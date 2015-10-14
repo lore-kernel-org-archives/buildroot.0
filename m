@@ -1,58 +1,45 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 14 Oct 2015 09:17:13 +0200
-Subject: [Buildroot] docs/website: New website
-In-Reply-To: <CA+TH9VmNdKfHr5v8-OteT6TLC8DK-HGshyUnbHgX_p+A2rW2=A@mail.gmail.com>
-References: <CA+TH9VmNdKfHr5v8-OteT6TLC8DK-HGshyUnbHgX_p+A2rW2=A@mail.gmail.com>
-Message-ID: <CAGduivyGchMyR4iXnxm3xniYoYLi7sq116=hjkmkOybVq+tifw@mail.gmail.com>
+Date: Wed, 14 Oct 2015 09:21:41 +0200
+Subject: [Buildroot] [PATCH v2 1/8] package/dhcp: fix SysV init scripts
+ option passing
+In-Reply-To: <1444728929-46246-1-git-send-email-benoit@wsystem.com>
+References: <1444728929-46246-1-git-send-email-benoit@wsystem.com>
+Message-ID: <CAGduivzbpaMUfyJYWtSXnZ1SH494jVVLv7nYx3T8f62gsh6Spg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo, all
+Hi Benoit,
 
-On Tue, Oct 13, 2015 at 9:54 PM, Angelo Compagnucci <
-angelo.compagnucci@gmail.com> wrote:
+On Tue, Oct 13, 2015 at 11:35 AM, Beno?t Th?baudeau <benoit@wsystem.com>
+wrote:
 
-> This patch introduces a new buildroot website based on a modern
-> flat layout inspired by material design.
-> Each page of the old website is converted to the new css/layout,
-> the big bump is in main page which is completely rewritten.
-> Content of the old website is copied more or less verbatim,
-> planning to add more content in the future.
+> The SysV init scripts have configuration variables like INTERFACES whose
+> contents have to be passed to the daemon. These variables are
+> initialized as empty strings, but some of them are not allowed to be
+> empty and there was no means of filling them apart from creating a root
+> FS overlay to overwrite these scripts.
 >
-> You can find a complete demo site here:
+> This commit adds support for files under /etc/default/ to set these
+> configuration variables. Such light files can now be added to the root
+> FS skeleton or overlays without having to duplicate most of the SysV
+> init scripts.
 >
-> http://angeloc.github.io
+> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
 >
-That's really neat ! Thanks a lot for your work. We now have a trully
-modern web page.
+>
+Thanks a lot for your work, I am afraid I am going to add to your work and
+maybe be a bit of a kill joy:
 
->
-> Unfortunately, this patch cannot be sent with git send-email, cause
-> css and javascript minified files contains lines longer than the
-> maximum smtp size.
->
-> Hence, I attached the patch in tar.gz format, it's fairly big due to
-> image and graphics, but couldn't manage to make it smaller.
->
-> I removed bootstrap css and javascript from shipping, now they are
-> served unmodified from their respective cdns, so from now on, the
-> problem with long lines should be resolved.
->
-> Hope you like it!
->
-> Sincerely, Angelo
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+What about systemd ?
+
+There's already a service file in the dhcp package, so any changes made to
+the init scripts should also be made to the .service to keep the whole
+package coherent.
+
+If you need any help/tips, do ask.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151014/08dad7da/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151014/d405aafd/attachment.html>
