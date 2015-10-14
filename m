@@ -1,54 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 23:35:07 +0200
-Subject: [Buildroot] [PATCH 1/1] musl: Honor BR2_STATIC_LIBS /
- BR2_SHARED_LIBS
-In-Reply-To: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
-References: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
-Message-ID: <20151014233507.23a93657@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 14 Oct 2015 18:41:57 -0300
+Subject: [Buildroot] [PATCH] sqlcipher: specify tclConfig.sh directory
+Message-ID: <1444858917-17641-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Charles,
+Otherwise it will search around, and if the host has it then it breaks.
+Fixes:
+http://autobuild.buildroot.net/results/057/0572a9a1f69ee214efb10863f5d2852b25bf4f54/
 
-On Tue, 13 Oct 2015 23:29:37 -0500, Charles Duffy wrote:
-> From: Charles Duffy <charles@dyfis.net>
-> 
-> Signed-off-by: Charles Duffy <chaduffy@cisco.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sqlcipher/sqlcipher.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks for the patch!
-
-> diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-> index 22589f5..aca78ab 100644
-> --- a/package/musl/musl.mk
-> +++ b/package/musl/musl.mk
-> @@ -28,7 +28,9 @@ define MUSL_CONFIGURE_CMDS
->  			--host=$(GNU_TARGET_NAME) \
->  			--prefix=/usr \
->  			--libdir=/lib \
-> -			--disable-gcc-wrapper)
-> +			--disable-gcc-wrapper \
-> +			$(if $(BR2_STATIC_LIBS),--disable-shared) \
-> +			$(if $(BR2_SHARED_LIBS),--disable-static))
-
-Could you instead try the following change:
-
--			--disable-gcc-wrapper)
-+			--disable-gcc-wrapper \
-+			$(SHARED_STATIC_LIBS_OPTS))
-
-
-The SHARED_STATIC_LIBS_OPTS variable, defined in package/Makefile.in,
-already contains the right combination of
---{enable,disable}-{static,shared} depending on BR2_STATIC_LIBS,
-BR2_SHARED_LIBS and BR2_STATIC_SHARED_LIBS.
-
-Thanks!
-
-Thomas
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 9693eb9..fadec22 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
+@@ -14,7 +14,8 @@ SQLCIPHER_CONF_ENV = \
+ 	TCLSH_CMD=$(HOST_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
+ 
+ SQLCIPHER_CONF_OPTS = \
+-	--enable-threadsafe
++	--enable-threadsafe \
++	--with-tcl=$(HOST_DIR)/usr/lib
+ 
+ SQLCIPHER_CFLAGS += -DSQLITE_HAS_CODEC # Required according to the README
+ SQLCIPHER_CONF_ENV += LIBS="-lcrypto -lz"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.9
