@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 23:53:44 +0200
-Subject: [Buildroot] [PATCH] guile: handle readline support explicitly
-In-Reply-To: <1444858956-1045-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1444858956-1045-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151014235344.6d3d9946@free-electrons.com>
+Date: Wed, 14 Oct 2015 23:55:22 +0200
+Subject: [Buildroot] [PATCH 4/5] gtest: Upgrade to GitHub HEAD
+In-Reply-To: <1444859483-2268-5-git-send-email-alan@softiron.co.uk>
+References: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
+ <1444859483-2268-5-git-send-email-alan@softiron.co.uk>
+Message-ID: <20151014235522.774491e2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Alan,
 
-On Wed, 14 Oct 2015 18:42:36 -0300, Gustavo Zacarias wrote:
-> Otherwise the host readline (+ncurses) development files can poison the
-> build causing breakage. Fixes:
-> http://autobuild.buildroot.net/results/d0a/d0a8ad9d3f19592e06df36408d6af745f7908165/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/guile/guile.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+On Wed, 14 Oct 2015 17:51:22 -0400, Alan Ott wrote:
 
-Applied, thanks.
+> +# The above revision must remain the same as the gmock package
+> +GTEST_SITE = $(call github,google,googletest,$(GTEST_VERSION))
+>  GTEST_INSTALL_STAGING = YES
+>  GTEST_INSTALL_TARGET = NO
+>  GTEST_LICENSE = BSD-3c
+>  GTEST_LICENSE_FILES = LICENSE
+> +GTEST_SUBDIR = googletest
+
+So gtest and gmock are in fact now part of the same repository/upstream
+project ? If that's the case, then I think we should simply get rid of
+the gtest and gmock packages, and have a single package named
+"googletest".
 
 Thomas
 -- 
