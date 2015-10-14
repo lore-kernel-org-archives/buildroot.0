@@ -1,39 +1,40 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 14 Oct 2015 12:34:22 +0200
-Subject: [Buildroot] [PATCH 1/1] ffmpeg: change tarball compression to xz
-Message-ID: <1444818862-1530-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 14 Oct 2015 12:46:40 +0200
+Subject: [Buildroot] Issues with the toolchain wrapper applied to the
+	internal toolchain
+In-Reply-To: <561E18C7.5090201@mind.be> (Arnout Vandecappelle's message of
+ "Wed, 14 Oct 2015 10:56:39 +0200")
+References: <20151011120859.7e786a73@free-electrons.com>
+ <561AC198.9070206@mind.be> <561E18C7.5090201@mind.be>
+Message-ID: <87a8rl917z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 9e44f2e..eb23f58 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 9565236404d3515aab754283c687c0a001019003148bf7f708e643608c0690b8  ffmpeg-2.8.tar.bz2
-+sha256 993ca7216aa0eac899a85fe1119dac12ef0655d67f932de6a32acc00188f8182  ffmpeg-2.8.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f817471..afa43f6 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- FFMPEG_VERSION = 2.8
--FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
-+FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
- 
+Hi,
+
+>> One solution for both issues would be to deal with buildroot-built toolchains
+ >> explicitly in the toolchain wrapper, i.e. detect the existence of .real and exec
+ >> that one directly. Would that be an acceptable solution?
+
+ >  Since this solution will be a lot easier, and we probably want it anyway for
+ > the ccache and arch-options issue, I will go for this solution.
+
+ >  The question is then: do we detect the existence of .real at runtime in the
+ > wrapper itself, or when building the toolchain wrapper?
+
+I would personally prefer to keep the wrapper as simple as possible (and
+errors to show up at build time and not runtime), so I would prefer to
+do it when building the wrapper.
+
+ >  I'll try to find time this evening to work this out.
+
+Great, thanks!
+
 -- 
-1.9.1
+Venlig hilsen,
+Peter Korsgaard 
