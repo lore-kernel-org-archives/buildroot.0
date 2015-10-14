@@ -1,39 +1,51 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Wed, 14 Oct 2015 10:22:29 -0500
-Subject: [Buildroot] [PATCH 1/1] lxc: bump version to 1.1.4
-Message-ID: <1444836149-10083-1-git-send-email-ryan.barnett@rockwellcollins.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Wed, 14 Oct 2015 08:38:09 -0700
+Subject: [Buildroot] docs/website: New website
+In-Reply-To: <CA+TH9VmNdKfHr5v8-OteT6TLC8DK-HGshyUnbHgX_p+A2rW2=A@mail.gmail.com>
+References: <CA+TH9VmNdKfHr5v8-OteT6TLC8DK-HGshyUnbHgX_p+A2rW2=A@mail.gmail.com>
+Message-ID: <CAJJ6jxvwh2Q7nozfQc5nhptf5tkwsR3bo26SbFwjOHj7_4mj-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
----
- package/lxc/lxc.hash | 2 +-
- package/lxc/lxc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Great, works on my Android phone too.
 
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index dcc532c..d5b8ec5 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 34ba517ffd7b38a14e5d12d56a4928b78602d56311d5f47c3ef90f4e714b9604 lxc-1.1.2.tar.gz
-+sha256 8f072ea2001bc94389003d82a91902855edf16b609e06f0486a74e4b8973e5dc lxc-1.1.4.tar.gz
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index c7ebda4..b11464e 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LXC_VERSION = 1.1.2
-+LXC_VERSION = 1.1.4
- LXC_SITE = https://linuxcontainers.org/downloads
- LXC_LICENSE = LGPLv2.1+
- LXC_LICENSE_FILES = COPYING
--- 
-1.9.1
+Regards, Steve
+
+On Tue, Oct 13, 2015 at 12:54 PM, Angelo Compagnucci
+<angelo.compagnucci@gmail.com> wrote:
+> This patch introduces a new buildroot website based on a modern
+> flat layout inspired by material design.
+> Each page of the old website is converted to the new css/layout,
+> the big bump is in main page which is completely rewritten.
+> Content of the old website is copied more or less verbatim,
+> planning to add more content in the future.
+>
+> You can find a complete demo site here:
+>
+> http://angeloc.github.io
+>
+> Unfortunately, this patch cannot be sent with git send-email, cause
+> css and javascript minified files contains lines longer than the
+> maximum smtp size.
+>
+> Hence, I attached the patch in tar.gz format, it's fairly big due to
+> image and graphics, but couldn't manage to make it smaller.
+>
+> I removed bootstrap css and javascript from shipping, now they are
+> served unmodified from their respective cdns, so from now on, the
+> problem with long lines should be resolved.
+>
+> Hope you like it!
+>
+> Sincerely, Angelo
+>
+> --
+> Profile: http://it.linkedin.com/in/compagnucciangelo
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
