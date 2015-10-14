@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Oct 2015 10:44:19 -0300
-Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.10.13
-Message-ID: <1444830259-17307-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 14 Oct 2015 10:44:34 -0300
+Subject: [Buildroot] [PATCH] xtables-addons: bump to version 2.9
+Message-ID: <1444830274-17351-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xtables-addons/xtables-addons.hash | 6 +++---
+ package/xtables-addons/xtables-addons.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 2b46b45..f377fa2 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	06dbcfcd4c0835440b0787084e726b7ea1a707acfb53e17a3be08efbbbbf4ee2	wireless-regdb-2015.09.25.tar.xz
-+sha256	1ec943322a63625b753acfd9a712044219b76961f16f9853f8b54aaa2a775622	wireless-regdb-2015.10.13.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 7ce580c..406790f 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index 5b60d12..c82f016 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.8/
+-md5	246ec2f1f75c32c6e04ae9ae75b578c9	xtables-addons-2.8.tar.xz
+-sha1	fb3a992e8ff3fe1967b8c6f22eba0c3475aceaf7	xtables-addons-2.8.tar.xz
++# Locally calculated after checking signature file from:
++# http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.9/
++sha256	648f6cd17ba41916df5bb605e617b2f18461090139e67d7cf5c5bd8a04c701b0	xtables-addons-2.9.tar.xz
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 687a66a..30353a0 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2015.09.25
-+WIRELESS_REGDB_VERSION = 2015.10.13
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-XTABLES_ADDONS_VERSION = 2.8
++XTABLES_ADDONS_VERSION = 2.9
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+ XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
 -- 
 2.4.9
