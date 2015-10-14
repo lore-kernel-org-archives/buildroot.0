@@ -1,56 +1,47 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Oct 2015 14:04:10 -0300
-Subject: [Buildroot] [PATCH 4/5] libsoup: bump to version 2.52.1
+Date: Wed, 14 Oct 2015 14:04:11 -0300
+Subject: [Buildroot] [PATCH 5/5] adwaita-icon-theme: bump to version 3.18.0
 In-Reply-To: <1444842251-4913-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1444842251-4913-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1444842251-4913-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1444842251-4913-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disabled vala bindings since they're not used by the current buildroot
-packages and it requires gobject-introspection which we don't provide
-yet.
+Also switch from ftp to http, it's better for firewall-laden places.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libsoup/libsoup.hash | 4 ++--
- package/libsoup/libsoup.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/adwaita-icon-theme/adwaita-icon-theme.hash | 4 ++--
+ package/adwaita-icon-theme/adwaita-icon-theme.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
-index 2eb86c4..58e3eb2 100644
---- a/package/libsoup/libsoup.hash
-+++ b/package/libsoup/libsoup.hash
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.hash b/package/adwaita-icon-theme/adwaita-icon-theme.hash
+index 1662ab9..14e88ed 100644
+--- a/package/adwaita-icon-theme/adwaita-icon-theme.hash
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.48/libsoup-2.48.0.sha256sum
--sha256	ea34dd64fe44343445daf6dd690d0691e9d973468de44878da97371c16d89784	libsoup-2.48.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.52/libsoup-2.52.1.sha256sum
-+sha256	0e19bca047ad50b28e8ed7663840f9e45a94909148822ca44dcb3e8cafb5cc48	libsoup-2.52.1.tar.xz
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 8cbd0cb..e43e25c 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -4,15 +4,15 @@
+-# From ftp://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.14/adwaita-icon-theme-3.14.0.sha256sum
+-sha256	afacb6025a18be007e33a9663b92cee9d2745279bb00107a68e09b2806f9541f  adwaita-icon-theme-3.14.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.18/adwaita-icon-theme-3.18.0.sha256sum
++sha256	5e9ce726001fdd8ee93c394fdc3cdb9e1603bbed5b7c62df453ccf521ec50e58	adwaita-icon-theme-3.18.0.tar.xz
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+index f9a6b50..cf39d04 100644
+--- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBSOUP_VERSION_MAJOR = 2.48
--LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
-+LIBSOUP_VERSION_MAJOR = 2.52
-+LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).1
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
- LIBSOUP_LICENSE = LGPLv2+
- LIBSOUP_LICENSE_FILES = COPYING
- LIBSOUP_INSTALL_STAGING = YES
- LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
--LIBSOUP_CONF_OPTS = --disable-glibtest
-+LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no
- LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 \
- 	libglib2 libxml2 sqlite host-intltool
- 
+-ADWAITA_ICON_THEME_VERSION_MAJOR = 3.14
++ADWAITA_ICON_THEME_VERSION_MAJOR = 3.18
+ ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).0
+-ADWAITA_ICON_THEME_SITE = ftp://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
++ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
+ ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
+ ADWAITA_ICON_THEME_LICENSE = LGPLv3 or CC-BY-SA-3.0
+ ADWAITA_ICON_THEME_LICENSE_FILES = COPYING COPYING_LGPL COPYING_CCBYSA3
 -- 
 2.4.9
