@@ -1,48 +1,39 @@
-From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Wed, 14 Oct 2015 17:16:59 +0200
-Subject: [Buildroot] =?utf-8?q?host_=C3=A2ckage_empty_dependency_list?=
-Message-ID: <561E71EB.5080801@green-communications.fr>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed, 14 Oct 2015 10:22:29 -0500
+Subject: [Buildroot] [PATCH 1/1] lxc: bump version to 1.1.4
+Message-ID: <1444836149-10083-1-git-send-email-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+---
+ package/lxc/lxc.hash | 2 +-
+ package/lxc/lxc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
-
-I'd like the host variant of a package to have no dependency at all,
-while its target variant has some. Specifying an empty list with
-
-HOST_FOO_DEPENDENCIES = ""
-
-gives me an error. Not setting HOST_FOO_DEPENDENCY or setting
-HOST_FOO_DEPENDENCIES =
-
-makes it inherit the dependencies of target variant. Is there a way to
-achieve this?
-
-Cheers,
-
-- -- 
-Sylvain Raybaud
-www.green-communications.fr
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.22 (GNU/Linux)
-
-iQIcBAEBAgAGBQJWHnHrAAoJEEkkwl4JtJ9y1QcP/jchbmAcFgDv0+J4prUIw8l0
-1Vlu/EzFIuzpcb7gaR508180fotN8azEnx75eNKWn9egwQN02inS2PvLhCn314wY
-ZfI5xsg6UMv9IBghFhJiTOzw+Ja+07vXzCWj9awB0ERWTVXpGL1Ebj9Aud9Jl3Bs
-rg9Bag/JulK4KppWiJ7f31oQ3M6FLGB5BZGodmHnyNuv5I+Fb/T8mAkqo4qcksml
-ldvlSNRr9Q+NH1SgIgVKBOpwxLPllpTfxoC6LhmvPKD6qqzXS7YC2wSb43aod+R4
-74L42tKKH9Spciyjdl3swkTimQlFjp7BVd99KZ+UzB+DZrMUn0y6Cp4yYaknCO8Y
-dD0MV8DZ0fmEyOL4waYZ1LAZvawiKRLV4otTg4uTw75rNOJ6AnMQsowrfsR98x73
-14u2qyiOSPyTF6V7rln33G5x9t5I7zwh5QQ/gkSvBedIU6dm1tN6nEphnQOpILUk
-AlQ+ihYO6tovrytuPK3MqykMjRpgZAXHXiXcGCFC+ntw8m8osAzlszjJEGNLUVym
-d74GD4rjGJtSNyO473z8k5R9sAa7AY8qpfN/0sD0mpYm+NEvxm026f0bqhP32w4q
-TdjzmSODoXy2AOWZfQz7voMmZ0vWt09PtMU8RSmG4xjm+RSUtyq/TOCEU4/hbN3x
-hxPYdH9o2ZcgP0p0fQ+S
-=cfWW
------END PGP SIGNATURE-----
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index dcc532c..d5b8ec5 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 34ba517ffd7b38a14e5d12d56a4928b78602d56311d5f47c3ef90f4e714b9604 lxc-1.1.2.tar.gz
++sha256 8f072ea2001bc94389003d82a91902855edf16b609e06f0486a74e4b8973e5dc lxc-1.1.4.tar.gz
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index c7ebda4..b11464e 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 1.1.2
++LXC_VERSION = 1.1.4
+ LXC_SITE = https://linuxcontainers.org/downloads
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+-- 
+1.9.1
