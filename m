@@ -1,83 +1,75 @@
-From: Charles Duffy <charles@dyfis.net>
-Date: Tue, 13 Oct 2015 23:28:38 -0500
-Subject: [Buildroot] [PATCH 1/1] introduce nwipe package
-Message-ID: <1444796918-22912-1-git-send-email-chaduffy@cisco.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 14 Oct 2015 23:05:54 +0200
+Subject: [Buildroot] [PATCH 1/2] gcc: use '.br_real' instead of '.real' for
+	the wrapped toolchain
+In-Reply-To: <20151011120859.7e786a73@free-electrons.com>
+References: <20151011120859.7e786a73@free-electrons.com>
+Message-ID: <1444856755-2011-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Charles Duffy <charles@dyfis.net>
+If an externally built toolchain also wraps the toolchain executables,
+there is a risk that it will also use the '.real' extension. To
+minimise this risk, use a more buildroot-specific extension instead:
+'.br_real'.
 
-Signed-off-by: Charles Duffy <chaduffy@cisco.com>
+For the time being, this is not yet a problem since the internal
+toolchain never has such a wrapper. However, in a later commit we
+will bypass the buildroot wrapper for external toolchains, so we
+have to avoid doing that when it's not buildroot that wrapped it.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in       |  1 +
- package/nwipe/Config.in |  9 +++++++++
- package/nwipe/nwipe.mk  | 27 +++++++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/nwipe/Config.in
- create mode 100644 package/nwipe/nwipe.mk
+Note: I didn't check if any of our external toolchains actually has
+such a .real thingy, but better safe than sorry.
+---
+ package/gcc/gcc.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8e3c64a..32affcc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1496,6 +1496,7 @@ endif
- 	source "package/ncdu/Config.in"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
-+	source "package/nwipe/Config.in"
- 	source "package/openvmtools/Config.in"
- 	source "package/polkit/Config.in"
- 	source "package/powerpc-utils/Config.in"
-diff --git a/package/nwipe/Config.in b/package/nwipe/Config.in
-new file mode 100644
-index 0000000..0cecd25
---- /dev/null
-+++ b/package/nwipe/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_NWIPE
-+	bool "nwipe"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  nwipe thoroughly overwrites block devices, forked from a component at
-+	  the core of the venerable DBAN.
-+	
-+	  https://github.com/martijnvanbrummelen/nwipe
-diff --git a/package/nwipe/nwipe.mk b/package/nwipe/nwipe.mk
-new file mode 100644
-index 0000000..18efb22
---- /dev/null
-+++ b/package/nwipe/nwipe.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# nwipe
-+#
-+################################################################################
-+
-+NWIPE_VERSION = 0.17
-+NWIPE_SITE = https://github.com/martijnvanbrummelen/nwipe
-+NWIPE_SITE_METHOD = git
-+NWIPE_DEPENDENCIES = ncurses parted
-+NWIPE_CONF_OPTS = --bindir=/bin
-+NWIPE_LICENSE = GPL
-+NWIPE_LICENSE_FILES = LICENCE
-+
-+define NWIPE_RUN_AUTOGEN
-+	cd $(@D) && { printf '%s\n' '44a' 'AC_CHECK_LIB([intl], [libintl_dgettext]) # needed by static builds of libparted' 'AC_CHECK_LIB([uuid], [uuid_generate]) # needed by static builds of libparted' '.' 'w' | edit configure.ac; }
-+	cd $(@D) && PATH=$(BR_PATH) ./init.sh
-+endef
-+NWIPE_PRE_CONFIGURE_HOOKS += NWIPE_RUN_AUTOGEN
-+
-+# to fix support for MUSL
-+define NWIPE_USE_OFF64T
-+	cd $(@D) && find . -type f -name '*.[ch]' -exec sed -i -r -e 's/loff_t/off64_t/g' -- '{}' +
-+endef
-+NWIPE_PRE_CONFIGURE_HOOKS += NWIPE_USE_OFF64T
-+
-+$(eval $(autotools-package))
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 1b30e6d..ef606c4 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -236,7 +236,7 @@ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--with-long-double-128
+ endif
+ 
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".real"'
++HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
+ 
+ ifeq ($(BR2_CCACHE),y)
+ HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
+@@ -272,23 +272,23 @@ endif # BR2_CCACHE
+ # used. However, we should not add the toolchain wrapper for them, and they
+ # match the *cc-* pattern. Therefore, an additional case is added for *-ar,
+ # *-ranlib and *-nm.
+-# Avoid that a .real is symlinked a second time.
++# Avoid that a .br_real is symlinked a second time.
+ # Also create <arch>-linux-<tool> symlinks.
+ define HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
+ 	$(Q)cd $(HOST_DIR)/usr/bin; \
+ 	for i in $(GNU_TARGET_NAME)-*; do \
+ 		case "$$i" in \
+-		*.real) \
++		*.br_real) \
+ 			;; \
+ 		*-ar|*-ranlib|*-nm) \
+ 			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
+ 			;; \
+ 		*cc|*cc-*|*++|*++-*|*cpp) \
+-			rm -f $$i.real; \
+-			mv $$i $$i.real; \
++			rm -f $$i.br_real; \
++			mv $$i $$i.br_real; \
+ 			ln -sf toolchain-wrapper $$i; \
+ 			ln -sf toolchain-wrapper $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
+-			ln -snf $$i.real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.real; \
++			ln -snf $$i.br_real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.br_real; \
+ 			;; \
+ 		*) \
+ 			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
 -- 
-2.0.0
+2.5.3
