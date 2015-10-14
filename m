@@ -1,35 +1,41 @@
 From: Alan Ott <alan@softiron.co.uk>
-Date: Wed, 14 Oct 2015 17:51:18 -0400
-Subject: [Buildroot] [PATCH 0/5] Move download links away from Google Code
-Message-ID: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
+Date: Wed, 14 Oct 2015 17:51:19 -0400
+Subject: [Buildroot] [PATCH 1/5] dsp-tools: Move download link away from
+	Google Code
+In-Reply-To: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
+References: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
+Message-ID: <1444859483-2268-2-git-send-email-alan@softiron.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Google Code going away early next year. Remove download links from
-Google Code and find the new official repos for those projects.
+Google Code is being shut down. The google code site which hosts the
+source .tar.gz references github/felipec, which has a dsp-tools repository
+with the same code as the tar.gz previously referenced.
 
-These patches came from Buildroot Dev Days in Dublin. There will be more
-to come to clean up the other projects using Google Code.
+Change the DSP_TOOLS_SITE to this github repo.
 
-Alan Ott (5):
-  dsp-tools: Move download link away from Google Code
-  gst-dsp: Move download link away from Google Code
-  gst-omapfb: Move download link away from Google Code
-  gtest: Upgrade to GitHub HEAD
-  gmock: Upgrade to GitHub HEAD
+Signed-off-by: Alan Ott <alan@softiron.co.uk>
+---
+ package/dsp-tools/dsp-tools.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- package/dsp-tools/dsp-tools.mk             |  4 ++--
- package/gmock/0001-force-use-python2.patch |  8 ++++----
- package/gmock/gmock.hash                   |  4 ++--
- package/gmock/gmock.mk                     | 31 ++++++++++--------------------
- package/gstreamer/gst-dsp/gst-dsp.mk       |  4 ++--
- package/gstreamer/gst-omapfb/gst-omapfb.mk |  4 ++--
- package/gtest/gtest.hash                   |  4 ++--
- package/gtest/gtest.mk                     | 19 ++++++++----------
- 8 files changed, 32 insertions(+), 46 deletions(-)
-
+diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
+index 64490b8..c91ed20 100644
+--- a/package/dsp-tools/dsp-tools.mk
++++ b/package/dsp-tools/dsp-tools.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-DSP_TOOLS_VERSION = 2.0
+-DSP_TOOLS_SITE = http://gst-dsp.googlecode.com/files
++DSP_TOOLS_VERSION = v2.0
++DSP_TOOLS_SITE = $(call github,felipec,dsp-tools,$(DSP_TOOLS_VERSION))
+ DSP_TOOLS_DEPENDENCIES = tidsp-binaries
+ DSP_TOOLS_LICENSE = LGPLv2.1
+ DSP_TOOLS_LICENSE_FILES = LICENSE
 -- 
 2.1.4
