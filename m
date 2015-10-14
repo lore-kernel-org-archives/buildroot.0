@@ -1,46 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 14 Oct 2015 12:38:19 +0000 (UTC)
-Subject: [Buildroot] [Bug 8271] Buildroot wit x86_64 architecture fails to
- boot on qemu with kernels >=3.10
-In-Reply-To: <bug-8271-163@https.bugs.busybox.net/>
-References: <bug-8271-163@https.bugs.busybox.net/>
-Message-ID: <20151014123819.0F9A281D75@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 14 Oct 2015 10:44:19 -0300
+Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.10.13
+Message-ID: <1444830259-17307-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8271
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
-
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-10-14 12:38:18 UTC ---
-Did you specify explicitly a CPU model to be emulated by Qemu using the -cpu
-option? If you don't, my understanding is that it will emulate a CPU similar to
-the host CPU (but I'm not sure about this). In any case, if your Qemu was
-emulating something that didn't support the movbe instruction, then it would
-break exactly like it did for you. Can you please check your Qemu setup ?
-
-Also, old versions of Qemu were not properly emulating the n270 (which is the
-Qemu speak for Atom), and were precisely not emulating the movbe instruction:
-https://lists.gnu.org/archive/html/qemu-devel/2013-02/msg01201.html.
-
-So my bet is really an emulation issue on your side. I've looked at the kernel,
-and the ARCH_USE_BUILTIN_BSWAP option has not been removed since commit
-83a57a4de1a222c351667ef9a0fedaac1295e85b, so I believe that this kernel commit
-has since then been widely tested, and that it is correct.
-
-I'll mark the bug as "works for me". Please do not hesitate to re-open with
-more details about your Qemu setup (version, and which -cpu option you've used)
-if you can still reproduce the problem. Thanks!
-
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 2b46b45..f377fa2 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	06dbcfcd4c0835440b0787084e726b7ea1a707acfb53e17a3be08efbbbbf4ee2	wireless-regdb-2015.09.25.tar.xz
++sha256	1ec943322a63625b753acfd9a712044219b76961f16f9853f8b54aaa2a775622	wireless-regdb-2015.10.13.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 7ce580c..406790f 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRELESS_REGDB_VERSION = 2015.09.25
++WIRELESS_REGDB_VERSION = 2015.10.13
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.4.9
