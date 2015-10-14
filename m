@@ -1,59 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 22:48:16 +0200
-Subject: [Buildroot] [PATCH v2 1/1] luvi: new package
-In-Reply-To: <1444854939-6557-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1444763952-29583-1-git-send-email-joerg.krause@embedded.rocks>
- <1444854939-6557-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151014224816.42782f90@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 Oct 2015 20:50:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 8401] gpsd 3.15 NMEA support
+In-Reply-To: <bug-8401-163@https.bugs.busybox.net/>
+References: <bug-8401-163@https.bugs.busybox.net/>
+Message-ID: <20151014205056.3556981D75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+https://bugs.busybox.net/show_bug.cgi?id=8401
 
-On Wed, 14 Oct 2015 22:35:39 +0200, J?rg Krause wrote:
+--- Comment #2 from kevin.alden2 at gmail.com 2015-10-14 20:50:56 UTC ---
+(In reply to comment #1)
+> Thanks for your report. Can you point to the upstream commit that fixes the
+> problem? I've looked quickly into gpsd's git repository, and I don't see this
+> problem fixed.
 
-> +# Bundled lua bindings have to be linked statically into the luvi executable
-> +LUVI_CONF_OPTS = \
-> +	-DBUILD_SHARED_LIBS=OFF \
-> +	-DWithSharedLibluv=ON \
-> +	-DTARGET_ARCH=$(LUVI_TARGET_ARCH) \
-> +	-DLUA_PATH=$(HOST_DIR)/usr/share/luajit-2.0.4/?.lua
-> +
-> +# Add "rex" module (PCRE via bundled lrexlib)
-> +ifeq ($(BR2_PACKAGE_PCRE),y)
-> +LUVI_DEPENDENCIES += pcre
-> +LUVI_CONF_OPTS += -DWithPCRE=ON -DWithSharedPCRE=ON
-> +endif
+http://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=3e25e2167beb3936de3986fad9b6c9bdec82b81f
 
-Can we have an else clause here to explicitly disable pcre support?
+It looks like they fixed the problem by changing the #ifdefs in the code as
+opposed to changing the SConstruct file back
 
-> +
-> +# Add "ssl" module (via bundled lua-openssl)
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +LUVI_DEPENDENCIES += openssl
-> +LUVI_CONF_OPTS += -DWithOpenSSL=ON -DWithOpenSSLASM=ON -DWithSharedOpenSSL=ON
-> +endif
-
-Same here.
-
-> +
-> +# Add "zlib" module (via bundled lua-zlib)
-> +ifeq ($(BR2_PACKAGE_ZLIB),y)
-> +LUVI_DEPENDENCIES += zlib
-> +LUVI_CONF_OPTS += -DWithZLIB=ON -DWithSharedZLIB=ON
-> +endif
-
-And here?
-
-Other than that, it looks good to me.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
