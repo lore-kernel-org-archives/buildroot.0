@@ -1,28 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 13:57:58 +0200
-Subject: [Buildroot] [PATCH 1/1] ffmpeg: change tarball compression to xz
-In-Reply-To: <1444818862-1530-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1444818862-1530-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20151014135758.2ab40e5a@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 Oct 2015 12:23:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 8266] mplayer build issue
+In-Reply-To: <bug-8266-163@https.bugs.busybox.net/>
+References: <bug-8266-163@https.bugs.busybox.net/>
+Message-ID: <20151014122343.2FA4781776@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+https://bugs.busybox.net/show_bug.cgi?id=8266
 
-On Wed, 14 Oct 2015 12:34:22 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/ffmpeg/ffmpeg.hash | 2 +-
->  package/ffmpeg/ffmpeg.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-Thomas
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-10-14 12:23:42 UTC ---
+Your defconfig (with just the post-build script, overlay, custom Busybox
+config, and the custom cflags removed) builds fine with the current Buildroot
+master. So I believe that the bug has been fixed (maybe due to the fact that
+the gcc version has been upgraded).
+
+I'll therefore close the bug. However, if you still see the issue, do not
+hesitate to re-open it. Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
