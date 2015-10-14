@@ -1,97 +1,93 @@
-From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Date: Wed, 14 Oct 2015 13:05:46 -0300
-Subject: [Buildroot] [PATCH v2 0/2] Add support for AXFS filesystem type
-In-Reply-To: <20151013231428.2e611e06@free-electrons.com>
-References: <1444064102-13575-1-git-send-email-ariel@vanguardiasur.com.ar>
- <20151013231428.2e611e06@free-electrons.com>
-Message-ID: <561E7D5A.1010600@vanguardiasur.com.ar>
+From: Jordan Yelloz <jordan@yelloz.me>
+Date: Wed, 14 Oct 2015 09:14:22 -0700
+Subject: [Buildroot] [PATCH 1/1] systemd: imported fix for journald
+ SIGABRTs.
+In-Reply-To: <CAGduivwsL3fEHHF5CBwpnkgk6fBjuVH6CMSBMm-r794Gd1t3ZQ@mail.gmail.com>
+References: <1444708715-4696-1-git-send-email-jordan@yelloz.me>
+ <CAGduivwRwmxVZeKK0Jx+QM8us8yzrSWzG_dT8RD4zS7W5UfCFw@mail.gmail.com>
+ <20151013095314.55f01730@free-electrons.com>
+ <CAGduivwsL3fEHHF5CBwpnkgk6fBjuVH6CMSBMm-r794Gd1t3ZQ@mail.gmail.com>
+Message-ID: <561E7F5E.8090204@yelloz.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-
-El 13/10/15 a las 18:14, Thomas Petazzoni escribi?:
-> Dear Ariel D'Alessandro,
+On 10/13/2015 01:15 AM, Maxime Hadjinlian wrote:
+> Hi Jordan
 > 
-> On Mon,  5 Oct 2015 13:55:00 -0300, Ariel D'Alessandro wrote:
->> This patch series adds support for using the AXFS filesystem type.
->>
->> The Advanced XIP File System is a Linux kernel filesystem driver that enables
->> files to be executed directly from flash or ROM memory rather than being copied
->> into RAM.
->>
->> More info can be found here: http://elinux.org/AXFS
->>
->> Changes from v1:
->> * Removed unnecessary call to $(generic-package) in axfsutils.mk.
->>
->> Ariel
->>
->> Ariel D'Alessandro (2):
->>   axfsutils: add new package
->>   axfs: add new filesystem type
+> On Tue, Oct 13, 2015 at 9:53 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com
+> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
 > 
-> You received some feedback on both patches. Could you address this
-> feedback, and submit a new version of the patches?
-
-Yes, right away.
-
+>     Maxime, Jordan,
 > 
-> Note that adding the axfs patches as a kernel extension, as suggested
-> by Yann E. Morin, is optional and can perfectly be done as a set of
-> follow-up patches: it is not mandatory to have this part of the current
-> series.
-
-Understood.
-
+>     On Tue, 13 Oct 2015 09:47:20 +0200, Maxime Hadjinlian wrote:
 > 
-> However, one thing that I remember about AXFS is that you could decide
-> when creating the root filesystem, which parts of which files would be
-> stored uncompressed (so that they can be XIP-ed) and which parts of
-> which files would be stored compressed (to save space). This allowed to
-> combine the nice aspects of a XIP-capable filesystem, with the nice
-> aspects of a compressed filesystem. 
+>     > On Tue, Oct 13, 2015 at 5:58 AM, Jordan Yelloz <jordan at yelloz.me <mailto:jordan@yelloz.me>> wrote:
+>     >
+>     > > Prior to applying this patch, assertion errors would reliably be displayed
+>     > > on the
+>     > > console. These failed assertions led to crashes in systemd-journald on
+>     > > startup.
+>     > >
+>     > > This patch fixes systemd bug #512:
+>     > > <https://github.com/systemd/systemd/issues/512>
+>     > >
+>     > NAK on this one.
+> 
+>     I clearly don't think "NAK on this one" is the appropriate way to react
+>     to a contribution, especially when the contribution in question is only
+>     the second one from Jordan.
+> 
+>     Here is a much more appropriate response for Jordan:
+> 
+> I apologies about the tone of my mail, I though you were an older
+> contributor I seems to recalled your name, anyway, that's not an excuse
+> for this.
+> Don't take it bad and please send many more patches :)
+> 
+> 
+>     """
+>     Jordan,
+> 
+>     Thanks for your patch! However, it turns out that another patch was
+>     already posted some time ago to bump the systemd version from 221 to
+>     226 (see https://patchwork.ozlabs.org/patch/525867/). Since systemd
+>     v226 already includes the fix for the problem you're pointing to, it
+>     seems like a better idea to upgrade systemd to v226 rather than
+>     backporting just this one fix.
+> 
+>     Consequently, we will mark your patch as "Rejected" in our patch
+>     tracking system, as we will favor the systemd update instead. However,
+>     what you could do is test the patch at
+>     https://patchwork.ozlabs.org/patch/525867/ and if it works for you,
+>     report a Tested-by.
+> 
+>     Thanks!
+>     """
+> 
+>     Best regards,
+> 
+>     Thomas
+>     --
+>     Thomas Petazzoni, CTO, Free Electrons
+>     Embedded Linux, Kernel and Android engineering
+>     http://free-electrons.com
+> 
+> 
 
-Yes, indeed. One of the keys of AXFS is that it "has the ability to
-store individual *pages* in a file uncompressed/XIP or compressed/Demand
-Paged." [0]
+It's not a big deal. I was not aware of the proposed patch to upgrade to
+systemd 226/227. I just assumed support for systemd was lagging behind,
+which is clearly not the case. I have imported patch #525867 and will
+test it soon.
 
-Moreover, "mkfs.axfs tool can receive an additional argument using the
--i flag which points to a user-created file in the XML format; it
-indicates which pages the user desires to have marked for XIP within the
-file system image." [1]
+Anyway, to provide a bit of justification to my actions, I am working
+off of the latest stable branch of buildroot (2015.08.x) and I saw my
+patch as strictly a bug-fix patch that wouldn't add any new package
+requirements or configuration options and one that fixes a critical
+defect (at least in my use case) in systemd 221.
 
-> I remember there was even a tool to
-> run on the target to "measure" the filesystem accesses, and give some
-> hints on which pages of data should be stored uncompressed vs. which
-> pages should be stored compressed. Is this actually implemented in
-> AXFS ? 
-
-Yes. The CONFIG_AXFS_PROFILING option is added in order to enable the
-profiling tool. Then simply running on the target platform, the AXFS
-profiler will collect data and write the information it could gather to
-/proc/axfs/volume0. See [1] for more information.
-
-> If so, do you plan to add support for such functionality ?
-
-Yes, it would be nice to add support for this functionality in order to
-explode the entire AXFS capability. I'll do this as a set of follow-up
-patches if that's OK, and let the -a flag (XIP all) for now.
-
-Thanks,
-
-
-Links:
-
-[0]
-http://www.academypublisher.com/ojs/index.php/jcp/article/viewFile/03017989/370
-
-[1]
-http://docslide.us/documents/application-execute-in-place-xip-with-linux-and-axfs.html
-
--- 
-Ariel D'Alessandro, VanguardiaSur
-www.vanguardiasur.com.ar
+--
+Jordan
