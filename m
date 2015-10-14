@@ -1,47 +1,62 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Oct 2015 14:04:11 -0300
-Subject: [Buildroot] [PATCH 5/5] adwaita-icon-theme: bump to version 3.18.0
-In-Reply-To: <1444842251-4913-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1444842251-4913-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1444842251-4913-5-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Oct 2015 19:06:34 +0200
+Subject: [Buildroot] [PATCH v2 0/2] Add support for AXFS filesystem type
+In-Reply-To: <561E7D5A.1010600@vanguardiasur.com.ar>
+References: <1444064102-13575-1-git-send-email-ariel@vanguardiasur.com.ar>
+ <20151013231428.2e611e06@free-electrons.com>
+ <561E7D5A.1010600@vanguardiasur.com.ar>
+Message-ID: <20151014190634.40a649a8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also switch from ftp to http, it's better for firewall-laden places.
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/adwaita-icon-theme/adwaita-icon-theme.hash | 4 ++--
- package/adwaita-icon-theme/adwaita-icon-theme.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Wed, 14 Oct 2015 13:05:46 -0300, Ariel D'Alessandro wrote:
 
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.hash b/package/adwaita-icon-theme/adwaita-icon-theme.hash
-index 1662ab9..14e88ed 100644
---- a/package/adwaita-icon-theme/adwaita-icon-theme.hash
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.hash
-@@ -1,2 +1,2 @@
--# From ftp://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.14/adwaita-icon-theme-3.14.0.sha256sum
--sha256	afacb6025a18be007e33a9663b92cee9d2745279bb00107a68e09b2806f9541f  adwaita-icon-theme-3.14.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.18/adwaita-icon-theme-3.18.0.sha256sum
-+sha256	5e9ce726001fdd8ee93c394fdc3cdb9e1603bbed5b7c62df453ccf521ec50e58	adwaita-icon-theme-3.18.0.tar.xz
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-index f9a6b50..cf39d04 100644
---- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--ADWAITA_ICON_THEME_VERSION_MAJOR = 3.14
-+ADWAITA_ICON_THEME_VERSION_MAJOR = 3.18
- ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).0
--ADWAITA_ICON_THEME_SITE = ftp://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
-+ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
- ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
- ADWAITA_ICON_THEME_LICENSE = LGPLv3 or CC-BY-SA-3.0
- ADWAITA_ICON_THEME_LICENSE_FILES = COPYING COPYING_LGPL COPYING_CCBYSA3
+> > You received some feedback on both patches. Could you address this
+> > feedback, and submit a new version of the patches?
+> 
+> Yes, right away.
+
+Excellent, thanks!
+
+> Moreover, "mkfs.axfs tool can receive an additional argument using the
+> -i flag which points to a user-created file in the XML format; it
+> indicates which pages the user desires to have marked for XIP within the
+> file system image." [1]
+
+So probably a Config.in option to specify the path to this file should
+be added.
+
+> > I remember there was even a tool to
+> > run on the target to "measure" the filesystem accesses, and give some
+> > hints on which pages of data should be stored uncompressed vs. which
+> > pages should be stored compressed. Is this actually implemented in
+> > AXFS ? 
+> 
+> Yes. The CONFIG_AXFS_PROFILING option is added in order to enable the
+> profiling tool. Then simply running on the target platform, the AXFS
+> profiler will collect data and write the information it could gather to
+> /proc/axfs/volume0. See [1] for more information.
+
+Good. This sort of into can be added in the help text of the Config.in
+option.
+
+> > If so, do you plan to add support for such functionality ?
+> 
+> Yes, it would be nice to add support for this functionality in order to
+> explode the entire AXFS capability. I'll do this as a set of follow-up
+> patches if that's OK, and let the -a flag (XIP all) for now.
+
+Sounds like a very good plan.
+
+Thanks!
+
+Thomas
 -- 
-2.4.9
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
