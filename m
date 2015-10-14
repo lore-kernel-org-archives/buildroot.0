@@ -1,68 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 22:40:11 +0200
-Subject: [Buildroot] [PATCH v2] gst1-plugins-base: update configure
- options
-In-Reply-To: <1444773987-19382-1-git-send-email-ps.report@gmx.net>
-References: <1444773987-19382-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151014224011.2aac931b@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 Oct 2015 20:46:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 8401] gpsd 3.15 NMEA support
+In-Reply-To: <bug-8401-163@https.bugs.busybox.net/>
+References: <bug-8401-163@https.bugs.busybox.net/>
+Message-ID: <20151014204639.C8D1F81A0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+https://bugs.busybox.net/show_bug.cgi?id=8401
 
-On Wed, 14 Oct 2015 00:06:27 +0200, Peter Seiderer wrote:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-10-14 20:46:39 UTC ---
+Thanks for your report. Can you point to the upstream commit that fixes the
+problem? I've looked quickly into gpsd's git repository, and I don't see this
+problem fixed.
 
-> +config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO_UNIX_2_0
-> +	bool "gio-unix-2.0"
-> +	help
-> +	  glib GIO unix plugin
-> +
->  endif
-> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> index 08ebe03..f391530 100644
-> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> @@ -202,4 +202,10 @@ else
->  GST1_PLUGINS_BASE_CONF_OPTS += --disable-vorbis
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO_UNIX_2_0),y)
-> +GST1_PLUGINS_BASE_CONF_OPTS += --enable-gio_unix_2_0
-> +else
-> +GST1_PLUGINS_BASE_CONF_OPTS += --disable-gio_unix_2_0
-> +endif
-
-This is still not good I believe. You're confusing --disable-gio and
---disable-gio_unix_2_0. According ./configure --help:
-
-  --disable-gio           disable dependency-less gio plugin
-  --disable-gio_unix_2_0       disable glib GIO unix: gio-unix-2.0
-
-So the option that enables/disables the gio plugin (as indicated by
-your Config.in option help text) is --disable-gio.
-
-On the other hand, --disable-gio_unix_2_0 is only used for this (from
-configure.ac):
-
-dnl *** gio-unix-2.0 for tests/check/pipelines/tcp.c ***
-translit(dnm, m, l) AM_CONDITIONAL(USE_GIO_UNIX_2_0, true)
-AG_GST_CHECK_FEATURE(GIO_UNIX_2_0, [glib GIO unix], gio-unix-2.0, [
-  AG_GST_PKG_CHECK_MODULES(GIO_UNIX_2_0, gio-unix-2.0 >= 2.24)
-])
-
-So I believe we don't really care about gio_unix_2_0, it's only used
-for tests. We could just as well pass --disable-gio_unix_2_0
-unconditionally, and have an option
-BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO to enable/disable the gio
-plugin.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
