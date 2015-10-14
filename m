@@ -1,50 +1,105 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Oct 2015 19:36:45 -0300
-Subject: [Buildroot] [PATCH] busybox: enable fully featured hush shell for
-	nommu
-Message-ID: <1444862205-23935-1-git-send-email-gustavo@zacarias.com.ar>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Wed, 14 Oct 2015 19:45:33 -0400
+Subject: [Buildroot] [PATCH v2 1/1] ntp: add ntptime option
+Message-ID: <1444866333-4256-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As pointed by Rich Fekler on IRC the basic hush shell is pretty much
-useless since it doesn't support if conditionals, loops, functions, case
-or even interactive mode.
-So enable the full feature-set.
-Size delta: +10184 bytes uncompressed for blackfin fdpic.
+Allow the `ntptime` utility to be included on a target.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
- package/busybox/busybox.mk | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Changes v1 -> v2:
+  - In order to support C libraries other than glibc, a change has been
+     made to NTP's autoconf (and the introduction of `NTP_AUTORECONF` to
+     the package). The `ntptime` utility requires ntp system calls to
+     build. The NTP code already supports falling back to inline calls
+     which make use of the `adjtimex` method (supported by uClibc and
+     musl; see 'include/sys/timex.h'). This adjustment flags the
+     configuration that ntp system calls are supported when `adjtimex`
+     or `__adjtimex` are defined (issue brought up by Thomas Petazzoni
+     when the initial ntptime support patch failed to build). For more
+     information, see:
+      https://bugs.ntp.org/show_bug.cgi?id=769
+---
+ package/ntp/0002-ntp-syscalls-fallback.patch | 27 +++++++++++++++++++++++++++
+ package/ntp/Config.in                        |  6 ++++++
+ package/ntp/ntp.mk                           |  2 ++
+ 3 files changed, 35 insertions(+)
+ create mode 100644 package/ntp/0002-ntp-syscalls-fallback.patch
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 3494456..d3a6fd8 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -89,6 +89,21 @@ define BUSYBOX_SET_MMU
- 	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
- 	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_BASH_COMPAT,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_BRACE_EXPANSION,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_HELP,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_INTERACTIVE,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_SAVEHISTORY,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_JOB,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_TICK,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_IF,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_LOOPS,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_CASE,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_FUNCTIONS,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_LOCAL,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_RANDOM_SUPPORT,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_EXPORT_N,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_MODE_X,$(BUSYBOX_BUILD_CONFIG))
- endef
- endif
+diff --git a/package/ntp/0002-ntp-syscalls-fallback.patch b/package/ntp/0002-ntp-syscalls-fallback.patch
+new file mode 100644
+index 0000000..535fc93
+--- /dev/null
++++ b/package/ntp/0002-ntp-syscalls-fallback.patch
+@@ -0,0 +1,27 @@
++inline ntp syscalls fallback
++
++Reference:
++ https://bugs.ntp.org/show_bug.cgi?id=769
++
++Signed-off-by: James Knight <james.knight@rockwellcollins.com>
++---
++ configure.ac | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1523,11 +1523,11 @@ AC_CACHE_CHECK(
++     [ntp_cv_var_ntp_syscalls],
++     [
++ 	ntp_cv_var_ntp_syscalls=no
++-	case "$ac_cv_func_ntp_adjtime$ac_cv_func_ntp_gettime$ac_cv_func___adjtimex" in
+++	case "$ac_cv_func_ntp_adjtime$ac_cv_func_ntp_gettime$ac_cv_func___adjtimex$ac_cv_func_adjtimex" in
++ 	 yesyes*)
++ 	    ntp_cv_var_ntp_syscalls=libc
++ 	    ;;
++-	 *yes)
+++	 *yesyes | *yesno | *noyes)
++ 	    ntp_cv_var_ntp_syscalls=inline
++ 	    ;;
++ 	 *)
+diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+index d4caddf..1763225 100644
+--- a/package/ntp/Config.in
++++ b/package/ntp/Config.in
+@@ -67,6 +67,12 @@ config BR2_PACKAGE_NTP_NTPSNMPD
+ 	help
+ 	  Install ntpsnmpd NTP SNMP MIB agent.
  
++config BR2_PACKAGE_NTP_NTPTIME
++	bool "ntptime"
++	help
++	  The ntptime utility program is used to read and set kernel time
++	  variables.
++
+ config BR2_PACKAGE_NTP_NTPTRACE
+ 	bool "ntptrace"
+ 	depends on BR2_PACKAGE_PERL
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 5997247..2b8be42 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -17,6 +17,7 @@ NTP_CONF_OPTS = \
+ 	--disable-tickadj \
+ 	--with-yielding-select=yes \
+ 	--disable-local-libevent
++NTP_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NTP_CONF_OPTS += --with-crypto
+@@ -46,6 +47,7 @@ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDC) += ntpdc/ntpdc
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPQ) += ntpq/ntpq
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPSNMPD) += ntpsnmpd/ntpsnmpd
++NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTIME) += util/ntptime
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTRACE) += scripts/ntptrace/ntptrace
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_SNTP) += sntp/sntp
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_TICKADJ) += util/tickadj
 -- 
-2.4.9
+1.9.5.msysgit.1
