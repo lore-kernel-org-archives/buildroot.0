@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 22:24:08 +0200
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.9.0
-In-Reply-To: <1444850288-4394-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1444850288-4394-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151014222408.0a4dce10@free-electrons.com>
+Date: Wed, 14 Oct 2015 22:24:20 +0200
+Subject: [Buildroot] [PATCH] spice-protocol: bump to version 0.12.10
+In-Reply-To: <1444849664-30799-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1444849664-30799-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151014222420.1b3a2bf6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 14 Oct 2015 16:18:08 -0300, Gustavo Zacarias wrote:
+On Wed, 14 Oct 2015 16:07:44 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/sqlite/sqlite.hash | 4 +++-
->  package/sqlite/sqlite.mk   | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+>  package/spice-protocol/spice-protocol.hash | 4 ++--
+>  package/spice-protocol/spice-protocol.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied, thanks.
 
