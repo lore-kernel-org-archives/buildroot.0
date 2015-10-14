@@ -1,31 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 23:53:34 +0200
-Subject: [Buildroot] [PATCH] sqlcipher: specify tclConfig.sh directory
-In-Reply-To: <1444858917-17641-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1444858917-17641-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151014235334.5e4699c3@free-electrons.com>
+Date: Wed, 14 Oct 2015 23:49:23 +0200
+Subject: [Buildroot] [git commit] sqlcipher: specify tclConfig.sh directory
+Message-ID: <20151014215342.6DB057FB77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=b1dcb1c2468134ddf0e3cfc81c40874bf9fc561e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Oct 2015 18:41:57 -0300, Gustavo Zacarias wrote:
-> Otherwise it will search around, and if the host has it then it breaks.
-> Fixes:
-> http://autobuild.buildroot.net/results/057/0572a9a1f69ee214efb10863f5d2852b25bf4f54/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/sqlcipher/sqlcipher.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Otherwise it will search around, and if the host has it then it breaks.
+Fixes:
+http://autobuild.buildroot.net/results/057/0572a9a1f69ee214efb10863f5d2852b25bf4f54/
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sqlcipher/sqlcipher.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 9693eb9..fadec22 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
+@@ -14,7 +14,8 @@ SQLCIPHER_CONF_ENV = \
+ 	TCLSH_CMD=$(HOST_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
+ 
+ SQLCIPHER_CONF_OPTS = \
+-	--enable-threadsafe
++	--enable-threadsafe \
++	--with-tcl=$(HOST_DIR)/usr/lib
+ 
+ SQLCIPHER_CFLAGS += -DSQLITE_HAS_CODEC # Required according to the README
+ SQLCIPHER_CONF_ENV += LIBS="-lcrypto -lz"
