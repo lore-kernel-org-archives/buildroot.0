@@ -1,34 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 23:31:06 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain-external: bypass buildroot
- wrapper
-In-Reply-To: <1444856755-2011-2-git-send-email-arnout@mind.be>
-References: <20151011120859.7e786a73@free-electrons.com>
- <1444856755-2011-1-git-send-email-arnout@mind.be>
- <1444856755-2011-2-git-send-email-arnout@mind.be>
-Message-ID: <20151014233106.416d10e6@free-electrons.com>
+Date: Wed, 14 Oct 2015 23:35:07 +0200
+Subject: [Buildroot] [PATCH 1/1] musl: Honor BR2_STATIC_LIBS /
+ BR2_SHARED_LIBS
+In-Reply-To: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
+References: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
+Message-ID: <20151014233507.23a93657@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Charles,
 
-On Wed, 14 Oct 2015 23:05:55 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+On Tue, 13 Oct 2015 23:29:37 -0500, Charles Duffy wrote:
+> From: Charles Duffy <charles@dyfis.net>
+> 
+> Signed-off-by: Charles Duffy <chaduffy@cisco.com>
 
-> Lightly tested with an internal toolchain, an external Sourcery
-> toolchain, an external downloaded buildroot toolchain, and an external
-> pre-installed buildroot toolchain.
+Thanks for the patch!
 
-Did you test with a pre-existing Buildroot toolchain (i.e that predates
-the introduction of the wrapper for internal toolchain), or did you
-build a Buildroot toolchain with the latest Buildroot (including your
-patches) and then re-used it as an external toolchain in another
-Buildroot configuration ?
+> diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+> index 22589f5..aca78ab 100644
+> --- a/package/musl/musl.mk
+> +++ b/package/musl/musl.mk
+> @@ -28,7 +28,9 @@ define MUSL_CONFIGURE_CMDS
+>  			--host=$(GNU_TARGET_NAME) \
+>  			--prefix=/usr \
+>  			--libdir=/lib \
+> -			--disable-gcc-wrapper)
+> +			--disable-gcc-wrapper \
+> +			$(if $(BR2_STATIC_LIBS),--disable-shared) \
+> +			$(if $(BR2_SHARED_LIBS),--disable-static))
 
-Thanks,
+Could you instead try the following change:
+
+-			--disable-gcc-wrapper)
++			--disable-gcc-wrapper \
++			$(SHARED_STATIC_LIBS_OPTS))
+
+
+The SHARED_STATIC_LIBS_OPTS variable, defined in package/Makefile.in,
+already contains the right combination of
+--{enable,disable}-{static,shared} depending on BR2_STATIC_LIBS,
+BR2_SHARED_LIBS and BR2_STATIC_SHARED_LIBS.
+
+Thanks!
 
 Thomas
 -- 
