@@ -1,45 +1,35 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 14 Oct 2015 09:21:41 +0200
-Subject: [Buildroot] [PATCH v2 1/8] package/dhcp: fix SysV init scripts
- option passing
-In-Reply-To: <1444728929-46246-1-git-send-email-benoit@wsystem.com>
-References: <1444728929-46246-1-git-send-email-benoit@wsystem.com>
-Message-ID: <CAGduivzbpaMUfyJYWtSXnZ1SH494jVVLv7nYx3T8f62gsh6Spg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Oct 2015 09:38:13 +0200
+Subject: [Buildroot] [git commit] squeezelite: alsa-lib mixer support is
+	mandatory
+Message-ID: <20151014073842.77D55805F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Benoit,
+commit: http://git.buildroot.net/buildroot/commit/?id=ae84f99cbc239cf95f145e7433fbdbcd57c35013
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Oct 13, 2015 at 11:35 AM, Beno?t Th?baudeau <benoit@wsystem.com>
-wrote:
+Fixes:
 
-> The SysV init scripts have configuration variables like INTERFACES whose
-> contents have to be passed to the daemon. These variables are
-> initialized as empty strings, but some of them are not allowed to be
-> empty and there was no means of filling them apart from creating a root
-> FS overlay to overwrite these scripts.
->
-> This commit adds support for files under /etc/default/ to set these
-> configuration variables. Such light files can now be added to the root
-> FS skeleton or overlays without having to duplicate most of the SysV
-> init scripts.
->
-> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
->
->
-Thanks a lot for your work, I am afraid I am going to add to your work and
-maybe be a bit of a kill joy:
+  http://autobuild.buildroot.net/results/4f5/4f53ed80c7f135c33341919be4d5256409a2b23a/
 
-What about systemd ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squeezelite/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-There's already a service file in the dhcp package, so any changes made to
-the init scripts should also be made to the .service to keep the whole
-package coherent.
-
-If you need any help/tips, do ask.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151014/d405aafd/attachment.html>
+diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
+index 1241085..be8f11a 100644
+--- a/package/squeezelite/Config.in
++++ b/package/squeezelite/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_SQUEEZELITE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	depends on BR2_USE_MMU # mpg123
+ 	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_ALSA_LIB_MIXER
+ 	select BR2_PACKAGE_FLAC
+ 	select BR2_PACKAGE_LIBMAD
+ 	select BR2_PACKAGE_LIBVORBIS
