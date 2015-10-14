@@ -1,48 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 23:49:00 +0200
-Subject: [Buildroot] [PATCH v3 2/2] axfs: add new filesystem type
-In-Reply-To: <1444852286-12219-3-git-send-email-ariel@vanguardiasur.com.ar>
-References: <1444852286-12219-1-git-send-email-ariel@vanguardiasur.com.ar>
- <1444852286-12219-3-git-send-email-ariel@vanguardiasur.com.ar>
-Message-ID: <20151014234900.7688c48e@free-electrons.com>
+Date: Wed, 14 Oct 2015 23:48:19 +0200
+Subject: [Buildroot] [git commit] slang: forcibly disable oniguruma support
+Message-ID: <20151014214910.B4C1A81EBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ariel D'Alessandro,
+commit: http://git.buildroot.net/buildroot/commit/?id=3cd1a9febe6a051db98d737a3bb78c8f461a3af3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Oct 2015 16:51:26 -0300, Ariel D'Alessandro wrote:
-> The Advanced XIP File System is a Linux kernel filesystem driver that
-> enables files to be executed directly from flash or ROM memory rather
-> than being copied into RAM. It has the ability to store individual
-> *pages* in a file uncompressed/XIP or compressed/Demand Paged.
-> 
-> This commit only adds support for 'XIP all' mode, so all the files that
-> have the execute attribute set will be XIP'ed.
-> 
-> At the moment, the FS is not supported in Linux mainline (v4.3-rc5), so
-> the kernel has to be built with the axfs patches to be able to read it.
-> Patches can be found here: https://github.com/jaredeh/axfs
-> 
-> Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-> ---
->  fs/Config.in      |  1 +
->  fs/axfs/Config.in | 16 ++++++++++++++++
->  fs/axfs/axfs.mk   | 13 +++++++++++++
->  3 files changed, 30 insertions(+)
->  create mode 100644 fs/axfs/Config.in
->  create mode 100644 fs/axfs/axfs.mk
+If the host has oniguruma installed then slang can detect it and try to
+(wrongly) link against it resulting in build failure. Fixes:
+http://autobuild.buildroot.net/results/51f/51ff079ebbd363e0445d226ec80bc28e524fd88c/
 
-Applied with some minor tweaks:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/slang/slang.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-    [Thomas: rewrap Config.in help text.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 59ef993..1a7576a 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -9,6 +9,7 @@ SLANG_SITE = http://www.jedsoft.org/releases/slang
+ SLANG_LICENSE = GPLv2+
+ SLANG_LICENSE_FILES = COPYING
+ SLANG_INSTALL_STAGING = YES
++SLANG_CONF_OPTS = --with-onig=no
+ SLANG_MAKE = $(MAKE1)
+ 
+ # Racy and we don't have/do libtermcap
