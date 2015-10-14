@@ -1,51 +1,81 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Wed, 14 Oct 2015 08:38:09 -0700
-Subject: [Buildroot] docs/website: New website
-In-Reply-To: <CA+TH9VmNdKfHr5v8-OteT6TLC8DK-HGshyUnbHgX_p+A2rW2=A@mail.gmail.com>
-References: <CA+TH9VmNdKfHr5v8-OteT6TLC8DK-HGshyUnbHgX_p+A2rW2=A@mail.gmail.com>
-Message-ID: <CAJJ6jxvwh2Q7nozfQc5nhptf5tkwsR3bo26SbFwjOHj7_4mj-w@mail.gmail.com>
+From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+Date: Wed, 14 Oct 2015 12:50:13 -0300
+Subject: [Buildroot] [PATCH v2 2/2] axfs: add new filesystem type
+In-Reply-To: <20151013205313.GB4161@free.fr>
+References: <1444064102-13575-1-git-send-email-ariel@vanguardiasur.com.ar>
+ <1444064102-13575-3-git-send-email-ariel@vanguardiasur.com.ar>
+ <5612C712.6020209@mind.be> <20151013205313.GB4161@free.fr>
+Message-ID: <561E79B5.8070509@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Great, works on my Android phone too.
+Yann,
 
-Regards, Steve
+El 13/10/15 a las 17:53, Yann E. MORIN escribi?:
+> Arnout, Ariel, All,
+> 
+> On 2015-10-05 19:53 +0100, Arnout Vandecappelle spake thusly:
+>> On 05-10-15 17:55, Ariel D'Alessandro wrote:
+>>> The Advanced XIP File System is a Linux kernel filesystem driver that enables
+>>> files to be executed directly from flash or ROM memory rather than being copied
+>>> into RAM.
+> [--SNIP--]
+>>  It would be nice to add the axfs kernel side as a kernel extension as well. But
+>> that looks heavily non-trivial.
+> 
+> I had a quick and cursory look at the axfs sources, and I think this
+> could be quite easily achievable. Non-trivial, granted, but not too
+> complex either.
+> 
+> Ariel, are you interested in adding this as a kernel extension?
+> (Hint: it would be really great! ;-) )
 
-On Tue, Oct 13, 2015 at 12:54 PM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> This patch introduces a new buildroot website based on a modern
-> flat layout inspired by material design.
-> Each page of the old website is converted to the new css/layout,
-> the big bump is in main page which is completely rewritten.
-> Content of the old website is copied more or less verbatim,
-> planning to add more content in the future.
->
-> You can find a complete demo site here:
->
-> http://angeloc.github.io
->
-> Unfortunately, this patch cannot be sent with git send-email, cause
-> css and javascript minified files contains lines longer than the
-> maximum smtp size.
->
-> Hence, I attached the patch in tar.gz format, it's fairly big due to
-> image and graphics, but couldn't manage to make it smaller.
->
-> I removed bootstrap css and javascript from shipping, now they are
-> served unmodified from their respective cdns, so from now on, the
-> problem with long lines should be resolved.
->
-> Hope you like it!
->
-> Sincerely, Angelo
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Yes, I'll make some room and take a look at this!
+
+> 
+> Kernel extensions are a way to "modify" the kernel source tree with
+> patches provided by another package:
+>     http://buildroot.org/downloads/manual/manual.html#linux-kernel-ext
+> 
+> Basically, here's what you'd have to do in the axfs extension:
+> 
+>   - get the 'raw' version of the kernel with (but see notes below):
+>         AXFSUTILS_KVER = $(MAKE) -C $(LINUX_DIR) kernelversion
+> 
+>   - check that there is a patch directory for that kernel version:
+>         kernel/patches/v$(AXFSUTILS_KVER)/
+>     => if not, bail out
+>     => if yes, continue
+> 
+>   - copy $(@D)/kernel/fs/axfs to $(LINUX_DIR)/fs/axfs
+> 
+>   - copy $(@D)/include/linux/* to $(LINUX_DIR)/include/linux/
+> 
+>   - modify $(LINUX_DIR)/fs/Kconfig with (before last line):
+>         source "fs/axfs/Kconfig"
+> 
+>   - modify $(LINUX_DIR)/fs/Makefile with (as last line):
+>         obj-$(CONFIG_AXFS) += axfs
+> 
+> Obviously, entirely untested; adapt to Real Life (TM). ;-)
+> 
+> Notes: ideally, the kernel 'raw' version should be provided by
+> linux/linux.mk but we currently do not have it yet; we only have
+> 'kernelrelease', not 'kernelversion'. It would be interesting if you
+> provided an initial patch that adds this.
+> 
+> Currently, 'kernelrelease' is in $(LINUX_VERSION_PROBED), so maybe you
+> could introduce LINUX_VERSION_RAW filled with the output of
+> 'kernelversion' (see how it's done for 'kernelrelease').
+
+That's pretty clarifying! Thank you very much for this Yann, it will
+help me a lot. I'll try to submit patches for this ASAP.
+
+Thanks,
+
+-- 
+Ariel D'Alessandro, VanguardiaSur
+www.vanguardiasur.com.ar
