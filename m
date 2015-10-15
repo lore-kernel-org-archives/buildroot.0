@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Oct 2015 09:10:30 +0200
-Subject: [Buildroot] [PATCH 4/5] gtest: Upgrade to GitHub HEAD
-In-Reply-To: <561ED08C.5010301@softiron.co.uk>
-References: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
- <1444859483-2268-5-git-send-email-alan@softiron.co.uk>
- <20151014235522.774491e2@free-electrons.com>
- <561ED08C.5010301@softiron.co.uk>
-Message-ID: <20151015091030.2f7272ec@free-electrons.com>
+Date: Thu, 15 Oct 2015 09:38:08 +0200
+Subject: [Buildroot] [git commit] musl: honor static vs. shared library
+	options
+Message-ID: <20151015073826.A7F3080049@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alan Ott,
+commit: http://git.buildroot.net/buildroot/commit/?id=bb41933d3642f44c8d2db07886b2e5bf18b97fad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Oct 2015 18:00:44 -0400, Alan Ott wrote:
+[Thomas: use SHARED_STATIC_LIBS_OPTS to simplify the logic.]
 
-> > So gtest and gmock are in fact now part of the same repository/upstream
-> > project ? If that's the case, then I think we should simply get rid of
-> > the gtest and gmock packages, and have a single package named
-> > "googletest".
-> 
-> Yes, that would probably be better. gmock depends on gtest, and gtest 
-> can be standalone. Maybe we have one package with a submenu option to 
-> build each target (and a dependency so gmock selects gtest).
-> 
-> Is that ok by you?
+Signed-off-by: Charles Duffy <chaduffy@cisco.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/musl/musl.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Yes, that's OK.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 22589f5..f0c45f5 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -28,7 +28,8 @@ define MUSL_CONFIGURE_CMDS
+ 			--host=$(GNU_TARGET_NAME) \
+ 			--prefix=/usr \
+ 			--libdir=/lib \
+-			--disable-gcc-wrapper)
++			--disable-gcc-wrapper \
++			$(SHARED_STATIC_LIBS_OPTS))
+ endef
+ 
+ define MUSL_BUILD_CMDS
