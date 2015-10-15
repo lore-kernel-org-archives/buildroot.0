@@ -1,41 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Oct 2015 09:38:56 +0200
-Subject: [Buildroot] [PATCH 1/1] musl: Honor BR2_STATIC_LIBS /
- BR2_SHARED_LIBS
-In-Reply-To: <CAEHm_shswg6pPrMgif+OY2w3qqW15d1Amkf4avUPum_OpF-MEA@mail.gmail.com>
-References: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
- <20151014233507.23a93657@free-electrons.com>
- <CAEHm_shswg6pPrMgif+OY2w3qqW15d1Amkf4avUPum_OpF-MEA@mail.gmail.com>
-Message-ID: <20151015093856.5f9d0dbe@free-electrons.com>
+Date: Thu, 15 Oct 2015 09:39:36 +0200
+Subject: [Buildroot] [git commit] pango: remove initscript
+Message-ID: <20151015074025.D833D81D5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Charles,
+commit: http://git.buildroot.net/buildroot/commit/?id=6c59216f154e83521628068bb12994fe28894894
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Oct 2015 22:23:12 +0000, Charles Duffy wrote:
-> On Wed, Oct 14, 2015 at 4:35 PM Thomas Petazzoni <
-> thomas.petazzoni at free-electrons.com> wrote:
-> 
-> > Could you instead try the following change:
-> >
-> > -                       --disable-gcc-wrapper)
-> > +                       --disable-gcc-wrapper \
-> > +                       $(SHARED_STATIC_LIBS_OPTS))
-> >
-> >
-> Works perfectly. Should I bother resubmitting, or are you inclined to make
-> the change directly?
+pango-querymodules is deprecated/removed, so ditch the initscript.
 
-I did the change and applied. See
-http://git.buildroot.net/buildroot/commit/?id=bb41933d3642f44c8d2db07886b2e5bf18b97fad.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pango/S25pango |   20 --------------------
+ package/pango/pango.mk |    5 -----
+ 2 files changed, 0 insertions(+), 25 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pango/S25pango b/package/pango/S25pango
+deleted file mode 100644
+index 9af9307..0000000
+--- a/package/pango/S25pango
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#!/bin/sh
+-#
+-# run pango-querymodules if needed
+-
+-FILE=/etc/pango/pango.modules
+-
+-case "$1" in
+-     start|"")
+-	if [ ! -f $FILE ] ; then
+-	   mkdir -p /etc/pango
+-	   /usr/bin/pango-querymodules > "$FILE"
+-	fi
+-	;;
+-    stop)
+-	;;
+-    *)
+-	echo "Usage: $0 {start|stop}" >&2
+-	exit 1
+-	;;
+-esac
+\ No newline at end of file
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 19d6509..6c96cd3 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -97,10 +97,5 @@ PANGO_DEPENDENCIES += xlib_libXft xlib_libXrender
+ PANGO_CONF_OPTS += --with-xft
+ endif
+ 
+-define PANGO_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 755 -D package/pango/S25pango \
+-		$(TARGET_DIR)/etc/init.d/S25pango
+-endef
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
