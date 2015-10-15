@@ -1,41 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Oct 2015 16:43:50 -0300
-Subject: [Buildroot] [PATCH] fping: bump to version 3.12
-Message-ID: <1444938230-3864-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 15 Oct 2015 21:55:21 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: Disable rtmpdump support
+	when PolarSSL is enabled
+Message-ID: <1444938921-10025-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes regression with fping6 -R.
+Using rtmpdump with PolarSSL breaks ffmpeg configure:
+/home/test/autobuild/instance-1/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/librtmp.so: undefined reference to `havege_random'
+/home/test/autobuild/instance-1/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/librtmp.so: undefined reference to `havege_init'
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This problem could be fixed by enabling POLARSSL_HAVEGE_C:
+http://freetz.org/browser/trunk/make/libs/polarssl/patches/050-activate-havege-random-generator-needed-by-rtmpdump.polarssl.patch?rev=10797
+
+This option is however accompanied by a warning in
+include/polarssl/config.h:
+
+ * Warning: the HAVEGE random generator is dependent on timing and specific
+ *          processor traits. It is therefore not advised to use HAVEGE as
+ *          your applications primary random generator or primary entropy pool
+ *          input. As a secondary input to your entropy pool, it IS able add
+ *          the (limited) extra entropy it provides.
+
+Since rtmpdump is not a vital part of ffmpeg it is save to disable
+rtmpdump support when PolarSSL is used.
+
+Fixes
+http://autobuild.buildroot.net/results/ae0/ae0c4bab7975ed2ad77a9f9fd6a300d1327d56b9/
+http://autobuild.buildroot.net/results/45d/45dd9adbac449ce0ed66af5b4655b4d9b37faa62/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/fping/fping.hash | 2 +-
- package/fping/fping.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v2: fix rtmpdump/PolarSSL detection (Yann)
 
-diff --git a/package/fping/fping.hash b/package/fping/fping.hash
-index c52e145..99c01cf 100644
---- a/package/fping/fping.hash
-+++ b/package/fping/fping.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	d824a4a8be88f74efe17ed66147b1e75c36ff83442e847ab1d5cfa7d9548c507	fping-3.11.tar.gz
-+sha256	d86f2281bda4653c7049e6ba8fce24ba67edbf9193b7bb1cf6219b0c8ddce4e6	fping-3.12.tar.gz
-diff --git a/package/fping/fping.mk b/package/fping/fping.mk
-index b33fa4d..c576dd1 100644
---- a/package/fping/fping.mk
-+++ b/package/fping/fping.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/ffmpeg/ffmpeg.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index f361970..c37a8ac 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -246,7 +246,8 @@ else
+ FFMPEG_CONF_OPTS += --disable-libbluray
+ endif
  
--FPING_VERSION = 3.11
-+FPING_VERSION = 3.12
- FPING_SITE = http://fping.org/dist
- FPING_LICENSE = BSD-like
- FPING_LICENSE_FILES = COPYING
+-ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
++# rtmpdump is broken with polarssl
++ifeq ($(BR2_PACKAGE_RTMPDUMP):$(BR2_PACKAGE_POLARSSL),y:)
+ FFMPEG_CONF_OPTS += --enable-librtmp
+ FFMPEG_DEPENDENCIES += rtmpdump
+ else
 -- 
-2.4.9
+2.6.1
