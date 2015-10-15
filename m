@@ -1,66 +1,30 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Thu, 15 Oct 2015 10:24:39 -0300
-Subject: [Buildroot] [PATCH] ccache: allow for BR2_CCACHE_DIR environment
-	override
-Message-ID: <1444915479-7871-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 15 Oct 2015 13:35:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 8341] Getting EGL Error: Could not create the egl
+ surface: error = 0x300b on RPI-2b board.
+In-Reply-To: <bug-8341-163@https.bugs.busybox.net/>
+References: <bug-8341-163@https.bugs.busybox.net/>
+Message-ID: <20151015133553.B32A47FA9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+https://bugs.busybox.net/show_bug.cgi?id=8341
 
-Allow the BR2_CCACHE_DIR .config option to be overriden by the
-BR2_CCACHE_DIR env variable.
-This is useful for big projects where in some cases the developers home
-directory might be a NFS mount (slow) and real production builds aren't.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Update documentation accordingly as well.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+         AssignedTo|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- Makefile                     | 6 ++++--
- docs/manual/common-usage.txt | 3 +++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-10-15 13:35:53 UTC ---
+Yann, can you have a look ? Thanks!
 
-diff --git a/Makefile b/Makefile
-index 181d446..5bf1538 100644
---- a/Makefile
-+++ b/Makefile
-@@ -183,7 +183,9 @@ endif
- ifneq ($(BR2_DL_DIR),)
- DL_DIR := $(BR2_DL_DIR)
- endif
--
-+ifneq ($(BR2_CCACHE_DIR),)
-+BR_CACHE_DIR := $(BR2_CCACHE_DIR)
-+endif
- 
- # Need that early, before we scan packages
- # Avoids doing the $(or...) everytime
-@@ -371,7 +373,7 @@ TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
- 
- ifeq ($(BR2_CCACHE),y)
- CCACHE := $(HOST_DIR)/usr/bin/ccache
--BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
-+BR_CACHE_DIR ?= $(call qstrip,$(BR2_CCACHE_DIR))
- export BR_CACHE_DIR
- HOSTCC := $(CCACHE) $(HOSTCC)
- HOSTCXX := $(CCACHE) $(HOSTCXX)
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 5b27b1f..51b6a3e 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -84,6 +84,9 @@ to +make+ or set in the environment:
-   configuration interface, so through the Buildroot +.config+ file; this
-   is the recommended way of setting it.
-   +
-+* +BR2_CCACHE_DIR+ to override the directory where
-+  Buildroot stores the cached files when using ccache.
-+  +
- * +BR2_DL_DIR+ to override the directory in which
-   Buildroot stores/retrieves downloaded files
-   +
 -- 
-2.4.9
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
