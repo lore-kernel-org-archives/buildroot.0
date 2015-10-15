@@ -1,57 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Oct 2015 21:55:21 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: Disable rtmpdump support
-	when PolarSSL is enabled
-Message-ID: <1444938921-10025-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Oct 2015 22:00:32 +0200
+Subject: [Buildroot] [git commit] axfs: add new filesystem type
+In-Reply-To: <20151014214751.023DE81663@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Wed, 14 Oct 2015 23:47:30 +0200")
+References: <20151014214751.023DE81663@busybox.osuosl.org>
+Message-ID: <87vba76gwv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using rtmpdump with PolarSSL breaks ffmpeg configure:
-/home/test/autobuild/instance-1/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/librtmp.so: undefined reference to `havege_random'
-/home/test/autobuild/instance-1/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/librtmp.so: undefined reference to `havege_init'
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-This problem could be fixed by enabling POLARSSL_HAVEGE_C:
-http://freetz.org/browser/trunk/make/libs/polarssl/patches/050-activate-havege-random-generator-needed-by-rtmpdump.polarssl.patch?rev=10797
+ > commit: http://git.buildroot.net/buildroot/commit/?id=a6f916430f553efa71dd7092073f5dec32861ba3
+ > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This option is however accompanied by a warning in
-include/polarssl/config.h:
+ > The Advanced XIP File System is a Linux kernel filesystem driver that
+ > enables files to be executed directly from flash or ROM memory rather
+ > than being copied into RAM. It has the ability to store individual
+ > *pages* in a file uncompressed/XIP or compressed/Demand Paged.
 
- * Warning: the HAVEGE random generator is dependent on timing and specific
- *          processor traits. It is therefore not advised to use HAVEGE as
- *          your applications primary random generator or primary entropy pool
- *          input. As a secondary input to your entropy pool, it IS able add
- *          the (limited) extra entropy it provides.
+ > This commit only adds support for 'XIP all' mode, so all the files that
+ > have the execute attribute set will be XIP'ed.
 
-Since rtmpdump is not a vital part of ffmpeg it is save to disable
-rtmpdump support when PolarSSL is used.
+ > At the moment, the FS is not supported in Linux mainline (v4.3-rc5), so
+ > the kernel has to be built with the axfs patches to be able to read it.
+ > Patches can be found here: https://github.com/jaredeh/axfs
 
-Fixes
-http://autobuild.buildroot.net/results/ae0/ae0c4bab7975ed2ad77a9f9fd6a300d1327d56b9/
-http://autobuild.buildroot.net/results/45d/45dd9adbac449ce0ed66af5b4655b4d9b37faa62/
+ > [Thomas: rewrap Config.in help text.]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: fix rtmpdump/PolarSSL detection (Yann)
+ > Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- package/ffmpeg/ffmpeg.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> +++ b/fs/axfs/Config.in
+ > @@ -0,0 +1,17 @@
+ > +config BR2_TARGET_ROOTFS_AXFS
+ > +	bool "axfs root filesystem"
+ > +	help
+ > +	  The Advanced XIP File System is a Linux kernel filesystem
+ > +	  driver that enables files to be executed directly from flash
+ > +	  or ROM memory rather than being copied into RAM. It has the
+ > +	  ability to store individual *pages* in a file
+ > +	  uncompressed/XIP or compressed/Demand Paged.
+ > +
+ > +	  So far, the only supported mode is 'XIP all', so all the
+ > +	  files that have the execute attribute set will be XIP'ed.
+ > +
+ > +	  At the moment, the FS is not supported in Linux mainline
+ > +	  (v4.3-rc5), so the kernel has to be built with the axfs
+ > +	  patches to be able to read it. Patches can be found at:
+ > +
+ > +	    https://github.com/jaredeh/axfs
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f361970..c37a8ac 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -246,7 +246,8 @@ else
- FFMPEG_CONF_OPTS += --disable-libbluray
- endif
- 
--ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
-+# rtmpdump is broken with polarssl
-+ifeq ($(BR2_PACKAGE_RTMPDUMP):$(BR2_PACKAGE_POLARSSL),y:)
- FFMPEG_CONF_OPTS += --enable-librtmp
- FFMPEG_DEPENDENCIES += rtmpdump
- else
+The indentation of that URL looks wrong. I'll fix it now.
+
 -- 
-2.6.1
+Bye, Peter Korsgaard
