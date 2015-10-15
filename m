@@ -1,31 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Oct 2015 13:27:53 +0200
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.12.8
-In-Reply-To: <1444907231-1923-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1444907231-1923-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151015132753.21c4d792@free-electrons.com>
+Date: Thu, 15 Oct 2015 13:28:11 +0200
+Subject: [Buildroot] [git commit] mplayer: enable apng and tdsc only if zlib
+	is available
+Message-ID: <20151015112816.C140881F00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=9731582d5c10d362878a194aa34bfcc0825a4395
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Oct 2015 08:07:11 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2015-7830 - Pcapng file parser crash.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/wireshark/wireshark.hash | 7 ++++---
->  package/wireshark/wireshark.mk   | 2 +-
->  2 files changed, 5 insertions(+), 4 deletions(-)
+apng and tdsc are enabled by default, but they need zlib, otherwise the
+compilation will fail with an error like this one:
 
-Applied, thanks.
+libavcodec/pngdec.c:35:18: fatal error: zlib.h: No such file or
+directory
+ #include <zlib.h>
+                  ^
+compilation terminated.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+So add an autodep on BR2_PACKAGE_ZLIB to enable or disable support for
+apng and tdsc accordingly.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mplayer/mplayer.mk |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index d896b35..2f58864 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -27,6 +27,19 @@ else
+ MPLAYER_CONF_OPTS += --disable-big-endian
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++MPLAYER_DEPENDENCIES += zlib
++MPLAYER_CONF_OPTS += \
++	--enable-decoder=apng \
++	--enable-encoder=apng \
++	--enable-decoder=tdsc
++else
++MPLAYER_CONF_OPTS += \
++	--disable-decoder=apng \
++	--disable-encoder=apng \
++	--disable-decoder=tdsc
++endif
++
+ ifeq ($(BR2_PACKAGE_SDL),y)
+ MPLAYER_CONF_OPTS += \
+ 	--enable-sdl \
