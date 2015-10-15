@@ -1,112 +1,61 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 15 Oct 2015 16:45:00 +0200
-Subject: [Buildroot] [PATCH v2] bridge-utils: add upstream patch fixing
-	sysfs writes
-Message-ID: <1444920300-21449-1-git-send-email-patrickdepinguin@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 15 Oct 2015 16:14:06 +0100
+Subject: [Buildroot] [PATCH] dropbear: bump to 2015.68
+In-Reply-To: <1444913378-32592-1-git-send-email-luca@lucaceresoli.net>
+References: <1444913378-32592-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <561FC2BE.6070809@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Dear Luca Ceresoli,
 
-Add upstream patch that fixes a sysfs path in br_set.
-The patch is on top of the latest release 1.5, which already dates from
-2011.
+On 10/15/2015 01:49 PM, Luca Ceresoli wrote:
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- package/bridge-utils/0003-sysfs-write-fixes.patch | 81 +++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 package/bridge-utils/0003-sysfs-write-fixes.patch
+Build test for MIPS architecture:
 
-diff --git a/package/bridge-utils/0003-sysfs-write-fixes.patch b/package/bridge-utils/0003-sysfs-write-fixes.patch
-new file mode 100644
-index 0000000..9154308
---- /dev/null
-+++ b/package/bridge-utils/0003-sysfs-write-fixes.patch
-@@ -0,0 +1,81 @@
-+commit bb9970a9df95837e39d680021b1f73d231e85406
-+Author: Stephen Hemminger <shemminger@vyatta.com>
-+Date:   Tue May 3 09:52:43 2011 -0700
-+
-+    Check error returns from write to sysfs
-+    
-+    Add helper function to check write to sysfs files.
-+
-+    Fix incorrect sysfs path in br_set.
-+
-+[Thomas De Schampheleire: update commit message only]
-+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-+
-+diff --git a/libbridge/libbridge_devif.c b/libbridge/libbridge_devif.c
-+index aa8bc36..1e83925 100644
-+--- a/libbridge/libbridge_devif.c
-++++ b/libbridge/libbridge_devif.c
-+@@ -280,25 +280,38 @@ fallback:
-+ 	return old_get_port_info(brname, port, info);
-+ }
-+ 
-++static int set_sysfs(const char *path, unsigned long value)
-++{
-++	int fd, ret = 0, cc;
-++	char buf[32];
-++
-++	fd = open(path, O_WRONLY);
-++	if (fd < 0)
-++		return -1;
-++
-++	cc = snprintf(buf, sizeof(buf), "%lu\n", value);
-++	if (write(fd, buf, cc) < 0)
-++		ret = -1;
-++	close(fd);
-++
-++	return ret;
-++}
-++
-+ 
-+ static int br_set(const char *bridge, const char *name,
-+ 		  unsigned long value, unsigned long oldcode)
-+ {
-+ 	int ret;
-+ 	char path[SYSFS_PATH_MAX];
-+-	FILE *f;
-+ 
-+-	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/%s", bridge, name);
-++	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/bridge/%s",
-++		 bridge, name);
-+ 
-+-	f = fopen(path, "w");
-+-	if (f) {
-+-		ret = fprintf(f, "%ld\n", value);
-+-		fclose(f);
-+-	} else {
-++	if ((ret = set_sysfs(path, value)) < 0) {
-+ 		/* fallback to old ioctl */
-+ 		struct ifreq ifr;
-+ 		unsigned long args[4] = { oldcode, value, 0, 0 };
-+-		
-++
-+ 		strncpy(ifr.ifr_name, bridge, IFNAMSIZ);
-+ 		ifr.ifr_data = (char *) &args;
-+ 		ret = ioctl(br_socket_fd, SIOCDEVPRIVATE, &ifr);
-+@@ -348,14 +361,10 @@ static int port_set(const char *bridge, const char *ifname,
-+ {
-+ 	int ret;
-+ 	char path[SYSFS_PATH_MAX];
-+-	FILE *f;
-+ 
-+ 	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/brport/%s", ifname, name);
-+-	f = fopen(path, "w");
-+-	if (f) {
-+-		ret = fprintf(f, "%ld\n", value);
-+-		fclose(f);
-+-	} else {
-++
-++	if ((ret = set_sysfs(path, value)) < 0) {
-+ 		int index = get_portno(bridge, ifname);
-+ 
-+ 		if (index < 0)
--- 
-1.9.5
+$ grep -E ^DROPBEAR_VERSION package/dropbear/dropbear.mk
+DROPBEAR_VERSION = 2015.68
+
+$ file output/target/usr/sbin/dropbear
+output/target/usr/sbin/dropbear: ELF 32-bit MSB executable, MIPS, MIPS32
+rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
+GNU/Linux 2.6.32, with unknown capability 0x41000000 = 0xf676e75, with
+unknown capability 0x10000 = 0x70401, stripped
+
+Regards,
+
+Vincent.
+
+> ---
+>  package/dropbear/dropbear.hash | 2 +-
+>  package/dropbear/dropbear.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+> index 30856cc..981bb1d 100644
+> --- a/package/dropbear/dropbear.hash
+> +++ b/package/dropbear/dropbear.hash
+> @@ -1,2 +1,2 @@
+>  # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+> -sha256	7e690594645dfde5787065c78a5d2e4d15e288babfa06e140197ce05f698c8e5	dropbear-2015.67.tar.bz2
+> +sha256	55ea7c1e904ffe4b1cdbe1addca8291a2533d7d285fd22ac33608e9502a62446  dropbear-2015.68.tar.bz2
+> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+> index aa3fd9d..57c1b5c 100644
+> --- a/package/dropbear/dropbear.mk
+> +++ b/package/dropbear/dropbear.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -DROPBEAR_VERSION = 2015.67
+> +DROPBEAR_VERSION = 2015.68
+>  DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+>  DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+>  DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
+> 
