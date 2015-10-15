@@ -1,41 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Oct 2015 16:43:04 -0300
-Subject: [Buildroot] [PATCH] redis: bump to version 3.0.5
-Message-ID: <1444938184-3817-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 15 Oct 2015 21:44:03 +0200
+Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: update configure
+ options
+In-Reply-To: <561DFECB.2020009@mind.be>
+References: <1444774091-19539-1-git-send-email-ps.report@gmx.net>
+ <561DFECB.2020009@mind.be>
+Message-ID: <20151015214403.1da7f271@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/redis/redis.hash | 4 +++-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Hello Arnout,
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 47964e9..d8a957d 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,2 +1,4 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1	cccc58b2b8643930840870f17280fcae57ed7675 	redis-3.0.4.tar.gz
-+sha1	ad3ee178c42bfcfd310c72bbddffbbe35db9b4a6 	redis-3.0.5.tar.gz
-+# Calculated based on the hash above
-+sha256	4c176826eee909fbdc63db1c15adc22aab42d758043829e556f4331e6a5bd480	redis-3.0.5.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index ea20b77..e7f4299 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 3.0.4
-+REDIS_VERSION = 3.0.5
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
--- 
-2.4.9
+On Wed, 14 Oct 2015 09:05:47 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> On 14-10-15 00:08, Peter Seiderer wrote:
+> > - add new onvif option
+> > - add new dtls option
+> > - add new openh264 option
+> > - add new x265 option
+> > - rename real option to rtp
+> > - remove legacy options: directdraw, osx_video, quicktime
+> >   and mythtv
+> > - add '--disable-bs2b' and '--disable-libde265' to options
+> >   which require currently unpackaged libraries
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > ToDo: handle new '--disable-gtk3' and '--disable-qt' options
+> 
+>  If you don't handle them now (or plan to do so in the very near future), then
+> explicitly disable them for the time being. This helps for reproducible builds.
+> 
+
+O.k. will do this (until I find enough time for a proper follow up patch)...
+
+Regards,
+Peter
+
+>  Regards,
+>  Arnout
+> 
+> 
