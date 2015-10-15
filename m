@@ -1,92 +1,97 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Oct 2015 23:36:53 +0200
-Subject: [Buildroot] [PATCH] ccache: allow for BR2_CCACHE_DIR
- environment override
-In-Reply-To: <1444915479-7871-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1444915479-7871-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <56201C75.10300@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Oct 2015 23:40:46 +0200
+Subject: [Buildroot] [PATCH RFC v2] gcc: improve checking of stack
+ smashing support with uclibc
+In-Reply-To: <1443458077-864-1-git-send-email-brendanheading@gmail.com>
+References: <1443458077-864-1-git-send-email-brendanheading@gmail.com>
+Message-ID: <20151015234046.614e0fd0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15-10-15 15:24, gustavo.zacarias at free-electrons.com wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> 
-> Allow the BR2_CCACHE_DIR .config option to be overriden by the
-> BR2_CCACHE_DIR env variable.
-> This is useful for big projects where in some cases the developers home
-> directory might be a NFS mount (slow) and real production builds aren't.
-> 
-> Update documentation accordingly as well.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Brendan,
 
- I initially thought: why not set the default in the .config file based on the
-environment. However, this approach is really a lot simpler, so:
+On Mon, 28 Sep 2015 17:34:37 +0100, Brendan Heading wrote:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> diff --git a/package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch b/package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch
+> new file mode 100644
+> index 0000000..31947a0
+> --- /dev/null
+> +++ b/package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch
+> @@ -0,0 +1,81 @@
+> +From ff055a237ef91673a031bfe9dab743b01bd93d70 Mon Sep 17 00:00:00 2001
+> +From: Brendan Heading <brendanheading@gmail.com>
+> +Date: Mon, 28 Sep 2015 16:14:41 +0100
+> +Subject: [PATCH 1/1] Improve checking of stack-smashing support with uclibc
+> +
+> +Detect if uclibc has stack-smashing enabled, and fall out if it does not.
+> +
+> +A more comprehensive solution is to be proposed for upstream.
+> +
+> +Upstream-status: inappropriate
 
+Why ?
 
- One more remark below.
+> +Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+> +---
+> + gcc/configure    | 15 +++++++++------
+> + gcc/configure.ac | 15 +++++++++------
+> + 2 files changed, 18 insertions(+), 12 deletions(-)
+> +
+> +diff --git a/gcc/configure b/gcc/configure
+> +index 63cba0a..658a3e6 100755
+> +--- a/gcc/configure
+> ++++ b/gcc/configure
+> +@@ -26806,17 +26806,20 @@ else
+> + 	if $EGREP '^[ 	]*#[ 	]*define[ 	]+__GLIBC__[ 	]+([1-9][0-9]|[3-9])' \
+> + 	   $target_header_dir/features.h > /dev/null; then
+> + 	  gcc_cv_libc_provides_ssp=yes
 
-> ---
->  Makefile                     | 6 ++++--
->  docs/manual/common-usage.txt | 3 +++
->  2 files changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 181d446..5bf1538 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -183,7 +183,9 @@ endif
->  ifneq ($(BR2_DL_DIR),)
->  DL_DIR := $(BR2_DL_DIR)
->  endif
-> -
-> +ifneq ($(BR2_CCACHE_DIR),)
-> +BR_CACHE_DIR := $(BR2_CCACHE_DIR)
-> +endif
->  
->  # Need that early, before we scan packages
->  # Avoids doing the $(or...) everytime
-> @@ -371,7 +373,7 @@ TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
->  
->  ifeq ($(BR2_CCACHE),y)
->  CCACHE := $(HOST_DIR)/usr/bin/ccache
-> -BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
-> +BR_CACHE_DIR ?= $(call qstrip,$(BR2_CCACHE_DIR))
->  export BR_CACHE_DIR
->  HOSTCC := $(CCACHE) $(HOSTCC)
->  HOSTCXX := $(CCACHE) $(HOSTCXX)
-> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-> index 5b27b1f..51b6a3e 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -84,6 +84,9 @@ to +make+ or set in the environment:
->    configuration interface, so through the Buildroot +.config+ file; this
->    is the recommended way of setting it.
->    +
-> +* +BR2_CCACHE_DIR+ to override the directory where
-> +  Buildroot stores the cached files when using ccache.
-> +  +
+What prevents uClibc from ever matching this case? Shouldn't the
+__UCLIBC__ case be *before* any __GLIBC__ case ?
 
- It could be useful to add this to ccache-support.txt as well.
+> ++	elif $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC__[ 	]+1' \
+> ++	     $target_header_dir/features.h > /dev/null && \
+> ++	     test -f $target_header_dir/bits/uClibc_config.h; then
+> ++	      if $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC_HAS_SSP__[ 	]+1' \
+> ++	        $target_header_dir/bits/uClibc_config.h > /dev/null; then
+> ++	         gcc_cv_libc_provides_ssp=yes
+> ++	      else
+> ++	         gcc_cv_libc_provides_ssp=no
 
- Regards,
- Arnout
+This else close is useless, gcc_cv_libc_provides_ssp is initialized to
+"no" at the beginning of this piece of code.
 
->  * +BR2_DL_DIR+ to override the directory in which
->    Buildroot stores/retrieves downloaded files
->    +
-> 
+If you look further down below in the code, you can see:
 
+       *-*-darwin* | *-*-freebsd*)
+         AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
+           [echo "no __stack_chk_fail on this target"])
 
+Do you know why a similar check isn't used for Linux ? It really seems
+to be a lot easier than to poke into the C library details, no? But
+maybe it's a too drastic change.
+
+But now that I think of it, there is probably a much, much simpler
+change: use the gcc_cv_libc_provides_ssp cache variable, which we
+already use during gcc-initial.
+
+My proposal would be something like:
+
+	http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=fix-ssp
+
+(see the last three commits)
+
+I am currently doing a test build of glibc, uClibc w/ SSP, uClibc w/o
+SSP and musl to see how it goes. But I believe it's actually simpler
+than patching gcc, no?
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
