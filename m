@@ -1,28 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Oct 2015 21:59:39 +0200
-Subject: [Buildroot] [git commit] fs/axfs: fix URL indentation
-Message-ID: <20151015202059.D1C838039D@busybox.osuosl.org>
+Date: Thu, 15 Oct 2015 22:22:24 +0200
+Subject: [Buildroot] [PATCH] dropbear: bump to 2015.68
+In-Reply-To: <1444913378-32592-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Thu, 15 Oct 2015 14:49:38 +0200")
+References: <1444913378-32592-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87eggv6fwf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=576463a95167cd83e6b883b71200a61eba27bddf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- fs/axfs/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-diff --git a/fs/axfs/Config.in b/fs/axfs/Config.in
-index eaaf7db..8dfaffa 100644
---- a/fs/axfs/Config.in
-+++ b/fs/axfs/Config.in
-@@ -14,4 +14,4 @@ config BR2_TARGET_ROOTFS_AXFS
- 	  (v4.3-rc5), so the kernel has to be built with the axfs
- 	  patches to be able to read it. Patches can be found at:
- 
--	    https://github.com/jaredeh/axfs
-+	  https://github.com/jaredeh/axfs
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
