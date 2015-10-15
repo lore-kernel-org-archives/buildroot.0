@@ -1,43 +1,60 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 16 Oct 2015 00:16:10 +0200
-Subject: [Buildroot] [PATCH] systemd: bump to 227
-Message-ID: <1444947370-7878-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 15 Oct 2015 19:28:49 -0300
+Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: Disable rtmpdump
+ support when PolarSSL is enabled
+In-Reply-To: <20151016000223.65fd40c3@free-electrons.com>
+References: <1444938921-10025-1-git-send-email-bernd.kuhls@t-online.de>
+ <20151016000223.65fd40c3@free-electrons.com>
+Message-ID: <562028A1.8070908@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added back the hash as it was discussed during the last Buildroot Dev
-Days.
+On 15/10/15 19:02, Thomas Petazzoni wrote:
 
-Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/systemd/systemd.hash | 2 ++
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/systemd/systemd.hash
+> Dear Bernd Kuhls,
+>
+> On Thu, 15 Oct 2015 21:55:21 +0200, Bernd Kuhls wrote:
+>> Using rtmpdump with PolarSSL breaks ffmpeg configure:
+>> /home/test/autobuild/instance-1/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/librtmp.so: undefined reference to `havege_random'
+>> /home/test/autobuild/instance-1/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/librtmp.so: undefined reference to `havege_init'
+>
+> This indicates that polarssl doesn't provide all the symbols needed by
+> librtmp.
+>
+> So the problem should not be fixed at the ffmpeg level, but at the
+> librtmp level: any other package that will try to link with librtmp
+> will have the same issue.
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-new file mode 100644
-index 0000000..60aebcf
---- /dev/null
-+++ b/package/systemd/systemd.hash
-@@ -0,0 +1,2 @@
-+# sha256 locally computed
-+sha256 6766e8489e359f3d608a9f032eb1f52d7c55d76d0f9171837cf2b3284b2b904b  systemd-227.tar.gz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 2e974fa..414dc0d 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 226
-+SYSTEMD_VERSION = 227
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
--- 
-2.6.1
+Hi Thomas, definitely...
+
+> The fix should be done in rtmpdump.mk, by disabling the possibility of
+> using polarssl as the crypto library. I guess it has to do with the API
+> change of PolarSSL (Gustavo ?).
+
+Those are part of the 1.2 API so no issues there.
+However rtmpdump has severe issues with it's Makefile and the resulting 
+librtmp.pc.
+librtmp.pc.in says:
+
+Requires: @CRYPTO_REQ@
+
+The Makefile says (condensed):
+
+CRYPTO=OPENSSL
+#CRYPTO=GNUTLS
+...
+REQ_GNUTLS=gnutls,hogweed,nettle
+REQ_OPENSSL=libssl,libcrypto
+...
+CRYPTO_REQ=$(REQ_$(CRYPTO))
+
+Hence polarssl is never thrown into the pkgconfig fail, hence it will 
+always fail.
+
+So, as it is, rtmpdump is useless with polarssl even if it builds with 
+it, so your fix is the right one unless rtmpdump is fixed.
+
+Regards.
