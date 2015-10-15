@@ -1,44 +1,92 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 15 Oct 2015 23:33:10 +0200
-Subject: [Buildroot] [PATCH v1] evemu: bump version to 2.3.1
-Message-ID: <1444944790-26362-1-git-send-email-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 15 Oct 2015 23:36:53 +0200
+Subject: [Buildroot] [PATCH] ccache: allow for BR2_CCACHE_DIR
+ environment override
+In-Reply-To: <1444915479-7871-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1444915479-7871-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <56201C75.10300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See [1] for details.
+On 15-10-15 15:24, gustavo.zacarias at free-electrons.com wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> 
+> Allow the BR2_CCACHE_DIR .config option to be overriden by the
+> BR2_CCACHE_DIR env variable.
+> This is useful for big projects where in some cases the developers home
+> directory might be a NFS mount (slow) and real production builds aren't.
+> 
+> Update documentation accordingly as well.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-[1] http://lists.freedesktop.org/archives/input-tools/2015-October/001221.html
+ I initially thought: why not set the default in the .config file based on the
+environment. However, this approach is really a lot simpler, so:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/evemu/evemu.hash | 4 ++--
- package/evemu/evemu.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
-index 9d7bb50..f7a0cc6 100644
---- a/package/evemu/evemu.hash
-+++ b/package/evemu/evemu.hash
-@@ -1,2 +1,2 @@
--# Hash from http://lists.freedesktop.org/archives/input-tools/2015-August/001190.html
--sha256 e0f79808959d1b1f307a3d5add8ee9e5786d926e9aeb0045dadb85c7350d0a3c evemu-2.2.0.tar.xz
-+# Hash from http://lists.freedesktop.org/archives/input-tools/2015-October/001221.html
-+sha256 5b0197735f9effa25563b0412c560354bee34f8263eaddb00dd996e6ff56eb6a evemu-2.3.1.tar.xz
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index ad56888..2fce723 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EVEMU_VERSION = 2.2.0
-+EVEMU_VERSION = 2.3.1
- EVEMU_SITE = http://www.freedesktop.org/software/evemu
- EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
- EVEMU_LICENSE = LGPLv3 (library), GPLv3 (tools)
+
+ One more remark below.
+
+> ---
+>  Makefile                     | 6 ++++--
+>  docs/manual/common-usage.txt | 3 +++
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 181d446..5bf1538 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -183,7 +183,9 @@ endif
+>  ifneq ($(BR2_DL_DIR),)
+>  DL_DIR := $(BR2_DL_DIR)
+>  endif
+> -
+> +ifneq ($(BR2_CCACHE_DIR),)
+> +BR_CACHE_DIR := $(BR2_CCACHE_DIR)
+> +endif
+>  
+>  # Need that early, before we scan packages
+>  # Avoids doing the $(or...) everytime
+> @@ -371,7 +373,7 @@ TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+>  
+>  ifeq ($(BR2_CCACHE),y)
+>  CCACHE := $(HOST_DIR)/usr/bin/ccache
+> -BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
+> +BR_CACHE_DIR ?= $(call qstrip,$(BR2_CCACHE_DIR))
+>  export BR_CACHE_DIR
+>  HOSTCC := $(CCACHE) $(HOSTCC)
+>  HOSTCXX := $(CCACHE) $(HOSTCXX)
+> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+> index 5b27b1f..51b6a3e 100644
+> --- a/docs/manual/common-usage.txt
+> +++ b/docs/manual/common-usage.txt
+> @@ -84,6 +84,9 @@ to +make+ or set in the environment:
+>    configuration interface, so through the Buildroot +.config+ file; this
+>    is the recommended way of setting it.
+>    +
+> +* +BR2_CCACHE_DIR+ to override the directory where
+> +  Buildroot stores the cached files when using ccache.
+> +  +
+
+ It could be useful to add this to ccache-support.txt as well.
+
+ Regards,
+ Arnout
+
+>  * +BR2_DL_DIR+ to override the directory in which
+>    Buildroot stores/retrieves downloaded files
+>    +
+> 
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
