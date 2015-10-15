@@ -1,39 +1,58 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 15 Oct 2015 14:49:38 +0200
-Subject: [Buildroot] [PATCH] dropbear: bump to 2015.68
-Message-ID: <1444913378-32592-1-git-send-email-luca@lucaceresoli.net>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Thu, 15 Oct 2015 15:03:06 +0200 (CEST)
+Subject: [Buildroot] Repair boot from SD card on i.MX6 Sabre boards
+In-Reply-To: <1444831418-13483-1-git-send-email-vincent.stehle@freescale.com>
+References: <1444831418-13483-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <864575831.1180005.1444914186930.JavaMail.zimbra@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/dropbear/dropbear.hash | 2 +-
- package/dropbear/dropbear.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I know that this patch is still under review and might change, but in it's present form,
 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index 30856cc..981bb1d 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,2 +1,2 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256	7e690594645dfde5787065c78a5d2e4d15e288babfa06e140197ce05f698c8e5	dropbear-2015.67.tar.bz2
-+sha256	55ea7c1e904ffe4b1cdbe1addca8291a2533d7d285fd22ac33608e9502a62446  dropbear-2015.68.tar.bz2
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index aa3fd9d..57c1b5c 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DROPBEAR_VERSION = 2015.67
-+DROPBEAR_VERSION = 2015.68
- DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
--- 
-1.9.1
+usind a imx6sabreq and util-linux 2.26.2-9 from debian
+
+Tested-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+
+Cordialement 
+
+J?r?my Rosen 
++33 (0)1 42 68 28 13
+
+fight key loggers : write some perl using vim 
+
+
+Open Wide Ingenierie
+
+23, rue Daviel
+75013 Paris - France
+www.openwide.fr
+
+----- Le 14 Oct 15, ? 16:03, Vincent Stehl? vincent.stehle at freescale.com a ?crit :
+
+> Hi,
+> 
+> Here is a two-patches series, to repair the boot from SD card on
+> Freescale Sabre boards.
+> 
+> The first patch adapts the SD card creation script to the new versions
+> of sfdisk; a prerequisite to actually preparing an SD card and booting
+> from it.
+> 
+> The second patch switches the defconfigs to building a zImage instead of
+> an uImage, to reflect what u-boot in Freescale releases awaits nowadays.
+> 
+> This was build-tested for all the five touched defconfigs but I did only
+> verify the boot on i.MX6 quad Sabre AI.
+> 
+> Feedbacks and testers welcome!
+> 
+> Best regards,
+> 
+> V.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
