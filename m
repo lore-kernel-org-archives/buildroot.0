@@ -1,111 +1,115 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Oct 2015 22:55:20 +0200
-Subject: [Buildroot] [git commit] bridge-utils: add upstream patch fixing
-	sysfs writes
-Message-ID: <20151015205533.04CE181F17@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 15 Oct 2015 23:06:15 +0200
+Subject: [Buildroot] [PATCH v1] libv4l: fix missing libintl linking
+Message-ID: <1444943175-9000-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2c97f7802c812380c1783de5027b90ef52bfd5d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add missing libintl linking to utils/dvb and utils/keytable (patch
+Makefile.in because patching Makefile.am and autoreconf did not work).
 
-Add upstream patch that fixes a sysfs path in br_set.
-The patch is on top of the latest release 1.5, which already dates from
-2011.
+Add proper gettext dependency for v4l-utils option.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes [1]:
+ dvb-format-convert.o: In function `parse_opt':
+ dvb-format-convert.c:(.text+0x46): undefined reference to `libintl_gettext'
+
+[1] http://autobuild.buildroot.net/results/40a/40a12c0d1746dcc51e4f221eefbbf31bd427cac8
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/bridge-utils/0003-sysfs-write-fixes.patch |   81 +++++++++++++++++++++
- 1 files changed, 81 insertions(+), 0 deletions(-)
+ ...-dvb-keytable-fix-missing-libintl-linking.patch | 52 ++++++++++++++++++++++
+ package/libv4l/Config.in                           |  1 +
+ package/libv4l/libv4l.mk                           |  3 ++
+ 3 files changed, 56 insertions(+)
+ create mode 100644 package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch
 
-diff --git a/package/bridge-utils/0003-sysfs-write-fixes.patch b/package/bridge-utils/0003-sysfs-write-fixes.patch
+diff --git a/package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch b/package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch
 new file mode 100644
-index 0000000..a7ff197
+index 0000000..99b021e
 --- /dev/null
-+++ b/package/bridge-utils/0003-sysfs-write-fixes.patch
-@@ -0,0 +1,81 @@
-+commit bb9970a9df95837e39d680021b1f73d231e85406
-+Author: Stephen Hemminger <shemminger@vyatta.com>
-+Date:   Tue May 3 09:52:43 2011 -0700
++++ b/package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch
+@@ -0,0 +1,52 @@
++From f815c05e93f4d92d5b62239ef25defee3347cb9d Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 15 Oct 2015 22:55:35 +0200
++Subject: [PATCH] dvb/keytable: fix missing libintl linking
 +
-+    Check error returns from write to sysfs
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ utils/dvb/Makefile.in      | 8 ++++----
++ utils/keytable/Makefile.in | 2 +-
++ 2 files changed, 5 insertions(+), 5 deletions(-)
 +
-+    Add helper function to check write to sysfs files.
++diff --git a/utils/dvb/Makefile.in b/utils/dvb/Makefile.in
++index a470045..3b664ad 100644
++--- a/utils/dvb/Makefile.in
+++++ b/utils/dvb/Makefile.in
++@@ -449,16 +449,16 @@ top_srcdir = @top_srcdir@
++ udevrulesdir = @udevrulesdir@
++ man_MANS = dvb-fe-tool.1 dvbv5-zap.1 dvbv5-scan.1 dvb-format-convert.1
++ dvb_fe_tool_SOURCES = dvb-fe-tool.c
++-dvb_fe_tool_LDADD = ../../lib/libdvbv5/libdvbv5.la
+++dvb_fe_tool_LDADD = ../../lib/libdvbv5/libdvbv5.la  $(LIBINTL)
++ dvb_fe_tool_LDFLAGS = $(ARGP_LIBS) -lm
++ dvbv5_zap_SOURCES = dvbv5-zap.c
++-dvbv5_zap_LDADD = ../../lib/libdvbv5/libdvbv5.la
+++dvbv5_zap_LDADD = ../../lib/libdvbv5/libdvbv5.la $(LIBINTL)
++ dvbv5_zap_LDFLAGS = $(ARGP_LIBS) -lm
++ dvbv5_scan_SOURCES = dvbv5-scan.c
++-dvbv5_scan_LDADD = ../../lib/libdvbv5/libdvbv5.la
+++dvbv5_scan_LDADD = ../../lib/libdvbv5/libdvbv5.la $(LIBINTL)
++ dvbv5_scan_LDFLAGS = $(ARGP_LIBS) -lm
++ dvb_format_convert_SOURCES = dvb-format-convert.c
++-dvb_format_convert_LDADD = ../../lib/libdvbv5/libdvbv5.la
+++dvb_format_convert_LDADD = ../../lib/libdvbv5/libdvbv5.la $(LIBINTL)
++ dvb_format_convert_LDFLAGS = $(ARGP_LIBS) -lm
++ EXTRA_DIST = README
++ all: all-am
++diff --git a/utils/keytable/Makefile.in b/utils/keytable/Makefile.in
++index da84df9..9f49ecb 100644
++--- a/utils/keytable/Makefile.in
+++++ b/utils/keytable/Makefile.in
++@@ -111,7 +111,7 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" \
++ PROGRAMS = $(bin_PROGRAMS)
++ am_ir_keytable_OBJECTS = keytable.$(OBJEXT)
++ ir_keytable_OBJECTS = $(am_ir_keytable_OBJECTS)
++-ir_keytable_LDADD = $(LDADD)
+++ir_keytable_LDADD = $(LDADD) $(LIBINTL)
++ AM_V_lt = $(am__v_lt_ at AM_V@)
++ am__v_lt_ = $(am__v_lt_ at AM_DEFAULT_V@)
++ am__v_lt_0 = --silent
++-- 
++2.1.4
 +
-+    Fix incorrect sysfs path in br_set.
-+
-+[Thomas De Schampheleire: update commit message only]
-+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-+
-+diff --git a/libbridge/libbridge_devif.c b/libbridge/libbridge_devif.c
-+index aa8bc36..1e83925 100644
-+--- a/libbridge/libbridge_devif.c
-++++ b/libbridge/libbridge_devif.c
-+@@ -280,25 +280,38 @@ fallback:
-+ 	return old_get_port_info(brname, port, info);
-+ }
-+ 
-++static int set_sysfs(const char *path, unsigned long value)
-++{
-++	int fd, ret = 0, cc;
-++	char buf[32];
-++
-++	fd = open(path, O_WRONLY);
-++	if (fd < 0)
-++		return -1;
-++
-++	cc = snprintf(buf, sizeof(buf), "%lu\n", value);
-++	if (write(fd, buf, cc) < 0)
-++		ret = -1;
-++	close(fd);
-++
-++	return ret;
-++}
-++
-+ 
-+ static int br_set(const char *bridge, const char *name,
-+ 		  unsigned long value, unsigned long oldcode)
-+ {
-+ 	int ret;
-+ 	char path[SYSFS_PATH_MAX];
-+-	FILE *f;
-+ 
-+-	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/%s", bridge, name);
-++	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/bridge/%s",
-++		 bridge, name);
-+ 
-+-	f = fopen(path, "w");
-+-	if (f) {
-+-		ret = fprintf(f, "%ld\n", value);
-+-		fclose(f);
-+-	} else {
-++	if ((ret = set_sysfs(path, value)) < 0) {
-+ 		/* fallback to old ioctl */
-+ 		struct ifreq ifr;
-+ 		unsigned long args[4] = { oldcode, value, 0, 0 };
-+-		
-++
-+ 		strncpy(ifr.ifr_name, bridge, IFNAMSIZ);
-+ 		ifr.ifr_data = (char *) &args;
-+ 		ret = ioctl(br_socket_fd, SIOCDEVPRIVATE, &ifr);
-+@@ -348,14 +361,10 @@ static int port_set(const char *bridge, const char *ifname,
-+ {
-+ 	int ret;
-+ 	char path[SYSFS_PATH_MAX];
-+-	FILE *f;
-+ 
-+ 	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/brport/%s", ifname, name);
-+-	f = fopen(path, "w");
-+-	if (f) {
-+-		ret = fprintf(f, "%ld\n", value);
-+-		fclose(f);
-+-	} else {
-++
-++	if ((ret = set_sysfs(path, value)) < 0) {
-+ 		int index = get_portno(bridge, ifname);
-+ 
-+ 		if (index < 0)
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index 5a55b2b..16dc6bb 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -23,6 +23,7 @@ comment "libv4l JPEG support not enabled"
+ 
+ config BR2_PACKAGE_LIBV4L_UTILS
+ 	bool "v4l-utils tools"
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  v4l-utils is a collection of various video4linux and DVB utilities.
+ 	  Enable this if you want to build the following tools:
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index d1b2933..e73f5f5 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -43,6 +43,9 @@ ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
+ LIBV4L_CONF_OPTS += --enable-v4l-utils
+ # clock_gettime is used, which is provided by librt for glibc < 2.17
+ LIBV4L_LIBS += -lrt
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
++LIBV4L_DEPENDENCIES += gettext
++endif
+ ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+ LIBV4L_CONF_OPTS += --enable-qv4l2
+ LIBV4L_DEPENDENCIES += qt5base
+-- 
+2.1.4
