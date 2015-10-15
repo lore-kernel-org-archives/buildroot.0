@@ -1,41 +1,46 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 15 Oct 2015 13:22:55 +0100
-Subject: [Buildroot] [PATCH] ffmpeg: let the user override the --cpu value
-Message-ID: <1444911775-45783-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 15 Oct 2015 09:48:50 -0300
+Subject: [Buildroot] [PATCH] sconeserver: use direct imagemagick disable
+Message-ID: <1444913330-16605-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Grab the content of BR2_PACKAGE_FFMPEG_EXTRACONF after guessing the CPU,
-so the user will still have the possibility to override it.
+Disabling sconesite image isn't enough to avoid imagemagick
+autodetection, and if it's present in the host (distro) but not in the
+target it gets automatically picked up. Fixes:
+http://autobuild.buildroot.net/results/377/37705926f3023395c54af0532ff95f0125fbaa66/
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Also add a comment about autoreconf.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ffmpeg/ffmpeg.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/sconeserver/sconeserver.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f361970..ec260de 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -421,14 +421,14 @@ else
- FFMPEG_CONF_OPTS += --disable-pic
- endif
- 
--FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index beca926..2072142 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -10,7 +10,7 @@ SCONESERVER_VERSION = 3b886c3dda6eda39bcb27472d29ed7fd3185ba1d
+ SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
+ SCONESERVER_LICENSE = GPLv2+
+ SCONESERVER_LICENSE_FILES = COPYING
 -
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
- FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
- else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
- FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
++# For 0001-fix-ssl-libs-ordering.patch and configure isn't up to date
+ SCONESERVER_AUTORECONF = YES
+ SCONESERVER_DEPENDENCIES += pcre
+ SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6
+@@ -50,7 +50,7 @@ SCONESERVER_CONF_OPTS += \
+ 	--with-sconesite-image \
+ 	--with-Magick++-config="$(STAGING_DIR)/usr/bin/Magick++-config"
+ else
+-SCONESERVER_CONF_OPTS += --without-sconesite-image
++SCONESERVER_CONF_OPTS += --without-sconesite-image --with-Magick++-config=no
  endif
  
-+FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
-+
- # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
- define FFMPEG_CONFIGURE_CMDS
- 	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
+ ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
 -- 
-1.7.1
+2.4.9
