@@ -1,20 +1,24 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Oct 2015 08:07:11 -0300
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.12.8
-Message-ID: <1444907231-1923-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Oct 2015 13:27:44 +0200
+Subject: [Buildroot] [git commit] wireshark: security bump to version 1.12.8
+Message-ID: <20151015112748.45C4C8076D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=f63dc20700da5bf5b7373a73c435f0019d26f097
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes:
 CVE-2015-7830 - Pcapng file parser crash.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wireshark/wireshark.hash | 7 ++++---
- package/wireshark/wireshark.mk   | 2 +-
+ package/wireshark/wireshark.hash |    7 ++++---
+ package/wireshark/wireshark.mk   |    2 +-
  2 files changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
@@ -42,5 +46,3 @@ index a2b7d1d..045fad3 100644
  WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
  WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
  WIRESHARK_LICENSE = wireshark license
--- 
-2.4.9
