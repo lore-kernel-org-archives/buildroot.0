@@ -1,41 +1,112 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Thu, 15 Oct 2015 10:35:07 -0400
-Subject: [Buildroot] [PATCH 2/2] ofono: fix missing systemd and dbus files
-In-Reply-To: <1444919707-29869-1-git-send-email-mike@mikebwilliams.com>
-References: <1444919707-29869-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <1444919707-29869-2-git-send-email-mike@mikebwilliams.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 15 Oct 2015 16:45:00 +0200
+Subject: [Buildroot] [PATCH v2] bridge-utils: add upstream patch fixing
+	sysfs writes
+Message-ID: <1444920300-21449-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ofono's service file was not being installed when systemd was selected
-as the init system.
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Without ofono.conf in /etc/dbus-1/system.d, ofonod cannot take
-its dbus name on the system bus and will fail to start with a
-permission denied error.
+Add upstream patch that fixes a sysfs path in br_set.
+The patch is on top of the latest release 1.5, which already dates from
+2011.
 
-Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/ofono/ofono.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/bridge-utils/0003-sysfs-write-fixes.patch | 81 +++++++++++++++++++++++
+ 1 file changed, 81 insertions(+)
+ create mode 100644 package/bridge-utils/0003-sysfs-write-fixes.patch
 
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index f1a63e2..43d16fd 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -16,7 +16,9 @@ OFONO_DEPENDENCIES = \
- 	libcap-ng \
- 	mobile-broadband-provider-info
- 
--OFONO_CONF_OPTS = --disable-test
-+OFONO_CONF_OPTS = --disable-test \
-+	--with-dbusconfdir=/etc \
-+	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
- 
- # N.B. Qualcomm QMI modem support requires O_CLOEXEC; so
- # make sure that it is defined.
+diff --git a/package/bridge-utils/0003-sysfs-write-fixes.patch b/package/bridge-utils/0003-sysfs-write-fixes.patch
+new file mode 100644
+index 0000000..9154308
+--- /dev/null
++++ b/package/bridge-utils/0003-sysfs-write-fixes.patch
+@@ -0,0 +1,81 @@
++commit bb9970a9df95837e39d680021b1f73d231e85406
++Author: Stephen Hemminger <shemminger@vyatta.com>
++Date:   Tue May 3 09:52:43 2011 -0700
++
++    Check error returns from write to sysfs
++    
++    Add helper function to check write to sysfs files.
++
++    Fix incorrect sysfs path in br_set.
++
++[Thomas De Schampheleire: update commit message only]
++Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++
++diff --git a/libbridge/libbridge_devif.c b/libbridge/libbridge_devif.c
++index aa8bc36..1e83925 100644
++--- a/libbridge/libbridge_devif.c
+++++ b/libbridge/libbridge_devif.c
++@@ -280,25 +280,38 @@ fallback:
++ 	return old_get_port_info(brname, port, info);
++ }
++ 
+++static int set_sysfs(const char *path, unsigned long value)
+++{
+++	int fd, ret = 0, cc;
+++	char buf[32];
+++
+++	fd = open(path, O_WRONLY);
+++	if (fd < 0)
+++		return -1;
+++
+++	cc = snprintf(buf, sizeof(buf), "%lu\n", value);
+++	if (write(fd, buf, cc) < 0)
+++		ret = -1;
+++	close(fd);
+++
+++	return ret;
+++}
+++
++ 
++ static int br_set(const char *bridge, const char *name,
++ 		  unsigned long value, unsigned long oldcode)
++ {
++ 	int ret;
++ 	char path[SYSFS_PATH_MAX];
++-	FILE *f;
++ 
++-	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/%s", bridge, name);
+++	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/bridge/%s",
+++		 bridge, name);
++ 
++-	f = fopen(path, "w");
++-	if (f) {
++-		ret = fprintf(f, "%ld\n", value);
++-		fclose(f);
++-	} else {
+++	if ((ret = set_sysfs(path, value)) < 0) {
++ 		/* fallback to old ioctl */
++ 		struct ifreq ifr;
++ 		unsigned long args[4] = { oldcode, value, 0, 0 };
++-		
+++
++ 		strncpy(ifr.ifr_name, bridge, IFNAMSIZ);
++ 		ifr.ifr_data = (char *) &args;
++ 		ret = ioctl(br_socket_fd, SIOCDEVPRIVATE, &ifr);
++@@ -348,14 +361,10 @@ static int port_set(const char *bridge, const char *ifname,
++ {
++ 	int ret;
++ 	char path[SYSFS_PATH_MAX];
++-	FILE *f;
++ 
++ 	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/brport/%s", ifname, name);
++-	f = fopen(path, "w");
++-	if (f) {
++-		ret = fprintf(f, "%ld\n", value);
++-		fclose(f);
++-	} else {
+++
+++	if ((ret = set_sysfs(path, value)) < 0) {
++ 		int index = get_portno(bridge, ifname);
++ 
++ 		if (index < 0)
 -- 
-2.1.4
+1.9.5
