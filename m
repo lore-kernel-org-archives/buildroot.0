@@ -1,63 +1,34 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Oct 2015 22:11:33 -0300
-Subject: [Buildroot] [PATCH] pango: remove initscript
-Message-ID: <1444871493-6802-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 14 Oct 2015 22:37:46 -0300
+Subject: [Buildroot] [PATCH] sane-backends: specify explicit path to
+	net-snmp-config
+Message-ID: <1444873066-10450-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pango-querymodules is deprecated/removed, so ditch the initscript.
+Otherwise if the host distro has net-snmp devel files sane-backends will
+find /usr/bin/net-snmp-config first and the build will break. Fixes:
+http://autobuild.buildroot.net/results/c38/c381c316907964787ebe1a0807399022f15d8158/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/pango/S25pango | 20 --------------------
- package/pango/pango.mk |  5 -----
- 2 files changed, 25 deletions(-)
- delete mode 100644 package/pango/S25pango
+ package/sane-backends/sane-backends.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pango/S25pango b/package/pango/S25pango
-deleted file mode 100644
-index 9af9307..0000000
---- a/package/pango/S25pango
-+++ /dev/null
-@@ -1,20 +0,0 @@
--#!/bin/sh
--#
--# run pango-querymodules if needed
--
--FILE=/etc/pango/pango.modules
--
--case "$1" in
--     start|"")
--	if [ ! -f $FILE ] ; then
--	   mkdir -p /etc/pango
--	   /usr/bin/pango-querymodules > "$FILE"
--	fi
--	;;
--    stop)
--	;;
--    *)
--	echo "Usage: $0 {start|stop}" >&2
--	exit 1
--	;;
--esac
-\ No newline at end of file
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 19d6509..6c96cd3 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -97,10 +97,5 @@ PANGO_DEPENDENCIES += xlib_libXft xlib_libXrender
- PANGO_CONF_OPTS += --with-xft
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index 0c0b5a9..e980929 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -39,6 +39,7 @@ SANE_BACKENDS_CONF_OPTS += --enable-avahi
  endif
  
--define PANGO_INSTALL_INIT_SYSV
--	$(INSTALL) -m 755 -D package/pango/S25pango \
--		$(TARGET_DIR)/etc/init.d/S25pango
--endef
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_NETSNMP),y)
++SANE_BACKENDS_CONF_ENV += ac_cv_path_SNMP_CONFIG_PATH=$(STAGING_DIR)/usr/bin/net-snmp-config
+ SANE_BACKENDS_DEPENDENCIES += netsnmp
+ else
+ SANE_BACKENDS_CONF_OPTS += --without-snmp
 -- 
 2.4.9
