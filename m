@@ -1,47 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Oct 2015 21:39:43 +0200
-Subject: [Buildroot] [PATCH v3] package/iqvlinux: new package
-In-Reply-To: <561CACC5.5020600@mind.be> (Arnout Vandecappelle's message of
- "Tue, 13 Oct 2015 09:03:33 +0200")
-References: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
- <20151010150457.GD3640@free.fr>
- <20151012224411.472a9d10@free-electrons.com>
- <20151012211618.GG3735@free.fr>
- <20151012232441.3322b2fa@free-electrons.com>
- <561CACC5.5020600@mind.be>
-Message-ID: <87zizj6hvk.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 15 Oct 2015 21:41:57 +0200
+Subject: [Buildroot] [PATCH v3 1/2] gst1-plugins-base: update configure
+	options
+Message-ID: <1444938117-6405-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+- always disable new gio_unix_2_0 option (only used for testing)
 
-Hi,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v2 -> v3:
+  - always disable gio_unix_2_0 option (suggested by Thomas Petazzoni)
 
- >> And the story is the same for xtable-addons: the additions in linux.mk
- >> were made because those kernel options were needed for xtable-addons to
- >> simply *build*.
+Changes v1 -> v2:
+  - change gio_unix_2_0 from disabled to option (needed library
+    already provided by libglib2 package) (suggested by Thomas Petazzoni)
+---
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- >  And of course I disagree with Thomas :-)
-
-Heh ;)
-
- >  I think we should follow the principle of least surprise. We should avoid
- > situations where a package builds and we know for sure it will not work at
- > runtime. In many cases, this cannot be avoided, but if we can avoid it, we should.
-
-It's not really that we *KNOW* that it won't build, it is more that we
-cannot *GUARANTEE* that it will.
-
-For this specific case, I think the issue is moot as people using this
-package are most likely on x86 (where having a kernel config without PCI
-is very unlikely), or atleast on a platform with PCI support enabled
-(otherwise they cannot use the Intel MAC).
-
-But yeah, I agree that we should try to make things work out of the box
-(both build and runtime) where possible.
-
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 08ebe03..099fb2a 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -22,6 +22,7 @@ GST1_PLUGINS_BASE_CONF_OPTS = \
+ 	--disable-examples \
+ 	--disable-oggtest \
+ 	--disable-vorbistest \
++	--disable-gio_unix_2_0 \
+ 	--disable-freetypetest \
+ 	--disable-valgrind
+ 
 -- 
-Bye, Peter Korsgaard
+2.1.4
