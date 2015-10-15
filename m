@@ -1,34 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Oct 2015 22:37:46 -0300
-Subject: [Buildroot] [PATCH] sane-backends: specify explicit path to
-	net-snmp-config
-Message-ID: <1444873066-10450-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 15 Oct 2015 08:25:19 +0200
+Subject: [Buildroot] [PATCH v2 1/1] luvi: new package
+In-Reply-To: <561EC531.6080009@trzebnica.net>
+References: <1444763952-29583-1-git-send-email-joerg.krause@embedded.rocks>
+ <1444854939-6557-1-git-send-email-joerg.krause@embedded.rocks>
+ <561EC531.6080009@trzebnica.net>
+Message-ID: <1444890319.8317.5.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise if the host distro has net-snmp devel files sane-backends will
-find /usr/bin/net-snmp-config first and the build will break. Fixes:
-http://autobuild.buildroot.net/results/c38/c381c316907964787ebe1a0807399022f15d8158/
+Hi Jerzy,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sane-backends/sane-backends.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Mi, 2015-10-14 at 23:12 +0200, Jerzy Grzegorek wrote:
+> Hi J?rg,
+> 
 
-diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-index 0c0b5a9..e980929 100644
---- a/package/sane-backends/sane-backends.mk
-+++ b/package/sane-backends/sane-backends.mk
-@@ -39,6 +39,7 @@ SANE_BACKENDS_CONF_OPTS += --enable-avahi
- endif
- 
- ifeq ($(BR2_PACKAGE_NETSNMP),y)
-+SANE_BACKENDS_CONF_ENV += ac_cv_path_SNMP_CONFIG_PATH=$(STAGING_DIR)/usr/bin/net-snmp-config
- SANE_BACKENDS_DEPENDENCIES += netsnmp
- else
- SANE_BACKENDS_CONF_OPTS += --without-snmp
--- 
-2.4.9
+[snip]
+
+> > +LUVI_VERSION = 2.3.4
+> > +LUVI_SOURCE = luvi-src-v$(LUVI_VERSION).tar.gz
+> > +LUVI_SITE = https://github.com/luvit/luvi/releases/download/v$(LUV
+> > I_VERSION)
+> 
+> The tag version is???v2.3.4???, so this should be rather
+> 
+> LUVI_VERSION = v2.3.4
+> LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
+> LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VE
+> RSION)
+> 
+
+You're right, although this is only necessary for the github helper.?
+
+However, since luvi identifies itself as "luvi v2.3.4" I changed the
+version string as suggested.
+
+Many thanks!
+
+Best regards
+J?rg Krause
