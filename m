@@ -1,53 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Oct 2015 20:33:32 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/rtmpdump: Fix librtmp.pc
-	defaulting to OpenSSL
-Message-ID: <1444934013-500-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 15 Oct 2015 20:55:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Disable rtmpdump support
+	when PolarSSL is enabled
+Message-ID: <1444935326-19634-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rtmpdump has an optional dependency to OpenSSL or GnuTLS.
-The 'Requires: ' section of librtmp.pc defaults to "libssl,libcrypto"
-even when no crypto lib is available because the 'CRYPTO=' override in
-rtmpdump.mk does not force librtmp/Makefile, line 35, to not include
-these libraries. This breaks ffmpeg configure.
+Using rtmpdump with PolarSSL breaks ffmpeg configure:
+/home/test/autobuild/instance-1/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/librtmp.so: undefined reference to `havege_random'
+/home/test/autobuild/instance-1/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/librtmp.so: undefined reference to `havege_init'
 
-The bug occured using this defconfig
+This problem could be fixed by enabling POLARSSL_HAVEGE_C:
+http://freetz.org/browser/trunk/make/libs/polarssl/patches/050-activate-havege-random-generator-needed-by-rtmpdump.polarssl.patch?rev=10797
 
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_NONFREE=y
-BR2_PACKAGE_FFMPEG_FFPLAY=y
-BR2_PACKAGE_FFMPEG_FFSERVER=y
-BR2_PACKAGE_FFMPEG_FFPROBE=y
-BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
-BR2_PACKAGE_FFMPEG_POSTPROC=y
-BR2_PACKAGE_RTMPDUMP=y
+This option is however accompanied by a warning in
+include/polarssl/config.h:
+
+ * Warning: the HAVEGE random generator is dependent on timing and specific
+ *          processor traits. It is therefore not advised to use HAVEGE as
+ *          your applications primary random generator or primary entropy pool
+ *          input. As a secondary input to your entropy pool, it IS able add
+ *          the (limited) extra entropy it provides.
+
+Since rtmpdump is not a vital part of ffmpeg it is save to disable
+rtmpdump support when PolarSSL is used.
+
+Fixes
+http://autobuild.buildroot.net/results/ae0/ae0c4bab7975ed2ad77a9f9fd6a300d1327d56b9/
+http://autobuild.buildroot.net/results/45d/45dd9adbac449ce0ed66af5b4655b4d9b37faa62/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: Removed "Fixes" section because this patch addresses another bug.
+ package/ffmpeg/ffmpeg.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- package/rtmpdump/rtmpdump.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index 613f1cd..5709cdb 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -25,6 +25,10 @@ RTMPDUMP_CRYPTO = OPENSSL
- else
- # no crypto
- RTMPDUMP_CRYPTO =
-+define RTMPDUMP_FIX_MAKEFILE
-+	$(SED) "s/CRYPTO=.*//g" $(@D)/librtmp/Makefile
-+endef
-+RTMPDUMP_POST_PATCH_HOOKS += RTMPDUMP_FIX_MAKEFILE
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index f361970..41e648b 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -246,7 +246,8 @@ else
+ FFMPEG_CONF_OPTS += --disable-libbluray
  endif
  
- RTMPDUMP_CFLAGS = $(TARGET_CFLAGS)
+-ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
++# rtmpdump is broken with polarssl
++ifeq ($(BR2_PACKAGE_RTMPDUMP)$(BR2_PACKAGE_POLARSSL),y)
+ FFMPEG_CONF_OPTS += --enable-librtmp
+ FFMPEG_DEPENDENCIES += rtmpdump
+ else
 -- 
 2.6.1
