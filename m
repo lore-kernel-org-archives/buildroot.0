@@ -1,46 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 15 Oct 2015 21:44:03 +0200
-Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: update configure
- options
-In-Reply-To: <561DFECB.2020009@mind.be>
-References: <1444774091-19539-1-git-send-email-ps.report@gmx.net>
- <561DFECB.2020009@mind.be>
-Message-ID: <20151015214403.1da7f271@gmx.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 15 Oct 2015 16:43:50 -0300
+Subject: [Buildroot] [PATCH] fping: bump to version 3.12
+Message-ID: <1444938230-3864-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Fixes regression with fping6 -R.
 
-On Wed, 14 Oct 2015 09:05:47 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/fping/fping.hash | 2 +-
+ package/fping/fping.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> On 14-10-15 00:08, Peter Seiderer wrote:
-> > - add new onvif option
-> > - add new dtls option
-> > - add new openh264 option
-> > - add new x265 option
-> > - rename real option to rtp
-> > - remove legacy options: directdraw, osx_video, quicktime
-> >   and mythtv
-> > - add '--disable-bs2b' and '--disable-libde265' to options
-> >   which require currently unpackaged libraries
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > ToDo: handle new '--disable-gtk3' and '--disable-qt' options
-> 
->  If you don't handle them now (or plan to do so in the very near future), then
-> explicitly disable them for the time being. This helps for reproducible builds.
-> 
-
-O.k. will do this (until I find enough time for a proper follow up patch)...
-
-Regards,
-Peter
-
->  Regards,
->  Arnout
-> 
-> 
+diff --git a/package/fping/fping.hash b/package/fping/fping.hash
+index c52e145..99c01cf 100644
+--- a/package/fping/fping.hash
++++ b/package/fping/fping.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	d824a4a8be88f74efe17ed66147b1e75c36ff83442e847ab1d5cfa7d9548c507	fping-3.11.tar.gz
++sha256	d86f2281bda4653c7049e6ba8fce24ba67edbf9193b7bb1cf6219b0c8ddce4e6	fping-3.12.tar.gz
+diff --git a/package/fping/fping.mk b/package/fping/fping.mk
+index b33fa4d..c576dd1 100644
+--- a/package/fping/fping.mk
++++ b/package/fping/fping.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FPING_VERSION = 3.11
++FPING_VERSION = 3.12
+ FPING_SITE = http://fping.org/dist
+ FPING_LICENSE = BSD-like
+ FPING_LICENSE_FILES = COPYING
+-- 
+2.4.9
