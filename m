@@ -1,94 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Oct 2015 23:40:46 +0200
-Subject: [Buildroot] [PATCH RFC v2] gcc: improve checking of stack
- smashing support with uclibc
-In-Reply-To: <1443458077-864-1-git-send-email-brendanheading@gmail.com>
-References: <1443458077-864-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20151015234046.614e0fd0@free-electrons.com>
+Date: Fri, 16 Oct 2015 00:01:08 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/rtmpdump: Fix librtmp.pc
+ defaulting to OpenSSL
+In-Reply-To: <1444934013-500-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1444934013-500-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151016000108.2e4ffd83@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+Dear Bernd Kuhls,
 
-On Mon, 28 Sep 2015 17:34:37 +0100, Brendan Heading wrote:
+On Thu, 15 Oct 2015 20:33:32 +0200, Bernd Kuhls wrote:
 
-> diff --git a/package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch b/package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch
-> new file mode 100644
-> index 0000000..31947a0
-> --- /dev/null
-> +++ b/package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch
-> @@ -0,0 +1,81 @@
-> +From ff055a237ef91673a031bfe9dab743b01bd93d70 Mon Sep 17 00:00:00 2001
-> +From: Brendan Heading <brendanheading@gmail.com>
-> +Date: Mon, 28 Sep 2015 16:14:41 +0100
-> +Subject: [PATCH 1/1] Improve checking of stack-smashing support with uclibc
-> +
-> +Detect if uclibc has stack-smashing enabled, and fall out if it does not.
-> +
-> +A more comprehensive solution is to be proposed for upstream.
-> +
-> +Upstream-status: inappropriate
+> diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+> index 613f1cd..5709cdb 100644
+> --- a/package/rtmpdump/rtmpdump.mk
+> +++ b/package/rtmpdump/rtmpdump.mk
+> @@ -25,6 +25,10 @@ RTMPDUMP_CRYPTO = OPENSSL
+>  else
+>  # no crypto
+>  RTMPDUMP_CRYPTO =
+> +define RTMPDUMP_FIX_MAKEFILE
+> +	$(SED) "s/CRYPTO=.*//g" $(@D)/librtmp/Makefile
+> +endef
+> +RTMPDUMP_POST_PATCH_HOOKS += RTMPDUMP_FIX_MAKEFILE
+>  endif
+>  
+>  RTMPDUMP_CFLAGS = $(TARGET_CFLAGS)
 
-Why ?
+This is the wrong fix. We are already passing CRYPTO= when no crypto
+library is used. The only problem is that we are only passing it at
+build time, while the .pc file is generated from .pc.in at install
+time. So all we need to do is pass CRYPTO also at install time. My
+proposal is therefore:
 
-> +Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> +---
-> + gcc/configure    | 15 +++++++++------
-> + gcc/configure.ac | 15 +++++++++------
-> + 2 files changed, 18 insertions(+), 12 deletions(-)
-> +
-> +diff --git a/gcc/configure b/gcc/configure
-> +index 63cba0a..658a3e6 100755
-> +--- a/gcc/configure
-> ++++ b/gcc/configure
-> +@@ -26806,17 +26806,20 @@ else
-> + 	if $EGREP '^[ 	]*#[ 	]*define[ 	]+__GLIBC__[ 	]+([1-9][0-9]|[3-9])' \
-> + 	   $target_header_dir/features.h > /dev/null; then
-> + 	  gcc_cv_libc_provides_ssp=yes
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index 613f1cd..a59ec9c 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
+@@ -35,22 +35,25 @@ else
+ RTMPDUMP_SHARED = "SHARED="
+ endif
+ 
++RTMPDUMP_MAKE_FLAGS = \
++       CRYPTO=$(RTMPDUMP_CRYPTO) \
++       prefix=/usr \
++       $(RTMPDUMP_SHARED)
++
+ define RTMPDUMP_BUILD_CMDS
+-       $(MAKE) CRYPTO=$(RTMPDUMP_CRYPTO) \
+-               prefix=/usr \
++       $(MAKE) $(RTMPDUMP_MAKE_FLAGS) \
+                XCFLAGS="$(RTMPDUMP_CFLAGS)" \
+                XLDFLAGS="$(TARGET_LDFLAGS)" \
+                CROSS_COMPILE="$(TARGET_CROSS)" \
+-               $(RTMPDUMP_SHARED) \
+                -C $(@D)/librtmp
+ endef
+ 
+ define RTMPDUMP_INSTALL_STAGING_CMDS
+-       $(MAKE) prefix=/usr -C $(@D)/librtmp install DESTDIR=$(STAGING_DIR) $(RTMPDUMP_SHARED)
++       $(MAKE) -C $(@D)/librtmp install DESTDIR=$(STAGING_DIR) $(RTMPDUMP_MAKE_FLAGS)
+ endef
+ 
+ define RTMPDUMP_INSTALL_TARGET_CMDS
+-       $(MAKE) prefix=/usr -C $(@D)/librtmp install DESTDIR=$(TARGET_DIR) $(RTMPDUMP_SHARED)
++       $(MAKE) -C $(@D)/librtmp install DESTDIR=$(TARGET_DIR) $(RTMPDUMP_MAKE_FLAGS)
+ endef
+ 
+ $(eval $(generic-package))
 
-What prevents uClibc from ever matching this case? Shouldn't the
-__UCLIBC__ case be *before* any __GLIBC__ case ?
+I tested it, it works for me. If it does for you, can you submit it as
+a proper patch?
 
-> ++	elif $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC__[ 	]+1' \
-> ++	     $target_header_dir/features.h > /dev/null && \
-> ++	     test -f $target_header_dir/bits/uClibc_config.h; then
-> ++	      if $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC_HAS_SSP__[ 	]+1' \
-> ++	        $target_header_dir/bits/uClibc_config.h > /dev/null; then
-> ++	         gcc_cv_libc_provides_ssp=yes
-> ++	      else
-> ++	         gcc_cv_libc_provides_ssp=no
-
-This else close is useless, gcc_cv_libc_provides_ssp is initialized to
-"no" at the beginning of this piece of code.
-
-If you look further down below in the code, you can see:
-
-       *-*-darwin* | *-*-freebsd*)
-         AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
-           [echo "no __stack_chk_fail on this target"])
-
-Do you know why a similar check isn't used for Linux ? It really seems
-to be a lot easier than to poke into the C library details, no? But
-maybe it's a too drastic change.
-
-But now that I think of it, there is probably a much, much simpler
-change: use the gcc_cv_libc_provides_ssp cache variable, which we
-already use during gcc-initial.
-
-My proposal would be something like:
-
-	http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=fix-ssp
-
-(see the last three commits)
-
-I am currently doing a test build of glibc, uClibc w/ SSP, uClibc w/o
-SSP and musl to see how it goes. But I believe it's actually simpler
-than patching gcc, no?
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
