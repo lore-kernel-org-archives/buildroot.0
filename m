@@ -1,36 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Oct 2015 14:06:10 +0200
-Subject: [Buildroot] [PATCH v1 1/1] gmediarender: new package
-In-Reply-To: <201510191203.t9JC3Dvq016614@ms-omx01.plus.so-net.ne.jp>
-References: <20151018092018.103b67cd@free-electrons.com>
- <201510191203.t9JC3Dvq016614@ms-omx01.plus.so-net.ne.jp>
-Message-ID: <20151019140610.2275410d@free-electrons.com>
+From: Charles Duffy <charles@dyfis.net>
+Date: Thu, 15 Oct 2015 10:27:18 -0500
+Subject: [Buildroot] [PATCH 1/1] musl: Make only shared libraries conditional
+Message-ID: <1444922838-16841-1-git-send-email-chaduffy@cisco.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hiroshi Kawashima,
+From: Charles Duffy <charles@dyfis.net>
 
-On Mon, 19 Oct 2015 21:03:13 +0900, Hiroshi Kawashima wrote:
-> Dear Thomas.
-> 
-> Thank you for your comment and suggestion.
-> I agree with your opinion, abondon this.
-> 
-> I find out good successor project of gmediarender, gmrender-resurrect
-> hosted on github.
-> 
-> It is maintained and has improved functionarity (eg. OpenHome support etc),
-> of course it is compatible with gstreamer v1.0.x.
-> 
-> I will send patch later for this.
+External toolchain use requires a static libc (as buildroot uses
+`gcc --print-file-name libc.a` to find the sysroot); thus, the static portion
+of a musl build should not be conditional.
 
-Thanks! Can you mark your patch as "Rejected" in patchwork then?
+Signed-off-by: Charles Duffy <chaduffy@cisco.com>
+---
+ package/musl/musl.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index f0c45f5..2f43aab 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -29,7 +29,8 @@ define MUSL_CONFIGURE_CMDS
+ 			--prefix=/usr \
+ 			--libdir=/lib \
+ 			--disable-gcc-wrapper \
+-			$(SHARED_STATIC_LIBS_OPTS))
++			--enable-static \
++			$(if $(BR2_STATIC_LIBS),--disable-shared,--enable-shared))
+ endef
+ 
+ define MUSL_BUILD_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.0
