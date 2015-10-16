@@ -1,62 +1,44 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 16 Oct 2015 18:04:42 +0100
-Subject: [Buildroot] [PATCH] vala: bump to version 0.30.0
-In-Reply-To: <1445009727-10934-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1445009727-10934-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <56212E2A.8070700@imgtec.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 16 Oct 2015 20:31:26 +0200
+Subject: [Buildroot] [PATCH v1] libv4l: fix missing libintl linking
+In-Reply-To: <20151016001305.082b5c06@free-electrons.com>
+References: <1444943175-9000-1-git-send-email-ps.report@gmx.net>
+ <20151016001305.082b5c06@free-electrons.com>
+Message-ID: <20151016203126.38efb8eb@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hello Thomas,
 
-On 10/16/2015 04:35 PM, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Fri, 16 Oct 2015 00:13:05 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Build test:
+> Dear Peter Seiderer,
+> 
+> On Thu, 15 Oct 2015 23:06:15 +0200, Peter Seiderer wrote:
+> > Add missing libintl linking to utils/dvb and utils/keytable (patch
+> > Makefile.in because patching Makefile.am and autoreconf did not work).
+> 
+> Please patch Makefile.am. To make autoreconf work on this package,
+> simply add host-gettext to LIBV4L_DEPENDENCIES.
 
-$ grep -E ^VALA_VERSION package/vala/vala.mk
-VALA_VERSION_MAJOR = 0.30
-VALA_VERSION = $(VALA_VERSION_MAJOR).0
+This was the missing part, thanks for the tip...
 
-$ file output/host/usr/bin/valac-0.30
-output/host/usr/bin/valac-0.30: ELF 64-bit LSB executable, x86-64,
-version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux
-2.6.18, not stripped
+> 
+> Then, submit the patch upstream, so that it gets integrated and we can
+> get rid of it at the next upstream release.
+>
+
+Done, see [1], updated buildroot patch follows...
 
 Regards,
+Peter
 
-Vincent.
 
-> ---
->  package/vala/vala.hash | 4 ++--
->  package/vala/vala.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+[1]  http://permalink.gmane.org/gmane.linux.drivers.video-input-infrastructure/95883
+
+> Thanks a lot!
 > 
-> diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-> index 063ec21..633dfc0 100644
-> --- a/package/vala/vala.hash
-> +++ b/package/vala/vala.hash
-> @@ -1,2 +1,2 @@
-> -# From https://download.gnome.org/sources/vala/0.28/vala-0.28.0.sha256sum
-> -sha256	0d9e3bd3f82145664875f7c29b2f544ba92d2814f75412948f774c0727fc977f	vala-0.28.0.tar.xz
-> +# From https://download.gnome.org/sources/vala/0.30/vala-0.#0.0.sha256sum
-> +sha256	61f0337b000f7ed6ef8c1fea87e0047d9bd7c0f91dd9c5b4eb70fd3fb883dedf	vala-0.30.0.tar.xz
-> diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-> index 9dedd8f..a0a986c 100644
-> --- a/package/vala/vala.mk
-> +++ b/package/vala/vala.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -VALA_VERSION_MAJOR = 0.28
-> +VALA_VERSION_MAJOR = 0.30
->  VALA_VERSION = $(VALA_VERSION_MAJOR).0
->  VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
->  VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
-> 
+> Thomas
