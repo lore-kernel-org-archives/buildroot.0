@@ -1,35 +1,31 @@
-From: =?UTF-8?B?0JLQvtC70LrQvtCyINCS0Y/Rh9C10YHQu9Cw0LI=?= <sv99@inbox.ru>
-Date: Fri, 16 Oct 2015 23:17:59 +0300
-Subject: [Buildroot] =?utf-8?q?how_can_i_customize_existing_package_when_u?=
- =?utf-8?q?sing_the_BR2=5FEXTERNAL_mechanism?=
-Message-ID: <1445026679.208938590@f90.i.mail.ru>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 16 Oct 2015 20:52:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 8116] 2015.05-rc2 raspberrypi2_defconfig network
+ interface not coming up
+In-Reply-To: <bug-8116-163@https.bugs.busybox.net/>
+References: <bug-8116-163@https.bugs.busybox.net/>
+Message-ID: <20151016205201.C10C381EC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- for example, i need add rtmp module to the nginx package
+https://bugs.busybox.net/show_bug.cgi?id=8116
 
-nginx.mk
+--- Comment #9 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-10-16 20:52:01 UTC ---
+[--SNIP--]
+> At least, there is now a configurable choice between the sleeping S40network
+> and ifplugd.
 
-ifeq ($(BR2_PACKAGE_NGINX_HTTP_RTMP),y)
-NGINX_POST_PATCH_CMDS += git clone  https://github.com/arut/nginx-rtmp-module.git $(@D)/rtmp
-NGINX_CONF_OPT += --add-module=$(@D)/rtmp
-endif
+The sleeping solution is to make our RPi defconfig (as well as all our default
+configs) "just work" out-of-the-box, nothing more.
 
-nginx/Config.in
+Any more serious system would probably have to use something along the lines
+of connman (my personal favourite) or NetworkManager or ifplugd. Or even
+custom startup scripts.
 
-config BR2_PACKAGE_NGINX_HTTP_RTMP
-?? ?bool "Enable RTMP module"
-?? ?depends on BR2_PACKAGE_NGINX
-?? ?help
-?? ?? Enable NGINX-based Media Streaming Server.
-
-Volkov Viacheslav
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151016/4d00a1d1/attachment.html>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
