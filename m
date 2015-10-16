@@ -1,23 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 16 Oct 2015 23:32:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/intltool: bump to version 0.51.0
-In-Reply-To: <1444950823-5199-1-git-send-email-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Fri, 16 Oct 2015 01:13:43
- +0200")
-References: <1444950823-5199-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <87a8ri1ou9.fsf@dell.be.48ers.dk>
+Date: Fri, 16 Oct 2015 23:30:44 +0200
+Subject: [Buildroot] [git commit] package/intltool: bump to version 0.51.0
+Message-ID: <20151016213707.465E281F6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7de33e138039eaf9c89531600c51e5af9c1f9da1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Also add a stronger, locally calculated sha256 checksum.
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Also add a stronger, locally calculated sha256 checksum.
 
-Committed, thanks.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/intltool/intltool.hash |    7 +++++--
+ package/intltool/intltool.mk   |    2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/intltool/intltool.hash b/package/intltool/intltool.hash
+index a60af50..f6f41dc 100644
+--- a/package/intltool/intltool.hash
++++ b/package/intltool/intltool.hash
+@@ -1,2 +1,5 @@
+-# From https://launchpad.net/intltool/trunk/0.50.2/+download/intltool-0.50.2.tar.gz/+md5
+-md5	23fbd879118253cb99aeac067da5f591	intltool-0.50.2.tar.gz
++# From https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz/+md5
++md5	12e517cac2b57a0121cda351570f1e63 intltool-0.51.0.tar.gz
++
++# Locally calculated
++sha256 67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd  intltool-0.51.0.tar.gz
+diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
+index 549cb3b..fb801a1 100644
+--- a/package/intltool/intltool.mk
++++ b/package/intltool/intltool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTLTOOL_VERSION = 0.50.2
++INTLTOOL_VERSION = 0.51.0
+ INTLTOOL_SITE = https://launchpad.net/intltool/trunk/$(INTLTOOL_VERSION)/+download
+ INTLTOOL_LICENSE = GPLv2+
+ INTLTOOL_LICENSE_FILES = COPYING
