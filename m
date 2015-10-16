@@ -1,50 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 16 Oct 2015 23:26:47 +0200
-Subject: [Buildroot] [git commit] polarssl: security bump to version 1.2.17
-Message-ID: <20151016212815.AF83A81F71@busybox.osuosl.org>
+Date: Fri, 16 Oct 2015 23:27:40 +0200
+Subject: [Buildroot] [git commit] vala: bump to version 0.30.0
+Message-ID: <20151016212815.B84A381F6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7bc8f03844f90ad7da2ff39ddf8dc2e6e3d575d1
+commit: http://git.buildroot.net/buildroot/commit/?id=c105a006bdefd4869a5771a66fb8a71137df7ff5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-CVE-2015-5291 - Remote attack on clients using session tickets or SNI
-
-Also includes countermeasures against Lenstra's RSA-CRT attach for
-PKCS#1 v1.5 signatures (1.2.16) and the Logjam attack (1.2.15).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/polarssl/polarssl.hash |    4 ++--
- package/polarssl/polarssl.mk   |    2 +-
+ package/vala/vala.hash |    4 ++--
+ package/vala/vala.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
-index e7883fd..c203392 100644
---- a/package/polarssl/polarssl.hash
-+++ b/package/polarssl/polarssl.hash
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 063ec21..633dfc0 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
 @@ -1,2 +1,2 @@
--# From https://polarssl.org/tech-updates/releases/polarssl-1.2.14-released
--sha256	d7cbd8314aa3a5441f6282d13d07df610f49b4bc678088b04188adf093d17d37	polarssl-1.2.14-gpl.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.1.2-and-1.3.14-and-polarssl-1.2.17-released
-+sha256	9301d4ebec3eb45bc9f28f2d79bfdb0c3dd351c386aa6cc66643e1b2be274d52	polarssl-1.2.17-gpl.tgz
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index 289a28d..aaa6759 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -5,7 +5,7 @@
+-# From https://download.gnome.org/sources/vala/0.28/vala-0.28.0.sha256sum
+-sha256	0d9e3bd3f82145664875f7c29b2f544ba92d2814f75412948f774c0727fc977f	vala-0.28.0.tar.xz
++# From https://download.gnome.org/sources/vala/0.30/vala-0.#0.0.sha256sum
++sha256	61f0337b000f7ed6ef8c1fea87e0047d9bd7c0f91dd9c5b4eb70fd3fb883dedf	vala-0.30.0.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 9dedd8f..a0a986c 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- POLARSSL_SITE = https://tls.mbed.org/code/releases
--POLARSSL_VERSION = 1.2.14
-+POLARSSL_VERSION = 1.2.17
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
- POLARSSL_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
+-VALA_VERSION_MAJOR = 0.28
++VALA_VERSION_MAJOR = 0.30
+ VALA_VERSION = $(VALA_VERSION_MAJOR).0
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
