@@ -1,63 +1,87 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 16 Oct 2015 08:46:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wavpack: bump to version 4.75.2
-Message-ID: <1444978001-8473-1-git-send-email-joerg.krause@embedded.rocks>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 16 Oct 2015 08:05:59 +0200
+Subject: [Buildroot] Kernel panic while trying to boot
+ qemu_x86_64_defconfig on notebook with dual boot.
+In-Reply-To: <CAAmaERMLtspQ2X-rSM_jaFGyqp_Gw1z6zOiPv=S9pZML=YjH-A@mail.gmail.com>
+References: <CAAmaERMLtspQ2X-rSM_jaFGyqp_Gw1z6zOiPv=S9pZML=YjH-A@mail.gmail.com>
+Message-ID: <562093C7.9000501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Autoreconf is not necessary anymore.
+ Hi Alexandre,
 
-WavPack "autodetects" CPU type to enable ASM code. However, the assembly code
-for ARM is written for ARMv7 only and building WavPack for an ARM-non-v7
-architecture will fail. We explicitly enable ASM for the supported
-architectures x86, x64 and ARMv7 and disable it for all others.
+ I think you fail to understand what QEMU does. It emulates a complete PC. In
+other words...
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/wavpack/wavpack.hash |  2 +-
- package/wavpack/wavpack.mk   | 14 +++++++++++---
- 2 files changed, 12 insertions(+), 4 deletions(-)
+On 16-10-15 04:41, Alexandre Oliveira wrote:
+> Hello everyone.
+> 
+> I am having a problem while trying to boot qemu_x86_64_defconfig on my notebook.
+> My configuration is really simple. The .config file is attached.
+> 
+> Following the manual, I first tried to boot and run my configuration with QEMU,
+> using the command: 
+> 
+> ============
+> $ qemu-system-x86_64 -M pc -kernel images/bzImage -drive
+> file=images/rootfs.ext2,if=ide -append root=/dev/sda -net nic,model=rtl8139 -net
+> user
 
-diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
-index 18dcfbc..f15afc2 100644
---- a/package/wavpack/wavpack.hash
-+++ b/package/wavpack/wavpack.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 2cade379b0aba99fbc4e442ccc6dac6c609f6212e46516a083e24c8c364430a4 wavpack-4.70.0.tar.bz2
-+sha256 7d31b34166c33c3109b45c6e4579b472fd05e3ee8ec6d728352961c5cdd1d6b0  wavpack-4.75.2.tar.bz2
-diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
-index c9bae47..02184e3 100644
---- a/package/wavpack/wavpack.mk
-+++ b/package/wavpack/wavpack.mk
-@@ -4,14 +4,22 @@
- #
- ################################################################################
- 
--WAVPACK_VERSION = 4.70.0
-+WAVPACK_VERSION = 4.75.2
- WAVPACK_SITE = http://www.wavpack.com
- WAVPACK_SOURCE = wavpack-$(WAVPACK_VERSION).tar.bz2
- WAVPACK_INSTALL_STAGING = YES
--# configure not up to date
--WAVPACK_AUTORECONF = YES
- WAVPACK_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),,libiconv)
- WAVPACK_LICENSE = BSD-3c
- WAVPACK_LICENSE_FILES = COPYING
- 
-+# WavPack "autodetects" CPU type to enable ASM code. However, the assembly code
-+# for ARM is written for ARMv7 only and building WavPack for an ARM-non-v7
-+# architecture will fail. We explicitly enable ASM for the supported
-+# architectures x86, x64 and ARMv7 and disable it for all others.
-+ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_ARM_CPU_ARMV7A),y)
-+WAVPACK_CONF_OPTS += --enable-asm
-+else
-+WAVPACK_CONF_OPTS += --disable-asm
-+endif
-+
- $(eval $(autotools-package))
+ ... it will take images/rootfs.ext2 and present it to the guest (= the
+buildroot Linux) as if it's a complete hard disk. All the rest of your host
+system (= your Ubuntu) is completely invisible to the guest. Similarly, the
+guest will see an RTL8139 network interface even though you probably have a
+completely different network card in your PC. The guest can only access things
+that you explicitly pass to qemu.
+
+> ============
+> 
+> This command works properly and Linux boots normally. After that, I created a
+> ext4 partition on /dev/sda7, which I mapped on /mnt/btlinux/
+> 
+> ==================
+> $ sudo tar -C /mnt/btlinux/ -xf images/rootfs.tar
+> ==================
+
+ To pass this to qemu, you could unmount /mnt/btlinux and then start qemu with:
+
+qemu-system-x86_64 -M pc -kernel images/bzImage -drive file=/dev/sda7,if=ide
+-append root=/dev/sda -net nic,model=rtl8139 -net user
+
+i.e., replace images/rootfs.ext2 with /dev/sda7. This gives the guest direct
+access to a single partition of your hard drive. Note that it is a very bad idea
+to give the guest access to a mounted partition, since you'll have two OSes that
+try to read and write it simultaneously and they'll have a different idea of
+what is on there.
+
+> 
+> 
+> All files were correctly extracted to the partition. Then, I added one more boot
+> option on GRUB.cfg file.
+
+ In fact, with the -kernel command line option, grub isn't even used. That's why
+you don't see a menu and it starts Linux immediately.
+
+[snip]
+
+> 1 - Why QEMU boot work properly and when I extract the same image to /dev/sda7,
+> the boot fails? 
+> 2 - What is QEMU doing that the 'normal boot' process are not doing? 
+> 3 - Why the file at /boot/bzImage can be found but the device /dev/sda7 can not?
+> 4 - Am I missing something?
+
+ Does this explain all your questions?
+
+ Regards,
+ Arnout
+
 -- 
-2.6.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
