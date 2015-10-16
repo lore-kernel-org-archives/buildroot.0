@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 16 Oct 2015 23:27:40 +0200
-Subject: [Buildroot] [git commit] vala: bump to version 0.30.0
-Message-ID: <20151016212815.B84A381F6D@busybox.osuosl.org>
+Date: Fri, 16 Oct 2015 23:27:22 +0200
+Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.0.6
+Message-ID: <20151016212815.B1AF781F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c105a006bdefd4869a5771a66fb8a71137df7ff5
+commit: http://git.buildroot.net/buildroot/commit/?id=693fb8a17a4f0c9cf5626e77489dc288760711da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
@@ -16,29 +16,29 @@ Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vala/vala.hash |    4 ++--
- package/vala/vala.mk   |    2 +-
+ package/harfbuzz/harfbuzz.hash |    4 ++--
+ package/harfbuzz/harfbuzz.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index 063ec21..633dfc0 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 2073665..6dddf8d 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
 @@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.28/vala-0.28.0.sha256sum
--sha256	0d9e3bd3f82145664875f7c29b2f544ba92d2814f75412948f774c0727fc977f	vala-0.28.0.tar.xz
-+# From https://download.gnome.org/sources/vala/0.30/vala-0.#0.0.sha256sum
-+sha256	61f0337b000f7ed6ef8c1fea87e0047d9bd7c0f91dd9c5b4eb70fd3fb883dedf	vala-0.30.0.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 9dedd8f..a0a986c 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.5.tar.bz2.sha256
+-sha256	4d99d2c6a58ecb55538ccab522e68836383852f9f41f696d2b93cd8f85195440	harfbuzz-1.0.5.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.6.tar.bz2.sha256
++sha256	f616a7fbdc78a627043f9029000bf08c0c71df59cde4143fc92a014f6a993b26	harfbuzz-1.0.6.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index af4510d..48ff309 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VALA_VERSION_MAJOR = 0.28
-+VALA_VERSION_MAJOR = 0.30
- VALA_VERSION = $(VALA_VERSION_MAJOR).0
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+-HARFBUZZ_VERSION = 1.0.5
++HARFBUZZ_VERSION = 1.0.6
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
