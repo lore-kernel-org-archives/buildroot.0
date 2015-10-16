@@ -1,91 +1,75 @@
-From: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
-Date: Fri, 16 Oct 2015 21:54:41 +0900
-Subject: [Buildroot] [PATCH v1 1/1] gmediarender: new package
-Message-ID: <201510161254.t9GCsftH031466@ms-omx02.plus.so-net.ne.jp>
+From: Julian Scheel <julian@jusst.de>
+Date: Fri, 16 Oct 2015 15:54:39 +0200
+Subject: [Buildroot] [PATCH 1/2] package/bitstream: new package
+Message-ID: <1445003680-26003-1-git-send-email-julian@jusst.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gmediarender is UPnP (DLNA) rendere based on gstreamer.
+BiTStream is a set of headers to ease processing of mpeg ts streams. It is
+used by dvblast.
 
-Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Signed-off-by: Julian Scheel <julian@jusst.de>
 ---
- package/Config.in                      |    1 +
- package/gmediarender/Config.in         |   15 +++++++++++++++
- package/gmediarender/gmediarender.hash |    2 ++
- package/gmediarender/gmediarender.mk   |   16 ++++++++++++++++
- 4 files changed, 34 insertions(+), 0 deletions(-)
- create mode 100644 package/gmediarender/Config.in
- create mode 100644 package/gmediarender/gmediarender.hash
- create mode 100644 package/gmediarender/gmediarender.mk
+ package/Config.in              |  1 +
+ package/bitstream/Config.in    |  8 ++++++++
+ package/bitstream/bitstream.mk | 19 +++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/bitstream/Config.in
+ create mode 100644 package/bitstream/bitstream.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8e3c64a..396d757 100644
+index 98dcd78..53a312c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -14,6 +14,7 @@ menu "Audio and video applications"
- 	source "package/ffmpeg/Config.in"
- 	source "package/flac/Config.in"
- 	source "package/flite/Config.in"
-+	source "package/gmediarender/Config.in"
- 	source "package/gstreamer/Config.in"
- 	source "package/gstreamer1/Config.in"
- 	source "package/jack2/Config.in"
-diff --git a/package/gmediarender/Config.in b/package/gmediarender/Config.in
+@@ -954,6 +954,7 @@ menu "Logging"
+ endmenu
+ 
+ menu "Multimedia"
++	source "package/bitstream/Config.in"
+ 	source "package/libass/Config.in"
+ 	source "package/libbluray/Config.in"
+ 	source "package/libdcadec/Config.in"
+diff --git a/package/bitstream/Config.in b/package/bitstream/Config.in
 new file mode 100644
-index 0000000..d2cd9d7
+index 0000000..3a7ad43
 --- /dev/null
-+++ b/package/gmediarender/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_GMEDIARENDER
-+	bool "gmediarender"
-+	depends on BR2_USE_WCHAR # gstreamer
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer, libupnp
-+	depends on BR2_USE_MMU # gstreamer
-+	select BR2_PACKAGE_GSTREAMER
-+	select BR2_PACKAGE_LIBUPNP
++++ b/package/bitstream/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_BITSTREAM
++	bool "biTStream"
 +	help
-+	  UPnP (DLNA) media renderer based on gstreamer
++	  biTStream is a set of C headers allowing a simpler access to
++	  binary structures such as specified by MPEG, DVB, IETF, SMPTE,
++	  IEEE, SCTE, etc.
 +
-+	  http://gmrender.nongnu.org/
-+
-+comment "gmediarender needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/gmediarender/gmediarender.hash b/package/gmediarender/gmediarender.hash
++	  http://www.videolan.org/developers/bitstream.html
+diff --git a/package/bitstream/bitstream.mk b/package/bitstream/bitstream.mk
 new file mode 100644
-index 0000000..f181770
+index 0000000..cdca80f
 --- /dev/null
-+++ b/package/gmediarender/gmediarender.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 85d3251ce3095394d389b56f8b47e7f79e906022e51ce92a4cf822ee2a5fee2c  gmediarender-0.0.6.tar.bz2
-diff --git a/package/gmediarender/gmediarender.mk b/package/gmediarender/gmediarender.mk
-new file mode 100644
-index 0000000..e383786
---- /dev/null
-+++ b/package/gmediarender/gmediarender.mk
-@@ -0,0 +1,16 @@
++++ b/package/bitstream/bitstream.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# gmediarender
++# biTStream
 +#
 +################################################################################
 +
-+GMEDIARENDER_VERSION = 0.0.6
-+GMEDIARENDER_SOURCE = gmediarender-$(GMEDIARENDER_VERSION).tar.bz2
-+GMEDIARENDER_SITE = http://savannah.nongnu.org/download/gmrender
-+GMEDIARENDER_AUTORECONF = YES
-+GMEDIARENDER_LICENSE = GPLv2
-+GMEDIARENDER_LICENSE_FILES = COPYING
-+GMEDIARENDER_DEPENDENCIES = gstreamer libupnp
-+GMEDIARENDER_CONF_OPTS = --with-libupnp=$(STAGING_DIR)/usr LIBS="-lixml"
++BITSTREAM_VERSION = 1.1
++BITSTREAM_SOURCE = bitstream-$(BITSTREAM_VERSION).tar.bz2
++BITSTREAM_SITE = https://get.videolan.org/bitstream/$(BITSTREAM_VERSION)
++BITSTREAM_LICENSE = MIT
 +
-+$(eval $(autotools-package))
++BITSTREAM_INSTALL_STAGING = YES
++BITSTREAM_INSTALL_TARGET = NO
++
++define BITSTREAM_INSTALL_STAGING_CMDS
++	(cd $(@D); $(MAKE) PREFIX=$(STAGING_DIR)/usr install)
++endef
++
++$(eval $(generic-package))
 -- 
-1.7.1
-
-============================================================
-    Hiroshi Kawashima
+2.6.0
