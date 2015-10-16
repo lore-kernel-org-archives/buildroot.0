@@ -1,45 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Oct 2015 17:19:17 +0200
-Subject: [Buildroot] [PATCH v4 1/4] package/rpm: bump to version 4.12.0.1
-In-Reply-To: <CALe+oY8XPdMd7ViBn9-_oqCSjeBeiPhLLmNrZQL4mXBvhkBpjg@mail.gmail.com>
-References: <1444076819-10228-1-git-send-email-james.knight@rockwellcollins.com>
- <20151011143414.4bf27c78@free-electrons.com>
- <CALe+oY8XPdMd7ViBn9-_oqCSjeBeiPhLLmNrZQL4mXBvhkBpjg@mail.gmail.com>
-Message-ID: <20151016171917.08fe5e22@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 16 Oct 2015 12:35:27 -0300
+Subject: [Buildroot] [PATCH] vala: bump to version 0.30.0
+Message-ID: <1445009727-10934-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, 16 Oct 2015 11:09:47 -0400, James Knight wrote:
-
-> On Sun, Oct 11, 2015 at 8:34 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > So could you rework this package to make it work with musl/uclibc
-> 
-> Thanks for checking this; I'll give it a shot. :)
-> 
-> > In the mean time, I'll mark your patches as "Changes Requested" in
-> > patchwork.
-> 
-> Minor patchwork question, when a patch has been flagged as "Changes
-> Requested" and I submit a new one, should I flag the old patch as
-> superseded?
-
-You can do it if you want, but that's really not necessary. When a
-patch is either in the "Changes Requested" state or the "Superseded"
-state, we simply no longer see in the list of pending patches. This
-means we won't care anymore about such patches, until the submitter
-sends an updated version.
-
-We never go back to older patches marked "Changes Requested" to change
-them to "Superseded" when the new version comes.
-
-Thomas
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 063ec21..633dfc0 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,2 +1,2 @@
+-# From https://download.gnome.org/sources/vala/0.28/vala-0.28.0.sha256sum
+-sha256	0d9e3bd3f82145664875f7c29b2f544ba92d2814f75412948f774c0727fc977f	vala-0.28.0.tar.xz
++# From https://download.gnome.org/sources/vala/0.30/vala-0.#0.0.sha256sum
++sha256	61f0337b000f7ed6ef8c1fea87e0047d9bd7c0f91dd9c5b4eb70fd3fb883dedf	vala-0.30.0.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 9dedd8f..a0a986c 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VALA_VERSION_MAJOR = 0.28
++VALA_VERSION_MAJOR = 0.30
+ VALA_VERSION = $(VALA_VERSION_MAJOR).0
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.9
