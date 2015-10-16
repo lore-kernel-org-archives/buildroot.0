@@ -1,101 +1,135 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 16 Oct 2015 01:46:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jq: bump to version 1.5
-Message-ID: <1444952810-30527-1-git-send-email-joerg.krause@embedded.rocks>
+From: Alexandre Oliveira <alexandrenagy@gmail.com>
+Date: Fri, 16 Oct 2015 02:41:09 +0000
+Subject: [Buildroot] Kernel panic while trying to boot qemu_x86_64_defconfig
+ on notebook with dual boot.
+Message-ID: <CAAmaERMLtspQ2X-rSM_jaFGyqp_Gw1z6zOiPv=S9pZML=YjH-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch applied upstream. Add hash file.
+Hello everyone.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- .../jq/0001-libm.h-comment-j0-j1-y0-and-y1.patch   | 49 ----------------------
- package/jq/jq.hash                                 |  2 +
- package/jq/jq.mk                                   |  4 +-
- 3 files changed, 4 insertions(+), 51 deletions(-)
- delete mode 100644 package/jq/0001-libm.h-comment-j0-j1-y0-and-y1.patch
- create mode 100644 package/jq/jq.hash
+I am having a problem while trying to boot qemu_x86_64_defconfig on my
+notebook. My configuration is really simple. The .config file is attached.
 
-diff --git a/package/jq/0001-libm.h-comment-j0-j1-y0-and-y1.patch b/package/jq/0001-libm.h-comment-j0-j1-y0-and-y1.patch
-deleted file mode 100644
-index dfc2f4c..0000000
---- a/package/jq/0001-libm.h-comment-j0-j1-y0-and-y1.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From e87163425a67938afde96f01b19587ac3348b369 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 7 Sep 2014 10:49:57 +0200
--Subject: [PATCH] libm.h: comment j0, j1, y0 and y1
--
--Those functions are currently not used by jq, but having them in
--libm.h prevents building with the uClibc C library when it doesn't
--have DO_XSI_MATH option enabled.
--
--This issue was spotted by the Buildroot autobuilder system:
--
--  http://autobuild.buildroot.org/results/aaf/aaf3c114e0ca3e265ae32c646ba67f01aaf608bd/build-end.log
--
--Submitted upstream at https://github.com/stedolan/jq/pull/570.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- libm.h | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/libm.h b/libm.h
--index f8c52be..8e82fb7 100644
----- a/libm.h
--+++ b/libm.h
--@@ -10,8 +10,8 @@ LIBM_DD(cosh)
-- LIBM_DD(exp2)
-- LIBM_DD(exp)
-- LIBM_DD(floor)
---LIBM_DD(j0)
---LIBM_DD(j1)
--+/* LIBM_DD(j0) */
--+/* LIBM_DD(j1) */
-- LIBM_DD(log10)
-- LIBM_DD(log2)
-- LIBM_DD(log)
--@@ -21,8 +21,8 @@ LIBM_DD(sqrt)
-- LIBM_DD(tan)
-- LIBM_DD(tanh)
-- LIBM_DD(tgamma)
---LIBM_DD(y0)
---LIBM_DD(y1)
--+/* LIBM_DD(y0) */
--+/* LIBM_DD(y1) */
-- /* LIBM_DID(jn) */
-- /* LIBM_DID(yn) */
-- /* LIBM_DDD(pow) */
---- 
--2.0.0
--
-diff --git a/package/jq/jq.hash b/package/jq/jq.hash
-new file mode 100644
-index 0000000..2cd6405
---- /dev/null
-+++ b/package/jq/jq.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c4d2bfec6436341113419debf479d833692cc5cdab7eb0326b5a4d4fbe9f493c  jq-1.5.tar.gz
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index 6a9dfc8..dd13276 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--JQ_VERSION = 1.4
--JQ_SITE = http://stedolan.github.io/jq/download/source
-+JQ_VERSION = 1.5
-+JQ_SITE = https://github.com/stedolan/jq/releases/download/jq-$(JQ_VERSION)
- JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
- JQ_LICENSE_FILES = COPYING
- 
--- 
-2.6.1
+Following the manual, I first tried to boot and run my configuration with
+QEMU, using the command:
+
+============
+$ qemu-system-x86_64 -M pc -kernel images/bzImage -drive
+file=images/rootfs.ext2,if=ide -append root=/dev/sda -net nic,model=rtl8139
+-net user
+============
+
+This command works properly and Linux boots normally. After that, I created
+a ext4 partition on /dev/sda7, which I mapped on /mnt/btlinux/
+
+==================
+$ sudo tar -C /mnt/btlinux/ -xf images/rootfs.tar
+==================
+
+
+All files were correctly extracted to the partition. Then, I added one more
+boot option on GRUB.cfg file.
+
+My UBUNTU is booting with:
+
+
+==================================
+menuentry 'Ubuntu' --class ubuntu --class gnu-linux --class gnu --class os
+$menuentry_id_option 'gnulinux-simple-339d246f-008b-4cdf-8bbc-5ed43ca2d4c6'
+{
+recordfail
+load_video
+gfxmode $linux_gfx_mode
+insmod gzio
+insmod part_msdos
+insmod ext2
+set root='hd0,msdos6'
+if [ x$feature_platform_search_hint = xy ]; then
+ search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos6
+--hint-efi=hd0,msdos6 --hint-baremetal=ahci0,msdos6
+ 339d246f-008b-4cdf-8bbc-5ed43ca2d4c6
+else
+ search --no-floppy --fs-uuid --set=root
+339d246f-008b-4cdf-8bbc-5ed43ca2d4c6
+fi
+linux /boot/vmlinuz-3.19.0-30-generic
+root=UUID=339d246f-008b-4cdf-8bbc-5ed43ca2d4c6 ro  quiet splash $vt_handoff
+initrd /boot/initrd.img-3.19.0-30-generic
+}
+====================================
+
+My new Linux is set with:
+
+
+
+===================
+menuentry 'BTLinux (em /dev/sda7)' --class gnu-linux --class gnu --class os
+$menuentry_id_option
+'osprober-gnulinux-simple-96eafc8c-0063-417a-9c32-4ea96ee97b55' {
+insmod part_msdos
+insmod ext2
+set root='hd0,msdos7'
+if [ x$feature_platform_search_hint = xy ]; then
+ search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos7
+--hint-efi=hd0,msdos7 --hint-baremetal=ahci0,msdos7
+ 96eafc8c-0063-417a-9c32-4ea96ee97b55
+else
+ search --no-floppy --fs-uuid --set=root
+96eafc8c-0063-417a-9c32-4ea96ee97b55
+fi
+linux /boot/bzImage root=/dev/sda7 console=tty1
+
+}
+===================
+
+
+I add the following two lines for /etc/fstab from the new linux:
+
+
+=================
+/dev/sda7                 /          ext4                defaults 1 1
+/dev/sda5                 swap  swap             defaults 0 0
+=================
+
+
+Ubuntu is on /dev/sda6 and BTLinux is on /dev/sda7.
+After boot starts, i get the famous following error:
+
+
+===========================
+VFS: Cannot open root device "sda7" or unknown-block(0,0)
+Please append a correct "root=" boot option; here are the available
+partitions:
+Kernel panic - not syncing: VFS: Unable to mount root fs on
+unknown-block(0,0)  error -6
+===========================
+
+
+1 - Why QEMU boot work properly and when I extract the same image to
+/dev/sda7, the boot fails?
+2 - What is QEMU doing that the 'normal boot' process are not doing?
+3 - Why the file at /boot/bzImage can be found but the device /dev/sda7 can
+not?
+4 - Am I missing something?
+
+Could someone please help?
+
+
+Thanks in advance for the assistance.
+
+Regards,
+Alexandre Oliveira.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151016/2d5b920a/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 53014 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151016/2d5b920a/attachment.obj>
