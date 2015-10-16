@@ -1,32 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 16 Oct 2015 20:00:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 8116] 2015.05-rc2 raspberrypi2_defconfig network
- interface not coming up
-In-Reply-To: <bug-8116-163@https.bugs.busybox.net/>
-References: <bug-8116-163@https.bugs.busybox.net/>
-Message-ID: <20151016200053.B5B0981F4F@busybox.osuosl.org>
+From: =?UTF-8?B?0JLQvtC70LrQvtCyINCS0Y/Rh9C10YHQu9Cw0LI=?= <sv99@inbox.ru>
+Date: Fri, 16 Oct 2015 23:17:59 +0300
+Subject: [Buildroot] =?utf-8?q?how_can_i_customize_existing_package_when_u?=
+ =?utf-8?q?sing_the_BR2=5FEXTERNAL_mechanism?=
+Message-ID: <1445026679.208938590@f90.i.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8116
+ for example, i need add rtmp module to the nginx package
 
---- Comment #8 from Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> 2015-10-16 20:00:53 UTC ---
-I had experienced the same issue, and I had fixed it using BusyBox's ifplugd
-with -M as suggested in comment #2. eth0 should be more "allow-hotplug" than
-"auto" on RPi.
+nginx.mk
 
-However, some services started quickly after S40network and configured to use
-eth0 might be unhappy if it is not yet up, but it is the same issue if the
-Ethernet cable is plugged later. So their configurations have to be adjusted
-anyway.
+ifeq ($(BR2_PACKAGE_NGINX_HTTP_RTMP),y)
+NGINX_POST_PATCH_CMDS += git clone  https://github.com/arut/nginx-rtmp-module.git $(@D)/rtmp
+NGINX_CONF_OPT += --add-module=$(@D)/rtmp
+endif
 
-At least, there is now a configurable choice between the sleeping S40network
-and ifplugd.
+nginx/Config.in
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+config BR2_PACKAGE_NGINX_HTTP_RTMP
+?? ?bool "Enable RTMP module"
+?? ?depends on BR2_PACKAGE_NGINX
+?? ?help
+?? ?? Enable NGINX-based Media Streaming Server.
+
+Volkov Viacheslav
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151016/4d00a1d1/attachment.html>
