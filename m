@@ -1,27 +1,39 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Fri, 16 Oct 2015 11:09:47 -0400
-Subject: [Buildroot] [PATCH v4 1/4] package/rpm: bump to version 4.12.0.1
-In-Reply-To: <20151011143414.4bf27c78@free-electrons.com>
-References: <1444076819-10228-1-git-send-email-james.knight@rockwellcollins.com>
- <20151011143414.4bf27c78@free-electrons.com>
-Message-ID: <CALe+oY8XPdMd7ViBn9-_oqCSjeBeiPhLLmNrZQL4mXBvhkBpjg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 16 Oct 2015 17:10:05 +0200
+Subject: [Buildroot] [PATCH] fs/common.mk: support comments in user
+	table files
+In-Reply-To: <20151016170128.6a821cd0@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 16 Oct 2015 17:01:28 +0200")
+References: <1445007019-23720-1-git-send-email-peter@korsgaard.com>
+ <20151016170128.6a821cd0@free-electrons.com>
+Message-ID: <87d1we3l4i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, Oct 11, 2015 at 8:34 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> So could you rework this package to make it work with musl/uclibc
+ > Peter, Yann,
+ > On Fri, 16 Oct 2015 16:50:19 +0200, Peter Korsgaard wrote:
+ >> The format of the users table files is non trivial, so it is sometimes handy
+ >> to add comments explaining the syntax (or simply the reason for the user)
+ >> inline in the files.
+ >> 
+ >> Support comment lines prefixed with '#' similar to shell / makedevs files and strip
+ >> those lines before passing to the mkusers script.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Thanks for checking this; I'll give it a shot. :)
+ > Shouldn't it the responsibility of the mkusers script to ignore such
+ > comments instead ?
 
-> In the mean time, I'll mark your patches as "Changes Requested" in
-> patchwork.
+It could be, but that is more work as it iterates over the (combined)
+file multiple times, and comments only really makes sense for custom
+users files (and nog <PKG>_USERS) so just stripping those lines when
+handling the custom files imho makes sense.
 
-Minor patchwork question, when a patch has been flagged as "Changes
-Requested" and I submit a new one, should I flag the old patch as
-superseded?
+-- 
+Venlig hilsen,
+Peter Korsgaard 
