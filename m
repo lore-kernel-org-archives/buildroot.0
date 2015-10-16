@@ -1,59 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 Oct 2015 18:30:46 +0200
-Subject: [Buildroot] [PATCH] fs/common.mk: support comments in user
-	table files
-In-Reply-To: <87d1we3l4i.fsf@dell.be.48ers.dk>
-References: <1445007019-23720-1-git-send-email-peter@korsgaard.com>
- <20151016170128.6a821cd0@free-electrons.com>
- <87d1we3l4i.fsf@dell.be.48ers.dk>
-Message-ID: <20151016163046.GA4104@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 16 Oct 2015 17:35:08 +0100
+Subject: [Buildroot] [PATCH] polarssl: security bump to version 1.2.17
+In-Reply-To: <1445010876-13077-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1445010876-13077-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5621273C.7030906@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, All,
+Dear Gustavo Zacarias,
 
-On 2015-10-16 17:10 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 10/16/2015 04:54 PM, Gustavo Zacarias wrote:
+> Fixes:
+> CVE-2015-5291 - Remote attack on clients using session tickets or SNI
 > 
->  > Peter, Yann,
->  > On Fri, 16 Oct 2015 16:50:19 +0200, Peter Korsgaard wrote:
->  >> The format of the users table files is non trivial, so it is sometimes handy
->  >> to add comments explaining the syntax (or simply the reason for the user)
->  >> inline in the files.
->  >> 
->  >> Support comment lines prefixed with '#' similar to shell / makedevs files and strip
->  >> those lines before passing to the mkusers script.
->  >> 
->  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Also includes countermeasures against Lenstra's RSA-CRT attach for
+> PKCS#1 v1.5 signatures (1.2.16) and the Logjam attack (1.2.15).
 > 
->  > Shouldn't it the responsibility of the mkusers script to ignore such
->  > comments instead ?
-> 
-> It could be, but that is more work as it iterates over the (combined)
-> file multiple times,
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Arguably, we could read the file only once and store the lines in
-variables. Then, we could do the filtering in the script.
+Build test for MIPS architecture:
 
-However, that script is not supposed to be called outside of Buildroot,
-so we don't really care where we do the filtering.
+$ grep -E ^POLARSSL_VERSION package/polarssl/polarssl.mk
+POLARSSL_VERSION = 1.2.17
 
-> and comments only really makes sense for custom
-> users files (and nog <PKG>_USERS) so just stripping those lines when
-> handling the custom files imho makes sense.
-
-Still, the script could probably use a bit of love in this area...
+$ file output/target/usr/lib/libpolarssl.so.1.2.17
+output/target/usr/lib/libpolarssl.so.1.2.17: ELF 32-bit MSB shared
+object, MIPS, MIPS32 rel2 version 1 (SYSV), dynamically linked, with
+unknown capability 0x41000000 = 0xf676e75, with unknown capability
+0x10000 = 0x70401, stripped
 
 Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Vincent.
