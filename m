@@ -1,46 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 16 Oct 2015 11:48:48 +0200
-Subject: [Buildroot] [git commit] evemu: bump version to 2.3.1
-Message-ID: <20151016111136.6089B7FBFE@busybox.osuosl.org>
+From: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
+Date: Fri, 16 Oct 2015 21:54:41 +0900
+Subject: [Buildroot] [PATCH v1 1/1] gmediarender: new package
+Message-ID: <201510161254.t9GCsftH031466@ms-omx02.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0235aa4a58a942f8a053f9b58ed2148643ba1315
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+gmediarender is UPnP (DLNA) rendere based on gstreamer.
 
-See [1] for details.
-
-[1] http://lists.freedesktop.org/archives/input-tools/2015-October/001221.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
 ---
- package/evemu/evemu.hash |    4 ++--
- package/evemu/evemu.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in                      |    1 +
+ package/gmediarender/Config.in         |   15 +++++++++++++++
+ package/gmediarender/gmediarender.hash |    2 ++
+ package/gmediarender/gmediarender.mk   |   16 ++++++++++++++++
+ 4 files changed, 34 insertions(+), 0 deletions(-)
+ create mode 100644 package/gmediarender/Config.in
+ create mode 100644 package/gmediarender/gmediarender.hash
+ create mode 100644 package/gmediarender/gmediarender.mk
 
-diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
-index 9d7bb50..f7a0cc6 100644
---- a/package/evemu/evemu.hash
-+++ b/package/evemu/evemu.hash
-@@ -1,2 +1,2 @@
--# Hash from http://lists.freedesktop.org/archives/input-tools/2015-August/001190.html
--sha256 e0f79808959d1b1f307a3d5add8ee9e5786d926e9aeb0045dadb85c7350d0a3c evemu-2.2.0.tar.xz
-+# Hash from http://lists.freedesktop.org/archives/input-tools/2015-October/001221.html
-+sha256 5b0197735f9effa25563b0412c560354bee34f8263eaddb00dd996e6ff56eb6a evemu-2.3.1.tar.xz
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index ad56888..2fce723 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EVEMU_VERSION = 2.2.0
-+EVEMU_VERSION = 2.3.1
- EVEMU_SITE = http://www.freedesktop.org/software/evemu
- EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
- EVEMU_LICENSE = LGPLv3 (library), GPLv3 (tools)
+diff --git a/package/Config.in b/package/Config.in
+index 8e3c64a..396d757 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -14,6 +14,7 @@ menu "Audio and video applications"
+ 	source "package/ffmpeg/Config.in"
+ 	source "package/flac/Config.in"
+ 	source "package/flite/Config.in"
++	source "package/gmediarender/Config.in"
+ 	source "package/gstreamer/Config.in"
+ 	source "package/gstreamer1/Config.in"
+ 	source "package/jack2/Config.in"
+diff --git a/package/gmediarender/Config.in b/package/gmediarender/Config.in
+new file mode 100644
+index 0000000..d2cd9d7
+--- /dev/null
++++ b/package/gmediarender/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_GMEDIARENDER
++	bool "gmediarender"
++	depends on BR2_USE_WCHAR # gstreamer
++	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer, libupnp
++	depends on BR2_USE_MMU # gstreamer
++	select BR2_PACKAGE_GSTREAMER
++	select BR2_PACKAGE_LIBUPNP
++	help
++	  UPnP (DLNA) media renderer based on gstreamer
++
++	  http://gmrender.nongnu.org/
++
++comment "gmediarender needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gmediarender/gmediarender.hash b/package/gmediarender/gmediarender.hash
+new file mode 100644
+index 0000000..f181770
+--- /dev/null
++++ b/package/gmediarender/gmediarender.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 85d3251ce3095394d389b56f8b47e7f79e906022e51ce92a4cf822ee2a5fee2c  gmediarender-0.0.6.tar.bz2
+diff --git a/package/gmediarender/gmediarender.mk b/package/gmediarender/gmediarender.mk
+new file mode 100644
+index 0000000..e383786
+--- /dev/null
++++ b/package/gmediarender/gmediarender.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# gmediarender
++#
++################################################################################
++
++GMEDIARENDER_VERSION = 0.0.6
++GMEDIARENDER_SOURCE = gmediarender-$(GMEDIARENDER_VERSION).tar.bz2
++GMEDIARENDER_SITE = http://savannah.nongnu.org/download/gmrender
++GMEDIARENDER_AUTORECONF = YES
++GMEDIARENDER_LICENSE = GPLv2
++GMEDIARENDER_LICENSE_FILES = COPYING
++GMEDIARENDER_DEPENDENCIES = gstreamer libupnp
++GMEDIARENDER_CONF_OPTS = --with-libupnp=$(STAGING_DIR)/usr LIBS="-lixml"
++
++$(eval $(autotools-package))
+-- 
+1.7.1
+
+============================================================
+    Hiroshi Kawashima
