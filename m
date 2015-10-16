@@ -1,31 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 16 Oct 2015 20:52:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 8116] 2015.05-rc2 raspberrypi2_defconfig network
- interface not coming up
-In-Reply-To: <bug-8116-163@https.bugs.busybox.net/>
-References: <bug-8116-163@https.bugs.busybox.net/>
-Message-ID: <20151016205201.C10C381EC2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 16 Oct 2015 23:27:01 +0200
+Subject: [Buildroot] [PATCH] polarssl: security bump to version 1.2.17
+In-Reply-To: <1445010876-13077-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 16 Oct 2015 12:54:36 -0300")
+References: <1445010876-13077-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87oafy1p3u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8116
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
---- Comment #9 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-10-16 20:52:01 UTC ---
-[--SNIP--]
-> At least, there is now a configurable choice between the sleeping S40network
-> and ifplugd.
+ > Fixes:
+ > CVE-2015-5291 - Remote attack on clients using session tickets or SNI
 
-The sleeping solution is to make our RPi defconfig (as well as all our default
-configs) "just work" out-of-the-box, nothing more.
+ > Also includes countermeasures against Lenstra's RSA-CRT attach for
+ > PKCS#1 v1.5 signatures (1.2.16) and the Logjam attack (1.2.15).
 
-Any more serious system would probably have to use something along the lines
-of connman (my personal favourite) or NetworkManager or ifplugd. Or even
-custom startup scripts.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
