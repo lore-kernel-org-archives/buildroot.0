@@ -1,70 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2015 16:06:37 +0200
-Subject: [Buildroot] [PATCHv6 3/4] Makefile: implement a graph-size
-	target
-In-Reply-To: <1445088825-19300-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1445088825-19300-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1445088825-19300-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20151017140637.GB3717@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Oct 2015 16:06:47 +0200
+Subject: [Buildroot] [PATCH 1/1] libfribidi: indentation cleanup
+In-Reply-To: <1445067034-3018-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1445067034-3018-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20151017160647.4a15747b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Jerzy Grzegorek,
 
-On 2015-10-17 15:33 +0200, Thomas Petazzoni spake thusly:
-> This commit implements a graph-size target that calls the script of
-> the same name to generate the graph and CSV files related to package
-> and file sizes.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+On Sat, 17 Oct 2015 09:30:34 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 > ---
->  Makefile | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 181d446..c871393 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -686,6 +686,13 @@ graph-depends: graph-depends-requirements
->  	|tee $(GRAPHS_DIR)/$(@).dot \
->  	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT)
->  
-> +graph-size:
-> +	$(Q)mkdir -p $(GRAPHS_DIR)
-> +	$(Q)$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
-> +		--graph $(GRAPHS_DIR)/graph-size.$(BR_GRAPH_OUT) \
-> +		--file-size-csv $(GRAPHS_DIR)/file-size-stats.csv \
-> +		--package-size-csv $(GRAPHS_DIR)/package-size-stats.csv
-> +
->  else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
->  
->  all: menuconfig
-> @@ -903,6 +910,7 @@ endif
->  	@echo '  manual-epub            - build manual in ePub'
->  	@echo '  graph-build            - generate graphs of the build times'
->  	@echo '  graph-depends          - generate graph of the dependency tree'
-> +	@echo '  graph-size             - generate stats of the filesystem size'
->  	@echo '  list-defconfigs        - list all defconfigs (pre-configured minimal systems)'
->  	@echo
->  	@echo 'Miscellaneous:'
-> -- 
-> 2.6.2
-> 
+>  package/libfribidi/libfribidi.mk               | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
+Applied, thanks.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
