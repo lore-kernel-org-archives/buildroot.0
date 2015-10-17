@@ -1,40 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 20:16:49 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/ffmpeg: Add support for
- GnuTLS
-In-Reply-To: <1445100748-1803-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1445100748-1803-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151017201649.34c10c8d@free-electrons.com>
+Date: Sat, 17 Oct 2015 20:17:26 +0200
+Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
+ qeglplatformscreen.cpp
+In-Reply-To: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
+References: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
+Message-ID: <20151017201726.41a4fa77@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Marc Andre,
 
-On Sat, 17 Oct 2015 18:52:28 +0200, Bernd Kuhls wrote:
-> Besides OpenSSL ffmpeg also supports GnuTLS.
+On Thu,  3 Sep 2015 15:22:10 +0200, Marc Andre wrote:
+> Update the already existing fix for EGL/X11 header issue to fix
+> an additional problem encountered on my system where I had
+> compile errors in qeglplatformscreen.cpp. The problem was related
+> to the wrong order of includes. The X11 headers must always be
+> included last, as indicated in
+> http://lists.qt-project.org/pipermail/development/2013-March/010511.html
 > 
-> If both GnuTLS and OpenSSL are enabled, the former takes precedence over
-> the latter:
-> http://git.videolan.org/?p=ffmpeg.git;a=blob;f=configure;h=7f9fed31a491ed0991aee2d354dba82e54e3291e;hb=refs/heads/release/2.8#l2719
+> I decided instead of adding a new patch to update the existing patch,
+> because it is an additional fix for the same problem. If you don't agree
+> I am happy to submit a seperate patch.
 > 
-> Introduce a Kconfig choice option to let the user decide which SSL
-> library ffmpeg should use. This choice also shows the fact, that OpenSSL
-> is incompatible with the GPL unless the nonfree option is enabled,
-> instead of silently ignoring OpenSSL when BR2_PACKAGE_FFMPEG_GPL is
-> enabled.
+> This version is updated as suggested by Arnout.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Marc Andre <marc.andre@netline.ch>
+> ---
+>  package/qt5/qt5base/0003-xcb-egl-fixes.patch | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
 
-To be honest, I don't think it's worth adding a Config.in choice here.
-Just use Gnutls if available, or use OpenSSL if available, and that's
-it. I believe it's sufficient, and more in line with how we handle the
-other options in ffmpeg (by doing "automatic handling of
-optional dependencies")
+Applied, after slightly tweaking the commit log (to avoid sentence at
+the first person) and rework the SoB as suggested by Arnout.
 
-Best regards;
+Thanks!
 
 Thomas
 -- 
