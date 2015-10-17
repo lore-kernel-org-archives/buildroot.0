@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2015 22:00:31 +0200
-Subject: [Buildroot] [PATCHv2] inadyn: fix init script and default
- config file
-In-Reply-To: <1445090722-4297-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1445090722-4297-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20151017200031.GG3717@free.fr>
+Date: Sat, 17 Oct 2015 22:02:05 +0200
+Subject: [Buildroot] [PATCH 1/3] toolchain: like glibc,
+ musl always provides SSP support
+In-Reply-To: <1445087350-4947-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1445087350-4947-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1445087350-4947-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20151017200205.GH3717@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +14,40 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2015-10-17 16:05 +0200, Thomas Petazzoni spake thusly:
-> This commit does a number of fixes to the inadyn package to make it
-> work properly "out of the box":
+On 2015-10-17 15:09 +0200, Thomas Petazzoni spake thusly:
+> Make sure BR2_TOOLCHAIN_USES_MUSL selects BR2_TOOLCHAIN_HAS_SSP since
+> musl always provides SSP support (like glibc).
 > 
->  * inadyn is installed in /usr/sbin, not /usr/bin, so we fix the path
->    in the init script
-> 
->  * Use "printf" for the Starting and Stopping messages, so that the OK
->    / FAIL stay on the same line.
-> 
->  * Pass the -q option to the start sequence, since it's passed in the
->    stop sequence.
-> 
->  * Fix the configuration file to use an existing dyndns_system and
->    avoid a failure at startup.
-> 
->  * Use a variable called ENABLED in /etc/default/inadyn to decide
->    whether to start the service or not. By default, it is not started,
->    as suggested by Gustavo, and an explicit ENABLED="yes" is needed.
-> 
->  * Store the PID file in /var/run/inadyn.pid, like we do for all other
->    daemons.
-> 
-> Cc: Alex Suykov <alex.suykov@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Twice your SoB line.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Yet, still a minor thingy...
-
-[--SNIP--]
-> diff --git a/package/inadyn/inadyn.conf b/package/inadyn/inadyn.conf
-> index b5877f7..aef5870 100644
-> --- a/package/inadyn/inadyn.conf
-> +++ b/package/inadyn/inadyn.conf
-> @@ -1,11 +1,11 @@
->  # Basic configuration file for inadyn
->  #
->  # /etc/inadyn.conf
-> -background
-> +pidfile /var/run/inadyn.pid
->  update_period_sec 600 # Check for a new IP every 600 seconds
->  username test		# replace 'test' with your username
->  password test		# replace 'test' with your password
-> -dyndns_system dyndns at dyndns.org   # replace w/ your provider
-> +dyndns_system default at dyndns.org   # replace w/ your provider
->  
->  #  uncomment the alias statement below to test it on your system
->  alias test.homeip.net
-
-The alias line is not commented, which makes the comment above a bit
-confusing...
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
+> ---
+>  toolchain/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index a851ce4..fc30c6e 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -27,6 +27,7 @@ config BR2_TOOLCHAIN_USES_MUSL
+>  	select BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+>  	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	select BR2_TOOLCHAIN_HAS_SSP
+>  
+>  choice
+>  	prompt "Toolchain type"
+> -- 
+> 2.6.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
