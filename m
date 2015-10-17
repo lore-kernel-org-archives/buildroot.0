@@ -1,69 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 14:42:58 +0200
-Subject: [Buildroot] [PATCH] busybox: fix musl build issues
-Message-ID: <1445085778-3358-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Oct 2015 15:09:07 +0200
+Subject: [Buildroot] [PATCH 0/3] Fix SSP related build failures
+Message-ID: <1445087350-4947-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Musl doesn't implemented wmtp, and its utmp support is not sufficient
-to build the latest versions of Busybox, so let's disable wtmp and
-utmp support in Busybox for musl toolchains.
+Hello,
 
-We re-use an existing define BUSYBOX_INTERNAL_SHADOW_PASSWORDS that
-was used to do some musl-related tweaks to the Busybox configuration
-around shadow password functions, and extend it to also do the
-utmp/wtmp tweaks. In the process, we rename the define to
-BUSYBOX_MUSL_TWEAKS.
+This set of patches aim at fixing the SSP related build failures that
+occur with uClibc configurations that don't have SSP support enabled.
 
-Note that BUSYBOX_KCONFIG_FIXUP_CMDS continues to call
-BUSYBOX_INTERNAL_SHADOW_PASSWORDS because there is another definition
-of this macro under other conditions.
+The original problem starts when uClibc-ng recently changed the glibc
+minor version it pretends to be. Due to this change, gcc know believe
+that uClibc always has SSP support (because the corresponding glibc
+minor version always has SSP support). This was causing build failures
+in programs such as "sudo", which are using SSP support:
 
-Fixes:
+  http://autobuild.buildroot.org/results/778/778e6309ba834cc70f8243a4f6c664c0bcaeb7c5/
 
-  http://autobuild.buildroot.org/results/b96/b96ffad13bca5e6fbf7ce79538aacbfe27b1eff3/
+In order to fix this, we explicitly pass the appropriate autoconf
+variable to gcc to tell whether the C library has SSP support or
+not. It was already done during gcc-initial (because the C library
+isn't available at that time), but is now also done at gcc-final time.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/busybox.mk | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+It was tested with:
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d3a6fd8..e5427cf 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -132,12 +132,18 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
- endef
- endif
- 
--# We also need to use internal functions when using the musl C
--# library, since some of them are not yet implemented by musl.
-+# We also need to use internal shadow password functions when using
-+# the musl C library, since some of them are not yet implemented by
-+# musl.
-+#
-+# Do not use utmp/wmtp support. wmtp support is not available in musl,
-+# and utmp support is not sufficient for Busybox.
- ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
-+define BUSYBOX_MUSL_TWEAKS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_PWD_GRP,$(BUSYBOX_BUILD_CONFIG))
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_SHADOW,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_UTMP,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_WTMP,$(BUSYBOX_BUILD_CONFIG))
- endef
- endif
- 
-@@ -223,6 +229,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_SET_SELINUX)
-+	$(BUSYBOX_MUSL_TWEAKS)
- endef
- 
- define BUSYBOX_CONFIGURE_CMDS
+ - internal toolchain with glibc. SSP support is properly generated,
+   and 'sudo' is indeed using it.
+
+ - internal toolchain with uClibc and SSP enabled. Same test: sudo
+   builds fine, and uses SSP.
+
+ - internal toolchain with uClibc, SSP disabled. Same test: sudo
+   builds fine, but of course doesn't use SSP support.
+
+ - internal toolchain with musl. SSP support is properly generated,
+   and 'sudo' is using it.
+
+Best regards,
+
+Thomas
+
+Thomas Petazzoni (3):
+  toolchain: like glibc, musl always provides SSP support
+  gcc: pass explicit gcc_cv_libc_provides_ssp also to gcc-final
+  gcc: simplify musl patches for SSP support
+
+ package/gcc/4.7.4/900-musl-support.patch     | 36 ----------------------------
+ package/gcc/4.8.5/900-musl-support.patch     | 36 ----------------------------
+ package/gcc/4.9.3/900-musl-support.patch     | 36 ----------------------------
+ package/gcc/5.2.0/904-musl-libc-config.patch | 36 ----------------------------
+ package/gcc/gcc-final/gcc-final.mk           |  2 ++
+ package/gcc/gcc-initial/gcc-initial.mk       |  5 +---
+ package/gcc/gcc.mk                           | 10 ++++++++
+ toolchain/Config.in                          |  1 +
+ 8 files changed, 14 insertions(+), 148 deletions(-)
+
 -- 
 2.6.2
