@@ -1,115 +1,81 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Sat, 17 Oct 2015 16:15:45 +0300
-Subject: [Buildroot] [PATCH] binutils: fix building perf
-Message-ID: <1445087745-17488-1-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Oct 2015 15:33:42 +0200
+Subject: [Buildroot] [PATCHv6 1/4] pkg-generic: add step_pkg_size global
+	instrumentation hook
+In-Reply-To: <1445088825-19300-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1445088825-19300-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1445088825-19300-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It turned out one of the previous fixes (required to build Linux
-kernel)
------------------->8-------------------
-ARC Binutils: https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/commit/a65b844aed9153789356e098984452df2f5d9058
-Buildroot: http://git.buildroot.net/buildroot/commit/?id=2d4e2e238a0ea9395152ae71d882d79b1f35094c
------------------->8-------------------
-broke building of some other software packages.
+This patch adds a global instrumentation hook that collects the list
+of files installed in $(TARGET_DIR) by each package, and stores this
+list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
+later be used to determine the size contribution of each package to
+the target root filesystem.
 
-In particular perf built for ARCv2 had corrupted .plt entries that lead
-to immediate crash on perf execution.
+Note that in order to detect if a file installed by one package is
+later overriden by another package, we calculate the md5 of installed
+files and compare them at each installation of a new package.
 
-That's an example of normal .plt entries:
------------------->8-------------------
-< 1-st PLT entry >:
-   12c24:    30 27 8c 7f 0d 00 74 95    ld         r12,[pcl,0x000d9574]
-   12c2c:    21 20 00 03                j.d        [r12]
-   12c30:    0a 24 c0 1f                mov        r12,pcl
+Collecting the list of files installed by each package is done
+unconditionally, as tests have shown that the performance impact of
+doing this is negligible.
 
-< 2-nd PLT entry >:
-   12c34:    30 27 8c 7f 0d 00 68 95    ld         r12,[pcl,0x000d9568]
-   12c3c:    21 20 00 03                j.d        [r12]
-   12c40:    0a 24 c0 1f                mov        r12,pcl
------------------->8-------------------
-Note right after jump in its delay-slot r12 gets set with current value
-of program counter. This is required for the first symbol resolution,
-see implementation of _dl_linux_resolve here:
-http://git.uclibc.org/uClibc/tree/ldso/ldso/arc/resolve.S#n46
-
-And that's what we got in .plt after mentioned fixes:
------------------->8-------------------
-< 1-st PLT entry>:
-   13384:    30 27 8c 7f 0f 00 84 75     ld         r12,[pcl,0x000f7584]
-   1338c:    21 20 00 03                 j.d        [r12]
-
-< 2-nd PLT entry>:
-   13390:    30 27 8c 7f 0f 00 78 75     ld         r12,[pcl,0x000f7578]
-   13398:    21 20 00 03                 j.d        [r12]
------------------->8-------------------
-
-Note r12 setup is missing.
-
-That happened because linker thought the size of PLT entry is 12 bytes
-(which is exactly the size of PLT entry for ARCv1, read ARC750/770)
-while for ARCv2 PLT entry is 16-bytes long. And erroneously trailing 4
-bytes were truncated.
-
-Current commit fixes this misbehavior and PLT gets generated properly
-again.
-
-Now we have a fix for that issue, see
-https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/commit/5df50c61083165455aae5504c5c3566fa5ccebb1
-
-This fix is in arc-2.23-dev branch and will be a part of the next
-release of ARC tools, so then this patch must be removed from buildroot.
-
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Tested-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...tire-object-if-it-contains-only-data-sect.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/binutils/arc-2015.06/0005-Test-the-entire-object-if-it-contains-only-data-sect.patch
+ package/pkg-generic.mk | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/binutils/arc-2015.06/0005-Test-the-entire-object-if-it-contains-only-data-sect.patch b/package/binutils/arc-2015.06/0005-Test-the-entire-object-if-it-contains-only-data-sect.patch
-new file mode 100644
-index 0000000..2cc96fc
---- /dev/null
-+++ b/package/binutils/arc-2015.06/0005-Test-the-entire-object-if-it-contains-only-data-sect.patch
-@@ -0,0 +1,35 @@
-+From 5df50c61083165455aae5504c5c3566fa5ccebb1 Mon Sep 17 00:00:00 2001
-+From: Claudiu Zissulescu <claziss@synopsys.com>
-+Date: Fri, 16 Oct 2015 10:21:21 +0200
-+Subject: [PATCH] Test the entire object if it contains only data sections.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 76ec295..ffef4d3 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -55,6 +55,38 @@ define step_time
+ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ 
++# Hooks to collect statistics about installed files
 +
-+diff --git a/bfd/elf32-arc.c b/bfd/elf32-arc.c
-+index 76bac6c..eb4f8e0 100644
-+--- a/bfd/elf32-arc.c
-++++ b/bfd/elf32-arc.c
-+@@ -915,11 +915,9 @@ of opposite endian-ness"),
-+       || bfd_get_flavour (obfd) != bfd_target_elf_flavour)
-+     return TRUE;
-+ 
-+-  /* Check to see if the input BFD actually contains any sections.  If
-+-     not, its flags may not have been initialised either, but it
-+-     cannot actually cause any incompatiblity.  Do not short-circuit
-+-     dynamic objects; their section list may be emptied by
-+-     elf_link_add_object_symbols.  */
-++  /* Check to see if the input BFD actually contains any sections.  Do
-++     not short-circuit dynamic objects; their section list may be
-++     emptied by elf_link_add_object_symbols.  */
-+   if (!(ibfd->flags & DYNAMIC))
-+     {
-+       bfd_boolean null_input_bfd = TRUE;
-+@@ -933,7 +931,6 @@ of opposite endian-ness"),
-+ 	    only_data_sections = FALSE;
-+ 
-+ 	  null_input_bfd = FALSE;
-+-	  break;
-+ 	}
-+ 
-+       if (null_input_bfd || only_data_sections)
-+-- 
-+2.4.3
++# This hook will be called before the target installation of a
++# package. We store in a file named .br_filelist_before the list of
++# files currently installed in the target. Note that the MD5 is also
++# stored, in order to identify if the files are overwritten.
++define step_pkg_size_start
++	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
++		$($(PKG)_DIR)/.br_filelist_before
++endef
 +
++# This hook will be called after the target installation of a
++# package. We store in a file named .br_filelist_after the list of
++# files (and their MD5) currently installed in the target. We then do
++# a diff with the .br_filelist_before to compute the list of files
++# installed by this package.
++define step_pkg_size_end
++	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
++		$($(PKG)_DIR)/.br_filelist_after
++	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
++		while read hash file ; do \
++			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
++		done
++endef
++
++define step_pkg_size
++	$(if $(filter install-target,$(2)),\
++		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
++		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
++endef
++GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
++
+ # User-supplied script
+ ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+ define step_user
 -- 
-2.4.3
+2.6.2
