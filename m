@@ -1,39 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 16:32:50 +0200
-Subject: [Buildroot] [PATCH] ccache: allow for BR2_CCACHE_DIR
- environment override
-In-Reply-To: <1444915479-7871-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1444915479-7871-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20151017163250.1394258c@free-electrons.com>
+Date: Sat, 17 Oct 2015 16:33:03 +0200
+Subject: [Buildroot] [git commit] ffmpeg: let the user override the --cpu
+	value
+Message-ID: <20151017143308.821A581D36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear gustavo.zacarias at free-electrons.com,
+commit: http://git.buildroot.net/buildroot/commit/?id=8849e806d1c737a4b8404026efceabe9882f0b55
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Oct 2015 10:24:39 -0300, gustavo.zacarias at free-electrons.com
-wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> 
-> Allow the BR2_CCACHE_DIR .config option to be overriden by the
-> BR2_CCACHE_DIR env variable.
-> This is useful for big projects where in some cases the developers home
-> directory might be a NFS mount (slow) and real production builds aren't.
-> 
-> Update documentation accordingly as well.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> ---
->  Makefile                     | 6 ++++--
->  docs/manual/common-usage.txt | 3 +++
->  2 files changed, 7 insertions(+), 2 deletions(-)
+Grab the content of BR2_PACKAGE_FFMPEG_EXTRACONF after guessing the CPU,
+so the user will still have the possibility to override it.
 
-Applied, thanks.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index f28eed8..287338d 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -444,14 +444,14 @@ else
+ FFMPEG_CONF_OPTS += --disable-pic
+ endif
+ 
+-FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+-
+ ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+ FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
+ else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+ FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
+ endif
+ 
++FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
++
+ # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+ define FFMPEG_CONFIGURE_CMDS
+ 	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
