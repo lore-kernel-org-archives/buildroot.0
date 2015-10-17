@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 16:24:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: bump to version
- 2.4.2
-In-Reply-To: <1445091507-2693-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1445091507-2693-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151017162423.49a610fc@free-electrons.com>
+Date: Sat, 17 Oct 2015 16:24:27 +0200
+Subject: [Buildroot] [PATCH] systemd: bump to 227
+In-Reply-To: <1444947370-7878-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1444947370-7878-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20151017162427.4e7c5b74@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Maxime Hadjinlian,
 
-On Sat, 17 Oct 2015 16:18:27 +0200, J?rg Krause wrote:
-> Also add a hash file - github release tarballs are considered stable now.
+On Fri, 16 Oct 2015 00:16:10 +0200, Maxime Hadjinlian wrote:
+> Added back the hash as it was discussed during the last Buildroot Dev
+> Days.
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/shairport-sync/shairport-sync.hash | 2 ++
->  package/shairport-sync/shairport-sync.mk   | 2 +-
+>  package/systemd/systemd.hash | 2 ++
+>  package/systemd/systemd.mk   | 2 +-
 >  2 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 package/shairport-sync/shairport-sync.hash
+>  create mode 100644 package/systemd/systemd.hash
 
 Applied, thanks.
 
