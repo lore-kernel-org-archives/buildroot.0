@@ -1,74 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 16:12:15 +0200
-Subject: [Buildroot] [PATCH v2] libv4l: fix missing libintl linking
-In-Reply-To: <1445021011-31994-1-git-send-email-ps.report@gmx.net>
-References: <1445021011-31994-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151017161215.00c6f073@free-electrons.com>
+Date: Sat, 17 Oct 2015 16:12:54 +0200
+Subject: [Buildroot] [git commit] pkg-generic: add step_pkg_size global
+	instrumentation hook
+Message-ID: <20151017141353.1553681D68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: http://git.buildroot.net/buildroot/commit/?id=99aca138c20e1259ac8c23252c223e150d460482
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 16 Oct 2015 20:43:31 +0200, Peter Seiderer wrote:
-> Add missing libintl linking to utils/dvb and utils/keytable (patch
-> Makefile.am and do autoreconf with host-gettext dependency).
-> 
-> Patch submitted upstream (see [2]).
-> 
-> Add proper gettext dependency for v4l-utils option.
-> 
-> Fixes [1]:
->  dvb-format-convert.o: In function `parse_opt':
->  dvb-format-convert.c:(.text+0x46): undefined reference to `libintl_gettext'
-> 
-> [1] http://autobuild.buildroot.net/results/40a/40a12c0d1746dcc51e4f221eefbbf31bd427cac8
-> [2] http://permalink.gmane.org/gmane.linux.drivers.video-input-infrastructure/95883
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - patch Makefile.am (instead of Makefile.in) and autoreconf
->     (suggested by Thomas Petazzoni)
-> ---
->  ...-dvb-keytable-fix-missing-libintl-linking.patch | 54 ++++++++++++++++++++++
->  package/libv4l/Config.in                           |  1 +
->  package/libv4l/libv4l.mk                           |  7 +++
->  3 files changed, 62 insertions(+)
->  create mode 100644 package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch
+This patch adds a global instrumentation hook that collects the list
+of files installed in $(TARGET_DIR) by each package, and stores this
+list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
+later be used to determine the size contribution of each package to
+the target root filesystem.
 
-Applied, thanks.
+Note that in order to detect if a file installed by one package is
+later overriden by another package, we calculate the md5 of installed
+files and compare them at each installation of a new package.
 
-However, I looked at your upstream submission, and I think your commit
-log is a bit too terse. A better explanation would have been:
+Collecting the list of files installed by each package is done
+unconditionally, as tests have shown that the performance impact of
+doing this is negligible.
 
-"""
-libv4l configure's script checks for the availability of gettext using
-the AM_GNU_GETTEXT autoconf macro. This macro provides the LIBINTL
-automake variable, which should be used at link time for any part of
-the code that uses the gettext functionality (see
-https://www.gnu.org/software/gettext/manual/html_node/AM_005fGNU_005fGETTEXT.html).
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Tested-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk |   32 ++++++++++++++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
 
-If LIBINTL is not used, then programs will properly link on systems
-where the C library directly provides the gettext functionality (which
-is the case on Linux systems that use the glibc C library). However, on
-systems where the gettext functionality is provided by a separate
-library, programs not linked with LIBINTL will fail to link due to
-missing functions. For such systems, the gettext functions are provided
-by the libintl library, itself part of gettext. An example of such
-systems are uClibc-based Linux systems, for which the libv4l utils
-currently fail to build due to this issue.
-
-To fix this, this patch uses the LIBINTL automake variable where
-appropriate.
-"""
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 76ec295..ffef4d3 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -55,6 +55,38 @@ define step_time
+ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ 
++# Hooks to collect statistics about installed files
++
++# This hook will be called before the target installation of a
++# package. We store in a file named .br_filelist_before the list of
++# files currently installed in the target. Note that the MD5 is also
++# stored, in order to identify if the files are overwritten.
++define step_pkg_size_start
++	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
++		$($(PKG)_DIR)/.br_filelist_before
++endef
++
++# This hook will be called after the target installation of a
++# package. We store in a file named .br_filelist_after the list of
++# files (and their MD5) currently installed in the target. We then do
++# a diff with the .br_filelist_before to compute the list of files
++# installed by this package.
++define step_pkg_size_end
++	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
++		$($(PKG)_DIR)/.br_filelist_after
++	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
++		while read hash file ; do \
++			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
++		done
++endef
++
++define step_pkg_size
++	$(if $(filter install-target,$(2)),\
++		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
++		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
++endef
++GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
++
+ # User-supplied script
+ ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+ define step_user
