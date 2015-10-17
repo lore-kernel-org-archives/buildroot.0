@@ -1,34 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 16:17:41 +0200
-Subject: [Buildroot] [PATCH] binutils: fix building perf
-In-Reply-To: <1445087745-17488-1-git-send-email-abrodkin@synopsys.com>
-References: <1445087745-17488-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20151017161741.54d8f69a@free-electrons.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat, 17 Oct 2015 16:18:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: bump to version
+	2.4.2
+Message-ID: <1445091507-2693-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Also add a hash file - github release tarballs are considered stable now.
 
-On Sat, 17 Oct 2015 16:15:45 +0300, Alexey Brodkin wrote:
-> It turned out one of the previous fixes (required to build Linux
-> kernel)
-> ------------------>8-------------------
-> ARC Binutils: https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/commit/a65b844aed9153789356e098984452df2f5d9058
-> Buildroot: http://git.buildroot.net/buildroot/commit/?id=2d4e2e238a0ea9395152ae71d882d79b1f35094c
-> ------------------>8-------------------
-> broke building of some other software packages.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/shairport-sync.hash | 2 ++
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/shairport-sync/shairport-sync.hash
 
-I've changed the commit title to "binutils: fix building perf on ARC",
-otherwise we could believe that the problem applied to all
-architectures. And then applied.
-
-Thanks!
-
-Thomas
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+new file mode 100644
+index 0000000..3d2f404
+--- /dev/null
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  e3c70acc8a4516dfe0c77d7b0317c4a180cc722b22715b042ef8757d1a0e0f32  shairport-sync-2.4.2.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index fa7100a..72708c3 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.4.1
++SHAIRPORT_SYNC_VERSION = 2.4.2
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.1
