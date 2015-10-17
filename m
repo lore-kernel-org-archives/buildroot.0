@@ -1,253 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 15:33:43 +0200
-Subject: [Buildroot] [PATCHv6 2/4] support/scripts: add size-stats script
-In-Reply-To: <1445088825-19300-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1445088825-19300-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1445088825-19300-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Sat, 17 Oct 2015 15:52:40 +0200
+Subject: [Buildroot] [PATCH 2/4] board/raspberrypi: prepare the image
+ files for the target
+In-Reply-To: <20151017114519.GA3717@free.fr>
+References: <20150820143005.GA6441@ketchup.mtl.sfl>
+ <1440273688-92868-2-git-send-email-benoit@wsystem.com>
+ <20151017114519.GA3717@free.fr>
+Message-ID: <CA+sos79vHmtQK6rafnfMS7q3pve85CC7jYHyhvmAAgwqRtH4gQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new script uses the data collected by the step_pkg_size
-instrumentation hook to generate a pie chart of the size contribution
-of each package to the target root filesystem, and two CSV files with
-statistics about the package size and file size. To achieve this, it
-looks at each file in $(TARGET_DIR), and using the
-packages-file-list.txt information collected by the step_pkg_size
-hook, it determines to which package the file belongs. It is therefore
-able to give the size installed by each package.
+Dear Yann E. MORIN,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- support/scripts/size-stats | 217 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 217 insertions(+)
- create mode 100755 support/scripts/size-stats
+On Sat, Oct 17, 2015 at 1:45 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[...]
+> Why not simply:
+>     cp -l "${BINARIES_DIR}/"*.dtb "${RPI_FW_BIN_DIR}"
+>
+> I'd prefer we keep the DTB files where they were installed, so the user
+> does not get confused.
+[...]
+> As I said above, I'd prefer the DTB files be left in their original
+> location, with the ones in rpi-firmware/ being only copies of, or
+> hard-links to, the originals.
 
-diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-new file mode 100755
-index 0000000..54685f6
---- /dev/null
-+++ b/support/scripts/size-stats
-@@ -0,0 +1,217 @@
-+#!/usr/bin/env python
-+
-+# Copyright (C) 2014 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+# General Public License for more details.
-+#
-+# You should have received a copy of the GNU General Public License
-+# along with this program; if not, write to the Free Software
-+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-+
-+import sys
-+import os
-+import os.path
-+import argparse
-+import csv
-+import collections
-+
-+try:
-+    import matplotlib
-+    matplotlib.use('Agg')
-+    import matplotlib.font_manager as fm
-+    import matplotlib.pyplot as plt
-+except ImportError:
-+    sys.stderr.write("You need python-matplotlib to generate the size graph\n")
-+    exit(1)
-+
-+colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
-+          '#0068b5', '#f28e00', '#940084', '#97c000']
-+
-+#
-+# This function adds a new file to 'filesdict', after checking its
-+# size. The 'filesdict' contain the relative path of the file as the
-+# key, and as the value a tuple containing the name of the package to
-+# which the file belongs and the size of the file.
-+#
-+# filesdict: the dict to which  the file is added
-+# relpath: relative path of the file
-+# fullpath: absolute path to the file
-+# pkg: package to which the file belongs
-+#
-+def add_file(filesdict, relpath, abspath, pkg):
-+    if not os.path.exists(abspath):
-+        return
-+    if os.path.islink(abspath):
-+        return
-+    sz = os.stat(abspath).st_size
-+    filesdict[relpath] = (pkg, sz)
-+
-+#
-+# This function returns a dict where each key is the path of a file in
-+# the root filesystem, and the value is a tuple containing two
-+# elements: the name of the package to which this file belongs and the
-+# size of the file.
-+#
-+# builddir: path to the Buildroot output directory
-+#
-+def build_package_dict(builddir):
-+    filesdict = {}
-+    with open(os.path.join(builddir, "build", "packages-file-list.txt")) as filelistf:
-+        for l in filelistf.readlines():
-+            pkg, fpath = l.split(",")
-+            # remove the initial './' in each file path
-+            fpath = fpath.strip()[2:]
-+            fullpath = os.path.join(builddir, "target", fpath)
-+            add_file(filesdict, fpath, fullpath, pkg)
-+    return filesdict
-+
-+#
-+# This function builds a dictionary that contains the name of a
-+# package as key, and the size of the files installed by this package
-+# as the value.
-+#
-+# filesdict: dictionary with the name of the files as key, and as
-+# value a tuple containing the name of the package to which the files
-+# belongs, and the size of the file. As returned by
-+# build_package_dict.
-+#
-+# builddir: path to the Buildroot output directory
-+#
-+def build_package_size(filesdict, builddir):
-+    pkgsize = collections.defaultdict(int)
-+
-+    for root, _, files in os.walk(os.path.join(builddir, "target")):
-+        for f in files:
-+            fpath = os.path.join(root, f)
-+            if os.path.islink(fpath):
-+                continue
-+            frelpath = os.path.relpath(fpath, os.path.join(builddir, "target"))
-+            if not frelpath in filesdict:
-+                print("WARNING: %s is not part of any package" % frelpath)
-+                pkg = "unknown"
-+            else:
-+                pkg = filesdict[frelpath][0]
-+
-+            pkgsize[pkg] += os.path.getsize(fpath)
-+
-+    return pkgsize
-+
-+#
-+# Given a dict returned by build_package_size(), this function
-+# generates a pie chart of the size installed by each package.
-+#
-+# pkgsize: dictionary with the name of the package as a key, and the
-+# size as the value, as returned by build_package_size.
-+#
-+# outputf: output file for the graph
-+#
-+def draw_graph(pkgsize, outputf):
-+    total = sum(pkgsize.values())
-+    labels = []
-+    values = []
-+    other_value = 0
-+    for (p, sz) in pkgsize.items():
-+        if sz < (total * 0.01):
-+            other_value += sz
-+        else:
-+            labels.append("%s (%d kB)" % (p, sz / 1000.))
-+            values.append(sz)
-+    labels.append("Other (%d kB)" % (other_value / 1000.))
-+    values.append(other_value)
-+
-+    plt.figure()
-+    patches, texts, autotexts = plt.pie(values, labels=labels,
-+                                        autopct='%1.1f%%', shadow=True,
-+                                        colors=colors)
-+    # Reduce text size
-+    proptease = fm.FontProperties()
-+    proptease.set_size('xx-small')
-+    plt.setp(autotexts, fontproperties=proptease)
-+    plt.setp(texts, fontproperties=proptease)
-+
-+    plt.suptitle("Filesystem size per package", fontsize=18, y=.97)
-+    plt.title("Total filesystem size: %d kB" % (total / 1000.), fontsize=10, y=.96)
-+    plt.savefig(outputf)
-+
-+#
-+# Generate a CSV file with statistics about the size of each file, its
-+# size contribution to the package and to the overall system.
-+#
-+# filesdict: dictionary with the name of the files as key, and as
-+# value a tuple containing the name of the package to which the files
-+# belongs, and the size of the file. As returned by
-+# build_package_dict.
-+#
-+# pkgsize: dictionary with the name of the package as a key, and the
-+# size as the value, as returned by build_package_size.
-+#
-+# outputf: output CSV file
-+#
-+def gen_files_csv(filesdict, pkgsizes, outputf):
-+    total = 0
-+    for (p, sz) in pkgsizes.items():
-+        total += sz
-+    with open(outputf, 'w') as csvfile:
-+        wr = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-+        wr.writerow(["File name",
-+                     "Package name",
-+                     "File size",
-+                     "Package size",
-+                     "File size in package (%)",
-+                     "File size in system (%)"])
-+        for f, (pkgname, filesize) in filesdict.items():
-+            pkgsize = pkgsizes[pkgname]
-+            wr.writerow([f, pkgname, filesize, pkgsize,
-+                         "%.1f" % (float(filesize) / pkgsize * 100),
-+                         "%.1f" % (float(filesize) / total * 100)])
-+
-+
-+#
-+# Generate a CSV file with statistics about the size of each package,
-+# and their size contribution to the overall system.
-+#
-+# pkgsize: dictionary with the name of the package as a key, and the
-+# size as the value, as returned by build_package_size.
-+#
-+# outputf: output CSV file
-+#
-+def gen_packages_csv(pkgsizes, outputf):
-+    total = sum(pkgsizes.values())
-+    with open(outputf, 'w') as csvfile:
-+        wr = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-+        wr.writerow(["Package name", "Package size", "Package size in system (%)"])
-+        for (pkg, size) in pkgsizes.items():
-+            wr.writerow([pkg, size, "%.1f" % (float(size) / total * 100)])
-+
-+parser = argparse.ArgumentParser(description='Draw build time graphs')
-+
-+parser.add_argument("--builddir", '-i', metavar="BUILDDIR", required=True,
-+                    help="Buildroot output directory")
-+parser.add_argument("--graph", '-g', metavar="GRAPH",
-+                    help="Graph output file (.pdf or .png extension)")
-+parser.add_argument("--file-size-csv", '-f', metavar="FILE_SIZE_CSV",
-+                    help="CSV output file with file size statistics")
-+parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
-+                    help="CSV output file with package size statistics")
-+args = parser.parse_args()
-+
-+# Find out which package installed what files
-+pkgdict = build_package_dict(args.builddir)
-+
-+# Collect the size installed by each package
-+pkgsize = build_package_size(pkgdict, args.builddir)
-+
-+if args.graph:
-+    draw_graph(pkgsize, args.graph)
-+if args.file_size_csv:
-+    gen_files_csv(pkgdict, pkgsize, args.file_size_csv)
-+if args.package_size_csv:
-+    gen_packages_csv(pkgsize, args.package_size_csv)
--- 
-2.6.2
+OK, I'll do that.
+
+Best regards,
+Beno?t
