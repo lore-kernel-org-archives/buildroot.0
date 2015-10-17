@@ -1,129 +1,108 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2015 17:50:19 +0200
-Subject: [Buildroot] [PATCH] support/mkusers: allow comments in users tables
-Message-ID: <1445097019-3217-1-git-send-email-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 17 Oct 2015 18:52:28 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/ffmpeg: Add support for GnuTLS
+Message-ID: <1445100748-1803-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The format of the users table files is non trivial, so it is sometimes
-handy to add comments explaining the syntax (or simply the reason for
-the user) inline in the files.
+Besides OpenSSL ffmpeg also supports GnuTLS.
 
-Ignore empty lines and comment lines prefixed with '#' similar to shell
-or makedevs files.
+If both GnuTLS and OpenSSL are enabled, the former takes precedence over
+the latter:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=configure;h=7f9fed31a491ed0991aee2d354dba82e54e3291e;hb=refs/heads/release/2.8#l2719
 
-Packages that defined no user (the vast majority) would cause an empty
-line to be present in the internal users table, hence the reason we
-skipped empty usernames. Now that we ignore empty lines, we no longer
-need to check for empty usernames.
+Introduce a Kconfig choice option to let the user decide which SSL
+library ffmpeg should use. This choice also shows the fact, that OpenSSL
+is incompatible with the GPL unless the nonfree option is enabled,
+instead of silently ignoring OpenSSL when BR2_PACKAGE_FFMPEG_GPL is
+enabled.
 
-Reported-by: Peter Korsgaard <jacmet@uclibc.org>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- support/scripts/mkusers | 45 ++++++++++++++++++++++++++-------------------
- 1 file changed, 26 insertions(+), 19 deletions(-)
+v3: rebased
+v2: OpenSSL and gpl'ed code from ffmpeg play together when nonfree
 
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-index 9c5c4dc..e2c24c7 100755
---- a/support/scripts/mkusers
-+++ b/support/scripts/mkusers
-@@ -358,6 +358,8 @@ add_one_user() {
- #----------------------------------------------------------------------------
- main() {
-     local username uid group gid passwd home shell groups comment
-+    local line
-+    local -a LINES
+ package/ffmpeg/Config.in | 38 ++++++++++++++++++++++++++++++++++++++
+ package/ffmpeg/ffmpeg.mk | 12 +++++++-----
+ 2 files changed, 45 insertions(+), 5 deletions(-)
+
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index e5981fe..de253c3 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -70,6 +70,44 @@ config BR2_PACKAGE_FFMPEG_SWSCALE
+ 	help
+ 	  Swscale is a library of video scaling routines.
  
-     # Some sanity checks
-     if [ ${MIN_UID} -le 0 ]; then
-@@ -367,36 +369,41 @@ main() {
-         fail "MIN_GID must be >0 (currently %d)\n" ${MIN_GID}
-     fi
- 
-+    # Read in all the file in memory, exclude empty lines and comments
-+    while read line; do
-+        LINES+=( "${line}" )
-+    done < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
++if BR2_PACKAGE_GNUTLS || \
++	(BR2_PACKAGE_OPENSSL && \
++		(!BR2_PACKAGE_FFMPEG_GPL || \
++		BR2_PACKAGE_FFMPEG_NONFREE))
 +
-     # We first create groups whose gid is not -1, and then we create groups
-     # whose gid is -1 (automatic), so that, if a group is defined both with
-     # a specified gid and an automatic gid, we ensure the specified gid is
-     # used, rather than a different automatic gid is computed.
++choice
++	prompt "https support library"
++
++config BR2_PACKAGE_FFMPEG_GNUTLS
++	bool "gnutls"
++	depends on BR2_PACKAGE_GNUTLS
++
++comment "GnuTLS support not available"
++	depends on !BR2_PACKAGE_GNUTLS
++
++config BR2_PACKAGE_FFMPEG_OPENSSL
++	bool "openssl"
++	depends on !BR2_PACKAGE_FFMPEG_GPL || BR2_PACKAGE_FFMPEG_NONFREE
++	depends on BR2_PACKAGE_OPENSSL
++
++comment "OpenSSL support not available"
++	depends on !BR2_PACKAGE_OPENSSL
++
++comment "OpenSSL is incompatible with the GPL, enable nonfree"
++	depends on BR2_PACKAGE_FFMPEG_GPL && \
++		!BR2_PACKAGE_FFMPEG_NONFREE && BR2_PACKAGE_OPENSSL
++
++endchoice
++
++endif
++
++comment "https support needs either OpenSSL or GnuTLS"
++	depends on !BR2_PACKAGE_GNUTLS && !BR2_PACKAGE_OPENSSL
++
++comment "https support using OpenSSL is incompatible with the GPL, enable nonfree"
++	depends on !BR2_PACKAGE_GNUTLS && BR2_PACKAGE_OPENSSL && \
++		BR2_PACKAGE_FFMPEG_GPL && !BR2_PACKAGE_FFMPEG_NONFREE
++
+ config BR2_PACKAGE_FFMPEG_ENCODERS
+ 	string "Enabled encoders"
+ 	default "all"
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 287338d..26e01e2 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -200,14 +200,16 @@ else
+ FFMPEG_CONF_OPTS += --disable-libfdk-aac
+ endif
  
-     # First, create all the main groups which gid is *not* automatic
--    while read username uid group gid passwd home shell groups comment; do
--        [ -n "${username}" ] || continue    # Package with no user
--        [ ${gid} -ge 0     ] || continue    # Automatic gid
-+    for line in "${LINES[@]}"; do
-+        read username uid group gid passwd home shell groups comment <<<"${line}"
-+        [ ${gid} -ge 0 ] || continue    # Automatic gid
-         add_one_group "${group}" "${gid}"
--    done <"${USERS_TABLE}"
-+    done
- 
-     # Then, create all the main groups which gid *is* automatic
--    while read username uid group gid passwd home shell groups comment; do
--        [ -n "${username}" ] || continue    # Package with no user
--        [ ${gid} -eq -1    ] || continue    # Non-automatic gid
-+    for line in "${LINES[@]}"; do
-+        read username uid group gid passwd home shell groups comment <<<"${line}"
-+        [ ${gid} -eq -1 ] || continue    # Non-automatic gid
-         add_one_group "${group}" "${gid}"
--    done <"${USERS_TABLE}"
-+    done
- 
-     # Then, create all the additional groups
-     # If any additional group is already a main group, we should use
-     # the gid of that main group; otherwise, we can use any gid
--    while read username uid group gid passwd home shell groups comment; do
--        [ -n "${username}" ] || continue    # Package with no user
-+    for line in "${LINES[@]}"; do
-+        read username uid group gid passwd home shell groups comment <<<"${line}"
-         if [ "${groups}" != "-" ]; then
-             for g in ${groups//,/ }; do
-                 add_one_group "${g}" -1
-             done
-         fi
--    done <"${USERS_TABLE}"
-+    done
- 
-     # When adding users, we do as for groups, in case two packages create
-     # the same user, one with an automatic uid, the other with a specified
-@@ -404,22 +411,22 @@ main() {
-     # uid be generated.
- 
-     # Now, add users whose uid is *not* automatic
--    while read username uid group gid passwd home shell groups comment; do
--        [ -n "${username}" ] || continue    # Package with no user
-+    for line in "${LINES[@]}"; do
-+        read username uid group gid passwd home shell groups comment <<<"${line}"
-         [ "${username}" != "-" ] || continue # Magic string to skip user creation
--        [ ${uid} -ge 0     ] || continue    # Automatic uid
-+        [ ${uid} -ge 0         ] || continue # Automatic uid
-         add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
-                      "${home}" "${shell}" "${groups}" "${comment}"
--    done <"${USERS_TABLE}"
-+    done
- 
-     # Finally, add users whose uid *is* automatic
--    while read username uid group gid passwd home shell groups comment; do
--        [ -n "${username}" ] || continue    # Package with no user
-+    for line in "${LINES[@]}"; do
-+        read username uid group gid passwd home shell groups comment <<<"${line}"
-         [ "${username}" != "-" ] || continue # Magic string to skip user creation
--        [ ${uid} -eq -1    ] || continue    # Non-automatic uid
-+        [ ${uid} -eq -1        ] || continue # Non-automatic uid
-         add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
-                      "${home}" "${shell}" "${groups}" "${comment}"
--    done <"${USERS_TABLE}"
-+    done
- }
- 
- #----------------------------------------------------------------------------
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-# openssl isn't license compatible with GPL
+-ifeq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
+-FFMPEG_CONF_OPTS += --disable-openssl
++ifeq ($(BR2_PACKAGE_FFMPEG_GNUTLS),y)
++FFMPEG_CONF_OPTS += --enable-gnutls
++FFMPEG_DEPENDENCIES += gnutls
+ else
++FFMPEG_CONF_OPTS += --disable-gnutls
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG_OPENSSL),y)
+ FFMPEG_CONF_OPTS += --enable-openssl
+ FFMPEG_DEPENDENCIES += openssl
+-endif
+ else
+ FFMPEG_CONF_OPTS += --disable-openssl
+ endif
 -- 
-1.9.1
+2.6.1
