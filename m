@@ -1,61 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Oct 2015 10:52:54 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain-external: bypass buildroot
-	wrapper
-In-Reply-To: <1444856755-2011-2-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Wed, 14 Oct 2015 23:05:55 +0200")
-References: <20151011120859.7e786a73@free-electrons.com>
- <1444856755-2011-1-git-send-email-arnout@mind.be>
- <1444856755-2011-2-git-send-email-arnout@mind.be>
-Message-ID: <871tct27x5.fsf@dell.be.48ers.dk>
+Date: Sat, 17 Oct 2015 10:50:20 +0200
+Subject: [Buildroot] [git commit] gcc: use '.br_real' instead of '.real'
+	suffix for the raw internal toolchain
+Message-ID: <20151017085309.A8D6581D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=416326d47eecce2e33bd0c1046632c2c38617931
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The buildroot internal toolchain now adds a wrapper. When we use a
- > buildroot toolchain as an external toolchain, we want to bypass this
- > wrapper and call the compiler directly, for two reasons:
+If an externally built (non-Buildroot) toolchain also wraps the toolchain
+executables, there is a risk that it will also use the '.real' extension.
+To minimise this risk, use a more buildroot-specific extension instead:
+'.br_real', so we can detect that the external toolchain is built using
+Buildroot and get to the raw toolchain binaries.
 
- > 1. The options added by the wrapper are not necessarily appropriate
- >    when it is reused as an external toolchain. For instance, ccache
- >    may have been enabled while building the toolchain but not when
- >    using it as an external toolchain.
+[Peter: reword description]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/gcc.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
- > 2. Currently, the wrapper expects to reside in .../usr/bin, but when
- >    used as an external toolchain it will be in .../ext-toolchain/bin.
- >    Therefore, the wrapper can't find the real binary and sysroot
- >    anymore.
-
- > To bypass the wrapper, we check for the existence of *.br_real files in
- > the external toolchain directory. If any such file exists, the wrapper
- > will add the .br_real suffix for all the wrapped files. Note that the
- > wrapper doesn't check if the *.br_real exists for each individual
- > wrapped file, it just assumes that all wrapped files have a
- > corresponding .br_real. This is currently true but that may change in
- > the future of course.
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- > Peter, you requested the check to be in the .mk file rather than in
- > the wrapper. However, since we have only one wrapper for all wrapped
- > files, that means that either all of them or none of them should have
- > the .br_real suffix. Therefore, if we later wrap additional files
- > (e.g. ld), existing external buildroot toolchains will fail again. So
- > to fix that, there should be a check in the wrapper.c file itself. But
- > if we have a check in the wrapper.c, there's no point having a check in
- > the wrapper.mk as well... So Peter, please tell me if I should instead
- > drop the check in the .mk file and add one in the .c file. Note that
- > that can be done as a follow-up so it shouldn't block this patch.
-
-Yeah, that's true. Either that or we need to add more complication to
-the .mk file. I'll need to think a bit more about that.
-
-In the mean time - Committed, thanks.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 1b30e6d..ef606c4 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -236,7 +236,7 @@ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--with-long-double-128
+ endif
+ 
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".real"'
++HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
+ 
+ ifeq ($(BR2_CCACHE),y)
+ HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
+@@ -272,23 +272,23 @@ endif # BR2_CCACHE
+ # used. However, we should not add the toolchain wrapper for them, and they
+ # match the *cc-* pattern. Therefore, an additional case is added for *-ar,
+ # *-ranlib and *-nm.
+-# Avoid that a .real is symlinked a second time.
++# Avoid that a .br_real is symlinked a second time.
+ # Also create <arch>-linux-<tool> symlinks.
+ define HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
+ 	$(Q)cd $(HOST_DIR)/usr/bin; \
+ 	for i in $(GNU_TARGET_NAME)-*; do \
+ 		case "$$i" in \
+-		*.real) \
++		*.br_real) \
+ 			;; \
+ 		*-ar|*-ranlib|*-nm) \
+ 			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
+ 			;; \
+ 		*cc|*cc-*|*++|*++-*|*cpp) \
+-			rm -f $$i.real; \
+-			mv $$i $$i.real; \
++			rm -f $$i.br_real; \
++			mv $$i $$i.br_real; \
+ 			ln -sf toolchain-wrapper $$i; \
+ 			ln -sf toolchain-wrapper $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
+-			ln -snf $$i.real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.real; \
++			ln -snf $$i.br_real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.br_real; \
+ 			;; \
+ 		*) \
+ 			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
