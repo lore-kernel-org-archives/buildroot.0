@@ -1,70 +1,69 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 Oct 2015 14:31:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Add optional dependencies
-Message-ID: <1445085118-8020-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Oct 2015 14:42:58 +0200
+Subject: [Buildroot] [PATCH] busybox: fix musl build issues
+Message-ID: <1445085778-3358-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable libcdio and libilbc since they are incompatible with ffmpeg.
+Musl doesn't implemented wmtp, and its utmp support is not sufficient
+to build the latest versions of Busybox, so let's disable wtmp and
+utmp support in Busybox for musl toolchains.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+We re-use an existing define BUSYBOX_INTERNAL_SHADOW_PASSWORDS that
+was used to do some musl-related tweaks to the Busybox configuration
+around shadow password functions, and extend it to also do the
+utmp/wtmp tweaks. In the process, we rename the define to
+BUSYBOX_MUSL_TWEAKS.
+
+Note that BUSYBOX_KCONFIG_FIXUP_CMDS continues to call
+BUSYBOX_INTERNAL_SHADOW_PASSWORDS because there is another definition
+of this macro under other conditions.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/b96/b96ffad13bca5e6fbf7ce79538aacbfe27b1eff3/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.mk | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ package/busybox/busybox.mk | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index febca90..42ccd2e 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -50,9 +50,11 @@ FFMPEG_CONF_OPTS = \
- 	--disable-libopencore-amrnb \
- 	--disable-libopencore-amrwb \
- 	--disable-libopencv \
-+	--disable-libcdio \
- 	--disable-libdc1394 \
- 	--disable-libfaac \
- 	--disable-libgsm \
-+	--disable-libilbc \
- 	--disable-libnut \
- 	--disable-libopenjpeg \
- 	--disable-libschroedinger \
-@@ -191,6 +193,13 @@ else
- FFMPEG_CONF_OPTS += --disable-bzlib
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index d3a6fd8..e5427cf 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -132,12 +132,18 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+ endef
  endif
  
-+ifeq ($(BR2_PACKAGE_FDK_AAC)$(BR2_PACKAGE_FFMPEG_NONFREE),yy)
-+FFMPEG_CONF_OPTS += --enable-libfdk-aac
-+FFMPEG_DEPENDENCIES += fdk-aac
-+else
-+FFMPEG_CONF_OPTS += --disable-libfdk-aac
-+endif
-+
- ifeq ($(BR2_PACKAGE_FFMPEG_GNUTLS),y)
- FFMPEG_CONF_OPTS += --enable-gnutls
- FFMPEG_DEPENDENCIES += gnutls
-@@ -205,6 +214,20 @@ else
- FFMPEG_CONF_OPTS += --disable-openssl
+-# We also need to use internal functions when using the musl C
+-# library, since some of them are not yet implemented by musl.
++# We also need to use internal shadow password functions when using
++# the musl C library, since some of them are not yet implemented by
++# musl.
++#
++# Do not use utmp/wmtp support. wmtp support is not available in musl,
++# and utmp support is not sufficient for Busybox.
+ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
++define BUSYBOX_MUSL_TWEAKS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_PWD_GRP,$(BUSYBOX_BUILD_CONFIG))
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_SHADOW,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_UTMP,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_WTMP,$(BUSYBOX_BUILD_CONFIG))
+ endef
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBDCADEC),y)
-+FFMPEG_CONF_OPTS += --enable-libdcadec
-+FFMPEG_DEPENDENCIES += libdcadec
-+else
-+FFMPEG_CONF_OPTS += --disable-libdcadec
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBOPENH264),y)
-+FFMPEG_CONF_OPTS += --enable-libopenh264
-+FFMPEG_DEPENDENCIES += libopenh264
-+else
-+FFMPEG_CONF_OPTS += --disable-libopenh264
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
- FFMPEG_DEPENDENCIES += libvorbis
- FFMPEG_CONF_OPTS += \
+@@ -223,6 +229,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
++	$(BUSYBOX_MUSL_TWEAKS)
+ endef
+ 
+ define BUSYBOX_CONFIGURE_CMDS
 -- 
-2.6.1
+2.6.2
