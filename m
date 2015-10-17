@@ -1,245 +1,115 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 15:09:10 +0200
-Subject: [Buildroot] [PATCH 3/3] gcc: simplify musl patches for SSP support
-In-Reply-To: <1445087350-4947-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1445087350-4947-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1445087350-4947-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Sat, 17 Oct 2015 16:15:45 +0300
+Subject: [Buildroot] [PATCH] binutils: fix building perf
+Message-ID: <1445087745-17488-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we are always explicitly passing gcc_cv_libc_provides_ssp,
-there is no longer any reason to modify the gcc configure/configure.ac
-to take into account the musl case. When a musl toolchain is being
-built, BR2_TOOLCHAIN_HAS_SSP is always 'y', and therefore
-gcc_cv_libc_provides_ssp=yes is always passed when building
-gcc-initial and gcc-final.
+It turned out one of the previous fixes (required to build Linux
+kernel)
+------------------>8-------------------
+ARC Binutils: https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/commit/a65b844aed9153789356e098984452df2f5d9058
+Buildroot: http://git.buildroot.net/buildroot/commit/?id=2d4e2e238a0ea9395152ae71d882d79b1f35094c
+------------------>8-------------------
+broke building of some other software packages.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+In particular perf built for ARCv2 had corrupted .plt entries that lead
+to immediate crash on perf execution.
+
+That's an example of normal .plt entries:
+------------------>8-------------------
+< 1-st PLT entry >:
+   12c24:    30 27 8c 7f 0d 00 74 95    ld         r12,[pcl,0x000d9574]
+   12c2c:    21 20 00 03                j.d        [r12]
+   12c30:    0a 24 c0 1f                mov        r12,pcl
+
+< 2-nd PLT entry >:
+   12c34:    30 27 8c 7f 0d 00 68 95    ld         r12,[pcl,0x000d9568]
+   12c3c:    21 20 00 03                j.d        [r12]
+   12c40:    0a 24 c0 1f                mov        r12,pcl
+------------------>8-------------------
+Note right after jump in its delay-slot r12 gets set with current value
+of program counter. This is required for the first symbol resolution,
+see implementation of _dl_linux_resolve here:
+http://git.uclibc.org/uClibc/tree/ldso/ldso/arc/resolve.S#n46
+
+And that's what we got in .plt after mentioned fixes:
+------------------>8-------------------
+< 1-st PLT entry>:
+   13384:    30 27 8c 7f 0f 00 84 75     ld         r12,[pcl,0x000f7584]
+   1338c:    21 20 00 03                 j.d        [r12]
+
+< 2-nd PLT entry>:
+   13390:    30 27 8c 7f 0f 00 78 75     ld         r12,[pcl,0x000f7578]
+   13398:    21 20 00 03                 j.d        [r12]
+------------------>8-------------------
+
+Note r12 setup is missing.
+
+That happened because linker thought the size of PLT entry is 12 bytes
+(which is exactly the size of PLT entry for ARCv1, read ARC750/770)
+while for ARCv2 PLT entry is 16-bytes long. And erroneously trailing 4
+bytes were truncated.
+
+Current commit fixes this misbehavior and PLT gets generated properly
+again.
+
+Now we have a fix for that issue, see
+https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/commit/5df50c61083165455aae5504c5c3566fa5ccebb1
+
+This fix is in arc-2.23-dev branch and will be a part of the next
+release of ARC tools, so then this patch must be removed from buildroot.
+
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 ---
- package/gcc/4.7.4/900-musl-support.patch     | 36 ----------------------------
- package/gcc/4.8.5/900-musl-support.patch     | 36 ----------------------------
- package/gcc/4.9.3/900-musl-support.patch     | 36 ----------------------------
- package/gcc/5.2.0/904-musl-libc-config.patch | 36 ----------------------------
- 4 files changed, 144 deletions(-)
+ ...tire-object-if-it-contains-only-data-sect.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/binutils/arc-2015.06/0005-Test-the-entire-object-if-it-contains-only-data-sect.patch
 
-diff --git a/package/gcc/4.7.4/900-musl-support.patch b/package/gcc/4.7.4/900-musl-support.patch
-index 1cb6701..67b8c30 100644
---- a/package/gcc/4.7.4/900-musl-support.patch
-+++ b/package/gcc/4.7.4/900-musl-support.patch
-@@ -323,24 +323,6 @@ Index: b/gcc/configure
- ===================================================================
- --- a/gcc/configure
- +++ b/gcc/configure
--@@ -26791,6 +26791,9 @@
-- else
--   gcc_cv_libc_provides_ssp=no
--     case "$target" in
--+       *-*-musl*)
--+         # All versions of musl provide stack protector
--+	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
--       # glibc 2.4 and later provides __stack_chk_fail and
--       # either __stack_chk_guard, or TLS access to stack guard canary.
--@@ -26824,6 +26827,7 @@
-- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-- 	 # simply assert that glibc does provide this, which is true for all
-- 	 # realistically usable GNU/Hurd configurations.
--+	 # All supported versions of musl provide it as well
-- 	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-darwin* | *-*-freebsd*)
-- 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
- @@ -26906,6 +26910,9 @@
-        gcc_cv_target_dl_iterate_phdr=no
-      fi
-@@ -355,24 +337,6 @@ Index: b/gcc/configure.ac
- ===================================================================
- --- a/gcc/configure.ac
- +++ b/gcc/configure.ac
--@@ -4669,6 +4669,9 @@
--       gcc_cv_libc_provides_ssp,
--       [gcc_cv_libc_provides_ssp=no
--     case "$target" in
--+       *-*-musl*)
--+         # All versions of musl provide stack protector
--+	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
--       [# glibc 2.4 and later provides __stack_chk_fail and
--       # either __stack_chk_guard, or TLS access to stack guard canary.
--@@ -4702,6 +4705,7 @@
-- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-- 	 # simply assert that glibc does provide this, which is true for all
-- 	 # realistically usable GNU/Hurd configurations.
--+	 # All supported versions of musl provide it as well
-- 	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-darwin* | *-*-freebsd*)
-- 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
- @@ -4767,6 +4771,9 @@
-        gcc_cv_target_dl_iterate_phdr=no
-      fi
-diff --git a/package/gcc/4.8.5/900-musl-support.patch b/package/gcc/4.8.5/900-musl-support.patch
-index 761f018..6743a88 100644
---- a/package/gcc/4.8.5/900-musl-support.patch
-+++ b/package/gcc/4.8.5/900-musl-support.patch
-@@ -486,24 +486,6 @@ Index: b/gcc/configure
- ===================================================================
- --- a/gcc/configure
- +++ b/gcc/configure
--@@ -26821,6 +26821,9 @@
-- else
--   gcc_cv_libc_provides_ssp=no
--     case "$target" in
--+       *-*-musl*)
--+         # All versions of musl provide stack protector
--+	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
--       # glibc 2.4 and later provides __stack_chk_fail and
--       # either __stack_chk_guard, or TLS access to stack guard canary.
--@@ -26854,6 +26857,7 @@
-- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-- 	 # simply assert that glibc does provide this, which is true for all
-- 	 # realistically usable GNU/Hurd configurations.
--+	 # All supported versions of musl provide it as well
-- 	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-darwin* | *-*-freebsd*)
-- 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
- @@ -26936,6 +26940,9 @@
-        gcc_cv_target_dl_iterate_phdr=no
-      fi
-@@ -518,24 +500,6 @@ Index: b/gcc/configure.ac
- ===================================================================
- --- a/gcc/configure.ac
- +++ b/gcc/configure.ac
--@@ -4750,6 +4750,9 @@
--       gcc_cv_libc_provides_ssp,
--       [gcc_cv_libc_provides_ssp=no
--     case "$target" in
--+       *-*-musl*)
--+         # All versions of musl provide stack protector
--+	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
--       [# glibc 2.4 and later provides __stack_chk_fail and
--       # either __stack_chk_guard, or TLS access to stack guard canary.
--@@ -4783,6 +4786,7 @@
-- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-- 	 # simply assert that glibc does provide this, which is true for all
-- 	 # realistically usable GNU/Hurd configurations.
--+	 # All supported versions of musl provide it as well
-- 	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-darwin* | *-*-freebsd*)
-- 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
- @@ -4848,6 +4852,9 @@
-        gcc_cv_target_dl_iterate_phdr=no
-      fi
-diff --git a/package/gcc/4.9.3/900-musl-support.patch b/package/gcc/4.9.3/900-musl-support.patch
-index 56502b8..a711b06 100644
---- a/package/gcc/4.9.3/900-musl-support.patch
-+++ b/package/gcc/4.9.3/900-musl-support.patch
-@@ -452,24 +452,6 @@ Index: b/gcc/configure
- ===================================================================
- --- a/gcc/configure
- +++ b/gcc/configure
--@@ -27328,6 +27328,9 @@
-- else
--   gcc_cv_libc_provides_ssp=no
--     case "$target" in
--+       *-*-musl*)
--+         # All versions of musl provide stack protector
--+	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
--       # glibc 2.4 and later provides __stack_chk_fail and
--       # either __stack_chk_guard, or TLS access to stack guard canary.
--@@ -27360,6 +27363,7 @@
-- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-- 	 # simply assert that glibc does provide this, which is true for all
-- 	 # realistically usable GNU/Hurd configurations.
--+	 # All supported versions of musl provide it as well
-- 	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-darwin* | *-*-freebsd*)
-- 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
- @@ -27449,6 +27453,9 @@
-        gcc_cv_target_dl_iterate_phdr=no
-      fi
-@@ -484,24 +466,6 @@ Index: b/gcc/configure.ac
- ===================================================================
- --- a/gcc/configure.ac
- +++ b/gcc/configure.ac
--@@ -5016,6 +5016,9 @@
--       gcc_cv_libc_provides_ssp,
--       [gcc_cv_libc_provides_ssp=no
--     case "$target" in
--+       *-*-musl*)
--+         # All versions of musl provide stack protector
--+	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
--       # glibc 2.4 and later provides __stack_chk_fail and
--       # either __stack_chk_guard, or TLS access to stack guard canary.
--@@ -5042,6 +5045,7 @@
-- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-- 	 # simply assert that glibc does provide this, which is true for all
-- 	 # realistically usable GNU/Hurd configurations.
--+	 # All supported versions of musl provide it as well
-- 	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-darwin* | *-*-freebsd*)
-- 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
- @@ -5108,6 +5112,9 @@
-        gcc_cv_target_dl_iterate_phdr=no
-      fi
-diff --git a/package/gcc/5.2.0/904-musl-libc-config.patch b/package/gcc/5.2.0/904-musl-libc-config.patch
-index c4eddb4..8549140 100644
---- a/package/gcc/5.2.0/904-musl-libc-config.patch
-+++ b/package/gcc/5.2.0/904-musl-libc-config.patch
-@@ -225,24 +225,6 @@ Index: b/gcc/configure
- ===================================================================
- --- a/gcc/configure
- +++ b/gcc/configure
--@@ -27681,6 +27681,9 @@
-- else
--   gcc_cv_libc_provides_ssp=no
--     case "$target" in
--+       *-*-musl*)
--+	 # All versions of musl provide stack protector
--+	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
--       # glibc 2.4 and later provides __stack_chk_fail and
--       # either __stack_chk_guard, or TLS access to stack guard canary.
--@@ -27713,6 +27716,7 @@
-- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-- 	 # simply assert that glibc does provide this, which is true for all
-- 	 # realistically usable GNU/Hurd configurations.
--+	 # All supported versions of musl provide it as well
-- 	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-darwin* | *-*-freebsd*)
-- 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
- @@ -27809,6 +27813,9 @@
-        gcc_cv_target_dl_iterate_phdr=no
-      fi
-@@ -257,24 +239,6 @@ Index: b/gcc/configure.ac
- ===================================================================
- --- a/gcc/configure.ac
- +++ b/gcc/configure.ac
--@@ -5199,6 +5199,9 @@
--       gcc_cv_libc_provides_ssp,
--       [gcc_cv_libc_provides_ssp=no
--     case "$target" in
--+       *-*-musl*)
--+	 # All versions of musl provide stack protector
--+	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
--       # glibc 2.4 and later provides __stack_chk_fail and
--       # either __stack_chk_guard, or TLS access to stack guard canary.
--@@ -5225,6 +5228,7 @@
-- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-- 	 # simply assert that glibc does provide this, which is true for all
-- 	 # realistically usable GNU/Hurd configurations.
--+	 # All supported versions of musl provide it as well
-- 	 gcc_cv_libc_provides_ssp=yes;;
--        *-*-darwin* | *-*-freebsd*)
-- 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
- @@ -5298,6 +5302,9 @@
-        gcc_cv_target_dl_iterate_phdr=no
-      fi
+diff --git a/package/binutils/arc-2015.06/0005-Test-the-entire-object-if-it-contains-only-data-sect.patch b/package/binutils/arc-2015.06/0005-Test-the-entire-object-if-it-contains-only-data-sect.patch
+new file mode 100644
+index 0000000..2cc96fc
+--- /dev/null
++++ b/package/binutils/arc-2015.06/0005-Test-the-entire-object-if-it-contains-only-data-sect.patch
+@@ -0,0 +1,35 @@
++From 5df50c61083165455aae5504c5c3566fa5ccebb1 Mon Sep 17 00:00:00 2001
++From: Claudiu Zissulescu <claziss@synopsys.com>
++Date: Fri, 16 Oct 2015 10:21:21 +0200
++Subject: [PATCH] Test the entire object if it contains only data sections.
++
++diff --git a/bfd/elf32-arc.c b/bfd/elf32-arc.c
++index 76bac6c..eb4f8e0 100644
++--- a/bfd/elf32-arc.c
+++++ b/bfd/elf32-arc.c
++@@ -915,11 +915,9 @@ of opposite endian-ness"),
++       || bfd_get_flavour (obfd) != bfd_target_elf_flavour)
++     return TRUE;
++ 
++-  /* Check to see if the input BFD actually contains any sections.  If
++-     not, its flags may not have been initialised either, but it
++-     cannot actually cause any incompatiblity.  Do not short-circuit
++-     dynamic objects; their section list may be emptied by
++-     elf_link_add_object_symbols.  */
+++  /* Check to see if the input BFD actually contains any sections.  Do
+++     not short-circuit dynamic objects; their section list may be
+++     emptied by elf_link_add_object_symbols.  */
++   if (!(ibfd->flags & DYNAMIC))
++     {
++       bfd_boolean null_input_bfd = TRUE;
++@@ -933,7 +931,6 @@ of opposite endian-ness"),
++ 	    only_data_sections = FALSE;
++ 
++ 	  null_input_bfd = FALSE;
++-	  break;
++ 	}
++ 
++       if (null_input_bfd || only_data_sections)
++-- 
++2.4.3
++
 -- 
-2.6.2
+2.4.3
