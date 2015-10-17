@@ -1,93 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2015 16:09:45 +0200
-Subject: [Buildroot] [PATCHv6 4/4] docs/manual: add section about size
-	graphing
-In-Reply-To: <1445088825-19300-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1445088825-19300-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1445088825-19300-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20151017140945.GC3717@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Oct 2015 16:12:15 +0200
+Subject: [Buildroot] [PATCH v2] libv4l: fix missing libintl linking
+In-Reply-To: <1445021011-31994-1-git-send-email-ps.report@gmx.net>
+References: <1445021011-31994-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20151017161215.00c6f073@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Peter Seiderer,
 
-On 2015-10-17 15:33 +0200, Thomas Petazzoni spake thusly:
-> Document the new graph-size target and its possibilities.
+On Fri, 16 Oct 2015 20:43:31 +0200, Peter Seiderer wrote:
+> Add missing libintl linking to utils/dvb and utils/keytable (patch
+> Makefile.am and do autoreconf with host-gettext dependency).
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+> Patch submitted upstream (see [2]).
+> 
+> Add proper gettext dependency for v4l-utils option.
+> 
+> Fixes [1]:
+>  dvb-format-convert.o: In function `parse_opt':
+>  dvb-format-convert.c:(.text+0x46): undefined reference to `libintl_gettext'
+> 
+> [1] http://autobuild.buildroot.net/results/40a/40a12c0d1746dcc51e4f221eefbbf31bd427cac8
+> [2] http://permalink.gmane.org/gmane.linux.drivers.video-input-infrastructure/95883
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  docs/manual/common-usage.txt | 41 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
-> 
-> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-> index 5b27b1f..3ae05c7 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -273,6 +273,47 @@ only other format supported is PNG:
->  BR2_GRAPH_OUT=png make graph-build
->  ----------------
->  
-> +=== Graphing the filesystem size contribution of packages
-> +
-> +When your target system grows, it is sometimes useful to understand
-> +how much each Buildroot package is contributing to the overall root
-> +filesystem size. To help with such an analysis, Buildroot collects
-> +data about files installed by each package and using this data,
-> +generates a graph and CSVs files detailing the size contribution of
-> +the different packages.
-> +
-> +To generate these data after a build, run:
-> +
-> +----------------
-> +make graph-size
-> +----------------
-> +
-> +This will generate:
-> +
-> +* +output/graphs/graph-size.pdf+, a pie chart of the contribution of
-> +  each package to the overall root filesystem size
-> +
-> +* +output/graphs/package-size-stats.csv+, a CSV file giving the size
-> +  contribution of each package to the overall root filesystem size
-> +
-> +* +output/graphs/file-size-stats.csv+, a CSV file giving the size
-> +  contribution of each installed file to the package it belongs, and
-> +  to the overall filesystem size.
-> +
-> +This +size-stats+ target requires the Python Matplotlib library to be
-> +installed (+python-matplotlib+ on most distributions), and also the
-> ++argpase+ module if you're using a Python version older than 2.7
-> +(+python-argparse+ on most distributions).
-> +
-> +Just like for the duration graph, a +BR2_GRAPH_OUT+ environment is
-> +supported to adjust the output file format. See xref:graph-depends[]
-> +for details about this environment variable.
-> +
-> +.Note
-> +The collected filesystem size data is only meaningful after a complete
-> +clean rebuild. Be sure to run +make clean all+ before using +make
-> +size-stats+.
-> +
->  include::eclipse-integration.txt[]
->  
->  include::advanced.txt[]
-> -- 
-> 2.6.2
-> 
+> Changes v1 -> v2:
+>   - patch Makefile.am (instead of Makefile.in) and autoreconf
+>     (suggested by Thomas Petazzoni)
+> ---
+>  ...-dvb-keytable-fix-missing-libintl-linking.patch | 54 ++++++++++++++++++++++
+>  package/libv4l/Config.in                           |  1 +
+>  package/libv4l/libv4l.mk                           |  7 +++
+>  3 files changed, 62 insertions(+)
+>  create mode 100644 package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch
 
+Applied, thanks.
+
+However, I looked at your upstream submission, and I think your commit
+log is a bit too terse. A better explanation would have been:
+
+"""
+libv4l configure's script checks for the availability of gettext using
+the AM_GNU_GETTEXT autoconf macro. This macro provides the LIBINTL
+automake variable, which should be used at link time for any part of
+the code that uses the gettext functionality (see
+https://www.gnu.org/software/gettext/manual/html_node/AM_005fGNU_005fGETTEXT.html).
+
+If LIBINTL is not used, then programs will properly link on systems
+where the C library directly provides the gettext functionality (which
+is the case on Linux systems that use the glibc C library). However, on
+systems where the gettext functionality is provided by a separate
+library, programs not linked with LIBINTL will fail to link due to
+missing functions. For such systems, the gettext functions are provided
+by the libintl library, itself part of gettext. An example of such
+systems are uClibc-based Linux systems, for which the libv4l utils
+currently fail to build due to this issue.
+
+To fix this, this patch uses the LIBINTL automake variable where
+appropriate.
+"""
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
