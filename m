@@ -1,74 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2015 21:55:42 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/ffmpeg: Add support for
-	GnuTLS
-In-Reply-To: <1445110736-1663-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1445110736-1663-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151017195542.GF3717@free.fr>
+Date: Sat, 17 Oct 2015 22:00:31 +0200
+Subject: [Buildroot] [PATCHv2] inadyn: fix init script and default
+ config file
+In-Reply-To: <1445090722-4297-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1445090722-4297-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20151017200031.GG3717@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Thomas, All,
 
-On 2015-10-17 21:38 +0200, Bernd Kuhls spake thusly:
-> Besides OpenSSL ffmpeg also supports GnuTLS.
+On 2015-10-17 16:05 +0200, Thomas Petazzoni spake thusly:
+> This commit does a number of fixes to the inadyn package to make it
+> work properly "out of the box":
 > 
-> If both GnuTLS and OpenSSL are enabled, the former takes precedence over
-> the latter:
-> http://git.videolan.org/?p=ffmpeg.git;a=blob;f=configure;h=7f9fed31a491ed0991aee2d354dba82e54e3291e;hb=refs/heads/release/2.8#l2719
+>  * inadyn is installed in /usr/sbin, not /usr/bin, so we fix the path
+>    in the init script
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  * Use "printf" for the Starting and Stopping messages, so that the OK
+>    / FAIL stay on the same line.
+> 
+>  * Pass the -q option to the start sequence, since it's passed in the
+>    stop sequence.
+> 
+>  * Fix the configuration file to use an existing dyndns_system and
+>    avoid a failure at startup.
+> 
+>  * Use a variable called ENABLED in /etc/default/inadyn to decide
+>    whether to start the service or not. By default, it is not started,
+>    as suggested by Gustavo, and an explicit ENABLED="yes" is needed.
+> 
+>  * Store the PID file in /var/run/inadyn.pid, like we do for all other
+>    daemons.
+> 
+> Cc: Alex Suykov <alex.suykov@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Twice your SoB line.
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> ---
-> v4: Removed Kconfig options (Thomas)
+Yet, still a minor thingy...
 
-And I agreed with Thomas when we talked about this on IRC yesterday. ;-)
+[--SNIP--]
+> diff --git a/package/inadyn/inadyn.conf b/package/inadyn/inadyn.conf
+> index b5877f7..aef5870 100644
+> --- a/package/inadyn/inadyn.conf
+> +++ b/package/inadyn/inadyn.conf
+> @@ -1,11 +1,11 @@
+>  # Basic configuration file for inadyn
+>  #
+>  # /etc/inadyn.conf
+> -background
+> +pidfile /var/run/inadyn.pid
+>  update_period_sec 600 # Check for a new IP every 600 seconds
+>  username test		# replace 'test' with your username
+>  password test		# replace 'test' with your password
+> -dyndns_system dyndns at dyndns.org   # replace w/ your provider
+> +dyndns_system default at dyndns.org   # replace w/ your provider
+>  
+>  #  uncomment the alias statement below to test it on your system
+>  alias test.homeip.net
+
+The alias line is not commented, which makes the comment above a bit
+confusing...
 
 Regards,
 Yann E. MORIN.
 
-> v3: rebased
-> v2: OpenSSL and gpl'ed code from ffmpeg play together when nonfree
-> 
->  package/ffmpeg/ffmpeg.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index 287338d..d4815ca 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -200,6 +200,11 @@ else
->  FFMPEG_CONF_OPTS += --disable-libfdk-aac
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> +FFMPEG_CONF_OPTS += --enable-gnutls --disable-openssl
-> +FFMPEG_DEPENDENCIES += gnutls
-> +else
-> +FFMPEG_CONF_OPTS += --disable-gnutls
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  # openssl isn't license compatible with GPL
->  ifeq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
-> @@ -211,6 +216,7 @@ endif
->  else
->  FFMPEG_CONF_OPTS += --disable-openssl
->  endif
-> +endif
->  
->  ifeq ($(BR2_PACKAGE_LIBDCADEC),y)
->  FFMPEG_CONF_OPTS += --enable-libdcadec
-> -- 
-> 2.6.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
