@@ -1,41 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 16:27:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wavpack: Fix iconv support
-In-Reply-To: <1445084909-17569-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1445084909-17569-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151017162706.4c0fa304@free-electrons.com>
+Date: Sat, 17 Oct 2015 16:29:20 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: Add optional dependencies
+Message-ID: <20151017142929.08BB981D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=632df1de3095943bb57b52b6582341c6482571f7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 17 Oct 2015 14:28:29 +0200, Bernd Kuhls wrote:
-> wavpack fails to link with libiconv
-> 
-> /bin/bash ../libtool  --tag=CC   --mode=link /home/bernd/buildroot/br3/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc  -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os    -o wvunpack wvunpack-wvunpack.o wvunpack-utils.o wvunpack-md5.o  ../src/.libs/libwavpack.la -lm
-> libtool: link: /home/bernd/buildroot/br3/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -o wvunpack wvunpack-wvunpack.o wvunpack-utils.o wvunpack-md5.o  ../src/.libs/libwavpack.so -lm -Wl,-rpath -Wl,/home/bernd/buildroot/br3/output/build/wavpack-4.75.2/src/.libs
-> /home/bernd/buildroot/br3/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/4.9.3/../../../../i586-buildroot-linux-uclibc/bin/ld: wvunpack-wvunpack.o: undefined reference to symbol 'libiconv_open'
-> 
-> using this defconfig
-> 
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_PACKAGE_WAVPACK=y
-> 
-> Patch suggested by Peter:
-> http://lists.busybox.net/pipermail/buildroot/2014-February/090596.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/wavpack/wavpack.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+Disable libcdio and libilbc since they are incompatible with ffmpeg.
 
-Applied, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk |   23 +++++++++++++++++++++++
+ 1 files changed, 23 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index f361970..f28eed8 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -50,9 +50,11 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-libopencore-amrnb \
+ 	--disable-libopencore-amrwb \
+ 	--disable-libopencv \
++	--disable-libcdio \
+ 	--disable-libdc1394 \
+ 	--disable-libfaac \
+ 	--disable-libgsm \
++	--disable-libilbc \
+ 	--disable-libnut \
+ 	--disable-libopenjpeg \
+ 	--disable-libschroedinger \
+@@ -191,6 +193,13 @@ else
+ FFMPEG_CONF_OPTS += --disable-bzlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FDK_AAC)$(BR2_PACKAGE_FFMPEG_NONFREE),yy)
++FFMPEG_CONF_OPTS += --enable-libfdk-aac
++FFMPEG_DEPENDENCIES += fdk-aac
++else
++FFMPEG_CONF_OPTS += --disable-libfdk-aac
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ # openssl isn't license compatible with GPL
+ ifeq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
+@@ -203,6 +212,20 @@ else
+ FFMPEG_CONF_OPTS += --disable-openssl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDCADEC),y)
++FFMPEG_CONF_OPTS += --enable-libdcadec
++FFMPEG_DEPENDENCIES += libdcadec
++else
++FFMPEG_CONF_OPTS += --disable-libdcadec
++endif
++
++ifeq ($(BR2_PACKAGE_LIBOPENH264),y)
++FFMPEG_CONF_OPTS += --enable-libopenh264
++FFMPEG_DEPENDENCIES += libopenh264
++else
++FFMPEG_CONF_OPTS += --disable-libopenh264
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+ FFMPEG_DEPENDENCIES += libvorbis
+ FFMPEG_CONF_OPTS += \
