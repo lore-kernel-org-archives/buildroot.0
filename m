@@ -1,35 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 16:21:55 +0200
-Subject: [Buildroot] [PATCH] toolchain-external/CodeSourcery MIPS:
- available only for R2
-In-Reply-To: <1445011202-47571-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1445011202-47571-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151017162155.097e9f42@free-electrons.com>
+Date: Sat, 17 Oct 2015 16:24:18 +0200
+Subject: [Buildroot] [git commit] systemd: bump to 227
+Message-ID: <20151017142422.B895181D81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=4e613bc5f94a084c3c77de776f3335f53bcb478b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 16 Oct 2015 17:00:01 +0100, Vicente Olivert Riera wrote:
-> Currently the CodeSourcery toolchains for MIPS can be selected to build
-> mips32 (revision level 1) targets, but the resulting binaries are built
-> for mips32r2 instead. This is because these toolchains don't have
-> library support other than mips32r2, so there is no point to allow the
-> selection of a mips32 variant with a CodeSourcery MIPS toolchain, since
-> everything will be built for mips32r2 instead.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  toolchain/toolchain-external/Config.in |    9 +++------
->  1 files changed, 3 insertions(+), 6 deletions(-)
+Added back the hash as it was discussed during the last Buildroot Dev
+Days.
 
-Applied, thanks.
+Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/systemd.hash |    2 ++
+ package/systemd/systemd.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+new file mode 100644
+index 0000000..60aebcf
+--- /dev/null
++++ b/package/systemd/systemd.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256 6766e8489e359f3d608a9f032eb1f52d7c55d76d0f9171837cf2b3284b2b904b  systemd-227.tar.gz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 2e974fa..414dc0d 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 226
++SYSTEMD_VERSION = 227
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
