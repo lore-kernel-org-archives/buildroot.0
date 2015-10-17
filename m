@@ -1,31 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 16:33:11 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: let the user override the --cpu
- value
-In-Reply-To: <1444911775-45783-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1444911775-45783-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151017163311.0de80d9d@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 Oct 2015 16:34:33 +0200
+Subject: [Buildroot] [PATCH] fs/common.mk: support comments in user
+	table files
+In-Reply-To: <1445007019-23720-1-git-send-email-peter@korsgaard.com>
+References: <1445007019-23720-1-git-send-email-peter@korsgaard.com>
+Message-ID: <20151017143433.GD3717@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Peter, All,
 
-On Thu, 15 Oct 2015 13:22:55 +0100, Vicente Olivert Riera wrote:
-> Grab the content of BR2_PACKAGE_FFMPEG_EXTRACONF after guessing the CPU,
-> so the user will still have the possibility to override it.
+On 2015-10-16 16:50 +0200, Peter Korsgaard spake thusly:
+> The format of the users table files is non trivial, so it is sometimes handy
+> to add comments explaining the syntax (or simply the reason for the user)
+> inline in the files.
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Support comment lines prefixed with '#' similar to shell / makedevs files and strip
+> those lines before passing to the mkusers script.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/ffmpeg/ffmpeg.mk |    4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
+>  fs/common.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 528e194..7110bc7 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -87,7 +87,7 @@ endif
+>  	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+>  endif
+>  ifneq ($$(ROOTFS_USERS_TABLES),)
+> -	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
+> +	sed '/^#/d' $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
 
-Applied, thanks.
+Thomas and I both think it should be done in the script itself.
+I'll do it. ;-)
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+>  endif
+>  	printf '$$(subst $$(sep),\n,$$(PACKAGES_USERS))' >> $$(USERS_TABLE)
+>  	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+> -- 
+> 2.1.4
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
