@@ -1,99 +1,57 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 Oct 2015 12:34:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Add support for GnuTLS
-Message-ID: <1445078098-18915-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Oct 2015 13:00:07 +0200
+Subject: [Buildroot] how can i customize existing package when using the
+ BR2_EXTERNAL mechanism
+In-Reply-To: <1445026679.208938590@f90.i.mail.ru>
+References: <1445026679.208938590@f90.i.mail.ru>
+Message-ID: <20151017130007.63ace36a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Besides OpenSSL ffmpeg also supports GnuTLS.
+Dear ?????? ????????,
 
-If both GnuTLS and OpenSSL are enabled, the former takes precedence over
-the latter:
-http://git.videolan.org/?p=ffmpeg.git;a=blob;f=configure;h=7f9fed31a491ed0991aee2d354dba82e54e3291e;hb=refs/heads/release/2.8#l2719
+On Fri, 16 Oct 2015 23:17:59 +0300, ?????? ???????? wrote:
+>  for example, i need add rtmp module to the nginx package
+> 
+> nginx.mk
+> 
+> ifeq ($(BR2_PACKAGE_NGINX_HTTP_RTMP),y)
+> NGINX_POST_PATCH_CMDS += git clone  https://github.com/arut/nginx-rtmp-module.git $(@D)/rtmp
+> NGINX_CONF_OPT += --add-module=$(@D)/rtmp
+> endif
+> 
+> nginx/Config.in
+> 
+> config BR2_PACKAGE_NGINX_HTTP_RTMP
+> ?? ?bool "Enable RTMP module"
+> ?? ?depends on BR2_PACKAGE_NGINX
+> ?? ?help
+> ?? ?? Enable NGINX-based Media Streaming Server.
 
-Introduce a Kconfig choice option to let the user decide which SSL
-library ffmpeg should use. This choice also shows the fact, that OpenSSL
-is incompatible with the GPL, instead of silently ignoring OpenSSL when
-BR2_PACKAGE_FFMPEG_GPL is enabled.
+The BR2_EXTERNAL mechanism does not allow to customize existing
+packages in the main Buildroot. It only allows to *add* other packages.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/Config.in | 33 +++++++++++++++++++++++++++++++++
- package/ffmpeg/ffmpeg.mk | 12 +++++++-----
- 2 files changed, 40 insertions(+), 5 deletions(-)
+My suggestion here would be to simply patch the official Buildroot, and
+send the patch upstream to us so that it gets merged.
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index e5981fe..f8fd7a2 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -70,6 +70,39 @@ config BR2_PACKAGE_FFMPEG_SWSCALE
- 	help
- 	  Swscale is a library of video scaling routines.
- 
-+if BR2_PACKAGE_GNUTLS || (BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_FFMPEG_GPL)
-+
-+choice
-+	prompt "https support library"
-+
-+config BR2_PACKAGE_FFMPEG_GNUTLS
-+	bool "gnutls"
-+	depends on BR2_PACKAGE_GNUTLS
-+
-+comment "GnuTLS support not available"
-+	depends on !BR2_PACKAGE_GNUTLS
-+
-+config BR2_PACKAGE_FFMPEG_OPENSSL
-+	bool "openssl"
-+	depends on !BR2_PACKAGE_FFMPEG_GPL
-+	depends on BR2_PACKAGE_OPENSSL
-+
-+comment "OpenSSL support not available"
-+	depends on !BR2_PACKAGE_OPENSSL
-+
-+comment "OpenSSL support is incompatible with the GPL"
-+	depends on BR2_PACKAGE_FFMPEG_GPL && BR2_PACKAGE_OPENSSL
-+
-+endchoice
-+
-+endif
-+
-+comment "https support needs either OpenSSL or GnuTLS"
-+	depends on !BR2_PACKAGE_GNUTLS && !BR2_PACKAGE_OPENSSL
-+
-+comment "https support using OpenSSL is incompatible with the GPL"
-+	depends on !BR2_PACKAGE_GNUTLS && BR2_PACKAGE_OPENSSL && BR2_PACKAGE_FFMPEG_GPL
-+
- config BR2_PACKAGE_FFMPEG_ENCODERS
- 	string "Enabled encoders"
- 	default "all"
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f361970..febca90 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -191,14 +191,16 @@ else
- FFMPEG_CONF_OPTS += --disable-bzlib
- endif
- 
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--# openssl isn't license compatible with GPL
--ifeq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
--FFMPEG_CONF_OPTS += --disable-openssl
-+ifeq ($(BR2_PACKAGE_FFMPEG_GNUTLS),y)
-+FFMPEG_CONF_OPTS += --enable-gnutls
-+FFMPEG_DEPENDENCIES += gnutls
- else
-+FFMPEG_CONF_OPTS += --disable-gnutls
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG_OPENSSL),y)
- FFMPEG_CONF_OPTS += --enable-openssl
- FFMPEG_DEPENDENCIES += openssl
--endif
- else
- FFMPEG_CONF_OPTS += --disable-openssl
- endif
+However, note that your approach is not correct: doing a "git clone" in
+the middle of a package patch commands is not good as it completely
+circumvents the Buildroot download logic and legal-info collection
+logic.
+
+You should instead add a separate package for the nginx-rtmp-module,
+and then if there is no other way than building it during the nginx
+build, what you can do is in the nginx package, depend on the
+nginx-rtmp-module, and create the appropriate symlink between $(@D) and
+the build directory of nginx-rtmp-module.
+
+Best regards,
+
+Thomas
 -- 
-2.6.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
