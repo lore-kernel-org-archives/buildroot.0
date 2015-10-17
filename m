@@ -1,44 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 20:17:26 +0200
-Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
- qeglplatformscreen.cpp
-In-Reply-To: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
-References: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
-Message-ID: <20151017201726.41a4fa77@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 17 Oct 2015 21:38:56 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/ffmpeg: Add support for GnuTLS
+Message-ID: <1445110736-1663-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marc Andre,
+Besides OpenSSL ffmpeg also supports GnuTLS.
 
-On Thu,  3 Sep 2015 15:22:10 +0200, Marc Andre wrote:
-> Update the already existing fix for EGL/X11 header issue to fix
-> an additional problem encountered on my system where I had
-> compile errors in qeglplatformscreen.cpp. The problem was related
-> to the wrong order of includes. The X11 headers must always be
-> included last, as indicated in
-> http://lists.qt-project.org/pipermail/development/2013-March/010511.html
-> 
-> I decided instead of adding a new patch to update the existing patch,
-> because it is an additional fix for the same problem. If you don't agree
-> I am happy to submit a seperate patch.
-> 
-> This version is updated as suggested by Arnout.
-> 
-> Signed-off-by: Marc Andre <marc.andre@netline.ch>
-> ---
->  package/qt5/qt5base/0003-xcb-egl-fixes.patch | 25 +++++++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
+If both GnuTLS and OpenSSL are enabled, the former takes precedence over
+the latter:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=configure;h=7f9fed31a491ed0991aee2d354dba82e54e3291e;hb=refs/heads/release/2.8#l2719
 
-Applied, after slightly tweaking the commit log (to avoid sentence at
-the first person) and rework the SoB as suggested by Arnout.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v4: Removed Kconfig options (Thomas)
+v3: rebased
+v2: OpenSSL and gpl'ed code from ffmpeg play together when nonfree
 
-Thanks!
+ package/ffmpeg/ffmpeg.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thomas
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 287338d..d4815ca 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -200,6 +200,11 @@ else
+ FFMPEG_CONF_OPTS += --disable-libfdk-aac
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++FFMPEG_CONF_OPTS += --enable-gnutls --disable-openssl
++FFMPEG_DEPENDENCIES += gnutls
++else
++FFMPEG_CONF_OPTS += --disable-gnutls
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ # openssl isn't license compatible with GPL
+ ifeq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
+@@ -211,6 +216,7 @@ endif
+ else
+ FFMPEG_CONF_OPTS += --disable-openssl
+ endif
++endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDCADEC),y)
+ FFMPEG_CONF_OPTS += --enable-libdcadec
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.1
