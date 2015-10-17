@@ -1,91 +1,245 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Oct 2015 15:09:09 +0200
-Subject: [Buildroot] [PATCH 2/3] gcc: pass explicit gcc_cv_libc_provides_ssp
-	also to gcc-final
+Date: Sat, 17 Oct 2015 15:09:10 +0200
+Subject: [Buildroot] [PATCH 3/3] gcc: simplify musl patches for SSP support
 In-Reply-To: <1445087350-4947-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1445087350-4947-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1445087350-4947-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1445087350-4947-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During the gcc-initial build, we already pass
-gcc_cv_libc_provides_ssp=yes explicitly when SSP support will be
-available in the C library: at this point in time the C library is not
-yet built, so gcc cannot detect if it will support SSP or not.
-
-However, it turns out that there are some situations for which it is
-also useful to tell gcc explicitly whether the SSP support is
-available or not: the gcc logic to decide whether uClibc has SSP
-support or not is broken since uClibc-ng bumped the glibc version it
-pretends to be.
-
-So, this commit makes sure that we explicitly pass
-gcc_cv_libc_provides_ssp both to gcc-initial and gcc-final, and that
-we're always passing either 'yes' or 'no'.
-
-Fixes:
-
-   http://autobuild.buildroot.org/results/778/778e6309ba834cc70f8243a4f6c664c0bcaeb7c5/
+Now that we are always explicitly passing gcc_cv_libc_provides_ssp,
+there is no longer any reason to modify the gcc configure/configure.ac
+to take into account the musl case. When a musl toolchain is being
+built, BR2_TOOLCHAIN_HAS_SSP is always 'y', and therefore
+gcc_cv_libc_provides_ssp=yes is always passed when building
+gcc-initial and gcc-final.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/gcc-final/gcc-final.mk     |  2 ++
- package/gcc/gcc-initial/gcc-initial.mk |  5 +----
- package/gcc/gcc.mk                     | 10 ++++++++++
- 3 files changed, 13 insertions(+), 4 deletions(-)
+ package/gcc/4.7.4/900-musl-support.patch     | 36 ----------------------------
+ package/gcc/4.8.5/900-musl-support.patch     | 36 ----------------------------
+ package/gcc/4.9.3/900-musl-support.patch     | 36 ----------------------------
+ package/gcc/5.2.0/904-musl-libc-config.patch | 36 ----------------------------
+ 4 files changed, 144 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index a5be3c7..5a0f5b5 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -85,6 +85,8 @@ HOST_GCC_FINAL_CONF_OPTS += \
- HOST_GCC_FINAL_CONF_ENV = \
- 	$(HOST_GCC_COMMON_CONF_ENV)
- 
-+HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
-+
- # Make sure we have 'cc'
- define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
- 	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 4b03e47..c0b5eaf 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -51,10 +51,7 @@ HOST_GCC_INITIAL_CONF_OPTS = \
- HOST_GCC_INITIAL_CONF_ENV = \
- 	$(HOST_GCC_COMMON_CONF_ENV)
- 
--# We need to tell gcc that the C library will be providing the ssp
--# support, as it can't guess it since the C library hasn't been built
--# yet (we're gcc-initial).
--HOST_GCC_INITIAL_MAKE_OPTS = $(if $(BR2_TOOLCHAIN_HAS_SSP),gcc_cv_libc_provides_ssp=yes) all-gcc
-+HOST_GCC_INITIAL_MAKE_OPTS = $(HOST_GCC_COMMON_MAKE_OPTS) all-gcc
- HOST_GCC_INITIAL_INSTALL_OPTS = install-gcc
- 
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index ef606c4..d6213cc 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -238,6 +238,16 @@ endif
- 
- HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
- 
-+# For gcc-initial, we need to tell gcc that the C library will be
-+# providing the ssp support, as it can't guess it since the C library
-+# hasn't been built yet.
-+#
-+# For gcc-final, the gcc logic to detect whether SSP support is
-+# available or not in the C library is not working properly for
-+# uClibc, so let's be explicit as well.
-+HOST_GCC_COMMON_MAKE_OPTS = \
-+	gcc_cv_libc_provides_ssp=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
-+
- ifeq ($(BR2_CCACHE),y)
- HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
- # Cfr. PATCH_BASE_DIRS in .stamp_patched, but we catch both versioned and
+diff --git a/package/gcc/4.7.4/900-musl-support.patch b/package/gcc/4.7.4/900-musl-support.patch
+index 1cb6701..67b8c30 100644
+--- a/package/gcc/4.7.4/900-musl-support.patch
++++ b/package/gcc/4.7.4/900-musl-support.patch
+@@ -323,24 +323,6 @@ Index: b/gcc/configure
+ ===================================================================
+ --- a/gcc/configure
+ +++ b/gcc/configure
+-@@ -26791,6 +26791,9 @@
+- else
+-   gcc_cv_libc_provides_ssp=no
+-     case "$target" in
+-+       *-*-musl*)
+-+         # All versions of musl provide stack protector
+-+	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+-       # glibc 2.4 and later provides __stack_chk_fail and
+-       # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -26824,6 +26827,7 @@
+- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+- 	 # simply assert that glibc does provide this, which is true for all
+- 	 # realistically usable GNU/Hurd configurations.
+-+	 # All supported versions of musl provide it as well
+- 	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-darwin* | *-*-freebsd*)
+- 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
+ @@ -26906,6 +26910,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
+@@ -355,24 +337,6 @@ Index: b/gcc/configure.ac
+ ===================================================================
+ --- a/gcc/configure.ac
+ +++ b/gcc/configure.ac
+-@@ -4669,6 +4669,9 @@
+-       gcc_cv_libc_provides_ssp,
+-       [gcc_cv_libc_provides_ssp=no
+-     case "$target" in
+-+       *-*-musl*)
+-+         # All versions of musl provide stack protector
+-+	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+-       [# glibc 2.4 and later provides __stack_chk_fail and
+-       # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -4702,6 +4705,7 @@
+- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+- 	 # simply assert that glibc does provide this, which is true for all
+- 	 # realistically usable GNU/Hurd configurations.
+-+	 # All supported versions of musl provide it as well
+- 	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-darwin* | *-*-freebsd*)
+- 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
+ @@ -4767,6 +4771,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
+diff --git a/package/gcc/4.8.5/900-musl-support.patch b/package/gcc/4.8.5/900-musl-support.patch
+index 761f018..6743a88 100644
+--- a/package/gcc/4.8.5/900-musl-support.patch
++++ b/package/gcc/4.8.5/900-musl-support.patch
+@@ -486,24 +486,6 @@ Index: b/gcc/configure
+ ===================================================================
+ --- a/gcc/configure
+ +++ b/gcc/configure
+-@@ -26821,6 +26821,9 @@
+- else
+-   gcc_cv_libc_provides_ssp=no
+-     case "$target" in
+-+       *-*-musl*)
+-+         # All versions of musl provide stack protector
+-+	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+-       # glibc 2.4 and later provides __stack_chk_fail and
+-       # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -26854,6 +26857,7 @@
+- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+- 	 # simply assert that glibc does provide this, which is true for all
+- 	 # realistically usable GNU/Hurd configurations.
+-+	 # All supported versions of musl provide it as well
+- 	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-darwin* | *-*-freebsd*)
+- 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
+ @@ -26936,6 +26940,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
+@@ -518,24 +500,6 @@ Index: b/gcc/configure.ac
+ ===================================================================
+ --- a/gcc/configure.ac
+ +++ b/gcc/configure.ac
+-@@ -4750,6 +4750,9 @@
+-       gcc_cv_libc_provides_ssp,
+-       [gcc_cv_libc_provides_ssp=no
+-     case "$target" in
+-+       *-*-musl*)
+-+         # All versions of musl provide stack protector
+-+	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+-       [# glibc 2.4 and later provides __stack_chk_fail and
+-       # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -4783,6 +4786,7 @@
+- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+- 	 # simply assert that glibc does provide this, which is true for all
+- 	 # realistically usable GNU/Hurd configurations.
+-+	 # All supported versions of musl provide it as well
+- 	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-darwin* | *-*-freebsd*)
+- 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
+ @@ -4848,6 +4852,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
+diff --git a/package/gcc/4.9.3/900-musl-support.patch b/package/gcc/4.9.3/900-musl-support.patch
+index 56502b8..a711b06 100644
+--- a/package/gcc/4.9.3/900-musl-support.patch
++++ b/package/gcc/4.9.3/900-musl-support.patch
+@@ -452,24 +452,6 @@ Index: b/gcc/configure
+ ===================================================================
+ --- a/gcc/configure
+ +++ b/gcc/configure
+-@@ -27328,6 +27328,9 @@
+- else
+-   gcc_cv_libc_provides_ssp=no
+-     case "$target" in
+-+       *-*-musl*)
+-+         # All versions of musl provide stack protector
+-+	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+-       # glibc 2.4 and later provides __stack_chk_fail and
+-       # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -27360,6 +27363,7 @@
+- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+- 	 # simply assert that glibc does provide this, which is true for all
+- 	 # realistically usable GNU/Hurd configurations.
+-+	 # All supported versions of musl provide it as well
+- 	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-darwin* | *-*-freebsd*)
+- 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
+ @@ -27449,6 +27453,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
+@@ -484,24 +466,6 @@ Index: b/gcc/configure.ac
+ ===================================================================
+ --- a/gcc/configure.ac
+ +++ b/gcc/configure.ac
+-@@ -5016,6 +5016,9 @@
+-       gcc_cv_libc_provides_ssp,
+-       [gcc_cv_libc_provides_ssp=no
+-     case "$target" in
+-+       *-*-musl*)
+-+         # All versions of musl provide stack protector
+-+	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+-       # glibc 2.4 and later provides __stack_chk_fail and
+-       # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -5042,6 +5045,7 @@
+- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+- 	 # simply assert that glibc does provide this, which is true for all
+- 	 # realistically usable GNU/Hurd configurations.
+-+	 # All supported versions of musl provide it as well
+- 	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-darwin* | *-*-freebsd*)
+- 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
+ @@ -5108,6 +5112,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
+diff --git a/package/gcc/5.2.0/904-musl-libc-config.patch b/package/gcc/5.2.0/904-musl-libc-config.patch
+index c4eddb4..8549140 100644
+--- a/package/gcc/5.2.0/904-musl-libc-config.patch
++++ b/package/gcc/5.2.0/904-musl-libc-config.patch
+@@ -225,24 +225,6 @@ Index: b/gcc/configure
+ ===================================================================
+ --- a/gcc/configure
+ +++ b/gcc/configure
+-@@ -27681,6 +27681,9 @@
+- else
+-   gcc_cv_libc_provides_ssp=no
+-     case "$target" in
+-+       *-*-musl*)
+-+	 # All versions of musl provide stack protector
+-+	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+-       # glibc 2.4 and later provides __stack_chk_fail and
+-       # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -27713,6 +27716,7 @@
+- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+- 	 # simply assert that glibc does provide this, which is true for all
+- 	 # realistically usable GNU/Hurd configurations.
+-+	 # All supported versions of musl provide it as well
+- 	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-darwin* | *-*-freebsd*)
+- 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
+ @@ -27809,6 +27813,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
+@@ -257,24 +239,6 @@ Index: b/gcc/configure.ac
+ ===================================================================
+ --- a/gcc/configure.ac
+ +++ b/gcc/configure.ac
+-@@ -5199,6 +5199,9 @@
+-       gcc_cv_libc_provides_ssp,
+-       [gcc_cv_libc_provides_ssp=no
+-     case "$target" in
+-+       *-*-musl*)
+-+	 # All versions of musl provide stack protector
+-+	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+-       # glibc 2.4 and later provides __stack_chk_fail and
+-       # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -5225,6 +5228,7 @@
+- 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+- 	 # simply assert that glibc does provide this, which is true for all
+- 	 # realistically usable GNU/Hurd configurations.
+-+	 # All supported versions of musl provide it as well
+- 	 gcc_cv_libc_provides_ssp=yes;;
+-        *-*-darwin* | *-*-freebsd*)
+- 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
+ @@ -5298,6 +5302,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
 -- 
 2.6.2
