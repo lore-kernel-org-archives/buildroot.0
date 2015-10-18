@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 23:39:56 +0200
-Subject: [Buildroot] [PATCH v2] uclibc: clean-up test suite build command
-In-Reply-To: <1429521018-11517-1-git-send-email-abrodkin@synopsys.com>
-References: <1429521018-11517-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20151018233956.3daf1174@free-electrons.com>
+Date: Sun, 18 Oct 2015 23:41:08 +0200
+Subject: [Buildroot] [git commit] Config.in.legacy: remove empty line
+Message-ID: <20151018214113.5BC9981D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=01f41585a78406f6e830d5eaf4413a983812a299
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Apr 2015 12:10:18 +0300, Alexey Brodkin wrote:
-> Starting from uClibc 0.9.32 "test_compile" target builds tests flawlessly.
-> For 0.9.31 it lead to build failure, but now when AVR32 support was dropped
-> I think this change worth applying.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in.legacy |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Applied, thanks. Yes, long delay, but better late than never!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7d2d63f..a452bf5 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -250,7 +250,6 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_DRIVERTEST
+ 	  BR2_PACKAGE_DIRECTFB_EXAMPLES option now installs all
+ 	  examples.
+ 
+-
+ config BR2_PACKAGE_DIRECTFB_EXAMPLES_FIRE
+ 	bool "DirectFB example df_fire has been removed"
+ 	select BR2_LEGACY
