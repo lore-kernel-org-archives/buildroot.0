@@ -1,96 +1,114 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Oct 2015 22:29:40 +0200
-Subject: [Buildroot] [PATCH v4 24/35] package/expedite: bump to efl-1.15
-	branch
+Date: Sun, 18 Oct 2015 22:29:41 +0200
+Subject: [Buildroot] [PATCH v4 25/35] package/efl/libethumb: remove package
 In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
 References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445200191-18404-25-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445200191-18404-26-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since expedite hasn't been released since 1.7.10 release,
-use efl-1.15 branch in the git tree.
-
-Use the newly added libefl package wich provide a new version
-of efl libraries.
-
-Autoreconf the package since there is no configure script
-in the git tree.
+Libethumb is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v4: update Config.in to use libefl
-    improve commit log
-    keep the dependency on threads
-    Replace the old BR2_PACKAGE_LIBEVAS_X11 by BR2_PACKAGE_LIBEFL_X
-v2: bump to 1.15 branch
+v4: remove libethumb from package/efl/
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/expedite/Config.in   | 17 ++++++++---------
- package/expedite/expedite.mk | 13 +++++++++----
- 2 files changed, 17 insertions(+), 13 deletions(-)
+ Config.in.legacy                   |  7 +++++++
+ package/efl/Config.in              |  1 -
+ package/efl/libethumb/Config.in    | 15 ---------------
+ package/efl/libethumb/libethumb.mk | 27 ---------------------------
+ 4 files changed, 7 insertions(+), 43 deletions(-)
+ delete mode 100644 package/efl/libethumb/Config.in
+ delete mode 100644 package/efl/libethumb/libethumb.mk
 
-diff --git a/package/expedite/Config.in b/package/expedite/Config.in
-index dab91c8..4040abd 100644
---- a/package/expedite/Config.in
-+++ b/package/expedite/Config.in
-@@ -1,19 +1,18 @@
- config BR2_PACKAGE_EXPEDITE
- 	bool "expedite"
- 	select BR2_PACKAGE_EFL
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7d2d63f..0fc78c7 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.11"
+ 
++config BR2_PACKAGE_LIBETHUMB
++	bool "libethumb package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  The libethumb package has been removed with the efl bump to 1.15.
++
+ config BR2_PACKAGE_MEDIA_CTL
+ 	bool "media-ctl package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 2860cd6..0729e02 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -23,7 +23,6 @@ source "package/efl/libeio/Config.in"
+ source "package/efl/libevas/Config.in"
+ source "package/efl/libembryo/Config.in"
+ source "package/efl/libedje/Config.in"
+-source "package/efl/libethumb/Config.in"
+ source "package/efl/libelementary/Config.in"
+ source "package/efl/libedbus/Config.in"
+ 
+diff --git a/package/efl/libethumb/Config.in b/package/efl/libethumb/Config.in
+deleted file mode 100644
+index 3e9cbde..0000000
+--- a/package/efl/libethumb/Config.in
++++ /dev/null
+@@ -1,15 +0,0 @@
+-comment "libethumb needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-
+-config BR2_PACKAGE_LIBETHUMB
+-	bool "libethumb"
 -	select BR2_PACKAGE_LIBEINA
 -	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBEET
--	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBECORE_EVAS
+-	select BR2_PACKAGE_LIBEDJE
 -	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
--	depends on BR2_USE_MMU # efl
--	depends on BR2_USE_WCHAR # efl
-+	depends on BR2_INSTALL_LIBSTDCPP # libefl
-+	depends on BR2_PACKAGE_HAS_UDEV # libefl -> libudev
-+	depends on BR2_USE_MMU # libefl
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libefl
-+	depends on !BR2_STATIC_LIBS # libefl
-+	depends on BR2_USE_WCHAR # libefl
- 	help
- 	  Expedite is the official Evas benchmark tool. It can test different
- 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
- 	  DirectFB and so on. Its tests are quite extensive, trying to
- 	  reproduce real world usage cases.
- 
--comment "expedite needs a toolchain w/ C++, threads, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+comment "expedite needs udev /dev management and a toolchain w/ C++, dynamic library, threads, wchar"
-+	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-index 9b232f8..ae30535 100644
---- a/package/expedite/expedite.mk
-+++ b/package/expedite/expedite.mk
-@@ -4,14 +4,19 @@
- #
- ################################################################################
- 
--EXPEDITE_VERSION = 1.7.10
--EXPEDITE_SITE = http://download.enlightenment.org/releases
-+# efl-1.15 branch
-+EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
-+EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
-+EXPEDITE_SITE_METHOD = git
- EXPEDITE_LICENSE = BSD-2c
- EXPEDITE_LICENSE_FILES = COPYING
- 
--EXPEDITE_DEPENDENCIES = libevas libeina libeet
-+EXPEDITE_DEPENDENCIES = host-libefl libefl
- 
--ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
-+# There is no configure script in the git tree.
-+EXPEDITE_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBEFL_X),y)
- EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
- 	--x-includes=$(STAGING_DIR)/usr/include \
- 	--x-libraries=$(STAGING_DIR)/usr/lib
+-	help
+-	  Ethumb is a library for generating thumbnail images of documents.
+-
+-	  http://trac.enlightenment.org/e/wiki/Ethumb
+diff --git a/package/efl/libethumb/libethumb.mk b/package/efl/libethumb/libethumb.mk
+deleted file mode 100644
+index 314ddf9..0000000
+--- a/package/efl/libethumb/libethumb.mk
++++ /dev/null
+@@ -1,27 +0,0 @@
+-################################################################################
+-#
+-# libethumb
+-#
+-################################################################################
+-
+-LIBETHUMB_VERSION = 1.7.10
+-LIBETHUMB_SOURCE = ethumb-$(LIBETHUMB_VERSION).tar.bz2
+-LIBETHUMB_SITE = http://download.enlightenment.org/releases
+-LIBETHUMB_LICENSE = LGPLv2.1+
+-LIBETHUMB_LICENSE_FILES = COPYING
+-
+-LIBETHUMB_INSTALL_STAGING = YES
+-
+-LIBETHUMB_DEPENDENCIES = libeina libevas libecore libedje host-libedje
+-
+-LIBETHUMB_CONF_OPTS = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc
+-
+-ifeq ($(BR2_PACKAGE_LIBEXIF),y)
+-LIBETHUMB_DEPENDENCIES += libexif
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS),y)
+-LIBETHUMB_DEPENDENCIES += libedbus
+-endif
+-
+-$(eval $(autotools-package))
 -- 
 2.4.3
