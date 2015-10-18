@@ -1,51 +1,38 @@
-From: James Knight <james.d.knight@live.com>
-Date: Sun, 18 Oct 2015 02:32:45 -0400
-Subject: [Buildroot] [PATCH 1/1] coreutils: handle merged usr folder
-Message-ID: <1445149965-15702-1-git-send-email-james.knight@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Oct 2015 09:20:18 +0200
+Subject: [Buildroot] [PATCH v1 1/1] gmediarender: new package
+In-Reply-To: <201510180049.t9I0nD00004594@ms-omx03.plus.so-net.ne.jp>
+References: <201510170058.t9H0w49H006744@ms-omx02.plus.so-net.ne.jp>
+ <201510180049.t9I0nD00004594@ms-omx03.plus.so-net.ne.jp>
+Message-ID: <20151018092018.103b67cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For targets prepared with a usr-move, coreutils should not be attempting
-to move binaries from `usr/bin` to `bin`.
+Hiroshi,
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
- package/coreutils/coreutils.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+On Sun, 18 Oct 2015 09:49:13 +0900, Hiroshi Kawashima wrote:
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index bb2ef96..60455ac 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -99,18 +99,24 @@ COREUTILS_CONF_OPTS += --with-openssl=yes
- COREUTILS_DEPENDENCIES += openssl
- endif
- 
--define COREUTILS_POST_INSTALL
-+ifeq ($(BR2_ROOTFS_MERGED_USR),)
-+define COREUTILS_CLEANUP_BIN
- 	# some things go in root rather than usr
- 	for f in $(COREUTILS_BIN_PROGS); do \
- 		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
- 	done
-+endef
-+COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP_BIN
-+endif
-+
-+define COREUTILS_CLEANUP
- 	# link for archaic shells
- 	ln -fs test $(TARGET_DIR)/usr/bin/[
- 	# gnu thinks chroot is in bin, debian thinks it's in sbin
- 	mv -f $(TARGET_DIR)/usr/bin/chroot $(TARGET_DIR)/usr/sbin/chroot
- endef
- 
--COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_POST_INSTALL
-+COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP
- 
- # If both coreutils and busybox are selected, the corresponding applets
- # may need to be reinstated by the clean targets.
+> Thank you for your review and comment.
+
+Thanks for your feedback.
+
+> 1) This project is old and last update is 2007, so it still depsnds on
+>    gstreamer 0.10.x.
+
+Then is it really useful to package this in Buildroot? I'm a bit
+worried about adding packages that rely only on GStreamer 0.10.
+GStreamer 0.10 is deprecated, and we should rather start thinking of
+removing it from Buildroot rather than adding more packages that depend
+on it.
+
+Maybe you should consider some other application than gmediarender for
+your project ?
+
+Thomas
 -- 
-1.9.5.msysgit.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
