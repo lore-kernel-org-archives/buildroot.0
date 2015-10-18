@@ -1,94 +1,62 @@
-From: Julian Scheel <julian@jusst.de>
-Date: Sun, 18 Oct 2015 14:34:11 +0200
-Subject: [Buildroot] [PATCH v2 2/2] dvblast: new package
-In-Reply-To: <1445171651-28330-1-git-send-email-julian@jusst.de>
-References: <1445171651-28330-1-git-send-email-julian@jusst.de>
-Message-ID: <1445171651-28330-2-git-send-email-julian@jusst.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Oct 2015 15:09:18 +0200
+Subject: [Buildroot] [PATCH 1/1] musl: Honor BR2_STATIC_LIBS /
+ BR2_SHARED_LIBS
+In-Reply-To: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
+References: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
+Message-ID: <20151018150918.7db2cc07@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DVBlast is a simple and powerful MPEG-2/TS demux and streaming application.
+Charles, Peter, Arnout, Yann,
 
-Signed-off-by: Julian Scheel <julian@jusst.de>
----
-Changelog v2:
+On Tue, 13 Oct 2015 23:29:37 -0500, Charles Duffy wrote:
+> From: Charles Duffy <charles@dyfis.net>
+> 
+> Signed-off-by: Charles Duffy <chaduffy@cisco.com>
+> ---
+>  package/musl/musl.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+> index 22589f5..aca78ab 100644
+> --- a/package/musl/musl.mk
+> +++ b/package/musl/musl.mk
+> @@ -28,7 +28,9 @@ define MUSL_CONFIGURE_CMDS
+>  			--host=$(GNU_TARGET_NAME) \
+>  			--prefix=/usr \
+>  			--libdir=/lib \
+> -			--disable-gcc-wrapper)
+> +			--disable-gcc-wrapper \
+> +			$(if $(BR2_STATIC_LIBS),--disable-shared) \
+> +			$(if $(BR2_SHARED_LIBS),--disable-static))
+>  endef
 
-Address review comments by Yann E. Morin (thanks for review!)
-- Complete license information
-- Remove explicit INSTALL_STAGING=no
-- Fix install command
+In fact, this patch is causing some problems. Now, when
+BR2_SHARED_LIBS=y, musl is built with --disable-static. Due to this,
+there is no libc.a generated for musl. For the internal toolchain
+backend, this is OK.
 
-The build cmd is not changed to use TARGET_CONFIGURE_OPTS as it breaks the
-build.
----
- package/Config.in          |  1 +
- package/dvblast/Config.in  | 10 ++++++++++
- package/dvblast/dvblast.mk | 25 +++++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/dvblast/Config.in
- create mode 100644 package/dvblast/dvblast.mk
+But when the produced toolchain gets re-used as an external toolchain,
+it fails because the external toolchain logic in Buildroot uses "gcc
+-print-file-name=libc.a" to find the sysroot. Since there is no libc.a,
+it fails and the toolchain cannot be used.
 
-diff --git a/package/Config.in b/package/Config.in
-index 53a312c..cf0e46d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -7,6 +7,7 @@ menu "Audio and video applications"
- 	source "package/alsa-utils/Config.in"
- 	source "package/aumix/Config.in"
- 	source "package/bellagio/Config.in"
-+	source "package/dvblast/Config.in"
- 	source "package/dvdauthor/Config.in"
- 	source "package/dvdrw-tools/Config.in"
- 	source "package/espeak/Config.in"
-diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
-new file mode 100644
-index 0000000..3b9b8d1
---- /dev/null
-+++ b/package/dvblast/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_DVBLAST
-+	bool "dvblast"
-+	select BR2_PACKAGE_BITSTREAM
-+	select BR2_PACKAGE_LIBEV
-+	depends on !BR2_bfin  # libev
-+	help
-+	  DVBlast is a simple and powerful MPEG-2/TS demux and streaming
-+	  application.
-+
-+	  http://www.videolan.org/projects/dvblast.html
-diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
-new file mode 100644
-index 0000000..5768f28
---- /dev/null
-+++ b/package/dvblast/dvblast.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# dvblast
-+#
-+################################################################################
-+
-+DVBLAST_VERSION = 3.0
-+DVBLAST_SOURCE = dvblast-$(DVBLAST_VERSION).tar.bz2
-+DVBLAST_SITE = https://get.videolan.org/dvblast/$(DVBLAST_VERSION)
-+DVBLAST_LICENSE = GPLv2+, WTFPL
-+DVBLAST_LICENSE_FILES = COPYING COPYING.WTFPL
-+
-+DVBLAST_DEPENDENCIES = bitstream libev
-+
-+DVBLAST_INSTALL_TARGET = YES
-+
-+define DVBLAST_BUILD_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_LD)"
-+endef
-+
-+define DVBLAST_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-+endef
-+
-+$(eval $(generic-package))
+Arnout, Yann, Peter, what do you think about this?
+
+Should we always produce a libc.a in the musl case, so that it's more
+like glibc and uClibc.
+
+Or should we adjust our external toolchain logic to fallback on
+searching for a different file than libc.a when libc.a is not available?
+
+Thanks for your feedback,
+
+Thomas
 -- 
-2.6.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
