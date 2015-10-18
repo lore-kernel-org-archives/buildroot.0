@@ -1,50 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 17:38:45 +0200
-Subject: [Buildroot] [PATCHv3] syslog-ng: New package
-In-Reply-To: <1444811658-16549-1-git-send-email-judge.packham@gmail.com>
-References: <20151014100147.205b90f3@free-electrons.com>
- <1444811658-16549-1-git-send-email-judge.packham@gmail.com>
-Message-ID: <20151018173845.62e62bd9@free-electrons.com>
+Date: Sun, 18 Oct 2015 17:39:37 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-base: update configure options
+Message-ID: <20151018153953.2C92C81DA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Packham,
+commit: http://git.buildroot.net/buildroot/commit/?id=8c49041bb254fd36e42ce287b167067b45941357
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Oct 2015 21:34:18 +1300, Chris Packham wrote:
-> syslog-ng is an enhanced log daemon, supporting a wide range of input
-> and output methods: syslog, unstructured text, queueing, SQL & NoSQL.
-> 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
-> Changes since v1:
-> - add hash file
-> - use simplified logging configuration for buildroot
-> - don't install man pages
+- always disable new gio_unix_2_0 option (only used for testing)
 
-Applied with a number of changes:
+[Thomas: add comment in .mk file.]
 
-    [Thomas:
-     - Rewrap Config.in.help text
-     - Pass --pidfile option when starting syslog-ng so that its PID file
-       is created in /var/run/syslog-ng.pid, which allows
-       start-stop-daemon to actually stop syslog-ng. Without this,
-       S01logging was not able to stop syslog-ng.
-     - Pass the executable path at stop time in S01logging, so that
-       start-stop-daemon can check we're not incorrectly stopping
-       something completely different.
-     - Add busybox as a dependency of syslog-ng if busybox is enabled,
-       since we want to override Busybox's S01logging init script.
-     - Simplify the python condition, since python and python3 are
-       mutually exclusive.
-     - Rewrap the comment above SYSLOG_NG_FIXUP_CONFIG.]
-    
-Thanks!
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../gst1-plugins-base/gst1-plugins-base.mk         |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 08ebe03..2d646e0 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -18,10 +18,12 @@ GST1_PLUGINS_BASE_CONF_ENV =
+ 	FT2_CONFIG=/bin/false \
+ 	ac_cv_header_stdint_t="stdint.h"
+ 
++# gio_unix_2_0 is only used for tests
+ GST1_PLUGINS_BASE_CONF_OPTS = \
+ 	--disable-examples \
+ 	--disable-oggtest \
+ 	--disable-vorbistest \
++	--disable-gio_unix_2_0 \
+ 	--disable-freetypetest \
+ 	--disable-valgrind
+ 
