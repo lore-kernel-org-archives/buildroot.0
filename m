@@ -1,66 +1,67 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Oct 2015 22:29:21 +0200
-Subject: [Buildroot] [PATCH v4 05/35] package/efl/libefl: regenerate the
-	configure script
+Date: Sun, 18 Oct 2015 22:29:27 +0200
+Subject: [Buildroot] [PATCH v4 11/35] package/efl/libefl: add frame buffer
+	config option
 In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
 References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445200191-18404-6-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445200191-18404-12-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Workaround a build issue with eldbus-codegen:
+Add an config option to enable frame buffer support
+in the efl libraries.
 
-  CCLD     bin/eldbus/eldbus-codegen
-  CXXLD    bin/eolian_cxx/eolian_cxx
-  CCLD     lib/ecore_x/ecore_x_vsync
-  CCLD     lib/evas/common/libevas_op_blend_sse3.la
-  CCLD     lib/evas/common/libevas_convert_rgb_32.la
-  CCLD     lib/ecore_ipc/libecore_ipc.la
-[...]/i686-ctng-linux-gnu/bin/ld: warning: libefl.so.1, needed by lib/ecore/.libs/libecore.so, not found (try using -rpath or -rpath-link)
-lib/ecore/.libs/libecore.so: undefined reference to `efl_control_suspend_set'
-lib/ecore/.libs/libecore.so: undefined reference to `efl_control_interface_get'
-collect2: error: ld returned 1 exit status
-Makefile:19135: recipe for target 'bin/eldbus/eldbus-codegen' failed
-make[6]: *** [bin/eldbus/eldbus-codegen] Error 1
+From the README [1]:
+This requires linux frame-buffer support, headers etc. This supports
+basic frame-buffers like /dev/fb as well as input via /dev/input for
+keyboards and mice in a basic way.
 
-A dependency on libefl seems to be missing for eldbus but by
-regenerating eldbus-codegen build correctly.
-
-Reported upstream: https://phab.enlightenment.org/T2718
-
-Also, gettextize is needed since *.po files were generated with
-an "old" gettext version (0.18):
-
-Making all in po
-*** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.18 but the autoconf macros are from gettext version 0.19
-Makefile:149: recipe for target 'check-macro-version' failed
+[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n521
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
 v4: rename to libefl
-v3: fix gettextize
+    improve commit log
 ---
- package/efl/libefl/libefl.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/efl/libefl/Config.in | 5 +++++
+ package/efl/libefl/libefl.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index c72ea7e..e25911f 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -37,6 +37,11 @@ config BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG
+ 	  otherwise we need to add a very long and obscure option
+ 	  to start the build.
+ 
++comment "libecore video support"
++
++config BR2_PACKAGE_LIBEFL_FB
++	bool "libecore framebuffer support"
++
+ comment "libevas loaders"
+ 
+ config BR2_PACKAGE_LIBEFL_PNG
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 781f397..609ae6a 100644
+index 9633630..3a4aab1 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -15,6 +15,11 @@ LIBEFL_INSTALL_STAGING = YES
+@@ -166,6 +166,12 @@ else
+ LIBEFL_CONF_OPTS += --enable-wayland=no
+ endif
  
- LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg lua udev zlib
- 
-+# regenerate the configure script:
-+# https://phab.enlightenment.org/T2718
-+LIBEFL_AUTORECONF = YES
-+LIBEFL_GETTEXTIZE = YES
++ifeq ($(BR2_PACKAGE_LIBEFL_FB),y)
++LIBEFL_CONF_OPTS += --enable-fb=yes
++else
++LIBEFL_CONF_OPTS += --enable-fb=no
++endif
 +
- # Configure options:
- # --disable-cxx-bindings: disable C++11 bindings.
- # --enable-lua-old: disable Elua and remove luajit dependency.
+ # image loader: handle only loaders that requires dependencies.
+ # All other loaders are builded by default statically.
+ ifeq ($(BR2_PACKAGE_LIBEFL_PNG),y)
 -- 
 2.4.3
