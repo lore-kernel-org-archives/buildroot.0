@@ -1,44 +1,47 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 18 Oct 2015 02:48:13 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-10-15
-In-Reply-To: <20151016063019.E3466101619@stock.ovh.net>
-References: <20151016063019.E3466101619@stock.ovh.net>
-Message-ID: <1445129293.7271.17.camel@embedded.rocks>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Sun, 18 Oct 2015 09:49:13 +0900
+Subject: [Buildroot] [PATCH v1 1/1] gmediarender: new package
+In-Reply-To: Your message of Sat, 17 Oct 2015 09:58:03 +0900.
+ <201510170058.t9H0w49H006744@ms-omx02.plus.so-net.ne.jp>
+Message-ID: <201510180049.t9I0nD00004594@ms-omx03.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fr, 2015-10-16 at 08:30 +0200, Thomas Petazzoni wrote:
-> Build statistics for 2015-10-15
-> ===============================
+Dear Thomas.
+Thank you for your review and comment.
+
+1) This project is old and last update is 2007, so it still depsnds on
+   gstreamer 0.10.x.
+2) AUTORECONF is not needed actually.
+
+I will send new v2 patch later.
+
+Regards,
+Kawashima
+
+> [snip]
+> > > +config BR2_PACKAGE_GMEDIARENDER
+> > > +	bool "gmediarender"
+> > > +	depends on BR2_USE_WCHAR # gstreamer
+> > > +	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer, libupnp
+> > > +	depends on BR2_USE_MMU # gstreamer
+> > > +	select BR2_PACKAGE_GSTREAMER
+> > 
+> > So it really only supports GStreamer 0.10.x (which is deprecated) and
+> > not GStreamer 1.x ?
+> Ok, let me check.
 > 
-> Detail of failures
-> ===================
-> 
-> ????mips64el |???????????????swupdate-2015.07 | NOK |
-> http://autobuild.buildroot.net/results/aaad892a487affe9f62ce4e54ff8bc
-> 897f4b99a3/
-> ??????x86_64 |???????????????swupdate-2015.07 | NOK | http://autobuil
-> d.buildroot.net/results/d9e8298898da6355f6b46a032f951b4ca196d103/
-> ????mips64el |???????????????swupdate-2015.07 | NOK | http://autobuil
-> d.buildroot.net/results/de3c39640ca972bd3a07e66859f348421342666e/
-> ????mips64el |???????????????swupdate-2015.07 | NOK | http://autobuil
-> d.buildroot.net/results/d1e446d2c552efd8eb9b34bdc7f50fe7ecccf31c/
-
-Looks related to [1], but I was not able to fix this by changing LD to
-gcc instead of ld. But honestly, I am not a toolchain expert and surely
-I missed something.
-
-For me it looks like there is a problem with linking the object files
-from each 'objs-y' directory into a single object file 'built-in.o'.
-
-A simple solution is to build the subdirectories 'core' and 'handlers'
-with the libs-y instead of the objs-y target.
-
-Any thoughts?
-
-[1]?http://git.buildroot.net/buildroot/commit/package/pv?id=1980bf056e1
-6c604c1f33ce9771d725da096cfe7
+> [snip]
+> > > +GMEDIARENDER_VERSION = 0.0.6
+> > > +GMEDIARENDER_SOURCE = gmediarender-$(GMEDIARENDER_VERSION).tar.bz2
+> > > +GMEDIARENDER_SITE = http://savannah.nongnu.org/download/gmrender
+> > > +GMEDIARENDER_AUTORECONF = YES
+> > 
+> > Can you add a justification for the AUTORECONF = YES here (in a comment
+> > above the line) ?
+> Ok, let me check again if really need this.
+============================================================
+    Hiroshi Kawashima
