@@ -1,99 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 16:04:01 +0200
-Subject: [Buildroot] [git commit] dvblast: new package
-Message-ID: <20151018140454.EA6C0801F0@busybox.osuosl.org>
+Date: Sun, 18 Oct 2015 16:06:12 +0200
+Subject: [Buildroot] [PATCH v2 2/2] dvblast: new package
+In-Reply-To: <1445171651-28330-2-git-send-email-julian@jusst.de>
+References: <1445171651-28330-1-git-send-email-julian@jusst.de>
+ <1445171651-28330-2-git-send-email-julian@jusst.de>
+Message-ID: <20151018160612.1bb09b23@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=43d6e6caa891b7db080ac86f2e07a0c7d8dbc465
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Julian Scheel,
 
-DVBlast is a simple and powerful MPEG-2/TS demux and streaming
-application.
+On Sun, 18 Oct 2015 14:34:11 +0200, Julian Scheel wrote:
+> DVBlast is a simple and powerful MPEG-2/TS demux and streaming application.
+> 
+> Signed-off-by: Julian Scheel <julian@jusst.de>
+> ---
+> Changelog v2:
+> 
+> Address review comments by Yann E. Morin (thanks for review!)
+> - Complete license information
+> - Remove explicit INSTALL_STAGING=no
 
-[Thomas:
- - add missing hash file.
- - rewrap Config.in help text
- - remove unneeded "DVBLAST_INSTALL_TARGET = YES", since this is the
-   default behavior
- - pass TARGET_MAKE_ENV in the environment when calling make.
- - use TARGET_CONFIGURE_OPTS instead of just CC/LD.]
+You should have also removed INSTALL_TARGET = YES, because that's the
+default.
 
-Signed-off-by: Julian Scheel <julian@jusst.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in            |    1 +
- package/dvblast/Config.in    |   10 ++++++++++
- package/dvblast/dvblast.hash |    4 ++++
- package/dvblast/dvblast.mk   |   22 ++++++++++++++++++++++
- 4 files changed, 37 insertions(+), 0 deletions(-)
+> - Fix install command
+> 
+> The build cmd is not changed to use TARGET_CONFIGURE_OPTS as it breaks the
+> build.
 
-diff --git a/package/Config.in b/package/Config.in
-index c2f12f3..7746742 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -7,6 +7,7 @@ menu "Audio and video applications"
- 	source "package/alsa-utils/Config.in"
- 	source "package/aumix/Config.in"
- 	source "package/bellagio/Config.in"
-+	source "package/dvblast/Config.in"
- 	source "package/dvdauthor/Config.in"
- 	source "package/dvdrw-tools/Config.in"
- 	source "package/espeak/Config.in"
-diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
-new file mode 100644
-index 0000000..ac8b4ae
---- /dev/null
-+++ b/package/dvblast/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_DVBLAST
-+	bool "dvblast"
-+	select BR2_PACKAGE_BITSTREAM
-+	select BR2_PACKAGE_LIBEV
-+	depends on !BR2_bfin  # libev
-+	help
-+	  DVBlast is a simple and powerful MPEG-2/TS demux and
-+	  streaming application.
-+
-+	  http://www.videolan.org/projects/dvblast.html
-diff --git a/package/dvblast/dvblast.hash b/package/dvblast/dvblast.hash
-new file mode 100644
-index 0000000..198549f
---- /dev/null
-+++ b/package/dvblast/dvblast.hash
-@@ -0,0 +1,4 @@
-+# from https://get.videolan.org/dvblast/3.0/dvblast-3.0.tar.bz2.md5
-+md5 89ea9ffb16476d47b8853e52a8a3ee63 dvblast-3.0.tar.bz2
-+# locally calculated
-+sha256 4fc3eb2a3d3545cb76a5c515a16671d1c34fe2f5dad57b71e89bd54c14c3045e dvblast-3.0.tar.bz2
-diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
-new file mode 100644
-index 0000000..11a2dc8
---- /dev/null
-+++ b/package/dvblast/dvblast.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# dvblast
-+#
-+################################################################################
-+
-+DVBLAST_VERSION = 3.0
-+DVBLAST_SOURCE = dvblast-$(DVBLAST_VERSION).tar.bz2
-+DVBLAST_SITE = https://get.videolan.org/dvblast/$(DVBLAST_VERSION)
-+DVBLAST_LICENSE = GPLv2+, WTFPL
-+DVBLAST_LICENSE_FILES = COPYING COPYING.WTFPL
-+DVBLAST_DEPENDENCIES = bitstream libev
-+
-+define DVBLAST_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+define DVBLAST_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-+endef
-+
-+$(eval $(generic-package))
+A working solution is to pass TARGET_CONFIGURE_OPTS in the environment
+of make instead of as an option. This ensures that the CFLAGS += in the
+dvblast Makefile are still taken into account.
+
+So, I've applied you patch, with the following changes:
+
+    [Thomas:
+     - add missing hash file.
+     - rewrap Config.in help text
+     - remove unneeded "DVBLAST_INSTALL_TARGET = YES", since this is the
+       default behavior
+     - pass TARGET_MAKE_ENV in the environment when calling make.
+     - use TARGET_CONFIGURE_OPTS instead of just CC/LD.]
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
