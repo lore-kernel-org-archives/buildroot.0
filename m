@@ -1,39 +1,51 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 18 Oct 2015 22:49:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: bump to version 2.6
-Message-ID: <1445201380-2188-1-git-send-email-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Oct 2015 23:04:59 +0200
+Subject: [Buildroot] [PATCH 0/3] linux: Fix appended DTB image generation
+Message-ID: <1445202302-2720-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 3d2f404..c6f5fc2 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  e3c70acc8a4516dfe0c77d7b0317c4a180cc722b22715b042ef8757d1a0e0f32  shairport-sync-2.4.2.tar.gz
-+sha256  d04036241e5a811240c43a3ddfb05a119a6043e8c5f1f354872a88e6cbdaef07  shairport-sync-2.6.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 72708c3..4d80f0d 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 2.4.2
-+SHAIRPORT_SYNC_VERSION = 2.6
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+What initially prompted this short series is the oldest patch
+currently sitting in patchwork, i.e
+http://patchwork.ozlabs.org/patch/394002/. In this patch, Guido
+Mart?nez wanted to fix a problem in our implementation of the appended
+DTB image generation: we are concatenating over and over again the DTB
+at the end of the same file, so that if you do "make linux-rebuild"
+multiple times, your kernel image ends up having your DTB concatenated
+multiple times to it. This is because we do the appending "in place",
+directly on zImage.
+
+To solve this problem, this series moves to generating the appended
+image under a different name: zImage.<dtb> (or uImage.<dtb> if the
+uImage format is used).
+
+But since this naming allows to generate *multiple* appended DTB
+images (which was forbidden until now), we take this opportunity to
+make such a thing possible.
+
+This is all done in the last patch of this series, the two first
+patches being merely preparation work for the last patch.
+
+Please help get rid of the oldest patch in patchwork by
+reviewing/testing this series!
+
+Best regards,
+
+Thomas
+
+Thomas Petazzoni (3):
+  linux: de-duplicate DTB and Linux image installation
+  linux: only install the DTBs when not in appended DTB mode
+  linux: don't build appended DTB image in place and support multiple
+    images
+
+ linux/linux.mk | 70 ++++++++++++++++++++++++++++++++--------------------------
+ 1 file changed, 39 insertions(+), 31 deletions(-)
+
 -- 
-2.6.1
+2.6.2
