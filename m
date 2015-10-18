@@ -1,71 +1,46 @@
-From: Ben Boeckel <mathstuf@gmail.com>
-Date: Sun, 18 Oct 2015 17:36:27 -0400
-Subject: [Buildroot] [PATCH 1/1] taskd: new package
-Message-ID: <1445204187-8157-1-git-send-email-mathstuf@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Oct 2015 23:39:27 +0200
+Subject: [Buildroot] [git commit] uclibc: clean-up test suite build command
+Message-ID: <20151018213932.0827981DF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Taskwarrior is a task management suite of tools. Taskd is the
-synchronization server for it.
+commit: http://git.buildroot.net/buildroot/commit/?id=b745982ed9a72c34792afbba81d1864716273d6d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+Starting from uClibc 0.9.32 "test_compile" target builds tests flawlessly.
+For 0.9.31 it lead to build failure, but now when AVR32 support was dropped
+I think this change worth applying.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in       |  1 +
- package/taskd/Config.in |  9 +++++++++
- package/taskd/taskd.mk  | 14 ++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/taskd/Config.in
- create mode 100644 package/taskd/taskd.mk
+ package/uclibc/uclibc.mk |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7746742..0620465 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1370,6 +1370,7 @@ endif
- 	source "package/sshpass/Config.in"
- 	source "package/strongswan/Config.in"
- 	source "package/stunnel/Config.in"
-+	source "package/taskd/Config.in"
- 	source "package/tcpdump/Config.in"
- 	source "package/tcping/Config.in"
- 	source "package/tcpreplay/Config.in"
-diff --git a/package/taskd/Config.in b/package/taskd/Config.in
-new file mode 100644
-index 0000000..534881f
---- /dev/null
-+++ b/package/taskd/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_TASKD
-+	bool "taskd"
-+	select BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  Task management synchronization daemon.
-+
-+	  http://taskwarrior.org/
-diff --git a/package/taskd/taskd.mk b/package/taskd/taskd.mk
-new file mode 100644
-index 0000000..0bdf81d
---- /dev/null
-+++ b/package/taskd/taskd.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# taskd
-+#
-+################################################################################
-+
-+TASKD_VERSION = 1.1.0
-+TASKD_SOURCE = taskd-$(TASKD_VERSION).tar.gz
-+TASKD_SITE = http://taskwarrior.org/download
-+TASKD_LICENSE = MIT
-+TASKD_LICENSE_FILES = COPYING LICENSE
-+TASKD_DEPENDENCIES = gnutls util-linux
-+
-+$(eval $(cmake-package))
--- 
-2.6.1
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index eaac9dc..7ff98b0 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -398,12 +398,10 @@ endef
+ 
+ ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
+ define UCLIBC_BUILD_TEST_SUITE
+-	$(MAKE1) -C $(@D)/test \
++	$(MAKE1) -C $(@D) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+-		ARCH_CFLAGS=-I$(STAGING_DIR)/usr/include \
+ 		UCLIBC_ONLY=1 \
+-		TEST_INSTALLED_UCLIBC=1 \
+-		compile
++		test_compile
+ endef
+ endif
+ 
