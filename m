@@ -1,60 +1,108 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 18 Oct 2015 22:24:35 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/libdcadec: Add -fPIC to static
-	build, enable shared build
-Message-ID: <1445199875-28494-1-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 18 Oct 2015 22:29:17 +0200
+Subject: [Buildroot] [PATCH v4 01/35] package/expedite: move to package
+	directory
+In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
+References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445200191-18404-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build errors occured due to libdcadec being linked statically.
+There is no advantage for efl related packages to share the same version
+number anymore (except for Efl and Elementary).
 
-Fixes
-http://autobuild.buildroot.net/results/a19/a19023e094cbed491444665d6839a9e65a8eee6c/
-http://autobuild.buildroot.net/results/98d/98dde028d1d6199f05c904b498bc39bbaa112aa6/
-http://autobuild.buildroot.net/results/4ff/4ffcae6cae419df35e8ca29d429ee178bcf31882/
-http://autobuild.buildroot.net/results/8ce/8ced16874255ace4923f6b8888c3fca07f28b804/
+Here are the version number used for the 1.15 stable release:
+EFL                     1.15.2
+Elementary              1.15.2
+Emotion Generic Players 1.15.0
+Evas Generic Loaders    1.15.0
+Python-EFL              1.15.0
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also, we usually do not have a sub-directory for a family of related
+packages which doen't share the same version number, so move expedite
+to the package directory. Expedite appear now in the
+"Graphic libraries and applications (graphic/text)" in the Kconfig menu.
+
+In a followup patch, expedite will be downloaded directly from the 1.15
+branch in the git repository since there is no new release after 1.7.0.
+
+Since expedite now select the efl package, propagate the reverse
+dependencies on mmu and wchar.
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v2: removed -fPIC for static build (Thomas, Samuel)
+v4: improve the commit log (ThomasP)
+    move expedite to "Graphic applications" under
+    "Graphic libraries and applications" menu (ThomasP)
+    fix package comment dependency on BR2_USE_MMU
+---
+ package/Config.in                      | 1 +
+ package/efl/Config.in                  | 1 -
+ package/{efl => }/expedite/Config.in   | 8 ++++++--
+ package/{efl => }/expedite/expedite.mk | 0
+ 4 files changed, 7 insertions(+), 3 deletions(-)
+ rename package/{efl => }/expedite/Config.in (73%)
+ rename package/{efl => }/expedite/expedite.mk (100%)
 
- package/libdcadec/libdcadec.mk | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
-index 76862a6..dff67b5 100644
---- a/package/libdcadec/libdcadec.mk
-+++ b/package/libdcadec/libdcadec.mk
-@@ -10,19 +10,24 @@ LIBDCADEC_LICENSE = LGPLv2.1+
- LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
- LIBDCADEC_INSTALL_STAGING = YES
+diff --git a/package/Config.in b/package/Config.in
+index 7392363..0897eb8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -219,6 +219,7 @@ endmenu
+ menu "Graphic libraries and applications (graphic/text)"
  
-+ifneq ($(BR2_STATIC_LIBS),y)
-+LIBDCADEC_SHARED = CONFIG_SHARED=1
-+endif
-+
- define LIBDCADEC_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" -C $(@D)
-+		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
-+		$(LIBDCADEC_SHARED) -C $(@D)
- endef
+ comment "Graphic applications"
++	source "package/expedite/Config.in"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/glmark2/Config.in"
+ 	source "package/gnuplot/Config.in"
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 3d31a26..cb91660 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -10,7 +10,6 @@ menuconfig BR2_PACKAGE_EFL
  
- define LIBDCADEC_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		DESTDIR=$(STAGING_DIR) PREFIX=/usr install
-+		$(LIBDCADEC_SHARED) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
- endef
+ if BR2_PACKAGE_EFL
  
- define LIBDCADEC_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-+		$(LIBDCADEC_SHARED) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
- endef
+-source "package/efl/expedite/Config.in"
+ source "package/efl/libeina/Config.in"
+ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+diff --git a/package/efl/expedite/Config.in b/package/expedite/Config.in
+similarity index 73%
+rename from package/efl/expedite/Config.in
+rename to package/expedite/Config.in
+index 1e12108..dab91c8 100644
+--- a/package/efl/expedite/Config.in
++++ b/package/expedite/Config.in
+@@ -1,15 +1,19 @@
+ config BR2_PACKAGE_EXPEDITE
+ 	bool "expedite"
++	select BR2_PACKAGE_EFL
+ 	select BR2_PACKAGE_LIBEINA
+ 	select BR2_PACKAGE_LIBEVAS
+ 	select BR2_PACKAGE_LIBEET
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
++	depends on BR2_USE_MMU # efl
++	depends on BR2_USE_WCHAR # efl
+ 	help
+ 	  Expedite is the official Evas benchmark tool. It can test different
+ 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+ 	  DirectFB and so on. Its tests are quite extensive, trying to
+ 	  reproduce real world usage cases.
  
- $(eval $(generic-package))
+-comment "expedite needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "expedite needs a toolchain w/ C++, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on BR2_USE_MMU
+diff --git a/package/efl/expedite/expedite.mk b/package/expedite/expedite.mk
+similarity index 100%
+rename from package/efl/expedite/expedite.mk
+rename to package/expedite/expedite.mk
 -- 
-2.6.1
+2.4.3
