@@ -1,99 +1,56 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Oct 2015 22:29:31 +0200
-Subject: [Buildroot] [PATCH v4 15/35] package/efl/libefl: add
-	OpenGL/OpenGLES support
+Date: Sun, 18 Oct 2015 22:29:46 +0200
+Subject: [Buildroot] [PATCH v4 30/35] package/efl/libedbus: remove package
 In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
 References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445200191-18404-16-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445200191-18404-31-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow to enable graphic acceleration using OpenGL or
-OpenGLES with efl libraries.
+Libedbus is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v4: rename libefl
-    improve commit log
+v4: todo
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/efl/libefl/Config.in | 26 ++++++++++++++++++++++++++
- package/efl/libefl/libefl.mk | 17 +++++++++++++++--
- 2 files changed, 41 insertions(+), 2 deletions(-)
+ Config.in.legacy      | 7 +++++++
+ package/efl/Config.in | 1 -
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 8356fa1..a3b6f0e 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -81,6 +81,32 @@ comment "for libecore XCB support disable recommended configurations"
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7592d71..5a7e7c8 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.11"
  
- endchoice
++config BR2_PACKAGE_LIBEDBUS
++	bool "libedbus package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  The libedbus package has been removed with the efl bump to 1.15.
++
+ config BR2_PACKAGE_LIBEFREET
+ 	bool "libefreet package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index ba71705..3092c8f 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -20,7 +20,6 @@ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
+ source "package/efl/libevas/Config.in"
+ source "package/efl/libelementary/Config.in"
+-source "package/efl/libedbus/Config.in"
  
-+if BR2_PACKAGE_LIBEFL_X_XLIB
-+
-+choice
-+	prompt "select libevas OpenGL support"
-+
-+config BR2_PACKAGE_LIBEFL_X_XLIB_GLX_FULL
-+	bool "libevas OpenGL full support"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+
-+comment "libevas OpenGLES support needs libgl"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-+
-+config BR2_PACKAGE_LIBEFL_X_XLIB_GLX_ES
-+	bool "libevas OpenGLES support"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "libevas OpenGLES support needs libgles"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES
-+
-+config BR2_PACKAGE_LIBEFL_X_XLIB_GLX_NONE
-+	bool "libevas disable OpenGL support"
-+
-+endchoice
-+
-+endif # BR2_PACKAGE_LIBEFL_X_XLIB
-+
- endif # BR2_PACKAGE_LIBEFL_X
+ endif # BR2_PACKAGE_EFL
  
- comment "libevas loaders"
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 6a1a8ae..e275699 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -176,8 +176,7 @@ endif
- ifeq ($(BR2_PACKAGE_LIBEFL_X),y)
- LIBEFL_CONF_OPTS += --with-x=$(STAGING_DIR) \
- 	--x-includes=$(STAGING_DIR)/usr/include \
--	--x-libraries=$(STAGING_DIR)/usr/lib \
--	--with-opengl=none
-+	--x-libraries=$(STAGING_DIR)/usr/lib
- 
- LIBEFL_DEPENDENCIES += \
- 	xlib_libX11 \
-@@ -187,6 +186,20 @@ LIBEFL_CONF_OPTS += --with-x=no \
- 	--with-x11=none
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB_GLX_FULL),y)
-+LIBEFL_CONF_OPTS += --with-opengl=full
-+LIBEFL_DEPENDENCIES += libgl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB_GLX_ES),y)
-+LIBEFL_CONF_OPTS += --with-opengl=es
-+LIBEFL_DEPENDENCIES += libgles
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB_GLX_NONE),y)
-+LIBEFL_CONF_OPTS += --with-opengl=none
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
- LIBEFL_DEPENDENCIES += \
- 	xlib_libX11 \
 -- 
 2.4.3
