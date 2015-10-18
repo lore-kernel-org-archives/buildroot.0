@@ -1,55 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 16:06:12 +0200
-Subject: [Buildroot] [PATCH v2 2/2] dvblast: new package
-In-Reply-To: <1445171651-28330-2-git-send-email-julian@jusst.de>
-References: <1445171651-28330-1-git-send-email-julian@jusst.de>
- <1445171651-28330-2-git-send-email-julian@jusst.de>
-Message-ID: <20151018160612.1bb09b23@free-electrons.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Sun, 18 Oct 2015 15:13:13 +0100
+Subject: [Buildroot] [PATCH RFC v2] gcc: improve checking of stack
+ smashing support with uclibc
+In-Reply-To: <20151015234046.614e0fd0@free-electrons.com>
+References: <1443458077-864-1-git-send-email-brendanheading@gmail.com>
+ <20151015234046.614e0fd0@free-electrons.com>
+Message-ID: <CA+BsyQ5W+VXtRBbW=Hy9R5cxu4QOeBz-xrBYVnPrJSUNnm27DA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Julian Scheel,
+>> +Upstream-status: inappropriate
+>
+> Why ?
 
-On Sun, 18 Oct 2015 14:34:11 +0200, Julian Scheel wrote:
-> DVBlast is a simple and powerful MPEG-2/TS demux and streaming application.
-> 
-> Signed-off-by: Julian Scheel <julian@jusst.de>
-> ---
-> Changelog v2:
-> 
-> Address review comments by Yann E. Morin (thanks for review!)
-> - Complete license information
-> - Remove explicit INSTALL_STAGING=no
+There was a bit of debate a few weeks ago on whether or not to submit
+the proposed changes upstream, but either way, it was never going to
+be likely that we'd get them to accept a patch against an old version
+of GCC that is in maintenance-only mode.
 
-You should have also removed INSTALL_TARGET = YES, because that's the
-default.
+>> +       gcc_cv_libc_provides_ssp=yes
+>
+> What prevents uClibc from ever matching this case? Shouldn't the
+> __UCLIBC__ case be *before* any __GLIBC__ case ?
 
-> - Fix install command
-> 
-> The build cmd is not changed to use TARGET_CONFIGURE_OPTS as it breaks the
-> build.
+Don't recall, but now it's academic now, as your proposed solution is better.
 
-A working solution is to pass TARGET_CONFIGURE_OPTS in the environment
-of make instead of as an option. This ensures that the CFLAGS += in the
-dvblast Makefile are still taken into account.
+> My proposal would be something like:
+>
+>         http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=fix-ssp
+>
+> (see the last three commits)
+>
+> I am currently doing a test build of glibc, uClibc w/ SSP, uClibc w/o
+> SSP and musl to see how it goes. But I believe it's actually simpler
+> than patching gcc, no?
 
-So, I've applied you patch, with the following changes:
+Definitely, I always thought that trying to get patches upstream
+and/or maintaining the patches locally would be a pain. I'd assumed
+that someone in the past had a good reason for adding the SSP checks
+in a patch for these cases, rather than using the cache variable, so I
+did not consider that option.
 
-    [Thomas:
-     - add missing hash file.
-     - rewrap Config.in help text
-     - remove unneeded "DVBLAST_INSTALL_TARGET = YES", since this is the
-       default behavior
-     - pass TARGET_MAKE_ENV in the environment when calling make.
-     - use TARGET_CONFIGURE_OPTS instead of just CC/LD.]
+I've mark my patch proposal as superseded.
 
-Thanks a lot!
+At least there is now a fix though, this should kill off a sizeable
+bunch of autobuild problems.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Brendan
