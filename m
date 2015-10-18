@@ -1,99 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 23:09:33 +0200
-Subject: [Buildroot] [PATCH v4 01/35] package/expedite: move to package
- directory
-In-Reply-To: <1445200191-18404-2-git-send-email-romain.naour@openwide.fr>
-References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
- <1445200191-18404-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151018230933.2b9487dd@free-electrons.com>
+Date: Sun, 18 Oct 2015 23:24:14 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/kodi-visualisation-goom: new
+ package
+In-Reply-To: <1445170286-12871-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1445170286-12871-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151018232414.72103d46@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Bernd,
 
-On Sun, 18 Oct 2015 22:29:17 +0200, Romain Naour wrote:
-> There is no advantage for efl related packages to share the same version
-> number anymore (except for Efl and Elementary).
-> 
-> Here are the version number used for the 1.15 stable release:
-> EFL                     1.15.2
-> Elementary              1.15.2
-> Emotion Generic Players 1.15.0
-> Evas Generic Loaders    1.15.0
-> Python-EFL              1.15.0
-> 
-> Also, we usually do not have a sub-directory for a family of related
-> packages which doen't share the same version number, so move expedite
+On Sun, 18 Oct 2015 14:11:25 +0200, Bernd Kuhls wrote:
 
-doen't -> don't
+> diff --git a/package/kodi-visualisation-goom/0001-cross-compile.patch b/package/kodi-visualisation-goom/0001-cross-compile.patch
+> new file mode 100644
+> index 0000000..3b051f2
+> --- /dev/null
+> +++ b/package/kodi-visualisation-goom/0001-cross-compile.patch
+> @@ -0,0 +1,29 @@
+> +Fix cross-compilation
+> +
+> +Use the cross-compiler and not the host version.
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +
+> +diff -uNr visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt
+> +--- visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt	2014-10-31 11:34:21.000000000 +0100
+> ++++ visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt	2015-07-19 19:49:43.340054342 +0200
+> +@@ -13,6 +13,10 @@
+> +                     ${KODI_INCLUDE_DIR}
+> +                     ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/src)
+> + 
+> ++get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
+> ++string( REGEX REPLACE "-[^-]+$" ""
+> ++        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
 
-> to the package directory. Expedite appear now in the
+Yerk, this is really horrible. But I guess you don't have much choice
+here: a CMake build system that calls into an autotools build system
+has high chances of requiring ugly things. But ok, we can take your
+proposal (did you submit it upstream?).
 
-appear now -> now appears
 
-> "Graphic libraries and applications (graphic/text)" in the Kconfig menu.
-> 
-> In a followup patch, expedite will be downloaded directly from the 1.15
-> branch in the git repository since there is no new release after 1.7.0.
+> +KODI_VISUALISATION_GOOM_VERSION = 98137474683e7a4e18c61cd3710ea4bfebad9759
+> +KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
+> +KODI_VISUALISATION_GOOM_LICENSE = GPLv2+
 
-"no new tarball release" ?
+Yes according to src/Main.cpp
 
-> 
-> Since expedite now select the efl package, propagate the reverse
-> dependencies on mmu and wchar.
+> +KODI_VISUALISATION_GOOM_LICENSE_FILES = COPYING
 
-I disagree with the select here. See below.
+But this file contains the text of the GPLv3. Can you report the issue
+upstream?
 
-> diff --git a/package/efl/expedite/Config.in b/package/expedite/Config.in
-> similarity index 73%
-> rename from package/efl/expedite/Config.in
-> rename to package/expedite/Config.in
-> index 1e12108..dab91c8 100644
-> --- a/package/efl/expedite/Config.in
-> +++ b/package/expedite/Config.in
-> @@ -1,15 +1,19 @@
->  config BR2_PACKAGE_EXPEDITE
->  	bool "expedite"
-> +	select BR2_PACKAGE_EFL
-
-This should be a:
-
-	depends on BR2_PACKAGE_EFL
-
-in my opinion. EFL is one of these "big" stuff (like Qt, Python, Gtk)
-for which people clearly know what they are doing. Nobody will want to
-enable "expedite" without knowing that it relies on the EFL. For
-example, gtkperf (which is also a benchmarking program, but for Gtk)
-does a "depends on BR2_PACKAGE_LIBGTK2".
-
-And if you do a "depends on" rather than a "select", then you...
-
->  	select BR2_PACKAGE_LIBEINA
->  	select BR2_PACKAGE_LIBEVAS
->  	select BR2_PACKAGE_LIBEET
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-> +	depends on BR2_USE_MMU # efl
-> +	depends on BR2_USE_WCHAR # efl
-
-don't have to add those lines.
-
->  	help
->  	  Expedite is the official Evas benchmark tool. It can test different
->  	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
->  	  DirectFB and so on. Its tests are quite extensive, trying to
->  	  reproduce real world usage cases.
->  
-> -comment "expedite needs a toolchain w/ C++, threads"
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> +comment "expedite needs a toolchain w/ C++, threads, wchar"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> +	depends on BR2_USE_MMU
-
-... and to change the comment here.
+Thanks,
 
 Thomas
 -- 
