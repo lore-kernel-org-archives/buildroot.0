@@ -1,98 +1,50 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Oct 2015 22:29:51 +0200
-Subject: [Buildroot] [PATCH v4 35/35] package/libemotion-generic-players:
-	new package
+Date: Sun, 18 Oct 2015 22:29:33 +0200
+Subject: [Buildroot] [PATCH v4 17/35] package/efl/libefl: add systemd
+	dependency
 In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
 References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445200191-18404-36-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445200191-18404-18-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+systemd it one of the "highly recommended" dependecies
+according to the README [1] but disabling it doesn't need
+the --enable-i-really-know-what-i-am-doing... option.
+That's why systemd is not added to
+BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
+
+[1] https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n491
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v4: update Config.in to use libefl
-v3: remove trailing slash (Vicente Bergas)
+v4: rename to libefl
+    improve commit log
+v3: new patch
 ---
- package/Config.in                                    |  1 +
- package/libemotion-generic-players/Config.in         | 20 ++++++++++++++++++++
- .../libemotion-generic-players.hash                  |  2 ++
- .../libemotion-generic-players.mk                    | 17 +++++++++++++++++
- 4 files changed, 40 insertions(+)
- create mode 100644 package/libemotion-generic-players/Config.in
- create mode 100644 package/libemotion-generic-players/libemotion-generic-players.hash
- create mode 100644 package/libemotion-generic-players/libemotion-generic-players.mk
+ package/efl/libefl/libefl.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8f4b520..c3bd0d6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -818,6 +818,7 @@ menu "Graphics"
- 	source "package/libdri2/Config.in"
- 	source "package/libdrm/Config.in"
- 	source "package/libexif/Config.in"
-+	source "package/libemotion-generic-players/Config.in"
- 	source "package/libevas-generic-loaders/Config.in"
- 	source "package/libfm/Config.in"
- 	source "package/libfm-extra/Config.in"
-diff --git a/package/libemotion-generic-players/Config.in b/package/libemotion-generic-players/Config.in
-new file mode 100644
-index 0000000..eedfa2c
---- /dev/null
-+++ b/package/libemotion-generic-players/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_LIBEMOTION_GENERIC_PLAYERS
-+	bool "libemotion generic players"
-+	select BR2_PACKAGE_EFL
-+	select BR2_PACKAGE_VLC # needs libvlc
-+	depends on BR2_INSTALL_LIBSTDCPP # libefl vlc
-+	depends on BR2_PACKAGE_HAS_UDEV # libefl -> libudev
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # vlc
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 # vlc
-+	depends on BR2_USE_MMU # libefl
-+	depends on !BR2_STATIC_LIBS # libefl
-+	depends on BR2_USE_WCHAR # libefl
-+	help
-+	  A media object library for Evas and Ecore.
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index 02c9005..c26c9c5 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -52,6 +52,13 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
+ LIBEFL_DEPENDENCIES += util-linux
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++LIBEFL_CONF_OPTS += --enable-systemd
++LIBEFL_DEPENDENCIES += systemd
++else
++LIBEFL_CONF_OPTS += --disable-systemd
++endif
 +
-+	  https://www.enlightenment.org
-+	  https://docs.enlightenment.org/stable/efl/emotion_main.html
-+
-+comment "libemotion generic players needs udev /dev management and a (e)glibc toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-diff --git a/package/libemotion-generic-players/libemotion-generic-players.hash b/package/libemotion-generic-players/libemotion-generic-players.hash
-new file mode 100644
-index 0000000..80c8123
---- /dev/null
-+++ b/package/libemotion-generic-players/libemotion-generic-players.hash
-@@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/emotion_generic_players/emotion_generic_players-1.15.0.tar.xz.sha256
-+sha256	9f6d5e9041ac7c014d663dac56d1b39ac42a45abe954d09d0edbf6e759e55f5f	emotion_generic_players-1.15.0.tar.xz
-diff --git a/package/libemotion-generic-players/libemotion-generic-players.mk b/package/libemotion-generic-players/libemotion-generic-players.mk
-new file mode 100644
-index 0000000..70b8ba3
---- /dev/null
-+++ b/package/libemotion-generic-players/libemotion-generic-players.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# libemotion-generic-players
-+#
-+################################################################################
-+
-+LIBEMOTION_GENERIC_PLAYERS_VERSION = 1.15.0
-+LIBEMOTION_GENERIC_PLAYERS_SOURCE = emotion_generic_players-$(LIBEMOTION_GENERIC_PLAYERS_VERSION).tar.xz
-+LIBEMOTION_GENERIC_PLAYERS_SITE = http://download.enlightenment.org/rel/libs/emotion_generic_players
-+LIBEMOTION_GENERIC_PLAYERS_LICENSE = GPLv2
-+LIBEMOTION_GENERIC_PLAYERS_LICENSE_FILES = COPYING
-+
-+LIBEMOTION_GENERIC_PLAYERS_INSTALL_STAGING = YES
-+
-+LIBEMOTION_GENERIC_PLAYERS_DEPENDENCIES = libefl vlc
-+
-+$(eval $(autotools-package))
+ # If fontconfig is disabled, this is going to make general font
+ # searching not work, and only some very direct 'load /path/file.ttf'
+ # will work alongside some old-school ttf file path searching. This
 -- 
 2.4.3
