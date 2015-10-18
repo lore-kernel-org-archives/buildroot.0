@@ -1,67 +1,121 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Oct 2015 22:29:27 +0200
-Subject: [Buildroot] [PATCH v4 11/35] package/efl/libefl: add frame buffer
-	config option
+Date: Sun, 18 Oct 2015 22:29:19 +0200
+Subject: [Buildroot] [PATCH v4 03/35] package/efl/libefl: new host-package
 In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
 References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445200191-18404-12-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445200191-18404-4-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an config option to enable frame buffer support
-in the efl libraries.
-
-From the README [1]:
-This requires linux frame-buffer support, headers etc. This supports
-basic frame-buffers like /dev/fb as well as input via /dev/input for
-keyboards and mice in a basic way.
-
-[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n521
+This new host-package provide edje_cc, embryo_cc and eet binaries
+that will be used by the upcomming libefl packages which will
+contain the new version of efl libraries.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v4: rename to libefl
-    improve commit log
+v4: keep efl as a sub-directory.
+    rename this new package to libefl since we want to keep a efl
+    and elementary version in sync.
+v3: remove trailing slash (Vicente Bergas)
+    bump to 1.15.2
 ---
- package/efl/libefl/Config.in | 5 +++++
- package/efl/libefl/libefl.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+ package/efl/libefl/libefl.hash |  2 ++
+ package/efl/libefl/libefl.mk   | 75 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 77 insertions(+)
+ create mode 100644 package/efl/libefl/libefl.hash
+ create mode 100644 package/efl/libefl/libefl.mk
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index c72ea7e..e25911f 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -37,6 +37,11 @@ config BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG
- 	  otherwise we need to add a very long and obscure option
- 	  to start the build.
- 
-+comment "libecore video support"
-+
-+config BR2_PACKAGE_LIBEFL_FB
-+	bool "libecore framebuffer support"
-+
- comment "libevas loaders"
- 
- config BR2_PACKAGE_LIBEFL_PNG
+diff --git a/package/efl/libefl/libefl.hash b/package/efl/libefl/libefl.hash
+new file mode 100644
+index 0000000..7ac26f4
+--- /dev/null
++++ b/package/efl/libefl/libefl.hash
+@@ -0,0 +1,2 @@
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.15.2.tar.xz.sha256
++sha256	dd738f19f454621a7fa1fdb4c008457c170989f5f0c535edfed7b6773ae6c2a4	efl-1.15.2.tar.xz
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 9633630..3a4aab1 100644
---- a/package/efl/libefl/libefl.mk
+new file mode 100644
+index 0000000..4dca733
+--- /dev/null
 +++ b/package/efl/libefl/libefl.mk
-@@ -166,6 +166,12 @@ else
- LIBEFL_CONF_OPTS += --enable-wayland=no
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEFL_FB),y)
-+LIBEFL_CONF_OPTS += --enable-fb=yes
-+else
-+LIBEFL_CONF_OPTS += --enable-fb=no
-+endif
+@@ -0,0 +1,75 @@
++################################################################################
++#
++# libefl
++#
++################################################################################
 +
- # image loader: handle only loaders that requires dependencies.
- # All other loaders are builded by default statically.
- ifeq ($(BR2_PACKAGE_LIBEFL_PNG),y)
++# hardcode the version here since the bump to 1.15 is not complete in Buildroot
++LIBEFL_VERSION = 1.15.2
++LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
++LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
++LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
++LIBEFL_LICENSE_FILES = COPYING
++
++################################################################################
++#
++# host-libefl
++#
++################################################################################
++
++# We want to build only some host tools used later in the build.
++# Actually we want: edje_cc, embryo_cc and eet.
++
++# Host dependencies:
++# * host-dbus: for Eldbus
++# * host-freetype: for libevas
++# * host-libglib2: for libecore
++# * host-libjpeg, host-libpng: for libevas image loader
++# * host-lua: disable luajit dependency
++HOST_LIBEFL_DEPENDENCIES = \
++	host-pkgconf \
++	host-dbus \
++	host-freetype \
++	host-libglib2 \
++	host-libjpeg \
++	host-libpng \
++	host-lua \
++	host-zlib
++
++# Configure options:
++# --disable-audio, --disable-multisense remove libsndfile dependency.
++# --disable-cxx-bindings: disable C++11 bindings.
++# --disable-fontconfig: remove dependency on fontconfig.
++# --disable-fribidi: remove dependency on libfribidi.
++# --disable-gstreamer1: remove dependency on gtreamer 1.0.
++# --disable-libeeze: remove libudev dependency.
++# --disable-libmount: remove dependency on host-util-linux libmount.
++# --disable-physics: remove Bullet dependency.
++# --enable-image-loader-gif=no: disable Gif dependency.
++# --enable-image-loader-tiff=no: disable Tiff dependency.
++# --enable-lua-old: disable Elua and remove luajit dependency.
++# --with-crypto=none: remove dependencies on openssl or gnutls.
++# --with-x11=none: remove dependency on X.org.
++#   Yes I really know what I am doing.
++HOST_LIBEFL_CONF_OPTS += \
++	--disable-audio \
++	--disable-cxx-bindings \
++	--disable-fontconfig \
++	--disable-fribidi \
++	--disable-gstreamer1 \
++	--disable-libeeze \
++	--disable-libmount \
++	--disable-multisense \
++	--disable-physics \
++	--enable-image-loader-gif=no \
++	--enable-image-loader-jpeg=yes \
++	--enable-image-loader-png=yes \
++	--enable-image-loader-tiff=no \
++	--enable-lua-old \
++	--with-crypto=none \
++	--with-glib=yes \
++	--with-opengl=none \
++	--with-x11=none \
++	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
++
++$(eval $(host-autotools-package))
 -- 
 2.4.3
