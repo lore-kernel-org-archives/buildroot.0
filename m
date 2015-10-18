@@ -1,56 +1,98 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Oct 2015 22:29:50 +0200
-Subject: [Buildroot] [PATCH v4 34/35] package/efl/libeina: remove package
+Date: Sun, 18 Oct 2015 22:29:51 +0200
+Subject: [Buildroot] [PATCH v4 35/35] package/libemotion-generic-players:
+	new package
 In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
 References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445200191-18404-35-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445200191-18404-36-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libeina is now available in efl package.
-
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
 v4: update Config.in to use libefl
-v3: update legacy option for 2015.11
-    update help text
+v3: remove trailing slash (Vicente Bergas)
 ---
- Config.in.legacy      | 7 +++++++
- package/efl/Config.in | 1 -
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/Config.in                                    |  1 +
+ package/libemotion-generic-players/Config.in         | 20 ++++++++++++++++++++
+ .../libemotion-generic-players.hash                  |  2 ++
+ .../libemotion-generic-players.mk                    | 17 +++++++++++++++++
+ 4 files changed, 40 insertions(+)
+ create mode 100644 package/libemotion-generic-players/Config.in
+ create mode 100644 package/libemotion-generic-players/libemotion-generic-players.hash
+ create mode 100644 package/libemotion-generic-players/libemotion-generic-players.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index c3bf45a..6da1ae6 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.11"
- 
-+config BR2_PACKAGE_LIBEINA
-+	bool "libeina package has been removed"
-+	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 8f4b520..c3bd0d6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -818,6 +818,7 @@ menu "Graphics"
+ 	source "package/libdri2/Config.in"
+ 	source "package/libdrm/Config.in"
+ 	source "package/libexif/Config.in"
++	source "package/libemotion-generic-players/Config.in"
+ 	source "package/libevas-generic-loaders/Config.in"
+ 	source "package/libfm/Config.in"
+ 	source "package/libfm-extra/Config.in"
+diff --git a/package/libemotion-generic-players/Config.in b/package/libemotion-generic-players/Config.in
+new file mode 100644
+index 0000000..eedfa2c
+--- /dev/null
++++ b/package/libemotion-generic-players/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_LIBEMOTION_GENERIC_PLAYERS
++	bool "libemotion generic players"
 +	select BR2_PACKAGE_EFL
++	select BR2_PACKAGE_VLC # needs libvlc
++	depends on BR2_INSTALL_LIBSTDCPP # libefl vlc
++	depends on BR2_PACKAGE_HAS_UDEV # libefl -> libudev
++	depends on BR2_TOOLCHAIN_USES_GLIBC # vlc
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 # vlc
++	depends on BR2_USE_MMU # libefl
++	depends on !BR2_STATIC_LIBS # libefl
++	depends on BR2_USE_WCHAR # libefl
 +	help
-+	  The libeina package has been removed with the efl bump to 1.15.
++	  A media object library for Evas and Ecore.
 +
- config BR2_PACKAGE_LIBEET
- 	bool "libeet package has been removed"
- 	select BR2_LEGACY
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 9e92a6e..bddff8c 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -14,7 +14,6 @@ menuconfig BR2_PACKAGE_EFL
- 
- if BR2_PACKAGE_EFL
- 
--source "package/efl/libeina/Config.in"
- source "package/efl/libefl/Config.in"
- source "package/efl/libelementary/Config.in"
- 
++	  https://www.enlightenment.org
++	  https://docs.enlightenment.org/stable/efl/emotion_main.html
++
++comment "libemotion generic players needs udev /dev management and a (e)glibc toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || !BR2_USE_WCHAR
++	depends on BR2_USE_MMU
+diff --git a/package/libemotion-generic-players/libemotion-generic-players.hash b/package/libemotion-generic-players/libemotion-generic-players.hash
+new file mode 100644
+index 0000000..80c8123
+--- /dev/null
++++ b/package/libemotion-generic-players/libemotion-generic-players.hash
+@@ -0,0 +1,2 @@
++# From https://download.enlightenment.org/rel/libs/emotion_generic_players/emotion_generic_players-1.15.0.tar.xz.sha256
++sha256	9f6d5e9041ac7c014d663dac56d1b39ac42a45abe954d09d0edbf6e759e55f5f	emotion_generic_players-1.15.0.tar.xz
+diff --git a/package/libemotion-generic-players/libemotion-generic-players.mk b/package/libemotion-generic-players/libemotion-generic-players.mk
+new file mode 100644
+index 0000000..70b8ba3
+--- /dev/null
++++ b/package/libemotion-generic-players/libemotion-generic-players.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# libemotion-generic-players
++#
++################################################################################
++
++LIBEMOTION_GENERIC_PLAYERS_VERSION = 1.15.0
++LIBEMOTION_GENERIC_PLAYERS_SOURCE = emotion_generic_players-$(LIBEMOTION_GENERIC_PLAYERS_VERSION).tar.xz
++LIBEMOTION_GENERIC_PLAYERS_SITE = http://download.enlightenment.org/rel/libs/emotion_generic_players
++LIBEMOTION_GENERIC_PLAYERS_LICENSE = GPLv2
++LIBEMOTION_GENERIC_PLAYERS_LICENSE_FILES = COPYING
++
++LIBEMOTION_GENERIC_PLAYERS_INSTALL_STAGING = YES
++
++LIBEMOTION_GENERIC_PLAYERS_DEPENDENCIES = libefl vlc
++
++$(eval $(autotools-package))
 -- 
 2.4.3
