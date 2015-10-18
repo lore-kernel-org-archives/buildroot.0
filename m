@@ -1,64 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 22:02:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdcadec: Add -fPIC to static
- build, enable shared build
-In-Reply-To: <CAHXCMMLUFrW7TRn9qQDZE2PUBXUyZbCT8pKe8fP5B4TYZv75-A@mail.gmail.com>
-References: <1445184515-6049-1-git-send-email-bernd.kuhls@t-online.de>
- <20151018210520.0c6971da@free-electrons.com>
- <CAHXCMMLUFrW7TRn9qQDZE2PUBXUyZbCT8pKe8fP5B4TYZv75-A@mail.gmail.com>
-Message-ID: <20151018220201.077078ae@free-electrons.com>
+From: Julian Scheel <julian@jusst.de>
+Date: Sun, 18 Oct 2015 22:13:38 +0200
+Subject: [Buildroot] [PATCH v2 2/2] dvblast: new package
+In-Reply-To: <20151018160612.1bb09b23@free-electrons.com>
+References: <1445171651-28330-1-git-send-email-julian@jusst.de>
+ <1445171651-28330-2-git-send-email-julian@jusst.de>
+ <20151018160612.1bb09b23@free-electrons.com>
+Message-ID: <5623FD72.9010306@jusst.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sun, 18 Oct 2015 21:52:38 +0200, Samuel Martin wrote:
+On 18.10.15 16:06, Thomas Petazzoni wrote:
+>> Address review comments by Yann E. Morin (thanks for review!)
+>> - Complete license information
+>> - Remove explicit INSTALL_STAGING=no
+>
+> You should have also removed INSTALL_TARGET = YES, because that's the
+> default.
 
-> > None of these configurations have BR2_STATIC_LIBS=y, so I fail to see
-> > why adding -fPIC when BR2_STATIC_LIBS=y would fix those issues.
-> >
-> > Moreover, using -fPIC for statically linked configurations generally
-> > doesn't make sense: the point of PIC code is to be Position
-> > Independent, which is needed for shared libraries. But not for
-> > statically linked programs.
-> 
-> AFAI understand these build failures, the problem comes from the
-> static library libdcadec.a that is unconditionnally built.
-> When the config has BR2_SHARED_LIBS=y, this static library got built
-> without -fPIC, then is used by ffmpeg to be linked against for some
-> shared objects libraries (e.g. libavcodec.so). That's right here that
-> error occurs.
+Ack, makes sense.
 
-This, I'm OK with.
+>> - Fix install command
+>>
+>> The build cmd is not changed to use TARGET_CONFIGURE_OPTS as it breaks the
+>> build.
+>
+> A working solution is to pass TARGET_CONFIGURE_OPTS in the environment
+> of make instead of as an option. This ensures that the CFLAGS += in the
+> dvblast Makefile are still taken into account.
 
-> >> The upstream Makefile also allows building a shared library if
-> >> CONFIG_SHARED=1 is added to _BUILD_CMDS.
-> >
-> > This probably fixes the problem however.
-> 
-> To fix this the options are:
-> 1) build libdcadec as a shared library, if it is supported;
-> 2) or, add -fPIC when BR2_SHARED_LIBS=y;
-> 3) or, unconditionally add -fPIC.
-> 
-> My preference is option 1).
+Ah, thanks, good to know. I'll keep it in mind.
 
-Obviously, (1) is the right solution here.
+> So, I've applied you patch, with the following changes:
+>
+>      [Thomas:
+>       - add missing hash file.
 
-> > So, can you explain the addition of -fPIC for BR2_STATIC_LIBS=y
-> > configurations?
-> 
-> IIRC, -fPIC on static libs does not have any harmful consequences,
-> only a slight overhead at some point due to some indirection.
+Nice, I actually hadn't even realized that buildroot has hash files so 
+far :)
 
-Correct. But it doesn't make sense to explicitly add -fPIC when
-BR2_STATIC_LIBS=y.
+>       - rewrap Config.in help text
+>       - remove unneeded "DVBLAST_INSTALL_TARGET = YES", since this is the
+>         default behavior
+>       - pass TARGET_MAKE_ENV in the environment when calling make.
+>       - use TARGET_CONFIGURE_OPTS instead of just CC/LD.]
+>
+> Thanks a lot!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks for applying.
+
+-Julian
