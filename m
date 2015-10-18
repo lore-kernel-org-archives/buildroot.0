@@ -1,56 +1,62 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Oct 2015 22:29:49 +0200
-Subject: [Buildroot] [PATCH v4 33/35] package/efl/libeet: remove package
-In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445200191-18404-34-git-send-email-romain.naour@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Oct 2015 22:30:04 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libdcadec: Add -fPIC to
+ static build, enable shared build
+In-Reply-To: <1445199875-28494-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1445199875-28494-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151018223004.4b4617d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libeet is now available in efl package.
+Bernd,
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-v4: update Config.in to use libefl
-v3: update legacy option for 2015.11
-    update help text
----
- Config.in.legacy      | 7 +++++++
- package/efl/Config.in | 1 -
- 2 files changed, 7 insertions(+), 1 deletion(-)
+Thanks for the new version!
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 80f0d31..c3bf45a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.11"
- 
-+config BR2_PACKAGE_LIBEET
-+	bool "libeet package has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_EFL
-+	help
-+	  The libeet package has been removed with the efl bump to 1.15.
-+
- config BR2_PACKAGE_LIBEVAS
- 	bool "libevas package has been removed"
- 	select BR2_LEGACY
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index b35e666..9e92a6e 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -15,7 +15,6 @@ menuconfig BR2_PACKAGE_EFL
- if BR2_PACKAGE_EFL
- 
- source "package/efl/libeina/Config.in"
--source "package/efl/libeet/Config.in"
- source "package/efl/libefl/Config.in"
- source "package/efl/libelementary/Config.in"
- 
+The title of the commit now seems a bit odd, since you're no longer
+adding -fPIC.
+
+On Sun, 18 Oct 2015 22:24:35 +0200, Bernd Kuhls wrote:
+> Build errors occured due to libdcadec being linked statically.
+
+Can you be more verbose in your commit log, to explain what's going on?
+At the bare minimum, something like:
+
+"""
+The libdcadec package currently only builds a static library, which is
+naturally built without -fPIC (since this is generally not needed for
+static libraries).
+
+However, when the generated static library gets used inside a larger
+dynamic library, such as ffmpeg's one, the link fails, since we're
+trying to include in a shared library non-PIC code.
+
+To solve this, this commit changes the way the libdcadec library is
+built to make sure a shared variant of the library gets built when
+appropriate. This way, ffmpeg has a PIC-enabled libdcadec library to
+link with.
+"""
+
+> diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
+> index 76862a6..dff67b5 100644
+> --- a/package/libdcadec/libdcadec.mk
+> +++ b/package/libdcadec/libdcadec.mk
+> @@ -10,19 +10,24 @@ LIBDCADEC_LICENSE = LGPLv2.1+
+>  LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
+>  LIBDCADEC_INSTALL_STAGING = YES
+>  
+> +ifneq ($(BR2_STATIC_LIBS),y)
+
+This should be:
+
+ifeq ($(BR2_STATIC_LIBS),)
+
+Thanks,
+
+Thomas
 -- 
-2.4.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
