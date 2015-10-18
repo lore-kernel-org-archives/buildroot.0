@@ -1,39 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 17:56:14 +0200
-Subject: [Buildroot] [git commit] system/skeleton: finalize removal of ftp
-	user
-Message-ID: <20151018155618.58CE281761@busybox.osuosl.org>
+Date: Sun, 18 Oct 2015 17:57:13 +0200
+Subject: [Buildroot] [PATCH] fs/common.mk: support comments in user
+ table files
+In-Reply-To: <1445007019-23720-1-git-send-email-peter@korsgaard.com>
+References: <1445007019-23720-1-git-send-email-peter@korsgaard.com>
+Message-ID: <20151018175713.492ba9b9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=514411bb9bdd4e25bf26baa5f4915eaf2dd5d551
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter,
 
-In commit 3dde19e5f32c58ffbf7e190257b073e91e0a7e8d, the ftp user was
-removed from /etc/passwd, /etc/group and /home in the skeleton, but
-the corresponding entry was not removed from /etc/shadow. This commit
-fixes that.
+On Fri, 16 Oct 2015 16:50:19 +0200, Peter Korsgaard wrote:
+> The format of the users table files is non trivial, so it is sometimes handy
+> to add comments explaining the syntax (or simply the reason for the user)
+> inline in the files.
+> 
+> Support comment lines prefixed with '#' similar to shell / makedevs files and strip
+> those lines before passing to the mkusers script.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- system/skeleton/etc/shadow |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+Yann has added support in mkusers to ignore comments, so I applied
+Yann's patch and marked yours as Rejected.
 
-diff --git a/system/skeleton/etc/shadow b/system/skeleton/etc/shadow
-index 972dd59..2ac2607 100644
---- a/system/skeleton/etc/shadow
-+++ b/system/skeleton/etc/shadow
-@@ -5,5 +5,4 @@ sync:*:10933:0:99999:7:::
- halt:*:10933:0:99999:7:::
- uucp:*:10933:0:99999:7:::
- operator:*:10933:0:99999:7:::
--ftp:*:10933:0:99999:7:::
- nobody:*:10933:0:99999:7:::
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
