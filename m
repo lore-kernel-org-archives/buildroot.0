@@ -1,62 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 15:09:18 +0200
-Subject: [Buildroot] [PATCH 1/1] musl: Honor BR2_STATIC_LIBS /
- BR2_SHARED_LIBS
-In-Reply-To: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
-References: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
-Message-ID: <20151018150918.7db2cc07@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Oct 2015 15:19:16 +0200
+Subject: [Buildroot] [PATCH] busybox: fix musl build issues
+In-Reply-To: <1445085778-3358-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1445085778-3358-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20151018131916.GA3583@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Charles, Peter, Arnout, Yann,
+Thomas, All,
 
-On Tue, 13 Oct 2015 23:29:37 -0500, Charles Duffy wrote:
-> From: Charles Duffy <charles@dyfis.net>
+On 2015-10-17 14:42 +0200, Thomas Petazzoni spake thusly:
+> Musl doesn't implemented wmtp, and its utmp support is not sufficient
+> to build the latest versions of Busybox, so let's disable wtmp and
+> utmp support in Busybox for musl toolchains.
 > 
-> Signed-off-by: Charles Duffy <chaduffy@cisco.com>
+> We re-use an existing define BUSYBOX_INTERNAL_SHADOW_PASSWORDS that
+> was used to do some musl-related tweaks to the Busybox configuration
+> around shadow password functions, and extend it to also do the
+> utmp/wtmp tweaks. In the process, we rename the define to
+> BUSYBOX_MUSL_TWEAKS.
+> 
+> Note that BUSYBOX_KCONFIG_FIXUP_CMDS continues to call
+> BUSYBOX_INTERNAL_SHADOW_PASSWORDS because there is another definition
+> of this macro under other conditions.
+
+And I think the renaming by itself was still worth it. We today have a
+situation where we can define the same macros twice, which is not "nice".
+
+That two macros want to change the same options is not nice either, but
+is much better.
+
+Eventually, we should probably want to have soemthing like:
+
+    BUSYBOX_NEEDS_INTERNAL_SHADOW = \
+        $(if $(BR2_TOOLCHAIN_USES_MUSL),y) \
+        $(if $(BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS),,y)
+
+    ifneq ($(BUSYBOX_NEEDS_INTERNAL_SHADOW),)
+    define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+        blabla enable config stuf...
+    endef
+    endif
+
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/b96/b96ffad13bca5e6fbf7ce79538aacbfe27b1eff3/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  package/musl/musl.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  package/busybox/busybox.mk | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-> index 22589f5..aca78ab 100644
-> --- a/package/musl/musl.mk
-> +++ b/package/musl/musl.mk
-> @@ -28,7 +28,9 @@ define MUSL_CONFIGURE_CMDS
->  			--host=$(GNU_TARGET_NAME) \
->  			--prefix=/usr \
->  			--libdir=/lib \
-> -			--disable-gcc-wrapper)
-> +			--disable-gcc-wrapper \
-> +			$(if $(BR2_STATIC_LIBS),--disable-shared) \
-> +			$(if $(BR2_SHARED_LIBS),--disable-static))
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index d3a6fd8..e5427cf 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -132,12 +132,18 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
 >  endef
+>  endif
+>  
+> -# We also need to use internal functions when using the musl C
+> -# library, since some of them are not yet implemented by musl.
+> +# We also need to use internal shadow password functions when using
+> +# the musl C library, since some of them are not yet implemented by
+> +# musl.
+> +#
+> +# Do not use utmp/wmtp support. wmtp support is not available in musl,
+> +# and utmp support is not sufficient for Busybox.
+>  ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> -define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+> +define BUSYBOX_MUSL_TWEAKS
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_PWD_GRP,$(BUSYBOX_BUILD_CONFIG))
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_SHADOW,$(BUSYBOX_BUILD_CONFIG))
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_UTMP,$(BUSYBOX_BUILD_CONFIG))
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_WTMP,$(BUSYBOX_BUILD_CONFIG))
+>  endef
+>  endif
+>  
+> @@ -223,6 +229,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+>  	$(BUSYBOX_SET_INIT)
+>  	$(BUSYBOX_SET_WATCHDOG)
+>  	$(BUSYBOX_SET_SELINUX)
+> +	$(BUSYBOX_MUSL_TWEAKS)
+>  endef
+>  
+>  define BUSYBOX_CONFIGURE_CMDS
+> -- 
+> 2.6.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-In fact, this patch is causing some problems. Now, when
-BR2_SHARED_LIBS=y, musl is built with --disable-static. Due to this,
-there is no libc.a generated for musl. For the internal toolchain
-backend, this is OK.
-
-But when the produced toolchain gets re-used as an external toolchain,
-it fails because the external toolchain logic in Buildroot uses "gcc
--print-file-name=libc.a" to find the sysroot. Since there is no libc.a,
-it fails and the toolchain cannot be used.
-
-Arnout, Yann, Peter, what do you think about this?
-
-Should we always produce a libc.a in the musl case, so that it's more
-like glibc and uClibc.
-
-Or should we adjust our external toolchain logic to fallback on
-searching for a different file than libc.a when libc.a is not available?
-
-Thanks for your feedback,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
