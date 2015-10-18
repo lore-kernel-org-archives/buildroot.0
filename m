@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Oct 2015 17:30:18 +0200
-Subject: [Buildroot] [PATCH 1/1] sed: handle merged usr folder
-In-Reply-To: <1445180905-15896-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1445180905-15896-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20151018153017.GB3583@free.fr>
+Date: Sun, 18 Oct 2015 17:32:27 +0200
+Subject: [Buildroot] [PATCH 1/1] coreutils: handle merged usr folder
+In-Reply-To: <1445149965-15702-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1445149965-15702-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <20151018153227.GC3583@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +12,57 @@ To: buildroot@busybox.net
 
 James, All,
 
-On 2015-10-18 11:08 -0400, James Knight spake thusly:
-> For targets prepared with a usr-move, package should not be attempting
+On 2015-10-18 02:32 -0400, James Knight spake thusly:
+> For targets prepared with a usr-move, coreutils should not be attempting
 > to move binaries from `usr/bin` to `bin`.
 
-I was looking at your coreutils patch doing the same, and was about to
-suggest you also looked at sed. ;-)
-
-However, we discussed these two changes with Thomas on IRC, and we're
-not very happy that the merged /usr change implies we have to have
-special handling for it in various packages... :-/
-
-But we can't see an easy alternate solution to the problem either... :-/
+For the records, pleas see comments already made on the patch doing the
+same for sed:
+    http://lists.busybox.net/pipermail/buildroot/2015-October/142230.html
 
 > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-BTW, note that we would already had the issue if a user were to provide
-a custom skeleton with merged /usr .
-
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/sed/sed.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/coreutils/coreutils.mk | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/sed/sed.mk b/package/sed/sed.mk
-> index b819300..5f76e7e 100644
-> --- a/package/sed/sed.mk
-> +++ b/package/sed/sed.mk
-> @@ -19,10 +19,11 @@ SED_CONF_OPTS = \
->  	--infodir=/usr/share/info \
->  	--include=$(STAGING_DIR)/usr/include
+> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+> index bb2ef96..60455ac 100644
+> --- a/package/coreutils/coreutils.mk
+> +++ b/package/coreutils/coreutils.mk
+> @@ -99,18 +99,24 @@ COREUTILS_CONF_OPTS += --with-openssl=yes
+>  COREUTILS_DEPENDENCIES += openssl
+>  endif
 >  
+> -define COREUTILS_POST_INSTALL
 > +ifeq ($(BR2_ROOTFS_MERGED_USR),)
->  define SED_MOVE_BINARY
->  	mv $(TARGET_DIR)/usr/bin/sed $(TARGET_DIR)/bin/
->  endef
-> -
->  SED_POST_INSTALL_TARGET_HOOKS = SED_MOVE_BINARY
+> +define COREUTILS_CLEANUP_BIN
+>  	# some things go in root rather than usr
+>  	for f in $(COREUTILS_BIN_PROGS); do \
+>  		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
+>  	done
+> +endef
+> +COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP_BIN
 > +endif
+> +
+> +define COREUTILS_CLEANUP
+>  	# link for archaic shells
+>  	ln -fs test $(TARGET_DIR)/usr/bin/[
+>  	# gnu thinks chroot is in bin, debian thinks it's in sbin
+>  	mv -f $(TARGET_DIR)/usr/bin/chroot $(TARGET_DIR)/usr/sbin/chroot
+>  endef
 >  
->  $(eval $(autotools-package))
+> -COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_POST_INSTALL
+> +COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP
+>  
+>  # If both coreutils and busybox are selected, the corresponding applets
+>  # may need to be reinstated by the clean targets.
 > -- 
 > 1.9.5.msysgit.1
 > 
