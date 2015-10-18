@@ -1,43 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 17:55:58 +0200
-Subject: [Buildroot] [PATCH] support/mkusers: allow comments in users
- tables
-In-Reply-To: <1445097019-3217-1-git-send-email-yann.morin.1998@free.fr>
-References: <1445097019-3217-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20151018175558.62ec445b@free-electrons.com>
+Date: Sun, 18 Oct 2015 17:56:14 +0200
+Subject: [Buildroot] [git commit] system/skeleton: finalize removal of ftp
+	user
+Message-ID: <20151018155618.58CE281761@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=514411bb9bdd4e25bf26baa5f4915eaf2dd5d551
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 17 Oct 2015 17:50:19 +0200, Yann E. MORIN wrote:
-> The format of the users table files is non trivial, so it is sometimes
-> handy to add comments explaining the syntax (or simply the reason for
-> the user) inline in the files.
-> 
-> Ignore empty lines and comment lines prefixed with '#' similar to shell
-> or makedevs files.
-> 
-> Packages that defined no user (the vast majority) would cause an empty
-> line to be present in the internal users table, hence the reason we
-> skipped empty usernames. Now that we ignore empty lines, we no longer
-> need to check for empty usernames.
-> 
-> Reported-by: Peter Korsgaard <jacmet@uclibc.org>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/scripts/mkusers | 45 ++++++++++++++++++++++++++-------------------
->  1 file changed, 26 insertions(+), 19 deletions(-)
+In commit 3dde19e5f32c58ffbf7e190257b073e91e0a7e8d, the ftp user was
+removed from /etc/passwd, /etc/group and /home in the skeleton, but
+the corresponding entry was not removed from /etc/shadow. This commit
+fixes that.
 
-Applied, thanks.
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ system/skeleton/etc/shadow |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/system/skeleton/etc/shadow b/system/skeleton/etc/shadow
+index 972dd59..2ac2607 100644
+--- a/system/skeleton/etc/shadow
++++ b/system/skeleton/etc/shadow
+@@ -5,5 +5,4 @@ sync:*:10933:0:99999:7:::
+ halt:*:10933:0:99999:7:::
+ uucp:*:10933:0:99999:7:::
+ operator:*:10933:0:99999:7:::
+-ftp:*:10933:0:99999:7:::
+ nobody:*:10933:0:99999:7:::
