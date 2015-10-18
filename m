@@ -1,54 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 23:26:35 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/kodi-screensaver-rsxs: new
- package
-In-Reply-To: <1445170286-12871-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1445170286-12871-1-git-send-email-bernd.kuhls@t-online.de>
- <1445170286-12871-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151018232635.554b8862@free-electrons.com>
+From: Ben Boeckel <mathstuf@gmail.com>
+Date: Sun, 18 Oct 2015 17:36:27 -0400
+Subject: [Buildroot] [PATCH 1/1] taskd: new package
+Message-ID: <1445204187-8157-1-git-send-email-mathstuf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Taskwarrior is a task management suite of tools. Taskd is the
+synchronization server for it.
 
-On Sun, 18 Oct 2015 14:11:26 +0200, Bernd Kuhls wrote:
+Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+---
+ package/Config.in       |  1 +
+ package/taskd/Config.in |  9 +++++++++
+ package/taskd/taskd.mk  | 14 ++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/taskd/Config.in
+ create mode 100644 package/taskd/taskd.mk
 
-> ++get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
-> ++string( REGEX REPLACE "-[^-]+$" ""
-> ++        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
-> ++
-
-Same as for the goom one: can you submit this upstream?
-
-> diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-> new file mode 100644
-> index 0000000..2df7683
-> --- /dev/null
-> +++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# kodi-screensaver-rsxs
-> +#
-> +################################################################################
-> +
-> +KODI_SCREENSAVER_RSXS_VERSION = 195e0ec3fbbcb2ee2012cd560e42d05167f0f259
-> +KODI_SCREENSAVER_RSXS_SITE = $(call github,notspiff,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
-
-Can you add the licensing information? I know there is none in the
-upstream package, but this is not normal. Can you ask upstream to add
-licensing details ?
-
-Also, for github packages, we now what to have a hash file. Can you add
-one (for both this one and goom) ?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 7746742..0620465 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1370,6 +1370,7 @@ endif
+ 	source "package/sshpass/Config.in"
+ 	source "package/strongswan/Config.in"
+ 	source "package/stunnel/Config.in"
++	source "package/taskd/Config.in"
+ 	source "package/tcpdump/Config.in"
+ 	source "package/tcping/Config.in"
+ 	source "package/tcpreplay/Config.in"
+diff --git a/package/taskd/Config.in b/package/taskd/Config.in
+new file mode 100644
+index 0000000..534881f
+--- /dev/null
++++ b/package/taskd/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_TASKD
++	bool "taskd"
++	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  Task management synchronization daemon.
++
++	  http://taskwarrior.org/
+diff --git a/package/taskd/taskd.mk b/package/taskd/taskd.mk
+new file mode 100644
+index 0000000..0bdf81d
+--- /dev/null
++++ b/package/taskd/taskd.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# taskd
++#
++################################################################################
++
++TASKD_VERSION = 1.1.0
++TASKD_SOURCE = taskd-$(TASKD_VERSION).tar.gz
++TASKD_SITE = http://taskwarrior.org/download
++TASKD_LICENSE = MIT
++TASKD_LICENSE_FILES = COPYING LICENSE
++TASKD_DEPENDENCIES = gnutls util-linux
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.1
