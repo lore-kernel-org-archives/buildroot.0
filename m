@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 15:32:59 +0200
-Subject: [Buildroot] Update of toolchains used in the autobuilders
-Message-ID: <20151018153259.0bd5eaca@free-electrons.com>
+Date: Sun, 18 Oct 2015 15:33:51 +0200
+Subject: [Buildroot] mips64/uclibc toolchain issue
+Message-ID: <20151018153351.1c5e36f4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,50 @@ To: buildroot@busybox.net
 
 Hello,
 
-I've rebuilt all pre-built Buildroot toolchains used for the
-autobuilders with the latest Buildroot, and deployed them in the
-autobuilders.
+For the autobuilders, I've tried to build the following toolchain
+configuration:
 
-Things worth mentioning:
+BR2_mips64el=y
+BR2_mips_64r2=y
+BR2_MIPS_NABI64=y
+# BR2_MIPS_SOFT_FLOAT is not set
+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_PTHREAD_DEBUG=y
+BR2_BINUTILS_VERSION_2_23_X=y
+BR2_GCC_VERSION_4_8_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
 
- - the br-arm-full-static and br-x86-64-core2-full toolchains are
-   built with 3.14 kernel headers instead of the default (latest) ones,
-   in order to test a bit some older kernel headers. Note that the
-   br-arm-full configuration was already built with 3.10 headers for the
-   same reason, and continues to be built with 3.10 headers.
+and it fails with:
 
- - the br-mips64-n64-full toolchain could not be built. It used to use
-   glibc, but now that uClibc support for MIPS64 has been enabled, it
-   tried to build with uClibc, and the build fails (I'll report the
-   problem separately to Waldemar and Vicente)
+  CC libc/sysdeps/linux/common/_exit.os
+libc/sysdeps/linux/mips/swapcontext.S: Assembler messages:
+libc/sysdeps/linux/mips/swapcontext.S:110: Error: Illegal operands `s.d fs6,(30*8+296)($4)'
+libc/sysdeps/linux/mips/swapcontext.S:111: Error: Illegal operands `s.d fs7,(31*8+296)($4)'
+libc/sysdeps/linux/mips/swapcontext.S:149: Error: Illegal operands `l.d fs6,(30*8+296)($2)'
+libc/sysdeps/linux/mips/swapcontext.S:150: Error: Illegal operands `l.d fs7,(31*8+296)($2)'
+  CC libc/sysdeps/linux/common/access.os
+make[1]: *** [libc/sysdeps/linux/mips/swapcontext.os] Error 1
+make[1]: *** Waiting for unfinished jobs....
+libc/sysdeps/linux/mips/getcontext.S: Assembler messages:
+libc/sysdeps/linux/mips/getcontext.S:101: Error: Illegal operands `s.d fs6,(30*8+296)($4)'
+libc/sysdeps/linux/mips/getcontext.S:102: Error: Illegal operands `s.d fs7,(31*8+296)($4)'
+make[1]: *** [libc/sysdeps/linux/mips/getcontext.os] Error 1
+  CC libc/sysdeps/linux/common/acct.os
+libc/sysdeps/linux/mips/setcontext.S: Assembler messages:
+libc/sysdeps/linux/mips/setcontext.S:99: Error: Illegal operands `l.d fs6,(30*8+296)($2)'
+libc/sysdeps/linux/mips/setcontext.S:100: Error: Illegal operands `l.d fs7,(31*8+296)($2)'
+make[1]: *** [libc/sysdeps/linux/mips/setcontext.os] Error 1
+make[1]: Leaving directory `/opt/toolchain-build/build/uclibc-1.0.6'
+make: *** [/opt/toolchain-build/build/uclibc-1.0.6/.stamp_built] Error 2
+make: Leaving directory `/home/test/toolchains/build/buildroot'
 
- - the pre-built musl toolchains have not been updated, because due to
-   commit bb41933d3642f44c8d2db07886b2e5bf18b97fad, there is no longer
-   a libc.a generated in the musl toolchains, which breaks the external
-   toolchain logic to find the sysroot.
+Could you have a look ?
 
- - I've added a br-sparc64-glibc configuration, following the addition
-   of Sparc64 support by Waldemar. Hopefully this configuration will
-   give less issues than the 32 bits Sparc v8 configuration we have.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
