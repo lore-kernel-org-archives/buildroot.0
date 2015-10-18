@@ -1,63 +1,96 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Oct 2015 22:29:29 +0200
-Subject: [Buildroot] [PATCH v4 13/35] package/efl/libefl: add jp2k config
-	option
+Date: Sun, 18 Oct 2015 22:29:40 +0200
+Subject: [Buildroot] [PATCH v4 24/35] package/expedite: bump to efl-1.15
+	branch
 In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
 References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445200191-18404-14-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445200191-18404-25-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like for webp format, add an option to enable the JPEG 2000
-codec support in the efl libraries.
+Since expedite hasn't been released since 1.7.10 release,
+use efl-1.15 branch in the git tree.
+
+Use the newly added libefl package wich provide a new version
+of efl libraries.
+
+Autoreconf the package since there is no configure script
+in the git tree.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v4: rename to libefl
+v4: update Config.in to use libefl
     improve commit log
+    keep the dependency on threads
+    Replace the old BR2_PACKAGE_LIBEVAS_X11 by BR2_PACKAGE_LIBEFL_X
+v2: bump to 1.15 branch
 ---
- package/efl/libefl/Config.in | 7 +++++++
- package/efl/libefl/libefl.mk | 7 +++++++
- 2 files changed, 14 insertions(+)
+ package/expedite/Config.in   | 17 ++++++++---------
+ package/expedite/expedite.mk | 13 +++++++++----
+ 2 files changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index e25911f..53adea2 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -51,6 +51,13 @@ config BR2_PACKAGE_LIBEFL_PNG
- 	  This enables the loader code that loads png files using
- 	  libpng.
- 
-+config BR2_PACKAGE_LIBEFL_JP2K
-+	bool "libevas jp2k loader"
-+	select BR2_PACKAGE_OPENJPEG
-+	help
-+	  This enables the loader code that loads jp2k files using
-+	  openjpeg.
-+
- config BR2_PACKAGE_LIBEFL_JPEG
- 	bool "libevas jpeg loader"
+diff --git a/package/expedite/Config.in b/package/expedite/Config.in
+index dab91c8..4040abd 100644
+--- a/package/expedite/Config.in
++++ b/package/expedite/Config.in
+@@ -1,19 +1,18 @@
+ config BR2_PACKAGE_EXPEDITE
+ 	bool "expedite"
+ 	select BR2_PACKAGE_EFL
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBEET
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+-	depends on BR2_USE_MMU # efl
+-	depends on BR2_USE_WCHAR # efl
++	depends on BR2_INSTALL_LIBSTDCPP # libefl
++	depends on BR2_PACKAGE_HAS_UDEV # libefl -> libudev
++	depends on BR2_USE_MMU # libefl
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libefl
++	depends on !BR2_STATIC_LIBS # libefl
++	depends on BR2_USE_WCHAR # libefl
  	help
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 3a4aab1..e53470d 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -201,6 +201,13 @@ else
- LIBEFL_CONF_OPTS += --enable-image-loader-tiff=no
- endif
+ 	  Expedite is the official Evas benchmark tool. It can test different
+ 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+ 	  DirectFB and so on. Its tests are quite extensive, trying to
+ 	  reproduce real world usage cases.
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_JP2K),y)
-+LIBEFL_CONF_OPTS += --enable-image-loader-jp2k=yes
-+LIBEFL_DEPENDENCIES += openjpeg
-+else
-+LIBEFL_CONF_OPTS += --enable-image-loader-jp2k=no
-+endif
+-comment "expedite needs a toolchain w/ C++, threads, wchar"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++comment "expedite needs udev /dev management and a toolchain w/ C++, dynamic library, threads, wchar"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU
+diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
+index 9b232f8..ae30535 100644
+--- a/package/expedite/expedite.mk
++++ b/package/expedite/expedite.mk
+@@ -4,14 +4,19 @@
+ #
+ ################################################################################
+ 
+-EXPEDITE_VERSION = 1.7.10
+-EXPEDITE_SITE = http://download.enlightenment.org/releases
++# efl-1.15 branch
++EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
++EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
++EXPEDITE_SITE_METHOD = git
+ EXPEDITE_LICENSE = BSD-2c
+ EXPEDITE_LICENSE_FILES = COPYING
+ 
+-EXPEDITE_DEPENDENCIES = libevas libeina libeet
++EXPEDITE_DEPENDENCIES = host-libefl libefl
+ 
+-ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
++# There is no configure script in the git tree.
++EXPEDITE_AUTORECONF = YES
 +
- ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
- LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
- LIBEFL_DEPENDENCIES += webp
++ifeq ($(BR2_PACKAGE_LIBEFL_X),y)
+ EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+ 	--x-libraries=$(STAGING_DIR)/usr/lib
 -- 
 2.4.3
