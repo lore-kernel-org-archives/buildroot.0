@@ -1,103 +1,151 @@
-From: Charles Duffy <charles@dyfis.net>
-Date: Sun, 18 Oct 2015 16:18:10 +0000
-Subject: [Buildroot] [PATCH 1/1] musl: Honor BR2_STATIC_LIBS /
-	BR2_SHARED_LIBS
-In-Reply-To: <20151018155838.GE3583@free.fr>
-References: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
- <20151018150918.7db2cc07@free-electrons.com> <20151018155838.GE3583@free.fr>
-Message-ID: <CAEHm_sjfxGkfvzvi=y-Mq+xGdOObGyKLfgfbO0g2MN+kCNUteg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Oct 2015 18:19:43 +0200
+Subject: [Buildroot] [PATCH 1/1] postgresql: add an option to build the
+ server
+In-Reply-To: <1445179920-2413-2-git-send-email-mathstuf@gmail.com>
+References: <1445179920-2413-1-git-send-email-mathstuf@gmail.com>
+ <1445179920-2413-2-git-send-email-mathstuf@gmail.com>
+Message-ID: <20151018181943.4faaefe2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I provided this patch because my build results were unnecessarily enlarged
-by dynamic libraries on an otherwise static-only system.
+Ben,
 
-It sounds to me like we could optionally disable only dynamic libraries;
-leave static libraries always enabled; and end up in a place that works for
-everyone.
+On Sun, 18 Oct 2015 10:52:00 -0400, Ben Boeckel wrote:
+> Unfortunately, postgresql upstream doesn't have a configure option for
+> this. Instead, to get bits of the build, compiling and installing
+> different subdirectories is the preferred way.
+> 
+> The directories come from those used in the FreeBSD port.
+> 
+> Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
 
-On Sun, Oct 18, 2015 at 10:58 AM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+Just to clarify: in our current packaging, we build and install both
+server and client?
 
-> Thomas, All,
->
-> On 2015-10-18 15:09 +0200, Thomas Petazzoni spake thusly:
-> > On Tue, 13 Oct 2015 23:29:37 -0500, Charles Duffy wrote:
-> > > From: Charles Duffy <charles@dyfis.net>
-> > >
-> > > Signed-off-by: Charles Duffy <chaduffy@cisco.com>
-> > > ---
-> > >  package/musl/musl.mk | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-> > > index 22589f5..aca78ab 100644
-> > > --- a/package/musl/musl.mk
-> > > +++ b/package/musl/musl.mk
-> > > @@ -28,7 +28,9 @@ define MUSL_CONFIGURE_CMDS
-> > >                     --host=$(GNU_TARGET_NAME) \
-> > >                     --prefix=/usr \
-> > >                     --libdir=/lib \
-> > > -                   --disable-gcc-wrapper)
-> > > +                   --disable-gcc-wrapper \
-> > > +                   $(if $(BR2_STATIC_LIBS),--disable-shared) \
-> > > +                   $(if $(BR2_SHARED_LIBS),--disable-static))
-> > >  endef
-> >
-> > In fact, this patch is causing some problems. Now, when
-> > BR2_SHARED_LIBS=y, musl is built with --disable-static. Due to this,
-> > there is no libc.a generated for musl. For the internal toolchain
-> > backend, this is OK.
-> >
-> > But when the produced toolchain gets re-used as an external toolchain,
-> > it fails because the external toolchain logic in Buildroot uses "gcc
-> > -print-file-name=libc.a" to find the sysroot. Since there is no libc.a,
-> > it fails and the toolchain cannot be used.
-> >
-> > Arnout, Yann, Peter, what do you think about this?
-> >
-> > Should we always produce a libc.a in the musl case, so that it's more
-> > like glibc and uClibc.
-> >
-> > Or should we adjust our external toolchain logic to fallback on
-> > searching for a different file than libc.a when libc.a is not available?
->
-> Hmmm... I have to admit that this is a tough one...
->
-> On the one hand, there's no reason to produce libc.a when we really want
-> dynamically-linked executables.
->
-> On the other hand, the toolchain is always a bit "special", and it still
-> makes sense to have libc.a even in the purely-shared scenario.
->
-> Really, I am totally unsure which way to go.
->
-> The quick fix to our build failures would be to revert this patch, of
-> course, until we have a better solution.
->
-> Charles, was there a hard resaon you provided this patch, or was it more
-> like "hey, let's not build static or shared when not needed" ?
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151018/4b3de436/attachment-0001.html>
+
+> diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+> index e9b8f48..2560a49 100644
+> --- a/package/postgresql/Config.in
+> +++ b/package/postgresql/Config.in
+> @@ -18,5 +18,21 @@ config BR2_PACKAGE_POSTGRESQL
+>  
+>  	  http://www.postgresql.org
+
+As I suggested, doing:
+
+	select BR2_PACKAGE_POSTGRESQL_CLIENT if !BR2_PACKAGE_POSTGRESQL_SERVER
+
+woudl be good.
+
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> index a42fe73..76a6377 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -58,6 +58,21 @@ POSTGRESQL_DEPENDENCIES += openssl
+>  POSTGRESQL_CONF_OPTS += --with-openssl
+>  endif
+>  
+> +POSTGRESQL_BUILD_DIRECTORIES =
+> +POSTGRESQL_INSTALL_DIRECTORIES =
+
+Not needed, variables are empty by default.
+
+> +
+> +ifeq ($(BR2_PACKAGE_POSTGRESQL_CLIENT),y)
+> +
+> +POSTGRESQL_CLIENT_DIRECTORIES += config src/include src/interfaces src/port \
+> +				 src/bin/pg_dump src/bin/psql src/bin/scripts src/bin/pg_config \
+> +				 src/backend
+
+Lines are a bit too long. What about instead:
+
+POSTGRESQL_CLIENT_DIRECTORIES = \
+	config src/include src/interfaces src/port src/backend \
+	src/bin/pg_dump src/bin/psql src/bin/scripts src/bin/pg_config \
+
+> +POSTGRESQL_BUILD_DIRECTORIES += $(POSTGRESQL_CLIENT_DIRECTORIES)
+> +POSTGRESQL_INSTALL_DIRECTORIES += $(POSTGRESQL_CLIENT_DIRECTORIES)
+> +
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_POSTGRESQL_SERVER),y)
+> +
+>  define POSTGRESQL_USERS
+>  	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+>  endef
+> @@ -89,4 +104,37 @@ define POSTGRESQL_INSTALL_INIT_SYSTEMD
+>  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/postgresql.service
+>  endef
+>  
+> +POSTGRESQL_SERVER_DIRECTORIES = src/common src/timezone src/backend \
+> +				src/backend/utils/mb/conversion_procs \
+> +				src/backend/snowball src/backend/replication/libpqwalreceiver \
+> +				src/bin/initdb src/bin/pg_ctl \
+> +				src/bin/pg_controldata src/bin/pg_resetxlog src/pl \
+> +				src/bin/pg_basebackup
+
+Ditto.
+
+> +
+> +POSTGRESQL_INSTALL_DIRECTORIES += $(POSTGRESQL_SERVER_DIRECTORIES)
+> +POSTGRESQL_BUILD_DIRECTORIES += src/port $(POSTGRESQL_SERVER_DIRECTORIES)
+
+Is it problematic if src/port gets installed in the server case? If
+not, then you don't need to have this difference between
+POSTGRESQL_INSTALL_DIRECTORIES and POSTGRESQL_BUILD_DIRECTORIES.
+
+> +
+> +endif
+> +
+> +define POSTGRESQL_BUILD_CMDS
+> +	for dir in $(POSTGRESQL_BUILD_DIRECTORIES); do \
+> +		echo $${dir}; \
+
+Left-over debugging?
+
+> +		$(MAKE) -C $(@D)/$${dir} || exit 1; \
+> +	done
+
+Could you use a foreach loop instead ?
+
+	$(foreach d,$(POSTGRESQL_BUILD_DIRECTORIES),\
+		$(MAKE) -C $(@D)/$(d)$(sep))
+
+> +endef
+> +
+> +define POSTGRESQL_INSTALL_TARGET_CMDS
+> +	for dir in $(POSTGRESQL_INSTALL_DIRECTORIES); do \
+> +		echo $${dir}; \
+> +		$(MAKE) -C $(@D)/$${dir} DESTDIR=$(TARGET_DIR) install || exit 1; \
+> +	done
+
+Ditto.
+
+> +endef
+> +
+> +define POSTGRESQL_INSTALL_STAGING_CMDS
+> +	for dir in $(POSTGRESQL_INSTALL_DIRECTORIES); do \
+> +		echo $${dir}; \
+> +		$(MAKE) -C $(@D)/$${dir} DESTDIR=$(STAGING_DIR) install || exit 1; \
+> +	done
+
+Ditto.
+
+Also, above the definition of POSTGRESQL_CLIENT_DIRECTORIES or
+POSTGRESQL_SERVER_DIRECTORIES, can you add a comment with a reference
+to the postgresql documentation that says which directories should be
+built/installed for the client and server cases? This way if we need to
+update the postgresql package in the future, we can do it by looking at
+the documentation.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
