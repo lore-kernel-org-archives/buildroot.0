@@ -1,54 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 21:06:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: Improve logic for
- GnuTLS/OpenSSL
-In-Reply-To: <1445184950-9386-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1445184950-9386-1-git-send-email-bernd.kuhls@t-online.de>
- <1445184950-9386-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151018210609.6f73002d@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Oct 2015 21:06:16 +0200
+Subject: [Buildroot] [PATCH 1/1] musl: Honor BR2_STATIC_LIBS /
+	BR2_SHARED_LIBS
+In-Reply-To: <20151018183347.06045571@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 18 Oct 2015 18:33:47 +0200")
+References: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
+ <20151018150918.7db2cc07@free-electrons.com>
+ <20151018155838.GE3583@free.fr>
+ <CAEHm_sjfxGkfvzvi=y-Mq+xGdOObGyKLfgfbO0g2MN+kCNUteg@mail.gmail.com>
+ <20151018183347.06045571@free-electrons.com>
+Message-ID: <8737x89etz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 18 Oct 2015 18:15:50 +0200, Bernd Kuhls wrote:
+ > Charles, Yann,
+ > On Sun, 18 Oct 2015 16:18:10 +0000, Charles Duffy wrote:
+ >> I provided this patch because my build results were unnecessarily enlarged
+ >> by dynamic libraries on an otherwise static-only system.
+ >> 
+ >> It sounds to me like we could optionally disable only dynamic libraries;
+ >> leave static libraries always enabled; and end up in a place that works for
+ >> everyone.
 
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index d4815ca..dd31847 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -203,19 +203,12 @@ endif
->  ifeq ($(BR2_PACKAGE_GNUTLS),y)
->  FFMPEG_CONF_OPTS += --enable-gnutls --disable-openssl
->  FFMPEG_DEPENDENCIES += gnutls
-> -else
-> -FFMPEG_CONF_OPTS += --disable-gnutls
-> -ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> -# openssl isn't license compatible with GPL
-> -ifeq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
-> -FFMPEG_CONF_OPTS += --disable-openssl
-> -else
-> +# OpenSSL license is not compatible with the LGPL license of ffmpeg.
-> +else ifneq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
+ > Yeah, that's also my thought. In uClibc, you can enable/disable the
+ > shared library build, but not the static library build. So maybe we
+ > should do:
 
-Where do you check that OpenSSL is enabled?
+ > 	--enable-static \
+ > 	$(if $(BR2_STATIC_LIBS),--disable-shared,--enable-shared)
 
->  FFMPEG_CONF_OPTS += --enable-openssl
->  FFMPEG_DEPENDENCIES += openssl
-> -endif
->  else
-> -FFMPEG_CONF_OPTS += --disable-openssl
-> -endif
-> +FFMPEG_CONF_OPTS += --disable-gnutls --disable-openssl
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBDCADEC),y)
+ > I.e, always static, and shared as soon as BR2_STATIC_LIBS is disabled.
 
-Thomas
+Yes, I think that's the safest/easiest/best-matching-the-other-libcs
+approach.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
