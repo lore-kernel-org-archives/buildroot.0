@@ -1,121 +1,70 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Oct 2015 22:29:19 +0200
-Subject: [Buildroot] [PATCH v4 03/35] package/efl/libefl: new host-package
+Date: Sun, 18 Oct 2015 22:29:35 +0200
+Subject: [Buildroot] [PATCH v4 19/35] package/libevas-generic-loaders: add
+	libraw dependency
 In-Reply-To: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
 References: <1445200191-18404-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445200191-18404-4-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445200191-18404-20-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new host-package provide edje_cc, embryo_cc and eet binaries
-that will be used by the upcomming libefl packages which will
-contain the new version of efl libraries.
+libraw it's one of the "highly recommended" dependecies
+according to the README [1].
+
+[1] https://git.enlightenment.org/core/evas_generic_loaders.git/tree/README?id=v1.15.0#n31
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v4: keep efl as a sub-directory.
-    rename this new package to libefl since we want to keep a efl
-    and elementary version in sync.
-v3: remove trailing slash (Vicente Bergas)
-    bump to 1.15.2
+v4: improve commit log
 ---
- package/efl/libefl/libefl.hash |  2 ++
- package/efl/libefl/libefl.mk   | 75 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 77 insertions(+)
- create mode 100644 package/efl/libefl/libefl.hash
- create mode 100644 package/efl/libefl/libefl.mk
+ package/libevas-generic-loaders/Config.in                  | 5 +++++
+ package/libevas-generic-loaders/libevas-generic-loaders.mk | 9 +++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libefl/libefl.hash b/package/efl/libefl/libefl.hash
-new file mode 100644
-index 0000000..7ac26f4
---- /dev/null
-+++ b/package/efl/libefl/libefl.hash
-@@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.15.2.tar.xz.sha256
-+sha256	dd738f19f454621a7fa1fdb4c008457c170989f5f0c535edfed7b6773ae6c2a4	efl-1.15.2.tar.xz
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-new file mode 100644
-index 0000000..4dca733
---- /dev/null
-+++ b/package/efl/libefl/libefl.mk
-@@ -0,0 +1,75 @@
-+################################################################################
-+#
-+# libefl
-+#
-+################################################################################
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index fb33bfa..8d9ede2 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -17,6 +17,11 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 
++config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
++	bool "Libraw loader"
++	help
++	  This option enables the Evas generic Libraw loader
 +
-+# hardcode the version here since the bump to 1.15 is not complete in Buildroot
-+LIBEFL_VERSION = 1.15.2
-+LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
-+LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
-+LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
-+LIBEFL_LICENSE_FILES = COPYING
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+ 	select BR2_PACKAGE_LIBRSVG
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index d8ab252..4665ded 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -14,14 +14,19 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+ 
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libefl zlib
+ 
+-# For now, we only support the SVG loader
+ # poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
+-	--disable-libraw \
+ 	--disable-gstreamer
+ 
++ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
++else
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
++endif
 +
-+################################################################################
-+#
-+# host-libefl
-+#
-+################################################################################
-+
-+# We want to build only some host tools used later in the build.
-+# Actually we want: edje_cc, embryo_cc and eet.
-+
-+# Host dependencies:
-+# * host-dbus: for Eldbus
-+# * host-freetype: for libevas
-+# * host-libglib2: for libecore
-+# * host-libjpeg, host-libpng: for libevas image loader
-+# * host-lua: disable luajit dependency
-+HOST_LIBEFL_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-dbus \
-+	host-freetype \
-+	host-libglib2 \
-+	host-libjpeg \
-+	host-libpng \
-+	host-lua \
-+	host-zlib
-+
-+# Configure options:
-+# --disable-audio, --disable-multisense remove libsndfile dependency.
-+# --disable-cxx-bindings: disable C++11 bindings.
-+# --disable-fontconfig: remove dependency on fontconfig.
-+# --disable-fribidi: remove dependency on libfribidi.
-+# --disable-gstreamer1: remove dependency on gtreamer 1.0.
-+# --disable-libeeze: remove libudev dependency.
-+# --disable-libmount: remove dependency on host-util-linux libmount.
-+# --disable-physics: remove Bullet dependency.
-+# --enable-image-loader-gif=no: disable Gif dependency.
-+# --enable-image-loader-tiff=no: disable Tiff dependency.
-+# --enable-lua-old: disable Elua and remove luajit dependency.
-+# --with-crypto=none: remove dependencies on openssl or gnutls.
-+# --with-x11=none: remove dependency on X.org.
-+#   Yes I really know what I am doing.
-+HOST_LIBEFL_CONF_OPTS += \
-+	--disable-audio \
-+	--disable-cxx-bindings \
-+	--disable-fontconfig \
-+	--disable-fribidi \
-+	--disable-gstreamer1 \
-+	--disable-libeeze \
-+	--disable-libmount \
-+	--disable-multisense \
-+	--disable-physics \
-+	--enable-image-loader-gif=no \
-+	--enable-image-loader-jpeg=yes \
-+	--enable-image-loader-png=yes \
-+	--enable-image-loader-tiff=no \
-+	--enable-lua-old \
-+	--with-crypto=none \
-+	--with-glib=yes \
-+	--with-opengl=none \
-+	--with-x11=none \
-+	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
-+
-+$(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
 -- 
 2.4.3
