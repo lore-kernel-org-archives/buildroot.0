@@ -1,62 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Oct 2015 22:30:04 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/libdcadec: Add -fPIC to
- static build, enable shared build
-In-Reply-To: <1445199875-28494-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1445199875-28494-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151018223004.4b4617d2@free-electrons.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 18 Oct 2015 22:49:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: bump to version 2.6
+Message-ID: <1445201380-2188-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the new version!
-
-The title of the commit now seems a bit odd, since you're no longer
-adding -fPIC.
-
-On Sun, 18 Oct 2015 22:24:35 +0200, Bernd Kuhls wrote:
-> Build errors occured due to libdcadec being linked statically.
-
-Can you be more verbose in your commit log, to explain what's going on?
-At the bare minimum, something like:
-
-"""
-The libdcadec package currently only builds a static library, which is
-naturally built without -fPIC (since this is generally not needed for
-static libraries).
-
-However, when the generated static library gets used inside a larger
-dynamic library, such as ffmpeg's one, the link fails, since we're
-trying to include in a shared library non-PIC code.
-
-To solve this, this commit changes the way the libdcadec library is
-built to make sure a shared variant of the library gets built when
-appropriate. This way, ffmpeg has a PIC-enabled libdcadec library to
-link with.
-"""
-
-> diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
-> index 76862a6..dff67b5 100644
-> --- a/package/libdcadec/libdcadec.mk
-> +++ b/package/libdcadec/libdcadec.mk
-> @@ -10,19 +10,24 @@ LIBDCADEC_LICENSE = LGPLv2.1+
->  LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
->  LIBDCADEC_INSTALL_STAGING = YES
->  
-> +ifneq ($(BR2_STATIC_LIBS),y)
-
-This should be:
-
-ifeq ($(BR2_STATIC_LIBS),)
-
-Thanks,
-
-Thomas
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 3d2f404..c6f5fc2 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  e3c70acc8a4516dfe0c77d7b0317c4a180cc722b22715b042ef8757d1a0e0f32  shairport-sync-2.4.2.tar.gz
++sha256  d04036241e5a811240c43a3ddfb05a119a6043e8c5f1f354872a88e6cbdaef07  shairport-sync-2.6.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 72708c3..4d80f0d 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.4.2
++SHAIRPORT_SYNC_VERSION = 2.6
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.1
