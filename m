@@ -1,33 +1,48 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 19 Oct 2015 17:02:31 +0200
-Subject: [Buildroot] [PATCH 0/3] Update Boundary Devices boards support
-Message-ID: <1445266954-15149-1-git-send-email-gary.bisson@boundarydevices.com>
+Date: Mon, 19 Oct 2015 17:02:33 +0200
+Subject: [Buildroot] [PATCH 2/3] nitrogen6*_defconfig: switch to zImage
+In-Reply-To: <1445266954-15149-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1445266954-15149-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1445266954-15149-3-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+As now using zImage/bootz in the 6x_bootscript.
 
-This series is mainly about switching to zImage booting as well as updating
-the U-Boot and Kernel revisions (still based on the 3.14.28-1.0.0-GA release).
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ configs/nitrogen6sx_defconfig | 2 +-
+ configs/nitrogen6x_defconfig  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Details about the U-Boot/Kernel revisions update are described in the patch
-commit log.
-
-Regards,
-Gary
-
-Gary Bisson (3):
-  board/boundarydevices: update 6x_bootscript to use zImage
-  nitrogen6*_defconfig: switch to zImage
-  nitrogen6*_defconfig: bump u-boot and kernel revisions
-
- board/boundarydevices/nitrogen6x/6x_bootscript.txt | 8 ++++----
- configs/nitrogen6sx_defconfig                      | 8 ++++----
- configs/nitrogen6x_defconfig                       | 8 ++++----
- 3 files changed, 12 insertions(+), 12 deletions(-)
-
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 70006d5..3cdf41b 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -31,7 +31,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_3.14.28_1.0.0_ga
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/3417c66/linux-imx6-3417c66.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
++BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-nitrogen6sx"
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 51c5161..cffbc25 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -31,7 +31,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_3.14.28_1.0.0_ga
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/3417c66/linux-imx6-3417c66.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
++BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6q-nitrogen6_max imx6q-sabrelite"
 -- 
 2.6.1
