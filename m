@@ -1,33 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Oct 2015 17:01:28 +0200
-Subject: [Buildroot] [PATCH] iptables: add upstream patch fixing the
-	message 'connlabel.conf not found'
-In-Reply-To: <1445257360-31923-1-git-send-email-patrickdepinguin@gmail.com>
- (Thomas De Schampheleire's message of "Mon, 19 Oct 2015 14:22:40
- +0200")
-References: <1445257360-31923-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <87vba27vhz.fsf@dell.be.48ers.dk>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 19 Oct 2015 17:02:31 +0200
+Subject: [Buildroot] [PATCH 0/3] Update Boundary Devices boards support
+Message-ID: <1445266954-15149-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Hi all,
 
- > From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- > In iptables versions 1.4.20 and 1.4.21, any call to iptables
- > would generate a message
+This series is mainly about switching to zImage booting as well as updating
+the U-Boot and Kernel revisions (still based on the 3.14.28-1.0.0-GA release).
 
- >     cannot open connlabel.conf, not registering 'connlabel' match: No
- >         such file or directory
+Details about the U-Boot/Kernel revisions update are described in the patch
+commit log.
 
-Committed, thanks.
+Regards,
+Gary
 
-Do you see this with mainline buildroot? We do pass --disable-static for
-!BR2_STATIC_LIBS builds, so I'm not sure how it could trigger for your?
+Gary Bisson (3):
+  board/boundarydevices: update 6x_bootscript to use zImage
+  nitrogen6*_defconfig: switch to zImage
+  nitrogen6*_defconfig: bump u-boot and kernel revisions
 
-But the fix does make sense for completely static builds.
+ board/boundarydevices/nitrogen6x/6x_bootscript.txt | 8 ++++----
+ configs/nitrogen6sx_defconfig                      | 8 ++++----
+ configs/nitrogen6x_defconfig                       | 8 ++++----
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+2.6.1
