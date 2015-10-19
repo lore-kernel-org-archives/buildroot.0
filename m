@@ -1,35 +1,52 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 19 Oct 2015 22:49:34 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-10-15
-In-Reply-To: <20151018045734.GA20889@tarshish>
-References: <20151016063019.E3466101619@stock.ovh.net>
- <1445129293.7271.17.camel@embedded.rocks> <20151018045734.GA20889@tarshish>
-Message-ID: <1445287774.1907.20.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Oct 2015 22:53:10 +0200
+Subject: [Buildroot] [PATCH 1/4] mkpimage: new host package
+In-Reply-To: <CAGduivyRx81uOHiT=JVj2=1iUw9jCQhgxUbqAxBJR0Wu9GVVtg@mail.gmail.com>
+References: <1445271894-22553-1-git-send-email-viktorin@rehivetech.com>
+ <1445271894-22553-2-git-send-email-viktorin@rehivetech.com>
+ <CAGduivyRx81uOHiT=JVj2=1iUw9jCQhgxUbqAxBJR0Wu9GVVtg@mail.gmail.com>
+Message-ID: <20151019225310.5cf90a28@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Maxime, Jan,
 
-On So, 2015-10-18 at 07:57 +0300, Baruch Siach wrote:
-> Hi J?rg,
+On Mon, 19 Oct 2015 21:04:51 +0200, Maxime Hadjinlian wrote:
+
+> > +ifndef HOSTGO
+> > +HOSTGO := go
+> > +HOSTGO := $(shell which $(HOSTGO) || type -p $(HOSTGO) || echo go)
+> > +endif
+
+Ouch, having to depend on Go for such a simple tool is indeed not very
+nice :-/
+
+> Even I don't use this tool anymore, after I reversed the code from Altera's
+> own tool, they released the documentation for the SPL signing and the fine
+> people at Barebox, created a small program (in C) that does exactly the
+> same, which you can find there:
+> http://git.pengutronix.de/?p=barebox.git;a=blob;f=scripts/socfpga_mkimage.c;h=1a7a66d98841e9f52c3ea49c651286aa1412c9a5;hb=HEAD
 > 
-> That was also my best guess after investigation this issue for some
-> time. I 
-> think you should raise this issue with upstream to see whether this
-> solution 
-> is acceptable.
+> However, I don't know how you would integrate such a tool, having a special
+> package ? Making U-Boot depends on Barebox sounds a bit crazy. But it would
+> be lighter than having to grab the go compiler for such a simple program.
 
-Many thanks for your investigation!
+I agree. Unfortunately, downloading directly
+http://git.pengutronix.de/?p=barebox.git;a=blob_plain;f=scripts/socfpga_mkimage.c;h=$(MKPIMAGE_VERSION);hb=HEAD
+doesn't work because this URL contains ';' which our download
+infrastructure doesn't like much.
 
-I did so and the patch was accepted upstream [1]. I prepared some
-Buildroot patches, too.
+However, this program is so simple that I would advocate taking the
+makedevs route: simply integrate the program source code itself inside
+Buildroot, in package/mkpimage/.
 
-[1]?https://github.com/sbabic/swupdate/commit/c3467290925b2a833a68d9db1
-2c198fdca752e32
+Thanks,
 
-Best regards
-J?rg Krause
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
