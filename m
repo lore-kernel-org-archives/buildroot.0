@@ -1,73 +1,87 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 19 Oct 2015 12:42:09 +0200
-Subject: [Buildroot] [PATCH 2/2] jq: enable host package
-In-Reply-To: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1445251329-18120-2-git-send-email-patrickdepinguin@gmail.com>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Mon, 19 Oct 2015 11:02:52 +0000
+Subject: [Buildroot] [PATCH] Buildroot support for Intel X1000
+Message-ID: <1445252572.4143.12.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+The Intel X1000 is the Pentium class microprocessor that ships with Galileo
+Gen 1/2. This patch adds changes to arch and toolchain-wrapper to omit the lock
+prefix for the X1000.
 
-Allow building jq as host utility for use in post-build scripts.
-This can be useful to created, edit, merge or even perform syntax checking
-on JSON files.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
 ---
- package/Config.in.host    |  1 +
- package/jq/Config.in.host | 11 +++++++++++
- package/jq/jq.mk          |  3 +++
- 3 files changed, 15 insertions(+)
- create mode 100644 package/jq/Config.in.host
+ arch/Config.in.x86             | 10 ++++++++++
+ toolchain/toolchain-wrapper.c  |  3 +++
+ toolchain/toolchain-wrapper.mk |  4 ++++
+ 3 files changed, 17 insertions(+)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1f69687..ce1b6bc 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -13,6 +13,7 @@ menu "Host utilities"
- 	source "package/genimage/Config.in.host"
- 	source "package/genpart/Config.in.host"
- 	source "package/imx-usb-loader/Config.in.host"
-+	source "package/jq/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/mke2img/Config.in.host"
- 	source "package/mtd/Config.in.host"
-diff --git a/package/jq/Config.in.host b/package/jq/Config.in.host
-new file mode 100644
-index 0000000..a0aabc0
---- /dev/null
-+++ b/package/jq/Config.in.host
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_HOST_JQ
-+	bool "host jq"
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 43f6abc..28b8adf 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -34,6 +34,14 @@ config BR2_x86_i486
+ config BR2_x86_i586
+ 	bool "i586"
+ 	depends on !BR2_x86_64
++config BR2_x86_x1000
++	bool "x1000"
++	depends on !BR2_x86_64
 +	help
-+	  jq is like sed for JSON data - you can use it to slice and filter
-+	  and map and transform structured data with the same ease that sed,
-+	  awk, grep and friends let you play with text.
++	    The Intel X1000 is a Pentium class microprocessor in the Quark 
++	    (sub-Atom) Product Line. The X1000 has a bug on the lock prefix
++	    requiring that prefix must be stripped at build time. See
++	    https://en.wikipedia.org/wiki/Intel_Quark
+ config BR2_x86_i686
+ 	bool "i686"
+ 	depends on !BR2_x86_64
+@@ -202,6 +210,7 @@ config BR2_ARCH
+ 	default "i386"		if BR2_x86_i386
+ 	default "i486"		if BR2_x86_i486
+ 	default "i586"		if BR2_x86_i586
++	default "i586"		if BR2_x86_x1000
+ 	default "i586"		if BR2_x86_pentium_mmx
+ 	default "i586"		if BR2_x86_geode
+ 	default "i586"		if BR2_x86_c3
+@@ -240,6 +249,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "i386"		if BR2_x86_i386
+ 	default "i486"		if BR2_x86_i486
+ 	default "i586"		if BR2_x86_i586
++	default "i586"		if BR2_x86_x1000
+ 	default "pentium-mmx"	if BR2_x86_pentium_mmx
+ 	default "i686"		if BR2_x86_i686
+ 	default "pentiumpro"	if BR2_x86_pentiumpro
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 16a3d78..f84bbe5 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -63,6 +63,9 @@ static char *predef_args[] = {
+ #ifdef BR_64
+ 	"-m64",
+ #endif
++#ifdef BR_OMIT_LOCK_PREFIX
++	"-Wa,-momit-lock-prefix=yes", 
++#endif
+ #ifdef BR_BINFMT_FLAT
+ 	"-Wl,-elf2flt",
+ #endif
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index c78363a..eba2b38 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -20,6 +20,10 @@ ifeq ($(BR2_CCACHE),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE
+ endif
+ 
++ifeq ($(BR2_x86_x1000),y)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_OMIT_LOCK_PREFIX
++endif
 +
-+	  As a host tool, jq can be useful to create/edit/merge/check JSON
-+	  files from a post-build script.
-+
-+	  http://stedolan.github.io/jq/
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index 8053e39..9a094ba 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -11,8 +11,11 @@ JQ_LICENSE_FILES = COPYING
- 
- # uses c99 specific features
- JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
-+HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99"
- 
- # jq explicitly enables maintainer mode, which we don't need/want
- JQ_CONF_OPTS += --disable-maintainer-mode
-+HOST_JQ_CONF_OPTS += --disable-maintainer-mode
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
+ endif
 -- 
-1.9.5
+2.1.0
