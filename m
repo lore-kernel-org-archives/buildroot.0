@@ -1,82 +1,152 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Oct 2015 22:35:43 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/nodejs: add version 4.1.2
-In-Reply-To: <20151019223038.6346f115@free-electrons.com>
-References: <cover.1445277033.git.yann.morin.1998@free.fr>
- <91f96e06dbe44ab711b1bb688892c31886026b59.1445277033.git.yann.morin.1998@free.fr>
- <20151019223038.6346f115@free-electrons.com>
-Message-ID: <20151019203543.GD3651@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Oct 2015 22:35:36 +0200
+Subject: [Buildroot] [git commit] xdriver_xf86-video-intel: add upstream
+	patches fixing fstat build errors
+Message-ID: <20151019203624.4081F81E8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=d157811ce1e510e61e2be093c62e2bebeb116cf6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-10-19 22:30 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 19 Oct 2015 19:51:01 +0200, Yann E. MORIN wrote:
-> > diff --git a/package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch
-> > new file mode 100644
-> > index 0000000..dee8042
-> > --- /dev/null
-> > +++ b/package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch
-> > @@ -0,0 +1,33 @@
-> > +From 3d4817c152d6f3afddcc699949c4d1664da91e2b Mon Sep 17 00:00:00 2001
-> > +From: Martin Bark <martin@barkynet.com>
-> > +Date: Tue, 30 Jun 2015 09:43:11 +0100
-> > +Subject: [PATCH 1/4] Remove dependency on Python bz2 module
-> > +
-> > +The Python bz2 module is only needed in certain cases, so only import
-> > +it when needed. In the normal nodejs build, this allows to remove the
-> > +dependency on this module.
-> 
-> Read this...
+Attempting to build xdriver_xf86-video-intel version 2.99.917 with udev
+results in compilation failures. The provided patches ([1], [2])
+corrects the `implicit declaration of function 'fstat'` occurrences
+during the building of this driver.
 
-Damn...
+[1] http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/commit/?id=12af8a575d1518d40416f83195049157c3a062a5
+[2] http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/commit/?id=369ceec0e4910ba2c37736a59c55c0d6c26433bf
 
-> > +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > +[Martin: adapt to 0.12.5]
-> > +Signed-off-by: Martin Bark <martin@barkynet.com>
-> > +[yann.morin.1998 at free.fr: adapt to 4.1.2]
-> > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > +---
-> > + deps/v8/tools/js2c.py | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/deps/v8/tools/js2c.py b/deps/v8/tools/js2c.py
-> > +index 77485f6..371caf5 100755
-> > +--- a/deps/v8/tools/js2c.py
-> > ++++ b/deps/v8/tools/js2c.py
-> > +@@ -34,7 +34,6 @@
-> > + import os, re, sys, string
-> > + import optparse
-> > + import jsmin
-> > +-import bz2
-> > + import textwrap
-> > + 
-> > + 
-> 
-> ... and compare it to the patch. You're no longer importing bz2
-> anywhere. Look at the same patch for 0.10 and 0.12, it is importing the
-> bz2 module, just conditionally.
+[Thomas:
+ - add upstream link to the git commits in the patches themselves
+ - add James SoB line inside the patches themselves
+ - add a comment above AUTORECONF = YES to indicate why it was added]
 
-ACK, I'll fix that commit log.
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-sna-udev-fstat.patch                      |   61 ++++++++++++++++++++
+ .../0002-uxa-udev-fstat.patch                      |   31 ++++++++++
+ .../xdriver_xf86-video-intel.mk                    |    2 +
+ 3 files changed, 94 insertions(+), 0 deletions(-)
 
-> We should maybe also upstream our nodejs patches... But that's a
-> separate work.
-
-I can take a shot at that...
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/x11r7/xdriver_xf86-video-intel/0001-sna-udev-fstat.patch b/package/x11r7/xdriver_xf86-video-intel/0001-sna-udev-fstat.patch
+new file mode 100644
+index 0000000..e4ded3a
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-intel/0001-sna-udev-fstat.patch
+@@ -0,0 +1,61 @@
++From 12af8a575d1518d40416f83195049157c3a062a5 Mon Sep 17 00:00:00 2001
++From: Chris Wilson <chris@chris-wilson.co.uk>
++Date: Tue, 24 Feb 2015 15:25:40 +0000
++Subject: sna: udev integration depends on fstat and sys/stat.h
++
++src/sna/sna_driver.c: In function 'sna_handle_uevents':
++src/sna/sna_driver.c:759:2: error: implicit declaration of function 'fstat' [-Werror=implicit-function-declaration]
++
++Also take the opportunity to include udev support in the configure
++summary.
++
++Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
++
++Upstream at: http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/commit/?id=12af8a575d1518d40416f83195049157c3a062a5
++
++Signed-off-by: James Knight <james.knight@rockwellcollins.com>
++
++diff --git a/configure.ac b/configure.ac
++index 7476e2b..de3a4b3 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -197,11 +197,15 @@ AC_ARG_ENABLE(udev,
++ 
++ if test "x$UDEV" != "xno"; then
++ 	PKG_CHECK_MODULES(UDEV, [libudev], [udev="yes"], [udev="no"])
+++	AC_CHECK_HEADERS([sys/stat.h], [], [udev="no"])
++ 	if test "x$UDEV" = "xyes" -a "x$udev" != "xyes"; then
++ 		AC_MSG_ERROR([udev support requested but not found (libudev)])
++ 	fi
++ 	if test "x$udev" = "xyes"; then
++ 		AC_DEFINE(HAVE_UDEV,1,[Enable udev-based monitor hotplug detection])
+++		udev_msg=" yes"
+++	else
+++		udev_msg=" no"
++ 	fi
++ fi
++ 
++@@ -911,6 +915,7 @@ echo "  Support for Kernel Mode Setting? $KMS"
++ echo "  Support for legacy User Mode Setting (for i810)? $UMS"
++ echo "  Support for Direct Rendering Infrastructure:$dri_msg"
++ echo "  Support for Xv motion compensation (XvMC and libXvMC):$xvmc_msg"
+++echo "  Support for display hotplug notifications (udev):$udev_msg"
++ echo "  Build additional tools and utilities?$tools_msg"
++ if test -n "$xp_msg"; then
++ echo "  Experimental support:$xp_msg"
++diff --git a/src/sna/sna_driver.c b/src/sna/sna_driver.c
++index 8c0d0b5..bc20ef0 100644
++--- a/src/sna/sna_driver.c
+++++ b/src/sna/sna_driver.c
++@@ -740,6 +740,8 @@ sna_wakeup_handler(WAKEUPHANDLER_ARGS_DECL)
++ }
++ 
++ #if HAVE_UDEV
+++#include <sys/stat.h>
+++
++ static void
++ sna_handle_uevents(int fd, void *closure)
++ {
++-- 
++cgit v0.10.2
++
+diff --git a/package/x11r7/xdriver_xf86-video-intel/0002-uxa-udev-fstat.patch b/package/x11r7/xdriver_xf86-video-intel/0002-uxa-udev-fstat.patch
+new file mode 100644
+index 0000000..3ab255b
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-intel/0002-uxa-udev-fstat.patch
+@@ -0,0 +1,31 @@
++From 369ceec0e4910ba2c37736a59c55c0d6c26433bf Mon Sep 17 00:00:00 2001
++From: Chris Wilson <chris@chris-wilson.co.uk>
++Date: Tue, 24 Feb 2015 15:25:40 +0000
++Subject: uxa: udev integration depends on fstat and sys/stat.h
++
++src/uxa/intel_driver.c: In function 'I830HandleUEvents':
++src/uxa/intel_driver.c:738:14: error: storage size of 's' isn't known
++src/uxa/intel_driver.c:746:2: error: implicit declaration of function 'fstat' [-Werror=implicit-function-declaration]
++
++Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
++
++Upstream at: Signed-off-by: James Knight <james.knight@rockwellcollins.com>
++
++Signed-off-by: James Knight <james.knight@rockwellcollins.com>
++
++diff --git a/src/uxa/intel_driver.c b/src/uxa/intel_driver.c
++index c554124..6e64b8c 100644
++--- a/src/uxa/intel_driver.c
+++++ b/src/uxa/intel_driver.c
++@@ -728,6 +728,8 @@ intel_flush_callback(CallbackListPtr *list,
++ }
++ 
++ #if HAVE_UDEV
+++#include <sys/stat.h>
+++
++ static void
++ I830HandleUEvents(int fd, void *closure)
++ {
++-- 
++cgit v0.10.2
++
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 707cedd..f0b0753 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -9,6 +9,8 @@ XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VE
+ XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
++# We're patching configure.ac
++XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
+ 
+ # this fixes a getline-related compilation error in src/sna/kgem.c
+ XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
