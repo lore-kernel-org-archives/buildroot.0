@@ -1,100 +1,87 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Mon, 19 Oct 2015 13:20:24 -0400
-Subject: [Buildroot] [PATCH 2/2] xdriver_xf86-video-intel: add upstream
-	patch fixing libdrm/kernel crash
-In-Reply-To: <1445275224-3928-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1445275224-3928-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <1445275224-3928-2-git-send-email-james.knight@rockwellcollins.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 19 Oct 2015 20:35:23 +0300
+Subject: [Buildroot] ltp-testsuite without native RPC (commit
+ 8f1c4c49a2ab0fc9e6cf73370f4483e253e5ac2d)
+In-Reply-To: <CAAXf6LV5hJVK+zqbFHZ0qbwfShx2ZhyLBNdEXvURPpEJp+4=OQ@mail.gmail.com>
+References: <CAAXf6LUBj47OW0+VBzeYE-Zh3jLMg77-kWCOiSCMPGiRKKSPfw@mail.gmail.com>
+ <20151015181727.GI2451@tarshish>
+ <CAAXf6LV5hJVK+zqbFHZ0qbwfShx2ZhyLBNdEXvURPpEJp+4=OQ@mail.gmail.com>
+Message-ID: <20151019173523.GX20889@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When running this Intel driver with a newer libdrm/kernel (4.x), Xorg
-can crash (segmentation fault).
+Hi Thomas,
 
-References:
- http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/commit/?id=7fe2b2948652443ff43d907855bd7a051d54d309
- https://bugs.gentoo.org/show_bug.cgi?id=552124
- https://bugzilla.opensuse.org/show_bug.cgi?id=931917
+On Mon, Oct 19, 2015 at 03:26:18PM +0200, Thomas De Schampheleire wrote:
+> On Thu, Oct 15, 2015 at 8:17 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> > On Thu, Oct 15, 2015 at 04:06:39PM +0200, Thomas De Schampheleire wrote:
+> >> What about patching ltp-testsuite instead, not enabling the RPC tests
+> >> in this case? At first sight this was added with following (ltp)
+> >> commit:
+> >> https://github.com/linux-test-project/ltp/commit/8e9a4dbb8eaa561e51d6d8ebe5a5342f3e498224
+> >
+> > Isn't that what ac_cv_header_tirpc_netconfig_h=no is doing?
+> 
+> I just tried building ltp-testsuite with a no-rpc toolchain on top of
+> latest buildroot. Here is the build failure:
+> 
+> /usr/bin/make -C lib -f
+> ".../output/build/ltp-testsuite-20150420/testcases/network/rpc/basic_tests/rpc01/lib/Makefile"
+> all
+> make[7]: Entering directory
+> `.../output/build/ltp-testsuite-20150420/testcases/network/rpc/basic_tests/rpc01/lib'
+> .../output/host/usr/bin/powerpc-linux-gcc -D_LARGEFILE_SOURCE
+> -D_LARGEFILE64_SOURCE -Os -g -O2 -fno-strict-aliasing -pipe -Wall -W
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -Os -Wold-style-definition
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FORTIFY_SOURCE=2
+> -I../../../../../../include -I../../../../../../include  -c -o
+> librpc01.o librpc01.c
+> librpc01.c:19:21: fatal error: rpc/xdr.h: No such file or directory
+>  #include <rpc/xdr.h>
+>                      ^
+> compilation terminated.
+> make[7]: *** [librpc01.o] Error 1
+> 
+> 
+> I think my original problem (this was with a previous version of
+> ltp-testsuite) was that rpc/rpc.h was missing, but I think the bottom
+> line is the same: ltp-testsuite attempts to build RPC-related tests
+> but the necessary header files are not available.
+> 
+> My approach was to add libtirpc to the equation, which provides the
+> header files and library to make things work.
+> 
+> With your patch, libtirpc is not added, and so the header files remain
+> unavailable.
+> 
+> How do you suggest to proceed?
+> One approach is to disable the ltp tests that use rpc entirely (on top
+> of your last patch), another one is to disable only the tests that use
+> authdes_create (on top of my original patch; reverting yours).
+> Other ideas are welcome, of course.
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
- .../0003-sna-libdrm-abi-protection.patch           | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-video-intel/0003-sna-libdrm-abi-protection.patch
+The best solution seems to be fixing the root cause upstream. There was an 
+attempt by Natanael Copa in commit c0547c56dafb8e1 (Add configure option to 
+disable DES authentication) to add a --disable-authdes configure option to 
+libtirpc. There was another attempt in commit 58cd17f999 (Fix: unresolved 
+_crypt() symbols) to add a local implementation of DES. The first attempt was 
+later reverted in commit f17b44048003 (Revert commit c0547c56dafb ('Add 
+configure option to disable DES')) which also (inadvertedly?) removed 
+des_crypt.c and des_impl.c from Makefile.am. Restoring the local DES 
+implementation looks not so hard to do.
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/0003-sna-libdrm-abi-protection.patch b/package/x11r7/xdriver_xf86-video-intel/0003-sna-libdrm-abi-protection.patch
-new file mode 100644
-index 0000000..ea3aa30
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-intel/0003-sna-libdrm-abi-protection.patch
-@@ -0,0 +1,65 @@
-+From 7fe2b2948652443ff43d907855bd7a051d54d309 Mon Sep 17 00:00:00 2001
-+From: Chris Wilson <chris@chris-wilson.co.uk>
-+Date: Thu, 19 Mar 2015 23:14:17 +0000
-+Subject: sna: Protect against ABI breakage in recent versions of libdrm
-+
-+Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-+
-+diff --git a/src/sna/kgem.c b/src/sna/kgem.c
-+index 11f0828..6f16cba 100644
-+--- a/src/sna/kgem.c
-++++ b/src/sna/kgem.c
-+@@ -182,6 +182,15 @@ struct local_i915_gem_caching {
-+ #define LOCAL_IOCTL_I915_GEM_SET_CACHING DRM_IOW(DRM_COMMAND_BASE + LOCAL_I915_GEM_SET_CACHING, struct local_i915_gem_caching)
-+ #define LOCAL_IOCTL_I915_GEM_GET_CACHING DRM_IOW(DRM_COMMAND_BASE + LOCAL_I915_GEM_GET_CACHING, struct local_i915_gem_caching)
-+ 
-++struct local_i915_gem_mmap {
-++	uint32_t handle;
-++	uint32_t pad;
-++	uint64_t offset;
-++	uint64_t size;
-++	uint64_t addr_ptr;
-++};
-++#define LOCAL_IOCTL_I915_GEM_MMAP DRM_IOWR(DRM_COMMAND_BASE + DRM_I915_GEM_MMAP, struct local_i915_gem_mmap)
-++
-+ struct local_i915_gem_mmap2 {
-+ 	uint32_t handle;
-+ 	uint32_t pad;
-+@@ -514,15 +523,15 @@ retry_wc:
-+ 
-+ static void *__kgem_bo_map__cpu(struct kgem *kgem, struct kgem_bo *bo)
-+ {
-+-	struct drm_i915_gem_mmap mmap_arg;
-++	struct local_i915_gem_mmap arg;
-+ 	int err;
-+ 
-+ retry:
-+-	VG_CLEAR(mmap_arg);
-+-	mmap_arg.handle = bo->handle;
-+-	mmap_arg.offset = 0;
-+-	mmap_arg.size = bytes(bo);
-+-	if ((err = do_ioctl(kgem->fd, DRM_IOCTL_I915_GEM_MMAP, &mmap_arg))) {
-++	VG_CLEAR(arg);
-++	arg.handle = bo->handle;
-++	arg.offset = 0;
-++	arg.size = bytes(bo);
-++	if ((err = do_ioctl(kgem->fd, LOCAL_IOCTL_I915_GEM_MMAP, &arg))) {
-+ 		assert(err != EINVAL);
-+ 
-+ 		if (__kgem_throttle_retire(kgem, 0))
-+@@ -536,10 +545,10 @@ retry:
-+ 		return NULL;
-+ 	}
-+ 
-+-	VG(VALGRIND_MAKE_MEM_DEFINED(mmap_arg.addr_ptr, bytes(bo)));
-++	VG(VALGRIND_MAKE_MEM_DEFINED(arg.addr_ptr, bytes(bo)));
-+ 
-+ 	DBG(("%s: caching CPU vma for %d\n", __FUNCTION__, bo->handle));
-+-	return bo->map__cpu = (void *)(uintptr_t)mmap_arg.addr_ptr;
-++	return bo->map__cpu = (void *)(uintptr_t)arg.addr_ptr;
-+ }
-+ 
-+ static int gem_write(int fd, uint32_t handle,
-+-- 
-+cgit v0.10.2
-+
+In the mean time I think we can replace our 
+0007-Disable-DES-authentification-support.patch with something more flexible 
+along the lines of Natanael's reverted patch.
+
+J?rg, do you concur?
+
+baruch
+
 -- 
-1.9.5.msysgit.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
