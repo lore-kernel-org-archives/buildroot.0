@@ -1,78 +1,124 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Mon, 19 Oct 2015 18:30:14 +0200
-Subject: [Buildroot] [PATCH 0/4] Attempt to improve support for Altera
- SoC FPGA boards
-In-Reply-To: <1445271894-22553-1-git-send-email-viktorin@rehivetech.com>
-References: <1445271894-22553-1-git-send-email-viktorin@rehivetech.com>
-Message-ID: <20151019183014.16d87cb4@pcviktorin.fit.vutbr.cz>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 Oct 2015 18:34:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: Add node.js v4.1.2
+In-Reply-To: <1444136239-22044-1-git-send-email-jaap@jcz.nl>
+References: <1444136239-22044-1-git-send-email-jaap@jcz.nl>
+Message-ID: <20151019163436.GB3651@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am sorry, the text may be a little bit confusing, so I am adding
-some clarifications...
+Jaap, All,
 
-On Mon, 19 Oct 2015 18:24:50 +0200
-Jan Viktorin <viktorin@rehivetech.com> wrote:
+On 2015-10-06 14:57 +0200, Jaap Crezee spake thusly:
+> Signed-off-by: Jaap Crezee <jaap@jcz.nl>
 
-> Hello Buildroot community,
-> 
-> the following patch series attempts to improve support for building for
-> Altera SoC FPGA boards. I mean, I'd like to have it ready out-of-the-box.
-> 
-> The readme says that it is necessary to "sign" (it is now signing, just CRC
+I have an alternative patch in the works to bump nodejs:
+    http://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/node&id=d080958d76d5737c0cb300976659d708889daeed
 
-"not signing"
+Compred to your patch:
+  - it fixes a build failure for armv VFPv2
+  - it drops 0.12.x
+  - it forward ports and cleans up more patches.
 
-> by the way) the SPL image in order to boot. I cannot ack this because my
-> SoC Development Kit (not the Arrow one!) boots normally with the generated
-> SPL. How is it possible then? Is it fixed in U-Boot? I doubt, didn't find it
-> there... I am confused about it.
-> 
-> I don't have the second board (Arrow SoCKit) to prove it boots without it.
+From what I understand from the htread, we may want to keep 0.12.x
+because of API changes.
 
-*it boots without "signing"
+So I'll adapt my patch to not get rif of 0.12.x and submit shortly.
 
-> 
-> Anyway, this series contains updates to the readme.txt and also adds mkpimage
-> package to support the "signing" of the SPL images. Those patches are not
-> very coherent and I do not expect to merge them at this stage.
+Regards,
+Yann E. MORIN.
 
-The readme should be updated that it is not necessary to sign anything.
-Or the mkpimage package should be included in Buildroot.
-
+>  ...01-Remove-dependency-on-Python-bz2-module.patch | 31 ++++++++++++++++++++++
+>  package/nodejs/Config.in                           |  5 ++++
+>  package/nodejs/nodejs.hash                         |  3 +++
+>  3 files changed, 39 insertions(+)
+>  create mode 100644 package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch
 > 
-> Can somebody check whether the generated SPL boots on Arrow SoCKit?
+> diff --git a/package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch
+> new file mode 100644
+> index 0000000..de83d44
+> --- /dev/null
+> +++ b/package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch
+> @@ -0,0 +1,31 @@
+> +From 3d4817c152d6f3afddcc699949c4d1664da91e2b Mon Sep 17 00:00:00 2001
+> +From: Martin Bark <martin@barkynet.com>
+> +Date: Tue, 30 Jun 2015 09:43:11 +0100
+> +Subject: [PATCH 1/4] Remove dependency on Python bz2 module
+> +
+> +The Python bz2 module is only needed in certain cases, so only import
+> +it when needed. In the normal nodejs build, this allows to remove the
+> +dependency on this module.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +[Martin: adapt to 0.12.5]
+> +Signed-off-by: Martin Bark <martin@barkynet.com>
+> +---
+> + deps/v8/tools/js2c.py | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/deps/v8/tools/js2c.py b/deps/v8/tools/js2c.py
+> +index 77485f6..371caf5 100755
+> +--- a/deps/v8/tools/js2c.py
+> ++++ b/deps/v8/tools/js2c.py
+> +@@ -34,7 +34,6 @@
+> + import os, re, sys, string
+> + import optparse
+> + import jsmin
+> +-import bz2
+> + import textwrap
+> + 
+> + 
+> +-- 
+> +2.1.4
+> +
+> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+> index 329d270..b25375b 100644
+> --- a/package/nodejs/Config.in
+> +++ b/package/nodejs/Config.in
+> @@ -40,12 +40,17 @@ config BR2_BR2_PACKAGE_NODEJS_0_12_X
+>  	bool "v0.12.7"
+>  	depends on !BR2_ARM_CPU_ARMV5
+>  
+> +config BR2_BR2_PACKAGE_NODEJS_4_1_X
+> +	bool "v4.1.2"
+> +	depends on !BR2_ARM_CPU_ARMV5
+> +
+>  endchoice
+>  
+>  config BR2_PACKAGE_NODEJS_VERSION_STRING
+>  	string
+>  	default "0.10.40"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
+>  	default "0.12.7"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
+> +	default "4.1.2"     if BR2_BR2_PACKAGE_NODEJS_4_1_X
+>  
+>  menu "Module Selection"
+>  
+> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+> index 9be2806..9f75471 100644
+> --- a/package/nodejs/nodejs.hash
+> +++ b/package/nodejs/nodejs.hash
+> @@ -3,3 +3,6 @@ sha256	bae79c2fd959aebe1629af36077bebbb760128db753da226d2344cd91499149f  node-v0
+>  
+>  # From upstream URL: http://nodejs.org/dist/v0.12.7/SHASUMS256.txt
+>  sha256	b23d64df051c9c969b0c583f802d5d71de342e53067127a5061415be7e12f39d  node-v0.12.7.tar.gz
+> +
+> +# From upstream URL: http://nodejs.org/dist/v4.1.2/SHASUMS256.txt
+> +sha256	febec3703a3fea9b64c46100a7b6a4408250027aa8259a2a815fd2275d502c49  node-v4.1.2.tar.gz
+> -- 
+> 2.6.0
 > 
-> If it does not, I would like to add the mkpimage package to Buildroot (however,
-> it requires a Go compiler).
-> 
-> If there is no issue, I would just leave the readme updates (an improve them
-> a bit).
-> 
-> Regards
-> Jan Viktorin
-> 
-> Jan Viktorin (4):
->   mkpimage: new host package
->   boot/uboot: compute CRC on SPLs for Altera SoC FPGA
->   socfpga: update readme for sockit/socdk boards
->   socfpga: note about unnecessary mkpimage of SPL
-> 
->  board/altera/readme.txt      | 31 +++++++++++++++++--------------
->  boot/uboot/Config.in         | 10 ++++++++++
->  boot/uboot/uboot.mk          |  9 +++++++++
->  package/mkpimage/mkpimage.mk | 28 ++++++++++++++++++++++++++++
->  4 files changed, 64 insertions(+), 14 deletions(-)
->  create mode 100644 package/mkpimage/mkpimage.mk
-> 
-
-
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-   Jan Viktorin                  E-mail: Viktorin at RehiveTech.com
-   System Architect              Web:    www.RehiveTech.com
-   RehiveTech
-   Brno, Czech Republic
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
