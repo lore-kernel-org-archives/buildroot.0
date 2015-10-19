@@ -1,87 +1,77 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 19 Oct 2015 20:35:23 +0300
-Subject: [Buildroot] ltp-testsuite without native RPC (commit
- 8f1c4c49a2ab0fc9e6cf73370f4483e253e5ac2d)
-In-Reply-To: <CAAXf6LV5hJVK+zqbFHZ0qbwfShx2ZhyLBNdEXvURPpEJp+4=OQ@mail.gmail.com>
-References: <CAAXf6LUBj47OW0+VBzeYE-Zh3jLMg77-kWCOiSCMPGiRKKSPfw@mail.gmail.com>
- <20151015181727.GI2451@tarshish>
- <CAAXf6LV5hJVK+zqbFHZ0qbwfShx2ZhyLBNdEXvURPpEJp+4=OQ@mail.gmail.com>
-Message-ID: <20151019173523.GX20889@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 Oct 2015 19:50:57 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] package/nodejs: bump version (branch
+	yem/node)
+Message-ID: <cover.1445277033.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello All!
 
-On Mon, Oct 19, 2015 at 03:26:18PM +0200, Thomas De Schampheleire wrote:
-> On Thu, Oct 15, 2015 at 8:17 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > On Thu, Oct 15, 2015 at 04:06:39PM +0200, Thomas De Schampheleire wrote:
-> >> What about patching ltp-testsuite instead, not enabling the RPC tests
-> >> in this case? At first sight this was added with following (ltp)
-> >> commit:
-> >> https://github.com/linux-test-project/ltp/commit/8e9a4dbb8eaa561e51d6d8ebe5a5342f3e498224
-> >
-> > Isn't that what ac_cv_header_tirpc_netconfig_h=no is doing?
-> 
-> I just tried building ltp-testsuite with a no-rpc toolchain on top of
-> latest buildroot. Here is the build failure:
-> 
-> /usr/bin/make -C lib -f
-> ".../output/build/ltp-testsuite-20150420/testcases/network/rpc/basic_tests/rpc01/lib/Makefile"
-> all
-> make[7]: Entering directory
-> `.../output/build/ltp-testsuite-20150420/testcases/network/rpc/basic_tests/rpc01/lib'
-> .../output/host/usr/bin/powerpc-linux-gcc -D_LARGEFILE_SOURCE
-> -D_LARGEFILE64_SOURCE -Os -g -O2 -fno-strict-aliasing -pipe -Wall -W
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -Os -Wold-style-definition
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FORTIFY_SOURCE=2
-> -I../../../../../../include -I../../../../../../include  -c -o
-> librpc01.o librpc01.c
-> librpc01.c:19:21: fatal error: rpc/xdr.h: No such file or directory
->  #include <rpc/xdr.h>
->                      ^
-> compilation terminated.
-> make[7]: *** [librpc01.o] Error 1
-> 
-> 
-> I think my original problem (this was with a previous version of
-> ltp-testsuite) was that rpc/rpc.h was missing, but I think the bottom
-> line is the same: ltp-testsuite attempts to build RPC-related tests
-> but the necessary header files are not available.
-> 
-> My approach was to add libtirpc to the equation, which provides the
-> header files and library to make things work.
-> 
-> With your patch, libtirpc is not added, and so the header files remain
-> unavailable.
-> 
-> How do you suggest to proceed?
-> One approach is to disable the ltp tests that use rpc entirely (on top
-> of your last patch), another one is to disable only the tests that use
-> authdes_create (on top of my original patch; reverting yours).
-> Other ideas are welcome, of course.
+This series is an attempt at bumping nodejs to a newer release.
 
-The best solution seems to be fixing the root cause upstream. There was an 
-attempt by Natanael Copa in commit c0547c56dafb8e1 (Add configure option to 
-disable DES authentication) to add a --disable-authdes configure option to 
-libtirpc. There was another attempt in commit 58cd17f999 (Fix: unresolved 
-_crypt() symbols) to add a local implementation of DES. The first attempt was 
-later reverted in commit f17b44048003 (Revert commit c0547c56dafb ('Add 
-configure option to disable DES')) which also (inadvertedly?) removed 
-des_crypt.c and des_impl.c from Makefile.am. Restoring the local DES 
-implementation looks not so hard to do.
+A previous submission was made by Jaap a while back (and I had missed it
+so far, only got pointed to it on IRC lately):
+    http://lists.busybox.net/pipermail/buildroot/2015-October/thread.html#141220
 
-In the mean time I think we can replace our 
-0007-Disable-DES-authentification-support.patch with something more flexible 
-along the lines of Natanael's reverted patch.
+Yet, this patch was incomplete, and since I had already been working on
+that, here's my series now. ;-)
 
-J?rg, do you concur?
+Note that in the meantime, nodejs has also released a newer version,
+4.2.0 and then a day later 4.2.1 (because big problem?). There's nothing
+new since 4.2.1, but it is still only a week old, so I'd wait a bit to
+see if they spit out yet another bug-fix release for 4.2.x shortly...
 
-baruch
+
+Changes v1 -> v2:
+  - original sumbmisison from Jaap considered v1
+  - needs gcc >= 4.8
+  - fix architectural ARM dependencies (armv6+ *and* VFPv2)
+  - forward-port more patches from 0.12.7
+  - use .tar.xz for 4.2.x
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 94f6f5b8df4f5bd8bc5358747cbc6a82c346bec9:
+
+  shared-mime-info: bump to version 1.5 (2015-10-19 17:02:43 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/node
+
+for you to fetch changes up to 91f96e06dbe44ab711b1bb688892c31886026b59:
+
+  package/nodejs: add version 4.1.2 (2015-10-19 19:39:27 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/nodejs: fix architectural dependencies on ARM
+      package/nodejs: add version 4.1.2
+
+ ...01-Remove-dependency-on-Python-bz2-module.patch | 33 ++++++++
+ .../0002-gyp-force-link-command-to-use-CXX.patch   | 29 +++++++
+ ...hon-variable-instead-of-hardcoding-Python.patch | 88 ++++++++++++++++++++++
+ package/nodejs/4.1.2/0004-fix-arm-vfpv2.patch      | 18 +++++
+ package/nodejs/Config.in                           | 22 +++++-
+ package/nodejs/nodejs.hash                         |  3 +
+ package/nodejs/nodejs.mk                           |  4 +
+ 7 files changed, 194 insertions(+), 3 deletions(-)
+ create mode 100644 package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch
+ create mode 100644 package/nodejs/4.1.2/0002-gyp-force-link-command-to-use-CXX.patch
+ create mode 100644 package/nodejs/4.1.2/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+ create mode 100644 package/nodejs/4.1.2/0004-fix-arm-vfpv2.patch
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
