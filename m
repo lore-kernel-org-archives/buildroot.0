@@ -1,41 +1,55 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 19 Oct 2015 10:33:56 -0300
-Subject: [Buildroot] [PATCH 1/3] shared-mime-info: bump to version 1.5
-Message-ID: <1445261638-14634-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 19 Oct 2015 10:33:57 -0300
+Subject: [Buildroot] [PATCH 2/3] libnfs: bump to version 1.9.8
+In-Reply-To: <1445261638-14634-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1445261638-14634-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1445261638-14634-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Prerequisite for the gvfs 1.26.1.1 bump.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/shared-mime-info/shared-mime-info.hash | 2 +-
- package/shared-mime-info/shared-mime-info.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libnfs/libnfs.hash | 2 ++
+ package/libnfs/libnfs.mk   | 8 +++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+ create mode 100644 package/libnfs/libnfs.hash
 
-diff --git a/package/shared-mime-info/shared-mime-info.hash b/package/shared-mime-info/shared-mime-info.hash
-index cd237dd..170c672 100644
---- a/package/shared-mime-info/shared-mime-info.hash
-+++ b/package/shared-mime-info/shared-mime-info.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	52c9f84a8c72de631a0458542980b1728560f59845eb5e93e1dbe825f4b72304	shared-mime-info-0.90.tar.bz2
-+sha256	d6412840eb265bf36e61fd7b6fc6bea21b0f58cb22bed16f2ccccdd54bea4180	shared-mime-info-1.5.tar.xz
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index 80a9526..2892344 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+new file mode 100644
+index 0000000..14d304f
+--- /dev/null
++++ b/package/libnfs/libnfs.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	e95af693e763a504eee72dacf3dc6c1001d83e40b807e7e1d0be2eaf48af779c	libnfs-libnfs-1.9.8.tar.gz
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index fb95e21..40d5ceb 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SHARED_MIME_INFO_VERSION = 0.90
--SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.bz2
-+SHARED_MIME_INFO_VERSION = 1.5
-+SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.xz
- SHARED_MIME_INFO_SITE = http://freedesktop.org/~hadess
- SHARED_MIME_INFO_INSTALL_STAGING = YES
- SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
+-LIBNFS_VERSION = libnfs-1.9.5
++LIBNFS_VERSION = libnfs-1.9.8
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
+@@ -17,4 +17,10 @@ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ LIBNFS_DEPENDENCIES += libtirpc
+ endif
+ 
++# Needed for autoreconf
++define LIBNFS_MAKE_M4_DIR
++	mkdir $(@D)/m4
++endef
++LIBNFS_POST_EXTRACT_HOOKS += LIBNFS_MAKE_M4_DIR
++
+ $(eval $(autotools-package))
 -- 
 2.4.10
