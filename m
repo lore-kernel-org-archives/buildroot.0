@@ -1,55 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 19 Oct 2015 22:33:36 +0200
-Subject: [Buildroot] [git commit] board/boundarydevices: update
-	6x_bootscript to use zImage
-Message-ID: <20151019203344.6C4A97FDA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] nitrogen6*_defconfig: bump u-boot and
+	kernel revisions
+Message-ID: <20151019203344.8AA4681E89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2367a9966185af44efe6baa0cc68bb4989c0901c
+commit: http://git.buildroot.net/buildroot/commit/?id=5e51be2ecc68f9f0cc60eb7caa2ae25afd4ae411
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As suggested by Thomas:
-http://lists.busybox.net/pipermail/buildroot/2015-September/139884.html
+This update brings several improvements such as:
+- switch to a generic Boundary defconfig
+  - same across all the Boundary Devices platforms
+- support of HDMI to MIPI daugther board
+https://boundarydevices.com/product/bd_hdmi_mipi/
+- enhanced display support
+  - LCD ASIT500MA6F5D
+  - LCD A030JN01
+  - HDMI 480p
+
+For a complete list of changes:
+https://github.com/boundarydevices/linux-imx6/commits/d7a412b
+https://github.com/boundarydevices/u-boot-imx6/commits/a4070a8
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/boundarydevices/nitrogen6x/6x_bootscript.txt |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ configs/nitrogen6sx_defconfig |    6 +++---
+ configs/nitrogen6x_defconfig  |    6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/board/boundarydevices/nitrogen6x/6x_bootscript.txt b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
-index 694a9b6..4a9be0b 100644
---- a/board/boundarydevices/nitrogen6x/6x_bootscript.txt
-+++ b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
-@@ -1,7 +1,7 @@
- setenv bootargs ''
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 3cdf41b..3670798 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -23,14 +23,14 @@ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2015.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/5115a9e/u-boot-5115a9e.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/a4070a8/u-boot-a4070a8.tar.gz"
  
- a_script=0x10800000
--a_uImage=0x10800000
-+a_zImage=0x10800000
- a_fdt=0x13000000
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_3.14.28_1.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/3417c66/linux-imx6-3417c66.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/d7a412b/linux-imx6-d7a412b.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index cffbc25..979bf09 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -23,14 +23,14 @@ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2015.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/5115a9e/u-boot-5115a9e.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/a4070a8/u-boot-a4070a8.tar.gz"
  
- setenv initrd_high 0xffffffff
-@@ -20,7 +20,7 @@ if itest.s "x" == "x${dtbname}" ; then
- 			dtbname=imx6sx-${board}-m4.dtb;
- 		fi
- 		a_script=0x80800000
--		a_uImage=0x80800000
-+		a_zImage=0x80800000
- 		a_fdt=0x83000000
- 	else
- 		dtbname=imx6q-${board}.dtb;
-@@ -125,7 +125,7 @@ if itest.s "x" != "x${show_env}" ; then
- 	printenv
- fi
- 
--if load ${dtype} ${disk}:${bootpart} ${a_uImage} ${bootdir}/uImage ; then
--	bootm ${a_uImage} - ${a_fdt}
-+if load ${dtype} ${disk}:${bootpart} ${a_zImage} ${bootdir}/zImage ; then
-+	bootz ${a_zImage} - ${a_fdt}
- fi
- echo "Error loading kernel image"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_3.14.28_1.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/3417c66/linux-imx6-3417c66.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/d7a412b/linux-imx6-d7a412b.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
