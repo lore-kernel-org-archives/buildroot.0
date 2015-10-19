@@ -1,68 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 19 Oct 2015 21:23:48 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/ffmpeg: Add support for
-	GnuTLS
-References: <1445110736-1663-1-git-send-email-bernd.kuhls@t-online.de>
- <20151018154530.06efcfb9@free-electrons.com>
-Message-ID: <4jsffcxklv.ln2@ID-313208.user.individual.net>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 19 Oct 2015 17:29:26 -0200 (BRST)
+Subject: [Buildroot] [PATCH 4/5] gtest: Upgrade to GitHub HEAD
+In-Reply-To: <561ED08C.5010301@softiron.co.uk>
+References: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
+ <1444859483-2268-5-git-send-email-alan@softiron.co.uk>
+ <20151014235522.774491e2@free-electrons.com>
+ <561ED08C.5010301@softiron.co.uk>
+Message-ID: <1629967145.779413.1445282966636.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello, Thomas and Alan,
 
-Am Sun, 18 Oct 2015 15:45:30 +0200 schrieb Thomas Petazzoni:
+> From: "Alan Ott" <alan@softiron.co.uk>
+> To: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> Cc: buildroot at buildroot.org
+> Sent: Wednesday, October 14, 2015 7:00:44 PM
+> Subject: Re: [Buildroot] [PATCH 4/5] gtest: Upgrade to GitHub HEAD
 
-> # OpenSSL license is not compatible with the LGPL license of ffmpeg.
-> else ifeq ($(BR2_PACKAGE_OPENSSL):$(BR2_PACKAGE_FFMPEG_GPL)
-$(BR2_PACKAGE_FFMPEG_NONFREE),y::y)
-> FFMPEG_CONF_OPTS += --enable-openssl
-> FFMPEG_DEPENDENCIES += openssl
-> else
-> FFMPEG_CONF_OPTS += --disable-gnutls --disable-openssl
-> endif
+> On 10/14/2015 05:55 PM, Thomas Petazzoni wrote:
+>> On Wed, 14 Oct 2015 17:51:22 -0400, Alan Ott wrote:
+>>
+>>> +# The above revision must remain the same as the gmock package
+>>> +GTEST_SITE = $(call github,google,googletest,$(GTEST_VERSION))
+>>>   GTEST_INSTALL_STAGING = YES
+>>>   GTEST_INSTALL_TARGET = NO
+>>>   GTEST_LICENSE = BSD-3c
+>>>   GTEST_LICENSE_FILES = LICENSE
+>>> +GTEST_SUBDIR = googletest
+>> So gtest and gmock are in fact now part of the same repository/upstream
+>> project ? If that's the case, then I think we should simply get rid of
+>> the gtest and gmock packages, and have a single package named
+>> "googletest".
+
+What about applying the submitted patches now, to fix the repository, and a different patch later to create the "googletest" package?
+
+> Yes, that would probably be better. gmock depends on gtest, and gtest
+> can be standalone. Maybe we have one package with a submenu option to
+> build each target (and a dependency so gmock selects gtest).
 > 
-> I think it is functionally equivalent, but much nicer to read. If you
-> agree (and the above works), can you send a patch doing this?
+> Is that ok by you?
+> 
+> Alan.
 
-your code does not duplicate the logic of ffmpeg configure. In your 
-proposal the following settings are required for OpenSSL support:
+Do you need any help to do this?
 
-	BR2_PACKAGE_FFMPEG_GPL		disabled
-	BR2_PACKAGE_FFMPEG_NONFREE	enabled
-
-This is one of three valid combinations, ffmpeg configure also
-accepts these combinations for OpenSSL support:
-
-	BR2_PACKAGE_FFMPEG_GPL		disabled
-	BR2_PACKAGE_FFMPEG_NONFREE	disabled
-and
-	BR2_PACKAGE_FFMPEG_GPL		enabled
-	BR2_PACKAGE_FFMPEG_NONFREE	enabled
-
-because in
-
-http://git.videolan.org/?
-p=ffmpeg.git;a=blob;f=configure;h=7f9fed31a491ed0991aee2d354dba82e54e3291e;hb=refs/
-heads/release/2.8#l4664
-
-the following code line
-
-enabled gpl && die_license_disabled_gpl nonfree openssl
-
-checks whether --enable-gpl was issued and breaks only if --enable-
-nonfree is not used at the same time like in the third example.
-
-If --enable-gpl is not used, like in the first and second example, there 
-will be no OpenSSL-related license checks during ffmpeg configure.
-
-In other words: You can enable gpl-only code in ffmpeg along with OpenSSL 
-support if you do not re-distribute the resulting binaries. If you do not 
-enable gpl-only code you can do what you want regarding OpenSSL ;)
-
-I am a bit lost atm trying to mirror this logic in an optimized form in 
-package/ffmpeg/ffmpeg.mk as requested, sorry.
-
-Regards, Bernd
+Carlos Santos (Casantos)
+DATACOM, P&D
