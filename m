@@ -1,28 +1,49 @@
-From: Charles Duffy <charles@dyfis.net>
-Date: Mon, 19 Oct 2015 20:44:30 +0000
-Subject: [Buildroot] [PATCH v3 1/1] nwipe: new package
-In-Reply-To: <20151017211352.GD32247@free.fr>
-References: <1445114199-14261-1-git-send-email-charles@dyfis.net>
- <20151017211352.GD32247@free.fr>
-Message-ID: <CAEHm_si6eCN38v7ffgSZJwngc+JiZ9hoxQ4sY=1tKPsWOefccQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 Oct 2015 22:44:51 +0200
+Subject: [Buildroot] [PATCH 2/2 v2] package/nodejs: add version 4.1.2
+In-Reply-To: <20151019223759.104d9e82@free-electrons.com>
+References: <cover.1445277033.git.yann.morin.1998@free.fr>
+ <91f96e06dbe44ab711b1bb688892c31886026b59.1445277033.git.yann.morin.1998@free.fr>
+ <20151019223038.6346f115@free-electrons.com>
+ <20151019203543.GD3651@free.fr>
+ <20151019223759.104d9e82@free-electrons.com>
+Message-ID: <20151019204451.GE3651@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> > +NWIPE_VERSION = 0.17
->
-> You should probably use the latest commit. 0.17 is more than one-year
-> old, and there have been a few fixes applied to the tree since then.
+Thomas, All,
 
+On 2015-10-19 22:37 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 19 Oct 2015 22:35:43 +0200, Yann E. MORIN wrote:
+> > > ... and compare it to the patch. You're no longer importing bz2
+> > > anywhere. Look at the same patch for 0.10 and 0.12, it is importing the
+> > > bz2 module, just conditionally.
+> > 
+> > ACK, I'll fix that commit log.
+> 
+> So the bz2 import is no longer needed at all?
 
-In v4, I moved to 8a9a71822148cb9c82d971030dafd8d374fd1f48, which appeared
-to be the latest commit -- but, looking back on it, I realize that this
-changeset is even with the 0.17 tag!
+Nope. The build goes OK without it.
 
-Am I missing a development branch elsewhere?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151019/d5f5d4cb/attachment.html>
+> > > We should maybe also upstream our nodejs patches... But that's a
+> > > separate work.
+> > I can take a shot at that...
+> Would be good, but it is definitely not mandatory to get your patch
+> accepted, of course.
+
+Understood, but I'll try nonetheless (some of those patches are probably
+easy to sneak in, liek the bz2 one).
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
