@@ -1,42 +1,47 @@
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Mon, 19 Oct 2015 09:51:17 +0200
-Subject: [Buildroot] What environment do I need for event input?
-In-Reply-To: <11e8982a7594f3e29171373bc8a2b26@cweb29.nm.nhnsystem.com>
-References: <11e8982a7594f3e29171373bc8a2b26@cweb29.nm.nhnsystem.com>
-Message-ID: <5624A0F5.4010304@green-communications.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Oct 2015 09:56:26 +0200
+Subject: [Buildroot] [PATCHv2] inadyn: fix init script and default
+	config file
+In-Reply-To: <1445090722-4297-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 17 Oct 2015 16:05:22 +0200")
+References: <1445090722-4297-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87k2qj8f6d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/10/2015 01:31, Jay wrote:
-> I need "/dev/input/event*" for irda remote controler.
-> ?I tested kernel 4.1.7 and buildroot 2015.08.1.  
-> ?Of course, on custon kernel configuration, I enabled "Device Drivers --&gt; Input device suppor --&gt; Event interface"
-> ?I have tested budilroot system configuration. ie) like these combinations 
-> ?Init system ("systemd") /dev managaement (auto selected with udev)
-> ?Init system ("Busybox") /dev management ("Dynamic using devtmpfs only")
-> ?Init system ("Busybox") /dev management ("Dynamic using mdev")
-> ?Init system ("Busybox") /dev management ("Dynamic using eudev")
-> ? 
-> ?And, Init system ("Busybox") /dev management ("Static using device table")
-> ?In case of using "Static device table", in directory of "output/taget/dev/input/" exists,  
-> ?but, on target system still does not show.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Are you sure your evdev devices are detected ? is /sys/class/input empty ?
+Hi,
 
-If it isn't empty, you can still read the available evdev devices in
-/sys/class/input and creates these nodes manually:
+ > Changes since v1:
 
-mkdir -m 660 -p /dev/input
-for dev in /sys/class/input/*/dev; do
-    if [ ! -f "$dev" ]; then
-        echo "no evdev devices"
-        break
-    fi
-    IFS=: read major minor < "$dev"
-    dev=${dev%/dev}
-    dev=${dev#/sys/class/input/}
-    mknod -m 660 "/dev/input/$dev" c "$major" "$minor"
-done
+ >  * Store PID file in /var/run/inadyn.pid instead of
+ >    /var/run/inadyn/inadyn.pid.
+
+ >  * Use the background functionality of start-stop-daemon instead of
+ >    the one of inadyn itself (suggested by Gustavo)
+
+Didn't Gustavoz suggest the opposite? E.G. to use the inadyn option to
+force the background mode on, independently of what the config file
+states?
+
+I also see that you are not passing the --syslog option to inadyn, so
+log messages go to stdout (which start-stop-daemon redirects to
+/dev/null) :/
+
+> +++ b/package/inadyn/inadyn.conf
+ > @@ -1,11 +1,11 @@
+ >  # Basic configuration file for inadyn
+ >  #
+ >  # /etc/inadyn.conf
+ > -background
+ > +pidfile /var/run/inadyn.pid
+
+We should instead use the --pidfile inadyn command line option to
+force this as we _REQUIRE_ this for start-stop-daemon.
+
+-- 
+Bye, Peter Korsgaard
