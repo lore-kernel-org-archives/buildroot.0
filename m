@@ -1,57 +1,34 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 19 Oct 2015 12:22:30 +0200
-Subject: [Buildroot] [PATCH] package/skeleton: add a startup script to
-	wait for slow network interfaces
-In-Reply-To: <87a8rf88qb.fsf@dell.be.48ers.dk>
-References: <1443879105-3036-1-git-send-email-yann.morin.1998@free.fr>
- <4678408.ifdbXGka0U@sagittea> <87a8rf88qb.fsf@dell.be.48ers.dk>
-Message-ID: <2221288.gAOZtpqjeu@sagittea>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 19 Oct 2015 12:42:08 +0200
+Subject: [Buildroot] [PATCH 1/2] jq: disable maintainer mode
+Message-ID: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 19 October 2015 12:15:40 Peter Korsgaard wrote:
-> >>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
-> Hi,
-> 
-> > I am a bit late to do the review, but why not add a script in
-> > 
->  > /etc/network/if-pre-up.d ? For example (notice $IFACE and
->  > $IF_MAXWAIT
->  > are set by ifupdown):
->  > 
->  > #! /bin/sh
->  > if [ "${IF_MAXWAIT}" ]; then
->  > 
->  >     printf "Waiting for interface %s to appear" "${IFACE}"
->  >     while [ ${IF_MAXWAIT} -gt 0 ]; do
->  >     
->  >         if [ -e "/sys/class/net/${IFACE}" ]; then
->  >         
->  >             printf " yes\n"
->  >             exit 0
->  >         
->  >         fi
->  >         sleep 1
->  >         printf "."
->  >         
->  >         : $((wait--))
->  >     
->  >     done
->  >     printf " no.\n"
->  >     exit 1
->  > 
->  > fi
-> 
-> That's certainly also an option. Care to send a patch reworking the
-> logic in S40network to a pre-up.d hook?
-Ok, I will.
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
+Since version 1.5, maintainer mode is enabled by default. We don't need
+this, and is in particular problematic because it requires bison 3.0.
 
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ package/jq/jq.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index dd13276..8053e39 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -12,4 +12,7 @@ JQ_LICENSE_FILES = COPYING
+ # uses c99 specific features
+ JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+ 
++# jq explicitly enables maintainer mode, which we don't need/want
++JQ_CONF_OPTS += --disable-maintainer-mode
++
+ $(eval $(autotools-package))
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+1.9.5
