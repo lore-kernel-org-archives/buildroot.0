@@ -1,37 +1,45 @@
-From: Charles Duffy <charles@dyfis.net>
-Date: Thu, 15 Oct 2015 10:27:18 -0500
-Subject: [Buildroot] [PATCH 1/1] musl: Make only shared libraries conditional
-Message-ID: <1444922838-16841-1-git-send-email-chaduffy@cisco.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 19 Oct 2015 09:18:03 -0300
+Subject: [Buildroot] [PATCH] less: bump to version 481
+Message-ID: <1445257083-32598-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Charles Duffy <charles@dyfis.net>
+Switch site to gnu mirror since the stable releases are mirrored there.
+Also use gpg sig to calclate hash, from the gnu mirror.
 
-External toolchain use requires a static libc (as buildroot uses
-`gcc --print-file-name libc.a` to find the sysroot); thus, the static portion
-of a musl build should not be conditional.
-
-Signed-off-by: Charles Duffy <chaduffy@cisco.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/musl/musl.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/less/less.hash | 4 ++--
+ package/less/less.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index f0c45f5..2f43aab 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -29,7 +29,8 @@ define MUSL_CONFIGURE_CMDS
- 			--prefix=/usr \
- 			--libdir=/lib \
- 			--disable-gcc-wrapper \
--			$(SHARED_STATIC_LIBS_OPTS))
-+			--enable-static \
-+			$(if $(BR2_STATIC_LIBS),--disable-shared,--enable-shared))
- endef
+diff --git a/package/less/less.hash b/package/less/less.hash
+index b1a227e..eea201d 100644
+--- a/package/less/less.hash
++++ b/package/less/less.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256	e536c7819ede54b3d487f0ffc4c14b3620bed83734d92a81e89f62346db0fcac	less-458.tar.gz
++# Locally calculated after checking pgp signature
++sha256	3fa38f2cf5e9e040bb44fffaa6c76a84506e379e47f5a04686ab78102090dda5	less-481.tar.gz
+diff --git a/package/less/less.mk b/package/less/less.mk
+index 39ef395..c217543 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- define MUSL_BUILD_CMDS
+-LESS_VERSION = 458
+-LESS_SITE = http://www.greenwoodsoftware.com/less
++LESS_VERSION = 481
++LESS_SITE = $(BR2_GNU_MIRROR)/less
+ LESS_LICENSE = GPLv3+
+ LESS_LICENSE_FILES = COPYING
+ # Build after busybox, full-blown is better
 -- 
-2.0.0
+2.4.9
