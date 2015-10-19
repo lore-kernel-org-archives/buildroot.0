@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Oct 2015 22:59:35 +0200
-Subject: [Buildroot] [PATCH 1/1] feh: bump to version 2.14
-In-Reply-To: <1445288065-5908-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1445288065-5908-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20151019225935.7eaa0635@free-electrons.com>
+Date: Mon, 19 Oct 2015 22:59:32 +0200
+Subject: [Buildroot] [git commit] package/swupdate: add hash file
+Message-ID: <20151019210113.94CC781D31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+commit: http://git.buildroot.net/buildroot/commit/?id=2711b2a65883c55a2cec7a8c5504f59750170769
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 19 Oct 2015 16:54:25 -0400, James Knight wrote:
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> ---
->  package/feh/feh.hash | 2 +-
->  package/feh/feh.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/swupdate/swupdate.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+new file mode 100644
+index 0000000..6d69d66
+--- /dev/null
++++ b/package/swupdate/swupdate.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	1410f8967aad0f4d3b4561110dbfb2c1f8e337bdc332f6b120f4995762c8bf6b  swupdate-2015.07.tar.gz
