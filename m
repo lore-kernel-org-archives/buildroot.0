@@ -1,40 +1,111 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Oct 2015 23:35:49 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/nodejs: add version 4.1.2
-In-Reply-To: <1445290295.12260.2.camel@embedded.rocks>
-References: <cover.1445277033.git.yann.morin.1998@free.fr>
- <91f96e06dbe44ab711b1bb688892c31886026b59.1445277033.git.yann.morin.1998@free.fr>
- <1445290295.12260.2.camel@embedded.rocks>
-Message-ID: <20151019213549.GI3651@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 19 Oct 2015 23:36:23 +0200
+Subject: [Buildroot] [PATCH 1/4] mkpimage: new host package
+In-Reply-To: <20151019232451.099df4e3@jvn>
+References: <1445271894-22553-1-git-send-email-viktorin@rehivetech.com>
+ <1445271894-22553-2-git-send-email-viktorin@rehivetech.com>
+ <CAGduivyRx81uOHiT=JVj2=1iUw9jCQhgxUbqAxBJR0Wu9GVVtg@mail.gmail.com>
+ <20151019225310.5cf90a28@free-electrons.com> <20151019210610.GG3651@free.fr>
+ <CAGduivxMZixMLiWcT4UoCf_iQ8soA9zYKtJ2XrkxCn+9exS7Eg@mail.gmail.com>
+ <20151019232451.099df4e3@jvn>
+Message-ID: <CAGduivygV76CehcmUM+TvU=wkWvqbL23zp9k2Y5yaPqJpUBZbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2015-10-19 23:31 +0200, J?rg Krause spake thusly:
-> On Mo, 2015-10-19 at 19:51 +0200, Yann E. MORIN wrote:
-> > We add a new version, because it is not API-compatible with the
-> > pervious
-> > versions.
-> previous? :-)
+Jan, all
 
-That was vicious. ;-)
-Fixed, thanks.
+On Mon, Oct 19, 2015 at 11:24 PM, Jan Viktorin <viktorin@rehivetech.com>
+wrote:
 
-> > Also, 4.1.2 requires gcc >= 4.8.
-> I tried with a gcc 4.8 toolchain and it compiles without any errors.
+> Hello all,
+>
+> thank you for your interest...
+>
+> On Mon, 19 Oct 2015 23:12:21 +0200
+> Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
+>
+>  [-SNIP-]
 
-Yes, I tries with gcc-4.7 and it breaks, while it builds with gcc-4.8.
-Thanks for the confirmation. :-)
+>
+> > > > I agree. Unfortunately, downloading directly
+> > > >
+> > >
+> http://git.pengutronix.de/?p=barebox.git;a=blob_plain;f=scripts/socfpga_mkimage.c;h=$(MKPIMAGE_VERSION);hb=HEAD
+> > > > doesn't work because this URL contains ';' which our download
+> > > > infrastructure doesn't like much.
+> > > >
+> > > > However, this program is so simple that I would advocate taking the
+> > > > makedevs route: simply integrate the program source code itself
+> inside
+> > > > Buildroot, in package/mkpimage/.
+> > >
+> > > Yup, agreed.
+>
+> Agreed. my intention was more like to tell the user: "install your own
+> Go compiler to use this".
+>
+> > >
+> > Agreed too, I'll send the current package that I have that does just
+> that.
+> > Jan: I'll put you in CC so if you want to work with it/on it, feel free !
+>
+> Great!
+>
+> By the way, there is still the fundamental question. Is the mkpimage
+> really necessary? I can boot the Altera SoC Development Kit without
+> running it. What is the value of doing that? Does it support the secure
+> boot sequence? Does it depend on some DIP switch on the board?
+>
+As far I can remember you can't boot the SoCFPGA without the SPL being
+"signed" (which is really a simple header with a CRC and some padding so it
+fits a precise size).
+I'm curious how you made one boot without this as per Altera's
+documentation the Boot ROM needs it. Note that in Qsys, it's already done
+in their various scripts, so if you build U-Boot that way, it's done for
+you.
+There's no real added value as far as I could tell, the SoC needs it,
+that's all. And there's no DIP switch which helps you configure that on the
+dev kit. I don't think you can configure it. You have to do it and that's
+pretty much it.
 
-Regards,
-Yann E. MORIN.
+>
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Jan
+>
+> >
+> > >
+> > > Regards,
+> > > Yann E. MORIN.
+> > >
+> > > --
+> > >
+> > >
+> .-----------------.--------------------.------------------.--------------------.
+> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> > > conspiracy: |
+> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+> > >      |
+> > > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/
+> There
+> > > is no  |
+> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+> > >  conspiracy.  |
+> > >
+> > >
+> '------------------------------^-------^------------------^--------------------'
+> > >
+>
+>
+>
+> --
+>   Jan Viktorin                E-mail: Viktorin at RehiveTech.com
+>   System Architect            Web:    www.RehiveTech.com
+>   RehiveTech
+>   Brno, Czech Republic
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151019/2fd82c56/attachment-0001.html>
