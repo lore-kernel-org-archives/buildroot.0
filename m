@@ -1,48 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 19 Oct 2015 11:10:25 +0200
-Subject: [Buildroot] [PATCH] toolchain: create symlink to 'lib' from
- ARCH_LIB_DIR iso fixed lib32/lib64
-In-Reply-To: <1445245676-21017-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1445245676-21017-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LWqHebb_JfCONXtG7=qt8HxQ+3u=hBBuBp-UyiSraf2hw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Oct 2015 12:15:40 +0200
+Subject: [Buildroot] [PATCH] package/skeleton: add a startup script to
+	wait for slow network interfaces
+In-Reply-To: <4678408.ifdbXGka0U@sagittea> (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Mon, 19 Oct 2015 10:47:10 +0200")
+References: <1443879105-3036-1-git-send-email-yann.morin.1998@free.fr>
+ <4678408.ifdbXGka0U@sagittea>
+Message-ID: <87a8rf88qb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 19, 2015 at 11:07 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> Currently, following symbolic links are created in both target and
-> staging directories:
-> - lib(32|64) --> lib
-> - usr/lib(32|64) --> lib
->
-> The decision for lib32 or lib64 is based on the target architecture
-> configuration in buildroot (BR2_ARCH_IS_64).
->
-> In at least one case this is not correct: when building for a Cavium Octeon
-> III processor using the toolchain from the Cavium Networks SDK, and
-> specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
-> in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
->
-> More generally, for external toolchains, the correct symbolic link is
-> from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
-> toolchains always use either lib32 or lib64.
->
-> Fix the problem as follows:
-> - create a symlink creation helper in toolchain/helpers.mk
-> - for external toolchains, call these helpers based on ARCH_LIB_DIR
-> - for internal toolchains, call these helpers based on the existing
->   fixed lib32/lib64 logic, moved from Makefile into gcc-initial.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
-> v6: rebase only
->     No feedback on v5, last discussion was on v4, see
->     http://lists.busybox.net/pipermail/buildroot/2015-July/132978.html
+>>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
 
-Sorry that I forgot to add 'v6' in the subject-prefix.
+Hi,
+
+> I am a bit late to do the review, but why not add a script in 
+ > /etc/network/if-pre-up.d ? For example (notice $IFACE and $IF_MAXWAIT 
+ > are set by ifupdown):
+
+ > #! /bin/sh
+ > if [ "${IF_MAXWAIT}" ]; then
+ >     printf "Waiting for interface %s to appear" "${IFACE}"
+ >     while [ ${IF_MAXWAIT} -gt 0 ]; do
+ >         if [ -e "/sys/class/net/${IFACE}" ]; then
+ >             printf " yes\n"
+ >             exit 0
+ >         fi
+ >         sleep 1
+ >         printf "."
+ >         : $((wait--))
+ >     done
+ >     printf " no.\n"
+ >     exit 1
+ > fi
+
+That's certainly also an option. Care to send a patch reworking the
+logic in S40network to a pre-up.d hook?
+
+ > Next, interface would use "maxwait" property in /etc/network/interface:
+
+ > auto eth0
+ > iface eth0 inet dhcp
+ >     maxwait 15
+
+Then our BR2_SYSTEM_DHCP logic should probably also be adapted to add
+'maxwait 15' by default.
+
+Thanks!
+
+-- 
+Bye, Peter Korsgaard
