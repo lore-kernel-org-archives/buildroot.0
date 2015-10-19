@@ -1,42 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Oct 2015 22:41:54 +0200
-Subject: [Buildroot] [PATCH 2/2] xdriver_xf86-video-intel: add upstream
- patch fixing libdrm/kernel crash
-In-Reply-To: <1445275224-3928-2-git-send-email-james.knight@rockwellcollins.com>
-References: <1445275224-3928-1-git-send-email-james.knight@rockwellcollins.com>
- <1445275224-3928-2-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20151019224154.153ee1c5@free-electrons.com>
+From: Charles Duffy <charles@dyfis.net>
+Date: Mon, 19 Oct 2015 20:44:30 +0000
+Subject: [Buildroot] [PATCH v3 1/1] nwipe: new package
+In-Reply-To: <20151017211352.GD32247@free.fr>
+References: <1445114199-14261-1-git-send-email-charles@dyfis.net>
+ <20151017211352.GD32247@free.fr>
+Message-ID: <CAEHm_si6eCN38v7ffgSZJwngc+JiZ9hoxQ4sY=1tKPsWOefccQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+>
+> > +NWIPE_VERSION = 0.17
+>
+> You should probably use the latest commit. 0.17 is more than one-year
+> old, and there have been a few fixes applied to the tree since then.
 
-On Mon, 19 Oct 2015 13:20:24 -0400, James Knight wrote:
-> When running this Intel driver with a newer libdrm/kernel (4.x), Xorg
-> can crash (segmentation fault).
-> 
-> References:
->  http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/commit/?id=7fe2b2948652443ff43d907855bd7a051d54d309
->  https://bugs.gentoo.org/show_bug.cgi?id=552124
->  https://bugzilla.opensuse.org/show_bug.cgi?id=931917
-> 
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> ---
->  .../0003-sna-libdrm-abi-protection.patch           | 65 ++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 package/x11r7/xdriver_xf86-video-intel/0003-sna-libdrm-abi-protection.patch
 
-Applied with some tweaks:
+In v4, I moved to 8a9a71822148cb9c82d971030dafd8d374fd1f48, which appeared
+to be the latest commit -- but, looking back on it, I realize that this
+changeset is even with the 0.17 tag!
 
-    [Thomas:
-      - add upstream link to the git commits in the patches themselves
-      - add James SoB line inside the patches themselves]
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Am I missing a development branch elsewhere?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151019/d5f5d4cb/attachment.html>
