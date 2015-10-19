@@ -1,32 +1,24 @@
-From: Vincent =?iso-8859-1?Q?Stehl=E9?= <vincent.stehle@freescale.com>
-Date: Mon, 19 Oct 2015 15:45:33 +0200
-Subject: [Buildroot] [PATCH V4] sdl2: new package
-In-Reply-To: <55AAA19F.60905@openwide.fr>
-Message-ID: <20151019134532.GA12643@laptop-vstehle>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Oct 2015 16:45:15 +0200
+Subject: [Buildroot] [PATCH] less: bump to version 481
+In-Reply-To: <1445257083-32598-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 19 Oct 2015 09:18:03 -0300")
+References: <1445257083-32598-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zize7w90.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guillaume and Romain,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Thank you for your effort on this nice sdl2 buildroot patch. I hope you
-are still working on it.
+ > Switch site to gnu mirror since the stable releases are mirrored there.
+ > Also use gpg sig to calclate hash, from the gnu mirror.
 
-While trying v5 of the path recently, as found in buildroot patchwork, I
-needed to add the following line to sdl2.mk:
+s/calclate/calculate/
 
-	SDL2_CONFIG_SCRIPTS = sdl2-config
+Committed, thanks.
 
-Without this line, the include path returned by `sdl2-config --cflags`
-will be something like /usr/include/SDL2, instead of pointing to the
-buildroot staging dir.
-
-You might want to add it to a v6, maybe?
-
-Apart from that, it works fine for me, thanks!
-
-Best regards,
-
-V.
+-- 
+Bye, Peter Korsgaard
