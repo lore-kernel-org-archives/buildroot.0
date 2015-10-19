@@ -1,95 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Oct 2015 00:19:36 +0200
-Subject: [Buildroot] [git commit] ntp: add ntptime option
-Message-ID: <20151019222225.881257FA90@busybox.osuosl.org>
+From: logos <logos.rsw@gmail.com>
+Date: Mon, 19 Oct 2015 15:45:41 -0700 (PDT)
+Subject: [Buildroot] buildroot inittab getty
+Message-ID: <1445294741948-115526.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c6629444dab52649b17a73dbd978c959f7d6b3c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Allow the `ntptime` utility to be included on a target.
+I am a newbie here.
+I had a question today and I tried find the answer in this forum.
+Failed apparently.
+So I decided to post it here.
 
-[Peter: add comment why AUTORECONF is needed]
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ntp/0002-ntp-syscalls-fallback.patch |   27 ++++++++++++++++++++++++++
- package/ntp/Config.in                        |    6 +++++
- package/ntp/ntp.mk                           |    3 ++
- 3 files changed, 36 insertions(+), 0 deletions(-)
+Buildroot version that I am using is "2015.02, Released March 1st, 2015"
 
-diff --git a/package/ntp/0002-ntp-syscalls-fallback.patch b/package/ntp/0002-ntp-syscalls-fallback.patch
-new file mode 100644
-index 0000000..535fc93
---- /dev/null
-+++ b/package/ntp/0002-ntp-syscalls-fallback.patch
-@@ -0,0 +1,27 @@
-+inline ntp syscalls fallback
-+
-+Reference:
-+ https://bugs.ntp.org/show_bug.cgi?id=769
-+
-+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1523,11 +1523,11 @@ AC_CACHE_CHECK(
-+     [ntp_cv_var_ntp_syscalls],
-+     [
-+ 	ntp_cv_var_ntp_syscalls=no
-+-	case "$ac_cv_func_ntp_adjtime$ac_cv_func_ntp_gettime$ac_cv_func___adjtimex" in
-++	case "$ac_cv_func_ntp_adjtime$ac_cv_func_ntp_gettime$ac_cv_func___adjtimex$ac_cv_func_adjtimex" in
-+ 	 yesyes*)
-+ 	    ntp_cv_var_ntp_syscalls=libc
-+ 	    ;;
-+-	 *yes)
-++	 *yesyes | *yesno | *noyes)
-+ 	    ntp_cv_var_ntp_syscalls=inline
-+ 	    ;;
-+ 	 *)
-diff --git a/package/ntp/Config.in b/package/ntp/Config.in
-index d4caddf..1763225 100644
---- a/package/ntp/Config.in
-+++ b/package/ntp/Config.in
-@@ -67,6 +67,12 @@ config BR2_PACKAGE_NTP_NTPSNMPD
- 	help
- 	  Install ntpsnmpd NTP SNMP MIB agent.
- 
-+config BR2_PACKAGE_NTP_NTPTIME
-+	bool "ntptime"
-+	help
-+	  The ntptime utility program is used to read and set kernel time
-+	  variables.
-+
- config BR2_PACKAGE_NTP_NTPTRACE
- 	bool "ntptrace"
- 	depends on BR2_PACKAGE_PERL
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 5997247..863717e 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -17,6 +17,8 @@ NTP_CONF_OPTS = \
- 	--disable-tickadj \
- 	--with-yielding-select=yes \
- 	--disable-local-libevent
-+# 0002-ntp-syscalls-fallback.patch
-+NTP_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NTP_CONF_OPTS += --with-crypto
-@@ -46,6 +48,7 @@ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDC) += ntpdc/ntpdc
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPQ) += ntpq/ntpq
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPSNMPD) += ntpsnmpd/ntpsnmpd
-+NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTIME) += util/ntptime
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTRACE) += scripts/ntptrace/ntptrace
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_SNTP) += sntp/sntp
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_TICKADJ) += util/tickadj
+In buildroot menuconfig, I didn't choose "Run a getty (login prompt) after
+boot",
+but in my output/target/etc/inittab, I have this line,
+ttyS3::respawn:/sbin/getty -L  ttyS3 57600 vt100 # GENERIC_SERIAL
+
+system/skeleton/etc/inittab shows,
+#ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+
+1. How can this happen? Why is the line uncommented?
+FYI, in my .config file I have
+# BR2_TARGET_GENERIC_GETTY is not set
+
+2. Why tty port has changed from ttyS0 to ttyS3?
+
+3. If possible, I'd like to understand inittab file generation process.
+
+4. Maybe this question doesn't belong here, 
+    what option or parameter do I need to setup if I want to login without
+typing login name and password after booting?
+Currently I have to type "root" and hit enter. (no password setup for root)
+
+Thanks for reading and appreciate any reply including directing me to right
+place to ask this question.
+
+
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/buildroot-inittab-getty-tp115526.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
