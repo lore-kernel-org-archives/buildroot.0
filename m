@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 19 Oct 2015 15:24:31 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.9.1
-Message-ID: <1445279071-2233-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 19 Oct 2015 15:24:52 -0300
+Subject: [Buildroot] [PATCH] dhcp: bump to version 4.1-ESV-R12
+Message-ID: <1445279092-2278-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
+ package/dhcp/dhcp.hash | 4 ++--
+ package/dhcp/dhcp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index c149c67..4c8caae 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1	6578aa8df05fd7777fbbc4fbf1912d981623f73b	sqlite-autoconf-3090000.tar.gz
-+sha1	6b7d22c24c9695118a2706c8e026fb3c31780a30	sqlite-autoconf-3090100.tar.gz
- # Calculated based on the hash above
--sha256	a324143f4cc35cd7e9605a0a8dec9f9e4861d0be8305f3642e7d05008b77e60d	sqlite-autoconf-3090000.tar.gz
-+sha256	d89d0e1d93deafebd0aa067d20d9029d9914ccde244920d9dd09ea51944e1c6c	sqlite-autoconf-3090100.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index c6e95ee..6ae74ea 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
+diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
+index d488004..84e3c63 100644
+--- a/package/dhcp/dhcp.hash
++++ b/package/dhcp/dhcp.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/dhcp/4.1-ESV-R11/dhcp-4.1-ESV-R11.tar.gz.sha256.asc
+-sha256	b643d11a50fba66bb1c118f47642eb3fac1e26989d3c0bf8a2471e83c06ac485	dhcp-4.1-ESV-R11.tar.gz
++# Verified from ftp://ftp.isc.org/isc/dhcp/4.1-ESV-R12/dhcp-4.1-ESV-R12.tar.gz.sha256.asc
++sha256	53265d1bf5e2073379df03c73a1a34d38a904307609c0f9cb77223912e753e5f	dhcp-4.1-ESV-R12.tar.gz
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index effcbe2..c05e694 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3090000
-+SQLITE_VERSION = 3090100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
+-DHCP_VERSION = 4.1-ESV-R11
++DHCP_VERSION = 4.1-ESV-R12
+ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = ISC
 -- 
 2.4.10
