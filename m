@@ -1,11 +1,11 @@
 From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 19 Oct 2015 22:48:52 +0200
+Date: Mon, 19 Oct 2015 22:49:34 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2015-10-15
 In-Reply-To: <20151018045734.GA20889@tarshish>
 References: <20151016063019.E3466101619@stock.ovh.net>
  <1445129293.7271.17.camel@embedded.rocks> <20151018045734.GA20889@tarshish>
-Message-ID: <1445287732.1907.18.camel@embedded.rocks>
+Message-ID: <1445287774.1907.20.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,8 +25,8 @@ On So, 2015-10-18 at 07:57 +0300, Baruch Siach wrote:
 
 Many thanks for your investigation!
 
-I did so and the patch was accepted upstream [1]. Buildroot patches are
-proposed...
+I did so and the patch was accepted upstream [1]. I prepared some
+Buildroot patches, too.
 
 [1]?https://github.com/sbabic/swupdate/commit/c3467290925b2a833a68d9db1
 2c198fdca752e32
