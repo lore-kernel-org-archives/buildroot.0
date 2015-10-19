@@ -1,42 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Oct 2015 22:03:56 +0200
-Subject: [Buildroot] [git commit] dhcp: bump to version 4.1-ESV-R12
-Message-ID: <20151019202704.9ED948010A@busybox.osuosl.org>
+Date: Mon, 19 Oct 2015 22:06:44 +0200
+Subject: [Buildroot] [git commit] libnfs: bump to version 1.9.8
+Message-ID: <20151019202704.B49F381EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94c76a6df0c9bce3576413c07bbe4a3d3751859c
+commit: http://git.buildroot.net/buildroot/commit/?id=39d1f0156b1ea18db084220dd3a6518a2d0d8b5c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Prerequisite for the gvfs 1.26.1.1 bump.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcp/dhcp.hash |    4 ++--
- package/dhcp/dhcp.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libnfs/libnfs.hash |    2 ++
+ package/libnfs/libnfs.mk   |    8 +++++++-
+ 2 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
-index d488004..84e3c63 100644
---- a/package/dhcp/dhcp.hash
-+++ b/package/dhcp/dhcp.hash
-@@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/dhcp/4.1-ESV-R11/dhcp-4.1-ESV-R11.tar.gz.sha256.asc
--sha256	b643d11a50fba66bb1c118f47642eb3fac1e26989d3c0bf8a2471e83c06ac485	dhcp-4.1-ESV-R11.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/dhcp/4.1-ESV-R12/dhcp-4.1-ESV-R12.tar.gz.sha256.asc
-+sha256	53265d1bf5e2073379df03c73a1a34d38a904307609c0f9cb77223912e753e5f	dhcp-4.1-ESV-R12.tar.gz
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index effcbe2..c05e694 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+new file mode 100644
+index 0000000..14d304f
+--- /dev/null
++++ b/package/libnfs/libnfs.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	e95af693e763a504eee72dacf3dc6c1001d83e40b807e7e1d0be2eaf48af779c	libnfs-libnfs-1.9.8.tar.gz
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index fb95e21..40d5ceb 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DHCP_VERSION = 4.1-ESV-R11
-+DHCP_VERSION = 4.1-ESV-R12
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = ISC
+-LIBNFS_VERSION = libnfs-1.9.5
++LIBNFS_VERSION = libnfs-1.9.8
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
+@@ -17,4 +17,10 @@ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ LIBNFS_DEPENDENCIES += libtirpc
+ endif
+ 
++# Needed for autoreconf
++define LIBNFS_MAKE_M4_DIR
++	mkdir $(@D)/m4
++endef
++LIBNFS_POST_EXTRACT_HOOKS += LIBNFS_MAKE_M4_DIR
++
+ $(eval $(autotools-package))
