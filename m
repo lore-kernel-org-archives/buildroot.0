@@ -1,61 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Oct 2015 21:12:56 +0200
-Subject: [Buildroot] [PATCH] iptables: add upstream patch fixing the
-	message 'connlabel.conf not found'
-In-Reply-To: <CAAXf6LWqmBZjvBu8Qd-N7JffxrU7V15xBMtYqMO3Fgj-XcPKmg@mail.gmail.com>
- (Thomas De Schampheleire's message of "Mon, 19 Oct 2015 21:05:47
- +0200")
-References: <1445257360-31923-1-git-send-email-patrickdepinguin@gmail.com>
- <87vba27vhz.fsf@dell.be.48ers.dk>
- <CAAXf6LWqmBZjvBu8Qd-N7JffxrU7V15xBMtYqMO3Fgj-XcPKmg@mail.gmail.com>
-Message-ID: <87zize3c5j.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 19 Oct 2015 21:23:48 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/ffmpeg: Add support for
+	GnuTLS
+References: <1445110736-1663-1-git-send-email-bernd.kuhls@t-online.de>
+ <20151018154530.06efcfb9@free-electrons.com>
+Message-ID: <4jsffcxklv.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Hi Thomas,
 
-Hi,
+Am Sun, 18 Oct 2015 15:45:30 +0200 schrieb Thomas Petazzoni:
 
->> Do you see this with mainline buildroot? We do pass --disable-static for
- >> !BR2_STATIC_LIBS builds, so I'm not sure how it could trigger for your?
- >> 
- >> But the fix does make sense for completely static builds.
+> # OpenSSL license is not compatible with the LGPL license of ffmpeg.
+> else ifeq ($(BR2_PACKAGE_OPENSSL):$(BR2_PACKAGE_FFMPEG_GPL)
+$(BR2_PACKAGE_FFMPEG_NONFREE),y::y)
+> FFMPEG_CONF_OPTS += --enable-openssl
+> FFMPEG_DEPENDENCIES += openssl
+> else
+> FFMPEG_CONF_OPTS += --disable-gnutls --disable-openssl
+> endif
+> 
+> I think it is functionally equivalent, but much nicer to read. If you
+> agree (and the above works), can you send a patch doing this?
 
- > We noticed this problem after upgrading to a newer buildroot version a
- > few releases back (but never sent that patch to buildroot until now).
- > We are not using a static build, nor did we make changes to
- > iptables.mk here.
- > I don't really know why the author of the patch mentioned static in
- > the commit message. Maybe he is not referring to 'static' in the sense
- > that Buildroot does.
+your code does not duplicate the logic of ffmpeg configure. In your 
+proposal the following settings are required for OpenSSL support:
 
-As far as I read the mail it is about configuring iptables with
---enable-static
+	BR2_PACKAGE_FFMPEG_GPL		disabled
+	BR2_PACKAGE_FFMPEG_NONFREE	enabled
 
- > Anyway, we were thus seeing this message with standard iptables calls
- > on a standard system.
+This is one of three valid combinations, ffmpeg configure also
+accepts these combinations for OpenSSL support:
 
-But with a Buildroot version not including:
+	BR2_PACKAGE_FFMPEG_GPL		disabled
+	BR2_PACKAGE_FFMPEG_NONFREE	disabled
+and
+	BR2_PACKAGE_FFMPEG_GPL		enabled
+	BR2_PACKAGE_FFMPEG_NONFREE	enabled
 
-commit 9f13ddf3bab51ae762b82ce9f767ac1abcdb7b2e
-Author: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date:   Tue Oct 21 13:58:14 2014 -0300
+because in
 
-    iptables: disable static for dynamic builds
-    
-    It leads to ugly runtime warnings, see:
-    http://patchwork.ozlabs.org/patch/386215/
-    It's also required for xtables-addons.
-    
-    Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+http://git.videolan.org/?
+p=ffmpeg.git;a=blob;f=configure;h=7f9fed31a491ed0991aee2d354dba82e54e3291e;hb=refs/
+heads/release/2.8#l4664
 
-Right?
+the following code line
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+enabled gpl && die_license_disabled_gpl nonfree openssl
+
+checks whether --enable-gpl was issued and breaks only if --enable-
+nonfree is not used at the same time like in the third example.
+
+If --enable-gpl is not used, like in the first and second example, there 
+will be no OpenSSL-related license checks during ffmpeg configure.
+
+In other words: You can enable gpl-only code in ffmpeg along with OpenSSL 
+support if you do not re-distribute the resulting binaries. If you do not 
+enable gpl-only code you can do what you want regarding OpenSSL ;)
+
+I am a bit lost atm trying to mirror this logic in an optimized form in 
+package/ffmpeg/ffmpeg.mk as requested, sorry.
+
+Regards, Bernd
