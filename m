@@ -1,9 +1,9 @@
 From: Thijs Vermeir <thijsvermeir@gmail.com>
-Date: Wed, 21 Oct 2015 00:16:07 +0200
-Subject: [Buildroot] [PATCH v2] python-ranger: new package
+Date: Wed, 21 Oct 2015 00:33:20 +0200
+Subject: [Buildroot] [PATCH v3] python-ranger: new package
 In-Reply-To: <87y4exjpl2.fsf@dell.be.48ers.dk>
 References: <87y4exjpl2.fsf@dell.be.48ers.dk>
-Message-ID: <1445379367-14585-1-git-send-email-thijsvermeir@gmail.com>
+Message-ID: <1445380400-14664-1-git-send-email-thijsvermeir@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,6 +20,9 @@ http://ranger.nongnu.org
 Signed-off-by: Thijs Vermeir <thijsvermeir@gmail.com>
 
 ---
+Changes v2 -> v3:
+- add LICENSE_FILES
+
 Changes v1 -> v2:
 - use upstream documented patch for detecting .pyc files
 - signed-off patches
@@ -32,8 +35,8 @@ Changes v1 -> v2:
  ...lorscheme-check-for-compiled-python-files.patch | 31 ++++++++++++++++++++++
  package/python-ranger/Config.in                    | 11 ++++++++
  package/python-ranger/python-ranger.hash           |  1 +
- package/python-ranger/python-ranger.mk             | 25 +++++++++++++++++
- 5 files changed, 69 insertions(+)
+ package/python-ranger/python-ranger.mk             | 26 ++++++++++++++++++
+ 5 files changed, 70 insertions(+)
  create mode 100644 package/python-ranger/0001-colorscheme-check-for-compiled-python-files.patch
  create mode 100644 package/python-ranger/Config.in
  create mode 100644 package/python-ranger/python-ranger.hash
@@ -114,10 +117,10 @@ index 0000000..4eaf344
 +sha256 80917c93396e46272b6de63816d925eb708291a9f7a559d49b24c571ea0eeeb3 python-ranger-1.7.2.tar.gz
 diff --git a/package/python-ranger/python-ranger.mk b/package/python-ranger/python-ranger.mk
 new file mode 100644
-index 0000000..0b1c68d
+index 0000000..6f9226b
 --- /dev/null
 +++ b/package/python-ranger/python-ranger.mk
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
 +# python-ranger
@@ -128,6 +131,7 @@ index 0000000..0b1c68d
 +PYTHON_RANGER_SITE = $(call github,hut,ranger,v$(PYTHON_RANGER_VERSION))
 +PYTHON_RANGER_SETUP_TYPE = distutils
 +PYTHON_RANGER_LICENSE = GPLv3
++PYTHON_RANGER_LICENSE_FILES = AUTHORS
 +
 +# The ranger script request python to be called with -O (optimize generated
 +# bytecode slightly; also PYTHONOPTIMIZE=x). This implicitly requires the python
