@@ -1,38 +1,39 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Tue, 20 Oct 2015 16:20:07 +0300
-Subject: [Buildroot] [PATCH] gdb: enable host-gdb on aarch64
-Message-ID: <20151020132007.GA1289@vostro>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 20 Oct 2015 10:27:36 -0300
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.3.1
+Message-ID: <1445347656-11423-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gdb has full support for aarch64 since version 7.6,
-current minimum is 7.7.1.
-Target build was re-enabled over a year ago, but host-gdb was not.
-
-Related commits:
-0e49733b306b353aad3a29a2c7a6faf25841ef0b gdb disabled for aarch64
-4372449a4f8e16f763c7d5a0c125ca015a7cbef6 target-gdb re-enabled
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gdb/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index b66e742..b65dd52 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_HOST_GDB
- 	# allow to build a cross-gdb, as the one of the external
- 	# toolchain should be used.
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_nios2
- 	help
- 	  Build a cross gdb that runs on the host machine and debugs
- 	  programs running on the target. It requires 'gdbserver'
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index d242f94..48860a7 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	d8dbb6b29dec1d9aa295655c4aa4eadd1e5367ef7047be22f4d6a18ba8acdb63	samba-4.3.0.tar.gz
++sha256	9908a80d95b9e2583906ed4347a8c80b769539a2788158992fb48ea9fb4d2c82	samba-4.3.1.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 6f3fb58..1d02e86 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.3.0
++SAMBA4_VERSION = 4.3.1
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-2.0.3
+2.4.10
