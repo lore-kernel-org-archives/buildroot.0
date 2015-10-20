@@ -1,9 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 20 Oct 2015 14:52:54 +0100
-Subject: [Buildroot] [PATCH 2/3] noip: add $(TARGET_MAKE_ENV) before $(MAKE)
+Date: Tue, 20 Oct 2015 14:52:55 +0100
+Subject: [Buildroot] [PATCH 3/3] noip: add a hash file
 In-Reply-To: <1445349175-41234-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1445349175-41234-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1445349175-41234-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1445349175-41234-3-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/noip/noip.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/noip/noip.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+ create mode 100644 package/noip/noip.hash
 
-diff --git a/package/noip/noip.mk b/package/noip/noip.mk
-index 98edfca..a61d141 100644
---- a/package/noip/noip.mk
-+++ b/package/noip/noip.mk
-@@ -12,8 +12,8 @@ NOIP_LICENSE_FILES = COPYING
- 
- define NOIP_BUILD_CMDS
- 	$(SED) "/^#define CONFIG_FILENAME/ s/PREFIX//" $(@D)/noip2.c
--	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
--		PREFIX=/usr CONFDIR=/etc
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" PREFIX=/usr CONFDIR=/etc
- endef
- 
- define NOIP_INSTALL_TARGET_CMDS
+diff --git a/package/noip/noip.hash b/package/noip/noip.hash
+new file mode 100644
+index 0000000..166438d
+--- /dev/null
++++ b/package/noip/noip.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 82b9bafab96a0c53b21aaef688bf70b3572e26217b5e2072bdb09da3c4a6f593  noip-duc-linux.tar.gz
 -- 
 1.7.1
