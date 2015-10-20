@@ -1,151 +1,109 @@
-From: Thijs Vermeir <thijsvermeir@gmail.com>
-Date: Wed, 21 Oct 2015 00:33:20 +0200
-Subject: [Buildroot] [PATCH v3] python-ranger: new package
-In-Reply-To: <87y4exjpl2.fsf@dell.be.48ers.dk>
-References: <87y4exjpl2.fsf@dell.be.48ers.dk>
-Message-ID: <1445380400-14664-1-git-send-email-thijsvermeir@gmail.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Tue, 20 Oct 2015 19:40:55 -0300
+Subject: [Buildroot] [PATCH] libglib2: disable tests and update configure
+	options
+Message-ID: <1445380855-31482-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ranger is a console file manager with VI key bindings. It provides a
-minimalistic and nice curses interface with a view on the directory hierarchy.
-It ships with "rifle", a file launcher that is good at automatically finding
-out which program to use for what file type.
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-http://ranger.nongnu.org
+Sometimes if host-python is around it doesn't work too well with the
+distro python (Gentoo, FC20 at least) leading to build failures.
 
-Signed-off-by: Thijs Vermeir <thijsvermeir@gmail.com>
+This failure is very hard to trigger, it's normally easier to do so by
+enabling top-level parallel builds.
 
+Fixes:
+http://autobuild.buildroot.net/results/0f8/0f881e322b7f9d244b8dd2440ba0afd3a8418027/
+
+While at it update the configure options to avoid any host
+libraries/tools from leaking in, new naming conventions and options.
+And remove dead code dealing with the nothreaded variant.
+
+Signed-off-by: Gustavo Zacarias <gustavozacarias@free-electrons.com>
 ---
-Changes v2 -> v3:
-- add LICENSE_FILES
+ package/libglib2/0002-disable-tests.patch | 43 +++++++++++++++++++++++++++++++
+ package/libglib2/libglib2.mk              | 12 ++++-----
+ 2 files changed, 48 insertions(+), 7 deletions(-)
+ create mode 100644 package/libglib2/0002-disable-tests.patch
 
-Changes v1 -> v2:
-- use upstream documented patch for detecting .pyc files
-- signed-off patches
-- select curses package depending on python version
-- documented post patch hook
-- remove host-python-package
-- add sha256 hash
----
- package/Config.in                                  |  1 +
- ...lorscheme-check-for-compiled-python-files.patch | 31 ++++++++++++++++++++++
- package/python-ranger/Config.in                    | 11 ++++++++
- package/python-ranger/python-ranger.hash           |  1 +
- package/python-ranger/python-ranger.mk             | 26 ++++++++++++++++++
- 5 files changed, 70 insertions(+)
- create mode 100644 package/python-ranger/0001-colorscheme-check-for-compiled-python-files.patch
- create mode 100644 package/python-ranger/Config.in
- create mode 100644 package/python-ranger/python-ranger.hash
- create mode 100644 package/python-ranger/python-ranger.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 7392363..578ba1b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -659,6 +659,7 @@ menu "External python modules"
- 	source "package/python-pyxml/Config.in"
- 	source "package/python-pyyaml/Config.in"
- 	source "package/python-pyzmq/Config.in"
-+	source "package/python-ranger/Config.in"
- 	source "package/python-requests/Config.in"
- 	source "package/python-rtslib-fb/Config.in"
- 	source "package/python-serial/Config.in"
-diff --git a/package/python-ranger/0001-colorscheme-check-for-compiled-python-files.patch b/package/python-ranger/0001-colorscheme-check-for-compiled-python-files.patch
+diff --git a/package/libglib2/0002-disable-tests.patch b/package/libglib2/0002-disable-tests.patch
 new file mode 100644
-index 0000000..bde3fee
+index 0000000..7bf4bb6
 --- /dev/null
-+++ b/package/python-ranger/0001-colorscheme-check-for-compiled-python-files.patch
-@@ -0,0 +1,31 @@
-+From 654e3116825c4d12340613196279fb13a5662113 Mon Sep 17 00:00:00 2001
-+From: Thijs Vermeir <thijsvermeir@gmail.com>
-+Date: Tue, 20 Oct 2015 18:13:36 +0200
-+Subject: [PATCH] colorscheme: check for compiled python files
++++ b/package/libglib2/0002-disable-tests.patch
+@@ -0,0 +1,43 @@
++Disable tests, some of them need python and sometimes host-python
++gets mixed with distro python leading to build failures.
 +
-+Some systems only provide *.pyc files
++Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 +
-+Patch accepted upstream:
-+https://github.com/hut/ranger/commit/d69f1ed3207c785d1a39ddd2992f6abb021b7540
-+
-+Signed-off-by: Thijs Vermeir <thijsvermeir@gmail.com>
-+---
-+ ranger/gui/colorscheme.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/ranger/gui/colorscheme.py b/ranger/gui/colorscheme.py
-+index d6afcac..d2b3b2d 100644
-+--- a/ranger/gui/colorscheme.py
-++++ b/ranger/gui/colorscheme.py
-+@@ -86,7 +86,7 @@ def _colorscheme_name_to_class(signal):
-+     usecustom = not ranger.arg.clean
++diff -Nura glib-2.46.1.orig/gio/Makefile.am glib-2.46.1/gio/Makefile.am
++--- glib-2.46.1.orig/gio/Makefile.am	2015-10-20 16:59:03.042212468 -0300
+++++ glib-2.46.1/gio/Makefile.am	2015-10-20 17:32:26.763146133 -0300
++@@ -233,7 +233,7 @@
++ platform_deps += win32/libgiowin32.la
++ endif
 + 
-+     def exists(colorscheme):
-+-        return os.path.exists(colorscheme + '.py')
-++        return os.path.exists(colorscheme + '.py') or os.path.exists(colorscheme + '.pyc')
++-SUBDIRS += . tests
+++SUBDIRS += .
 + 
-+     def is_scheme(x):
-+         try:
-+-- 
-+2.6.1
-+
-diff --git a/package/python-ranger/Config.in b/package/python-ranger/Config.in
-new file mode 100644
-index 0000000..da0506b
---- /dev/null
-+++ b/package/python-ranger/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_RANGER
-+	bool "python-ranger"
-+	select BR2_PACKAGE_PYTHON_CURSES if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_CURSES if BR2_PACKAGE_PYTHON3
-+	help
-+	  ranger is a console file manager with VI key bindings. It provides a
-+	  minimalistic and nice curses interface with a view on the directory hierarchy.
-+	  It ships with "rifle", a file launcher that is good at automatically finding
-+	  out which program to use for what file type.
-+
-+	  http://ranger.nongnu.org
-diff --git a/package/python-ranger/python-ranger.hash b/package/python-ranger/python-ranger.hash
-new file mode 100644
-index 0000000..4eaf344
---- /dev/null
-+++ b/package/python-ranger/python-ranger.hash
-@@ -0,0 +1 @@
-+sha256 80917c93396e46272b6de63816d925eb708291a9f7a559d49b24c571ea0eeeb3 python-ranger-1.7.2.tar.gz
-diff --git a/package/python-ranger/python-ranger.mk b/package/python-ranger/python-ranger.mk
-new file mode 100644
-index 0000000..6f9226b
---- /dev/null
-+++ b/package/python-ranger/python-ranger.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# python-ranger
-+#
-+################################################################################
-+
-+PYTHON_RANGER_VERSION = 1.7.2
-+PYTHON_RANGER_SITE = $(call github,hut,ranger,v$(PYTHON_RANGER_VERSION))
-+PYTHON_RANGER_SETUP_TYPE = distutils
-+PYTHON_RANGER_LICENSE = GPLv3
-+PYTHON_RANGER_LICENSE_FILES = AUTHORS
-+
-+# The ranger script request python to be called with -O (optimize generated
-+# bytecode slightly; also PYTHONOPTIMIZE=x). This implicitly requires the python
-+# source files to be present. Therefore, the -O flag is removed when only the .pyc
-+# files are installed.
-+
-+define PYTHON_RANGER_DO_NOT_GENERATE_BYTECODE_AT_RUNTIME
-+	$(SED) 's%/usr/bin/python -O%/usr/bin/python%g' $(@D)/scripts/ranger
-+endef
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
-+PYTHON_RANGER_POST_PATCH_HOOKS += PYTHON_RANGER_DO_NOT_GENERATE_BYTECODE_AT_RUNTIME
-+endif
-+
-+$(eval $(python-package))
++ if HAVE_FAM
++ SUBDIRS += fam
++diff -Nura glib-2.46.1.orig/glib/Makefile.am glib-2.46.1/glib/Makefile.am
++--- glib-2.46.1.orig/glib/Makefile.am	2015-10-20 16:59:03.066213318 -0300
+++++ glib-2.46.1/glib/Makefile.am	2015-10-20 17:33:23.537155988 -0300
++@@ -33,8 +33,8 @@
++ MAYBE_PCRE = pcre 
++ endif
++ 
++-SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre . tests
++-DIST_SUBDIRS = libcharset gnulib pcre update-pcre tests
+++SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre .
+++DIST_SUBDIRS = libcharset gnulib pcre update-pcre
++ 
++ AM_CPPFLAGS = 				\
++ 	$(glib_INCLUDES) 		\
++diff -Nura glib-2.46.1.orig/Makefile.am glib-2.46.1/Makefile.am
++--- glib-2.46.1.orig/Makefile.am	2015-10-20 16:59:03.003211087 -0300
+++++ glib-2.46.1/Makefile.am	2015-10-20 17:32:20.923939420 -0300
++@@ -6,7 +6,7 @@
++ 
++ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
++ 
++-SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests
+++SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
++ DIST_SUBDIRS = $(SUBDIRS) build
++ 
++ bin_SCRIPTS = glib-gettextize
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index f9fbade..8f6ca83 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -86,15 +86,13 @@ LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=yes
+ endif
+ 
+ HOST_LIBGLIB2_CONF_OPTS = \
++	--disable-coverage \
+ 	--disable-dtrace \
++	--disable-fam \
++	--disable-libelf \
++	--disable-selinux \
+ 	--disable-systemtap \
+-	--disable-gcov \
+-	--disable-modular-tests
+-
+-LIBGLIB2_CONF_OPTS += --disable-modular-tests
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+-LIBGLIB2_CONF_OPTS += --with-threads=none --disable-threads
+-endif
++	--disable-xattr
+ 
+ LIBGLIB2_DEPENDENCIES = host-pkgconf host-libglib2 libffi zlib $(if $(BR2_NEEDS_GETTEXT),gettext) host-gettext
+ 
 -- 
-2.1.0
+2.4.10
