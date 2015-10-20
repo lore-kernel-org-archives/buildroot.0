@@ -1,27 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Oct 2015 16:35:00 +0200
-Subject: [Buildroot] [PATCH] gdb: enable host-gdb on aarch64
-In-Reply-To: <20151020132007.GA1289@vostro> (Alex Suykov's message of "Tue, 20
- Oct 2015 16:20:07 +0300")
-References: <20151020132007.GA1289@vostro>
-Message-ID: <87twplip63.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Oct 2015 16:35:28 +0200
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.3.1
+In-Reply-To: <1445347656-11423-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 20 Oct 2015 10:27:36 -0300")
+References: <1445347656-11423-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87pp09ip5b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alex" == Alex Suykov <alex.suykov@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > gdb has full support for aarch64 since version 7.6,
- > current minimum is 7.7.1.
- > Target build was re-enabled over a year ago, but host-gdb was not.
-
- > Related commits:
- > 0e49733b306b353aad3a29a2c7a6faf25841ef0b gdb disabled for aarch64
- > 4372449a4f8e16f763c7d5a0c125ca015a7cbef6 target-gdb re-enabled
-
- > Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
