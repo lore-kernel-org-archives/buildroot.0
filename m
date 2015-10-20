@@ -1,22 +1,87 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 20 Oct 2015 20:50:51 +1300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-10-19
-In-Reply-To: <20151020063015.114A2101605@stock.ovh.net>
-References: <20151020063015.114A2101605@stock.ovh.net>
-Message-ID: <CAFOYHZC3M5OGnpJHH6kokar7JXYy03yB3XCn2U8voJCx-VP4mw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Oct 2015 09:55:24 +0200
+Subject: [Buildroot] [git commit] exfat: bump to version 1.2.1
+Message-ID: <20151020075546.8684180E39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 20, 2015 at 7:30 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->       xtensa |                syslog-ng-3.7.1 | NOK | http://autobuild.buildroot.net/results/445270aed4c79cde75d54d49d13ffad9d684c61b/
->       x86_64 |                syslog-ng-3.7.1 | NOK | http://autobuild.buildroot.net/results/b8224ea52d962c62ead367343d68bf98a4b9e883/
+commit: http://git.buildroot.net/buildroot/commit/?id=98538bb0a246519912e4014630ea92ccd90ab07a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Switch to github homepage and site.
+Package is now autotools-based.
+musl tweak no longer required.
 
-Both look like the configure step has failed to detect libesmtp.
-Despite the fact that there is a dependency and from what I can tell
-libesmtp was built first. Trying to reproduce now.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/exfat/Config.in  |    2 +-
+ package/exfat/exfat.hash |    4 ++--
+ package/exfat/exfat.mk   |   27 ++++-----------------------
+ 3 files changed, 7 insertions(+), 26 deletions(-)
+
+diff --git a/package/exfat/Config.in b/package/exfat/Config.in
+index 575f389..c0b4eab 100644
+--- a/package/exfat/Config.in
++++ b/package/exfat/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_EXFAT
+ 	  A full-featured exFAT file system implementation for GNU/Linux
+ 	  and other Unix-like systems as a FUSE module.
+ 
+-	  http://code.google.com/p/exfat/
++	  https://github.com/relan/exfat
+ 
+ comment "exfat needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+diff --git a/package/exfat/exfat.hash b/package/exfat/exfat.hash
+index bfaca6e..af67785 100644
+--- a/package/exfat/exfat.hash
++++ b/package/exfat/exfat.hash
+@@ -1,2 +1,2 @@
+-# From https://code.google.com/p/exfat/wiki/Downloads?tm=2
+-sha1	060560f74dbce4dc947c7e658e75fdf339bc10ff	fuse-exfat-1.1.0.tar.gz
++# Locally calculated
++sha256	f444cd2849295b8de7fc61022fbf02f5bb1a84790c43f0c75ba3bf96f4619dd4	fuse-exfat-1.2.1.tar.gz
+diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+index 5508ec3..cc474a7 100644
+--- a/package/exfat/exfat.mk
++++ b/package/exfat/exfat.mk
+@@ -4,31 +4,12 @@
+ #
+ ################################################################################
+ 
+-EXFAT_VERSION = 1.1.0
+-EXFAT_SITE = http://distfiles.gentoo.org/distfiles
++EXFAT_VERSION = 1.2.1
++EXFAT_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_VERSION)
+ EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
+-EXFAT_DEPENDENCIES = host-scons libfuse
++EXFAT_DEPENDENCIES = libfuse host-pkgconf
+ EXFAT_LICENSE = GPLv3+
+ EXFAT_LICENSE_FILES = COPYING
+ EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
+ 
+-# The endianness handling functions in platform.h are protected behind
+-# ifdef __GLIBC__ which musl doesn't define even though it does
+-# provide the endianness handling interface. Work around it by
+-# ensuring __GLIBC__ is defined.
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-EXFAT_CFLAGS += -D__GLIBC__
+-endif
+-
+-define EXFAT_BUILD_CMDS
+-	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS) CCFLAGS="$(EXFAT_CFLAGS)" $(SCONS))
+-endef
+-
+-define EXFAT_INSTALL_TARGET_CMDS
+-	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS) CCFLAGS="$(EXFAT_CFLAGS)" $(SCONS) \
+-		DESTDIR=$(TARGET_DIR)/usr/sbin install)
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(autotools-package))
