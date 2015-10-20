@@ -1,37 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Oct 2015 11:36:22 +0200
-Subject: [Buildroot] [PATCH] Buildroot support for Intel X1000
-In-Reply-To: <1445333306.3204.6.camel@intel.com>
-References: <1445252572.4143.12.camel@intel.com>
- <20151020100656.3d979ad1@free-electrons.com>
- <1445333306.3204.6.camel@intel.com>
-Message-ID: <20151020113622.6c4e1625@free-electrons.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 20 Oct 2015 22:40:35 +1300
+Subject: [Buildroot] [PATCH] syslog-ng: Specify location of libesmtp
+In-Reply-To: <87fv15286n.fsf@dell.be.48ers.dk>
+References: <1445328991-29416-1-git-send-email-judge.packham@gmail.com>
+ <87fv15286n.fsf@dell.be.48ers.dk>
+Message-ID: <CAFOYHZA0PXC4t6opOkztezy1hdU5Zhcoom34oM6+5JT2Fsb8MQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Kinsella, Ray,
+Hi Peter,
 
-On Tue, 20 Oct 2015 09:28:27 +0000, Kinsella, Ray wrote:
+On Tue, Oct 20, 2015 at 10:36 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+>
+>  > If --with-libesmtp is omitted a host tool is invoked to detect the
+>  > location of the library and headers, which is obviously the wrong thing
+>  > for a cross-compile environment. Explicitly add --with-libesmtp to
+>  > resolve this.
+>
+>  > Fixes:
+>  > http://git.buildroot.net/buildroot/commit/?id=539acb7500588d0a277357cf831c9f25f770578d
+>  > http://git.buildroot.net/buildroot/commit/?id=01f41585a78406f6e830d5eaf4413a983812a299
 
-> I took a quick check of my board/galileo patchset.
-> It is free for errant trailing spaces and has the required "category"
-> prefix. 
+Oops this is the url of the HEAD commit not the url of the build
+result. This should have been
 
-Thanks for checking.
+  http://autobuild.buildroot.net/results/b82/b8224ea52d962c62ead367343d68bf98a4b9e883/
+  http://autobuild.buildroot.net/results/445/445270aed4c79cde75d54d49d13ffad9d684c61b/
 
-> However, I had a question on tabbing, for files like grub.cfg or
-> genimage.cfg.
-> Is there a convention? are tabs _or_ spaces fine?
-
-I think we more commonly use tabs.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Probably doesn't matter but If you want you could revert and fix up
+the commit message to correct the URL.
