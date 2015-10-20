@@ -1,17 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Oct 2015 12:28:30 +0200
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Tue, 20 Oct 2015 10:31:10 +0000
 Subject: [Buildroot] [git commit] arch/x86: add support for Intel X1000
-In-Reply-To: <20151020080505.82B8581E83@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Tue, 20 Oct 2015 10:04:52 +0200")
+In-Reply-To: <874mhl25rl.fsf@dell.be.48ers.dk>
 References: <20151020080505.82B8581E83@busybox.osuosl.org>
-Message-ID: <874mhl25rl.fsf@dell.be.48ers.dk>
+ <874mhl25rl.fsf@dell.be.48ers.dk>
+Message-ID: <1445337070.3204.25.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Peter,
+
+I handle this in the defconfig for Galileo, explicitly setting binutils to 2.5
+Presume you feel that binutils  < 2.5 shouldn't be selectable by the user?
+
+Ray K
+
+On Tue, 2015-10-20@12:28 +0200, Peter Korsgaard wrote:
+
+
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni at free-electrons.com<mailto:thomas.petazzoni@free-electrons.com>> writes:
 
  > commit: http://git.buildroot.net/buildroot/commit/?id=968f5d5e59195e6e6a9a349ec9a118fb3a50b8b3
  > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
@@ -25,6 +35,3 @@ To: buildroot@busybox.net
 Isn't the -momit-lock-prefix=yes option only supported by fairly recent
 binutils versions? If so, older binutils version / external toolchains
 shouldn't be available for x1000.
-
--- 
-Bye, Peter Korsgaard
