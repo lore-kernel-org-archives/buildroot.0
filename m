@@ -1,40 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Oct 2015 16:34:37 +0200
-Subject: [Buildroot] [git commit] gdb: enable host-gdb on aarch64
-Message-ID: <20151020143646.0970181EC7@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 20 Oct 2015 15:40:52 +0100
+Subject: [Buildroot] [PATCH] tstools: GitHub migration
+In-Reply-To: <87y4exip9l.fsf@dell.be.48ers.dk>
+References: <1445346374-21146-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87y4exip9l.fsf@dell.be.48ers.dk>
+Message-ID: <56265274.6040402@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c436ffbc7efcff1ab96d99b8620c6562cfc1ad0d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 10/20/2015 03:32 PM, Peter Korsgaard wrote:
+[snip]
+>  > +# tstools doesn't have any license so far. See:
+>  > +# https://github.com/kynesim/tstools/issues/32
+>  > +TSTOOLS_LICENSE =
+>  > +TSTOOLS_LICENSE_FILES =
+> 
+> While it is correct that the upstream repo doesn't include a copy of the
+> license file, plenty (all?) source files clearly list that they are
+> under the MPL v1.1 license:
+> 
+> grep -rls 'MPL v1.1'
+> tsplay_fns.h
+> ipv4.h
+...
+[snip]
 
-gdb has full support for aarch64 since version 7.6,
-current minimum is 7.7.1.
-Target build was re-enabled over a year ago, but host-gdb was not.
+> So I've kept the license as MPLv1.1 and adjusted the comment to make it
+> clear that it is just the license file we are missing.
 
-Related commits:
-0e49733b306b353aad3a29a2c7a6faf25841ef0b gdb disabled for aarch64
-4372449a4f8e16f763c7d5a0c125ca015a7cbef6 target-gdb re-enabled
+Ooops, I see. Thanks Peter!
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gdb/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index b66e742..b65dd52 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_HOST_GDB
- 	# allow to build a cross-gdb, as the one of the external
- 	# toolchain should be used.
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_nios2
- 	help
- 	  Build a cross gdb that runs on the host machine and debugs
- 	  programs running on the target. It requires 'gdbserver'
+> Committed with that fixed, thanks.
+> 
