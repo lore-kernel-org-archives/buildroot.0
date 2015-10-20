@@ -1,87 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Oct 2015 09:55:24 +0200
-Subject: [Buildroot] [git commit] exfat: bump to version 1.2.1
-Message-ID: <20151020075546.8684180E39@busybox.osuosl.org>
+Date: Tue, 20 Oct 2015 09:55:00 +0200
+Subject: [Buildroot] [git commit] package/nodejs: fix architectural
+	dependencies on ARM
+Message-ID: <20151020075546.780C781EC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98538bb0a246519912e4014630ea92ccd90ab07a
+commit: http://git.buildroot.net/buildroot/commit/?id=f443386c5de43791b87339954783acdb7023442e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to github homepage and site.
-Package is now autotools-based.
-musl tweak no longer required.
+On ARM, starting with v0.12.x, the V8 JS engine is now requires at least
+an armv6 and at least a VFPv2.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Since we're about to introduce the v4.x version, which has the same
+requirements, introduce an intermediate variable to hold that condition.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: J??rg Krause <joerg.krause@embedded.rocks>
+Cc: Martin Bark <martin@barkynet.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/exfat/Config.in  |    2 +-
- package/exfat/exfat.hash |    4 ++--
- package/exfat/exfat.mk   |   27 ++++-----------------------
- 3 files changed, 7 insertions(+), 26 deletions(-)
+ package/nodejs/Config.in |   12 ++++++++++--
+ 1 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/exfat/Config.in b/package/exfat/Config.in
-index 575f389..c0b4eab 100644
---- a/package/exfat/Config.in
-+++ b/package/exfat/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_EXFAT
- 	  A full-featured exFAT file system implementation for GNU/Linux
- 	  and other Unix-like systems as a FUSE module.
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 329d270..034557b 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -25,6 +25,15 @@ comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
  
--	  http://code.google.com/p/exfat/
-+	  https://github.com/relan/exfat
+ if BR2_PACKAGE_NODEJS
  
- comment "exfat needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
-diff --git a/package/exfat/exfat.hash b/package/exfat/exfat.hash
-index bfaca6e..af67785 100644
---- a/package/exfat/exfat.hash
-+++ b/package/exfat/exfat.hash
-@@ -1,2 +1,2 @@
--# From https://code.google.com/p/exfat/wiki/Downloads?tm=2
--sha1	060560f74dbce4dc947c7e658e75fdf339bc10ff	fuse-exfat-1.1.0.tar.gz
-+# Locally calculated
-+sha256	f444cd2849295b8de7fc61022fbf02f5bb1a84790c43f0c75ba3bf96f4619dd4	fuse-exfat-1.2.1.tar.gz
-diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
-index 5508ec3..cc474a7 100644
---- a/package/exfat/exfat.mk
-+++ b/package/exfat/exfat.mk
-@@ -4,31 +4,12 @@
- #
- ################################################################################
++# Starting with 0.12.x, on ARM, V8 (the JS engine)
++# now requires an armv6+ and a VFPv2+.
++config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	bool
++	# On supported architectures other than ARM, no special requirement
++	default y if !BR2_arm
++	# On ARM, at least ARMv6+ with VFPv2+ is needed
++	default y if !BR2_ARM_CPU_ARMV5 && BR2_ARM_CPU_HAS_VFPV2
++
+ choice
+ 	prompt "Node.js version"
+ 	default BR2_BR2_PACKAGE_NODEJS_0_10_X if BR2_ARM_CPU_ARMV5
+@@ -35,10 +44,9 @@ choice
+ config BR2_BR2_PACKAGE_NODEJS_0_10_X
+ 	bool "v0.10.40"
  
--EXFAT_VERSION = 1.1.0
--EXFAT_SITE = http://distfiles.gentoo.org/distfiles
-+EXFAT_VERSION = 1.2.1
-+EXFAT_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_VERSION)
- EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
--EXFAT_DEPENDENCIES = host-scons libfuse
-+EXFAT_DEPENDENCIES = libfuse host-pkgconf
- EXFAT_LICENSE = GPLv3+
- EXFAT_LICENSE_FILES = COPYING
- EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
+-# V8 included with v0.12.5 requires at least ARMv6
+ config BR2_BR2_PACKAGE_NODEJS_0_12_X
+ 	bool "v0.12.7"
+-	depends on !BR2_ARM_CPU_ARMV5
++	depends on BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
  
--# The endianness handling functions in platform.h are protected behind
--# ifdef __GLIBC__ which musl doesn't define even though it does
--# provide the endianness handling interface. Work around it by
--# ensuring __GLIBC__ is defined.
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--EXFAT_CFLAGS += -D__GLIBC__
--endif
--
--define EXFAT_BUILD_CMDS
--	(cd $(@D); \
--		$(TARGET_CONFIGURE_OPTS) CCFLAGS="$(EXFAT_CFLAGS)" $(SCONS))
--endef
--
--define EXFAT_INSTALL_TARGET_CMDS
--	(cd $(@D); \
--		$(TARGET_CONFIGURE_OPTS) CCFLAGS="$(EXFAT_CFLAGS)" $(SCONS) \
--		DESTDIR=$(TARGET_DIR)/usr/sbin install)
--endef
--
--$(eval $(generic-package))
-+$(eval $(autotools-package))
+ endchoice
+ 
