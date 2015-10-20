@@ -1,39 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 20 Oct 2015 10:46:27 -0300
-Subject: [Buildroot] [PATCH] musl: bump to version 1.1.12
-Message-ID: <1445348787-2619-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 20 Oct 2015 14:52:53 +0100
+Subject: [Buildroot] [PATCH 1/3] noip: use a simpler sed command with our
+	$(SED) variable
+Message-ID: <1445349175-41234-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/musl/musl.hash | 2 +-
- package/musl/musl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/noip/noip.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 4872f94..b136599 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	bb9e6da51b7b12641f5d1abb39705c6c6c1b2fbd20002362948aa736a0aa353f  musl-1.1.11.tar.gz
-+sha256	720b83c7e276b4b679c0bffe9509340d5f81fd601508e607e708177df0d31c0e  musl-1.1.12.tar.gz
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 2f43aab..6fdcc73 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/noip/noip.mk b/package/noip/noip.mk
+index fceea1e..98edfca 100644
+--- a/package/noip/noip.mk
++++ b/package/noip/noip.mk
+@@ -11,8 +11,7 @@ NOIP_LICENSE = GPLv2+
+ NOIP_LICENSE_FILES = COPYING
  
--MUSL_VERSION = 1.1.11
-+MUSL_VERSION = 1.1.12
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+ define NOIP_BUILD_CMDS
+-	sed -i -e "s:\(#define CONFIG_FILENAME\).*:\1 \"/etc/no-ip2.conf\":" \
+-		$(@D)/noip2.c
++	$(SED) "/^#define CONFIG_FILENAME/ s/PREFIX//" $(@D)/noip2.c
+ 	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+ 		PREFIX=/usr CONFDIR=/etc
+ endef
 -- 
-2.4.10
+1.7.1
