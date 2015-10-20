@@ -1,9 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 20 Oct 2015 15:05:53 +0100
-Subject: [Buildroot] [PATCH 2/3] dhcpdump: add project URL
+Date: Tue, 20 Oct 2015 15:05:54 +0100
+Subject: [Buildroot] [PATCH 3/3] dhcpdump: add a hash file
 In-Reply-To: <1445349954-44062-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1445349954-44062-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1445349954-44062-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1445349954-44062-3-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/dhcpdump/Config.in |    2 ++
+ package/dhcpdump/dhcpdump.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
+ create mode 100644 package/dhcpdump/dhcpdump.hash
 
-diff --git a/package/dhcpdump/Config.in b/package/dhcpdump/Config.in
-index 1840e34..2368a46 100644
---- a/package/dhcpdump/Config.in
-+++ b/package/dhcpdump/Config.in
-@@ -3,3 +3,5 @@ config BR2_PACKAGE_DHCPDUMP
- 	select BR2_PACKAGE_LIBPCAP
- 	help
- 	  A tool for monitoring dhcp requests using tcpdump.
-+
-+	  http://www.mavetju.org/
+diff --git a/package/dhcpdump/dhcpdump.hash b/package/dhcpdump/dhcpdump.hash
+new file mode 100644
+index 0000000..36040c8
+--- /dev/null
++++ b/package/dhcpdump/dhcpdump.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 6d5eb9418162fb738bc56e4c1682ce7f7392dd96e568cc996e44c28de7f77190  dhcpdump-1.8.tar.gz
 -- 
 1.7.1
