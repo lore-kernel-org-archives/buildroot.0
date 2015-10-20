@@ -1,65 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Oct 2015 20:54:09 +0200
-Subject: [Buildroot] What is the preferred way install additional cmake
- modules?
-In-Reply-To: <56267135.7050303@gmail.com>
-References: <56267135.7050303@gmail.com>
-Message-ID: <20151020185409.GD3738@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 20 Oct 2015 20:57:28 +0200
+Subject: [Buildroot] [PATCH] syslog-ng: Specify location of libesmtp
+In-Reply-To: <1445328991-29416-1-git-send-email-judge.packham@gmail.com>
+References: <1445328991-29416-1-git-send-email-judge.packham@gmail.com>
+Message-ID: <20151020205728.6f2d2332@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zoltan, All,
+Hello Chris,
 
-On 2015-10-20 18:52 +0200, Zoltan Gyarmati spake thusly:
-> i am about to add the modemmanager-qt[1] package to Buildroot, which
-> for building depends on a set of additional cmake modules also
-> provided by the KDE project, called extra-cmake-modules[2], which
-> itself also uses cmake for building and installing.
-[--SNIP--]
->  My instinct would say that extra-cmake-modules is supposed to be a
-> host package
+On Tue, 20 Oct 2015 21:16:31 +1300, Chris Packham <judge.packham@gmail.com> wrote:
 
-My instinct says so, too. ;-)
+> If --with-libesmtp is omitted a host tool is invoked to detect the
+> location of the library and headers, which is obviously the wrong thing
+> for a cross-compile environment. Explicitly add --with-libesmtp to
+> resolve this.
+> 
+> Fixes:
+> http://git.buildroot.net/buildroot/commit/?id=539acb7500588d0a277357cf831c9f25f770578d
+> http://git.buildroot.net/buildroot/commit/?id=01f41585a78406f6e830d5eaf4413a983812a299
+> 
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> ---
+>  package/syslog-ng/syslog-ng.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+> index 7371060..2bbace8 100644
+> --- a/package/syslog-ng/syslog-ng.mk
+> +++ b/package/syslog-ng/syslog-ng.mk
+> @@ -37,6 +37,7 @@ endif
+>  ifeq ($(BR2_PACKAGE_LIBESMTP),y)
+>  SYSLOG_NG_DEPENDENCIES += libesmtp
+>  SYSLOG_NG_CONF_OPTS += --enable-smtp
+> +SYSLOG_NG_CONF_OPTS += --with-libesmtp="$(STAGING_DIR)/usr"
+>  else
+>  SYSLOG_NG_CONF_OPTS += --disable-smtp
+>  endif
 
-> (as then i wouldn't need to explicitly set
-> EXTRA_CMAKE_MODULES_INSTALL_TARGET to NO), so i tried this to define
-> as a host-cmake-package, make modemmanager-qt depending on
-> host-extra-cmake-modules, but then the cmake modules not found by the
-> modemmanager-qt build config.
+The buildroot package libestmp provides a libesmtp-config script, but
+it is installed into
 
-So:
-  - if extra-cmake-modules are in staging/ then it works
-  - if extra-cmake-modules are in host/ then it does not work
+	host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/libesmtp-config
 
-But what is not found? The ECM files themselves? Can you paste the few
-lines that exhibit the error, please?
+where it is not found by the syslog-ng configure script... 
 
-> In this latter case the .cmake files gets installed under:
-> path-to-buildroot/output/host/usr/share/ECM/cmake/
-
-I would have indeed expected to see them installed there.
-
-> What is the preferred way to install this package? Install it as a
-> host-package, and specify a custom install target dir, or leave it as
-> plain cmake-package?
-
-My stance:
-  - it is a host-package
-
-We need to understand why cmake can't find those modules.
-
-I CCed Samuel, our cmake expert, so he can shine some light on this.
+Would a more portable solution be to add this search path (or fix the install
+location of libestmp-config) for the syslog-ng configure call (libesmtp-config
+--libs gives '-pthread -L[...]/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib
+-lesmtp -lssl -lcrypto -ldl')?
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Peter
