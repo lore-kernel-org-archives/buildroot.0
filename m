@@ -1,28 +1,63 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 20 Oct 2015 14:52:55 +0100
-Subject: [Buildroot] [PATCH 3/3] noip: add a hash file
-In-Reply-To: <1445349175-41234-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1445349175-41234-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1445349175-41234-3-git-send-email-Vincent.Riera@imgtec.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Tue, 20 Oct 2015 10:54:46 -0300
+Subject: [Buildroot] [PATCH] erlang: Remove BR2_TOOLCHAIN_HAS_THREADS
+	dependency
+Message-ID: <1445349286-1185-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/noip/noip.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
- create mode 100644 package/noip/noip.hash
+Erlang can be built without threads support, by passing an
+appropriate config option.
 
-diff --git a/package/noip/noip.hash b/package/noip/noip.hash
-new file mode 100644
-index 0000000..166438d
---- /dev/null
-+++ b/package/noip/noip.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 82b9bafab96a0c53b21aaef688bf70b3572e26217b5e2072bdb09da3c4a6f593  noip-duc-linux.tar.gz
+This commit drops the config dependency on BR2_TOOLCHAIN_HAS_THREADS
+and instead passes --disable-threads if the toolchain doesn't support
+threads.
+
+While here, change the wording of the config comment to "dynamic
+library" to be consistent with similar comments elsewhere.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+ package/erlang/Config.in | 5 ++---
+ package/erlang/erlang.mk | 4 ++++
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 625b7c1b829f..0ec01bb749b4 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -1,12 +1,11 @@
+-comment "erlang needs a toolchain w/ threads, shared library"
++comment "erlang needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_ERLANG
+ 	bool "erlang"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 499f62c1539b..848d1ddc44c5 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -40,6 +40,10 @@ HOST_ERLANG_CONF_OPTS = --without-javac --with-ssl=$(HOST_DIR)/usr
+ 
+ HOST_ERLANG_CONF_OPTS += --without-termcap
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++ERLANG_CONF_OPTS += --disable-threads
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ ERLANG_CONF_OPTS += --with-termcap
+ ERLANG_DEPENDENCIES += ncurses
 -- 
-1.7.1
+2.5.2
