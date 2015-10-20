@@ -1,58 +1,42 @@
 From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Tue, 20 Oct 2015 13:32:22 +0200
-Subject: [Buildroot] [PATCH v2 4/7] altera: update text about the mkpimage
+Date: Tue, 20 Oct 2015 13:32:24 +0200
+Subject: [Buildroot] [PATCH v2 6/7] altera: improve fdisk instructions
 In-Reply-To: <1445340745-1000-1-git-send-email-viktorin@rehivetech.com>
 References: <1445340745-1000-1-git-send-email-viktorin@rehivetech.com>
-Message-ID: <1445340745-1000-5-git-send-email-viktorin@rehivetech.com>
+Message-ID: <1445340745-1000-7-git-send-email-viktorin@rehivetech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As we've integrated the mkpimage, we just leave some notes
-about other available tools and give an advice how to enable
-this feature in Buildroot.
+The 't' command expects the number of the target partition
+when there are at least 2 of them. Also note about the arbitrary
+value 9000000.
 
 Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 ---
- board/altera/readme.txt | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ board/altera/readme.txt | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/board/altera/readme.txt b/board/altera/readme.txt
-index ddd9e03..fdd7316 100644
+index 62c3670..a30e5a9 100644
 --- a/board/altera/readme.txt
 +++ b/board/altera/readme.txt
-@@ -75,21 +75,23 @@ After building, you should obtain this tree:
-     ??? socfpga.dtb
-     ??? u-boot.img
-     ??? u-boot-spl.bin
-+    ??? u-boot-spl.bin.crc
-     ??? uImage
+@@ -111,10 +111,11 @@ let's assume it is /dev/sdc :
+   $ sudo fdisk /dev/sdc
  
+ Delete all previous partitions with 'd' then create the new partition table,
+-using these options, pressing enter after each one:
++using these options, pressing enter after each one (the value 9000000 depends
++on the size of your SD card):
  
- Signing the Preloader
- ---------------------
+-  * n p 1 9000000 +20480K t 1 b
+-  * n p 2 4096 +4496384K t 83
++  * n p 1 9000000 +20480K t b
++  * n p 2 4096 +4496384K t 2 83
+   * n p 3 2048 +1024K t 3 a2
  
--*** BEWARE ****
--The u-boot-spl.bin must be signed using the Altera's tool "mkpimage".
--This tool comes as a part of the Altera development environnment (SoC EDS).
--A fork of this tool have been done by Maxime Hadjinlian and can be found here :
--https://github.com/maximeh/mkpimage
-+The u-boot-spl.bin needs a checksum computed by the Altera's tool "mkpimage".
-+This tool comes as a part of the Altera development environnment (SoC EDS),
-+as a standalone tool https://github.com/maximeh/mkpimage and as a part of the
-+Barebox project. The boards do not boot without the checksum.
- 
--Remember that without signing the u-boot-spl.bin, the board will not boot !!!
-+The Buildroot integrates the mkpimage and you can find it in the configuration.
-+If you check: "Bootloaders/U-Boot/CRC SPL image for SoC FPGA" the build system
-+calls mkpimage on the SPL for you automatically.
- 
--  $ mkpimage u-boot-spl.bin -o u-boot-spl-signed.bin
-+  $ mkpimage u-boot-spl.bin -o u-boot-spl.bin.crc
- 
- Prepare your SDcard
- ===================
+ Using the 'p' option, the SD card's partition must look like this :
 -- 
 2.6.1
