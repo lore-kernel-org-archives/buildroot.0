@@ -1,109 +1,172 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 20 Oct 2015 22:43:48 +0200
-Subject: [Buildroot] What is the preferred way install additional cmake
-	modules?
-In-Reply-To: <20151020185409.GD3738@free.fr>
-References: <56267135.7050303@gmail.com> <20151020185409.GD3738@free.fr>
-Message-ID: <CAHXCMMLkvFB0z-UiNgLyWjNWZCamBouyaRyyDHbXNF+OC+TG7g@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 20 Oct 2015 22:51:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: broken with musl on x86
+Message-ID: <1445374313-30804-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Zoltan, Yann, all,
+This patch replaces a previous submission made by Bernd Kuhls some while ago
+[1].
 
-On Tue, Oct 20, 2015 at 8:54 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Zoltan, All,
->
-> On 2015-10-20 18:52 +0200, Zoltan Gyarmati spake thusly:
->> i am about to add the modemmanager-qt[1] package to Buildroot, which
->> for building depends on a set of additional cmake modules also
->> provided by the KDE project, called extra-cmake-modules[2], which
->> itself also uses cmake for building and installing.
-> [--SNIP--]
->>  My instinct would say that extra-cmake-modules is supposed to be a
->> host package
->
-> My instinct says so, too. ;-)
->
->> (as then i wouldn't need to explicitly set
->> EXTRA_CMAKE_MODULES_INSTALL_TARGET to NO), so i tried this to define
->> as a host-cmake-package, make modemmanager-qt depending on
->> host-extra-cmake-modules, but then the cmake modules not found by the
->> modemmanager-qt build config.
->
-> So:
->   - if extra-cmake-modules are in staging/ then it works
->   - if extra-cmake-modules are in host/ then it does not work
->
-> But what is not found? The ECM files themselves? Can you paste the few
-> lines that exhibit the error, please?
+The posix_memalign declaration is incompatible with musl for C++, because of
+the exception specification [2]. Note, the referenced patch is part of the a
+patch series to "Add musl support to GCC".
 
-The CMake module files installed by ECM, when configuring a target package.
+Instead of patching gcc in Buildroot we disable jsoncpp and any reverse
+dependendy with the musl toolchain on x86.
 
-As explained in [1] (in the second half of the page), CMake
-(find_package) looks into a series of paths to find the modules.
-The prefix of these paths is sensitive to the CMAKE_SYSROOT variable,
-that's why modules installed in the host/ are not found when
-configuring some package for cross-compilation.
+[1] https://patchwork.ozlabs.org/patch/505425/
+[2] https://gcc.gnu.org/ml/gcc-patches/2015-04/msg01084.html
 
-My understanding behind this behavior is that CMake does not trust too
-much 3rd-party modules.
-I mean CMake has no way to know:
-- that modules located in <buildroot>/output/host/usr/share/ECM/cmake/
-are only for the host or for target;
-- that <buildroot>/output/host/usr/share/ECM/cmake/ is a collection of
-modules specially written to extend to default collection;
-- if a 3rd-party module would contain absolute paths to the
-libraries/programs/headers/etc, so stuff not compiled for the target.
+Fixes:
+http://autobuild.buildroot.net/results/588/5885d33b8d9f17878f565f3ae5371017dc89aede/
+http://autobuild.buildroot.net/results/0d9/0d90c7c13ae1640b07709c4c686e0237ada1324d/
+http://autobuild.buildroot.net/results/30b/30b98ac7362c27254218a6e521d29971070f8c3c/
+http://autobuild.buildroot.net/results/292/29289c125166630aeaf884ccc006bcf12c8aa0f6/
 
-So, CMake just assumes that everything that is for the target should
-be located in the sysroot. That's a safe way IMHO;
+and many more.
 
-(Side note: For pkg-config, it is the same we look for *.pc in host/
-for when building for the host, and in staging/ for target, the only
-difference is that it does not comes with a lot of *.pc files.)
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/cmake/Config.in            | 4 ++++
+ package/jsoncpp/Config.in          | 5 +++++
+ package/kodi-pvr-argustv/Config.in | 4 ++++
+ package/kodi-pvr-filmon/Config.in  | 4 ++++
+ package/kodi-pvr-pctv/Config.in    | 4 ++++
+ package/kodi-pvr-stalker/Config.in | 4 ++++
+ package/sysdig/Config.in           | 4 ++++
+ 7 files changed, 29 insertions(+)
 
->
->> In this latter case the .cmake files gets installed under:
->> path-to-buildroot/output/host/usr/share/ECM/cmake/
->
-> I would have indeed expected to see them installed there.
->
->> What is the preferred way to install this package? Install it as a
->> host-package, and specify a custom install target dir, or leave it as
->> plain cmake-package?
->
-> My stance:
->   - it is a host-package
-
-I second.
-I worked on something similar a while ago, and I ended up with a hack
-I'm not really proud of: line 15 in [2] (the ugly symlink).
-
-Another way to do this more properly is using
-CMAKE_FIND_ROOT_PATH_MODE_PACKAGE [3], like this [4].
-But this solution does not prevent from badly written module with
-absolute paths (pointing to some host binaries).
-This may be caught later during the build by the poison paths
-detection, but I doubt it can spot paths to the paths like
-<output>/host/usr/lib/; can it?
-
->
-> We need to understand why cmake can't find those modules.
->
-> I CCed Samuel, our cmake expert, so he can shine some light on this.
-
-Hope this help! ;-)
-
-
-[1] https://cmake.org/cmake/help/v3.3/command/find_package.html?highlight=find_package
-[2] https://github.com/tSed/buildroot-2/commit/2f5c52bfc8da80461d589efa97898b51ab42021b
-[3] https://cmake.org/cmake/help/v3.3/variable/CMAKE_FIND_ROOT_PATH_MODE_PACKAGE.html
-[4] http://code.bulix.org/h0jy9o-89332
-
-Regards,
-
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index 6f04a4a..4ba844a 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_XZ
++	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64)) # jsoncpp
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # from jsoncpp
+ 	depends on BR2_USE_WCHAR # libarchive
+@@ -38,3 +39,6 @@ comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7"
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++comment "ctest needs a (e)glibc or uClibc toolchain w/ C++ on x86"
++	depends on (BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64))
+diff --git a/package/jsoncpp/Config.in b/package/jsoncpp/Config.in
+index 83118c4..a29e569 100644
+--- a/package/jsoncpp/Config.in
++++ b/package/jsoncpp/Config.in
+@@ -1,4 +1,6 @@
+ config BR2_PACKAGE_JSONCPP
++	# posix_memalign is incompatible with musl for C++ on x86
++	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64))
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	bool "jsoncpp"
+@@ -13,3 +15,6 @@ config BR2_PACKAGE_JSONCPP
+ 
+ comment "jsoncpp needs a toolchain w/ C++, gcc >= 4.7"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++comment "jsoncpp needs a (e)glibc or uClibc toolchain w/ C++ on x86"
++	depends on (BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64))
+diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
+index 247d83c..c9b74e0 100644
+--- a/package/kodi-pvr-argustv/Config.in
++++ b/package/kodi-pvr-argustv/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_ARGUSTV
+ 	bool "kodi-pvr-argustv"
++	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64)) # jsoncpp
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_KODI_PVR_ARGUSTV
+ 
+ comment "kodi-pvr-argustv needs a toolchain w/ gcc >= 4.7"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++comment "kodi-pvr-argustv needs a (e)glibc or uClibc toolchain w/ C++ on x86"
++	depends on (BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64))
+diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
+index 3d87ec8..a6e2a7d 100644
+--- a/package/kodi-pvr-filmon/Config.in
++++ b/package/kodi-pvr-filmon/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_FILMON
+ 	bool "kodi-pvr-filmon"
++	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64)) # jsoncpp
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_KODI_PVR_FILMON
+ 
+ comment "kodi-pvr-filmon needs a toolchain w/ gcc >= 4.7"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++comment "kodi-pvr-filmon needs a (e)glibc or uClibc toolchain w/ C++ on x86"
++	depends on (BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64))
+diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
+index 1bef551..bd32349 100644
+--- a/package/kodi-pvr-pctv/Config.in
++++ b/package/kodi-pvr-pctv/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_PCTV
+ 	bool "kodi-pvr-pctv"
++	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64)) # jsoncpp
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_KODI_PVR_PCTV
+ 
+ comment "kodi-pvr-pctv needs a toolchain w/ gcc >= 4.7"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++comment "kodi-pvr-pctv needs a (e)glibc or uClibc toolchain w/ C++ on x86"
++	depends on (BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64))
+diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
+index 26a8c3f..1d570cd 100644
+--- a/package/kodi-pvr-stalker/Config.in
++++ b/package/kodi-pvr-stalker/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_STALKER
+ 	bool "kodi-pvr-stalker"
++	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64)) # jsoncpp
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_KODI_PVR_STALKER
+ 
+ comment "kodi-pvr-stalker needs a toolchain w/ gcc >= 4.7"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++comment "kodi-pvr-stalker needs a (e)glibc or uClibc toolchain w/ C++ on x86"
++	depends on (BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64))
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index dc71d5f..c1908b5 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_SYSDIG
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_JSONCPP
++	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64)) # jsoncpp
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_INSTALL_LIBSTDCPP # libjson
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+@@ -19,3 +20,6 @@ config BR2_PACKAGE_SYSDIG
+ comment "sysdig needs a toolchain w/ C++, dynamic library and a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
++
++comment "sysdig needs a (e)glibc or uClibc toolchain w/ C++ on x86"
++	depends on (BR2_TOOLCHAIN_USES_MUSL && (BR2_i386 || BR2_x86_64))
 -- 
-Samuel
+2.6.1
