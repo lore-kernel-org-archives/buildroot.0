@@ -1,40 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Oct 2015 11:33:25 +0200
-Subject: [Buildroot] [git commit] syslog-ng: Specify location of libesmtp
-Message-ID: <20151020093656.919C07FB70@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Oct 2015 11:36:22 +0200
+Subject: [Buildroot] [PATCH] Buildroot support for Intel X1000
+In-Reply-To: <1445333306.3204.6.camel@intel.com>
+References: <1445252572.4143.12.camel@intel.com>
+ <20151020100656.3d979ad1@free-electrons.com>
+ <1445333306.3204.6.camel@intel.com>
+Message-ID: <20151020113622.6c4e1625@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6e088b101d3981c0b57250a70e45a0fe349172bf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Kinsella, Ray,
 
-If --with-libesmtp is omitted a host tool is invoked to detect the
-location of the library and headers, which is obviously the wrong thing
-for a cross-compile environment. Explicitly add --with-libesmtp to
-resolve this.
+On Tue, 20 Oct 2015 09:28:27 +0000, Kinsella, Ray wrote:
 
-Fixes:
-http://git.buildroot.net/buildroot/commit/?id=539acb7500588d0a277357cf831c9f25f770578d
-http://git.buildroot.net/buildroot/commit/?id=01f41585a78406f6e830d5eaf4413a983812a299
+> I took a quick check of my board/galileo patchset.
+> It is free for errant trailing spaces and has the required "category"
+> prefix. 
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/syslog-ng/syslog-ng.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Thanks for checking.
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 7371060..2bbace8 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -37,6 +37,7 @@ endif
- ifeq ($(BR2_PACKAGE_LIBESMTP),y)
- SYSLOG_NG_DEPENDENCIES += libesmtp
- SYSLOG_NG_CONF_OPTS += --enable-smtp
-+SYSLOG_NG_CONF_OPTS += --with-libesmtp="$(STAGING_DIR)/usr"
- else
- SYSLOG_NG_CONF_OPTS += --disable-smtp
- endif
+> However, I had a question on tabbing, for files like grub.cfg or
+> genimage.cfg.
+> Is there a convention? are tabs _or_ spaces fine?
+
+I think we more commonly use tabs.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
