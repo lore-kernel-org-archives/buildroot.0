@@ -1,37 +1,38 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 20 Oct 2015 15:40:52 +0100
-Subject: [Buildroot] [PATCH] tstools: GitHub migration
-In-Reply-To: <87y4exip9l.fsf@dell.be.48ers.dk>
-References: <1445346374-21146-1-git-send-email-Vincent.Riera@imgtec.com>
- <87y4exip9l.fsf@dell.be.48ers.dk>
-Message-ID: <56265274.6040402@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Oct 2015 17:14:46 +0200
+Subject: [Buildroot] [git commit] tstools: GitHub migration
+In-Reply-To: <20151020143645.F3EB4818D4@busybox.osuosl.org>
+References: <20151020143645.F3EB4818D4@busybox.osuosl.org>
+Message-ID: <20151020171446.5db7b297@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/20/2015 03:32 PM, Peter Korsgaard wrote:
-[snip]
->  > +# tstools doesn't have any license so far. See:
->  > +# https://github.com/kynesim/tstools/issues/32
->  > +TSTOOLS_LICENSE =
->  > +TSTOOLS_LICENSE_FILES =
-> 
-> While it is correct that the upstream repo doesn't include a copy of the
-> license file, plenty (all?) source files clearly list that they are
-> under the MPL v1.1 license:
-> 
-> grep -rls 'MPL v1.1'
-> tsplay_fns.h
-> ipv4.h
-...
-[snip]
+Peter, Vicente,
 
-> So I've kept the license as MPLv1.1 and adjusted the comment to make it
-> clear that it is just the license file we are missing.
+On Tue, 20 Oct 2015 16:33:07 +0200, Peter Korsgaard wrote:
 
-Ooops, I see. Thanks Peter!
+> - Wrap the help text in the Config.in to 72 characters, and also change
+>   the project URL to the GitHub one.
 
-> Committed with that fixed, thanks.
-> 
+Hhh...
+
+
+> -	  This is a set of cross-platform command line tools for
+> -	  working with MPEG data
+> +	  This is a set of cross-platform command line tools for working with
+> +	  MPEG data.
+
+This clearly doesn't fit in 72 characters now, except if you count tab
+as one character of course. emacs says that the long line here is now
+77 characters long.
+
+So basically, the previous wrapping was more correct, IMO.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
