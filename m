@@ -1,96 +1,94 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 20 Oct 2015 21:03:29 +1300
-Subject: [Buildroot] buildroot inittab getty
-In-Reply-To: <20151020100154.47cf5600@free-electrons.com>
-References: <1445294741948-115526.post@n4.nabble.com>
- <20151020100154.47cf5600@free-electrons.com>
-Message-ID: <CAFOYHZANC+s29pspRSytM1qq7Mbq2+XKa-toGfGgfGi6CiYoOw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Oct 2015 10:04:52 +0200
+Subject: [Buildroot] [git commit] arch/x86: add support for Intel X1000
+Message-ID: <20151020080505.82B8581E83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 20, 2015 at 9:01 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 19 Oct 2015 15:45:41 -0700 (PDT), logos wrote:
->
->> In buildroot menuconfig, I didn't choose "Run a getty (login prompt) after
->> boot",
->> but in my output/target/etc/inittab, I have this line,
->> ttyS3::respawn:/sbin/getty -L  ttyS3 57600 vt100 # GENERIC_SERIAL
->>
->> system/skeleton/etc/inittab shows,
->> #ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
->>
->> 1. How can this happen? Why is the line uncommented?
->
-> The line gets uncommented if BR2_TARGET_GENERIC_GETTY=y. The logic
-> doing this is in package/skeleton/skeleton.mk. It gets uncommented so
-> that a getty process is started at boot time to prompt you for your
-> login/password on the right serial port / terminal.
->
->> FYI, in my .config file I have
->> # BR2_TARGET_GENERIC_GETTY is not set
->
-> When BR2_TARGET_GENERIC_GETTY is disabled, it does not get uncommented,
-> I just did a test build with the latest Buildroot:
->
-> thomas at skate:~/projets/buildroot (master)$ grep GETTY .config
-> # BR2_TARGET_GENERIC_GETTY is not set
-> thomas at skate:~/projets/buildroot (master)$ grep getty output/target/etc/inittab
-> # Put a getty on the serial port
-> #ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
->
->> 2. Why tty port has changed from ttyS0 to ttyS3?
->
-> Because you have BR2_TARGET_GENERIC_GETTY=y in your configuration, and
-> BR2_TARGET_GENERIC_GETTY_PORT="ttyS3". Or because you are using a
-> custom rootfs skeleton that has a different /etc/inittab.
->
->> 3. If possible, I'd like to understand inittab file generation process.
->
-> 1. The skeleton package gets installed. It copies system/skeleton/* to
->    output/target/.
->
-> 2. The busybox package gets installed. It copies
->    package/busybox/inittab to output/target/etc/inittab.
->
-> 3. The skeleton package has registered a "target finalize hook" called
->    SKELETON_SYSTEM_GETTY that gets triggered at the very end of the build
->    (after all packages have been built and installed, but before the root
->    filesystem image is generated). This hook, implemented in
->    package/skeleton/skeleton.mk, will tune the inittab by uncommenting
->    the getty line and adjusting the serial port / terminal according to
->    your configuration. This only happens if BR2_TARGET_GENERIC_GETTY=y.
->
->    See http://git.buildroot.net/buildroot/tree/package/skeleton/skeleton.mk#n139
->
-> Note that the logic in the older Buildroot you're using is different,
-> since at the time, we didn't had a 'skeleton' package.
->
->> 4. Maybe this question doesn't belong here,
->>     what option or parameter do I need to setup if I want to login without
->> typing login name and password after booting?
->> Currently I have to type "root" and hit enter. (no password setup for root)
->
-> Just add a post-build script that tunes your inittab by adding a line
-> that starts a shell.
+commit: http://git.buildroot.net/buildroot/commit/?id=968f5d5e59195e6e6a9a349ec9a118fb3a50b8b3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding '-n -l /bin/sh' to the command should take you straight to a
-shell instead of invoking login.
+The Intel X1000 is the Pentium class microprocessor that ships with
+Galileo Gen 1/2. This patch adds changes to arch and toolchain-wrapper
+to omit the lock prefix for the X1000.
 
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[Thomas: tweak commit log and Config.in help text.]
+
+Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.x86             |   12 ++++++++++++
+ toolchain/toolchain-wrapper.c  |    3 +++
+ toolchain/toolchain-wrapper.mk |    4 ++++
+ 3 files changed, 19 insertions(+), 0 deletions(-)
+
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 43f6abc..dca30da 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -34,6 +34,16 @@ config BR2_x86_i486
+ config BR2_x86_i586
+ 	bool "i586"
+ 	depends on !BR2_x86_64
++config BR2_x86_x1000
++	bool "x1000"
++	depends on !BR2_x86_64
++	help
++	  The Intel X1000 is a Pentium class microprocessor in the
++	  Quark (sub-Atom) Product Line. The X1000 has a bug on the
++	  lock prefix requiring that prefix must be stripped at build
++	  time.
++
++	  See https://en.wikipedia.org/wiki/Intel_Quark.
+ config BR2_x86_i686
+ 	bool "i686"
+ 	depends on !BR2_x86_64
+@@ -202,6 +212,7 @@ config BR2_ARCH
+ 	default "i386"		if BR2_x86_i386
+ 	default "i486"		if BR2_x86_i486
+ 	default "i586"		if BR2_x86_i586
++	default "i586"		if BR2_x86_x1000
+ 	default "i586"		if BR2_x86_pentium_mmx
+ 	default "i586"		if BR2_x86_geode
+ 	default "i586"		if BR2_x86_c3
+@@ -240,6 +251,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "i386"		if BR2_x86_i386
+ 	default "i486"		if BR2_x86_i486
+ 	default "i586"		if BR2_x86_i586
++	default "i586"		if BR2_x86_x1000
+ 	default "pentium-mmx"	if BR2_x86_pentium_mmx
+ 	default "i686"		if BR2_x86_i686
+ 	default "pentiumpro"	if BR2_x86_pentiumpro
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 16a3d78..887058f 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -63,6 +63,9 @@ static char *predef_args[] = {
+ #ifdef BR_64
+ 	"-m64",
+ #endif
++#ifdef BR_OMIT_LOCK_PREFIX
++	"-Wa,-momit-lock-prefix=yes",
++#endif
+ #ifdef BR_BINFMT_FLAT
+ 	"-Wl,-elf2flt",
+ #endif
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index c78363a..eba2b38 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -20,6 +20,10 @@ ifeq ($(BR2_CCACHE),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE
+ endif
+ 
++ifeq ($(BR2_x86_x1000),y)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_OMIT_LOCK_PREFIX
++endif
++
+ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
+ endif
