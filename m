@@ -1,40 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Oct 2015 12:03:06 +0200
-Subject: [Buildroot] [PATCH] syslog-ng: Specify location of libesmtp
-In-Reply-To: <CAFOYHZA0PXC4t6opOkztezy1hdU5Zhcoom34oM6+5JT2Fsb8MQ@mail.gmail.com>
- (Chris Packham's message of "Tue, 20 Oct 2015 22:40:35 +1300")
-References: <1445328991-29416-1-git-send-email-judge.packham@gmail.com>
- <87fv15286n.fsf@dell.be.48ers.dk>
- <CAFOYHZA0PXC4t6opOkztezy1hdU5Zhcoom34oM6+5JT2Fsb8MQ@mail.gmail.com>
-Message-ID: <87bnbt26xx.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Oct 2015 12:28:30 +0200
+Subject: [Buildroot] [git commit] arch/x86: add support for Intel X1000
+In-Reply-To: <20151020080505.82B8581E83@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Tue, 20 Oct 2015 10:04:52 +0200")
+References: <20151020080505.82B8581E83@busybox.osuosl.org>
+Message-ID: <874mhl25rl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ > commit: http://git.buildroot.net/buildroot/commit/?id=968f5d5e59195e6e6a9a349ec9a118fb3a50b8b3
+ > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->> 
- >> > Fixes:
- >> > http://git.buildroot.net/buildroot/commit/?id=539acb7500588d0a277357cf831c9f25f770578d
- >> > http://git.buildroot.net/buildroot/commit/?id=01f41585a78406f6e830d5eaf4413a983812a299
+ > The Intel X1000 is the Pentium class microprocessor that ships with
+ > Galileo Gen 1/2. This patch adds changes to arch and toolchain-wrapper
+ > to omit the lock prefix for the X1000.
 
- > Oops this is the url of the HEAD commit not the url of the build
- > result. This should have been
+ > [Thomas: tweak commit log and Config.in help text.]
 
- >   http://autobuild.buildroot.net/results/b82/b8224ea52d962c62ead367343d68bf98a4b9e883/
- >   http://autobuild.buildroot.net/results/445/445270aed4c79cde75d54d49d13ffad9d684c61b/
-
- > Probably doesn't matter but If you want you could revert and fix up
- > the commit message to correct the URL.
-
-Gaah, you're right - I can't believe I didn't notice that :/
-
-I'll leave it as it is.
+Isn't the -momit-lock-prefix=yes option only supported by fairly recent
+binutils versions? If so, older binutils version / external toolchains
+shouldn't be available for x1000.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
