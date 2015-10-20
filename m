@@ -1,37 +1,47 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Tue, 20 Oct 2015 10:31:10 +0000
-Subject: [Buildroot] [git commit] arch/x86: add support for Intel X1000
-In-Reply-To: <874mhl25rl.fsf@dell.be.48ers.dk>
-References: <20151020080505.82B8581E83@busybox.osuosl.org>
- <874mhl25rl.fsf@dell.be.48ers.dk>
-Message-ID: <1445337070.3204.25.camel@intel.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 20 Oct 2015 13:31:56 +0300
+Subject: [Buildroot] [PATCH] ltp-testsuite: update homepage link and
+	download site
+Message-ID: <f1b5c3f899c70e4f61f9ded871ec3f1d2e357512.1445337116.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+ltp-testsuite migrated to github.
 
-I handle this in the defconfig for Galileo, explicitly setting binutils to 2.5
-Presume you feel that binutils  < 2.5 shouldn't be selectable by the user?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ltp-testsuite/Config.in        | 2 +-
+ package/ltp-testsuite/ltp-testsuite.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Ray K
-
-On Tue, 2015-10-20@12:28 +0200, Peter Korsgaard wrote:
-
-
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni at free-electrons.com<mailto:thomas.petazzoni@free-electrons.com>> writes:
-
- > commit: http://git.buildroot.net/buildroot/commit/?id=968f5d5e59195e6e6a9a349ec9a118fb3a50b8b3
- > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
- > The Intel X1000 is the Pentium class microprocessor that ships with
- > Galileo Gen 1/2. This patch adds changes to arch and toolchain-wrapper
- > to omit the lock prefix for the X1000.
-
- > [Thomas: tweak commit log and Config.in help text.]
-
-Isn't the -momit-lock-prefix=yes option only supported by fairly recent
-binutils versions? If so, older binutils version / external toolchains
-shouldn't be available for x1000.
+diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+index 978b8e3cbae1..bd540f29f86b 100644
+--- a/package/ltp-testsuite/Config.in
++++ b/package/ltp-testsuite/Config.in
+@@ -19,7 +19,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
+ 	  UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and UCLIBC_SV4_DEPRECATED
+ 	  are needed.
+ 
+-	  http://ltp.sourceforge.net/
++	  http://linux-test-project.github.io
+ 
+ comment "ltp-testsuite needs a non-musl toolchain w/ threads"
+ 	depends on !BR2_nios2
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 7fe42eb82ff9..64467de69737 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -6,7 +6,7 @@
+ 
+ LTP_TESTSUITE_VERSION = 20150420
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+-LTP_TESTSUITE_SITE = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
++LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
+ LTP_TESTSUITE_LICENSE_FILES = COPYING
+ LTP_TESTSUITE_CONF_OPTS += \
+-- 
+2.6.1
