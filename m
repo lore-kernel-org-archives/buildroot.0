@@ -1,41 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Oct 2015 16:35:23 +0200
-Subject: [Buildroot] [git commit] musl: bump to version 1.1.12
-Message-ID: <20151020143646.1AF9D81ECE@busybox.osuosl.org>
+Date: Tue, 20 Oct 2015 16:34:37 +0200
+Subject: [Buildroot] [git commit] gdb: enable host-gdb on aarch64
+Message-ID: <20151020143646.0970181EC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c55bc1c2a4c0ad8286c4be147f4c8ae08e37abd
+commit: http://git.buildroot.net/buildroot/commit/?id=c436ffbc7efcff1ab96d99b8620c6562cfc1ad0d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+gdb has full support for aarch64 since version 7.6,
+current minimum is 7.7.1.
+Target build was re-enabled over a year ago, but host-gdb was not.
+
+Related commits:
+0e49733b306b353aad3a29a2c7a6faf25841ef0b gdb disabled for aarch64
+4372449a4f8e16f763c7d5a0c125ca015a7cbef6 target-gdb re-enabled
+
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/musl/musl.hash |    2 +-
- package/musl/musl.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gdb/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 4872f94..b136599 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	bb9e6da51b7b12641f5d1abb39705c6c6c1b2fbd20002362948aa736a0aa353f  musl-1.1.11.tar.gz
-+sha256	720b83c7e276b4b679c0bffe9509340d5f81fd601508e607e708177df0d31c0e  musl-1.1.12.tar.gz
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 2f43aab..6fdcc73 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUSL_VERSION = 1.1.11
-+MUSL_VERSION = 1.1.12
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index b66e742..b65dd52 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_HOST_GDB
+ 	# allow to build a cross-gdb, as the one of the external
+ 	# toolchain should be used.
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_nios2
+ 	help
+ 	  Build a cross gdb that runs on the host machine and debugs
+ 	  programs running on the target. It requires 'gdbserver'
