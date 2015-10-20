@@ -1,47 +1,28 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 20 Oct 2015 13:31:56 +0300
-Subject: [Buildroot] [PATCH] ltp-testsuite: update homepage link and
-	download site
-Message-ID: <f1b5c3f899c70e4f61f9ded871ec3f1d2e357512.1445337116.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Oct 2015 12:34:06 +0200
+Subject: [Buildroot] [git commit] arch/x86: add support for Intel X1000
+In-Reply-To: <1445337070.3204.25.camel@intel.com> (Ray Kinsella's message of
+ "Tue, 20 Oct 2015 10:31:10 +0000")
+References: <20151020080505.82B8581E83@busybox.osuosl.org>
+ <874mhl25rl.fsf@dell.be.48ers.dk> <1445337070.3204.25.camel@intel.com>
+Message-ID: <87zizdzv4x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ltp-testsuite migrated to github.
+>>>>> "Kinsella," == Kinsella, Ray <ray.kinsella@intel.com> writes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ltp-testsuite/Config.in        | 2 +-
- package/ltp-testsuite/ltp-testsuite.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Hi Peter,
+ > I handle this in the defconfig for Galileo, explicitly setting binutils to 2.5
+ > Presume you feel that binutils  < 2.5 shouldn't be selectable by the user?
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 978b8e3cbae1..bd540f29f86b 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -19,7 +19,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	  UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and UCLIBC_SV4_DEPRECATED
- 	  are needed.
- 
--	  http://ltp.sourceforge.net/
-+	  http://linux-test-project.github.io
- 
- comment "ltp-testsuite needs a non-musl toolchain w/ threads"
- 	depends on !BR2_nios2
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 7fe42eb82ff9..64467de69737 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -6,7 +6,7 @@
- 
- LTP_TESTSUITE_VERSION = 20150420
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
--LTP_TESTSUITE_SITE = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
-+LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
- LTP_TESTSUITE_CONF_OPTS += \
+Yes, indeed - Simply add a depends on !BR2_x86_x1000 to the older
+binutils versions in package/binutils/Config.in.host and the affected
+preconfigured external toolchains (presumably all of them as I take it
+you also need the C library to be built with that option?)
+
 -- 
-2.6.1
+Venlig hilsen,
+Peter Korsgaard 
