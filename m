@@ -1,77 +1,44 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Tue, 20 Oct 2015 18:52:05 +0200
-Subject: [Buildroot] What is the preferred way install additional cmake
-	modules?
-Message-ID: <56267135.7050303@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Oct 2015 20:11:27 +0200
+Subject: [Buildroot] [git commit] tstools: GitHub migration
+In-Reply-To: <20151020163517.GB3738@free.fr> (Yann E. MORIN's message of "Tue, 
+ 20 Oct 2015 18:35:17 +0200")
+References: <20151020143645.F3EB4818D4@busybox.osuosl.org>
+ <20151020171446.5db7b297@free-electrons.com>
+ <56265B25.8070900@imgtec.com> <20151020163517.GB3738@free.fr>
+Message-ID: <87fv15l8a8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Dear All,
+Hi,
 
-i am about to add the modemmanager-qt[1] package to Buildroot, which
-for building depends on a set of additional cmake modules also
-provided by the KDE project, called extra-cmake-modules[2], which
-itself also uses cmake for building and installing.
+ > Note: I hate TABs. TABs are so 70s. Besides, since, as you said, the
+ > width of TABs varies very wildely between machines (due to personal
+ > tastes), it means that TABs can not reliably be used to provide a
+ > "beautiful" layout that is reprpducible everywhere as-is; various
+ > editors will always break that nice layout.
 
- I managed to set up a working configuration to install the
-extra-cmake-modules package with the following in my
-extra-cmake-modules/extra-cmake-modules.mk file (_VERSION and other
-variables are omitted here):
+ > Besides, using 8-char-wide TABs means indentation very quickly limits
+ > the amount of space to write code (80-char-wide lines are close to the
+ > optimum width for human reading).
 
+ > Also, it is very hard to configure one's editor, sicne coding rules vary
+ > between projects, some requiring leading TABs, 4- or 8- (or even 2!)
+ > char wide, while others require leading spaces...
 
-EXTRA_CMAKE_MODULES_INSTALL_STAGING = YES
-EXTRA_CMAKE_MODULES_INSTALL_TARGET = NO
+ > There is today *no* reason to use leading TABs; any sane editor will
+ > happily insert how-many space you want when pressing TAB (heck, I guess
+ > even emacs is capable of that ;-] ).
 
-$(eval $(cmake-package))
+While this is all true, Buildroot is mainly Kconfig and Makefiles, and
+both of those languages have special handling of tabs, so we have to
+stick to it.
 
-
-and in my target package i add the 'extra-cmake-modules' to the
-dependencies. In this case the .cmake files get installed in the
-
-path-to-buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/us
-r/share/ECM/cmake/
-
-directory.
-
- My instinct would say that extra-cmake-modules is supposed to be a
-host package (as then i wouldn't need to explicitly set
-EXTRA_CMAKE_MODULES_INSTALL_TARGET to NO), so i tried this to define
-as a host-cmake-package, make modemmanager-qt depending on
-host-extra-cmake-modules, but then the cmake modules not found by the
-modemmanager-qt build config.
-
-In this latter case the .cmake files gets installed under:
-path-to-buildroot/output/host/usr/share/ECM/cmake/
-
-
-What is the preferred way to install this package? Install it as a
-host-package, and specify a custom install target dir, or leave it as
-plain cmake-package?
-
-
-
-Thanks, regards
-zgyarmati
-
-
-[1]
-https://projects.kde.org/projects/frameworks/modemmanager-qt/repository
-
-[2] https://projects.kde.org/projects/kdesupport/extra-cmake-modules
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.22 (GNU/Linux)
-
-iQEcBAEBAgAGBQJWJnE1AAoJEAGmEeeR8iVhh20IAJPBBxS0h2nYHnqeNsaLg7nr
-Om9yviFOVSfyPB2kouFP/C9bGZ5DGXM66tMgjjVbUpxbLkLyUoFAFLXp2ORdwTT2
-aMJWLGurDD16iePOKyDjxEgv4C6Fl7gWgzPLHTRyyLAdJIxzHP5dykCZBwo1t2hW
-AXH9mCS+pAM1yfa5Mk5Nw4uYeLqJ0NAttDQmXnMwilu9AV1bNejyzLeGSge5gdjb
-YvbBDRkVRS8KMlZ2aG5JI/RKbK/RabSM4Mhtka4NYOGOqhDyQ2FpDj4b+FVaFeQn
-opSJFuAecKT9RRb73N9ZT3Se+sYuBwB2sMdUZT3A30KzLbNnmoSDR9Itw/0RSfw=
-=tPVc
------END PGP SIGNATURE-----
+-- 
+Venlig hilsen,
+Peter Korsgaard 
