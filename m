@@ -1,43 +1,26 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 20 Oct 2015 22:53:10 +0200
-Subject: [Buildroot] [PATCH] [RFC] linux: add option to avoid kernel
- kconfig updates
-In-Reply-To: <1445277739-30943-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1445277739-30943-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <5626A9B6.8080005@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Oct 2015 22:54:00 +0200
+Subject: [Buildroot] [PATCH 1/1] sed: handle merged usr folder
+In-Reply-To: <1445180905-15896-1-git-send-email-james.knight@rockwellcollins.com>
+ (James Knight's message of "Sun, 18 Oct 2015 11:08:25 -0400")
+References: <1445180905-15896-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <876121jm6v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19-10-15 20:02, gustavo.zacarias at free-electrons.com wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> 
-> Some packages require specific kernel options enabled to be of any use,
-> however when building a kernel with a specific configuration intended
-> for binary-only modules this can be counterproductive.
+>>>>> "James" == James Knight <james.d.knight@live.com> writes:
 
- Can you give a concrete example of this? The options that we set automatically
-should only be options that are really required for building or running. So if
-you don't set it, it's not going to work anyway. If there is some option that is
-not really required, then we shouldn't be setting it.
+ > For targets prepared with a usr-move, package should not be attempting
+ > to move binaries from `usr/bin` to `bin`.
 
+ > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 
- Regards,
- Arnout
-
-> 
-> Add an option to disable this behaviour and leave the .config alone.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-[snip]
-
+A simpler fix is just to get sed to put the binary in /bin in the first
+place,m so I've changed the package to configure with --bindir=/bin
+instead and mark your patch as rejected.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
