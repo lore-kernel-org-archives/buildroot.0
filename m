@@ -1,165 +1,91 @@
-From: Alexandre Oliveira <alexandrenagy@gmail.com>
-Date: Tue, 20 Oct 2015 00:33:37 +0000
-Subject: [Buildroot] Kernel panic while trying to boot
- qemu_x86_64_defconfig on notebook with dual boot.
-In-Reply-To: <CAAmaERM=kQUdtarFeq=MUAW-_rUwbequRBVp-Cr55ZFWvjVqLg@mail.gmail.com>
-References: <CAAmaERMLtspQ2X-rSM_jaFGyqp_Gw1z6zOiPv=S9pZML=YjH-A@mail.gmail.com>
- <562093C7.9000501@mind.be>
- <CAAmaEROCOJc_LYXDoFtBJwidH-h531ogKDY0EQJeKKnX6752Hw@mail.gmail.com>
- <5620C977.8030101@mind.be>
- <CAAmaERM=kQUdtarFeq=MUAW-_rUwbequRBVp-Cr55ZFWvjVqLg@mail.gmail.com>
-Message-ID: <CAAmaERN739zj0EUQLbfDTdxVy+rpoojS1wUeDeqxWyVEaKSVYA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 20 Oct 2015 06:49:01 +0300
+Subject: [Buildroot] ltp-testsuite without native RPC (commit
+ 8f1c4c49a2ab0fc9e6cf73370f4483e253e5ac2d)
+In-Reply-To: <20151019173523.GX20889@tarshish>
+References: <CAAXf6LUBj47OW0+VBzeYE-Zh3jLMg77-kWCOiSCMPGiRKKSPfw@mail.gmail.com>
+ <20151015181727.GI2451@tarshish>
+ <CAAXf6LV5hJVK+zqbFHZ0qbwfShx2ZhyLBNdEXvURPpEJp+4=OQ@mail.gmail.com>
+ <20151019173523.GX20889@tarshish>
+Message-ID: <20151020034901.GZ20889@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello again,
+Hi Thomas,
 
-It looks like I had some trash compiling code.
+On Mon, Oct 19, 2015 at 08:35:23PM +0300, Baruch Siach wrote:
+> On Mon, Oct 19, 2015 at 03:26:18PM +0200, Thomas De Schampheleire wrote:
+> > On Thu, Oct 15, 2015 at 8:17 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> > > On Thu, Oct 15, 2015 at 04:06:39PM +0200, Thomas De Schampheleire wrote:
+> > >> What about patching ltp-testsuite instead, not enabling the RPC tests
+> > >> in this case? At first sight this was added with following (ltp)
+> > >> commit:
+> > >> https://github.com/linux-test-project/ltp/commit/8e9a4dbb8eaa561e51d6d8ebe5a5342f3e498224
+> > >
+> > > Isn't that what ac_cv_header_tirpc_netconfig_h=no is doing?
+> > 
+> > I just tried building ltp-testsuite with a no-rpc toolchain on top of
+> > latest buildroot. Here is the build failure:
+> > 
+> > /usr/bin/make -C lib -f
+> > ".../output/build/ltp-testsuite-20150420/testcases/network/rpc/basic_tests/rpc01/lib/Makefile"
+> > all
+> > make[7]: Entering directory
+> > `.../output/build/ltp-testsuite-20150420/testcases/network/rpc/basic_tests/rpc01/lib'
+> > .../output/host/usr/bin/powerpc-linux-gcc -D_LARGEFILE_SOURCE
+> > -D_LARGEFILE64_SOURCE -Os -g -O2 -fno-strict-aliasing -pipe -Wall -W
+> > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -Os -Wold-style-definition
+> > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FORTIFY_SOURCE=2
+> > -I../../../../../../include -I../../../../../../include  -c -o
+> > librpc01.o librpc01.c
+> > librpc01.c:19:21: fatal error: rpc/xdr.h: No such file or directory
+> >  #include <rpc/xdr.h>
+> >                      ^
+> > compilation terminated.
+> > make[7]: *** [librpc01.o] Error 1
+> > 
+> > 
+> > I think my original problem (this was with a previous version of
+> > ltp-testsuite) was that rpc/rpc.h was missing, but I think the bottom
+> > line is the same: ltp-testsuite attempts to build RPC-related tests
+> > but the necessary header files are not available.
+> > 
+> > My approach was to add libtirpc to the equation, which provides the
+> > header files and library to make things work.
+> > 
+> > With your patch, libtirpc is not added, and so the header files remain
+> > unavailable.
+> > 
+> > How do you suggest to proceed?
+> > One approach is to disable the ltp tests that use rpc entirely (on top
+> > of your last patch), another one is to disable only the tests that use
+> > authdes_create (on top of my original patch; reverting yours).
+> > Other ideas are welcome, of course.
+> 
+> The best solution seems to be fixing the root cause upstream. There was an 
+> attempt by Natanael Copa in commit c0547c56dafb8e1 (Add configure option to 
+> disable DES authentication) to add a --disable-authdes configure option to 
+> libtirpc. There was another attempt in commit 58cd17f999 (Fix: unresolved 
+> _crypt() symbols) to add a local implementation of DES. The first attempt was 
+> later reverted in commit f17b44048003 (Revert commit c0547c56dafb ('Add 
+> configure option to disable DES')) which also (inadvertedly?) removed 
+> des_crypt.c and des_impl.c from Makefile.am. Restoring the local DES 
+> implementation looks not so hard to do.
+> 
+> In the mean time I think we can replace our 
+> 0007-Disable-DES-authentification-support.patch with something more flexible 
+> along the lines of Natanael's reverted patch.
 
-I just clean everything and build again, with your advices and it works.
+Which, of course, won't solve our problem.
 
-There is no need to change fstab file.
+I'll look into the first approach (libtirpc local DES) if I find some time.
 
-I attached initramdisk to kernel and AHCI support.
-Then, I run the following commands.
+baruch
 
-$ sudo umount /dev/sda7
-$ sudo mount /dev/sda7 /mnt/btlinux/
-$ sudo rm -rf /mnt/btlinux/*
-$ sudo tar -C /mnt/btlinux/ -xf images/rootfs.tar
-$ sudo mkdir /mnt/btlinux/boot
-$ sudo cp /home/alexandre/x86_64output/images/bzImage /mnt/btlinux/boot/
-$ sudo umount /dev/sda7
-
-After that, I reboot and boot with GRUB like the e-mails before.
-
-Thank you for the help.
-
-Att.
-Alexandre Oliveira.
-
-
-Em sex, 16 de out de 2015 ?s 22:51, Alexandre Oliveira <
-alexandrenagy@gmail.com> escreveu:
-
->
->  Hi Alexandre,
->>
->>  [Please don't top-post, but reply in-line with the quoted text as is done
->> below. Also remove redundant pieces of quoted text.]
->>
->
-> I realized this right after sending the email. I am sorry.
->
->
->>  Normally, the kernel should also dump a list of block devices that it
->> found. If
->> it doesn't, then probably the drivers for your disk are not built into the
->> kernel. In "big" distroes like Debian/Ubuntu, there is an initramfs which
->> contains all possible drivers are modules and the correct one is loaded
->> at boot
->> time. The qemu defconfig in Buildroot is really minimal, it only contains
->> a PIIX
->> driver.
->>
->
-> I attached init RAM disk into kernel with the option:
-> [*] initial RAM  filesystem  linked into kernel. (Filesystem images menu).
-> This avoid the need of calling a initramfs in the GRUB options. That's
-> right?
->
->
->>
->>  To find the correct driver(s), do 'lsmod' in your ubuntu system. You'll
->> get a
->> long list of modules currently loaded, and you have to look for the ones
->> that
->> are related to the disk. Most likely, it's CONFIG_SATA_AHCI (module ahci)
->> that
->> you need. You'll probably also need CONFIG_MSDOS_PARTITION.
->
->  To enable these, run 'make linux-menuconfig', type / to search for the
->> options
->> you need, enable them (with y, not with m), and rebuild.
->>
->
-> 'lsmod' command returns:
-> ahci                   36864  2
-> libahci                32768  1 ahci
->
-> 'lspci' command returns:
-> 00:1f.2 SATA controller: Intel Corporation 5 Series/3400 Series Chipset 6
-> port SATA AHCI Controller (rev 05)
->
-> The option CONFIG_SATA_AHCI  was not set.
-> I just add it and re-make the buildroot linux system.
->
-> After that, I run this script inside output directory:
->
-> ========
-> #!/bin/bash
-> sudo umount /dev/sda7
-> sudo mount /dev/sda7 /mnt/btlinux/
-> sudo rm -rf /mnt/btlinux/*
-> sudo tar -C /mnt/btlinux/ -xf images/rootfs.tar
-> sudo cp fstab /mnt/btlinux/etc/
-> ========
->
-> the fstab has two new lines:
->
-> ====
-> /dev/sda7        / ext4         defaults 1 1
-> /dev/sda5        none swap defaults 0 0
-> ====
->
-> Then, I reboot notebook an GRUB calls:
->
-> =======
-> menuentry 'Build root (em /dev/sda7)' --class gnu-linux --class gnu
-> --class os $menuentry_id_option
-> 'osprober-gnulinux-simple-96eafc8c-0063-417a-9c32-4ea96ee97b55' {
-> insmod part_msdos
-> insmod ext2
-> set root='hd0,msdos7'
-> if [ x$feature_platform_search_hint = xy ]; then
->  search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos7
-> --hint-efi=hd0,msdos7 --hint-baremetal=ahci0,msdos7
->  96eafc8c-0063-417a-9c32-4ea96ee97b55
-> else
->  search --no-floppy --fs-uuid --set=root
-> 96eafc8c-0063-417a-9c32-4ea96ee97b55
-> fi
-> linux /boot/bzImage root=/dev/sda7 console=tty1
->
-> }
-> =========
->
-> But, after reboot, the same error is happening...
->
-> ===========================
-> VFS: Cannot open root device "sda7" or unknown-block(0,0)
-> Please append a correct "root=" boot option; here are the available
-> partitions:
-> Kernel panic - not syncing: VFS: Unable to mount root fs on
-> unknown-block(0,0)  error -6
-> ===========================
->
->
-> I already learned a lot with your answers.
-> I tried to add another Intel SATA drivers on Device Drivers menus from
-> $make linux-menuconfig but the same error occurs...
->
-> Do you have any new guess?
-> Thank you in advance for the help.
->
->
-> Best Regards,
-> Alexandre Oliveira.
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151020/f1291ee1/attachment.html>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
