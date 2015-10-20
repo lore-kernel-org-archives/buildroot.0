@@ -1,63 +1,33 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Tue, 20 Oct 2015 10:54:46 -0300
-Subject: [Buildroot] [PATCH] erlang: Remove BR2_TOOLCHAIN_HAS_THREADS
-	dependency
-Message-ID: <1445349286-1185-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 20 Oct 2015 15:05:52 +0100
+Subject: [Buildroot] [PATCH 1/3] dhcpdump: add $(TARGET_MAKE_ENV) before
+	$(MAKE)
+Message-ID: <1445349954-44062-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erlang can be built without threads support, by passing an
-appropriate config option.
-
-This commit drops the config dependency on BR2_TOOLCHAIN_HAS_THREADS
-and instead passes --disable-threads if the toolchain doesn't support
-threads.
-
-While here, change the wording of the config comment to "dynamic
-library" to be consistent with similar comments elsewhere.
-
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/erlang/Config.in | 5 ++---
- package/erlang/erlang.mk | 4 ++++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/dhcpdump/dhcpdump.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 625b7c1b829f..0ec01bb749b4 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -1,12 +1,11 @@
--comment "erlang needs a toolchain w/ threads, shared library"
-+comment "erlang needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+index 6b677a6..3584f4f 100644
+--- a/package/dhcpdump/dhcpdump.mk
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -16,8 +16,8 @@ DHCPDUMP_LIBS += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
+ endif
  
- config BR2_PACKAGE_ERLANG
- 	bool "erlang"
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBATOMIC_OPS
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 499f62c1539b..848d1ddc44c5 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -40,6 +40,10 @@ HOST_ERLANG_CONF_OPTS = --without-javac --with-ssl=$(HOST_DIR)/usr
+ define DHCPDUMP_BUILD_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS) -D_GNU_SOURCE" \
+-		LIBS="$(DHCPDUMP_LIBS)"
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS) \
++		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)"
+ endef
  
- HOST_ERLANG_CONF_OPTS += --without-termcap
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+ERLANG_CONF_OPTS += --disable-threads
-+endif
-+
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- ERLANG_CONF_OPTS += --with-termcap
- ERLANG_DEPENDENCIES += ncurses
+ define DHCPDUMP_INSTALL_TARGET_CMDS
 -- 
-2.5.2
+1.7.1
