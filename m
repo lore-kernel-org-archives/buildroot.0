@@ -1,73 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Oct 2015 10:06:56 +0200
-Subject: [Buildroot] [PATCH] Buildroot support for Intel X1000
-In-Reply-To: <1445252572.4143.12.camel@intel.com>
-References: <1445252572.4143.12.camel@intel.com>
-Message-ID: <20151020100656.3d979ad1@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 20 Oct 2015 10:10:15 +0200
+Subject: [Buildroot] [PATCH] iptables: add upstream patch fixing the
+ message 'connlabel.conf not found'
+In-Reply-To: <87zize3c5j.fsf@dell.be.48ers.dk>
+References: <1445257360-31923-1-git-send-email-patrickdepinguin@gmail.com>
+ <87vba27vhz.fsf@dell.be.48ers.dk>
+ <CAAXf6LWqmBZjvBu8Qd-N7JffxrU7V15xBMtYqMO3Fgj-XcPKmg@mail.gmail.com>
+ <87zize3c5j.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LUQ_FxWKWckFNvk_ZAA++vEop=VqEYGaj2z0iaDz+mKAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ray,
+On Oct 19, 2015 9:13 PM, "Peter Korsgaard" <peter@korsgaard.com> wrote:
+>
+> >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com>
+writes:
+>
+> Hi,
+>
+> >> Do you see this with mainline buildroot? We do pass --disable-static
+for
+>  >> !BR2_STATIC_LIBS builds, so I'm not sure how it could trigger for
+your?
+>  >>
+>  >> But the fix does make sense for completely static builds.
+>
+>  > We noticed this problem after upgrading to a newer buildroot version a
+>  > few releases back (but never sent that patch to buildroot until now).
+>  > We are not using a static build, nor did we make changes to
+>  > iptables.mk here.
+>  > I don't really know why the author of the patch mentioned static in
+>  > the commit message. Maybe he is not referring to 'static' in the sense
+>  > that Buildroot does.
+>
+> As far as I read the mail it is about configuring iptables with
+> --enable-static
+>
+>  > Anyway, we were thus seeing this message with standard iptables calls
+>  > on a standard system.
+>
+> But with a Buildroot version not including:
+>
+> commit 9f13ddf3bab51ae762b82ce9f767ac1abcdb7b2e
+> Author: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Date:   Tue Oct 21 13:58:14 2014 -0300
+>
+>     iptables: disable static for dynamic builds
+>
+>     It leads to ugly runtime warnings, see:
+>     http://patchwork.ozlabs.org/patch/386215/
+>     It's also required for xtables-addons.
+>
+>     Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>     Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> Right?
 
-On Mon, 19 Oct 2015 11:02:52 +0000, Kinsella, Ray wrote:
-> The Intel X1000 is the Pentium class microprocessor that ships with Galileo
-> Gen 1/2. This patch adds changes to arch and toolchain-wrapper to omit the lock
-> prefix for the X1000.
-> 
-> Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+Makes sense, we were updating from 2013.05 to 2014.05 back then.
+I wasn't aware of the above patch.
+It means that for our use case, we
+wouldn't need it any more (we're on 2015.05 now).
 
-I've applied your patch, after doing some small tweaks (see below).
+Thanks for refreshing that for me :)
 
-> ---
->  arch/Config.in.x86             | 10 ++++++++++
->  toolchain/toolchain-wrapper.c  |  3 +++
->  toolchain/toolchain-wrapper.mk |  4 ++++
->  3 files changed, 17 insertions(+)
-> 
-> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-> index 43f6abc..28b8adf 100644
-> --- a/arch/Config.in.x86
-> +++ b/arch/Config.in.x86
-> @@ -34,6 +34,14 @@ config BR2_x86_i486
->  config BR2_x86_i586
->  	bool "i586"
->  	depends on !BR2_x86_64
-> +config BR2_x86_x1000
-> +	bool "x1000"
-> +	depends on !BR2_x86_64
-> +	help
-> +	    The Intel X1000 is a Pentium class microprocessor in the Quark 
-
-Indentation for help text is one tab + two spaces. Also, there was a
-trailing space on this line.
-
-> +	    (sub-Atom) Product Line. The X1000 has a bug on the lock prefix
-> +	    requiring that prefix must be stripped at build time. See
-> +	    https://en.wikipedia.org/wiki/Intel_Quark
-
-And the lines were a bit too long, so I rewrapped them.
-
-> +#ifdef BR_OMIT_LOCK_PREFIX
-> +	"-Wa,-momit-lock-prefix=yes", 
-
-There was also a trailing space here.
-
-And finally, I've changed  the commit title to:
-
-	arch/x86: add support for Intel x1000
-
-We indeed like to have some sort of "category" prefix for all patches.
-Generally it's just the package name (when the patch is touching a
-package), but we also try to do the same for patches touching other
-things as well.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+/Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151020/3bea789c/attachment.html>
