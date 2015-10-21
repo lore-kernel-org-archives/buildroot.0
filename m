@@ -1,49 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Oct 2015 22:15:36 +0200
-Subject: [Buildroot] [git commit] ltp-testsuite: update homepage link and
-	download site
-Message-ID: <20151021201836.8E4AF81EE7@busybox.osuosl.org>
+Date: Wed, 21 Oct 2015 22:18:04 +0200
+Subject: [Buildroot] [PATCH 1/1] Add more options to eudev package.
+In-Reply-To: <5627EEE3.3010302@mind.be>
+References: <CAOcYpt2ah7+P2ZJyzN+i0DjxE+x9LiDZPWwg6zqMxzi-x7BhKQ@mail.gmail.com>
+ <20151020203326.GA31310@free.fr>
+ <CAOcYpt1nwhHC7d_rpG3G5J+u8z8FaXykSntgp85NBQ1ziCy7ww@mail.gmail.com>
+ <CAOcYpt3=T60_0NWWaCPsidFOC_vcZrCcGv5s9VH+AHJnb0ckjw@mail.gmail.com>
+ <CAOcYpt3FL4sTBF-Edk4ShGX2vE2wGYX4gp7jHmsfDMxxA=03DA@mail.gmail.com>
+ <20151021212450.1c6fc5b4@free-electrons.com>
+ <5627EEE3.3010302@mind.be>
+Message-ID: <20151021221804.483ac95d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae33f027b55850cd8f48dedfb79402688662173f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-ltp-testsuite migrated to github.
+On Wed, 21 Oct 2015 22:00:35 +0200, Arnout Vandecappelle wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ltp-testsuite/Config.in        |    2 +-
- package/ltp-testsuite/ltp-testsuite.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> > While I understand what you are trying to do, I am not sure we can
+> > support this in Buildroot upstream. You want eudev to be in / and
+> > not /usr, but maybe the next person will want this other package to be
+> > in / and not /usr. How do we handle this ? Add one more option to all
+> > packages ? Doesn't seem really maintainable.
+> 
+>  Actually, it makes sense to me to install it completely in / instead of /usr -
+> that would also remove the need to have all the --libdir etc. options that we
+> currently pass. The way it's currently done, eudev's install anyway adds
+> symlinks back from /lib/libudev.so to /usr/lib/libudev.so.
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 91b09ce..8475902 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -20,7 +20,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	  UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and UCLIBC_SV4_DEPRECATED
- 	  are needed.
- 
--	  http://ltp.sourceforge.net/
-+	  http://linux-test-project.github.io
- 
- comment "ltp-testsuite needs a non-musl toolchain w/ threads"
- 	depends on !BR2_nios2
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 7fe42eb..64467de 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -6,7 +6,7 @@
- 
- LTP_TESTSUITE_VERSION = 20150420
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
--LTP_TESTSUITE_SITE = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
-+LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
- LTP_TESTSUITE_CONF_OPTS += \
+If we install it unconditionally in /, then it's fine with me. What I
+would dislike is to start having options for such things.
+
+However, there is still the question: why eudev in /, and not any other
+package that other users may find important to have in / ? Where do we
+put the boundary ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
