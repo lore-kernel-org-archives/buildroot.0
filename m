@@ -1,47 +1,49 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Wed, 21 Oct 2015 20:41:54 +1300
-Subject: [Buildroot] [PATCH] syslog-ng: Specify location of libesmtp
-In-Reply-To: <877fmhl4ie.fsf@dell.be.48ers.dk>
-References: <1445328991-29416-1-git-send-email-judge.packham@gmail.com>
- <20151020205728.6f2d2332@gmx.net> <877fmhl4ie.fsf@dell.be.48ers.dk>
-Message-ID: <CAFOYHZBj3PtYrr_U6Tq6nAG9X0w5AXYis5b-rDpbvjQSCMby6A@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Oct 2015 10:06:29 +0200
+Subject: [Buildroot] [PATCH 1/2] qt5base: add optional gstreamer1 support
+Message-ID: <1445414790-16583-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 21, 2015 at 8:32 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
->
-> Hi,
->
->  >> SYSLOG_NG_CONF_OPTS += --disable-smtp
->  >> endif
->
->  > The buildroot package libestmp provides a libesmtp-config script, but
->  > it is installed into
->
->  >      host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/libesmtp-config
->
->  > where it is not found by the syslog-ng configure script...
->
-> Yes, $(STAGING_DIR)/usr/bin, similar to the other *-config scripts.
->
->  > Would a more portable solution be to add this search path (or fix the install
->  > location of libestmp-config) for the syslog-ng configure call (libesmtp-config
->  > --libs gives '-pthread -L[...]/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib
->  > -lesmtp -lssl -lcrypto -ldl')?
->
-> $(STAGING_DIR)/usr/bin contains binaries for the target (and *-config
-> scripts), so it shouldn't be added to the path, but another approach is
-> indeed to fix the configure script to look elsewhere for the script,
-> similar to how a bunch of packages allow the path to sdl-config to be
-> overridden through the SDL_CONFIG environment variable.
+Indirectly fixes:
+http://autobuild.buildroot.net/results/773/773d9996bd3da283eed6b75083b8bab6469d0423/
+http://autobuild.buildroot.net/results/069/069f564fde821b55e710fbe93fe30a5cf11a6da5/
+http://autobuild.buildroot.net/results/456/456d380f8b4478245e89f711c33fe0c2d23aaa3a/
+http://autobuild.buildroot.net/results/7c8/7c8ebfc93a5b11e40251495715d742520b3b8291/
 
-The way the test is implemented in configure.ac libestmp-config is
-invoked directly so it would need to be on the path. Or I could look
-at an upstream patch to change this to something that can be
-overridden. I'd almost prefer if libesmtp had pkg-config support which
-integrates better with autotools and buildroot has existing support
-for.
+And many more, as qt5multimedia needs qt5base to be built with gstreamer1
+support as well.
+
+While qt5 has some gstreamer 0.10 support, it doesn't seem to be used much
+any more and E.G. the 0.10 fallback code in qt5multimedia is broken so only
+enable it for the 1.x series.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/qt5base.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 570cd35..4eed126 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -147,6 +147,14 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
+ 
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES),-make,-nomake) examples
+ 
++# gstreamer 0.10 support is broken in qt5multimedia
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
++QT5BASE_CONFIGURE_OPTS += -gstreamer 1.0
++QT5BASE_DEPENDENCIES   += gst1-plugins-base
++else
++QT5BASE_CONFIGURE_OPTS += -no-gstreamer
++endif
++
+ # Build the list of libraries to be installed on the target
+ QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XCB)        += Qt5XcbQpa
+-- 
+2.1.4
