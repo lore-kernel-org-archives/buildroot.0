@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Oct 2015 22:12:13 +0200
-Subject: [Buildroot] [PATCH] erlang: Remove BR2_TOOLCHAIN_HAS_THREADS
- dependency
-In-Reply-To: <1445349286-1185-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1445349286-1185-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20151021221213.314eb654@free-electrons.com>
+Date: Wed, 21 Oct 2015 22:12:47 +0200
+Subject: [Buildroot] [git commit] noip: add $(TARGET_MAKE_ENV) before $(MAKE)
+Message-ID: <20151021201411.EB95F80790@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+commit: http://git.buildroot.net/buildroot/commit/?id=2683c7e515a29214f36032b0573db963f05bf11e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Oct 2015 10:54:46 -0300, Ezequiel Garcia wrote:
-> Erlang can be built without threads support, by passing an
-> appropriate config option.
-> 
-> This commit drops the config dependency on BR2_TOOLCHAIN_HAS_THREADS
-> and instead passes --disable-threads if the toolchain doesn't support
-> threads.
-> 
-> While here, change the wording of the config comment to "dynamic
-> library" to be consistent with similar comments elsewhere.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> ---
->  package/erlang/Config.in | 5 ++---
->  package/erlang/erlang.mk | 4 ++++
->  2 files changed, 6 insertions(+), 3 deletions(-)
+For consistency reasons, this commit adjusts the noip package to pass
+$(TARGET_MAKE_ENV) in the environment when calling $(MAKE).
 
-Applied, thanks.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/noip/noip.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/noip/noip.mk b/package/noip/noip.mk
+index 98edfca..a61d141 100644
+--- a/package/noip/noip.mk
++++ b/package/noip/noip.mk
+@@ -12,8 +12,8 @@ NOIP_LICENSE_FILES = COPYING
+ 
+ define NOIP_BUILD_CMDS
+ 	$(SED) "/^#define CONFIG_FILENAME/ s/PREFIX//" $(@D)/noip2.c
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+-		PREFIX=/usr CONFDIR=/etc
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS)" PREFIX=/usr CONFDIR=/etc
+ endef
+ 
+ define NOIP_INSTALL_TARGET_CMDS
