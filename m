@@ -1,32 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Oct 2015 22:40:55 +0200
-Subject: [Buildroot] [PATCH v2 1/1] board/via/imx6_vab820: update to
- latest BSP release
-In-Reply-To: <1445234196-979-1-git-send-email-imrehg@gmail.com>
-References: <1445234196-979-1-git-send-email-imrehg@gmail.com>
-Message-ID: <20151021224055.19256ce1@free-electrons.com>
+Date: Wed, 21 Oct 2015 22:51:57 +0200
+Subject: [Buildroot] Compiler errors pointing in BUILD_DIR when using
+ OVERRIDE_SRCDIR
+In-Reply-To: <5627F50F.2060201@mind.be>
+References: <CAKMA=Nbi2xkzg77St8PAbmQ79WKCeFw3KWDTuFkRYNR0pULzeQ@mail.gmail.com>
+ <5627F50F.2060201@mind.be>
+Message-ID: <20151021225157.04f425da@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Arnout, Julien,
 
-On Mon, 19 Oct 2015 13:56:36 +0800, imrehg at gmail.com wrote:
-> From: Gergely Imreh <imrehg@gmail.com>
-> 
-> Changes:
-> * Update Kernel and U-Boot to the latest 2.0.6 BSP release from the
-> official sources.
-> * Add genimage config to create bootable SD card image
-> 
-> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - fixed language in genimage.cfg (thanks Baruch Siach)
+On Wed, 21 Oct 2015 22:26:55 +0200, Arnout Vandecappelle wrote:
 
-Applied, thanks.
+> > In my company we are using buildroot for package development.
+> > According to the buildroot documentation we are using the
+> > <pkg>_OVERRIDE_SRCDIR mechanism.
+> > 
+> > It works great when the build is going well. However when there is a
+> > compiler error/warning the issue is referring files in
+> > output/build/<pkg> (because the source code was rsynced at this
+> > location to be built).
+> >>From a developer point of view (which is editing source code in
+> > <pkg>_OVERRIDE_SRCDIR), it is difficult to work because if you jump on
+> > the error, it does not jump on the source file which is edited. This
+> > behavior generates mistake.
+> > 
+> > What do you think about that (limitation, bug ?) ? Do you think it
+> > would be possible to improve it ?
+> 
+>  Some people (e.g., me :-) use the same source directory to build several
+> configurations in separate output directories. In that case, building in the
+> source directory wouldn't work...
+> 
+>  If the package in question supports out-of-tree building (like e.g. the kernel
+> or most autotools-based packages), it would be possible that we don't copy the
+> sources but instead just build out-of-tree in the build directory. Thomas
+> Petazzoni posted a patch series to that effect about two and a half years ago,
+> but that series was incomplete and never got applied. So you could take it over,
+> perhaps improve and repost it. See [1], but mind [2]. Also, Thomas may have a
+> more recent version of the series.
+
+In fact, I already had a discussion with Julien about this issue (I
+happen to know Julien for other reasons), and already pointed him to
+the idea of doing per-package out-of-tree build. I unfortunately don't
+have a more recent version of the series than what I posted a long,
+long time ago.
+
+Another option maybe is to ask rsync to create hardlinks so that
+developers could edit directly the source files in output/build/<pkg>/
+and in fact what gets edited are the files in the original location.
+Though I agree that this is quite hackish and I'm pretty sure has lots
+of nasty corner cases.
+
+Clearly, the long-term solution to solve this problem is out of tree
+build of packages.
+
+At least, this request is great for one thing: it gives me one more
+argument to push per-package out of tree build. I was wondering what to
+do during my upcoming 10-11 hours flight, maybe you gave me an idea :)
 
 Thomas
 -- 
