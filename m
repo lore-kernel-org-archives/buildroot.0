@@ -1,67 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Oct 2015 22:00:35 +0200
-Subject: [Buildroot] [PATCH 1/1] Add more options to eudev package.
-In-Reply-To: <20151021212450.1c6fc5b4@free-electrons.com>
-References: <CAOcYpt2ah7+P2ZJyzN+i0DjxE+x9LiDZPWwg6zqMxzi-x7BhKQ@mail.gmail.com>
- <20151020203326.GA31310@free.fr>
- <CAOcYpt1nwhHC7d_rpG3G5J+u8z8FaXykSntgp85NBQ1ziCy7ww@mail.gmail.com>
- <CAOcYpt3=T60_0NWWaCPsidFOC_vcZrCcGv5s9VH+AHJnb0ckjw@mail.gmail.com>
- <CAOcYpt3FL4sTBF-Edk4ShGX2vE2wGYX4gp7jHmsfDMxxA=03DA@mail.gmail.com>
- <20151021212450.1c6fc5b4@free-electrons.com>
-Message-ID: <5627EEE3.3010302@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Oct 2015 22:03:13 +0200
+Subject: [Buildroot] [git commit] minicom: switch to the official site
+Message-ID: <20151021200922.081B881EF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21-10-15 21:24, Thomas Petazzoni wrote:
-> Hello David,
-> 
-> On Wed, 21 Oct 2015 13:50:17 +0200, David Kosir wrote:
-> 
->> I've tried to make second patch better, but realized that it is more
->> complicated than I thought.
->> Best solution I came with to add --libdir=/lib to EUDEV_CONF_OPTS
->> I see that we already specify --libexecdir=/lib
->> That option would allow to use separate /usr, at least to start udev
->> normaly at boot, before /usr is mounted.
->> I think that is good option as it would not break anything (at least
->> what I see).
->> Do you have better idea?
-> 
-> While I understand what you are trying to do, I am not sure we can
-> support this in Buildroot upstream. You want eudev to be in / and
-> not /usr, but maybe the next person will want this other package to be
-> in / and not /usr. How do we handle this ? Add one more option to all
-> packages ? Doesn't seem really maintainable.
+commit: http://git.buildroot.net/buildroot/commit/?id=6adacbe61a110daa741438a91961cf2675683f95
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Actually, it makes sense to me to install it completely in / instead of /usr -
-that would also remove the need to have all the --libdir etc. options that we
-currently pass. The way it's currently done, eudev's install anyway adds
-symlinks back from /lib/libudev.so to /usr/lib/libudev.so.
+We switched to our mirror because because the official site started to
+fail, but now it works again.
 
- Of course, includes and pkgconfig still have to be put in /usr.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/minicom/minicom.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
- Regards,
- Arnout
-
-> 
-> I don't really have a good suggestion on how to solve this problem, but
-> I'm pretty sure that adding an option to the eudev package is the right
-> solution.
-> 
-> Best regards,
-> 
-> Thomas
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index dd05741..26e9cef 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MINICOM_VERSION = 2.7
+-MINICOM_SITE = http://sources.buildroot.net
++MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/3977
+ MINICOM_LICENSE = GPLv2+
+ MINICOM_LICENSE_FILES = COPYING
+ 
