@@ -1,47 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Oct 2015 09:25:53 +0200
-Subject: [Buildroot] [PATCH v5] board: add support for Synopsys VDK
- Software Development Platform
-In-Reply-To: <5626B5DE.3020201@mind.be>
-References: <7cfe6681e738e9696eba42b8128eea1da7d3eb30.1444642014.git.jpinto@synopsys.com>
- <5626B5DE.3020201@mind.be>
-Message-ID: <20151021092553.708d4dd8@free-electrons.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Wed, 21 Oct 2015 20:41:54 +1300
+Subject: [Buildroot] [PATCH] syslog-ng: Specify location of libesmtp
+In-Reply-To: <877fmhl4ie.fsf@dell.be.48ers.dk>
+References: <1445328991-29416-1-git-send-email-judge.packham@gmail.com>
+ <20151020205728.6f2d2332@gmx.net> <877fmhl4ie.fsf@dell.be.48ers.dk>
+Message-ID: <CAFOYHZBj3PtYrr_U6Tq6nAG9X0w5AXYis5b-rDpbvjQSCMby6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+On Wed, Oct 21, 2015 at 8:32 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>
+> Hi,
+>
+>  >> SYSLOG_NG_CONF_OPTS += --disable-smtp
+>  >> endif
+>
+>  > The buildroot package libestmp provides a libesmtp-config script, but
+>  > it is installed into
+>
+>  >      host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/libesmtp-config
+>
+>  > where it is not found by the syslog-ng configure script...
+>
+> Yes, $(STAGING_DIR)/usr/bin, similar to the other *-config scripts.
+>
+>  > Would a more portable solution be to add this search path (or fix the install
+>  > location of libestmp-config) for the syslog-ng configure call (libesmtp-config
+>  > --libs gives '-pthread -L[...]/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib
+>  > -lesmtp -lssl -lcrypto -ldl')?
+>
+> $(STAGING_DIR)/usr/bin contains binaries for the target (and *-config
+> scripts), so it shouldn't be added to the path, but another approach is
+> indeed to fix the configure script to look elsewhere for the script,
+> similar to how a bunch of packages allow the path to sdl-config to be
+> overridden through the SDL_CONFIG environment variable.
 
-On Tue, 20 Oct 2015 23:45:02 +0200, Arnout Vandecappelle wrote:
-
-> > +CONFIG_INPUT_EVDEV=y
-> > +CONFIG_INPUT_MISC=y
-> > +CONFIG_INPUT_UINPUT=y
-> > +CONFIG_SERIO_AMBAKMI=y
-> > +CONFIG_SERIAL_8250=y
-> > +CONFIG_SERIAL_8250_CONSOLE=y
-> > +CONFIG_SERIAL_AMBA_PL011=y
-> > +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-> > +CONFIG_SERIAL_OF_PLATFORM=y
-> 
->  Err, I thought OpenFirmware was a PowerPC thing?
-
-Yes, originally. But OF is now used more or less as a synonym for
-"Device Tree", i.e all the kernel functions to parse the Device Tree
-are prefixed with of_*().
-
-If you don't have CONFIG_SERIAL_OF_PLATFORM=y and your hardware is
-described by a Device Tree, then your 8250 serial driver will not probe.
-
-However, what is a bit weird is to enable both the 8250 driver and the
-pl011 driver.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+The way the test is implemented in configure.ac libestmp-config is
+invoked directly so it would need to be on the path. Or I could look
+at an upstream patch to change this to something that can be
+overridden. I'd almost prefer if libesmtp had pkg-config support which
+integrates better with autotools and buildroot has existing support
+for.
