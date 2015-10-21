@@ -1,51 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Oct 2015 23:04:21 +0200
-Subject: [Buildroot] [PATCH 2/2] jq: enable host package
-In-Reply-To: <20151021223958.5605a589@free-electrons.com>
-References: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
- <1445251329-18120-2-git-send-email-patrickdepinguin@gmail.com>
- <20151021223958.5605a589@free-electrons.com>
-Message-ID: <5627FDD5.8060207@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 21 Oct 2015 23:09:58 +0200
+Subject: [Buildroot] [PATCH V4] sdl2: new package
+In-Reply-To: <5627FBE0.5010004@openwide.fr>
+References: <20151019134532.GA12643@laptop-vstehle>
+ <5627FBE0.5010004@openwide.fr>
+Message-ID: <5627FF26.40805@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21-10-15 22:39, Thomas Petazzoni wrote:
-> Thomas,
-> 
-> On Mon, 19 Oct 2015 12:42:09 +0200, Thomas De Schampheleire wrote:
->> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hi Vincent, All,
+
+Le 21/10/2015 22:56, Romain Naour a ?crit :
+> Hi Vincent, All,
 >>
->> Allow building jq as host utility for use in post-build scripts.
->> This can be useful to created, edit, merge or even perform syntax checking
->> on JSON files.
+>> While trying v5 of the path recently, as found in buildroot patchwork, I
+>> needed to add the following line to sdl2.mk:
 >>
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> Since this host package clearly doesn't fall into the "debugging tool,
-> flashing tool or image preparation tool" category, I'd like to collect
-> the opinion of a few other developers before applying.
-> 
-> Peter, Arnout, Yann, what do you think?
+>> 	SDL2_CONFIG_SCRIPTS = sdl2-config
+>>
+>> Without this line, the include path returned by `sdl2-config --cflags`
+>> will be something like /usr/include/SDL2, instead of pointing to the
+>> buildroot staging dir.
+>>
 
- I was thinking the same thing when I say the patch, but I don't care enough to
-really comment on it. It's a bit similar to packages that depend on some host
-preprocessing tool, like flex. But then of course we just have a dependency and
-not a Config.in.host.
+I confirm there is a poisoned path returned by this script:
 
- OTOH, if we accept this, it kind of opens the doors to support almost
-everything as a host package. But maybe there's nothing wrong with that either.
+sdl2-config --cflags
+-I/usr/include/SDL2
+-I/home/naourr/buildroot/test/efl-1.15.2-v2/host/usr/i686-buildroot-linux-gnu/sysroot/usr/include
+-D_REENTRANT
 
- Regards,
- Arnout
+sdl2-config --libs
+-L/usr/lib -lSDL2 -lpthread
 
+And thanks to your fix:
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+sdl2-config --cflags
+-I/home/naourr/buildroot/test/efl-1.15.2-v2/host/usr/i686-buildroot-linux-gnu/sysroot/usr/include/SDL2
+-I/home/naourr/buildroot/test/efl-1.15.2-v2/host/usr/i686-buildroot-linux-gnu/sysroot/usr/include
+-D_REENTRANT
+
+sdl2-config --libs
+-L/home/naourr/buildroot/test/efl-1.15.2-v2/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib
+-lSDL2 -lpthread
+
+Good catch !
+
+Best regards,
+Romain
