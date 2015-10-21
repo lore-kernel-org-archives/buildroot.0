@@ -1,102 +1,60 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 21 Oct 2015 17:05:24 +0100
-Subject: [Buildroot] [PATCH v2] openpgm: bump to version release-5-2-122
-Message-ID: <1445443524-50754-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Lennart Ramberg <ramberg.lennart@gmail.com>
+Date: Wed, 21 Oct 2015 18:59:03 +0200
+Subject: [Buildroot] X11: How do I prevent the target screen from going
+	black after 10 minutes?
+Message-ID: <CAEzGmjCKbQKZWy0WfQaGGoqZgzJ6bjf+4jdZRinx2XLijCZ49A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At the same time perform a GitHub migration, since Google Code will
-disappear soon.
+Hello,
 
-- Bump to version release-5-2-122
-- Switch to GitHub
-- Remove trailing slash from OPENPGM_SUBDIR
-- Remove unnecessary python dependencies
-- Add a hook to create the missing m4 directory, needed to autoreconf
-- Add a hash file
-- Rewrap the help text to 72 characters length
-- Change the project URL
+Maybe not a proper Builroot question, but:
+X11: How do I prevent the target screen from going black after 10 minutes?
+There is no xorg.conf (to edit the ServerFlags section).
+I was thinking maybe an overlay with an edited xorg.conf?
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Thanks in advance
+Lennart
+
+My defconfig:
+BR2_x86_i686=y
+BR2_KERNEL_HEADERS_3_18=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+# BR2_TARGET_GENERIC_GETTY is not set
+BR2_ROOTFS_OVERLAY="board/eta/board1/rootfs-overlay/"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
+BR2_LINUX_KERNEL_DEFCONFIG="i386"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XAPP_TWM=y
+BR2_PACKAGE_XAPP_XCLOCK=y
+BR2_PACKAGE_XAPP_XINIT=y
+BR2_PACKAGE_XAPP_XWD=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
+BR2_PACKAGE_XTERM=y
+BR2_PACKAGE_FLUXBOX=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_SQLITE=y
+BR2_PACKAGE_LIBGTK2=y
+BR2_PACKAGE_LIBCURL=y
+BR2_PACKAGE_NTP=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_SUPERVISOR=y
+BR2_PACKAGE_NANO=y
+# BR2_PACKAGE_NANO_TINY is not set
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_BLOCKS=1000000
+BR2_TARGET_GRUB2=y
 ---
-Changes v1 -> v2:
-  - Remove the hook for running the bootstrap script
-  - Re-add AUTORECONF = YES
-  - Add a hook to create the missing m4 directory, needed to autoreconf
-
- package/openpgm/Config.in    |   13 +++++++------
- package/openpgm/openpgm.hash |    2 ++
- package/openpgm/openpgm.mk   |   17 ++++++++++++-----
- 3 files changed, 21 insertions(+), 11 deletions(-)
- create mode 100644 package/openpgm/openpgm.hash
-
-diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
-index 3e90422..d541d13 100644
---- a/package/openpgm/Config.in
-+++ b/package/openpgm/Config.in
-@@ -6,13 +6,14 @@ config BR2_PACKAGE_OPENPGM
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	help
--	  OpenPGM is an open source implementation of the Pragmatic General
--	  Multicast (PGM) specification in RFC 3208 available at www.ietf.org.
--	  PGM is a reliable and scalable multicast protocol that enables
--	  receivers to detect loss, request retransmission of lost data, or
--	  notify an application of unrecoverable loss.
-+	  OpenPGM is an open source implementation of the Pragmatic
-+	  General Multicast (PGM) specification in RFC 3208 available at
-+	  www.ietf.org. PGM is a reliable and scalable multicast
-+	  protocol that enables receivers to detect loss, request
-+	  retransmission of lost data, or notify an application of
-+	  unrecoverable loss.
- 
--	  http://code.google.com/p/openpgm/
-+	  https://github.com/steve-o/openpgm/
- 
- comment "openpgm needs a toolchain w/ wchar, threads"
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
-diff --git a/package/openpgm/openpgm.hash b/package/openpgm/openpgm.hash
-new file mode 100644
-index 0000000..f20e02a
---- /dev/null
-+++ b/package/openpgm/openpgm.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 ecd48fd0bcfd8351ce6dcf31b063dd8fe83d3dab41bca62a6ebd6880a88c4a69  openpgm-release-5-2-122.tar.gz
-diff --git a/package/openpgm/openpgm.mk b/package/openpgm/openpgm.mk
-index d54e8eb..42b0a5d 100644
---- a/package/openpgm/openpgm.mk
-+++ b/package/openpgm/openpgm.mk
-@@ -4,15 +4,22 @@
- #
- ################################################################################
- 
--OPENPGM_VERSION = 5.1.118~dfsg
--OPENPGM_SOURCE = libpgm-$(OPENPGM_VERSION).tar.gz
--OPENPGM_SITE = http://openpgm.googlecode.com/files
-+OPENPGM_VERSION = release-5-2-122
-+OPENPGM_SITE = $(call github,steve-o,openpgm,$(OPENPGM_VERSION))
- OPENPGM_LICENSE = LGPLv2.1+
- OPENPGM_LICENSE_FILES = openpgm/pgm/LICENSE
- OPENPGM_INSTALL_STAGING = YES
-+OPENPGM_SUBDIR = openpgm/pgm
- OPENPGM_AUTORECONF = YES
--OPENPGM_SUBDIR = openpgm/pgm/
--OPENPGM_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-+
-+# We need to create the m4 directory to make sure that autoreconf will
-+# start calling libtoolize. Otherwise it will start with aclocal and it
-+# will fail because the m4 directory doesn't exist.
-+define OPENPGM_CREATE_M4_DIR
-+	mkdir -p $(@D)/$(OPENPGM_SUBDIR)/m4
-+endef
-+OPENPGM_POST_PATCH_HOOKS += OPENPGM_CREATE_M4_DIR
-+
- OPENPGM_CONF_ENV = \
- 	ac_cv_file__proc_cpuinfo=yes \
- 	ac_cv_file__dev_rtc=no \
--- 
-1.7.1
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151021/71219de5/attachment.html>
