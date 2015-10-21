@@ -1,103 +1,50 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Wed, 21 Oct 2015 09:58:07 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Oct 2015 10:20:01 +0200
 Subject: [Buildroot] [PATCH 1/1] Fix Image name not configurable (issue
  #28).
-In-Reply-To: <55E44D1B.5050207@mclink.it>
+In-Reply-To: <5627458F.4020108@mclink.it>
 References: <1440842823-1283-1-git-send-email-mc5686@mclink.it>
  <1440845031-3965-1-git-send-email-mc5686@mclink.it>
  <1440845031-3965-2-git-send-email-mc5686@mclink.it>
  <20150829115935.GC4857@free.fr> <55E1DDB9.6040101@mclink.it>
- <20150831093214.6ae89b8a@free-electrons.com> <20150831081740.GA3596@free.fr>
- <55E44D1B.5050207@mclink.it>
-Message-ID: <5627458F.4020108@mclink.it>
+ <20150831093214.6ae89b8a@free-electrons.com>
+ <20150831081740.GA3596@free.fr> <55E44D1B.5050207@mclink.it>
+ <5627458F.4020108@mclink.it>
+Message-ID: <20151021102001.176f33d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I received today (!) answer from upstream:
-============= see: https://github.com/linux4sam/at91bootstrap/issues/28#issuecomment-149745536 ==============
+Dear Mauro Condarelli,
 
-Hello,
+On Wed, 21 Oct 2015 09:58:07 +0200, Mauro Condarelli wrote:
+> Hi,
+> I received today (!) answer from upstream:
+> ============= see: https://github.com/linux4sam/at91bootstrap/issues/28#issuecomment-149745536 ==============
+> 
+> Hello,
+> 
+> Yes, it is not configurable, making it configurable is more comfortable.
+> We accepted your advice. Thank you for your support.
+> 
+> Best Regards,
+> Wenyou Yang
+> 
+> ========================================================================================
+> I thus assume my original (not the more convoluted one I submitted later) patch can be backported.
+> 
+> Please advise about what I should do.
 
-Yes, it is not configurable, making it configurable is more comfortable.
-We accepted your advice. Thank you for your support.
+You need to get the patch actually accepted upstream, and once it is
+accepted, backport it into Buildroot (as a temporary solution until
+upstream makes a new release that includes your change).
 
-Best Regards,
-Wenyou Yang
+Thanks!
 
-========================================================================================
-I thus assume my original (not the more convoluted one I submitted later) patch can be backported.
-
-Please advise about what I should do.
-
-Regards
-Mauro Condarelli
-
-Il 31/08/2015 14:48, Mauro Condarelli ha scritto:
-> Agreed.
-> I will press upstream.
-> In the meantime I will live with my local changes.
-> I'll keep the list posted on any (eventual) development.
->
-> Regards
-> Mauro
->
-> Il 31/08/2015 10:17, Yann E. MORIN ha scritto:
->> Mauro, Thomas, All,
->>
->> On 2015-08-31 09:32 +0200, Thomas Petazzoni spake thusly:
->>> On Sat, 29 Aug 2015 18:28:41 +0200, Mauro Condarelli wrote:
->>>> After the previous discussion on IRC I came up with this very different patch which does not touch the upstream package at all (even though I still think allowing user to chose isn't evil).
->>>> Before I try to submit it I would like a comment.
->>>> The aim is to force the booted image name according to requested kernel target if (and only if) user contextually requests the image to be installed.
->>>> Obvious downside is user has no feedback of the change (and I don't know how to provide this feedback).
->>>> Would this be more acceptable?
->>>>
->>>> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
->>>> index fa67ea6..ccb5e95 100644
->>>> --- a/boot/at91bootstrap3/at91bootstrap3.mk
->>>> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
->>>> @@ -40,6 +40,23 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
->>>>           cp $(@D)/binaries/*.bin $(BINARIES_DIR)
->>>>    endef
->>>> +ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
->>>> +define AT91BOOTSTRAP3_KCONFIG_FIXUP_CMDS
->>>> +       $(if $(BR2_LINUX_KERNEL_UIMAGE),
->>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
->>>> +       $(if $(BR2_LINUX_KERNEL_APPENDED_UIMAGE),
->>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
->>>> +       $(if $(BR2_LINUX_KERNEL_ZIMAGE),
->>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
->>>> +       $(if $(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),
->>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
->>>> +       $(if $(BR2_LINUX_KERNEL_VMLINUX),
->>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"vmlinux",$(@D)/.config))
->>>> +       $(if $(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),
->>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,$(BR2_LINUX_KERNEL_IMAGE_NAME),$(@D)/.config))
->>>> +endef
->>>> +endif
->>> I think this is not correct because it assumes you want to boot the
->>> Linux kernel directly from ATBootstrap, while many people usually do
->>> AT91Bootstrap -> another bootloader (U-Boot or Barebox) -> Linux kernel.
->> Besides, this is changing an option that is not user-configurable, so
->> its lifetime in the .config is not guaranteed. I.e. if the buildsystem
->> of at01bootstrap3 would do an "oldconfig" on it, it would get lost
->> (well, at least that's the case on their master branch).
->>
->> Please, get the matter with upstream and see what they think.
->>
->> When upstream has agreed on a "fix", *then* we can see at backporting it
->> until they do a new release.
->>
->> Regards,
->> Yann E. MORIN.
->>
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
