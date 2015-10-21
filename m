@@ -1,38 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Oct 2015 22:39:05 +0200
-Subject: [Buildroot] [PATCH 1/2] jq: disable maintainer mode
-In-Reply-To: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20151021223905.49094797@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 21 Oct 2015 22:39:49 +0200
+Subject: [Buildroot] [PATCH 1/1] Add more options to eudev package.
+In-Reply-To: <20151021221804.483ac95d@free-electrons.com>
+References: <CAOcYpt2ah7+P2ZJyzN+i0DjxE+x9LiDZPWwg6zqMxzi-x7BhKQ@mail.gmail.com>
+ <20151020203326.GA31310@free.fr>
+ <CAOcYpt1nwhHC7d_rpG3G5J+u8z8FaXykSntgp85NBQ1ziCy7ww@mail.gmail.com>
+ <CAOcYpt3=T60_0NWWaCPsidFOC_vcZrCcGv5s9VH+AHJnb0ckjw@mail.gmail.com>
+ <CAOcYpt3FL4sTBF-Edk4ShGX2vE2wGYX4gp7jHmsfDMxxA=03DA@mail.gmail.com>
+ <20151021212450.1c6fc5b4@free-electrons.com> <5627EEE3.3010302@mind.be>
+ <20151021221804.483ac95d@free-electrons.com>
+Message-ID: <5627F815.6090701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
-
-On Mon, 19 Oct 2015 12:42:08 +0200, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 21-10-15 22:18, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Since version 1.5, maintainer mode is enabled by default. We don't need
-> this, and is in particular problematic because it requires bison 3.0.
+> On Wed, 21 Oct 2015 22:00:35 +0200, Arnout Vandecappelle wrote:
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>> While I understand what you are trying to do, I am not sure we can
+>>> support this in Buildroot upstream. You want eudev to be in / and
+>>> not /usr, but maybe the next person will want this other package to be
+>>> in / and not /usr. How do we handle this ? Add one more option to all
+>>> packages ? Doesn't seem really maintainable.
+>>
+>>  Actually, it makes sense to me to install it completely in / instead of /usr -
+>> that would also remove the need to have all the --libdir etc. options that we
+>> currently pass. The way it's currently done, eudev's install anyway adds
+>> symlinks back from /lib/libudev.so to /usr/lib/libudev.so.
+> 
+> If we install it unconditionally in /, then it's fine with me. What I
+> would dislike is to start having options for such things.
+> 
+> However, there is still the question: why eudev in /, and not any other
+> package that other users may find important to have in / ? Where do we
+> put the boundary ?
 
-It took me a little bit of time to understand this one, since jq 1.5
-was building fine in my minimal chroot that does not have bison
-installed.
+ Because eudev is already installed mostly in / - as I said, even if libudev.so
+is installed in /usr/lib, there's still a symlink created to point to it from
+/lib. Same for udevadm: installed in /usr/bin but a symlink is created from
+/bin. Basically, it's eudev itself that decides it should be in / in addition to
+/usr.
 
-However, what happens is that if you don't have bison installed at all,
-everything works fine. But if you have a bison version installed that
-happens to be older than bison 3.0, then you get an error at configure
-time.
+ That said, I don't think David's use case is one that we should support,
+because IMHO it's the wrong way to go at it. I think it's better to make a
+separate full filesystem and either pivot_root or union-mount it. I think
+depending on the /bin or /usr/bin location is a recipe for disaster.
 
-So: patch applied, thanks!
+ Regards,
+ Arnout
 
-Thomas
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
