@@ -1,51 +1,37 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 21 Oct 2015 12:32:55 +0000 (UTC)
-Subject: [Buildroot] [Bug 8421] util-linux installs systemd files in
-	output/target/home/
-In-Reply-To: <bug-8421-163@https.bugs.busybox.net/>
-References: <bug-8421-163@https.bugs.busybox.net/>
-Message-ID: <20151021123255.9BA6B81EE5@busybox.osuosl.org>
+Date: Wed, 21 Oct 2015 12:56:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 8416] cups depends on BR2_DEPRECATED_SINCE_2015_05
+In-Reply-To: <bug-8416-163@https.bugs.busybox.net/>
+References: <bug-8416-163@https.bugs.busybox.net/>
+Message-ID: <20151021125658.0C8DF7FFAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8421
+https://bugs.busybox.net/show_bug.cgi?id=8416
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+            Summary|[buildroot 2015.8] cups     |cups depends on
+                   |depends on                  |BR2_DEPRECATED_SINCE_2015_0
+                   |BR2_DEPRECATED_SINCE_2015_0 |5
+                   |5                           |
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2015-10-21 12:32:55 UTC ---
-Looks to be caused by the recent pkgconf version bump, which now prefixes all
-variables with the sysroot:
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-10-21 12:56:57 UTC ---
+It is worth mentioning that there is a set of patches updating and
+undeprecating CUPS. See:
 
-commit 3fe434bf35b09ddf438392e6e5b4bc0b849495c7
-Author: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date:   Mon Oct 5 16:54:30 2015 -0300
+http://patchwork.ozlabs.org/patch/518817/
+http://patchwork.ozlabs.org/patch/518818/
+http://patchwork.ozlabs.org/patch/518820/
+http://patchwork.ozlabs.org/patch/518821/
+http://patchwork.ozlabs.org/patch/518822/
 
-    glib-networking: specify GIO_MODULE_DIR for target
-
-    Since the upgrade to pkgconf 0.9.12 all directories and variables with
-    directories are sysroot-prefixed, whereas with the old patch only some
-    variables were (includedir, mapdir, sdkdir, libdir).
-
-    libglib2 uses a giomoduledir=${libdir}/gio/modules variable in
-    gio-2.0.pc, which when expanded via sysroot by pkgconf at configure time
-    points to the staging directory (via libdir expansion).
-    When target install gets called the gio module gets installed to staging
-    rather than target, with the obvious consequences this has.
-
-    Work-around this pkgconfig abuse by overriding GIO_MODULE_DIR at target
-    install time.
-
-    Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-I'll add a workaround for util-linux as well.
+Could you test them, and see if they work for you? Thanks!
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
