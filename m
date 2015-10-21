@@ -1,51 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Oct 2015 17:14:02 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/xilfpga: Add xilfpga defconfig
-In-Reply-To: <1445439476-32911-1-git-send-email-Zubair.Kakakhel@imgtec.com>
-References: <1445439476-32911-1-git-send-email-Zubair.Kakakhel@imgtec.com>
-Message-ID: <20151021171402.5d9aa7d0@free-electrons.com>
+Date: Wed, 21 Oct 2015 17:15:53 +0200
+Subject: [Buildroot] [PATCH] openpgm: bump to version release-5-2-122
+In-Reply-To: <56279A94.8010809@imgtec.com>
+References: <1445435791-40706-1-git-send-email-Vincent.Riera@imgtec.com>
+ <56279A94.8010809@imgtec.com>
+Message-ID: <20151021171553.52fcee58@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zubair,
+Dear Vicente Olivert Riera,
 
-On Wed, 21 Oct 2015 15:57:56 +0100, Zubair Lutfullah Kakakhel wrote:
-> Under the IMG University Program 'MIPSfpga', RTL verilog code for a MIPS
-> m14kEC core is released under an academic license.
-> 
-> The core is used to make a soft-SOC which can run the Linux kernel +
-> buildroot.
+On Wed, 21 Oct 2015 15:00:52 +0100, Vicente Olivert Riera wrote:
+> On 10/21/2015 02:56 PM, Vicente Olivert Riera wrote:
+> [snip]
+> > - Run the bootstrap.sh script it fails to autoreconf properly
+> - Run the bootstrap.sh script; it fails to autoreconf properly
 
-Cool! :-)
-
-> 
-> This patch adds a defconfig for it and a readme file.
-> 
-> The config generates a simple mips32r2 rootfs using uClibc.
-> 
-> Signed-off-by: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-> Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> 
-> ---
-> p.s.
-> 
-> The kernel patches for MIPSfpga will hopefully be upstreamed by 4.4.
-> 
-> Once that is done, I'll look into adding the stuff to enable buildroot
-> to compile the kernel as well.
-
-A defconfig which doesn't build a kernel nor a bootloader is pretty
-useless IMO.
-
-Isn't the code to build this kernel available on some Git repository,
-even if it's not upstream yet ? If so, then it would be better to have
-a defconfig that points to this Git repository (actually, many of our
-defconfigs point to non-upstream kernel source code).
-
-Thanks!
+I quickly looked at the bootstrap.sh script, and besides the messages in
+Japanese (or what I guessed to be Japanese), nothing really unusual
+stands out. What fails if you just have AUTORECONF = YES ?
 
 Thomas
 -- 
