@@ -1,120 +1,96 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Wed, 21 Oct 2015 22:35:59 +0900
-Subject: [Buildroot] [PATCH v1 1/1] gauche: new package
-Message-ID: <201510211335.t9LDZxji001496@ms-omx03.plus.so-net.ne.jp>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 21 Oct 2015 14:56:31 +0100
+Subject: [Buildroot] [PATCH] openpgm: bump to version release-5-2-122
+Message-ID: <1445435791-40706-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gauche is a Scheme scripting engine aiming at being a handy tool
-that helps programmers and system administrators to write small
-to large scripts quickly.
+At the same time perform a GitHub migration, since Google Code will
+disappear soon.
 
-Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
----
-Please allow me to patch 'configure' directly instead of configure.ac
-due to incompatibility of autotools version of gauche assumed.
----
- package/Config.in                       |    1 +
- package/gauche/0001-fix-so-suffix.patch |   12 ++++++++++++
- package/gauche/Config.in                |   14 ++++++++++++++
- package/gauche/gauche.hash              |    3 +++
- package/gauche/gauche.mk                |   20 ++++++++++++++++++++
- 5 files changed, 50 insertions(+), 0 deletions(-)
- create mode 100644 package/gauche/0001-fix-so-suffix.patch
- create mode 100644 package/gauche/Config.in
- create mode 100644 package/gauche/gauche.hash
- create mode 100644 package/gauche/gauche.mk
+- Bump to version release-5-2-122
+- Switch to GitHub
+- Remove trailing slash from OPENPGM_SUBDIR
+- Remove unnecessary python dependencies
+- Run the bootstrap.sh script it fails to autoreconf properly
+- Add a hash file
+- Rewrap the help text to 72 characters length
+- Change the project URL
 
-diff --git a/package/Config.in b/package/Config.in
-index 7392363..eb92ead 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -459,6 +459,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-p1-zlib/Config.in"
- endmenu
- endif
-+	source "package/gauche/Config.in"
- 	source "package/guile/Config.in"
- 	source "package/haserl/Config.in"
- 	source "package/jamvm/Config.in"
-diff --git a/package/gauche/0001-fix-so-suffix.patch b/package/gauche/0001-fix-so-suffix.patch
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/openpgm/Config.in    |   13 +++++++------
+ package/openpgm/openpgm.hash |    2 ++
+ package/openpgm/openpgm.mk   |   17 +++++++++++------
+ 3 files changed, 20 insertions(+), 12 deletions(-)
+ create mode 100644 package/openpgm/openpgm.hash
+
+diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
+index 3e90422..d541d13 100644
+--- a/package/openpgm/Config.in
++++ b/package/openpgm/Config.in
+@@ -6,13 +6,14 @@ config BR2_PACKAGE_OPENPGM
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	help
+-	  OpenPGM is an open source implementation of the Pragmatic General
+-	  Multicast (PGM) specification in RFC 3208 available at www.ietf.org.
+-	  PGM is a reliable and scalable multicast protocol that enables
+-	  receivers to detect loss, request retransmission of lost data, or
+-	  notify an application of unrecoverable loss.
++	  OpenPGM is an open source implementation of the Pragmatic
++	  General Multicast (PGM) specification in RFC 3208 available at
++	  www.ietf.org. PGM is a reliable and scalable multicast
++	  protocol that enables receivers to detect loss, request
++	  retransmission of lost data, or notify an application of
++	  unrecoverable loss.
+ 
+-	  http://code.google.com/p/openpgm/
++	  https://github.com/steve-o/openpgm/
+ 
+ comment "openpgm needs a toolchain w/ wchar, threads"
+ 	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
+diff --git a/package/openpgm/openpgm.hash b/package/openpgm/openpgm.hash
 new file mode 100644
-index 0000000..18d0bd5
+index 0000000..f20e02a
 --- /dev/null
-+++ b/package/gauche/0001-fix-so-suffix.patch
-@@ -0,0 +1,12 @@
-+diff -ur a/configure b/configure
-+--- a/configure	2014-07-20 15:15:05.000000000 +0900
-++++ b/configure	2015-10-20 21:52:32.791442291 +0900
-+@@ -6843,7 +6843,7 @@
-+     SHLIB_MAIN_LDFLAGS=""
-+     SHLIB_OK=ok
-+     ;;
-+-  *-linux-gnu*|*-*-gnu*|*freebsd*|*dragonfly*)
-++  *-linux-*|*-*-gnu*|*freebsd*|*dragonfly*)
-+     SHLIB_SO_CFLAGS="-fPIC"
-+     SHLIB_SO_LDFLAGS="$rpath -shared -o"
-+     SHLIB_SO_SUFFIX="so"
-diff --git a/package/gauche/Config.in b/package/gauche/Config.in
-new file mode 100644
-index 0000000..ad61c3f
---- /dev/null
-+++ b/package/gauche/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_GAUCHE
-+	bool "gauche"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-+	help
-+	  Gauche is a Scheme scripting engine aiming at being a handy tool
-+	  that helps programmers and system administrators to write small
-+	  to large scripts quickly.
-+
-+	  http://practical-scheme.net/gauche/
-+
-+comment "gauche needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/gauche/gauche.hash b/package/gauche/gauche.hash
-new file mode 100644
-index 0000000..9d19671
---- /dev/null
-+++ b/package/gauche/gauche.hash
-@@ -0,0 +1,3 @@
++++ b/package/openpgm/openpgm.hash
+@@ -0,0 +1,2 @@
 +# Locally calculated
-+#
-+sha256 7b18bcd70beaced1e004594be46c8cff95795318f6f5830dd2a8a700410fc149  Gauche-0.9.4.tgz
-diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
-new file mode 100644
-index 0000000..a329724
---- /dev/null
-+++ b/package/gauche/gauche.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# gauche
-+#
-+################################################################################
++sha256 ecd48fd0bcfd8351ce6dcf31b063dd8fe83d3dab41bca62a6ebd6880a88c4a69  openpgm-release-5-2-122.tar.gz
+diff --git a/package/openpgm/openpgm.mk b/package/openpgm/openpgm.mk
+index d54e8eb..bb3105a 100644
+--- a/package/openpgm/openpgm.mk
++++ b/package/openpgm/openpgm.mk
+@@ -4,15 +4,20 @@
+ #
+ ################################################################################
+ 
+-OPENPGM_VERSION = 5.1.118~dfsg
+-OPENPGM_SOURCE = libpgm-$(OPENPGM_VERSION).tar.gz
+-OPENPGM_SITE = http://openpgm.googlecode.com/files
++OPENPGM_VERSION = release-5-2-122
++OPENPGM_SITE = $(call github,steve-o,openpgm,$(OPENPGM_VERSION))
+ OPENPGM_LICENSE = LGPLv2.1+
+ OPENPGM_LICENSE_FILES = openpgm/pgm/LICENSE
+ OPENPGM_INSTALL_STAGING = YES
+-OPENPGM_AUTORECONF = YES
+-OPENPGM_SUBDIR = openpgm/pgm/
+-OPENPGM_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
++OPENPGM_SUBDIR = openpgm/pgm
 +
-+GAUCHE_VERSION = 0.9.4
-+GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
-+GAUCHE_SITE = http://prdownloads.sourceforge.net/gauche
-+GAUCHE_LICENSE = BSD
-+GAUCHE_LICENSE_FILES = COPYING
-+GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+GAUCHE_DEPENDENCIES = host-gauche
-+GAUCHE_CONF_OPTS = \
-+	--enable-ipv6 \
-+	--enable-threads=default \
-+	--enable-multibyte=utf-8
++# openpgm doesn't autoreconf properly, we have to bootstrap it.
++OPENPGM_DEPENDENCIES += host-automake host-autoconf host-libtool
++define OPENPGM_BOOTSTRAP
++	cd $(@D)/$(OPENPGM_SUBDIR) && PATH=$(BR_PATH) ./bootstrap.sh
++endef
++OPENPGM_PRE_CONFIGURE_HOOKS += OPENPGM_BOOTSTRAP
 +
-+$(eval $(host-autotools-package))
-+$(eval $(autotools-package))
+ OPENPGM_CONF_ENV = \
+ 	ac_cv_file__proc_cpuinfo=yes \
+ 	ac_cv_file__dev_rtc=no \
 -- 
 1.7.1
-
-============================================================
-    Hiroshi Kawashima
