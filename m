@@ -1,40 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Oct 2015 23:20:20 +0200
-Subject: [Buildroot] [PATCH 2/2] jq: enable host package
-In-Reply-To: <5627FDD5.8060207@mind.be>
-References: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
- <1445251329-18120-2-git-send-email-patrickdepinguin@gmail.com>
- <20151021223958.5605a589@free-electrons.com>
- <5627FDD5.8060207@mind.be>
-Message-ID: <20151021232020.610e4735@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 21 Oct 2015 23:21:07 +0200
+Subject: [Buildroot] [PATCH] toochain/wrapper: fix potential bug in foreach
+	loop
+Message-ID: <1445462467-26873-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+In Makefile, the comma ',' is used to separate the arguments passed to
+functions, so we should not be allowed to use straight commas in strings
+we want to expand.
 
-On Wed, 21 Oct 2015 23:04:21 +0200, Arnout Vandecappelle wrote:
+For the toolchain wrapper, we need to transform a list:
+    -mfoo -mbar -mbuz
 
->  I was thinking the same thing when I say the patch, but I don't care enough to
-> really comment on it. It's a bit similar to packages that depend on some host
-> preprocessing tool, like flex. But then of course we just have a dependency and
-> not a Config.in.host.
+into something acceptable for a C array assignment:
+    "-mfoo", "-mbar", "-mbuz",
 
-To me, host packages that are a dependency of some other target
-packages have a real and strong reason to exist. The ones that don't
-should really fall into the "useful for debugging, flashing or
-preparing images" category IMO.
+So, we use a $(foreach ...) loop for that. However, we do have a
+straight comma in there.
 
->  OTOH, if we accept this, it kind of opens the doors to support almost
-> everything as a host package. But maybe there's nothing wrong with that either.
+It does not cause any issue in practice, since $(foreach) is a make
+builtin function that accepts three and only three parameters.
 
-Opening the door to almost everything as a host package is personally
-something that I'd like to avoid.
+However, this is not sane.
 
-Thomas
+Change the straight comma to the usual $(comma) expansion, like we sould
+do for a call to any other function.
+
+At the same time, make the code a bit easier to read, by first creating
+the transformed list, and then creating the define.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ toolchain/toolchain-wrapper.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index eba2b38..af39071 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -14,7 +14,9 @@ TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+ 
+ # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
+ # separate argument when used in execv() by the toolchain wrapper.
+-TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
++TOOLCHAIN_WRAPPER_OPTS = \
++	$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)"$(comma))
++TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(TOOLCHAIN_WRAPPER_OPTS)'
+ 
+ ifeq ($(BR2_CCACHE),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
