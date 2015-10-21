@@ -1,57 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 21 Oct 2015 12:21:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 8421] New: util-linux installs systemd files in
- output/target/home/
-Message-ID: <bug-8421-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Oct 2015 14:22:07 +0200
+Subject: [Buildroot] [PATCH] python-ranger: new package
+In-Reply-To: <20151021141313.37715fb8@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 21 Oct 2015 14:13:13 +0200")
+References: <1445367699-13964-1-git-send-email-thijsvermeir@gmail.com>
+ <20151021134806.4c7a27ff@free-electrons.com>
+ <8737x4iged.fsf@dell.be.48ers.dk>
+ <20151021141313.37715fb8@free-electrons.com>
+Message-ID: <87y4ewh0nk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8421
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-           Summary: util-linux installs systemd files in
-                    output/target/home/
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Mac OS
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: thijsvermeir at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Hi,
 
+ >> Indeed, I was thinking the same. Question is if we want to forcible
+ >> select python / python3 (and if so, which one?) or if it should depend
+ >> on them.
 
-When I use a user table and enable systemd, the home folder of the user
-contains systemd files from the util-linux package and other directories.
+ > Good that we agree :)
 
-~/buildroot/sheeva/output/target/home/tvermeir$ tree .
-.
-`-- buildroot
-    |-- host
-    |   `-- sheevaplug-glibc
-    |       `-- usr
-    |           `-- arm-buildroot-linux-gnueabi
-    |               `-- sysroot
-    |                   `-- lib
-    |                       `-- systemd
-    |                           `-- system
-    |                               |-- fstrim.service
-    |                               `-- fstrim.timer
-    `-- sheeva
+Yeah ;)
 
-10 directories, 2 files
+ > Or alternatively, if we don't want to hide to the user that this tool
+ > is going to bring Python into the build, we could:
 
-~/buildroot/sheeva$ find ./ -name "fstrim.service"
-./output/target/home/tvermeir/buildroot/host/sheevaplug-glibc/usr/arm-buildroot-linux-gnueabi/sysroot/lib/systemd/system/fstrim.service
-./output/build/util-linux-2.27/sys-utils/fstrim.service
+We already do so for E.G. dstat, so unless kconfig gets confused about
+the conditional selects I think we should go for it.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Venlig hilsen,
+Peter Korsgaard 
