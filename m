@@ -1,26 +1,57 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 21 Oct 2015 13:13:51 +0100
-Subject: [Buildroot] [PATCH] dropwatch: add a hash file
-Message-ID: <1445429631-50305-1-git-send-email-Vincent.Riera@imgtec.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 21 Oct 2015 12:21:10 +0000 (UTC)
+Subject: [Buildroot] [Bug 8421] New: util-linux installs systemd files in
+ output/target/home/
+Message-ID: <bug-8421-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/dropwatch/dropwatch.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
- create mode 100644 package/dropwatch/dropwatch.hash
+https://bugs.busybox.net/show_bug.cgi?id=8421
 
-diff --git a/package/dropwatch/dropwatch.hash b/package/dropwatch/dropwatch.hash
-new file mode 100644
-index 0000000..3f15c84
---- /dev/null
-+++ b/package/dropwatch/dropwatch.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 c2348b8d72781ab0f3ca52b8415d78ea98808280e14e7d68e76605f196bb5c4a  dropwatch-1.4.tar.xz
+           Summary: util-linux installs systemd files in
+                    output/target/home/
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Mac OS
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: thijsvermeir at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+When I use a user table and enable systemd, the home folder of the user
+contains systemd files from the util-linux package and other directories.
+
+~/buildroot/sheeva/output/target/home/tvermeir$ tree .
+.
+`-- buildroot
+    |-- host
+    |   `-- sheevaplug-glibc
+    |       `-- usr
+    |           `-- arm-buildroot-linux-gnueabi
+    |               `-- sysroot
+    |                   `-- lib
+    |                       `-- systemd
+    |                           `-- system
+    |                               |-- fstrim.service
+    |                               `-- fstrim.timer
+    `-- sheeva
+
+10 directories, 2 files
+
+~/buildroot/sheeva$ find ./ -name "fstrim.service"
+./output/target/home/tvermeir/buildroot/host/sheevaplug-glibc/usr/arm-buildroot-linux-gnueabi/sysroot/lib/systemd/system/fstrim.service
+./output/build/util-linux-2.27/sys-utils/fstrim.service
+
 -- 
-1.7.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
