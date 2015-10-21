@@ -1,31 +1,39 @@
-From: David Kosir <david.kosir@bylapis.com>
-Date: Wed, 21 Oct 2015 13:50:17 +0200
-Subject: [Buildroot] [PATCH 1/1] Add more options to eudev package.
-In-Reply-To: <CAOcYpt3=T60_0NWWaCPsidFOC_vcZrCcGv5s9VH+AHJnb0ckjw@mail.gmail.com>
-References: <CAOcYpt2ah7+P2ZJyzN+i0DjxE+x9LiDZPWwg6zqMxzi-x7BhKQ@mail.gmail.com>
- <20151020203326.GA31310@free.fr>
- <CAOcYpt1nwhHC7d_rpG3G5J+u8z8FaXykSntgp85NBQ1ziCy7ww@mail.gmail.com>
- <CAOcYpt3=T60_0NWWaCPsidFOC_vcZrCcGv5s9VH+AHJnb0ckjw@mail.gmail.com>
-Message-ID: <CAOcYpt3FL4sTBF-Edk4ShGX2vE2wGYX4gp7jHmsfDMxxA=03DA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 21 Oct 2015 11:56:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 8416] New: [buildroot 2015.8] cups depends on
+ BR2_DEPRECATED_SINCE_2015_05
+Message-ID: <bug-8416-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+https://bugs.busybox.net/show_bug.cgi?id=8416
 
-I've sent first patch, for kmod dependency.
+           Summary: [buildroot 2015.8] cups depends on
+                    BR2_DEPRECATED_SINCE_2015_05
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: spam at abma.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I've tried to make second patch better, but realized that it is more
-complicated than I thought.
-Best solution I came with to add --libdir=/lib to EUDEV_CONF_OPTS
-I see that we already specify --libexecdir=/lib
-That option would allow to use separate /usr, at least to start udev
-normaly at boot, before /usr is mounted.
-I think that is good option as it would not break anything (at least
-what I see).
-Do you have better idea?
 
---
-David
+is cups deprecated?
+
+didn't find a note about this in changelog, so i assume its a bug?!
+
+also version 2015.8 can't be selected in the bugtracker...
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
