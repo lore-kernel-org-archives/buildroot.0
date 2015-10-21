@@ -1,114 +1,95 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 21 Oct 2015 20:28:15 +0200
-Subject: [Buildroot] [PATCH] package/Makefile.in: remove
- BR2_TARGET_OPTIMIZATION from TARGET_CFLAGS
-In-Reply-To: <1444861150-4972-1-git-send-email-arnout@mind.be>
-References: <1444861150-4972-1-git-send-email-arnout@mind.be>
-Message-ID: <20151021182815.GA4112@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 21 Oct 2015 20:37:45 +0200
+Subject: [Buildroot] [PATCH v2] board/freescale: switch
+	create-boot-sd.sh to parted
+In-Reply-To: <1445417826-9634-1-git-send-email-vincent.stehle@freescale.com>
+References: <CAAMH-ysuKMKY6AXbtJqALq0jr3fs1-j0e_Pf=Qrm8BvUuTimKg@mail.gmail.com>
+ <1445417826-9634-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <5627DB79.7020001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2015-10-15 00:19 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> Since the toolchain is always wrapped and the wrapper already passes
-> BR2_TARGET_OPTIMIZATION (through BR_ADDITIONAL_CFLAGS), there is no longer
-> any need to pass it in TARGET_CFLAGS as well.
+On 21-10-15 10:57, Vincent Stehl? wrote:
+> Starting with version 2.26, sfdisk defaults to a unit of 512 B sectors.
+> With those recent versions of sfdisk, the create-boot-sd.sh script ends
+> up creating a boot partition of 240 KB, which is too small to contain a
+> Linux kernel.
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-On principle:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-However, I noticed a potential bug in the toolchain-wrapper makefile.
-Here's how we currently define BR_ADDITIONAL_CFLAGS:
-
-    -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
-
-Notice the last comma in there? We want to have that comma in the
-resulting expansion, so that we transform the option string:
-
-    -mfoo -mbar -buz
-
-into:
-
-    "-mfoo", "-mbar", "-mbuz",
-
-so that it can be used ina C array definition:
-
-    static char *predef_args[] = {
-    [...]
-    #ifdef BR_ADDITIONAL_CFLAGS
-        BR_ADDITIONAL_CFLAGS
-    #endif
-    }
-
-However, in Makefile function calls, the comma is used to separate the
-arguments passed to the function.
-
-Even though $(foreach ...) only accepts three arguments, and the last
-comma in fact correctly ends up in the expanded string, it would be
-much safer to use $(comma) instead, like we would have to do in a call
-to any other function.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Tested with BR2_DEBUG_WRAPPER that BR2_TARGET_OPTIMIZATION and
-> BR2_OPTIMIZE_* are still called correctly.
-> ---
->  package/Makefile.in | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
+> As it is difficult to address both pre and post v2.26 sfdisk versions in
+> a single command, we change the create-boot-sd.sh script to use parted
+> instead. While at it, we set the boot partition size to 64 MB, which
+> should be enough for everyone.
 > 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 8a592d4..ca34660 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -110,22 +110,20 @@ endif
->  STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
->  STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
+> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+> 
+> ---
+> 
+> 
+> Hi,
+> 
+> This is a second proposal, using parted this time. Even with sfdisk
+> `--unit' parameter, I could not find an eleguant solution to support all
+> versions of sfdisk, sorry. Please let me know if you find switching to
+> parted acceptable.
+
+ I really don't like that we would rely on a tool installed on the host.
+
+ Is there any reason why genimage (cfr. wandboard) wouldn't work, like I
+suggested earlier?
+
+ Regards,
+ Arnout
+
+> 
+> This is tested on Sabre AI with an i.MX6 Quad.
+> 
+> Best regards,
+> 
+> V.
+> 
+> 
+> Changes in v2
+> -------------
+> - Switch to parted, as advised by Gary.
+> - Fix spelling in commit message, spotted by Luca.
+> 
+> 
+>  board/freescale/create-boot-sd.sh | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/board/freescale/create-boot-sd.sh b/board/freescale/create-boot-sd.sh
+> index af45115..d80bd52 100755
+> --- a/board/freescale/create-boot-sd.sh
+> +++ b/board/freescale/create-boot-sd.sh
+> @@ -59,10 +59,12 @@ sync
+>  # - Bootloader at offset 1024
+>  # - FAT partition starting at 1MB offset, containing uImage and *.dtb
+>  # - ext2/3 partition formatted as ext2 or ext3, containing the root filesystem.
+> -sfdisk ${DEV} <<EOF
+> -32,480,b
+> -512,,L
+> -EOF
+> +parted --script "${DEV}" \
+> +       mklabel msdos \
+> +       unit MiB \
+> +       mkpart primary fat16 1 64 \
+> +       mkpart primary ext2 64 100% \
+> +       print
 >  
-> -TARGET_OPTIMIZATION := $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
-> -
->  ifeq ($(BR2_OPTIMIZE_0),y)
-> -TARGET_OPTIMIZATION += -O0
-> +TARGET_OPTIMIZATION = -O0
->  endif
->  ifeq ($(BR2_OPTIMIZE_1),y)
-> -TARGET_OPTIMIZATION += -O1
-> +TARGET_OPTIMIZATION = -O1
->  endif
->  ifeq ($(BR2_OPTIMIZE_2),y)
-> -TARGET_OPTIMIZATION += -O2
-> +TARGET_OPTIMIZATION = -O2
->  endif
->  ifeq ($(BR2_OPTIMIZE_3),y)
-> -TARGET_OPTIMIZATION += -O3
-> +TARGET_OPTIMIZATION = -O3
->  endif
->  ifeq ($(BR2_OPTIMIZE_S),y)
-> -TARGET_OPTIMIZATION += -Os
-> +TARGET_OPTIMIZATION = -Os
->  endif
->  ifeq ($(BR2_DEBUG_1),y)
->  TARGET_DEBUGGING = -g1
-> -- 
-> 2.6.1
+>  sync
+>  
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
