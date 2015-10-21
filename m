@@ -1,40 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Oct 2015 13:50:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: broken with musl on x86
-In-Reply-To: <1445374313-30804-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1445374313-30804-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151021135029.4b4b9e42@free-electrons.com>
+From: David Kosir <david.kosir@bylapis.com>
+Date: Wed, 21 Oct 2015 13:50:17 +0200
+Subject: [Buildroot] [PATCH 1/1] Add more options to eudev package.
+In-Reply-To: <CAOcYpt3=T60_0NWWaCPsidFOC_vcZrCcGv5s9VH+AHJnb0ckjw@mail.gmail.com>
+References: <CAOcYpt2ah7+P2ZJyzN+i0DjxE+x9LiDZPWwg6zqMxzi-x7BhKQ@mail.gmail.com>
+ <20151020203326.GA31310@free.fr>
+ <CAOcYpt1nwhHC7d_rpG3G5J+u8z8FaXykSntgp85NBQ1ziCy7ww@mail.gmail.com>
+ <CAOcYpt3=T60_0NWWaCPsidFOC_vcZrCcGv5s9VH+AHJnb0ckjw@mail.gmail.com>
+Message-ID: <CAOcYpt3FL4sTBF-Edk4ShGX2vE2wGYX4gp7jHmsfDMxxA=03DA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Yann,
 
-On Tue, 20 Oct 2015 22:51:53 +0200, J?rg Krause wrote:
-> This patch replaces a previous submission made by Bernd Kuhls some while ago
-> [1].
-> 
-> The posix_memalign declaration is incompatible with musl for C++, because of
-> the exception specification [2]. Note, the referenced patch is part of the a
-> patch series to "Add musl support to GCC".
-> 
-> Instead of patching gcc in Buildroot we disable jsoncpp and any reverse
-> dependendy with the musl toolchain on x86.
-> 
-> [1] https://patchwork.ozlabs.org/patch/505425/
-> [2] https://gcc.gnu.org/ml/gcc-patches/2015-04/msg01084.html
+I've sent first patch, for kmod dependency.
 
-It is indeed not very practical to fix gcc, since external toolchains
-would continue to be affected. But isn't there a way of working around
-the problem inside jsoncpp itself, so that we don't have to do this
-complicated reverse-dependency propagation ?
+I've tried to make second patch better, but realized that it is more
+complicated than I thought.
+Best solution I came with to add --libdir=/lib to EUDEV_CONF_OPTS
+I see that we already specify --libexecdir=/lib
+That option would allow to use separate /usr, at least to start udev
+normaly at boot, before /usr is mounted.
+I think that is good option as it would not break anything (at least
+what I see).
+Do you have better idea?
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+--
+David
