@@ -1,57 +1,51 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 21 Oct 2015 22:56:00 +0200
-Subject: [Buildroot] [PATCH V4] sdl2: new package
-In-Reply-To: <20151019134532.GA12643@laptop-vstehle>
-References: <20151019134532.GA12643@laptop-vstehle>
-Message-ID: <5627FBE0.5010004@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 21 Oct 2015 23:04:21 +0200
+Subject: [Buildroot] [PATCH 2/2] jq: enable host package
+In-Reply-To: <20151021223958.5605a589@free-electrons.com>
+References: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
+ <1445251329-18120-2-git-send-email-patrickdepinguin@gmail.com>
+ <20151021223958.5605a589@free-electrons.com>
+Message-ID: <5627FDD5.8060207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent, All,
-
-Le 19/10/2015 15:45, Vincent Stehl? a ?crit :
-> Hi Guillaume and Romain,
+On 21-10-15 22:39, Thomas Petazzoni wrote:
+> Thomas,
 > 
-> Thank you for your effort on this nice sdl2 buildroot patch. I hope you
-> are still working on it.
-
-Actually no, I only reviewed it after the Buildroot summer camp and sent an
-updated version. Since then it's waiting for a reviewer or tester ;-)
-
+> On Mon, 19 Oct 2015 12:42:09 +0200, Thomas De Schampheleire wrote:
+>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> Allow building jq as host utility for use in post-build scripts.
+>> This can be useful to created, edit, merge or even perform syntax checking
+>> on JSON files.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > 
-> While trying v5 of the path recently, as found in buildroot patchwork, I
-> needed to add the following line to sdl2.mk:
+> Since this host package clearly doesn't fall into the "debugging tool,
+> flashing tool or image preparation tool" category, I'd like to collect
+> the opinion of a few other developers before applying.
 > 
-> 	SDL2_CONFIG_SCRIPTS = sdl2-config
-> 
-> Without this line, the include path returned by `sdl2-config --cflags`
-> will be something like /usr/include/SDL2, instead of pointing to the
-> buildroot staging dir.
-> 
-> You might want to add it to a v6, maybe?
+> Peter, Arnout, Yann, what do you think?
 
-Thanks for the feedback ! You're probably right, I need to rebuild it locally to
-check.
+ I was thinking the same thing when I say the patch, but I don't care enough to
+really comment on it. It's a bit similar to packages that depend on some host
+preprocessing tool, like flex. But then of course we just have a dependency and
+not a Config.in.host.
 
-I used it to enable the sdl2 support during the development of my efl patches
-series, I didn't see any build issue even with the paranoid toolchain wrapper
-enabled... (but the sdl2-config is probably not used)
+ OTOH, if we accept this, it kind of opens the doors to support almost
+everything as a host package. But maybe there's nothing wrong with that either.
 
-> 
-> Apart from that, it works fine for me, thanks!
+ Regards,
+ Arnout
 
-Great!
-I'll send an updated version with your fix, can you send your tested and/or
-reviewed tag ;-)
 
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> V.
-> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
