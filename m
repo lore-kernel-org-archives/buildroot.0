@@ -1,44 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Oct 2015 11:45:20 +0200
-Subject: [Buildroot] [PATCH] syslog-ng: Specify location of libesmtp
-In-Reply-To: <20151021102711.44de0ec5@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 21 Oct 2015 10:27:11 +0200")
-References: <1445328991-29416-1-git-send-email-judge.packham@gmail.com>
- <20151020205728.6f2d2332@gmx.net> <877fmhl4ie.fsf@dell.be.48ers.dk>
- <CAFOYHZBj3PtYrr_U6Tq6nAG9X0w5AXYis5b-rDpbvjQSCMby6A@mail.gmail.com>
- <20151021102711.44de0ec5@free-electrons.com>
-Message-ID: <87fv14imhb.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Oct 2015 13:42:28 +0200
+Subject: [Buildroot] [PATCH 1/2] qt5base: add optional gstreamer1 support
+In-Reply-To: <1445414790-16583-1-git-send-email-peter@korsgaard.com>
+References: <1445414790-16583-1-git-send-email-peter@korsgaard.com>
+Message-ID: <20151021134228.64da3709@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Peter,
 
- > Dear Chris Packham,
- > On Wed, 21 Oct 2015 20:41:54 +1300, Chris Packham wrote:
+On Wed, 21 Oct 2015 10:06:29 +0200, Peter Korsgaard wrote:
+> Indirectly fixes:
+> http://autobuild.buildroot.net/results/773/773d9996bd3da283eed6b75083b8bab6469d0423/
+> http://autobuild.buildroot.net/results/069/069f564fde821b55e710fbe93fe30a5cf11a6da5/
+> http://autobuild.buildroot.net/results/456/456d380f8b4478245e89f711c33fe0c2d23aaa3a/
+> http://autobuild.buildroot.net/results/7c8/7c8ebfc93a5b11e40251495715d742520b3b8291/
+> 
+> And many more, as qt5multimedia needs qt5base to be built with gstreamer1
+> support as well.
+> 
+> While qt5 has some gstreamer 0.10 support, it doesn't seem to be used much
+> any more and E.G. the 0.10 fallback code in qt5multimedia is broken so only
+> enable it for the 1.x series.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- >> The way the test is implemented in configure.ac libestmp-config is
- >> invoked directly so it would need to be on the path. Or I could look
- >> at an upstream patch to change this to something that can be
- >> overridden. I'd almost prefer if libesmtp had pkg-config support which
- >> integrates better with autotools and buildroot has existing support
- >> for.
+Please also look at http://patchwork.ozlabs.org/patch/504627/ and
+http://patchwork.ozlabs.org/patch/504628/ which have some overlap.
 
- > As Peter suggested, the way we usually fix that is by replacing the
- > direct invocation of <foo>-config in configure.ac by
- > ${FOO_CONFIG:foo-config}, so that it can be overridden in the
- > environment.
+Thanks,
 
- > However, the current --with-<foo> solution that you have used is fine
- > for me. We do use this solution for numerous packages, so I'm fine with
- > using it as well for syslog-ng.
-
-Agreed. The only potential issue is for static linking as
-libestmp-config --libs may return more libraries than the hardcoded
--lesmtp, but I guess the autobuilders will tell us if that is the case.
-
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
