@@ -1,58 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Oct 2015 22:26:55 +0200
-Subject: [Buildroot] Compiler errors pointing in BUILD_DIR when using
- OVERRIDE_SRCDIR
-In-Reply-To: <CAKMA=Nbi2xkzg77St8PAbmQ79WKCeFw3KWDTuFkRYNR0pULzeQ@mail.gmail.com>
-References: <CAKMA=Nbi2xkzg77St8PAbmQ79WKCeFw3KWDTuFkRYNR0pULzeQ@mail.gmail.com>
-Message-ID: <5627F50F.2060201@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Oct 2015 22:37:11 +0200
+Subject: [Buildroot] [git commit] jq: disable maintainer mode
+Message-ID: <20151021203813.1B91181EC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21-10-15 15:16, Julien Rosener wrote:
-> Hi,
-> 
-> In my company we are using buildroot for package development.
-> According to the buildroot documentation we are using the
-> <pkg>_OVERRIDE_SRCDIR mechanism.
-> 
-> It works great when the build is going well. However when there is a
-> compiler error/warning the issue is referring files in
-> output/build/<pkg> (because the source code was rsynced at this
-> location to be built).
->>From a developer point of view (which is editing source code in
-> <pkg>_OVERRIDE_SRCDIR), it is difficult to work because if you jump on
-> the error, it does not jump on the source file which is edited. This
-> behavior generates mistake.
-> 
-> What do you think about that (limitation, bug ?) ? Do you think it
-> would be possible to improve it ?
+commit: http://git.buildroot.net/buildroot/commit/?id=d1597ffb2c44273b793adc7f28dbbcb1b9a30ab3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Some people (e.g., me :-) use the same source directory to build several
-configurations in separate output directories. In that case, building in the
-source directory wouldn't work...
+Since version 1.5, maintainer mode is enabled by default. We don't need
+this, and is in particular problematic because it requires bison 3.0.
 
- If the package in question supports out-of-tree building (like e.g. the kernel
-or most autotools-based packages), it would be possible that we don't copy the
-sources but instead just build out-of-tree in the build directory. Thomas
-Petazzoni posted a patch series to that effect about two and a half years ago,
-but that series was incomplete and never got applied. So you could take it over,
-perhaps improve and repost it. See [1], but mind [2]. Also, Thomas may have a
-more recent version of the series.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jq/jq.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
- Regards,
- Arnout
-
-[1] http://lists.busybox.net/pipermail/buildroot/2013-April/070573.html
-[2] http://lists.busybox.net/pipermail/buildroot/2013-May/072556.html
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index dd13276..8053e39 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -12,4 +12,7 @@ JQ_LICENSE_FILES = COPYING
+ # uses c99 specific features
+ JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+ 
++# jq explicitly enables maintainer mode, which we don't need/want
++JQ_CONF_OPTS += --disable-maintainer-mode
++
+ $(eval $(autotools-package))
