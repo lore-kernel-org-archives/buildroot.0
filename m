@@ -1,39 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 21 Oct 2015 12:56:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 8416] cups depends on BR2_DEPRECATED_SINCE_2015_05
-In-Reply-To: <bug-8416-163@https.bugs.busybox.net/>
-References: <bug-8416-163@https.bugs.busybox.net/>
-Message-ID: <20151021125658.0C8DF7FFAC@busybox.osuosl.org>
+From: Julien Rosener <julien.rosener@digital-scratch.org>
+Date: Wed, 21 Oct 2015 15:16:08 +0200
+Subject: [Buildroot] Compiler errors pointing in BUILD_DIR when using
+	OVERRIDE_SRCDIR
+Message-ID: <CAKMA=Nbi2xkzg77St8PAbmQ79WKCeFw3KWDTuFkRYNR0pULzeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8416
+Hi,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+In my company we are using buildroot for package development.
+According to the buildroot documentation we are using the
+<pkg>_OVERRIDE_SRCDIR mechanism.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Summary|[buildroot 2015.8] cups     |cups depends on
-                   |depends on                  |BR2_DEPRECATED_SINCE_2015_0
-                   |BR2_DEPRECATED_SINCE_2015_0 |5
-                   |5                           |
+It works great when the build is going well. However when there is a
+compiler error/warning the issue is referring files in
+output/build/<pkg> (because the source code was rsynced at this
+location to be built).
+From a developer point of view (which is editing source code in
+<pkg>_OVERRIDE_SRCDIR), it is difficult to work because if you jump on
+the error, it does not jump on the source file which is edited. This
+behavior generates mistake.
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-10-21 12:56:57 UTC ---
-It is worth mentioning that there is a set of patches updating and
-undeprecating CUPS. See:
+What do you think about that (limitation, bug ?) ? Do you think it
+would be possible to improve it ?
 
-http://patchwork.ozlabs.org/patch/518817/
-http://patchwork.ozlabs.org/patch/518818/
-http://patchwork.ozlabs.org/patch/518820/
-http://patchwork.ozlabs.org/patch/518821/
-http://patchwork.ozlabs.org/patch/518822/
-
-Could you test them, and see if they work for you? Thanks!
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Julien.
