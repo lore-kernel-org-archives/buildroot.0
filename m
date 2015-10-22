@@ -1,80 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Oct 2015 16:20:29 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/xilfpga: Add xilfpga defconfig
-In-Reply-To: <5628ABC9.50300@imgtec.com>
-References: <1445439476-32911-1-git-send-email-Zubair.Kakakhel@imgtec.com>
- <20151021171402.5d9aa7d0@free-electrons.com> <5628ABC9.50300@imgtec.com>
-Message-ID: <5628F0AD.3090906@mind.be>
+Date: Thu, 22 Oct 2015 16:26:03 +0200
+Subject: [Buildroot] [PATCH v1 1/1] gauche: new package
+In-Reply-To: <5628DE0A.1040000@imgtec.com>
+References: <201510211335.t9LDZxji001496@ms-omx03.plus.so-net.ne.jp>
+ <5628DE0A.1040000@imgtec.com>
+Message-ID: <5628F1FB.90905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22-10-15 11:26, Zubair Lutfullah Kakakhel wrote:
-> Hi,
+On 22-10-15 15:00, Vicente Olivert Riera wrote:
+> Dear Hiroshi Kawashima,
 > 
-> On 21/10/15 16:14, Thomas Petazzoni wrote:
->> Zubair,
->>
->> On Wed, 21 Oct 2015 15:57:56 +0100, Zubair Lutfullah Kakakhel wrote:
->>> Under the IMG University Program 'MIPSfpga', RTL verilog code for a MIPS
->>> m14kEC core is released under an academic license.
->>>
->>> The core is used to make a soft-SOC which can run the Linux kernel +
->>> buildroot.
->>
->> Cool! :-)
->>
+> thanks for your contribution. Comments inlined; please keep reading.
 > 
-> Indeed :)
+> On 10/21/2015 02:35 PM, Hiroshi Kawashima wrote:
+[snip]
+>> diff --git a/package/gauche/0001-fix-so-suffix.patch b/package/gauche/0001-fix-so-suffix.patch
+>> new file mode 100644
+>> index 0000000..18d0bd5
+>> --- /dev/null
+>> +++ b/package/gauche/0001-fix-so-suffix.patch
+>> @@ -0,0 +1,12 @@
 > 
->>>
->>> This patch adds a defconfig for it and a readme file.
->>>
->>> The config generates a simple mips32r2 rootfs using uClibc.
->>>
->>> Signed-off-by: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
->>> Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>>
->>> ---
->>> p.s.
->>>
->>> The kernel patches for MIPSfpga will hopefully be upstreamed by 4.4.
->>>
->>> Once that is done, I'll look into adding the stuff to enable buildroot
->>> to compile the kernel as well.
->>
->> A defconfig which doesn't build a kernel nor a bootloader is pretty
->> useless IMO.
->>
->> Isn't the code to build this kernel available on some Git repository,
->> even if it's not upstream yet ? If so, then it would be better to have
->> a defconfig that points to this Git repository (actually, many of our
->> defconfigs point to non-upstream kernel source code).
+> The patch should contain a brief description about what it does or why
+> is needed, and also contain your SoB.
 > 
-> The users of MIPSfpga are academics who receive the patches along with
-> other documentation + MIPS core tar-balled up in a package.
+>> +diff -ur a/configure b/configure
+>> +--- a/configure	2014-07-20 15:15:05.000000000 +0900
+>> ++++ b/configure	2015-10-20 21:52:32.791442291 +0900
+>> +@@ -6843,7 +6843,7 @@
+>> +     SHLIB_MAIN_LDFLAGS=""
+>> +     SHLIB_OK=ok
+>> +     ;;
+>> +-  *-linux-gnu*|*-*-gnu*|*freebsd*|*dragonfly*)
+>> ++  *-linux-*|*-*-gnu*|*freebsd*|*dragonfly*)
+>> +     SHLIB_SO_CFLAGS="-fPIC"
+>> +     SHLIB_SO_LDFLAGS="$rpath -shared -o"
+>> +     SHLIB_SO_SUFFIX="so"
 > 
-> Hence, instead of making a staging repo on github, I went for directly
-> up-streaming things.
+> I have built gauche with this patch, and without it, and I don't see any
+> difference. Are you sure this is necessary? If so, why?
 
- Well, to be able to upstream, you must have at least a local repo, so it's just
-a matter of pushing that to github or gitlab.
+ I guess it's needed for uclibc/musl, they don't have the -gnu part.
 
-> I do intend to make buildroot build the kernel when the time comes.
-> 
-> e.g.
-> https://patchwork.linux-mips.org/project/linux-mips/list/?submitter=6836
-
- If those patches are all that is needed, it would be possible to include them
-in buildroot. Or download them from patchwork. We're really not going to accept
-a defconfig that doesn't build a kernel.
-
- What about the bootloader?
 
  Regards,
  Arnout
+
+[snip]
 
 
 -- 
