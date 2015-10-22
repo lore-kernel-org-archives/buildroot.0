@@ -1,256 +1,51 @@
-From: =?UTF-8?Q?Guillaume_GARDET_-_Olis=c3=a9o?= <guillaume.gardet@oliseo.fr>
-Date: Thu, 22 Oct 2015 10:04:41 +0200
-Subject: [Buildroot] [PATCH v5 1/1] sdl2: new package
-In-Reply-To: <1437245698-24942-1-git-send-email-romain.naour@openwide.fr>
-References: <1437245698-24942-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <56289899.1050509@oliseo.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 22 Oct 2015 10:22:02 +0200
+Subject: [Buildroot] [PATCH 2/2] jq: enable host package
+In-Reply-To: <20151021232020.610e4735@free-electrons.com>
+References: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
+ <1445251329-18120-2-git-send-email-patrickdepinguin@gmail.com>
+ <20151021223958.5605a589@free-electrons.com> <5627FDD5.8060207@mind.be>
+ <20151021232020.610e4735@free-electrons.com>
+Message-ID: <CAAXf6LVLoU=sFyoEFhPyagqguVO0OV-dhFT5-JmMVPJGF4i9AA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for your updates!
+On Wed, Oct 21, 2015 at 11:20 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Arnout,
+>
+> On Wed, 21 Oct 2015 23:04:21 +0200, Arnout Vandecappelle wrote:
+>
+>>  I was thinking the same thing when I say the patch, but I don't care enough to
+>> really comment on it. It's a bit similar to packages that depend on some host
+>> preprocessing tool, like flex. But then of course we just have a dependency and
+>> not a Config.in.host.
+>
+> To me, host packages that are a dependency of some other target
+> packages have a real and strong reason to exist. The ones that don't
+> should really fall into the "useful for debugging, flashing or
+> preparing images" category IMO.
+>
+>>  OTOH, if we accept this, it kind of opens the doors to support almost
+>> everything as a host package. But maybe there's nothing wrong with that either.
+>
+> Opening the door to almost everything as a host package is personally
+> something that I'd like to avoid.
 
+I don't think that we would open the door to 'almost every package' as
+host package. For many packages, it makes no sense to have them as
+host package in the context of buildroot, say audio/video,
+profiling/benchmark, hardware handling, mail, miscellaneous,
+networking apps, ...
+In fact, I would argue that almost none of the packages we have in
+Buildroot make sense as host packages, except those that we already
+have, and a few limited categories of tools. In my opinion, one such
+category could be config file handling, and host-jq fits into that
+category. It's the type of thing one can reasonably need to put
+together filestystem images for embedded devices, especially in
+environments where many (variants of) devices are being developed.
 
-Guillaume
-
-
-
-Le 18/07/2015 20:54, Romain Naour a ?crit :
-> From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
->
-> [Romain:
->    - Wrap Config.in help text at 72 columns.
->    - Move sdl2 package after sdl modules in Config.in. (Arnout)
->    - Explicitly disable dbus and wayland.
->    - Remove double underscore (SDL2__*).
->    - Unify autotools options to use --enable/--disable.
->    - Use x-includes and x-libraries to avoid path poisoning.
->    - Remove xlib_libXrender, xproto_inputproto and xproto_scrnsaverproto
->      dependencies since the build system doesn't depend on them.
->    - Add Xlib_libXi, xlib_libScrnSaver and xlib_libXxf86vm dependencies.
->    - Handle autotools options (--enable/--disable) for each X11
->      dependencies.]
->
-> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> Cc: Yann E. Morin <yann.morin.1998@free.fr>
-> ---
->
-> Changes in V5:
-> * Wrap Config.in help text at 72 columns.
-> * Move sdl2 package after sdl modules in Config.in. (Arnout)
-> * Explicitly disable dbus and wayland.
-> * Remove double underscore (SDL2__*).
-> * Unify autotools options to use --enable/--disable.
-> * Use x-includes and x-libraries to avoid path poisoning.
-> * Remove xlib_libXrender, xproto_inputproto and xproto_scrnsaverproto
->    dependencies since the build system doesn't depend on them.
-> * Add Xlib_libXi, xlib_libScrnSaver and xlib_libXxf86vm dependencies.
-> * Handle autotools options (--enable/--disable) for each X11
->    dependencies.
->
-> Changes in V4:
-> * Fix comments places in Config.in
->
-> Changes in V3:
-> * Add dependenies comments for DirectFB and X11 options
-> * Fix license filename
-> * Add explicit enable/disable options for libudev
-> * Fix typo: s/succesful/successful/
-> * Add more X11 dependencies: x11-xcursor, x11-xinerama, x11-xinput, x11-scrnsaver
-> * Disbale opengl/opengles video diver explicitly
-> * Use --disable-rpath option option instead of manual fix
->
-> Changes in V2:
-> * Fix SDL2 case: s/SDL2/sdl2/
-> * Add dependency on toolchain with dynamic library
-> * Remove unneeded 'SDL2' in sub-options names
-> * Remove unneeded space after comma in if statement
-> * Add explicit enable/disable options for tslib and alsa
-> * Remove Mesa3D optional part
-> * Move unconditionnal SDL2_CONF_OPTS upper
-> * Remove host build
-> ---
->   package/Config.in      |   1 +
->   package/sdl2/Config.in |  33 ++++++++++++++
->   package/sdl2/sdl2.mk   | 115 +++++++++++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 149 insertions(+)
->   create mode 100644 package/sdl2/Config.in
->   create mode 100644 package/sdl2/sdl2.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 86a53c8..11927e5 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -253,6 +253,7 @@ endif
->   	source "package/sdl_net/Config.in"
->   	source "package/sdl_sound/Config.in"
->   	source "package/sdl_ttf/Config.in"
-> +	source "package/sdl2/Config.in"
->   
->   comment "Other GUIs"
->   	source "package/efl/Config.in"
-> diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
-> new file mode 100644
-> index 0000000..26e7aab
-> --- /dev/null
-> +++ b/package/sdl2/Config.in
-> @@ -0,0 +1,33 @@
-> +config BR2_PACKAGE_SDL2
-> +	depends on !BR2_STATIC_LIBS
-> +	bool "sdl2"
-> +	help
-> +	  Simple DirectMedia Layer 2 - SDL2 is a library that allows
-> +	  programs portable low level access to a video framebuffer,
-> +	  audio output, mouse, and keyboard. It is not compatible with
-> +	  SDL1.
-> +
-> +	  http://www.libsdl.org/
-> +
-> +if BR2_PACKAGE_SDL2
-> +
-> +config BR2_PACKAGE_SDL2_DIRECTFB
-> +	bool "DirectFB video driver"
-> +	depends on BR2_PACKAGE_DIRECTFB
-> +
-> +config BR2_PACKAGE_SDL2_X11
-> +	bool "X11 video driver"
-> +	depends on BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBX11
-> +	select BR2_PACKAGE_XLIB_LIBXEXT
-> +
-> +comment "DirectFB video driver needs directfb"
-> +	depends on !BR2_PACKAGE_DIRECTFB
-> +
-> +comment "X11 video driver needs X.org"
-> +	depends on !BR2_PACKAGE_XORG7
-> +
-> +endif
-> +
-> +comment "sdl2 needs a toolchain w/ dynamic library"
-> +	depends on BR2_STATIC_LIBS
-> diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-> new file mode 100644
-> index 0000000..a545f9d
-> --- /dev/null
-> +++ b/package/sdl2/sdl2.mk
-> @@ -0,0 +1,115 @@
-> +################################################################################
-> +#
-> +# sdl2
-> +#
-> +################################################################################
-> +
-> +SDL2_VERSION = 2.0.3
-> +SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
-> +SDL2_SITE = http://www.libsdl.org/release
-> +SDL2_LICENSE = zlib
-> +SDL2_LICENSE_FILES = COPYING.txt
-> +SDL2_INSTALL_STAGING = YES
-> +
-> +SDL2_CONF_OPTS += \
-> +	--disable-rpath \
-> +	--disable-arts \
-> +	--disable-esd \
-> +	--disable-dbus \
-> +	--disable-pulseaudio \
-> +	--disable-video-opengl \
-> +	--disable-video-opengles \
-> +	--disable-video-wayland
-> +
-> +# We must enable static build to get compilation successful.
-> +SDL2_CONF_OPTS += --enable-static
-> +
-> +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-> +SDL2_DEPENDENCIES += udev
-> +SDL2_CONF_OPTS += --enable-libudev
-> +else
-> +SDL2_CONF_OPTS += --disable-libudev
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
-> +SDL2_DEPENDENCIES += directfb
-> +SDL2_CONF_OPTS += --enable-video-directfb
-> +SDL2_CONF_ENV = ac_cv_path_DIRECTFBCONFIG=$(STAGING_DIR)/usr/bin/directfb-config
-> +else
-> +SDL2_CONF_OPTS += --disable-video-directfb
-> +endif
-> +
-> +# x-includes and x-libraries must be set for cross-compiling
-> +# By default x_includes and x_libraries contains unsafe paths.
-> +# (/usr/X11R6/include and /usr/X11R6/lib)
-> +ifeq ($(BR2_PACKAGE_SDL2_X11),y)
-> +SDL2_DEPENDENCIES += xlib_libX11 xlib_libXext
-> +
-> +# X11/extensions/shape.h is provided by libXext.
-> +SDL2_CONF_OPTS += --enable-video-x11 \
-> +	--with-x=$(STAGING_DIR) \
-> +	--x-includes=$(STAGING_DIR)/usr/include \
-> +	--x-libraries=$(STAGING_DIR)/usr/lib  \
-> +	--enable-video-x11-xshape
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
-> +SDL2_DEPENDENCIES += xlib_libXcursor
-> +SDL2_CONF_OPTS += --enable-video-x11-xcursor
-> +else
-> +SDL2_CONF_OPTS += --disable-video-x11-xcursor
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-> +SDL2_DEPENDENCIES += xlib_libXinerama
-> +SDL2_CONF_OPTS += --enable-video-x11-xinerama
-> +else
-> +SDL2_CONF_OPTS += --disable-video-x11-xinerama
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
-> +SDL2_DEPENDENCIES += xlib_libXi
-> +SDL2_CONF_OPTS += --enable-video-x11-xinput
-> +else
-> +SDL2_CONF_OPTS += --disable-video-x11-xinput
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-> +SDL2_DEPENDENCIES += xlib_libXrandr
-> +SDL2_CONF_OPTS += --enable-video-x11-xrandr
-> +else
-> +SDL2_CONF_OPTS += --disable-video-x11-xrandr
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXSCRNSAVER),y)
-> +SDL2_DEPENDENCIES += xlib_libXScrnSaver
-> +SDL2_CONF_OPTS += --enable-video-x11-scrnsaver
-> +else
-> +SDL2_CONF_OPTS += --disable-video-x11-scrnsaver
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
-> +SDL2_DEPENDENCIES += xlib_libXxf86vm
-> +SDL2_CONF_OPTS += --enable-video-x11-vm
-> +else
-> +SDL2_CONF_OPTS += --disable-video-x11-vm
-> +endif
-> +
-> +else
-> +SDL2_CONF_OPTS += --disable-video-x11 --without-x
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TSLIB),y)
-> +SDL2_DEPENDENCIES += tslib
-> +SDL2_CONF_OPTS += --enable-input-tslib
-> +else
-> +SDL2_CONF_OPTS += --disable-input-tslib
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-> +SDL2_DEPENDENCIES += alsa-lib
-> +SDL2_CONF_OPTS += --enable-alsa
-> +else
-> +SDL2_CONF_OPTS += --disable-alsa
-> +endif
-> +
-> +$(eval $(autotools-package))
+/Thomas
