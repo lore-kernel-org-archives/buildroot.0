@@ -1,213 +1,81 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 22 Oct 2015 23:25:43 +0200
-Subject: [Buildroot] [PATCH v2] package/python-pillow: new package
-Message-ID: <1445549143-10983-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 22 Oct 2015 23:33:34 +0200
+Subject: [Buildroot] [PATCH v4] python-ranger: new package
+In-Reply-To: <1445454558-16326-1-git-send-email-thijsvermeir@gmail.com> (Thijs
+ Vermeir's message of "Wed, 21 Oct 2015 21:09:18 +0200")
+References: <1445454558-16326-1-git-send-email-thijsvermeir@gmail.com>
+Message-ID: <87mvvak2q9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds python-pillow, the friendly python image library fork.
+>>>>> "Thijs" == Thijs Vermeir <thijsvermeir@gmail.com> writes:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Changes:
+ > ranger is a console file manager with VI key bindings. It provides a
+ > minimalistic and nice curses interface with a view on the directory hierarchy.
+ > It ships with "rifle", a file launcher that is good at automatically finding
+ > out which program to use for what file type.
 
-v1 -> v2:
+ > http://ranger.nongnu.org
 
-* Added patch to remove platform guessing, now headers should be searched in buildroot folders
-* Fixed optional configure options
+ > Signed-off-by: Thijs Vermeir <thijsvermeir@gmail.com>
 
+ > ---
+ > Changes v3 -> v4:
+ > - rename python-ranger -> ranger
 
- package/Config.in                                  |  1 +
- ...setup.py-removing-unneeded-platform-guess.patch | 85 ++++++++++++++++++++++
- package/python-pillow/Config.in                    | 47 ++++++++++++
- package/python-pillow/python-pillow.mk             | 18 +++++
- 4 files changed, 151 insertions(+)
- create mode 100644 package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
- create mode 100644 package/python-pillow/Config.in
- create mode 100644 package/python-pillow/python-pillow.mk
+But you forgot to change the subject ;)
+ > +config BR2_PACKAGE_RANGER
+ > +	bool "ranger"
+ > +	depends on BR2_USE_MMU # python3
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
+ > +	depends on !BR2_STATIC_LIBS # python3
+ > +	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+ > +	select BR2_PACKAGE_PYTHON_CURSES if BR2_PACKAGE_PYTHON
+ > +	select BR2_PACKAGE_PYTHON3_CURSES if BR2_PACKAGE_PYTHON3
+ > +	help
+ > +	  ranger is a console file manager with VI key bindings. It provides a
+ > +	  minimalistic and nice curses interface with a view on the directory hierarchy.
+ > +	  It ships with "rifle", a file launcher that is good at automatically finding
+ > +	  out which program to use for what file type.
 
-diff --git a/package/Config.in b/package/Config.in
-index 7392363..7acfc6f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -634,6 +634,7 @@ menu "External python modules"
- 	source "package/python-nfc/Config.in"
- 	source "package/python-numpy/Config.in"
- 	source "package/python-pam/Config.in"
-+	source "package/python-pillow/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-protobuf/Config.in"
- 	source "package/python-psutil/Config.in"
-diff --git a/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch b/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
-new file mode 100644
-index 0000000..1886888
---- /dev/null
-+++ b/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
-@@ -0,0 +1,85 @@
-+From cb8c67c0b7ee805100c381300ea29262e8b5838a Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+Date: Thu, 22 Oct 2015 22:45:31 +0200
-+Subject: [PATCH] setup.py: removing unneeded platform guess
-+
-+Platformm guess is not needed when cross compiling on buildroot
-+so removing it.
-+
-+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+---
-+ setup.py | 58 +---------------------------------------------------------
-+ 1 file changed, 1 insertion(+), 57 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 4cb7257..038b7dc 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -241,63 +241,7 @@ class pil_build_ext(build_ext):
-+                 _add_directory(include_dirs, "/usr/X11/include")
-+ 
-+         elif sys.platform.startswith("linux"):
-+-            arch_tp = (plat.processor(), plat.architecture()[0])
-+-            if arch_tp == ("x86_64", "32bit"):
-+-                # 32 bit build on 64 bit machine.
-+-                _add_directory(library_dirs, "/usr/lib/i386-linux-gnu")
-+-            else:
-+-                for platform_ in arch_tp:
-+-
-+-                    if not platform_:
-+-                        continue
-+-
-+-                    if platform_ in ["x86_64", "64bit"]:
-+-                        _add_directory(library_dirs, "/lib64")
-+-                        _add_directory(library_dirs, "/usr/lib64")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/x86_64-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["i386", "i686", "32bit"]:
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/i386-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["aarch64"]:
-+-                        _add_directory(library_dirs, "/usr/lib64")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/aarch64-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["arm", "armv7l"]:
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/arm-linux-gnueabi")
-+-                        break
-+-                    elif platform_ in ["ppc64"]:
-+-                        _add_directory(library_dirs, "/usr/lib64")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/ppc64-linux-gnu")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/powerpc64-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["ppc"]:
-+-                        _add_directory(library_dirs, "/usr/lib/ppc-linux-gnu")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/powerpc-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["s390x"]:
-+-                        _add_directory(library_dirs, "/usr/lib64")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/s390x-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["s390"]:
-+-                        _add_directory(library_dirs, "/usr/lib/s390-linux-gnu")
-+-                        break
-+-                else:
-+-                    raise ValueError(
-+-                        "Unable to identify Linux platform: `%s`" % platform_)
-+-
-+-            # XXX Kludge. Above /\ we brute force support multiarch. Here we
-+-            # try Barry's more general approach. Afterward, something should
-+-            # work ;-)
-+-            self.add_multiarch_paths()
-++            pass
-+ 
-+         elif sys.platform.startswith("gnu"):
-+             self.add_multiarch_paths()
-+-- 
-+1.9.1
-+
-diff --git a/package/python-pillow/Config.in b/package/python-pillow/Config.in
-new file mode 100644
-index 0000000..575b50d
---- /dev/null
-+++ b/package/python-pillow/Config.in
-@@ -0,0 +1,47 @@
-+config BR2_PACKAGE_PYTHON_PILLOW
-+	bool "python-pillow"
-+	help
-+	  Pillow is the "friendly" PIL fork by Alex Clark and Contributors. PIL is
-+	  the Python Imaging Library by Fredrik Lundh and Contributors.
-+
-+	  https://pypi.python.org/pypi/Pillow/
-+
-+if BR2_PACKAGE_PYTHON_PILLOW
-+
-+config BR2_PACKAGE_PYTHON_PILLOW_JPEG
-+	bool "JPEG support"
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  This option provides JPEG functionality.
-+
-+config BR2_PACKAGE_PYTHON_PILLOW_ZLIB
-+	bool "compressed PNGs support"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  This option provides access to compressed PNGs.
-+
-+config BR2_PACKAGE_PYTHON_PILLOW_TIFF
-+	bool "compressed TIFF support"
-+	select BR2_PACKAGE_TIFF
-+	help
-+	  This option provides compressed TIFF functionality.
-+
-+config BR2_PACKAGE_PYTHON_PILLOW_FREETYPE
-+	bool "freetype support"
-+	select BR2_PACKAGE_FREETYPE
-+	help
-+	  This option provides type related services.
-+
-+config BR2_PACKAGE_PYTHON_PILLOW_WEBP
-+	bool "WebP format support"
-+	select BR2_PACKAGE_WEBP
-+	help
-+	  This option provides the WebP format.
-+
-+config BR2_PACKAGE_PYTHON_PILLOW_JPEG2000
-+	bool "JPEG 2000 support"
-+	select BR2_PACKAGE_OPENJPEG
-+	help
-+	  This option provides JPEG 2000 functionality.
-+
-+endif
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-new file mode 100644
-index 0000000..ccf8440
---- /dev/null
-+++ b/package/python-pillow/python-pillow.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# python-pillow
-+#
-+################################################################################
-+
-+PYTHON_PILLOW_VERSION = 3.0.0
-+PYTHON_PILLOW_SITE = $(call github,python-pillow,Pillow,$(PYTHON_PILLOW_VERSION))
-+PYTHON_PILLOW_SETUP_TYPE = distutils
-+PYTHON_PILLOW_DEPENDENCIES = python-setuptools \
-+      $(if $(BR2_PACKAGE_JPEG),jpeg) \
-+      $(if $(BR2_PACKAGE_ZLIB),zlib) \
-+      $(if $(BR2_PACKAGE_TIFF),tiff) \
-+      $(if $(BR2_PACKAGE_FREETYPE),freetype) \
-+      $(if $(BR2_PACKAGE_WEBP),webp) \
-+      $(if $(BR2_PACKAGE_OPENJPEG),openjpeg)
-+
-+$(eval $(python-package))
+Help text should be wrapped to ~72 chars so menuconfig displays
+correctly in a 80 chars window.
+ > +
+ > +	  http://ranger.nongnu.org
+ > diff --git a/package/ranger/ranger.hash b/package/ranger/ranger.hash
+ > new file mode 100644
+ > index 0000000..989d76e
+ > --- /dev/null
+ > +++ b/package/ranger/ranger.hash
+ > @@ -0,0 +1 @@
+ > +sha256 80917c93396e46272b6de63816d925eb708291a9f7a559d49b24c571ea0eeeb3 ranger-1.7.2.tar.gz
+
+We normally add a comment explaining where the hash comes from (Locally
+calculated in this case).
+
+> diff --git a/package/ranger/ranger.mk b/package/ranger/ranger.mk
+ > new file mode 100644
+ > index 0000000..46f318b
+ > --- /dev/null
+ > +++ b/package/ranger/ranger.mk
+ > @@ -0,0 +1,26 @@
+ > +################################################################################
+ > +#
+ > +# ranger
+ > +#
+ > +################################################################################
+ > +
+ > +RANGER_VERSION = 1.7.2
+ > +RANGER_SITE = $(call github,hut,ranger,v$(RANGER_VERSION))
+
+I see that there's tarballs with gpg signatures on ranger.nongnu.org, so
+I've changed to use that instead (and used the signature to validate the
+hash).
+
+Committed with these fixes, thanks!
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
