@@ -1,22 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Oct 2015 23:44:01 +0200
-Subject: [Buildroot] [PATCH] iproute2: drop dead tipc disabling code
-In-Reply-To: <1445530827-31937-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 22 Oct 2015 13:20:27 -0300")
-References: <1445530827-31937-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87eggmk28u.fsf@dell.be.48ers.dk>
+Date: Thu, 22 Oct 2015 23:44:41 +0200
+Subject: [Buildroot] [PATCH 1/1] ntp: bump to version 4.2.8p4
+In-Reply-To: <1445472491-3348-1-git-send-email-james.knight@rockwellcollins.com>
+ (James Knight's message of "Wed, 21 Oct 2015 20:08:11 -0400")
+References: <1445472491-3348-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <87a8rak27q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "James" == James Knight <james.knight@rockwellcollins.com> writes:
 
- > Since it's automatic via libmnl being present it's just dead code that's
- > not defined any longer, so remove it.
-
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 
 Committed, thanks.
 
