@@ -1,359 +1,73 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Thu, 22 Oct 2015 10:21:25 +0100
-Subject: [Buildroot] [PATCH v5] board: add support for Synopsys VDK
- Software Development Platform
-In-Reply-To: <5626B5DE.3020201@mind.be>
-References: <7cfe6681e738e9696eba42b8128eea1da7d3eb30.1444642014.git.jpinto@synopsys.com>
- <5626B5DE.3020201@mind.be>
-Message-ID: <5628AA95.3010402@synopsys.com>
+From: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
+Date: Thu, 22 Oct 2015 10:26:33 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/xilfpga: Add xilfpga defconfig
+In-Reply-To: <20151021171402.5d9aa7d0@free-electrons.com>
+References: <1445439476-32911-1-git-send-email-Zubair.Kakakhel@imgtec.com>
+ <20151021171402.5d9aa7d0@free-electrons.com>
+Message-ID: <5628ABC9.50300@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi,
 
-On 10/20/2015 10:45 PM, Arnout Vandecappelle wrote:
-> On 13-10-15 12:10, Joao Pinto wrote:
->> title: Add support for Synopsys VDK Software Development Platform
-> 
->  No need to repeat what is already in the subject.
-> 
+On 21/10/15 16:14, Thomas Petazzoni wrote:
+> Zubair,
+>
+> On Wed, 21 Oct 2015 15:57:56 +0100, Zubair Lutfullah Kakakhel wrote:
+>> Under the IMG University Program 'MIPSfpga', RTL verilog code for a MIPS
+>> m14kEC core is released under an academic license.
 >>
->> The Virtualizer Development Kit (VDK) Family for ARM Cortex Products
->> consists of a set of virtual prototypes that provide a virtualizer for 
->> the ARM core variants. The VDK is a standalone package that runs on an 
->> host computer.
-> 
->  I guess it's non-free as well?
+>> The core is used to make a soft-SOC which can run the Linux kernel +
+>> buildroot.
+>
+> Cool! :-)
+>
 
-You're right, VDK is a Synopsys non-free tool.
+Indeed :)
 
-> 
 >>
->> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+>> This patch adds a defconfig for it and a readme file.
+>>
+>> The config generates a simple mips32r2 rootfs using uClibc.
+>>
+>> Signed-off-by: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
+>> Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>>
 >> ---
->> Change v4 -> v5:
->>  - Changelog format, minimal defconfig (Yann E. MORIN)
->> Change v3 -> v4:
->>  - drop 'Image' boot option (Thomas Petazzoni)
->> Change v2 -> v3:
->>  - kernel defconfig was not generated properly (Thomas Petazzoni)
+>> p.s.
 >>
->>  board/synopsys/vdk/linux-vdk-aarch64-defconfig | 226 +++++++++++++++++++++++++
->>  configs/snps_aarch64_vdk_defconfig             |  15 ++
->>  2 files changed, 241 insertions(+)
->>  create mode 100644 board/synopsys/vdk/linux-vdk-aarch64-defconfig
->>  create mode 100644 configs/snps_aarch64_vdk_defconfig
+>> The kernel patches for MIPSfpga will hopefully be upstreamed by 4.4.
 >>
->> diff --git a/board/synopsys/vdk/linux-vdk-aarch64-defconfig b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
->> new file mode 100644
->> index 0000000..f90f2ca
->> --- /dev/null
->> +++ b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
->> @@ -0,0 +1,175 @@
->> +CONFIG_SYSVIPC=y
->> +CONFIG_POSIX_MQUEUE=y
->> +CONFIG_NO_HZ=y
->> +CONFIG_HIGH_RES_TIMERS=y
->> +CONFIG_BSD_PROCESS_ACCT=y
->> +CONFIG_IKCONFIG=y
->> +CONFIG_IKCONFIG_PROC=y
->> +CONFIG_LOG_BUF_SHIFT=16
->> +CONFIG_CGROUPS=y
->> +CONFIG_BLK_DEV_INITRD=y
->> +CONFIG_EMBEDDED=y
->> +CONFIG_SLAB=y
->> +CONFIG_PROFILING=y
->> +CONFIG_CC_STACKPROTECTOR_REGULAR=y
->> +CONFIG_MODULES=y
->> +CONFIG_MODULE_UNLOAD=y
->> +CONFIG_SMP=y
->> +CONFIG_SCHED_MC=y
->> +CONFIG_SCHED_SMT=y
->> +CONFIG_NR_CPUS=8
->> +CONFIG_PREEMPT=y
->> +CONFIG_DEFAULT_MMAP_MIN_ADDR=32768
->> +CONFIG_TRANSPARENT_HUGEPAGE=y
->> +CONFIG_TRANSPARENT_HUGEPAGE_MADVISE=y
->> +CONFIG_CMDLINE="console=ttyAMA0 earlyprintk=pl011,0x1c090000 debug user_debug=31 loglevel=9 root=/dev/vda"
->> +CONFIG_CMDLINE_FORCE=y
-> 
->  Is this really needed? Well, VDK probably doesn't allow passing a command line
-> anyway...
+>> Once that is done, I'll look into adding the stuff to enable buildroot
+>> to compile the kernel as well.
+>
+> A defconfig which doesn't build a kernel nor a bootloader is pretty
+> useless IMO.
+>
+> Isn't the code to build this kernel available on some Git repository,
+> even if it's not upstream yet ? If so, then it would be better to have
+> a defconfig that points to this Git repository (actually, many of our
+> defconfigs point to non-upstream kernel source code).
 
-For the VDK environment we have two ways, this one or to set the bootargs in the
-device tree, but in my opinion this option is more clean.
+The users of MIPSfpga are academics who receive the patches along with
+other documentation + MIPS core tar-balled up in a package.
 
-> 
-> 
->> +CONFIG_BINFMT_MISC=y
->> +CONFIG_CPU_IDLE=y
->> +CONFIG_CPU_FREQ=y
->> +CONFIG_CPU_FREQ_GOV_USERSPACE=y
->> +CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-> 
->  Does VDK support frequency scaling?
+Hence, instead of making a staging repo on github, I went for directly
+up-streaming things.
 
-VDK is an emulation of an ARMv8, so we try to include as features as possible.
-So I would recommend to keep this options.
+I do intend to make buildroot build the kernel when the time comes.
 
-> 
->> +CONFIG_ARM_BIG_LITTLE_CPUFREQ=y
-> 
->  Does VDK support big.LITTLE?
+e.g.
+https://patchwork.linux-mips.org/project/linux-mips/list/?submitter=6836
 
-Same as before.
+Regards,
+ZubairLK
 
-> 
->> +CONFIG_ARM_DT_BL_CPUFREQ=y
->> +CONFIG_ARM_SPCI_CPUFREQ=y
->> +CONFIG_NET=y
->> +CONFIG_PACKET=y
->> +CONFIG_UNIX=y
->> +CONFIG_XFRM_USER=y
-> 
->  Is this needed?
-> 
->> +CONFIG_NET_KEY=y
->> +CONFIG_NET_KEY_MIGRATE=y
->> +CONFIG_INET=y
->> +CONFIG_IP_MULTICAST=y
->> +CONFIG_IP_PNP=y
->> +CONFIG_IP_PNP_DHCP=y
->> +CONFIG_IP_PNP_BOOTP=y
->> +CONFIG_IP_PNP_RARP=y
->> +CONFIG_SYN_COOKIES=y
->> +CONFIG_NETWORK_PHY_TIMESTAMPING=y
->> +CONFIG_NET_9P=y
-> 
->  Is Plan9 useful in a simulator?
-
-This one can be removed.
-
-> 
->> +CONFIG_NET_9P_VIRTIO=y
->> +CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
->> +CONFIG_DEVTMPFS=y
->> +CONFIG_DEVTMPFS_MOUNT=y
->> +CONFIG_VEXPRESS_CONFIG=y
-> 
->  Does VDK use VExpress?
-
-Synopsys VDK runs a foundation model of ARMv8 and according to the tool' team,
-the "Versatile Express" should be activated.
-
-> 
->> +CONFIG_CONNECTOR=y
->> +CONFIG_MTD=y
->> +CONFIG_MTD_CMDLINE_PARTS=y
->> +CONFIG_MTD_BLOCK=y
->> +CONFIG_MTD_OOPS=y
->> +CONFIG_MTD_CFI=y
->> +CONFIG_MTD_CFI_INTELEXT=y
->> +CONFIG_MTD_SLRAM=y
-> 
->  Does VDK support all of that?
-
-Yes, the MTD package can be removed.
-
-> 
->> +CONFIG_MTD_NAND=y
->> +CONFIG_OF_SELFTEST=y
->> +CONFIG_BLK_DEV_LOOP=y
->> +CONFIG_BLK_DEV_NBD=m
->> +CONFIG_BLK_DEV_RAM=y
->> +CONFIG_BLK_DEV_RAM_SIZE=65536
-> 
->  Are these three needed?
-
-The MTD module, as previously stated, can be removed.
-I think CONFIG_BLK_DEV_NBD, CONFIG_OF_SELFTEST can be removed.
-The CONFIG_BLK_DEV_* are useful when VDK is used as part of the Synopsys Hybrid
-Prototyping Kits.
-
-> 
->> +CONFIG_VIRTIO_BLK=y
->> +CONFIG_SCSI=y
->> +CONFIG_BLK_DEV_SD=y
->> +CONFIG_BLK_DEV_DM=y
->> +CONFIG_NETDEVICES=y
->> +CONFIG_SMC91X=y
->> +CONFIG_SMSC911X=y
->> +CONFIG_STMMAC_ETH=m
-> 
->  Does VDK support all of these?
-
-I think CONFIG_SMC91X and CONFIG_SMSC911X can be removed.
-
-> 
->> +CONFIG_STMMAC_DEBUG_FS=y
-> 
->  Is this needed?
-> 
-
-I think CONFIG_STMMAC_DEBUG_FS can be removed.
-
->> +CONFIG_INPUT_EVDEV=y
->> +CONFIG_INPUT_MISC=y
->> +CONFIG_INPUT_UINPUT=y
->> +CONFIG_SERIO_AMBAKMI=y
->> +CONFIG_SERIAL_8250=y
->> +CONFIG_SERIAL_8250_CONSOLE=y
->> +CONFIG_SERIAL_AMBA_PL011=y
->> +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
->> +CONFIG_SERIAL_OF_PLATFORM=y
-> 
->  Err, I thought OpenFirmware was a PowerPC thing?
-> 
->> +CONFIG_VIRTIO_CONSOLE=y
->> +CONFIG_I2C=y
->> +CONFIG_I2C_CHARDEV=y
->> +CONFIG_I2C_DESIGNWARE_PLATFORM=y
->> +CONFIG_GPIOLIB=y
->> +CONFIG_GPIO_SYSFS=y
->> +CONFIG_POWER_RESET_VEXPRESS=y
->> +CONFIG_FB=y
->> +CONFIG_FB_ARMCLCD=y
->> +CONFIG_FRAMEBUFFER_CONSOLE=y
->> +CONFIG_LOGO=y
->> +CONFIG_USB_HIDDEV=y
->> +CONFIG_USB=y
->> +CONFIG_USB_EHCI_HCD=y
->> +CONFIG_USB_EHCI_HCD_SYNOPSYS=y
->> +CONFIG_USB_OHCI_HCD=y
->> +CONFIG_NOP_USB_XCEIV=y
->> +CONFIG_USB_ULPI=y
->> +CONFIG_USB_DUMMY_HCD=m
->> +CONFIG_USB_G_SERIAL=m
->> +CONFIG_MMC=y
->> +CONFIG_MMC_ARMMMCI=y
->> +CONFIG_NEW_LEDS=y
->> +CONFIG_LEDS_CLASS=y
->> +CONFIG_LEDS_GPIO=y
->> +CONFIG_LEDS_TRIGGERS=y
->> +CONFIG_LEDS_TRIGGER_TIMER=y
->> +CONFIG_LEDS_TRIGGER_ONESHOT=y
->> +CONFIG_LEDS_TRIGGER_HEARTBEAT=y
->> +CONFIG_LEDS_TRIGGER_BACKLIGHT=y
->> +CONFIG_LEDS_TRIGGER_CPU=y
->> +CONFIG_LEDS_TRIGGER_GPIO=y
->> +CONFIG_SWITCH=y
->> +CONFIG_RTC_CLASS=y
->> +CONFIG_RTC_DRV_PL031=y
->> +CONFIG_VIRTIO_BALLOON=y
->> +CONFIG_VIRTIO_MMIO=y
->> +CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
->> +CONFIG_COMMON_CLK_VERSATILE=y
->> +CONFIG_CLK_SP810=y
->> +CONFIG_CLK_VEXPRESS_OSC=y
->> +CONFIG_COMMON_CLK_SCPI=y
->> +CONFIG_MAILBOX=y
->> +CONFIG_ARM_SCPI_PROTOCOL=y
->> +CONFIG_EXT4_FS=y
->> +CONFIG_EXT4_FS_SECURITY=y
->> +CONFIG_BTRFS_FS=y
-> 
->  I don't think btrfs is needed. Perhaps as a module. Same for the other fses.
-
-Yep, we can put them as modules.
-
-> 
->> +CONFIG_QUOTA=y
->> +CONFIG_QFMT_V2=y
->> +CONFIG_AUTOFS4_FS=y
->> +CONFIG_MSDOS_FS=y
->> +CONFIG_VFAT_FS=y
->> +CONFIG_TMPFS=y
->> +CONFIG_TMPFS_POSIX_ACL=y
->> +CONFIG_HUGETLBFS=y
->> +CONFIG_ECRYPT_FS=y
->> +CONFIG_JFFS2_FS=y
->> +CONFIG_JFFS2_SUMMARY=y
->> +CONFIG_JFFS2_FS_XATTR=y
->> +CONFIG_JFFS2_COMPRESSION_OPTIONS=y
->> +CONFIG_JFFS2_LZO=y
->> +CONFIG_JFFS2_RUBIN=y
->> +CONFIG_CRAMFS=y
->> +CONFIG_9P_FS=y
->> +CONFIG_NLS_CODEPAGE_437=y
->> +CONFIG_NLS_ISO8859_1=y
->> +CONFIG_VIRTUALIZATION=y
->> +CONFIG_KVM=y
->> +CONFIG_DYNAMIC_DEBUG=y
->> +CONFIG_DEBUG_INFO=y
->> +CONFIG_MAGIC_SYSRQ=y
->> +CONFIG_SCHEDSTATS=y
->> +CONFIG_TIMER_STATS=y
->> +CONFIG_FUNCTION_TRACER=y
->> +CONFIG_STRICT_DEVMEM=y
->> +CONFIG_SECURITY=y
->> +CONFIG_SECURITY_NETWORK_XFRM=y
->> +CONFIG_LSM_MMAP_MIN_ADDR=0
->> +CONFIG_SECURITY_SELINUX=y
->> +CONFIG_SECURITY_SELINUX_BOOTPARAM=y
->> +CONFIG_SECURITY_SELINUX_DISABLE=y
->> +CONFIG_SECURITY_SMACK=y
->> +CONFIG_SECURITY_APPARMOR=y
->> +CONFIG_DEFAULT_SECURITY_APPARMOR=y
-> 
->  We don't enable any security option in all the other kernel configs...
-
-This is not a critical issue, we can remove the security packages.
-
-> 
->> +CONFIG_CRYPTO_MICHAEL_MIC=y
->> +CONFIG_CRC_CCITT=y
->> +CONFIG_CRC_T10DIF=y
->> +CONFIG_CRC_ITU_T=y
->> +CONFIG_CRC7=y
-> 
->  All of these definitely have no business in a defconfig.
-
-You're right is can be removed.
-
-> 
->> diff --git a/configs/snps_aarch64_vdk_defconfig b/configs/snps_aarch64_vdk_defconfig
->> new file mode 100644
->> index 0000000..a79b1d2
->> --- /dev/null
->> +++ b/configs/snps_aarch64_vdk_defconfig
->> @@ -0,0 +1,14 @@
->> +BR2_aarch64=y
->> +BR2_KERNEL_HEADERS_3_18=y
->> +BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
->> +BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
->> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-aarch64-defconfig"
->> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
->> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
->> +BR2_TARGET_ROOTFS_EXT2=y
-> 
->  Perhaps also select EXT2_4.
-> 
-> 
->  It would also be good to add a readme file that explains how to start the
-> simulator. Like board/qemu/arm-vexpress/readme.txt
-
-Sure, I will include one.
-
-> 
-> 
->  Regards,
->  Arnout
-> 
->> +# BR2_TARGET_ROOTFS_TAR is not set
->>
-> 
-> 
-
-Based on your comments I will make a new patch to support VDK.
-
-Thanks,
-
--Joao
+>
+> Thanks!
+>
+> Thomas
+>
