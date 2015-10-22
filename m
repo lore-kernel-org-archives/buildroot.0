@@ -1,63 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Oct 2015 22:34:04 +0200
-Subject: [Buildroot] [PATCH 09/21 v2] core: move rule to create basic
-	directories
+Date: Thu, 22 Oct 2015 22:33:59 +0200
+Subject: [Buildroot] [PATCH 04/21 v2] core: commonalise the bundled and
+	br2-external %_defconfig rules
 In-Reply-To: <cover.1445545973.git.yann.morin.1998@free.fr>
 References: <cover.1445545973.git.yann.morin.1998@free.fr>
-Message-ID: <0dec9eeddd95be3a04ee06c372520584db7951d8.1445545973.git.yann.morin.1998@free.fr>
+Message-ID: <3b01a81ac78b8ca787b1e0308e819d8eb2ece1df.1445545973.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some of those directories will be needed even during configuration, like
-BUILD_DIR, where we'll store the generated kconfig snippet.
+The code for both cases is exactly the same, and only differs in the
+location where defconfig files are looked for.
 
-So, move the rule to create them outside the HAVE_CONFIG block.
+We use an intermediate macro to generate the corresponding rules,
+because directly generating the rules is ugly and needs lots of escaping
+and double-dollar-ing for the $(eval ...) and $(foreach ...) calls to
+play nicely together.
+
+Furthermore, that will be tremendously useful when we support multiple
+br2-external trees.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- Makefile | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ Makefile | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 21ad930..6cc9877 100644
+index 60cea32..052f58a 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -205,6 +205,15 @@ LEGAL_LICENSES_TXT_HOST = $(LEGAL_INFO_DIR)/host-licenses.txt
- LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
- LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
+@@ -789,13 +789,12 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
  
-+################################################################################
-+#
-+# staging and target directories do NOT list these as
-+# dependencies anywhere else
-+#
-+################################################################################
-+$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-+	@mkdir -p $@
-+
- BR2_CONFIG = $(CONFIG_DIR)/.config
- 
- # Pull in the user's configuration file
-@@ -435,15 +444,6 @@ world: target-post-image
- 	legal-info legal-info-prepare legal-info-clean printvars help \
- 	list-defconfigs target-finalize target-post-image source-check
- 
--################################################################################
--#
--# staging and target directories do NOT list these as
--# dependencies anywhere else
--#
--################################################################################
--$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
--	@mkdir -p $@
+ # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+-%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
+-	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
+-		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
 -
- # We make a symlink lib32->lib or lib64->lib as appropriate
- # MIPS64/n32 requires lib32 even though it's a 64-bit arch.
- ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
+-%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
+-	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
+-		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
++define PERCENT_DEFCONFIG
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
++	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
++		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
++endef
++$(eval $(foreach d,$(TOPDIR) $(BR2_EXTERNAL),$(call PERCENT_DEFCONFIG,$(d))$(sep)))
+ 
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< \
 -- 
 1.9.1
