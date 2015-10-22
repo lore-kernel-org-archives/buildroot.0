@@ -1,33 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Oct 2015 17:55:54 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/xilfpga: Add xilfpga defconfig
-In-Reply-To: <5628F0AD.3090906@mind.be>
-References: <1445439476-32911-1-git-send-email-Zubair.Kakakhel@imgtec.com>
- <20151021171402.5d9aa7d0@free-electrons.com>
- <5628ABC9.50300@imgtec.com> <5628F0AD.3090906@mind.be>
-Message-ID: <20151022175554.2befc190@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 22 Oct 2015 13:20:27 -0300
+Subject: [Buildroot] [PATCH] iproute2: drop dead tipc disabling code
+Message-ID: <1445530827-31937-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Zubair,
+Since it's automatic via libmnl being present it's just dead code that's
+not defined any longer, so remove it.
 
-On Thu, 22 Oct 2015 16:20:29 +0200, Arnout Vandecappelle wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/iproute2/iproute2.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
->  If those patches are all that is needed, it would be possible to include them
-> in buildroot. Or download them from patchwork. We're really not going to accept
-> a defconfig that doesn't build a kernel.
-
-We could indeed just do:
-
-BR2_LINUX_KERNEL_PATCH="https://patchwork.linux-mips.org/patch/11324/mbox/ https://patchwork.linux-mips.org/patch/11325/mbox/ https://patchwork.linux-mips.org/patch/11327/mbox/ https://patchwork.linux-mips.org/patch/11326/mbox/"
-
-Best regards,
-
-Thomas
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index d1aa6bf..6660eb2 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -54,7 +54,6 @@ define IPROUTE2_CONFIGURE_CMDS
+ 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
+ 	$(IPROUTE2_DISABLE_ARPD)
+ 	$(IPROUTE2_WITH_IPTABLES)
+-	$(IPROUTE2_DISABLE_TIPC)
+ endef
+ 
+ define IPROUTE2_BUILD_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
