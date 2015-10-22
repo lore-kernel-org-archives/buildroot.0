@@ -1,74 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Oct 2015 23:20:38 +0200
-Subject: [Buildroot] [PATCH 03/21 v2] core: move pkg-utils.mk to support/
-In-Reply-To: <562950BD.4000405@mind.be>
-References: <cover.1445545973.git.yann.morin.1998@free.fr>
- <924ba3caeef2c8236936a4515e2d55316362d046.1445545973.git.yann.morin.1998@free.fr>
- <562950BD.4000405@mind.be>
-Message-ID: <20151022212038.GC3797@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 22 Oct 2015 23:24:49 +0200
+Subject: [Buildroot] syslog-ng build failures
+In-Reply-To: <CAFOYHZA=ujev-79kRHw7sFN9hRAikGsXtTC+fJbhyyMyFcFmTg@mail.gmail.com>
+References: <CAFOYHZA=ujev-79kRHw7sFN9hRAikGsXtTC+fJbhyyMyFcFmTg@mail.gmail.com>
+Message-ID: <20151022212449.GN21428@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hi Chris,
+Chris Packham wrote,
 
-On 2015-10-22 23:10 +0200, Arnout Vandecappelle spake thusly:
-> On 22-10-15 22:33, Yann E. MORIN wrote:
-> > pkg-utils.mk contains various definitions that are used in the package
-> > infrastructures and packages themselves.
-> > 
-> > However, those definitions can be useful in other parts of Buildroot,
-> > and are already used in a few places that are not related to the package
-> > infrastructure. Also, $(sep) will be needed early in the Makefile when
-> > we eventually support multiple br2-external trees.
-> > 
-> > Since this file only contains definitions, we can include it anytime.
-> > 
-> > So, consider that file to no longer be specific to the package infras:
-> >   - move it to support and rename it,
-> >   - move a few similar definitions from the main Makefile to that file.
+> I've sent patches for some of the syslog-ng failures. The last one is
+> http://autobuild.buildroot.net/results/137/137c6d5ef82f3a92f87bc2b3e285df548ca68654/
 > 
->  Actually I think a lot more should move to support. For instance, pkg-* is
-> actually not just for packages but also for linux, bootloaders, toolchain. And
-> even package/Makefile.in (with a better name then :-).
-
-I do agree. But I think this can be done in a separate series.
-
-The current series is about adding multi-br2-external support, so only
-includes whatever is necessary to achieve that goal.
-
-I can queue a rework of the support materials as you suggest, but that
-will be done in a separate series (and hopefully not a requirement
-before this one is condered! ;-) ).
-
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Peter Korsgaard <jacmet@uclibc.org>
-> > ---
-> >  Makefile              | 10 ++-----
-> >  package/pkg-utils.mk  | 59 ----------------------------------------
-> >  support/misc/utils.mk | 74 +++++++++++++++++++++++++++++++++++++++++++++++++++
+> This appears to be because posix_spawnp and the others aren't
+> available with that configuration of uclibc (although it looks like
+> UCLIBC_HAS_ADVANCED_REALTIME is defined).
 > 
->  If you agree that more stuff should move to support, I think there should be a
-> new directory support/make or support/mk.
+> I could add --disable-amqp if we're using uclibc but that seems overly
+> severe. Any better suggestions?
 
-As I said, we can move it later when doing the support rework.
+The output is quieten, so I am not sure, but may be an explictely
+-lrt would help here?
 
->  BTW, why didn't the rename detection catch this? Did you change too much? In
-> that case, perhaps it's better to do it in two patches? :-P
-
-It was not caught because it is less than 50% (actually, 49%!) so git did
-not detect a copy (or a rename either).
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+best regards
+ Waldemar
