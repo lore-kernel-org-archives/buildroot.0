@@ -1,156 +1,30 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 22 Oct 2015 09:10:08 -0200 (BRST)
-Subject: [Buildroot] X11: How do I prevent the target screen from going
- black after 10 minutes?
-In-Reply-To: <CAEzGmjD5uKHocgH7cDJeXZWvw4eq0YeZfGgx6EHvb_kPf8NVZA@mail.gmail.com>
-References: <CAEzGmjCKbQKZWy0WfQaGGoqZgzJ6bjf+4jdZRinx2XLijCZ49A@mail.gmail.com>
- <CAEYzJUH2pcGaafwSJ4dEUY0uvf6a4FNYQ9B-bos6nbWvUSs8RA@mail.gmail.com>
- <CAEzGmjDZ00CTnksb035Jfo9N4-NO4vpUEkJOvf9qptyn-e3NSQ@mail.gmail.com>
- <2045148520.1576581.1445510546977.JavaMail.zimbra@datacom.ind.br>
- <CAEzGmjD5uKHocgH7cDJeXZWvw4eq0YeZfGgx6EHvb_kPf8NVZA@mail.gmail.com>
-Message-ID: <2097041356.1590443.1445512208008.JavaMail.zimbra@datacom.ind.br>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 22 Oct 2015 09:28:01 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.4.x series
+Message-ID: <1445516881-3346-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message -----
-> From: "Lennart Ramberg" <ramberg.lennart@gmail.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "Bj?rn Forsman" <bjorn.forsman@gmail.com>, "buildroot" <buildroot@busybox.net>
-> Sent: Thursday, October 22, 2015 8:54:19 AM
-> Subject: Re: [Buildroot] X11: How do I prevent the target screen from going black after 10 minutes?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Thanks, however:
-
-> # xset q
-> -sh: xset: not found
-
-Sorry, I forgot to say that you need to select the xset package, under
-
-    -> Target packages
-        -> Graphic libraries and applications (graphic/text)
-            -> X.org X Window System
-                -> X11R7 Applications 
-
-> And yes, it goes black.
-
-:-)
-
-> Regards
-> Lennart
-
-Carlos Santos (Casantos)
-DATACOM, P&D
-
-> On Thu, Oct 22, 2015 at 12:42 PM, Carlos Santos < casantos@datacom.ind.br >
-> wrote:
-
->> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
->> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
->> > Cc: "buildroot" < buildroot@busybox.net >
->> > Sent: Thursday, October 22, 2015 5:44:17 AM
->> > Subject: Re: [Buildroot] X11: How do I prevent the target screen from going
->> > black after 10 minutes?
-
->> > Thanks for the quick reply.
->> > However, I had no success. Screen still blanks after 10 min (unless keyb/mouse
->> > activity).
->> > I assume this is what you meant:
-
->> > # cat /boot/grub/grub.cfg
->> > set default="0"
->> > set timeout="3"
-
->> > menuentry "Buildroot" {
->> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
->> > }
-
->> > Regards
->> > Lennart
-
->> Supposing that you are not running a screen saver daemon live "xscreensaver", I
->> guess the screen goes blank (black?) due to the X server itself, not the Linux
->> kernel. Try using
-
->> $ xset q
-
->> to display the screen saver timeout and
-
->> $ xset s off
-
->> to disable the screen saver.
-
->> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman < bjorn.forsman@gmail.com >
->> > wrote:
-
->> >> On 21 October 2015 at 18:59, Lennart Ramberg < ramberg.lennart@gmail.com >
->> >> wrote:
->> >> > Hello,
-
->> >> > Maybe not a proper Builroot question, but:
->> >> > X11: How do I prevent the target screen from going black after 10 minutes?
->> >> > There is no xorg.conf (to edit the ServerFlags section).
->> >> > I was thinking maybe an overlay with an edited xorg.conf?
-
->> >> Have you tried adding "consoleblank=0" to the kernel command line? (I
->> >> _think_ that should do it.)
-
->> >> Best regards,
->> >> Bj?rn Forsman
-
->> > _______________________________________________
->> > buildroot mailing list
->> > buildroot at busybox.net
->> > http://lists.busybox.net/mailman/listinfo/buildroot
-
->> Carlos Santos (Casantos)
->> DATACOM, P&D
-
->> ----- Original Message -----
->> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
->> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
->> > Cc: "buildroot" < buildroot@busybox.net >
->> > Sent: Thursday, October 22, 2015 5:44:17 AM
->>> Subject: Re: [Buildroot] X11: How do I prevent the target screen from going
->> > black after 10 minutes?
-
->> > Thanks for the quick reply.
->> > However, I had no success. Screen still blanks after 10 min (unless keyb/mouse
->> > activity).
->> > I assume this is what you meant:
-
->> > # cat /boot/grub/grub.cfg
->> > set default="0"
->> > set timeout="3"
-
->> > menuentry "Buildroot" {
->> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
->> > }
-
->> > Regards
->> > Lennart
-
->> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman < bjorn.forsman@gmail.com >
->> > wrote:
-
->> >> On 21 October 2015 at 18:59, Lennart Ramberg < ramberg.lennart@gmail.com >
->> >> wrote:
->> >> > Hello,
-
->> >> > Maybe not a proper Builroot question, but:
->> >> > X11: How do I prevent the target screen from going black after 10 minutes?
->> >> > There is no xorg.conf (to edit the ServerFlags section).
->> >> > I was thinking maybe an overlay with an edited xorg.conf?
-
->> >> Have you tried adding "consoleblank=0" to the kernel command line? (I
->> >> _think_ that should do it.)
-
->> >> Best regards,
->> >> Bj?rn Forsman
-
->> > _______________________________________________
->> > buildroot mailing list
->> > buildroot at busybox.net
->> > http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7001466..e05cef9 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -192,7 +192,7 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.109"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.90"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.49"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.54"	if BR2_KERNEL_HEADERS_3_14
+-- 
+2.4.10
