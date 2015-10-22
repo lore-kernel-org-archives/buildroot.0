@@ -1,86 +1,69 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 22 Oct 2015 21:22:55 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 22 Oct 2015 21:54:38 +0200
 Subject: [Buildroot] [PATCH 2/2] jq: enable host package
-In-Reply-To: <20151022163902.GA3797@free.fr>
+In-Reply-To: <CAAXf6LVLoU=sFyoEFhPyagqguVO0OV-dhFT5-JmMVPJGF4i9AA@mail.gmail.com>
 References: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
  <1445251329-18120-2-git-send-email-patrickdepinguin@gmail.com>
- <20151021223958.5605a589@free-electrons.com> <20151022163902.GA3797@free.fr>
-Message-ID: <CAAXf6LU_vNHQRcCQAPs-61tkPdgTA8RzuJUaJj3mNwuv7DUKfw@mail.gmail.com>
+ <20151021223958.5605a589@free-electrons.com> <5627FDD5.8060207@mind.be>
+ <20151021232020.610e4735@free-electrons.com>
+ <CAAXf6LVLoU=sFyoEFhPyagqguVO0OV-dhFT5-JmMVPJGF4i9AA@mail.gmail.com>
+Message-ID: <56293EFE.9050009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 22, 2015 at 6:39 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas?, All,
->
-> On 2015-10-21 22:39 +0200, Thomas Petazzoni spake thusly:
->> On Mon, 19 Oct 2015 12:42:09 +0200, Thomas De Schampheleire wrote:
->> > From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->> >
->> > Allow building jq as host utility for use in post-build scripts.
->> > This can be useful to created, edit, merge or even perform syntax checking
->> > on JSON files.
->> >
->> > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 22-10-15 10:22, Thomas De Schampheleire wrote:
+> On Wed, Oct 21, 2015 at 11:20 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Arnout,
 >>
->> Since this host package clearly doesn't fall into the "debugging tool,
->> flashing tool or image preparation tool" category, I'd like to collect
->> the opinion of a few other developers before applying.
+>> On Wed, 21 Oct 2015 23:04:21 +0200, Arnout Vandecappelle wrote:
 >>
->> Peter, Arnout, Yann, what do you think?
->
-> On principle, I'm OK with user-selectable host packages, as long as there
-> is a real benefit to having it, like:
->   - image preparation tools (fs, flash, dtc, bootloader utils...)
->   - configuration tools (pwgen, SElinux compiler...)
->   - debug tools
->
-> (Note: I'm not listing dependency of target package, since that is not
-> user-selectable.)
->
-> Adding any other type of package to be user-selectable will always be
-> debatable. I'm not sure where we should draw the line, but we could
-> provide guidelines, like:
->
->   - the package is not usually packaged in distributions (or too old);
->     libxslt for xsltproc comes to mind for example;
->
->   - the submitter comes with a very clear use-case which can not
->     otherwise be solved by other means (overlays, conditionals in
->     post-build scripts...)
->
-> Now, as far as host-jq is concerned, I'm not very sure. The use-case
-> Thomas DS. invoques is tweaking config files for various targets.
->
-> Even though I understand that, and even though I could have thought the
-> same, I'm still not quite sure. JSON is indeed a pretty much usual
-> configuration format those days (whether that is sane is a question for
-> another thread ;-] ). However, I would argue (weakly) that this tool
-> should be provided by the host environment, not us.
->
-> Except: old, enterprise-class distributions (e.g. RHEL5) may lack that
-> tool, especially since it was born in 2012.
+>>>  I was thinking the same thing when I say the patch, but I don't care enough to
+>>> really comment on it. It's a bit similar to packages that depend on some host
+>>> preprocessing tool, like flex. But then of course we just have a dependency and
+>>> not a Config.in.host.
+>>
+>> To me, host packages that are a dependency of some other target
+>> packages have a real and strong reason to exist. The ones that don't
+>> should really fall into the "useful for debugging, flashing or
+>> preparing images" category IMO.
+>>
+>>>  OTOH, if we accept this, it kind of opens the doors to support almost
+>>> everything as a host package. But maybe there's nothing wrong with that either.
+>>
+>> Opening the door to almost everything as a host package is personally
+>> something that I'd like to avoid.
+> 
+> I don't think that we would open the door to 'almost every package' as
+> host package. For many packages, it makes no sense to have them as
+> host package in the context of buildroot, say audio/video,
+> profiling/benchmark, hardware handling, mail, miscellaneous,
+> networking apps, ...
+> In fact, I would argue that almost none of the packages we have in
+> Buildroot make sense as host packages, except those that we already
+> have, and a few limited categories of tools. In my opinion, one such
+> category could be config file handling, and host-jq fits into that
+> category. It's the type of thing one can reasonably need to put
+> together filestystem images for embedded devices, especially in
+> environments where many (variants of) devices are being developed.
 
-Even for RHEL6, while there possibly is an rpm package available,
-tools as jq are not installed by default.
-For products like those you build with buildroot, the build should be
-self-contained and not depend too much on environment tools. For
-things like grep, (host-)gcc, ... we can reasonably expect them to be
-present. But I don't see jq in this category. At least in our case,
-with all workstations involved in the organization, it is not possible
-to expect all of them to contain jq.
+ So that basically puts jq into the 'image generation' category for you :-)
 
-In practice, we are using JSON files to pass some configuration to
-applications. Different boards need different configuration, and jq
-provides easy manipulation and reading of such files on the cmd-line
-(and jansson can be used to read such files from the application).
-Some of our JSON files are pre-existing in a rootfs overlay; in this
-case we use host-jq to run a syntax check.
-Some of them are dynamically generated and combined from the build
-process using host-jq.
+ Note that personally I don't have much of a problem with adding more host
+packages, I don't think they tend to add much of a maintenance burden.
 
-Hope this helps to convice you all :)
+ Regards,
+ Arnout
 
-/Thomas
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
