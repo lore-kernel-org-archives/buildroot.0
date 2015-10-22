@@ -1,31 +1,59 @@
-From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
-Date: Thu, 22 Oct 2015 12:08:50 +0200
-Subject: [Buildroot] [PATCH v2] board/freescale: switch
-	create-boot-sd.sh to parted
-In-Reply-To: <5627DB79.7020001@mind.be>
-References: <CAAMH-ysuKMKY6AXbtJqALq0jr3fs1-j0e_Pf=Qrm8BvUuTimKg@mail.gmail.com>
- <1445417826-9634-1-git-send-email-vincent.stehle@freescale.com>
- <5627DB79.7020001@mind.be>
-Message-ID: <5628B5B2.3070807@freescale.com>
+From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
+Date: Thu, 22 Oct 2015 12:31:39 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/at: updated version from
+	3.1.13 to 3.1.16
+In-Reply-To: <20150920150838.1009ed2d@free-electrons.com>
+References: <11269096.cxoRZRC0e7@deathstar> <1473000.Q0pm3JyGrD@deathstar>
+ <20150920150838.1009ed2d@free-electrons.com>
+Message-ID: <1913530.deddMt05TU@deathstar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/21/2015 08:37 PM, Arnout Vandecappelle wrote:
-..
->  Is there any reason why genimage (cfr. wandboard) wouldn't work, like I
-> suggested earlier?
+On Sunday 20 September 2015 15:08:38 Thomas Petazzoni wrote:
+> Dear Francesco Nwokeka,
+> 
+> On Tue, 08 Sep 2015 14:13:59 +0200, Francesco Nwokeka wrote:
+> > Version 3 of the patch to update the "at" package.
+> 
+> You received some comments from Arnout Vandecappelle on September 8th
+> on this patch. Could you take them into account and send an updated
+> version of the patch?
+> 
+> I was going to apply by fixing the problems pointed by Arnout, but one
+> requires a bit more work:
+> 
+> """
+> > * Merged previous Makefile.in patches into one.  
+> 
+>  Ick, that's not what I intended! We want a separate patch file for each
+> separate change. The two patches that you squashed into one do two
+>  distinct changes:
+> 
+>  - change IROOT into DESTDIR
+>  - don't try to install as root
+> 
+> So it's good to keep them separate.
+> 
+>  My proposal was to drop the first patch and just use IROOT. In
+>  buildroot, we can easily use IROOT instead of DESTDIR by setting
+> 
+> AT_INSTALL_TARGET_OPTS = IROOT=$(TARGET_DIR) install
+> """
+> 
+> Could you fix that and send a new version?
 
-Hi Arnout,
 
-You are right, genimage seems like a nice solution. In fact I think I
-prefer this SD card image generation approach over the direct SD card
-modification method.
+Hi Thomas!
+	Sorry for the late reply but I've been 100% busy during this period. I'll get the patch back up and running ASAP. Sorry for the delay
 
-Thank you for this suggestion.
 
-Best regards,
+Thanks,
+	Francesco
 
-V.
+> Thanks,
+> 
+> Thomas
+> 
