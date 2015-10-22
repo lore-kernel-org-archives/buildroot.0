@@ -1,69 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Oct 2015 21:54:38 +0200
-Subject: [Buildroot] [PATCH 2/2] jq: enable host package
-In-Reply-To: <CAAXf6LVLoU=sFyoEFhPyagqguVO0OV-dhFT5-JmMVPJGF4i9AA@mail.gmail.com>
-References: <1445251329-18120-1-git-send-email-patrickdepinguin@gmail.com>
- <1445251329-18120-2-git-send-email-patrickdepinguin@gmail.com>
- <20151021223958.5605a589@free-electrons.com> <5627FDD5.8060207@mind.be>
- <20151021232020.610e4735@free-electrons.com>
- <CAAXf6LVLoU=sFyoEFhPyagqguVO0OV-dhFT5-JmMVPJGF4i9AA@mail.gmail.com>
-Message-ID: <56293EFE.9050009@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 22 Oct 2015 22:17:04 +0200
+Subject: [Buildroot] [PATCH 1/2] qt5base: add optional gstreamer1 support
+In-Reply-To: <5629321A.50503@carallon.com> (Will Wagner's message of "Thu, 22
+ Oct 2015 19:59:38 +0100")
+References: <1445414790-16583-1-git-send-email-peter@korsgaard.com>
+ <20151021134228.64da3709@free-electrons.com>
+ <877fmgigrr.fsf@dell.be.48ers.dk>
+ <0874644c-9a80-4da8-af8d-ea8cad036c35@MAIL-SINTERS-01.sinters-int.fr>
+ <877fmelroe.fsf@dell.be.48ers.dk> <5629321A.50503@carallon.com>
+Message-ID: <8737x2lku7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22-10-15 10:22, Thomas De Schampheleire wrote:
-> On Wed, Oct 21, 2015 at 11:20 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Arnout,
->>
->> On Wed, 21 Oct 2015 23:04:21 +0200, Arnout Vandecappelle wrote:
->>
->>>  I was thinking the same thing when I say the patch, but I don't care enough to
->>> really comment on it. It's a bit similar to packages that depend on some host
->>> preprocessing tool, like flex. But then of course we just have a dependency and
->>> not a Config.in.host.
->>
->> To me, host packages that are a dependency of some other target
->> packages have a real and strong reason to exist. The ones that don't
->> should really fall into the "useful for debugging, flashing or
->> preparing images" category IMO.
->>
->>>  OTOH, if we accept this, it kind of opens the doors to support almost
->>> everything as a host package. But maybe there's nothing wrong with that either.
->>
->> Opening the door to almost everything as a host package is personally
->> something that I'd like to avoid.
-> 
-> I don't think that we would open the door to 'almost every package' as
-> host package. For many packages, it makes no sense to have them as
-> host package in the context of buildroot, say audio/video,
-> profiling/benchmark, hardware handling, mail, miscellaneous,
-> networking apps, ...
-> In fact, I would argue that almost none of the packages we have in
-> Buildroot make sense as host packages, except those that we already
-> have, and a few limited categories of tools. In my opinion, one such
-> category could be config file handling, and host-jq fits into that
-> category. It's the type of thing one can reasonably need to put
-> together filestystem images for embedded devices, especially in
-> environments where many (variants of) devices are being developed.
+>>>>> "Will" == Will Wagner <will_wagner@carallon.com> writes:
 
- So that basically puts jq into the 'image generation' category for you :-)
+Hi,
 
- Note that personally I don't have much of a problem with adding more host
-packages, I don't think they tend to add much of a maintenance burden.
+ > On 22/10/2015 18:49, Peter Korsgaard wrote:
 
- Regards,
- Arnout
+ >> Yes, but E.G. the gstreamer 0.10 support in qt5multimedia doesn't build,
+ >> whereas the 1.x support does, and we prefer 1.x over 0.10 elsewhere in
+ >> Buildroot.
 
+ > This is working fine for me. I have 0.10 building and working on a board.
 
+So you don't see these compile errors?
+
+https://patchwork.ozlabs.org/patch/533653/
+
+For one, I see
+src/plugins/gstreamer/mediaplayer/qgstreamerplayersession.cpp calling
+gst_video_connector_get_type that isn't defined anywhere.
+
+ >> Ok, but gstreamer1 pulls in host-pkgconf, so it should be available when
+ >> qt5base runs the configure step, right?
+
+ > host-pkgconfig is built already, but Qt5.5 just seems to be broken and
+ > ignores the passed in path to pkgconf. I've just not had the time to
+ > put together a proper patch and try to get it upstream, but it is
+ > still on my list.
+
+That can presumably be fixed by just ensuring that HOST_DIR/usr/bin is
+in the path (using TARGET_MAKE_ENV / TARGET_CONFIGURE_OPTS)?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Venlig hilsen,
+Peter Korsgaard 
