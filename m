@@ -1,59 +1,119 @@
-From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
-Date: Thu, 22 Oct 2015 12:31:39 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/at: updated version from
-	3.1.13 to 3.1.16
-In-Reply-To: <20150920150838.1009ed2d@free-electrons.com>
-References: <11269096.cxoRZRC0e7@deathstar> <1473000.Q0pm3JyGrD@deathstar>
- <20150920150838.1009ed2d@free-electrons.com>
-Message-ID: <1913530.deddMt05TU@deathstar>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu, 22 Oct 2015 08:42:26 -0200 (BRST)
+Subject: [Buildroot] X11: How do I prevent the target screen from going
+ black after 10 minutes?
+In-Reply-To: <CAEzGmjDZ00CTnksb035Jfo9N4-NO4vpUEkJOvf9qptyn-e3NSQ@mail.gmail.com>
+References: <CAEzGmjCKbQKZWy0WfQaGGoqZgzJ6bjf+4jdZRinx2XLijCZ49A@mail.gmail.com>
+ <CAEYzJUH2pcGaafwSJ4dEUY0uvf6a4FNYQ9B-bos6nbWvUSs8RA@mail.gmail.com>
+ <CAEzGmjDZ00CTnksb035Jfo9N4-NO4vpUEkJOvf9qptyn-e3NSQ@mail.gmail.com>
+Message-ID: <2045148520.1576581.1445510546977.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 20 September 2015 15:08:38 Thomas Petazzoni wrote:
-> Dear Francesco Nwokeka,
-> 
-> On Tue, 08 Sep 2015 14:13:59 +0200, Francesco Nwokeka wrote:
-> > Version 3 of the patch to update the "at" package.
-> 
-> You received some comments from Arnout Vandecappelle on September 8th
-> on this patch. Could you take them into account and send an updated
-> version of the patch?
-> 
-> I was going to apply by fixing the problems pointed by Arnout, but one
-> requires a bit more work:
-> 
-> """
-> > * Merged previous Makefile.in patches into one.  
-> 
->  Ick, that's not what I intended! We want a separate patch file for each
-> separate change. The two patches that you squashed into one do two
->  distinct changes:
-> 
->  - change IROOT into DESTDIR
->  - don't try to install as root
-> 
-> So it's good to keep them separate.
-> 
->  My proposal was to drop the first patch and just use IROOT. In
->  buildroot, we can easily use IROOT instead of DESTDIR by setting
-> 
-> AT_INSTALL_TARGET_OPTS = IROOT=$(TARGET_DIR) install
-> """
-> 
-> Could you fix that and send a new version?
+> From: "Lennart Ramberg" <ramberg.lennart@gmail.com>
+> To: "Bj?rn Forsman" <bjorn.forsman@gmail.com>
+> Cc: "buildroot" <buildroot@busybox.net>
+> Sent: Thursday, October 22, 2015 5:44:17 AM
+> Subject: Re: [Buildroot] X11: How do I prevent the target screen from going
+> black after 10 minutes?
 
+> Thanks for the quick reply.
+> However, I had no success. Screen still blanks after 10 min (unless keyb/mouse
+> activity).
+> I assume this is what you meant:
 
-Hi Thomas!
-	Sorry for the late reply but I've been 100% busy during this period. I'll get the patch back up and running ASAP. Sorry for the delay
+> # cat /boot/grub/grub.cfg
+> set default="0"
+> set timeout="3"
 
+> menuentry "Buildroot" {
+> linux /boot/bzImage root=/dev/sda1 consoleblank=0
+> }
 
-Thanks,
-	Francesco
+> Regards
+> Lennart
 
-> Thanks,
-> 
-> Thomas
-> 
+Supposing that you are not running a screen saver daemon live "xscreensaver", I guess the screen goes blank (black?) due to the X server itself, not the Linux kernel. Try using
+
+    $ xset q
+
+to display the screen saver timeout and
+
+    $ xset s off
+
+to disable the screen saver.
+
+> On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman < bjorn.forsman@gmail.com >
+> wrote:
+
+>> On 21 October 2015 at 18:59, Lennart Ramberg < ramberg.lennart@gmail.com >
+>> wrote:
+>> > Hello,
+
+>> > Maybe not a proper Builroot question, but:
+>> > X11: How do I prevent the target screen from going black after 10 minutes?
+>> > There is no xorg.conf (to edit the ServerFlags section).
+>> > I was thinking maybe an overlay with an edited xorg.conf?
+
+>> Have you tried adding "consoleblank=0" to the kernel command line? (I
+>> _think_ that should do it.)
+
+>> Best regards,
+>> Bj?rn Forsman
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Carlos Santos (Casantos)
+DATACOM, P&D
+
+----- Original Message -----
+> From: "Lennart Ramberg" <ramberg.lennart@gmail.com>
+> To: "Bj?rn Forsman" <bjorn.forsman@gmail.com>
+> Cc: "buildroot" <buildroot@busybox.net>
+> Sent: Thursday, October 22, 2015 5:44:17 AM
+> Subject: Re: [Buildroot] X11: How do I prevent the target screen from going black after 10 minutes?
+
+> Thanks for the quick reply.
+> However, I had no success. Screen still blanks after 10 min (unless keyb/mouse
+> activity).
+> I assume this is what you meant:
+
+> # cat /boot/grub/grub.cfg
+> set default="0"
+> set timeout="3"
+
+> menuentry "Buildroot" {
+> linux /boot/bzImage root=/dev/sda1 consoleblank=0
+> }
+
+> Regards
+> Lennart
+
+> On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman < bjorn.forsman@gmail.com >
+> wrote:
+
+>> On 21 October 2015 at 18:59, Lennart Ramberg < ramberg.lennart@gmail.com >
+>> wrote:
+>> > Hello,
+
+>> > Maybe not a proper Builroot question, but:
+>> > X11: How do I prevent the target screen from going black after 10 minutes?
+>> > There is no xorg.conf (to edit the ServerFlags section).
+>> > I was thinking maybe an overlay with an edited xorg.conf?
+
+>> Have you tried adding "consoleblank=0" to the kernel command line? (I
+>> _think_ that should do it.)
+
+>> Best regards,
+>> Bj?rn Forsman
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
