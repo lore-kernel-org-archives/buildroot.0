@@ -1,65 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Oct 2015 22:34:07 +0200
-Subject: [Buildroot] [PATCH 12/21 v2] core: do not hard-code inclusion of
-	br2-external in Kconfig
+Date: Thu, 22 Oct 2015 22:34:05 +0200
+Subject: [Buildroot] [PATCH 10/21 v2] core: introduce a generated kconfig
+	snippet
 In-Reply-To: <cover.1445545973.git.yann.morin.1998@free.fr>
 References: <cover.1445545973.git.yann.morin.1998@free.fr>
-Message-ID: <177fa1d338591b375532eedc587d6012e876a407.1445545973.git.yann.morin.1998@free.fr>
+Message-ID: <2e51f095a276e4292a2d22ebb26e86d8894c87b1.1445545973.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move the inclusion of br2-external's Config.in to the generated kconfig
-snippet.
+Add the infrastructure for adding generated kconfig snippet in the
+menuconfig.
 
-This will ultimately allow us to use more than one br2-external tree.
+For now, the kconfig snippet is generated empty, the recipe for filling
+it in will be introduced in sub-sequent patches.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- Config.in | 7 -------
- Makefile  | 8 +++++++-
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ Config.in             | 6 ++++++
+ Makefile              | 7 ++++++-
+ docs/manual/manual.mk | 3 +++
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/Config.in b/Config.in
-index a0fb1ea..512c049 100644
+index d795361..a0fb1ea 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -645,11 +645,4 @@ source "package/Config.in.host"
+@@ -18,6 +18,10 @@ config BR2_EXTERNAL
+ 	string
+ 	option env="BR2_EXTERNAL"
  
- source "Config.in.legacy"
++config BR2_BUILD_DIR
++	string
++	option env="BUILD_DIR"
++
+ # Hidden boolean selected by packages in need of Java in order to build
+ # (example: xbmc)
+ config BR2_NEEDS_HOST_JAVA
+@@ -647,3 +651,5 @@ menu "User-provided options"
+ source "$BR2_EXTERNAL/Config.in"
  
--menu "User-provided options"
--	depends on BR2_EXTERNAL != "support/dummy-external"
--
--source "$BR2_EXTERNAL/Config.in"
--
--endmenu
--
- source "$BR2_BUILD_DIR/.br2-external.in"
+ endmenu
++
++source "$BR2_BUILD_DIR/.br2-external.in"
 diff --git a/Makefile b/Makefile
-index af9aab4..1ee44a6 100644
+index 6cc9877..af9aab4 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -823,7 +823,13 @@ endif
+@@ -702,7 +702,7 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
+ export HOSTCFLAGS
  
- .PHONY: $(BUILD_DIR)/.br2-external.in
- $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
--	@touch $@
-+	$(Q)( \
-+		printf "#\n# Automatically generated file; DO NOT EDIT.\n#\n\n"; \
-+		printf 'menu "User-provided options"\n'; \
-+		printf '\tdepends on BR2_EXTERNAL != "support/dummy-external"\n\n'; \
-+		printf 'source "%s/Config.in"\n\n' $$(cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd); \
-+		printf 'endmenu # User-provided options\n'; \
-+	) >$@
+-prepare-kconfig: outputmakefile
++prepare-kconfig: outputmakefile $(BUILD_DIR)/.br2-external.in
  
+ $(BUILD_DIR)/buildroot-config/%onf:
+ 	mkdir -p $(@D)/lxdialog
+@@ -720,6 +720,7 @@ COMMON_CONFIG_ENV = \
+ 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
+ 	BR2_CONFIG=$(BR2_CONFIG) \
+ 	BR2_EXTERNAL=$(BR2_EXTERNAL) \
++	BUILD_DIR=$(BUILD_DIR) \
+ 	SKIP_LEGACY=
+ 
+ xconfig: $(BUILD_DIR)/buildroot-config/qconf prepare-kconfig
+@@ -820,6 +821,10 @@ ifeq ($(NEED_WRAPPER),y)
+ 	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
+ endif
+ 
++.PHONY: $(BUILD_DIR)/.br2-external.in
++$(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
++	@touch $@
++
  # printvars prints all the variables currently defined in our Makefiles
  printvars:
+ 	@$(foreach V, \
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index caf080a..b26f912 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -7,6 +7,9 @@
+ MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
+ MANUAL_RESOURCES = $(TOPDIR)/docs/images
+ 
++# Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
++MANUAL_DEPENDENCIES += prepare-kconfig
++
+ # Our manual needs to generate lists
+ define MANUAL_GEN_LISTS
+ 	$(Q)$(call MESSAGE,"Updating the manual lists...")
 -- 
 1.9.1
