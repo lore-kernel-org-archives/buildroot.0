@@ -1,31 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Oct 2015 22:34:10 +0200
-Subject: [Buildroot] [PATCH 15/21 v2] core: handle .br-external in a make
-	rule
+Date: Thu, 22 Oct 2015 22:34:09 +0200
+Subject: [Buildroot] [PATCH 14/21 v2] core: introduce per br2-external ID
 In-Reply-To: <cover.1445545973.git.yann.morin.1998@free.fr>
 References: <cover.1445545973.git.yann.morin.1998@free.fr>
-Message-ID: <580b7b9dcf0e042aae58fd9664111399d830042f.1445545973.git.yann.morin.1998@free.fr>
+Message-ID: <34423e8f6ab990edec92d5b6d0694124927d705d.1445545973.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we treat the case where we have no br2-external tree
-(BR2_EXTERNAL is empty) differently from the case where we do have
-one (BR2_EXTERNAL is not empty).
+This unique ID is used to construct a per br2-external tree variable,
+BR2_EXTERNAL_$(ID), which contains the path to the br2-external tree.
 
-There is now no reason to treat those two cases differently:
+This variable is available both from Kconfig (set in the Kconfig
+snippet) and from the .mk files.
 
-  - the kconfig snippet is always generated appropriately (i.e. it would
-    include the br2-external tree if set, or include nothing otherwise);
+Also, display the BR2_EXTERNAL_$(ID) and its path as a comment in the
+menuconfig.
 
-  - we no longer have a dummy br-external tree either.
+This will ultimately allow us to support multiple br2-external trees at
+once, with that ID (and thus BR2_EXTERNAL_$(ID)) uniquely defining which
+br2-external tree is being used.
 
-As such, generate the .br-external cache file in both cases.
-
-This will make it much easy to handle when we introduce support for
-multiple br2-external trees.
+Note: since the variables in the Makefile and in Kconfig are named the
+same, the one we computed early on (second hunk) will be overridden by
+the one in .config when we have it. Thus, even though they are set to
+the same raw value, the one from .config is quoted and, being included
+later in the Makefile, will take precedence, so we must un-quote it
+before we include the br2-external's makefile (third hunk). That's
+unfortunate, but there is no easy way around that as we want the two
+variables to be named the same in Makefile and Kconfig (and we can't
+ask the user to un-quote that variable himself either), hence the
+little dirty trick.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -33,49 +40,62 @@ Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- Makefile | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ Makefile | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index f5202ba..d31144b 100644
+index 80de431..f5202ba 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -151,23 +151,17 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
- # On subsequent invocations of make, it is read in. It can still be overridden
- # on the command line, therefore the file is re-created every time make is run.
+@@ -153,6 +153,9 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
  #
--# When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
--# line), the .br-external file is removed.
--#
- # If the br2-external tree defines its ID, then export the path in the
- # BR2_EXTERNAL_$(ID) variable.
+ # When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
+ # line), the .br-external file is removed.
++#
++# If the br2-external tree defines its ID, then export the path in the
++# BR2_EXTERNAL_$(ID) variable.
  
  BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
  -include $(BR2_EXTERNAL_FILE)
--ifeq ($(BR2_EXTERNAL),)
--  $(shell rm -f $(BR2_EXTERNAL_FILE))
--else
-+ifneq ($(BR2_EXTERNAL),)
-   _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-   ifeq ($(_BR2_EXTERNAL),)
-     $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relative to $(TOPDIR))
+@@ -165,6 +168,13 @@ else
    endif
    override BR2_EXTERNAL := $(_BR2_EXTERNAL)
--  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-   ifneq ($(wildcard $(BR2_EXTERNAL)/external.id),)
-     BR2_EXTERNAL_ID := $(shell cat $(BR2_EXTERNAL)/external.id 2>/dev/null)
-     ifeq ($(BR2_EXTERNAL_ID),)
-@@ -178,6 +172,11 @@ else
+   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
++  ifneq ($(wildcard $(BR2_EXTERNAL)/external.id),)
++    BR2_EXTERNAL_ID := $(shell cat $(BR2_EXTERNAL)/external.id 2>/dev/null)
++    ifeq ($(BR2_EXTERNAL_ID),)
++    $(error $(BR2_EXTERNAL) has no ID (in file 'external.id'))
++    endif
++    BR2_EXTERNAL_$(BR2_EXTERNAL_ID) = $(BR2_EXTERNAL)
++  endif
    BR2_EXTERNAL_MK = $(BR2_EXTERNAL)/external.mk
  endif
  
-+# This needs to be *after* we compute BR_EXTERNAL, above.
-+.PHONY: $(BR2_EXTERNAL_FILE)
-+$(BR2_EXTERNAL_FILE):
-+	@echo BR2_EXTERNAL ?= $(BR_EXTERNAL) >$@
-+
- # To make sure that the environment variable overrides the .config option,
- # set this before including .config.
- ifneq ($(BR2_DL_DIR),)
+@@ -424,6 +434,10 @@ include boot/common.mk
+ include linux/linux.mk
+ include fs/common.mk
+ 
++# If the br2-external tree defines its ID, then the BR2_EXTERNAL_$(ID)
++# variable is also present in .config, so it is quoted. We must unquote
++# it before feeding it to the br2-external makefile.
++BR2_EXTERNAL_$(BR2_EXTERNAL_ID) := $(call qstrip,$(BR2_EXTERNAL_$(BR2_EXTERNAL_ID)))
+ # Nothing to include if no BR2_EXTERNAL tree in use
+ include $(BR2_EXTERNAL_MK)
+ 
+@@ -823,7 +837,13 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+ 	$(Q)if [ -n '$(BR2_EXTERNAL)' ]; then \
+ 		printf "#\n# Automatically generated file; DO NOT EDIT.\n#\n\n"; \
+ 		printf 'menu "User-provided options"\n\n'; \
+-		printf 'source "%s/Config.in"\n\n' $$(cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd); \
++		if [ -z "$(BR2_EXTERNAL_ID)" ]; then \
++			printf 'source "%s/Config.in"\n\n' $$(cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd); \
++		else \
++			printf 'config BR2_EXTERNAL_%s\n' $(BR2_EXTERNAL_ID); \
++			printf '\tstring\n\tdefault "%s"\n\n' $(BR2_EXTERNAL_$(BR2_EXTERNAL_ID)); \
++			printf 'source "$$BR2_EXTERNAL_%s/Config.in"\n\n' $(BR2_EXTERNAL_ID); \
++		fi; \
+ 		printf 'endmenu # User-provided options\n'; \
+ 	fi >$@
+ 
 -- 
 1.9.1
