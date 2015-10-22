@@ -1,59 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Oct 2015 22:33:59 +0200
-Subject: [Buildroot] [PATCH 04/21 v2] core: commonalise the bundled and
-	br2-external %_defconfig rules
+Date: Thu, 22 Oct 2015 22:34:06 +0200
+Subject: [Buildroot] [PATCH 11/21 v2] docs/manual: prepare-config can be
+	used as a dependency of documents
 In-Reply-To: <cover.1445545973.git.yann.morin.1998@free.fr>
 References: <cover.1445545973.git.yann.morin.1998@free.fr>
-Message-ID: <3b01a81ac78b8ca787b1e0308e819d8eb2ece1df.1445545973.git.yann.morin.1998@free.fr>
+Message-ID: <c6951f7f221e173f49a5931e912dadd23cc23fa1.1445545973.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The code for both cases is exactly the same, and only differs in the
-location where defconfig files are looked for.
-
-We use an intermediate macro to generate the corresponding rules,
-because directly generating the rules is ugly and needs lots of escaping
-and double-dollar-ing for the $(eval ...) and $(foreach ...) calls to
-play nicely together.
-
-Furthermore, that will be tremendously useful when we support multiple
-br2-external trees.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- Makefile | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ docs/manual/adding-packages-asciidoc.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 60cea32..052f58a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -789,13 +789,12 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
+diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
+index 0c10fd1..a278d44 100644
+--- a/docs/manual/adding-packages-asciidoc.txt
++++ b/docs/manual/adding-packages-asciidoc.txt
+@@ -65,6 +65,8 @@ information is (assuming the document name is +foo+) :
  
- # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
--%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
--	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
--		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
--
--%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
--	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
--		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-+define PERCENT_DEFCONFIG
-+%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
-+	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
-+		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
-+endef
-+$(eval $(foreach d,$(TOPDIR) $(BR2_EXTERNAL),$(call PERCENT_DEFCONFIG,$(d))$(sep)))
+ * +FOO_DEPENDENCIES+, optional, the list of packages (most probably,
+   host-packages) that must be built before building this document.
++  If a hook of your document needs to access the _Kconfig_ structure,
++  you may add +prepare-kconfig+ to the list of dependencies.
  
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< \
+ There are also additional hooks (see xref:hooks[] for general information
+ on hooks), that a document may set to define extra actions to be done at
 -- 
 1.9.1
