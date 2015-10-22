@@ -1,95 +1,122 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Oct 2015 22:34:14 +0200
-Subject: [Buildroot] [PATCH 19/21 v2] docs/manual: include packages from
-	BR2_EXTERNAL if set
+Date: Thu, 22 Oct 2015 22:34:15 +0200
+Subject: [Buildroot] [PATCH 20/21 v2] docs/manual: document the br2-external
+	ID
 In-Reply-To: <cover.1445545973.git.yann.morin.1998@free.fr>
 References: <cover.1445545973.git.yann.morin.1998@free.fr>
-Message-ID: <5e31d554ac4e043d2181ad691a9bf3d8f9be2553.1445545973.git.yann.morin.1998@free.fr>
+Message-ID: <7fc654ad197b16c299c07a5d3507a009a3345349.1445545973.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the user is using one or more br2-external trees, add the list of
-packages therein to the manual.
+Update the manual with the new external.id mandatory file.
 
-Note that we do re-introduce BR2_EXTERNAL (when it was removed in
-[-SHA1-] (docs/manual: do not override BR2_EXTERNAL). The reason for
-the removal is that BR2_EXTERNAL is no longer used as a Kconfig option.
+Take the opportunity to add a section listing all mandatory files,
+Config.in, external.mk and the new external.id, instead of just hinting
+about them in the external package recipes section.
 
-However, BR2_EXTERNAL is now used by the gen-manual-lists.py script,
-which needs it to find packages' .mk files in the br2-external trees,
-not as a Kconfig option (which it is not).
-
-So, even though that looks like a revert, that's not: the purpose is
-different, and we only pass it when not empty.
-
-In case we have no br2-external, we want to create an empty file, so
-we can't just touch it, in case it was previously generated with
-br2-external trees; instead, we printf an empty string in there to
-ensure the file exists and is empty.
+Change the example to use the ID-suffixed variable instead of the raw
+BR2_EXTERNAL variable, which won't be useable once we introduce support
+for multiple br2-external trees, as it would then contain more that one
+path.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- docs/manual/appendix.txt |  5 +++++
- docs/manual/manual.mk    | 18 ++++++++++++++++++
- 2 files changed, 23 insertions(+)
+ docs/manual/customize-outside-br.txt | 50 ++++++++++++++++++++++++------------
+ 1 file changed, 34 insertions(+), 16 deletions(-)
 
-diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-index 87a20bd..7ef8bbc 100644
---- a/docs/manual/appendix.txt
-+++ b/docs/manual/appendix.txt
-@@ -40,3 +40,8 @@ year following deprecation. For example, a symbol depending on
- +BR2_DEPRECATED_SINCE_2013_05+ can be removed from 2014.05 onwards.
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 9ad177d..afc5b78 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -57,19 +57,41 @@ Or disable the usage of external definitions:
+ buildroot/ $ make BR2_EXTERNAL= xconfig
+ -----
  
- include::deprecated-list.txt[]
+-+BR2_EXTERNAL+ allows three different things:
++A +BR2_EXTERNAL+ tree must contain at least those three files:
 +
-+// This file is generated:
-+// - with the list of br2-external packages if BR2_EXTERNAL is set
-+// - empty otherwise
-+include::br2-external.txt[]
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index b26f912..2e711b8 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -10,14 +10,32 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
- # Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
- MANUAL_DEPENDENCIES += prepare-kconfig
- 
-+# If using one or more BR2_EXTERNAL trees, include the list of
-+# packages therein, otherwise, generate an empty file
-+ifeq ($(BR2_EXTERNAL),)
-+define MANUAL_GEN_LISTS_BR2_EXTERNAL
-+	$(Q)printf "" >$(@D)/br2-external.txt
-+endef
-+else
-+define MANUAL_GEN_LISTS_BR2_EXTERNAL
-+	$(Q)( \
-+		printf "== List of BR2_EXTERNAL packages\n\n"; \
-+		printf "include::br2-external-package-list.txt[]\n"; \
-+	) >$(@D)/br2-external.txt
-+endef
-+MANUAL_GEN_LISTS_ENV = BR2_EXTERNAL="$(BR2_EXTERNAL)"
-+endif
+++external.id+::
++   That file should contain the ID for the +BR2_EXTERNAL+ tree.
++   That ID is used to construct the +BR2_EXTERNAL_$(ID)+ variable,
++   available in +Config.in+ and +external.mk+ (see below), so that ID
++   must be a valid make and Kconfig variable. Buildroot sets
++   +BR2_EXTERNAL_$(ID)+ to the path of the +BR2_EXTERNAL+ tree.
+++
++Examples:
+++
++  ** +FOO+ -> +BR2_EXTERNAL_FOO+
++  ** +BAR_42+ -> +BR2_EXTERNAL_BAR_42+
++  ** ...
 +
- # Our manual needs to generate lists
- define MANUAL_GEN_LISTS
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
- 	$(Q)$(COMMON_CONFIG_ENV) \
-+		$(MANUAL_GEN_LISTS_ENV) \
- 		BR2_DEFCONFIG="" \
- 		TOPDIR=$(TOPDIR) \
- 		O=$(@D) \
- 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
-+	$(MANUAL_GEN_LISTS_BR2_EXTERNAL)
- endef
- MANUAL_POST_RSYNC_HOOKS += MANUAL_GEN_LISTS
+++Config.in+::
+++external.mk+::
++   Those files (which may each be empty) can be used to define package
++   recipes, like for packages bundled in Buildroot itself, or other
++   custom configuration options.
++
++Using +BR2_EXTERNAL+ then allows three different things:
  
+  * One can store all the board-specific configuration files there,
+    such as the kernel configuration, the root filesystem overlay, or
+    any other configuration file for which Buildroot allows to set its
+-   location. The +BR2_EXTERNAL+ value is available within the
+-   Buildroot configuration using +$(BR2_EXTERNAL)+. As an example, one
+-   could set the +BR2_ROOTFS_OVERLAY+ Buildroot option to
+-   +$(BR2_EXTERNAL)/board/<boardname>/overlay/+ (to specify a root
++   location. The location of the +BR2_EXTERNAL+ tree is available in the
++   Buildroot configuration using the +BR2_EXTERNAL_$(ID)+ variable. As
++   an example, (considering the ID +BAR_42+), one could set the
++   +BR2_ROOTFS_OVERLAY+ Buildroot option to
++   +$(BR2_EXTERNAL_BAR_42)/board/<boardname>/overlay/+ (to specify a root
+    filesystem overlay), or the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
+    Buildroot option to
+-   +$(BR2_EXTERNAL)/board/<boardname>/kernel.config+ (to specify the
+-   location of the kernel configuration file).
++   +$(BR2_EXTERNAL_BAR_42)/board/<boardname>/kernel.config+ (to specify
++   the location of the kernel configuration file).
+ 
+  * One can store package recipes (i.e. +Config.in+ and
+    +<packagename>.mk+), or even custom configuration options and make
+@@ -77,27 +99,23 @@ buildroot/ $ make BR2_EXTERNAL= xconfig
+    make it appear in the top-level configuration menu, and includes
+    +$(BR2_EXTERNAL)/external.mk+ with the rest of the makefile logic.
+ +
+-.Note
+-Providing +Config.in+ and +external.mk+ is mandatory, but they can be
+-   empty.
+-+
+ The main usage of this is to store package recipes. The recommended
+    way to do this is to write a +$(BR2_EXTERNAL)/Config.in+ file that
+    looks like:
+ +
+ ------
+-source "$BR2_EXTERNAL/package/package1/Config.in"
+-source "$BR2_EXTERNAL/package/package2/Config.in"
++source "$BR2_EXTERNAL_BAR_42/package/package1/Config.in"
++source "$BR2_EXTERNAL_BAR_42/package/package2/Config.in"
+ ------
+ +
+ Then, have a +$(BR2_EXTERNAL)/external.mk+ file that looks like:
+ +
+ ------
+-include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
++include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42)/package/*/*.mk))
+ ------
+ +
+-And then in +$(BR2_EXTERNAL)/package/package1+ and
+-   +$(BR2_EXTERNAL)/package/package2+ create normal Buildroot
++And then in +$(BR2_EXTERNAL_FOO_42)/package/package1+ and
++   +$(BR2_EXTERNAL_FOO_42)/package/package2+ create normal Buildroot
+    package recipes, as explained in xref:adding-packages[].
+    If you prefer, you can also group the packages in subdirectories
+    called <boardname> and adapt the above paths accordingly.
 -- 
 1.9.1
