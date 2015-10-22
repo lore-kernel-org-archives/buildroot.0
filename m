@@ -1,73 +1,31 @@
-From: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-Date: Thu, 22 Oct 2015 10:26:33 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/xilfpga: Add xilfpga defconfig
-In-Reply-To: <20151021171402.5d9aa7d0@free-electrons.com>
-References: <1445439476-32911-1-git-send-email-Zubair.Kakakhel@imgtec.com>
- <20151021171402.5d9aa7d0@free-electrons.com>
-Message-ID: <5628ABC9.50300@imgtec.com>
+From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
+Date: Thu, 22 Oct 2015 12:08:50 +0200
+Subject: [Buildroot] [PATCH v2] board/freescale: switch
+	create-boot-sd.sh to parted
+In-Reply-To: <5627DB79.7020001@mind.be>
+References: <CAAMH-ysuKMKY6AXbtJqALq0jr3fs1-j0e_Pf=Qrm8BvUuTimKg@mail.gmail.com>
+ <1445417826-9634-1-git-send-email-vincent.stehle@freescale.com>
+ <5627DB79.7020001@mind.be>
+Message-ID: <5628B5B2.3070807@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 10/21/2015 08:37 PM, Arnout Vandecappelle wrote:
+..
+>  Is there any reason why genimage (cfr. wandboard) wouldn't work, like I
+> suggested earlier?
 
-On 21/10/15 16:14, Thomas Petazzoni wrote:
-> Zubair,
->
-> On Wed, 21 Oct 2015 15:57:56 +0100, Zubair Lutfullah Kakakhel wrote:
->> Under the IMG University Program 'MIPSfpga', RTL verilog code for a MIPS
->> m14kEC core is released under an academic license.
->>
->> The core is used to make a soft-SOC which can run the Linux kernel +
->> buildroot.
->
-> Cool! :-)
->
+Hi Arnout,
 
-Indeed :)
+You are right, genimage seems like a nice solution. In fact I think I
+prefer this SD card image generation approach over the direct SD card
+modification method.
 
->>
->> This patch adds a defconfig for it and a readme file.
->>
->> The config generates a simple mips32r2 rootfs using uClibc.
->>
->> Signed-off-by: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
->> Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>
->> ---
->> p.s.
->>
->> The kernel patches for MIPSfpga will hopefully be upstreamed by 4.4.
->>
->> Once that is done, I'll look into adding the stuff to enable buildroot
->> to compile the kernel as well.
->
-> A defconfig which doesn't build a kernel nor a bootloader is pretty
-> useless IMO.
->
-> Isn't the code to build this kernel available on some Git repository,
-> even if it's not upstream yet ? If so, then it would be better to have
-> a defconfig that points to this Git repository (actually, many of our
-> defconfigs point to non-upstream kernel source code).
+Thank you for this suggestion.
 
-The users of MIPSfpga are academics who receive the patches along with
-other documentation + MIPS core tar-balled up in a package.
+Best regards,
 
-Hence, instead of making a staging repo on github, I went for directly
-up-streaming things.
-
-I do intend to make buildroot build the kernel when the time comes.
-
-e.g.
-https://patchwork.linux-mips.org/project/linux-mips/list/?submitter=6836
-
-Regards,
-ZubairLK
-
->
-> Thanks!
->
-> Thomas
->
+V.
