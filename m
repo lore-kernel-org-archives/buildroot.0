@@ -1,97 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Oct 2015 10:22:51 +0200
-Subject: [Buildroot] [PATCH v2] package/python-pillow: new package
-In-Reply-To: <1445549143-10983-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1445549143-10983-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20151023102251.4766d6fc@free-electrons.com>
+Date: Fri, 23 Oct 2015 10:24:46 +0200
+Subject: [Buildroot] [PATCH 1/1] feh: install in /usr
+In-Reply-To: <87io5yk2aq.fsf@dell.be.48ers.dk>
+References: <1445540750-4312-1-git-send-email-james.knight@rockwellcollins.com>
+ <87io5yk2aq.fsf@dell.be.48ers.dk>
+Message-ID: <20151023102446.5004cafe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Dear Peter Korsgaard,
 
-On Thu, 22 Oct 2015 23:25:43 +0200, Angelo Compagnucci wrote:
+Your e-mail below as a reply to James is empty. I guess you wanted to
+say that you applied the patch, since it's visible at
+http://git.buildroot.net/buildroot/commit/?id=948e4837d32e7c708427864551090ee1935ea0ef.
 
-> +config BR2_PACKAGE_PYTHON_PILLOW_JPEG
-> +	bool "JPEG support"
-> +	select BR2_PACKAGE_JPEG
-> +	help
-> +	  This option provides JPEG functionality.
-> +
-> +config BR2_PACKAGE_PYTHON_PILLOW_ZLIB
-> +	bool "compressed PNGs support"
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  This option provides access to compressed PNGs.
-> +
-> +config BR2_PACKAGE_PYTHON_PILLOW_TIFF
-> +	bool "compressed TIFF support"
-> +	select BR2_PACKAGE_TIFF
-> +	help
-> +	  This option provides compressed TIFF functionality.
-> +
-> +config BR2_PACKAGE_PYTHON_PILLOW_FREETYPE
-> +	bool "freetype support"
-> +	select BR2_PACKAGE_FREETYPE
-> +	help
-> +	  This option provides type related services.
-> +
-> +config BR2_PACKAGE_PYTHON_PILLOW_WEBP
-> +	bool "WebP format support"
-> +	select BR2_PACKAGE_WEBP
-> +	help
-> +	  This option provides the WebP format.
-> +
-> +config BR2_PACKAGE_PYTHON_PILLOW_JPEG2000
-> +	bool "JPEG 2000 support"
-> +	select BR2_PACKAGE_OPENJPEG
-> +	help
-> +	  This option provides JPEG 2000 functionality.
-
-If you declare options here...
-
-> diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-> new file mode 100644
-> index 0000000..ccf8440
-> --- /dev/null
-> +++ b/package/python-pillow/python-pillow.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# python-pillow
-> +#
-> +################################################################################
-> +
-> +PYTHON_PILLOW_VERSION = 3.0.0
-> +PYTHON_PILLOW_SITE = $(call github,python-pillow,Pillow,$(PYTHON_PILLOW_VERSION))
-> +PYTHON_PILLOW_SETUP_TYPE = distutils
-> +PYTHON_PILLOW_DEPENDENCIES = python-setuptools \
-> +      $(if $(BR2_PACKAGE_JPEG),jpeg) \
-> +      $(if $(BR2_PACKAGE_ZLIB),zlib) \
-> +      $(if $(BR2_PACKAGE_TIFF),tiff) \
-> +      $(if $(BR2_PACKAGE_FREETYPE),freetype) \
-> +      $(if $(BR2_PACKAGE_WEBP),webp) \
-> +      $(if $(BR2_PACKAGE_OPENJPEG),openjpeg)
-
-It would be good to use them here.
-
-However, I believe you shouldn't declare any of those options. Just
-remove them from the Config.in, and use "implicit optional
-dependencies": i.e python-pillow will have jpeg support if the jpeg
-package is enabled.
-
-Also, why do you need "python-setuptools" ? It is a bit strange to
-declare distutils as the <pkg>_SETUP_TYPE, and then having to depend on
-python-setuptools. Can you clarify ?
-
-Finally, we now want to have hash files, even for github sourced
-packages, so please add one.
-
-Thanks!
+Best regards,
 
 Thomas
+
+On Thu, 22 Oct 2015 23:42:53 +0200, Peter Korsgaard wrote:
+> >>>>> "James" == James Knight <james.knight@rockwellcollins.com> writes:
+> 
+>  > By default, feh installs into /usr/local. Adjusting the prefix to point
+>  > to a system distribution path.
+> 
+>  > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+> 
+> 
+> > ---
+>  >  package/feh/feh.mk | 2 +-
+>  >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+>  > diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+>  > index 03435dc..7381e25 100644
+>  > --- a/package/feh/feh.mk
+>  > +++ b/package/feh/feh.mk
+>  > @@ -18,7 +18,7 @@ endef
+>  
+>  >  define FEH_INSTALL_TARGET_CMDS
+>  >  	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
+>  > -		DESTDIR=$(TARGET_DIR) -C $(@D) install
+>  > +		PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
+>  >  endef
+>  
+>  >  $(eval $(generic-package))
+>  > -- 
+>  > 1.9.5.msysgit.1
+> 
+>  > _______________________________________________
+>  > buildroot mailing list
+>  > buildroot at busybox.net
+>  > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+
+
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
