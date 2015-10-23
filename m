@@ -1,8 +1,8 @@
-From: Volkov Viacheslav <sv99@inbox.ru>
-Date: Fri, 23 Oct 2015 19:25:05 +0300
+From: sv99 <sv99@inbox.ru>
+Date: Fri, 23 Oct 2015 16:56:42 +0300
 Subject: [Buildroot] [PATCH] br2-external support existing package
 	customization
-Message-ID: <1445617505-16026-1-git-send-email-sv99@inbox.ru>
+Message-ID: <1445608602-15958-1-git-send-email-sv99@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
