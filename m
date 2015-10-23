@@ -1,63 +1,192 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Fri, 23 Oct 2015 08:55:49 +0100
-Subject: [Buildroot] [PATCH 1/2] qt5base: add optional gstreamer1 support
-In-Reply-To: <8737x2lku7.fsf@dell.be.48ers.dk>
-References: <1445414790-16583-1-git-send-email-peter@korsgaard.com>
- <20151021134228.64da3709@free-electrons.com>
- <877fmgigrr.fsf@dell.be.48ers.dk>
- <0874644c-9a80-4da8-af8d-ea8cad036c35@MAIL-SINTERS-01.sinters-int.fr>
- <877fmelroe.fsf@dell.be.48ers.dk> <5629321A.50503@carallon.com>
- <8737x2lku7.fsf@dell.be.48ers.dk>
-Message-ID: <5629E805.2050007@carallon.com>
+From: Lennart Ramberg <ramberg.lennart@gmail.com>
+Date: Fri, 23 Oct 2015 10:21:03 +0200
+Subject: [Buildroot] X11: How do I prevent the target screen from going
+ black after 10 minutes?
+In-Reply-To: <2097041356.1590443.1445512208008.JavaMail.zimbra@datacom.ind.br>
+References: <CAEzGmjCKbQKZWy0WfQaGGoqZgzJ6bjf+4jdZRinx2XLijCZ49A@mail.gmail.com>
+ <CAEYzJUH2pcGaafwSJ4dEUY0uvf6a4FNYQ9B-bos6nbWvUSs8RA@mail.gmail.com>
+ <CAEzGmjDZ00CTnksb035Jfo9N4-NO4vpUEkJOvf9qptyn-e3NSQ@mail.gmail.com>
+ <2045148520.1576581.1445510546977.JavaMail.zimbra@datacom.ind.br>
+ <CAEzGmjD5uKHocgH7cDJeXZWvw4eq0YeZfGgx6EHvb_kPf8NVZA@mail.gmail.com>
+ <2097041356.1590443.1445512208008.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <CAEzGmjA9FGvMgkpoDbPtcxZbosj4PdqCks_JiJ9hbhgZ_wTjyg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/10/2015 21:17, Peter Korsgaard wrote:
->>>>>> "Will" == Will Wagner <will_wagner@carallon.com> writes:
-> Hi,
->
->   > On 22/10/2015 18:49, Peter Korsgaard wrote:
->
->   >> Yes, but E.G. the gstreamer 0.10 support in qt5multimedia doesn't build,
->   >> whereas the 1.x support does, and we prefer 1.x over 0.10 elsewhere in
->   >> Buildroot.
->
->   > This is working fine for me. I have 0.10 building and working on a board.
->
-> So you don't see these compile errors?
->
-> https://patchwork.ozlabs.org/patch/533653/
->
-> For one, I see
-> src/plugins/gstreamer/mediaplayer/qgstreamerplayersession.cpp calling
-> gst_video_connector_get_type that isn't defined anywhere.
+This worked:
+# DISPLAY=:0 xset s off -dpms   (Skipped consoleblank=0 in grub.cfg)
+But it won't persist a restart.
 
-No I don't see that. I'll take a look and see what is happening.
-
->
->   >> Ok, but gstreamer1 pulls in host-pkgconf, so it should be available when
->   >> qt5base runs the configure step, right?
->
->   > host-pkgconfig is built already, but Qt5.5 just seems to be broken and
->   > ignores the passed in path to pkgconf. I've just not had the time to
->   > put together a proper patch and try to get it upstream, but it is
->   > still on my list.
->
-> That can presumably be fixed by just ensuring that HOST_DIR/usr/bin is
-> in the path (using TARGET_MAKE_ENV / TARGET_CONFIGURE_OPTS)?
->
-
-I hadn't thought of that, but yes presumably that would work.
+I guess a script could run it after boot, alternativerly I could make an
+xorg.conf.
+How should Buildroot arrange such a script to be run automatically after
+boot?
+I assume avoiding xorg.conf would be more modern/better. Or?
 
 Regards
-Will
+Lennart
 
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+On Thu, Oct 22, 2015 at 1:10 PM, Carlos Santos <casantos@datacom.ind.br>
+wrote:
+
+> ----- Original Message -----
+> > From: "Lennart Ramberg" <ramberg.lennart@gmail.com>
+> > To: "Carlos Santos" <casantos@datacom.ind.br>
+> > Cc: "Bj?rn Forsman" <bjorn.forsman@gmail.com>, "buildroot" <
+> buildroot at busybox.net>
+> > Sent: Thursday, October 22, 2015 8:54:19 AM
+> > Subject: Re: [Buildroot] X11: How do I prevent the target screen from
+> going black after 10 minutes?
+>
+> > Thanks, however:
+>
+> > # xset q
+> > -sh: xset: not found
+>
+> Sorry, I forgot to say that you need to select the xset package, under
+>
+>     -> Target packages
+>         -> Graphic libraries and applications (graphic/text)
+>             -> X.org X Window System
+>                 -> X11R7 Applications
+>
+> > And yes, it goes black.
+>
+> :-)
+>
+> > Regards
+> > Lennart
+>
+> Carlos Santos (Casantos)
+> DATACOM, P&D
+>
+> > On Thu, Oct 22, 2015 at 12:42 PM, Carlos Santos <
+> casantos at datacom.ind.br >
+> > wrote:
+>
+> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
+> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
+> >> > Cc: "buildroot" < buildroot@busybox.net >
+> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
+> >> > Subject: Re: [Buildroot] X11: How do I prevent the target screen from
+> going
+> >> > black after 10 minutes?
+>
+> >> > Thanks for the quick reply.
+> >> > However, I had no success. Screen still blanks after 10 min (unless
+> keyb/mouse
+> >> > activity).
+> >> > I assume this is what you meant:
+>
+> >> > # cat /boot/grub/grub.cfg
+> >> > set default="0"
+> >> > set timeout="3"
+>
+> >> > menuentry "Buildroot" {
+> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
+> >> > }
+>
+> >> > Regards
+> >> > Lennart
+>
+> >> Supposing that you are not running a screen saver daemon live
+> "xscreensaver", I
+> >> guess the screen goes blank (black?) due to the X server itself, not
+> the Linux
+> >> kernel. Try using
+>
+> >> $ xset q
+>
+> >> to display the screen saver timeout and
+>
+> >> $ xset s off
+>
+> >> to disable the screen saver.
+>
+> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
+> bjorn.forsman at gmail.com >
+> >> > wrote:
+>
+> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
+> ramberg.lennart at gmail.com >
+> >> >> wrote:
+> >> >> > Hello,
+>
+> >> >> > Maybe not a proper Builroot question, but:
+> >> >> > X11: How do I prevent the target screen from going black after 10
+> minutes?
+> >> >> > There is no xorg.conf (to edit the ServerFlags section).
+> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
+>
+> >> >> Have you tried adding "consoleblank=0" to the kernel command line? (I
+> >> >> _think_ that should do it.)
+>
+> >> >> Best regards,
+> >> >> Bj?rn Forsman
+>
+> >> > _______________________________________________
+> >> > buildroot mailing list
+> >> > buildroot at busybox.net
+> >> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> >> Carlos Santos (Casantos)
+> >> DATACOM, P&D
+>
+> >> ----- Original Message -----
+> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
+> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
+> >> > Cc: "buildroot" < buildroot@busybox.net >
+> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
+> >>> Subject: Re: [Buildroot] X11: How do I prevent the target screen from
+> going
+> >> > black after 10 minutes?
+>
+> >> > Thanks for the quick reply.
+> >> > However, I had no success. Screen still blanks after 10 min (unless
+> keyb/mouse
+> >> > activity).
+> >> > I assume this is what you meant:
+>
+> >> > # cat /boot/grub/grub.cfg
+> >> > set default="0"
+> >> > set timeout="3"
+>
+> >> > menuentry "Buildroot" {
+> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
+> >> > }
+>
+> >> > Regards
+> >> > Lennart
+>
+> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
+> bjorn.forsman at gmail.com >
+> >> > wrote:
+>
+> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
+> ramberg.lennart at gmail.com >
+> >> >> wrote:
+> >> >> > Hello,
+>
+> >> >> > Maybe not a proper Builroot question, but:
+> >> >> > X11: How do I prevent the target screen from going black after 10
+> minutes?
+> >> >> > There is no xorg.conf (to edit the ServerFlags section).
+> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
+>
+> >> >> Have you tried adding "consoleblank=0" to the kernel command line? (I
+> >> >> _think_ that should do it.)
+>
+> >> >> Best regards,
+> >> >> Bj?rn Forsman
+>
+> >> > _______________________________________________
+> >> > buildroot mailing list
+> >> > buildroot at busybox.net
+> >> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151023/1ae0efc4/attachment.html>
