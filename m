@@ -1,197 +1,46 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 23 Oct 2015 09:59:33 -0200 (BRST)
-Subject: [Buildroot] X11: How do I prevent the target screen from going
- black after 10 minutes?
-In-Reply-To: <CAEzGmjCwfCgFWH=pWvz=B+kLTS4BUhCPb0efjru10HR4dLOm_g@mail.gmail.com>
-References: <CAEzGmjCKbQKZWy0WfQaGGoqZgzJ6bjf+4jdZRinx2XLijCZ49A@mail.gmail.com>
- <CAEYzJUH2pcGaafwSJ4dEUY0uvf6a4FNYQ9B-bos6nbWvUSs8RA@mail.gmail.com>
- <CAEzGmjDZ00CTnksb035Jfo9N4-NO4vpUEkJOvf9qptyn-e3NSQ@mail.gmail.com>
- <2045148520.1576581.1445510546977.JavaMail.zimbra@datacom.ind.br>
- <CAEzGmjD5uKHocgH7cDJeXZWvw4eq0YeZfGgx6EHvb_kPf8NVZA@mail.gmail.com>
- <2097041356.1590443.1445512208008.JavaMail.zimbra@datacom.ind.br>
- <CAEzGmjA9FGvMgkpoDbPtcxZbosj4PdqCks_JiJ9hbhgZ_wTjyg@mail.gmail.com>
- <CAEzGmjCwfCgFWH=pWvz=B+kLTS4BUhCPb0efjru10HR4dLOm_g@mail.gmail.com>
-Message-ID: <1339698879.1908456.1445601573094.JavaMail.zimbra@datacom.ind.br>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Fri, 23 Oct 2015 14:06:10 +0200
+Subject: [Buildroot] [PATCH 1/2] Makefile: use root-relative -f path for
+	/sbin/ldconfig
+In-Reply-To: <20151023102645.0b8f3729@free-electrons.com>
+References: <1445502151-25735-1-git-send-email-bjorn.forsman@gmail.com>
+ <562952C7.30708@mind.be>
+ <CAEYzJUEvAp4sfaykkY8dKi8_9G1YGLZ-3U=dgHj9HR3EHsUKXQ@mail.gmail.com>
+ <20151023102645.0b8f3729@free-electrons.com>
+Message-ID: <CAEYzJUFo9DrnHHJjfCXaDr+8fS1v+98Ti3fHD1oEkkrJPLQudg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Lennart Ramberg" <ramberg.lennart@gmail.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "Bj?rn Forsman" <bjorn.forsman@gmail.com>, "buildroot" <buildroot@busybox.net>
-> Sent: Friday, October 23, 2015 7:17:29 AM
-> Subject: Re: [Buildroot] X11: How do I prevent the target screen from going black after 10 minutes?
+Hi Thomas,
 
-> Me again,
-> Sorry for jumping at the gun;
-> A script could of course be run where I start my other programs.
+On 23 October 2015 at 10:26, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Bj?rn Forsman,
+>
+> On Fri, 23 Oct 2015 09:12:02 +0200, Bj?rn Forsman wrote:
+>
+>> If you want to completely remove use of (host) /sbin/ldconfig, that's fine too.
+>>
+>> Just tell me what to do :-)
+>
+> We need to completely remove the ldconfig stuff, since it simply cannot
+> work. However, there is at least one package (mysql) that installs
+> libraries in a non-standard location (/usr/lib/mysql) and relies on
+> ld.so.conf for the dynamic linker to find them. I believe we need to
+> fix MySQL so that it installs its libraries in /usr/lib, and then get
+> rid of all the ldconfig/ld.so.conf stuff.
+>
+> Or, alternatively, see how to get it working with an init script which
+> runs ldconfig at boot time. But then you have to look at how uClibc and
+> musl handle this, and implement a solution that works for all three C
+> libraries.
 
-> But still, any opinions about xset vs. xorg.conf?
-> /Lennart
+Sounds like a bigger task than I planned... :-/  (I'm afraid to break things.)
 
-The effect is the same in both cases but if you need to disable screensaver always and permanently then xorg.conf is the best choice, since it can be done statically, at build time.
+Would it be possible to merge "[PATCH 2/2] Makefile: add -C flag for
+/sbin/ldconfig" as a stop-gap fix for my build problem then?
 
-Carlos Santos (Casantos)
-DATACOM, P&D
-
-> On Fri, Oct 23, 2015 at 10:21 AM, Lennart Ramberg < ramberg.lennart@gmail.com >
-> wrote:
-
->> This worked:
->> # DISPLAY=:0 xset s off -dpms (Skipped consoleblank=0 in grub.cfg)
->> But it won't persist a restart.
-
->> I guess a script could run it after boot, alternativerly I could make an
->> xorg.conf.
->> How should Buildroot arrange such a script to be run automatically after boot?
->> I assume avoiding xorg.conf would be more modern/better. Or?
-
->> Regards
->> Lennart
-
->> On Thu, Oct 22, 2015 at 1:10 PM, Carlos Santos < casantos@datacom.ind.br >
->> wrote:
-
->>> ----- Original Message -----
->>> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
->>> > To: "Carlos Santos" < casantos@datacom.ind.br >
->>>> Cc: "Bj?rn Forsman" < bjorn.forsman@gmail.com >, "buildroot" <
->>> > buildroot at busybox.net >
->>> > Sent: Thursday, October 22, 2015 8:54:19 AM
->>>> Subject: Re: [Buildroot] X11: How do I prevent the target screen from going
->>> > black after 10 minutes?
-
->>> > Thanks, however:
-
->>> > # xset q
->>> > -sh: xset: not found
-
->>> Sorry, I forgot to say that you need to select the xset package, under
-
->>> -> Target packages
->>> -> Graphic libraries and applications (graphic/text)
->>> -> X.org X Window System
->>> -> X11R7 Applications
-
->>> > And yes, it goes black.
-
->>> :-)
-
->>> > Regards
->>> > Lennart
-
->>> Carlos Santos (Casantos)
->>> DATACOM, P&D
-
->>> > On Thu, Oct 22, 2015 at 12:42 PM, Carlos Santos < casantos@datacom.ind.br >
->>> > wrote:
-
->>> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
->>> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
->>> >> > Cc: "buildroot" < buildroot@busybox.net >
->>> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
->>> >> > Subject: Re: [Buildroot] X11: How do I prevent the target screen from going
->>> >> > black after 10 minutes?
-
->>> >> > Thanks for the quick reply.
->>> >> > However, I had no success. Screen still blanks after 10 min (unless keyb/mouse
->>> >> > activity).
->>> >> > I assume this is what you meant:
-
->>> >> > # cat /boot/grub/grub.cfg
->>> >> > set default="0"
->>> >> > set timeout="3"
-
->>> >> > menuentry "Buildroot" {
->>> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
->>> >> > }
-
->>> >> > Regards
->>> >> > Lennart
-
->>> >> Supposing that you are not running a screen saver daemon live "xscreensaver", I
->>> >> guess the screen goes blank (black?) due to the X server itself, not the Linux
->>> >> kernel. Try using
-
->>> >> $ xset q
-
->>> >> to display the screen saver timeout and
-
->>> >> $ xset s off
-
->>> >> to disable the screen saver.
-
->>> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman < bjorn.forsman@gmail.com >
->>> >> > wrote:
-
->>> >> >> On 21 October 2015 at 18:59, Lennart Ramberg < ramberg.lennart@gmail.com >
->>> >> >> wrote:
->>> >> >> > Hello,
-
->>> >> >> > Maybe not a proper Builroot question, but:
->>> >> >> > X11: How do I prevent the target screen from going black after 10 minutes?
->>> >> >> > There is no xorg.conf (to edit the ServerFlags section).
->>> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
-
->>> >> >> Have you tried adding "consoleblank=0" to the kernel command line? (I
->>> >> >> _think_ that should do it.)
-
->>> >> >> Best regards,
->>> >> >> Bj?rn Forsman
-
->>> >> > _______________________________________________
->>> >> > buildroot mailing list
->>> >> > buildroot at busybox.net
->>> >> > http://lists.busybox.net/mailman/listinfo/buildroot
-
->>> >> Carlos Santos (Casantos)
->>> >> DATACOM, P&D
-
->>> >> ----- Original Message -----
->>> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
->>> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
->>> >> > Cc: "buildroot" < buildroot@busybox.net >
->>> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
->>> >>> Subject: Re: [Buildroot] X11: How do I prevent the target screen from going
->>> >> > black after 10 minutes?
-
->>> >> > Thanks for the quick reply.
->>> >> > However, I had no success. Screen still blanks after 10 min (unless keyb/mouse
->>> >> > activity).
->>> >> > I assume this is what you meant:
-
->>> >> > # cat /boot/grub/grub.cfg
->>> >> > set default="0"
->>> >> > set timeout="3"
-
->>> >> > menuentry "Buildroot" {
->>> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
->>> >> > }
-
->>> >> > Regards
->>> >> > Lennart
-
->>> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman < bjorn.forsman@gmail.com >
->>> >> > wrote:
-
->>> >> >> On 21 October 2015 at 18:59, Lennart Ramberg < ramberg.lennart@gmail.com >
->>> >> >> wrote:
->>> >> >> > Hello,
-
->>> >> >> > Maybe not a proper Builroot question, but:
->>> >> >> > X11: How do I prevent the target screen from going black after 10 minutes?
->>> >> >> > There is no xorg.conf (to edit the ServerFlags section).
->>> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
-
->>> >> >> Have you tried adding "consoleblank=0" to the kernel command line? (I
->>> >> >> _think_ that should do it.)
-
->>> >> >> Best regards,
->>> >> >> Bj?rn Forsman
-
->>> >> > _______________________________________________
->>> >> > buildroot mailing list
->>> >> > buildroot at busybox.net
->>> >> > http://lists.busybox.net/mailman/listinfo/buildroot
+- Bj?rn
