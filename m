@@ -1,192 +1,98 @@
-From: Lennart Ramberg <ramberg.lennart@gmail.com>
-Date: Fri, 23 Oct 2015 10:21:03 +0200
-Subject: [Buildroot] X11: How do I prevent the target screen from going
- black after 10 minutes?
-In-Reply-To: <2097041356.1590443.1445512208008.JavaMail.zimbra@datacom.ind.br>
-References: <CAEzGmjCKbQKZWy0WfQaGGoqZgzJ6bjf+4jdZRinx2XLijCZ49A@mail.gmail.com>
- <CAEYzJUH2pcGaafwSJ4dEUY0uvf6a4FNYQ9B-bos6nbWvUSs8RA@mail.gmail.com>
- <CAEzGmjDZ00CTnksb035Jfo9N4-NO4vpUEkJOvf9qptyn-e3NSQ@mail.gmail.com>
- <2045148520.1576581.1445510546977.JavaMail.zimbra@datacom.ind.br>
- <CAEzGmjD5uKHocgH7cDJeXZWvw4eq0YeZfGgx6EHvb_kPf8NVZA@mail.gmail.com>
- <2097041356.1590443.1445512208008.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <CAEzGmjA9FGvMgkpoDbPtcxZbosj4PdqCks_JiJ9hbhgZ_wTjyg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 Oct 2015 10:22:51 +0200
+Subject: [Buildroot] [PATCH v2] package/python-pillow: new package
+In-Reply-To: <1445549143-10983-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1445549143-10983-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20151023102251.4766d6fc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This worked:
-# DISPLAY=:0 xset s off -dpms   (Skipped consoleblank=0 in grub.cfg)
-But it won't persist a restart.
+Dear Angelo Compagnucci,
 
-I guess a script could run it after boot, alternativerly I could make an
-xorg.conf.
-How should Buildroot arrange such a script to be run automatically after
-boot?
-I assume avoiding xorg.conf would be more modern/better. Or?
+On Thu, 22 Oct 2015 23:25:43 +0200, Angelo Compagnucci wrote:
 
-Regards
-Lennart
+> +config BR2_PACKAGE_PYTHON_PILLOW_JPEG
+> +	bool "JPEG support"
+> +	select BR2_PACKAGE_JPEG
+> +	help
+> +	  This option provides JPEG functionality.
+> +
+> +config BR2_PACKAGE_PYTHON_PILLOW_ZLIB
+> +	bool "compressed PNGs support"
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  This option provides access to compressed PNGs.
+> +
+> +config BR2_PACKAGE_PYTHON_PILLOW_TIFF
+> +	bool "compressed TIFF support"
+> +	select BR2_PACKAGE_TIFF
+> +	help
+> +	  This option provides compressed TIFF functionality.
+> +
+> +config BR2_PACKAGE_PYTHON_PILLOW_FREETYPE
+> +	bool "freetype support"
+> +	select BR2_PACKAGE_FREETYPE
+> +	help
+> +	  This option provides type related services.
+> +
+> +config BR2_PACKAGE_PYTHON_PILLOW_WEBP
+> +	bool "WebP format support"
+> +	select BR2_PACKAGE_WEBP
+> +	help
+> +	  This option provides the WebP format.
+> +
+> +config BR2_PACKAGE_PYTHON_PILLOW_JPEG2000
+> +	bool "JPEG 2000 support"
+> +	select BR2_PACKAGE_OPENJPEG
+> +	help
+> +	  This option provides JPEG 2000 functionality.
 
-On Thu, Oct 22, 2015 at 1:10 PM, Carlos Santos <casantos@datacom.ind.br>
-wrote:
+If you declare options here...
 
-> ----- Original Message -----
-> > From: "Lennart Ramberg" <ramberg.lennart@gmail.com>
-> > To: "Carlos Santos" <casantos@datacom.ind.br>
-> > Cc: "Bj?rn Forsman" <bjorn.forsman@gmail.com>, "buildroot" <
-> buildroot at busybox.net>
-> > Sent: Thursday, October 22, 2015 8:54:19 AM
-> > Subject: Re: [Buildroot] X11: How do I prevent the target screen from
-> going black after 10 minutes?
->
-> > Thanks, however:
->
-> > # xset q
-> > -sh: xset: not found
->
-> Sorry, I forgot to say that you need to select the xset package, under
->
->     -> Target packages
->         -> Graphic libraries and applications (graphic/text)
->             -> X.org X Window System
->                 -> X11R7 Applications
->
-> > And yes, it goes black.
->
-> :-)
->
-> > Regards
-> > Lennart
->
-> Carlos Santos (Casantos)
-> DATACOM, P&D
->
-> > On Thu, Oct 22, 2015 at 12:42 PM, Carlos Santos <
-> casantos at datacom.ind.br >
-> > wrote:
->
-> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
-> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
-> >> > Cc: "buildroot" < buildroot@busybox.net >
-> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
-> >> > Subject: Re: [Buildroot] X11: How do I prevent the target screen from
-> going
-> >> > black after 10 minutes?
->
-> >> > Thanks for the quick reply.
-> >> > However, I had no success. Screen still blanks after 10 min (unless
-> keyb/mouse
-> >> > activity).
-> >> > I assume this is what you meant:
->
-> >> > # cat /boot/grub/grub.cfg
-> >> > set default="0"
-> >> > set timeout="3"
->
-> >> > menuentry "Buildroot" {
-> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
-> >> > }
->
-> >> > Regards
-> >> > Lennart
->
-> >> Supposing that you are not running a screen saver daemon live
-> "xscreensaver", I
-> >> guess the screen goes blank (black?) due to the X server itself, not
-> the Linux
-> >> kernel. Try using
->
-> >> $ xset q
->
-> >> to display the screen saver timeout and
->
-> >> $ xset s off
->
-> >> to disable the screen saver.
->
-> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
-> bjorn.forsman at gmail.com >
-> >> > wrote:
->
-> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
-> ramberg.lennart at gmail.com >
-> >> >> wrote:
-> >> >> > Hello,
->
-> >> >> > Maybe not a proper Builroot question, but:
-> >> >> > X11: How do I prevent the target screen from going black after 10
-> minutes?
-> >> >> > There is no xorg.conf (to edit the ServerFlags section).
-> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
->
-> >> >> Have you tried adding "consoleblank=0" to the kernel command line? (I
-> >> >> _think_ that should do it.)
->
-> >> >> Best regards,
-> >> >> Bj?rn Forsman
->
-> >> > _______________________________________________
-> >> > buildroot mailing list
-> >> > buildroot at busybox.net
-> >> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> >> Carlos Santos (Casantos)
-> >> DATACOM, P&D
->
-> >> ----- Original Message -----
-> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
-> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
-> >> > Cc: "buildroot" < buildroot@busybox.net >
-> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
-> >>> Subject: Re: [Buildroot] X11: How do I prevent the target screen from
-> going
-> >> > black after 10 minutes?
->
-> >> > Thanks for the quick reply.
-> >> > However, I had no success. Screen still blanks after 10 min (unless
-> keyb/mouse
-> >> > activity).
-> >> > I assume this is what you meant:
->
-> >> > # cat /boot/grub/grub.cfg
-> >> > set default="0"
-> >> > set timeout="3"
->
-> >> > menuentry "Buildroot" {
-> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
-> >> > }
->
-> >> > Regards
-> >> > Lennart
->
-> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
-> bjorn.forsman at gmail.com >
-> >> > wrote:
->
-> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
-> ramberg.lennart at gmail.com >
-> >> >> wrote:
-> >> >> > Hello,
->
-> >> >> > Maybe not a proper Builroot question, but:
-> >> >> > X11: How do I prevent the target screen from going black after 10
-> minutes?
-> >> >> > There is no xorg.conf (to edit the ServerFlags section).
-> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
->
-> >> >> Have you tried adding "consoleblank=0" to the kernel command line? (I
-> >> >> _think_ that should do it.)
->
-> >> >> Best regards,
-> >> >> Bj?rn Forsman
->
-> >> > _______________________________________________
-> >> > buildroot mailing list
-> >> > buildroot at busybox.net
-> >> > http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151023/1ae0efc4/attachment.html>
+> diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+> new file mode 100644
+> index 0000000..ccf8440
+> --- /dev/null
+> +++ b/package/python-pillow/python-pillow.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# python-pillow
+> +#
+> +################################################################################
+> +
+> +PYTHON_PILLOW_VERSION = 3.0.0
+> +PYTHON_PILLOW_SITE = $(call github,python-pillow,Pillow,$(PYTHON_PILLOW_VERSION))
+> +PYTHON_PILLOW_SETUP_TYPE = distutils
+> +PYTHON_PILLOW_DEPENDENCIES = python-setuptools \
+> +      $(if $(BR2_PACKAGE_JPEG),jpeg) \
+> +      $(if $(BR2_PACKAGE_ZLIB),zlib) \
+> +      $(if $(BR2_PACKAGE_TIFF),tiff) \
+> +      $(if $(BR2_PACKAGE_FREETYPE),freetype) \
+> +      $(if $(BR2_PACKAGE_WEBP),webp) \
+> +      $(if $(BR2_PACKAGE_OPENJPEG),openjpeg)
+
+It would be good to use them here.
+
+However, I believe you shouldn't declare any of those options. Just
+remove them from the Config.in, and use "implicit optional
+dependencies": i.e python-pillow will have jpeg support if the jpeg
+package is enabled.
+
+Also, why do you need "python-setuptools" ? It is a bit strange to
+declare distutils as the <pkg>_SETUP_TYPE, and then having to depend on
+python-setuptools. Can you clarify ?
+
+Finally, we now want to have hash files, even for github sourced
+packages, so please add one.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
