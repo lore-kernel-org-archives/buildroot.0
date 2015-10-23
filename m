@@ -1,46 +1,135 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Fri, 23 Oct 2015 14:06:10 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: use root-relative -f path for
-	/sbin/ldconfig
-In-Reply-To: <20151023102645.0b8f3729@free-electrons.com>
-References: <1445502151-25735-1-git-send-email-bjorn.forsman@gmail.com>
- <562952C7.30708@mind.be>
- <CAEYzJUEvAp4sfaykkY8dKi8_9G1YGLZ-3U=dgHj9HR3EHsUKXQ@mail.gmail.com>
- <20151023102645.0b8f3729@free-electrons.com>
-Message-ID: <CAEYzJUFo9DrnHHJjfCXaDr+8fS1v+98Ti3fHD1oEkkrJPLQudg@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Fri, 23 Oct 2015 14:23:55 +0200
+Subject: [Buildroot] [PATCH v3] sane-backends: add systemd support
+In-Reply-To: <1445602809-55156-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1445602809-55156-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <CAGduivzBuoN-ciXQFHVPtEKjTo-iCDbZeurcYv8bz7OuOG_9Bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Vicente, all,
 
-On 23 October 2015 at 10:26, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Bj?rn Forsman,
->
-> On Fri, 23 Oct 2015 09:12:02 +0200, Bj?rn Forsman wrote:
->
->> If you want to completely remove use of (host) /sbin/ldconfig, that's fine too.
->>
->> Just tell me what to do :-)
->
-> We need to completely remove the ldconfig stuff, since it simply cannot
-> work. However, there is at least one package (mysql) that installs
-> libraries in a non-standard location (/usr/lib/mysql) and relies on
-> ld.so.conf for the dynamic linker to find them. I believe we need to
-> fix MySQL so that it installs its libraries in /usr/lib, and then get
-> rid of all the ldconfig/ld.so.conf stuff.
->
-> Or, alternatively, see how to get it working with an init script which
-> runs ldconfig at boot time. But then you have to look at how uClibc and
-> musl handle this, and implement a solution that works for all three C
-> libraries.
+On Fri, Oct 23, 2015 at 2:20 PM, Vicente Olivert Riera <
+Vincent.Riera@imgtec.com> wrote:
 
-Sounds like a bigger task than I planned... :-/  (I'm afraid to break things.)
-
-Would it be possible to merge "[PATCH 2/2] Makefile: add -C flag for
-/sbin/ldconfig" as a stop-gap fix for my build problem then?
-
-- Bj?rn
+> The content of the saned.socket and saned at .service files is based on the
+> instructions of the sane-backends manual.
+>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v2 -> v3:
+>   - Create the "target.wants" directories for the socket and the service
+>     and put symlinks in there pointing to the real files. (Suggested by
+>     Maxime Hadjinlian)
+>
+> Changes v1 -> v2:
+>   - Install the systemd files in /usr/lib/systemd/system. (Suggested by
+>     Maxime Hadjinlian)
+>   - Create saned user and group (Highlighted by Maxime Hadjinlian)
+>   - Amend the commit log since we are not using the location for the
+>     systemd files specified in the manual.
+>
+>  package/sane-backends/sane-backends.mk |   24 ++++++++++++++++++++++++
+>  package/sane-backends/saned.socket     |   10 ++++++++++
+>  package/sane-backends/saned at .service   |   18 ++++++++++++++++++
+>  3 files changed, 52 insertions(+), 0 deletions(-)
+>  create mode 100644 package/sane-backends/saned.socket
+>  create mode 100644 package/sane-backends/saned at .service
+>
+> diff --git a/package/sane-backends/sane-backends.mk
+> b/package/sane-backends/sane-backends.mk
+> index e980929..37e5136 100644
+> --- a/package/sane-backends/sane-backends.mk
+> +++ b/package/sane-backends/sane-backends.mk
+> @@ -14,6 +14,13 @@ SANE_BACKENDS_INSTALL_STAGING = YES
+>  SANE_BACKENDS_CONF_OPTS = \
+>         $(if
+> $(BR2_TOOLCHAIN_HAS_THREADS),--enable-pthread,--disable-pthread)
+>
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +SANE_BACKENDS_CONF_OPTS += --with-systemd
+> +SANE_BACKENDS_DEPENDENCIES += systemd
+> +else
+> +SANE_BACKENDS_CONF_OPTS += --without-systemd
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBUSB),y)
+>  SANE_BACKENDS_DEPENDENCIES += libusb
+>  SANE_BACKENDS_CONF_OPTS += --enable-libusb_1_0
+> @@ -51,4 +58,21 @@ endef
+>
+>  SANE_BACKENDS_POST_CONFIGURE_HOOKS += SANE_BACKENDS_DISABLE_DOCS
+>
+> +define SANE_BACKENDS_USERS
+> +       saned -1 saned -1 * /etc/sane.d - - Saned User
+> +endef
+> +
+> +define SANE_BACKENDS_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -m 0644 -D package/sane-backends/saned.socket \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/saned.socket
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/socket.target.wants
+> +       ln -sf ../../../../usr/lib/systemd/system/saned.socket \
+> +
+>  $(TARGET_DIR)/etc/systemd/system/socket.target.wants/saned.socket
+> +       $(INSTALL) -m 0644 -D package/sane-backends/saned at .service \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/saned at .service
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +       ln -sf ../../../../usr/lib/systemd/system/saned at .service \
+> +
+>  $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/saned at .service
+> +endef
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/sane-backends/saned.socket
+> b/package/sane-backends/saned.socket
+> new file mode 100644
+> index 0000000..1aa19e7
+> --- /dev/null
+> +++ b/package/sane-backends/saned.socket
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=saned incoming socket
+> +
+> +[Socket]
+> +ListenStream=6566
+> +Accept=yes
+> +MaxConnections=1
+> +
+> +[Install]
+> +WantedBy=sockets.target
+> diff --git a/package/sane-backends/saned at .service
+> b/package/sane-backends/saned at .service
+> new file mode 100644
+> index 0000000..1905dbf
+> --- /dev/null
+> +++ b/package/sane-backends/saned at .service
+> @@ -0,0 +1,18 @@
+> +[Unit]
+> +Description=Scanner Service
+> +Requires=saned.socket
+> +
+> +[Service]
+> +ExecStart=/usr/sbin/saned
+> +User=saned
+> +Group=saned
+> +StandardInput=null
+> +StandardOutput=syslog
+> +StandardError=syslog
+> +Environment=SANE_CONFIG_DIR=/etc/sane.d
+> +# If you need to debug your configuration uncomment the next line and
+> +# change it as appropriate to set the desired debug options
+> +# Environment=SANE_DEBUG_DLL=255 SANE_DEBUG_BJNP=5
+> +
+> +[Install]
+> +Also=saned.socket
+> --
+> 1.7.1
+>
+> Reviewed-by "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+Tested-by "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151023/dfd649b4/attachment.html>
