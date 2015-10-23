@@ -1,216 +1,208 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Fri, 23 Oct 2015 10:10:54 +0100
-Subject: [Buildroot] [PATCH v5] board: add support for ARM Juno r1
- Development Board
-In-Reply-To: <5629451D.8060502@mind.be>
-References: <b132a8d9bc9e51f56f7b4a5c0e4c02404aaabd8a.1444647414.git.jpinto@synopsys.com>
- <5629451D.8060502@mind.be>
-Message-ID: <5629F99E.2040105@synopsys.com>
+From: Lennart Ramberg <ramberg.lennart@gmail.com>
+Date: Fri, 23 Oct 2015 11:17:29 +0200
+Subject: [Buildroot] X11: How do I prevent the target screen from going
+ black after 10 minutes?
+In-Reply-To: <CAEzGmjA9FGvMgkpoDbPtcxZbosj4PdqCks_JiJ9hbhgZ_wTjyg@mail.gmail.com>
+References: <CAEzGmjCKbQKZWy0WfQaGGoqZgzJ6bjf+4jdZRinx2XLijCZ49A@mail.gmail.com>
+ <CAEYzJUH2pcGaafwSJ4dEUY0uvf6a4FNYQ9B-bos6nbWvUSs8RA@mail.gmail.com>
+ <CAEzGmjDZ00CTnksb035Jfo9N4-NO4vpUEkJOvf9qptyn-e3NSQ@mail.gmail.com>
+ <2045148520.1576581.1445510546977.JavaMail.zimbra@datacom.ind.br>
+ <CAEzGmjD5uKHocgH7cDJeXZWvw4eq0YeZfGgx6EHvb_kPf8NVZA@mail.gmail.com>
+ <2097041356.1590443.1445512208008.JavaMail.zimbra@datacom.ind.br>
+ <CAEzGmjA9FGvMgkpoDbPtcxZbosj4PdqCks_JiJ9hbhgZ_wTjyg@mail.gmail.com>
+Message-ID: <CAEzGmjCwfCgFWH=pWvz=B+kLTS4BUhCPb0efjru10HR4dLOm_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Me again,
+Sorry for jumping at the gun;
+A script could of course be run where I start my other programs.
 
-Hi,
+But still, any opinions about xset vs. xorg.conf?
+/Lennart
 
-On 10/22/2015 9:20 PM, Arnout Vandecappelle wrote:
-> On 22-10-15 18:17, Joao Pinto wrote:
->> The Juno r1 ARM Development Platform (ADP) is a software development
->> platform for ARMv8-A, it includes the Juno r1 Versatile Express board 
->> and an ARMv8-A reference software port available through Linaro.
+
+On Fri, Oct 23, 2015 at 10:21 AM, Lennart Ramberg <ramberg.lennart@gmail.com
+> wrote:
+
+> This worked:
+> # DISPLAY=:0 xset s off -dpms   (Skipped consoleblank=0 in grub.cfg)
+> But it won't persist a restart.
+>
+> I guess a script could run it after boot, alternativerly I could make an
+> xorg.conf.
+> How should Buildroot arrange such a script to be run automatically after
+> boot?
+> I assume avoiding xorg.conf would be more modern/better. Or?
+>
+> Regards
+> Lennart
+>
+> On Thu, Oct 22, 2015 at 1:10 PM, Carlos Santos <casantos@datacom.ind.br>
+> wrote:
+>
+>> ----- Original Message -----
+>> > From: "Lennart Ramberg" <ramberg.lennart@gmail.com>
+>> > To: "Carlos Santos" <casantos@datacom.ind.br>
+>> > Cc: "Bj?rn Forsman" <bjorn.forsman@gmail.com>, "buildroot" <
+>> buildroot at busybox.net>
+>> > Sent: Thursday, October 22, 2015 8:54:19 AM
+>> > Subject: Re: [Buildroot] X11: How do I prevent the target screen from
+>> going black after 10 minutes?
 >>
->> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
->> ---
+>> > Thanks, however:
 >>
->> Changes v4 -> v5:
->>  -Added changelog to the patch
->> Changes v3 -> v4  (Thomas Petazzoni):
->>  -The kernel' arm64 defconfig lacks a considerable amount of 
->>  configuration items regarding the Juno r1 board, and that is the reason
->>  of this custom kernel configuration file.
->>  -The ARM Juno needs a kernel image called Image, and that 
->>  it the reason why BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is being used.
->>  -A new readme.txt was produced.
+>> > # xset q
+>> > -sh: xset: not found
 >>
->>  board/arm/junor1/linux-junor1-defconfig | 176 ++++++++++++++++++++++++++++++++
->>  board/arm/junor1/readme.txt             |  76 ++++++++++++++
->>  configs/arm_junor1_defconfig            |  16 +++
->>  3 files changed, 268 insertions(+)
->>  create mode 100644 board/arm/junor1/linux-junor1-defconfig
->>  create mode 100644 board/arm/junor1/readme.txt
->>  create mode 100644 configs/arm_junor1_defconfig
+>> Sorry, I forgot to say that you need to select the xset package, under
 >>
->> diff --git a/board/arm/junor1/linux-junor1-defconfig b/board/arm/junor1/linux-junor1-defconfig
->> new file mode 100644
->> index 0000000..b216d3e
->> --- /dev/null
->> +++ b/board/arm/junor1/linux-junor1-defconfig
-> 
->  This defconfig again contains a lot of options that I doubt are very useful. It
-> even enables some things that are explicitly disabled in the arm64 defconfig, e.g.
-> 
-> # CONFIG_UTS_NS is not set
-> # CONFIG_WIRELESS is not set
-> 
-> 
->  But it doesn't look too bad, so I'm OK with it as it is.
-> 
-> [snip]
-> 
->> diff --git a/board/arm/junor1/readme.txt b/board/arm/junor1/readme.txt
->> new file mode 100644
->> index 0000000..2b3ebf5
->> --- /dev/null
->> +++ b/board/arm/junor1/readme.txt
->> @@ -0,0 +1,76 @@
->> +ARM Juno r1
->> +
->> +Intro
->> +=====
->> +
->> +These instructions apply to all models of the ARM Juno:
->> +  - Juno r0 (does not support PCIe)
->> +  - Juno r1 (supports PCIe)
-> 
->  If the same binaries apply to both r0 and r1, why not call it something juno
-> without r1?
-
-I agree.
-
-> 
->> +
->> +Buildroot will generate the kernel image, device tree blob and a 
->> +minimal root filesystem.
->> +
->> +How to build it
->> +===============
->> +
->> +Configure Buildroot
->> +-------------------
->> +
->> +Configuring Buildroot is pretty simple, just execute:
->> +
->> +  $ make arm_junor1_defconfig
->> +
->> +Build the rootfs, kernel and DTB
->> +--------------------------------
->> +
->> +Note: you will need to have access to the network, since Buildroot will
->> +download the packages' sources.
->> +
->> +You may now build your rootfs with:
->> +
->> +  $ make
->> +
->> +(This may take a while)
-> 
->  I think this is a lot of text for something so simple :-)
-> 
->> +
->> +Result of the build
->> +-------------------
->> +
->> +After building, you should obtain this tree:
->> +
->> +    output/images/
->> +    +-- rootfs.tar
->> +    +-- juno-r1.dtb
->> +    +-- Image
->> +
->> +Preparing your rootfs
->> +======================
->> +Format your pen drive as a ext3 filesystem by executing:
->> +
->> +   $ mkfs.ext3 /dev/<your device> 
->> +
->> +Installing your rootfs
->> +======================
->> +After mounting the pen drive please execute the following:
->> +
->> +   $ sudo tar -xvf output/images/rootfs.tar -C <pen drive mount path>
->> +
->> +When completed make sure to unmount the device:
->> +   
->> +   $ umount <pen drive mount path>
->> +
->> +Insert the pen drive in one of the ARM Juno' USB type A connectors.
-> 
->  So why not just generate an ext4 image instead of this procedure?
-> 
->> +
->> +Installing kernel image and DTB
->> +===============================
->> +1. Connect to the ARM Juno UART0 and execute USB_ON in the terminal
-> 
->  What does this mean? I mean, if the system is running, you'd have a getty on
-> UART0, no?
-> 
->> +2. Connect a USB cable between your PC and ARM Juno USB type B connector
->> +   A mass storage device should appear in your desktop.
->> +3. Open the software/ folder
->> +4. Copy the 'Image' file to software/
->> +5. Copy the 'juno-r1.dtb' file to software/ and rename it to r1a57a53.dtb
->> +6. Press the red button in the front pannel of ARM Juno
-> 
->  Is there no way to boot directly from the pen drive instead?
-
-The procedure I describe here is the board' default and it is the one that we
-use here at Synopsys. It is possible that other methods can be used.
-
-> 
->> +
->> +At this time, the board will erase the Flash entry for each new item and
->> +replace it with the lastest ones.
->> +When finished, the board will boot and mount the root filesystem at /dev/sda1.
->> +
->> diff --git a/configs/arm_junor1_defconfig b/configs/arm_junor1_defconfig
->> new file mode 100644
->> index 0000000..3987293
->> --- /dev/null
->> +++ b/configs/arm_junor1_defconfig
->> @@ -0,0 +1,16 @@
->> +BR2_aarch64=y
->> +BR2_KERNEL_HEADERS_VERSION=y
->> +BR2_DEFAULT_KERNEL_VERSION="4.2.2"
->> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
->> +BR2_TARGET_GENERIC_HOSTNAME="junor1-buildroot"
->> +BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS Juno r1 by Buildroot"
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.linaro.org/landing-teams/working/arm/kernel.git"
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="6917b51dee54f21816706af2278517b7af218f9a"
-> 
->  This is just v4.3-rc1, so you could use an upstream kernel instead of Linaro.
-> Are you sure you took the right sha?
-
-The Juno board was recently added to linux mainline (v4.2 I think) but the total
-support is still in Linaro. Take as an example the video output support, sound
-and pcie. The git commid id I configured is one of the latest, assuring that we
-have the maximum of stable functionalities as possible. The stable tags lack
-crucial features.
-
-> 
->> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/junor1/linux-junor1-defconfig"
->> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
->> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
->> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno-r1"
-> 
->  No need for a bootloader?
-
-The board uses EDK2, which comes already built with the board.
-If a developer needs to build a custom package it should get teh edk2 package a
-built it.
-
-> 
->  Regards,
->  Arnout
-> 
-> 
-> 
-
-Thanks,
-Joao
+>>     -> Target packages
+>>         -> Graphic libraries and applications (graphic/text)
+>>             -> X.org X Window System
+>>                 -> X11R7 Applications
+>>
+>> > And yes, it goes black.
+>>
+>> :-)
+>>
+>> > Regards
+>> > Lennart
+>>
+>> Carlos Santos (Casantos)
+>> DATACOM, P&D
+>>
+>> > On Thu, Oct 22, 2015 at 12:42 PM, Carlos Santos <
+>> casantos at datacom.ind.br >
+>> > wrote:
+>>
+>> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
+>> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
+>> >> > Cc: "buildroot" < buildroot@busybox.net >
+>> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
+>> >> > Subject: Re: [Buildroot] X11: How do I prevent the target screen
+>> from going
+>> >> > black after 10 minutes?
+>>
+>> >> > Thanks for the quick reply.
+>> >> > However, I had no success. Screen still blanks after 10 min (unless
+>> keyb/mouse
+>> >> > activity).
+>> >> > I assume this is what you meant:
+>>
+>> >> > # cat /boot/grub/grub.cfg
+>> >> > set default="0"
+>> >> > set timeout="3"
+>>
+>> >> > menuentry "Buildroot" {
+>> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
+>> >> > }
+>>
+>> >> > Regards
+>> >> > Lennart
+>>
+>> >> Supposing that you are not running a screen saver daemon live
+>> "xscreensaver", I
+>> >> guess the screen goes blank (black?) due to the X server itself, not
+>> the Linux
+>> >> kernel. Try using
+>>
+>> >> $ xset q
+>>
+>> >> to display the screen saver timeout and
+>>
+>> >> $ xset s off
+>>
+>> >> to disable the screen saver.
+>>
+>> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
+>> bjorn.forsman at gmail.com >
+>> >> > wrote:
+>>
+>> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
+>> ramberg.lennart at gmail.com >
+>> >> >> wrote:
+>> >> >> > Hello,
+>>
+>> >> >> > Maybe not a proper Builroot question, but:
+>> >> >> > X11: How do I prevent the target screen from going black after 10
+>> minutes?
+>> >> >> > There is no xorg.conf (to edit the ServerFlags section).
+>> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
+>>
+>> >> >> Have you tried adding "consoleblank=0" to the kernel command line?
+>> (I
+>> >> >> _think_ that should do it.)
+>>
+>> >> >> Best regards,
+>> >> >> Bj?rn Forsman
+>>
+>> >> > _______________________________________________
+>> >> > buildroot mailing list
+>> >> > buildroot at busybox.net
+>> >> > http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>> >> Carlos Santos (Casantos)
+>> >> DATACOM, P&D
+>>
+>> >> ----- Original Message -----
+>> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
+>> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
+>> >> > Cc: "buildroot" < buildroot@busybox.net >
+>> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
+>> >>> Subject: Re: [Buildroot] X11: How do I prevent the target screen from
+>> going
+>> >> > black after 10 minutes?
+>>
+>> >> > Thanks for the quick reply.
+>> >> > However, I had no success. Screen still blanks after 10 min (unless
+>> keyb/mouse
+>> >> > activity).
+>> >> > I assume this is what you meant:
+>>
+>> >> > # cat /boot/grub/grub.cfg
+>> >> > set default="0"
+>> >> > set timeout="3"
+>>
+>> >> > menuentry "Buildroot" {
+>> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
+>> >> > }
+>>
+>> >> > Regards
+>> >> > Lennart
+>>
+>> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
+>> bjorn.forsman at gmail.com >
+>> >> > wrote:
+>>
+>> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
+>> ramberg.lennart at gmail.com >
+>> >> >> wrote:
+>> >> >> > Hello,
+>>
+>> >> >> > Maybe not a proper Builroot question, but:
+>> >> >> > X11: How do I prevent the target screen from going black after 10
+>> minutes?
+>> >> >> > There is no xorg.conf (to edit the ServerFlags section).
+>> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
+>>
+>> >> >> Have you tried adding "consoleblank=0" to the kernel command line?
+>> (I
+>> >> >> _think_ that should do it.)
+>>
+>> >> >> Best regards,
+>> >> >> Bj?rn Forsman
+>>
+>> >> > _______________________________________________
+>> >> > buildroot mailing list
+>> >> > buildroot at busybox.net
+>> >> > http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151023/4fb585df/attachment.html>
