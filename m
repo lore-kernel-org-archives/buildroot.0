@@ -1,7 +1,7 @@
 From: James Knight <james.knight@rockwellcollins.com>
-Date: Fri, 23 Oct 2015 18:41:28 -0400
-Subject: [Buildroot] [PATCH 1/1] liblockfile: bump to version 1.0.9-6
-Message-ID: <1445640088-11832-1-git-send-email-james.knight@rockwellcollins.com>
+Date: Fri, 23 Oct 2015 19:10:12 -0400
+Subject: [Buildroot] [PATCH v5 1/1] yad: new package
+Message-ID: <1445641812-7704-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +10,107 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
- package/liblockfile/liblockfile.hash | 6 +++---
- package/liblockfile/liblockfile.mk   | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Changes v4 -> v5:
+  - Increment to version 0.31.2.
+  - Cleanup yad menu option to be visible after Xorg/MMU is selected. 
 
-diff --git a/package/liblockfile/liblockfile.hash b/package/liblockfile/liblockfile.hash
-index 7f7ee7f..dbcc19e 100644
---- a/package/liblockfile/liblockfile.hash
-+++ b/package/liblockfile/liblockfile.hash
-@@ -1,3 +1,3 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/libl/liblockfile/liblockfile_1.08-4.dsc
--sha256	d63293d5091d7fdc0259563694e4d68771310dbc4e70e188e6b68e7a776405cb	liblockfile_1.08.orig.tar.gz
--sha256	e1343c37b83722abdaa1b5d98e1696748ca134ad36752b8affebebd51ef78468	liblockfile_1.08-4.debian.tar.bz2
-+# From http://http.debian.net/debian/pool/main/libl/liblockfile/liblockfile_1.09-6.dsc
-+sha256	16979eba05396365e1d6af7100431ae9d32f9bc063930d1de66298a0695f1b7f	liblockfile_1.09.orig.tar.gz
-+sha256	d45eacb7c637c16d03c777c55989d98da494ae9584a0783fe6dbf0db60fa290f	liblockfile_1.09-6.debian.tar.bz2
-diff --git a/package/liblockfile/liblockfile.mk b/package/liblockfile/liblockfile.mk
-index 4f7a67e..b578022 100644
---- a/package/liblockfile/liblockfile.mk
-+++ b/package/liblockfile/liblockfile.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
+Changes v3 -> v4:
+  - Add missing libglib2 dependencies (pointed out by Vicente Olivert
+     Riera).
+  - Cleanup YAD help description to maximize the 72-character limit
+     space (suggested by Vicente Olivert Riera).
+
+Changes v2 -> v3:
+  - Increment to version 0.31.1 (removed need for HTML patch introduced
+     in v2 change; suggested by Vicente Olivert Riera).
+
+Changes v1 -> v2:
+  - Increment to version 0.29.0 (with updated hash and patch fix).
+  - Removed complex gtk library selection. Defaults to libgtk3, if
+     available; elsewise, uses libgtk2 (suggested from comments by
+     Baruch Siach, Thomas Petazzoni and Peter Korsgaard).
+---
+ package/Config.in     |  1 +
+ package/yad/Config.in | 17 +++++++++++++++++
+ package/yad/yad.hash  |  2 ++
+ package/yad/yad.mk    | 24 ++++++++++++++++++++++++
+ 4 files changed, 44 insertions(+)
+ create mode 100644 package/yad/Config.in
+ create mode 100644 package/yad/yad.hash
+ create mode 100644 package/yad/yad.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 2f74439..5971ffa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -293,6 +293,7 @@ comment "X applications"
+ 	source "package/xscreensaver/Config.in"
+ 	source "package/xterm/Config.in"
+ 	source "package/xvkbd/Config.in"
++	source "package/yad/Config.in"
  
--LIBLOCKFILE_VERSION = 1.08
-+LIBLOCKFILE_VERSION = 1.09
- LIBLOCKFILE_SOURCE = liblockfile_$(LIBLOCKFILE_VERSION).orig.tar.gz
--LIBLOCKFILE_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/libl/liblockfile
--LIBLOCKFILE_PATCH = liblockfile_$(LIBLOCKFILE_VERSION)-4.debian.tar.bz2
-+LIBLOCKFILE_SITE = http://http.debian.net/debian/pool/main/libl/liblockfile
-+LIBLOCKFILE_PATCH = liblockfile_$(LIBLOCKFILE_VERSION)-6.debian.tar.bz2
- 
- LIBLOCKFILE_LICENSE = LGPLv2+, dotlockfile GPLv2+
--# No license file included, it refers to the gnu.org website
-+LIBLOCKFILE_LICENSE_FILES = COPYRIGHT
- 
- LIBLOCKFILE_INSTALL_STAGING = YES
- LIBLOCKFILE_CONF_OPTS = --mandir=/usr/share/man
+ comment "X libraries and helper libraries"
+ 	source "package/libsexy/Config.in"
+diff --git a/package/yad/Config.in b/package/yad/Config.in
+new file mode 100644
+index 0000000..9b16729
+--- /dev/null
++++ b/package/yad/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_YAD
++	bool "yad"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  YAD (yet another dialog) is a tool for create graphical dialogs from
++	  shell scripts.
++
++	  http://sourceforge.net/projects/yad-dialog/
++
++comment "yad needs libgtk2 or libgtk3"
++	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
++	depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
+diff --git a/package/yad/yad.hash b/package/yad/yad.hash
+new file mode 100644
+index 0000000..4e88ab0
+--- /dev/null
++++ b/package/yad/yad.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 c91d6a9eb36abdb502d2d8ada0ec29c266b94a6628f723adeca436bee0b6c55c yad-0.31.2.tar.xz
+diff --git a/package/yad/yad.mk b/package/yad/yad.mk
+new file mode 100644
+index 0000000..57262e8
+--- /dev/null
++++ b/package/yad/yad.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# yad
++#
++################################################################################
++
++YAD_VERSION = 0.31.2
++YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
++YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
++YAD_LICENSE = GPLv3
++YAD_LICENSE_FILES = COPYING
++YAD_DEPENDENCIES = host-intltool host-pkgconf libglib2
++
++YAD_CONF_OPTS = --enable-html=no
++
++ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++YAD_DEPENDENCIES += libgtk3
++YAD_CONF_OPTS += --with-gtk=gtk3
++else
++YAD_DEPENDENCIES += libgtk2
++YAD_CONF_OPTS += --with-gtk=gtk2
++endif
++
++$(eval $(autotools-package))
 -- 
 1.9.5.msysgit.1
