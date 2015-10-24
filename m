@@ -1,60 +1,67 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 24 Oct 2015 23:01:02 +0200
-Subject: [Buildroot] [PATCH v5 22/36] package/efl/libelementary: add host
-	package
+Date: Sat, 24 Oct 2015 23:00:50 +0200
+Subject: [Buildroot] [PATCH v5 10/36] package/efl/libefl: add webp dependency
 In-Reply-To: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445720476-21517-23-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445720476-21517-11-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-elm_prefs_cc builded for the host machine is
-needed to cross-compile correctly libelementary
-for the target. Otherwise, elm_prefs_cc for the
-target is used on the host machine.
+WebP is a new image format that provides lossless and lossy
+compression for images on the web. So enabling webp support
+in efl libraries allow to loads images using WebP.
+
+Also, it one of the "highly recommended" dependecies [1]
+according to the README but disabling it doesn't need
+the --enable-i-really-know-what-i-am-doing... option.
+That's why BR2_PACKAGE_LIBEFL_WEBP is not added to
+BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
+
+[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v4: use libefl
-    reword the commit message
+v4: rename to libefl
+    improve commit log
 ---
- package/efl/libelementary/libelementary.mk | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ package/efl/libefl/Config.in | 5 +++++
+ package/efl/libefl/libefl.mk | 7 +++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
-index a2c4a60..4ba8681 100644
---- a/package/efl/libelementary/libelementary.mk
-+++ b/package/efl/libelementary/libelementary.mk
-@@ -12,14 +12,26 @@ LIBELEMENTARY_LICENSE_FILES = COPYING
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index 5c65744..c72ea7e 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -65,4 +65,9 @@ config BR2_PACKAGE_LIBEFL_TIFF
+ 	help
+ 	  This enables the loader code that loads tiff files.
  
- LIBELEMENTARY_INSTALL_STAGING = YES
- 
--LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl libefl
-+LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl host-libelementary libefl
- 
- LIBELEMENTARY_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
-+	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
-+	--with-doxygen=no \
-+	--disable-elementary-test
++config BR2_PACKAGE_LIBEFL_WEBP
++	bool "libevas webp image loader"
++	help
++	  This enables the loader code that loads images using WebP.
 +
-+# We need a host package in order to provide elm_prefs_cc and
-+# elementary_codegen.
-+HOST_LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl
-+HOST_LIBELEMENTARY_CONF_OPTS = \
-+	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-+	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
-+	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--with-doxygen=no \
- 	--disable-elementary-test
+ endif # BR2_PACKAGE_LIBEFL
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index c7ecf51..9633630 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -195,6 +195,13 @@ else
+ LIBEFL_CONF_OPTS += --enable-image-loader-tiff=no
+ endif
  
++ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
++LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
++LIBEFL_DEPENDENCIES += webp
++else
++LIBEFL_CONF_OPTS += --enable-image-loader-webp=no
++endif
++
  $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ 
+ ################################################################################
 -- 
 2.4.3
