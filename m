@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 24 Oct 2015 18:26:53 +0200
-Subject: [Buildroot] [PATCH 06/11] perl-netaddr-ip: bump to version 4.078
+Date: Sat, 24 Oct 2015 18:26:54 +0200
+Subject: [Buildroot] [PATCH 07/11] perl-net-dns: bump to version 1.02
 In-Reply-To: <1445704018-9780-1-git-send-email-francois.perrad@gadz.org>
 References: <1445704018-9780-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1445704018-9780-6-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1445704018-9780-7-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,54 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-netaddr-ip/Config.in            | 2 +-
- package/perl-netaddr-ip/perl-netaddr-ip.hash | 4 ++--
- package/perl-netaddr-ip/perl-netaddr-ip.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-net-dns/Config.in         | 4 ----
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/perl-netaddr-ip/Config.in b/package/perl-netaddr-ip/Config.in
-index 4f082f1..7ccb20a 100644
---- a/package/perl-netaddr-ip/Config.in
-+++ b/package/perl-netaddr-ip/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_PERL_NETADDR_IP
- 	bool "perl-netaddr-ip"
- 	depends on !BR2_STATIC_LIBS
+diff --git a/package/perl-net-dns/Config.in b/package/perl-net-dns/Config.in
+index 52fb4d8..24ce481 100644
+--- a/package/perl-net-dns/Config.in
++++ b/package/perl-net-dns/Config.in
+@@ -1,11 +1,7 @@
+ config BR2_PACKAGE_PERL_NET_DNS
+ 	bool "perl-net-dns"
+-	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_PERL_DIGEST_HMAC
  	help
--	  NetAddr::IP - Manages IPv4 and IPv6 addresses and subnets
-+	  Manages IPv4 and IPv6 addresses and subnets
+ 	  Net::DNS is a DNS resolver implemented in Perl.
  
- 	  https://metacpan.org/release/NetAddr-IP
- 
-diff --git a/package/perl-netaddr-ip/perl-netaddr-ip.hash b/package/perl-netaddr-ip/perl-netaddr-ip.hash
-index 37d17fa..19bba20 100644
---- a/package/perl-netaddr-ip/perl-netaddr-ip.hash
-+++ b/package/perl-netaddr-ip/perl-netaddr-ip.hash
+ 	  http://www.net-dns.org
+-
+-comment "perl-net-dns needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 01d2772..6533e2b 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    b72b91ebd228b096fd3b0acc87df877e NetAddr-IP-4.075.tar.gz
--sha256 ab8275bb8f306f780cd029a6dc48764461f4d1ef3a106b99fe5a90cbf2968839 NetAddr-IP-4.075.tar.gz
-+md5    bca8406520b6535a3f9661d385705d97 NetAddr-IP-4.078.tar.gz
-+sha256 b9a12294e58dcece0189630ddb6926e37169cbbb24c76091f1e604e426c19614 NetAddr-IP-4.078.tar.gz
-diff --git a/package/perl-netaddr-ip/perl-netaddr-ip.mk b/package/perl-netaddr-ip/perl-netaddr-ip.mk
-index 8acb4d7..2e5a82a 100644
---- a/package/perl-netaddr-ip/perl-netaddr-ip.mk
-+++ b/package/perl-netaddr-ip/perl-netaddr-ip.mk
-@@ -4,7 +4,7 @@
+-md5    f1d48107ff6b366479ad035783486d7a Net-DNS-0.83.tar.gz
+-sha256 8e1108d1801b9695909859323e1ed2f7ffb3b03dd3d2028a19fb79fc1a1d7c39 Net-DNS-0.83.tar.gz
++md5    adbb3fd9bc1677d8fd79605925a35106 Net-DNS-1.02.tar.gz
++sha256 9473c322b036592663bb20383e85190a682d142688b162efc975a61bcc7534f2 Net-DNS-1.02.tar.gz
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index f93b084..59d2b60 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_NETADDR_IP_VERSION = 4.075
-+PERL_NETADDR_IP_VERSION = 4.078
- PERL_NETADDR_IP_SOURCE = NetAddr-IP-$(PERL_NETADDR_IP_VERSION).tar.gz
- PERL_NETADDR_IP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKER
- PERL_NETADDR_IP_LICENSE = Artistic or GPLv1+
+-PERL_NET_DNS_VERSION = 0.83
++PERL_NET_DNS_VERSION = 1.02
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_DEPENDENCIES = perl-digest-hmac
+-PERL_NET_DNS_LICENSE = Artistic or GPLv1+
++PERL_NET_DNS_LICENSE = MIT
+ PERL_NET_DNS_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
 -- 
 2.5.0
