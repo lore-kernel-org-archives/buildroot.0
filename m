@@ -1,55 +1,73 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 24 Oct 2015 18:18:01 +0200
-Subject: [Buildroot] [PATCH] uclibc: update uClibc-ng to 1.0.8
-Message-ID: <20151024161801.GA25515@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 24 Oct 2015 18:21:41 +0200
+Subject: [Buildroot] [PATCH 1/1] Revert "package/swupdate: add patch to
+ fix build issue with some toolchains"
+In-Reply-To: <1445691845-17624-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1445691845-17624-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <20151024162141.GD3632@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes following problems:
-- mips64 toolchain building when UCLIBC_HAS_CONTEXT_FUNCS is enabled
-- segfault when SSP and NPTL is used for static binaries
-- Updates for ARC and Xtensa
-- missing syscalls for fanotify_init() and fanotify_mark() are added
-- support for the syncfs() system call added
-- problems compiling freeswitch are fixed
-- problems running LTP regarding fallocate are fixed
+Bj?rn, All,
 
-Tested with defconfigs for Qemu arm/ppc/sh/mips/x86/x86_64/xtensa.
+On 2015-10-24 15:04 +0200, Bj?rn Forsman spake thusly:
+> This patch caused an unfortunate regression that prevents any handlers
+> from being registered (runtime issue). This means swupdate cannot
+> perform any update. Upstream has reverted it.
+> 
+> See discussion:
+> https://groups.google.com/d/msg/swupdate/oVIhJmYPT8A/eq3uZvYVDQAJ
+> 
+> This reverts commit a8cc6eeec5a665db5689083312beef14a9afbafa.
+> 
+> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 
-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
----
- package/uclibc/Config.in   |    2 +-
- package/uclibc/uclibc.hash |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 2e10af7..ff6dffd 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -65,7 +65,7 @@ config BR2_UCLIBC_VERSION_STRING
- 	string
- 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
- 	default "arc-2015.06" if BR2_UCLIBC_VERSION_ARC_GIT
--	default "1.0.6"		if BR2_UCLIBC_VERSION_NG
-+	default "1.0.8"		if BR2_UCLIBC_VERSION_NG
- 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
- config BR2_UCLIBC_CONFIG
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 6cd76dd..d9931a9 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -2,7 +2,7 @@
- sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
- 
- # From http://www.uclibc-ng.org/
--sha256  afb2ec318fe5b115165e3fdc22964a2fd2b68e03a652ac36164ed096b4bb795c        uClibc-ng-1.0.6.tar.xz
-+sha256  11575cda78681713f5a36cf35deaae93acdc7dce463d38a12902991fb7f5312a        uClibc-ng-1.0.8.tar.xz
- 
- # No hash for the ARC variant, comes from the github-helper
- none	xxx	uClibc-arc-2015.06.tar.gz
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/swupdate/swupdate.hash | 1 -
+>  package/swupdate/swupdate.mk   | 1 -
+>  2 files changed, 2 deletions(-)
+> 
+> diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+> index 96ebedf..eb7722c 100644
+> --- a/package/swupdate/swupdate.hash
+> +++ b/package/swupdate/swupdate.hash
+> @@ -1,4 +1,3 @@
+>  # Locally calculated
+>  sha256	1410f8967aad0f4d3b4561110dbfb2c1f8e337bdc332f6b120f4995762c8bf6b  swupdate-2015.07.tar.gz
+> -sha256	ec633171e6a893506fad6b96fb2b258d60a023c03be5520b968a1d5cc6bafe6e  c3467290925b2a833a68d9db12c198fdca752e32.patch
+>  sha256	6cffe115cad73c0d1095f7880b6d2b97fc12b7f7871f532e5b33717e863f03d7  5a5ef5909f5da5b2070d58ffaee924bb8e6a51e1.patch
+> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+> index 68f6e2c..bcdc764 100644
+> --- a/package/swupdate/swupdate.mk
+> +++ b/package/swupdate/swupdate.mk
+> @@ -9,7 +9,6 @@ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+>  SWUPDATE_LICENSE = GPLv2+, MIT, Public Domain
+>  SWUPDATE_LICENSE_FILES = COPYING
+>  SWUPDATE_PATCH = \
+> -	https://github.com/sbabic/swupdate/commit/c3467290925b2a833a68d9db12c198fdca752e32.patch \
+>  	https://github.com/sbabic/swupdate/commit/5a5ef5909f5da5b2070d58ffaee924bb8e6a51e1.patch
+>  
+>  # swupdate bundles its own version of mongoose (version 3.8) and
+> -- 
+> 2.5.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
