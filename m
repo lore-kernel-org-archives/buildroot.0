@@ -1,29 +1,20 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 24 Oct 2015 10:58:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: add hash
-Message-ID: <1445677095-12521-1-git-send-email-bernd.kuhls@t-online.de>
+From: David PICARD <davepiq@yahoo.fr>
+Date: Sat, 24 Oct 2015 09:34:07 +0000 (UTC)
+Subject: [Buildroot] Integrating ft6x06 touchscreen driver
+References: <1587830330.3506598.1445679247577.JavaMail.yahoo@mail.yahoo.com>
+Message-ID: <1587830330.3506598.1445679247577.JavaMail.yahoo@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I forgot to add the hash file in the 15.2 bump:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/130039
+Hi,
+I could successfully build a system for the RPi B+ and Adafruit's PiTFT 2.8" capacitive touchscreen. The frame buffer works, and I can see my test Qt5 app on the TFT. Happy week for a noob !
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi/kodi.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/kodi/kodi.hash
-
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-new file mode 100644
-index 0000000..14af9af
---- /dev/null
-+++ b/package/kodi/kodi.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	dd8aeb942e6de5d1488e243e1346cff3f6597e21b5131a3ba72ff5cc82037110	kodi-15.2-Isengard.tar.gz
--- 
-2.6.1
+So far, so good. But I'm stuck at the touchscreen part. I saw a driver (ft6x06) in Adafruit's git tree, but I don't really know how to use it. So, I'd be pleased if you could give me some guidelines.
+Alternatively, I could use a USB mouse. But I although I could see an entry in /dev/input, the pointer would not show up on the TFT device.
+Thanks,David.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151024/d17cd602/attachment.html>
