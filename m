@@ -1,104 +1,112 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 24 Oct 2015 23:00:42 +0200
-Subject: [Buildroot] [PATCH v5 02/36] package/libevas-generic-loaders: move
-	to package directory
+Date: Sat, 24 Oct 2015 23:00:52 +0200
+Subject: [Buildroot] [PATCH v5 12/36] package/efl/libefl: fix framebuffer
+	support
 In-Reply-To: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445720476-21517-3-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445720476-21517-13-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As for expedite package, there is no advantage for efl related
-packages to share the same version number anymore
-(except for efl and libelementary).
+From: Vicente Bergas <vicencb@gmail.com>
 
-Also, we usually do not have a sub-directory for a family of related
-packages which doen't share the same version number, so move
-libevas-generic-loaders to package directory.
-Libevas-generic-loaders appear now in "Libraries" -> "Graphics" in
-the Kconfig menu.
+From [1]:
+When running terminology, a message appears in eina_module_load with:
+could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
+Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
+ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
+It seems like the EAPI macro has no effect...
 
-While at it, remove BR2_USE_WCHAR dependency since the efl package
-already depend on it.
+A patch from Ross Vandegrift has been posted on enlightenment mailing
+list [2], but it's not yet an upstream patch.
 
+[1] http://sourceforge.net/p/enlightenment/mailman/message/34493376
+[2] http://sourceforge.net/p/enlightenment/mailman/message/34492801
+
+Signed-off-by: Vicente Bergas <vicencb@gmail.com>
+[Romain: use a git formated patch and add a commit log]
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
-v4: improve the commit log (ThomasP)
-    move libevas-generic-loaders to "Libraries" -> "Graphics" (ThomasP)
-    fix package comment dependency on BR2_USE_MMU
+v4: move the patch to libefl
+    improve the commit log
+v3: new patch
 ---
- package/Config.in                                                   | 1 +
- package/efl/Config.in                                               | 1 -
- package/{efl => }/libevas-generic-loaders/Config.in                 | 6 +++---
- .../{efl => }/libevas-generic-loaders/libevas-generic-loaders.mk    | 0
- 4 files changed, 4 insertions(+), 4 deletions(-)
- rename package/{efl => }/libevas-generic-loaders/Config.in (79%)
- rename package/{efl => }/libevas-generic-loaders/libevas-generic-loaders.mk (100%)
+ ...ecore_fb_private.h-define-EAPI-before-use.patch | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+ create mode 100644 package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index c3b9a7a..8ecb2df 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -819,6 +819,7 @@ menu "Graphics"
- 	source "package/libdri2/Config.in"
- 	source "package/libdrm/Config.in"
- 	source "package/libexif/Config.in"
-+	source "package/libevas-generic-loaders/Config.in"
- 	source "package/libfm/Config.in"
- 	source "package/libfm-extra/Config.in"
- 	source "package/libfreeimage/Config.in"
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index cb91660..7ce5a36 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -16,7 +16,6 @@ source "package/efl/libeet/Config.in"
- source "package/efl/libefreet/Config.in"
- source "package/efl/libeio/Config.in"
- source "package/efl/libevas/Config.in"
--source "package/efl/libevas-generic-loaders/Config.in"
- source "package/efl/libembryo/Config.in"
- source "package/efl/libedje/Config.in"
- source "package/efl/libethumb/Config.in"
-diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-similarity index 79%
-rename from package/efl/libevas-generic-loaders/Config.in
-rename to package/libevas-generic-loaders/Config.in
-index 3f7581f..d0c3cf4 100644
---- a/package/efl/libevas-generic-loaders/Config.in
-+++ b/package/libevas-generic-loaders/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	bool "libevas generic loaders"
- 	select BR2_PACKAGE_LIBEINA
- 	select BR2_PACKAGE_ZLIB
-+	depends on BR2_PACKAGE_EFL
- 	help
- 	  These are additional "generic" loaders for Evas that are
- 	  stand-alone executables that evas may run from its generic
-@@ -15,15 +16,14 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	bool "SVG loader"
- 	select BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO
--	depends on BR2_USE_WCHAR # librsvg -> glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
- 	depends on BR2_ARCH_HAS_ATOMICS # cairo
- 	help
- 	  This option enables the Evas generic SVG loader
- 
--comment "SVG loader needs a toolchain w/ wchar, threads, C++"
-+comment "SVG loader needs a toolchain w/ threads, C++"
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
- 
- endif
-diff --git a/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-similarity index 100%
-rename from package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
-rename to package/libevas-generic-loaders/libevas-generic-loaders.mk
+diff --git a/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
+new file mode 100644
+index 0000000..81d14f9
+--- /dev/null
++++ b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
+@@ -0,0 +1,64 @@
++From 2fb4fdf641e67e49b87a3524038a694c8dd0ba4e Mon Sep 17 00:00:00 2001
++From: Vicente Bergas <vicencb@gmail.com>
++Date: Fri, 9 Oct 2015 23:35:20 +0200
++Subject: [PATCH] ecore_fb_private.h: define EAPI before use
++
++From [1]:
++When running terminology, a message appears in eina_module_load with:
++could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
++Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
++ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
++It seems like the EAPI macro has no effect...
++
++A patch from Ross Vandegrift has been posted on enlightenment mailing
++list [2], but it's not yet an upstream patch.
++
++[1] http://sourceforge.net/p/enlightenment/mailman/message/34493376
++[2] http://sourceforge.net/p/enlightenment/mailman/message/34492801
++
++Signed-off-by: Vicente Bergas <vicencb@gmail.com>
++[Romain:
++  - Add a commit log
++  - Add a link to the enlightenment mailing list
++  - Add Vicente's SoB line]
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ src/lib/ecore_fb/ecore_fb_private.h | 17 +++++++++++++++++
++ 1 file changed, 17 insertions(+)
++
++diff --git a/src/lib/ecore_fb/ecore_fb_private.h b/src/lib/ecore_fb/ecore_fb_private.h
++index f7dc0c6..f54c8d2 100644
++--- a/src/lib/ecore_fb/ecore_fb_private.h
+++++ b/src/lib/ecore_fb/ecore_fb_private.h
++@@ -33,6 +33,20 @@
++ 
++ #include <Ecore_Fb.h>
++ 
+++#ifdef EAPI
+++# undef EAPI
+++#endif
+++
+++#ifdef __GNUC__
+++# if __GNUC__ >= 4
+++#  define EAPI __attribute__ ((visibility("default")))
+++# else
+++#  define EAPI
+++# endif
+++#else
+++# define EAPI
+++#endif
+++
++ /* ecore_fb_li.c */
++ struct _Ecore_Fb_Input_Device
++ {
++@@ -92,4 +106,7 @@ void ecore_fb_vt_shutdown(void);
++ #define TS_GET_CAL 0x8014660a
++ #endif
++   
+++#undef EAPI
+++#define EAPI
+++
++ #endif
++-- 
++2.4.3
++
 -- 
 2.4.3
