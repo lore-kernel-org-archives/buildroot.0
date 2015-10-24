@@ -1,116 +1,135 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Fri, 23 Oct 2015 19:10:12 -0400
-Subject: [Buildroot] [PATCH v5 1/1] yad: new package
-Message-ID: <1445641812-7704-1-git-send-email-james.knight@rockwellcollins.com>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Sat, 24 Oct 2015 09:11:52 +0900
+Subject: [Buildroot] [PATCH v2 1/1] gauche: new package
+Message-ID: <201510240011.t9O0Bq58024545@ms-omx03.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Gauche is an R7RS Scheme implementation developed to be a handy script
+interpriter, which allows programmers and systemadministrators to write
+small to large scripts for their daily chores. Quick startup, built-in
+system interface, native multilingual support are some of my goals.
+
+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
 ---
-Changes v4 -> v5:
-  - Increment to version 0.31.2.
-  - Cleanup yad menu option to be visible after Xorg/MMU is selected. 
-
-Changes v3 -> v4:
-  - Add missing libglib2 dependencies (pointed out by Vicente Olivert
-     Riera).
-  - Cleanup YAD help description to maximize the 72-character limit
-     space (suggested by Vicente Olivert Riera).
-
-Changes v2 -> v3:
-  - Increment to version 0.31.1 (removed need for HTML patch introduced
-     in v2 change; suggested by Vicente Olivert Riera).
-
-Changes v1 -> v2:
-  - Increment to version 0.29.0 (with updated hash and patch fix).
-  - Removed complex gtk library selection. Defaults to libgtk3, if
-     available; elsewise, uses libgtk2 (suggested from comments by
-     Baruch Siach, Thomas Petazzoni and Peter Korsgaard).
+Changes v1 -> v2
+- change help description to written in project's web page.
+- add brief description and SoB in patch file.
+- change depens on BR2_TOOLCHAIN_HAS_THREADS -> 
+    BR2_TOOLCHAIN_HAS_THREADS_NPTL.
+- add brief description why "-std=gnu99" needed in GAUCHE_CONF_ENV.
+- add depends on BR2_ARCH_HAS_ATOMICS (Boehm gc need this).
+- add # fork() to 'depends on BR2_USE_MMU'.
+- remove empty comment line in hash file.
+- remove unnecessary GAUCHE_CONF_OPTS.
 ---
- package/Config.in     |  1 +
- package/yad/Config.in | 17 +++++++++++++++++
- package/yad/yad.hash  |  2 ++
- package/yad/yad.mk    | 24 ++++++++++++++++++++++++
- 4 files changed, 44 insertions(+)
- create mode 100644 package/yad/Config.in
- create mode 100644 package/yad/yad.hash
- create mode 100644 package/yad/yad.mk
+ package/Config.in                       |    1 +
+ package/gauche/0001-fix-so-suffix.patch |   16 ++++++++++++++++
+ package/gauche/Config.in                |   18 ++++++++++++++++++
+ package/gauche/gauche.hash              |    2 ++
+ package/gauche/gauche.mk                |   19 +++++++++++++++++++
+ 5 files changed, 56 insertions(+), 0 deletions(-)
+ create mode 100644 package/gauche/0001-fix-so-suffix.patch
+ create mode 100644 package/gauche/Config.in
+ create mode 100644 package/gauche/gauche.hash
+ create mode 100644 package/gauche/gauche.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2f74439..5971ffa 100644
+index 2f74439..602ece9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -293,6 +293,7 @@ comment "X applications"
- 	source "package/xscreensaver/Config.in"
- 	source "package/xterm/Config.in"
- 	source "package/xvkbd/Config.in"
-+	source "package/yad/Config.in"
- 
- comment "X libraries and helper libraries"
- 	source "package/libsexy/Config.in"
-diff --git a/package/yad/Config.in b/package/yad/Config.in
+@@ -460,6 +460,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
++	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
+ 	source "package/jamvm/Config.in"
+diff --git a/package/gauche/0001-fix-so-suffix.patch b/package/gauche/0001-fix-so-suffix.patch
 new file mode 100644
-index 0000000..9b16729
+index 0000000..3e82ddb
 --- /dev/null
-+++ b/package/yad/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_YAD
-+	bool "yad"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
++++ b/package/gauche/0001-fix-so-suffix.patch
+@@ -0,0 +1,16 @@
++With uclibc configuration, $host does not match to '*-linux-gnu-*'.
++
++Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
++
++diff -ur a/configure b/configure
++--- a/configure	2014-07-20 15:15:05.000000000 +0900
+++++ b/configure	2015-10-20 21:52:32.791442291 +0900
++@@ -6843,7 +6843,7 @@
++     SHLIB_MAIN_LDFLAGS=""
++     SHLIB_OK=ok
++     ;;
++-  *-linux-gnu*|*-*-gnu*|*freebsd*|*dragonfly*)
+++  *-linux-*|*-*-gnu*|*freebsd*|*dragonfly*)
++     SHLIB_SO_CFLAGS="-fPIC"
++     SHLIB_SO_LDFLAGS="$rpath -shared -o"
++     SHLIB_SO_SUFFIX="so"
+diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+new file mode 100644
+index 0000000..1074bc1
+--- /dev/null
++++ b/package/gauche/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_GAUCHE
++	bool "gauche"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_ARCH_HAS_ATOMICS
 +	help
-+	  YAD (yet another dialog) is a tool for create graphical dialogs from
-+	  shell scripts.
++	  Gauche is an R7RS Scheme implementation developed to be a
++	  handy script interpriter, which allows programmers and
++	  systemadministrators to write small to large scripts for their
++	  daily chores. Quick startup, built-in system interface, native
++	  multilingual support are some of my goals.
 +
-+	  http://sourceforge.net/projects/yad-dialog/
++	  http://practical-scheme.net/gauche/
 +
-+comment "yad needs libgtk2 or libgtk3"
-+	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
-+	depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
-diff --git a/package/yad/yad.hash b/package/yad/yad.hash
++comment "gauche needs a toolchain w/ NPTL"
++	depends on BR2_USE_MMU
++	depends on BR2_ARCH_HAS_ATOMICS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/gauche/gauche.hash b/package/gauche/gauche.hash
 new file mode 100644
-index 0000000..4e88ab0
+index 0000000..9ec106a
 --- /dev/null
-+++ b/package/yad/yad.hash
++++ b/package/gauche/gauche.hash
 @@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 c91d6a9eb36abdb502d2d8ada0ec29c266b94a6628f723adeca436bee0b6c55c yad-0.31.2.tar.xz
-diff --git a/package/yad/yad.mk b/package/yad/yad.mk
++# Locally calculated
++sha256 7b18bcd70beaced1e004594be46c8cff95795318f6f5830dd2a8a700410fc149  Gauche-0.9.4.tgz
+diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
 new file mode 100644
-index 0000000..57262e8
+index 0000000..39ddfdc
 --- /dev/null
-+++ b/package/yad/yad.mk
-@@ -0,0 +1,24 @@
++++ b/package/gauche/gauche.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# yad
++# gauche
 +#
 +################################################################################
 +
-+YAD_VERSION = 0.31.2
-+YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
-+YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
-+YAD_LICENSE = GPLv3
-+YAD_LICENSE_FILES = COPYING
-+YAD_DEPENDENCIES = host-intltool host-pkgconf libglib2
++GAUCHE_VERSION = 0.9.4
++GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
++GAUCHE_SITE = http://prdownloads.sourceforge.net/gauche
++GAUCHE_LICENSE = BSD
++GAUCHE_LICENSE_FILES = COPYING
++GAUCHE_DEPENDENCIES = host-gauche
 +
-+YAD_CONF_OPTS = --enable-html=no
++# Checking c99 support in configure fails without WCHAR. But we do not
++# need WCHAR at gauche runtime, so explicitly specify here.
++GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
 +
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+YAD_DEPENDENCIES += libgtk3
-+YAD_CONF_OPTS += --with-gtk=gtk3
-+else
-+YAD_DEPENDENCIES += libgtk2
-+YAD_CONF_OPTS += --with-gtk=gtk2
-+endif
-+
++$(eval $(host-autotools-package))
 +$(eval $(autotools-package))
 -- 
-1.9.5.msysgit.1
+1.7.1
+
+============================================================
+    Hiroshi Kawashima
