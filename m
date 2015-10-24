@@ -1,87 +1,129 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 24 Oct 2015 23:01:05 +0200
-Subject: [Buildroot] [PATCH v5 25/36] package/expedite: bump to efl-1.15
-	branch
+Date: Sat, 24 Oct 2015 23:01:07 +0200
+Subject: [Buildroot] [PATCH v5 27/36] package/efl/libedje: remove package
 In-Reply-To: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445720476-21517-26-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445720476-21517-28-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since expedite hasn't been released since 1.7.10 release,
-use efl-1.15 branch in the git tree.
-
-Use the newly added libefl package wich provide a new version
-of efl libraries.
-
-Autoreconf the package since there is no configure script
-in the git tree.
+Libedje is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
-    remove comments on dependencies
+v5: remove libedje directory
 v4: update Config.in to use libefl
-    improve commit log
-    keep the dependency on threads
-    Replace the old BR2_PACKAGE_LIBEVAS_X11 by BR2_PACKAGE_LIBEFL_X
-v2: bump to 1.15 branch
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/expedite/Config.in   |  8 --------
- package/expedite/expedite.mk | 13 +++++++++----
- 2 files changed, 9 insertions(+), 12 deletions(-)
+ Config.in.legacy               |  7 +++++++
+ package/efl/Config.in          |  1 -
+ package/efl/libedje/Config.in  | 28 ----------------------------
+ package/efl/libedje/libedje.mk | 28 ----------------------------
+ 4 files changed, 7 insertions(+), 57 deletions(-)
+ delete mode 100644 package/efl/libedje/Config.in
+ delete mode 100644 package/efl/libedje/libedje.mk
 
-diff --git a/package/expedite/Config.in b/package/expedite/Config.in
-index de6a056..7846881 100644
---- a/package/expedite/Config.in
-+++ b/package/expedite/Config.in
-@@ -1,16 +1,8 @@
- config BR2_PACKAGE_EXPEDITE
- 	bool "expedite"
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBEET
- 	depends on BR2_PACKAGE_EFL
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
- 	help
- 	  Expedite is the official Evas benchmark tool. It can test different
- 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
- 	  DirectFB and so on. Its tests are quite extensive, trying to
- 	  reproduce real world usage cases.
--
--comment "expedite needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-index 9b232f8..ae30535 100644
---- a/package/expedite/expedite.mk
-+++ b/package/expedite/expedite.mk
-@@ -4,14 +4,19 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d35a241..3349c50 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.11"
  
--EXPEDITE_VERSION = 1.7.10
--EXPEDITE_SITE = http://download.enlightenment.org/releases
-+# efl-1.15 branch
-+EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
-+EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
-+EXPEDITE_SITE_METHOD = git
- EXPEDITE_LICENSE = BSD-2c
- EXPEDITE_LICENSE_FILES = COPYING
- 
--EXPEDITE_DEPENDENCIES = libevas libeina libeet
-+EXPEDITE_DEPENDENCIES = host-libefl libefl
- 
--ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
-+# There is no configure script in the git tree.
-+EXPEDITE_AUTORECONF = YES
++config BR2_PACKAGE_LIBEDJE
++	bool "libedje package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  The libedje package has been removed with the efl bump to 1.15.
 +
-+ifeq ($(BR2_PACKAGE_LIBEFL_X),y)
- EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
- 	--x-includes=$(STAGING_DIR)/usr/include \
- 	--x-libraries=$(STAGING_DIR)/usr/lib
+ config BR2_PACKAGE_LIBETHUMB
+ 	bool "libethumb package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 0729e02..5a14192 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -22,7 +22,6 @@ source "package/efl/libefreet/Config.in"
+ source "package/efl/libeio/Config.in"
+ source "package/efl/libevas/Config.in"
+ source "package/efl/libembryo/Config.in"
+-source "package/efl/libedje/Config.in"
+ source "package/efl/libelementary/Config.in"
+ source "package/efl/libedbus/Config.in"
+ 
+diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
+deleted file mode 100644
+index b163508..0000000
+--- a/package/efl/libedje/Config.in
++++ /dev/null
+@@ -1,28 +0,0 @@
+-comment "libedje needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-
+-config BR2_PACKAGE_LIBEDJE
+-	bool "libedje"
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBECORE_EVAS
+-	select BR2_PACKAGE_LIBEMBRYO
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LUA
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+-	help
+-	  A graphical layout and animation library for animated
+-	  resizable, compressed and scalable themes.
+-
+-	  http://trac.enlightenment.org/e/wiki/Edje
+-
+-if BR2_PACKAGE_LIBEDJE
+-
+-config BR2_PACKAGE_LIBEDJE_CC
+-	bool "build edje_cc"
+-	help
+-	  Build and install the Edje compiler for the target. Normally this
+-	  is not required.
+-
+-endif
+diff --git a/package/efl/libedje/libedje.mk b/package/efl/libedje/libedje.mk
+deleted file mode 100644
+index 59189e4..0000000
+--- a/package/efl/libedje/libedje.mk
++++ /dev/null
+@@ -1,28 +0,0 @@
+-################################################################################
+-#
+-# libedje
+-#
+-################################################################################
+-
+-LIBEDJE_VERSION = 1.7.10
+-LIBEDJE_SOURCE = edje-$(LIBEDJE_VERSION).tar.bz2
+-LIBEDJE_SITE = http://download.enlightenment.org/releases
+-LIBEDJE_LICENSE = GPLv2+ (epp binary), BSD-2c (everything else)
+-LIBEDJE_LICENSE_FILES = COPYING
+-
+-LIBEDJE_INSTALL_STAGING = YES
+-
+-LIBEDJE_DEPENDENCIES = \
+-	host-pkgconf lua libeina libeet libecore libevas \
+-	libembryo
+-
+-ifeq ($(BR2_PACKAGE_LIBEDJE_CC),y)
+-LIBEDJE_CONF_OPTS += --enable-edje-cc
+-else
+-LIBEDJE_CONF_OPTS += --disable-edje-cc
+-endif
+-
+-HOST_LIBEDJE_CONF_OPTS = --enable-edje-cc
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
 -- 
 2.4.3
