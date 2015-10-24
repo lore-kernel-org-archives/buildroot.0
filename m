@@ -1,8 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 24 Oct 2015 18:26:48 +0200
-Subject: [Buildroot] [PATCH 01/11] perl-crypt-openssl-random: bump to
-	version 0.11
-Message-ID: <1445704018-9780-1-git-send-email-francois.perrad@gadz.org>
+Date: Sat, 24 Oct 2015 18:26:49 +0200
+Subject: [Buildroot] [PATCH 02/11] perl-http-message: bump to version 6.11
+In-Reply-To: <1445704018-9780-1-git-send-email-francois.perrad@gadz.org>
+References: <1445704018-9780-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1445704018-9780-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,47 +12,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-crypt-openssl-random/Config.in                      | 3 +--
- package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash | 4 ++--
- package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk   | 2 +-
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/perl-http-message/perl-http-message.hash |  4 ++--
+ package/perl-http-message/perl-http-message.mk   | 13 ++++---------
+ 2 files changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/package/perl-crypt-openssl-random/Config.in b/package/perl-crypt-openssl-random/Config.in
-index 2095cac..2ceb78d 100644
---- a/package/perl-crypt-openssl-random/Config.in
-+++ b/package/perl-crypt-openssl-random/Config.in
-@@ -3,8 +3,7 @@ config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_OPENSSL
- 	help
--	  Routines for accessing the OpenSSL pseudo-random number generator
--	  using the openSSL libraries
-+	  OpenSSL/LibreSSL pseudo-random number generator access
- 
- 	  http://sourceforge.net/projects/perl-openssl/
- 
-diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
-index 2de6547..caacdc9 100644
---- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
-+++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index ff6268d..f57fec2 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    b89ca9314c3a066b440a7bb3cb8d725d Crypt-OpenSSL-Random-0.10.tar.gz
--sha256 ae65d0ab6907edd1d67f87fdf0923ecae4d54c4c2e0ac9d9df97227903ccf18a Crypt-OpenSSL-Random-0.10.tar.gz
-+md5    5d71337503e0356ce1ce1481504e5885 Crypt-OpenSSL-Random-0.11.tar.gz
-+sha256 bb8c81c6a39b9b13a22d818ee9a746242f136f0fadceb6b9776ae615e7524c7a Crypt-OpenSSL-Random-0.11.tar.gz
-diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
-index 32c0a03..6152821 100644
---- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
-+++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
-@@ -4,7 +4,7 @@
+-md5    e563ac516e28d33f65bc0f295f625f85 HTTP-Message-6.06.tar.gz
+-sha256 087e97009c5239dca4631cf433d836771b3fc5ba5685eef1965f9d3415cbad63 HTTP-Message-6.06.tar.gz
++md5    4ed7add10daea3ab30abfeab6d03872f HTTP-Message-6.11.tar.gz
++sha256 e7b368077ae6a188d99920411d8f52a8e5acfb39574d4f5c24f46fd22533d81b HTTP-Message-6.11.tar.gz
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index 12eda90..77213fa 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
+@@ -4,16 +4,11 @@
  #
  ################################################################################
  
--PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.10
-+PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.11
- PERL_CRYPT_OPENSSL_RANDOM_SOURCE = Crypt-OpenSSL-Random-$(PERL_CRYPT_OPENSSL_RANDOM_VERSION).tar.gz
- PERL_CRYPT_OPENSSL_RANDOM_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
- PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = openssl
+-PERL_HTTP_MESSAGE_VERSION = 6.06
++PERL_HTTP_MESSAGE_VERSION = 6.11
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+-PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
++PERL_HTTP_MESSAGE_DEPENDENCIES = perl-encode-locale perl-http-date perl-io-html perl-lwp-mediatypes perl-uri
+ PERL_HTTP_MESSAGE_LICENSE = Artistic or GPLv1+
+-PERL_HTTP_MESSAGE_LICENSE_FILES = README
+-PERL_HTTP_MESSAGE_DEPENDENCIES = \
+-	perl-encode-locale \
+-	perl-http-date \
+-	perl-io-html \
+-	perl-lwp-mediatypes \
+-	perl-uri
++PERL_HTTP_MESSAGE_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
 -- 
 2.5.0
