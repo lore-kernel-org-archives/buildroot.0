@@ -1,49 +1,55 @@
-From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Sat, 24 Oct 2015 15:04:05 +0200
-Subject: [Buildroot] [PATCH 1/1] Revert "package/swupdate: add patch to fix
-	build issue with some toolchains"
-Message-ID: <1445691845-17624-1-git-send-email-bjorn.forsman@gmail.com>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Sat, 24 Oct 2015 15:16:52 +0200
+Subject: [Buildroot] [git commit] package/swupdate: add patch to fix
+ build issue with some toolchains
+In-Reply-To: <20151024122806.GA3632@free.fr>
+References: <20151019210337.3699681DEC@busybox.osuosl.org>
+ <CAEYzJUGe08AuhCFO4mdOywLQU2Wju=ZaEiFRbwmzGMdmAaNJ5g@mail.gmail.com>
+ <20151024122806.GA3632@free.fr>
+Message-ID: <CAEYzJUHSNkf1644CWs6u8bo8+q31G0bKmMBv1hj6rJXbsKfaPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch caused an unfortunate regression that prevents any handlers
-from being registered (runtime issue). This means swupdate cannot
-perform any update. Upstream has reverted it.
+Hi Yann,
 
-See discussion:
-https://groups.google.com/d/msg/swupdate/oVIhJmYPT8A/eq3uZvYVDQAJ
+On 24 October 2015 at 14:28, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Bj?rn, All,
+>
+> On 2015-10-24 14:01 +0200, Bj?rn Forsman spake thusly:
+>> This patch caused an unfortunate regression that prevents any handlers
+>> from being registered (runtime issue).
+>> This means it cannot perform any update. Upstream has reverted it.
+>>
+>> See discussion:
+>> https://groups.google.com/d/msg/swupdate/oVIhJmYPT8A/eq3uZvYVDQAJ
+>
+> Care to send a rever for it, please?
 
-This reverts commit a8cc6eeec5a665db5689083312beef14a9afbafa.
+Done.
 
-Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
----
- package/swupdate/swupdate.hash | 1 -
- package/swupdate/swupdate.mk   | 1 -
- 2 files changed, 2 deletions(-)
+> Also, if you can disable the package for the affected toolchains and/or
+> architectures, that would be great as well.
 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 96ebedf..eb7722c 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,4 +1,3 @@
- # Locally calculated
- sha256	1410f8967aad0f4d3b4561110dbfb2c1f8e337bdc332f6b120f4995762c8bf6b  swupdate-2015.07.tar.gz
--sha256	ec633171e6a893506fad6b96fb2b258d60a023c03be5520b968a1d5cc6bafe6e  c3467290925b2a833a68d9db12c198fdca752e32.patch
- sha256	6cffe115cad73c0d1095f7880b6d2b97fc12b7f7871f532e5b33717e863f03d7  5a5ef5909f5da5b2070d58ffaee924bb8e6a51e1.patch
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 68f6e2c..bcdc764 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -9,7 +9,6 @@ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPLv2+, MIT, Public Domain
- SWUPDATE_LICENSE_FILES = COPYING
- SWUPDATE_PATCH = \
--	https://github.com/sbabic/swupdate/commit/c3467290925b2a833a68d9db12c198fdca752e32.patch \
- 	https://github.com/sbabic/swupdate/commit/5a5ef5909f5da5b2070d58ffaee924bb8e6a51e1.patch
- 
- # swupdate bundles its own version of mongoose (version 3.8) and
--- 
-2.5.2
+That's more difficult: I'm not sure of the exact set is. I might
+disable too much.
+
+The original commit mentions these autobuild errors:
+
+http://autobuild.buildroot.net/results/de9/de920298075d32f3de83a0cfb7417846eb833425/
+http://autobuild.buildroot.net/results/975/975915aa33005806e78260bae385cd4b3e359ca8/
+http://autobuild.buildroot.net/results/c54/c54e7a2ea353d95d41a1e966de0dffa7b6ac432e/
+http://autobuild.buildroot.net/results/019/0198596ebfed05ab86552b628da2274d55bf42ae/
+
+but also say that there are "many more". I _think_ the commonality is
+BR2_MIPS_NABI64=y, but then again the commit message also mentions
+issues on x86-64, but I didn't see that in the above autobuild
+configs.
+
+> Thanks for the report! :-)
+
+No problem :-)
+
+- Bj?rn
