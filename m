@@ -1,52 +1,67 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 24 Oct 2015 23:00:48 +0200
-Subject: [Buildroot] [PATCH v5 08/36] package/efl/libefl: add libcurl
-	dependency
+Date: Sat, 24 Oct 2015 23:00:51 +0200
+Subject: [Buildroot] [PATCH v5 11/36] package/efl/libefl: add frame buffer
+	config option
 In-Reply-To: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445720476-21517-9-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445720476-21517-12-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Curl is listed as an dependency in the README:
-https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n453
+Add an config option to enable frame buffer support
+in the efl libraries.
+
+From the README [1]:
+This requires linux frame-buffer support, headers etc. This supports
+basic frame-buffers like /dev/fb as well as input via /dev/input for
+keyboards and mice in a basic way.
+
+[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n521
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
 v4: rename to libefl
+    improve commit log
 ---
- package/efl/libefl/Config.in | 1 +
- package/efl/libefl/libefl.mk | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/efl/libefl/Config.in | 5 +++++
+ package/efl/libefl/libefl.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 07aee42..29aef05 100644
+index c72ea7e..e25911f 100644
 --- a/package/efl/libefl/Config.in
 +++ b/package/efl/libefl/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_LIBEFL
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
-+	select BR2_PACKAGE_LIBCURL # eina_module, runtime dependency
- 	select BR2_PACKAGE_LUA # Evas lua 5.1 or 5.2
- 	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
- 	help
+@@ -37,6 +37,11 @@ config BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG
+ 	  otherwise we need to add a very long and obscure option
+ 	  to start the build.
+ 
++comment "libecore video support"
++
++config BR2_PACKAGE_LIBEFL_FB
++	bool "libecore framebuffer support"
++
+ comment "libevas loaders"
+ 
+ config BR2_PACKAGE_LIBEFL_PNG
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index c697e41..b26f848 100644
+index 9633630..3a4aab1 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -13,7 +13,8 @@ LIBEFL_LICENSE_FILES = COPYING
+@@ -166,6 +166,12 @@ else
+ LIBEFL_CONF_OPTS += --enable-wayland=no
+ endif
  
- LIBEFL_INSTALL_STAGING = YES
- 
--LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg lua udev zlib
-+LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg libcurl lua \
-+	udev zlib
- 
- # regenerate the configure script:
- # https://phab.enlightenment.org/T2718
++ifeq ($(BR2_PACKAGE_LIBEFL_FB),y)
++LIBEFL_CONF_OPTS += --enable-fb=yes
++else
++LIBEFL_CONF_OPTS += --enable-fb=no
++endif
++
+ # image loader: handle only loaders that requires dependencies.
+ # All other loaders are builded by default statically.
+ ifeq ($(BR2_PACKAGE_LIBEFL_PNG),y)
 -- 
 2.4.3
