@@ -1,55 +1,184 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sat, 24 Oct 2015 15:16:52 +0200
-Subject: [Buildroot] [git commit] package/swupdate: add patch to fix
- build issue with some toolchains
-In-Reply-To: <20151024122806.GA3632@free.fr>
-References: <20151019210337.3699681DEC@busybox.osuosl.org>
- <CAEYzJUGe08AuhCFO4mdOywLQU2Wju=ZaEiFRbwmzGMdmAaNJ5g@mail.gmail.com>
- <20151024122806.GA3632@free.fr>
-Message-ID: <CAEYzJUHSNkf1644CWs6u8bo8+q31G0bKmMBv1hj6rJXbsKfaPQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 24 Oct 2015 15:16:44 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/kodi-visualisation-goom: new
+	package
+Message-ID: <1445692605-5612-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: added hash, sent patch upstream, updated _LICENSE_FILES (Thomas)
+v2: rebased
 
-On 24 October 2015 at 14:28, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Bj?rn, All,
->
-> On 2015-10-24 14:01 +0200, Bj?rn Forsman spake thusly:
->> This patch caused an unfortunate regression that prevents any handlers
->> from being registered (runtime issue).
->> This means it cannot perform any update. Upstream has reverted it.
->>
->> See discussion:
->> https://groups.google.com/d/msg/swupdate/oVIhJmYPT8A/eq3uZvYVDQAJ
->
-> Care to send a rever for it, please?
+ Config.in.legacy                                   |  7 +++++
+ .../0001-cross-compile.patch                       | 32 ++++++++++++++++++++++
+ package/kodi-visualisation-goom/Config.in          | 10 +++++++
+ .../kodi-visualisation-goom.hash                   |  2 ++
+ .../kodi-visualisation-goom.mk                     | 14 ++++++++++
+ package/kodi/Config.in                             | 10 +------
+ package/kodi/kodi.mk                               |  7 +----
+ 7 files changed, 67 insertions(+), 15 deletions(-)
+ create mode 100644 package/kodi-visualisation-goom/0001-cross-compile.patch
+ create mode 100644 package/kodi-visualisation-goom/Config.in
+ create mode 100644 package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+ create mode 100644 package/kodi-visualisation-goom/kodi-visualisation-goom.mk
 
-Done.
-
-> Also, if you can disable the package for the affected toolchains and/or
-> architectures, that would be great as well.
-
-That's more difficult: I'm not sure of the exact set is. I might
-disable too much.
-
-The original commit mentions these autobuild errors:
-
-http://autobuild.buildroot.net/results/de9/de920298075d32f3de83a0cfb7417846eb833425/
-http://autobuild.buildroot.net/results/975/975915aa33005806e78260bae385cd4b3e359ca8/
-http://autobuild.buildroot.net/results/c54/c54e7a2ea353d95d41a1e966de0dffa7b6ac432e/
-http://autobuild.buildroot.net/results/019/0198596ebfed05ab86552b628da2274d55bf42ae/
-
-but also say that there are "many more". I _think_ the commonality is
-BR2_MIPS_NABI64=y, but then again the commit message also mentions
-issues on x86-64, but I didn't see that in the above autobuild
-configs.
-
-> Thanks for the report! :-)
-
-No problem :-)
-
-- Bj?rn
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c5b8223..617e689 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.11"
+ 
++config BR2_PACKAGE_KODI_GOOM
++	select BR2_LEGACY
++	bool "Goom support in Kodi was moved to an addon"
++	select BR2_PACKAGE_KODI_VISUALISATION_GOOM
++	help
++	  Goom support in Kodi was moved to an addon
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REAL
+ 	bool "gst1-plugins-bad real plugin has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/kodi-visualisation-goom/0001-cross-compile.patch b/package/kodi-visualisation-goom/0001-cross-compile.patch
+new file mode 100644
+index 0000000..8dd0fe9
+--- /dev/null
++++ b/package/kodi-visualisation-goom/0001-cross-compile.patch
+@@ -0,0 +1,32 @@
++Fix cross-compilation
++
++Use the cross-compiler and not the host version.
++
++Patch sent upstream:
++https://github.com/notspiff/visualization.goom/pull/4
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt
++--- visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt	2014-10-31 11:34:21.000000000 +0100
+++++ visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt	2015-07-19 19:49:43.340054342 +0200
++@@ -13,6 +13,10 @@
++                     ${KODI_INCLUDE_DIR}
++                     ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/src)
++ 
+++get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
+++string( REGEX REPLACE "-[^-]+$" ""
+++        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
+++
++ include(ExternalProject)
++ set(update_command "")
++ if(BOOTSTRAP_IN_TREE OR NOT DEFINED BOOTSTRAP_IN_TREE)
++@@ -20,7 +24,7 @@
++ endif()
++ externalproject_add(libgoom SOURCE_DIR ${PROJECT_SOURCE_DIR}/lib/goom2k4-0
++                     "${update_command}"
++-                    CONFIGURE_COMMAND ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/configure --disable-shared --enable-static --with-pic --prefix=<INSTALL_DIR>
+++                    CONFIGURE_COMMAND ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/configure --disable-shared --enable-static --with-pic --prefix=<INSTALL_DIR> --host=${TOOLCHAIN_NAME}
++                     BUILD_COMMAND ${MAKE}
++                     INSTALL_COMMAND "")
++ 
+diff --git a/package/kodi-visualisation-goom/Config.in b/package/kodi-visualisation-goom/Config.in
+new file mode 100644
+index 0000000..c1f1751
+--- /dev/null
++++ b/package/kodi-visualisation-goom/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_KODI_VISUALISATION_GOOM
++	bool "kodi-visualisation-goom"
++	depends on BR2_PACKAGE_KODI_GL
++	help
++	  GOOM visualiser for Kodi
++
++	  https://github.com/notspiff/visualization.goom
++
++comment "goom needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+new file mode 100644
+index 0000000..059613e
+--- /dev/null
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	388114b357b7e97ff39bc01f88e21b8c1ebb937b7b4d85583259d03492fe3077	kodi-visualisation-goom-98137474683e7a4e18c61cd3710ea4bfebad9759.tar.gz
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+new file mode 100644
+index 0000000..4ba9275
+--- /dev/null
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# kodi-visualisation-goom
++#
++################################################################################
++
++KODI_VISUALISATION_GOOM_VERSION = 98137474683e7a4e18c61cd3710ea4bfebad9759
++KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
++KODI_VISUALISATION_GOOM_LICENSE = GPLv2+
++KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
++
++KODI_VISUALISATION_GOOM_DEPENDENCIES = kodi
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 9d3ea6f..d8badd8 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -136,15 +136,6 @@ config BR2_PACKAGE_KODI_LIBBLURAY
+ comment "libbluray support needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+ 
+-config BR2_PACKAGE_KODI_GOOM
+-	bool "goom screensaver"
+-	depends on BR2_PACKAGE_KODI_GL
+-	help
+-	  Enable goom screensaver
+-
+-comment "goom needs an OpenGL backend"
+-	depends on !BR2_PACKAGE_KODI_GL
+-
+ config BR2_PACKAGE_KODI_RSXS
+ 	bool "rsxs screensaver"
+ 	depends on BR2_PACKAGE_KODI_GL
+@@ -306,6 +297,7 @@ menu "Screensavers"
+ endmenu
+ 
+ menu "Visualisations"
++	source "package/kodi-visualisation-goom/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
+ 	source "package/kodi-visualisation-waveforhue/Config.in"
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 46d8650..37b25f3 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -30,6 +30,7 @@ KODI_CONF_ENV = \
+ 
+ KODI_CONF_OPTS +=  \
+ 	--with-ffmpeg=shared \
++	--disable-goom \
+ 	--disable-joystick \
+ 	--disable-openmax \
+ 	--disable-projectm \
+@@ -116,12 +117,6 @@ KODI_CONF_OPTS += --disable-gles
+ endif
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_KODI_GOOM),y)
+-KODI_CONF_OPTS += --enable-goom
+-else
+-KODI_CONF_OPTS += --disable-goom
+-endif
+-
+ ifeq ($(BR2_PACKAGE_KODI_LIBUSB),y)
+ KODI_DEPENDENCIES += libusb-compat
+ KODI_CONF_OPTS += --enable-libusb
+-- 
+2.6.1
