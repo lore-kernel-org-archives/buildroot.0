@@ -1,32 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Oct 2015 10:49:22 +0200
-Subject: [Buildroot] [PATCH 2/2] uboot-tools: bump to 2015.10
-In-Reply-To: <1445676562-24568-1-git-send-email-peter@korsgaard.com>
-References: <1445676562-24568-1-git-send-email-peter@korsgaard.com>
-Message-ID: <1445676562-24568-2-git-send-email-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 24 Oct 2015 10:58:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: add hash
+Message-ID: <1445677095-12521-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uboot-tools/uboot-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I forgot to add the hash file in the 15.2 bump:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/130039
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 5a239ab..6e4d0ed 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2015.07
-+UBOOT_TOOLS_VERSION = 2015.10
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/kodi.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/kodi/kodi.hash
+
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+new file mode 100644
+index 0000000..14af9af
+--- /dev/null
++++ b/package/kodi/kodi.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	dd8aeb942e6de5d1488e243e1346cff3f6597e21b5131a3ba72ff5cc82037110	kodi-15.2-Isengard.tar.gz
 -- 
-2.1.4
+2.6.1
