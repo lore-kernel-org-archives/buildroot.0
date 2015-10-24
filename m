@@ -1,58 +1,142 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 24 Oct 2015 23:01:03 +0200
-Subject: [Buildroot] [PATCH v5 23/36] package/efl: libefl and libelementary
-	share the same version number
+Date: Sat, 24 Oct 2015 23:01:04 +0200
+Subject: [Buildroot] [PATCH v5 24/36] package/enlightenment: bump to version
+	0.19.12
 In-Reply-To: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445720476-21517-24-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445720476-21517-25-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Use the newly added libefl package wich provide a new version
+of efl libraries.
+This new version needs libelementary dependency.
+
+Update upstream url, add hash file and use xz archive.
+
+Select png and jpeg image loader since enlightenment_start
+fail at runtime if png and jpeg image loader are not
+available in elf libraries.
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/efl/efl.mk                         | 2 ++
- package/efl/libefl/libefl.mk               | 3 +--
- package/efl/libelementary/libelementary.mk | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
+    remove comment on dependencies
+v4: update Config.in to use libefl
+    improve commit log
+    keep the dependency on threads
+v3: bymp to 0.19.12
+    remove trailing slash (Vicente Bergas)
+v2: bump to 0.19.9
+    remove glibc only dependency
+---
+ package/enlightenment/Config.in          | 36 +++++++-------------------------
+ package/enlightenment/enlightenment.hash |  2 ++
+ package/enlightenment/enlightenment.mk   | 22 +++++++------------
+ 3 files changed, 17 insertions(+), 43 deletions(-)
+ create mode 100644 package/enlightenment/enlightenment.hash
 
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 99e4d14..151ac28 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -1,2 +1,4 @@
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 58f8f39..4a349fb 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -1,33 +1,16 @@
+ config BR2_PACKAGE_ENLIGHTENMENT
+ 	bool "enlightenment"
+-	select BR2_PACKAGE_EFL
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBECORE_X
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBEVAS_JPEG
+-	select BR2_PACKAGE_LIBEVAS_PNG
+-	select BR2_PACKAGE_LIBEVAS_EET
+-	select BR2_PACKAGE_LIBECORE_EVAS
+-	select BR2_PACKAGE_LIBEDJE
+-	select BR2_PACKAGE_LIBEFREET
+-	select BR2_PACKAGE_LIBEDBUS
+-	select BR2_PACKAGE_LIBEIO
+-	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
++	select BR2_PACKAGE_LIBEFL_X
++	select BR2_PACKAGE_LIBEFL_JPEG # needed at runtime by enlightenment_start
++	select BR2_PACKAGE_LIBEFL_PNG # needed at runtime by enlightenment_start
++	select BR2_PACKAGE_LIBELEMENTARY
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+-	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	# libedbus -> dbus
+-	# libedbus -> glib2, libevas
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# libedbus -> dbus, efl libraries
+-	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+ 	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
+ 	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_PACKAGE_EFL
++	depends on BR2_PACKAGE_XORG7
+ 	help
+ 	  Enlightenment, also known simply as E, is a stacking window
+ 	  manager for the X Window System which can be used alone or
+@@ -36,8 +19,3 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	  desktop environment.
  
-+EFL_VERSION = 1.15.2
-+
- include $(sort $(wildcard package/efl/*/*.mk))
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 8ddca64..6aaa08b 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -4,8 +4,7 @@
+ 	  http://www.enlightenment.org/
+-
+-comment "enlightenment needs a toolchain w/ wchar, C++, threads"
+-	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_ARCH_HAS_ATOMICS
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+new file mode 100644
+index 0000000..c9b1284
+--- /dev/null
++++ b/package/enlightenment/enlightenment.hash
+@@ -0,0 +1,2 @@
++# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
++sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index ddebe06..9127099 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,24 +4,18 @@
  #
  ################################################################################
  
--# hardcode the version here since the bump to 1.15 is not complete in Buildroot
--LIBEFL_VERSION = 1.15.2
-+LIBEFL_VERSION = $(EFL_VERSION)
- LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
- LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
- LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
-diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
-index 4ba8681..c920801 100644
---- a/package/efl/libelementary/libelementary.mk
-+++ b/package/efl/libelementary/libelementary.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-ENLIGHTENMENT_VERSION = 0.17.6
+-ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
++ENLIGHTENMENT_VERSION = 0.19.12
++ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
++ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2c
+ ENLIGHTENMENT_LICENSE_FILES = COPYING
  
--LIBELEMENTARY_VERSION = 1.15.2
-+LIBELEMENTARY_VERSION = $(EFL_VERSION)
- LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
- LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
- LIBELEMENTARY_LICENSE = LGPLv2.1
+-ENLIGHTENMENT_DEPENDENCIES = 	\
+-	host-pkgconf 		\
+-	libecore 		\
+-	libeet 			\
+-	libeina 		\
+-	libevas 		\
++ENLIGHTENMENT_DEPENDENCIES = \
++	host-pkgconf \
++	host-libefl \
++	libefl \
++	libelementary \
+ 	libevas-generic-loaders \
+-	libedje 		\
+-	libefreet 		\
+-	libedbus 		\
+-	libeio 			\
+-	host-libedje 		\
+-	host-libeet		\
+ 	xcb-util-keysyms
+ 
+ ENLIGHTENMENT_CONF_OPTS = \
 -- 
 2.4.3
