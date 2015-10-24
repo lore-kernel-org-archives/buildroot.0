@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Oct 2015 10:49:21 +0200
-Subject: [Buildroot] [PATCH 1/2] uboot: bump version to 2015.10
-Message-ID: <1445676562-24568-1-git-send-email-peter@korsgaard.com>
+Date: Sat, 24 Oct 2015 10:49:22 +0200
+Subject: [Buildroot] [PATCH 2/2] uboot-tools: bump to 2015.10
+In-Reply-To: <1445676562-24568-1-git-send-email-peter@korsgaard.com>
+References: <1445676562-24568-1-git-send-email-peter@korsgaard.com>
+Message-ID: <1445676562-24568-2-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Keep the 2015.07 patch so things still work for people using 2015.07.
-
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/uboot-tools/uboot-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 8643dab..b75006b 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -38,7 +38,7 @@ choice
- 	  Select the specific U-Boot version you want to use
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 5a239ab..6e4d0ed 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2015.07"
-+	bool "2015.10"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -83,7 +83,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2015.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2015.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+-UBOOT_TOOLS_VERSION = 2015.07
++UBOOT_TOOLS_VERSION = 2015.10
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPLv2+
 -- 
 2.1.4
