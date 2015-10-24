@@ -1,225 +1,254 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 24 Oct 2015 15:16:45 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/kodi-screensaver-rsxs: new
-	package
-In-Reply-To: <1445692605-5612-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1445692605-5612-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1445692605-5612-2-git-send-email-bernd.kuhls@t-online.de>
+From: =?UTF-8?B?0JLQvtC70LrQvtCyINCS0Y/Rh9C10YHQu9Cw0LI=?= <sv99@inbox.ru>
+Date: Sat, 24 Oct 2015 17:38:34 +0300
+Subject: [Buildroot]
+ =?utf-8?q?=5BPATCH=5D_br2-external_support_existing_p?=
+ =?utf-8?q?ackage_customization?=
+In-Reply-To: <20151023224115.GD3674@free.fr>
+References: <1445617505-16026-1-git-send-email-sv99@inbox.ru>
+ <20151023224115.GD3674@free.fr>
+Message-ID: <1445697514.888985483@f373.i.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove options BR2_PACKAGE_XLIB_XMU and BR2_PACKAGE_XLIB_XMU as
-well, they are not needed and never worked anyway due to typos ;)
+ This my first patch sended throu git send-mail. Excuse me my wary bad english.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: added hash, sent patch upstream, added license infos (Thomas)
-v2: rebased
+I have customized clone old version buildroot. Most packets not changed. Some additional packages - good solution for BR2_EXTERNAL.
 
- Config.in.legacy                                   |  7 ++++
- .../kodi-screensaver-rsxs/0001-cross-compile.patch | 37 ++++++++++++++++++++++
- package/kodi-screensaver-rsxs/Config.in            | 10 ++++++
- .../kodi-screensaver-rsxs.hash                     |  2 ++
- .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk | 14 ++++++++
- package/kodi/Config.in                             | 12 +------
- package/kodi/kodi.mk                               | 20 ++----------
- 7 files changed, 73 insertions(+), 29 deletions(-)
- create mode 100644 package/kodi-screensaver-rsxs/0001-cross-compile.patch
- create mode 100644 package/kodi-screensaver-rsxs/Config.in
- create mode 100644 package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
- create mode 100644 package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+Two packet have changed CONF_OPTS.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 617e689..bb9a20e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.11"
- 
-+config BR2_PACKAGE_KODI_RSXS
-+	select BR2_LEGACY
-+	bool "rsxs support in Kodi was moved to an addon"
-+	select BR2_PACKAGE_KODI_SCREENSAVER_RSXS
-+	help
-+	  rsxs support in Kodi was moved to an addon
-+
- config BR2_PACKAGE_KODI_GOOM
- 	select BR2_LEGACY
- 	bool "Goom support in Kodi was moved to an addon"
-diff --git a/package/kodi-screensaver-rsxs/0001-cross-compile.patch b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
-new file mode 100644
-index 0000000..56c2f4e
---- /dev/null
-+++ b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
-@@ -0,0 +1,37 @@
-+Fix cross-compilation
-+
-+Use the cross-compiler and not the host version.
-+
-+Patch sent upstream:
-+https://github.com/notspiff/screensavers.rsxs/pull/5
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLists.txt screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/CMakeLists.txt
-+--- screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLists.txt	2015-03-19 12:20:23.000000000 +0100
-++++ screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/CMakeLists.txt	2015-07-19 20:26:16.660481032 +0200
-+@@ -33,6 +33,11 @@
-+                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src/skyrocket
-+                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src/solarwinds)
-+                         
-++
-++get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
-++string( REGEX REPLACE "-[^-]+$" ""
-++        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
-++
-+ include(ExternalProject)
-+ set(update_command "")
-+ if(BOOTSTRAP_IN_TREE OR NOT DEFINED BOOTSTRAP_IN_TREE)
-+@@ -46,8 +51,11 @@
-+   endif()
-+ endif()
-+ externalproject_add(rsxs SOURCE_DIR ${PROJECT_SOURCE_DIR}/${rsxs_dir}
-+-                    CONFIGURE_COMMAND ${configure_start}
-++                    CONFIGURE_COMMAND gl_cv_func_gettimeofday_clobber=no
-++                                      ac_cv_func_malloc_0_nonnull=yes
-++                                      ${configure_start}
-+                                       --prefix=<INSTALL_DIR>
-++                                      --host=${TOOLCHAIN_NAME}
-+                                       --without-xscreensaver
-+                                       --disable-cyclone
-+                                       --disable-euphoria
-diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
-new file mode 100644
-index 0000000..4abebe5
---- /dev/null
-+++ b/package/kodi-screensaver-rsxs/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
-+	bool "kodi-screensaver-rsxs"
-+	depends on BR2_PACKAGE_KODI_GL # libglu
-+	help
-+	  RSXS screensaver add-ons for Kodi
-+
-+	  https://github.com/notspiff/screensavers.rsxs
-+
-+comment "rsxs needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-new file mode 100644
-index 0000000..44f1726
---- /dev/null
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	0797ffb720056ea2e04ac8b7ee4fc2dca1e42611ef138b347e928d8d7f3c696f	kodi-screensaver-rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.tar.gz
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-new file mode 100644
-index 0000000..c76e9da
---- /dev/null
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# kodi-screensaver-rsxs
-+#
-+################################################################################
-+
-+KODI_SCREENSAVER_RSXS_VERSION = 195e0ec3fbbcb2ee2012cd560e42d05167f0f259
-+KODI_SCREENSAVER_RSXS_SITE = $(call github,notspiff,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
-+KODI_SCREENSAVER_RSXS_LICENSE = GPLv3
-+KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
-+
-+KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index d8badd8..58d6f33 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -81,9 +81,7 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_TIFF
- 	select BR2_PACKAGE_TINYXML
- 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_KODI_GL
--	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
- 	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_KODI_GL
--	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
-@@ -136,15 +134,6 @@ config BR2_PACKAGE_KODI_LIBBLURAY
- comment "libbluray support needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 
--config BR2_PACKAGE_KODI_RSXS
--	bool "rsxs screensaver"
--	depends on BR2_PACKAGE_KODI_GL
--	help
--	  Enable goom screensaver
--
--comment "rsxs needs an OpenGL backend"
--	depends on !BR2_PACKAGE_KODI_GL
--
- config BR2_PACKAGE_KODI_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_STATIC_LIBS # libcec
-@@ -293,6 +282,7 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-greynetic/Config.in"
- 	source "package/kodi-screensaver-pingpong/Config.in"
- 	source "package/kodi-screensaver-pyro/Config.in"
-+	source "package/kodi-screensaver-rsxs/Config.in"
- 	source "package/kodi-screensaver-stars/Config.in"
- endmenu
- 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 37b25f3..4d8d0c1 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -35,6 +35,7 @@ KODI_CONF_OPTS +=  \
- 	--disable-openmax \
- 	--disable-projectm \
- 	--disable-pulse \
-+	--disable-rsxs \
- 	--disable-vdpau \
- 	--disable-vtbdecoder \
- 	--enable-optimizations
-@@ -89,24 +90,8 @@ ifeq ($(BR2_PACKAGE_KODI_GL),y)
- KODI_DEPENDENCIES += libglew libglu libgl xlib_libX11 xlib_libXext \
- 	xlib_libXmu xlib_libXrandr xlib_libXt libdrm
- KODI_CONF_OPTS += --enable-gl --enable-x11 --disable-gles
--ifeq ($(BR2_PACKAGE_KODI_RSXS),y)
--# fix rsxs compile
--# gcc5: http://trac.kodi.tv/ticket/16006#comment:6
--# make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
--KODI_CONF_ENV += \
--	ac_cv_type__Bool=yes \
--	jm_cv_func_gettimeofday_clobber=no \
--	mac_cv_pkg_png=$(STAGING_DIR)/usr/bin/libpng-config \
--	mac_cv_pkg_cppflags="`$(STAGING_DIR)/usr/bin/libpng-config --I_opts --cppflags`" \
--	mac_cv_pkg_cxxflags="`$(STAGING_DIR)/usr/bin/libpng-config --ccopts`" \
--	mac_cv_pkg_ldflags="`$(STAGING_DIR)/usr/bin/libpng-config --L_opts --R_opts`" \
--	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
--KODI_CONF_OPTS += --enable-rsxs
- else
--KODI_CONF_OPTS += --disable-rsxs
--endif
--else
--KODI_CONF_OPTS += --disable-gl --disable-rsxs --disable-x11
-+KODI_CONF_OPTS += --disable-gl --disable-x11
- ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
- KODI_DEPENDENCIES += libegl libgles
- KODI_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
-@@ -224,7 +209,6 @@ endef
- KODI_PRE_CONFIGURE_HOOKS += KODI_BOOTSTRAP
- 
- define KODI_CLEAN_UNUSED_ADDONS
--	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/screensaver.rsxs.plasma
- 	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.milkdrop
- 	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.projectm
- 	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.itunes
--- 
-2.6.1
+This solution for simple customization evailable packages. Add or remove single CONF params.
+
+Include not worked in the eval environment,? after $(eval $(generic-package)) in the make. Code in the included make will executed after eval fully executed - for customization purposes needs run code in the first lines generic-package macro!!
+
+My solution executed additional make lines readed from file in the special directory. 
+
+Version with git clone rtmp worked in old version and not changed, I simple tested working for this code. You version with NGINX_POST_EXTRACT_HOOKS looked wery well.
+
+In current version buildroot not allowed overload or tuning existing packages without patching original tree.
+
+Thanks
+
+
+>???????, 24 ??????? 2015, 0:41 +02:00 ?? "Yann E. MORIN" <yann.morin.1998@free.fr>:
+>
+>Volkov, All,
+>
+>Thanks you for your submission. :-)
+>
+>I have some concerns with it, please read on...
+>
+>On 2015-10-23 19:25 +0300, Volkov Viacheslav spake thusly:
+>> Tested on the pkg-generic.
+>> 
+>> BR2_PACKAGE_OVERLAY_DIR may be set as $(BR2_EXTERNAL)/package_overlay
+>>   pkgname1
+>>     pkgname1.mk
+>>   pkgname2
+>>     pkgname2.mk
+>
+>Even though I understand your reason for wanting this feature (but see
+>below for suggestion to solve it differently), I have to admit that I am
+>not sure we ultimately want that in Buildroot.
+>
+>It allows for too many opportunities to actually break things.
+>
+>For example, suppose that a package has a version in Buldroot:
+>
+>????FOO_VERSION = 1.2.3
+>
+>and an overlay overrides that to another version:
+>
+>????FOO_VERSION = 4.5.6
+>
+>which is totally different from the one known to Buildroot, like uses a
+>different build system (cmake instead of autotools).
+>
+>Surely, this will break horribly.
+>
+>And there are even worse sceanrios I can't even think of (well, I can, I
+>have a wicked mind ;-) ).
+>
+>Anyway, see below forsome comments nonetheless, about the implemenation...
+>
+>> Tested on the nginx package
+>> 
+>> nginx.mk
+>> # Test overlay package
+>> $(waning start overlay)
+>> define NGINX_POST_PATCH_FIXUP
+>> 	git clone https:/github.com/arut/nginx-rtmp-module.git $(@D)/rtmp
+>> endef
+>> NGINX_CONF_OPT += --add-module=$(@D)/rtmp
+>> $(warning NGINX_CONF_OPTS)
+>
+>There are a few issues with how you are doing this.
+>
+>First, the macro NGINX_POST_PATCH_FIXUP is never used; but I get that's
+>an omission in the commit log and you assigned it to a post-patch hook
+>in your tree.
+>
+>Second, it looks like it is a post-patch hook (looking at the name of
+>the macro). This is purely wrong, because we are not guaranteed to have
+>network access at that time. Only download commands and their pre and
+>post hooks are guaranteed to have network access. It's used by people
+>that do not have a continuous internet connection, so they can connect,
+>run 'make source' to get everything they need, and then disconnect.
+>
+>Third, this does not provide a reproducible build, since you always end
+>up using the lastest commit at the time of the clone, hence between two
+>builds, there is no guarantee you'd get the same result.
+>
+>Fourth, the licensing information is not updated to account for that new
+>body of code being dropped (but fortunately, both are BSD-2c). Still,
+>that code will not be part of the legal-info output.
+>
+>
+>However, the most obvious solution is to try and get something upstream
+>in Buildroot. I would suggest that you update the existing nginx
+>package, like so:
+>
+>??- in package/nginx/Config.in:
+>
+>????comment "external modules"
+>
+>????config BR2_PACKAGE_NGINX_RTMP_MODULE
+>????????bool "rtmp"
+>
+>??- in package/nginx/nginx.mk:
+>
+>????NGINX_RTMP_MODULE_VERSION = v1.1.7
+>????NGINX_RTMP_MODULE_SOURCE = nginx-rtmp-module-$(NGINX_RTMP_MODULE_VERSION).tar.gz
+>????NGINX_RTMP_MODULE_SITE = $(call github,arut,nginx-rtmp-module,$(NGINX_RTMP_MODULE_VERSION))
+>
+>????NGINX_EXTRA_DOWNLOADS = $(NGINX_RTMP_MODULE_SITE)/$(NGINX_RTMP_MODULE_SOURCE)
+>
+>????ifeq ($(BR2_PACKAGE_NGINX_RTMP_MODULE),y)
+>????define NGINX_RTMP_MODULE_EXTRACT
+>????????mkdir -p $(@D)/rtmp
+>????????$(call suitable-extractor,$(NGINX_RTMP_MODULE_SOURCE)) \
+>????????????$(DL_DIR)/$(NGINX_RTMP_MODULE_SOURCE) |\
+>????????????$(TAR) --strip-components=1 -C $(@D)/rtmp $(TAR_OPTIONS) -
+>????endef
+>????NGINX_POST_EXTRACT_HOOKS += NGINX_RTMP_MODULE_EXTRACT
+>????NGINX_CONF_OPTS += --add-module=$(@D)/rtmp
+>????endif # BR2_PACKAGE_NGINX_RTMP_MODULE
+>
+>
+>Alternatively, I guess the same can be achieved by putting that code
+>directly in a br2-external tree and including the files as-is. Since the
+>variables are expanded only at the moment they are needed, you can well
+>complement existing variables from a br2-external tree (even though that
+>is really ugly).
+>
+>
+>> # -= analog
+>> # _CONF_OPTS := $(filter-out option.$(_CONF_OPTS))
+>> 
+>> Signed-off-by: sv99 < sv99@inbox.ru >
+>
+>You must use your real name here.
+>
+>[--SNIP--]
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index ffef4d3..0617f78 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -341,6 +342,8 @@ endef
+>> 
+>>  define inner-generic-package
+>> 
+>> +$(eval $(call package-overlay,$(call qstrip,$(BR2_PACKAGE_OVERLAY_DIR)),$(1)/$(1).mk))
+>
+>Why not simply something like:
+>
+>????ifneq ($$(BR2_PACKAGE_OVERLAY_DIR),)
+>????-include $$(BR2_PACKAGE_OVERLAY_DIR)/$(1)/$(1).mk
+>????endif
+>
+>Notes:
+>??- the include directive starts with a dash '-', so that make will not
+>????complain if the included file does not exist;
+>??- the variable is double-dollared, because we're inside the -inner
+>????macro; read the text above it for explanations.
+>
+>This should be just enough, and would not need the weird macro with the
+>weird and convoluted perl stuff below.
+>
+>An alternative would be:
+>
+>????ifneq ($$(BR2_PACKAGE_OVERLAY_DIR),)
+>????ifneq ($$(wildcard $$(BR2_PACKAGE_OVERLAY_DIR)/$(1)/$(1).mk),)
+>????$$(warning Applying overlay for package $(1))
+>????include $$(BR2_PACKAGE_OVERLAY_DIR)/$(1)/$(1).mk
+>????endif
+>????endif
+>
+>Which still does not require the weird package-overlay macro and, as an
+>added bonus, warns the user about which package is being overlaid.
+>
+>>  # Define default values for various package-related variables, if not
+>>  # already defined. For some variables (version, source, site and
+>>  # subdir), if they are undefined, we try to see if a variable without
+>> @@ -895,6 +898,7 @@ endif
+>>  endif # $(2)_KCONFIG_VAR
+>>  endef # inner-generic-package
+>> 
+>> +
+>
+>Please avoid spurious empty lines like this (second occurence).
+>
+>>  ################################################################################
+>>  # generic-package -- the target generator macro for generic packages
+>>  ################################################################################
+>> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+>> index 44bd2c9..310a8a7 100644
+>> --- a/package/pkg-utils.mk
+>> +++ b/package/pkg-utils.mk
+>> @@ -150,3 +150,21 @@ define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
+>>  	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
+>>  	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
+>>  endef
+>> +
+>> +define newline
+>> +
+>> +
+>> +endef
+>
+>We already have $(newline); it called $(sep).
+>
+>> +newline-stub = __NEWLINE_STUB__
+>> +
+>> +# package-overlay -- load and eval makefile in place
+>> +# example:
+>> +#   $(eval $(call  package-overlay,$(call qstrip,$(BR2_PACKAGE_OVERLAY_DIR)),RELATIVE_PATH_TO_THE_FILE))
+>> +define package-overlay
+>> +ifneq ("$(1)","")
+>> +ifneq ($$(wildcard $(1)/$(2)),)
+>> +$$(eval $$(subst $$(newline-stub),$$(newline),$$(shell perl -p -e 's/\n/$$(newline-stub)/' $(1)/$(2))))
+>
+>Eeek! :-(
+>Seriously? :-/
+>
+>Regards,
+>Yann E. MORIN.
+>
+>-- 
+>.-----------------.--------------------.------------------.--------------------.
+>|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>|  http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+>'------------------------------^-------^------------------^--------------------'
+>_______________________________________________
+>buildroot mailing list
+>buildroot at busybox.net
+>http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+? ?????????, ?????? ????????!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151024/55fe8853/attachment.html>
