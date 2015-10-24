@@ -1,233 +1,59 @@
-From: Lennart Ramberg <ramberg.lennart@gmail.com>
-Date: Sat, 24 Oct 2015 08:45:45 +0200
-Subject: [Buildroot] X11: How do I prevent the target screen from going
- black after 10 minutes?
-In-Reply-To: <1339698879.1908456.1445601573094.JavaMail.zimbra@datacom.ind.br>
-References: <CAEzGmjCKbQKZWy0WfQaGGoqZgzJ6bjf+4jdZRinx2XLijCZ49A@mail.gmail.com>
- <CAEYzJUH2pcGaafwSJ4dEUY0uvf6a4FNYQ9B-bos6nbWvUSs8RA@mail.gmail.com>
- <CAEzGmjDZ00CTnksb035Jfo9N4-NO4vpUEkJOvf9qptyn-e3NSQ@mail.gmail.com>
- <2045148520.1576581.1445510546977.JavaMail.zimbra@datacom.ind.br>
- <CAEzGmjD5uKHocgH7cDJeXZWvw4eq0YeZfGgx6EHvb_kPf8NVZA@mail.gmail.com>
- <2097041356.1590443.1445512208008.JavaMail.zimbra@datacom.ind.br>
- <CAEzGmjA9FGvMgkpoDbPtcxZbosj4PdqCks_JiJ9hbhgZ_wTjyg@mail.gmail.com>
- <CAEzGmjCwfCgFWH=pWvz=B+kLTS4BUhCPb0efjru10HR4dLOm_g@mail.gmail.com>
- <1339698879.1908456.1445601573094.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <CAEzGmjAQp0MhDKukHf=-bxnd2zfBLw1qocUDYH6pxk_AXcUwVA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 24 Oct 2015 09:46:44 +0200
+Subject: [Buildroot] [PATCH 1/1] liblockfile: bump to version 1.0.9-6
+In-Reply-To: <1445640088-11832-1-git-send-email-james.knight@rockwellcollins.com>
+ (James Knight's message of "Fri, 23 Oct 2015 18:41:28 -0400")
+References: <1445640088-11832-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <87r3kkiu8r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you.
-Thereby solved.
-Regards
-Lennart
+>>>>> "James" == James Knight <james.knight@rockwellcollins.com> writes:
 
-On Fri, Oct 23, 2015 at 1:59 PM, Carlos Santos <casantos@datacom.ind.br>
-wrote:
+ > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+ > ---
+ >  package/liblockfile/liblockfile.hash | 6 +++---
+ >  package/liblockfile/liblockfile.mk   | 8 ++++----
+ >  2 files changed, 7 insertions(+), 7 deletions(-)
 
-> > From: "Lennart Ramberg" <ramberg.lennart@gmail.com>
-> > To: "Carlos Santos" <casantos@datacom.ind.br>
-> > Cc: "Bj?rn Forsman" <bjorn.forsman@gmail.com>, "buildroot" <
-> buildroot at busybox.net>
-> > Sent: Friday, October 23, 2015 7:17:29 AM
-> > Subject: Re: [Buildroot] X11: How do I prevent the target screen from
-> going black after 10 minutes?
->
-> > Me again,
-> > Sorry for jumping at the gun;
-> > A script could of course be run where I start my other programs.
->
-> > But still, any opinions about xset vs. xorg.conf?
-> > /Lennart
->
-> The effect is the same in both cases but if you need to disable
-> screensaver always and permanently then xorg.conf is the best choice, since
-> it can be done statically, at build time.
->
-> Carlos Santos (Casantos)
-> DATACOM, P&D
->
-> > On Fri, Oct 23, 2015 at 10:21 AM, Lennart Ramberg <
-> ramberg.lennart at gmail.com >
-> > wrote:
->
-> >> This worked:
-> >> # DISPLAY=:0 xset s off -dpms (Skipped consoleblank=0 in grub.cfg)
-> >> But it won't persist a restart.
->
-> >> I guess a script could run it after boot, alternativerly I could make an
-> >> xorg.conf.
-> >> How should Buildroot arrange such a script to be run automatically
-> after boot?
-> >> I assume avoiding xorg.conf would be more modern/better. Or?
->
-> >> Regards
-> >> Lennart
->
-> >> On Thu, Oct 22, 2015 at 1:10 PM, Carlos Santos <
-> casantos at datacom.ind.br >
-> >> wrote:
->
-> >>> ----- Original Message -----
-> >>> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
-> >>> > To: "Carlos Santos" < casantos@datacom.ind.br >
-> >>>> Cc: "Bj?rn Forsman" < bjorn.forsman@gmail.com >, "buildroot" <
-> >>> > buildroot at busybox.net >
-> >>> > Sent: Thursday, October 22, 2015 8:54:19 AM
-> >>>> Subject: Re: [Buildroot] X11: How do I prevent the target screen from
-> going
-> >>> > black after 10 minutes?
->
-> >>> > Thanks, however:
->
-> >>> > # xset q
-> >>> > -sh: xset: not found
->
-> >>> Sorry, I forgot to say that you need to select the xset package, under
->
-> >>> -> Target packages
-> >>> -> Graphic libraries and applications (graphic/text)
-> >>> -> X.org X Window System
-> >>> -> X11R7 Applications
->
-> >>> > And yes, it goes black.
->
-> >>> :-)
->
-> >>> > Regards
-> >>> > Lennart
->
-> >>> Carlos Santos (Casantos)
-> >>> DATACOM, P&D
->
-> >>> > On Thu, Oct 22, 2015 at 12:42 PM, Carlos Santos <
-> casantos at datacom.ind.br >
-> >>> > wrote:
->
-> >>> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
-> >>> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
-> >>> >> > Cc: "buildroot" < buildroot@busybox.net >
-> >>> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
-> >>> >> > Subject: Re: [Buildroot] X11: How do I prevent the target screen
-> from going
-> >>> >> > black after 10 minutes?
->
-> >>> >> > Thanks for the quick reply.
-> >>> >> > However, I had no success. Screen still blanks after 10 min
-> (unless keyb/mouse
-> >>> >> > activity).
-> >>> >> > I assume this is what you meant:
->
-> >>> >> > # cat /boot/grub/grub.cfg
-> >>> >> > set default="0"
-> >>> >> > set timeout="3"
->
-> >>> >> > menuentry "Buildroot" {
-> >>> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
-> >>> >> > }
->
-> >>> >> > Regards
-> >>> >> > Lennart
->
-> >>> >> Supposing that you are not running a screen saver daemon live
-> "xscreensaver", I
-> >>> >> guess the screen goes blank (black?) due to the X server itself,
-> not the Linux
-> >>> >> kernel. Try using
->
-> >>> >> $ xset q
->
-> >>> >> to display the screen saver timeout and
->
-> >>> >> $ xset s off
->
-> >>> >> to disable the screen saver.
->
-> >>> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
-> bjorn.forsman at gmail.com >
-> >>> >> > wrote:
->
-> >>> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
-> ramberg.lennart at gmail.com >
-> >>> >> >> wrote:
-> >>> >> >> > Hello,
->
-> >>> >> >> > Maybe not a proper Builroot question, but:
-> >>> >> >> > X11: How do I prevent the target screen from going black after
-> 10 minutes?
-> >>> >> >> > There is no xorg.conf (to edit the ServerFlags section).
-> >>> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
->
-> >>> >> >> Have you tried adding "consoleblank=0" to the kernel command
-> line? (I
-> >>> >> >> _think_ that should do it.)
->
-> >>> >> >> Best regards,
-> >>> >> >> Bj?rn Forsman
->
-> >>> >> > _______________________________________________
-> >>> >> > buildroot mailing list
-> >>> >> > buildroot at busybox.net
-> >>> >> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> >>> >> Carlos Santos (Casantos)
-> >>> >> DATACOM, P&D
->
-> >>> >> ----- Original Message -----
-> >>> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
-> >>> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
-> >>> >> > Cc: "buildroot" < buildroot@busybox.net >
-> >>> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
-> >>> >>> Subject: Re: [Buildroot] X11: How do I prevent the target screen
-> from going
-> >>> >> > black after 10 minutes?
->
-> >>> >> > Thanks for the quick reply.
-> >>> >> > However, I had no success. Screen still blanks after 10 min
-> (unless keyb/mouse
-> >>> >> > activity).
-> >>> >> > I assume this is what you meant:
->
-> >>> >> > # cat /boot/grub/grub.cfg
-> >>> >> > set default="0"
-> >>> >> > set timeout="3"
->
-> >>> >> > menuentry "Buildroot" {
-> >>> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
-> >>> >> > }
->
-> >>> >> > Regards
-> >>> >> > Lennart
->
-> >>> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
-> bjorn.forsman at gmail.com >
-> >>> >> > wrote:
->
-> >>> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
-> ramberg.lennart at gmail.com >
-> >>> >> >> wrote:
-> >>> >> >> > Hello,
->
-> >>> >> >> > Maybe not a proper Builroot question, but:
-> >>> >> >> > X11: How do I prevent the target screen from going black after
-> 10 minutes?
-> >>> >> >> > There is no xorg.conf (to edit the ServerFlags section).
-> >>> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
->
-> >>> >> >> Have you tried adding "consoleblank=0" to the kernel command
-> line? (I
-> >>> >> >> _think_ that should do it.)
->
-> >>> >> >> Best regards,
-> >>> >> >> Bj?rn Forsman
->
-> >>> >> > _______________________________________________
-> >>> >> > buildroot mailing list
-> >>> >> > buildroot at busybox.net
-> >>> >> > http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151024/256dbdf7/attachment.html>
+ > diff --git a/package/liblockfile/liblockfile.hash b/package/liblockfile/liblockfile.hash
+ > index 7f7ee7f..dbcc19e 100644
+ > --- a/package/liblockfile/liblockfile.hash
+ > +++ b/package/liblockfile/liblockfile.hash
+ > @@ -1,3 +1,3 @@
+ > -# From
+ > http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/libl/liblockfile/liblockfile_1.08-4.dsc
+ > -sha256	d63293d5091d7fdc0259563694e4d68771310dbc4e70e188e6b68e7a776405cb	liblockfile_1.08.orig.tar.gz
+ > -sha256
+ > e1343c37b83722abdaa1b5d98e1696748ca134ad36752b8affebebd51ef78468
+ > liblockfile_1.08-4.debian.tar.bz2
+ > +# From http://http.debian.net/debian/pool/main/libl/liblockfile/liblockfile_1.09-6.dsc
+ > +sha256	16979eba05396365e1d6af7100431ae9d32f9bc063930d1de66298a0695f1b7f	liblockfile_1.09.orig.tar.gz
+ > +sha256
+ > d45eacb7c637c16d03c777c55989d98da494ae9584a0783fe6dbf0db60fa290f
+ > liblockfile_1.09-6.debian.tar.bz2
+ > diff --git a/package/liblockfile/liblockfile.mk b/package/liblockfile/liblockfile.mk
+ > index 4f7a67e..b578022 100644
+ > --- a/package/liblockfile/liblockfile.mk
+ > +++ b/package/liblockfile/liblockfile.mk
+ > @@ -4,13 +4,13 @@
+ >  #
+ >  ################################################################################
+ 
+ > -LIBLOCKFILE_VERSION = 1.08
+ > +LIBLOCKFILE_VERSION = 1.09
+ >  LIBLOCKFILE_SOURCE = liblockfile_$(LIBLOCKFILE_VERSION).orig.tar.gz
+ > -LIBLOCKFILE_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/libl/liblockfile
+ > -LIBLOCKFILE_PATCH = liblockfile_$(LIBLOCKFILE_VERSION)-4.debian.tar.bz2
+ > +LIBLOCKFILE_SITE = http://http.debian.net/debian/pool/main/libl/liblockfile
+
+Will that URL stay valid? We normally use the snapshot.debian.org URLs
+the normal mirrors remove the tarballs once they move to a new version.
+
+Other than that the patch looks good.
+
+-- 
+Bye, Peter Korsgaard
