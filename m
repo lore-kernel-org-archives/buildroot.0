@@ -1,50 +1,58 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 24 Oct 2015 23:00:57 +0200
-Subject: [Buildroot] [PATCH v5 17/36] package/efl/libefl: add systemd
-	dependency
+Date: Sat, 24 Oct 2015 23:01:03 +0200
+Subject: [Buildroot] [PATCH v5 23/36] package/efl: libefl and libelementary
+	share the same version number
 In-Reply-To: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445720476-21517-18-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445720476-21517-24-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd it one of the "highly recommended" dependecies
-according to the README [1] but disabling it doesn't need
-the --enable-i-really-know-what-i-am-doing... option.
-That's why systemd is not added to
-BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
-
-[1] https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n491
-
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v4: rename to libefl
-    improve commit log
-v3: new patch
----
- package/efl/libefl/libefl.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/efl/efl.mk                         | 2 ++
+ package/efl/libefl/libefl.mk               | 3 +--
+ package/efl/libelementary/libelementary.mk | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 99e4d14..151ac28 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -1,2 +1,4 @@
+ 
++EFL_VERSION = 1.15.2
++
+ include $(sort $(wildcard package/efl/*/*.mk))
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 02c9005..c26c9c5 100644
+index 8ddca64..6aaa08b 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -52,6 +52,13 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
- LIBEFL_DEPENDENCIES += util-linux
- endif
+@@ -4,8 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+LIBEFL_CONF_OPTS += --enable-systemd
-+LIBEFL_DEPENDENCIES += systemd
-+else
-+LIBEFL_CONF_OPTS += --disable-systemd
-+endif
-+
- # If fontconfig is disabled, this is going to make general font
- # searching not work, and only some very direct 'load /path/file.ttf'
- # will work alongside some old-school ttf file path searching. This
+-# hardcode the version here since the bump to 1.15 is not complete in Buildroot
+-LIBEFL_VERSION = 1.15.2
++LIBEFL_VERSION = $(EFL_VERSION)
+ LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
+ LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
+diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
+index 4ba8681..c920801 100644
+--- a/package/efl/libelementary/libelementary.mk
++++ b/package/efl/libelementary/libelementary.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBELEMENTARY_VERSION = 1.15.2
++LIBELEMENTARY_VERSION = $(EFL_VERSION)
+ LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
+ LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
+ LIBELEMENTARY_LICENSE = LGPLv2.1
 -- 
 2.4.3
