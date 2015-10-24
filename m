@@ -1,142 +1,70 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 24 Oct 2015 23:01:04 +0200
-Subject: [Buildroot] [PATCH v5 24/36] package/enlightenment: bump to version
-	0.19.12
+Date: Sat, 24 Oct 2015 23:01:00 +0200
+Subject: [Buildroot] [PATCH v5 20/36] package/libevas-generic-loaders: add
+	libraw dependency
 In-Reply-To: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445720476-21517-25-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445720476-21517-21-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the newly added libefl package wich provide a new version
-of efl libraries.
-This new version needs libelementary dependency.
+libraw it's one of the "highly recommended" dependecies
+according to the README [1].
 
-Update upstream url, add hash file and use xz archive.
-
-Select png and jpeg image loader since enlightenment_start
-fail at runtime if png and jpeg image loader are not
-available in elf libraries.
+[1] https://git.enlightenment.org/core/evas_generic_loaders.git/tree/README?id=v1.15.0#n31
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
-    remove comment on dependencies
-v4: update Config.in to use libefl
-    improve commit log
-    keep the dependency on threads
-v3: bymp to 0.19.12
-    remove trailing slash (Vicente Bergas)
-v2: bump to 0.19.9
-    remove glibc only dependency
+v4: improve commit log
 ---
- package/enlightenment/Config.in          | 36 +++++++-------------------------
- package/enlightenment/enlightenment.hash |  2 ++
- package/enlightenment/enlightenment.mk   | 22 +++++++------------
- 3 files changed, 17 insertions(+), 43 deletions(-)
- create mode 100644 package/enlightenment/enlightenment.hash
+ package/libevas-generic-loaders/Config.in                  | 5 +++++
+ package/libevas-generic-loaders/libevas-generic-loaders.mk | 9 +++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index 58f8f39..4a349fb 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -1,33 +1,16 @@
- config BR2_PACKAGE_ENLIGHTENMENT
- 	bool "enlightenment"
--	select BR2_PACKAGE_EFL
--	select BR2_PACKAGE_LIBECORE
--	select BR2_PACKAGE_LIBECORE_X
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEET
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBEVAS_JPEG
--	select BR2_PACKAGE_LIBEVAS_PNG
--	select BR2_PACKAGE_LIBEVAS_EET
--	select BR2_PACKAGE_LIBECORE_EVAS
--	select BR2_PACKAGE_LIBEDJE
--	select BR2_PACKAGE_LIBEFREET
--	select BR2_PACKAGE_LIBEDBUS
--	select BR2_PACKAGE_LIBEIO
--	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
-+	select BR2_PACKAGE_LIBEFL_X
-+	select BR2_PACKAGE_LIBEFL_JPEG # needed at runtime by enlightenment_start
-+	select BR2_PACKAGE_LIBEFL_PNG # needed at runtime by enlightenment_start
-+	select BR2_PACKAGE_LIBELEMENTARY
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
--	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
--	depends on BR2_USE_WCHAR
--	depends on BR2_INSTALL_LIBSTDCPP
--	# libedbus -> dbus
--	# libedbus -> glib2, libevas
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# libedbus -> dbus, efl libraries
--	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
- 	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_PACKAGE_EFL
-+	depends on BR2_PACKAGE_XORG7
- 	help
- 	  Enlightenment, also known simply as E, is a stacking window
- 	  manager for the X Window System which can be used alone or
-@@ -36,8 +19,3 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	  desktop environment.
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index 5b9f009..26166a8 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -11,6 +11,11 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
  
- 	  http://www.enlightenment.org/
--
--comment "enlightenment needs a toolchain w/ wchar, C++, threads"
--	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--	depends on BR2_ARCH_HAS_ATOMICS
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-new file mode 100644
-index 0000000..c9b1284
---- /dev/null
-+++ b/package/enlightenment/enlightenment.hash
-@@ -0,0 +1,2 @@
-+# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
-+sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index ddebe06..9127099 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,24 +4,18 @@
- #
- ################################################################################
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
  
--ENLIGHTENMENT_VERSION = 0.17.6
--ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
-+ENLIGHTENMENT_VERSION = 0.19.12
-+ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
-+ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
- ENLIGHTENMENT_LICENSE_FILES = COPYING
++config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
++	bool "Libraw loader"
++	help
++	  This option enables the Evas generic Libraw loader
++
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+ 	select BR2_PACKAGE_LIBRSVG
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index d8ab252..4665ded 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -14,14 +14,19 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
  
--ENLIGHTENMENT_DEPENDENCIES = 	\
--	host-pkgconf 		\
--	libecore 		\
--	libeet 			\
--	libeina 		\
--	libevas 		\
-+ENLIGHTENMENT_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-libefl \
-+	libefl \
-+	libelementary \
- 	libevas-generic-loaders \
--	libedje 		\
--	libefreet 		\
--	libedbus 		\
--	libeio 			\
--	host-libedje 		\
--	host-libeet		\
- 	xcb-util-keysyms
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libefl zlib
  
- ENLIGHTENMENT_CONF_OPTS = \
+-# For now, we only support the SVG loader
+ # poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
+-	--disable-libraw \
+ 	--disable-gstreamer
+ 
++ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
++else
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
 -- 
 2.4.3
