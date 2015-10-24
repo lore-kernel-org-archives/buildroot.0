@@ -1,70 +1,71 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 24 Oct 2015 23:01:00 +0200
-Subject: [Buildroot] [PATCH v5 20/36] package/libevas-generic-loaders: add
-	libraw dependency
+Date: Sat, 24 Oct 2015 23:00:58 +0200
+Subject: [Buildroot] [PATCH v5 18/36] package/efl/libefl: add sdl2 support
 In-Reply-To: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445720476-21517-21-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445720476-21517-19-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libraw it's one of the "highly recommended" dependecies
-according to the README [1].
-
-[1] https://git.enlightenment.org/core/evas_generic_loaders.git/tree/README?id=v1.15.0#n31
+SDL support can't be used with OpenGLES.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v4: improve commit log
+v5: new patch added since sdl2 package is new available
 ---
- package/libevas-generic-loaders/Config.in                  | 5 +++++
- package/libevas-generic-loaders/libevas-generic-loaders.mk | 9 +++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ package/efl/libefl/Config.in |  7 +++++++
+ package/efl/libefl/libefl.mk | 11 +++++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-index 5b9f009..26166a8 100644
---- a/package/libevas-generic-loaders/Config.in
-+++ b/package/libevas-generic-loaders/Config.in
-@@ -11,6 +11,11 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index a3b6f0e..44860a2 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -42,6 +42,12 @@ comment "libecore video support"
+ config BR2_PACKAGE_LIBEFL_FB
+ 	bool "libecore framebuffer support"
  
- if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 
-+config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
-+	bool "Libraw loader"
-+	help
-+	  This option enables the Evas generic Libraw loader
++config BR2_PACKAGE_LIBEFL_SDL2
++	bool "libevas SDL2 support"
++	# SDL support is not available with OpenGLES.
++	depends on !BR2_PACKAGE_LIBEFL_X_XLIB_GLX_ES
++	select BR2_PACKAGE_SDL2
 +
- config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	bool "SVG loader"
- 	select BR2_PACKAGE_LIBRSVG
-diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-index d8ab252..4665ded 100644
---- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
-+++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-@@ -14,14 +14,19 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+ config BR2_PACKAGE_LIBEFL_X
+ 	bool "libecore X support"
+ 	depends on BR2_PACKAGE_XORG7
+@@ -89,6 +95,7 @@ choice
+ config BR2_PACKAGE_LIBEFL_X_XLIB_GLX_FULL
+ 	bool "libevas OpenGL full support"
+ 	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_LIBEFL_SDL2 # evas depends on libglu header in evas_engine.c
  
- LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libefl zlib
+ comment "libevas OpenGLES support needs libgl"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index c26c9c5..8ddca64 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -180,6 +180,17 @@ else
+ LIBEFL_CONF_OPTS += --enable-fb=no
+ endif
  
--# For now, we only support the SVG loader
- # poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
- LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
- 	--disable-poppler \
- 	--disable-spectre \
--	--disable-libraw \
- 	--disable-gstreamer
- 
-+ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
-+LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
-+LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
++ifeq ($(BR2_PACKAGE_LIBEFL_SDL2),y)
++LIBEFL_CONF_OPTS += --enable-sdl=yes
++LIBEFL_DEPENDENCIES += sdl2
 +else
-+LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
++LIBEFL_CONF_OPTS += --enable-sdl=no
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
- LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
- LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
++ifeq ($(BR2_PACKAGE_EFL_X_XLIB_GLX_FULL)$(BR2_PACKAGE_EFL_SDL2),yy)
++EFL_DEPENDENCIES += libglu
++endif
++
+ # --enable-xinput22 is recommended
+ ifeq ($(BR2_PACKAGE_LIBEFL_X),y)
+ LIBEFL_CONF_OPTS += --with-x=$(STAGING_DIR) \
 -- 
 2.4.3
