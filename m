@@ -1,66 +1,109 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 24 Oct 2015 23:00:45 +0200
-Subject: [Buildroot] [PATCH v5 05/36] package/efl/libefl: regenerate the
-	configure script
+Date: Sat, 24 Oct 2015 23:00:59 +0200
+Subject: [Buildroot] [PATCH v5 19/36] package/libevas-generic-loaders: bump
+	to version 1.15.0
 In-Reply-To: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1445720476-21517-6-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1445720476-21517-20-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Workaround a build issue with eldbus-codegen:
+Use the newly added libefl package wich provide a new version
+of libeina.
 
-  CCLD     bin/eldbus/eldbus-codegen
-  CXXLD    bin/eolian_cxx/eolian_cxx
-  CCLD     lib/ecore_x/ecore_x_vsync
-  CCLD     lib/evas/common/libevas_op_blend_sse3.la
-  CCLD     lib/evas/common/libevas_convert_rgb_32.la
-  CCLD     lib/ecore_ipc/libecore_ipc.la
-[...]/i686-ctng-linux-gnu/bin/ld: warning: libefl.so.1, needed by lib/ecore/.libs/libecore.so, not found (try using -rpath or -rpath-link)
-lib/ecore/.libs/libecore.so: undefined reference to `efl_control_suspend_set'
-lib/ecore/.libs/libecore.so: undefined reference to `efl_control_interface_get'
-collect2: error: ld returned 1 exit status
-Makefile:19135: recipe for target 'bin/eldbus/eldbus-codegen' failed
-make[6]: *** [bin/eldbus/eldbus-codegen] Error 1
+Also, update the upstream url and add a hash file.
 
-A dependency on libefl seems to be missing for eldbus but by
-regenerating eldbus-codegen build correctly.
-
-Reported upstream: https://phab.enlightenment.org/T2718
-
-Also, gettextize is needed since *.po files were generated with
-an "old" gettext version (0.18):
-
-Making all in po
-*** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.18 but the autoconf macros are from gettext version 0.19
-Makefile:149: recipe for target 'check-macro-version' failed
+While at it, remove BR2_TOOLCHAIN_HAS_THREADS and BR2_INSTALL_LIBSTDCPP
+dependencies since the efl package already depend on them.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
+v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
 v4: rename to libefl
-v3: fix gettextize
+    improve commit log
+    add a dependency on threads
+v3: remove trailing slash (Vicente Bergas)
+v2: bump to 1.15
+    remove glibc only dependency
 ---
- package/efl/libefl/libefl.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libevas-generic-loaders/Config.in                    | 9 +--------
+ package/libevas-generic-loaders/libevas-generic-loaders.hash | 2 ++
+ package/libevas-generic-loaders/libevas-generic-loaders.mk   | 9 +++++----
+ 3 files changed, 8 insertions(+), 12 deletions(-)
+ create mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.hash
 
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 781f397..609ae6a 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -15,6 +15,11 @@ LIBEFL_INSTALL_STAGING = YES
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index d0c3cf4..5b9f009 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	bool "libevas generic loaders"
+-	select BR2_PACKAGE_LIBEINA
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_PACKAGE_EFL
+ 	help
+@@ -8,7 +7,7 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	  stand-alone executables that evas may run from its generic
+ 	  loader module.
  
- LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg lua udev zlib
+-	  http://trac.enlightenment.org/e/wiki/Evas_Generic_Loaders
++	  https://www.enlightenment.org/
  
-+# regenerate the configure script:
-+# https://phab.enlightenment.org/T2718
-+LIBEFL_AUTORECONF = YES
-+LIBEFL_GETTEXTIZE = YES
-+
- # Configure options:
- # --disable-cxx-bindings: disable C++11 bindings.
- # --enable-lua-old: disable Elua and remove luajit dependency.
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 
+@@ -16,14 +15,8 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+ 	select BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_CAIRO
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
+-	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+ 	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	help
+ 	  This option enables the Evas generic SVG loader
+ 
+-comment "SVG loader needs a toolchain w/ threads, C++"
+-	depends on BR2_ARCH_HAS_ATOMICS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-
+ endif
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.hash b/package/libevas-generic-loaders/libevas-generic-loaders.hash
+new file mode 100644
+index 0000000..32723ba
+--- /dev/null
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.hash
+@@ -0,0 +1,2 @@
++# From https://download.enlightenment.org/rel/libs/evas_generic_loaders/evas_generic_loaders-1.15.0.tar.xz.sha256
++sha256	1e539e4d4d4e1590345caeb7fdd84f47ec7cd63bb76b6b7107a87420a401fd7f	evas_generic_loaders-1.15.0.tar.xz
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index ac6b1cc..d8ab252 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -4,17 +4,18 @@
+ #
+ ################################################################################
+ 
+-LIBEVAS_GENERIC_LOADERS_VERSION = 1.7.10
+-LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.bz2
+-LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/releases
++LIBEVAS_GENERIC_LOADERS_VERSION = 1.15.0
++LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.xz
++LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/rel/libs/evas_generic_loaders
+ LIBEVAS_GENERIC_LOADERS_LICENSE = GPLv2
+ LIBEVAS_GENERIC_LOADERS_LICENSE_FILES = COPYING
+ 
+ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+ 
+-LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libeina zlib
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libefl zlib
+ 
+ # For now, we only support the SVG loader
++# poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
 -- 
 2.4.3
