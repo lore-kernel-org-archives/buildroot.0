@@ -1,120 +1,233 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Oct 2015 08:30:15 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-10-23
-Message-ID: <20151024063015.AB9DB101CC2@stock.ovh.net>
+From: Lennart Ramberg <ramberg.lennart@gmail.com>
+Date: Sat, 24 Oct 2015 08:45:45 +0200
+Subject: [Buildroot] X11: How do I prevent the target screen from going
+ black after 10 minutes?
+In-Reply-To: <1339698879.1908456.1445601573094.JavaMail.zimbra@datacom.ind.br>
+References: <CAEzGmjCKbQKZWy0WfQaGGoqZgzJ6bjf+4jdZRinx2XLijCZ49A@mail.gmail.com>
+ <CAEYzJUH2pcGaafwSJ4dEUY0uvf6a4FNYQ9B-bos6nbWvUSs8RA@mail.gmail.com>
+ <CAEzGmjDZ00CTnksb035Jfo9N4-NO4vpUEkJOvf9qptyn-e3NSQ@mail.gmail.com>
+ <2045148520.1576581.1445510546977.JavaMail.zimbra@datacom.ind.br>
+ <CAEzGmjD5uKHocgH7cDJeXZWvw4eq0YeZfGgx6EHvb_kPf8NVZA@mail.gmail.com>
+ <2097041356.1590443.1445512208008.JavaMail.zimbra@datacom.ind.br>
+ <CAEzGmjA9FGvMgkpoDbPtcxZbosj4PdqCks_JiJ9hbhgZ_wTjyg@mail.gmail.com>
+ <CAEzGmjCwfCgFWH=pWvz=B+kLTS4BUhCPb0efjru10HR4dLOm_g@mail.gmail.com>
+ <1339698879.1908456.1445601573094.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <CAEzGmjAQp0MhDKukHf=-bxnd2zfBLw1qocUDYH6pxk_AXcUwVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-10-23
-===============================
+Thank you.
+Thereby solved.
+Regards
+Lennart
 
-        success : 141
-       failures : 54 
-       timeouts : 1  
-          TOTAL : 196
+On Fri, Oct 23, 2015 at 1:59 PM, Carlos Santos <casantos@datacom.ind.br>
+wrote:
 
-Classification of failures by reason
-====================================
-
-                   mplayer-1.2 | 7 
-                directfb-1.7.7 | 4 
-                   dvblast-3.0 | 3 
-                 sudo-1.8.14p3 | 3 
-              strongswan-5.3.3 | 2 
-                busybox-1.24.0 | 2 
-                 python3-3.4.3 | 2 
-             host-nodejs-4.1.2 | 2 
-                  ffmpeg-2.8.1 | 2 
-liquid-dsp-df5a459fa05dba41... | 2 
-               syslog-ng-3.7.1 | 1 
-                  connman-1.30 | 1 
-                libgsasl-1.8.0 | 1 
-               libgtk3-3.14.15 | 1 
-                  libv4l-1.8.0 | 1 
-                  qemu-2.4.0.1 | 1 
-                    webp-0.4.3 | 1 
-     openvmtools-stable-9.10.2 | 1 
-                    ruby-2.2.3 | 1 
-                    sdl-1.2.15 | 1 
-make[2]: *** wait: No child... | 1 
-                mongrel2-1.9.2 | 1 
-                  guile-2.0.11 | 1 
-           qt5multimedia-5.5.0 | 1 
-             python-spidev-3.0 | 1 
-                    kbd-1.15.5 | 1 
-                   mp4v2-2.0.0 | 1 
-                      qt-4.8.7 | 1 
-           libfreeimage-3.17.0 | 1 
-                collectd-5.5.0 | 1 
-                oprofile-1.0.0 | 1 
-                 fio-fio-2.1.4 | 1 
-               dvbsnoop-1.4.50 | 1 
-             lttng-tools-2.6.0 | 1 
-canfestival-7740ac6fdedc23e... | 1 
-                    ustr-1.0.4 | 1 
-
-Detail of failures
-===================
-
-       sparc |                 busybox-1.24.0 | NOK | http://autobuild.buildroot.net/results/a016498b09924fef5cd78bd9d8bc1a0829b92d71/
-       sparc |                 busybox-1.24.0 | NOK | http://autobuild.buildroot.net/results/b0f78b440638baa95347a97a7cc2868c30b17b36/
-         arm | canfestival-7740ac6fdedc23e... | NOK | http://autobuild.buildroot.net/results/e8bc26ae3d925f358c30b102ab4b259c015ae38d/
-      x86_64 |                 collectd-5.5.0 | NOK | http://autobuild.buildroot.net/results/87844100012a52a356eba9db7930566ff181529a/
-         arm |                   connman-1.30 | NOK | http://autobuild.buildroot.net/results/b97cab4bcda6aafac94b6f76f78129e2bbb9169d/
-        i686 |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/663b81d44fc39ab5bd09f92b15af22dfa6f913fd/
-         arm |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/ae05a2d52ff2a7264bdc4c7a0513b2f9870bf853/
-        i686 |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/041c1742e4016fd4f3f1e2ee7b7824ae25c934fc/
-      x86_64 |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/d2ccf611afd8dd6ab9e1296872163a0e7c09a18b/
-     powerpc |                    dvblast-3.0 | NOK | http://autobuild.buildroot.net/results/e088019958cdff72cb80787527756ba0c6c93d3a/
-      x86_64 |                    dvblast-3.0 | NOK | http://autobuild.buildroot.net/results/6af3abcdced1cc689a59fe11483f5cdcae0cfd38/
-         arm |                    dvblast-3.0 | NOK | http://autobuild.buildroot.net/results/584b088324f2723ecfd5c5f9a569bee0a4c4c31b/
-         arm |                dvbsnoop-1.4.50 | NOK | http://autobuild.buildroot.net/results/3a98ecba026236a214141663ac4f01bd25d37311/
-      x86_64 |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/c8be7ace3a28e6ee3de79ad34ea57f64dca20599/
-microblazeel |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/243b6af06f1759078eba9091dab6975a6c51ac5f/
-         arm |                  fio-fio-2.1.4 | NOK | http://autobuild.buildroot.net/results/56a0f25d525b5855acd2f0bb18e1d3bfa2c303e9/
-         arm |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/1d864588f71b8c13a67781cf91ad058c74eb7abc/
-      x86_64 |              host-nodejs-4.1.2 | NOK | http://autobuild.buildroot.net/results/b6104f9a7a9b8e6b890de6c4130a087eb4803415/
-      x86_64 |              host-nodejs-4.1.2 | NOK | http://autobuild.buildroot.net/results/2fb4c498e3fd854b94aced0ca60a0485246dc3de/
-         arm |                     kbd-1.15.5 | NOK | http://autobuild.buildroot.net/results/098b97f7bad0b24d10f8f21452f00211391a6264/
-         arm |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/e7838cc2eec86e441b0b10fc030147a689015a40/
-      x86_64 |                 libgsasl-1.8.0 | NOK | http://autobuild.buildroot.net/results/0c4866e59ab1126a379944a102e746e37dad52d3/
-     powerpc |                libgtk3-3.14.15 | NOK | http://autobuild.buildroot.net/results/5bf47650936124ae25cb4a9507a87ff68836312f/
-         sh4 |                   libv4l-1.8.0 | NOK | http://autobuild.buildroot.net/results/2b14cbcb18880b98163ff4ac66011a38f7722ad6/
-     powerpc | liquid-dsp-df5a459fa05dba41... | NOK | http://autobuild.buildroot.net/results/3dbe4f3690ad29bbd72e7e4047229cf07cdda580/
-     powerpc | liquid-dsp-df5a459fa05dba41... | NOK | http://autobuild.buildroot.net/results/9ded41685eb47024f5c45bc237a6fa8bdd908485/
-         arm |              lttng-tools-2.6.0 | NOK | http://autobuild.buildroot.net/results/19dadd591a042aa77b3aeb2141301a239385bfcc/
-microblazeel | make[2]: *** wait: No child... | TIM | http://autobuild.buildroot.net/results/d1fa4ea959a2a41481bac605758d907c755c936e/
-         arm |                 mongrel2-1.9.2 | NOK | http://autobuild.buildroot.net/results/d77d245ad501353037cde5610aad7566075b9f08/
-      xtensa |                    mp4v2-2.0.0 | NOK | http://autobuild.buildroot.net/results/ecca502d7c37524a30b090222620bfd614f1c802/
-         arm |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/23ef46f448f356cc95dfd40776463309f521b792/
-         sh4 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/c23f3bd6f631bcb00a25823e062f272c27a3bd39/
-     aarch64 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/76e0eb6caa2bd57dff24cfd091f37460c4f70608/
-         arm |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/e55292466d1d8e59a57b75996c5c48fad9f8cc11/
-      xtensa |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/aa7cff4faa02cfb9d9f4ad833ca47cbedc22d8bf/
-        i686 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/6611b95f765194046dec7c2a55e111b4b6b38fea/
-    mips64el |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/18e6e15b0bcec008e9e52ae5f348715b369e0f98/
-      x86_64 |      openvmtools-stable-9.10.2 | NOK | http://autobuild.buildroot.net/results/cbbd1c6fea77686da8c3d3cfc993beb7545219a7/
-     powerpc |                 oprofile-1.0.0 | NOK | http://autobuild.buildroot.net/results/1e89c87a704fc01f76f7334e5c03aedd4c4625ec/
-      x86_64 |              python-spidev-3.0 | NOK | http://autobuild.buildroot.net/results/f2ec7af840c1c2fc52347778ca2141c0bd99709f/
-         arm |                  python3-3.4.3 | NOK | http://autobuild.buildroot.net/results/149b3f33716e30649de09b0e7b4ac4f141d74785/
-         arm |                  python3-3.4.3 | NOK | http://autobuild.buildroot.net/results/91895f03cc02823d2d483e982084081a6d696f86/
-      mipsel |                   qemu-2.4.0.1 | NOK | http://autobuild.buildroot.net/results/33b034ad1a062629f263ec65e8b5938b88991809/
-      xtensa |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/05e2e2d6094cc03791a89a56f7ef5465cb47b1f4/
-         arm |            qt5multimedia-5.5.0 | NOK | http://autobuild.buildroot.net/results/c4859633ea06abebcb443c8cac402f83c7d22efc/
-      mipsel |                     ruby-2.2.3 | NOK | http://autobuild.buildroot.net/results/fab1902cd8660474c7b7fbcd208544874f756a24/
-         arm |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/2c9f5b5c00bc2bd3ce8bc265c2276de9a84e09a6/
-    mips64el |               strongswan-5.3.3 | NOK | http://autobuild.buildroot.net/results/d9608c9705e693686249b1ddc01d7da4d0a54894/
-    mips64el |               strongswan-5.3.3 | NOK | http://autobuild.buildroot.net/results/81e4027b568c18c4cfd9ccedfc64cf2157581f8e/
-         arm |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/adea6f8716f627f5a134b9435c0af0b4edbda8ec/
-         arm |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/9d413fc00112d6bbc8a30b99a12763bc7b9a5043/
-         arm |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/c9e3408ae2962dc2fdfe123b67d6988ffe493ae7/
-      xtensa |                syslog-ng-3.7.1 | NOK | http://autobuild.buildroot.net/results/9c8fc25cf63e4c51f7b6920577ecb0d86775528d/
-         arm |                     ustr-1.0.4 | NOK | http://autobuild.buildroot.net/results/8a5c65e538d6982e7416a809db04c50fe91ca55f/
-     aarch64 |                     webp-0.4.3 | NOK | http://autobuild.buildroot.net/results/6caaa969bd1ca5e706070430046f0e4da1e8d711/
-
-
--- 
-http://autobuild.buildroot.net
+> > From: "Lennart Ramberg" <ramberg.lennart@gmail.com>
+> > To: "Carlos Santos" <casantos@datacom.ind.br>
+> > Cc: "Bj?rn Forsman" <bjorn.forsman@gmail.com>, "buildroot" <
+> buildroot at busybox.net>
+> > Sent: Friday, October 23, 2015 7:17:29 AM
+> > Subject: Re: [Buildroot] X11: How do I prevent the target screen from
+> going black after 10 minutes?
+>
+> > Me again,
+> > Sorry for jumping at the gun;
+> > A script could of course be run where I start my other programs.
+>
+> > But still, any opinions about xset vs. xorg.conf?
+> > /Lennart
+>
+> The effect is the same in both cases but if you need to disable
+> screensaver always and permanently then xorg.conf is the best choice, since
+> it can be done statically, at build time.
+>
+> Carlos Santos (Casantos)
+> DATACOM, P&D
+>
+> > On Fri, Oct 23, 2015 at 10:21 AM, Lennart Ramberg <
+> ramberg.lennart at gmail.com >
+> > wrote:
+>
+> >> This worked:
+> >> # DISPLAY=:0 xset s off -dpms (Skipped consoleblank=0 in grub.cfg)
+> >> But it won't persist a restart.
+>
+> >> I guess a script could run it after boot, alternativerly I could make an
+> >> xorg.conf.
+> >> How should Buildroot arrange such a script to be run automatically
+> after boot?
+> >> I assume avoiding xorg.conf would be more modern/better. Or?
+>
+> >> Regards
+> >> Lennart
+>
+> >> On Thu, Oct 22, 2015 at 1:10 PM, Carlos Santos <
+> casantos at datacom.ind.br >
+> >> wrote:
+>
+> >>> ----- Original Message -----
+> >>> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
+> >>> > To: "Carlos Santos" < casantos@datacom.ind.br >
+> >>>> Cc: "Bj?rn Forsman" < bjorn.forsman@gmail.com >, "buildroot" <
+> >>> > buildroot at busybox.net >
+> >>> > Sent: Thursday, October 22, 2015 8:54:19 AM
+> >>>> Subject: Re: [Buildroot] X11: How do I prevent the target screen from
+> going
+> >>> > black after 10 minutes?
+>
+> >>> > Thanks, however:
+>
+> >>> > # xset q
+> >>> > -sh: xset: not found
+>
+> >>> Sorry, I forgot to say that you need to select the xset package, under
+>
+> >>> -> Target packages
+> >>> -> Graphic libraries and applications (graphic/text)
+> >>> -> X.org X Window System
+> >>> -> X11R7 Applications
+>
+> >>> > And yes, it goes black.
+>
+> >>> :-)
+>
+> >>> > Regards
+> >>> > Lennart
+>
+> >>> Carlos Santos (Casantos)
+> >>> DATACOM, P&D
+>
+> >>> > On Thu, Oct 22, 2015 at 12:42 PM, Carlos Santos <
+> casantos at datacom.ind.br >
+> >>> > wrote:
+>
+> >>> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
+> >>> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
+> >>> >> > Cc: "buildroot" < buildroot@busybox.net >
+> >>> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
+> >>> >> > Subject: Re: [Buildroot] X11: How do I prevent the target screen
+> from going
+> >>> >> > black after 10 minutes?
+>
+> >>> >> > Thanks for the quick reply.
+> >>> >> > However, I had no success. Screen still blanks after 10 min
+> (unless keyb/mouse
+> >>> >> > activity).
+> >>> >> > I assume this is what you meant:
+>
+> >>> >> > # cat /boot/grub/grub.cfg
+> >>> >> > set default="0"
+> >>> >> > set timeout="3"
+>
+> >>> >> > menuentry "Buildroot" {
+> >>> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
+> >>> >> > }
+>
+> >>> >> > Regards
+> >>> >> > Lennart
+>
+> >>> >> Supposing that you are not running a screen saver daemon live
+> "xscreensaver", I
+> >>> >> guess the screen goes blank (black?) due to the X server itself,
+> not the Linux
+> >>> >> kernel. Try using
+>
+> >>> >> $ xset q
+>
+> >>> >> to display the screen saver timeout and
+>
+> >>> >> $ xset s off
+>
+> >>> >> to disable the screen saver.
+>
+> >>> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
+> bjorn.forsman at gmail.com >
+> >>> >> > wrote:
+>
+> >>> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
+> ramberg.lennart at gmail.com >
+> >>> >> >> wrote:
+> >>> >> >> > Hello,
+>
+> >>> >> >> > Maybe not a proper Builroot question, but:
+> >>> >> >> > X11: How do I prevent the target screen from going black after
+> 10 minutes?
+> >>> >> >> > There is no xorg.conf (to edit the ServerFlags section).
+> >>> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
+>
+> >>> >> >> Have you tried adding "consoleblank=0" to the kernel command
+> line? (I
+> >>> >> >> _think_ that should do it.)
+>
+> >>> >> >> Best regards,
+> >>> >> >> Bj?rn Forsman
+>
+> >>> >> > _______________________________________________
+> >>> >> > buildroot mailing list
+> >>> >> > buildroot at busybox.net
+> >>> >> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> >>> >> Carlos Santos (Casantos)
+> >>> >> DATACOM, P&D
+>
+> >>> >> ----- Original Message -----
+> >>> >> > From: "Lennart Ramberg" < ramberg.lennart@gmail.com >
+> >>> >> > To: "Bj?rn Forsman" < bjorn.forsman@gmail.com >
+> >>> >> > Cc: "buildroot" < buildroot@busybox.net >
+> >>> >> > Sent: Thursday, October 22, 2015 5:44:17 AM
+> >>> >>> Subject: Re: [Buildroot] X11: How do I prevent the target screen
+> from going
+> >>> >> > black after 10 minutes?
+>
+> >>> >> > Thanks for the quick reply.
+> >>> >> > However, I had no success. Screen still blanks after 10 min
+> (unless keyb/mouse
+> >>> >> > activity).
+> >>> >> > I assume this is what you meant:
+>
+> >>> >> > # cat /boot/grub/grub.cfg
+> >>> >> > set default="0"
+> >>> >> > set timeout="3"
+>
+> >>> >> > menuentry "Buildroot" {
+> >>> >> > linux /boot/bzImage root=/dev/sda1 consoleblank=0
+> >>> >> > }
+>
+> >>> >> > Regards
+> >>> >> > Lennart
+>
+> >>> >> > On Wed, Oct 21, 2015 at 7:02 PM, Bj?rn Forsman <
+> bjorn.forsman at gmail.com >
+> >>> >> > wrote:
+>
+> >>> >> >> On 21 October 2015 at 18:59, Lennart Ramberg <
+> ramberg.lennart at gmail.com >
+> >>> >> >> wrote:
+> >>> >> >> > Hello,
+>
+> >>> >> >> > Maybe not a proper Builroot question, but:
+> >>> >> >> > X11: How do I prevent the target screen from going black after
+> 10 minutes?
+> >>> >> >> > There is no xorg.conf (to edit the ServerFlags section).
+> >>> >> >> > I was thinking maybe an overlay with an edited xorg.conf?
+>
+> >>> >> >> Have you tried adding "consoleblank=0" to the kernel command
+> line? (I
+> >>> >> >> _think_ that should do it.)
+>
+> >>> >> >> Best regards,
+> >>> >> >> Bj?rn Forsman
+>
+> >>> >> > _______________________________________________
+> >>> >> > buildroot mailing list
+> >>> >> > buildroot at busybox.net
+> >>> >> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151024/256dbdf7/attachment.html>
