@@ -1,57 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Oct 2015 15:09:19 +0100
-Subject: [Buildroot] [git commit] package/{mesa3d,
-	mesa3d-headers}: bump version to 11.0.4
-Message-ID: <20151025200324.DB37A81D82@busybox.osuosl.org>
+Date: Sun, 25 Oct 2015 21:00:41 +0100
+Subject: [Buildroot] [git commit] q5base: use TARGET_MAKE_ENV
+Message-ID: <20151025200324.E96BF8192A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3af2f6cddcdf9fccc6900b17cae8c15f3ee4fddf
+commit: http://git.buildroot.net/buildroot/commit/?id=81a6fb28799fd4ee535ec17929be3dbcba29f756
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+So our tools (E.G. pkg-config) in $(HOST_DIR) are found.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |    2 +-
- package/mesa3d/mesa3d.hash               |    4 ++--
- package/mesa3d/mesa3d.mk                 |    2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/qt5/qt5base/qt5base.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 76c681c..91f5fe8 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 570cd35..3d1ada4 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -173,6 +173,7 @@ endif
+ define QT5BASE_CONFIGURE_CMDS
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
+ 	(cd $(@D); \
++		$(TARGET_MAKE_ENV) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+@@ -196,11 +197,11 @@ define QT5BASE_CONFIGURE_CMDS
+ endef
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 11.0.3
-+MESA3D_HEADERS_VERSION = 11.0.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 334910b..5ac885f 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-September/000179.html
--sha256	ab2992eece21adc23c398720ef8c6933cb69ea42e1b2611dc09d031e17e033d6	mesa-11.0.3.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-October/000180.html
-+sha256	40201bf7fc6fa12a6d9edfe870b41eb4dd6669154e3c42c48a96f70805f5483d	mesa-11.0.4.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1714c48..1594489 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ define QT5BASE_BUILD_CMDS
+-	$(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 11.0.3
-+MESA3D_VERSION = 11.0.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+ define QT5BASE_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ 	$(QT5_LA_PRL_FILES_FIXUP)
+ endef
+ 
