@@ -1,67 +1,35 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 25 Oct 2015 20:33:56 +0100
-Subject: [Buildroot] [PATCH 4/4] beaglebone: adds barebox bootloader
-	defconfig
-In-Reply-To: <1445801636-7554-1-git-send-email-pieter@boesman.nl>
-References: <1445801636-7554-1-git-send-email-pieter@boesman.nl>
-Message-ID: <1445801636-7554-5-git-send-email-pieter@boesman.nl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 25 Oct 2015 21:02:59 +0100
+Subject: [Buildroot] [PATCH 1/2] qt5base: add optional gstreamer1 support
+In-Reply-To: <1445414790-16583-1-git-send-email-peter@korsgaard.com> (Peter
+ Korsgaard's message of "Wed, 21 Oct 2015 10:06:29 +0200")
+References: <1445414790-16583-1-git-send-email-peter@korsgaard.com>
+Message-ID: <8737wyiumk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Builds barebox x-loader (MLO) and the barebox bootloader.
-* Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
-  being generated with the kernel.
----
- configs/beaglebone_barebox_defconfig | 38 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 configs/beaglebone_barebox_defconfig
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/configs/beaglebone_barebox_defconfig b/configs/beaglebone_barebox_defconfig
-new file mode 100644
-index 0000000..d34a5bc
---- /dev/null
-+++ b/configs/beaglebone_barebox_defconfig
-@@ -0,0 +1,38 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_ARM_EABIHF=y
-+
-+# system
-+BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
-+
-+# filesystem
-+BR2_PACKAGE_AM33X_CM3=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.12.10"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
-+
-+# bootloader
-+BR2_TARGET_BAREBOX=y
-+BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="am335x"
-+BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE=y
-+BR2_TARGET_BAREBOX_IMAGE_FILE="barebox-am33xx-beaglebone.img"
-+BR2_TARGET_BAREBOX_XLOAD=y
-+BR2_TARGET_BAREBOX_XLOAD_BOARD_DEFCONFIG="am335x_mlo"
-+BR2_TARGET_BAREBOX_XLOAD_USE_SPECIFIC_IMAGE=y
-+BR2_TARGET_BAREBOX_XLOAD_IMAGE_FILE="barebox-am33xx-beaglebone-mlo.img"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_LATEST_VERSION=y
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_ZIMAGE=y
+ > Indirectly fixes:
+ > http://autobuild.buildroot.net/results/773/773d9996bd3da283eed6b75083b8bab6469d0423/
+ > http://autobuild.buildroot.net/results/069/069f564fde821b55e710fbe93fe30a5cf11a6da5/
+ > http://autobuild.buildroot.net/results/456/456d380f8b4478245e89f711c33fe0c2d23aaa3a/
+ > http://autobuild.buildroot.net/results/7c8/7c8ebfc93a5b11e40251495715d742520b3b8291/
+
+ > And many more, as qt5multimedia needs qt5base to be built with gstreamer1
+ > support as well.
+
+ > While qt5 has some gstreamer 0.10 support, it doesn't seem to be used much
+ > any more and E.G. the 0.10 fallback code in qt5multimedia is broken so only
+ > enable it for the 1.x series.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.1.4
+Venlig hilsen,
+Peter Korsgaard 
