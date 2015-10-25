@@ -1,65 +1,157 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 25 Oct 2015 20:21:07 +0100
-Subject: [Buildroot] [PATCH v5 02/36] package/libevas-generic-loaders:
- move to package directory
-In-Reply-To: <20151025125624.GD3665@free.fr>
+Date: Sun, 25 Oct 2015 20:24:53 +0100
+Subject: [Buildroot] [PATCH v5 03/36] package/efl/libefl: new
+	host-package
+In-Reply-To: <20151025131019.GE3665@free.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
- <1445720476-21517-3-git-send-email-romain.naour@openwide.fr>
- <20151025125624.GD3665@free.fr>
-Message-ID: <562D2BA3.9020203@openwide.fr>
+ <1445720476-21517-4-git-send-email-romain.naour@openwide.fr>
+ <20151025131019.GE3665@free.fr>
+Message-ID: <562D2C85.5060705@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+Yann, All,
 
-Le 25/10/2015 13:56, Yann E. MORIN a ?crit :
-> Romain, All,
-> 
+Le 25/10/2015 14:10, Yann E. MORIN a ?crit :
 > On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
->> As for expedite package, there is no advantage for efl related
->> packages to share the same version number anymore
->> (except for efl and libelementary).
+>> This new host-package provide edje_cc, embryo_cc and eet binaries
+>> that will be used by the upcomming libefl packages which will
+>> contain the new version of efl libraries.
 >>
->> Also, we usually do not have a sub-directory for a family of related
->> packages which doen't share the same version number, so move
->> libevas-generic-loaders to package directory.
->> Libevas-generic-loaders appear now in "Libraries" -> "Graphics" in
->> the Kconfig menu.
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>> v4: keep efl as a sub-directory.
+>>     rename this new package to libefl since we want to keep a efl
+>>     and elementary version in sync.
+>> v3: remove trailing slash (Vicente Bergas)
+>>     bump to 1.15.2
+>> ---
+>>  package/efl/libefl/libefl.hash |  2 ++
+>>  package/efl/libefl/libefl.mk   | 75 ++++++++++++++++++++++++++++++++++++++++++
+>>  2 files changed, 77 insertions(+)
+>>  create mode 100644 package/efl/libefl/libefl.hash
+>>  create mode 100644 package/efl/libefl/libefl.mk
 >>
->> While at it, remove BR2_USE_WCHAR dependency since the efl package
->> already depend on it.
+>> diff --git a/package/efl/libefl/libefl.hash b/package/efl/libefl/libefl.hash
+>> new file mode 100644
+>> index 0000000..7ac26f4
+>> --- /dev/null
+>> +++ b/package/efl/libefl/libefl.hash
+>> @@ -0,0 +1,2 @@
+>> +# From https://download.enlightenment.org/rel/libs/efl/efl-1.15.2.tar.xz.sha256
+>> +sha256	dd738f19f454621a7fa1fdb4c008457c170989f5f0c535edfed7b6773ae6c2a4	efl-1.15.2.tar.xz
+>> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+>> new file mode 100644
+>> index 0000000..4dca733
+>> --- /dev/null
+>> +++ b/package/efl/libefl/libefl.mk
+>> @@ -0,0 +1,75 @@
+>> +################################################################################
+>> +#
+>> +# libefl
+>> +#
+>> +################################################################################
+>> +
+>> +# hardcode the version here since the bump to 1.15 is not complete in Buildroot
+>> +LIBEFL_VERSION = 1.15.2
+>> +LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
+>> +LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
+>> +LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
+>> +LIBEFL_LICENSE_FILES = COPYING
 > 
-> Are you sure that libevas-generic-loaders does not itself depend on
-> wchar?
+> There are much more license files:
 > 
-> If it does, then please keep the dependency, even if it is automatically
-> inherited through the dependency on EFL. This is so, in case EFL loses
-> its dependency on wchar, libevas-generic-loaders would still have its
-> own.
+>     LIBEFL_LICENSE_FILES = \
+>         COPYING \
+>         licenses/COPYING.BSD \
+>         licenses/COPYING.FTL \
+>         licenses/COPYING.GPL \
+>         licenses/COPYING.LGPL \
+>         licenses/COPYING.SMALL
+> 
+> We may also want to add COMPLIANCE to this list, since it has a few
+> suggestions about legal info.
 
-libevas-generic-loaders doesn't use wchar by itself, it's a reverse dependency
-that come from librsvg which is required for svg support only.
-
-So, IIUC when a package A select a package B, we must propagate all reverse
-dependencies of the package B when the package A already depends on them
-implicitly (i.e when using a depends on BR2_PACKAGE_C).
-
-Also, in the libevas-generic-loaders bump I removed two other dependencies for
-the same reason (BR2_TOOLCHAIN_HAS_THREADS and BR2_INSTALL_LIBSTDCPP):
-http://lists.busybox.net/pipermail/buildroot/2015-October/142950.html
-
-Thoughts ?
+Thanks, I missed the directory licenses (I was looking for COPYING file).
+I'll add all of them.
 
 Best regards,
 Romain
-> 
-> If it is not needed, then:
-> 
->     Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 > 
 > Regards,
 > Yann E. MORIN.
+> 
+>> +################################################################################
+>> +#
+>> +# host-libefl
+>> +#
+>> +################################################################################
+>> +
+>> +# We want to build only some host tools used later in the build.
+>> +# Actually we want: edje_cc, embryo_cc and eet.
+>> +
+>> +# Host dependencies:
+>> +# * host-dbus: for Eldbus
+>> +# * host-freetype: for libevas
+>> +# * host-libglib2: for libecore
+>> +# * host-libjpeg, host-libpng: for libevas image loader
+>> +# * host-lua: disable luajit dependency
+>> +HOST_LIBEFL_DEPENDENCIES = \
+>> +	host-pkgconf \
+>> +	host-dbus \
+>> +	host-freetype \
+>> +	host-libglib2 \
+>> +	host-libjpeg \
+>> +	host-libpng \
+>> +	host-lua \
+>> +	host-zlib
+>> +
+>> +# Configure options:
+>> +# --disable-audio, --disable-multisense remove libsndfile dependency.
+>> +# --disable-cxx-bindings: disable C++11 bindings.
+>> +# --disable-fontconfig: remove dependency on fontconfig.
+>> +# --disable-fribidi: remove dependency on libfribidi.
+>> +# --disable-gstreamer1: remove dependency on gtreamer 1.0.
+>> +# --disable-libeeze: remove libudev dependency.
+>> +# --disable-libmount: remove dependency on host-util-linux libmount.
+>> +# --disable-physics: remove Bullet dependency.
+>> +# --enable-image-loader-gif=no: disable Gif dependency.
+>> +# --enable-image-loader-tiff=no: disable Tiff dependency.
+>> +# --enable-lua-old: disable Elua and remove luajit dependency.
+>> +# --with-crypto=none: remove dependencies on openssl or gnutls.
+>> +# --with-x11=none: remove dependency on X.org.
+>> +#   Yes I really know what I am doing.
+>> +HOST_LIBEFL_CONF_OPTS += \
+>> +	--disable-audio \
+>> +	--disable-cxx-bindings \
+>> +	--disable-fontconfig \
+>> +	--disable-fribidi \
+>> +	--disable-gstreamer1 \
+>> +	--disable-libeeze \
+>> +	--disable-libmount \
+>> +	--disable-multisense \
+>> +	--disable-physics \
+>> +	--enable-image-loader-gif=no \
+>> +	--enable-image-loader-jpeg=yes \
+>> +	--enable-image-loader-png=yes \
+>> +	--enable-image-loader-tiff=no \
+>> +	--enable-lua-old \
+>> +	--with-crypto=none \
+>> +	--with-glib=yes \
+>> +	--with-opengl=none \
+>> +	--with-x11=none \
+>> +	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
+>> +
+>> +$(eval $(host-autotools-package))
+>> -- 
+>> 2.4.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
