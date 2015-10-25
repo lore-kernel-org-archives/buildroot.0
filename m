@@ -1,55 +1,32 @@
-From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Sun, 25 Oct 2015 21:52:55 +0100
-Subject: [Buildroot] [PATCH] arch/arm: use EABIhf by default with VFP
-In-Reply-To: <87pp02heb2.fsf@dell.be.48ers.dk>
-References: <87k2qn6gf0.fsf@dell.be.48ers.dk>
- <1445786380-2741-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <877fmaixqa.fsf@dell.be.48ers.dk>
- <CA+sos7-joVOt2bNGPv31uM=t1CmfW=eCyTjHuH-qu2h25O=fSw@mail.gmail.com>
- <87pp02heb2.fsf@dell.be.48ers.dk>
-Message-ID: <CA+sos78tx8Yh4DKjwtHte7E7TuixNfTnT6QgFUy2ffN-iqKa-Q@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 25 Oct 2015 21:53:43 +0100
+Subject: [Buildroot] [PATCH] uclibc: update uClibc-ng to 1.0.8
+In-Reply-To: <20151024161801.GA25515@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Sat, 24 Oct 2015 18:18:01 +0200")
+References: <20151024161801.GA25515@waldemar-brodkorb.de>
+Message-ID: <874mhehdpk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 25, 2015 at 9:40 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Beno?t" == Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> writes:
->
->  > On Sun, Oct 25, 2015 at 7:55 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->  >>>>>>> "Beno?t" == Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> writes:
->  >>
->  >> > Set EABIhf as the default target ABI for the ARM processors that have or
->  >> > may have a VFP unit, since this ABI is the most efficient in that case.
->  >> > Of course, EABI can still be selected manually if needed.
->  >>
->  >> On a related note, should we default to thumb2 if the CPU supports it?
->
->  > I would say:
->
->  >     choice
->  >            prompt "ARM instruction set"
->  >            default BR2_ARM_INSTRUCTIONS_ARM if BR2_ARM_CPU_HAS_ARM
->  >            default BR2_ARM_INSTRUCTIONS_THUMBS2 if BR2_ARM_CPU_HAS_THUMBS2
->  >            default BR2_ARM_INSTRUCTIONS_THUMBS if BR2_ARM_CPU_HAS_THUMBS
->
-> I'm not sure it makes sense to default to thumb1 even if the CPU
-> supports it because of various compatibility issues
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-It's the first default that wins, not the last one, so above it's ARM
-over Thumb1.
+ > Fixes following problems:
+ > - mips64 toolchain building when UCLIBC_HAS_CONTEXT_FUNCS is enabled
+ > - segfault when SSP and NPTL is used for static binaries
+ > - Updates for ARC and Xtensa
+ > - missing syscalls for fanotify_init() and fanotify_mark() are added
+ > - support for the syncfs() system call added
+ > - problems compiling freeswitch are fixed
+ > - problems running LTP regarding fallocate are fixed
 
-> - So simply:
->
-> default BR2_ARM_INSTRUCTIONS_THUMBS2 if BR2_ARM_CPU_HAS_THUMBS2
->
-> (if no thumb2 is available, the first available option (ARM) is used).
+ > Tested with defconfigs for Qemu arm/ppc/sh/mips/x86/x86_64/xtensa.
 
-With ARM + Thumb2, I would rather use ARM to avoid compatibility
-issues, except on platforms very constrained on memory. On Cortex-M3,
-there's not even ARM. Or is it common to use Thumb2 on bigger
-platforms like Cortex-A*?
+ > Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
 
-Best regards,
-Beno?t
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
