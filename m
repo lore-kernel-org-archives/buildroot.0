@@ -1,68 +1,68 @@
-From: Ben Boeckel <mathstuf@gmail.com>
-Date: Sat, 24 Oct 2015 17:39:14 -0400
-Subject: [Buildroot] [PATCH 1/1] libcap: depend on host-attr for the host
-In-Reply-To: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
-References: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
-Message-ID: <1445722754-3477-2-git-send-email-mathstuf@gmail.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Sun, 25 Oct 2015 02:59:27 +0200
+Subject: [Buildroot] [PATCH v3 01/13] package/dhcp: fix SysV init scripts
+	option passing
+Message-ID: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a host-libcap is built, it is built without libattr support.
-However, libcap does not define some symbols based on this flag. This
-becomes a problem when a build-host tool is run (e.g., ls) which uses
-these symbols gets the host-libcap library via LD_LIBRARY_PATH.
+From: Beno?t Th?baudeau <benoit@wsystem.com>
 
-In order to define all of the symbols, add libattr support on the host.
-The RAISE_SETFCAP setting must also be disabled since the required
-permissions are not available during install.
+The SysV init scripts have configuration variables like INTERFACES whose
+contents have to be passed to the daemon. These variables are
+initialized as empty strings, but some of them are not allowed to be
+empty and there was no means of filling them apart from creating a root
+FS overlay to overwrite these scripts.
 
-Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+This commit adds support for files under /etc/default/ to set these
+configuration variables. Such light files can now be added to the root
+FS skeleton or overlays without having to duplicate most of the SysV
+init scripts.
+
+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+
 ---
- package/attr/attr.mk     | 1 +
- package/libcap/libcap.mk | 9 ++++-----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Changes v2 -> v3: none.
 
-diff --git a/package/attr/attr.mk b/package/attr/attr.mk
-index a66891b..7dac7cf 100644
---- a/package/attr/attr.mk
-+++ b/package/attr/attr.mk
-@@ -37,3 +37,4 @@ endef
- ATTR_POST_INSTALL_STAGING_HOOKS += ATTR_FIX_LIBTOOL_LA_LIBDIR
+Changes v1 -> v2:
+ - Rebase.
+---
+ package/dhcp/S80dhcp-relay  | 4 ++++
+ package/dhcp/S80dhcp-server | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/package/dhcp/S80dhcp-relay b/package/dhcp/S80dhcp-relay
+index 5ee06c7..0f383e6 100755
+--- a/package/dhcp/S80dhcp-relay
++++ b/package/dhcp/S80dhcp-relay
+@@ -13,6 +13,10 @@ INTERFACES=""
+ # Additional options that are passed to the DHCP relay daemon?
+ OPTIONS=""
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 54844f8..65057e5 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -20,8 +20,7 @@ else
- LIBCAP_HAVE_LIBATTR = no
- endif
++# Read configuration variable file if it is present
++CFG_FILE="/etc/default/dhcrelay"
++[ -r "${CFG_FILE}" ] && . "${CFG_FILE}"
++
+ # Sanity checks
+ test -f /usr/sbin/dhcrelay || exit 0
+ test -n "$INTERFACES" || exit 0
+diff --git a/package/dhcp/S80dhcp-server b/package/dhcp/S80dhcp-server
+index 3df14ff..f7907e2 100755
+--- a/package/dhcp/S80dhcp-server
++++ b/package/dhcp/S80dhcp-server
+@@ -7,6 +7,10 @@
+ #       Separate multiple interfaces with spaces, e.g. "eth0 eth1".
+ INTERFACES=""
  
--# we don't have host-attr
--HOST_LIBCAP_DEPENDENCIES =
-+HOST_LIBCAP_DEPENDENCIES = host-attr
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBCAP_MAKE_TARGET = libcap.a
-@@ -67,12 +66,12 @@ define LIBCAP_INSTALL_TARGET_CMDS
- endef
- 
- define HOST_LIBCAP_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
- define HOST_LIBCAP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) \
--		prefix=/usr lib=lib install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) \
-+		RAISE_SETFCAP=no prefix=/usr lib=lib install
- endef
- 
- $(eval $(generic-package))
++# Read configuration variable file if it is present
++CFG_FILE="/etc/default/dhcpd"
++[ -r "${CFG_FILE}" ] && . "${CFG_FILE}"
++
+ # Sanity checks
+ test -f /usr/sbin/dhcpd || exit 0
+ test -f /etc/dhcp/dhcpd.conf || exit 0
 -- 
-2.6.2
+2.1.4
