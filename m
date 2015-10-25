@@ -1,55 +1,90 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Oct 2015 12:52:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
-	mesa3d-headers}: bump version to 11.0.4
-Message-ID: <1445773955-12995-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Oct 2015 13:31:45 +0100
+Subject: [Buildroot] [PATCH v5 11/36] package/efl/libefl: add frame
+ buffer config option
+In-Reply-To: <1445720476-21517-12-git-send-email-romain.naour@openwide.fr>
+References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
+ <1445720476-21517-12-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151025123145.GA3665@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Romain, All,
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 76c681c..91f5fe8 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 11.0.3
-+MESA3D_HEADERS_VERSION = 11.0.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 334910b..5ac885f 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-September/000179.html
--sha256	ab2992eece21adc23c398720ef8c6933cb69ea42e1b2611dc09d031e17e033d6	mesa-11.0.3.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-October/000180.html
-+sha256	40201bf7fc6fa12a6d9edfe870b41eb4dd6669154e3c42c48a96f70805f5483d	mesa-11.0.4.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1714c48..1594489 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 11.0.3
-+MESA3D_VERSION = 11.0.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
+> Add an config option to enable frame buffer support
+> in the efl libraries.
+> 
+> From the README [1]:
+> This requires linux frame-buffer support, headers etc. This supports
+> basic frame-buffers like /dev/fb as well as input via /dev/input for
+> keyboards and mice in a basic way.
+> 
+> [1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n521
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> v4: rename to libefl
+>     improve commit log
+> ---
+>  package/efl/libefl/Config.in | 5 +++++
+>  package/efl/libefl/libefl.mk | 6 ++++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+> index c72ea7e..e25911f 100644
+> --- a/package/efl/libefl/Config.in
+> +++ b/package/efl/libefl/Config.in
+> @@ -37,6 +37,11 @@ config BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG
+>  	  otherwise we need to add a very long and obscure option
+>  	  to start the build.
+>  
+> +comment "libecore video support"
+> +
+> +config BR2_PACKAGE_LIBEFL_FB
+> +	bool "libecore framebuffer support"
+> +
+>  comment "libevas loaders"
+>  
+>  config BR2_PACKAGE_LIBEFL_PNG
+> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+> index 9633630..3a4aab1 100644
+> --- a/package/efl/libefl/libefl.mk
+> +++ b/package/efl/libefl/libefl.mk
+> @@ -166,6 +166,12 @@ else
+>  LIBEFL_CONF_OPTS += --enable-wayland=no
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBEFL_FB),y)
+> +LIBEFL_CONF_OPTS += --enable-fb=yes
+> +else
+> +LIBEFL_CONF_OPTS += --enable-fb=no
+> +endif
+> +
+>  # image loader: handle only loaders that requires dependencies.
+>  # All other loaders are builded by default statically.
+>  ifeq ($(BR2_PACKAGE_LIBEFL_PNG),y)
+> -- 
+> 2.4.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.6.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
