@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Oct 2015 17:43:16 +0100
-Subject: [Buildroot] [PATCH v5 28/36] package/efl/libembryo: remove
- package
-In-Reply-To: <1445720476-21517-29-git-send-email-romain.naour@openwide.fr>
+Date: Sun, 25 Oct 2015 17:44:17 +0100
+Subject: [Buildroot] [PATCH v5 29/36] package/efl/libeio: remove package
+In-Reply-To: <1445720476-21517-30-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
- <1445720476-21517-29-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151025164316.GZ11692@free.fr>
+ <1445720476-21517-30-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151025164417.GA11692@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,100 +14,111 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2015-10-24 23:01 +0200, Romain Naour spake thusly:
-> Libembryo is now available in efl package.
+> Libeio is now available in efl package.
 > 
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Same comment as libedje about the legacy comment.
+Again, still the same comment as for the previous removals.
 
 Regards,
 Yann E. MORIN.
 
 > ---
-> v5: remove libembryo directory
+> v5: remove libeio directory
 > v4: update Config.in to use libefl
 > v3: update legacy option for 2015.11
 >     update help text
 > ---
->  Config.in.legacy                   |  7 +++++++
->  package/efl/Config.in              |  1 -
->  package/efl/libembryo/Config.in    |  9 ---------
->  package/efl/libembryo/libembryo.mk | 18 ------------------
->  4 files changed, 7 insertions(+), 28 deletions(-)
->  delete mode 100644 package/efl/libembryo/Config.in
->  delete mode 100644 package/efl/libembryo/libembryo.mk
+>  Config.in.legacy             |  7 +++++++
+>  package/efl/Config.in        |  1 -
+>  package/efl/libeio/Config.in | 22 ----------------------
+>  package/efl/libeio/libeio.mk | 16 ----------------
+>  4 files changed, 7 insertions(+), 39 deletions(-)
+>  delete mode 100644 package/efl/libeio/Config.in
+>  delete mode 100644 package/efl/libeio/libeio.mk
 > 
 > diff --git a/Config.in.legacy b/Config.in.legacy
-> index 3349c50..e7e49e3 100644
+> index e7e49e3..feda47b 100644
 > --- a/Config.in.legacy
 > +++ b/Config.in.legacy
 > @@ -107,6 +107,13 @@ endif
 >  ###############################################################################
 >  comment "Legacy options removed in 2015.11"
 >  
-> +config BR2_PACKAGE_LIBEMBRYO
-> +	bool "libembryo package has been removed"
+> +config BR2_PACKAGE_LIBEIO
+> +	bool "libeio package has been removed"
 > +	select BR2_LEGACY
 > +	select BR2_PACKAGE_EFL
 > +	help
-> +	  The libembryo package has been removed with the efl bump to 1.15.
+> +	  The libeio package has been removed with the efl bump to 1.15.
 > +
->  config BR2_PACKAGE_LIBEDJE
->  	bool "libedje package has been removed"
+>  config BR2_PACKAGE_LIBEMBRYO
+>  	bool "libembryo package has been removed"
 >  	select BR2_LEGACY
 > diff --git a/package/efl/Config.in b/package/efl/Config.in
-> index 5a14192..31dc066 100644
+> index 31dc066..9d258eb 100644
 > --- a/package/efl/Config.in
 > +++ b/package/efl/Config.in
-> @@ -21,7 +21,6 @@ source "package/efl/libefl/Config.in"
+> @@ -19,7 +19,6 @@ source "package/efl/libecore/Config.in"
+>  source "package/efl/libeet/Config.in"
+>  source "package/efl/libefl/Config.in"
 >  source "package/efl/libefreet/Config.in"
->  source "package/efl/libeio/Config.in"
+> -source "package/efl/libeio/Config.in"
 >  source "package/efl/libevas/Config.in"
-> -source "package/efl/libembryo/Config.in"
 >  source "package/efl/libelementary/Config.in"
 >  source "package/efl/libedbus/Config.in"
->  
-> diff --git a/package/efl/libembryo/Config.in b/package/efl/libembryo/Config.in
+> diff --git a/package/efl/libeio/Config.in b/package/efl/libeio/Config.in
 > deleted file mode 100644
-> index 63c7064..0000000
-> --- a/package/efl/libembryo/Config.in
+> index 5b1e395..0000000
+> --- a/package/efl/libeio/Config.in
 > +++ /dev/null
-> @@ -1,9 +0,0 @@
-> -config BR2_PACKAGE_LIBEMBRYO
-> -	bool "libembryo"
+> @@ -1,22 +0,0 @@
+> -config BR2_PACKAGE_LIBEIO
+> -	bool "libeio"
+> -	select BR2_PACKAGE_LIBEET
 > -	select BR2_PACKAGE_LIBEINA
+> -	select BR2_PACKAGE_LIBECORE
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS
 > -	help
-> -	  Embryo is primarily a shared library that gives you an API
-> -	  to load and control interpreted programs compiled into an
-> -	  abstract machine bytecode that it understands.
+> -	  Eio integrates with EFL (Ecore, Eina) to provide efficient
+> -	  filesystem Input/Output (I/O). It use the best techniques to
+> -	  achieve such purpose, like using at-variants, splice,
+> -	  properly handling errors and doing it in an asynchronous
+> -	  fashion by means of worker threads. It is also ported to
+> -	  Windows, so multi-platform.
 > -
-> -	  http://trac.enlightenment.org/e/wiki/Embryo
-> diff --git a/package/efl/libembryo/libembryo.mk b/package/efl/libembryo/libembryo.mk
+> -	  Whenever you need to list a directory, copy, move or delete
+> -	  files, Eio will do that task better than you'd achieve with
+> -	  naive implementations, and it is easy to use.
+> -
+> -	  http://trac.enlightenment.org/e/wiki/Eio
+> -
+> -comment "libeio needs a toolchain w/ threads"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/efl/libeio/libeio.mk b/package/efl/libeio/libeio.mk
 > deleted file mode 100644
-> index fc45e42..0000000
-> --- a/package/efl/libembryo/libembryo.mk
+> index e687c32..0000000
+> --- a/package/efl/libeio/libeio.mk
 > +++ /dev/null
-> @@ -1,18 +0,0 @@
+> @@ -1,16 +0,0 @@
 > -################################################################################
 > -#
-> -# libembryo
+> -# libeio
 > -#
 > -################################################################################
 > -
-> -LIBEMBRYO_VERSION = 1.7.10
-> -LIBEMBRYO_SOURCE = embryo-$(LIBEMBRYO_VERSION).tar.bz2
-> -LIBEMBRYO_SITE = http://download.enlightenment.org/releases
-> -LIBEMBRYO_LICENSE = BSD-2c, Embryo license
-> -LIBEMBRYO_LICENSE_FILES = COPYING
+> -LIBEIO_VERSION = 1.7.10
+> -LIBEIO_SOURCE = eio-$(LIBEIO_VERSION).tar.bz2
+> -LIBEIO_SITE = http://download.enlightenment.org/releases
+> -LIBEIO_LICENSE = LGPLv2.1
+> -LIBEIO_LICENSE_FILES = COPYING
 > -
-> -LIBEMBRYO_INSTALL_STAGING = YES
-> -
-> -LIBEMBRYO_DEPENDENCIES = host-pkgconf libeina
+> -LIBEIO_INSTALL_STAGING = YES
+> -LIBEIO_DEPENDENCIES = libeina libeet libecore
 > -
 > -$(eval $(autotools-package))
-> -$(eval $(host-autotools-package))
 > -- 
 > 2.4.3
 > 
