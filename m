@@ -1,138 +1,139 @@
 From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 25 Oct 2015 20:33:54 +0100
-Subject: [Buildroot] [PATCH 2/4] barebox: adds option to build x-loader
+Date: Sun, 25 Oct 2015 20:33:55 +0100
+Subject: [Buildroot] [PATCH 3/4] barebox: user selection of build output
+	images
 In-Reply-To: <1445801636-7554-1-git-send-email-pieter@boesman.nl>
 References: <1445801636-7554-1-git-send-email-pieter@boesman.nl>
-Message-ID: <1445801636-7554-3-git-send-email-pieter@boesman.nl>
+Message-ID: <1445801636-7554-4-git-send-email-pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support selection of x-loader config, but version, source URL and patches are
-shared with barebox bootloader build.
+A non-default image can be selected as the barebox build output in the images/
+directory. This typically is needed to select the appropriate image generated
+by multi-platform support defconfigs (E.g. am335x).
 ---
- boot/barebox/Config.in                        | 47 +++++++++++++++++++++++++++
- boot/barebox/barebox-xload/barebox-xload.hash |  1 +
- boot/barebox/barebox-xload/barebox-xload.mk   | 44 +++++++++++++++++++++++++
- 3 files changed, 92 insertions(+)
- create mode 120000 boot/barebox/barebox-xload/barebox-xload.hash
- create mode 100644 boot/barebox/barebox-xload/barebox-xload.mk
+ boot/barebox/Config.in                      | 36 +++++++++++++++++++++++++++++
+ boot/barebox/barebox-boot/barebox-boot.mk   | 13 +++++++++--
+ boot/barebox/barebox-xload/barebox-xload.mk |  7 ++++++
+ 3 files changed, 54 insertions(+), 2 deletions(-)
 
 diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 437407d..3c0e52e 100644
+index 3c0e52e..a138507 100644
 --- a/boot/barebox/Config.in
 +++ b/boot/barebox/Config.in
-@@ -130,4 +130,51 @@ config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
+@@ -104,6 +104,24 @@ config BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
+ 	  A space-separated list of configuration fragment files,
+ 	  that will be merged to the main Barebox configuration file.
  
- endif
- 
-+config BR2_TARGET_BAREBOX_XLOAD
-+	bool "Build Barebox x-loader"
-+	help
-+	  Build the Barebox x-loader
-+
-+if BR2_TARGET_BAREBOX_XLOAD
-+
 +choice
-+	prompt "Barebox x-loader configuration"
-+	default BR2_TARGET_BAREBOX_XLOAD_USE_DEFCONFIG
++	prompt "Barebox image file"
++	default BR2_TARGET_BAREBOX_USE_DEFAULT_IMAGE
 +
-+config BR2_TARGET_BAREBOX_XLOAD_USE_DEFCONFIG
-+	bool "Using a x-loader defconfig"
++config BR2_TARGET_BAREBOX_USE_DEFAULT_IMAGE
++	bool "Using the default image file"
 +
-+config BR2_TARGET_BAREBOX_XLOAD_USE_CUSTOM_CONFIG
-+	bool "Using a custom x-loader config file"
++config BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE
++	bool "Using a specific image file"
 +
 +endchoice
 +
-+config BR2_TARGET_BAREBOX_XLOAD_BOARD_DEFCONFIG
-+	string "X-loader board defconfig"
-+	depends on BR2_TARGET_BAREBOX_XLOAD_USE_DEFCONFIG
++config BR2_TARGET_BAREBOX_IMAGE_FILE
++	string "Image file path"
++	depends on BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE
 +	help
-+	  Name of the board for which Barebox should be built, without
-+	  the _defconfig suffix.
++	  Name of the built barebox image file
 +
+ config BR2_TARGET_BAREBOX_BAREBOXENV
+ 	bool "bareboxenv tool in target"
+ 	help
+@@ -169,6 +187,24 @@ config BR2_TARGET_BAREBOX_XLOAD_CONFIG_FRAGMENT_FILES
+ 	  A space-separated list of configuration fragment files,
+ 	  that will be merged to the main Barebox configuration file.
+ 
++choice
++	prompt "Barebox x-loader image file"
++	default BR2_TARGET_BAREBOX_XLOAD_USE_DEFAULT_IMAGE
 +
-+config BR2_TARGET_BAREBOX_XLOAD_CUSTOM_CONFIG_FILE
-+	string "X-loader configuration file path"
-+	depends on BR2_TARGET_BAREBOX_XLOAD_USE_CUSTOM_CONFIG
++config BR2_TARGET_BAREBOX_XLOAD_USE_DEFAULT_IMAGE
++	bool "Using the default x-loader image file"
++
++config BR2_TARGET_BAREBOX_XLOAD_USE_SPECIFIC_IMAGE
++	bool "Using a specific x-loader image file"
++
++endchoice
++
++config BR2_TARGET_BAREBOX_XLOAD_IMAGE_FILE
++	string "X-loader image file path"
++	depends on BR2_TARGET_BAREBOX_XLOAD_USE_SPECIFIC_IMAGE
 +	help
-+	  Path to the barebox configuration file
++	  Name of the built x-loader barebox image file
 +
-+config BR2_TARGET_BAREBOX_XLOAD_CONFIG_FRAGMENT_FILES
-+	string "Additional x-loader configuration fragment files"
-+	help
-+	  A space-separated list of configuration fragment files,
-+	  that will be merged to the main Barebox configuration file.
-+
-+config BR2_TARGET_BAREBOX_XLOAD_INSTALL_FILENAME
-+	string "X-loader image filename when installed"
-+	default "MLO"
-+	help
-+	  Name to give the image in the output/images directory.
-+
+ config BR2_TARGET_BAREBOX_XLOAD_INSTALL_FILENAME
+ 	string "X-loader image filename when installed"
+ 	default "MLO"
+diff --git a/boot/barebox/barebox-boot/barebox-boot.mk b/boot/barebox/barebox-boot/barebox-boot.mk
+index a76a496..e1cde18 100644
+--- a/boot/barebox/barebox-boot/barebox-boot.mk
++++ b/boot/barebox/barebox-boot/barebox-boot.mk
+@@ -15,6 +15,7 @@ BAREBOX_BOOT_POST_PATCH_HOOKS += $(BAREBOX_POST_PATCH_HOOKS)
+ BAREBOX_BOOT_MAKE_FLAGS = $(BAREBOX_MAKE_FLAGS)
+ BAREBOX_BOOT_MAKE_ENV = $(BAREBOX_MAKE_ENV)
+ BAREBOX_BOOT_INSTALL_IMAGES = $(BAREBOX_INSTALL_IMAGES)
++BAREBOX_BOOT_INSTALL_DEST = $(BINARIES_DIR)/barebox.bin
+ 
+ ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
+ BAREBOX_BOOT_SOURCE_CONFIG = $(BAREBOX_BOOT_DIR)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,\
+@@ -54,14 +55,22 @@ define BAREBOX_BOOT_BUILD_CMDS
+ 	$(BAREBOX_BOOT_BUILD_CUSTOM_ENV)
+ endef
+ 
++ifdef BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE
++define BAREBOX_BOOT_INSTALL_IMAGES_CMDS
++	cp -L $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_IMAGE_FILE)) \
++		$(BAREBOX_BOOT_INSTALL_DEST)
++	$(BAREBOX_BOOT_INSTALL_CUSTOM_ENV)
++endef
++else
+ define BAREBOX_BOOT_INSTALL_IMAGES_CMDS
+ 	if test -h $(@D)/barebox-flash-image ; then \
+-		cp -L $(@D)/barebox-flash-image $(BINARIES_DIR)/barebox.bin ; \
++		cp -L $(@D)/barebox-flash-image $(BAREBOX_BOOT_INSTALL_DEST) ; \
+ 	else \
+-		cp $(@D)/barebox.bin $(BINARIES_DIR);\
++		cp $(@D)/barebox.bin $(BAREBOX_BOOT_INSTALL_DEST);\
+ 	fi
+ 	$(BAREBOX_BOOT_INSTALL_CUSTOM_ENV)
+ endef
 +endif
-+
- endif
-diff --git a/boot/barebox/barebox-xload/barebox-xload.hash b/boot/barebox/barebox-xload/barebox-xload.hash
-new file mode 120000
-index 0000000..b6462b8
---- /dev/null
-+++ b/boot/barebox/barebox-xload/barebox-xload.hash
-@@ -0,0 +1 @@
-+../barebox.hash
-\ No newline at end of file
+ 
+ ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+ define BAREBOX_BOOT_INSTALL_TARGET_CMDS
 diff --git a/boot/barebox/barebox-xload/barebox-xload.mk b/boot/barebox/barebox-xload/barebox-xload.mk
-new file mode 100644
-index 0000000..19bcc1c
---- /dev/null
+index 19bcc1c..9ab552a 100644
+--- a/boot/barebox/barebox-xload/barebox-xload.mk
 +++ b/boot/barebox/barebox-xload/barebox-xload.mk
-@@ -0,0 +1,44 @@
-+################################################################################
-+#
-+# barebox-xload
-+#
-+################################################################################
-+
-+BAREBOX_XLOAD_VERSION = $(BAREBOX_VERSION)
-+BAREBOX_XLOAD_SITE = $(BAREBOX_SITE)
-+BAREBOX_XLOAD_SITE_METHOD = $(BAREBOX_SITE_METHOD)
-+BAREBOX_XLOAD_SOURCE = $(BAREBOX_SOURCE)
-+BAREBOX_XLOAD_DEPENDENCIES = $(BAREBOX_DEPENDENCIES)
-+BAREBOX_XLOAD_LICENSE = $(BAREBOX_LICENSE)
-+BAREBOX_XLOAD_LICENSE_FILES = $(BAREBOX_LICENSE_FILES)
-+BAREBOX_XLOAD_POST_PATCH_HOOKS += $(BAREBOX_POST_PATCH_HOOKS)
-+BAREBOX_XLOAD_MAKE_FLAGS = $(BAREBOX_MAKE_FLAGS)
-+BAREBOX_XLOAD_MAKE_ENV = $(BAREBOX_MAKE_ENV)
-+BAREBOX_XLOAD_INSTALL_IMAGES = $(BAREBOX_INSTALL_IMAGES)
-+BAREBOX_XLOAD_INSTALL_DEST = $(BINARIES_DIR)/$(call qstrip,$(BR2_TARGET_BAREBOX_XLOAD_INSTALL_FILENAME))
-+
-+ifeq ($(BR2_TARGET_BAREBOX_XLOAD_USE_DEFCONFIG),y)
-+BAREBOX_XLOAD_SOURCE_CONFIG = $(BAREBOX_XLOAD_DIR)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,\
-+	$(BR2_TARGET_BAREBOX_XLOAD_BOARD_DEFCONFIG))_defconfig
-+else ifeq ($(BR2_TARGET_BAREBOX_XLOAD_USE_CUSTOM_CONFIG),y)
-+BAREBOX_XLOAD_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_XLOAD_CUSTOM_CONFIG_FILE))
-+endif
-+
-+BAREBOX_XLOAD_KCONFIG_FILE = $(BAREBOX_XLOAD_SOURCE_CONFIG)
-+BAREBOX_XLOAD_KCONFIG_FRAGMENT_FILES = $(BAREBOX_KCONFIG_FRAGMENT_FILES)
-+BAREBOX_XLOAD_KCONFIG_EDITORS = $(BAREBOX_KCONFIG_EDITORS)
-+BAREBOX_XLOAD_KCONFIG_OPTS = $(BAREBOX_MAKE_FLAGS)
-+
-+define BAREBOX_XLOAD_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_XLOAD_MAKE_FLAGS) -C $(@D)
-+endef
-+
+@@ -33,6 +33,12 @@ define BAREBOX_XLOAD_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_XLOAD_MAKE_FLAGS) -C $(@D)
+ endef
+ 
++ifdef BR2_TARGET_BAREBOX_XLOAD_USE_SPECIFIC_IMAGE
 +define BAREBOX_XLOAD_INSTALL_IMAGES_CMDS
-+	if test -h $(@D)/barebox-flash-image ; then \
-+		cp -L $(@D)/barebox-flash-image $(BAREBOX_XLOAD_INSTALL_DEST) ; \
-+	else \
-+		cp $(@D)/barebox.bin $(BAREBOX_XLOAD_INSTALL_DEST);\
-+	fi
++	cp -L $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_XLOAD_IMAGE_FILE)) \
++		$(BAREBOX_XLOAD_INSTALL_DEST)
 +endef
-+
-+$(eval $(kconfig-package))
++else
+ define BAREBOX_XLOAD_INSTALL_IMAGES_CMDS
+ 	if test -h $(@D)/barebox-flash-image ; then \
+ 		cp -L $(@D)/barebox-flash-image $(BAREBOX_XLOAD_INSTALL_DEST) ; \
+@@ -40,5 +46,6 @@ define BAREBOX_XLOAD_INSTALL_IMAGES_CMDS
+ 		cp $(@D)/barebox.bin $(BAREBOX_XLOAD_INSTALL_DEST);\
+ 	fi
+ endef
++endif
+ 
+ $(eval $(kconfig-package))
 -- 
 2.1.4
