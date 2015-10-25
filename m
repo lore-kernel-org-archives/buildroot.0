@@ -1,59 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Oct 2015 21:54:06 +0100
-Subject: [Buildroot] [git commit] perl-crypt-openssl-random: bump to version
-	0.11
-Message-ID: <20151025210816.24D00818C6@busybox.osuosl.org>
+Date: Sun, 25 Oct 2015 21:51:40 +0100
+Subject: [Buildroot] [git commit] uclibc: update uClibc-ng to 1.0.8
+Message-ID: <20151025210816.1F45581DF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af092802cf99070fb99c42911274747db71a03e2
+commit: http://git.buildroot.net/buildroot/commit/?id=1f8aaa37300808d2f7c6d8c6f48aa90caab24451
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes following problems:
+- mips64 toolchain building when UCLIBC_HAS_CONTEXT_FUNCS is enabled
+- segfault when SSP and NPTL is used for static binaries
+- Updates for ARC and Xtensa
+- missing syscalls for fanotify_init() and fanotify_mark() are added
+- support for the syncfs() system call added
+- problems compiling freeswitch are fixed
+- problems running LTP regarding fallocate are fixed
+
+Tested with defconfigs for Qemu arm/ppc/sh/mips/x86/x86_64/xtensa.
+
+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-crypt-openssl-random/Config.in        |    3 +--
- .../perl-crypt-openssl-random.hash                 |    4 ++--
- .../perl-crypt-openssl-random.mk                   |    2 +-
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/uclibc/Config.in   |    2 +-
+ package/uclibc/uclibc.hash |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-crypt-openssl-random/Config.in b/package/perl-crypt-openssl-random/Config.in
-index 2095cac..2ceb78d 100644
---- a/package/perl-crypt-openssl-random/Config.in
-+++ b/package/perl-crypt-openssl-random/Config.in
-@@ -3,8 +3,7 @@ config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_OPENSSL
- 	help
--	  Routines for accessing the OpenSSL pseudo-random number generator
--	  using the openSSL libraries
-+	  OpenSSL/LibreSSL pseudo-random number generator access
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 2e10af7..ff6dffd 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -65,7 +65,7 @@ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
+ 	default "arc-2015.06" if BR2_UCLIBC_VERSION_ARC_GIT
+-	default "1.0.6"		if BR2_UCLIBC_VERSION_NG
++	default "1.0.8"		if BR2_UCLIBC_VERSION_NG
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
  
- 	  http://sourceforge.net/projects/perl-openssl/
+ config BR2_UCLIBC_CONFIG
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 6cd76dd..d9931a9 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -2,7 +2,7 @@
+ sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
  
-diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
-index 2de6547..caacdc9 100644
---- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
-+++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    b89ca9314c3a066b440a7bb3cb8d725d Crypt-OpenSSL-Random-0.10.tar.gz
--sha256 ae65d0ab6907edd1d67f87fdf0923ecae4d54c4c2e0ac9d9df97227903ccf18a Crypt-OpenSSL-Random-0.10.tar.gz
-+md5    5d71337503e0356ce1ce1481504e5885 Crypt-OpenSSL-Random-0.11.tar.gz
-+sha256 bb8c81c6a39b9b13a22d818ee9a746242f136f0fadceb6b9776ae615e7524c7a Crypt-OpenSSL-Random-0.11.tar.gz
-diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
-index 32c0a03..6152821 100644
---- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
-+++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # From http://www.uclibc-ng.org/
+-sha256  afb2ec318fe5b115165e3fdc22964a2fd2b68e03a652ac36164ed096b4bb795c        uClibc-ng-1.0.6.tar.xz
++sha256  11575cda78681713f5a36cf35deaae93acdc7dce463d38a12902991fb7f5312a        uClibc-ng-1.0.8.tar.xz
  
--PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.10
-+PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.11
- PERL_CRYPT_OPENSSL_RANDOM_SOURCE = Crypt-OpenSSL-Random-$(PERL_CRYPT_OPENSSL_RANDOM_VERSION).tar.gz
- PERL_CRYPT_OPENSSL_RANDOM_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
- PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = openssl
+ # No hash for the ARC variant, comes from the github-helper
+ none	xxx	uClibc-arc-2015.06.tar.gz
