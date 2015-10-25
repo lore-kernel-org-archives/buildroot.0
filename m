@@ -1,51 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Oct 2015 22:30:34 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-bad: add x265 plugin
-Message-ID: <20151025213049.248FF8047F@busybox.osuosl.org>
+Date: Sun, 25 Oct 2015 22:12:10 +0100
+Subject: [Buildroot] [git commit] libnl: bump to version 3.2.27
+Message-ID: <20151025213049.14BEB818D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9d1d56426edebec8c751ddc8a5dfbc7dee58f9c
+commit: http://git.buildroot.net/buildroot/commit/?id=77a30a05caf9b07e5e9b6bf797f270e576940388
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thijs Vermeir <thijsvermeir@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in      |    7 ++++++-
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |    2 ++
- 2 files changed, 8 insertions(+), 1 deletions(-)
+ package/libnl/libnl.hash |    4 ++--
+ package/libnl/libnl.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index a28243b..26a963e 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -635,7 +635,12 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index 9ce5ffe..2f1a3cb 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
+@@ -1,2 +1,2 @@
+-# From https://github.com/thom311/libnl/releases/download/libnl3_2_26/libnl-3.2.26.tar.gz.sha256sum
+-sha256	1323ff6cea47efe9f988893b09840942a8c36131f472a9f3b96eb68d8f8d7555	libnl-3.2.26.tar.gz
++# From https://github.com/thom311/libnl/releases/download/libnl3_2_27/libnl-3.2.27.tar.gz.sha256sum
++sha256	4bbbf92b3c78a90f423cf96260bf419a28b75db8cced47051217a56795f58ec6	libnl-3.2.27.tar.gz
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 5993e97..85c0db8 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
- 	bool "x265"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_X265
- 	help
--	  x265 plugin
-+	  x265 encoding plugin
-+
-+comment "x265 needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
- 
- endif
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index fe5f242..1c42a60 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -760,6 +760,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-x265
-+GST1_PLUGINS_BAD_DEPENDENCIES += x265
-+GST1_PLUGINS_BAD_HAS_GPL_LICENSE = y
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-x265
- endif
+-LIBNL_VERSION = 3.2.26
++LIBNL_VERSION = 3.2.27
+ LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
+ LIBNL_LICENSE = LGPLv2.1+
+ LIBNL_LICENSE_FILES = COPYING
