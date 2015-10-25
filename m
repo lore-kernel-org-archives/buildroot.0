@@ -1,48 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Oct 2015 21:24:36 +0100
-Subject: [Buildroot] [git commit] avahi: drop unneeded avahi-autopid patch
-Message-ID: <20151025202516.43B1A807EC@busybox.osuosl.org>
+From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Sun, 25 Oct 2015 21:27:36 +0100
+Subject: [Buildroot] [PATCH] arch/arm: use EABIhf by default with VFP
+In-Reply-To: <877fmaixqa.fsf@dell.be.48ers.dk>
+References: <87k2qn6gf0.fsf@dell.be.48ers.dk>
+ <1445786380-2741-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <877fmaixqa.fsf@dell.be.48ers.dk>
+Message-ID: <CA+sos7-joVOt2bNGPv31uM=t1CmfW=eCyTjHuH-qu2h25O=fSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8a8378696634b9a93ecf21f567961b6402b2c9ea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, Oct 25, 2015 at 7:55 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Beno?t" == Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> writes:
+>
+>  > Set EABIhf as the default target ABI for the ARM processors that have or
+>  > may have a VFP unit, since this ABI is the most efficient in that case.
+>  > Of course, EABI can still be selected manually if needed.
+>
+> On a related note, should we default to thumb2 if the CPU supports it?
 
-The reason for the patch is not entirely clear as it dates back to the
-original addition of avahi (in 2006), and it contains no description - But
-presumably it is to work around a permission issue with the address files,
-similar to what is explained here:
+I would say:
 
-https://bugs.launchpad.net/ubuntu/+source/avahi/+bug/83521
+    choice
+           prompt "ARM instruction set"
+           default BR2_ARM_INSTRUCTIONS_ARM if BR2_ARM_CPU_HAS_ARM
+           default BR2_ARM_INSTRUCTIONS_THUMBS2 if BR2_ARM_CPU_HAS_THUMBS2
+           default BR2_ARM_INSTRUCTIONS_THUMBS if BR2_ARM_CPU_HAS_THUMBS
 
-That particular issue got fixed by upstream in 2007 using umask(2):
-
-https://github.com/lathiat/avahi/commit/747f75372063371865bf5fc9857982defcffdca4
-
-So the patch isn't needed any more and can be dropped.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/avahi/0001-autoipd-perms.patch |   11 -----------
- 1 files changed, 0 insertions(+), 11 deletions(-)
-
-diff --git a/package/avahi/0001-autoipd-perms.patch b/package/avahi/0001-autoipd-perms.patch
-deleted file mode 100644
-index c740e3f..0000000
---- a/package/avahi/0001-autoipd-perms.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- avahi-0.6.14/avahi-autoipd/main.c.cls	2006-09-13 12:49:45.000000000 -0700
--+++ avahi-0.6.14/avahi-autoipd/main.c	2006-09-25 20:34:10.000000000 -0700
--@@ -239,7 +239,7 @@
-- 
--     fprintf(f, "%s\n", inet_ntop(AF_INET, &addr, buf, sizeof (buf)));
--     fclose(f);
---
--+    chmod(fn, S_IRUSR|S_IWUSR);
--     return 0;
--     
-- fail:
+Best regards,
+Beno?t
