@@ -1,80 +1,123 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Oct 2015 15:43:28 +0100
-Subject: [Buildroot] [PATCH v5 11/36] package/efl/libefl: add frame
- buffer config option
-In-Reply-To: <1445720476-21517-12-git-send-email-romain.naour@openwide.fr>
+Date: Sun, 25 Oct 2015 15:45:06 +0100
+Subject: [Buildroot] [PATCH v5 12/36] package/efl/libefl: fix
+ framebuffer support
+In-Reply-To: <1445720476-21517-13-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
- <1445720476-21517-12-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151025144328.GH11692@free.fr>
+ <1445720476-21517-13-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151025144506.GI11692@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+romain, All,
 
 On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
-> Add an config option to enable frame buffer support
-> in the efl libraries.
+> From: Vicente Bergas <vicencb@gmail.com>
 > 
-> From the README [1]:
-> This requires linux frame-buffer support, headers etc. This supports
-> basic frame-buffers like /dev/fb as well as input via /dev/input for
-> keyboards and mice in a basic way.
+> From [1]:
+> When running terminology, a message appears in eina_module_load with:
+> could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
+> Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
+> ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
+> It seems like the EAPI macro has no effect...
 > 
-> [1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n521
+> A patch from Ross Vandegrift has been posted on enlightenment mailing
+> list [2], but it's not yet an upstream patch.
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> [1] http://sourceforge.net/p/enlightenment/mailman/message/34493376
+> [2] http://sourceforge.net/p/enlightenment/mailman/message/34492801
 
-This time for real:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Then you should fold this into the previous patch that adds the
+framebuffer option.
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Vicente Bergas <vicencb@gmail.com>
+> [Romain: use a git formated patch and add a commit log]
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
-> v4: rename to libefl
->     improve commit log
+> v4: move the patch to libefl
+>     improve the commit log
+> v3: new patch
 > ---
->  package/efl/libefl/Config.in | 5 +++++
->  package/efl/libefl/libefl.mk | 6 ++++++
->  2 files changed, 11 insertions(+)
+>  ...ecore_fb_private.h-define-EAPI-before-use.patch | 64 ++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
 > 
-> diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-> index c72ea7e..e25911f 100644
-> --- a/package/efl/libefl/Config.in
-> +++ b/package/efl/libefl/Config.in
-> @@ -37,6 +37,11 @@ config BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG
->  	  otherwise we need to add a very long and obscure option
->  	  to start the build.
->  
-> +comment "libecore video support"
+> diff --git a/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
+> new file mode 100644
+> index 0000000..81d14f9
+> --- /dev/null
+> +++ b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
+> @@ -0,0 +1,64 @@
+> +From 2fb4fdf641e67e49b87a3524038a694c8dd0ba4e Mon Sep 17 00:00:00 2001
+> +From: Vicente Bergas <vicencb@gmail.com>
+> +Date: Fri, 9 Oct 2015 23:35:20 +0200
+> +Subject: [PATCH] ecore_fb_private.h: define EAPI before use
 > +
-> +config BR2_PACKAGE_LIBEFL_FB
-> +	bool "libecore framebuffer support"
+> +From [1]:
+> +When running terminology, a message appears in eina_module_load with:
+> +could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
+> +Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
+> +ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
+> +It seems like the EAPI macro has no effect...
 > +
->  comment "libevas loaders"
->  
->  config BR2_PACKAGE_LIBEFL_PNG
-> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-> index 9633630..3a4aab1 100644
-> --- a/package/efl/libefl/libefl.mk
-> +++ b/package/efl/libefl/libefl.mk
-> @@ -166,6 +166,12 @@ else
->  LIBEFL_CONF_OPTS += --enable-wayland=no
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBEFL_FB),y)
-> +LIBEFL_CONF_OPTS += --enable-fb=yes
-> +else
-> +LIBEFL_CONF_OPTS += --enable-fb=no
-> +endif
+> +A patch from Ross Vandegrift has been posted on enlightenment mailing
+> +list [2], but it's not yet an upstream patch.
 > +
->  # image loader: handle only loaders that requires dependencies.
->  # All other loaders are builded by default statically.
->  ifeq ($(BR2_PACKAGE_LIBEFL_PNG),y)
+> +[1] http://sourceforge.net/p/enlightenment/mailman/message/34493376
+> +[2] http://sourceforge.net/p/enlightenment/mailman/message/34492801
+> +
+> +Signed-off-by: Vicente Bergas <vicencb@gmail.com>
+> +[Romain:
+> +  - Add a commit log
+> +  - Add a link to the enlightenment mailing list
+> +  - Add Vicente's SoB line]
+> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> +---
+> + src/lib/ecore_fb/ecore_fb_private.h | 17 +++++++++++++++++
+> + 1 file changed, 17 insertions(+)
+> +
+> +diff --git a/src/lib/ecore_fb/ecore_fb_private.h b/src/lib/ecore_fb/ecore_fb_private.h
+> +index f7dc0c6..f54c8d2 100644
+> +--- a/src/lib/ecore_fb/ecore_fb_private.h
+> ++++ b/src/lib/ecore_fb/ecore_fb_private.h
+> +@@ -33,6 +33,20 @@
+> + 
+> + #include <Ecore_Fb.h>
+> + 
+> ++#ifdef EAPI
+> ++# undef EAPI
+> ++#endif
+> ++
+> ++#ifdef __GNUC__
+> ++# if __GNUC__ >= 4
+> ++#  define EAPI __attribute__ ((visibility("default")))
+> ++# else
+> ++#  define EAPI
+> ++# endif
+> ++#else
+> ++# define EAPI
+> ++#endif
+> ++
+> + /* ecore_fb_li.c */
+> + struct _Ecore_Fb_Input_Device
+> + {
+> +@@ -92,4 +106,7 @@ void ecore_fb_vt_shutdown(void);
+> + #define TS_GET_CAL 0x8014660a
+> + #endif
+> +   
+> ++#undef EAPI
+> ++#define EAPI
+> ++
+> + #endif
+> +-- 
+> +2.4.3
+> +
 > -- 
 > 2.4.3
 > 
