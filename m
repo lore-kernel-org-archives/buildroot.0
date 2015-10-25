@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Oct 2015 15:48:04 +0100
+Date: Sun, 25 Oct 2015 15:48:33 +0100
 Subject: [Buildroot] [PATCH v5 13/36] package/efl/libefl: add jp2k
  config option
 In-Reply-To: <1445720476-21517-14-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
  <1445720476-21517-14-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151025144804.GJ11692@free.fr>
+Message-ID: <20151025144833.GK11692@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,21 +17,16 @@ Romain, All,
 On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
 > Like for webp format, add an option to enable the JPEG 2000
 > codec support in the efl libraries.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-Suddenly, I wonder why you added a bunch of image loaders in the first
-patch adding libelf, but you add a few more such loaders in separate
-patches.
+I forgot:
 
-Can't you do either:
-  - introduce all of them as separate patches, or
-  - introduce all of them in the first patch adding libefl?
-
-Or is there an underlying good reason to do as you did?
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
 > v4: rename to libefl
 >     improve commit log
