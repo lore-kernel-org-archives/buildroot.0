@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Oct 2015 17:03:47 +0100
-Subject: [Buildroot] [PATCH v5 20/36] package/libevas-generic-loaders:
- add libraw dependency
-In-Reply-To: <1445720476-21517-21-git-send-email-romain.naour@openwide.fr>
+Date: Sun, 25 Oct 2015 17:09:56 +0100
+Subject: [Buildroot] [PATCH v5 21/36] package/efl/libelementary: bump to
+ version 1.15.2
+In-Reply-To: <1445720476-21517-22-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
- <1445720476-21517-21-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151025160347.GR11692@free.fr>
+ <1445720476-21517-22-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151025160956.GS11692@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,68 +15,114 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2015-10-24 23:01 +0200, Romain Naour spake thusly:
-> libraw it's one of the "highly recommended" dependecies
-> according to the README [1].
+> Use the newly added libefl package wich provide a new version
+> of libeina, libevas, libecore and libedje.
 > 
-> [1] https://git.enlightenment.org/core/evas_generic_loaders.git/tree/README?id=v1.15.0#n31
+> Update the upstream url and add a hash file.
+> 
+> Since eet, eolian_gen and eldbus_codegen are installed in
+> HOST_DIR by host-efl package, help configure script to find
+> them.
+> 
+> Explicitly disable doxygen and elementary-test.
 > 
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
-> v4: improve commit log
-> ---
->  package/libevas-generic-loaders/Config.in                  | 5 +++++
->  package/libevas-generic-loaders/libevas-generic-loaders.mk | 9 +++++++--
->  2 files changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-> index 5b9f009..26166a8 100644
-> --- a/package/libevas-generic-loaders/Config.in
-> +++ b/package/libevas-generic-loaders/Config.in
-> @@ -11,6 +11,11 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
->  
->  if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
->  
-> +config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
-> +	bool "Libraw loader"
 
-You forgot to select BR2_PACKAGE_LIBRAW and propagate its dependency on
-C++.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+See however a comment in the next patch of yours.
 
 Regards,
 Yann E. MORIN.
 
-> +	help
-> +	  This option enables the Evas generic Libraw loader
-> +
->  config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
->  	bool "SVG loader"
->  	select BR2_PACKAGE_LIBRSVG
-> diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-> index d8ab252..4665ded 100644
-> --- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
-> +++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-> @@ -14,14 +14,19 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+> ---
+> v5: move the hash file to package/efl/libelementary
+> v4: keep libelementary in package/efl/
+> v3: bump to 1.15.2
+>     remove trailing slash (Vicente Bergas)
+> v2: bump to 1.15.1
+>     remove glibc only dependency
+> ---
+>  package/efl/libelementary/Config.in          | 11 +----------
+>  package/efl/libelementary/libelementary.hash |  2 ++
+>  package/efl/libelementary/libelementary.mk   | 25 +++++++++----------------
+>  3 files changed, 12 insertions(+), 26 deletions(-)
+>  create mode 100644 package/efl/libelementary/libelementary.hash
+> 
+> diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+> index 4f62592..182b14a 100644
+> --- a/package/efl/libelementary/Config.in
+> +++ b/package/efl/libelementary/Config.in
+> @@ -1,17 +1,8 @@
+> -comment "libelementary needs a toolchain w/ threads, dynamic library"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> -
+>  config BR2_PACKAGE_LIBELEMENTARY
+>  	bool "libelementary"
+> -	select BR2_PACKAGE_LIBEINA
+> -	select BR2_PACKAGE_LIBEVAS
+> -	select BR2_PACKAGE_LIBECORE
+> -	select BR2_PACKAGE_LIBEDJE
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+> -	depends on !BR2_STATIC_LIBS
+>  	help
+>  	  Elementary is a widget toolkit and EFL wrapper and convenience
+>  	  library to make it easy to build applications and tools with UIs
+>  	  with less code.
 >  
->  LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libefl zlib
+> -	  http://trac.enlightenment.org/e/wiki/Elementary
+> +	  https://enlightenment.org
+> diff --git a/package/efl/libelementary/libelementary.hash b/package/efl/libelementary/libelementary.hash
+> new file mode 100644
+> index 0000000..2cd36d8
+> --- /dev/null
+> +++ b/package/efl/libelementary/libelementary.hash
+> @@ -0,0 +1,2 @@
+> +# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.15.2.tar.xz.sha256
+> +sha256	523c3073210b611817d0f56aa8348962ec757282f9f7dfde93825afa164a0f3f	elementary-1.15.2.tar.xz
+> diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
+> index 8bd69fe..a2c4a60 100644
+> --- a/package/efl/libelementary/libelementary.mk
+> +++ b/package/efl/libelementary/libelementary.mk
+> @@ -4,29 +4,22 @@
+>  #
+>  ################################################################################
 >  
-> -# For now, we only support the SVG loader
->  # poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
->  LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
->  	--disable-poppler \
->  	--disable-spectre \
-> -	--disable-libraw \
->  	--disable-gstreamer
+> -LIBELEMENTARY_VERSION = 1.7.10
+> -LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.bz2
+> -LIBELEMENTARY_SITE = http://download.enlightenment.org/releases
+> +LIBELEMENTARY_VERSION = 1.15.2
+> +LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
+> +LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
+>  LIBELEMENTARY_LICENSE = LGPLv2.1
+>  LIBELEMENTARY_LICENSE_FILES = COPYING
 >  
-> +ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
-> +LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
-> +LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
-> +else
-> +LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
->  LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
->  LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
+>  LIBELEMENTARY_INSTALL_STAGING = YES
+>  
+> -LIBELEMENTARY_DEPENDENCIES = \
+> -	libeina libevas libecore libedje host-libedje \
+> -	host-libeet
+> +LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl libefl
+>  
+>  LIBELEMENTARY_CONF_OPTS = \
+>  	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+> -	--with-eet-eet=$(HOST_DIR)/usr/bin/eet
+> -
+> -# libethumb_client is only built when ethumbd is built.
+> -# ethumbd is only built if edbus is built.
+> -ifeq ($(BR2_PACKAGE_LIBETHUMB)$(BR2_PACKAGE_LIBEDBUS),yy)
+> -LIBELEMENTARY_DEPENDENCIES += libethumb
+> -LIBELEMENTARY_CONF_OPTS += --enable-ethumb
+> -else
+> -LIBELEMENTARY_CONF_OPTS += --disable-ethumb
+> -endif
+> +	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+> +	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+> +	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
+> +	--with-doxygen=no \
+> +	--disable-elementary-test
+>  
+>  $(eval $(autotools-package))
 > -- 
 > 2.4.3
 > 
