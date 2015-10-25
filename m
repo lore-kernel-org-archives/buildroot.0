@@ -1,65 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Oct 2015 21:56:46 +0100
-Subject: [Buildroot] [git commit] perl-net-dns: bump to version 1.02
-Message-ID: <20151025210816.5BED7818C6@busybox.osuosl.org>
+Date: Sun, 25 Oct 2015 22:01:40 +0100
+Subject: [Buildroot] [git commit] boost.mk spelling error 'SEPERATED' ->
+	'SEPARATED'
+Message-ID: <20151025210816.8EE647FE27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f71af72666ff5b48fd3853d531eb52032027bac
+commit: http://git.buildroot.net/buildroot/commit/?id=49580efc4ab76d9e8629e9f7bacf3c3e634cdf99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-net-dns/Config.in         |    4 ----
- package/perl-net-dns/perl-net-dns.hash |    4 ++--
- package/perl-net-dns/perl-net-dns.mk   |    4 ++--
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ package/boost/boost.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-net-dns/Config.in b/package/perl-net-dns/Config.in
-index 52fb4d8..24ce481 100644
---- a/package/perl-net-dns/Config.in
-+++ b/package/perl-net-dns/Config.in
-@@ -1,11 +1,7 @@
- config BR2_PACKAGE_PERL_NET_DNS
- 	bool "perl-net-dns"
--	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_PERL_DIGEST_HMAC
- 	help
- 	  Net::DNS is a DNS resolver implemented in Perl.
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index cc3ba9e..8159ed5 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -102,8 +102,8 @@ endif
+ BOOST_DEPENDENCIES += $(if $(BR2_ENABLE_LOCALE),,libiconv)
+ endif
  
- 	  http://www.net-dns.org
--
--comment "perl-net-dns needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index 01d2772..6533e2b 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    f1d48107ff6b366479ad035783486d7a Net-DNS-0.83.tar.gz
--sha256 8e1108d1801b9695909859323e1ed2f7ffb3b03dd3d2028a19fb79fc1a1d7c39 Net-DNS-0.83.tar.gz
-+md5    adbb3fd9bc1677d8fd79605925a35106 Net-DNS-1.02.tar.gz
-+sha256 9473c322b036592663bb20383e85190a682d142688b162efc975a61bcc7534f2 Net-DNS-1.02.tar.gz
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index f93b084..59d2b60 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+-BOOST_WITHOUT_FLAGS_COMMASEPERATED += $(subst $(space),$(comma),$(strip $(BOOST_WITHOUT_FLAGS)))
+-BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPERATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPERATED))
++BOOST_WITHOUT_FLAGS_COMMASEPARATED += $(subst $(space),$(comma),$(strip $(BOOST_WITHOUT_FLAGS)))
++BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPARATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPARATED))
+ BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
  
--PERL_NET_DNS_VERSION = 0.83
-+PERL_NET_DNS_VERSION = 1.02
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_DEPENDENCIES = perl-digest-hmac
--PERL_NET_DNS_LICENSE = Artistic or GPLv1+
-+PERL_NET_DNS_LICENSE = MIT
- PERL_NET_DNS_LICENSE_FILES = README
- 
- $(eval $(perl-package))
+ define BOOST_CONFIGURE_CMDS
