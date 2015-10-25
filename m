@@ -1,36 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Oct 2015 19:56:20 +0100
-Subject: [Buildroot] [git commit] arch/arm: use EABIhf by default with VFP
-Message-ID: <20151025200324.E1882818D9@busybox.osuosl.org>
+Date: Sun, 25 Oct 2015 15:09:19 +0100
+Subject: [Buildroot] [git commit] package/{mesa3d,
+	mesa3d-headers}: bump version to 11.0.4
+Message-ID: <20151025200324.DB37A81D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc0773f2a89f30b252532e771cf4ffa513f57f2d
+commit: http://git.buildroot.net/buildroot/commit/?id=3af2f6cddcdf9fccc6900b17cae8c15f3ee4fddf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Set EABIhf as the default target ABI for the ARM processors that have or
-may have a VFP unit, since this ABI is the most efficient in that case.
-Of course, EABI can still be selected manually if needed.
-
-[Peter: only default to EABIHF when we are sure the CPU has a VFP]
-Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau.dev@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.arm |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |    2 +-
+ package/mesa3d/mesa3d.hash               |    4 ++--
+ package/mesa3d/mesa3d.mk                 |    2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 4d10f4c..db7b8f2 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -188,6 +188,7 @@ endchoice
- choice
- 	prompt "Target ABI"
- 	depends on BR2_arm || BR2_armeb
-+	default BR2_ARM_EABIHF if BR2_ARM_CPU_HAS_VFPV2
- 	default BR2_ARM_EABI
- 	help
- 	  Application Binary Interface to use. The Application Binary
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 76c681c..91f5fe8 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 11.0.3
++MESA3D_HEADERS_VERSION = 11.0.4
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 334910b..5ac885f 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-September/000179.html
+-sha256	ab2992eece21adc23c398720ef8c6933cb69ea42e1b2611dc09d031e17e033d6	mesa-11.0.3.tar.xz
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-October/000180.html
++sha256	40201bf7fc6fa12a6d9edfe870b41eb4dd6669154e3c42c48a96f70805f5483d	mesa-11.0.4.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1714c48..1594489 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 11.0.3
++MESA3D_VERSION = 11.0.4
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
