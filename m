@@ -1,157 +1,46 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 25 Oct 2015 20:24:53 +0100
-Subject: [Buildroot] [PATCH v5 03/36] package/efl/libefl: new
-	host-package
-In-Reply-To: <20151025131019.GE3665@free.fr>
-References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
- <1445720476-21517-4-git-send-email-romain.naour@openwide.fr>
- <20151025131019.GE3665@free.fr>
-Message-ID: <562D2C85.5060705@openwide.fr>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Sun, 25 Oct 2015 20:33:52 +0100
+Subject: [Buildroot] [PATCH 0/4] Supporting a second Barebox build to build
+	the MLO/SPL
+Message-ID: <1445801636-7554-1-git-send-email-pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+This patch-set in 4 parts adds support for building a second barebox build (the
+x-loader). This implements the design proposed in
+http://elinux.org/Buildroot#Todo_list:
+1. Have boot/barebox/ containing the common stuff.
+2. Add two separate packages boot/barebox-boot/ and boot/barebox-xload/.
+3. There is only one version selection, but each package allows to
+   define the configuration to be used.
+4. Design is a little bit like package/gcc, where we have multiple gcc builds,
+   but share a lot of common definitions between the packages.
 
-Le 25/10/2015 14:10, Yann E. MORIN a ?crit :
-> On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
->> This new host-package provide edje_cc, embryo_cc and eet binaries
->> that will be used by the upcomming libefl packages which will
->> contain the new version of efl libraries.
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->> v4: keep efl as a sub-directory.
->>     rename this new package to libefl since we want to keep a efl
->>     and elementary version in sync.
->> v3: remove trailing slash (Vicente Bergas)
->>     bump to 1.15.2
->> ---
->>  package/efl/libefl/libefl.hash |  2 ++
->>  package/efl/libefl/libefl.mk   | 75 ++++++++++++++++++++++++++++++++++++++++++
->>  2 files changed, 77 insertions(+)
->>  create mode 100644 package/efl/libefl/libefl.hash
->>  create mode 100644 package/efl/libefl/libefl.mk
->>
->> diff --git a/package/efl/libefl/libefl.hash b/package/efl/libefl/libefl.hash
->> new file mode 100644
->> index 0000000..7ac26f4
->> --- /dev/null
->> +++ b/package/efl/libefl/libefl.hash
->> @@ -0,0 +1,2 @@
->> +# From https://download.enlightenment.org/rel/libs/efl/efl-1.15.2.tar.xz.sha256
->> +sha256	dd738f19f454621a7fa1fdb4c008457c170989f5f0c535edfed7b6773ae6c2a4	efl-1.15.2.tar.xz
->> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
->> new file mode 100644
->> index 0000000..4dca733
->> --- /dev/null
->> +++ b/package/efl/libefl/libefl.mk
->> @@ -0,0 +1,75 @@
->> +################################################################################
->> +#
->> +# libefl
->> +#
->> +################################################################################
->> +
->> +# hardcode the version here since the bump to 1.15 is not complete in Buildroot
->> +LIBEFL_VERSION = 1.15.2
->> +LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
->> +LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
->> +LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
->> +LIBEFL_LICENSE_FILES = COPYING
-> 
-> There are much more license files:
-> 
->     LIBEFL_LICENSE_FILES = \
->         COPYING \
->         licenses/COPYING.BSD \
->         licenses/COPYING.FTL \
->         licenses/COPYING.GPL \
->         licenses/COPYING.LGPL \
->         licenses/COPYING.SMALL
-> 
-> We may also want to add COMPLIANCE to this list, since it has a few
-> suggestions about legal info.
+To demonstrate that it works as advertized, the last patch adds a defconfig for
+the beaglebone black that makes use of the added functionality.
 
-Thanks, I missed the directory licenses (I was looking for COPYING file).
-I'll add all of them.
+Pieter Smith (4):
+  barebox: prepare for x-loader build
+  barebox: adds option to build x-loader
+  barebox: user selection of build output images
+  beaglebone: adds barebox bootloader defconfig
 
-Best regards,
-Romain
+ boot/barebox/Config.in                        | 92 +++++++++++++++++++++++++++
+ boot/barebox/barebox-boot/barebox-boot.hash   |  1 +
+ boot/barebox/barebox-boot/barebox-boot.mk     | 89 ++++++++++++++++++++++++++
+ boot/barebox/barebox-xload/barebox-xload.hash |  1 +
+ boot/barebox/barebox-xload/barebox-xload.mk   | 51 +++++++++++++++
+ boot/barebox/barebox.mk                       | 60 +----------------
+ configs/beaglebone_barebox_defconfig          | 38 +++++++++++
+ 7 files changed, 273 insertions(+), 59 deletions(-)
+ create mode 120000 boot/barebox/barebox-boot/barebox-boot.hash
+ create mode 100644 boot/barebox/barebox-boot/barebox-boot.mk
+ create mode 120000 boot/barebox/barebox-xload/barebox-xload.hash
+ create mode 100644 boot/barebox/barebox-xload/barebox-xload.mk
+ create mode 100644 configs/beaglebone_barebox_defconfig
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> +################################################################################
->> +#
->> +# host-libefl
->> +#
->> +################################################################################
->> +
->> +# We want to build only some host tools used later in the build.
->> +# Actually we want: edje_cc, embryo_cc and eet.
->> +
->> +# Host dependencies:
->> +# * host-dbus: for Eldbus
->> +# * host-freetype: for libevas
->> +# * host-libglib2: for libecore
->> +# * host-libjpeg, host-libpng: for libevas image loader
->> +# * host-lua: disable luajit dependency
->> +HOST_LIBEFL_DEPENDENCIES = \
->> +	host-pkgconf \
->> +	host-dbus \
->> +	host-freetype \
->> +	host-libglib2 \
->> +	host-libjpeg \
->> +	host-libpng \
->> +	host-lua \
->> +	host-zlib
->> +
->> +# Configure options:
->> +# --disable-audio, --disable-multisense remove libsndfile dependency.
->> +# --disable-cxx-bindings: disable C++11 bindings.
->> +# --disable-fontconfig: remove dependency on fontconfig.
->> +# --disable-fribidi: remove dependency on libfribidi.
->> +# --disable-gstreamer1: remove dependency on gtreamer 1.0.
->> +# --disable-libeeze: remove libudev dependency.
->> +# --disable-libmount: remove dependency on host-util-linux libmount.
->> +# --disable-physics: remove Bullet dependency.
->> +# --enable-image-loader-gif=no: disable Gif dependency.
->> +# --enable-image-loader-tiff=no: disable Tiff dependency.
->> +# --enable-lua-old: disable Elua and remove luajit dependency.
->> +# --with-crypto=none: remove dependencies on openssl or gnutls.
->> +# --with-x11=none: remove dependency on X.org.
->> +#   Yes I really know what I am doing.
->> +HOST_LIBEFL_CONF_OPTS += \
->> +	--disable-audio \
->> +	--disable-cxx-bindings \
->> +	--disable-fontconfig \
->> +	--disable-fribidi \
->> +	--disable-gstreamer1 \
->> +	--disable-libeeze \
->> +	--disable-libmount \
->> +	--disable-multisense \
->> +	--disable-physics \
->> +	--enable-image-loader-gif=no \
->> +	--enable-image-loader-jpeg=yes \
->> +	--enable-image-loader-png=yes \
->> +	--enable-image-loader-tiff=no \
->> +	--enable-lua-old \
->> +	--with-crypto=none \
->> +	--with-glib=yes \
->> +	--with-opengl=none \
->> +	--with-x11=none \
->> +	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
->> +
->> +$(eval $(host-autotools-package))
->> -- 
->> 2.4.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+2.1.4
