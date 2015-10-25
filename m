@@ -1,43 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Oct 2015 21:56:36 +0100
-Subject: [Buildroot] [git commit] perl-mojolicious: bump to version 6.25
-Message-ID: <20151025210816.4C044818C6@busybox.osuosl.org>
+Date: Sun, 25 Oct 2015 21:56:41 +0100
+Subject: [Buildroot] [git commit] perl-netaddr-ip: bump to version 4.078
+Message-ID: <20151025210816.54485818C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3b6336c9ac0e8a62c273e3b0bdf92d2bda369f3
+commit: http://git.buildroot.net/buildroot/commit/?id=fff978be292b859525247e87eab17297cb74f316
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-mojolicious/perl-mojolicious.hash |    4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-netaddr-ip/Config.in            |    2 +-
+ package/perl-netaddr-ip/perl-netaddr-ip.hash |    4 ++--
+ package/perl-netaddr-ip/perl-netaddr-ip.mk   |    2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index d8114e2..289f1f3 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
+diff --git a/package/perl-netaddr-ip/Config.in b/package/perl-netaddr-ip/Config.in
+index 4f082f1..7ccb20a 100644
+--- a/package/perl-netaddr-ip/Config.in
++++ b/package/perl-netaddr-ip/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PERL_NETADDR_IP
+ 	bool "perl-netaddr-ip"
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+-	  NetAddr::IP - Manages IPv4 and IPv6 addresses and subnets
++	  Manages IPv4 and IPv6 addresses and subnets
+ 
+ 	  https://metacpan.org/release/NetAddr-IP
+ 
+diff --git a/package/perl-netaddr-ip/perl-netaddr-ip.hash b/package/perl-netaddr-ip/perl-netaddr-ip.hash
+index 37d17fa..19bba20 100644
+--- a/package/perl-netaddr-ip/perl-netaddr-ip.hash
++++ b/package/perl-netaddr-ip/perl-netaddr-ip.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    dd067c5791e27a104a07f2676edf1bf2 Mojolicious-6.14.tar.gz
--sha256 9808871b24ee8c9709fc1bd0473a64a54d99fc8c4d6334f503256ae90130b05a Mojolicious-6.14.tar.gz
-+md5    8c189aed47bbe330584fb335251b3380 Mojolicious-6.25.tar.gz
-+sha256 2e34d665a505ca9cbd4c55f010b17d184533b9ba2f92431d7c4126e0edc3a41a Mojolicious-6.25.tar.gz
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 302cedb..3ea828b 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
+-md5    b72b91ebd228b096fd3b0acc87df877e NetAddr-IP-4.075.tar.gz
+-sha256 ab8275bb8f306f780cd029a6dc48764461f4d1ef3a106b99fe5a90cbf2968839 NetAddr-IP-4.075.tar.gz
++md5    bca8406520b6535a3f9661d385705d97 NetAddr-IP-4.078.tar.gz
++sha256 b9a12294e58dcece0189630ddb6926e37169cbbb24c76091f1e604e426c19614 NetAddr-IP-4.078.tar.gz
+diff --git a/package/perl-netaddr-ip/perl-netaddr-ip.mk b/package/perl-netaddr-ip/perl-netaddr-ip.mk
+index 8acb4d7..2e5a82a 100644
+--- a/package/perl-netaddr-ip/perl-netaddr-ip.mk
++++ b/package/perl-netaddr-ip/perl-netaddr-ip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_VERSION = 6.14
-+PERL_MOJOLICIOUS_VERSION = 6.25
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
+-PERL_NETADDR_IP_VERSION = 4.075
++PERL_NETADDR_IP_VERSION = 4.078
+ PERL_NETADDR_IP_SOURCE = NetAddr-IP-$(PERL_NETADDR_IP_VERSION).tar.gz
+ PERL_NETADDR_IP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKER
+ PERL_NETADDR_IP_LICENSE = Artistic or GPLv1+
