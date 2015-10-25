@@ -1,70 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Oct 2015 21:02:03 +0100
-Subject: [Buildroot] [git commit] qt5multimedia: drop broken gstreamer 0.10
-	support
-Message-ID: <20151025200325.0CCB8818D9@busybox.osuosl.org>
+Date: Sun, 25 Oct 2015 21:24:36 +0100
+Subject: [Buildroot] [git commit] avahi: drop unneeded avahi-autopid patch
+Message-ID: <20151025202516.43B1A807EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2e16ea64a6f89a82098625bb93db020ea5d4db4
+commit: http://git.buildroot.net/buildroot/commit/?id=8a8378696634b9a93ecf21f567961b6402b2c9ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The gstreamer 0.10 support code seems to have bitrotten as the build fails
-with undefined references to various functions:
+The reason for the patch is not entirely clear as it dates back to the
+original addition of avahi (in 2006), and it contains no description - But
+presumably it is to work around a permission issue with the address files,
+similar to what is explained here:
 
-.obj/qgstreameraudiodecodersession.o: In function `QGstreamerAudioDecoderSession::read()':
-qgstreameraudiodecodersession.cpp:(.text+0x13a0): undefined reference to `QGstUtils::audioFormatForBuffer(_GstBuffer*)'
-collect2: error: ld returned 1 exit status
-Makefile:111: recipe for target '../../../../plugins/mediaservice/libgstaudiodecoder.so' failed
-make[6]: *** [../../../../plugins/mediaservice/libgstaudiodecoder.so] Error 1
-Makefile:45: recipe for target 'sub-audiodecoder-make_first' failed
-make[5]: *** [sub-audiodecoder-make_first] Error 2
-make[5]: *** Waiting for unfinished jobs....
-.obj/qgstreamercapturesession.o: In function `QGstreamerCaptureSession::probeBuffer(_GstBuffer*) [clone .part.30]':
-qgstreamercapturesession.cpp:(.text+0x3fc8): undefined reference to `QGstUtils::bufferToImage(_GstBuffer*)'
-collect2: error: ld returned 1 exit status
-Makefile:153: recipe for target '../../../../plugins/mediaservice/libgstmediacapture.so' failed
-make[6]: *** [../../../../plugins/mediaservice/libgstmediacapture.so] Error 1
-Makefile:95: recipe for target 'sub-mediacapture-make_first' failed
-make[5]: *** [sub-mediacapture-make_first] Error 2
-.obj/qgstreamerplayersession.o: In function `QGstreamerPlayerSession::QGstreamerPlayerSession(QObject*)':
-qgstreamerplayersession.cpp:(.text+0xecc): undefined reference to `gst_video_connector_get_type'
-.obj/qgstreamerplayersession.o: In function `QGstreamerPlayerSession::processBusMessage(QGstreamerMessage const&)':
-qgstreamerplayersession.cpp:(.text+0x5b4c): undefined reference to `QGstUtils::gstTagListToMap(_GstStructure const*)'
-collect2: error: ld returned 1 exit status
-Makefile:129: recipe for target '../../../../plugins/mediaservice/libgstmediaplayer.so' failed
-make[6]: *** [../../../../plugins/mediaservice/libgstmediaplayer.so] Error 1
-Makefile:70: recipe for target 'sub-mediaplayer-make_first' failed
-make[5]: *** [sub-mediaplayer-make_first] Error 2
+https://bugs.launchpad.net/ubuntu/+source/avahi/+bug/83521
+
+That particular issue got fixed by upstream in 2007 using umask(2):
+
+https://github.com/lathiat/avahi/commit/747f75372063371865bf5fc9857982defcffdca4
+
+So the patch isn't needed any more and can be dropped.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5multimedia/qt5multimedia.mk |    5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+ package/avahi/0001-autoipd-perms.patch |   11 -----------
+ 1 files changed, 0 insertions(+), 11 deletions(-)
 
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 50fdd57..df1395c 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -18,9 +18,6 @@ QT5MULTIMEDIA_LICENSE = Commercial license
- QT5MULTIMEDIA_REDISTRIBUTE = NO
- endif
- 
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
--QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
--endif
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- QT5MULTIMEDIA_DEPENDENCIES += gst1-plugins-base
- endif
-@@ -43,7 +40,7 @@ define QT5MULTIMEDIA_INSTALL_STAGING_CMDS
- endef
- 
- ifeq ($(BR2_STATIC_LIBS),)
--ifneq ($(BR2_PACKAGE_GST_PLUGINS_BASE)$(BR2_PACKAGE_GST1_PLUGINS_BASE),)
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
- 	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
- endef
+diff --git a/package/avahi/0001-autoipd-perms.patch b/package/avahi/0001-autoipd-perms.patch
+deleted file mode 100644
+index c740e3f..0000000
+--- a/package/avahi/0001-autoipd-perms.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- avahi-0.6.14/avahi-autoipd/main.c.cls	2006-09-13 12:49:45.000000000 -0700
+-+++ avahi-0.6.14/avahi-autoipd/main.c	2006-09-25 20:34:10.000000000 -0700
+-@@ -239,7 +239,7 @@
+- 
+-     fprintf(f, "%s\n", inet_ntop(AF_INET, &addr, buf, sizeof (buf)));
+-     fclose(f);
+--
+-+    chmod(fn, S_IRUSR|S_IWUSR);
+-     return 0;
+-     
+- fail:
