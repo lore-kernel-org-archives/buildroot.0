@@ -1,33 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Oct 2015 11:07:12 +0100
-Subject: [Buildroot] [git commit] configs/riotboard: bump u-boot to version
-	2015.10
-Message-ID: <20151025100750.006B37F935@busybox.osuosl.org>
+From: Geoffrey Ragot <geoffreyragot@gmail.com>
+Date: Sun, 25 Oct 2015 12:12:53 +0100
+Subject: [Buildroot] [PATCH 1/1] Update Apache2 package
+Message-ID: <1445771573-14693-1-git-send-email-geoffrey.ragot@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c70b19c97a6bea01425bbdaf88cbd839626077b1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Currently, apache2 package does not allow
+to use -DBIG_SECURITY_HOLE flag.
+This flag allow httpd daemon to run as root.
+It should be the responsability of the user
+to take this decision.
+This patch add an option to set this flag.
+Previous behavior unchanged.
 
-Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Geoffrey Ragot <geoffrey.ragot@gmail.com>
 ---
- configs/riotboard_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/apache/Config.in | 5 +++++
+ package/apache/apache.mk | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-index 96c3619..7795787 100644
---- a/configs/riotboard_defconfig
-+++ b/configs/riotboard_defconfig
-@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/embest/riotboard/rootfs_overlay"
- # bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
- BR2_TARGET_UBOOT_BOARDNAME="riotboard"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/package/apache/Config.in b/package/apache/Config.in
+index 0814a17..ff0e822 100644
+--- a/package/apache/Config.in
++++ b/package/apache/Config.in
+@@ -17,3 +17,8 @@ config BR2_PACKAGE_APACHE
+ comment "apache needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++
++if BR2_PACKAGE_APACHE
++config BR2_PACKAGE_APACHE_ALLOW_ROOT
++	bool "Allow apache running as root"
++endif
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index daf8fe2..2e935b5 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -35,6 +35,10 @@ APACHE_CONF_OPTS = \
+ 	--disable-lua \
+ 	--disable-luajit
  
++ifeq ($(BR2_PACKAGE_APACHE_ALLOW_ROOT),y)
++APACHE_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -DBIG_SECURITY_HOLE"
++endif
++
+ ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
+ APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
+ endif
+-- 
+2.6.1
