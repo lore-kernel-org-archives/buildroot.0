@@ -1,81 +1,90 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Oct 2015 22:30:54 +0100
-Subject: [Buildroot] [PATCH] arch/arm: use EABIhf by default with VFP
-In-Reply-To: <CA+sos78tx8Yh4DKjwtHte7E7TuixNfTnT6QgFUy2ffN-iqKa-Q@mail.gmail.com>
-References: <87k2qn6gf0.fsf@dell.be.48ers.dk>
- <1445786380-2741-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <877fmaixqa.fsf@dell.be.48ers.dk>
- <CA+sos7-joVOt2bNGPv31uM=t1CmfW=eCyTjHuH-qu2h25O=fSw@mail.gmail.com>
- <87pp02heb2.fsf@dell.be.48ers.dk>
- <CA+sos78tx8Yh4DKjwtHte7E7TuixNfTnT6QgFUy2ffN-iqKa-Q@mail.gmail.com>
-Message-ID: <20151025213054.GK11692@free.fr>
+Date: Sun, 25 Oct 2015 22:40:20 +0100
+Subject: [Buildroot] [PATCH 1/2] x265: new package
+In-Reply-To: <87d1w2fxgq.fsf@dell.be.48ers.dk>
+References: <1445716229-40660-1-git-send-email-thijsvermeir@gmail.com>
+ <87d1w2fxgq.fsf@dell.be.48ers.dk>
+Message-ID: <20151025214020.GL11692@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Beno?t, Peter, All,
+\Peter, All,
 
-On 2015-10-25 21:52 +0100, Beno?t Th?baudeau spake thusly:
-> On Sun, Oct 25, 2015 at 9:40 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> >>>>>> "Beno?t" == Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> writes:
-> >
-> >  > On Sun, Oct 25, 2015 at 7:55 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> >  >>>>>>> "Beno?t" == Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> writes:
-> >  >>
-> >  >> > Set EABIhf as the default target ABI for the ARM processors that have or
-> >  >> > may have a VFP unit, since this ABI is the most efficient in that case.
-> >  >> > Of course, EABI can still be selected manually if needed.
-> >  >>
-> >  >> On a related note, should we default to thumb2 if the CPU supports it?
-> >
-> >  > I would say:
-> >
-> >  >     choice
-> >  >            prompt "ARM instruction set"
-> >  >            default BR2_ARM_INSTRUCTIONS_ARM if BR2_ARM_CPU_HAS_ARM
-> >  >            default BR2_ARM_INSTRUCTIONS_THUMBS2 if BR2_ARM_CPU_HAS_THUMBS2
-> >  >            default BR2_ARM_INSTRUCTIONS_THUMBS if BR2_ARM_CPU_HAS_THUMBS
-> >
-> > I'm not sure it makes sense to default to thumb1 even if the CPU
-> > supports it because of various compatibility issues
+On 2015-10-25 22:29 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Thijs" == Thijs Vermeir <thijsvermeir@gmail.com> writes:
+>  > x265 is a H.265 / HEVC video encoder application library, designed to encode
+>  > video or images into an H.265 / HEVC encoded bitstream.
 > 
-> It's the first default that wins, not the last one,
-
-To be more precise: it's the first default which dependencies are
-fullfiled that wins.
-
-> so above it's ARM over Thumb1.
-
-> > - So simply:
-> >
-> > default BR2_ARM_INSTRUCTIONS_THUMBS2 if BR2_ARM_CPU_HAS_THUMBS2
-> >
-> > (if no thumb2 is available, the first available option (ARM) is used).
+>  > http://x265.org
 > 
-> With ARM + Thumb2, I would rather use ARM to avoid compatibility
-> issues, except on platforms very constrained on memory. On Cortex-M3,
-> there's not even ARM. Or is it common to use Thumb2 on bigger
-> platforms like Cortex-A*?
+>  > Signed-off-by: Thijs Vermeir <thijsvermeir@gmail.com>
+> 
+> > +++ b/package/x265/x265.mk
+>  > @@ -0,0 +1,31 @@
+>  > +################################################################################
+>  > +#
+>  > +# x265
+>  > +#
+>  > +################################################################################
+>  > +
+>  > +X265_VERSION = 1.8
+>  > +X265_SOURCE = x265_$(X265_VERSION).tar.gz
+>  > +X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+>  > +X265_LICENSE = GPLv2+
+>  > +X265_LICENSE_FILES = COPYING
+>  > +X265_SUBDIR = source/
+> 
+> NIT: we normally don't append the trailing '/'.
+> 
+> > +X265_INSTALL_STAGING = YES
+>  > +
+>  > +ifeq ($(BR2_i386)$(BR2_x86_64),y)
+>  > +X265_DEPENDENCIES += host-yasm
+>  > +endif
+>  > +
+>  > +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+>  > +X265_CONF_OPTS += -DENABLE_SHARED=true -DENABLE_PIC=true
+>  > +else
+>  > +X265_CONF_OPTS += -DENABLE_SHARED=false
+>  > +endif
+> 
+> Any idea why the x265 developers don't use the "standard"
+> BUILD_SHARED_LIBS=ON|OFF flag like other packages?
 
-I agree that we should default to ARM if available. If not, then default
-to Thumb2 if available. Finally, fallback to Thumb1.
+I gues it would work, since they do things like:
 
-We know that if neither ARM not Thumb2 is available, then we must have
-Thumb1 available. otherwise it would not make sense to have an ARM CPU
-that does not support any of those three.
+    if(ENABLE_SHARED)
+and
+    if(ENABLE_PIC)
 
-So, slight ammendment to Beno?t's proposal:
+Ditto for CLI.
 
-    choice
-        prompt "ARM instruction set"
-        default BR2_ARM_INSTRUCTIONS_ARM    if BR2_ARM_CPU_HAS_ARM
-        default BR2_ARM_INSTRUCTIONS_THUMB2 if BR2_ARM_CPU_HAS_THUMB2
-        default BR2_ARM_INSTRUCTIONS_THUMB
+Thijs, care to check if changing true/false to ON/OFF still works,
+please? If so, can you send an patch? This way, all our Cmake-based
+packages will look the same, which is good for consistency.
 
 Regards,
 Yann E. MORIN.
+
+>  > +ifeq ($(BR2_PACKAGE_X265_CLI),)
+>  > +X265_CONF_OPTS += -DENABLE_CLI=false
+>  > +else
+>  > +X265_CONF_OPTS += -DENABLE_CLI=true
+>  > +endif
+> 
+> We prefer positive logic, so I've swapped these around.
+> 
+> Committed, thanks.
+> 
+> -- 
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
