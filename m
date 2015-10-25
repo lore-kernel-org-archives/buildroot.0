@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Oct 2015 15:41:39 +0100
-Subject: [Buildroot] [PATCH v5 10/36] package/efl/libefl: add webp
- dependency
-In-Reply-To: <1445720476-21517-11-git-send-email-romain.naour@openwide.fr>
+Date: Sun, 25 Oct 2015 15:43:28 +0100
+Subject: [Buildroot] [PATCH v5 11/36] package/efl/libefl: add frame
+ buffer config option
+In-Reply-To: <1445720476-21517-12-git-send-email-romain.naour@openwide.fr>
 References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
- <1445720476-21517-11-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151025144138.GG11692@free.fr>
+ <1445720476-21517-12-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151025144328.GH11692@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,65 +15,66 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
-> WebP is a new image format that provides lossless and lossy
-> compression for images on the web. So enabling webp support
-> in efl libraries allow to loads images using WebP.
+> Add an config option to enable frame buffer support
+> in the efl libraries.
 > 
-> Also, it one of the "highly recommended" dependecies [1]
-> according to the README but disabling it doesn't need
-> the --enable-i-really-know-what-i-am-doing... option.
-> That's why BR2_PACKAGE_LIBEFL_WEBP is not added to
-> BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
+> From the README [1]:
+> This requires linux frame-buffer support, headers etc. This supports
+> basic frame-buffers like /dev/fb as well as input via /dev/input for
+> keyboards and mice in a basic way.
 > 
-> [1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
+> [1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n521
 > 
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+
+This time for real:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
 > v4: rename to libefl
 >     improve commit log
 > ---
 >  package/efl/libefl/Config.in | 5 +++++
->  package/efl/libefl/libefl.mk | 7 +++++++
->  2 files changed, 12 insertions(+)
+>  package/efl/libefl/libefl.mk | 6 ++++++
+>  2 files changed, 11 insertions(+)
 > 
 > diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-> index 5c65744..c72ea7e 100644
+> index c72ea7e..e25911f 100644
 > --- a/package/efl/libefl/Config.in
 > +++ b/package/efl/libefl/Config.in
-> @@ -65,4 +65,9 @@ config BR2_PACKAGE_LIBEFL_TIFF
->  	help
->  	  This enables the loader code that loads tiff files.
+> @@ -37,6 +37,11 @@ config BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG
+>  	  otherwise we need to add a very long and obscure option
+>  	  to start the build.
 >  
-> +config BR2_PACKAGE_LIBEFL_WEBP
-> +	bool "libevas webp image loader"
-
-You forgot to select BR2_PACKAGE_WEBP.
-
-Regards,
-Yann E. MORIN.
-
-> +	help
-> +	  This enables the loader code that loads images using WebP.
+> +comment "libecore video support"
 > +
->  endif # BR2_PACKAGE_LIBEFL
+> +config BR2_PACKAGE_LIBEFL_FB
+> +	bool "libecore framebuffer support"
+> +
+>  comment "libevas loaders"
+>  
+>  config BR2_PACKAGE_LIBEFL_PNG
 > diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-> index c7ecf51..9633630 100644
+> index 9633630..3a4aab1 100644
 > --- a/package/efl/libefl/libefl.mk
 > +++ b/package/efl/libefl/libefl.mk
-> @@ -195,6 +195,13 @@ else
->  LIBEFL_CONF_OPTS += --enable-image-loader-tiff=no
+> @@ -166,6 +166,12 @@ else
+>  LIBEFL_CONF_OPTS += --enable-wayland=no
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
-> +LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
-> +LIBEFL_DEPENDENCIES += webp
+> +ifeq ($(BR2_PACKAGE_LIBEFL_FB),y)
+> +LIBEFL_CONF_OPTS += --enable-fb=yes
 > +else
-> +LIBEFL_CONF_OPTS += --enable-image-loader-webp=no
+> +LIBEFL_CONF_OPTS += --enable-fb=no
 > +endif
 > +
->  $(eval $(autotools-package))
->  
->  ################################################################################
+>  # image loader: handle only loaders that requires dependencies.
+>  # All other loaders are builded by default statically.
+>  ifeq ($(BR2_PACKAGE_LIBEFL_PNG),y)
 > -- 
 > 2.4.3
 > 
