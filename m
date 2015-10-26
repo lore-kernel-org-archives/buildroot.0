@@ -1,131 +1,48 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 26 Oct 2015 18:45:01 +0100
-Subject: [Buildroot] [PATCH 2/2] scancpan: README as default license file
-In-Reply-To: <1445881501-3104-1-git-send-email-francois.perrad@gadz.org>
-References: <1445881501-3104-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1445881501-3104-2-git-send-email-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 Oct 2015 19:00:29 +0100
+Subject: [Buildroot] [PATCH 1/2] x265: new package
+In-Reply-To: <CAHCOiUSFUs4Nnr_r99LhkvOwS9HGZ19UPiGd0mwQAZadQDzLfA@mail.gmail.com>
+References: <1445716229-40660-1-git-send-email-thijsvermeir@gmail.com>
+ <87d1w2fxgq.fsf@dell.be.48ers.dk> <20151025214020.GL11692@free.fr>
+ <CAHCOiUSFUs4Nnr_r99LhkvOwS9HGZ19UPiGd0mwQAZadQDzLfA@mail.gmail.com>
+Message-ID: <20151026180029.GA3788@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-add this heuristic when no specific license file is found
+Thijs, All,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-db-file/perl-db-file.mk                           | 1 +
- package/perl-digest-sha1/perl-digest-sha1.mk                   | 1 +
- package/perl-io-socket-ssl/perl-io-socket-ssl.mk               | 1 +
- package/perl-mail-dkim/perl-mail-dkim.mk                       | 1 +
- package/perl-mailtools/perl-mailtools.mk                       | 1 +
- package/perl-timedate/perl-timedate.mk                         | 1 +
- package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk | 1 +
- package/perl-xml-sax-base/perl-xml-sax-base.mk                 | 1 +
- support/scripts/scancpan                                       | 3 +++
- 9 files changed, 11 insertions(+)
+On 2015-10-26 13:53 +0100, Thijs Vermeir spake thusly:
+> On Sun, Oct 25, 2015 at 10:40 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > Thijs, care to check if changing true/false to ON/OFF still works,
+> > please? If so, can you send an patch? This way, all our Cmake-based
+> > packages will look the same, which is good for consistency.
+> >
+> > Regards,
+> > Yann E. MORIN.
+> 
+> Yes, I can look at it. To be clear you mean by the "standard" way:
+> - create a patch to accept BUILD_SHARED_LIBS (and enable fPIC) and
+> remove all the shared lib stuff from the mk file
 
-diff --git a/package/perl-db-file/perl-db-file.mk b/package/perl-db-file/perl-db-file.mk
-index 1011632..6d611ea 100644
---- a/package/perl-db-file/perl-db-file.mk
-+++ b/package/perl-db-file/perl-db-file.mk
-@@ -9,5 +9,6 @@ PERL_DB_FILE_SOURCE = DB_File-$(PERL_DB_FILE_VERSION).tar.gz
- PERL_DB_FILE_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PM/PMQS
- PERL_DB_FILE_DEPENDENCIES = berkeleydb
- PERL_DB_FILE_LICENSE = Artistic or GPLv1+
-+PERL_DB_FILE_LICENSE_FILES = README
- 
- $(eval $(perl-package))
-diff --git a/package/perl-digest-sha1/perl-digest-sha1.mk b/package/perl-digest-sha1/perl-digest-sha1.mk
-index 1d7601b..52b9ec3 100644
---- a/package/perl-digest-sha1/perl-digest-sha1.mk
-+++ b/package/perl-digest-sha1/perl-digest-sha1.mk
-@@ -8,5 +8,6 @@ PERL_DIGEST_SHA1_VERSION = 2.13
- PERL_DIGEST_SHA1_SOURCE = Digest-SHA1-$(PERL_DIGEST_SHA1_VERSION).tar.gz
- PERL_DIGEST_SHA1_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
- PERL_DIGEST_SHA1_LICENSE = Artistic or GPLv1+
-+PERL_DIGEST_SHA1_LICENSE_FILES = README
- 
- $(eval $(perl-package))
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-index fcf914c..a75d8af 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-@@ -9,5 +9,6 @@ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
- PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
- PERL_IO_SOCKET_SSL_DEPENDENCIES = perl-net-ssleay
- PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPLv1+
-+PERL_IO_SOCKET_SSL_LICENSE_FILES = README
- 
- $(eval $(perl-package))
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index 8c7926f..03a3b74 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
-@@ -8,5 +8,6 @@ PERL_MAIL_DKIM_VERSION = 0.40
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
- PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JA/JASLONG
- PERL_MAIL_DKIM_DEPENDENCIES = perl-crypt-openssl-rsa perl-mailtools perl-net-dns
-+PERL_MAIL_DKIM_LICENSE_FILES = README
- 
- $(eval $(perl-package))
-diff --git a/package/perl-mailtools/perl-mailtools.mk b/package/perl-mailtools/perl-mailtools.mk
-index 88f3a9f..d3c049d 100644
---- a/package/perl-mailtools/perl-mailtools.mk
-+++ b/package/perl-mailtools/perl-mailtools.mk
-@@ -9,5 +9,6 @@ PERL_MAILTOOLS_SOURCE = MailTools-$(PERL_MAILTOOLS_VERSION).tar.gz
- PERL_MAILTOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKOV
- PERL_MAILTOOLS_DEPENDENCIES = perl-timedate
- PERL_MAILTOOLS_LICENSE = Artistic or GPLv1+
-+PERL_MAILTOOLS_LICENSE_FILES = README
- 
- $(eval $(perl-package))
-diff --git a/package/perl-timedate/perl-timedate.mk b/package/perl-timedate/perl-timedate.mk
-index b7fcd08..4c594fb 100644
---- a/package/perl-timedate/perl-timedate.mk
-+++ b/package/perl-timedate/perl-timedate.mk
-@@ -8,5 +8,6 @@ PERL_TIMEDATE_VERSION = 2.30
- PERL_TIMEDATE_SOURCE = TimeDate-$(PERL_TIMEDATE_VERSION).tar.gz
- PERL_TIMEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GB/GBARR
- PERL_TIMEDATE_LICENSE = Artistic or GPLv1+
-+PERL_TIMEDATE_LICENSE_FILES = README
- 
- $(eval $(perl-package))
-diff --git a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-index 727b9b8..31b71c1 100644
---- a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-+++ b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
-@@ -8,5 +8,6 @@ PERL_XML_NAMESPACESUPPORT_VERSION = 1.11
- PERL_XML_NAMESPACESUPPORT_SOURCE = XML-NamespaceSupport-$(PERL_XML_NAMESPACESUPPORT_VERSION).tar.gz
- PERL_XML_NAMESPACESUPPORT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERIGRIN
- PERL_XML_NAMESPACESUPPORT_LICENSE = Artistic or GPLv1+
-+PERL_XML_NAMESPACESUPPORT_LICENSE_FILES = README
- 
- $(eval $(perl-package))
-diff --git a/package/perl-xml-sax-base/perl-xml-sax-base.mk b/package/perl-xml-sax-base/perl-xml-sax-base.mk
-index de47ea4..60dec31 100644
---- a/package/perl-xml-sax-base/perl-xml-sax-base.mk
-+++ b/package/perl-xml-sax-base/perl-xml-sax-base.mk
-@@ -8,5 +8,6 @@ PERL_XML_SAX_BASE_VERSION = 1.08
- PERL_XML_SAX_BASE_SOURCE = XML-SAX-Base-$(PERL_XML_SAX_BASE_VERSION).tar.gz
- PERL_XML_SAX_BASE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GR/GRANTM
- PERL_XML_SAX_BASE_LICENSE = Artistic or GPLv1+
-+PERL_XML_SAX_BASE_LICENSE_FILES = README
- 
- $(eval $(perl-package))
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 1835fea..0436d2a 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -544,6 +544,9 @@ sub find_license_files {
-         next if m|/|;
-         push @license_files, $_ if m/(ARTISTIC|COPYING|COPYRIGHT|LICENSE)/i;
-     }
-+    if (scalar @license_files == 0 && $manifest =~ m/(README)[\n\s]/i) {
-+        @license_files = ($1);
-+    }
-     return \@license_files;
- }
- 
+No, it should not be needed to patch the sources of the package.
+
+Just check if changing true/false in x265.mk to ON/OFF still works. If
+so, do the change and send a patch to Buildroot to use ON/OFF instead of
+true/false.
+
+If it does not work, we will keep true/false.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.5.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
