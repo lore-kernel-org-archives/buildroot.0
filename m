@@ -1,54 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Oct 2015 22:20:54 +0100
-Subject: [Buildroot] [PATCH 04/21 v2] core: commonalise the bundled and
- br2-external %_defconfig rules
-In-Reply-To: <20151026205650.GB3788@free.fr>
-References: <cover.1445545973.git.yann.morin.1998@free.fr>
- <3b01a81ac78b8ca787b1e0308e819d8eb2ece1df.1445545973.git.yann.morin.1998@free.fr>
- <562E8CCC.20505@mind.be> <20151026205650.GB3788@free.fr>
-Message-ID: <562E9936.6060202@mind.be>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Mon, 26 Oct 2015 16:24:45 -0500
+Subject: [Buildroot] [git commit] package/initscripts: S40network: wait
+ for network interfaces to appear
+In-Reply-To: <20151026210447.GC3788@free.fr>
+References: <20151016111136.50FA381F8A@busybox.osuosl.org>
+ <CAMQcK5K7pKFBoN9N2hv4oLscew6qTWvj9RhfiCviLako0VzdRg@mail.gmail.com>
+ <87io5tcraw.fsf@dell.be.48ers.dk>
+ <CADZ9A7pN8Tq8NzDbnNDjjSP0Y7Edvo7TbngcFNhttO+v+ybMXg@mail.gmail.com>
+ <20151026210447.GC3788@free.fr>
+Message-ID: <CAMQcK5+CrTFbDBKFq4ACQ=Ea2OCtZ9vYvnfLOmO8cQf9qhbbKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26-10-15 21:56, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2015-10-26 21:27 +0100, Arnout Vandecappelle spake thusly:
->> On 22-10-15 22:33, Yann E. MORIN wrote:
-[snip]
->>> ---
->>>  Makefile | 13 ++++++-------
->>>  1 file changed, 6 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index 60cea32..052f58a 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -789,13 +789,12 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->>>  	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
->>>  
->>>  # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+Yann, Peter,
+
+On Mon, Oct 26, 2015 at 4:04 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Maury, Ryan, Peter, All,
+>
+> On 2015-10-26 15:53 -0500, Maury Anderson spake thusly:
+>> I believe both suggestions should be added.
 >>
->>  This comment should go inside the define
-> 
-> Why? The macro only generates Makefile code, so we don;t care that
-> comment being replicated for both cases.
+>> Thank you for the awk magic.  The modified awk magic creates duplicates,
+>> for instance if you had "lo eth3 eth3:1 eth3:2" you end up with "lo eth3
+>> eth3 eth3".  The duplicates don't hurt anything, just waste time in the
+>> loop.  Can we pipe it through uniq?  (Provided uniq is in the default
+>> busybox.)
+>
+> Or still in awk:
+>
+>     ifaces=$(awk '/^auto/ { split($2, iface, ":"); ifaces[iface[1]]=1; }
+>                   END { for(i in ifaces) { printf( "%s\n", i); } }
+>                  ' \
+>                  /etc/network/interfaces
+>             )
 
- Because the comment should be as close as possible to statement it relates to.
-So actually it should be placed after the %_defconfig (which is possible now
-since there is only one).
+For what my two USD cents is worth:  ;)
 
- Regards,
- Arnout
+I prefer just keeping Peter's awk suggestion of:
 
+awk '/^auto/ { split($2, iface, ":"); print iface[1] }' /etc/network/interfaces
+
+The reason I prefer this is because of the simplicity of it and it is
+much easier to read and understand for people who are causal users of
+AWK syntax (such as myself). As Peter said, I think overhead of the
+simplified command is worth it over the complication of this awk
+command above.
+
+A patch should be inbound to the mailing list shortly addressing this issue.
+
+Thanks,
+-Ryan
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
