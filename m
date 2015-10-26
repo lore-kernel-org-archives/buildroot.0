@@ -1,101 +1,55 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 26 Oct 2015 15:07:14 -0500
-Subject: [Buildroot] [git commit] package/initscripts: S40network: wait
- for network interfaces to appear
-In-Reply-To: <20151016111136.50FA381F8A@busybox.osuosl.org>
-References: <20151016111136.50FA381F8A@busybox.osuosl.org>
-Message-ID: <CAMQcK5K7pKFBoN9N2hv4oLscew6qTWvj9RhfiCviLako0VzdRg@mail.gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 27 Oct 2015 09:08:49 +1300
+Subject: [Buildroot] [PATCH] syslog-ng: Link against librt
+In-Reply-To: <CAFOYHZD60ZAPoyeHzL9akgu8MR5pSYGh4MH9ROnUPwvgH0VMdg@mail.gmail.com>
+References: <1445817733-12772-1-git-send-email-judge.packham@gmail.com>
+ <20151026045411.654c6ba5@free-electrons.com>
+ <CAFOYHZDmJrQ1BY703iLY6FDke-z3Dcjb8ojSRs_x7nGwf7PpOQ@mail.gmail.com>
+ <CAFOYHZD60ZAPoyeHzL9akgu8MR5pSYGh4MH9ROnUPwvgH0VMdg@mail.gmail.com>
+Message-ID: <CAFOYHZCA2eGK_YD5=G6GiOkik1Lkv1Fueu5O-6DPikzacLNSuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Yann, All,
-
-On Fri, Oct 16, 2015 at 2:16 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
-
-[...]
-
+On Mon, Oct 26, 2015 at 8:08 PM, Chris Packham <judge.packham@gmail.com> wrote:
+> On Mon, Oct 26, 2015 at 7:53 PM, Chris Packham <judge.packham@gmail.com> wrote:
+>> Hi Thomas,
+>>
+>> On Mon, Oct 26, 2015 at 4:54 PM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> Dear Chris Packham,
+>>>
+>>> On Mon, 26 Oct 2015 13:02:13 +1300, Chris Packham wrote:
+>>>
+>>>> +# rabbit-mq needs -lrt
+>>>> +SYSLOG_NG_CONF_ENV = LIBS=-lrt
+>>>
+>>> While this works, I believe a better solution is to fix the
+>>> configure.ac. It already checks if nanosleep is in librt, and if so,
+>>> links against librt.
+>>>
+>>> It should the same for those functions, if the rabbitmq support is
+>>> enabled.
+>>
+>> Hmm. Syslog-ng distributes rabbitmq-c as a sub package. The looking at
+>> included rabbitmq-c sources and the upstream package[1] it is checking
+>> for clock_gettime which it thinks it should find in librt. But looking
+>> at the config.log[2] for rabbitmq-c it has decided that no library is
+>> required. Is there something unexpected about clock_gettime with
+>> uclibc?
+>>
+>> [1] - https://github.com/alanxz/rabbitmq-c/blob/master/configure.ac#L104
+>> [2] - http://autobuild.buildroot.net/results/a3d/a3dfdebd76d47df11a8e26a215bb88fbce8dc6f7/syslog-ng-3.7.1/modules/afamqp/rabbitmq-c/config.log
+>>
 >
-> diff --git a/package/initscripts/init.d/S40network b/package/initscripts/init.d/S40network
-> index 7b11d8b..a8d7c5d 100755
-> --- a/package/initscripts/init.d/S40network
-> +++ b/package/initscripts/init.d/S40network
-> @@ -6,8 +6,37 @@
->  # Debian ifupdown needs the /run/network lock directory
->  mkdir -p /run/network
+> Digging a bit deeper it looks like clock_gettime is in both libc and
+> librt. According to the (glibc) man page -lrt was needed prior to
+> glibc 2.17 so I'm guessing this is some kind of backwards
+> compatibility check that would happen to satisfy the posix_spawn
+> requirements. I'll see about an upstream patch to rabbitmq-c.
 >
-> +# In case we have a slow-to-appear interface (e.g. eth-over-USB),
-> +# and we need to configure it, wait until it appears, but not too
-> +# long either. WAIT_DELAY is in seconds.
-> +WAIT_DELAY=15
-> +
-> +wait_for_interfaces() {
-> +       IFACES=$(awk '/^auto/ { print $2 }' /etc/network/interfaces)
 
-This new way to handle bringing up interfaces doesn't work well if you
-have defined virtual interfaces in your /etc/network/interfaces.
-Having virtual interfaces in your /etc/network/interfaces file I
-believe is a valid use case that I think buildroot's default
-S40network should handle. The specific use case that will fail is
-outlined below:
-
-In the actual use case demonstrated below, the network interfaces file
-contains 2 virtual interfaces on eth3.  Virtual interfaces do not get
-a unique entry in /sys/class/net.  The function "wait_for_interfaces"
-added to /package/initscripts/init.d/S40network makes an assumption
-that all interfaces that may be "auto" will have a /sys/class/net
-entry.  In the case of a virtual interface, the function will always
-timeout, and "ifup -a" is never called.
-
-# awk '/^auto/ { print $2 }' /etc/network/interfaces
-lo
-eth3
-eth3:1
-eth3:2
-
-# ls /sys/class/net/
-eth0   eth1   eth2   eth3 lo
-
-I'm not an awk expert so I'm not exactly sure how to fix this issue
-but I think this is a valid use case that should be addressed.
-
-Thanks,
--Ryan
-
-> +       [ -n "$IFACES" ] || return
-> +
-> +       printf "Waiting for network interfaces to appear"
-> +
-> +       for i in $(seq $WAIT_DELAY); do
-> +           for IFACE in $IFACES; do
-> +               if [ ! -e "/sys/class/net/$IFACE" ]; then
-> +                   printf "."
-> +                   sleep 1
-> +                   continue 2
-> +               fi
-> +           done
-> +
-> +           printf " ok\n"; return
-> +       done
-> +
-> +       printf " timeout\n"
-> +       exit 1
-> +}
-> +
->  case "$1" in
->    start)
-> +       wait_for_interfaces
-> +
->         echo "Starting network..."
->         /sbin/ifup -a
->         ;;
-
-
--- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+And here's a link to the pull request
+https://github.com/alanxz/rabbitmq-c/pull/322
