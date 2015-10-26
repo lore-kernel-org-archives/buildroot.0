@@ -1,44 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Oct 2015 06:13:35 +0100
-Subject: [Buildroot] [git commit] syslog-ng: Update URL for upstream patches
-Message-ID: <20151026051404.51B387F9E4@busybox.osuosl.org>
+Date: Mon, 26 Oct 2015 06:13:39 +0100
+Subject: [Buildroot] [git commit] syslog-ng: Fix build error
+Message-ID: <20151026051404.5A87F818ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca3d59142d4029132ab14098a81ded84009b21e8
+commit: http://git.buildroot.net/buildroot/commit/?id=b7d06152d105756869ad3ec6326ed471838ac85a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rather than pointing at a developer's github repository point at the
-official Balabit one. The commit SHAs are the same so no other change is
-needed.
+Add an upstream patch to fix the following build error.
+
+  error: redefinition of typedef 'TransportMapperUnix'
+
+Fixes:
+http://autobuild.buildroot.net/results/c9b/c9b31d2de72a4e48a213b5c1d011814566732dfb
 
 Signed-off-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/syslog-ng/syslog-ng.mk |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ package/syslog-ng/syslog-ng.hash |    1 +
+ package/syslog-ng/syslog-ng.mk   |    3 ++-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index 1c074a5..fed2475 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -5,3 +5,4 @@ sha256 77fcbe7d6df23e710a81d8e065e17ab91b14d580aead65bb292e4f25b4369192  f10941e
+ sha256 4547b44d8241be716f321d2aed225197e517db9912d6aedd8565765b427db6f2  96a633ce3f46ed102f38115000730bad41c4ed65.patch
+ sha256 15cdd963f5cae0e113724fb202baccc0056f8618723d7f7290f15e082f9e16cd  00526014247bb63680e53c35d4a76d0dac989405.patch
+ sha256 ec76ed27ab01f9487a8adf092655bc99167a9e81f6be685a8a45fdb1b07cca32  46b07ecaffc154aa7cc713409196020736fe4f33.patch
++sha256 737b34b4457a1fa9cd38be6a98119f131f7d64e82480011880c178d3d2618dea  e30fe7c3717a7bda4036448c7777747df1a4e0f9.patch
 diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 3441751..99b2a06 100644
+index 99b2a06..1f51e04 100644
 --- a/package/syslog-ng/syslog-ng.mk
 +++ b/package/syslog-ng/syslog-ng.mk
-@@ -15,11 +15,11 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- SYSLOG_NG_CONF_ENV = LIBS=-lrt
- SYSLOG_NG_CONF_OPTS = --disable-manpages
- SYSLOG_NG_PATCH = \
--	https://github.com/dnsjts/syslog-ng/commit/7b2b673ae2640ce9ad396f538fc25acb6e4405ec.patch \
--	https://github.com/dnsjts/syslog-ng/commit/f10941e565d402e032948bb9711bfbab43eadd88.patch \
--	https://github.com/dnsjts/syslog-ng/commit/96a633ce3f46ed102f38115000730bad41c4ed65.patch \
--	https://github.com/dnsjts/syslog-ng/commit/00526014247bb63680e53c35d4a76d0dac989405.patch \
--	https://github.com/dnsjts/syslog-ng/commit/46b07ecaffc154aa7cc713409196020736fe4f33.patch
-+	https://github.com/balabit/syslog-ng/commit/7b2b673ae2640ce9ad396f538fc25acb6e4405ec.patch \
-+	https://github.com/balabit/syslog-ng/commit/f10941e565d402e032948bb9711bfbab43eadd88.patch \
-+	https://github.com/balabit/syslog-ng/commit/96a633ce3f46ed102f38115000730bad41c4ed65.patch \
-+	https://github.com/balabit/syslog-ng/commit/00526014247bb63680e53c35d4a76d0dac989405.patch \
-+	https://github.com/balabit/syslog-ng/commit/46b07ecaffc154aa7cc713409196020736fe4f33.patch
+@@ -19,7 +19,8 @@ SYSLOG_NG_PATCH = \
+ 	https://github.com/balabit/syslog-ng/commit/f10941e565d402e032948bb9711bfbab43eadd88.patch \
+ 	https://github.com/balabit/syslog-ng/commit/96a633ce3f46ed102f38115000730bad41c4ed65.patch \
+ 	https://github.com/balabit/syslog-ng/commit/00526014247bb63680e53c35d4a76d0dac989405.patch \
+-	https://github.com/balabit/syslog-ng/commit/46b07ecaffc154aa7cc713409196020736fe4f33.patch
++	https://github.com/balabit/syslog-ng/commit/46b07ecaffc154aa7cc713409196020736fe4f33.patch \
++	https://github.com/balabit/syslog-ng/commit/e30fe7c3717a7bda4036448c7777747df1a4e0f9.patch
  
  # We override busybox's S01logging init script
  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
