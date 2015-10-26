@@ -1,55 +1,82 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 27 Oct 2015 09:08:49 +1300
-Subject: [Buildroot] [PATCH] syslog-ng: Link against librt
-In-Reply-To: <CAFOYHZD60ZAPoyeHzL9akgu8MR5pSYGh4MH9ROnUPwvgH0VMdg@mail.gmail.com>
-References: <1445817733-12772-1-git-send-email-judge.packham@gmail.com>
- <20151026045411.654c6ba5@free-electrons.com>
- <CAFOYHZDmJrQ1BY703iLY6FDke-z3Dcjb8ojSRs_x7nGwf7PpOQ@mail.gmail.com>
- <CAFOYHZD60ZAPoyeHzL9akgu8MR5pSYGh4MH9ROnUPwvgH0VMdg@mail.gmail.com>
-Message-ID: <CAFOYHZCA2eGK_YD5=G6GiOkik1Lkv1Fueu5O-6DPikzacLNSuQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 26 Oct 2015 21:12:00 +0100
+Subject: [Buildroot] [PATCH 03/21 v2] core: move pkg-utils.mk to support/
+In-Reply-To: <20151022212038.GC3797@free.fr>
+References: <cover.1445545973.git.yann.morin.1998@free.fr>
+ <924ba3caeef2c8236936a4515e2d55316362d046.1445545973.git.yann.morin.1998@free.fr>
+ <562950BD.4000405@mind.be> <20151022212038.GC3797@free.fr>
+Message-ID: <562E8910.7050003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 26, 2015 at 8:08 PM, Chris Packham <judge.packham@gmail.com> wrote:
-> On Mon, Oct 26, 2015 at 7:53 PM, Chris Packham <judge.packham@gmail.com> wrote:
->> Hi Thomas,
->>
->> On Mon, Oct 26, 2015 at 4:54 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>> Dear Chris Packham,
+On 22-10-15 23:20, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2015-10-22 23:10 +0200, Arnout Vandecappelle spake thusly:
+>> On 22-10-15 22:33, Yann E. MORIN wrote:
+>>> pkg-utils.mk contains various definitions that are used in the package
+>>> infrastructures and packages themselves.
 >>>
->>> On Mon, 26 Oct 2015 13:02:13 +1300, Chris Packham wrote:
+>>> However, those definitions can be useful in other parts of Buildroot,
+>>> and are already used in a few places that are not related to the package
+>>> infrastructure. Also, $(sep) will be needed early in the Makefile when
+>>> we eventually support multiple br2-external trees.
 >>>
->>>> +# rabbit-mq needs -lrt
->>>> +SYSLOG_NG_CONF_ENV = LIBS=-lrt
+>>> Since this file only contains definitions, we can include it anytime.
 >>>
->>> While this works, I believe a better solution is to fix the
->>> configure.ac. It already checks if nanosleep is in librt, and if so,
->>> links against librt.
->>>
->>> It should the same for those functions, if the rabbitmq support is
->>> enabled.
+>>> So, consider that file to no longer be specific to the package infras:
+>>>   - move it to support and rename it,
+>>>   - move a few similar definitions from the main Makefile to that file.
 >>
->> Hmm. Syslog-ng distributes rabbitmq-c as a sub package. The looking at
->> included rabbitmq-c sources and the upstream package[1] it is checking
->> for clock_gettime which it thinks it should find in librt. But looking
->> at the config.log[2] for rabbitmq-c it has decided that no library is
->> required. Is there something unexpected about clock_gettime with
->> uclibc?
->>
->> [1] - https://github.com/alanxz/rabbitmq-c/blob/master/configure.ac#L104
->> [2] - http://autobuild.buildroot.net/results/a3d/a3dfdebd76d47df11a8e26a215bb88fbce8dc6f7/syslog-ng-3.7.1/modules/afamqp/rabbitmq-c/config.log
->>
->
-> Digging a bit deeper it looks like clock_gettime is in both libc and
-> librt. According to the (glibc) man page -lrt was needed prior to
-> glibc 2.17 so I'm guessing this is some kind of backwards
-> compatibility check that would happen to satisfy the posix_spawn
-> requirements. I'll see about an upstream patch to rabbitmq-c.
->
+>>  Actually I think a lot more should move to support. For instance, pkg-* is
+>> actually not just for packages but also for linux, bootloaders, toolchain. And
+>> even package/Makefile.in (with a better name then :-).
+> 
+> I do agree. But I think this can be done in a separate series.
 
-And here's a link to the pull request
-https://github.com/alanxz/rabbitmq-c/pull/322
+ Yeah sorry I should have mentioned that: as a separate series indeed.
+
+
+> The current series is about adding multi-br2-external support, so only
+> includes whatever is necessary to achieve that goal.
+> 
+> I can queue a rework of the support materials as you suggest, but that
+> will be done in a separate series (and hopefully not a requirement
+> before this one is condered! ;-) ).
+> 
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>> Cc: Peter Korsgaard <jacmet@uclibc.org>
+>>> ---
+>>>  Makefile              | 10 ++-----
+>>>  package/pkg-utils.mk  | 59 ----------------------------------------
+>>>  support/misc/utils.mk | 74 +++++++++++++++++++++++++++++++++++++++++++++++++++
+>>
+>>  If you agree that more stuff should move to support, I think there should be a
+>> new directory support/make or support/mk.
+> 
+> As I said, we can move it later when doing the support rework.
+
+ OK.
+
+>>  BTW, why didn't the rename detection catch this? Did you change too much? In
+>> that case, perhaps it's better to do it in two patches? :-P
+> 
+> It was not caught because it is less than 50% (actually, 49%!) so git did
+> not detect a copy (or a rename either).
+
+ If you send a v2, could you set -M40% so the rename is detected?
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
