@@ -1,65 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Oct 2015 17:47:08 +0100
-Subject: [Buildroot] [PATCH] kmod: Fix tool links when
+Date: Mon, 26 Oct 2015 17:48:02 +0100
+Subject: [Buildroot] [git commit] kmod: Fix tool links when
 	BR2_ROOTFS_MERGED_USR
-In-Reply-To: <562e333d.G1kZT16K4SVKn/lt%chris.lesiak@licor.com> (Chris
- Lesiak's message of "Mon, 26 Oct 2015 09:05:49 -0500")
-References: <562e333d.G1kZT16K4SVKn/lt%chris.lesiak@licor.com>
-Message-ID: <87r3khd1bn.fsf@dell.be.48ers.dk>
+Message-ID: <20151026164906.2106E81EA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Lesiak <chris.lesiak@licor.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2aca24c4d124025fcb5ab1596867e37d31855a59
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> From 259a889fc3eb5196a9b69a624effe56b9e6dcfeb Mon Sep 17 00:00:00 2001
- > From: Chris Lesiak <chris.lesiak@licor.com>
- > Date: Mon, 26 Oct 2015 08:51:48 -0500
- > Subject: [PATCH] kmod: Fix tool links when BR2_ROOTFS_MERGED_USR
+[Peter: use KMOD_BIN_PATH instead of doubling logic, add comment explaining
+	why this is needed]
+Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/kmod/kmod.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
- > Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
- > ---
- >  package/kmod/kmod.mk | 8 ++++++++
- >  1 file changed, 8 insertions(+)
-
- > diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
- > index e07e601..84ef7c3 100644
- > --- a/package/kmod/kmod.mk
- > +++ b/package/kmod/kmod.mk
- > @@ -46,11 +46,19 @@ KMOD_LICENSE_FILES += COPYING
- >  # take precedence over busybox implementation
- >  KMOD_DEPENDENCIES += $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-
-I was a bit confused that things didn't work as ../usr/bin/kmod seems a
-sensible path from /sbin, but the symlink is resolved first so it really
-starts from /usr/sbin.
-
-
- > +ifeq ($(BR2_ROOTFS_MERGED_USR),y)
- > +define KMOD_INSTALL_TOOLS
- > +	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
- > +		ln -sf ../bin/kmod $(TARGET_DIR)/usr/sbin/$$i; \
- > +	done
- > +endef
- > +else
- >  define KMOD_INSTALL_TOOLS
- >  	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
- >  		ln -sf ../usr/bin/kmod $(TARGET_DIR)/sbin/$$i; \
- >  	done
- >  endef
- > +endif
-
-Instead of having the logic twice with the risks of getting them out of
-sync in the future, I've instead added a KMOD_BIN_PATH (that is either
-../bin/kmod or ../usr/bin/kmod) and used that.
-
-There isn't really any good reason to use $(TARGET_DIR)/usr/sbin/$$i
-over $(TARGET_DIR/sbin/$$i as ln follows the symlink, so I've left that
-as is.
-
-Committed with those changes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index e07e601..3742a03 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -46,9 +46,16 @@ KMOD_LICENSE_FILES += COPYING
+ # take precedence over busybox implementation
+ KMOD_DEPENDENCIES += $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ 
++# /sbin is really /usr/sbin with merged /usr, so adjust relative symlink
++ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++KMOD_BIN_PATH = ../bin/kmod
++else
++KMOD_BIN_PATH = ../usr/bin/kmod
++endif
++
+ define KMOD_INSTALL_TOOLS
+ 	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
+-		ln -sf ../usr/bin/kmod $(TARGET_DIR)/sbin/$$i; \
++		ln -sf $(KMOD_BIN_PATH) $(TARGET_DIR)/sbin/$$i; \
+ 	done
+ endef
+ 
