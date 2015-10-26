@@ -1,44 +1,252 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Oct 2015 17:48:02 +0100
-Subject: [Buildroot] [git commit] kmod: Fix tool links when
-	BR2_ROOTFS_MERGED_USR
-Message-ID: <20151026164906.2106E81EA4@busybox.osuosl.org>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Mon, 26 Oct 2015 15:12:56 -0200
+Subject: [Buildroot] [PATCH v3 1/3] chocolate-doom: new package
+Message-ID: <1445879578-404-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2aca24c4d124025fcb5ab1596867e37d31855a59
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Chocolate Doom is a set of conservative source ports for Doom, Heretic,
+Hexen and Strife, with a philosophy of preserving the look, feel, and
+bugs of the vanilla versions of each.
 
-[Peter: use KMOD_BIN_PATH instead of doubling logic, add comment explaining
-	why this is needed]
-Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+http://www.chocolate-doom.org
+
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 ---
- package/kmod/kmod.mk |    9 ++++++++-
- 1 files changed, 8 insertions(+), 1 deletions(-)
+Changes v2 -> v3:
+  - Rewrite commit message for upstream patch 2 (hopefully clearer now);
+  - Include upstream status in patches.
+---
+ package/Config.in                                  |  1 +
+ ...ruct-attribute-directive-ignored-warnings.patch | 49 ++++++++++++++++
+ ...-configure-fix-with-PACKAGE-option-checks.patch | 67 ++++++++++++++++++++++
+ package/chocolate-doom/Config.in                   | 12 ++++
+ package/chocolate-doom/chocolate-doom.hash         |  2 +
+ package/chocolate-doom/chocolate-doom.mk           | 43 ++++++++++++++
+ 6 files changed, 174 insertions(+)
+ create mode 100644 package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch
+ create mode 100644 package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch
+ create mode 100644 package/chocolate-doom/Config.in
+ create mode 100644 package/chocolate-doom/chocolate-doom.hash
+ create mode 100644 package/chocolate-doom/chocolate-doom.mk
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index e07e601..3742a03 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -46,9 +46,16 @@ KMOD_LICENSE_FILES += COPYING
- # take precedence over busybox implementation
- KMOD_DEPENDENCIES += $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+diff --git a/package/Config.in b/package/Config.in
+index 10ff94e..d4917a3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -205,6 +205,7 @@ comment "Themes"
+ endmenu
  
-+# /sbin is really /usr/sbin with merged /usr, so adjust relative symlink
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+KMOD_BIN_PATH = ../bin/kmod
-+else
-+KMOD_BIN_PATH = ../usr/bin/kmod
+ menu "Games"
++	source "package/chocolate-doom/Config.in"
+ 	source "package/doom-wad/Config.in"
+ 	source "package/gnuchess/Config.in"
+ 	source "package/lbreakout2/Config.in"
+diff --git a/package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch b/package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch
+new file mode 100644
+index 0000000..463d67f
+--- /dev/null
++++ b/package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch
+@@ -0,0 +1,49 @@
++From d9c517d9a4e168c1f7ed28ad0eb9365d69f5ceb2 Mon Sep 17 00:00:00 2001
++From: Rodrigo Rebello <rprebello@gmail.com>
++Date: Thu, 22 Oct 2015 11:29:55 -0200
++Subject: [PATCH 1/2] Fix "`gcc_struct' attribute directive ignored" warnings
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Compilation for target architectures other than i386, x86_64 or PowerPC
++(e.g. ARM) caused multiple warnings like the following to appear:
++
++  doomdata.h:75:1: warning: ?gcc_struct? attribute directive ignored
++   } PACKEDATTR mapsidedef_t;
++   ^
++
++This was due to 'gcc_struct' being undefined for these architectures.
++Since that attribute was actually introduced by commit 87db726b9a9ae61ca
++to address the fact that -mms-bitfields became the default for GCC on
++Windows, limit it to that case.
++
++Upstream-status: accepted, not yet released.
++https://github.com/chocolate-doom/chocolate-doom/pull/629
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++---
++ src/doomtype.h | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/doomtype.h b/src/doomtype.h
++index bf0a40e..77c026c 100644
++--- a/src/doomtype.h
+++++ b/src/doomtype.h
++@@ -52,10 +52,10 @@
++ 
++ #ifdef __GNUC__
++ 
++-#ifdef __clang__
++-#define PACKEDATTR __attribute__((packed))
++-#else
+++#if defined(_WIN32) && !defined(__clang__)
++ #define PACKEDATTR __attribute__((packed,gcc_struct))
+++#else
+++#define PACKEDATTR __attribute__((packed))
++ #endif
++ 
++ #else
++-- 
++2.1.4
++
+diff --git a/package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch b/package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch
+new file mode 100644
+index 0000000..94c1e47
+--- /dev/null
++++ b/package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch
+@@ -0,0 +1,67 @@
++From fd12fa91aa8e35dbd3ffa5bfe055baf6bde0cd63 Mon Sep 17 00:00:00 2001
++From: Rodrigo Rebello <rprebello@gmail.com>
++Date: Thu, 22 Oct 2015 15:28:11 -0200
++Subject: [PATCH 2/2] configure: fix --with-PACKAGE option checks
++
++Options of the form --with-PACKAGE[=yes] (e.g. --with-libpng), when
++passed to configure, were being treated as though --without-PACKAGE had
++been given.
++
++Although the intention is to have configure check and use PACKAGE by
++default if it's available, thus requiring the user to pass an option
++only if PACKAGE must NOT be used, there are times when the opposite
++might be desired (i.e. the user wants to indicate PACKAGE MUST be used).
++Moreover, allowing --with-PACKAGE and behaving as if --without-PACKAGE
++had been specified is in itself quite confusing.
++
++Fix that by testing the result of 'with_PACKAGE' in configure.ac and
++acting accordingly instead of blindly assuming a 'no'.
++
++Upstream-status: accepted, not yet released.
++https://github.com/chocolate-doom/chocolate-doom/pull/630
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++---
++ configure.ac | 18 ++++++++++++++++--
++ 1 file changed, 16 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index ee97fe2..7b03485 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -80,7 +80,14 @@ AC_SDL_MAIN_WORKAROUND([
++         [Build without libsamplerate @<:@default=check@:>@]),
++     [],
++     [
++-        AC_CHECK_LIB(samplerate, src_new)
+++        [with_libsamplerate=check]
+++    ])
+++    AS_IF([test "x$with_libsamplerate" != xno], [
+++        AC_CHECK_LIB(samplerate, src_new, [], [
+++            AS_IF([test "x$with_libsamplerate" != xcheck], [AC_MSG_FAILURE(
+++                [--with-libsamplerate was given, but test for libsamplerate failed])
+++            ])
+++        ])
++     ])
++     # Check for libpng.
++     AC_ARG_WITH([libpng],
++@@ -88,8 +95,15 @@ AC_SDL_MAIN_WORKAROUND([
++         [Build without libpng @<:@default=check@:>@]),
++     [],
++     [
+++        [with_libpng=check]
+++    ])
+++    AS_IF([test "x$with_libpng" != xno], [
++         AC_CHECK_LIB(z, zlibVersion)
++-        AC_CHECK_LIB(png, png_get_io_ptr)
+++        AC_CHECK_LIB(png, png_get_io_ptr, [], [
+++            AS_IF([test "x$with_libpng" != xcheck], [AC_MSG_FAILURE(
+++                [--with-libpng was given, but test for libpng failed])
+++            ])
+++        ])
++     ])
++     AC_CHECK_LIB(m, log)
++ 
++-- 
++2.1.4
++
+diff --git a/package/chocolate-doom/Config.in b/package/chocolate-doom/Config.in
+new file mode 100644
+index 0000000..5e0d9c1
+--- /dev/null
++++ b/package/chocolate-doom/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_CHOCOLATE_DOOM
++	bool "chocolate-doom"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_SDL
++	select BR2_PACKAGE_SDL_MIXER
++	select BR2_PACKAGE_SDL_NET
++	help
++	  Chocolate Doom is a set of conservative source ports for Doom,
++	  Heretic, Hexen and Strife, with a philosophy of preserving the
++	  look, feel, and bugs of the vanilla versions of each.
++
++	  http://www.chocolate-doom.org
+diff --git a/package/chocolate-doom/chocolate-doom.hash b/package/chocolate-doom/chocolate-doom.hash
+new file mode 100644
+index 0000000..bdf5698
+--- /dev/null
++++ b/package/chocolate-doom/chocolate-doom.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	ad11e2871667c6fa0658abf2dcba0cd9b26fbd651ee8df55adfdc18ad8fd674a	chocolate-doom-2.2.1.tar.gz
+diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
+new file mode 100644
+index 0000000..78e6628
+--- /dev/null
++++ b/package/chocolate-doom/chocolate-doom.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# chocolate-doom
++#
++################################################################################
++
++CHOCOLATE_DOOM_VERSION = 2.2.1
++CHOCOLATE_DOOM_SOURCE = chocolate-doom-$(CHOCOLATE_DOOM_VERSION).tar.gz
++CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
++CHOCOLATE_DOOM_LICENSE = GPLv2+
++CHOCOLATE_DOOM_LICENSE_FILES = COPYING
++CHOCOLATE_DOOM_AUTORECONF = YES
++CHOCOLATE_DOOM_DEPENDENCIES = sdl sdl_mixer sdl_net
++
++# Avoid installing desktop entries, icons, etc.
++CHOCOLATE_DOOM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
++
++ifeq ($(BR2_STATIC_LIBS),y)
++# SDL_mixer uses symbols from SDL, but ends up after it on the link
++# cmdline. Fix it by forcing the SDL libs at the very end.
++CHOCOLATE_DOOM_CONF_ENV = LIBS="`$(STAGING_DIR)/usr/bin/sdl-config --static-libs`"
 +endif
 +
- define KMOD_INSTALL_TOOLS
- 	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
--		ln -sf ../usr/bin/kmod $(TARGET_DIR)/sbin/$$i; \
-+		ln -sf $(KMOD_BIN_PATH) $(TARGET_DIR)/sbin/$$i; \
- 	done
- endef
- 
++CHOCOLATE_DOOM_CONF_OPTS = \
++	--disable-sdltest \
++	--with-sdl-prefix=$(STAGING_DIR)/usr \
++	--with-sdl-exec-prefix=$(STAGING_DIR)/usr
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++	CHOCOLATE_DOOM_DEPENDENCIES += libpng
++	CHOCOLATE_DOOM_CONF_OPTS += --with-libpng
++else
++	CHOCOLATE_DOOM_CONF_OPTS += --without-libpng
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++	CHOCOLATE_DOOM_DEPENDENCIES += libsamplerate
++	CHOCOLATE_DOOM_CONF_OPTS += --with-libsamplerate
++else
++	CHOCOLATE_DOOM_CONF_OPTS += --without-libsamplerate
++endif
++
++$(eval $(autotools-package))
+-- 
+2.1.4
