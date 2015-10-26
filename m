@@ -1,44 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Oct 2015 09:51:25 +0100
-Subject: [Buildroot] [PATCH] arch/arm: use EABIhf by default with VFP
-In-Reply-To: <20151026092536.6aa7996b@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 26 Oct 2015 09:25:36 +0100")
-References: <87k2qn6gf0.fsf@dell.be.48ers.dk>
- <1445786380-2741-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <87bnbmixv1.fsf@dell.be.48ers.dk>
- <20151026013217.60ad1af8@free-electrons.com>
- <87bnbmdqad.fsf@dell.be.48ers.dk>
- <20151026092536.6aa7996b@free-electrons.com>
-Message-ID: <877fmadnci.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 Oct 2015 09:58:27 +0100
+Subject: [Buildroot] [PATCH 1/1] libcap: depend on host-attr for the host
+In-Reply-To: <1445722754-3477-2-git-send-email-mathstuf@gmail.com>
+References: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
+ <1445722754-3477-2-git-send-email-mathstuf@gmail.com>
+Message-ID: <20151026095827.2679c61f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Ben Boeckel,
 
- > Peter,
- > On Mon, 26 Oct 2015 08:47:54 +0100, Peter Korsgaard wrote:
+On Sat, 24 Oct 2015 17:39:14 -0400, Ben Boeckel wrote:
+> When a host-libcap is built, it is built without libattr support.
+> However, libcap does not define some symbols based on this flag. This
+> becomes a problem when a build-host tool is run (e.g., ls) which uses
+> these symbols gets the host-libcap library via LD_LIBRARY_PATH.
 
- >> > However, unlike BR2_ARM_CPU_HAS_NEON which gets selected even on ARM
- >> > cores for which NEON is optional, but for which the user has explicitly
- >> > requested NEON support to be enabled (through BR2_ARM_ENABLE_NEON), it
- >> > is not the case for the VFP option. I think we should do that.
- >> > Otherwise, BR2_ARM_CPU_HAS_VFPV2 will not be true, even if the VFPv2
- >> > unit is actually available and used.
- >> 
- >> But packages should use the BR2_ARM_FPU_VFPV2 (and 3/4) symbols to check
- >> if they should use the VFP, and not BR2_ARM_CPU_MAYBE_HAS_VFPV2 || BR2_ARM_CPU_HAS_VFPV2
+Ok, so let me try to understand this a bit better. You say that if you
+have host-libcap built and installed in $(HOST_DIR), then when you
+build another package, if the build process of that package uses your
+system 'ls' (i.e /bin/ls), then this ls doesn't work properly because
+it uses $(HOST_DIR)/usr/lib/libacl.so instead of /usr/lib/libacl.so.
 
- > But then they have to test BR2_ARM_FPU_VFPV2 || BR2_ARM_FPU_VFPV3 ||
- > BR2_ARM_FPU_VFPV3D16 || ...
+Is that correct ?
 
- > If they just want to know if a VFP is available.
+If that is correct, then I think your proposed change is not the right
+solution, because it is just a workaround for the specific situation,
+on your distribution, where ls gets linked against an acl that has attr
+support. A similar problem can appear with other binaries/libraries,
+and we don't want to clutter our host package dependencies to solve
+such problems IMO.
 
-If that is the case we could make a hidden BR2_ARM_FPU_VFP that gets
-selected by those, or simply check for !ARM_SOFT_FLOAT.
+Instead, I believe we should look at removing $(HOST_DIR)/usr/lib from
+LD_LIBRARY_PATH, i.e do something like:
 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 8a592d4..10f3a47 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -298,12 +298,10 @@ HOST_CONFIGURE_OPTS = \
+        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+        PKG_CONFIG_SYSROOT_DIR="/" \
+        PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
+-       LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
+        INTLTOOL_PERL=$(PERL)
+ 
+ HOST_MAKE_ENV = \
+        PATH=$(BR_PATH) \
+-       LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
+        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+        PKG_CONFIG_SYSROOT_DIR="/" \
+        PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
+
+We do build all host binaries in $(HOST_DIR) with a rpath that points
+to $(HOST_DIR)/usr/lib, so this LD_LIBRARY_PATH should not be
+necessary. And this LD_LIBRARY_PATH is indeed wrong as it means that
+any system binary will first use the Buildroot-built host libraries
+rather than the system ones, as you experienced. These LD_LIBRARY_PATH
+were introduced back in February 2010, at a time when we were not
+building host binaries with a rpath. So I believe they should by now be
+unnecessary, and as you found out, potentially harmful.
+
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
