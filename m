@@ -1,36 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Oct 2015 23:04:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/swupdate: fix build issue with
- some toolchains
-In-Reply-To: <1445894151-27841-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1445894151-27841-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151026230404.1501048e@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Oct 2015 23:30:54 +0100
+Subject: [Buildroot] [PATCH] xorg-server: bump to version 1.17.3
+In-Reply-To: <1445896855-14914-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 26 Oct 2015 19:00:55 -0300")
+References: <1445896855-14914-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a8r5b6u9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Mon, 26 Oct 2015 22:15:51 +0100, J?rg Krause wrote:
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-> +# Using 'ld' directly for the 'builtin-target' in Makefile.build to compile a
-> +# set of object files into one object file does not work for some toolchains
-> +# (x86_64 and mips64) leading to different kind of relocation errors. By
-> +# passing the below values for 'LD' and 'ldflags-y', we ensure that 'gcc' is
-> +# used to compile the 'builtin-target' target.
->  define SWUPDATE_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D)
-> +	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
-> +		LD="$(TARGET_CC)" ldflags-y="-Wl,-r -nostdlib"
->  endef
+Committed, thanks.
 
-But shouldn't upstream be fixed to use gcc instead of ld? Using ld
-directly is normally not a good idea.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
