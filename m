@@ -1,51 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Oct 2015 01:32:17 +0100
-Subject: [Buildroot] [PATCH] arch/arm: use EABIhf by default with VFP
-In-Reply-To: <87bnbmixv1.fsf@dell.be.48ers.dk>
-References: <87k2qn6gf0.fsf@dell.be.48ers.dk>
- <1445786380-2741-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <87bnbmixv1.fsf@dell.be.48ers.dk>
-Message-ID: <20151026013217.60ad1af8@free-electrons.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 26 Oct 2015 13:36:15 +1300
+Subject: [Buildroot] [PATCH 1/2] syslog-ng: Update URL for upstream patches
+Message-ID: <1445819776-7028-1-git-send-email-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Rather than pointing at a developer's github repository point at the
+official Balabit one. The commit SHAs are the same so no other change is
+needed.
 
-On Sun, 25 Oct 2015 19:53:06 +0100, Peter Korsgaard wrote:
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+The change set for python 3 support has been merged so the commits are now in
+the main upstream repository.
 
->  > diff --git a/arch/Config.in.arm b/arch/Config.in.arm
->  > index 4d10f4c..f0110b1 100644
->  > --- a/arch/Config.in.arm
->  > +++ b/arch/Config.in.arm
->  > @@ -188,6 +188,7 @@ endchoice
->  >  choice
->  >  	prompt "Target ABI"
->  >  	depends on BR2_arm || BR2_armeb
->  > +	default BR2_ARM_EABIHF if BR2_ARM_CPU_MAYBE_HAS_VFPV2 || BR2_ARM_CPU_HAS_VFPV2
-> 
-> I think we should only do it when we are certain it will run,
-> E.G. arm926 (our default variant) selects MAYBE_HAS_VFPV2, but it is
-> afaik quite rare to see arm9s with a vfp.
-> 
-> Committed with that changed, thanks.
+ package/syslog-ng/syslog-ng.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-default BR2_ARM_EABIHF if BR2_ARM_CPU_MAYBE_HAS_VFPV2 || BR2_ARM_CPU_HAS_VFPV2
-
-was indeed wrong, since having BR2_ARM_CPU_MAYBE_HAS_VFPV2 does not
-indicate that the SoC has VFP.
-
-However, unlike BR2_ARM_CPU_HAS_NEON which gets selected even on ARM
-cores for which NEON is optional, but for which the user has explicitly
-requested NEON support to be enabled (through BR2_ARM_ENABLE_NEON), it
-is not the case for the VFP option. I think we should do that.
-Otherwise, BR2_ARM_CPU_HAS_VFPV2 will not be true, even if the VFPv2
-unit is actually available and used.
-
-Thomas
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 3441751..99b2a06 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -15,11 +15,11 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ SYSLOG_NG_CONF_ENV = LIBS=-lrt
+ SYSLOG_NG_CONF_OPTS = --disable-manpages
+ SYSLOG_NG_PATCH = \
+-	https://github.com/dnsjts/syslog-ng/commit/7b2b673ae2640ce9ad396f538fc25acb6e4405ec.patch \
+-	https://github.com/dnsjts/syslog-ng/commit/f10941e565d402e032948bb9711bfbab43eadd88.patch \
+-	https://github.com/dnsjts/syslog-ng/commit/96a633ce3f46ed102f38115000730bad41c4ed65.patch \
+-	https://github.com/dnsjts/syslog-ng/commit/00526014247bb63680e53c35d4a76d0dac989405.patch \
+-	https://github.com/dnsjts/syslog-ng/commit/46b07ecaffc154aa7cc713409196020736fe4f33.patch
++	https://github.com/balabit/syslog-ng/commit/7b2b673ae2640ce9ad396f538fc25acb6e4405ec.patch \
++	https://github.com/balabit/syslog-ng/commit/f10941e565d402e032948bb9711bfbab43eadd88.patch \
++	https://github.com/balabit/syslog-ng/commit/96a633ce3f46ed102f38115000730bad41c4ed65.patch \
++	https://github.com/balabit/syslog-ng/commit/00526014247bb63680e53c35d4a76d0dac989405.patch \
++	https://github.com/balabit/syslog-ng/commit/46b07ecaffc154aa7cc713409196020736fe4f33.patch
+ 
+ # We override busybox's S01logging init script
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.3
