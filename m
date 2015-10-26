@@ -1,53 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Oct 2015 21:26:05 +0100
-Subject: [Buildroot] [git commit] liblockfile: bump to version 1.0.9-6
-Message-ID: <20151026202653.225E37FCAD@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 26 Oct 2015 21:27:56 +0100
+Subject: [Buildroot] [PATCH 04/21 v2] core: commonalise the bundled and
+ br2-external %_defconfig rules
+In-Reply-To: <3b01a81ac78b8ca787b1e0308e819d8eb2ece1df.1445545973.git.yann.morin.1998@free.fr>
+References: <cover.1445545973.git.yann.morin.1998@free.fr>
+ <3b01a81ac78b8ca787b1e0308e819d8eb2ece1df.1445545973.git.yann.morin.1998@free.fr>
+Message-ID: <562E8CCC.20505@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e12be0b3759b00f0e17cfc064cf9e49060fd2949
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22-10-15 22:33, Yann E. MORIN wrote:
+> The code for both cases is exactly the same, and only differs in the
+> location where defconfig files are looked for.
+> 
+> We use an intermediate macro to generate the corresponding rules,
+> because directly generating the rules is ugly and needs lots of escaping
+> and double-dollar-ing for the $(eval ...) and $(foreach ...) calls to
+> play nicely together.
+> 
+> Furthermore, that will be tremendously useful when we support multiple
+> br2-external trees.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/liblockfile/liblockfile.hash |    6 +++---
- package/liblockfile/liblockfile.mk   |    8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ Bunch of small nits. I'm not giving it my reviewed-by yet because I'm not
+convinced that this change really makes things clearer, so it only really
+applies in function of the multi-external and for that I first have to see the
+whole series.
 
-diff --git a/package/liblockfile/liblockfile.hash b/package/liblockfile/liblockfile.hash
-index 7f7ee7f..4421673 100644
---- a/package/liblockfile/liblockfile.hash
-+++ b/package/liblockfile/liblockfile.hash
-@@ -1,3 +1,3 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/libl/liblockfile/liblockfile_1.08-4.dsc
--sha256	d63293d5091d7fdc0259563694e4d68771310dbc4e70e188e6b68e7a776405cb	liblockfile_1.08.orig.tar.gz
--sha256	e1343c37b83722abdaa1b5d98e1696748ca134ad36752b8affebebd51ef78468	liblockfile_1.08-4.debian.tar.bz2
-+# From http://snapshot.debian.org/archive/debian/20151026T153523Z/pool/main/libl/liblockfile/liblockfile_1.09-6.dsc
-+sha256	16979eba05396365e1d6af7100431ae9d32f9bc063930d1de66298a0695f1b7f	liblockfile_1.09.orig.tar.gz
-+sha256	d45eacb7c637c16d03c777c55989d98da494ae9584a0783fe6dbf0db60fa290f	liblockfile_1.09-6.debian.tar.bz2
-diff --git a/package/liblockfile/liblockfile.mk b/package/liblockfile/liblockfile.mk
-index 4f7a67e..8de598f 100644
---- a/package/liblockfile/liblockfile.mk
-+++ b/package/liblockfile/liblockfile.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--LIBLOCKFILE_VERSION = 1.08
-+LIBLOCKFILE_VERSION = 1.09
- LIBLOCKFILE_SOURCE = liblockfile_$(LIBLOCKFILE_VERSION).orig.tar.gz
--LIBLOCKFILE_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/libl/liblockfile
--LIBLOCKFILE_PATCH = liblockfile_$(LIBLOCKFILE_VERSION)-4.debian.tar.bz2
-+LIBLOCKFILE_SITE = http://snapshot.debian.org/archive/debian/20151026T153523Z/pool/main/libl/liblockfile
-+LIBLOCKFILE_PATCH = liblockfile_$(LIBLOCKFILE_VERSION)-6.debian.tar.bz2
- 
- LIBLOCKFILE_LICENSE = LGPLv2+, dotlockfile GPLv2+
--# No license file included, it refers to the gnu.org website
-+LIBLOCKFILE_LICENSE_FILES = COPYRIGHT
- 
- LIBLOCKFILE_INSTALL_STAGING = YES
- LIBLOCKFILE_CONF_OPTS = --mandir=/usr/share/man
+> ---
+>  Makefile | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 60cea32..052f58a 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -789,13 +789,12 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
+>  
+>  # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+
+ This comment should go inside the define
+
+> -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
+> -	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
+> -		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
+> -
+> -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
+> -	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
+> -		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
+> +define PERCENT_DEFCONFIG
+
+ The macros we've added recently were all lowercase, and I like it that way.
+
+ Regards,
+ Arnout
+
+> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
+> +	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
+> +		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
+> +endef
+> +$(eval $(foreach d,$(TOPDIR) $(BR2_EXTERNAL),$(call PERCENT_DEFCONFIG,$(d))$(sep)))
+>  
+>  savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  	@$(COMMON_CONFIG_ENV) $< \
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
