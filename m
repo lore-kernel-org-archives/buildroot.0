@@ -1,40 +1,51 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 26 Oct 2015 13:02:13 +1300
-Subject: [Buildroot] [PATCH] syslog-ng: Link against librt
-Message-ID: <1445817733-12772-1-git-send-email-judge.packham@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 Oct 2015 01:32:17 +0100
+Subject: [Buildroot] [PATCH] arch/arm: use EABIhf by default with VFP
+In-Reply-To: <87bnbmixv1.fsf@dell.be.48ers.dk>
+References: <87k2qn6gf0.fsf@dell.be.48ers.dk>
+ <1445786380-2741-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <87bnbmixv1.fsf@dell.be.48ers.dk>
+Message-ID: <20151026013217.60ad1af8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some of the rabbit-mq tools need to link against librt, specify
-LIBS=-lrt when configuring.
+Dear Peter Korsgaard,
 
-Fixes:
-http://autobuild.buildroot.net/results/a3d/a3dfdebd76d47df11a8e26a215bb88fbce8dc6f7
-http://autobuild.buildroot.net/results/7d2/7d26e8efe67bf958162a309acb20800e669543e4
-http://autobuild.buildroot.net/results/7b5/7b5370d12a2ff8937cba3a201d4edce3dcd12a6e
-http://autobuild.buildroot.net/results/bab/babbb089ce1a7750495323248f21402960fb6c80
+On Sun, 25 Oct 2015 19:53:06 +0100, Peter Korsgaard wrote:
 
-Helped-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- package/syslog-ng/syslog-ng.mk | 2 ++
- 1 file changed, 2 insertions(+)
+>  > diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+>  > index 4d10f4c..f0110b1 100644
+>  > --- a/arch/Config.in.arm
+>  > +++ b/arch/Config.in.arm
+>  > @@ -188,6 +188,7 @@ endchoice
+>  >  choice
+>  >  	prompt "Target ABI"
+>  >  	depends on BR2_arm || BR2_armeb
+>  > +	default BR2_ARM_EABIHF if BR2_ARM_CPU_MAYBE_HAS_VFPV2 || BR2_ARM_CPU_HAS_VFPV2
+> 
+> I think we should only do it when we are certain it will run,
+> E.G. arm926 (our default variant) selects MAYBE_HAS_VFPV2, but it is
+> afaik quite rare to see arm9s with a vfp.
+> 
+> Committed with that changed, thanks.
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 1ade7cf..3441751 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -11,6 +11,8 @@ SYSLOG_NG_LICENSE = LGPLv2.1+ (syslog-ng core), GPLv2+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING
- SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- 	eventlog libglib2 openssl pcre
-+# rabbit-mq needs -lrt
-+SYSLOG_NG_CONF_ENV = LIBS=-lrt
- SYSLOG_NG_CONF_OPTS = --disable-manpages
- SYSLOG_NG_PATCH = \
- 	https://github.com/dnsjts/syslog-ng/commit/7b2b673ae2640ce9ad396f538fc25acb6e4405ec.patch \
+default BR2_ARM_EABIHF if BR2_ARM_CPU_MAYBE_HAS_VFPV2 || BR2_ARM_CPU_HAS_VFPV2
+
+was indeed wrong, since having BR2_ARM_CPU_MAYBE_HAS_VFPV2 does not
+indicate that the SoC has VFP.
+
+However, unlike BR2_ARM_CPU_HAS_NEON which gets selected even on ARM
+cores for which NEON is optional, but for which the user has explicitly
+requested NEON support to be enabled (through BR2_ARM_ENABLE_NEON), it
+is not the case for the VFP option. I think we should do that.
+Otherwise, BR2_ARM_CPU_HAS_VFPV2 will not be true, even if the VFPv2
+unit is actually available and used.
+
+Thomas
 -- 
-2.5.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
