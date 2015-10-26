@@ -1,70 +1,117 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Oct 2015 00:49:37 +0100
-Subject: [Buildroot] [PATCH 0/3 v3] toolchain/external: bump Linaro ARM,
-	ARMEB and AArch64 toolchains (branch yem/toolchain-linaro-2015.08)
-Message-ID: <cover.1445903025.git.yann.morin.1998@free.fr>
+Date: Tue, 27 Oct 2015 00:49:39 +0100
+Subject: [Buildroot] [PATCH 1/3 v3] toolchain/external: bump Linaro ARM to
+	2015.08
+In-Reply-To: <cover.1445903025.git.yann.morin.1998@free.fr>
+References: <cover.1445903025.git.yann.morin.1998@free.fr>
+Message-ID: <89db321b2d6e173eaa5b9c25e83be3637936edb9.1445903025.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+That toolchain is built for an x86_64 host, so we make it available only
+for x86_64, and we keep the old 2014.09 toolchain for x86 hosts.
 
-This series bumps the Linaro toolchains for ARM, ARMEB andAArch64 to the
-latst release advertised on their toolchain page, 2015.08.
-
-These new toolchains (like all those produced after 2014.09) are only
-available for x86_64 hosts. So, we keep the previous 2014.09 toolchains
-for x86 hosts, and add the new ones for x86_64 hosts.
-
-To this effect:
-  - we keep the same Kconfig symbol for both variants (x86 or x86_64
-    host),
-  - we duplicate the symbol, each entry depending on an x86 or x86_64
-    host.
-
-Since we have two entries, we can give them different prompts and
+To avoid dealing with legacy symbols and introduce versioned options,
+we reuse the same symbol for both toolchains. Thanks to the different
+depednencies (on the host), we can give them different prompts and
 different help texts.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ toolchain/toolchain-external/Config.in             | 28 ++++++++++++++++++++--
+ .../toolchain-external/toolchain-external.hash     |  1 +
+ toolchain/toolchain-external/toolchain-external.mk |  5 ++++
+ 3 files changed, 32 insertions(+), 2 deletions(-)
 
-Changes v2 -> v3:
-  - bump further
-  - don't add legacy symbols, don;t add versioned symbols (no longer
-    needed)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 3c79446dc7ffff50974dd67496b84c5a605d8e11:
-
-  xorg-server: bump to version 1.17.3 (2015-10-26 23:30:23 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/toolchain-linaro-2015.08
-
-for you to fetch changes up to 0ec78e8e5fe8005a752826731f86055aff3bdce3:
-
-  toolchain/external: bump Linaro AArch64 to 2015.08 (2015-10-27 00:39:04 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      toolchain/external: bump Linaro ARM to 2015.08
-      toolchain/external: bump Linaro ARMEB to 2015.08
-      toolchain/external: bump Linaro AArch64 to 2015.08
-
- toolchain/toolchain-external/Config.in             | 73 ++++++++++++++++++++--
- .../toolchain-external/toolchain-external.hash     |  3 +
- toolchain/toolchain-external/toolchain-external.mk | 15 +++++
- 3 files changed, 85 insertions(+), 6 deletions(-)
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 4291394..3b1db79 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -11,17 +11,19 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
+ 	depends on !BR2_STATIC_LIBS
+ 
++# Note: we use the same symbol for both Linaro toolchains.
++# Since they have different dependencies (the host), we can
++# give them different prompts and different help texts.
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	bool "Linaro ARM 2014.09"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABIHF
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+@@ -33,6 +35,28 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	  with the hard floating point calling convention, and uses
+ 	  the VFPv3-D16 FPU instructions.
+ 
++# See the note above.
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
++	bool "Linaro ARM 2015.08"
++	depends on BR2_arm
++	depends on BR2_ARM_CPU_ARMV7A
++	depends on BR2_HOSTARCH = "x86_64"
++	depends on BR2_ARM_EABIHF
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	help
++	  Linaro toolchain for the ARM architecture. It uses Linaro
++	  GCC 2015.08 (based on gcc 5.1), Linaro GDB 2015.08 (based on
++	  GDB 7.10), eglibc 2.21, Binutils 2015.10 (based on 2.25). It
++	  generates code that runs on all Cortex-A profile devices,
++	  but tuned for the Cortex-A9. The code generated is Thumb 2,
++	  with the hard floating point calling convention, and uses
++	  the VFPv3-D16 FPU instructions.
++
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	bool "Linaro armeb 2014.09"
+ 	depends on BR2_armeb
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index 8424dca..d9c73b4 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -50,6 +50,7 @@ sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2
+ 
+ # ARM and Aarch64 toolchains from Linaro
+ sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
++sha256 34812c5d0556db86259ac6eb3f8bcf4ce8eca3fa8d7180875958492a42e9853f  gcc-linaro-5.1-2015.08-x86_64_arm-linux-gnueabihf.tar.xz
+ sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+ 
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 4e12a1c..b745ed7 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -312,8 +312,13 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+ 	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
+ endef
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM),y)
++ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
++else
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/components/toolchain/binaries/5.1-2015.08/arm-linux-gnueabihf
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.1-2015.08-x86_64_arm-linux-gnueabihf.tar.xz
++endif
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
