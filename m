@@ -1,62 +1,78 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 26 Oct 2015 16:24:45 -0500
-Subject: [Buildroot] [git commit] package/initscripts: S40network: wait
- for network interfaces to appear
-In-Reply-To: <20151026210447.GC3788@free.fr>
-References: <20151016111136.50FA381F8A@busybox.osuosl.org>
- <CAMQcK5K7pKFBoN9N2hv4oLscew6qTWvj9RhfiCviLako0VzdRg@mail.gmail.com>
- <87io5tcraw.fsf@dell.be.48ers.dk>
- <CADZ9A7pN8Tq8NzDbnNDjjSP0Y7Edvo7TbngcFNhttO+v+ybMXg@mail.gmail.com>
- <20151026210447.GC3788@free.fr>
-Message-ID: <CAMQcK5+CrTFbDBKFq4ACQ=Ea2OCtZ9vYvnfLOmO8cQf9qhbbKg@mail.gmail.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Mon, 26 Oct 2015 22:27:26 +0100
+Subject: [Buildroot] [PATCH 0/4] Supporting a second Barebox build to
+ build the MLO/SPL
+In-Reply-To: <20151026045735.52c0f9e5@free-electrons.com>
+References: <1445801636-7554-1-git-send-email-pieter@boesman.nl>
+ <20151026045735.52c0f9e5@free-electrons.com>
+Message-ID: <20151026212726.GA9761@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Peter,
+Hi Thomas,
 
-On Mon, Oct 26, 2015 at 4:04 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Maury, Ryan, Peter, All,
->
-> On 2015-10-26 15:53 -0500, Maury Anderson spake thusly:
->> I believe both suggestions should be added.
->>
->> Thank you for the awk magic.  The modified awk magic creates duplicates,
->> for instance if you had "lo eth3 eth3:1 eth3:2" you end up with "lo eth3
->> eth3 eth3".  The duplicates don't hurt anything, just waste time in the
->> loop.  Can we pipe it through uniq?  (Provided uniq is in the default
->> busybox.)
->
-> Or still in awk:
->
->     ifaces=$(awk '/^auto/ { split($2, iface, ":"); ifaces[iface[1]]=1; }
->                   END { for(i in ifaces) { printf( "%s\n", i); } }
->                  ' \
->                  /etc/network/interfaces
->             )
+On Mon, Oct 26, 2015 at 04:57:35AM +0100, Thomas Petazzoni wrote:
+> Dear Pieter Smith,
+> 
+> On Sun, 25 Oct 2015 20:33:52 +0100, Pieter Smith wrote:
+> 
+> > Pieter Smith (4):
+> >   barebox: prepare for x-loader build
+> >   barebox: adds option to build x-loader
+> >   barebox: user selection of build output images
+> >   beaglebone: adds barebox bootloader defconfig
+> > 
+> >  boot/barebox/Config.in                        | 92 +++++++++++++++++++++++++++
+> >  boot/barebox/barebox-boot/barebox-boot.hash   |  1 +
+> >  boot/barebox/barebox-boot/barebox-boot.mk     | 89 ++++++++++++++++++++++++++
+> >  boot/barebox/barebox-xload/barebox-xload.hash |  1 +
+> >  boot/barebox/barebox-xload/barebox-xload.mk   | 51 +++++++++++++++
+> >  boot/barebox/barebox.mk                       | 60 +----------------
+> >  configs/beaglebone_barebox_defconfig          | 38 +++++++++++
+> 
+> I believe "xload" is really a term tied to the OMAP platforms, but
+> Barebox can have this dual configuration situation for other platforms
+> as well (ex: Atmel). Some other platforms use the term "SPL".
+> 
+> Can we find some better name ?
 
-For what my two USD cents is worth:  ;)
+Yes please, but selecting a use-case agnostic name might be tricky:
 
-I prefer just keeping Peter's awk suggestion of:
+U-Boot uses SPL (Secondary Program Loader) to describe a "run from internal
+SRAM" build as opposed to TPL (Tertiary Program Loader) for the normal "run
+from external RAM" build. This terminology however is U-Boot specific.
 
-awk '/^auto/ { split($2, iface, ":"); print iface[1] }' /etc/network/interfaces
+From a pure barebox perspective, there is nothing distinctive about the second
+build. It is just another defconfig, so there does not seem to be barebox
+terminology to differentiate between these types of builds. (Barebox even
+leaves the naming as a configuration option)
 
-The reason I prefer this is because of the simplicity of it and it is
-much easier to read and understand for people who are causal users of
-AWK syntax (such as myself). As Peter said, I think overhead of the
-simplified command is worth it over the complication of this awk
-command above.
+From an OMAP perspective, the second build is used to generate the X-loader
+when booting from NAND or MLO when booting from MMC.
 
-A patch should be inbound to the mailing list shortly addressing this issue.
+I would have loved to just stick with the boot stage naming, but the stage is
+very much architecture dependent:
+For BBB for example:
+1. First-stage bootloader runs from internal hard-coded ROM
+2. Second-stage bootloader runs from the internal SRAM (TI MLO) and is
+   generated with a trimmed down configuration.
+3. Third-stage bootloader runs from the external RAM and is generated with a
+   full configuration.
+But for the QCA4531 and family:
+1. First-stage bootloader runs from external serial NOR flash and is generated
+   with a full-blown configuration.
 
-Thanks,
--Ryan
+IMHO, let's just go with the suggested U-Boot naming (SPL) and if no barebox
+developers complain, stick to that.
 
--- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+Agreed?
+
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
