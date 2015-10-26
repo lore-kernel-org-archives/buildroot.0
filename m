@@ -1,28 +1,21 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Oct 2015 21:27:56 +0100
-Subject: [Buildroot] [PATCH 04/21 v2] core: commonalise the bundled and
- br2-external %_defconfig rules
-In-Reply-To: <3b01a81ac78b8ca787b1e0308e819d8eb2ece1df.1445545973.git.yann.morin.1998@free.fr>
+Date: Mon, 26 Oct 2015 21:44:07 +0100
+Subject: [Buildroot] [PATCH 05/21 v2] core: remove .br-external on
+	distclean
+In-Reply-To: <84027326a9f437b9c829a3a6f1e7c4616bf1ae1e.1445545973.git.yann.morin.1998@free.fr>
 References: <cover.1445545973.git.yann.morin.1998@free.fr>
- <3b01a81ac78b8ca787b1e0308e819d8eb2ece1df.1445545973.git.yann.morin.1998@free.fr>
-Message-ID: <562E8CCC.20505@mind.be>
+ <84027326a9f437b9c829a3a6f1e7c4616bf1ae1e.1445545973.git.yann.morin.1998@free.fr>
+Message-ID: <562E9097.5060800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22-10-15 22:33, Yann E. MORIN wrote:
-> The code for both cases is exactly the same, and only differs in the
-> location where defconfig files are looked for.
-> 
-> We use an intermediate macro to generate the corresponding rules,
-> because directly generating the rules is ugly and needs lots of escaping
-> and double-dollar-ing for the $(eval ...) and $(foreach ...) calls to
-> play nicely together.
-> 
-> Furthermore, that will be tremendously useful when we support multiple
-> br2-external trees.
+On 22-10-15 22:34, Yann E. MORIN wrote:
+> distclean is supposed to return the current directory, whether in-tree
+> or out-of-tree, into pristine conditions, which means we should also
+> forget about any br2-external tree on distclean.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -30,48 +23,35 @@ On 22-10-15 22:33, Yann E. MORIN wrote:
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 
- Bunch of small nits. I'm not giving it my reviewed-by yet because I'm not
-convinced that this change really makes things clearer, so it only really
-applies in function of the multi-external and for that I first have to see the
-whole series.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> ---
->  Makefile | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 60cea32..052f58a 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -789,13 +789,12 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
->  
->  # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+ That said: why don't we just remove $(O) unconditionally?
 
- This comment should go inside the define
 
-> -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
-> -	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
-> -		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
-> -
-> -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
-> -	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
-> -		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-> +define PERCENT_DEFCONFIG
+ Note that this can be applied independently of the rest of the series.
 
- The macros we've added recently were all lowercase, and I like it that way.
 
  Regards,
  Arnout
 
-> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
-> +	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
-> +		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
-> +endef
-> +$(eval $(foreach d,$(TOPDIR) $(BR2_EXTERNAL),$(call PERCENT_DEFCONFIG,$(d))$(sep)))
+
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 052f58a..0e25bd1 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -839,7 +839,7 @@ ifeq ($(O),output)
+>  	rm -rf $(O)
+>  endif
+>  	rm -rf $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
+> -		$(CONFIG_DIR)/.auto.deps
+> +		$(CONFIG_DIR)/.auto.deps $(BR2_EXTERNAL_FILE)
 >  
->  savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  	@$(COMMON_CONFIG_ENV) $< \
+>  help:
+>  	@echo 'Cleaning:'
 > 
 
 
