@@ -1,34 +1,26 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Mon, 26 Oct 2015 15:12:58 -0200
-Subject: [Buildroot] [PATCH v3 3/3] doom-wad: add BR2_PACKAGE_CHOCOLATE_DOOM
-	as alternate dependency
-In-Reply-To: <1445879578-404-1-git-send-email-rprebello@gmail.com>
-References: <1445879578-404-1-git-send-email-rprebello@gmail.com>
-Message-ID: <1445879578-404-3-git-send-email-rprebello@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 26 Oct 2015 17:14:35 +0000
+Subject: [Buildroot] [PATCH] portmap: add a hash file
+Message-ID: <1445879675-12758-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The shareware WAD file is also supported by Chocolate Doom.
-
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/doom-wad/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/portmap/portmap.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+ create mode 100644 package/portmap/portmap.hash
 
-diff --git a/package/doom-wad/Config.in b/package/doom-wad/Config.in
-index aa1d029..edd299b 100644
---- a/package/doom-wad/Config.in
-+++ b/package/doom-wad/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_DOOM_WAD
- 	bool "shareware Doom WAD file"
--	depends on BR2_PACKAGE_PRBOOM
-+	depends on BR2_PACKAGE_CHOCOLATE_DOOM || BR2_PACKAGE_PRBOOM
- 	help
- 	  This will install the shareware wad data file for the doom game.
- 
+diff --git a/package/portmap/portmap.hash b/package/portmap/portmap.hash
+new file mode 100644
+index 0000000..e542b2d
+--- /dev/null
++++ b/package/portmap/portmap.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 02c820d39f3e6e729d1bea3287a2d8a6c684f1006fb9612f97dcad4a281d41de  portmap-6.0.tgz
 -- 
-2.1.4
+1.7.1
