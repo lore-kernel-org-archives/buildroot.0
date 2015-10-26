@@ -1,54 +1,108 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 26 Oct 2015 19:00:55 -0300
-Subject: [Buildroot] [PATCH] xorg-server: bump to version 1.17.3
-Message-ID: <1445896855-14914-1-git-send-email-gustavo@zacarias.com.ar>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 26 Oct 2015 23:04:27 +0100
+Subject: [Buildroot] [PATCH v5 13/36] package/efl/libefl: add jp2k
+ config option
+In-Reply-To: <20151025144804.GJ11692@free.fr>
+References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
+ <1445720476-21517-14-git-send-email-romain.naour@openwide.fr>
+ <20151025144804.GJ11692@free.fr>
+Message-ID: <562EA36B.6020407@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/x11r7/xserver_xorg-server/Config.in                | 4 ++--
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Hi Yann, All,
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 8b794b3..2e05d5b 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -70,7 +70,7 @@ choice
- 	bool "X Window System server version"
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
--	bool "1.17.2"
-+	bool "1.17.3"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
- 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
- 
-@@ -82,7 +82,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.17.2" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
-+	default "1.17.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
- choice
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 4f57787..82ae71b 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
- # From http://lists.x.org/archives/xorg-announce/2014-June/002440.html
- sha1   7a95765e56b124758fcd7b609589e65b8870880b                                xorg-server-1.14.7.tar.bz2
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
--# From http://lists.x.org/archives/xorg-announce/2015-June/002614.html
--sha1	56ac29a82b99bcf4c7ba2fca41a44cfa18748262				xorg-server-1.17.2.tar.bz2
--sha256	f61120612728f2c5034671d0ca3e2273438c60aba93b3dda4a8aa40e6a257993	xorg-server-1.17.2.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-October/002647.html
-+sha1	78c33555d267fe0feda945d02f627cbc5aacbba5				xorg-server-1.17.3.tar.bz2
-+sha256	89b5c6b7e7ec4731645283d2178f607825b75a470e76b3ad3cb1c1dbd2456b73	xorg-server-1.17.3.tar.bz2
+Le 25/10/2015 15:48, Yann E. MORIN a ?crit :
+> Romain, All,
+> 
+> On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
+>> Like for webp format, add an option to enable the JPEG 2000
+>> codec support in the efl libraries.
+> 
+> Suddenly, I wonder why you added a bunch of image loaders in the first
+> patch adding libelf, but you add a few more such loaders in separate
+> patches.
+> 
+> Can't you do either:
+>   - introduce all of them as separate patches, or
+>   - introduce all of them in the first patch adding libefl?
+> 
+> Or is there an underlying good reason to do as you did?
+
+Yes there is a reason (good maybe), I wanted to add in the first patch all
+images loader that are already present in the previous version of efl package.
+So, I added new one in separate patches.
+
+Best regards,
+Romain
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>> v4: rename to libefl
+>>     improve commit log
+>> ---
+>>  package/efl/libefl/Config.in | 7 +++++++
+>>  package/efl/libefl/libefl.mk | 7 +++++++
+>>  2 files changed, 14 insertions(+)
+>>
+>> diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+>> index e25911f..53adea2 100644
+>> --- a/package/efl/libefl/Config.in
+>> +++ b/package/efl/libefl/Config.in
+>> @@ -51,6 +51,13 @@ config BR2_PACKAGE_LIBEFL_PNG
+>>  	  This enables the loader code that loads png files using
+>>  	  libpng.
+>>  
+>> +config BR2_PACKAGE_LIBEFL_JP2K
+>> +	bool "libevas jp2k loader"
+>> +	select BR2_PACKAGE_OPENJPEG
+>> +	help
+>> +	  This enables the loader code that loads jp2k files using
+>> +	  openjpeg.
+>> +
+>>  config BR2_PACKAGE_LIBEFL_JPEG
+>>  	bool "libevas jpeg loader"
+>>  	help
+>> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+>> index 3a4aab1..e53470d 100644
+>> --- a/package/efl/libefl/libefl.mk
+>> +++ b/package/efl/libefl/libefl.mk
+>> @@ -201,6 +201,13 @@ else
+>>  LIBEFL_CONF_OPTS += --enable-image-loader-tiff=no
+>>  endif
+>>  
+>> +ifeq ($(BR2_PACKAGE_LIBEFL_JP2K),y)
+>> +LIBEFL_CONF_OPTS += --enable-image-loader-jp2k=yes
+>> +LIBEFL_DEPENDENCIES += openjpeg
+>> +else
+>> +LIBEFL_CONF_OPTS += --enable-image-loader-jp2k=no
+>> +endif
+>> +
+>>  ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
+>>  LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
+>>  LIBEFL_DEPENDENCIES += webp
+>> -- 
+>> 2.4.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 -- 
-2.4.10
+Romain Naour
+
+OPEN WIDE Ing?nierie - Paris
+23/25, rue Daviel| 75013 PARIS
+http://ingenierie.openwide.fr
+
+Le blog des technologies libres et embarqu?es :
+http://www.linuxembedded.fr
