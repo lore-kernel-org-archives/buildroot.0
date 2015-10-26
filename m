@@ -1,27 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Oct 2015 22:53:46 +0100
-Subject: [Buildroot] [git commit] portmap: add a hash file
-Message-ID: <20151026215921.7A68681EAC@busybox.osuosl.org>
+Date: Mon, 26 Oct 2015 22:55:54 +0100
+Subject: [Buildroot] [git commit] perl-netaddr-ip: remove !BR2_STATIC_LIBS
+	constraint
+Message-ID: <20151026215921.876EA80409@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7ea96b87d9659dbb46e3ffba3e17f113a265f92
+commit: http://git.buildroot.net/buildroot/commit/?id=0a2d217826d64ac0f13dcb26499a077b864ba2f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+with the option -noxs, the Pure Perl version is always built.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/portmap/portmap.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/perl-netaddr-ip/Config.in          |    3 ---
+ package/perl-netaddr-ip/perl-netaddr-ip.mk |    2 ++
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/portmap/portmap.hash b/package/portmap/portmap.hash
-new file mode 100644
-index 0000000..e542b2d
---- /dev/null
-+++ b/package/portmap/portmap.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 02c820d39f3e6e729d1bea3287a2d8a6c684f1006fb9612f97dcad4a281d41de  portmap-6.0.tgz
+diff --git a/package/perl-netaddr-ip/Config.in b/package/perl-netaddr-ip/Config.in
+index 7ccb20a..1525830 100644
+--- a/package/perl-netaddr-ip/Config.in
++++ b/package/perl-netaddr-ip/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_PERL_NETADDR_IP
+ 	bool "perl-netaddr-ip"
+-	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Manages IPv4 and IPv6 addresses and subnets
+ 
+ 	  https://metacpan.org/release/NetAddr-IP
+ 
+-comment "perl-netaddr-ip needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-netaddr-ip/perl-netaddr-ip.mk b/package/perl-netaddr-ip/perl-netaddr-ip.mk
+index 2e5a82a..f2eec6c 100644
+--- a/package/perl-netaddr-ip/perl-netaddr-ip.mk
++++ b/package/perl-netaddr-ip/perl-netaddr-ip.mk
+@@ -10,6 +10,8 @@ PERL_NETADDR_IP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKER
+ PERL_NETADDR_IP_LICENSE = Artistic or GPLv1+
+ PERL_NETADDR_IP_LICENSE_FILES = Artistic Copying
+ 
++# we always build the Pure Perl version.
++# the build of the native part of NetAddr::IP::Util is buggy.
+ PERL_NETADDR_IP_CONF_OPTS = -noxs
+ 
+ $(eval $(perl-package))
