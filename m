@@ -1,28 +1,65 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Mon, 26 Oct 2015 09:29:25 -0700
-Subject: [Buildroot] Building system for the Marvell's ARMADA A385 borad
- to enable Node.js
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474D39044@svr-wa-exch1.atg.lc>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Oct 2015 17:47:08 +0100
+Subject: [Buildroot] [PATCH] kmod: Fix tool links when
+	BR2_ROOTFS_MERGED_USR
+In-Reply-To: <562e333d.G1kZT16K4SVKn/lt%chris.lesiak@licor.com> (Chris
+ Lesiak's message of "Mon, 26 Oct 2015 09:05:49 -0500")
+References: <562e333d.G1kZT16K4SVKn/lt%chris.lesiak@licor.com>
+Message-ID: <87r3khd1bn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot Busybox,
+>>>>> "Chris" == Chris Lesiak <chris.lesiak@licor.com> writes:
 
-My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.08.1. I made the former meet the latter's requirements. My target board is Marvell ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP.
+ >> From 259a889fc3eb5196a9b69a624effe56b9e6dcfeb Mon Sep 17 00:00:00 2001
+ > From: Chris Lesiak <chris.lesiak@licor.com>
+ > Date: Mon, 26 Oct 2015 08:51:48 -0500
+ > Subject: [PATCH] kmod: Fix tool links when BR2_ROOTFS_MERGED_USR
 
-Last week I built the 4.1.4 system with Node.js with no problems. This morning I succeeded in booting it on my board.
+ > Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+ > ---
+ >  package/kmod/kmod.mk | 8 ++++++++
+ >  1 file changed, 8 insertions(+)
 
-I ran the "npm -version" command and received a Segmentation fault.
+ > diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+ > index e07e601..84ef7c3 100644
+ > --- a/package/kmod/kmod.mk
+ > +++ b/package/kmod/kmod.mk
+ > @@ -46,11 +46,19 @@ KMOD_LICENSE_FILES += COPYING
+ >  # take precedence over busybox implementation
+ >  KMOD_DEPENDENCIES += $(if $(BR2_PACKAGE_BUSYBOX),busybox)
 
-I am resolving this problem now. Attached is my .config file. Your experience sharing is welcome!
+I was a bit confused that things didn't work as ../usr/bin/kmod seems a
+sensible path from /sbin, but the symlink is resolved first so it really
+starts from /usr/sbin.
 
-Tommy
 
-________________________________
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151026/a812fee9/attachment.html>
+ > +ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+ > +define KMOD_INSTALL_TOOLS
+ > +	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
+ > +		ln -sf ../bin/kmod $(TARGET_DIR)/usr/sbin/$$i; \
+ > +	done
+ > +endef
+ > +else
+ >  define KMOD_INSTALL_TOOLS
+ >  	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
+ >  		ln -sf ../usr/bin/kmod $(TARGET_DIR)/sbin/$$i; \
+ >  	done
+ >  endef
+ > +endif
+
+Instead of having the logic twice with the risks of getting them out of
+sync in the future, I've instead added a KMOD_BIN_PATH (that is either
+../bin/kmod or ../usr/bin/kmod) and used that.
+
+There isn't really any good reason to use $(TARGET_DIR)/usr/sbin/$$i
+over $(TARGET_DIR/sbin/$$i as ln follows the symlink, so I've left that
+as is.
+
+Committed with those changes, thanks.
+
+-- 
+Bye, Peter Korsgaard
