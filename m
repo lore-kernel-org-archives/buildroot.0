@@ -1,41 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 27 Oct 2015 10:26:37 +0000
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14}.x and 4.{1,
-	2}.x series
-Message-ID: <1445941598-49808-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 27 Oct 2015 07:40:32 -0300
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.2
+Message-ID: <1445942432-29522-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linux-headers/Config.in.host |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/dbus/dbus.hash | 2 +-
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2ea5717..8135b17 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -193,14 +193,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.91"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.92"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.49"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.55"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.56"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.22"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.11"	if BR2_KERNEL_HEADERS_4_1
--	default "4.2.4"		if BR2_KERNEL_HEADERS_4_2
-+	default "4.1.12"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.2.5"		if BR2_KERNEL_HEADERS_4_2
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 4db2dd3..7e21dd0 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	1dfb9745fb992f1ccd43c920490de8caddf6726a6222e8b803be6098293f924b  dbus-1.10.0.tar.gz
++sha256	aef3f49595df09b0824433ee993cda748ede93693a719a831562ae1616b6bb9e  dbus-1.10.2.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 139a5d7..9e722d8 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.10.0
++DBUS_VERSION = 1.10.2
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
 -- 
-1.7.1
+2.4.10
