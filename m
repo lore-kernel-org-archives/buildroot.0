@@ -1,86 +1,108 @@
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Tue, 27 Oct 2015 10:22:52 +0100
-Subject: [Buildroot] [git commit] package/initscripts: S40network: wait
- for network interfaces to appear
-In-Reply-To: <CAMQcK5K7pKFBoN9N2hv4oLscew6qTWvj9RhfiCviLako0VzdRg@mail.gmail.com>
-References: <20151016111136.50FA381F8A@busybox.osuosl.org>
- <CAMQcK5K7pKFBoN9N2hv4oLscew6qTWvj9RhfiCviLako0VzdRg@mail.gmail.com>
-Message-ID: <562F426C.4010500@green-communications.fr>
+From: Viacheslav Volkov <sv99@inbox.ru>
+Date: Tue, 27 Oct 2015 12:25:09 +0300
+Subject: [Buildroot] [PATCH 1/2] zbar: new package
+Message-ID: <1445937910-26996-1-git-send-email-sv99@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/10/2015 21:07, Ryan Barnett wrote:
-> Peter, Yann, All,
-> 
-> On Fri, Oct 16, 2015 at 2:16 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> 
-> [...]
-> 
->>
->> diff --git a/package/initscripts/init.d/S40network b/package/initscripts/init.d/S40network
->> index 7b11d8b..a8d7c5d 100755
->> --- a/package/initscripts/init.d/S40network
->> +++ b/package/initscripts/init.d/S40network
->> @@ -6,8 +6,37 @@
->>  # Debian ifupdown needs the /run/network lock directory
->>  mkdir -p /run/network
->>
->> +# In case we have a slow-to-appear interface (e.g. eth-over-USB),
->> +# and we need to configure it, wait until it appears, but not too
->> +# long either. WAIT_DELAY is in seconds.
->> +WAIT_DELAY=15
->> +
->> +wait_for_interfaces() {
->> +       IFACES=$(awk '/^auto/ { print $2 }' /etc/network/interfaces)
-> 
-> This new way to handle bringing up interfaces doesn't work well if you
-> have defined virtual interfaces in your /etc/network/interfaces.
-> Having virtual interfaces in your /etc/network/interfaces file I
-> believe is a valid use case that I think buildroot's default
-> S40network should handle. The specific use case that will fail is
-> outlined below:
-> 
-> In the actual use case demonstrated below, the network interfaces file
-> contains 2 virtual interfaces on eth3.  Virtual interfaces do not get
-> a unique entry in /sys/class/net.  The function "wait_for_interfaces"
-> added to /package/initscripts/init.d/S40network makes an assumption
-> that all interfaces that may be "auto" will have a /sys/class/net
-> entry.  In the case of a virtual interface, the function will always
-> timeout, and "ifup -a" is never called.
-> 
-> # awk '/^auto/ { print $2 }' /etc/network/interfaces
-> lo
-> eth3
-> eth3:1
-> eth3:2
+QR and barcode scanner library and gst-plugins-bad.
 
-These are not virtual interfaces in any way.  These aren't even
-interfaces.  Actually, they are address labels.
+Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
+---
+ package/Config.in                     |  1 +
+ package/zbar/0001-zbar-autoconf.patch | 16 ++++++++++++++++
+ package/zbar/Config.in                |  4 ++++
+ package/zbar/zbar.hash                |  3 +++
+ package/zbar/zbar.mk                  | 22 ++++++++++++++++++++++
+ 5 files changed, 46 insertions(+)
+ create mode 100644 package/zbar/0001-zbar-autoconf.patch
+ create mode 100644 package/zbar/Config.in
+ create mode 100644 package/zbar/zbar.hash
+ create mode 100644 package/zbar/zbar.mk
 
-Debian's ifupdown still support them, but never supported it correctly
-in the first place. Nowadays, it has more or less the same effect as
-just adding multiple eth3 definitions, something that busybox
-unfortunately does not support (i just looked at the code, and
-supporting it could be possibly done only by removing code, i should
-submit a patch).
-
-Anyway, one simple fix would be to just test
-/sys/class/net/${IFACE%:*} instead.
-
-However, true virtual interfaces may also be defined in
-/etc/network/interfaces and created via a pre-up stanza:
-
-auto br0
-iface br0 inet static
-    pre-up ip link add br0 type bridge
-    post-down ip link del br0
-    address 203.0.113.42
-    netmask 255.255.255.0
-
-In this case, S40network will wait forever.  However, if the feature
-was implemented via ifupdown pre-up hooks, then this use-case could
-actually work, since hooks are executed after pre-up stanzas. But that
-is maybe too complex for buildroot.
+diff --git a/package/Config.in b/package/Config.in
+index 10ff94e..778b1e1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -854,6 +854,7 @@ menu "Graphics"
+ 	source "package/webkit/Config.in"
+ 	source "package/webkitgtk24/Config.in"
+ 	source "package/webp/Config.in"
++	source "package/zbar/Config.in"
+ 	source "package/zxing-cpp/Config.in"
+ endmenu
+ 
+diff --git a/package/zbar/0001-zbar-autoconf.patch b/package/zbar/0001-zbar-autoconf.patch
+new file mode 100644
+index 0000000..159f75e
+--- /dev/null
++++ b/package/zbar/0001-zbar-autoconf.patch
+@@ -0,0 +1,16 @@
++diff --git a/configure.ac b/configure.ac
++index 256aedb..5aa5689 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -3,10 +3,11 @@ AC_PREREQ([2.61])
++ AC_INIT([zbar], [0.10], [spadix at users.sourceforge.net])
++ AC_CONFIG_AUX_DIR(config)
++ AC_CONFIG_MACRO_DIR(config)
++-AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign subdir-objects std-options dist-bzip2])
+++AM_INIT_AUTOMAKE([1.10 -Wall -Werror -Wno-portability foreign subdir-objects std-options dist-bzip2])
++ AC_CONFIG_HEADERS([include/config.h])
++ AC_CONFIG_SRCDIR(zbar/scanner.c)
++ LT_PREREQ([2.2])
+++m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
++ LT_INIT([dlopen win32-dll])
++ LT_LANG([Windows Resource])
+diff --git a/package/zbar/Config.in b/package/zbar/Config.in
+new file mode 100644
+index 0000000..cad6e54
+--- /dev/null
++++ b/package/zbar/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_ZBAR
++	bool "zbar"
++	help
++	    QR and barcode scanner
+diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
+new file mode 100644
+index 0000000..d466fdf
+--- /dev/null
++++ b/package/zbar/zbar.hash
+@@ -0,0 +1,3 @@
++# Local computed:
++sha256 38f8535a3c4c526ecaa968a992efcbf7392623e68db45dc2f181d4c9d3002d69 zbar-854a5d97059e395807091ac4d80c53f7968abb8f.tar.gz
++
+diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
+new file mode 100644
+index 0000000..91527a1
+--- /dev/null
++++ b/package/zbar/zbar.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# zbar
++#
++#############################################################
++
++#ZBAR_VERSION = 0.10
++#ZBAR_SITE = http://downloads.sourceforge.net/project/zbar/zbar/$(ZBAR_VERSION)
++ZBAR_VERSION = 854a5d97059e395807091ac4d80c53f7968abb8f
++ZBAR_SITE = $(call github,ZBar,Zbar,$(ZBAR_VERSION))
++ZBAR_INSTALL_STAGING = YES
++ZBAR_AUTORECONF = YES
++ZBAR_DEPENDENCIES = libv4l
++ZBAR_CONF_OPTS = --without-imagemagick --without-qt --without-gtk --without-python --without-x --without-jpeg --enable-shared=yes
++
++ZBAR_POST_BUILD_HOOKS += ZBAR_INSTALL_FIXUP
++
++define ZBAR_INSTALL_FIXUP
++	touch $(@D)/doc/man/zbarcam.1
++endef
++
++$(eval $(autotools-package))
+-- 
+2.6.1
