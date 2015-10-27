@@ -1,56 +1,91 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 27 Oct 2015 14:41:57 +0000
-Subject: [Buildroot] [PATCH v5 1/1] yad: new package
-In-Reply-To: <1445641812-7704-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1445641812-7704-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <562F8D35.3000602@imgtec.com>
+From: Viacheslav Volkov <sv99@inbox.ru>
+Date: Tue, 27 Oct 2015 17:55:11 +0300
+Subject: [Buildroot] [PATCH v3] rfkill: new package
+Message-ID: <1445957711-10417-1-git-send-email-sv99@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+Add rfkill package.
 
-On 10/24/2015 12:10 AM, James Knight wrote:
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-[snip]
-> diff --git a/package/yad/Config.in b/package/yad/Config.in
-> new file mode 100644
-> index 0000000..9b16729
-> --- /dev/null
-> +++ b/package/yad/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_YAD
-> +	bool "yad"
-> +	depends on BR2_PACKAGE_XORG7
-> +	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> +	depends on BR2_USE_MMU # libglib2
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	help
-> +	  YAD (yet another dialog) is a tool for create graphical dialogs from
+Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
+---
+Changes v2 -> v3:
+  - wrapp comment to 72 characters length  (suggested by Vincent.Riera at imgtec.com)
 
-That line exceeds the 72 characters limit considering 8-characters-wide
-tabs.
+Changes v1 -> v2:
+  - correct Config.in  (suggested by Vincent.Riera at imgtec.com)
+  - correct rfkill.mk
 
-Apart from that minor detail, which I guess after 5 versions of your
-patch the maintainer will not mind to fix it for you, your patch looks
-good to me.
+ package/Config.in          |  1 +
+ package/rfkill/Config.in   |  7 +++++++
+ package/rfkill/rfkill.hash |  2 ++
+ package/rfkill/rfkill.mk   | 20 ++++++++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/rfkill/Config.in
+ create mode 100644 package/rfkill/rfkill.hash
+ create mode 100644 package/rfkill/rfkill.mk
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Build test for MIPS architecture:
-
-$ file output/target/usr/bin/yad
-output/target/usr/bin/yad: ELF 32-bit LSB executable, MIPS, MIPS32 rel2
-version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux
-2.6.32, with unknown capability 0xf41 = 0x756e6700, with unknown
-capability 0x70100 = 0x1040000, stripped
-
-
-Regards,
-
-Vincent.
+diff --git a/package/Config.in b/package/Config.in
+index 10ff94e..9933514 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -403,6 +403,7 @@ endif
+ 	source "package/pps-tools/Config.in"
+ 	source "package/pulseview/Config.in"
+ 	source "package/read-edid/Config.in"
++	source "package/rfkill/Config.in"
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
+ 	source "package/rtl8188eu/Config.in"
+diff --git a/package/rfkill/Config.in b/package/rfkill/Config.in
+new file mode 100644
+index 0000000..3cb7c18
+--- /dev/null
++++ b/package/rfkill/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_RFKILL
++	bool "rfkill"
++	help
++	  rfkill is a small userspace tool to query the state of the 
++	  rfkill switches.
++
++	  https://wireless.wiki.kernel.org/en/users/documentation/rfkill/
+diff --git a/package/rfkill/rfkill.hash b/package/rfkill/rfkill.hash
+new file mode 100644
+index 0000000..21be0a2
+--- /dev/null
++++ b/package/rfkill/rfkill.hash
+@@ -0,0 +1,2 @@
++# From: https://www.kernel.org/pub/software/network/rfkill/sha256sums.asc
++sha256	e0ae3004215e39a6c5c36e0726558740728d16f67ebdb8bea621250f6091d86a  rfkill-0.5.tar.xz
+diff --git a/package/rfkill/rfkill.mk b/package/rfkill/rfkill.mk
+new file mode 100644
+index 0000000..b377c03
+--- /dev/null
++++ b/package/rfkill/rfkill.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# rfkill
++#
++################################################################################
++
++RFKILL_VERSION = 0.5
++RFKILL_SOURCE = rfkill-$(RFKILL_VERSION).tar.xz
++RFKILL_SITE = https://www.kernel.org/pub/software/network/rfkill
++
++define RFKILL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		VERSION_SUFFIX="-br"
++endef
++
++define RFKILL_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/rfkill $(TARGET_DIR)/usr/bin/rfkill
++endef
++
++$(eval $(generic-package))
+-- 
+2.6.1
