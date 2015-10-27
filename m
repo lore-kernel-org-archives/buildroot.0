@@ -1,47 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Oct 2015 23:39:21 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Oct 2015 23:46:08 +0100
 Subject: [Buildroot] [git commit] package/initscripts: S40network: wait
- for network interfaces to appear
-In-Reply-To: <562F426C.4010500@green-communications.fr>
+	for network interfaces to appear
+In-Reply-To: <562FFD19.8020204@mind.be> (Arnout Vandecappelle's message of
+ "Tue, 27 Oct 2015 23:39:21 +0100")
 References: <20151016111136.50FA381F8A@busybox.osuosl.org>
  <CAMQcK5K7pKFBoN9N2hv4oLscew6qTWvj9RhfiCviLako0VzdRg@mail.gmail.com>
- <562F426C.4010500@green-communications.fr>
-Message-ID: <562FFD19.8020204@mind.be>
+ <562F426C.4010500@green-communications.fr> <562FFD19.8020204@mind.be>
+Message-ID: <871tcg7wwf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27-10-15 10:22, Nicolas Cavallari wrote:
-> However, true virtual interfaces may also be defined in
-> /etc/network/interfaces and created via a pre-up stanza:
-> 
-> auto br0
-> iface br0 inet static
->     pre-up ip link add br0 type bridge
->     post-down ip link del br0
->     address 203.0.113.42
->     netmask 255.255.255.0
-> 
-> In this case, S40network will wait forever.  However, if the feature
-> was implemented via ifupdown pre-up hooks, then this use-case could
-> actually work, since hooks are executed after pre-up stanzas. But that
-> is maybe too complex for buildroot.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- Actually, this sounds less complicated than the script we currently have.
+Hi,
 
- At least, if both busybox and ifupdown behave the same way.
+ >> In this case, S40network will wait forever.  However, if the feature
+ >> was implemented via ifupdown pre-up hooks, then this use-case could
+ >> actually work, since hooks are executed after pre-up stanzas. But that
+ >> is maybe too complex for buildroot.
 
- Does systemd use /etc/network/interfaces and/or the hooks?
+ >  Actually, this sounds less complicated than the script we currently have.
 
- Regards,
- Arnout
+ >  At least, if both busybox and ifupdown behave the same way.
+
+Yes, this was already discussed:
+
+http://lists.busybox.net/pipermail/buildroot/2015-October/142329.html
+
+But Jerome didn't send a patch yet. The only disadvantage would be that
+the timeout is per-interface instead of globally, but that is imho not
+that bad.
+
+ >  Does systemd use /etc/network/interfaces and/or the hooks?
+
+I don't think so.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Venlig hilsen,
+Peter Korsgaard 
