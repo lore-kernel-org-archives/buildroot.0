@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Oct 2015 12:33:55 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10,
-	14}.x and 4.{1, 2}.x series
-In-Reply-To: <1445941228-15637-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 27 Oct 2015 07:20:27 -0300")
+Date: Tue, 27 Oct 2015 12:34:00 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 4.2.5
+In-Reply-To: <1445941228-15637-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 27 Oct 2015 07:20:28 -0300")
 References: <1445941228-15637-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mvv4a6l8.fsf@dell.be.48ers.dk>
+ <1445941228-15637-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87io5sa6l3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
