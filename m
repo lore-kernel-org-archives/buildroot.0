@@ -1,37 +1,75 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 27 Oct 2015 15:42:29 +0200
-Subject: [Buildroot] [PATCH] wpa_supplicant: fix static build with EAP
-	enabled
-Message-ID: <2c1cf80ae8dc5f8c463ea817b6252851da1263f2.1445953349.git.baruch@tkos.co.il>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 27 Oct 2015 13:47:58 +0000
+Subject: [Buildroot] [PATCH v2] rfkill: new package
+In-Reply-To: <1445950874-9848-1-git-send-email-sv99@inbox.ru>
+References: <1445950874-9848-1-git-send-email-sv99@inbox.ru>
+Message-ID: <562F808E.6010805@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable EAP-TNC for static build because its implementation uses dlopen().
+Dear Viacheslav Volkov,
 
-Fixes:
-http://autobuild.buildroot.net/results/e21/e21705ae690ab899b6f00e4a15833abef5e54e0e/
+your patch now looks much better. I have some comments about minor details.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/wpa_supplicant/wpa_supplicant.mk | 3 +++
- 1 file changed, 3 insertions(+)
+The first one, you didn't marked your previous patch as superseded in
+Patchwork.
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 0574f02f4138..cc8a3dfa96e2 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -45,6 +45,9 @@ endif
- # Trailing underscore on purpose to not enable CONFIG_EAPOL_TEST
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
- WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_
-+ifeq ($(BR2_STATIC_LIBS),y)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_TNC
-+endif
- else
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP
- endif
--- 
-2.6.1
+On 10/27/2015 01:01 PM, Viacheslav Volkov wrote:
+> Add rfkill package.
+> 
+> Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
+> ---
+I was expecting a changelog here. Please read:
+
+http://buildroot.org/manual.html#submitting-patches
+
+Scroll down until "21.5.2. Patch revision changelog".
+
+>  package/Config.in          |  1 +
+>  package/rfkill/Config.in   |  7 +++++++
+>  package/rfkill/rfkill.hash |  2 ++
+>  package/rfkill/rfkill.mk   | 20 ++++++++++++++++++++
+>  4 files changed, 30 insertions(+)
+>  create mode 100644 package/rfkill/Config.in
+>  create mode 100644 package/rfkill/rfkill.hash
+>  create mode 100644 package/rfkill/rfkill.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 10ff94e..9933514 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -403,6 +403,7 @@ endif
+>  	source "package/pps-tools/Config.in"
+>  	source "package/pulseview/Config.in"
+>  	source "package/read-edid/Config.in"
+> +	source "package/rfkill/Config.in"
+>  	source "package/rng-tools/Config.in"
+>  	source "package/rpi-userland/Config.in"
+>  	source "package/rtl8188eu/Config.in"
+> diff --git a/package/rfkill/Config.in b/package/rfkill/Config.in
+> new file mode 100644
+> index 0000000..b7a676e
+> --- /dev/null
+> +++ b/package/rfkill/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_RFKILL
+> +	bool "rfkill"
+> +	help
+> +	  rfkill is a small userspace tool to query the state of the rfkill
+
+That line is not wrapped to 72 characters length if we consider the tab
+as 8 characters wide. The trailing "rfkill" word should be placed in the
+next line.
+
+> +	  switches.
+> +
+> +	  https://wireless.wiki.kernel.org/en/users/documentation/rfkill
+
+Add a trailing slash (/) to that URL.
+
+Regards,
+
+Vincent.
