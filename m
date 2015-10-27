@@ -1,38 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Oct 2015 13:52:08 +0100
-Subject: [Buildroot] [PATCH 1/3 v3] toolchain/external: bump Linaro ARM
- to 2015.08
-In-Reply-To: <20151027043341.GG2229@tarshish>
-References: <cover.1445903025.git.yann.morin.1998@free.fr>
- <89db321b2d6e173eaa5b9c25e83be3637936edb9.1445903025.git.yann.morin.1998@free.fr>
- <20151027043341.GG2229@tarshish>
-Message-ID: <20151027125207.GA3555@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 27 Oct 2015 14:57:17 +0200
+Subject: [Buildroot] [PATCH 2/2] ipmiutil: fix stack protector test
+In-Reply-To: <88628938a5c1b5e5ec376f105519948386afe751.1445950637.git.baruch@tkos.co.il>
+References: <88628938a5c1b5e5ec376f105519948386afe751.1445950637.git.baruch@tkos.co.il>
+Message-ID: <fe150b99186b8b76924cfaf246a3d56b43e1d8cb.1445950637.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Add a patch that corrects detection of toolchain stack protector support when
+libssp is missing.
 
-On 2015-10-27 06:33 +0200, Baruch Siach spake thusly:
-> On Tue, Oct 27, 2015 at 12:49:39AM +0100, Yann E. MORIN wrote:
-> > +	help
-> > +	  Linaro toolchain for the ARM architecture. It uses Linaro
-> > +	  GCC 2015.08 (based on gcc 5.1), Linaro GDB 2015.08 (based on
-> > +	  GDB 7.10), eglibc 2.21, Binutils 2015.10 (based on 2.25). It
-> 
-> glibc most likely, not eglibc.
+Fixes:
+http://autobuild.buildroot.net/results/497/497d2739c27ce0dcf91bdf2f87c02fc169ba9071/
+http://autobuild.buildroot.net/results/f71/f71a4bbca2505fcacb396bcc643c7152d87b5283/
+http://autobuild.buildroot.net/results/85d/85da63d49086f8cc62e2c67632dfdc39d7702169/
 
-Good catch. Thanks! :-)
+and more.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...003-configure.ac-fix-stack-protector-test.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/ipmiutil/0003-configure.ac-fix-stack-protector-test.patch
 
+diff --git a/package/ipmiutil/0003-configure.ac-fix-stack-protector-test.patch b/package/ipmiutil/0003-configure.ac-fix-stack-protector-test.patch
+new file mode 100644
+index 000000000000..d6ad6045dd34
+--- /dev/null
++++ b/package/ipmiutil/0003-configure.ac-fix-stack-protector-test.patch
+@@ -0,0 +1,45 @@
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 27 Oct 2015 13:58:24 +0200
++Subject: [PATCH] configure.ac: fix stack protector test
++
++gcc does not generate stack protection check code for function that does not
++use its stack. Some toolchain (most notable uClibc based) accept the
++-fstack-protector option, but don't provide libssp. The current test will
++incorrectly identify this case, leading to link failures like:
++
++ipmiutil.o: In function `main':
++ipmiutil.c:(.text.startup+0x1c0): undefined reference to
++`__stack_chk_fail_local'
++ialarms.o: In function `get_alarms_picmg':
++ialarms.c:(.text+0x1c5): undefined reference to `__stack_chk_fail_local'
++ialarms.o: In function `.L46':
++ialarms.c:(.text+0x362): undefined reference to `__stack_chk_fail_local'
++ialarms.o: In function `get_enc_leds':
++ialarms.c:(.text+0x45f): undefined reference to `__stack_chk_fail_local'
++
++Add stack usage code to the test to correctly identify missing libssp.
++
++Patch status: sent upstream
++(http://sourceforge.net/p/ipmiutil/mailman/message/34572536/)
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 41b6ea89167a..f3f60fb9ff69 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -334,7 +334,7 @@ else
++         rm -f $tmpc $tmpo >/dev/null 2>&1
++ 	echo $ECHO_N "checking compile fortify flags ... $ECHO_C"
++ 	cfhard="-fstack-protector --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2"
++-	echo "int main() { return(1); }" >$tmpc
+++	echo "int main() { alloca(100); return(1); }" >$tmpc
++ 	$CC -o $tmpo $cfhard $tmpc  >/dev/null 2>&1
++ 	if test $? -ne 0 ; then
++ 	   cfhard=
++-- 
++2.6.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.6.1
