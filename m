@@ -1,25 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Oct 2015 22:19:33 +0100
-Subject: [Buildroot] [PATCH] perl: fetch lastest upstream patches from
-	perl-cross
-In-Reply-To: <1445976439-16097-1-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Tue, 27 Oct 2015 21:07:19 +0100")
-References: <1445976439-16097-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87eggg80wq.fsf@dell.be.48ers.dk>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Tue, 27 Oct 2015 16:21:08 -0500
+Subject: [Buildroot] [PATCH] libcurl: fix license typo
+Message-ID: <1445980868-55928-1-git-send-email-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+The license for libcurl is actually 'ISC' not 'ICS'.
 
- > my previous patch about static build (0001-fix-EUMM.patch) was not the good fix.
- > see discussion: http://github.com/arsv/perl-cross/issues/18
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+---
+ package/libcurl/libcurl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-
-Committed, thanks.
-
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index ab007d6..8587baa 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -11,7 +11,7 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
+ 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
+ 	$(if $(BR2_PACKAGE_LIBIDN),libidn) \
+ 	$(if $(BR2_PACKAGE_RTMPDUMP),rtmpdump)
+-LIBCURL_LICENSE = ICS
++LIBCURL_LICENSE = ISC
+ LIBCURL_LICENSE_FILES = COPYING
+ LIBCURL_INSTALL_STAGING = YES
+ 
 -- 
-Bye, Peter Korsgaard
+1.9.1
