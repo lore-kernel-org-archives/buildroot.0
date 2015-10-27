@@ -1,49 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Oct 2015 20:13:54 +0100
-Subject: [Buildroot] [PATCH] uclibc: get rid of ARC's uClibc fork
-In-Reply-To: <1445959005-23917-1-git-send-email-abrodkin@synopsys.com>
-References: <1445959005-23917-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <562FCCF2.8090208@mind.be>
+Date: Tue, 27 Oct 2015 20:16:28 +0100
+Subject: [Buildroot] [PATCH v5 04/36] package/efl/libefl: new package
+In-Reply-To: <562EA0D6.1000308@openwide.fr>
+References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
+ <1445720476-21517-5-git-send-email-romain.naour@openwide.fr>
+ <20151025135513.GA11692@free.fr> <562EA0D6.1000308@openwide.fr>
+Message-ID: <562FCD8C.4080309@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27-10-15 16:16, Alexey Brodkin wrote:
-> For quite some time all ARC changes have been pushed upstream.
-> So both uClibc master branch 
-
- In that case, perhaps the snapshot version should be enabled for ARC?
-
-> and uClibc-ng have full ARC support
-> including the most recent changes.
+On 26-10-15 22:53, Romain Naour wrote:
+> ...the comments line start to be very long, should I do something like:
 > 
-> I.e. finally we have reached the point when there's no need in
-> Synopsys fork of uClibc on GitHub and it will soon be obsoleted and
-> removed at some pint of time.
-> 
-> Now since vanilla uClibc hasn't seen any releases for many years we cannot
-> really use it for ARC. Fortunately there exists uClibc-ng and Waldemar
-> cuts releases regularly - that works perfectly fine for us.
-> 
-> That patch removes all mentions of ARC's uClibc which in turn makes
-> uClibc-ng default libc for ARC.
-> 
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> comment "EFL needs Lua, udev /dev management and a toolchain w/ C++, dynamic library, threads, wchar"
+> 	depends on !BR2_PACKAGE_LUA || !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP \
+> 		|| BR2_STATIC_LIBS  || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+> 	depends on BR2_USE_MMU
 
- ... but that can be done independently of this patch, so:
+ In this case, I think it's worthwhile to split it into two comments, one for
+lua and udev and another for the toolchain.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
+ BTW I personally would put lua in lowercase here, because the option in the
+menu is also in lowercase.
 
  Regards,
  Arnout
 
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
