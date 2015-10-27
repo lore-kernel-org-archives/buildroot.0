@@ -1,371 +1,904 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Oct 2015 22:09:39 +0100
-Subject: [Buildroot] [git commit] ipmiutil: bump to version 2.9.7
-Message-ID: <20151027211833.CAA2881F77@busybox.osuosl.org>
+Date: Tue, 27 Oct 2015 22:09:02 +0100
+Subject: [Buildroot] [git commit] uclibc: get rid of ARC's uClibc fork
+Message-ID: <20151027211833.BDAE481F7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9972408a94fa8447786de5d15a11f2649b43a882
+commit: http://git.buildroot.net/buildroot/commit/?id=1c8e10e0ca7833cee05231a5d629feab0be1245a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove upstream or unneeded patches. Renumber and refresh the doc disable
-patch. Add a different version of the lanplus disable fix (sent upstream) that
-integrates with upstream change in this area.
+For quite some time all ARC changes have been pushed upstream.
+So both uClibc master branch and uClibc-ng have full ARC support
+including the most recent changes.
 
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+I.e. finally we have reached the point when there's no need in
+Synopsys fork of uClibc on GitHub and it will soon be obsoleted and
+removed at some pint of time.
+
+Now since vanilla uClibc hasn't seen any releases for many years we cannot
+really use it for ARC. Fortunately there exists uClibc-ng and Waldemar
+cuts releases regularly - that works perfectly fine for us.
+
+That patch removes all mentions of ARC's uClibc which in turn makes
+uClibc-ng default libc for ARC.
+
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-By: Waldemar Brodkorb <wbx@uclibc-ng.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...c-use-CC-instead-of-gcc-full-link-for-sta.patch |   43 ---------
- ...-no-build-doc.patch => 0001-no-build-doc.patch} |   11 ++-
- .../0002-lib-Makefile.am-fix-lanplus-disable.patch |   38 ++++++++
- package/ipmiutil/0003-really-disable-lanplus.patch |   95 --------------------
- .../ipmiutil/0004-avoid-wchar-t-redefinition.patch |   19 ----
- .../0005-add-missing-param.h-header-include.patch  |   24 -----
- .../0006-add-missing-sys-select.h-include.patch    |   26 ------
- package/ipmiutil/ipmiutil.hash                     |    2 +-
- package/ipmiutil/ipmiutil.mk                       |    4 +-
- 9 files changed, 47 insertions(+), 215 deletions(-)
+ package/uclibc/Config.in                           |    9 -
+ ...nptl-remove-duplicate-vfork-in-libpthread.patch |  722 --------------------
+ ...e-memset-so-it-could-be-used-without-doub.patch |   81 ---
+ package/uclibc/uclibc.mk                           |    3 -
+ 4 files changed, 0 insertions(+), 815 deletions(-)
 
-diff --git a/package/ipmiutil/0001-configure.ac-use-CC-instead-of-gcc-full-link-for-sta.patch b/package/ipmiutil/0001-configure.ac-use-CC-instead-of-gcc-full-link-for-sta.patch
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index ff6dffd..21d8ddc 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -29,13 +29,6 @@ choice
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL if !BR2_x86_i386
+ 		depends on !(BR2_arc || BR2_mips64 || BR2_mips64el || BR2_xtensa)
+ 
+-	config BR2_UCLIBC_VERSION_ARC_GIT
+-		bool "uClibc Git ARC"
+-		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
+-		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+-		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+-		depends on BR2_arc
+-
+ 	config BR2_UCLIBC_VERSION_NG
+ 		bool "uClibc-ng"
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if BR2_m68k
+@@ -64,7 +57,6 @@ config BR2_USE_UCLIBC_SNAPSHOT
+ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
+-	default "arc-2015.06" if BR2_UCLIBC_VERSION_ARC_GIT
+ 	default "1.0.8"		if BR2_UCLIBC_VERSION_NG
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+ 
+@@ -72,7 +64,6 @@ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
+ 	default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
+ 	default "package/uclibc/uClibc-ng.config" if BR2_UCLIBC_VERSION_NG
+-	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_ARC_GIT
+ 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+ 	help
+ 	  Some people may wish to use their own modified uClibc configuration
+diff --git a/package/uclibc/arc-2015.06/0001-nptl-remove-duplicate-vfork-in-libpthread.patch b/package/uclibc/arc-2015.06/0001-nptl-remove-duplicate-vfork-in-libpthread.patch
 deleted file mode 100644
-index 07e37d4..0000000
---- a/package/ipmiutil/0001-configure.ac-use-CC-instead-of-gcc-full-link-for-sta.patch
+index 6b609af..0000000
+--- a/package/uclibc/arc-2015.06/0001-nptl-remove-duplicate-vfork-in-libpthread.patch
 +++ /dev/null
-@@ -1,43 +0,0 @@
--From 2909bfbc97559cf3e28c9045f64e3078aacca354 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 4 Apr 2015 17:59:32 +0200
--Subject: [PATCH] configure.ac: use CC instead of gcc, full link for stack
-- protector test
+@@ -1,722 +0,0 @@
+-From a22a0030f32b828c0f2e804d1ed1fe567ddab680 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Sat, 20 Sep 2014 22:09:00 +0200
+-Subject: [PATCH] nptl: remove duplicate vfork() in libpthread
 -
--Using gcc directly is incorrect when cross-compiling, $CC should be
--used instead.
+-Automatic patching via two oneliners by Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>:
+-sed -i -e 's/[[:space:]]pt-vfork\.[csS]//' -e '/^ASFLAGS-pt-vfork\./d' $(git grep -l pt-vfork libpthread/nptl/sysdeps)
+-find libpthread/nptl -name "*pt-vfork*" -exec git rm {} \;
 -
--Also, for the stack protector test, a full link is needed, since just
--the compilation can work, but the link can fail due to libssp not
--being available in the toolchain.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Reported-By: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ----
-- configure.ac | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
+- .../nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S  | 42 --------------
+- .../nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch |  2 +-
+- .../nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S    |  7 ---
+- .../nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch |  2 +-
+- .../nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S    | 37 ------------
+- .../sysdeps/unix/sysv/linux/i386/Makefile.arch     |  2 +-
+- .../nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S   | 67 ----------------------
+- .../sysdeps/unix/sysv/linux/metag/Makefile.arch    |  2 +-
+- .../nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S  | 51 ----------------
+- .../sysdeps/unix/sysv/linux/mips/Makefile.arch     |  2 +-
+- .../nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S   | 37 ------------
+- .../sysdeps/unix/sysv/linux/powerpc/Makefile.arch  |  2 +-
+- .../unix/sysv/linux/powerpc/powerpc32/pt-vfork.S   | 48 ----------------
+- .../unix/sysv/linux/powerpc/powerpc64/pt-vfork.S   | 48 ----------------
+- .../sysdeps/unix/sysv/linux/powerpc/pt-vfork.S     |  5 --
+- .../nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch  |  2 +-
+- .../nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S     | 64 ---------------------
+- .../sysdeps/unix/sysv/linux/sparc/Makefile.arch    |  2 +-
+- .../nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S  | 44 --------------
+- .../sysdeps/unix/sysv/linux/x86_64/Makefile.arch   |  2 +-
+- .../nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S | 32 -----------
+- 21 files changed, 9 insertions(+), 491 deletions(-)
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc32/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc64/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S
+- delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S
 -
--diff --git a/configure.ac b/configure.ac
--index c1193c6..61efbc5 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -308,7 +308,7 @@ else
-- 	echo $ECHO_N "checking compile warning flags ... $ECHO_C"
-- 	cfwarn="-Wno-pointer-sign -Wno-sign-conversion -Wunused-result -Wgnu-designator"
-- 	echo "int main() { return(1); }" >$tmpc
---	gcc -o $tmpo -c $cfwarn $tmpc  >/dev/null 2>&1
--+	$CC -o $tmpo -c $cfwarn $tmpc  >/dev/null 2>&1
-- 	if test $? -ne 0 ; then
-- 	   cfwarn=
-- 	   echo "skip"
--@@ -319,7 +319,7 @@ else
-- 	echo $ECHO_N "checking compile fortify flags ... $ECHO_C"
-- 	cfhard="-fstack-protector --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2"
-- 	echo "int main() { return(1); }" >$tmpc
---	gcc -o $tmpo -c $cfhard $tmpc  >/dev/null 2>&1
--+	$CC -o $tmpo $cfhard $tmpc  >/dev/null 2>&1
-- 	if test $? -ne 0 ; then
-- 	   cfhard=
-- 	   echo "skip"
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S
+-deleted file mode 100644
+-index a6005c1..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S
+-+++ /dev/null
+-@@ -1,42 +0,0 @@
+--/* Copyright (C) 2003, 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, see
+--   <http://www.gnu.org/licenses/>.  */
+--
+--#include <sysdep.h>
+--#include <tcb-offsets.h>
+--
+--#undef PSEUDO_PREPARE_ARGS
+--#define PSEUDO_PREPARE_ARGS						\
+--	/* Load the current cached pid value across the vfork.  */	\
+--	rduniq;								\
+--	ldl	a2, PID_OFFSET(v0);					\
+--	mov	v0, a1;							\
+--	/* Write back its negation, to indicate that the pid value is	\
+--	   uninitialized in the the child, and in the window between	\
+--	   here and the point at which we restore the value.  */	\
+--	negl	a2, t0;							\
+--	stl	t0, PID_OFFSET(v0);
+--
+--PSEUDO (__vfork, vfork, 0)
+--
+--	/* If we're back in the parent, restore the saved pid.  */
+--	beq	v0, 1f
+--	stl	a2, PID_OFFSET(a1)
+--1:	ret
+--
+--PSEUDO_END (__vfork)
+--
+--weak_alias (__vfork, vfork)
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch
+-index 8e3c7b0..3b9db6a 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch
+-@@ -5,7 +5,7 @@
+- # Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
+- #
+- 
+--libpthread_linux_arch_SSRC = pt-vfork.S
+-+libpthread_linux_arch_SSRC =
+- libpthread_linux_arch_CSRC = pthread_once.c lowlevellock.c \
+- 	pt-__syscall_rt_sigaction.c pt-__syscall_error.c
+- 
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S
+-deleted file mode 100644
+-index f222dca..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S
+-+++ /dev/null
+-@@ -1,7 +0,0 @@
+--/*
+-- * Copyright (C) 2013 Synopsys, Inc. (www.synopsys.com)
+-- *
+-- * Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
+-- */
+--
+--#include "vfork.S"
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch
+-index c8d5d4a..e61072e 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch
+-@@ -5,7 +5,7 @@
+- # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+- #
+- 
+--libpthread_linux_arch_SSRC = pt-vfork.S
+-+libpthread_linux_arch_SSRC =
+- libpthread_linux_arch_CSRC = pthread_once.c \
+- 	pt-__syscall_rt_sigaction.c pt-__syscall_error.c \
+- 	lowlevellock.c
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S
+-deleted file mode 100644
+-index df18f03..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S
+-+++ /dev/null
+-@@ -1,37 +0,0 @@
+--/* Copyright (C) 2005 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, see
+--   <http://www.gnu.org/licenses/>.  */
+--
+--#include <tcb-offsets.h>
+--
+--/* Save the PID value.  */
+--#define SAVE_PID \
+--	str	lr, [sp, #-4]!;		/* Save LR.  */			\
+--	mov	r0, #0xffff0fff;	/* Point to the high page.  */	\
+--	mov	lr, pc;			/* Save our return address.  */	\
+--	sub	pc, r0, #31;		/* Jump to the TLS entry.  */	\
+--	ldr	lr, [sp], #4;		/* Restore LR.  */		\
+--	mov	r2, r0;			/* Save the TLS addr in r2.  */	\
+--	ldr	r3, [r2, #PID_OFFSET];	/* Load the saved PID.  */	\
+--	rsb	r0, r3, #0;		/* Negate it.  */		\
+--	str	r0, [r2, #PID_OFFSET]	/* Store the temporary PID.  */
+--
+--/* Restore the old PID value in the parent.  */
+--#define RESTORE_PID \
+--	cmp	r0, #0;			/* If we are the parent... */	\
+--	strne	r3, [r2, #PID_OFFSET]	/* ... restore the saved PID.  */
+--
+--#include "../../../../../../../libc/sysdeps/linux/arm/vfork.S"
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/Makefile.arch
+-index fff0dae..9dc878c 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/Makefile.arch
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/Makefile.arch
+-@@ -5,7 +5,7 @@
+- # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+- #
+- 
+--libpthread_linux_arch_SSRC = pt-vfork.S clone.S pthread_spin_unlock.S pthread_once.S
+-+libpthread_linux_arch_SSRC = clone.S pthread_spin_unlock.S pthread_once.S
+- libpthread_linux_arch_CSRC = pthread_spin_init.c pt-__syscall_error.c
+- 
+- libc_linux_arch_CSRC = fork.c
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S
+-deleted file mode 100644
+-index 5bba782..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S
+-+++ /dev/null
+-@@ -1,67 +0,0 @@
+--/* Copyright (C) 1999, 2002, 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--   Contributed by Andreas Schwab <schwab@gnu.org>.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, see
+--   <http://www.gnu.org/licenses/>.  */
+--
+--#include <sysdep.h>
+--#define _ERRNO_H	1
+--#include <bits/errno.h>
+--#include <bits/kernel-features.h>
+--#include <tcb-offsets.h>
+--
+--/* Save the PID value.  */
+--#define SAVE_PID \
+--	movl	%gs:PID, %edx; 						      \
+--	movl	%edx, %eax;						      \
+--	negl	%eax;							      \
+--	movl	%eax, %gs:PID
+--
+--/* Restore the old PID value in the parent.  */
+--#define RESTORE_PID \
+--	testl	%eax, %eax;						      \
+--	je	1f;							      \
+--	movl	%edx, %gs:PID;						      \
+--1:
+--
+--/* Clone the calling process, but without copying the whole address space.
+--   The calling process is suspended until the new process exits or is
+--   replaced by a call to `execve'.  Return -1 for errors, 0 to the new process,
+--   and the process ID of the new process to the old process.  */
+--
+--ENTRY (__vfork)
+--	/* Pop the return PC value into ECX.  */
+--	popl	%ecx
+--
+--	SAVE_PID
+--
+--	/* Stuff the syscall number in EAX and enter into the kernel.  */
+--	movl	$SYS_ify (vfork), %eax
+--	int	$0x80
+--
+--	RESTORE_PID
+--
+--	/* Jump to the return PC.  Don't jump directly since this
+--	   disturbs the branch target cache.  Instead push the return
+--	   address back on the stack.  */
+--	pushl	%ecx
+--
+--	cmpl	$-4095, %eax
+--	jae	SYSCALL_ERROR_LABEL	/* Branch forward if it failed.  */
+--L(pseudo_end):
+--	ret
+--PSEUDO_END (__vfork)
+--
+--weak_alias (__vfork, vfork)
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/metag/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/metag/Makefile.arch
+-index 4d02d0c..ddc7680 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/metag/Makefile.arch
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/metag/Makefile.arch
+-@@ -5,7 +5,7 @@
+- # Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
+- #
+- 
+--libpthread_linux_arch_SSRC = pt-vfork.S
+-+libpthread_linux_arch_SSRC =
+- libpthread_linux_arch_CSRC = pthread_once.c \
+- 	pt-__syscall_rt_sigaction.c pt-__syscall_error.c \
+- 	lowlevellock.c
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S
+-deleted file mode 100644
+-index 489c749..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S
+-+++ /dev/null
+-@@ -1,51 +0,0 @@
+--/* Copyright (C) 2005 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, write to the Free
+--   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+--   02111-1307 USA.  */
+--
+--#include <tcb-offsets.h>
+--#include <asm/unistd.h>
+--
+--#ifdef __PIC__
+--#define __VFORK_METAG_LOAD_TP ___metag_load_tp at PLT
+--#else
+--#define __VFORK_METAG_LOAD_TP ___metag_load_tp
+--#endif
+--
+--/* Save the PID value.  */
+--#define SAVE_PID \
+--	SETL	[A0StP++], D0FrT, D1RtP; \
+--	CALLR	D1RtP, __VFORK_METAG_LOAD_TP; \
+--	SUB	D0Re0, D0Re0, #TLS_PRE_TCB_SIZE; \
+--	GETD	D0FrT, [D0Re0 + #PID]; \
+--	NEG	D0FrT, D0FrT; \
+--	SETD	[D0Re0 + #PID], D0FrT; \
+--	GETL	D0FrT, D1RtP, [--A0StP];
+--
+--#define RESTORE_PID \
+--	CMP 	D0Re0, #0; \
+--	BEQ	1f; \
+--	MSETL	[A0StP++], D0Re0, D0FrT; \
+--	CALLR	D1RtP, __VFORK_METAG_LOAD_TP; \
+--	SUB	D0Re0, D0Re0, #TLS_PRE_TCB_SIZE; \
+--	GETD	D0FrT, [D0Re0 + #PID]; \
+--	NEG	D0FrT, D0FrT; \
+--	SETD	[D0Re0 + #PID], D0FrT; \
+--	GETL	D0FrT, D1RtP, [--A0StP]; \
+--	GETL	D0Re0, D1Re0, [--A0StP]; \
+--1:
+--
+--#include <../../../../../../../libc/sysdeps/linux/metag/vfork.S>
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/mips/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/mips/Makefile.arch
+-index 4a3d0f2..f87dedc 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/mips/Makefile.arch
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/mips/Makefile.arch
+-@@ -5,7 +5,7 @@
+- # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+- #
+- 
+--libpthread_linux_arch_SSRC = pt-vfork.S clone.S
+-+libpthread_linux_arch_SSRC = clone.S
+- libpthread_linux_arch_CSRC = pthread_once.c pt-__syscall_rt_sigaction.c
+- 
+- libc_linux_arch_CSRC = fork.c
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S
+-deleted file mode 100644
+-index 52fbde3..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S
+-+++ /dev/null
+-@@ -1,37 +0,0 @@
+--/* Copyright (C) 2005 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, see
+--   <http://www.gnu.org/licenses/>.  */
+--
+--#include <features.h>
+--#include <tls.h>
+--
+--/* Save the PID value.  */
+--#define SAVE_PID \
+--	READ_THREAD_POINTER(v1);	/* Get the thread pointer.  */	\
+--	lw	a2, PID_OFFSET(v1);	/* Load the saved PID.  */	\
+--	subu	a2, $0, a2;		/* Negate it.  */		\
+--	sw	a2, PID_OFFSET(v1);	/* Store the temporary PID.  */
+--
+--/* Restore the old PID value in the parent.  */
+--#define RESTORE_PID \
+--	beqz	v0, 1f;			/* If we are the parent... */	\
+--	READ_THREAD_POINTER(v1);	/* Get the thread pointer.  */	\
+--	lw	a2, PID_OFFSET(v1);	/* Load the saved PID.  */	\
+--	subu	a2, $0, a2;		/* Re-negate it.  */		\
+--	sw	a2, PID_OFFSET(v1);	/* Restore the PID.  */		\
+--1:
+--
+--#include <../../../../../../../libc/sysdeps/linux/mips/vfork.S>
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/Makefile.arch
+-index 21b9b72..df4bb69 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/Makefile.arch
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/Makefile.arch
+-@@ -5,7 +5,7 @@
+- # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+- #
+- 
+--libpthread_linux_arch_SSRC = pt-vfork.S
+-+libpthread_linux_arch_SSRC =
+- libpthread_linux_arch_CSRC = pthread_once.c pt-__syscall_error.c
+- 
+- libc_linux_arch_CSRC = fork.c
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc32/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc32/pt-vfork.S
+-deleted file mode 100644
+-index 2f82504..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc32/pt-vfork.S
+-+++ /dev/null
+-@@ -1,48 +0,0 @@
+--/* Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--   Contributed by Jakub Jelinek <jakub@redhat.com>, 2004.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, see
+--   <http://www.gnu.org/licenses/>.  */
+--
+--#include <sysdep.h>
+--#define _ERRNO_H	1
+--#include <bits/errno.h>
+--#include <bits/kernel-features.h>
+--#include <tcb-offsets.h>
+--
+--/* Clone the calling process, but without copying the whole address space.
+--   The calling process is suspended until the new process exits or is
+--   replaced by a call to `execve'.  Return -1 for errors, 0 to the new process,
+--   and the process ID of the new process to the old process.  */
+--
+--ENTRY (__vfork)
+--	lwz	0,PID(2)
+--	neg	0,0
+--	stw	0,PID(2)
+--
+--	DO_CALL (SYS_ify (vfork))
+--
+--	cmpwi	1,3,0
+--	beqlr-	1
+--
+--	lwz	0,PID(2)
+--	neg	0,0
+--	stw	0,PID(2)
+--
+--	PSEUDO_RET
+--
+--PSEUDO_END (__vfork)
+--
+--weak_alias (__vfork, vfork)
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc64/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc64/pt-vfork.S
+-deleted file mode 100644
+-index 12e47b3..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc64/pt-vfork.S
+-+++ /dev/null
+-@@ -1,48 +0,0 @@
+--/* Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--   Contributed by Jakub Jelinek <jakub@redhat.com>, 2004.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, see
+--   <http://www.gnu.org/licenses/>.  */
+--
+--#include <sysdep.h>
+--#define _ERRNO_H	1
+--#include <bits/errno.h>
+--#include <bits/kernel-features.h>
+--#include <tcb-offsets.h>
+--
+--/* Clone the calling process, but without copying the whole address space.
+--   The calling process is suspended until the new process exits or is
+--   replaced by a call to `execve'.  Return -1 for errors, 0 to the new process,
+--   and the process ID of the new process to the old process.  */
+--
+--ENTRY (__vfork)
+--	lwz	0,PID(13)
+--	neg	0,0
+--	stw	0,PID(13)
+--
+--	DO_CALL (SYS_ify (vfork))
+--
+--	cmpwi	1,3,0
+--	beqlr-	1
+--
+--	lwz	0,PID(13)
+--	neg	0,0
+--	stw	0,PID(13)
+--
+--	PSEUDO_RET
+--
+--PSEUDO_END (__vfork)
+--
+--weak_alias (__vfork, vfork)
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/pt-vfork.S
+-deleted file mode 100644
+-index 0225219..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/pt-vfork.S
+-+++ /dev/null
+-@@ -1,5 +0,0 @@
+--#if defined __powerpc64__
+--# include "powerpc64/pt-vfork.S"
+--#else
+--# include "powerpc32/pt-vfork.S"
+--#endif
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch
+-index 154dd6e..908d9e1 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch
+-@@ -5,7 +5,7 @@
+- # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+- #
+- 
+--libpthread_linux_arch_SSRC = pt-vfork.S pthread_once.S pthread_rwlock_wrlock.S \
+-+libpthread_linux_arch_SSRC = pthread_once.S pthread_rwlock_wrlock.S \
+- 			pthread_rwlock_rdlock.S pthread_rwlock_unlock.S \
+- 			lowlevellock.S lowlevelrobustlock.S pthread_barrier_wait.S \
+- 			pthread_cond_broadcast.S pthread_cond_signal.S \
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S
+-deleted file mode 100644
+-index 56aa6d0..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S
+-+++ /dev/null
+-@@ -1,64 +0,0 @@
+--/* Copyright (C) 2003, 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, see
+--   <http://www.gnu.org/licenses/>.  */
+--
+--#include <sysdep.h>
+--#define _ERRNO_H	1
+--#include <bits/errno.h>
+--#include <tcb-offsets.h>
+--
+--/* Clone the calling process, but without copying the whole address space.
+--   The calling process is suspended until the new process exits or is
+--   replaced by a call to `execve'.  Return -1 for errors, 0 to the new process,
+--   and the process ID of the new process to the old process.  */
+--
+--ENTRY (__vfork)
+--	/* Save the PID value.  */
+--	stc	gbr, r2
+--	mov.w	.L2, r0
+--	mov.l	@(r0,r2), r4
+--	neg	r4, r1
+--	mov.l	r1, @(r0,r2)
+--
+--	mov.w	.L1, r3
+--	trapa	#0x10
+--	mov     r0, r1
+--
+--	/* Restore the old PID value in the parent.  */
+--	tst	r0, r0
+--	bt/s	2f
+--	 stc	gbr, r2
+--	mov.w	.L2, r0
+--	mov.l	r4, @(r0,r2)
+--	mov	r1, r0
+--2:
+--	mov	#-12, r2
+--	shad	r2, r1
+--	not	r1, r1			// r1=0 means r0 = -1 to -4095
+--	tst	r1, r1			// i.e. error in linux
+--	bf	.Lpseudo_end
+--	SYSCALL_ERROR_HANDLER
+--.Lpseudo_end:
+--	rts
+--	 nop
+--.L1:
+--	.word	__NR_vfork
+--.L2:
+--	.word	PID - TLS_PRE_TCB_SIZE
+--
+--PSEUDO_END (__vfork)
+--
+--weak_alias (__vfork, vfork)
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/Makefile.arch
+-index 2b2b5f5..01a9e87 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/Makefile.arch
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/Makefile.arch
+-@@ -5,7 +5,7 @@
+- # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+- #
+- 
+--libpthread_linux_arch_SSRC = pt-vfork.S clone.S
+-+libpthread_linux_arch_SSRC = clone.S
+- libpthread_linux_arch_CSRC = pthread_once.c lowlevellock.c \
+- 	pthread_barrier_init.c pthread_barrier_wait.c pthread_barrier_destroy.c \
+- 	pt-__syscall_error.c
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S
+-deleted file mode 100644
+-index 37231a8..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S
+-+++ /dev/null
+-@@ -1,44 +0,0 @@
+--/* Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--   Contributed by Jakub Jelinek <jakub@redhat.com>, 2004.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, see
+--   <http://www.gnu.org/licenses/>.  */
+--
+--#include <sysdep.h>
+--#include <tcb-offsets.h>
+--
+--	.text
+--	.globl		__syscall_error
+--ENTRY(__vfork)
+--	ld	[%g7 + PID], %o5
+--	sub	%g0, %o5, %o4
+--	st	%o4, [%g7 + PID]
+--
+--	LOADSYSCALL(vfork)
+--	ta	0x10
+--	bcc	2f
+--	 mov	%o7, %g1
+--	st	%o5, [%g7 + PID]
+--	call	__syscall_error
+--	 mov	%g1, %o7
+--2:	sub	%o1, 1, %o1
+--	andcc	%o0, %o1, %o0
+--	bne,a	1f
+--	 st	%o5, [%g7 + PID]
+--1:	retl
+--	 nop
+--END(__vfork)
+--
+--weak_alias (__vfork, vfork)
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/Makefile.arch
+-index ebd5060..af14164 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/Makefile.arch
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/Makefile.arch
+-@@ -5,7 +5,7 @@
+- # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+- #
+- 
+--libpthread_linux_arch_SSRC = pt-vfork.S clone.S pthread_once.S \
+-+libpthread_linux_arch_SSRC = clone.S pthread_once.S \
+- 	lowlevellock.S pthread_barrier_wait.S pthread_cond_signal.S pthread_cond_broadcast.S \
+- 	sem_post.S sem_timedwait.S lowlevelrobustlock.S \
+- 	sem_trywait.S sem_wait.S pthread_rwlock_rdlock.S pthread_rwlock_wrlock.S \
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S
+-deleted file mode 100644
+-index 08a085c..0000000
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S
+-+++ /dev/null
+-@@ -1,32 +0,0 @@
+--/* Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+--
+--   The GNU C Library is free software; you can redistribute it and/or
+--   modify it under the terms of the GNU Lesser General Public
+--   License as published by the Free Software Foundation; either
+--   version 2.1 of the License, or (at your option) any later version.
+--
+--   The GNU C Library is distributed in the hope that it will be useful,
+--   but WITHOUT ANY WARRANTY; without even the implied warranty of
+--   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--   Lesser General Public License for more details.
+--
+--   You should have received a copy of the GNU Lesser General Public
+--   License along with the GNU C Library; if not, see
+--   <http://www.gnu.org/licenses/>.  */
+--
+--#include <tcb-offsets.h>
+--
+--#define SAVE_PID \
+--	movl	%fs:PID, %esi;						      \
+--	movl	%esi, %edx;						      \
+--	negl	%edx;							      \
+--	movl	%edx, %fs:PID
+--
+--#define RESTORE_PID \
+--	testq	%rax, %rax;						      \
+--	je	1f;							      \
+--	movl	%esi, %fs:PID;						      \
+--1:
+--
+--#include <../../../../../../../libc/sysdeps/linux/x86_64/vfork.S>
 --- 
--2.1.0
+-2.4.3
 -
-diff --git a/package/ipmiutil/0002-no-build-doc.patch b/package/ipmiutil/0001-no-build-doc.patch
-similarity index 78%
-rename from package/ipmiutil/0002-no-build-doc.patch
-rename to package/ipmiutil/0001-no-build-doc.patch
-index f26d22e..ea7da97 100644
---- a/package/ipmiutil/0002-no-build-doc.patch
-+++ b/package/ipmiutil/0001-no-build-doc.patch
-@@ -7,10 +7,11 @@ Fixes:
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- 
--diff -durN ipmiutil-2.9.5.orig/configure.ac ipmiutil-2.9.5/configure.ac
----- ipmiutil-2.9.5.orig/configure.ac	2015-04-06 12:23:01.020731749 +0200
--+++ ipmiutil-2.9.5/configure.ac	2015-04-06 12:24:31.181773510 +0200
--@@ -55,7 +55,7 @@
-+diff --git a/configure.ac b/configure.ac
-+index 344b27a71a35..41b6ea89167a 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -56,7 +56,7 @@ LIB_DIR="/usr/lib"
-  isredhat=0
-  init_scripts="scripts/ipmi_port.sh scripts/ipmiutil_evt scripts/ipmiutil_asy scripts/ipmiutil_wdt"
-  projdir=`pwd`
-@@ -19,7 +20,7 @@ diff -durN ipmiutil-2.9.5.orig/configure.ac ipmiutil-2.9.5/configure.ac
-  os=Linux
-  
-  # ltmain.sh, config.sub, et al should have been created, but check to be sure.
--@@ -161,7 +161,7 @@
-+@@ -162,7 +162,7 @@ AC_ARG_ENABLE([standalone],
-  	LANPLUS_SAM="no"
-  	LD_SAMX=""
-  	CFLAGS="-O2"
-diff --git a/package/ipmiutil/0002-lib-Makefile.am-fix-lanplus-disable.patch b/package/ipmiutil/0002-lib-Makefile.am-fix-lanplus-disable.patch
-new file mode 100644
-index 0000000..35d1d67
---- /dev/null
-+++ b/package/ipmiutil/0002-lib-Makefile.am-fix-lanplus-disable.patch
-@@ -0,0 +1,38 @@
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 27 Oct 2015 14:23:44 +0200
-+Subject: [PATCH] lib/Makefile.am: fix lanplus disable
-+
-+Protect the install target as well when lanplus is disabled. Fixes the
-+following installation failure when openssl is missing:
-+
-+In file included from lanplus.c:78:0:
-+./inc/ipmitool/ipmi.h:51:25: fatal error: openssl/evp.h: No such file or directory
-+
-+Patch status: sent upstream
-+(http://sourceforge.net/p/ipmiutil/mailman/message/34572580/)
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ lib/Makefile.am | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/Makefile.am b/lib/Makefile.am
-+index 805a218ab7eb..939594cfd3e5 100644
-+--- a/lib/Makefile.am
-++++ b/lib/Makefile.am
-+@@ -51,8 +51,10 @@ distclean:
-+ 	cd lanplus; make distclean
-+ 	
-+ install:
-+-	$(MKDIR) ${datato}
-+-	cd lanplus; make install
-++	if [ "$(PLUSFLAGS)" = "-DHAVE_LANPLUS" ]; then \
-++	  $(MKDIR) ${datato} ; \
-++	  cd lanplus; make install ; \
-++	fi
-+ 
-+ check:
-+ 
-+-- 
-+2.6.1
-+
-diff --git a/package/ipmiutil/0003-really-disable-lanplus.patch b/package/ipmiutil/0003-really-disable-lanplus.patch
+diff --git a/package/uclibc/arc-2015.06/0002-ARCv2-update-memset-so-it-could-be-used-without-doub.patch b/package/uclibc/arc-2015.06/0002-ARCv2-update-memset-so-it-could-be-used-without-doub.patch
 deleted file mode 100644
-index 33dd249..0000000
---- a/package/ipmiutil/0003-really-disable-lanplus.patch
+index 647f97e..0000000
+--- a/package/uclibc/arc-2015.06/0002-ARCv2-update-memset-so-it-could-be-used-without-doub.patch
 +++ /dev/null
-@@ -1,95 +0,0 @@
--lib: do not try to build lanplus if it is disabled
+@@ -1,81 +0,0 @@
+-From 9b79d39b027f0a44215c4c13f7fd23b710727c37 Mon Sep 17 00:00:00 2001
+-From: Alexey Brodkin <abrodkin@synopsys.com>
+-Date: Thu, 16 Jul 2015 11:38:29 +0300
+-Subject: [PATCH] ARCv2: update memset() so it could be used without double
+- load/stores
 -
--If lanplus is disabled, we do not want to build it, especially when
--openssl is disabled, otherwise it fails to build with:
+-Existing version of memset() relies on existence of 64-bit load/stores.
+-While ARC HS38 may not have those instructions implemented in SoC.
 -
--    make[4]: Entering directory `/home/buildroot/build/instance-0/output/build/ipmiutil-2.9.5/lib/lanplus'
--    /home/buildroot/build/instance-0/output/host/usr/bin/i686-ctng-linux-gnu-gcc -DHAVE_CONFIG_H 
--    -I. -I../.. -I. -I./inc   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 
--    -DLINUX -DSKIP_MD2 -fPIC  -fstack-protector --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2 -fPIC
--    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -c -o lanplus.o lanplus.c
--    In file included from lanplus.c:78:0:
--    ./inc/ipmitool/ipmi.h:51:25: fatal error: openssl/evp.h: No such file or directory
+-Proposed implementation checks if "-mno-ll64" option was passed to gcc
+-(for ARCv2 "-mll64" is set implicitly by default) by checking __LL64__
+-definition and if it is not defined uses 32-bit load/stores.
 -
--Sample build error visible at:
--    http://autobuild.buildroot.org/results/04a/04a1c48d484debd7894fd32997ed50d3a0110b93/build-end.log
+-Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
+-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+-Cc: Vineet Gupta <vgupta@synopsys.com>
+----
+- libc/string/arc/arcv2/memset.S | 30 ++++++++++++++++++++++++++++++
+- 1 file changed, 30 insertions(+)
 -
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff -durN ipmiutil-2.9.5.orig/configure.ac ipmiutil-2.9.5/configure.ac
----- ipmiutil-2.9.5.orig/configure.ac	2015-05-23 19:33:54.293468417 +0200
--+++ ipmiutil-2.9.5/configure.ac	2015-05-23 19:31:41.595877435 +0200
--@@ -474,6 +474,8 @@
-- AC_SUBST(SHR_LINK)
-- AC_SUBST(pkgconfigdir)
-- 
--+AM_CONDITIONAL([LANPLUS], [test x$LANPLUS_SAM = xyes])
--+
-- AC_OUTPUT(Makefile util/Makefile lib/Makefile lib/libipmiutil.pc lib/lanplus/Makefile doc/Makefile scripts/Makefile)
-- 
-- if test "x$sysname" = "xSunOS"; then
--diff -durN ipmiutil-2.9.5.orig/lib/lanplus/Makefile.am ipmiutil-2.9.5/lib/lanplus/Makefile.am
----- ipmiutil-2.9.5.orig/lib/lanplus/Makefile.am	2014-11-04 18:46:11.000000000 +0100
--+++ ipmiutil-2.9.5/lib/lanplus/Makefile.am	2015-05-23 19:32:30.956469461 +0200
--@@ -1,5 +1,7 @@
-- #  Makefile.am for libipmi_lanplus.so and libipmi_lanplus.a
-- 
--+if LANPLUS
--+
-- ODIR 	= obj
-- CFLAGS_STATIC  = @OS_CFLAGS@ -DSTATIC -fno-strict-aliasing -fPIC $(CFLAGS) 
-- AM_CFLAGS  = @OS_CFLAGS@ -fPIC  @LANPLUS_CFLAGS@
--@@ -53,3 +55,4 @@
-- #$(ODIR)/%.o:    %.c $(ODIR)
-- #	$(CC) -c $(CFLAGS_STATIC) $(INCLUDES) -o $@ $<
-- 
--+endif
--diff -durN ipmiutil-2.9.5.orig/lib/Makefile.am ipmiutil-2.9.5/lib/Makefile.am
----- ipmiutil-2.9.5.orig/lib/Makefile.am	2014-11-04 18:46:11.000000000 +0100
--+++ ipmiutil-2.9.5/lib/Makefile.am	2015-05-23 19:41:06.378636668 +0200
--@@ -32,28 +32,39 @@
-- 	    else cp -f libipmiapi64.a.redhat  libipmiapi.a; fi \
--           else cp -f libipmiapi32.a libipmiapi.a; fi \
-- 	fi
--+if LANPLUS
-- 	cd lanplus; make clean; make  
-- 	cp -f lanplus/libipmi_lanplus.a  .
--+endif # LANPLUS
-- 
-- clean:
-- 	rm -f libipmiapi.a lib*_lanplus.a lib*_lanplus.so
--+if LANPLUS
-- 	cd lanplus; make clean
--+endif # LANPLUS
-- 
-- clobber:
-- 	rm -f libipmiapi.a lib*_lanplus.a  lib*_lanplus.so
--+if LANPLUS
-- 	cd lanplus; make clean
--+endif # LANPLUS
-- 	
-- distclean:
-- 	rm -f libipmiapi.a lib*.a  lib*_lanplus.so
--+if LANPLUS
-- 	cd lanplus; make distclean
--+endif # LANPLUS
-- 	
-- install:
-- 	$(MKDIR) ${datato}
--+if LANPLUS
-- 	cd lanplus; make install
--+endif # LANPLUS
-- 
-- check:
-- 
-- installso:
--+if LANPLUS
-- 	@if [ -d /usr/lib64 ]; then \
-- 	$(MKDIR) ${lib64} ; \
-- 	echo "installing libipmi_lanplus into ${lib64}"; \
--@@ -68,4 +79,5 @@
-- 	(cd ${lib32} && rm -f libipmi_lanplus.* ); \
-- 	../../libtool --finish ${lib64} \
-- 	fi
--+endif # LANPLUS
-- 	
-diff --git a/package/ipmiutil/0004-avoid-wchar-t-redefinition.patch b/package/ipmiutil/0004-avoid-wchar-t-redefinition.patch
-deleted file mode 100644
-index 63a5927..0000000
---- a/package/ipmiutil/0004-avoid-wchar-t-redefinition.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Avoid wchar_t redefinition
--
--The musl C library does not define _WCHAR_T. Check also for compiler defined
--__WCHAR_TYPE__.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--
--diff -Nuar ipmiutil-2.9.5-orig/util/imb_api.h ipmiutil-2.9.5/util/imb_api.h
----- ipmiutil-2.9.5-orig/util/imb_api.h	2014-11-04 19:46:11.000000000 +0200
--+++ ipmiutil-2.9.5/util/imb_api.h	2015-09-29 07:49:40.799063825 +0300
--@@ -49,7 +49,7 @@
-- /* DOS defines wchar_t in stdlib.h */
-- #else 
--  // defined(LINUX) | defined(SOLARIS)
---#ifndef _WCHAR_T
--+#if !defined(_WCHAR_T) && !defined(__WCHAR_TYPE__)
-- #define _WCHAR_T
-- typedef long    wchar_t;
-- #endif
-diff --git a/package/ipmiutil/0005-add-missing-param.h-header-include.patch b/package/ipmiutil/0005-add-missing-param.h-header-include.patch
-deleted file mode 100644
-index 30bc47b..0000000
---- a/package/ipmiutil/0005-add-missing-param.h-header-include.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Add missing linux/param.h header include
--
--Fixes the following build failure under musl:
--
--mem_if.c: In function ???MapPhysicalMemory???:
--mem_if.c:337:36: error: ???EXEC_PAGESIZE??? undeclared (first use in this function)
--  ulDiff = (ULONG)(tdStartAddress % EXEC_PAGESIZE);
--                                    ^
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--
--diff -Nuar ipmiutil-2.9.5-orig/util/mem_if.c ipmiutil-2.9.5/util/mem_if.c
----- ipmiutil-2.9.5-orig/util/mem_if.c	2014-11-04 19:46:11.000000000 +0200
--+++ ipmiutil-2.9.5/util/mem_if.c	2015-09-29 08:08:31.800459775 +0300
--@@ -65,6 +65,9 @@
-- #include <sys/param.h>
-- #include <sys/mman.h>
-- #include <sys/ioctl.h>
--+#ifdef __linux__
--+#include <linux/param.h>
+-diff --git a/libc/string/arc/arcv2/memset.S b/libc/string/arc/arcv2/memset.S
+-index d076ad1..0918d37 100644
+---- a/libc/string/arc/arcv2/memset.S
+-+++ b/libc/string/arc/arcv2/memset.S
+-@@ -52,6 +52,7 @@ ENTRY(memset)
+- 	lpnz	@.Lset64bytes
+- 	;; LOOP START
+- 	PREWRITE(r3, 64)	;Prefetch the next write location
+-+#ifdef __LL64__
+- 	std.ab	r4, [r3, 8]
+- 	std.ab	r4, [r3, 8]
+- 	std.ab	r4, [r3, 8]
+-@@ -60,16 +61,45 @@ ENTRY(memset)
+- 	std.ab	r4, [r3, 8]
+- 	std.ab	r4, [r3, 8]
+- 	std.ab	r4, [r3, 8]
+-+#else
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
 -+#endif
-- #endif
-- #if defined(SOLARIS) || defined(BSD)
-- #define EXEC_PAGESIZE     4096
-diff --git a/package/ipmiutil/0006-add-missing-sys-select.h-include.patch b/package/ipmiutil/0006-add-missing-sys-select.h-include.patch
-deleted file mode 100644
-index a0cba20..0000000
---- a/package/ipmiutil/0006-add-missing-sys-select.h-include.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Add missing sys/select.h include
+- .Lset64bytes:
+- 
+- 	lsr.f	lp_count, r2, 5 ;Last remaining  max 124 bytes
+- 	lpnz	.Lset32bytes
+- 	;; LOOP START
+- 	prefetchw [r3, 32]	;Prefetch the next write location
+-+#ifdef __LL64__
+- 	std.ab	r4, [r3, 8]
+- 	std.ab	r4, [r3, 8]
+- 	std.ab	r4, [r3, 8]
+- 	std.ab	r4, [r3, 8]
+-+#else
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+	st.ab	r4, [r3, 4]
+-+#endif
+- .Lset32bytes:
+- 
+- 	and.f	lp_count, r2, 0x1F ;Last remaining 31 bytes
+--- 
+-2.4.3
 -
--POSIX.1-2001 requires sys/select.h for select(). Fixes the following build
--failure under musl:
--
--ipmimv.c: In function ???ipmicmd_mv???:
--ipmimv.c:345:5: error: unknown type name ???fd_set???
--     fd_set readfds;
--     ^
--ipmimv.c:346:20: error: storage size of ???tv??? isn???t known
--     struct timeval tv;
--                    ^
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--
--diff -Nuar ipmiutil-2.9.5-orig/util/ipmimv.c ipmiutil-2.9.5/util/ipmimv.c
----- ipmiutil-2.9.5-orig/util/ipmimv.c	2014-11-04 19:46:11.000000000 +0200
--+++ ipmiutil-2.9.5/util/ipmimv.c	2015-09-29 09:16:08.862828679 +0300
--@@ -62,6 +62,7 @@
-- #include <time.h>
-- #include <errno.h>
-- #include <sys/ioctl.h>
--+#include <sys/select.h>
-- #if defined(MACOS)
-- #include <sys/time.h>
-- #else
-diff --git a/package/ipmiutil/ipmiutil.hash b/package/ipmiutil/ipmiutil.hash
-index 2afc0f2..35a0bd3 100644
---- a/package/ipmiutil/ipmiutil.hash
-+++ b/package/ipmiutil/ipmiutil.hash
-@@ -1,2 +1,2 @@
- # From http://sourceforge.net/projects/ipmiutil/files/?source=navbar
--sha1	265f022c876da373b2ecb4be2bc0f98e65f70977	ipmiutil-2.9.5.tar.gz
-+sha1	cc26d977afc87717812ef25aa02b2d5ab84843c4	ipmiutil-2.9.7.tar.gz
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index 4861c81..30d0f96 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--IPMIUTIL_VERSION = 2.9.5
-+IPMIUTIL_VERSION = 2.9.7
- IPMIUTIL_SITE = http://sourceforge.net/projects/ipmiutil/files
- IPMIUTIL_LICENSE = BSD-3c
- IPMIUTIL_LICENSE_FILES = COPYING
--# We're patching configure.ac , lib/Makefile.am and lib/lanplus/Makefile.am
-+# We're patching configure.ac, lib/Makefile.am
- IPMIUTIL_AUTORECONF = YES
- 
- IPMIUTIL_MAKE = $(MAKE1)
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 7ff98b0..c62a40f 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -15,9 +15,6 @@ BR_NO_CHECK_HASH_FOR += $(UCLIBC_SOURCE)
+ else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+-else ifeq ($(BR2_UCLIBC_VERSION_ARC_GIT),y)
+-UCLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,uClibc,$(UCLIBC_VERSION))
+-UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
+ else
+ UCLIBC_SITE = http://www.uclibc.org/downloads
+ UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
