@@ -1,128 +1,175 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 27 Oct 2015 10:45:50 +0100
-Subject: [Buildroot] [PATCH 1/2] zbar: new package
-In-Reply-To: <1445937910-26996-1-git-send-email-sv99@inbox.ru>
-References: <1445937910-26996-1-git-send-email-sv99@inbox.ru>
-Message-ID: <CAGm1_ksqhWaZGTMBf_Zf9YGegRDVzmWw5_i4mfVeuXT781uvAQ@mail.gmail.com>
+From: maitysanchayan at gmail.com <maitysanchayan@gmail.com>
+Date: Tue, 27 Oct 2015 15:23:18 +0530
+Subject: [Buildroot] [PATCH] configs: Add support for Toradex Colibri
+ Vybrid modules
+In-Reply-To: <562F46B4.5090405@mind.be>
+References: <f63a9e7f3d885880c6b55b89eec4aa739b497ea1.1445312793.git.maitysanchayan@gmail.com>
+ <562E860A.2090203@mind.be>
+ <20151027034232.GB7906@Sanchayan-Arch.toradex.int>
+ <562F46B4.5090405@mind.be>
+Message-ID: <20151027095318.GA11375@Sanchayan-Arch.toradex.int>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Viacheslav,
+Hello,
 
-On Tue, Oct 27, 2015 at 10:25 AM, Viacheslav Volkov <sv99@inbox.ru> wrote:
-> QR and barcode scanner library and gst-plugins-bad.
+On 15-10-27 10:41:08, Arnout Vandecappelle wrote:
+> 
+> 
+> On 27-10-15 04:42, maitysanchayan at gmail.com wrote:
+> > Hello Arnout,
+> > 
+> > On 15-10-26 20:59:06, Arnout Vandecappelle wrote:
+> >>  Hi Sanchayan,
+> >>
+> >> On 20-10-15 05:49, Sanchayan Maity wrote:
+> >>> This patch adds a minimal default configuration for Colibri Vybrid
+> >>> modules which has been tested on Colibri Vybrid VF50 and VF61.
+> >>>
+> >>> Vybrid is well supported in mainline kernel by Toradex however we
+> >>> use the custom git branches maintained by Toradex. The configuration
+> 
+>  Something I forgot to mention in my initial review: this sentence doesn't
+> explain very well what you're doing. I mean, you say that it's OK to use
+> mainline but you use the Toradex branch anyway, without giving a good reason for it.
+
+Ok. I guess it will be best if I remove that line. Since it is a Toradex module
+best use the git branches we have. I will also synchronise this with every
+release we make.
+
 >
-> Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
-> ---
->  package/Config.in                     |  1 +
->  package/zbar/0001-zbar-autoconf.patch | 16 ++++++++++++++++
->  package/zbar/Config.in                |  4 ++++
->  package/zbar/zbar.hash                |  3 +++
->  package/zbar/zbar.mk                  | 22 ++++++++++++++++++++++
->  5 files changed, 46 insertions(+)
->  create mode 100644 package/zbar/0001-zbar-autoconf.patch
->  create mode 100644 package/zbar/Config.in
->  create mode 100644 package/zbar/zbar.hash
->  create mode 100644 package/zbar/zbar.mk
+> >>> only builds a minimal root filesystem. Support for u-boot and flash
+> >>> scripts is not added.
+> 
+>  And another thing I forgot to mention: unless there is a really good reason not
+> to support U-Boot, please do support U-Boot as well. The goal of a defconfig is
+> to make it easy to start to make your own configuration and to start hacking.
+> It's basically a simple way to express all the information about how to build
+> things that you would otherwise find in wiki pages etc. So how to build a custom
+> boot loader is really an essential part of that.
+
+Ok. I will also add uboot support.
+
+> 
+>  For some boards we even have two defconfigs, to distinguish the booting from SD
+> card and the booting from flash. That's also something that is sometimes a bit
+> tricky to get right so it is worthwhile to have a separate defconfig for it.
+
+I don't think we will require separate defconfigs. Our uboot support has environment
+variable which will allow booting directly from the SD card. Will add details along
+with the documentation in next iteration.
+
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 10ff94e..778b1e1 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -854,6 +854,7 @@ menu "Graphics"
->         source "package/webkit/Config.in"
->         source "package/webkitgtk24/Config.in"
->         source "package/webp/Config.in"
-> +       source "package/zbar/Config.in"
->         source "package/zxing-cpp/Config.in"
->  endmenu
->
-> diff --git a/package/zbar/0001-zbar-autoconf.patch b/package/zbar/0001-zbar-autoconf.patch
-> new file mode 100644
-> index 0000000..159f75e
-> --- /dev/null
-> +++ b/package/zbar/0001-zbar-autoconf.patch
-> @@ -0,0 +1,16 @@
-> +diff --git a/configure.ac b/configure.ac
-> +index 256aedb..5aa5689 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -3,10 +3,11 @@ AC_PREREQ([2.61])
-> + AC_INIT([zbar], [0.10], [spadix at users.sourceforge.net])
-> + AC_CONFIG_AUX_DIR(config)
-> + AC_CONFIG_MACRO_DIR(config)
-> +-AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign subdir-objects std-options dist-bzip2])
-> ++AM_INIT_AUTOMAKE([1.10 -Wall -Werror -Wno-portability foreign subdir-objects std-options dist-bzip2])
-> + AC_CONFIG_HEADERS([include/config.h])
-> + AC_CONFIG_SRCDIR(zbar/scanner.c)
-> + LT_PREREQ([2.2])
-> ++m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
-> + LT_INIT([dlopen win32-dll])
-> + LT_LANG([Windows Resource])
-> diff --git a/package/zbar/Config.in b/package/zbar/Config.in
-> new file mode 100644
-> index 0000000..cad6e54
-> --- /dev/null
-> +++ b/package/zbar/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_ZBAR
-> +       bool "zbar"
+> >>>
+> >>> Signed-off-by: Sanchayan Maity <maitysanchayan@gmail.com>
+> >>> ---
+> [snip]
+> >>> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> >>
+> >>  That is rarely a good idea... You usually put the kernel in a separate mtd
+> >> partition or UBI volume.
+> > 
+> > On the Colibri Vybrid modules we have one UBI parition on which the root filesystem
+> > resides along with the kernel and device tree blobs in /boot. From uboot we then use
+> > boot from ubifs. I am aware that this is supposedly not recommended and recently
+> > Richard Weinberger also had a ELCE talk regarding that though I am not aware of the
+> > reasons at the moment.
+> > 
+> > I added the above since it directly gives a rootfs ubifs image which users of the
+> > Colibri Vybrid can then directly use as to how to we define our update procedures.
+> 
+>  If that's the way you define your update procedure, then keep it the way it is.
+> 
+>  The reason that Richard Weinberger advises against it (I think) is that it just
+> adds overhead: mounting ubifs takes time in addition to attaching the ubi
+> partition. So booting the kernel from a UBI volume will be significantly faster.
+> But there is certainly something to be said for your approach as well, since it
+> makes it much easier to guarantee consistency between kernel and rootfs.
+> 
+> > 
+> > Will the addition of the above options be not acceptable still?
+> > 
+> >>
+> >>> +BR2_PACKAGE_GDB=y
+> >>> +BR2_PACKAGE_IPROUTE2=y
+> >>
+> >>  Please don't select any package except busybox.
+> > 
+> > Ok.
+> > 
+> >>
+> >>> +BR2_TARGET_ROOTFS_UBIFS=y
+> >>> +BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+> >>> +BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x800
+> >>> +BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=8112
+> >>> +BR2_TARGET_ROOTFS_UBIFS_RT_LZO=y
+> >>
+> >>  This is the default, how come it appears in your defconfig?
+> >>
+> >>> +BR2_TARGET_ROOTFS_UBIFS_NONE=y
+> >>
+> >>  Same here.
+> > 
+> > Ok. I added it specifically. Will purge the defaults here.
+> 
+>  Well, it's not bad to add it explicitly, just in case the defaults change
+> (though we try to avoid that) and to make it more explicit what choices you've made.
+> 
+> 
+>  To avoid some of the feedback like I gave, it's good to already mention in the
+> commit message what choices you've made and why.
 
-libv4l missing hier.
+Thank you very much for your feedback. I will try addressing all comments in my next
+version.
 
-> +       help
-> +           QR and barcode scanner
+- Sanchayan.
 
-Upstream project URL missing
-
-> diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
-> new file mode 100644
-> index 0000000..d466fdf
-> --- /dev/null
-> +++ b/package/zbar/zbar.hash
-> @@ -0,0 +1,3 @@
-> +# Local computed:
-> +sha256 38f8535a3c4c526ecaa968a992efcbf7392623e68db45dc2f181d4c9d3002d69 zbar-854a5d97059e395807091ac4d80c53f7968abb8f.tar.gz
-> +
-
-AFAIK you either use official release version and a hash file or git
-commit without hash file.
-
-> diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-> new file mode 100644
-> index 0000000..91527a1
-> --- /dev/null
-> +++ b/package/zbar/zbar.mk
-> @@ -0,0 +1,22 @@
-> +#############################################################
-> +#
-> +# zbar
-> +#
-> +#############################################################
-> +
-> +#ZBAR_VERSION = 0.10
-> +#ZBAR_SITE = http://downloads.sourceforge.net/project/zbar/zbar/$(ZBAR_VERSION)
-> +ZBAR_VERSION = 854a5d97059e395807091ac4d80c53f7968abb8f
-> +ZBAR_SITE = $(call github,ZBar,Zbar,$(ZBAR_VERSION))
-> +ZBAR_INSTALL_STAGING = YES
-> +ZBAR_AUTORECONF = YES
-> +ZBAR_DEPENDENCIES = libv4l
-> +ZBAR_CONF_OPTS = --without-imagemagick --without-qt --without-gtk --without-python --without-x --without-jpeg --enable-shared=yes
-> +
-> +ZBAR_POST_BUILD_HOOKS += ZBAR_INSTALL_FIXUP
-> +
-> +define ZBAR_INSTALL_FIXUP
-> +       touch $(@D)/doc/man/zbarcam.1
-> +endef
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.6.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> > 
+> >>
+> >>> +BR2_TARGET_ROOTFS_UBIFS_OPTS="--space-fixup"
+> >>> +BR2_TARGET_ROOTFS_UBI=y
+> >>> +BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x20000
+> >>> +BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+> >>> +BR2_TARGET_ROOTFS_UBI_OPTS=""
+> >>>
+> >>
+> >>
+> >>  We also like to have a readme file, in board/toradex/colibri/readme.txt, that
+> >> explains how to get the images to the target. Particularly in this case because
+> >> it's not simply a matter of putting it in an SD card. Look at other boards for
+> >> examples.
+> > 
+> > Will add the same.
+> > 
+> > Thanks for your inputs and time Arnout.
+> > 
+> > - Sanchayan.
+> > 
+> >>
+> >>  Regards,
+> >>  Arnout
+> >>
+> >> -- 
+> >> Arnout Vandecappelle                          arnout at mind be
+> >> Senior Embedded Software Architect            +32-16-286500
+> >> Essensium/Mind                                http://www.mind.be
+> >> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> >> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> >> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> 
+> -- 
+> Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+> Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+> Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> 
