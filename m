@@ -1,36 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Oct 2015 22:09:24 +0100
-Subject: [Buildroot] [PATCH] uclibc: get rid of ARC's uClibc fork
-In-Reply-To: <1445959005-23917-1-git-send-email-abrodkin@synopsys.com> (Alexey
- Brodkin's message of "Tue, 27 Oct 2015 18:16:45 +0300")
-References: <1445959005-23917-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <87vb9s81dn.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Oct 2015 22:16:03 +0100
+Subject: [Buildroot] [PATCH 1/2] ipmiutil: bump to version 2.9.7
+In-Reply-To: <88628938a5c1b5e5ec376f105519948386afe751.1445950637.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 27 Oct 2015 14:57:16 +0200")
+References: <88628938a5c1b5e5ec376f105519948386afe751.1445950637.git.baruch@tkos.co.il>
+Message-ID: <87r3kg812k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > For quite some time all ARC changes have been pushed upstream.
- > So both uClibc master branch and uClibc-ng have full ARC support
- > including the most recent changes.
+ > Remove upstream or unneeded patches. Renumber and refresh the doc disable
+ > patch. Add a different version of the lanplus disable fix (sent upstream) that
+ > integrates with upstream change in this area.
 
- > I.e. finally we have reached the point when there's no need in
- > Synopsys fork of uClibc on GitHub and it will soon be obsoleted and
- > removed at some pint of time.
-
- > Now since vanilla uClibc hasn't seen any releases for many years we cannot
- > really use it for ARC. Fortunately there exists uClibc-ng and Waldemar
- > cuts releases regularly - that works perfectly fine for us.
-
- > That patch removes all mentions of ARC's uClibc which in turn makes
- > uClibc-ng default libc for ARC.
-
- > Cc: Waldemar Brodkorb <wbx@openadk.org>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
