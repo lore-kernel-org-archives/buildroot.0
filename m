@@ -1,46 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Oct 2015 21:38:43 +0100
-Subject: [Buildroot] [PATCH v3] rfkill: new package
-In-Reply-To: <562FAE13.8070507@inbox.ru> (Viacheslav Volkov's message of "Tue, 
- 27 Oct 2015 20:02:11 +0300")
-References: <1445957711-10417-1-git-send-email-sv99@inbox.ru>
- <20151027152544.GB3555@free.fr> <562FAE13.8070507@inbox.ru>
-Message-ID: <878u6o9hd8.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 27 Oct 2015 21:58:30 +0100
+Subject: [Buildroot] [PATCH v1] gst1-validate: fix compile with cairo support
+Message-ID: <1445979510-9276-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Viacheslav" == Viacheslav Volkov <sv99@inbox.ru> writes:
+In case cairo support is (auto-)detected cairo PNG support
+is required.
 
- > Exists questions with license information.
- > In the distributions exists file COPYING:
+Fixes ([1]):
 
- > Copyright 2009 Johannes Berg <johannes@sipsolutions.net>
- > Copyright 2009 Marcel Holtmann <marcel@holtmann.org>
- > Copyright 2009 Tim Gardner <tim.gardner@canonical.com>
+../gst-libs/gst/video/.libs/libgstvalidatevideo-1.0.so: undefined reference to `cairo_surface_write_to_png'
+../gst-libs/gst/video/.libs/libgstvalidatevideo-1.0.so: undefined reference to `cairo_image_surface_create_from_png'
+collect2: error: ld returned 1 exit status
 
- > Permission to use, copy, modify, and/or distribute this software for any
- > purpose with or without fee is hereby granted, provided that the above
- > copyright notice and this permission notice appear in all copies.
+[1] http://autobuild.buildroot.net/results/c5e/c5eb6cb12dba559226c67f5d258cc151aa8a8d3a
 
- > THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
- > WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
- > MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
- > ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- > WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
- > ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
- > OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/gstreamer1/gst1-validate/Config.in        | 3 +++
+ package/gstreamer1/gst1-validate/gst1-validate.mk | 7 ++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-That is the ISC license:
-
-https://opensource.org/licenses/ISC
-
-So:
-
-RFKILL_LICENSE = ISC
-RFKILL_LICENSE_FILES = COPYING
-
+diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
+index 34ec85f..1b3b2f5 100644
+--- a/package/gstreamer1/gst1-validate/Config.in
++++ b/package/gstreamer1/gst1-validate/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_GST1_VALIDATE
+ 	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_PYTHON_PYEXPAT
++	# if package cairo is autodetected PNG support is needed
++	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
+ 	help
+ 	  GstValidate is a tool that allows GStreamer developers to
+ 	  check that the GstElements they write behave the way they
+@@ -12,3 +14,4 @@ config BR2_PACKAGE_GST1_VALIDATE
+ 
+ comment "gst1-validate depends on python"
+ 	depends on !BR2_PACKAGE_PYTHON
++
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index b8b09da..a7d66be 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -12,6 +12,11 @@ GST1_VALIDATE_LICENSE_FILES = COPYING
+ 
+ GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
+ 
+-GST1_VALIDATE_DEPENDENCIES = gstreamer1 gst1-plugins-base host-python python
++GST1_VALIDATE_DEPENDENCIES = \
++	gstreamer1 \
++	gst1-plugins-base \
++	host-python \
++	python \
++	$(if $(BR2_PACKAGE_CAIRO),cairo)
+ 
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.1.4
