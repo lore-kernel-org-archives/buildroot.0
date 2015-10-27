@@ -1,64 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Oct 2015 19:20:43 +0100
-Subject: [Buildroot] Help Adding Package to build root..
-In-Reply-To: <CACvocV4-o7u1L52xP7YnVTgoi369NUDk6vP4=ng6cLuwzXOvVw@mail.gmail.com>
-References: <CACvocV4-o7u1L52xP7YnVTgoi369NUDk6vP4=ng6cLuwzXOvVw@mail.gmail.com>
-Message-ID: <20151027182043.GF3555@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Oct 2015 20:06:24 +0100
+Subject: [Buildroot] [PATCH] core: add a 'make version' rule
+In-Reply-To: <1445956167-11122-1-git-send-email-yann.morin.1998@free.fr>
+References: <1445956167-11122-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <562FCB30.8040604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giovanni, All,
-
-On 2015-10-27 18:52 +0100, astrolite . spake thusly:
-> Hi all sorry for my stupid question but i've a problem to adding a packages
-> to buid root..
+On 27-10-15 15:29, Yann E. MORIN wrote:
+> We often ask people for the version they are using when they ask for
+> help (either on the list or on IRC). Some of them do not even know which
+> version they are using.
 > 
-> I need to add a package called pigpio.
-> I've create a .tar.gz on github with all the file required.
-> The link is : https://github.com/ciclonite/pigpio
+> Add a make rule to dump the full version string.
+
+ Anything wrong with 'make print-version'? :-)
+
+ I already marked it as rejected.
+
+ Regards,
+ Arnout
+
 > 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> ---
+>  Makefile | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> Here what happens:
-> gzip -d -c
-> /root/qt-dev/buildroot-qt-dev/buildroot-2015.05/dl/libpigpio-38.tar.gz |
-> tar --strip-components=1 -C
-> /root/qt-dev/buildroot-qt-dev/buildroot-2015.05/output/build/libpigpio-38
->  -xf -
-> >>> libpigpio 38 Patching
-> >>> libpigpio 38 Updating config.sub and config.guess
-> for file in config.guess config.sub; do for i in $(find
-> /root/qt-dev/buildroot-qt-dev/buildroot-2015.05/output/build/libpigpio-38
-> -name $file); do cp support/gnuconfig/$file $i; done; done
-> >>> libpigpio 38 Configuring
-> >>> libpigpio 38 Autoreconfiguring
-> autoreconf: 'configure.ac' or 'configure.in' is required
-> Why the autoreconf cannot find configure.ac? in the tar.gz it's present!
+> diff --git a/Makefile b/Makefile
+> index 853d185..3cf0c0c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -88,10 +88,14 @@ DATE := $(shell date +%Y%m%d)
+>  # Need to export it, so it can be got from environment in children (eg. mconf)
+>  export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+>  
+> +.PHONY: version
+> +version:
+> +	@echo $(BR2_VERSION_FULL)
+> +
+>  noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+>  	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
+>  	randpackageconfig allyespackageconfig allnopackageconfig \
+> -	print-version olddefconfig
+> +	print-version olddefconfig version
+>  
+>  # Some global targets do not trigger a build, but are used to collect
+>  # metadata, or do various checks. When such targets are triggered,
+> 
 
-I've made a very simple and minimalistic pgipio package:
-
-    $ cat package/pigpio/pigpio.mk
-    PIGPIO_VERSION = 924b8d2baf2d36336bf9ba320a22f3306783c051
-    PIGPIO_SITE = $(call github,ciclonite,pigpio,$(PIGPIO_VERSION))
-    PIGPIO_AUTORECONF = YES
-    $(eval $(autotools-package))
-
-And it does autoreconf nicely for me.
-
-Care to share your own .mk so we can compare and identify your issue?
-
-It does not build, because there is a missing custom.cext file, but your
-direct problem does not happen for me.
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
