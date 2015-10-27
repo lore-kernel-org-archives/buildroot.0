@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Oct 2015 22:16:03 +0100
-Subject: [Buildroot] [PATCH 1/2] ipmiutil: bump to version 2.9.7
-In-Reply-To: <88628938a5c1b5e5ec376f105519948386afe751.1445950637.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 27 Oct 2015 14:57:16 +0200")
+Date: Tue, 27 Oct 2015 22:16:09 +0100
+Subject: [Buildroot] [PATCH 2/2] ipmiutil: fix stack protector test
+In-Reply-To: <fe150b99186b8b76924cfaf246a3d56b43e1d8cb.1445950637.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 27 Oct 2015 14:57:17 +0200")
 References: <88628938a5c1b5e5ec376f105519948386afe751.1445950637.git.baruch@tkos.co.il>
-Message-ID: <87r3kg812k.fsf@dell.be.48ers.dk>
+ <fe150b99186b8b76924cfaf246a3d56b43e1d8cb.1445950637.git.baruch@tkos.co.il>
+Message-ID: <87mvv4812e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +14,16 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Remove upstream or unneeded patches. Renumber and refresh the doc disable
- > patch. Add a different version of the lanplus disable fix (sent upstream) that
- > integrates with upstream change in this area.
+ > Add a patch that corrects detection of toolchain stack protector support when
+ > libssp is missing.
 
- > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/497/497d2739c27ce0dcf91bdf2f87c02fc169ba9071/
+ > http://autobuild.buildroot.net/results/f71/f71a4bbca2505fcacb396bcc643c7152d87b5283/
+ > http://autobuild.buildroot.net/results/85d/85da63d49086f8cc62e2c67632dfdc39d7702169/
+
+ > and more.
+
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
