@@ -1,21 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Oct 2015 12:34:06 +0100
-Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.2
-In-Reply-To: <1445942432-29522-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 27 Oct 2015 07:40:32 -0300")
-References: <1445942432-29522-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87eggga6kx.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Oct 2015 12:32:59 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{10, 14}.x and 4.{1,
+	2}.x series
+Message-ID: <20151027113420.A07F681EF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5caab58ff4670e65e0da529b2f838a5ae19fd32b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2ea5717..8135b17 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -193,14 +193,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.91"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.92"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.49"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.55"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.56"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.22"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.11"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.2.4"		if BR2_KERNEL_HEADERS_4_2
++	default "4.1.12"	if BR2_KERNEL_HEADERS_4_1
++	default "4.2.5"		if BR2_KERNEL_HEADERS_4_2
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
