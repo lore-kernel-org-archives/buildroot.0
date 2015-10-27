@@ -1,26 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Oct 2015 07:34:53 +0100
-Subject: [Buildroot] [PATCH 1/2] qemu/x86_64: enable generic hda codec
-In-Reply-To: <1445908642-8162-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1445908642-8162-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151027073453.6cd95be9@free-electrons.com>
+Date: Tue, 27 Oct 2015 07:52:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: broken with musl on x86
+In-Reply-To: <20151021135029.4b4b9e42@free-electrons.com>
+References: <1445374313-30804-1-git-send-email-joerg.krause@embedded.rocks>
+ <20151021135029.4b4b9e42@free-electrons.com>
+Message-ID: <20151027075207.51f35d1d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hello,
 
-On Mon, 26 Oct 2015 22:17:21 -0300, Gustavo Zacarias wrote:
-> Enable the generic hda (sound) codec, necessary for qemu audio to work.
+On Wed, 21 Oct 2015 13:50:29 +0200, Thomas Petazzoni wrote:
+
+> On Tue, 20 Oct 2015 22:51:53 +0200, J?rg Krause wrote:
+> > This patch replaces a previous submission made by Bernd Kuhls some while ago
+> > [1].
+> > 
+> > The posix_memalign declaration is incompatible with musl for C++, because of
+> > the exception specification [2]. Note, the referenced patch is part of the a
+> > patch series to "Add musl support to GCC".
+> > 
+> > Instead of patching gcc in Buildroot we disable jsoncpp and any reverse
+> > dependendy with the musl toolchain on x86.
+> > 
+> > [1] https://patchwork.ozlabs.org/patch/505425/
+> > [2] https://gcc.gnu.org/ml/gcc-patches/2015-04/msg01084.html
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  board/qemu/x86_64/linux-4.2.config | 1 +
->  1 file changed, 1 insertion(+)
+> It is indeed not very practical to fix gcc, since external toolchains
+> would continue to be affected. But isn't there a way of working around
+> the problem inside jsoncpp itself, so that we don't have to do this
+> complicated reverse-dependency propagation ?
 
-Both applied, thanks.
+There is indeed a solution: remove the -pedantic flags from
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wconversion -Wshadow -Wextra -pedantic")
+
+line in CMakeLists.txt. And it builds just fine. It seems a lot simpler
+than propagating the reverse dependencies.
+
+Could you submit a patch doing this ?
+
+Best regards,
 
 Thomas
 -- 
