@@ -1,125 +1,55 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 27 Oct 2015 21:07:19 +0100
-Subject: [Buildroot] [PATCH] perl: fetch lastest upstream patches from
-	perl-cross
-Message-ID: <1445976439-16097-1-git-send-email-francois.perrad@gadz.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Oct 2015 21:12:06 +0100
+Subject: [Buildroot] Help Adding Package to build root..
+In-Reply-To: <CACvocV4-o7u1L52xP7YnVTgoi369NUDk6vP4=ng6cLuwzXOvVw@mail.gmail.com>
+References: <CACvocV4-o7u1L52xP7YnVTgoi369NUDk6vP4=ng6cLuwzXOvVw@mail.gmail.com>
+Message-ID: <562FDA96.5020605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-my previous patch about static build (0001-fix-EUMM.patch) was not the good fix.
+On 27-10-15 18:52, astrolite . wrote:
+> Hi all sorry for my stupid question but i've a problem to adding a packages to
+> buid root..
+> 
+> I need to add a package called pigpio.
+> I've create a .tar.gz on github with all the file required.
+> The link is : https://github.com/ciclonite/pigpio
+> 
+> 
+> Here what happens:
+> gzip -d -c
+> /root/qt-dev/buildroot-qt-dev/buildroot-2015.05/dl/libpigpio-38.tar.gz | tar
+> --strip-components=1 -C
+> /root/qt-dev/buildroot-qt-dev/buildroot-2015.05/output/build/libpigpio-38  -xf -
+>>>> libpigpio 38 Patching
+>>>> libpigpio 38 Updating config.sub and config.guess
+> for file in config.guess config.sub; do for i in $(find
+> /root/qt-dev/buildroot-qt-dev/buildroot-2015.05/output/build/libpigpio-38 -name
+> $file); do cp support/gnuconfig/$file $i; done; done
+>>>> libpigpio 38 Configuring
+>>>> libpigpio 38 Autoreconfiguring
+> autoreconf: 'configure.ac <http://configure.ac>' or 'configure.in
+> <http://configure.in>' is required
+> Why the autoreconf cannot find configure.ac <http://configure.ac>? in the tar.gz
+> it's present!
 
-see discussion: http://github.com/arsv/perl-cross/issues/18
+ Is it in the build directory
+/root/qt-dev/buildroot-qt-dev/buildroot-2015.05/output/build/libpigpio-38 ?
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/0001-fix-EUMM.patch                   | 18 ------------
- package/perl/0002-dynaloader-hints.patch           |  2 ++
- .../0003-add-version.pm-to-miniperl_top-path.patch | 16 +++++++++++
- ...ilt-in-functions-to-avoid-false-positives.patch | 32 ++++++++++++++++++++++
- 4 files changed, 50 insertions(+), 18 deletions(-)
- delete mode 100644 package/perl/0001-fix-EUMM.patch
- create mode 100644 package/perl/0003-add-version.pm-to-miniperl_top-path.patch
- create mode 100644 package/perl/0004-suppress-built-in-functions-to-avoid-false-positives.patch
+ Could you share your Config.in and pigpio.mk so we can check it? The version
+"38" is suspicious since there is no corresponding tag in the github repo, so I
+wonder if you really have the correct tarball.
 
-diff --git a/package/perl/0001-fix-EUMM.patch b/package/perl/0001-fix-EUMM.patch
-deleted file mode 100644
-index e2b24ff..0000000
---- a/package/perl/0001-fix-EUMM.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--fix EUMM 7.04_01 which comes with Perl 5.22.0
--
--with static lib build, we cannot call _find_magic_vstring(),
--which does a `require B;` and B is not a pure Perl module.
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
----- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker/version/vpp.pm
--+++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker/version/vpp.pm
--@@ -933,7 +933,7 @@ sub _un_vstring {
--     if ( length($value) >= 3 && $value !~ /[._]/
-- 	&& _is_non_alphanumeric($value)) {
-- 	my $tvalue;
---	if ( $] ge 5.008_001 ) {
--+	if ( $Config{usedl} && ( $] ge 5.008_001 ) ) {
-- 	    $tvalue = _find_magic_vstring($value);
-- 	    $value = $tvalue if length $tvalue;
-- 	}
-diff --git a/package/perl/0002-dynaloader-hints.patch b/package/perl/0002-dynaloader-hints.patch
-index 2653b78..408fa90 100644
---- a/package/perl/0002-dynaloader-hints.patch
-+++ b/package/perl/0002-dynaloader-hints.patch
-@@ -3,6 +3,8 @@ which is in the default include path.
 
- Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-
-+Fetch from: http://github.com/arsv/perl-cross/blob/master/cnf/diffs/dynaloader.patch
-+
- --- a/ext/DynaLoader/hints/linux.pl
- +++ b/ext/DynaLoader/hints/linux.pl
- @@ -1,5 +1 @@
-diff --git a/package/perl/0003-add-version.pm-to-miniperl_top-path.patch b/package/perl/0003-add-version.pm-to-miniperl_top-path.patch
-new file mode 100644
-index 0000000..91c959f
---- /dev/null
-+++ b/package/perl/0003-add-version.pm-to-miniperl_top-path.patch
-@@ -0,0 +1,16 @@
-+add version.pm to miniperl_top path
-+
-+Fetch from: http://github.com/arsv/perl-cross/commit/f53a9f1b613b84396d174855f6c37bf04f76bae3
-+See discussion: https://github.com/arsv/perl-cross/issues/18
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+--- a/miniperl_top
-++++ b/miniperl_top
-+@@ -39,4 +39,5 @@ exec $top/miniperl\
-+ 	-I$top/dist/Carp/lib\
-+ 	-I$top/cpan/podlators/lib\
-+ 	-I$top/cpan/parent/lib\
-++	-I$top/cpan/version/lib\
-+ 	"$@"
-+
-diff --git a/package/perl/0004-suppress-built-in-functions-to-avoid-false-positives.patch b/package/perl/0004-suppress-built-in-functions-to-avoid-false-positives.patch
-new file mode 100644
-index 0000000..73635fe
---- /dev/null
-+++ b/package/perl/0004-suppress-built-in-functions-to-avoid-false-positives.patch
-@@ -0,0 +1,32 @@
-+suppress built-in functions to avoid false positives
-+
-+gcc knows j0 etc. are pure and excludes them from try.c, subverting
-+linkage test against libm.a and leading to link errors later.
-+
-+Fetch from: http://github.com/arsv/perl-cross/commit/ce7fa56d3a40767135039e03517a4d9ef2f3aaa1
-+See discussion: https://github.com/arsv/perl-cross/issues/18
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+--- a/cnf/configure__f.sh
-++++ b/cnf/configure__f.sh
-+@@ -222,7 +222,7 @@ function try_link_libs {
-+ }
-+
-+ function try_link {
-+-	try_link_libs $libs
-++	try_link_libs $libs $*
-+ }
-+
-+ function try_readelf {
-+--- a/cnf/configure_func.sh
-++++ b/cnf/configure_func.sh
-+@@ -22,7 +22,7 @@ function hasfunc {
-+ 		esac ;;
-+ 	esac
-+ 	try_add "int main(void) { $1($2); return 0; }"
-+-	try_link
-++	try_link -O0 -fno-builtin
-+ 	resdef 'found' 'not found' "$_s"
-+ }
-+
---
-2.5.0
+ Regards,
+ Arnout
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
