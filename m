@@ -1,49 +1,41 @@
-From: Viacheslav Volkov <sv99@inbox.ru>
-Date: Tue, 27 Oct 2015 13:07:49 +0300
-Subject: [Buildroot] [PATCH v2 2/2] gst-plugins-bad: add zbar plugin
-In-Reply-To: <1445940469-27154-1-git-send-email-sv99@inbox.ru>
-References: <1445940469-27154-1-git-send-email-sv99@inbox.ru>
-Message-ID: <1445940469-27154-2-git-send-email-sv99@inbox.ru>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 27 Oct 2015 07:20:27 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14}.x and 4.{1,
+	2}.x series
+Message-ID: <1445941228-15637-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gstreamer/gst-plugins-bad/Config.in          | 4 ++++
- package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk | 7 +++++++
- 2 files changed, 11 insertions(+)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
-index 6aa93de..3bfd12b 100644
---- a/package/gstreamer/gst-plugins-bad/Config.in
-+++ b/package/gstreamer/gst-plugins-bad/Config.in
-@@ -319,4 +319,8 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VP8
- 	bool "vp8"
- 	select BR2_PACKAGE_LIBVPX
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
-+	bool "zbar"
-+	select BR2_PACKAGE_ZBAR
-+
- endif
-diff --git a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
-index 0a85603..1c80593 100644
---- a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
-+++ b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
-@@ -585,4 +585,11 @@ else
- GST_PLUGINS_BAD_CONF_OPTS += --disable-vp8
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR),y)
-+GST_PLUGINS_BAD_CONF_OPTS += --enable-zbar
-+GST_PLUGINS_BAD_DEPENDENCIES += zbar
-+else
-+GST_PLUGINS_BAD_CONF_OPTS += --disable-zbar
-+endif
-+
- $(eval $(autotools-package))
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2ea5717..8135b17 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -193,14 +193,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.91"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.92"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.49"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.55"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.56"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.22"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.11"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.2.4"		if BR2_KERNEL_HEADERS_4_2
++	default "4.1.12"	if BR2_KERNEL_HEADERS_4_1
++	default "4.2.5"		if BR2_KERNEL_HEADERS_4_2
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.6.1
+2.4.10
