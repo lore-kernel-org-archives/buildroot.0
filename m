@@ -1,69 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 Oct 2015 22:37:02 +0100
-Subject: [Buildroot] [PATCH 2/3] skeleton: optionally wait for network
- interfaces to appear
-In-Reply-To: <2419445.kGEUX5UIA3@sagittea>
-References: <1446047943-24641-1-git-send-email-jezz@sysmic.org>
- <1446047943-24641-3-git-send-email-jezz@sysmic.org>
- <20151028174653.GA3650@free.fr> <2419445.kGEUX5UIA3@sagittea>
-Message-ID: <20151028213702.GB3650@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 28 Oct 2015 22:39:23 +0100
+Subject: [Buildroot] [PATCH v5 08/36] package/efl/libefl: add libcurl
+ dependency
+In-Reply-To: <20151025143716.GE11692@free.fr>
+References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
+ <1445720476-21517-9-git-send-email-romain.naour@openwide.fr>
+ <20151025143716.GE11692@free.fr>
+Message-ID: <5631408B.8070703@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+Yann, All,
 
-On 2015-10-28 21:21 +0100, J?r?me Pouiller spake thusly:
-> On Wednesday 28 October 2015 18:46:53 Yann E. MORIN wrote:
-> > On 2015-10-28 16:59 +0100, J?r?me Pouiller spake thusly:
-> [...]
-> > Please drop the empty lines.
-> There were empty lines in original patch ;-).
+Sorry for the slow response time, but I'm doing this on my free time only.
 
-OK, I see. ;-)
-
-Still, please drop them next time, please.
-
-[--SNIP--]
-> >   - I looked at man 5 interfaces, and there is no mention of
-> > wait-delay,
+Le 25/10/2015 15:37, Yann E. MORIN a ?crit :
+> On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
+>> Curl is listed as an dependency in the README:
+>> https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n453
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>> v4: rename to libefl
+>> ---
+>>  package/efl/libefl/Config.in | 1 +
+>>  package/efl/libefl/libefl.mk | 3 ++-
+>>  2 files changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+>> index 07aee42..29aef05 100644
+>> --- a/package/efl/libefl/Config.in
+>> +++ b/package/efl/libefl/Config.in
+>> @@ -9,6 +9,7 @@ config BR2_PACKAGE_LIBEFL
+>>  	select BR2_PACKAGE_DBUS
+>>  	select BR2_PACKAGE_FREETYPE
+>>  	select BR2_PACKAGE_JPEG # Emile needs libjpeg
+>> +	select BR2_PACKAGE_LIBCURL # eina_module, runtime dependency
 > 
-> I have found documentation related to if-*.d scripts in section called 
-> "IFACE OPTIONS" of interfaces(5) of my debian.
+> If it is a runtime dependency, ...
 > 
-> >   - I don't see how 'wait-delay' translates to 'wait_iface'
+>>  	select BR2_PACKAGE_LUA # Evas lua 5.1 or 5.2
+>>  	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
+>>  	help
+>> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+>> index c697e41..b26f848 100644
+>> --- a/package/efl/libefl/libefl.mk
+>> +++ b/package/efl/libefl/libefl.mk
+>> @@ -13,7 +13,8 @@ LIBEFL_LICENSE_FILES = COPYING
+>>  
+>>  LIBEFL_INSTALL_STAGING = YES
+>>  
+>> -LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg lua udev zlib
+>> +LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg libcurl lua \
+>> +	udev zlib
 > 
-> From interfaces(5):
+> ... then why do you add it to build dependencies?
 > 
->   "Additionally, all options given in an interface definition stanza are 
-> exported to the environment in upper case  with  "IF_"  prepended  and  
-> with hyphens converted to underscores and non-alphanumeric characters 
-> discarded."
+> Moreover, it looks more like a build dependency, given the number of
+> calls to the libcurl functions throughout the libelf code. Can you
+> confirm whether this is only a runtime dependency or a build dependency?
 
-OK, thanks for the explanations. So there is no relation between the
-'stanza' name and the script name, right?
+It's confirmed by this commit:
+https://git.enlightenment.org/core/efl.git/commit/?id=2c1c6b9335e38c6e52b06829a95d9b58d780c99e
 
-Also, I read this in man 5 interfaces;
+You're right, I'll remove this build time dependency.
 
-    When ifupdown is being called with the --all option, before doing
-    anything to interfaces, if [sic] calls all the hook scripts (pre-up
-    or down) with IFACE set to "--all", LOGICAL set to the current value
-    of --allow parameter (or "auto" if it's  not set), ADDRFAM="meta"
-    and METHOD="none". After all the interfaces have been brought up or
-    taken down, the appropriate scripts (up or post-down) are executed.
+Best regards,
+Romain
 
-Since S40network calls 'ifup -a' and you added a pre-up script, I guess
-it should filter out the '--all' interface and exit early in that case.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>  # regenerate the configure script:
+>>  # https://phab.enlightenment.org/T2718
+>> -- 
+>> 2.4.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
