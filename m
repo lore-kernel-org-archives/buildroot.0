@@ -1,62 +1,69 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Wed, 28 Oct 2015 17:36:26 -0400
-Subject: [Buildroot] [PATCH 1/1] e2fsprogs: prevent undesired cleanup with a
-	usr merged target
-Message-ID: <1446068186-13524-1-git-send-email-james.knight@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 28 Oct 2015 22:37:02 +0100
+Subject: [Buildroot] [PATCH 2/3] skeleton: optionally wait for network
+ interfaces to appear
+In-Reply-To: <2419445.kGEUX5UIA3@sagittea>
+References: <1446047943-24641-1-git-send-email-jezz@sysmic.org>
+ <1446047943-24641-3-git-send-email-jezz@sysmic.org>
+ <20151028174653.GA3650@free.fr> <2419445.kGEUX5UIA3@sagittea>
+Message-ID: <20151028213702.GB3650@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following commit prevents the e2fsprogs package from inadvertently
-removing its own binaries when a target includes BusyBox and is
-targeting a usr-merged environment.
+J?r?me, All,
 
-While an action has been added to cleanup BusyBox-provided (if any)
-ext2-related tools when including e2fsprogs, the action will delete
-desired e2fsprogs binaries in an already prepared usr-merged target.
-Adjusting the cleanup to occur before installing e2fsprogs binaries so
-that if a usr-merged target exists, it will first delete the previous
-binaries (if any) followed by installing new binaries.
+On 2015-10-28 21:21 +0100, J?r?me Pouiller spake thusly:
+> On Wednesday 28 October 2015 18:46:53 Yann E. MORIN wrote:
+> > On 2015-10-28 16:59 +0100, J?r?me Pouiller spake thusly:
+> [...]
+> > Please drop the empty lines.
+> There were empty lines in original patch ;-).
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
- package/e2fsprogs/e2fsprogs.mk | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+OK, I see. ;-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 178372b..4b81b44 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -106,9 +106,16 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
- E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
- endif
- 
--# Remove busybox tune2fs and e2label, since we want the e2fsprogs full
--# blown variants to take precedence, but they are not installed in the
--# same location.
-+# If BusyBox is included, its configuration may supply its own variant
-+# of ext2-related tools. Since Buildroot desires having full blown
-+# variants take precedence (in this case, e2fsprogs), we want to remove
-+# BusyBox's variant of e2fsprogs provided binaries. e2fsprogs targets
-+# /usr/{bin,sbin} where BusyBox targets /{bin,sbin}. We will attempt to
-+# remove BusyBox-generated ext2-related tools from /{bin,sbin}. We need
-+# to do this in the pre-install stage to ensure we do not accidentally
-+# remove e2fsprogs's binaries in usr-merged environments (ie. if they
-+# are removed, they would be re-installed in this package's install
-+# stage).
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- E2FSPROGS_DEPENDENCIES += busybox
- 
-@@ -119,7 +126,7 @@ define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
- 	$(RM) -f $(TARGET_DIR)/sbin/tune2fs
- 	$(RM) -f $(TARGET_DIR)/sbin/e2label
- endef
--E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
-+E2FSPROGS_PRE_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
- endif
- 
- define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
+Still, please drop them next time, please.
+
+[--SNIP--]
+> >   - I looked at man 5 interfaces, and there is no mention of
+> > wait-delay,
+> 
+> I have found documentation related to if-*.d scripts in section called 
+> "IFACE OPTIONS" of interfaces(5) of my debian.
+> 
+> >   - I don't see how 'wait-delay' translates to 'wait_iface'
+> 
+> From interfaces(5):
+> 
+>   "Additionally, all options given in an interface definition stanza are 
+> exported to the environment in upper case  with  "IF_"  prepended  and  
+> with hyphens converted to underscores and non-alphanumeric characters 
+> discarded."
+
+OK, thanks for the explanations. So there is no relation between the
+'stanza' name and the script name, right?
+
+Also, I read this in man 5 interfaces;
+
+    When ifupdown is being called with the --all option, before doing
+    anything to interfaces, if [sic] calls all the hook scripts (pre-up
+    or down) with IFACE set to "--all", LOGICAL set to the current value
+    of --allow parameter (or "auto" if it's  not set), ADDRFAM="meta"
+    and METHOD="none". After all the interfaces have been brought up or
+    taken down, the appropriate scripts (up or post-down) are executed.
+
+Since S40network calls 'ifup -a' and you added a pre-up script, I guess
+it should filter out the '--all' interface and exit early in that case.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.5.msysgit.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
