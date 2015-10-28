@@ -1,64 +1,99 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 27 Oct 2015 22:04:05 -0300
-Subject: [Buildroot] [PATCH] vorbis-tools: add fix for CVE-2015-6749
-Message-ID: <1445994245-17963-1-git-send-email-gustavo@zacarias.com.ar>
+From: Viacheslav Volkov <sv99@inbox.ru>
+Date: Wed, 28 Oct 2015 09:44:50 +0300
+Subject: [Buildroot] [PATCH v5] rfkill: new package
+Message-ID: <1446014690-13499-1-git-send-email-sv99@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-6749 - invalid AIFF file causes alloca() buffer overflow.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
 ---
- ...oggenc-Fix-large-alloca-on-bad-AIFF-input.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/vorbis-tools/0001-oggenc-Fix-large-alloca-on-bad-AIFF-input.patch
+Changes v4 -> v5:
+  - add license info - ISC (suggested by peter at korsgaard.com)
+  - add RFKILL_INSTALL_TARGET_CMDS
 
-diff --git a/package/vorbis-tools/0001-oggenc-Fix-large-alloca-on-bad-AIFF-input.patch b/package/vorbis-tools/0001-oggenc-Fix-large-alloca-on-bad-AIFF-input.patch
+Changes v3 -> v4:
+  - remove trailing space in the comment  (suggested by yann.morin.1998 at free.fr)
+  - remove trailing slash in the URL
+
+Changes v2 -> v3:
+  - wrapp comment to 72 characters length  (suggested by Vincent.Riera at imgtec.com)
+
+Changes v1 -> v2:
+  - correct Config.in  (suggested by Vincent.Riera at imgtec.com)
+  - correct rfkill.mk
+---
+ package/Config.in          |  1 +
+ package/rfkill/Config.in   |  7 +++++++
+ package/rfkill/rfkill.hash |  2 ++
+ package/rfkill/rfkill.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/rfkill/Config.in
+ create mode 100644 package/rfkill/rfkill.hash
+ create mode 100644 package/rfkill/rfkill.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 10ff94e..9933514 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -403,6 +403,7 @@ endif
+ 	source "package/pps-tools/Config.in"
+ 	source "package/pulseview/Config.in"
+ 	source "package/read-edid/Config.in"
++	source "package/rfkill/Config.in"
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
+ 	source "package/rtl8188eu/Config.in"
+diff --git a/package/rfkill/Config.in b/package/rfkill/Config.in
 new file mode 100644
-index 0000000..6df6786
+index 0000000..0d07913
 --- /dev/null
-+++ b/package/vorbis-tools/0001-oggenc-Fix-large-alloca-on-bad-AIFF-input.patch
-@@ -0,0 +1,37 @@
-+Fix CVE-2015-6749 - invalid AIFF file causes alloca() buffer overflow.
-+See https://trac.xiph.org/ticket/2212
-+Status: upstream
++++ b/package/rfkill/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_RFKILL
++	bool "rfkill"
++	help
++	  rfkill is a small userspace tool to query the state of the
++	  rfkill switches.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++	  https://wireless.wiki.kernel.org/en/users/documentation/rfkill
+diff --git a/package/rfkill/rfkill.hash b/package/rfkill/rfkill.hash
+new file mode 100644
+index 0000000..21be0a2
+--- /dev/null
++++ b/package/rfkill/rfkill.hash
+@@ -0,0 +1,2 @@
++# From: https://www.kernel.org/pub/software/network/rfkill/sha256sums.asc
++sha256	e0ae3004215e39a6c5c36e0726558740728d16f67ebdb8bea621250f6091d86a  rfkill-0.5.tar.xz
+diff --git a/package/rfkill/rfkill.mk b/package/rfkill/rfkill.mk
+new file mode 100644
+index 0000000..ad84fcf
+--- /dev/null
++++ b/package/rfkill/rfkill.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# rfkill
++#
++################################################################################
 +
-+diff --git a/oggenc/audio.c b/oggenc/audio.c
-+index 477da8c..4921fb9 100644
-+--- a/oggenc/audio.c
-++++ b/oggenc/audio.c
-+@@ -245,8 +245,8 @@ static int aiff_permute_matrix[6][6] =
-+ int aiff_open(FILE *in, oe_enc_opt *opt, unsigned char *buf, int buflen)
-+ {
-+     int aifc; /* AIFC or AIFF? */
-+-    unsigned int len;
-+-    unsigned char *buffer;
-++    unsigned int len, readlen;
-++    unsigned char buffer[22];
-+     unsigned char buf2[8];
-+     aiff_fmt format;
-+     aifffile *aiff = malloc(sizeof(aifffile));
-+@@ -269,9 +269,9 @@ int aiff_open(FILE *in, oe_enc_opt *opt, unsigned char *buf, int buflen)
-+         return 0; /* Weird common chunk */
-+     }
-+ 
-+-    buffer = alloca(len);
-+-
-+-    if(fread(buffer,1,len,in) < len)
-++    readlen = len < sizeof(buffer) ? len : sizeof(buffer);
-++    if(fread(buffer,1,readlen,in) < readlen ||
-++       (len > readlen && !seek_forward(in, len-readlen)))
-+     {
-+         fprintf(stderr, _("Warning: Unexpected EOF in reading AIFF header\n"));
-+         return 0;
-+-- 
-+2.5.0
++RFKILL_VERSION = 0.5
++RFKILL_SOURCE = rfkill-$(RFKILL_VERSION).tar.xz
++RFKILL_SITE = https://www.kernel.org/pub/software/network/rfkill
++RFKILL_LICENSE = ISC
++RFKILL_LICENSE_FILE = COPYING
 +
++define RFKILL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		VERSION_SUFFIX="-br"
++endef
++
++define RFKILL_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
-2.4.10
+2.6.1
