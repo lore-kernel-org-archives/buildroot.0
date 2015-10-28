@@ -1,67 +1,28 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 28 Oct 2015 16:59:02 +0100
-Subject: [Buildroot] [PATCH 2/3] skeleton: optionally wait for network
-	interfaces to appear
-In-Reply-To: <1446047943-24641-1-git-send-email-jezz@sysmic.org>
-References: <1446047943-24641-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1446047943-24641-3-git-send-email-jezz@sysmic.org>
+Date: Wed, 28 Oct 2015 16:59:00 +0100
+Subject: [Buildroot] [PATCH 0/3] Alternative way to wait interfaces on bootup
+Message-ID: <1446047943-24641-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch has same purpose than 49964858f45d2243c513e6d362e992ad89ec7a45:
+As discussed here:
 
-  On some machines, the network interface is slow to appear. For example,
-  on the Raspberry Pi, the network interface eth0 is an ethernet-over-USB,
-  and our standard boot process is too fast, so our network startup script
-  is called before the USB bus is compeltely enumerated, thus it can't
-  configure eth0.
+   http://lists.busybox.net/pipermail/buildroot/2015-October/142329.html
 
-  Closes #8116.
+J?r?me Pouiller (3):
+  Revert "package/initscripts: S40network: wait for network interfaces
+    to appear"
+  skeleton: optionally wait for network interfaces to appear
+  skeleton: wait interface to appear if dhcp is enabled
 
-However, it use an optionnal ifupdown hook instead of an initscript.
-
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- system/skeleton/etc/network/if-pre-up.d/wait_iface | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/initscripts/init.d/S40network              | 29 ----------------------
+ package/skeleton/skeleton.mk                       |  1 +
+ system/skeleton/etc/network/if-pre-up.d/wait_iface | 28 +++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 29 deletions(-)
  create mode 100755 system/skeleton/etc/network/if-pre-up.d/wait_iface
 
-diff --git a/system/skeleton/etc/network/if-pre-up.d/wait_iface b/system/skeleton/etc/network/if-pre-up.d/wait_iface
-new file mode 100755
-index 0000000..4f0866b
---- /dev/null
-+++ b/system/skeleton/etc/network/if-pre-up.d/wait_iface
-@@ -0,0 +1,28 @@
-+#!/bin/sh
-+
-+# In case we have a slow-to-appear interface (e.g. eth-over-USB),
-+# and we need to configure it, wait until it appears, but not too
-+# long either. IF_WAIT_DELAY is in seconds.
-+
-+if [ "${IF_WAIT_DELAY}" ]; then
-+
-+    printf "Waiting for interface %s to appear" "${IFACE}"
-+    while [ ${IF_WAIT_DELAY} -gt 0 ]; do
-+
-+        if [ -e "/sys/class/net/${IFACE}" ]; then
-+
-+            printf " yes\n"
-+            exit 0
-+
-+        fi
-+        sleep 1
-+        printf "."
-+
-+        : $((IF_WAIT_DELAY -= 1))
-+
-+    done
-+    printf " no.\n"
-+    exit 1
-+
-+fi
-+
 -- 
 2.1.4
