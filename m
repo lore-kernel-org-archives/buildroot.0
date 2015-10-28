@@ -1,87 +1,66 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 28 Oct 2015 22:39:23 +0100
-Subject: [Buildroot] [PATCH v5 08/36] package/efl/libefl: add libcurl
- dependency
-In-Reply-To: <20151025143716.GE11692@free.fr>
-References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
- <1445720476-21517-9-git-send-email-romain.naour@openwide.fr>
- <20151025143716.GE11692@free.fr>
-Message-ID: <5631408B.8070703@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 28 Oct 2015 22:44:01 +0100
+Subject: [Buildroot] [PATCH v6] board: add support for Synopsys VDK
+ Software Development Platform
+In-Reply-To: <28a76c89b596d02f7d5b2e8ccfee2d82cfe00569.1445511464.git.jpinto@synopsys.com>
+References: <28a76c89b596d02f7d5b2e8ccfee2d82cfe00569.1445511464.git.jpinto@synopsys.com>
+Message-ID: <563141A1.6080009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+On 22-10-15 13:01, Joao Pinto wrote:
+> The Virtualizer Development Kit (VDK) Family for ARM Cortex Products
+> consists of a set of virtual prototypes that provide a virtualizer for 
+> the ARM core variants. The VDK is a standalone package that runs on an 
+> host computer.
+> 
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
 
-Sorry for the slow response time, but I'm doing this on my free time only.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Le 25/10/2015 15:37, Yann E. MORIN a ?crit :
-> On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
->> Curl is listed as an dependency in the README:
->> https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n453
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->> v4: rename to libefl
->> ---
->>  package/efl/libefl/Config.in | 1 +
->>  package/efl/libefl/libefl.mk | 3 ++-
->>  2 files changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
->> index 07aee42..29aef05 100644
->> --- a/package/efl/libefl/Config.in
->> +++ b/package/efl/libefl/Config.in
->> @@ -9,6 +9,7 @@ config BR2_PACKAGE_LIBEFL
->>  	select BR2_PACKAGE_DBUS
->>  	select BR2_PACKAGE_FREETYPE
->>  	select BR2_PACKAGE_JPEG # Emile needs libjpeg
->> +	select BR2_PACKAGE_LIBCURL # eina_module, runtime dependency
-> 
-> If it is a runtime dependency, ...
-> 
->>  	select BR2_PACKAGE_LUA # Evas lua 5.1 or 5.2
->>  	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
->>  	help
->> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
->> index c697e41..b26f848 100644
->> --- a/package/efl/libefl/libefl.mk
->> +++ b/package/efl/libefl/libefl.mk
->> @@ -13,7 +13,8 @@ LIBEFL_LICENSE_FILES = COPYING
->>  
->>  LIBEFL_INSTALL_STAGING = YES
->>  
->> -LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg lua udev zlib
->> +LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg libcurl lua \
->> +	udev zlib
-> 
-> ... then why do you add it to build dependencies?
-> 
-> Moreover, it looks more like a build dependency, given the number of
-> calls to the libcurl functions throughout the libelf code. Can you
-> confirm whether this is only a runtime dependency or a build dependency?
+ One small nit below.
 
-It's confirmed by this commit:
-https://git.enlightenment.org/core/efl.git/commit/?id=2c1c6b9335e38c6e52b06829a95d9b58d780c99e
+> ---
 
-You're right, I'll remove this build time dependency.
+[snip]
+> diff --git a/configs/snps_aarch64_vdk_defconfig b/configs/snps_aarch64_vdk_defconfig
+> new file mode 100644
+> index 0000000..982158e
+> --- /dev/null
+> +++ b/configs/snps_aarch64_vdk_defconfig
+> @@ -0,0 +1,16 @@
+> +BR2_aarch64=y
+> +BR2_KERNEL_HEADERS_3_18=y
+> +BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-aarch64-defconfig"
+> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+> +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
 
-Best regards,
-Romain
+ This is redundant.
 
+ Regards,
+ Arnout
+
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
 > 
-> Regards,
-> Yann E. MORIN.
-> 
->>  # regenerate the configure script:
->>  # https://phab.enlightenment.org/T2718
->> -- 
->> 2.4.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
