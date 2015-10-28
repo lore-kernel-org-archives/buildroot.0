@@ -1,39 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2015 23:35:15 +0100
-Subject: [Buildroot] [PATCH] skeleton: add "operator" group
-In-Reply-To: <1446048540-25164-1-git-send-email-jezz@sysmic.org>
- (=?utf-8?B?IkrDqXLDtG1l?=
- Pouiller"'s message of "Wed, 28 Oct 2015 17:09:00 +0100")
-References: <1446048540-25164-1-git-send-email-jezz@sysmic.org>
-Message-ID: <877fm67hb0.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Oct 2015 23:37:44 +0100
+Subject: [Buildroot] [PATCH] package/flashrom: fix build failures with
+	musl
+In-Reply-To: <1446069349-27818-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 28 Oct 2015 22:55:49 +0100")
+References: <1446069349-27818-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <8737wu7h6v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > gid 37 was referenced in /etc/passwd but not in /etc/group
- > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
- > ---
- >  system/skeleton/etc/group | 1 +
- >  1 file changed, 1 insertion(+)
+ > flashroms makes a few assumptions on the headers to be included.
+ > It forgets that not everything is not using glibc, so it is missing
 
- > diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
- > index ba20e90..c813da2 100644
- > --- a/system/skeleton/etc/group
- > +++ b/system/skeleton/etc/group
- > @@ -16,6 +16,7 @@ video:x:28:
- >  audio:x:29:
- >  tape:x:32:
- >  www-data:x:33:
- > +operator:x:37:
+Double 'not'.
 
-Committed, thanks.
-
-I guess this means it wasn't used anywhere? Perhaps we should better
-remove the user/group?
+Committed after fixing that, thanks.
 
 -- 
 Bye, Peter Korsgaard
