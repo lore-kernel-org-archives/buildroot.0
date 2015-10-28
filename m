@@ -1,45 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2015 23:58:42 +0100
-Subject: [Buildroot] [git commit] flashrom: fix typos in patch descriptions
-Message-ID: <20151028225904.E42487FF2A@busybox.osuosl.org>
+Date: Thu, 29 Oct 2015 00:05:01 +0100
+Subject: [Buildroot] [PATCH v2] Makefile: Remove 'quiet' variable
+In-Reply-To: <1444334617-23796-1-git-send-email-cedric.marie@openmailbox.org>
+ (=?utf-8?Q?=22C=C3=A9dric?= Marie"'s message of "Thu, 8 Oct 2015 22:03:37
+ +0200")
+References: <1444334617-23796-1-git-send-email-cedric.marie@openmailbox.org>
+Message-ID: <87fv0u61cy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f6a68408a8f42c94e75494fdf972f61dde186fb7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "C?dric" == C?dric Marie <cedric.marie@openmailbox.org> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/flashrom/0001-spi.patch      |    2 +-
- package/flashrom/0002-sys-io.h.patch |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > 'quiet' variable is set and exported, but it is not used. We can safely
+ > remove it.
 
-diff --git a/package/flashrom/0001-spi.patch b/package/flashrom/0001-spi.patch
-index d28cb46..22ffcb5 100644
---- a/package/flashrom/0001-spi.patch
-+++ b/package/flashrom/0001-spi.patch
-@@ -5,7 +5,7 @@ so it must be included before it is used, by SPI_IOC_MESSAGE
- from linux/spi/spidev.h
- 
- Fixes build errors with the musl C library, as seen in these
--Buidlroot autobuilder failures:
-+Buildroot autobuilder failures:
- 
-     http://autobuild.buildroot.org/results/2a3/2a3744007c630c267575a638ebcd83a4b97644f5/build-end.log
-     http://autobuild.buildroot.org/results/3de/3de936d9be79e151e66af15193084d82a0f2c04a/build-end.log
-diff --git a/package/flashrom/0002-sys-io.h.patch b/package/flashrom/0002-sys-io.h.patch
-index ddb2b4c..8d990c6 100644
---- a/package/flashrom/0002-sys-io.h.patch
-+++ b/package/flashrom/0002-sys-io.h.patch
-@@ -5,7 +5,7 @@ However, its inclusion is conditional to the _GLIBC_ define. This is
- usually OK under Linux, since both glibc and uClibc define it (uclibc
- fakes being glibc).
- 
--But the mus lC library does not impersonate glibc, so we're missing
-+But the musl C library does not impersonate glibc, so we're missing
- including sys/io.h in this case.
- 
- Change the include from checking _GLIBC_ to checking whether this is
+ > This variable is inherited from the Makefile of the Linux kernel, and
+ > is not used in Buildroot.
+
+ > In support/scripts/mkmakefile, 'quiet' value is checked, but the test
+ > is always true ('quiet' is never set to silent_), so the test can be
+ > removed as well.
+
+ > Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - KBUILD_VERBOSE must not be removed, it is used for packages based
+ >     on Kbuild.
+
+ > Title of PATCH v1 was:
+ > Makefile: Remove KBUILD_VERBOSE and quiet
+
+ > In order to describe how the verbosity level is managed in different
+ > infrastructures, comments will be added in Makefile (suggested by Arnout).
+ > It will be provided in a separate patch.
+
+ > Arnout also suggested not to export 'Q', which seems to be Buildroot
+ > internal. This will also be provided in a separate patch, if confirmed.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
