@@ -1,34 +1,64 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 28 Oct 2015 20:17:38 +0100
-Subject: [Buildroot] [PATCH] host-perl: fix patching
-Message-ID: <1446059858-2646-1-git-send-email-francois.perrad@gadz.org>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Wed, 28 Oct 2015 21:21:14 +0100
+Subject: [Buildroot] [PATCH 2/3] skeleton: optionally wait for network
+	interfaces to appear
+In-Reply-To: <20151028174653.GA3650@free.fr>
+References: <1446047943-24641-1-git-send-email-jezz@sysmic.org>
+ <1446047943-24641-3-git-send-email-jezz@sysmic.org>
+ <20151028174653.GA3650@free.fr>
+Message-ID: <2419445.kGEUX5UIA3@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-see http://autobuild.buildroot.net/results/c8e/c8e6bbe50ca71835bdde9503a9fe23ace8236a09/
+Hello Yann,
 
-the newest patches are against perl-cross,
-so we need to extract perl-cross in the host-perl case.
+On Wednesday 28 October 2015 18:46:53 Yann E. MORIN wrote:
+> J?r?me, All,
+> 
+> On 2015-10-28 16:59 +0100, J?r?me Pouiller spake thusly:
+[...]
+> Please drop the empty lines.
+There were empty lines in original patch ;-).
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.mk | 1 +
- 1 file changed, 1 insertion(+)
+> Also, I would have preferred patches 2 & 3 to be folded into a single
+> patch. 
+ok.
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 7192700..d35e05c 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -31,6 +31,7 @@ define PERL_CROSS_EXTRACT
- 	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
- endef
- PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
-+HOST_PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
- 
- define PERL_CROSS_SET_POD
- 	$(SED) s/$(PERL_CROSS_OLD_POD)/$(PERL_CROSS_NEW_POD)/g $(@D)/Makefile
+> I don't really understand how it all works:
+> 
+>   - does the busybox ifup-down and full-fledged ifup-down support
+>     wait-delay?
+Yes, both.
+
+>   - I looked at man 5 interfaces, and there is no mention of
+> wait-delay,
+
+I have found documentation related to if-*.d scripts in section called 
+"IFACE OPTIONS" of interfaces(5) of my debian.
+
+
+>   - I don't see how 'wait-delay' translates to 'wait_iface'
+
+From interfaces(5):
+
+  "Additionally, all options given in an interface definition stanza are 
+exported to the environment in upper case  with  "IF_"  prepended  and  
+with hyphens converted to underscores and non-alphanumeric characters 
+discarded."
+
+
+>   - I guess 'wait-delay' is made an environment variable IF_WAIT_DELAY
+> before the script is run, but I'd have preferred explanations rather
+> than having to guess.
+> 
+> Care to shed some light, please?
+
+Regards,
+
 -- 
-2.5.0
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
