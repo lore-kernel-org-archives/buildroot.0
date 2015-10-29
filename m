@@ -1,205 +1,134 @@
-From: Viacheslav Volkov <sv99@inbox.ru>
-Date: Thu, 29 Oct 2015 17:56:28 +0300
-Subject: [Buildroot] [PATCH v4 1/2] zbar: new package
-In-Reply-To: <563224AA.9090003@imgtec.com>
-References: <1446121780-9082-1-git-send-email-sv99@inbox.ru>
- <563224AA.9090003@imgtec.com>
-Message-ID: <5632339C.6060806@inbox.ru>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 29 Oct 2015 12:14:21 -0300
+Subject: [Buildroot] [PATCH] configs/mpc8315erdb: bump to linux 4.2.5
+Message-ID: <1446131661-21507-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My test br2_config for raspberry board:
+Also revamp the kernel config a bit to make it more featured, enabling
+SATA ports and storage.
 
-BR2_arm=y
-BR2_arm1176jzf_s=y
-BR2_DL_DIR="/vagrant/dl"
-BR2_CCACHE=y
-BR2_KERNEL_HEADERS_VERSION=y
-BR2_DEFAULT_KERNEL_VERSION="4.1.5"
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-BR2_TARGET_TZ_INFO=y
-BR2_PACKAGE_GSTREAMER=y
-BR2_PACKAGE_GST_PLUGINS_BAD=y
-BR2_PACKAGE_RPI_FIRMWARE=y
-# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
-BR2_PACKAGE_NODEJS=y
-BR2_BR2_PACKAGE_NODEJS_0_12_X=y
-BR2_PACKAGE_NODEJS_NPM=y
-BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT=y
-BR2_PACKAGE_ZBAR=y
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../{linux-4.1.config => linux-4.2.config}         | 44 ++++++++++++++++------
+ configs/freescale_mpc8315erdb_defconfig            |  8 ++--
+ 2 files changed, 37 insertions(+), 15 deletions(-)
+ rename board/freescale/mpc8315erdb/{linux-4.1.config => linux-4.2.config} (51%)
 
-29.10.15 16:52, Vicente Olivert Riera ?????:
-> Dear Viacheslav Volkov,
->
-> one more thing. I have tested your patch removing the ZBAR_INSTALL_FIXUP
-> and it installs fine for me. Under what circumstances are you
-> experiencing that failure in Buildroot? Could you share a minimal
-> defconfig to reproduce the problem?
->
-> Regards,
->
-> Vincent.
->
-> On 10/29/2015 12:29 PM, Viacheslav Volkov wrote:
->> Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
->> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->> Changes v3 -> v4:
->>   - correct zbar.mk, Config.in add hash (suggested by Vincent.Riera at imgtec.com)
->>   - license -> LGPL (suggested by martin at barkynet.com)
->>
->> Changes v2 -> v3:
->>   - intendation in the Config.in (suggested by Yegor Yefremov)
->>   - add license info
->>
->> Changes v1 -> v2:
->>   - many changes
->> ---
->>  package/Config.in                     |  1 +
->>  package/zbar/0001-zbar-autoconf.patch | 16 ++++++++++++++++
->>  package/zbar/0002-zbar-jpeg.patch     | 13 +++++++++++++
->>  package/zbar/Config.in                | 22 ++++++++++++++++++++++
->>  package/zbar/zbar.hash                |  3 +++
->>  package/zbar/zbar.mk                  | 32 ++++++++++++++++++++++++++++++++
->>  6 files changed, 87 insertions(+)
->>  create mode 100644 package/zbar/0001-zbar-autoconf.patch
->>  create mode 100644 package/zbar/0002-zbar-jpeg.patch
->>  create mode 100644 package/zbar/Config.in
->>  create mode 100644 package/zbar/zbar.hash
->>  create mode 100644 package/zbar/zbar.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 10ff94e..778b1e1 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -854,6 +854,7 @@ menu "Graphics"
->>  	source "package/webkit/Config.in"
->>  	source "package/webkitgtk24/Config.in"
->>  	source "package/webp/Config.in"
->> +	source "package/zbar/Config.in"
->>  	source "package/zxing-cpp/Config.in"
->>  endmenu
->>  
->> diff --git a/package/zbar/0001-zbar-autoconf.patch b/package/zbar/0001-zbar-autoconf.patch
->> new file mode 100644
->> index 0000000..159f75e
->> --- /dev/null
->> +++ b/package/zbar/0001-zbar-autoconf.patch
->> @@ -0,0 +1,16 @@
->> +diff --git a/configure.ac b/configure.ac
->> +index 256aedb..5aa5689 100644
->> +--- a/configure.ac
->> ++++ b/configure.ac
->> +@@ -3,10 +3,11 @@ AC_PREREQ([2.61])
->> + AC_INIT([zbar], [0.10], [spadix at users.sourceforge.net])
->> + AC_CONFIG_AUX_DIR(config)
->> + AC_CONFIG_MACRO_DIR(config)
->> +-AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign subdir-objects std-options dist-bzip2])
->> ++AM_INIT_AUTOMAKE([1.10 -Wall -Werror -Wno-portability foreign subdir-objects std-options dist-bzip2])
->> + AC_CONFIG_HEADERS([include/config.h])
->> + AC_CONFIG_SRCDIR(zbar/scanner.c)
->> + LT_PREREQ([2.2])
->> ++m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
->> + LT_INIT([dlopen win32-dll])
->> + LT_LANG([Windows Resource])
->> diff --git a/package/zbar/0002-zbar-jpeg.patch b/package/zbar/0002-zbar-jpeg.patch
->> new file mode 100644
->> index 0000000..1d93a94
->> --- /dev/null
->> +++ b/package/zbar/0002-zbar-jpeg.patch
->> @@ -0,0 +1,13 @@
->> +diff --git a/zbar/jpeg.c b/zbar/jpeg.c
->> +index 972bfea..fdd1619 100644
->> +--- a/zbar/jpeg.c
->> ++++ b/zbar/jpeg.c
->> +@@ -68,7 +68,7 @@ void init_source (j_decompress_ptr cinfo)
->> +     cinfo->src->bytes_in_buffer = img->datalen;
->> + }
->> + 
->> +-int fill_input_buffer (j_decompress_ptr cinfo)
->> ++boolean fill_input_buffer (j_decompress_ptr cinfo)
->> + {
->> +     /* buffer underrun error case */
->> +     cinfo->src->next_input_byte = fake_eoi;
->> diff --git a/package/zbar/Config.in b/package/zbar/Config.in
->> new file mode 100644
->> index 0000000..a5acaa3
->> --- /dev/null
->> +++ b/package/zbar/Config.in
->> @@ -0,0 +1,22 @@
->> +config BR2_PACKAGE_ZBAR
->> +	bool "zbar"
->> +	# dependencies from lib4l
->> +	depends on BR2_TOOLCHAIN_HAS_THREADS # lib4l
->> +	depends on BR2_USE_MMU # lib4l
->> +	depends on !BR2_STATIC_LIBS # lib4l
->> +	depends on BR2_INSTALL_LIBSTDCPP # lib4l
->> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # lib4l
->> +	depends on BR2_TOOLCHAIN_USES_GLIBC || \
->> +		BR2_TOOLCHAIN_USES_UCLIBC # lib4l
->> +	select BR2_PACKAGE_JPEG
->> +	select BR2_PACKAGE_LIBV4L
->> +	help
->> +	  QR and barcode scanner
->> +
->> +	  http://zbar.sourceforge.net/
->> +
->> +comment "zbar needs an uClibc or (e)glibc toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
->> +	depends on BR2_USE_MMU
->> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
->> +		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
->> +		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
->> diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
->> new file mode 100644
->> index 0000000..5c04d9b
->> --- /dev/null
->> +++ b/package/zbar/zbar.hash
->> @@ -0,0 +1,3 @@
->> +# Locally computed:
->> +sha256 38f8535a3c4c526ecaa968a992efcbf7392623e68db45dc2f181d4c9d3002d69 zbar-854a5d97059e395807091ac4d80c53f7968abb8f.tar.gz
->> +
->> diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
->> new file mode 100644
->> index 0000000..bd3c197
->> --- /dev/null
->> +++ b/package/zbar/zbar.mk
->> @@ -0,0 +1,32 @@
->> +################################################################################
->> +#
->> +# zbar
->> +#
->> +################################################################################
->> +
->> +# github have some additional commits for compilling with recent kernel
->> +ZBAR_VERSION = 854a5d97059e395807091ac4d80c53f7968abb8f
->> +ZBAR_SITE = $(call github,ZBar,Zbar,$(ZBAR_VERSION))
->> +ZBAR_LICENSE = LGPLv2.1
->> +ZBAR_LICENSE_FILES = LICENSE
->> +ZBAR_INSTALL_STAGING = YES
->> +ZBAR_AUTORECONF = YES
->> +ZBAR_DEPENDENCIES = libv4l libjpeg
->> +ZBAR_CONF_OPTS = \
->> +	--without-imagemagick \
->> +	--without-qt \
->> +	--without-gtk \
->> +	--without-python \
->> +	--without-x \
->> +	--enable-shared=yes
->> +
->> +# fix /usr/bin/install: cannot stat ?./doc/man/zbarcam.1?: No such file or
->> +#   directory
->> +# make[5]: *** [install-man1] Error 1
->> +define ZBAR_INSTALL_FIXUP
->> +	touch $(@D)/doc/man/zbarcam.1
->> +endef
->> +
->> +ZBAR_POST_BUILD_HOOKS += ZBAR_INSTALL_FIXUP
->> +
->> +$(eval $(autotools-package))
->>
+diff --git a/board/freescale/mpc8315erdb/linux-4.1.config b/board/freescale/mpc8315erdb/linux-4.2.config
+similarity index 51%
+rename from board/freescale/mpc8315erdb/linux-4.1.config
+rename to board/freescale/mpc8315erdb/linux-4.2.config
+index c9f17b7..8f56069 100644
+--- a/board/freescale/mpc8315erdb/linux-4.1.config
++++ b/board/freescale/mpc8315erdb/linux-4.2.config
+@@ -1,18 +1,26 @@
++CONFIG_FSL_EMB_PERFMON=y
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_POSIX_MQUEUE=y
+ CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_EXPERT=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_SYSCTL_SYSCALL=y
++CONFIG_EMBEDDED=y
+ CONFIG_MODULES=y
+ # CONFIG_PPC_CHRP is not set
+ # CONFIG_PPC_PMAC is not set
+ CONFIG_PPC_83xx=y
+ CONFIG_MPC831x_RDB=y
++CONFIG_MCU_MPC8349EMITX=y
+ CONFIG_PCI=y
++CONFIG_PCIEPORTBUS=y
++# CONFIG_PCIEASPM is not set
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_INET=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_MTD=y
+ CONFIG_MTD_CMDLINE_PARTS=y
+ CONFIG_MTD_BLOCK=y
+@@ -21,28 +29,42 @@ CONFIG_MTD_CFI_AMDSTD=y
+ CONFIG_MTD_PHYSMAP_OF=y
+ CONFIG_MTD_NAND=y
+ CONFIG_MTD_NAND_FSL_ELBC=y
+-CONFIG_MD=y
+-CONFIG_BLK_DEV_MD=y
+-CONFIG_MD_LINEAR=y
+-CONFIG_MD_RAID0=y
+-CONFIG_MD_RAID1=y
++CONFIG_SCSI_MQ_DEFAULT=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_ATA=y
++CONFIG_SATA_FSL=y
+ CONFIG_NETDEVICES=y
+ CONFIG_GIANFAR=y
+-CONFIG_E100=y
++CONFIG_REALTEK_PHY=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_I2C=y
+ CONFIG_I2C_CHARDEV=y
+ CONFIG_I2C_MPC=y
+ CONFIG_SPI=y
+-CONFIG_SPI_BITBANG=y
++CONFIG_SPI_FSL_SPI=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_GPIO_MPC8XXX=y
+ CONFIG_WATCHDOG=y
++CONFIG_8xxx_WDT=y
+ CONFIG_USB=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_FSL=y
++CONFIG_USB_STORAGE=y
+ CONFIG_RTC_CLASS=y
+-CONFIG_RTC_INTF_DEV_UIE_EMUL=y
+ CONFIG_RTC_DRV_DS1307=y
++CONFIG_RTC_DRV_GENERIC=y
++CONFIG_DMADEVICES=y
++CONFIG_FSL_DMA=y
++CONFIG_ASYNC_TX_DMA=y
++CONFIG_EXT4_FS=y
++CONFIG_FANOTIFY=y
++CONFIG_VFAT_FS=y
++CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
+ CONFIG_JFFS2_FS=y
++CONFIG_SQUASHFS=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
+ CONFIG_CRYPTO_DEV_TALITOS=y
+diff --git a/configs/freescale_mpc8315erdb_defconfig b/configs/freescale_mpc8315erdb_defconfig
+index 4910ebe..9ffef82 100644
+--- a/configs/freescale_mpc8315erdb_defconfig
++++ b/configs/freescale_mpc8315erdb_defconfig
+@@ -12,15 +12,15 @@ BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+ 
+ # Lock headers version to match and avoid breakage
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.1.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++BR2_DEFAULT_KERNEL_VERSION="4.2.5"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-4.1.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-4.2.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="mpc8315erdb"
+-- 
+2.4.10
