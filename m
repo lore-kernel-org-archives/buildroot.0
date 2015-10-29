@@ -1,21 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2015 19:57:56 +0100
-Subject: [Buildroot] [PATCH] libnspr: bump to version 4.10.10
-In-Reply-To: <1446123365-21899-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 29 Oct 2015 09:56:05 -0300")
-References: <1446123365-21899-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bnbh4i4r.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Oct 2015 20:03:29 +0100
+Subject: [Buildroot] [PATCH] package/kexec-lite: update to latest version
+In-Reply-To: <1446123197-9392-1-git-send-email-joel@jms.id.au> (Joel Stanley's
+ message of "Thu, 29 Oct 2015 23:23:17 +1030")
+References: <1446123197-9392-1-git-send-email-joel@jms.id.au>
+Message-ID: <877fm54hvi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > From: Jeremy Kerr <jk@ozlabs.org>
+ > Upstream now supports little endian, so enable for little-endian
+ > powerpc.
 
-Committed, thanks.
+ > Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+ > Signed-off-by: Joel Stanley <joel@jms.id.au>
+
+We now also add download hashes for packages on github, so I've added
+that and committed, thanks. 
 
 -- 
 Bye, Peter Korsgaard
