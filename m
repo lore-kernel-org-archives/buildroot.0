@@ -1,24 +1,30 @@
-From: Ben Boeckel <mathstuf@gmail.com>
-Date: Wed, 28 Oct 2015 22:49:04 -0400
-Subject: [Buildroot] [PATCH 1/1] libcap: depend on host-attr for the host
-In-Reply-To: <20151027072954.0b27c319@free-electrons.com>
-References: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
- <1445722754-3477-2-git-send-email-mathstuf@gmail.com>
- <20151026095827.2679c61f@free-electrons.com>
- <20151026142725.GA13801@megas.khq.kitware.com>
- <20151027072954.0b27c319@free-electrons.com>
-Message-ID: <20151029024904.GA28102@bronto-burt.dev.benboeckel.net>
+From: Viacheslav Volkov <sv99@inbox.ru>
+Date: Thu, 29 Oct 2015 08:09:43 +0300
+Subject: [Buildroot] [PATCH v2] v4l2grab: new package
+In-Reply-To: <20151028222839.15dabdd9@free-electrons.com>
+References: <1446019140-21478-1-git-send-email-sv99@inbox.ru>
+ <20151028222839.15dabdd9@free-electrons.com>
+Message-ID: <5631AA17.8050306@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 27, 2015 at 07:29:54 +0100, Thomas Petazzoni wrote:
-> Does this mean you will send a patch for it, after doing some testing ?
+Yes, this utility wery similar.
 
-Patch sent. Tested locally by building util-linux.
+Diffs:
+1. Output jpeg
+2. Allow yum -> internal convert
 
-Thanks,
+This utility not compilled by default.
 
---Ben
+> Dear Viacheslav Volkov,
+>
+> On Wed, 28 Oct 2015 10:59:00 +0300, Viacheslav Volkov wrote:
+>> I not find libv4l2grab utility in the v4l2 distribution.
+> http://git.linuxtv.org/cgit.cgi/v4l-utils.git/tree/contrib/test/v4l2grab.c ?
+>
+> Best regards,
+>
+> Thomas
