@@ -1,60 +1,111 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2015 20:02:56 +0100
-Subject: [Buildroot] [git commit] package/kexec-lite: update to latest
-	version
-Message-ID: <20151029190717.7E6BE7FA76@busybox.osuosl.org>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 29 Oct 2015 21:06:48 +0100
+Subject: [Buildroot] [PATCH 0/4] libfsl*: fix install path + update conf opts
+Message-ID: <1446149212-12048-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8749c3fc6e85939136d05809271d8def261c8cc4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-Upstream now supports little endian, so enable for little-endian
-powerpc.
+I meant to do this series for a long time:
+http://patchwork.ozlabs.org/patch/409684/
 
-[Peter: add hash]
-Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kexec-lite/Config.in       |    2 +-
- package/kexec-lite/kexec-lite.hash |    2 ++
- package/kexec-lite/kexec-lite.mk   |    2 +-
- 3 files changed, 4 insertions(+), 2 deletions(-)
+I tried to split what Jeff offered into separate patches.
 
-diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
-index ede5cba..fcc0d88 100644
---- a/package/kexec-lite/Config.in
-+++ b/package/kexec-lite/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_KEXEC_LITE
- 	bool "kexec-lite"
--	depends on BR2_powerpc || BR2_powerpc64
-+	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	depends on !BR2_STATIC_LIBS # dtc, elfutils
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-diff --git a/package/kexec-lite/kexec-lite.hash b/package/kexec-lite/kexec-lite.hash
-new file mode 100644
-index 0000000..e8179b7
---- /dev/null
-+++ b/package/kexec-lite/kexec-lite.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 2300187bf25616c382cb2f191a2eb13033e019511854794ce234a76cf9f5ad6b  kexec-lite-783fb4a811d0b0f8cc2ed68fa7872dcad56a3944.tar.gz
-diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
-index 7e3c8d3..27bc204 100644
---- a/package/kexec-lite/kexec-lite.mk
-+++ b/package/kexec-lite/kexec-lite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KEXEC_LITE_VERSION = fb8543fea3beb0522b5a63a74ea1a845dbd7b954
-+KEXEC_LITE_VERSION = 783fb4a811d0b0f8cc2ed68fa7872dcad56a3944
- KEXEC_LITE_SITE = $(call github,antonblanchard,kexec-lite,$(KEXEC_LITE_VERSION))
- KEXEC_LITE_LICENSE = GPLv2+
- KEXEC_LITE_DEPENDENCIES = elfutils dtc
+Some are taking care of the install path that was causing troubles to
+gst-fsl-plugins at runtime since we don't use ldconfig.
+
+The other patches enable some missing configure options (hard float and vpu)
+as pointed by Jeff.
+
+Here is the defconfig that has been used to test those patches:
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_EABIHF=y
+BR2_ARM_ENABLE_NEON=y
+BR2_ARM_FPU_NEON=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/d7a412b/linux-imx6-d7a412b.tar.gz"
+BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+BR2_LINUX_KERNEL_ZIMAGE=y
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6q-nitrogen6_max imx6q-sabrelite"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_PACKAGE_ALSA_UTILS=y
+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
+BR2_PACKAGE_ALSA_UTILS_AMIDI=y
+BR2_PACKAGE_ALSA_UTILS_AMIXER=y
+BR2_PACKAGE_ALSA_UTILS_APLAY=y
+BR2_PACKAGE_ALSA_UTILS_APLAYMIDI=y
+BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
+BR2_PACKAGE_GSTREAMER=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA=y
+BR2_PACKAGE_GST_PLUGINS_GOOD=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUTODETECT=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUGUTILS=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLV=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOBOX=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_V4L2=y
+BR2_PACKAGE_GST_FSL_PLUGINS=y
+BR2_PACKAGE_GSTREAMER1=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TCP=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOPARSERS=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEBUGUTILS=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLV=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA=y
+BR2_PACKAGE_GST1_IMX=y
+BR2_PACKAGE_STRACE=y
+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
+BR2_PACKAGE_IMX_GPU_VIV=y
+BR2_PACKAGE_IMX_GPU_VIV_APITRACE=y
+BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES=y
+BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO=y
+BR2_PACKAGE_FONTCONFIG=y
+BR2_PACKAGE_IPERF3=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_RSYNC=y
+BR2_PACKAGE_HOST_MKE2IMG=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+
+I'll detail on each patch what has been done.
+
+Regards,
+Gary
+
+Gary Bisson (4):
+  libfslcodec: add install hooks to fix libraries path
+  libfslcodec: add missing configure options
+  libfslparser: add install hooks to fix libraries path
+  libfslparser: add missing configure options
+
+ package/libfslcodec/libfslcodec.mk   | 24 ++++++++++++++++++++++++
+ package/libfslparser/libfslparser.mk | 12 ++++++++++++
+ 2 files changed, 36 insertions(+)
+
+-- 
+2.6.1
