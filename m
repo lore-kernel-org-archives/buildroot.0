@@ -1,55 +1,57 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 29 Oct 2015 21:06:51 +0100
-Subject: [Buildroot] [PATCH 3/4] libfslparser: add install hooks to fix
-	libraries path
+Date: Thu, 29 Oct 2015 21:06:50 +0100
+Subject: [Buildroot] [PATCH 2/4] libfslcodec: add missing configure options
 In-Reply-To: <1446149212-12048-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1446149212-12048-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1446149212-12048-4-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1446149212-12048-3-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, all the libraries are installed under /usr/lib/imx-mm which
-causes problems at runtime.
+Enable VPU and hard float support when the proper configuration is setup.
+BR2_ARM_EABIHF=y
+BR2_PACKAGE_IMX_VPU=y
 
-This has been tested implicitely by running Gstreamer without any special
-setup (no ld.so.conf nor LD_LIBRARY_PATH modification):
- # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
- # gst-launch-0.10 audiotestsrc ! mfw_mp3encoder ! fakesink
+See Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-
+multimedia/libfslcodec/libfslcodec.inc
+
+Tested with the Linaro ARM 2014.09 toolchain.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
 
-I'm actually not sure if libfslparser is needed at all. I couldn't find
-a library depending on any of the one from the package. But Yocto still has
-depency on the package for gst-fsl-plugins:
-https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-multimedia/gstreamer/gst-fsl-plugin.inc#L9
+Thanks to those options, I could see that:
+- lib_jpeg_dec_arm11_elinux_novpu.so isn't copied
+- lib_peq_arm11_elinux.so.1.fhw is copied instead of the fsw version
 
 Regards,
 Gary
 
 ---
- package/libfslparser/libfslparser.mk | 8 ++++++++
+ package/libfslcodec/libfslcodec.mk | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-index 2b53d62..aa02f19 100644
---- a/package/libfslparser/libfslparser.mk
-+++ b/package/libfslparser/libfslparser.mk
-@@ -20,4 +20,12 @@ endef
- # The Makefile installs several versions of the libraries, but we only
- # need one of them, depending on the platform.
+diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
+index 4d8fd18..ae68bdd 100644
+--- a/package/libfslcodec/libfslcodec.mk
++++ b/package/libfslcodec/libfslcodec.mk
+@@ -13,6 +13,14 @@ LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c
+ LIBFSLCODEC_LICENSE_FILES = EULA COPYING
+ LIBFSLCODEC_REDISTRIBUTE = NO
  
-+# no need to symlink in target image, just move libraries around
-+define LIBFSLPARSER_FIXUP_TARGET_PATH
-+	find $(TARGET_DIR)/usr/lib/imx-mm -mindepth 2 -maxdepth 2 -not -type d \
-+		-exec mv {} $(TARGET_DIR)/usr/lib \;
-+	rm -fr $(TARGET_DIR)/usr/lib/imx-mm
-+endef
-+LIBFSLPARSER_POST_INSTALL_TARGET_HOOKS += LIBFSLPARSER_FIXUP_TARGET_PATH
++ifeq ($(BR2_ARM_EABIHF),y)
++LIBFSLCODEC_CONF_OPTS += --enable-fhw
++endif
 +
- $(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_IMX_VPU),y)
++LIBFSLCODEC_CONF_OPTS += --enable-vpu
++endif
++
+ define LIBFSLCODEC_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLCODEC_SOURCE))
+ endef
 -- 
 2.6.1
