@@ -1,256 +1,79 @@
-From: Stephen Beckwith <embeddedsteve@gmail.com>
-Date: Thu, 29 Oct 2015 12:43:19 -0400
-Subject: [Buildroot] BR2_EXTERNAL Setup
-Message-ID: <CAN34foyUYLVn3oBP0TkpN122FtCL1XpWHZ2vWUXG_fcSLAqEmg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 29 Oct 2015 19:17:52 +0100
+Subject: [Buildroot] [PATCH] fs/ext2: add options for extra space and
+ extra inodes
+In-Reply-To: <CAFGQKxcNOhG6TnWALz5BPqePSZFhchWQpwcVmbzCV10DTqPWqg@mail.gmail.com>
+References: <1446073576-20337-1-git-send-email-yann.morin.1998@free.fr>
+ <CAFGQKxcNOhG6TnWALz5BPqePSZFhchWQpwcVmbzCV10DTqPWqg@mail.gmail.com>
+Message-ID: <20151029181752.GA3600@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
-   I've been going through the posted slides and docs (very nice job!) and
-the manual, and I'd like to seek some guidance regarding a setup using the
-BR2_EXTERNAL support in BuildRoot.
-    What I'm developing here is a "system" - not just a "board", this is
-more of an "environment" for others to use:  consists of the Linux Kernel,
-the standard packages, quite a bit of custom code (application modules,
-maybe some libraries), and then third-party tools will most likely be
-included as well.
-     In the documentation, the "recommended" setup for the BR2_EXTERNAL
-tree always starts with "board", then company, etc. . . .   Since the work
-I'm doing won't be contributed back to BuildRoot (as it's strictly in-house
-tools) I was wondering if the following modification makes sense.   I'd
-like your feedback/view on the approach below.  Mind you, I'm building an
-"environment" for users to run on the platforms.
-   These platforms are similar, but have different traits.  Similar I/O
-capabilities, many of the same chips, but there maybe be tweaks/patches
-required due to HW Specific implementations.  Kernel configs may (probably
-will be) different due to different class CPU's being used (or even
-different CPU architectures).  I would like to be able to "drop in" third
-party vendor tools easily.  If shared across platforms, then they go in
-common, else under the specific platform.
+Martin, All,
 
-Goals:
-1)  Keep things simple - to replace/update easily, add in updated packages,
-etc.
-2)  Drop in 3rd party packages easily
-3)  share what's common (drivers, libraries, apps) but have ability to
-tweak individual platforms accordingly.  From a user point of view, it's
-the same "environment" (commands, RFS layout) just some different/tweaked
-commands.
-4)  Whether "all" of these options show up in the Buildroot config is TBD -
-some maybe optional, that's still being defined.  Would like the
-flexibility to add/delete packages - dependencies are TBD as well.
-5) Leverage as much of the BuildRoot build infrastructure as possible,
-using simple setups.
+On 2015-10-29 10:45 +0000, Martin Bark spake thusly:
+> On 28 October 2015 at 23:06, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Add two options to the ext2 filesystem, one to add extra free space, one
+> > to add extra free inodes.
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> > ---
+> >  fs/ext2/Config.in       | 20 ++++++++++++++++++--
+> >  fs/ext2/ext2.mk         |  2 ++
+> >  package/mke2img/mke2img |  8 +++++++-
+> >  3 files changed, 27 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+> > index 5b1cd0c..fb06cdd 100644
+> > --- a/fs/ext2/Config.in
+> > +++ b/fs/ext2/Config.in
+> > @@ -45,13 +45,29 @@ config BR2_TARGET_ROOTFS_EXT2_LABEL
+> >         string "filesystem label"
+> >
+> >  config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+> > -       int "size in blocks (leave at 0 for auto calculation)"
+> > +       int "exact size in blocks (leave at 0 for auto calculation)"
+> >         default 0
+> >
+> >  config BR2_TARGET_ROOTFS_EXT2_INODES
+> > -       int "inodes (leave at 0 for auto calculation)"
+> > +       int "exact number of inodes (leave at 0 for auto calculation)"
+> >         default 0
+> >
+> > +config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS
+> > +       int "extra size in blocks" if BR2_TARGET_ROOTFS_EXT2_BLOCKS = 0
+> > +       default 0
+> > +       help
+> > +         Enter here the nmuber of extra blocks of free space you
+> 
+> should be number not nmuber.
 
-There will be "few" of us "using" this setup (1-3 people) but many more
-using the output product (the "environment") - could be 10's of folks
-across the company.
+Damn keyboard dislexia! :-)
 
-I've started this external tree at "platform" - the setup maybe "overly
-done" in terms the Config.in and *.mk files, there maybe ways to
-consolidate this or use other Make setups. . . (I've been doing Embedded SW
-for 33 years, my familiarity with make/config is "middle" - not expert, but
-can poke my way around if not overly complicated).
+> > +         want on your filesystem. By default, Buildroot will not
+> > +         leave much space free.
+> > +
+> > +config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+> > +       int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+> > +       default 0
+> > +       help
+> > +         Enter here the nmuber of extra free inodes you want on
+> 
+> Same again
 
-Notes:
-common:  This is code (company or 3rd party) that would be common to the
-various platforms. . . This will most likely be the "bulk" of the code (80%
-or more).
-Since the code won't be "fetched" from anywhere, the intent was to use the
-<pkg>_OVERRIDE_SRCDIR mechanism, that would do the rsync from the package
-source directory to the build directory for building.
-
-Thanks in Advance for your insights and feedback.
+Thanks! :-)
 
 Regards,
-Stephen
+Yann E. MORIN.
 
-
-[@localhost platform]$ tree
-.
-??? common
-?   ??? common.mk
-?   ??? company
-?   ?   ??? company.mk
-?   ?   ??? Config.in
-?   ?   ??? pkg1
-?   ?   ?   ??? Config.in
-?   ?   ?   ??? pkg1.mk
-?   ?   ?   ??? src
-?   ?   ?       ??? Makefile
-?   ?   ?       ??? platform_id.c
-?   ?   ?       ??? platform_id.h
-?   ?   ??? pkg2
-?   ?       ??? Config.in
-?   ?       ??? pkg1.mk
-?   ?       ??? src
-?   ?           ??? Makefile
-?   ?           ??? platform_id.c
-?   ?           ??? platform_id.h
-?   ??? Config.in
-?   ??? vendor_A
-?   ?   ??? Config.in
-?   ?   ??? pkg1
-?   ?   ?   ??? Config.in
-?   ?   ?   ??? pkg1.mk
-?   ?   ?   ??? src
-?   ?   ?       ??? Makefile
-?   ?   ?       ??? platform_id.c
-?   ?   ?       ??? platform_id.h
-?   ?   ??? pkg2
-?   ?   ?   ??? Config.in
-?   ?   ?   ??? pkg1.mk
-?   ?   ?   ??? src
-?   ?   ?       ??? Makefile
-?   ?   ?       ??? platform_id.c
-?   ?   ?       ??? platform_id.h
-?   ?   ??? vendorA.mk
-?   ??? vendor_B
-?       ??? Config.in
-?       ??? pkg1
-?       ?   ??? Config.in
-?       ?   ??? pkg1.mk
-?       ?   ??? src
-?       ?       ??? Makefile
-?       ?       ??? platform_id.c
-?       ?       ??? platform_id.h
-?       ??? pkg2
-?       ?   ??? Config.in
-?       ?   ??? pkg1.mk
-?       ?   ??? src
-?       ?       ??? Makefile
-?       ?       ??? platform_id.c
-?       ?       ??? platform_id.h
-?       ??? vendorB.mk
-??? Config.in
-??? platA
-?   ??? busybox.config
-?   ??? company
-?   ?   ??? company.mk
-?   ?   ??? Config.in
-?   ?   ??? pkg1
-?   ?   ?   ??? Config.in
-?   ?   ?   ??? pkg1.mk
-?   ?   ?   ??? src
-?   ?   ?       ??? Makefile
-?   ?   ?       ??? platform_id.c
-?   ?   ?       ??? platform_id.h
-?   ?   ??? pkg2
-?   ?       ??? Config.in
-?   ?       ??? pkg1.mk
-?   ?       ??? src
-?   ?           ??? Makefile
-?   ?           ??? platform_id.c
-?   ?           ??? platform_id.h
-?   ??? Config.in
-?   ??? configs
-?   ?   ??? platA_defconfig
-?   ??? linux.config
-?   ??? patches
-?   ?   ??? 0001-drvAdd.patch
-?   ??? platA.mk
-?   ??? rootfs_overlay
-?   ??? vendor_A
-?   ?   ??? Config.in
-?   ?   ??? pkg1
-?   ?   ?   ??? Config.in
-?   ?   ?   ??? pkg1.mk
-?   ?   ?   ??? src
-?   ?   ?       ??? Makefile
-?   ?   ?       ??? platform_id.c
-?   ?   ?       ??? platform_id.h
-?   ?   ??? pkg2
-?   ?   ?   ??? Config.in
-?   ?   ?   ??? pkg1.mk
-?   ?   ?   ??? src
-?   ?   ?       ??? Makefile
-?   ?   ?       ??? platform_id.c
-?   ?   ?       ??? platform_id.h
-?   ?   ??? vendorA.mk
-?   ??? vendor_B
-?       ??? Config.in
-?       ??? pkg1
-?       ?   ??? Config.in
-?       ?   ??? pkg1.mk
-?       ?   ??? src
-?       ?       ??? Makefile
-?       ?       ??? platform_id.c
-?       ?       ??? platform_id.h
-?       ??? pkg2
-?       ?   ??? Config.in
-?       ?   ??? pkg1.mk
-?       ?   ??? src
-?       ?       ??? Makefile
-?       ?       ??? platform_id.c
-?       ?       ??? platform_id.h
-?       ??? vendorB.mk
-??? platB
-?   ??? busybox.config
-?   ??? company
-?   ?   ??? company.mk
-?   ?   ??? Config.in
-?   ?   ??? pkg1
-?   ?   ?   ??? Config.in
-?   ?   ?   ??? pkg1.mk
-?   ?   ?   ??? src
-?   ?   ?       ??? Makefile
-?   ?   ?       ??? platform_id.c
-?   ?   ?       ??? platform_id.h
-?   ?   ??? pkg2
-?   ?       ??? Config.in
-?   ?       ??? pkg1.mk
-?   ?       ??? src
-?   ?           ??? Makefile
-?   ?           ??? platform_id.c
-?   ?           ??? platform_id.h
-?   ??? Config.in
-?   ??? configs
-?   ?   ??? platB_defconfig
-?   ??? linux.config
-?   ??? patches
-?   ?   ??? 0001-drvAdd.patch
-?   ??? platB.mk
-?   ??? rootfs_overlay
-?   ??? vendor_A
-?   ?   ??? Config.in
-?   ?   ??? pkg1
-?   ?   ?   ??? Config.in
-?   ?   ?   ??? pkg1.mk
-?   ?   ?   ??? src
-?   ?   ?       ??? Makefile
-?   ?   ?       ??? platform_id.c
-?   ?   ?       ??? platform_id.h
-?   ?   ??? pkg2
-?   ?   ?   ??? Config.in
-?   ?   ?   ??? pkg1.mk
-?   ?   ?   ??? src
-?   ?   ?       ??? Makefile
-?   ?   ?       ??? platform_id.c
-?   ?   ?       ??? platform_id.h
-?   ?   ??? vendorA.mk
-?   ??? vendor_B
-?       ??? Config.in
-?       ??? pkg1
-?       ?   ??? Config.in
-?       ?   ??? pkg1.mk
-?       ?   ??? src
-?       ?       ??? Makefile
-?       ?       ??? platform_id.c
-?       ?       ??? platform_id.h
-?       ??? pkg2
-?       ?   ??? Config.in
-?       ?   ??? pkg1.mk
-?       ?   ??? src
-?       ?       ??? Makefile
-?       ?       ??? platform_id.c
-?       ?       ??? platform_id.h
-?       ??? vendorB.mk
-??? platform.mk
-
-54 directories, 124 files
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151029/59c8cbf6/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
