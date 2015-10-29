@@ -1,11 +1,11 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 29 Oct 2015 11:53:06 +0000
-Subject: [Buildroot] [PATCH 6/9 v2] toolchain/external: allow user to
- exclude files from custom toolchains
-In-Reply-To: <6223ee9be26db809c8bf54069277c4067066fc82.1445690712.git.yann.morin.1998@free.fr>
+Date: Thu, 29 Oct 2015 12:10:10 +0000
+Subject: [Buildroot] [PATCH 9/9 v2] toolchain/external: Codescape
+ toolchains also exist for x86_64
+In-Reply-To: <d81c191c32f761351ec9a907feedbd47968cd1ee.1445690712.git.yann.morin.1998@free.fr>
 References: <cover.1445690712.git.yann.morin.1998@free.fr>
- <6223ee9be26db809c8bf54069277c4067066fc82.1445690712.git.yann.morin.1998@free.fr>
-Message-ID: <563208A2.5090304@imgtec.com>
+ <d81c191c32f761351ec9a907feedbd47968cd1ee.1445690712.git.yann.morin.1998@free.fr>
+Message-ID: <56320CA2.4020003@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +14,16 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On 10/24/2015 01:48 PM, Yann E. MORIN wrote:
-> Similarly as what we do for the toolchain's own locales (i.e. the
-> locales of the tools in the toolchain, not the locales for the target),
-> and an option so that users using a custom toolchain may pass a list of
-> globs to exclude when extracting the toolchain (to save some space).
+On 10/24/2015 01:49 PM, Yann E. MORIN wrote:
+> Since their prefix exactly matches our $(HOSTARCH), just use that.
 > 
-> Reported-by: Romain Naour <romain.naour@openwide.fr>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Built rootfs's using the four possible combinations, MTI toolchain for
+x86 and x86_64, and IMG toolchain for x86 and x86_64.
 
 Regards,
 
