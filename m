@@ -1,187 +1,256 @@
-From: Viacheslav Volkov <sv99@inbox.ru>
-Date: Thu, 29 Oct 2015 18:49:30 +0300
-Subject: [Buildroot] [PATCH v5 1/1] zbar: new package
-Message-ID: <1446133771-16014-1-git-send-email-sv99@inbox.ru>
+From: Stephen Beckwith <embeddedsteve@gmail.com>
+Date: Thu, 29 Oct 2015 12:43:19 -0400
+Subject: [Buildroot] BR2_EXTERNAL Setup
+Message-ID: <CAN34foyUYLVn3oBP0TkpN122FtCL1XpWHZ2vWUXG_fcSLAqEmg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
----
- Changes v4 -> v5:
-  - add patch description (suggested by Vincent.Riera at imgtec.com)
+Greetings,
+   I've been going through the posted slides and docs (very nice job!) and
+the manual, and I'd like to seek some guidance regarding a setup using the
+BR2_EXTERNAL support in BuildRoot.
+    What I'm developing here is a "system" - not just a "board", this is
+more of an "environment" for others to use:  consists of the Linux Kernel,
+the standard packages, quite a bit of custom code (application modules,
+maybe some libraries), and then third-party tools will most likely be
+included as well.
+     In the documentation, the "recommended" setup for the BR2_EXTERNAL
+tree always starts with "board", then company, etc. . . .   Since the work
+I'm doing won't be contributed back to BuildRoot (as it's strictly in-house
+tools) I was wondering if the following modification makes sense.   I'd
+like your feedback/view on the approach below.  Mind you, I'm building an
+"environment" for users to run on the platforms.
+   These platforms are similar, but have different traits.  Similar I/O
+capabilities, many of the same chips, but there maybe be tweaks/patches
+required due to HW Specific implementations.  Kernel configs may (probably
+will be) different due to different class CPU's being used (or even
+different CPU architectures).  I would like to be able to "drop in" third
+party vendor tools easily.  If shared across platforms, then they go in
+common, else under the specific platform.
 
- Changes v3 -> v4:
-  - correct zbar.mk, Config.in add hash (suggested by Vincent.Riera at imgtec.com)
-  - license -> LGPL (suggested by martin at barkynet.com)
+Goals:
+1)  Keep things simple - to replace/update easily, add in updated packages,
+etc.
+2)  Drop in 3rd party packages easily
+3)  share what's common (drivers, libraries, apps) but have ability to
+tweak individual platforms accordingly.  From a user point of view, it's
+the same "environment" (commands, RFS layout) just some different/tweaked
+commands.
+4)  Whether "all" of these options show up in the Buildroot config is TBD -
+some maybe optional, that's still being defined.  Would like the
+flexibility to add/delete packages - dependencies are TBD as well.
+5) Leverage as much of the BuildRoot build infrastructure as possible,
+using simple setups.
 
-Changes v2 -> v3:
-  - intendation in the Config.in (suggested by Yegor Yefremov)
-  - add license info
+There will be "few" of us "using" this setup (1-3 people) but many more
+using the output product (the "environment") - could be 10's of folks
+across the company.
 
-Changes v1 -> v2:
-  - many changes
----
- package/Config.in                     |  1 +
- package/zbar/0001-zbar-autoconf.patch | 27 +++++++++++++++++++++++++++
- package/zbar/0002-zbar-jpeg.patch     | 21 +++++++++++++++++++++
- package/zbar/Config.in                | 21 +++++++++++++++++++++
- package/zbar/zbar.hash                |  3 +++
- package/zbar/zbar.mk                  | 32 ++++++++++++++++++++++++++++++++
- 6 files changed, 105 insertions(+)
- create mode 100644 package/zbar/0001-zbar-autoconf.patch
- create mode 100644 package/zbar/0002-zbar-jpeg.patch
- create mode 100644 package/zbar/Config.in
- create mode 100644 package/zbar/zbar.hash
- create mode 100644 package/zbar/zbar.mk
+I've started this external tree at "platform" - the setup maybe "overly
+done" in terms the Config.in and *.mk files, there maybe ways to
+consolidate this or use other Make setups. . . (I've been doing Embedded SW
+for 33 years, my familiarity with make/config is "middle" - not expert, but
+can poke my way around if not overly complicated).
 
-diff --git a/package/Config.in b/package/Config.in
-index 10ff94e..778b1e1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -854,6 +854,7 @@ menu "Graphics"
- 	source "package/webkit/Config.in"
- 	source "package/webkitgtk24/Config.in"
- 	source "package/webp/Config.in"
-+	source "package/zbar/Config.in"
- 	source "package/zxing-cpp/Config.in"
- endmenu
- 
-diff --git a/package/zbar/0001-zbar-autoconf.patch b/package/zbar/0001-zbar-autoconf.patch
-new file mode 100644
-index 0000000..671cc6e
---- /dev/null
-+++ b/package/zbar/0001-zbar-autoconf.patch
-@@ -0,0 +1,27 @@
-+Correct configuration error on recent version autoreconf.
-+
-+Need call AM_PROG_AR macro.
-+And not portable patterns %. in the make files.
-+
-+Last update distribution in the 2012.
-+
-+Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
-+
-+Index: b/configure.ac
-+===================================================================
-+diff --git a/configure.ac b/configure.ac
-+index 256aedb..5aa5689 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -3,10 +3,11 @@ AC_PREREQ([2.61])
-+ AC_INIT([zbar], [0.10], [spadix at users.sourceforge.net])
-+ AC_CONFIG_AUX_DIR(config)
-+ AC_CONFIG_MACRO_DIR(config)
-+-AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign subdir-objects std-options dist-bzip2])
-++AM_INIT_AUTOMAKE([1.10 -Wall -Werror -Wno-portability foreign subdir-objects std-options dist-bzip2])
-+ AC_CONFIG_HEADERS([include/config.h])
-+ AC_CONFIG_SRCDIR(zbar/scanner.c)
-+ LT_PREREQ([2.2])
-++m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
-+ LT_INIT([dlopen win32-dll])
-+ LT_LANG([Windows Resource])
-diff --git a/package/zbar/0002-zbar-jpeg.patch b/package/zbar/0002-zbar-jpeg.patch
-new file mode 100644
-index 0000000..661749d
---- /dev/null
-+++ b/package/zbar/0002-zbar-jpeg.patch
-@@ -0,0 +1,21 @@
-+Correct function prototipe for using with libjpeg.
-+
-+Last update distribution in the 2012.
-+
-+Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
-+
-+Index: b/zbar/jpeg.c
-+===================================================================
-+diff --git a/zbar/jpeg.c b/zbar/jpeg.c
-+index 972bfea..fdd1619 100644
-+--- a/zbar/jpeg.c
-++++ b/zbar/jpeg.c
-+@@ -68,7 +68,7 @@ void init_source (j_decompress_ptr cinfo)
-+     cinfo->src->bytes_in_buffer = img->datalen;
-+ }
-+ 
-+-int fill_input_buffer (j_decompress_ptr cinfo)
-++boolean fill_input_buffer (j_decompress_ptr cinfo)
-+ {
-+     /* buffer underrun error case */
-+     cinfo->src->next_input_byte = fake_eoi;
-diff --git a/package/zbar/Config.in b/package/zbar/Config.in
-new file mode 100644
-index 0000000..5fac0c3
---- /dev/null
-+++ b/package/zbar/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_ZBAR
-+	bool "zbar"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
-+	depends on BR2_USE_MMU # libv4l
-+	depends on !BR2_STATIC_LIBS # libv4l
-+	depends on BR2_INSTALL_LIBSTDCPP # libv4l
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libv4l
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || \
-+		BR2_TOOLCHAIN_USES_UCLIBC # libv4l
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBV4L
-+	help
-+	  QR and barcode scanner
-+
-+	  http://zbar.sourceforge.net/
-+
-+comment "zbar needs an uClibc or (e)glibc toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
-new file mode 100644
-index 0000000..5c04d9b
---- /dev/null
-+++ b/package/zbar/zbar.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 38f8535a3c4c526ecaa968a992efcbf7392623e68db45dc2f181d4c9d3002d69 zbar-854a5d97059e395807091ac4d80c53f7968abb8f.tar.gz
-+
-diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-new file mode 100644
-index 0000000..bd3c197
---- /dev/null
-+++ b/package/zbar/zbar.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# zbar
-+#
-+################################################################################
-+
-+# github have some additional commits for compilling with recent kernel
-+ZBAR_VERSION = 854a5d97059e395807091ac4d80c53f7968abb8f
-+ZBAR_SITE = $(call github,ZBar,Zbar,$(ZBAR_VERSION))
-+ZBAR_LICENSE = LGPLv2.1
-+ZBAR_LICENSE_FILES = LICENSE
-+ZBAR_INSTALL_STAGING = YES
-+ZBAR_AUTORECONF = YES
-+ZBAR_DEPENDENCIES = libv4l libjpeg
-+ZBAR_CONF_OPTS = \
-+	--without-imagemagick \
-+	--without-qt \
-+	--without-gtk \
-+	--without-python \
-+	--without-x \
-+	--enable-shared=yes
-+
-+# fix /usr/bin/install: cannot stat ?./doc/man/zbarcam.1?: No such file or
-+#   directory
-+# make[5]: *** [install-man1] Error 1
-+define ZBAR_INSTALL_FIXUP
-+	touch $(@D)/doc/man/zbarcam.1
-+endef
-+
-+ZBAR_POST_BUILD_HOOKS += ZBAR_INSTALL_FIXUP
-+
-+$(eval $(autotools-package))
--- 
-2.6.1
+Notes:
+common:  This is code (company or 3rd party) that would be common to the
+various platforms. . . This will most likely be the "bulk" of the code (80%
+or more).
+Since the code won't be "fetched" from anywhere, the intent was to use the
+<pkg>_OVERRIDE_SRCDIR mechanism, that would do the rsync from the package
+source directory to the build directory for building.
+
+Thanks in Advance for your insights and feedback.
+
+Regards,
+Stephen
+
+
+[@localhost platform]$ tree
+.
+??? common
+?   ??? common.mk
+?   ??? company
+?   ?   ??? company.mk
+?   ?   ??? Config.in
+?   ?   ??? pkg1
+?   ?   ?   ??? Config.in
+?   ?   ?   ??? pkg1.mk
+?   ?   ?   ??? src
+?   ?   ?       ??? Makefile
+?   ?   ?       ??? platform_id.c
+?   ?   ?       ??? platform_id.h
+?   ?   ??? pkg2
+?   ?       ??? Config.in
+?   ?       ??? pkg1.mk
+?   ?       ??? src
+?   ?           ??? Makefile
+?   ?           ??? platform_id.c
+?   ?           ??? platform_id.h
+?   ??? Config.in
+?   ??? vendor_A
+?   ?   ??? Config.in
+?   ?   ??? pkg1
+?   ?   ?   ??? Config.in
+?   ?   ?   ??? pkg1.mk
+?   ?   ?   ??? src
+?   ?   ?       ??? Makefile
+?   ?   ?       ??? platform_id.c
+?   ?   ?       ??? platform_id.h
+?   ?   ??? pkg2
+?   ?   ?   ??? Config.in
+?   ?   ?   ??? pkg1.mk
+?   ?   ?   ??? src
+?   ?   ?       ??? Makefile
+?   ?   ?       ??? platform_id.c
+?   ?   ?       ??? platform_id.h
+?   ?   ??? vendorA.mk
+?   ??? vendor_B
+?       ??? Config.in
+?       ??? pkg1
+?       ?   ??? Config.in
+?       ?   ??? pkg1.mk
+?       ?   ??? src
+?       ?       ??? Makefile
+?       ?       ??? platform_id.c
+?       ?       ??? platform_id.h
+?       ??? pkg2
+?       ?   ??? Config.in
+?       ?   ??? pkg1.mk
+?       ?   ??? src
+?       ?       ??? Makefile
+?       ?       ??? platform_id.c
+?       ?       ??? platform_id.h
+?       ??? vendorB.mk
+??? Config.in
+??? platA
+?   ??? busybox.config
+?   ??? company
+?   ?   ??? company.mk
+?   ?   ??? Config.in
+?   ?   ??? pkg1
+?   ?   ?   ??? Config.in
+?   ?   ?   ??? pkg1.mk
+?   ?   ?   ??? src
+?   ?   ?       ??? Makefile
+?   ?   ?       ??? platform_id.c
+?   ?   ?       ??? platform_id.h
+?   ?   ??? pkg2
+?   ?       ??? Config.in
+?   ?       ??? pkg1.mk
+?   ?       ??? src
+?   ?           ??? Makefile
+?   ?           ??? platform_id.c
+?   ?           ??? platform_id.h
+?   ??? Config.in
+?   ??? configs
+?   ?   ??? platA_defconfig
+?   ??? linux.config
+?   ??? patches
+?   ?   ??? 0001-drvAdd.patch
+?   ??? platA.mk
+?   ??? rootfs_overlay
+?   ??? vendor_A
+?   ?   ??? Config.in
+?   ?   ??? pkg1
+?   ?   ?   ??? Config.in
+?   ?   ?   ??? pkg1.mk
+?   ?   ?   ??? src
+?   ?   ?       ??? Makefile
+?   ?   ?       ??? platform_id.c
+?   ?   ?       ??? platform_id.h
+?   ?   ??? pkg2
+?   ?   ?   ??? Config.in
+?   ?   ?   ??? pkg1.mk
+?   ?   ?   ??? src
+?   ?   ?       ??? Makefile
+?   ?   ?       ??? platform_id.c
+?   ?   ?       ??? platform_id.h
+?   ?   ??? vendorA.mk
+?   ??? vendor_B
+?       ??? Config.in
+?       ??? pkg1
+?       ?   ??? Config.in
+?       ?   ??? pkg1.mk
+?       ?   ??? src
+?       ?       ??? Makefile
+?       ?       ??? platform_id.c
+?       ?       ??? platform_id.h
+?       ??? pkg2
+?       ?   ??? Config.in
+?       ?   ??? pkg1.mk
+?       ?   ??? src
+?       ?       ??? Makefile
+?       ?       ??? platform_id.c
+?       ?       ??? platform_id.h
+?       ??? vendorB.mk
+??? platB
+?   ??? busybox.config
+?   ??? company
+?   ?   ??? company.mk
+?   ?   ??? Config.in
+?   ?   ??? pkg1
+?   ?   ?   ??? Config.in
+?   ?   ?   ??? pkg1.mk
+?   ?   ?   ??? src
+?   ?   ?       ??? Makefile
+?   ?   ?       ??? platform_id.c
+?   ?   ?       ??? platform_id.h
+?   ?   ??? pkg2
+?   ?       ??? Config.in
+?   ?       ??? pkg1.mk
+?   ?       ??? src
+?   ?           ??? Makefile
+?   ?           ??? platform_id.c
+?   ?           ??? platform_id.h
+?   ??? Config.in
+?   ??? configs
+?   ?   ??? platB_defconfig
+?   ??? linux.config
+?   ??? patches
+?   ?   ??? 0001-drvAdd.patch
+?   ??? platB.mk
+?   ??? rootfs_overlay
+?   ??? vendor_A
+?   ?   ??? Config.in
+?   ?   ??? pkg1
+?   ?   ?   ??? Config.in
+?   ?   ?   ??? pkg1.mk
+?   ?   ?   ??? src
+?   ?   ?       ??? Makefile
+?   ?   ?       ??? platform_id.c
+?   ?   ?       ??? platform_id.h
+?   ?   ??? pkg2
+?   ?   ?   ??? Config.in
+?   ?   ?   ??? pkg1.mk
+?   ?   ?   ??? src
+?   ?   ?       ??? Makefile
+?   ?   ?       ??? platform_id.c
+?   ?   ?       ??? platform_id.h
+?   ?   ??? vendorA.mk
+?   ??? vendor_B
+?       ??? Config.in
+?       ??? pkg1
+?       ?   ??? Config.in
+?       ?   ??? pkg1.mk
+?       ?   ??? src
+?       ?       ??? Makefile
+?       ?       ??? platform_id.c
+?       ?       ??? platform_id.h
+?       ??? pkg2
+?       ?   ??? Config.in
+?       ?   ??? pkg1.mk
+?       ?   ??? src
+?       ?       ??? Makefile
+?       ?       ??? platform_id.c
+?       ?       ??? platform_id.h
+?       ??? vendorB.mk
+??? platform.mk
+
+54 directories, 124 files
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151029/59c8cbf6/attachment.html>
