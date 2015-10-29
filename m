@@ -1,24 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2015 19:56:53 +0100
-Subject: [Buildroot] [PATCH] configs/mpc8315erdb: bump to linux 4.2.5
-In-Reply-To: <1446131661-21507-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 29 Oct 2015 12:14:21 -0300")
-References: <1446131661-21507-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k2q54i6i.fsf@dell.be.48ers.dk>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Thu, 29 Oct 2015 15:56:51 -0300
+Subject: [Buildroot] [PATCH] ccache: bump to version 3.2.4
+Message-ID: <1446145011-19797-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
- > Also revamp the kernel config a bit to make it more featured, enabling
- > SATA ports and storage.
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index d4e33d5..483243b 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,2 +1,2 @@
+-# Verified key https://samba.org/ftp/ccache/ccache-3.2.3.tar.xz.asc - sha256 computed locally
+-sha256	ec0414fc435982ece8b8fca062f5836ff32c5d5148abd7f80768614ed776600e	ccache-3.2.3.tar.xz
++# Verified key https://samba.org/ftp/ccache/ccache-3.2.4.tar.xz.asc - sha256 computed locally
++sha256	1c3da93f654e78a4ac71a54b0f63b19bc0fef9aa5522f4ebb9c201d4361cea5d	ccache-3.2.4.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 167711d..bce801e 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CCACHE_VERSION = 3.2.3
++CCACHE_VERSION = 3.2.4
+ CCACHE_SITE = https://samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
 -- 
-Bye, Peter Korsgaard
+2.4.10
