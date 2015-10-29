@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2015 19:57:31 +0100
-Subject: [Buildroot] [PATCH] iperf3: bump to version 3.1
-In-Reply-To: <1446124677-22273-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 29 Oct 2015 10:17:57 -0300")
-References: <1446124677-22273-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fv0t4i5g.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Oct 2015 19:57:56 +0100
+Subject: [Buildroot] [PATCH] libnspr: bump to version 4.10.10
+In-Reply-To: <1446123365-21899-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 29 Oct 2015 09:56:05 -0300")
+References: <1446123365-21899-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bnbh4i4r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,6 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Switch to proper homepage, download from homepage and add a hash file.
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
