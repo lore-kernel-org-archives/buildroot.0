@@ -1,49 +1,79 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 29 Oct 2015 07:55:34 -0300
-Subject: [Buildroot] [PATCH] python-spidev: bump to version 3.1
-Message-ID: <1446116134-31005-1-git-send-email-gustavo@zacarias.com.ar>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 29 Oct 2015 11:13:00 +0000
+Subject: [Buildroot] [PATCH 1/9 v2] core/pkg-generic: allow packages to
+ exclude files when extracting
+In-Reply-To: <8051e354081180d0e566d15f63e424eb1b4fbd23.1445690712.git.yann.morin.1998@free.fr>
+References: <cover.1445690712.git.yann.morin.1998@free.fr>
+ <8051e354081180d0e566d15f63e424eb1b4fbd23.1445690712.git.yann.morin.1998@free.fr>
+Message-ID: <CAFGQKxdtG6=RziFhZOfH93ZB1A+_YcGCnG0dVaDhAzPumYCCeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+Yann, All,
 
-And fixes:
-http://autobuild.buildroot.net/results/abc/abca38e3e93b609c1040c1152de7cd59940e2c88/
-It was using an absolute include_dirs in setup.py pointing to the host
-kernel sources (/usr/src/linux). It didn't affect "normal" distros since
-they normally don't have the kernel sources installed, however for
-Gentoo it's quite normal to have kernel sources there.
+How about also applying the same excludes list to the rsync in the
+.stamp_rsynced rule?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/python-spidev/python-spidev.hash | 2 ++
- package/python-spidev/python-spidev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/python-spidev/python-spidev.hash
+Thanks
 
-diff --git a/package/python-spidev/python-spidev.hash b/package/python-spidev/python-spidev.hash
-new file mode 100644
-index 0000000..49e8db8
---- /dev/null
-+++ b/package/python-spidev/python-spidev.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	355391e9ad3024950590626b080324394c12e75bb21923dbd56a978a1eac6ac7	spidev-3.1.tar.gz
-diff --git a/package/python-spidev/python-spidev.mk b/package/python-spidev/python-spidev.mk
-index 14103f3..0a8dd15 100644
---- a/package/python-spidev/python-spidev.mk
-+++ b/package/python-spidev/python-spidev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_SPIDEV_VERSION = 3.0
-+PYTHON_SPIDEV_VERSION = 3.1
- PYTHON_SPIDEV_SOURCE = spidev-$(PYTHON_SPIDEV_VERSION).tar.gz
- PYTHON_SPIDEV_SITE = https://pypi.python.org/packages/source/s/spidev
- PYTHON_SPIDEV_SETUP_TYPE = distutils
--- 
-2.4.10
+Martin
+
+On 24 October 2015 at 13:48, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Currently, packages that need to exclude parts of the archives when
+> extracting (e.g. to gain space), like gcc or toolchain-external, have to
+> provide custom extract commands, just for the sake of adding a bunch of
+> --exclude directives when calling tar.
+>
+> Add a new variable that packages may set, to provide a space-separated
+> list of patterns to exclude.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  docs/manual/adding-packages-generic.txt | 4 ++++
+>  package/pkg-generic.mk                  | 5 ++++-
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 9d6401f..a7143e4 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -314,6 +314,10 @@ information is (assuming the package name is +libfoo+) :
+>    that have more than one leading component to strip, set this
+>    variable with the value to be passed to tar. Default: 1.
+>
+> +* +LIBFOO_EXCLUDES+ is a space-separated list of patterns to exclude
+> +  when extracting the archive. Each item from that list is passed as
+> +  a tar's +--exclude+ option. By default, empty.
+> +
+>  * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
+>    name) that are required for the current target package to
+>    compile. These dependencies are guaranteed to be compiled and
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index ffef4d3..8b189fe 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -508,7 +508,10 @@ $(2)_TARGET_DIRCLEAN =             $$($(2)_DIR)/.stamp_dircleaned
+>  # default extract command
+>  $(2)_EXTRACT_CMDS ?= \
+>         $$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
+> -       $$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
+> +       $$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
+> +               -C $$($(2)_DIR) \
+> +               $$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
+> +               $$(TAR_OPTIONS) -)
+>
+>  # pre/post-steps hooks
+>  $(2)_PRE_DOWNLOAD_HOOKS         ?=
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
