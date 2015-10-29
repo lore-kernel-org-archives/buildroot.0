@@ -1,49 +1,59 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 29 Oct 2015 23:23:17 +1030
-Subject: [Buildroot] [PATCH] package/kexec-lite: update to latest version
-Message-ID: <1446123197-9392-1-git-send-email-joel@jms.id.au>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 29 Oct 2015 10:17:57 -0300
+Subject: [Buildroot] [PATCH] iperf3: bump to version 3.1
+Message-ID: <1446124677-22273-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jeremy Kerr <jk@ozlabs.org>
+Switch to proper homepage, download from homepage and add a hash file.
 
-Upstream now supports little endian, so enable for little-endian
-powerpc.
-
-Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/kexec-lite/Config.in     | 2 +-
- package/kexec-lite/kexec-lite.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iperf3/Config.in   | 2 +-
+ package/iperf3/iperf3.hash | 2 ++
+ package/iperf3/iperf3.mk   | 5 +++--
+ 3 files changed, 6 insertions(+), 3 deletions(-)
+ create mode 100644 package/iperf3/iperf3.hash
 
-diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
-index ede5cba..fcc0d88 100644
---- a/package/kexec-lite/Config.in
-+++ b/package/kexec-lite/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_KEXEC_LITE
- 	bool "kexec-lite"
--	depends on BR2_powerpc || BR2_powerpc64
-+	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	depends on !BR2_STATIC_LIBS # dtc, elfutils
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
-index 7e3c8d3..27bc204 100644
---- a/package/kexec-lite/kexec-lite.mk
-+++ b/package/kexec-lite/kexec-lite.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/iperf3/Config.in b/package/iperf3/Config.in
+index 1f263ab..18c3612 100644
+--- a/package/iperf3/Config.in
++++ b/package/iperf3/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_IPERF3
+ 	  It's a redesign of the NLANR/DAST iperf(2) and is not
+ 	  backward compatible.
+ 
+-	  https://github.com/esnet/iperf
++	  https://iperf.fr
+ 
+ comment "iperf3 needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+new file mode 100644
+index 0000000..9fb2cba
+--- /dev/null
++++ b/package/iperf3/iperf3.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	94fef2c3a51d01f0b1ee899bf02c87ff392423fb8c8d0af34fd59c1462c8bbb0	iperf-3.1-source.tar.gz
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index b8e594f..d1338e6 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--KEXEC_LITE_VERSION = fb8543fea3beb0522b5a63a74ea1a845dbd7b954
-+KEXEC_LITE_VERSION = 783fb4a811d0b0f8cc2ed68fa7872dcad56a3944
- KEXEC_LITE_SITE = $(call github,antonblanchard,kexec-lite,$(KEXEC_LITE_VERSION))
- KEXEC_LITE_LICENSE = GPLv2+
- KEXEC_LITE_DEPENDENCIES = elfutils dtc
+-IPERF3_VERSION = 3.0.10
+-IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
++IPERF3_VERSION = 3.1
++IPERF3_SITE = https://iperf.fr/download/iperf_$(IPERF3_VERSION)
++IPERF3_SOURCE = iperf-$(IPERF3_VERSION)-source.tar.gz
+ IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
+ IPERF3_LICENSE_FILES = LICENSE
+ 
 -- 
-2.6.2
+2.4.10
