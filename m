@@ -1,54 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 28 Oct 2015 23:25:13 -0300
-Subject: [Buildroot] [PATCH] xorg-server: bump to version 1.17.4
-Message-ID: <1446085513-22185-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ben Boeckel <mathstuf@gmail.com>
+Date: Wed, 28 Oct 2015 22:48:15 -0400
+Subject: [Buildroot] [PATCH] makefile: remove LD_LIBRARY_PATH from the
+	environment
+In-Reply-To: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
+References: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
+Message-ID: <1446086895-28252-1-git-send-email-mathstuf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/x11r7/xserver_xorg-server/Config.in                | 4 ++--
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+If system tools are selected, the host's lib/ directory may shadow
+libraries from the system which are configured differently and do not
+have all of the symbols required by the system tool.
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 2e05d5b..84f0298 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -70,7 +70,7 @@ choice
- 	bool "X Window System server version"
+Since buildroot uses rpath everywhere, LD_LIBRARY_PATH should not be
+necessary anyways.
+
+Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+---
+ package/Makefile.in | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 8a592d4..10f3a47 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -298,12 +298,10 @@ HOST_CONFIGURE_OPTS = \
+ 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 	PKG_CONFIG_SYSROOT_DIR="/" \
+ 	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
+-	LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
+ 	INTLTOOL_PERL=$(PERL)
  
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
--	bool "1.17.3"
-+	bool "1.17.4"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
- 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
- 
-@@ -82,7 +82,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.17.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
-+	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
- choice
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 82ae71b..0119e37 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
- # From http://lists.x.org/archives/xorg-announce/2014-June/002440.html
- sha1   7a95765e56b124758fcd7b609589e65b8870880b                                xorg-server-1.14.7.tar.bz2
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
--# From http://lists.x.org/archives/xorg-announce/2015-October/002647.html
--sha1	78c33555d267fe0feda945d02f627cbc5aacbba5				xorg-server-1.17.3.tar.bz2
--sha256	89b5c6b7e7ec4731645283d2178f607825b75a470e76b3ad3cb1c1dbd2456b73	xorg-server-1.17.3.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-October/002650.html
-+sha1	139c4d6795eb4c3848616cc514d134532975e49e				xorg-server-1.17.4.tar.bz2
-+sha256	0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457	xorg-server-1.17.4.tar.bz2
+ HOST_MAKE_ENV = \
+ 	PATH=$(BR_PATH) \
+-	LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
+ 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 	PKG_CONFIG_SYSROOT_DIR="/" \
+ 	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
 -- 
-2.4.10
+2.6.2
