@@ -1,77 +1,53 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu, 29 Oct 2015 10:00:18 +0100
-Subject: [Buildroot] [PATCH v3 2/2] skeleton: optionally wait for network
-	interfaces to appear
-In-Reply-To: <1446109218-11057-1-git-send-email-jezz@sysmic.org>
-References: <1446109218-11057-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1446109218-11057-3-git-send-email-jezz@sysmic.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 29 Oct 2015 09:09:47 +0000
+Subject: [Buildroot] [PATCH v5 1/1] yad: new package
+In-Reply-To: <CALe+oY-dFj4aCxv3Nes5N7uH0B5LbcEFuKnMDd4No_YNT4nFdg@mail.gmail.com>
+References: <1445641812-7704-1-git-send-email-james.knight@rockwellcollins.com>
+ <562F8D35.3000602@imgtec.com>
+ <CALe+oY-dFj4aCxv3Nes5N7uH0B5LbcEFuKnMDd4No_YNT4nFdg@mail.gmail.com>
+Message-ID: <5631E25B.5020103@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch has same purpose than 49964858f45d2243c513e6d362e992ad89ec7a45:
+Dear James Knight,
 
-  On some machines, the network interface is slow to appear. For example,
-  on the Raspberry Pi, the network interface eth0 is an ethernet-over-USB,
-  and our standard boot process is too fast, so our network startup script
-  is called before the USB bus is compeltely enumerated, thus it can't
-  configure eth0.
+On 10/28/2015 09:34 PM, James Knight wrote:
+> Vincent,
+> 
+> First off, thanks for reviewing/testing (as always).
+> 
+> On Tue, Oct 27, 2015 at 10:41 AM, Vicente Olivert Riera
+> <Vincent.Riera@imgtec.com> wrote:
+>>> +     help
+>>> +       YAD (yet another dialog) is a tool for create graphical dialogs from
+>>
+>> That line exceeds the 72 characters limit considering 8-characters-wide
+>> tabs.
+> 
+> Sorry, I'm confused. I only moved the word "from" into the lined based
+> off your previous suggestion:
 
-  Closes #8116.
+You are totally right and I apologize for that. This is totally my
+fault. It seems that in the Buildroot project tabs are considered as 8
+characters wide. I didn't know that when I made that suggestion to you,
+but in my defense I have to say that is not documented anywhere.
 
-However, wait-delay hook is enabled only if wait-delay property appears
-in /etc/network/interfaces. This patch enable it automaticaly when
-interface is configured through DHCP at bootup. But, if user choose
-to write /etc/network/interface himself, he have to explicitly
-set wait-delay.
+Regards,
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/skeleton/skeleton.mk                       |  1 +
- system/skeleton/etc/network/if-pre-up.d/wait_iface | 21 +++++++++++++++++++++
- 2 files changed, 22 insertions(+)
- create mode 100755 system/skeleton/etc/network/if-pre-up.d/wait_iface
+Vincent.
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 920d3b4..d1b797d 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -89,6 +89,7 @@ define SET_NETWORK_DHCP
- 		echo ;                                               \
- 		echo "auto $(NETWORK_DHCP_IFACE)";                   \
- 		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
-+		echo "	wait-delay 15";                              \
- 	) >> $(TARGET_DIR)/etc/network/interfaces
- endef
- endif
-diff --git a/system/skeleton/etc/network/if-pre-up.d/wait_iface b/system/skeleton/etc/network/if-pre-up.d/wait_iface
-new file mode 100755
-index 0000000..ebccff2
---- /dev/null
-+++ b/system/skeleton/etc/network/if-pre-up.d/wait_iface
-@@ -0,0 +1,21 @@
-+#!/bin/sh
-+
-+# In case we have a slow-to-appear interface (e.g. eth-over-USB),
-+# and we need to configure it, wait until it appears, but not too
-+# long either. IF_WAIT_DELAY is in seconds.
-+
-+if [ "${IF_WAIT_DELAY}" -a ! -e "/sys/class/net/${IFACE}" ]; then
-+    printf "Waiting for interface %s to appear" "${IFACE}"
-+    while [ ${IF_WAIT_DELAY} -gt 0 ]; do
-+        if [ -e "/sys/class/net/${IFACE}" ]; then
-+            printf "\n"
-+            exit 0
-+        fi
-+        sleep 1
-+        printf "."
-+        : $((IF_WAIT_DELAY -= 1))
-+    done
-+    printf " timeout!\n"
-+    exit 1
-+fi
-+
--- 
-2.1.4
+> On Wed, Oct 7, 2015 at 6:08 AM, Vicente Olivert Riera
+> <Vincent.Riera@imgtec.com> wrote:
+>>> +     select BR2_PACKAGE_LIBGLIB2
+>>> +     help
+>>> +       YAD (yet another dialog) is a tool for create graphical dialogs
+>>> +       from shell scripts.
+>>
+>> The word "from" still fits in the first line as it will not exceed the
+>> 72 characters limit.
+> 
+> Am I missing something?
+> 
