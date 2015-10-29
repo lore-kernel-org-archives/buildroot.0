@@ -1,64 +1,113 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 29 Oct 2015 10:47:03 +0000
-Subject: [Buildroot] [PATCH] busybox: bump to version 1.24.1
-In-Reply-To: <1446115231-4451-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1446115231-4451-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5631F927.7060502@imgtec.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 29 Oct 2015 10:55:17 +0000
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: add config
+ option to build wpa_client library
+In-Reply-To: <1446047749-16623-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1446047749-16623-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <CAFGQKxdN0qS9WzOo+pee_Cc6yM2YF_i23Nsg7oYRC1YKbGURFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+J?rg,
 
-On 10/29/2015 10:40 AM, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Build test for MIPS architecture:
-
-$ grep -R "^BUSYBOX_VERSION" package/busybox/busybox.mk
-BUSYBOX_VERSION = 1.24.1
-
-$ file output/target/bin/busybox
-output/target/bin/busybox: setuid ELF 32-bit LSB executable, MIPS,
-MIPS32 rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
-GNU/Linux 2.6.32, with unknown capability 0xf41 = 0x756e6700, with
-unknown capability 0x70100 = 0x1040000, stripped
-
-Regards,
-
-Vincent.
-
+On 28 October 2015 at 15:55, J?rg Krause <joerg.krause@embedded.rocks> wrote:
+> Version 2.5 of wpa_supplicant introduces the config option
+> CONFIG_BUILD_WPA_CLIENT_SO to enable building wpa_client as shared library.
+>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  package/busybox/busybox.hash | 6 +++---
->  package/busybox/busybox.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-> index 1a9b2ff..99fb8e4 100644
-> --- a/package/busybox/busybox.hash
-> +++ b/package/busybox/busybox.hash
-> @@ -1,3 +1,3 @@
-> -# From http://busybox.net/downloads/busybox-1.24.0.tar.bz2.sign
-> -md5 2fa3110042e518e0e1225c799294664c  busybox-1.24.0.tar.bz2
-> -sha1 238a9b8a66c31fdcdd00790a840ef03cc77482c7  busybox-1.24.0.tar.bz2
-> +# From http://busybox.net/downloads/busybox-1.24.1.tar.bz2.sign
-> +md5 be98a40cadf84ce2d6b05fa41a275c6a  busybox-1.24.1.tar.bz2
-> +sha1 157d14d24748b4505b1a418535688706a2b81680  busybox-1.24.1.tar.bz2
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index e5427cf..7f6dbd6 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -BUSYBOX_VERSION = 1.24.0
-> +BUSYBOX_VERSION = 1.24.1
->  BUSYBOX_SITE = http://www.busybox.net/downloads
->  BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
->  BUSYBOX_LICENSE = GPLv2
-> 
+>  package/wpa_supplicant/Config.in         |  5 +++++
+>  package/wpa_supplicant/wpa_supplicant.mk | 24 ++++++++++++++++++++++++
+>  2 files changed, 29 insertions(+)
+>
+> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+> index eb42257..0b4c484 100644
+> --- a/package/wpa_supplicant/Config.in
+> +++ b/package/wpa_supplicant/Config.in
+> @@ -63,6 +63,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_CLI
+>         help
+>           Install wpa_cli command line utility
+>
+> +config BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO
+> +       bool "Install wpa_client shared library"
+> +       help
+> +         Installs libwpa_client.so.
+> +
+
+Should this be dependent on no being built with static libs? i.e
+
+    depends on !BR2_STATIC_LIBS
+
+Thanks
+
+Martin
+
+>  config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
+>         bool "Install wpa_passphrase binary"
+>         help
+> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> index 839a419..e3f1434 100644
+> --- a/package/wpa_supplicant/wpa_supplicant.mk
+> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> @@ -15,6 +15,9 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
+>  WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+>  WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+>
+> +# install the wpa_client library
+> +WPA_SUPPLICANT_INSTALL_STAGING = YES
+> +
+>  WPA_SUPPLICANT_CONFIG_EDITS =
+>
+>  WPA_SUPPLICANT_CONFIG_SET =
+> @@ -117,6 +120,22 @@ WPA_SUPPLICANT_DEPENDENCIES += readline
+>  WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_READLINE
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO),y)
+> +WPA_SUPPLICANT_CONFIG_SET += CONFIG_BUILD_WPA_CLIENT_SO
+> +define WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO
+> +       $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/libwpa_client.so \
+> +               $(TARGET_DIR)/usr/lib/libwpa_client.so
+> +       $(INSTALL) -m 0644 -D $(@D)/src/common/wpa_ctrl.h \
+> +               $(TARGET_DIR)/usr/include/wpa_ctrl.h
+> +endef
+> +define WPA_SUPPLICANT_INSTALL_STAGING_WPA_CLIENT_SO
+> +       $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/libwpa_client.so \
+> +               $(STAGING_DIR)/usr/lib/libwpa_client.so
+> +       $(INSTALL) -m 0644 -D $(@D)/src/common/wpa_ctrl.h \
+> +               $(STAGING_DIR)/usr/include/wpa_ctrl.h
+> +endef
+> +endif
+> +
+>  define WPA_SUPPLICANT_CONFIGURE_CMDS
+>         cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
+>         sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
+> @@ -159,6 +178,10 @@ define WPA_SUPPLICANT_INSTALL_DBUS
+>  endef
+>  endif
+>
+> +define WPA_SUPPLICANT_INSTALL_STAGING_CMDS
+> +       $(WPA_SUPPLICANT_INSTALL_STAGING_WPA_CLIENT_SO)
+> +endef
+> +
+>  define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+>         $(INSTALL) -m 0755 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/wpa_supplicant \
+>                 $(TARGET_DIR)/usr/sbin/wpa_supplicant
+> @@ -167,6 +190,7 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+>         $(WPA_SUPPLICANT_INSTALL_CLI)
+>         $(WPA_SUPPLICANT_INSTALL_PASSPHRASE)
+>         $(WPA_SUPPLICANT_INSTALL_DBUS)
+> +       $(WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO)
+>  endef
+>
+>  define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+> --
+> 2.6.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
