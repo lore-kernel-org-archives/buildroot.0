@@ -1,46 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2015 20:04:36 +0100
-Subject: [Buildroot] [git commit] busybox: bump to version 1.24.1
-Message-ID: <20151029190717.91F217FA76@busybox.osuosl.org>
+Date: Thu, 29 Oct 2015 19:57:07 +0100
+Subject: [Buildroot] [git commit] iperf3: bump to version 3.1
+Message-ID: <20151029190717.6B6B9818D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a425c49c3201eb4c8d6e4b817688de1851fe110
+commit: http://git.buildroot.net/buildroot/commit/?id=ec658ff15a0f1098360e9c9efecec31c6b731e95
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Switch to proper homepage, download from homepage and add a hash file.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox.hash |    6 +++---
- package/busybox/busybox.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/iperf3/Config.in   |    2 +-
+ package/iperf3/iperf3.hash |    2 ++
+ package/iperf3/iperf3.mk   |    5 +++--
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index 1a9b2ff..99fb8e4 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,3 +1,3 @@
--# From http://busybox.net/downloads/busybox-1.24.0.tar.bz2.sign
--md5 2fa3110042e518e0e1225c799294664c  busybox-1.24.0.tar.bz2
--sha1 238a9b8a66c31fdcdd00790a840ef03cc77482c7  busybox-1.24.0.tar.bz2
-+# From http://busybox.net/downloads/busybox-1.24.1.tar.bz2.sign
-+md5 be98a40cadf84ce2d6b05fa41a275c6a  busybox-1.24.1.tar.bz2
-+sha1 157d14d24748b4505b1a418535688706a2b81680  busybox-1.24.1.tar.bz2
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e5427cf..7f6dbd6 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/iperf3/Config.in b/package/iperf3/Config.in
+index 1f263ab..18c3612 100644
+--- a/package/iperf3/Config.in
++++ b/package/iperf3/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_IPERF3
+ 	  It's a redesign of the NLANR/DAST iperf(2) and is not
+ 	  backward compatible.
+ 
+-	  https://github.com/esnet/iperf
++	  https://iperf.fr
+ 
+ comment "iperf3 needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+new file mode 100644
+index 0000000..9fb2cba
+--- /dev/null
++++ b/package/iperf3/iperf3.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	94fef2c3a51d01f0b1ee899bf02c87ff392423fb8c8d0af34fd59c1462c8bbb0	iperf-3.1-source.tar.gz
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index b8e594f..d1338e6 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--BUSYBOX_VERSION = 1.24.0
-+BUSYBOX_VERSION = 1.24.1
- BUSYBOX_SITE = http://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPLv2
+-IPERF3_VERSION = 3.0.10
+-IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
++IPERF3_VERSION = 3.1
++IPERF3_SITE = https://iperf.fr/download/iperf_$(IPERF3_VERSION)
++IPERF3_SOURCE = iperf-$(IPERF3_VERSION)-source.tar.gz
+ IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
+ IPERF3_LICENSE_FILES = LICENSE
+ 
