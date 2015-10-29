@@ -1,82 +1,42 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Thu, 29 Oct 2015 09:08:10 +0100
-Subject: [Buildroot] [PATCH 2/3] skeleton: optionally wait for network
- interfaces to appear
-In-Reply-To: <1446047943-24641-3-git-send-email-jezz@sysmic.org>
-References: <1446047943-24641-1-git-send-email-jezz@sysmic.org>
- <1446047943-24641-3-git-send-email-jezz@sysmic.org>
-Message-ID: <5631D3EA.5090500@green-communications.fr>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Thu, 29 Oct 2015 09:51:54 +0100
+Subject: [Buildroot] [PATCH 0/2] Alternative way to wait interfaces on bootup
+Message-ID: <1446108716-10399-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/10/2015 16:59, J?r?me Pouiller wrote:
-> This patch has same purpose than 49964858f45d2243c513e6d362e992ad89ec7a45:
-> 
->   On some machines, the network interface is slow to appear. For example,
->   on the Raspberry Pi, the network interface eth0 is an ethernet-over-USB,
->   and our standard boot process is too fast, so our network startup script
->   is called before the USB bus is compeltely enumerated, thus it can't
->   configure eth0.
-> 
->   Closes #8116.
-> 
-> However, it use an optionnal ifupdown hook instead of an initscript.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  system/skeleton/etc/network/if-pre-up.d/wait_iface | 28 ++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->  create mode 100755 system/skeleton/etc/network/if-pre-up.d/wait_iface
-> 
-> diff --git a/system/skeleton/etc/network/if-pre-up.d/wait_iface b/system/skeleton/etc/network/if-pre-up.d/wait_iface
-> new file mode 100755
-> index 0000000..4f0866b
-> --- /dev/null
-> +++ b/system/skeleton/etc/network/if-pre-up.d/wait_iface
-> @@ -0,0 +1,28 @@
-> +#!/bin/sh
-> +
-> +# In case we have a slow-to-appear interface (e.g. eth-over-USB),
-> +# and we need to configure it, wait until it appears, but not too
-> +# long either. IF_WAIT_DELAY is in seconds.
-> +
-> +if [ "${IF_WAIT_DELAY}" ]; then
-> +
-> +    printf "Waiting for interface %s to appear" "${IFACE}"
+As discussed here:
 
-I think we shouldn't print this scary message when the interface already
-exist in the first place... I was suggesting to only do it if
-VERBOSITY=1 but busybox does not support that.
+   http://lists.busybox.net/pipermail/buildroot/2015-October/142329.html   
+   
+v2:
+  - Squash patches 2 and 3
+  - Remove blank lines
+  - Do not print anything if interface already exist
+  - Change displayed information
 
-> +    while [ ${IF_WAIT_DELAY} -gt 0 ]; do
-> +
-> +        if [ -e "/sys/class/net/${IFACE}" ]; then
-> +
-> +            printf " yes\n"
+Notice I did not handled case where IFACE=--all. Indeed IF_WAIT_DELAY
+is not set in this case won't be set (and none of scripts provided by
+ifupdown/ifupdown-extra packages have special handling for '--all'.)
 
-So this prints:
-"Waiting for interface dummy0 to appear..... yes"
-or
-"Waiting for interface dummy0 to appear............... no"
+I don't print any explicit error message in case failure. Indeed,
+ifupdown/run-parts already print messages and I believe 
+"Waiting for interface dummy0 to appear... timeout!" is explicit enough.
 
-We should maybe just print a new line on success and an explicit error
-message on failure.
+   
+J?r?me Pouiller (2):
+  Revert "package/initscripts: S40network: wait for network interfaces
+    to appear"
+  skeleton: optionally wait for network interfaces to appear
 
-> +            exit 0
-> +
-> +        fi
-> +        sleep 1
-> +        printf "."
-> +
-> +        : $((IF_WAIT_DELAY -= 1))
-> +
-> +    done
-> +    printf " no.\n"
-> +    exit 1
-> +
-> +fi
-> +
-> 
+ package/initscripts/init.d/S40network              | 29 ----------------------
+ package/skeleton/skeleton.mk                       |  1 +
+ system/skeleton/etc/network/if-pre-up.d/wait_iface | 21 ++++++++++++++++
+ 3 files changed, 22 insertions(+), 29 deletions(-)
+ create mode 100755 system/skeleton/etc/network/if-pre-up.d/wait_iface
+
+-- 
+2.1.4
