@@ -1,44 +1,24 @@
 From: Ben Boeckel <mathstuf@gmail.com>
-Date: Wed, 28 Oct 2015 22:48:15 -0400
-Subject: [Buildroot] [PATCH] makefile: remove LD_LIBRARY_PATH from the
-	environment
-In-Reply-To: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
+Date: Wed, 28 Oct 2015 22:49:04 -0400
+Subject: [Buildroot] [PATCH 1/1] libcap: depend on host-attr for the host
+In-Reply-To: <20151027072954.0b27c319@free-electrons.com>
 References: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
-Message-ID: <1446086895-28252-1-git-send-email-mathstuf@gmail.com>
+ <1445722754-3477-2-git-send-email-mathstuf@gmail.com>
+ <20151026095827.2679c61f@free-electrons.com>
+ <20151026142725.GA13801@megas.khq.kitware.com>
+ <20151027072954.0b27c319@free-electrons.com>
+Message-ID: <20151029024904.GA28102@bronto-burt.dev.benboeckel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If system tools are selected, the host's lib/ directory may shadow
-libraries from the system which are configured differently and do not
-have all of the symbols required by the system tool.
+On Tue, Oct 27, 2015 at 07:29:54 +0100, Thomas Petazzoni wrote:
+> Does this mean you will send a patch for it, after doing some testing ?
 
-Since buildroot uses rpath everywhere, LD_LIBRARY_PATH should not be
-necessary anyways.
+Patch sent. Tested locally by building util-linux.
 
-Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
----
- package/Makefile.in | 2 --
- 1 file changed, 2 deletions(-)
+Thanks,
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 8a592d4..10f3a47 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -298,12 +298,10 @@ HOST_CONFIGURE_OPTS = \
- 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 	PKG_CONFIG_SYSROOT_DIR="/" \
- 	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
--	LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
- 	INTLTOOL_PERL=$(PERL)
- 
- HOST_MAKE_ENV = \
- 	PATH=$(BR_PATH) \
--	LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
- 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 	PKG_CONFIG_SYSROOT_DIR="/" \
- 	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
--- 
-2.6.2
+--Ben
