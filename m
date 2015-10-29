@@ -1,156 +1,57 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 29 Oct 2015 11:36:03 +0000
-Subject: [Buildroot] [PATCH v3 1/2] zbar: new package
-In-Reply-To: <1446100633-23719-1-git-send-email-sv99@inbox.ru>
-References: <1446100633-23719-1-git-send-email-sv99@inbox.ru>
-Message-ID: <CAFGQKxdPjDU=2-JtXaKs1TeTZrKsFom+D3cwXNdgnarkYqio4w@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 29 Oct 2015 11:39:19 +0000
+Subject: [Buildroot] [PATCH 4/9 v2] toolchain/external: use generic
+ extract commands (!blackfin case)
+In-Reply-To: <4dfbf001b46ffeddf9c4fb300967473a3860b200.1445690712.git.yann.morin.1998@free.fr>
+References: <cover.1445690712.git.yann.morin.1998@free.fr>
+ <4dfbf001b46ffeddf9c4fb300967473a3860b200.1445690712.git.yann.morin.1998@free.fr>
+Message-ID: <56320567.6080303@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Viacheslav Volkov,
+Dear Yann E. MORIN,
 
-One comment inline below.
+On 10/24/2015 01:48 PM, Yann E. MORIN wrote:
+> Now that packages can provide a list of files to be excluded when
+> extracting their archive, downloaded external toolchains are no longer
+> special in this respect.
+> 
+> Still, those toolchains are currently extracted directly into their
+> final location, $(HOST_DIR)/opt/ext-toolchain/ which means we still
+> need a custom extract command.
+> 
+> Except, we don't really need it: we can just move the toolchain, after
+> it's been extracted by the generic extract command, with a post-extract
+> hook.
+> 
+> This means that:
+> 
+>   - we now extract the toolchain with the generic extract command,
+> 
+>   - the toolchain is thus extracted into $(@D) ,
+> 
+>   - fixup commands are run against $(@D), as a post-extract hook,
+>     instead of against $(HOST_DIR)/opt/ext-toolchain ,
+> 
+>   - once this is done, we move $(@D)/* into the final location with a
+>     new post-extract hook.
+> 
+> Note: the blackfin case is special, and will be handled in a follow-up
+> patch.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-On 29 October 2015 at 06:37, Viacheslav Volkov <sv99@inbox.ru> wrote:
-> Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes v2 -> v3:
->   - intendation in the Config.in (suggested by Yegor Yefremov)
->   - add license info
->
-> Changes v1 -> v2:
->   - many changes
-> ---
->  package/Config.in                     |  1 +
->  package/zbar/0001-zbar-autoconf.patch | 16 ++++++++++++++++
->  package/zbar/0002-zbar-jpeg.patch     | 13 +++++++++++++
->  package/zbar/Config.in                | 16 ++++++++++++++++
->  package/zbar/zbar.mk                  | 22 ++++++++++++++++++++++
->  5 files changed, 68 insertions(+)
->  create mode 100644 package/zbar/0001-zbar-autoconf.patch
->  create mode 100644 package/zbar/0002-zbar-jpeg.patch
->  create mode 100644 package/zbar/Config.in
->  create mode 100644 package/zbar/zbar.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 10ff94e..778b1e1 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -854,6 +854,7 @@ menu "Graphics"
->         source "package/webkit/Config.in"
->         source "package/webkitgtk24/Config.in"
->         source "package/webp/Config.in"
-> +       source "package/zbar/Config.in"
->         source "package/zxing-cpp/Config.in"
->  endmenu
->
-> diff --git a/package/zbar/0001-zbar-autoconf.patch b/package/zbar/0001-zbar-autoconf.patch
-> new file mode 100644
-> index 0000000..159f75e
-> --- /dev/null
-> +++ b/package/zbar/0001-zbar-autoconf.patch
-> @@ -0,0 +1,16 @@
-> +diff --git a/configure.ac b/configure.ac
-> +index 256aedb..5aa5689 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -3,10 +3,11 @@ AC_PREREQ([2.61])
-> + AC_INIT([zbar], [0.10], [spadix at users.sourceforge.net])
-> + AC_CONFIG_AUX_DIR(config)
-> + AC_CONFIG_MACRO_DIR(config)
-> +-AM_INIT_AUTOMAKE([1.10 -Wall -Werror foreign subdir-objects std-options dist-bzip2])
-> ++AM_INIT_AUTOMAKE([1.10 -Wall -Werror -Wno-portability foreign subdir-objects std-options dist-bzip2])
-> + AC_CONFIG_HEADERS([include/config.h])
-> + AC_CONFIG_SRCDIR(zbar/scanner.c)
-> + LT_PREREQ([2.2])
-> ++m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
-> + LT_INIT([dlopen win32-dll])
-> + LT_LANG([Windows Resource])
-> diff --git a/package/zbar/0002-zbar-jpeg.patch b/package/zbar/0002-zbar-jpeg.patch
-> new file mode 100644
-> index 0000000..1d93a94
-> --- /dev/null
-> +++ b/package/zbar/0002-zbar-jpeg.patch
-> @@ -0,0 +1,13 @@
-> +diff --git a/zbar/jpeg.c b/zbar/jpeg.c
-> +index 972bfea..fdd1619 100644
-> +--- a/zbar/jpeg.c
-> ++++ b/zbar/jpeg.c
-> +@@ -68,7 +68,7 @@ void init_source (j_decompress_ptr cinfo)
-> +     cinfo->src->bytes_in_buffer = img->datalen;
-> + }
-> +
-> +-int fill_input_buffer (j_decompress_ptr cinfo)
-> ++boolean fill_input_buffer (j_decompress_ptr cinfo)
-> + {
-> +     /* buffer underrun error case */
-> +     cinfo->src->next_input_byte = fake_eoi;
-> diff --git a/package/zbar/Config.in b/package/zbar/Config.in
-> new file mode 100644
-> index 0000000..ced6c95
-> --- /dev/null
-> +++ b/package/zbar/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_ZBAR
-> +       bool "zbar"
-> +       # dependencies from lib4l
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_USE_MMU # fork()
-> +       depends on !BR2_STATIC_LIBS # dlopen()
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
-> +       # wait for libv4l 1.7+ for musl compatibility
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
-> +       select BR2_PACKAGE_JPEG
-> +       select BR2_PACKAGE_LIBV4L
-> +       help
-> +         QR and barcode scanner
-> +
-> +         http://zbar.sourceforge.net/
-> diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-> new file mode 100644
-> index 0000000..e25a952
-> --- /dev/null
-> +++ b/package/zbar/zbar.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# zbar
-> +#
-> +################################################################################
-> +
-> +ZBAR_VERSION = 854a5d97059e395807091ac4d80c53f7968abb8f
-> +ZBAR_SITE = $(call github,ZBar,Zbar,$(ZBAR_VERSION))
-> +ZBAR_LICENSE = GPLv2.1
+After applying this patch (and the previous ones) I have built a rootfs
+for MIPS architecture using the latest Codesourcery external toolchain.
 
-The zbar license is LGPLv2.1 not GPLv2.1
+Regards,
 
-Thanks
-
-Martin
-
-> +ZBAR_LICENSE_FILES = LICENSE
-> +ZBAR_INSTALL_STAGING = YES
-> +ZBAR_AUTORECONF = YES
-> +ZBAR_DEPENDENCIES = libv4l libjpeg
-> +ZBAR_CONF_OPTS = --without-imagemagick --without-qt --without-gtk
-> +ZBAR_CONF_OPTS += --without-python --without-x --enable-shared=yes
-> +
-> +define ZBAR_INSTALL_FIXUP
-> +       touch $(@D)/doc/man/zbarcam.1
-> +endef
-> +
-> +ZBAR_POST_BUILD_HOOKS += ZBAR_INSTALL_FIXUP
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.6.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Vincent.
