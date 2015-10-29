@@ -1,42 +1,82 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 29 Oct 2015 07:40:31 -0300
-Subject: [Buildroot] [PATCH] busybox: bump to version 1.24.1
-Message-ID: <1446115231-4451-1-git-send-email-gustavo@zacarias.com.ar>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 29 Oct 2015 10:41:24 +0000
+Subject: [Buildroot] [PATCH 2/2] package/systemd: Respect
+	BR2_TARGET_GENERIC_GETTY_BAUDRATE
+In-Reply-To: <20151029171702.0fa0b81c@camb691>
+References: <1446099102-5205-1-git-send-email-cyrilbur@gmail.com>
+ <1446099102-5205-2-git-send-email-cyrilbur@gmail.com>
+ <20151029171702.0fa0b81c@camb691>
+Message-ID: <CAFGQKxfgm1KvBR95ksPgha3XKaix_NPorSWfCcDmYYYOmhYdSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/busybox/busybox.hash | 6 +++---
- package/busybox/busybox.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Cyril, All,
 
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index 1a9b2ff..99fb8e4 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,3 +1,3 @@
--# From http://busybox.net/downloads/busybox-1.24.0.tar.bz2.sign
--md5 2fa3110042e518e0e1225c799294664c  busybox-1.24.0.tar.bz2
--sha1 238a9b8a66c31fdcdd00790a840ef03cc77482c7  busybox-1.24.0.tar.bz2
-+# From http://busybox.net/downloads/busybox-1.24.1.tar.bz2.sign
-+md5 be98a40cadf84ce2d6b05fa41a275c6a  busybox-1.24.1.tar.bz2
-+sha1 157d14d24748b4505b1a418535688706a2b81680  busybox-1.24.1.tar.bz2
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e5427cf..7f6dbd6 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUSYBOX_VERSION = 1.24.0
-+BUSYBOX_VERSION = 1.24.1
- BUSYBOX_SITE = http://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPLv2
--- 
-2.4.10
+Some comment inline below
+
+On 29 October 2015 at 06:17, Cyril Bur <cyrilbur@gmail.com> wrote:
+> On Thu, 29 Oct 2015 17:11:42 +1100
+> Cyril Bur <cyrilbur@gmail.com> wrote:
+>
+>> Currently systemd getty services ignore baudrates set in buildroot in
+>> favour of a hardcoded 115200. This patch SEDs out that hardcoded value with
+>> what is selected.
+>
+> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+>
+>> ---
+>>  package/systemd/systemd.mk | 9 +++++++--
+>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+>> index b62fc08..d8a25ed 100644
+>> --- a/package/systemd/systemd.mk
+>> +++ b/package/systemd/systemd.mk
+>> @@ -183,6 +183,7 @@ endef
+>>
+>>  ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+>>  # systemd needs getty.service for VTs and serial-getty.service for serial ttys
+>> +# also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
+>>  define SYSTEMD_INSTALL_SERVICE_TTY
+>>       if echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
+>>       then \
+>> @@ -190,8 +191,12 @@ define SYSTEMD_INSTALL_SERVICE_TTY
+>>       else \
+>>               SERVICE="serial-getty"; \
+>>       fi; \
+>> -     ln -fs ../../../../lib/systemd/system/$${SERVICE}@.service \
+>> -             $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service
+>> +     ln -fs $(TARGET_DIR)/lib/systemd/system/$${SERVICE}@.service \
+>> +             $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service; \
+
+Changing the symlink above is not necessary for this patch.  Also i
+think the the change is wrong and will cause the service to symlink an
+invalid file when run on the target.
+
+>> +     if [ $(BR2_TARGET_GENERIC_GETTY_BAUDRATE) -gt 0 ] ; \
+>> +     then \
+>> +             $(SED) 's,115200,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE),' $(TARGET_DIR)/lib/systemd/system/$${SERVICE}@.service; \
+>> +     fi
+
+$(BR2_TARGET_GENERIC_GETTY_BAUDRATE) will have double quotes around it
+which will need to be removed so i don't think the -gt test will ever
+work.  Have a look in package/skeleton/skeleton.mk where it uses
+$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE)) to strip the
+double quotes before it uses the value, you'll need to do something
+similar.
+
+Thanks
+
+Martin
+
+>>  endef
+>>  endif
+>>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
