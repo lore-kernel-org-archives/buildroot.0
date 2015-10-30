@@ -1,63 +1,135 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 30 Oct 2015 11:51:21 +0100
-Subject: [Buildroot] [PATCH 2/9 v2] toolchain-external/blacfin: always
- force keeping hardlinks from archives
-In-Reply-To: <5a706d0a2b7d76256a1883350e3e22ffcc3501ec.1445690712.git.yann.morin.1998@free.fr>
-References: <cover.1445690712.git.yann.morin.1998@free.fr>
- <5a706d0a2b7d76256a1883350e3e22ffcc3501ec.1445690712.git.yann.morin.1998@free.fr>
-Message-ID: <56334BA9.60508@mind.be>
+Date: Fri, 30 Oct 2015 12:01:30 +0100
+Subject: [Buildroot] [PATCH] fs/ext2: add options for extra space and
+ extra inodes
+In-Reply-To: <1446073576-20337-1-git-send-email-yann.morin.1998@free.fr>
+References: <1446073576-20337-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <56334E0A.6010407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24-10-15 14:48, Yann E. MORIN wrote:
-> Currently, for the blackfin external toolchains, we tell tar to extract
-> files by dereferencing hard-links.
+On 29-10-15 00:06, Yann E. MORIN wrote:
+> Add two options to the ext2 filesystem, one to add extra free space, one
+> to add extra free inodes.
 > 
-> However, --hard-dereference has no impact when extracting archives in
-> which there are hard-links.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  fs/ext2/Config.in       | 20 ++++++++++++++++++--
+>  fs/ext2/ext2.mk         |  2 ++
+>  package/mke2img/mke2img |  8 +++++++-
+>  3 files changed, 27 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+> index 5b1cd0c..fb06cdd 100644
+> --- a/fs/ext2/Config.in
+> +++ b/fs/ext2/Config.in
+> @@ -45,13 +45,29 @@ config BR2_TARGET_ROOTFS_EXT2_LABEL
+>  	string "filesystem label"
+>  
+>  config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+> -	int "size in blocks (leave at 0 for auto calculation)"
+> +	int "exact size in blocks (leave at 0 for auto calculation)"
+>  	default 0
+>  
+>  config BR2_TARGET_ROOTFS_EXT2_INODES
+> -	int "inodes (leave at 0 for auto calculation)"
+> +	int "exact number of inodes (leave at 0 for auto calculation)"
+>  	default 0
+>  
+> +config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS
+> +	int "extra size in blocks" if BR2_TARGET_ROOTFS_EXT2_BLOCKS = 0
+> +	default 0
+> +	help
+> +	  Enter here the nmuber of extra blocks of free space you
+> +	  want on your filesystem. By default, Buildroot will not
+> +	  leave much space free.
 
- Took me a while to understand what you meant. How about:
+ To be precise, buildroot will add 500 extra blocks for ext2 and 1800 extra
+blocks for ext3+. So perhaps we could encode that here, and remove it from the
+mke2img script?
 
-However, --hard-dereference is only meaningful when creating an archive,
-not when extracting it.
+> +
+> +config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+> +	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+> +	default 0
+> +	help
+> +	  Enter here the nmuber of extra free inodes you want on
+> +	  your filesystem. By default, Buildroot will not leave
+> +	  many free inodes.
 
- With that:
+ Same here, 400 inodes are added.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> +
+>  config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+>  	int "reserved blocks percentage"
+>  	default 0
+> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+> index cab66a5..7417f81 100644
+> --- a/fs/ext2/ext2.mk
+> +++ b/fs/ext2/ext2.mk
+> @@ -9,10 +9,12 @@ EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
+>  ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+>  EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
+>  endif
+> +EXT2_OPTS += -B $(BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS)
+
+ Perhaps this could be put into the else of the ifneq? Or better yet, make it an
+ifeq.
 
 
  Regards,
  Arnout
 
-> 
-> Drop this option.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 4e12a1c..704ce2b 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -453,9 +453,9 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_
->  define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
->  	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
->  	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
-> -		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-> +		$(TAR) --strip-components=3 -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
->  	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
-> -		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-> +		$(TAR) --strip-components=3 -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
->  endef
->  else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
->  # Normal handling of toolchain tarball extraction.
+>  
+>  ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
+>  EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
+>  endif
+> +EXT2_OPTS += -I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES)
+>  
+>  ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
+>  EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
+> diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+> index 5e2f62f..d772af5 100755
+> --- a/package/mke2img/mke2img
+> +++ b/package/mke2img/mke2img
+> @@ -17,12 +17,16 @@ main() {
+>      # Default values
+>      gen=2
+>      rev=1
+> +    nb_extra_blocks=0
+> +    nb_extra_inodes=0
+>  
+> -    while getopts :hb:i:r:d:o:G:R:l:u: OPT; do
+> +    while getopts :hb:B:i:I:r:d:o:G:R:l:u: OPT; do
+>          case "${OPT}" in
+>          h)  help; exit 0;;
+>          b)  nb_blocks=${OPTARG};;
+> +        B)  nb_extra_blocks=${OPTARG};;
+>          i)  nb_inodes=${OPTARG};;
+> +        I)  nb_extra_inodes=${OPTARG};;
+>          r)  nb_res_blocks=${OPTARG};;
+>          d)  root_dir="${OPTARG}";;
+>          o)  image="${OPTARG}";;
+> @@ -58,6 +62,7 @@ main() {
+>          nb_inodes=$(find "${root_dir}" | wc -l)
+>          nb_inodes=$((nb_inodes+400))
+>      fi
+> +    nb_inodes=$((nb_inodes+nb_extra_inodes))
+>  
+>      # calculate needed blocks
+>      if [ -z "${nb_blocks}" ]; then
+> @@ -73,6 +78,7 @@ main() {
+>              nb_blocks=$((nb_blocks+1300))
+>          fi
+>      fi
+> +    nb_blocks=$((nb_blocks+nb_extra_blocks))
+>  
+>      # Upgrade to rev1 if needed
+>      if [ ${rev} -ge 1 ]; then
 > 
 
 
