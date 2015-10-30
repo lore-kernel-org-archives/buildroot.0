@@ -1,41 +1,30 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Fri, 30 Oct 2015 11:27:06 +0100
-Subject: [Buildroot] [PATCH 3/4] libfslparser: add install hooks to fix
-	libraries path
-In-Reply-To: <1446149212-12048-4-git-send-email-gary.bisson@boundarydevices.com>
-References: <1446149212-12048-1-git-send-email-gary.bisson@boundarydevices.com>
- <1446149212-12048-4-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <2787793.hk6j5KppJf@sagittea>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 30 Oct 2015 07:34:42 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x series
+Message-ID: <1446201282-22634-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Garry,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thursday 29 October 2015 21:06:51 Gary Bisson wrote:
-[...]
-> b/package/libfslparser/libfslparser.mk index 2b53d62..aa02f19 100644
-> --- a/package/libfslparser/libfslparser.mk
-> +++ b/package/libfslparser/libfslparser.mk
-> @@ -20,4 +20,12 @@ endef
-> # The Makefile installs several versions of the libraries, but we only 
-> # need one of them, depending on the platform.
-> 
-> +# no need to symlink in target image, just move libraries around
-> +define LIBFSLPARSER_FIXUP_TARGET_PATH
-> +	find $(TARGET_DIR)/usr/lib/imx-mm -mindepth 2 -maxdepth 2 -not -type d \ 
-> +		-exec mv {} $(TARGET_DIR)/usr/lib \;
-> +	rm -fr $(TARGET_DIR)/usr/lib/imx-mm
-> +endef
-> +LIBFSLPARSER_POST_INSTALL_TARGET_HOOKS += LIBFSLPARSER_FIXUP_TARGET_PATH 
-A POST_INSTALL_STAGING_HOOKS is not necessary for libfslparser?
-
-
-Regards,
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8135b17..1a8ec69 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -198,7 +198,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.14.56"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.22"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.23"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.12"	if BR2_KERNEL_HEADERS_4_1
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+2.4.10
