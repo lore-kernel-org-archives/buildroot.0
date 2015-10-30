@@ -1,226 +1,173 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 30 Oct 2015 22:07:27 +0100
-Subject: [Buildroot] [PATCH v4 2/2] package/kodi-screensaver-rsxs: new
-	package
-In-Reply-To: <1446239247-6651-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1446239247-6651-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1446239247-6651-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 30 Oct 2015 22:52:33 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/libsoil: new package
+Message-ID: <1446241953-14139-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove options BR2_PACKAGE_XLIB_XMU and BR2_PACKAGE_XLIB_XMU as
-well, they are not needed and never worked anyway due to typos ;)
+Needed for these new Kodi addons:
+
+kodi-screensaver-asterwave
+kodi-screensaver-cpblobs
+kodi-screensaver-matrixtrails
+kodi-screensaver-planestate
+kodi-visualisation-fountain
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v4: no changes
-v3: added hash, sent patch upstream, added license infos (Thomas)
-v2: rebased
+v3: added various changes after a review by Peter
+    - in comment for v2: s/tarball/zipfile/
+    - moved -fPIC from 0001-fix-makefile.patch to LIBSOIL_CFLAGS
+Because this library will be used in at least five packages I decided
+against using the other upstream makefile providing a static-only
+library.
 
- Config.in.legacy                                   |  7 ++++
- .../kodi-screensaver-rsxs/0001-cross-compile.patch | 37 ++++++++++++++++++++++
- package/kodi-screensaver-rsxs/Config.in            | 10 ++++++
- .../kodi-screensaver-rsxs.hash                     |  2 ++
- .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk | 14 ++++++++
- package/kodi/Config.in                             | 12 +------
- package/kodi/kodi.mk                               | 20 ++----------
- 7 files changed, 73 insertions(+), 29 deletions(-)
- create mode 100644 package/kodi-screensaver-rsxs/0001-cross-compile.patch
- create mode 100644 package/kodi-screensaver-rsxs/Config.in
- create mode 100644 package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
- create mode 100644 package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+v2: added various changes after a review by Thomas
+    - not available as static library
+    - used author's upstream tarball instead from Debian
+    - added a Makefile fix to simplify the usage of variable CC
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 617e689..bb9a20e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.11"
- 
-+config BR2_PACKAGE_KODI_RSXS
-+	select BR2_LEGACY
-+	bool "rsxs support in Kodi was moved to an addon"
-+	select BR2_PACKAGE_KODI_SCREENSAVER_RSXS
-+	help
-+	  rsxs support in Kodi was moved to an addon
-+
- config BR2_PACKAGE_KODI_GOOM
- 	select BR2_LEGACY
- 	bool "Goom support in Kodi was moved to an addon"
-diff --git a/package/kodi-screensaver-rsxs/0001-cross-compile.patch b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
+ package/Config.in                       |  1 +
+ package/libsoil/0001-fix-makefile.patch | 35 +++++++++++++++++++++++++++
+ package/libsoil/Config.in               | 12 +++++++++
+ package/libsoil/libsoil.hash            |  2 ++
+ package/libsoil/libsoil.mk              | 43 +++++++++++++++++++++++++++++++++
+ 5 files changed, 93 insertions(+)
+ create mode 100644 package/libsoil/0001-fix-makefile.patch
+ create mode 100644 package/libsoil/Config.in
+ create mode 100644 package/libsoil/libsoil.hash
+ create mode 100644 package/libsoil/libsoil.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 10ff94e..780eb12 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -833,6 +833,7 @@ menu "Graphics"
+ 	source "package/libqrencode/Config.in"
+ 	source "package/libraw/Config.in"
+ 	source "package/librsvg/Config.in"
++	source "package/libsoil/Config.in"
+ 	source "package/libsvg/Config.in"
+ 	source "package/libsvg-cairo/Config.in"
+ 	source "package/libsvgtiny/Config.in"
+diff --git a/package/libsoil/0001-fix-makefile.patch b/package/libsoil/0001-fix-makefile.patch
 new file mode 100644
-index 0000000..56c2f4e
+index 0000000..43e81f2
 --- /dev/null
-+++ b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
-@@ -0,0 +1,37 @@
-+Fix cross-compilation
++++ b/package/libsoil/0001-fix-makefile.patch
+@@ -0,0 +1,35 @@
++Various makefile fixes to allow cross compilation
 +
-+Use the cross-compiler and not the host version.
-+
-+Patch sent upstream:
-+https://github.com/notspiff/screensavers.rsxs/pull/5
++Partly ported from
++http://anonscm.debian.org/cgit/pkg-games/libsoil.git/tree/debian/patches/linking_correctly.patch
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+diff -uNr screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLists.txt screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/CMakeLists.txt
-+--- screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLists.txt	2015-03-19 12:20:23.000000000 +0100
-++++ screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/CMakeLists.txt	2015-07-19 20:26:16.660481032 +0200
-+@@ -33,6 +33,11 @@
-+                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src/skyrocket
-+                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src/solarwinds)
-+                         
-++
-++get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
-++string( REGEX REPLACE "-[^-]+$" ""
-++        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
-++
-+ include(ExternalProject)
-+ set(update_command "")
-+ if(BOOTSTRAP_IN_TREE OR NOT DEFINED BOOTSTRAP_IN_TREE)
-+@@ -46,8 +51,11 @@
-+   endif()
-+ endif()
-+ externalproject_add(rsxs SOURCE_DIR ${PROJECT_SOURCE_DIR}/${rsxs_dir}
-+-                    CONFIGURE_COMMAND ${configure_start}
-++                    CONFIGURE_COMMAND gl_cv_func_gettimeofday_clobber=no
-++                                      ac_cv_func_malloc_0_nonnull=yes
-++                                      ${configure_start}
-+                                       --prefix=<INSTALL_DIR>
-++                                      --host=${TOOLCHAIN_NAME}
-+                                       --without-xscreensaver
-+                                       --disable-cyclone
-+                                       --disable-euphoria
-diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
++diff -uNr "b/Simple OpenGL Image Library/projects/makefile/alternate Makefile.txt" "a/Simple OpenGL Image Library/projects/makefile/alternate Makefile.txt"
++--- "b/Simple OpenGL Image Library/projects/makefile/alternate Makefile.txt"	2008-07-07 18:13:28.000000000 +0200
+++++ "a/Simple OpenGL Image Library/projects/makefile/alternate Makefile.txt"	2015-10-05 20:35:59.264517571 +0200
++@@ -1,8 +1,8 @@
++ MAKE = make
++-CC = gcc
++-INSTALL_FILE = install -p -o root -g root -m 644
++-INSTALL_DIR = install -p -o root -g root -d
++-LN = ln -s
+++CC = $(GCC)
+++INSTALL_FILE = $(INSTALL) -m 644
+++INSTALL_DIR = $(INSTALL) -d
+++LN = ln -sf
++ RM = rm -fv
++ CFLAGS += -c -O2 -Wall
++ LDFLAGS +=
++@@ -27,9 +27,9 @@
++ 
++ lib: $(OFILES)
++ 	# create static library
++-	ar -cvq $(LIBNAME).a $(OFILES)
+++	$(AR) -cvq $(LIBNAME).a $(OFILES)
++ 	# create shared library
++-	gcc -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES)
+++	$(CC) -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES) -lGL -lm
++ 
++ install:
++ 	$(INSTALL_DIR) $(DESTDIR)/$(INCLUDEDIR)
+diff --git a/package/libsoil/Config.in b/package/libsoil/Config.in
 new file mode 100644
-index 0000000..4abebe5
+index 0000000..aea0cc3
 --- /dev/null
-+++ b/package/kodi-screensaver-rsxs/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
-+	bool "kodi-screensaver-rsxs"
-+	depends on BR2_PACKAGE_KODI_GL # libglu
++++ b/package/libsoil/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBSOIL
++	bool "libsoil"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on !BR2_STATIC_LIBS
 +	help
-+	  RSXS screensaver add-ons for Kodi
++	  SOIL is a tiny C library used primarily for uploading
++	  textures into OpenGL.
 +
-+	  https://github.com/notspiff/screensavers.rsxs
++	  http://www.lonesock.net/soil.html
 +
-+comment "rsxs needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
++comment "libsoil needs an OpenGL backend and a toolchain w/ dynamic library"
++	depends on !BR2_PACKAGE_HAS_LIBGL || BR2_STATIC_LIBS
+diff --git a/package/libsoil/libsoil.hash b/package/libsoil/libsoil.hash
 new file mode 100644
-index 0000000..44f1726
+index 0000000..175569b
 --- /dev/null
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
++++ b/package/libsoil/libsoil.hash
 @@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	0797ffb720056ea2e04ac8b7ee4fc2dca1e42611ef138b347e928d8d7f3c696f	kodi-screensaver-rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.tar.gz
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
++# Locally calculated
++sha256	a2305b8d64f6d636e36d669bbdb0ca5445d1345c754b3d61d3f037dad2e5f701	soil.zip
+diff --git a/package/libsoil/libsoil.mk b/package/libsoil/libsoil.mk
 new file mode 100644
-index 0000000..c76e9da
+index 0000000..0ed8723
 --- /dev/null
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-@@ -0,0 +1,14 @@
++++ b/package/libsoil/libsoil.mk
+@@ -0,0 +1,43 @@
 +################################################################################
 +#
-+# kodi-screensaver-rsxs
++# libsoil
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_RSXS_VERSION = 195e0ec3fbbcb2ee2012cd560e42d05167f0f259
-+KODI_SCREENSAVER_RSXS_SITE = $(call github,notspiff,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
-+KODI_SCREENSAVER_RSXS_LICENSE = GPLv3
-+KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
++LIBSOIL_VERSION = 20080707
++LIBSOIL_SOURCE = soil.zip
++LIBSOIL_SITE = http://www.lonesock.net/files
++LIBSOIL_INSTALL_STAGING = YES
++LIBSOIL_DEPENDENCIES = libgl
++LIBSOIL_LICENSE = Public Domain, MIT
++LIBSOIL_LICENSE_FILES = src/stb_image_aug.c src/image_helper.c
 +
-+KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi
++LIBSOIL_CFLAGS = "$(TARGET_CFLAGS) -c -fPIC"
 +
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index d8badd8..58d6f33 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -81,9 +81,7 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_TIFF
- 	select BR2_PACKAGE_TINYXML
- 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_KODI_GL
--	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
- 	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_KODI_GL
--	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
-@@ -136,15 +134,6 @@ config BR2_PACKAGE_KODI_LIBBLURAY
- comment "libbluray support needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 
--config BR2_PACKAGE_KODI_RSXS
--	bool "rsxs screensaver"
--	depends on BR2_PACKAGE_KODI_GL
--	help
--	  Enable goom screensaver
--
--comment "rsxs needs an OpenGL backend"
--	depends on !BR2_PACKAGE_KODI_GL
--
- config BR2_PACKAGE_KODI_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_STATIC_LIBS # libcec
-@@ -293,6 +282,7 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-greynetic/Config.in"
- 	source "package/kodi-screensaver-pingpong/Config.in"
- 	source "package/kodi-screensaver-pyro/Config.in"
-+	source "package/kodi-screensaver-rsxs/Config.in"
- 	source "package/kodi-screensaver-stars/Config.in"
- endmenu
- 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 37b25f3..4d8d0c1 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -35,6 +35,7 @@ KODI_CONF_OPTS +=  \
- 	--disable-openmax \
- 	--disable-projectm \
- 	--disable-pulse \
-+	--disable-rsxs \
- 	--disable-vdpau \
- 	--disable-vtbdecoder \
- 	--enable-optimizations
-@@ -89,24 +90,8 @@ ifeq ($(BR2_PACKAGE_KODI_GL),y)
- KODI_DEPENDENCIES += libglew libglu libgl xlib_libX11 xlib_libXext \
- 	xlib_libXmu xlib_libXrandr xlib_libXt libdrm
- KODI_CONF_OPTS += --enable-gl --enable-x11 --disable-gles
--ifeq ($(BR2_PACKAGE_KODI_RSXS),y)
--# fix rsxs compile
--# gcc5: http://trac.kodi.tv/ticket/16006#comment:6
--# make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
--KODI_CONF_ENV += \
--	ac_cv_type__Bool=yes \
--	jm_cv_func_gettimeofday_clobber=no \
--	mac_cv_pkg_png=$(STAGING_DIR)/usr/bin/libpng-config \
--	mac_cv_pkg_cppflags="`$(STAGING_DIR)/usr/bin/libpng-config --I_opts --cppflags`" \
--	mac_cv_pkg_cxxflags="`$(STAGING_DIR)/usr/bin/libpng-config --ccopts`" \
--	mac_cv_pkg_ldflags="`$(STAGING_DIR)/usr/bin/libpng-config --L_opts --R_opts`" \
--	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
--KODI_CONF_OPTS += --enable-rsxs
- else
--KODI_CONF_OPTS += --disable-rsxs
--endif
--else
--KODI_CONF_OPTS += --disable-gl --disable-rsxs --disable-x11
-+KODI_CONF_OPTS += --disable-gl --disable-x11
- ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
- KODI_DEPENDENCIES += libegl libgles
- KODI_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
-@@ -224,7 +209,6 @@ endef
- KODI_PRE_CONFIGURE_HOOKS += KODI_BOOTSTRAP
- 
- define KODI_CLEAN_UNUSED_ADDONS
--	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/screensaver.rsxs.plasma
- 	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.milkdrop
- 	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.projectm
- 	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.itunes
++define LIBSOIL_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(DL_DIR)/$(LIBSOIL_SOURCE)
++endef
++
++define LIBSOIL_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS=$(LIBSOIL_CFLAGS) \
++		-f ../projects/makefile/alternate\ Makefile.txt \
++		-C $(@D)/Simple\ OpenGL\ Image\ Library/src
++endef
++
++define LIBSOIL_INSTALL_STAGING_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		-f ../projects/makefile/alternate\ Makefile.txt \
++		DESTDIR=$(STAGING_DIR) install \
++		INSTALL=$(INSTALL) \
++		-C $(@D)/Simple\ OpenGL\ Image\ Library/src
++endef
++
++define LIBSOIL_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		-f ../projects/makefile/alternate\ Makefile.txt \
++		DESTDIR=$(TARGET_DIR) install \
++		INSTALL=$(INSTALL) \
++		-C $(@D)/Simple\ OpenGL\ Image\ Library/src
++endef
++
++$(eval $(generic-package))
 -- 
 2.6.1
