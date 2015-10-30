@@ -1,106 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 30 Oct 2015 13:54:20 +0100
-Subject: [Buildroot] [PATCH] fs/ext2: add options for extra space and
- extra inodes
-In-Reply-To: <20151030123518.GA3713@free.fr>
-References: <1446073576-20337-1-git-send-email-yann.morin.1998@free.fr>
- <56334E0A.6010407@mind.be> <20151030123518.GA3713@free.fr>
-Message-ID: <5633687C.6010504@mind.be>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Fri, 30 Oct 2015 22:52:46 +0900
+Subject: [Buildroot] [meiwaku] Re:  [PATCH v3 1/1] gauche: new package
+In-Reply-To: Your message of Fri, 30 Oct 2015 13:51:16 +0100.
+ <563367C4.40607@mind.be>
+Message-ID: <201510301352.t9UDqler021783@ms-omx01.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear, Arnout.
 
+Thank you for your comment.
 
-On 30-10-15 13:35, Yann E. MORIN wrote:
-> Arnout, All,
+Arnout Vandecappelle writes:
+> On 30-10-15 12:49, Hiroshi Kawashima wrote:
+> > Gauche is an R7RS Scheme implementation developed to be a handy script
+> > interpriter, which allows programmers and systemadministrators to write
 > 
-> On 2015-10-30 12:01 +0100, Arnout Vandecappelle spake thusly:
->> On 29-10-15 00:06, Yann E. MORIN wrote:
->>> Add two options to the ext2 filesystem, one to add extra free space, one
->>> to add extra free inodes.
->>>
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-[snip]
->>> +config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS
->>> +	int "extra size in blocks" if BR2_TARGET_ROOTFS_EXT2_BLOCKS = 0
->>> +	default 0
->>> +	help
->>> +	  Enter here the nmuber of extra blocks of free space you
->>> +	  want on your filesystem. By default, Buildroot will not
->>> +	  leave much space free.
->>
->>  To be precise, buildroot will add 500 extra blocks for ext2 and 1800 extra
->> blocks for ext3+. So perhaps we could encode that here, and remove it from the
->> mke2img script?
+>  interpreter
+Ok.
+
+> > small to large scripts for their daily chores. Quick startup, built-in
+> > system interface, native multilingual support are some of my goals.
 > 
-> I don't want to do that, because the extra blocks and inodes that
-> Buildroot adds are just to account for the extra space required to
-> store the filesystem metadata.
+>  my -> its
+>  Same comments for the help text, obviously.
+Ok.
+
+> > --- /dev/null
+> > +++ b/package/gauche/0001-fix-so-suffix.patch
+> > @@ -0,0 +1,18 @@
+> > +With uclibc configuration, $host does not match to '*-linux-gnu-*'.
 > 
-> If we were to encode those here in the kconfig option, nothing would
-> prevent the user from setting this to a value lower than strictly
-> required.
+>  uclibc or musl. Oh, and it's gnu*, not gnu-*, otherwise ARM's gnueabi would
+> also not match.
+Ok.
+
+> > +I touch configure instead of configure.ac because autoreconf failed
+> > +by version mismatch of autotools.
 > 
-> In Kconfig, we can provide a range, but no a lower (or upper) bound to a
-> value. And we do not want to limit the user in the values he may want to
-> set here (even to an insanely large value for the upper bound.
+>  Then also include the fix for configure.ac in the same patch, and of course
+> please send the patch upstream so we don't have to carry it forever.
+Ok, I will.
+
+> > +GAUCHE_VERSION = 0.9.4
+> > +GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
+> > +GAUCHE_SITE = http://prdownloads.sourceforge.net/gauche
 > 
-> I would really prefer we hide this internal complex computation from the
-> user, and let him specify the extra space he actually wants.
+>  That will lead to the annoying sourceforge redirect page. Instead, point
+> directly to http://downloads.sourceforge.net/project/gauche/Gauche
+Ok.
 
- OK fair enough.
-
-
->>> +config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
->>> +	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
->>> +	default 0
->>> +	help
->>> +	  Enter here the nmuber of extra free inodes you want on
->>> +	  your filesystem. By default, Buildroot will not leave
->>> +	  many free inodes.
->>
->>  Same here, 400 inodes are added.
+> > +GAUCHE_LICENSE = BSD
 > 
-> Ditto.
+>  BSD doesn't exist, it's BSD-4c, BSD-3c or BSD-2c. In this case, it's BSD-3c.
 > 
->>>  config BR2_TARGET_ROOTFS_EXT2_RESBLKS
->>>  	int "reserved blocks percentage"
->>>  	default 0
->>> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
->>> index cab66a5..7417f81 100644
->>> --- a/fs/ext2/ext2.mk
->>> +++ b/fs/ext2/ext2.mk
->>> @@ -9,10 +9,12 @@ EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
->>>  ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
->>>  EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
->>>  endif
->>> +EXT2_OPTS += -B $(BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS)
->>
->>  Perhaps this could be put into the else of the ifneq? Or better yet, make it an
->> ifeq.
+>  Also, there's a bunch of other licenses mentioned in COPYING. Many of them a
+> re
+> BSD-3c, one of them is "You may do as you please" so that's included in BSD-3
+> c,
+> and boehm-gc has its own license so call it Boehm-gc (couldn't find it on SPD
+> X).
+> srfi-11.scm has a home-grown license we can call SRFI (also not found on SPDX
+> ),
+> and reload.scm has another home-grown license so we'll call it reload license
+> .
+> Are the latter two files actually used (i.e., if you remove them, does it sti
+> ll
+> work)?
 > 
-> Well, the fact that the prompt has a condition before it is displayed
-> will ensure that BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS/INODES is always
-> set to a non-empty value, so we can safely use it. If the user specified
-> the exact size/inodes, then the extra size/indoes will be set to 0.
+>  In summary, it should be:
+> 
+> GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
+Thank you for your investigation.
+I will change as yours.
 
- I meant it more as a refactoring that makes the code easier to understand, but
-you may have a different opinion of what is easier, so:
+I will send v4 patch later.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thank you!
+Kawashima
+============================================================
+    Hiroshi Kawashima
