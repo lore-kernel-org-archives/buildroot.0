@@ -1,85 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Oct 2015 15:46:42 +0100
-Subject: [Buildroot] [PATCH] package/dvblast: fix build issues without
-	glibc
-In-Reply-To: <1446214116-8750-1-git-send-email-yann.morin.1998@free.fr>
-References: <1446214116-8750-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20151030144642.GB3713@free.fr>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Fri, 30 Oct 2015 11:27:47 -0400
+Subject: [Buildroot] [PATCH 1/1] openssl: remove patch's git-hash to support
+	fat/ntfs systems
+Message-ID: <1446218867-6128-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Altering the OpenSSL parallel build patch's source location; the change
+removes the Git hash reference from the URL. This is to support storing
+cache data on file systems which have a more restrictive character set.
+For this case, the downloaded patch will have the complete filename in
+the 'dl' directory:
 
-On 2015-10-30 15:08 +0100, Yann E. MORIN spake thusly:
-> dvblast wants iconv functions even without locales.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/03f/03fe6dc17d7f36d9b8c7ced402850def95d8feb3/
->     http://autobuild.buildroot.org/results/064/0647b0180ac9a6bf6172742e388df9a9e584d91b/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Julian Scheel <julian@jusst.de>
+ openssl-1.0.2d-parallel-build.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d
 
-Forget about that patch, it causes other build failures... :-(
+For FAT/NTFS systems, it cannot handle the '?' character. By only using
+the patch's filename, the file can be safely stored on FAT/NTFS systems
+with the name:
 
-Regards,
-Yann E. MORIN.
+ openssl-1.0.2d-parallel-build.patch
 
-> ---
->  package/dvblast/Config.in  |  1 +
->  package/dvblast/dvblast.mk | 11 +++++++++--
->  2 files changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
-> index ac8b4ae..f20d919 100644
-> --- a/package/dvblast/Config.in
-> +++ b/package/dvblast/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_DVBLAST
->  	bool "dvblast"
->  	select BR2_PACKAGE_BITSTREAM
->  	select BR2_PACKAGE_LIBEV
-> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
->  	depends on !BR2_bfin  # libev
->  	help
->  	  DVBlast is a simple and powerful MPEG-2/TS demux and
-> diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
-> index 11a2dc8..56e114f 100644
-> --- a/package/dvblast/dvblast.mk
-> +++ b/package/dvblast/dvblast.mk
-> @@ -11,12 +11,19 @@ DVBLAST_LICENSE = GPLv2+, WTFPL
->  DVBLAST_LICENSE_FILES = COPYING COPYING.WTFPL
->  DVBLAST_DEPENDENCIES = bitstream libev
->  
-> +DVBLAST_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
-> +
-> +ifeq ($(BR2_NEEDS_GETTEXT),y)
-> +DVBLAST_DEPENDENCIES += gettext
-> +DVBLAST_MAKE_ENV += LDLIBS=-liconv
-> +endif
-> +
->  define DVBLAST_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-> +	$(DVBLAST_MAKE_ENV) $(MAKE) -C $(@D)
->  endef
->  
->  define DVBLAST_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-> +	$(DVBLAST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
->  endef
->  
->  $(eval $(generic-package))
-> -- 
-> 1.9.1
-> 
+Removing the Git reference should not be a major issue since this
+repository (which we are pulling the patch from), appears to be maintain
+a series of patches for multiple versions of OpenSSL. The patch we are
+fetching explicitly defines the OpenSSL version we are trying to patch.
+In the worst case, if the patch is changed on or removed off its head,
+Buildroot's hash-check will catch this.
 
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+---
+ package/openssl/openssl.hash | 2 +-
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 9eaa363..118f532 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,4 +1,4 @@
+ # From https://www.openssl.org/source/openssl-1.0.2d.tar.gz.sha256
+ sha256	671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8	openssl-1.0.2d.tar.gz
+ # Locally computed
+-sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d
++sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index cad8d0c..f2f181b 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -14,7 +14,7 @@ HOST_OPENSSL_DEPENDENCIES = host-zlib
+ OPENSSL_TARGET_ARCH = generic32
+ OPENSSL_CFLAGS = $(TARGET_CFLAGS)
+ OPENSSL_PATCH = \
+-	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d
++	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch
+ 
+ ifeq ($(BR2_USE_MMU),)
+ OPENSSL_CFLAGS += -DHAVE_FORK=0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.5.msysgit.1
