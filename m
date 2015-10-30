@@ -1,72 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Oct 2015 14:58:03 +0100
-Subject: [Buildroot] Buildroot LTS?
-In-Reply-To: <563336DE.4040809@2net.co.uk>
-References: <563336DE.4040809@2net.co.uk>
-Message-ID: <20151030145803.6aeb3c2d@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 30 Oct 2015 15:08:36 +0100
+Subject: [Buildroot] [PATCH] package/dvblast: fix build issues without glibc
+Message-ID: <1446214116-8750-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+dvblast wants iconv functions even without locales.
 
-On Fri, 30 Oct 2015 09:22:38 +0000, Chris Simmonds wrote:
+Fixes:
+    http://autobuild.buildroot.org/results/03f/03fe6dc17d7f36d9b8c7ced402850def95d8feb3/
+    http://autobuild.buildroot.org/results/064/0647b0180ac9a6bf6172742e388df9a9e584d91b/
+    ...
 
-> Is there a long term support policy for Buildroot? For example, when the
-> next significant bug like heartbleed or shellshock comes along, how do I
-> best incorporate the fix in my Buildroot project?
-> 
-> Looking through the commit history, I gather that Buildroot is a
-> "rolling release". There are stable releases several times per year, but
-> there are few updates once it is released. So, the way to get security
-> fixes would be to update to the latest stable release: is that correct?
-> The downside is that that will bring in many changes in addition to
-> fixing security bugs and I may have to go through a new QA cycle.
-> 
-> I would be interested in any comments on the above. What do Buildroot
-> users do in practice? Does any 3rd party offer LTS support for Buildroot?
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julian Scheel <julian@jusst.de>
+---
+ package/dvblast/Config.in  |  1 +
+ package/dvblast/dvblast.mk | 11 +++++++++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-There is currently no long term support policy for the community
-maintained Buildroot. We have discussed this topic a few times during
-our meetings, as I remember raising the question of whether we should
-maintain for a longer period certain specific releases of Buildroot, at
-least to take care of the security problems.
-
-So far, our common reaction was that it is rather time-consuming to do
-and also not very exciting for volunteers to do. It is the type of
-topic that would really be helped if there was some funding from
-companies.
-
-That being said, if there is sufficient interest for this, and
-developers willing to look at the security issues and submit the
-corresponding patches, I'm sure we'd be happy to create such LTS
-releases from time to time.
-
-Currently, Buildroot users have two options:
-
- * Stick to a given Buildroot version, and take care of the security
-   updates themselves.
-
- * Update their Buildroot version, but this as you said has the
-   consequence of updating many components in the system, even when the
-   update is not strictly necessary from a security point of view.
-
-I would personally be happy to take patches against a given fixed
-version of Buildroot, and do regularly some point releases based on
-this version. But there need to be some involvement from the interested
-users.
-
-As far as security updates provided by third party companies, I guess
-several embedded Linux services company would probably be willing to
-provide such services. But there is no formal/public offering as far as
-I know.
-
-Best regards,
-
-Thomas
+diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
+index ac8b4ae..f20d919 100644
+--- a/package/dvblast/Config.in
++++ b/package/dvblast/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_DVBLAST
+ 	bool "dvblast"
+ 	select BR2_PACKAGE_BITSTREAM
+ 	select BR2_PACKAGE_LIBEV
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	depends on !BR2_bfin  # libev
+ 	help
+ 	  DVBlast is a simple and powerful MPEG-2/TS demux and
+diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
+index 11a2dc8..56e114f 100644
+--- a/package/dvblast/dvblast.mk
++++ b/package/dvblast/dvblast.mk
+@@ -11,12 +11,19 @@ DVBLAST_LICENSE = GPLv2+, WTFPL
+ DVBLAST_LICENSE_FILES = COPYING COPYING.WTFPL
+ DVBLAST_DEPENDENCIES = bitstream libev
+ 
++DVBLAST_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
++
++ifeq ($(BR2_NEEDS_GETTEXT),y)
++DVBLAST_DEPENDENCIES += gettext
++DVBLAST_MAKE_ENV += LDLIBS=-liconv
++endif
++
+ define DVBLAST_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(DVBLAST_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
+ 
+ define DVBLAST_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++	$(DVBLAST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
