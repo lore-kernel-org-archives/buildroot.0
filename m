@@ -1,39 +1,116 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 30 Oct 2015 09:33:32 -0300
-Subject: [Buildroot] [PATCH] php: bump to version 5.6.15
-Message-ID: <1446208412-11734-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 30 Oct 2015 13:35:18 +0100
+Subject: [Buildroot] [PATCH] fs/ext2: add options for extra space and
+ extra inodes
+In-Reply-To: <56334E0A.6010407@mind.be>
+References: <1446073576-20337-1-git-send-email-yann.morin.1998@free.fr>
+ <56334E0A.6010407@mind.be>
+Message-ID: <20151030123518.GA3713@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Arnout, All,
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index a0b12a2..e4a3e73 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256	c8edf6b05fd8a69ebd88d90c5c0975ee168502204622ad5cfcd550bc222632d9	php-5.6.14.tar.xz
-+sha256	cf52e2e621e60997269663fa4bc06253191fa2a41dc9b08c8c911435b3ebcca9	php-5.6.15.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index a90913f..76e3d62 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PHP_VERSION_MAJOR = 5.6
--PHP_VERSION = $(PHP_VERSION_MAJOR).14
-+PHP_VERSION = $(PHP_VERSION_MAJOR).15
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+On 2015-10-30 12:01 +0100, Arnout Vandecappelle spake thusly:
+> On 29-10-15 00:06, Yann E. MORIN wrote:
+> > Add two options to the ext2 filesystem, one to add extra free space, one
+> > to add extra free inodes.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> > ---
+> >  fs/ext2/Config.in       | 20 ++++++++++++++++++--
+> >  fs/ext2/ext2.mk         |  2 ++
+> >  package/mke2img/mke2img |  8 +++++++-
+> >  3 files changed, 27 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+> > index 5b1cd0c..fb06cdd 100644
+> > --- a/fs/ext2/Config.in
+> > +++ b/fs/ext2/Config.in
+> > @@ -45,13 +45,29 @@ config BR2_TARGET_ROOTFS_EXT2_LABEL
+> >  	string "filesystem label"
+> >  
+> >  config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+> > -	int "size in blocks (leave at 0 for auto calculation)"
+> > +	int "exact size in blocks (leave at 0 for auto calculation)"
+> >  	default 0
+> >  
+> >  config BR2_TARGET_ROOTFS_EXT2_INODES
+> > -	int "inodes (leave at 0 for auto calculation)"
+> > +	int "exact number of inodes (leave at 0 for auto calculation)"
+> >  	default 0
+> >  
+> > +config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS
+> > +	int "extra size in blocks" if BR2_TARGET_ROOTFS_EXT2_BLOCKS = 0
+> > +	default 0
+> > +	help
+> > +	  Enter here the nmuber of extra blocks of free space you
+> > +	  want on your filesystem. By default, Buildroot will not
+> > +	  leave much space free.
+> 
+>  To be precise, buildroot will add 500 extra blocks for ext2 and 1800 extra
+> blocks for ext3+. So perhaps we could encode that here, and remove it from the
+> mke2img script?
+
+I don't want to do that, because the extra blocks and inodes that
+Buildroot adds are just to account for the extra space required to
+store the filesystem metadata.
+
+If we were to encode those here in the kconfig option, nothing would
+prevent the user from setting this to a value lower than strictly
+required.
+
+In Kconfig, we can provide a range, but no a lower (or upper) bound to a
+value. And we do not want to limit the user in the values he may want to
+set here (even to an insanely large value for the upper bound.
+
+I would really prefer we hide this internal complex computation from the
+user, and let him specify the extra space he actually wants.
+
+> > +config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+> > +	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+> > +	default 0
+> > +	help
+> > +	  Enter here the nmuber of extra free inodes you want on
+> > +	  your filesystem. By default, Buildroot will not leave
+> > +	  many free inodes.
+> 
+>  Same here, 400 inodes are added.
+
+Ditto.
+
+> >  config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+> >  	int "reserved blocks percentage"
+> >  	default 0
+> > diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+> > index cab66a5..7417f81 100644
+> > --- a/fs/ext2/ext2.mk
+> > +++ b/fs/ext2/ext2.mk
+> > @@ -9,10 +9,12 @@ EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
+> >  ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+> >  EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
+> >  endif
+> > +EXT2_OPTS += -B $(BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS)
+> 
+>  Perhaps this could be put into the else of the ifneq? Or better yet, make it an
+> ifeq.
+
+Well, the fact that the prompt has a condition before it is displayed
+will ensure that BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS/INODES is always
+set to a non-empty value, so we can safely use it. If the user specified
+the exact size/inodes, then the extra size/indoes will be set to 0.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.4.10
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
