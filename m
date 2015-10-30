@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Oct 2015 15:10:50 +0100
-Subject: [Buildroot] [PATCH] host-perl: fix patching
-In-Reply-To: <1446059858-2646-1-git-send-email-francois.perrad@gadz.org>
-References: <1446059858-2646-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20151030151050.6dea8243@free-electrons.com>
+Date: Fri, 30 Oct 2015 15:12:17 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.18.x series
+Message-ID: <20151030141225.B66557FC6E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=1d0b0283e461af8695fbd8332399e7265387946b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 28 Oct 2015 20:17:38 +0100, Francois Perrad wrote:
-> see http://autobuild.buildroot.net/results/c8e/c8e6bbe50ca71835bdde9503a9fe23ace8236a09/
-> 
-> the newest patches are against perl-cross,
-> so we need to extract perl-cross in the host-perl case.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl/perl.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8135b17..1a8ec69 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -198,7 +198,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.14.56"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.22"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.23"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.12"	if BR2_KERNEL_HEADERS_4_1
