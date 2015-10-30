@@ -1,63 +1,120 @@
 From: James Knight <james.knight@rockwellcollins.com>
-Date: Fri, 30 Oct 2015 11:27:47 -0400
-Subject: [Buildroot] [PATCH 1/1] openssl: remove patch's git-hash to support
-	fat/ntfs systems
-Message-ID: <1446218867-6128-1-git-send-email-james.knight@rockwellcollins.com>
+Date: Fri, 30 Oct 2015 11:39:27 -0400
+Subject: [Buildroot] [PATCH v6 1/1] yad: new package
+Message-ID: <1446219567-4540-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Altering the OpenSSL parallel build patch's source location; the change
-removes the Git hash reference from the URL. This is to support storing
-cache data on file systems which have a more restrictive character set.
-For this case, the downloaded patch will have the complete filename in
-the 'dl' directory:
-
- openssl-1.0.2d-parallel-build.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d
-
-For FAT/NTFS systems, it cannot handle the '?' character. By only using
-the patch's filename, the file can be safely stored on FAT/NTFS systems
-with the name:
-
- openssl-1.0.2d-parallel-build.patch
-
-Removing the Git reference should not be a major issue since this
-repository (which we are pulling the patch from), appears to be maintain
-a series of patches for multiple versions of OpenSSL. The patch we are
-fetching explicitly defines the OpenSSL version we are trying to patch.
-In the worst case, if the patch is changed on or removed off its head,
-Buildroot's hash-check will catch this.
-
 Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
- package/openssl/openssl.hash | 2 +-
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v5 -> v6:
+  - Cleanup yad help formatting to fit Buildroot style (with help from
+     Vicente Olivert Riera).
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 9eaa363..118f532 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,4 +1,4 @@
- # From https://www.openssl.org/source/openssl-1.0.2d.tar.gz.sha256
- sha256	671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8	openssl-1.0.2d.tar.gz
- # Locally computed
--sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d
-+sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index cad8d0c..f2f181b 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -14,7 +14,7 @@ HOST_OPENSSL_DEPENDENCIES = host-zlib
- OPENSSL_TARGET_ARCH = generic32
- OPENSSL_CFLAGS = $(TARGET_CFLAGS)
- OPENSSL_PATCH = \
--	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d
-+	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch
+Changes v4 -> v5:
+  - Increment to version 0.31.2.
+  - Cleanup yad menu option to be visible after Xorg/MMU is selected.
+
+Changes v3 -> v4:
+  - Add missing libglib2 dependencies (pointed out by Vicente Olivert
+     Riera).
+  - Cleanup YAD help description to maximize the 72-character limit
+     space (suggested by Vicente Olivert Riera).
+
+Changes v2 -> v3:
+  - Increment to version 0.31.1 (removed need for HTML patch introduced
+     in v2 change; suggested by Vicente Olivert Riera).
+
+Changes v1 -> v2:
+  - Increment to version 0.29.0 (with updated hash and patch fix).
+  - Removed complex gtk library selection. Defaults to libgtk3, if
+     available; elsewise, uses libgtk2 (suggested from comments by
+     Baruch Siach, Thomas Petazzoni and Peter Korsgaard).
+---
+ package/Config.in     |  1 +
+ package/yad/Config.in | 17 +++++++++++++++++
+ package/yad/yad.hash  |  2 ++
+ package/yad/yad.mk    | 24 ++++++++++++++++++++++++
+ 4 files changed, 44 insertions(+)
+ create mode 100644 package/yad/Config.in
+ create mode 100644 package/yad/yad.hash
+ create mode 100644 package/yad/yad.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 10ff94e..9c75fa3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -293,6 +293,7 @@ comment "X applications"
+ 	source "package/xscreensaver/Config.in"
+ 	source "package/xterm/Config.in"
+ 	source "package/xvkbd/Config.in"
++	source "package/yad/Config.in"
  
- ifeq ($(BR2_USE_MMU),)
- OPENSSL_CFLAGS += -DHAVE_FORK=0
+ comment "X libraries and helper libraries"
+ 	source "package/libsexy/Config.in"
+diff --git a/package/yad/Config.in b/package/yad/Config.in
+new file mode 100644
+index 0000000..3fa583d
+--- /dev/null
++++ b/package/yad/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_YAD
++	bool "yad"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  YAD (yet another dialog) is a tool for create graphical dialogs
++	  from shell scripts.
++
++	  http://sourceforge.net/projects/yad-dialog/
++
++comment "yad needs libgtk2 or libgtk3"
++	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
++	depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
+diff --git a/package/yad/yad.hash b/package/yad/yad.hash
+new file mode 100644
+index 0000000..4e88ab0
+--- /dev/null
++++ b/package/yad/yad.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 c91d6a9eb36abdb502d2d8ada0ec29c266b94a6628f723adeca436bee0b6c55c yad-0.31.2.tar.xz
+diff --git a/package/yad/yad.mk b/package/yad/yad.mk
+new file mode 100644
+index 0000000..57262e8
+--- /dev/null
++++ b/package/yad/yad.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# yad
++#
++################################################################################
++
++YAD_VERSION = 0.31.2
++YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
++YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
++YAD_LICENSE = GPLv3
++YAD_LICENSE_FILES = COPYING
++YAD_DEPENDENCIES = host-intltool host-pkgconf libglib2
++
++YAD_CONF_OPTS = --enable-html=no
++
++ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++YAD_DEPENDENCIES += libgtk3
++YAD_CONF_OPTS += --with-gtk=gtk3
++else
++YAD_DEPENDENCIES += libgtk2
++YAD_CONF_OPTS += --with-gtk=gtk2
++endif
++
++$(eval $(autotools-package))
 -- 
 1.9.5.msysgit.1
