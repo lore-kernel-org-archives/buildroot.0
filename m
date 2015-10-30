@@ -1,56 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Oct 2015 16:43:37 +0100
-Subject: [Buildroot] [pull request] package/dvblast: fix autobuild failures
-Message-ID: <cover.1446219805.git.yann.morin.1998@free.fr>
+Date: Fri, 30 Oct 2015 16:43:40 +0100
+Subject: [Buildroot] [PATCH 1/4] package/dvblast: needs iconv always
+In-Reply-To: <cover.1446219805.git.yann.morin.1998@free.fr>
+References: <cover.1446219805.git.yann.morin.1998@free.fr>
+Message-ID: <64a273c2431ecee72e0e7084dc4edee8850bb5d8.1446219805.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+dvblast wants iconv functions even without locales.
 
-This series fixes the four types of build failures due to dvblast:
-  - requires libiconv, even without locales
-  - needs -lm because of -lev
-  - needs threads
-  - uses incorrect integer types
+Fixes:
+    http://autobuild.buildroot.org/results/03f/03fe6dc17d7f36d9b8c7ced402850def95d8feb3/
+    http://autobuild.buildroot.org/results/064/0647b0180ac9a6bf6172742e388df9a9e584d91b/
+    ...
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julian Scheel <julian@jusst.de>
+---
+ package/dvblast/Config.in  |  1 +
+ package/dvblast/dvblast.mk | 11 +++++++++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-
-The following changes since commit 9cadddd0a85abdad5de799359f4ff9849d4731f2:
-
-  libv4l: bump version to 1.8.1 (2015-10-29 20:06:33 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/autobuild
-
-for you to fetch changes up to a138be83167445a8f88e8b028725cf6a48d45b37:
-
-  package/dvblast: fix musl build (2015-10-30 16:42:50 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      package/dvblast: needs iconv always
-      package/dvblast: fix static linking
-      package/dvblast: needs threads
-      package/dvblast: fix musl build
-
- package/dvblast/0001-missing-lm.patch    | 29 +++++++++++++++++++++++++++++
- package/dvblast/0002-fix-int-types.patch | 22 ++++++++++++++++++++++
- package/dvblast/Config.in                |  6 ++++++
- package/dvblast/dvblast.mk               | 11 +++++++++--
- 4 files changed, 66 insertions(+), 2 deletions(-)
- create mode 100644 package/dvblast/0001-missing-lm.patch
- create mode 100644 package/dvblast/0002-fix-int-types.patch
-
+diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
+index ac8b4ae..da78943 100644
+--- a/package/dvblast/Config.in
++++ b/package/dvblast/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_DVBLAST
+ 	bool "dvblast"
+ 	select BR2_PACKAGE_BITSTREAM
+ 	select BR2_PACKAGE_LIBEV
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	depends on !BR2_bfin  # libev
+ 	help
+ 	  DVBlast is a simple and powerful MPEG-2/TS demux and
+diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
+index 11a2dc8..ef9a666 100644
+--- a/package/dvblast/dvblast.mk
++++ b/package/dvblast/dvblast.mk
+@@ -11,12 +11,19 @@ DVBLAST_LICENSE = GPLv2+, WTFPL
+ DVBLAST_LICENSE_FILES = COPYING COPYING.WTFPL
+ DVBLAST_DEPENDENCIES = bitstream libev
+ 
++DVBLAST_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
++
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++DVBLAST_DEPENDENCIES += libiconv
++DVBLAST_MAKE_ENV += LDLIBS=-liconv
++endif
++
+ define DVBLAST_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(DVBLAST_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
+ 
+ define DVBLAST_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++	$(DVBLAST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
