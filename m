@@ -1,42 +1,73 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 30 Oct 2015 16:40:49 -0300
-Subject: [Buildroot] [PATCH 6/6] gst1-libav: bump to version 1.6.1
-In-Reply-To: <1446234049-15155-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1446234049-15155-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1446234049-15155-6-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 30 Oct 2015 21:12:18 +0100
+Subject: [Buildroot] Qt5 and touchscreen calibration
+In-Reply-To: <5633A776.90600@mind.be>
+References: <5633A11C.6070706@yahoo.fr>
+	<5633A776.90600@mind.be>
+Message-ID: <20151030211218.6c801173@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello David, Arnout,
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 9f6473b..ec35c5d 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.6.0.tar.xz.sha256sum
--sha256	6cca6cf73182a882768ef0c860af88c2fd2c77e2c81ce464a998ab4e6baa604c  gst-libav-1.6.0.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.6.1.tar.xz.sha256sum
-+sha256	24d5e8e8b8c825af1a19aa80a27aba268ec383c8133fd4ef66e0e572ff6137a9  gst-libav-1.6.1.tar.xz
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index ffd13b5..d6a21e4 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_LIBAV_VERSION = 1.6.0
-+GST1_LIBAV_VERSION = 1.6.1
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
- 
--- 
-2.4.10
+On Fri, 30 Oct 2015 18:23:02 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> On 30-10-15 17:55, David Picard wrote:
+> > Hello,
+> > 
+> > 
+> > I got my touchscreen working perfectly with ts_test. Many thanks to Peter
+> > Seiderer !
+> > 
+> > But the thing is that my Qt5 app does not grab the touchscreen properly : x and
+> > y axis are switched. I did enable the tslib option under Qt5 in menuconfig. Is
+
+The following 
+
+	$ QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS='rotate=270' /usr/lib/qt/examples/touch/fingerpaint/fingerpaint -platform 
+linuxfb:fb=/dev/fb1
+
+worked for me to get x/y right, see [1] for Qt5 parameters.
+
+Regards,
+Peter
+
+[1] http://doc.qt.io/qt-5/embedded-linux.html
+
+> > there some magic command line option to pass to the application ? I tried this :
+> > 
+> > $ myapp -platform linuxfb:fb=/dev/fb1 -plugin tslib
+> > ts_open() failed (No such file or directory)
+> 
+>  Did you export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/event0 (but
+> replace with the correct device of course)?
+> 
+>  Or hang on, for tslib it's TSLIB_TSDEVICE that you have to set.
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> > 
+> >>>> the app shows up, but TS still messed up.
+> > 
+> > My config :
+> > - Raspberry Pi B+ and Adafruit 2.8" PiTFT w/ cap touch.
+> > - Buildroot 2015.08.1
+> > - Qt5 w/ tslib support enabled (BR2_PACKAGE_QT5BASE_TSLIB=y).
+> > 
+> > 
+> > Regards,
+> > David.
+> > 
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> > 
+> 
+> 
