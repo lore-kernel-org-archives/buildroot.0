@@ -1,85 +1,72 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Fri, 30 Oct 2015 22:52:46 +0900
-Subject: [Buildroot] [meiwaku] Re:  [PATCH v3 1/1] gauche: new package
-In-Reply-To: Your message of Fri, 30 Oct 2015 13:51:16 +0100.
- <563367C4.40607@mind.be>
-Message-ID: <201510301352.t9UDqler021783@ms-omx01.plus.so-net.ne.jp>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 30 Oct 2015 14:58:03 +0100
+Subject: [Buildroot] Buildroot LTS?
+In-Reply-To: <563336DE.4040809@2net.co.uk>
+References: <563336DE.4040809@2net.co.uk>
+Message-ID: <20151030145803.6aeb3c2d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear, Arnout.
+Hello Chris,
 
-Thank you for your comment.
+On Fri, 30 Oct 2015 09:22:38 +0000, Chris Simmonds wrote:
 
-Arnout Vandecappelle writes:
-> On 30-10-15 12:49, Hiroshi Kawashima wrote:
-> > Gauche is an R7RS Scheme implementation developed to be a handy script
-> > interpriter, which allows programmers and systemadministrators to write
+> Is there a long term support policy for Buildroot? For example, when the
+> next significant bug like heartbleed or shellshock comes along, how do I
+> best incorporate the fix in my Buildroot project?
 > 
->  interpreter
-Ok.
+> Looking through the commit history, I gather that Buildroot is a
+> "rolling release". There are stable releases several times per year, but
+> there are few updates once it is released. So, the way to get security
+> fixes would be to update to the latest stable release: is that correct?
+> The downside is that that will bring in many changes in addition to
+> fixing security bugs and I may have to go through a new QA cycle.
+> 
+> I would be interested in any comments on the above. What do Buildroot
+> users do in practice? Does any 3rd party offer LTS support for Buildroot?
 
-> > small to large scripts for their daily chores. Quick startup, built-in
-> > system interface, native multilingual support are some of my goals.
-> 
->  my -> its
->  Same comments for the help text, obviously.
-Ok.
+There is currently no long term support policy for the community
+maintained Buildroot. We have discussed this topic a few times during
+our meetings, as I remember raising the question of whether we should
+maintain for a longer period certain specific releases of Buildroot, at
+least to take care of the security problems.
 
-> > --- /dev/null
-> > +++ b/package/gauche/0001-fix-so-suffix.patch
-> > @@ -0,0 +1,18 @@
-> > +With uclibc configuration, $host does not match to '*-linux-gnu-*'.
-> 
->  uclibc or musl. Oh, and it's gnu*, not gnu-*, otherwise ARM's gnueabi would
-> also not match.
-Ok.
+So far, our common reaction was that it is rather time-consuming to do
+and also not very exciting for volunteers to do. It is the type of
+topic that would really be helped if there was some funding from
+companies.
 
-> > +I touch configure instead of configure.ac because autoreconf failed
-> > +by version mismatch of autotools.
-> 
->  Then also include the fix for configure.ac in the same patch, and of course
-> please send the patch upstream so we don't have to carry it forever.
-Ok, I will.
+That being said, if there is sufficient interest for this, and
+developers willing to look at the security issues and submit the
+corresponding patches, I'm sure we'd be happy to create such LTS
+releases from time to time.
 
-> > +GAUCHE_VERSION = 0.9.4
-> > +GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
-> > +GAUCHE_SITE = http://prdownloads.sourceforge.net/gauche
-> 
->  That will lead to the annoying sourceforge redirect page. Instead, point
-> directly to http://downloads.sourceforge.net/project/gauche/Gauche
-Ok.
+Currently, Buildroot users have two options:
 
-> > +GAUCHE_LICENSE = BSD
-> 
->  BSD doesn't exist, it's BSD-4c, BSD-3c or BSD-2c. In this case, it's BSD-3c.
-> 
->  Also, there's a bunch of other licenses mentioned in COPYING. Many of them a
-> re
-> BSD-3c, one of them is "You may do as you please" so that's included in BSD-3
-> c,
-> and boehm-gc has its own license so call it Boehm-gc (couldn't find it on SPD
-> X).
-> srfi-11.scm has a home-grown license we can call SRFI (also not found on SPDX
-> ),
-> and reload.scm has another home-grown license so we'll call it reload license
-> .
-> Are the latter two files actually used (i.e., if you remove them, does it sti
-> ll
-> work)?
-> 
->  In summary, it should be:
-> 
-> GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
-Thank you for your investigation.
-I will change as yours.
+ * Stick to a given Buildroot version, and take care of the security
+   updates themselves.
 
-I will send v4 patch later.
+ * Update their Buildroot version, but this as you said has the
+   consequence of updating many components in the system, even when the
+   update is not strictly necessary from a security point of view.
 
-Thank you!
-Kawashima
-============================================================
-    Hiroshi Kawashima
+I would personally be happy to take patches against a given fixed
+version of Buildroot, and do regularly some point releases based on
+this version. But there need to be some involvement from the interested
+users.
+
+As far as security updates provided by third party companies, I guess
+several embedded Linux services company would probably be willing to
+provide such services. But there is no formal/public offering as far as
+I know.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
