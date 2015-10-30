@@ -1,92 +1,40 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 29 Oct 2015 22:38:11 +0100
-Subject: [Buildroot] [PATCH v5 17/36] package/efl/libefl: add systemd
- dependency
-In-Reply-To: <20151025151349.GO11692@free.fr>
-References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
- <1445720476-21517-18-git-send-email-romain.naour@openwide.fr>
- <20151025151349.GO11692@free.fr>
-Message-ID: <563291C3.9040605@openwide.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 29 Oct 2015 21:05:58 -0300
+Subject: [Buildroot] [PATCH] cairo: bump to version 1.14.4
+Message-ID: <1446163558-6773-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/cairo/cairo.hash | 4 ++--
+ package/cairo/cairo.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Le 25/10/2015 16:13, Yann E. MORIN a ?crit :
-> Romain, All,
-> 
-> On 2015-10-24 23:00 +0200, Romain Naour spake thusly:
->> systemd it one of the "highly recommended" dependecies
->> according to the README [1] but disabling it doesn't need
->> the --enable-i-really-know-what-i-am-doing... option.
->> That's why systemd is not added to
->> BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
->>
->> [1] https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n491
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> However, see a comment, below...
-> 
->> ---
->> v4: rename to libefl
->>     improve commit log
->> v3: new patch
->> ---
->>  package/efl/libefl/libefl.mk | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
->> index 02c9005..c26c9c5 100644
->> --- a/package/efl/libefl/libefl.mk
->> +++ b/package/efl/libefl/libefl.mk
->> @@ -52,6 +52,13 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
->>  LIBEFL_DEPENDENCIES += util-linux
->>  endif
->>  
->> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
->> +LIBEFL_CONF_OPTS += --enable-systemd
->> +LIBEFL_DEPENDENCIES += systemd
->> +else
->> +LIBEFL_CONF_OPTS += --disable-systemd
->> +endif
-> 
-> You're adding optional dependencies with various patches; that's
-> perfectly good.
-> 
-> However, I woiuld like that all those optional features be forcibly
-> disabled form the first patch adding libefl. Then each of your patches
-> would transform the hard-coded --disable-XXXX into conditional blocks
-> (with or without Config.in options).
-
-There is a very long list of config options that are not handled by the
-packaging actually, I'll try to do that at least for the option I use in the
-package and for auto detected options.
-
-Speaking of config option, some of them use --disable-XXXX and --enable-XXXX,
-but some other use --enable-XXXX=no and --enable-XXXX=yes. I'll unify this by
-using --disable-XXXX and --enable-XXXX.
-
-Best regards,
-Romain
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>  # If fontconfig is disabled, this is going to make general font
->>  # searching not work, and only some very direct 'load /path/file.ttf'
->>  # will work alongside some old-school ttf file path searching. This
->> -- 
->> 2.4.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
+index 79b2ec6..1440185 100644
+--- a/package/cairo/cairo.hash
++++ b/package/cairo/cairo.hash
+@@ -1,2 +1,2 @@
+-# From http://cairographics.org/releases/cairo-1.14.2.tar.xz.sha1
+-sha1	c8da68aa66ca0855b5d0ff552766d3e8679e1d24	cairo-1.14.2.tar.xz
++# From http://cairographics.org/releases/cairo-1.14.4.tar.xz.sha1
++sha1	5b44471e7c328f96de6830baf8ea65030de797f9	cairo-1.14.4.tar.xz
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 098f249..9018b29 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAIRO_VERSION = 1.14.2
++CAIRO_VERSION = 1.14.4
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+ CAIRO_LICENSE = LGPLv2.1+
+ CAIRO_LICENSE_FILES = COPYING
+-- 
+2.4.10
