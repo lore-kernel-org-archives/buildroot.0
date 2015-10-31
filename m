@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 Oct 2015 18:24:21 +0100
-Subject: [Buildroot] [PATCH 2/4] package/dvblast: fix static linking
-In-Reply-To: <408895b4d5738d83013ff4b493ba3293ae30e48d.1446219805.git.yann.morin.1998@free.fr>
+Date: Sat, 31 Oct 2015 18:25:41 +0100
+Subject: [Buildroot] [PATCH 3/4] package/dvblast: needs threads
+In-Reply-To: <f9ad87dc2c39526c794c35b9f05eb2d354d31639.1446219805.git.yann.morin.1998@free.fr>
 References: <cover.1446219805.git.yann.morin.1998@free.fr>
- <408895b4d5738d83013ff4b493ba3293ae30e48d.1446219805.git.yann.morin.1998@free.fr>
-Message-ID: <20151031182421.1b49965c@free-electrons.com>
+ <f9ad87dc2c39526c794c35b9f05eb2d354d31639.1446219805.git.yann.morin.1998@free.fr>
+Message-ID: <20151031182541.0e685c25@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,23 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Fri, 30 Oct 2015 16:43:41 +0100, Yann E. MORIN wrote:
-> dvblast links to -lev, which calls functions from -lm, like floor().
-> 
-> dvblast does not use libtool, so it does not pull in the libev
-> dependencies when doing a static link.
-> 
-> Fix that by always pulling in -lm after -lev. We can not do it from the
-> .mk, because libraries passed from the .mk end up at the beginning of
-> the list.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/1f0/1f02f84fb926839a1adbe3af457bb909fdc44433/
->     http://autobuild.buildroot.org/results/6af/6af3abcdced1cc689a59fe11483f5cdcae0cfd38/
+On Fri, 30 Oct 2015 16:43:42 +0100, Yann E. MORIN wrote:
+> Fixes;
+>     http://autobuild.buildroot.org/results/c25/c25143fd1363d162de6733bc55a84289543f4da3/
+>     http://autobuild.buildroot.org/results/09d/09d9a962b20295d09d7777f873f7bb1c8130dbf1/
 >     ...
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Julian Scheel <julian@jusst.de>
-> ---
->  package/dvblast/0001-missing-lm.patch | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/dvblast/0001-missing-lm.patch
 
-Applied, thanks. Please submit the patch upstream.
+I've applied but now that I'm re-reading when replying to your e-mail,
+I see a mistake:
+
+> +comment 'dvblast needs a toolchain w/ threads'
+
+We normally use double quotes, not single quotes for comments.
+
+Thanks,
 
 Thomas
 -- 
