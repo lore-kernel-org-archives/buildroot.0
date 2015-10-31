@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Oct 2015 09:38:49 +0100
-Subject: [Buildroot] [PATCH] pulseaudio: bump to version 7.1
-In-Reply-To: <1446215616-58750-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Fri, 30 Oct 2015 14:33:36 +0000")
-References: <1446215616-58750-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <878u6j3012.fsf@dell.be.48ers.dk>
+Date: Sat, 31 Oct 2015 09:39:04 +0100
+Subject: [Buildroot] [PATCH] php: bump to version 5.6.15
+In-Reply-To: <1446208412-11734-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 30 Oct 2015 09:33:32 -0300")
+References: <1446208412-11734-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874mh7300n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
