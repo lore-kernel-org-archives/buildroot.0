@@ -1,171 +1,195 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Sat, 31 Oct 2015 10:22:08 +0900
-Subject: [Buildroot] [PATCH v4 1/1] gauche: new package
-Message-ID: <201510310122.t9V1M8CT023045@ms-omx01.plus.so-net.ne.jp>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Fri, 30 Oct 2015 23:56:21 -0200
+Subject: [Buildroot] [PATCH 1/1] irssi: new package
+Message-ID: <1446256581-3010-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gauche is an R7RS Scheme implementation developed to be a handy script
-interpreter, which allows programmers and systemadministrators to write
-small to large scripts for their daily chores. Quick startup, built-in
-system interface, native multilingual support are some of its goals.
+Irssi is a terminal based IRC client for UNIX systems.
 
-Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+http://irssi.org/
+
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 ---
-Changes v3 -> v4 (reflect comment from Arnout)
-- fix some miss spell in help text.
-- fix comment in patch file.
-- add patch file for configure.ac (same fix with configure).
-- fix GAUCHE_LICENSE
-Changes v2 -> v3
-- add comment to patch file why I touch configure directly instead of
-  configure.ac
-Changes v1 -> v2
-- change help description to written in project's web page.
-- add brief description and SoB in patch file.
-- change depens on BR2_TOOLCHAIN_HAS_THREADS -> 
-    BR2_TOOLCHAIN_HAS_THREADS_NPTL.
-- add brief description why "-std=gnu99" needed in GAUCHE_CONF_ENV.
-- add depends on BR2_ARCH_HAS_ATOMICS (Boehm gc need this).
-- add # fork() to 'depends on BR2_USE_MMU'.
-- remove empty comment line in hash file.
-- remove unnecessary GAUCHE_CONF_OPTS.
----
- package/Config.in                                  |    1 +
- package/gauche/0001-fix-so-suffix.patch            |   18 ++++++++++++++++++
- .../gauche/0002-fix-so-suffix-configure-ac.patch   |   16 ++++++++++++++++
- package/gauche/Config.in                           |   18 ++++++++++++++++++
- package/gauche/gauche.hash                         |    2 ++
- package/gauche/gauche.mk                           |   19 +++++++++++++++++++
- 6 files changed, 74 insertions(+), 0 deletions(-)
- create mode 100644 package/gauche/0001-fix-so-suffix.patch
- create mode 100644 package/gauche/0002-fix-so-suffix-configure-ac.patch
- create mode 100644 package/gauche/Config.in
- create mode 100644 package/gauche/gauche.hash
- create mode 100644 package/gauche/gauche.mk
+ package/Config.in                                  |  1 +
+ .../0001-Fix-quote-around-macro-argument.patch     | 46 +++++++++++++++++++
+ package/irssi/Config.in                            | 30 +++++++++++++
+ package/irssi/irssi.hash                           |  2 +
+ package/irssi/irssi.mk                             | 52 ++++++++++++++++++++++
+ 5 files changed, 131 insertions(+)
+ create mode 100644 package/irssi/0001-Fix-quote-around-macro-argument.patch
+ create mode 100644 package/irssi/Config.in
+ create mode 100644 package/irssi/irssi.hash
+ create mode 100644 package/irssi/irssi.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 10ff94e..f0cd4ab 100644
+index 10ff94e..47bf7e7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -460,6 +460,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-p1-zlib/Config.in"
- endmenu
- endif
-+	source "package/gauche/Config.in"
- 	source "package/guile/Config.in"
- 	source "package/haserl/Config.in"
- 	source "package/jamvm/Config.in"
-diff --git a/package/gauche/0001-fix-so-suffix.patch b/package/gauche/0001-fix-so-suffix.patch
+@@ -1280,6 +1280,7 @@ endif
+ 	source "package/iptables/Config.in"
+ 	source "package/iptraf-ng/Config.in"
+ 	source "package/iputils/Config.in"
++	source "package/irssi/Config.in"
+ 	source "package/iw/Config.in"
+ 	source "package/janus-gateway/Config.in"
+ 	source "package/kismet/Config.in"
+diff --git a/package/irssi/0001-Fix-quote-around-macro-argument.patch b/package/irssi/0001-Fix-quote-around-macro-argument.patch
 new file mode 100644
-index 0000000..77bb355
+index 0000000..d0509d5
 --- /dev/null
-+++ b/package/gauche/0001-fix-so-suffix.patch
-@@ -0,0 +1,18 @@
-+With uclibc or musl configuration, $host does not match to '*-linux-gnu*'.
-+I touch configure instead of configure.ac because autoreconf failed
-+by version mismatch of autotools.
++++ b/package/irssi/0001-Fix-quote-around-macro-argument.patch
+@@ -0,0 +1,46 @@
++From a9d2f9ca6edb7a958ecb606f7db2055caad26a1e Mon Sep 17 00:00:00 2001
++From: Rodrigo Rebello <rprebello@gmail.com>
++Date: Wed, 28 Oct 2015 13:38:21 -0200
++Subject: [PATCH 1/1] Fix quote around macro argument
 +
-+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
++In m4/curses.m4, line 134, the 5th argument passed to AC_NCURSES was
++surrounded by '"' instead of '[' and ']'. Because of that, the expansion
++of AC_NCURSES in that case would produce the following line inside the
++configure script (note the repeated double quotes):
 +
-+diff -ur a/configure b/configure
-+--- a/configure	2014-07-20 15:15:05.000000000 +0900
-++++ b/configure	2015-10-20 21:52:32.791442291 +0900
-+@@ -6843,7 +6843,7 @@
-+     SHLIB_MAIN_LDFLAGS=""
-+     SHLIB_OK=ok
-+     ;;
-+-  *-linux-gnu*|*-*-gnu*|*freebsd*|*dragonfly*)
-++  *-linux-*|*-*-gnu*|*freebsd*|*dragonfly*)
-+     SHLIB_SO_CFLAGS="-fPIC"
-+     SHLIB_SO_LDFLAGS="$rpath -shared -o"
-+     SHLIB_SO_SUFFIX="so"
-diff --git a/package/gauche/0002-fix-so-suffix-configure-ac.patch b/package/gauche/0002-fix-so-suffix-configure-ac.patch
++  screen_manager=""ncurses on $withval/include""
++
++That would cause the following error when configure was executed with
++the "--with-ncurses=dir" argument:
++
++  ./configure: line 13468: on: command not found
++
++Although in the case above the error doesn't actually influence the
++build process ('screen_manager' isn't used anywhere in the script),
++trying to execute 'on' might be harmful if it corresponded to an
++existing command in the user's environment.
++
++Upstream-status: accepted, not yet released.
++https://github.com/irssi/irssi/pull/344
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++---
++ m4/curses.m4 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/m4/curses.m4 b/m4/curses.m4
++index 82b110f..41c0e6c 100644
++--- a/m4/curses.m4
+++++ b/m4/curses.m4
++@@ -131,7 +131,7 @@ AC_DEFUN([AC_CHECK_CURSES],[
++ 	  if test x$withval = xno ; then
++ 		search_ncurses=false
++ 	  elif test x$withval != xyes ; then
++-		AC_NCURSES($withval/include, ncurses.h, -L$withval/lib -lncurses, -I$withval/include, "ncurses on $withval/include")
+++		AC_NCURSES($withval/include, ncurses.h, -L$withval/lib -lncurses, -I$withval/include, [ncurses on $withval/include])
++ 	  fi
++ 	)
++ 
++-- 
++2.1.4
++
+diff --git a/package/irssi/Config.in b/package/irssi/Config.in
 new file mode 100644
-index 0000000..f9b4459
+index 0000000..7d29201
 --- /dev/null
-+++ b/package/gauche/0002-fix-so-suffix-configure-ac.patch
-@@ -0,0 +1,16 @@
-+With uclibc or musl configuration, $host does not match to '*-linux-gnu*'.
-+
-+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-+
-+diff -ur a/configure.ac b/configure.ac
-+--- a/configure.ac	2015-10-21 21:33:17.370000200 +0900
-++++ b/configure.ac	2015-10-21 21:33:39.784110527 +0900
-+@@ -572,7 +572,7 @@
-+     SHLIB_MAIN_LDFLAGS=""
-+     SHLIB_OK=ok
-+     ;;
-+-  *-linux-gnu*|*-*-gnu*|*freebsd*|*dragonfly*)
-++  *-linux-*|*-*-gnu*|*freebsd*|*dragonfly*)
-+     SHLIB_SO_CFLAGS="-fPIC"
-+     SHLIB_SO_LDFLAGS="$rpath -shared -o"
-+     SHLIB_SO_SUFFIX="so"
-diff --git a/package/gauche/Config.in b/package/gauche/Config.in
-new file mode 100644
-index 0000000..eee6a78
---- /dev/null
-+++ b/package/gauche/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_GAUCHE
-+	bool "gauche"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++++ b/package/irssi/Config.in
+@@ -0,0 +1,30 @@
++config BR2_PACKAGE_IRSSI
++	bool "irssi"
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_NCURSES
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
 +	depends on BR2_USE_MMU # fork()
-+	depends on BR2_ARCH_HAS_ATOMICS
 +	help
-+	  Gauche is an R7RS Scheme implementation developed to be a
-+	  handy script interpreter, which allows programmers and
-+	  systemadministrators to write small to large scripts for their
-+	  daily chores. Quick startup, built-in system interface, native
-+	  multilingual support are some of its goals.
++	  Irssi is a terminal based IRC client for UNIX systems.
 +
-+	  http://practical-scheme.net/gauche/
++	  http://irssi.org/
 +
-+comment "gauche needs a toolchain w/ NPTL"
++if BR2_PACKAGE_IRSSI
++
++config BR2_PACKAGE_IRSSI_PROXY
++	bool "proxy module"
++	help
++	  Build the irssi proxy module, which allows an IRC connection
++	  to be shared among multiple clients.
++
++config BR2_PACKAGE_IRSSI_TRUE_COLOR
++	bool "true color support"
++	help
++	  Build with true color support in terminal.
++
++endif
++
++comment "irssi needs a toolchain w/ wchar, threads"
 +	depends on BR2_USE_MMU
-+	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/gauche/gauche.hash b/package/gauche/gauche.hash
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
 new file mode 100644
-index 0000000..9ec106a
+index 0000000..0bfafe6
 --- /dev/null
-+++ b/package/gauche/gauche.hash
++++ b/package/irssi/irssi.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 7b18bcd70beaced1e004594be46c8cff95795318f6f5830dd2a8a700410fc149  Gauche-0.9.4.tgz
-diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
++# Locally calculated after checking pgp signature
++sha256	3c9600cad2edf58f1d012febc1a0ba844274df6e331c01a9e935467705166807	irssi-0.8.17.tar.bz2
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
 new file mode 100644
-index 0000000..92e9ff4
+index 0000000..c76fe6f
 --- /dev/null
-+++ b/package/gauche/gauche.mk
-@@ -0,0 +1,19 @@
++++ b/package/irssi/irssi.mk
+@@ -0,0 +1,52 @@
 +################################################################################
 +#
-+# gauche
++# irssi
 +#
 +################################################################################
 +
-+GAUCHE_VERSION = 0.9.4
-+GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
-+GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
-+GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
-+GAUCHE_LICENSE_FILES = COPYING
-+GAUCHE_DEPENDENCIES = host-gauche
++IRSSI_VERSION = 0.8.17
++IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.bz2
++IRSSI_SITE = http://irssi.org/files
++IRSSI_LICENSE = GPLv2+
++IRSSI_LICENSE_FILES = COPYING
++IRSSI_DEPENDENCIES = libglib2 ncurses
++IRSSI_AUTORECONF = YES
 +
-+# Checking c99 support in configure fails without WCHAR. But we do not
-+# need WCHAR at gauche runtime, so explicitly specify here.
-+GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++IRSSI_CONF_OPTS = \
++	--disable-glibtest \
++	--with-ncurses=$(STAGING_DIR)/usr \
++	--without-perl
 +
-+$(eval $(host-autotools-package))
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++IRSSI_CONF_OPTS += --enable-ssl
++IRSSI_DEPENDENCIES += openssl
++else
++IRSSI_CONF_OPTS += --disable-ssl
++endif
++
++ifeq ($(BR2_PACKAGE_IRSSI_PROXY),y)
++IRSSI_CONF_OPTS += --with-proxy
++# If shared libs are disabled, 'proxy' has to go in the list of built-in
++# modules.
++ifeq ($(BR2_STATIC_LIBS),y)
++IRSSI_CONF_OPTS += --with-modules=proxy
++endif
++else
++IRSSI_CONF_OPTS += --without-proxy
++endif # proxy
++
++ifeq ($(BR2_PACKAGE_IRSSI_TRUE_COLOR),y)
++IRSSI_CONF_OPTS += --enable-true-color
++else
++IRSSI_CONF_OPTS += --disable-true-color
++endif
++
++# Cross-compiling irssi with the perl interpreter enabled doesn't work
++# yet. So, remove scripts as they are useless in that case.
++define IRSSI_REMOVE_SCRIPTS
++	rm -rf $(TARGET_DIR)/usr/share/irssi/scripts/
++endef
++
++IRSSI_POST_INSTALL_TARGET_HOOKS += IRSSI_REMOVE_SCRIPTS
++
 +$(eval $(autotools-package))
 -- 
-1.7.1
-
-============================================================
-    Hiroshi Kawashima
+2.1.4
