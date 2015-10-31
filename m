@@ -1,86 +1,58 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 31 Oct 2015 15:19:02 +0100
-Subject: [Buildroot] [PATCH v5 25/36] package/expedite: bump to efl-1.15
- branch
-In-Reply-To: <20151025163651.GW11692@free.fr>
-References: <1445720476-21517-1-git-send-email-romain.naour@openwide.fr>
- <1445720476-21517-26-git-send-email-romain.naour@openwide.fr>
- <20151025163651.GW11692@free.fr>
-Message-ID: <5634CDD6.60003@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 31 Oct 2015 15:33:55 +0100
+Subject: [Buildroot] [PATCH] package/nodejs: more python3 fixes
+Message-ID: <1446302035-22083-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+nodejs' build system can not work with python3.
 
-Le 25/10/2015 17:36, Yann E. MORIN a ?crit :
-> Romain, All,
-> 
-> On 2015-10-24 23:01 +0200, Romain Naour spake thusly:
->> Since expedite hasn't been released since 1.7.10 release,
->> use efl-1.15 branch in the git tree.
->>
->> Use the newly added libefl package wich provide a new version
->> of efl libraries.
->>
->> Autoreconf the package since there is no configure script
->> in the git tree.
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> [--SNIP--]
->> diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
->> index 9b232f8..ae30535 100644
->> --- a/package/expedite/expedite.mk
->> +++ b/package/expedite/expedite.mk
->> @@ -4,14 +4,19 @@
->>  #
->>  ################################################################################
->>  
->> -EXPEDITE_VERSION = 1.7.10
->> -EXPEDITE_SITE = http://download.enlightenment.org/releases
->> +# efl-1.15 branch
->> +EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
->> +EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
->> +EXPEDITE_SITE_METHOD = git
->>  EXPEDITE_LICENSE = BSD-2c
->>  EXPEDITE_LICENSE_FILES = COPYING
->>  
->> -EXPEDITE_DEPENDENCIES = libevas libeina libeet
->> +EXPEDITE_DEPENDENCIES = host-libefl libefl
-> 
-> It also uses PKG_CHECK_MODULES, so you need host-pkgconf.
-> 
-> BTW, please check the previous patches, I did not systematically checked
-> for it. I've seen it on some of the efl packages, but I'm not sure all
-> depend on host-pkgconf when needed.
+Complement the existing patch to use a variable instead of hard-coding
+python.
 
-Thanks, I've checked the previous patches and I added host-pkgconf to
-libevas-generic-loaders and libemotion-generic-players
+Fixes:
+    http://autobuild.buildroot.org/results/406/406291bf7c61a80ed4a8d14d9a3887f51a1b2254/
+    http://autobuild.buildroot.org/results/ff9/ff97f452b875d8b1fb78561609742a233b80e0d3/
+    http://autobuild.buildroot.org/results/7ad/7adb96b45cb539c46940908d4ce9ca78b6a84d81/
+    ...
 
-Thanks!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ ...e-a-python-variable-instead-of-hardcoding-Python.patch | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-Best regards,
-Romain
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> -ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
->> +# There is no configure script in the git tree.
->> +EXPEDITE_AUTORECONF = YES
->> +
->> +ifeq ($(BR2_PACKAGE_LIBEFL_X),y)
->>  EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
->>  	--x-includes=$(STAGING_DIR)/usr/include \
->>  	--x-libraries=$(STAGING_DIR)/usr/lib
->> -- 
->> 2.4.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/nodejs/4.1.2/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch b/package/nodejs/4.1.2/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+index 2e266af..3104644 100644
+--- a/package/nodejs/4.1.2/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
++++ b/package/nodejs/4.1.2/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+@@ -14,7 +14,7 @@ the nodejs build system.
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ [Martin: adapt to 0.12.5]
+ Signed-off-by: Martin Bark <martin@barkynet.com>
+-[yann.morin.1998 at free.fr: adapat to 4.1.2]
++[yann.morin.1998 at free.fr: adapt to 4.1.2]
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+  deps/v8/tools/gyp/v8.gyp | 8 ++++----
+@@ -86,3 +86,16 @@ index c703155..06c0b2b 100644
+                '../../tools/gen-postmortem-metadata.py',
+                '<@(_outputs)',
+                '<@(heapobject_files)'
++diff --git a/deps/v8/build/toolchain.gypi b/deps/v8/build/toolchain.gypi
++index c703155..06c0b2b 100644
++--- a/deps/v8/build/toolchain.gypi
+++++ b/deps/v8/build/toolchain.gypi
++@@ -38,7 +38,7 @@
++     'ubsan%': 0,
++     'ubsan_vptr%': 0,
++     'v8_target_arch%': '<(target_arch)',
++-    'v8_host_byteorder%': '<!(python -c "import sys; print sys.byteorder")',
+++    'v8_host_byteorder%': '<!(<(python) -c "import sys; print sys.byteorder")',
++     # Native Client builds currently use the V8 ARM JIT and
++     # arm/simulator-arm.cc to defer the significant effort required
++     # for NaCl JIT support. The nacl_target_arch variable provides
+-- 
+1.9.1
