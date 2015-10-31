@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Oct 2015 09:48:44 +0100
-Subject: [Buildroot] [git commit] cairo: bump to version 1.14.4
-Message-ID: <20151031090244.C3E8E81937@busybox.osuosl.org>
+Date: Sat, 31 Oct 2015 09:39:01 +0100
+Subject: [Buildroot] [git commit] php: bump to version 5.6.15
+Message-ID: <20151031090244.DAC7881910@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d5f36eb63d7b3dd0104b8ce3458b8d0b54dd883f
+commit: http://git.buildroot.net/buildroot/commit/?id=567a7c3dfadbe0304b5990a465000fba130dfa46
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cairo/cairo.hash |    4 ++--
- package/cairo/cairo.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/php/php.hash |    2 +-
+ package/php/php.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
-index 79b2ec6..1440185 100644
---- a/package/cairo/cairo.hash
-+++ b/package/cairo/cairo.hash
+diff --git a/package/php/php.hash b/package/php/php.hash
+index a0b12a2..e4a3e73 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,2 +1,2 @@
--# From http://cairographics.org/releases/cairo-1.14.2.tar.xz.sha1
--sha1	c8da68aa66ca0855b5d0ff552766d3e8679e1d24	cairo-1.14.2.tar.xz
-+# From http://cairographics.org/releases/cairo-1.14.4.tar.xz.sha1
-+sha1	5b44471e7c328f96de6830baf8ea65030de797f9	cairo-1.14.4.tar.xz
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 098f249..9018b29 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -4,7 +4,7 @@
- #
+ # From http://php.net/downloads.php
+-sha256	c8edf6b05fd8a69ebd88d90c5c0975ee168502204622ad5cfcd550bc222632d9	php-5.6.14.tar.xz
++sha256	cf52e2e621e60997269663fa4bc06253191fa2a41dc9b08c8c911435b3ebcca9	php-5.6.15.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index a90913f..76e3d62 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CAIRO_VERSION = 1.14.2
-+CAIRO_VERSION = 1.14.4
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
- CAIRO_LICENSE = LGPLv2.1+
- CAIRO_LICENSE_FILES = COPYING
+ PHP_VERSION_MAJOR = 5.6
+-PHP_VERSION = $(PHP_VERSION_MAJOR).14
++PHP_VERSION = $(PHP_VERSION_MAJOR).15
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
