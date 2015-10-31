@@ -1,40 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 Oct 2015 15:55:50 +0100
-Subject: [Buildroot] [PATCH 1/1] ofono: bump to version 1.17
-In-Reply-To: <1446230985-12935-1-git-send-email-petr.vorel@gmail.com>
-References: <1446230985-12935-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <20151031155550.0c2636b8@free-electrons.com>
+Date: Sat, 31 Oct 2015 15:56:56 +0100
+Subject: [Buildroot] [git commit] fs/ext2: add options for extra space and
+	extra inodes
+Message-ID: <20151031145708.DA2FE818B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Petr Vorel,
+commit: http://git.buildroot.net/buildroot/commit/?id=301c18e1233a4e1bbbd5368496ddfe99480909bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 30 Oct 2015 19:49:45 +0100, Petr Vorel wrote:
-> Updated patch with uClibc support - merge with upstream support
-> for musl.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/ofono/0001-uclibc-backtrace.patch | 55 +++++++++++++++++--------------
->  package/ofono/ofono.hash                  |  2 +-
->  package/ofono/ofono.mk                    |  2 +-
->  3 files changed, 32 insertions(+), 27 deletions(-)
+Add two options to the ext2 filesystem, one to add extra free space, one
+to add extra free inodes.
 
-I've applied, thanks!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/ext2/Config.in       |   20 ++++++++++++++++++--
+ fs/ext2/ext2.mk         |    2 ++
+ package/mke2img/mke2img |    8 +++++++-
+ 3 files changed, 27 insertions(+), 3 deletions(-)
 
-However, their patch for the musl build is really crappy. Instead, they
-should add a configure.ac check for the backtrace related functionality
-and use the result of that check instead of testing __GLIBC__. If you
-have the courage to improve this and submit it upstream, it would be
-good.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 5b1cd0c..1e7f719 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -45,13 +45,29 @@ config BR2_TARGET_ROOTFS_EXT2_LABEL
+ 	string "filesystem label"
+ 
+ config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+-	int "size in blocks (leave at 0 for auto calculation)"
++	int "exact size in blocks (leave at 0 for auto calculation)"
+ 	default 0
+ 
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+-	int "inodes (leave at 0 for auto calculation)"
++	int "exact number of inodes (leave at 0 for auto calculation)"
+ 	default 0
+ 
++config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS
++	int "extra size in blocks" if BR2_TARGET_ROOTFS_EXT2_BLOCKS = 0
++	default 0
++	help
++	  Enter here the number of extra blocks of free space you
++	  want on your filesystem. By default, Buildroot will not
++	  leave much space free.
++
++config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
++	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
++	default 0
++	help
++	  Enter here the number of extra free inodes you want on
++	  your filesystem. By default, Buildroot will not leave
++	  many free inodes.
++
+ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+ 	int "reserved blocks percentage"
+ 	default 0
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index cab66a5..7417f81 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -9,10 +9,12 @@ EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
+ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+ EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
+ endif
++EXT2_OPTS += -B $(BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS)
+ 
+ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
+ EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
+ endif
++EXT2_OPTS += -I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES)
+ 
+ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
+ EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
+diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+index 5e2f62f..d772af5 100755
+--- a/package/mke2img/mke2img
++++ b/package/mke2img/mke2img
+@@ -17,12 +17,16 @@ main() {
+     # Default values
+     gen=2
+     rev=1
++    nb_extra_blocks=0
++    nb_extra_inodes=0
+ 
+-    while getopts :hb:i:r:d:o:G:R:l:u: OPT; do
++    while getopts :hb:B:i:I:r:d:o:G:R:l:u: OPT; do
+         case "${OPT}" in
+         h)  help; exit 0;;
+         b)  nb_blocks=${OPTARG};;
++        B)  nb_extra_blocks=${OPTARG};;
+         i)  nb_inodes=${OPTARG};;
++        I)  nb_extra_inodes=${OPTARG};;
+         r)  nb_res_blocks=${OPTARG};;
+         d)  root_dir="${OPTARG}";;
+         o)  image="${OPTARG}";;
+@@ -58,6 +62,7 @@ main() {
+         nb_inodes=$(find "${root_dir}" | wc -l)
+         nb_inodes=$((nb_inodes+400))
+     fi
++    nb_inodes=$((nb_inodes+nb_extra_inodes))
+ 
+     # calculate needed blocks
+     if [ -z "${nb_blocks}" ]; then
+@@ -73,6 +78,7 @@ main() {
+             nb_blocks=$((nb_blocks+1300))
+         fi
+     fi
++    nb_blocks=$((nb_blocks+nb_extra_blocks))
+ 
+     # Upgrade to rev1 if needed
+     if [ ${rev} -ge 1 ]; then
