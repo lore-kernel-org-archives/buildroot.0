@@ -1,58 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 Oct 2015 16:02:24 +0100
-Subject: [Buildroot] [git commit] package/dvblast: fix musl build
-Message-ID: <20151031150258.E560580165@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 31 Oct 2015 17:38:11 +0100
+Subject: [Buildroot] [PATCH] package/openvmtools: does not build with uClibc
+Message-ID: <1446309491-24752-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=922b67d89c49f7c7778a7c95e7ef398c408fb507
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On glibc 2.4+, openvmtools uses euidaccess(), which is not implemented
+on uClibc.
 
-In order to make dvblast build with the musl C library, use the
-standard uintXX_t integer types instead of u_intXX_t.
+But since uClibc fakes being a glibc-3.10, openvmtools believes it can
+use euidaccess(), and thus we get a linking error.
 
 Fixes:
-    http://autobuild.buildroot.org/results/a43/a434372d84544116e7bb4a88c0ee437ae0578007/
-    http://autobuild.buildroot.org/results/167/167efb284be47ae3e90fe7a8e6316e757b59cd3e/
+    http://autobuild.buildroot.org/results/779/779bed269982f0b2e04baecae2e720d602319552/
+    http://autobuild.buildroot.org/results/860/8609823e35115f07b0f16f0a1831201aa1cf9e3c/
+    http://autobuild.buildroot.org/results/f57/f572573c5f7f9206e0a8309b535a7c633a2d6b16/
     ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Julian Scheel <julian@jusst.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dvblast/0002-fix-int-types.patch |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/dvblast/0002-fix-int-types.patch b/package/dvblast/0002-fix-int-types.patch
-new file mode 100644
-index 0000000..d741cc6
---- /dev/null
-+++ b/package/dvblast/0002-fix-int-types.patch
-@@ -0,0 +1,24 @@
-+Standard integer types are uintXX_t not u_intXX_t
-+
-+This fixes the build with the musl C library.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN dvblast-3.0.orig/dvblast.h dvblast-3.0/dvblast.h
-+--- dvblast-3.0.orig/dvblast.h	2015-10-05 17:51:14.000000000 +0200
-++++ dvblast-3.0/dvblast.h	2015-10-30 16:29:25.586125193 +0100
-+@@ -49,10 +49,10 @@
-+  * Raw udp packet structure with flexible-array payload
-+  *****************************************************************************/
-+ struct udpheader { // FAVOR_BSD hell ...
-+-  u_int16_t source;
-+-  u_int16_t dest;
-+-  u_int16_t len;
-+-  u_int16_t check;
-++  uint16_t source;
-++  uint16_t dest;
-++  uint16_t len;
-++  uint16_t check;
-+ };
-+ 
-+ #if defined(__FreeBSD__) || defined(__APPLE__)
+---
+Note; an alternate solution would be to patch openvmtools to not use
+euidaccess with uClibc as well. But I'm warry of patching. After all, a
+package that deals with virtual machines is not really size-sensitive,
+so it is not completely stupid to disable it with uClibc, and require
+either glibc or musl...
+---
+ package/openvmtools/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 98cbeb9..64bf65c 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_OPENVMTOOLS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_ENABLE_LOCALE
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBDNET
+ 	help
+@@ -40,13 +41,14 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
+ 	help
+ 	  Support for PAM in openvmtools
+ 
+-comment "PAM support needs a uClibc or (e)glibc toolchain w/ dynamic library"
++comment "PAM support needs an (e)glibc toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ endif
+ 
+-comment "openvmtools needs a toolchain w/ wchar, threads, RPC, locale"
++comment "openvmtools needs an (e)glibc or musl toolchain w/ wchar, threads, RPC, locale"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE
++		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE || \
++		BR2_TOOLCHAIN_USES_UCLIBC
+-- 
+1.9.1
