@@ -1,173 +1,171 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 30 Oct 2015 22:52:33 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/libsoil: new package
-Message-ID: <1446241953-14139-1-git-send-email-bernd.kuhls@t-online.de>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Sat, 31 Oct 2015 10:22:08 +0900
+Subject: [Buildroot] [PATCH v4 1/1] gauche: new package
+Message-ID: <201510310122.t9V1M8CT023045@ms-omx01.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for these new Kodi addons:
+Gauche is an R7RS Scheme implementation developed to be a handy script
+interpreter, which allows programmers and systemadministrators to write
+small to large scripts for their daily chores. Quick startup, built-in
+system interface, native multilingual support are some of its goals.
 
-kodi-screensaver-asterwave
-kodi-screensaver-cpblobs
-kodi-screensaver-matrixtrails
-kodi-screensaver-planestate
-kodi-visualisation-fountain
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-v3: added various changes after a review by Peter
-    - in comment for v2: s/tarball/zipfile/
-    - moved -fPIC from 0001-fix-makefile.patch to LIBSOIL_CFLAGS
-Because this library will be used in at least five packages I decided
-against using the other upstream makefile providing a static-only
-library.
-
-v2: added various changes after a review by Thomas
-    - not available as static library
-    - used author's upstream tarball instead from Debian
-    - added a Makefile fix to simplify the usage of variable CC
-
- package/Config.in                       |  1 +
- package/libsoil/0001-fix-makefile.patch | 35 +++++++++++++++++++++++++++
- package/libsoil/Config.in               | 12 +++++++++
- package/libsoil/libsoil.hash            |  2 ++
- package/libsoil/libsoil.mk              | 43 +++++++++++++++++++++++++++++++++
- 5 files changed, 93 insertions(+)
- create mode 100644 package/libsoil/0001-fix-makefile.patch
- create mode 100644 package/libsoil/Config.in
- create mode 100644 package/libsoil/libsoil.hash
- create mode 100644 package/libsoil/libsoil.mk
+Changes v3 -> v4 (reflect comment from Arnout)
+- fix some miss spell in help text.
+- fix comment in patch file.
+- add patch file for configure.ac (same fix with configure).
+- fix GAUCHE_LICENSE
+Changes v2 -> v3
+- add comment to patch file why I touch configure directly instead of
+  configure.ac
+Changes v1 -> v2
+- change help description to written in project's web page.
+- add brief description and SoB in patch file.
+- change depens on BR2_TOOLCHAIN_HAS_THREADS -> 
+    BR2_TOOLCHAIN_HAS_THREADS_NPTL.
+- add brief description why "-std=gnu99" needed in GAUCHE_CONF_ENV.
+- add depends on BR2_ARCH_HAS_ATOMICS (Boehm gc need this).
+- add # fork() to 'depends on BR2_USE_MMU'.
+- remove empty comment line in hash file.
+- remove unnecessary GAUCHE_CONF_OPTS.
+---
+ package/Config.in                                  |    1 +
+ package/gauche/0001-fix-so-suffix.patch            |   18 ++++++++++++++++++
+ .../gauche/0002-fix-so-suffix-configure-ac.patch   |   16 ++++++++++++++++
+ package/gauche/Config.in                           |   18 ++++++++++++++++++
+ package/gauche/gauche.hash                         |    2 ++
+ package/gauche/gauche.mk                           |   19 +++++++++++++++++++
+ 6 files changed, 74 insertions(+), 0 deletions(-)
+ create mode 100644 package/gauche/0001-fix-so-suffix.patch
+ create mode 100644 package/gauche/0002-fix-so-suffix-configure-ac.patch
+ create mode 100644 package/gauche/Config.in
+ create mode 100644 package/gauche/gauche.hash
+ create mode 100644 package/gauche/gauche.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 10ff94e..780eb12 100644
+index 10ff94e..f0cd4ab 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -833,6 +833,7 @@ menu "Graphics"
- 	source "package/libqrencode/Config.in"
- 	source "package/libraw/Config.in"
- 	source "package/librsvg/Config.in"
-+	source "package/libsoil/Config.in"
- 	source "package/libsvg/Config.in"
- 	source "package/libsvg-cairo/Config.in"
- 	source "package/libsvgtiny/Config.in"
-diff --git a/package/libsoil/0001-fix-makefile.patch b/package/libsoil/0001-fix-makefile.patch
+@@ -460,6 +460,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
++	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
+ 	source "package/jamvm/Config.in"
+diff --git a/package/gauche/0001-fix-so-suffix.patch b/package/gauche/0001-fix-so-suffix.patch
 new file mode 100644
-index 0000000..43e81f2
+index 0000000..77bb355
 --- /dev/null
-+++ b/package/libsoil/0001-fix-makefile.patch
-@@ -0,0 +1,35 @@
-+Various makefile fixes to allow cross compilation
++++ b/package/gauche/0001-fix-so-suffix.patch
+@@ -0,0 +1,18 @@
++With uclibc or musl configuration, $host does not match to '*-linux-gnu*'.
++I touch configure instead of configure.ac because autoreconf failed
++by version mismatch of autotools.
 +
-+Partly ported from
-+http://anonscm.debian.org/cgit/pkg-games/libsoil.git/tree/debian/patches/linking_correctly.patch
++Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr "b/Simple OpenGL Image Library/projects/makefile/alternate Makefile.txt" "a/Simple OpenGL Image Library/projects/makefile/alternate Makefile.txt"
-+--- "b/Simple OpenGL Image Library/projects/makefile/alternate Makefile.txt"	2008-07-07 18:13:28.000000000 +0200
-++++ "a/Simple OpenGL Image Library/projects/makefile/alternate Makefile.txt"	2015-10-05 20:35:59.264517571 +0200
-+@@ -1,8 +1,8 @@
-+ MAKE = make
-+-CC = gcc
-+-INSTALL_FILE = install -p -o root -g root -m 644
-+-INSTALL_DIR = install -p -o root -g root -d
-+-LN = ln -s
-++CC = $(GCC)
-++INSTALL_FILE = $(INSTALL) -m 644
-++INSTALL_DIR = $(INSTALL) -d
-++LN = ln -sf
-+ RM = rm -fv
-+ CFLAGS += -c -O2 -Wall
-+ LDFLAGS +=
-+@@ -27,9 +27,9 @@
-+ 
-+ lib: $(OFILES)
-+ 	# create static library
-+-	ar -cvq $(LIBNAME).a $(OFILES)
-++	$(AR) -cvq $(LIBNAME).a $(OFILES)
-+ 	# create shared library
-+-	gcc -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES)
-++	$(CC) -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES) -lGL -lm
-+ 
-+ install:
-+ 	$(INSTALL_DIR) $(DESTDIR)/$(INCLUDEDIR)
-diff --git a/package/libsoil/Config.in b/package/libsoil/Config.in
++diff -ur a/configure b/configure
++--- a/configure	2014-07-20 15:15:05.000000000 +0900
+++++ b/configure	2015-10-20 21:52:32.791442291 +0900
++@@ -6843,7 +6843,7 @@
++     SHLIB_MAIN_LDFLAGS=""
++     SHLIB_OK=ok
++     ;;
++-  *-linux-gnu*|*-*-gnu*|*freebsd*|*dragonfly*)
+++  *-linux-*|*-*-gnu*|*freebsd*|*dragonfly*)
++     SHLIB_SO_CFLAGS="-fPIC"
++     SHLIB_SO_LDFLAGS="$rpath -shared -o"
++     SHLIB_SO_SUFFIX="so"
+diff --git a/package/gauche/0002-fix-so-suffix-configure-ac.patch b/package/gauche/0002-fix-so-suffix-configure-ac.patch
 new file mode 100644
-index 0000000..aea0cc3
+index 0000000..f9b4459
 --- /dev/null
-+++ b/package/libsoil/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBSOIL
-+	bool "libsoil"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on !BR2_STATIC_LIBS
++++ b/package/gauche/0002-fix-so-suffix-configure-ac.patch
+@@ -0,0 +1,16 @@
++With uclibc or musl configuration, $host does not match to '*-linux-gnu*'.
++
++Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
++
++diff -ur a/configure.ac b/configure.ac
++--- a/configure.ac	2015-10-21 21:33:17.370000200 +0900
+++++ b/configure.ac	2015-10-21 21:33:39.784110527 +0900
++@@ -572,7 +572,7 @@
++     SHLIB_MAIN_LDFLAGS=""
++     SHLIB_OK=ok
++     ;;
++-  *-linux-gnu*|*-*-gnu*|*freebsd*|*dragonfly*)
+++  *-linux-*|*-*-gnu*|*freebsd*|*dragonfly*)
++     SHLIB_SO_CFLAGS="-fPIC"
++     SHLIB_SO_LDFLAGS="$rpath -shared -o"
++     SHLIB_SO_SUFFIX="so"
+diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+new file mode 100644
+index 0000000..eee6a78
+--- /dev/null
++++ b/package/gauche/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_GAUCHE
++	bool "gauche"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_ARCH_HAS_ATOMICS
 +	help
-+	  SOIL is a tiny C library used primarily for uploading
-+	  textures into OpenGL.
++	  Gauche is an R7RS Scheme implementation developed to be a
++	  handy script interpreter, which allows programmers and
++	  systemadministrators to write small to large scripts for their
++	  daily chores. Quick startup, built-in system interface, native
++	  multilingual support are some of its goals.
 +
-+	  http://www.lonesock.net/soil.html
++	  http://practical-scheme.net/gauche/
 +
-+comment "libsoil needs an OpenGL backend and a toolchain w/ dynamic library"
-+	depends on !BR2_PACKAGE_HAS_LIBGL || BR2_STATIC_LIBS
-diff --git a/package/libsoil/libsoil.hash b/package/libsoil/libsoil.hash
++comment "gauche needs a toolchain w/ NPTL"
++	depends on BR2_USE_MMU
++	depends on BR2_ARCH_HAS_ATOMICS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/gauche/gauche.hash b/package/gauche/gauche.hash
 new file mode 100644
-index 0000000..175569b
+index 0000000..9ec106a
 --- /dev/null
-+++ b/package/libsoil/libsoil.hash
++++ b/package/gauche/gauche.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	a2305b8d64f6d636e36d669bbdb0ca5445d1345c754b3d61d3f037dad2e5f701	soil.zip
-diff --git a/package/libsoil/libsoil.mk b/package/libsoil/libsoil.mk
++sha256 7b18bcd70beaced1e004594be46c8cff95795318f6f5830dd2a8a700410fc149  Gauche-0.9.4.tgz
+diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
 new file mode 100644
-index 0000000..0ed8723
+index 0000000..92e9ff4
 --- /dev/null
-+++ b/package/libsoil/libsoil.mk
-@@ -0,0 +1,43 @@
++++ b/package/gauche/gauche.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# libsoil
++# gauche
 +#
 +################################################################################
 +
-+LIBSOIL_VERSION = 20080707
-+LIBSOIL_SOURCE = soil.zip
-+LIBSOIL_SITE = http://www.lonesock.net/files
-+LIBSOIL_INSTALL_STAGING = YES
-+LIBSOIL_DEPENDENCIES = libgl
-+LIBSOIL_LICENSE = Public Domain, MIT
-+LIBSOIL_LICENSE_FILES = src/stb_image_aug.c src/image_helper.c
++GAUCHE_VERSION = 0.9.4
++GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
++GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
++GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
++GAUCHE_LICENSE_FILES = COPYING
++GAUCHE_DEPENDENCIES = host-gauche
 +
-+LIBSOIL_CFLAGS = "$(TARGET_CFLAGS) -c -fPIC"
++# Checking c99 support in configure fails without WCHAR. But we do not
++# need WCHAR at gauche runtime, so explicitly specify here.
++GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
 +
-+define LIBSOIL_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(DL_DIR)/$(LIBSOIL_SOURCE)
-+endef
-+
-+define LIBSOIL_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS=$(LIBSOIL_CFLAGS) \
-+		-f ../projects/makefile/alternate\ Makefile.txt \
-+		-C $(@D)/Simple\ OpenGL\ Image\ Library/src
-+endef
-+
-+define LIBSOIL_INSTALL_STAGING_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		-f ../projects/makefile/alternate\ Makefile.txt \
-+		DESTDIR=$(STAGING_DIR) install \
-+		INSTALL=$(INSTALL) \
-+		-C $(@D)/Simple\ OpenGL\ Image\ Library/src
-+endef
-+
-+define LIBSOIL_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		-f ../projects/makefile/alternate\ Makefile.txt \
-+		DESTDIR=$(TARGET_DIR) install \
-+		INSTALL=$(INSTALL) \
-+		-C $(@D)/Simple\ OpenGL\ Image\ Library/src
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(host-autotools-package))
++$(eval $(autotools-package))
 -- 
-2.6.1
+1.7.1
+
+============================================================
+    Hiroshi Kawashima
