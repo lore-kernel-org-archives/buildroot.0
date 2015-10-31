@@ -1,66 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 Oct 2015 15:58:17 +0100
-Subject: [Buildroot] [git commit] package/dvblast: always needs iconv
-Message-ID: <20151031150258.C28CB81910@busybox.osuosl.org>
+Date: Sat, 31 Oct 2015 16:02:24 +0100
+Subject: [Buildroot] [git commit] package/dvblast: fix musl build
+Message-ID: <20151031150258.E560580165@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bdd72afa173ab97617f413a9ff01ac2b1dad7ba6
+commit: http://git.buildroot.net/buildroot/commit/?id=922b67d89c49f7c7778a7c95e7ef398c408fb507
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-dvblast wants iconv functions even without locales.
+In order to make dvblast build with the musl C library, use the
+standard uintXX_t integer types instead of u_intXX_t.
 
 Fixes:
-    http://autobuild.buildroot.org/results/03f/03fe6dc17d7f36d9b8c7ced402850def95d8feb3/
-    http://autobuild.buildroot.org/results/064/0647b0180ac9a6bf6172742e388df9a9e584d91b/
+    http://autobuild.buildroot.org/results/a43/a434372d84544116e7bb4a88c0ee437ae0578007/
+    http://autobuild.buildroot.org/results/167/167efb284be47ae3e90fe7a8e6316e757b59cd3e/
     ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julian Scheel <julian@jusst.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dvblast/Config.in  |    1 +
- package/dvblast/dvblast.mk |   11 +++++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ package/dvblast/0002-fix-int-types.patch |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
-index ac8b4ae..da78943 100644
---- a/package/dvblast/Config.in
-+++ b/package/dvblast/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_DVBLAST
- 	bool "dvblast"
- 	select BR2_PACKAGE_BITSTREAM
- 	select BR2_PACKAGE_LIBEV
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	depends on !BR2_bfin  # libev
- 	help
- 	  DVBlast is a simple and powerful MPEG-2/TS demux and
-diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
-index 11a2dc8..ef9a666 100644
---- a/package/dvblast/dvblast.mk
-+++ b/package/dvblast/dvblast.mk
-@@ -11,12 +11,19 @@ DVBLAST_LICENSE = GPLv2+, WTFPL
- DVBLAST_LICENSE_FILES = COPYING COPYING.WTFPL
- DVBLAST_DEPENDENCIES = bitstream libev
- 
-+DVBLAST_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
+diff --git a/package/dvblast/0002-fix-int-types.patch b/package/dvblast/0002-fix-int-types.patch
+new file mode 100644
+index 0000000..d741cc6
+--- /dev/null
++++ b/package/dvblast/0002-fix-int-types.patch
+@@ -0,0 +1,24 @@
++Standard integer types are uintXX_t not u_intXX_t
 +
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+DVBLAST_DEPENDENCIES += libiconv
-+DVBLAST_MAKE_ENV += LDLIBS=-liconv
-+endif
++This fixes the build with the musl C library.
 +
- define DVBLAST_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(DVBLAST_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
- define DVBLAST_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-+	$(DVBLAST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
- endef
- 
- $(eval $(generic-package))
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN dvblast-3.0.orig/dvblast.h dvblast-3.0/dvblast.h
++--- dvblast-3.0.orig/dvblast.h	2015-10-05 17:51:14.000000000 +0200
+++++ dvblast-3.0/dvblast.h	2015-10-30 16:29:25.586125193 +0100
++@@ -49,10 +49,10 @@
++  * Raw udp packet structure with flexible-array payload
++  *****************************************************************************/
++ struct udpheader { // FAVOR_BSD hell ...
++-  u_int16_t source;
++-  u_int16_t dest;
++-  u_int16_t len;
++-  u_int16_t check;
+++  uint16_t source;
+++  uint16_t dest;
+++  uint16_t len;
+++  uint16_t check;
++ };
++ 
++ #if defined(__FreeBSD__) || defined(__APPLE__)
