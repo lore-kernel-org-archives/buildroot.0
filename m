@@ -1,121 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 Oct 2015 15:54:36 +0100
-Subject: [Buildroot] [git commit] ofono: bump to version 1.17
-Message-ID: <20151031145505.921C37FA3D@busybox.osuosl.org>
+Date: Sat, 31 Oct 2015 15:49:33 +0100
+Subject: [Buildroot] [git commit] moarvm: bump to version 2015.10
+Message-ID: <20151031145505.8A84B7FA3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7057555d00a11b4fc8aa1a7c46c44d98442aa03c
+commit: http://git.buildroot.net/buildroot/commit/?id=088e8a7746359dc67edb75fc4259a087ae665c99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated patch with uClibc support - merge with upstream support
-for musl.
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ofono/0001-uclibc-backtrace.patch |   55 ++++++++++++++++-------------
- package/ofono/ofono.hash                  |    2 +-
- package/ofono/ofono.mk                    |    2 +-
- 3 files changed, 32 insertions(+), 27 deletions(-)
+ package/moarvm/moarvm.hash |    2 +-
+ package/moarvm/moarvm.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ofono/0001-uclibc-backtrace.patch b/package/ofono/0001-uclibc-backtrace.patch
-index 8499bcf..3ce7bf8 100644
---- a/package/ofono/0001-uclibc-backtrace.patch
-+++ b/package/ofono/0001-uclibc-backtrace.patch
-@@ -4,41 +4,46 @@ Backtrace support is only used for logging on signal errors, which
- isn't really critical, so simply remove backtrace info if not
- available in uClibc.
- 
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- src/log.c |    7 +++++++
-- 1 file changed, 7 insertions(+)
-+NOTE: based on patch from Peter Korsgaard <jacmet@sunsite.dk>
- 
--Index: ofono-1.5/src/log.c
--===================================================================
----- ofono-1.5.orig/src/log.c
--+++ ofono-1.5/src/log.c
--@@ -30,7 +30,12 @@
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+--- ofono-1.7.orig/src/log.c
-++++ ofono-1.7/src/log.c
-+@@ -30,7 +30,8 @@
-  #include <stdlib.h>
-  #include <string.h>
-  #include <syslog.h>
--+#include <features.h>
--+/* backtrace support is optional on uClibc */
--+#if !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
-+-#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
- +#define HAVE_BACKTRACE
-  #include <execinfo.h>
--+#endif
-+ #endif
-  #include <dlfcn.h>
-+@@ -115,7 +116,7 @@
-+	va_end(ap);
-+ }
-  
-- #include "ofono.h"
--@@ -115,6 +120,7 @@
-- 
-+-#ifdef __GLIBC__
-++#ifdef HAVE_BACKTRACE
-  static void print_backtrace(unsigned int offset)
-  {
--+#ifdef HAVE_BACKTRACE
-  	void *frames[99];
-- 	size_t n_ptrs;
-- 	unsigned int i;
--@@ -213,6 +219,7 @@
-+@@ -309,7 +310,7 @@
-+	if (detach == FALSE)
-+		option |= LOG_PERROR;
-  
-- 	close(outfd[1]);
-- 	close(infd[0]);
--+#endif /* HAVE_BACKTRACE */
-- }
-+-#ifdef __GLIBC__
-++#ifdef HAVE_BACKTRACE
-+	signal_setup(signal_handler);
-+ #endif
-+
-+@@ -326,7 +327,7 @@
-+
-+	closelog();
-+
-+-#ifdef __GLIBC__
-++#ifdef HAVE_BACKTRACE
-+	signal_setup(SIG_DFL);
-+ #endif
-  
-- static void signal_handler(int signo)
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index e83ce1a..50c92ed 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index 2a87855..977da7e 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256	403b98dadece8bc804c0bd16b96d3db5a3bb0f84af64b3d67924da2d1a754b07  ofono-1.16.tar.xz
-+sha256	cbf20f07fd15253c682b23c1786d517f505c3688f7c4ea93da777e1523b89635  ofono-1.17.tar.xz
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 7899750..588c9cd 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
+ # Locally computed
+-sha256  828843eb3da020ee24ff83933b63aebf4aa774b815a3dfa3a758d6334779565e  MoarVM-2015.05.tar.gz
++sha256  2d05fbac7aa431d5a10625958df1f3d47963d79ede2c875f52fec3ea65ea445f  MoarVM-2015.10.tar.gz
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 5889436..a918b91 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OFONO_VERSION = 1.16
-+OFONO_VERSION = 1.17
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPLv2
+-MOARVM_VERSION = 2015.05
++MOARVM_VERSION = 2015.10
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
