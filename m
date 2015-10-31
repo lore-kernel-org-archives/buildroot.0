@@ -1,41 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 Oct 2015 15:49:33 +0100
-Subject: [Buildroot] [git commit] moarvm: bump to version 2015.10
-Message-ID: <20151031145505.8A84B7FA3D@busybox.osuosl.org>
+Date: Sat, 31 Oct 2015 15:55:50 +0100
+Subject: [Buildroot] [PATCH 1/1] ofono: bump to version 1.17
+In-Reply-To: <1446230985-12935-1-git-send-email-petr.vorel@gmail.com>
+References: <1446230985-12935-1-git-send-email-petr.vorel@gmail.com>
+Message-ID: <20151031155550.0c2636b8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=088e8a7746359dc67edb75fc4259a087ae665c99
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Petr Vorel,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/moarvm/moarvm.hash |    2 +-
- package/moarvm/moarvm.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, 30 Oct 2015 19:49:45 +0100, Petr Vorel wrote:
+> Updated patch with uClibc support - merge with upstream support
+> for musl.
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+>  package/ofono/0001-uclibc-backtrace.patch | 55 +++++++++++++++++--------------
+>  package/ofono/ofono.hash                  |  2 +-
+>  package/ofono/ofono.mk                    |  2 +-
+>  3 files changed, 32 insertions(+), 27 deletions(-)
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 2a87855..977da7e 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  828843eb3da020ee24ff83933b63aebf4aa774b815a3dfa3a758d6334779565e  MoarVM-2015.05.tar.gz
-+sha256  2d05fbac7aa431d5a10625958df1f3d47963d79ede2c875f52fec3ea65ea445f  MoarVM-2015.10.tar.gz
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 5889436..a918b91 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOARVM_VERSION = 2015.05
-+MOARVM_VERSION = 2015.10
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+I've applied, thanks!
+
+However, their patch for the musl build is really crappy. Instead, they
+should add a configure.ac check for the backtrace related functionality
+and use the result of that check instead of testing __GLIBC__. If you
+have the courage to improve this and submit it upstream, it would be
+good.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
