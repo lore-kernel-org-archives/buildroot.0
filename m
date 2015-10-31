@@ -1,42 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 Oct 2015 15:48:31 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-ugly: bump to version 1.6.1
-Message-ID: <20151031145505.57A007FF39@busybox.osuosl.org>
+Date: Sat, 31 Oct 2015 15:54:36 +0100
+Subject: [Buildroot] [git commit] ofono: bump to version 1.17
+Message-ID: <20151031145505.921C37FA3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e1bba3ce0561a7374d4f887a383e6b3f653f9f37
+commit: http://git.buildroot.net/buildroot/commit/?id=7057555d00a11b4fc8aa1a7c46c44d98442aa03c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Updated patch with uClibc support - merge with upstream support
+for musl.
+
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../gst1-plugins-ugly/gst1-plugins-ugly.hash       |    4 ++--
- .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ofono/0001-uclibc-backtrace.patch |   55 ++++++++++++++++-------------
+ package/ofono/ofono.hash                  |    2 +-
+ package/ofono/ofono.mk                    |    2 +-
+ 3 files changed, 32 insertions(+), 27 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index d7ca7c3..7b418e4 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+diff --git a/package/ofono/0001-uclibc-backtrace.patch b/package/ofono/0001-uclibc-backtrace.patch
+index 8499bcf..3ce7bf8 100644
+--- a/package/ofono/0001-uclibc-backtrace.patch
++++ b/package/ofono/0001-uclibc-backtrace.patch
+@@ -4,41 +4,46 @@ Backtrace support is only used for logging on signal errors, which
+ isn't really critical, so simply remove backtrace info if not
+ available in uClibc.
+ 
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/log.c |    7 +++++++
+- 1 file changed, 7 insertions(+)
++NOTE: based on patch from Peter Korsgaard <jacmet@sunsite.dk>
+ 
+-Index: ofono-1.5/src/log.c
+-===================================================================
+---- ofono-1.5.orig/src/log.c
+-+++ ofono-1.5/src/log.c
+-@@ -30,7 +30,12 @@
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++---
++--- ofono-1.7.orig/src/log.c
+++++ ofono-1.7/src/log.c
++@@ -30,7 +30,8 @@
+  #include <stdlib.h>
+  #include <string.h>
+  #include <syslog.h>
+-+#include <features.h>
+-+/* backtrace support is optional on uClibc */
+-+#if !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
++-#ifdef __GLIBC__
+++#if defined(__GLIBC__) && !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
+ +#define HAVE_BACKTRACE
+  #include <execinfo.h>
+-+#endif
++ #endif
+  #include <dlfcn.h>
++@@ -115,7 +116,7 @@
++	va_end(ap);
++ }
+  
+- #include "ofono.h"
+-@@ -115,6 +120,7 @@
+- 
++-#ifdef __GLIBC__
+++#ifdef HAVE_BACKTRACE
+  static void print_backtrace(unsigned int offset)
+  {
+-+#ifdef HAVE_BACKTRACE
+  	void *frames[99];
+- 	size_t n_ptrs;
+- 	unsigned int i;
+-@@ -213,6 +219,7 @@
++@@ -309,7 +310,7 @@
++	if (detach == FALSE)
++		option |= LOG_PERROR;
+  
+- 	close(outfd[1]);
+- 	close(infd[0]);
+-+#endif /* HAVE_BACKTRACE */
+- }
++-#ifdef __GLIBC__
+++#ifdef HAVE_BACKTRACE
++	signal_setup(signal_handler);
++ #endif
++
++@@ -326,7 +327,7 @@
++
++	closelog();
++
++-#ifdef __GLIBC__
+++#ifdef HAVE_BACKTRACE
++	signal_setup(SIG_DFL);
++ #endif
+  
+- static void signal_handler(int signo)
+diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
+index e83ce1a..50c92ed 100644
+--- a/package/ofono/ofono.hash
++++ b/package/ofono/ofono.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.6.0.tar.xz.sha256sum
--sha256	91178dc0d687a83c083190a905681d3a66901374b1004fc52cd300b7802e5f06  gst-plugins-ugly-1.6.0.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.6.1.tar.xz.sha256sum
-+sha256	0cc3f90e4322efe1f774272e8fe5c185be37cf7999cd5ca7e0e0607e03d56a57  gst-plugins-ugly-1.6.1.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 6489a02..3e02586 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+ # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
+-sha256	403b98dadece8bc804c0bd16b96d3db5a3bb0f84af64b3d67924da2d1a754b07  ofono-1.16.tar.xz
++sha256	cbf20f07fd15253c682b23c1786d517f505c3688f7c4ea93da777e1523b89635  ofono-1.17.tar.xz
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+index 7899750..588c9cd 100644
+--- a/package/ofono/ofono.mk
++++ b/package/ofono/ofono.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_UGLY_VERSION = 1.6.0
-+GST1_PLUGINS_UGLY_VERSION = 1.6.1
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+-OFONO_VERSION = 1.16
++OFONO_VERSION = 1.17
+ OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
+ OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
+ OFONO_LICENSE = GPLv2
