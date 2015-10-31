@@ -1,25 +1,54 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 31 Oct 2015 21:45:51 +0100
-Subject: [Buildroot] [PATCH 1/1] ofono: bump to version 1.17
-In-Reply-To: <20151031155550.0c2636b8@free-electrons.com>
-References: <1446230985-12935-1-git-send-email-petr.vorel@gmail.com>
- <20151031155550.0c2636b8@free-electrons.com>
-Message-ID: <20151031204550.GA25719@t61>
+From: Gabe Evans <gabe@hashrabbit.co>
+Date: Sat, 31 Oct 2015 21:27:17 +0000
+Subject: [Buildroot] [PATCH 1/1] mosquitto: systemd support
+Message-ID: <1446326837-15874-1-git-send-email-gabe@hashrabbit.co>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+---
+ package/mosquitto/mosquitto.mk      |  8 ++++++++
+ package/mosquitto/mosquitto.service | 10 ++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/mosquitto/mosquitto.service
 
-> However, their patch for the musl build is really crappy. Instead, they
-> should add a configure.ac check for the backtrace related functionality
-> and use the result of that check instead of testing __GLIBC__. If you
-> have the courage to improve this and submit it upstream, it would be
-> good.
-I'll do it :-).
-I suppose it's enough just to improve check for execinfo.h header and backtrace function.
-
-Kind regards,
-Petr
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 73365f9..efeb32d 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -83,6 +83,14 @@ define MOSQUITTO_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50mosquitto
+ endef
+ 
++define MOSQUITTO_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/mosquitto/mosquitto.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/mosquitto.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/mosquitto.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mosquitto.service
++endef
++
+ define MOSQUITTO_USERS
+ 	mosquitto -1 nogroup -1 * - - - Mosquitto user
+ endef
+diff --git a/package/mosquitto/mosquitto.service b/package/mosquitto/mosquitto.service
+new file mode 100644
+index 0000000..2d1939d
+--- /dev/null
++++ b/package/mosquitto/mosquitto.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Mosquitto MQTT broker
++
++[Service]
++ExecStart=/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
++ExecReload=/bin/kill -HUP $MAINPID
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
+-- 
+1.9.1
