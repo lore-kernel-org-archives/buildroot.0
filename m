@@ -1,68 +1,81 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  1 Nov 2015 19:07:43 +0100
-Subject: [Buildroot] [PATCH v6 07/33] package/efl/libefl: add harfbuzz
-	dependency
+Date: Sun,  1 Nov 2015 19:07:47 +0100
+Subject: [Buildroot] [PATCH v6 11/33] package/efl/libefl: add jp2k config
+	option
 In-Reply-To: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
 References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1446401289-9059-8-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1446401289-9059-12-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Harfbuzz allow to enable complex text shaping and layouting
-support in efl libraries.
-
-Also, it one of the "highly recommended" dependecies
-according to the README but disabling it doesn't need
-the --enable-i-really-know-what-i-am-doing... option.
-That's why harfbuzz is not added to
-BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
+Like for webp format, add an option to enable the JPEG 2000
+codec support in the efl libraries.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: use --enable/disable options
+v6: use --disable option
 v4: rename to libefl
-    improve commit log.
+    improve commit log
 ---
+ package/efl/libefl/Config.in | 7 +++++++
  package/efl/libefl/libefl.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index 4a202a0..72b7347 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -98,6 +98,13 @@ config BR2_PACKAGE_LIBEFL_PNG
+ 	  This enables the loader code that loads png files using
+ 	  libpng.
+ 
++config BR2_PACKAGE_LIBEFL_JP2K
++	bool "libevas jp2k loader"
++	select BR2_PACKAGE_OPENJPEG
++	help
++	  This enables the loader code that loads jp2k files using
++	  openjpeg.
++
+ config BR2_PACKAGE_LIBEFL_JPEG
+ 	bool "libevas jpeg loader"
+ 	help
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 7bd3820..80eb3d8 100644
+index 5adbfd6..38fade1 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -31,7 +31,6 @@ LIBEFL_GETTEXTIZE = YES
+@@ -30,7 +30,6 @@ LIBEFL_GETTEXTIZE = YES
+ 
  # Configure options:
  # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-fb: disable frame buffer support.
--# --disable-harfbuzz: disable harfbuzz support.
- # --disable-image-loader-jp2k: disable JPEG 2000 support.
- # --disable-image-loader-webp: disable webp support.
+-# --disable-image-loader-jp2k: disable JPEG 2000 support.
  # --disable-sdl: disable sdl2 support.
-@@ -46,7 +45,6 @@ LIBEFL_CONF_OPTS = \
+ # --disable-systemd: disable systemd support.
+ # --disable-xinput22: disable X11 XInput v2.2+ support.
+@@ -41,7 +40,6 @@ LIBEFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
  	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
  	--disable-cxx-bindings \
- 	--disable-fb \
--	--disable-harfbuzz \
- 	--disable-image-loader-jp2k \
- 	--disable-image-loader-webp \
+-	--disable-image-loader-jp2k \
  	--disable-sdl \
-@@ -110,6 +108,13 @@ else
- LIBEFL_CONF_OPTS += --disable-pulseaudio
+ 	--disable-systemd \
+ 	--enable-lua-old \
+@@ -179,6 +177,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-image-loader-tiff
  endif
  
-+ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
-+LIBEFL_DEPENDENCIES += harfbuzz
-+LIBEFL_CONF_OPTS += --enable-harfbuzz
++ifeq ($(BR2_PACKAGE_LIBEFL_JP2K),y)
++LIBEFL_CONF_OPTS += --enable-image-loader-jp2k=yes
++LIBEFL_DEPENDENCIES += openjpeg
 +else
-+LIBEFL_CONF_OPTS += --disable-harfbuzz
++LIBEFL_CONF_OPTS += --disable-image-loader-jp2k
 +endif
 +
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- LIBEFL_DEPENDENCIES += tslib
- LIBEFL_CONF_OPTS += --enable-tslib
+ ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
+ LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
+ LIBEFL_DEPENDENCIES += webp
 -- 
 2.4.3
