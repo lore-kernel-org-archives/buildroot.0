@@ -1,68 +1,99 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  1 Nov 2015 19:07:51 +0100
-Subject: [Buildroot] [PATCH v6 15/33] package/efl/libefl: add systemd
-	dependency
+Date: Sun,  1 Nov 2015 19:08:08 +0100
+Subject: [Buildroot] [PATCH v6 32/33] package/efl/libeina: remove package
 In-Reply-To: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
 References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1446401289-9059-16-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1446401289-9059-33-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd it one of the "highly recommended" dependecies
-according to the README [1] but disabling it doesn't need
-the --enable-i-really-know-what-i-am-doing... option.
-That's why systemd is not added to
-BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
-
-[1] https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n491
+Libeina is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: use --enable/disable option
-v4: rename to libefl
-    improve commit log
-v3: new patch
+v6: Improve lecacy help text (Yann E.Morin)
+v5: remove libeina directory
+v4: update Config.in to use libefl
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/efl/libefl/libefl.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ Config.in.legacy               |  7 +++++++
+ package/efl/Config.in          |  1 -
+ package/efl/libeina/Config.in  |  6 ------
+ package/efl/libeina/libeina.mk | 18 ------------------
+ 4 files changed, 7 insertions(+), 25 deletions(-)
+ delete mode 100644 package/efl/libeina/Config.in
+ delete mode 100644 package/efl/libeina/libeina.mk
 
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index d2537dc..5907cf0 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
- # Configure options:
- # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-sdl: disable sdl2 support.
--# --disable-systemd: disable systemd support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
- # --with-opengl=none: disable opengl support.
- # --with-x11=none: remove dependency on X.org.
-@@ -41,7 +40,6 @@ LIBEFL_CONF_OPTS = \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--disable-cxx-bindings \
- 	--disable-sdl \
--	--disable-systemd \
- 	--enable-lua-old
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a5404ef..ea301b0 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.11"
  
- # Disable untested configuration warning.
-@@ -56,6 +54,13 @@ else
- LIBEFL_CONF_OPTS += --disable-libmount
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+LIBEFL_CONF_OPTS += --enable-systemd
-+LIBEFL_DEPENDENCIES += systemd
-+else
-+LIBEFL_CONF_OPTS += --disable-systemd
-+endif
++config BR2_PACKAGE_LIBEINA
++	bool "libeina package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  With EFL 1.15, libeina is now provided by the libefl package.
 +
- ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
- LIBEFL_CONF_OPTS += --enable-fontconfig
- LIBEFL_DEPENDENCIES += fontconfig
+ config BR2_PACKAGE_LIBEET
+ 	bool "libeet package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 1dc466e..4e802ba 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -15,7 +15,6 @@ menuconfig BR2_PACKAGE_EFL
+ 
+ if BR2_PACKAGE_EFL
+ 
+-source "package/efl/libeina/Config.in"
+ source "package/efl/libefl/Config.in"
+ source "package/efl/libelementary/Config.in"
+ 
+diff --git a/package/efl/libeina/Config.in b/package/efl/libeina/Config.in
+deleted file mode 100644
+index 80600ad..0000000
+--- a/package/efl/libeina/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_LIBEINA
+-	bool "libeina"
+-	help
+-	  Eina is a tiny library to handle data types (list, hash, etc.)
+-
+-	  http://trac.enlightenment.org/e/wiki/Eina
+diff --git a/package/efl/libeina/libeina.mk b/package/efl/libeina/libeina.mk
+deleted file mode 100644
+index ae9f1c6..0000000
+--- a/package/efl/libeina/libeina.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# libeina
+-#
+-################################################################################
+-
+-LIBEINA_VERSION = 1.7.10
+-LIBEINA_SOURCE = eina-$(LIBEINA_VERSION).tar.bz2
+-LIBEINA_SITE = http://download.enlightenment.org/releases
+-LIBEINA_LICENSE = LGPLv2.1+
+-LIBEINA_LICENSE_FILES = COPYING
+-
+-LIBEINA_INSTALL_STAGING = YES
+-
+-LIBEINA_DEPENDENCIES = host-pkgconf
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
 -- 
 2.4.3
