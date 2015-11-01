@@ -1,131 +1,102 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  1 Nov 2015 19:08:00 +0100
-Subject: [Buildroot] [PATCH v6 24/33] package/efl/libedje: remove package
+Date: Sun,  1 Nov 2015 19:08:03 +0100
+Subject: [Buildroot] [PATCH v6 27/33] package/efl/libefreet: remove package
 In-Reply-To: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
 References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1446401289-9059-25-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1446401289-9059-28-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libedje is now available in efl package.
+Libefreet is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 v6: Improve lecacy help text (Yann E.Morin)
-v5: remove libedje directory
+v5: remove libefreet directory
 v4: update Config.in to use libefl
 v3: update legacy option for 2015.11
     update help text
 ---
- Config.in.legacy               |  7 +++++++
- package/efl/Config.in          |  1 -
- package/efl/libedje/Config.in  | 28 ----------------------------
- package/efl/libedje/libedje.mk | 28 ----------------------------
- 4 files changed, 7 insertions(+), 57 deletions(-)
- delete mode 100644 package/efl/libedje/Config.in
- delete mode 100644 package/efl/libedje/libedje.mk
+ Config.in.legacy                   |  7 +++++++
+ package/efl/Config.in              |  1 -
+ package/efl/libefreet/Config.in    | 10 ----------
+ package/efl/libefreet/libefreet.mk | 17 -----------------
+ 4 files changed, 7 insertions(+), 28 deletions(-)
+ delete mode 100644 package/efl/libefreet/Config.in
+ delete mode 100644 package/efl/libefreet/libefreet.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index d220ab0..dd7e773 100644
+index 2f01e7d..74bc0ba 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2015.11"
  
-+config BR2_PACKAGE_LIBEDJE
-+	bool "libedje package has been removed"
++config BR2_PACKAGE_LIBEFREET
++	bool "libefreet package has been removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  With EFL 1.15, libedje is now provided by the libefl package.
++	  With EFL 1.15, libefreet is now provided by the libefl package.
 +
- config BR2_PACKAGE_LIBETHUMB
- 	bool "libethumb package has been removed"
+ config BR2_PACKAGE_LIBEIO
+ 	bool "libeio package has been removed"
  	select BR2_LEGACY
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index ff8ba83..417534c 100644
+index 509f356..a4ad1d9 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -23,7 +23,6 @@ source "package/efl/libefreet/Config.in"
- source "package/efl/libeio/Config.in"
+@@ -19,7 +19,6 @@ source "package/efl/libeina/Config.in"
+ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
+-source "package/efl/libefreet/Config.in"
  source "package/efl/libevas/Config.in"
- source "package/efl/libembryo/Config.in"
--source "package/efl/libedje/Config.in"
  source "package/efl/libelementary/Config.in"
  source "package/efl/libedbus/Config.in"
- 
-diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
+diff --git a/package/efl/libefreet/Config.in b/package/efl/libefreet/Config.in
 deleted file mode 100644
-index b163508..0000000
---- a/package/efl/libedje/Config.in
+index 8687db4..0000000
+--- a/package/efl/libefreet/Config.in
 +++ /dev/null
-@@ -1,28 +0,0 @@
--comment "libedje needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
--config BR2_PACKAGE_LIBEDJE
--	bool "libedje"
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_LIBEFREET
+-	bool "libefreet"
 -	select BR2_PACKAGE_LIBEINA
 -	select BR2_PACKAGE_LIBEET
 -	select BR2_PACKAGE_LIBECORE
--	select BR2_PACKAGE_LIBECORE_EVAS
--	select BR2_PACKAGE_LIBEMBRYO
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LUA
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
 -	help
--	  A graphical layout and animation library for animated
--	  resizable, compressed and scalable themes.
+-	  Efreet is a library designed to help apps work with several of the
+-	  Freedesktop.org standards regarding Icons, Desktop files and Menus.
 -
--	  http://trac.enlightenment.org/e/wiki/Edje
--
--if BR2_PACKAGE_LIBEDJE
--
--config BR2_PACKAGE_LIBEDJE_CC
--	bool "build edje_cc"
--	help
--	  Build and install the Edje compiler for the target. Normally this
--	  is not required.
--
--endif
-diff --git a/package/efl/libedje/libedje.mk b/package/efl/libedje/libedje.mk
+-	  http://trac.enlightenment.org/e/wiki/Efreet
+diff --git a/package/efl/libefreet/libefreet.mk b/package/efl/libefreet/libefreet.mk
 deleted file mode 100644
-index 59189e4..0000000
---- a/package/efl/libedje/libedje.mk
+index 65dbd12..0000000
+--- a/package/efl/libefreet/libefreet.mk
 +++ /dev/null
-@@ -1,28 +0,0 @@
+@@ -1,17 +0,0 @@
 -################################################################################
 -#
--# libedje
+-# libefreet
 -#
 -################################################################################
 -
--LIBEDJE_VERSION = 1.7.10
--LIBEDJE_SOURCE = edje-$(LIBEDJE_VERSION).tar.bz2
--LIBEDJE_SITE = http://download.enlightenment.org/releases
--LIBEDJE_LICENSE = GPLv2+ (epp binary), BSD-2c (everything else)
--LIBEDJE_LICENSE_FILES = COPYING
+-LIBEFREET_VERSION = 1.7.10
+-LIBEFREET_SOURCE = efreet-$(LIBEFREET_VERSION).tar.bz2
+-LIBEFREET_SITE = http://download.enlightenment.org/releases
+-LIBEFREET_LICENSE = BSD-2c
+-LIBEFREET_LICENSE_FILES = COPYING
 -
--LIBEDJE_INSTALL_STAGING = YES
+-LIBEFREET_INSTALL_STAGING = YES
 -
--LIBEDJE_DEPENDENCIES = \
--	host-pkgconf lua libeina libeet libecore libevas \
--	libembryo
--
--ifeq ($(BR2_PACKAGE_LIBEDJE_CC),y)
--LIBEDJE_CONF_OPTS += --enable-edje-cc
--else
--LIBEDJE_CONF_OPTS += --disable-edje-cc
--endif
--
--HOST_LIBEDJE_CONF_OPTS = --enable-edje-cc
+-LIBEFREET_DEPENDENCIES = libeina libeet libecore
 -
 -$(eval $(autotools-package))
--$(eval $(host-autotools-package))
 -- 
 2.4.3
