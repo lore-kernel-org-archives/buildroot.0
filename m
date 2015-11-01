@@ -1,89 +1,155 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  1 Nov 2015 19:07:57 +0100
-Subject: [Buildroot] [PATCH v6 21/33] package/expedite: bump to efl-1.15
-	branch
+Date: Sun,  1 Nov 2015 19:08:04 +0100
+Subject: [Buildroot] [PATCH v6 28/33] package/efl/libedbus: remove package
 In-Reply-To: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
 References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1446401289-9059-22-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1446401289-9059-29-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since expedite hasn't been released since 1.7.10 release,
-use efl-1.15 branch in the git tree.
-
-Use the newly added libefl package wich provide a new version
-of efl libraries.
-
-Autoreconf the package since there is no configure script
-in the git tree.
+Libedbus is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: Add host-pkgconfig dependency (Yann E.Morin)
-v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
-    remove comments on dependencies
-v4: update Config.in to use libefl
-    improve commit log
-    keep the dependency on threads
-    Replace the old BR2_PACKAGE_LIBEVAS_X11 by BR2_PACKAGE_LIBEFL_X
-v2: bump to 1.15 branch
+v6: Improve lecacy help text (Yann E.Morin)
+v5: remove libedbus directory
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/expedite/Config.in   |  8 ++------
- package/expedite/expedite.mk | 13 +++++++++----
- 2 files changed, 11 insertions(+), 10 deletions(-)
+ Config.in.legacy                 |  7 +++++++
+ package/efl/Config.in            |  1 -
+ package/efl/libedbus/Config.in   | 44 ----------------------------------------
+ package/efl/libedbus/libedbus.mk | 37 ---------------------------------
+ 4 files changed, 7 insertions(+), 82 deletions(-)
+ delete mode 100644 package/efl/libedbus/Config.in
+ delete mode 100644 package/efl/libedbus/libedbus.mk
 
-diff --git a/package/expedite/Config.in b/package/expedite/Config.in
-index e60510b..0bcf343 100644
---- a/package/expedite/Config.in
-+++ b/package/expedite/Config.in
-@@ -2,15 +2,11 @@ config BR2_PACKAGE_EXPEDITE
- 	bool "expedite"
- 	depends on BR2_PACKAGE_EFL
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
--	select BR2_PACKAGE_LIBEET
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEVAS
- 	help
- 	  Expedite is the official Evas benchmark tool. It can test different
- 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
- 	  DirectFB and so on. Its tests are quite extensive, trying to
- 	  reproduce real world usage cases.
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 74bc0ba..ae2e1ad 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.11"
  
--comment "expedite needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "expedite needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-index 9b232f8..6b3bbfe 100644
---- a/package/expedite/expedite.mk
-+++ b/package/expedite/expedite.mk
-@@ -4,14 +4,19 @@
- #
- ################################################################################
- 
--EXPEDITE_VERSION = 1.7.10
--EXPEDITE_SITE = http://download.enlightenment.org/releases
-+# efl-1.15 branch
-+EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
-+EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
-+EXPEDITE_SITE_METHOD = git
- EXPEDITE_LICENSE = BSD-2c
- EXPEDITE_LICENSE_FILES = COPYING
- 
--EXPEDITE_DEPENDENCIES = libevas libeina libeet
-+EXPEDITE_DEPENDENCIES = host-libefl host-pkgconf libefl
- 
--ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
-+# There is no configure script in the git tree.
-+EXPEDITE_AUTORECONF = YES
++config BR2_PACKAGE_LIBEDBUS
++	bool "libedbus package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  With EFL 1.15, libedbus is now provided by the libefl package.
 +
-+ifeq ($(BR2_PACKAGE_LIBEFL_X),y)
- EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
- 	--x-includes=$(STAGING_DIR)/usr/include \
- 	--x-libraries=$(STAGING_DIR)/usr/lib
+ config BR2_PACKAGE_LIBEFREET
+ 	bool "libefreet package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index a4ad1d9..61e44fe 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -21,7 +21,6 @@ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
+ source "package/efl/libevas/Config.in"
+ source "package/efl/libelementary/Config.in"
+-source "package/efl/libedbus/Config.in"
+ 
+ endif # BR2_PACKAGE_EFL
+ 
+diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
+deleted file mode 100644
+index 7e862d3..0000000
+--- a/package/efl/libedbus/Config.in
++++ /dev/null
+@@ -1,44 +0,0 @@
+-config BR2_PACKAGE_LIBEDBUS
+-	bool "libedbus"
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_DBUS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+-	depends on BR2_USE_MMU # dbus
+-	help
+-	  E_Dbus is a set of wrappers around D-Bus APIs so they can be
+-	  easily used by EFL applications, automatically providing
+-	  Ecore/main loop integration, as well as Eina data types.
+-
+-	  http://trac.enlightenment.org/e/wiki/E_Dbus
+-
+-if BR2_PACKAGE_LIBEDBUS
+-
+-config BR2_PACKAGE_LIBEDBUS_BLUEZ
+-	bool "bluez support"
+-	depends on !BR2_STATIC_LIBS # bluez_utils
+-	depends on BR2_USE_WCHAR # bluez_utils -> glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> glib2
+-	select BR2_PACKAGE_BLUEZ_UTILS
+-	help
+-	  Bluetooth support.
+-
+-comment "bluez support needs a toolchain w/ wchar, threads, dynamic library"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+-config BR2_PACKAGE_LIBEDBUS_CONNMAN
+-	bool "connman support"
+-	depends on BR2_PACKAGE_CONNMAN
+-	help
+-	  Connection manager support.
+-
+-config BR2_PACKAGE_LIBEDBUS_NOTIFY
+-	bool "notify support"
+-	help
+-	  Notify support.
+-
+-endif
+-
+-comment "libedbus needs a toolchain w/ threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/efl/libedbus/libedbus.mk b/package/efl/libedbus/libedbus.mk
+deleted file mode 100644
+index 634ceaf..0000000
+--- a/package/efl/libedbus/libedbus.mk
++++ /dev/null
+@@ -1,37 +0,0 @@
+-################################################################################
+-#
+-# libedbus
+-#
+-################################################################################
+-
+-LIBEDBUS_VERSION = 1.7.10
+-LIBEDBUS_SOURCE = e_dbus-$(LIBEDBUS_VERSION).tar.bz2
+-LIBEDBUS_SITE = http://download.enlightenment.org/releases
+-LIBEDBUS_LICENSE = BSD-2c
+-LIBEDBUS_LICENSE_FILES = COPYING
+-
+-LIBEDBUS_INSTALL_STAGING = YES
+-
+-LIBEDBUS_DEPENDENCIES = host-pkgconf dbus libeina libecore
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_BLUEZ),y)
+-LIBEDBUS_CONF_OPTS += --enable-ebluez
+-LIBEDBUS_DEPENDENCIES += bluez_utils
+-else
+-LIBEDBUS_CONF_OPTS += --disable-ebluez
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_CONNMAN),y)
+-LIBEDBUS_CONF_OPTS += --enable-econnman0_7x
+-LIBEDBUS_DEPENDENCIES += connman
+-else
+-LIBEDBUS_CONF_OPTS += --disable-econnman0_7x
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_NOTIFY),y)
+-LIBEDBUS_CONF_OPTS += --enable-enotify --disable-edbus-notify-test
+-else
+-LIBEDBUS_CONF_OPTS += --disable-enotify
+-endif
+-
+-$(eval $(autotools-package))
 -- 
 2.4.3
