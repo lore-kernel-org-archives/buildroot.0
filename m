@@ -1,45 +1,39 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  2 Nov 2015 00:25:26 +0100
-Subject: [Buildroot] [PATCH v1] valgrind: enabls tls support
-Message-ID: <1446420326-29281-1-git-send-email-ps.report@gmx.net>
+Date: Mon, 2 Nov 2015 00:36:07 +0100
+Subject: [Buildroot] [PATCH 0/4 RFC] xorg: fix installation paths
+ (branch yem/xorg)
+In-Reply-To: <cover.1446416019.git.yann.morin.1998@free.fr>
+References: <cover.1446416019.git.yann.morin.1998@free.fr>
+Message-ID: <20151102003607.1fa9f695@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested with example program from [1] with qemu_x86_64.
+Hello Yann,
 
-[1] http://valgrind.10908.n7.nabble.com/Thread-local-storage-TLS-support-td40815.html
+On Mon,  2 Nov 2015 00:00:09 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/valgrind/valgrind.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> Hello All!
+> 
+> This series is an attempt to fix the installation paths of many
+> Xorg-related packages.
+> 
+> *This is an RFC.*  There is an alternate proposal after the explanations
+> on the series.
+> 
+> The new pkconf bumped in d7f6d320 introduced a change in behaviour: all
+> path variables returned by pkgconf are now prefixed with the sysroot
+> directory.
+> 
 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index a630125..dc126ca 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -9,12 +9,18 @@ VALGRIND_SITE = http://valgrind.org/downloads
- VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
- VALGRIND_LICENSE = GPLv2 GFDLv1.2
- VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
--VALGRIND_CONF_OPTS = --disable-tls --disable-ubsan
-+VALGRIND_CONF_OPTS = --disable-ubsan
- VALGRIND_INSTALL_STAGING = YES
- 
- # patch touching configure.ac
- VALGRIND_AUTORECONF = YES
- 
-+ifeq ($(BR2_GCC_ENABLE_TLS),y)
-+VALGRIND_CONF_OPTS += --enable-tls 
-+else
-+VALGRIND_CONF_OPTS += --disable-tls
-+endif
-+
- # When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
- # -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
- # it forcibly adds -march=mips64. This causes Valgrind to be built
--- 
-2.1.4
+...this commit breaks some other packages too, see [1] for libv4l example.
+
+This commit removed a patch named '0002-fix-double-sysroot.patch', I think
+this patch should somehow be forward ported to the new pkconf packet...
+
+Regards,
+Peter
+
+[1] http://lists.busybox.net/pipermail/buildroot/2015-October/141429.html
