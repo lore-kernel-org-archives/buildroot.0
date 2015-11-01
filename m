@@ -1,100 +1,113 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  1 Nov 2015 19:08:09 +0100
-Subject: [Buildroot] [PATCH v6 33/33] package/libemotion-generic-players:
-	new package
+Date: Sun,  1 Nov 2015 19:08:02 +0100
+Subject: [Buildroot] [PATCH v6 26/33] package/efl/libeio: remove package
 In-Reply-To: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
 References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1446401289-9059-34-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1446401289-9059-27-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-v6: Add missing vlc dependencies and host-pkgconf (Yann E.Morin)
-v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
-    update comment on dependencies
-v4: update Config.in to use libefl
-v3: remove trailing slash (Vicente Bergas)
----
- package/Config.in                                     |  1 +
- package/libemotion-generic-players/Config.in          | 19 +++++++++++++++++++
- .../libemotion-generic-players.hash                   |  2 ++
- .../libemotion-generic-players.mk                     | 17 +++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/libemotion-generic-players/Config.in
- create mode 100644 package/libemotion-generic-players/libemotion-generic-players.hash
- create mode 100644 package/libemotion-generic-players/libemotion-generic-players.mk
+Libeio is now available in efl package.
 
-diff --git a/package/Config.in b/package/Config.in
-index b3f5a9a..6a89cfa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -819,6 +819,7 @@ menu "Graphics"
- 	source "package/libdri2/Config.in"
- 	source "package/libdrm/Config.in"
- 	source "package/libexif/Config.in"
-+	source "package/libemotion-generic-players/Config.in"
- 	source "package/libevas-generic-loaders/Config.in"
- 	source "package/libfm/Config.in"
- 	source "package/libfm-extra/Config.in"
-diff --git a/package/libemotion-generic-players/Config.in b/package/libemotion-generic-players/Config.in
-new file mode 100644
-index 0000000..f6dd45d
---- /dev/null
-+++ b/package/libemotion-generic-players/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBEMOTION_GENERIC_PLAYERS
-+	bool "libemotion generic players"
-+	depends on BR2_PACKAGE_EFL
-+	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) # vlc
-+	depends on BR2_INSTALL_LIBSTDCPP # vlc
-+	depends on BR2_USE_WCHAR # vlc
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # vlc
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 # vlc
-+	select BR2_PACKAGE_VLC # needs libvlc
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+v6: Improve lecacy help text (Yann E.Morin)
+v5: remove libeio directory
+v4: update Config.in to use libefl
+v3: update legacy option for 2015.11
+    update help text
+---
+ Config.in.legacy             |  7 +++++++
+ package/efl/Config.in        |  1 -
+ package/efl/libeio/Config.in | 22 ----------------------
+ package/efl/libeio/libeio.mk | 16 ----------------
+ 4 files changed, 7 insertions(+), 39 deletions(-)
+ delete mode 100644 package/efl/libeio/Config.in
+ delete mode 100644 package/efl/libeio/libeio.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a5d5153..2f01e7d 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.11"
+ 
++config BR2_PACKAGE_LIBEIO
++	bool "libeio package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
 +	help
-+	  A media object library for Evas and Ecore.
++	  With EFL 1.15, libeio is now provided by the libefl package.
 +
-+	  https://www.enlightenment.org
-+	  https://docs.enlightenment.org/stable/efl/emotion_main.html
-+
-+comment "libemotion generic players needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, wchar, threads, headers >= 3.7"
-+	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-diff --git a/package/libemotion-generic-players/libemotion-generic-players.hash b/package/libemotion-generic-players/libemotion-generic-players.hash
-new file mode 100644
-index 0000000..80c8123
---- /dev/null
-+++ b/package/libemotion-generic-players/libemotion-generic-players.hash
-@@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/emotion_generic_players/emotion_generic_players-1.15.0.tar.xz.sha256
-+sha256	9f6d5e9041ac7c014d663dac56d1b39ac42a45abe954d09d0edbf6e759e55f5f	emotion_generic_players-1.15.0.tar.xz
-diff --git a/package/libemotion-generic-players/libemotion-generic-players.mk b/package/libemotion-generic-players/libemotion-generic-players.mk
-new file mode 100644
-index 0000000..ef41b2e
---- /dev/null
-+++ b/package/libemotion-generic-players/libemotion-generic-players.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# libemotion-generic-players
-+#
-+################################################################################
-+
-+LIBEMOTION_GENERIC_PLAYERS_VERSION = 1.15.0
-+LIBEMOTION_GENERIC_PLAYERS_SOURCE = emotion_generic_players-$(LIBEMOTION_GENERIC_PLAYERS_VERSION).tar.xz
-+LIBEMOTION_GENERIC_PLAYERS_SITE = http://download.enlightenment.org/rel/libs/emotion_generic_players
-+LIBEMOTION_GENERIC_PLAYERS_LICENSE = BSD-2c
-+LIBEMOTION_GENERIC_PLAYERS_LICENSE_FILES = COPYING
-+
-+LIBEMOTION_GENERIC_PLAYERS_INSTALL_STAGING = YES
-+
-+LIBEMOTION_GENERIC_PLAYERS_DEPENDENCIES = host-pkgconf libefl vlc
-+
-+$(eval $(autotools-package))
+ config BR2_PACKAGE_LIBEMBRYO
+ 	bool "libembryo package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 2f6d94d..509f356 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -20,7 +20,6 @@ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
+ source "package/efl/libefreet/Config.in"
+-source "package/efl/libeio/Config.in"
+ source "package/efl/libevas/Config.in"
+ source "package/efl/libelementary/Config.in"
+ source "package/efl/libedbus/Config.in"
+diff --git a/package/efl/libeio/Config.in b/package/efl/libeio/Config.in
+deleted file mode 100644
+index 5b1e395..0000000
+--- a/package/efl/libeio/Config.in
++++ /dev/null
+@@ -1,22 +0,0 @@
+-config BR2_PACKAGE_LIBEIO
+-	bool "libeio"
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBECORE
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	help
+-	  Eio integrates with EFL (Ecore, Eina) to provide efficient
+-	  filesystem Input/Output (I/O). It use the best techniques to
+-	  achieve such purpose, like using at-variants, splice,
+-	  properly handling errors and doing it in an asynchronous
+-	  fashion by means of worker threads. It is also ported to
+-	  Windows, so multi-platform.
+-
+-	  Whenever you need to list a directory, copy, move or delete
+-	  files, Eio will do that task better than you'd achieve with
+-	  naive implementations, and it is easy to use.
+-
+-	  http://trac.enlightenment.org/e/wiki/Eio
+-
+-comment "libeio needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/efl/libeio/libeio.mk b/package/efl/libeio/libeio.mk
+deleted file mode 100644
+index e687c32..0000000
+--- a/package/efl/libeio/libeio.mk
++++ /dev/null
+@@ -1,16 +0,0 @@
+-################################################################################
+-#
+-# libeio
+-#
+-################################################################################
+-
+-LIBEIO_VERSION = 1.7.10
+-LIBEIO_SOURCE = eio-$(LIBEIO_VERSION).tar.bz2
+-LIBEIO_SITE = http://download.enlightenment.org/releases
+-LIBEIO_LICENSE = LGPLv2.1
+-LIBEIO_LICENSE_FILES = COPYING
+-
+-LIBEIO_INSTALL_STAGING = YES
+-LIBEIO_DEPENDENCIES = libeina libeet libecore
+-
+-$(eval $(autotools-package))
 -- 
 2.4.3
