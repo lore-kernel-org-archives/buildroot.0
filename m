@@ -1,117 +1,155 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 Nov 2015 08:30:19 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-10-31
-Message-ID: <20151101073020.201DF101322@stock.ovh.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun,  1 Nov 2015 09:35:18 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/wpa_supplicant: add config
+	option to build wpa_client library
+Message-ID: <1446366918-4504-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-10-31
-===============================
+Version 2.5 of wpa_supplicant introduces the config option
+CONFIG_BUILD_WPA_CLIENT_SO to enable building wpa_client as shared library.
 
-        success : 148
-       failures : 57 
-       timeouts : 0  
-          TOTAL : 205
+We need to add a patch from upstream to fix a runtime error with
+libwpa_client.so:
+  Error relocating /usr/lib/libwpa_client.so: bin_clear_free: symbol not found
 
-Classification of failures by reason
-====================================
+Cc: Martin Bark <martin@barkynet.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+Changes v2:
+ - depends on dynamic build (Martin Bark)
+ - Installs -> Install in help text
+ - Add upstream patch
+---
+ .../wpa_supplicant/0002-fix-libwpa_client.patch    | 39 ++++++++++++++++++++++
+ package/wpa_supplicant/Config.in                   |  9 +++++
+ package/wpa_supplicant/wpa_supplicant.mk           | 24 +++++++++++++
+ 3 files changed, 72 insertions(+)
+ create mode 100644 package/wpa_supplicant/0002-fix-libwpa_client.patch
 
-                   mplayer-1.2 | 8 
-                  ffmpeg-2.8.1 | 8 
-              swupdate-2015.07 | 3 
-                 libpcap-1.7.4 | 3 
-              host-perl-5.22.0 | 2 
-             bluez5_utils-5.27 | 2 
-               lighttpd-1.4.37 | 2 
-     openvmtools-stable-9.10.2 | 2 
-                    ruby-2.2.3 | 2 
-                      x265-1.8 | 2 
-                  vsftpd-3.0.3 | 2 
-               util-linux-2.27 | 2 
-                   bdwgc-7.4.2 | 1 
-                busybox-1.24.1 | 1 
-         qt5imageformats-5.5.0 | 1 
-liquid-dsp-df5a459fa05dba41... | 1 
-                pulseaudio-7.0 | 1 
-                  boost-1.58.0 | 1 
-                    libiio-0.5 | 1 
-          usb_modeswitch-2.2.5 | 1 
-                openssl-1.0.2d | 1 
-             lttng-tools-2.6.0 | 1 
-             host-nodejs-4.1.2 | 1 
-              gst1-libav-1.6.0 | 1 
-                  connman-1.30 | 1 
-                     lsof-4.89 | 1 
-                   systemd-227 | 1 
-libbroadvoice-f65b0f50c8c76... | 1 
-                  libv4l-1.8.1 | 1 
-                   dvblast-3.0 | 1 
-                      qt-4.8.7 | 1 
-
-Detail of failures
-===================
-
-       sparc |                    bdwgc-7.4.2 | NOK | http://autobuild.buildroot.net/results/93647ed90bde7bd41b55605e6836462d211afa03/
-       sparc |              bluez5_utils-5.27 | NOK | http://autobuild.buildroot.net/results/e3075025df49be3030e5881af70120d55bfed333/
-       sparc |              bluez5_utils-5.27 | NOK | http://autobuild.buildroot.net/results/bcc0b5ff4110dacd113841b309f3ec49d81933f0/
-     sparc64 |                   boost-1.58.0 | NOK | http://autobuild.buildroot.net/results/2e71e6f18089e91af4bd1fb7a574929c45d6fb80/
-       sparc |                 busybox-1.24.1 | NOK | http://autobuild.buildroot.net/results/e2f6c0a5f746690e2d56485138f238cb66f9fa9a/
-      x86_64 |                   connman-1.30 | NOK | http://autobuild.buildroot.net/results/531d6cae331807ec8de48085eb82c5d7ec0146be/
-         arm |                    dvblast-3.0 | NOK | http://autobuild.buildroot.net/results/81c7fe2578e0692309ec385f5bd457fcde64236e/
-    mips64el |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/8b98cd9a24f01a6b1912eae57054b3e022ad33fd/
-        mips |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/c76cee063e9d2ca9e0ec5f3153570f54aa425177/
-        mips |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/e0168d86053946b607459f84b245216bf4627a3d/
-    mips64el |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/34108033f2cb18ef78f07664ff6ccf4f03a1d804/
-        mips |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/69e17f7c30e054c9fbe8f22c0cc695956c4abea5/
-        mips |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/68aa10a02443750972848bc1f921e059d34e17d4/
-         arc |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/0daf90dcd9e20b5b2a4348187a2a9c9d3d2a9dd5/
-      x86_64 |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/6af48fd7bcd0fe1bbba7d951d2fda27450eebb25/
-    mips64el |               gst1-libav-1.6.0 | NOK | http://autobuild.buildroot.net/results/a04acd695f88504f01a1c78c9762230209ffde94/
-         arm |              host-nodejs-4.1.2 | NOK | http://autobuild.buildroot.net/results/406291bf7c61a80ed4a8d14d9a3887f51a1b2254/
-      xtensa |               host-perl-5.22.0 | NOK | http://autobuild.buildroot.net/results/a0b0c7aec75a61c1440a36fc284e916729c268af/
-     aarch64 |               host-perl-5.22.0 | NOK | http://autobuild.buildroot.net/results/9cfa1a2aa41faf6d1f9988e3963e25ea22e26a3e/
-         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/beace68a19382b43370c798dcf7d2ef412f9d75e/
-         arm |                     libiio-0.5 | NOK | http://autobuild.buildroot.net/results/7d409d40968a49722d0474e03fae868d6e4561cd/
-     sparc64 |                  libpcap-1.7.4 | NOK | http://autobuild.buildroot.net/results/68ca89d83fb39b459987c3a89c065792a282325e/
-     sparc64 |                  libpcap-1.7.4 | NOK | http://autobuild.buildroot.net/results/e69c82c59ccbc91d6ac0a0db6cf932f4f77e427b/
-     sparc64 |                  libpcap-1.7.4 | NOK | http://autobuild.buildroot.net/results/5e86aa684ae050da7d867a24b1ac50c9d7610202/
-        i686 |                   libv4l-1.8.1 | NOK | http://autobuild.buildroot.net/results/13155d9a467bb5f04c2489858bdffd2fd5cc36a9/
-         arc |                lighttpd-1.4.37 | NOK | http://autobuild.buildroot.net/results/36d6acfc4a08e320f20b60b134803778e7029c80/
-      xtensa |                lighttpd-1.4.37 | NOK | http://autobuild.buildroot.net/results/364077dfbd8323af32eb4f29e444bc3b0f0edc34/
-     powerpc | liquid-dsp-df5a459fa05dba41... | NOK | http://autobuild.buildroot.net/results/9d233a4580f6a329f1c9ecc4947ca064d485e648/
-         arm |                      lsof-4.89 | NOK | http://autobuild.buildroot.net/results/e16ac770af20bd8b4c6362b056236edf62e0a491/
-         arm |              lttng-tools-2.6.0 | NOK | http://autobuild.buildroot.net/results/7edcd7d20aaa37a47f72716027b7ccb38cc90455/
-        i686 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/05e3ec1234eb25ec1049c2ee56a597e85626300b/
-        i686 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/c7a5f6d0783d87ed9b80cae6fdfd41d762474efb/
-      x86_64 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/d577526889c6f4d33781c4336d7f4497650f7356/
-    mips64el |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/388af35f9c6c1f026d3b5091786d6db1a10aac6d/
-      xtensa |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/596053b4ec3fd67161f691fa4f65765c4ba1a992/
-         arm |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/6d42ea0c38ed3fe8328ead0721d00095bf46dcb6/
-        i686 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/d95f2569f5b40b25a3dfbfb66a9516bb3815f178/
-      x86_64 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/68596a3b55334e8ed7ffed9c0c0b273129ce7746/
-     powerpc |                 openssl-1.0.2d | NOK | http://autobuild.buildroot.net/results/e1f917026f061db9b09831b60c9c3aa0983dc871/
-      x86_64 |      openvmtools-stable-9.10.2 | NOK | http://autobuild.buildroot.net/results/8609823e35115f07b0f16f0a1831201aa1cf9e3c/
-      x86_64 |      openvmtools-stable-9.10.2 | NOK | http://autobuild.buildroot.net/results/779bed269982f0b2e04baecae2e720d602319552/
-     powerpc |                 pulseaudio-7.0 | NOK | http://autobuild.buildroot.net/results/8ec855dbd1c0cb8bfc456c9d42e1b3e5cfeb877a/
-         sh4 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/23eb751b57c27d01960fa8a224f9b9a4305201f7/
-     aarch64 |          qt5imageformats-5.5.0 | NOK | http://autobuild.buildroot.net/results/ff5c70d18432e79720ea9a31428b4fe581b787a8/
-      x86_64 |                     ruby-2.2.3 | NOK | http://autobuild.buildroot.net/results/c76051811ed417cdb541c496f7e5ffb772315ceb/
-      mipsel |                     ruby-2.2.3 | NOK | http://autobuild.buildroot.net/results/6978945fa1ef702ba4ed756d29289f21b29a7ce0/
-    mips64el |               swupdate-2015.07 | NOK | http://autobuild.buildroot.net/results/9d41f878acbfb9c55b1cbefa9cbd522905abf946/
-    mips64el |               swupdate-2015.07 | NOK | http://autobuild.buildroot.net/results/d75cd8933880deb9028d873b9d9dec0dfbce392f/
-    mips64el |               swupdate-2015.07 | NOK | http://autobuild.buildroot.net/results/f30a2d4114a84a3985653707949b04d322a1614a/
-       sparc |                    systemd-227 | NOK | http://autobuild.buildroot.net/results/bab40f4d19b92a21381c9808bf31d5261c806362/
-    mips64el |           usb_modeswitch-2.2.5 | NOK | http://autobuild.buildroot.net/results/ecd7c8e8423efd5ffc175c915a2d6187b95e874d/
-         arm |                util-linux-2.27 | NOK | http://autobuild.buildroot.net/results/05a55c5f049fe5c372a00b1ae716da8ebfe0f1b1/
-         arm |                util-linux-2.27 | NOK | http://autobuild.buildroot.net/results/35c25bae51926e5e15bf713a0a0f1883e7643a51/
-         arm |                   vsftpd-3.0.3 | NOK | http://autobuild.buildroot.net/results/65f5e9417776ae085a02e9719d904d875a4e5135/
-      xtensa |                   vsftpd-3.0.3 | NOK | http://autobuild.buildroot.net/results/38fa276f00fe88904b7c8ef4d0fd8b09fc4c5381/
-         arm |                       x265-1.8 | NOK | http://autobuild.buildroot.net/results/677d39111ffba7533ecf69ed682f58bff86309a9/
-        bfin |                       x265-1.8 | NOK | http://autobuild.buildroot.net/results/291b8aafb7db03d11e1c1831cbb7e73c051f4a12/
-
-
+diff --git a/package/wpa_supplicant/0002-fix-libwpa_client.patch b/package/wpa_supplicant/0002-fix-libwpa_client.patch
+new file mode 100644
+index 0000000..11c5402
+--- /dev/null
++++ b/package/wpa_supplicant/0002-fix-libwpa_client.patch
+@@ -0,0 +1,39 @@
++From 6f7e0354a9035ce33742a5f869f817a6b39b2f31 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Thu, 29 Oct 2015 11:39:03 +0100
++Subject: [PATCH 1/1] wpa_supplicant/Makefile: fix libwpa_client
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Building libwpa_client requires src/utils/common.c for bin_clear_free() else
++loading the library fails with:
++
++  Error relocating /usr/lib/libwpa_client.so: bin_clear_free: symbol not found
++
++Backported from: 736b7cb2daf877a0cb9ad42ff15a2efbbd65fa42
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ wpa_supplicant/Makefile | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
++index 61f8f18..0c444b0 100644
++--- a/wpa_supplicant/Makefile
+++++ b/wpa_supplicant/Makefile
++@@ -1706,9 +1706,11 @@ wpa_cli: $(OBJS_c)
++ 
++ LIBCTRL += ../src/common/wpa_ctrl.o
++ LIBCTRL += ../src/utils/os_$(CONFIG_OS).o
+++LIBCTRL += ../src/utils/common.c
++ LIBCTRL += ../src/utils/wpa_debug.o
++ LIBCTRLSO += ../src/common/wpa_ctrl.c
++ LIBCTRLSO += ../src/utils/os_$(CONFIG_OS).c
+++LIBCTRLSO += ../src/utils/common.c
++ LIBCTRLSO += ../src/utils/wpa_debug.c
++ 
++ libwpa_client.a: $(LIBCTRL)
++-- 
++2.6.2
++
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index eb42257..f4c4167 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -63,6 +63,15 @@ config BR2_PACKAGE_WPA_SUPPLICANT_CLI
+ 	help
+ 	  Install wpa_cli command line utility
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO
++	depends on !BR2_STATIC_LIBS
++	bool "Install wpa_client shared library"
++	help
++	  Install libwpa_client.so.
++
++comment "wpa_client library needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
+ 	bool "Install wpa_passphrase binary"
+ 	help
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 839a419..e3f1434 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -15,6 +15,9 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
+ WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+ 
++# install the wpa_client library
++WPA_SUPPLICANT_INSTALL_STAGING = YES
++
+ WPA_SUPPLICANT_CONFIG_EDITS =
+ 
+ WPA_SUPPLICANT_CONFIG_SET =
+@@ -117,6 +120,22 @@ WPA_SUPPLICANT_DEPENDENCIES += readline
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_READLINE
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO),y)
++WPA_SUPPLICANT_CONFIG_SET += CONFIG_BUILD_WPA_CLIENT_SO
++define WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO
++	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/libwpa_client.so \
++		$(TARGET_DIR)/usr/lib/libwpa_client.so
++	$(INSTALL) -m 0644 -D $(@D)/src/common/wpa_ctrl.h \
++		$(TARGET_DIR)/usr/include/wpa_ctrl.h
++endef
++define WPA_SUPPLICANT_INSTALL_STAGING_WPA_CLIENT_SO
++	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/libwpa_client.so \
++		$(STAGING_DIR)/usr/lib/libwpa_client.so
++	$(INSTALL) -m 0644 -D $(@D)/src/common/wpa_ctrl.h \
++		$(STAGING_DIR)/usr/include/wpa_ctrl.h
++endef
++endif
++
+ define WPA_SUPPLICANT_CONFIGURE_CMDS
+ 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
+ 	sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
+@@ -159,6 +178,10 @@ define WPA_SUPPLICANT_INSTALL_DBUS
+ endef
+ endif
+ 
++define WPA_SUPPLICANT_INSTALL_STAGING_CMDS
++	$(WPA_SUPPLICANT_INSTALL_STAGING_WPA_CLIENT_SO)
++endef
++
+ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/wpa_supplicant \
+ 		$(TARGET_DIR)/usr/sbin/wpa_supplicant
+@@ -167,6 +190,7 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+ 	$(WPA_SUPPLICANT_INSTALL_CLI)
+ 	$(WPA_SUPPLICANT_INSTALL_PASSPHRASE)
+ 	$(WPA_SUPPLICANT_INSTALL_DBUS)
++	$(WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO)
+ endef
+ 
+ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
 -- 
-http://autobuild.buildroot.net
+2.6.2
