@@ -1,85 +1,78 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  1 Nov 2015 19:07:45 +0100
-Subject: [Buildroot] [PATCH v6 09/33] package/efl/libefl: add webp dependency
+Date: Sun,  1 Nov 2015 19:07:53 +0100
+Subject: [Buildroot] [PATCH v6 17/33] package/libevas-generic-loaders: add
+	libraw dependency
 In-Reply-To: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
 References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1446401289-9059-10-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1446401289-9059-18-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WebP is a new image format that provides lossless and lossy
-compression for images on the web. So enabling webp support
-in efl libraries allow to loads images using WebP.
+libraw it's one of the "highly recommended" dependecies
+according to the README [1].
 
-Also, it one of the "highly recommended" dependecies [1]
-according to the README but disabling it doesn't need
-the --enable-i-really-know-what-i-am-doing... option.
-That's why BR2_PACKAGE_LIBEFL_WEBP is not added to
-BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
-
-[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
+[1] https://git.enlightenment.org/core/evas_generic_loaders.git/tree/README?id=v1.15.0#n31
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v6: select BR2_PACKAGE_WEBP (Yann E.Morin)
-v4: rename to libefl
-    improve commit log
+v6: select BR2_PACKAGE_LIBRAW and propagate its dependency on
+    C++. (Yann E.Morin)
+v4: improve commit log
 ---
- package/efl/libefl/Config.in | 6 ++++++
- package/efl/libefl/libefl.mk | 9 +++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ package/libevas-generic-loaders/Config.in                  | 10 ++++++++++
+ package/libevas-generic-loaders/libevas-generic-loaders.mk |  9 +++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 3cf4b4e..0b89411 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -112,4 +112,10 @@ config BR2_PACKAGE_LIBEFL_TIFF
- 	help
- 	  This enables the loader code that loads tiff files.
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index 65ced8a..1d5b717 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -11,6 +11,16 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
  
-+config BR2_PACKAGE_LIBEFL_WEBP
-+	bool "libevas webp image loader"
-+	select BR2_PACKAGE_WEBP
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 
++config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
++	bool "libraw loader"
++	depends on BR2_INSTALL_LIBSTDCPP # libraw
++	select BR2_PACKAGE_LIBRAW
 +	help
-+	  This enables the loader code that loads images using WebP.
++	  This option enables the Evas generic Libraw loader
 +
- endif # BR2_PACKAGE_LIBEFL
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 10d0a98..e479cfc 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
- # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-fb: disable frame buffer support.
- # --disable-image-loader-jp2k: disable JPEG 2000 support.
--# --disable-image-loader-webp: disable webp support.
- # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
- # --disable-xinput22: disable X11 XInput v2.2+ support.
-@@ -45,7 +44,6 @@ LIBEFL_CONF_OPTS = \
- 	--disable-cxx-bindings \
- 	--disable-fb \
- 	--disable-image-loader-jp2k \
--	--disable-image-loader-webp \
- 	--disable-sdl \
- 	--disable-systemd \
- 	--enable-lua-old \
-@@ -177,6 +175,13 @@ else
- LIBEFL_CONF_OPTS += --disable-image-loader-tiff
- endif
++comment "libraw loader needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+ 	depends on BR2_USE_MMU # librsvg -> glib2
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index 47dfa9a..2c1c1cd 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -14,15 +14,20 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
-+LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
-+LIBEFL_DEPENDENCIES += webp
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = host-pkgconf libefl zlib
+ 
+-# For now, we only support the SVG loader
+ # poppler >= 0.32 is not supported by the current version of
+ # libevas-generic-loaders.
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
+-	--disable-libraw \
+ 	--disable-gstreamer
+ 
++ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
 +else
-+LIBEFL_CONF_OPTS += --disable-image-loader-webp
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
 +endif
 +
- $(eval $(autotools-package))
- 
- ################################################################################
+ ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
 -- 
 2.4.3
