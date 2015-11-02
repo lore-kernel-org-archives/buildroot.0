@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 15:41:22 +0100
-Subject: [Buildroot] [PATCH] sudo: bump to version 1.8.15
-In-Reply-To: <1446457093-27978-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1446457093-27978-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151102154122.479c5419@free-electrons.com>
+Date: Mon, 2 Nov 2015 15:41:51 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.2-5
+Message-ID: <20151102144157.A512F81D8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=4369e9a5c4473c66fb6c19824f24d8332437804e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 2 Nov 2015 09:38:13 +0000, Vicente Olivert Riera wrote:
-> Unneeded patches removed. Highlights from ChangeLog:
-> 
-> * Fixed a build problem on systems that don't implicitly include
->   sys/types.h from other header files. Bug #711.
-> 
-> * Fixed the compiler stack protector test in configure for compilers
->   that support -fstack-protector but don't actually have the ssp
->   library available.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/sudo/0001-musl-fix-missing-header.patch    |   19 -
->  ...etter-configure-test-for-fstack-protector.patch |  415 --------------------
->  ...LDFLAGS-when-checking-for-stack-protector.patch |   81 ----
->  ...program-when-checking-for-stack-protector.patch |  189 ---------
->  package/sudo/sudo.hash                             |    4 +-
->  package/sudo/sudo.mk                               |    2 +-
->  6 files changed, 3 insertions(+), 707 deletions(-)
->  delete mode 100644 package/sudo/0001-musl-fix-missing-header.patch
->  delete mode 100644 package/sudo/0002-Better-configure-test-for-fstack-protector.patch
->  delete mode 100644 package/sudo/0003-Preserve-LDFLAGS-when-checking-for-stack-protector.patch
->  delete mode 100644 package/sudo/0004-Actually-link-the-test-program-when-checking-for-stack-protector.patch
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/imagemagick/imagemagick.hash |    2 +-
+ package/imagemagick/imagemagick.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 716eaa7..0622ce2 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256	05b1c499415048099a1464ebd03f0cfaae8d0994c681bcf7e0319b26e5e8d848	ImageMagick-6.9.2-4.tar.xz
++sha256 19fb341725a13c01458cfce23d0a260fd032432a5daeebdd4f06c92d716ded40 ImageMagick-6.9.2-5.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 3b96126..c149829 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.9.2-4
++IMAGEMAGICK_VERSION = 6.9.2-5
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
