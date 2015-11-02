@@ -1,82 +1,39 @@
-From: David Picard <davepiq@yahoo.fr>
-Date: Mon, 2 Nov 2015 08:53:51 +0100
-Subject: [Buildroot] Qt5 and touchscreen calibration
-In-Reply-To: <20151030211218.6c801173@gmx.net>
-References: <5633A11C.6070706@yahoo.fr> <5633A776.90600@mind.be>
- <20151030211218.6c801173@gmx.net>
-Message-ID: <5637168F.7000400@yahoo.fr>
+From: Remi Pommarel <repk@triplefau.lt>
+Date: Mon, 2 Nov 2015 09:11:34 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/git: Add needed library for
+ static compilation
+In-Reply-To: <20151102042520.GM3352@tarshish>
+References: <1446410183-7798-1-git-send-email-repk@triplefau.lt>
+ <1446410183-7798-2-git-send-email-repk@triplefau.lt>
+ <20151102042520.GM3352@tarshish>
+Message-ID: <20151102081134.GD13534@cruxbox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi baruch,
 
-The 'rotate' trick did it.
+On Mon, Nov 02, 2015 at 06:25:20AM +0200, Baruch Siach wrote:
+> Hi Remi,
+> 
+> On Sun, Nov 01, 2015 at 09:36:21PM +0100, Remi Pommarel wrote:
+> > @@ -57,7 +57,7 @@ endif
+> >  
+> >  # assume yes for these tests, configure will bail out otherwise
+> >  # saying error: cannot run test program while cross compiling
+> > -GIT_CONF_ENV = \
+> > +GIT_CONF_ENV += \
+> >  	ac_cv_fread_reads_directories=yes \
+> >  	ac_cv_snprintf_returns_bogus=yes LIBS='$(GIT_CONF_ENV_LIBS)'
+> 
+> Please move this hunk to patch #3 in this series, which is where it logically 
+> belongs.
+> 
 
-Thanks,
-David.
+I removed the gettext part from v1 because it is not needed anymore with
+the git patches. But this hunk escapes my attention.
 
-Le 30/10/2015 21:12, Peter Seiderer a ?crit :
-> Hello David, Arnout,
->
-> On Fri, 30 Oct 2015 18:23:02 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->> On 30-10-15 17:55, David Picard wrote:
->>> Hello,
->>>
->>>
->>> I got my touchscreen working perfectly with ts_test. Many thanks to Peter
->>> Seiderer !
->>>
->>> But the thing is that my Qt5 app does not grab the touchscreen properly : x and
->>> y axis are switched. I did enable the tslib option under Qt5 in menuconfig. Is
->
-> The following
->
-> 	$ QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS='rotate=270' /usr/lib/qt/examples/touch/fingerpaint/fingerpaint -platform
-> linuxfb:fb=/dev/fb1
->
-> worked for me to get x/y right, see [1] for Qt5 parameters.
->
-> Regards,
-> Peter
->
-> [1] http://doc.qt.io/qt-5/embedded-linux.html
->
->>> there some magic command line option to pass to the application ? I tried this :
->>>
->>> $ myapp -platform linuxfb:fb=/dev/fb1 -plugin tslib
->>> ts_open() failed (No such file or directory)
->>
->>   Did you export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/event0 (but
->> replace with the correct device of course)?
->>
->>   Or hang on, for tslib it's TSLIB_TSDEVICE that you have to set.
->>
->>
->>   Regards,
->>   Arnout
->>
->>>
->>>>>> the app shows up, but TS still messed up.
->>>
->>> My config :
->>> - Raspberry Pi B+ and Adafruit 2.8" PiTFT w/ cap touch.
->>> - Buildroot 2015.08.1
->>> - Qt5 w/ tslib support enabled (BR2_PACKAGE_QT5BASE_TSLIB=y).
->>>
->>>
->>> Regards,
->>> David.
->>>
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
->>
->
+Thanks.
+Remi
