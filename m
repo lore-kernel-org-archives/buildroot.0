@@ -1,20 +1,19 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 2 Nov 2015 22:46:08 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 2 Nov 2015 22:49:08 +0100
 Subject: [Buildroot] [PATCH] pkgconf: fix incorrect variable-directory
  sysroot prefixing
 In-Reply-To: <1446494630-2956-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1446494630-2956-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151102224608.31ce714f@gmx.net>
+Message-ID: <20151102214908.GC3935@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gustavo,
+Gustavo, All,
 
-On Mon,  2 Nov 2015 17:03:50 -0300, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
-
+On 2015-11-02 17:03 -0300, Gustavo Zacarias spake thusly:
 > According to the pkg-config documents ("specification") when
 > sysroot-prefixing is enabled via PKG_CONFIG_SYSROOT_DIR this should only
 > be applied to -I/-L directories (includes, library directories), and not
@@ -28,6 +27,28 @@ On Mon,  2 Nov 2015 17:03:50 -0300, Gustavo Zacarias <gustavo@zacarias.com.ar> w
 > prefixed.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+As discussed on IRC, this patch breaks the build of xlib-libX11:
+
+    checking keysym definitions... configure: error: Cannot find keysymdef.h
+    make[1]: *** [/home/ymorin/dev/buildroot/O/build/xlib_libX11-1.6.3/.stamp_configured] Error 1
+    make: *** [_all] Error 2
+
+That's because, in its infinite wisdom^Wstupidity, the Xorg packages are
+calling pkg-config to directly query variables, even those that should
+be retrived with --cflags and such, like so:
+
+    KEYSYMDEFDIR=`$PKG_CONFIG --variable=includedir xproto`/X11
+
+Yes, they are _that_ busted... ;-(
+
+So, NAK. Sorry.
+
+Waiting for your updated proposal, now! ;-]
+
+Regards,
+Yann E. MORIN.
+
 > ---
 >  ...-Fix-all-variables-sysroot-prefix-problem.patch | 47 ++++++++++++++++++++++
 >  1 file changed, 47 insertions(+)
@@ -86,11 +107,18 @@ On Mon,  2 Nov 2015 17:03:50 -0300, Gustavo Zacarias <gustavo@zacarias.com.ar> w
 > +-- 
 > +2.4.10
 > +
+> -- 
+> 2.4.10
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Tested for the lib4vl/qt/moc case, './host/usr/bin/pkg-config --variable=moc_location QtCore'
-(same for uic/rcc) now returns the correct values...
-
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
