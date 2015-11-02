@@ -1,182 +1,88 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Mon, 2 Nov 2015 11:34:08 +0100
-Subject: [Buildroot] [RFC PATCH] dpdk: new package
-In-Reply-To: <5633A615.90408@mind.be>
-References: <1446203156-26848-1-git-send-email-viktorin@rehivetech.com>
- <5633A615.90408@mind.be>
-Message-ID: <20151102113408.5aaf26bb@jvn>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 2 Nov 2015 07:38:17 -0300
+Subject: [Buildroot] [PATCH 0/4 RFC] xorg: fix installation paths
+ (branch yem/xorg)
+In-Reply-To: <20151102003607.1fa9f695@gmx.net>
+References: <cover.1446416019.git.yann.morin.1998@free.fr>
+ <20151102003607.1fa9f695@gmx.net>
+Message-ID: <56373D19.6080303@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+On 01/11/15 20:36, Peter Seiderer wrote:
 
-thanks for your quick review...
+>> The new pkconf bumped in d7f6d320 introduced a change in behaviour: all
+>> path variables returned by pkgconf are now prefixed with the sysroot
+>> directory.
+>>
+>
+> ...this commit breaks some other packages too, see [1] for libv4l example.
+>
+> This commit removed a patch named '0002-fix-double-sysroot.patch', I think
+> this patch should somehow be forward ported to the new pkconf packet...
+>
+> Regards,
+> Peter
 
-On Fri, 30 Oct 2015 18:17:09 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Hi Peter.
+That's wrong, double-sysroot is natively removed by the newer versions 
+of pkgconf, if you have this:
 
->  Hi Jan,
-> 
->  I didn't do a detailed review, just some general remarks.
-> 
-> On 30-10-15 12:05, Jan Viktorin wrote:
-> > This patch introduces support of the DPDK library (www.dpdk.org) into
-> > Buildroot. It compiles and installs DPDK libraries on the target and
-> > staging and allows to compiler other applications depending on the DPDK
-> > library. It can also install some basic tools the DPDK provides
-> > (testpmd, python scripts, test suite).  
-> 
->  Explanation of what DPDK stands for would be nice :-)
+./usr/lib/pkgconfig/libxslt.pc:Libs: -L${libdir} -lxslt  -lxml2 
+-L/home/gustavoz/b/midx11/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib 
+-lz -lm -ldl -lm
 
-OK, will improve ;).
+And do this:
 
-> 
-> > 
-> > The patch assumes DPDK 2.2 which is not out at the moment (scheduled
-> > to the end of November). However, this version will contain support for
-> > the ARM architecture that is currently being reviewed.
-> > 
-> > Testing of DPDK on ARM is possible by cloning
-> > 
-> >  https://github.com/RehiveTech/dpdk arm-support-v5
-> > 
-> > as the package allows customization of the download process.  
-> 
->  We try to avoid adding options to select a version or different source. For
-> instance, we recently removed the version selection from busybox. If you need
-> for instance this arm-support branch, you can still use the _OVERRIDE_SRCDIR
-> approach.
+$ ./pkg-config --libs libxslt
+-L/home/gustavoz/b/midx11/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib 
+-lxslt  -lz -ldl -lm -lxml2
 
-Thanks for this hint. It is a little complication (I like when
-everything is in the defconfig - a single file) for some internal
-things. But I'll go this way in the next version.
+The output is as expected.
 
-> Is there any good reason why you need multi-version support for this
-> package?
+The problem is two-fold as we discussed with Yann last night.
+On one side the pkg-config manpage says:
 
-Probably not. all these were just for my comfort during develpoment,
-patch management, etc.
+  PKG_CONFIG_SYSROOT_DIR
+   Modify  -I  and -L to use the directories located in target sys?
+   root.  this option is useful when cross-compiling packages  that
+   use  pkg-config  to  determine CFLAGS and LDFLAGS. -I and -L are
+   modified to point to the new system  root.  this  means  that  a
+   -I/usr/include/libfoo will become -I/var/target/usr/include/lib?
+   foo with a PKG_CONFIG_SYSROOT_DIR  equal  to  /var/target  (same
+   rule apply to -L)
 
-> 
->  Same for custom patches, we have BR2_GLOBAL_PATCH_DIR.
+So pkgconf is being "too happy" in applying the sysroot prefix to all 
+directories it finds in any variable.
 
-Of course, I don't need this because of git...
+On the other hand on the previous 0001-fix-variable.patch it did:
 
-> 
-> > 
-> > The ARM ports can be tested by
-> > 
-> >  qemu_aarch64_virt_defconfig
-> >  qemu_arm_vexpress_defconfig
-> > 
-> > I did not test, how it works with x86 as I do not use Buildroot
-> > for this.
-> > 
-> > The included hashes are calculated locally by downloading the tar.gz
-> > archives by hand.
-> > 
-> > There are unfortunately some pitfalls:
-> > 
-> > * it may require to enable PCI, MSIX, UIO in the Linux Kernel
-> >   (some defconfigs does not include as default and it is platform
-> >   dependent as ARMv7 almost does not use PCI)  
-> 
->  We had a similar situation recently but I don't remember which package it was
-> and what the conclusion was. But basically, if you don't have PCI, then the
-> build will end with an error saying that you don't have PCI, so it's not rocket
-> science to discover that PCI should be enabled.
+if ( !strcmp(req.variable, "includedir") ||
+         !strcmp(req.variable, "mapdir") ||
+         !strcmp(req.variable, "sdkdir") ||
+         !strcmp(req.variable, "libdir"))
+               printf("%s%s\n", sysroot_dir, req.buf);
+       else
+               printf("%s\n", req.buf);
 
-Yes, it's just annoying.
+So it was adding the sysroot prefix for mapdir & sdkdir as well, very 
+much out of specification (we'll call the manpage a spec), catering for 
+package abuse.
 
-> 
->  UIO I think you could enable explicitly in linux.mk however.
+In the end our previous pkgconf was working out of spec, which may be 
+ok, but poses the question, how many of these variables should be 
+patched/prefixed as well? Because in the future other packages with 
+their $nonstandard variable may need this as well, and patching and 
+patching pkgconf for eternity doesn't sound so great.
 
-You probably mean something like(?):
+First pkgconf should be patched to fix the out-of-spec functionality and 
+send that upstream, but variable exceptions won't roll.
 
-linux.mk:
-$(if $(BR_PACKAGE_DPDK),
-    $(call KCONFIG_ENABLE_OPT,CONFIG_XXX_UIO,$(@D)/.config))
+For the second problem i think mangling the .pc files would be best for 
+the special variables, based on a per-package definition where you can 
+say which other variables should be prefixed.
 
-> 
-> > 
-> > * when building PCAP PMD driver, the libpcap is required (however,
-> >   this dependency is difficult to express in Buildroot as this depends
-> >   on the DPDK configuration file - similar to the issue above)  
-> 
->  Yeah, we have a similar situation with swupdate, and no resolution so far. We
-> also had a similar situation with the crosstool-NG support before that was removed.
-> 
->  What you definitely can do is
-> 
-> ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-> DPDK_DEPENDENCIES += libpcap
-> endif
-> 
-> and add in the helptext that you need to enable libpcap manually if required.
-
-OK.
-
-> 
-> > 
-> > * some tools the DPDK provides depend on Python(2) so the user has
-> >   to enable it to install those
-> > 
-> > I assume, the user knows what he is doing in those cases and configures
-> > the Buildroot in the right way. Or any ideas? Yann?
-> > 
-> > Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>  
-> 
-> 
->  Generic other remarks:
-> 
-> - Why not use the kernel-module infra?
-
-The DPDK project has a specific build system which is better to not
-touch :). I tried several approaches and finally, I finished with the
-proposed patch as the one that is clean and working.
-
-> - Shouldn't it be a kconfig-package as well?
-
-Unfortunately, the DPDK project does not use kconfig at the moment (it
-probably will in the future but...). So the kconfig-package cannot be
-used here.
-
-> - Help text line wrapping is not OK.
-> - Instead of the configuration choice which always has only two options, just
-> allow to leave the config string empty and default to the arch-appropriate one then.
-> - pyscripts should probably not require an option; just install automatically if
-> python is enabled.
-> - License is probably not correct, if the files are called LICENSE.LGPL LICENSE.GPL
-
-The DPDK itself is under BSD (however, I did not find the license
-file there). The included kernel drivers are GPL. I have no idea about
-the purpose of LGPL at the moment (probably dual-licensing, will
-check...).
-
-> - For enabling kconfig opts, there are helper functions.
-> - Never put comments in command blocks; put them before the define.
-
-OK, will fix.
-
-> - Don't put empty assignments (DPDK_INSTALL_TARGET_LIBS)
-
-OK. I wanted to make obvious that it is empty. I will remove it.
-
-> 
-> 
-> 
->  Regards,
->  Arnout
-> 
-> [snip]
-
-
-
--- 
-  Jan Viktorin                E-mail: Viktorin at RehiveTech.com
-  System Architect            Web:    www.RehiveTech.com
-  RehiveTech
-  Brno, Czech Republic
+Regards.
