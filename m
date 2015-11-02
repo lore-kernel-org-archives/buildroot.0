@@ -1,84 +1,62 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 Nov 2015 17:03:50 -0300
-Subject: [Buildroot] [PATCH] pkgconf: fix incorrect variable-directory
-	sysroot prefixing
-Message-ID: <1446494630-2956-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Nov 2015 21:28:33 +0100
+Subject: [Buildroot] [git commit] package/openvmtools: does not build with
+	uClibc
+Message-ID: <20151102203151.58C7181DA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to the pkg-config documents ("specification") when
-sysroot-prefixing is enabled via PKG_CONFIG_SYSROOT_DIR this should only
-be applied to -I/-L directories (includes, library directories), and not
-to all of the other variables that can specify a directory.
+commit: http://git.buildroot.net/buildroot/commit/?id=774c599fc568a5a12feff0b633f29f7ca38814ca
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However xorg uses mapdir/sdkdir in a similar fashion in what could be
-considered an abuse of the spec, hence needs to be prefixed as well.
+On glibc 2.4+, openvmtools uses euidaccess(), which is not implemented
+on uClibc.
 
-This patch makes pkgconf behave in the pkg-config specified way with the
-added exception for the mapdir and sdkdir variables which are still
-prefixed.
+But since uClibc fakes being a glibc-2.10, openvmtools believes it can
+use euidaccess(), and thus we get a linking error.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+    http://autobuild.buildroot.org/results/779/779bed269982f0b2e04baecae2e720d602319552/
+    http://autobuild.buildroot.org/results/860/8609823e35115f07b0f16f0a1831201aa1cf9e3c/
+    http://autobuild.buildroot.org/results/f57/f572573c5f7f9206e0a8309b535a7c633a2d6b16/
+    ...
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-Fix-all-variables-sysroot-prefix-problem.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
+ package/openvmtools/Config.in |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-new file mode 100644
-index 0000000..33a7589
---- /dev/null
-+++ b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-@@ -0,0 +1,47 @@
-+From cb7638bd24f3b9a40c125338e7b315fbabeb37ed Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 2 Nov 2015 15:36:28 -0300
-+Subject: [PATCH] Fix all-variables sysroot prefix problem
-+
-+According to the pkg-config specifications (or rather documentation)
-+only the -L/-I directory entries should be sysroot-prefixed.
-+But since xorg uses mapdir/sdkdir with a similar intention disable
-+prefixing for all variables except these.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ main.c | 11 ++++++-----
-+ 1 file changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/main.c b/main.c
-+index 6947126..77f3654 100644
-+--- a/main.c
-++++ b/main.c
-+@@ -313,9 +313,9 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-+ 			memset(req->buf, 0, sizeof(req->buf));
-+ 
-+ 			if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-+-			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-+-				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-+-
-++			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-++			    	(!strcmp(req->variable, "mapdir") || !strcmp(req->variable, "sdkdir")))
-++				    strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-+ 			strlcat(req->buf, var, sizeof(req->buf));
-+ 			return;
-+ 		}
-+@@ -323,8 +323,9 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-+ 		strlcat(req->buf, " ", sizeof(req->buf));
-+ 
-+ 		if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-+-		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-+-			strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-++		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-++		    	(!strcmp(req->variable, "mapdir") || !strcmp(req->variable, "sdkdir")))
-++			    strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-+ 
-+ 		strlcat(req->buf, var, sizeof(req->buf));
-+ 	}
-+-- 
-+2.4.10
-+
--- 
-2.4.10
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 98cbeb9..64bf65c 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_OPENVMTOOLS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_ENABLE_LOCALE
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBDNET
+ 	help
+@@ -40,13 +41,14 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
+ 	help
+ 	  Support for PAM in openvmtools
+ 
+-comment "PAM support needs a uClibc or (e)glibc toolchain w/ dynamic library"
++comment "PAM support needs an (e)glibc toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ endif
+ 
+-comment "openvmtools needs a toolchain w/ wchar, threads, RPC, locale"
++comment "openvmtools needs an (e)glibc or musl toolchain w/ wchar, threads, RPC, locale"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE
++		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE || \
++		BR2_TOOLCHAIN_USES_UCLIBC
