@@ -1,99 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 Nov 2015 18:57:04 -0300
-Subject: [Buildroot] [PATCH v2] pkgconf: fix incorrect variable-directory
-	sysroot prefixing
-Message-ID: <1446501424-26609-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Nov 2015 23:12:02 +0100
+Subject: [Buildroot] [git commit] package/nodejs: Fixed npm global install
+Message-ID: <20151102221242.01829819BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to the pkg-config documents ("specification") when
-sysroot-prefixing is enabled via PKG_CONFIG_SYSROOT_DIR this should only
-be applied to -I/-L directories (includes, library directories), and not
-to all of the other variables that can specify a directory.
+commit: http://git.buildroot.net/buildroot/commit/?id=1325da4a28f0c701c09b9f090df706838540948d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However xorg uses mapdir/sdkdir in a similar fashion in what could be
-considered an abuse of the spec, hence needs to be prefixed as well.
-And what's more, it also uses includedir in a nonstandard fashion just
-requesting the value via 'pkg-config --variable=includedir libfoo' which
-doesn't pass the standard prefixing rules for the --cflags and --libs
-invocation.
+Set npm_config_prefix to $(TARGET_DIR)/usr so that npm -g will correctly
+install global modules to $(TARGET_DIR)/usr/lib/node_modules.
 
-This patch makes pkgconf behave in the pkg-config specified way with the
-added exception for the includedir, libdir, mapdir and sdkdir variables
-which are prefixed.
+By using npm -g to install global modules npm will now automatically create
+the symlinks to executables under $(TARGET_DIR)/usr/bin.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+See https://docs.npmjs.com/misc/config#global and
+https://docs.npmjs.com/files/folders for information on how the prefix
+setting is used by global installs.
+
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-Fix-all-variables-sysroot-prefix-problem.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
+ package/nodejs/nodejs.mk |   13 ++-----------
+ 1 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-new file mode 100644
-index 0000000..bac9f62
---- /dev/null
-+++ b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-@@ -0,0 +1,58 @@
-+From abc7a780f2a52a1aa3ee288e17140b817b545cc3 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 2 Nov 2015 18:38:00 -0300
-+Subject: [PATCH] Fix all-variables sysroot prefix problem
-+
-+According to the pkg-config specifications (or rather documentation)
-+only the -L/-I directory entries should be sysroot-prefixed.
-+
-+We also need to prefix the mapdir/sdkdir variables since they're used by
-+xorg and expected that way.
-+
-+Also allow prefixing for includedir and libdir since in some silly cases
-+the directories may be requested barebones via pkg-config
-+--variable=includedir libfool for example.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ main.c | 17 ++++++++++++-----
-+ 1 file changed, 12 insertions(+), 5 deletions(-)
-+
-+diff --git a/main.c b/main.c
-+index 6947126..52d16c2 100644
-+--- a/main.c
-++++ b/main.c
-+@@ -313,9 +313,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-+ 			memset(req->buf, 0, sizeof(req->buf));
-+ 
-+ 			if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-+-			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-+-				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-+-
-++			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-++			    	(!strcmp(req->variable, "includedir") || \
-++				    !strcmp(req->variable, "libdir") || \
-++				    !strcmp(req->variable, "mapdir") || \
-++				    !strcmp(req->variable, "sdkdir")))
-++					strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-+ 			strlcat(req->buf, var, sizeof(req->buf));
-+ 			return;
-+ 		}
-+@@ -323,8 +326,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-+ 		strlcat(req->buf, " ", sizeof(req->buf));
-+ 
-+ 		if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-+-		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-+-			strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-++		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-++		    	(!strcmp(req->variable, "includedir") || \
-++			    !strcmp(req->variable, "libdir") || \
-++			    !strcmp(req->variable, "mapdir") || \
-++			    !strcmp(req->variable, "sdkdir")))
-++				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-+ 
-+ 		strlcat(req->buf, var, sizeof(req->buf));
-+ 	}
-+-- 
-+2.4.10
-+
--- 
-2.4.10
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 099b3f0..7b6ae6b 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -106,6 +106,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
+ 	npm_config_target_arch=$(NODEJS_CPU) \
+ 	npm_config_build_from_source=true \
+ 	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
++	npm_config_prefix=$(TARGET_DIR)/usr \
+ 	$(HOST_DIR)/usr/bin/npm
+ 
+ #
+@@ -116,17 +117,7 @@ define NODEJS_INSTALL_MODULES
+ 	# If you're having trouble with module installation, adding -d to the
+ 	# npm install call below and setting npm_config_rollback=false can both
+ 	# help in diagnosing the problem.
+-	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
+-		$(NPM) install $(NODEJS_MODULES_LIST) \
+-	)
+-
+-	# Symlink all executables in $(TARGET_DIR)/usr/lib/node_modules/.bin to
+-	# $(TARGET_DIR)/usr/bin so they are accessible from the command line
+-	cd $(TARGET_DIR)/usr/bin; \
+-	for f in ../../usr/lib/node_modules/.bin/*; do \
+-		[ -f "$${f}" -a -x "$${f}" ] || continue; \
+-		ln -sf "$${f}" "$${f##*/}" || exit 1; \
+-	done
++	$(NPM) install -g $(NODEJS_MODULES_LIST)
+ endef
+ endif
+ 
