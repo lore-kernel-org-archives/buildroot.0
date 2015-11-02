@@ -1,55 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 21:34:22 +0100
-Subject: [Buildroot] [git commit] mosquitto: systemd support
-Message-ID: <20151102203430.A658981D8D@busybox.osuosl.org>
+Date: Mon, 2 Nov 2015 21:33:35 +0100
+Subject: [Buildroot] [PATCH] package/openvmtools: does not build with
+ uClibc
+In-Reply-To: <1446309491-24752-1-git-send-email-yann.morin.1998@free.fr>
+References: <1446309491-24752-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20151102213335.4aca2400@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e7f636c2cbc7483888fef1a032e98bdeb463fe9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yann,
 
-Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mosquitto/mosquitto.mk      |    8 ++++++++
- package/mosquitto/mosquitto.service |   10 ++++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+On Sat, 31 Oct 2015 17:38:11 +0100, Yann E. MORIN wrote:
+> On glibc 2.4+, openvmtools uses euidaccess(), which is not implemented
+> on uClibc.
+> 
+> But since uClibc fakes being a glibc-3.10, openvmtools believes it can
 
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 73365f9..efeb32d 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -83,6 +83,14 @@ define MOSQUITTO_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50mosquitto
- endef
- 
-+define MOSQUITTO_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/mosquitto/mosquitto.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/mosquitto.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/mosquitto.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mosquitto.service
-+endef
-+
- define MOSQUITTO_USERS
- 	mosquitto -1 nogroup -1 * - - - Mosquitto user
- endef
-diff --git a/package/mosquitto/mosquitto.service b/package/mosquitto/mosquitto.service
-new file mode 100644
-index 0000000..2d1939d
---- /dev/null
-+++ b/package/mosquitto/mosquitto.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Mosquitto MQTT broker
-+
-+[Service]
-+ExecStart=/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
-+ExecReload=/bin/kill -HUP $MAINPID
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+s/3.10/2.10/.
+
+> use euidaccess(), and thus we get a linking error.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/779/779bed269982f0b2e04baecae2e720d602319552/
+>     http://autobuild.buildroot.org/results/860/8609823e35115f07b0f16f0a1831201aa1cf9e3c/
+>     http://autobuild.buildroot.org/results/f57/f572573c5f7f9206e0a8309b535a7c633a2d6b16/
+>     ...
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> ---
+> Note; an alternate solution would be to patch openvmtools to not use
+> euidaccess with uClibc as well. But I'm warry of patching. After all, a
+> package that deals with virtual machines is not really size-sensitive,
+> so it is not completely stupid to disable it with uClibc, and require
+> either glibc or musl...
+
+I've applied the patch after fixing 2.10 typo, thanks!
+
+However, it is interesting to see the type of build issues that we've
+discovered since uClibc pretends to be glibc 2.10.
+
+But oh well, those packages simply get what they merit: instead of
+doing proper configure.ac checks, they do some stupid version-based
+checking. Which is doomed to fail at some point.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
