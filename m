@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 22:42:06 +0100
-Subject: [Buildroot] [PATCH v4 1/2] package/kodi-visualisation-goom: new
- package
-In-Reply-To: <1446239247-6651-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1446239247-6651-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151102224206.47160d9f@free-electrons.com>
+Date: Mon, 2 Nov 2015 22:45:06 +0100
+Subject: [Buildroot] [git commit] luv: fix license typo
+Message-ID: <20151102214515.D755B8182A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+commit: http://git.buildroot.net/buildroot/commit/?id=a61afb85dfb33a38c5887b2632944e243cf74a99
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 30 Oct 2015 22:07:26 +0100, Bernd Kuhls wrote:
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Acked-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/luv/luv.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> diff --git a/package/kodi-visualisation-goom/0001-cross-compile.patch b/package/kodi-visualisation-goom/0001-cross-compile.patch
-> new file mode 100644
-> index 0000000..8dd0fe9
-> --- /dev/null
-> +++ b/package/kodi-visualisation-goom/0001-cross-compile.patch
-> @@ -0,0 +1,32 @@
-> +Fix cross-compilation
-> +
-> +Use the cross-compiler and not the host version.
-> +
-> +Patch sent upstream:
-> +https://github.com/notspiff/visualization.goom/pull/4
-
-Seems like upstream feedback wasn't very good on this, and with some
-good reason I believe since it's quite hackish, no?
-
-Don't you think we can find a better solution to pass down the --host
-value ? Maybe an explicit CMakeLists.txt option ?
-
-This packaging is really weird :-/
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/luv/luv.mk b/package/luv/luv.mk
+index 8e108a0..fd5c365 100644
+--- a/package/luv/luv.mk
++++ b/package/luv/luv.mk
+@@ -8,7 +8,7 @@ LUV_VERSION = 1.7.4-4
+ LUV_SOURCE = luv-$(LUV_VERSION).tar.gz
+ LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
+ LUV_LICENSE = Apache-2.0
+-LUV_LICENSE_FILE = LICENSE.txt
++LUV_LICENSE_FILES = LICENSE.txt
+ LUV_DEPENDENCIES = libuv
+ LUV_INSTALL_STAGING = YES
+ 
