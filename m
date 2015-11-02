@@ -1,25 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 20:57:10 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain: add 4.3.x choice for headers
-In-Reply-To: <1446476213-28962-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1446476213-28962-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151102205710.6b3804c5@free-electrons.com>
+Date: Mon, 2 Nov 2015 20:57:54 +0100
+Subject: [Buildroot] [PATCH 1/1] network-manager: bump to version 1.0.6
+In-Reply-To: <1445991641-21173-1-git-send-email-petr.vorel@gmail.com>
+References: <1445991641-21173-1-git-send-email-petr.vorel@gmail.com>
+Message-ID: <20151102205754.7ab7e762@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Petr Vorel,
 
-On Mon, 2 Nov 2015 15:56:51 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Wed, 28 Oct 2015 01:20:41 +0100, Petr Vorel wrote:
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  toolchain/toolchain-common.in          | 5 +++++
->  toolchain/toolchain-external/Config.in | 4 ++++
->  2 files changed, 9 insertions(+)
+>  package/network-manager/network-manager.hash | 4 ++--
+>  package/network-manager/network-manager.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-All three patches applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
