@@ -1,785 +1,182 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 2 Nov 2015 09:38:13 +0000
-Subject: [Buildroot] [PATCH] sudo: bump to version 1.8.15
-Message-ID: <1446457093-27978-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Mon, 2 Nov 2015 11:34:08 +0100
+Subject: [Buildroot] [RFC PATCH] dpdk: new package
+In-Reply-To: <5633A615.90408@mind.be>
+References: <1446203156-26848-1-git-send-email-viktorin@rehivetech.com>
+ <5633A615.90408@mind.be>
+Message-ID: <20151102113408.5aaf26bb@jvn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unneeded patches removed. Highlights from ChangeLog:
+Hello Arnout,
 
-* Fixed a build problem on systems that don't implicitly include
-  sys/types.h from other header files. Bug #711.
+thanks for your quick review...
 
-* Fixed the compiler stack protector test in configure for compilers
-  that support -fstack-protector but don't actually have the ssp
-  library available.
+On Fri, 30 Oct 2015 18:17:09 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/sudo/0001-musl-fix-missing-header.patch    |   19 -
- ...etter-configure-test-for-fstack-protector.patch |  415 --------------------
- ...LDFLAGS-when-checking-for-stack-protector.patch |   81 ----
- ...program-when-checking-for-stack-protector.patch |  189 ---------
- package/sudo/sudo.hash                             |    4 +-
- package/sudo/sudo.mk                               |    2 +-
- 6 files changed, 3 insertions(+), 707 deletions(-)
- delete mode 100644 package/sudo/0001-musl-fix-missing-header.patch
- delete mode 100644 package/sudo/0002-Better-configure-test-for-fstack-protector.patch
- delete mode 100644 package/sudo/0003-Preserve-LDFLAGS-when-checking-for-stack-protector.patch
- delete mode 100644 package/sudo/0004-Actually-link-the-test-program-when-checking-for-stack-protector.patch
+>  Hi Jan,
+> 
+>  I didn't do a detailed review, just some general remarks.
+> 
+> On 30-10-15 12:05, Jan Viktorin wrote:
+> > This patch introduces support of the DPDK library (www.dpdk.org) into
+> > Buildroot. It compiles and installs DPDK libraries on the target and
+> > staging and allows to compiler other applications depending on the DPDK
+> > library. It can also install some basic tools the DPDK provides
+> > (testpmd, python scripts, test suite).  
+> 
+>  Explanation of what DPDK stands for would be nice :-)
 
-diff --git a/package/sudo/0001-musl-fix-missing-header.patch b/package/sudo/0001-musl-fix-missing-header.patch
-deleted file mode 100644
-index e3681b2..0000000
---- a/package/sudo/0001-musl-fix-missing-header.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Header sys/types.h is needed for id_t
--
--Patch reported as bug upstream:
--http://bugzilla.sudo.ws/show_bug.cgi?id=711
--
--Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
--
--diff -purN sudo-1.8.14p3.orig/include/sudo_util.h sudo-1.8.14p3/include/sudo_util.h
----- sudo-1.8.14p3.orig/include/sudo_util.h	2015-07-22 14:22:49.000000000 +0200
--+++ sudo-1.8.14p3/include/sudo_util.h	2015-08-01 09:35:15.077909614 +0200
--@@ -23,6 +23,8 @@
-- # include "compat/stdbool.h"
-- #endif /* HAVE_STDBOOL_H */
-- 
--+#include <sys/types.h>
--+
-- /*
--  * Macros for operating on struct timeval.
--  */
-diff --git a/package/sudo/0002-Better-configure-test-for-fstack-protector.patch b/package/sudo/0002-Better-configure-test-for-fstack-protector.patch
-deleted file mode 100644
-index b9ec410..0000000
---- a/package/sudo/0002-Better-configure-test-for-fstack-protector.patch
-+++ /dev/null
-@@ -1,415 +0,0 @@
--Better configure test for -fstack-protector. Some gcc installations may
--be missing the ssp library even though the compiler supports it.
--
--Backported from upstream:
--  http://www.sudo.ws/repos/sudo/rev/4ade5d1249f4
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--# HG changeset patch
--# User Todd C. Miller <Todd.Miller@courtesan.com>
--# Date 1446137469 21600
--# Node ID 4ade5d1249f483c4dd6c579c70b327791094afe8
--# Parent  97ee37d905ceefa433e93a0f552c2a3e5926e2fb
--Better configure test for -fstack-protector.  Some gcc installations
--may be missing the ssp library even though the compiler supports it.
--
--diff -r 97ee37d905ce -r 4ade5d1249f4 configure
----- a/configure	Sun Oct 25 14:28:38 2015 -0600
--+++ b/configure	Thu Oct 29 10:51:09 2015 -0600
--@@ -23916,236 +23916,94 @@
-- fi
-- 
-- if test "$enable_hardening" != "no"; then
---    if test -n "$GCC"; then
---	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C compiler accepts -fstack-protector-strong" >&5
---$as_echo_n "checking whether C compiler accepts -fstack-protector-strong... " >&6; }
---if ${ax_cv_check_cflags___fstack_protector_strong+:} false; then :
---  $as_echo_n "(cached) " >&6
---else
---
---  ax_check_save_flags=$CFLAGS
---  CFLAGS="$CFLAGS  -fstack-protector-strong"
---  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
---/* end confdefs.h.  */
---
---int
---main ()
---{
---
---  ;
---  return 0;
---}
---_ACEOF
---if ac_fn_c_try_compile "$LINENO"; then :
---  ax_cv_check_cflags___fstack_protector_strong=yes
---else
---  ax_cv_check_cflags___fstack_protector_strong=no
---fi
---rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
---  CFLAGS=$ax_check_save_flags
---fi
---{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_cflags___fstack_protector_strong" >&5
---$as_echo "$ax_cv_check_cflags___fstack_protector_strong" >&6; }
---if test x"$ax_cv_check_cflags___fstack_protector_strong" = xyes; then :
---
---	    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linker accepts -fstack-protector-strong" >&5
---$as_echo_n "checking whether the linker accepts -fstack-protector-strong... " >&6; }
---if ${ax_cv_check_ldflags___fstack_protector_strong+:} false; then :
---  $as_echo_n "(cached) " >&6
---else
---
---  ax_check_save_flags=$LDFLAGS
---  LDFLAGS="$LDFLAGS  -fstack-protector-strong"
---  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
---/* end confdefs.h.  */
---
---int
---main ()
---{
---
---  ;
---  return 0;
---}
---_ACEOF
---if ac_fn_c_try_link "$LINENO"; then :
---  ax_cv_check_ldflags___fstack_protector_strong=yes
---else
---  ax_cv_check_ldflags___fstack_protector_strong=no
---fi
---rm -f core conftest.err conftest.$ac_objext \
---    conftest$ac_exeext conftest.$ac_ext
---  LDFLAGS=$ax_check_save_flags
---fi
---{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_ldflags___fstack_protector_strong" >&5
---$as_echo "$ax_cv_check_ldflags___fstack_protector_strong" >&6; }
---if test x"$ax_cv_check_ldflags___fstack_protector_strong" = xyes; then :
---
---		SSP_CFLAGS="-fstack-protector-strong"
---		SSP_LDFLAGS="-Wc,-fstack-protector-strong"
---
---else
---  :
---fi
---
---
---else
---  :
---fi
---
---	if test -z "$SSP_CFLAGS"; then
---	    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C compiler accepts -fstack-protector-all" >&5
---$as_echo_n "checking whether C compiler accepts -fstack-protector-all... " >&6; }
---if ${ax_cv_check_cflags___fstack_protector_all+:} false; then :
---  $as_echo_n "(cached) " >&6
---else
---
---  ax_check_save_flags=$CFLAGS
---  CFLAGS="$CFLAGS  -fstack-protector-all"
---  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
---/* end confdefs.h.  */
---
---int
---main ()
---{
---
---  ;
---  return 0;
---}
---_ACEOF
---if ac_fn_c_try_compile "$LINENO"; then :
---  ax_cv_check_cflags___fstack_protector_all=yes
---else
---  ax_cv_check_cflags___fstack_protector_all=no
---fi
---rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
---  CFLAGS=$ax_check_save_flags
---fi
---{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_cflags___fstack_protector_all" >&5
---$as_echo "$ax_cv_check_cflags___fstack_protector_all" >&6; }
---if test x"$ax_cv_check_cflags___fstack_protector_all" = xyes; then :
---
---		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linker accepts -fstack-protector-all" >&5
---$as_echo_n "checking whether the linker accepts -fstack-protector-all... " >&6; }
---if ${ax_cv_check_ldflags___fstack_protector_all+:} false; then :
---  $as_echo_n "(cached) " >&6
---else
---
---  ax_check_save_flags=$LDFLAGS
---  LDFLAGS="$LDFLAGS  -fstack-protector-all"
---  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
---/* end confdefs.h.  */
---
---int
---main ()
---{
---
---  ;
---  return 0;
---}
---_ACEOF
---if ac_fn_c_try_link "$LINENO"; then :
---  ax_cv_check_ldflags___fstack_protector_all=yes
---else
---  ax_cv_check_ldflags___fstack_protector_all=no
---fi
---rm -f core conftest.err conftest.$ac_objext \
---    conftest$ac_exeext conftest.$ac_ext
---  LDFLAGS=$ax_check_save_flags
---fi
---{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_ldflags___fstack_protector_all" >&5
---$as_echo "$ax_cv_check_ldflags___fstack_protector_all" >&6; }
---if test x"$ax_cv_check_ldflags___fstack_protector_all" = xyes; then :
---
---		    SSP_CFLAGS="-fstack-protector-all"
---		    SSP_LDFLAGS="-Wc,-fstack-protector-all"
---
---else
---  :
---fi
---
---
---else
---  :
---fi
---
---	    if test -z "$SSP_CFLAGS"; then
---		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C compiler accepts -fstack-protector" >&5
---$as_echo_n "checking whether C compiler accepts -fstack-protector... " >&6; }
---if ${ax_cv_check_cflags___fstack_protector+:} false; then :
---  $as_echo_n "(cached) " >&6
---else
---
---  ax_check_save_flags=$CFLAGS
---  CFLAGS="$CFLAGS  -fstack-protector"
---  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
---/* end confdefs.h.  */
---
---int
---main ()
---{
---
---  ;
---  return 0;
---}
---_ACEOF
---if ac_fn_c_try_compile "$LINENO"; then :
---  ax_cv_check_cflags___fstack_protector=yes
---else
---  ax_cv_check_cflags___fstack_protector=no
---fi
---rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
---  CFLAGS=$ax_check_save_flags
---fi
---{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_cflags___fstack_protector" >&5
---$as_echo "$ax_cv_check_cflags___fstack_protector" >&6; }
---if test x"$ax_cv_check_cflags___fstack_protector" = xyes; then :
---
---		    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linker accepts -fstack-protector" >&5
---$as_echo_n "checking whether the linker accepts -fstack-protector... " >&6; }
---if ${ax_cv_check_ldflags___fstack_protector+:} false; then :
---  $as_echo_n "(cached) " >&6
---else
---
---  ax_check_save_flags=$LDFLAGS
---  LDFLAGS="$LDFLAGS  -fstack-protector"
---  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
---/* end confdefs.h.  */
---
---int
---main ()
---{
---
---  ;
---  return 0;
---}
---_ACEOF
---if ac_fn_c_try_link "$LINENO"; then :
---  ax_cv_check_ldflags___fstack_protector=yes
---else
---  ax_cv_check_ldflags___fstack_protector=no
---fi
---rm -f core conftest.err conftest.$ac_objext \
---    conftest$ac_exeext conftest.$ac_ext
---  LDFLAGS=$ax_check_save_flags
---fi
---{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_ldflags___fstack_protector" >&5
---$as_echo "$ax_cv_check_ldflags___fstack_protector" >&6; }
---if test x"$ax_cv_check_ldflags___fstack_protector" = xyes; then :
---
---			SSP_CFLAGS="-fstack-protector"
---			SSP_LDFLAGS="-Wc,-fstack-protector"
---
---else
---  :
---fi
---
---
---else
---  :
---fi
---
---	    fi
---	fi
--+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for compiler stack protector support" >&5
--+$as_echo_n "checking for compiler stack protector support... " >&6; }
--+if ${sudo_cv_var_stack_protector+:} false; then :
--+  $as_echo_n "(cached) " >&6
--+else
--+
--+	    sudo_cv_var_stack_protector=no
--+	    _CFLAGS="$CFLAGS"
--+	    _LDFLAGS="$LDFLAGS"
--+	    CFLAGS="-fstack-protector-strong"
--+	    LDFLAGS="-fstack-protector-strong"
--+	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
--+/* end confdefs.h.  */
--+
--+		$ac_includes_default
--+int
--+main ()
--+{
--+char buf[1024]; buf[1023] = '\0';
--+  ;
--+  return 0;
--+}
--+
--+_ACEOF
--+if ac_fn_c_try_compile "$LINENO"; then :
--+
--+		sudo_cv_var_stack_protector="-fstack-protector-strong"
--+
--+else
--+
--+		CFLAGS="-fstack-protector-all"
--+		LDFLAGS="-fstack-protector-all"
--+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
--+/* end confdefs.h.  */
--+
--+		    $ac_includes_default
--+int
--+main ()
--+{
--+char buf[1024]; buf[1023] = '\0';
--+  ;
--+  return 0;
--+}
--+
--+_ACEOF
--+if ac_fn_c_try_compile "$LINENO"; then :
--+
--+		    sudo_cv_var_stack_protector="-fstack-protector-all"
--+
--+else
--+
--+		    CFLAGS="-fstack-protector"
--+		    LDFLAGS="-fstack-protector"
--+		    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
--+/* end confdefs.h.  */
--+
--+			$ac_includes_default
--+int
--+main ()
--+{
--+char buf[1024]; buf[1023] = '\0';
--+  ;
--+  return 0;
--+}
--+
--+_ACEOF
--+if ac_fn_c_try_compile "$LINENO"; then :
--+
--+			sudo_cv_var_stack_protector="-fstack-protector"
--+
--+fi
--+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
--+
--+fi
--+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
--+
--+fi
--+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
--+	    CFLAGS="$_CFLAGS"
--+	    LDFLAGS="$_LDFLAGS"
--+
--+
--+fi
--+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $sudo_cv_var_stack_protector" >&5
--+$as_echo "$sudo_cv_var_stack_protector" >&6; }
--+    if test X"$sudo_cv_var_stack_protector" != X"no"; then
--+	SSP_CFLAGS="$sudo_cv_var_stack_protector"
--+	SSP_LDFLAGS="-Wc,$sudo_cv_var_stack_protector"
--     fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linker accepts -Wl,-z,relro" >&5
-- $as_echo_n "checking whether the linker accepts -Wl,-z,relro... " >&6; }
--diff -r 97ee37d905ce -r 4ade5d1249f4 configure.ac
----- a/configure.ac	Sun Oct 25 14:28:38 2015 -0600
--+++ b/configure.ac	Thu Oct 29 10:51:09 2015 -0600
--@@ -3978,29 +3978,45 @@
-- dnl This test relies on AC_LANG_WERROR
-- dnl
-- if test "$enable_hardening" != "no"; then
---    if test -n "$GCC"; then
---	AX_CHECK_COMPILE_FLAG([-fstack-protector-strong], [
---	    AX_CHECK_LINK_FLAG([-fstack-protector-strong], [
---		SSP_CFLAGS="-fstack-protector-strong"
---		SSP_LDFLAGS="-Wc,-fstack-protector-strong"
---	    ])
---	])
---	if test -z "$SSP_CFLAGS"; then
---	    AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [
---		AX_CHECK_LINK_FLAG([-fstack-protector-all], [
---		    SSP_CFLAGS="-fstack-protector-all"
---		    SSP_LDFLAGS="-Wc,-fstack-protector-all"
--+    AC_CACHE_CHECK([for compiler stack protector support],
--+	[sudo_cv_var_stack_protector],
--+	[
--+	    sudo_cv_var_stack_protector=no
--+	    _CFLAGS="$CFLAGS"
--+	    _LDFLAGS="$LDFLAGS"
--+	    CFLAGS="-fstack-protector-strong"
--+	    LDFLAGS="-fstack-protector-strong"
--+	    AC_COMPILE_IFELSE([
--+		AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
--+		[[char buf[1024]; buf[1023] = '\0';]])
--+	    ], [
--+		sudo_cv_var_stack_protector="-fstack-protector-strong"
--+	    ], [
--+		CFLAGS="-fstack-protector-all"
--+		LDFLAGS="-fstack-protector-all"
--+		AC_COMPILE_IFELSE([
--+		    AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
--+		    [[char buf[1024]; buf[1023] = '\0';]])
--+		], [
--+		    sudo_cv_var_stack_protector="-fstack-protector-all"
--+		], [
--+		    CFLAGS="-fstack-protector"
--+		    LDFLAGS="-fstack-protector"
--+		    AC_COMPILE_IFELSE([
--+			AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
--+			[[char buf[1024]; buf[1023] = '\0';]])
--+		    ], [
--+			sudo_cv_var_stack_protector="-fstack-protector"
--+		    ], [])
-- 		])
-- 	    ])
---	    if test -z "$SSP_CFLAGS"; then
---		AX_CHECK_COMPILE_FLAG([-fstack-protector], [
---		    AX_CHECK_LINK_FLAG([-fstack-protector], [
---			SSP_CFLAGS="-fstack-protector"
---			SSP_LDFLAGS="-Wc,-fstack-protector"
---		    ])
---		])
---	    fi
---	fi
--+	    CFLAGS="$_CFLAGS"
--+	    LDFLAGS="$_LDFLAGS"
--+	]
--+    )
--+    if test X"$sudo_cv_var_stack_protector" != X"no"; then
--+	SSP_CFLAGS="$sudo_cv_var_stack_protector"
--+	SSP_LDFLAGS="-Wc,$sudo_cv_var_stack_protector"
--     fi
--     AX_CHECK_LINK_FLAG([-Wl,-z,relro], [LDFLAGS="${LDFLAGS} -Wl,-z,relro"])
-- fi
--
-diff --git a/package/sudo/0003-Preserve-LDFLAGS-when-checking-for-stack-protector.patch b/package/sudo/0003-Preserve-LDFLAGS-when-checking-for-stack-protector.patch
-deleted file mode 100644
-index 6ba3bb3..0000000
---- a/package/sudo/0003-Preserve-LDFLAGS-when-checking-for-stack-protector.patch
-+++ /dev/null
-@@ -1,81 +0,0 @@
--Preserve LDFLAGS when checking for stack protector as they may include
--rpath settings to allow the stack protector lib to be found. Avoidusing
--existing CFLAGS since we don't want the compiler to optimize away the
--stack variable.
--
--Backported from upstream:
--  http://www.sudo.ws/repos/sudo/rev/e6bc59225c06
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--# HG changeset patch
--# User Todd C. Miller <Todd.Miller@courtesan.com>
--# Date 1446149181 21600
--# Node ID e6bc59225c06c5d45580197519a73e3feea14cbd
--# Parent  4ade5d1249f483c4dd6c579c70b327791094afe8
--Preserve LDFLAGS when checking for stack protector as they may include
--rpath settings to allow the stack protector lib to be found.  Avoid
--using existing CFLAGS since we don't want the compiler to optimize
--away the stack variable.
--
--diff -r 4ade5d1249f4 -r e6bc59225c06 configure
----- a/configure	Thu Oct 29 10:51:09 2015 -0600
--+++ b/configure	Thu Oct 29 14:06:21 2015 -0600
--@@ -23926,7 +23926,7 @@
-- 	    _CFLAGS="$CFLAGS"
-- 	    _LDFLAGS="$LDFLAGS"
-- 	    CFLAGS="-fstack-protector-strong"
---	    LDFLAGS="-fstack-protector-strong"
--+	    LDFLAGS="$_LDFLAGS -fstack-protector-strong"
-- 	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-- /* end confdefs.h.  */
-- 
--@@ -23947,7 +23947,7 @@
-- else
-- 
-- 		CFLAGS="-fstack-protector-all"
---		LDFLAGS="-fstack-protector-all"
--+		LDFLAGS="$_LDFLAGS -fstack-protector-all"
-- 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-- /* end confdefs.h.  */
-- 
--@@ -23968,7 +23968,7 @@
-- else
-- 
-- 		    CFLAGS="-fstack-protector"
---		    LDFLAGS="-fstack-protector"
--+		    LDFLAGS="$_LDFLAGS -fstack-protector"
-- 		    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-- /* end confdefs.h.  */
-- 
--diff -r 4ade5d1249f4 -r e6bc59225c06 configure.ac
----- a/configure.ac	Thu Oct 29 10:51:09 2015 -0600
--+++ b/configure.ac	Thu Oct 29 14:06:21 2015 -0600
--@@ -3985,7 +3985,7 @@
-- 	    _CFLAGS="$CFLAGS"
-- 	    _LDFLAGS="$LDFLAGS"
-- 	    CFLAGS="-fstack-protector-strong"
---	    LDFLAGS="-fstack-protector-strong"
--+	    LDFLAGS="$_LDFLAGS -fstack-protector-strong"
-- 	    AC_COMPILE_IFELSE([
-- 		AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-- 		[[char buf[1024]; buf[1023] = '\0';]])
--@@ -3993,7 +3993,7 @@
-- 		sudo_cv_var_stack_protector="-fstack-protector-strong"
-- 	    ], [
-- 		CFLAGS="-fstack-protector-all"
---		LDFLAGS="-fstack-protector-all"
--+		LDFLAGS="$_LDFLAGS -fstack-protector-all"
-- 		AC_COMPILE_IFELSE([
-- 		    AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-- 		    [[char buf[1024]; buf[1023] = '\0';]])
--@@ -4001,7 +4001,7 @@
-- 		    sudo_cv_var_stack_protector="-fstack-protector-all"
-- 		], [
-- 		    CFLAGS="-fstack-protector"
---		    LDFLAGS="-fstack-protector"
--+		    LDFLAGS="$_LDFLAGS -fstack-protector"
-- 		    AC_COMPILE_IFELSE([
-- 			AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-- 			[[char buf[1024]; buf[1023] = '\0';]])
--
-diff --git a/package/sudo/0004-Actually-link-the-test-program-when-checking-for-stack-protector.patch b/package/sudo/0004-Actually-link-the-test-program-when-checking-for-stack-protector.patch
-deleted file mode 100644
-index 87dc29b..0000000
---- a/package/sudo/0004-Actually-link-the-test-program-when-checking-for-stack-protector.patch
-+++ /dev/null
-@@ -1,189 +0,0 @@
--When checking for stack protector support we need to actually link the
--test program.
--
--Backported from upstream:
--  http://www.sudo.ws/repos/sudo/rev/ab4f94aac7de
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--# HG changeset patch
--# User Todd C. Miller <Todd.Miller@courtesan.com>
--# Date 1446216562 21600
--# Node ID ab4f94aac7de73efa1b201890354c74126baf7ca
--# Parent  e6bc59225c06c5d45580197519a73e3feea14cbd
--When checking for stack protector support we need to actually link
--the test program.
--
--diff -r e6bc59225c06 -r ab4f94aac7de configure
----- a/configure	Thu Oct 29 14:06:21 2015 -0600
--+++ b/configure	Fri Oct 30 08:49:22 2015 -0600
--@@ -23922,11 +23922,17 @@
--   $as_echo_n "(cached) " >&6
-- else
-- 
---	    sudo_cv_var_stack_protector=no
--+	    # Avoid using CFLAGS since the compiler might optimize away our
--+	    # test.  We don't want LIBS to interfere with the test but keep
--+	    # LDFLAGS as it may have an rpath needed to find the ssp lib.
-- 	    _CFLAGS="$CFLAGS"
-- 	    _LDFLAGS="$LDFLAGS"
---	    CFLAGS="-fstack-protector-strong"
---	    LDFLAGS="$_LDFLAGS -fstack-protector-strong"
--+	    _LIBS="$LIBS"
--+	    LIBS=
--+
--+	    sudo_cv_var_stack_protector="-fstack-protector-strong"
--+	    CFLAGS="$sudo_cv_var_stack_protector"
--+	    LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
-- 	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-- /* end confdefs.h.  */
-- 
--@@ -23940,14 +23946,13 @@
-- }
-- 
-- _ACEOF
---if ac_fn_c_try_compile "$LINENO"; then :
---
---		sudo_cv_var_stack_protector="-fstack-protector-strong"
---
---else
---
---		CFLAGS="-fstack-protector-all"
---		LDFLAGS="$_LDFLAGS -fstack-protector-all"
--+if ac_fn_c_try_link "$LINENO"; then :
--+
--+else
--+
--+		sudo_cv_var_stack_protector="-fstack-protector-all"
--+		CFLAGS="$sudo_cv_var_stack_protector"
--+		LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
-- 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-- /* end confdefs.h.  */
-- 
--@@ -23961,14 +23966,13 @@
-- }
-- 
-- _ACEOF
---if ac_fn_c_try_compile "$LINENO"; then :
---
---		    sudo_cv_var_stack_protector="-fstack-protector-all"
---
---else
---
---		    CFLAGS="-fstack-protector"
---		    LDFLAGS="$_LDFLAGS -fstack-protector"
--+if ac_fn_c_try_link "$LINENO"; then :
--+
--+else
--+
--+		    sudo_cv_var_stack_protector="-fstack-protector"
--+		    CFLAGS="$sudo_cv_var_stack_protector"
--+		    LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
-- 		    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-- /* end confdefs.h.  */
-- 
--@@ -23982,20 +23986,26 @@
-- }
-- 
-- _ACEOF
---if ac_fn_c_try_compile "$LINENO"; then :
---
---			sudo_cv_var_stack_protector="-fstack-protector"
---
---fi
---rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
---
---fi
---rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
---
---fi
---rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
--+if ac_fn_c_try_link "$LINENO"; then :
--+
--+else
--+
--+			sudo_cv_var_stack_protector=no
--+
--+fi
--+rm -f core conftest.err conftest.$ac_objext \
--+    conftest$ac_exeext conftest.$ac_ext
--+
--+fi
--+rm -f core conftest.err conftest.$ac_objext \
--+    conftest$ac_exeext conftest.$ac_ext
--+
--+fi
--+rm -f core conftest.err conftest.$ac_objext \
--+    conftest$ac_exeext conftest.$ac_ext
-- 	    CFLAGS="$_CFLAGS"
-- 	    LDFLAGS="$_LDFLAGS"
--+	    LIBS="$_LIBS"
-- 
-- 
-- fi
--diff -r e6bc59225c06 -r ab4f94aac7de configure.ac
----- a/configure.ac	Thu Oct 29 14:06:21 2015 -0600
--+++ b/configure.ac	Fri Oct 30 08:49:22 2015 -0600
--@@ -3981,37 +3981,42 @@
--     AC_CACHE_CHECK([for compiler stack protector support],
-- 	[sudo_cv_var_stack_protector],
-- 	[
---	    sudo_cv_var_stack_protector=no
--+	    # Avoid using CFLAGS since the compiler might optimize away our
--+	    # test.  We don't want LIBS to interfere with the test but keep
--+	    # LDFLAGS as it may have an rpath needed to find the ssp lib.
-- 	    _CFLAGS="$CFLAGS"
-- 	    _LDFLAGS="$LDFLAGS"
---	    CFLAGS="-fstack-protector-strong"
---	    LDFLAGS="$_LDFLAGS -fstack-protector-strong"
---	    AC_COMPILE_IFELSE([
--+	    _LIBS="$LIBS"
--+	    LIBS=
--+
--+	    sudo_cv_var_stack_protector="-fstack-protector-strong"
--+	    CFLAGS="$sudo_cv_var_stack_protector"
--+	    LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
--+	    AC_LINK_IFELSE([
-- 		AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-- 		[[char buf[1024]; buf[1023] = '\0';]])
---	    ], [
---		sudo_cv_var_stack_protector="-fstack-protector-strong"
---	    ], [
---		CFLAGS="-fstack-protector-all"
---		LDFLAGS="$_LDFLAGS -fstack-protector-all"
---		AC_COMPILE_IFELSE([
--+	    ], [], [
--+		sudo_cv_var_stack_protector="-fstack-protector-all"
--+		CFLAGS="$sudo_cv_var_stack_protector"
--+		LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
--+		AC_LINK_IFELSE([
-- 		    AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-- 		    [[char buf[1024]; buf[1023] = '\0';]])
---		], [
---		    sudo_cv_var_stack_protector="-fstack-protector-all"
---		], [
---		    CFLAGS="-fstack-protector"
---		    LDFLAGS="$_LDFLAGS -fstack-protector"
---		    AC_COMPILE_IFELSE([
--+		], [], [
--+		    sudo_cv_var_stack_protector="-fstack-protector"
--+		    CFLAGS="$sudo_cv_var_stack_protector"
--+		    LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
--+		    AC_LINK_IFELSE([
-- 			AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-- 			[[char buf[1024]; buf[1023] = '\0';]])
---		    ], [
---			sudo_cv_var_stack_protector="-fstack-protector"
---		    ], [])
--+		    ], [], [
--+			sudo_cv_var_stack_protector=no
--+		    ])
-- 		])
-- 	    ])
-- 	    CFLAGS="$_CFLAGS"
-- 	    LDFLAGS="$_LDFLAGS"
--+	    LIBS="$_LIBS"
-- 	]
--     )
--     if test X"$sudo_cv_var_stack_protector" != X"no"; then
--
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index cf96417..4c2431f 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,2 +1,2 @@
--# From http://www.sudo.ws/download.html
--sha256	a8a697cbb113859058944850d098464618254804cf97961dee926429f00a1237	sudo-1.8.14p3.tar.gz
-+# From: http://www.sudo.ws/download.html
-+sha256 4316381708324da8b6cb151f655c1a11855207c7c02244d8ffdea5104d7cc308  sudo-1.8.15.tar.gz
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 4327c8a..f28312a 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUDO_VERSION = 1.8.14p3
-+SUDO_VERSION = 1.8.15
- SUDO_SITE = http://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC BSD-3c
- SUDO_LICENSE_FILES = doc/LICENSE
+OK, will improve ;).
+
+> 
+> > 
+> > The patch assumes DPDK 2.2 which is not out at the moment (scheduled
+> > to the end of November). However, this version will contain support for
+> > the ARM architecture that is currently being reviewed.
+> > 
+> > Testing of DPDK on ARM is possible by cloning
+> > 
+> >  https://github.com/RehiveTech/dpdk arm-support-v5
+> > 
+> > as the package allows customization of the download process.  
+> 
+>  We try to avoid adding options to select a version or different source. For
+> instance, we recently removed the version selection from busybox. If you need
+> for instance this arm-support branch, you can still use the _OVERRIDE_SRCDIR
+> approach.
+
+Thanks for this hint. It is a little complication (I like when
+everything is in the defconfig - a single file) for some internal
+things. But I'll go this way in the next version.
+
+> Is there any good reason why you need multi-version support for this
+> package?
+
+Probably not. all these were just for my comfort during develpoment,
+patch management, etc.
+
+> 
+>  Same for custom patches, we have BR2_GLOBAL_PATCH_DIR.
+
+Of course, I don't need this because of git...
+
+> 
+> > 
+> > The ARM ports can be tested by
+> > 
+> >  qemu_aarch64_virt_defconfig
+> >  qemu_arm_vexpress_defconfig
+> > 
+> > I did not test, how it works with x86 as I do not use Buildroot
+> > for this.
+> > 
+> > The included hashes are calculated locally by downloading the tar.gz
+> > archives by hand.
+> > 
+> > There are unfortunately some pitfalls:
+> > 
+> > * it may require to enable PCI, MSIX, UIO in the Linux Kernel
+> >   (some defconfigs does not include as default and it is platform
+> >   dependent as ARMv7 almost does not use PCI)  
+> 
+>  We had a similar situation recently but I don't remember which package it was
+> and what the conclusion was. But basically, if you don't have PCI, then the
+> build will end with an error saying that you don't have PCI, so it's not rocket
+> science to discover that PCI should be enabled.
+
+Yes, it's just annoying.
+
+> 
+>  UIO I think you could enable explicitly in linux.mk however.
+
+You probably mean something like(?):
+
+linux.mk:
+$(if $(BR_PACKAGE_DPDK),
+    $(call KCONFIG_ENABLE_OPT,CONFIG_XXX_UIO,$(@D)/.config))
+
+> 
+> > 
+> > * when building PCAP PMD driver, the libpcap is required (however,
+> >   this dependency is difficult to express in Buildroot as this depends
+> >   on the DPDK configuration file - similar to the issue above)  
+> 
+>  Yeah, we have a similar situation with swupdate, and no resolution so far. We
+> also had a similar situation with the crosstool-NG support before that was removed.
+> 
+>  What you definitely can do is
+> 
+> ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+> DPDK_DEPENDENCIES += libpcap
+> endif
+> 
+> and add in the helptext that you need to enable libpcap manually if required.
+
+OK.
+
+> 
+> > 
+> > * some tools the DPDK provides depend on Python(2) so the user has
+> >   to enable it to install those
+> > 
+> > I assume, the user knows what he is doing in those cases and configures
+> > the Buildroot in the right way. Or any ideas? Yann?
+> > 
+> > Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>  
+> 
+> 
+>  Generic other remarks:
+> 
+> - Why not use the kernel-module infra?
+
+The DPDK project has a specific build system which is better to not
+touch :). I tried several approaches and finally, I finished with the
+proposed patch as the one that is clean and working.
+
+> - Shouldn't it be a kconfig-package as well?
+
+Unfortunately, the DPDK project does not use kconfig at the moment (it
+probably will in the future but...). So the kconfig-package cannot be
+used here.
+
+> - Help text line wrapping is not OK.
+> - Instead of the configuration choice which always has only two options, just
+> allow to leave the config string empty and default to the arch-appropriate one then.
+> - pyscripts should probably not require an option; just install automatically if
+> python is enabled.
+> - License is probably not correct, if the files are called LICENSE.LGPL LICENSE.GPL
+
+The DPDK itself is under BSD (however, I did not find the license
+file there). The included kernel drivers are GPL. I have no idea about
+the purpose of LGPL at the moment (probably dual-licensing, will
+check...).
+
+> - For enabling kconfig opts, there are helper functions.
+> - Never put comments in command blocks; put them before the define.
+
+OK, will fix.
+
+> - Don't put empty assignments (DPDK_INSTALL_TARGET_LIBS)
+
+OK. I wanted to make obvious that it is empty. I will remove it.
+
+> 
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> [snip]
+
+
+
 -- 
-1.7.1
+  Jan Viktorin                E-mail: Viktorin at RehiveTech.com
+  System Architect            Web:    www.RehiveTech.com
+  RehiveTech
+  Brno, Czech Republic
