@@ -1,50 +1,783 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 15:33:09 +0100
-Subject: [Buildroot] [PATCH v1] valgrind: enabls tls support
-In-Reply-To: <1446420326-29281-1-git-send-email-ps.report@gmx.net>
-References: <1446420326-29281-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151102153309.7c86ee73@free-electrons.com>
+Date: Mon, 2 Nov 2015 15:40:53 +0100
+Subject: [Buildroot] [git commit] sudo: bump to version 1.8.15
+Message-ID: <20151102144100.B139081D8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: http://git.buildroot.net/buildroot/commit/?id=2bb372c118bbb689b8b118522865a0823b60cd0a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  2 Nov 2015 00:25:26 +0100, Peter Seiderer wrote:
-> Tested with example program from [1] with qemu_x86_64.
-> 
-> [1] http://valgrind.10908.n7.nabble.com/Thread-local-storage-TLS-support-td40815.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/valgrind/valgrind.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+Unneeded patches removed. Highlights from ChangeLog:
 
-I've applied your patch (after fixing the typo in the commit title).
+* Fixed a build problem on systems that don't implicitly include
+  sys/types.h from other header files. Bug #711.
 
-However, it is not a fully correct solution: BR2_GCC_ENABLE_TLS is only
-valid for internal toolchains. For external toolchains, it will always
-be false, so you will never have TLS support enabled for external
-toolchains. I think it would really be easier if Valgrind had a
-compile-time way of determining whether TLS support is available or
-not, because it is the only package for which we need to know if TLS
-support is available or not.
+* Fixed the compiler stack protector test in configure for compilers
+  that support -fstack-protector but don't actually have the ssp
+  library available.
 
-I've nonetheless applied your patch because it doesn't make things
-really worse than they are. But I would really prefer if you could do
-some research at adjusting valgrind configure.ac to check TLS
-availability at compile time.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sudo/0001-musl-fix-missing-header.patch    |   19 -
+ ...etter-configure-test-for-fstack-protector.patch |  415 --------------------
+ ...LDFLAGS-when-checking-for-stack-protector.patch |   81 ----
+ ...program-when-checking-for-stack-protector.patch |  189 ---------
+ package/sudo/sudo.hash                             |    4 +-
+ package/sudo/sudo.mk                               |    2 +-
+ 6 files changed, 3 insertions(+), 707 deletions(-)
 
-Generally speaking, I think we should drop BR2_GCC_ENABLE_TLS
-altogether, and simply enable TLS whenever we have NPTL threads being
-used.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sudo/0001-musl-fix-missing-header.patch b/package/sudo/0001-musl-fix-missing-header.patch
+deleted file mode 100644
+index e3681b2..0000000
+--- a/package/sudo/0001-musl-fix-missing-header.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Header sys/types.h is needed for id_t
+-
+-Patch reported as bug upstream:
+-http://bugzilla.sudo.ws/show_bug.cgi?id=711
+-
+-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+-
+-diff -purN sudo-1.8.14p3.orig/include/sudo_util.h sudo-1.8.14p3/include/sudo_util.h
+---- sudo-1.8.14p3.orig/include/sudo_util.h	2015-07-22 14:22:49.000000000 +0200
+-+++ sudo-1.8.14p3/include/sudo_util.h	2015-08-01 09:35:15.077909614 +0200
+-@@ -23,6 +23,8 @@
+- # include "compat/stdbool.h"
+- #endif /* HAVE_STDBOOL_H */
+- 
+-+#include <sys/types.h>
+-+
+- /*
+-  * Macros for operating on struct timeval.
+-  */
+diff --git a/package/sudo/0002-Better-configure-test-for-fstack-protector.patch b/package/sudo/0002-Better-configure-test-for-fstack-protector.patch
+deleted file mode 100644
+index b9ec410..0000000
+--- a/package/sudo/0002-Better-configure-test-for-fstack-protector.patch
++++ /dev/null
+@@ -1,415 +0,0 @@
+-Better configure test for -fstack-protector. Some gcc installations may
+-be missing the ssp library even though the compiler supports it.
+-
+-Backported from upstream:
+-  http://www.sudo.ws/repos/sudo/rev/4ade5d1249f4
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-# HG changeset patch
+-# User Todd C. Miller <Todd.Miller@courtesan.com>
+-# Date 1446137469 21600
+-# Node ID 4ade5d1249f483c4dd6c579c70b327791094afe8
+-# Parent  97ee37d905ceefa433e93a0f552c2a3e5926e2fb
+-Better configure test for -fstack-protector.  Some gcc installations
+-may be missing the ssp library even though the compiler supports it.
+-
+-diff -r 97ee37d905ce -r 4ade5d1249f4 configure
+---- a/configure	Sun Oct 25 14:28:38 2015 -0600
+-+++ b/configure	Thu Oct 29 10:51:09 2015 -0600
+-@@ -23916,236 +23916,94 @@
+- fi
+- 
+- if test "$enable_hardening" != "no"; then
+--    if test -n "$GCC"; then
+--	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C compiler accepts -fstack-protector-strong" >&5
+--$as_echo_n "checking whether C compiler accepts -fstack-protector-strong... " >&6; }
+--if ${ax_cv_check_cflags___fstack_protector_strong+:} false; then :
+--  $as_echo_n "(cached) " >&6
+--else
+--
+--  ax_check_save_flags=$CFLAGS
+--  CFLAGS="$CFLAGS  -fstack-protector-strong"
+--  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+--/* end confdefs.h.  */
+--
+--int
+--main ()
+--{
+--
+--  ;
+--  return 0;
+--}
+--_ACEOF
+--if ac_fn_c_try_compile "$LINENO"; then :
+--  ax_cv_check_cflags___fstack_protector_strong=yes
+--else
+--  ax_cv_check_cflags___fstack_protector_strong=no
+--fi
+--rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+--  CFLAGS=$ax_check_save_flags
+--fi
+--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_cflags___fstack_protector_strong" >&5
+--$as_echo "$ax_cv_check_cflags___fstack_protector_strong" >&6; }
+--if test x"$ax_cv_check_cflags___fstack_protector_strong" = xyes; then :
+--
+--	    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linker accepts -fstack-protector-strong" >&5
+--$as_echo_n "checking whether the linker accepts -fstack-protector-strong... " >&6; }
+--if ${ax_cv_check_ldflags___fstack_protector_strong+:} false; then :
+--  $as_echo_n "(cached) " >&6
+--else
+--
+--  ax_check_save_flags=$LDFLAGS
+--  LDFLAGS="$LDFLAGS  -fstack-protector-strong"
+--  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+--/* end confdefs.h.  */
+--
+--int
+--main ()
+--{
+--
+--  ;
+--  return 0;
+--}
+--_ACEOF
+--if ac_fn_c_try_link "$LINENO"; then :
+--  ax_cv_check_ldflags___fstack_protector_strong=yes
+--else
+--  ax_cv_check_ldflags___fstack_protector_strong=no
+--fi
+--rm -f core conftest.err conftest.$ac_objext \
+--    conftest$ac_exeext conftest.$ac_ext
+--  LDFLAGS=$ax_check_save_flags
+--fi
+--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_ldflags___fstack_protector_strong" >&5
+--$as_echo "$ax_cv_check_ldflags___fstack_protector_strong" >&6; }
+--if test x"$ax_cv_check_ldflags___fstack_protector_strong" = xyes; then :
+--
+--		SSP_CFLAGS="-fstack-protector-strong"
+--		SSP_LDFLAGS="-Wc,-fstack-protector-strong"
+--
+--else
+--  :
+--fi
+--
+--
+--else
+--  :
+--fi
+--
+--	if test -z "$SSP_CFLAGS"; then
+--	    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C compiler accepts -fstack-protector-all" >&5
+--$as_echo_n "checking whether C compiler accepts -fstack-protector-all... " >&6; }
+--if ${ax_cv_check_cflags___fstack_protector_all+:} false; then :
+--  $as_echo_n "(cached) " >&6
+--else
+--
+--  ax_check_save_flags=$CFLAGS
+--  CFLAGS="$CFLAGS  -fstack-protector-all"
+--  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+--/* end confdefs.h.  */
+--
+--int
+--main ()
+--{
+--
+--  ;
+--  return 0;
+--}
+--_ACEOF
+--if ac_fn_c_try_compile "$LINENO"; then :
+--  ax_cv_check_cflags___fstack_protector_all=yes
+--else
+--  ax_cv_check_cflags___fstack_protector_all=no
+--fi
+--rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+--  CFLAGS=$ax_check_save_flags
+--fi
+--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_cflags___fstack_protector_all" >&5
+--$as_echo "$ax_cv_check_cflags___fstack_protector_all" >&6; }
+--if test x"$ax_cv_check_cflags___fstack_protector_all" = xyes; then :
+--
+--		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linker accepts -fstack-protector-all" >&5
+--$as_echo_n "checking whether the linker accepts -fstack-protector-all... " >&6; }
+--if ${ax_cv_check_ldflags___fstack_protector_all+:} false; then :
+--  $as_echo_n "(cached) " >&6
+--else
+--
+--  ax_check_save_flags=$LDFLAGS
+--  LDFLAGS="$LDFLAGS  -fstack-protector-all"
+--  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+--/* end confdefs.h.  */
+--
+--int
+--main ()
+--{
+--
+--  ;
+--  return 0;
+--}
+--_ACEOF
+--if ac_fn_c_try_link "$LINENO"; then :
+--  ax_cv_check_ldflags___fstack_protector_all=yes
+--else
+--  ax_cv_check_ldflags___fstack_protector_all=no
+--fi
+--rm -f core conftest.err conftest.$ac_objext \
+--    conftest$ac_exeext conftest.$ac_ext
+--  LDFLAGS=$ax_check_save_flags
+--fi
+--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_ldflags___fstack_protector_all" >&5
+--$as_echo "$ax_cv_check_ldflags___fstack_protector_all" >&6; }
+--if test x"$ax_cv_check_ldflags___fstack_protector_all" = xyes; then :
+--
+--		    SSP_CFLAGS="-fstack-protector-all"
+--		    SSP_LDFLAGS="-Wc,-fstack-protector-all"
+--
+--else
+--  :
+--fi
+--
+--
+--else
+--  :
+--fi
+--
+--	    if test -z "$SSP_CFLAGS"; then
+--		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C compiler accepts -fstack-protector" >&5
+--$as_echo_n "checking whether C compiler accepts -fstack-protector... " >&6; }
+--if ${ax_cv_check_cflags___fstack_protector+:} false; then :
+--  $as_echo_n "(cached) " >&6
+--else
+--
+--  ax_check_save_flags=$CFLAGS
+--  CFLAGS="$CFLAGS  -fstack-protector"
+--  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+--/* end confdefs.h.  */
+--
+--int
+--main ()
+--{
+--
+--  ;
+--  return 0;
+--}
+--_ACEOF
+--if ac_fn_c_try_compile "$LINENO"; then :
+--  ax_cv_check_cflags___fstack_protector=yes
+--else
+--  ax_cv_check_cflags___fstack_protector=no
+--fi
+--rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+--  CFLAGS=$ax_check_save_flags
+--fi
+--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_cflags___fstack_protector" >&5
+--$as_echo "$ax_cv_check_cflags___fstack_protector" >&6; }
+--if test x"$ax_cv_check_cflags___fstack_protector" = xyes; then :
+--
+--		    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linker accepts -fstack-protector" >&5
+--$as_echo_n "checking whether the linker accepts -fstack-protector... " >&6; }
+--if ${ax_cv_check_ldflags___fstack_protector+:} false; then :
+--  $as_echo_n "(cached) " >&6
+--else
+--
+--  ax_check_save_flags=$LDFLAGS
+--  LDFLAGS="$LDFLAGS  -fstack-protector"
+--  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+--/* end confdefs.h.  */
+--
+--int
+--main ()
+--{
+--
+--  ;
+--  return 0;
+--}
+--_ACEOF
+--if ac_fn_c_try_link "$LINENO"; then :
+--  ax_cv_check_ldflags___fstack_protector=yes
+--else
+--  ax_cv_check_ldflags___fstack_protector=no
+--fi
+--rm -f core conftest.err conftest.$ac_objext \
+--    conftest$ac_exeext conftest.$ac_ext
+--  LDFLAGS=$ax_check_save_flags
+--fi
+--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_ldflags___fstack_protector" >&5
+--$as_echo "$ax_cv_check_ldflags___fstack_protector" >&6; }
+--if test x"$ax_cv_check_ldflags___fstack_protector" = xyes; then :
+--
+--			SSP_CFLAGS="-fstack-protector"
+--			SSP_LDFLAGS="-Wc,-fstack-protector"
+--
+--else
+--  :
+--fi
+--
+--
+--else
+--  :
+--fi
+--
+--	    fi
+--	fi
+-+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for compiler stack protector support" >&5
+-+$as_echo_n "checking for compiler stack protector support... " >&6; }
+-+if ${sudo_cv_var_stack_protector+:} false; then :
+-+  $as_echo_n "(cached) " >&6
+-+else
+-+
+-+	    sudo_cv_var_stack_protector=no
+-+	    _CFLAGS="$CFLAGS"
+-+	    _LDFLAGS="$LDFLAGS"
+-+	    CFLAGS="-fstack-protector-strong"
+-+	    LDFLAGS="-fstack-protector-strong"
+-+	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-+/* end confdefs.h.  */
+-+
+-+		$ac_includes_default
+-+int
+-+main ()
+-+{
+-+char buf[1024]; buf[1023] = '\0';
+-+  ;
+-+  return 0;
+-+}
+-+
+-+_ACEOF
+-+if ac_fn_c_try_compile "$LINENO"; then :
+-+
+-+		sudo_cv_var_stack_protector="-fstack-protector-strong"
+-+
+-+else
+-+
+-+		CFLAGS="-fstack-protector-all"
+-+		LDFLAGS="-fstack-protector-all"
+-+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-+/* end confdefs.h.  */
+-+
+-+		    $ac_includes_default
+-+int
+-+main ()
+-+{
+-+char buf[1024]; buf[1023] = '\0';
+-+  ;
+-+  return 0;
+-+}
+-+
+-+_ACEOF
+-+if ac_fn_c_try_compile "$LINENO"; then :
+-+
+-+		    sudo_cv_var_stack_protector="-fstack-protector-all"
+-+
+-+else
+-+
+-+		    CFLAGS="-fstack-protector"
+-+		    LDFLAGS="-fstack-protector"
+-+		    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-+/* end confdefs.h.  */
+-+
+-+			$ac_includes_default
+-+int
+-+main ()
+-+{
+-+char buf[1024]; buf[1023] = '\0';
+-+  ;
+-+  return 0;
+-+}
+-+
+-+_ACEOF
+-+if ac_fn_c_try_compile "$LINENO"; then :
+-+
+-+			sudo_cv_var_stack_protector="-fstack-protector"
+-+
+-+fi
+-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-+
+-+fi
+-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-+
+-+fi
+-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-+	    CFLAGS="$_CFLAGS"
+-+	    LDFLAGS="$_LDFLAGS"
+-+
+-+
+-+fi
+-+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $sudo_cv_var_stack_protector" >&5
+-+$as_echo "$sudo_cv_var_stack_protector" >&6; }
+-+    if test X"$sudo_cv_var_stack_protector" != X"no"; then
+-+	SSP_CFLAGS="$sudo_cv_var_stack_protector"
+-+	SSP_LDFLAGS="-Wc,$sudo_cv_var_stack_protector"
+-     fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linker accepts -Wl,-z,relro" >&5
+- $as_echo_n "checking whether the linker accepts -Wl,-z,relro... " >&6; }
+-diff -r 97ee37d905ce -r 4ade5d1249f4 configure.ac
+---- a/configure.ac	Sun Oct 25 14:28:38 2015 -0600
+-+++ b/configure.ac	Thu Oct 29 10:51:09 2015 -0600
+-@@ -3978,29 +3978,45 @@
+- dnl This test relies on AC_LANG_WERROR
+- dnl
+- if test "$enable_hardening" != "no"; then
+--    if test -n "$GCC"; then
+--	AX_CHECK_COMPILE_FLAG([-fstack-protector-strong], [
+--	    AX_CHECK_LINK_FLAG([-fstack-protector-strong], [
+--		SSP_CFLAGS="-fstack-protector-strong"
+--		SSP_LDFLAGS="-Wc,-fstack-protector-strong"
+--	    ])
+--	])
+--	if test -z "$SSP_CFLAGS"; then
+--	    AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [
+--		AX_CHECK_LINK_FLAG([-fstack-protector-all], [
+--		    SSP_CFLAGS="-fstack-protector-all"
+--		    SSP_LDFLAGS="-Wc,-fstack-protector-all"
+-+    AC_CACHE_CHECK([for compiler stack protector support],
+-+	[sudo_cv_var_stack_protector],
+-+	[
+-+	    sudo_cv_var_stack_protector=no
+-+	    _CFLAGS="$CFLAGS"
+-+	    _LDFLAGS="$LDFLAGS"
+-+	    CFLAGS="-fstack-protector-strong"
+-+	    LDFLAGS="-fstack-protector-strong"
+-+	    AC_COMPILE_IFELSE([
+-+		AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+-+		[[char buf[1024]; buf[1023] = '\0';]])
+-+	    ], [
+-+		sudo_cv_var_stack_protector="-fstack-protector-strong"
+-+	    ], [
+-+		CFLAGS="-fstack-protector-all"
+-+		LDFLAGS="-fstack-protector-all"
+-+		AC_COMPILE_IFELSE([
+-+		    AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+-+		    [[char buf[1024]; buf[1023] = '\0';]])
+-+		], [
+-+		    sudo_cv_var_stack_protector="-fstack-protector-all"
+-+		], [
+-+		    CFLAGS="-fstack-protector"
+-+		    LDFLAGS="-fstack-protector"
+-+		    AC_COMPILE_IFELSE([
+-+			AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+-+			[[char buf[1024]; buf[1023] = '\0';]])
+-+		    ], [
+-+			sudo_cv_var_stack_protector="-fstack-protector"
+-+		    ], [])
+- 		])
+- 	    ])
+--	    if test -z "$SSP_CFLAGS"; then
+--		AX_CHECK_COMPILE_FLAG([-fstack-protector], [
+--		    AX_CHECK_LINK_FLAG([-fstack-protector], [
+--			SSP_CFLAGS="-fstack-protector"
+--			SSP_LDFLAGS="-Wc,-fstack-protector"
+--		    ])
+--		])
+--	    fi
+--	fi
+-+	    CFLAGS="$_CFLAGS"
+-+	    LDFLAGS="$_LDFLAGS"
+-+	]
+-+    )
+-+    if test X"$sudo_cv_var_stack_protector" != X"no"; then
+-+	SSP_CFLAGS="$sudo_cv_var_stack_protector"
+-+	SSP_LDFLAGS="-Wc,$sudo_cv_var_stack_protector"
+-     fi
+-     AX_CHECK_LINK_FLAG([-Wl,-z,relro], [LDFLAGS="${LDFLAGS} -Wl,-z,relro"])
+- fi
+-
+diff --git a/package/sudo/0003-Preserve-LDFLAGS-when-checking-for-stack-protector.patch b/package/sudo/0003-Preserve-LDFLAGS-when-checking-for-stack-protector.patch
+deleted file mode 100644
+index 6ba3bb3..0000000
+--- a/package/sudo/0003-Preserve-LDFLAGS-when-checking-for-stack-protector.patch
++++ /dev/null
+@@ -1,81 +0,0 @@
+-Preserve LDFLAGS when checking for stack protector as they may include
+-rpath settings to allow the stack protector lib to be found. Avoidusing
+-existing CFLAGS since we don't want the compiler to optimize away the
+-stack variable.
+-
+-Backported from upstream:
+-  http://www.sudo.ws/repos/sudo/rev/e6bc59225c06
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-# HG changeset patch
+-# User Todd C. Miller <Todd.Miller@courtesan.com>
+-# Date 1446149181 21600
+-# Node ID e6bc59225c06c5d45580197519a73e3feea14cbd
+-# Parent  4ade5d1249f483c4dd6c579c70b327791094afe8
+-Preserve LDFLAGS when checking for stack protector as they may include
+-rpath settings to allow the stack protector lib to be found.  Avoid
+-using existing CFLAGS since we don't want the compiler to optimize
+-away the stack variable.
+-
+-diff -r 4ade5d1249f4 -r e6bc59225c06 configure
+---- a/configure	Thu Oct 29 10:51:09 2015 -0600
+-+++ b/configure	Thu Oct 29 14:06:21 2015 -0600
+-@@ -23926,7 +23926,7 @@
+- 	    _CFLAGS="$CFLAGS"
+- 	    _LDFLAGS="$LDFLAGS"
+- 	    CFLAGS="-fstack-protector-strong"
+--	    LDFLAGS="-fstack-protector-strong"
+-+	    LDFLAGS="$_LDFLAGS -fstack-protector-strong"
+- 	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- 
+-@@ -23947,7 +23947,7 @@
+- else
+- 
+- 		CFLAGS="-fstack-protector-all"
+--		LDFLAGS="-fstack-protector-all"
+-+		LDFLAGS="$_LDFLAGS -fstack-protector-all"
+- 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- 
+-@@ -23968,7 +23968,7 @@
+- else
+- 
+- 		    CFLAGS="-fstack-protector"
+--		    LDFLAGS="-fstack-protector"
+-+		    LDFLAGS="$_LDFLAGS -fstack-protector"
+- 		    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- 
+-diff -r 4ade5d1249f4 -r e6bc59225c06 configure.ac
+---- a/configure.ac	Thu Oct 29 10:51:09 2015 -0600
+-+++ b/configure.ac	Thu Oct 29 14:06:21 2015 -0600
+-@@ -3985,7 +3985,7 @@
+- 	    _CFLAGS="$CFLAGS"
+- 	    _LDFLAGS="$LDFLAGS"
+- 	    CFLAGS="-fstack-protector-strong"
+--	    LDFLAGS="-fstack-protector-strong"
+-+	    LDFLAGS="$_LDFLAGS -fstack-protector-strong"
+- 	    AC_COMPILE_IFELSE([
+- 		AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+- 		[[char buf[1024]; buf[1023] = '\0';]])
+-@@ -3993,7 +3993,7 @@
+- 		sudo_cv_var_stack_protector="-fstack-protector-strong"
+- 	    ], [
+- 		CFLAGS="-fstack-protector-all"
+--		LDFLAGS="-fstack-protector-all"
+-+		LDFLAGS="$_LDFLAGS -fstack-protector-all"
+- 		AC_COMPILE_IFELSE([
+- 		    AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+- 		    [[char buf[1024]; buf[1023] = '\0';]])
+-@@ -4001,7 +4001,7 @@
+- 		    sudo_cv_var_stack_protector="-fstack-protector-all"
+- 		], [
+- 		    CFLAGS="-fstack-protector"
+--		    LDFLAGS="-fstack-protector"
+-+		    LDFLAGS="$_LDFLAGS -fstack-protector"
+- 		    AC_COMPILE_IFELSE([
+- 			AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+- 			[[char buf[1024]; buf[1023] = '\0';]])
+-
+diff --git a/package/sudo/0004-Actually-link-the-test-program-when-checking-for-stack-protector.patch b/package/sudo/0004-Actually-link-the-test-program-when-checking-for-stack-protector.patch
+deleted file mode 100644
+index 87dc29b..0000000
+--- a/package/sudo/0004-Actually-link-the-test-program-when-checking-for-stack-protector.patch
++++ /dev/null
+@@ -1,189 +0,0 @@
+-When checking for stack protector support we need to actually link the
+-test program.
+-
+-Backported from upstream:
+-  http://www.sudo.ws/repos/sudo/rev/ab4f94aac7de
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-# HG changeset patch
+-# User Todd C. Miller <Todd.Miller@courtesan.com>
+-# Date 1446216562 21600
+-# Node ID ab4f94aac7de73efa1b201890354c74126baf7ca
+-# Parent  e6bc59225c06c5d45580197519a73e3feea14cbd
+-When checking for stack protector support we need to actually link
+-the test program.
+-
+-diff -r e6bc59225c06 -r ab4f94aac7de configure
+---- a/configure	Thu Oct 29 14:06:21 2015 -0600
+-+++ b/configure	Fri Oct 30 08:49:22 2015 -0600
+-@@ -23922,11 +23922,17 @@
+-   $as_echo_n "(cached) " >&6
+- else
+- 
+--	    sudo_cv_var_stack_protector=no
+-+	    # Avoid using CFLAGS since the compiler might optimize away our
+-+	    # test.  We don't want LIBS to interfere with the test but keep
+-+	    # LDFLAGS as it may have an rpath needed to find the ssp lib.
+- 	    _CFLAGS="$CFLAGS"
+- 	    _LDFLAGS="$LDFLAGS"
+--	    CFLAGS="-fstack-protector-strong"
+--	    LDFLAGS="$_LDFLAGS -fstack-protector-strong"
+-+	    _LIBS="$LIBS"
+-+	    LIBS=
+-+
+-+	    sudo_cv_var_stack_protector="-fstack-protector-strong"
+-+	    CFLAGS="$sudo_cv_var_stack_protector"
+-+	    LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
+- 	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- 
+-@@ -23940,14 +23946,13 @@
+- }
+- 
+- _ACEOF
+--if ac_fn_c_try_compile "$LINENO"; then :
+--
+--		sudo_cv_var_stack_protector="-fstack-protector-strong"
+--
+--else
+--
+--		CFLAGS="-fstack-protector-all"
+--		LDFLAGS="$_LDFLAGS -fstack-protector-all"
+-+if ac_fn_c_try_link "$LINENO"; then :
+-+
+-+else
+-+
+-+		sudo_cv_var_stack_protector="-fstack-protector-all"
+-+		CFLAGS="$sudo_cv_var_stack_protector"
+-+		LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
+- 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- 
+-@@ -23961,14 +23966,13 @@
+- }
+- 
+- _ACEOF
+--if ac_fn_c_try_compile "$LINENO"; then :
+--
+--		    sudo_cv_var_stack_protector="-fstack-protector-all"
+--
+--else
+--
+--		    CFLAGS="-fstack-protector"
+--		    LDFLAGS="$_LDFLAGS -fstack-protector"
+-+if ac_fn_c_try_link "$LINENO"; then :
+-+
+-+else
+-+
+-+		    sudo_cv_var_stack_protector="-fstack-protector"
+-+		    CFLAGS="$sudo_cv_var_stack_protector"
+-+		    LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
+- 		    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- 
+-@@ -23982,20 +23986,26 @@
+- }
+- 
+- _ACEOF
+--if ac_fn_c_try_compile "$LINENO"; then :
+--
+--			sudo_cv_var_stack_protector="-fstack-protector"
+--
+--fi
+--rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+--
+--fi
+--rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+--
+--fi
+--rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-+if ac_fn_c_try_link "$LINENO"; then :
+-+
+-+else
+-+
+-+			sudo_cv_var_stack_protector=no
+-+
+-+fi
+-+rm -f core conftest.err conftest.$ac_objext \
+-+    conftest$ac_exeext conftest.$ac_ext
+-+
+-+fi
+-+rm -f core conftest.err conftest.$ac_objext \
+-+    conftest$ac_exeext conftest.$ac_ext
+-+
+-+fi
+-+rm -f core conftest.err conftest.$ac_objext \
+-+    conftest$ac_exeext conftest.$ac_ext
+- 	    CFLAGS="$_CFLAGS"
+- 	    LDFLAGS="$_LDFLAGS"
+-+	    LIBS="$_LIBS"
+- 
+- 
+- fi
+-diff -r e6bc59225c06 -r ab4f94aac7de configure.ac
+---- a/configure.ac	Thu Oct 29 14:06:21 2015 -0600
+-+++ b/configure.ac	Fri Oct 30 08:49:22 2015 -0600
+-@@ -3981,37 +3981,42 @@
+-     AC_CACHE_CHECK([for compiler stack protector support],
+- 	[sudo_cv_var_stack_protector],
+- 	[
+--	    sudo_cv_var_stack_protector=no
+-+	    # Avoid using CFLAGS since the compiler might optimize away our
+-+	    # test.  We don't want LIBS to interfere with the test but keep
+-+	    # LDFLAGS as it may have an rpath needed to find the ssp lib.
+- 	    _CFLAGS="$CFLAGS"
+- 	    _LDFLAGS="$LDFLAGS"
+--	    CFLAGS="-fstack-protector-strong"
+--	    LDFLAGS="$_LDFLAGS -fstack-protector-strong"
+--	    AC_COMPILE_IFELSE([
+-+	    _LIBS="$LIBS"
+-+	    LIBS=
+-+
+-+	    sudo_cv_var_stack_protector="-fstack-protector-strong"
+-+	    CFLAGS="$sudo_cv_var_stack_protector"
+-+	    LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
+-+	    AC_LINK_IFELSE([
+- 		AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+- 		[[char buf[1024]; buf[1023] = '\0';]])
+--	    ], [
+--		sudo_cv_var_stack_protector="-fstack-protector-strong"
+--	    ], [
+--		CFLAGS="-fstack-protector-all"
+--		LDFLAGS="$_LDFLAGS -fstack-protector-all"
+--		AC_COMPILE_IFELSE([
+-+	    ], [], [
+-+		sudo_cv_var_stack_protector="-fstack-protector-all"
+-+		CFLAGS="$sudo_cv_var_stack_protector"
+-+		LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
+-+		AC_LINK_IFELSE([
+- 		    AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+- 		    [[char buf[1024]; buf[1023] = '\0';]])
+--		], [
+--		    sudo_cv_var_stack_protector="-fstack-protector-all"
+--		], [
+--		    CFLAGS="-fstack-protector"
+--		    LDFLAGS="$_LDFLAGS -fstack-protector"
+--		    AC_COMPILE_IFELSE([
+-+		], [], [
+-+		    sudo_cv_var_stack_protector="-fstack-protector"
+-+		    CFLAGS="$sudo_cv_var_stack_protector"
+-+		    LDFLAGS="$_LDFLAGS $sudo_cv_var_stack_protector"
+-+		    AC_LINK_IFELSE([
+- 			AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+- 			[[char buf[1024]; buf[1023] = '\0';]])
+--		    ], [
+--			sudo_cv_var_stack_protector="-fstack-protector"
+--		    ], [])
+-+		    ], [], [
+-+			sudo_cv_var_stack_protector=no
+-+		    ])
+- 		])
+- 	    ])
+- 	    CFLAGS="$_CFLAGS"
+- 	    LDFLAGS="$_LDFLAGS"
+-+	    LIBS="$_LIBS"
+- 	]
+-     )
+-     if test X"$sudo_cv_var_stack_protector" != X"no"; then
+-
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index cf96417..4c2431f 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,2 +1,2 @@
+-# From http://www.sudo.ws/download.html
+-sha256	a8a697cbb113859058944850d098464618254804cf97961dee926429f00a1237	sudo-1.8.14p3.tar.gz
++# From: http://www.sudo.ws/download.html
++sha256 4316381708324da8b6cb151f655c1a11855207c7c02244d8ffdea5104d7cc308  sudo-1.8.15.tar.gz
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 4327c8a..f28312a 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUDO_VERSION = 1.8.14p3
++SUDO_VERSION = 1.8.15
+ SUDO_SITE = http://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC BSD-3c
+ SUDO_LICENSE_FILES = doc/LICENSE
