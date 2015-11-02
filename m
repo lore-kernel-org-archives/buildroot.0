@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 20:57:54 +0100
-Subject: [Buildroot] [PATCH 1/1] network-manager: bump to version 1.0.6
-In-Reply-To: <1445991641-21173-1-git-send-email-petr.vorel@gmail.com>
-References: <1445991641-21173-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <20151102205754.7ab7e762@free-electrons.com>
+Date: Mon, 2 Nov 2015 20:58:07 +0100
+Subject: [Buildroot] [PATCH 1/1] modem-manager: bump to version 1.4.12
+In-Reply-To: <1445992282-21975-1-git-send-email-petr.vorel@gmail.com>
+References: <1445992282-21975-1-git-send-email-petr.vorel@gmail.com>
+Message-ID: <20151102205807.0db15aed@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 Dear Petr Vorel,
 
-On Wed, 28 Oct 2015 01:20:41 +0100, Petr Vorel wrote:
+On Wed, 28 Oct 2015 01:31:22 +0100, Petr Vorel wrote:
 > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  package/network-manager/network-manager.hash | 4 ++--
->  package/network-manager/network-manager.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/modem-manager/modem-manager.hash | 2 +-
+>  package/modem-manager/modem-manager.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
