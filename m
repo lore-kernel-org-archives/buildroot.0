@@ -1,56 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 16:50:16 +0100
-Subject: [Buildroot] [PATCH v4 1/1] gauche: new package
-In-Reply-To: <201510310122.t9V1M8CT023045@ms-omx01.plus.so-net.ne.jp>
-References: <201510310122.t9V1M8CT023045@ms-omx01.plus.so-net.ne.jp>
-Message-ID: <20151102165016.62635bd0@free-electrons.com>
+Date: Mon, 2 Nov 2015 16:51:47 +0100
+Subject: [Buildroot] [git commit] skeleton: optionally wait for network
+	interfaces to appear
+Message-ID: <20151102155158.A6BA180008@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hiroshi Kawashima,
+commit: http://git.buildroot.net/buildroot/commit/?id=ccc52c8183730a6b7f498d371520e881dfb41668
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 31 Oct 2015 10:22:08 +0900, Hiroshi Kawashima wrote:
+This patch has same purpose than 49964858f45d2243c513e6d362e992ad89ec7a45:
 
-> diff --git a/package/gauche/0001-fix-so-suffix.patch b/package/gauche/0001-fix-so-suffix.patch
-> new file mode 100644
-> index 0000000..77bb355
-> --- /dev/null
-> +++ b/package/gauche/0001-fix-so-suffix.patch
+  On some machines, the network interface is slow to appear. For example,
+  on the Raspberry Pi, the network interface eth0 is an ethernet-over-USB,
+  and our standard boot process is too fast, so our network startup script
+  is called before the USB bus is compeltely enumerated, thus it can't
+  configure eth0.
 
-This ...
+  Closes #8116.
 
+However, wait-delay hook is enabled only if wait-delay property appears
+in /etc/network/interfaces. This patch enable it automaticaly when
+interface is configured through DHCP at bootup. But, if user choose
+to write /etc/network/interface himself, he have to explicitly
+set wait-delay.
 
-> diff --git a/package/gauche/0002-fix-so-suffix-configure-ac.patch b/package/gauche/0002-fix-so-suffix-configure-ac.patch
-> new file mode 100644
-> index 0000000..f9b4459
-> --- /dev/null
-> +++ b/package/gauche/0002-fix-so-suffix-configure-ac.patch
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/skeleton/skeleton.mk                       |    1 +
+ system/skeleton/etc/network/if-pre-up.d/wait_iface |   21 ++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
-... and this should be in the same patch, since it's exactly the same
-change. Also it should carry an explanation as to why we are patching
-the configure script directly instead of patching just configure.ac and
-doing an autoreconf.
-
-> +GAUCHE_VERSION = 0.9.4
-> +GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
-> +GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
-> +GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
-> +GAUCHE_LICENSE_FILES = COPYING
-> +GAUCHE_DEPENDENCIES = host-gauche
-> +
-> +# Checking c99 support in configure fails without WCHAR. But we do not
-> +# need WCHAR at gauche runtime, so explicitly specify here.
-
-This explanation doesn't seem properly worded, because it doesn't at
-all explain why passing -std=gnu99 is solving a wchar problem.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 920d3b4..d1b797d 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -89,6 +89,7 @@ define SET_NETWORK_DHCP
+ 		echo ;                                               \
+ 		echo "auto $(NETWORK_DHCP_IFACE)";                   \
+ 		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
++		echo "	wait-delay 15";                              \
+ 	) >> $(TARGET_DIR)/etc/network/interfaces
+ endef
+ endif
+diff --git a/system/skeleton/etc/network/if-pre-up.d/wait_iface b/system/skeleton/etc/network/if-pre-up.d/wait_iface
+new file mode 100755
+index 0000000..ebccff2
+--- /dev/null
++++ b/system/skeleton/etc/network/if-pre-up.d/wait_iface
+@@ -0,0 +1,21 @@
++#!/bin/sh
++
++# In case we have a slow-to-appear interface (e.g. eth-over-USB),
++# and we need to configure it, wait until it appears, but not too
++# long either. IF_WAIT_DELAY is in seconds.
++
++if [ "${IF_WAIT_DELAY}" -a ! -e "/sys/class/net/${IFACE}" ]; then
++    printf "Waiting for interface %s to appear" "${IFACE}"
++    while [ ${IF_WAIT_DELAY} -gt 0 ]; do
++        if [ -e "/sys/class/net/${IFACE}" ]; then
++            printf "\n"
++            exit 0
++        fi
++        sleep 1
++        printf "."
++        : $((IF_WAIT_DELAY -= 1))
++    done
++    printf " timeout!\n"
++    exit 1
++fi
++
