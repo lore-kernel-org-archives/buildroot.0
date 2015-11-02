@@ -1,39 +1,35 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 2 Nov 2015 00:36:07 +0100
-Subject: [Buildroot] [PATCH 0/4 RFC] xorg: fix installation paths
- (branch yem/xorg)
-In-Reply-To: <cover.1446416019.git.yann.morin.1998@free.fr>
-References: <cover.1446416019.git.yann.morin.1998@free.fr>
-Message-ID: <20151102003607.1fa9f695@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 2 Nov 2015 06:25:20 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/git: Add needed library for
+ static compilation
+In-Reply-To: <1446410183-7798-2-git-send-email-repk@triplefau.lt>
+References: <1446410183-7798-1-git-send-email-repk@triplefau.lt>
+ <1446410183-7798-2-git-send-email-repk@triplefau.lt>
+Message-ID: <20151102042520.GM3352@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hi Remi,
 
-On Mon,  2 Nov 2015 00:00:09 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Sun, Nov 01, 2015 at 09:36:21PM +0100, Remi Pommarel wrote:
+> @@ -57,7 +57,7 @@ endif
+>  
+>  # assume yes for these tests, configure will bail out otherwise
+>  # saying error: cannot run test program while cross compiling
+> -GIT_CONF_ENV = \
+> +GIT_CONF_ENV += \
+>  	ac_cv_fread_reads_directories=yes \
+>  	ac_cv_snprintf_returns_bogus=yes LIBS='$(GIT_CONF_ENV_LIBS)'
 
-> Hello All!
-> 
-> This series is an attempt to fix the installation paths of many
-> Xorg-related packages.
-> 
-> *This is an RFC.*  There is an alternate proposal after the explanations
-> on the series.
-> 
-> The new pkconf bumped in d7f6d320 introduced a change in behaviour: all
-> path variables returned by pkgconf are now prefixed with the sysroot
-> directory.
-> 
+Please move this hunk to patch #3 in this series, which is where it logically 
+belongs.
 
-...this commit breaks some other packages too, see [1] for libv4l example.
+baruch
 
-This commit removed a patch named '0002-fix-double-sysroot.patch', I think
-this patch should somehow be forward ported to the new pkconf packet...
-
-Regards,
-Peter
-
-[1] http://lists.busybox.net/pipermail/buildroot/2015-October/141429.html
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
