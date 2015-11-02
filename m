@@ -1,7 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 2 Nov 2015 15:56:51 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain: add 4.3.x choice for headers
-Message-ID: <1446476213-28962-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 2 Nov 2015 15:56:53 +0100
+Subject: [Buildroot] [PATCH 3/3] linux: bump default version to 4.3
+In-Reply-To: <1446476213-28962-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1446476213-28962-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1446476213-28962-3-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- toolchain/toolchain-common.in          | 5 +++++
- toolchain/toolchain-external/Config.in | 4 ++++
- 2 files changed, 9 insertions(+)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 4e880a2..6871d8b 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -231,10 +231,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
+diff --git a/linux/Config.in b/linux/Config.in
+index 8a66866..12b417a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.2.5"
++	bool "4.3"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
  	string
-+	default "4.3"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
- 	default "4.2"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
- 	default "4.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
- 	default "4.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 4291394..3f6b8e8 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -1030,6 +1030,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3
-+	bool "4.3.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_2
- 	bool "4.2.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
+-	default "4.2.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
 2.4.10
