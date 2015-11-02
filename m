@@ -1,66 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 15:22:45 +0100
-Subject: [Buildroot] suckless.org dwm / dmenu package for buildroot
-In-Reply-To: <1446467960.4528.0@smtp.n3o.at>
-References: <1446467960.4528.0@smtp.n3o.at>
-Message-ID: <20151102152245.4044fff6@free-electrons.com>
+Date: Mon, 2 Nov 2015 15:24:57 +0100
+Subject: [Buildroot] [git commit] valgrind: enable tls support
+Message-ID: <20151102142924.35E01819BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=31a3f4bd54e12b8d6de286ab8fb6d9651990e2f5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 02 Nov 2015 13:39:20 +0100, buildroot at n3o.at wrote:
+Tested with example program from [1] with qemu_x86_64.
 
-> I missed the two packages named in subject so i decided to try to add 
-> em.
-> 
-> here's my patch: https://neu3no.de/dwm_buildroot.patch
-> 
-> I'm not quiet sure if I did it the right way, so plz tell me if I 
-> didn't.
+[1] http://valgrind.10908.n7.nabble.com/Thread-local-storage-TLS-support-td40815.html
 
-Thanks for this! Could you submit those two packages as proper patches,
-as per the instructions in the Buildroot manual at
-http://buildroot.org/downloads/manual/manual.html#submitting-patches.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/valgrind/valgrind.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-A few comments:
-
- * You should make two separate patches, one per newly added package.
-
- * 0001-buildroot_env.patch is most likely incorrect. The PREFIX
-   variable should simply be overridden from the environment, and the
-   X11LIB/X11INC variables should be changed to not use TARGET_DIR,
-   which is a Buildroot-specific thing and it should creep into the
-   package build system. Also, all patches to packages should have a
-   description and Signed-off-by line, see
-   http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
-
- * "depends on BR2_PACKAGE_XLIB_LIBXINERAMA" should be a select.
-
- * DMENU_DEPENDENCIES = xserver_xorg-server -> this is not correct. A
-   X11 application never depends on the server, but on X11 client
-   libraires.
-
- * LD_LIBRARY_PATH="$(TARGET_DIR)/usr/lib/" is terribly wrong. Using a
-   LD_LIBRARY_PATH on the host pointing to target libraries simply
-   cannot work.
-
- * CC=$(TARGET_CC) LD=$(TARGET_LD) -> use $(TARGET_CONFIGURE_OPTS)
-   instead
-
- * Hash files are missing
-
- * License information is missing
-
- * There are some remaining debugging messages in DWM_BUILD_CMDS.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 75d542a..5849b49 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -9,9 +9,15 @@ VALGRIND_SITE = http://valgrind.org/downloads
+ VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
+ VALGRIND_LICENSE = GPLv2 GFDLv1.2
+ VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
+-VALGRIND_CONF_OPTS = --disable-tls --disable-ubsan
++VALGRIND_CONF_OPTS = --disable-ubsan
+ VALGRIND_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_GCC_ENABLE_TLS),y)
++VALGRIND_CONF_OPTS += --enable-tls
++else
++VALGRIND_CONF_OPTS += --disable-tls
++endif
++
+ # When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
+ # -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
+ # it forcibly adds -march=mips64. This causes Valgrind to be built
