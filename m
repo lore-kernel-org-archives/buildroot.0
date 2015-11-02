@@ -1,34 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 16:52:21 +0100
-Subject: [Buildroot] [PATCH v3 1/2] Revert "package/initscripts:
- S40network: wait for network interfaces to appear"
-In-Reply-To: <1446109218-11057-2-git-send-email-jezz@sysmic.org>
-References: <1446109218-11057-1-git-send-email-jezz@sysmic.org>
- <1446109218-11057-2-git-send-email-jezz@sysmic.org>
-Message-ID: <20151102165221.658e28de@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 2 Nov 2015 18:01:12 +0100
+Subject: [Buildroot] [PATCH v1] valgrind: enabls tls support
+In-Reply-To: <20151102153309.7c86ee73@free-electrons.com>
+References: <1446420326-29281-1-git-send-email-ps.report@gmx.net>
+ <20151102153309.7c86ee73@free-electrons.com>
+Message-ID: <20151102180112.0bb05227@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Hello Thomas,
 
-On Thu, 29 Oct 2015 10:00:17 +0100, J?r?me Pouiller wrote:
-> This reverts commit 49964858f45d2243c513e6d362e992ad89ec7a45. It is
-> going to be replaced with an ifup hook in next patch.
+On Mon, 2 Nov 2015 15:33:09 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Peter Seiderer,
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/initscripts/init.d/S40network | 29 -----------------------------
->  1 file changed, 29 deletions(-)
+> On Mon,  2 Nov 2015 00:25:26 +0100, Peter Seiderer wrote:
+> > Tested with example program from [1] with qemu_x86_64.
+> > 
+> > [1] http://valgrind.10908.n7.nabble.com/Thread-local-storage-TLS-support-td40815.html
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  package/valgrind/valgrind.mk | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> I've applied your patch (after fixing the typo in the commit title).
+> 
 
-Both patches applied, thanks a lot!
+Many thanks for fixing it...
 
-Best regards,
+> However, it is not a fully correct solution: BR2_GCC_ENABLE_TLS is only
+> valid for internal toolchains. For external toolchains, it will always
+> be false, so you will never have TLS support enabled for external
+> toolchains. I think it would really be easier if Valgrind had a
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I can live with it.... ;-)
+
+> compile-time way of determining whether TLS support is available or
+> not, because it is the only package for which we need to know if TLS
+> support is available or not.
+> 
+> I've nonetheless applied your patch because it doesn't make things
+> really worse than they are. But I would really prefer if you could do
+> some research at adjusting valgrind configure.ac to check TLS
+> availability at compile time.
+> 
+
+O.k, I will take a look...
+
+Regards,
+Peter
+
+> Generally speaking, I think we should drop BR2_GCC_ENABLE_TLS
+> altogether, and simply enable TLS whenever we have NPTL threads being
+> used.
+> 
+> Best regards,
+> 
+> Thomas
