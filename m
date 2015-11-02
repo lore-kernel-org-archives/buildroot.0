@@ -1,53 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Nov 2015 21:33:35 +0100
-Subject: [Buildroot] [PATCH] package/openvmtools: does not build with
- uClibc
-In-Reply-To: <1446309491-24752-1-git-send-email-yann.morin.1998@free.fr>
-References: <1446309491-24752-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20151102213335.4aca2400@free-electrons.com>
+Date: Mon, 2 Nov 2015 21:35:01 +0100
+Subject: [Buildroot] [PATCH 1/1] mosquitto: systemd support
+In-Reply-To: <1446326837-15874-1-git-send-email-gabe@hashrabbit.co>
+References: <1446326837-15874-1-git-send-email-gabe@hashrabbit.co>
+Message-ID: <20151102213501.413e1457@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Dear Gabe Evans,
 
-On Sat, 31 Oct 2015 17:38:11 +0100, Yann E. MORIN wrote:
-> On glibc 2.4+, openvmtools uses euidaccess(), which is not implemented
-> on uClibc.
-> 
-> But since uClibc fakes being a glibc-3.10, openvmtools believes it can
-
-s/3.10/2.10/.
-
-> use euidaccess(), and thus we get a linking error.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/779/779bed269982f0b2e04baecae2e720d602319552/
->     http://autobuild.buildroot.org/results/860/8609823e35115f07b0f16f0a1831201aa1cf9e3c/
->     http://autobuild.buildroot.org/results/f57/f572573c5f7f9206e0a8309b535a7c633a2d6b16/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
+On Sat, 31 Oct 2015 21:27:17 +0000, Gabe Evans wrote:
+> Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
 > ---
-> Note; an alternate solution would be to patch openvmtools to not use
-> euidaccess with uClibc as well. But I'm warry of patching. After all, a
-> package that deals with virtual machines is not really size-sensitive,
-> so it is not completely stupid to disable it with uClibc, and require
-> either glibc or musl...
+>  package/mosquitto/mosquitto.mk      |  8 ++++++++
+>  package/mosquitto/mosquitto.service | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/mosquitto/mosquitto.service
 
-I've applied the patch after fixing 2.10 typo, thanks!
+I don't fully understand the systemd thing, but this looked reasonable,
+so I've applied. Systemd people in the Buildroot community are invited
+to comment/review a bit more on systemd related things :)
 
-However, it is interesting to see the type of build issues that we've
-discovered since uClibc pretends to be glibc 2.10.
-
-But oh well, those packages simply get what they merit: instead of
-doing proper configure.ac checks, they do some stupid version-based
-checking. Which is doomed to fail at some point.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
