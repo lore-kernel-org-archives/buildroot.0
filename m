@@ -1,111 +1,86 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 3 Nov 2015 19:57:03 +0100
-Subject: [Buildroot] [PATCH v2] pkgconf: fix incorrect
- variable-directory sysroot prefixing
-In-Reply-To: <1446501424-26609-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1446501424-26609-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151103195703.76aa56ea@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  3 Nov 2015 20:05:59 +0100
+Subject: [Buildroot] [PATCH 0/2 v2] core: check for improper install paths
+	(branch yem/pkg-no-double-build-dir)
+Message-ID: <cover.1446577223.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gustavo,
+Hello All!
 
-On Mon,  2 Nov 2015 18:57:04 -0300, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+URGENT! Please review...
 
-> According to the pkg-config documents ("specification") when
-> sysroot-prefixing is enabled via PKG_CONFIG_SYSROOT_DIR this should only
-> be applied to -I/-L directories (includes, library directories), and not
-> to all of the other variables that can specify a directory.
-> 
-> However xorg uses mapdir/sdkdir in a similar fashion in what could be
-> considered an abuse of the spec, hence needs to be prefixed as well.
-> And what's more, it also uses includedir in a nonstandard fashion just
-> requesting the value via 'pkg-config --variable=includedir libfoo' which
-> doesn't pass the standard prefixing rules for the --cflags and --libs
-> invocation.
-> 
-> This patch makes pkgconf behave in the pkg-config specified way with the
-> added exception for the includedir, libdir, mapdir and sdkdir variables
-> which are prefixed.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...-Fix-all-variables-sysroot-prefix-problem.patch | 58 ++++++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-> 
-> diff --git a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-> new file mode 100644
-> index 0000000..bac9f62
-> --- /dev/null
-> +++ b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-> @@ -0,0 +1,58 @@
-> +From abc7a780f2a52a1aa3ee288e17140b817b545cc3 Mon Sep 17 00:00:00 2001
-> +From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +Date: Mon, 2 Nov 2015 18:38:00 -0300
-> +Subject: [PATCH] Fix all-variables sysroot prefix problem
-> +
-> +According to the pkg-config specifications (or rather documentation)
-> +only the -L/-I directory entries should be sysroot-prefixed.
-> +
-> +We also need to prefix the mapdir/sdkdir variables since they're used by
-> +xorg and expected that way.
-> +
-> +Also allow prefixing for includedir and libdir since in some silly cases
-> +the directories may be requested barebones via pkg-config
-> +--variable=includedir libfool for example.
-> +
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +---
-> + main.c | 17 ++++++++++++-----
-> + 1 file changed, 12 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/main.c b/main.c
-> +index 6947126..52d16c2 100644
-> +--- a/main.c
-> ++++ b/main.c
-> +@@ -313,9 +313,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-> + 			memset(req->buf, 0, sizeof(req->buf));
-> + 
-> + 			if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-> +-			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-> +-				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-> +-
-> ++			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-> ++			    	(!strcmp(req->variable, "includedir") || \
-> ++				    !strcmp(req->variable, "libdir") || \
-> ++				    !strcmp(req->variable, "mapdir") || \
-> ++				    !strcmp(req->variable, "sdkdir")))
-> ++					strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-> + 			strlcat(req->buf, var, sizeof(req->buf));
-> + 			return;
-> + 		}
-> +@@ -323,8 +326,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-> + 		strlcat(req->buf, " ", sizeof(req->buf));
-> + 
-> + 		if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-> +-		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-> +-			strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-> ++		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-> ++		    	(!strcmp(req->variable, "includedir") || \
-> ++			    !strcmp(req->variable, "libdir") || \
-> ++			    !strcmp(req->variable, "mapdir") || \
-> ++			    !strcmp(req->variable, "sdkdir")))
-> ++				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-> + 
-> + 		strlcat(req->buf, var, sizeof(req->buf));
-> + 	}
-> +-- 
-> +2.4.10
-> +
+This series adds a new post-step hook, that applies to both
+install-target and install-staging, and checks that packages do not
+install files in paths like:
+    $(TARGET_DIR)/$(O)
+    $(STAGING_DIR)/$(O)
 
-Still works for my (simple) lib4vl/qt/moc case, './host/usr/bin/pkg-config --variable=moc_location QtCore'
-(same for uic/rcc) returns the correct value...
+Having one (or both) of those directories means that a package is
+confusing DESTDIR, PREFIX and SYSROOT_DIR.
 
-Tested-by: Peter Seiderer <ps.report@gmx.net>
+Such a confusion is currently caused by our host-pkgconf, that happilly
+(but wrongly) prepends the sysroot directory to all paths it may return,
+whether they be queried via one of --cflags, --cflags-only-I, --libs or
+--libs-only-L, or whether they be directly queried via --variable=XXX.
+
+Another source of confusion may come from generic-packages, wihch badly
+coded custom Makefiles (even though I haven't noticed any so far, it is
+bound to happen sooner or later...).
+
+We want to detect such broken packages *ASAP* so we can fix them before
+the release (or at best come up with a fallback plan).
+
+Kown to break are quite a few packages from the Xorg stack, with more
+than 15 detected so far, but maybe more since I had a contingency plan
+to fix them in bulk, see previous RFC:
+    http://lists.busybox.net/pipermail/buildroot/2015-November/143562.html
+
+Also, some packages that want to call moc (from Qt4 for sure, possibly
+from Qt5 too) also have a similar issue, see:
+    http://lists.busybox.net/pipermail/buildroot/2015-October/141429.html
+
+Although the second case is already causing build failures (and will
+require a fix of its own), the first case has so far gone unnoticed (I
+just stumbled on it by chance while reviewing the EFL bump series, which
+is now kind of blocked by this issue).
+
+
+Changes RFC -> v2:
+  - only keep those two patches, drop the Xorg fixups.
+
 
 Regards,
-Peter
+Yann E. MORIN.
+
+
+The following changes since commit b8527eb3c017c74c861db8b21f8a0def55988382:
+
+  poco: add patches to fix pcre link issue and library installation (2015-11-03 17:18:33 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/pkg-no-double-build-dir
+
+for you to fetch changes up to fe19a41362f17e9435b0da14097ce9fecda38780:
+
+  core/pkg-generic: check proper package installation (2015-11-03 19:59:31 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      core/pkg-generic: allow step hooks to fail a step
+      core/pkg-generic: check proper package installation
+
+ package/pkg-generic.mk | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
