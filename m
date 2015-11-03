@@ -1,60 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 15:19:18 +0100
-Subject: [Buildroot] Poco 1.6.1 with glib for Raspberry Pi
-In-Reply-To: <56388339.6080904@prosystems.de>
-References: <56388339.6080904@prosystems.de>
-Message-ID: <20151103151918.1aa989ea@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 Nov 2015 11:35:56 -0300
+Subject: [Buildroot] [PATCH] mpd: security bump to version 0.19.11
+Message-ID: <1446561356-27107-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Benno,
+Fixes an ape tag parsing buffer overflow.
 
-Thanks for your report! See below for those additional questions to
-better understand what's going on and hopefully help resolve the issue.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 3 Nov 2015 10:49:45 +0100, Benno wrote:
-
-> I got Problems with POCO 1.6.1 compiles with the 'unbundled' Flag for 
-> Raspberry Pi.
-> 
-> When I compile my program with the POCO libs from buildroot this error 
-> appear:
-> 
-> 
-> |..../libPocoFoundation.so: undefined reference to `_pcre_ucd_stage1' 
-> |||....|/libPocoFoundation.so: undefined reference to 
-> `_pcre_ucd_records' |||....|/libPocoFoundation.so: undefined reference 
-> to `_pcre_ucp_gentype' |||....|/libPocoFoundation.so: undefined 
-> reference to `_pcre_ucd_stage2'|
-
-Can you give us a sample program that allows us to reproduce the
-problem ?
-
-> after a short internet search I found out that other people have the 
-> same problem too but no clear solution to solve it.
-> 
-> I made sure that the packages pcre, zlib, expat and sqlite are checked 
-> in buildroot then the program run through compilation,
-> but when I execute it on the pi the program returns with the error:
-> 
-> 'undefined symbole: _prce_ucd_stage1'
-> 
-> Did I missed something important?
-
-Same here, can you give a sample program that allows us to reproduce ?
-
-> For my kernel I use glibc, for the FPEnviroment.
-
-Is the sentence incomplete? "for the FPEnvironment" doesn't really mean
-anything.
-
-Best regards,
-
-Thomas
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 56d30f2..1b6c80b 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	c386eb3d22f98dc993b5ae3c272f969aa7763713483c6800040ebf1791b15851	mpd-0.19.10.tar.xz
++sha256	7a5c66aa5af97a5b7af3dc49e3d2594071dafd62a14e2e9f7c9a5a86342836c6	mpd-0.19.11.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7bbef03..7e6b60f 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).10
++MPD_VERSION = $(MPD_VERSION_MAJOR).11
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
