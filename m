@@ -1,56 +1,50 @@
 From: Gabe Evans <gabe@hashrabbit.co>
-Date: Tue, 3 Nov 2015 14:21:46 -0800
-Subject: [Buildroot] [PATCH 1/2] package/dropbear: Respect user specific
-	configurations
-In-Reply-To: <20151103225311.22589f69@free-electrons.com>
-References: <1446099102-5205-1-git-send-email-cyrilbur@gmail.com>
- <20151102224357.213f796c@free-electrons.com>
- <CAHsRNLgKPsm59euMCkS6XvHKxQQVzEyTeAfFHszEYuEw0rNjgg@mail.gmail.com>
- <20151103225311.22589f69@free-electrons.com>
-Message-ID: <CAHsRNLgvVBBYiaab=Fgu=FDXZpMw9rqwcmVy=aSaXPaOi==L=w@mail.gmail.com>
+Date: Tue,  3 Nov 2015 22:24:30 +0000
+Subject: [Buildroot] [PATCH 1/1] systemd: disable ldconfig through configure
+	option
+Message-ID: <1446589470-10304-1-git-send-email-gabe@hashrabbit.co>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Systemd v216+ includes a configure option to disable ldconfig.
 
-On Tue, Nov 3, 2015 at 1:53 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> So your report is definitely useful. But if I may suggest, it would be
-> even more useful if you could review systemd related patches before
-> they are applied.
+Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+---
+ package/systemd/systemd.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-This one slipped past me but I'd be more than happy to review patches
-in the future.
-
->> An even better solution would be to move the dropbear.service symlink from
->> /etc/systemd/system/multi-user.target.wants/ to
->> /usr/lib/systemd/system/multi-user.target.wants/. That would allow users to
->> shadow the unit completely with their own customizations or override
->> individual options through the use of "drop-in" units. The manual explains
->> this in more detail:
->> http://www.freedesktop.org/software/systemd/man/systemd.unit.html#id-1.10.3
->
-> *All* our packages are creating the symlink
-> in /etc/systemd/system/multi-user.target.wants/, so changing that
-> really needs to be discussed with the other people interested in
-> systemd support in Buildroot. I believe we used to have some symlinks
-> in /usr, some in /etc, and we settled on /etc with some
-> ${justification}.
-
-It might also be worth clarifying that other Linux distributions
-follow the practice of reserving /etc/systemd for users and
-/usr/lib/systemd for maintainers.
-
-This is definitely a big change that should be discussed in more
-detail. I'm still getting familiar with the mailing list so your help
-in starting this conversation would be appreciated. :)
-
-Thanks,
-Gabe
-
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 414dc0d..35dac83 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -37,6 +37,7 @@ SYSTEMD_CONF_OPTS += \
+ 	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
+ 	--disable-efi \
+ 	--disable-gnuefi \
++	--disable-ldconfig \
+ 	--disable-tests \
+ 	--disable-dbus \
+ 	--without-python
+@@ -154,17 +155,10 @@ define SYSTEMD_SANITIZE_PATH_IN_UNITS
+ 		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
+ endef
+ 
+-# Disable ldconfig.service, as /sbin/ldconfig is not available when the
+-# target is built with a glibc-based toolchain.
+-define SYSTEMD_DISABLE_LDCONFIG_SERVICE_HOOK
+-	rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/ldconfig.service
+-endef
+-
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
+-	SYSTEMD_DISABLE_LDCONFIG_SERVICE_HOOK \
+ 	SYSTEMD_SANITIZE_PATH_IN_UNITS
+ 
+ define SYSTEMD_USERS
 -- 
-Gabe Evans | Co-Founder & CTO
-hashrabbit.co ? angel.co/hashrabbit ? github.com/gevans
+1.9.1
