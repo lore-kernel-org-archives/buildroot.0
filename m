@@ -1,68 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 15:58:12 +0100
-Subject: [Buildroot] [git commit] uclibc: add patch to fix <unistd.h> header
-Message-ID: <20151103150018.534B881A1D@busybox.osuosl.org>
+Date: Tue, 3 Nov 2015 16:02:03 +0100
+Subject: [Buildroot] Poco 1.6.1 with glib for Raspberry Pi
+In-Reply-To: <5638CBAE.9040700@prosystems.de>
+References: <56388339.6080904@prosystems.de>
+ <20151103151918.1aa989ea@free-electrons.com>
+ <5638CBAE.9040700@prosystems.de>
+Message-ID: <20151103160203.187da1ba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52717eac86da18d4de08220d2c59d29086cf147f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Benno,
 
-The bump to uClibc-ng 1.0.8 added some changes in <unistd.h> related
-to syncfs() that broke the build for packages including this header
-file, such as lighttpd. This commit adds a uClibc-ng patch (submitted
-upstream) which fixes the issue.
+On Tue, 3 Nov 2015 15:58:54 +0100, Benno wrote:
 
-Fixes:
+> > Can you give us a sample program that allows us to reproduce the
+> > problem ?
+> 
+> I tried to make an example program...
+> 
+> #include <string>
+> 
+> int main(int argc, char **argv)
+> {
+>      std::string example = "This is a test string";
+> 
+>      return 0;
+> }
 
-  http://autobuild.buildroot.org/results/6be/6be17a91373708900082958a59df8b7575df69c0/
+Unless I'm wrong this example program is *not* using the Poco libraries.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reported-by: Xi-Sheng Luo <lxsjason@gmail.com>
----
- .../1.0.8/0001-unistd-fix-if-condition.patch       |   34 ++++++++++++++++++++
- 1 files changed, 34 insertions(+), 0 deletions(-)
+> I linked the Poco libraries Foundation, Util and Net. Then I compiled it.
+> When the linker is invoked I got the same errors again....
 
-diff --git a/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch b/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch
-new file mode 100644
-index 0000000..c321f4e
---- /dev/null
-+++ b/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch
-@@ -0,0 +1,34 @@
-+From 1e85892911bf016e9bb2a647b6584cdd806706f8 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Tue, 3 Nov 2015 15:32:23 +0100
-+Subject: [PATCH] unistd: fix #if condition
-+
-+Commit dfa593d4d881116723a4401b466ea964fb12327b ("syncfs: add system
-+call support") modified the #if condition around the definition of the
-+syncfs() prototype in a way that doesn't build, causing build failures
-+of any file including <unistd.h>:
-+
-+output/host/usr/powerpc-buildroot-linux-uclibc/sysroot/usr/include/unistd.h:988:14: error: #if with no expression
-+ #if __USE_GNU
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ include/unistd.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/unistd.h b/include/unistd.h
-+index 4701dab..40d6abd 100644
-+--- a/include/unistd.h
-++++ b/include/unistd.h
-+@@ -1073,7 +1073,7 @@ extern char *getpass (const char *__prompt) __nonnull ((1));
-+ extern int fsync (int __fd);
-+ #endif /* Use BSD || X/Open || Unix98.  */
-+ 
-+-#if __USE_GNU
-++#if defined __USE_GNU
-+ /* Make all changes done to all files on the file system associated
-+  *    with FD actually appear on disk.  */
-+ extern int syncfs (int __fd) __THROW;
-+-- 
-+2.6.2
-+
+This is unclear. Can you give the *exact* commands you are running
+using the example program above to get the problem ?
+
+> > Is the sentence incomplete? "for the FPEnvironment" doesn't really mean
+> > anything.
+> I thought its an important info that I use glibc.
+
+Yes, the fact that you use glibc is useful. But it does not answer my
+question which was: "what do you mean by FPEnvironment?"
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
