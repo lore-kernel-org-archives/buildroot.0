@@ -1,47 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 3 Nov 2015 22:20:37 +0100
-Subject: [Buildroot] [PATCH 0/3 v3] toolchain/external: bump Linaro ARM,
- ARMEB and AArch64 toolchains (branch yem/toolchain-linaro-2015.08)
-In-Reply-To: <20151103221143.47625aac@free-electrons.com>
-References: <cover.1445903025.git.yann.morin.1998@free.fr>
- <20151103221143.47625aac@free-electrons.com>
-Message-ID: <20151103212037.GA4201@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 3 Nov 2015 22:25:32 +0100
+Subject: [Buildroot] [PATCH] boost: fix sparc64 compile,
+ set the correct instruction-set
+In-Reply-To: <20151103220543.06ed88e9@free-electrons.com>
+References: <20151103210313.GA25989@waldemar-brodkorb.de>
+ <20151103220543.06ed88e9@free-electrons.com>
+Message-ID: <20151103212531.GI21428@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi,
+Thomas Petazzoni wrote,
 
-On 2015-11-03 22:11 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 27 Oct 2015 00:49:37 +0100, Yann E. MORIN wrote:
-> > Yann E. MORIN (3):
-> >       toolchain/external: bump Linaro ARM to 2015.08
-> >       toolchain/external: bump Linaro ARMEB to 2015.08
-> >       toolchain/external: bump Linaro AArch64 to 2015.08
+> Dear Waldemar Brodkorb,
 > 
-> All three applied, thanks!
+> On Tue, 3 Nov 2015 22:03:14 +0100, Waldemar Brodkorb wrote:
 > 
-> On the first patch, I fixed the s/eglibc/glibc/ typo noticed by Baruch.
+> > +ifeq ($(BR2_sparc64),y)
+> > +BOOST_OPTS += architecture=sparc instruction-set=ultrasparc
+> > +endif
+> 
+> We're not setting architecture= nor instruction-set= for any other
+> architecture. Should we do so ?
+> 
+> Should the instruction-set be set to BR2_GCC_TARGET_TUNE ?
 
-Meh...
+You mean BR2_GCC_TARGET_CPU? No, because leon3 is not set in boost.
 
-> On the second patch, I rewrote the Config.in help text, since it was
-> not referring to the proper Linaro toolchain version (you copy/pasted
-> from the wrong place it seems).
+To do minimal damage to other architectures, I would just
+set it for sparc/sparc64. The boost architecture does not always
+match the buildroot architecture name. (f.e. ppc is power)
 
-Meh again...
+I think 0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch could be
+removed, when a correct setting is used for sparc32.
 
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+best regards
+ Waldemar
