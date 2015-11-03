@@ -1,51 +1,55 @@
-From: Antoine Tenart <antoine.tenart@free-electrons.com>
-Date: Tue,  3 Nov 2015 17:52:13 +0100
-Subject: [Buildroot] [PATCH] wf111: fix overwriting module files during
-	install
-Message-ID: <1446569533-25368-1-git-send-email-antoine.tenart@free-electrons.com>
+From: Edson Siqueira <edson.siqueira@datacom.ind.br>
+Date: Tue,  3 Nov 2015 14:59:38 -0200
+Subject: [Buildroot] [PATCH 1/1] boost: add option to build boost_coroutine
+Message-ID: <1446569978-10357-1-git-send-email-edson.siqueira@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matthew Starr <mstarr@hedonline.com>
+It was disabled by default by commit 611dfe6cb55ed72d7df3b7c102f4a723248a4037
+due to the upgrade to boost 1.54.0.
 
-When installing the WF111 modules, the module.* files generated
-during the kernel compilation were overrided. This ended up having
-the wrong information about the modules compiled in a given image
-(and only the one about the WF111 module). This could be verified
-using the "modprobe -l" command, with only the wf111 module showing
-up.
-
-This patch fixes this, by removing the manual copy of the generated
-files (in WF111_INSTALL_TARGET_CMDS) and by instead using the build
-command to populate our target directory, containing the module.*
-files. This way the files are not overrided but instead updated
-with the additional WF111 informations.
-
-Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
-Tested-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+Signed-off-by: Edson Siqueira <edson.siqueira@datacom.ind.br>
 ---
- package/wf111/wf111.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/boost/Config.in | 4 ++++
+ package/boost/boost.mk  | 4 +---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/wf111/wf111.mk b/package/wf111/wf111.mk
-index 479d665760b1..e63a1d2a19c7 100644
---- a/package/wf111/wf111.mk
-+++ b/package/wf111/wf111.mk
-@@ -24,11 +24,7 @@ endif
- define WF111_BUILD_CMDS
- 	$(MAKE) -C $(@D) PWD=$(@D) \
- 		$(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) \
--		install_static
--endef
--
--define WF111_INSTALL_TARGET_CMDS
--	cp -dpfr $(@D)/output/* $(TARGET_DIR)
-+		OUTPUT=$(TARGET_DIR) install_static
- endef
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index ac70152..150174c 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -70,6 +70,10 @@ config BR2_PACKAGE_BOOST_CONTEXT
+ 	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
+ 			|| BR2_powerpc || BR2_sparc || BR2_x86_64)
  
- $(eval $(generic-package))
++config BR2_PACKAGE_BOOST_COROUTINE
++        bool "boost-coroutine"
++        depends on BR2_PACKAGE_BOOST_CONTEXT
++
+ config BR2_PACKAGE_BOOST_DATE_TIME
+ 	bool "boost-date_time"
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 16d05cd..80325b0 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -20,13 +20,11 @@ HOST_BOOST_FLAGS = --without-icu \
+ 	iostreams locale log math mpi program_options python random regex \
+ 	serialization signals system test thread timer wave)
+ 
+-# coroutine breaks on some weak toolchains and it's new for 1.54+
+-BOOST_WITHOUT_FLAGS = coroutine
+-
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
 -- 
-2.6.2
+1.9.1
