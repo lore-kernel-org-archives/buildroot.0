@@ -1,55 +1,37 @@
-From: Edson Siqueira <edson.siqueira@datacom.ind.br>
-Date: Tue,  3 Nov 2015 14:59:38 -0200
-Subject: [Buildroot] [PATCH 1/1] boost: add option to build boost_coroutine
-Message-ID: <1446569978-10357-1-git-send-email-edson.siqueira@datacom.ind.br>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 3 Nov 2015 18:17:35 +0100
+Subject: [Buildroot] [PATCH] libpcap: fix sparc64 build, -fPIC required
+Message-ID: <20151103171735.GA32079@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It was disabled by default by commit 611dfe6cb55ed72d7df3b7c102f4a723248a4037
-due to the upgrade to boost 1.54.0.
+Should fix following autobuilder issues:
+http://autobuild.buildroot.net/results/e79353496aa91848c76f15c561efdd84476c20ac/
+http://autobuild.buildroot.net/results/a859ecb153838837e9a73b47ed7e1105d6be55ac/
+http://autobuild.buildroot.net/results/f2ce1899a1144bec23fb25f4ce36dc78d768f8a8/
 
-Signed-off-by: Edson Siqueira <edson.siqueira@datacom.ind.br>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/boost/Config.in | 4 ++++
- package/boost/boost.mk  | 4 +---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/libpcap/libpcap.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index ac70152..150174c 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -70,6 +70,10 @@ config BR2_PACKAGE_BOOST_CONTEXT
- 	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
- 			|| BR2_powerpc || BR2_sparc || BR2_x86_64)
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index eb21fa9..e6dacc8 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -55,8 +55,8 @@ else
+ LIBPCAP_CONF_OPTS += --without-libnl
+ endif
  
-+config BR2_PACKAGE_BOOST_COROUTINE
-+        bool "boost-coroutine"
-+        depends on BR2_PACKAGE_BOOST_CONTEXT
-+
- config BR2_PACKAGE_BOOST_DATE_TIME
- 	bool "boost-date_time"
+-# microblaze needs -fPIC instead of -fpic
+-ifeq ($(BR2_microblaze),y)
++# microblaze/sparc64 needs -fPIC instead of -fpic
++ifeq ($(BR2_microblaze)$(BR2_sparc64),y)
+ LIBPCAP_CFLAGS += -fPIC
+ endif
  
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 16d05cd..80325b0 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -20,13 +20,11 @@ HOST_BOOST_FLAGS = --without-icu \
- 	iostreams locale log math mpi program_options python random regex \
- 	serialization signals system test thread timer wave)
- 
--# coroutine breaks on some weak toolchains and it's new for 1.54+
--BOOST_WITHOUT_FLAGS = coroutine
--
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
 -- 
-1.9.1
+1.7.10.4
