@@ -1,37 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 20:25:07 +0100
-Subject: [Buildroot] Illegal instruction by python's xmlrpclib on
- powerpc64, gcc-4.9
-In-Reply-To: <56390904.7010101@zacarias.com.ar>
-References: <CAM+bi4sfbXMkgow7-ku+u2f5ypEM1WGPAuRRvkkjUA-Z05KnqQ@mail.gmail.com>
- <20151103151730.1e9dcc3c@free-electrons.com>
- <56390904.7010101@zacarias.com.ar>
-Message-ID: <20151103202507.7883b141@free-electrons.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Tue,  3 Nov 2015 17:45:05 -0200
+Subject: [Buildroot] [PATCH 1/1] irssi: add missing dependency on
+	host-pkgconf
+Message-ID: <1446579905-31668-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, Dwayne,
+The irssi configure script uses pkg-config to detect the availability of
+libglib2 and openssl.
 
-On Tue, 3 Nov 2015 16:20:36 -0300, Gustavo Zacarias wrote:
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ package/irssi/irssi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I've added e5500/e6500 support with basic testing from Dwayne Fontenot, 
-> i never had any e5500/6500 hardware in my hands to test though, so it's 
-> kind of YMMV/best spare effort.
-
-All right, so I'm adding Dwayne in Cc: to this e-mail so hopefully he
-can help us by doing testing on real hardware.
-
-Dwayne, can you have a look at the report at
-http://lists.busybox.net/pipermail/buildroot/2015-November/143655.html
-and see if you can reproduce or not on a PowerPC e6500 platform ?
-
-Thanks!
-
-Thomas
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index d38d917..6857a11 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -11,7 +11,7 @@ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.bz2
+ IRSSI_SITE = http://pkgs.fedoraproject.org/repo/pkgs/irssi/$(IRSSI_SOURCE)/ecf64be47978d89a742b435a81cb47db
+ IRSSI_LICENSE = GPLv2+
+ IRSSI_LICENSE_FILES = COPYING
+-IRSSI_DEPENDENCIES = libglib2 ncurses
++IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses
+ IRSSI_AUTORECONF = YES
+ 
+ IRSSI_CONF_OPTS = \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
