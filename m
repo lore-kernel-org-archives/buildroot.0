@@ -1,54 +1,56 @@
-From: DATACOM - Edson Siqueira <edson.siqueira@datacom.ind.br>
-Date: Tue, 03 Nov 2015 16:14:20 -0200
-Subject: [Buildroot] [PATCH 1/1] boost: add option to build
-	boost_coroutine
-In-Reply-To: <20151103183541.000defd6@free-electrons.com>
-References: <1446569978-10357-1-git-send-email-edson.siqueira@datacom.ind.br>
- <20151103183541.000defd6@free-electrons.com>
-Message-ID: <5638F97C.7060300@datacom.ind.br>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 3 Nov 2015 19:18:10 +0100
+Subject: [Buildroot] [PATCH] elfutils: fix sparc64 build, -fPIC required
+In-Reply-To: <20151103185733.364482c2@free-electrons.com>
+References: <20151103171832.GA7668@waldemar-brodkorb.de>
+ <20151103185733.364482c2@free-electrons.com>
+Message-ID: <20151103181810.GE21428@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas Petazzoni,
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-At the time of commit 611dfe6cb55ed72d7df3b7c102f4a723248a4037, this library
-was new to boost and being built regardless of the config. The fix was to
-always remove it from compilation to avoid problems with some compilers.
-Now, with a proper option, it should be possible to enable it only when
-the compiler supports the compilation of this library.
+> Dear Waldemar Brodkorb,
+> 
+> On Tue, 3 Nov 2015 18:18:32 +0100, Waldemar Brodkorb wrote:
+> > Fixes following autobuild errors:
+> > http://autobuild.buildroot.net/results/82cc7766d2c805146e94baf82a24d1002f56593d/
+> > http://autobuild.buildroot.net/results/ca4ca362581ee0111cba389d1afbff287692c21b/
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> >  package/elfutils/elfutils.mk |    5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+> > index 838c3b8..261849a 100644
+> > --- a/package/elfutils/elfutils.mk
+> > +++ b/package/elfutils/elfutils.mk
+> > @@ -21,6 +21,11 @@ ELFUTILS_CONF_ENV += \
+> >  	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+> >  	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
+> >  
+> > +# sparc64 needs -fPIC instead of -fpic
+> > +ifeq ($(BR2_sparc64),y)
+> > +ELFUTILS_CONF_ENV += CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS)) -fPIC"
+> 
+> I don't like the duplication of the _FILE_OFFSET_BITS dance. Can you
+> introduce an ELFUTILS_CFLAGS instead ?
 
-I've tested this patch using a ppc32 toolchain to build the library.
+Okay, I did know you wouldn't like it ;)
+ 
+> Also, for libpcap, -fPIC is needed instead of -fpic for both microblaze
+> and sparc64. But for elfutils, -fPIC is only needed for sparc64 ? I
+> just tested a quick build of elfutils on microblaze, and it indeed
+> works without any change.
+> 
+> Do you have any clue why?
 
-Thanks,
+No idea, sorry.
 
-On 03-11-2015 15:35, Thomas Petazzoni wrote:
-> Dear Edson Siqueira,
->
-> On Tue,  3 Nov 2015 14:59:38 -0200, Edson Siqueira wrote:
->> It was disabled by default by commit 611dfe6cb55ed72d7df3b7c102f4a723248a4037
->> due to the upgrade to boost 1.54.0.
->>
->> Signed-off-by: Edson Siqueira <edson.siqueira@datacom.ind.br>
-> Thanks for your contribution. However, you don't explain why you think
-> that the problems that lead to commit
-> 611dfe6cb55ed72d7df3b7c102f4a723248a4037 have now been fixed. Can you
-> give more details ? Have you tested the configurations pointed by the
-> 611dfe6cb55ed72d7df3b7c102f4a723248a4037 commit log and verified that
-> they now build fine with the coroutine module enabled ?
->
-> Thanks,
->
-> Thomas
-
--- 
-Edson Siqueira
-
-DATACOM
-Projetista de Software Embarcado - P&D
-Rua da Gl?ria, 251 - 8 ? andar - Centro C?vico - Curitiba, PR
-Fone: +55 41 3089-3670
-edson.siqueira at datacom.ind.br
-www.datacom.ind.br
+best regards
+ Waldemar
