@@ -1,53 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 17:22:15 +0100
-Subject: [Buildroot] Poco 1.6.1 with glib for Raspberry Pi
-In-Reply-To: <5638CEBF.1030502@prosystems.de>
-References: <56388339.6080904@prosystems.de>
- <20151103151918.1aa989ea@free-electrons.com>
- <5638CBAE.9040700@prosystems.de>
- <20151103160203.187da1ba@free-electrons.com>
- <5638CEBF.1030502@prosystems.de>
-Message-ID: <20151103172215.4afe95f7@free-electrons.com>
+From: Antoine Tenart <antoine.tenart@free-electrons.com>
+Date: Tue,  3 Nov 2015 17:52:13 +0100
+Subject: [Buildroot] [PATCH] wf111: fix overwriting module files during
+	install
+Message-ID: <1446569533-25368-1-git-send-email-antoine.tenart@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Benno,
+From: Matthew Starr <mstarr@hedonline.com>
 
-On Tue, 3 Nov 2015 16:11:59 +0100, Benno wrote:
+When installing the WF111 modules, the module.* files generated
+during the kernel compilation were overrided. This ended up having
+the wrong information about the modules compiled in a given image
+(and only the one about the WF111 module). This could be verified
+using the "modprobe -l" command, with only the wf111 module showing
+up.
 
-> > This is unclear. Can you give the *exact* commands you are running
-> > using the example program above to get the problem ?
-> 
-> for compiling:
-> path/to/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabi-g++ 
-> -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/Example.d" 
-> -MT"src/Example.d" -o "src/Example.o" "../src/Example.cpp"
-> 
-> for linking:
-> path/to/output/host/usr/bin/arm-buildroot-linux-gnueabi-g++ 
-> -L/path/to/buildroot/output/target/usr/lib -o "ExampleProj" 
-> ./src/Example.o   -lPocoFoundation -lPocoUtil -lPocoNet
+This patch fixes this, by removing the manual copy of the generated
+files (in WF111_INSTALL_TARGET_CMDS) and by instead using the build
+command to populate our target directory, containing the module.*
+files. This way the files are not overrided but instead updated
+with the additional WF111 informations.
 
-I didn't test your program since you never gave me the Example.cpp
-source code. Instead, I used the example HTTP server provided in the
-Poco documentation. I indeed stumbled across the pcre issue, and also a
-library installation problem.
+Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+Tested-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+---
+ package/wf111/wf111.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-I've fixed both issues in commit
-http://git.buildroot.net/buildroot/commit/?id=b8527eb3c017c74c861db8b21f8a0def55988382.
-With those patches, I can successfully build and run the HTTP server
-example.
-
-Thanks for reporting the issue in the first place, and don't hesitate
-to test and report back if the patches are working for you.
-
-Best regards,
-
-Thomas
+diff --git a/package/wf111/wf111.mk b/package/wf111/wf111.mk
+index 479d665760b1..e63a1d2a19c7 100644
+--- a/package/wf111/wf111.mk
++++ b/package/wf111/wf111.mk
+@@ -24,11 +24,7 @@ endif
+ define WF111_BUILD_CMDS
+ 	$(MAKE) -C $(@D) PWD=$(@D) \
+ 		$(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) \
+-		install_static
+-endef
+-
+-define WF111_INSTALL_TARGET_CMDS
+-	cp -dpfr $(@D)/output/* $(TARGET_DIR)
++		OUTPUT=$(TARGET_DIR) install_static
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.2
