@@ -1,34 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 15:44:35 +0100
-Subject: [Buildroot] [git commit] imagemagick: use download location as hash
-	source
-Message-ID: <20151103145129.9D22C81E71@busybox.osuosl.org>
+Date: Tue, 3 Nov 2015 15:51:52 +0100
+Subject: [Buildroot] [PATCH] imagemagick: use download location as hash
+ source
+In-Reply-To: <f1f4c7da1fc1a5d9792f673b287b34571e5b121e.1446532981.git.baruch@tkos.co.il>
+References: <f1f4c7da1fc1a5d9792f673b287b34571e5b121e.1446532981.git.baruch@tkos.co.il>
+Message-ID: <20151103155152.0563d8f0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a555062109fa21d945511f606680386e2f2199a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-Since commit 12a6c5b12cd1 (imagemagick: use official download site,
-2015-02-17) we use the official ImageMagic size. Use it also as hash source.
-That's the conversion we use in all other packages when upstream provides
-hashes.
+On Tue,  3 Nov 2015 08:43:01 +0200, Baruch Siach wrote:
+> Since commit 12a6c5b12cd1 (imagemagick: use official download site,
+> 2015-02-17) we use the official ImageMagic size. Use it also as hash source.
+> That's the conversion we use in all other packages when upstream provides
+> hashes.
+> 
+> Cc: Fabio Porcedda <Fabio.Porcedda@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/imagemagick/imagemagick.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cc: Fabio Porcedda <Fabio.Porcedda@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/imagemagick/imagemagick.hash |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 0622ce2..61f73fb 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
--# From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
-+# From http://www.imagemagick.org/download/releases/digest.rdf
- sha256 19fb341725a13c01458cfce23d0a260fd032432a5daeebdd4f06c92d716ded40 ImageMagick-6.9.2-5.tar.xz
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
