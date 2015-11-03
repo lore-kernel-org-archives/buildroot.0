@@ -1,49 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 23:50:20 +0100
-Subject: [Buildroot] [PATCH] arch/arm: VFP and Thumb1 are not compatible
-In-Reply-To: <1446507277-26679-1-git-send-email-yann.morin.1998@free.fr>
-References: <1446507277-26679-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20151103235020.20e50c91@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 4 Nov 2015 00:09:16 +0100
+Subject: [Buildroot] [git commit] toolchain/external: use generic
+ extract commands (!blackfin case)
+In-Reply-To: <20151103223523.8760E81E5E@busybox.osuosl.org>
+References: <20151103223523.8760E81E5E@busybox.osuosl.org>
+Message-ID: <56393E9C.1030005@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+ Post-merge review, never a good idea :-)
 
-On Tue,  3 Nov 2015 00:34:37 +0100, Yann E. MORIN wrote:
-> gcc will refuse to build with both --with-mode=thumb and --with-fpu=vfp,
-> with error messages during ./configure, like:
-> 
->     checking for suffix of object files... configure: error: in `/home/ymor
->     in/dev/buildroot/O/build/host-gcc-initial-4.9.3/build/arm-buildroot-lin
->     ux-uclibcgnueabihf/libgcc':
->     configure: error: cannot compute suffix of object files: cannot compile
->     See `config.log' for more details.
-> 
-> And config.log informatively contains:
-> 
->     sorry, unimplemented: Thumb-1 hard-float VFP ABI
-> 
-> This is an error message that comes deep from gcc source files.
-> 
-> If gcc says it does not support VFP with Thumb1, then let's disable that
-> combination in our menuconfig.
-> 
-> Prefer VFP over Thumb1, i.e. hide Thumb1 when we're not soft-float.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  arch/Config.in.arm | 6 ++++++
->  1 file changed, 6 insertions(+)
+On 03-11-15 22:30, Thomas Petazzoni wrote:
+> +define TOOLCHAIN_EXTERNAL_MOVE
+>  	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
+> -	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
+> -		$(TAR) --strip-components=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+> -	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
+> +	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
 
-Applied, thanks.
+ This will make the following fail:
 
-Thomas
+make toolchain-external-dirclean; make
+
+ Patch follows.
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
