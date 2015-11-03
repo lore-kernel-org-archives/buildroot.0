@@ -1,51 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 23:42:35 +0100
-Subject: [Buildroot] [PATCH 06/21 v2] docs/manual: do not override
- BR2_EXTERNAL
-In-Reply-To: <4ffb76bcc38fd984ddd6b91f6a0228456b418f1d.1445545973.git.yann.morin.1998@free.fr>
-References: <cover.1445545973.git.yann.morin.1998@free.fr>
- <4ffb76bcc38fd984ddd6b91f6a0228456b418f1d.1445545973.git.yann.morin.1998@free.fr>
-Message-ID: <20151103234235.2c5999af@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 3 Nov 2015 23:43:42 +0100
+Subject: [Buildroot] [PATCH 1/1] libtirpc: rpcgen is only built for host,
+ don't install to target
+In-Reply-To: <1446584983-29703-1-git-send-email-phil@zankapfel.net>
+References: <1446584983-29703-1-git-send-email-phil@zankapfel.net>
+Message-ID: <5639389E.9090209@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+On 03-11-15 22:09, Phil Eichinger wrote:
+> rpcgen is only used to generate headers needed for compilation.
+> Move it to noinst_PROGRAMS otherwise you may end up with a host-arch
+> binary in your target.
+> 
+> Signed-off-by: Phil Eichinger <phil@zankapfel.net>
 
-On Thu, 22 Oct 2015 22:34:01 +0200, Yann E. MORIN wrote:
-> Currently, we forcibly override BR2_EXTERNAL when building the manual,
-> so as to avoid referring to packages therein from the manual.
-> 
-> However, when generating the lists of packages, we limit ourselves to
-> scanning for packages in (Buildroot's) TOPDIR and never search in
-> BR2_EXTERNAL. So, we do not really need to override BR2_EXTERNAL when
-> generating the manual to achieve the same result.
-> 
-> Furthermore, we're only looking for packages that are defined in the
-> sub-menu "Target packages", and never anywhere else, and especially not
-> in the sub-menu "User-provided options".
-> 
-> Finally, we're soon to completely eliminate use of BR2_EXTERNAL in
-> Kconfig altogether, so that would no longer have any impact anyway.
-> 
-> So, just leave BR2_EXTERNAL alone when generating the manual.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Note that nfs-utils-1.3.3 actually defines it in noinst_PROGRAMS.
+
+ Regards,
+ Arnout
+
 > ---
->  docs/manual/manual.mk | 3 ---
->  1 file changed, 3 deletions(-)
+>  package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch b/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
+> index ad14312..1cf8614 100644
+> --- a/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
+> +++ b/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
+> @@ -87,7 +87,7 @@ index 0000000..2277b6f
+>  +	$(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+>  +LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+>  +
+> -+bin_PROGRAMS = rpcgen
+> ++noinst_PROGRAMS = rpcgen
+>  +
+>  +rpcgen_SOURCES = \
+>  +	rpc_clntout.c \
+> 
 
-Applied, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
