@@ -1,106 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 22:30:08 +0100
-Subject: [Buildroot] [git commit] toolchain/external: use generic extract
-	commands (!blackfin case)
-Message-ID: <20151103223523.8760E81E5E@busybox.osuosl.org>
+Date: Tue, 3 Nov 2015 22:20:30 +0100
+Subject: [Buildroot] [git commit] core/pkg-generic: allow packages to
+	exclude files when extracting
+Message-ID: <20151103223523.48DDF81E83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=23ffa7ecf763206f570689a0644784d555948e67
+commit: http://git.buildroot.net/buildroot/commit/?id=07e5641339800b75109cbc72f8e13a7b4f16d039
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that packages can provide a list of files to be excluded when
-extracting their archive, downloaded external toolchains are no longer
-special in this respect.
+Currently, packages that need to exclude parts of the archives when
+extracting (e.g. to gain space), like gcc or toolchain-external, have to
+provide custom extract commands, just for the sake of adding a bunch of
+--exclude directives when calling tar.
 
-Still, those toolchains are currently extracted directly into their
-final location, $(HOST_DIR)/opt/ext-toolchain/ which means we still
-need a custom extract command.
-
-Except, we don't really need it: we can just move the toolchain, after
-it's been extracted by the generic extract command, with a post-extract
-hook.
-
-This means that:
-
-  - we now extract the toolchain with the generic extract command,
-
-  - the toolchain is thus extracted into $(@D) ,
-
-  - fixup commands are run against $(@D), as a post-extract hook,
-    instead of against $(HOST_DIR)/opt/ext-toolchain ,
-
-  - once this is done, we move $(@D)/* into the final location with a
-    new post-extract hook.
-
-Note: the blackfin case is special, and will be handled in a follow-up
-patch.
-
-[Thomas: register the TOOLCHAIN_EXTERNAL_FIXUP_CMDS only for the Arago
-case, add some additional comments in the code about why we're moving
-the toolchain around.]
+Add a new variable that packages may set, to provide a space-separated
+list of patterns to exclude.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk |   23 +++++++++++++-------
- 1 files changed, 15 insertions(+), 8 deletions(-)
+ docs/manual/adding-packages-generic.txt |    4 ++++
+ package/pkg-generic.mk                  |    5 ++++-
+ 2 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 77c51a3..3f97726 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -300,17 +300,19 @@ TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arag
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
- TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
- define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv7a/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
--	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
-+	mv $(@D)/arago-2011.09/armv7a/* $(@D)/
-+	rm -rf $(@D)/arago-2011.09/
- endef
-+TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
- TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
- define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv5te/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
--	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
-+	mv $(@D)/arago-2011.09/armv5te/* $(@D)/
-+	rm -rf $(@D)/arago-2011.09/
- endef
-+TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM),y)
- ifeq ($(HOSTARCH),x86)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
-@@ -474,12 +476,17 @@ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
- endef
- else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
- # Normal handling of toolchain tarball extraction.
--define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-+TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
-+
-+# As a regular package, the toolchain gets extracted in $(@D), but
-+# since it's actually a fairly special package, we need it to be moved
-+# into TOOLCHAIN_EXTERNAL_INSTALL_DIR.
-+define TOOLCHAIN_EXTERNAL_MOVE
- 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
--	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
--		$(TAR) --strip-components=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
--	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
-+	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
- endef
-+TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += \
-+	TOOLCHAIN_EXTERNAL_MOVE
- endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 9d6401f..a7143e4 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -314,6 +314,10 @@ information is (assuming the package name is +libfoo+) :
+   that have more than one leading component to strip, set this
+   variable with the value to be passed to tar. Default: 1.
  
- # Returns the location of the libc.a file for the given compiler + flags
++* +LIBFOO_EXCLUDES+ is a space-separated list of patterns to exclude
++  when extracting the archive. Each item from that list is passed as
++  a tar's +--exclude+ option. By default, empty.
++
+ * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
+   name) that are required for the current target package to
+   compile. These dependencies are guaranteed to be compiled and
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index ffef4d3..8b189fe 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -508,7 +508,10 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ # default extract command
+ $(2)_EXTRACT_CMDS ?= \
+ 	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
+-	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
++	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
++		-C $$($(2)_DIR) \
++		$$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
++		$$(TAR_OPTIONS) -)
+ 
+ # pre/post-steps hooks
+ $(2)_PRE_DOWNLOAD_HOOKS         ?=
