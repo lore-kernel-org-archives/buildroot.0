@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 15:51:59 +0100
-Subject: [Buildroot] [PATCH] squid: bump to version 3.5.11
-In-Reply-To: <1446547880-23500-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1446547880-23500-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151103155159.4bf28581@free-electrons.com>
+Date: Tue, 3 Nov 2015 15:52:04 +0100
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.45
+In-Reply-To: <1446547902-23546-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1446547902-23546-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151103155204.7a552af4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue,  3 Nov 2015 07:51:20 -0300, Gustavo Zacarias wrote:
+On Tue,  3 Nov 2015 07:51:42 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/squid/squid.hash | 6 +++---
->  package/squid/squid.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+>  package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
