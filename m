@@ -1,52 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 23:46:39 +0100
-Subject: [Buildroot] [git commit] systemd: disable ldconfig through
-	configure option
-Message-ID: <20151103224939.6CC657FDC6@busybox.osuosl.org>
+Date: Tue, 3 Nov 2015 23:48:58 +0100
+Subject: [Buildroot] [git commit] libtirpc: rpcgen is only built for host,
+	don't install to target
+Message-ID: <20151103224939.79AAC7FC4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a566520ef6c73f113584082749505c5dea16ccfb
+commit: http://git.buildroot.net/buildroot/commit/?id=4f7f86fb1de4a1e5f56adbb12bd4bff6861a2820
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Systemd v216+ includes a configure option to disable ldconfig.
+rpcgen is only used to generate headers needed for compilation.
+Move it to noinst_PROGRAMS otherwise you may end up with a host-arch
+binary in your target.
 
-Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/systemd.mk |    8 +-------
- 1 files changed, 1 insertions(+), 7 deletions(-)
+ ...Add-rpcgen-program-from-nfs-utils-sources.patch |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 414dc0d..35dac83 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -37,6 +37,7 @@ SYSTEMD_CONF_OPTS += \
- 	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
- 	--disable-efi \
- 	--disable-gnuefi \
-+	--disable-ldconfig \
- 	--disable-tests \
- 	--disable-dbus \
- 	--without-python
-@@ -154,17 +155,10 @@ define SYSTEMD_SANITIZE_PATH_IN_UNITS
- 		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
- endef
- 
--# Disable ldconfig.service, as /sbin/ldconfig is not available when the
--# target is built with a glibc-based toolchain.
--define SYSTEMD_DISABLE_LDCONFIG_SERVICE_HOOK
--	rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/ldconfig.service
--endef
--
- SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- 	SYSTEMD_INSTALL_INIT_HOOK \
- 	SYSTEMD_INSTALL_MACHINEID_HOOK \
- 	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
--	SYSTEMD_DISABLE_LDCONFIG_SERVICE_HOOK \
- 	SYSTEMD_SANITIZE_PATH_IN_UNITS
- 
- define SYSTEMD_USERS
+diff --git a/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch b/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
+index ad14312..1cf8614 100644
+--- a/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
++++ b/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
+@@ -87,7 +87,7 @@ index 0000000..2277b6f
+ +	$(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+ +LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+ +
+-+bin_PROGRAMS = rpcgen
+++noinst_PROGRAMS = rpcgen
+ +
+ +rpcgen_SOURCES = \
+ +	rpc_clntout.c \
