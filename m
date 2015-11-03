@@ -1,81 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Nov 2015 23:41:11 +0100
-Subject: [Buildroot] [git commit] core: do not accept multiple definitions
-	of a package
-Message-ID: <20151103224159.AB09181D68@busybox.osuosl.org>
+Date: Tue, 3 Nov 2015 23:42:07 +0100
+Subject: [Buildroot] [PATCH 05/21 v2] core: remove .br-external on
+ distclean
+In-Reply-To: <84027326a9f437b9c829a3a6f1e7c4616bf1ae1e.1445545973.git.yann.morin.1998@free.fr>
+References: <cover.1445545973.git.yann.morin.1998@free.fr>
+ <84027326a9f437b9c829a3a6f1e7c4616bf1ae1e.1445545973.git.yann.morin.1998@free.fr>
+Message-ID: <20151103234207.753e70bd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ea851c0c0f9783894e9469806d0e25c2bf5d55b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-One of the selling points for br2-external is to provide a mean to add
-new packages. However, it is not supported that a package be defined by
-Buildroot and then redefined in a br2-external tree.
+On Thu, 22 Oct 2015 22:34:00 +0200, Yann E. MORIN wrote:
+> distclean is supposed to return the current directory, whether in-tree
+> or out-of-tree, into pristine conditions, which means we should also
+> forget about any br2-external tree on distclean.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This situation may occur without the user noticing or even willing to
-redefine the package, for example:
-  - br2-external is first created against a version of Buildroot
-  - a package (missing in Buildroot) is added to that br2-external tree
-  - upstream Buildroot adds this package
-  - user updates to the new Buildroot
+Applied, thanks.
 
-In this case, the result in undefined, and we can't make any guarantee
-on the result (working or not).
-
-Add a sanity check so that a package redefinition gets caught.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile               |    1 +
- package/pkg-generic.mk |    9 +++++++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 8e3f657..caf4a91 100644
---- a/Makefile
-+++ b/Makefile
-@@ -334,6 +334,7 @@ unexport O
- GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
- 
- PACKAGES :=
-+PACKAGES_ALL :=
- 
- # silent mode requested?
- QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 8b189fe..1ae0315 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -341,6 +341,14 @@ endef
- 
- define inner-generic-package
- 
-+# Ensure the package is only declared once, i.e. do not accept that a
-+# package be re-defined by a br2-external tree
-+ifneq ($(call strip,$(filter $(1),$(PACKAGES_ALL))),)
-+$$(error Package '$(1)' defined a second time in '$(pkgdir)'; \
-+	previous definition was in '$$($(2)_PKGDIR)')
-+endif
-+PACKAGES_ALL += $(1)
-+
- # Define default values for various package-related variables, if not
- # already defined. For some variables (version, source, site and
- # subdir), if they are undefined, we try to see if a variable without
-@@ -351,6 +359,7 @@ define inner-generic-package
- $(2)_TYPE                       =  $(4)
- $(2)_NAME			=  $(1)
- $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
-+$(2)_PKGDIR			=  $(pkgdir)
- 
- # Keep the package version that may contain forward slashes in the _DL_VERSION
- # variable, then replace all forward slashes ('/') by underscores ('_') to
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
