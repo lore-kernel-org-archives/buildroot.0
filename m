@@ -1,127 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 11:49:23 +0100
-Subject: [Buildroot] Illegal instruction by python's xmlrpclib on
- powerpc64, gcc-4.9
-In-Reply-To: <CAM+bi4sGFXwL3AqiqmVoxQtOXXVyHH32sVEfpKp+-0PO32afpg@mail.gmail.com>
-References: <CAM+bi4sfbXMkgow7-ku+u2f5ypEM1WGPAuRRvkkjUA-Z05KnqQ@mail.gmail.com>
- <20151103151730.1e9dcc3c@free-electrons.com>
- <CAM+bi4sGFXwL3AqiqmVoxQtOXXVyHH32sVEfpKp+-0PO32afpg@mail.gmail.com>
-Message-ID: <20151104114923.67eb85d6@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 4 Nov 2015 11:53:51 +0100
+Subject: [Buildroot] [PATCH v3 11/13] package/dhcp: systemd: support
+	IPv6 lease file
+In-Reply-To: <5639DF94.4000505@wsystem.com>
+References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <1445734779-7212-11-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <CAGduivxGsOm8DRoBsqDAMHx3dkC381C5TvXq_peYiKd1yizyvg@mail.gmail.com>
+ <5639DF94.4000505@wsystem.com>
+Message-ID: <CAGduivyAygSdLT1pmrOCD7mHO8xC2UvHOP2rAk2MnChhPMHmiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alvaro Gamez,
+On Wed, Nov 4, 2015 at 11:36 AM, Beno?t Th?baudeau <benoit@wsystem.com>
+wrote:
 
-On Wed, 4 Nov 2015 11:18:32 +0100, Alvaro Gamez wrote:
+> Maxime, all,
+>
+> On 04/11/2015 11:21, Maxime Hadjinlian wrote:
+> > Hi Benoit, all
+> >
+> > On Sun, Oct 25, 2015 at 2:59 AM, Beno?t Th?baudeau <
+> benoit.thebaudeau.dev at gmail.com <mailto:benoit.thebaudeau.dev@gmail.com>>
+> wrote:
+> >
+> >     The IPv6 lease file has a different name.
+> >
+> >     Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com
+> <mailto:benoit.thebaudeau.dev@gmail.com>>
+> >
+> >     ---
+> >     Changes v2 -> v3: new patch.
+> >     ---
+> >      package/dhcp/dhcp.mk <http://dhcp.mk> | 2 ++
+> >      1 file changed, 2 insertions(+)
+> >
+> >     diff --git a/package/dhcp/dhcp.mk <http://dhcp.mk> b/package/dhcp/
+> dhcp.mk <http://dhcp.mk>
+> >     index c05e694..3aa1577 100644
+> >     --- a/package/dhcp/dhcp.mk <http://dhcp.mk>
+> >     +++ b/package/dhcp/dhcp.mk <http://dhcp.mk>
+> >     @@ -83,6 +83,8 @@ define DHCP_INSTALL_INIT_SYSTEMD
+> >                     $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
+> >             echo "f /var/lib/dhcp/dhcpd.leases - - - - -" >> \
+> >                     $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
+> >     +       echo "f /var/lib/dhcp/dhcpd6.leases - - - - -" >> \
+> >     +               $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
+> >      endef
+> >      endif
+> >
+> > Reviewed-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com <mailto:
+> maxime.hadjinlian at gmail.com>>
+> >
+> > A question though, from the manual page of dhcpd, by default it starts
+> as an IPv6 server should we have, two services one with '-4' and one with
+> '-6' ? And it's left to the user to specify it in the "$OPTIONS" ? Maybe
+> this should be mentioned somewhere ?
+>
+> '-4' is the default, not '-6'.
 
-> Somehow sqrt(x) is failing? Here is this function dissasembled by gdb:
-> Dump of assembler code for function math_sqrt:
->    0x00003fff8f80c690 <+0>:    mflr    r0
->    0x00003fff8f80c694 <+4>:    stfd    f30,-16(r1)
->    0x00003fff8f80c698 <+8>:    stfd    f31,-8(r1)
->    0x00003fff8f80c69c <+12>:    mr      r3,r4
->    0x00003fff8f80c6a0 <+16>:    std     r31,-24(r1)
->    0x00003fff8f80c6a4 <+20>:    std     r0,16(r1)
->    0x00003fff8f80c6a8 <+24>:    stdu    r1,-144(r1)
->    0x00003fff8f80c6ac <+28>:    bl      0x3fff8f806dac
-> <00000017.plt_call.PyFloat_AsDouble>
->    0x00003fff8f80c6b0 <+32>:    ld      r2,40(r1)
->    0x00003fff8f80c6b4 <+36>:    addis   r9,r2,-2
->    0x00003fff8f80c6b8 <+40>:    lfs     f0,28480(r9)
->    0x00003fff8f80c6bc <+44>:    fmr     f30,f1
->    0x00003fff8f80c6c0 <+48>:    fcmpu   cr7,f1,f0
->    0x00003fff8f80c6c4 <+52>:    bne     cr7,0x3fff8f80c6dc <math_sqrt+76>
->    0x00003fff8f80c6c8 <+56>:    bl      0x3fff8f8070bc
-> <00000017.plt_call.PyErr_Occurred>
->    0x00003fff8f80c6cc <+60>:    ld      r2,40(r1)
->    0x00003fff8f80c6d0 <+64>:    li      r9,0
->    0x00003fff8f80c6d4 <+68>:    cmpdi   cr7,r3,0
->    0x00003fff8f80c6d8 <+72>:    bne     cr7,0x3fff8f80c73c <math_sqrt+172>
-> => 0x00003fff8f80c6dc <+76>:    fsqrt   f31,f30
-> 
-> 
-> So, I've created the following test code:
-> #include <stdio.h>
-> #include <math.h>
-> 
-> int main(int argc, char *argv[])
-> {
->     double d=4, sd;
->     sd = sqrt(d);
->     printf("%f\n", sd);
->     return 0;
-> }
-> 
-> When compiled with NO optimizations, it receives SIGILL on:
-> Dump of assembler code for function .sqrtl:
->    0x00003fffa154c690 <+0>:    addis   r9,r2,-6
->    0x00003fffa154c694 <+4>:    fmr     f2,f1
->    0x00003fffa154c698 <+8>:    lfd     f0,1240(r9)
->    0x00003fffa154c69c <+12>:    fcmpu   cr7,f1,f0
->    0x00003fffa154c6a0 <+16>:    blt     cr7,0x3fffa154c6b0 <.sqrtl+32>
-> => 0x00003fffa154c6a4 <+20>:    fsqrt   f1,f2
+If I look at ./server/dhcpd.8 in the sources of dhcp-4.1-ESVR12, it clearly
+states:
 
-Ok, so fsqrt is not available on this CPU core.
+-6 Run as a DHCPv6 server. This is the default and cannot be combined with
+-4.
 
-> When compiled with -O1, it doesn't receive SIGILL and correctly prints 2 as
-> sqrt(4).
-> The difference seems to be that without optimization, sqrt results in:
->         bl sqrt
-> While when optimized, that call disappears.
+A single instance of dhcpd cannot be run with
+> both '-4' and '-6'. I don't know if it's possible (or desirable) to safely
+> run
+> simultaneously two instances of dhcpd, one with '-4' and the other one with
+> '-6'.
+>
+Well it could be useful if you are trying to build a network appliance and
+you want to support both stack. So you would want to start two processes
+with different options. Maybe that's something that should be left to the
+users to figure out.
 
-Ah, yes. This is because gcc is smart and realizes that:
+>
+> "$OPTIONS" is designed exactly for such things. Users should read the man
+> page
+> of dhcpd to know what may fit in there.
+>
+I understood what was "$OPTIONS" about, I just worry that it's a bit
+"hidden" for the users, but maybe they should know what they are doing.
 
-	double d = 4;
-	sd = sqrt(d);
-
-will always result to sd = 2, so at -O1, it optimizes that.
-
-If you change your code to:
-
-double foo(double a)
-{
-	return sqrt(a);
-}
-
-int main(void)
-{
-	printf("%f\n", foo(4));
-}
-
-then it should not be optimized, even at -O1. Or maybe it will be
-optimized if foo() is in the same file as main() if gcc automatically
-inlines the function. But if you put foo() in a separate C file, built
-into its own object file, it for sure will not optimize (unless you
-enable LTO).
-
-> After all this, it definitely seems to be that fsqrt instruction is the one
-> at fault here.
-> By doing a simple google search for "e6500 fsqrt" I've come across several
-> posts that seem to indicate that e6500's FPU does not in fact support fsqrt
-> instruction. For example, this:
-> http://lists.openembedded.org/pipermail/openembedded-core/2012-September/069345.html
-> 
-> I'm gonna be trying this again once the whole compilation finishes with
-> glibc-2.22, just in case it's been solved there. If not, I don't know if a
-> patch in the fashion of that in the mailing list above should be provided
-> for buildroot's glibc package or if it should be sent to glibc mailing
-> list, or possibly both.
-
-I believe this problem might be fixed by glibc commit
-08cee2a464f614a6d4275b5af6c52481f1aa16e6, which has been merged since
-glibc 2.21. Which glibc version have you been using so far ?
-
-See
-https://sourceware.org/git/?p=glibc.git;a=commit;h=08cee2a464f614a6d4275b5af6c52481f1aa16e6
-and https://sourceware.org/bugzilla/show_bug.cgi?id=16576.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>
+> Best regards,
+> Beno?t
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151104/e8920b7b/attachment.html>
