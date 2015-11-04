@@ -1,28 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Nov 2015 00:06:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libass: add asm support for
- Intel archs
-In-Reply-To: <1438441967-18854-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1438441967-18854-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151105000643.768990c9@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 5 Nov 2015 00:10:50 +0100
+Subject: [Buildroot] [PATCH] docs/manual: fix typo in $(FOO_PKGDIR)
+	documentation
+Message-ID: <1446678650-17966-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ docs/manual/adding-packages-generic.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sat,  1 Aug 2015 17:12:47 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libass/libass.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-
-Applied, thanks.
-
-Thomas
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 02a43d6..1c25c4e 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -498,7 +498,7 @@ In the action definitions, you can use the following variables:
+ * +$(FOO_PKGDIR)+ contains the path to the directory containing the
+   +foo.mk+ and +Config.in+ files. This variable is useful when it is
+   necessary to install a file bundled in Buildroot, like a runtime
+-  configuration file, a splashscren image...
++  configuration file, a splashscreen image...
+ 
+ * +$(@D)+, which contains the directory in which the package source
+   code has been uncompressed.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.2
