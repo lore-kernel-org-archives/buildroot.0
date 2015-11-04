@@ -1,7 +1,9 @@
 From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <noe.rubinstein@gmail.com>
-Date: Wed,  4 Nov 2015 18:47:04 +0100
-Subject: [Buildroot] [PATCH v2 1/2] trousers: new package
-Message-ID: <1446659225-30438-1-git-send-email-nrubinstein@aldebaran.com>
+Date: Wed,  4 Nov 2015 18:47:05 +0100
+Subject: [Buildroot] [PATCH v2 2/2] tpm-tools: new package
+In-Reply-To: <1446659225-30438-1-git-send-email-nrubinstein@aldebaran.com>
+References: <1446659225-30438-1-git-send-email-nrubinstein@aldebaran.com>
+Message-ID: <1446659225-30438-2-git-send-email-nrubinstein@aldebaran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,74 +24,67 @@ Changes since v1:
 * More verbose package description
 * Cosmetic changes
 ---
- package/Config.in              |  1 +
- package/trousers/Config.in     | 11 +++++++++++
- package/trousers/trousers.hash |  3 +++
- package/trousers/trousers.mk   | 17 +++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/trousers/Config.in
- create mode 100644 package/trousers/trousers.hash
- create mode 100644 package/trousers/trousers.mk
+ package/Config.in                |  1 +
+ package/tpm-tools/Config.in      |  8 ++++++++
+ package/tpm-tools/tpm-tools.hash |  3 +++
+ package/tpm-tools/tpm-tools.mk   | 13 +++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/tpm-tools/Config.in
+ create mode 100644 package/tpm-tools/tpm-tools.hash
+ create mode 100644 package/tpm-tools/tpm-tools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f0ddf0c..850cb83 100644
+index 850cb83..ad77244 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -765,6 +765,7 @@ menu "Crypto"
  	source "package/nettle/Config.in"
  	source "package/openssl/Config.in"
  	source "package/polarssl/Config.in"
-+	source "package/trousers/Config.in"
++	source "package/tpm-tools/Config.in"
+ 	source "package/trousers/Config.in"
  endmenu
  
- menu "Database"
-diff --git a/package/trousers/Config.in b/package/trousers/Config.in
+diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
 new file mode 100644
-index 0000000..a740c00
+index 0000000..0c25c76
 --- /dev/null
-+++ b/package/trousers/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_TROUSERS
-+	bool "trousers"
++++ b/package/tpm-tools/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_TPM_TOOLS
++	bool "tpm-tools"
++	select BR2_PACKAGE_TROUSERS
 +	depends on BR2_PACKAGE_OPENSSL
 +	help
-+	  The open-source TCG Software Stack (TSS).
-+
-+	  This library enables the use of a Trusted Platform Module that
-+	  complies with the TPM specification, version 1.2. It implements the
-+	  TSS specification, version 1.2.
++	  Tools to manage and diagnose a TPM
 +
 +	  http://trousers.sourceforge.net/
-diff --git a/package/trousers/trousers.hash b/package/trousers/trousers.hash
+diff --git a/package/tpm-tools/tpm-tools.hash b/package/tpm-tools/tpm-tools.hash
 new file mode 100644
-index 0000000..997cfa9
+index 0000000..8c1ff89
 --- /dev/null
-+++ b/package/trousers/trousers.hash
++++ b/package/tpm-tools/tpm-tools.hash
 @@ -0,0 +1,3 @@
-+# http://sourceforge.net/projects/trousers/files/trousers/0.3.13/
-+sha1 d23f1a3df4febffc4174f5cca7d1c54230477bb2 trousers-0.3.13.tar.gz
-+md5  ad508f97b406f6e48cd90e85d78e7ca8         trousers-0.3.13.tar.gz
-diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
++# http://sourceforge.net/projects/trousers/files/tpm-tools/1.3.8/
++sha1 f2c799ac8dc78f3537e1dbe4ae7c6e93f37e868c tpm-tools-1.3.8.tar.gz
++md5  85a978c4e03fefd4b73cbeadde7c4d0b         tpm-tools-1.3.8.tar.gz
+diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
 new file mode 100644
-index 0000000..86366e9
+index 0000000..d6fea7b
 --- /dev/null
-+++ b/package/trousers/trousers.mk
-@@ -0,0 +1,17 @@
++++ b/package/tpm-tools/tpm-tools.mk
+@@ -0,0 +1,13 @@
 +#############################################################
 +#
-+# trousers
++# tpm-tools
 +#
 +##############################################################
 +
-+TROUSERS_VERSION = 0.3.13
-+TROUSERS_SOURCE = trousers-$(TROUSERS_VERSION).tar.gz
-+TROUSERS_SITE = http://downloads.sourceforge.net/project/trousers/trousers/$(TROUSERS_VERSION)
-+TROUSERS_INSTALL_STAGING = YES
-+TROUSERS_DEPENDENCIES = openssl
-+
-+# The TrouSerS build system attempts to create the tss user and group on the
-+# host system. Disable the user checking feature as a workaround.
-+TROUSERS_CONF_OPTS += --disable-usercheck
++TPM_TOOLS_VERSION = 1.3.8
++TPM_TOOLS_SOURCE = tpm-tools-$(TPM_TOOLS_VERSION).tar.gz
++TPM_TOOLS_SITE = http://downloads.sourceforge.net/project/trousers/tpm-tools/$(TPM_TOOLS_VERSION)
++TPM_TOOLS_STRIP_COMPONENTS = 2
++TPM_TOOLS_DEPENDENCIES = trousers
 +
 +$(eval $(autotools-package))
 -- 
