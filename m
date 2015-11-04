@@ -1,34 +1,35 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed, 04 Nov 2015 21:21:41 +0000
-Subject: [Buildroot] [PATCHv6] package/golang: new package
-In-Reply-To: <20151104183119.107ccc45@free-electrons.com>
-References: <1438277053-10053-1-git-send-email-yann.morin.1998@free.fr>
- <20151021230701.4701e646@free-electrons.com>
- <CA+h8R2p5xgF7rJJW5z0AzB7b359F=S9yWrXpiTmCVK-D0Sk8pw@mail.gmail.com>
- <CA+h8R2rbM2BTMLLuczMk741Otm3EBySYPEZi8QbPZrGzf=41zQ@mail.gmail.com>
- <CA+h8R2r33RBdHNCq6dyZFE5FE_FQ2yJFjWqBGt8+wgOPCbeO+w@mail.gmail.com>
- <20151104172118.GB4072@free.fr> <20151104183119.107ccc45@free-electrons.com>
-Message-ID: <CA+h8R2pTn48GzacG14mBVWJcReFCdGH5jRTRp1wwoxSuZF98PQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Nov 2015 22:24:17 +0100
+Subject: [Buildroot] [git commit] protobuf: fix legal-info
+Message-ID: <20151104212427.7AAA481E18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=f700463c66376283ab4bffc391209bf20c63088d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Would you like to address these or should I? If I add the command with env
-variables variable as well as the docs, should I respin it or should I send
-it to you? What's the best way to do this?
+The file changed from COPYING.txt to LICENSE, fixes:
+http://autobuild.buildroot.net/results/c40/c40e9b6030584a4fd8b3e46f78f6d0702d1dc11e/
 
-Correct. Also, I think I raised a few comments (about gofmt, about the
-> situations where go in the target is useful). Those comments were
-> answered, but it would be nicer if the answers were turned into actual
-> comments into the code, or in the Config.in help text.
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/protobuf/protobuf.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks!
-Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151104/bef5c71b/attachment.html>
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 144e5fb..3eeadfc 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ PROTOBUF_VERSION = v2.6.1
+ PROTOBUF_SITE = $(call github,google,protobuf,$(PROTOBUF_VERSION))
+ PROTOBUF_LICENSE = BSD-3c
+-PROTOBUF_LICENSE_FILES = COPYING.txt
++PROTOBUF_LICENSE_FILES = LICENSE
+ # no configure script
+ PROTOBUF_AUTORECONF = YES
+ 
