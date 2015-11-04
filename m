@@ -1,73 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 Nov 2015 22:26:43 +0100
-Subject: [Buildroot] [PATCH v3 13/13] package/dhcp: systemd: add
- dhcrelay service file
-In-Reply-To: <563A09A7.10002@wsystem.com>
-References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <1445734779-7212-13-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <CAGduivzruYhUvjMdxw12EB+FaemiJX3p=zsfUra-Ma4dbkEC8g@mail.gmail.com>
- <563A09A7.10002@wsystem.com>
-Message-ID: <563A7813.9080605@mind.be>
+Date: Wed, 4 Nov 2015 22:39:32 +0100
+Subject: [Buildroot] [PATCH] gcc-final: hard link TARGET-cc -> TARGET-gcc
+In-Reply-To: <1446622467-21916-1-git-send-email-steven@uplinklabs.net>
+References: <1446622467-21916-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <563A7B14.9090507@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04-11-15 14:35, Beno?t Th?baudeau wrote:
-> Hi Maxime, all,
+On 04-11-15 08:34, Steven Noonan wrote:
+> Doing a symlink results in incorrect behavior:
 > 
-> On 04/11/2015 12:24, Maxime Hadjinlian wrote:
->> On Sun, Oct 25, 2015 at 2:59 AM, Beno?t Th?baudeau <benoit.thebaudeau.dev at gmail.com <mailto:benoit.thebaudeau.dev@gmail.com>> wrote:
-[snip]
->>     +ExecStart=/usr/sbin/dhcrelay -q -pf /run/dhcrelay.pid $OPTIONS $IFCMD $SERVERS
->>
->> Why don't we want /var/run/dhcrelay.pid which is the default ? 
+>     $ x86_64-buildroot-linux-gnux32-cc
+>     --version
+>     ccache: error: execv of [...]/x86_64-buildroot-linux-gnux32-cc.br_real.br_real failed: No such file or directory
 > 
-> I did that to be consistent with what had been done for dhcpd.service.
+>     $ x86_64-buildroot-linux-gnux32-gcc --version
+>     x86_64-buildroot-linux-gnux32-gcc.br_real (Buildroot 2015.11-git-00965-g8d89653-dirty) 5.2.0
+>     Copyright (C) 2015 Free Software Foundation, Inc.
+>     This is free software; see the source for copying conditions.  There is NO
+>     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 > 
-> /run is the new norm, but Buildroot configures the dhcp package to use /var/run
-> as the default, and the SysV init scripts stick to that.
+> Note the double .br_real on the invocation by toolchain-wrapper.
 > 
-> I don't know Buildroot's rules about that if any. Maybe dhcp.mk should just be
-> updated to use /run. Thomas?
+> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 
- Since /var/run is currently a symlink to /run, it would be good to update
-dhcp.mk as you propose. Or perhaps even remove those configures since I think
-they're the default anyway.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+ However...
+
+> ---
+>  package/gcc/gcc-final/gcc-final.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index 8ac2968..7ccc533 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -91,7 +91,7 @@ HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
+>  # Make sure we have 'cc'
+>  define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+>  	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
+> -		ln -snf $(GNU_TARGET_NAME)-gcc \
+> +		cp -l $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc \
+
+ Why not ln -f instead of cp -l?
 
  Regards,
  Arnout
 
-> 
->>     +KillSignal=SIGINT
->>
->> I did not try to run it, but it doesn't react to SIGTERM ? I did not see anything in the code to prevent it but I only looked at it pretty quickly.
-> 
-> It's also from dhcpd.service. I've searched around and I've not found a good
-> reason for it, but there must be one. I'll try and dig more.
-> 
->>     +EnvironmentFile=/etc/default/dhcrelay
->>
->> Should be 'EnvironmentFile=-/etc/default/dhcrelay'
-> 
-> This is on purpose. This file is required because IFCMD and SERVERS are required
-> too.
-> 
->>     +
->>     +[Install]
->>     +WantedBy=multi-user.target
->>     --
->>     2.1.4
-> 
-> Best regards,
-> Beno?t
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
+>  	fi
+>  endef
 > 
 
 
