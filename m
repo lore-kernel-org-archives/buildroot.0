@@ -1,164 +1,170 @@
-From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
-Date: Wed, 4 Nov 2015 14:35:35 +0100
-Subject: [Buildroot] [PATCH v3 13/13] package/dhcp: systemd: add
-	dhcrelay service file
-In-Reply-To: <CAGduivzruYhUvjMdxw12EB+FaemiJX3p=zsfUra-Ma4dbkEC8g@mail.gmail.com>
-References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <1445734779-7212-13-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <CAGduivzruYhUvjMdxw12EB+FaemiJX3p=zsfUra-Ma4dbkEC8g@mail.gmail.com>
-Message-ID: <563A09A7.10002@wsystem.com>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Wed, 04 Nov 2015 22:40:27 +0900
+Subject: [Buildroot] [PATCH v5 1/1] gauche: new package
+Message-ID: <201511041340.tA4DeS3s025833@ms-omx01.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime, all,
+Gauche is an R7RS Scheme implementation developed to be a handy script
+interpreter, which allows programmers and systemadministrators to write
+small to large scripts for their daily chores. Quick startup, built-in
+system interface, native multilingual support are some of its goals.
 
-On 04/11/2015 12:24, Maxime Hadjinlian wrote:
-> On Sun, Oct 25, 2015 at 2:59 AM, Beno?t Th?baudeau <benoit.thebaudeau.dev at gmail.com <mailto:benoit.thebaudeau.dev@gmail.com>> wrote:
-> 
->     Add a systemd service file to start dhcrelay.
-> 
->     The network interfaces to listen on must be set via the variable IFCMD
->     in /etc/default/dhcrelay, e.g.:
-> 
->         IFCMD="-i eth0 -i eth1"
-> 
->     The "upstream" servers to pass the queries along to must be set via the
->     variable SERVERS in the same file, e.g.:
-> 
->         SERVERS="server0 server1"
-> 
->     Extra command line options can be set via the variable OPTIONS in the
->     same file.
-> 
->     Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev at gmail.com <mailto:benoit.thebaudeau.dev@gmail.com>>
-> 
->     ---
->     Changes v2 -> v3: new patch.
->     ---
->      package/dhcp/dhcp.mk <http://dhcp.mk>          | 45 ++++++++++++++++++++++++++++---------------
->      package/dhcp/dhcrelay.service | 13 +++++++++++++
->      2 files changed, 42 insertions(+), 16 deletions(-)
->      create mode 100644 package/dhcp/dhcrelay.service
-> 
->     diff --git a/package/dhcp/dhcp.mk <http://dhcp.mk> b/package/dhcp/dhcp.mk <http://dhcp.mk>
->     index 3aa1577..4ba302b 100644
->     --- a/package/dhcp/dhcp.mk <http://dhcp.mk>
->     +++ b/package/dhcp/dhcp.mk <http://dhcp.mk>
->     @@ -37,6 +37,23 @@ define DHCP_INSTALL_SERVER
->             $(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
->                     $(TARGET_DIR)/etc/dhcp/dhcpd.conf
->      endef
->     +
->     +define DHCP_INSTALL_SERVER_INIT_SYSTEMD
->     +       $(INSTALL) -D -m 644 package/dhcp/dhcpd.service \
->     +               $(TARGET_DIR)/usr/lib/systemd/system/dhcpd.service
->     +
->     +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->     +
->     +       ln -sf ../../../../usr/lib/systemd/system/dhcpd.service \
->     +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dhcpd.service
->     +
->     +       echo "d /var/lib/dhcp 0755 - - - -" > \
->     +               $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
->     +       echo "f /var/lib/dhcp/dhcpd.leases - - - - -" >> \
->     +               $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
->     +       echo "f /var/lib/dhcp/dhcpd6.leases - - - - -" >> \
->     +               $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
->     +endef
->      endif
-> 
->      ifeq ($(BR2_PACKAGE_DHCP_RELAY),y)
->     @@ -46,6 +63,16 @@ define DHCP_INSTALL_RELAY
->             $(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/dhcrelay \
->                     $(TARGET_DIR)/usr/sbin/dhcrelay
->      endef
->     +
->     +define DHCP_INSTALL_RELAY_INIT_SYSTEMD
->     +       $(INSTALL) -D -m 644 package/dhcp/dhcrelay.service \
->     +               $(TARGET_DIR)/usr/lib/systemd/system/dhcrelay.service
->     +
->     +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->     +
->     +       ln -sf ../../../../usr/lib/systemd/system/dhcrelay.service \
->     +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dhcrelay.service
->     +endef
->      endif
-> 
->      ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
->     @@ -69,24 +96,10 @@ define DHCP_INSTALL_INIT_SYSV
->                     $(TARGET_DIR)/etc/init.d/S80dhcp-relay
->      endef
-> 
->     -ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
->      define DHCP_INSTALL_INIT_SYSTEMD
->     -       $(INSTALL) -D -m 644 package/dhcp/dhcpd.service \
->     -               $(TARGET_DIR)/usr/lib/systemd/system/dhcpd.service
->     -
->     -       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->     -
->     -       ln -sf ../../../../usr/lib/systemd/system/dhcpd.service \
->     -               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dhcpd.service
->     -
->     -       echo "d /var/lib/dhcp 0755 - - - -" > \
->     -               $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
->     -       echo "f /var/lib/dhcp/dhcpd.leases - - - - -" >> \
->     -               $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
->     -       echo "f /var/lib/dhcp/dhcpd6.leases - - - - -" >> \
->     -               $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
->     +       $(DHCP_INSTALL_SERVER_INIT_SYSTEMD)
->     +       $(DHCP_INSTALL_RELAY_INIT_SYSTEMD)
->      endef
->     -endif
-> 
->      define DHCP_INSTALL_TARGET_CMDS
->             $(DHCP_INSTALL_RELAY)
->     diff --git a/package/dhcp/dhcrelay.service b/package/dhcp/dhcrelay.service
->     new file mode 100644
->     index 0000000..5a1410e
->     --- /dev/null
->     +++ b/package/dhcp/dhcrelay.service
->     @@ -0,0 +1,13 @@
->     +[Unit]
->     +Description=DHCP relay
->     +After=network.target
->     +
->     +[Service]
->     +Type=forking
->     +PIDFile=/run/dhcrelay.pid
->     +ExecStart=/usr/sbin/dhcrelay -q -pf /run/dhcrelay.pid $OPTIONS $IFCMD $SERVERS
-> 
-> Why don't we want /var/run/dhcrelay.pid which is the default ? 
+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v4 -> v5 (refelect comment from Thomas)
+- 2 patches for configure and configure.ac -> single patch.
+- improve explanation why we need to specify -std=gnu99 in GAUCHE_CONF_ENV.
 
-I did that to be consistent with what had been done for dhcpd.service.
+Changes v3 -> v4 (reflect comment from Arnout)
+- fix some miss spell in help text.
+- fix comment in patch file.
+- add patch file for configure.ac (same fix with configure).
+- fix GAUCHE_LICENSE
 
-/run is the new norm, but Buildroot configures the dhcp package to use /var/run
-as the default, and the SysV init scripts stick to that.
+Changes v2 -> v3
+- add comment to patch file why I touch configure directly instead of
+  configure.ac
 
-I don't know Buildroot's rules about that if any. Maybe dhcp.mk should just be
-updated to use /run. Thomas?
+Changes v1 -> v2
+- change help description to written in project's web page.
+- add brief description and SoB in patch file.
+- change depens on BR2_TOOLCHAIN_HAS_THREADS -> 
+    BR2_TOOLCHAIN_HAS_THREADS_NPTL.
+- add brief description why "-std=gnu99" needed in GAUCHE_CONF_ENV.
+- add depends on BR2_ARCH_HAS_ATOMICS (Boehm gc need this).
+- add # fork() to 'depends on BR2_USE_MMU'.
+- remove empty comment line in hash file.
+- remove unnecessary GAUCHE_CONF_OPTS.
+---
+ package/Config.in                       |    1 +
+ package/gauche/0001-fix-so-suffix.patch |   31 +++++++++++++++++++++++++++++++
+ package/gauche/Config.in                |   18 ++++++++++++++++++
+ package/gauche/gauche.hash              |    2 ++
+ package/gauche/gauche.mk                |   23 +++++++++++++++++++++++
+ 5 files changed, 75 insertions(+), 0 deletions(-)
+ create mode 100644 package/gauche/0001-fix-so-suffix.patch
+ create mode 100644 package/gauche/Config.in
+ create mode 100644 package/gauche/gauche.hash
+ create mode 100644 package/gauche/gauche.mk
 
->     +KillSignal=SIGINT
-> 
-> I did not try to run it, but it doesn't react to SIGTERM ? I did not see anything in the code to prevent it but I only looked at it pretty quickly.
+diff --git a/package/Config.in b/package/Config.in
+index f0ddf0c..f4affa8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -459,6 +459,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
++	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
+ 	source "package/jamvm/Config.in"
+diff --git a/package/gauche/0001-fix-so-suffix.patch b/package/gauche/0001-fix-so-suffix.patch
+new file mode 100644
+index 0000000..b65e269
+--- /dev/null
++++ b/package/gauche/0001-fix-so-suffix.patch
+@@ -0,0 +1,31 @@
++With uclibc or musl configuration, $host does not match to '*-linux-gnu*'.
++I touch configure directly instead of configure.ac because autoreconf
++failed by version mismatch of autotools.
++
++Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
++
++diff -ur a/configure b/configure
++--- a/configure	2014-07-20 15:15:05.000000000 +0900
+++++ b/configure	2015-10-20 21:52:32.791442291 +0900
++@@ -6843,7 +6843,7 @@
++     SHLIB_MAIN_LDFLAGS=""
++     SHLIB_OK=ok
++     ;;
++-  *-linux-gnu*|*-*-gnu*|*freebsd*|*dragonfly*)
+++  *-linux-*|*-*-gnu*|*freebsd*|*dragonfly*)
++     SHLIB_SO_CFLAGS="-fPIC"
++     SHLIB_SO_LDFLAGS="$rpath -shared -o"
++     SHLIB_SO_SUFFIX="so"
++
++diff -ur a/configure.ac b/configure.ac
++--- a/configure.ac	2015-10-21 21:33:17.370000200 +0900
+++++ b/configure.ac	2015-10-21 21:33:39.784110527 +0900
++@@ -572,7 +572,7 @@
++     SHLIB_MAIN_LDFLAGS=""
++     SHLIB_OK=ok
++     ;;
++-  *-linux-gnu*|*-*-gnu*|*freebsd*|*dragonfly*)
+++  *-linux-*|*-*-gnu*|*freebsd*|*dragonfly*)
++     SHLIB_SO_CFLAGS="-fPIC"
++     SHLIB_SO_LDFLAGS="$rpath -shared -o"
++     SHLIB_SO_SUFFIX="so"
+diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+new file mode 100644
+index 0000000..eee6a78
+--- /dev/null
++++ b/package/gauche/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_GAUCHE
++	bool "gauche"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_ARCH_HAS_ATOMICS
++	help
++	  Gauche is an R7RS Scheme implementation developed to be a
++	  handy script interpreter, which allows programmers and
++	  systemadministrators to write small to large scripts for their
++	  daily chores. Quick startup, built-in system interface, native
++	  multilingual support are some of its goals.
++
++	  http://practical-scheme.net/gauche/
++
++comment "gauche needs a toolchain w/ NPTL"
++	depends on BR2_USE_MMU
++	depends on BR2_ARCH_HAS_ATOMICS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/gauche/gauche.hash b/package/gauche/gauche.hash
+new file mode 100644
+index 0000000..9ec106a
+--- /dev/null
++++ b/package/gauche/gauche.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 7b18bcd70beaced1e004594be46c8cff95795318f6f5830dd2a8a700410fc149  Gauche-0.9.4.tgz
+diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
+new file mode 100644
+index 0000000..c0563b2
+--- /dev/null
++++ b/package/gauche/gauche.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# gauche
++#
++################################################################################
++
++GAUCHE_VERSION = 0.9.4
++GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
++GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
++GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
++GAUCHE_LICENSE_FILES = COPYING
++GAUCHE_DEPENDENCIES = host-gauche
++
++# Detection of c99 support in configure fails without WCHAR. To enable
++# automatic detection of c99 support by configure, we need to enable
++# WCHAR in toolchain. But actually we do not need WCHAR at gauche
++# runtime. So reuesting WCHAR in toolchain just for automatic detection
++# will be overkill. To solve this, explicitly -std=gnu99 is specified
++# here.
++GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++
++$(eval $(host-autotools-package))
++$(eval $(autotools-package))
+-- 
+1.7.1
 
-It's also from dhcpd.service. I've searched around and I've not found a good
-reason for it, but there must be one. I'll try and dig more.
-
->     +EnvironmentFile=/etc/default/dhcrelay
-> 
-> Should be 'EnvironmentFile=-/etc/default/dhcrelay'
-
-This is on purpose. This file is required because IFCMD and SERVERS are required
-too.
-
->     +
->     +[Install]
->     +WantedBy=multi-user.target
->     --
->     2.1.4
-
-Best regards,
-Beno?t
+============================================================
+    Hiroshi Kawashima
