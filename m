@@ -1,50 +1,75 @@
-From: Antoine Tenart <antoine.tenart@free-electrons.com>
-Date: Wed, 4 Nov 2015 11:00:34 +0100
-Subject: [Buildroot] [PATCH] wf111: fix overwriting module files during
- install
-In-Reply-To: <64CA5C49A43E314D9F7DAE05370E2F7B06771305@hed-dc01.hed.local>
-References: <1446569533-25368-1-git-send-email-antoine.tenart@free-electrons.com>
- <20151103183410.0e80264e@free-electrons.com>
- <64CA5C49A43E314D9F7DAE05370E2F7B06771305@hed-dc01.hed.local>
-Message-ID: <20151104100034.GB24888@kwain>
+From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
+Date: Wed, 4 Nov 2015 11:01:24 +0100
+Subject: [Buildroot] [PATCH v3 02/13] package/dhcp: systemd: rename
+	environment file
+In-Reply-To: <CAGduivwTD1Z6GNz5oUCZ8cDVU9kf_PF5iykrR0Z2-Ny9K4zrzA@mail.gmail.com>
+References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <1445734779-7212-2-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <CAGduivynxFaA8G90N8B+E2pbSVWvMryWev80-r2_Z=gKzvjC5g@mail.gmail.com>
+ <CAGduivwTD1Z6GNz5oUCZ8cDVU9kf_PF5iykrR0Z2-Ny9K4zrzA@mail.gmail.com>
+Message-ID: <5639D774.1030501@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 03, 2015 at 11:38:35AM -0600, Matthew Starr wrote:
+Hi Maxime, all,
+
+On 04/11/2015 10:54, Maxime Hadjinlian wrote:
 > 
-> The problem with this is the wf111 package depends on the manufacturer's
-> build and install method through their makefile included in the binary
-> file they
-> provide as an input to the wf111 package.  This is a single step build
-> and install
-> process.  You could make a new set of steps to build and install in the
-> wf111.mk file, but then any manufacturer changes in future versions of
-> the
-> software could and most likely will break the wf111.mk file.
+> 
+> On Wed, Nov 4, 2015 at 10:52 AM, Maxime Hadjinlian <maxime.hadjinlian at gmail.com <mailto:maxime.hadjinlian@gmail.com>> wrote:
+> 
+>     Hi Benoit, all
+> 
+>     On Sun, Oct 25, 2015 at 2:59 AM, Beno?t Th?baudeau <benoit.thebaudeau.dev at gmail.com <mailto:benoit.thebaudeau.dev@gmail.com>> wrote:
+> 
+>         Use the same EnvironmentFile name as the SysV init script for
+>         consistency. The filenames under /etc/default/ are usually just the
+>         package/daemon/service/feature name without any extension, so remove the
+>         ".conf" extension from EnvironmentFile.
+> 
+>         Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev at gmail.com <mailto:benoit.thebaudeau.dev@gmail.com>>
+> 
+>         ---
+>         Changes v2 -> v3: new patch.
+>         ---
+>          package/dhcp/dhcpd.service | 2 +-
+>          1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+>         diff --git a/package/dhcp/dhcpd.service b/package/dhcp/dhcpd.service
+>         index 7b265cb..5989506 100644
+>         --- a/package/dhcp/dhcpd.service
+>         +++ b/package/dhcp/dhcpd.service
+>         @@ -7,7 +7,7 @@ Type=forking
+>          PIDFile=/run/dhcpd.pid
+>          ExecStart=/usr/sbin/dhcpd -q -pf /run/dhcpd.pid $INTERFACES
+>          KillSignal=SIGINT
+>         -EnvironmentFile=/etc/default/dhcpd.conf
+>         +EnvironmentFile=/etc/default/dhcpd
+> 
+>     Maybe this should be:
+>     EnvironmentFile-=/etc/default/dhcpd
+> 
+>     Notice the '-' before the '=', in case the file doesn't exists, it won't print a warning or error the whole service.
+> 
+> My mistake, the '-' should be *AFTER* the '='.
 
-I agree with Matthew, it is not possible to separate the build task from
-the install one using the wf111 top Makefile as is. I see 3 solutions
-here:
+See 06/13.
 
-- We keep it this way, it's not the best solution from a Buildroot point
-  of view but the package maintenance is easier.
-- We make a patch to modify the top Makefile, separating properly the
-  step phase from the install one.
-- We explicitly do the compilation and installation in the wf111.mk
-  file, by copying what is done in the Makefile (the install_static
-  target calls other Makefile, and performs some actions to copy some
-  files to destdir).
+>     When I build dhcp, I did not find a /etc/default folder in my target directory, am I missing something there ?
 
-What do you recommend?
+You might have this question about 13/13 which requires a file in /etc/default,
+but not here because of 06/13. But a default file provided by Buildroot would
+not make sense for 13/13 since the file contents would be application-specific
+though required. In this case, it is up to users to add a rootfs overlay with
+such files.
 
-Thanks,
+>          [Install]
+>          WantedBy=multi-user.target
+>         --
+>         2.1.4
 
-Antoine
-
--- 
-Antoine T?nart, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Beno?t
