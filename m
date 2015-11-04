@@ -1,34 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 17:06:27 +0100
-Subject: [Buildroot] [PATCH v6 1/1] yad: new package
-In-Reply-To: <1446219567-4540-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1446219567-4540-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20151104170627.3ea7ee2d@free-electrons.com>
+From: Steven Noonan <steven@uplinklabs.net>
+Date: Wed,  4 Nov 2015 08:59:04 -0800
+Subject: [Buildroot] [PATCH] protobuf-c: bump version to v1.1.1
+Message-ID: <1446656344-2666-1-git-send-email-steven@uplinklabs.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+---
+ package/protobuf-c/protobuf-c.mk | 2 +-
+ package/protobuf-c/protobuf.hash | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/protobuf-c/protobuf.hash
 
-On Fri, 30 Oct 2015 11:39:27 -0400, James Knight wrote:
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> ---
-> Changes v5 -> v6:
->   - Cleanup yad help formatting to fit Buildroot style (with help from
->      Vicente Olivert Riera).
-
-I've applied after doing a small change:
-
-    [Thomas: remove dependency on libglib2, as it is not tested directly
-    by yad's configure script, and is anyway guaranteed to be available
-    since yad depends on gtk2 or gtk3, which both require libglib2.]
-
-Thanks,
-
-Thomas
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index d73eb25..ee4500e 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROTOBUF_C_VERSION = v1.0.0-rc1
++PROTOBUF_C_VERSION = v1.1.1
+ PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+diff --git a/package/protobuf-c/protobuf.hash b/package/protobuf-c/protobuf.hash
+new file mode 100644
+index 0000000..e973c53
+--- /dev/null
++++ b/package/protobuf-c/protobuf.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 09c5bb187b7a8e86bc0ff860f7df86370be9e8661cdb99c1072dcdab0763562c protobuf-c-1.1.1.tar.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.2
