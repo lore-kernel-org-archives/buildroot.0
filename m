@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 18:56:42 +0100
-Subject: [Buildroot] [PATCH] protobuf: bump to 2.6.1
-In-Reply-To: <1446626241-25745-1-git-send-email-steven@uplinklabs.net>
-References: <1446626241-25745-1-git-send-email-steven@uplinklabs.net>
-Message-ID: <20151104185642.373c3138@free-electrons.com>
+Date: Wed, 4 Nov 2015 18:56:45 +0100
+Subject: [Buildroot] [PATCH] protobuf-c: bump version to v1.1.1
+In-Reply-To: <1446658107-6730-1-git-send-email-steven@uplinklabs.net>
+References: <1446658107-6730-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <20151104185645.060e3702@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,15 @@ To: buildroot@busybox.net
 
 Dear Steven Noonan,
 
-On Wed,  4 Nov 2015 00:37:21 -0800, Steven Noonan wrote:
+On Wed,  4 Nov 2015 09:28:27 -0800, Steven Noonan wrote:
 > Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 > ---
->  package/protobuf/protobuf.hash | 2 ++
->  package/protobuf/protobuf.mk   | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 package/protobuf/protobuf.hash
+>  v2: correcting .hash filename
+>  v3: correcting .hash contents (sheesh, github links to two different tarballs
+>      for the same release version, and I picked the wrong one when creating the
+> 	 hash file)
 
-Applied, thanks. We'll see what the autobuilders have to say :-)
+Applied, thanks.
 
 Thomas
 -- 
