@@ -1,63 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  4 Nov 2015 22:42:39 +0100
-Subject: [Buildroot] [PATCHv2] core/printvars: allow dumping a set of
-	variables
-Message-ID: <1446673359-10358-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Nov 2015 22:48:00 +0100
+Subject: [Buildroot] [git commit] e2fsprogs: prevent undesired cleanup with
+	a usr merged target
+Message-ID: <20151104215007.65CD081E90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dumping our 176164 variables can take quite some time (~12s here). What
-takes the most time is sorting the variables (~9s), followed by the
-parsing of our Makefiles (~3s), with the actual printing in the noise.
+commit: http://git.buildroot.net/buildroot/commit/?id=9a9950dba81eb1ec25ac98080d2b5ab764b704f7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However, sometimes only one or a few variables are needed. For example,
-one may want to retrieve the Linux build dir from a post-build hook (to
-get the Linux' actual .config after our fixups and check for various
-features).
+The following commit prevents the e2fsprogs package from inadvertently
+removing its own binaries when a target includes BusyBox and is
+targeting a usr-merged environment.
 
-Add the possibility to only dump the variables listed in $(VAR) which
-must be passed as a make argument, like so:
+While an action has been added to cleanup BusyBox-provided (if any)
+ext2-related tools when including e2fsprogs, the action will delete
+desired e2fsprogs binaries in an already prepared usr-merged target.
+Adjusting the cleanup to occur before installing e2fsprogs binaries so
+that if a usr-merged target exists, it will first delete the previous
+binaries (if any) followed by installing new binaries.
 
-    $ make -s printvars VARS="LINUX_DIR TOPDIR O"
-    LINUX_DIR=/home/ymorin/dev/buildroot/O/build/linux-4.3 ($(BUILD_DIR)/$(LINUX_BASE_NAME))
-    O=/home/ymorin/dev/buildroot/O/. (/home/ymorin/dev/buildroot/O/.)
-    TOPDIR=/home/ymorin/dev/buildroot/buildroot (/home/ymorin/dev/buildroot/buildroot)
-
-It is also possible to use make-appterns, like:
-
-    $ make -s printvars VARS="BUSYBOX_%"
-
-This is much faster (the time is just about the time it takes to parse
-our Makefiles, 3s here) and easier to parse.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2;
-  - accept make-patterns  (Thomas)
----
- Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/e2fsprogs/e2fsprogs.mk |   15 +++++++++++----
+ 1 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6d34ee2..222c818 100644
---- a/Makefile
-+++ b/Makefile
-@@ -832,9 +832,10 @@ ifeq ($(NEED_WRAPPER),y)
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 178372b..4b81b44 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -106,9 +106,16 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
+ E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
  endif
  
- # printvars prints all the variables currently defined in our Makefiles
-+# or only the variables specified in $(VARS)
- printvars:
- 	@$(foreach V, \
--		$(sort $(.VARIABLES)), \
-+		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
- 		$(if $(filter-out environment% default automatic, \
- 				$(origin $V)), \
- 		$(info $V=$($V) ($(value $V)))))
--- 
-1.9.1
+-# Remove busybox tune2fs and e2label, since we want the e2fsprogs full
+-# blown variants to take precedence, but they are not installed in the
+-# same location.
++# If BusyBox is included, its configuration may supply its own variant
++# of ext2-related tools. Since Buildroot desires having full blown
++# variants take precedence (in this case, e2fsprogs), we want to remove
++# BusyBox's variant of e2fsprogs provided binaries. e2fsprogs targets
++# /usr/{bin,sbin} where BusyBox targets /{bin,sbin}. We will attempt to
++# remove BusyBox-generated ext2-related tools from /{bin,sbin}. We need
++# to do this in the pre-install stage to ensure we do not accidentally
++# remove e2fsprogs's binaries in usr-merged environments (ie. if they
++# are removed, they would be re-installed in this package's install
++# stage).
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ E2FSPROGS_DEPENDENCIES += busybox
+ 
+@@ -119,7 +126,7 @@ define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
+ 	$(RM) -f $(TARGET_DIR)/sbin/tune2fs
+ 	$(RM) -f $(TARGET_DIR)/sbin/e2label
+ endef
+-E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
++E2FSPROGS_PRE_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
+ endif
+ 
+ define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
