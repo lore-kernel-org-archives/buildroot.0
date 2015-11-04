@@ -1,56 +1,49 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 4 Nov 2015 11:21:52 +0100
-Subject: [Buildroot] [PATCH v3 11/13] package/dhcp: systemd: support
-	IPv6 lease file
-In-Reply-To: <1445734779-7212-11-git-send-email-benoit.thebaudeau.dev@gmail.com>
+From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
+Date: Wed, 4 Nov 2015 11:24:20 +0100
+Subject: [Buildroot] [PATCH v3 02/13] package/dhcp: systemd: rename
+	environment file
+In-Reply-To: <20151104111816.6c20529a@free-electrons.com>
 References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <1445734779-7212-11-git-send-email-benoit.thebaudeau.dev@gmail.com>
-Message-ID: <CAGduivxGsOm8DRoBsqDAMHx3dkC381C5TvXq_peYiKd1yizyvg@mail.gmail.com>
+ <1445734779-7212-2-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <CAGduivynxFaA8G90N8B+E2pbSVWvMryWev80-r2_Z=gKzvjC5g@mail.gmail.com>
+ <20151104111816.6c20529a@free-electrons.com>
+Message-ID: <5639DCD4.8030203@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Benoit, all
+Thomas, Gabe, Maxime, all,
 
-On Sun, Oct 25, 2015 at 2:59 AM, Beno?t Th?baudeau <
-benoit.thebaudeau.dev@gmail.com> wrote:
+On 04/11/2015 11:18, Thomas Petazzoni wrote:
+> On Wed, 4 Nov 2015 10:52:10 +0100, Maxime Hadjinlian wrote:
+> 
+>>> diff --git a/package/dhcp/dhcpd.service b/package/dhcp/dhcpd.service
+>>> index 7b265cb..5989506 100644
+>>> --- a/package/dhcp/dhcpd.service
+>>> +++ b/package/dhcp/dhcpd.service
+>>> @@ -7,7 +7,7 @@ Type=forking
+>>>  PIDFile=/run/dhcpd.pid
+>>>  ExecStart=/usr/sbin/dhcpd -q -pf /run/dhcpd.pid $INTERFACES
+>>>  KillSignal=SIGINT
+>>> -EnvironmentFile=/etc/default/dhcpd.conf
+>>> +EnvironmentFile=/etc/default/dhcpd
+>>>
+>> Maybe this should be:
+>> EnvironmentFile-=/etc/default/dhcpd
+> 
+> On the dropbear package, Gabe Evans said it may not be such a good idea
+> to do this EnvironmentFile thing.
 
-> The IPv6 lease file has a different name.
->
-> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
->
-> ---
-> Changes v2 -> v3: new patch.
-> ---
->  package/dhcp/dhcp.mk | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> index c05e694..3aa1577 100644
-> --- a/package/dhcp/dhcp.mk
-> +++ b/package/dhcp/dhcp.mk
-> @@ -83,6 +83,8 @@ define DHCP_INSTALL_INIT_SYSTEMD
->                 $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
->         echo "f /var/lib/dhcp/dhcpd.leases - - - - -" >> \
->                 $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
-> +       echo "f /var/lib/dhcp/dhcpd6.leases - - - - -" >> \
-> +               $(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
->  endef
->  endif
->
-> Reviewed-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+Why? What was the rationale? What would be the alternatives?
 
-A question though, from the manual page of dhcpd, by default it starts as
-an IPv6 server should we have, two services one with '-4' and one with '-6'
-? And it's left to the user to specify it in the "$OPTIONS" ? Maybe this
-should be mentioned somewhere ?
+> Can we settle on a common decision ?
+> 
+> (From my PoV, using this EnvironmentFile looked good as it would be a
+> common mechanism between the systemd and Busybox/sysvinit cases to tune
+> the configuration of services. But Gabe seemed to disagree.)
+> 
+> Could systemd people in Buildroot decide what to do ? :-)
 
-> --
-> 2.1.4
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151104/9be81378/attachment.html>
+Beno?t
