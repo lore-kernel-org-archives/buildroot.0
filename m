@@ -1,58 +1,125 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 18:34:34 +0100
-Subject: [Buildroot] [PATCH] protobuf: bump to 2.6.1
-In-Reply-To: <CAKbGBLi5tuV+opoR120-1vxZNnYH2sCQP4tYi-jE-vMoa6z51w@mail.gmail.com>
-References: <1446626241-25745-1-git-send-email-steven@uplinklabs.net>
- <20151104120319.30a10287@free-electrons.com>
- <CAKbGBLhqvqwODLAj0zOxYk2Y9-NoBi_uHbS-4rHgp5TcEAV07Q@mail.gmail.com>
- <CAKbGBLi5tuV+opoR120-1vxZNnYH2sCQP4tYi-jE-vMoa6z51w@mail.gmail.com>
-Message-ID: <20151104183434.1f9be07c@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 4 Nov 2015 18:36:10 +0100
+Subject: [Buildroot] [PATCH v2] pkgconf: fix incorrect
+ variable-directory sysroot prefixing
+In-Reply-To: <1446501424-26609-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1446501424-26609-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151104173610.GC4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Steven,
+Gustavo, All,
 
-On Wed, 4 Nov 2015 08:58:16 -0800, Steven Noonan wrote:
-
-> > Thanks for pointing those out. I'll take a look.
+On 2015-11-02 18:57 -0300, Gustavo Zacarias spake thusly:
+> According to the pkg-config documents ("specification") when
+> sysroot-prefixing is enabled via PKG_CONFIG_SYSROOT_DIR this should only
+> be applied to -I/-L directories (includes, library directories), and not
+> to all of the other variables that can specify a directory.
 > 
-> One of the threads I found is confusing. It bumped protobuf to 2.6.1
-> but also enabled building for PowerPC. But I see no indication in the
-> protobuf 2.6.1 sources that PowerPC is a supported architecture, so I
-> wouldn't have expected it to work -- and the patch was presumably not
-> applied for that reason. This issue should not affect my patch, as I
-> didn't touch the architecture requirements in
-> package/protobuf/Config.in (or in anything depending on protobuf).
-
-Right.
-
-> >> Most notably, make sure that protobuf-c builds fine, and
-> >> python-protobuf builds fine. But look at the threads for other
-> >> potential issues.
+> However xorg uses mapdir/sdkdir in a similar fashion in what could be
+> considered an abuse of the spec, hence needs to be prefixed as well.
+> And what's more, it also uses includedir in a nonstandard fashion just
+> requesting the value via 'pkg-config --variable=includedir libfoo' which
+> doesn't pass the standard prefixing rules for the --cflags and --libs
+> invocation.
 > 
-> I'll submit a separate patch upgrading protobuf-c to v1.1.1.
+> This patch makes pkgconf behave in the pkg-config specified way with the
+> added exception for the includedir, libdir, mapdir and sdkdir variables
+> which are prefixed.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Perfect.
+Thanks! :-)
 
-> With the protobuf 2.6.1 patch and my [unsubmitted] protobuf-c v1.1.1
-> patch, I successfully built with this defconfig (basically
-> qemu_x86_64_defconfig + protobuf and any packages using it):
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-[...]
+Regards,
+Yann E. MORIN.
 
-Excellent, thanks for your testing. I'll wait for your protobuf-c patch
-then, and apply both the protobuf and protobuf-c patches.
+> ---
+>  ...-Fix-all-variables-sysroot-prefix-problem.patch | 58 ++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
+> 
+> diff --git a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
+> new file mode 100644
+> index 0000000..bac9f62
+> --- /dev/null
+> +++ b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
+> @@ -0,0 +1,58 @@
+> +From abc7a780f2a52a1aa3ee288e17140b817b545cc3 Mon Sep 17 00:00:00 2001
+> +From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +Date: Mon, 2 Nov 2015 18:38:00 -0300
+> +Subject: [PATCH] Fix all-variables sysroot prefix problem
+> +
+> +According to the pkg-config specifications (or rather documentation)
+> +only the -L/-I directory entries should be sysroot-prefixed.
+> +
+> +We also need to prefix the mapdir/sdkdir variables since they're used by
+> +xorg and expected that way.
+> +
+> +Also allow prefixing for includedir and libdir since in some silly cases
+> +the directories may be requested barebones via pkg-config
+> +--variable=includedir libfool for example.
+> +
+> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +---
+> + main.c | 17 ++++++++++++-----
+> + 1 file changed, 12 insertions(+), 5 deletions(-)
+> +
+> +diff --git a/main.c b/main.c
+> +index 6947126..52d16c2 100644
+> +--- a/main.c
+> ++++ b/main.c
+> +@@ -313,9 +313,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
+> + 			memset(req->buf, 0, sizeof(req->buf));
+> + 
+> + 			if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
+> +-			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
+> +-				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
+> +-
+> ++			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
+> ++			    	(!strcmp(req->variable, "includedir") || \
+> ++				    !strcmp(req->variable, "libdir") || \
+> ++				    !strcmp(req->variable, "mapdir") || \
+> ++				    !strcmp(req->variable, "sdkdir")))
+> ++					strlcat(req->buf, sysroot_dir, sizeof(req->buf));
+> + 			strlcat(req->buf, var, sizeof(req->buf));
+> + 			return;
+> + 		}
+> +@@ -323,8 +326,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
+> + 		strlcat(req->buf, " ", sizeof(req->buf));
+> + 
+> + 		if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
+> +-		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
+> +-			strlcat(req->buf, sysroot_dir, sizeof(req->buf));
+> ++		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
+> ++		    	(!strcmp(req->variable, "includedir") || \
+> ++			    !strcmp(req->variable, "libdir") || \
+> ++			    !strcmp(req->variable, "mapdir") || \
+> ++			    !strcmp(req->variable, "sdkdir")))
+> ++				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
+> + 
+> + 		strlcat(req->buf, var, sizeof(req->buf));
+> + 	}
+> +-- 
+> +2.4.10
+> +
+> -- 
+> 2.4.10
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-If some people want to look at enabling PowerPC later, they can do it
-as follow-up patches.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
