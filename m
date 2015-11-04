@@ -1,53 +1,42 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 4 Nov 2015 11:09:10 +0100
-Subject: [Buildroot] [PATCH v3 04/13] package/dhcp: systemd: support
-	extra options
-In-Reply-To: <1445734779-7212-4-git-send-email-benoit.thebaudeau.dev@gmail.com>
+Date: Wed, 4 Nov 2015 11:13:04 +0100
+Subject: [Buildroot] [PATCH v3 02/13] package/dhcp: systemd: rename
+	environment file
+In-Reply-To: <5639D8CB.2020104@wsystem.com>
 References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <1445734779-7212-4-git-send-email-benoit.thebaudeau.dev@gmail.com>
-Message-ID: <CAGduivyXrg+T=PhPkVKm-F+Bx6NCfyvETQEzpiihe=1nnJPOKQ@mail.gmail.com>
+ <1445734779-7212-2-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <CAGduivynxFaA8G90N8B+E2pbSVWvMryWev80-r2_Z=gKzvjC5g@mail.gmail.com>
+ <CAGduivwTD1Z6GNz5oUCZ8cDVU9kf_PF5iykrR0Z2-Ny9K4zrzA@mail.gmail.com>
+ <5639D774.1030501@wsystem.com>
+ <CAGduivzaWxVq=OYOH3WjGn_iKRn2qKcJ3h79yi6mekAcn7dMjg@mail.gmail.com>
+ <5639D8CB.2020104@wsystem.com>
+Message-ID: <CAGduivzqDvJn2H=JiwO69Nu2C=zM2tqnyP84Rk057fTm1FQs_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 25, 2015 at 2:59 AM, Beno?t Th?baudeau <
-benoit.thebaudeau.dev@gmail.com> wrote:
+[-SNIP-]
 
-> Add an OPTIONS configuration variable in order to make it possible to
-> pass custom extra options to dhcpd. This keeps the systemd support
-> consistent with the SysV init script.
+> >     >     Maybe this should be:
+> >     >     EnvironmentFile-=/etc/default/dhcpd
+> >     >
+> >     >     Notice the '-' before the '=', in case the file doesn't
+> exists, it won't print a warning or error the whole service.
+> >     >
+> >     > My mistake, the '-' should be *AFTER* the '='.
+> >
+> >     See 06/13.
+> >
+> > Ah yes, should they be squashed ?
 >
-> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
+> No: these patches have different purposes.
 >
-> ---
-> Changes v2 -> v3: new patch.
-> ---
->  package/dhcp/dhcpd.service | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/dhcp/dhcpd.service b/package/dhcp/dhcpd.service
-> index 5989506..ad1300c 100644
-> --- a/package/dhcp/dhcpd.service
-> +++ b/package/dhcp/dhcpd.service
-> @@ -5,7 +5,7 @@ After=network.target
->  [Service]
->  Type=forking
->  PIDFile=/run/dhcpd.pid
-> -ExecStart=/usr/sbin/dhcpd -q -pf /run/dhcpd.pid $INTERFACES
-> +ExecStart=/usr/sbin/dhcpd -q -pf /run/dhcpd.pid $OPTIONS $INTERFACES
->  KillSignal=SIGINT
->  EnvironmentFile=/etc/default/dhcpd
->
+Yes, on that bombshell
 
-Reviewed-by:  "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
-
->
-> --
-> 2.1.4
->
->
+Reviewed-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+[-SNIP-]
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151104/104b6aa5/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151104/07dd322d/attachment.html>
