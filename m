@@ -1,67 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 21:42:30 +0100
-Subject: [Buildroot] [git commit] libuecc: new package
-Message-ID: <20151104204649.E202581E9B@busybox.osuosl.org>
+Date: Wed, 4 Nov 2015 21:48:23 +0100
+Subject: [Buildroot] [PATCH 1/2] libuecc: add new package
+In-Reply-To: <1446102782-4565-1-git-send-email-post@lespocky.de>
+References: <1446102782-4565-1-git-send-email-post@lespocky.de>
+Message-ID: <20151104214823.5b2205ba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ae362f09a36f96d63c8a24bde9ad2ddf6211642
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Alexander Dahl,
 
-This package is a small library used for the Freifunk Gluon project
-and will be used by other upcoming packages.
+On Thu, 29 Oct 2015 08:13:01 +0100, Alexander Dahl wrote:
+> This package is a small library used for the Freifunk Gluon project and
+> will be used by other upcoming packages. It's my first buildroot package
+> and I tried to follow the documentation as close as possible, however as
+> you might suppose I'm open for any suggestions.
+> 
+> Signed-off-by: Alexander Dahl <post@lespocky.de>
+> ---
+>  package/Config.in          |  1 +
+>  package/libuecc/Config.in  |  6 ++++++
+>  package/libuecc/libuecc.mk | 13 +++++++++++++
+>  3 files changed, 20 insertions(+)
+>  create mode 100644 package/libuecc/Config.in
+>  create mode 100644 package/libuecc/libuecc.mk
 
-Signed-off-by: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in          |    1 +
- package/libuecc/Config.in  |    6 ++++++
- package/libuecc/libuecc.mk |   13 +++++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
+I've applied your patch, thanks! There were two minor issues:
 
-diff --git a/package/Config.in b/package/Config.in
-index 3a0bd2f..98411b3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -764,6 +764,7 @@ menu "Crypto"
- 	source "package/libsodium/Config.in"
- 	source "package/libssh/Config.in"
- 	source "package/libssh2/Config.in"
-+	source "package/libuecc/Config.in"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
- 	source "package/polarssl/Config.in"
-diff --git a/package/libuecc/Config.in b/package/libuecc/Config.in
-new file mode 100644
-index 0000000..34bbea2
---- /dev/null
-+++ b/package/libuecc/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBUECC
-+	bool "libuecc"
-+	help
-+	  Very small Elliptic Curve Cryptography library
-+
-+	  http://git.universe-factory.net/libuecc
-diff --git a/package/libuecc/libuecc.mk b/package/libuecc/libuecc.mk
-new file mode 100644
-index 0000000..bddb7d5
---- /dev/null
-+++ b/package/libuecc/libuecc.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libuecc
-+#
-+################################################################################
-+
-+LIBUECC_VERSION = v6
-+LIBUECC_SITE = git://git.universe-factory.net/libuecc
-+LIBUECC_LICENSE = BSD-2c
-+LIBUECC_LICENSE_FILES = COPYRIGHT
-+LIBUECC_INSTALL_STAGING = YES
-+
-+$(eval $(cmake-package))
+ - The commit log should not contain some "personal" messages such as
+   "It's my first buildroot package...". The contents of the commit log
+   is kept forever in the project history. If you want to include such
+   "personal/contextual" messages, put them either in a separate e-mail
+   (called the cover letter) or under the --- sign below the
+   Signed-off-by line.
+
+ - There was a line with trailing spaces in Config.in.
+
+Other than that, looked good to, so applied!
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
