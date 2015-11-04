@@ -1,49 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 21:48:23 +0100
-Subject: [Buildroot] [PATCH 1/2] libuecc: add new package
-In-Reply-To: <1446102782-4565-1-git-send-email-post@lespocky.de>
-References: <1446102782-4565-1-git-send-email-post@lespocky.de>
-Message-ID: <20151104214823.5b2205ba@free-electrons.com>
+Date: Wed, 4 Nov 2015 21:48:36 +0100
+Subject: [Buildroot] [git commit] package/nginx: fix a typo
+Message-ID: <20151104204853.D13AA81E9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Dahl,
+commit: http://git.buildroot.net/buildroot/commit/?id=407d77e9c1448a9eec9669346bac33218c3b29be
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 29 Oct 2015 08:13:01 +0100, Alexander Dahl wrote:
-> This package is a small library used for the Freifunk Gluon project and
-> will be used by other upcoming packages. It's my first buildroot package
-> and I tried to follow the documentation as close as possible, however as
-> you might suppose I'm open for any suggestions.
-> 
-> Signed-off-by: Alexander Dahl <post@lespocky.de>
-> ---
->  package/Config.in          |  1 +
->  package/libuecc/Config.in  |  6 ++++++
->  package/libuecc/libuecc.mk | 13 +++++++++++++
->  3 files changed, 20 insertions(+)
->  create mode 100644 package/libuecc/Config.in
->  create mode 100644 package/libuecc/libuecc.mk
+Signed-off-by: No?? Rubinstein <nrubinstein@aldebaran.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nginx/nginx.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I've applied your patch, thanks! There were two minor issues:
-
- - The commit log should not contain some "personal" messages such as
-   "It's my first buildroot package...". The contents of the commit log
-   is kept forever in the project history. If you want to include such
-   "personal/contextual" messages, put them either in a separate e-mail
-   (called the cover letter) or under the --- sign below the
-   Signed-off-by line.
-
- - There was a line with trailing spaces in Config.in.
-
-Other than that, looked good to, so applied!
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 32a337c..8e23bd8 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -19,7 +19,7 @@ NGINX_CONF_OPTS = \
+ 
+ # www-data user and group are used for nginx. Because these user and group
+ # are already set by buildroot, it is not necessary to redefine them.
+-# See system/skeleton/passwd
++# See system/skeleton/etc/passwd
+ #   username: www-data    uid: 33
+ #   groupname: www-data   gid: 33
+ #
