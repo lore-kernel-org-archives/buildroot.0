@@ -1,53 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 22:55:41 +0100
-Subject: [Buildroot] [PATCH v2] python3: add patch to fix PEP 3147 issue
- with automake built packages
-In-Reply-To: <1441023704-27725-1-git-send-email-cvubrugier@fastmail.fm>
-References: <1441023704-27725-1-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <20151104225541.15eef643@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  4 Nov 2015 23:11:23 +0100
+Subject: [Buildroot] [PATCH] docs/manual: document $(FOO_PKGDIR)
+Message-ID: <1446675083-22426-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+In the manual, add a note that packages can use $(FOO_PKGDIR) to get the
+path to the directory containg the .mk and Config.in files, if they need
+it to e.g. copy files from there, like startup scripts, systemd units or
+any other resource.
 
-On Mon, 31 Aug 2015 14:21:44 +0200, Christophe Vu-Brugier wrote:
-> Packages built with automake use a `py-compile` helper to byte-compile
-> Python source files. This script uses the "py_compile" module from the
-> standard library. In turn, the compile() function in the "py_compile"
-> module invokes the cache_from_source() function provided by importlib.
-> 
-> This commit adds a new patch named "020-importlib-no-pep3147.patch"
-> that changes cache_from_source() and source_from_cache() in importlib
-> to get rid of the "__pycache__" directory.
-> 
-> This commit fixes the following import error in kmod when the module
-> is built for Python 3:
-> 
->   >>> from kmod import Kmod
->   Traceback (most recent call last):
->     File "<stdin>", line 1, in <module>
->   ImportError: cannot import name 'Kmod'
-> 
-> Moreover, this commit removes two patches that are no longer necessary
-> since modifying cache_from_source() and source_from_cache() disables
-> PEP 3147 for the standard library and distutils / setuptools.
-> 
->  * 004-old-stdlib-cache.patch
->  * 016-distutils-no-pep3147.patch
-> 
-> Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> 
-> ---
-> Changes since v1:
->  * remove patches 004 and 016 as suggested by Thomas Petazzoni
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Applied, thanks.
+---
+Changes:
+  - split out of the series since the corresponding code has been
+    applied
+---
+ docs/manual/adding-packages-generic.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thomas
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index a7143e4..02a43d6 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -495,6 +495,11 @@ endef
+ 
+ In the action definitions, you can use the following variables:
+ 
++* +$(FOO_PKGDIR)+ contains the path to the directory containing the
++  +foo.mk+ and +Config.in+ files. This variable is useful when it is
++  necessary to install a file bundled in Buildroot, like a runtime
++  configuration file, a splashscren image...
++
+ * +$(@D)+, which contains the directory in which the package source
+   code has been uncompressed.
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
