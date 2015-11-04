@@ -1,30 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 11:56:41 +0100
-Subject: [Buildroot] [PATCH] pkg-generic: use correct variable name for
- tar extraction exclusions
-In-Reply-To: <1446622608-22556-1-git-send-email-steven@uplinklabs.net>
-References: <1446622608-22556-1-git-send-email-steven@uplinklabs.net>
-Message-ID: <20151104115641.5cde8953@free-electrons.com>
+Date: Wed, 4 Nov 2015 12:00:28 +0100
+Subject: [Buildroot] buildroot configuration files -- query
+In-Reply-To: <CAKpDV8sD-00LdpoqPS_pgbPGkqdn5bm2HX_JBGCgKHdq39sdvw@mail.gmail.com>
+References: <CAKpDV8sD-00LdpoqPS_pgbPGkqdn5bm2HX_JBGCgKHdq39sdvw@mail.gmail.com>
+Message-ID: <20151104120028.546dbec5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steven Noonan,
+Dear Dinesh Guleria,
 
-On Tue,  3 Nov 2015 23:36:48 -0800, Steven Noonan wrote:
-> The only users of this feature are in package/gcc, but they were using
-> $(2)_TAR_EXCLUDES instead of pkg-generic's $(2)_EXCLUDES. The former name makes
-> more sense to me and is more readable, so let's just use that.
+On Wed, 4 Nov 2015 16:06:49 +0530, Dinesh Guleria wrote:
+
+> I am referring following document to learn buildroot.
+> http://buildroot.uclibc.org/downloads/manual/manual.html
 > 
-> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+> 1> What exactly is the difference between the configuration files in*
+> /board* directory & */configs* directory ?
+> 
+>    For example these two config files are for at91sam9260ek MCU :--
+>    /board/atmel/at91sam9260ek/linux-3.9.config
 
-Thanks for your patch. However, following your initial report, I had
-already fixed the problem. Moreover, your patch was making things work
-for gcc, but 1/ was breaking things for the external toolchain code
-which uses <pkg>_EXCLUDES and 2/ was not updating the Buildroot manual
-accordingly.
+This is a Linux kernel configuration file. It describes which kernel
+features are enabled (drivers, filesystems, network protocols, kernel
+features, etc.).
+
+>    /configs/at91sam9260eknf_defconfig
+
+This is a Buildroot configuration file. It describes your embedded
+Linux system as a whole (architecture, toolchain, target packages,
+etc.).
+
+> 2> we can load the configuration using following command :--
+>   * make <name>_defconfig command*
+> 
+>    we can save a configuration by following command *make savedefconfig*.
+> As said in following section :--
+>    9.3. Storing the Buildroot configuration
+>    The Buildroot configuration can be stored using the command make
+> savedefconfig.
+>    The recommended place to store this defconfig is
+> configs/<boardname>_defconfig.
+> 
+>    a> Now my question how the configuration file for new MCU is created
+> first time in /configs directory. What is the command to use for this ?
+
+"make savedefconfig", which by default will create a file named
+"defconfig", which you simply move to configs/, under a name like
+<blabla>_defconfig:
+
+$ make savedefconfig
+$ mv defconfig configs/blabla_defconfig
+
+>    b> How the configuration file for a particular board is created first
+> time & saved (lets say for example this /board/atmel/XXXX)
+>       Now how to create & save configuration file for XXXX board ? What is
+> command to use for this ?
+
+It's not a configuration file for a "board", but for example a Linux
+kernel configuration file. If you're talking about the Linux kernel
+configuration file, then you can use the "make linux-update-config" or
+"make linux-update-defconfig" targets.
+
+See the manual for more details, or also
+http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
+slide 74 and following.
 
 Best regards,
 
