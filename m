@@ -1,35 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 22:24:17 +0100
-Subject: [Buildroot] [git commit] protobuf: fix legal-info
-Message-ID: <20151104212427.7AAA481E18@busybox.osuosl.org>
+Date: Wed, 4 Nov 2015 22:25:06 +0100
+Subject: [Buildroot] [PATCH] protobuf: fix legal-info
+In-Reply-To: <1446671110-27300-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1446671110-27300-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151104222506.4dfd3334@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f700463c66376283ab4bffc391209bf20c63088d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-The file changed from COPYING.txt to LICENSE, fixes:
-http://autobuild.buildroot.net/results/c40/c40e9b6030584a4fd8b3e46f78f6d0702d1dc11e/
+On Wed,  4 Nov 2015 18:05:10 -0300, Gustavo Zacarias wrote:
+> The file changed from COPYING.txt to LICENSE, fixes:
+> http://autobuild.buildroot.net/results/c40/c40e9b6030584a4fd8b3e46f78f6d0702d1dc11e/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/protobuf/protobuf.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/protobuf/protobuf.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 144e5fb..3eeadfc 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- PROTOBUF_VERSION = v2.6.1
- PROTOBUF_SITE = $(call github,google,protobuf,$(PROTOBUF_VERSION))
- PROTOBUF_LICENSE = BSD-3c
--PROTOBUF_LICENSE_FILES = COPYING.txt
-+PROTOBUF_LICENSE_FILES = LICENSE
- # no configure script
- PROTOBUF_AUTORECONF = YES
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
