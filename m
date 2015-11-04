@@ -1,33 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 21:49:49 +0100
-Subject: [Buildroot] [PATCH 1/2] package/nginx: fix a typo
-In-Reply-To: <1446662767-15730-1-git-send-email-nrubinstein@aldebaran.com>
-References: <1446662767-15730-1-git-send-email-nrubinstein@aldebaran.com>
-Message-ID: <20151104214949.70e20041@free-electrons.com>
+Date: Wed, 4 Nov 2015 21:50:24 +0100
+Subject: [Buildroot] [git commit] package/rng-tools: systemd: support extra
+	options
+Message-ID: <20151104205040.BD8A6807F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear No? Rubinstein,
+commit: http://git.buildroot.net/buildroot/commit/?id=463d0b9d1b628283edb77defa507df3c9d0d2d76
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  4 Nov 2015 19:46:06 +0100, No? Rubinstein wrote:
-> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
-> ---
->  package/nginx/nginx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Add a DAEMON_ARGS configuration variable in order to make it possible to
+pass custom extra options to rngd. This environment variable must
+defined in /etc/default/rngd if needed, like with the SysV init script.
+This file does not have to be present if not needed.
 
-Both patches applied, thanks!
+Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau.dev@gmail.com>
+Reviewed-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rng-tools/rngd.service |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-For the second patch, it would be good if someone could modify makedevs
-to not accept user/group specified as strings, since resolving them
-from the host point of view doesn't make any sense.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rng-tools/rngd.service b/package/rng-tools/rngd.service
+index 3bdc4c1..c0bcffe 100644
+--- a/package/rng-tools/rngd.service
++++ b/package/rng-tools/rngd.service
+@@ -2,8 +2,9 @@
+ Description=Hardware RNG Entropy Gatherer Daemon
+ 
+ [Service]
+-ExecStart=/usr/sbin/rngd -f
++ExecStart=/usr/sbin/rngd -f $DAEMON_ARGS
+ SuccessExitStatus=66
++EnvironmentFile=-/etc/default/rngd
+ 
+ [Install]
+ WantedBy=multi-user.target
