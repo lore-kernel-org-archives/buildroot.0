@@ -1,125 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Nov 2015 18:36:10 +0100
-Subject: [Buildroot] [PATCH v2] pkgconf: fix incorrect
- variable-directory sysroot prefixing
-In-Reply-To: <1446501424-26609-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1446501424-26609-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151104173610.GC4072@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Nov 2015 17:07:21 +0100
+Subject: [Buildroot] [git commit] package/libdcadec: enable shared build
+Message-ID: <20151104173627.93E4981D34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=13860f6e0f534a0aed6b7f0ae91e2e9d525be586
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-11-02 18:57 -0300, Gustavo Zacarias spake thusly:
-> According to the pkg-config documents ("specification") when
-> sysroot-prefixing is enabled via PKG_CONFIG_SYSROOT_DIR this should only
-> be applied to -I/-L directories (includes, library directories), and not
-> to all of the other variables that can specify a directory.
-> 
-> However xorg uses mapdir/sdkdir in a similar fashion in what could be
-> considered an abuse of the spec, hence needs to be prefixed as well.
-> And what's more, it also uses includedir in a nonstandard fashion just
-> requesting the value via 'pkg-config --variable=includedir libfoo' which
-> doesn't pass the standard prefixing rules for the --cflags and --libs
-> invocation.
-> 
-> This patch makes pkgconf behave in the pkg-config specified way with the
-> added exception for the includedir, libdir, mapdir and sdkdir variables
-> which are prefixed.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The libdcadec package currently only builds a static library, which is
+naturally built without -fPIC (since this is generally not needed for
+static libraries).
 
-Thanks! :-)
+However, when the generated static library gets used inside a larger
+dynamic library, such as ffmpeg's one, the link fails, since we're
+trying to include in a shared library non-PIC code.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To solve this, this commit changes the way the libdcadec library is
+built to make sure a shared variant of the library gets built when
+appropriate. This way, ffmpeg has a PIC-enabled libdcadec library to
+link with.
 
-Regards,
-Yann E. MORIN.
+Fixes
+http://autobuild.buildroot.net/results/bd3/bd34d1d2f2d35455d1ddefa1ec247c78f341603f/
+http://autobuild.buildroot.net/results/4f7/4f7c87e47e763ce656c50b5862408b18e6f185ab/
+http://autobuild.buildroot.net/results/998/99836db091af610a99dbc815b7fdf09cc1d531d1/
+http://autobuild.buildroot.net/results/a19/a19023e094cbed491444665d6839a9e65a8eee6c/
+http://autobuild.buildroot.net/results/98d/98dde028d1d6199f05c904b498bc39bbaa112aa6/
+http://autobuild.buildroot.net/results/4ff/4ffcae6cae419df35e8ca29d429ee178bcf31882/
+http://autobuild.buildroot.net/results/8ce/8ced16874255ace4923f6b8888c3fca07f28b804/
 
-> ---
->  ...-Fix-all-variables-sysroot-prefix-problem.patch | 58 ++++++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-> 
-> diff --git a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-> new file mode 100644
-> index 0000000..bac9f62
-> --- /dev/null
-> +++ b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-> @@ -0,0 +1,58 @@
-> +From abc7a780f2a52a1aa3ee288e17140b817b545cc3 Mon Sep 17 00:00:00 2001
-> +From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +Date: Mon, 2 Nov 2015 18:38:00 -0300
-> +Subject: [PATCH] Fix all-variables sysroot prefix problem
-> +
-> +According to the pkg-config specifications (or rather documentation)
-> +only the -L/-I directory entries should be sysroot-prefixed.
-> +
-> +We also need to prefix the mapdir/sdkdir variables since they're used by
-> +xorg and expected that way.
-> +
-> +Also allow prefixing for includedir and libdir since in some silly cases
-> +the directories may be requested barebones via pkg-config
-> +--variable=includedir libfool for example.
-> +
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +---
-> + main.c | 17 ++++++++++++-----
-> + 1 file changed, 12 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/main.c b/main.c
-> +index 6947126..52d16c2 100644
-> +--- a/main.c
-> ++++ b/main.c
-> +@@ -313,9 +313,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-> + 			memset(req->buf, 0, sizeof(req->buf));
-> + 
-> + 			if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-> +-			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-> +-				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-> +-
-> ++			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-> ++			    	(!strcmp(req->variable, "includedir") || \
-> ++				    !strcmp(req->variable, "libdir") || \
-> ++				    !strcmp(req->variable, "mapdir") || \
-> ++				    !strcmp(req->variable, "sdkdir")))
-> ++					strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-> + 			strlcat(req->buf, var, sizeof(req->buf));
-> + 			return;
-> + 		}
-> +@@ -323,8 +326,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-> + 		strlcat(req->buf, " ", sizeof(req->buf));
-> + 
-> + 		if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-> +-		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-> +-			strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-> ++		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-> ++		    	(!strcmp(req->variable, "includedir") || \
-> ++			    !strcmp(req->variable, "libdir") || \
-> ++			    !strcmp(req->variable, "mapdir") || \
-> ++			    !strcmp(req->variable, "sdkdir")))
-> ++				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-> + 
-> + 		strlcat(req->buf, var, sizeof(req->buf));
-> + 	}
-> +-- 
-> +2.4.10
-> +
-> -- 
-> 2.4.10
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libdcadec/libdcadec.mk |   11 ++++++++---
+ 1 files changed, 8 insertions(+), 3 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
+index 76862a6..2b391fc 100644
+--- a/package/libdcadec/libdcadec.mk
++++ b/package/libdcadec/libdcadec.mk
+@@ -10,19 +10,24 @@ LIBDCADEC_LICENSE = LGPLv2.1+
+ LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
+ LIBDCADEC_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_STATIC_LIBS),)
++LIBDCADEC_SHARED = CONFIG_SHARED=1
++endif
++
+ define LIBDCADEC_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" -C $(@D)
++		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
++		$(LIBDCADEC_SHARED) -C $(@D)
+ endef
+ 
+ define LIBDCADEC_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		DESTDIR=$(STAGING_DIR) PREFIX=/usr install
++		$(LIBDCADEC_SHARED) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
+ endef
+ 
+ define LIBDCADEC_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++		$(LIBDCADEC_SHARED) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
+ endef
+ 
+ $(eval $(generic-package))
