@@ -1,72 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 14:48:06 +0100
+Date: Wed, 4 Nov 2015 15:02:45 +0100
 Subject: [Buildroot] [PATCH v3 1/3] package/git: Add needed library for
  static compilation
-In-Reply-To: <1446452252-10647-2-git-send-email-repk@triplefau.lt>
+In-Reply-To: <20151104144806.6a35229f@free-electrons.com>
 References: <1446452252-10647-1-git-send-email-repk@triplefau.lt>
  <1446452252-10647-2-git-send-email-repk@triplefau.lt>
-Message-ID: <20151104144806.6a35229f@free-electrons.com>
+ <20151104144806.6a35229f@free-electrons.com>
+Message-ID: <20151104150245.1d707768@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Remi Pommarel,
+Hello Remi,
 
-On Mon,  2 Nov 2015 09:17:30 +0100, Remi Pommarel wrote:
-> Add missing ssl and crypto libraries in LIBS variable used by configure.
-> 
-> A statically compiled libcurl need to be linked with some libraries to get all
-> its undefined symbols resolved. Indeed when libcurl supports openssl it needs
-> -lssl to satisfy all its dependencies, the same goes for crypto symbols.
+On Wed, 4 Nov 2015 14:48:06 +0100, Thomas Petazzoni wrote:
 
-It isn't clear what is the relation here between libcurl and openssl.
-Can you detail?
+> What is this fixing exactly? I've tried building Git statically, then
+> Git+OpenSSL statically, then Git+OpenSSL+libcurl statically, and all
+> these configurations. Can you rework your patch to clearly indicate in
+> the commit log which configuration is currently failing and how it is
+> failing (relevant error messages) ?
 
-> diff --git a/package/git/git.mk b/package/git/git.mk
-> index 2bd6a01..2c404b4 100644
-> --- a/package/git/git.mk
-> +++ b/package/git/git.mk
-> @@ -14,7 +14,7 @@ GIT_DEPENDENCIES = zlib host-gettext
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  GIT_DEPENDENCIES += openssl
->  GIT_CONF_OPTS += --with-openssl
-> -GIT_CONF_ENV_LIBS += $(if $(BR2_STATIC_LIBS),-lz)
-> +GIT_CONF_ENV_LIBS += $(if $(BR2_STATIC_LIBS),-lssl -lcrypto -lz)
->  else
->  GIT_CONF_OPTS += --without-openssl
->  endif
+Ok, now that I looked to your patch 3/3, I understand a bit more the
+problem. In my testing, it in fact doesn't detect curl anymore, because
+it can't link against libcurl due to missing libraries.
 
-What is this fixing exactly? I've tried building Git statically, then
-Git+OpenSSL statically, then Git+OpenSSL+libcurl statically, and all
-these configurations. Can you rework your patch to clearly indicate in
-the commit log which configuration is currently failing and how it is
-failing (relevant error messages) ?
+Your patch 3/3 adds support for specifying a curl-config program, which
+is good. But the entire purpose of using curl-config is to get the
+appropriate compiler and linker flags, and in our case, curl-config is
+properly saying that we should link against -lssl -lcrypto:
 
-The following configuration:
+$ ./output/staging/usr/bin/curl-config --libs
+-L/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lcurl -lssl -lcrypto -lssl -lz -lz -lcrypto -lz -lz
 
-BR2_arm=y
-BR2_STATIC_LIBS=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2015.08-647-gc356fb2.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_GIT=y
-BR2_PACKAGE_OPENSSL=y
-BR2_PACKAGE_LIBCURL=y
-# BR2_TARGET_ROOTFS_TAR is not set
+So we definitely shouldn't have to do the hacks that you do in PATCH
+1/3. Except that you have to do it because Git configure.ac is not
+doing the right thing.
 
-Builds just fine here.
+Since you've already contributed several fixes for this to the Git
+people, can you work with upstream to resolve the problem ? Either by
+calling the curl-config program from configure.ac, or by using
+pkg-config (but Git developers may not like having to use pkg-config).
+
+Also, your patch organization is weird: your patch 2/3 is adding
+patches 0001 and 0003, while your patch 3/3 is adding patch 0002. This
+is pretty odd.
 
 Thanks,
 
