@@ -1,72 +1,53 @@
-From: Remi Pommarel <repk@triplefau.lt>
-Date: Wed, 4 Nov 2015 20:39:56 +0100
-Subject: [Buildroot] [PATCH v3 1/3] package/git: Add needed library for
- static compilation
-In-Reply-To: <20151104150245.1d707768@free-electrons.com>
-References: <1446452252-10647-1-git-send-email-repk@triplefau.lt>
- <1446452252-10647-2-git-send-email-repk@triplefau.lt>
- <20151104144806.6a35229f@free-electrons.com>
- <20151104150245.1d707768@free-electrons.com>
-Message-ID: <20151104193956.GI13534@cruxbox>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  4 Nov 2015 20:40:42 +0100
+Subject: [Buildroot] [PATCH] core/printvars: allow dumping a set of variables
+Message-ID: <1446666042-6051-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dumping our 176164 variables can take quite some time (~12s here). What
+takes the most time is sorting the variables (~9s), followed by the
+parsing of our Makefiles (~3s), with the actual printing in the noise.
 
-On Wed, Nov 04, 2015 at 03:02:45PM +0100, Thomas Petazzoni wrote:
-> Hello Remi,
-> 
-> On Wed, 4 Nov 2015 14:48:06 +0100, Thomas Petazzoni wrote:
-> 
-> > What is this fixing exactly? I've tried building Git statically, then
-> > Git+OpenSSL statically, then Git+OpenSSL+libcurl statically, and all
-> > these configurations. Can you rework your patch to clearly indicate in
-> > the commit log which configuration is currently failing and how it is
-> > failing (relevant error messages) ?
-> 
-> Ok, now that I looked to your patch 3/3, I understand a bit more the
-> problem. In my testing, it in fact doesn't detect curl anymore, because
-> it can't link against libcurl due to missing libraries.
+However, sometimes only one or a few variables are needed. For example,
+one may want to retrieve the Linux build dir from a post-build hook (to
+get the Linux' actual .config after our fixups and check for various
+features).
 
-Exactly
+Add the possibility to only dump the variables listed in $(VAR) which
+must be passed as a make argument, like so:
 
-> 
-> Your patch 3/3 adds support for specifying a curl-config program, which
-> is good. But the entire purpose of using curl-config is to get the
-> appropriate compiler and linker flags, and in our case, curl-config is
-> properly saying that we should link against -lssl -lcrypto:
-> 
-> $ ./output/staging/usr/bin/curl-config --libs
-> -L/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lcurl -lssl -lcrypto -lssl -lz -lz -lcrypto -lz -lz
-> 
-> So we definitely shouldn't have to do the hacks that you do in PATCH
-> 1/3. Except that you have to do it because Git configure.ac is not
-> doing the right thing.
-> 
-> Since you've already contributed several fixes for this to the Git
-> people, can you work with upstream to resolve the problem ? Either by
-> calling the curl-config program from configure.ac, or by using
-> pkg-config (but Git developers may not like having to use pkg-config).
+    $ make -s printvars VARS="LINUX_DIR TOPDIR O"
+    LINUX_DIR=/home/ymorin/dev/buildroot/O/build/linux-4.3 ($(BUILD_DIR)/$(LINUX_BASE_NAME))
+    O=/home/ymorin/dev/buildroot/O/. (/home/ymorin/dev/buildroot/O/.)
+    TOPDIR=/home/ymorin/dev/buildroot/buildroot (/home/ymorin/dev/buildroot/buildroot)
 
-In fact I was using this trick to workaround configure, because it was
-already used (cf. GIT_CONF_ENV_LIBS with -lz and -liconv), thus avoiding
-me to dive into git's configure.ac.
+This is much faster (the time is just about the time it takes to parse
+our Makefiles, 3s here) and easier to parse.
 
-Agreed that a patch that fixes configure.ac would be a better solution,
-but as it does not exist yet I though the workaround would be a good
-temporary fix.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> 
-> Also, your patch organization is weird: your patch 2/3 is adding
-> patches 0001 and 0003, while your patch 3/3 is adding patch 0002. This
-> is pretty odd.
-
-Yes it is odd, I can re-number the patches if they apply correctly.
-
-Thanks
-
+diff --git a/Makefile b/Makefile
+index 6d34ee2..7b152c7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -832,9 +832,10 @@ ifeq ($(NEED_WRAPPER),y)
+ endif
+ 
+ # printvars prints all the variables currently defined in our Makefiles
++# or only the variables specified in $(VARS)
+ printvars:
+ 	@$(foreach V, \
+-		$(sort $(.VARIABLES)), \
++		$(sort $(if $(VARS),$(VARS),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
+ 		$(info $V=$($V) ($(value $V)))))
 -- 
-Remi
+1.9.1
