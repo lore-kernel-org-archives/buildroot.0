@@ -1,100 +1,44 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Tue, 3 Nov 2015 21:17:36 -0800
-Subject: [Buildroot] [git commit] package/gcc: use generic extract
-	commands
-In-Reply-To: <20151103223523.6C6E481E82@busybox.osuosl.org>
-References: <20151103223523.6C6E481E82@busybox.osuosl.org>
-Message-ID: <CAKbGBLig-vvPVGE=fMwVyy2nUAbMu_tyJujexW8Ry3finE_WMw@mail.gmail.com>
+Date: Tue, 3 Nov 2015 21:45:22 -0800
+Subject: [Buildroot] cc --version fails with toolchain-wrapper
+Message-ID: <CAKbGBLgwPfrHDLe8-qXBYv=Kpf=QEpT9ww8E4a_MQQ2M6VC4jg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone. Long time, no see...
+What's up with this? Invoking "*-gcc" works, but "*-cc" does not:
 
-On Tue, Nov 3, 2015 at 1:22 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=e3b46be7f41d7d336636560b6b85fedfbc68cd89
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-> Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/gcc/gcc-final/gcc-final.mk     |    3 ++-
->  package/gcc/gcc-initial/gcc-initial.mk |    3 ++-
->  package/gcc/gcc.mk                     |   15 ++++-----------
->  3 files changed, 8 insertions(+), 13 deletions(-)
->
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index 5a0f5b5..8ac2968 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -12,7 +12,8 @@ HOST_GCC_FINAL_DEPENDENCIES = \
->         $(HOST_GCC_COMMON_DEPENDENCIES) \
->         $(BR_LIBC)
->
-> -HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
-> +HOST_GCC_FINAL_TAR_EXCLUDES = $(HOST_GCC_TAR_EXCLUDES)
+$ /home/steven/Development/buildroot/output/host/usr/bin/x86_64-buildroot-linux-gnux32-cc
+--version
+ccache: error: execv of
+/home/steven/Development/buildroot/output/host/usr/bin/x86_64-buildroot-linux-gnux32-cc.br_real.br_real
+failed: No such file or directory
 
-This appears to be wrong. The variable used in pkg-generic.mk is
-$(2)_EXCLUDES not $(2)_TAR_EXCLUDES. So this doesn't pass any
-'--exclude's to the tar command.
+$ /home/steven/Development/buildroot/output/host/usr/bin/x86_64-buildroot-linux-gnux32-gcc
+--version
+x86_64-buildroot-linux-gnux32-gcc.br_real (Buildroot
+2015.11-git-00965-g8d89653-dirty) 5.2.0
+Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-> +HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
->
->  ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
->  HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
-> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-> index c0b5eaf..3ab47b9 100644
-> --- a/package/gcc/gcc-initial/gcc-initial.mk
-> +++ b/package/gcc/gcc-initial/gcc-initial.mk
-> @@ -10,7 +10,8 @@ GCC_INITIAL_SOURCE = $(GCC_SOURCE)
->
->  HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
->
-> -HOST_GCC_INITIAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
-> +HOST_GCC_INITIAL_TAR_EXCLUDES = $(HOST_GCC_TAR_EXCLUDES)
 
-Same.
+My guess is that doing something like this would solve it. About to
+test the theory with a rebuild over the next couple hours...
 
-> +HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
->
->  ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
->  HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index d6213cc..28eb75e 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -48,18 +48,11 @@ define HOST_GCC_APPLY_PATCHES
->         $(HOST_GCC_APPLY_POWERPC_PATCH)
->  endef
->
-> -#
-> -# Custom extract command to save disk space
-> -#
-> +HOST_GCC_TAR_EXCLUDES = \
-> +       libjava/* libgo/* \
-> +       gcc/testsuite/* libstdc++-v3/testsuite/*
->
-> -define HOST_GCC_EXTRACT_CMDS
-> -       $(call suitable-extractor,$(GCC_SOURCE)) $(DL_DIR)/$(GCC_SOURCE) | \
-> -               $(TAR) --strip-components=1 -C $(@D) \
-> -               --exclude='libjava/*' \
-> -               --exclude='libgo/*' \
-> -               --exclude='gcc/testsuite/*' \
-> -               --exclude='libstdc++-v3/testsuite/*' \
-> -               $(TAR_OPTIONS) -
-> +define HOST_GCC_FAKE_TESTSUITE
->         mkdir -p $(@D)/libstdc++-v3/testsuite/
->         echo "all:" > $(@D)/libstdc++-v3/testsuite/Makefile.in
->         echo "install:" >> $(@D)/libstdc++-v3/testsuite/Makefile.in
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/gcc/gcc-final/gcc-final.mk
+b/package/gcc/gcc-final/gcc-final.mk
+index 8ac2968..7ccc533 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -91,7 +91,7 @@ HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
+ # Make sure we have 'cc'
+ define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+        if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
+-               ln -snf $(GNU_TARGET_NAME)-gcc \
++               cp -l $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc \
+                        $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
+        fi
+ endef
