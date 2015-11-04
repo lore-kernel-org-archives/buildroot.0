@@ -1,70 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Nov 2015 00:04:20 +0100
-Subject: [Buildroot] [PATCH v2] python3: add patch to fix PEP 3147 issue
- with automake built packages
-In-Reply-To: <20151104225541.15eef643@free-electrons.com>
-References: <1441023704-27725-1-git-send-email-cvubrugier@fastmail.fm>
- <20151104225541.15eef643@free-electrons.com>
-Message-ID: <20151105000420.5abc2ee1@free-electrons.com>
+From: Steven Noonan <steven@uplinklabs.net>
+Date: Wed, 4 Nov 2015 15:05:52 -0800
+Subject: [Buildroot] [PATCH] gcc-final: hard link TARGET-cc -> TARGET-gcc
+In-Reply-To: <563A7B14.9090507@mind.be>
+References: <1446622467-21916-1-git-send-email-steven@uplinklabs.net>
+ <563A7B14.9090507@mind.be>
+Message-ID: <CAKbGBLhz_jcUwAwhM73RrjqhU8fi6bgT=X4cNjhinhH_HidZ8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christophe,
+On Wed, Nov 4, 2015 at 1:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 04-11-15 08:34, Steven Noonan wrote:
+>> Doing a symlink results in incorrect behavior:
+>>
+>>     $ x86_64-buildroot-linux-gnux32-cc
+>>     --version
+>>     ccache: error: execv of [...]/x86_64-buildroot-linux-gnux32-cc.br_real.br_real failed: No such file or directory
+>>
+>>     $ x86_64-buildroot-linux-gnux32-gcc --version
+>>     x86_64-buildroot-linux-gnux32-gcc.br_real (Buildroot 2015.11-git-00965-g8d89653-dirty) 5.2.0
+>>     Copyright (C) 2015 Free Software Foundation, Inc.
+>>     This is free software; see the source for copying conditions.  There is NO
+>>     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+>>
+>> Note the double .br_real on the invocation by toolchain-wrapper.
+>>
+>> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>  However...
+>
+>> ---
+>>  package/gcc/gcc-final/gcc-final.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+>> index 8ac2968..7ccc533 100644
+>> --- a/package/gcc/gcc-final/gcc-final.mk
+>> +++ b/package/gcc/gcc-final/gcc-final.mk
+>> @@ -91,7 +91,7 @@ HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
+>>  # Make sure we have 'cc'
+>>  define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+>>       if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
+>> -             ln -snf $(GNU_TARGET_NAME)-gcc \
+>> +             cp -l $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc \
+>
+>  Why not ln -f instead of cp -l?
 
-In fact, it seems that this patch might be causing some Python 3 build
-issues. See
-http://autobuild.buildroot.org/results/06e/06e7c654a10a7618c0c64c57bfd9f27e770138fc/build-end.log.
+Could do that too. It just didn't occur to me because I've always used
+the 'cp' command for the job.
 
-Can you have a look?
-
-Thanks!
-
-Thomas
-
-On Wed, 4 Nov 2015 22:55:41 +0100, Thomas Petazzoni wrote:
-> Dear Christophe Vu-Brugier,
-> 
-> On Mon, 31 Aug 2015 14:21:44 +0200, Christophe Vu-Brugier wrote:
-> > Packages built with automake use a `py-compile` helper to byte-compile
-> > Python source files. This script uses the "py_compile" module from the
-> > standard library. In turn, the compile() function in the "py_compile"
-> > module invokes the cache_from_source() function provided by importlib.
-> > 
-> > This commit adds a new patch named "020-importlib-no-pep3147.patch"
-> > that changes cache_from_source() and source_from_cache() in importlib
-> > to get rid of the "__pycache__" directory.
-> > 
-> > This commit fixes the following import error in kmod when the module
-> > is built for Python 3:
-> > 
-> >   >>> from kmod import Kmod
-> >   Traceback (most recent call last):
-> >     File "<stdin>", line 1, in <module>
-> >   ImportError: cannot import name 'Kmod'
-> > 
-> > Moreover, this commit removes two patches that are no longer necessary
-> > since modifying cache_from_source() and source_from_cache() disables
-> > PEP 3147 for the standard library and distutils / setuptools.
-> > 
-> >  * 004-old-stdlib-cache.patch
-> >  * 016-distutils-no-pep3147.patch
-> > 
-> > Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> > 
-> > ---
-> > Changes since v1:
-> >  * remove patches 004 and 016 as suggested by Thomas Petazzoni
-> 
-> Applied, thanks.
-> 
-> Thomas
-
-
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>  Regards,
+>  Arnout
+>
+>>                       $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
+>>       fi
+>>  endef
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
