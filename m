@@ -1,39 +1,44 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Tue, 3 Nov 2015 23:37:16 -0800
-Subject: [Buildroot] [git commit] package/gcc: use generic extract
-	commands
-In-Reply-To: <20151104083427.350f1fd8@free-electrons.com>
-References: <20151103223523.6C6E481E82@busybox.osuosl.org>
- <CAKbGBLig-vvPVGE=fMwVyy2nUAbMu_tyJujexW8Ry3finE_WMw@mail.gmail.com>
- <20151104083427.350f1fd8@free-electrons.com>
-Message-ID: <CAKbGBLiSSx2Mu880d8VOgKaa+L_MCtOCC4Ry99edaZMAWqC8FQ@mail.gmail.com>
+Date: Tue,  3 Nov 2015 23:34:27 -0800
+Subject: [Buildroot] [PATCH] gcc-final: hard link TARGET-cc -> TARGET-gcc
+Message-ID: <1446622467-21916-1-git-send-email-steven@uplinklabs.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oops, my patch was late then ;)
+Doing a symlink results in incorrect behavior:
 
-On Tue, Nov 3, 2015 at 11:34 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Steven Noonan,
->
-> On Tue, 3 Nov 2015 21:17:36 -0800, Steven Noonan wrote:
->
->> > -HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
->> > +HOST_GCC_FINAL_TAR_EXCLUDES = $(HOST_GCC_TAR_EXCLUDES)
->>
->> This appears to be wrong. The variable used in pkg-generic.mk is
->> $(2)_EXCLUDES not $(2)_TAR_EXCLUDES. So this doesn't pass any
->> '--exclude's to the tar command.
->
-> Indeed. Fixed by
-> http://git.buildroot.net/buildroot/commit/?id=4a8478b728429e94e0c85330e1558298d905af3e.
-> Thanks for having reported the issue!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+    $ x86_64-buildroot-linux-gnux32-cc
+    --version
+    ccache: error: execv of [...]/x86_64-buildroot-linux-gnux32-cc.br_real.br_real failed: No such file or directory
+
+    $ x86_64-buildroot-linux-gnux32-gcc --version
+    x86_64-buildroot-linux-gnux32-gcc.br_real (Buildroot 2015.11-git-00965-g8d89653-dirty) 5.2.0
+    Copyright (C) 2015 Free Software Foundation, Inc.
+    This is free software; see the source for copying conditions.  There is NO
+    warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Note the double .br_real on the invocation by toolchain-wrapper.
+
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+---
+ package/gcc/gcc-final/gcc-final.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 8ac2968..7ccc533 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -91,7 +91,7 @@ HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
+ # Make sure we have 'cc'
+ define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+ 	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
+-		ln -snf $(GNU_TARGET_NAME)-gcc \
++		cp -l $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc \
+ 			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
+ 	fi
+ endef
+-- 
+2.6.2
