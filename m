@@ -1,71 +1,37 @@
-From: Steven Noonan <steven@uplinklabs.net>
-Date: Wed, 4 Nov 2015 15:05:52 -0800
-Subject: [Buildroot] [PATCH] gcc-final: hard link TARGET-cc -> TARGET-gcc
-In-Reply-To: <563A7B14.9090507@mind.be>
-References: <1446622467-21916-1-git-send-email-steven@uplinklabs.net>
- <563A7B14.9090507@mind.be>
-Message-ID: <CAKbGBLhz_jcUwAwhM73RrjqhU8fi6bgT=X4cNjhinhH_HidZ8w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Nov 2015 00:06:03 +0100
+Subject: [Buildroot] [git commit] package/libass: add asm support for Intel
+	archs
+Message-ID: <20151104230639.8F67681D54@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 4, 2015 at 1:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 04-11-15 08:34, Steven Noonan wrote:
->> Doing a symlink results in incorrect behavior:
->>
->>     $ x86_64-buildroot-linux-gnux32-cc
->>     --version
->>     ccache: error: execv of [...]/x86_64-buildroot-linux-gnux32-cc.br_real.br_real failed: No such file or directory
->>
->>     $ x86_64-buildroot-linux-gnux32-gcc --version
->>     x86_64-buildroot-linux-gnux32-gcc.br_real (Buildroot 2015.11-git-00965-g8d89653-dirty) 5.2.0
->>     Copyright (C) 2015 Free Software Foundation, Inc.
->>     This is free software; see the source for copying conditions.  There is NO
->>     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
->>
->> Note the double .br_real on the invocation by toolchain-wrapper.
->>
->> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->  However...
->
->> ---
->>  package/gcc/gcc-final/gcc-final.mk | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
->> index 8ac2968..7ccc533 100644
->> --- a/package/gcc/gcc-final/gcc-final.mk
->> +++ b/package/gcc/gcc-final/gcc-final.mk
->> @@ -91,7 +91,7 @@ HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
->>  # Make sure we have 'cc'
->>  define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
->>       if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
->> -             ln -snf $(GNU_TARGET_NAME)-gcc \
->> +             cp -l $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc \
->
->  Why not ln -f instead of cp -l?
+commit: http://git.buildroot.net/buildroot/commit/?id=c9dff0139e2df58796fde959456cc5e854c40cad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Could do that too. It just didn't occur to me because I've always used
-the 'cp' command for the job.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libass/libass.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
->  Regards,
->  Arnout
->
->>                       $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
->>       fi
->>  endef
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index 643a35e..f1f00f3 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -18,6 +18,12 @@ LIBASS_DEPENDENCIES = \
+ 	libfribidi \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
++# configure: WARNING: Install yasm for a significantly faster libass build.
++# only for Intel archs
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++LIBASS_DEPENDENCIES += host-yasm
++endif
++
+ ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
+ LIBASS_DEPENDENCIES += fontconfig
+ LIBASS_CONF_OPTS += --enable-fontconfig
