@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 08:33:55 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: make extraction
- idempotent
-In-Reply-To: <1446592175-8003-1-git-send-email-arnout@mind.be>
-References: <1446592175-8003-1-git-send-email-arnout@mind.be>
-Message-ID: <20151104083355.4b69aedb@free-electrons.com>
+Date: Wed, 4 Nov 2015 08:34:27 +0100
+Subject: [Buildroot] [git commit] package/gcc: use generic extract
+ commands
+In-Reply-To: <CAKbGBLig-vvPVGE=fMwVyy2nUAbMu_tyJujexW8Ry3finE_WMw@mail.gmail.com>
+References: <20151103223523.6C6E481E82@busybox.osuosl.org>
+ <CAKbGBLig-vvPVGE=fMwVyy2nUAbMu_tyJujexW8Ry3finE_WMw@mail.gmail.com>
+Message-ID: <20151104083427.350f1fd8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+Dear Steven Noonan,
 
-On Wed, 4 Nov 2015 00:09:35 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Commit 23ffa7ec first extracts to the toolchain-external build
-> directory and then moves everything to $(HOST_DIR)/opt/ext-toolchain.
-> However, this is not idempotent, because moving directories over
-> existing ones doesn't always work, particularly if the target is on
-> another device.
-> 
-> Simply remove the destination contents before moving.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 1 +
->  1 file changed, 1 insertion(+)
+On Tue, 3 Nov 2015 21:17:36 -0800, Steven Noonan wrote:
 
-Applied, thanks.
+> > -HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+> > +HOST_GCC_FINAL_TAR_EXCLUDES = $(HOST_GCC_TAR_EXCLUDES)
+> 
+> This appears to be wrong. The variable used in pkg-generic.mk is
+> $(2)_EXCLUDES not $(2)_TAR_EXCLUDES. So this doesn't pass any
+> '--exclude's to the tar command.
+
+Indeed. Fixed by
+http://git.buildroot.net/buildroot/commit/?id=4a8478b728429e94e0c85330e1558298d905af3e.
+Thanks for having reported the issue!
 
 Thomas
 -- 
