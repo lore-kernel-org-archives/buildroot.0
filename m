@@ -1,40 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Nov 2015 08:31:09 +0100
-Subject: [Buildroot] [git commit] toolchain-external: make extraction
-	idempotent
-Message-ID: <20151104073115.6F47D81830@busybox.osuosl.org>
+Date: Wed, 4 Nov 2015 08:32:39 +0100
+Subject: [Buildroot] [git commit] gcc: use <pkg>_EXCLUDES,
+	not <pkg>_TAR_EXCLUDES
+Message-ID: <20151104073358.89EEF8042D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b731dc7bfb9c8ce7be502711f0b44ccab5515f1d
+commit: http://git.buildroot.net/buildroot/commit/?id=4a8478b728429e94e0c85330e1558298d905af3e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 23ffa7ec first extracts to the toolchain-external build
-directory and then moves everything to $(HOST_DIR)/opt/ext-toolchain.
-However, this is not idempotent, because moving directories over
-existing ones doesn't always work, particularly if the target is on
-another device.
+As reported by Steven Noonan, the variable recently introduced in the
+package infrastructure to exclude certain parts of an archive from
+being extracted is <pkg>_EXCLUDES, not <pkg>_TAR_EXCLUDES. However,
+the gcc code was incorrectly using <pkg>_TAR_EXCLUDES. This commit
+fixes that.
 
-Simply remove the destination contents before moving.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reported-by: Steven Noonan <steven@uplinklabs.net>
 ---
- toolchain/toolchain-external/toolchain-external.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/gcc/gcc-final/gcc-final.mk     |    2 +-
+ package/gcc/gcc-initial/gcc-initial.mk |    2 +-
+ package/gcc/gcc.mk                     |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 18e6808..958ab18 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -483,6 +483,7 @@ TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
- # since it's actually a fairly special package, we need it to be moved
- # into TOOLCHAIN_EXTERNAL_INSTALL_DIR.
- define TOOLCHAIN_EXTERNAL_MOVE
-+	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/*
- 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
- 	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 8ac2968..0467ac2 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -12,7 +12,7 @@ HOST_GCC_FINAL_DEPENDENCIES = \
+ 	$(HOST_GCC_COMMON_DEPENDENCIES) \
+ 	$(BR_LIBC)
+ 
+-HOST_GCC_FINAL_TAR_EXCLUDES = $(HOST_GCC_TAR_EXCLUDES)
++HOST_GCC_FINAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
+ HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
+ 
+ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 3ab47b9..1e58d8b 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -10,7 +10,7 @@ GCC_INITIAL_SOURCE = $(GCC_SOURCE)
+ 
+ HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
+ 
+-HOST_GCC_INITIAL_TAR_EXCLUDES = $(HOST_GCC_TAR_EXCLUDES)
++HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
+ HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
+ 
+ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 28eb75e..b9551e8 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -48,7 +48,7 @@ define HOST_GCC_APPLY_PATCHES
+ 	$(HOST_GCC_APPLY_POWERPC_PATCH)
  endef
+ 
+-HOST_GCC_TAR_EXCLUDES = \
++HOST_GCC_EXCLUDES = \
+ 	libjava/* libgo/* \
+ 	gcc/testsuite/* libstdc++-v3/testsuite/*
+ 
