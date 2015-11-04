@@ -1,69 +1,47 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Wed,  4 Nov 2015 22:20:31 +0100
-Subject: [Buildroot] [v2, 4/4] beaglebone: adds barebox bootloader defconfig
-In-Reply-To: <1446672031-13866-1-git-send-email-pieter@boesman.nl>
-References: <1446672031-13866-1-git-send-email-pieter@boesman.nl>
-Message-ID: <1446672031-13866-5-git-send-email-pieter@boesman.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Nov 2015 22:21:34 +0100
+Subject: [Buildroot] [PATCH 2/2] fastd: add new package
+In-Reply-To: <1446102782-4565-2-git-send-email-post@lespocky.de>
+References: <1446102782-4565-1-git-send-email-post@lespocky.de>
+ <1446102782-4565-2-git-send-email-post@lespocky.de>
+Message-ID: <20151104222134.792979c1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Builds barebox MLO and the barebox bootloader.
-* Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
-  being generated with the kernel.
+Dear Alexander Dahl,
 
-Signed-off-by: Pieter Smith <pieter@boesman.nl>
----
- configs/beaglebone_barebox_defconfig | 39 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 configs/beaglebone_barebox_defconfig
+On Thu, 29 Oct 2015 08:13:02 +0100, Alexander Dahl wrote:
+> This is a new package for the fastd "Fast and Secure Tunneling Daemon"
+> which was developed for the Freifunk Gluon project in the first place.
+> It's one of my first buildroot packages and I tried to follow the
+> developer guide, if something can be improved I'm open for suggestions.
+> I hope I covered the necessary build options and set reasonable
+> defaults. Included is a patch to allow cross compiling with toolchains
+> without LTO support which fails with the unpatched version due to some
+> ugly cmake hacks in fastd v17, details in the patch.
 
-diff --git a/configs/beaglebone_barebox_defconfig b/configs/beaglebone_barebox_defconfig
-new file mode 100644
-index 0000000..b4fd67b
---- /dev/null
-+++ b/configs/beaglebone_barebox_defconfig
-@@ -0,0 +1,39 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_ARM_EABIHF=y
-+
-+# system
-+BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
-+
-+# filesystem
-+BR2_PACKAGE_AM33X_CM3=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.12.10"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
-+
-+# bootloader
-+BR2_TARGET_BAREBOX_TWO_CONFIGS=y
-+BR2_TARGET_BAREBOX=y
-+BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="am335x"
-+BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE=y
-+BR2_TARGET_BAREBOX_IMAGE_FILE="barebox-am33xx-beaglebone.img"
-+BR2_TARGET_BAREBOX_2=y
-+BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG="am335x_mlo"
-+BR2_TARGET_BAREBOX_2_USE_SPECIFIC_IMAGE=y
-+BR2_TARGET_BAREBOX_2_IMAGE_FILE="barebox-am33xx-beaglebone-mlo.img"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_LATEST_VERSION=y
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_ZIMAGE=y
+This commit log again contained some "personal" messages, so I reworded
+it.
+
+I also did a few other changes:
+
+    [Thomas:
+     - Get rid of trailing spaces in Config.in
+     - Remove the BR2_PACKAGE_FASTD_OPENSSL, and simply rely on
+       BR2_PACKAGE_OPENSSL
+     - Remove -DWITH_CAPABILITIES=TRUE, since libcap support is anyway
+       mandatory.
+     - Use ON/OFF instead of TRUE/FALSE.]
+
+and then applied your patch.
+
+Could you submit your LTO related patch to the upstream project and get it merged, so that next time we update the fastd package we can get rid of the patch?
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
