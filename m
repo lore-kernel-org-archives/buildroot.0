@@ -1,45 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  4 Nov 2015 23:11:23 +0100
-Subject: [Buildroot] [PATCH] docs/manual: document $(FOO_PKGDIR)
-Message-ID: <1446675083-22426-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 4 Nov 2015 23:29:46 +0100
+Subject: [Buildroot] [PATCH] arch: add tune options for powerpc e5500 and
+	e6500
+Message-ID: <1446676186-32465-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the manual, add a note that packages can use $(FOO_PKGDIR) to get the
-path to the directory containg the .mk and Config.in files, if they need
-it to e.g. copy files from there, like startup scripts, systemd units or
-any other resource.
+These were forgotten when the subarches were added in cd88e49.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Alvaro Gamez <alvaro.gamez@hazent.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes:
-  - split out of the series since the corresponding code has been
-    applied
----
- docs/manual/adding-packages-generic.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/Config.in.powerpc | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index a7143e4..02a43d6 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -495,6 +495,11 @@ endef
- 
- In the action definitions, you can use the following variables:
- 
-+* +$(FOO_PKGDIR)+ contains the path to the directory containing the
-+  +foo.mk+ and +Config.in+ files. This variable is useful when it is
-+  necessary to install a file bundled in Buildroot, like a runtime
-+  configuration file, a splashscren image...
-+
- * +$(@D)+, which contains the directory in which the package source
-   code has been uncompressed.
- 
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 95bcaee..8581a4d 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -200,6 +200,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "e300c2"	if BR2_powerpc_e300c2
+ 	default "e300c3"	if BR2_powerpc_e300c3
+ 	default "e500mc"	if BR2_powerpc_e500mc
++	default "e5500"		if BR2_powerpc_e5500
++	default "e6500"		if BR2_powerpc_e6500
+ 	default "power4"	if BR2_powerpc_power4
+ 	default "power5"	if BR2_powerpc_power5
+ 	default "power6"	if BR2_powerpc_power6
 -- 
-1.9.1
+2.6.2
