@@ -1,35 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  5 Nov 2015 13:28:58 -0300
-Subject: [Buildroot] [PATCH] fastd: needs host-bison and host-pkgconf
-Message-ID: <1446740938-9782-1-git-send-email-gustavo@zacarias.com.ar>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Thu,  5 Nov 2015 11:34:33 -0500
+Subject: [Buildroot] [PATCH 1/1] gpsd: correct explicit nmea 0183 support
+	flag
+Message-ID: <1446741273-8460-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes (missing host-bison):
-http://autobuild.buildroot.net/results/237/2371c98112a416f4d9d32576f207dad8d80ac537
+The following handles the GPSd SCons change for the explicit
+configuration of the NMEA 0183 protocol. The protocol configuration
+change was introduced in 3.12. Developer's who transitioned to
+Buildroot's GPSd 3.15 had NMEA 0183 implicitly enabled by default. This
+change allows NMEA 0183 to be explicitly disabled again.
 
-host-pkgconf derived from $(@D)/cmake/deps.cmake
+See:
+ http://git.savannah.gnu.org/cgit/gpsd.git/commit/SConstruct?id=8f20d7b2d1ece8f3205ca038726c77daa5234c0c
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
- package/fastd/fastd.mk | 2 +-
+ package/gpsd/gpsd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
-index afaa27b..4c2626f 100644
---- a/package/fastd/fastd.mk
-+++ b/package/fastd/fastd.mk
-@@ -9,7 +9,7 @@ FASTD_SITE = git://git.universe-factory.net/fastd
- FASTD_LICENSE = BSD-2c
- FASTD_LICENSE_FILES = COPYRIGHT
- FASTD_CONF_OPTS = -DENABLE_LIBSODIUM=ON
--FASTD_DEPENDENCIES = libuecc libsodium libcap
-+FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium libcap
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- FASTD_CONF_OPTS += -DENABLE_OPENSSL=ON
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 2199e31..577b43c 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -102,7 +102,7 @@ ifneq ($(BR2_PACKAGE_GPSD_MTK3301),y)
+ GPSD_SCONS_OPTS += mtk3301=no
+ endif
+ ifneq ($(BR2_PACKAGE_GPSD_NMEA),y)
+-GPSD_SCONS_OPTS += nmea=no
++GPSD_SCONS_OPTS += nmea0183=no
+ endif
+ ifneq ($(BR2_PACKAGE_GPSD_NTRIP),y)
+ GPSD_SCONS_OPTS += ntrip=no
 -- 
-2.4.10
+1.9.5.msysgit.1
