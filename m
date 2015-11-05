@@ -1,8 +1,8 @@
 From: Trent Piepho <tpiepho@kymetacorp.com>
-Date: Thu, 5 Nov 2015 19:45:20 +0000
-Subject: [Buildroot] [PATCH] toolchain/external:: Fix gdbserver install with
+Date: Thu, 5 Nov 2015 19:42:02 +0000
+Subject: [Buildroot] [PATCH] toolchain/external: Fix gdbserver install with
  linaro 2015.08
-Message-ID: <1446752721.4553.8.camel@rtred1test09.kymeta.local>
+Message-ID: <1446752522.4553.7.camel@rtred1test09.kymeta.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
