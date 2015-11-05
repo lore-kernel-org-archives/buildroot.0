@@ -1,56 +1,39 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Thu, 05 Nov 2015 22:04:09 +0900
-Subject: [Buildroot] [PATCH v5 1/1] gauche: new package
-In-Reply-To: Your message of Wed, 04 Nov 2015 15:46:01 +0100.
- <20151104154601.05336c0e@free-electrons.com>
-Message-ID: <201511051304.tA5D49uv001691@ms-omx01.plus.so-net.ne.jp>
+From: Stephen Beckwith <embeddedsteve@gmail.com>
+Date: Thu, 5 Nov 2015 08:16:33 -0500
+Subject: [Buildroot] BR2_EXTERNAL - Broken in 2015.08.01????
+Message-ID: <CAN34foz=B-ig5Ci4kE=UKk6p2qws2Pp-qzaQGgCoXpXco6SAuw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear, Thomas.
+I'm having an issue getting code to build using a BR2_EXTERNAL setup with
+the 2015.08.01 release of Buildroot.
+The Config.in file structure works just fine, the options specified show up
+in menuconfig and are selectable.  Defined CONFIG items (MUST they be
+BR2_XXXX names?) are listed at the bottom of the top level .config (using
+an "out of tree" build setup. . . )
+However, when I try to build the extra code, nothing happens.  This code is
+just simple "hello world" programs in a custom directory structure, using
+the generic-package setup.
+My initial attempt did produce some make errors, so I know build-root was
+parsing through the make files, but fixes to remove the warnings results in
+NO makes being run to compile and add the code to the build.
+I've reviewed the Slides & Lab Notes posted on-line from this years
+training session and reviewed the manual.  I have NO idea what's missing
+here.
+And yes, I have a .br-external file in the out of tree build directory
+(board as has been recommended - is this a MUST for Buildroot?) that is
+pointing to the external tree.
+I would GREATLY appreciate access to the magic decoder ring that will allow
+me to build this extra code as part of my embedded linux system.
 
-Thomas Petazzoni writes:
-> Dear Hiroshi Kawashima,
-> 
-> On Wed, 04 Nov 2015 22:40:27 +0900, Hiroshi Kawashima wrote:
-> > Gauche is an R7RS Scheme implementation developed to be a handy script
-> > interpreter, which allows programmers and systemadministrators to write
-> > small to large scripts for their daily chores. Quick startup, built-in
-> > system interface, native multilingual support are some of its goals.
-> > 
-> > Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-> > Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> > Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> > ---
-> > Changes v4 -> v5 (refelect comment from Thomas)
-> > - 2 patches for configure and configure.ac -> single patch.
-> > - improve explanation why we need to specify -std=gnu99 in GAUCHE_CONF_ENV.
-> 
-> Applied, thanks.
-Thank you!
+How many directory levels are allowed in an external tree?
 
-> Could you:
-> 
->  1/ Submit the gauche patch to the upstream project?
-Yes, I already sent patch to upstream (original author), but
-not replied yet.
-
->  2/ Look if all the gauche-* binaries installed on the target are
->     really useful? At least gauche-config and gauche-package look
->     unnecessary, since gauche-config is used to get compiler/linker
->     flags which is not needed on the target as we don't have a
->     compiler, and gauche-package is used to build/install additional
->     gauche packages, which also isn't possible since we don't have a
->     compiler on the target. You can submit a patch that implements a
->     post install target hook to remove the non-needed programs.
-Sure, I will do.
-gauche-cesconv might be used, but other gauche-* will not be
-necessary for target.
-
+Your expertise and quick response is GREATLY appreciated!
 Regards,
-Kawashima
-============================================================
-    Hiroshi Kawashima
+EmbeddedSteve
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151105/08116d44/attachment.html>
