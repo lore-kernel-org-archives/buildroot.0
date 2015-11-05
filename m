@@ -1,102 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Nov 2015 13:31:29 +0100
-Subject: [Buildroot] [git commit] pkgconf: fix incorrect variable-directory
-	sysroot prefixing
-Message-ID: <20151106123417.4142C81F8A@busybox.osuosl.org>
+Date: Thu, 5 Nov 2015 13:30:16 +0100
+Subject: [Buildroot] [PATCH] docs/manual: fix typo in $(FOO_PKGDIR)
+ documentation
+In-Reply-To: <1446678650-17966-1-git-send-email-arnout@mind.be>
+References: <1446678650-17966-1-git-send-email-arnout@mind.be>
+Message-ID: <20151105133016.11249401@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=07de512d25cac6f76f077c9c5bb1cb8484ed9803
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-According to the pkg-config documents ("specification") when
-sysroot-prefixing is enabled via PKG_CONFIG_SYSROOT_DIR this should only
-be applied to -I/-L directories (includes, library directories), and not
-to all of the other variables that can specify a directory.
+On Thu, 5 Nov 2015 00:10:50 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  docs/manual/adding-packages-generic.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-However xorg uses mapdir/sdkdir in a similar fashion in what could be
-considered an abuse of the spec, hence needs to be prefixed as well.
-And what's more, it also uses includedir in a nonstandard fashion just
-requesting the value via 'pkg-config --variable=includedir libfoo' which
-doesn't pass the standard prefixing rules for the --cflags and --libs
-invocation.
+Applied, thanks.
 
-This patch makes pkgconf behave in the pkg-config specified way with the
-added exception for the includedir, libdir, mapdir and sdkdir variables
-which are prefixed.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...-Fix-all-variables-sysroot-prefix-problem.patch |   58 ++++++++++++++++++++
- 1 files changed, 58 insertions(+), 0 deletions(-)
-
-diff --git a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-new file mode 100644
-index 0000000..bac9f62
---- /dev/null
-+++ b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-@@ -0,0 +1,58 @@
-+From abc7a780f2a52a1aa3ee288e17140b817b545cc3 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 2 Nov 2015 18:38:00 -0300
-+Subject: [PATCH] Fix all-variables sysroot prefix problem
-+
-+According to the pkg-config specifications (or rather documentation)
-+only the -L/-I directory entries should be sysroot-prefixed.
-+
-+We also need to prefix the mapdir/sdkdir variables since they're used by
-+xorg and expected that way.
-+
-+Also allow prefixing for includedir and libdir since in some silly cases
-+the directories may be requested barebones via pkg-config
-+--variable=includedir libfool for example.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ main.c | 17 ++++++++++++-----
-+ 1 file changed, 12 insertions(+), 5 deletions(-)
-+
-+diff --git a/main.c b/main.c
-+index 6947126..52d16c2 100644
-+--- a/main.c
-++++ b/main.c
-+@@ -313,9 +313,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-+ 			memset(req->buf, 0, sizeof(req->buf));
-+ 
-+ 			if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-+-			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-+-				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-+-
-++			    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-++			    	(!strcmp(req->variable, "includedir") || \
-++				    !strcmp(req->variable, "libdir") || \
-++				    !strcmp(req->variable, "mapdir") || \
-++				    !strcmp(req->variable, "sdkdir")))
-++					strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-+ 			strlcat(req->buf, var, sizeof(req->buf));
-+ 			return;
-+ 		}
-+@@ -323,8 +326,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-+ 		strlcat(req->buf, " ", sizeof(req->buf));
-+ 
-+ 		if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-+-		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))))
-+-			strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-++		    (sysroot_dir != NULL && strncmp(var, sysroot_dir, strlen(sysroot_dir))) &&
-++		    	(!strcmp(req->variable, "includedir") || \
-++			    !strcmp(req->variable, "libdir") || \
-++			    !strcmp(req->variable, "mapdir") || \
-++			    !strcmp(req->variable, "sdkdir")))
-++				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-+ 
-+ 		strlcat(req->buf, var, sizeof(req->buf));
-+ 	}
-+-- 
-+2.4.10
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
