@@ -1,49 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Nov 2015 22:15:57 +0100
-Subject: [Buildroot] [PATCHv6] package/golang: new package
-In-Reply-To: <CA+h8R2pTn48GzacG14mBVWJcReFCdGH5jRTRp1wwoxSuZF98PQ@mail.gmail.com>
-References: <1438277053-10053-1-git-send-email-yann.morin.1998@free.fr>
- <20151021230701.4701e646@free-electrons.com>
- <CA+h8R2p5xgF7rJJW5z0AzB7b359F=S9yWrXpiTmCVK-D0Sk8pw@mail.gmail.com>
- <CA+h8R2rbM2BTMLLuczMk741Otm3EBySYPEZi8QbPZrGzf=41zQ@mail.gmail.com>
- <CA+h8R2r33RBdHNCq6dyZFE5FE_FQ2yJFjWqBGt8+wgOPCbeO+w@mail.gmail.com>
- <20151104172118.GB4072@free.fr>
- <20151104183119.107ccc45@free-electrons.com>
- <CA+h8R2pTn48GzacG14mBVWJcReFCdGH5jRTRp1wwoxSuZF98PQ@mail.gmail.com>
-Message-ID: <20151105211557.GF3781@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Nov 2015 22:37:23 +0100
+Subject: [Buildroot] [PATCH v2 2/3] gpsd: cleanup udev rule permissions
+In-Reply-To: <1446748914-12628-2-git-send-email-james.knight@rockwellcollins.com>
+References: <1446748914-12628-1-git-send-email-james.knight@rockwellcollins.com>
+ <1446748914-12628-2-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <20151105223723.35e5069e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+Dear James Knight,
 
-On 2015-11-04 21:21 +0000, Christian Stewart spake thusly:
-> Would you like to address these or should I? If I add the command with env
-> variables variable as well as the docs, should I respin it or should I send
-> it to you? What's the best way to do this?
-
-Please do the change and respin a new patch to the list.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> > Correct. Also, I think I raised a few comments (about gofmt, about the
-> > situations where go in the target is useful). Those comments were
-> > answered, but it would be nicer if the answers were turned into actual
-> > comments into the code, or in the Config.in help text.
-> >
+On Thu,  5 Nov 2015 13:41:53 -0500, James Knight wrote:
+> Adjust a generated udev rule file (25-gpsd.rules) to have user write
+> permissions. This is to prevent rebuild issues when the gpsd package
+> fails to re-install on a target (since the `cp` of the rule file will
+> fail due to permissions).
 > 
-> Thanks!
-> Christian
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+> ---
+> Changes v1 -> v2:
+>   - Package change introduced in change set 2.
+> ---
+>  package/gpsd/gpsd.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
+Applied after doing some minor tweaks to the commit title and the
+comment in the code.
+
+Could you report this issue to upstream gpsd? It is not normal IMO that
+a projects doesn't support "make install; make install".
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
