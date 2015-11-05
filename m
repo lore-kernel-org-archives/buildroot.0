@@ -1,72 +1,71 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  5 Nov 2015 19:53:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 8441] New: Invalid directory for X11 fonts in
-	target (RPi2)
-Message-ID: <bug-8441-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 5 Nov 2015 20:55:29 +0100
+Subject: [Buildroot] [PATCH] toolchain/external:: Fix gdbserver install
+ with linaro 2015.08
+In-Reply-To: <1446752721.4553.8.camel@rtred1test09.kymeta.local>
+References: <1446752721.4553.8.camel@rtred1test09.kymeta.local>
+Message-ID: <20151105195529.GC3781@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8441
+Trent, All,
 
-           Summary: Invalid directory for X11 fonts in target (RPi2)
-           Product: buildroot
-           Version: unspecified
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: buildroot at netsolux.ch
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On 2015-11-05 19:45 +0000, Trent Piepho spake thusly:
+> It's now in bin/gdbserver from the install dir of the toolchain.
 
+Indeed...
 
-Hello,
+> Signed-off-by: Trent Piepho <tpiepho@kymetacorp.com>
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 958ab18..843b1f8 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -645,7 +645,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+>  	if test "$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" = "y"; then \
+>  		$(call MESSAGE,"Copying gdbserver") ; \
+>  		gdbserver_found=0 ; \
+> -		for d in $${ARCH_SYSROOT_DIR}/usr $${ARCH_SYSROOT_DIR}/../debug-root/usr $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} ; do \
+> +		for d in $${ARCH_SYSROOT_DIR}/usr $${ARCH_SYSROOT_DIR}/../debug-root/usr $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} ${TOOLCHAIN_EXTERNAL_INSTALL_DIR}; do \
 
-In the target directory, all X11 fonts are installed in wrong directory :
+It might be time to split this overly-long line, like so:
 
-[root at devel target]$ pwd
-/data/buildroot/output/target
+        for d in $${ARCH_SYSROOT_DIR}/usr \
+                 $${ARCH_SYSROOT_DIR}/../debug-root/usr \
+                 $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} \
+                 ${TOOLCHAIN_EXTERNAL_INSTALL_DIR}; do \
 
-[root at devel target]$ find . -name fonts -print
-./usr/share/fonts
-./etc/fonts
-./data/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/share/fonts
+Also, we use the $(FOO) construct when refering to Makefile variables,
+and TOOLCHAIN_EXTERNAL_INSTALL_DIR *is* a Makefile variable. Care to fix
+and respin, please?
 
-[root at devel target]$ ls -lsa
-./data/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/share/fonts
-total 12
-4 drwxr-xr-x 3 root root 4096 Nov  5 19:22 .
-4 drwxr-xr-x 4 root root 4096 Nov  5 19:22 ..
-4 drwxr-xr-x 7 root root 4096 Nov  5 19:29 X11
+Thank you! :-)
 
-[root at devel target]$ ls -lsa
-./data/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/share/fonts/X11/
-total 44
- 4 drwxr-xr-x 7 root root  4096 Nov  5 19:29 .
- 4 drwxr-xr-x 3 root root  4096 Nov  5 19:22 ..
- 4 drwxr-xr-x 2 root root  4096 Nov  5 19:29 100dpi
- 4 drwxr-xr-x 2 root root  4096 Nov  5 19:29 75dpi
- 4 drwxr-xr-x 2 root root  4096 Nov  5 19:29 cyrillic
- 4 drwxr-xr-x 3 root root  4096 Nov  5 19:22 encodings
-20 drwxr-xr-x 2 root root 20480 Nov  5 19:29 misc
+Regards,
+Yann E. MORIN.
 
-[root at devel target]$ ls -lsa ./usr/share/fonts
-total 12
-4 drwxr-xr-x  3 root root 4096 Nov  5 18:47 .
-4 drwxr-xr-x 23 root root 4096 Nov  5 20:11 ..
-4 drwxr-xr-x  2 root root 4096 Nov  5 18:47 dejavu
-
-Best Regards,
-
-Thomas
+>  			if test -f $${d}/bin/gdbserver ; then \
+>  				install -m 0755 -D $${d}/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
+>  				gdbserver_found=1 ; \
+> -- 
+> 1.8.3.1
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
