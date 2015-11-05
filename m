@@ -1,62 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Nov 2015 22:39:59 +0100
-Subject: [Buildroot] [PATCH v2 3/3] gpsd: disable attempt to reload
- systemd
-In-Reply-To: <1446748914-12628-3-git-send-email-james.knight@rockwellcollins.com>
-References: <1446748914-12628-1-git-send-email-james.knight@rockwellcollins.com>
- <1446748914-12628-3-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20151105223959.26c4af78@free-electrons.com>
+Date: Thu, 5 Nov 2015 22:42:03 +0100
+Subject: [Buildroot] [PATCH] bind: fix intermittent build issues with
+ high BR2_JLEVEL
+In-Reply-To: <1446721054-15603-1-git-send-email-heyleke@gmail.com>
+References: <1446721054-15603-1-git-send-email-heyleke@gmail.com>
+Message-ID: <20151105224203.77337e4b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+Dear Jan Heylen,
 
-On Thu,  5 Nov 2015 13:41:54 -0500, James Knight wrote:
-> The following disables the attempt to reload the host system's systemd
-> (`systemctl daemon-reload`; if any) when installing the gpsd package.
-> In previous attempts, the command would invoke and fail (either by being
-> non-existent or a system policy kit would timeout) falling back to a
-> `true` invoke.
+Thanks for your patch!
+
+On Thu,  5 Nov 2015 11:57:34 +0100, Jan Heylen wrote:
+> From: Peter Korsgaard <jacmet@sunsite.dk>
+
+I am not sure it is appropriate to send a patch in the name of someone
+else. Maybe you're taking one of Peter's previous commit, and
+re-applying it, but the context is different, so I believe it should be
+under your own name.
+
 > 
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> ---
-> Changes v1 -> v2:
->   - Package change introduced in change set 2.
-> ---
->  package/gpsd/gpsd.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Build sometimes breaks with:
 > 
-> diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-> index 5a369b0..40b95f7 100644
-> --- a/package/gpsd/gpsd.mk
-> +++ b/package/gpsd/gpsd.mk
-> @@ -234,4 +234,12 @@ endef
->  GPSD_POST_INSTALL_TARGET_HOOKS += GPSD_INSTALL_UDEV_RULES
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +define GPSD_DISABLE_SYSTEMD_DAEMON_RELOAD
-> +	$(SED) 's/systemctl daemon-reload || //g' $(@D)/SConstruct
-> +endef
-> +
-> +GPSD_POST_PATCH_HOOKS += GPSD_DISABLE_SYSTEMD_DAEMON_RELOAD
-> +endif
+> libtool: link: `unix/os.lo' is not a valid libtool object
+> make[3]: *** [rndc-confgen] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> make[4]: Leaving directory `/scratch/peko/build/bind-9.6-ESV-R4/bin/rndc/unix'
+> 
+> So disable parallel builds.
 
-I see the problem, but rather than this $(SED) expression, could you
-create a proper patch against the gpsd sources ? The risk with the
-$(SED) expression is that we might forget about it when updating gpsd
-in the future.
+I've been trying to reproduce the parallel build issue, and I haven't
+been able to do so. It seems our autobuilders also didn't catch it.
 
-Also, can you raise the issue with the upstream gpsd developers? Maybe
-they could introduce some SConstruct command line option to explicitly
-disable restarting the systemd service. Or maybe the SConstruct already
-has a way of knowing that it is cross-compiling, in which case doing
-this systemctl call is silly.
+How often are you able to reproduce it ? On what type of build machine ?
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
