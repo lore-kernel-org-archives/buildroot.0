@@ -1,45 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  5 Nov 2015 19:45:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 8436] New: xserver_xorg-server Segmentation fault
-Message-ID: <bug-8436-163@https.bugs.busybox.net/>
+From: Trent Piepho <tpiepho@kymetacorp.com>
+Date: Thu, 5 Nov 2015 19:45:20 +0000
+Subject: [Buildroot] [PATCH] toolchain/external:: Fix gdbserver install with
+ linaro 2015.08
+Message-ID: <1446752721.4553.8.camel@rtred1test09.kymeta.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8436
+It's now in bin/gdbserver from the install dir of the toolchain.
 
-           Summary: xserver_xorg-server Segmentation fault
-           Product: buildroot
-           Version: unspecified
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: buildroot at netsolux.ch
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Trent Piepho <tpiepho@kymetacorp.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Hello,
-
-xserver_xorg-server crash when using Dillo or Midori.
-
-See : https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63346
-
-xserver_xorg-server should never be built with the -Os option (default option).
-
-The server works when compiled with -O3 option.
-
-Best regards,
-
-Thomas
-
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 958ab18..843b1f8 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -645,7 +645,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+ 	if test "$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" = "y"; then \
+ 		$(call MESSAGE,"Copying gdbserver") ; \
+ 		gdbserver_found=0 ; \
+-		for d in $${ARCH_SYSROOT_DIR}/usr $${ARCH_SYSROOT_DIR}/../debug-root/usr $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} ; do \
++		for d in $${ARCH_SYSROOT_DIR}/usr $${ARCH_SYSROOT_DIR}/../debug-root/usr $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} ${TOOLCHAIN_EXTERNAL_INSTALL_DIR}; do \
+ 			if test -f $${d}/bin/gdbserver ; then \
+ 				install -m 0755 -D $${d}/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
+ 				gdbserver_found=1 ; \
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.3.1
