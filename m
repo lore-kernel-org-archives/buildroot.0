@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Nov 2015 13:30:09 +0100
-Subject: [Buildroot] [PATCH] python-protobuf: fix legal info
-In-Reply-To: <1446720185-10790-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1446720185-10790-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151105133009.39cc06f3@free-electrons.com>
+Date: Thu, 5 Nov 2015 13:30:21 +0100
+Subject: [Buildroot] [git commit] docs/manual: fix typo in $(FOO_PKGDIR)
+	documentation
+Message-ID: <20151105123043.5331B7FC53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=1daa4c95a4bb93621292dd5c9d24285fcddb4026
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  5 Nov 2015 07:43:05 -0300, Gustavo Zacarias wrote:
-> It uses the same tarball as protobuf hence suffers the same problem as
-> commit f700463c. Fixes:
-> http://autobuild.buildroot.net/results/428/4282281e5582b0da8ed3ff44f4d6d86f716ea333/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/python-protobuf/python-protobuf.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-generic.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 02a43d6..1c25c4e 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -498,7 +498,7 @@ In the action definitions, you can use the following variables:
+ * +$(FOO_PKGDIR)+ contains the path to the directory containing the
+   +foo.mk+ and +Config.in+ files. This variable is useful when it is
+   necessary to install a file bundled in Buildroot, like a runtime
+-  configuration file, a splashscren image...
++  configuration file, a splashscreen image...
+ 
+ * +$(@D)+, which contains the directory in which the package source
+   code has been uncompressed.
