@@ -1,45 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Nov 2015 13:37:21 +0100
-Subject: [Buildroot] [PATCH v2] pkgconf: fix incorrect
- variable-directory sysroot prefixing
-In-Reply-To: <1446501424-26609-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1446501424-26609-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151106133721.3ca401a0@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 6 Nov 2015 15:05:45 +0100
+Subject: [Buildroot] [PATCH 2/2] arch: add tune options for powerpc e5500
+	and e6500
+In-Reply-To: <1446818745-32224-1-git-send-email-arnout@mind.be>
+References: <1446818745-32224-1-git-send-email-arnout@mind.be>
+Message-ID: <1446818745-32224-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+These were forgotten when the subarches were added in cd88e49.
 
-On Mon,  2 Nov 2015 18:57:04 -0300, Gustavo Zacarias wrote:
-> According to the pkg-config documents ("specification") when
-> sysroot-prefixing is enabled via PKG_CONFIG_SYSROOT_DIR this should only
-> be applied to -I/-L directories (includes, library directories), and not
-> to all of the other variables that can specify a directory.
-> 
-> However xorg uses mapdir/sdkdir in a similar fashion in what could be
-> considered an abuse of the spec, hence needs to be prefixed as well.
-> And what's more, it also uses includedir in a nonstandard fashion just
-> requesting the value via 'pkg-config --variable=includedir libfoo' which
-> doesn't pass the standard prefixing rules for the --cflags and --libs
-> invocation.
-> 
-> This patch makes pkgconf behave in the pkg-config specified way with the
-> added exception for the includedir, libdir, mapdir and sdkdir variables
-> which are prefixed.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...-Fix-all-variables-sysroot-prefix-problem.patch | 58 ++++++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Alvaro Gamez <alvaro.gamez@hazent.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ arch/Config.in.powerpc | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied, thanks.
-
-Thomas
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 95bcaee..8581a4d 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -200,6 +200,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "e300c2"	if BR2_powerpc_e300c2
+ 	default "e300c3"	if BR2_powerpc_e300c3
+ 	default "e500mc"	if BR2_powerpc_e500mc
++	default "e5500"		if BR2_powerpc_e5500
++	default "e6500"		if BR2_powerpc_e6500
+ 	default "power4"	if BR2_powerpc_power4
+ 	default "power5"	if BR2_powerpc_power5
+ 	default "power6"	if BR2_powerpc_power6
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.2
