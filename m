@@ -1,91 +1,349 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  6 Nov 2015 20:15:30 +0100
-Subject: [Buildroot] [PATCHv4] core/pkg-generic: check proper package
-	installation
-Message-ID: <1446837330-31048-1-git-send-email-yann.morin.1998@free.fr>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Fri,  6 Nov 2015 17:47:57 -0200
+Subject: [Buildroot] [PATCH v4 1/3] chocolate-doom: new package
+Message-ID: <1446839279-9021-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages misbehave, and install files in either of;
-  - $(STAGING_DIR)/$(O) or $(TARGET_DIR)/$(O),
-  - $(STAGING_DIR)/$(HOST_DIR) or $(TARGET_DIR)/$(HOST_DIR).
+Chocolate Doom is a set of conservative source ports for Doom, Heretic,
+Hexen and Strife, with a philosophy of preserving the look, feel, and
+bugs of the vanilla versions of each.
 
-One common reason for that is that pkgconf now prepends the sysroot path
-to all the paths it returns. Other reasons vary, but are mostly due to
-poorly writen generic-packages.
+http://www.chocolate-doom.org
 
-Add a check for those locations, as part of the command blocks for the
-target and staging installs.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Romain Naour <romain.naour@openwide.fr>
-
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 ---
-Chamges v3 -> v4:
-  - don't use step hooks; do the checks in the command blocks (Arnout)
+Changes v3 -> v4:
+  - Add patch to fix build for non-x86 architectures (Romain Naour);
+  - Add comment to chocolate-doom.mk explaining why autoreconf is
+    necessary (Romain Naour);
+  - Fix indentation in chocolate-doom.mk (Romain Naour);
+  - Remove CHOCOLATE_DOOM_SOURCE from chocolate-doom.mk since it's
+    equal to the default value.
 
 Changes v2 -> v3:
-  - also check for $(HOST_DIR) in case the user specified an
-    out-of-build-dir location  (Arnout)
-
+  - Rewrite commit message for upstream patch 2 (hopefully clearer now);
+  - Include upstream status in patches.
 ---
-Note that, in the current state of Buildroot, this *will* cause a lot of
-build failures until all those packages are fixed. Among the known to
-break are quite a few Xorg packages.
----
- package/pkg-generic.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ package/Config.in                                  |  1 +
+ ...ruct-attribute-directive-ignored-warnings.patch | 49 +++++++++++++
+ ...-configure-fix-with-PACKAGE-option-checks.patch | 67 ++++++++++++++++++
+ ...se-of-ioperm-inb-outb-to-x86-architecture.patch | 80 ++++++++++++++++++++++
+ package/chocolate-doom/Config.in                   | 12 ++++
+ package/chocolate-doom/chocolate-doom.hash         |  2 +
+ package/chocolate-doom/chocolate-doom.mk           | 44 ++++++++++++
+ 7 files changed, 255 insertions(+)
+ create mode 100644 package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch
+ create mode 100644 package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch
+ create mode 100644 package/chocolate-doom/0003-opl-limit-use-of-ioperm-inb-outb-to-x86-architecture.patch
+ create mode 100644 package/chocolate-doom/Config.in
+ create mode 100644 package/chocolate-doom/chocolate-doom.hash
+ create mode 100644 package/chocolate-doom/chocolate-doom.mk
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a5d0e57..82ec32e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -229,6 +229,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_STAGING_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
-+	$(call check-install-dirs,$(STAGING_DIR))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(call MESSAGE,"Fixing package configuration files") ;\
- 			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
-@@ -275,6 +276,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
- 		$($(PKG)_INSTALL_INIT_SYSV))
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
-+	$(call check-install-dirs,$(TARGET_DIR))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
- 	fi
-@@ -286,6 +288,23 @@ $(BUILD_DIR)/%/.stamp_dircleaned:
- 	rm -Rf $(@D)
+diff --git a/package/Config.in b/package/Config.in
+index bdc3063..1eb9ccf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -204,6 +204,7 @@ comment "Themes"
+ endmenu
  
- ################################################################################
-+# check-install-dirs -- check that packages do not incorrectly install files
-+# into incorrect locations
-+#
-+# argument 2 is the base directory to check for
-+################################################################################
-+define check-install-dirs
-+	$(Q)if [ -d $(1)/$(HOST_DIR) ]; then \
-+		printf "ERROR: package %s installs files in %s\n" $($(PKG)_NAME) $(1)$(HOST_DIR); \
-+		exit 1; \
-+	fi
-+	$(Q)if [ -d $(1)/$(O) ]; then \
-+		printf "ERROR: package %s installs files in %s\n" $($(PKG)_NAME) $(1)$(O); \
-+		exit 1; \
-+	fi
-+endef
+ menu "Games"
++	source "package/chocolate-doom/Config.in"
+ 	source "package/doom-wad/Config.in"
+ 	source "package/gnuchess/Config.in"
+ 	source "package/lbreakout2/Config.in"
+diff --git a/package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch b/package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch
+new file mode 100644
+index 0000000..bff8e3e
+--- /dev/null
++++ b/package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch
+@@ -0,0 +1,49 @@
++From d9c517d9a4e168c1f7ed28ad0eb9365d69f5ceb2 Mon Sep 17 00:00:00 2001
++From: Rodrigo Rebello <rprebello@gmail.com>
++Date: Thu, 22 Oct 2015 11:29:55 -0200
++Subject: [PATCH] Fix "`gcc_struct' attribute directive ignored" warnings
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
++Compilation for target architectures other than i386, x86_64 or PowerPC
++(e.g. ARM) caused multiple warnings like the following to appear:
++
++  doomdata.h:75:1: warning: ?gcc_struct? attribute directive ignored
++   } PACKEDATTR mapsidedef_t;
++   ^
++
++This was due to 'gcc_struct' being undefined for these architectures.
++Since that attribute was actually introduced by commit 87db726b9a9ae61ca
++to address the fact that -mms-bitfields became the default for GCC on
++Windows, limit it to that case.
++
++Upstream-status: accepted, not yet released.
++https://github.com/chocolate-doom/chocolate-doom/pull/629
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++---
++ src/doomtype.h | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/doomtype.h b/src/doomtype.h
++index bf0a40e..77c026c 100644
++--- a/src/doomtype.h
+++++ b/src/doomtype.h
++@@ -52,10 +52,10 @@
++ 
++ #ifdef __GNUC__
++ 
++-#ifdef __clang__
++-#define PACKEDATTR __attribute__((packed))
++-#else
+++#if defined(_WIN32) && !defined(__clang__)
++ #define PACKEDATTR __attribute__((packed,gcc_struct))
+++#else
+++#define PACKEDATTR __attribute__((packed))
++ #endif
++ 
++ #else
++-- 
++2.1.4
++
+diff --git a/package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch b/package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch
+new file mode 100644
+index 0000000..f4d09f5
+--- /dev/null
++++ b/package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch
+@@ -0,0 +1,67 @@
++From fd12fa91aa8e35dbd3ffa5bfe055baf6bde0cd63 Mon Sep 17 00:00:00 2001
++From: Rodrigo Rebello <rprebello@gmail.com>
++Date: Thu, 22 Oct 2015 15:28:11 -0200
++Subject: [PATCH] configure: fix --with-PACKAGE option checks
++
++Options of the form --with-PACKAGE[=yes] (e.g. --with-libpng), when
++passed to configure, were being treated as though --without-PACKAGE had
++been given.
++
++Although the intention is to have configure check and use PACKAGE by
++default if it's available, thus requiring the user to pass an option
++only if PACKAGE must NOT be used, there are times when the opposite
++might be desired (i.e. the user wants to indicate PACKAGE MUST be used).
++Moreover, allowing --with-PACKAGE and behaving as if --without-PACKAGE
++had been specified is in itself quite confusing.
++
++Fix that by testing the result of 'with_PACKAGE' in configure.ac and
++acting accordingly instead of blindly assuming a 'no'.
++
++Upstream-status: accepted, not yet released.
++https://github.com/chocolate-doom/chocolate-doom/pull/630
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++---
++ configure.ac | 18 ++++++++++++++++--
++ 1 file changed, 16 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index ee97fe2..7b03485 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -80,7 +80,14 @@ AC_SDL_MAIN_WORKAROUND([
++         [Build without libsamplerate @<:@default=check@:>@]),
++     [],
++     [
++-        AC_CHECK_LIB(samplerate, src_new)
+++        [with_libsamplerate=check]
+++    ])
+++    AS_IF([test "x$with_libsamplerate" != xno], [
+++        AC_CHECK_LIB(samplerate, src_new, [], [
+++            AS_IF([test "x$with_libsamplerate" != xcheck], [AC_MSG_FAILURE(
+++                [--with-libsamplerate was given, but test for libsamplerate failed])
+++            ])
+++        ])
++     ])
++     # Check for libpng.
++     AC_ARG_WITH([libpng],
++@@ -88,8 +95,15 @@ AC_SDL_MAIN_WORKAROUND([
++         [Build without libpng @<:@default=check@:>@]),
++     [],
++     [
+++        [with_libpng=check]
+++    ])
+++    AS_IF([test "x$with_libpng" != xno], [
++         AC_CHECK_LIB(z, zlibVersion)
++-        AC_CHECK_LIB(png, png_get_io_ptr)
+++        AC_CHECK_LIB(png, png_get_io_ptr, [], [
+++            AS_IF([test "x$with_libpng" != xcheck], [AC_MSG_FAILURE(
+++                [--with-libpng was given, but test for libpng failed])
+++            ])
+++        ])
++     ])
++     AC_CHECK_LIB(m, log)
++ 
++-- 
++2.1.4
++
+diff --git a/package/chocolate-doom/0003-opl-limit-use-of-ioperm-inb-outb-to-x86-architecture.patch b/package/chocolate-doom/0003-opl-limit-use-of-ioperm-inb-outb-to-x86-architecture.patch
+new file mode 100644
+index 0000000..860f563
+--- /dev/null
++++ b/package/chocolate-doom/0003-opl-limit-use-of-ioperm-inb-outb-to-x86-architecture.patch
+@@ -0,0 +1,80 @@
++From 87c7399305b30045a856d737bbfd8f59b8f52392 Mon Sep 17 00:00:00 2001
++From: Rodrigo Rebello <rprebello@gmail.com>
++Date: Fri, 6 Nov 2015 12:14:01 -0200
++Subject: [PATCH] opl: limit use of ioperm/inb/outb to x86 architecture
++
++The use of I/O ports in the Linux driver to directly control OPL chips
++is x86 specific and only really makes sense for x86-based PC's with
++compatible hardware.
++
++For some architectures (e.g. ARM), ioperm, inb and outb do exist and are
++detected by the configure script (via AC_CHECK_FUNCS(ioperm)), but their
++use is inappropriate in these cases and should be avoided.
++
++In some other scenarios, like when using a GNU toolchain + uClibc for
++PowerPC, the build even fails with the following error:
++
++  opl_linux.c:26:20: fatal error: sys/io.h: No such file or directory
++
++That is so because ioperm() is exported by uClibc and gets detected by
++configure, which enables the "Linux" driver via definition of
++HAVE_IOPERM, but in practice 'sys/io.h' is missing for ppc (inb/outb is
++not implemented, and the call to ioperm() would return EIO anyway).
++
++So, besides testing for HAVE_IOPERM, also test if either __i386__ or
++__x86_64__ are defined before enabling this OPL driver.
++
++Upstream-status: accepted, not yet released.
++https://github.com/chocolate-doom/chocolate-doom/pull/638
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++---
++ opl/opl.c       | 4 ++--
++ opl/opl_linux.c | 4 ++--
++ 2 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/opl/opl.c b/opl/opl.c
++index 60f027d..0d25689 100644
++--- a/opl/opl.c
+++++ b/opl/opl.c
++@@ -27,7 +27,7 @@
++ 
++ //#define OPL_DEBUG_TRACE
++ 
++-#ifdef HAVE_IOPERM
+++#if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM)
++ extern opl_driver_t opl_linux_driver;
++ #endif
++ #if defined(HAVE_LIBI386) || defined(HAVE_LIBAMD64)
++@@ -40,7 +40,7 @@ extern opl_driver_t opl_sdl_driver;
++ 
++ static opl_driver_t *drivers[] =
++ {
++-#ifdef HAVE_IOPERM
+++#if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM)
++     &opl_linux_driver,
++ #endif
++ #if defined(HAVE_LIBI386) || defined(HAVE_LIBAMD64)
++diff --git a/opl/opl_linux.c b/opl/opl_linux.c
++index 5df5d46..19e4c3e 100644
++--- a/opl/opl_linux.c
+++++ b/opl/opl_linux.c
++@@ -17,7 +17,7 @@
++ 
++ #include "config.h"
++ 
++-#ifdef HAVE_IOPERM
+++#if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM)
++ 
++ #include <stdio.h>
++ #include <string.h>
++@@ -99,5 +99,5 @@ opl_driver_t opl_linux_driver =
++     OPL_Timer_AdjustCallbacks,
++ };
++ 
++-#endif /* #ifdef HAVE_IOPERM */
+++#endif /* #if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM) */
++ 
++-- 
++2.1.4
++
+diff --git a/package/chocolate-doom/Config.in b/package/chocolate-doom/Config.in
+new file mode 100644
+index 0000000..5e0d9c1
+--- /dev/null
++++ b/package/chocolate-doom/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_CHOCOLATE_DOOM
++	bool "chocolate-doom"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_SDL
++	select BR2_PACKAGE_SDL_MIXER
++	select BR2_PACKAGE_SDL_NET
++	help
++	  Chocolate Doom is a set of conservative source ports for Doom,
++	  Heretic, Hexen and Strife, with a philosophy of preserving the
++	  look, feel, and bugs of the vanilla versions of each.
++
++	  http://www.chocolate-doom.org
+diff --git a/package/chocolate-doom/chocolate-doom.hash b/package/chocolate-doom/chocolate-doom.hash
+new file mode 100644
+index 0000000..bdf5698
+--- /dev/null
++++ b/package/chocolate-doom/chocolate-doom.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	ad11e2871667c6fa0658abf2dcba0cd9b26fbd651ee8df55adfdc18ad8fd674a	chocolate-doom-2.2.1.tar.gz
+diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
+new file mode 100644
+index 0000000..d64ad51
+--- /dev/null
++++ b/package/chocolate-doom/chocolate-doom.mk
+@@ -0,0 +1,44 @@
 +################################################################################
- # virt-provides-single -- check that provider-pkg is the declared provider for
- # the virtual package virt-pkg
- #
++#
++# chocolate-doom
++#
++################################################################################
++
++CHOCOLATE_DOOM_VERSION = 2.2.1
++CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
++CHOCOLATE_DOOM_LICENSE = GPLv2+
++CHOCOLATE_DOOM_LICENSE_FILES = COPYING
++CHOCOLATE_DOOM_DEPENDENCIES = sdl sdl_mixer sdl_net
++
++# We're patching configure.ac, so we need to autoreconf
++CHOCOLATE_DOOM_AUTORECONF = YES
++
++# Avoid installing desktop entries, icons, etc.
++CHOCOLATE_DOOM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
++
++ifeq ($(BR2_STATIC_LIBS),y)
++# SDL_mixer uses symbols from SDL, but ends up after it on the link
++# cmdline. Fix it by forcing the SDL libs at the very end.
++CHOCOLATE_DOOM_CONF_ENV = LIBS="`$(STAGING_DIR)/usr/bin/sdl-config --static-libs`"
++endif
++
++CHOCOLATE_DOOM_CONF_OPTS = \
++	--disable-sdltest \
++	--with-sdl-prefix=$(STAGING_DIR)/usr \
++	--with-sdl-exec-prefix=$(STAGING_DIR)/usr
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++CHOCOLATE_DOOM_DEPENDENCIES += libpng
++CHOCOLATE_DOOM_CONF_OPTS += --with-libpng
++else
++CHOCOLATE_DOOM_CONF_OPTS += --without-libpng
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++CHOCOLATE_DOOM_DEPENDENCIES += libsamplerate
++CHOCOLATE_DOOM_CONF_OPTS += --with-libsamplerate
++else
++CHOCOLATE_DOOM_CONF_OPTS += --without-libsamplerate
++endif
++
++$(eval $(autotools-package))
 -- 
-1.9.1
+2.1.4
