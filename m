@@ -1,590 +1,91 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Fri,  6 Nov 2015 20:08:06 +0100
-Subject: [Buildroot] [PATCH] odroid_xu4: new board
-Message-ID: <1446836886-27256-1-git-send-email-viktorin@rehivetech.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  6 Nov 2015 20:15:30 +0100
+Subject: [Buildroot] [PATCHv4] core/pkg-generic: check proper package
+	installation
+Message-ID: <1446837330-31048-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides support for the board Odroid XU4:
+Some packages misbehave, and install files in either of;
+  - $(STAGING_DIR)/$(O) or $(TARGET_DIR)/$(O),
+  - $(STAGING_DIR)/$(HOST_DIR) or $(TARGET_DIR)/$(HOST_DIR).
 
-  http://odroid.com/dokuwiki/doku.php?id=en:odroid-xu4
+One common reason for that is that pkgconf now prepends the sysroot path
+to all the paths it returns. Other reasons vary, but are mostly due to
+poorly writen generic-packages.
 
-The support utilizes the Linux Kernel 4.2 experimental from:
+Add a check for those locations, as part of the command blocks for the
+target and staging installs.
 
-  https://github.com/tobetter/linux  odroidxu4-v4.2
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Romain Naour <romain.naour@openwide.fr>
 
-  (currently: 5eb40d45b291ee129cbfac2073f1ca7aa32ff4c5)
-
-and a customized linux defconfig which disables various (mostly)
-useless drivers to minimalize the Buildroot initial system. It
-compiles the r8152 driver into the kernel to have a working
-Ethernet out-of-the-box.
-
-The U-Boot SPL is not used as there are some binary blobs by
-Samsung (signed) needed to run. They are included in the used
-U-Boot:
-
-  https://github.com/hardkernel/u-boot.git  odroidxu3-v2012.07
-
-  (currently: 7aee723e3eb9a0935dbbfefc254735d2651a325d)
-
-Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 ---
- board/hardkernel/linux-odroidxu4-v4.2.config | 402 +++++++++++++++++++++++++++
- board/hardkernel/odroid-post.sh              |  11 +
- board/hardkernel/odroidxu4-boot.ini          |  22 ++
- board/hardkernel/readme.txt                  |  49 ++++
- configs/odroid_xu4_defconfig                 |  27 ++
- 5 files changed, 511 insertions(+)
- create mode 100644 board/hardkernel/linux-odroidxu4-v4.2.config
- create mode 100755 board/hardkernel/odroid-post.sh
- create mode 100644 board/hardkernel/odroidxu4-boot.ini
- create mode 100644 board/hardkernel/readme.txt
- create mode 100644 configs/odroid_xu4_defconfig
+Chamges v3 -> v4:
+  - don't use step hooks; do the checks in the command blocks (Arnout)
 
-diff --git a/board/hardkernel/linux-odroidxu4-v4.2.config b/board/hardkernel/linux-odroidxu4-v4.2.config
-new file mode 100644
-index 0000000..9cb13c5
---- /dev/null
-+++ b/board/hardkernel/linux-odroidxu4-v4.2.config
-@@ -0,0 +1,402 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_FHANDLE=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_TASKSTATS=y
-+CONFIG_TASK_DELAY_ACCT=y
-+CONFIG_TASK_XACCT=y
-+CONFIG_TASK_IO_ACCOUNTING=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_CGROUPS=y
-+CONFIG_CGROUP_DEBUG=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CPUSETS=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_MEMCG=y
-+CONFIG_MEMCG_KMEM=y
-+CONFIG_CGROUP_PERF=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_RT_GROUP_SCHED=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_NAMESPACES=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_EMBEDDED=y
-+CONFIG_PERF_EVENTS=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_ARCH_EXYNOS=y
-+CONFIG_ARCH_EXYNOS3=y
-+CONFIG_EXYNOS5420_MCPM=y
-+CONFIG_SMP=y
-+CONFIG_BIG_LITTLE=y
-+CONFIG_NR_CPUS=8
-+CONFIG_ARM_PSCI=y
-+CONFIG_PREEMPT=y
-+CONFIG_AEABI=y
-+CONFIG_HIGHMEM=y
-+CONFIG_CMA=y
-+CONFIG_SECCOMP=y
-+CONFIG_ZBOOT_ROM_TEXT=0x0
-+CONFIG_ZBOOT_ROM_BSS=0x0
-+CONFIG_ARM_APPENDED_DTB=y
-+CONFIG_ARM_ATAG_DTB_COMPAT=y
-+CONFIG_CMDLINE="root=/dev/ram0 rw ramdisk=8192 initrd=0x41000000,8M console=ttySAC1,115200 init=/linuxrc mem=256M"
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_STAT_DETAILS=y
-+CONFIG_CPU_FREQ_GOV_POWERSAVE=m
-+CONFIG_CPU_FREQ_GOV_USERSPACE=m
-+CONFIG_CPU_FREQ_GOV_ONDEMAND=m
-+CONFIG_CPU_FREQ_GOV_CONSERVATIVE=m
-+CONFIG_CPUFREQ_DT=y
-+CONFIG_ARM_BIG_LITTLE_CPUFREQ=y
-+CONFIG_ARM_DT_BL_CPUFREQ=y
-+CONFIG_ARM_EXYNOS_CPU_FREQ_BOOST_SW=y
-+# CONFIG_ARM_EXYNOS5440_CPUFREQ is not set
-+CONFIG_CPU_IDLE=y
-+CONFIG_ARM_EXYNOS_CPUIDLE=y
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_BINFMT_MISC=m
-+CONFIG_PM_AUTOSLEEP=y
-+CONFIG_PM_WAKELOCKS=y
-+CONFIG_PM_DEBUG=y
-+CONFIG_PM_ADVANCED_DEBUG=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_NET_KEY=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_IP_PNP_RARP=y
-+CONFIG_NETFILTER=y
-+CONFIG_NF_CONNTRACK=y
-+CONFIG_NF_CONNTRACK_MARK=y
-+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
-+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
-+CONFIG_NF_CONNTRACK_IPV4=m
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_IP_NF_NAT=m
-+CONFIG_IP_NF_TARGET_MASQUERADE=m
-+CONFIG_BT=m
-+CONFIG_BT_RFCOMM=m
-+CONFIG_BT_RFCOMM_TTY=y
-+CONFIG_BT_BNEP=m
-+CONFIG_BT_BNEP_MC_FILTER=y
-+CONFIG_BT_BNEP_PROTO_FILTER=y
-+CONFIG_BT_HIDP=m
-+# CONFIG_BT_DEBUGFS is not set
-+CONFIG_BT_HCIBTUSB=m
-+CONFIG_BT_HCIUART=m
-+CONFIG_BT_HCIUART_BCSP=y
-+CONFIG_BT_HCIUART_ATH3K=y
-+CONFIG_BT_HCIUART_LL=y
-+CONFIG_BT_HCIUART_3WIRE=y
-+CONFIG_BT_HCIBCM203X=m
-+CONFIG_BT_HCIBPA10X=m
-+CONFIG_BT_HCIBFUSB=m
-+CONFIG_CFG80211=m
-+CONFIG_MAC80211=m
-+CONFIG_MAC80211_LEDS=y
-+CONFIG_RFKILL_REGULATOR=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_DMA_CMA=y
-+CONFIG_CMA_SIZE_MBYTES=128
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_CRYPTOLOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_SIZE=8192
-+CONFIG_EEPROM_93CX6=m
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_CHR_DEV_SG=y
-+CONFIG_SCSI_SCAN_ASYNC=y
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_DM=y
-+CONFIG_DM_CRYPT=m
-+CONFIG_NETDEVICES=y
-+CONFIG_MACVLAN=m
-+CONFIG_TUN=m
-+CONFIG_VETH=m
-+# CONFIG_ETHERNET is not set
-+CONFIG_USB_RTL8152=y
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_LEDS is not set
-+# CONFIG_INPUT_MOUSEDEV is not set
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO is not set
-+CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_SAMSUNG=y
-+CONFIG_SERIAL_SAMSUNG_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_RAW_DRIVER=m
-+CONFIG_TCG_TIS_I2C_INFINEON=y
-+CONFIG_I2C_CHARDEV=m
-+CONFIG_I2C_MUX=m
-+CONFIG_I2C_ARB_GPIO_CHALLENGE=m
-+CONFIG_I2C_GPIO=y
-+CONFIG_SPI=y
-+CONFIG_SPI_S3C64XX=m
-+CONFIG_DEBUG_GPIO=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_POWER_SUPPLY=y
-+CONFIG_BATTERY_SBS=y
-+CONFIG_BATTERY_MAX17040=y
-+CONFIG_BATTERY_MAX17042=y
-+CONFIG_SENSORS_LM90=y
-+CONFIG_SENSORS_PWM_FAN=y
-+CONFIG_THERMAL=y
-+CONFIG_CPU_THERMAL=y
-+CONFIG_THERMAL_EMULATION=y
-+CONFIG_WATCHDOG=y
-+CONFIG_S3C2410_WATCHDOG=y
-+CONFIG_MFD_SEC_CORE=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_DEBUG=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_REGULATOR_GPIO=y
-+CONFIG_REGULATOR_S2MPA01=y
-+CONFIG_REGULATOR_S2MPS11=y
-+CONFIG_REGULATOR_S5M8767=y
-+CONFIG_MEDIA_SUPPORT=m
-+CONFIG_MEDIA_RC_SUPPORT=y
-+CONFIG_LIRC=m
-+CONFIG_RC_DEVICES=y
-+CONFIG_RC_ATI_REMOTE=m
-+CONFIG_IR_HIX5HD2=m
-+CONFIG_IR_IMON=m
-+CONFIG_IR_MCEUSB=m
-+CONFIG_IR_REDRAT3=m
-+CONFIG_IR_STREAMZAP=m
-+CONFIG_IR_IGORPLUGUSB=m
-+CONFIG_IR_IGUANA=m
-+CONFIG_IR_TTUSBIR=m
-+CONFIG_RC_LOOPBACK=m
-+CONFIG_IR_GPIOPLUG_CIR=m
-+CONFIG_DRM=y
-+CONFIG_DRM_PTN3460=y
-+CONFIG_DRM_PS8622=y
-+CONFIG_DRM_EXYNOS=y
-+CONFIG_DRM_EXYNOS_FIMD=y
-+CONFIG_DRM_EXYNOS_DSI=y
-+CONFIG_DRM_EXYNOS_HDMI=y
-+CONFIG_DRM_PANEL_SIMPLE=y
-+CONFIG_DRM_PANEL_S6E8AA0=y
-+CONFIG_FB_UDL=m
-+CONFIG_FB_SIMPLE=y
-+CONFIG_EXYNOS_VIDEO=y
-+CONFIG_EXYNOS_MIPI_DSI=y
-+CONFIG_LCD_CLASS_DEVICE=y
-+CONFIG_LCD_PLATFORM=y
-+CONFIG_BACKLIGHT_PWM=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_LOGO=y
-+CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_ROOT_HUB_TT=y
-+CONFIG_USB_EHCI_EXYNOS=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_OHCI_EXYNOS=y
-+CONFIG_USB_ACM=m
-+CONFIG_USB_STORAGE=m
-+CONFIG_USB_DWC3=y
-+CONFIG_USB_DWC3_DEBUG=y
-+CONFIG_USB_GADGET=m
-+CONFIG_USB_ZERO=m
-+CONFIG_USB_ETH=m
-+CONFIG_MMC=y
-+CONFIG_MMC_CLKGATE=y
-+CONFIG_MMC_BLOCK_MINORS=16
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_S3C=y
-+CONFIG_MMC_SDHCI_S3C_DMA=y
-+CONFIG_MMC_DW=y
-+CONFIG_MMC_DW_IDMAC=y
-+CONFIG_MMC_DW_EXYNOS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_PWM=m
-+CONFIG_LEDS_TRIGGER_TIMER=y
-+CONFIG_LEDS_TRIGGER_ONESHOT=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_LEDS_TRIGGER_BACKLIGHT=y
-+CONFIG_LEDS_TRIGGER_GPIO=y
-+CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
-+CONFIG_LEDS_TRIGGER_TRANSIENT=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_S5M=y
-+CONFIG_RTC_DRV_S3C=y
-+CONFIG_DMADEVICES=y
-+CONFIG_PL330_DMA=y
-+CONFIG_STAGING=y
-+CONFIG_FB_TFT=m
-+CONFIG_FB_TFT_AGM1264K_FL=m
-+CONFIG_FB_TFT_BD663474=m
-+CONFIG_FB_TFT_HX8340BN=m
-+CONFIG_FB_TFT_HX8347D=m
-+CONFIG_FB_TFT_HX8353D=m
-+CONFIG_FB_TFT_HX8357D=m
-+CONFIG_FB_TFT_ILI9163=m
-+CONFIG_FB_TFT_ILI9320=m
-+CONFIG_FB_TFT_ILI9325=m
-+CONFIG_FB_TFT_ILI9340=m
-+CONFIG_FB_TFT_ILI9341=m
-+CONFIG_FB_TFT_ILI9481=m
-+CONFIG_FB_TFT_ILI9486=m
-+CONFIG_FB_TFT_PCD8544=m
-+CONFIG_FB_TFT_RA8875=m
-+CONFIG_FB_TFT_S6D02A1=m
-+CONFIG_FB_TFT_S6D1121=m
-+CONFIG_FB_TFT_SSD1289=m
-+CONFIG_FB_TFT_SSD1306=m
-+CONFIG_FB_TFT_SSD1331=m
-+CONFIG_FB_TFT_SSD1351=m
-+CONFIG_FB_TFT_ST7735R=m
-+CONFIG_FB_TFT_TINYLCD=m
-+CONFIG_FB_TFT_TLS8204=m
-+CONFIG_FB_TFT_UC1701=m
-+CONFIG_FB_TFT_UPD161704=m
-+CONFIG_FB_TFT_WATTEROTT=m
-+CONFIG_FB_FLEX=m
-+CONFIG_FB_TFT_FBTFT_DEVICE=m
-+CONFIG_COMMON_CLK_S2MPS11=y
-+CONFIG_PM_DEVFREQ=y
-+CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
-+CONFIG_DEVFREQ_GOV_PERFORMANCE=m
-+CONFIG_DEVFREQ_GOV_POWERSAVE=m
-+CONFIG_DEVFREQ_GOV_USERSPACE=m
-+CONFIG_PM_DEVFREQ_EVENT=y
-+CONFIG_DEVFREQ_EVENT_EXYNOS_PPMU=y
-+CONFIG_EXTCON=y
-+CONFIG_IIO=y
-+CONFIG_EXYNOS_ADC=y
-+CONFIG_PWM=y
-+CONFIG_PWM_SAMSUNG=y
-+CONFIG_PHY_EXYNOS5250_SATA=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_POSIX_ACL=y
-+CONFIG_EXT3_FS_SECURITY=y
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_EXT4_FS_SECURITY=y
-+CONFIG_EXT4_ENCRYPTION=m
-+CONFIG_EXT4_DEBUG=y
-+CONFIG_JBD_DEBUG=y
-+CONFIG_JBD2_DEBUG=y
-+CONFIG_REISERFS_FS=m
-+CONFIG_REISERFS_CHECK=y
-+CONFIG_REISERFS_PROC_INFO=y
-+CONFIG_REISERFS_FS_XATTR=y
-+CONFIG_REISERFS_FS_POSIX_ACL=y
-+CONFIG_REISERFS_FS_SECURITY=y
-+CONFIG_JFS_FS=m
-+CONFIG_JFS_POSIX_ACL=y
-+CONFIG_JFS_SECURITY=y
-+CONFIG_JFS_DEBUG=y
-+CONFIG_JFS_STATISTICS=y
-+CONFIG_XFS_FS=m
-+CONFIG_XFS_QUOTA=y
-+CONFIG_XFS_POSIX_ACL=y
-+CONFIG_XFS_RT=y
-+CONFIG_XFS_DEBUG=y
-+CONFIG_FANOTIFY=y
-+CONFIG_QUOTA=y
-+CONFIG_QUOTA_NETLINK_INTERFACE=y
-+CONFIG_QUOTA_DEBUG=y
-+CONFIG_QFMT_V1=m
-+CONFIG_QFMT_V2=m
-+CONFIG_AUTOFS4_FS=m
-+CONFIG_FUSE_FS=y
-+CONFIG_CUSE=m
-+CONFIG_OVERLAY_FS=m
-+CONFIG_FSCACHE=m
-+CONFIG_FSCACHE_STATS=y
-+CONFIG_FSCACHE_HISTOGRAM=y
-+CONFIG_CACHEFILES=m
-+CONFIG_ISO9660_FS=m
-+CONFIG_JOLIET=y
-+CONFIG_ZISOFS=y
-+CONFIG_UDF_FS=m
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_NTFS_FS=y
-+CONFIG_NTFS_RW=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_CONFIGFS_FS=y
-+CONFIG_ROMFS_FS=m
-+CONFIG_NFS_FS=m
-+CONFIG_NFS_V3_ACL=y
-+CONFIG_NFS_V4=m
-+CONFIG_NFS_SWAP=y
-+CONFIG_NFS_V4_1=y
-+CONFIG_NFS_V4_2=y
-+CONFIG_NFS_V4_1_MIGRATION=y
-+CONFIG_NFS_FSCACHE=y
-+CONFIG_NFS_USE_LEGACY_DNS=y
-+CONFIG_NFSD=m
-+CONFIG_NFSD_V3_ACL=y
-+CONFIG_NFSD_V4=y
-+CONFIG_NFSD_PNFS=y
-+CONFIG_NFSD_FAULT_INJECTION=y
-+CONFIG_SUNRPC_DEBUG=y
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DEBUG_INFO=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_MEMORY_INIT=y
-+CONFIG_LOCKUP_DETECTOR=y
-+CONFIG_DEBUG_RT_MUTEXES=y
-+CONFIG_DEBUG_SPINLOCK=y
-+CONFIG_DEBUG_MUTEXES=y
-+CONFIG_DEBUG_USER=y
-+CONFIG_PERSISTENT_KEYRINGS=y
-+CONFIG_BIG_KEYS=y
-+CONFIG_TRUSTED_KEYS=m
-+CONFIG_SECURITY_DMESG_RESTRICT=y
-+CONFIG_SECURITY=y
-+CONFIG_SECURITY_NETWORK_XFRM=y
-+CONFIG_SECURITY_SMACK=y
-+CONFIG_SECURITY_SMACK_BRINGUP=y
-+CONFIG_SECURITY_TOMOYO=y
-+CONFIG_SECURITY_TOMOYO_OMIT_USERSPACE_LOADER=y
-+CONFIG_SECURITY_APPARMOR=y
-+CONFIG_SECURITY_YAMA=y
-+CONFIG_SECURITY_YAMA_STACKED=y
-+CONFIG_INTEGRITY_SIGNATURE=y
-+CONFIG_INTEGRITY_ASYMMETRIC_KEYS=y
-+CONFIG_IMA=y
-+CONFIG_IMA_APPRAISE=y
-+CONFIG_EVM=y
-+CONFIG_EVM_EXTRA_SMACK_XATTRS=y
-+CONFIG_DEFAULT_SECURITY_DAC=y
-+CONFIG_CRYPTO_DEV_S5P=y
-+CONFIG_ARM_CRYPTO=y
-+CONFIG_CRYPTO_SHA1_ARM=y
-+CONFIG_CRYPTO_SHA256_ARM=y
-+CONFIG_CRYPTO_AES_ARM=m
-+CONFIG_CRC_CCITT=y
-+CONFIG_CRC_ITU_T=y
-+CONFIG_FONTS=y
-+CONFIG_FONT_7x14=y
-diff --git a/board/hardkernel/odroid-post.sh b/board/hardkernel/odroid-post.sh
-new file mode 100755
-index 0000000..0e3ac05
---- /dev/null
-+++ b/board/hardkernel/odroid-post.sh
-@@ -0,0 +1,11 @@
-+#! /bin/sh
+Changes v2 -> v3:
+  - also check for $(HOST_DIR) in case the user specified an
+    out-of-build-dir location  (Arnout)
+
+---
+Note that, in the current state of Buildroot, this *will* cause a lot of
+build failures until all those packages are fixed. Among the known to
+break are quite a few Xorg packages.
+---
+ package/pkg-generic.mk | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index a5d0e57..82ec32e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -229,6 +229,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_STAGING_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
++	$(call check-install-dirs,$(STAGING_DIR))
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(call MESSAGE,"Fixing package configuration files") ;\
+ 			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
+@@ -275,6 +276,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
+ 		$($(PKG)_INSTALL_INIT_SYSV))
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
++	$(call check-install-dirs,$(TARGET_DIR))
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+ 	fi
+@@ -286,6 +288,23 @@ $(BUILD_DIR)/%/.stamp_dircleaned:
+ 	rm -Rf $(@D)
+ 
+ ################################################################################
++# check-install-dirs -- check that packages do not incorrectly install files
++# into incorrect locations
++#
++# argument 2 is the base directory to check for
++################################################################################
++define check-install-dirs
++	$(Q)if [ -d $(1)/$(HOST_DIR) ]; then \
++		printf "ERROR: package %s installs files in %s\n" $($(PKG)_NAME) $(1)$(HOST_DIR); \
++		exit 1; \
++	fi
++	$(Q)if [ -d $(1)/$(O) ]; then \
++		printf "ERROR: package %s installs files in %s\n" $($(PKG)_NAME) $(1)$(O); \
++		exit 1; \
++	fi
++endef
 +
-+files="bl1.bin.hardkernel bl2.bin.hardkernel tzsw.bin.hardkernel sd_fusing.sh"
-+
-+for f in $files; do
-+	cp -v ${BUILD_DIR}/uboot-${2}/sd_fuse/hardkernel/$f $BINARIES_DIR/$f
-+done
-+
-+cp -v board/hardkernel/odroidxu4-boot.ini ${BINARIES_DIR}/boot.ini
-+
-+cd $BINARIES_DIR && ln -vsf u-boot.bin u-boot.bin.hardkernel
-diff --git a/board/hardkernel/odroidxu4-boot.ini b/board/hardkernel/odroidxu4-boot.ini
-new file mode 100644
-index 0000000..2deccbf
---- /dev/null
-+++ b/board/hardkernel/odroidxu4-boot.ini
-@@ -0,0 +1,22 @@
-+ODROIDXU-UBOOT-CONFIG
-+
-+# U-Boot Parameters (DO NOT MODIFY)
-+setenv version 4.2.0-rc1-41
-+setenv zimage zImage
-+setenv fdtbin exynos5422-odroidxu4.dtb
-+
-+setenv zimage_addr_r 0x40008000
-+setenv fdtbin_addr_r 0x44000000
-+
-+setenv fdt_high "0xffffffff"
-+
-+# Default boot argument
-+setenv bootrootfs "root=/dev/mmcblk0p2 rootwait rw"
-+setenv console "console=ttySAC2,115200n8"
-+
-+setenv bootargs "${bootrootfs} ${console}"
-+
-+# boot commands
-+fatload mmc 0:1 ${zimage_addr_r} ${zimage}
-+fatload mmc 0:1 ${fdtbin_addr_r} ${fdtbin}
-+bootz ${zimage_addr_r} - ${fdtbin_addr_r}"
-diff --git a/board/hardkernel/readme.txt b/board/hardkernel/readme.txt
-new file mode 100644
-index 0000000..d7a77db
---- /dev/null
-+++ b/board/hardkernel/readme.txt
-@@ -0,0 +1,49 @@
-+Odroid XU4
-+==========
-+
-+http://www.hardkernel.com/main/products/prdt_info.php?g_code=G143452239825
-+http://www.hardkernel.com/main/products/prdt_info.php?g_code=G143452239825
-+
-+The Buildroot odroid_xu4_defconfig configuration builds:
-+
-+  u-boot.bin -> u-boot.bin.hardkernel
-+  zImage
-+  exynos5422-odroidxu4.dtb
-+  rootfs.ext3
-+
-+and prepares:
-+
-+  bl1.bin.hardkernel
-+  bl2.bin.hardkernel
-+  tzsw.bin.hardkernel
-+  sd_fusing.sh
-+  boot.ini
-+
-+As the board requires signed 1st bootloader, it is necessary to use
-+the provided BLOBs.
-+
-+
-+Installation:
-+
-+ - suppose ${SD} points to eg. /dev/sdc (your SD card)
-+
-+ 1) make odroid_xu4_defconfig
-+ 2) make
-+ 3) cd output/images
-+ 4) create 2 partitions (fdisk, cfdisk, ...):
-+    FAT (~128 MB), ext3 (rest).
-+
-+ 5) sudo ./sd_fusing ${SD}
-+    Installs the bootloaders, trust zone and the built U-Boot.
-+
-+ 6) sudo dd if=rootfs.ext3 of=${SD}2
-+    Write to eg. /dev/sdc2.
-+
-+ 7) sudo mount ${SD}1 /mnt
-+    Mount the FAT partition (eg. /dev/sdc1).
-+
-+ 8) sudo cp -v zImage boot.ini exynos5422-odroidxu4.dtb /mnt
-+ 9) sudo umount ${SD}1
-+
-+ Boot... if the fan is running the 1st booting works.
-+ The LED "Alive" should be blue while U-Boot is running.
-diff --git a/configs/odroid_xu4_defconfig b/configs/odroid_xu4_defconfig
-new file mode 100644
-index 0000000..3790db7
---- /dev/null
-+++ b/configs/odroid_xu4_defconfig
-@@ -0,0 +1,27 @@
-+BR2_arm=y
-+BR2_cortex_a15=y
-+BR2_ARM_FPU_NEON=y
-+BR2_KERNEL_HEADERS_4_2=y
-+BR2_TARGET_GENERIC_HOSTNAME="odroid-xu4"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Odroid XU4!"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttySAC2"
-+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroid-post.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_TARGET_UBOOT_VERSION)"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/tobetter/linux"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="odroidxu4-v4.2"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/hardkernel/linux-odroidxu4-v4.2.config"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_3=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="odroid"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="odroidxu3-v2012.07"
++################################################################################
+ # virt-provides-single -- check that provider-pkg is the declared provider for
+ # the virtual package virt-pkg
+ #
 -- 
-2.6.2
+1.9.1
