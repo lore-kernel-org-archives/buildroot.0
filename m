@@ -1,45 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Nov 2015 17:05:09 +0100
-Subject: [Buildroot] [PATCH 1/2] gcc: add patches for powerpc e6500
-	64-bit support
-In-Reply-To: <1446818745-32224-1-git-send-email-arnout@mind.be>
-References: <1446818745-32224-1-git-send-email-arnout@mind.be>
-Message-ID: <563CCFB5.4040109@mind.be>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Fri, 6 Nov 2015 11:07:09 -0500
+Subject: [Buildroot] [PATCH v2 3/3] gpsd: disable attempt to reload
+	systemd
+In-Reply-To: <20151105223959.26c4af78@free-electrons.com>
+References: <1446748914-12628-1-git-send-email-james.knight@rockwellcollins.com>
+ <1446748914-12628-3-git-send-email-james.knight@rockwellcollins.com>
+ <20151105223959.26c4af78@free-electrons.com>
+Message-ID: <CALe+oY96yQYW+0V8gK++ufdHogzV=QwrQK1g31A358jetWCa=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06-11-15 15:05, Arnout Vandecappelle (Essensium/Mind) wrote:
-> Building with -mtune=e6500 led to build failures in glibc (probably in
-> uclibc as well) because gcc was built for a 32-bit target even though
-> the target tuple is powerpc64-*. This lead to a mix of 32-bit and
-> 64-bit support and build errors like:
-> 
->   fatal error: gnu/lib-names-32.h: No such file or directory
-> 
-> The root cause is that the configure script is not handling e6500
-> correctly, because of stupid typo in the condition.
-> 
-> Change has been submitted upstream.
+Thomas,
 
- Patch has been accepted upstream.
+On Thu, Nov 5, 2015 at 4:39 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> rather than this $(SED) expression, could you
+> create a proper patch against the gpsd sources ?
 
- Regards,
- Arnout
+Gah! I was going to make a patch but figured the SED option would be
+preferred. Oops.
 
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Alvaro Gamez <alvaro.gamez@hazent.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-[snip]
+I take at look trying to get these changes (this and the other patch
+related to gpsd udev) upstream.
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+As always, thanks for the commits/comments.
