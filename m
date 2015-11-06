@@ -1,11 +1,11 @@
 From: Peter Rosin <peda@lysator.liu.se>
-Date: Fri, 06 Nov 2015 09:06:19 +0100
-Subject: [Buildroot] [PATCH 0/2] bump libtirpc to 1.0.1
-In-Reply-To: <563B32F8.8050607@lysator.liu.se>
+Date: Fri, 06 Nov 2015 09:27:03 +0100
+Subject: [Buildroot] [PATCH 1/2] rpcbind: backport adjustment to changes
+ in libtirpc 1.0.1
+In-Reply-To: <1446712210-14129-2-git-send-email-peda@lysator.liu.se>
 References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
- <20151105100543.4efb53dc@free-electrons.com>
- <563B32F8.8050607@lysator.liu.se>
-Message-ID: <563C5F7B.9060104@lysator.liu.se>
+ <1446712210-14129-2-git-send-email-peda@lysator.liu.se>
+Message-ID: <563C6457.8070006@lysator.liu.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,21 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On 2015-11-05 11:44, Peter Rosin wrote:
-> On 2015-11-05 10:05, Thomas Petazzoni wrote:
->> Dear Peter Rosin,
->>
->> On Thu,  5 Nov 2015 09:30:08 +0100, Peter Rosin wrote:
->>
->>> I'd like to bump libtirpc to 1.0.1. However there is an api incompatibility
->>> introduced in 0.3.2 which requires a patch to rpcbind, which I took from
-> oops, introduced in -> introduced since
->>> upstream. The rpcbind patch make rpcbind work with either tirpc 0.3.2 or
->>> 1.0.1, so I added that patch first in the series even if it might seem
->>> backwards.
->> Thanks for those patches. Is rpcbind the only user of libtirpc that is
->> affected by the API change ?
->>
->> Thomas
-> Good question...
+On 2015-11-05 09:30, Peter Rosin wrote:
+> From: Peter Rosin <peda@axentia.se>
+>
+> Signed-off-by: Peter Rosin <peda@axentia.se>
+> ---
+>  ...ly-Don-t-use-the-xp_auth-pointer-directly.patch |   42 ++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100755 package/rpcbind/0002-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch
+>
+> diff --git a/package/rpcbind/0002-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch b/package/rpcbind/0002-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch
+> new file mode 100755
 
-So, I grepped for "xp_auth" in the sources of all other packages that sport a dependency on
-libtirpc (argus, busybox, conntrack-tools, lmbench, ltp-testsuite, nfs-utils, quota and xinetd)
-and came up empty.
+Ouch, should be file mode 100644.
 
-Good enough?
+Should I resend a -v2 series fixing this glitch?
 
 Cheers,
 Peter
