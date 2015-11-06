@@ -1,71 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Nov 2015 16:50:46 +0100
-Subject: [Buildroot] Buildroot LTS?
-In-Reply-To: <563CC8D3.1010202@zacarias.com.ar>
-References: <563336DE.4040809@2net.co.uk>
- <20151030145803.6aeb3c2d@free-electrons.com>
- <87eggb1keu.fsf@dell.be.48ers.dk>
- <563CC8D3.1010202@zacarias.com.ar>
-Message-ID: <20151106165046.0fd56197@free-electrons.com>
+Date: Fri, 6 Nov 2015 16:54:42 +0100
+Subject: [Buildroot] BR2_EXTERNAL - Broken in 2015.08.01????
+In-Reply-To: <CAN34foyWQxHW1t=157ePm8JDfxAT6NoCarGPxOtsXh6C56gJsw@mail.gmail.com>
+References: <CAN34foz=B-ig5Ci4kE=UKk6p2qws2Pp-qzaQGgCoXpXco6SAuw@mail.gmail.com>
+ <20151105142958.60a38821@free-electrons.com>
+ <CAN34foyu5iSPur6c7gNKsB+b6AZgkrbqQ8fP5CKH6jt_GYjTjw@mail.gmail.com>
+ <20151105230545.581bf875@free-electrons.com>
+ <CAN34foxQ3J=Vd5ZRDtj7X54eD9naRCk-+5-Hh7AuTXp19OBUGQ@mail.gmail.com>
+ <20151106154102.6b72af73@free-electrons.com>
+ <CAN34foyWQxHW1t=157ePm8JDfxAT6NoCarGPxOtsXh6C56gJsw@mail.gmail.com>
+Message-ID: <20151106165442.687e5e08@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Stephen Beckwith,
 
-On Fri, 6 Nov 2015 12:35:47 -0300, Gustavo Zacarias wrote:
+On Fri, 6 Nov 2015 10:22:03 -0500, Stephen Beckwith wrote:
 
-> A bit late to the talk, but still relevant i think.
-> I think this is the biggest issue, at least for me it doesn't sound too 
-> interesting, i generally live with the bleeding-edge (master), and 
-> recommend people to use the latest release or master.
-
-Right, but it's very often not do-able to real-life projects/products.
-I gave a Buildroot training this week for a company, and they are stuck
-with Buildroot 2012.05. No BR2_EXTERNAL, no dependency graph, no legal
-info, none of the goodness we've added over the last 3 years. And of
-course, almost no security updates (though they fixed some of the big
-ones).
-
-> Security bumps are, in general, well tagged with i think my defacto 
-> standard:
+> *And you also state:*
 > 
-> $ git log --grep="security bump"|grep Author|sort|uniq
-> Author: Baruch Siach <xxx>
-> Author: Bernd Kuhls <xxx>
-> Author: Gustavo Zacarias <xxx>
-> Author: J?rg Krause <xxx>
-> Author: Peter Korsgaard <xxx>
-> Author: Yann E. MORIN <xxx>
+> Package "foo" *must*:
 > 
-> That being said it's just a first step towards LTS releases.
-> Though some other security fixes might sneak-in via regular bumps 
-> without being tagged or looking close enough at the release notes.
+>  * Be implemented in package/foo/foo.mk
 
-Yes, but to me very much like how current package bumps are done, those
-LTS releases could simply be based on feedback/contribution. In those
-LTS releases, we do not guarantee that *all* packages have been fixed
-for *all* known security problems. We only releases an updated
-Buildroot which has fixes for the security issues which were reported
-to the Buildroot community and for which patches were submitted.
+Yes, in the main Buildroot tree. In the BR2_EXTERNAL tree, it can be
+anywhere you want, as long as the directory name is "foo". I.e, it can
+be in
 
-Basically, it's just to avoid having everybody duplicating the same
-work, and have a central place to push the security fixes.
+	baz/boz/foo/foo.mk
+	package/vendor/foo/foo.mk
 
-> With some previous experience with these things it depends very much on 
-> the package and how long-term the release support window is to choose if 
-> it's best to patch or bump.
-> And also what would constitute grounds for a release? One security fix? 
-> If it's periodic it might be too late for a security fix, hence possibly 
-> some cumulative periodic release plus some way of notifying when patches 
-> are applied (separate ML? rss feed? users checking the git repo?).
+> Back to the original problem:  I have a External setup, with "packages"
+> specified in a custom directory structure, NOT in a "package" directory yet
+> the top level make does NOT build these external packages.  Why?  They are
+> only built if I explicity:  make <package> - then it works just fine. . .
 
-I don't think it's needed to have a super strict policy on this. We
-could act a bit like the LTS kernel releases: release from time to
-time, unless there is some kind of urgent/major security issue, in
-which case you can do a release sooner.
+Because you named wrongly the Config.in option for those packages....
+
+> I modified the ?leaf? config.in to declare BR2_EXTERNAL_<PKG> - re-run the
+> menu config, deslect, re-select, save, verify that the BR2_EXTERNAL_<PKG>
+> =y is in the top level .config.
+
+Why do you insist on using BR2_EXTERNAL_<pkg>, while I have been
+telling you (as well as the manual and the training slides) that you
+should be using BR2_PACKAGE_<pkg> ?
+
+If you don't read what I write, how do you expect things to work ?
+
+> Still does not build from ?make? (there is build directory present.)
+
+Yes, because your Config.in options incorrectly start with
+BR2_EXTERNAL_ while they should start with BR2_PACKAGE_.
+
+The code that decides if a package should be built or not is in
+package/pkg-generic.mk, and the relevant pieces are:
+
+$(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+...
+ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+PACKAGES += $(1)
+endif
+
+So, a package named 'foo' is built if BR2_PACKAGE_FOO=y.
+
+Best regards,
 
 Thomas
 -- 
