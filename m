@@ -1,39 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Nov 2015 17:51:38 +0100
-Subject: [Buildroot] BR2_EXTERNAL - Broken in 2015.08.01????
-In-Reply-To: <CAN34foy9f7k67hpqhRfP-Ztz0Q3CGXQTS68KM6qcKE3t5V=3sQ@mail.gmail.com>
-References: <CAN34foz=B-ig5Ci4kE=UKk6p2qws2Pp-qzaQGgCoXpXco6SAuw@mail.gmail.com>
- <20151105142958.60a38821@free-electrons.com>
- <CAN34foyu5iSPur6c7gNKsB+b6AZgkrbqQ8fP5CKH6jt_GYjTjw@mail.gmail.com>
- <20151105230545.581bf875@free-electrons.com>
- <CAN34foxQ3J=Vd5ZRDtj7X54eD9naRCk-+5-Hh7AuTXp19OBUGQ@mail.gmail.com>
- <20151106154102.6b72af73@free-electrons.com>
- <CAN34foyWQxHW1t=157ePm8JDfxAT6NoCarGPxOtsXh6C56gJsw@mail.gmail.com>
- <20151106165442.687e5e08@free-electrons.com>
- <CAN34foy9f7k67hpqhRfP-Ztz0Q3CGXQTS68KM6qcKE3t5V=3sQ@mail.gmail.com>
-Message-ID: <20151106175138.6a4f3562@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 6 Nov 2015 14:13:59 -0300
+Subject: [Buildroot] [PATCH v2 1/1] package/wpa_supplicant: add config
+ option to build wpa_client library
+In-Reply-To: <1446366918-4504-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1446366918-4504-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <563CDFD7.7060801@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stephen Beckwith,
+On 01/11/15 05:35, J?rg Krause wrote:
 
-On Fri, 6 Nov 2015 11:04:45 -0500, Stephen Beckwith wrote:
+> Version 2.5 of wpa_supplicant introduces the config option
+> CONFIG_BUILD_WPA_CLIENT_SO to enable building wpa_client as shared library.
+>
+> We need to add a patch from upstream to fix a runtime error with
+> libwpa_client.so:
+>    Error relocating /usr/lib/libwpa_client.so: bin_clear_free: symbol not found
+>
+> Cc: Martin Bark <martin@barkynet.com>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
->  In the Config.in - can there be "other" defined config options that will
-> allow me to toggle builds based upon these selections?
-
-Yes, of course.
-
-You should really read more code in Buildroot itself, there are
-*plenty* of examples. Just one random example: package/gpsd/Config.in.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Reviewed-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
