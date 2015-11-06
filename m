@@ -1,110 +1,74 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Nov 2015 10:06:21 +0100
-Subject: [Buildroot] [PATCHv3] core/pkg-generic: check proper package
-	installation
-In-Reply-To: <1446756756-12147-1-git-send-email-yann.morin.1998@free.fr>
-References: <1446756756-12147-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <563C6D8D.10005@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Nov 2015 10:19:13 +0100
+Subject: [Buildroot] [PATCH] bind: fix intermittent build issues with
+ high BR2_JLEVEL
+In-Reply-To: <CAGszK3iEXWFBRz4zmG5ky9AptekEX34sVYmRoK8JDremEbNPgA@mail.gmail.com>
+References: <1446721054-15603-1-git-send-email-heyleke@gmail.com>
+ <20151105224203.77337e4b@free-electrons.com>
+ <CAGszK3iEXWFBRz4zmG5ky9AptekEX34sVYmRoK8JDremEbNPgA@mail.gmail.com>
+Message-ID: <20151106101913.4de92418@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Yann,
+Jan,
 
- Sorry to be annoying, but...
+On Fri, 6 Nov 2015 08:04:35 +0100, Jan Heylen wrote:
 
-On 05-11-15 21:52, Yann E. MORIN wrote:
-> Some packages misbehave, and install files in either of;
->   - $(STAGING_DIR)/$(O) or $(TARGET_DIR)/$(O),
->   - $(STAGING_DIR)/$(HOST_DIR) or $(TARGET_DIR)/$(HOST_DIR).
+> > I am not sure it is appropriate to send a patch in the name of someone
+> > else. Maybe you're taking one of Peter's previous commit, and
+> > re-applying it, but the context is different, so I believe it should be
+> > under your own name.
+> >
+> OK, just wanted to point out it is the same issue (and the same solution).
+
+OK.
+
+
+> make[1]: Leaving directory `<CUT>/output/build/bind-9.9.7'
+> make: *** [<CUT>/output/build/bind-9.9.7/.stamp_built] Error 2
 > 
-> One common reason for that is that pkgconf now prepends the sysroot path
-> to all the paths it returns. Other reasons vary, but are mostly due to
-> poorly writen generic-packages.
+> How often are you able to reproduce it ? On what type of build machine ?
+> >
 > 
-> And a new step hooks to check that no file gets installed in either
-> locations, called after the install-target and install-staging steps.
+> We are on the  2015.05, Released May 31st, 2015 Buildroot release.
+
+On master, we updated bind to 9.9.8. Do you also reproduce the issue
+with bind 9.9.8 ?
+
+What I find weird is that our autobuilder infrastructure generally
+catches pretty well the parallel build issues. And we currently have
+zero failures on bind 9.9.7 and bind 9.9.8:
+
+  http://autobuild.buildroot.org/?reason=bind-9.9.7
+  http://autobuild.buildroot.org/?reason=bind-9.9.8
+
+
+> We do build multiple defconfigs (up to 8) (in separate buildroot working
+> folders) at once on the same machine. But I see from the buildroot output
+> that BR2_JLEVEL is set to '9' (cores +1) for each of these jobs?
+
+That's expected if you have left BR2_JLEVEL to its default of 0.
+
+> >>> bind 9.9.7 Building
+> PATH="<CUT>/output/host/bin:<CUT>/output/host/sbin:<CUT>/output/host/usr/bin:<CUT>/output/host/usr/sbin:/usr/local/bin:/usr/bin"
+>  /usr/bin/make -j9  -C <CUT>/output/build/bind-9.9.7/
+> make[1]: Entering directory `<CUT>/output/build/bind-9.9.7'
+> making all in <CUT>/output/build/bind-9.9.7/make
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Romain Naour <romain.naour@openwide.fr>
 > 
-> ---
-> Changes v2 -> v3;
->   - also check for $(HOST_DIR) in case the user specified an
->     out-of-build-dir locatiopn  (Arnout)
+> Maybe the exact condition is to have multiple buildroot jobs (8) on 8 cores
+> with BR2_JLEVEL set to 8 (so 8*8 = 64 'jobs').
 > 
-> ---
-> Note that, in the current state of Buildroot, this *will* cause a lot of
-> build failures until all those packages are fixed. Among the known to
-> break are quite a few Xorg packages, plus many packages that need to
-> call moc (from Qt4 for sure, possibly from Qt5 too).
+> So we might optimize that on our side ;-), but still it shouldn't trigger
+> this error?
 
- Still not true for moc :-)
+It should trigger this error indeed.
 
-> ---
->  package/pkg-generic.mk | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index a5d0e57..2fb3fd8 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -87,6 +87,25 @@ define step_pkg_size
->  endef
->  GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
->  
-> +define step_check_build_dir_one
-> +	if [ -d $(2) ]; then \
-
- Perhaps it would be better to handle the $(HOST_DIR) / $(O) combination here, so:
-
-	if [ -d $(2)/$(HOST_DIR) -o -d $(2)/$(O) ]; then \
-
-> +		printf "ERROR: package %s installs files in %s\n" $(1) $(2) >&2; \
-> +		exit 1; \
-> +	fi
-> +endef
-> +
-> +define step_check_build_dir
-> +	$(if $(filter install-staging,$(2)),\
-> +		$(if $(filter end,$(1)),\
-> +				$(call step_check_build_dir_one,$(3),$(STAGING_DIR)/$(HOST_DIR)); \
-> +				$(call step_check_build_dir_one,$(3),$(STAGING_DIR)/$(O))))
-> +	$(if $(filter install-target,$(2)),\
-> +		$(if $(filter end,$(1)),\
-> +				$(call step_check_build_dir_one,$(3),$(TARGET_DIR)/$(HOST_DIR)); \
-> +				$(call step_check_build_dir_one,$(3),$(TARGET_DIR)/$(O))))
-> +endef
-> +GLOBAL_INSTRUMENTATION_HOOKS += step_check_build_dir
-
- You never replied to my comment that I think this would fit better directly in
-the .stamp_install_* rules rather than as hooks. My reasoning is that it is much
-more difficult to find out why some commands are being called when they're
-hidden in hooks. That's not too bad for things like gathering statistics since
-they're supposedly inobtrusive, but here you're throwing an error so it is
-really useful to be able to find easily in the source where this error comes from.
-
-
- Regards,
- Arnout
-
-> +
->  # User-supplied script
->  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
->  define step_user
-> 
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
