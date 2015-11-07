@@ -1,195 +1,103 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Nov 2015 17:50:53 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/vsxu: new package
+Date: Sat,  7 Nov 2015 17:50:51 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/libglfw: new package
 In-Reply-To: <1446915053-13783-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1446915053-13783-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1446915053-13783-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1446915053-13783-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package needs cal3d source code which is included upstream as a git
-submodule, something not supported by the git download helper.
-To include cal3d I used a method described by Arnout:
-http://lists.busybox.net/pipermail/buildroot/2013-March/069971.html
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: added patch to make BR2_COMPILER_PARANOID_UNSAFE_PATH=y happy
+v2: fixed typos: glew => glfw
+    added _CONF_OPTS to disable building examples/tests/docs
+    added optional dependencies to xlib_libXi & xlib_libXxf86vm
 
- package/Config.in                         |  1 +
- package/vsxu/0001-disable-backtrace.patch | 35 ++++++++++++++++++++++++++
- package/vsxu/0002-fix-includes.patch      | 41 +++++++++++++++++++++++++++++++
- package/vsxu/Config.in                    | 20 +++++++++++++++
- package/vsxu/vsxu.mk                      | 31 +++++++++++++++++++++++
- 5 files changed, 128 insertions(+)
- create mode 100644 package/vsxu/0001-disable-backtrace.patch
- create mode 100644 package/vsxu/0002-fix-includes.patch
- create mode 100644 package/vsxu/Config.in
- create mode 100644 package/vsxu/vsxu.mk
+ package/Config.in            |  1 +
+ package/libglfw/Config.in    | 16 ++++++++++++++++
+ package/libglfw/libglfw.hash |  2 ++
+ package/libglfw/libglfw.mk   | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 47 insertions(+)
+ create mode 100644 package/libglfw/Config.in
+ create mode 100644 package/libglfw/libglfw.hash
+ create mode 100644 package/libglfw/libglfw.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index eb601e8..6080e15 100644
+index a6d1f38..d278e64 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -225,6 +225,7 @@ comment "Graphic applications"
- 	source "package/mesa3d-demos/Config.in"
- 	source "package/qt5cinex/Config.in"
- 	source "package/rrdtool/Config.in"
-+	source "package/vsxu/Config.in"
- 
- comment "Graphic libraries"
- 	source "package/cal3d/Config.in"
-diff --git a/package/vsxu/0001-disable-backtrace.patch b/package/vsxu/0001-disable-backtrace.patch
+@@ -827,6 +827,7 @@ menu "Graphics"
+ 	source "package/libgeotiff/Config.in"
+ 	source "package/libglade/Config.in"
+ 	source "package/libglew/Config.in"
++	source "package/libglfw/Config.in"
+ 	source "package/libglu/Config.in"
+ 	source "package/libgtk2/Config.in"
+ 	source "package/libgtk3/Config.in"
+diff --git a/package/libglfw/Config.in b/package/libglfw/Config.in
 new file mode 100644
-index 0000000..1c5e2a4
+index 0000000..045bd26
 --- /dev/null
-+++ b/package/vsxu/0001-disable-backtrace.patch
-@@ -0,0 +1,35 @@
-+uClibc has no support for execinfo.h/backtrace
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- a/engine/include/debug/vsx_backtrace.h	2015-05-23 13:21:46.000000000 +0200
-++++ b/engine/include/debug/vsx_backtrace.h	2015-11-05 20:46:48.000000000 +0100
-+@@ -7,7 +7,7 @@
-+ 
-+ #include <stdio.h>
-+ #include <errno.h>
-+-#include <execinfo.h>
-++//#include <execinfo.h>
-+ #include <unistd.h>
-+ #include <string.h>
-+ #include <malloc.h>
-+@@ -18,7 +18,8 @@
-+ 
-+ inline void full_write(int fd, const char *buf, size_t len)
-+ {
-+-#if !(PLATFORM_FAMILY == PLATFORM_FAMILY_WINDOWS)
-++#if 0
-++//#if !(PLATFORM_FAMILY == PLATFORM_FAMILY_WINDOWS)
-+   while (len > 0) {
-+   ssize_t ret = write(fd, buf, len);
-+ 
-+@@ -34,7 +35,8 @@
-+ 
-+ inline void print_backtrace(void)
-+ {
-+-#if !(PLATFORM_FAMILY == PLATFORM_FAMILY_WINDOWS)
-++#if 0
-++//#if !(PLATFORM_FAMILY == PLATFORM_FAMILY_WINDOWS)
-+   static const char start[] = "BACKTRACE ------------\n";
-+   static const char end[] = "----------------------\n";
-+ 
-diff --git a/package/vsxu/0002-fix-includes.patch b/package/vsxu/0002-fix-includes.patch
-new file mode 100644
-index 0000000..5d94496
---- /dev/null
-+++ b/package/vsxu/0002-fix-includes.patch
-@@ -0,0 +1,41 @@
-+Do not use host paths when cross-compiling.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr vsxu-4a34b08ec9e51605ca55d1a833f23e9601b2aa88.org/plugins/src/render.text/CMakeLists.txt vsxu-4a34b08ec9e51605ca55d1a833f23e9601b2aa88/plugins/src/render.text/CMakeLists.txt
-+--- vsxu-4a34b08ec9e51605ca55d1a833f23e9601b2aa88.org/plugins/src/render.text/CMakeLists.txt	2015-05-23 13:21:46.000000000 +0200
-++++ vsxu-4a34b08ec9e51605ca55d1a833f23e9601b2aa88/plugins/src/render.text/CMakeLists.txt	2015-11-07 17:42:53.277922806 +0100
-+@@ -8,6 +8,8 @@
-+ 
-+ message("configuring vsxu module            " ${module_id})
-+ 
-++find_package(Freetype REQUIRED)
-++
-+ # set defines for MOD_CM, MOD_DM, MOD_NM
-+ CREATE_STATIC_GLUE(${module_id})
-+ 
-+@@ -21,7 +23,7 @@
-+ endif(WIN32)
-+ 
-+ if(UNIX)
-+-  include_directories(/usr/include/freetype2)
-++  include_directories(${FREETYPE_INCLUDE_DIRS})
-+ endif(UNIX)
-+ 
-+ # include common
-+diff -uNr vsxu-4a34b08ec9e51605ca55d1a833f23e9601b2aa88.org/plugins/src/texture/CMakeLists.txt vsxu-4a34b08ec9e51605ca55d1a833f23e9601b2aa88/plugins/src/texture/CMakeLists.txt
-+--- vsxu-4a34b08ec9e51605ca55d1a833f23e9601b2aa88.org/plugins/src/texture/CMakeLists.txt	2015-05-23 13:21:46.000000000 +0200
-++++ vsxu-4a34b08ec9e51605ca55d1a833f23e9601b2aa88/plugins/src/texture/CMakeLists.txt	2015-11-07 17:41:33.000000000 +0100
-+@@ -8,7 +8,11 @@
-+ 
-+ message("configuring vsxu module            " ${module_id})
-+ 
-+-include_directories(/usr/include/OpenEXR)
-++find_package(OpenEXR)
-++
-++if(OpenEXR_FOUND)
-++  include_directories(${OPENEXR_INCLUDE_DIRS})
-++endif(OpenEXR_FOUND)
-+ 
-+ # set defines for MOD_CM, MOD_DM, MOD_NM
-+ CREATE_STATIC_GLUE(${module_id})
-diff --git a/package/vsxu/Config.in b/package/vsxu/Config.in
-new file mode 100644
-index 0000000..8639c0c
---- /dev/null
-+++ b/package/vsxu/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_VSXU
-+	bool "vsxu"
++++ b/package/libglfw/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LIBGLFW
++	bool "libglfw"
 +	depends on BR2_PACKAGE_XORG7
 +	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBGLEW
-+	select BR2_PACKAGE_LIBGLFW
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_XLIB_LIBXCURSOR
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXINERAMA
++	select BR2_PACKAGE_XLIB_LIBXRANDR
 +	help
-+	  VSXu (VSX Ultra) is an OpenGL-based (hardware-accelerated),
-+	  modular programming environment with its main purpose to
-+	  visualize music and create real time graphic effects.
++	  GLFW is an Open Source, multi-platform library for creating
++	  windows with OpenGL contexts and receiving input and events.
 +
-+	  http://www.vsxu.com
++	  http://www.glfw.org
 +
-+comment "vsxu depends on X.org and needs an OpenGL backend"
++comment "libglfw depends on X.org and needs an OpenGL backend"
 +	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/vsxu/vsxu.mk b/package/vsxu/vsxu.mk
+diff --git a/package/libglfw/libglfw.hash b/package/libglfw/libglfw.hash
 new file mode 100644
-index 0000000..7dcbf74
+index 0000000..3226aad
 --- /dev/null
-+++ b/package/vsxu/vsxu.mk
-@@ -0,0 +1,31 @@
++++ b/package/libglfw/libglfw.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	6ac642087682aaf7f8397761a41a99042b2c656498217a1c63ba9706d1eef122	libglfw-3.1.2.tar.gz
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
+new file mode 100644
+index 0000000..0b1730d
+--- /dev/null
++++ b/package/libglfw/libglfw.mk
+@@ -0,0 +1,28 @@
 +################################################################################
 +#
-+# vsxu
++# libglfw
 +#
 +################################################################################
 +
-+# instead of using master branch we use branch glfw3
-+VSXU_VERSION = 4a34b08ec9e51605ca55d1a833f23e9601b2aa88
-+VSXU_SITE = $(call github,vovoid,vsxu,$(VSXU_VERSION))
-+VSXU_LICENSE = GPLv3
-+VSXU_LICENSE_FILES = COPYING
-+VSXU_INSTALL_STAGING = YES
-+VSXU_DEPENDENCIES = cal3d freetype jpeg libgl libglew libglfw libglu \
-+	libpng zlib
++LIBGLFW_VERSION = 3.1.2
++LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
++LIBGLFW_INSTALL_STAGING = YES
++LIBGLFW_DEPENDENCIES = libgl xlib_libXcursor xlib_libXext \
++	xlib_libXinerama xlib_libXrandr
++LIBGLFW_LICENSE = zlib
++LIBGLFW_LICENSE_FILES = COPYING.txt
 +
-+# cal3d is a git submodule
-+define VSXU_LINK_CAL3D
-+	rm -rf $(@D)/plugins/src/mesh.importers/cal3d/
-+	ln -sf $(CAL3D_DIR) $(@D)/plugins/src/mesh.importers/cal3d
-+endef
-+VSXU_POST_EXTRACT_HOOKS += VSXU_LINK_CAL3D
++LIBGLFW_CONF_OPTS += \
++	-DGLFW_BUILD_EXAMPLES=OFF \
++	-DGLFW_BUILD_TESTS=OFF \
++	-DGLFW_BUILD_DOCS=OFF
 +
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+VSXU_DEPENDENCIES += alsa-lib
++ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
++LIBGLFW_DEPENDENCIES += xlib_libXi
 +endif
 +
-+ifeq ($(BR2_PACKAGE_OPENCV),y)
-+VSXU_DEPENDENCIES += opencv
++ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
++LIBGLFW_DEPENDENCIES += xlib_libXxf86vm
 +endif
 +
 +$(eval $(cmake-package))
