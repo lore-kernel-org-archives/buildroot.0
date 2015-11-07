@@ -1,67 +1,98 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Nov 2015 17:50:52 +0100
-Subject: [Buildroot] [PATCH v2 2/3] package/cal3d: new package
-In-Reply-To: <1446915053-13783-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1446915053-13783-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1446915053-13783-3-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 7 Nov 2015 22:43:57 +0100
+Subject: [Buildroot] [git commit] Update for 2015.11-rc1
+Message-ID: <20151107215131.A438981648@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package only provides a git submodule for the vsxu package.
+commit: http://git.buildroot.net/buildroot/commit/?id=e1da0eff54912b712fbeb05979bd6606d716c665
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: no changes
+ CHANGES                    |    2 +-
+ Makefile                   |    2 +-
+ docs/website/download.html |   14 +++++++-------
+ docs/website/news.html     |   13 +++++++++++++
+ 4 files changed, 22 insertions(+), 9 deletions(-)
 
- package/Config.in       |  1 +
- package/cal3d/Config.in |  6 ++++++
- package/cal3d/cal3d.mk  | 10 ++++++++++
- 3 files changed, 17 insertions(+)
- create mode 100644 package/cal3d/Config.in
- create mode 100644 package/cal3d/cal3d.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index d278e64..eb601e8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -227,6 +227,7 @@ comment "Graphic applications"
- 	source "package/rrdtool/Config.in"
+diff --git a/CHANGES b/CHANGES
+index 904dcf7..d801ac3 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2015.11-rc1, not yet released
++2015.11-rc1, Released November, 7th 2015
  
- comment "Graphic libraries"
-+	source "package/cal3d/Config.in"
- 	source "package/cegui06/Config.in"
- 	source "package/directfb/Config.in"
- 	source "package/directfb-examples/Config.in"
-diff --git a/package/cal3d/Config.in b/package/cal3d/Config.in
-new file mode 100644
-index 0000000..231d905
---- /dev/null
-+++ b/package/cal3d/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_CAL3D
-+	help
-+	  Cal3D is a skeletal based character animation library.
-+	  This package provides a git submodule for the vsxu package.
+ 	Fixes all over the tree and new features.
+ 
+diff --git a/Makefile b/Makefile
+index fbc6115..80c264f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -41,7 +41,7 @@ else # umask
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2015.11-git
++export BR2_VERSION := 2015.11-rc1
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 534fc7e..a6c2ac0 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -15,18 +15,18 @@ here:<p>
+ or
+ <a href="/downloads/buildroot-2015.08.1.tar.bz2">buildroot-2015.08.1.tar.bz2</a>
+ (<a href="/downloads/buildroot-2015.08.1.tar.bz2.sign">PGP signature</a>).
+-<!--
 +
-+	  https://github.com/vovoid/cal3d
-diff --git a/package/cal3d/cal3d.mk b/package/cal3d/cal3d.mk
-new file mode 100644
-index 0000000..0a7813f
---- /dev/null
-+++ b/package/cal3d/cal3d.mk
-@@ -0,0 +1,10 @@
-+################################################################################
-+#
-+# cal3d
-+#
-+################################################################################
+ <p>
+-The latest release candidate is <b>2015.08-rc2</b>, which can be
++The latest release candidate is <b>2015.11-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2015.08-rc2.tar.gz">buildroot-2015.08-rc1.tar.gz</a>
+-(<a href="/downloads/buildroot-2015.08-rc2.tar.gz.sign">PGP signature</a>)
++<a href="/downloads/buildroot-2015.11-rc1.tar.gz">buildroot-2015.11-rc1.tar.gz</a>
++(<a href="/downloads/buildroot-2015.11-rc1.tar.gz.sign">PGP signature</a>)
+ or
+-<a href="/downloads/buildroot-2015.08-rc2.tar.bz2">buildroot-2015.08-rc1.tar.bz2</a>
+-(<a href="/downloads/buildroot-2015.08-rc2.tar.bz2.sign">PGP signature</a>).
++<a href="/downloads/buildroot-2015.11-rc1.tar.bz2">buildroot-2015.11-rc1.tar.bz2</a>
++(<a href="/downloads/buildroot-2015.11-rc1.tar.bz2.sign">PGP signature</a>).
+ <p>
+--->
 +
-+CAL3D_VERSION = 0f640189eec913973c64db3bc1c1685554cb7202
-+CAL3D_SITE = $(call github,vovoid,cal3d,$(CAL3D_VERSION))
+ This and earlier releases (and their PGP signatures) can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 2a10a07..23b5f7e 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -8,6 +8,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>xxx November 2015 -- 2015.11-rc1 released</b>
 +
-+$(eval $(generic-package))
--- 
-2.6.2
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see
++    the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.11-rc1">CHANGES</a>
++    file for details.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2015.11-rc1.tar.bz2">2015.11-rc1
++    release candidate</a>, and report any problems found to the
++    <a href="support.html">mailing list</a> or
++    <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>6 September 2015 -- 2015.08.1 released</b>
+ 
+     <p>The 2015.08.1 bugfix release is out - Thanks to everyone
