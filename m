@@ -1,184 +1,88 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Nov 2015 11:24:17 +0100
-Subject: [Buildroot] [PATCH v4 1/1] package/libsoil: new package
-Message-ID: <1446891857-1755-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  7 Nov 2015 11:33:36 +0100
+Subject: [Buildroot] [PATCH 1/3] package/libglfw: new package
+In-Reply-To: <1446892418-6932-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1446892418-6932-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1446892418-6932-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for these new Kodi addons:
-
-kodi-screensaver-asterwave
-kodi-screensaver-cpblobs
-kodi-screensaver-matrixtrails
-kodi-screensaver-planestate
-kodi-visualisation-fountain
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v4: added various changes after a review by Thomas
-    - moved "-c -fPIC" from _CFLAGS to the patched Makefile
-    - moved extracted source code from the "Simple OpenGL Image Library"
-      subdir into $(@D)
-    - LIBSOIL_MAKEFILE now contains the filename of the Makefile
-
-v3: added various changes after a review by Peter
-    - in comment for v2: s/tarball/zipfile/
-    - moved -fPIC from 0001-fix-makefile.patch to LIBSOIL_CFLAGS
-Because this library will be used in at least five packages I decided
-against using the other upstream makefile providing a static-only
-library.
-
-v2: added various changes after a review by Thomas
-    - not available as static library
-    - used author's upstream tarball instead from Debian
-    - added a Makefile fix to simplify the usage of variable CC
-
- package/Config.in                       |  1 +
- package/libsoil/0001-fix-makefile.patch | 40 ++++++++++++++++++++++++++++++
- package/libsoil/Config.in               | 12 +++++++++
- package/libsoil/libsoil.hash            |  2 ++
- package/libsoil/libsoil.mk              | 43 +++++++++++++++++++++++++++++++++
- 5 files changed, 98 insertions(+)
- create mode 100644 package/libsoil/0001-fix-makefile.patch
- create mode 100644 package/libsoil/Config.in
- create mode 100644 package/libsoil/libsoil.hash
- create mode 100644 package/libsoil/libsoil.mk
+ package/Config.in            |  1 +
+ package/libglfw/Config.in    | 16 ++++++++++++++++
+ package/libglfw/libglfw.hash |  2 ++
+ package/libglfw/libglfw.mk   | 15 +++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/libglfw/Config.in
+ create mode 100644 package/libglfw/libglfw.hash
+ create mode 100644 package/libglfw/libglfw.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bdc3063..a6d1f38 100644
+index a6d1f38..d278e64 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -835,6 +835,7 @@ menu "Graphics"
- 	source "package/libqrencode/Config.in"
- 	source "package/libraw/Config.in"
- 	source "package/librsvg/Config.in"
-+	source "package/libsoil/Config.in"
- 	source "package/libsvg/Config.in"
- 	source "package/libsvg-cairo/Config.in"
- 	source "package/libsvgtiny/Config.in"
-diff --git a/package/libsoil/0001-fix-makefile.patch b/package/libsoil/0001-fix-makefile.patch
+@@ -827,6 +827,7 @@ menu "Graphics"
+ 	source "package/libgeotiff/Config.in"
+ 	source "package/libglade/Config.in"
+ 	source "package/libglew/Config.in"
++	source "package/libglfw/Config.in"
+ 	source "package/libglu/Config.in"
+ 	source "package/libgtk2/Config.in"
+ 	source "package/libgtk3/Config.in"
+diff --git a/package/libglfw/Config.in b/package/libglfw/Config.in
 new file mode 100644
-index 0000000..3b80048
+index 0000000..045bd26
 --- /dev/null
-+++ b/package/libsoil/0001-fix-makefile.patch
-@@ -0,0 +1,40 @@
-+Various makefile fixes to allow cross compilation
-+
-+Partly ported from
-+http://anonscm.debian.org/cgit/pkg-games/libsoil.git/tree/debian/patches/linking_correctly.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr "soil.org/projects/makefile/alternate Makefile.txt" "soil/projects/makefile/alternate Makefile.txt"
-+--- "soil.org/projects/makefile/alternate Makefile.txt"	2008-07-07 18:13:28.000000000 +0200
-++++ "soil/projects/makefile/alternate Makefile.txt"	2015-11-07 11:15:04.140106336 +0100
-+@@ -1,8 +1,8 @@
-+ MAKE = make
-+-CC = gcc
-+-INSTALL_FILE = install -p -o root -g root -m 644
-+-INSTALL_DIR = install -p -o root -g root -d
-+-LN = ln -s
-++CC = $(GCC)
-++INSTALL_FILE = $(INSTALL) -m 644
-++INSTALL_DIR = $(INSTALL) -d
-++LN = ln -sf
-+ RM = rm -fv
-+ CFLAGS += -c -O2 -Wall
-+ LDFLAGS +=
-+@@ -23,13 +23,13 @@
-+ all: $(OFILES) lib
-+ 
-+ %.o: %.c
-+-	$(CC) $(CFLAGS) $< -o $@
-++	$(CC) $(CFLAGS) -c -fPIC $< -o $@
-+ 
-+ lib: $(OFILES)
-+ 	# create static library
-+-	ar -cvq $(LIBNAME).a $(OFILES)
-++	$(AR) -cvq $(LIBNAME).a $(OFILES)
-+ 	# create shared library
-+-	gcc -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES)
-++	$(CC) -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES) -lGL -lm
-+ 
-+ install:
-+ 	$(INSTALL_DIR) $(DESTDIR)/$(INCLUDEDIR)
-diff --git a/package/libsoil/Config.in b/package/libsoil/Config.in
-new file mode 100644
-index 0000000..aea0cc3
---- /dev/null
-+++ b/package/libsoil/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBSOIL
-+	bool "libsoil"
++++ b/package/libglfw/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LIBGLFW
++	bool "libglfw"
++	depends on BR2_PACKAGE_XORG7
 +	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_XLIB_LIBXCURSOR
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXINERAMA
++	select BR2_PACKAGE_XLIB_LIBXRANDR
 +	help
-+	  SOIL is a tiny C library used primarily for uploading
-+	  textures into OpenGL.
++	  GLFW is an Open Source, multi-platform library for creating
++	  windows with OpenGL contexts and receiving input and events.
 +
-+	  http://www.lonesock.net/soil.html
++	  http://www.glfw.org
 +
-+comment "libsoil needs an OpenGL backend and a toolchain w/ dynamic library"
-+	depends on !BR2_PACKAGE_HAS_LIBGL || BR2_STATIC_LIBS
-diff --git a/package/libsoil/libsoil.hash b/package/libsoil/libsoil.hash
++comment "libglfw depends on X.org and needs an OpenGL backend"
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglfw/libglfw.hash b/package/libglfw/libglfw.hash
 new file mode 100644
-index 0000000..175569b
+index 0000000..3226aad
 --- /dev/null
-+++ b/package/libsoil/libsoil.hash
++++ b/package/libglfw/libglfw.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	a2305b8d64f6d636e36d669bbdb0ca5445d1345c754b3d61d3f037dad2e5f701	soil.zip
-diff --git a/package/libsoil/libsoil.mk b/package/libsoil/libsoil.mk
++# Locally computed
++sha256	6ac642087682aaf7f8397761a41a99042b2c656498217a1c63ba9706d1eef122	libglfw-3.1.2.tar.gz
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
 new file mode 100644
-index 0000000..074d9cc
+index 0000000..2a0d494
 --- /dev/null
-+++ b/package/libsoil/libsoil.mk
-@@ -0,0 +1,43 @@
++++ b/package/libglfw/libglfw.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# libsoil
++# libglfw
 +#
 +################################################################################
 +
-+LIBSOIL_VERSION = 20080707
-+LIBSOIL_SOURCE = soil.zip
-+LIBSOIL_SITE = http://www.lonesock.net/files
-+LIBSOIL_INSTALL_STAGING = YES
-+LIBSOIL_DEPENDENCIES = libgl
-+LIBSOIL_LICENSE = Public Domain, MIT
-+LIBSOIL_LICENSE_FILES = src/stb_image_aug.c src/image_helper.c
-+LIBSOIL_MAKEFILE = "../projects/makefile/alternate Makefile.txt"
++LIBGLFW_VERSION = 3.1.2
++LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
++LIBGLFW_INSTALL_STAGING = YES
++LIBGLFW_DEPENDENCIES = libgl xlib_libXcursor xlib_libXext \
++	xlib_libXinerama xlib_libXrandr
++LIBGLEW_LICENSE = zlib
++LIBGLEW_LICENSE_FILES = COPYING.txt
 +
-+define LIBSOIL_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(DL_DIR)/$(LIBSOIL_SOURCE)
-+	mv $(@D)/Simple\ OpenGL\ Image\ Library/* $(@D)
-+endef
-+
-+define LIBSOIL_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS=$(LIBSOIL_CFLAGS) \
-+		-f $(LIBSOIL_MAKEFILE) \
-+		-C $(@D)/src
-+endef
-+
-+define LIBSOIL_INSTALL_STAGING_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		-f $(LIBSOIL_MAKEFILE) \
-+		DESTDIR=$(STAGING_DIR) install \
-+		INSTALL=$(INSTALL) \
-+		-C $(@D)/src
-+endef
-+
-+define LIBSOIL_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		-f $(LIBSOIL_MAKEFILE) \
-+		DESTDIR=$(TARGET_DIR) install \
-+		INSTALL=$(INSTALL) \
-+		-C $(@D)/src
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(cmake-package))
 -- 
 2.6.2
