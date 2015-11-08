@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Nov 2015 15:00:35 +0100
-Subject: [Buildroot] [git commit] gcc-final: hard link TARGET-cc ->
-	TARGET-gcc
-Message-ID: <20151108140055.26C9E7FF6E@busybox.osuosl.org>
+Date: Sun, 8 Nov 2015 15:01:18 +0100
+Subject: [Buildroot] [PATCH] gcc-final: hard link TARGET-cc -> TARGET-gcc
+In-Reply-To: <1446622467-21916-1-git-send-email-steven@uplinklabs.net>
+References: <1446622467-21916-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <20151108150118.1471b0da@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=70dffaa1322accf8718643650908da30037a02c3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Steven Noonan,
 
-Doing a symlink results in incorrect behavior:
+On Tue,  3 Nov 2015 23:34:27 -0800, Steven Noonan wrote:
+> Doing a symlink results in incorrect behavior:
+> 
+>     $ x86_64-buildroot-linux-gnux32-cc
+>     --version
+>     ccache: error: execv of [...]/x86_64-buildroot-linux-gnux32-cc.br_real.br_real failed: No such file or directory
+> 
+>     $ x86_64-buildroot-linux-gnux32-gcc --version
+>     x86_64-buildroot-linux-gnux32-gcc.br_real (Buildroot 2015.11-git-00965-g8d89653-dirty) 5.2.0
+>     Copyright (C) 2015 Free Software Foundation, Inc.
+>     This is free software; see the source for copying conditions.  There is NO
+>     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+> 
+> Note the double .br_real on the invocation by toolchain-wrapper.
+> 
+> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+> ---
+>  package/gcc/gcc-final/gcc-final.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-    $ x86_64-buildroot-linux-gnux32-cc
-    --version
-    ccache: error: execv of [...]/x86_64-buildroot-linux-gnux32-cc.br_real.br_real failed: No such file or directory
+Applied after changing to use 'ln -f' instead of 'cp -l', as
+suggested by Arnout. Thanks!
 
-    $ x86_64-buildroot-linux-gnux32-gcc --version
-    x86_64-buildroot-linux-gnux32-gcc.br_real (Buildroot 2015.11-git-00965-g8d89653-dirty) 5.2.0
-    Copyright (C) 2015 Free Software Foundation, Inc.
-    This is free software; see the source for copying conditions.  There is NO
-    warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-Note the double .br_real on the invocation by toolchain-wrapper.
-
-[Thomas: use 'ln -f' instead of 'cp -l', as suggested by Arnout.]
-
-Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/gcc-final/gcc-final.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 0467ac2..7802855 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -91,7 +91,7 @@ HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
- # Make sure we have 'cc'
- define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
- 	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
--		ln -snf $(GNU_TARGET_NAME)-gcc \
-+		ln -f $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc \
- 			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
- 	fi
- endef
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
