@@ -1,55 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  8 Nov 2015 16:55:17 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/mplayer: Fix linking with
-	libvorbis/libdvdread
-Message-ID: <1446998117-14021-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Sun, 8 Nov 2015 17:08:43 +0100
+Subject: [Buildroot] [PATCH 3/4] libfslparser: add install hooks to fix
+	libraries path
+In-Reply-To: <1924419.qtieCN8KUx@sagittea>
+References: <1446149212-12048-1-git-send-email-gary.bisson@boundarydevices.com>
+ <2787793.hk6j5KppJf@sagittea>
+ <CAAMH-yt31Y9Ez8Stjv8G_j63GvwC6Csc3NX8SK=1OSPaZLSGpA@mail.gmail.com>
+ <1924419.qtieCN8KUx@sagittea>
+Message-ID: <CAAMH-yvbFV0i_RfRu91apJRbz4TQ3DYCr8bB4ERKQ4afPtZ5zA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/7f6/7f6e5396e95a3c3b676ca59bedc5317aa88e5f4c/
-http://autobuild.buildroot.net/results/6ac/6acd9cf25c3088d313247510db47a214fff30c67/
-http://autobuild.buildroot.net/results/a0d/a0da41bb734dbcdb17e13d852cfbdba5e069429e/
-http://autobuild.buildroot.net/results/d0c/d0caf60c1ddf4e05086c93f646e32b5ddc75b6ce/
+Hi J?r?me,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: adjust mplayer.mk to match mplayer/configure behaviour
-    by fixing libdvdread and libvorbis support (Thomas)
+On Fri, Oct 30, 2015 at 11:43 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> On Friday 30 October 2015 11:36:21 Gary Bisson wrote:
+>> Hi Jerome,
+>>
+>> On Fri, Oct 30, 2015 at 11:27 AM, J?r?me Pouiller <jezz@sysmic.org>
+> wrote:
+> [...]
+>> > A POST_INSTALL_STAGING_HOOKS is not necessary for libfslparser?
+>>
+>> No, libfslparser is only needed by gst-fsl-plugins which looks for the
+>> libs at the right location at build time (usr/lib/imx-mm).
+>>
+>> The staging hook is needed for libfslcodec since it is used by both
+>> gst-fsl-plugins and gst1-imx (not looking at the imx-mm path at build
+>> time).
+>>
+>> Although it might have been more consistent to have the staging hook
+>> in both, I chose to reduce the patch as much as possible. Plus I'm not
+>> sure people will like my symlink approach in the staging directory.
+> IMHO, target/ should be a subset of staging/ (even if today, this is far
+> from  the case). So, I would prefer to also create symlinks in staging/.
 
- package/mplayer/mplayer.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+So I'm ok with adding the symlinks to the fslparser staging as well.
+But if we'd really like to have target as a subset of staging,
+shouldn't we use symlinks for the target too?
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 2f58864..8eb59c9 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -117,9 +117,10 @@ endif
- # https://github.com/pld-linux/mplayer/blob/master/mplayer-libcdio.patch
- MPLAYER_CONF_OPTS += --disable-libcdio
- 
-+# We intentionally don't pass --enable-dvdread, to let the
-+# autodetection find which library to link with.
- ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
- MPLAYER_CONF_OPTS +=  \
--	--enable-dvdread \
- 	--with-dvdread-config=$(STAGING_DIR)/usr/bin/dvdread-config
- MPLAYER_DEPENDENCIES += libdvdread
- endif
-@@ -175,9 +176,10 @@ MPLAYER_DEPENDENCIES += tremor
- MPLAYER_CONF_OPTS += --enable-tremor
- endif
- 
-+# We intentionally don't pass --enable-libvorbis, to let the
-+# autodetection find which library to link with.
- ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
- MPLAYER_DEPENDENCIES += libvorbis
--MPLAYER_CONF_OPTS += --enable-libvorbis
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBMAD),y)
--- 
-2.6.2
+Regards,
+Gary
