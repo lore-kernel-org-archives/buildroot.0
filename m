@@ -1,113 +1,75 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Mon, 9 Nov 2015 00:52:08 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-firmware: menu entries for mwifiex
-	blobs
-Message-ID: <c4a720fa59f51fbfe00ec8c1683e1be09f56b593.1447022391.git.alex.suykov@gmail.com>
+Date: Mon, 9 Nov 2015 00:53:06 +0200
+Subject: [Buildroot] [PATCH 2/2] linux-firmware: adjust Config.in text for
+	mwifiex
+In-Reply-To: <c4a720fa59f51fbfe00ec8c1683e1be09f56b593.1447022391.git.alex.suykov@gmail.com>
+References: <c4a720fa59f51fbfe00ec8c1683e1be09f56b593.1447022391.git.alex.suykov@gmail.com>
+Message-ID: <c03bf0e4e0a807ac3346027a2945338c863c0b79.1447022391.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Firmware blobs for Marvell WiFi-Ex 8797, 8887, 8897 were already
-there in linux-firmware tree but relevant options were not in Config.in.
+With SD, USB and PCI-E variants available for several chips,
+bus-prefixed entries get mis-aligned badly.
+Rearrange them to use bus-suffixes instead.
+
+Config options and the files themselves remain bus-prefixed.
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
-sd8797 is the only one I'm going to use, but since they are all similar
-I added the rest as well.
-
- package/linux-firmware/Config.in         | 30 ++++++++++++++++++++++++++
- package/linux-firmware/linux-firmware.mk | 36 ++++++++++++++++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ package/linux-firmware/Config.in | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 2e4c205..32e9c6e 100644
+index 32e9c6e..d838986 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -159,6 +159,36 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
+@@ -155,37 +155,37 @@ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688
+ 	  Firmware files for the Marvell SD8688 module
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
+-	bool "Marvell Wifi-Ex SD 8787"
++	bool "Marvell Wifi-Ex 8787 SDIO"
  	help
  	  Firmware files for the Marvell Wifi-Ex 8787 module on SDIO.
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797
-+	bool "Marvell Wifi-Ex SD 8797"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8797 module on SDIO.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797
-+	bool "Marvell Wifi-Ex USB 8797"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8797 module on USB.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887
-+	bool "Marvell Wifi-Ex SD 8887"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8887 module on SDIO.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897
-+	bool "Marvell Wifi-Ex SD 8897"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8897 module on SDIO.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8897
-+	bool "Marvell Wifi-Ex USB 8897"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8897 module on USB.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897
-+	bool "Marvell Wifi-Ex PCI-E 8897"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8897 module on PCI-E.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
- 	bool "Ralink rt2501/rt61"
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797
+-	bool "Marvell Wifi-Ex SD 8797"
++	bool "Marvell Wifi-Ex 8797 SDIO"
  	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 768f3c4..d3efd65 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -129,6 +129,42 @@ LINUX_FIRMWARE_FILES += mrvl/sd8787_uapsta.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
- endif
+ 	  Firmware files for the Marvell Wifi-Ex 8797 module on SDIO.
  
-+# sd8797
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797),y)
-+LINUX_FIRMWARE_FILES += mrvl/sd8797_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# usb8797
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797),y)
-+LINUX_FIRMWARE_FILES += mrvl/usb8797_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# sd8887
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887),y)
-+LINUX_FIRMWARE_FILES += mrvl/sd8887_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# sd8897
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897),y)
-+LINUX_FIRMWARE_FILES += mrvl/sd8897_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# usb8897
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8897),y)
-+LINUX_FIRMWARE_FILES += mrvl/usb8897_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# pcie8897
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897),y)
-+LINUX_FIRMWARE_FILES += mrvl/pcie8897_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
- # wl127x
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
- # wl1271-nvs.bin is a symlink to wl127x-nvs.bin
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797
+-	bool "Marvell Wifi-Ex USB 8797"
++	bool "Marvell Wifi-Ex 8797 USB"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8797 module on USB.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887
+-	bool "Marvell Wifi-Ex SD 8887"
++	bool "Marvell Wifi-Ex 8887 SDIO"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8887 module on SDIO.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897
+-	bool "Marvell Wifi-Ex SD 8897"
++	bool "Marvell Wifi-Ex 8897 SDIO"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8897 module on SDIO.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8897
+-	bool "Marvell Wifi-Ex USB 8897"
++	bool "Marvell Wifi-Ex 8897 USB"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8897 module on USB.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897
+-	bool "Marvell Wifi-Ex PCI-E 8897"
++	bool "Marvell Wifi-Ex 8897 PCI-E"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8897 module on PCI-E.
+ 
 -- 
 2.0.3
