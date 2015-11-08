@@ -1,46 +1,28 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Sun, 8 Nov 2015 17:08:43 +0100
-Subject: [Buildroot] [PATCH 3/4] libfslparser: add install hooks to fix
-	libraries path
-In-Reply-To: <1924419.qtieCN8KUx@sagittea>
-References: <1446149212-12048-1-git-send-email-gary.bisson@boundarydevices.com>
- <2787793.hk6j5KppJf@sagittea>
- <CAAMH-yt31Y9Ez8Stjv8G_j63GvwC6Csc3NX8SK=1OSPaZLSGpA@mail.gmail.com>
- <1924419.qtieCN8KUx@sagittea>
-Message-ID: <CAAMH-yvbFV0i_RfRu91apJRbz4TQ3DYCr8bB4ERKQ4afPtZ5zA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 08 Nov 2015 17:21:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mplayer: Fix linking with
+	libvorbis
+References: <1446993776-26617-1-git-send-email-bernd.kuhls@t-online.de>
+ <20151108154516.28033c10@free-electrons.com>
+Message-ID: <7e94hcxe4s.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
+Am Sun, 08 Nov 2015 15:45:16 +0100 schrieb Thomas Petazzoni:
 
-On Fri, Oct 30, 2015 at 11:43 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> On Friday 30 October 2015 11:36:21 Gary Bisson wrote:
->> Hi Jerome,
->>
->> On Fri, Oct 30, 2015 at 11:27 AM, J?r?me Pouiller <jezz@sysmic.org>
-> wrote:
-> [...]
->> > A POST_INSTALL_STAGING_HOOKS is not necessary for libfslparser?
->>
->> No, libfslparser is only needed by gst-fsl-plugins which looks for the
->> libs at the right location at build time (usr/lib/imx-mm).
->>
->> The staging hook is needed for libfslcodec since it is used by both
->> gst-fsl-plugins and gst1-imx (not looking at the imx-mm path at build
->> time).
->>
->> Although it might have been more consistent to have the staging hook
->> in both, I chose to reduce the patch as much as possible. Plus I'm not
->> sure people will like my symlink approach in the staging directory.
-> IMHO, target/ should be a subset of staging/ (even if today, this is far
-> from  the case). So, I would prefer to also create symlinks in staging/.
+>> +-if test "$_libvorbis" = auto; then
+>> ++if test "$_libvorbis" != no; then
+> 
+> Are you sure this is the correct fix? I believe for MPlayer, the
+> behavior of all options is that if you do --enable-<foo>, Mplayer
+> enables <foo> without doing any checks for it.
 
-So I'm ok with adding the symlinks to the fslparser staging as well.
-But if we'd really like to have target as a subset of staging,
-shouldn't we use symlinks for the target too?
+Hi Thomas,
 
-Regards,
-Gary
+you are right, Mplayer configure is not autoconf-based..., this is v2 of 
+my patch: http://patchwork.ozlabs.org/patch/541462/
+
+Regards, Bernd
