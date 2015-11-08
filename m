@@ -1,69 +1,46 @@
-From: Steven Noonan <steven@uplinklabs.net>
-Date: Sun,  8 Nov 2015 09:08:09 -0800
-Subject: [Buildroot] [PATCH] package/python-protobuf: eliminate unneeded
-	build-time dependencies
-In-Reply-To: <CAKbGBLgXpMNaSOGgGg5nmLLdub=R44pDMWJNRGbMyErRz7NSoQ@mail.gmail.com>
-References: <CAKbGBLgXpMNaSOGgGg5nmLLdub=R44pDMWJNRGbMyErRz7NSoQ@mail.gmail.com>
-Message-ID: <1447002489-2373-1-git-send-email-steven@uplinklabs.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  8 Nov 2015 18:44:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-mga:
+	disable DRI support when not available
+Message-ID: <1447004673-18164-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This was causing unexpected HTTP requests by the setup.py script for
-python-protobuf. These "dependencies" aren't actually required for a successful
-build, and are not staged into the target install directory.
+configure.ac is not cross-compile aware, a patch fixing DRI detection
+was added in 2009
+http://git.buildroot.net/buildroot/commit/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga-1.4.9.patch?id=59b0aa7a7ee327688a77dd5d01d0b2032f6535a2
 
-Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+assuming DRI support being present if DRI support was not disabled.
+
+By default configure.ac assumes "auto" which leads to DRI support being
+enabled even if DRI support is disabled in buildroot config. This patch
+adds --disable-dri to really disable DRI support, fixes:
+
+http://autobuild.buildroot.net/results/5e5/5e5dbc30e1f30f7d2d614f4a9edb7fe439f73d61/
+http://autobuild.buildroot.net/results/a8f/a8fab920599e7dc77038f3d2a9a699d6823cf3ef/
+http://autobuild.buildroot.net/results/81d/81dbad489412cd28345de364624180cb082b3bb6/
+http://autobuild.buildroot.net/results/53f/53fc0031da2b65890223f3183c77eb66cf0b5273/
+http://autobuild.buildroot.net/results/544/54481a0f8d690e3878f4616ae1f331705e3c34be/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...2.6.1-disable-unneeded-build-dependencies.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/python-protobuf/protobuf-2.6.1-disable-unneeded-build-dependencies.patch
+ package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/python-protobuf/protobuf-2.6.1-disable-unneeded-build-dependencies.patch b/package/python-protobuf/protobuf-2.6.1-disable-unneeded-build-dependencies.patch
-new file mode 100644
-index 0000000..3f0eabd
---- /dev/null
-+++ b/package/python-protobuf/protobuf-2.6.1-disable-unneeded-build-dependencies.patch
-@@ -0,0 +1,37 @@
-+From 7e7db7225e227905acabfa2149152ece21c93e70 Mon Sep 17 00:00:00 2001
-+From: Steven Noonan <steven@uplinklabs.net>
-+Date: Sun, 8 Nov 2015 09:03:00 -0800
-+Subject: [PATCH] python-protobuf: don't require google-apputils
+diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+index dcf751c..771ec18 100644
+--- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
++++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+@@ -12,4 +12,8 @@ XDRIVER_XF86_VIDEO_MGA_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_MGA_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_MGA_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xproto
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
++XDRIVER_XF86_VIDEO_MGA_CONF_OPTS = --disable-dri
++endif
 +
-+This dependency is totally superfluous for successfully building/running
-+python-protobuf. It's only "required" at build time and is not staged into the
-+install directory, but it isn't even really required for a successful build.
-+
-+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-+---
-+ python/setup.py | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/python/setup.py b/python/setup.py
-+index 2450a77..db6f497 100755
-+--- a/python/setup.py
-++++ b/python/setup.py
-+@@ -160,7 +160,6 @@ if __name__ == '__main__':
-+         packages = [ 'google' ],
-+         namespace_packages = [ 'google' ],
-+         test_suite = 'setup.MakeTestSuite',
-+-        google_test_dir = "google/protobuf/internal",
-+         # Must list modules explicitly so that we don't install tests.
-+         py_modules = [
-+           'google.protobuf.internal.api_implementation',
-+@@ -189,7 +188,6 @@ if __name__ == '__main__':
-+           'google.protobuf.text_format'],
-+         cmdclass = { 'clean': clean, 'build_py': build_py },
-+         install_requires = ['setuptools'],
-+-        setup_requires = ['google-apputils'],
-+         ext_modules = ext_module_list,
-+         url = 'https://developers.google.com/protocol-buffers/',
-+         maintainer = maintainer_email,
-+-- 
-+2.6.2
-+
+ $(eval $(autotools-package))
 -- 
 2.6.2
