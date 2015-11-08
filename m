@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Nov 2015 14:37:16 +0100
-Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
-In-Reply-To: <CA+BsyQ7XEwj_dLa=H6Yt+rWQMh3rOvH7Bhr=BfWNNkMmVbfnuw@mail.gmail.com>
-References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
- <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
- <CA+BsyQ7XEwj_dLa=H6Yt+rWQMh3rOvH7Bhr=BfWNNkMmVbfnuw@mail.gmail.com>
-Message-ID: <20151108143716.31f5c8cd@free-electrons.com>
+Date: Sun, 8 Nov 2015 14:42:46 +0100
+Subject: [Buildroot] [git commit] website/news: update with release date and
+	announcement e-mail link
+Message-ID: <20151108134307.A84EB81D75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+commit: http://git.buildroot.net/buildroot/commit/?id=40c43ee0b7b09d9b126add5b21cc2f45533cb33f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 8 Nov 2015 13:30:45 +0000, Brendan Heading wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/website/news.html |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-> FYI the new 1.0.1 version of libtirpc contains my patch to remove the
-> calls to atomic operations that were causing a lot of autobuild
-> failures on SPARC (and probably some other lesser-used arches too).
-> Took a bit of negotiation to get the patch into a form they were happy
-> to accept, but we got there in the end.
-> 
-> So when the bump to 1.0.1 goes in we can expect this class of
-> autobuild issues to go away.
-
-Excellent, thanks a lot for working on this topic!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 23b5f7e..ce81378 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -8,12 +8,14 @@
+ <p>
+ 
+ <ul>
+-  <li><b>xxx November 2015 -- 2015.11-rc1 released</b>
++  <li><b>7 November 2015 -- 2015.11-rc1 released</b>
+ 
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see
+     the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.11-rc1">CHANGES</a>
+-    file for details.</p>
++    file for details. See also
++    the <a href="http://lists.busybox.net/pipermail/buildroot/2015-November/144026.html">announcement
++    e-mail</a>.</p>
+ 
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.11-rc1.tar.bz2">2015.11-rc1
