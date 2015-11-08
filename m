@@ -1,75 +1,91 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Mon, 9 Nov 2015 00:53:06 +0200
-Subject: [Buildroot] [PATCH 2/2] linux-firmware: adjust Config.in text for
-	mwifiex
-In-Reply-To: <c4a720fa59f51fbfe00ec8c1683e1be09f56b593.1447022391.git.alex.suykov@gmail.com>
-References: <c4a720fa59f51fbfe00ec8c1683e1be09f56b593.1447022391.git.alex.suykov@gmail.com>
-Message-ID: <c03bf0e4e0a807ac3346027a2945338c863c0b79.1447022391.git.alex.suykov@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 9 Nov 2015 00:44:02 +0100
+Subject: [Buildroot] [PATCH] system: Fix for NFS booting with interface
+ config via DHCP
+In-Reply-To: <1446860689.4553.41.camel@rtred1test09.kymeta.local>
+References: <1446841557.4553.32.camel@rtred1test09.kymeta.local>
+ <563D4BE4.2020105@mind.be>
+ <1446860689.4553.41.camel@rtred1test09.kymeta.local>
+Message-ID: <563FDE42.5000709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With SD, USB and PCI-E variants available for several chips,
-bus-prefixed entries get mis-aligned badly.
-Rearrange them to use bus-suffixes instead.
+On 07-11-15 02:44, Trent Piepho wrote:
+> On Sat, 2015-11-07 at 01:55 +0100, Arnout Vandecappelle wrote:
+> 
+>>> Example when the interface is used for NFS:
+>>> # ifup eth0
+>>> Skipping eth0, used for NFS from 192.168.1.123
+>>> run-parts: /etc/network/if-pre-up.d/nfs_check: exit status 1
+>>>
+>>> Example when the interface isn't used for NFS:
+>>> # ifup eth1
+>>> [brings interface up]
+>>>
+>>> An alternative to putting the script in if-pre-up.d would be to add
+>>> pre-up lines to the interfaces file.  This would allow running the
+>>> script just for certain interfaces.  It also removes the "run-parts"
+>>> message to do it this way.
+>>
+>>  But I think ifup would still report an error, no?
+> Not really, error exit status but no message:
+> 
+> # ifup eth0 ; echo $?
+> Skipping eth0, used for NFS from 192.168.1.123
+> 1
+> 
+> The skipping message is from my script.
 
-Config options and the files themselves remain bus-prefixed.
+ In that case, a pre-up line seems better to me.
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
----
- package/linux-firmware/Config.in | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 32e9c6e..d838986 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -155,37 +155,37 @@ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688
- 	  Firmware files for the Marvell SD8688 module
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
--	bool "Marvell Wifi-Ex SD 8787"
-+	bool "Marvell Wifi-Ex 8787 SDIO"
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8787 module on SDIO.
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797
--	bool "Marvell Wifi-Ex SD 8797"
-+	bool "Marvell Wifi-Ex 8797 SDIO"
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8797 module on SDIO.
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797
--	bool "Marvell Wifi-Ex USB 8797"
-+	bool "Marvell Wifi-Ex 8797 USB"
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8797 module on USB.
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887
--	bool "Marvell Wifi-Ex SD 8887"
-+	bool "Marvell Wifi-Ex 8887 SDIO"
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8887 module on SDIO.
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897
--	bool "Marvell Wifi-Ex SD 8897"
-+	bool "Marvell Wifi-Ex 8897 SDIO"
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8897 module on SDIO.
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8897
--	bool "Marvell Wifi-Ex USB 8897"
-+	bool "Marvell Wifi-Ex 8897 USB"
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8897 module on USB.
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897
--	bool "Marvell Wifi-Ex PCI-E 8897"
-+	bool "Marvell Wifi-Ex 8897 PCI-E"
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8897 module on PCI-E.
- 
+>>> +
+>>> +nfsip=`awk '$3=="nfs" && $2=="/"{ sub(/:.*/,"",$1); print $1; }' /proc/mounts`
+>>
+>>  sed is generally better-known so we prefer it if possible. Like
+>>
+>> sed -n '/^\([0-9.]*\):[^ ]* \/ nfs .*/s//\1/p' /proc/mounts
+> 
+> Ok, that's simpler too.
+> 
+>>
+>>
+>>  However, why don't we just check if the interface is already up? Like
+>> ip link show $IFACE | cut -d ' ' -f 3 | grep -q UP
+> 
+> It's currently ok to call ifup on an interface that's already up.  It
+> will reconfigure it.  The interface, while up, might not have been
+> assigned an ip.
+> 
+> It wouldn't be tied to NFS at that point either.
+
+ Right, so your approach is better then.
+
+ BTW are we sure that /proc/mounts contains the IP address and not the host name?
+
+
+ Regards,
+ Arnout
+
+
+>>  I wonder if it is useful to have this optional. The overhead of running this
+>> extra script is minimal, and we know for sure that NFS-root will not boot
+>> without it. So I'd always install it if BR2_SYSTEM_DHCP. And people who don't
+>> want it can still get rid of it in an overlay.
+> 
+> I didn't think that being option was that useful either.  But it's
+> possible for NFS root to work without having this, if the NFS interface
+> is not the same one that is being configured with DHCP.
+> 
+
+
 -- 
-2.0.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
