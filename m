@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Nov 2015 16:05:21 +0100
-Subject: [Buildroot] [git commit] mongrel2: uses dlopen(),
-	needs dynamic library support
-Message-ID: <20151108150554.43D2E8040B@busybox.osuosl.org>
+Date: Sun, 8 Nov 2015 16:49:05 +0100
+Subject: [Buildroot] [PATCH] protobuf: bump to 2.6.1
+In-Reply-To: <1446626241-25745-1-git-send-email-steven@uplinklabs.net>
+References: <1446626241-25745-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <20151108164905.27d41c84@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=54fde8949373d6e010eefaf1e1fa8edc19cb4d4f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Steven Noonan,
 
-Fixes:
+On Wed,  4 Nov 2015 00:37:21 -0800, Steven Noonan wrote:
+> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+> ---
+>  package/protobuf/protobuf.hash | 2 ++
+>  package/protobuf/protobuf.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/protobuf/protobuf.hash
 
-  http://autobuild.buildroot.net/results/c5e/c5ecfe4a5ad3712d65293de517a24e76c4376c57/
+This is breaking the build of python-protobuf:
+http://autobuild.buildroot.net/results/16e/16e8c41f3b6627ecee96fcf5ab3b22f1b7513ba4/build-end.log.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mongrel2/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+The problem is that python-protobuf now has some additional
+dependencies, which setuptools tries to download automatically. You
+probably haven't seen this on your machine because it automatically
+downloads the needed dependencies. It appears on the autobuilders
+because https:// downloads fail.
 
-diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
-index 1afba77..1c7b495 100644
---- a/package/mongrel2/Config.in
-+++ b/package/mongrel2/Config.in
-@@ -1,9 +1,10 @@
--comment "mongrel2 needs a toolchain w/ C++, threads, wchar"
-+comment "mongrel2 needs a toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
- 		BR2_TOOLCHAIN_USES_GLIBC || \
- 		BR2_arm
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_MONGREL2
- 	bool "mongrel2"
-@@ -12,6 +13,7 @@ config BR2_PACKAGE_MONGREL2
- 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
- 	depends on BR2_USE_WCHAR # zeromq -> util-linux
-+	depends on !BR2_STATIC_LIBS # uses dlopen()
- 	# {get,make,swap}context functions present in
- 	# {e,}glibc and in uClibc's master branch. Source has arm workaround
- 	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
+This should be fixed by:
+
+ 1/ Ensuring that setuptools does not download dependencies
+    automatically
+
+ 2/ Packaging the appropriate python-protobuf dependencies.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
