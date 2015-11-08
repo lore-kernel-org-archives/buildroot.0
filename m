@@ -1,35 +1,47 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Sun, 8 Nov 2015 13:30:45 +0000
-Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
-In-Reply-To: <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
-References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
- <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
-Message-ID: <CA+BsyQ7XEwj_dLa=H6Yt+rWQMh3rOvH7Bhr=BfWNNkMmVbfnuw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Nov 2015 14:31:21 +0100
+Subject: [Buildroot] [git commit] package/mpg123: fix static linking issue
+	with alsa
+Message-ID: <20151108133230.8DA4981D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 5 November 2015 at 08:30, Peter Rosin <peda@lysator.liu.se> wrote:
-> From: Peter Rosin <peda@axentia.se>
->
-> Adjust patch 0001 to trivial changes.
-> Adjust patch 0007 to remove new DES things.
-> Add patch 0008 directly from upstream to fix a late problem in the
-> 1.0.1 release.
+commit: http://git.buildroot.net/buildroot/commit/?id=8dc10951088819e5113bb74414469f08eb33e611
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas, Peter,
+As opposed to the other audio backends, the configure script does NOT
+use pkg-config to figure out how to link with alsa, breaking static
+linking as alsa uses pthreads.
 
-FYI the new 1.0.1 version of libtirpc contains my patch to remove the
-calls to atomic operations that were causing a lot of autobuild
-failures on SPARC (and probably some other lesser-used arches too).
-Took a bit of negotiation to get the patch into a form they were happy
-to accept, but we got there in the end.
+This patch uses the same fix from Peter used for portaudio:
+http://git.buildroot.net/buildroot/commit/package/mpg123/mpg123.mk?id=dea306c78b5d4c571555c50512e212a725b594b9
 
-So when the bump to 1.0.1 goes in we can expect this class of
-autobuild issues to go away.
+Fixes
+http://autobuild.buildroot.net/results/796/79613fda3f51e969ecd46ae1151bd4c3316639c3/
+http://autobuild.buildroot.net/results/b0a/b0a99ff1516602ed42c0cc14d9d2922a01cdf88f/
+http://autobuild.buildroot.net/results/5bd/5bdfd2aa9de568d0f7be27ffb18d4541b0e1be0c/
+and many others
 
-regards
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpg123/mpg123.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Brendan
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index efd510d..f6bb297 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -67,6 +67,9 @@ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ MPG123_AUDIO += alsa
+ MPG123_CONF_OPTS += --with-default-audio=alsa
+ MPG123_DEPENDENCIES += alsa-lib
++# configure script does NOT use pkg-config to figure out how to link
++# with alsa, breaking static linking as alsa uses pthreads
++MPG123_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs alsa`"
+ endif
+ 
+ MPG123_CONF_OPTS += --with-audio=$(subst $(space),$(comma),$(MPG123_AUDIO))
