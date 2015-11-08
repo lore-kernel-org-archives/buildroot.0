@@ -1,23 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 08 Nov 2015 13:37:36 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-11-06
-References: <20151107073016.DCC83100931@stock.ovh.net>
-Message-ID: <g9s3hcxe4s.ln2@ID-313208.user.individual.net>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Sun, 8 Nov 2015 13:30:45 +0000
+Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
+In-Reply-To: <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
+References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
+ <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
+Message-ID: <CA+BsyQ7XEwj_dLa=H6Yt+rWQMh3rOvH7Bhr=BfWNNkMmVbfnuw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 07 Nov 2015 08:30:16 +0100 schrieb Thomas Petazzoni:
+On 5 November 2015 at 08:30, Peter Rosin <peda@lysator.liu.se> wrote:
+> From: Peter Rosin <peda@axentia.se>
+>
+> Adjust patch 0001 to trivial changes.
+> Adjust patch 0007 to remove new DES things.
+> Add patch 0008 directly from upstream to fix a late problem in the
+> 1.0.1 release.
 
->      powerpc |                  mpg123-1.22.4 | NOK |
->      http://autobuild.buildroot.net/
-results/79613fda3f51e969ecd46ae1151bd4c3316639c3/
+Thomas, Peter,
 
-Hi,
+FYI the new 1.0.1 version of libtirpc contains my patch to remove the
+calls to atomic operations that were causing a lot of autobuild
+failures on SPARC (and probably some other lesser-used arches too).
+Took a bit of negotiation to get the patch into a form they were happy
+to accept, but we got there in the end.
 
-fixed by http://patchwork.ozlabs.org/patch/541439/
+So when the bump to 1.0.1 goes in we can expect this class of
+autobuild issues to go away.
 
-Regards, Bernd
+regards
+
+Brendan
