@@ -1,44 +1,68 @@
-From: Trent Piepho <tpiepho@kymetacorp.com>
-Date: Mon, 9 Nov 2015 21:29:38 +0000
-Subject: [Buildroot] [PATCH] system: Fix for NFS booting with interface
- config via DHCP
-In-Reply-To: <563FDE42.5000709@mind.be>
-References: <1446841557.4553.32.camel@rtred1test09.kymeta.local>
- <563D4BE4.2020105@mind.be>
- <1446860689.4553.41.camel@rtred1test09.kymeta.local>
- <563FDE42.5000709@mind.be>
-Message-ID: <1447104580.4553.74.camel@rtred1test09.kymeta.local>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 9 Nov 2015 22:48:31 +0100
+Subject: [Buildroot] [git commit] Revert "system: Fix warning when
+ selecting systemd"
+In-Reply-To: <20151109205943.8954F81DE4@busybox.osuosl.org>
+References: <20151109205943.8954F81DE4@busybox.osuosl.org>
+Message-ID: <564114AF.4020103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2015-11-09 at 00:44 +0100, Arnout Vandecappelle wrote:
-> >>
-> >>  However, why don't we just check if the interface is already up? Like
-> >> ip link show $IFACE | cut -d ' ' -f 3 | grep -q UP
-> > 
-> > It's currently ok to call ifup on an interface that's already up.  It
-> > will reconfigure it.  The interface, while up, might not have been
-> > assigned an ip.
-> > 
-> > It wouldn't be tied to NFS at that point either.
+On 09-11-15 21:40, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=adcc48e0b25fb6a9759bc8d889badbbad9e02954
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
->  Right, so your approach is better then.
+> This reverts commit b4718c3a28fc3b178253b24bd6fbb8540a724c7e.
 > 
->  BTW are we sure that /proc/mounts contains the IP address and not the host name?
+> The BR2_ROOTFS_MERGED_USR symbol is used to activate various workarounds for
+> a merged /usr by packages, so it should be active even with a custom rootfs
+> skeleton.
 
-I believe the nfsroot mount option only allows IP addresses and not
-hostnames.  Since the kernel would have to do the DNS lookup.  And the
-kernel docs say "<server-ip>", which seems to imply only an IP will
-work.  It didn't work when I tried it.  And the busybox mount command
-appears to only accept an IP ("mount: bad address 'hostname'").
+ The problem is that with a custom skeleton, we don't know if it is merged /usr
+or not. If it is not merged, then our workarounds are wrong. But of course, with
+a custom skeleton, all bets are off...
 
-But the util linux mount does accept a hostname and it does show up
-in /proc/mounts as a hostname.
+ I guess we should at least mention in a help text somewhere that for systemd
+the custom skeleton must have merged /usr.
 
-So you can get a hostname, but I don't think it's possible in a NFS root
-case.  The mount options also in /proc/mounts will have addr=<ip>, which
-is a way to get the numeric ip even if the hostname is present.  It does
-make the sed parsing harder to get the value from there.
+
+ Regards,
+ Arnout
+
+
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  system/Config.in |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 92712a8..4d07010 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -92,7 +92,7 @@ config BR2_INIT_SYSTEMD
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+> -	select BR2_ROOTFS_MERGED_USR if BR2_ROOTFS_SKELETON_DEFAULT
+> +	select BR2_ROOTFS_MERGED_USR
+>  	select BR2_PACKAGE_SYSTEMD
+>  
+>  comment "systemd needs (e)glibc toolchain, headers >= 3.10"
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
