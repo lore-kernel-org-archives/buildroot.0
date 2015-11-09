@@ -1,112 +1,69 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 9 Nov 2015 11:23:39 +0100
-Subject: [Buildroot] [PATCH v2] python: rework *.pyc files generation
-In-Reply-To: <1446462917-992-1-git-send-email-yegorslists@googlemail.com>
-References: <1446462917-992-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAGm1_ku1AninNGc2oepsByXbbX+BZkXth4s1QDEhT0dqDsBFAw@mail.gmail.com>
+From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
+Date: Mon, 9 Nov 2015 11:49:20 +0100
+Subject: [Buildroot] [PATCH v3 11/13] package/dhcp: systemd: support
+	IPv6 lease file
+In-Reply-To: <CAGduivz2ChrAgNgxM-a33JN_Eh7aFsfSKpq_vT0hRd7sNTt_zw@mail.gmail.com>
+References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <1445734779-7212-11-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <CAGduivxGsOm8DRoBsqDAMHx3dkC381C5TvXq_peYiKd1yizyvg@mail.gmail.com>
+ <5639DF94.4000505@wsystem.com>
+ <CAGduivyAygSdLT1pmrOCD7mHO8xC2UvHOP2rAk2MnChhPMHmiw@mail.gmail.com>
+ <5639E8D9.7060109@wsystem.com>
+ <CAGduivz2ChrAgNgxM-a33JN_Eh7aFsfSKpq_vT0hRd7sNTt_zw@mail.gmail.com>
+Message-ID: <56407A30.1050404@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Maxime, all,
 
-On Mon, Nov 2, 2015 at 12:15 PM,  <yegorslists@googlemail.com> wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> This patch generates all *.pyc files from *.py located in
-> <target>/usr/lib/python*/site-packages, before stripping the rootfs.
->
-> *.pyc generation on per package basis is disabled through
-> "--no-compile" option.
->
-> This prevents modules from packages, that do not compile the *.py
-> files, from disappearing.
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> ---
-> Changes:
->         v2: move finalization code from root Makefile to python.mk and python3.mk
->
->  package/pkg-python.mk      |  2 +-
->  package/python/python.mk   | 11 +++++++++++
->  package/python3/python3.mk | 11 +++++++++++
->  3 files changed, 23 insertions(+), 1 deletion(-)
->
-> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> index b7a702d..9725d24 100644
-> --- a/package/pkg-python.mk
-> +++ b/package/pkg-python.mk
-> @@ -253,7 +253,7 @@ ifndef $(2)_INSTALL_TARGET_CMDS
->  define $(2)_INSTALL_TARGET_CMDS
->         (cd $$($$(PKG)_BUILDDIR)/; \
->                 $$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
-> -               $$($(2)_PYTHON_INTERPRETER) setup.py install \
-> +               $$($(2)_PYTHON_INTERPRETER) setup.py install --no-compile \
->                 $$($$(PKG)_BASE_INSTALL_TARGET_OPTS) \
->                 $$($$(PKG)_INSTALL_TARGET_OPTS))
->  endef
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index 80ffbde..1b0361f 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -219,10 +219,21 @@ $(eval $(host-autotools-package))
->
->  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
->  define PYTHON_FINALIZE_TARGET
-> +       PYTHONPATH="$(PYTHON_PATH)" \
-> +               $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) -c "import compileall; \
-> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages')"
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
->  endef
->  endif
->
-> +ifeq ($(BR2_PACKAGE_PYTHON_PY_PYC),y)
-> +define PYTHON_FINALIZE_TARGET
-> +       PYTHONPATH="$(PYTHON_PATH)" \
-> +               $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) -c "import compileall; \
-> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages')"
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
->  define PYTHON_FINALIZE_TARGET
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index fd5709a..5d4555b 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -210,10 +210,21 @@ $(eval $(host-autotools-package))
->
->  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
->  define PYTHON3_FINALIZE_TARGET
-> +       PYTHONPATH="$(PYTHON3_PATH)" \
-> +               $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) -c "import compileall; \
-> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages')"
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
->  endef
->  endif
->
-> +ifeq ($(BR2_PACKAGE_PYTHON3_PY_PYC),y)
-> +define PYTHON3_FINALIZE_TARGET
-> +       PYTHONPATH="$(PYTHON3_PATH)" \
-> +               $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) -c "import compileall; \
-> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages')"
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
->  define PYTHON3_FINALIZE_TARGET
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
-> --
-> 2.1.4
->
+On 04/11/2015 12:31, Maxime Hadjinlian wrote:
+>>>     > A question though, from the manual page of dhcpd, by default it starts as an IPv6 server should we have, two services one with '-4' and one with '-6' ? And it's left to the user to specify it in the "$OPTIONS" ? Maybe this should be mentioned somewhere ?
+>>>
+>>>     '-4' is the default, not '-6'. 
+>>>
+>>> If I look at ./server/dhcpd.8 in the sources of dhcp-4.1-ESVR12, it clearly states:
+>>>
+>>> -6 Run as a DHCPv6 server. This is the default and cannot be combined with -4. 
+>> 
+>> My bad: I had looked at the man page of another version.
 
-Could you please take a look at this patch, so that it has a chance to
-get into current release?
+Actually, this dhcpd.8 is wrong. Looking at common/discover.c:
+    int local_family = AF_INET;
 
-Thanks.
+So IPv4 really is the default, and this is confirmed by the behavior.
 
-Yegor
+This documentation issue is fixed in 4.3.3. A version bump would be great, all
+the more the EoL date of 4.1-ESV-R12 is Dec. 2015. I'll see if I can quickly add
+that to my series.
+
+>     >     A single instance of dhcpd cannot be run with
+>     >     both '-4' and '-6'. I don't know if it's possible (or desirable) to safely run
+>     >     simultaneously two instances of dhcpd, one with '-4' and the other one with
+>     >     '-6'.
+>     >
+>     > Well it could be useful if you are trying to build a network appliance and you want to support both stack. So you would want to start two processes with different options. Maybe that's something that should be left to the users to figure out.
+> 
+>     Yes, but should everything be duplicated in Buildroot just for this purpose? For
+>     SysV, it's easy not to duplicate things, but how would you do that with systemd?
+>     How do distributions handle this?
+> 
+> I only looked at Arch Linux, they duplicate the service file. It's also possible to use the template mechanisms in systemd, to have something like dhcpd at .service and when you enable it, you create a symlink called dhcpd at 4.service, and the '4' is passed as argument to the template and you can use it however you want it to.
+
+Ubuntu duplicates the service files too. And all the service files come from the
+same package.
+
+How do we want to handle that in Buildroot?
+1/ Always start IPv4 and IPv6 instances like Ubuntu does. This is wasting
+   resources if one of them is actually unused.
+2/ Add a Kconfig choice - common to all the selected DHCP daemons - between
+   "only IPv4", "only IPv6", and "IPv4 + IPv6".
+3/ Use /etc/default/dhcpd and the like. We could detect the presence of
+   /etc/default/dhcpd vs. /etc/default/dhcpd6, or of some variables in them, or
+   of /etc/dhcp/dhcpd.conf vs. /etc/dhcp/dhcpd6.conf. Something like that seems
+   to be easier to use, but less obvious for users unless well documented.
+
+Best regards,
+Beno?t
