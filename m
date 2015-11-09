@@ -1,52 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Nov 2015 22:23:09 +0100
-Subject: [Buildroot] [PATCH] configs: new configuration for at91sam9g20ek
-In-Reply-To: <20151109115525.GA4302@piout.net>
-References: <1447032023-6229-1-git-send-email-jenskamenik@googlemail.com>
- <20151109115525.GA4302@piout.net>
-Message-ID: <20151109222309.67599ac2@free-electrons.com>
+Date: Mon, 9 Nov 2015 22:27:40 +0100
+Subject: [Buildroot] [git commit branch/next] package/tvheadend: bump version
+Message-ID: <20151109212746.D994781D56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex,
+commit: http://git.buildroot.net/buildroot/commit/?id=334bae4bd85f20cee927c05a70dfa08aab2453b9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 9 Nov 2015 12:55:25 +0100, Alexandre Belloni wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tvheadend/tvheadend.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> regarding the sort order, I'd say that at91sam9g20ek is not between
-> at91sam9g15ek and at91sam9g25ek (both part of the at91sam9x5 familiy). I
-> would place it before at91sam9g45m10ek. That comment is also valid for
-> the family_, mach_ and dtb_ definitions
-
-I think you should explain why. It's because you're not interested in
-alphabetic ordering here, but rather "release date" ordering of the
-platform. Is that correct ?
-
-
-> > diff --git a/configs/at91sam9g20ek_defconfig b/configs/at91sam9g20ek_defconfig
-> > new file mode 100644
-> > index 0000000..10125e1
-> > --- /dev/null
-> > +++ b/configs/at91sam9g20ek_defconfig
-> > @@ -0,0 +1,23 @@
-> > +BR2_arm=y
-> > +BR2_KERNEL_HEADERS_VERSION=y
-> > +BR2_DEFAULT_KERNEL_VERSION="3.18"
-> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-> 
-> These can probably be updated to 4.1
-
-Indeed.
-
-Jens, can you fix those two issues and send an updated version of your
-patch ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 4ffb357..6b8fdea 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 1b682a46a11ea821c4ed183a274bc78993ef40a0
++TVHEADEND_VERSION = a27b0af2b82dae83cf8a41e01ee1174b911f3aa3
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
