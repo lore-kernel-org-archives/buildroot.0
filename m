@@ -1,43 +1,65 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 09 Nov 2015 09:43:56 +0100
-Subject: [Buildroot] [PATCH 3/4] libfslparser: add install hooks to fix
-	libraries path
-In-Reply-To: <CAAMH-yvbFV0i_RfRu91apJRbz4TQ3DYCr8bB4ERKQ4afPtZ5zA@mail.gmail.com>
-References: <1446149212-12048-1-git-send-email-gary.bisson@boundarydevices.com>
- <1924419.qtieCN8KUx@sagittea>
- <CAAMH-yvbFV0i_RfRu91apJRbz4TQ3DYCr8bB4ERKQ4afPtZ5zA@mail.gmail.com>
-Message-ID: <3216905.pxiEsz4o6j@sagittea>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Mon,  9 Nov 2015 10:03:31 +0100
+Subject: [Buildroot] [PATCH 1/2] libnet:new package
+Message-ID: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 08 November 2015 17:08:43 Gary Bisson wrote:
-> Hi J?r?me,
-> 
-> On Fri, Oct 30, 2015 at 11:43 AM, J?r?me Pouiller <jezz@sysmic.org> 
-wrote:
-> > On Friday 30 October 2015 11:36:21 Gary Bisson wrote:
-[...]
-> >> Although it might have been more consistent to have the staging
-> >> hook
-> >> in both, I chose to reduce the patch as much as possible. Plus I'm
-> >> not sure people will like my symlink approach in the staging
-> >> directory.> 
-> > IMHO, target/ should be a subset of staging/ (even if today, this is
-> > far from  the case). So, I would prefer to also create symlinks in
-> > staging/.
-> So I'm ok with adding the symlinks to the fslparser staging as well.
-> But if we'd really like to have target as a subset of staging,
-> shouldn't we use symlinks for the target too?
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+---
+ package/Config.in        |  1 +
+ package/libnet/Config.in |  7 +++++++
+ package/libnet/libnet.mk | 13 +++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/libnet/Config.in
+ create mode 100644 package/libnet/libnet.mk
 
-Sure, I am in favor to use symlinks for target/ also.
-
-
-BR,
-
+diff --git a/package/Config.in b/package/Config.in
+index bdc3063..e0b42c0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1019,6 +1019,7 @@ menu "Networking"
+ 	source "package/libmnl/Config.in"
+ 	source "package/libmodbus/Config.in"
+ 	source "package/libndp/Config.in"
++	source "package/libnet/Config.in"
+ 	source "package/libnetfilter_acct/Config.in"
+ 	source "package/libnetfilter_conntrack/Config.in"
+ 	source "package/libnetfilter_cthelper/Config.in"
+diff --git a/package/libnet/Config.in b/package/libnet/Config.in
+new file mode 100644
+index 0000000..76ed9dd
+--- /dev/null
++++ b/package/libnet/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBNET
++	bool "libnet"
++	help
++	  libnet provides a portable framework for low-level network packet
++	  construction.
++
++	  http://sourceforge.net/projects/libnet-dev
+diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
+new file mode 100644
+index 0000000..d021f76
+--- /dev/null
++++ b/package/libnet/libnet.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libnet
++#
++################################################################################
++
++LIBNET_VERSION = 1.1.6
++LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
++LIBNET_INSTALL_STAGING = YES
++LIBNET_LICENSE = BSD-2c
++LIBNET_LICENSE_FILES = doc/COPYING
++
++$(eval $(autotools-package))
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+1.8.3.1
