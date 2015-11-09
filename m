@@ -1,91 +1,148 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 9 Nov 2015 00:44:02 +0100
-Subject: [Buildroot] [PATCH] system: Fix for NFS booting with interface
- config via DHCP
-In-Reply-To: <1446860689.4553.41.camel@rtred1test09.kymeta.local>
-References: <1446841557.4553.32.camel@rtred1test09.kymeta.local>
- <563D4BE4.2020105@mind.be>
- <1446860689.4553.41.camel@rtred1test09.kymeta.local>
-Message-ID: <563FDE42.5000709@mind.be>
+From: Jens Kamenik <jenskamenik@googlemail.com>
+Date: Mon,  9 Nov 2015 02:20:23 +0100
+Subject: [Buildroot] [PATCH] configs: new configuration for at91sam9g20ek
+Message-ID: <1447032023-6229-1-git-send-email-jenskamenik@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07-11-15 02:44, Trent Piepho wrote:
-> On Sat, 2015-11-07 at 01:55 +0100, Arnout Vandecappelle wrote:
-> 
->>> Example when the interface is used for NFS:
->>> # ifup eth0
->>> Skipping eth0, used for NFS from 192.168.1.123
->>> run-parts: /etc/network/if-pre-up.d/nfs_check: exit status 1
->>>
->>> Example when the interface isn't used for NFS:
->>> # ifup eth1
->>> [brings interface up]
->>>
->>> An alternative to putting the script in if-pre-up.d would be to add
->>> pre-up lines to the interfaces file.  This would allow running the
->>> script just for certain interfaces.  It also removes the "run-parts"
->>> message to do it this way.
->>
->>  But I think ifup would still report an error, no?
-> Not really, error exit status but no message:
-> 
-> # ifup eth0 ; echo $?
-> Skipping eth0, used for NFS from 192.168.1.123
-> 1
-> 
-> The skipping message is from my script.
+- added NAND-based configuration configs/at91sam9g20ek_defconfig for the at91sam9g20ek eval. board
+- added at91sam9g20ek option to the atmel/flasher.sh tool
+- removed old configs/at91sam9g20dfc_defconfig
+- added at91sam9g20ek description for configuring the board for flashing
 
- In that case, a pre-up line seems better to me.
+Signed-off-by: Jens Kamenik <jenskamenik@googlemail.com>
+---
+ board/atmel/flasher.sh           |  5 +++++
+ board/atmel/readme.txt           |  7 +++++++
+ configs/at91sam9g20dfc_defconfig | 31 -------------------------------
+ configs/at91sam9g20ek_defconfig  | 23 +++++++++++++++++++++++
+ 4 files changed, 35 insertions(+), 31 deletions(-)
+ delete mode 100644 configs/at91sam9g20dfc_defconfig
+ create mode 100644 configs/at91sam9g20ek_defconfig
 
-
->>> +
->>> +nfsip=`awk '$3=="nfs" && $2=="/"{ sub(/:.*/,"",$1); print $1; }' /proc/mounts`
->>
->>  sed is generally better-known so we prefer it if possible. Like
->>
->> sed -n '/^\([0-9.]*\):[^ ]* \/ nfs .*/s//\1/p' /proc/mounts
-> 
-> Ok, that's simpler too.
-> 
->>
->>
->>  However, why don't we just check if the interface is already up? Like
->> ip link show $IFACE | cut -d ' ' -f 3 | grep -q UP
-> 
-> It's currently ok to call ifup on an interface that's already up.  It
-> will reconfigure it.  The interface, while up, might not have been
-> assigned an ip.
-> 
-> It wouldn't be tied to NFS at that point either.
-
- Right, so your approach is better then.
-
- BTW are we sure that /proc/mounts contains the IP address and not the host name?
-
-
- Regards,
- Arnout
-
-
->>  I wonder if it is useful to have this optional. The overhead of running this
->> extra script is minimal, and we know for sure that NFS-root will not boot
->> without it. So I'd always install it if BR2_SYSTEM_DHCP. And people who don't
->> want it can still get rid of it in an overlay.
-> 
-> I didn't think that being option was that useful either.  But it's
-> possible for NFS root to work without having this, if the NFS interface
-> is not the same one that is being configured with DHCP.
-> 
-
-
+diff --git a/board/atmel/flasher.sh b/board/atmel/flasher.sh
+index bbdb199..7707c6d 100755
+--- a/board/atmel/flasher.sh
++++ b/board/atmel/flasher.sh
+@@ -20,6 +20,10 @@ family_at91sam9g25ek="at91sam9x5ek"
+ mach_at91sam9g25ek="at91sam9g25-ek"
+ dtb_at91sam9g25ek="at91sam9g25ek.dtb"
+ 
++family_at91sam9g20ek="at91sam9g20ek"
++mach_at91sam9g20ek="at91sam9g20-ek"
++dtb_at91sam9g20ek="at91sam9g20ek.dtb"
++
+ family_at91sam9g35ek="at91sam9x5ek"
+ mach_at91sam9g35ek="at91sam9g35-ek"
+ dtb_at91sam9g35ek="at91sam9g35ek.dtb"
+@@ -93,6 +97,7 @@ Available boards:
+   at91sam9g45m10ek
+   at91sam9rlek
+   at91sam9g15ek
++  at91sam9g20ek
+   at91sam9g25ek
+   at91sam9x25ek
+   at91sam9g35ek
+diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
+index 539ef66..25682cf 100644
+--- a/board/atmel/readme.txt
++++ b/board/atmel/readme.txt
+@@ -7,6 +7,7 @@ also be found on the Linux4SAM website, in particular here:
+ http://www.at91.com/linux4sam/bin/view/Linux4SAM/GettingStarted
+ 
+ This guide covers the following configurations:
++ - at91sam9g20ek_defconfig
+  - at91sam9g45m10ek_defconfig
+  - at91sam9rlek_defconfig
+  - at91sam9x5ek_defconfig (at91sam9g15, at91sam9g25, at91sam9x25,
+@@ -33,6 +34,7 @@ Flashing the board
+ ------------------
+ 
+ Connect the board:
++ o at91sam9g20ek: DBGU: J17, USB sam-ba: J19
+  o at91sam9g45m10ek: DBGU: J10, USB sam-ba: J14
+  o at91sam9rlek: DBGU: J19, USB sam-ba: J21
+  o at91sam9x5ek: DBGU: J11, USB sam-ba: J20
+@@ -42,6 +44,11 @@ Connect the board:
+  o sama5d4 Xplained: DBGU: J1, USB sam-ba: J11
+ 
+ Start the board in RomBOOT:
++ o at91sam9g20ek:
++    1. open JP7, JP33 and JP34
++    2. start the board
++    3. close JP34
++
+  o at91sam9g45m10ek:
+     1. open JP8, JP10 and JP12
+     2. start the board
+diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
+deleted file mode 100644
+index 1d346c2..0000000
+--- a/configs/at91sam9g20dfc_defconfig
++++ /dev/null
+@@ -1,31 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_arm926t=y
+-
+-# Lock down headers to avoid breaking with new defaults
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.1.6"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_1=y
+-
+-# Host utilities
+-#
+-BR2_PACKAGE_HOST_SAM_BA=y
+-
+-# First stage bootloader
+-BR2_TARGET_AT91BOOTSTRAP=y
+-BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9g20ek"
+-BR2_TARGET_AT91BOOTSTRAP_DATAFLASHCARD=y
+-
+-# Second stage bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="at91sam9g20ek_nandflash"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1.6"
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+-BR2_LINUX_KERNEL_DEFCONFIG="at91sam9g20ek"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_TAR=y
+diff --git a/configs/at91sam9g20ek_defconfig b/configs/at91sam9g20ek_defconfig
+new file mode 100644
+index 0000000..10125e1
+--- /dev/null
++++ b/configs/at91sam9g20ek_defconfig
+@@ -0,0 +1,23 @@
++BR2_arm=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.18"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="cad9c452bfeda05527fa46972c9d717b46f7b746"
++BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9g20ek"
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2047
++BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9g20eknf_uboot"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="at91sam9g20ek_nandflash"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
++BR2_PACKAGE_HOST_SAM_BA=y
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
