@@ -1,50 +1,63 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  9 Nov 2015 09:49:43 -0300
-Subject: [Buildroot] [PATCH] libnss: security bump to version 3.20.1
-Message-ID: <1447073383-24351-1-git-send-email-gustavo@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 9 Nov 2015 14:20:23 +0100
+Subject: [Buildroot] [PATCHv4] core/pkg-generic: check proper package
+ installation
+In-Reply-To: <20151106230701.GC3746@free.fr>
+References: <1446837330-31048-1-git-send-email-yann.morin.1998@free.fr>
+ <563D2FFA.5010403@mind.be> <20151106230701.GC3746@free.fr>
+Message-ID: <56409D97.20002@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-7181 - A use-after-poison flaw was found in the way NSS parsed
-certain ASN.1 structures. An attacker could use this flaw to cause NSS
-to crash or execute arbitrary code with the permissions of the user
-running an application compiled against the NSS library.
-CVE-2015-7182 - A heap-based buffer overflow flaw was found in the way
-NSS parsed certain ASN.1 structures. An attacker could use this flaw to
-cause NSS to crash or execute arbitrary code with the permissions of the
-user running an application compiled against the NSS library.
+Dear Yann,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Yann E. MORIN wrote:
+> Arnout, All,
+>
+> On 2015-11-06 23:55 +0100, Arnout Vandecappelle spake thusly:
+>> On 06-11-15 20:15, Yann E. MORIN wrote:
+>>> Some packages misbehave, and install files in either of;
+>>>    - $(STAGING_DIR)/$(O) or $(TARGET_DIR)/$(O),
+>>>    - $(STAGING_DIR)/$(HOST_DIR) or $(TARGET_DIR)/$(HOST_DIR).
+>>>
+>>> One common reason for that is that pkgconf now prepends the sysroot path
+>>> to all the paths it returns. Other reasons vary, but are mostly due to
+>>> poorly writen generic-packages.
+>>>
+>>> Add a check for those locations, as part of the command blocks for the
+>>> target and staging installs.
+>>>
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>>> Cc: Arnout Vandecappelle <arnout@mind.be>
+>>> Cc: Peter Seiderer <ps.report@gmx.net>
+>>> Cc: Romain Naour <romain.naour@openwide.fr>
+>>>
+[...]
+>>> +		exit 1; \
+>>> +	fi
+>>
+>>   I think it's better without this duplication so with a second parameter and
+>> calling the function twice.
+>
+> Well, it's either duplication of the if-block, or duplication of the
+> call sites. And I think it is better to have duplication of the
+> if-blocks, in cas we need to check for mor eloactions, otherwise we'd
+> have to duplicate even more the call sites...
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 9e24786..68f50ea 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_20_RTM/src/SHA256SUMS
--sha256	5e38d4b9837ca338af966b97fc91c07f67ad647fb38dc4af3cfd0d84e477d15c	nss-3.20.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_20_1_RTM/src/SHA256SUMS
-+sha256	ad3c8f11dfd9570c2d04a6140d5ef7c2bdd0fe30d6c9e5548721a4251a5e8c97	nss-3.20.1.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index f283bb3..a15fab2 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.20
-+LIBNSS_VERSION = 3.20.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+Is it possible to make check-install-dirs (note the plural) just call
+multiple times check-install-dir (singular), passing a different path
+each time?
+
+I'm sure you know all problems in computer science (except one) can be
+solved by adding another level of indirection! :-)
+
+Obviously this can be a future improvement, especially useful in case
+the list of paths to check grew longer.
+
 -- 
-2.4.10
+Luca
