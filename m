@@ -1,47 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  9 Nov 2015 21:25:10 +0100
-Subject: [Buildroot] [PATCH 1/2] ruby: do not overwrite RUBY_CONF_ENV
-Message-ID: <1447100711-16463-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 09 Nov 2015 21:31:18 +0100
+Subject: [Buildroot] [PATCH] system: Fix warning when selecting systemd
+In-Reply-To: <1446834225-19878-1-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Fri, 6 Nov 2015 19:23:45 +0100")
+References: <1446834225-19878-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <878u66ud7t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 53bf889cdca77979814bc6b74170e2f104fc3b70 ("ruby: should not
-use dl_iterate_phdr() on Blackfin") we added
-ac_cv_func_dl_iterate_phdr=no to RUBY_CONF_ENV when building on the
-Blackfin architecture.
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-However, while doing so, we overwrote the previous value of
-RUBY_CONF_ENV, which was defined to have custom CFLAGS:
+ > With systemd and a custom skeleton, you end up with the following
+ > warning:
+ > warning: (BR2_INIT_SYSTEMD) selects BR2_ROOTFS_MERGED_USR which has
+ > unmet direct dependencies (BR2_ROOTFS_SKELETON_DEFAULT)
 
-RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > ---
+ >  system/Config.in | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This has no visible effect because the custom CFLAGS are only used on
-SuperH/SuperH 64, while the overwrite of RUBY_CONF_ENV takes place on
-Blackfin.
+ > diff --git a/system/Config.in b/system/Config.in
+ > index 4d07010..92712a8 100644
+ > --- a/system/Config.in
+ > +++ b/system/Config.in
+ > @@ -92,7 +92,7 @@ config BR2_INIT_SYSTEMD
+ >  	depends on BR2_USE_MMU
+ >  	depends on !BR2_STATIC_LIBS
+ >  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ > -	select BR2_ROOTFS_MERGED_USR
+ > +	select BR2_ROOTFS_MERGED_USR if BR2_ROOTFS_SKELETON_DEFAULT
 
-However, it doesn't look very pretty, and future additions to
-RUBY_CONF_ENV may break this subtle behavior.
+Hmm, we have a number of workarounds for merged /usr under package/, so
+those packages will break with a custom skeleton (that contains a merged
+/usr as required by systemd) as those workarounds are not performed.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ruby/ruby.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Perhaps we should instead introduce a hidden BR2_ROOTFS_MERGED_USR
+kconfig option for the !BR2_ROOTFS_SKELETON_DEFAULT case?
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 243cd0b..298493c 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -30,7 +30,7 @@ endif
- RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
- 
- ifeq ($(BR2_bfin),y)
--RUBY_CONF_ENV = ac_cv_func_dl_iterate_phdr=no
-+RUBY_CONF_ENV += ac_cv_func_dl_iterate_phdr=no
- # Blackfin doesn't have FFI closure support, needed by the fiddle
- # extension.
- RUBY_CONF_OPTS += --with-out-ext=fiddle
 -- 
-2.6.3
+Bye, Peter Korsgaard
