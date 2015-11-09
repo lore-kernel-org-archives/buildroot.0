@@ -1,38 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2015 21:40:32 +0100
-Subject: [Buildroot] [git commit] Revert "system: Fix warning when selecting
-	systemd"
-Message-ID: <20151109205943.8954F81DE4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Nov 2015 22:08:30 +0100
+Subject: [Buildroot] [PATCH] package/python-protobuf: eliminate unneeded
+ build-time dependencies
+In-Reply-To: <1447002489-2373-1-git-send-email-steven@uplinklabs.net>
+References: <CAKbGBLgXpMNaSOGgGg5nmLLdub=R44pDMWJNRGbMyErRz7NSoQ@mail.gmail.com>
+ <1447002489-2373-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <20151109220830.4c64c607@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=adcc48e0b25fb6a9759bc8d889badbbad9e02954
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Steven,
 
-This reverts commit b4718c3a28fc3b178253b24bd6fbb8540a724c7e.
+On Sun,  8 Nov 2015 09:08:09 -0800, Steven Noonan wrote:
+> This was causing unexpected HTTP requests by the setup.py script for
+> python-protobuf. These "dependencies" aren't actually required for a successful
+> build, and are not staged into the target install directory.
 
-The BR2_ROOTFS_MERGED_USR symbol is used to activate various workarounds for
-a merged /usr by packages, so it should be active even with a custom rootfs
-skeleton.
+The reference to the autobuild is missing. It should contain:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- system/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Fixes:
 
-diff --git a/system/Config.in b/system/Config.in
-index 92712a8..4d07010 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -92,7 +92,7 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
--	select BR2_ROOTFS_MERGED_USR if BR2_ROOTFS_SKELETON_DEFAULT
-+	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
- 
- comment "systemd needs (e)glibc toolchain, headers >= 3.10"
+	http://autobuild.buildroot.org/results/e44/e44694f30e39266491a1040e284e504d6d37ef9e/
+
+> 
+> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+(I have verified that your patch fixes the build problem in the minimal
+chroot I use for Buildroot testing in my autobuilder instance)
+
+> +++ b/package/python-protobuf/protobuf-2.6.1-disable-unneeded-build-dependencies.patch
+
+This file name is not correct according to our patch naming policy. It
+should be 0001-disable-unneeded-build-dependencies.patch.
+
+Also, can you submit this change upstream ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
