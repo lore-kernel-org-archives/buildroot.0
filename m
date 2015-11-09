@@ -1,38 +1,47 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon,  9 Nov 2015 16:40:14 -0300
-Subject: [Buildroot] [PATCH] gettext: fix legal info
-Message-ID: <1447098014-9099-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  9 Nov 2015 21:25:11 +0100
+Subject: [Buildroot] [PATCH 2/2] ruby: explicitly disable SSP support
+In-Reply-To: <1447100711-16463-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1447100711-16463-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1447100711-16463-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+The SSP support checks of the Ruby configure script do not do a full
+link, and therefore don't properly detect if SSP support is fully
+functional or not, which causes some build failures if the compiler
+supports -fstack-protector but the C library does not provide the SSP
+implementation.
 
-The license is wrong, it's GPLv3+ rather than GPLv2+ now.
-Also there's a specific clause for libintl that makes it LGPLv2.1+, see
-gettext-runtime/COPYING.
+To avoid this, we explicitly tell ruby if SSP support is available or
+not.
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/001/00154b0142f51c197d5d53ae36f7adc4f8250d9d/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gettext/gettext.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/ruby/ruby.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 724b393..cb509f2 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -8,8 +8,8 @@ GETTEXT_VERSION = 0.19.6
- GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
- GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
- GETTEXT_INSTALL_STAGING = YES
--GETTEXT_LICENSE = GPLv2+
--GETTEXT_LICENSE_FILES = COPYING
-+GETTEXT_LICENSE = LGPLv2.1+ (libintl), GPLv3+ (the rest)
-+GETTEXT_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 298493c..17104b6 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -36,6 +36,10 @@ RUBY_CONF_ENV += ac_cv_func_dl_iterate_phdr=no
+ RUBY_CONF_OPTS += --with-out-ext=fiddle
+ endif
  
- GETTEXT_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- HOST_GETTEXT_DEPENDENCIES = # we don't want the libiconv dependency
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
++RUBY_CONF_ENV += stack_protector=no
++endif
++
+ # Force optionals to build before we do
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ RUBY_DEPENDENCIES += berkeleydb
 -- 
-2.4.10
+2.6.3
