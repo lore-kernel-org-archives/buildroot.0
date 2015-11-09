@@ -1,42 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  9 Nov 2015 08:18:57 -0300
-Subject: [Buildroot] [PATCH 2/2] usb_modeswitch_data: bump to version
-	20151101
-In-Reply-To: <1447067937-1834-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447067937-1834-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1447067937-1834-2-git-send-email-gustavo@zacarias.com.ar>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Mon, 9 Nov 2015 12:55:25 +0100
+Subject: [Buildroot] [PATCH] configs: new configuration for at91sam9g20ek
+In-Reply-To: <1447032023-6229-1-git-send-email-jenskamenik@googlemail.com>
+References: <1447032023-6229-1-git-send-email-jenskamenik@googlemail.com>
+Message-ID: <20151109115525.GA4302@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/usb_modeswitch_data/usb_modeswitch_data.hash | 2 +-
- package/usb_modeswitch_data/usb_modeswitch_data.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Jens,
 
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.hash b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-index ea36839..05a5445 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.hash
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	826096cb35a487c6e924b1318074988457220b5e72812e5393597950dd9eefc2	usb-modeswitch-data-20150627.tar.bz2
-+sha256	584d362bc0060c02016edaac7b05ebd6558d5dcbdf14f1ae6d0ec9630265a982	usb-modeswitch-data-20151101.tar.bz2
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-index 1b397cb..d8d5622 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--USB_MODESWITCH_DATA_VERSION = 20150627
-+USB_MODESWITCH_DATA_VERSION = 20151101
- USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
- USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
+A few small nitpicks below:
+
+On 09/11/2015 at 02:20:23 +0100, Jens Kamenik wrote :
+> --- a/board/atmel/flasher.sh
+> +++ b/board/atmel/flasher.sh
+> @@ -20,6 +20,10 @@ family_at91sam9g25ek="at91sam9x5ek"
+>  mach_at91sam9g25ek="at91sam9g25-ek"
+>  dtb_at91sam9g25ek="at91sam9g25ek.dtb"
+>  
+> +family_at91sam9g20ek="at91sam9g20ek"
+> +mach_at91sam9g20ek="at91sam9g20-ek"
+> +dtb_at91sam9g20ek="at91sam9g20ek.dtb"
+> +
+>  family_at91sam9g35ek="at91sam9x5ek"
+>  mach_at91sam9g35ek="at91sam9g35-ek"
+>  dtb_at91sam9g35ek="at91sam9g35ek.dtb"
+> @@ -93,6 +97,7 @@ Available boards:
+>    at91sam9g45m10ek
+>    at91sam9rlek
+>    at91sam9g15ek
+> +  at91sam9g20ek
+
+regarding the sort order, I'd say that at91sam9g20ek is not between
+at91sam9g15ek and at91sam9g25ek (both part of the at91sam9x5 familiy). I
+would place it before at91sam9g45m10ek. That comment is also valid for
+the family_, mach_ and dtb_ definitions
+
+>    at91sam9g25ek
+>    at91sam9x25ek
+>    at91sam9g35ek
+
+[...]
+
+> diff --git a/configs/at91sam9g20ek_defconfig b/configs/at91sam9g20ek_defconfig
+> new file mode 100644
+> index 0000000..10125e1
+> --- /dev/null
+> +++ b/configs/at91sam9g20ek_defconfig
+> @@ -0,0 +1,23 @@
+> +BR2_arm=y
+> +BR2_KERNEL_HEADERS_VERSION=y
+> +BR2_DEFAULT_KERNEL_VERSION="3.18"
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+
+These can probably be updated to 4.1
+
+Everything else seems OK, thanks for your patch.
+
 -- 
-2.4.10
+Alexandre Belloni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
