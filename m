@@ -1,83 +1,174 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 9 Nov 2015 15:52:24 +0100
-Subject: [Buildroot] [PATCHv4] core/pkg-generic: check proper package
- installation
-In-Reply-To: <56409D97.20002@lucaceresoli.net>
-References: <1446837330-31048-1-git-send-email-yann.morin.1998@free.fr>
- <563D2FFA.5010403@mind.be> <20151106230701.GC3746@free.fr>
- <56409D97.20002@lucaceresoli.net>
-Message-ID: <5640B328.6030408@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 9 Nov 2015 17:32:08 +0000
+Subject: [Buildroot] [PATCH v3 1/3] toolchain/external: add MIPS Codescape
+	MTI GNU Linux toolchain
+Message-ID: <1447090330-28133-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- Add support for MIPS Codescape MTI GNU Linux toolchain
+- Add a hash value
+- Add logic to 'toolchain/helpers.mk' to allow the SYSROOT_DIR and
+  ARCH_SYSROOT_DIR sit side by side instead of nested.
 
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v2 -> v3:
+ - Drop the hook to create the link for the side by side sysroots in the
+   toolchain-external.mk and create it in the helpers.mk. Also remove
+   the unnecessary comment since the helpers.mk code doesn't assume a
+   nested sysroot anymore.
 
-On 09-11-15 14:20, Luca Ceresoli wrote:
-> Dear Yann,
-> 
-> Yann E. MORIN wrote:
->> Arnout, All,
->>
->> On 2015-11-06 23:55 +0100, Arnout Vandecappelle spake thusly:
->>> On 06-11-15 20:15, Yann E. MORIN wrote:
->>>> Some packages misbehave, and install files in either of;
->>>>    - $(STAGING_DIR)/$(O) or $(TARGET_DIR)/$(O),
->>>>    - $(STAGING_DIR)/$(HOST_DIR) or $(TARGET_DIR)/$(HOST_DIR).
->>>>
->>>> One common reason for that is that pkgconf now prepends the sysroot path
->>>> to all the paths it returns. Other reasons vary, but are mostly due to
->>>> poorly writen generic-packages.
->>>>
->>>> Add a check for those locations, as part of the command blocks for the
->>>> target and staging installs.
->>>>
->>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>>> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
->>>> Cc: Arnout Vandecappelle <arnout@mind.be>
->>>> Cc: Peter Seiderer <ps.report@gmx.net>
->>>> Cc: Romain Naour <romain.naour@openwide.fr>
->>>>
-> [...]
->>>> +        exit 1; \
->>>> +    fi
->>>
->>>   I think it's better without this duplication so with a second parameter and
->>> calling the function twice.
->>
->> Well, it's either duplication of the if-block, or duplication of the
->> call sites. And I think it is better to have duplication of the
->> if-blocks, in cas we need to check for mor eloactions, otherwise we'd
->> have to duplicate even more the call sites...
-> 
-> Is it possible to make check-install-dirs (note the plural) just call
-> multiple times check-install-dir (singular), passing a different path
-> each time?
+ toolchain/helpers.mk                               |   28 ++++++----
+ toolchain/toolchain-external/Config.in             |   52 ++++++++++++++++++++
+ .../toolchain-external/toolchain-external.hash     |    4 ++
+ toolchain/toolchain-external/toolchain-external.mk |    4 ++
+ 4 files changed, 77 insertions(+), 11 deletions(-)
 
- That actually increases complexity and decreases readability compared to the
-current duplication of the if-block, because you (as a reader) have to parse
-both macros and keep them in your head simultaneously to understand what's going
-on. In such a case, I do prefer a bit of duplication.
-
- Regards,
- Arnout
-
-
-> 
-> I'm sure you know all problems in computer science (except one) can be
-> solved by adding another level of indirection! :-)
-> 
-> Obviously this can be a future improvement, especially useful in case
-> the list of paths to check grew longer.
-> 
-
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 1452ec6..1b9d12f 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -142,18 +142,24 @@ copy_toolchain_sysroot = \
+ 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+ 		fi ; \
+ 	done ; \
+-	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+-		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+-			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+-		fi ; \
+-		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
++	SYSROOT_DIR_CANON=`readlink -f $${SYSROOT_DIR}` ; \
++	ARCH_SYSROOT_DIR_CANON=`readlink -f $${ARCH_SYSROOT_DIR}` ; \
++	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} ] ; then \
+ 		relpath="./" ; \
+-		nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
+-		for slash in `seq 1 $${nbslashs}` ; do \
+-			relpath=$${relpath}"../" ; \
+-		done ; \
+-		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
+-		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
++		if [ $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
++			if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
++				cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
++			fi ; \
++			mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
++			nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
++			for slash in `seq 1 $${nbslashs}` ; do \
++				relpath=$${relpath}"../" ; \
++			done ; \
++			ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
++			echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
++		elif [ `dirname $${ARCH_SYSROOT_DIR_CANON}` == `dirname $${SYSROOT_DIR_CANON}` ] ; then \
++			ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
++		fi ; \
+ 	fi ; \
+ 	if test -n "$${SUPPORT_LIB_DIR}" ; then \
+ 		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index f2eed7f..ee6d221 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -236,6 +236,57 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 
+ 	  This toolchain uses software-floating point.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506
++	bool "Codescape MTI GNU Linux Toolchain 2015.06"
++	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_MIPS_SOFT_FLOAT
++	depends on BR2_mips_32r2 || BR2_mips_64r2
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	help
++	  Codescape MTI GNU Linux Toolchain 2015.06 for the MIPS
++	  architecture, from Imagination Technologies. It uses gcc
++	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
++	  headers 4.0. It has support for the following variants:
++	    - MIPS32r2 - Big-Endian, o32
++	      Select 'MIPS (big endian)' Target Architecture
++	      Select 'mips 32r2' Target Architecture Variant
++	    - MIPS32r2 - Little-Endian, o32
++	      Select 'MIPS (little endian)' Target Architecture
++	      Select 'mips 32r2' Target Architecture Variant
++	    - MIPS32r2 - Big-Endian, 2008 NaN, o32
++	      Select 'MIPS (big endian)' Target Architecture
++	      Select 'mips 32r2' Target Architecture Variant
++	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
++	    - MIPS32r2 - Little-Endian, 2008 NaN, o32
++	      Select 'MIPS (little endian)' Target Architecture
++	      Select 'mips 32r2' Target Architecture Variant
++	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
++	    - MIPS32r2 - Little-Endian, o32, microMIPS
++	      Select 'MIPS (little endian)' Target Architecture
++	      Select 'mips 32r2' Target Architecture Variant
++	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
++	    - MIPS64r2 - Big-Endian, n32
++	      Select 'MIPS64 (big endian)' Target Architecture
++	      Select 'mips 64r2' Target Architecture Variant
++	      Select 'n32' Target ABI
++	    - MIPS64r2 - Little-Endian, n32
++	      Select 'MIPS64 (little endian)' Target Architecture
++	      Select 'mips 64r2' Target Architecture Variant
++	      Select 'n32' Target ABI
++	    - MIPS64r2 - Big-Endian, n64
++	      Select 'MIPS64 (big endian)' Target Architecture
++	      Select 'mips 64r2' Target Architecture Variant
++	      Select 'n64' Target ABI
++	    - MIPS64r2 - Little-Endian, n64
++	      Select 'MIPS64 (little endian)' Target Architecture
++	      Select 'mips 64r2' Target Architecture Variant
++	      Select 'n64' Target ABI
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
+ 	bool "Sourcery CodeBench MIPS 2015.05"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+@@ -987,6 +1038,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
++	default "mips-mti-linux-gnu"     if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index 2d41389..9456174 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -56,6 +56,10 @@ sha256 24b86799a6c64380c740bf31a700b46e854fc0a821da2341e9868f0196c864de  gcc-lin
+ sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+ sha256 b9137008744d9009877f662dbac7481d673cdcb1798e727e325a37c98a0f63da  gcc-linaro-5.1-2015.08-x86_64_aarch64-linux-gnu.tar.xz
+ 
++# Codescape toolchains from Imagination Technologies
++# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-05/
++sha256 f2d12dde626b750987d37ba6c73c6e11839850add94b0d4e4cf77917c1b0944f  Codescape.GNU.Tools.Package.2015.06-05.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
++
+ # Synopsys DesignWare ARC toolchains
+ sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu_2014.12_prebuilt_uclibc_le_arc700_linux_install.tar.gz
+ sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 958ab18..1e22f5f 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -341,6 +341,10 @@ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/components/toolchain/binari
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.1-2015.08-x86_64_armeb-linux-gnueabihf.tar.xz
+ endif
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506),y)
++TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-05
++TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2015.06-05.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
++TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.7.1
