@@ -1,99 +1,112 @@
-From: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Mon,  9 Nov 2015 10:03:32 +0100
-Subject: [Buildroot] [PATCH 2/2] netsniff-ng:new package
-In-Reply-To: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
-References: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <1447059812-26424-2-git-send-email-joris.lijssens@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 9 Nov 2015 11:23:39 +0100
+Subject: [Buildroot] [PATCH v2] python: rework *.pyc files generation
+In-Reply-To: <1446462917-992-1-git-send-email-yegorslists@googlemail.com>
+References: <1446462917-992-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <CAGm1_ku1AninNGc2oepsByXbbX+BZkXth4s1QDEhT0dqDsBFAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
----
- package/Config.in                  |  1 +
- package/netsniff-ng/Config.in      | 22 ++++++++++++++++++++++
- package/netsniff-ng/netsniff-ng.mk | 30 ++++++++++++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 package/netsniff-ng/Config.in
- create mode 100644 package/netsniff-ng/netsniff-ng.mk
+Hi Thomas,
 
-diff --git a/package/Config.in b/package/Config.in
-index e0b42c0..0a80afb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -88,6 +88,7 @@ endif
- 	source "package/mcelog/Config.in"
- 	source "package/memstat/Config.in"
- 	source "package/netperf/Config.in"
-+	source "package/netsniff-ng/Config.in"
- 	source "package/oprofile/Config.in"
- 	source "package/pax-utils/Config.in"
- 	source "package/pv/Config.in"
-diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-new file mode 100644
-index 0000000..448e853
---- /dev/null
-+++ b/package/netsniff-ng/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_NETSNIFF_NG
-+	bool "netsniff-ng"
-+	select BR2_PACKAGE_LIBNL
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_LIBCLI
-+	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-+	select BR2_PACKAGE_LIBURCU
-+	select BR2_PACKAGE_LIBNET
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu
-+	help
-+	  netsniff-ng is a free, performant Linux network analyzer and
-+	  networking toolkit. If you will, the Swiss army knife for
-+	  network packets.
-+
-+comment "netsniff-ng needs an (e)glibc toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854
-+
-+comment "netsniff-ng needs a toolchain not affected by GCC bug 58854"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854
-diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-new file mode 100644
-index 0000000..6f755a1
---- /dev/null
-+++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# netsniff-ng
-+#
-+################################################################################
-+
-+NETSNIFF_NG_VERSION = v0.5.9
-+NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
-+NETSNIFF_NG_LICENSE = GPLv2
-+NETSNIFF_NG_LICENSE_FILES = README
-+
-+define NETSNIFF_NG_CONFIGURE_CMDS
-+		(cd $(@D); \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		./configure \
-+		--prefix=$(TARGET_DIR)/usr \
-+	)
-+endef
-+
-+define NETSNIFF_NG_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define NETSNIFF_NG_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc install -C $(@D)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.8.3.1
+On Mon, Nov 2, 2015 at 12:15 PM,  <yegorslists@googlemail.com> wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> This patch generates all *.pyc files from *.py located in
+> <target>/usr/lib/python*/site-packages, before stripping the rootfs.
+>
+> *.pyc generation on per package basis is disabled through
+> "--no-compile" option.
+>
+> This prevents modules from packages, that do not compile the *.py
+> files, from disappearing.
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> ---
+> Changes:
+>         v2: move finalization code from root Makefile to python.mk and python3.mk
+>
+>  package/pkg-python.mk      |  2 +-
+>  package/python/python.mk   | 11 +++++++++++
+>  package/python3/python3.mk | 11 +++++++++++
+>  3 files changed, 23 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index b7a702d..9725d24 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -253,7 +253,7 @@ ifndef $(2)_INSTALL_TARGET_CMDS
+>  define $(2)_INSTALL_TARGET_CMDS
+>         (cd $$($$(PKG)_BUILDDIR)/; \
+>                 $$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+> -               $$($(2)_PYTHON_INTERPRETER) setup.py install \
+> +               $$($(2)_PYTHON_INTERPRETER) setup.py install --no-compile \
+>                 $$($$(PKG)_BASE_INSTALL_TARGET_OPTS) \
+>                 $$($$(PKG)_INSTALL_TARGET_OPTS))
+>  endef
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index 80ffbde..1b0361f 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -219,10 +219,21 @@ $(eval $(host-autotools-package))
+>
+>  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+>  define PYTHON_FINALIZE_TARGET
+> +       PYTHONPATH="$(PYTHON_PATH)" \
+> +               $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) -c "import compileall; \
+> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages')"
+>         find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
+>  endef
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_PYTHON_PY_PYC),y)
+> +define PYTHON_FINALIZE_TARGET
+> +       PYTHONPATH="$(PYTHON_PATH)" \
+> +               $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) -c "import compileall; \
+> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages')"
+> +endef
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
+>  define PYTHON_FINALIZE_TARGET
+>         find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index fd5709a..5d4555b 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -210,10 +210,21 @@ $(eval $(host-autotools-package))
+>
+>  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+>  define PYTHON3_FINALIZE_TARGET
+> +       PYTHONPATH="$(PYTHON3_PATH)" \
+> +               $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) -c "import compileall; \
+> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages')"
+>         find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
+>  endef
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_PYTHON3_PY_PYC),y)
+> +define PYTHON3_FINALIZE_TARGET
+> +       PYTHONPATH="$(PYTHON3_PATH)" \
+> +               $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) -c "import compileall; \
+> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages')"
+> +endef
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
+>  define PYTHON3_FINALIZE_TARGET
+>         find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
+> --
+> 2.1.4
+>
+
+Could you please take a look at this patch, so that it has a chance to
+get into current release?
+
+Thanks.
+
+Yegor
