@@ -1,52 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2015 22:09:02 +0100
-Subject: [Buildroot] [git commit] libnss: security bump to version 3.20.1
-Message-ID: <20151109211747.C3A11819A7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Nov 2015 22:23:09 +0100
+Subject: [Buildroot] [PATCH] configs: new configuration for at91sam9g20ek
+In-Reply-To: <20151109115525.GA4302@piout.net>
+References: <1447032023-6229-1-git-send-email-jenskamenik@googlemail.com>
+ <20151109115525.GA4302@piout.net>
+Message-ID: <20151109222309.67599ac2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c02f2606cf576cbeff088f5ffd3521783d16516c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Alex,
 
-Fixes:
-CVE-2015-7181 - A use-after-poison flaw was found in the way NSS parsed
-certain ASN.1 structures. An attacker could use this flaw to cause NSS
-to crash or execute arbitrary code with the permissions of the user
-running an application compiled against the NSS library.
-CVE-2015-7182 - A heap-based buffer overflow flaw was found in the way
-NSS parsed certain ASN.1 structures. An attacker could use this flaw to
-cause NSS to crash or execute arbitrary code with the permissions of the
-user running an application compiled against the NSS library.
+On Mon, 9 Nov 2015 12:55:25 +0100, Alexandre Belloni wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libnss/libnss.hash |    4 ++--
- package/libnss/libnss.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> regarding the sort order, I'd say that at91sam9g20ek is not between
+> at91sam9g15ek and at91sam9g25ek (both part of the at91sam9x5 familiy). I
+> would place it before at91sam9g45m10ek. That comment is also valid for
+> the family_, mach_ and dtb_ definitions
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 9e24786..68f50ea 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_20_RTM/src/SHA256SUMS
--sha256	5e38d4b9837ca338af966b97fc91c07f67ad647fb38dc4af3cfd0d84e477d15c	nss-3.20.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_20_1_RTM/src/SHA256SUMS
-+sha256	ad3c8f11dfd9570c2d04a6140d5ef7c2bdd0fe30d6c9e5548721a4251a5e8c97	nss-3.20.1.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index f283bb3..a15fab2 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.20
-+LIBNSS_VERSION = 3.20.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+I think you should explain why. It's because you're not interested in
+alphabetic ordering here, but rather "release date" ordering of the
+platform. Is that correct ?
+
+
+> > diff --git a/configs/at91sam9g20ek_defconfig b/configs/at91sam9g20ek_defconfig
+> > new file mode 100644
+> > index 0000000..10125e1
+> > --- /dev/null
+> > +++ b/configs/at91sam9g20ek_defconfig
+> > @@ -0,0 +1,23 @@
+> > +BR2_arm=y
+> > +BR2_KERNEL_HEADERS_VERSION=y
+> > +BR2_DEFAULT_KERNEL_VERSION="3.18"
+> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+> 
+> These can probably be updated to 4.1
+
+Indeed.
+
+Jens, can you fix those two issues and send an updated version of your
+patch ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
