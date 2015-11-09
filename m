@@ -1,45 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2015 21:31:18 +0100
-Subject: [Buildroot] [PATCH] system: Fix warning when selecting systemd
-In-Reply-To: <1446834225-19878-1-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Fri, 6 Nov 2015 19:23:45 +0100")
-References: <1446834225-19878-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <878u66ud7t.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Nov 2015 21:34:20 +0100
+Subject: [Buildroot] [PATCH] protobuf: bump to 2.6.1
+In-Reply-To: <CAKbGBLgXpMNaSOGgGg5nmLLdub=R44pDMWJNRGbMyErRz7NSoQ@mail.gmail.com>
+References: <1446626241-25745-1-git-send-email-steven@uplinklabs.net>
+ <20151108164905.27d41c84@free-electrons.com>
+ <CAKbGBLj5_4nQw+j=AAXWLNx8+OGYGUCrZuhpV3EFTCqYxSZe3g@mail.gmail.com>
+ <CAKbGBLgXpMNaSOGgGg5nmLLdub=R44pDMWJNRGbMyErRz7NSoQ@mail.gmail.com>
+Message-ID: <20151109213420.616308f8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+Hello,
 
- > With systemd and a custom skeleton, you end up with the following
- > warning:
- > warning: (BR2_INIT_SYSTEMD) selects BR2_ROOTFS_MERGED_USR which has
- > unmet direct dependencies (BR2_ROOTFS_SKELETON_DEFAULT)
+On Sun, 8 Nov 2015 08:59:07 -0800, Steven Noonan wrote:
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > ---
- >  system/Config.in | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+> It looks like it's probably as simple as:
+> 
+> diff --git a/python/setup.py b/python/setup.py
+> index 2450a77..6f6bffb 100755
+> --- a/python/setup.py
+> +++ b/python/setup.py
+> @@ -189,7 +189,6 @@ if __name__ == '__main__':
+>            'google.protobuf.text_format'],
+>          cmdclass = { 'clean': clean, 'build_py': build_py },
+>          install_requires = ['setuptools'],
+> -        setup_requires = ['google-apputils'],
+>          ext_modules = ext_module_list,
+>          url = 'https://developers.google.com/protocol-buffers/',
+>          maintainer = maintainer_email,
 
- > diff --git a/system/Config.in b/system/Config.in
- > index 4d07010..92712a8 100644
- > --- a/system/Config.in
- > +++ b/system/Config.in
- > @@ -92,7 +92,7 @@ config BR2_INIT_SYSTEMD
- >  	depends on BR2_USE_MMU
- >  	depends on !BR2_STATIC_LIBS
- >  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- > -	select BR2_ROOTFS_MERGED_USR
- > +	select BR2_ROOTFS_MERGED_USR if BR2_ROOTFS_SKELETON_DEFAULT
+Can you submit this as a proper patch ?
 
-Hmm, we have a number of workarounds for merged /usr under package/, so
-those packages will break with a custom skeleton (that contains a merged
-/usr as required by systemd) as those workarounds are not performed.
+Thanks,
 
-Perhaps we should instead introduce a hidden BR2_ROOTFS_MERGED_USR
-kconfig option for the !BR2_ROOTFS_SKELETON_DEFAULT case?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
