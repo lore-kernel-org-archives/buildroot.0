@@ -1,154 +1,42 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  9 Nov 2015 08:18:56 -0300
-Subject: [Buildroot] [PATCH 1/2] usb_modeswitch: bump to version 2.2.6
-Message-ID: <1447067937-1834-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  9 Nov 2015 08:18:57 -0300
+Subject: [Buildroot] [PATCH 2/2] usb_modeswitch_data: bump to version
+	20151101
+In-Reply-To: <1447067937-1834-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1447067937-1834-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1447067937-1834-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch upstream so remove it.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/usb_modeswitch/0001-rename-abort.patch | 105 -------------------------
- package/usb_modeswitch/usb_modeswitch.hash     |   2 +-
- package/usb_modeswitch/usb_modeswitch.mk       |   2 +-
- 3 files changed, 2 insertions(+), 107 deletions(-)
- delete mode 100644 package/usb_modeswitch/0001-rename-abort.patch
+ package/usb_modeswitch_data/usb_modeswitch_data.hash | 2 +-
+ package/usb_modeswitch_data/usb_modeswitch_data.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/usb_modeswitch/0001-rename-abort.patch b/package/usb_modeswitch/0001-rename-abort.patch
-deleted file mode 100644
-index 739e817..0000000
---- a/package/usb_modeswitch/0001-rename-abort.patch
-+++ /dev/null
-@@ -1,105 +0,0 @@
--abort() is a C library function and used by Jim, so it results in
--a duplicate definition and confusion when linking statically.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura usb-modeswitch-2.2.5.orig/usb_modeswitch.c usb-modeswitch-2.2.5/usb_modeswitch.c
----- usb-modeswitch-2.2.5.orig/usb_modeswitch.c	2015-07-28 08:24:41.043352748 -0300
--+++ usb-modeswitch-2.2.5/usb_modeswitch.c	2015-07-28 08:38:43.557315576 -0300
--@@ -544,7 +544,7 @@
-- 		libusb_open(dev, &devh);
-- 		if (devh == NULL) {
-- 			SHOW_PROGRESS(output,"Error opening the device. Abort\n\n");
---			abort();
--+			abortOut();
-- 		}
-- 	}
-- 
--@@ -574,18 +574,18 @@
-- 			ResponseEndpoint = find_first_bulk_endpoint(LIBUSB_ENDPOINT_IN);
-- 		if (!MessageEndpoint) {
-- 			fprintf(stderr,"Error: message endpoint not given or found. Abort\n\n");
---			abort();
--+			abortOut();
-- 		}
-- 		if (!ResponseEndpoint) {
-- 			fprintf(stderr,"Error: response endpoint not given or found. Abort\n\n");
---			abort();
--+			abortOut();
-- 		}
-- 		SHOW_PROGRESS(output,"Use endpoints 0x%02x (out) and 0x%02x (in)\n", MessageEndpoint, ResponseEndpoint);
-- 	}
-- 
-- 	if (interfaceClass == -1) {
-- 		fprintf(stderr, "Error: Could not get class of interface %d. Does it exist? Abort\n\n",Interface);
---		abort();
--+		abortOut();
-- 	}
-- 
-- 	if (defaultClass == 0)
--@@ -601,7 +601,7 @@
-- 		if (defaultClass != 8) {
-- 			fprintf(stderr, "Error: can't use storage command in MessageContent with interface %d;\n"
-- 				"       interface class is %d, expected 8. Abort\n\n", Interface, defaultClass);
---			abort();
--+			abortOut();
-- 		}
-- 
-- 	if (InquireDevice && show_progress) {
--@@ -629,7 +629,7 @@
-- 	 */
-- 	if ( ModeMap & (ModeMap-1) ) {
-- 		fprintf(output,"Multiple special modes selected; check configuration. Abort\n\n");
---		abort();
--+		abortOut();
-- 	}
-- 
-- 	if ((strlen(MessageContent) || StandardEject) && ModeMap ) {
--@@ -1339,7 +1339,7 @@
-- 	ret = libusb_claim_interface(devh, Interface);
-- 	if (ret < 0) {
-- 		SHOW_PROGRESS(output," Could not claim interface (error %d). Abort\n", ret);
---		abort();
--+		abortOut();
-- 	}
-- //	libusb_clear_halt(devh, MessageEndpoint);
-- 	if (show_progress)
--@@ -1832,7 +1832,7 @@
-- 	int ret = libusb_get_active_config_descriptor(dev, &active_config);
-- 	if (ret < 0) {
-- 		SHOW_PROGRESS(output," Determining the active configuration failed (error %d). Abort\n", ret);
---		abort();
--+		abortOut();
-- 	}
-- 	return active_config->bConfigurationValue;
-- }
--@@ -1878,7 +1878,7 @@
-- 			}
-- 			if (file==NULL) {
-- 				fprintf(stderr, "Error: Could not find file %s. Abort\n\n", FileName);
---				abort();
--+				abortOut();
-- 			} else {
-- 				token = fgets(Str, LINE_DIM-1, file);
-- 			}
--@@ -2014,7 +2014,7 @@
-- 		closelog();
-- }
-- 
---void abort()
--+void abortOut()
-- {
-- 	close_all();
-- 	exit(1);
--diff -Nura usb-modeswitch-2.2.5.orig/usb_modeswitch.h usb-modeswitch-2.2.5/usb_modeswitch.h
----- usb-modeswitch-2.2.5.orig/usb_modeswitch.h	2015-07-28 08:24:41.043352748 -0300
--+++ usb-modeswitch-2.2.5/usb_modeswitch.h	2015-07-28 08:38:54.986708480 -0300
--@@ -61,7 +61,7 @@
-- void printVersion();
-- void printHelp();
-- void close_all();
---void abort();
--+void abortOut();
-- int readArguments(int argc, char **argv);
-- void deviceDescription();
-- int deviceInquire();
-diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
-index 9552a24..2033d31 100644
---- a/package/usb_modeswitch/usb_modeswitch.hash
-+++ b/package/usb_modeswitch/usb_modeswitch.hash
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.hash b/package/usb_modeswitch_data/usb_modeswitch_data.hash
+index ea36839..05a5445 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.hash
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	8b2340303732aabc8c8e1cdd7d4352f61dcb942839f58ce22ba0ecfa122426d5	usb-modeswitch-2.2.5.tar.bz2
-+sha256	7ee42be2fe26dde20c58f54bf678fb136d2706250e4aa74f06fc97268a46e90f	usb-modeswitch-2.2.6.tar.bz2
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index c1b0a76..aca13e4 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
+-sha256	826096cb35a487c6e924b1318074988457220b5e72812e5393597950dd9eefc2	usb-modeswitch-data-20150627.tar.bz2
++sha256	584d362bc0060c02016edaac7b05ebd6558d5dcbdf14f1ae6d0ec9630265a982	usb-modeswitch-data-20151101.tar.bz2
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+index 1b397cb..d8d5622 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--USB_MODESWITCH_VERSION = 2.2.5
-+USB_MODESWITCH_VERSION = 2.2.6
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb
+-USB_MODESWITCH_DATA_VERSION = 20150627
++USB_MODESWITCH_DATA_VERSION = 20151101
+ USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
+ USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
 -- 
 2.4.10
