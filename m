@@ -1,22 +1,175 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2015 23:45:20 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10,
-	14}.x and 4.{1, 2}.x series
-In-Reply-To: <1447151972-12086-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 10 Nov 2015 07:39:31 -0300")
-References: <1447151972-12086-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mvulpj7j.fsf@dell.be.48ers.dk>
+From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+Date: Tue, 10 Nov 2015 19:54:55 -0300
+Subject: [Buildroot] [PATCH 1/1] qt5base: Patch Qt config to detect
+ sunxi-mali
+In-Reply-To: <1442407978-30060-1-git-send-email-daniel.nystrom@timeterminal.se>
+References: <1442407978-30060-1-git-send-email-daniel.nystrom@timeterminal.se>
+Message-ID: <564275BF.90300@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hi Daniel,
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+I've tested this patch on an A20 Olinuxino Micro, enabling Qt5 + EGLFS +
+sunxi-mali. I successfully run all the opengl examples that are built
+with Qt.
 
-Committed, thanks.
+The patch fixed the following issue:
+--
+# pwd
+  /usr/lib/qt/examples/opengl/hellowindow
+# ./hellowindow
+  UMP<2>: New session opened
+  Unable to query physical screen size, defaulting to 100 dpi.
+  To override, set QT_QPA_EGLFS_PHYSICAL_WIDTH and
+  QT_QPA_EGLFS_PHYSICAL_HEIGHT
+  (in millimeters).
+  UMP<2>: Session closed
+  EGL Error : Could not create the egl surface: error = 0x300b
+
+  Aborted
+--
+
+Tested-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+
+Thanks!
+
+El 16/09/15 a las 09:52, Daniel Nystr?m escribi?:
+> Currently Qt 5.5 only detects and build the eglfs_mali device
+> integration if the commercial Mali driver package from ARM is used.
+> This patch makes sure the Qt configure script also test for the
+> sunxi-mali driver package. It also removes the dependency of
+> the proprietary fbdev_window.h.
+> 
+> This issue is set to be fixed in upcoming Qt 5.6:
+> https://codereview.qt-project.org/#/c/125837/
+> 
+> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+> ---
+>  .../qt5base/0010-fix-eglfs-for-sunxi-mali.patch    | 109 +++++++++++++++++++++
+>  1 file changed, 109 insertions(+)
+>  create mode 100644 package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch
+> 
+> diff --git a/package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch b/package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch
+> new file mode 100644
+> index 0000000..a578af3
+> --- /dev/null
+> +++ b/package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch
+> @@ -0,0 +1,109 @@
+> +Fix Qt5 configure script not autodetecting sunxi-mali drivers rendering
+> +in eglfs_mali not being built. The patch also fix compatibility issues
+> +regarding header files only included in the proprietary version.
+> +
+> +This will be fixed in Qt 5.6.
+> +
+> +ref: https://codereview.qt-project.org/#/c/125837/
+> +
+> +Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+> +
+> +diff --git a/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.cpp b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.cpp
+> +new file mode 100644
+> +index 0000000..1914d64
+> +--- /dev/null
+> ++++ b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.cpp
+> +@@ -0,0 +1,44 @@
+> ++/****************************************************************************
+> ++**
+> ++** Copyright (C) 2015 The Qt Company Ltd.
+> ++** Contact: http://www.qt.io/licensing/
+> ++**
+> ++** This file is part of the config.tests of the Qt Toolkit.
+> ++**
+> ++** $QT_BEGIN_LICENSE:LGPL21$
+> ++** Commercial License Usage
+> ++** Licensees holding valid commercial Qt licenses may use this file in
+> ++** accordance with the commercial license agreement provided with the
+> ++** Software or, alternatively, in accordance with the terms contained in
+> ++** a written agreement between you and The Qt Company. For licensing terms
+> ++** and conditions see http://www.qt.io/terms-conditions. For further
+> ++** information use the contact form at http://www.qt.io/contact-us.
+> ++**
+> ++** GNU Lesser General Public License Usage
+> ++** Alternatively, this file may be used under the terms of the GNU Lesser
+> ++** General Public License version 2.1 or version 3 as published by the Free
+> ++** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+> ++** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+> ++** following information to ensure the GNU Lesser General Public License
+> ++** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+> ++** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+> ++**
+> ++** As a special exception, The Qt Company gives you certain additional
+> ++** rights. These rights are described in The Qt Company LGPL Exception
+> ++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+> ++**
+> ++** $QT_END_LICENSE$
+> ++**
+> ++****************************************************************************/
+> ++
+> ++#include <EGL/egl.h>
+> ++#include <GLES2/gl2.h>
+> ++
+> ++int main(int, char **)
+> ++{
+> ++    EGLDisplay dpy = 0;
+> ++    EGLContext ctx = 0;
+> ++    mali_native_window *w = 0;
+> ++    eglDestroyContext(dpy, ctx);
+> ++    return 0;
+> ++}
+> +diff --git a/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.pro b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.pro
+> +new file mode 100644
+> +index 0000000..85bcf64
+> +--- /dev/null
+> ++++ b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.pro
+> +@@ -0,0 +1,5 @@
+> ++SOURCES = eglfs-mali-2.cpp
+> ++
+> ++CONFIG -= qt
+> ++
+> ++LIBS += -lEGL -lGLESv2
+> +diff --git a/configure b/configure
+> +index cea62fb..09781bc 100755
+> +--- a/configure
+> ++++ b/configure
+> +@@ -5624,7 +5624,8 @@ if [ "$CFG_EGLFS" != "no" ]; then
+> +         else
+> +             CFG_EGLFS_BRCM=no
+> +         fi
+> +-        if compileTest qpa/eglfs-mali "eglfs-mali"; then
+> ++        if compileTest qpa/eglfs-mali "eglfs-mali" \
+> ++            || compileTest qpa/eglfs-mali-2 "eglfs-mali-2"; then
+> +             CFG_EGLFS_MALI=yes
+> +         else
+> +             CFG_EGLFS_MALI=no
+> +diff --git a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
+> +index 455d780..43decdf 100644
+> +--- a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
+> ++++ b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
+> +@@ -32,7 +32,6 @@
+> + ****************************************************************************/
+> +
+> + #include "qeglfsmaliintegration.h"
+> +-#include <EGL/fbdev_window.h>
+> +
+> + #include <unistd.h>
+> + #include <fcntl.h>
+> +@@ -43,6 +42,11 @@
+> +
+> + QT_BEGIN_NAMESPACE
+> +
+> ++struct fbdev_window {
+> ++    unsigned short width;
+> ++    unsigned short height;
+> ++};
+> ++
+> + void QEglFSMaliIntegration::platformInit()
+> + {
+> +     // Keep the non-overridden base class functions based on fb0 working.
+> 
 
 -- 
-Bye, Peter Korsgaard
+Ariel D'Alessandro, VanguardiaSur
+www.vanguardiasur.com.ar
