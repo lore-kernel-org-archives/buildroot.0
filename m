@@ -1,57 +1,84 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Tue, 10 Nov 2015 16:09:01 +0100
-Subject: [Buildroot] [PATCH 2/2] arch: add tune options for powerpc
-	e5500 and e6500
-In-Reply-To: <1446818745-32224-2-git-send-email-arnout@mind.be>
-References: <1446818745-32224-1-git-send-email-arnout@mind.be>
- <1446818745-32224-2-git-send-email-arnout@mind.be>
-Message-ID: <CAM+bi4s0N0kUY69SYV+nJ4o=y824G89N_OcbiEykROuoBcUEVA@mail.gmail.com>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Tue, 10 Nov 2015 17:10:42 +0000
+Subject: [Buildroot] [PATCH v7] board: add support for Intel Galileo Gen
+ 2
+In-Reply-To: <56314C13.5030302@mind.be>
+References: <1445359684.18938.6.camel@intel.com> <56314C13.5030302@mind.be>
+Message-ID: <1447175442.3010.65.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout
+Hi Arnout,
 
-It seems that these two patches completely solve the issues I was having
-with this architecture, so please consider both of them to be tested.
+Humblest apologies for the delay in responding to your email.
 
-Tested-by: Alvaro G. M <alvaro.gamez@hazent.com>
+>  There is now a v1.2 BSP at Intel that is based on 3.14. Unfortunately, it's in
+> a 7z-packed tarball so not exactly easy to integrate...
 
-2015-11-06 15:05 GMT+01:00 Arnout Vandecappelle (Essensium/Mind) <
-arnout@mind.be>:
+There is - I am very familiar with it. There is more yocto specific
+stuff to strip from this, so I will integrate after I get the base
+enabling upstream based on 3.8.7. 
 
-> These were forgotten when the subarches were added in cd88e49.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Alvaro Gamez <alvaro.gamez@hazent.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  arch/Config.in.powerpc | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-> index 95bcaee..8581a4d 100644
-> --- a/arch/Config.in.powerpc
-> +++ b/arch/Config.in.powerpc
-> @@ -200,6 +200,8 @@ config BR2_GCC_TARGET_CPU
->         default "e300c2"        if BR2_powerpc_e300c2
->         default "e300c3"        if BR2_powerpc_e300c3
->         default "e500mc"        if BR2_powerpc_e500mc
-> +       default "e5500"         if BR2_powerpc_e5500
-> +       default "e6500"         if BR2_powerpc_e6500
->         default "power4"        if BR2_powerpc_power4
->         default "power5"        if BR2_powerpc_power5
->         default "power6"        if BR2_powerpc_power6
-> --
-> 2.6.2
->
->
+>  Doesn't genimage allow to specify this in a single file?
+I tried putting them together - can't remember the issues I had, will
+look at it again. 
 
+>  ext2 is completely useless.
+Agreed.
 
--- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151110/7e6bf9d6/attachment.html>
+>  ext3 could be replaced by ext4.
+
+Agreed.
+
+> > +CONFIG_CRYPTO_CRC32C=y
+> 
+>  That's probably a leftover of some option you disabled.
+Ok - will investigate. 
+
+> > +# CONFIG_VIRTUALIZATION is not set
+> > +CONFIG_CRC_T10DIF=y
+>  This one too.
+
+Ok - will investigate. 
+
+>  No bashisms here, so /bin/sh
+
+Agreed 
+
+> 
+>  Perhaps add a -e to exit on failure.
+
+Agreed 
+
+> > +RET=${?}
+> > +exit ${RET}
+> 
+>  These two lines are redundant.
+
+Agreed 
+
+>  Why not just hard link all of these instead of loading them as modules? The
+> drivers that differ between the two modules are so small that it's not going to
+> make a significant difference in kernel size.
+
+Ok I will figure out which ones are not model specific and hard link
+them.  I seem to have some memory the model specific ones are mutually
+exclusive, they shouldn't be loaded at the same time, will need to
+verify. 
+
+>  Perhaps add a comment here that this version is needed for the -Wl,... option.
+Agreed,
+
+>  Can we use ext4 instead?
+Agreed,
+
+> 
+> > +BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs.ext2"
+> 
+>  That's not needed.
+Ok.
+
+Ray K
