@@ -1,104 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Nov 2015 23:10:19 +0100
-Subject: [Buildroot] [PATCH v2] system: Fix for NFS booting with
- interface config via DHCP
-In-Reply-To: <1447107410.4553.76.camel@rtred1test09.kymeta.local>
-References: <1446841557.4553.32.camel@rtred1test09.kymeta.local>
- <20151108145723.49e07124@free-electrons.com>
- <1447107410.4553.76.camel@rtred1test09.kymeta.local>
-Message-ID: <56426B4B.60004@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Nov 2015 23:37:02 +0100
+Subject: [Buildroot] [PATCH] liquid-dsp: fix powerpc/altivec build
+	failures
+In-Reply-To: <1447164605-14899-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 10 Nov 2015 11:10:05 -0300")
+References: <1447164605-14899-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r3jxpjld.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09-11-15 23:16, Trent Piepho wrote:
-> Configuring the network interface with DHCP via
-> /etc/network/interfaces generally does not work when NFS booting.  The
-> DHCP configuration will initially bring the interface down and system
-> then hangs at that point as the root filesystem is no longer
-> accessable.  See bug 4709.
-> 
-> This adds a script to be run via a pre-up line in
-> /etc/network/interfaces.  It checks for a NFS root filesystem and if
-> the interface to be configured is used for access to the NFS server.
-> If this is the case, then it returns a failure code so that ifup will
-> not configure the interface.  This works for DHCP and another config
-> methods (static, bootp, etc.).  This system does detect if the
-> interface to be configured isn't the one used for NFS and doesn't skip
-> it when that is the case.
-> 
-> NFS filesystems that aren't the root fs aren't considered.
-> 
-> Signed-off-by: Trent Piepho <tpiepho@kymetacorp.com>
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > When a powerpc target is detected the build system tries to force
+ > altivec support but that's wrong:
 
- I checked that the addr= appears in /proc/mounts since at least 2.6.17.
+ > Not every powerpc processor has altivec instruction support.
 
- IMHO this is still for 2015.11.
+ > It's using the removed/deprecated -faltivec compiler directive when it
+ > should be using -maltivec instead.
 
+ > Even if the above conditions are corrected the altivec codepath fails
+ > to build properly.
 
- Regards,
- Arnout
+ > So just disable altivec in general using the standard
+ > --enable-simdoverride configure option. Fixes:
 
+ > http://autobuild.buildroot.net/results/e1b/e1b6cf76a7a4ae754a928d211e779e9381198f48/
 
-> ---
->  package/skeleton/nfs_check   | 20 ++++++++++++++++++++
->  package/skeleton/skeleton.mk |  3 +++
->  2 files changed, 23 insertions(+)
->  create mode 100755 package/skeleton/nfs_check
-> 
-> diff --git a/package/skeleton/nfs_check b/package/skeleton/nfs_check
-> new file mode 100755
-> index 0000000..dfa0cbf
-> --- /dev/null
-> +++ b/package/skeleton/nfs_check
-> @@ -0,0 +1,20 @@
-> +#!/bin/sh
-> +
-> +# This allows NFS booting to work while also being able to configure
-> +# the network interface via DHCP when not NFS booting.  Otherwise, a
-> +# NFS booted system will likely hang during DHCP configuration.
-> +
-> +# Attempting to configure the network interface used for NFS will
-> +# initially bring that network down.  Since the root filesystem is
-> +# accessed over this network, the system hangs.
-> +
-> +# This script is run by ifup and will attempt to detect if a NFS root
-> +# mount uses the interface to be configured (IFACE), and if so does
-> +# not configure it.  This should allow the same build to be disk/flash
-> +# booted or NFS booted.
-> +
-> +nfsip=`sed -n '/^[^ ]*:.* \/ nfs.*[ ,]addr=\([0-9.]\+\).*/s//\1/p' /proc/mounts`
-> +if [ -n "$nfsip" ] && ip route get to "$nfsip" | grep -q "dev $IFACE"; then
-> +	echo Skipping $IFACE, used for NFS from $nfsip
-> +	exit 1
-> +fi
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index d1b797d..0cab8a1 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -89,8 +89,11 @@ define SET_NETWORK_DHCP
->  		echo ;                                               \
->  		echo "auto $(NETWORK_DHCP_IFACE)";                   \
->  		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
-> +		echo "  pre-up /etc/network/nfs_check";              \
->  		echo "	wait-delay 15";                              \
->  	) >> $(TARGET_DIR)/etc/network/interfaces
-> +	$(INSTALL) -m 0755 -D $(SKELETON_PKGDIR)/nfs_check \
-> +		$(TARGET_DIR)/etc/network/nfs_check
->  endef
->  endif
->  
-> 
-
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
