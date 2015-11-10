@@ -1,76 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Nov 2015 13:36:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 8456] New: Building host-pkgconf on Fedora 23
- fails due to incorrect build dependencies
-Message-ID: <bug-8456-163@https.bugs.busybox.net/>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Tue, 10 Nov 2015 22:53:56 +0900
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-11-06
+In-Reply-To: <f0p5hcxm2q.ln2@ID-313208.user.individual.net>
+References: <20151107073016.DCC83100931@stock.ovh.net>
+ <f0p5hcxm2q.ln2@ID-313208.user.individual.net>
+Message-ID: <43B1D209-3DB5-49EF-8F92-4A8442109C7F@ca2.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8456
+Dear Bernd.
 
-           Summary: Building host-pkgconf on Fedora 23 fails due to
-                    incorrect build dependencies
-           Product: buildroot
-           Version: 2015.08
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: ian_ormshaw at waters.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Thank you for your suggestion.
+I also think it will fix this (sh4, powerpc, arm, ?).
 
+I will send patch later.
 
-When building on Fedora 23 with a previously working configuration I receive
-the following error:
-
-ls: symbol lookup error: ls: undefined symbol: cap_get_file
-configure: error: working directory cannot be determined
-
-This is caused by the by the following lines in the configure script.
-
-   1127 ac_pwd=`pwd` && test -n "$ac_pwd" &&
-   1128 ac_ls_di=`ls -di .` &&
-   1129 ac_pwd_ls_di=`cd "$ac_pwd" && ls -di .` ||
-   1130   as_fn_error $? "working directory cannot be determined"
-   1131 test "X$ac_ls_di" = "X$ac_pwd_ls_di" || 
-   1132   as_fn_error $? "pwd does not report name of working directory"
-
-This line calls /bin/ls as there is no host ls provided by buildroot, but ls
-uses LD_LIBRARY_PATH as set by buildroot to locate the shared libraries it
-requires and therefore opens:
-
-${buildpath}/host/usr/lib/libcap.so.2
-
-The same effect can be achieved by typing:
-
-LD_LIBRARY_PATH=${buildpath}/host/usr/lib ls -dl .
-
-Temperately modifying the configure script to be:
-
-   1127 LD_LIBRARY_PATH= ac_pwd=`pwd` && test -n "$ac_pwd" &&
-   1128 ac_ls_di=`ls -di .` &&
-   1129 ac_pwd_ls_di=`cd "$ac_pwd" && ls -di .` ||
-   1130   as_fn_error $? "working directory cannot be determined"
-   1131 test "X$ac_ls_di" = "X$ac_pwd_ls_di" || 
-   1132   as_fn_error $? "pwd does not report name of working directory"
-
-Allows the build to continue.  But the same problem is encountered in building
-other host packages.
-
-But it would appear to be a dependency issue.  I think the build order should
-be that
-
-host-coreutils and host-libcap needs to be build before any other host packages
-that use ls (or any other commands used in configure scripts).
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> 2015/11/09 14:53?Bernd Kuhls <bernd.kuhls@t-online.de> ?????
+> 
+> Am Sat, 07 Nov 2015 08:30:16 +0100 schrieb Thomas Petazzoni:
+> 
+>>         arm |                   gauche-0.9.4 | NOK |
+>>         http://autobuild.buildroot.net/
+> results/43abe584b53995097d81e8e75a900fd9f09e1961/
+> 
+> Hi,
+> 
+> I could not reproduce the build error but I think this upstream commit 
+> should fix it: https://github.com/shirok/Gauche/
+> commit/625ca6201271e68aac53dbd532d3f17fecd9c4cb
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
