@@ -1,50 +1,93 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Nov 2015 22:36:29 +0100
-Subject: [Buildroot] [PATCH 2/3] package/skeleton: don't handle merged /usr
-	for custom skeleton
+Date: Tue, 10 Nov 2015 22:36:30 +0100
+Subject: [Buildroot] [PATCH 3/3] package/skeleton: ensure custom skeleton
+	uses merged /usr if needed
 In-Reply-To: <cover.1447190450.git.yann.morin.1998@free.fr>
 References: <cover.1447190450.git.yann.morin.1998@free.fr>
-Message-ID: <7f88fedbe4711c2801a89be088ceaf9c9c252b00.1447190450.git.yann.morin.1998@free.fr>
+Message-ID: <d667c39209bc260f60546ee0b9e7f5a661c4b761.1447190450.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In case the user wants to use a custom skeleton, we should not try to
-handle the symlinks (resp. mkdir) to handle merged (resp. split) /usr.
+When using systemd, the poolicy in Buildroot is to use a merged /usr
+(see c5bd8af6, "system: add options for /bin /sbin and /lib to be
+symlinks into /usr" for more info). So, we apply a few tricks in some
+packages to account for the merged /usr case.
+
+However, when using a custom skeleton, we have no say in how that
+skeleton is organised, so it may well have a split /usr. In that case,
+our little tricks might not work as expected.
+
+So, when the user uses a custom skeleton and wants systemd as an init
+system, we must check that the custom skeleton is setup with a merged
+/usr.
+
+We do that by checking that each pair of {/lib,/usr/lib} {/bin,/usr/bin}
+and {/sbin,/usr/sbin} have the same inode numbers, i.e. /lib must have
+the same inode number as /usr/lib (and so on...). When a pair does not
+share the same inode number, this is not a merged /usr and we abort.
+
+We implement that check with make constructs, so it is done very early
+in the build process, and we can abort early if need be.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- package/skeleton/skeleton.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/skeleton/skeleton.mk | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
 diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 11a609b..38391de 100644
+index 38391de..46e8cc4 100644
 --- a/package/skeleton/skeleton.mk
 +++ b/package/skeleton/skeleton.mk
-@@ -15,9 +15,9 @@ SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
+@@ -14,7 +14,45 @@ SKELETON_SOURCE =
+ SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
  
  ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
++
  SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
--else
-+else # ! custom skeleton
 +
++ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++
++# Ensure the user has prepared a merged /usr.
++#
++# Extract the inode numbers for all of those directories. In case any is
++# a symlink, we want to get the inode of the pointed-to directory, so we
++# append '/.' to be sure we get the target directory. Since the symlinks
++# can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
++# all of them.
++#
++SKELETON_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/lib/.)
++SKELETON_BIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/bin/.)
++SKELETON_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/sbin/.)
++SKELETON_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/lib/.)
++SKELETON_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/bin/.)
++SKELETON_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_PATH)/usr/sbin/.)
++
++ifneq ($(SKELETON_LIB_INODE),$(SKELETON_USR_LIB_INODE))
++SKELETON_CUSTOM_NOT_MERGED_USR += /lib
++endif
++ifneq ($(SKELETON_BIN_INODE),$(SKELETON_USR_BIN_INODE))
++SKELETON_CUSTOM_NOT_MERGED_USR += /bin
++endif
++ifneq ($(SKELETON_SBIN_INODE),$(SKELETON_USR_SBIN_INODE))
++SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
++endif
++
++ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
++$(error Use of systemd as an init system requires a merged /usr. \
++	However, the custom skeleton in $(SKELETON_PATH) is not \
++	using a merged /usr for the following directories: \
++	$(SKELETON_CUSTOM_NOT_MERGED_USR))
++endif
++
++endif # merged /usr
++
+ else # ! custom skeleton
+ 
  SKELETON_PATH = system/skeleton
--endif
- 
- ifeq ($(BR2_ROOTFS_MERGED_USR),y)
- define SKELETON_USR_SYMLINKS_OR_DIRS
-@@ -33,6 +33,8 @@ define SKELETON_USR_SYMLINKS_OR_DIRS
- endef
- endif
- 
-+endif # ! custom skeleton
-+
- define SKELETON_INSTALL_TARGET_CMDS
- 	rsync -a --ignore-times $(SYNC_VCS_EXCLUSIONS) \
- 		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
 -- 
 1.9.1
