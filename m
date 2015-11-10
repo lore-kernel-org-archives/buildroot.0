@@ -1,48 +1,83 @@
-From: David Van Arnem <dvanarnem@cmlab.biz>
-Date: Tue, 10 Nov 2015 12:21:31 -0700
-Subject: [Buildroot] Building new package with "make <pkg>"
-In-Reply-To: <564239FF.3030602@cmlab.biz>
-References: <564239FF.3030602@cmlab.biz>
-Message-ID: <564243BB.6070300@cmlab.biz>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Tue, 10 Nov 2015 13:49:30 -0600
+Subject: [Buildroot] [PATCH 1/1] qemu: explicitly disable SSP support
+In-Reply-To: <1447175937-18022-1-git-send-email-rprebello@gmail.com>
+References: <1447175937-18022-1-git-send-email-rprebello@gmail.com>
+Message-ID: <CAMQcK5Jma=S+O4DU8WWtUPS7aZz48rra2Gs+VaqER1sjbGAS_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/10/2015 11:39 AM, David Van Arnem wrote:
-> Hi all,
->
-> I see from the top-level Makefile "help" that I should be able to run
-> "make <pkg>" to build only a target package and its dependencies in
-> Buildroot.  I added a new package to Buildroot, but when I run the make
-> command to build only it, the tools seem to be doing a complete build
-> (kernel, all target packages, filesystem, etc).  What do I need to do to
-> be able to build the package by itself?
+Hi Rodrigo,
 
-Nevermind, I wasn't waiting long enough...the tools were building GCC 
-for the target architecture and then the package built correctly.  Sorry 
-for the noise.
+On Tue, Nov 10, 2015 at 11:18 AM, Rodrigo Rebello <rprebello@gmail.com> wrote:
+> Even though the QEMU configure script does a full compile and link test
+> to detect SSP support, it does so by using the compiler option
+> -fstack-protector-strong (and then -fstack-protector-all if that fails).
+>
+> The problem with this method is that the test program passes the check
+> with -fstack-protector-strong even when SSP support is not available in
+> the toolchain, since that option restricts stack protection to only a
+> subset of all the functions in a program and (in the case of the test
+> program) no "canary" code gets inserted, producing a false-positive.
+> This causes a subsequent failure when the probe for pthreads is
+> performed.
+>
+> To avoid patching the configure script, fix that by simply disabling the
+> use of stack protector when SSP is known to be unavailable in the
+> toolchain.
+>
+> Fixes:
+>
+>   http://autobuild.buildroot.net/results/efb/efbb4e940543894b8745bb405478a096c90a5ae2/
+>   http://autobuild.buildroot.net/results/32d/32d6d984febad2dee1f0d31c5fa0aea823297096/
+>   http://autobuild.buildroot.net/results/aa6/aa6e71c957fb6f07e7bded35a8e47be4dadd042c/
+>   ...and many others.
+>
+> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+> ---
+>  package/qemu/qemu.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 94e1bcf..0161b10 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -133,6 +133,12 @@ QEMU_VARS = \
+>         PYTHON=$(HOST_DIR)/usr/bin/python2 \
+>         PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+>
+> +# Force disable stack protector when SSP isn't available in toolchain as
+> +# QEMU configure script fails to properly detect that.
+> +ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
+> +QEMU_OPTS += --disable-stack-protector
+> +endif
 
-David
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Typically when explicitly adding enable/disable configure options both
+cases of enabling or disabling the option are put within buildroot. So
+for this case, it would become:
 
+# Force disable stack protector when SSP isn't available in toolchain as
+# QEMU configure script fails to properly detect that.
+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
+QEMU_OPTS += --enable-stack-protector
+else
+QEMU_OPTS += --disable-stack-protector
+endif
+
+> +
+>  # If we want to specify only a subset of targets, we must still enable all
+>  # of them, so that QEMU properly builds its list of default targets, from
+>  # which it then checks if the specified sub-set is valid. That's what we
+
+Thanks,
+-Ryan
 
 -- 
-Thanks,
-David
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/pkcs7-signature
-Size: 2416 bytes
-Desc: S/MIME Cryptographic Signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151110/6f8b5948/attachment.p7s>
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
