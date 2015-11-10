@@ -1,44 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2015 23:45:05 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{10, 14}.x and 4.{1,
-	2}.x series
-Message-ID: <20151110232250.3DD6881EAC@busybox.osuosl.org>
+Date: Tue, 10 Nov 2015 23:36:51 +0100
+Subject: [Buildroot] [git commit] liquid-dsp: fix powerpc/altivec build
+	failures
+Message-ID: <20151110232250.1344B81EA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1fc783adc5db01e426713a7630ea9e589eb85806
+commit: http://git.buildroot.net/buildroot/commit/?id=7d435d8510db69ed2f9108abaa52479bce127b72
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+When a powerpc target is detected the build system tries to force
+altivec support but that's wrong:
+
+Not every powerpc processor has altivec instruction support.
+
+It's using the removed/deprecated -faltivec compiler directive when it
+should be using -maltivec instead.
+
+Even if the above conditions are corrected the altivec codepath fails
+to build properly.
+
+So just disable altivec in general using the standard
+--enable-simdoverride configure option. Fixes:
+
+http://autobuild.buildroot.net/results/e1b/e1b6cf76a7a4ae754a928d211e779e9381198f48/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/liquid-dsp/liquid-dsp.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d2686b6..5f99cc1 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -201,15 +201,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.92"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.93"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.50"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.56"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.57"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.24"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.12"	if BR2_KERNEL_HEADERS_4_1
--	default "4.2.5"		if BR2_KERNEL_HEADERS_4_2
-+	default "4.1.13"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.2.6"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3"		if BR2_KERNEL_HEADERS_4_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index 8bb8d54..e7bb686 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
+@@ -34,6 +34,11 @@ ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
+ LIQUID_DSP_LDFLAGS += -lfftw3f
+ endif
+ 
++# disable altivec, it has build issues
++ifeq ($(BR2_powerpc)$(BR2_powerpc64),y)
++LIQUID_DSP_CONF_OPTS += --enable-simdoverride
++endif
++
+ ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
+ LIQUID_DSP_LDFLAGS += -lfftw3
+ endif
