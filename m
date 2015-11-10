@@ -1,36 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Nov 2015 10:48:58 +0100
-Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
- for target, fix a typo
-In-Reply-To: <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
-References: <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
-Message-ID: <20151110104858.6c49b759@free-electrons.com>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Tue, 10 Nov 2015 09:49:45 +0000
+Subject: [Buildroot] [PATCH v3] libseccomp: Add new config option to
+ build and install tests
+In-Reply-To: <560E3F24.90109@imgtec.com>
+References: <20150920144637.25230558@free-electrons.com>
+ <1442827716-8802-1-git-send-email-markos.chandras@imgtec.com>
+ <560E3F24.90109@imgtec.com>
+Message-ID: <5641BDB9.1000601@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hiroshi,
+On 10/02/2015 09:24 AM, Markos Chandras wrote:
+> On 09/21/2015 10:28 AM, Markos Chandras wrote:
+>> Add new config option to allow building and installing the libseccomp
+>> testsuite on the target. It's useful for testing the kernels'
+>> seccomp behavior for the target architecture.
+>>
+>> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>> ---
+>> changes since v2:
+>> - Move installation path for tests to /usr/share/libseccomp
+>> - Do not install python files. We don't support python + libseccomp
+>> at the moment so there is no point in installing these tests yet.
+>>
+>> changes since v1:
+>> - Drop compile hook for tests and use MAKE_OPTS instead
+>> ---
+> 
+> ping?
+> 
+ping?
 
-On Tue, 10 Nov 2015 18:22:47 +0900, Hiroshi Kawashima wrote:
-> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-
-Thanks for this patch. Also, I think you should have a look at the
-autobuilder failures for gauche, it fails to build in a number of
-situations. See:
-
-   http://autobuild.buildroot.org/?reason=gauche-0.9.4
-
-Some cases are due to unsupported architecture (example: xtensa), some
-cases are due to the external libatomic_ops being built before gauche,
-and therefore used by gauche instead of its internal copy, causing some
-build failures, etc.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+markos
