@@ -1,96 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Nov 2015 00:17:56 +0100
-Subject: [Buildroot] [PATCH 1/2] libnet:new package
-In-Reply-To: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
-References: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <56427B24.7030602@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Nov 2015 00:22:08 +0100
+Subject: [Buildroot] [PATCH 3/3] package/skeleton: ensure custom
+	skeleton uses merged /usr if needed
+In-Reply-To: <d667c39209bc260f60546ee0b9e7f5a661c4b761.1447190450.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Tue, 10 Nov 2015 22:36:30 +0100")
+References: <cover.1447190450.git.yann.morin.1998@free.fr>
+ <d667c39209bc260f60546ee0b9e7f5a661c4b761.1447190450.git.yann.morin.1998@free.fr>
+Message-ID: <87d1vhphi7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Joris,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 09-11-15 10:03, Joris Lijssens wrote:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-> ---
->  package/Config.in        |  1 +
->  package/libnet/Config.in |  7 +++++++
->  package/libnet/libnet.mk | 13 +++++++++++++
+ > When using systemd, the poolicy in Buildroot is to use a merged /usr
+ > (see c5bd8af6, "system: add options for /bin /sbin and /lib to be
+ > symlinks into /usr" for more info). So, we apply a few tricks in some
+ > packages to account for the merged /usr case.
 
- We now require .hash files for github packages as well, since github nowadays
-provides stable tarballs.
+ > However, when using a custom skeleton, we have no say in how that
+ > skeleton is organised, so it may well have a split /usr. In that case,
+ > our little tricks might not work as expected.
 
->  3 files changed, 21 insertions(+)
->  create mode 100644 package/libnet/Config.in
->  create mode 100644 package/libnet/libnet.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index bdc3063..e0b42c0 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1019,6 +1019,7 @@ menu "Networking"
->  	source "package/libmnl/Config.in"
->  	source "package/libmodbus/Config.in"
->  	source "package/libndp/Config.in"
-> +	source "package/libnet/Config.in"
->  	source "package/libnetfilter_acct/Config.in"
->  	source "package/libnetfilter_conntrack/Config.in"
->  	source "package/libnetfilter_cthelper/Config.in"
-> diff --git a/package/libnet/Config.in b/package/libnet/Config.in
-> new file mode 100644
-> index 0000000..76ed9dd
-> --- /dev/null
-> +++ b/package/libnet/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBNET
-> +	bool "libnet"
-> +	help
-> +	  libnet provides a portable framework for low-level network packet
-> +	  construction.
-> +
-> +	  http://sourceforge.net/projects/libnet-dev
-> diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
-> new file mode 100644
-> index 0000000..d021f76
-> --- /dev/null
-> +++ b/package/libnet/libnet.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# libnet
-> +#
-> +################################################################################
-> +
-> +LIBNET_VERSION = 1.1.6
-> +LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
-> +LIBNET_INSTALL_STAGING = YES
-> +LIBNET_LICENSE = BSD-2c
+ > So, when the user uses a custom skeleton and wants systemd as an init
+ > system, we must check that the custom skeleton is setup with a merged
+ > /usr.
 
- There are also a few BSD-3c files, so I think this should be BSD-2c, BSD-3c.
+ > We do that by checking that each pair of {/lib,/usr/lib} {/bin,/usr/bin}
+ > and {/sbin,/usr/sbin} have the same inode numbers, i.e. /lib must have
+ > the same inode number as /usr/lib (and so on...). When a pair does not
+ > share the same inode number, this is not a merged /usr and we abort.
 
-> +LIBNET_LICENSE_FILES = doc/COPYING
-> +
-> +$(eval $(autotools-package))
-> 
+ > We implement that check with make constructs, so it is done very early
+ > in the build process, and we can abort early if need be.
 
- The configure script tries to build and run a program to test for ETH_P_ALL
-availability in the AC_LIBNET_CHECK_PF_PACKET function. This will obviously fail
-when cross-compiling, maybe worse when hostarch == targetarch. So I think it's
-best to explicitly pass libnet_cv_have_packet_socket=yes
+Nice. It doesn't handle cases where absolute symlinks are used
+(E.G. /bin -> /usr/bin), but I don't see how we can fix that.
 
- Also it would be nice if there was a way to enable the bpf support, but that
-can come later.
-
-
- Regards,
- Arnout
+Committed series, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
