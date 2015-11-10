@@ -1,55 +1,36 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Tue, 10 Nov 2015 18:22:47 +0900
-Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files for
-	target, fix a typo
-Message-ID: <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Nov 2015 10:48:58 +0100
+Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
+ for target, fix a typo
+In-Reply-To: <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
+References: <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
+Message-ID: <20151110104858.6c49b759@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
----
-diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
-index b887c6a..8406774 100644
---- a/package/gauche/gauche.mk
-+++ b/package/gauche/gauche.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--GAUCHE_VERSION = 0.9.4
-+GAUCHE_VERSION_MAJOR = 0.9
-+GAUCHE_VERSION = $(GAUCHE_VERSION_MAJOR).4
- GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
- GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
- GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
-@@ -23,10 +24,24 @@ endif
- # Detection of c99 support in configure fails without WCHAR. To enable
- # automatic detection of c99 support by configure, we need to enable
- # WCHAR in toolchain. But actually we do not need WCHAR at gauche
--# runtime. So reuesting WCHAR in toolchain just for automatic detection
-+# runtime. So requesting WCHAR in toolchain just for automatic detection
- # will be overkill. To solve this, explicitly -std=gnu99 is specified
- # here.
- GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
- 
-+define GAUCHE_REMOVE_UNNEEDED
-+	for i in gauche-config gauche-install gauche-package ; do \
-+		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
-+		rm -f $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/$(GNU_TARGET_NAME)/$$i ; \
-+	done
-+	for i in gencomp genstub precomp ; do \
-+		rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/lib/$$i ; \
-+	done
-+	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/aclocal.m4
-+	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/template.*
-+	rm -fr $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/include
-+endef
-+GAUCHE_POST_INSTALL_TARGET_HOOKS += GAUCHE_REMOVE_UNNEEDED
-+
- $(eval $(host-autotools-package))
- $(eval $(autotools-package))
-============================================================
-    Hiroshi Kawashima
+Hiroshi,
+
+On Tue, 10 Nov 2015 18:22:47 +0900, Hiroshi Kawashima wrote:
+> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+
+Thanks for this patch. Also, I think you should have a look at the
+autobuilder failures for gauche, it fails to build in a number of
+situations. See:
+
+   http://autobuild.buildroot.org/?reason=gauche-0.9.4
+
+Some cases are due to unsupported architecture (example: xtensa), some
+cases are due to the external libatomic_ops being built before gauche,
+and therefore used by gauche instead of its internal copy, causing some
+build failures, etc.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
