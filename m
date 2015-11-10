@@ -1,76 +1,97 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Nov 2015 22:48:36 +0100
-Subject: [Buildroot] [PATCH] core: fix setting of HOSTARCH
-In-Reply-To: <20151109221737.GD5162@free.fr>
-References: <1447095621-32080-1-git-send-email-yann.morin.1998@free.fr>
- <564117BE.4050300@mind.be> <20151109221737.GD5162@free.fr>
-Message-ID: <56426634.3010306@mind.be>
+Date: Tue, 10 Nov 2015 23:10:19 +0100
+Subject: [Buildroot] [PATCH v2] system: Fix for NFS booting with
+ interface config via DHCP
+In-Reply-To: <1447107410.4553.76.camel@rtred1test09.kymeta.local>
+References: <1446841557.4553.32.camel@rtred1test09.kymeta.local>
+ <20151108145723.49e07124@free-electrons.com>
+ <1447107410.4553.76.camel@rtred1test09.kymeta.local>
+Message-ID: <56426B4B.60004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09-11-15 23:17, Yann E. MORIN wrote:
-> Arnout, All,
+On 09-11-15 23:16, Trent Piepho wrote:
+> Configuring the network interface with DHCP via
+> /etc/network/interfaces generally does not work when NFS booting.  The
+> DHCP configuration will initially bring the interface down and system
+> then hangs at that point as the root filesystem is no longer
+> accessable.  See bug 4709.
 > 
-> On 2015-11-09 23:01 +0100, Arnout Vandecappelle spake thusly:
->> On 09-11-15 20:00, Yann E. MORIN wrote:
->>> Currently, we set HOSTARCH to the output of `uname -m`. This gives us
->>> the architecture as seen by the running kernel. For example, we would
->>> end up with 'x86_64' for a 64-bit kernel running on an x86_64 processor.
-> [--SNIP--]
->>> So, instead of relying on the output of `uname -r`, look for the host
->>> gcc and extract the target it was configured to generate code for.
-> [--SNIP--]
->>> +export HOSTARCH := $(shell gcc -v 2>&1 | \
->>> +	sed -e '/^Target: \([^-]*\).*/!d' \
->>> +	    -e 's//\1/' \
->>> +	    -e 's/i.86/x86/' \
->>> +	    -e 's/sun4u/sparc64/' \
->>> +	    -e 's/arm.*/arm/' \
->>> +	    -e 's/sa110/arm/' \
->>> +	    -e 's/ppc64/powerpc64/' \
->>> +	    -e 's/ppc/powerpc/' \
->>> +	    -e 's/macppc/powerpc/' \
->>> +	    -e 's/sh.*/sh/' )
->>
->>  Since what we get here already are gcc tuples, the de-mangling shouldn't be
->> needed, right?
+> This adds a script to be run via a pre-up line in
+> /etc/network/interfaces.  It checks for a NFS root filesystem and if
+> the interface to be configured is used for access to the NFS server.
+> If this is the case, then it returns a failure code so that ifup will
+> not configure the interface.  This works for DHCP and another config
+> methods (static, bootp, etc.).  This system does detect if the
+> interface to be configured isn't the one used for NFS and doesn't skip
+> it when that is the case.
 > 
-> I am not sure either way. Note that I only constrained the check on how
-> to retrieve the value, and expressely did not address the way we played
-> with it, so as to follow the path of least surprise.
+> NFS filesystems that aren't the root fs aren't considered.
 > 
-> However, we still have to de-mangle i.86 into x86 because that what
-> we're using everywhere. 
+> Signed-off-by: Trent Piepho <tpiepho@kymetacorp.com>
 
- Right, we'd have to change that.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+ I checked that the addr= appears in /proc/mounts since at least 2.6.17.
 
-> Also, we need to demangle arm.* into arm,
-> because arm may have some trailing stuff (like armv6) which still means
-> it's an arm. 
+ IMHO this is still for 2015.11.
 
- Really? For the kernel arch (uname -m) that's true, but also for the gcc tuple?
-But armeb is indeed possible.
-
-> Ditto sh I guess. macppc I would guess (y the name of it)
-> that we really don't care about. sa110: are we really expecting to run
-> on that machine anyway?
-> 
-> We can further reduce the de-mangling in a later patch, however, it that
-> makes sense...
-
- Of course. However, I'm not sure if it makes sense to copy the mangling for the
-uname to the mangling of the gcc tuple...
 
  Regards,
  Arnout
 
+
+> ---
+>  package/skeleton/nfs_check   | 20 ++++++++++++++++++++
+>  package/skeleton/skeleton.mk |  3 +++
+>  2 files changed, 23 insertions(+)
+>  create mode 100755 package/skeleton/nfs_check
 > 
-> Regards,
-> Yann E. MORIN.
+> diff --git a/package/skeleton/nfs_check b/package/skeleton/nfs_check
+> new file mode 100755
+> index 0000000..dfa0cbf
+> --- /dev/null
+> +++ b/package/skeleton/nfs_check
+> @@ -0,0 +1,20 @@
+> +#!/bin/sh
+> +
+> +# This allows NFS booting to work while also being able to configure
+> +# the network interface via DHCP when not NFS booting.  Otherwise, a
+> +# NFS booted system will likely hang during DHCP configuration.
+> +
+> +# Attempting to configure the network interface used for NFS will
+> +# initially bring that network down.  Since the root filesystem is
+> +# accessed over this network, the system hangs.
+> +
+> +# This script is run by ifup and will attempt to detect if a NFS root
+> +# mount uses the interface to be configured (IFACE), and if so does
+> +# not configure it.  This should allow the same build to be disk/flash
+> +# booted or NFS booted.
+> +
+> +nfsip=`sed -n '/^[^ ]*:.* \/ nfs.*[ ,]addr=\([0-9.]\+\).*/s//\1/p' /proc/mounts`
+> +if [ -n "$nfsip" ] && ip route get to "$nfsip" | grep -q "dev $IFACE"; then
+> +	echo Skipping $IFACE, used for NFS from $nfsip
+> +	exit 1
+> +fi
+> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> index d1b797d..0cab8a1 100644
+> --- a/package/skeleton/skeleton.mk
+> +++ b/package/skeleton/skeleton.mk
+> @@ -89,8 +89,11 @@ define SET_NETWORK_DHCP
+>  		echo ;                                               \
+>  		echo "auto $(NETWORK_DHCP_IFACE)";                   \
+>  		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
+> +		echo "  pre-up /etc/network/nfs_check";              \
+>  		echo "	wait-delay 15";                              \
+>  	) >> $(TARGET_DIR)/etc/network/interfaces
+> +	$(INSTALL) -m 0755 -D $(SKELETON_PKGDIR)/nfs_check \
+> +		$(TARGET_DIR)/etc/network/nfs_check
+>  endef
+>  endif
+>  
 > 
 
 
