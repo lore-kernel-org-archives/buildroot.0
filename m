@@ -1,26 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2015 11:30:36 +0100
-Subject: [Buildroot] [PATCH] gettext: fix legal info
-In-Reply-To: <1447098014-9099-1-git-send-email-gustavo.zacarias@free-electrons.com>
- (gustavo zacarias's message of "Mon, 9 Nov 2015 16:40:14 -0300")
-References: <1447098014-9099-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <874mguqh83.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Nov 2015 11:28:03 +0100
+Subject: [Buildroot] [git commit] ruby: explicitly disable SSP support
+Message-ID: <20151110103050.3D3BE8010F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "gustavo" == gustavo zacarias <gustavo.zacarias@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b7184e66c07be704ce4e86d46c73e61ed85eb915
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
- > The license is wrong, it's GPLv3+ rather than GPLv2+ now.
- > Also there's a specific clause for libintl that makes it LGPLv2.1+, see
- > gettext-runtime/COPYING.
+The SSP support checks of the Ruby configure script do not do a full
+link, and therefore don't properly detect if SSP support is fully
+functional or not, which causes some build failures if the compiler
+supports -fstack-protector but the C library does not provide the SSP
+implementation.
 
- > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+To avoid this, we explicitly tell ruby if SSP support is available or
+not.
 
-Committed, thanks.
+Fixes:
 
--- 
-Bye, Peter Korsgaard
+  http://autobuild.buildroot.net/results/001/00154b0142f51c197d5d53ae36f7adc4f8250d9d/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ruby/ruby.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 298493c..17104b6 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -36,6 +36,10 @@ RUBY_CONF_ENV += ac_cv_func_dl_iterate_phdr=no
+ RUBY_CONF_OPTS += --with-out-ext=fiddle
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
++RUBY_CONF_ENV += stack_protector=no
++endif
++
+ # Force optionals to build before we do
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ RUBY_DEPENDENCIES += berkeleydb
