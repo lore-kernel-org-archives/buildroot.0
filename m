@@ -1,38 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2015 11:28:51 +0100
-Subject: [Buildroot] [git commit] gettext: fix legal info
-Message-ID: <20151110103050.4A3DE81E8C@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 10 Nov 2015 07:39:31 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14}.x and 4.{1,
+	2}.x series
+Message-ID: <1447151972-12086-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=185aa5b0f0a630b14885b78fb0033397ce7eb3a1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The license is wrong, it's GPLv3+ rather than GPLv2+ now.
-Also there's a specific clause for libintl that makes it LGPLv2.1+, see
-gettext-runtime/COPYING.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gettext/gettext.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 724b393..cb509f2 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -8,8 +8,8 @@ GETTEXT_VERSION = 0.19.6
- GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
- GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
- GETTEXT_INSTALL_STAGING = YES
--GETTEXT_LICENSE = GPLv2+
--GETTEXT_LICENSE_FILES = COPYING
-+GETTEXT_LICENSE = LGPLv2.1+ (libintl), GPLv3+ (the rest)
-+GETTEXT_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
- 
- GETTEXT_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- HOST_GETTEXT_DEPENDENCIES = # we don't want the libiconv dependency
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index d2686b6..5f99cc1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -201,15 +201,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.92"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.93"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.50"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.56"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.57"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.24"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.12"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.2.5"		if BR2_KERNEL_HEADERS_4_2
++	default "4.1.13"	if BR2_KERNEL_HEADERS_4_1
++	default "4.2.6"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3"		if BR2_KERNEL_HEADERS_4_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.4.10
