@@ -1,57 +1,41 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Tue, 10 Nov 2015 15:18:57 -0200
-Subject: [Buildroot] [PATCH 1/1] qemu: explicitly disable SSP support
-Message-ID: <1447175937-18022-1-git-send-email-rprebello@gmail.com>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Tue, 10 Nov 2015 18:23:48 +0100
+Subject: [Buildroot] [PATCH] configs: new configuration for at91sam9g20ek
+In-Reply-To: <20151109222309.67599ac2@free-electrons.com>
+References: <1447032023-6229-1-git-send-email-jenskamenik@googlemail.com>
+ <20151109115525.GA4302@piout.net>
+ <20151109222309.67599ac2@free-electrons.com>
+Message-ID: <20151110172348.GB4519@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even though the QEMU configure script does a full compile and link test
-to detect SSP support, it does so by using the compiler option
--fstack-protector-strong (and then -fstack-protector-all if that fails).
+Hi,
 
-The problem with this method is that the test program passes the check
-with -fstack-protector-strong even when SSP support is not available in
-the toolchain, since that option restricts stack protection to only a
-subset of all the functions in a program and (in the case of the test
-program) no "canary" code gets inserted, producing a false-positive.
-This causes a subsequent failure when the probe for pthreads is
-performed.
+On 09/11/2015 at 22:23:09 +0100, Thomas Petazzoni wrote :
+> Alex,
+> 
+> On Mon, 9 Nov 2015 12:55:25 +0100, Alexandre Belloni wrote:
+> 
+> > regarding the sort order, I'd say that at91sam9g20ek is not between
+> > at91sam9g15ek and at91sam9g25ek (both part of the at91sam9x5 familiy). I
+> > would place it before at91sam9g45m10ek. That comment is also valid for
+> > the family_, mach_ and dtb_ definitions
+> 
+> I think you should explain why. It's because you're not interested in
+> alphabetic ordering here, but rather "release date" ordering of the
+> platform. Is that correct ?
+> 
 
-To avoid patching the configure script, fix that by simply disabling the
-use of stack protector when SSP is known to be unavailable in the
-toolchain.
+I'd say that I'm more interested in grouping by families and that indeed
+would be almost the same as the release date order.
+The sam9g20 is almost the same as a sam9260 but is quite far from the
+sam9x5 family.
 
-Fixes:
 
-  http://autobuild.buildroot.net/results/efb/efbb4e940543894b8745bb405478a096c90a5ae2/
-  http://autobuild.buildroot.net/results/32d/32d6d984febad2dee1f0d31c5fa0aea823297096/
-  http://autobuild.buildroot.net/results/aa6/aa6e71c957fb6f07e7bded35a8e47be4dadd042c/
-  ...and many others.
-
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
- package/qemu/qemu.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 94e1bcf..0161b10 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -133,6 +133,12 @@ QEMU_VARS = \
- 	PYTHON=$(HOST_DIR)/usr/bin/python2 \
- 	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
-+# Force disable stack protector when SSP isn't available in toolchain as
-+# QEMU configure script fails to properly detect that.
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
-+QEMU_OPTS += --disable-stack-protector
-+endif
-+
- # If we want to specify only a subset of targets, we must still enable all
- # of them, so that QEMU properly builds its list of default targets, from
- # which it then checks if the specified sub-set is valid. That's what we
 -- 
-2.1.4
+Alexandre Belloni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
