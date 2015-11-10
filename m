@@ -1,41 +1,58 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Tue, 10 Nov 2015 18:23:48 +0100
-Subject: [Buildroot] [PATCH] configs: new configuration for at91sam9g20ek
-In-Reply-To: <20151109222309.67599ac2@free-electrons.com>
-References: <1447032023-6229-1-git-send-email-jenskamenik@googlemail.com>
- <20151109115525.GA4302@piout.net>
- <20151109222309.67599ac2@free-electrons.com>
-Message-ID: <20151110172348.GB4519@piout.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Nov 2015 17:50:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 8456] Building host-pkgconf on Fedora 23 fails due
+ to incorrect build dependencies
+In-Reply-To: <bug-8456-163@https.bugs.busybox.net/>
+References: <bug-8456-163@https.bugs.busybox.net/>
+Message-ID: <20151110175005.776B781E83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=8456
 
-On 09/11/2015 at 22:23:09 +0100, Thomas Petazzoni wrote :
-> Alex,
-> 
-> On Mon, 9 Nov 2015 12:55:25 +0100, Alexandre Belloni wrote:
-> 
-> > regarding the sort order, I'd say that at91sam9g20ek is not between
-> > at91sam9g15ek and at91sam9g25ek (both part of the at91sam9x5 familiy). I
-> > would place it before at91sam9g45m10ek. That comment is also valid for
-> > the family_, mach_ and dtb_ definitions
-> 
-> I think you should explain why. It's because you're not interested in
-> alphabetic ordering here, but rather "release date" ordering of the
-> platform. Is that correct ?
-> 
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-I'd say that I'm more interested in grouping by families and that indeed
-would be almost the same as the release date order.
-The sam9g20 is almost the same as a sam9260 but is quite far from the
-sam9x5 family.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+                 CC|                            |yann.morin.1998 at free.fr
+         AssignedTo|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
 
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-11-10 17:50:04 UTC ---
+Ian, All,
+
+Thanks for the report.
+
+We've already had this bug reported on the list, and a patch was
+submitted with the same proposal as yours, i.e. make host-libcap
+a dpeendency of host-coreutils, itself a dependency of host-pkgconf.
+
+However, we believe this is the wrong solution.
+
+We are aiming at getting rid of LD_LIBRARY_PATH instead, since we
+are supposed to have proper RPATH in all our generated host
+binaries, which should make LD_LIBRARY_PATH unnecessary.
+
+Still, there are a few of our host binaries that still do not have
+a proper RPATH set, and fixing those is not a trivial task.
+
+So, the short-term action is to collect all our host binaries
+that still lack a proper RPATH, see which ones need it: a host
+binary that only has dependencies on the C library and similar
+host libraries, like stdc++, does not require RPATH.
+
+We need to investgate those, fix them when needed, and finally
+get rid of LD_LIBRARY_PATH altogether. Any help in this endeavour
+will be greatly appreciated! ;-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
