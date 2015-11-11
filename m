@@ -1,44 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 09:49:31 +0100
-Subject: [Buildroot] [PATCH] liquid-dsp: fix powerpc/altivec build
- failures
-In-Reply-To: <1447164605-14899-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447164605-14899-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151111094931.00b09ad6@free-electrons.com>
+From: Michael Schweikart <micky@schweikarts-vom-dach.de>
+Date: Wed, 11 Nov 2015 09:47:50 +0100
+Subject: [Buildroot] issue with dhcp on buildroot
+Message-ID: <2864886.JM8PMHTYst@mars>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi,
 
-On Tue, 10 Nov 2015 11:10:05 -0300, Gustavo Zacarias wrote:
-> When a powerpc target is detected the build system tries to force
-> altivec support but that's wrong:
-> 
-> Not every powerpc processor has altivec instruction support.
-> 
-> It's using the removed/deprecated -faltivec compiler directive when it
-> should be using -maltivec instead.
-> 
-> Even if the above conditions are corrected the altivec codepath fails
-> to build properly.
-> 
-> So just disable altivec in general using the standard
-> --enable-simdoverride configure option. Fixes:
-> 
-> http://autobuild.buildroot.net/results/e1b/e1b6cf76a7a4ae754a928d211e779e9381198f48/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+i have setup a buildroot environment and build it. I deploy it on device under 
+test and the systems boots up(Kernel Version 4.3). As soon as the network and 
+udhcpc (v1.24.1) starts i get the following messages. 
 
-Thanks for fixing this! Could you also report the problem to the
-upstream project?
+Sending discover...
+udhcpc: sendto: Invalid argument.
+Sending discover...
+udhcpc: sendto: Invalid argument.
+No lease, failing
 
-Thanks!
+If i setup an static ip address i am able to ping the device under test. I try 
+to ping a IP form the device under test i get the following error.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ping: sendto: Destination address required
+
+Is there anybody out there how can support me?
+
+best regards
