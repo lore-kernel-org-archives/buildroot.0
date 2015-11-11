@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:20:02 +0100
-Subject: [Buildroot] [PATCH 1/2] wpa_supplicant: add security patches
-In-Reply-To: <1447250946-15575-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447250946-15575-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151111152002.0384f7b6@free-electrons.com>
+Date: Wed, 11 Nov 2015 15:20:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mplayer: needs host-yasm for
+ mmx support
+In-Reply-To: <1446999752-11055-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1446999752-11055-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151111152015.7ec1904a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Bernd Kuhls,
 
-On Wed, 11 Nov 2015 11:09:05 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2015-5310 - wpa_supplicant unauthorized WNM Sleep Mode GTK control
-> CVE-2015-5315 - wpa_supplicant: EAP-pwd missing last fragment length
-> validation
-> CVE-2015-5316 - EAP-pwd peer error path failure on unexpected Confirm
-> message
+On Sun,  8 Nov 2015 17:22:32 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/6a8/6a8c3a70e33cb5b3fc40d036fb0716d915185f33/
+> http://autobuild.buildroot.net/results/cef/cef30d4e14d39ab64bb27a6514a0390755f4a9d2/
+> http://autobuild.buildroot.net/results/03b/03b1b42688b07789971a99337708b4dbe4278665/
+> http://autobuild.buildroot.net/results/5e3/5e3320dfc6793a9ff0494161cdc9a3be795462c4/
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...Key-Data-in-WNM-Sleep-Mode-Response-frame.patch | 32 +++++++++++++
->  ...-peer-Fix-last-fragment-length-validation.patch | 54 ++++++++++++++++++++++
->  ...erver-Fix-last-fragment-length-validation.patch | 51 ++++++++++++++++++++
->  ...r-Fix-error-path-for-unexpected-Confirm-m.patch | 34 ++++++++++++++
->  4 files changed, 171 insertions(+)
->  create mode 100644 package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
->  create mode 100644 package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
->  create mode 100644 package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
->  create mode 100644 package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
+>  package/mplayer/mplayer.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
-Both applied to master, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
