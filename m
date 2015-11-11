@@ -1,26 +1,68 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Nov 2015 10:27:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 8456] Building host-pkgconf on Fedora 23 fails due
- to incorrect build dependencies
-In-Reply-To: <bug-8456-163@https.bugs.busybox.net/>
-References: <bug-8456-163@https.bugs.busybox.net/>
-Message-ID: <20151111102747.B57188010F@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 11 Nov 2015 11:48:18 +0100
+Subject: [Buildroot] issue with dhcp on buildroot
+In-Reply-To: <2864886.JM8PMHTYst@mars>
+References: <2864886.JM8PMHTYst@mars>
+Message-ID: <56431CF2.6090405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8456
+On 11-11-15 09:47, Michael Schweikart wrote:
+> Hi,
+> 
+> i have setup a buildroot environment and build it. I deploy it on device under 
+> test and the systems boots up(Kernel Version 4.3). As soon as the network and 
+> udhcpc (v1.24.1) starts i get the following messages. 
+> 
+> Sending discover...
+> udhcpc: sendto: Invalid argument.
+> Sending discover...
+> udhcpc: sendto: Invalid argument.
+> No lease, failing
 
---- Comment #2 from Dr I J Ormshaw <ian_ormshaw@waters.com> 2015-11-11 10:27:46 UTC ---
-Yes I agree removing LD_LIBRARY_PATH is a much better solution.  I had thought
-of that as a possibility myself, but didn't suggest it because of the amount of
-work involved.  As I need to get my build working again quickly I will probably
-do the coreutils fix as a stop gap.  If I do do this, I will, of course, make a
-patch available.
+ Is it possible that the Ethernet device doesn't exist yet when udhcpc starts?
+
+ When you start it from the command line, does it work?
+
+> 
+> If i setup an static ip address i am able to ping the device under test. I try 
+> to ping a IP form the device under test i get the following error.
+> 
+> ping: sendto: Destination address required
+
+ So you did the following:
+
+ifconfig eth0 up 192.168.1.1
+ping 192.168.1.2
+
+ and you get the 'Destination address required' error?
+
+ Does ping to the configured address work?
+
+ When you wireshark the link, do you see anything coming out?
+
+
+ Regards,
+ Arnout
+
+> 
+> Is there anybody out there how can support me?
+> 
+> best regards
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
