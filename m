@@ -1,30 +1,26 @@
-From: Michael Schweikart <micky@schweikarts-vom-dach.de>
-Date: Wed, 11 Nov 2015 09:47:50 +0100
-Subject: [Buildroot] issue with dhcp on buildroot
-Message-ID: <2864886.JM8PMHTYst@mars>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 Nov 2015 10:27:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 8456] Building host-pkgconf on Fedora 23 fails due
+ to incorrect build dependencies
+In-Reply-To: <bug-8456-163@https.bugs.busybox.net/>
+References: <bug-8456-163@https.bugs.busybox.net/>
+Message-ID: <20151111102747.B57188010F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=8456
 
-i have setup a buildroot environment and build it. I deploy it on device under 
-test and the systems boots up(Kernel Version 4.3). As soon as the network and 
-udhcpc (v1.24.1) starts i get the following messages. 
+--- Comment #2 from Dr I J Ormshaw <ian_ormshaw@waters.com> 2015-11-11 10:27:46 UTC ---
+Yes I agree removing LD_LIBRARY_PATH is a much better solution.  I had thought
+of that as a possibility myself, but didn't suggest it because of the amount of
+work involved.  As I need to get my build working again quickly I will probably
+do the coreutils fix as a stop gap.  If I do do this, I will, of course, make a
+patch available.
 
-Sending discover...
-udhcpc: sendto: Invalid argument.
-Sending discover...
-udhcpc: sendto: Invalid argument.
-No lease, failing
-
-If i setup an static ip address i am able to ping the device under test. I try 
-to ping a IP form the device under test i get the following error.
-
-ping: sendto: Destination address required
-
-Is there anybody out there how can support me?
-
-best regards
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
