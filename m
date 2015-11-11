@@ -1,77 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:08:38 +0100
-Subject: [Buildroot] [git commit branch/next] alsa-lib: bump to version 1.1.0
-Message-ID: <20151111141413.A767281EC2@busybox.osuosl.org>
+Date: Wed, 11 Nov 2015 15:11:41 +0100
+Subject: [Buildroot] [git commit branch/next] gvfs: bump to version 1.26.2
+Message-ID: <20151111141413.D2DF67FCBE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f98e865074a6c6f9cc38721b3320f95de5f2967b
+commit: http://git.buildroot.net/buildroot/commit/?id=2db62b3164b6b14a7a83baecc51c355def70bdd8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/alsa-lib/0001-add-missing-include.patch |   29 +++++++++++++++++++++++
- package/alsa-lib/alsa-lib.hash                  |    2 +-
- package/alsa-lib/alsa-lib.mk                    |    2 +-
- 3 files changed, 31 insertions(+), 2 deletions(-)
+ package/gvfs/gvfs.hash |    4 ++--
+ package/gvfs/gvfs.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/alsa-lib/0001-add-missing-include.patch b/package/alsa-lib/0001-add-missing-include.patch
-new file mode 100644
-index 0000000..ac7dfa9
---- /dev/null
-+++ b/package/alsa-lib/0001-add-missing-include.patch
-@@ -0,0 +1,29 @@
-+Subject: [PATCH] topology: Add missing include sys/stat.h
-+
-+Necessary for proper definitions of S_IRUSR & co.  Otherwise it
-+results in compile errors with old glibc:
-+  parser.c: In function 'snd_tplg_build_file':
-+  parser.c:262: error: 'S_IRUSR' undeclared (first use in this function)
-+  parser.c:262: error: (Each undeclared identifier is reported only once
-+  parser.c:262: error: for each function it appears in.)
-+
-+Signed-off-by: Takashi Iwai <tiwai@suse.de>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: upstream
-+
-+diff --git a/src/topology/parser.c b/src/topology/parser.c
-+index 80a0ae0..18bb9c7 100644
-+--- a/src/topology/parser.c
-++++ b/src/topology/parser.c
-+@@ -16,6 +16,7 @@
-+            Liam Girdwood <liam.r.girdwood@linux.intel.com>
-+ */
-+ 
-++#include <sys/stat.h>
-+ #include "list.h"
-+ #include "tplg_local.h"
-+ 
-+-- 
-+1.7.11.7
-+
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 3e132c8..506416d 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index cc9e4f6..19e820a 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	73043c35eb9636be0f4af6a240235c213f12a25feb1f04aeeac8cb7e30fcbdd0	alsa-lib-1.0.29.tar.bz2
-+sha256	dfde65d11e82b68f82e562ab6228c1fb7c78854345d3c57e2c68a9dd3dae1f15	alsa-lib-1.1.0.tar.bz2
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 3115433..ea2351c 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.1.1.sha256sum
+-sha256	2dadf986e464db1d7f007b178a5432b30ba93ef0cb31a2795156540d496dc06d	gvfs-1.26.1.1.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.2.sha256sum
++sha256	695b6e0f3de5ac2cb4d188917edef3f13299328150a2413f1a7131d9b2d48d18	gvfs-1.26.2.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index e1da18f..48d2b50 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ALSA_LIB_VERSION = 1.0.29
-+ALSA_LIB_VERSION = 1.1.0
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- ALSA_LIB_LICENSE = LGPLv2.1+
+ GVFS_VERSION_MAJOR = 1.26
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).1.1
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
