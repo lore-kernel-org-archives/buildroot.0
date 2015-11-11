@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:15:38 +0100
-Subject: [Buildroot] [PATCH] libglib2: bump to version 2.46.2
-In-Reply-To: <1447248832-8579-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447248832-8579-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151111151538.353b7be0@free-electrons.com>
+Date: Wed, 11 Nov 2015 15:17:04 +0100
+Subject: [Buildroot] [PATCH 1/2] alsa-lib: bump to version 1.1.0
+In-Reply-To: <1447202845-19300-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1447202845-19300-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151111151704.0b2eba6b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,16 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 11 Nov 2015 10:33:52 -0300, Gustavo Zacarias wrote:
+On Tue, 10 Nov 2015 21:47:24 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libglib2/libglib2.hash | 4 ++--
->  package/libglib2/libglib2.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/alsa-lib/0001-add-missing-include.patch | 29 +++++++++++++++++++++++++
+>  package/alsa-lib/alsa-lib.hash                  |  2 +-
+>  package/alsa-lib/alsa-lib.mk                    |  2 +-
+>  3 files changed, 31 insertions(+), 2 deletions(-)
+>  create mode 100644 package/alsa-lib/0001-add-missing-include.patch
 
-Applied, thanks.
+Both applied to next, thanks.
 
 Thomas
 -- 
