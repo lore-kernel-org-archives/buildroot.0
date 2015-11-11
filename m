@@ -1,34 +1,26 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 11 Nov 2015 18:47:41 +0100
-Subject: [Buildroot] [PATCH] docs/manual: fix bash export syntax in example
-	code
-Message-ID: <1447264061-21523-1-git-send-email-luca@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Nov 2015 18:51:24 +0100
+Subject: [Buildroot] [PATCH] docs/manual: fix bash export syntax in
+ example code
+In-Reply-To: <1447264061-21523-1-git-send-email-luca@lucaceresoli.net>
+References: <1447264061-21523-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20151111185124.5ebd908f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To export a variable in .bashrc we shouldn't put a '$' at the
-beginning of the line, and there must be a '=' between key and value.
+Dear Luca Ceresoli,
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- docs/manual/download-location.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 11 Nov 2015 18:47:41 +0100, Luca Ceresoli wrote:
+> To export a variable in .bashrc we shouldn't put a '$' at the
+> beginning of the line, and there must be a '=' between key and value.
 
-diff --git a/docs/manual/download-location.txt b/docs/manual/download-location.txt
-index cca7e7e..0b53f54 100644
---- a/docs/manual/download-location.txt
-+++ b/docs/manual/download-location.txt
-@@ -17,7 +17,7 @@ set, then the value of +BR2_DL_DIR+ in the Buildroot configuration is
- overridden. The following line should be added to +<~/.bashrc>+.
- 
- -----------------
-- $ export BR2_DL_DIR <shared download location>
-+ export BR2_DL_DIR=<shared download location>
- -----------------
- 
- The download location can also be set in the +.config+ file, with the
+Well the $ is here to indicate that it's the shell prompt.
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
