@@ -1,80 +1,90 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 Nov 2015 21:47:25 -0300
-Subject: [Buildroot] [PATCH 2/2] alsa-utils: bump to version 1.1.0
-In-Reply-To: <1447202845-19300-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447202845-19300-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1447202845-19300-2-git-send-email-gustavo@zacarias.com.ar>
+From: Andrew Donnellan <andrew.donnellan@au1.ibm.com>
+Date: Wed, 11 Nov 2015 14:46:14 +1100
+Subject: [Buildroot] [PATCH] trinity: bump to version 1.6
+Message-ID: <1447213574-10726-1-git-send-email-andrew.donnellan@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add BAT (Basic Audio Testing) tool option.
+Bump trinity version to 1.6. Remove backported vt.c missing include patch
+as it is now included in the upstream release.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Andrew Donnellan <andrew.donnellan@au1.ibm.com>
 ---
- package/alsa-utils/Config.in       |  4 ++++
- package/alsa-utils/alsa-utils.hash |  2 +-
- package/alsa-utils/alsa-utils.mk   | 10 +++++++++-
- 3 files changed, 14 insertions(+), 2 deletions(-)
+ ...ssing-include-to-fix-building-with-uClibc.patch | 47 ----------------------
+ package/trinity/trinity.mk                         |  2 +-
+ 2 files changed, 1 insertion(+), 48 deletions(-)
+ delete mode 100644 package/trinity/0001-vt.c-add-missing-include-to-fix-building-with-uClibc.patch
 
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index 3a99279..a08743e 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -50,6 +50,10 @@ config BR2_PACKAGE_ALSA_UTILS_APLAY
- 	select BR2_PACKAGE_ALSA_LIB_PCM
- 	bool "aplay/arecord"
- 
-+config BR2_PACKAGE_ALSA_UTILS_BAT
-+	select BR2_PACKAGE_FFTW
-+	bool "bat"
-+
- config BR2_PACKAGE_ALSA_UTILS_IECSET
- 	select BR2_PACKAGE_ALSA_LIB_PCM
- 	bool "iecset"
-diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
-index ba5061b..e6530eb 100644
---- a/package/alsa-utils/alsa-utils.hash
-+++ b/package/alsa-utils/alsa-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	5160058f3e14483ced5de919dd473f93932059454530a9b7ef97dcabd6833e9b	alsa-utils-1.0.29.tar.bz2
-+sha256	3b1c3135b76e14532d3dd23fb15759ddd7daf9ffbc183f7a9a0a3a86374748f1	alsa-utils-1.1.0.tar.bz2
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 06bda9a..11b46c4 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
+diff --git a/package/trinity/0001-vt.c-add-missing-include-to-fix-building-with-uClibc.patch b/package/trinity/0001-vt.c-add-missing-include-to-fix-building-with-uClibc.patch
+deleted file mode 100644
+index e1d23cd..0000000
+--- a/package/trinity/0001-vt.c-add-missing-include-to-fix-building-with-uClibc.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-vt.c: add missing include to fix building with uClibc
+-
+-Backporting an upstream patch to fix a building issue with uClibc.
+-
+-Upstream commit:
+-
+-  https://github.com/kernelslacker/trinity/commit/fb4a1adc4540f0702b84aa900f2b8ebed004885d
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-From fb4a1adc4540f0702b84aa900f2b8ebed004885d Mon Sep 17 00:00:00 2001
+-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-Date: Wed, 18 Mar 2015 09:58:46 +0000
+-Subject: [PATCH] vt.c: add missing include to fix building with uClibc
+-
+-"#include <linux/serial.h>" is needed in order to build trinity
+-successfully with uClibc. Otherwise it would fail displaying an error
+-message like this one:
+-
+-ioctls/vt.c:152:8: error: invalid application of 'sizeof' to incomplete
+-type 'struct serial_rs485'
+-  IOCTL(TIOCGRS485),
+-
+-ioctls/vt.c:155:8: error: invalid application of 'sizeof' to incomplete
+-type 'struct serial_rs485'
+-  IOCTL(TIOCSRS485),
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+----
+- ioctls/vt.c |    1 +
+- 1 files changed, 1 insertions(+), 0 deletions(-)
+-
+-diff --git a/ioctls/vt.c b/ioctls/vt.c
+-index 5e7e7d7..a4a7e0c 100644
+---- a/ioctls/vt.c
+-+++ b/ioctls/vt.c
+-@@ -1,6 +1,7 @@
+- #include <sys/vt.h>
+- #include <sys/ioctl.h>
+- #include <linux/kd.h>
+-+#include <linux/serial.h>
+- 
+- #include "utils.h"
+- #include "ioctls.h"
+--- 
+-1.7.1
+-
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+index 211f1b6..7596e92 100644
+--- a/package/trinity/trinity.mk
++++ b/package/trinity/trinity.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ALSA_UTILS_VERSION = 1.0.29
-+ALSA_UTILS_VERSION = 1.1.0
- ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
- ALSA_UTILS_LICENSE = GPLv2
-@@ -33,12 +33,20 @@ ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
- ALSA_UTILS_CONF_OPTS += --disable-alsamixer --disable-alsatest
- endif
- 
-+ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
-+ALSA_UTILS_CONF_OPTS += --enable-bat
-+ALSA_UTILS_DEPENDENCIES += fftw
-+else
-+ALSA_UTILS_CONF_OPTS += --disable-bat
-+endif
-+
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACONF) += usr/sbin/alsaconf
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACTL) += usr/sbin/alsactl
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER) += usr/bin/alsamixer
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIDI) += usr/bin/amidi
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIXER) += usr/bin/amixer
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_APLAY) += usr/bin/aplay usr/bin/arecord
-+ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_BAT) += usr/bin/bat
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_IECSET) += usr/bin/iecset
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ACONNECT) += usr/bin/aconnect
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAUCM) += usr/bin/alsaucm
+-TRINITY_VERSION = v1.5
++TRINITY_VERSION = v1.6
+ TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
+ TRINITY_LICENSE = GPLv2
+ TRINITY_LICENSE_FILES = COPYING
 -- 
-2.4.10
+Andrew Donnellan              Software Engineer, OzLabs
+andrew.donnellan at au1.ibm.com  Australia Development Lab, Canberra
++61 2 6201 8874 (work)        IBM Australia Limited
