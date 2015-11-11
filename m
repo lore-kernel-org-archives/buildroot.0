@@ -1,45 +1,33 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Wed, 11 Nov 2015 20:40:26 +0100
-Subject: [Buildroot] [PATCH] wine: Update download location
-Message-ID: <564399AA.8030005@dawncrow.de>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 11 Nov 2015 21:50:49 +0100
+Subject: [Buildroot] [PATCH] docs/manual: fix bash export syntax in
+ example code
+In-Reply-To: <20151111185124.5ebd908f@free-electrons.com>
+References: <1447264061-21523-1-git-send-email-luca@lucaceresoli.net>
+ <20151111185124.5ebd908f@free-electrons.com>
+Message-ID: <5643AA29.6060606@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
+Dear Thomas,
 
-Wine will soon switch away from Sourceforge and also will release 1.8 this year.
-So to prepare for all that we should switch to the new Wine mirror on their own site.
+Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
+>
+> On Wed, 11 Nov 2015 18:47:41 +0100, Luca Ceresoli wrote:
+>> To export a variable in .bashrc we shouldn't put a '$' at the
+>> beginning of the line, and there must be a '=' between key and value.
+>
+> Well the $ is here to indicate that it's the shell prompt.
 
- package/wine/wine.hash | 5 ++---
- package/wine/wine.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+I would agree if this specific part of the manual were suggesting a
+shell command in general. Instead it's suggesting to add a line to
+~/.bashrc, where a '$' does not make sense of course.
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 71d633c..d1e3494 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,3 +1,2 @@
--# From http://sourceforge.net/projects/wine/files/Source/
--md5	0f6c56f86befe38e219090915f81f48a	wine-1.6.2.tar.bz2
--sha1	574b9ccedbf213622b7ee55f715764673fc27692	wine-1.6.2.tar.bz2
-+# Locally calculated after checking pgp signature
-+sha256 f0ab9eede5a0ccacbf6e50682649f9377b9199e49cf55641f1787cf72405acbe wine-1.6.2.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index d6fb9c6..38576db 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -6,7 +6,7 @@
- 
- WINE_VERSION = 1.6.2
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
--WINE_SITE = http://downloads.sourceforge.net/project/wine/Source
-+WINE_SITE = https://dl.winehq.org/wine/source/1.6
- WINE_LICENSE = LGPLv2.1+
- WINE_LICENSE_FILES = COPYING.LIB LICENSE
- WINE_DEPENDENCIES = host-bison host-flex host-wine
+Maybe I should have explained it in my commit message?
+
 -- 
-1.9.1
+Luca
