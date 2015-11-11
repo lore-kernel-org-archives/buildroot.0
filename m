@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Nov 2015 11:09:05 -0300
-Subject: [Buildroot] [PATCH 1/2] wpa_supplicant: add security patches
-Message-ID: <1447250946-15575-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 11 Nov 2015 11:09:06 -0300
+Subject: [Buildroot] [PATCH 2/2] hostapd: add security patches
+In-Reply-To: <1447250946-15575-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1447250946-15575-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1447250946-15575-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,67 +11,21 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-CVE-2015-5310 - wpa_supplicant unauthorized WNM Sleep Mode GTK control
-CVE-2015-5315 - wpa_supplicant: EAP-pwd missing last fragment length
-validation
-CVE-2015-5316 - EAP-pwd peer error path failure on unexpected Confirm
-message
+CVE-2015-5314 - hostapd: EAP-pwd missing last fragment length validation
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...Key-Data-in-WNM-Sleep-Mode-Response-frame.patch | 32 +++++++++++++
  ...-peer-Fix-last-fragment-length-validation.patch | 54 ++++++++++++++++++++++
  ...erver-Fix-last-fragment-length-validation.patch | 51 ++++++++++++++++++++
- ...r-Fix-error-path-for-unexpected-Confirm-m.patch | 34 ++++++++++++++
- 4 files changed, 171 insertions(+)
- create mode 100644 package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
- create mode 100644 package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
- create mode 100644 package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
- create mode 100644 package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
+ 2 files changed, 105 insertions(+)
+ create mode 100644 package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
+ create mode 100644 package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
 
-diff --git a/package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch b/package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
-new file mode 100644
-index 0000000..00e5b7c
---- /dev/null
-+++ b/package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
-@@ -0,0 +1,32 @@
-+From 6b12d93d2c7428a34bfd4b3813ba339ed57b698a Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sun, 25 Oct 2015 15:45:50 +0200
-+Subject: [PATCH] WNM: Ignore Key Data in WNM Sleep Mode Response frame if no
-+ PMF in use
-+
-+WNM Sleep Mode Response frame is used to update GTK/IGTK only if PMF is
-+enabled. Verify that PMF is in use before using this field on station
-+side to avoid accepting unauthenticated key updates. (CVE-2015-5310)
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+---
-+ wpa_supplicant/wnm_sta.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/wpa_supplicant/wnm_sta.c b/wpa_supplicant/wnm_sta.c
-+index 954de67..7d79499 100644
-+--- a/wpa_supplicant/wnm_sta.c
-++++ b/wpa_supplicant/wnm_sta.c
-+@@ -187,6 +187,12 @@ static void wnm_sleep_mode_exit_success(struct wpa_supplicant *wpa_s,
-+ 	end = ptr + key_len_total;
-+ 	wpa_hexdump_key(MSG_DEBUG, "WNM: Key Data", ptr, key_len_total);
-+ 
-++	if (key_len_total && !wpa_sm_pmf_enabled(wpa_s->wpa)) {
-++		wpa_msg(wpa_s, MSG_INFO,
-++			"WNM: Ignore Key Data in WNM-Sleep Mode Response - PMF not enabled");
-++		return;
-++	}
-++
-+ 	while (ptr + 1 < end) {
-+ 		if (ptr + 2 + ptr[1] > end) {
-+ 			wpa_printf(MSG_DEBUG, "WNM: Invalid Key Data element "
-diff --git a/package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch b/package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
+diff --git a/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch b/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
 new file mode 100644
 index 0000000..82c2639
 --- /dev/null
-+++ b/package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
++++ b/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
 @@ -0,0 +1,54 @@
 +From 8057821706784608b828e769ccefbced95591e50 Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
@@ -125,11 +81,11 @@ index 0000000..82c2639
 +-- 
 +1.9.1
 +
-diff --git a/package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch b/package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
+diff --git a/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch b/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
 new file mode 100644
 index 0000000..bfc4c74
 --- /dev/null
-+++ b/package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
++++ b/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
 @@ -0,0 +1,51 @@
 +From bef802ece03f9ae9d52a21f0cf4f1bc2c5a1f8aa Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
@@ -179,46 +135,6 @@ index 0000000..bfc4c74
 + 		pos = wpabuf_head_u8(data->inbuf);
 + 		len = data->in_frag_pos;
 + 		wpa_printf(MSG_DEBUG, "EAP-pwd: Last fragment, %d bytes",
-+-- 
-+1.9.1
-+
-diff --git a/package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch b/package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
-new file mode 100644
-index 0000000..3088f6a
---- /dev/null
-+++ b/package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
-@@ -0,0 +1,34 @@
-+From 95577884ca4fa76be91344ff7a8d5d1e6dc3da61 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sun, 1 Nov 2015 19:35:44 +0200
-+Subject: [PATCH] EAP-pwd peer: Fix error path for unexpected Confirm message
-+
-+If the Confirm message is received from the server before the Identity
-+exchange has been completed, the group has not yet been determined and
-+data->grp is NULL. The error path in eap_pwd_perform_confirm_exchange()
-+did not take this corner case into account and could end up
-+dereferencing a NULL pointer and terminating the process if invalid
-+message sequence is received. (CVE-2015-5316)
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+---
-+ src/eap_peer/eap_pwd.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/eap_peer/eap_pwd.c b/src/eap_peer/eap_pwd.c
-+index 75ceef1..892b590 100644
-+--- a/src/eap_peer/eap_pwd.c
-++++ b/src/eap_peer/eap_pwd.c
-+@@ -774,7 +774,8 @@ eap_pwd_perform_confirm_exchange(struct eap_sm *sm, struct eap_pwd_data *data,
-+ 	wpabuf_put_data(data->outbuf, conf, SHA256_MAC_LEN);
-+ 
-+ fin:
-+-	bin_clear_free(cruft, BN_num_bytes(data->grp->prime));
-++	if (data->grp)
-++		bin_clear_free(cruft, BN_num_bytes(data->grp->prime));
-+ 	BN_clear_free(x);
-+ 	BN_clear_free(y);
-+ 	if (data->outbuf == NULL) {
 +-- 
 +1.9.1
 +
