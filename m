@@ -1,46 +1,51 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Wed, 11 Nov 2015 23:35:30 +0900
-Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
-	for target, fix a typo
-In-Reply-To: <564350B2.3010407@mind.be>
-References: <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
- <5642598B.2000509@mind.be> <20151111145910.795b029f@free-electrons.com>
- <4860F7F0-54BB-44FA-8ACE-4097834598F6@ca2.so-net.ne.jp>
- <564350B2.3010407@mind.be>
-Message-ID: <9714BA7F-3F20-4906-9FC1-F350275D3728@ca2.so-net.ne.jp>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Nov 2015 15:35:29 +0100
+Subject: [Buildroot] [git commit] libssh2: disable on broken nios2 toolchains
+Message-ID: <20151111143556.C8FEA81EB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout.
+commit: http://git.buildroot.net/buildroot/commit/?id=cdf55a12658dc9ff5496f4bf0cc980a662008cd6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thank you!
+Fixes:
 
-> 2015/11/11 23:29?Arnout Vandecappelle <arnout@mind.be> ?????
-> 
-> On 11-11-15 15:14, Hiroshi Kawashima wrote:
->> Dear Thomas.
->> 
->> Thank you for your suggestion.
->> As you are maintainer, I will obey your opinion anyway.
->> 
->> But both approach is same 10 lines.
->> Just my preference is direct approach will have good readability if same size.
-> 
-> I agree that your approach is better readable. I personally like make
-> constructs but shell is for most people clearer.
-> 
-> Regards,
-> Arnout
-> 
-> [snip]
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+  http://autobuild.buildroot.org/results/bcf/bcfd8287a8d3dec2d66aa8191910f4dab0d7be36/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libssh2/Config.in  |    3 +++
+ package/php-ssh2/Config.in |    3 +++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+index 017fd40..3416240 100644
+--- a/package/libssh2/Config.in
++++ b/package/libssh2/Config.in
+@@ -1,6 +1,9 @@
+ config BR2_PACKAGE_LIBSSH2
+ 	bool "libssh2"
+ 	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
++	# Triggers the _gp link issue
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	help
+ 	  libssh2 is a client-side C library implementing the SSH2
+ 	  protocol as defined by Internet Drafts: SECSH-TRANS(22),
+diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
+index b457900..bc31e1d 100644
+--- a/package/php-ssh2/Config.in
++++ b/package/php-ssh2/Config.in
+@@ -2,6 +2,9 @@ config BR2_PACKAGE_PHP_SSH2
+ 	bool "php-ssh2"
+ 	depends on BR2_PACKAGE_PHP
+ 	select BR2_PACKAGE_LIBSSH2
++	# Triggers the _gp link issue (libssh2)
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	help
+ 	  PHP bindings for the libssh2 library.
+ 
