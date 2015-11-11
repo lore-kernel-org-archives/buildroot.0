@@ -1,140 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:19:18 +0100
-Subject: [Buildroot] [git commit] hostapd: add security patches
-Message-ID: <20151111142131.D49677FC65@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 11 Nov 2015 15:28:15 +0100
+Subject: [Buildroot] [PATCH 1/2] libnet:new package
+In-Reply-To: <20151111150528.16ffceac@free-electrons.com>
+References: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
+ <56427B24.7030602@mind.be> <20151111150528.16ffceac@free-electrons.com>
+Message-ID: <5643507F.3050903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bcf98fe65b205306f909028c2ff6df7fde4a0a01
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11-11-15 15:05, Thomas Petazzoni wrote:
+> Arnout,
+> 
+> I'm just seeing your review right now. Did you mark the patches as
+> Changes Requested? I did not mark them as Accepted as far as I
+> remember, even if I applied them.
 
-Fixes:
-CVE-2015-5314 - hostapd: EAP-pwd missing last fragment length validation
+ Don't you have a hook that does that automatically? Anyway, they currently are
+still marked as Changes Requested, so I'll update them to Accepted.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...-peer-Fix-last-fragment-length-validation.patch |   54 ++++++++++++++++++++
- ...erver-Fix-last-fragment-length-validation.patch |   51 ++++++++++++++++++
- 2 files changed, 105 insertions(+), 0 deletions(-)
+> 
+> On Wed, 11 Nov 2015 00:17:56 +0100, Arnout Vandecappelle wrote:
+> 
+>>  We now require .hash files for github packages as well, since github nowadays
+>> provides stable tarballs.
+> 
+> This package is not fetched from github. But I've added the hash
+> nonetheless.
 
-diff --git a/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch b/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
-new file mode 100644
-index 0000000..82c2639
---- /dev/null
-+++ b/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
-@@ -0,0 +1,54 @@
-+From 8057821706784608b828e769ccefbced95591e50 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sun, 1 Nov 2015 18:18:17 +0200
-+Subject: [PATCH] EAP-pwd peer: Fix last fragment length validation
-+
-+All but the last fragment had their length checked against the remaining
-+room in the reassembly buffer. This allowed a suitably constructed last
-+fragment frame to try to add extra data that would go beyond the buffer.
-+The length validation code in wpabuf_put_data() prevents an actual
-+buffer write overflow from occurring, but this results in process
-+termination. (CVE-2015-5315)
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+---
-+ src/eap_peer/eap_pwd.c | 7 +++----
-+ 1 file changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/eap_peer/eap_pwd.c b/src/eap_peer/eap_pwd.c
-+index 1f78544..75ceef1 100644
-+--- a/src/eap_peer/eap_pwd.c
-++++ b/src/eap_peer/eap_pwd.c
-+@@ -903,7 +903,7 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
-+ 	/*
-+ 	 * buffer and ACK the fragment
-+ 	 */
-+-	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
-++	if (EAP_PWD_GET_MORE_BIT(lm_exch) || data->in_frag_pos) {
-+ 		data->in_frag_pos += len;
-+ 		if (data->in_frag_pos > wpabuf_size(data->inbuf)) {
-+ 			wpa_printf(MSG_INFO, "EAP-pwd: Buffer overflow attack "
-+@@ -916,7 +916,8 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
-+ 			return NULL;
-+ 		}
-+ 		wpabuf_put_data(data->inbuf, pos, len);
-+-
-++	}
-++	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
-+ 		resp = eap_msg_alloc(EAP_VENDOR_IETF, EAP_TYPE_PWD,
-+ 				     EAP_PWD_HDR_SIZE,
-+ 				     EAP_CODE_RESPONSE, eap_get_id(reqData));
-+@@ -930,10 +931,8 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
-+ 	 * we're buffering and this is the last fragment
-+ 	 */
-+ 	if (data->in_frag_pos) {
-+-		wpabuf_put_data(data->inbuf, pos, len);
-+ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Last fragment, %d bytes",
-+ 			   (int) len);
-+-		data->in_frag_pos += len;
-+ 		pos = wpabuf_head_u8(data->inbuf);
-+ 		len = data->in_frag_pos;
-+ 	}
-+-- 
-+1.9.1
-+
-diff --git a/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch b/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
-new file mode 100644
-index 0000000..bfc4c74
---- /dev/null
-+++ b/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
-@@ -0,0 +1,51 @@
-+From bef802ece03f9ae9d52a21f0cf4f1bc2c5a1f8aa Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sun, 1 Nov 2015 18:24:16 +0200
-+Subject: [PATCH] EAP-pwd server: Fix last fragment length validation
-+
-+All but the last fragment had their length checked against the remaining
-+room in the reassembly buffer. This allowed a suitably constructed last
-+fragment frame to try to add extra data that would go beyond the buffer.
-+The length validation code in wpabuf_put_data() prevents an actual
-+buffer write overflow from occurring, but this results in process
-+termination. (CVE-2015-5314)
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+---
-+ src/eap_server/eap_server_pwd.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/eap_server/eap_server_pwd.c b/src/eap_server/eap_server_pwd.c
-+index cb83ff7..9f787ab 100644
-+--- a/src/eap_server/eap_server_pwd.c
-++++ b/src/eap_server/eap_server_pwd.c
-+@@ -970,7 +970,7 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
-+ 	/*
-+ 	 * the first and all intermediate fragments have the M bit set
-+ 	 */
-+-	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
-++	if (EAP_PWD_GET_MORE_BIT(lm_exch) || data->in_frag_pos) {
-+ 		if ((data->in_frag_pos + len) > wpabuf_size(data->inbuf)) {
-+ 			wpa_printf(MSG_DEBUG, "EAP-pwd: Buffer overflow "
-+ 				   "attack detected! (%d+%d > %d)",
-+@@ -981,6 +981,8 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
-+ 		}
-+ 		wpabuf_put_data(data->inbuf, pos, len);
-+ 		data->in_frag_pos += len;
-++	}
-++	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
-+ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Got a %d byte fragment",
-+ 			   (int) len);
-+ 		return;
-+@@ -990,8 +992,6 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
-+ 	 * buffering fragments so that's how we know it's the last)
-+ 	 */
-+ 	if (data->in_frag_pos) {
-+-		wpabuf_put_data(data->inbuf, pos, len);
-+-		data->in_frag_pos += len;
-+ 		pos = wpabuf_head_u8(data->inbuf);
-+ 		len = data->in_frag_pos;
-+ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Last fragment, %d bytes",
-+-- 
-+1.9.1
-+
+ Oops, I confused the two patches :-)
+
+> 
+>>> +LIBNET_VERSION = 1.1.6
+>>> +LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
+>>> +LIBNET_INSTALL_STAGING = YES
+>>> +LIBNET_LICENSE = BSD-2c
+>>
+>>  There are also a few BSD-3c files, so I think this should be BSD-2c, BSD-3c.
+> 
+> I made a follow-up commit to fix this.
+> 
+>>  The configure script tries to build and run a program to test for ETH_P_ALL
+>> availability in the AC_LIBNET_CHECK_PF_PACKET function. This will obviously fail
+>> when cross-compiling, maybe worse when hostarch == targetarch. So I think it's
+>> best to explicitly pass libnet_cv_have_packet_socket=yes
+> 
+> I did a test build here for ARM, and did not encounter any issues.
+> Which configuration did you test? Or is it just by inspection of
+> configure.ac?
+
+ With "fail" I mean that it will think that PF_PACKET/ETH_P_ALL is not
+available, while normally on Linux it is available (at least for root). Maybe
+you can configure it out of the kernel, but that would be a very exotic config.
+
+ I noticed it by inspecting configure.ac and tested an armv7 build to confirm.
+
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
