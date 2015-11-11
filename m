@@ -1,51 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:35:29 +0100
-Subject: [Buildroot] [git commit] libssh2: disable on broken nios2 toolchains
-Message-ID: <20151111143556.C8FEA81EB8@busybox.osuosl.org>
+Date: Wed, 11 Nov 2015 15:39:26 +0100
+Subject: [Buildroot] [PATCH 1/2] libnet:new package
+In-Reply-To: <5643507F.3050903@mind.be>
+References: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
+ <56427B24.7030602@mind.be>
+ <20151111150528.16ffceac@free-electrons.com>
+ <5643507F.3050903@mind.be>
+Message-ID: <20151111153926.6543a4a0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cdf55a12658dc9ff5496f4bf0cc980a662008cd6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnout,
 
-Fixes:
+On Wed, 11 Nov 2015 15:28:15 +0100, Arnout Vandecappelle wrote:
 
-  http://autobuild.buildroot.org/results/bcf/bcfd8287a8d3dec2d66aa8191910f4dab0d7be36/
+>  Don't you have a hook that does that automatically? Anyway, they currently are
+> still marked as Changes Requested, so I'll update them to Accepted.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libssh2/Config.in  |    3 +++
- package/php-ssh2/Config.in |    3 +++
- 2 files changed, 6 insertions(+), 0 deletions(-)
+I don't use an automatic hook, no. I used to have one, but it wasn't
+working well when the patch was changed compared to the one in
+patchwork. I know Peter now uses git notes to solve this problem, but I
+haven't implemented a similar solution.
 
-diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
-index 017fd40..3416240 100644
---- a/package/libssh2/Config.in
-+++ b/package/libssh2/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_LIBSSH2
- 	bool "libssh2"
- 	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
-+	# Triggers the _gp link issue
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	help
- 	  libssh2 is a client-side C library implementing the SSH2
- 	  protocol as defined by Internet Drafts: SECSH-TRANS(22),
-diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
-index b457900..bc31e1d 100644
---- a/package/php-ssh2/Config.in
-+++ b/package/php-ssh2/Config.in
-@@ -2,6 +2,9 @@ config BR2_PACKAGE_PHP_SSH2
- 	bool "php-ssh2"
- 	depends on BR2_PACKAGE_PHP
- 	select BR2_PACKAGE_LIBSSH2
-+	# Triggers the _gp link issue (libssh2)
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	help
- 	  PHP bindings for the libssh2 library.
- 
+Since when I'm done with a patch I anyway have to look again at the
+list of patches to pick the next one to work on, it's not a big deal to
+mark as Accepted the patch(es) I just applied.
+
+> > This package is not fetched from github. But I've added the hash
+> > nonetheless.
+> 
+>  Oops, I confused the two patches :-)
+
+As I said to my reply to Joris, there is in fact a newer upstream for
+libnet, hosted at github. But it did not build nicely out of the box,
+so I gave up and reverted back to the version used by Joris.
+
+> > I did a test build here for ARM, and did not encounter any issues.
+> > Which configuration did you test? Or is it just by inspection of
+> > configure.ac?
+> 
+>  With "fail" I mean that it will think that PF_PACKET/ETH_P_ALL is not
+> available, while normally on Linux it is available (at least for root). Maybe
+> you can configure it out of the kernel, but that would be a very exotic config.
+> 
+>  I noticed it by inspecting configure.ac and tested an armv7 build to confirm.
+
+Right. Can you submit a patch doing that? Either you or Joris?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
