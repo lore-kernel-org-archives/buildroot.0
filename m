@@ -1,61 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Nov 2015 13:52:15 +0100
-Subject: [Buildroot] [PATCH 3/3] package/skeleton: ensure custom
- skeleton uses merged /usr if needed
-In-Reply-To: <87d1vhphi7.fsf@dell.be.48ers.dk>
-References: <cover.1447190450.git.yann.morin.1998@free.fr>
- <d667c39209bc260f60546ee0b9e7f5a661c4b761.1447190450.git.yann.morin.1998@free.fr>
- <87d1vhphi7.fsf@dell.be.48ers.dk>
-Message-ID: <20151111125215.GA3968@free.fr>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Wed, 11 Nov 2015 22:11:04 +0900
+Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
+ for target, fix a typo
+In-Reply-To: Your message of Tue, 10 Nov 2015 11:42:11 +0100.
+ <20151110114211.365afbbc@free-electrons.com>
+Message-ID: <201511111311.tABDB5aR013551@ms-omx03.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Dear Thomas.
 
-On 2015-11-11 00:22 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > When using systemd, the poolicy in Buildroot is to use a merged /usr
->  > (see c5bd8af6, "system: add options for /bin /sbin and /lib to be
->  > symlinks into /usr" for more info). So, we apply a few tricks in some
->  > packages to account for the merged /usr case.
-> 
->  > However, when using a custom skeleton, we have no say in how that
->  > skeleton is organised, so it may well have a split /usr. In that case,
->  > our little tricks might not work as expected.
-> 
->  > So, when the user uses a custom skeleton and wants systemd as an init
->  > system, we must check that the custom skeleton is setup with a merged
->  > /usr.
-> 
->  > We do that by checking that each pair of {/lib,/usr/lib} {/bin,/usr/bin}
->  > and {/sbin,/usr/sbin} have the same inode numbers, i.e. /lib must have
->  > the same inode number as /usr/lib (and so on...). When a pair does not
->  > share the same inode number, this is not a merged /usr and we abort.
-> 
->  > We implement that check with make constructs, so it is done very early
->  > in the build process, and we can abort early if need be.
-> 
-> Nice. It doesn't handle cases where absolute symlinks are used
-> (E.G. /bin -> /usr/bin), but I don't see how we can fix that.
+I checked latest 25 fails of
+    http://autobuild.buildroot.org/?reason=gauche-0.9.4
+Summary is tail of this e-mail.
 
-In that situation, then target/bin would indeed point to /usr/bin would
-point to the host's /usr/bin and that would break horribly as soon as a
-package would try to install something in there.
+I looked at tree of gauche, but it will not so easy to use external
+(existing in buildroot) bdwgc, so I'd like to exclude architectures
+not supported by current boehm gc as first.
 
-Well, that is not a change from the previous behaviour. that case was
-broken (aka unsupported) previously, it is still broken.
+I know this is not long term solution, but to classify further cause,
+it will be useful.
+If you agree, I will send patch for this.
 
-Regards,
-Yann E. MORIN.
+Regards, Kawashima
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2015-11-11 12:36:54	xtensa		gc not ported
+2015-11-10 23:30:21	powerpc		./libgauche-0.9.so: undefined reference to `getcontext'
+2015-11-10 23:11:45	arc		gc not ported
+2015-11-10 22:20:21	powerpc		./libgauche-0.9.so: undefined reference to `getcontext'
+2015-11-10 17:30:19	arc		gc not ported
+2015-11-10 14:16:58	sh4		./libgauche-0.9.so: undefined reference to `getcontext'
+2015-11-10 08:46:51	powerpc		./libgauche-0.9.so: undefined reference to `getcontext'
+2015-11-10 04:28:00	arm		./libgauche-0.9.so: undefined reference to `AO_pt_lock'
+2015-11-10 03:44:37	xtensa		gc not ported
+2015-11-10 01:17:44	microblazeel	gc not ported
+2015-11-10 00:37:46	arm		./libgauche-0.9.so: undefined reference to `AO_pt_lock'
+2015-11-10 00:00:05	arm		./include/private/../gc_pthread_redirects.h:37:22: fatal error: dlfcn.h: No such file or directory
+2015-11-09 16:40:33	xtensa		gc not ported
+2015-11-09 16:24:36	powerpc		./libgauche-0.9.so: undefined reference to `getcontext'
+2015-11-09 14:43:12	arc		gc not ported
+2015-11-09 10:43:50	arc		gc not ported
+2015-11-09 07:08:04	xtensa		gc not ported
+2015-11-09 05:14:36	arm		./libgauche-0.9.so: undefined reference to `AO_pt_lock'
+2015-11-09 01:00:08	microbazeel	gc not ported
+2015-11-08 20:14:57	arm		./libgauche-0.9.so: undefined reference to `AO_pt_lock'
+2015-11-08 15:41:57	arm		./include/private/../gc_pthread_redirects.h:37:22: fatal error: dlfcn.h: No such file or directory
+2015-11-08 07:18:05	xtensa		gc not ported
+2015-11-08 06:41:22	arc		gc not ported
+2015-11-08 05:34:02	powerpc		./libgauche-0.9.so: undefined reference to `getcontext'
+2015-11-07 02:03:42	powerpc		./libgauche-0.9.so: undefined reference to `getcontext'
+...
+
+> If you cannot use the bdwgc package, then just add some architecture
+> dependencies in gauche/Config.in, probably in the form of:
+> 
+> config BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+> 	bool
+> 	default y if BR2_arm || BR2_i386 || ...
+> 
+> config BR2_PACKAGE_GAUCHE
+> 	bool "gauche"
+> 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+> 
+> comment "gauche needs ..."
+> 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+> 
+> Best regards,
+> 
+> Thomas
+============================================================
+    Hiroshi Kawashima
