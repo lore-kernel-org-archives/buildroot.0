@@ -1,49 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:05:28 +0100
-Subject: [Buildroot] [PATCH 1/2] libnet:new package
-In-Reply-To: <56427B24.7030602@mind.be>
+Date: Wed, 11 Nov 2015 15:07:59 +0100
+Subject: [Buildroot] [PATCH 2/2] netsniff-ng:new package
+In-Reply-To: <1447059812-26424-2-git-send-email-joris.lijssens@gmail.com>
 References: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
- <56427B24.7030602@mind.be>
-Message-ID: <20151111150528.16ffceac@free-electrons.com>
+ <1447059812-26424-2-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <20151111150759.493329df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Dear Joris Lijssens,
 
-I'm just seeing your review right now. Did you mark the patches as
-Changes Requested? I did not mark them as Accepted as far as I
-remember, even if I applied them.
+On Mon,  9 Nov 2015 10:03:32 +0100, Joris Lijssens wrote:
+> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+> ---
+>  package/Config.in                  |  1 +
+>  package/netsniff-ng/Config.in      | 22 ++++++++++++++++++++++
+>  package/netsniff-ng/netsniff-ng.mk | 30 ++++++++++++++++++++++++++++++
+>  3 files changed, 53 insertions(+)
+>  create mode 100644 package/netsniff-ng/Config.in
+>  create mode 100644 package/netsniff-ng/netsniff-ng.mk
 
-On Wed, 11 Nov 2015 00:17:56 +0100, Arnout Vandecappelle wrote:
+I've applied your patch after doing a number of changes:
 
->  We now require .hash files for github packages as well, since github nowadays
-> provides stable tarballs.
+    [Thomas:
+     - add comment in Config.in to explain why this package depends on
+       glibc, and specifically why it doesn't build for uClibc and musl.
+     - add hash file.
+     - add 'COPYING' to the list of LICENSE_FILES
+     - add themissing <pkg>_DEPENDENCIES variable in the .mk file, to make
+       sure dependencies are built before netsniff-ng.
+     - add comment in the .mk file explain why we're using the
+       generic-package infrastructure even if the build procedure is
+       essentially ./configure, make, make install.
+     - fix indentation in NETSNIFF_NG_CONFIGURE_CMDS.]
 
-This package is not fetched from github. But I've added the hash
-nonetheless.
+Though I believe you should look into the comments made by Arnout,
+since some of them remain valid even after my changes, and it would be
+great if you could address them through follow-up patches.
 
-> > +LIBNET_VERSION = 1.1.6
-> > +LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
-> > +LIBNET_INSTALL_STAGING = YES
-> > +LIBNET_LICENSE = BSD-2c
-> 
->  There are also a few BSD-3c files, so I think this should be BSD-2c, BSD-3c.
-
-I made a follow-up commit to fix this.
-
->  The configure script tries to build and run a program to test for ETH_P_ALL
-> availability in the AC_LIBNET_CHECK_PF_PACKET function. This will obviously fail
-> when cross-compiling, maybe worse when hostarch == targetarch. So I think it's
-> best to explicitly pass libnet_cv_have_packet_socket=yes
-
-I did a test build here for ARM, and did not encounter any issues.
-Which configuration did you test? Or is it just by inspection of
-configure.ac?
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
