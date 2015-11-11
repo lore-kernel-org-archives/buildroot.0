@@ -1,52 +1,224 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:19:23 +0100
-Subject: [Buildroot] [git commit] package/mplayer: needs host-yasm for mmx
-	support
-Message-ID: <20151111142131.E020C7FC65@busybox.osuosl.org>
+Date: Wed, 11 Nov 2015 15:19:13 +0100
+Subject: [Buildroot] [git commit] wpa_supplicant: add security patches
+Message-ID: <20151111142131.C9BE581ECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c63534de711247ecb98a3c18f21e29f5f5f23a29
+commit: http://git.buildroot.net/buildroot/commit/?id=76db6b0dd0451daacf4377a752bbbf86bb94bb37
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/6a8/6a8c3a70e33cb5b3fc40d036fb0716d915185f33/
-http://autobuild.buildroot.net/results/cef/cef30d4e14d39ab64bb27a6514a0390755f4a9d2/
-http://autobuild.buildroot.net/results/03b/03b1b42688b07789971a99337708b4dbe4278665/
-http://autobuild.buildroot.net/results/5e3/5e3320dfc6793a9ff0494161cdc9a3be795462c4/
+Fixes:
+CVE-2015-5310 - wpa_supplicant unauthorized WNM Sleep Mode GTK control
+CVE-2015-5315 - wpa_supplicant: EAP-pwd missing last fragment length
+validation
+CVE-2015-5316 - EAP-pwd peer error path failure on unexpected Confirm
+message
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mplayer/mplayer.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ ...Key-Data-in-WNM-Sleep-Mode-Response-frame.patch |   32 ++++++++++++
+ ...-peer-Fix-last-fragment-length-validation.patch |   54 ++++++++++++++++++++
+ ...erver-Fix-last-fragment-length-validation.patch |   51 ++++++++++++++++++
+ ...r-Fix-error-path-for-unexpected-Confirm-m.patch |   34 ++++++++++++
+ 4 files changed, 171 insertions(+), 0 deletions(-)
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 2f58864..99fc469 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -259,6 +259,13 @@ ifeq ($(BR2_i386),y)
- MPLAYER_CFLAGS += -fomit-frame-pointer
- endif
- 
-+ifeq ($(BR2_X86_CPU_HAS_MMX),y)
-+MPLAYER_CONF_OPTS += --yasm=$(HOST_DIR)/usr/bin/yasm
-+MPLAYER_DEPENDENCIES += host-yasm
-+else
-+MPLAYER_CONF_OPTS += --yasm=''
-+endif
+diff --git a/package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch b/package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
+new file mode 100644
+index 0000000..00e5b7c
+--- /dev/null
++++ b/package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
+@@ -0,0 +1,32 @@
++From 6b12d93d2c7428a34bfd4b3813ba339ed57b698a Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Sun, 25 Oct 2015 15:45:50 +0200
++Subject: [PATCH] WNM: Ignore Key Data in WNM Sleep Mode Response frame if no
++ PMF in use
 +
- define MPLAYER_CONFIGURE_CMDS
- 	(cd $(@D); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
-@@ -273,7 +280,6 @@ define MPLAYER_CONFIGURE_CMDS
- 		--charset=UTF-8 \
- 		--extra-cflags="$(MPLAYER_CFLAGS)" \
- 		--extra-ldflags="$(MPLAYER_LDFLAGS)" \
--		--yasm='' \
- 		--enable-fbdev \
- 		$(MPLAYER_CONF_OPTS) \
- 		--enable-cross-compile \
++WNM Sleep Mode Response frame is used to update GTK/IGTK only if PMF is
++enabled. Verify that PMF is in use before using this field on station
++side to avoid accepting unauthenticated key updates. (CVE-2015-5310)
++
++Signed-off-by: Jouni Malinen <j@w1.fi>
++---
++ wpa_supplicant/wnm_sta.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/wpa_supplicant/wnm_sta.c b/wpa_supplicant/wnm_sta.c
++index 954de67..7d79499 100644
++--- a/wpa_supplicant/wnm_sta.c
+++++ b/wpa_supplicant/wnm_sta.c
++@@ -187,6 +187,12 @@ static void wnm_sleep_mode_exit_success(struct wpa_supplicant *wpa_s,
++ 	end = ptr + key_len_total;
++ 	wpa_hexdump_key(MSG_DEBUG, "WNM: Key Data", ptr, key_len_total);
++ 
+++	if (key_len_total && !wpa_sm_pmf_enabled(wpa_s->wpa)) {
+++		wpa_msg(wpa_s, MSG_INFO,
+++			"WNM: Ignore Key Data in WNM-Sleep Mode Response - PMF not enabled");
+++		return;
+++	}
+++
++ 	while (ptr + 1 < end) {
++ 		if (ptr + 2 + ptr[1] > end) {
++ 			wpa_printf(MSG_DEBUG, "WNM: Invalid Key Data element "
+diff --git a/package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch b/package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
+new file mode 100644
+index 0000000..82c2639
+--- /dev/null
++++ b/package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
+@@ -0,0 +1,54 @@
++From 8057821706784608b828e769ccefbced95591e50 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Sun, 1 Nov 2015 18:18:17 +0200
++Subject: [PATCH] EAP-pwd peer: Fix last fragment length validation
++
++All but the last fragment had their length checked against the remaining
++room in the reassembly buffer. This allowed a suitably constructed last
++fragment frame to try to add extra data that would go beyond the buffer.
++The length validation code in wpabuf_put_data() prevents an actual
++buffer write overflow from occurring, but this results in process
++termination. (CVE-2015-5315)
++
++Signed-off-by: Jouni Malinen <j@w1.fi>
++---
++ src/eap_peer/eap_pwd.c | 7 +++----
++ 1 file changed, 3 insertions(+), 4 deletions(-)
++
++diff --git a/src/eap_peer/eap_pwd.c b/src/eap_peer/eap_pwd.c
++index 1f78544..75ceef1 100644
++--- a/src/eap_peer/eap_pwd.c
+++++ b/src/eap_peer/eap_pwd.c
++@@ -903,7 +903,7 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
++ 	/*
++ 	 * buffer and ACK the fragment
++ 	 */
++-	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
+++	if (EAP_PWD_GET_MORE_BIT(lm_exch) || data->in_frag_pos) {
++ 		data->in_frag_pos += len;
++ 		if (data->in_frag_pos > wpabuf_size(data->inbuf)) {
++ 			wpa_printf(MSG_INFO, "EAP-pwd: Buffer overflow attack "
++@@ -916,7 +916,8 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
++ 			return NULL;
++ 		}
++ 		wpabuf_put_data(data->inbuf, pos, len);
++-
+++	}
+++	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
++ 		resp = eap_msg_alloc(EAP_VENDOR_IETF, EAP_TYPE_PWD,
++ 				     EAP_PWD_HDR_SIZE,
++ 				     EAP_CODE_RESPONSE, eap_get_id(reqData));
++@@ -930,10 +931,8 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
++ 	 * we're buffering and this is the last fragment
++ 	 */
++ 	if (data->in_frag_pos) {
++-		wpabuf_put_data(data->inbuf, pos, len);
++ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Last fragment, %d bytes",
++ 			   (int) len);
++-		data->in_frag_pos += len;
++ 		pos = wpabuf_head_u8(data->inbuf);
++ 		len = data->in_frag_pos;
++ 	}
++-- 
++1.9.1
++
+diff --git a/package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch b/package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
+new file mode 100644
+index 0000000..bfc4c74
+--- /dev/null
++++ b/package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
+@@ -0,0 +1,51 @@
++From bef802ece03f9ae9d52a21f0cf4f1bc2c5a1f8aa Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Sun, 1 Nov 2015 18:24:16 +0200
++Subject: [PATCH] EAP-pwd server: Fix last fragment length validation
++
++All but the last fragment had their length checked against the remaining
++room in the reassembly buffer. This allowed a suitably constructed last
++fragment frame to try to add extra data that would go beyond the buffer.
++The length validation code in wpabuf_put_data() prevents an actual
++buffer write overflow from occurring, but this results in process
++termination. (CVE-2015-5314)
++
++Signed-off-by: Jouni Malinen <j@w1.fi>
++---
++ src/eap_server/eap_server_pwd.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/eap_server/eap_server_pwd.c b/src/eap_server/eap_server_pwd.c
++index cb83ff7..9f787ab 100644
++--- a/src/eap_server/eap_server_pwd.c
+++++ b/src/eap_server/eap_server_pwd.c
++@@ -970,7 +970,7 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
++ 	/*
++ 	 * the first and all intermediate fragments have the M bit set
++ 	 */
++-	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
+++	if (EAP_PWD_GET_MORE_BIT(lm_exch) || data->in_frag_pos) {
++ 		if ((data->in_frag_pos + len) > wpabuf_size(data->inbuf)) {
++ 			wpa_printf(MSG_DEBUG, "EAP-pwd: Buffer overflow "
++ 				   "attack detected! (%d+%d > %d)",
++@@ -981,6 +981,8 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
++ 		}
++ 		wpabuf_put_data(data->inbuf, pos, len);
++ 		data->in_frag_pos += len;
+++	}
+++	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
++ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Got a %d byte fragment",
++ 			   (int) len);
++ 		return;
++@@ -990,8 +992,6 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
++ 	 * buffering fragments so that's how we know it's the last)
++ 	 */
++ 	if (data->in_frag_pos) {
++-		wpabuf_put_data(data->inbuf, pos, len);
++-		data->in_frag_pos += len;
++ 		pos = wpabuf_head_u8(data->inbuf);
++ 		len = data->in_frag_pos;
++ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Last fragment, %d bytes",
++-- 
++1.9.1
++
+diff --git a/package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch b/package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
+new file mode 100644
+index 0000000..3088f6a
+--- /dev/null
++++ b/package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
+@@ -0,0 +1,34 @@
++From 95577884ca4fa76be91344ff7a8d5d1e6dc3da61 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Sun, 1 Nov 2015 19:35:44 +0200
++Subject: [PATCH] EAP-pwd peer: Fix error path for unexpected Confirm message
++
++If the Confirm message is received from the server before the Identity
++exchange has been completed, the group has not yet been determined and
++data->grp is NULL. The error path in eap_pwd_perform_confirm_exchange()
++did not take this corner case into account and could end up
++dereferencing a NULL pointer and terminating the process if invalid
++message sequence is received. (CVE-2015-5316)
++
++Signed-off-by: Jouni Malinen <j@w1.fi>
++---
++ src/eap_peer/eap_pwd.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/eap_peer/eap_pwd.c b/src/eap_peer/eap_pwd.c
++index 75ceef1..892b590 100644
++--- a/src/eap_peer/eap_pwd.c
+++++ b/src/eap_peer/eap_pwd.c
++@@ -774,7 +774,8 @@ eap_pwd_perform_confirm_exchange(struct eap_sm *sm, struct eap_pwd_data *data,
++ 	wpabuf_put_data(data->outbuf, conf, SHA256_MAC_LEN);
++ 
++ fin:
++-	bin_clear_free(cruft, BN_num_bytes(data->grp->prime));
+++	if (data->grp)
+++		bin_clear_free(cruft, BN_num_bytes(data->grp->prime));
++ 	BN_clear_free(x);
++ 	BN_clear_free(y);
++ 	if (data->outbuf == NULL) {
++-- 
++1.9.1
++
