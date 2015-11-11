@@ -1,116 +1,72 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Wed, 11 Nov 2015 20:18:21 -0200
-Subject: [Buildroot] [PATCH v2 1/1] qemu: add patch to fix SSP support
-	detection
-Message-ID: <1447280301-9225-1-git-send-email-rprebello@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Nov 2015 23:24:16 +0100
+Subject: [Buildroot] [git commit] package/python-protobuf: eliminate
+	unneeded build-time dependencies
+Message-ID: <20151111222448.006D481778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The QEMU configure script incorrectly assumes SSP is supported by the
-toolchain in some cases where the compiler accepts -fstack-protector-*
-flags but the C library does not provide the necessary __stack_chk_*()
-functions.
+commit: http://git.buildroot.net/buildroot/commit/?id=b6eb7600c2ff5aa0f179464ee7428b99ff21818a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though a full compile and link test is performed by the script,
-this is done with a code fragment which does not actually meet any of
-the conditions required to cause the compiler to emit canary code when
-the -fstack-protector-strong variant is used. As no compile or link
-failure occurs in this case, a false positive is generated and a
-subsequent error is seen when the probe for pthreads is performed.
-
-The fix consists in patching the configure script to use an appropriate
-test program for the SSP support checks.
+This was causing unexpected HTTP requests by the setup.py script for
+python-protobuf. These "dependencies" aren't actually required for a successful
+build, and are not staged into the target install directory.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/efb/efbb4e940543894b8745bb405478a096c90a5ae2/
-  http://autobuild.buildroot.net/results/32d/32d6d984febad2dee1f0d31c5fa0aea823297096/
-  http://autobuild.buildroot.net/results/aa6/aa6e71c957fb6f07e7bded35a8e47be4dadd042c/
-  ...and many others.
+  http://autobuild.buildroot.org/results/e44/e44694f30e39266491a1040e284e504d6d37ef9e/
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2:
-  - Patch the configure script instead of force disable SSP detection
-    (Arnout Vandecappelle).
----
- ...se-appropriate-code-fragment-for-fstack-p.patch | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
+ .../0001-disable-unneeded-build-dependencies.patch |   37 ++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
 
-diff --git a/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch b/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
+diff --git a/package/python-protobuf/0001-disable-unneeded-build-dependencies.patch b/package/python-protobuf/0001-disable-unneeded-build-dependencies.patch
 new file mode 100644
-index 0000000..5eee141
+index 0000000..3f0eabd
 --- /dev/null
-+++ b/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
-@@ -0,0 +1,65 @@
-+From 83897ad507f8bb332000304b96d36c109c19bfad Mon Sep 17 00:00:00 2001
-+From: Rodrigo Rebello <rprebello@gmail.com>
-+Date: Wed, 11 Nov 2015 18:39:24 -0200
-+Subject: [PATCH 1/1] configure: use appropriate code fragment for
-+ -fstack-protector checks
-+Cc: qemu-trivial at nongnu.org
++++ b/package/python-protobuf/0001-disable-unneeded-build-dependencies.patch
+@@ -0,0 +1,37 @@
++From 7e7db7225e227905acabfa2149152ece21c93e70 Mon Sep 17 00:00:00 2001
++From: Steven Noonan <steven@uplinklabs.net>
++Date: Sun, 8 Nov 2015 09:03:00 -0800
++Subject: [PATCH] python-protobuf: don't require google-apputils
 +
-+The check for stack-protector support consisted in compiling and linking
-+the test program below (output by function write_c_skeleton()) with the
-+compiler flag -fstack-protector-strong first and then with
-+-fstack-protector-all if the first one failed to work:
++This dependency is totally superfluous for successfully building/running
++python-protobuf. It's only "required" at build time and is not staged into the
++install directory, but it isn't even really required for a successful build.
 +
-+  int main(void) { return 0; }
-+
-+This caused false positives when using certain toolchains in which the
-+compiler accepted -fstack-protector-strong but no support was provided
-+by the C library, since for this stack-protector variant the compiler
-+emits canary code only for functions that meet specific conditions
-+(local arrays, memory references to local variables, etc.) and the code
-+fragment under test included none of them (hence no stack protection
-+code generated, no link failure).
-+
-+This fix changes the test program used for -fstack-protector checks to
-+include a function that meets conditions which cause the compiler to
-+generate canary code in all variants.
-+
-+Upstream status: sent
-+
-+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 +---
-+ configure | 18 ++++++++++++++++++
-+ 1 file changed, 18 insertions(+)
++ python/setup.py | 2 --
++ 1 file changed, 2 deletions(-)
 +
-+diff --git a/configure b/configure
-+index cd219d8..a6f4101 100755
-+--- a/configure
-++++ b/configure
-+@@ -1471,6 +1471,24 @@ for flag in $gcc_flags; do
-+ done
-+ 
-+ if test "$stack_protector" != "no"; then
-++  cat > $TMPC << EOF
-++void foo(const char *c);
-++
-++void foo(const char *c)
-++{
-++    char arr[64], *p;
-++    for (p = arr; *c; c++, p++) {
-++        *p = *c;
-++    }
-++}
-++
-++int main(void)
-++{
-++    char c[] = "";
-++    foo(c);
-++    return 0;
-++}
-++EOF
-+   gcc_flags="-fstack-protector-strong -fstack-protector-all"
-+   sp_on=0
-+   for flag in $gcc_flags; do
++diff --git a/python/setup.py b/python/setup.py
++index 2450a77..db6f497 100755
++--- a/python/setup.py
+++++ b/python/setup.py
++@@ -160,7 +160,6 @@ if __name__ == '__main__':
++         packages = [ 'google' ],
++         namespace_packages = [ 'google' ],
++         test_suite = 'setup.MakeTestSuite',
++-        google_test_dir = "google/protobuf/internal",
++         # Must list modules explicitly so that we don't install tests.
++         py_modules = [
++           'google.protobuf.internal.api_implementation',
++@@ -189,7 +188,6 @@ if __name__ == '__main__':
++           'google.protobuf.text_format'],
++         cmdclass = { 'clean': clean, 'build_py': build_py },
++         install_requires = ['setuptools'],
++-        setup_requires = ['google-apputils'],
++         ext_modules = ext_module_list,
++         url = 'https://developers.google.com/protocol-buffers/',
++         maintainer = maintainer_email,
 +-- 
-+2.1.4
++2.6.2
 +
--- 
-2.1.4
