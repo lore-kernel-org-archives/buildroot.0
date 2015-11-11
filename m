@@ -1,32 +1,68 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 11 Nov 2015 14:13:16 +0100
-Subject: [Buildroot] Kernel patches in Buildroot
-In-Reply-To: <56432ED3.7070008@mind.be>
-References: <56432809.3000902@synopsys.com> <56432ED3.7070008@mind.be>
-Message-ID: <CAGm1_kuAhrYU=Dva6=rxy2m6jH-RDOwxdNz-CtWAphfFYJsY8w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Nov 2015 14:24:17 +0100
+Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
+ for target, fix a typo
+In-Reply-To: <201511111311.tABDB5aR013551@ms-omx03.plus.so-net.ne.jp>
+References: <20151110114211.365afbbc@free-electrons.com>
+ <201511111311.tABDB5aR013551@ms-omx03.plus.so-net.ne.jp>
+Message-ID: <20151111142417.76bf1bb7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 11, 2015 at 1:04 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 11-11-15 12:35, Joao Pinto wrote:
->> Hi,
->> We are designing the procedure to release our software stack based on buildroot.
->> Could you please tell what is the advised method for including a kernel patch
->> set in buildroot? I typically use BR2_LINUX_KERNEL_PATCH where I indicate each
->> patch file. Is there a easier way like using BR2_GLOBAL_PATCH_DIR for example?
->
->  I personally prefer to use a git repository that includes the patches. During
-> development, I make a local checkout specified with LINUX_OVERRIDE_SRCDIR; for
-> release, I point to the repository (often on gitlab) and specify a tag.
->
->  BR2_GLOBAL_PATCH_DIR and BR2_LINUX_KERNEL_PATCH are basically equivalent, you
-> can specify a directory with the latter as well.
+Hiroshi,
 
-You can also create a BSP repository containing patches, configs and
-so on and just instruct customers to use BR2_EXTERNAL feature
-(http://nightly.buildroot.org/manual.html#outside-br-custom).
+On Wed, 11 Nov 2015 22:11:04 +0900, Hiroshi Kawashima wrote:
 
-Yegor
+> 2015-11-11 12:36:54	xtensa		gc not ported
+
+Right, exclude this architecture.
+
+> 2015-11-10 23:30:21	powerpc		./libgauche-0.9.so: undefined reference to `getcontext'
+
+This probably only happens with certain C libraries only. Check if this
+build failure occurs with uClibc or glibc, probably only with uClibc.
+
+> 2015-11-10 23:11:45	arc		gc not ported
+
+Right, exclude this architecture as well.
+
+> 2015-11-10 22:20:21	powerpc		./libgauche-0.9.so: undefined reference to `getcontext'
+> 2015-11-10 17:30:19	arc		gc not ported
+> 2015-11-10 14:16:58	sh4		./libgauche-0.9.so: undefined reference to `getcontext'
+> 2015-11-10 08:46:51	powerpc		./libgauche-0.9.so: undefined reference to `getcontext'
+> 2015-11-10 04:28:00	arm		./libgauche-0.9.so: undefined reference to `AO_pt_lock'
+
+This is what happens when libatomic_ops is built before gauche. In this
+case, gauche tries to use the external libatomic_ops instead of its
+internal one.
+
+As I already suggested to fix this, you have two options:
+
+ (1) Understand why using the external libatomic_ops doesn't work and
+     fix it.
+
+ (2) Pass a configure option to gauche to force it to use its internal
+     version of libatomic_ops.
+
+I'd prefer (1), but we can live with (2) if (1) is too complicated.
+
+> 2015-11-10 00:00:05	arm		./include/private/../gc_pthread_redirects.h:37:22: fatal error: dlfcn.h: No such file or directory
+
+Two options here:
+
+ (1) boehm gc in gauche supports the GC_NO_DLOPEN like the official
+     boehm gc. In this case, pass -DGC_NO_DLOPEN when
+     BR2_STATIC_LIBS=y. See bdwgc.mk for an example.
+
+ (2) Make gauche depend on !BR2_STATIC_LIBS.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
