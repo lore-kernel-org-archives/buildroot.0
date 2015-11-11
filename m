@@ -1,29 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:17:09 +0100
-Subject: [Buildroot] [PATCH] trinity: bump to version 1.6
-In-Reply-To: <1447213574-10726-1-git-send-email-andrew.donnellan@au1.ibm.com>
-References: <1447213574-10726-1-git-send-email-andrew.donnellan@au1.ibm.com>
-Message-ID: <20151111151709.4f062476@free-electrons.com>
+Date: Wed, 11 Nov 2015 15:20:02 +0100
+Subject: [Buildroot] [PATCH 1/2] wpa_supplicant: add security patches
+In-Reply-To: <1447250946-15575-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1447250946-15575-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151111152002.0384f7b6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andrew Donnellan,
+Dear Gustavo Zacarias,
 
-On Wed, 11 Nov 2015 14:46:14 +1100, Andrew Donnellan wrote:
-> Bump trinity version to 1.6. Remove backported vt.c missing include patch
-> as it is now included in the upstream release.
+On Wed, 11 Nov 2015 11:09:05 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> CVE-2015-5310 - wpa_supplicant unauthorized WNM Sleep Mode GTK control
+> CVE-2015-5315 - wpa_supplicant: EAP-pwd missing last fragment length
+> validation
+> CVE-2015-5316 - EAP-pwd peer error path failure on unexpected Confirm
+> message
 > 
-> Signed-off-by: Andrew Donnellan <andrew.donnellan@au1.ibm.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  ...ssing-include-to-fix-building-with-uClibc.patch | 47 ----------------------
->  package/trinity/trinity.mk                         |  2 +-
->  2 files changed, 1 insertion(+), 48 deletions(-)
->  delete mode 100644 package/trinity/0001-vt.c-add-missing-include-to-fix-building-with-uClibc.patch
+>  ...Key-Data-in-WNM-Sleep-Mode-Response-frame.patch | 32 +++++++++++++
+>  ...-peer-Fix-last-fragment-length-validation.patch | 54 ++++++++++++++++++++++
+>  ...erver-Fix-last-fragment-length-validation.patch | 51 ++++++++++++++++++++
+>  ...r-Fix-error-path-for-unexpected-Confirm-m.patch | 34 ++++++++++++++
+>  4 files changed, 171 insertions(+)
+>  create mode 100644 package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
+>  create mode 100644 package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
+>  create mode 100644 package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
+>  create mode 100644 package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
 
-Applied to next, thanks.
+Both applied to master, thanks.
 
 Thomas
 -- 
