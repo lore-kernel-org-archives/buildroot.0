@@ -1,76 +1,80 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 Nov 2015 21:47:24 -0300
-Subject: [Buildroot] [PATCH 1/2] alsa-lib: bump to version 1.1.0
-Message-ID: <1447202845-19300-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 10 Nov 2015 21:47:25 -0300
+Subject: [Buildroot] [PATCH 2/2] alsa-utils: bump to version 1.1.0
+In-Reply-To: <1447202845-19300-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1447202845-19300-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1447202845-19300-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add BAT (Basic Audio Testing) tool option.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/alsa-lib/0001-add-missing-include.patch | 29 +++++++++++++++++++++++++
- package/alsa-lib/alsa-lib.hash                  |  2 +-
- package/alsa-lib/alsa-lib.mk                    |  2 +-
- 3 files changed, 31 insertions(+), 2 deletions(-)
- create mode 100644 package/alsa-lib/0001-add-missing-include.patch
+ package/alsa-utils/Config.in       |  4 ++++
+ package/alsa-utils/alsa-utils.hash |  2 +-
+ package/alsa-utils/alsa-utils.mk   | 10 +++++++++-
+ 3 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/alsa-lib/0001-add-missing-include.patch b/package/alsa-lib/0001-add-missing-include.patch
-new file mode 100644
-index 0000000..ac7dfa9
---- /dev/null
-+++ b/package/alsa-lib/0001-add-missing-include.patch
-@@ -0,0 +1,29 @@
-+Subject: [PATCH] topology: Add missing include sys/stat.h
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index 3a99279..a08743e 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -50,6 +50,10 @@ config BR2_PACKAGE_ALSA_UTILS_APLAY
+ 	select BR2_PACKAGE_ALSA_LIB_PCM
+ 	bool "aplay/arecord"
+ 
++config BR2_PACKAGE_ALSA_UTILS_BAT
++	select BR2_PACKAGE_FFTW
++	bool "bat"
 +
-+Necessary for proper definitions of S_IRUSR & co.  Otherwise it
-+results in compile errors with old glibc:
-+  parser.c: In function 'snd_tplg_build_file':
-+  parser.c:262: error: 'S_IRUSR' undeclared (first use in this function)
-+  parser.c:262: error: (Each undeclared identifier is reported only once
-+  parser.c:262: error: for each function it appears in.)
-+
-+Signed-off-by: Takashi Iwai <tiwai@suse.de>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: upstream
-+
-+diff --git a/src/topology/parser.c b/src/topology/parser.c
-+index 80a0ae0..18bb9c7 100644
-+--- a/src/topology/parser.c
-++++ b/src/topology/parser.c
-+@@ -16,6 +16,7 @@
-+            Liam Girdwood <liam.r.girdwood@linux.intel.com>
-+ */
-+ 
-++#include <sys/stat.h>
-+ #include "list.h"
-+ #include "tplg_local.h"
-+ 
-+-- 
-+1.7.11.7
-+
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 3e132c8..506416d 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
+ config BR2_PACKAGE_ALSA_UTILS_IECSET
+ 	select BR2_PACKAGE_ALSA_LIB_PCM
+ 	bool "iecset"
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
+index ba5061b..e6530eb 100644
+--- a/package/alsa-utils/alsa-utils.hash
++++ b/package/alsa-utils/alsa-utils.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	73043c35eb9636be0f4af6a240235c213f12a25feb1f04aeeac8cb7e30fcbdd0	alsa-lib-1.0.29.tar.bz2
-+sha256	dfde65d11e82b68f82e562ab6228c1fb7c78854345d3c57e2c68a9dd3dae1f15	alsa-lib-1.1.0.tar.bz2
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 3115433..ea2351c 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
+-sha256	5160058f3e14483ced5de919dd473f93932059454530a9b7ef97dcabd6833e9b	alsa-utils-1.0.29.tar.bz2
++sha256	3b1c3135b76e14532d3dd23fb15759ddd7daf9ffbc183f7a9a0a3a86374748f1	alsa-utils-1.1.0.tar.bz2
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 06bda9a..11b46c4 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ALSA_LIB_VERSION = 1.0.29
-+ALSA_LIB_VERSION = 1.1.0
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- ALSA_LIB_LICENSE = LGPLv2.1+
+-ALSA_UTILS_VERSION = 1.0.29
++ALSA_UTILS_VERSION = 1.1.0
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_LICENSE = GPLv2
+@@ -33,12 +33,20 @@ ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
+ ALSA_UTILS_CONF_OPTS += --disable-alsamixer --disable-alsatest
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
++ALSA_UTILS_CONF_OPTS += --enable-bat
++ALSA_UTILS_DEPENDENCIES += fftw
++else
++ALSA_UTILS_CONF_OPTS += --disable-bat
++endif
++
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACONF) += usr/sbin/alsaconf
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACTL) += usr/sbin/alsactl
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER) += usr/bin/alsamixer
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIDI) += usr/bin/amidi
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIXER) += usr/bin/amixer
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_APLAY) += usr/bin/aplay usr/bin/arecord
++ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_BAT) += usr/bin/bat
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_IECSET) += usr/bin/iecset
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ACONNECT) += usr/bin/aconnect
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAUCM) += usr/bin/alsaucm
 -- 
 2.4.10
