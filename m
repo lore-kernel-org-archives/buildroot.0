@@ -1,121 +1,159 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Nov 2015 00:31:02 +0100
-Subject: [Buildroot] [PATCH v1] valgrind: fix musl compile
-In-Reply-To: <56437591.1090806@openwide.fr>
-References: <1446317942-18726-1-git-send-email-ps.report@gmx.net>
- <56437591.1090806@openwide.fr>
-Message-ID: <5643CFB6.8030202@mind.be>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Wed, 11 Nov 2015 21:49:31 -0200
+Subject: [Buildroot] [PATCH v2 1/1] qemu: add patch to fix SSP support
+	detection
+In-Reply-To: <5643CF83.6000800@mind.be>
+References: <1447280301-9225-1-git-send-email-rprebello@gmail.com>
+ <5643CF83.6000800@mind.be>
+Message-ID: <CABLs7GXMFP-vm1tRx1zcQZAsJ+KXUV8JNqxLN+3qPhGbNDL50w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11-11-15 18:06, Romain Naour wrote:
-> Hi Peter,
-> 
-> Le 31/10/2015 19:59, Peter Seiderer a ?crit :
->> Add patch disabling glibc version check and adding some tweaks
->> for musl support (based on OpenWRT patch [1]).
+Arnout,
+
+2015-11-11 21:30 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
+> On 11-11-15 23:18, Rodrigo Rebello wrote:
+>> The QEMU configure script incorrectly assumes SSP is supported by the
+>> toolchain in some cases where the compiler accepts -fstack-protector-*
+>> flags but the C library does not provide the necessary __stack_chk_*()
+>> functions.
 >>
->> Fixes ([2]):
->>   checking the glibc version... unsupported version
->>   configure: error: Valgrind requires glibc version 2.2 or later
+>> Even though a full compile and link test is performed by the script,
+>> this is done with a code fragment which does not actually meet any of
+>> the conditions required to cause the compiler to emit canary code when
+>> the -fstack-protector-strong variant is used. As no compile or link
+>> failure occurs in this case, a false positive is generated and a
+>> subsequent error is seen when the probe for pthreads is performed.
 >>
->> [1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
->> [2] http://autobuild.buildroot.org/results/7b0/7b048ba58918f0a08498c61327fcf35a85a84837/build-end.log
+>> The fix consists in patching the configure script to use an appropriate
+>> test program for the SSP support checks.
 >>
->> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>> Fixes:
+>>
+>>   http://autobuild.buildroot.net/results/efb/efbb4e940543894b8745bb405478a096c90a5ae2/
+>>   http://autobuild.buildroot.net/results/32d/32d6d984febad2dee1f0d31c5fa0aea823297096/
+>>   http://autobuild.buildroot.net/results/aa6/aa6e71c957fb6f07e7bded35a8e47be4dadd042c/
+>>   ...and many others.
+>>
+>> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>  But let's wait a day or see for upstream to comment on the patch. I have one nit:
+>
 >> ---
->>  ...bc-detection-for-musl-plus-some-adjusteme.patch | 77 ++++++++++++++++++++++
->>  package/valgrind/valgrind.mk                       |  3 +
->>  2 files changed, 80 insertions(+)
->>  create mode 100644 package/valgrind/0003-Disable-glibc-detection-for-musl-plus-some-adjusteme.patch
+>> Changes v1 -> v2:
+>>   - Patch the configure script instead of force disable SSP detection
+>>     (Arnout Vandecappelle).
+>> ---
+>>  ...se-appropriate-code-fragment-for-fstack-p.patch | 65 ++++++++++++++++++++++
+>>  1 file changed, 65 insertions(+)
+>>  create mode 100644 package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
 >>
->> diff --git a/package/valgrind/0003-Disable-glibc-detection-for-musl-plus-some-adjusteme.patch b/package/valgrind/0003-Disable-glibc-detection-for-musl-plus-some-adjusteme.patch
+>> diff --git a/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch b/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
 >> new file mode 100644
->> index 0000000..0a2f660
+>> index 0000000..5eee141
 >> --- /dev/null
->> +++ b/package/valgrind/0003-Disable-glibc-detection-for-musl-plus-some-adjusteme.patch
->> @@ -0,0 +1,77 @@
->> +From fcb21d1480c17da6c59422d8eebfdf42d967f441 Mon Sep 17 00:00:00 2001
->> +From: Peter Seiderer <ps.report@gmx.net>
->> +Date: Sat, 31 Oct 2015 19:45:04 +0100
->> +Subject: [PATCH] Disable glibc detection for musl (plus some adjustements).
+>> +++ b/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
+>> @@ -0,0 +1,65 @@
+>> +From 83897ad507f8bb332000304b96d36c109c19bfad Mon Sep 17 00:00:00 2001
+>> +From: Rodrigo Rebello <rprebello@gmail.com>
+>> +Date: Wed, 11 Nov 2015 18:39:24 -0200
+>> +Subject: [PATCH 1/1] configure: use appropriate code fragment for
+>> + -fstack-protector checks
+>> +Cc: qemu-trivial at nongnu.org
 >> +
->> +Patch based on the OpenWrt patch for valgrind/musl, see [1].
+>> +The check for stack-protector support consisted in compiling and linking
+>> +the test program below (output by function write_c_skeleton()) with the
+>> +compiler flag -fstack-protector-strong first and then with
+>> +-fstack-protector-all if the first one failed to work:
 >> +
->> +[1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
+>> +  int main(void) { return 0; }
 >> +
->> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>> +This caused false positives when using certain toolchains in which the
+>> +compiler accepted -fstack-protector-strong but no support was provided
+>> +by the C library, since for this stack-protector variant the compiler
+>> +emits canary code only for functions that meet specific conditions
+>> +(local arrays, memory references to local variables, etc.) and the code
+>> +fragment under test included none of them (hence no stack protection
+>> +code generated, no link failure).
+>> +
+>> +This fix changes the test program used for -fstack-protector checks to
+>> +include a function that meets conditions which cause the compiler to
+>> +generate canary code in all variants.
+>> +
+>> +Upstream status: sent
+>> +
+>> +Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 >> +---
->> + configure.ac             | 5 +++--
->> + coregrind/vg_preloaded.c | 2 +-
->> + include/pub_tool_redir.h | 9 ++++++++-
->> + 3 files changed, 12 insertions(+), 4 deletions(-)
+>> + configure | 18 ++++++++++++++++++
+>> + 1 file changed, 18 insertions(+)
 >> +
->> +diff --git a/configure.ac b/configure.ac
->> +index 8ab7f9b..378ba9f 100644
->> +--- a/configure.ac
->> ++++ b/configure.ac
->> +@@ -1066,8 +1066,9 @@ case "${GLIBC_VERSION}" in
->> + 	;;
->> +      2.0|2.1|*)
->> + 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
->> +-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later,])
->> +-	AC_MSG_ERROR([Darwin libc, Bionic libc or Solaris libc])
->> ++	AC_MSG_WARN([Valgrind requires glibc version 2.2 or later,])
->> ++	AC_MSG_WARN([Darwin libc, Bionic libc or Solaris libc])
->> ++	GLIBC_VERSION=musl
-> 
-> This part of this patch break the glibc check for unsupported version 2.0 and 2.1.
-> 
-> If you want to upstream the patch, maybe you can check if GLIBC_VERSION is empty
-> and use the toolchain tuple instead ?
-> 
-> Something like:
-> 
-> # GLIBC_VERSION is empty if a musl libc is used, so use the toolchain tuple
-> # in this case.
-> if test x$GLIBC_VERSION = x; then
->     TUPLE=`$CC -dumpmachine | grep musl`
->     if test -n $TUPLE; then
+>> +diff --git a/configure b/configure
+>> +index cd219d8..a6f4101 100755
+>> +--- a/configure
+>> ++++ b/configure
+>> +@@ -1471,6 +1471,24 @@ for flag in $gcc_flags; do
+>> + done
+>> +
+>> + if test "$stack_protector" != "no"; then
+>> ++  cat > $TMPC << EOF
+>> ++void foo(const char *c);
+>
+>  This declaration is unnecessary.
+>
 
- if $CC -dumpmachine | grep -q musl; then
+Actually it is necessary, otherwise compiling the test code fails with:
 
-would be simpler.
+config-temp/qemu-conf.c:3:6: error: no previous prototype for ?foo?
+[-Werror=missing-prototypes]
+ void foo(const char *c)
+      ^
 
- Regards,
- Arnout
+Because in configure, line 410, -Wmissing-prototypes is added to
+QEMU_FLAGS (used in every compile test), and tests are run with
+-Werror by default, unless --disable-werror is passed to the configure
+script.
 
->         GLIBC_VERSION=musl
->     fi
-> fi
-> 
-> AC_MSG_CHECKING([the glibc version])
-> 
-> case "${GLIBC_VERSION}" in
-> ...
->     musl)
-> 	AC_MSG_RESULT(Musl)
-> 	;;
-> ...
-> 
-> Thoughts?
-> 
-> Best regards,
-> Romain Naour
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+>
+>  Regards,
+>  Arnout
+>
+>> ++
+>> ++void foo(const char *c)
+>> ++{
+>> ++    char arr[64], *p;
+>> ++    for (p = arr; *c; c++, p++) {
+>> ++        *p = *c;
+>> ++    }
+>> ++}
+>> ++
+>> ++int main(void)
+>> ++{
+>> ++    char c[] = "";
+>> ++    foo(c);
+>> ++    return 0;
+>> ++}
+>> ++EOF
+>> +   gcc_flags="-fstack-protector-strong -fstack-protector-all"
+>> +   sp_on=0
+>> +   for flag in $gcc_flags; do
+>> +--
+>> +2.1.4
+>> +
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Regards,
+Rodrigo
