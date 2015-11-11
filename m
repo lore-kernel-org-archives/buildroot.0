@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:02:24 +0100
-Subject: [Buildroot] [git commit branch/next] libnet: adjust license
-	information
-Message-ID: <20151111140244.130E7805F5@busybox.osuosl.org>
+Date: Wed, 11 Nov 2015 15:03:47 +0100
+Subject: [Buildroot] [PATCH 1/2] libnet:new package
+In-Reply-To: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
+References: <1447059812-26424-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <20151111150347.183bed23@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d33e77f742cc5f9706a6eb4eaeeaabe27315939
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Joris Lijssens,
 
-As noticed by Arnout, some files are under BSD-3c.
+On Mon,  9 Nov 2015 10:03:31 +0100, Joris Lijssens wrote:
+> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+> ---
+>  package/Config.in        |  1 +
+>  package/libnet/Config.in |  7 +++++++
+>  package/libnet/libnet.mk | 13 +++++++++++++
+>  3 files changed, 21 insertions(+)
+>  create mode 100644 package/libnet/Config.in
+>  create mode 100644 package/libnet/libnet.mk
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnet/libnet.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I've applied, however I had to add a hash file, since it is now
+mandatory, as noticed by Arnout.
 
-diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
-index d021f76..3b62a79 100644
---- a/package/libnet/libnet.mk
-+++ b/package/libnet/libnet.mk
-@@ -7,7 +7,7 @@
- LIBNET_VERSION = 1.1.6
- LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
- LIBNET_INSTALL_STAGING = YES
--LIBNET_LICENSE = BSD-2c
-+LIBNET_LICENSE = BSD-2c, BSD-3c
- LIBNET_LICENSE_FILES = doc/COPYING
- 
- $(eval $(autotools-package))
+Note that there is a newer version of libnet at
+https://github.com/sam-github/libnet (which seems to be the new
+upstream location for the project). It would be good to use it if
+possible.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
