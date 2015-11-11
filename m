@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Nov 2015 10:29:20 -0300
-Subject: [Buildroot] [PATCH] gvfs: bump to version 1.26.2
-Message-ID: <1447248560-5278-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 11 Nov 2015 10:33:52 -0300
+Subject: [Buildroot] [PATCH] libglib2: bump to version 2.46.2
+Message-ID: <1447248832-8579-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gvfs/gvfs.hash | 4 ++--
- package/gvfs/gvfs.mk   | 2 +-
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index cc9e4f6..19e820a 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 6032c30..7bce911 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.1.1.sha256sum
--sha256	2dadf986e464db1d7f007b178a5432b30ba93ef0cb31a2795156540d496dc06d	gvfs-1.26.1.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.2.sha256sum
-+sha256	695b6e0f3de5ac2cb4d188917edef3f13299328150a2413f1a7131d9b2d48d18	gvfs-1.26.2.tar.xz
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index e1da18f..48d2b50 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
+-# https://download.gnome.org/sources/glib/2.46/glib-2.46.1.sha256sum
+-sha256  5a1f03b952ebc3a7e9f612b8724f70898183e31503db329b4f15d07163c8fdfb  glib-2.46.1.tar.xz
++# https://download.gnome.org/sources/glib/2.46/glib-2.46.2.sha256sum
++sha256  5031722e37036719c1a09163cc6cf7c326e4c4f1f1e074b433c156862bd733db  glib-2.46.2.tar.xz
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 8f6ca83..c3c9cf8 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- GVFS_VERSION_MAJOR = 1.26
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).1.1
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
+ LIBGLIB2_VERSION_MAJOR = 2.46
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPLv2+
 -- 
 2.4.10
