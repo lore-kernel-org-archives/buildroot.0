@@ -1,42 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 15:11:41 +0100
-Subject: [Buildroot] [git commit branch/next] gvfs: bump to version 1.26.2
-Message-ID: <20151111141413.D2DF67FCBE@busybox.osuosl.org>
+Date: Wed, 11 Nov 2015 15:09:08 +0100
+Subject: [Buildroot] [git commit branch/next] alsa-utils: bump to version
+	1.1.0
+Message-ID: <20151111141413.B07B0804EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2db62b3164b6b14a7a83baecc51c355def70bdd8
+commit: http://git.buildroot.net/buildroot/commit/?id=c835db65fa9084690ce244a5401d5943d98274c5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Also add BAT (Basic Audio Testing) tool option.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gvfs/gvfs.hash |    4 ++--
- package/gvfs/gvfs.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/alsa-utils/Config.in       |    4 ++++
+ package/alsa-utils/alsa-utils.hash |    2 +-
+ package/alsa-utils/alsa-utils.mk   |   10 +++++++++-
+ 3 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index cc9e4f6..19e820a 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index 3a99279..a08743e 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -50,6 +50,10 @@ config BR2_PACKAGE_ALSA_UTILS_APLAY
+ 	select BR2_PACKAGE_ALSA_LIB_PCM
+ 	bool "aplay/arecord"
+ 
++config BR2_PACKAGE_ALSA_UTILS_BAT
++	select BR2_PACKAGE_FFTW
++	bool "bat"
++
+ config BR2_PACKAGE_ALSA_UTILS_IECSET
+ 	select BR2_PACKAGE_ALSA_LIB_PCM
+ 	bool "iecset"
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
+index ba5061b..e6530eb 100644
+--- a/package/alsa-utils/alsa-utils.hash
++++ b/package/alsa-utils/alsa-utils.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.1.1.sha256sum
--sha256	2dadf986e464db1d7f007b178a5432b30ba93ef0cb31a2795156540d496dc06d	gvfs-1.26.1.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.2.sha256sum
-+sha256	695b6e0f3de5ac2cb4d188917edef3f13299328150a2413f1a7131d9b2d48d18	gvfs-1.26.2.tar.xz
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index e1da18f..48d2b50 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256	5160058f3e14483ced5de919dd473f93932059454530a9b7ef97dcabd6833e9b	alsa-utils-1.0.29.tar.bz2
++sha256	3b1c3135b76e14532d3dd23fb15759ddd7daf9ffbc183f7a9a0a3a86374748f1	alsa-utils-1.1.0.tar.bz2
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 06bda9a..11b46c4 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GVFS_VERSION_MAJOR = 1.26
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).1.1
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
+-ALSA_UTILS_VERSION = 1.0.29
++ALSA_UTILS_VERSION = 1.1.0
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_LICENSE = GPLv2
+@@ -33,12 +33,20 @@ ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
+ ALSA_UTILS_CONF_OPTS += --disable-alsamixer --disable-alsatest
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
++ALSA_UTILS_CONF_OPTS += --enable-bat
++ALSA_UTILS_DEPENDENCIES += fftw
++else
++ALSA_UTILS_CONF_OPTS += --disable-bat
++endif
++
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACONF) += usr/sbin/alsaconf
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACTL) += usr/sbin/alsactl
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER) += usr/bin/alsamixer
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIDI) += usr/bin/amidi
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIXER) += usr/bin/amixer
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_APLAY) += usr/bin/aplay usr/bin/arecord
++ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_BAT) += usr/bin/bat
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_IECSET) += usr/bin/iecset
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ACONNECT) += usr/bin/aconnect
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAUCM) += usr/bin/alsaucm
