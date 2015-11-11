@@ -1,142 +1,77 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Nov 2015 11:09:06 -0300
-Subject: [Buildroot] [PATCH 2/2] hostapd: add security patches
-In-Reply-To: <1447250946-15575-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447250946-15575-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1447250946-15575-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Nov 2015 15:08:38 +0100
+Subject: [Buildroot] [git commit branch/next] alsa-lib: bump to version 1.1.0
+Message-ID: <20151111141413.A767281EC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-5314 - hostapd: EAP-pwd missing last fragment length validation
+commit: http://git.buildroot.net/buildroot/commit/?id=f98e865074a6c6f9cc38721b3320f95de5f2967b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-peer-Fix-last-fragment-length-validation.patch | 54 ++++++++++++++++++++++
- ...erver-Fix-last-fragment-length-validation.patch | 51 ++++++++++++++++++++
- 2 files changed, 105 insertions(+)
- create mode 100644 package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
- create mode 100644 package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
+ package/alsa-lib/0001-add-missing-include.patch |   29 +++++++++++++++++++++++
+ package/alsa-lib/alsa-lib.hash                  |    2 +-
+ package/alsa-lib/alsa-lib.mk                    |    2 +-
+ 3 files changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch b/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
+diff --git a/package/alsa-lib/0001-add-missing-include.patch b/package/alsa-lib/0001-add-missing-include.patch
 new file mode 100644
-index 0000000..82c2639
+index 0000000..ac7dfa9
 --- /dev/null
-+++ b/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
-@@ -0,0 +1,54 @@
-+From 8057821706784608b828e769ccefbced95591e50 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sun, 1 Nov 2015 18:18:17 +0200
-+Subject: [PATCH] EAP-pwd peer: Fix last fragment length validation
++++ b/package/alsa-lib/0001-add-missing-include.patch
+@@ -0,0 +1,29 @@
++Subject: [PATCH] topology: Add missing include sys/stat.h
 +
-+All but the last fragment had their length checked against the remaining
-+room in the reassembly buffer. This allowed a suitably constructed last
-+fragment frame to try to add extra data that would go beyond the buffer.
-+The length validation code in wpabuf_put_data() prevents an actual
-+buffer write overflow from occurring, but this results in process
-+termination. (CVE-2015-5315)
++Necessary for proper definitions of S_IRUSR & co.  Otherwise it
++results in compile errors with old glibc:
++  parser.c: In function 'snd_tplg_build_file':
++  parser.c:262: error: 'S_IRUSR' undeclared (first use in this function)
++  parser.c:262: error: (Each undeclared identifier is reported only once
++  parser.c:262: error: for each function it appears in.)
 +
-+Signed-off-by: Jouni Malinen <j@w1.fi>
++Signed-off-by: Takashi Iwai <tiwai@suse.de>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +---
-+ src/eap_peer/eap_pwd.c | 7 +++----
-+ 1 file changed, 3 insertions(+), 4 deletions(-)
++Status: upstream
 +
-+diff --git a/src/eap_peer/eap_pwd.c b/src/eap_peer/eap_pwd.c
-+index 1f78544..75ceef1 100644
-+--- a/src/eap_peer/eap_pwd.c
-++++ b/src/eap_peer/eap_pwd.c
-+@@ -903,7 +903,7 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
-+ 	/*
-+ 	 * buffer and ACK the fragment
-+ 	 */
-+-	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
-++	if (EAP_PWD_GET_MORE_BIT(lm_exch) || data->in_frag_pos) {
-+ 		data->in_frag_pos += len;
-+ 		if (data->in_frag_pos > wpabuf_size(data->inbuf)) {
-+ 			wpa_printf(MSG_INFO, "EAP-pwd: Buffer overflow attack "
-+@@ -916,7 +916,8 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
-+ 			return NULL;
-+ 		}
-+ 		wpabuf_put_data(data->inbuf, pos, len);
-+-
-++	}
-++	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
-+ 		resp = eap_msg_alloc(EAP_VENDOR_IETF, EAP_TYPE_PWD,
-+ 				     EAP_PWD_HDR_SIZE,
-+ 				     EAP_CODE_RESPONSE, eap_get_id(reqData));
-+@@ -930,10 +931,8 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
-+ 	 * we're buffering and this is the last fragment
-+ 	 */
-+ 	if (data->in_frag_pos) {
-+-		wpabuf_put_data(data->inbuf, pos, len);
-+ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Last fragment, %d bytes",
-+ 			   (int) len);
-+-		data->in_frag_pos += len;
-+ 		pos = wpabuf_head_u8(data->inbuf);
-+ 		len = data->in_frag_pos;
-+ 	}
++diff --git a/src/topology/parser.c b/src/topology/parser.c
++index 80a0ae0..18bb9c7 100644
++--- a/src/topology/parser.c
+++++ b/src/topology/parser.c
++@@ -16,6 +16,7 @@
++            Liam Girdwood <liam.r.girdwood@linux.intel.com>
++ */
++ 
+++#include <sys/stat.h>
++ #include "list.h"
++ #include "tplg_local.h"
++ 
 +-- 
-+1.9.1
++1.7.11.7
 +
-diff --git a/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch b/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
-new file mode 100644
-index 0000000..bfc4c74
---- /dev/null
-+++ b/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
-@@ -0,0 +1,51 @@
-+From bef802ece03f9ae9d52a21f0cf4f1bc2c5a1f8aa Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sun, 1 Nov 2015 18:24:16 +0200
-+Subject: [PATCH] EAP-pwd server: Fix last fragment length validation
-+
-+All but the last fragment had their length checked against the remaining
-+room in the reassembly buffer. This allowed a suitably constructed last
-+fragment frame to try to add extra data that would go beyond the buffer.
-+The length validation code in wpabuf_put_data() prevents an actual
-+buffer write overflow from occurring, but this results in process
-+termination. (CVE-2015-5314)
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+---
-+ src/eap_server/eap_server_pwd.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/eap_server/eap_server_pwd.c b/src/eap_server/eap_server_pwd.c
-+index cb83ff7..9f787ab 100644
-+--- a/src/eap_server/eap_server_pwd.c
-++++ b/src/eap_server/eap_server_pwd.c
-+@@ -970,7 +970,7 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
-+ 	/*
-+ 	 * the first and all intermediate fragments have the M bit set
-+ 	 */
-+-	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
-++	if (EAP_PWD_GET_MORE_BIT(lm_exch) || data->in_frag_pos) {
-+ 		if ((data->in_frag_pos + len) > wpabuf_size(data->inbuf)) {
-+ 			wpa_printf(MSG_DEBUG, "EAP-pwd: Buffer overflow "
-+ 				   "attack detected! (%d+%d > %d)",
-+@@ -981,6 +981,8 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
-+ 		}
-+ 		wpabuf_put_data(data->inbuf, pos, len);
-+ 		data->in_frag_pos += len;
-++	}
-++	if (EAP_PWD_GET_MORE_BIT(lm_exch)) {
-+ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Got a %d byte fragment",
-+ 			   (int) len);
-+ 		return;
-+@@ -990,8 +992,6 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
-+ 	 * buffering fragments so that's how we know it's the last)
-+ 	 */
-+ 	if (data->in_frag_pos) {
-+-		wpabuf_put_data(data->inbuf, pos, len);
-+-		data->in_frag_pos += len;
-+ 		pos = wpabuf_head_u8(data->inbuf);
-+ 		len = data->in_frag_pos;
-+ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Last fragment, %d bytes",
-+-- 
-+1.9.1
-+
--- 
-2.4.10
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 3e132c8..506416d 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	73043c35eb9636be0f4af6a240235c213f12a25feb1f04aeeac8cb7e30fcbdd0	alsa-lib-1.0.29.tar.bz2
++sha256	dfde65d11e82b68f82e562ab6228c1fb7c78854345d3c57e2c68a9dd3dae1f15	alsa-lib-1.1.0.tar.bz2
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 3115433..ea2351c 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ALSA_LIB_VERSION = 1.0.29
++ALSA_LIB_VERSION = 1.1.0
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_LICENSE = LGPLv2.1+
