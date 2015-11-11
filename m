@@ -1,65 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Nov 2015 14:59:10 +0100
-Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
- for target, fix a typo
-In-Reply-To: <5642598B.2000509@mind.be>
-References: <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
- <5642598B.2000509@mind.be>
-Message-ID: <20151111145910.795b029f@free-electrons.com>
+Date: Wed, 11 Nov 2015 14:59:48 +0100
+Subject: [Buildroot] [git commit branch/next] netsniff-ng: new package
+Message-ID: <20151111140001.CA21881E7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Hiroshi,
+commit: http://git.buildroot.net/buildroot/commit/?id=500d287b07190c9c1a1284bc91b37d07e1a835a3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 10 Nov 2015 21:54:35 +0100, Arnout Vandecappelle wrote:
+[Thomas:
+ - add comment in Config.in to explain why this package depends on
+   glibc, and specifically why it doesn't build for uClibc and musl.
+ - add hash file.
+ - add 'COPYING' to the list of LICENSE_FILES
+ - add themissing <pkg>_DEPENDENCIES variable in the .mk file, to make
+   sure dependencies are built before netsniff-ng.
+ - add comment in the .mk file explain why we're using the
+   generic-package infrastructure even if the build procedure is
+   essentially ./configure, make, make install.
+ - fix indentation in NETSNIFF_NG_CONFIGURE_CMDS.]
 
-> > +define GAUCHE_REMOVE_UNNEEDED
-> > +	for i in gauche-config gauche-install gauche-package ; do \
-> > +		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
-> > +		rm -f $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/$(GNU_TARGET_NAME)/$$i ; \
-> > +	done
-> > +	for i in gencomp genstub precomp ; do \
-> > +		rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/lib/$$i ; \
-> > +	done
-> > +	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/aclocal.m4
-> > +	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/template.*
-> > +	rm -fr $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/include
-> 
->  This cleanup is quite complicated and I wonder if it is really worth it. For
-> space, the impact is really small compared to the 3MB of libs and .scm files
-> installed by the package. Even the ones in /usr/bin I'm not sure if it's worth
-> to remove them.
-> 
->  Thomas, what do you think?
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                    |    1 +
+ package/netsniff-ng/Config.in        |   24 ++++++++++++++++++++++++
+ package/netsniff-ng/netsniff-ng.hash |    2 ++
+ package/netsniff-ng/netsniff-ng.mk   |   34 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 61 insertions(+), 0 deletions(-)
 
-I also think it is quite noisy, at least the way it is written. However
-I like to have on the target only what's needed.
-
-Hiroshi, do we really need to be so fine-grained when removing things?
-
-Maybe we could do:
-
-GAUCHE_FILES_TO_CLEANUP = \
-	$(foreach p,gauche-config gauche-install gauche-package,\
-		bin/$(p) lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/$(GNU_TARGET_NAME)/$(p)) \
-	$(foreach p,gencomp genstub precomp,\
-		share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/lib/$(p)) \
-	share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/aclocal.m4 \
-	share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/template.* \
-	lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/include
-
-And then use that variable:
-
-	$(foreach p,$(GAUCHE_FILES_TO_CLEANUP),\
-		$(RM) -rf $(TARGET_DIR)/usr/$(p)$(sep))
-
-But it's not significantly better :/
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index e0b42c0..0a80afb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -88,6 +88,7 @@ endif
+ 	source "package/mcelog/Config.in"
+ 	source "package/memstat/Config.in"
+ 	source "package/netperf/Config.in"
++	source "package/netsniff-ng/Config.in"
+ 	source "package/oprofile/Config.in"
+ 	source "package/pax-utils/Config.in"
+ 	source "package/pv/Config.in"
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+new file mode 100644
+index 0000000..8c48f39
+--- /dev/null
++++ b/package/netsniff-ng/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_NETSNIFF_NG
++	bool "netsniff-ng"
++	select BR2_PACKAGE_LIBNL
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_LIBCLI
++	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
++	select BR2_PACKAGE_LIBURCU
++	select BR2_PACKAGE_LIBNET
++	# Build with uClibc fails due to missing ceill()
++	# Build with musl fails due to various header issues
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu
++	help
++	  netsniff-ng is a free, performant Linux network analyzer and
++	  networking toolkit. If you will, the Swiss army knife for
++	  network packets.
++
++comment "netsniff-ng needs an (e)glibc toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854
++
++comment "netsniff-ng needs a toolchain not affected by GCC bug 58854"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+new file mode 100644
+index 0000000..935003c
+--- /dev/null
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 f0008edd31df93822b7befe50cfb3740ce6fd35b1013ae3a73b2a389a41022e4 netsniff-ng-v0.5.9.tar.gz
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+new file mode 100644
+index 0000000..4fed88c
+--- /dev/null
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# netsniff-ng
++#
++################################################################################
++
++NETSNIFF_NG_VERSION = v0.5.9
++NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
++NETSNIFF_NG_LICENSE = GPLv2
++NETSNIFF_NG_LICENSE_FILES = README COPYING
++NETSNIFF_NG_DEPENDENCIES = \
++	libnl libpcap libcli libnetfilter_conntrack \
++	liburcu libnet
++
++# hand-written configure script and makefile
++define NETSNIFF_NG_CONFIGURE_CMDS
++	(cd $(@D); \
++		$(TARGET_CONFIGURE_ARGS) \
++		$(TARGET_CONFIGURE_OPTS) \
++		./configure \
++		--prefix=$(TARGET_DIR)/usr \
++	)
++endef
++
++define NETSNIFF_NG_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define NETSNIFF_NG_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc install -C $(@D)
++endef
++
++$(eval $(generic-package))
