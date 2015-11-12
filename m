@@ -1,159 +1,346 @@
 From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Wed, 11 Nov 2015 21:49:31 -0200
-Subject: [Buildroot] [PATCH v2 1/1] qemu: add patch to fix SSP support
-	detection
-In-Reply-To: <5643CF83.6000800@mind.be>
-References: <1447280301-9225-1-git-send-email-rprebello@gmail.com>
- <5643CF83.6000800@mind.be>
-Message-ID: <CABLs7GXMFP-vm1tRx1zcQZAsJ+KXUV8JNqxLN+3qPhGbNDL50w@mail.gmail.com>
+Date: Thu, 12 Nov 2015 00:42:43 -0200
+Subject: [Buildroot] [PATCH 1/1] ltris: add upstream patch to fix buld with
+	GCC 5
+Message-ID: <1447296163-26732-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+LTris was failing to build with GCC 5 due to a change in semantics
+regarding inline functions compared to previous GCC versions.
 
-2015-11-11 21:30 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
-> On 11-11-15 23:18, Rodrigo Rebello wrote:
->> The QEMU configure script incorrectly assumes SSP is supported by the
->> toolchain in some cases where the compiler accepts -fstack-protector-*
->> flags but the C library does not provide the necessary __stack_chk_*()
->> functions.
->>
->> Even though a full compile and link test is performed by the script,
->> this is done with a code fragment which does not actually meet any of
->> the conditions required to cause the compiler to emit canary code when
->> the -fstack-protector-strong variant is used. As no compile or link
->> failure occurs in this case, a false positive is generated and a
->> subsequent error is seen when the probe for pthreads is performed.
->>
->> The fix consists in patching the configure script to use an appropriate
->> test program for the SSP support checks.
->>
->> Fixes:
->>
->>   http://autobuild.buildroot.net/results/efb/efbb4e940543894b8745bb405478a096c90a5ae2/
->>   http://autobuild.buildroot.net/results/32d/32d6d984febad2dee1f0d31c5fa0aea823297096/
->>   http://autobuild.buildroot.net/results/aa6/aa6e71c957fb6f07e7bded35a8e47be4dadd042c/
->>   ...and many others.
->>
->> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
->
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->  But let's wait a day or see for upstream to comment on the patch. I have one nit:
->
->> ---
->> Changes v1 -> v2:
->>   - Patch the configure script instead of force disable SSP detection
->>     (Arnout Vandecappelle).
->> ---
->>  ...se-appropriate-code-fragment-for-fstack-p.patch | 65 ++++++++++++++++++++++
->>  1 file changed, 65 insertions(+)
->>  create mode 100644 package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
->>
->> diff --git a/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch b/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
->> new file mode 100644
->> index 0000000..5eee141
->> --- /dev/null
->> +++ b/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
->> @@ -0,0 +1,65 @@
->> +From 83897ad507f8bb332000304b96d36c109c19bfad Mon Sep 17 00:00:00 2001
->> +From: Rodrigo Rebello <rprebello@gmail.com>
->> +Date: Wed, 11 Nov 2015 18:39:24 -0200
->> +Subject: [PATCH 1/1] configure: use appropriate code fragment for
->> + -fstack-protector checks
->> +Cc: qemu-trivial at nongnu.org
->> +
->> +The check for stack-protector support consisted in compiling and linking
->> +the test program below (output by function write_c_skeleton()) with the
->> +compiler flag -fstack-protector-strong first and then with
->> +-fstack-protector-all if the first one failed to work:
->> +
->> +  int main(void) { return 0; }
->> +
->> +This caused false positives when using certain toolchains in which the
->> +compiler accepted -fstack-protector-strong but no support was provided
->> +by the C library, since for this stack-protector variant the compiler
->> +emits canary code only for functions that meet specific conditions
->> +(local arrays, memory references to local variables, etc.) and the code
->> +fragment under test included none of them (hence no stack protection
->> +code generated, no link failure).
->> +
->> +This fix changes the test program used for -fstack-protector checks to
->> +include a function that meets conditions which cause the compiler to
->> +generate canary code in all variants.
->> +
->> +Upstream status: sent
->> +
->> +Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
->> +---
->> + configure | 18 ++++++++++++++++++
->> + 1 file changed, 18 insertions(+)
->> +
->> +diff --git a/configure b/configure
->> +index cd219d8..a6f4101 100755
->> +--- a/configure
->> ++++ b/configure
->> +@@ -1471,6 +1471,24 @@ for flag in $gcc_flags; do
->> + done
->> +
->> + if test "$stack_protector" != "no"; then
->> ++  cat > $TMPC << EOF
->> ++void foo(const char *c);
->
->  This declaration is unnecessary.
->
+The issue has already been solved upstream, but a new version hasn't
+been released yet.
 
-Actually it is necessary, otherwise compiling the test code fails with:
+Fixes:
 
-config-temp/qemu-conf.c:3:6: error: no previous prototype for ?foo?
-[-Werror=missing-prototypes]
- void foo(const char *c)
-      ^
+  http://autobuild.buildroot.net/results/d5e/d5e832c3aa7ee7af128e2ba1835fe7d5d69d7ce8/
+  http://autobuild.buildroot.net/results/e73/e7306093e0ae1a1dcb69f015b10d56e4c95e689e/
+  http://autobuild.buildroot.net/results/781/781e891e8a59dab29b0ec37d43cd03107f6cce5b/
+  ...
 
-Because in configure, line 410, -Wmissing-prototypes is added to
-QEMU_FLAGS (used in every compile test), and tests are run with
--Werror by default, unless --disable-werror is passed to the configure
-script.
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ package/ltris/0001-fix-gcc5-build.patch | 308 ++++++++++++++++++++++++++++++++
+ 1 file changed, 308 insertions(+)
+ create mode 100644 package/ltris/0001-fix-gcc5-build.patch
 
->
->  Regards,
->  Arnout
->
->> ++
->> ++void foo(const char *c)
->> ++{
->> ++    char arr[64], *p;
->> ++    for (p = arr; *c; c++, p++) {
->> ++        *p = *c;
->> ++    }
->> ++}
->> ++
->> ++int main(void)
->> ++{
->> ++    char c[] = "";
->> ++    foo(c);
->> ++    return 0;
->> ++}
->> ++EOF
->> +   gcc_flags="-fstack-protector-strong -fstack-protector-all"
->> +   sp_on=0
->> +   for flag in $gcc_flags; do
->> +--
->> +2.1.4
->> +
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
-Regards,
-Rodrigo
+diff --git a/package/ltris/0001-fix-gcc5-build.patch b/package/ltris/0001-fix-gcc5-build.patch
+new file mode 100644
+index 0000000..66d0fa3
+--- /dev/null
++++ b/package/ltris/0001-fix-gcc5-build.patch
+@@ -0,0 +1,308 @@
++Upstream patch to fix build with GCC 5
++
++Obtained from the LGames Subversion repository with the following command:
++svn diff -c164 svn://svn.code.sf.net/p/lgames/code/trunk/ltris
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++
++Revision log message:
++------------------------------------------------------------------------
++r164 | kulkanie | 2015-05-16 05:48:02 -0300 (Sat, 16 May 2015) | 1 line
++
++removed all inline keywords
++------------------------------------------------------------------------
++
++Line added to LTris ChangeLog concerning the change:
++- removed all inline keywords to work with GCC 5 (2015/05/16 MS)
++
++Author: Michael Speck
++
++Index: src/sdl.c
++===================================================================
++--- a/src/sdl.c	(revision 163)
+++++ b/src/sdl.c	(revision 164)
++@@ -244,7 +244,7 @@
++ #endif
++ 
++ /* return full path of bitmap */
++-inline void get_full_bmp_path( char *full_path, char *file_name )
+++void get_full_bmp_path( char *full_path, char *file_name )
++ {
++     sprintf(full_path,  "%s/gfx/%s", SRC_DIR, file_name );
++ }
++@@ -330,7 +330,7 @@
++ /*
++     lock surface
++ */
++-inline void lock_surf(SDL_Surface *sur)
+++void lock_surf(SDL_Surface *sur)
++ {
++     if (SDL_MUSTLOCK(sur))
++         SDL_LockSurface(sur);
++@@ -339,7 +339,7 @@
++ /*
++     unlock surface
++ */
++-inline void unlock_surf(SDL_Surface *sur)
+++void unlock_surf(SDL_Surface *sur)
++ {
++     if (SDL_MUSTLOCK(sur))
++         SDL_UnlockSurface(sur);
++@@ -666,7 +666,7 @@
++ /*
++     lock font surface
++ */
++-inline void lock_font(Font *fnt)
+++void lock_font(Font *fnt)
++ {
++     if (SDL_MUSTLOCK(fnt->pic))
++         SDL_LockSurface(fnt->pic);
++@@ -675,7 +675,7 @@
++ /*
++     unlock font surface
++ */
++-inline void unlock_font(Font *fnt)
+++void unlock_font(Font *fnt)
++ {
++     if (SDL_MUSTLOCK(fnt->pic))
++         SDL_UnlockSurface(fnt->pic);
++@@ -905,7 +905,7 @@
++ /*
++     update rectangle (0,0,0,0)->fullscreen
++ */
++-inline void refresh_screen(int x, int y, int w, int h)
+++void refresh_screen(int x, int y, int w, int h)
++ {
++     SDL_UpdateRect(sdl.screen, x, y, w, h);
++ }
++@@ -1055,7 +1055,7 @@
++ /*
++     lock surface
++ */
++-inline void lock_screen()
+++void lock_screen()
++ {
++     if (SDL_MUSTLOCK(sdl.screen))
++         SDL_LockSurface(sdl.screen);
++@@ -1064,7 +1064,7 @@
++ /*
++     unlock surface
++ */
++-inline void unlock_screen()
+++void unlock_screen()
++ {
++     if (SDL_MUSTLOCK(sdl.screen))
++         SDL_UnlockSurface(sdl.screen);
++@@ -1073,7 +1073,7 @@
++ /*
++     flip hardware screens (double buffer)
++ */
++-inline void flip_screen()
+++void flip_screen()
++ {
++     SDL_Flip(sdl.screen);
++ }
++@@ -1132,7 +1132,7 @@
++ /*
++     get milliseconds since last call
++ */
++-inline int get_time()
+++int get_time()
++ {
++     int ms;
++     cur_time = SDL_GetTicks();
++@@ -1148,7 +1148,7 @@
++ /*
++     reset timer
++ */
++-inline void reset_timer()
+++void reset_timer()
++ {
++     last_time = SDL_GetTicks();
++ }
++Index: src/sdl.h
++===================================================================
++--- a/src/sdl.h	(revision 163)
+++++ b/src/sdl.h	(revision 164)
++@@ -41,8 +41,8 @@
++ SDL_Surface* load_surf(char *fname, int f);
++ SDL_Surface* create_surf(int w, int h, int f);
++ void free_surf( SDL_Surface **surf );
++-inline void lock_surf(SDL_Surface *sur);
++-inline void unlock_surf(SDL_Surface *sur);
+++void lock_surf(SDL_Surface *sur);
+++void unlock_surf(SDL_Surface *sur);
++ void blit_surf(void);
++ void alpha_blit_surf(int alpha);
++ void fill_surf(int c);
++@@ -86,8 +86,8 @@
++ Font* load_fixed_font(char *fname, int off, int len, int w);
++ void free_font(Font **sfnt);
++ int  write_text(Font *sfnt, SDL_Surface *dest, int x, int y, char *str, int alpha);
++-inline void lock_font(Font *sfnt);
++-inline void unlock_font(Font *sfnt);
+++void lock_font(Font *sfnt);
+++void unlock_font(Font *sfnt);
++ SDL_Rect last_write_rect(Font *fnt);
++ int  text_width(Font *fnt, char *str);
++ 
++@@ -132,14 +132,14 @@
++ char** get_mode_names( int *count );
++ int  set_video_mode( Video_Mode mode );
++ void hardware_cap();
++-inline void refresh_screen( int x, int y, int w, int h );
+++void refresh_screen( int x, int y, int w, int h );
++ void refresh_rects();
++ void add_refresh_rect(int x, int y, int w, int h);
++ int  wait_for_key();
++ void wait_for_click();
++-inline void lock_screen();
++-inline void unlock_screen();
++-inline void flip_screen();
+++void lock_screen();
+++void unlock_screen();
+++void flip_screen();
++ void fade_screen( int type, int ms );
++ void take_screenshot( int i );
++ 
++@@ -148,8 +148,8 @@
++ SDL_Cursor* create_cursor( int width, int height, int hot_x, int hot_y, char *source );
++ 
++ /* timer */
++-inline int get_time();
++-inline void reset_timer();
+++int get_time();
+++void reset_timer();
++ 
++ #ifdef __cplusplus
++ };
++Index: src/tools.c
++===================================================================
++--- a/src/tools.c	(revision 163)
+++++ b/src/tools.c	(revision 164)
++@@ -23,7 +23,7 @@
++ #include "ltris.h"
++ 
++ /* compares to strings and returns true if their first strlen(str1) chars are equal */
++-inline int strequal( char *str1, char *str2 )
+++int strequal( char *str1, char *str2 )
++ {
++     if ( strlen( str1 ) != strlen( str2 ) ) return 0;
++     return ( !strncmp( str1, str2, strlen( str1 ) ) );
++@@ -30,7 +30,7 @@
++ }
++ 
++ /* set delay to ms milliseconds */
++-inline void delay_set( Delay *delay, int ms )
+++void delay_set( Delay *delay, int ms )
++ {
++     delay->limit = ms;
++     delay->cur = 0;
++@@ -37,13 +37,13 @@
++ }
++ 
++ /* reset delay ( cur = 0 )*/
++-inline void delay_reset( Delay *delay )
+++void delay_reset( Delay *delay )
++ {
++     delay->cur = 0;
++ }
++ 
++ /* check if times out and reset */
++-inline int delay_timed_out( Delay *delay, int ms )
+++int delay_timed_out( Delay *delay, int ms )
++ {
++     delay->cur += ms;
++     if ( delay->cur >= delay->limit ) {
++@@ -56,12 +56,12 @@
++ }
++ 
++ /* set timer so that we have a time out next call of delay_timed_out() */
++-inline void delay_force_time_out( Delay *delay )
+++void delay_force_time_out( Delay *delay )
++ {
++     delay->cur = delay->limit;
++ }
++ 
++-inline void goto_tile( int *x, int *y, int d )
+++void goto_tile( int *x, int *y, int d )
++ {
++     /*  0 -up, clockwise, 5 - left up */
++     switch ( d ) {
++@@ -326,24 +326,24 @@
++ the target value until reached when counter_update() is called.
++ ====================================================================
++ */
++-inline void counter_set( Counter *counter, double value )
+++void counter_set( Counter *counter, double value )
++ {
++     counter->value = value;
++     counter->approach = value;
++ }
++-inline void counter_add( Counter *counter, double add )
+++void counter_add( Counter *counter, double add )
++ {
++     counter->value += add;
++ }
++-inline double counter_get_approach( Counter counter )
+++double counter_get_approach( Counter counter )
++ {
++     return counter.approach;
++ }
++-inline double counter_get( Counter counter )
+++double counter_get( Counter counter )
++ {
++     return counter.value;
++ }
++-inline void counter_update( Counter *counter, int ms )
+++void counter_update( Counter *counter, int ms )
++ {
++     double change;
++     if ( counter->approach == counter->value ) return;
++Index: src/bowl.c
++===================================================================
++--- a/src/bowl.c	(revision 163)
+++++ b/src/bowl.c	(revision 164)
++@@ -333,7 +333,7 @@
++ Set a tile contents and pixel contents.
++ ====================================================================
++ */
++-inline void bowl_set_tile( Bowl *bowl, int x, int y, int tile_id )
+++void bowl_set_tile( Bowl *bowl, int x, int y, int tile_id )
++ {
++     int i, j = y * bowl->block_size;
++     bowl->contents[x][y] = tile_id;
++Index: src/tools.h
++===================================================================
++--- a/src/tools.h	(revision 163)
+++++ b/src/tools.h	(revision 164)
++@@ -33,7 +33,7 @@
++ #define VEC_DIST( vec1, vec2 ) ( sqrt( ( vec1.x - vec2.x ) * ( vec1.x - vec2.x ) + ( vec1.y - vec2.y ) * ( vec1.y - vec2.y ) ) )
++ 
++ /* compares to strings and returns true if their first strlen(str1) chars are equal */
++-inline int strequal( char *str1, char *str2 );
+++int strequal( char *str1, char *str2 );
++ 
++ /* delete lines */
++ void delete_lines( char **lines, int line_number );
++@@ -45,16 +45,16 @@
++ } Delay;
++ 
++ /* set delay to ms milliseconds */
++-inline void delay_set( Delay *delay, int ms );
+++void delay_set( Delay *delay, int ms );
++ 
++ /* reset delay ( cur = 0 )*/
++-inline void delay_reset( Delay *delay );
+++void delay_reset( Delay *delay );
++ 
++ /* check if time's out ( add ms milliseconds )and reset */
++-inline int delay_timed_out( Delay *delay, int ms );
+++int delay_timed_out( Delay *delay, int ms );
++ 
++ /* set timer so that we have a time out next call of delay_timed_out() */
++-inline void delay_force_time_out( Delay *delay );
+++void delay_force_time_out( Delay *delay );
++ 
++ /* return distance betwteen to map positions */
++ int get_dist( int x1, int y1, int x2, int y2 );
+-- 
+2.1.4
