@@ -1,33 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2015 22:23:56 +0100
-Subject: [Buildroot] [PATCH 1/1] ltris: add upstream patch to fix buld
-	with GCC 5
-In-Reply-To: <1447296163-26732-1-git-send-email-rprebello@gmail.com> (Rodrigo
- Rebello's message of "Thu, 12 Nov 2015 00:42:43 -0200")
-References: <1447296163-26732-1-git-send-email-rprebello@gmail.com>
-Message-ID: <87bnayoqs3.fsf@dell.be.48ers.dk>
+Date: Thu, 12 Nov 2015 22:41:38 +0100
+Subject: [Buildroot] [PATCH] polarssl: security bump to version 1.2.18
+In-Reply-To: <1447356646-19912-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 12 Nov 2015 16:30:46 -0300")
+References: <1447356646-19912-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877flmopyl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rodrigo" == Rodrigo Rebello <rprebello@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > LTris was failing to build with GCC 5 due to a change in semantics
- > regarding inline functions compared to previous GCC versions.
+ > Fixes a potential heap corruption on Windows when
+ > mbedtls_x509_crt_parse_path() is passed a path longer than 2GB. This
+ > cannot be triggered remotely. Found by Guido Vranken, Intelworks.
 
- > The issue has already been solved upstream, but a new version hasn't
- > been released yet.
+ > Fixes a potential buffer overflow in some asn1_write_xxx() functions.
+ > This cannot be triggered remotely unless you create X.509 certificates
+ > based on untrusted input or write keys of untrusted origin. Found by
+ > Guido Vranken, Intelworks.
 
- > Fixes:
+ > The X509 max_pathlen constraint was not enforced on intermediate
+ > certificates. Found by Nicholas Wilson, and fix and tests provided by
+ > Janos Follath.
 
- >   http://autobuild.buildroot.net/results/d5e/d5e832c3aa7ee7af128e2ba1835fe7d5d69d7ce8/
- >   http://autobuild.buildroot.net/results/e73/e7306093e0ae1a1dcb69f015b10d56e4c95e689e/
- >   http://autobuild.buildroot.net/results/781/781e891e8a59dab29b0ec37d43cd03107f6cce5b/
- >   ...
-
- > Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
