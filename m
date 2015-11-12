@@ -1,41 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Nov 2015 23:14:28 +0100
-Subject: [Buildroot] [PATCH] libsoup: bump to version 2.52.2
-In-Reply-To: <87k2pmor3z.fsf@dell.be.48ers.dk>
-References: <1447248869-8916-1-git-send-email-gustavo@zacarias.com.ar>
- <20151111151650.2639d6c7@free-electrons.com>
- <87k2pmor3z.fsf@dell.be.48ers.dk>
-Message-ID: <20151112231428.6804dc53@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 12 Nov 2015 23:33:05 +0100
+Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime: bump u-boot to
+	2015.10
+Message-ID: <1447367585-21643-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ configs/olimex_a20_olinuxino_lime_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 12 Nov 2015 22:16:48 +0100, Peter Korsgaard wrote:
-
->  > Dear Gustavo Zacarias,
->  > On Wed, 11 Nov 2015 10:34:29 -0300, Gustavo Zacarias wrote:
->  >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->  >> ---
->  >> package/libsoup/libsoup.hash | 4 ++--
->  >> package/libsoup/libsoup.mk   | 2 +-
->  >> 2 files changed, 3 insertions(+), 3 deletions(-)
-> 
->  > Applied, thanks.
-> 
-> Don't forget to specify that these are applied to the next branch, not
-> to master.
-
-Yes, indeed. I noticed this after sending this batch of "Applied,
-thanks", and did (hopefully) the right thing for the other patches.
-
-Thanks,
-
-Thomas
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 53286b4..e30a070 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
