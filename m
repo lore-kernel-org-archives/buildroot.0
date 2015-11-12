@@ -1,34 +1,347 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2015 22:41:38 +0100
-Subject: [Buildroot] [PATCH] polarssl: security bump to version 1.2.18
-In-Reply-To: <1447356646-19912-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 12 Nov 2015 16:30:46 -0300")
-References: <1447356646-19912-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877flmopyl.fsf@dell.be.48ers.dk>
+Date: Thu, 12 Nov 2015 22:22:46 +0100
+Subject: [Buildroot] [git commit] ltris: add upstream patch to fix buld with
+	GCC 5
+Message-ID: <20151112214155.7294181EFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3120db1508e02eca607c28b9abb6d97984ba7be0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes a potential heap corruption on Windows when
- > mbedtls_x509_crt_parse_path() is passed a path longer than 2GB. This
- > cannot be triggered remotely. Found by Guido Vranken, Intelworks.
+LTris was failing to build with GCC 5 due to a change in semantics
+regarding inline functions compared to previous GCC versions.
 
- > Fixes a potential buffer overflow in some asn1_write_xxx() functions.
- > This cannot be triggered remotely unless you create X.509 certificates
- > based on untrusted input or write keys of untrusted origin. Found by
- > Guido Vranken, Intelworks.
+The issue has already been solved upstream, but a new version hasn't
+been released yet.
 
- > The X509 max_pathlen constraint was not enforced on intermediate
- > certificates. Found by Nicholas Wilson, and fix and tests provided by
- > Janos Follath.
+Fixes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+  http://autobuild.buildroot.net/results/d5e/d5e832c3aa7ee7af128e2ba1835fe7d5d69d7ce8/
+  http://autobuild.buildroot.net/results/e73/e7306093e0ae1a1dcb69f015b10d56e4c95e689e/
+  http://autobuild.buildroot.net/results/781/781e891e8a59dab29b0ec37d43cd03107f6cce5b/
+  ...
 
-Committed, thanks.
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ltris/0001-fix-gcc5-build.patch |  308 +++++++++++++++++++++++++++++++
+ 1 files changed, 308 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ltris/0001-fix-gcc5-build.patch b/package/ltris/0001-fix-gcc5-build.patch
+new file mode 100644
+index 0000000..66d0fa3
+--- /dev/null
++++ b/package/ltris/0001-fix-gcc5-build.patch
+@@ -0,0 +1,308 @@
++Upstream patch to fix build with GCC 5
++
++Obtained from the LGames Subversion repository with the following command:
++svn diff -c164 svn://svn.code.sf.net/p/lgames/code/trunk/ltris
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++
++Revision log message:
++------------------------------------------------------------------------
++r164 | kulkanie | 2015-05-16 05:48:02 -0300 (Sat, 16 May 2015) | 1 line
++
++removed all inline keywords
++------------------------------------------------------------------------
++
++Line added to LTris ChangeLog concerning the change:
++- removed all inline keywords to work with GCC 5 (2015/05/16 MS)
++
++Author: Michael Speck
++
++Index: src/sdl.c
++===================================================================
++--- a/src/sdl.c	(revision 163)
+++++ b/src/sdl.c	(revision 164)
++@@ -244,7 +244,7 @@
++ #endif
++ 
++ /* return full path of bitmap */
++-inline void get_full_bmp_path( char *full_path, char *file_name )
+++void get_full_bmp_path( char *full_path, char *file_name )
++ {
++     sprintf(full_path,  "%s/gfx/%s", SRC_DIR, file_name );
++ }
++@@ -330,7 +330,7 @@
++ /*
++     lock surface
++ */
++-inline void lock_surf(SDL_Surface *sur)
+++void lock_surf(SDL_Surface *sur)
++ {
++     if (SDL_MUSTLOCK(sur))
++         SDL_LockSurface(sur);
++@@ -339,7 +339,7 @@
++ /*
++     unlock surface
++ */
++-inline void unlock_surf(SDL_Surface *sur)
+++void unlock_surf(SDL_Surface *sur)
++ {
++     if (SDL_MUSTLOCK(sur))
++         SDL_UnlockSurface(sur);
++@@ -666,7 +666,7 @@
++ /*
++     lock font surface
++ */
++-inline void lock_font(Font *fnt)
+++void lock_font(Font *fnt)
++ {
++     if (SDL_MUSTLOCK(fnt->pic))
++         SDL_LockSurface(fnt->pic);
++@@ -675,7 +675,7 @@
++ /*
++     unlock font surface
++ */
++-inline void unlock_font(Font *fnt)
+++void unlock_font(Font *fnt)
++ {
++     if (SDL_MUSTLOCK(fnt->pic))
++         SDL_UnlockSurface(fnt->pic);
++@@ -905,7 +905,7 @@
++ /*
++     update rectangle (0,0,0,0)->fullscreen
++ */
++-inline void refresh_screen(int x, int y, int w, int h)
+++void refresh_screen(int x, int y, int w, int h)
++ {
++     SDL_UpdateRect(sdl.screen, x, y, w, h);
++ }
++@@ -1055,7 +1055,7 @@
++ /*
++     lock surface
++ */
++-inline void lock_screen()
+++void lock_screen()
++ {
++     if (SDL_MUSTLOCK(sdl.screen))
++         SDL_LockSurface(sdl.screen);
++@@ -1064,7 +1064,7 @@
++ /*
++     unlock surface
++ */
++-inline void unlock_screen()
+++void unlock_screen()
++ {
++     if (SDL_MUSTLOCK(sdl.screen))
++         SDL_UnlockSurface(sdl.screen);
++@@ -1073,7 +1073,7 @@
++ /*
++     flip hardware screens (double buffer)
++ */
++-inline void flip_screen()
+++void flip_screen()
++ {
++     SDL_Flip(sdl.screen);
++ }
++@@ -1132,7 +1132,7 @@
++ /*
++     get milliseconds since last call
++ */
++-inline int get_time()
+++int get_time()
++ {
++     int ms;
++     cur_time = SDL_GetTicks();
++@@ -1148,7 +1148,7 @@
++ /*
++     reset timer
++ */
++-inline void reset_timer()
+++void reset_timer()
++ {
++     last_time = SDL_GetTicks();
++ }
++Index: src/sdl.h
++===================================================================
++--- a/src/sdl.h	(revision 163)
+++++ b/src/sdl.h	(revision 164)
++@@ -41,8 +41,8 @@
++ SDL_Surface* load_surf(char *fname, int f);
++ SDL_Surface* create_surf(int w, int h, int f);
++ void free_surf( SDL_Surface **surf );
++-inline void lock_surf(SDL_Surface *sur);
++-inline void unlock_surf(SDL_Surface *sur);
+++void lock_surf(SDL_Surface *sur);
+++void unlock_surf(SDL_Surface *sur);
++ void blit_surf(void);
++ void alpha_blit_surf(int alpha);
++ void fill_surf(int c);
++@@ -86,8 +86,8 @@
++ Font* load_fixed_font(char *fname, int off, int len, int w);
++ void free_font(Font **sfnt);
++ int  write_text(Font *sfnt, SDL_Surface *dest, int x, int y, char *str, int alpha);
++-inline void lock_font(Font *sfnt);
++-inline void unlock_font(Font *sfnt);
+++void lock_font(Font *sfnt);
+++void unlock_font(Font *sfnt);
++ SDL_Rect last_write_rect(Font *fnt);
++ int  text_width(Font *fnt, char *str);
++ 
++@@ -132,14 +132,14 @@
++ char** get_mode_names( int *count );
++ int  set_video_mode( Video_Mode mode );
++ void hardware_cap();
++-inline void refresh_screen( int x, int y, int w, int h );
+++void refresh_screen( int x, int y, int w, int h );
++ void refresh_rects();
++ void add_refresh_rect(int x, int y, int w, int h);
++ int  wait_for_key();
++ void wait_for_click();
++-inline void lock_screen();
++-inline void unlock_screen();
++-inline void flip_screen();
+++void lock_screen();
+++void unlock_screen();
+++void flip_screen();
++ void fade_screen( int type, int ms );
++ void take_screenshot( int i );
++ 
++@@ -148,8 +148,8 @@
++ SDL_Cursor* create_cursor( int width, int height, int hot_x, int hot_y, char *source );
++ 
++ /* timer */
++-inline int get_time();
++-inline void reset_timer();
+++int get_time();
+++void reset_timer();
++ 
++ #ifdef __cplusplus
++ };
++Index: src/tools.c
++===================================================================
++--- a/src/tools.c	(revision 163)
+++++ b/src/tools.c	(revision 164)
++@@ -23,7 +23,7 @@
++ #include "ltris.h"
++ 
++ /* compares to strings and returns true if their first strlen(str1) chars are equal */
++-inline int strequal( char *str1, char *str2 )
+++int strequal( char *str1, char *str2 )
++ {
++     if ( strlen( str1 ) != strlen( str2 ) ) return 0;
++     return ( !strncmp( str1, str2, strlen( str1 ) ) );
++@@ -30,7 +30,7 @@
++ }
++ 
++ /* set delay to ms milliseconds */
++-inline void delay_set( Delay *delay, int ms )
+++void delay_set( Delay *delay, int ms )
++ {
++     delay->limit = ms;
++     delay->cur = 0;
++@@ -37,13 +37,13 @@
++ }
++ 
++ /* reset delay ( cur = 0 )*/
++-inline void delay_reset( Delay *delay )
+++void delay_reset( Delay *delay )
++ {
++     delay->cur = 0;
++ }
++ 
++ /* check if times out and reset */
++-inline int delay_timed_out( Delay *delay, int ms )
+++int delay_timed_out( Delay *delay, int ms )
++ {
++     delay->cur += ms;
++     if ( delay->cur >= delay->limit ) {
++@@ -56,12 +56,12 @@
++ }
++ 
++ /* set timer so that we have a time out next call of delay_timed_out() */
++-inline void delay_force_time_out( Delay *delay )
+++void delay_force_time_out( Delay *delay )
++ {
++     delay->cur = delay->limit;
++ }
++ 
++-inline void goto_tile( int *x, int *y, int d )
+++void goto_tile( int *x, int *y, int d )
++ {
++     /*  0 -up, clockwise, 5 - left up */
++     switch ( d ) {
++@@ -326,24 +326,24 @@
++ the target value until reached when counter_update() is called.
++ ====================================================================
++ */
++-inline void counter_set( Counter *counter, double value )
+++void counter_set( Counter *counter, double value )
++ {
++     counter->value = value;
++     counter->approach = value;
++ }
++-inline void counter_add( Counter *counter, double add )
+++void counter_add( Counter *counter, double add )
++ {
++     counter->value += add;
++ }
++-inline double counter_get_approach( Counter counter )
+++double counter_get_approach( Counter counter )
++ {
++     return counter.approach;
++ }
++-inline double counter_get( Counter counter )
+++double counter_get( Counter counter )
++ {
++     return counter.value;
++ }
++-inline void counter_update( Counter *counter, int ms )
+++void counter_update( Counter *counter, int ms )
++ {
++     double change;
++     if ( counter->approach == counter->value ) return;
++Index: src/bowl.c
++===================================================================
++--- a/src/bowl.c	(revision 163)
+++++ b/src/bowl.c	(revision 164)
++@@ -333,7 +333,7 @@
++ Set a tile contents and pixel contents.
++ ====================================================================
++ */
++-inline void bowl_set_tile( Bowl *bowl, int x, int y, int tile_id )
+++void bowl_set_tile( Bowl *bowl, int x, int y, int tile_id )
++ {
++     int i, j = y * bowl->block_size;
++     bowl->contents[x][y] = tile_id;
++Index: src/tools.h
++===================================================================
++--- a/src/tools.h	(revision 163)
+++++ b/src/tools.h	(revision 164)
++@@ -33,7 +33,7 @@
++ #define VEC_DIST( vec1, vec2 ) ( sqrt( ( vec1.x - vec2.x ) * ( vec1.x - vec2.x ) + ( vec1.y - vec2.y ) * ( vec1.y - vec2.y ) ) )
++ 
++ /* compares to strings and returns true if their first strlen(str1) chars are equal */
++-inline int strequal( char *str1, char *str2 );
+++int strequal( char *str1, char *str2 );
++ 
++ /* delete lines */
++ void delete_lines( char **lines, int line_number );
++@@ -45,16 +45,16 @@
++ } Delay;
++ 
++ /* set delay to ms milliseconds */
++-inline void delay_set( Delay *delay, int ms );
+++void delay_set( Delay *delay, int ms );
++ 
++ /* reset delay ( cur = 0 )*/
++-inline void delay_reset( Delay *delay );
+++void delay_reset( Delay *delay );
++ 
++ /* check if time's out ( add ms milliseconds )and reset */
++-inline int delay_timed_out( Delay *delay, int ms );
+++int delay_timed_out( Delay *delay, int ms );
++ 
++ /* set timer so that we have a time out next call of delay_timed_out() */
++-inline void delay_force_time_out( Delay *delay );
+++void delay_force_time_out( Delay *delay );
++ 
++ /* return distance betwteen to map positions */
++ int get_dist( int x1, int y1, int x2, int y2 );
