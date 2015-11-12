@@ -1,31 +1,39 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 12 Nov 2015 23:33:05 +0100
-Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime: bump u-boot to
-	2015.10
-Message-ID: <1447367585-21643-1-git-send-email-francois.perrad@gadz.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 12 Nov 2015 22:44:44 +0000 (UTC)
+Subject: [Buildroot] [Bug 8456] Building host-pkgconf on Fedora 23 fails due
+ to incorrect build dependencies
+In-Reply-To: <bug-8456-163@https.bugs.busybox.net/>
+References: <bug-8456-163@https.bugs.busybox.net/>
+Message-ID: <20151112224444.9182F7F8A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_a20_olinuxino_lime_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://bugs.busybox.net/show_bug.cgi?id=8456
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 53286b4..e30a070 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-11-12 22:44:43 UTC ---
+(In reply to comment #3)
+> Created attachment 6221 [details]
+> Add host coreutils and add some host build dependancies
+> 
+> I'm not claiming to have added all of the required dependencies. but
+> 
+> A) Buildroot now builds for me on Fedora 23
+> B) This makes things no worse
+> C) pkgconfig and anything dependent on it now has correct dependencies and uses
+>    compatible ls and libcap
+
+As Yann said, we believe this is not the proper direction. Instead, removing
+LD_LIBRARY_PATH should be done, so that for your system tools, we don't try to
+use the Buildroot built libraries.
+
+Can you test the patch at http://patchwork.ozlabs.org/patch/537657/ instead ?
+
+Thanks!
+
 -- 
-2.5.0
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
