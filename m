@@ -1,30 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2015 08:52:23 +0100
-Subject: [Buildroot] [PATCH] core: fix setting of HOSTARCH
-In-Reply-To: <20151111225820.GB3968@free.fr> (Yann E. MORIN's message of "Wed, 
- 11 Nov 2015 23:58:20 +0100")
-References: <1447095621-32080-1-git-send-email-yann.morin.1998@free.fr>
- <20151111235359.707acc35@free-electrons.com>
- <20151111225820.GB3968@free.fr>
-Message-ID: <87wptnods8.fsf@dell.be.48ers.dk>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 12 Nov 2015 09:05:41 +0100
+Subject: [Buildroot] [PATCH] barebox: bump to version 2015.11.0
+Message-ID: <1447315541-1522-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- >> Those build failures are not caused by a 32 bits vs. 64 bits issue. In
- >> fact, I started running my chroot under "linux32", but it was even
- >> worse. Because indeed my chroots *are* 64 bits.
-
- > OK, but still, in a 32-bit chroot, in the linux32 personality, we were
- > trying to use the 64-bit variant of the toolchain. And I observed the
- > same symptom as the autobuild failures.
-
-How can that be? With linux32 uname -m returns 'ix86', right?
-
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 7e81181..e9021fb 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.10.0"
++	bool "2015.11.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2015.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 1b927ba..bb2ecc2 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# http://www.barebox.org/download/barebox-2015.10.0.tar.bz2.md5
+-md5 50b787db3f91bebd5ed646e80a05caab barebox-2015.10.0.tar.bz2
++# http://www.barebox.org/download/barebox-2015.11.0.tar.bz2.md5
++md5 05951fa64000f5baedfc1064dbcfcad0 barebox-2015.11.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 8353042fe27a30a01a00fe1e1f4a34f292a291027b9637d3ea8f305387407880 barebox-2015.10.0.tar.bz2
++sha256 ea40cef0a5ef76c4d68e76ac0e5c71c758c563ffa48c08e0b284688ec6f9d422 barebox-2015.11.0.tar.bz2
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.6.2
