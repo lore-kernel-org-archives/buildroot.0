@@ -1,53 +1,49 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 12 Nov 2015 09:05:41 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2015.11.0
-Message-ID: <1447315541-1522-1-git-send-email-fabio.porcedda@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Nov 2015 09:11:52 +0100
+Subject: [Buildroot] [PATCH] core: fix setting of HOSTARCH
+In-Reply-To: <20151111235359.707acc35@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 11 Nov 2015 23:53:59 +0100")
+References: <1447095621-32080-1-git-send-email-yann.morin.1998@free.fr>
+ <20151111235359.707acc35@free-electrons.com>
+Message-ID: <87si4bocvr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 7e81181..e9021fb 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.10.0"
-+	bool "2015.11.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 1b927ba..bb2ecc2 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2015.10.0.tar.bz2.md5
--md5 50b787db3f91bebd5ed646e80a05caab barebox-2015.10.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2015.11.0.tar.bz2.md5
-+md5 05951fa64000f5baedfc1064dbcfcad0 barebox-2015.11.0.tar.bz2
- 
- # Locally calculated
--sha256 8353042fe27a30a01a00fe1e1f4a34f292a291027b9637d3ea8f305387407880 barebox-2015.10.0.tar.bz2
-+sha256 ea40cef0a5ef76c4d68e76ac0e5c71c758c563ffa48c08e0b284688ec6f9d422 barebox-2015.11.0.tar.bz2
+Hi,
+
+ > Those build failures are not caused by a 32 bits vs. 64 bits issue. In
+ > fact, I started running my chroot under "linux32", but it was even
+ > worse. Because indeed my chroots *are* 64 bits.
+
+ > However, the real problem is that the new Linaro toolchains have been
+ > built against glibc 2.14 (for the host), while my chroot only uses
+ > glibc 2.11 (from Debian 6.0).
+
+Ahh. Debian 6.0 is getting quite old (2011), but yeah - People on
+Enterprise distributions might end up with the same problems.
+
+ > I'm not sure how to handle this. Some old distros may not have glibc
+ > 2.14.
+
+I don't think there's much we can do, besides perhaps adding a comment
+in the help text.
+
+I'm not sure how realistic it is to convince the Linaro people to build
+their toolchains on ancient distributions.
+
+
+ > In any case, I believe the rework of how we get HOSTARCH is not really
+ > needed IMO: 1/ it is not the source of the problem for the Linaro
+ > toolchain and 2/ it is most likely appropriate to use setarch/linux32
+ > when running a 32 bits chroot under a 64 bits kernel.
+
+I agree about linux32, yes.
+
 -- 
-2.6.2
+Venlig hilsen,
+Peter Korsgaard 
