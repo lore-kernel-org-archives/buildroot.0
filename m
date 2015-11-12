@@ -1,31 +1,31 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 12 Nov 2015 22:14:21 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/qemu: bump to the latest linux
- version
-In-Reply-To: <1447151972-12086-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1447151972-12086-1-git-send-email-gustavo@zacarias.com.ar>
- <1447151972-12086-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151112211421.GB21428@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Nov 2015 22:16:48 +0100
+Subject: [Buildroot] [PATCH] libsoup: bump to version 2.52.2
+In-Reply-To: <20151111151650.2639d6c7@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 11 Nov 2015 15:16:50 +0100")
+References: <1447248869-8916-1-git-send-email-gustavo@zacarias.com.ar>
+ <20151111151650.2639d6c7@free-electrons.com>
+Message-ID: <87k2pmor3z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
-Gustavo Zacarias wrote,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> sparc64_sun4u: ditch ne2k driver since it's useless, and add the e1000
-> driver which works fine.
+ > Dear Gustavo Zacarias,
+ > On Wed, 11 Nov 2015 10:34:29 -0300, Gustavo Zacarias wrote:
+ >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ >> ---
+ >> package/libsoup/libsoup.hash | 4 ++--
+ >> package/libsoup/libsoup.mk   | 2 +-
+ >> 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thx, cool.
+ > Applied, thanks.
 
-> x86: stick to 4.2.x kernels since 4.3 doesn't work right with uclibc
-> (any variant) based toolchains.
+Don't forget to specify that these are applied to the next branch, not
+to master.
 
-Can you elaborate on this?
-A quick build test worked fine for me.
-Or did you had any runtime issues?
-
-best regards
- Waldemar
+-- 
+Bye, Peter Korsgaard
