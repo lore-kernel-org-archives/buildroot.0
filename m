@@ -1,28 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2015 22:48:25 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-firmware: menu entries for
-	mwifiex blobs
-In-Reply-To: <c4a720fa59f51fbfe00ec8c1683e1be09f56b593.1447022391.git.alex.suykov@gmail.com>
- (Alex Suykov's message of "Mon, 9 Nov 2015 00:52:08 +0200")
-References: <c4a720fa59f51fbfe00ec8c1683e1be09f56b593.1447022391.git.alex.suykov@gmail.com>
-Message-ID: <8737waopna.fsf@dell.be.48ers.dk>
+Date: Thu, 12 Nov 2015 22:45:25 +0100
+Subject: [Buildroot] [git commit branch/next] linux-firmware: adjust
+	Config.in text for mwifiex
+Message-ID: <20151112214840.D86F881DA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alex" == Alex Suykov <alex.suykov@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1ce38192f0cfdf2900f3d8d08e2f7fe58492b1bb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Firmware blobs for Marvell WiFi-Ex 8797, 8887, 8897 were already
- > there in linux-firmware tree but relevant options were not in Config.in.
+With SD, USB and PCI-E variants available for several chips,
+bus-prefixed entries get mis-aligned badly.
+Rearrange them to use bus-suffixes instead.
 
- > Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
- > ---
- > sd8797 is the only one I'm going to use, but since they are all similar
- > I added the rest as well.
+Config options and the files themselves remain bus-prefixed.
 
-Committed both to next, thanks.
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-firmware/Config.in |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 32e9c6e..d838986 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -155,37 +155,37 @@ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688
+ 	  Firmware files for the Marvell SD8688 module
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
+-	bool "Marvell Wifi-Ex SD 8787"
++	bool "Marvell Wifi-Ex 8787 SDIO"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8787 module on SDIO.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797
+-	bool "Marvell Wifi-Ex SD 8797"
++	bool "Marvell Wifi-Ex 8797 SDIO"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8797 module on SDIO.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797
+-	bool "Marvell Wifi-Ex USB 8797"
++	bool "Marvell Wifi-Ex 8797 USB"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8797 module on USB.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887
+-	bool "Marvell Wifi-Ex SD 8887"
++	bool "Marvell Wifi-Ex 8887 SDIO"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8887 module on SDIO.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897
+-	bool "Marvell Wifi-Ex SD 8897"
++	bool "Marvell Wifi-Ex 8897 SDIO"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8897 module on SDIO.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8897
+-	bool "Marvell Wifi-Ex USB 8897"
++	bool "Marvell Wifi-Ex 8897 USB"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8897 module on USB.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897
+-	bool "Marvell Wifi-Ex PCI-E 8897"
++	bool "Marvell Wifi-Ex 8897 PCI-E"
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8897 module on PCI-E.
+ 
