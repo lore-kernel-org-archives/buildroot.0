@@ -1,27 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 12 Nov 2015 18:22:37 -0300
-Subject: [Buildroot] [PATCH 2/2] configs/qemu: bump to the latest linux
- version
-In-Reply-To: <20151112211421.GB21428@waldemar-brodkorb.de>
-References: <1447151972-12086-1-git-send-email-gustavo@zacarias.com.ar>
- <1447151972-12086-2-git-send-email-gustavo@zacarias.com.ar>
- <20151112211421.GB21428@waldemar-brodkorb.de>
-Message-ID: <5645031D.5060405@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Nov 2015 22:23:56 +0100
+Subject: [Buildroot] [PATCH 1/1] ltris: add upstream patch to fix buld
+	with GCC 5
+In-Reply-To: <1447296163-26732-1-git-send-email-rprebello@gmail.com> (Rodrigo
+ Rebello's message of "Thu, 12 Nov 2015 00:42:43 -0200")
+References: <1447296163-26732-1-git-send-email-rprebello@gmail.com>
+Message-ID: <87bnayoqs3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/11/15 18:14, Waldemar Brodkorb wrote:
+>>>>> "Rodrigo" == Rodrigo Rebello <rprebello@gmail.com> writes:
 
->> x86: stick to 4.2.x kernels since 4.3 doesn't work right with uclibc
->> (any variant) based toolchains.
->
-> Can you elaborate on this?
-> A quick build test worked fine for me.
-> Or did you had any runtime issues?
+ > LTris was failing to build with GCC 5 due to a change in semantics
+ > regarding inline functions compared to previous GCC versions.
 
-Hi Waldemar.
-Just try to pull a dhcp address from the network interface.
-Regards.
+ > The issue has already been solved upstream, but a new version hasn't
+ > been released yet.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/d5e/d5e832c3aa7ee7af128e2ba1835fe7d5d69d7ce8/
+ >   http://autobuild.buildroot.net/results/e73/e7306093e0ae1a1dcb69f015b10d56e4c95e689e/
+ >   http://autobuild.buildroot.net/results/781/781e891e8a59dab29b0ec37d43cd03107f6cce5b/
+ >   ...
+
+ > Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
