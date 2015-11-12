@@ -1,108 +1,80 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 12 Nov 2015 11:42:52 +0100
-Subject: [Buildroot] [PATCH v3 11/13] package/dhcp: systemd: support
-	IPv6 lease file
-In-Reply-To: <56407A30.1050404@wsystem.com>
-References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <1445734779-7212-11-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <CAGduivxGsOm8DRoBsqDAMHx3dkC381C5TvXq_peYiKd1yizyvg@mail.gmail.com>
- <5639DF94.4000505@wsystem.com>
- <CAGduivyAygSdLT1pmrOCD7mHO8xC2UvHOP2rAk2MnChhPMHmiw@mail.gmail.com>
- <5639E8D9.7060109@wsystem.com>
- <CAGduivz2ChrAgNgxM-a33JN_Eh7aFsfSKpq_vT0hRd7sNTt_zw@mail.gmail.com>
- <56407A30.1050404@wsystem.com>
-Message-ID: <CAGduivw6uX9yEFiMA6XtNM3w8zPfEg96o+7ZS1ZcvfsJB0mcLQ@mail.gmail.com>
+Date: Thu, 12 Nov 2015 12:02:39 +0100
+Subject: [Buildroot] [PATCH] support/download: fetch all refs on full
+	git clone
+In-Reply-To: <1446871164-19229-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1446871164-19229-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <CAGduivyHPkkG7f6K7h2KGBXHPS7h8hvn07B2bKJdrbwLsf2nFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Benoit, all
+Hi Vivien, all
 
-On Mon, Nov 9, 2015 at 11:49 AM, Beno?t Th?baudeau <benoit@wsystem.com>
-wrote:
+On Sat, Nov 7, 2015 at 5:39 AM, Vivien Didelot <
+vivien.didelot@savoirfairelinux.com> wrote:
 
-> Hi Maxime, all,
+> When specifying BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION, a user may want to
+> specify the SHA of a reference different than a branch or tag.
 >
-> On 04/11/2015 12:31, Maxime Hadjinlian wrote:
-> >>>     > A question though, from the manual page of dhcpd, by default it
-> starts as an IPv6 server should we have, two services one with '-4' and one
-> with '-6' ? And it's left to the user to specify it in the "$OPTIONS" ?
-> Maybe this should be mentioned somewhere ?
-> >>>
-> >>>     '-4' is the default, not '-6'.
-> >>>
-> >>> If I look at ./server/dhcpd.8 in the sources of dhcp-4.1-ESVR12, it
-> clearly states:
-> >>>
-> >>> -6 Run as a DHCPv6 server. This is the default and cannot be combined
-> with -4.
-> >>
-> >> My bad: I had looked at the man page of another version.
+> For instance, Gerrit stores the patchsets under refs/changes/xx/xxx, and
+> Github stores the pull requests under refs/pull/xxx/head.
 >
-> Actually, this dhcpd.8 is wrong. Looking at common/discover.c:
->     int local_family = AF_INET;
+> When cloning a repository with --bare, you don't fetch these references.
+> This patch uses --mirror for a full clone, in order to give the user
+> access to all references of the Git repository.
 >
-> So IPv4 really is the default, and this is confirmed by the behavior.
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> ---
+>  support/download/git | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> This documentation issue is fixed in 4.3.3. A version bump would be great,
-> all
-> the more the EoL date of 4.1-ESV-R12 is Dec. 2015. I'll see if I can
-> quickly add
-> that to my series.
+> diff --git a/support/download/git b/support/download/git
+> index 0e6103b..357a558 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -43,7 +43,7 @@ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)"
+> ]; then
+>  fi
+>  if [ ${git_done} -eq 0 ]; then
+>      printf "Doing full clone\n"
+> -    ${GIT} clone ${verbose} --bare "${repo}" "${basename}"
+> +    ${GIT} clone ${verbose} --mirror "${repo}" "${basename}"
+>  fi
 >
-Ah, that explains everything. Indeed, a bump would be nice if you could
-squeeze it, otherwise I'm sure it'll be done pretty quickly, DHCP is a
-pretty used package after all :).
+>  GIT_DIR="${basename}" \
+> --
+> 2.6.2
+>
+> I've read the different between bare and mirror and from what I
+understand, mirrors implies bare and also maps the remotes branch to the
+local branches.
 
->
-> >     >     A single instance of dhcpd cannot be run with
-> >     >     both '-4' and '-6'. I don't know if it's possible (or
-> desirable) to safely run
-> >     >     simultaneously two instances of dhcpd, one with '-4' and the
-> other one with
-> >     >     '-6'.
-> >     >
-> >     > Well it could be useful if you are trying to build a network
-> appliance and you want to support both stack. So you would want to start
-> two processes with different options. Maybe that's something that should be
-> left to the users to figure out.
-> >
-> >     Yes, but should everything be duplicated in Buildroot just for this
-> purpose? For
-> >     SysV, it's easy not to duplicate things, but how would you do that
-> with systemd?
-> >     How do distributions handle this?
-> >
-> > I only looked at Arch Linux, they duplicate the service file. It's also
-> possible to use the template mechanisms in systemd, to have something like
-> dhcpd at .service and when you enable it, you create a symlink called
-> dhcpd at 4.service, and the '4' is passed as argument to the template and
-> you can use it however you want it to.
->
-> Ubuntu duplicates the service files too. And all the service files come
-> from the
-> same package.
->
-> How do we want to handle that in Buildroot?
-> 1/ Always start IPv4 and IPv6 instances like Ubuntu does. This is wasting
->    resources if one of them is actually unused.
-> 2/ Add a Kconfig choice - common to all the selected DHCP daemons - between
->    "only IPv4", "only IPv6", and "IPv4 + IPv6".
-> 3/ Use /etc/default/dhcpd and the like. We could detect the presence of
->    /etc/default/dhcpd vs. /etc/default/dhcpd6, or of some variables in
-> them, or
->    of /etc/dhcp/dhcpd.conf vs. /etc/dhcp/dhcpd6.conf. Something like that
-> seems
->    to be easier to use, but less obvious for users unless well documented.
->
-> In my humble opinion, I would go for the Kconfig options as I find this
-easier for the end user and to maintain.
+Given that understanding, I am afraid I don't really get what you are
+trying to do. From what I understand of Git, everything has a SHA ID, be
+it, branches, tags, merge commit, even when you push -f you still have
+access to previous state of your HEAD.
 
-> Best regards,
-> Beno?t
+I cloned a repository from Github that had pull requests ongoing, I could
+not find anything non-standard under .git/refs/, is there a specific
+example that you could point to ? I don't know Gerrit nor how it works, so
+maybe this was the issues you had ?
+
+Finally, with the current mechanisms, you can specify a SHA, so if you are
+trying to clone a PR, since it should be made from either a branch from the
+local repository, or a whole other repository, you should be able to
+specify it.
+
+Again, I'm not sure I got what you were trying to do, maybe there's a
+special use cases with Gerrit that I'm not aware of.
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151112/3f60a172/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151112/4abcf84a/attachment.html>
