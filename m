@@ -1,31 +1,41 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Sat, 14 Nov 2015 00:16:53 +0100
-Subject: [Buildroot] zedboard: uboot: load env earlier
-In-Reply-To: <1447418954-3350-1-git-send-email-gwenj@trabucayre.com>
-References: <1447418954-3350-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20151114001653.045f56b3@jvn>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 14 Nov 2015 00:26:31 +0100
+Subject: [Buildroot] [PATCH/next 01/13] package/x11r7/xapp_xinput: bump
+	version to 1.6.2
+Message-ID: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Seems reasonable to me. Thanks for this fix!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xapp_xinput/xapp_xinput.hash | 4 ++--
+ package/x11r7/xapp_xinput/xapp_xinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Acked-By: Jan Viktorin <viktorin@rehivetech.com>
-
-On Fri, 13 Nov 2015 13:49:14 +0100
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
-
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> By default, with the original patch bootcmd runs sdboot before loading uEnv.txt.
-> Consequently, if the user change modeboot, the user's defined content is updated
-> too late.
-> By loading uEnv.txt before 'run $modeboot' the correct boot mode is used instead
-> of default mode.
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  .../0001-zynq-Create-zedboard-specific-U-Boot-environment.patch    | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+diff --git a/package/x11r7/xapp_xinput/xapp_xinput.hash b/package/x11r7/xapp_xinput/xapp_xinput.hash
+index a8f6b70..724b2e2 100644
+--- a/package/x11r7/xapp_xinput/xapp_xinput.hash
++++ b/package/x11r7/xapp_xinput/xapp_xinput.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-September/002321.html
+-sha256	b7632d0f228a8a6be93b09857ea413940fcf44091e60f4a0fe9f5fd82efd871f	xinput-1.6.1.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-October/002643.html
++sha256	3694d29b4180952fbf13c6d4e59541310cbb11eef5bf888ff3d8b7f4e3aee5c4		xinput-1.6.2.tar.bz2
+diff --git a/package/x11r7/xapp_xinput/xapp_xinput.mk b/package/x11r7/xapp_xinput/xapp_xinput.mk
+index 099408b..aaa7a80 100644
+--- a/package/x11r7/xapp_xinput/xapp_xinput.mk
++++ b/package/x11r7/xapp_xinput/xapp_xinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_XINPUT_VERSION = 1.6.1
++XAPP_XINPUT_VERSION = 1.6.2
+ XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.bz2
+ XAPP_XINPUT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XINPUT_LICENSE = MIT
+-- 
+2.6.2
