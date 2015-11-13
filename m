@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Nov 2015 00:26:32 +0100
-Subject: [Buildroot] [PATCH/next 02/13] package/x11r7/xapp_xkbcomp: bump
-	version to 1.3.1
+Date: Sat, 14 Nov 2015 00:26:36 +0100
+Subject: [Buildroot] [PATCH/next 06/13]
+	package/x11r7/xdriver_xf86-input-libinput: bump version to 0.15.0
 In-Reply-To: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1447457203-27816-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1447457203-27816-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 4 ++--
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 2 +-
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash      | 4 ++--
+ .../x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk  | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-index b49d5a2..bc85caa 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index 3936f01..be0bf09 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2014-November/002497.html
--sha256	cfac973778fabf5216121ad60b7af8ab74ce7513af0f9260cf8c5309e1622b2a	xkbcomp-1.3.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-November/002653.html
-+sha256	0304dc9e0d4ac10831a9ef5d5419722375ddbc3eac3ff4413094d57bc1f1923d	xkbcomp-1.3.1.tar.bz2
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-index 0a72742..fea7fa8 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-July/002619.html
+-sha256	db8f919c24a381cec1e7840f1f2117251501c0c7ae2a43941d84753154a826d6	xf86-input-libinput-0.12.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-October/002648.html
++sha256	28707c504194648b11a1e26acf13039b60bf344efa6aa9788afed6d47f019a41	xf86-input-libinput-0.15.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index 30973ea..b4bc4b8 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XKBCOMP_VERSION = 1.3.0
-+XAPP_XKBCOMP_VERSION = 1.3.1
- XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
- XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBCOMP_LICENSE = MIT
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.12.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.15.0
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
 -- 
 2.6.2
