@@ -1,27 +1,37 @@
-From: Ben Boeckel <mathstuf@gmail.com>
-Date: Thu, 12 Nov 2015 20:37:33 -0500
-Subject: [Buildroot] [PATCH] makefile: remove LD_LIBRARY_PATH from the
-	environment
-In-Reply-To: <1446086895-28252-1-git-send-email-mathstuf@gmail.com>
-References: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
- <1446086895-28252-1-git-send-email-mathstuf@gmail.com>
-Message-ID: <20151113013733.GA17107@bronto-burt.dev.benboeckel.net>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 13 Nov 2015 06:24:22 +0100
+Subject: [Buildroot] [PATCH 2/2] configs/qemu: bump to the latest linux
+ version
+In-Reply-To: <5645031D.5060405@zacarias.com.ar>
+References: <1447151972-12086-1-git-send-email-gustavo@zacarias.com.ar>
+ <1447151972-12086-2-git-send-email-gustavo@zacarias.com.ar>
+ <20151112211421.GB21428@waldemar-brodkorb.de>
+ <5645031D.5060405@zacarias.com.ar>
+Message-ID: <20151113052422.GD21428@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 28, 2015 at 22:48:15 -0400, Ben Boeckel wrote:
-> If system tools are selected, the host's lib/ directory may shadow
-> libraries from the system which are configured differently and do not
-> have all of the symbols required by the system tool.
-> 
-> Since buildroot uses rpath everywhere, LD_LIBRARY_PATH should not be
-> necessary anyways.
-> 
-> Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+Hi Gustavo,
+Gustavo Zacarias wrote,
 
-Bump.
+> On 12/11/15 18:14, Waldemar Brodkorb wrote:
+> 
+> >>x86: stick to 4.2.x kernels since 4.3 doesn't work right with uclibc
+> >>(any variant) based toolchains.
+> >
+> >Can you elaborate on this?
+> >A quick build test worked fine for me.
+> >Or did you had any runtime issues?
+> 
+> Hi Waldemar.
+> Just try to pull a dhcp address from the network interface.
+> Regards.
 
---Ben
+Fixed here:
+http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=1.0&id=e89e3af8f64bded3920f046fb8db2b95a188ff55
+
+Best regards
+ Waldemar 
