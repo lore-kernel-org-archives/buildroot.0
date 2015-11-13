@@ -1,44 +1,132 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2015 13:46:07 +0100
-Subject: [Buildroot] [git commit branch/next] cryptsetup: bump to version
-	1.7.0
-Message-ID: <20151113124637.8692F7FB61@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 13 Nov 2015 10:51:56 -0300
+Subject: [Buildroot] [PATCH] busybox: add upstream unzip segv patch
+Message-ID: <1447422716-27041-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f11f5d541abe6628c50bf7e0a3999dc6e8914e3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptsetup/cryptsetup.hash |    2 +-
- package/cryptsetup/cryptsetup.mk   |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/busybox/0002-unzip.patch | 111 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 111 insertions(+)
+ create mode 100644 package/busybox/0002-unzip.patch
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index a0b975d..e770f95 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/sha256sums.asc
--sha256	45a6ccd3c65b7d904e58e1cb3656a7e997190b6a05b5ff7c6887e4a41c5f19bc	cryptsetup-1.6.8.tar.xz
-+sha256	075524a7cc0db36d12119fa79116750accb1c6c8825d5faa2534b74b8ce3d148	cryptsetup-1.7.0.tar.xz
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 78cbe8f..986b131 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CRYPTSETUP_VERSION_MAJOR = 1.6
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).8
-+CRYPTSETUP_VERSION_MAJOR = 1.7
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
+diff --git a/package/busybox/0002-unzip.patch b/package/busybox/0002-unzip.patch
+new file mode 100644
+index 0000000..400e528
+--- /dev/null
++++ b/package/busybox/0002-unzip.patch
+@@ -0,0 +1,111 @@
++From 1de25a6e87e0e627aa34298105a3d17c60a1f44e Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Mon, 26 Oct 2015 19:33:05 +0100
++Subject: [PATCH] unzip: test for bad archive SEGVing
++
++function                                             old     new   delta
++huft_build                                          1296    1300      +4
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ archival/libarchive/decompress_gunzip.c | 11 +++++++----
++ testsuite/unzip.tests                   | 23 ++++++++++++++++++++++-
++ 2 files changed, 29 insertions(+), 5 deletions(-)
++
++diff --git a/archival/libarchive/decompress_gunzip.c b/archival/libarchive/decompress_gunzip.c
++index 7b6f459..30bf451 100644
++--- a/archival/libarchive/decompress_gunzip.c
+++++ b/archival/libarchive/decompress_gunzip.c
++@@ -305,11 +305,12 @@ static int huft_build(const unsigned *b, const unsigned n,
++ 	unsigned i;             /* counter, current code */
++ 	unsigned j;             /* counter */
++ 	int k;                  /* number of bits in current code */
++-	unsigned *p;            /* pointer into c[], b[], or v[] */
+++	const unsigned *p;      /* pointer into c[], b[], or v[] */
++ 	huft_t *q;              /* points to current table */
++ 	huft_t r;               /* table entry for structure assignment */
++ 	huft_t *u[BMAX];        /* table stack */
++ 	unsigned v[N_MAX];      /* values in order of bit length */
+++	unsigned v_end;
++ 	int ws[BMAX + 1];       /* bits decoded stack */
++ 	int w;                  /* bits decoded */
++ 	unsigned x[BMAX + 1];   /* bit offsets, then code stack */
++@@ -324,7 +325,7 @@ static int huft_build(const unsigned *b, const unsigned n,
++ 
++ 	/* Generate counts for each bit length */
++ 	memset(c, 0, sizeof(c));
++-	p = (unsigned *) b; /* cast allows us to reuse p for pointing to b */
+++	p = b;
++ 	i = n;
++ 	do {
++ 		c[*p]++; /* assume all entries <= BMAX */
++@@ -365,12 +366,14 @@ static int huft_build(const unsigned *b, const unsigned n,
++ 	}
++ 
++ 	/* Make a table of values in order of bit lengths */
++-	p = (unsigned *) b;
+++	p = b;
++ 	i = 0;
+++	v_end = 0;
++ 	do {
++ 		j = *p++;
++ 		if (j != 0) {
++ 			v[x[j]++] = i;
+++			v_end = x[j];
++ 		}
++ 	} while (++i < n);
++ 
++@@ -432,7 +435,7 @@ static int huft_build(const unsigned *b, const unsigned n,
++ 
++ 			/* set up table entry in r */
++ 			r.b = (unsigned char) (k - w);
++-			if (p >= v + n) {
+++			if (p >= v + v_end) { // Was "if (p >= v + n)" but v[] can be shorter!
++ 				r.e = 99; /* out of values--invalid code */
++ 			} else if (*p < s) {
++ 				r.e = (unsigned char) (*p < 256 ? 16 : 15);	/* 256 is EOB code */
++diff --git a/testsuite/unzip.tests b/testsuite/unzip.tests
++index 8677a03..ca0a458 100755
++--- a/testsuite/unzip.tests
+++++ b/testsuite/unzip.tests
++@@ -7,7 +7,7 @@
++ 
++ . ./testing.sh
++ 
++-# testing "test name" "options" "expected result" "file input" "stdin"
+++# testing "test name" "commands" "expected result" "file input" "stdin"
++ #   file input will be file called "input"
++ #   test can create a file "actual" instead of writing to stdout
++ 
++@@ -30,6 +30,27 @@ testing "unzip (subdir only)" "unzip -q foo.zip foo/ && test -d foo && test ! -f
++ rmdir foo
++ rm foo.zip
++ 
+++# File containing some damaged encrypted stream
+++testing "unzip (bad archive)" "uudecode; unzip bad.zip 2>&1; echo \$?" \
+++"Archive:  bad.zip
+++  inflating: ]3j?r?IK-%Ix
+++unzip: inflate error
+++1
+++" \
+++"" "\
+++begin-base64 644 bad.zip
+++UEsDBBQAAgkIAAAAIQA5AAAANwAAADwAAAAQAAcAXTNqwr1ywqtJGxJLLSVJ
+++eCkBD0AdKBk8JzQsIj01JC0/ORJQSwMEFAECCAAAAAAhADoAAAAPAAAANgAA
+++AAwAAQASw73Ct1DCokohPXQiNjoUNTUiHRwgLT4WHlBLAQIQABQAAggIAAAA
+++oQA5AAAANwAAADwAAAAQQAcADAAAACwAMgCAAAAAAABdM2rCvXLCq0kbEkst
+++JUl4KQEPQB0oGSY4Cz4QNgEnJSYIPVBLAQIAABQAAggAAAAAIQAqAAAADwAA
+++BDYAAAAMAAEADQAAADIADQAAAEEAAAASw73Ct1DKokohPXQiNzA+FAI1HCcW
+++NzITNFBLBQUKAC4JAA04Cw0EOhZQSwUGAQAABAIAAgCZAAAAeQAAAAIALhM=
+++====
+++"
+++
+++rm *
+++
++ # Clean up scratch directory.
++ 
++ cd ..
++-- 
++2.6.2
++
+-- 
+2.4.10
