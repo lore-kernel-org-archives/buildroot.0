@@ -1,49 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2015 09:08:10 +0100
-Subject: [Buildroot] [git commit] ranger: propagate python3 wchar dependency
-Message-ID: <20151113081058.6778581EC0@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 13 Nov 2015 07:49:48 +0100
+Subject: [Buildroot] [PATCH] support/download: fetch all refs on full
+ git clone
+In-Reply-To: <20151112170726.GB11143@ketchup.mtl.sfl>
+References: <1446871164-19229-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <CAGduivyHPkkG7f6K7h2KGBXHPS7h8hvn07B2bKJdrbwLsf2nFA@mail.gmail.com>
+ <20151112161223.GA22361@ketchup.mtl.sfl>
+ <CAGduivzemzRU0_1c+xh8=q+ZF1Tc5o+rwWsF50DtsPqd9Bf38w@mail.gmail.com>
+ <20151112170726.GB11143@ketchup.mtl.sfl>
+Message-ID: <5645880C.5040103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24ecac5562aed872371297d2225bb62a25ed3e5a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12-11-15 18:07, Vivien Didelot wrote:
+[snip]
+> This is orthogonal, but I'm wondering if it'd make sense to stamp a git
+> remote update, similary to the local kernel setup + rsync. That would
+> ease the build process of a team, when a parallel kernel development is
+> on going.
 
-Fixes:
-http://autobuild.buildroot.net/results/da1/da1a4cac055ab4b1a301cf719233ff00d1e793a2/
-http://autobuild.buildroot.net/results/8bb/8bbfd91d1d972b5d382e7355a8a36ab532510745/
-http://autobuild.buildroot.net/results/05c/05c7691c0cc1ef4cfa842643ab564a3958e66542/
-http://autobuild.buildroot.net/results/dfd/dfdbb574708393b627b1244a627444478155c70f/
+ I'm not sure what you mean with stamping a git remote update. What I think
+would make sense is that for distributed VCS downloads (i.e. git and hg) we keep
+a full (shallow) clone in DL_DIR in addition to the tarball. That makes handling
+updates a lot more efficient. We probably would want to expose that to PRIMARY
+and SECONDARY download sites as well. Especially the PRIMARY would be useful,
+since it would allow you to start from a local clone of e.g. linux.git (which
+may not have the ref you need), and then just fetch the missing refs from upstream.
 
-Python3 needs wchar, so ranger needs to depend on that as well before we can
-safely select python3.
+ This will not be easy to implement, though, since we'd need to handle e.g.
+multiple remotes that end up in the same DL_DIR/foo.git repository.
 
-While we're at it, also add a comment about the toolchain dependencies.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ranger/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ Was this what you meant, Vivien?
 
-diff --git a/package/ranger/Config.in b/package/ranger/Config.in
-index 3d77107..ee0ffec 100644
---- a/package/ranger/Config.in
-+++ b/package/ranger/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_RANGER
- 	bool "ranger"
- 	depends on BR2_USE_MMU # python3
-+	depends on BR2_USE_WCHAR # python3
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
- 	depends on !BR2_STATIC_LIBS # python3
- 	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
-@@ -14,3 +15,7 @@ config BR2_PACKAGE_RANGER
- 	  which program to use for what file type.
- 
- 	  http://ranger.nongnu.org
-+
-+comment "ranger needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
