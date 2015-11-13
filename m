@@ -1,33 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2015 22:35:51 +0100
-Subject: [Buildroot] [git commit branch/next] olimex_a20_olinuxino_lime:
-	bump u-boot to 2015.10
-Message-ID: <20151113213626.02F2B807F6@busybox.osuosl.org>
+Date: Fri, 13 Nov 2015 22:41:09 +0100
+Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.4.5
+In-Reply-To: <1447448968-22829-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Fri, 13 Nov 2015 22:09:28 +0100")
+References: <1447448968-22829-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87a8qhlgqy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a1998bdb86196699b034e94cf0b4638f0d492f2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/olimex_a20_olinuxino_lime_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Changelog (see [1] for details):
+ >   Only a small fix, the suggested hwdb entry that the touchpad-edge-detector
+ >   printed used the wrong codes for ABS_X and ABS_Y. Fixed with this release,
+ >   the output is now suitable for copy/paste into the udev hwdb.
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 53286b4..e30a070 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
+ > [1] http://lists.freedesktop.org/archives/input-tools/2015-November/001227.html
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
