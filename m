@@ -1,36 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2015 23:09:01 +0100
-Subject: [Buildroot] [git commit] ibrdtnd: needs host-pkgconf
-Message-ID: <20151113075130.AE41D81F76@busybox.osuosl.org>
+Date: Fri, 13 Nov 2015 09:08:10 +0100
+Subject: [Buildroot] [git commit] ranger: propagate python3 wchar dependency
+Message-ID: <20151113081058.6778581EC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2156714b99757e82e9e29e62221608c6d8fd846c
+commit: http://git.buildroot.net/buildroot/commit/?id=24ecac5562aed872371297d2225bb62a25ed3e5a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The configure script uses pkg-config to find the optional dependencies, so
-make sure it is present:
+Fixes:
+http://autobuild.buildroot.net/results/da1/da1a4cac055ab4b1a301cf719233ff00d1e793a2/
+http://autobuild.buildroot.net/results/8bb/8bbfd91d1d972b5d382e7355a8a36ab532510745/
+http://autobuild.buildroot.net/results/05c/05c7691c0cc1ef4cfa842643ab564a3958e66542/
+http://autobuild.buildroot.net/results/dfd/dfdbb574708393b627b1244a627444478155c70f/
 
-checking pkg-config is at least version 0.9.0... yes
+Python3 needs wchar, so ranger needs to depend on that as well before we can
+safely select python3.
+
+While we're at it, also add a comment about the toolchain dependencies.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ibrdtnd/ibrdtnd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ranger/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/ibrdtnd/ibrdtnd.mk b/package/ibrdtnd/ibrdtnd.mk
-index e9fa43d..3451bfa 100644
---- a/package/ibrdtnd/ibrdtnd.mk
-+++ b/package/ibrdtnd/ibrdtnd.mk
-@@ -9,7 +9,7 @@ IBRDTND_SOURCE = ibrdtnd-$(IBRDTND_VERSION).tar.gz
- IBRDTND_SITE = https://www.ibr.cs.tu-bs.de/projects/ibr-dtn/releases
- IBRDTND_LICENSE = Apache-2.0
- IBRDTND_LICENSE_FILES = COPYING
--IBRDTND_DEPENDENCIES = ibrdtn ibrcommon
-+IBRDTND_DEPENDENCIES = ibrdtn ibrcommon host-pkgconf
+diff --git a/package/ranger/Config.in b/package/ranger/Config.in
+index 3d77107..ee0ffec 100644
+--- a/package/ranger/Config.in
++++ b/package/ranger/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_RANGER
+ 	bool "ranger"
+ 	depends on BR2_USE_MMU # python3
++	depends on BR2_USE_WCHAR # python3
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
+ 	depends on !BR2_STATIC_LIBS # python3
+ 	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+@@ -14,3 +15,7 @@ config BR2_PACKAGE_RANGER
+ 	  which program to use for what file type.
  
- # Disable features that don't have the necessary dependencies in
- # Buildroot
+ 	  http://ranger.nongnu.org
++
++comment "ranger needs a toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
