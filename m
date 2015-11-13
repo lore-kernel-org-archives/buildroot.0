@@ -1,66 +1,64 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 13 Nov 2015 07:37:46 +0100
-Subject: [Buildroot] [PATCH] makefile: remove LD_LIBRARY_PATH from the
- environment
-In-Reply-To: <1446086895-28252-1-git-send-email-mathstuf@gmail.com>
-References: <1445722754-3477-1-git-send-email-mathstuf@gmail.com>
- <1446086895-28252-1-git-send-email-mathstuf@gmail.com>
-Message-ID: <5645853A.3040002@mind.be>
+Date: Fri, 13 Nov 2015 08:02:43 +0100
+Subject: [Buildroot] [PATCH v2] python3: add patch to fix PEP 3147 issue
+ with automake built packages
+In-Reply-To: <20151112163129.4adc5852@PAL-U515208D001>
+References: <1441023704-27725-1-git-send-email-cvubrugier@fastmail.fm>
+ <20151104225541.15eef643@free-electrons.com>
+ <20151105000420.5abc2ee1@free-electrons.com>
+ <20151112163129.4adc5852@PAL-U515208D001>
+Message-ID: <56458B13.2070806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29-10-15 03:48, Ben Boeckel wrote:
-> If system tools are selected, the host's lib/ directory may shadow
-> libraries from the system which are configured differently and do not
-> have all of the symbols required by the system tool.
+On 12-11-15 16:31, Christophe Vu-Brugier wrote:
+> Hi Thomas,
 > 
-> Since buildroot uses rpath everywhere, LD_LIBRARY_PATH should not be
-> necessary anyways.
+> On Thu, 5 Nov 2015 00:04:20 +0100, Thomas Petazzoni wrote :
+>> In fact, it seems that this patch might be causing some Python 3 build
+>> issues. See
+>> http://autobuild.buildroot.org/results/06e/06e7c654a10a7618c0c64c57bfd9f27e770138fc/build-end.log.
+>>
+>> Can you have a look?
 > 
-> Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+> Sorry for the late reply.
+> 
+> Here is a short explanation for the error. The Makefile defines a rule
+> to regenerate "Python/importlib.h" if "Lib/importlib/_bootstrap.py" is
+> modified using a C helper named `_freeze_importlib`. Since
+> "_boostrap.py" is modified by my patch, the rule is invoked. The
+> problem is that the helper is built for the target so it cannot be
+> executed on the host.
+> 
+> If I understand correctly "importlib.h" is a frozen module: it contains
+> bytecode generated from "_bootstrap.py". It is only used by a dummy
+> "frozen.c" program.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Isn't importlib.h installed to STAGING_DIR where it could be picked up by other
+modules?
 
- As I mentioned in a discussion with Yann (don't remember if it was on IRC or on
-the list), I think we should apply this now no master to see what the
-autobuilders say. We currently break the build on Fedora 23 for any
-configuration including libattr, which IMHO is worse than the (probably small)
-number of host-tools that are missing rpath.
+> 
+> I see two options:
+> 
+> 1/ Patch the Makefile to invoke a version of `_freeze_importlib` built
+>    for the host.
+> 2/ Simply do not regenerate "importlib.h" because it is not used.
 
- If we apply this patch _now_, we still have a few weeks to look at autobuild
-results and handle the fallout.
+ Most likely, the generated importlib.h doesn't change due to your patch. So the
+simplest solution is to do a 'touch $(@D)/Python/importlib.h' in a post-patch
+hook (with a large comment explaining why it is necessary and allowed).
 
- Note that all the host tools that are mentioned in Config.in.host will have to
-be tested manually. Anybody up for that? Also the boot loaders will have to be
-tested manually since they're not handled by the autobuilders.
 
  Regards,
  Arnout
 
-> ---
->  package/Makefile.in | 2 --
->  1 file changed, 2 deletions(-)
 > 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 8a592d4..10f3a47 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -298,12 +298,10 @@ HOST_CONFIGURE_OPTS = \
->  	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->  	PKG_CONFIG_SYSROOT_DIR="/" \
->  	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
-> -	LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
->  	INTLTOOL_PERL=$(PERL)
->  
->  HOST_MAKE_ENV = \
->  	PATH=$(BR_PATH) \
-> -	LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
->  	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->  	PKG_CONFIG_SYSROOT_DIR="/" \
->  	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
+> I would favor the second option.
+> 
+> With best regards,
 > 
 
 
