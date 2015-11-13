@@ -1,41 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 13 Nov 2015 09:35:47 -0300
-Subject: [Buildroot] [PATCH] cryptsetup: bump to version 1.7.0
-Message-ID: <1447418147-6484-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Nov 2015 13:46:16 +0100
+Subject: [Buildroot] [PATCH] exiv2: bump to version 0.25
+In-Reply-To: <1447418127-6439-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 13 Nov 2015 09:35:27 -0300")
+References: <1447418127-6439-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87y4e2m5if.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index a0b975d..e770f95 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/sha256sums.asc
--sha256	45a6ccd3c65b7d904e58e1cb3656a7e997190b6a05b5ff7c6887e4a41c5f19bc	cryptsetup-1.6.8.tar.xz
-+sha256	075524a7cc0db36d12119fa79116750accb1c6c8825d5faa2534b74b8ce3d148	cryptsetup-1.7.0.tar.xz
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 78cbe8f..986b131 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CRYPTSETUP_VERSION_MAJOR = 1.6
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).8
-+CRYPTSETUP_VERSION_MAJOR = 1.7
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed to next, thanks.
+
 -- 
-2.4.10
+Bye, Peter Korsgaard
