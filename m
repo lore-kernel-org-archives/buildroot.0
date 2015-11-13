@@ -1,78 +1,57 @@
-From: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Fri, 13 Nov 2015 12:09:18 +0100
-Subject: [Buildroot] [PATCH 1/1] rabbitmq-c:new package
-Message-ID: <1447412958-25453-1-git-send-email-joris.lijssens@gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Fri, 13 Nov 2015 13:49:14 +0100
+Subject: [Buildroot] [PATCH] zedboard: uboot: load env earlier
+Message-ID: <1447418954-3350-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
----
- package/Config.in                  |  1 +
- package/rabbitmq-c/Config.in       |  9 +++++++++
- package/rabbitmq-c/rabbitmq-c.hash |  2 ++
- package/rabbitmq-c/rabbitmq-c.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/rabbitmq-c/Config.in
- create mode 100644 package/rabbitmq-c/rabbitmq-c.hash
- create mode 100644 package/rabbitmq-c/rabbitmq-c.mk
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index 0a80afb..7092be4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1058,6 +1058,7 @@ menu "Networking"
- 	source "package/ortp/Config.in"
- 	source "package/qdecoder/Config.in"
- 	source "package/qpid-proton/Config.in"
-+	source "package/rabbitmq-c/Config.in"
- 	source "package/rtmpdump/Config.in"
- 	source "package/slirp/Config.in"
- 	source "package/snmppp/Config.in"
-diff --git a/package/rabbitmq-c/Config.in b/package/rabbitmq-c/Config.in
-new file mode 100644
-index 0000000..55ce93d
---- /dev/null
-+++ b/package/rabbitmq-c/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_RABBITMQ_C
-+	bool "rabbitmq-c"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  This is a C-language AMQP client library for use with v2.0+ of 
-+	  the RabbitMQ broker.
-+
-+
-+	  https://github.com/alanxz/rabbitmq-c
-diff --git a/package/rabbitmq-c/rabbitmq-c.hash b/package/rabbitmq-c/rabbitmq-c.hash
-new file mode 100644
-index 0000000..9f7d071
---- /dev/null
-+++ b/package/rabbitmq-c/rabbitmq-c.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 0b9b81d05b3e629c3449521690de400fe4539a8ba1feacadcbd6e9a50c8a4625 rabbitmq-c-v0.7.1.tar.gz
-diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-new file mode 100644
-index 0000000..cd81ddf
---- /dev/null
-+++ b/package/rabbitmq-c/rabbitmq-c.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# rabbitmq-c
-+#
-+################################################################################
-+
-+RABBITMQ_C_VERSION = v0.7.1
-+RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,$(RABBITMQ_C_VERSION))
-+RABBITMQ_C_LICENSE = MIT
-+RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
-+RABBITMQ_C_INSTALL_STAGING = YES
-+RABBITMQ_C_DEPENDENCIES = openssl
-+
-+$(eval $(cmake-package))
+By default, with the original patch bootcmd runs sdboot before loading uEnv.txt.
+Consequently, if the user change modeboot, the user's defined content is updated
+too late.
+By loading uEnv.txt before 'run $modeboot' the correct boot mode is used instead
+of default mode.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ .../0001-zynq-Create-zedboard-specific-U-Boot-environment.patch    | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch b/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
+index 1971503..6dae31e 100644
+--- a/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
++++ b/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
+@@ -11,7 +11,7 @@ diff --git a/include/configs/zynq_zed.h b/include/configs/zynq_zed.h
+ index 946de95..2400a88 100644
+ --- a/include/configs/zynq_zed.h
+ +++ b/include/configs/zynq_zed.h
+-@@ -24,4 +24,29 @@
++@@ -24,4 +24,28 @@
+ 
+  #include <configs/zynq-common.h>
+ 
+@@ -20,7 +20,7 @@ index 946de95..2400a88 100644
+ +	"envload=mmc info && if fatload mmc 0 0x1000 uEnv.txt;"\
+ +	" then echo Importing uEnv.txt; env import -t 0x1000"  \
+ +	" $filesize; fi;\0"                                    \
+-+	"bootcmd=run $modeboot\0"                              \
+++	"bootcmd=run envload; run $modeboot\0"                 \
+ +	"modeboot=sdboot\0"                                    \
+ +	"baudrate=115200\0"                                    \
+ +	"bootenv=uEnv.txt\0"                                   \
+@@ -28,8 +28,7 @@ index 946de95..2400a88 100644
+ +	"kernel_image=uImage\0"                                \
+ +	"ramdisk_image=rootfs.cpio.uboot\0"                    \
+ +	"fpga_image=system.bit\0"                              \
+-+	"sdboot=echo Booting from SD...;"                      \
+-+	" run envload; run fpgaboot;"                          \
+++	"sdboot=echo Booting from SD...; run fpgaboot;"        \
+ +	" fatload mmc 0 0x1000000 ${kernel_image}"             \
+ +	" && fatload mmc 0 0x2000000 ${ramdisk_image}"         \
+ +	" && fatload mmc 0 0x3000000 ${devicetree_image}"      \
 -- 
-1.8.3.1
+2.4.10
