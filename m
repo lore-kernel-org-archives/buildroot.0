@@ -1,63 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2015 22:41:46 +0100
-Subject: [Buildroot] [git commit] package/ebtables: disable for musl
-	toolchains
-Message-ID: <20151113214300.51AE381F12@busybox.osuosl.org>
+Date: Fri, 13 Nov 2015 22:45:05 +0100
+Subject: [Buildroot] [PATCH v2] python3: add patch to fix PEP 3147 issue
+	with automake built packages
+In-Reply-To: <56458B13.2070806@mind.be> (Arnout Vandecappelle's message of
+ "Fri, 13 Nov 2015 08:02:43 +0100")
+References: <1441023704-27725-1-git-send-email-cvubrugier@fastmail.fm>
+ <20151104225541.15eef643@free-electrons.com>
+ <20151105000420.5abc2ee1@free-electrons.com>
+ <20151112163129.4adc5852@PAL-U515208D001> <56458B13.2070806@mind.be>
+Message-ID: <871tbtlgke.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4fc6f61b0e0d66cf5b8b6fbe361850e47bf2eb2b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-ebtabes fail to build with a musl based toolchain due to several errors.
-Most of them has been fixed by [1] and [2] but it's not enought because
-useful_functions.c fail to build due to mixed usespace and kernel headers
-usage [3].
+Hi,
 
-In file included from [...]/sysroot/usr/include/netinet/ether.h:8:0,
-                 from useful_functions.c:28:
-[...]/sysroot/usr/include/netinet/if_ether.h:96:8: error: redefinition of ???struct ethhdr???
- struct ethhdr {
-        ^
-In file included from include/linux/netfilter_bridge.h:8:0,
-                 from include/linux/netfilter_bridge/ebtables.h:17,
-                 from include/ebtables_u.h:27,
-                 from useful_functions.c:25:
-include/linux/if_ether.h:119:8: note: originally defined here
- struct ethhdr {
-        ^
-Makefile:78: recipe for target 'useful_functions.o' failed
+ >> 2/ Simply do not regenerate "importlib.h" because it is not used.
 
-Fixes:
-http://autobuild.buildroot.net/results/75c/75cc79ae2a2d05ad27198f1b745c8bef37c3a87d/build-end.log
+ >  Most likely, the generated importlib.h doesn't change due to your patch. So the
+ > simplest solution is to do a 'touch $(@D)/Python/importlib.h' in a post-patch
+ > hook (with a large comment explaining why it is necessary and allowed).
 
-[1] http://git.netfilter.org/ebtables/commit/?id=f8079671326e9fd079391d24911a9a8a77f1d6fd
-[2] http://git.netfilter.org/ebtables/commit/?id=4488ba7aa2bb612a624c68957f464fc0ee786e05
-[3] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
+Yes, sounds sensible. Christophe, care to send a patch?
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ebtables/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
-
-diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
-index 3f7566a..fa123b1 100644
---- a/package/ebtables/Config.in
-+++ b/package/ebtables/Config.in
-@@ -1,7 +1,12 @@
- config BR2_PACKAGE_EBTABLES
- 	bool "ebtables"
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # mixes userspace and kernel headers
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  Ethernet bridge frame table administration
- 
- 	  http://ebtables.netfilter.org/
-+
-+comment "ebtables needs a glibc or uClibc toolchain"
-+	depends on BR2_TOOLCHAIN_USES_MUSL
-+	depends on BR2_USE_MMU
+-- 
+Bye, Peter Korsgaard
