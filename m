@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 13 Nov 2015 16:37:04 -0300
-Subject: [Buildroot] [PATCH 2/3] comix_cursors: new package
+Date: Fri, 13 Nov 2015 16:37:05 -0300
+Subject: [Buildroot] [PATCH 3/3] cantarell: new package
 In-Reply-To: <1447443425-2530-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1447443425-2530-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1447443425-2530-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1447443425-2530-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,75 +12,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                        |  1 +
- package/comix_cursors/Config.in          |  6 ++++++
- package/comix_cursors/comix_cursors.hash |  2 ++
- package/comix_cursors/comix_cursors.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/comix_cursors/Config.in
- create mode 100644 package/comix_cursors/comix_cursors.hash
- create mode 100644 package/comix_cursors/comix_cursors.mk
+ package/Config.in                |  1 +
+ package/cantarell/Config.in      |  7 +++++++
+ package/cantarell/cantarell.hash |  2 ++
+ package/cantarell/cantarell.mk   | 15 +++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/cantarell/Config.in
+ create mode 100644 package/cantarell/cantarell.hash
+ create mode 100644 package/cantarell/cantarell.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f48d114..be2a7a8 100644
+index be2a7a8..dde5c4c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -183,6 +183,7 @@ endmenu
- menu "Fonts, cursors, icons, sounds and themes"
- 
- comment "Cursors"
-+	source "package/comix_cursors/Config.in"
- 	source "package/obsidian_cursors/Config.in"
+@@ -188,6 +188,7 @@ comment "Cursors"
  
  comment "Fonts"
-diff --git a/package/comix_cursors/Config.in b/package/comix_cursors/Config.in
+ 	source "package/bitstream-vera/Config.in"
++	source "package/cantarell/Config.in"
+ 	source "package/dejavu/Config.in"
+ 	source "package/ghostscript-fonts/Config.in"
+ 	source "package/inconsolata/Config.in"
+diff --git a/package/cantarell/Config.in b/package/cantarell/Config.in
 new file mode 100644
-index 0000000..82da8e4
+index 0000000..78af96d
 --- /dev/null
-+++ b/package/comix_cursors/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_COMIX_CURSORS
-+	bool "comix"
++++ b/package/cantarell/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_CANTARELL
++	bool "cantarell"
 +	help
-+	  X11 mouse theme with a comics feeling.
++	  The Cantarell font family is a contemporary Humanist
++	  sans serif designed for on-screen reading.
 +
-+	  http://kde-look.org/content/show.php/ComixCursors?content=32627
-diff --git a/package/comix_cursors/comix_cursors.hash b/package/comix_cursors/comix_cursors.hash
++	  https://wiki.gnome.org/Projects/CantarellFonts
+diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
 new file mode 100644
-index 0000000..d7f33ca
+index 0000000..d3946c6
 --- /dev/null
-+++ b/package/comix_cursors/comix_cursors.hash
++++ b/package/cantarell/cantarell.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	3109e4d19d930a6a2a5c3422ebaaa2002640169118f9b12c042bb64995f3ec31	ComixCursors-0.8.2.tar.bz2
-diff --git a/package/comix_cursors/comix_cursors.mk b/package/comix_cursors/comix_cursors.mk
++# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.18.1.sha256sum
++sha256	9c5b1a2edee1d3acf30eaae3d559b2b2e1d835249cf2770f6f8bfc6af861e8f0	cantarell-fonts-0.0.18.1.tar.xz
+diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
 new file mode 100644
-index 0000000..2f8e0e1
+index 0000000..d9ca655
 --- /dev/null
-+++ b/package/comix_cursors/comix_cursors.mk
-@@ -0,0 +1,23 @@
++++ b/package/cantarell/cantarell.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# comix_cursors
++# cantarell
 +#
 +################################################################################
 +
-+COMIX_CURSORS_VERSION = 0.8.2
-+COMIX_CURSORS_SITE = http://limitland.de/downloads/comixcursors
-+COMIX_CURSORS_SOURCE = ComixCursors-$(COMIX_CURSORS_VERSION).tar.bz2
-+COMIX_CURSORS_LICENSE = GPL
++CANTARELL_VERSION_MAJOR = 0.0
++CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).18.1
++CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/0.0
++CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
++CANTARELL_DEPENDENCIES = host-pkgconf
++CANTARELL_LICENSE = SILv1.1
++CANTARELL_LICENSE_FILES = COPYING
 +
-+define COMIX_CURSORS_EXTRACT_CMDS
-+	$(call suitable-extractor,$(COMIX_CURSORS_SOURCE)) $(DL_DIR)/$(COMIX_CURSORS_SOURCE) | \
-+	$(TAR) --strip-components=0 -C $(@D) $(TAR_OPTIONS) -
-+endef
-+
-+define COMIX_CURSORS_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/share/cursors/xorg-x11
-+	cp -a $(@D)/* \
-+		$(TARGET_DIR)/usr/share/cursors/xorg-x11
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 2.4.10
