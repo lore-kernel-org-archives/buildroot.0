@@ -1,132 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 13 Nov 2015 10:51:56 -0300
-Subject: [Buildroot] [PATCH] busybox: add upstream unzip segv patch
-Message-ID: <1447422716-27041-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 13 Nov 2015 10:57:48 -0300
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.46
+Message-ID: <1447423068-27262-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/busybox/0002-unzip.patch | 111 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 111 insertions(+)
- create mode 100644 package/busybox/0002-unzip.patch
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/0002-unzip.patch b/package/busybox/0002-unzip.patch
-new file mode 100644
-index 0000000..400e528
---- /dev/null
-+++ b/package/busybox/0002-unzip.patch
-@@ -0,0 +1,111 @@
-+From 1de25a6e87e0e627aa34298105a3d17c60a1f44e Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Mon, 26 Oct 2015 19:33:05 +0100
-+Subject: [PATCH] unzip: test for bad archive SEGVing
-+
-+function                                             old     new   delta
-+huft_build                                          1296    1300      +4
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ archival/libarchive/decompress_gunzip.c | 11 +++++++----
-+ testsuite/unzip.tests                   | 23 ++++++++++++++++++++++-
-+ 2 files changed, 29 insertions(+), 5 deletions(-)
-+
-+diff --git a/archival/libarchive/decompress_gunzip.c b/archival/libarchive/decompress_gunzip.c
-+index 7b6f459..30bf451 100644
-+--- a/archival/libarchive/decompress_gunzip.c
-++++ b/archival/libarchive/decompress_gunzip.c
-+@@ -305,11 +305,12 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 	unsigned i;             /* counter, current code */
-+ 	unsigned j;             /* counter */
-+ 	int k;                  /* number of bits in current code */
-+-	unsigned *p;            /* pointer into c[], b[], or v[] */
-++	const unsigned *p;      /* pointer into c[], b[], or v[] */
-+ 	huft_t *q;              /* points to current table */
-+ 	huft_t r;               /* table entry for structure assignment */
-+ 	huft_t *u[BMAX];        /* table stack */
-+ 	unsigned v[N_MAX];      /* values in order of bit length */
-++	unsigned v_end;
-+ 	int ws[BMAX + 1];       /* bits decoded stack */
-+ 	int w;                  /* bits decoded */
-+ 	unsigned x[BMAX + 1];   /* bit offsets, then code stack */
-+@@ -324,7 +325,7 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 
-+ 	/* Generate counts for each bit length */
-+ 	memset(c, 0, sizeof(c));
-+-	p = (unsigned *) b; /* cast allows us to reuse p for pointing to b */
-++	p = b;
-+ 	i = n;
-+ 	do {
-+ 		c[*p]++; /* assume all entries <= BMAX */
-+@@ -365,12 +366,14 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 	}
-+ 
-+ 	/* Make a table of values in order of bit lengths */
-+-	p = (unsigned *) b;
-++	p = b;
-+ 	i = 0;
-++	v_end = 0;
-+ 	do {
-+ 		j = *p++;
-+ 		if (j != 0) {
-+ 			v[x[j]++] = i;
-++			v_end = x[j];
-+ 		}
-+ 	} while (++i < n);
-+ 
-+@@ -432,7 +435,7 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 
-+ 			/* set up table entry in r */
-+ 			r.b = (unsigned char) (k - w);
-+-			if (p >= v + n) {
-++			if (p >= v + v_end) { // Was "if (p >= v + n)" but v[] can be shorter!
-+ 				r.e = 99; /* out of values--invalid code */
-+ 			} else if (*p < s) {
-+ 				r.e = (unsigned char) (*p < 256 ? 16 : 15);	/* 256 is EOB code */
-+diff --git a/testsuite/unzip.tests b/testsuite/unzip.tests
-+index 8677a03..ca0a458 100755
-+--- a/testsuite/unzip.tests
-++++ b/testsuite/unzip.tests
-+@@ -7,7 +7,7 @@
-+ 
-+ . ./testing.sh
-+ 
-+-# testing "test name" "options" "expected result" "file input" "stdin"
-++# testing "test name" "commands" "expected result" "file input" "stdin"
-+ #   file input will be file called "input"
-+ #   test can create a file "actual" instead of writing to stdout
-+ 
-+@@ -30,6 +30,27 @@ testing "unzip (subdir only)" "unzip -q foo.zip foo/ && test -d foo && test ! -f
-+ rmdir foo
-+ rm foo.zip
-+ 
-++# File containing some damaged encrypted stream
-++testing "unzip (bad archive)" "uudecode; unzip bad.zip 2>&1; echo \$?" \
-++"Archive:  bad.zip
-++  inflating: ]3j?r?IK-%Ix
-++unzip: inflate error
-++1
-++" \
-++"" "\
-++begin-base64 644 bad.zip
-++UEsDBBQAAgkIAAAAIQA5AAAANwAAADwAAAAQAAcAXTNqwr1ywqtJGxJLLSVJ
-++eCkBD0AdKBk8JzQsIj01JC0/ORJQSwMEFAECCAAAAAAhADoAAAAPAAAANgAA
-++AAwAAQASw73Ct1DCokohPXQiNjoUNTUiHRwgLT4WHlBLAQIQABQAAggIAAAA
-++oQA5AAAANwAAADwAAAAQQAcADAAAACwAMgCAAAAAAABdM2rCvXLCq0kbEkst
-++JUl4KQEPQB0oGSY4Cz4QNgEnJSYIPVBLAQIAABQAAggAAAAAIQAqAAAADwAA
-++BDYAAAAMAAEADQAAADIADQAAAEEAAAASw73Ct1DKokohPXQiNzA+FAI1HCcW
-++NzITNFBLBQUKAC4JAA04Cw0EOhZQSwUGAQAABAIAAgCZAAAAeQAAAAIALhM=
-++====
-++"
-++
-++rm *
-++
-+ # Clean up scratch directory.
-+ 
-+ cd ..
-+-- 
-+2.6.2
-+
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 618d53a..5594cba 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	1075def48da9327be22441f4a3460d24159fae2bf4bcfb4ab6e7ca5e95e54a69	libmicrohttpd-0.9.45.tar.gz
++sha256	06dbd2654f390fa1e8196fe063fc1449a6c2ed65a38199a49bf29ad8a93b8979	libmicrohttpd-0.9.46.tar.gz
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 06b40a1..3e8bbb1 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.45
++LIBMICROHTTPD_VERSION = 0.9.46
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
 -- 
 2.4.10
