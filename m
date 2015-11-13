@@ -1,98 +1,103 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 13 Nov 2015 22:48:47 +0100
-Subject: [Buildroot] [PATCH 1/6] package/axfsutils: fix Makefile
+Date: Fri, 13 Nov 2015 22:48:48 +0100
+Subject: [Buildroot] [PATCH 2/6] package/mysql: unconditionally define host
+	variables
 In-Reply-To: <cover.1447449754.git.yann.morin.1998@free.fr>
 References: <cover.1447449754.git.yann.morin.1998@free.fr>
-Message-ID: <1142395b4466f1e5ccbe593ddce1c6e792b6795a.1447449754.git.yann.morin.1998@free.fr>
+Message-ID: <70800f7df3d1c437d4368d764e26e0e87fa583f3.1447449754.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mkfs.axfs uses zlib, but does not have an rpath to our host dir.
+To build the host-mysql, we only build parts of the source, just the
+strictly minimum required to then cross-compile it.
 
-That's because:
-  - we're not passing our host CFLAGS or LDFLAGS
-  - it is forcibly setting CFLAGS in the Makefile, overriding anything
-    specified by the user
-  - it is not using LDFLAGS at all
+However, the host variables (conf opts, build and install cmds) are only
+defined when the mysql server is enabled in the configuration.
 
-Add two patches so that CFLAGS and LDFLAGS from the environment are
-used if present.
+So, this breaks:
+    make defconfig; make host-mysql
+
+Even though it is not much use to have that partial host-mysql on its
+own, it is still very interesting to be able to build it, if at least
+for testing changes in the core package infrastructures (like new step
+hooks or the likes...)
+
+Move the definitions of the host variant out of the server conditional
+block.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Marcelo Guti?rrez(UTN/FRH) <kuyurix@gmail.com>
 ---
- package/axfsutils/0001-fix-cflags.patch  | 19 +++++++++++++++++++
- package/axfsutils/0002-use-ldflags.patch | 20 ++++++++++++++++++++
- package/axfsutils/axfsutils.mk           |  2 +-
- 3 files changed, 40 insertions(+), 1 deletion(-)
- create mode 100644 package/axfsutils/0001-fix-cflags.patch
- create mode 100644 package/axfsutils/0002-use-ldflags.patch
+ package/mysql/mysql.mk | 39 ++++++++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 19 deletions(-)
 
-diff --git a/package/axfsutils/0001-fix-cflags.patch b/package/axfsutils/0001-fix-cflags.patch
-new file mode 100644
-index 0000000..0415d82
---- /dev/null
-+++ b/package/axfsutils/0001-fix-cflags.patch
-@@ -0,0 +1,19 @@
-+Makefile: complement CFLAGS provided by the user
-+
-+In some circumstances, the user may want to pass its own CFLAGS,
-+like for when the zlib headers are not located in the standard gcc
-+search paths.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN a/mkfs.axfs-legacy/Makefile b/mkfs.axfs-legacy/Makefile
-+--- a/mkfs.axfs-legacy/Makefile
-++++ b/mkfs.axfs-legacy/Makefile
-+@@ -1,5 +1,5 @@
-+-INC = -I./
-+-CFLAGS = -g $(INC) -O0
-++INC += -I./
-++CFLAGS += -g $(INC) -O0
-+ 
-+ MKFSOBJS = mkfs.axfs.o
-+ 
-diff --git a/package/axfsutils/0002-use-ldflags.patch b/package/axfsutils/0002-use-ldflags.patch
-new file mode 100644
-index 0000000..20e03a9
---- /dev/null
-+++ b/package/axfsutils/0002-use-ldflags.patch
-@@ -0,0 +1,20 @@
-+Makefile: use LDFLAGS as provided by the user
-+
-+In some circumstances, the user may want to pass some LDFLAGS, like
-+-L flags to point to the zlib location if it was not installed in a
-+standard location.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN a/mkfs.axfs-legacy/Makefile b/mkfs.axfs-legacy/Makefile
-+--- a/mkfs.axfs-legacy/Makefile
-++++ b/mkfs.axfs-legacy/Makefile
-+@@ -6,7 +6,7 @@
-+ all:   mkfs.axfs
-+ 
-+ mkfs.axfs: $(MKFSOBJS)
-+-	$(CC) $(CFLAGS) -o mkfs.axfs $(MKFSOBJS) -lz
-++	$(CC) $(CFLAGS) $(LDFLAGS) -o mkfs.axfs $(MKFSOBJS) -lz
-+ 
-+ clean_mkfs.axfs:
-+ 	rm -rf $(MKFSOBJS) mkfs.axfs
-diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
-index 3e6ea52..4dd60ef 100644
---- a/package/axfsutils/axfsutils.mk
-+++ b/package/axfsutils/axfsutils.mk
-@@ -13,7 +13,7 @@ AXFSUTILS_DEPENDENCIES = host-zlib
- # The 'new' mkfs.axfs version requires GNUstep which is not a buildroot
- # prerequisite. The 'legacy' one works just as well without that requirement.
- define HOST_AXFSUTILS_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mkfs.axfs-legacy
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)/mkfs.axfs-legacy
- endef
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index c6d9f3a..00fab85 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -33,6 +33,26 @@ MYSQL_CONF_OPTS = \
+ 	--enable-thread-safe-client \
+ 	--disable-mysql-maintainer-mode
  
- define HOST_AXFSUTILS_INSTALL_CMDS
++HOST_MYSQL_DEPENDENCIES = host-zlib host-ncurses
++
++HOST_MYSQL_CONF_OPTS = \
++	--with-embedded-server \
++	--disable-mysql-maintainer-mode
++
++define HOST_MYSQL_BUILD_CMDS
++	$(MAKE) -C $(@D)/include my_config.h
++	$(MAKE) -C $(@D)/mysys libmysys.a
++	$(MAKE) -C $(@D)/strings libmystrings.a
++	$(MAKE) -C $(@D)/vio libvio.a
++	$(MAKE) -C $(@D)/dbug libdbug.a
++	$(MAKE) -C $(@D)/regex libregex.a
++	$(MAKE) -C $(@D)/sql gen_lex_hash
++endef
++
++define HOST_MYSQL_INSTALL_CMDS
++	$(INSTALL) -m 0755  $(@D)/sql/gen_lex_hash $(HOST_DIR)/usr/bin/
++endef
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MYSQL_DEPENDENCIES += openssl
+ endif
+@@ -43,11 +63,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_MYSQL_SERVER),y)
+ MYSQL_DEPENDENCIES += host-mysql host-bison
+-HOST_MYSQL_DEPENDENCIES = host-zlib host-ncurses
+-
+-HOST_MYSQL_CONF_OPTS = \
+-	--with-embedded-server \
+-	--disable-mysql-maintainer-mode
+ 
+ MYSQL_CONF_OPTS += \
+ 	--localstatedir=/var/mysql \
+@@ -74,20 +89,6 @@ else
+ MYSQL_CONF_OPTS += --without-debug
+ endif
+ 
+-define HOST_MYSQL_BUILD_CMDS
+-	$(MAKE) -C $(@D)/include my_config.h
+-	$(MAKE) -C $(@D)/mysys libmysys.a
+-	$(MAKE) -C $(@D)/strings libmystrings.a
+-	$(MAKE) -C $(@D)/vio libvio.a
+-	$(MAKE) -C $(@D)/dbug libdbug.a
+-	$(MAKE) -C $(@D)/regex libregex.a
+-	$(MAKE) -C $(@D)/sql gen_lex_hash
+-endef
+-
+-define HOST_MYSQL_INSTALL_CMDS
+-	$(INSTALL) -m 0755  $(@D)/sql/gen_lex_hash  $(HOST_DIR)/usr/bin/
+-endef
+-
+ define MYSQL_USERS
+ 	mysql -1 nogroup -1 * /var/mysql - - MySQL daemon
+ endef
 -- 
 1.9.1
