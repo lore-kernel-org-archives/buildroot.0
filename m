@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Nov 2015 00:26:31 +0100
-Subject: [Buildroot] [PATCH/next 01/13] package/x11r7/xapp_xinput: bump
-	version to 1.6.2
-Message-ID: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 14 Nov 2015 00:26:32 +0100
+Subject: [Buildroot] [PATCH/next 02/13] package/x11r7/xapp_xkbcomp: bump
+	version to 1.3.1
+In-Reply-To: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1447457203-27816-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xinput/xapp_xinput.hash | 4 ++--
- package/x11r7/xapp_xinput/xapp_xinput.mk   | 2 +-
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 4 ++--
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xinput/xapp_xinput.hash b/package/x11r7/xapp_xinput/xapp_xinput.hash
-index a8f6b70..724b2e2 100644
---- a/package/x11r7/xapp_xinput/xapp_xinput.hash
-+++ b/package/x11r7/xapp_xinput/xapp_xinput.hash
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+index b49d5a2..bc85caa 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2013-September/002321.html
--sha256	b7632d0f228a8a6be93b09857ea413940fcf44091e60f4a0fe9f5fd82efd871f	xinput-1.6.1.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-October/002643.html
-+sha256	3694d29b4180952fbf13c6d4e59541310cbb11eef5bf888ff3d8b7f4e3aee5c4		xinput-1.6.2.tar.bz2
-diff --git a/package/x11r7/xapp_xinput/xapp_xinput.mk b/package/x11r7/xapp_xinput/xapp_xinput.mk
-index 099408b..aaa7a80 100644
---- a/package/x11r7/xapp_xinput/xapp_xinput.mk
-+++ b/package/x11r7/xapp_xinput/xapp_xinput.mk
+-# From http://lists.x.org/archives/xorg-announce/2014-November/002497.html
+-sha256	cfac973778fabf5216121ad60b7af8ab74ce7513af0f9260cf8c5309e1622b2a	xkbcomp-1.3.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-November/002653.html
++sha256	0304dc9e0d4ac10831a9ef5d5419722375ddbc3eac3ff4413094d57bc1f1923d	xkbcomp-1.3.1.tar.bz2
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+index 0a72742..fea7fa8 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XINPUT_VERSION = 1.6.1
-+XAPP_XINPUT_VERSION = 1.6.2
- XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.bz2
- XAPP_XINPUT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XINPUT_LICENSE = MIT
+-XAPP_XKBCOMP_VERSION = 1.3.0
++XAPP_XKBCOMP_VERSION = 1.3.1
+ XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
+ XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBCOMP_LICENSE = MIT
 -- 
 2.6.2
