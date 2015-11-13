@@ -1,66 +1,91 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 13 Nov 2015 08:02:43 +0100
-Subject: [Buildroot] [PATCH v2] python3: add patch to fix PEP 3147 issue
- with automake built packages
-In-Reply-To: <20151112163129.4adc5852@PAL-U515208D001>
-References: <1441023704-27725-1-git-send-email-cvubrugier@fastmail.fm>
- <20151104225541.15eef643@free-electrons.com>
- <20151105000420.5abc2ee1@free-electrons.com>
- <20151112163129.4adc5852@PAL-U515208D001>
-Message-ID: <56458B13.2070806@mind.be>
+Date: Fri, 13 Nov 2015 08:10:05 +0100
+Subject: [Buildroot] [PATCH v2 1/1] qemu: add patch to fix SSP support
+ detection
+In-Reply-To: <CABLs7GU_RV8FOsFBqPB+Rz8nfHXFUaRF8PQrksk1MsrHQ7b4JA@mail.gmail.com>
+References: <1447280301-9225-1-git-send-email-rprebello@gmail.com>
+ <5643CF83.6000800@mind.be>
+ <CABLs7GXMFP-vm1tRx1zcQZAsJ+KXUV8JNqxLN+3qPhGbNDL50w@mail.gmail.com>
+ <56444B9D.3060501@mind.be>
+ <CABLs7GU_RV8FOsFBqPB+Rz8nfHXFUaRF8PQrksk1MsrHQ7b4JA@mail.gmail.com>
+Message-ID: <56458CCD.6030305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12-11-15 16:31, Christophe Vu-Brugier wrote:
-> Hi Thomas,
+On 12-11-15 16:04, Rodrigo Rebello wrote:
+> Arnout, All
 > 
-> On Thu, 5 Nov 2015 00:04:20 +0100, Thomas Petazzoni wrote :
->> In fact, it seems that this patch might be causing some Python 3 build
->> issues. See
->> http://autobuild.buildroot.org/results/06e/06e7c654a10a7618c0c64c57bfd9f27e770138fc/build-end.log.
+> 2015-11-12 6:19 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
 >>
->> Can you have a look?
+>>
+>> On 12-11-15 00:49, Rodrigo Rebello wrote:
+>>> Arnout,
+>>>
+>>> 2015-11-11 21:30 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
+>>>> On 11-11-15 23:18, Rodrigo Rebello wrote:
+>> [snip]
+>>>>> +diff --git a/configure b/configure
+>>>>> +index cd219d8..a6f4101 100755
+>>>>> +--- a/configure
+>>>>> ++++ b/configure
+>>>>> +@@ -1471,6 +1471,24 @@ for flag in $gcc_flags; do
+>>>>> + done
+>>>>> +
+>>>>> + if test "$stack_protector" != "no"; then
+>>>>> ++  cat > $TMPC << EOF
+>>>>> ++void foo(const char *c);
+>>>>
+>>>>  This declaration is unnecessary.
+>>>>
+>>>
+>>> Actually it is necessary, otherwise compiling the test code fails with:
+>>>
+>>> config-temp/qemu-conf.c:3:6: error: no previous prototype for ?foo?
+>>> [-Werror=missing-prototypes]
+>>>  void foo(const char *c)
+>>>       ^
+>>>
+>>> Because in configure, line 410, -Wmissing-prototypes is added to
+>>> QEMU_FLAGS (used in every compile test), and tests are run with
+>>> -Werror by default, unless --disable-werror is passed to the configure
+>>> script.
+>>
+>>  Right. And I guess declaring it static means that the whole function could be
+>> elided so still no stack protection.
+>>
+>>  I wonder what would happen if LTO were enabled, since in that case the function
+>> could be elided again...
+>>
 > 
-> Sorry for the late reply.
+> Indeed, I've run a test with LTO enabled and no stack protection code
+> gets emitted due to the optimizations. Finding a test code fragment
+> that works for all possibilities isn't so simple after all.
 > 
-> Here is a short explanation for the error. The Makefile defines a rule
-> to regenerate "Python/importlib.h" if "Lib/importlib/_bootstrap.py" is
-> modified using a C helper named `_freeze_importlib`. Since
-> "_boostrap.py" is modified by my patch, the rule is invoked. The
-> problem is that the helper is built for the target so it cannot be
-> executed on the host.
-> 
-> If I understand correctly "importlib.h" is a frozen module: it contains
-> bytecode generated from "_bootstrap.py". It is only used by a dummy
-> "frozen.c" program.
+> Maybe we should stick to the original v1 of this patch which disables
+> SSP detection when it's known to be unsupported in the toolchain? Far
+> from perfect, but at least it's more robust.
 
- Isn't importlib.h installed to STAGING_DIR where it could be picked up by other
-modules?
+ It would be nicer to find a fundamental upstreamable solution, but yes, the
+original solution was more robust.
 
 > 
-> I see two options:
+>>  To solve this fundamentally in buildroot, perhaps we should patch the gcc
+>> wrapper to fail when -fstack-protector-* is passed when SSP is not enabled.
+>>
 > 
-> 1/ Patch the Makefile to invoke a version of `_freeze_importlib` built
->    for the host.
-> 2/ Simply do not regenerate "importlib.h" because it is not used.
+> Yes, that would be nice since it would serve as a solution to many
+> other similar SSP detection failure cases. Perhaps I should look into
+> that? Or wait until more people provide their views on this?
 
- Most likely, the generated importlib.h doesn't change due to your patch. So the
-simplest solution is to do a 'touch $(@D)/Python/importlib.h' in a post-patch
-hook (with a large comment explaining why it is necessary and allowed).
-
+ Feel free to look into that. It shouldn't be too hard, we're already iterating
+over all the arguments in the wrapper so you have an example of how to do it.
+Just exit(1) immediately when you encounter an option that is not allowed.
 
  Regards,
  Arnout
-
-> 
-> I would favor the second option.
-> 
-> With best regards,
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
