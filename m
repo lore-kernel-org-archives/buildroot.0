@@ -1,57 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Nov 2015 00:07:26 +0100
-Subject: [Buildroot] [PATCH/next 2/2] package/{mesa3d,
-	mesa3d-headers}: bump version to 11.0.5
-In-Reply-To: <1447456046-5358-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1447456046-5358-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1447456046-5358-2-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 14 Nov 2015 00:16:58 +0100
+Subject: [Buildroot] [PATCH v1] fbgrab: bump verstion to 1.3
+Message-ID: <1447456618-4352-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Changelog (see [1] for details):
+  - Added support when active framebuffer is not starting at offset 0
+  - Fixed broken re-ordering of colors, rgba to argb
+  - Fixed broken path for man page
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 91f5fe8..e65f01d 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 11.0.4
-+MESA3D_HEADERS_VERSION = 11.0.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 5ac885f..8b9c8c6 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
+[1] http://fbgrab.monells.se
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/fbgrab/fbgrab.hash | 2 +-
+ package/fbgrab/fbgrab.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
+index 4652f2c..de3bc1f 100644
+--- a/package/fbgrab/fbgrab.hash
++++ b/package/fbgrab/fbgrab.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-October/000180.html
--sha256	40201bf7fc6fa12a6d9edfe870b41eb4dd6669154e3c42c48a96f70805f5483d	mesa-11.0.4.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-November/000181.html
-+sha256	9c255a2a6695fcc6ef4a279e1df0aeaf417dc142f39ee59dfb533d80494bb67a	mesa-11.0.5.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1594489..4f484f7 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256	61e0772ad6ea744ee597ae478398ddd0ba6fceee2cf343859bebde2c15bafb91	fbgrab-1.2.tar.gz
++sha256 5fab478cbf8731fbacefaa76236a8f8b38ccff920c53b3a8253bc35509fba8ed fbgrab-1.3.tar.gz
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index b60da9a..4455423 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 11.0.4
-+MESA3D_VERSION = 11.0.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+-FBGRAB_VERSION = 1.2
++FBGRAB_VERSION = 1.3
+ FBGRAB_SITE = http://fbgrab.monells.se
+ FBGRAB_DEPENDENCIES = libpng
+ FBGRAB_LICENSE = GPLv2
 -- 
-2.6.2
+2.1.4
