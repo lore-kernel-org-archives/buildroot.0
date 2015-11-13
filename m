@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 13 Nov 2015 16:37:05 -0300
-Subject: [Buildroot] [PATCH 3/3] cantarell: new package
-In-Reply-To: <1447443425-2530-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447443425-2530-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1447443425-2530-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 13 Nov 2015 16:41:37 -0300
+Subject: [Buildroot] [PATCH] gcr: new package
+Message-ID: <1447443697-3802-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,67 +10,92 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                |  1 +
- package/cantarell/Config.in      |  7 +++++++
- package/cantarell/cantarell.hash |  2 ++
- package/cantarell/cantarell.mk   | 15 +++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/cantarell/Config.in
- create mode 100644 package/cantarell/cantarell.hash
- create mode 100644 package/cantarell/cantarell.mk
+ package/Config.in     |  1 +
+ package/gcr/Config.in | 19 +++++++++++++++++++
+ package/gcr/gcr.hash  |  2 ++
+ package/gcr/gcr.mk    | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 50 insertions(+)
+ create mode 100644 package/gcr/Config.in
+ create mode 100644 package/gcr/gcr.hash
+ create mode 100644 package/gcr/gcr.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index be2a7a8..dde5c4c 100644
+index dde5c4c..7c10837 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -188,6 +188,7 @@ comment "Cursors"
- 
- comment "Fonts"
- 	source "package/bitstream-vera/Config.in"
-+	source "package/cantarell/Config.in"
- 	source "package/dejavu/Config.in"
- 	source "package/ghostscript-fonts/Config.in"
- 	source "package/inconsolata/Config.in"
-diff --git a/package/cantarell/Config.in b/package/cantarell/Config.in
+@@ -755,6 +755,7 @@ menu "Crypto"
+ 	source "package/botan/Config.in"
+ 	source "package/ca-certificates/Config.in"
+ 	source "package/cryptodev/Config.in"
++	source "package/gcr/Config.in"
+ 	source "package/gnutls/Config.in"
+ 	source "package/libassuan/Config.in"
+ 	source "package/libgcrypt/Config.in"
+diff --git a/package/gcr/Config.in b/package/gcr/Config.in
 new file mode 100644
-index 0000000..78af96d
+index 0000000..cd40ca1
 --- /dev/null
-+++ b/package/cantarell/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_CANTARELL
-+	bool "cantarell"
++++ b/package/gcr/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_GCR
++	bool "gcr"
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	depends on !BR2_STATIC_LIBS # p11-kit
++	select BR2_PACKAGE_GNUPG2 # runtime
++	select BR2_PACKAGE_LIBGCRYPT
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_P11_KIT
 +	help
-+	  The Cantarell font family is a contemporary Humanist
-+	  sans serif designed for on-screen reading.
++	  Library for cryptographic UIs and accessing PKCS#11 modules.
 +
-+	  https://wiki.gnome.org/Projects/CantarellFonts
-diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
++	  https://developer.gnome.org/gcr/
++
++comment "gcr needs a toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
 new file mode 100644
-index 0000000..d3946c6
+index 0000000..8f1f931
 --- /dev/null
-+++ b/package/cantarell/cantarell.hash
++++ b/package/gcr/gcr.hash
 @@ -0,0 +1,2 @@
-+# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.18.1.sha256sum
-+sha256	9c5b1a2edee1d3acf30eaae3d559b2b2e1d835249cf2770f6f8bfc6af861e8f0	cantarell-fonts-0.0.18.1.tar.xz
-diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
++# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.18/gcr-3.18.0.sha256sum
++sha256	d4d16da5af55148a694055835ccd07ad34daf0ad03bdad929bf7cad15637ce00	gcr-3.18.0.tar.xz
+diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
 new file mode 100644
-index 0000000..d9ca655
+index 0000000..f1e8abe
 --- /dev/null
-+++ b/package/cantarell/cantarell.mk
-@@ -0,0 +1,15 @@
++++ b/package/gcr/gcr.mk
+@@ -0,0 +1,28 @@
 +################################################################################
 +#
-+# cantarell
++# gcr
 +#
 +################################################################################
 +
-+CANTARELL_VERSION_MAJOR = 0.0
-+CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).18.1
-+CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/0.0
-+CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
-+CANTARELL_DEPENDENCIES = host-pkgconf
-+CANTARELL_LICENSE = SILv1.1
-+CANTARELL_LICENSE_FILES = COPYING
++GCR_VERSION_MAJOR = 3.18
++GCR_VERSION = $(GCR_VERSION_MAJOR).0
++GCR_SITE = http://ftp.acc.umu.se/pub/gnome/sources/gcr/$(GCR_VERSION_MAJOR)
++GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
++GCR_DEPENDENCIES = host-pkgconf libgcrypt libglib2 p11-kit
++GCR_INSTALL_STAGING = YES
++GCR_CONF_ENV = ac_cv_path_GNUPG=/usr/bin/gpg2
++GCR_CONF_OPTS = \
++	--disable-gtk-doc \
++	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
++# Even though COPYING is v2 the code states v2.1+
++GCR_LICENSE = LGPLv2.1+
++GCR_LICENSE_FILES = COPYING
++
++# Only the X11 backend is supported for the simple GUI
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
++GCR_DEPENDENCIES += libgtk3
++else
++GCR_CONF_OPTS += --without-gtk
++endif
 +
 +$(eval $(autotools-package))
 -- 
