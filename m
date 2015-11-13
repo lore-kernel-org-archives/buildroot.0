@@ -1,83 +1,50 @@
 From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Fri, 13 Nov 2015 19:05:12 +0900
-Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
- for target, fix a typo
-In-Reply-To: Your message of Wed, 11 Nov 2015 14:24:17 +0100.
- <20151111142417.76bf1bb7@free-electrons.com>
-Message-ID: <201511131005.tADA5CR3007841@ms-omx01.plus.so-net.ne.jp>
+Date: Fri, 13 Nov 2015 19:05:35 +0900
+Subject: [Buildroot] [PATCH] package/gauche: exclude build on archs not
+	boehm gc ported
+Message-ID: <201511131005.tADA5ZAn022684@ms-omx03.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas.
+This patch limits gauch build only on architectures boehm gc is ported.
 
-Thank you for your comment.
+Will fix:
+http://autobuild.buildroot.org/results/368/3681948013fcd39cc80b690b880924421e429c80//
+http://autobuild.buildroot.org/results/ba7/ba7eb5a878ec25033596dc7c9b0f4678d4a83de5//
+http://autobuild.buildroot.org/results/1cb/1cbf1ee5bde3d50b935ae8ba931c8d0cc1052acc//
+http://autobuild.buildroot.org/results/8af/8afb36606eabdc6ae6e65a28a11877af39f9a7e0//
 
-I will post 3 patches for each fix later soon.
-Last one 'fatal error: dlfcn.h: No such file or directory' is not
-covered yet, but most failure will be disappeared.
-
-Regards,
-Kawashima
-
-Thomas Petazzoni writes:
-> Hiroshi,
-> 
-> On Wed, 11 Nov 2015 22:11:04 +0900, Hiroshi Kawashima wrote:
-> 
-> > 2015-11-11 12:36:54	xtensa		gc not ported
-> 
-> Right, exclude this architecture.
-> 
-> > 2015-11-10 23:30:21	powerpc		./libgauche-0.9.so: undefined reference
->  to `getcontext'
-> 
-> This probably only happens with certain C libraries only. Check if this
-> build failure occurs with uClibc or glibc, probably only with uClibc.
-> 
-> > 2015-11-10 23:11:45	arc		gc not ported
-> 
-> Right, exclude this architecture as well.
-> 
-> > 2015-11-10 22:20:21	powerpc		./libgauche-0.9.so: undefined reference
->  to `getcontext'
-> > 2015-11-10 17:30:19	arc		gc not ported
-> > 2015-11-10 14:16:58	sh4		./libgauche-0.9.so: undefined reference
->  to `getcontext'
-> > 2015-11-10 08:46:51	powerpc		./libgauche-0.9.so: undefined reference
->  to `getcontext'
-> > 2015-11-10 04:28:00	arm		./libgauche-0.9.so: undefined reference
->  to `AO_pt_lock'
-> 
-> This is what happens when libatomic_ops is built before gauche. In this
-> case, gauche tries to use the external libatomic_ops instead of its
-> internal one.
-> 
-> As I already suggested to fix this, you have two options:
-> 
->  (1) Understand why using the external libatomic_ops doesn't work and
->      fix it.
-> 
->  (2) Pass a configure option to gauche to force it to use its internal
->      version of libatomic_ops.
-> 
-> I'd prefer (1), but we can live with (2) if (1) is too complicated.
-> 
-> > 2015-11-10 00:00:05	arm		./include/private/../gc_pthread_redirec
-> ts.h:37:22: fatal error: dlfcn.h: No such file or directory
-> 
-> Two options here:
-> 
->  (1) boehm gc in gauche supports the GC_NO_DLOPEN like the official
->      boehm gc. In this case, pass -DGC_NO_DLOPEN when
->      BR2_STATIC_LIBS=y. See bdwgc.mk for an example.
-> 
->  (2) Make gauche depend on !BR2_STATIC_LIBS.
-> 
-> Thanks,
-> 
-> Thomas
+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+---
+diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+index 0720672..ff1d0f6 100644
+--- a/package/gauche/Config.in
++++ b/package/gauche/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_GAUCHE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+ 	help
+ 	  Gauche is an R7RS Scheme implementation developed to be a
+ 	  handy script interpreter, which allows programmers and
+@@ -13,6 +14,14 @@ config BR2_PACKAGE_GAUCHE
+ 
+ 	  http://practical-scheme.net/gauche/
+ 
++config BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k || \
++		BR2_mips || BR2_mipsel || BR2_mips64 || \
++		BR2_mips64el || BR2_powerpc || BR2_powerpc64 || \
++		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_sparc || \
++		BR2_sparc64 || BR2_x86_64
++
+ comment "gauche needs a toolchain w/ NPTL"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_ARCH_HAS_ATOMICS
 ============================================================
     Hiroshi Kawashima
