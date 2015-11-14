@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2015 23:22:01 +0100
-Subject: [Buildroot] [PATCH/next 09/13]
-	package/x11r7/xserver_xorg-server: add version 1.18.0
-In-Reply-To: <1447457203-27816-9-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sat, 14 Nov 2015 00:26:39 +0100")
+Date: Sat, 14 Nov 2015 23:22:31 +0100
+Subject: [Buildroot] [PATCH/next 10/13] package/pixman: bump version to
+	0.33.4
+In-Reply-To: <1447457203-27816-10-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 14 Nov 2015 00:26:40 +0100")
 References: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
- <1447457203-27816-9-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <878u60i5me.fsf@dell.be.48ers.dk>
+ <1447457203-27816-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <874mgoi5lk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,11 +15,10 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Video drivers need ABI version 20 now:
- > http://cgit.freedesktop.org/xorg/xserver/commit/?id=a8a0f6464a33c12c1de495d74fd478c0d952643e
+ > Removed patches applied upstream.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Is there any sense in keeping the v1.17 series around? I would prefer to
-not have to support 3 versions.
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
