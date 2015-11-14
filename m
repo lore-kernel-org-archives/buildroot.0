@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2015 23:06:58 +0100
+Date: Sat, 14 Nov 2015 23:09:14 +0100
 Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xkeyboard-config: bump version to 2.16
-Message-ID: <20151114222605.3133680407@busybox.osuosl.org>
+	package/x11r7/xdriver_xf86-input-synaptics: bump version to 1.8.3
+Message-ID: <20151114222605.C37CE819A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b27b014846d44445ac9d38f655561da17c8592c4
+commit: http://git.buildroot.net/buildroot/commit/?id=de2ea6ad54907c575120cf0d613f1a7b8a7162f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../x11r7/xkeyboard-config/xkeyboard-config.hash   |    4 ++--
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
+ .../xdriver_xf86-input-synaptics.hash              |    4 ++--
+ .../xdriver_xf86-input-synaptics.mk                |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index c9bdca2..7b67d0c 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
+index 7b7216d..3cb0758 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-May/002609.html
--sha256	0e443cf7ca2f0b40846472c029647a05933fc705d611e1478c4db8a48a6f38bf	xkeyboard-config-2.15.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-October/002642.html
-+sha256	1e8a1f212c96b7f71ca0b05da361cac1816d27baae1d8e03e7b53049b58d1d58	xkeyboard-config-2.16.tar.bz2
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index f88686b..1ab9350 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-March/002556.html
+-sha256	7b0e164ebd02a680e0c695955e783059f37edb0c2656398e0a972adc8e698c80	xf86-input-synaptics-1.8.2.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-November/002652.html
++sha256	d39f100c74f3673778b53f17bab7690161925e25dd998a15dd8cc69b52e83f01	xf86-input-synaptics-1.8.3.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+index 28663d1..b6ade4c 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XKEYBOARD_CONFIG_VERSION = 2.15
-+XKEYBOARD_CONFIG_VERSION = 2.16
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
+-XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.8.2
++XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.8.3
+ XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
