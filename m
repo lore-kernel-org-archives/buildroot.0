@@ -1,29 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2015 23:04:14 +0100
-Subject: [Buildroot] [git commit branch/next] cryptsetup: fix hash source
-	link
-Message-ID: <20151114222605.0C9EB81A1D@busybox.osuosl.org>
+Date: Sat, 14 Nov 2015 23:07:12 +0100
+Subject: [Buildroot] [git commit branch/next]
+	package/x11r7/xdriver_xf86-input-evdev: bump version to 2.10.0
+Message-ID: <20151114222605.3BF7781947@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8058e622b5dd78b1ad9a11d2efd8fca5c2a8c98b
+commit: http://git.buildroot.net/buildroot/commit/?id=a458f926bb6afce2791ffb5e76595c7e4834126d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptsetup/cryptsetup.hash |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../xdriver_xf86-input-evdev.hash                  |    4 ++--
+ .../xdriver_xf86-input-evdev.mk                    |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index e770f95..8fbbc7d 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
+index 330ac30..cd892d3 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
 @@ -1,2 +1,2 @@
--# From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/sha256sums.asc
-+# From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/sha256sums.asc
- sha256	075524a7cc0db36d12119fa79116750accb1c6c8825d5faa2534b74b8ce3d148	cryptsetup-1.7.0.tar.xz
+-# From http://lists.x.org/archives/xorg-announce/2015-March/002557.html
+-sha256	792329b531afc6928ccda94e4b51a5520d4ddf8ef9a00890a5d0d31898acefec	xf86-input-evdev-2.9.2.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-October/002649.html
++sha256	d097298eb07b7a9edf4493b5c3c058041458ca52c8c62dbd4f40b84c5086d117	xf86-input-evdev-2.10.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 6019412..1e90afa 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.9.2
++XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.0
+ XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
