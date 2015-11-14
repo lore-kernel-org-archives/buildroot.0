@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2015 23:07:12 +0100
-Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xdriver_xf86-input-evdev: bump version to 2.10.0
-Message-ID: <20151114222605.3BF7781947@busybox.osuosl.org>
+Date: Sat, 14 Nov 2015 23:04:51 +0100
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xinput:
+	bump version to 1.6.2
+Message-ID: <20151114222605.3A9F8819A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a458f926bb6afce2791ffb5e76595c7e4834126d
+commit: http://git.buildroot.net/buildroot/commit/?id=daf9b1524d6a55a1205bce8183d4dbe5c53426bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../xdriver_xf86-input-evdev.hash                  |    4 ++--
- .../xdriver_xf86-input-evdev.mk                    |    2 +-
+ package/x11r7/xapp_xinput/xapp_xinput.hash |    4 ++--
+ package/x11r7/xapp_xinput/xapp_xinput.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-index 330ac30..cd892d3 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
+diff --git a/package/x11r7/xapp_xinput/xapp_xinput.hash b/package/x11r7/xapp_xinput/xapp_xinput.hash
+index a8f6b70..724b2e2 100644
+--- a/package/x11r7/xapp_xinput/xapp_xinput.hash
++++ b/package/x11r7/xapp_xinput/xapp_xinput.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-March/002557.html
--sha256	792329b531afc6928ccda94e4b51a5520d4ddf8ef9a00890a5d0d31898acefec	xf86-input-evdev-2.9.2.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-October/002649.html
-+sha256	d097298eb07b7a9edf4493b5c3c058041458ca52c8c62dbd4f40b84c5086d117	xf86-input-evdev-2.10.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 6019412..1e90afa 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+-# From http://lists.x.org/archives/xorg-announce/2013-September/002321.html
+-sha256	b7632d0f228a8a6be93b09857ea413940fcf44091e60f4a0fe9f5fd82efd871f	xinput-1.6.1.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-October/002643.html
++sha256	3694d29b4180952fbf13c6d4e59541310cbb11eef5bf888ff3d8b7f4e3aee5c4		xinput-1.6.2.tar.bz2
+diff --git a/package/x11r7/xapp_xinput/xapp_xinput.mk b/package/x11r7/xapp_xinput/xapp_xinput.mk
+index 099408b..aaa7a80 100644
+--- a/package/x11r7/xapp_xinput/xapp_xinput.mk
++++ b/package/x11r7/xapp_xinput/xapp_xinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.9.2
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.0
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+-XAPP_XINPUT_VERSION = 1.6.1
++XAPP_XINPUT_VERSION = 1.6.2
+ XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.bz2
+ XAPP_XINPUT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XINPUT_LICENSE = MIT
