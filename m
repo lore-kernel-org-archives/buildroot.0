@@ -1,43 +1,83 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Nov 2015 00:26:33 +0100
-Subject: [Buildroot] [PATCH/next 03/13] package/x11r7/xkeyboard-config: bump
-	version to 2.16
-In-Reply-To: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1447457203-27816-3-git-send-email-bernd.kuhls@t-online.de>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Sat, 14 Nov 2015 12:05:49 +0900
+Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
+ for target, fix a typo
+In-Reply-To: Your message of Wed, 11 Nov 2015 14:24:17 +0100.
+ <20151111142417.76bf1bb7@free-electrons.com>
+Message-ID: <201511140305.tAE35n9r007347@ms-omx01.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xkeyboard-config/xkeyboard-config.hash | 4 ++--
- package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Dear Thomas.
+Thank you for your comment.
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index c9bdca2..7b67d0c 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-May/002609.html
--sha256	0e443cf7ca2f0b40846472c029647a05933fc705d611e1478c4db8a48a6f38bf	xkeyboard-config-2.15.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-October/002642.html
-+sha256	1e8a1f212c96b7f71ca0b05da361cac1816d27baae1d8e03e7b53049b58d1d58	xkeyboard-config-2.16.tar.bz2
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index f88686b..1ab9350 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XKEYBOARD_CONFIG_VERSION = 2.15
-+XKEYBOARD_CONFIG_VERSION = 2.16
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
--- 
-2.6.2
+I sent 3 patches to fix these.
+Please pullup them.
+
+Raplied inline.
+
+Thomas Petazzoni writes:
+...
+> > 2015-11-11 12:36:54	xtensa		gc not ported
+> 
+> Right, exclude this architecture.
+Done.
+
+> > 2015-11-10 23:30:21	powerpc		./libgauche-0.9.so: undefined reference
+>  to `getcontext'
+> 
+> This probably only happens with certain C libraries only. Check if this
+> build failure occurs with uClibc or glibc, probably only with uClibc.
+Yes, it happen on uClibc, so I incorporated patch for this from
+bdwgc package.
+
+> > 2015-11-10 23:11:45	arc		gc not ported
+> 
+> Right, exclude this architecture as well.
+Done.
+
+> > 2015-11-10 22:20:21	powerpc		./libgauche-0.9.so: undefined reference
+>  to `getcontext'
+> > 2015-11-10 17:30:19	arc		gc not ported
+> > 2015-11-10 14:16:58	sh4		./libgauche-0.9.so: undefined reference
+>  to `getcontext'
+> > 2015-11-10 08:46:51	powerpc		./libgauche-0.9.so: undefined reference
+>  to `getcontext'
+> > 2015-11-10 04:28:00	arm		./libgauche-0.9.so: undefined reference
+>  to `AO_pt_lock'
+> 
+> This is what happens when libatomic_ops is built before gauche. In this
+> case, gauche tries to use the external libatomic_ops instead of its
+> internal one.
+> 
+> As I already suggested to fix this, you have two options:
+> 
+>  (1) Understand why using the external libatomic_ops doesn't work and
+>      fix it.
+> 
+>  (2) Pass a configure option to gauche to force it to use its internal
+>      version of libatomic_ops.
+> 
+> I'd prefer (1), but we can live with (2) if (1) is too complicated.
+I choose (2) for now, patch posted.
+
+> > 2015-11-10 00:00:05	arm		./include/private/../gc_pthread_redirec
+> ts.h:37:22: fatal error: dlfcn.h: No such file or directory
+> 
+> Two options here:
+> 
+>  (1) boehm gc in gauche supports the GC_NO_DLOPEN like the official
+>      boehm gc. In this case, pass -DGC_NO_DLOPEN when
+>      BR2_STATIC_LIBS=y. See bdwgc.mk for an example.
+> 
+>  (2) Make gauche depend on !BR2_STATIC_LIBS.
+Patch for this not sent yet.
+After 3 patches are pullup, I will send for this.
+
+Regards,
+Kawashima
+============================================================
+    Hiroshi Kawashima
