@@ -1,104 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2015 23:07:37 +0100
-Subject: [Buildroot] [git commit branch/next] package/libinput: bump version
-	to 1.1.0
-Message-ID: <20151114222605.52D9F81D4B@busybox.osuosl.org>
+Date: Sat, 14 Nov 2015 23:06:46 +0100
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xkbcomp:
+	bump version to 1.3.1
+Message-ID: <20151114222605.3243B81D42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5101ea58d52fe4edd9ac74d6f144ade1e374bf50
+commit: http://git.buildroot.net/buildroot/commit/?id=f39fff6d698db939d9e4d313d58c7ab28e6cd1a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Also rebased 0001-rename-log_msg-to-libinput_log_msg.patch.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-rename-log_msg-to-libinput_log_msg.patch  |   24 +++++++++++++++----
- package/libinput/libinput.hash                     |    4 +-
- package/libinput/libinput.mk                       |    2 +-
- 3 files changed, 22 insertions(+), 8 deletions(-)
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash |    4 ++--
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch b/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch
-index 433b29e..e36862a 100644
---- a/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch
-+++ b/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch
-@@ -22,9 +22,9 @@ diff --git a/src/libinput-private.h b/src/libinput-private.h
- index b36dc95..98f91b3 100644
- --- a/src/libinput-private.h
- +++ b/src/libinput-private.h
--@@ -179,15 +179,15 @@ struct libinput_event_listener {
-- typedef void (*libinput_source_dispatch_t)(void *data);
-+@@ -259,12 +259,12 @@
-  
-+ typedef void (*libinput_source_dispatch_t)(void *data);
-  
- -#define log_debug(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
- -#define log_info(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
-@@ -39,17 +39,22 @@ index b36dc95..98f91b3 100644
- +#define log_bug_libinput(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "libinput bug: " __VA_ARGS__)
- +#define log_bug_client(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "client bug: " __VA_ARGS__)
-  
-+ #define log_debug_ratelimit(li_, r_, ...) log_msg_ratelimit((li_), (r_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
-+ #define log_info_ratelimit(li_, r_, ...) log_msg_ratelimit((li_), (r_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
-+@@ -281,7 +281,7 @@
-+ 	LIBINPUT_ATTRIBUTE_PRINTF(4, 5);
-+ 
-  void
- -log_msg(struct libinput *libinput,
- +libinput_log_msg(struct libinput *libinput,
-  	enum libinput_log_priority priority,
-- 	const char *format, ...);
-- 
-+ 	const char *format, ...)
-+ 	LIBINPUT_ATTRIBUTE_PRINTF(3, 4);
- diff --git a/src/libinput.c b/src/libinput.c
- index 279cce0..5748e5e 100644
- --- a/src/libinput.c
- +++ b/src/libinput.c
--@@ -107,7 +107,7 @@ log_msg_va(struct libinput *libinput,
-+@@ -155,7 +155,7 @@
-  }
-  
-  void
-@@ -58,6 +63,15 @@ index 279cce0..5748e5e 100644
-  	enum libinput_log_priority priority,
-  	const char *format, ...)
-  {
-+@@ -184,7 +184,7 @@
-+ 	va_end(args);
-+ 
-+ 	if (state == RATELIMIT_THRESHOLD)
-+-		log_msg(libinput,
-++		libinput_log_msg(libinput,
-+ 			priority,
-+ 			"WARNING: log rate limit exceeded (%d msgs per %dms). Discarding future messages.\n",
-+ 			ratelimit->burst,
- -- 
- 2.1.2
- 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 299a28f..18bd4a7 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+index b49d5a2..bc85caa 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/wayland-devel/2015-July/023184.html
--sha256	69a97da47ef8fa9debadaa8ee11005b9b5183bd2b87c5aa7827b7c388a5acc5d	libinput-0.19.0.tar.xz
-+# From http://lists.freedesktop.org/archives/wayland-devel/2015-October/025065.html
-+sha256	673186ea2a0d2b695afaa9758834f9217b175774d9ae222e1b43ff63c663f582	libinput-1.1.0.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 175e04f..8b51b2b 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+-# From http://lists.x.org/archives/xorg-announce/2014-November/002497.html
+-sha256	cfac973778fabf5216121ad60b7af8ab74ce7513af0f9260cf8c5309e1622b2a	xkbcomp-1.3.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-November/002653.html
++sha256	0304dc9e0d4ac10831a9ef5d5419722375ddbc3eac3ff4413094d57bc1f1923d	xkbcomp-1.3.1.tar.bz2
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+index 0a72742..fea7fa8 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 0.19.0
-+LIBINPUT_VERSION = 1.1.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_LICENSE = MIT
+-XAPP_XKBCOMP_VERSION = 1.3.0
++XAPP_XKBCOMP_VERSION = 1.3.1
+ XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
+ XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBCOMP_LICENSE = MIT
