@@ -1,45 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2015 23:31:28 +0100
-Subject: [Buildroot] [git commit] package/fastd: propagate libcap dependency
-Message-ID: <20151114223226.A4F4981D42@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 14 Nov 2015 23:40:26 +0100
+Subject: [Buildroot] [PATCH/next
+ 09/13]	package/x11r7/xserver_xorg-server: add version 1.18.0
+References: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
+ <1447457203-27816-9-git-send-email-bernd.kuhls@t-online.de>
+ <878u60i5me.fsf@dell.be.48ers.dk>
+Message-ID: <qrpkhcx89o.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40b29611dbc6518d4e3bb99c00823ea0a123466c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am Sat, 14 Nov 2015 23:22:01 +0100 schrieb Peter Korsgaard:
 
-libcap neds headers >= 3.0, so propagate that down to fastd which
-selects libcap.
+>>>>>> "Bernd" == Bernd Kuhls
+>>>>>> <bernd.kuhls@t-online.de> writes:
+> 
+>  > Video drivers need ABI version 20 now:
+>  > http://cgit.freedesktop.org/xorg/xserver/commit/?
+id=a8a0f6464a33c12c1de495d74fd478c0d952643e
+> 
+> Is there any sense in keeping the v1.17 series around? I would prefer to
+> not have to support 3 versions.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fastd/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+Hi Peter,
 
-diff --git a/package/fastd/Config.in b/package/fastd/Config.in
-index 07118f3..4170ea1 100644
---- a/package/fastd/Config.in
-+++ b/package/fastd/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_FASTD
- 	bool "fastd"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
- 	select BR2_PACKAGE_LIBUECC
- 	select BR2_PACKAGE_LIBSODIUM
- 	select BR2_PACKAGE_LIBCAP
-@@ -21,6 +22,7 @@ config BR2_PACKAGE_FASTD_STATUS_SOCKET
- 
- endif
- 
--comment "fastd needs a toolchain w/ threads"
-+comment "fastd needs a toolchain w/ threads, headers >= 3.0"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+nvidia-driver depends on ABI 19 (yes, I will send a patch in the next 
+minutes, I do not use Nvidia hardware so i forgot about it), it is broken 
+with X.org 1.18.0:
+
+http://www.phoronix.com/scan.php?page=news_item&px=x.org-server-1.18-
+video-abi
+
+ftp://download.nvidia.com/XFree86/Linux-x86/358.09/README/
+minimumrequirements.html
+
+https://www.archlinux.org/news/xorg-1180-enters-testing/
+
+Regards, Bernd
