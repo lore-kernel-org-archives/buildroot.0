@@ -1,83 +1,97 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Sat, 14 Nov 2015 12:05:49 +0900
-Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
- for target, fix a typo
-In-Reply-To: Your message of Wed, 11 Nov 2015 14:24:17 +0100.
- <20151111142417.76bf1bb7@free-electrons.com>
-Message-ID: <201511140305.tAE35n9r007347@ms-omx01.plus.so-net.ne.jp>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Sat, 14 Nov 2015 01:32:05 -0200
+Subject: [Buildroot] [PATCH v2 1/1] qemu: add patch to fix SSP support
+	detection
+In-Reply-To: <56458CCD.6030305@mind.be>
+References: <1447280301-9225-1-git-send-email-rprebello@gmail.com>
+ <5643CF83.6000800@mind.be>
+ <CABLs7GXMFP-vm1tRx1zcQZAsJ+KXUV8JNqxLN+3qPhGbNDL50w@mail.gmail.com>
+ <56444B9D.3060501@mind.be>
+ <CABLs7GU_RV8FOsFBqPB+Rz8nfHXFUaRF8PQrksk1MsrHQ7b4JA@mail.gmail.com>
+ <56458CCD.6030305@mind.be>
+Message-ID: <CABLs7GXiOVap1qiJw4URKFMusfBe6FRuejb9eCHt02aiMz_okQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas.
-Thank you for your comment.
+Arnout, All,
 
-I sent 3 patches to fix these.
-Please pullup them.
+2015-11-13 5:10 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
+[snip]
+>>>  I wonder what would happen if LTO were enabled, since in that case the function
+>>> could be elided again...
+>>>
+>>
+>> Indeed, I've run a test with LTO enabled and no stack protection code
+>> gets emitted due to the optimizations. Finding a test code fragment
+>> that works for all possibilities isn't so simple after all.
+>>
+>> Maybe we should stick to the original v1 of this patch which disables
+>> SSP detection when it's known to be unsupported in the toolchain? Far
+>> from perfect, but at least it's more robust.
+>
+>  It would be nicer to find a fundamental upstreamable solution, but yes, the
+> original solution was more robust.
+>
 
-Raplied inline.
+Well, I've improved on the test code and the new version is not only
+shorter (no need for foo()), but it also works with LTO enabled:
 
-Thomas Petazzoni writes:
-...
-> > 2015-11-11 12:36:54	xtensa		gc not ported
-> 
-> Right, exclude this architecture.
-Done.
+[snip]
+  cat > $TMPC << EOF
+int main(int argc, char *argv[])
+{
+    char arr[64], *p = arr, *c = argv[0];
+    while (*c) {
+        *p++ = *c++;
+    }
+    return 0;
+}
+EOF
+[snip]
 
-> > 2015-11-10 23:30:21	powerpc		./libgauche-0.9.so: undefined reference
->  to `getcontext'
-> 
-> This probably only happens with certain C libraries only. Check if this
-> build failure occurs with uClibc or glibc, probably only with uClibc.
-Yes, it happen on uClibc, so I incorporated patch for this from
-bdwgc package.
+As this is more robust than the previous one, I've sent a new patch
+upstream. It's already been reviewed by one person, but not yet
+accepted:
+https://patchwork.ozlabs.org/patch/543357/
 
-> > 2015-11-10 23:11:45	arc		gc not ported
-> 
-> Right, exclude this architecture as well.
-Done.
+I suspect I should wait for a while before submitting an update to the
+buildroot list. However, given the great amount of patches the QEMU
+project receives every day, I wonder if that will be looked@anytime
+soon (if ever).
 
-> > 2015-11-10 22:20:21	powerpc		./libgauche-0.9.so: undefined reference
->  to `getcontext'
-> > 2015-11-10 17:30:19	arc		gc not ported
-> > 2015-11-10 14:16:58	sh4		./libgauche-0.9.so: undefined reference
->  to `getcontext'
-> > 2015-11-10 08:46:51	powerpc		./libgauche-0.9.so: undefined reference
->  to `getcontext'
-> > 2015-11-10 04:28:00	arm		./libgauche-0.9.so: undefined reference
->  to `AO_pt_lock'
-> 
-> This is what happens when libatomic_ops is built before gauche. In this
-> case, gauche tries to use the external libatomic_ops instead of its
-> internal one.
-> 
-> As I already suggested to fix this, you have two options:
-> 
->  (1) Understand why using the external libatomic_ops doesn't work and
->      fix it.
-> 
->  (2) Pass a configure option to gauche to force it to use its internal
->      version of libatomic_ops.
-> 
-> I'd prefer (1), but we can live with (2) if (1) is too complicated.
-I choose (2) for now, patch posted.
+On the other hand, modifying the gcc wrapper to error out on
+-fstack-protector-* when SSP is unsupported is straightforward and
+I've already cooked up a patch for that. I could send it immediately
+and maybe mark this qemu-specific patch as rejected or superseded.
 
-> > 2015-11-10 00:00:05	arm		./include/private/../gc_pthread_redirec
-> ts.h:37:22: fatal error: dlfcn.h: No such file or directory
-> 
-> Two options here:
-> 
->  (1) boehm gc in gauche supports the GC_NO_DLOPEN like the official
->      boehm gc. In this case, pass -DGC_NO_DLOPEN when
->      BR2_STATIC_LIBS=y. See bdwgc.mk for an example.
-> 
->  (2) Make gauche depend on !BR2_STATIC_LIBS.
-Patch for this not sent yet.
-After 3 patches are pullup, I will send for this.
+Thoughts?
 
 Regards,
-Kawashima
-============================================================
-    Hiroshi Kawashima
+Rodrigo
+
+>>
+>>>  To solve this fundamentally in buildroot, perhaps we should patch the gcc
+>>> wrapper to fail when -fstack-protector-* is passed when SSP is not enabled.
+>>>
+>>
+>> Yes, that would be nice since it would serve as a solution to many
+>> other similar SSP detection failure cases. Perhaps I should look into
+>> that? Or wait until more people provide their views on this?
+>
+>  Feel free to look into that. It shouldn't be too hard, we're already iterating
+> over all the arguments in the wrapper so you have an example of how to do it.
+> Just exit(1) immediately when you encounter an option that is not allowed.
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
