@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2015 23:06:46 +0100
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xkbcomp:
-	bump version to 1.3.1
-Message-ID: <20151114222605.3243B81D42@busybox.osuosl.org>
+Date: Sat, 14 Nov 2015 23:06:58 +0100
+Subject: [Buildroot] [git commit branch/next]
+	package/x11r7/xkeyboard-config: bump version to 2.16
+Message-ID: <20151114222605.3133680407@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f39fff6d698db939d9e4d313d58c7ab28e6cd1a1
+commit: http://git.buildroot.net/buildroot/commit/?id=b27b014846d44445ac9d38f655561da17c8592c4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash |    4 ++--
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   |    2 +-
+ .../x11r7/xkeyboard-config/xkeyboard-config.hash   |    4 ++--
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-index b49d5a2..bc85caa 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index c9bdca2..7b67d0c 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2014-November/002497.html
--sha256	cfac973778fabf5216121ad60b7af8ab74ce7513af0f9260cf8c5309e1622b2a	xkbcomp-1.3.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-November/002653.html
-+sha256	0304dc9e0d4ac10831a9ef5d5419722375ddbc3eac3ff4413094d57bc1f1923d	xkbcomp-1.3.1.tar.bz2
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-index 0a72742..fea7fa8 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-May/002609.html
+-sha256	0e443cf7ca2f0b40846472c029647a05933fc705d611e1478c4db8a48a6f38bf	xkeyboard-config-2.15.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-October/002642.html
++sha256	1e8a1f212c96b7f71ca0b05da361cac1816d27baae1d8e03e7b53049b58d1d58	xkeyboard-config-2.16.tar.bz2
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index f88686b..1ab9350 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XKBCOMP_VERSION = 1.3.0
-+XAPP_XKBCOMP_VERSION = 1.3.1
- XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
- XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBCOMP_LICENSE = MIT
+-XKEYBOARD_CONFIG_VERSION = 2.15
++XKEYBOARD_CONFIG_VERSION = 2.16
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
