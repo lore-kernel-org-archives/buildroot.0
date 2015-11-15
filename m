@@ -1,42 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 15 Nov 2015 12:52:20 +0100
-Subject: [Buildroot] [PATCH/next v2 4/4] package/nvidia-driver: depends on
-	xorg-xserver =< 1.17
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 15 Nov 2015 14:03:31 +0200
+Subject: [Buildroot] [PATCH/next v2 1/4]
+ package/x11r7/xdriver_xf86-video-intel: bump version
 In-Reply-To: <1447588340-8270-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1447588340-8270-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1447588340-8270-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151115120331.GH9908@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://www.phoronix.com/scan.php?page=news_item&px=x.org-server-1.18-video-abi
-https://www.archlinux.org/news/xorg-1180-enters-testing/
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/nvidia-driver/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Hi Bernd,
 
-diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
-index b50e2c3..a9a7f3e 100644
---- a/package/nvidia-driver/Config.in
-+++ b/package/nvidia-driver/Config.in
-@@ -1,11 +1,13 @@
--comment "nvidia-driver needs an (e)glibc toolchain"
-+comment "nvidia-driver needs Xorg <= 1.17 and an (e)glibc toolchain"
- 	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
-+		BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
- 
- config BR2_PACKAGE_NVIDIA_DRIVER
- 	bool "nvidia-driver"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
- 	help
- 	  The binary-only driver blob for NVidia cards.
- 	  This is the userland part only.
+On Sun, Nov 15, 2015 at 12:52:17PM +0100, Bernd Kuhls wrote:
+
+> diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+> index 6c3c6ba..752a1ed 100644
+> --- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+> +++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+> @@ -1,2 +1,2 @@
+> -# From http://lists.x.org/archives/xorg-announce/2014-December/002508.html
+> -sha256	00b781eea055582820a123c47b62411bdf6aabf4f03dc0568faec55faf9667c9	xf86-video-intel-2.99.917.tar.bz2
+> +# From Locally computed
+> +sha256	d5a6fd2f8599070294e60cd1168f3ffe71606ea07d9eaa4ed35f021396045563	xdriver_xf86-video-intel-0340718366d7cb168a46930eb7be22f2d88354d8.tar.gz
+
+Hashes are not useful for arbitrary git checkouts. Should be:
+
+none xxx xdriver_xf86-video-intel-0340718366d7cb168a46930eb7be22f2d88354d8.tar.gz
+
+baruch
+
 -- 
-2.6.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
