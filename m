@@ -1,91 +1,102 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 15 Nov 2015 13:24:55 +0100
-Subject: [Buildroot] [PATCH] boost: fix sparc compile
-Message-ID: <20151115122455.GA29481@waldemar-brodkorb.de>
+Date: Sun, 15 Nov 2015 13:28:50 +0100
+Subject: [Buildroot] [PATCH] uclibc: update to 1.0.9
+Message-ID: <20151115122850.GA29521@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like for sparc64, set correct instruction set.
-Patch is obsoleted by this changeset.
+Fixes a fanotify include bug where old kernels (2.6.x) fail to build.
+Fixes recent failures on x86 with Linux 4.3.x kernel regarding
+network sockets. Includes the removed patch.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
 ---
 
-boost::context still does not compile. Don't know why it is
-disabled for sparc/sparc64 as it contains the needed code.
-Need to check on my sparc systems before enabling via a patch.
+Hi, as discussed on IRC #buildroot, please consider to apply it to
+master. It contains all patchsets to build perfectly with latest 4.3
+(x86) and old 2.6 kernels (regarding fanotify changes).
+The other changes are mostly outside the use case of buildroot.
+(changes to h8/300 and metag architecture, documentation fixes
+mentioning buildroot as usable platform for uClibc-ng)
+
+One new feature is added, euidaccess legacy function, but the
+addition shouldn't add any regression to existing code.
 
 ---
- ...0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch |   42 --------------------
- package/boost/boost.mk                             |    4 ++
- 2 files changed, 4 insertions(+), 42 deletions(-)
- delete mode 100644 package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
+ .../1.0.8/0001-unistd-fix-if-condition.patch       |   34 --------------------
+ package/uclibc/Config.in                           |    2 +-
+ package/uclibc/uclibc.hash                         |    2 +-
+ 3 files changed, 2 insertions(+), 36 deletions(-)
+ delete mode 100644 package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch
 
-diff --git a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch b/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
+diff --git a/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch b/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch
 deleted file mode 100644
-index a4d39b3..0000000
---- a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
+index c321f4e..0000000
+--- a/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch
 +++ /dev/null
-@@ -1,42 +0,0 @@
--From ec60c37295146bb80aa44a92cf416027b75b5ff7 Mon Sep 17 00:00:00 2001
--From: Vladimir Prus <vladimir@codesourcery.com>
--Date: Mon, 27 Apr 2015 19:12:54 +0300
--Subject: [PATCH] Remove bogus 'c3' cpu varant for SPARC.
+@@ -1,34 +0,0 @@
+-From 1e85892911bf016e9bb2a647b6584cdd806706f8 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Tue, 3 Nov 2015 15:32:23 +0100
+-Subject: [PATCH] unistd: fix #if condition
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Commit dfa593d4d881116723a4401b466ea964fb12327b ("syncfs: add system
+-call support") modified the #if condition around the definition of the
+-syncfs() prototype in a way that doesn't build, causing build failures
+-of any file including <unistd.h>:
+-
+-output/host/usr/powerpc-buildroot-linux-uclibc/sysroot/usr/include/unistd.h:988:14: error: #if with no expression
+- #if __USE_GNU
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- src/tools/gcc.jam | 3 +--
-- src/tools/gcc.py  | 3 +--
-- 2 files changed, 2 insertions(+), 4 deletions(-)
+- include/unistd.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/src/tools/gcc.jam b/src/tools/gcc.jam
--index eff95ae..128ab84 100644
----- a/tools/build/src/tools/gcc.jam
--+++ b/tools/build/src/tools/gcc.jam
--@@ -1138,8 +1138,7 @@ cpu-flags gcc OPTIONS : x86 : c3-2 : -march=c3-2 ;
-- ##
-- cpu-flags gcc OPTIONS : x86 : atom : -march=atom ;
-- # Sparc
---cpu-flags gcc OPTIONS : sparc : c3 : -mcpu=c3 : default ;
---cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 ;
--+cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 : default ;
-- cpu-flags gcc OPTIONS : sparc : cypress : -mcpu=cypress ;
-- cpu-flags gcc OPTIONS : sparc : v8 : -mcpu=v8 ;
-- cpu-flags gcc OPTIONS : sparc : supersparc : -mcpu=supersparc ;
--diff --git a/src/tools/gcc.py b/src/tools/gcc.py
--index a13ce7a..d2d3294 100644
----- a/tools/build/src/tools/gcc.py
--+++ b/tools/build/src/tools/gcc.py
--@@ -789,8 +789,7 @@ cpu_flags('gcc', 'OPTIONS', 'x86', 'atom', ['-march=atom'])
-- # Sparc
-- flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>32'], ['-m32'])
-- flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>64'], ['-m64'])
---cpu_flags('gcc', 'OPTIONS', 'sparc', 'c3', ['-mcpu=c3'], default=True)
---cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'])
--+cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'], default=True)
-- cpu_flags('gcc', 'OPTIONS', 'sparc', 'cypress', ['-mcpu=cypress'])
-- cpu_flags('gcc', 'OPTIONS', 'sparc', 'v8', ['-mcpu=v8'])
-- cpu_flags('gcc', 'OPTIONS', 'sparc', 'supersparc', ['-mcpu=supersparc'])
+-diff --git a/include/unistd.h b/include/unistd.h
+-index 4701dab..40d6abd 100644
+---- a/include/unistd.h
+-+++ b/include/unistd.h
+-@@ -1073,7 +1073,7 @@ extern char *getpass (const char *__prompt) __nonnull ((1));
+- extern int fsync (int __fd);
+- #endif /* Use BSD || X/Open || Unix98.  */
+- 
+--#if __USE_GNU
+-+#if defined __USE_GNU
+- /* Make all changes done to all files on the file system associated
+-  *    with FD actually appear on disk.  */
+- extern int syncfs (int __fd) __THROW;
 --- 
--2.3.6
+-2.6.2
 -
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index d91baf1..74bb710 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -89,6 +89,10 @@ BOOST_OPTS += toolset=gcc \
- 	     abi=$(BOOST_ABI) \
- 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release)
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 21d8ddc..eeb6ca0 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -57,7 +57,7 @@ config BR2_USE_UCLIBC_SNAPSHOT
+ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
+-	default "1.0.8"		if BR2_UCLIBC_VERSION_NG
++	default "1.0.9"		if BR2_UCLIBC_VERSION_NG
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
  
-+ifeq ($(BR2_sparc),y)
-+BOOST_OPTS += architecture=sparc instruction-set=v8
-+endif
-+
- ifeq ($(BR2_sparc64),y)
- BOOST_OPTS += architecture=sparc instruction-set=ultrasparc
- endif
+ config BR2_UCLIBC_CONFIG
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index d9931a9..f985501 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -2,7 +2,7 @@
+ sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
+ 
+ # From http://www.uclibc-ng.org/
+-sha256  11575cda78681713f5a36cf35deaae93acdc7dce463d38a12902991fb7f5312a        uClibc-ng-1.0.8.tar.xz
++sha256  08be8dd22ac0c3806add88b813129fb3014437eddc9d78fc73eba7f33c4b4a9d        uClibc-ng-1.0.9.tar.xz
+ 
+ # No hash for the ARC variant, comes from the github-helper
+ none	xxx	uClibc-arc-2015.06.tar.gz
 -- 
 1.7.10.4
