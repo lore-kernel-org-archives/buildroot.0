@@ -1,46 +1,54 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 15 Nov 2015 13:29:27 +0100
-Subject: [Buildroot] [PATCH] uclibc: cleanup unused ARC stuff
-Message-ID: <20151115122927.GA29706@waldemar-brodkorb.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 15 Nov 2015 17:44:24 +0100
+Subject: [Buildroot] [PATCH 1/6] package/axfsutils: fix Makefile
+In-Reply-To: <1142395b4466f1e5ccbe593ddce1c6e792b6795a.1447449754.git.yann.morin.1998@free.fr>
+References: <cover.1447449754.git.yann.morin.1998@free.fr>
+ <1142395b4466f1e5ccbe593ddce1c6e792b6795a.1447449754.git.yann.morin.1998@free.fr>
+Message-ID: <5648B668.8000903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARC is supported by uClibc-ng, cleanup old code.
+On 13-11-15 22:48, Yann E. MORIN wrote:
+> mkfs.axfs uses zlib, but does not have an rpath to our host dir.
+> 
+> That's because:
+>   - we're not passing our host CFLAGS or LDFLAGS
+>   - it is forcibly setting CFLAGS in the Makefile, overriding anything
+>     specified by the user
+>   - it is not using LDFLAGS at all
+> 
+> Add two patches so that CFLAGS and LDFLAGS from the environment are
+> used if present.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
----
- package/uclibc/Config.in   |    2 +-
- package/uclibc/uclibc.hash |    3 ---
- 2 files changed, 1 insertion(+), 4 deletions(-)
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ (verified with ldd)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index eeb6ca0..bd95041 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -18,7 +18,7 @@ config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
- 
- choice
- 	prompt "uClibc C library Version"
--	default BR2_UCLIBC_VERSION_NG if !BR2_arc
-+	default BR2_UCLIBC_VERSION_NG
- 	help
- 	  Select the version of uClibc you wish to use.
- 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index f985501..00e3389 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -4,8 +4,5 @@ sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0
- # From http://www.uclibc-ng.org/
- sha256  08be8dd22ac0c3806add88b813129fb3014437eddc9d78fc73eba7f33c4b4a9d        uClibc-ng-1.0.9.tar.xz
- 
--# No hash for the ARC variant, comes from the github-helper
--none	xxx	uClibc-arc-2015.06.tar.gz
--
- # No hash for this git snapshot
- none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
+ Probably difficult to upstream this.
+
+ Regards,
+ Arnout
+
+
+> ---
+>  package/axfsutils/0001-fix-cflags.patch  | 19 +++++++++++++++++++
+>  package/axfsutils/0002-use-ldflags.patch | 20 ++++++++++++++++++++
+>  package/axfsutils/axfsutils.mk           |  2 +-
+>  3 files changed, 40 insertions(+), 1 deletion(-)
+>  create mode 100644 package/axfsutils/0001-fix-cflags.patch
+>  create mode 100644 package/axfsutils/0002-use-ldflags.patch
+[snip]
+
+
 -- 
-1.7.10.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
