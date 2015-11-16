@@ -1,67 +1,54 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Mon, 16 Nov 2015 17:29:51 +0000
-Subject: [Buildroot] [PATCH v7] board: add support for Intel Galileo Gen
- 2
-In-Reply-To: <56314C13.5030302@mind.be>
-References: <1445359684.18938.6.camel@intel.com> <56314C13.5030302@mind.be>
-Message-ID: <1447694994.6537.51.camel@intel.com>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Mon, 16 Nov 2015 19:54:17 +0200
+Subject: [Buildroot] [PATCH 0/2] Samsung XE303C12 aka Chromebook Snow
+Message-ID: <cover.1447689401.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > diff --git a/board/intel/galileo/genimage.cfg b/board/intel/galileo/genimage.cfg
-> > new file mode 100644
-> > index 0000000..b1db6f7
-> > --- /dev/null
-> > +++ b/board/intel/galileo/genimage.cfg
-> > @@ -0,0 +1,15 @@
-> > +image sdcard.img {
-> > +	hdimage {
-> > +	}
-> > +
-> > +	partition boot {
-> > +		partition-type = 0xC
-> > +		image = "efi-part.vfat"
-> 
->  Doesn't genimage allow to specify this in a single file?
+This short series adds board config for Chromebook Snow.
 
-Hi Arnout, 
+There are several ways to boot a custom kernel on the device,
+the one used here is perhaps the easiest to implement.
+However, it needs vboot-tools to sign the custom kernel.
 
-Needed to do a bit of investigation to refresh my memory here - on why I
-implemented this way. To understand what genimage does requires a bit of
-understanding of what tools it is using under the hood. Typically using
-hdimage and vfat are mutually exclusive.
+The kernel is packed into u-boot flat image tree (FIT) together with
+the DT blob. Long story short, this is the only way I can get it to boot
+with the original bootloader. Using uImage with appended DT should be
+possible as well, but for some reason it does not seem to work.
 
- * hdimage - typically I use hdimage where I have 1 or more partitions I
-want to aggregate into a single image ... so I want pull the ext3/ext4
-image created by buildroot as a partition. 
- * vfat - typically I use vfat where I want to use an overlay fs, i.e. a
-sdcard that has been formatted as vfat with a EFI, Kernel, Ext3 overlay
-image and perhaps also an initramfs. 
+At first I tried to add FIT option to the Kernel binary format menu,
+because it's not really Chromebook-specific, but it turned out to be
+ugly and much more complex than doing it in a post-build script.
 
-So you are usually doing one or the other. The constraint with Galileo
-Gen 2 is that it's UEFI BIOS can only read VFAT or EFI partitions when
-looking for bootloader EFI binaries like grub-efi or gummiboot. So this
-leaves me with a couple of options:-
+Most of this boot stuff is common for all Chromebooks, even x86 ones,
+but not for Samsung devices other than Chromebooks. Because of this,
+it's boards/chromebook/snow and not boards/samsung/xe303c12.
 
- * I can use hdimage - I can create the VFAT/EFI partition myself
-calling mtools, and then use hdimage above to aggregate this partition
-into an image along with the rootfs image produced by buildroot
- * I can use vfat with the overlay fs approach, however this typically
-comes with a boottime performance penalty.
+Alex Suykov (2):
+  vboot-utils: new package
+  board: add support for Chromebook Snow
 
-So my approach is as follows ...
+ board/chromebook/snow/kernel.args      |   1 +
+ board/chromebook/snow/kernel.its       |  34 ++++++
+ board/chromebook/snow/linux-4.3.config | 161 +++++++++++++++++++++++++++
+ board/chromebook/snow/readme.txt       | 191 +++++++++++++++++++++++++++++++++
+ board/chromebook/snow/sign.sh          |  32 ++++++
+ configs/chromebook_snow_defconfig      |  17 +++
+ package/Config.in.host                 |   1 +
+ package/vboot-utils/Config.in.host     |   6 ++
+ package/vboot-utils/vboot-utils.mk     |  23 ++++
+ 9 files changed, 466 insertions(+)
+ create mode 100644 board/chromebook/snow/kernel.args
+ create mode 100644 board/chromebook/snow/kernel.its
+ create mode 100644 board/chromebook/snow/linux-4.3.config
+ create mode 100644 board/chromebook/snow/readme.txt
+ create mode 100755 board/chromebook/snow/sign.sh
+ create mode 100644 configs/chromebook_snow_defconfig
+ create mode 100644 package/vboot-utils/Config.in.host
+ create mode 100644 package/vboot-utils/vboot-utils.mk
 
- * Use genimage vfat instead to create my first 'image' as vfat, under
-the hood genimage uses dd + mkfs.vfat to create the image and then uses
-mtools (mmd + mcopy) to copy in the EFI binaries.
- * I then use hdimage to pull in the vfat image above as an EFI parition
-and the ext3 image created by buildroot as the rootfs partition. 
-
-For me this was simplest approach to layout the sdcard image as the
-Galileo requires, much simpler than rewriting lots of mtools logic that
-already exists in genimage. Make sense ?
-
-Ray K
+-- 
+2.0.3
