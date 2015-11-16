@@ -1,41 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Nov 2015 23:47:00 +0100
-Subject: [Buildroot] [PATCH 05/21 RFC] core/pkg-virtual: ignore from
-	legal-info output
+Date: Mon, 16 Nov 2015 23:47:01 +0100
+Subject: [Buildroot] [PATCH 06/21 RFC] package/gcc: add licensing information
 In-Reply-To: <cover.1447713615.git.yann.morin.1998@free.fr>
 References: <cover.1447713615.git.yann.morin.1998@free.fr>
-Message-ID: <e3506e59aa801227a1e47ccace2ef664fdaf0eca.1447713615.git.yann.morin.1998@free.fr>
+Message-ID: <ac61c991794df8089b615aee810b018840e37cc8.1447713615.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Virtual packages really have nothing to save for legal-info, so we just
-ignore them.
+Currently, this is not used, since there is no host-gcc (or gcc)
+package, and we only build host-gcc-initial and host-gcc-final.
 
-Following patches will always extract-and-aptch non-ignored packages, so
-we would potentially see spurious "extracting" and "patching" messages
-on the console, which would be a bit strange. Ignoring virtual packages
-will get us a cleaner log.
+So, this commit only really adds the licensing terms, installing
+them in the legal-info output will be handled in a futur commit.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-virtual.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/gcc/gcc.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-index 9c68b51..1471b95 100644
---- a/package/pkg-virtual.mk
-+++ b/package/pkg-virtual.mk
-@@ -57,6 +57,8 @@ endif
- # Add dependency against the provider
- $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b9551e8..1c847e0 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -9,6 +9,15 @@
+ #
  
-+$(2)_REDISTRIBUTE = IGNORE
-+
- # Call the generic package infrastructure to generate the necessary
- # make targets
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
+ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
++GCC_LICENSE = \
++	GPLv2+, GPLv3+, LGPLv2.1+ (w/ exception), LGPv3+ (w/ exception), \
++	BSD-3c, MIT, BSL-1.0
++GCC_LICENSE_FILES = \
++	COPYING COPYING3 COPYING.LIB COPYING3.LIB COPYING.RUNTIME \
++	libiberty/COPYING.LIB gcc/go/gofrontend/LICENSE \
++	gcc/COPYING gcc/COPYING.LIB gcc/COPYING3 gcc/COPYING3.LIB \
++	libquadmath/COPYING.LIB libsanitizer/LICENSE.TXT libffi/LICENSE \
++	include/COPYING include/COPYING3 zlib/contrib/dotzlib/LICENSE_1_0.txt
+ 
+ ifeq ($(BR2_arc),y)
+ GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
 -- 
 1.9.1
