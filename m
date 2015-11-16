@@ -1,26 +1,37 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 16 Nov 2015 16:01:35 +0000
-Subject: [Buildroot] [PATCH] libgudev: add a hash file
-Message-ID: <1447689695-1381-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Nov 2015 17:20:38 +0100
+Subject: [Buildroot] [PATCH] uclibc: update to 1.0.9
+In-Reply-To: <20151115122850.GA29521@waldemar-brodkorb.de>
+References: <20151115122850.GA29521@waldemar-brodkorb.de>
+Message-ID: <20151116172038.4bf5a229@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libgudev/libgudev.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
- create mode 100644 package/libgudev/libgudev.hash
+Hello,
 
-diff --git a/package/libgudev/libgudev.hash b/package/libgudev/libgudev.hash
-new file mode 100644
-index 0000000..a6c1d6b
---- /dev/null
-+++ b/package/libgudev/libgudev.hash
-@@ -0,0 +1,2 @@
-+# From: http://ftp.gnome.org/pub/GNOME/sources/libgudev/230/libgudev-230.sha256sum
-+sha256 a2e77faced0c66d7498403adefcc0707105e03db71a2b2abd620025b86347c18  libgudev-230.tar.xz
+On Sun, 15 Nov 2015 13:28:50 +0100, Waldemar Brodkorb wrote:
+> Fixes a fanotify include bug where old kernels (2.6.x) fail to build.
+> Fixes recent failures on x86 with Linux 4.3.x kernel regarding
+> network sockets. Includes the removed patch.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+I didn't test, but I checked the changelog between 1.0.8 and 1.0.9, and
+it seems minimal, and really fixes 2 problems that are currently
+affecting Buildroot: fanotify build issues with old kernel headers and
+the network issue on x86 with 4.3 kernels.
+
+To me, this should be applied to master.
+
+Best regards,
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
