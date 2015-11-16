@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Nov 2015 23:47:10 +0100
-Subject: [Buildroot] [PATCH 15/21 RFC] core/pkg-generic: add macro to
-	hardlink-or-copy
+Date: Mon, 16 Nov 2015 23:47:11 +0100
+Subject: [Buildroot] [PATCH 16/21 RFC] core/legal-info: use the macro to
+	install source archives
 In-Reply-To: <cover.1447713615.git.yann.morin.1998@free.fr>
 References: <cover.1447713615.git.yann.morin.1998@free.fr>
-Message-ID: <13184d01305cbba2861610b0e54ffa3895c8a2f0.1447713615.git.yann.morin.1998@free.fr>
+Message-ID: <b6d1b94e48a8140d330e261bb4c1be1970014135.1447713615.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +14,26 @@ To: buildroot@busybox.net
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/pkg-generic.mk | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/pkg-generic.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 544ae5c..82fbeb0 100644
+index 82fbeb0..a04adcf 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -305,6 +305,24 @@ endif
- endef
+@@ -819,9 +819,10 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+ 	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
+ endif
+-# Copy the source tarball (just hardlink if possible)
+-	@cp -l $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))) 2>/dev/null || \
+-	    cp $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
++# Copy the source tarball
++	$$(Q)$$(call hardlink-copy,\
++		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
++		     $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))))
+ endif # redistribute
  
- ################################################################################
-+# hardlink-copy -- hardlink source and destination if possible, otherwise
-+# do a simple copy
-+#
-+# argument 1 is the source
-+# argument 2 is the destination *directory*
-+#
-+# example:
-+#   $(call hard-link-copy,source,destination)
-+#
-+# Note: we make that a single command, so se can:
-+#  - use '$(Q)' in front of it and properly silence the whole macro,
-+#  - use '|| exit 1' after it, so we can exit on error in compound commands.
-+################################################################################
-+define hardlink-copy
-+	{ mkdir -p $(2) && { cp -l $(1) $(2) 2>/dev/null || cp $(1) $(2); } }
-+endef
-+
-+################################################################################
- # inner-generic-package -- generates the make targets needed to build a
- # generic package
- #
+ endif # other packages
 -- 
 1.9.1
