@@ -1,65 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Nov 2015 22:12:20 +0100
-Subject: [Buildroot] [git commit] package/gauche: exclude build on archs not
-	boehm gc ported
-Message-ID: <20151116220222.B0E0D81E7B@busybox.osuosl.org>
+Date: Mon, 16 Nov 2015 23:02:07 +0100
+Subject: [Buildroot] [git commit] package/gauche: fix getcontext build issue
+	at link time
+Message-ID: <20151116220222.CCB287FC2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11f47facd5ef57fd790f7751ee87b671c007953c
+commit: http://git.buildroot.net/buildroot/commit/?id=91f888cbc4bd2c76dc6896f6ab47da3826139a60
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch limits gauch build only on architectures boehm gc is ported.
+This patch is ported from bdwgc package. Since Gauche uses an internal
+copy of the boehm gc code, it is affected by the same problem.
 
-Will fix:
-http://autobuild.buildroot.org/results/368/3681948013fcd39cc80b690b880924421e429c80//
-http://autobuild.buildroot.org/results/ba7/ba7eb5a878ec25033596dc7c9b0f4678d4a83de5//
-http://autobuild.buildroot.org/results/1cb/1cbf1ee5bde3d50b935ae8ba931c8d0cc1052acc//
-http://autobuild.buildroot.org/results/8af/8afb36606eabdc6ae6e65a28a11877af39f9a7e0//
+Both configure and configure.ac are modified because autoreconf fails
+due to an incompatibility with the version of the autotools used by
+Buildroot.
 
-[Thomas:
- - add comment explaining where the architecture dependency is coming
-   from, as suggested by Arnout.
- - move the definition of BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS to the
-   beginning of the Config.in file, to be consistent with what we do
-   in other packages.]
+Fixes:
+
+   http://autobuild.buildroot.org/results/8c6/8c6ce526735a36b8c8b4c6047e3c69039c4527cb/
+   http://autobuild.buildroot.org/results/894/89460829a737a4dab19103f7a46905636420b0a8/
+
+[Thomas: adjust commit log and patch description.]
 
 Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gauche/Config.in |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+ ...ac-add-check-for-NO_GETCONTEXT-definition.patch |   62 ++++++++++++++++++++
+ 1 files changed, 62 insertions(+), 0 deletions(-)
 
-diff --git a/package/gauche/Config.in b/package/gauche/Config.in
-index 0720672..54a0be2 100644
---- a/package/gauche/Config.in
-+++ b/package/gauche/Config.in
-@@ -1,8 +1,18 @@
-+# Architecture dependency from the bundled bdwgc.
-+config BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k || \
-+		BR2_mips || BR2_mipsel || BR2_mips64 || \
-+		BR2_mips64el || BR2_powerpc || BR2_powerpc64 || \
-+		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_sparc || \
-+		BR2_sparc64 || BR2_x86_64
+diff --git a/package/gauche/0002-gc-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch b/package/gauche/0002-gc-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
+new file mode 100644
+index 0000000..6cc0656
+--- /dev/null
++++ b/package/gauche/0002-gc-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
+@@ -0,0 +1,62 @@
++gc/configure.ac: add check for NO_GETCONTEXT definition
 +
- config BR2_PACKAGE_GAUCHE
- 	bool "gauche"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
- 	help
- 	  Gauche is an R7RS Scheme implementation developed to be a
- 	  handy script interpreter, which allows programmers and
-@@ -16,4 +26,5 @@ config BR2_PACKAGE_GAUCHE
- comment "gauche needs a toolchain w/ NPTL"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++This patch is ported from bdwgc package. Since Gauche uses an internal
++copy of the boehm gc code, it is affected by the same problem.
++
++Both configure and configure.ac are modified because autoreconf fails
++due to an incompatibility with the version of the autotools used by
++Buildroot.
++
++Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
++
++Original credits of patch in bdwgc package:
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++[yann.morin.1998 at free.fr: add a comment, change variable name, use
++ AS_IF, remove debug traces, use AC_CHECK_FUNCS (as suggested by
++ Thomas)]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++diff -ur a/gc/configure b/gc/configure
++--- a/gc/configure	2015-11-12 21:41:02.394822056 +0900
+++++ b/gc/configure	2015-11-12 22:04:14.655157423 +0900
++@@ -16153,6 +16153,23 @@
++ $as_echo "$ac_cv_fno_strict_aliasing" >&6; }
++ fi
++ 
+++# Check for getcontext (uClibc can be configured without it, for example)
+++for ac_func in getcontext
+++do :
+++  ac_fn_c_check_func "$LINENO" "getcontext" "ac_cv_func_getcontext"
+++if test "x$ac_cv_func_getcontext" = xyes; then :
+++  cat >>confdefs.h <<_ACEOF
+++#define HAVE_GETCONTEXT 1
+++_ACEOF
+++
+++fi
+++done
+++
+++if test "$ac_cv_func_getcontext" = "no"; then :
+++  CFLAGS="$CFLAGS -DNO_GETCONTEXT"
+++   CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"
+++fi
+++
++ case "$host" in
++ # While IRIX 6 has libdl for the O32 and N32 ABIs, it's missing for N64
++ # and unnecessary everywhere.
++diff -ur a/gc/configure.ac b/gc/configure.ac
++--- a/gc/configure.ac	2015-11-12 22:31:44.851510997 +0900
+++++ b/gc/configure.ac	2015-11-12 22:33:39.292191227 +0900
++@@ -459,6 +459,12 @@
++   AC_MSG_RESULT($ac_cv_fno_strict_aliasing)
++ fi
++ 
+++# Check for getcontext (uClibc can be configured without it, for example)
+++AC_CHECK_FUNCS([getcontext])
+++AS_IF([test "$ac_cv_func_getcontext" = "no"],
+++  [CFLAGS="$CFLAGS -DNO_GETCONTEXT"
+++   CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"])
+++
++ case "$host" in
++ # While IRIX 6 has libdl for the O32 and N32 ABIs, it's missing for N64
++ # and unnecessary everywhere.
