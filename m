@@ -1,92 +1,139 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2015 23:45:32 +0100
-Subject: [Buildroot] [git commit] uclibc: update to 1.0.9
-Message-ID: <20151116224600.A9CCE81E6A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 16 Nov 2015 23:47:12 +0100
+Subject: [Buildroot] [PATCH 0/21 RFC] core/legal-info: fixes,
+	completness and enhancements (branch yem/legal-patch)
+Message-ID: <cover.1447713615.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67299e3ae02f7c31c58875deb655e031c7f4fe82
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Fixes a fanotify include bug where old kernels (2.6.x) fail to build.
-Fixes recent failures on x86 with Linux 4.3.x kernel regarding
-network sockets. Includes the removed patch.
+This series introduces core changs in how we handle the legal-info for
+various packages.
 
-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../1.0.8/0001-unistd-fix-if-condition.patch       |   34 --------------------
- package/uclibc/Config.in                           |    2 +-
- package/uclibc/uclibc.hash                         |    2 +-
- 3 files changed, 2 insertions(+), 36 deletions(-)
+The underlying reason for this series is that our legal-info content is
+far from being complete. Most notably, the patches applied to packages
+are not part of the legal-info output.
 
-diff --git a/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch b/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch
-deleted file mode 100644
-index c321f4e..0000000
---- a/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 1e85892911bf016e9bb2a647b6584cdd806706f8 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 3 Nov 2015 15:32:23 +0100
--Subject: [PATCH] unistd: fix #if condition
--
--Commit dfa593d4d881116723a4401b466ea964fb12327b ("syncfs: add system
--call support") modified the #if condition around the definition of the
--syncfs() prototype in a way that doesn't build, causing build failures
--of any file including <unistd.h>:
--
--output/host/usr/powerpc-buildroot-linux-uclibc/sysroot/usr/include/unistd.h:988:14: error: #if with no expression
-- #if __USE_GNU
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/unistd.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/unistd.h b/include/unistd.h
--index 4701dab..40d6abd 100644
----- a/include/unistd.h
--+++ b/include/unistd.h
--@@ -1073,7 +1073,7 @@ extern char *getpass (const char *__prompt) __nonnull ((1));
-- extern int fsync (int __fd);
-- #endif /* Use BSD || X/Open || Unix98.  */
-- 
---#if __USE_GNU
--+#if defined __USE_GNU
-- /* Make all changes done to all files on the file system associated
--  *    with FD actually appear on disk.  */
-- extern int syncfs (int __fd) __THROW;
---- 
--2.6.2
--
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 21d8ddc..eeb6ca0 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -57,7 +57,7 @@ config BR2_USE_UCLIBC_SNAPSHOT
- config BR2_UCLIBC_VERSION_STRING
- 	string
- 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
--	default "1.0.8"		if BR2_UCLIBC_VERSION_NG
-+	default "1.0.9"		if BR2_UCLIBC_VERSION_NG
- 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
- config BR2_UCLIBC_CONFIG
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index d9931a9..f985501 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -2,7 +2,7 @@
- sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
- 
- # From http://www.uclibc-ng.org/
--sha256  11575cda78681713f5a36cf35deaae93acdc7dce463d38a12902991fb7f5312a        uClibc-ng-1.0.8.tar.xz
-+sha256  08be8dd22ac0c3806add88b813129fb3014437eddc9d78fc73eba7f33c4b4a9d        uClibc-ng-1.0.9.tar.xz
- 
- # No hash for the ARC variant, comes from the github-helper
- none	xxx	uClibc-arc-2015.06.tar.gz
+We do highly suggest users do redistribute Buildroot as part of their
+compliance delivery, so the patches we bundle would be part of that
+compliance deilvery.
+
+However, patches that are downloaded or (most importantly) patches that
+come from a global patch directory would be missing from that compliance
+delivery.
+
+The series starts with minor fixes to libecore and the legal-info infra,
+and with adding licensing information to the Linux headers.
+
+Then we add a new keyword to the _REDISTRIBUTE variable, so a package
+can be completely ignored from the legal-info ouput (no source saved,
+not license file saved, not listed in the manifest). Virtual packages
+are forcibly set to be ignored that way.
+
+Along the process of adding patches to the legal-info output, there was
+an opportunity to cleanup and enhance the gcc package wrt. legal-info.
+It was discovered that our legal-info for gcc was (besides the patches)
+incomplete, as the Xtensa overlay was not saved. So, we took the burden
+of cleaning, fixing and enhancing the gcc package:
+
+  - have the same source tree for initial and final steps,
+  - only extract sources once,
+  - make the gcc package pure host packages,
+  - add licensing information,
+  - save the Xtensa overlay to the legal-info output.
+
+Still side-tracked with all those changes, we fix the perl package to
+also save the perl-cross sources in the legal-info putput.
+
+Then, back to the legal-info infra, further changes allow saving the
+patches alongside the source archives:
+
+  - archives are saved in a subdirectory named package-version rarther
+    than all in the same directory,
+  - the directory where the kicense files are stores are also named
+    similarly, for consistency, rather than with ust the name of the
+    package,
+  - patches ar eeventually saved alongside the corrsponding archive,
+  - eventually, legal-info is made to work in full-offline mode.
+
+
+Notes:
+
+  - we considered saving the full content of _ALL_DOWNLOADS or just the
+    content of _EXTRA_DOWNLOADS, but that does not play well with
+    pre-configued toolchains, which use _EXTRA_DOWNLOAD to doenload
+    additional tarballs with more binary stuff in there (sysroots), so
+    it does not make sense to include those in the legal-info output.
+    Since_ALL_DOWNLOADS also contains _EXTRA_DOWNLOADS, we can't use it
+    either. Those are to be handled manually in post-legal-info hooks;
+
+  - there might be other packages for which we are not saving 'extra'
+    stuff, but they can be fixed (with post-legal-info hooks) in
+    followup patches.
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 5f2cd8f5ecd7d035f00664c604fd8bfd5f1afcb8:
+
+  lua-periphery: fix build on Sparc/Sparc64 (2015-11-16 23:19:27 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/legal-patch
+
+for you to fetch changes up to 0aa743543356cbe19450b672b435f016260ee7d6:
+
+  core/pkg-infra: ensure legal-info works in off-line mode (2015-11-16 23:39:03 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (21):
+      package/libecore: do not build anything at patch time
+      core/legal-info: fix missing double-$
+      package/linux-headers: add licensing information
+      core/legal-info: allow ignoring packages from the legal-info
+      core/pkg-virtual: ignore from legal-info output
+      package/gcc: add licensing information
+      package/gcc: handle licensing information
+      package/gcc: add a patch for arc rather than using sed
+      package/gcc: properly extract and patch sources
+      package/gcc: make host-gcc a pure host package
+      package/gcc: make -initial and -final use sources from host-gcc
+      package/gcc: include the extensa overlay in the legal-info output
+      package/perl: include perl-cross in the legal-info output
+      core: add a global variable with already-unquoted global patch dir
+      core/pkg-generic: add macro to hardlink-or-copy
+      core/legal-info: use the macro to install source archives
+      core/legal-info: install source archives in their own sub-dir
+      core/legal-info: add package version to license directory
+      core/apply-patches: store full path of applied patches
+      core/legal-info: also save patches
+      core/pkg-infra: ensure legal-info works in off-line mode
+
+ Makefile                                           |   2 +
+ docs/manual/adding-packages-generic.txt            |   7 +-
+ package/efl/libecore/libecore.mk                   |   2 +-
+ .../900-no-libgmon.a-when-inhibit_libc.patch       |  43 +++++++
+ package/gcc/gcc-final/gcc-final.mk                 |  40 +++---
+ package/gcc/gcc-initial/gcc-initial.mk             |  43 ++-----
+ package/gcc/gcc.mk                                 | 137 +++++++++++----------
+ package/linux-headers/linux-headers.mk             |   2 +
+ package/perl/perl.mk                               |   7 ++
+ package/pkg-generic.mk                             |  74 ++++++++---
+ package/pkg-virtual.mk                             |   2 +
+ support/scripts/apply-patches.sh                   |   7 +-
+ 12 files changed, 228 insertions(+), 138 deletions(-)
+ create mode 100644 package/gcc/arc-2015.06/900-no-libgmon.a-when-inhibit_libc.patch
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
