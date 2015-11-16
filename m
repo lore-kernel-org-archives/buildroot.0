@@ -1,112 +1,133 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Mon, 16 Nov 2015 08:58:18 -0200
-Subject: [Buildroot] [PATCH v3 1/1] qemu: add patch to fix SSP support
-	detection
-Message-ID: <1447671498-9180-1-git-send-email-rprebello@gmail.com>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Mon, 16 Nov 2015 21:33:03 +0900
+Subject: [Buildroot] [PATCH] package/gauche: fix getcontext not solved
+	error on link
+In-Reply-To: <56497F25.4020100@mind.be>
+References: <201511131005.tADA5pt9030611@ms-omx02.plus.so-net.ne.jp>
+ <56497F25.4020100@mind.be>
+Message-ID: <DCB69957-FA7C-447C-B55F-CCB8ED8A4D1C@ca2.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The QEMU configure script incorrectly assumes SSP is supported by the
-toolchain in some cases where the compiler accepts -fstack-protector*
-flags but the C library does not provide the necessary __stack_chk_*()
-functions.
+Dear Arnout.
+Thank you for your comment.
 
-Even though a full compile and link test is performed by the script,
-this is done with a code fragment which does not actually meet any of
-the conditions required to cause the compiler to emit canary code when
-the -fstack-protector-strong variant is used. As no compile or link
-failure occurs in this case, a false positive is generated and a
-subsequent error is seen when the probe for pthreads is performed.
+Both of patch to configure and configure.ac are already included.
 
-The fix consists in patching the configure script to use a more
-appropriate test program for the SSP support checks.
+I will send patch to upstream.
 
-Fixes:
+Regards,
+Kawashima
 
-  http://autobuild.buildroot.net/results/efb/efbb4e940543894b8745bb405478a096c90a5ae2/
-  http://autobuild.buildroot.net/results/32d/32d6d984febad2dee1f0d31c5fa0aea823297096/
-  http://autobuild.buildroot.net/results/aa6/aa6e71c957fb6f07e7bded35a8e47be4dadd042c/
-  ...and many others.
-
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
-Changes v2 -> v3:
-  - Use a better test code fragment that works when LTO is enabled
-
-Changes v1 -> v2:
-  - Patch the configure script instead of force disable SSP detection
-    (Arnout Vandecappelle)
----
- ...se-appropriate-code-fragment-for-fstack-p.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
-
-diff --git a/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch b/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
-new file mode 100644
-index 0000000..9ebe334
---- /dev/null
-+++ b/package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
-@@ -0,0 +1,58 @@
-+From 7b93e98143c376ed09bfd30658b8641d4a36e77e Mon Sep 17 00:00:00 2001
-+From: Rodrigo Rebello <rprebello@gmail.com>
-+Date: Thu, 12 Nov 2015 12:04:28 -0200
-+Subject: [PATCH] configure: use appropriate code fragment for
-+ -fstack-protector checks
-+Cc: qemu-trivial at nongnu.org
-+
-+The check for stack-protector support consisted in compiling and linking
-+the test program below (output by function write_c_skeleton()) with the
-+compiler flag -fstack-protector-strong first and then with
-+-fstack-protector-all if the first one failed to work:
-+
-+  int main(void) { return 0; }
-+
-+This caused false positives when using certain toolchains in which the
-+compiler accepts -fstack-protector-strong but no support is provided by
-+the C library, since in this stack-protector variant the compiler emits
-+canary code only for functions that meet specific conditions (local
-+arrays, memory references to local variables, etc.) and the code
-+fragment under test included none of them (hence no stack protection
-+code generated, no link failure).
-+
-+This fix modifies the test program used for -fstack-protector checks to
-+meet conditions which cause the compiler to generate canary code in all
-+variants.
-+
-+Upstream status: sent
-+https://patchwork.ozlabs.org/patch/543357/
-+
-+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-+---
-+ configure | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/configure b/configure
-+index cd219d8..27d7b3c 100755
-+--- a/configure
-++++ b/configure
-+@@ -1471,6 +1471,16 @@ for flag in $gcc_flags; do
-+ done
-+ 
-+ if test "$stack_protector" != "no"; then
-++  cat > $TMPC << EOF
-++int main(int argc, char *argv[])
-++{
-++    char arr[64], *p = arr, *c = argv[0];
-++    while (*c) {
-++        *p++ = *c++;
-++    }
-++    return 0;
-++}
-++EOF
-+   gcc_flags="-fstack-protector-strong -fstack-protector-all"
-+   sp_on=0
-+   for flag in $gcc_flags; do
-+-- 
-+2.1.4
-+
--- 
-2.1.4
+> 2015/11/16 16:00?Arnout Vandecappelle <arnout@mind.be> ?????
+> 
+> On 13-11-15 11:05, Hiroshi Kawashima wrote:
+>> This patch is ported from bdwgc package.
+>> Gauche use internal boehm gc so it has same problem.
+>> 
+>> I touch configure directly instead of configure.ac because autoreconf
+>> failed by version mismatch of autotools.
+>> 
+>> Will fix:
+>> http://autobuild.buildroot.org/results/8c6/8c6ce526735a36b8c8b4c6047e3c69039c4527cb//
+>> http://autobuild.buildroot.org/results/894/89460829a737a4dab19103f7a46905636420b0a8//
+>> 
+>> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> However, ideally you should patch both configure.ac and configure, and also
+> send the patch upstream of course.
+> 
+> Regards,
+> Arnout
+> 
+>> ---
+>> ...ac-add-check-for-NO_GETCONTEXT-definition.patch |   61 ++++++++++++++++++++
+>> 1 files changed, 61 insertions(+), 0 deletions(-)
+>> create mode 100644 package/gauche/0002-gc-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
+>> 
+>> diff --git a/package/gauche/0002-gc-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch b/package/gauche/0002-gc-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
+>> new file mode 100644
+>> index 0000000..8940574
+>> --- /dev/null
+>> +++ b/package/gauche/0002-gc-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
+>> @@ -0,0 +1,61 @@
+>> +gc/configure.ac: add check for NO_GETCONTEXT definition
+>> +
+>> +This patch is ported from bdwgc package.
+>> +Gauche use internal boehm gc so it has same problem.
+>> +
+>> +I touch configure directly instead of configure.ac because autoreconf
+>> +failed by version mismatch of autotools.
+>> +
+>> +Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+>> +
+>> +Original credits of patch in bdwgc package:
+>> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> +[yann.morin.1998 at free.fr: add a comment, change variable name, use
+>> + AS_IF, remove debug traces, use AC_CHECK_FUNCS (as suggested by
+>> + Thomas)]
+>> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> +Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> +
+>> +diff -ur a/gc/configure b/gc/configure
+>> +--- a/gc/configure	2015-11-12 21:41:02.394822056 +0900
+>> ++++ b/gc/configure	2015-11-12 22:04:14.655157423 +0900
+>> +@@ -16153,6 +16153,23 @@
+>> + $as_echo "$ac_cv_fno_strict_aliasing" >&6; }
+>> + fi
+>> + 
+>> ++# Check for getcontext (uClibc can be configured without it, for example)
+>> ++for ac_func in getcontext
+>> ++do :
+>> ++  ac_fn_c_check_func "$LINENO" "getcontext" "ac_cv_func_getcontext"
+>> ++if test "x$ac_cv_func_getcontext" = xyes; then :
+>> ++  cat >>confdefs.h <<_ACEOF
+>> ++#define HAVE_GETCONTEXT 1
+>> ++_ACEOF
+>> ++
+>> ++fi
+>> ++done
+>> ++
+>> ++if test "$ac_cv_func_getcontext" = "no"; then :
+>> ++  CFLAGS="$CFLAGS -DNO_GETCONTEXT"
+>> ++   CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"
+>> ++fi
+>> ++
+>> + case "$host" in
+>> + # While IRIX 6 has libdl for the O32 and N32 ABIs, it's missing for N64
+>> + # and unnecessary everywhere.
+>> +diff -ur a/gc/configure.ac b/gc/configure.ac
+>> +--- a/gc/configure.ac	2015-11-12 22:31:44.851510997 +0900
+>> ++++ b/gc/configure.ac	2015-11-12 22:33:39.292191227 +0900
+>> +@@ -459,6 +459,12 @@
+>> +   AC_MSG_RESULT($ac_cv_fno_strict_aliasing)
+>> + fi
+>> + 
+>> ++# Check for getcontext (uClibc can be configured without it, for example)
+>> ++AC_CHECK_FUNCS([getcontext])
+>> ++AS_IF([test "$ac_cv_func_getcontext" = "no"],
+>> ++  [CFLAGS="$CFLAGS -DNO_GETCONTEXT"
+>> ++   CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"])
+>> ++
+>> + case "$host" in
+>> + # While IRIX 6 has libdl for the O32 and N32 ABIs, it's missing for N64
+>> + # and unnecessary everywhere.
+>> 
+> 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
