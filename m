@@ -1,100 +1,120 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Nov 2015 23:47:03 +0100
-Subject: [Buildroot] [PATCH 08/21 RFC] package/gcc: add a patch for arc
-	rather than using sed
+Date: Mon, 16 Nov 2015 23:47:04 +0100
+Subject: [Buildroot] [PATCH 09/21 RFC] package/gcc: properly extract and
+	patch sources
 In-Reply-To: <cover.1447713615.git.yann.morin.1998@free.fr>
 References: <cover.1447713615.git.yann.morin.1998@free.fr>
-Message-ID: <b27bd7fff11b0118cfd9227152263a5f16d56e1b.1447713615.git.yann.morin.1998@free.fr>
+Message-ID: <f84cab2dedb3294dbe1b41f309f63aa71b6ef043.1447713615.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-That way, we get the same sources for the -initial and -final passes,
-which will ultimately allow us not to extract gcc for the two passes
-and directly use the sources extracted for host-gcc.
+Currently, we're extracting the gcc sources three times, which takes a
+bit of place:
+  - for host-gcc, just for the sake of legal-info,
+  - for host-gcc-initial,
+  - for host-gcc-final.
+
+However, gcc does not support in-tree builds, and for host-gcc-initial
+as well as for host-gcc-final, wiile we do not build anything for
+host-gcc we build in a sub-directory, which leaves the three gcc source
+trees intact.
+
+Thus, we could re-use the sources from host-gcc for the two builds, but
+they are so far not completely patched. Most notably, the special Xtensa
+tarball is not extracted, and the powerpc patch is not applied when
+needed.
+
+Re-organise the way the host-gcc package is defined, so that the source
+tree is properly prepared. We need to move blocks around, so that hooks
+are registered in the correct order; as a reference, we use the ordering
+as seen in host-gcc-initial and host-gcc-final (same order in both).
+
+The "standard" patches are applied by the package infra, so we add a
+post-patch hook to apply the powerpc patch.
+
+The list of exclusions is defined earlier, as it looks more logical to
+have all extract-related defintions come before the patch-related ones.
+
+Ditto for the testsuite.
+
+We for now keep the HOST_GCC_APPLY_PATCHES and HOST_GCC_CONFIGURE_SYMLINK
+macros, as host-gcc-initial and host-gcc-final have not yet been
+converted. Once that's been done, we can get rid of the macros.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../900-no-libgmon.a-when-inhibit_libc.patch       | 43 ++++++++++++++++++++++
- package/gcc/gcc-initial/gcc-initial.mk             | 13 -------
- 2 files changed, 43 insertions(+), 13 deletions(-)
- create mode 100644 package/gcc/arc-2015.06/900-no-libgmon.a-when-inhibit_libc.patch
+ package/gcc/gcc.mk | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
-diff --git a/package/gcc/arc-2015.06/900-no-libgmon.a-when-inhibit_libc.patch b/package/gcc/arc-2015.06/900-no-libgmon.a-when-inhibit_libc.patch
-new file mode 100644
-index 0000000..e9fbf3f
---- /dev/null
-+++ b/package/gcc/arc-2015.06/900-no-libgmon.a-when-inhibit_libc.patch
-@@ -0,0 +1,43 @@
-+libgcc: on ARC, do not build libgmon.a when inhibit_libc
-+
-+gcc on ARC has a bug: in its libgcc, even when no C library is available
-+(--with-newlib is passed, and therefore inhibit_libc is defined), it
-+tries to use the C library for the libgmon library.
-+
-+Only add it to the list of extra_parts if inhibit_libc is not true.
-+
-+inhibit_libc is not available to libgcc, so we use a dirty hack to get
-+its value from the gcc/config.log. This is not really nice, but is not
-+much worse than the sed invocation we previously had to tweak that file.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN host-gcc-arc-2015.06.orig/libgcc/config.host host-gcc-arc-2015.06/libgcc/config.host
-+--- host-gcc-arc-2015.06.orig/libgcc/config.host	2015-11-15 23:01:57.588638300 +0100
-++++ host-gcc-arc-2015.06/libgcc/config.host	2015-11-15 23:07:25.256450515 +0100
-+@@ -75,6 +75,9 @@
-+ md_unwind_header=no-unwind.h
-+ unwind_header=unwind-generic.h
-+ 
-++# Hack to know whether we need to set inhibit_libc (to exclude libgmon.a)
-++eval $(grep -E "^inhibit_libc='true'\$" ../../gcc/config.log 2>&1)
-++
-+ # Set default cpu_type so it can be updated in each machine entry.
-+ cpu_type=`echo ${host} | sed 's/-.*$//'`
-+ case ${host} in
-+diff -durN host-gcc-arc-2015.06.orig/libgcc/config.host host-gcc-arc-2015.06/libgcc/config.host
-+--- host-gcc-arc-2015.06.orig/libgcc/config.host	2015-06-26 12:34:27.000000000 +0200
-++++ host-gcc-arc-2015.06/libgcc/config.host	2015-11-15 19:47:27.384690564 +0100
-+@@ -327,7 +327,11 @@
-+ 	;;
-+ arc*-*-linux-uclibc*)
-+ 	tmake_file="${tmake_file} t-slibgcc-libgcc t-slibgcc-nolc-override arc/t-arc700-uClibc arc/t-arc"
-+-	extra_parts="crti.o crtn.o crtend.o crtbegin.o crtendS.o crtbeginS.o libgmon.a crtg.o crtgend.o"
-++	extra_parts="crti.o crtn.o crtend.o crtbegin.o crtendS.o crtbeginS.o"
-++	if [ ! "${inhibit_libc}" = "true" ]; then
-++		extra_parts="${extra_parts} libgmon.a"
-++	fi
-++	extra_parts="${extra_parts} crtg.o crtgend.o"
-+ 	;;
-+ arm-wrs-vxworks)
-+ 	tmake_file="$tmake_file arm/t-arm arm/t-vxworks t-softfp-sfdf t-softfp-excl arm/t-softfp t-softfp"
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 19f8ced..e476c501 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -31,19 +31,6 @@ HOST_GCC_INITIAL_SUBDIR = build
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index fe984a7..fa5baa6 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -24,29 +24,37 @@ GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION)
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+ else
+ GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
++GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
+ endif
  
- HOST_GCC_INITIAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
+-GCC_SOURCE ?= gcc-$(GCC_VERSION).tar.bz2
++HOST_GCC_EXCLUDES = \
++	libjava/* libgo/* \
++	gcc/testsuite/* libstdc++-v3/testsuite/*
++
++define HOST_GCC_FAKE_TESTSUITE
++	mkdir -p $(@D)/libstdc++-v3/testsuite/
++	echo "all:" > $(@D)/libstdc++-v3/testsuite/Makefile.in
++	echo "install:" >> $(@D)/libstdc++-v3/testsuite/Makefile.in
++endef
++HOST_GCC_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
  
--# gcc on ARC has a bug: in its libgcc, even when no C library is
--# available (--with-newlib is passed, and therefore inhibit_libc is
--# defined), it tries to use the C library for the libgmon
--# library. Since it's not needed in gcc-initial, we disabled it here.
--ifeq ($(BR2_GCC_VERSION_4_8_ARC),y)
--define HOST_GCC_INITIAL_DISABLE_LIBGMON
--	$(SED) 's/crtbeginS.o libgmon.a crtg.o/crtbeginS.o crtg.o/' \
--		$(@D)/libgcc/config.host
--endef
--HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
--HOST_GCC_INITIAL_POST_RSYNC_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
--endif
+ #
+ # Xtensa special hook
+ #
 -
- HOST_GCC_INITIAL_CONF_OPTS = \
- 	$(HOST_GCC_COMMON_CONF_OPTS) \
- 	--enable-languages=c \
++ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+ HOST_GCC_XTENSA_OVERLAY_TAR = $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,$(BR2_XTENSA_CORE_NAME)).tar
+-
+ define HOST_GCC_XTENSA_OVERLAY_EXTRACT
+ 	tar xf $(HOST_GCC_XTENSA_OVERLAY_TAR) -C $(@D) --strip-components=1 gcc
+ endef
+-
+-#
+-# Apply patches
+-#
++HOST_GCC_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
++endif # Xtensa
+ 
+ ifeq ($(ARCH),powerpc)
+ ifneq ($(BR2_SOFT_FLOAT),)
+ define HOST_GCC_APPLY_POWERPC_PATCH
+ 	$(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) 1000-powerpc-link-with-math-lib.patch.conditional
+ endef
++HOST_GCC_POST_PATCH_HOOKS += HOST_GCC_APPLY_POWERPC_PATCH
+ endif
+ endif
+ 
+@@ -57,16 +65,6 @@ define HOST_GCC_APPLY_PATCHES
+ 	$(HOST_GCC_APPLY_POWERPC_PATCH)
+ endef
+ 
+-HOST_GCC_EXCLUDES = \
+-	libjava/* libgo/* \
+-	gcc/testsuite/* libstdc++-v3/testsuite/*
+-
+-define HOST_GCC_FAKE_TESTSUITE
+-	mkdir -p $(@D)/libstdc++-v3/testsuite/
+-	echo "all:" > $(@D)/libstdc++-v3/testsuite/Makefile.in
+-	echo "install:" >> $(@D)/libstdc++-v3/testsuite/Makefile.in
+-endef
+-
+ #
+ # Create 'build' directory and configure symlink
+ #
 -- 
 1.9.1
