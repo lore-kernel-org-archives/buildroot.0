@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Nov 2015 23:05:53 +0100
-Subject: [Buildroot] [PATCH 1/1]
- package/x11r7/xdriver_xf86-video-siliconmotion: Fix compile warnings being
- treated as error
-In-Reply-To: <1447004673-18164-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1447004673-18164-1-git-send-email-bernd.kuhls@t-online.de>
- <1447004673-18164-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151116230553.4a20d31c@free-electrons.com>
+Date: Mon, 16 Nov 2015 23:08:00 +0100
+Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
+In-Reply-To: <564837B6.60209@lysator.liu.se>
+References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
+ <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
+ <CA+BsyQ7XEwj_dLa=H6Yt+rWQMh3rOvH7Bhr=BfWNNkMmVbfnuw@mail.gmail.com>
+ <20151108143716.31f5c8cd@free-electrons.com>
+ <564837B6.60209@lysator.liu.se>
+Message-ID: <20151116230800.2fba9d63@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Peter Rosin,
 
-On Sun,  8 Nov 2015 18:44:33 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/059/059d771cb39532dee73a5f50e24b3441005ed38b/
-> http://autobuild.buildroot.net/results/542/5429dd3f07430cf1487a8cfa82ba55e66a640473/
-> http://autobuild.buildroot.net/results/073/073105a692033665d31b2dc034eff2e0fdca7f10/
-> http://autobuild.buildroot.net/results/018/01805d60b8b046122d357e2559268e8a45dcf9d3/
-> and many others
+On Sun, 15 Nov 2015 08:43:50 +0100, Peter Rosin wrote:
+
+> What are we waiting for anyway? Anything I can do to move this along?
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../xdriver_xf86-video-siliconmotion.mk                                 | 2 ++
->  1 file changed, 2 insertions(+)
+> I thought I had straightened out all question marks?
 
-Applied, thanks.
+We are right now preparing the 2015.11 release, so at this point, no
+version bump is merged in master. We are merging some of the new
+features and version bumps in "next" but this tends to happen more
+slowly than usual since we try to focus a bit our effort on the master
+branch.
+
+But your patch is not forgotten, it is listed in our patch tracking
+system at http://patchwork.ozlabs.org/project/buildroot/list/.
+
+Thanks!
 
 Thomas
 -- 
