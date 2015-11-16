@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Nov 2015 21:15:07 +0100
-Subject: [Buildroot] [PATCH] strongswan: security bump to version 5.3.4
-In-Reply-To: <1447703706-28787-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447703706-28787-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151116211507.4da13de5@free-electrons.com>
+Date: Mon, 16 Nov 2015 21:16:37 +0100
+Subject: [Buildroot] [git commit] uboot: fix ARCH for i386 and x86_64
+Message-ID: <20151116201822.9E0D481E1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=9a730a92a3691a7c2bafcc6373a96d47e3d687bc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 16 Nov 2015 16:55:06 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2015-8023 - authentication bypass vulnerability in the eap-mschapv2
-> plugin that was caused by insufficient verification of the internal
-> state when handling EAP-MSCHAPv2 Success messages received by the
-> client.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/strongswan/strongswan.hash | 6 +++---
->  package/strongswan/strongswan.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/uboot.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 66e728f..0e3f808 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -72,9 +72,11 @@ UBOOT_BIN_IFT = $(UBOOT_BIN).ift
+ endif
+ 
+ # The kernel calls AArch64 'arm64', but U-Boot calls it just 'arm', so
+-# we have to special case it.
++# we have to special case it. Similar for i386/x86_64 -> x86
+ ifeq ($(KERNEL_ARCH),arm64)
+ UBOOT_ARCH = arm
++else ifneq ($(filter $(KERNEL_ARCH),i386 x86_64),)
++UBOOT_ARCH = x86
+ else
+ UBOOT_ARCH = $(KERNEL_ARCH)
+ endif
