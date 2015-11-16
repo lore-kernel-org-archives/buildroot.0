@@ -1,32 +1,49 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 16 Nov 2015 08:55:31 +0100
-Subject: [Buildroot] [PATCH] package/fastd: propagate libcap dependency
-In-Reply-To: <1447539706-15504-1-git-send-email-yann.morin.1998@free.fr>
-References: <1447539706-15504-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <89dc77e20e644f37a39b3d3eee635650@localhost>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon, 16 Nov 2015 09:22:53 +0100
+Subject: [Buildroot] [PATCH] package/gauche: force to use intenal
+ libatomic_ops
+In-Reply-To: <201511131006.tADA64m9008638@ms-omx01.plus.so-net.ne.jp>
+References: <201511131006.tADA64m9008638@ms-omx01.plus.so-net.ne.jp>
+Message-ID: <5649925D.5070604@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei, 
+Hi Hiroshi,
 
-Am 2015-11-14 23:21, schrieb Yann E. MORIN:
-> libcap neds headers >= 3.0, so propagate that down to fastd which
-> selects libcap.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Alexander Dahl <post@lespocky.de>
+> Force to use internal libatomic_ops of gauche.
+>
+> Fix:
+> http://autobuild.buildroot.org/results/a97/a979f6a58f0fbb1896830461d6c384f4a65c9429//
+> W dniu 13.11.2015 o 11:06, Hiroshi Kawashima pisze:r
+> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+> ---
+> diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
+> index b887c6a..95a448b 100644
+> --- a/package/gauche/gauche.mk
+> +++ b/package/gauche/gauche.mk
 
-Still compiles for me with x86 and RPi configs. Thanks guys for tracking
-down those dependencies. :-)
+Subject typo
 
-Greets
-Alex
+intenal -> internal
 
--- 
-?With the first link, the chain is forged. The first speech censured,
-the first thought forbidden, the first freedom denied, chains us all
-irrevocably.? (Jean-Luc Picard, quoting Judge Aaron Satie)
-*** GnuPG-FP: 02C8 A590 7FE5 CA5F 3601  D1D5 8FBA 7744 CC87 10D0 ***
+Regards,
+Jerzy
+
+> @@ -12,6 +12,7 @@ GAUCHE_LICENSE_FILES = COPYING
+>   GAUCHE_DEPENDENCIES = host-gauche
+>   
+>   HOST_GAUCHE_CONF_OPTS = --without-zlib
+> +GAUCHE_CONF_OPTS = --without-libatomic-ops
+>   
+>   ifeq ($(BR2_PACKAGE_ZLIB),y)
+>   GAUCHE_CONF_OPTS += --with-zlib=$(STAGING_DIR)
+> ============================================================
+>      Hiroshi Kawashima
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
