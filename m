@@ -1,91 +1,124 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Nov 2015 07:32:24 +0100
-Subject: [Buildroot] [PATCH v2 1/1] qemu: add patch to fix SSP support
- detection
-In-Reply-To: <CABLs7GXiOVap1qiJw4URKFMusfBe6FRuejb9eCHt02aiMz_okQ@mail.gmail.com>
-References: <1447280301-9225-1-git-send-email-rprebello@gmail.com>
- <5643CF83.6000800@mind.be>
- <CABLs7GXMFP-vm1tRx1zcQZAsJ+KXUV8JNqxLN+3qPhGbNDL50w@mail.gmail.com>
- <56444B9D.3060501@mind.be>
- <CABLs7GU_RV8FOsFBqPB+Rz8nfHXFUaRF8PQrksk1MsrHQ7b4JA@mail.gmail.com>
- <56458CCD.6030305@mind.be>
- <CABLs7GXiOVap1qiJw4URKFMusfBe6FRuejb9eCHt02aiMz_okQ@mail.gmail.com>
-Message-ID: <56497878.6080500@mind.be>
+Date: Mon, 16 Nov 2015 07:51:37 +0100
+Subject: [Buildroot] [PATCH v1 1/1] gmrender-resurrect: new package
+In-Reply-To: <201510191206.t9JC6rK5008730@ms-omx02.plus.so-net.ne.jp>
+References: <201510191206.t9JC6rK5008730@ms-omx02.plus.so-net.ne.jp>
+Message-ID: <56497CF9.5080801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14-11-15 04:32, Rodrigo Rebello wrote:
-> Arnout, All,
+On 19-10-15 14:06, Hiroshi Kawashima wrote:
+> gmrender-resurrect is UPnP (DLNA) renderer based on gstreamer.
 > 
-> 2015-11-13 5:10 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
-> [snip]
->>>>  I wonder what would happen if LTO were enabled, since in that case the function
->>>> could be elided again...
->>>>
->>>
->>> Indeed, I've run a test with LTO enabled and no stack protection code
->>> gets emitted due to the optimizations. Finding a test code fragment
->>> that works for all possibilities isn't so simple after all.
->>>
->>> Maybe we should stick to the original v1 of this patch which disables
->>> SSP detection when it's known to be unsupported in the toolchain? Far
->>> from perfect, but at least it's more robust.
->>
->>  It would be nicer to find a fundamental upstreamable solution, but yes, the
->> original solution was more robust.
->>
+> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+
+ Some small comments below. With these, you can add my:
+
+  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+>  package/Config.in                                  |  1 +
+>  package/gmrender-resurrect/Config.in               | 15 +++++++++++++++
+>  package/gmrender-resurrect/gmrender-resurrect.hash |  2 ++
+>  package/gmrender-resurrect/gmrender-resurrect.mk   | 16 ++++++++++++++++
+>  4 files changed, 34 insertions(+)
+>  create mode 100644 package/gmrender-resurrect/Config.in
+>  create mode 100644 package/gmrender-resurrect/gmrender-resurrect.hash
+>  create mode 100644 package/gmrender-resurrect/gmrender-resurrect.mk
 > 
-> Well, I've improved on the test code and the new version is not only
-> shorter (no need for foo()), but it also works with LTO enabled:
-> 
-> [snip]
->   cat > $TMPC << EOF
-> int main(int argc, char *argv[])
-> {
->     char arr[64], *p = arr, *c = argv[0];
->     while (*c) {
->         *p++ = *c++;
->     }
->     return 0;
-> }
-> EOF
+> diff --git a/package/Config.in b/package/Config.in
+> index 8e3c64a..0811f4e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -14,6 +14,7 @@ menu "Audio and video applications"
+>  	source "package/ffmpeg/Config.in"
+>  	source "package/flac/Config.in"
+>  	source "package/flite/Config.in"
+> +	source "package/gmrender-resurrect/Config.in"
+>  	source "package/gstreamer/Config.in"
+>  	source "package/gstreamer1/Config.in"
+>  	source "package/jack2/Config.in"
+> diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
+> new file mode 100644
+> index 0000000..fc6327c
+> --- /dev/null
+> +++ b/package/gmrender-resurrect/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_GMRENDER_RESURRECT
+> +	bool "gmrender-resurrect"
+> +	depends on BR2_USE_WCHAR # gstreamer1
 
- Yep, this piece of code is perfect, since it _will_ smash the stack (if
-strlen(argv[0]) > 64) so the SSP support _must_ be linked in. The only thing
-that could happen in some distant future is that the compiler does sufficient
-static analysis to detect the problem at compile time and errors out
-immediately, but at the moment that's a bit far-fetched.
+ This should actually be gstreamer1 -> glib2 (the real cause is glib2). Same for
+the ones below.
 
-> [snip]
-> 
-> As this is more robust than the previous one, I've sent a new patch
-> upstream. It's already been reviewed by one person, but not yet
-> accepted:
-> https://patchwork.ozlabs.org/patch/543357/
-> 
-> I suspect I should wait for a while before submitting an update to the
-> buildroot list. However, given the great amount of patches the QEMU
-> project receives every day, I wonder if that will be looked at anytime
-> soon (if ever).
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1, libupnp
+> +	depends on BR2_USE_MMU # gstreamer1
+> +	select BR2_PACKAGE_GSTREAMER1
+> +	select BR2_PACKAGE_LIBUPNP
+> +	help
+> +	  UPnP (DLNA) media renderer based on gstreamer
 
- No need to wait to submit it to buildroot IMHO.
+ It could be useful to add:
 
-> 
-> On the other hand, modifying the gcc wrapper to error out on
-> -fstack-protector-* when SSP is unsupported is straightforward and
-> I've already cooked up a patch for that. I could send it immediately
-> and maybe mark this qemu-specific patch as rejected or superseded.
+	  You have to manually enable the GStreamer plugins to actually
+	  render the media. This includes the parser and decoder elements
+	  as well as an audio and/or video sink.
 
- Yes, please do send that patch. It is however something that will probably only
-be applied to next, while the qemu patch can be applied to master, so you should
-probably send both of them.
+ In fact, playbin is absolutely required, so I'd also add:
 
+	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
+
+> +
+> +	  https://github.com/hzeller/gmrender-resurrect
+> +
+> +comment "gmrender-resurrect needs a toolchain w/ wchar, threads"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/gmrender-resurrect/gmrender-resurrect.hash b/package/gmrender-resurrect/gmrender-resurrect.hash
+> new file mode 100644
+> index 0000000..f41447a
+> --- /dev/null
+> +++ b/package/gmrender-resurrect/gmrender-resurrect.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 502129ecb097bf23ba011f18a8bf1923951ec2dc6da157f3b376383c5f99b623 gmrender-resurrect-aa3d02cf40321cf78a6ea9019e23a7f6cd091dee.tar.gz
+> diff --git a/package/gmrender-resurrect/gmrender-resurrect.mk b/package/gmrender-resurrect/gmrender-resurrect.mk
+> new file mode 100644
+> index 0000000..18c6e01
+> --- /dev/null
+> +++ b/package/gmrender-resurrect/gmrender-resurrect.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# gmrender-resurrect
+> +#
+> +################################################################################
+> +
+> +GMRENDER_RESURRECT_VERSION = aa3d02cf40321cf78a6ea9019e23a7f6cd091dee
+> +GMRENDER_RESURRECT_SITE = $(call github,hzeller,gmrender-resurrect,$(GMRENDER_RESURRECT_VERSION))
+> +# Original distribution does not have default configure,
+> +# so we need to autoreconf:
+> +GMRENDER_RESURRECT_AUTORECONF = YES
+> +GMRENDER_RESURRECT_LICENSE = GPLv2+
+
+ Verified.
+
+> +GMRENDER_RESURRECT_LICENSE_FILES = COPYING
+> +GMRENDER_RESURRECT_DEPENDENCIES = gstreamer1 libupnp
+
+ There is also a sysvinit start script bundled with the source, so it would make
+sense to install that as well. However, it doesn't look like it's usable as is.
 
  Regards,
  Arnout
+
+> +
+> +$(eval $(autotools-package))
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
