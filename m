@@ -1,90 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 16 Nov 2015 23:45:32 +0100
-Subject: [Buildroot] [git commit] ushare: fix linking issue with gcc 5.x
-Message-ID: <20151116224600.D85988050E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] uclibc: update to 1.0.9
+Message-ID: <20151116224600.A9CCE81E6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66e28e98151d10e832645076eab77612714410f1
+commit: http://git.buildroot.net/buildroot/commit/?id=67299e3ae02f7c31c58875deb655e031c7f4fe82
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/1d4/1d4d621f3bd7862a75bd7e95e275ccb6694b54c9/
-http://autobuild.buildroot.net/results/140/140767a7437b60a62f553ab49c104c37a4949c6c/
-http://autobuild.buildroot.net/results/a88/a88ae349d4d7cdff4f15c8ad9e3a1eac74dc6c4b/
-http://autobuild.buildroot.net/results/599/59946c728593502e4a17cb7e2d75eabac54db537/
+Fixes a fanotify include bug where old kernels (2.6.x) fail to build.
+Fixes recent failures on x86 with Linux 4.3.x kernel regarding
+network sockets. Includes the removed patch.
 
-And many more.
-
-GCC5 defaults to -std=gnu11, which has different semantics for inline than
-previous versions:
-
-https://gcc.gnu.org/gcc-5/porting_to.html
-
-Which causes linker issues when display_headers() and start_log() are
-referenced from other files.  There's no real reason why these needs to be
-inline, so just drop the keyword.
-
+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-ushare-fix-building-with-gcc-5.x.patch    |   49 ++++++++++++++++++++
- 1 files changed, 49 insertions(+), 0 deletions(-)
+ .../1.0.8/0001-unistd-fix-if-condition.patch       |   34 --------------------
+ package/uclibc/Config.in                           |    2 +-
+ package/uclibc/uclibc.hash                         |    2 +-
+ 3 files changed, 2 insertions(+), 36 deletions(-)
 
-diff --git a/package/ushare/0002-ushare-fix-building-with-gcc-5.x.patch b/package/ushare/0002-ushare-fix-building-with-gcc-5.x.patch
-new file mode 100644
-index 0000000..abef81f
---- /dev/null
-+++ b/package/ushare/0002-ushare-fix-building-with-gcc-5.x.patch
-@@ -0,0 +1,49 @@
-+From 6abc52190accc8d8b17455420e234a1d7dc7ba55 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Mon, 16 Nov 2015 23:15:27 +0100
-+Subject: [PATCH] ushare: fix building with gcc 5.x
-+
-+GCC5 defaults to -std=gnu11, which has different semantics for inline than
-+previous versions:
-+
-+https://gcc.gnu.org/gcc-5/porting_to.html
-+
-+Which causes linker issues when display_headers() and start_log() are
-+referenced from other files.  There's no real reason why these needs to be
-+inline, so just drop the keyword.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/trace.c  | 2 +-
-+ src/ushare.c | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/trace.c b/src/trace.c
-+index 50729ef..4e314ef 100644
-+--- a/src/trace.c
-++++ b/src/trace.c
-+@@ -57,7 +57,7 @@ print_log (log_level level, const char *format, ...)
-+   va_end (va);
-+ }
-+ 
-+-inline void
-++void
-+ start_log (void)
-+ {
-+   openlog (PACKAGE_NAME, LOG_PID, LOG_DAEMON);
-+diff --git a/src/ushare.c b/src/ushare.c
-+index b64451e..af46e78 100644
-+--- a/src/ushare.c
-++++ b/src/ushare.c
-+@@ -496,7 +496,7 @@ reload_config (int s __attribute__ ((unused)))
-+   }
-+ }
-+ 
-+-inline void
-++void
-+ display_headers (void)
-+ {
-+   printf (_("%s (version %s), a lightweight UPnP A/V and DLNA Media Server.\n"),
-+-- 
-+2.1.4
-+
+diff --git a/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch b/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch
+deleted file mode 100644
+index c321f4e..0000000
+--- a/package/uclibc/1.0.8/0001-unistd-fix-if-condition.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 1e85892911bf016e9bb2a647b6584cdd806706f8 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Tue, 3 Nov 2015 15:32:23 +0100
+-Subject: [PATCH] unistd: fix #if condition
+-
+-Commit dfa593d4d881116723a4401b466ea964fb12327b ("syncfs: add system
+-call support") modified the #if condition around the definition of the
+-syncfs() prototype in a way that doesn't build, causing build failures
+-of any file including <unistd.h>:
+-
+-output/host/usr/powerpc-buildroot-linux-uclibc/sysroot/usr/include/unistd.h:988:14: error: #if with no expression
+- #if __USE_GNU
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- include/unistd.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/unistd.h b/include/unistd.h
+-index 4701dab..40d6abd 100644
+---- a/include/unistd.h
+-+++ b/include/unistd.h
+-@@ -1073,7 +1073,7 @@ extern char *getpass (const char *__prompt) __nonnull ((1));
+- extern int fsync (int __fd);
+- #endif /* Use BSD || X/Open || Unix98.  */
+- 
+--#if __USE_GNU
+-+#if defined __USE_GNU
+- /* Make all changes done to all files on the file system associated
+-  *    with FD actually appear on disk.  */
+- extern int syncfs (int __fd) __THROW;
+--- 
+-2.6.2
+-
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 21d8ddc..eeb6ca0 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -57,7 +57,7 @@ config BR2_USE_UCLIBC_SNAPSHOT
+ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
+-	default "1.0.8"		if BR2_UCLIBC_VERSION_NG
++	default "1.0.9"		if BR2_UCLIBC_VERSION_NG
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+ 
+ config BR2_UCLIBC_CONFIG
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index d9931a9..f985501 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -2,7 +2,7 @@
+ sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
+ 
+ # From http://www.uclibc-ng.org/
+-sha256  11575cda78681713f5a36cf35deaae93acdc7dce463d38a12902991fb7f5312a        uClibc-ng-1.0.8.tar.xz
++sha256  08be8dd22ac0c3806add88b813129fb3014437eddc9d78fc73eba7f33c4b4a9d        uClibc-ng-1.0.9.tar.xz
+ 
+ # No hash for the ARC variant, comes from the github-helper
+ none	xxx	uClibc-arc-2015.06.tar.gz
