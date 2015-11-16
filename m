@@ -1,40 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Nov 2015 23:08:00 +0100
-Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
-In-Reply-To: <564837B6.60209@lysator.liu.se>
-References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
- <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
- <CA+BsyQ7XEwj_dLa=H6Yt+rWQMh3rOvH7Bhr=BfWNNkMmVbfnuw@mail.gmail.com>
- <20151108143716.31f5c8cd@free-electrons.com>
- <564837B6.60209@lysator.liu.se>
-Message-ID: <20151116230800.2fba9d63@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 Nov 2015 23:11:16 +0100
+Subject: [Buildroot] [PATCH] uclibc: update to 1.0.9
+In-Reply-To: <20151116172038.4bf5a229@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 16 Nov 2015 17:20:38 +0100")
+References: <20151115122850.GA29521@waldemar-brodkorb.de>
+ <20151116172038.4bf5a229@free-electrons.com>
+Message-ID: <87r3jph9x7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Rosin,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 15 Nov 2015 08:43:50 +0100, Peter Rosin wrote:
+ > Hello,
+ > On Sun, 15 Nov 2015 13:28:50 +0100, Waldemar Brodkorb wrote:
+ >> Fixes a fanotify include bug where old kernels (2.6.x) fail to build.
+ >> Fixes recent failures on x86 with Linux 4.3.x kernel regarding
+ >> network sockets. Includes the removed patch.
+ >> 
+ >> Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
 
-> What are we waiting for anyway? Anything I can do to move this along?
-> 
-> I thought I had straightened out all question marks?
+ > Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-We are right now preparing the 2015.11 release, so at this point, no
-version bump is merged in master. We are merging some of the new
-features and version bumps in "next" but this tends to happen more
-slowly than usual since we try to focus a bit our effort on the master
-branch.
+ > I didn't test, but I checked the changelog between 1.0.8 and 1.0.9, and
+ > it seems minimal, and really fixes 2 problems that are currently
+ > affecting Buildroot: fanotify build issues with old kernel headers and
+ > the network issue on x86 with 4.3 kernels.
 
-But your patch is not forgotten, it is listed in our patch tracking
-system at http://patchwork.ozlabs.org/project/buildroot/list/.
+ > To me, this should be applied to master.
 
-Thanks!
+Ok - Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
