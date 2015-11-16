@@ -1,102 +1,67 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 16 Nov 2015 16:54:12 +0000
-Subject: [Buildroot] [PATCH] hidapi: new package
-Message-ID: <1447692852-21669-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Mon, 16 Nov 2015 17:29:51 +0000
+Subject: [Buildroot] [PATCH v7] board: add support for Intel Galileo Gen
+ 2
+In-Reply-To: <56314C13.5030302@mind.be>
+References: <1445359684.18938.6.camel@intel.com> <56314C13.5030302@mind.be>
+Message-ID: <1447694994.6537.51.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/Config.in          |    1 +
- package/hidapi/Config.in   |   20 ++++++++++++++++++++
- package/hidapi/hidapi.hash |    2 ++
- package/hidapi/hidapi.mk   |   27 +++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+), 0 deletions(-)
- create mode 100644 package/hidapi/Config.in
- create mode 100644 package/hidapi/hidapi.hash
- create mode 100644 package/hidapi/hidapi.mk
+> > diff --git a/board/intel/galileo/genimage.cfg b/board/intel/galileo/genimage.cfg
+> > new file mode 100644
+> > index 0000000..b1db6f7
+> > --- /dev/null
+> > +++ b/board/intel/galileo/genimage.cfg
+> > @@ -0,0 +1,15 @@
+> > +image sdcard.img {
+> > +	hdimage {
+> > +	}
+> > +
+> > +	partition boot {
+> > +		partition-type = 0xC
+> > +		image = "efi-part.vfat"
+> 
+>  Doesn't genimage allow to specify this in a single file?
 
-diff --git a/package/Config.in b/package/Config.in
-index bdc3063..04800c5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -864,6 +864,7 @@ menu "Hardware handling"
- 	source "package/ccid/Config.in"
- 	source "package/dtc/Config.in"
- 	source "package/gnu-efi/Config.in"
-+	source "package/hidapi/Config.in"
- 	source "package/lcdapi/Config.in"
- 	source "package/libaio/Config.in"
- 	source "package/libatasmart/Config.in"
-diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
-new file mode 100644
-index 0000000..7fbc1c2
---- /dev/null
-+++ b/package/hidapi/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_HIDAPI
-+	bool "hidapi"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
-+	# When eudev is used as the udev provider, libgudev is
-+	# automatically provided as it is part of eudev. However, when
-+	# systemd is used as the udev provider, libgudev is not
-+	# provided, and needs to be built separately. This is why we
-+	# select the libgudev package only if systemd is used.
-+	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_SYSTEMD
-+	help
-+	  HIDAPI is a multi-platform library which allows an application
-+	  to interface with USB and Bluetooth HID-Class devices on
-+	  Windows, Linux, and Mac OS X.
-+
-+	  http://www.signal11.us/oss/hidapi/
-+
-+comment "hidapi needs udev /dev management and a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/hidapi/hidapi.hash b/package/hidapi/hidapi.hash
-new file mode 100644
-index 0000000..ba00df2
---- /dev/null
-+++ b/package/hidapi/hidapi.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 33e206f5e145fc1bc6aeb55084d71b55d686533d23ad5bb762746ceba81e728b  hidapi-d17db57b9d4354752e0af42f5f33007a42ef2906.tar.gz
-diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
-new file mode 100644
-index 0000000..23d5eab
---- /dev/null
-+++ b/package/hidapi/hidapi.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# hidapi
-+#
-+################################################################################
-+
-+# Use master version as the current stable is very old and some bugs
-+# have been fixed since then.
-+HIDAPI_VERSION = d17db57b9d4354752e0af42f5f33007a42ef2906
-+HIDAPI_SITE = $(call github,signal11,hidapi,$(HIDAPI_VERSION))
-+HIDAPI_INSTALL_STAGING = YES
-+# No configure provided, so we need to autoreconf.
-+HIDAPI_AUTORECONF = YES
-+HIDAPI_LICENSE = GPLv3, BSD-3c
-+HIDAPI_LICENSE_FILES = LICENSE.txt LICENSE-gpl3.txt LICENSE-bsd.txt
-+
-+HIDAPI_DEPENDENCIES = libusb
-+# When eudev is used as the udev provider, libgudev is automatically
-+# provided as it is part of eudev. However, when systemd is used as the
-+# udev provider, libgudev is not provided, and needs to be built
-+# separately. This is why we select the libgudev package only if systemd
-+# is used.
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+HIDAPI_DEPENDENCIES += libgudev
-+endif
-+
-+$(eval $(autotools-package))
--- 
-1.7.1
+Hi Arnout, 
+
+Needed to do a bit of investigation to refresh my memory here - on why I
+implemented this way. To understand what genimage does requires a bit of
+understanding of what tools it is using under the hood. Typically using
+hdimage and vfat are mutually exclusive.
+
+ * hdimage - typically I use hdimage where I have 1 or more partitions I
+want to aggregate into a single image ... so I want pull the ext3/ext4
+image created by buildroot as a partition. 
+ * vfat - typically I use vfat where I want to use an overlay fs, i.e. a
+sdcard that has been formatted as vfat with a EFI, Kernel, Ext3 overlay
+image and perhaps also an initramfs. 
+
+So you are usually doing one or the other. The constraint with Galileo
+Gen 2 is that it's UEFI BIOS can only read VFAT or EFI partitions when
+looking for bootloader EFI binaries like grub-efi or gummiboot. So this
+leaves me with a couple of options:-
+
+ * I can use hdimage - I can create the VFAT/EFI partition myself
+calling mtools, and then use hdimage above to aggregate this partition
+into an image along with the rootfs image produced by buildroot
+ * I can use vfat with the overlay fs approach, however this typically
+comes with a boottime performance penalty.
+
+So my approach is as follows ...
+
+ * Use genimage vfat instead to create my first 'image' as vfat, under
+the hood genimage uses dd + mkfs.vfat to create the image and then uses
+mtools (mmd + mcopy) to copy in the EFI binaries.
+ * I then use hdimage to pull in the vfat image above as an EFI parition
+and the ext3 image created by buildroot as the rootfs partition. 
+
+For me this was simplest approach to layout the sdcard image as the
+Galileo requires, much simpler than rewriting lots of mtools logic that
+already exists in genimage. Make sense ?
+
+Ray K
