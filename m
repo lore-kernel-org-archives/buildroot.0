@@ -1,58 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Nov 2015 21:53:48 +0100
-Subject: [Buildroot] [git commit] zedboard: uboot: load env earlier
-Message-ID: <20151116205358.08EE27FEC8@busybox.osuosl.org>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 16 Nov 2015 22:07:22 +0100
+Subject: [Buildroot] [PATCH] boost: fix sparc compile
+In-Reply-To: <20151116214000.3f33b341@free-electrons.com>
+References: <20151115122455.GA29481@waldemar-brodkorb.de>
+ <20151116214000.3f33b341@free-electrons.com>
+Message-ID: <20151116210722.GG19876@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d761f0f408b8433d9abe77b21172396edeccee60
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-By default, with the original patch bootcmd runs sdboot before loading uEnv.txt.
-Consequently, if the user change modeboot, the user's defined content is updated
-too late.
-By loading uEnv.txt before 'run $modeboot' the correct boot mode is used instead
-of default mode.
+> Dear Waldemar Brodkorb,
+> 
+> On Sun, 15 Nov 2015 13:24:55 +0100, Waldemar Brodkorb wrote:
+> > Like for sparc64, set correct instruction set.
+> > Patch is obsoleted by this changeset.
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> 
+> Is this fixing an actual issue / build failure, or just making the
+> Sparc fix nicer ?
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Acked-By: Jan Viktorin <viktorin@rehivetech.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...eate-zedboard-specific-U-Boot-environment.patch |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch b/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
-index 1971503..6dae31e 100644
---- a/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
-+++ b/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
-@@ -11,7 +11,7 @@ diff --git a/include/configs/zynq_zed.h b/include/configs/zynq_zed.h
- index 946de95..2400a88 100644
- --- a/include/configs/zynq_zed.h
- +++ b/include/configs/zynq_zed.h
--@@ -24,4 +24,29 @@
-+@@ -24,4 +24,28 @@
+It makes the sparc fix nicer, no patch required to disable c3 and
+it will use sparcv8 instead sparcv7, which matches more your
+targeting sparc systems.
  
-  #include <configs/zynq-common.h>
- 
-@@ -20,7 +20,7 @@ index 946de95..2400a88 100644
- +	"envload=mmc info && if fatload mmc 0 0x1000 uEnv.txt;"\
- +	" then echo Importing uEnv.txt; env import -t 0x1000"  \
- +	" $filesize; fi;\0"                                    \
--+	"bootcmd=run $modeboot\0"                              \
-++	"bootcmd=run envload; run $modeboot\0"                 \
- +	"modeboot=sdboot\0"                                    \
- +	"baudrate=115200\0"                                    \
- +	"bootenv=uEnv.txt\0"                                   \
-@@ -28,8 +28,7 @@ index 946de95..2400a88 100644
- +	"kernel_image=uImage\0"                                \
- +	"ramdisk_image=rootfs.cpio.uboot\0"                    \
- +	"fpga_image=system.bit\0"                              \
--+	"sdboot=echo Booting from SD...;"                      \
--+	" run envload; run fpgaboot;"                          \
-++	"sdboot=echo Booting from SD...; run fpgaboot;"        \
- +	" fatload mmc 0 0x1000000 ${kernel_image}"             \
- +	" && fatload mmc 0 0x2000000 ${ramdisk_image}"         \
- +	" && fatload mmc 0 0x3000000 ${devicetree_image}"      \
+> Also, Boost on Sparc still doesn't build properly for me in certain
+> configurations. For example:
+> 
+> BR2_PACKAGE_BOOST_CONTEXT=y
+> BR2_PACKAGE_BOOST_COROUTINE=y
+> 
+> Fails with:
+> 
+> ...failed gcc.compile.asm bin.v2/libs/context/build/gcc-4.9.3/release/threading-multi/asm/jump_sparc_sysv_elf_gas.o...
+> gcc.compile.c++ bin.v2/libs/context/build/gcc-4.9.3/release/threading-multi/unsupported.o
+> libs/context/src/unsupported.cpp:7:2: error: #error "platform not supported"
+>  #error "platform not supported"
+
+As mentioned in my comment, context/coroutine are not yet supported.
+Will need to do some testing and then I will try to get the fixes to
+enable it upstream.
+
+best regards
+ Waldemar
