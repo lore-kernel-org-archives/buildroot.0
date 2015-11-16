@@ -1,99 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Nov 2015 21:43:32 +0100
-Subject: [Buildroot] [PATCH] boost: fix sparc compile
-In-Reply-To: <20151116214000.3f33b341@free-electrons.com>
-References: <20151115122455.GA29481@waldemar-brodkorb.de>
- <20151116214000.3f33b341@free-electrons.com>
-Message-ID: <564A3FF4.2030707@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Nov 2015 21:50:56 +0100
+Subject: [Buildroot] [git commit] boost: do not allow context module on sparc
+Message-ID: <20151116205151.EAA5981D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16-11-15 21:40, Thomas Petazzoni wrote:
-> Dear Waldemar Brodkorb,
-> 
-> On Sun, 15 Nov 2015 13:24:55 +0100, Waldemar Brodkorb wrote:
->> Like for sparc64, set correct instruction set.
->> Patch is obsoleted by this changeset.
->>
->> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
->> ---
-> 
-> Is this fixing an actual issue / build failure, or just making the
-> Sparc fix nicer ?
-> 
-> Also, Boost on Sparc still doesn't build properly for me in certain
-> configurations. For example:
-> 
-> BR2_sparc=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc-glibc-2015.08-647-gc356fb2.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_2=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_BOOST=y
-> BR2_PACKAGE_BOOST_ATOMIC=y
-> BR2_PACKAGE_BOOST_CHRONO=y
-> BR2_PACKAGE_BOOST_CONTAINER=y
-> BR2_PACKAGE_BOOST_CONTEXT=y
+commit: http://git.buildroot.net/buildroot/commit/?id=648956a137949e0388536688fff3ae4f7bb298a8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Quoting Waldemar:
+The boost context module does not build on sparc, even if sparc is
+advertised as a supported architecture by the boost documentation. So
+let's disallow this module for the time being.
 
-boost::context still does not compile. Don't know why it is
-disabled for sparc/sparc64 as it contains the needed code.
-Need to check on my sparc systems before enabling via a patch.
+Fixes:
 
- But for the release we probably want to disable it in Config.in.
+  http://autobuild.buildroot.org/results/206/2060e6e31c4d739947097faf6587e0a06681fee2/
 
- Regards,
- Arnout
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/boost/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-> BR2_PACKAGE_BOOST_COROUTINE=y
-> BR2_PACKAGE_BOOST_DATE_TIME=y
-> BR2_PACKAGE_BOOST_EXCEPTION=y
-> BR2_PACKAGE_BOOST_FILESYSTEM=y
-> BR2_PACKAGE_BOOST_GRAPH=y
-> BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
-> BR2_PACKAGE_BOOST_IOSTREAMS=y
-> BR2_PACKAGE_BOOST_LOCALE=y
-> BR2_PACKAGE_BOOST_LOG=y
-> BR2_PACKAGE_BOOST_MATH=y
-> BR2_PACKAGE_BOOST_MPI=y
-> BR2_PACKAGE_BOOST_PROGRAM_OPTIONS=y
-> BR2_PACKAGE_BOOST_RANDOM=y
-> BR2_PACKAGE_BOOST_REGEX=y
-> BR2_PACKAGE_BOOST_SERIALIZATION=y
-> BR2_PACKAGE_BOOST_SIGNALS=y
-> BR2_PACKAGE_BOOST_SYSTEM=y
-> BR2_PACKAGE_BOOST_TEST=y
-> BR2_PACKAGE_BOOST_TIMER=y
-> BR2_PACKAGE_BOOST_WAVE=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> Fails with:
-> 
-> ...failed gcc.compile.asm bin.v2/libs/context/build/gcc-4.9.3/release/threading-multi/asm/jump_sparc_sysv_elf_gas.o...
-> gcc.compile.c++ bin.v2/libs/context/build/gcc-4.9.3/release/threading-multi/unsupported.o
-> libs/context/src/unsupported.cpp:7:2: error: #error "platform not supported"
->  #error "platform not supported"
-> 
-> Best regards,
-> 
-> Thomas
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index edffd7e..cffaf6e 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -67,11 +67,12 @@ config BR2_PACKAGE_BOOST_CONTAINER
+ 
+ # see
+ # http://www.boost.org/doc/libs/1_59_0/libs/context/doc/html/context/architectures.html
+-# for the list of supported architectures.
++# for the list of supported architectures. Sparc pretends to be
++# supported, but it doesn't build.
+ config BR2_PACKAGE_BOOST_CONTEXT
+ 	bool "boost-context"
+ 	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
+-			|| BR2_powerpc || BR2_sparc || BR2_x86_64)
++			|| BR2_powerpc || BR2_x86_64)
+ 
+ config BR2_PACKAGE_BOOST_COROUTINE
+         bool "boost-coroutine"
