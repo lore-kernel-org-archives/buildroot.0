@@ -1,49 +1,41 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon, 16 Nov 2015 09:22:53 +0100
-Subject: [Buildroot] [PATCH] package/gauche: force to use intenal
- libatomic_ops
-In-Reply-To: <201511131006.tADA64m9008638@ms-omx01.plus.so-net.ne.jp>
-References: <201511131006.tADA64m9008638@ms-omx01.plus.so-net.ne.jp>
-Message-ID: <5649925D.5070604@trzebnica.net>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 16 Nov 2015 09:43:54 +0100
+Subject: [Buildroot] [PATCH] support/download: fetch all refs on full
+	git clone
+In-Reply-To: <5645880C.5040103@mind.be>
+References: <1446871164-19229-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <20151112170726.GB11143@ketchup.mtl.sfl> <5645880C.5040103@mind.be>
+Message-ID: <14498168.cEIkmZpZ53@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Hiroshi,
+Hello Arnout,
 
-> Force to use internal libatomic_ops of gauche.
->
-> Fix:
-> http://autobuild.buildroot.org/results/a97/a979f6a58f0fbb1896830461d6c384f4a65c9429//
-> W dniu 13.11.2015 o 11:06, Hiroshi Kawashima pisze:r
-> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-> ---
-> diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
-> index b887c6a..95a448b 100644
-> --- a/package/gauche/gauche.mk
-> +++ b/package/gauche/gauche.mk
+On Friday 13 November 2015 07:49:48 Arnout Vandecappelle wrote:
+[...]
+> What I
+> think would make sense is that for distributed VCS downloads (i.e.
+> git and hg) we keep a full (shallow) clone in DL_DIR in addition to
+> the tarball. That makes handling updates a lot more efficient. We
+> probably would want to expose that to PRIMARY and SECONDARY download
+> sites as well. Especially the PRIMARY would be useful, since it would
+> allow you to start from a local clone of e.g. linux.git (which may
+> not have the ref you need), and then just fetch the missing refs from
+> upstream.
+> 
+>  This will not be easy to implement, though, since we'd need to handle
+> e.g. multiple remotes that end up in the same DL_DIR/foo.git
+> repository.
+For your information, I have in my drafts a patch which implement a 
+similar idea. I think I would be able to send a first version in 1 or 2 
+weeks.
 
-Subject typo
+BR,
 
-intenal -> internal
-
-Regards,
-Jerzy
-
-> @@ -12,6 +12,7 @@ GAUCHE_LICENSE_FILES = COPYING
->   GAUCHE_DEPENDENCIES = host-gauche
->   
->   HOST_GAUCHE_CONF_OPTS = --without-zlib
-> +GAUCHE_CONF_OPTS = --without-libatomic-ops
->   
->   ifeq ($(BR2_PACKAGE_ZLIB),y)
->   GAUCHE_CONF_OPTS += --with-zlib=$(STAGING_DIR)
-> ============================================================
->      Hiroshi Kawashima
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
