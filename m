@@ -1,41 +1,54 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 16 Nov 2015 09:43:54 +0100
-Subject: [Buildroot] [PATCH] support/download: fetch all refs on full
-	git clone
-In-Reply-To: <5645880C.5040103@mind.be>
-References: <1446871164-19229-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <20151112170726.GB11143@ketchup.mtl.sfl> <5645880C.5040103@mind.be>
-Message-ID: <14498168.cEIkmZpZ53@sagittea>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Mon, 16 Nov 2015 08:15:56 -0200
+Subject: [Buildroot] [PATCH v2 1/1] qemu: add patch to fix SSP support
+	detection
+In-Reply-To: <56497878.6080500@mind.be>
+References: <1447280301-9225-1-git-send-email-rprebello@gmail.com>
+ <5643CF83.6000800@mind.be>
+ <CABLs7GXMFP-vm1tRx1zcQZAsJ+KXUV8JNqxLN+3qPhGbNDL50w@mail.gmail.com>
+ <56444B9D.3060501@mind.be>
+ <CABLs7GU_RV8FOsFBqPB+Rz8nfHXFUaRF8PQrksk1MsrHQ7b4JA@mail.gmail.com>
+ <56458CCD.6030305@mind.be>
+ <CABLs7GXiOVap1qiJw4URKFMusfBe6FRuejb9eCHt02aiMz_okQ@mail.gmail.com>
+ <56497878.6080500@mind.be>
+Message-ID: <CABLs7GVvKkHRAdLGbWTjiB9CHaHvFh+o9pOXEZU2LNe+8ieuUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Arnout,
 
-On Friday 13 November 2015 07:49:48 Arnout Vandecappelle wrote:
-[...]
-> What I
-> think would make sense is that for distributed VCS downloads (i.e.
-> git and hg) we keep a full (shallow) clone in DL_DIR in addition to
-> the tarball. That makes handling updates a lot more efficient. We
-> probably would want to expose that to PRIMARY and SECONDARY download
-> sites as well. Especially the PRIMARY would be useful, since it would
-> allow you to start from a local clone of e.g. linux.git (which may
-> not have the ref you need), and then just fetch the missing refs from
-> upstream.
-> 
->  This will not be easy to implement, though, since we'd need to handle
-> e.g. multiple remotes that end up in the same DL_DIR/foo.git
-> repository.
-For your information, I have in my drafts a patch which implement a 
-similar idea. I think I would be able to send a first version in 1 or 2 
-weeks.
+2015-11-16 4:32 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
+[snip]
+>
+>  No need to wait to submit it to buildroot IMHO.
+>
+>>
+>> On the other hand, modifying the gcc wrapper to error out on
+>> -fstack-protector-* when SSP is unsupported is straightforward and
+>> I've already cooked up a patch for that. I could send it immediately
+>> and maybe mark this qemu-specific patch as rejected or superseded.
+>
+>  Yes, please do send that patch. It is however something that will probably only
+> be applied to next, while the qemu patch can be applied to master, so you should
+> probably send both of them.
+>
 
-BR,
+OK then, I'll send them both and mark this one as superseded.
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Regards,
+Rodrigo
+
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
