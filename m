@@ -1,59 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Nov 2015 23:00:45 +0100
-Subject: [Buildroot] [PATCH 1/2] vboot-utils: new package
-In-Reply-To: <20151116215244.GA8630@vostro>
-References: <cover.1447689401.git.alex.suykov@gmail.com>
- <39f87349d2f42ac5d2acec7a00c94c4e5e9400a8.1447689401.git.alex.suykov@gmail.com>
- <564A3A5F.3010301@mind.be> <20151116215244.GA8630@vostro>
-Message-ID: <564A520D.9010506@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Nov 2015 22:12:20 +0100
+Subject: [Buildroot] [git commit] package/gauche: exclude build on archs not
+	boehm gc ported
+Message-ID: <20151116220222.B0E0D81E7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16-11-15 22:52, Alex Suykov wrote:
-> Mon, Nov 16, 2015 at 09:19:43PM +0100, Arnout Vandecappelle wrote:
-> 
->>> +	  ChromeOS verified boot utils: futility and cgpt.
->>
->>  ChromeOS or Chromius OS? Please be consistent :-)
->  
-> Fixed that in v2 already. Should be Chromium OS throughout of course.
-> Chromium OS but Chrome-book.
+commit: http://git.buildroot.net/buildroot/commit/?id=11f47facd5ef57fd790f7751ee87b671c007953c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yeah sorry I was replying to the wrong version.
+This patch limits gauch build only on architectures boehm gc is ported.
 
-> 
->>> +VBOOT_UTILS_VERSION = bbdd62f9b030db7ad8eef789aaf58a7ff9a25656
->>> +VBOOT_UTILS_SITE = https://chromium.googlesource.com/chromiumos/platform/vboot_reference
->>
->>  Since googlesource is shutting down: is there an alternative location already?
->> Possibly one which doesn't require git download method?
-> 
-> Isn't it Google Code that's shutting down?
+Will fix:
+http://autobuild.buildroot.org/results/368/3681948013fcd39cc80b690b880924421e429c80//
+http://autobuild.buildroot.org/results/ba7/ba7eb5a878ec25033596dc7c9b0f4678d4a83de5//
+http://autobuild.buildroot.org/results/1cb/1cbf1ee5bde3d50b935ae8ba931c8d0cc1052acc//
+http://autobuild.buildroot.org/results/8af/8afb36606eabdc6ae6e65a28a11877af39f9a7e0//
 
- Oops, my bad.
+[Thomas:
+ - add comment explaining where the architecture dependency is coming
+   from, as suggested by Arnout.
+ - move the definition of BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS to the
+   beginning of the Config.in file, to be consistent with what we do
+   in other packages.]
 
+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gauche/Config.in |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-> It does not look like they have any other site for Chromium OS sources.
-> https://www.chromium.org/chromium-os/developer-guide#TOC-Get-the-Source
-> 
-> They do have tgz shapshots however, I overlooked that.
-> Should be better than git checkouts.
-
- All right, so my comments weren't completely useless :-)
-
- Don't forget to add a hash file then.
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+index 0720672..54a0be2 100644
+--- a/package/gauche/Config.in
++++ b/package/gauche/Config.in
+@@ -1,8 +1,18 @@
++# Architecture dependency from the bundled bdwgc.
++config BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k || \
++		BR2_mips || BR2_mipsel || BR2_mips64 || \
++		BR2_mips64el || BR2_powerpc || BR2_powerpc64 || \
++		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_sparc || \
++		BR2_sparc64 || BR2_x86_64
++
+ config BR2_PACKAGE_GAUCHE
+ 	bool "gauche"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+ 	help
+ 	  Gauche is an R7RS Scheme implementation developed to be a
+ 	  handy script interpreter, which allows programmers and
+@@ -16,4 +26,5 @@ config BR2_PACKAGE_GAUCHE
+ comment "gauche needs a toolchain w/ NPTL"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
