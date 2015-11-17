@@ -1,104 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Nov 2015 23:45:32 +0100
-Subject: [Buildroot] [git commit branch/next] gcr: new package
-Message-ID: <20151117224600.7FA6B81922@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 17 Nov 2015 23:54:12 +0100
+Subject: [Buildroot] [PATCH] pkg-download: support file:// in
+ BR2_PRIMARY_SITE
+In-Reply-To: <20151117175558.156ea1f0@free-electrons.com>
+References: <1447776478-16046-1-git-send-email-jezz@sysmic.org>
+ <20151117175558.156ea1f0@free-electrons.com>
+Message-ID: <564BB014.6030809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec069dcf54cc69c19701a69106acaffdd07023bf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 17-11-15 17:55, Thomas Petazzoni wrote:
+> Dear J?r?me Pouiller,
+> 
+> On Tue, 17 Nov 2015 17:07:58 +0100, J?r?me Pouiller wrote:
+>> This feature was already discuted here:
+>>
+>>   http://lists.busybox.net/pipermail/buildroot/2015-April/125419.html
+>>
+>> Personally, I have a big central directory with all tarballs I have
+>> ever downloaded. I use this feature to isolate tarballs necessary to
+>> build a configuration:
+>>
+>>   make project_defconfig
+>>   make BR2_DL_DIR=/tmp/mirror-project BR2_PRIMARY_SITE=file:///home/user/dl source
+>>   tar -C /tmp -czvf mirror-project.tgz mirror-project
+> 
+> You have a much simpler option:
+> 
+> 	make external-deps
 
-[Thomas: add explicit --with-gtk when gtk is available.]
+ You probably mean:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in     |    1 +
- package/gcr/Config.in |   19 +++++++++++++++++++
- package/gcr/gcr.hash  |    2 ++
- package/gcr/gcr.mk    |   29 +++++++++++++++++++++++++++++
- 4 files changed, 51 insertions(+), 0 deletions(-)
+for file in $(make external-deps); cp dl/$file /tmp/mirror-project; done
 
-diff --git a/package/Config.in b/package/Config.in
-index 39a5af7..3656c54 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -751,6 +751,7 @@ menu "Crypto"
- 	source "package/botan/Config.in"
- 	source "package/ca-certificates/Config.in"
- 	source "package/cryptodev/Config.in"
-+	source "package/gcr/Config.in"
- 	source "package/gnutls/Config.in"
- 	source "package/libassuan/Config.in"
- 	source "package/libgcrypt/Config.in"
-diff --git a/package/gcr/Config.in b/package/gcr/Config.in
-new file mode 100644
-index 0000000..cd40ca1
---- /dev/null
-+++ b/package/gcr/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_GCR
-+	bool "gcr"
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	depends on !BR2_STATIC_LIBS # p11-kit
-+	select BR2_PACKAGE_GNUPG2 # runtime
-+	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_P11_KIT
-+	help
-+	  Library for cryptographic UIs and accessing PKCS#11 modules.
-+
-+	  https://developer.gnome.org/gcr/
-+
-+comment "gcr needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
-diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
-new file mode 100644
-index 0000000..8f1f931
---- /dev/null
-+++ b/package/gcr/gcr.hash
-@@ -0,0 +1,2 @@
-+# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.18/gcr-3.18.0.sha256sum
-+sha256	d4d16da5af55148a694055835ccd07ad34daf0ad03bdad929bf7cad15637ce00	gcr-3.18.0.tar.xz
-diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
-new file mode 100644
-index 0000000..0730eb4
---- /dev/null
-+++ b/package/gcr/gcr.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# gcr
-+#
-+################################################################################
-+
-+GCR_VERSION_MAJOR = 3.18
-+GCR_VERSION = $(GCR_VERSION_MAJOR).0
-+GCR_SITE = http://ftp.acc.umu.se/pub/gnome/sources/gcr/$(GCR_VERSION_MAJOR)
-+GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
-+GCR_DEPENDENCIES = host-pkgconf libgcrypt libglib2 p11-kit
-+GCR_INSTALL_STAGING = YES
-+GCR_CONF_ENV = ac_cv_path_GNUPG=/usr/bin/gpg2
-+GCR_CONF_OPTS = \
-+	--disable-gtk-doc \
-+	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
-+# Even though COPYING is v2 the code states v2.1+
-+GCR_LICENSE = LGPLv2.1+
-+GCR_LICENSE_FILES = COPYING
-+
-+# Only the X11 backend is supported for the simple GUI
-+ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
-+GCR_DEPENDENCIES += libgtk3
-+GCR_CONF_OPTS += --with-gtk
-+else
-+GCR_CONF_OPTS += --without-gtk
-+endif
-+
-+$(eval $(autotools-package))
+
+ I think a local file PRIMARY_SITE can be useful for other situations as well,
+e.g. a slow CIFS-mounted shared download location that is too slow to use as
+DL_DIR, so I think the feature has merit.
+
+ Regards,
+ Arnout
+
+
+> 
+> Thomas
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
