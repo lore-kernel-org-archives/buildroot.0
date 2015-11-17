@@ -1,23 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2015 09:24:56 +0100
-Subject: [Buildroot] [PATCH] apply-patches.sh: use everything from the
-	series file
-In-Reply-To: <1446852432-30582-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 7 Nov 2015 00:27:12 +0100")
-References: <1446852432-30582-1-git-send-email-arnout@mind.be>
-Message-ID: <871tbpf2xz.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Nov 2015 10:08:45 +0100
+Subject: [Buildroot] [PATCH 1/6] package/axfsutils: fix Makefile
+In-Reply-To: <1142395b4466f1e5ccbe593ddce1c6e792b6795a.1447449754.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 13 Nov 2015 22:48:47 +0100")
+References: <cover.1447449754.git.yann.morin.1998@free.fr>
+ <1142395b4466f1e5ccbe593ddce1c6e792b6795a.1447449754.git.yann.morin.1998@free.fr>
+Message-ID: <87wpthdmci.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > When a series file exists, we should use every file mentioned in it,
- > not just the ones ending with .patch or .diff. Also, there's no need
- > to uncompress anything if it's mentioned in a series file (the tools
- > that manipulate series files don't support compressed patches).
+ > mkfs.axfs uses zlib, but does not have an rpath to our host dir.
+ > That's because:
+ >   - we're not passing our host CFLAGS or LDFLAGS
+ >   - it is forcibly setting CFLAGS in the Makefile, overriding anything
+ >     specified by the user
+ >   - it is not using LDFLAGS at all
+
+ > Add two patches so that CFLAGS and LDFLAGS from the environment are
+ > used if present.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
 
