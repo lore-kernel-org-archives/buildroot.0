@@ -1,44 +1,104 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Nov 2015 23:33:52 +0100
-Subject: [Buildroot] [PATCH] readline: install configuration file from
- package recipe
-In-Reply-To: <564BA4BF.7020106@mind.be>
-References: <1447780732-21911-1-git-send-email-jezz@sysmic.org>
- <564BA4BF.7020106@mind.be>
-Message-ID: <564BAB50.6010405@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Nov 2015 23:45:32 +0100
+Subject: [Buildroot] [git commit branch/next] gcr: new package
+Message-ID: <20151117224600.7FA6B81922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-11-15 23:05, Arnout Vandecappelle wrote:
-> On 17-11-15 18:18, J?r?me Pouiller wrote:
->> /etc/inputrc is configuration file for readline. However, until now, it
->> was provided by skeleton. This patch install /etc/inputrc from readline
->> recipe.
->>
->> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
->> ---
->>  package/readline/inputrc     | 44 ++++++++++++++++++++++++++++++++++++++++++++
->>  package/readline/readline.mk |  6 +++++-
->>  system/skeleton/etc/inputrc  | 44 --------------------------------------------
-> 
->  Please use git format-patch -M or do
-> git config --global --bool --add format.find-renames true
-> git config --global --bool --add format.find-copies true
+commit: http://git.buildroot.net/buildroot/commit/?id=ec069dcf54cc69c19701a69106acaffdd07023bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- I was writing this while offline so hadn't seen your v2 yet, sorry for the noise.
+[Thomas: add explicit --with-gtk when gtk is available.]
 
- Regards,
- Arnout
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in     |    1 +
+ package/gcr/Config.in |   19 +++++++++++++++++++
+ package/gcr/gcr.hash  |    2 ++
+ package/gcr/gcr.mk    |   29 +++++++++++++++++++++++++++++
+ 4 files changed, 51 insertions(+), 0 deletions(-)
 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/Config.in b/package/Config.in
+index 39a5af7..3656c54 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -751,6 +751,7 @@ menu "Crypto"
+ 	source "package/botan/Config.in"
+ 	source "package/ca-certificates/Config.in"
+ 	source "package/cryptodev/Config.in"
++	source "package/gcr/Config.in"
+ 	source "package/gnutls/Config.in"
+ 	source "package/libassuan/Config.in"
+ 	source "package/libgcrypt/Config.in"
+diff --git a/package/gcr/Config.in b/package/gcr/Config.in
+new file mode 100644
+index 0000000..cd40ca1
+--- /dev/null
++++ b/package/gcr/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_GCR
++	bool "gcr"
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	depends on !BR2_STATIC_LIBS # p11-kit
++	select BR2_PACKAGE_GNUPG2 # runtime
++	select BR2_PACKAGE_LIBGCRYPT
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_P11_KIT
++	help
++	  Library for cryptographic UIs and accessing PKCS#11 modules.
++
++	  https://developer.gnome.org/gcr/
++
++comment "gcr needs a toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
+new file mode 100644
+index 0000000..8f1f931
+--- /dev/null
++++ b/package/gcr/gcr.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.18/gcr-3.18.0.sha256sum
++sha256	d4d16da5af55148a694055835ccd07ad34daf0ad03bdad929bf7cad15637ce00	gcr-3.18.0.tar.xz
+diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
+new file mode 100644
+index 0000000..0730eb4
+--- /dev/null
++++ b/package/gcr/gcr.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# gcr
++#
++################################################################################
++
++GCR_VERSION_MAJOR = 3.18
++GCR_VERSION = $(GCR_VERSION_MAJOR).0
++GCR_SITE = http://ftp.acc.umu.se/pub/gnome/sources/gcr/$(GCR_VERSION_MAJOR)
++GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
++GCR_DEPENDENCIES = host-pkgconf libgcrypt libglib2 p11-kit
++GCR_INSTALL_STAGING = YES
++GCR_CONF_ENV = ac_cv_path_GNUPG=/usr/bin/gpg2
++GCR_CONF_OPTS = \
++	--disable-gtk-doc \
++	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
++# Even though COPYING is v2 the code states v2.1+
++GCR_LICENSE = LGPLv2.1+
++GCR_LICENSE_FILES = COPYING
++
++# Only the X11 backend is supported for the simple GUI
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
++GCR_DEPENDENCIES += libgtk3
++GCR_CONF_OPTS += --with-gtk
++else
++GCR_CONF_OPTS += --without-gtk
++endif
++
++$(eval $(autotools-package))
