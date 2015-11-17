@@ -1,98 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2015 09:29:24 +0100
-Subject: [Buildroot] [git commit] package/axfsutils: fix Makefile
-Message-ID: <20151117091038.A930281762@busybox.osuosl.org>
+Date: Tue, 17 Nov 2015 09:24:53 +0100
+Subject: [Buildroot] [git commit] apply-patches.sh: use everything from the
+	series file
+Message-ID: <20151117091038.5E19481E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb8b5c27b2eaca31e83603417dd7a7269504cbac
+commit: http://git.buildroot.net/buildroot/commit/?id=7caf46439c684340a494e3aed345c479ec6927c2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mkfs.axfs uses zlib, but does not have an rpath to our host dir.
+When a series file exists, we should use every file mentioned in it,
+not just the ones ending with .patch or .diff. Also, there's no need
+to uncompress anything if it's mentioned in a series file (the tools
+that manipulate series files don't support compressed patches).
 
-That's because:
-  - we're not passing our host CFLAGS or LDFLAGS
-  - it is forcibly setting CFLAGS in the Makefile, overriding anything
-    specified by the user
-  - it is not using LDFLAGS at all
-
-Add two patches so that CFLAGS and LDFLAGS from the environment are
-used if present.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Doug Kehn <rdkehn@yahoo.com>
+Tested-by: Doug Kehn <rdkehn@yahoo.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/axfsutils/0001-fix-cflags.patch  |   19 +++++++++++++++++++
- package/axfsutils/0002-use-ldflags.patch |   20 ++++++++++++++++++++
- package/axfsutils/axfsutils.mk           |    2 +-
- 3 files changed, 40 insertions(+), 1 deletions(-)
+ support/scripts/apply-patches.sh |   55 ++++++++++++++++++++-----------------
+ 1 files changed, 30 insertions(+), 25 deletions(-)
 
-diff --git a/package/axfsutils/0001-fix-cflags.patch b/package/axfsutils/0001-fix-cflags.patch
-new file mode 100644
-index 0000000..0415d82
---- /dev/null
-+++ b/package/axfsutils/0001-fix-cflags.patch
-@@ -0,0 +1,19 @@
-+Makefile: complement CFLAGS provided by the user
-+
-+In some circumstances, the user may want to pass its own CFLAGS,
-+like for when the zlib headers are not located in the standard gcc
-+search paths.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN a/mkfs.axfs-legacy/Makefile b/mkfs.axfs-legacy/Makefile
-+--- a/mkfs.axfs-legacy/Makefile
-++++ b/mkfs.axfs-legacy/Makefile
-+@@ -1,5 +1,5 @@
-+-INC = -I./
-+-CFLAGS = -g $(INC) -O0
-++INC += -I./
-++CFLAGS += -g $(INC) -O0
-+ 
-+ MKFSOBJS = mkfs.axfs.o
-+ 
-diff --git a/package/axfsutils/0002-use-ldflags.patch b/package/axfsutils/0002-use-ldflags.patch
-new file mode 100644
-index 0000000..20e03a9
---- /dev/null
-+++ b/package/axfsutils/0002-use-ldflags.patch
-@@ -0,0 +1,20 @@
-+Makefile: use LDFLAGS as provided by the user
-+
-+In some circumstances, the user may want to pass some LDFLAGS, like
-+-L flags to point to the zlib location if it was not installed in a
-+standard location.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN a/mkfs.axfs-legacy/Makefile b/mkfs.axfs-legacy/Makefile
-+--- a/mkfs.axfs-legacy/Makefile
-++++ b/mkfs.axfs-legacy/Makefile
-+@@ -6,7 +6,7 @@
-+ all:   mkfs.axfs
-+ 
-+ mkfs.axfs: $(MKFSOBJS)
-+-	$(CC) $(CFLAGS) -o mkfs.axfs $(MKFSOBJS) -lz
-++	$(CC) $(CFLAGS) $(LDFLAGS) -o mkfs.axfs $(MKFSOBJS) -lz
-+ 
-+ clean_mkfs.axfs:
-+ 	rm -rf $(MKFSOBJS) mkfs.axfs
-diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
-index 3e6ea52..4dd60ef 100644
---- a/package/axfsutils/axfsutils.mk
-+++ b/package/axfsutils/axfsutils.mk
-@@ -13,7 +13,7 @@ AXFSUTILS_DEPENDENCIES = host-zlib
- # The 'new' mkfs.axfs version requires GNUstep which is not a buildroot
- # prerequisite. The 'legacy' one works just as well without that requirement.
- define HOST_AXFSUTILS_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mkfs.axfs-legacy
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)/mkfs.axfs-legacy
- endef
- 
- define HOST_AXFSUTILS_INSTALL_CMDS
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index af6df9e..2edf054 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -16,8 +16,9 @@
+ # '*'. Pattern(s) describing the patch names you want to apply.
+ #
+ # The script will look recursively for patches from the patch directory. If a
+-# file is named 'series' then only patches mentionned into it will be applied.
+-# If not, the script will look for file names matching pattern(s). If the name
++# file named 'series' exists then the patches mentioned in it will be applied
++# as plain patches, regardless of their file name. If no 'series' file exists,
++# the script will look for file names matching pattern(s). If the name
+ # ends with '.tar.*', '.tbz2' or '.tgz', the file is considered as an archive
+ # and will be uncompressed into a directory named
+ # '.patches-name_of_the_archive-unpacked'. It's the turn of this directory to
+@@ -64,28 +65,32 @@ find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print0 | \
+ function apply_patch {
+     path=$1
+     patch=$2
+-    case "$patch" in
+-	*.gz)
+-	type="gzip"; uncomp="gunzip -dc"; ;; 
+-	*.bz)
+-	type="bzip"; uncomp="bunzip -dc"; ;; 
+-	*.bz2)
+-	type="bzip2"; uncomp="bunzip2 -dc"; ;; 
+-	*.xz)
+-	type="xz"; uncomp="unxz -dc"; ;;
+-	*.zip)
+-	type="zip"; uncomp="unzip -d"; ;; 
+-	*.Z)
+-	type="compress"; uncomp="uncompress -c"; ;; 
+-	*.diff*)
+-	type="diff"; uncomp="cat"; ;;
+-	*.patch*)
+-	type="patch"; uncomp="cat"; ;;
+-	*)
+-	echo "Unsupported file type for ${path}/${patch}, skipping";
+-	return 0
+-	;;
+-    esac
++    if [ "$3" ]; then
++        type="series"; uncomp="cat"
++    else
++        case "$patch" in
++	    *.gz)
++	    type="gzip"; uncomp="gunzip -dc"; ;;
++	    *.bz)
++	    type="bzip"; uncomp="bunzip -dc"; ;;
++	    *.bz2)
++	    type="bzip2"; uncomp="bunzip2 -dc"; ;;
++	    *.xz)
++	    type="xz"; uncomp="unxz -dc"; ;;
++	    *.zip)
++	    type="zip"; uncomp="unzip -d"; ;;
++	    *.Z)
++	    type="compress"; uncomp="uncompress -c"; ;;
++	    *.diff*)
++	    type="diff"; uncomp="cat"; ;;
++	    *.patch*)
++	    type="patch"; uncomp="cat"; ;;
++	    *)
++	    echo "Unsupported file type for ${path}/${patch}, skipping";
++	    return 0
++	    ;;
++        esac
++    fi
+     if [ -z "$silent" ] ; then
+ 	echo ""
+ 	echo "Applying $patch using ${type}: "
+@@ -111,7 +116,7 @@ function scan_patchdir {
+     # to apply patches. Skip line starting with a dash.
+     if [ -e "${path}/series" ] ; then
+         for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
+-            apply_patch "$path" "$i"
++            apply_patch "$path" "$i" series
+         done
+     else
+         for i in `cd $path; ls -d $patches 2> /dev/null` ; do
