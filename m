@@ -1,50 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Nov 2015 22:15:49 +0100
-Subject: [Buildroot] [PATCH 06/21 RFC] package/gcc: add licensing
- information
-In-Reply-To: <20151117122826.646069a0@free-electrons.com>
-References: <cover.1447713615.git.yann.morin.1998@free.fr>
- <ac61c991794df8089b615aee810b018840e37cc8.1447713615.git.yann.morin.1998@free.fr>
- <20151117122826.646069a0@free-electrons.com>
-Message-ID: <20151117211549.GC3703@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Nov 2015 22:16:22 +0100
+Subject: [Buildroot] [PATCH] pkg-generic: Strip all but leading comments
+ from C files used as license.
+In-Reply-To: <1447779739-4661-1-git-send-email-peda@lysator.liu.se>
+References: <1447779739-4661-1-git-send-email-peda@lysator.liu.se>
+Message-ID: <20151117221622.6443362f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Peter Rosin,
 
-On 2015-11-17 12:28 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 16 Nov 2015 23:47:01 +0100, Yann E. MORIN wrote:
-> >  GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
-> > +GCC_LICENSE = \
-> > +	GPLv2+, GPLv3+, LGPLv2.1+ (w/ exception), LGPv3+ (w/ exception), \
-> > +	BSD-3c, MIT, BSL-1.0
+On Tue, 17 Nov 2015 18:02:19 +0100, Peter Rosin wrote:
+> From: Peter Rosin <peda@axentia.se>
 > 
-> What I dislike a bit with this is that we don't clearly differentiate
-> what goes on the target with what remains on the host. For many
-> companies, having GPLv3 or LGPLv3 stuff on the target is (unfortunately)
-> a no-go, so it would be good to make this clearer.
-> 
-> As per your implementation, such license information will only be part
-> of the "host packages" license information, while libgcc gets actually
-> installed in the target. To be honest, I am not entirely sure how to
-> handle this properly with our package infrastructure.
+> Signed-off-by: Peter Rosin <peda@axentia.se>
 
-Yes, the current legalese will only apply to the host variant.
+Thanks for your contribution. Could you explain what is the problem
+with keeping a complete source file as legal information?
 
-We could add a target gcc-final that defines the needed legal-info
-stuff, but installs nothing (like I did so far with the host-gcc
-package). But I don't like it much either.
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 44bd2c9..1497eb2 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -145,8 +145,30 @@ endef
+>  
+>  define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
+>  	$(call legal-license-header,$(1),$(2) file,$(4)) && \
+> -	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
+> -	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
+>  	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
+> -	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
+> +	case $(3) in \
+> +	*.c|*.h) \
+> +	  sed -e '\
+> +x;\
+> +/^$$/{\
+> +  x;\
+> +  /^[ \t]*$$/b;\
+> +  /^[ \t]*\/\//b;\
+> +  /^[ \t]*\/\*.*\*\//b;\
+> +  /^[ \t]*\/\*/h;\
+> +  //b;\
+> +  s/.*//;\
+> +  q\
+> +};\
+> +x;\
+> +/\*\//{\
+> +  x;\
+> +  s/.*//;\
+> +  x\
+> +}' < $(3) > $(LICENSE_FILES_DIR_$(4))/$(1)/$(2) \
 
-Regards,
-Yann E. MORIN.
+We quickly discussed your proposal on the #buildroot IRC, and the
+conclusion is that we generally don't like this, for at least two
+reasons:
 
+ 1/ The sed expression is awfully complicated.
+
+ 2/ There is absolutely no guarantee that the license part is inside
+    the leading comment and that the complicated sed expression will
+    actually keep the relevant part of the file.
+
+We generally try to use a fairly short source code file as the license
+text, so that keeping the entire file should not be a problem. If it
+remains a problem, then I would suggest that you work with the upstream
+project and ask them to include a separate license file that we can use.
+
+Another possibility would be to do something like:
+
+<pkg>_LICENSE_FILES = foo.c-23+42
+
+to indicate that the license text is from line 23 to line 42. But it is
+again not very foolproof, and it doesn't give much benefits.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
