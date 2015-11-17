@@ -1,85 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Nov 2015 22:16:22 +0100
-Subject: [Buildroot] [PATCH] pkg-generic: Strip all but leading comments
- from C files used as license.
-In-Reply-To: <1447779739-4661-1-git-send-email-peda@lysator.liu.se>
-References: <1447779739-4661-1-git-send-email-peda@lysator.liu.se>
-Message-ID: <20151117221622.6443362f@free-electrons.com>
+Date: Tue, 17 Nov 2015 22:10:15 +0100
+Subject: [Buildroot] [git commit branch/next] boost: specify architecture
+	variant for sparc
+Message-ID: <20151117211646.1CA1C80817@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Rosin,
+commit: http://git.buildroot.net/buildroot/commit/?id=4b13641be6a83aca80a7a9bdfe03f71465355b3c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 17 Nov 2015 18:02:19 +0100, Peter Rosin wrote:
-> From: Peter Rosin <peda@axentia.se>
-> 
-> Signed-off-by: Peter Rosin <peda@axentia.se>
+Instead of using a patch to specify the architecture variant for
+sparc, use some Boost configure variables.
 
-Thanks for your contribution. Could you explain what is the problem
-with keeping a complete source file as legal information?
+[Thomas: reword commit log.]
 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 44bd2c9..1497eb2 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -145,8 +145,30 @@ endef
->  
->  define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
->  	$(call legal-license-header,$(1),$(2) file,$(4)) && \
-> -	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
-> -	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
->  	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
-> -	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
-> +	case $(3) in \
-> +	*.c|*.h) \
-> +	  sed -e '\
-> +x;\
-> +/^$$/{\
-> +  x;\
-> +  /^[ \t]*$$/b;\
-> +  /^[ \t]*\/\//b;\
-> +  /^[ \t]*\/\*.*\*\//b;\
-> +  /^[ \t]*\/\*/h;\
-> +  //b;\
-> +  s/.*//;\
-> +  q\
-> +};\
-> +x;\
-> +/\*\//{\
-> +  x;\
-> +  s/.*//;\
-> +  x\
-> +}' < $(3) > $(LICENSE_FILES_DIR_$(4))/$(1)/$(2) \
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch |   42 --------------------
+ package/boost/boost.mk                             |    4 ++
+ 2 files changed, 4 insertions(+), 42 deletions(-)
 
-We quickly discussed your proposal on the #buildroot IRC, and the
-conclusion is that we generally don't like this, for at least two
-reasons:
-
- 1/ The sed expression is awfully complicated.
-
- 2/ There is absolutely no guarantee that the license part is inside
-    the leading comment and that the complicated sed expression will
-    actually keep the relevant part of the file.
-
-We generally try to use a fairly short source code file as the license
-text, so that keeping the entire file should not be a problem. If it
-remains a problem, then I would suggest that you work with the upstream
-project and ask them to include a separate license file that we can use.
-
-Another possibility would be to do something like:
-
-<pkg>_LICENSE_FILES = foo.c-23+42
-
-to indicate that the license text is from line 23 to line 42. But it is
-again not very foolproof, and it doesn't give much benefits.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch b/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
+deleted file mode 100644
+index a4d39b3..0000000
+--- a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From ec60c37295146bb80aa44a92cf416027b75b5ff7 Mon Sep 17 00:00:00 2001
+-From: Vladimir Prus <vladimir@codesourcery.com>
+-Date: Mon, 27 Apr 2015 19:12:54 +0300
+-Subject: [PATCH] Remove bogus 'c3' cpu varant for SPARC.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- src/tools/gcc.jam | 3 +--
+- src/tools/gcc.py  | 3 +--
+- 2 files changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/tools/gcc.jam b/src/tools/gcc.jam
+-index eff95ae..128ab84 100644
+---- a/tools/build/src/tools/gcc.jam
+-+++ b/tools/build/src/tools/gcc.jam
+-@@ -1138,8 +1138,7 @@ cpu-flags gcc OPTIONS : x86 : c3-2 : -march=c3-2 ;
+- ##
+- cpu-flags gcc OPTIONS : x86 : atom : -march=atom ;
+- # Sparc
+--cpu-flags gcc OPTIONS : sparc : c3 : -mcpu=c3 : default ;
+--cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 ;
+-+cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 : default ;
+- cpu-flags gcc OPTIONS : sparc : cypress : -mcpu=cypress ;
+- cpu-flags gcc OPTIONS : sparc : v8 : -mcpu=v8 ;
+- cpu-flags gcc OPTIONS : sparc : supersparc : -mcpu=supersparc ;
+-diff --git a/src/tools/gcc.py b/src/tools/gcc.py
+-index a13ce7a..d2d3294 100644
+---- a/tools/build/src/tools/gcc.py
+-+++ b/tools/build/src/tools/gcc.py
+-@@ -789,8 +789,7 @@ cpu_flags('gcc', 'OPTIONS', 'x86', 'atom', ['-march=atom'])
+- # Sparc
+- flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>32'], ['-m32'])
+- flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>64'], ['-m64'])
+--cpu_flags('gcc', 'OPTIONS', 'sparc', 'c3', ['-mcpu=c3'], default=True)
+--cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'])
+-+cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'], default=True)
+- cpu_flags('gcc', 'OPTIONS', 'sparc', 'cypress', ['-mcpu=cypress'])
+- cpu_flags('gcc', 'OPTIONS', 'sparc', 'v8', ['-mcpu=v8'])
+- cpu_flags('gcc', 'OPTIONS', 'sparc', 'supersparc', ['-mcpu=supersparc'])
+--- 
+-2.3.6
+-
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 80325b0..efc0020 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -89,6 +89,10 @@ BOOST_OPTS += toolset=gcc \
+ 	     abi=$(BOOST_ABI) \
+ 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release)
+ 
++ifeq ($(BR2_sparc),y)
++BOOST_OPTS += architecture=sparc instruction-set=v8
++endif
++
+ # By default, Boost build and installs both the shared and static
+ # variants. Override that if we want static only or shared only.
+ ifeq ($(BR2_STATIC_LIBS),y)
