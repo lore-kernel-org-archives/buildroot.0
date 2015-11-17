@@ -1,63 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Nov 2015 22:40:45 +0100
-Subject: [Buildroot] [PATCH 06/21 RFC] package/gcc: add licensing
- information
-In-Reply-To: <20151117222506.2faa3bbf@free-electrons.com>
-References: <cover.1447713615.git.yann.morin.1998@free.fr>
- <ac61c991794df8089b615aee810b018840e37cc8.1447713615.git.yann.morin.1998@free.fr>
- <20151117122826.646069a0@free-electrons.com>
- <20151117211549.GC3703@free.fr>
- <20151117222506.2faa3bbf@free-electrons.com>
-Message-ID: <20151117214045.GF3703@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 17 Nov 2015 22:36:30 +0100
+Subject: [Buildroot] [PATCH] pkg-download: support file:// in
+ BR2_PRIMARY_SITE
+In-Reply-To: <1447776478-16046-1-git-send-email-jezz@sysmic.org>
+References: <1447776478-16046-1-git-send-email-jezz@sysmic.org>
+Message-ID: <564B9DDE.3040602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
-On 2015-11-17 22:25 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 17 Nov 2015 22:15:49 +0100, Yann E. MORIN wrote:
-> > > As per your implementation, such license information will only be part
-> > > of the "host packages" license information, while libgcc gets actually
-> > > installed in the target. To be honest, I am not entirely sure how to
-> > > handle this properly with our package infrastructure.
-> > 
-> > Yes, the current legalese will only apply to the host variant.
-> > 
-> > We could add a target gcc-final that defines the needed legal-info
-> > stuff, but installs nothing (like I did so far with the host-gcc
-> > package). But I don't like it much either.
+On 17-11-15 17:07, J?r?me Pouiller wrote:
+> This feature was already discuted here:
 > 
-> It's not super nice indeed, but I don't really see a better option. We
-> could always make this package actually do something "useful":
-> installing the gcc libraries to the target. I.e essentially move the
-> following part of host-gcc-final to this package:
+>   http://lists.busybox.net/pipermail/buildroot/2015-April/125419.html
+> 
+> Personally, I have a big central directory with all tarballs I have
+> ever downloaded. I use this feature to isolate tarballs necessary to
+> build a configuration:
+> 
+>   make project_defconfig
+>   make BR2_DL_DIR=/tmp/mirror-project BR2_PRIMARY_SITE=file:///home/user/dl source
+>   tar -C /tmp -czvf mirror-project.tgz mirror-project
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Yes, I like that idea. Even if that makes the package a bit more
-complex, it helps in separating the host/target/staging stuff (like what
-we already discussed about hte extrenal toolchain, remember?).
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-[--SNIP--]
-> This is really making the code more complicated just for the sake of
-> legal-info, though. Which isn't super nice. But at least we would have
-> the gcc libraries properly mentioned in the legal-info output for the
-> target.
+ for next
 
-Yes, and that's a very good reason for doing it.
+ Regards,
+ Arnout
 
-I'll send patches and we can discuss further with actual code.
+> ---
+>  package/pkg-download.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index c86b9ab..f08f616 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -214,6 +214,7 @@ endef
+>  define DOWNLOAD_INNER
+>  	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
+>  		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
+> +			file) $(call $(3)_LOCALFILES,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+>  			scp) $(call $(3)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+>  			*) $(call $(3)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+>  		esac ; \
+> 
 
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
