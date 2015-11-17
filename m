@@ -1,35 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2015 17:03:28 +0100
-Subject: [Buildroot] [git commit] core/legal-info: fix missing double-$
-Message-ID: <20151117160747.29BA380097@busybox.osuosl.org>
+Date: Tue, 17 Nov 2015 17:02:37 +0100
+Subject: [Buildroot] [git commit] package/libecore: do not build anything at
+	patch time
+Message-ID: <20151117160747.0FC5281EA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3c7b5274d7dfbf60b357f7c0e42bf9d2d2e5fdc
+commit: http://git.buildroot.net/buildroot/commit/?id=4c0999b8cdce71c93a40dc239b609a4ac6118138
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Trying to build anything at patch time will result in a broken
+legal-info, as the needed host dependencies are not yet built.
+
+Make that hook a pre-configure hook rather than a post-extract
+hook.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk |    2 +-
+ package/efl/libecore/libecore.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a5d0e57..08f4f31 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -795,7 +795,7 @@ else
+diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
+index b5016dc..28a8bae 100644
+--- a/package/efl/libecore/libecore.mk
++++ b/package/efl/libecore/libecore.mk
+@@ -97,7 +97,7 @@ define LIBECORE_BUILD_MAKEKEYS_FOR_HOST
+ 	$(HOST_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/src/util makekeys.o makekeys
+ endef
  
- ifeq ($$($(2)_REDISTRIBUTE),YES)
- ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
--	$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
-+	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
+-LIBECORE_POST_EXTRACT_HOOKS += LIBECORE_BUILD_MAKEKEYS_FOR_HOST
++LIBECORE_PRE_CONFIGURE_HOOKS += LIBECORE_BUILD_MAKEKEYS_FOR_HOST
+ else
+ LIBECORE_CONF_OPTS += --disable-ecore-x-xcb
  endif
- # Copy the source tarball (just hardlink if possible)
- 	@cp -l $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))) 2>/dev/null || \
