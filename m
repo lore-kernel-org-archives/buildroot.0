@@ -1,36 +1,52 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Tue, 17 Nov 2015 10:24:06 -0200
-Subject: [Buildroot] [PATCH 1/1] perl-file-util: restore host variant and
-	fix dependencies
-Message-ID: <1447763046-25345-1-git-send-email-casantos@datacom.ind.br>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 17 Nov 2015 13:20:32 +0100
+Subject: [Buildroot] [PATCH 01/21 RFC] package/libecore: do not build
+ anything at patch time
+In-Reply-To: <20151117121649.32a08094@free-electrons.com>
+References: <cover.1447713615.git.yann.morin.1998@free.fr>
+ <5e4ec100e9c6dda1262d9b84cd5a63f75ebc3864.1447713615.git.yann.morin.1998@free.fr>
+ <20151117121649.32a08094@free-electrons.com>
+Message-ID: <564B1B90.4080307@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The host variant was added by us (DATACOM) because it is useful to
-build some third-party packages that we use in our firmware. We humbly
-request you to keep it alive.
+Hello Yann, Thomas,
+Le 17/11/2015 12:16, Thomas Petazzoni a ?crit :
+> Dear Yann E. MORIN,
+> 
+> On Mon, 16 Nov 2015 23:46:56 +0100, Yann E. MORIN wrote:
+>> Trying to build anything at patch time will result in a broken
+>> legal-info, as the needed host dependencies are not yet built.
+>>
+>> Make that hook a pre-configure hook rather than a post-extract
+>> hook.
+>>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc: Peter Korsgaard <jacmet@uclibc.org>
+>> Cc: Romain Naour <romain.naour@openwide.fr>
+> 
+> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> Even though this will probably conflict with the EFL rework from
+> Romain. However I believe this patch should be merged in master, since
+> it actually fixes legal-info.
 
-Declare that it requires host-perl-module-build.
+Ok, it's not a big problem. The merge conflict will be easily resolved by
+removing the libecore package ;-)
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/perl-file-util/perl-file-util.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Actually makekeys is not build by the upcoming host-efl package, I'll check if
+we still need it.
 
-diff --git a/package/perl-file-util/perl-file-util.mk b/package/perl-file-util/perl-file-util.mk
-index fe83585..7026515 100644
---- a/package/perl-file-util/perl-file-util.mk
-+++ b/package/perl-file-util/perl-file-util.mk
-@@ -10,5 +10,7 @@ PERL_FILE_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOMMY
- PERL_FILE_UTIL_DEPENDENCIES = host-perl-module-build
- PERL_FILE_UTIL_LICENSE = Artistic or GPLv1+
- PERL_FILE_UTIL_LICENSE_FILES = COPYING LICENSE
-+HOST_PERL_FILE_UTIL_DEPENDENCIES = host-perl-module-build
- 
- $(eval $(perl-package))
-+$(eval $(host-perl-package))
--- 
-2.5.0
+Otherwise:
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+
+Best regards,
+Romain
+> 
+> Thanks,
+> 
+> Thomas
+> 
