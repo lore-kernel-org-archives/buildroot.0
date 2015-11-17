@@ -1,33 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Nov 2015 17:24:57 -0300
-Subject: [Buildroot] [PATCH] liquid-dsp: blacklist CS powerpc toolchains
-In-Reply-To: <20151117211943.3b638229@free-electrons.com>
-References: <1447784444-5336-1-git-send-email-gustavo@zacarias.com.ar>
- <20151117211943.3b638229@free-electrons.com>
-Message-ID: <564B8D19.9070508@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Nov 2015 21:26:26 +0100
+Subject: [Buildroot] [PATCH v2] package/gauche: fix 'dlfcn.h: No such
+	file' on autobuild
+In-Reply-To: <201511171550.tAHFoAcS030490@ms-omx01.plus.so-net.ne.jp> (Hiroshi
+ Kawashima's message of "Wed, 18 Nov 2015 00:50:10 +0900")
+References: <201511171550.tAHFoAcS030490@ms-omx01.plus.so-net.ne.jp>
+Message-ID: <87twokcqz1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/11/15 17:19, Thomas Petazzoni wrote:
+>>>>> "Hiroshi" == Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp> writes:
 
-> You forgot to use the same dependencies in the comment, to avoid it
-> being displayed in cases where the package can anyway not be enabled.
-> I've applied to master after fixing this. Thanks!
->
-> Thomas
+ > Ported from bdwgc package.
+ > When build with BR2_STATIC_LIBS environment, prevent to use dlopen().
 
-Hi Thomas.
-I believe that would be a no-op, since:
+ > Fix:
+ > http://autobuild.buildroot.org/results/da5/da5b9605552d4914c5e6f0d890367b92536419c1
 
+ > Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+ > ---
+ > Changes:
+ > v1 -> v2
+ > - refelect comment from Thomas for refine.
 
-comment "liquid-dsp requires a (e)glibc/musl toolchain w/ dynamic library"
-         depends on !(BR2_TOOLCHAIN_USES_GLIBC || 
-BR2_TOOLCHAIN_USES_MUSL) || BR2_STATIC_LIBS
+Committed, thanks.
 
-It is a glibc toolchain (well, eglibc i believe, but same deal), and 
-glibc toolchains can't do static, so unreachable.
-
-Regards.
+-- 
+Bye, Peter Korsgaard
