@@ -1,58 +1,79 @@
-From: Peter Rosin <peda@lysator.liu.se>
-Date: Tue, 17 Nov 2015 18:02:19 +0100
-Subject: [Buildroot] [PATCH] pkg-generic: Strip all but leading comments
-	from C files used as license.
-Message-ID: <1447779739-4661-1-git-send-email-peda@lysator.liu.se>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Tue, 17 Nov 2015 17:13:31 +0000
+Subject: [Buildroot] Kernel patches in Buildroot
+In-Reply-To: <564B0BBE.8050102@synopsys.com>
+References: <56432809.3000902@synopsys.com> <56432ED3.7070008@mind.be>
+ <564B0BBE.8050102@synopsys.com>
+Message-ID: <564B603B.5010907@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Peter Rosin <peda@axentia.se>
 
-Signed-off-by: Peter Rosin <peda@axentia.se>
----
- package/pkg-utils.mk |   28 +++++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
+Hi!
+I am trying to use BR2_GLOBAL_PATCH_DIR to indicate the global patch directory,
+which has the following value:
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 44bd2c9..1497eb2 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -145,8 +145,30 @@ endef
- 
- define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
- 	$(call legal-license-header,$(1),$(2) file,$(4)) && \
--	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
--	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
- 	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
--	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
-+	case $(3) in \
-+	*.c|*.h) \
-+	  sed -e '\
-+x;\
-+/^$$/{\
-+  x;\
-+  /^[ \t]*$$/b;\
-+  /^[ \t]*\/\//b;\
-+  /^[ \t]*\/\*.*\*\//b;\
-+  /^[ \t]*\/\*/h;\
-+  //b;\
-+  s/.*//;\
-+  q\
-+};\
-+x;\
-+/\*\//{\
-+  x;\
-+  s/.*//;\
-+  x\
-+}' < $(3) > $(LICENSE_FILES_DIR_$(4))/$(1)/$(2) \
-+	;; \
-+	*) cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2);; \
-+	esac && \
-+	cat $(LICENSE_FILES_DIR_$(4))/$(1)/$(2) >>$(LEGAL_LICENSES_TXT_$(4)) && \
-+	echo >>$(LEGAL_LICENSES_TXT_$(4))
- endef
--- 
-1.7.10.4
+BR2_GLOBAL_PATCH_DIR="snps-custom/packages"
+
+I have a "snps-custom" folder which has a "packages" folder inside. Inside the
+"packages" folder we have a folder for each package we need to patch, in this
+example mplayer and the linux kernel.
+
+--snps-custom
+  --packages
+    --linux-arc-axs101-20141021-3.13
+	0001-XXXX.patch
+	0002-YYYY.patch
+    --mplayer
+	0001-mplayer.patch
+    --<packagename>
+	000x-xxxxx.patch
+
+The linux kernel patching system does not recognizes the
+packages/linux-arc-axs101-20141021-3.13 patch folder. Could you give me a help
+on this?
+
+Thanks!
+
+BR,
+Joao Pinto
+
+
+
+On 11/17/2015 11:13 AM, Joao Pinto wrote:
+> Thanks for your help!
+> 
+> On 11/11/2015 12:04 PM, Arnout Vandecappelle wrote:
+>> On 11-11-15 12:35, Joao Pinto wrote:
+>>> Hi,
+>>> We are designing the procedure to release our software stack based on buildroot.
+>>> Could you please tell what is the advised method for including a kernel patch
+>>> set in buildroot? I typically use BR2_LINUX_KERNEL_PATCH where I indicate each
+>>> patch file. Is there a easier way like using BR2_GLOBAL_PATCH_DIR for example?
+>>
+>>  I personally prefer to use a git repository that includes the patches. During
+>> development, I make a local checkout specified with LINUX_OVERRIDE_SRCDIR; for
+>> release, I point to the repository (often on gitlab) and specify a tag.
+>>
+>>  BR2_GLOBAL_PATCH_DIR and BR2_LINUX_KERNEL_PATCH are basically equivalent, you
+>> can specify a directory with the latter as well.
+>>
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>>
+>>> Thanks for your help!
+>>>
+>>> Joao
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+>>
+> 
