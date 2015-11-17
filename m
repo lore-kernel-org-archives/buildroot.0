@@ -1,71 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Nov 2015 12:31:00 +0100
-Subject: [Buildroot] [PATCH 07/21 RFC] package/gcc: handle licensing
- information
-In-Reply-To: <f3b2a1958ec5d8edccfdb0b2af7e351bbf3575c0.1447713615.git.yann.morin.1998@free.fr>
-References: <cover.1447713615.git.yann.morin.1998@free.fr>
- <f3b2a1958ec5d8edccfdb0b2af7e351bbf3575c0.1447713615.git.yann.morin.1998@free.fr>
-Message-ID: <20151117123100.16fb8915@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 17 Nov 2015 11:52:13 +0000
+Subject: [Buildroot] [PATCH] ltp-testsuite: bump to version 20150903
+Message-ID: <1447761133-27463-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/ltp-testsuite/ltp-testsuite.hash |    6 ++++--
+ package/ltp-testsuite/ltp-testsuite.mk   |    2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-On Mon, 16 Nov 2015 23:47:02 +0100, Yann E. MORIN wrote:
-> We currently install no licensing information for gcc. But the way we
-> build gcc makes it tricky to add licensing information:
-> 
->   - we do not build host-gcc; rather, we build host-gcc-initial and
->     host-gcc-final,
-> 
->   - we do not want to save licensing information for host-gcc-initial
->     and host-gcc-final, because what really makes sense from a user's
->     point of view is really host-gcc.
-> 
-> So, we make gcc a real host-generic-package for which we do not define
-> any configure, build or install command, but for which we do have
-> licensing information.
-> 
-> Then for both host-gcc-initial and host-gcc-final, we fake them to be
-> non-redistributable, because the licensing information for them is not
-> needed, nor is it needed to save their archives.
-> 
-> Finally, we make both host-gcc-initial and host-gc-final depend on
-> host-gcc, so that host-gcc is handled by the legal-info framework.
-> 
-> Thus, legal-info will now save the gcc source and licensing information,
-> and ignore host-gcc-initial and host-gcc-final.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-This I dislike very much. host-gcc is not a package, and it doesn't
-exist. package/gcc/gcc.mk just contains common definitions to both
-gcc-initial and gcc-final. Making 'gcc' a package is more confusing
-than anything else.
-
-I believe a much better approach is to simply add the licensing
-informations to the gcc-final package, and leave gcc-initial with no
-licensing information. If having a package named "gcc-final" in the
-licensing report is really shocking for you, then we can rename
-gcc-final to just "gcc", and have something like:
-
- + package/
-   + gcc/
-     + gcc-common.mk
-     + gcc-initial/
-       + gcc-initial.mk
-     + gcc/
-       + gcc.mk
-
-Best regards,
-
-Thomas
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index 5923daf..d60b8a4 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,2 +1,4 @@
+-# Locally computed:
+-sha256  ad504e6697b964787f51caad6d8a916caa367f241ac602545548488195216a80  ltp-full-20150420.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20150903/ltp-full-20150903.tar.xz.md5
++md5 4ee849923b69f79b5208e71f3ed20484  ltp-full-20150903.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20150903/ltp-full-20150903.tar.xz.sha1
++sha1 d39bb3a41bfd1fd584703cf066fb2e935af0c00a  ltp-full-20150903.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 64467de..78dc9f4 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20150420
++LTP_TESTSUITE_VERSION = 20150903
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
