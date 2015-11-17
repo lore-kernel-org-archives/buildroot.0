@@ -1,92 +1,35 @@
-From: Peter Rosin <peda@lysator.liu.se>
-Date: Tue, 17 Nov 2015 22:36:03 +0100
-Subject: [Buildroot] [PATCH] pkg-generic: Strip all but leading comments
- from C files used as license.
-In-Reply-To: <20151117221622.6443362f@free-electrons.com>
-References: <1447779739-4661-1-git-send-email-peda@lysator.liu.se>
- <20151117221622.6443362f@free-electrons.com>
-Message-ID: <564B9DC3.8070703@lysator.liu.se>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Nov 2015 22:29:13 +0100
+Subject: [Buildroot] [PATCH v2] readline: install configuration file
+ from package recipe
+In-Reply-To: <1447780845-22019-1-git-send-email-jezz@sysmic.org>
+References: <1447780845-22019-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20151117222913.4c5a4676@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear J?r?me Pouiller,
 
-On 2015-11-17 22:16, Thomas Petazzoni wrote:
-> Dear Peter Rosin,
->
-> On Tue, 17 Nov 2015 18:02:19 +0100, Peter Rosin wrote:
->> From: Peter Rosin <peda@axentia.se>
->>
->> Signed-off-by: Peter Rosin <peda@axentia.se>
-> Thanks for your contribution. Could you explain what is the problem
-> with keeping a complete source file as legal information?
+On Tue, 17 Nov 2015 18:20:45 +0100, J?r?me Pouiller wrote:
+> /etc/inputrc is configuration file for readline. However, until now, it
+> was provided by skeleton. This patch install /etc/inputrc from readline
+> recipe.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+> v2:
+>   Send patch using -M
 
-It's not a big deal, but source code certainly looked out of place
-when I first scanned through licenses.txt. I guess you old-timers
-have just gotten used to having it there...
+Applied to next, thanks!
 
->> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
->> index 44bd2c9..1497eb2 100644
->> --- a/package/pkg-utils.mk
->> +++ b/package/pkg-utils.mk
->> @@ -145,8 +145,30 @@ endef
->>  
->>  define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
->>  	$(call legal-license-header,$(1),$(2) file,$(4)) && \
->> -	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
->> -	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
->>  	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
->> -	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
->> +	case $(3) in \
->> +	*.c|*.h) \
->> +	  sed -e '\
->> +x;\
->> +/^$$/{\
->> +  x;\
->> +  /^[ \t]*$$/b;\
->> +  /^[ \t]*\/\//b;\
->> +  /^[ \t]*\/\*.*\*\//b;\
->> +  /^[ \t]*\/\*/h;\
->> +  //b;\
->> +  s/.*//;\
->> +  q\
->> +};\
->> +x;\
->> +/\*\//{\
->> +  x;\
->> +  s/.*//;\
->> +  x\
->> +}' < $(3) > $(LICENSE_FILES_DIR_$(4))/$(1)/$(2) \
-> We quickly discussed your proposal on the #buildroot IRC, and the
-> conclusion is that we generally don't like this, for at least two
-> reasons:
->
->  1/ The sed expression is awfully complicated.
->
->  2/ There is absolutely no guarantee that the license part is inside
->     the leading comment and that the complicated sed expression will
->     actually keep the relevant part of the file.
->
-> We generally try to use a fairly short source code file as the license
-> text, so that keeping the entire file should not be a problem. If it
-> remains a problem, then I would suggest that you work with the upstream
-> project and ask them to include a separate license file that we can use.
+Thanks for this /etc/inputrc and /etc/issue fixes. It's definitely good
+to strip down a bit the skeleton.
 
-I wouldn't call it a sed expression, it's a sed program really, but it's not very
-complicated once you get through the sed syntax. But I see your points. I
-just had a bit of fun writing it, no big deal if it gets thrown away here. I'll just
-run the same thing locally instead...
-
-> Another possibility would be to do something like:
->
-> <pkg>_LICENSE_FILES = foo.c-23+42
->
-> to indicate that the license text is from line 23 to line 42. But it is
-> again not very foolproof, and it doesn't give much benefits.
->
-Right, and that approach would require more care on version bumps...
-
-Cheers,
-Peter
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
