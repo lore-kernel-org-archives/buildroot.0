@@ -1,43 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Nov 2015 18:35:48 +0100
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.3.19
-Message-ID: <20151201232121.06EE381932@busybox.osuosl.org>
+Date: Tue, 17 Nov 2015 21:49:43 +0100
+Subject: [Buildroot] [git commit] hidapi: new package
+Message-ID: <20151201232117.C380A7FB18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5517c1b27f41a47007d33e6b0c95f7b864b86bf5
+commit: http://git.buildroot.net/buildroot/commit/?id=6267f34afdd06ad848bbf7a2975cb279132b6ba0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Thomas:
+ - use BR2_INIT_SYSTEMD instead of BR2_PACKAGE_SYSTEMD for the
+   libgudev handling. This is consistent with what we do in libmbim,
+   modem-manager and network-manager. Only udisks is diverging from
+   this by using BR2_PACKAGE_SYSTEMD.
+ - Fix the license info: it is GPLv3 *or* BSD-3c *or* the specific
+   HIDAPI license. Added LICENSE-orig.txt to LICENSE_FILES.]
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in          |  1 +
+ package/hidapi/Config.in   | 20 ++++++++++++++++++++
+ package/hidapi/hidapi.hash |  2 ++
+ package/hidapi/hidapi.mk   | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 51 insertions(+)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 088059b..b33c838 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	7a87e7f486d1ada10007356917a412cde6c6114dac018e3569e3aa09e9f29395	gnutls-3.3.18.tar.xz
-+sha256	888d8779b48f21959b33d4d9ad0b546e5ec3dea20abf0d9bb03869d56b1f44cf	gnutls-3.3.19.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 9fbdb49..1ac3e4e 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).18
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).19
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+diff --git a/package/Config.in b/package/Config.in
+index 0a80afb..39a5af7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -865,6 +865,7 @@ menu "Hardware handling"
+ 	source "package/ccid/Config.in"
+ 	source "package/dtc/Config.in"
+ 	source "package/gnu-efi/Config.in"
++	source "package/hidapi/Config.in"
+ 	source "package/lcdapi/Config.in"
+ 	source "package/libaio/Config.in"
+ 	source "package/libatasmart/Config.in"
+diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
+new file mode 100644
+index 0000000..5d025bf
+--- /dev/null
++++ b/package/hidapi/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_HIDAPI
++	bool "hidapi"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
++	# When eudev is used as the udev provider, libgudev is
++	# automatically provided as it is part of eudev. However, when
++	# systemd is used as the udev provider, libgudev is not
++	# provided, and needs to be built separately. This is why we
++	# select the libgudev package only if systemd is used.
++	select BR2_PACKAGE_LIBGUDEV if BR2_INIT_SYSTEMD
++	help
++	  HIDAPI is a multi-platform library which allows an application
++	  to interface with USB and Bluetooth HID-Class devices on
++	  Windows, Linux, and Mac OS X.
++
++	  http://www.signal11.us/oss/hidapi/
++
++comment "hidapi needs udev /dev management and a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/hidapi/hidapi.hash b/package/hidapi/hidapi.hash
+new file mode 100644
+index 0000000..ba00df2
+--- /dev/null
++++ b/package/hidapi/hidapi.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 33e206f5e145fc1bc6aeb55084d71b55d686533d23ad5bb762746ceba81e728b  hidapi-d17db57b9d4354752e0af42f5f33007a42ef2906.tar.gz
+diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
+new file mode 100644
+index 0000000..2457554
+--- /dev/null
++++ b/package/hidapi/hidapi.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# hidapi
++#
++################################################################################
++
++# Use master version as the current stable is very old and some bugs
++# have been fixed since then.
++HIDAPI_VERSION = d17db57b9d4354752e0af42f5f33007a42ef2906
++HIDAPI_SITE = $(call github,signal11,hidapi,$(HIDAPI_VERSION))
++HIDAPI_INSTALL_STAGING = YES
++# No configure provided, so we need to autoreconf.
++HIDAPI_AUTORECONF = YES
++HIDAPI_LICENSE = GPLv3 or BSD-3c or HIDAPI license
++HIDAPI_LICENSE_FILES = LICENSE.txt LICENSE-gpl3.txt LICENSE-bsd.txt LICENSE-orig.txt
++
++HIDAPI_DEPENDENCIES = libusb
++
++# When eudev is used as the udev provider, libgudev is automatically
++# provided as it is part of eudev. However, when systemd is used as
++# the udev provider, libgudev is not provided, and needs to be built
++# separately. This is why we depend on the libgudev package only if
++# systemd is used.
++ifeq ($(BR2_INIT_SYSTEMD),y)
++HIDAPI_DEPENDENCIES += libgudev
++endif
++
++$(eval $(autotools-package))
