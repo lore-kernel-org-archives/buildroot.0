@@ -1,32 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Nov 2015 21:22:46 +0100
-Subject: [Buildroot] [PATCH 1/3] configs/qemu: bump x86 to 4.3 kernel
-In-Reply-To: <1447778234-14246-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447778234-14246-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151117212246.2115e657@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Nov 2015 17:24:57 -0300
+Subject: [Buildroot] [PATCH] liquid-dsp: blacklist CS powerpc toolchains
+In-Reply-To: <20151117211943.3b638229@free-electrons.com>
+References: <1447784444-5336-1-git-send-email-gustavo@zacarias.com.ar>
+ <20151117211943.3b638229@free-electrons.com>
+Message-ID: <564B8D19.9070508@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 17/11/15 17:19, Thomas Petazzoni wrote:
 
-On Tue, 17 Nov 2015 13:37:12 -0300, Gustavo Zacarias wrote:
-> Now that uclibc-ng was bumped to version 1.0.9 nothing prevents x86
-> from working correctly.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  board/qemu/x86/{linux-4.2.config => linux-4.3.config} |  0
->  configs/qemu_x86_defconfig                            | 10 +++++-----
->  2 files changed, 5 insertions(+), 5 deletions(-)
->  rename board/qemu/x86/{linux-4.2.config => linux-4.3.config} (100%)
+> You forgot to use the same dependencies in the comment, to avoid it
+> being displayed in cases where the package can anyway not be enabled.
+> I've applied to master after fixing this. Thanks!
+>
+> Thomas
 
-All three patches applied to master, thanks.
+Hi Thomas.
+I believe that would be a no-op, since:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+comment "liquid-dsp requires a (e)glibc/musl toolchain w/ dynamic library"
+         depends on !(BR2_TOOLCHAIN_USES_GLIBC || 
+BR2_TOOLCHAIN_USES_MUSL) || BR2_STATIC_LIBS
+
+It is a glibc toolchain (well, eglibc i believe, but same deal), and 
+glibc toolchains can't do static, so unreachable.
+
+Regards.
