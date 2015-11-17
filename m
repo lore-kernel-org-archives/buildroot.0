@@ -1,43 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Nov 2015 22:04:11 +0100
-Subject: [Buildroot] [PATCH] hidapi: new package
-In-Reply-To: <1447692852-21669-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1447692852-21669-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151117220411.349143fa@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Nov 2015 18:13:52 -0300
+Subject: [Buildroot] [PATCH v2] readline: install configuration file
+ from package recipe
+In-Reply-To: <1447780845-22019-1-git-send-email-jezz@sysmic.org>
+References: <1447780845-22019-1-git-send-email-jezz@sysmic.org>
+Message-ID: <564B9890.8090605@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+On 17/11/15 14:20, J?r?me Pouiller wrote:
 
-On Mon, 16 Nov 2015 16:54:12 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/Config.in          |    1 +
->  package/hidapi/Config.in   |   20 ++++++++++++++++++++
->  package/hidapi/hidapi.hash |    2 ++
->  package/hidapi/hidapi.mk   |   27 +++++++++++++++++++++++++++
->  4 files changed, 50 insertions(+), 0 deletions(-)
->  create mode 100644 package/hidapi/Config.in
->  create mode 100644 package/hidapi/hidapi.hash
->  create mode 100644 package/hidapi/hidapi.mk
+> /etc/inputrc is configuration file for readline. However, until now, it
+> was provided by skeleton. This patch install /etc/inputrc from readline
+> recipe.
+>
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Applied to next, with a few changes:
-
-    [Thomas:
-     - use BR2_INIT_SYSTEMD instead of BR2_PACKAGE_SYSTEMD for the
-       libgudev handling. This is consistent with what we do in libmbim,
-       modem-manager and network-manager. Only udisks is diverging from
-       this by using BR2_PACKAGE_SYSTEMD.
-     - Fix the license info: it is GPLv3 *or* BSD-3c *or* the specific
-       HIDAPI license. Added LICENSE-orig.txt to LICENSE_FILES.]
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
