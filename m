@@ -1,45 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2015 10:09:26 +0100
-Subject: [Buildroot] [PATCH 4/6] package/libcurl: carefully override
-	LD_LIBRARY_PATH
-In-Reply-To: <2fcbe9513b2535d0d0e0075cb57e079d8416db0a.1447449754.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 13 Nov 2015 22:48:50 +0100")
-References: <cover.1447449754.git.yann.morin.1998@free.fr>
- <2fcbe9513b2535d0d0e0075cb57e079d8416db0a.1447449754.git.yann.morin.1998@free.fr>
-Message-ID: <87h9kldmbd.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Nov 2015 09:29:24 +0100
+Subject: [Buildroot] [git commit] package/axfsutils: fix Makefile
+Message-ID: <20151117091038.A930281762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cb8b5c27b2eaca31e83603417dd7a7269504cbac
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > To build libcurl, we need to override LD_LIBRARY and force it to a sane
- > value, otherwise libcurl is confused when target == host (see a51ce319,
- > libcurl: fix configure with openssl when target == host).
+mkfs.axfs uses zlib, but does not have an rpath to our host dir.
 
- > That is currently OK, since we always set LD_LIBRARY_PATH to a non-empty
- > value.
+That's because:
+  - we're not passing our host CFLAGS or LDFLAGS
+  - it is forcibly setting CFLAGS in the Makefile, overriding anything
+    specified by the user
+  - it is not using LDFLAGS at all
 
- > However, we're soon to stop setting it at all.
+Add two patches so that CFLAGS and LDFLAGS from the environment are
+used if present.
 
- > So, if the user has an empty (or no) LD_LIBRARY_PATH in his envirnment,
- > we'd end up adding the current working directory to LD_LIBRARY_PATH (as
- > an empty entry in a colon-separated list is most probably interpreted as
- > meaning the currentworking directory, which we do know can cause issue,
- > and which we expfressely check against in support/dependencies/dependencies.sh
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/axfsutils/0001-fix-cflags.patch  |   19 +++++++++++++++++++
+ package/axfsutils/0002-use-ldflags.patch |   20 ++++++++++++++++++++
+ package/axfsutils/axfsutils.mk           |    2 +-
+ 3 files changed, 40 insertions(+), 1 deletions(-)
 
- > Fix that by only using an existing LD_LIBRARY_PATH if it is not empty.
- > Also use a Makefile construct as it is easier to read than a shell one
- > (we can do that, as all variables from the environment as available as
- > make variables).
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Peter Korsgaard <jacmet@uclibc.org>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/axfsutils/0001-fix-cflags.patch b/package/axfsutils/0001-fix-cflags.patch
+new file mode 100644
+index 0000000..0415d82
+--- /dev/null
++++ b/package/axfsutils/0001-fix-cflags.patch
+@@ -0,0 +1,19 @@
++Makefile: complement CFLAGS provided by the user
++
++In some circumstances, the user may want to pass its own CFLAGS,
++like for when the zlib headers are not located in the standard gcc
++search paths.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN a/mkfs.axfs-legacy/Makefile b/mkfs.axfs-legacy/Makefile
++--- a/mkfs.axfs-legacy/Makefile
+++++ b/mkfs.axfs-legacy/Makefile
++@@ -1,5 +1,5 @@
++-INC = -I./
++-CFLAGS = -g $(INC) -O0
+++INC += -I./
+++CFLAGS += -g $(INC) -O0
++ 
++ MKFSOBJS = mkfs.axfs.o
++ 
+diff --git a/package/axfsutils/0002-use-ldflags.patch b/package/axfsutils/0002-use-ldflags.patch
+new file mode 100644
+index 0000000..20e03a9
+--- /dev/null
++++ b/package/axfsutils/0002-use-ldflags.patch
+@@ -0,0 +1,20 @@
++Makefile: use LDFLAGS as provided by the user
++
++In some circumstances, the user may want to pass some LDFLAGS, like
++-L flags to point to the zlib location if it was not installed in a
++standard location.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN a/mkfs.axfs-legacy/Makefile b/mkfs.axfs-legacy/Makefile
++--- a/mkfs.axfs-legacy/Makefile
+++++ b/mkfs.axfs-legacy/Makefile
++@@ -6,7 +6,7 @@
++ all:   mkfs.axfs
++ 
++ mkfs.axfs: $(MKFSOBJS)
++-	$(CC) $(CFLAGS) -o mkfs.axfs $(MKFSOBJS) -lz
+++	$(CC) $(CFLAGS) $(LDFLAGS) -o mkfs.axfs $(MKFSOBJS) -lz
++ 
++ clean_mkfs.axfs:
++ 	rm -rf $(MKFSOBJS) mkfs.axfs
+diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
+index 3e6ea52..4dd60ef 100644
+--- a/package/axfsutils/axfsutils.mk
++++ b/package/axfsutils/axfsutils.mk
+@@ -13,7 +13,7 @@ AXFSUTILS_DEPENDENCIES = host-zlib
+ # The 'new' mkfs.axfs version requires GNUstep which is not a buildroot
+ # prerequisite. The 'legacy' one works just as well without that requirement.
+ define HOST_AXFSUTILS_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mkfs.axfs-legacy
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)/mkfs.axfs-legacy
+ endef
+ 
+ define HOST_AXFSUTILS_INSTALL_CMDS
