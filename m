@@ -1,44 +1,40 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Tue, 17 Nov 2015 11:13:02 +0000
-Subject: [Buildroot] Kernel patches in Buildroot
-In-Reply-To: <56432ED3.7070008@mind.be>
-References: <56432809.3000902@synopsys.com> <56432ED3.7070008@mind.be>
-Message-ID: <564B0BBE.8050102@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Nov 2015 12:16:49 +0100
+Subject: [Buildroot] [PATCH 01/21 RFC] package/libecore: do not build
+ anything at patch time
+In-Reply-To: <5e4ec100e9c6dda1262d9b84cd5a63f75ebc3864.1447713615.git.yann.morin.1998@free.fr>
+References: <cover.1447713615.git.yann.morin.1998@free.fr>
+ <5e4ec100e9c6dda1262d9b84cd5a63f75ebc3864.1447713615.git.yann.morin.1998@free.fr>
+Message-ID: <20151117121649.32a08094@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for your help!
+Dear Yann E. MORIN,
 
-On 11/11/2015 12:04 PM, Arnout Vandecappelle wrote:
-> On 11-11-15 12:35, Joao Pinto wrote:
->> Hi,
->> We are designing the procedure to release our software stack based on buildroot.
->> Could you please tell what is the advised method for including a kernel patch
->> set in buildroot? I typically use BR2_LINUX_KERNEL_PATCH where I indicate each
->> patch file. Is there a easier way like using BR2_GLOBAL_PATCH_DIR for example?
+On Mon, 16 Nov 2015 23:46:56 +0100, Yann E. MORIN wrote:
+> Trying to build anything at patch time will result in a broken
+> legal-info, as the needed host dependencies are not yet built.
 > 
->  I personally prefer to use a git repository that includes the patches. During
-> development, I make a local checkout specified with LINUX_OVERRIDE_SRCDIR; for
-> release, I point to the repository (often on gitlab) and specify a tag.
+> Make that hook a pre-configure hook rather than a post-extract
+> hook.
 > 
->  BR2_GLOBAL_PATCH_DIR and BR2_LINUX_KERNEL_PATCH are basically equivalent, you
-> can specify a directory with the latter as well.
-> 
-> 
->  Regards,
->  Arnout
-> 
->>
->> Thanks for your help!
->>
->> Joao
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
-> 
-> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Even though this will probably conflict with the EFL rework from
+Romain. However I believe this patch should be merged in master, since
+it actually fixes legal-info.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
