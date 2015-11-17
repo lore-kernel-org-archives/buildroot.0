@@ -1,107 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2015 09:24:53 +0100
-Subject: [Buildroot] [git commit] apply-patches.sh: use everything from the
-	series file
-Message-ID: <20151117091038.5E19481E27@busybox.osuosl.org>
+Date: Tue, 17 Nov 2015 09:58:50 +0100
+Subject: [Buildroot] [git commit] package/mysql: unconditionally define host
+	variables
+Message-ID: <20151117091039.4366181801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7caf46439c684340a494e3aed345c479ec6927c2
+commit: http://git.buildroot.net/buildroot/commit/?id=292cc2a20ac839a7ec1c5931728d9caf7611977b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When a series file exists, we should use every file mentioned in it,
-not just the ones ending with .patch or .diff. Also, there's no need
-to uncompress anything if it's mentioned in a series file (the tools
-that manipulate series files don't support compressed patches).
+To build the host-mysql, we only build parts of the source, just the
+strictly minimum required to then cross-compile it.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Doug Kehn <rdkehn@yahoo.com>
-Tested-by: Doug Kehn <rdkehn@yahoo.com>
+However, the host variables (conf opts, build and install cmds) are only
+defined when the mysql server is enabled in the configuration.
+
+So, this breaks:
+    make defconfig; make host-mysql
+
+Even though it is not much use to have that partial host-mysql on its
+own, it is still very interesting to be able to build it, if at least
+for testing changes in the core package infrastructures (like new step
+hooks or the likes...)
+
+Move the definitions of the host variant out of the server conditional
+block.
+
+[Peter: add comment about what we build and why as suggested by Arnout]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Marcelo Guti??rrez(UTN/FRH) <kuyurix@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/apply-patches.sh |   55 ++++++++++++++++++++-----------------
- 1 files changed, 30 insertions(+), 25 deletions(-)
+ package/mysql/mysql.mk |   42 +++++++++++++++++++++++-------------------
+ 1 files changed, 23 insertions(+), 19 deletions(-)
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index af6df9e..2edf054 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -16,8 +16,9 @@
- # '*'. Pattern(s) describing the patch names you want to apply.
- #
- # The script will look recursively for patches from the patch directory. If a
--# file is named 'series' then only patches mentionned into it will be applied.
--# If not, the script will look for file names matching pattern(s). If the name
-+# file named 'series' exists then the patches mentioned in it will be applied
-+# as plain patches, regardless of their file name. If no 'series' file exists,
-+# the script will look for file names matching pattern(s). If the name
- # ends with '.tar.*', '.tbz2' or '.tgz', the file is considered as an archive
- # and will be uncompressed into a directory named
- # '.patches-name_of_the_archive-unpacked'. It's the turn of this directory to
-@@ -64,28 +65,32 @@ find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print0 | \
- function apply_patch {
-     path=$1
-     patch=$2
--    case "$patch" in
--	*.gz)
--	type="gzip"; uncomp="gunzip -dc"; ;; 
--	*.bz)
--	type="bzip"; uncomp="bunzip -dc"; ;; 
--	*.bz2)
--	type="bzip2"; uncomp="bunzip2 -dc"; ;; 
--	*.xz)
--	type="xz"; uncomp="unxz -dc"; ;;
--	*.zip)
--	type="zip"; uncomp="unzip -d"; ;; 
--	*.Z)
--	type="compress"; uncomp="uncompress -c"; ;; 
--	*.diff*)
--	type="diff"; uncomp="cat"; ;;
--	*.patch*)
--	type="patch"; uncomp="cat"; ;;
--	*)
--	echo "Unsupported file type for ${path}/${patch}, skipping";
--	return 0
--	;;
--    esac
-+    if [ "$3" ]; then
-+        type="series"; uncomp="cat"
-+    else
-+        case "$patch" in
-+	    *.gz)
-+	    type="gzip"; uncomp="gunzip -dc"; ;;
-+	    *.bz)
-+	    type="bzip"; uncomp="bunzip -dc"; ;;
-+	    *.bz2)
-+	    type="bzip2"; uncomp="bunzip2 -dc"; ;;
-+	    *.xz)
-+	    type="xz"; uncomp="unxz -dc"; ;;
-+	    *.zip)
-+	    type="zip"; uncomp="unzip -d"; ;;
-+	    *.Z)
-+	    type="compress"; uncomp="uncompress -c"; ;;
-+	    *.diff*)
-+	    type="diff"; uncomp="cat"; ;;
-+	    *.patch*)
-+	    type="patch"; uncomp="cat"; ;;
-+	    *)
-+	    echo "Unsupported file type for ${path}/${patch}, skipping";
-+	    return 0
-+	    ;;
-+        esac
-+    fi
-     if [ -z "$silent" ] ; then
- 	echo ""
- 	echo "Applying $patch using ${type}: "
-@@ -111,7 +116,7 @@ function scan_patchdir {
-     # to apply patches. Skip line starting with a dash.
-     if [ -e "${path}/series" ] ; then
-         for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
--            apply_patch "$path" "$i"
-+            apply_patch "$path" "$i" series
-         done
-     else
-         for i in `cd $path; ls -d $patches 2> /dev/null` ; do
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index c6d9f3a..1aad831 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -33,6 +33,29 @@ MYSQL_CONF_OPTS = \
+ 	--enable-thread-safe-client \
+ 	--disable-mysql-maintainer-mode
+ 
++# host-mysql only installs what is needed to build mysql, i.e. the
++# gen_lex_hash tool, and it only builds the parts that are needed to
++# create this tool
++HOST_MYSQL_DEPENDENCIES = host-zlib host-ncurses
++
++HOST_MYSQL_CONF_OPTS = \
++	--with-embedded-server \
++	--disable-mysql-maintainer-mode
++
++define HOST_MYSQL_BUILD_CMDS
++	$(MAKE) -C $(@D)/include my_config.h
++	$(MAKE) -C $(@D)/mysys libmysys.a
++	$(MAKE) -C $(@D)/strings libmystrings.a
++	$(MAKE) -C $(@D)/vio libvio.a
++	$(MAKE) -C $(@D)/dbug libdbug.a
++	$(MAKE) -C $(@D)/regex libregex.a
++	$(MAKE) -C $(@D)/sql gen_lex_hash
++endef
++
++define HOST_MYSQL_INSTALL_CMDS
++	$(INSTALL) -m 0755  $(@D)/sql/gen_lex_hash $(HOST_DIR)/usr/bin/
++endef
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MYSQL_DEPENDENCIES += openssl
+ endif
+@@ -43,11 +66,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_MYSQL_SERVER),y)
+ MYSQL_DEPENDENCIES += host-mysql host-bison
+-HOST_MYSQL_DEPENDENCIES = host-zlib host-ncurses
+-
+-HOST_MYSQL_CONF_OPTS = \
+-	--with-embedded-server \
+-	--disable-mysql-maintainer-mode
+ 
+ MYSQL_CONF_OPTS += \
+ 	--localstatedir=/var/mysql \
+@@ -74,20 +92,6 @@ else
+ MYSQL_CONF_OPTS += --without-debug
+ endif
+ 
+-define HOST_MYSQL_BUILD_CMDS
+-	$(MAKE) -C $(@D)/include my_config.h
+-	$(MAKE) -C $(@D)/mysys libmysys.a
+-	$(MAKE) -C $(@D)/strings libmystrings.a
+-	$(MAKE) -C $(@D)/vio libvio.a
+-	$(MAKE) -C $(@D)/dbug libdbug.a
+-	$(MAKE) -C $(@D)/regex libregex.a
+-	$(MAKE) -C $(@D)/sql gen_lex_hash
+-endef
+-
+-define HOST_MYSQL_INSTALL_CMDS
+-	$(INSTALL) -m 0755  $(@D)/sql/gen_lex_hash  $(HOST_DIR)/usr/bin/
+-endef
+-
+ define MYSQL_USERS
+ 	mysql -1 nogroup -1 * /var/mysql - - MySQL daemon
+ endef
