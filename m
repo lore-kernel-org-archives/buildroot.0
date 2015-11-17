@@ -1,33 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Nov 2015 21:19:43 +0100
-Subject: [Buildroot] [PATCH] liquid-dsp: blacklist CS powerpc toolchains
-In-Reply-To: <1447784444-5336-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447784444-5336-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151117211943.3b638229@free-electrons.com>
+Date: Tue, 17 Nov 2015 21:20:48 +0100
+Subject: [Buildroot] [git commit] configs/qemu: fix networking for sparc64
+Message-ID: <20151117202100.505ED7FF9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=dd5f8b25d4c80b26a195204e75407a7c0e12f7e5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Nov 2015 15:20:44 -0300, Gustavo Zacarias wrote:
-> They're unable to build liquid-dsp successfully resulting in an internal
-> compiler error. Fixes:
-> http://autobuild.buildroot.net/results/2ac/2acd745f4e5ec6edfd09afcd57b9ece216724c1b/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/liquid-dsp/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
+It contained a typo that prevented the driver from being built.
 
-You forgot to use the same dependencies in the comment, to avoid it
-being displayed in cases where the package can anyway not be enabled.
-I've applied to master after fixing this. Thanks!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/qemu/sparc64-sun4u/linux-4.3.config |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/qemu/sparc64-sun4u/linux-4.3.config b/board/qemu/sparc64-sun4u/linux-4.3.config
+index 7eda705..0e1e168 100644
+--- a/board/qemu/sparc64-sun4u/linux-4.3.config
++++ b/board/qemu/sparc64-sun4u/linux-4.3.config
+@@ -15,7 +15,7 @@ CONFIG_BLK_DEV_SD=y
+ CONFIG_ATA=y
+ CONFIG_PATA_CMD64X=y
+ CONFIG_NETDEVICES=y
+-CONFIG_E1000_PCI=y
++CONFIG_E1000=y
+ CONFIG_SERIAL_SUNSU=y
+ CONFIG_SERIAL_SUNSU_CONSOLE=y
+ CONFIG_EXT4_FS=y
