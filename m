@@ -1,41 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 21:53:36 +0100
-Subject: [Buildroot] [git commit] dbus: bump to version 1.10.4
-Message-ID: <20151201232118.85F857F9FA@busybox.osuosl.org>
+Date: Tue, 17 Nov 2015 22:10:15 +0100
+Subject: [Buildroot] [git commit] boost: specify architecture variant for
+	sparc
+Message-ID: <20151201232118.1060D7FB18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c20fccf3514abb727cc733b1bf809024ada01103
+commit: http://git.buildroot.net/buildroot/commit/?id=4b13641be6a83aca80a7a9bdfe03f71465355b3c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Instead of using a patch to specify the architecture variant for
+sparc, use some Boost configure variables.
+
+[Thomas: reword commit log.]
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dbus/dbus.hash | 2 +-
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch | 42 ----------------------
+ package/boost/boost.mk                             |  4 +++
+ 2 files changed, 4 insertions(+), 42 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 7e21dd0..87efd4b 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	aef3f49595df09b0824433ee993cda748ede93693a719a831562ae1616b6bb9e  dbus-1.10.2.tar.gz
-+sha256	ad7dcad73ad9b0ff55819985d354eacfffe07e2eb8c763e155efc21d6001084b  dbus-1.10.4.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 9e722d8..79cd678 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch b/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
+deleted file mode 100644
+index a4d39b3..0000000
+--- a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From ec60c37295146bb80aa44a92cf416027b75b5ff7 Mon Sep 17 00:00:00 2001
+-From: Vladimir Prus <vladimir@codesourcery.com>
+-Date: Mon, 27 Apr 2015 19:12:54 +0300
+-Subject: [PATCH] Remove bogus 'c3' cpu varant for SPARC.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- src/tools/gcc.jam | 3 +--
+- src/tools/gcc.py  | 3 +--
+- 2 files changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/tools/gcc.jam b/src/tools/gcc.jam
+-index eff95ae..128ab84 100644
+---- a/tools/build/src/tools/gcc.jam
+-+++ b/tools/build/src/tools/gcc.jam
+-@@ -1138,8 +1138,7 @@ cpu-flags gcc OPTIONS : x86 : c3-2 : -march=c3-2 ;
+- ##
+- cpu-flags gcc OPTIONS : x86 : atom : -march=atom ;
+- # Sparc
+--cpu-flags gcc OPTIONS : sparc : c3 : -mcpu=c3 : default ;
+--cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 ;
+-+cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 : default ;
+- cpu-flags gcc OPTIONS : sparc : cypress : -mcpu=cypress ;
+- cpu-flags gcc OPTIONS : sparc : v8 : -mcpu=v8 ;
+- cpu-flags gcc OPTIONS : sparc : supersparc : -mcpu=supersparc ;
+-diff --git a/src/tools/gcc.py b/src/tools/gcc.py
+-index a13ce7a..d2d3294 100644
+---- a/tools/build/src/tools/gcc.py
+-+++ b/tools/build/src/tools/gcc.py
+-@@ -789,8 +789,7 @@ cpu_flags('gcc', 'OPTIONS', 'x86', 'atom', ['-march=atom'])
+- # Sparc
+- flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>32'], ['-m32'])
+- flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>64'], ['-m64'])
+--cpu_flags('gcc', 'OPTIONS', 'sparc', 'c3', ['-mcpu=c3'], default=True)
+--cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'])
+-+cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'], default=True)
+- cpu_flags('gcc', 'OPTIONS', 'sparc', 'cypress', ['-mcpu=cypress'])
+- cpu_flags('gcc', 'OPTIONS', 'sparc', 'v8', ['-mcpu=v8'])
+- cpu_flags('gcc', 'OPTIONS', 'sparc', 'supersparc', ['-mcpu=supersparc'])
+--- 
+-2.3.6
+-
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 80325b0..efc0020 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -89,6 +89,10 @@ BOOST_OPTS += toolset=gcc \
+ 	     abi=$(BOOST_ABI) \
+ 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release)
  
--DBUS_VERSION = 1.10.2
-+DBUS_VERSION = 1.10.4
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 GPLv2+
- DBUS_LICENSE_FILES = COPYING
++ifeq ($(BR2_sparc),y)
++BOOST_OPTS += architecture=sparc instruction-set=v8
++endif
++
+ # By default, Boost build and installs both the shared and static
+ # variants. Override that if we want static only or shared only.
+ ifeq ($(BR2_STATIC_LIBS),y)
