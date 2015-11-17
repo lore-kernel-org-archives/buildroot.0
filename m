@@ -1,56 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2015 10:00:26 +0100
-Subject: [Buildroot] [git commit] package/libcurl: carefully override
-	LD_LIBRARY_PATH
-Message-ID: <20151117091039.C684C81801@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 17 Nov 2015 10:11:26 +0000
+Subject: [Buildroot] [PATCH] hidapi: new package
+In-Reply-To: <20151116180724.GK9908@tarshish>
+References: <1447692852-21669-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20151116180724.GK9908@tarshish>
+Message-ID: <564AFD4E.2000301@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71b1d39726672160108901c0a1fbd00ee899d0a8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Baruch,
 
-To build libcurl, we need to override LD_LIBRARY and force it to a sane
-value, otherwise libcurl is confused when target == host (see a51ce319,
-libcurl: fix configure with openssl when target == host).
+On 11/16/2015 06:07 PM, Baruch Siach wrote:
+> Hi Vincent,
+> 
+> On Mon, Nov 16, 2015 at 04:54:12PM +0000, Vicente Olivert Riera wrote:
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> [...]
+> 
+>> +HIDAPI_DEPENDENCIES = libusb
+>> +# When eudev is used as the udev provider, libgudev is automatically
+>> +# provided as it is part of eudev. However, when systemd is used as the
+>> +# udev provider, libgudev is not provided, and needs to be built
+>> +# separately. This is why we select the libgudev package only if systemd
+>> +# is used.
+>> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> 
+> Should be 'ifeq ($(BR2_PACKAGE_LIBGUDEV),y)', in think, since all we need is 
+> to have libgudev built before this package, regardless of systemd. With this 
+> change the comment becomes redundant. The comment in Config.in should be 
+> enough.
 
-That is currently OK, since we always set LD_LIBRARY_PATH to a non-empty
-value.
+we need libgudev only if we are going to use systemd. Otherwise it will
+be provided by eudev.
 
-However, we're soon to stop setting it at all.
+Of course we could use ifeq ($(BR2_PACKAGE_LIBGUDEV),y) here, but, for
+consistency with Config.in, I use ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+instead. See for instance the udisks package.
 
-So, if the user has an empty (or no) LD_LIBRARY_PATH in his envirnment,
-we'd end up adding the current working directory to LD_LIBRARY_PATH (as
-an empty entry in a colon-separated list is most probably interpreted as
-meaning the current working directory, which we do know can cause issue,
-and which we expressely check against in support/dependencies/dependencies.sh
+Regards,
 
-Fix that by only using an existing LD_LIBRARY_PATH if it is not empty.
-Also use a Makefile construct as it is easier to read than a shell one
-(we can do that, as all variables from the environment are available as
-make variables).
+Vincent.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 8587baa..7c259b2 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -30,7 +30,7 @@ LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
- # native stuff during the rest of configure when target == host.
- # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
- # are found first.
--LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib
-+LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
- LIBCURL_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr \
- 	--with-ca-path=/etc/ssl/certs
- else ifeq ($(BR2_PACKAGE_GNUTLS),y)
+>> +HIDAPI_DEPENDENCIES += libgudev
+>> +endif
+> 
+> baruch
+> 
