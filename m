@@ -1,115 +1,117 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Nov 2015 22:48:16 +0100
-Subject: [Buildroot] [PATCH 04/21 RFC] core/legal-info: allow ignoring
- packages from the legal-info
-In-Reply-To: <5d993adab02ed57f67d14652247fbd31aaae87bc.1447713615.git.yann.morin.1998@free.fr>
-References: <cover.1447713615.git.yann.morin.1998@free.fr>
- <5d993adab02ed57f67d14652247fbd31aaae87bc.1447713615.git.yann.morin.1998@free.fr>
-Message-ID: <564BA0A0.4020003@mind.be>
+Date: Tue, 17 Nov 2015 23:05:51 +0100
+Subject: [Buildroot] [PATCH] readline: install configuration file from
+ package recipe
+In-Reply-To: <1447780732-21911-1-git-send-email-jezz@sysmic.org>
+References: <1447780732-21911-1-git-send-email-jezz@sysmic.org>
+Message-ID: <564BA4BF.7020106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16-11-15 23:46, Yann E. MORIN wrote:
-> It might be necessary to not even mention a package in the output of
-> legal-info:
+On 17-11-15 18:18, J?r?me Pouiller wrote:
+> /etc/inputrc is configuration file for readline. However, until now, it
+> was provided by skeleton. This patch install /etc/inputrc from readline
+> recipe.
 > 
->   - virtual package have virtually nothing to save in the legal-info
->     output;
-> 
->   - for Buildroot itself, host-gcc-initial and host-gcc-final are not
->     real packages, they are just two different steps of the same
->     package, gcc;
-> 
->   - for proprietary packages, it might not even be legal to even mention
->     them, being under NDA or some other such restrictive conditions.
-> 
-> Add the new 'IGNORE' keyword to the _REDISTRIBUTE package variable, so
-> that the legal-info infra will simply completely ignore that package.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- But see below.
-
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
->  docs/manual/adding-packages-generic.txt | 7 +++++--
->  package/pkg-generic.mk                  | 8 +++++++-
->  2 files changed, 12 insertions(+), 3 deletions(-)
+>  package/readline/inputrc     | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>  package/readline/readline.mk |  6 +++++-
+>  system/skeleton/etc/inputrc  | 44 --------------------------------------------
+
+ Please use git format-patch -M or do
+git config --global --bool --add format.find-renames true
+git config --global --bool --add format.find-copies true
+
+>  3 files changed, 49 insertions(+), 45 deletions(-)
+>  create mode 100644 package/readline/inputrc
+>  delete mode 100644 system/skeleton/etc/inputrc
 > 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index 1c25c4e..aec398b 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -390,7 +390,8 @@ information is (assuming the package name is +libfoo+) :
->    See xref:legal-info[] for more information.
->    This variable is optional. If it is not defined, a warning will be produced
->    to let you know, and +not saved+ will appear in the +license files+ field
-> -  of the manifest file for this package.
-> +  of the manifest file for this package (unless +LIBFOO_REDISTRIBUTE+ is
-> +  set to +IGNORE+, see below...)
+> diff --git a/package/readline/inputrc b/package/readline/inputrc
+> new file mode 100644
+> index 0000000..2f1cb60
+> --- /dev/null
+> +++ b/package/readline/inputrc
+[snip]
+> diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+> index c004899..3d31696 100644
+> --- a/package/readline/readline.mk
+> +++ b/package/readline/readline.mk
+> @@ -17,8 +17,12 @@ READLINE_LICENSE_FILES = COPYING
+>  define READLINE_PURGE_EXAMPLES
+>  	rm -rf $(TARGET_DIR)/usr/share/readline
+>  endef
+> -
+>  READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_PURGE_EXAMPLES
 >  
->  * +LIBFOO_ACTUAL_SOURCE_TARBALL+ only applies to packages whose
->    +LIBFOO_SITE+ / +LIBTOO_SOURCE+ pair points to an archive that does
-> @@ -414,7 +415,9 @@ information is (assuming the package name is +libfoo+) :
->  * +LIBFOO_REDISTRIBUTE+ can be set to +YES+ (default) or +NO+ to indicate if
->    the package source code is allowed to be redistributed. Set it to +NO+ for
->    non-opensource packages: Buildroot will not save the source code for this
-> -  package when collecting the +legal-info+.
-> +  package when collecting the +legal-info+. Alternatively, you may set it to
-> +  +IGNORE+ so that Buildroot does not even mention that package in the
-> +  +legal-info+ output.
+> +define READLINE_INSTALL_INPUTRC
+> +	$(INSTALL) -D -m 644 package/readline/inputrc $(TARGET_DIR)/etc/inputrc
 
- Perhaps add:
+ Please use $(READLINE_PKGDIR) instead of package/readline.
 
-This is done automatically for virtual packages.
+ Otherwise LGTM.
 
  Regards,
  Arnout
 
->  
->  * +LIBFOO_FLAT_STACKSIZE+ defines the stack size of an application built into
->    the FLAT binary format. The application stack size on the NOMMU architecture
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 08f4f31..91c8fea 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -739,10 +739,12 @@ $(2)_MANIFEST_LICENSE_FILES ?= not saved
->  
->  # If the package declares _LICENSE_FILES, we need to extract it,
->  # for overriden, local or normal remote packages alike, whether
-> -# we want to redistribute it or not.
-> +# we want to redistribute it or not, but not if we want to ignore it.
-> +ifneq ($$($(2)_REDISTRIBUTE),IGNORE)
->  ifneq ($$($(2)_LICENSE_FILES),)
->  $(1)-legal-info: $(1)-patch
->  endif
-> +endif
->  
->  # We only save the sources of packages we want to redistribute, that are
->  # non-local, and non-overriden. So only store, in the manifest, the tarball
-> @@ -766,6 +768,8 @@ $(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
->  
->  # legal-info: produce legally relevant info.
->  $(1)-legal-info:
-> +ifneq ($$($(2)_REDISTRIBUTE),IGNORE)
+> +endef
+> +READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_INPUTRC
 > +
->  # Packages without a source are assumed to be part of Buildroot, skip them.
->  	$$(foreach hook,$$($(2)_PRE_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
->  ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-> @@ -807,6 +811,8 @@ endif # other packages
->  endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
->  	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
->  
-> +endif # REDISTRIBUTE == IGNORE
-> +
->  # add package to the general list of targets if requested by the buildroot
->  # configuration
->  ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> diff --git a/system/skeleton/etc/inputrc b/system/skeleton/etc/inputrc
+> deleted file mode 100644
+> index 2f1cb60..0000000
+> --- a/system/skeleton/etc/inputrc
+> +++ /dev/null
+> @@ -1,44 +0,0 @@
+> -# /etc/inputrc - global inputrc for libreadline
+> -# See readline(3readline) and `info readline' for more information.
+> -
+> -# Be 8 bit clean.
+> -set input-meta on
+> -set output-meta on
+> -set bell-style visible
+> -
+> -# To allow the use of 8bit-characters like the german umlauts, comment out
+> -# the line below. However this makes the meta key not work as a meta key,
+> -# which is annoying to those which don't need to type in 8-bit characters.
+> -
+> -# set convert-meta off
+> -
+> -"\e0d": backward-word
+> -"\e0c": forward-word
+> -"\e[h": beginning-of-line
+> -"\e[f": end-of-line
+> -"\e[1~": beginning-of-line
+> -"\e[4~": end-of-line
+> -#"\e[5~": beginning-of-history
+> -#"\e[6~": end-of-history
+> -"\e[3~": delete-char
+> -"\e[2~": quoted-insert
+> -
+> -# Common standard keypad and cursor
+> -# (codes courtsey Werner Fink, <werner@suse.de>)
+> -#"\e[1~": history-search-backward
+> -"\e[2~": yank
+> -"\e[3~": delete-char
+> -#"\e[4~": set-mark
+> -"\e[5~": history-search-backward
+> -"\e[6~": history-search-forward
+> -# Normal keypad and cursor of xterm
+> -"\e[F": end-of-line
+> -"\e[H": beginning-of-line
+> -# Application keypad and cursor of xterm
+> -"\eOA": previous-history
+> -"\eOC": forward-char
+> -"\eOB": next-history
+> -"\eOD": backward-char
+> -"\eOF": end-of-line
+> -"\eOH": beginning-of-line
+> -
 > 
 
 
