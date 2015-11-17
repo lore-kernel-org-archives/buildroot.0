@@ -1,52 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2015 22:21:52 +0100
-Subject: [Buildroot] [PATCH] pkg-generic: Strip all but leading comments
-	from C files used as license.
-In-Reply-To: <1447779739-4661-1-git-send-email-peda@lysator.liu.se> (Peter
- Rosin's message of "Tue, 17 Nov 2015 18:02:19 +0100")
-References: <1447779739-4661-1-git-send-email-peda@lysator.liu.se>
-Message-ID: <878u5wcoen.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 17 Nov 2015 22:26:38 +0100
+Subject: [Buildroot] [PATCH 04/21 RFC] core/legal-info: allow ignoring
+ packages from the legal-info
+In-Reply-To: <20151117211451.7ad6f80f@free-electrons.com>
+References: <cover.1447713615.git.yann.morin.1998@free.fr>
+ <5d993adab02ed57f67d14652247fbd31aaae87bc.1447713615.git.yann.morin.1998@free.fr>
+ <20151117122226.0cbd8042@free-electrons.com>
+ <564B655C.5060105@lucaceresoli.net> <20151117192802.GA3703@free.fr>
+ <20151117211451.7ad6f80f@free-electrons.com>
+Message-ID: <20151117212638.GE3703@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Rosin <peda@lysator.liu.se> writes:
+Thomas, All,
 
- > From: Peter Rosin <peda@axentia.se>
- > Signed-off-by: Peter Rosin <peda@axentia.se>
- > ---
- >  package/pkg-utils.mk |   28 +++++++++++++++++++++++++---
- >  1 file changed, 25 insertions(+), 3 deletions(-)
+On 2015-11-17 21:14 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 17 Nov 2015 20:28:02 +0100, Yann E. MORIN wrote:
+> > Well, I don't really care whether we call it IGNORE or NOTHING or
+> > whatever makes more sense. I'm also fine with deprecating YES and NO
+> > to replace them with more meaningful values.
+> > 
+> > What I care about is having the ability to mark a package for the
+> > following conditions:
+> > 
+> >   - redistribute "source" archive, list in the manifest and save
+> >     licensing files,
+> > 
+> >   - list in the manifest and save licensing files,
+> > 
+> >   - completely omit the package from legal-info.
+> 
+> Right, understood.
+> 
+> > As Luca explained, there are packages for which we should not
+> > redistribute the "source" archive, but which we must list in the
+> > manifest. Luca talked about imx-vpu, I was thinking about
+> > nvidia-driver.
+> 
+> Seen the examples, it is more convincing now.
+> 
+> > The new possibility that I would want is to completely ignore the
+> > package from the legal-info output, as there might be legal reasons that
+> > the mere existence of that package should not be disclosed.
+> 
+> So, I understand the need. Now, I am wondering whether we should have
+> one single variable with "special" values as Luca/you suggest, or two
+> clearly separated boolean variables that control each aspects
+> (distribute the source, include in legal-info). Example:
+> 
+> <pkg>_GENERATE_LEGAL_INFO = YES/NO
+> <pkg>_REDISTRIBUTE_SOURCE = YES/NO
+> 
+> Of course, if <pkg>_GENERATE_LEGAL_INFO = NO, <pkg>_REDISTRIBUTE_SOURCE
+> is ignored.
+> 
+> This is just a proposal, I'm totally open to better names for the
+> variables.
 
- > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
- > index 44bd2c9..1497eb2 100644
- > --- a/package/pkg-utils.mk
- > +++ b/package/pkg-utils.mk
- > @@ -145,8 +145,30 @@ endef
- 
- >  define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
- >  	$(call legal-license-header,$(1),$(2) file,$(4)) && \
- > -	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
- > -	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
- >  	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
- > -	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
- > +	case $(3) in \
- > +	*.c|*.h) \
- > +	  sed -e '\
- > +x;\
-> +/^$$/{\
- > +  x;\
- > +  /^[ \t]*$$/b;\
- > +  /^[ \t]*\/\//b;\
- > +  /^[ \t]*\/\*.*\*\//b;\
+I would prefer we keep a single variable. Especially since we can easily
+keep backward compatibility.
 
-Hmm, I don't think we want to fiddle with the content of the legal
-statements. Is there any real problem with having the complete .c / .h
-file? That's still helping people but not risking that we screw up
-anything.
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
