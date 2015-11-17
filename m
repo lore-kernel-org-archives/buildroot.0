@@ -1,36 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2015 23:29:52 +0100
-Subject: [Buildroot] [PATCH v2] package/gauche: fix 'dlfcn.h: No such
-	file' on autobuild
-In-Reply-To: <20151117214010.64de14ab@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 17 Nov 2015 21:40:10 +0100")
-References: <201511171550.tAHFoAcS030490@ms-omx01.plus.so-net.ne.jp>
- <20151117214010.64de14ab@free-electrons.com>
-Message-ID: <871tbocl9b.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 17 Nov 2015 23:33:52 +0100
+Subject: [Buildroot] [PATCH] readline: install configuration file from
+ package recipe
+In-Reply-To: <564BA4BF.7020106@mind.be>
+References: <1447780732-21911-1-git-send-email-jezz@sysmic.org>
+ <564BA4BF.7020106@mind.be>
+Message-ID: <564BAB50.6010405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 17-11-15 23:05, Arnout Vandecappelle wrote:
+> On 17-11-15 18:18, J?r?me Pouiller wrote:
+>> /etc/inputrc is configuration file for readline. However, until now, it
+>> was provided by skeleton. This patch install /etc/inputrc from readline
+>> recipe.
+>>
+>> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+>> ---
+>>  package/readline/inputrc     | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>>  package/readline/readline.mk |  6 +++++-
+>>  system/skeleton/etc/inputrc  | 44 --------------------------------------------
+> 
+>  Please use git format-patch -M or do
+> git config --global --bool --add format.find-renames true
+> git config --global --bool --add format.find-copies true
 
- > Dear Hiroshi Kawashima,
- > On Wed, 18 Nov 2015 00:50:10 +0900, Hiroshi Kawashima wrote:
- >> Ported from bdwgc package.
- >> When build with BR2_STATIC_LIBS environment, prevent to use dlopen().
- >> 
- >> Fix:
- >> http://autobuild.buildroot.org/results/da5/da5b9605552d4914c5e6f0d890367b92536419c1
- >> 
- >> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+ I was writing this while offline so hadn't seen your v2 yet, sorry for the noise.
 
- > This patch is not sufficient. It still fails to build, later, because
- > gauche tries to build a shared library. So I believe gauche really
- > needs to depend on !BR2_STATIC_LIBS. Here is the failure you get:
+ Regards,
+ Arnout
 
-Ok, I'll drop it then.
+
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
