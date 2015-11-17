@@ -1,37 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Nov 2015 17:55:58 +0100
-Subject: [Buildroot] [PATCH] pkg-download: support file:// in
- BR2_PRIMARY_SITE
-In-Reply-To: <1447776478-16046-1-git-send-email-jezz@sysmic.org>
-References: <1447776478-16046-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20151117175558.156ea1f0@free-electrons.com>
+From: Peter Rosin <peda@lysator.liu.se>
+Date: Tue, 17 Nov 2015 18:02:19 +0100
+Subject: [Buildroot] [PATCH] pkg-generic: Strip all but leading comments
+	from C files used as license.
+Message-ID: <1447779739-4661-1-git-send-email-peda@lysator.liu.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+From: Peter Rosin <peda@axentia.se>
 
-On Tue, 17 Nov 2015 17:07:58 +0100, J?r?me Pouiller wrote:
-> This feature was already discuted here:
-> 
->   http://lists.busybox.net/pipermail/buildroot/2015-April/125419.html
-> 
-> Personally, I have a big central directory with all tarballs I have
-> ever downloaded. I use this feature to isolate tarballs necessary to
-> build a configuration:
-> 
->   make project_defconfig
->   make BR2_DL_DIR=/tmp/mirror-project BR2_PRIMARY_SITE=file:///home/user/dl source
->   tar -C /tmp -czvf mirror-project.tgz mirror-project
+Signed-off-by: Peter Rosin <peda@axentia.se>
+---
+ package/pkg-utils.mk |   28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-You have a much simpler option:
-
-	make external-deps
-
-Thomas
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 44bd2c9..1497eb2 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -145,8 +145,30 @@ endef
+ 
+ define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
+ 	$(call legal-license-header,$(1),$(2) file,$(4)) && \
+-	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
+-	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
+ 	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
+-	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
++	case $(3) in \
++	*.c|*.h) \
++	  sed -e '\
++x;\
++/^$$/{\
++  x;\
++  /^[ \t]*$$/b;\
++  /^[ \t]*\/\//b;\
++  /^[ \t]*\/\*.*\*\//b;\
++  /^[ \t]*\/\*/h;\
++  //b;\
++  s/.*//;\
++  q\
++};\
++x;\
++/\*\//{\
++  x;\
++  s/.*//;\
++  x\
++}' < $(3) > $(LICENSE_FILES_DIR_$(4))/$(1)/$(2) \
++	;; \
++	*) cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2);; \
++	esac && \
++	cat $(LICENSE_FILES_DIR_$(4))/$(1)/$(2) >>$(LEGAL_LICENSES_TXT_$(4)) && \
++	echo >>$(LEGAL_LICENSES_TXT_$(4))
+ endef
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
