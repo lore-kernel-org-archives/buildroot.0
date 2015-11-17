@@ -1,79 +1,144 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Tue, 17 Nov 2015 17:13:31 +0000
-Subject: [Buildroot] Kernel patches in Buildroot
-In-Reply-To: <564B0BBE.8050102@synopsys.com>
-References: <56432809.3000902@synopsys.com> <56432ED3.7070008@mind.be>
- <564B0BBE.8050102@synopsys.com>
-Message-ID: <564B603B.5010907@synopsys.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue, 17 Nov 2015 18:18:52 +0100
+Subject: [Buildroot] [PATCH] readline: install configuration file from
+	package recipe
+Message-ID: <1447780732-21911-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+/etc/inputrc is configuration file for readline. However, until now, it
+was provided by skeleton. This patch install /etc/inputrc from readline
+recipe.
 
-Hi!
-I am trying to use BR2_GLOBAL_PATCH_DIR to indicate the global patch directory,
-which has the following value:
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/readline/inputrc     | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ package/readline/readline.mk |  6 +++++-
+ system/skeleton/etc/inputrc  | 44 --------------------------------------------
+ 3 files changed, 49 insertions(+), 45 deletions(-)
+ create mode 100644 package/readline/inputrc
+ delete mode 100644 system/skeleton/etc/inputrc
 
-BR2_GLOBAL_PATCH_DIR="snps-custom/packages"
-
-I have a "snps-custom" folder which has a "packages" folder inside. Inside the
-"packages" folder we have a folder for each package we need to patch, in this
-example mplayer and the linux kernel.
-
---snps-custom
-  --packages
-    --linux-arc-axs101-20141021-3.13
-	0001-XXXX.patch
-	0002-YYYY.patch
-    --mplayer
-	0001-mplayer.patch
-    --<packagename>
-	000x-xxxxx.patch
-
-The linux kernel patching system does not recognizes the
-packages/linux-arc-axs101-20141021-3.13 patch folder. Could you give me a help
-on this?
-
-Thanks!
-
-BR,
-Joao Pinto
-
-
-
-On 11/17/2015 11:13 AM, Joao Pinto wrote:
-> Thanks for your help!
-> 
-> On 11/11/2015 12:04 PM, Arnout Vandecappelle wrote:
->> On 11-11-15 12:35, Joao Pinto wrote:
->>> Hi,
->>> We are designing the procedure to release our software stack based on buildroot.
->>> Could you please tell what is the advised method for including a kernel patch
->>> set in buildroot? I typically use BR2_LINUX_KERNEL_PATCH where I indicate each
->>> patch file. Is there a easier way like using BR2_GLOBAL_PATCH_DIR for example?
->>
->>  I personally prefer to use a git repository that includes the patches. During
->> development, I make a local checkout specified with LINUX_OVERRIDE_SRCDIR; for
->> release, I point to the repository (often on gitlab) and specify a tag.
->>
->>  BR2_GLOBAL_PATCH_DIR and BR2_LINUX_KERNEL_PATCH are basically equivalent, you
->> can specify a directory with the latter as well.
->>
->>
->>  Regards,
->>  Arnout
->>
->>>
->>> Thanks for your help!
->>>
->>> Joao
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
->>
-> 
+diff --git a/package/readline/inputrc b/package/readline/inputrc
+new file mode 100644
+index 0000000..2f1cb60
+--- /dev/null
++++ b/package/readline/inputrc
+@@ -0,0 +1,44 @@
++# /etc/inputrc - global inputrc for libreadline
++# See readline(3readline) and `info readline' for more information.
++
++# Be 8 bit clean.
++set input-meta on
++set output-meta on
++set bell-style visible
++
++# To allow the use of 8bit-characters like the german umlauts, comment out
++# the line below. However this makes the meta key not work as a meta key,
++# which is annoying to those which don't need to type in 8-bit characters.
++
++# set convert-meta off
++
++"\e0d": backward-word
++"\e0c": forward-word
++"\e[h": beginning-of-line
++"\e[f": end-of-line
++"\e[1~": beginning-of-line
++"\e[4~": end-of-line
++#"\e[5~": beginning-of-history
++#"\e[6~": end-of-history
++"\e[3~": delete-char
++"\e[2~": quoted-insert
++
++# Common standard keypad and cursor
++# (codes courtsey Werner Fink, <werner@suse.de>)
++#"\e[1~": history-search-backward
++"\e[2~": yank
++"\e[3~": delete-char
++#"\e[4~": set-mark
++"\e[5~": history-search-backward
++"\e[6~": history-search-forward
++# Normal keypad and cursor of xterm
++"\e[F": end-of-line
++"\e[H": beginning-of-line
++# Application keypad and cursor of xterm
++"\eOA": previous-history
++"\eOC": forward-char
++"\eOB": next-history
++"\eOD": backward-char
++"\eOF": end-of-line
++"\eOH": beginning-of-line
++
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index c004899..3d31696 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -17,8 +17,12 @@ READLINE_LICENSE_FILES = COPYING
+ define READLINE_PURGE_EXAMPLES
+ 	rm -rf $(TARGET_DIR)/usr/share/readline
+ endef
+-
+ READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_PURGE_EXAMPLES
+ 
++define READLINE_INSTALL_INPUTRC
++	$(INSTALL) -D -m 644 package/readline/inputrc $(TARGET_DIR)/etc/inputrc
++endef
++READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_INPUTRC
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/system/skeleton/etc/inputrc b/system/skeleton/etc/inputrc
+deleted file mode 100644
+index 2f1cb60..0000000
+--- a/system/skeleton/etc/inputrc
++++ /dev/null
+@@ -1,44 +0,0 @@
+-# /etc/inputrc - global inputrc for libreadline
+-# See readline(3readline) and `info readline' for more information.
+-
+-# Be 8 bit clean.
+-set input-meta on
+-set output-meta on
+-set bell-style visible
+-
+-# To allow the use of 8bit-characters like the german umlauts, comment out
+-# the line below. However this makes the meta key not work as a meta key,
+-# which is annoying to those which don't need to type in 8-bit characters.
+-
+-# set convert-meta off
+-
+-"\e0d": backward-word
+-"\e0c": forward-word
+-"\e[h": beginning-of-line
+-"\e[f": end-of-line
+-"\e[1~": beginning-of-line
+-"\e[4~": end-of-line
+-#"\e[5~": beginning-of-history
+-#"\e[6~": end-of-history
+-"\e[3~": delete-char
+-"\e[2~": quoted-insert
+-
+-# Common standard keypad and cursor
+-# (codes courtsey Werner Fink, <werner@suse.de>)
+-#"\e[1~": history-search-backward
+-"\e[2~": yank
+-"\e[3~": delete-char
+-#"\e[4~": set-mark
+-"\e[5~": history-search-backward
+-"\e[6~": history-search-forward
+-# Normal keypad and cursor of xterm
+-"\e[F": end-of-line
+-"\e[H": beginning-of-line
+-# Application keypad and cursor of xterm
+-"\eOA": previous-history
+-"\eOC": forward-char
+-"\eOB": next-history
+-"\eOD": backward-char
+-"\eOF": end-of-line
+-"\eOH": beginning-of-line
+-
+-- 
+2.1.4
