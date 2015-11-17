@@ -1,52 +1,97 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 17 Nov 2015 13:20:32 +0100
-Subject: [Buildroot] [PATCH 01/21 RFC] package/libecore: do not build
- anything at patch time
-In-Reply-To: <20151117121649.32a08094@free-electrons.com>
-References: <cover.1447713615.git.yann.morin.1998@free.fr>
- <5e4ec100e9c6dda1262d9b84cd5a63f75ebc3864.1447713615.git.yann.morin.1998@free.fr>
- <20151117121649.32a08094@free-electrons.com>
-Message-ID: <564B1B90.4080307@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Nov 2015 13:27:54 +0100
+Subject: [Buildroot] [PATCH] pulseaudio: fix build issue with old gcc
+	versions
+Message-ID: <1447763274-4201-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann, Thomas,
-Le 17/11/2015 12:16, Thomas Petazzoni a ?crit :
-> Dear Yann E. MORIN,
-> 
-> On Mon, 16 Nov 2015 23:46:56 +0100, Yann E. MORIN wrote:
->> Trying to build anything at patch time will result in a broken
->> legal-info, as the needed host dependencies are not yet built.
->>
->> Make that hook a pre-configure hook rather than a post-extract
->> hook.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Peter Korsgaard <jacmet@uclibc.org>
->> Cc: Romain Naour <romain.naour@openwide.fr>
-> 
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Even though this will probably conflict with the EFL rework from
-> Romain. However I believe this patch should be merged in master, since
-> it actually fixes legal-info.
+This commit adds a patch to pulseaudio (already submitted upstream)
+that avoids a structure redefinition build failure that occurs with
+old gcc versions.
 
-Ok, it's not a big problem. The merge conflict will be easily resolved by
-removing the libecore package ;-)
+Fixes:
 
-Actually makekeys is not build by the upcoming host-efl package, I'll check if
-we still need it.
+  http://autobuild.buildroot.org/results/a1e/a1e7e59f9c65a6ce38800439c78b7808048ad708/
 
-Otherwise:
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...acket-avoid-redefinition-of-pa_packet-str.patch | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+ create mode 100644 package/pulseaudio/0001-pulsecore-packet-avoid-redefinition-of-pa_packet-str.patch
 
-Best regards,
-Romain
-> 
-> Thanks,
-> 
-> Thomas
-> 
+diff --git a/package/pulseaudio/0001-pulsecore-packet-avoid-redefinition-of-pa_packet-str.patch b/package/pulseaudio/0001-pulsecore-packet-avoid-redefinition-of-pa_packet-str.patch
+new file mode 100644
+index 0000000..10741a1
+--- /dev/null
++++ b/package/pulseaudio/0001-pulsecore-packet-avoid-redefinition-of-pa_packet-str.patch
+@@ -0,0 +1,64 @@
++From 0c9b79cd8f6b8a88d7e60741607173af5d320203 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Tue, 17 Nov 2015 12:00:53 +0100
++Subject: [PATCH] pulsecore/packet: avoid redefinition of pa_packet structure
++
++packet.h defines:
++
++  typedef struct pa_packet pa_packet;
++
++and packet.c defines:
++
++  typedef struct pa_packet {
++    ...
++  } pa_packet;
++
++With old versions of gcc (such as gcc 4.5) this causes a redefinition
++error at compile time:
++
++pulsecore/packet.c:43:3: error: redefinition of typedef 'pa_packet'
++pulsecore/packet.h:26:26: note: previous declaration of 'pa_packet' was here
++
++In order to fix this, this commit changes the definition in packet.c
++to just:
++
++  struct pa_packet {
++    ...
++  };
++
++This way, the contents of the structure remain opaque to users of
++pa_packet outside packet.c, and the 'pa_packet' type remains usable.
++
++Fixes: https://bugs.freedesktop.org/show_bug.cgi?id=91334
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Submitted-upstream-at: http://lists.freedesktop.org/archives/pulseaudio-discuss/2015-November/024785.html
++---
++ src/pulsecore/packet.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/pulsecore/packet.c b/src/pulsecore/packet.c
++index e275d23..2a61d58 100644
++--- a/src/pulsecore/packet.c
+++++ b/src/pulsecore/packet.c
++@@ -32,7 +32,7 @@
++ 
++ #define MAX_APPENDED_SIZE 128
++ 
++-typedef struct pa_packet {
+++struct pa_packet {
++     PA_REFCNT_DECLARE;
++     enum { PA_PACKET_APPENDED, PA_PACKET_DYNAMIC } type;
++     size_t length;
++@@ -40,7 +40,7 @@ typedef struct pa_packet {
++     union {
++         uint8_t appended[MAX_APPENDED_SIZE];
++     } per_type;
++-} pa_packet;
+++};
++ 
++ PA_STATIC_FLIST_DECLARE(packets, 0, pa_xfree);
++ 
++-- 
++2.6.3
++
+-- 
+2.6.3
