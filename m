@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Nov 2015 23:12:24 +0100
-Subject: [Buildroot] [PATCH 5/6] gst-plugins-ugly: add legal info
-In-Reply-To: <1447850352-26299-5-git-send-email-gustavo.zacarias@free-electrons.com>
+Date: Wed, 18 Nov 2015 23:15:47 +0100
+Subject: [Buildroot] [PATCH 6/6] gst-ffmpeg: add legal info
+In-Reply-To: <1447850352-26299-6-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1447850352-26299-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1447850352-26299-5-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <564CF7C8.3030901@mind.be>
+ <1447850352-26299-6-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <564CF893.4040107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,38 +15,44 @@ On 18-11-15 13:39, gustavo.zacarias at free-electrons.com wrote:
 > From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+
+ NACK. Marked as rejected
 > ---
->  package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk | 2 ++
+>  package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 2 ++
 >  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
-> index e8f2362..9662623 100644
-> --- a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
-> +++ b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
-> @@ -7,6 +7,8 @@
->  GST_PLUGINS_UGLY_VERSION = 0.10.19
->  GST_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST_PLUGINS_UGLY_VERSION).tar.xz
->  GST_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
-> +GST_PLUGINS_UGLY_LICENSE = LGPLv2.1+
+> diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+> index b1d8f8b..b728128 100644
+> --- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+> +++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+> @@ -9,6 +9,8 @@ GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
+>  GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
+>  GST_FFMPEG_INSTALL_STAGING = YES
+>  GST_FFMPEG_DEPENDENCIES = host-pkgconf gstreamer gst-plugins-base
+> +GST_FFMPEG_LICENSE = GPLv2+ LGPLv2+ LGPLv2.1+
+> +GST_FFMPEG_LICENSE_FILES = COPYING COPYING.LIB
+>  
+>  ifeq ($(BR2_PACKAGE_GST_FFMPEG_GPL),y)
+>  GST_FFMPEG_CONF_OPTS += --disable-lgpl
 
- synaesthesia is GPLv2+ (and is always enabled)
+ The license is already specified in the lines just below:
 
- All the rest is LGPLv2+...
-
-> +GST_PLUGINS_UGLY_LICENSE_FILES = COPYING
-
- ...except this file which is 2.1...
-
- I guess there's a reason it's called ugly :-)
+ifeq ($(BR2_PACKAGE_GST_FFMPEG_GPL),y)
+GST_FFMPEG_CONF_OPTS += --disable-lgpl
+GST_FFMPEG_LICENSE = GPLv2+ (gst-ffmpeg), GPLv2+/GPLv3+ (libav)
+GST_FFMPEG_LICENSE_FILES = COPYING gst-libs/ext/libav/COPYING.GPLv2
+gst-libs/ext/libav/COPYING.GPLv3
+else
+GST_FFMPEG_CONF_OPTS += --enable-lgpl
+GST_FFMPEG_LICENSE = LGPLv2+ (gst-ffmpeg), LGPLv2.1+/LGPLv3+ (libav)
+GST_FFMPEG_LICENSE_FILES = COPYING.LIB gst-libs/ext/libav/COPYING.LGPLv2.1
+gst-libs/ext/libav/COPYING.LGPLv3
+endif
 
 
  Regards,
  Arnout
 
->  
->  GST_PLUGINS_UGLY_CONF_OPTS = \
->  	--disable-examples
-> 
 
 
 -- 
