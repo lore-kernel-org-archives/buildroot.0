@@ -1,50 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 22:02:02 +0100
-Subject: [Buildroot] [PATCH v3 1/1] qemu: add patch to fix SSP support
- detection
-In-Reply-To: <1447671498-9180-1-git-send-email-rprebello@gmail.com>
-References: <1447671498-9180-1-git-send-email-rprebello@gmail.com>
-Message-ID: <20151118220202.18515091@free-electrons.com>
+Date: Wed, 18 Nov 2015 22:14:56 +0100
+Subject: [Buildroot] [git commit branch/next] system: Fix for NFS booting
+	with interface config via DHCP
+Message-ID: <20151118211548.D98A481D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rodrigo Rebello,
+commit: http://git.buildroot.net/buildroot/commit/?id=71c75a5ea0e62786d279ef1609f23732bde5acc3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 16 Nov 2015 08:58:18 -0200, Rodrigo Rebello wrote:
-> The QEMU configure script incorrectly assumes SSP is supported by the
-> toolchain in some cases where the compiler accepts -fstack-protector*
-> flags but the C library does not provide the necessary __stack_chk_*()
-> functions.
-> 
-> Even though a full compile and link test is performed by the script,
-> this is done with a code fragment which does not actually meet any of
-> the conditions required to cause the compiler to emit canary code when
-> the -fstack-protector-strong variant is used. As no compile or link
-> failure occurs in this case, a false positive is generated and a
-> subsequent error is seen when the probe for pthreads is performed.
-> 
-> The fix consists in patching the configure script to use a more
-> appropriate test program for the SSP support checks.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/efb/efbb4e940543894b8745bb405478a096c90a5ae2/
->   http://autobuild.buildroot.net/results/32d/32d6d984febad2dee1f0d31c5fa0aea823297096/
->   http://autobuild.buildroot.net/results/aa6/aa6e71c957fb6f07e7bded35a8e47be4dadd042c/
->   ...and many others.
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-> ---
-> Changes v2 -> v3:
->   - Use a better test code fragment that works when LTO is enabled
+Configuring the network interface with DHCP via
+/etc/network/interfaces generally does not work when NFS booting.  The
+DHCP configuration will initially bring the interface down and system
+then hangs at that point as the root filesystem is no longer
+accessable.
 
-Applied to master, thanks.
+This adds a script to be run via a pre-up line in
+/etc/network/interfaces.  It checks for a NFS root filesystem and if
+the interface to be configured is used for access to the NFS server.
+If this is the case, then it returns a failure code so that ifup will
+not configure the interface.  This works for DHCP and another config
+methods (static, bootp, etc.).  This system does detect if the
+interface to be configured isn't the one used for NFS and doesn't skip
+it when that is the case.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+NFS filesystems that aren't the root fs aren't considered.
+
+Fixes bug #4790.
+
+Signed-off-by: Trent Piepho <tpiepho@kymetacorp.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/skeleton/nfs_check   |   20 ++++++++++++++++++++
+ package/skeleton/skeleton.mk |    3 +++
+ 2 files changed, 23 insertions(+), 0 deletions(-)
+
+diff --git a/package/skeleton/nfs_check b/package/skeleton/nfs_check
+new file mode 100755
+index 0000000..dfa0cbf
+--- /dev/null
++++ b/package/skeleton/nfs_check
+@@ -0,0 +1,20 @@
++#!/bin/sh
++
++# This allows NFS booting to work while also being able to configure
++# the network interface via DHCP when not NFS booting.  Otherwise, a
++# NFS booted system will likely hang during DHCP configuration.
++
++# Attempting to configure the network interface used for NFS will
++# initially bring that network down.  Since the root filesystem is
++# accessed over this network, the system hangs.
++
++# This script is run by ifup and will attempt to detect if a NFS root
++# mount uses the interface to be configured (IFACE), and if so does
++# not configure it.  This should allow the same build to be disk/flash
++# booted or NFS booted.
++
++nfsip=`sed -n '/^[^ ]*:.* \/ nfs.*[ ,]addr=\([0-9.]\+\).*/s//\1/p' /proc/mounts`
++if [ -n "$nfsip" ] && ip route get to "$nfsip" | grep -q "dev $IFACE"; then
++	echo Skipping $IFACE, used for NFS from $nfsip
++	exit 1
++fi
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index d1b797d..0cab8a1 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -89,8 +89,11 @@ define SET_NETWORK_DHCP
+ 		echo ;                                               \
+ 		echo "auto $(NETWORK_DHCP_IFACE)";                   \
+ 		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
++		echo "  pre-up /etc/network/nfs_check";              \
+ 		echo "	wait-delay 15";                              \
+ 	) >> $(TARGET_DIR)/etc/network/interfaces
++	$(INSTALL) -m 0755 -D $(SKELETON_PKGDIR)/nfs_check \
++		$(TARGET_DIR)/etc/network/nfs_check
+ endef
+ endif
+ 
