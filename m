@@ -1,42 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Nov 2015 22:11:55 +0100
-Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.1.0
-Message-ID: <20151201232119.274A17F9FA@busybox.osuosl.org>
+Date: Wed, 18 Nov 2015 21:58:23 +0100
+Subject: [Buildroot] [git commit] syslog-ng: Bump version to 3.7.2
+Message-ID: <20151201232119.01A417FFCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0d62de9df75b1a01b62cb8492a60340ec167523d
+commit: http://git.buildroot.net/buildroot/commit/?id=b981df4fcee131b19c8f3e06489485346d38e942
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/syslog-ng/syslog-ng.hash | 8 +-------
+ package/syslog-ng/syslog-ng.mk   | 9 +--------
+ 2 files changed, 2 insertions(+), 15 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 6dddf8d..3772242 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.6.tar.bz2.sha256
--sha256	f616a7fbdc78a627043f9029000bf08c0c71df59cde4143fc92a014f6a993b26	harfbuzz-1.0.6.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.0.tar.bz2.sha256
-+sha256	0f584a5947e60ede565e7a4e122baa5e4b17a62eab872abf5f73d8552ceb716b	harfbuzz-1.1.0.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 48ff309..703e15c 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index fed2475..0213d2d 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,8 +1,2 @@
+ # Locally computed
+-sha256 4c19841b9079b377cd814b1e6ebbf273af41d04d51c648f4c31f19bfadc20220  syslog-ng-3.7.1.tar.gz
+-sha256 ca6b18c00e72a531dc3e4da24ff79e4b4420cb0f666b3d72af6597648b36a696  7b2b673ae2640ce9ad396f538fc25acb6e4405ec.patch
+-sha256 77fcbe7d6df23e710a81d8e065e17ab91b14d580aead65bb292e4f25b4369192  f10941e565d402e032948bb9711bfbab43eadd88.patch
+-sha256 4547b44d8241be716f321d2aed225197e517db9912d6aedd8565765b427db6f2  96a633ce3f46ed102f38115000730bad41c4ed65.patch
+-sha256 15cdd963f5cae0e113724fb202baccc0056f8618723d7f7290f15e082f9e16cd  00526014247bb63680e53c35d4a76d0dac989405.patch
+-sha256 ec76ed27ab01f9487a8adf092655bc99167a9e81f6be685a8a45fdb1b07cca32  46b07ecaffc154aa7cc713409196020736fe4f33.patch
+-sha256 737b34b4457a1fa9cd38be6a98119f131f7d64e82480011880c178d3d2618dea  e30fe7c3717a7bda4036448c7777747df1a4e0f9.patch
++sha256 b1b3ccc0ce7f0d8bf15b23e59f2f4f5ded70eed410dfd27105219bc8856388a5  syslog-ng-3.7.2.tar.gz
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 1f51e04..5f48a79 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.0.6
-+HARFBUZZ_VERSION = 1.1.0
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-SYSLOG_NG_VERSION = 3.7.1
++SYSLOG_NG_VERSION = 3.7.2
+ SYSLOG_NG_SOURCE = syslog-ng-$(SYSLOG_NG_VERSION).tar.gz
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPLv2.1+ (syslog-ng core), GPLv2+ (modules)
+@@ -14,13 +14,6 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ # rabbit-mq needs -lrt
+ SYSLOG_NG_CONF_ENV = LIBS=-lrt
+ SYSLOG_NG_CONF_OPTS = --disable-manpages
+-SYSLOG_NG_PATCH = \
+-	https://github.com/balabit/syslog-ng/commit/7b2b673ae2640ce9ad396f538fc25acb6e4405ec.patch \
+-	https://github.com/balabit/syslog-ng/commit/f10941e565d402e032948bb9711bfbab43eadd88.patch \
+-	https://github.com/balabit/syslog-ng/commit/96a633ce3f46ed102f38115000730bad41c4ed65.patch \
+-	https://github.com/balabit/syslog-ng/commit/00526014247bb63680e53c35d4a76d0dac989405.patch \
+-	https://github.com/balabit/syslog-ng/commit/46b07ecaffc154aa7cc713409196020736fe4f33.patch \
+-	https://github.com/balabit/syslog-ng/commit/e30fe7c3717a7bda4036448c7777747df1a4e0f9.patch
+ 
+ # We override busybox's S01logging init script
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
