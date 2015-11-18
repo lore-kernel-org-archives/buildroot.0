@@ -1,33 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 21:55:51 +0100
-Subject: [Buildroot] [PATCH] board: readme.txt for Intel Galileo Gen 1/2
-In-Reply-To: <1447852425.2751.31.camel@intel.com>
-References: <1447852425.2751.31.camel@intel.com>
-Message-ID: <20151118215551.51e018ee@free-electrons.com>
+Date: Wed, 18 Nov 2015 21:56:58 +0100
+Subject: [Buildroot] [git commit] package/gauche: fix build error on
+	BR2_STATIC_LIBS
+Message-ID: <20151118205733.2561781E03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Kinsella, Ray,
+commit: http://git.buildroot.net/buildroot/commit/?id=e9b415ace06b416a5743c97e13f4fd7df9666d85
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Nov 2015 13:13:44 +0000, Kinsella, Ray wrote:
-> Created a readme.txt for the Intel Galileo Gen 1/2 that describes,
-> 
->  * How to build for the Intel Galileo Gen 1/2
->  * How to access the console on the Intel Galileo Gen 1/2
-> 
-> Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
-> ---
->  board/intel/galileo/readme.txt | 52 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 board/intel/galileo/readme.txt
+Building gauche depends on dynamic link, so add dependency on
+!BR2_STATIC_LIBS.
 
-Applied to next, thanks.
+Fix:
+http://autobuild.buildroot.org/results/da5/da5b9605552d4914c5e6f0d890367b92536419c1
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gauche/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+index 54a0be2..fd0617a 100644
+--- a/package/gauche/Config.in
++++ b/package/gauche/Config.in
+@@ -13,6 +13,7 @@ config BR2_PACKAGE_GAUCHE
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Gauche is an R7RS Scheme implementation developed to be a
+ 	  handy script interpreter, which allows programmers and
+@@ -23,8 +24,8 @@ config BR2_PACKAGE_GAUCHE
+ 
+ 	  http://practical-scheme.net/gauche/
+ 
+-comment "gauche needs a toolchain w/ NPTL"
++comment "gauche needs a toolchain w/ NPTL, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
