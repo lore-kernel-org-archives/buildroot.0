@@ -1,81 +1,58 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Wed, 18 Nov 2015 13:13:44 +0000
-Subject: [Buildroot] [PATCH] board: readme.txt for Intel Galileo Gen 1/2
-Message-ID: <1447852425.2751.31.camel@intel.com>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Wed, 18 Nov 2015 14:41:51 +0100
+Subject: [Buildroot] [PATCH 1/1] netsniff-ng: override NACL_INC_DIR and
+	NACL_LIB_DIR to fix broken builds on system where nacl is
+	installed + add dependencies on geoip,
+	ncurses and zlib so that the entire netsniff-ng toolset can be build
+Message-ID: <1447854111-5299-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Created a readme.txt for the Intel Galileo Gen 1/2 that describes,
-
- * How to build for the Intel Galileo Gen 1/2
- * How to access the console on the Intel Galileo Gen 1/2
-
-Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 ---
- board/intel/galileo/readme.txt | 52 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 board/intel/galileo/readme.txt
+ package/netsniff-ng/Config.in      | 3 +++
+ package/netsniff-ng/netsniff-ng.mk | 6 +++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/board/intel/galileo/readme.txt b/board/intel/galileo/readme.txt
-new file mode 100644
-index 0000000..7a3abd4
---- /dev/null
-+++ b/board/intel/galileo/readme.txt
-@@ -0,0 +1,52 @@
-+
-+Intel Galileo Gen 1/2
-+
-+Intro
-+============
-+
-+These instructions apply to both the Intel Galileo Gen 1/2 development boards
-+based on the Intel Quark X1000.
-+
-+How to build
-+============
-+
-+Apply the defconfig for the Intel Galileo Gen 1/2
-+
-+ $ make galileo_defconfig
-+
-+Add any additional packages required and build.
-+
-+ $ make
-+
-+The build process will create a SD card image and place it in output/images.
-+
-+ $ ls -lh output/images/sdcard.img
-+ -rw-r--r--. 1 foo foo 11M Nov 17 16:19 output/images/sdcard.img
-+
-+Write the image to an mSD card, insert into the Galileo and power on.
-+
-+ $ dd if=output/images/sdcard.img of=/dev/mmcblk0; sync
-+
-+Accessing the console
-+=====================
-+
-+During power-on the console will become available on the Galileo's ttyS1. This 
-+may be accessed as follows.
-+
-+ * Galileo Gen 1
-+
-+	http://clayskits.com/products/galileo-gen-1-serial-cable
-+
-+	A USB to RS-232 to 3.5mm Jack cable is required. Connect to the 3.5mm
-+	Jack next to the Ethernet Header.
-+
-+ * Galileo Gen 2
-+
-+	http://www.ftdichip.com/Products/Cables/USBTTLSerial.htm
-+
-+	A FTDI TTL-232R-3V3 cable may be used to connect to the FTDI header 
-+	next to the Ethernet connector on the Galileo Gen 2. 
-+
-+The console should now be visible at 115200 baud.
-+
-+ $ picocom -b 115200 /dev/ttyUSB0
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index 8c48f39..fe02ea3 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -6,6 +6,9 @@ config BR2_PACKAGE_NETSNIFF_NG
+ 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_LIBNET
++	select BR2_PACKAGE_GEOIP
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_ZLIB
+ 	# Build with uClibc fails due to missing ceill()
+ 	# Build with musl fails due to various header issues
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index 4fed88c..a6dfb61 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -8,13 +8,17 @@ NETSNIFF_NG_VERSION = v0.5.9
+ NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
+ NETSNIFF_NG_LICENSE = GPLv2
+ NETSNIFF_NG_LICENSE_FILES = README COPYING
++NETSNIFF_NG_CONF_ENV = \
++			NACL_INC_DIR=/dev/null \
++			NACL_LIB_DIR=/dev/null
+ NETSNIFF_NG_DEPENDENCIES = \
+ 	libnl libpcap libcli libnetfilter_conntrack \
+-	liburcu libnet
++	liburcu libnet geoip ncurses zlib
+ 
+ # hand-written configure script and makefile
+ define NETSNIFF_NG_CONFIGURE_CMDS
+ 	(cd $(@D); \
++		$(NETSNIFF_NG_CONF_ENV) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		./configure \
 -- 
-2.1.0
+1.8.3.1
