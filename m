@@ -1,46 +1,60 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Wed, 18 Nov 2015 09:30:21 +0000
-Subject: [Buildroot] Kernel patches in Buildroot
-In-Reply-To: <20151117210817.26557c68@free-electrons.com>
-References: <56432809.3000902@synopsys.com> <56432ED3.7070008@mind.be>
- <564B0BBE.8050102@synopsys.com> <564B603B.5010907@synopsys.com>
- <20151117210817.26557c68@free-electrons.com>
-Message-ID: <564C452D.1050908@synopsys.com>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Wed, 18 Nov 2015 18:31:59 +0900
+Subject: [Buildroot] package/gauche: fix build error on BR2_STATIC_LIBS
+In-Reply-To: <201511180929.tAI9TATJ023961@ms-omx02.plus.so-net.ne.jp>
+References: <201511180929.tAI9TATJ023961@ms-omx02.plus.so-net.ne.jp>
+Message-ID: <8CEE50CE-A3EF-4714-B1F8-87782299C14C@ca2.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
-Thanks, worked fine!
+Very sorry.
+I forget to add [PATCH] in subject, I will send again.
+Sorry bothering you.
 
-BR
-Joao Pinto
+Regards,
+Kawashima
 
-On 11/17/2015 8:08 PM, Thomas Petazzoni wrote:
-> Dear Joao Pinto,
+> 2015/11/18 18:29?Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp> ?????
 > 
-> On Tue, 17 Nov 2015 17:13:31 +0000, Joao Pinto wrote:
+> Building gauche depends on dynamic link, so add dependency on
+> !BR2_STATIC_LIBS.
 > 
->> BR2_GLOBAL_PATCH_DIR="snps-custom/packages"
->>
->> I have a "snps-custom" folder which has a "packages" folder inside. Inside the
->> "packages" folder we have a folder for each package we need to patch, in this
->> example mplayer and the linux kernel.
->>
->> --snps-custom
->>   --packages
->>     --linux-arc-axs101-20141021-3.13
+> Fix:
+> http://autobuild.buildroot.org/results/da5/da5b9605552d4914c5e6f0d890367b92536419c1
 > 
-> Call this folder just "linux". The folder must be named after the
-> package name, and not contains some additional version information. If
-> you want to store patches for several versions of the same package, you
-> must use the same organization as in Buildroot itself:
+> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+> ---
+> package/gauche/Config.in | 5 +++--
+> 1 file changed, 3 insertions(+), 2 deletions(-)
 > 
->   <package-name>/<package-version>/*.patch
+> diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+> index 0720672..24377c4 100644
+> --- a/package/gauche/Config.in
+> +++ b/package/gauche/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_GAUCHE
+> 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> 	depends on BR2_USE_MMU # fork()
+> 	depends on BR2_ARCH_HAS_ATOMICS
+> +	depends on !BR2_STATIC_LIBS
+> 	help
+> 	  Gauche is an R7RS Scheme implementation developed to be a
+> 	  handy script interpreter, which allows programmers and
+> @@ -13,7 +14,7 @@ config BR2_PACKAGE_GAUCHE
 > 
-> Best regards,
+> 	  http://practical-scheme.net/gauche/
 > 
-> Thomas
-> 
+> -comment "gauche needs a toolchain w/ NPTL"
+> +comment "gauche needs a toolchain w/ NPTL, dynamic library"
+> 	depends on BR2_USE_MMU
+> 	depends on BR2_ARCH_HAS_ATOMICS
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+> ============================================================
+>    Hiroshi Kawashima
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
