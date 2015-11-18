@@ -1,50 +1,58 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 18 Nov 2015 12:55:24 +0000
-Subject: [Buildroot] [PATCH v3 1/1] qemu: add patch to fix SSP support
- detection
-In-Reply-To: <1447671498-9180-1-git-send-email-rprebello@gmail.com>
-References: <1447671498-9180-1-git-send-email-rprebello@gmail.com>
-Message-ID: <564C753C.6020301@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Nov 2015 13:57:09 +0100
+Subject: [Buildroot] [v3 0/2] openssl: parallel build
+In-Reply-To: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
+References: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
+Message-ID: <20151118135709.125f4afd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rodrigo Rebello,
+Ryan,
 
-On 11/16/2015 10:58 AM, Rodrigo Rebello wrote:
-> The QEMU configure script incorrectly assumes SSP is supported by the
-> toolchain in some cases where the compiler accepts -fstack-protector*
-> flags but the C library does not provide the necessary __stack_chk_*()
-> functions.
+On Wed, 16 Sep 2015 07:06:23 -0500, Ryan Barnett wrote:
+> I have adopted Thomas P's patches that we submitted but in May in order
+> enable parallel build of openssl. I have updated the patches to use the
+> latest patches available from gentoo and have tested builds only on i386,
+> ARM, and MIPS.
 > 
-> Even though a full compile and link test is performed by the script,
-> this is done with a code fragment which does not actually meet any of
-> the conditions required to cause the compiler to emit canary code when
-> the -fstack-protector-strong variant is used. As no compile or link
-> failure occurs in this case, a false positive is generated and a
-> subsequent error is seen when the probe for pthreads is performed.
+> Original Patches:
 > 
-> The fix consists in patching the configure script to use a more
-> appropriate test program for the SSP support checks.
+> http://patchwork.ozlabs.org/patch/473086/
+> http://patchwork.ozlabs.org/patch/473087/
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/efb/efbb4e940543894b8745bb405478a096c90a5ae2/
->   http://autobuild.buildroot.net/results/32d/32d6d984febad2dee1f0d31c5fa0aea823297096/
->   http://autobuild.buildroot.net/results/aa6/aa6e71c957fb6f07e7bded35a8e47be4dadd042c/
->   ...and many others.
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Ryan Barnett (2):
+>   openssl: use git formatted patches
+>   openssl: enable parallel build and installation
 
-Build test for MIPS architecture. This patch fixed this recent autobuild
-failure:
+I have the feeling that the parallel build patches for OpenSSL are not
+working properly. Look at the recent build failures we've got for the
+openssl and host-openssl builds:
 
-http://autobuild.buildroot.net/results/9a7211e7b40f5a08fc50a912663d53af515896a8/
+  http://autobuild.buildroot.org/?reason=openssl-1.0.2d
+  http://autobuild.buildroot.org/?reason=host-openssl-1.0.2d
 
-Regards,
+They are pretty much all due to a similar error:
 
-Vincent.
+  ln: failed to create symbolic link 'libssl.so': File exists
+  ln: creating symbolic link `libcrypto.so': File exists
+
+I could spot only one that is different:
+
+In file included from apps.h:117:0,
+                 from req.c:74:
+../include/openssl/bio.h:521:34: error: expected ';' before 'BIO_ctrl'
+ # define BIO_set_fp(b,fp,c)      BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
+
+Do you have some ideas? Does Gentoo has some more patches? Should we
+revert back to non-parallel build for OpenSSL ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
