@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 21:54:13 +0100
-Subject: [Buildroot] [PATCH] nano: bump to version 2.4.3
-In-Reply-To: <1447862621-19712-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447862621-19712-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151118215413.7558e6ca@free-electrons.com>
+Date: Wed, 18 Nov 2015 21:54:21 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
+Message-ID: <20151118205426.92E8E81EA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=b59169d1744bd8ead6481deb48cea55850870c00
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Nov 2015 13:03:41 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/nano/nano.hash | 2 +-
->  package/nano/nano.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5f99cc1..560cad7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -199,7 +199,7 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.73"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.93"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.50"	if BR2_KERNEL_HEADERS_3_12
