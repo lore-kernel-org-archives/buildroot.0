@@ -1,23 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 18 Nov 2015 12:30:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 8456] Building host-pkgconf on Fedora 23 fails due
- to incorrect build dependencies
-In-Reply-To: <bug-8456-163@https.bugs.busybox.net/>
-References: <bug-8456-163@https.bugs.busybox.net/>
-Message-ID: <20151118123025.1F2C58044A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Nov 2015 13:38:59 +0100
+Subject: [Buildroot] package/gauche: fix build error on BR2_STATIC_LIBS
+In-Reply-To: <8CEE50CE-A3EF-4714-B1F8-87782299C14C@ca2.so-net.ne.jp>
+References: <201511180929.tAI9TATJ023961@ms-omx02.plus.so-net.ne.jp>
+ <8CEE50CE-A3EF-4714-B1F8-87782299C14C@ca2.so-net.ne.jp>
+Message-ID: <20151118133859.3aa086d3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8456
+Dear Hiroshi Kawashima,
 
---- Comment #5 from Dr I J Ormshaw <ian_ormshaw@waters.com> 2015-11-18 12:30:24 UTC ---
-I've build successfully with the patch from 
-http://patchwork.ozlabs.org/patch/537657/
+On Wed, 18 Nov 2015 18:31:59 +0900, Hiroshi Kawashima wrote:
+> Very sorry.
+> I forget to add [PATCH] in subject, I will send again.
+> Sorry bothering you.
 
+git does it automatically for you when you use "git format-patch".
+
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
