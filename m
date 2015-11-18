@@ -1,58 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 15:43:07 +0100
-Subject: [Buildroot] [git commit] squashfs: always enable xattr support
-Message-ID: <20151201232124.83668821F8@busybox.osuosl.org>
+Date: Wed, 18 Nov 2015 21:53:42 +0100
+Subject: [Buildroot] [git commit] nano: bump to version 2.4.3
+Message-ID: <20151201232118.9C4FE7FB18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=10478514a51427e855f83eeb24a0502b1380150c
+commit: http://git.buildroot.net/buildroot/commit/?id=d8566397dbc267320b2f989e32b90159787c6394
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In 785fef10 xattr support was disabled, probably because the old version
-did require the xattr package to be present to support it.
-In a409d76e xattr support was made optional via (lib)attr, however the
-squashfs package does in fact include all of the required bits to
-support xattr without the need for the attr package.
-
-So enable xattr support by default for both the host and target
-variants.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/squashfs/squashfs.mk | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index 3204d05..cdeb9c8 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -9,13 +9,7 @@ SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
- SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
- SQUASHFS_LICENSE = GPLv2+
- SQUASHFS_LICENSE_FILES = COPYING
--
--ifeq ($(BR2_PACKAGE_ATTR),y)
--SQUASHFS_DEPENDENCIES += attr
--SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
--else
--SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
--endif
-+SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 8ad1497..c924151 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  c8cd7f18fcf5696d9df3364ee2a840e0ab7b6bdbd22abf850bbdc951db7f65b9  nano-2.4.2.tar.gz
++sha256  32d627072b6026678e4f4095c047adec92ac7ec542dd6d91cf27f49b601768f2  nano-2.4.3.tar.gz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 9b84490..28161f3 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
- SQUASHFS_DEPENDENCIES += lz4
-@@ -54,9 +48,8 @@ endif
- 
- HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz
- 
--# no libattr/xz in BR
- HOST_SQUASHFS_MAKE_ARGS = \
--	XATTR_SUPPORT=0 \
-+	XATTR_SUPPORT=1 \
- 	XZ_SUPPORT=1    \
- 	GZIP_SUPPORT=1  \
- 	LZ4_SUPPORT=1	\
+-NANO_VERSION = 2.4.2
++NANO_VERSION = 2.4.3
+ NANO_SITE = $(BR2_GNU_MIRROR)/nano
+ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
