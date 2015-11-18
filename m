@@ -1,193 +1,57 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 18 Nov 2015 23:18:00 +0100
-Subject: [Buildroot] [PATCH v3] package/python-pillow: new package
-Message-ID: <1447885080-3835-1-git-send-email-angelo.compagnucci@gmail.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Wed, 18 Nov 2015 23:19:13 +0100
+Subject: [Buildroot] [RFC] wine: Bump to 1.8
+In-Reply-To: <20151118225702.23400c0f@free-electrons.com>
+References: <564CE703.2070706@dawncrow.de>
+ <20151118222111.06e1de92@free-electrons.com> <564CF1C5.9080204@dawncrow.de>
+ <20151118225702.23400c0f@free-electrons.com>
+Message-ID: <564CF961.3010305@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds python-pillow, the friendly python image library fork.
+Am 18.11.2015 um 22:57 schrieb Thomas Petazzoni:
+> Hello,
+> 
+> On Wed, 18 Nov 2015 22:46:45 +0100, Andr? Hentschel wrote:
+> 
+>>>  * Use 'git format-patch -M' to enable rename detection, so that the
+>>>    renaming of the patches is detected, and instead of seeing a
+>>>    complete file being removed, and a complete file being added, we see
+>>>    a rename.
+>>
+>> I also adjusted the patch a bit to apply to the new version
+> 
+> Not a problem: if the changes are not too important, it will still
+> detect the rename.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Changes:
+OK, I'll try that
 
-v2 -> v3:
+> 
+>>> Last suggestion: can you submit the SANE_CONFIG patch upstream, so that
+>>> hopefully they merge it before the 1.8 release, and we can have zero
+>>> patches for the wine package ?
+>>
+>> The patch won't go in as it is, because it would break
+>> non-cross-builds, also this problem is most likely not only true for
+>> sane, but also for other *-config programs, and I'm no configure
+>> guru...
+> 
+> Why do you say it breaks non-cross-builds? I looked again at
+> 0003-sane-config-fix.patch and I don't really see how it can break
+> non-cross-builds.
+> 
+> The patch is just replacing 'sane-config' by
+> '${SANE_CONFIG:-sane-config}'.
+> 
+> ${SANE_CONFIG:-sane-config} says "use the value of SANE_CONFIG is
+> available, otherwise use sane-config".
+> 
+> So, if SANE_CONFIG is not defined in the environment, this patch makes
+> zero difference compared to the existing situation. It only optionally
+> allows to pass SANE_CONFIG.
+> 
 
-* Simplified package
-* Better handling of setup type
-* Adding hash file
-
-v1 -> v2:
-
-* Added patch to remove platform guessing, now headers should be searched in buildroot folders
-* Fixed optional configure options
-
-
- package/Config.in                                  |  1 +
- ...setup.py-removing-unneeded-platform-guess.patch | 85 ++++++++++++++++++++++
- package/python-pillow/Config.in                    | 12 +++
- package/python-pillow/python-pillow.hash           |  2 +
- package/python-pillow/python-pillow.mk             | 17 +++++
- 5 files changed, 117 insertions(+)
- create mode 100644 package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
- create mode 100644 package/python-pillow/Config.in
- create mode 100644 package/python-pillow/python-pillow.hash
- create mode 100644 package/python-pillow/python-pillow.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index bdc3063..48ccacb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -636,6 +636,7 @@ menu "External python modules"
- 	source "package/python-nfc/Config.in"
- 	source "package/python-numpy/Config.in"
- 	source "package/python-pam/Config.in"
-+	source "package/python-pillow/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-protobuf/Config.in"
- 	source "package/python-psutil/Config.in"
-diff --git a/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch b/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
-new file mode 100644
-index 0000000..1886888
---- /dev/null
-+++ b/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
-@@ -0,0 +1,85 @@
-+From cb8c67c0b7ee805100c381300ea29262e8b5838a Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+Date: Thu, 22 Oct 2015 22:45:31 +0200
-+Subject: [PATCH] setup.py: removing unneeded platform guess
-+
-+Platformm guess is not needed when cross compiling on buildroot
-+so removing it.
-+
-+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+---
-+ setup.py | 58 +---------------------------------------------------------
-+ 1 file changed, 1 insertion(+), 57 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 4cb7257..038b7dc 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -241,63 +241,7 @@ class pil_build_ext(build_ext):
-+                 _add_directory(include_dirs, "/usr/X11/include")
-+ 
-+         elif sys.platform.startswith("linux"):
-+-            arch_tp = (plat.processor(), plat.architecture()[0])
-+-            if arch_tp == ("x86_64", "32bit"):
-+-                # 32 bit build on 64 bit machine.
-+-                _add_directory(library_dirs, "/usr/lib/i386-linux-gnu")
-+-            else:
-+-                for platform_ in arch_tp:
-+-
-+-                    if not platform_:
-+-                        continue
-+-
-+-                    if platform_ in ["x86_64", "64bit"]:
-+-                        _add_directory(library_dirs, "/lib64")
-+-                        _add_directory(library_dirs, "/usr/lib64")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/x86_64-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["i386", "i686", "32bit"]:
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/i386-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["aarch64"]:
-+-                        _add_directory(library_dirs, "/usr/lib64")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/aarch64-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["arm", "armv7l"]:
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/arm-linux-gnueabi")
-+-                        break
-+-                    elif platform_ in ["ppc64"]:
-+-                        _add_directory(library_dirs, "/usr/lib64")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/ppc64-linux-gnu")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/powerpc64-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["ppc"]:
-+-                        _add_directory(library_dirs, "/usr/lib/ppc-linux-gnu")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/powerpc-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["s390x"]:
-+-                        _add_directory(library_dirs, "/usr/lib64")
-+-                        _add_directory(
-+-                            library_dirs, "/usr/lib/s390x-linux-gnu")
-+-                        break
-+-                    elif platform_ in ["s390"]:
-+-                        _add_directory(library_dirs, "/usr/lib/s390-linux-gnu")
-+-                        break
-+-                else:
-+-                    raise ValueError(
-+-                        "Unable to identify Linux platform: `%s`" % platform_)
-+-
-+-            # XXX Kludge. Above /\ we brute force support multiarch. Here we
-+-            # try Barry's more general approach. Afterward, something should
-+-            # work ;-)
-+-            self.add_multiarch_paths()
-++            pass
-+ 
-+         elif sys.platform.startswith("gnu"):
-+             self.add_multiarch_paths()
-+-- 
-+1.9.1
-+
-diff --git a/package/python-pillow/Config.in b/package/python-pillow/Config.in
-new file mode 100644
-index 0000000..e53accb
---- /dev/null
-+++ b/package/python-pillow/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_PILLOW
-+	bool "python-pillow"
-+	help
-+	  Pillow is the "friendly" PIL fork by Alex Clark and Contributors. PIL is
-+	  the Python Imaging Library by Fredrik Lundh and Contributors.
-+	  
-+	  Pillow relies on external libraries to provide support various
-+	  image formats. Select the corresponding package(s) to get this
-+	  support. Pillow can use jpeg, zlib (for PNG), tiff, freetype, webp,
-+	  and openjpeg (JPEG-2000).
-+
-+	  https://pypi.python.org/pypi/Pillow/
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-new file mode 100644
-index 0000000..fd2978a
---- /dev/null
-+++ b/package/python-pillow/python-pillow.hash
-@@ -0,0 +1,2 @@
-+# sha256 locally computed
-+sha256 780f21465e2b7690fc55925188373cd54668ea4d71964f971e1fea4bc16d365e  python-pillow-3.0.0.tar.gz
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-new file mode 100644
-index 0000000..a956a2e
---- /dev/null
-+++ b/package/python-pillow/python-pillow.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# python-pillow
-+#
-+################################################################################
-+
-+PYTHON_PILLOW_VERSION = 3.0.0
-+PYTHON_PILLOW_SITE = $(call github,python-pillow,Pillow,$(PYTHON_PILLOW_VERSION))
-+PYTHON_PILLOW_SETUP_TYPE = setuptools
-+PYTHON_PILLOW_DEPENDENCIES = $(if $(BR2_PACKAGE_JPEG),jpeg) \
-+      $(if $(BR2_PACKAGE_ZLIB),zlib) \
-+      $(if $(BR2_PACKAGE_TIFF),tiff) \
-+      $(if $(BR2_PACKAGE_FREETYPE),freetype) \
-+      $(if $(BR2_PACKAGE_WEBP),webp) \
-+      $(if $(BR2_PACKAGE_OPENJPEG),openjpeg)
-+
-+$(eval $(python-package))
--- 
-1.9.1
+True, my mistake, but the other points hold true.
