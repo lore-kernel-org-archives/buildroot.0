@@ -1,40 +1,48 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Wed, 18 Nov 2015 23:42:59 +0900
-Subject: [Buildroot] package/gauche: fix build error on BR2_STATIC_LIBS
-In-Reply-To: <20151118133859.3aa086d3@free-electrons.com>
-References: <201511180929.tAI9TATJ023961@ms-omx02.plus.so-net.ne.jp>
- <8CEE50CE-A3EF-4714-B1F8-87782299C14C@ca2.so-net.ne.jp>
- <20151118133859.3aa086d3@free-electrons.com>
-Message-ID: <D8B1A679-6ECE-4B93-973A-20E7E33CC586@ca2.so-net.ne.jp>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Nov 2015 15:49:12 +0100
+Subject: [Buildroot] [PATCH 2/2] help: relocate help messages specific
+ to one package
+In-Reply-To: <1447857421-9380-2-git-send-email-jezz@sysmic.org>
+References: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
+ <1447857421-9380-2-git-send-email-jezz@sysmic.org>
+Message-ID: <20151118154912.408690e7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas.
+Hello,
 
-I will do, thank you?
+On Wed, 18 Nov 2015 15:37:01 +0100, J?r?me Pouiller wrote:
+> Use $LOCAL_HELP feature in order to integrate help messages specific
+> to one package (linux-menuconfig, etc...) package they are
+> related.
+> 
+> It would be possible to do it using kconfig framework, but I was not
+> sure it is necessary to document kconfig targets systematicaly.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  Makefile                   | 16 ----------------
+>  boot/barebox/barebox.mk    |  5 +++++
+>  linux/linux.mk             |  7 +++++++
+>  package/busybox/busybox.mk |  4 ++++
+>  package/uclibc/uclibc.mk   |  4 ++++
+>  5 files changed, 20 insertions(+), 16 deletions(-)
 
-> 2015/11/18 21:38?Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ?????
-> 
-> Dear Hiroshi Kawashima,
-> 
-> On Wed, 18 Nov 2015 18:31:59 +0900, Hiroshi Kawashima wrote:
->> Very sorry.
->> I forget to add [PATCH] in subject, I will send again.
->> Sorry bothering you.
-> 
-> git does it automatically for you when you use "git format-patch".
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I already proposed something achieving a similar thing (but more
+integrated into the package infrastructure) a while ago, and it wasn't
+accepted.
+
+See:
+
+  http://lists.busybox.net/pipermail/buildroot/2015-January/118159.html
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
