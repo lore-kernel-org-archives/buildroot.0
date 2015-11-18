@@ -1,82 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 21:55:38 +0100
-Subject: [Buildroot] [git commit] board: readme.txt for Intel Galileo Gen 1/2
-Message-ID: <20151201232118.DFD907FFCD@busybox.osuosl.org>
+Date: Wed, 18 Nov 2015 21:54:55 +0100
+Subject: [Buildroot] [git commit] package/*: test for BR2_PACKAGE_LIBGUDEV
+	for dependency
+Message-ID: <20151201232118.BF11C7FB18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=167cda0facfa0cc4a912956e618c466a87b3c274
+commit: http://git.buildroot.net/buildroot/commit/?id=462b1cbfa68eba1bae0d4d732aeefdf3308ecae0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Created a readme.txt for the Intel Galileo Gen 1/2 that describes,
+Make the case of adding libgudev as a dependency more consistent with all
+other dependency packages. The <pkg>_DEPENDENCIES variable sets the build
+order which is conceptually independent of the underlying reason for that
+dependency.
 
- * How to build for the Intel Galileo Gen 1/2
- * How to access the console on the Intel Galileo Gen 1/2
+Also, remove the comments in hidapi.mk and udisks.mk. These comments explain
+why BR2_PACKAGE_LIBGUDEV is selected, so the comments in corresponding
+Config.in files are enough.
 
-Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/intel/galileo/readme.txt | 52 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ package/hidapi/hidapi.mk                   | 7 +------
+ package/libmbim/libmbim.mk                 | 2 +-
+ package/modem-manager/modem-manager.mk     | 2 +-
+ package/network-manager/network-manager.mk | 2 +-
+ package/udisks/udisks.mk                   | 7 +------
+ 5 files changed, 5 insertions(+), 15 deletions(-)
 
-diff --git a/board/intel/galileo/readme.txt b/board/intel/galileo/readme.txt
-new file mode 100644
-index 0000000..7a3abd4
---- /dev/null
-+++ b/board/intel/galileo/readme.txt
-@@ -0,0 +1,52 @@
-+
-+Intel Galileo Gen 1/2
-+
-+Intro
-+============
-+
-+These instructions apply to both the Intel Galileo Gen 1/2 development boards
-+based on the Intel Quark X1000.
-+
-+How to build
-+============
-+
-+Apply the defconfig for the Intel Galileo Gen 1/2
-+
-+ $ make galileo_defconfig
-+
-+Add any additional packages required and build.
-+
-+ $ make
-+
-+The build process will create a SD card image and place it in output/images.
-+
-+ $ ls -lh output/images/sdcard.img
-+ -rw-r--r--. 1 foo foo 11M Nov 17 16:19 output/images/sdcard.img
-+
-+Write the image to an mSD card, insert into the Galileo and power on.
-+
-+ $ dd if=output/images/sdcard.img of=/dev/mmcblk0; sync
-+
-+Accessing the console
-+=====================
-+
-+During power-on the console will become available on the Galileo's ttyS1. This 
-+may be accessed as follows.
-+
-+ * Galileo Gen 1
-+
-+	http://clayskits.com/products/galileo-gen-1-serial-cable
-+
-+	A USB to RS-232 to 3.5mm Jack cable is required. Connect to the 3.5mm
-+	Jack next to the Ethernet Header.
-+
-+ * Galileo Gen 2
-+
-+	http://www.ftdichip.com/Products/Cables/USBTTLSerial.htm
-+
-+	A FTDI TTL-232R-3V3 cable may be used to connect to the FTDI header 
-+	next to the Ethernet connector on the Galileo Gen 2. 
-+
-+The console should now be visible at 115200 baud.
-+
-+ $ picocom -b 115200 /dev/ttyUSB0
+diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
+index 2457554..eb5d5c3 100644
+--- a/package/hidapi/hidapi.mk
++++ b/package/hidapi/hidapi.mk
+@@ -16,12 +16,7 @@ HIDAPI_LICENSE_FILES = LICENSE.txt LICENSE-gpl3.txt LICENSE-bsd.txt LICENSE-orig
+ 
+ HIDAPI_DEPENDENCIES = libusb
+ 
+-# When eudev is used as the udev provider, libgudev is automatically
+-# provided as it is part of eudev. However, when systemd is used as
+-# the udev provider, libgudev is not provided, and needs to be built
+-# separately. This is why we depend on the libgudev package only if
+-# systemd is used.
+-ifeq ($(BR2_INIT_SYSTEMD),y)
++ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+ HIDAPI_DEPENDENCIES += libgudev
+ endif
+ 
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index cfba08e..cb6c905 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -13,7 +13,7 @@ LIBMBIM_INSTALL_STAGING = YES
+ 
+ LIBMBIM_DEPENDENCIES = libglib2 udev
+ 
+-ifeq ($(BR2_INIT_SYSTEMD),y)
++ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+ LIBMBIM_DEPENDENCIES += libgudev
+ endif
+ 
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index f38dee3..6d8dc10 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -12,7 +12,7 @@ MODEM_MANAGER_LICENSE_FILES = COPYING
+ MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool
+ MODEM_MANAGER_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_INIT_SYSTEMD),y)
++ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+ MODEM_MANAGER_DEPENDENCIES += libgudev
+ endif
+ 
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 2c19a7d..f2fe147 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -63,7 +63,7 @@ ifeq ($(BR2_PACKAGE_DHCPCD),y)
+ NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
+ endif
+ 
+-ifeq ($(BR2_INIT_SYSTEMD),y)
++ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+ NETWORK_MANAGER_DEPENDENCIES += libgudev
+ endif
+ 
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index bea9452..eccfbd2 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
+@@ -22,12 +22,7 @@ UDISKS_DEPENDENCIES = 	\
+ 
+ UDISKS_CONF_OPTS = --disable-remote-access --disable-man-pages
+ 
+-# When eudev is used as the udev provider, libgudev is automatically
+-# provided as it is part of eudev. However, when systemd is used as the
+-# udev provider, libgudev is not provided, and needs to be built
+-# separately. This is why we select the libgudev package only if systemd
+-# is used.
+-ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+ UDISKS_DEPENDENCIES += libgudev
+ endif
+ 
