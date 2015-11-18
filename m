@@ -1,33 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 19:36:47 +0100
-Subject: [Buildroot] [PATCH/next 09/13]
- package/x11r7/xserver_xorg-server: add version 1.18.0
-In-Reply-To: <t4suhcxhbi.ln2@ID-313208.user.individual.net>
-References: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
- <1447457203-27816-9-git-send-email-bernd.kuhls@t-online.de>
- <878u60i5me.fsf@dell.be.48ers.dk>
- <qrpkhcx89o.ln2@ID-313208.user.individual.net>
- <t4suhcxhbi.ln2@ID-313208.user.individual.net>
-Message-ID: <20151118193647.174c0d32@free-electrons.com>
+Date: Wed, 18 Nov 2015 19:39:09 +0100
+Subject: [Buildroot] [PATCH 1/1] chrony: bump to version 2.2
+In-Reply-To: <1447864764-2208-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1447864764-2208-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <20151118193909.7b400bb9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+James,
 
-On Wed, 18 Nov 2015 19:20:45 +0100, Bernd Kuhls wrote:
-
-> > nvidia-driver depends on ABI 19 (yes, I will send a patch in the next
-> > minutes, I do not use Nvidia hardware so i forgot about it), it is
-> > broken with X.org 1.18.0:
+On Wed, 18 Nov 2015 11:39:24 -0500, James Knight wrote:
+> With the new version, documentation is not generated part of the main
+> build. This removes the need to alter the Makefile to remove the invoke
+> on the `chrony.txt` target. Cleanup also allows a switch to using
+> autotools and explicitly disabling seccomp (since its experimental) and
+> tomcrypt (Buildroot does not have libtomcrypt at this time).
 > 
-> Nvidia issued an update, I will post a new patch series in the coming 
-> days: http://www.nvidia.com/download/driverResults.aspx/95154/en-us
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+> ---
+>  package/chrony/chrony.hash |  6 +++---
+>  package/chrony/chrony.mk   | 29 ++++++++---------------------
+>  2 files changed, 11 insertions(+), 24 deletions(-)
 
-So thanks to this update we won't have to keep the ABI 19 compatible
-X.org server version, right?
+Chrony's configure script is not using autoconf, so we should not be
+using the autotools package infrastructure for this package.
+
+The reason is quite simple: while it may happens that the
+autotools-package infrastructure works fine *today* with Chrony's
+configure script, we might change the autotools-package infrastructure
+in the future to do things that are perfectly valid with regular
+autoconf-generated configure script, but not with Chrony's configure
+script.
+
+So I would prefer to keep using the generic-package infrastructure for
+this package.
+
+Thanks!
 
 Thomas
 -- 
