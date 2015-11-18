@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 21:54:08 +0100
-Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.4
-In-Reply-To: <1447862590-19667-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1447862590-19667-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151118215408.75b7eed6@free-electrons.com>
+Date: Wed, 18 Nov 2015 21:54:13 +0100
+Subject: [Buildroot] [PATCH] nano: bump to version 2.4.3
+In-Reply-To: <1447862621-19712-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1447862621-19712-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151118215413.7558e6ca@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,11 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 18 Nov 2015 13:03:10 -0300, Gustavo Zacarias wrote:
+On Wed, 18 Nov 2015 13:03:41 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/dbus/dbus.hash | 2 +-
->  package/dbus/dbus.mk   | 2 +-
+>  package/nano/nano.hash | 2 +-
+>  package/nano/nano.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
