@@ -1,60 +1,33 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Wed, 18 Nov 2015 18:31:59 +0900
-Subject: [Buildroot] package/gauche: fix build error on BR2_STATIC_LIBS
-In-Reply-To: <201511180929.tAI9TATJ023961@ms-omx02.plus.so-net.ne.jp>
-References: <201511180929.tAI9TATJ023961@ms-omx02.plus.so-net.ne.jp>
-Message-ID: <8CEE50CE-A3EF-4714-B1F8-87782299C14C@ca2.so-net.ne.jp>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Wed, 18 Nov 2015 10:39:27 +0000
+Subject: [Buildroot] [PATCH v8] board: add support for Intel Galileo Gen
+ 2
+In-Reply-To: <20151118091716.0edc0975@free-electrons.com>
+References: <1447778330.2974.66.camel@intel.com>
+ <20151117232830.42e68602@free-electrons.com>
+ <1447834278.2751.8.camel@intel.com>
+ <20151118091716.0edc0975@free-electrons.com>
+Message-ID: <1447843167.2751.17.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Very sorry.
-I forget to add [PATCH] in subject, I will send again.
-Sorry bothering you.
 
-Regards,
-Kawashima
+> Is mtools *always* used by genimage, or only if you build a vfat
+> partition? I guess the later. And if that's the case, then it's a bit
+> annoying to have host-genimage unconditionally select host-mtools.
 
-> 2015/11/18 18:29?Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp> ?????
-> 
-> Building gauche depends on dynamic link, so add dependency on
-> !BR2_STATIC_LIBS.
-> 
-> Fix:
-> http://autobuild.buildroot.org/results/da5/da5b9605552d4914c5e6f0d890367b92536419c1
-> 
-> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-> ---
-> package/gauche/Config.in | 5 +++--
-> 1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/gauche/Config.in b/package/gauche/Config.in
-> index 0720672..24377c4 100644
-> --- a/package/gauche/Config.in
-> +++ b/package/gauche/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_GAUCHE
-> 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> 	depends on BR2_USE_MMU # fork()
-> 	depends on BR2_ARCH_HAS_ATOMICS
-> +	depends on !BR2_STATIC_LIBS
-> 	help
-> 	  Gauche is an R7RS Scheme implementation developed to be a
-> 	  handy script interpreter, which allows programmers and
-> @@ -13,7 +14,7 @@ config BR2_PACKAGE_GAUCHE
-> 
-> 	  http://practical-scheme.net/gauche/
-> 
-> -comment "gauche needs a toolchain w/ NPTL"
-> +comment "gauche needs a toolchain w/ NPTL, dynamic library"
-> 	depends on BR2_USE_MMU
-> 	depends on BR2_ARCH_HAS_ATOMICS
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-> ============================================================
->    Hiroshi Kawashima
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Your correct the latter, you risk head scratching if a users try to use
+genimage 
+and get an error because mtools are missing. mtools is not a huge build
+cost to incur?
+
+I explicitly set
+
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
+ 
+to take care of this, but ideally I would only need to set
+BR2_PACKAGE_HOST_GENIMAGE. 
