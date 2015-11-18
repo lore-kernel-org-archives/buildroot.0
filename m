@@ -1,7 +1,8 @@
 From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Wed, 18 Nov 2015 18:29:10 +0900
-Subject: [Buildroot] package/gauche: fix build error on BR2_STATIC_LIBS
-Message-ID: <201511180929.tAI9TATJ023961@ms-omx02.plus.so-net.ne.jp>
+Date: Wed, 18 Nov 2015 18:30:23 +0900
+Subject: [Buildroot] [PATCH] package/gauche: fix build error on
+	BR2_STATIC_LIBS
+Message-ID: <201511180930.tAI9UNXP024636@ms-omx02.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
