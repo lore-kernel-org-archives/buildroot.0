@@ -1,89 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Nov 2015 22:10:15 +0100
-Subject: [Buildroot] [git commit] boost: specify architecture variant for
-	sparc
-Message-ID: <20151201232118.1060D7FB18@busybox.osuosl.org>
+Date: Wed, 18 Nov 2015 21:55:38 +0100
+Subject: [Buildroot] [git commit] board: readme.txt for Intel Galileo Gen 1/2
+Message-ID: <20151201232118.DFD907FFCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b13641be6a83aca80a7a9bdfe03f71465355b3c
+commit: http://git.buildroot.net/buildroot/commit/?id=167cda0facfa0cc4a912956e618c466a87b3c274
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of using a patch to specify the architecture variant for
-sparc, use some Boost configure variables.
+Created a readme.txt for the Intel Galileo Gen 1/2 that describes,
 
-[Thomas: reword commit log.]
+ * How to build for the Intel Galileo Gen 1/2
+ * How to access the console on the Intel Galileo Gen 1/2
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch | 42 ----------------------
- package/boost/boost.mk                             |  4 +++
- 2 files changed, 4 insertions(+), 42 deletions(-)
+ board/intel/galileo/readme.txt | 52 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch b/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
-deleted file mode 100644
-index a4d39b3..0000000
---- a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From ec60c37295146bb80aa44a92cf416027b75b5ff7 Mon Sep 17 00:00:00 2001
--From: Vladimir Prus <vladimir@codesourcery.com>
--Date: Mon, 27 Apr 2015 19:12:54 +0300
--Subject: [PATCH] Remove bogus 'c3' cpu varant for SPARC.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- src/tools/gcc.jam | 3 +--
-- src/tools/gcc.py  | 3 +--
-- 2 files changed, 2 insertions(+), 4 deletions(-)
--
--diff --git a/src/tools/gcc.jam b/src/tools/gcc.jam
--index eff95ae..128ab84 100644
----- a/tools/build/src/tools/gcc.jam
--+++ b/tools/build/src/tools/gcc.jam
--@@ -1138,8 +1138,7 @@ cpu-flags gcc OPTIONS : x86 : c3-2 : -march=c3-2 ;
-- ##
-- cpu-flags gcc OPTIONS : x86 : atom : -march=atom ;
-- # Sparc
---cpu-flags gcc OPTIONS : sparc : c3 : -mcpu=c3 : default ;
---cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 ;
--+cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 : default ;
-- cpu-flags gcc OPTIONS : sparc : cypress : -mcpu=cypress ;
-- cpu-flags gcc OPTIONS : sparc : v8 : -mcpu=v8 ;
-- cpu-flags gcc OPTIONS : sparc : supersparc : -mcpu=supersparc ;
--diff --git a/src/tools/gcc.py b/src/tools/gcc.py
--index a13ce7a..d2d3294 100644
----- a/tools/build/src/tools/gcc.py
--+++ b/tools/build/src/tools/gcc.py
--@@ -789,8 +789,7 @@ cpu_flags('gcc', 'OPTIONS', 'x86', 'atom', ['-march=atom'])
-- # Sparc
-- flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>32'], ['-m32'])
-- flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>64'], ['-m64'])
---cpu_flags('gcc', 'OPTIONS', 'sparc', 'c3', ['-mcpu=c3'], default=True)
---cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'])
--+cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'], default=True)
-- cpu_flags('gcc', 'OPTIONS', 'sparc', 'cypress', ['-mcpu=cypress'])
-- cpu_flags('gcc', 'OPTIONS', 'sparc', 'v8', ['-mcpu=v8'])
-- cpu_flags('gcc', 'OPTIONS', 'sparc', 'supersparc', ['-mcpu=supersparc'])
---- 
--2.3.6
--
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 80325b0..efc0020 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -89,6 +89,10 @@ BOOST_OPTS += toolset=gcc \
- 	     abi=$(BOOST_ABI) \
- 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release)
- 
-+ifeq ($(BR2_sparc),y)
-+BOOST_OPTS += architecture=sparc instruction-set=v8
-+endif
+diff --git a/board/intel/galileo/readme.txt b/board/intel/galileo/readme.txt
+new file mode 100644
+index 0000000..7a3abd4
+--- /dev/null
++++ b/board/intel/galileo/readme.txt
+@@ -0,0 +1,52 @@
 +
- # By default, Boost build and installs both the shared and static
- # variants. Override that if we want static only or shared only.
- ifeq ($(BR2_STATIC_LIBS),y)
++Intel Galileo Gen 1/2
++
++Intro
++============
++
++These instructions apply to both the Intel Galileo Gen 1/2 development boards
++based on the Intel Quark X1000.
++
++How to build
++============
++
++Apply the defconfig for the Intel Galileo Gen 1/2
++
++ $ make galileo_defconfig
++
++Add any additional packages required and build.
++
++ $ make
++
++The build process will create a SD card image and place it in output/images.
++
++ $ ls -lh output/images/sdcard.img
++ -rw-r--r--. 1 foo foo 11M Nov 17 16:19 output/images/sdcard.img
++
++Write the image to an mSD card, insert into the Galileo and power on.
++
++ $ dd if=output/images/sdcard.img of=/dev/mmcblk0; sync
++
++Accessing the console
++=====================
++
++During power-on the console will become available on the Galileo's ttyS1. This 
++may be accessed as follows.
++
++ * Galileo Gen 1
++
++	http://clayskits.com/products/galileo-gen-1-serial-cable
++
++	A USB to RS-232 to 3.5mm Jack cable is required. Connect to the 3.5mm
++	Jack next to the Ethernet Header.
++
++ * Galileo Gen 2
++
++	http://www.ftdichip.com/Products/Cables/USBTTLSerial.htm
++
++	A FTDI TTL-232R-3V3 cable may be used to connect to the FTDI header 
++	next to the Ethernet connector on the Galileo Gen 2. 
++
++The console should now be visible at 115200 baud.
++
++ $ picocom -b 115200 /dev/ttyUSB0
