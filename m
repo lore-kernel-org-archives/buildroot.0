@@ -1,42 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 21:55:20 +0100
-Subject: [Buildroot] [PATCH next 1/2] package/*: test for
- BR2_PACKAGE_LIBGUDEV for dependency
-In-Reply-To: <fe0244022307f4d80793175f3d433c3e4ae9b738.1447875520.git.baruch@tkos.co.il>
-References: <fe0244022307f4d80793175f3d433c3e4ae9b738.1447875520.git.baruch@tkos.co.il>
-Message-ID: <20151118215520.76ee0f5e@free-electrons.com>
+Date: Wed, 18 Nov 2015 21:55:38 +0100
+Subject: [Buildroot] [git commit branch/next] board: readme.txt for Intel
+	Galileo Gen 1/2
+Message-ID: <20151118205546.3298180E39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=167cda0facfa0cc4a912956e618c466a87b3c274
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 18 Nov 2015 21:38:39 +0200, Baruch Siach wrote:
-> Make the case of adding libgudev as a dependency more consistent with all
-> other dependency packages. The <pkg>_DEPENDENCIES variable sets the build
-> order which is conceptually independent of the underlying reason for that
-> dependency.
-> 
-> Also, remove the comments in hidapi.mk and udisks.mk. These comments explain
-> why BR2_PACKAGE_LIBGUDEV is selected, so the comments in corresponding
-> Config.in files are enough.
-> 
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/hidapi/hidapi.mk                   | 7 +------
->  package/libmbim/libmbim.mk                 | 2 +-
->  package/modem-manager/modem-manager.mk     | 2 +-
->  package/network-manager/network-manager.mk | 2 +-
->  package/udisks/udisks.mk                   | 7 +------
->  5 files changed, 5 insertions(+), 15 deletions(-)
+Created a readme.txt for the Intel Galileo Gen 1/2 that describes,
 
-Both patches applied to next, thanks.
+ * How to build for the Intel Galileo Gen 1/2
+ * How to access the console on the Intel Galileo Gen 1/2
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/intel/galileo/readme.txt |   52 ++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 52 insertions(+), 0 deletions(-)
+
+diff --git a/board/intel/galileo/readme.txt b/board/intel/galileo/readme.txt
+new file mode 100644
+index 0000000..7a3abd4
+--- /dev/null
++++ b/board/intel/galileo/readme.txt
+@@ -0,0 +1,52 @@
++
++Intel Galileo Gen 1/2
++
++Intro
++============
++
++These instructions apply to both the Intel Galileo Gen 1/2 development boards
++based on the Intel Quark X1000.
++
++How to build
++============
++
++Apply the defconfig for the Intel Galileo Gen 1/2
++
++ $ make galileo_defconfig
++
++Add any additional packages required and build.
++
++ $ make
++
++The build process will create a SD card image and place it in output/images.
++
++ $ ls -lh output/images/sdcard.img
++ -rw-r--r--. 1 foo foo 11M Nov 17 16:19 output/images/sdcard.img
++
++Write the image to an mSD card, insert into the Galileo and power on.
++
++ $ dd if=output/images/sdcard.img of=/dev/mmcblk0; sync
++
++Accessing the console
++=====================
++
++During power-on the console will become available on the Galileo's ttyS1. This 
++may be accessed as follows.
++
++ * Galileo Gen 1
++
++	http://clayskits.com/products/galileo-gen-1-serial-cable
++
++	A USB to RS-232 to 3.5mm Jack cable is required. Connect to the 3.5mm
++	Jack next to the Ethernet Header.
++
++ * Galileo Gen 2
++
++	http://www.ftdichip.com/Products/Cables/USBTTLSerial.htm
++
++	A FTDI TTL-232R-3V3 cable may be used to connect to the FTDI header 
++	next to the Ethernet connector on the Galileo Gen 2. 
++
++The console should now be visible at 115200 baud.
++
++ $ picocom -b 115200 /dev/ttyUSB0
