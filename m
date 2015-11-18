@@ -1,54 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Nov 2015 22:53:18 +0100
-Subject: [Buildroot] [PATCH 3/6] gst-plugins-good: add legal info
-In-Reply-To: <1447850352-26299-3-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1447850352-26299-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1447850352-26299-3-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <564CF34E.7040409@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Nov 2015 22:57:02 +0100
+Subject: [Buildroot] [RFC] wine: Bump to 1.8
+In-Reply-To: <564CF1C5.9080204@dawncrow.de>
+References: <564CE703.2070706@dawncrow.de>
+ <20151118222111.06e1de92@free-electrons.com>
+ <564CF1C5.9080204@dawncrow.de>
+Message-ID: <20151118225702.23400c0f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18-11-15 13:39, gustavo.zacarias at free-electrons.com wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Hello,
+
+On Wed, 18 Nov 2015 22:46:45 +0100, Andr? Hentschel wrote:
+
+> >  * Use 'git format-patch -M' to enable rename detection, so that the
+> >    renaming of the patches is detected, and instead of seeing a
+> >    complete file being removed, and a complete file being added, we see
+> >    a rename.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> ---
->  package/gstreamer/gst-plugins-good/gst-plugins-good.mk | 2 ++
->  1 file changed, 2 insertions(+)
+> I also adjusted the patch a bit to apply to the new version
+
+Not a problem: if the changes are not too important, it will still
+detect the rename.
+
+> > Last suggestion: can you submit the SANE_CONFIG patch upstream, so that
+> > hopefully they merge it before the 1.8 release, and we can have zero
+> > patches for the wine package ?
 > 
-> diff --git a/package/gstreamer/gst-plugins-good/gst-plugins-good.mk b/package/gstreamer/gst-plugins-good/gst-plugins-good.mk
-> index fee83a1..a686caf 100644
-> --- a/package/gstreamer/gst-plugins-good/gst-plugins-good.mk
-> +++ b/package/gstreamer/gst-plugins-good/gst-plugins-good.mk
-> @@ -7,6 +7,8 @@
->  GST_PLUGINS_GOOD_VERSION = 0.10.31
->  GST_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST_PLUGINS_GOOD_VERSION).tar.xz
->  GST_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
-> +GST_PLUGINS_GOOD_LICENSE = LGPLv2.1+
+> The patch won't go in as it is, because it would break
+> non-cross-builds, also this problem is most likely not only true for
+> sane, but also for other *-config programs, and I'm no configure
+> guru...
 
- Here there are also some files marked as LGPLv2+, but as I commented on patch
-1, it may be better like that. So
+Why do you say it breaks non-cross-builds? I looked again at
+0003-sane-config-fix.patch and I don't really see how it can break
+non-cross-builds.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The patch is just replacing 'sane-config' by
+'${SANE_CONFIG:-sane-config}'.
 
+${SANE_CONFIG:-sane-config} says "use the value of SANE_CONFIG is
+available, otherwise use sane-config".
 
- Regards,
- Arnout
+So, if SANE_CONFIG is not defined in the environment, this patch makes
+zero difference compared to the existing situation. It only optionally
+allows to pass SANE_CONFIG.
 
-> +GST_PLUGINS_GOOD_LICENSE_FILES = COPYING
->  
->  GST_PLUGINS_GOOD_CONF_OPTS = \
->  	--disable-examples \
-> 
+Best regards,
 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
