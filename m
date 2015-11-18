@@ -1,54 +1,39 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 18 Nov 2015 16:40:17 +0100
-Subject: [Buildroot] [PATCH 15/21 RFC] core/pkg-generic: add macro to
- hardlink-or-copy
-In-Reply-To: <13184d01305cbba2861610b0e54ffa3895c8a2f0.1447713615.git.yann.morin.1998@free.fr>
-References: <cover.1447713615.git.yann.morin.1998@free.fr>
- <13184d01305cbba2861610b0e54ffa3895c8a2f0.1447713615.git.yann.morin.1998@free.fr>
-Message-ID: <564C9BE1.6010008@lucaceresoli.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 18 Nov 2015 13:03:10 -0300
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.4
+Message-ID: <1447862590-19667-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dbus/dbus.hash | 2 +-
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->   package/pkg-generic.mk | 18 ++++++++++++++++++
->   1 file changed, 18 insertions(+)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 544ae5c..82fbeb0 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -305,6 +305,24 @@ endif
->   endef
->
->   ################################################################################
-> +# hardlink-copy -- hardlink source and destination if possible, otherwise
-> +# do a simple copy
-> +#
-> +# argument 1 is the source
-> +# argument 2 is the destination *directory*
-> +#
-> +# example:
-> +#   $(call hard-link-copy,source,destination)
-> +#
-> +# Note: we make that a single command, so se can:
-> +#  - use '$(Q)' in front of it and properly silence the whole macro,
-> +#  - use '|| exit 1' after it, so we can exit on error in compound commands.
-> +################################################################################
-> +define hardlink-copy
-> +	{ mkdir -p $(2) && { cp -l $(1) $(2) 2>/dev/null || cp $(1) $(2); } }
-> +endef
-> +
-
-Good idea! But wouldn't it fit better in pkg-utils.mk? Indeed it's very
-generic.
-
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 7e21dd0..87efd4b 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	aef3f49595df09b0824433ee993cda748ede93693a719a831562ae1616b6bb9e  dbus-1.10.2.tar.gz
++sha256	ad7dcad73ad9b0ff55819985d354eacfffe07e2eb8c763e155efc21d6001084b  dbus-1.10.4.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 9e722d8..79cd678 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.10.2
++DBUS_VERSION = 1.10.4
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
 -- 
-Luca
+2.4.10
