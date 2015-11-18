@@ -1,30 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Nov 2015 15:20:17 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
-Message-ID: <1447870817-26854-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 18 Nov 2015 19:20:45 +0100
+Subject: [Buildroot] [PATCH/next
+ 09/13]	package/x11r7/xserver_xorg-server: add version 1.18.0
+References: <1447457203-27816-1-git-send-email-bernd.kuhls@t-online.de>
+ <1447457203-27816-9-git-send-email-bernd.kuhls@t-online.de>
+ <878u60i5me.fsf@dell.be.48ers.dk>
+ <qrpkhcx89o.ln2@ID-313208.user.individual.net>
+Message-ID: <t4suhcxhbi.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Am Sat, 14 Nov 2015 23:40:26 +0100 schrieb Bernd Kuhls:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5f99cc1..560cad7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -199,7 +199,7 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.73"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.93"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.50"	if BR2_KERNEL_HEADERS_3_12
--- 
-2.4.10
+> Am Sat, 14 Nov 2015 23:22:01 +0100 schrieb Peter Korsgaard:
+> 
+>>>>>>> "Bernd" == Bernd Kuhls
+>>>>>>> <bernd.kuhls@t-online.de> writes:
+>> 
+>>  > Video drivers need ABI version 20 now:
+>>  > http://cgit.freedesktop.org/xorg/xserver/commit/?
+> id=a8a0f6464a33c12c1de495d74fd478c0d952643e
+>> 
+>> Is there any sense in keeping the v1.17 series around? I would prefer
+>> to not have to support 3 versions.
+> 
+> Hi Peter,
+> 
+> nvidia-driver depends on ABI 19 (yes, I will send a patch in the next
+> minutes, I do not use Nvidia hardware so i forgot about it), it is
+> broken with X.org 1.18.0:
+
+Hi,
+
+Nvidia issued an update, I will post a new patch series in the coming 
+days: http://www.nvidia.com/download/driverResults.aspx/95154/en-us
+
+Regards, Bernd
