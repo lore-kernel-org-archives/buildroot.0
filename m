@@ -1,58 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 22:57:02 +0100
-Subject: [Buildroot] [RFC] wine: Bump to 1.8
-In-Reply-To: <564CF1C5.9080204@dawncrow.de>
-References: <564CE703.2070706@dawncrow.de>
- <20151118222111.06e1de92@free-electrons.com>
- <564CF1C5.9080204@dawncrow.de>
-Message-ID: <20151118225702.23400c0f@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 18 Nov 2015 22:57:10 +0100
+Subject: [Buildroot] [RFC v1] directfb: fix musl compile
+In-Reply-To: <1447110344-1446-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Tue, 10 Nov 2015 00:05:44 +0100")
+References: <1447110344-1446-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87vb8z9djd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On Wed, 18 Nov 2015 22:46:45 +0100, Andr? Hentschel wrote:
+Hi,
 
-> >  * Use 'git format-patch -M' to enable rename detection, so that the
-> >    renaming of the patches is detected, and instead of seeing a
-> >    complete file being removed, and a complete file being added, we see
-> >    a rename.
-> 
-> I also adjusted the patch a bit to apply to the new version
+ > - use 'union sigval' instead of sigval_t (same as suggested
+ >   for canfestival by Yann E. MORIN, see [2])
 
-Not a problem: if the changes are not too important, it will still
-detect the rename.
+ > - delete DIRECT_RECURSIVE_MUTEX_INITIALIZER define (which uses unknown
+ >   PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
 
-> > Last suggestion: can you submit the SANE_CONFIG patch upstream, so that
-> > hopefully they merge it before the 1.8 release, and we can have zero
-> > patches for the wine package ?
-> 
-> The patch won't go in as it is, because it would break
-> non-cross-builds, also this problem is most likely not only true for
-> sane, but also for other *-config programs, and I'm no configure
-> guru...
+ > - use DIRECT_MUTEX_INITIALIZER instead for trace.c (no recursive
+ >   mutex needed)
 
-Why do you say it breaks non-cross-builds? I looked again at
-0003-sane-config-fix.patch and I don't really see how it can break
-non-cross-builds.
+ > - use pthread_once and direct_recursive_mutex_init instead for
+ >   directfb.c
 
-The patch is just replacing 'sane-config' by
-'${SANE_CONFIG:-sane-config}'.
+ > Fixes [1]:
 
-${SANE_CONFIG:-sane-config} says "use the value of SANE_CONFIG is
-available, otherwise use sane-config".
+ >   system.c:114:6: error: unknown type name 'sigval_t'
 
-So, if SANE_CONFIG is not defined in the environment, this patch makes
-zero difference compared to the existing situation. It only optionally
-allows to pass SANE_CONFIG.
+ > and
 
-Best regards,
+ >   ../lib/direct/os/linux/glibc/mutex.h:49:53: error: ?PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP? undeclared (first use in this function)
 
-Thomas
+ > [1] http://autobuild.buildroot.net/results/548/548bf7b800a946e97135c0ba66363f388e517d6f
+ > [2] https://patchwork.ozlabs.org/patch/509731
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > RFC: not yet runtime tested
+
+Thanks, but I don't feel confident applying such a patch, especially as
+upstream seems dead so we cannot get their feedback on it / will have to
+carry it along ourselves - So I've instead marked directfb as !musl.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
