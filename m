@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 21:54:21 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
-Message-ID: <20151118205426.92E8E81EA5@busybox.osuosl.org>
+Date: Wed, 18 Nov 2015 21:54:33 +0100
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
+In-Reply-To: <1447870817-26854-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1447870817-26854-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151118215433.6200558c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b59169d1744bd8ead6481deb48cea55850870c00
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-headers/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Wed, 18 Nov 2015 15:20:17 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/linux-headers/Config.in.host | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5f99cc1..560cad7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -199,7 +199,7 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.73"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.93"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.50"	if BR2_KERNEL_HEADERS_3_12
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
