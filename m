@@ -1,43 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 09:17:16 +0100
-Subject: [Buildroot] [PATCH v8] board: add support for Intel Galileo Gen
- 2
-In-Reply-To: <1447834278.2751.8.camel@intel.com>
-References: <1447778330.2974.66.camel@intel.com>
- <20151117232830.42e68602@free-electrons.com>
- <1447834278.2751.8.camel@intel.com>
-Message-ID: <20151118091716.0edc0975@free-electrons.com>
+Date: Wed, 18 Nov 2015 09:22:10 +0100
+Subject: [Buildroot] [PATCH] hidapi: new package
+In-Reply-To: <20151118045051.GO9908@tarshish>
+References: <1447692852-21669-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20151116180724.GK9908@tarshish> <564AFD4E.2000301@imgtec.com>
+ <20151118045051.GO9908@tarshish>
+Message-ID: <20151118092210.30ff22d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ray,
+Baruch,
 
-On Wed, 18 Nov 2015 08:11:17 +0000, Kinsella, Ray wrote:
+On Wed, 18 Nov 2015 06:50:51 +0200, Baruch Siach wrote:
 
-> > Why do you need host-mtools? I've kept it for now, but I'm not sure. Is
-> > it used internally by genimage?
+> > Of course we could use ifeq ($(BR2_PACKAGE_LIBGUDEV),y) here, but, for
+> > consistency with Config.in, I use ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> > instead. See for instance the udisks package.
 > 
-> Yes its is used to make the EFI (vfat) partition, it uses mtools under
-> the covers to copy grub into the right place. Strictly speaking it
-> should be auto-selected when you select genimage. 
+> I think this is wrong. First, consistency with Config.in calls for using 
+> BR2_PACKAGE_LIBGUDEV like we do with all other selects. But more
+> importantly, IMO, we only use the <pkg>_DEPENDENCIES variable to set
+> the build order which is conceptually independent of the underlying
+> reason we need this dependency, systemd in this case. I think that
+> all the other packages that Thomas mentioned should also test for
+> BR2_PACKAGE_LIBGUDEV when setting <pkg>_DEPENDENCIES.
 
-Is mtools *always* used by genimage, or only if you build a vfat
-partition? I guess the later. And if that's the case, then it's a bit
-annoying to have host-genimage unconditionally select host-mtools.
+I am not as clear-cut as you are on what is the correct thing to do
+here, but your reasoning seems reasonable to me. So we need to align
+the existing packages to do this, and also to use BR2_INIT_SYSTEMD in
+Config.in (udisks uses BR2_PACKAGE_SYSTEMD). Will you send some patches
+or should I do so?
 
-> > Also, it is generally customary to add a readme.txt in the board
-> > folder, i.e in board/intel/galileo/ in your case to explain how to
-> > build/use this configuration. What is especially useful is some
-> > indication on which UART is used on the board, how to connect to it,
-> > etc.
-> 
-> np, will do this. 
-> I will include a couple of URLs to helpful serial cables. 
-
-Great, thanks!
+Thanks,
 
 Thomas
 -- 
