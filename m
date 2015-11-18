@@ -1,48 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 15:49:12 +0100
-Subject: [Buildroot] [PATCH 2/2] help: relocate help messages specific
- to one package
-In-Reply-To: <1447857421-9380-2-git-send-email-jezz@sysmic.org>
-References: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
- <1447857421-9380-2-git-send-email-jezz@sysmic.org>
-Message-ID: <20151118154912.408690e7@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 18 Nov 2015 16:40:17 +0100
+Subject: [Buildroot] [PATCH 15/21 RFC] core/pkg-generic: add macro to
+ hardlink-or-copy
+In-Reply-To: <13184d01305cbba2861610b0e54ffa3895c8a2f0.1447713615.git.yann.morin.1998@free.fr>
+References: <cover.1447713615.git.yann.morin.1998@free.fr>
+ <13184d01305cbba2861610b0e54ffa3895c8a2f0.1447713615.git.yann.morin.1998@free.fr>
+Message-ID: <564C9BE1.6010008@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Yann,
 
-On Wed, 18 Nov 2015 15:37:01 +0100, J?r?me Pouiller wrote:
-> Use $LOCAL_HELP feature in order to integrate help messages specific
-> to one package (linux-menuconfig, etc...) package they are
-> related.
-> 
-> It would be possible to do it using kconfig framework, but I was not
-> sure it is necessary to document kconfig targets systematicaly.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
->  Makefile                   | 16 ----------------
->  boot/barebox/barebox.mk    |  5 +++++
->  linux/linux.mk             |  7 +++++++
->  package/busybox/busybox.mk |  4 ++++
->  package/uclibc/uclibc.mk   |  4 ++++
->  5 files changed, 20 insertions(+), 16 deletions(-)
+>   package/pkg-generic.mk | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 544ae5c..82fbeb0 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -305,6 +305,24 @@ endif
+>   endef
+>
+>   ################################################################################
+> +# hardlink-copy -- hardlink source and destination if possible, otherwise
+> +# do a simple copy
+> +#
+> +# argument 1 is the source
+> +# argument 2 is the destination *directory*
+> +#
+> +# example:
+> +#   $(call hard-link-copy,source,destination)
+> +#
+> +# Note: we make that a single command, so se can:
+> +#  - use '$(Q)' in front of it and properly silence the whole macro,
+> +#  - use '|| exit 1' after it, so we can exit on error in compound commands.
+> +################################################################################
+> +define hardlink-copy
+> +	{ mkdir -p $(2) && { cp -l $(1) $(2) 2>/dev/null || cp $(1) $(2); } }
+> +endef
+> +
 
-I already proposed something achieving a similar thing (but more
-integrated into the package infrastructure) a while ago, and it wasn't
-accepted.
+Good idea! But wouldn't it fit better in pkg-utils.mk? Indeed it's very
+generic.
 
-See:
-
-  http://lists.busybox.net/pipermail/buildroot/2015-January/118159.html
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Luca
