@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 21:53:42 +0100
-Subject: [Buildroot] [git commit branch/next] nano: bump to version 2.4.3
-Message-ID: <20151118205349.7BC427FD8D@busybox.osuosl.org>
+Date: Wed, 18 Nov 2015 21:53:36 +0100
+Subject: [Buildroot] [git commit branch/next] dbus: bump to version 1.10.4
+Message-ID: <20151118205349.707E381EC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8566397dbc267320b2f989e32b90159787c6394
+commit: http://git.buildroot.net/buildroot/commit/?id=c20fccf3514abb727cc733b1bf809024ada01103
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nano/nano.hash |    2 +-
- package/nano/nano.mk   |    2 +-
+ package/dbus/dbus.hash |    2 +-
+ package/dbus/dbus.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 8ad1497..c924151 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 7e21dd0..87efd4b 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256  c8cd7f18fcf5696d9df3364ee2a840e0ab7b6bdbd22abf850bbdc951db7f65b9  nano-2.4.2.tar.gz
-+sha256  32d627072b6026678e4f4095c047adec92ac7ec542dd6d91cf27f49b601768f2  nano-2.4.3.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 9b84490..28161f3 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
+-sha256	aef3f49595df09b0824433ee993cda748ede93693a719a831562ae1616b6bb9e  dbus-1.10.2.tar.gz
++sha256	ad7dcad73ad9b0ff55819985d354eacfffe07e2eb8c763e155efc21d6001084b  dbus-1.10.4.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 9e722d8..79cd678 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NANO_VERSION = 2.4.2
-+NANO_VERSION = 2.4.3
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+-DBUS_VERSION = 1.10.2
++DBUS_VERSION = 1.10.4
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
