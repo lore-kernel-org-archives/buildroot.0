@@ -1,64 +1,101 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Wed, 18 Nov 2015 13:41:32 -0600
-Subject: [Buildroot] [v3 0/2] openssl: parallel build
-In-Reply-To: <20151118135709.125f4afd@free-electrons.com>
-References: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
- <20151118135709.125f4afd@free-electrons.com>
-Message-ID: <CAMQcK5+S=aDv3qtA6vdzeqgqSq6Xd4xUBYjvHQat=pg1Ot72gA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Nov 2015 21:40:38 +0100
+Subject: [Buildroot] [PATCH] libserial: add patch to fix build failure on
+	sparc/sparc64
+Message-ID: <1447879238-29695-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Like c-periphery and lua-periphery, libserial fails to build because
+it tries to use some baud rate definitions that are not available on
+sparc and sparc64 (the highest baud rates).
 
-On Wed, Nov 18, 2015 at 6:57 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> I have the feeling that the parallel build patches for OpenSSL are not
-> working properly. Look at the recent build failures we've got for the
-> openssl and host-openssl builds:
->
->   http://autobuild.buildroot.org/?reason=openssl-1.0.2d
->   http://autobuild.buildroot.org/?reason=host-openssl-1.0.2d
->
-> They are pretty much all due to a similar error:
->
->   ln: failed to create symbolic link 'libssl.so': File exists
->   ln: creating symbolic link `libcrypto.so': File exists
->
-> I could spot only one that is different:
->
-> In file included from apps.h:117:0,
->                  from req.c:74:
-> ../include/openssl/bio.h:521:34: error: expected ';' before 'BIO_ctrl'
->  # define BIO_set_fp(b,fp,c)      BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
->
-> Do you have some ideas?
+This commit fixes that by introducing a patch to libserial to make the
+use of these high baud rates conditional on their availability.
 
-I agree with you in that it looks like are some issues with the
-parallel build. It appears there is a hard to track down race
-condition due a symbolic being created twice during the build but as
-to way I don't have any clue.
+Fixes:
 
->Does Gentoo has some more patches?
+  http://autobuild.buildroot.org/results/f9b/f9bbb8a6636cd3e3203b059f627aac7b1d511eb2/
 
-No this is the only patch for openssl 1.0.2d. There also hasn't been
-any updates to this patch other then the one that is currently there.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...n-t-use-high-baudrates-when-not-available.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/libserial/0002-Don-t-use-high-baudrates-when-not-available.patch
 
-> Should we revert back to non-parallel build for OpenSSL ?
-
-I guess I will leave that up to either yourself or Peter if you feel
-that it should. I don't have time in the next week or two to
-investigate the problem further so I'm OK with reverting this patch.
-
-Thanks,
--Ryan
-
+diff --git a/package/libserial/0002-Don-t-use-high-baudrates-when-not-available.patch b/package/libserial/0002-Don-t-use-high-baudrates-when-not-available.patch
+new file mode 100644
+index 0000000..f2ad61a
+--- /dev/null
++++ b/package/libserial/0002-Don-t-use-high-baudrates-when-not-available.patch
+@@ -0,0 +1,65 @@
++From 47ca0621ccd2100e4ba0d7f4e2a861d14f05f63c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Tue, 17 Nov 2015 23:50:14 +0100
++Subject: [PATCH] Don't use high baudrates when not available
++
++On certain architectures (namely Sparc), the maximum baud rate exposed
++by the kernel headers is B2000000. Therefore, the current libserial
++code doesn't build for the Sparc and Sparc64 architectures due to
++this.
++
++In order to address this problem, this patch tests the value of
++__MAX_BAUD. If it's higher than B2000000 then we assume we're on an
++architecture that supports all baud rates up to B4000000. Otherwise,
++we simply don't support the baud rates above B2000000.
++
++Fixes build failures such as:
++
++./SerialPort.h:88:24: error: 'B2500000' was not declared in this scope
++         BAUD_2500000 = B2500000,
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/SerialPort.h      | 2 ++
++ src/SerialStreamBuf.h | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/src/SerialPort.h b/src/SerialPort.h
++index 6c0baaa..0b1af4c 100644
++--- a/src/SerialPort.h
+++++ b/src/SerialPort.h
++@@ -85,11 +85,13 @@ public:
++         BAUD_1152000 = B1152000, 
++         BAUD_1500000 = B1500000,
++         BAUD_2000000 = B2000000,
+++#if __MAX_BAUD > B2000000
++         BAUD_2500000 = B2500000,
++         BAUD_3000000 = B3000000,
++         BAUD_3500000 = B3500000,
++         BAUD_4000000 = B4000000,
++ #endif
+++#endif /* __linux__ */
++         BAUD_DEFAULT = BAUD_57600
++     } ;
++ 
++diff --git a/src/SerialStreamBuf.h b/src/SerialStreamBuf.h
++index ccbb996..174f31c 100644
++--- a/src/SerialStreamBuf.h
+++++ b/src/SerialStreamBuf.h
++@@ -85,11 +85,13 @@ extern "C++"
++                 BAUD_1152000 = SerialPort::BAUD_1152000, 
++                 BAUD_1500000 = SerialPort::BAUD_1500000, 
++                 BAUD_2000000 = SerialPort::BAUD_2000000, 
+++#if __MAX_BAUD > B2000000
++                 BAUD_2500000 = SerialPort::BAUD_2500000, 
++                 BAUD_3000000 = SerialPort::BAUD_3000000, 
++                 BAUD_3500000 = SerialPort::BAUD_3500000, 
++                 BAUD_4000000 = SerialPort::BAUD_4000000, 
++ #endif
+++#endif /* __linux__ */
++                 BAUD_DEFAULT = SerialPort::BAUD_DEFAULT,
++                 BAUD_INVALID = -1
++             } ;
++-- 
++2.6.3
++
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+2.6.3
