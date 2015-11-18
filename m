@@ -1,46 +1,46 @@
-From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-Date: Wed, 18 Nov 2015 18:30:23 +0900
-Subject: [Buildroot] [PATCH] package/gauche: fix build error on
-	BR2_STATIC_LIBS
-Message-ID: <201511180930.tAI9UNXP024636@ms-omx02.plus.so-net.ne.jp>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Wed, 18 Nov 2015 09:30:21 +0000
+Subject: [Buildroot] Kernel patches in Buildroot
+In-Reply-To: <20151117210817.26557c68@free-electrons.com>
+References: <56432809.3000902@synopsys.com> <56432ED3.7070008@mind.be>
+ <564B0BBE.8050102@synopsys.com> <564B603B.5010907@synopsys.com>
+ <20151117210817.26557c68@free-electrons.com>
+Message-ID: <564C452D.1050908@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building gauche depends on dynamic link, so add dependency on
-!BR2_STATIC_LIBS.
+Dear Thomas,
+Thanks, worked fine!
 
-Fix:
-http://autobuild.buildroot.org/results/da5/da5b9605552d4914c5e6f0d890367b92536419c1
+BR
+Joao Pinto
 
-Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
----
- package/gauche/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/gauche/Config.in b/package/gauche/Config.in
-index 0720672..24377c4 100644
---- a/package/gauche/Config.in
-+++ b/package/gauche/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_GAUCHE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Gauche is an R7RS Scheme implementation developed to be a
- 	  handy script interpreter, which allows programmers and
-@@ -13,7 +14,7 @@ config BR2_PACKAGE_GAUCHE
- 
- 	  http://practical-scheme.net/gauche/
- 
--comment "gauche needs a toolchain w/ NPTL"
-+comment "gauche needs a toolchain w/ NPTL, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-============================================================
-    Hiroshi Kawashima
+On 11/17/2015 8:08 PM, Thomas Petazzoni wrote:
+> Dear Joao Pinto,
+> 
+> On Tue, 17 Nov 2015 17:13:31 +0000, Joao Pinto wrote:
+> 
+>> BR2_GLOBAL_PATCH_DIR="snps-custom/packages"
+>>
+>> I have a "snps-custom" folder which has a "packages" folder inside. Inside the
+>> "packages" folder we have a folder for each package we need to patch, in this
+>> example mplayer and the linux kernel.
+>>
+>> --snps-custom
+>>   --packages
+>>     --linux-arc-axs101-20141021-3.13
+> 
+> Call this folder just "linux". The folder must be named after the
+> package name, and not contains some additional version information. If
+> you want to store patches for several versions of the same package, you
+> must use the same organization as in Buildroot itself:
+> 
+>   <package-name>/<package-version>/*.patch
+> 
+> Best regards,
+> 
+> Thomas
+> 
