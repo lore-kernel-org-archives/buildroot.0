@@ -1,34 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Nov 2015 09:55:28 +0100
-Subject: [Buildroot] [PATCH] hidapi: new package
-In-Reply-To: <20151118084517.GT9908@tarshish>
-References: <1447692852-21669-1-git-send-email-Vincent.Riera@imgtec.com>
- <20151116180724.GK9908@tarshish> <564AFD4E.2000301@imgtec.com>
- <20151118045051.GO9908@tarshish>
- <20151118092210.30ff22d2@free-electrons.com>
- <20151118084517.GT9908@tarshish>
-Message-ID: <20151118095528.4dad4a0f@free-electrons.com>
+Date: Wed, 18 Nov 2015 09:57:27 +0100
+Subject: [Buildroot] [PATCH] pkg-download: support file:// in
+ BR2_PRIMARY_SITE
+In-Reply-To: <564BB014.6030809@mind.be>
+References: <1447776478-16046-1-git-send-email-jezz@sysmic.org>
+ <20151117175558.156ea1f0@free-electrons.com>
+ <564BB014.6030809@mind.be>
+Message-ID: <20151118095727.08b48388@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Arnout, J?r?me,
 
-On Wed, 18 Nov 2015 10:45:17 +0200, Baruch Siach wrote:
+On Tue, 17 Nov 2015 23:54:12 +0100, Arnout Vandecappelle wrote:
 
-> > I am not as clear-cut as you are on what is the correct thing to do
-> > here, but your reasoning seems reasonable to me. So we need to align
-> > the existing packages to do this, and also to use BR2_INIT_SYSTEMD in
-> > Config.in (udisks uses BR2_PACKAGE_SYSTEMD). Will you send some patches
-> > or should I do so?
+> >>   make project_defconfig
+> >>   make BR2_DL_DIR=/tmp/mirror-project BR2_PRIMARY_SITE=file:///home/user/dl source
+> >>   tar -C /tmp -czvf mirror-project.tgz mirror-project
+> > 
+> > You have a much simpler option:
+> > 
+> > 	make external-deps
 > 
-> I'll send the patches later. Would you like one patch per package, or a single 
-> patch based on next?
+>  You probably mean:
+> 
+> for file in $(make external-deps); cp dl/$file /tmp/mirror-project; done
 
-I think a single patch is good enough, the number of affected packages
-is pretty small.
+Yes, indeed, I only pointed at "make external-deps", leaving it to the
+reader to figure out how to make use of it in the context of what
+J?r?me is trying to do. But I could have been more explicit.
+
+>  I think a local file PRIMARY_SITE can be useful for other situations as well,
+> e.g. a slow CIFS-mounted shared download location that is too slow to use as
+> DL_DIR, so I think the feature has merit.
+
+Yes, I also think the feature has merit.
+
+J?r?me, could you respin the patch after updating the Config.in help
+text of the BR2_PRIMARY_SITE option?
 
 Thanks,
 
