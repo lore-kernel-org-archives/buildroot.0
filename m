@@ -1,45 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Nov 2015 23:08:58 +0100
-Subject: [Buildroot] [git commit] directfb: disable for musl toolchains
-Message-ID: <20151118222838.062EB81EEF@busybox.osuosl.org>
+Date: Wed, 18 Nov 2015 23:03:42 +0100
+Subject: [Buildroot] [git commit] qt5base: use 'depends on' for directfb
+Message-ID: <20151118222837.EC499807C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa4ae3e98dd53258a307ba83ef7c24e518db3556
+commit: http://git.buildroot.net/buildroot/commit/?id=551cdaf2d2ab1325f06bfa8814df43b586be3d5a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/548/548bf7b800a946e97135c0ba66363f388e517d6f/
-
-Directfb doesn't build with musl, and upstream seems dead - So just disable
-it.
+This is the only package where we select directfb. Change it to use depends
+on to match what we do for the X11 backend.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/directfb/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/Config.in |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 548f602..8c13d30 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DIRECTFB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t issue
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -164,5 +165,6 @@ config BR2_PACKAGE_DIRECTFB_TESTS
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 603df45..7cadcb2 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -178,11 +178,10 @@ config BR2_PACKAGE_QT5BASE_LINUXFB
  
- endif # BR2_PACKAGE_DIRECTFB
+ config BR2_PACKAGE_QT5BASE_DIRECTFB
+ 	bool "directfb support"
+-	select BR2_PACKAGE_DIRECTFB
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 # directfb
++	depends on BR2_PACKAGE_DIRECTFB
  
--comment "directfb needs a toolchain w/ C++, threads, gcc >= 4.5"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+comment "directfb needs a (e)glibc or uClibc toolchain w/ C++, threads, gcc >= 4.5"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || BR2_TOOLCHAIN_USES_MUSL
+-comment "directfb needs a toolchain w/ gcc >= 4.5"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++comment "directfb backend if directb is enabled"
++	depends on !BR2_PACKAGE_DIRECTFB
+ 
+ config BR2_PACKAGE_QT5BASE_XCB
+ 	bool "X.org XCB support"
