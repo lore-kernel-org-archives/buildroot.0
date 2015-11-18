@@ -1,57 +1,157 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Wed, 18 Nov 2015 23:19:13 +0100
-Subject: [Buildroot] [RFC] wine: Bump to 1.8
-In-Reply-To: <20151118225702.23400c0f@free-electrons.com>
-References: <564CE703.2070706@dawncrow.de>
- <20151118222111.06e1de92@free-electrons.com> <564CF1C5.9080204@dawncrow.de>
- <20151118225702.23400c0f@free-electrons.com>
-Message-ID: <564CF961.3010305@dawncrow.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 18 Nov 2015 22:47:10 +0100
+Subject: [Buildroot] [git commit] core: check host executables have
+	appropriate RPATH
+Message-ID: <20151118222837.C898F81EEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 18.11.2015 um 22:57 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> On Wed, 18 Nov 2015 22:46:45 +0100, Andr? Hentschel wrote:
-> 
->>>  * Use 'git format-patch -M' to enable rename detection, so that the
->>>    renaming of the patches is detected, and instead of seeing a
->>>    complete file being removed, and a complete file being added, we see
->>>    a rename.
->>
->> I also adjusted the patch a bit to apply to the new version
-> 
-> Not a problem: if the changes are not too important, it will still
-> detect the rename.
+commit: http://git.buildroot.net/buildroot/commit/?id=5c0c38522605413170a10c45ac08d46c4ed076af
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OK, I'll try that
+When we build our host programs, and they depend on a host library we
+also build, we want to ensure that program actually uses that library at
+runtime, and not the one from the system.
 
-> 
->>> Last suggestion: can you submit the SANE_CONFIG patch upstream, so that
->>> hopefully they merge it before the 1.8 release, and we can have zero
->>> patches for the wine package ?
->>
->> The patch won't go in as it is, because it would break
->> non-cross-builds, also this problem is most likely not only true for
->> sane, but also for other *-config programs, and I'm no configure
->> guru...
-> 
-> Why do you say it breaks non-cross-builds? I looked again at
-> 0003-sane-config-fix.patch and I don't really see how it can break
-> non-cross-builds.
-> 
-> The patch is just replacing 'sane-config' by
-> '${SANE_CONFIG:-sane-config}'.
-> 
-> ${SANE_CONFIG:-sane-config} says "use the value of SANE_CONFIG is
-> available, otherwise use sane-config".
-> 
-> So, if SANE_CONFIG is not defined in the environment, this patch makes
-> zero difference compared to the existing situation. It only optionally
-> allows to pass SANE_CONFIG.
-> 
+We currently ensure that in two ways:
+  - we add a RPATH tag that points to our host library directory,
+  - we export LD_LIBRARY_PATH to point to that same directory.
 
-True, my mistake, but the other points hold true.
+With these two in place, we're pretty much confident that our host
+libraries will be used by our host programs.
+
+However, it turns our that not all the host programs we build end up
+with an RPATH tag:
+  - some packages do not use our $(HOST_LDFLAGS)
+  - some packages' build system are oblivious to those LDFLAGS
+
+In this case, there are two situations:
+  - the program is not linked to one of our host libraries: it in fact
+    does not need an RPATH tag [0]
+  - the program actually uses one of our host libraries: in that case it
+    should have had an RPATH tag pointing to the host directory.
+
+For libraries, they only need an RPATH if they depend on another library
+that is not installed in the standard library path. However, any system
+library will already be in the standard library path, and any library we
+install ourselves is in $(HOST_DIR)/usr/lib so already in RPATH.
+
+We add a new support script that checks that all ELF executables have
+a proper DT_RPATH (or DT_RUNPATH) tag when they link to our host
+libraries, and reports those file that are missing an RPATH. If a file
+missing an RPATH is an executable, the script aborts; if only libraries
+are are missing an RPATH, the script does not abort.
+
+[0] Except if it were to dlopen() it, of course, but the only program
+I'm aware of that does that is openssl, and it has a correct RPATH tag.
+
+[Peter: reworded as suggested by Arnout, fix HOT_DIR typo in comment]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-generic.mk           |    8 ++++
+ support/scripts/check-host-rpath |   71 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 79 insertions(+), 0 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 08f4f31..357a5c7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -87,6 +87,14 @@ define step_pkg_size
+ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
+ 
++# This hook checks that host packages that need libraries that we build
++# have a proper DT_RPATH or DT_RUNPATH tag
++define check_host_rpath
++	$(if $(filter install-host,$(2)),\
++		$(if $(filter end,$(1)),support/scripts/check-host-rpath $(3) $(HOST_DIR)))
++endef
++GLOBAL_INSTRUMENTATION_HOOKS += check_host_rpath
++
+ # User-supplied script
+ ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+ define step_user
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+new file mode 100755
+index 0000000..dc9e17f
+--- /dev/null
++++ b/support/scripts/check-host-rpath
+@@ -0,0 +1,71 @@
++#!/usr/bin/env bash
++
++# This script scans $(HOST_DIR)/{bin,sbin} for all ELF files, and checks
++# they have an RPATH to $(HOST_DIR)/usr/lib if they need libraries from
++# there.
++
++# Override the user's locale so we are sure we can parse the output of
++# readelf(1) and file(1)
++export LC_ALL=C
++
++main() {
++    local pkg="${1}"
++    local hostdir="${2}"
++    local file ret
++
++    # Remove duplicate and trailing '/' for proper match
++    hostdir="$( sed -r -e 's:/+:/:g;' <<<"${hostdir}" )"
++
++    ret=0
++    while read file; do
++        elf_needs_rpath "${file}" "${hostdir}" || continue
++        check_elf_has_rpath "${file}" "${hostdir}" && continue
++        if [ ${ret} -eq 0 ]; then
++            ret=1
++            printf "***\n"
++            printf "*** ERROR: package %s installs executables without proper RPATH:\n" "${pkg}"
++        fi
++        printf "***   %s\n" "${file}"
++    done < <( find "${hostdir}"/usr/{bin,sbin} -type f -exec file {} + 2>/dev/null \
++              |sed -r -e '/^([^:]+):.*\<ELF\>.*\<executable\>.*/!d'                \
++                      -e 's//\1/'                                                  \
++            )
++
++    return ${ret}
++}
++
++elf_needs_rpath() {
++    local file="${1}"
++    local hostdir="${2}"
++    local lib
++
++    while read lib; do
++        [ -e "${hostdir}/usr/lib/${lib}" ] && return 0
++    done < <( readelf -d "${file}"                                         \
++              |sed -r -e '/^.* \(NEEDED\) .*Shared library: \[(.+)\]$/!d;' \
++                     -e 's//\1/;'                                          \
++            )
++
++    return 1
++}
++
++check_elf_has_rpath() {
++    local file="${1}"
++    local hostdir="${2}"
++    local rpath dir
++
++    while read rpath; do
++        for dir in ${rpath//:/ }; do
++            # Remove duplicate and trailing '/' for proper match
++            dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
++            [ "${dir}" = "${hostdir}/usr/lib" ] && return 0
++        done
++    done < <( readelf -d "${file}"                                              \
++              |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
++                      -e 's//\3/;'                                              \
++            )
++
++    return 1
++}
++
++main "${@}"
