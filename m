@@ -1,106 +1,88 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu, 19 Nov 2015 11:36:05 +0100
-Subject: [Buildroot] [PATCH 4/5] pkg-generic: provide an option to use git
-	archives
+Date: Thu, 19 Nov 2015 11:36:03 +0100
+Subject: [Buildroot] [PATCH 2/5] download/git: allow to create archives
+	containing shallowed git repos
 In-Reply-To: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
 References: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1447929366-8972-5-git-send-email-jezz@sysmic.org>
+Message-ID: <1447929366-8972-3-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Note: In order to make this work, $(2)_SITE_METHOD must be set before
-$(2)_SOURCE
+We introduce a new tarball format for projects managed with git. This
+new format is a shallowed version of upstream repository.
+
+This format is a little larger (20 to 50% in my tests) than standard
+one and contains information about upstream git repository.
+
+That simplify workflow with upstream. It is now possible to reconnect
+a build directory with upstream repository using:
+
+   git fetch --unshallow
+
+If you want to also get remote tags and branch (as in a standard
+clone), run:
+
+   git config remote.origin.fetch refs/heads/*:refs/remotes/origin/*
+   git fetch
+
+For large repository, you can use a local repository as reference in
+order to speedup unshallow process (read warnings about '--reference'
+option in git-clone manual page):
+
+   echo "repo_path/.git/objects" > .git/objects/info/alternates
+   git fetch --unshallow
+
+Note 1: some repository does not support unshallowing (especially
+anonscm.debian.org)
+
+Note 2: I have tested this patch with git 2.1 (from Debian Jessie).
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- Config.in              | 13 +++++++++++++
- package/pkg-generic.mk | 36 ++++++++++++++++++++----------------
- 2 files changed, 33 insertions(+), 16 deletions(-)
+ support/download/git | 30 +++++++++++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index d795361..6b9482c 100644
---- a/Config.in
-+++ b/Config.in
-@@ -158,6 +158,19 @@ config BR2_HOST_DIR
+diff --git a/support/download/git b/support/download/git
+index 0e6103b..6755f65 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -46,7 +46,31 @@ if [ ${git_done} -eq 0 ]; then
+     ${GIT} clone ${verbose} --bare "${repo}" "${basename}"
+ fi
  
- menu "Mirrors and Download locations"
+-GIT_DIR="${basename}" \
+-${GIT} archive --prefix="${basename}/" -o "${output}.tmp" --format=tar "${cset}"
++if [[ ${output} != *.git.tar.gz* ]]; then
++    GIT_DIR="${basename}" \
++    ${GIT} archive --prefix="${basename}/" -o "${output}.tmp" --format=tar "${cset}"
  
-+config BR2_USE_GIT_ARCHIVES
-+	bool "Place git repository in archives"
-+	help
-+	  In case a package use a git repository as source. Enabling this
-+	  option will archive (shallowed) bare git repository instead of plain
-+	  files. In order to distinguish these archives from classical ones,
-+	  their names end with .git.tar.gz.
+-gzip <"${output}.tmp" >"${output}"
++    gzip <"${output}.tmp" >"${output}"
++fi
++if [[ ${output} = *.git.tar.gz* ]]; then
++    GIT_DIR="${basename}" ${GIT} reset --soft ${cset}
 +
-+	  Enable this option if you work with upstream and are interrested to
-+	  have a better workflow with upstream team. Notice archive generation
-+	  is about 25% slower and archives are 20 to 50% bigger. Time to extract
-+	  archives are identical with or without this option.
++    # Git cannot shallow a repository on an arbitrary commit-id. It must be a
++    # symbolic reference of a remote repository (HEAD, tag or branch) (problem
++    # seems to be resolved in git 2.5).
++    # However, we want to be able to shallow on any commit-id.
++    # We didn't find any other way than use an intermediate repository in order
++    # to work around this limitation.
++    # (In add, this method make easier pruning of packed objects)
++    #
++    # Note 1: --depth is ignored in local clones. Git suggest to use file://
++    # in order to force copy of objects. We have to use an absolute path with
++    # these URIs
++    #
++    # Note 2: ${basename}.git will be removed by dl-wrapper (since it is in
++    # same directory than ${basename})
++    ${GIT} clone "file://$(readlink -f ${basename})" "${basename}.git" --bare --depth 1
++    GIT_DIR="${basename}.git" ${GIT} remote set-url origin "${repo}"
 +
- config BR2_PRIMARY_SITE
- 	string "Primary download site"
- 	default ""
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 846d8e9..30155a6 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -412,11 +412,30 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- $(2)_VERSION = custom
- endif
- 
-+ifndef $(2)_SITE
-+ ifdef $(3)_SITE
-+  $(2)_SITE = $$($(3)_SITE)
-+ endif
-+endif
-+
-+ifndef $(2)_SITE_METHOD
-+ ifdef $(3)_SITE_METHOD
-+  $(2)_SITE_METHOD = $$($(3)_SITE_METHOD)
-+ else
-+  # Try automatic detection using the scheme part of the URI
-+  $(2)_SITE_METHOD = $$(call geturischeme,$$($(2)_SITE))
-+ endif
-+endif
-+
- ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $$($(3)_SOURCE)
-  else
--  $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
-+  ifeq ($(BR2_USE_GIT_ARCHIVES)$$($(2)_SITE_METHOD),ygit)
-+   $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).git.tar.gz
-+  else
-+   $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
-+  endif
-  endif
- endif
- 
-@@ -431,21 +450,6 @@ $(2)_ALL_DOWNLOADS = \
- 		$$(if $$(findstring ://,$$(p)),$$(p),\
- 			$$($(2)_SITE)/$$(p)))
- 
--ifndef $(2)_SITE
-- ifdef $(3)_SITE
--  $(2)_SITE = $$($(3)_SITE)
-- endif
--endif
--
--ifndef $(2)_SITE_METHOD
-- ifdef $(3)_SITE_METHOD
--  $(2)_SITE_METHOD = $$($(3)_SITE_METHOD)
-- else
--	# Try automatic detection using the scheme part of the URI
--	$(2)_SITE_METHOD = $$(call geturischeme,$$($(2)_SITE))
-- endif
--endif
--
- ifeq ($$($(2)_SITE_METHOD),local)
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- $(2)_OVERRIDE_SRCDIR = $$($(2)_SITE)
++    tar czf "${output}" "${basename}.git"
++fi
 -- 
 2.1.4
