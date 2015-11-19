@@ -1,28 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Nov 2015 22:32:20 +0100
-Subject: [Buildroot] [PATCH] xapp_sessreg: fix build issue with gcc 5
-In-Reply-To: <1447950844-14511-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 19 Nov 2015 17:34:04 +0100")
-References: <1447950844-14511-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877fld8yl7.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 19 Nov 2015 23:33:46 +0200
+Subject: [Buildroot] [PATCH v2] sdl: overwrite libpth autodetection
+In-Reply-To: <1447968633-10830-1-git-send-email-ps.report@gmx.net>
+References: <1447968633-10830-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20151119213346.GT2203@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Peter,
 
- > Backport an upstream commit that fixes the build of xapp_sessreg with
- > gcc 5.
+On Thu, Nov 19, 2015 at 10:30:33PM +0100, Peter Seiderer wrote:
+> The sdl libpth autodetection gets confused in case a host
+> version is present. Overwrite libpth autodection for the
+> target build dependent on BR2_PACKAGE_LIBPTHSEM and
+> BR2_PACKAGE_LIBPTHSEM_COMPAT and use pth-config from
+> staging directory.
+> 
+> Fixes [1]:
+> 
+> checking for pthreads... no
+> checking for pth-config... /usr/bin/pth-config
+> checking pth... yes
+> [...]
+> ./src/SDL.c:33:17: fatal error: pth.h: No such file or directory
+>  #include <pth.h>
+> 
+> [1] http://autobuild.buildroot.net/results/733/73330e51b3c099d179004db0b9522ac13358b8f7
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - add SDL_DEPENDENCIES += libpthsem (suggested by Baruch Siach)
+>   - fix libpth enable logic, needs BR2_PACKAGE_LIBPTHSEM and BR2_PACKAGE_LIBPTHSEM_COMPAT
+>   - overwrite ac_cv_path_PTH_CONFIG to use the right pth-config from
+>     staging dir
+> ---
+>  package/sdl/sdl.mk | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+> index 78eb4dd..e976905 100644
+> --- a/package/sdl/sdl.mk
+> +++ b/package/sdl/sdl.mk
+> @@ -58,6 +58,15 @@ ifneq ($(BR2_USE_MMU),y)
+>  SDL_CONF_OPTS += --enable-dga=no
+>  endif
+>  
+> +# overwrite autodection (prevents confusion with host libpth version)
+> +ifeq ($(BR2_PACKAGE_LIBPTHSEM)$(BR2_PACKAGE_LIBPTHSEM_COMPAT),yy)
 
- > Fixes:
+Testing for BR2_PACKAGE_LIBPTHSEM_COMPAT alone should be enough since 
+BR2_PACKAGE_LIBPTHSEM_COMPAT depends on BR2_PACKAGE_LIBPTHSEM.
 
- >   http://autobuild.buildroot.org/results/ec0/ec01564854f0738df05b8d995d9f0db396a0e5a8/
+> +SDL_CONF_OPTS += --enable-pth
+> +SDL_CONF_ENV += ac_cv_path_PTH_CONFIG=$(STAGING_DIR)/usr/bin/pth-config
+> +SDL_DEPENDENCIES += libpthsem
+> +else
+> +SDL_CONF_OPTS += --disable-pth
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_TSLIB),y)
+>  SDL_DEPENDENCIES += tslib
+>  endif
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+baruch
 
 -- 
-Bye, Peter Korsgaard
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
