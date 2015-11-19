@@ -1,45 +1,50 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 19 Nov 2015 20:53:27 +0100
-Subject: [Buildroot] ADS7846 Module touch Raspberry PI 2 - Buildroot
-In-Reply-To: <CACvocV7gAwsYYQ=C=Qg20_b+OfEigKtjLNOqCR6K6asGp2demw@mail.gmail.com>
-References: <CACvocV7gAwsYYQ=C=Qg20_b+OfEigKtjLNOqCR6K6asGp2demw@mail.gmail.com>
-Message-ID: <20151119205327.71f7f54e@gmx.net>
+Date: Thu, 19 Nov 2015 21:53:45 +0100
+Subject: [Buildroot] [PATCH v1] sdl: overwrite libpth autodetection
+Message-ID: <1447966425-3951-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Giovanni,
+The sdl libpth autodetection gets confused in case a host
+version is detected. Overwrite libpth autodection for the
+target  build dependent on BR2_PACKAGE_LIBPTHSEM.
 
-On Thu, 19 Nov 2015 20:28:39 +0100, "astrolite ." <ciclonite@gmail.com> wrote:
+Fixes [1]:
 
-> Hi,
-> I don't know if this question is really relevant with buildroot, but i've a
-> problem using this module with devicetree.
-> I've put into config.txt, the specific configuration for working with the
-> touch display but nothing happen.
-> In this tutorial :  http://brummbeere.readthedocs.org/en/latest/raspi.html
-> there is note:
-> 
-> "
-> To be able to add support for device tree overlays in a later step we need
-> to download the Raspberry tools. The tools contain a script mkknlimg that
-> adds a trailer to the self-compiled kernel.
-> "
-> What i need for use devicetree with buildroot?
-> Thanks a lot,
-> Giovanni.
+checking for pthreads... no
+checking for pth-config... /usr/bin/pth-config
+checking pth... yes
+[...]
+./src/SDL.c:33:17: fatal error: pth.h: No such file or directory
+ #include <pth.h>
 
-The actual buildroot config for Raspberry Pi already contains new enough
-kernel source and userland tools for device tree support, see [1] and
-the mkknlimg hint (line 129ff). More hints for your touchpanel support see
-[2] and [3]...
+[1] http://autobuild.buildroot.net/results/733/73330e51b3c099d179004db0b9522ac13358b8f7
 
-Regards,
-Peter
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/sdl/sdl.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-
-[1] http://git.buildroot.net/buildroot/tree/board/raspberrypi/readme.txt
-[2] https://github.com/notro/fbtft/wiki/Touchpanel
-[3] https://github.com/raspberrypi/firmware/blob/master/boot/overlays/README
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 78eb4dd..3e3496c 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -58,6 +58,13 @@ ifneq ($(BR2_USE_MMU),y)
+ SDL_CONF_OPTS += --enable-dga=no
+ endif
+ 
++# overwrite autodection (prevents confusion with host libpth version)
++ifeq ($(BR2_PACKAGE_LIBPTHSEM),y)
++SDL_CONF_OPTS +=  --enable-pth
++else
++SDL_CONF_OPTS +=  --disable-pth
++endif
++
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ SDL_DEPENDENCIES += tslib
+ endif
+-- 
+2.1.4
