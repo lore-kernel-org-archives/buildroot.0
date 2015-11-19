@@ -1,55 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Nov 2015 23:00:46 +0100
-Subject: [Buildroot] [PATCH 1/1] libnet: explicitly pass
- libnet_cv_have_packet_socket=yes because PF_PACKET is always available on
- Linux
-In-Reply-To: <1447848930-3090-1-git-send-email-joris.lijssens@gmail.com>
-References: <1447848930-3090-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <20151119230046.78a68843@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Nov 2015 23:05:12 +0100
+Subject: [Buildroot] [PATCH v3] sdl: overwrite libpth autodetection
+In-Reply-To: <1447969367-21983-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Thu, 19 Nov 2015 22:42:47 +0100")
+References: <1447969367-21983-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87wptd7ihz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joris,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Like your other patch, the commit title of this is too long. But
-there's another issue, read below.
+ > The sdl libpth autodetection gets confused in case a host
+ > version is present. Overwrite libpth autodection for the
+ > target build dependent on BR2_PACKAGE_LIBPTHSEM_COMPAT and
+ > use pth-config from staging directory.
 
-On Wed, 18 Nov 2015 13:15:30 +0100, Joris Lijssens wrote:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-> ---
->  package/libnet/libnet.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
-> index 3b62a79..7004417 100644
-> --- a/package/libnet/libnet.mk
-> +++ b/package/libnet/libnet.mk
-> @@ -10,4 +10,9 @@ LIBNET_INSTALL_STAGING = YES
->  LIBNET_LICENSE = BSD-2c, BSD-3c
->  LIBNET_LICENSE_FILES = doc/COPYING
->  
-> +# PF_PACKET is always available on Linux, but build breaks for musl
-> +ifneq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-> +LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
-> +endif
+ > Fixes [1]:
 
-In fact, even without defining libnet_cv_have_packet_socket=yes, libnet
-does not build with musl. So either the build problem should be fixed
-(it's a typical structure redefinition problem due to using the kernel
-headers instead of the C library headers), but it is not super simple
-to fix because libnet's code is somewhat convoluted.
+ > checking for pthreads... no
+ > checking for pth-config... /usr/bin/pth-config
+ > checking pth... yes
+ > [...]
+ > ./src/SDL.c:33:17: fatal error: pth.h: No such file or directory
+ >  #include <pth.h>
 
-I would suggest to simply mark the package as not available on musl
-(and therefore netsniff-ng as well). Can you send a patch doing this,
-and on top of this send a new version of this patch?
+ > [1] http://autobuild.buildroot.net/results/733/73330e51b3c099d179004db0b9522ac13358b8f7
 
-Thanks,
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Changes v2 -> v3:
+ >   - simplify libpth enable logic, check on BR2_PACKAGE_LIBPTHSEM_COMPAT is enough
+ >    (suggested by Baruch Siach)
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
