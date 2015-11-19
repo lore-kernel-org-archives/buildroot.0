@@ -1,56 +1,66 @@
-From: Arthur LAMBERT <lambertarthur22@gmail.com>
-Date: Thu, 19 Nov 2015 19:36:53 +0100
-Subject: [Buildroot] Compile kernel module within buildroot package
-Message-ID: <20151119183653.GA1025@arthur-bzh>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 19 Nov 2015 20:12:13 +0100
+Subject: [Buildroot] [RFC v1] directfb: fix musl compile
+In-Reply-To: <87vb8z9djd.fsf@dell.be.48ers.dk>
+References: <1447110344-1446-1-git-send-email-ps.report@gmx.net>
+ <87vb8z9djd.fsf@dell.be.48ers.dk>
+Message-ID: <20151119201213.6e82f6b8@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello Peter,
 
-I am currently using the 2015.08 version of buildroot. Kernel module compilation
-is broken :
+On Wed, 18 Nov 2015 22:57:10 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-[arthur] make lttng-modules-rebuild
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_staging_installed
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_target_installed
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_images_installed
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_host_installed
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_built
->>> lttng-modules 2.6.0 Building
->>> lttng-modules 2.6.0 Building kernel module(s)
-grep: /.config: No such file or directory
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+> 
+> Hi,
+> 
+>  > - use 'union sigval' instead of sigval_t (same as suggested
+>  >   for canfestival by Yann E. MORIN, see [2])
+> 
+>  > - delete DIRECT_RECURSIVE_MUTEX_INITIALIZER define (which uses unknown
+>  >   PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
+> 
+>  > - use DIRECT_MUTEX_INITIALIZER instead for trace.c (no recursive
+>  >   mutex needed)
+> 
+>  > - use pthread_once and direct_recursive_mutex_init instead for
+>  >   directfb.c
+> 
+>  > Fixes [1]:
+> 
+>  >   system.c:114:6: error: unknown type name 'sigval_t'
+> 
+>  > and
+> 
+>  >   ../lib/direct/os/linux/glibc/mutex.h:49:53: error: ?PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP? undeclared (first use in this function)
+> 
+>  > [1] http://autobuild.buildroot.net/results/548/548bf7b800a946e97135c0ba66363f388e517d6f
+>  > [2] https://patchwork.ozlabs.org/patch/509731
+> 
+>  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>  > ---
+>  > RFC: not yet runtime tested
+> 
+> Thanks, but I don't feel confident applying such a patch, especially as
+> upstream seems dead so we cannot get their feedback on it / will have to
+> carry it along ourselves - So I've instead marked directfb as !musl.
+> 
 
-I found a fix here : http://lists.busybox.net/pipermail/buildroot/2015-September/138543.html
+O.k.
 
-next try after applying the fix :
+According to [1] the directfb source code is (temporarily?) hosted on github [2]
+by one of the developers...
 
-[arthur] make lttng-modules-rebuild
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_staging_installed
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_target_installed
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_images_installed
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_host_installed
-rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_built
->>> lttng-modules 2.6.0 Building
->>> lttng-modules 2.6.0 Building kernel module(s)
-PATH="/home/arthur/work/buildroot/2015_08/output/host/bin:/home/arthur/work/buildroot/2015_08/output/host/sbin:/home/arthur/work/buildroot/2015_08/output/host/usr/bin:/home/arthur/work/buildroot/2015_08/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/gnat/bin:/home/g179168/middleware/tools/bin/" BR_BINARIES_DIR=/home/arthur/work/buildroot/2015_08/output/images /usr/bin/make -j9 -C /home/arthur/work/buildroot/2015_08/output/build/linux-dreem_v2 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm INSTALL_MOD_PATH=/home/arthur/work/buildroot/2015_08/output/target CROSS_COMPILE=" /home/arthur/work/buildroot/2015_08/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-" DEPMOD=/home/arthur/work/buildroot/2015_08/output/host/sbin/depmod  PWD=/home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/. M=/home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/. modules
-  Building modules, stage 2.
-  MODPOST 0 modules
->>> lttng-modules 2.6.0 Installing to target
->>> lttng-modules 2.6.0 Installing kernel module(s)
-PATH="/home/arthur/work/buildroot/2015_08/output/host/bin:/home/arthur/work/buildroot/2015_08/output/host/sbin:/home/arthur/work/buildroot/2015_08/output/host/usr/bin:/home/arthur/work/buildroot/2015_08/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/gnat/bin:/home/g179168/middleware/tools/bin/" BR_BINARIES_DIR=/home/arthur/work/buildroot/2015_08/output/images /usr/bin/make -j9 -C /home/arthur/work/buildroot/2015_08/output/build/linux-dreem_v2 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm INSTALL_MOD_PATH=/home/arthur/work/buildroot/2015_08/output/target CROSS_COMPILE=" /home/arthur/work/buildroot/2015_08/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-" DEPMOD=/home/arthur/work/buildroot/2015_08/output/host/sbin/depmod  PWD=/home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/. M=/home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/. modules_install
-  DEPMOD  3.14.28
+If I find some more time to work on my patch I will try to submit it there...
+
+Regards,
+Peter
 
 
-Nothing seems to be compile :
-
-[arthur] find output/build/lttng-modules-2.6.0/ -name "*.ko"
-=> no result
-
-Do I miss something ?
-Same result with master branch.
-
-Thanks,
-Arthur.
+[1] http://www.phoronix.com/scan.php?page=news_item&px=DirectFB-On-GitHub
+[2] https://github.com/deniskropp/DirectFB/
