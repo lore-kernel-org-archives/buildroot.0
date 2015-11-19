@@ -1,39 +1,45 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu, 19 Nov 2015 11:36:06 +0100
-Subject: [Buildroot] [PATCH 5/5] pkg-generic: tag sources if git is used
-In-Reply-To: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
-References: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1447929366-8972-6-git-send-email-jezz@sysmic.org>
+Date: Thu, 19 Nov 2015 11:36:01 +0100
+Subject: [Buildroot] [PATCH 0/5] Introduce alternative archive format
+Message-ID: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to simplify patch updating, tag original version of sources.
-We may also provide a feature to automaticaly update patches in future.
+Hello,
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/pkg-generic.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+As suggested by Arnout [1], this series provide an alternative archive
+format. This new format contains a shallowed version of upstream
+repository. This format is a little bigger and a little longer to
+create but it allow a better workflow with upstream. I describe some
+good practice in patch 2.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 30155a6..6d7677b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -152,6 +152,12 @@ $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call step_start,patch)
- 	@$(call MESSAGE,"Patching")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
-+	$(Q)( \
-+	if test -d $(@D)/.git; then \
-+	  GIT_DIR=$(@D)/.git $(GIT) tag upstream; \
-+	  GIT_DIR=$(@D)/.git $(GIT) tag $(NAMEVER); \
-+	fi; \
-+	)
- 	$(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) $(@D) $(DL_DIR) $(notdir $(p))$(sep))
- 	$(Q)( \
- 	for D in $(PATCH_BASE_DIRS); do \
+Notice projects hosted by github don't yet benefit of this feature
+since I have not found any elegant way to do it :-(. 
+
+During my tests, I have noticed current shallow clone is mostly broken
+(at least with git < 2.5 [2]). Indeed, shallow clone only work with
+symbolic references (HEAD, a tag or a branch). However, we avoid use of
+symbolic references in VERSION.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2015-November/144296.html
+[2] http://stackoverflow.com/a/30701724/301717
+
+
+J?r?me Pouiller (5):
+  pkg-download: do not test SITE_METHOD
+  download/git: allow to create archives containing shallowed git repos
+  pkg-generic: allow to populate build directory from a git archive
+  pkg-generic: provide an option to use git archives
+  pkg-generic: tag sources if git is used
+
+ Config.in               | 13 +++++++++++
+ package/pkg-download.mk |  7 +-----
+ package/pkg-generic.mk  | 60 ++++++++++++++++++++++++++++++++++---------------
+ support/download/git    | 30 ++++++++++++++++++++++---
+ 4 files changed, 83 insertions(+), 27 deletions(-)
+
 -- 
 2.1.4
