@@ -1,31 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Nov 2015 13:19:32 +0100
-Subject: [Buildroot] [PATCH] libserial: add patch to fix build failure
-	on sparc/sparc64
-In-Reply-To: <1447879238-29695-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 18 Nov 2015 21:40:38 +0100")
-References: <1447879238-29695-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87bnaq9o6j.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Nov 2015 13:29:05 +0100
+Subject: [Buildroot] [PATCH 1/1] perl-file-util: restore host variant
+	and fix dependencies
+In-Reply-To: <1447763046-25345-1-git-send-email-casantos@datacom.ind.br>
+ (Carlos Santos's message of "Tue, 17 Nov 2015 10:24:06 -0200")
+References: <1447763046-25345-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <87610y9nqm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
- > Like c-periphery and lua-periphery, libserial fails to build because
- > it tries to use some baud rate definitions that are not available on
- > sparc and sparc64 (the highest baud rates).
+ > The host variant was added by us (DATACOM) because it is useful to
+ > build some third-party packages that we use in our firmware. We humbly
+ > request you to keep it alive.
 
- > This commit fixes that by introducing a patch to libserial to make the
- > use of these high baud rates conditional on their availability.
+ > Declare that it requires host-perl-module-build.
 
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/f9b/f9bbb8a6636cd3e3203b059f627aac7b1d511eb2/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
 Committed, thanks.
 
