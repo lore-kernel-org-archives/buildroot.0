@@ -1,79 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Nov 2015 10:44:18 +0100
-Subject: [Buildroot] [git commit] slang: fix build on musl
-Message-ID: <20151119101937.6294F81F67@busybox.osuosl.org>
+Date: Thu, 19 Nov 2015 11:17:48 +0100
+Subject: [Buildroot] [git commit] libuecc: not available in static builds
+Message-ID: <20151119101937.7496181E83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=154c3ea73206ee7115b1730cfa1aaaec50374c07
+commit: http://git.buildroot.net/buildroot/commit/?id=aadf19c9c3aa6e92c6727650989981fbc0757f0d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add patch from Alpine Linux to fix the build of slang with the musl C
-library.
-
 Fixes:
+http://autobuild.buildroot.net/results/c0d/c0d91fc0fa28fda0ffd1c9a236bde5435222bcc0/
 
-  http://autobuild.buildroot.org/results/bc3/bc3cca6e6a906afa4c57dcddfb4a9ecd0cb44398/
+Unconditionally builds a shared library.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...osix_close-function-to-posix_close_slfile.patch |   47 ++++++++++++++++++++
- 1 files changed, 47 insertions(+), 0 deletions(-)
+ package/fastd/Config.in   |    6 ++++--
+ package/libuecc/Config.in |    4 ++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/slang/0004-Rename-posix_close-function-to-posix_close_slfile.patch b/package/slang/0004-Rename-posix_close-function-to-posix_close_slfile.patch
-new file mode 100644
-index 0000000..4b3c869
---- /dev/null
-+++ b/package/slang/0004-Rename-posix_close-function-to-posix_close_slfile.patch
-@@ -0,0 +1,47 @@
-+From 055b02cf98ab9b7301988c3be2d277f262f0957e Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Wed, 18 Nov 2015 23:12:15 +0100
-+Subject: [PATCH] Rename posix_close() function to posix_close_slfile()
+diff --git a/package/fastd/Config.in b/package/fastd/Config.in
+index 4170ea1..f753ce4 100644
+--- a/package/fastd/Config.in
++++ b/package/fastd/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_FASTD
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
++	depends on !BR2_STATIC_LIBS # libuecc
+ 	select BR2_PACKAGE_LIBUECC
+ 	select BR2_PACKAGE_LIBSODIUM
+ 	select BR2_PACKAGE_LIBCAP
+@@ -22,7 +23,8 @@ config BR2_PACKAGE_FASTD_STATUS_SOCKET
+ 
+ endif
+ 
+-comment "fastd needs a toolchain w/ threads, headers >= 3.0"
++comment "fastd needs a toolchain w/ threads, headers >= 3.0, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
++		|| BR2_STATIC_LIBS
+diff --git a/package/libuecc/Config.in b/package/libuecc/Config.in
+index 34bbea2..b7cd045 100644
+--- a/package/libuecc/Config.in
++++ b/package/libuecc/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_LIBUECC
+ 	bool "libuecc"
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Very small Elliptic Curve Cryptography library
+ 
+ 	  http://git.universe-factory.net/libuecc
 +
-+posix_close() is a function that will be implemented as part of an
-+upcoming of the POSIX standard. For this reason, the musl C library
-+has already started implementing this function call. Unfortunately,
-+since slang already defines a function with the same name, it cannot
-+build properly with the musl C library.
-+
-+This commit fixes that by renaming the slang function to
-+posix_close_slfile().
-+
-+This patch has been taken from the Alpine Linux repository, at
-+http://git.alpinelinux.org/cgit/aports/plain/main/slang/musl-fix-posix_close-clash.patch.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/slposio.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/slposio.c b/src/slposio.c
-+index 94f20dd..475e2c9 100644
-+--- a/src/slposio.c
-++++ b/src/slposio.c
-+@@ -372,7 +372,7 @@ static int posix_close_fd (int *fd)
-+    return 0;
-+ }
-+ 
-+-static int posix_close (SLFile_FD_Type *f)
-++static int posix_close_slfile (SLFile_FD_Type *f)
-+ {
-+    int status = do_close (f);
-+ 
-+@@ -1011,7 +1011,7 @@ static SLang_Intrin_Fun_Type Fd_Name_Table [] =
-+    MAKE_INTRINSIC_2("write", posix_write, V, F, B),
-+    MAKE_INTRINSIC_1("dup_fd", posix_dup, V, F),
-+    MAKE_INTRINSIC_2("dup2_fd", posix_dup2, I, F, I),
-+-   MAKE_INTRINSIC_1("close", posix_close, I, F),
-++   MAKE_INTRINSIC_1("close", posix_close_slfile, I, F),
-+    MAKE_INTRINSIC_1("_close", posix_close_fd, I, I),
-+ #if defined(TTYNAME_R)
-+    MAKE_INTRINSIC_0("ttyname", posix_ttyname, V),
-+-- 
-+2.6.3
-+
++comment "libuecc needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
