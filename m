@@ -1,38 +1,67 @@
-From: =?gb18030?B?wffQx87euts=?= <jordon.wu@gmail.com>
-Date: Thu, 19 Nov 2015 19:40:29 +0800
-Subject: [Buildroot] package qt5base build failed if using
-	QT5BASE_OVERRIDE_SRCDIR
-Message-ID: <tencent_0DB9B313288D1F8F3BBBF005@qq.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 19 Nov 2015 13:02:53 +0100
+Subject: [Buildroot] [PATCH 0/5] Introduce alternative archive format
+In-Reply-To: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
+References: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20151119130253.0dd0aebb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+J?r?me,
 
+On Thu, 19 Nov 2015 11:36:01 +0100, J?r?me Pouiller wrote:
 
-Buildroot will failed if I using QT5BASE_OVERRIDE_SRCDIR to specify qt5base to local path. error log as below.
+> As suggested by Arnout [1], this series provide an alternative archive
+> format. This new format contains a shallowed version of upstream
+> repository. This format is a little bigger and a little longer to
+> create but it allow a better workflow with upstream. I describe some
+> good practice in patch 2.
+> 
+> Notice projects hosted by github don't yet benefit of this feature
+> since I have not found any elegant way to do it :-(. 
+> 
+> During my tests, I have noticed current shallow clone is mostly broken
+> (at least with git < 2.5 [2]). Indeed, shallow clone only work with
+> symbolic references (HEAD, a tag or a branch). However, we avoid use of
+> symbolic references in VERSION.
 
+Thanks for this contribution.
 
-It seems qt5base patch not applied while using QT5BASE_OVERRIDE_SRCDIR.  How to resolved this issue if I must to using QT5BASE_OVERRIDE_SRCDIR to specify qt5base to local path ?
+Your justification in PATCH 2 is just "That simplify workflow with
+upstream". However, we already have the <pkg>_OVERRIDE_SRCDIR mechanism
+(and <pkg>_SITE_METHOD = local, which is the same) to specifically
+address this use case.
 
+The idea with <pkg>_OVERRIDE_SRCDIR is that if you are actively
+developing on a software component, then it should not be Buildroot's
+responsibility to download/extract/patch it, but it should instead use
+a locally available source directory, which is managed completely
+separately from Buildroot. There you can do whatever Git, Subversion or
+Mercurial version control you want, Buildroot will simply rsync to the
+build directory.
 
-======================================================================
-vmuser at ubuntu14:~/buildroot-imx/buildroot$ make qt5base-rebuild
-rm -f /home/vmuser/buildroot-imx/buildroot/output/build/qt5base-custom/.stamp_rsynced
-rm -f /home/vmuser/buildroot-imx/buildroot/output/build/qt5base-custom/.stamp_staging_installed
-rm -f /home/vmuser/buildroot-imx/buildroot/output/build/qt5base-custom/.stamp_target_installed
-rm -f /home/vmuser/buildroot-imx/buildroot/output/build/qt5base-custom/.stamp_images_installed
-rm -f /home/vmuser/buildroot-imx/buildroot/output/build/qt5base-custom/.stamp_host_installed
-rm -f /home/vmuser/buildroot-imx/buildroot/output/build/qt5base-custom/.stamp_built
->>> qt5base custom Syncing from source dir /home/vmuser/buildroot-imx/qtbase-opensource-src-5.5.0
-rsync -au --chmod=u=rwX,go=rX --exclude .svn --exclude .git --exclude .hg --exclude .bzr --exclude CVS /home/vmuser/buildroot-imx/qtbase-opensource-src-5.5.0/ /home/vmuser/buildroot-imx/buildroot/output/build/qt5base-custom
->>> qt5base custom Configuring
-(cd /home/vmuser/buildroot-imx/buildroot/output/build/qt5base-custom; PATH="/home/vmuser/buildroot-imx/buildroot/output/host/bin:/home/vmuser/buildroot-imx/buildroot/output/host/sbin:/home/vmuser/buildroot-imx/buildroot/output/host/usr/bin:/home/vmuser/buildroot-imx/buildroot/output/host/usr/sbin:/home/vmuser/bin:/home/vmuser/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games" PKG_CONFIG="/home/vmuser/buildroot-imx/buildroot/output/host/usr/bin/pkg-config" PKG_CONFIG_LIBDIR="/home/vmuser/buildroot-imx/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig" PKG_CONFIG_SYSROOT_DIR="/home/vmuser/buildroot-imx/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" MAKEFLAGS=" --no-print-directory -j8" ./configure -v -prefix /usr -hostprefix /home/vmuser/buildroot-imx/buildroot/output/host/usr -headerdir /usr/include/qt5 -sysroot /home/vmuser/buildroot-imx/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot -plugindir /usr/lib/qt/plugins -examplesdir /usr/lib/qt/examples -no-rpath -nomake tests -device buildroot -device-option CROSS_COMPILE="/home/vmuser/buildroot-imx/buildroot/output/host/usr/bin/arm-linux-gnueabihf-" -device-option BR_COMPILER_CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -DENABLE_MX6_WORKAROUND" -device-option BR_COMPILER_CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -DENABLE_MX6_WORKAROUND" -optimized-qmake -no-kms -no-cups -no-nis -no-iconv -system-zlib -system-pcre -no-pch -shared -release -largefile -opensource -confirm-license -no-sql-mysql -no-sql-psql   -no-sql-sqlite -no-gui -no-widgets -no-linuxfb -no-directfb -no-xcb -no-opengl  -no-eglfs -no-openssl -no-fontconfig -no-gif -no-libjpeg -no-libpng -no-dbus -no-tslib -glib -no-icu -nomake examples -gstreamer 1.0 )
-Error: No device matching 'buildroot'
-make[1]: *** [/home/vmuser/buildroot-imx/buildroot/output/build/qt5base-custom/.stamp_configured] Error 101
-make: *** [_all] Error 2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151119/2c799c08/attachment.html>
+I think doing development in the build directory, as encouraged by your
+patch, is a bad practice. The build directory is a temporary location,
+people should not be encouraged to work from there.
+
+And I fail to see what your solution brings compared to using
+<pkg>_OVERRIDE_SRCDIR or <pkg>_SITE_METHOD = local. To me, the existing
+solutions are in fact more flexible and don't encourage the practice of
+hacking in the build directory.
+
+Of course, if there is a specific workflow that you could describe that
+doesn't work with <pkg>_OVERRIDE_SRCDIR, then I'm definitely
+interested, and from this discussion we can decide whether improvements
+to OVERRIDE_SRCDIR are needed, or if a completely different solution is
+needed.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
