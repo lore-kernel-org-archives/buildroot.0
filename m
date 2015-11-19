@@ -1,40 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 Nov 2015 13:47:09 -0300
-Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.1.0
-Message-ID: <1447951629-13598-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Thu, 19 Nov 2015 12:38:46 -0500
+Subject: [Buildroot] [PATCH] support/download: fetch all refs on full
+	git clone
+In-Reply-To: <1446871164-19229-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1446871164-19229-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <20151119173846.GA26379@ketchup.mtl.sfl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Nov. Friday 06 (45) 11:39 PM, Vivien Didelot wrote:
+> When specifying BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION, a user may want to
+> specify the SHA of a reference different than a branch or tag.
+> 
+> For instance, Gerrit stores the patchsets under refs/changes/xx/xxx, and
+> Github stores the pull requests under refs/pull/xxx/head.
+> 
+> When cloning a repository with --bare, you don't fetch these references.
+> This patch uses --mirror for a full clone, in order to give the user
+> access to all references of the Git repository.
+> 
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 6dddf8d..3772242 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.6.tar.bz2.sha256
--sha256	f616a7fbdc78a627043f9029000bf08c0c71df59cde4143fc92a014f6a993b26	harfbuzz-1.0.6.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.0.tar.bz2.sha256
-+sha256	0f584a5947e60ede565e7a4e122baa5e4b17a62eab872abf5f73d8552ceb716b	harfbuzz-1.1.0.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 48ff309..703e15c 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 1.0.6
-+HARFBUZZ_VERSION = 1.1.0
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
--- 
-2.4.10
+Reviewed-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+
+(I pasted Maxime's review here for clarity)
+
+Guys, could you merge this patch please? Also having it applied as a fix
+for 2015.11 would be a plus.
+
+Best,
+-v
