@@ -1,72 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 19 Nov 2015 22:09:37 +0100
-Subject: [Buildroot] [PATCH v1] sdl: overwrite libpth autodetection
-In-Reply-To: <20151119210559.GR2203@tarshish>
-References: <1447966425-3951-1-git-send-email-ps.report@gmx.net>
- <20151119210559.GR2203@tarshish>
-Message-ID: <20151119220937.7d378b47@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 19 Nov 2015 22:11:55 +0100
+Subject: [Buildroot] [git commit branch/next] harfbuzz: bump to version 1.1.0
+Message-ID: <20151119211206.0031D81EB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+commit: http://git.buildroot.net/buildroot/commit/?id=0d62de9df75b1a01b62cb8492a60340ec167523d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 19 Nov 2015 23:05:59 +0200, Baruch Siach <baruch@tkos.co.il> wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/harfbuzz/harfbuzz.hash |    4 ++--
+ package/harfbuzz/harfbuzz.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Hi Peter,
-> 
-> On Thu, Nov 19, 2015 at 09:53:45PM +0100, Peter Seiderer wrote:
-> > The sdl libpth autodetection gets confused in case a host
-> > version is detected. Overwrite libpth autodection for the
-> > target  build dependent on BR2_PACKAGE_LIBPTHSEM.
-> > 
-> > Fixes [1]:
-> > 
-> > checking for pthreads... no
-> > checking for pth-config... /usr/bin/pth-config
-> > checking pth... yes
-> > [...]
-> > ./src/SDL.c:33:17: fatal error: pth.h: No such file or directory
-> >  #include <pth.h>
-> > 
-> > [1] http://autobuild.buildroot.net/results/733/73330e51b3c099d179004db0b9522ac13358b8f7
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  package/sdl/sdl.mk | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-> > index 78eb4dd..3e3496c 100644
-> > --- a/package/sdl/sdl.mk
-> > +++ b/package/sdl/sdl.mk
-> > @@ -58,6 +58,13 @@ ifneq ($(BR2_USE_MMU),y)
-> >  SDL_CONF_OPTS += --enable-dga=no
-> >  endif
-> >  
-> > +# overwrite autodection (prevents confusion with host libpth version)
-> > +ifeq ($(BR2_PACKAGE_LIBPTHSEM),y)
-> 
-> Should probably also add 'SDL_DEPENDENCIES += libpthsem'. 
-
-Ups..., yes your are right..., will send a v2 patch version...
-
-Thanks for review...
-
-Regards,
-Peter
-
-> 
-> > +SDL_CONF_OPTS +=  --enable-pth
-> > +else
-> > +SDL_CONF_OPTS +=  --disable-pth
-> > +endif
-> > +
-> >  ifeq ($(BR2_PACKAGE_TSLIB),y)
-> >  SDL_DEPENDENCIES += tslib
-> >  endif
-> 
-> baruch
-> 
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 6dddf8d..3772242 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.6.tar.bz2.sha256
+-sha256	f616a7fbdc78a627043f9029000bf08c0c71df59cde4143fc92a014f6a993b26	harfbuzz-1.0.6.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.0.tar.bz2.sha256
++sha256	0f584a5947e60ede565e7a4e122baa5e4b17a62eab872abf5f73d8552ceb716b	harfbuzz-1.1.0.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 48ff309..703e15c 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 1.0.6
++HARFBUZZ_VERSION = 1.1.0
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
