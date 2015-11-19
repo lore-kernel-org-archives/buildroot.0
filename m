@@ -1,35 +1,56 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Thu, 19 Nov 2015 12:38:46 -0500
-Subject: [Buildroot] [PATCH] support/download: fetch all refs on full
-	git clone
-In-Reply-To: <1446871164-19229-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-References: <1446871164-19229-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <20151119173846.GA26379@ketchup.mtl.sfl>
+From: Arthur LAMBERT <lambertarthur22@gmail.com>
+Date: Thu, 19 Nov 2015 19:36:53 +0100
+Subject: [Buildroot] Compile kernel module within buildroot package
+Message-ID: <20151119183653.GA1025@arthur-bzh>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Nov. Friday 06 (45) 11:39 PM, Vivien Didelot wrote:
-> When specifying BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION, a user may want to
-> specify the SHA of a reference different than a branch or tag.
-> 
-> For instance, Gerrit stores the patchsets under refs/changes/xx/xxx, and
-> Github stores the pull requests under refs/pull/xxx/head.
-> 
-> When cloning a repository with --bare, you don't fetch these references.
-> This patch uses --mirror for a full clone, in order to give the user
-> access to all references of the Git repository.
-> 
-> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Hi all,
 
-Reviewed-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+I am currently using the 2015.08 version of buildroot. Kernel module compilation
+is broken :
 
-(I pasted Maxime's review here for clarity)
+[arthur] make lttng-modules-rebuild
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_staging_installed
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_target_installed
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_images_installed
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_host_installed
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_built
+>>> lttng-modules 2.6.0 Building
+>>> lttng-modules 2.6.0 Building kernel module(s)
+grep: /.config: No such file or directory
 
-Guys, could you merge this patch please? Also having it applied as a fix
-for 2015.11 would be a plus.
+I found a fix here : http://lists.busybox.net/pipermail/buildroot/2015-September/138543.html
 
-Best,
--v
+next try after applying the fix :
+
+[arthur] make lttng-modules-rebuild
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_staging_installed
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_target_installed
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_images_installed
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_host_installed
+rm -f /home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/.stamp_built
+>>> lttng-modules 2.6.0 Building
+>>> lttng-modules 2.6.0 Building kernel module(s)
+PATH="/home/arthur/work/buildroot/2015_08/output/host/bin:/home/arthur/work/buildroot/2015_08/output/host/sbin:/home/arthur/work/buildroot/2015_08/output/host/usr/bin:/home/arthur/work/buildroot/2015_08/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/gnat/bin:/home/g179168/middleware/tools/bin/" BR_BINARIES_DIR=/home/arthur/work/buildroot/2015_08/output/images /usr/bin/make -j9 -C /home/arthur/work/buildroot/2015_08/output/build/linux-dreem_v2 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm INSTALL_MOD_PATH=/home/arthur/work/buildroot/2015_08/output/target CROSS_COMPILE=" /home/arthur/work/buildroot/2015_08/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-" DEPMOD=/home/arthur/work/buildroot/2015_08/output/host/sbin/depmod  PWD=/home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/. M=/home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/. modules
+  Building modules, stage 2.
+  MODPOST 0 modules
+>>> lttng-modules 2.6.0 Installing to target
+>>> lttng-modules 2.6.0 Installing kernel module(s)
+PATH="/home/arthur/work/buildroot/2015_08/output/host/bin:/home/arthur/work/buildroot/2015_08/output/host/sbin:/home/arthur/work/buildroot/2015_08/output/host/usr/bin:/home/arthur/work/buildroot/2015_08/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/gnat/bin:/home/g179168/middleware/tools/bin/" BR_BINARIES_DIR=/home/arthur/work/buildroot/2015_08/output/images /usr/bin/make -j9 -C /home/arthur/work/buildroot/2015_08/output/build/linux-dreem_v2 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm INSTALL_MOD_PATH=/home/arthur/work/buildroot/2015_08/output/target CROSS_COMPILE=" /home/arthur/work/buildroot/2015_08/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-" DEPMOD=/home/arthur/work/buildroot/2015_08/output/host/sbin/depmod  PWD=/home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/. M=/home/arthur/work/buildroot/2015_08/output/build/lttng-modules-2.6.0/. modules_install
+  DEPMOD  3.14.28
+
+
+Nothing seems to be compile :
+
+[arthur] find output/build/lttng-modules-2.6.0/ -name "*.ko"
+=> no result
+
+Do I miss something ?
+Same result with master branch.
+
+Thanks,
+Arthur.
