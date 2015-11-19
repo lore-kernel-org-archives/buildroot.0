@@ -1,83 +1,63 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 19 Nov 2015 22:42:27 +0100
-Subject: [Buildroot] [PATCH v2] sdl: overwrite libpth autodetection
-In-Reply-To: <20151119213346.GT2203@tarshish>
-References: <1447968633-10830-1-git-send-email-ps.report@gmx.net>
- <20151119213346.GT2203@tarshish>
-Message-ID: <20151119224227.21e3e7a6@gmx.net>
+Date: Thu, 19 Nov 2015 22:42:47 +0100
+Subject: [Buildroot] [PATCH v3] sdl: overwrite libpth autodetection
+Message-ID: <1447969367-21983-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+The sdl libpth autodetection gets confused in case a host
+version is present. Overwrite libpth autodection for the
+target build dependent on BR2_PACKAGE_LIBPTHSEM_COMPAT and
+use pth-config from staging directory.
 
-On Thu, 19 Nov 2015 23:33:46 +0200, Baruch Siach <baruch@tkos.co.il> wrote:
+Fixes [1]:
 
-> Hi Peter,
-> 
-> On Thu, Nov 19, 2015 at 10:30:33PM +0100, Peter Seiderer wrote:
-> > The sdl libpth autodetection gets confused in case a host
-> > version is present. Overwrite libpth autodection for the
-> > target build dependent on BR2_PACKAGE_LIBPTHSEM and
-> > BR2_PACKAGE_LIBPTHSEM_COMPAT and use pth-config from
-> > staging directory.
-> > 
-> > Fixes [1]:
-> > 
-> > checking for pthreads... no
-> > checking for pth-config... /usr/bin/pth-config
-> > checking pth... yes
-> > [...]
-> > ./src/SDL.c:33:17: fatal error: pth.h: No such file or directory
-> >  #include <pth.h>
-> > 
-> > [1] http://autobuild.buildroot.net/results/733/73330e51b3c099d179004db0b9522ac13358b8f7
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v1 -> v2:
-> >   - add SDL_DEPENDENCIES += libpthsem (suggested by Baruch Siach)
-> >   - fix libpth enable logic, needs BR2_PACKAGE_LIBPTHSEM and BR2_PACKAGE_LIBPTHSEM_COMPAT
-> >   - overwrite ac_cv_path_PTH_CONFIG to use the right pth-config from
-> >     staging dir
-> > ---
-> >  package/sdl/sdl.mk | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-> > index 78eb4dd..e976905 100644
-> > --- a/package/sdl/sdl.mk
-> > +++ b/package/sdl/sdl.mk
-> > @@ -58,6 +58,15 @@ ifneq ($(BR2_USE_MMU),y)
-> >  SDL_CONF_OPTS += --enable-dga=no
-> >  endif
-> >  
-> > +# overwrite autodection (prevents confusion with host libpth version)
-> > +ifeq ($(BR2_PACKAGE_LIBPTHSEM)$(BR2_PACKAGE_LIBPTHSEM_COMPAT),yy)
-> 
-> Testing for BR2_PACKAGE_LIBPTHSEM_COMPAT alone should be enough since 
-> BR2_PACKAGE_LIBPTHSEM_COMPAT depends on BR2_PACKAGE_LIBPTHSEM.
-> 
+checking for pthreads... no
+checking for pth-config... /usr/bin/pth-config
+checking pth... yes
+[...]
+./src/SDL.c:33:17: fatal error: pth.h: No such file or directory
+ #include <pth.h>
 
-O.k, will send patch v3 soon...
+[1] http://autobuild.buildroot.net/results/733/73330e51b3c099d179004db0b9522ac13358b8f7
 
-Thanks for review...
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v2 -> v3:
+  - simplify libpth enable logic, check on BR2_PACKAGE_LIBPTHSEM_COMPAT is enough
+   (suggested by Baruch Siach)
 
-Regards,
-Peter
+Changes v1 -> v2:
+  - add SDL_DEPENDENCIES += libpthsem (suggested by Baruch Siach)
+  - fix libpth enable logic, needs BR2_PACKAGE_LIBPTHSEM and BR2_PACKAGE_LIBPTHSEM_COMPAT
+  - overwrite ac_cv_path_PTH_CONFIG to use the right pth-config from
+    staging dir
+---
+ package/sdl/sdl.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> > +SDL_CONF_OPTS += --enable-pth
-> > +SDL_CONF_ENV += ac_cv_path_PTH_CONFIG=$(STAGING_DIR)/usr/bin/pth-config
-> > +SDL_DEPENDENCIES += libpthsem
-> > +else
-> > +SDL_CONF_OPTS += --disable-pth
-> > +endif
-> > +
-> >  ifeq ($(BR2_PACKAGE_TSLIB),y)
-> >  SDL_DEPENDENCIES += tslib
-> >  endif
-> 
-> baruch
-> 
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 78eb4dd..cc1ad06 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -58,6 +58,15 @@ ifneq ($(BR2_USE_MMU),y)
+ SDL_CONF_OPTS += --enable-dga=no
+ endif
+ 
++# overwrite autodection (prevents confusion with host libpth version)
++ifeq ($(BR2_PACKAGE_LIBPTHSEM_COMPAT),y)
++SDL_CONF_OPTS += --enable-pth
++SDL_CONF_ENV += ac_cv_path_PTH_CONFIG=$(STAGING_DIR)/usr/bin/pth-config
++SDL_DEPENDENCIES += libpthsem
++else
++SDL_CONF_OPTS += --disable-pth
++endif
++
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ SDL_DEPENDENCIES += tslib
+ endif
+-- 
+2.1.4
