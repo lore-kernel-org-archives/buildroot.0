@@ -1,63 +1,29 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 19 Nov 2015 22:42:47 +0100
-Subject: [Buildroot] [PATCH v3] sdl: overwrite libpth autodetection
-Message-ID: <1447969367-21983-1-git-send-email-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Nov 2015 22:52:32 +0100
+Subject: [Buildroot] [PATCH] iproute2: fix build with musl
+In-Reply-To: <1447967220-30052-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 19 Nov 2015 22:07:00 +0100")
+References: <1447967220-30052-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <871tbl8xnj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sdl libpth autodetection gets confused in case a host
-version is present. Overwrite libpth autodection for the
-target build dependent on BR2_PACKAGE_LIBPTHSEM_COMPAT and
-use pth-config from staging directory.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes [1]:
+ > This commit adds two patches to the iproute2 package that are
+ > necessary to build it against the musl C library. Both patches have
+ > been submitted upstream.
 
-checking for pthreads... no
-checking for pth-config... /usr/bin/pth-config
-checking pth... yes
-[...]
-./src/SDL.c:33:17: fatal error: pth.h: No such file or directory
- #include <pth.h>
+ > Fixes:
 
-[1] http://autobuild.buildroot.net/results/733/73330e51b3c099d179004db0b9522ac13358b8f7
+ >   http://autobuild.buildroot.org/results/5d3/5d3f8c2242e9a89bb545166fc7d70429d2cddd42/
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v2 -> v3:
-  - simplify libpth enable logic, check on BR2_PACKAGE_LIBPTHSEM_COMPAT is enough
-   (suggested by Baruch Siach)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Changes v1 -> v2:
-  - add SDL_DEPENDENCIES += libpthsem (suggested by Baruch Siach)
-  - fix libpth enable logic, needs BR2_PACKAGE_LIBPTHSEM and BR2_PACKAGE_LIBPTHSEM_COMPAT
-  - overwrite ac_cv_path_PTH_CONFIG to use the right pth-config from
-    staging dir
----
- package/sdl/sdl.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+I just started looking at that build failure as well - Committed, thanks.
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index 78eb4dd..cc1ad06 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -58,6 +58,15 @@ ifneq ($(BR2_USE_MMU),y)
- SDL_CONF_OPTS += --enable-dga=no
- endif
- 
-+# overwrite autodection (prevents confusion with host libpth version)
-+ifeq ($(BR2_PACKAGE_LIBPTHSEM_COMPAT),y)
-+SDL_CONF_OPTS += --enable-pth
-+SDL_CONF_ENV += ac_cv_path_PTH_CONFIG=$(STAGING_DIR)/usr/bin/pth-config
-+SDL_DEPENDENCIES += libpthsem
-+else
-+SDL_CONF_OPTS += --disable-pth
-+endif
-+
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- SDL_DEPENDENCIES += tslib
- endif
 -- 
-2.1.4
+Bye, Peter Korsgaard
