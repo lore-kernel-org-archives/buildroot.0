@@ -1,59 +1,55 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Thu, 19 Nov 2015 11:44:07 +0100
-Subject: [Buildroot] [PATCH 2/2] help: relocate help messages specific
-	to one package
-In-Reply-To: <20151118154912.408690e7@free-electrons.com>
-References: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
- <1447857421-9380-2-git-send-email-jezz@sysmic.org>
- <20151118154912.408690e7@free-electrons.com>
-Message-ID: <29551021.aMD2rVc6HH@sagittea>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 19 Nov 2015 12:09:38 +0100
+Subject: [Buildroot] [PATCH] package/minidlna: fix static build
+In-Reply-To: <87io4y9umq.fsf@dell.be.48ers.dk>
+References: <1447889466-8504-1-git-send-email-yann.morin.1998@free.fr>
+ <87mvua9uzr.fsf@dell.be.48ers.dk> <87io4y9umq.fsf@dell.be.48ers.dk>
+Message-ID: <D2494AFA-3325-405C-89FA-5B245DB586E5@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+On November 19, 2015 11:00:13 AM GMT+01:00, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> >> libvorbix.pc does not exist, it is named vorbis.pc.
+>
+> > libvorbis.pc
+>
+> >> Also, sqlite3 was missing when querying pkg-config.
+>
+> > No autobuilder references?
+>
+>Looking at the autobuilder failures
+>(http://autobuild.buildroot.net/?reason=minidlna-1.1.5) they all seem
+>to
+>be caused by BR2_COMPILER_PARANOID_UNSAFE_PATH and the configure script
+>adding /usr/local when checking for libraries/headers :/
+>
+>-- 
+>Bye, Peter Korsgaard
+>_______________________________________________
+>buildroot mailing list
+>buildroot at busybox.net
+>http://lists.busybox.net/mailman/listinfo/buildroot
 
-On Wednesday 18 November 2015 15:49:12 Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 18 Nov 2015 15:37:01 +0100, J?r?me Pouiller wrote:
-> > Use $LOCAL_HELP feature in order to integrate help messages specific
-> > to one package (linux-menuconfig, etc...) package they are
-> > related.
-> > 
-> > It would be possible to do it using kconfig framework, but I was not
-> > sure it is necessary to document kconfig targets systematicaly.
-> > 
-> > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> > ---
-> > 
-> >  Makefile                   | 16 ----------------
-> >  boot/barebox/barebox.mk    |  5 +++++
-> >  linux/linux.mk             |  7 +++++++
-> >  package/busybox/busybox.mk |  4 ++++
-> >  package/uclibc/uclibc.mk   |  4 ++++
-> >  5 files changed, 20 insertions(+), 16 deletions(-)
-> 
-> I already proposed something achieving a similar thing (but more
-> integrated into the package infrastructure) a while ago, and it wasn't
-> accepted.
-> 
-> See:
-> 
->  
-> http://lists.busybox.net/pipermail/buildroot/2015-January/118159.html
+Peter,
 
-Indeed, second patch of my series seems achieving a similar thing (it's 
-a pity arguments provided to reject it were not logged). 
+If you look earlier in the config.log,
+you'll see the actual errors.
 
-However I think first patch has really different aim.
+Looking at configure.ac, it becomes
+obvious why that happens:
 
+for l in "" /usr/lib ... do ...
 
-BR,
-
+Regards,
+Yann E. MORIN.
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Sent from my Android device with K-9 Mail. Please excuse my brevity.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151119/6f6ae9a7/attachment.html>
