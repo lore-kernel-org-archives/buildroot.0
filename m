@@ -1,89 +1,47 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Fri, 20 Nov 2015 20:48:15 -0200
-Subject: [Buildroot] [PATCH v2 1/1] mongrel2: add upstream patch to fix
-	symbol conflict
-Message-ID: <1448059695-20671-1-git-send-email-rprebello@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 20 Nov 2015 23:48:43 +0100
+Subject: [Buildroot] [buildroot]Is there anyplan to add qt3d package
+In-Reply-To: <CAAH=mgNfvyqVtoLER9EwPYO=8E+uMqKUBnDNGkJGF3-fGQizjQ@mail.gmail.com>
+References: <CAAH=mgNfvyqVtoLER9EwPYO=8E+uMqKUBnDNGkJGF3-fGQizjQ@mail.gmail.com>
+Message-ID: <564FA34B.4060907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The symbol 'max_align_t', defined in the mongrel2 sources
-(src/mem/align.h), is also defined in one of the standard headers in
-some toolchains (the ones based on GCC 5+ apparently).
+On 20-11-15 06:51, Jordon Wu wrote:
+> Hi,
+> 
+> I using buildroot master branch to build qt5, but not found qt3d submodule. Is
+> there any plan to add qt3d module to buildroot?
 
-This conflict has been solved upstream, and a new version (1.10.0)
-containing the fix has been released already, so this backported patch
-may be dropped in the future when mongrel2 gets a version bump.
+ It will be included if someone offers a patch :-) But qt3d is pretty simple,
+I'm sure you will be able to create a package for it based on e.g. qt5svg. The
+most difficult part is finding out the license, but fortunately, for qt3d that's
+very simple too: it is LGPLv3 or GPLv2+.
 
-Fixes:
+ Regards,
+ Arnout
 
-  http://autobuild.buildroot.net/results/b7f/b7f86bdda094de96633e9921e0e5895eadc89217/
-  http://autobuild.buildroot.net/results/f62/f623703aa6d7992b67d305331734e4ed0c7b2be4/
-  http://autobuild.buildroot.net/results/eb3/eb385cb4f87078122028e85cbe31caa01d794991/
-  ...
+> 
+> Best Regards
+> Jordon Wu
+> =====================
+> Email: jordon.wu at gmail.com <mailto:jordon.wu@gmail.com>
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
-Changes v1 -> v2:
-  - Fix wording in commit message:
-    s/has been already released/has been released already/
----
- .../0004-Rename-symbol-to-prevent-conflict.patch   | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch
 
-diff --git a/package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch b/package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch
-new file mode 100644
-index 0000000..8369816
---- /dev/null
-+++ b/package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch
-@@ -0,0 +1,45 @@
-+From 8d0bc79f38913b1a55e7d151b32bbc9462c24b47 Mon Sep 17 00:00:00 2001
-+From: Jason Miller <jason@jasom.org>
-+Date: Fri, 14 Aug 2015 19:03:09 -0700
-+Subject: [PATCH] Rename symbol to prevent conflict
-+
-+One of the standard headers defines max_align_t on some versions of linux.
-+
-+[Backported from upstream commit
-+https://github.com/mongrel2/mongrel2/commit/563bac8c59b9b32205164d237cf1ec0cb48d189f.]
-+
-+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-+---
-+ src/mem/align.h  | 2 +-
-+ src/mem/halloc.c | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/mem/align.h b/src/mem/align.h
-+index 4c6e183..03a4999 100644
-+--- a/src/mem/align.h
-++++ b/src/mem/align.h
-+@@ -30,7 +30,7 @@ union max_align
-+ 	void (*q)(void);
-+ };
-+ 
-+-typedef union max_align max_align_t;
-++typedef union max_align h_max_align_t;
-+ 
-+ #endif
-+ 
-+diff --git a/src/mem/halloc.c b/src/mem/halloc.c
-+index b097d1f..40d0c09 100644
-+--- a/src/mem/halloc.c
-++++ b/src/mem/halloc.c
-+@@ -34,7 +34,7 @@ typedef struct hblock
-+ #endif
-+ 	hlist_item_t  siblings; /* 2 pointers */
-+ 	hlist_head_t  children; /* 1 pointer  */
-+-	max_align_t   data[1];  /* not allocated, see below */
-++	h_max_align_t   data[1];  /* not allocated, see below */
-+ 	
-+ } hblock_t;
-+ 
-+-- 
-+2.1.4
-+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
