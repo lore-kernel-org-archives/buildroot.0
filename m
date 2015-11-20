@@ -1,42 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Nov 2015 22:57:19 +0100
-Subject: [Buildroot] [PATCH 2/2] libnet: PF_PACKET is always available
- on Linux
-In-Reply-To: <1448033368-8081-2-git-send-email-joris.lijssens@gmail.com>
-References: <1448033368-8081-1-git-send-email-joris.lijssens@gmail.com>
- <1448033368-8081-2-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <564F973F.7080907@mind.be>
+Date: Fri, 20 Nov 2015 23:06:20 +0100
+Subject: [Buildroot] Using openssl functions in another package
+In-Reply-To: <564F7606.4020309@cmlab.biz>
+References: <564F7606.4020309@cmlab.biz>
+Message-ID: <564F995C.2000709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20-11-15 16:29, Joris Lijssens wrote:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-> ---
->  package/libnet/libnet.mk | 3 +++
->  1 file changed, 3 insertions(+)
+On 20-11-15 20:35, David Van Arnem wrote:
+> Hi all,
 > 
-> diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
-> index 3b62a79..1a5e610 100644
-> --- a/package/libnet/libnet.mk
-> +++ b/package/libnet/libnet.mk
-> @@ -7,7 +7,10 @@
->  LIBNET_VERSION = 1.1.6
->  LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
->  LIBNET_INSTALL_STAGING = YES
-> +# PF_PACKET is always available on Linux
-> +LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
->  LIBNET_LICENSE = BSD-2c, BSD-3c
->  LIBNET_LICENSE_FILES = doc/COPYING
->  
-> +
+> I have a custom package (source in C) that uses some of OpenSSL's SHA functions
+> to perform hashing.  I can build successfully outside of the buildroot tree by
+> both including the SHA header file in the C source with:
+> 
+> #include <openssl/sha.h>
+> 
+> and then adding the crypto library in the CC command:
+> 
+> $(CC) -lcrypto -o prog prog.c
 
- This change is unnessary, but that can be fixed up during commit. Otherwise:
- Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ In general, instead of explicitly passing -lcrypto it is better to use
+pkg-config to get the flags:
 
->  $(eval $(autotools-package))
+$(CC) `pkg-config --cflags libcrypto --libs libcrypto` -o prog prog.c
+
+> 
+> However, when I try to build the package in buildroot, using the same CC command
+> in the Makefile, I get the following error:
+> 
+> prog.c: fatal error: openssl/sha.h: No such file or directory
+> 
+> I have enabled the openssl package in my buildroot configuration, and set up my
+> custom package's Config.in to depend on it:
+> 
+> depends on BR2_PACKAGE_OPENSSL
+
+ Did you also add a dependency on openssl in the package.mk file?  Do you pass
+the correct CC in the package.mk file? Is the header properly installed in
+output/staging/usr/include/openssl?
+
+ Regards,
+ Arnout
+
+> 
+> My target is a MicroBlaze (little endian, single core) processor.  What else
+> might I need to do to use the OpenSSL SHA functions correctly and avoid this error?
 > 
 
 
