@@ -1,85 +1,54 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Fri, 20 Nov 2015 20:28:34 -0200
-Subject: [Buildroot] [PATCH 1/1] mongrel2: add upstream patch to fix symbol
-	conflict
-Message-ID: <1448058514-20034-1-git-send-email-rprebello@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 20 Nov 2015 23:34:06 +0100
+Subject: [Buildroot] [PATCH v2 4/5] gst-plugins-bad: add legal info
+In-Reply-To: <1447971261-26290-4-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1447971261-26290-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <1447971261-26290-4-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <564F9FDE.2080109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The symbol 'max_align_t', defined in the mongrel2 sources
-(src/mem/align.h), is also defined in one of the standard headers in
-some toolchains (the ones based on GCC 5+ apparently).
+On 19-11-15 23:14, gustavo.zacarias at free-electrons.com wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> 
+> Even though COPYING.LIB is LGPLv2+ many code files state v2.1+
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-This conflict has been solved upstream, and a new version (1.10.0)
-containing the fix has been already released, so this backported patch
-may be dropped in the future when mongrel2 gets a version bump.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Fixes:
 
-  http://autobuild.buildroot.net/results/b7f/b7f86bdda094de96633e9921e0e5895eadc89217/
-  http://autobuild.buildroot.net/results/f62/f623703aa6d7992b67d305331734e4ed0c7b2be4/
-  http://autobuild.buildroot.net/results/eb3/eb385cb4f87078122028e85cbe31caa01d794991/
-  ...
+ Regards,
+ Arnout
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
- .../0004-Rename-symbol-to-prevent-conflict.patch   | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch
+> ---
+>  package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
+> index 0a85603..fa2f124 100644
+> --- a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
+> +++ b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
+> @@ -7,6 +7,9 @@
+>  GST_PLUGINS_BAD_VERSION = 0.10.23
+>  GST_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST_PLUGINS_BAD_VERSION).tar.xz
+>  GST_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
+> +# COPYING.LIB is in fact v2, but most of the code is v2.1+
+> +GST_PLUGINS_BAD_LICENSE = LGPLv2.1+, GPLv2+
+> +GST_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB COPYING
+>  
+>  GST_PLUGINS_BAD_CONF_OPTS = \
+>  	--disable-examples
+> 
 
-diff --git a/package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch b/package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch
-new file mode 100644
-index 0000000..8369816
---- /dev/null
-+++ b/package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch
-@@ -0,0 +1,45 @@
-+From 8d0bc79f38913b1a55e7d151b32bbc9462c24b47 Mon Sep 17 00:00:00 2001
-+From: Jason Miller <jason@jasom.org>
-+Date: Fri, 14 Aug 2015 19:03:09 -0700
-+Subject: [PATCH] Rename symbol to prevent conflict
-+
-+One of the standard headers defines max_align_t on some versions of linux.
-+
-+[Backported from upstream commit
-+https://github.com/mongrel2/mongrel2/commit/563bac8c59b9b32205164d237cf1ec0cb48d189f.]
-+
-+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-+---
-+ src/mem/align.h  | 2 +-
-+ src/mem/halloc.c | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/mem/align.h b/src/mem/align.h
-+index 4c6e183..03a4999 100644
-+--- a/src/mem/align.h
-++++ b/src/mem/align.h
-+@@ -30,7 +30,7 @@ union max_align
-+ 	void (*q)(void);
-+ };
-+ 
-+-typedef union max_align max_align_t;
-++typedef union max_align h_max_align_t;
-+ 
-+ #endif
-+ 
-+diff --git a/src/mem/halloc.c b/src/mem/halloc.c
-+index b097d1f..40d0c09 100644
-+--- a/src/mem/halloc.c
-++++ b/src/mem/halloc.c
-+@@ -34,7 +34,7 @@ typedef struct hblock
-+ #endif
-+ 	hlist_item_t  siblings; /* 2 pointers */
-+ 	hlist_head_t  children; /* 1 pointer  */
-+-	max_align_t   data[1];  /* not allocated, see below */
-++	h_max_align_t   data[1];  /* not allocated, see below */
-+ 	
-+ } hblock_t;
-+ 
-+-- 
-+2.1.4
-+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
