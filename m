@@ -1,57 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Nov 2015 23:06:20 +0100
-Subject: [Buildroot] Using openssl functions in another package
-In-Reply-To: <564F7606.4020309@cmlab.biz>
-References: <564F7606.4020309@cmlab.biz>
-Message-ID: <564F995C.2000709@mind.be>
+Date: Fri, 20 Nov 2015 23:26:31 +0100
+Subject: [Buildroot] Analysis of build results for 2015-11-18
+In-Reply-To: <20151120001552.51c1b21b@free-electrons.com>
+References: <20151119073014.0017E101A9A@stock.ovh.net>
+ <20151120001552.51c1b21b@free-electrons.com>
+Message-ID: <564F9E17.2090501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20-11-15 20:35, David Van Arnem wrote:
-> Hi all,
+On 20-11-15 00:15, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I have a custom package (source in C) that uses some of OpenSSL's SHA functions
-> to perform hashing.  I can build successfully outside of the buildroot tree by
-> both including the SHA header file in the C source with:
+> J?r?me, Johan, Bernd, Yann, Martin, Gustavo, R?mi, Samuel, Alexey,
+> Waldemar, Clayton, please read below, there are some interesting issues
+> for you :-) Thanks !
 > 
-> #include <openssl/sha.h>
-> 
-> and then adding the crypto library in the CC command:
-> 
-> $(CC) -lcrypto -o prog prog.c
+> On Thu, 19 Nov 2015 08:30:13 +0100 (CET), Thomas Petazzoni wrote:
+[snip]
+> > microblazeel |  make[1]: *** [all] Terminated | TIM | http://autobuild.buildroot.net/results/6e4a9ede477b031f47f7e271c38f67f432a3573c/
 
- In general, instead of explicitly passing -lcrypto it is better to use
-pkg-config to get the flags:
+ This is in fact also a real build failure, not just a webkit-related timeout.
+The bullet package seems to have a problem on microblaze. This was with gcc 4.9,
+but I just tried with gcc 5 and that has the same problem.
 
-$(CC) `pkg-config --cflags libcrypto --libs libcrypto` -o prog prog.c
+ First there is a run of:
 
-> 
-> However, when I try to build the package in buildroot, using the same CC command
-> in the Makefile, I get the following error:
-> 
-> prog.c: fatal error: openssl/sha.h: No such file or directory
-> 
-> I have enabled the openssl package in my buildroot configuration, and set up my
-> custom package's Config.in to depend on it:
-> 
-> depends on BR2_PACKAGE_OPENSSL
+fde encoding in CMakeFiles/BulletXmlWorldImporter.dir/tinyxmlparser.o(.eh_frame)
+prevents .eh_frame_hdr table being created
 
- Did you also add a dependency on openssl in the package.mk file?  Do you pass
-the correct CC in the package.mk file? Is the header properly installed in
-output/staging/usr/include/openssl?
+but then the build hangs in cc1plus of btSoftBody.cpp
+
+
+ Just disable the package on microblaze?
+
 
  Regards,
  Arnout
-
-> 
-> My target is a MicroBlaze (little endian, single core) processor.  What else
-> might I need to do to use the OpenSSL SHA functions correctly and avoid this error?
-> 
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
