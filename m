@@ -1,58 +1,61 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Fri, 20 Nov 2015 10:34:15 -0300
-Subject: [Buildroot] [PATCH] squashfs: always enable xattr support
-Message-ID: <1448026455-8146-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Fri, 20 Nov 2015 09:02:42 -0600
+Subject: [Buildroot] [PATCH] openssl: fix race condition when symlink
+ shared libs
+In-Reply-To: <564EB1B1.805@lysator.liu.se>
+References: <1447962631-60866-1-git-send-email-ryan.barnett@rockwellcollins.com>
+ <564EB1B1.805@lysator.liu.se>
+Message-ID: <CAMQcK5KFosvT-Hrqbzu+Aip_W=b-CChBy6DwfKV70Bn8zHT1RQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Hi Peter,
 
-In 785fef10 xattr support was disabled, probably because the old version
-did require the xattr package to be present to support it.
-In a409d76e xattr support was made optional via (lib)attr, however the
-squashfs package does in fact include all of the required bits to
-support xattr without the need for the attr package.
+On Thu, Nov 19, 2015 at 11:37 PM, Peter Rosin <peda@lysator.liu.se> wrote:
+>
+> On 2015-11-19 20:50, Ryan Barnett wrote:
+>
+>> +
+>> +diff --git a/Makefile.shared b/Makefile.shared
+>> +index 8d57163..ce66574 100644
+>> +--- a/Makefile.shared
+>> ++++ b/Makefile.shared
+>> +@@ -118,14 +118,14 @@ SYMLINK_SO=    \
+>> +             if [ -n "$$SHLIB_COMPAT" ]; then \
+>> +                     for x in $$SHLIB_COMPAT; do \
+>> +                             ( $(SET_X); rm -f $$SHLIB$$x$$SHLIB_SUFFIX; \
+>> +-                              ln -s $$prev $$SHLIB$$x$$SHLIB_SUFFIX ); \
+>> ++                              ln -sf $$prev $$SHLIB$$x$$SHLIB_SUFFIX ); \
+>
+> I thought the problem was that the two parties raced, not that the symlink couldn't be
+> created. Thus, the key part was to replace "rm" with the force flag of ln, so that race
+> loser does a no-operation instead of (temporarily) clobbering the state for the race
+> winner. So, you apparently only do half the job in this patch...
 
-So enable xattr support by default for both the host and target
-variants.
+The errors are as follows:
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- package/squashfs/squashfs.mk | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+  ln: failed to create symbolic link 'libssl.so': File exists
+  ln: creating symbolic link `libcrypto.so': File exists
 
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index 3204d05..cdeb9c8 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -9,13 +9,7 @@ SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
- SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
- SQUASHFS_LICENSE = GPLv2+
- SQUASHFS_LICENSE_FILES = COPYING
--
--ifeq ($(BR2_PACKAGE_ATTR),y)
--SQUASHFS_DEPENDENCIES += attr
--SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
--else
--SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
--endif
-+SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
- 
- ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
- SQUASHFS_DEPENDENCIES += lz4
-@@ -54,9 +48,8 @@ endif
- 
- HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz
- 
--# no libattr/xz in BR
- HOST_SQUASHFS_MAKE_ARGS = \
--	XATTR_SUPPORT=0 \
-+	XATTR_SUPPORT=1 \
- 	XZ_SUPPORT=1    \
- 	GZIP_SUPPORT=1  \
- 	LZ4_SUPPORT=1	\
+ln is failing to create a symbolic link because the link already
+exists. As Arnout described, there are two parallel paths that are
+calling SYMLINK_SO, so how I understand it is that there a tiny chance
+that both parallel paths call the 'rm -f' and then one creates a
+symbolic link before the other. I think this still fixes the issue,
+however, I think that the 'rm -f' is pointless because the 'ln -sf' is
+more or less perform what was intended by the 'rm -f'.
+
+Saying that though, I will remove the 'rm -f' and resend the patch.
+
+Thanks,
+-Ryan
+
 -- 
-2.4.10
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
