@@ -1,48 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Nov 2015 23:26:31 +0100
-Subject: [Buildroot] Analysis of build results for 2015-11-18
-In-Reply-To: <20151120001552.51c1b21b@free-electrons.com>
-References: <20151119073014.0017E101A9A@stock.ovh.net>
- <20151120001552.51c1b21b@free-electrons.com>
-Message-ID: <564F9E17.2090501@mind.be>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Fri, 20 Nov 2015 20:28:34 -0200
+Subject: [Buildroot] [PATCH 1/1] mongrel2: add upstream patch to fix symbol
+	conflict
+Message-ID: <1448058514-20034-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20-11-15 00:15, Thomas Petazzoni wrote:
-> Hello,
-> 
-> J?r?me, Johan, Bernd, Yann, Martin, Gustavo, R?mi, Samuel, Alexey,
-> Waldemar, Clayton, please read below, there are some interesting issues
-> for you :-) Thanks !
-> 
-> On Thu, 19 Nov 2015 08:30:13 +0100 (CET), Thomas Petazzoni wrote:
-[snip]
-> > microblazeel |  make[1]: *** [all] Terminated | TIM | http://autobuild.buildroot.net/results/6e4a9ede477b031f47f7e271c38f67f432a3573c/
+The symbol 'max_align_t', defined in the mongrel2 sources
+(src/mem/align.h), is also defined in one of the standard headers in
+some toolchains (the ones based on GCC 5+ apparently).
 
- This is in fact also a real build failure, not just a webkit-related timeout.
-The bullet package seems to have a problem on microblaze. This was with gcc 4.9,
-but I just tried with gcc 5 and that has the same problem.
+This conflict has been solved upstream, and a new version (1.10.0)
+containing the fix has been already released, so this backported patch
+may be dropped in the future when mongrel2 gets a version bump.
 
- First there is a run of:
+Fixes:
 
-fde encoding in CMakeFiles/BulletXmlWorldImporter.dir/tinyxmlparser.o(.eh_frame)
-prevents .eh_frame_hdr table being created
+  http://autobuild.buildroot.net/results/b7f/b7f86bdda094de96633e9921e0e5895eadc89217/
+  http://autobuild.buildroot.net/results/f62/f623703aa6d7992b67d305331734e4ed0c7b2be4/
+  http://autobuild.buildroot.net/results/eb3/eb385cb4f87078122028e85cbe31caa01d794991/
+  ...
 
-but then the build hangs in cc1plus of btSoftBody.cpp
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ .../0004-Rename-symbol-to-prevent-conflict.patch   | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch
 
-
- Just disable the package on microblaze?
-
-
- Regards,
- Arnout
+diff --git a/package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch b/package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch
+new file mode 100644
+index 0000000..8369816
+--- /dev/null
++++ b/package/mongrel2/0004-Rename-symbol-to-prevent-conflict.patch
+@@ -0,0 +1,45 @@
++From 8d0bc79f38913b1a55e7d151b32bbc9462c24b47 Mon Sep 17 00:00:00 2001
++From: Jason Miller <jason@jasom.org>
++Date: Fri, 14 Aug 2015 19:03:09 -0700
++Subject: [PATCH] Rename symbol to prevent conflict
++
++One of the standard headers defines max_align_t on some versions of linux.
++
++[Backported from upstream commit
++https://github.com/mongrel2/mongrel2/commit/563bac8c59b9b32205164d237cf1ec0cb48d189f.]
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++---
++ src/mem/align.h  | 2 +-
++ src/mem/halloc.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/mem/align.h b/src/mem/align.h
++index 4c6e183..03a4999 100644
++--- a/src/mem/align.h
+++++ b/src/mem/align.h
++@@ -30,7 +30,7 @@ union max_align
++ 	void (*q)(void);
++ };
++ 
++-typedef union max_align max_align_t;
+++typedef union max_align h_max_align_t;
++ 
++ #endif
++ 
++diff --git a/src/mem/halloc.c b/src/mem/halloc.c
++index b097d1f..40d0c09 100644
++--- a/src/mem/halloc.c
+++++ b/src/mem/halloc.c
++@@ -34,7 +34,7 @@ typedef struct hblock
++ #endif
++ 	hlist_item_t  siblings; /* 2 pointers */
++ 	hlist_head_t  children; /* 1 pointer  */
++-	max_align_t   data[1];  /* not allocated, see below */
+++	h_max_align_t   data[1];  /* not allocated, see below */
++ 	
++ } hblock_t;
++ 
++-- 
++2.1.4
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
