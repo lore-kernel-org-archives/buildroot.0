@@ -1,38 +1,98 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 20 Nov 2015 13:00:50 -0300
-Subject: [Buildroot] [PATCH] libgtk3: mark wayland support as broken
-Message-ID: <1448035250-17182-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Fri, 20 Nov 2015 10:23:30 -0600
+Subject: [Buildroot] [PATCH v2] openssl: fix race condition when symlink
+	shared libs
+Message-ID: <1448036610-7077-1-git-send-email-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed on the list it requires a matching XDG runtime API level
-which is currently not the case (wayland/weston newer than libgtk3 at
-the moment). It doesn't normall exhibit build failures, but it fails at
-runtime regardless.
+The build-shared target depends on do_crypto and link-shared, which
+will be executed in parallel. do_crypto calls
+link_a.linux_shared -> link_a.gnu which does SYMLINK_SO; in parallel,
+link-shared calls symlink.linux_shared which also does SYMLINK_SO.
+Before the symlink is created, it is rm'ed, but there is a tiny chance
+that the second one is created after the rm has been called.
 
-Also fixes:
-http://autobuild.buildroot.net/results/aae/aae4266c16189b295cc7ceb60000c504ebb60752/
+Fix this by using 'ln -sf' instead of 'ln -s' so the build doesn't
+error out.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Patch submitted upstream at:
+  https://bugs.gentoo.org/show_bug.cgi?id=566260
+
+Thanks to Arnout for explain the issue (wording used above).
+
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+CC: Arnout Vandecappelle <arnout@mind.be>
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
 ---
- package/libgtk3/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index cdc3b2d..02c7aaf 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -40,6 +40,8 @@ config BR2_PACKAGE_LIBGTK3_X11
- config BR2_PACKAGE_LIBGTK3_WAYLAND
- 	bool "GDK Wayland backend"
- 	default y
-+	# Needs a libgtk3 bump to match API level
-+	depends on BROKEN
- 	depends on BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 	help
+Note this is a temporary fix until a gentoo maintainer weighs in and
+updates their parallel build patch.
+
+ v1 -> v2
+   Remove the 'rm -f' since we are using 'ln -sf' (Arnout originally)
+---
+ ...ared-fix-race-condition-when-symlinking-s.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/openssl/0003-makefile.shared-fix-race-condition-when-symlinking-s.patch
+
+diff --git a/package/openssl/0003-makefile.shared-fix-race-condition-when-symlinking-s.patch b/package/openssl/0003-makefile.shared-fix-race-condition-when-symlinking-s.patch
+new file mode 100644
+index 0000000..d6672f4
+--- /dev/null
++++ b/package/openssl/0003-makefile.shared-fix-race-condition-when-symlinking-s.patch
+@@ -0,0 +1,48 @@
++From 878793890a9b84ff313397c56478d7c6f770b2d2 Mon Sep 17 00:00:00 2001
++From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
++Date: Thu, 19 Nov 2015 10:47:00 -0600
++Subject: [PATCH] makefile.shared: fix race condition when symlinking shared
++ libs
++
++The build-shared target depends on do_crypto and link-shared, which
++will be executed in parallel. do_crypto calls
++link_a.linux_shared -> link_a.gnu which does SYMLINK_SO; in parallel,
++link-shared calls symlink.linux_shared which also does SYMLINK_SO.
++Before the symlink is created, it is rm'ed, but there is a tiny chance
++that the second one is created after the rm has been called.
++
++Fix this race condition by just using ln -sf since it will be the same
++symlink regards and not cause the build to error out.
++
++Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
++---
++ Makefile.shared | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile.shared b/Makefile.shared
++index 8d57163..8ab3d18 100644
++--- a/Makefile.shared
+++++ b/Makefile.shared
++@@ -117,15 +117,15 @@ SYMLINK_SO=	\
++ 		prev=$$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX; \
++ 		if [ -n "$$SHLIB_COMPAT" ]; then \
++ 			for x in $$SHLIB_COMPAT; do \
++-				( $(SET_X); rm -f $$SHLIB$$x$$SHLIB_SUFFIX; \
++-				  ln -s $$prev $$SHLIB$$x$$SHLIB_SUFFIX ); \
+++				( $(SET_X);  \
+++				  ln -sf $$prev $$SHLIB$$x$$SHLIB_SUFFIX ); \
++ 				prev=$$SHLIB$$x$$SHLIB_SUFFIX; \
++ 			done; \
++ 		fi; \
++ 		if [ -n "$$SHLIB_SOVER" ]; then \
++ 			[ -e "$$SHLIB$$SHLIB_SUFFIX" ] || \
++-			( $(SET_X); rm -f $$SHLIB$$SHLIB_SUFFIX; \
++-			  ln -s $$prev $$SHLIB$$SHLIB_SUFFIX ); \
+++			( $(SET_X); \
+++			  ln -sf $$prev $$SHLIB$$SHLIB_SUFFIX ); \
++ 		fi; \
++ 	fi
++ 
++-- 
++1.9.1
++
 -- 
-2.4.10
+1.9.1
