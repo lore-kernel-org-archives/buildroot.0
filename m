@@ -1,71 +1,125 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Nov 2015 22:27:25 +0100
-Subject: [Buildroot] [PATCH 5/6] gst-plugins-ugly: add legal info
-In-Reply-To: <564E47F9.1080404@free-electrons.com>
-References: <1447850352-26299-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1447850352-26299-5-git-send-email-gustavo.zacarias@free-electrons.com>
- <564CF7C8.3030901@mind.be> <564E47F9.1080404@free-electrons.com>
-Message-ID: <564F903D.3000107@mind.be>
+Date: Fri, 20 Nov 2015 22:39:18 +0100
+Subject: [Buildroot] [PATCH] ustr: using debian patches to compile w/
+ GCC 5.x
+In-Reply-To: <1447983556-28274-1-git-send-email-ryanbarnett3@gmail.com>
+References: <1447983556-28274-1-git-send-email-ryanbarnett3@gmail.com>
+Message-ID: <564F9306.3090608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19-11-15 23:06, Gustavo Zacarias wrote:
-> On 18/11/15 19:12, Arnout Vandecappelle wrote:
-> 
->> On 18-11-15 13:39, gustavo.zacarias at free-electrons.com wrote:
->>> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
->>>
->>> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
->>> ---
->>>   package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
->>> b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
->>> index e8f2362..9662623 100644
->>> --- a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
->>> +++ b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
->>> @@ -7,6 +7,8 @@
->>>   GST_PLUGINS_UGLY_VERSION = 0.10.19
->>>   GST_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST_PLUGINS_UGLY_VERSION).tar.xz
->>>   GST_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
->>> +GST_PLUGINS_UGLY_LICENSE = LGPLv2.1+
->>
->>   synaesthesia is GPLv2+ (and is always enabled)
->>
->>   All the rest is LGPLv2+...
->>
->>> +GST_PLUGINS_UGLY_LICENSE_FILES = COPYING
->>
->>   ...except this file which is 2.1...
->>
->>   I guess there's a reason it's called ugly :-)
->>
->>
->>   Regards,
->>   Arnout
-> 
-> Hi Arnout.
-> Actually it's more ugly, in fact tests/check/elements/xingmux.c is LGPLv2.1+ :)
+On 20-11-15 02:39, Ryan Barnett wrote:
+> To fix issues with compiling with GCC 5.x, switch to utilzing the
+> debian patches for cross compiling. The debian tar was tired but the
+> series file in the folder is not compatiable with buildroot as it has
+> a 'p1' after each file.
 
- When checking licenses, I skip stuff in tests, docs, config, ... because we
-don't build that.
+ Peter merged 7caf46439 (apply-patches.sh: use everything from the series file)
+so this should no longer be the case. Could you give it another go?
 
+> This means the patches are individually
+> listed.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/150/150fa803fc3b65f75dce2847907ee768fc94c7a7
+>   http://autobuild.buildroot.net/results/150/150fa803fc3b65f75dce2847907ee768fc94c7a7
+>   ...and many more
+> 
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+> ---
+>  .../ustr/0001-cross-compile-modifications.patch    | 144 ---------------------
+>  package/ustr/ustr.hash                             |   6 +
+>  package/ustr/ustr.mk                               |  50 ++-----
+>  3 files changed, 16 insertions(+), 184 deletions(-)
+>  delete mode 100644 package/ustr/0001-cross-compile-modifications.patch
+> 
+> diff --git a/package/ustr/0001-cross-compile-modifications.patch b/package/ustr/0001-cross-compile-modifications.patch
+> deleted file mode 100644
+> index ab75b44..0000000
+> --- a/package/ustr/0001-cross-compile-modifications.patch
+> +++ /dev/null
+> @@ -1,144 +0,0 @@
+> -Changes are to allow ustr version 1.0.4 to cross compile in buildroot.
+
+ Commit log should explicitly mention that this patch (or an equivalent) is part
+of the debian patches. If the debian patch is different, also mention explicitly
+what the difference is.
+
+> -
+> -Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
+> -
+[snip]
+> diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
+> index 3144c0b..0daed3f 100644
+> --- a/package/ustr/ustr.mk
+> +++ b/package/ustr/ustr.mk
+> @@ -9,46 +9,16 @@ USTR_SOURCE = ustr-$(USTR_VERSION).tar.bz2
+>  USTR_SITE = http://www.and.org/ustr/$(USTR_VERSION)
+>  USTR_LICENSE = BSD-2c MIT LGPLv2+
+>  USTR_LICENSE_FILES = LICENSE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
+> +USTR_AUTORECONF = YES
+> +USTR_PATCH = \
+> +	https://anonscm.debian.org/cgit/users/zito-guest/pkg-ustr.git/plain/debian/patches/fixes/autoconf.diff?id=b09545eda93cc75d0510bc100a236b432e3c81b8 \
+> +	https://anonscm.debian.org/cgit/users/zito-guest/pkg-ustr.git/plain/debian/patches/fixes/doc-html-local-css.diff?id=b09545eda93cc75d0510bc100a236b432e3c81b8 \
+> +	https://anonscm.debian.org/cgit/users/zito-guest/pkg-ustr.git/plain/debian/patches/fixes/gnu-inline.diff?id=b09545eda93cc75d0510bc100a236b432e3c81b8 \
+> +	https://anonscm.debian.org/cgit/users/zito-guest/pkg-ustr.git/plain/debian/patches/fixes/nonlinux.diff?id=b09545eda93cc75d0510bc100a236b432e3c81b8 \
+> +	https://anonscm.debian.org/cgit/users/zito-guest/pkg-ustr.git/plain/debian/patches/fixes/stdarg-va_copy.diff?id=b09545eda93cc75d0510bc100a236b432e3c81b8 \
+> +	https://anonscm.debian.org/cgit/users/zito-guest/pkg-ustr.git/plain/debian/patches/fixes/unused-vars.diff?id=b09545eda93cc75d0510bc100a236b432e3c81b8
+>  
+>  USTR_INSTALL_STAGING = YES
+>  
+> -ifeq ($(BR2_STATIC_LIBS),y)
+> -USTR_BUILD_TARGETS = all
+> -USTR_INSTALL_TARGETS = install
+> -else ifeq ($(BR2_SHARED_LIBS),y)
+> -USTR_BUILD_TARGETS = all-shared
+> -USTR_INSTALL_TARGETS = install-shared
+> -else
+> -USTR_BUILD_TARGETS = all all-shared
+> -USTR_INSTALL_TARGETS = all install-shared
+> -endif
+> -
+> -define USTR_BUILD_CMDS
+> -	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(USTR_BUILD_TARGETS)
+> -endef
+> -
+> -define USTR_INSTALL_STAGING_CMDS
+> -	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) \
+> -		$(USTR_INSTALL_TARGETS)
+> -	$(RM) -f $(STAGING_DIR)/usr/lib/libustr-debug*
+> -	$(RM) -f $(STAGING_DIR)/usr/lib/pkgconfig/libustr-debug.pc
+> -endef
+> -
+> -define USTR_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
+> -		$(USTR_INSTALL_TARGETS)
+> -	$(RM) -f $(TARGET_DIR)/usr/lib/libustr-debug*
+> -	$(RM) -rf $(TARGET_DIR)/usr/share/ustr-$(USTR_VERSION)
+> -endef
+> -
+> -define HOST_USTR_BUILD_CMDS
+> -	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) all-shared
+> -endef
+> -
+> -define HOST_USTR_INSTALL_CMDS
+> -	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) \
+> -		install-shared
+> -endef
+> -
+> -$(eval $(generic-package))
+> -$(eval $(host-generic-package))
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+
+ Wow, so there's a Debian patch that converts it into an autotools package?
+That's definitely worth mentioning explicitly in the commit log.
 
  Regards,
  Arnout
 
-> So i'm going for:
-> 
-> # COPYING is in fact LGPLv2.1, but all of the code is v2+
-> # (except for one test, xingmux)
-> GST_PLUGINS_UGLY_LICENSE = LGPLv2+, GPLv2+ (synaesthesia)
-> 
-> Since in general we don't ship/use tests.
-> Regards.
 > 
 
 
