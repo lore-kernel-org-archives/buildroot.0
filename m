@@ -1,46 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 20 Nov 2015 12:19:07 -0300
-Subject: [Buildroot] [PATCH] kompexsqlite: needs threads and wchar
-Message-ID: <1448032747-7558-1-git-send-email-gustavo@zacarias.com.ar>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Fri, 20 Nov 2015 16:29:27 +0100
+Subject: [Buildroot] [PATCH 1/2] libnet: disable for musl toolchains
+Message-ID: <1448033368-8081-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Wchar is used by the wrapper, fixes:
-http://autobuild.buildroot.net/results/763/763d9aff86085b67077fc665e462cee81962246d/
-
-Threads can be disabled by the sqlite build system, but since
-kompexsqlite doesn't use the sqlite buildsystem and only uses a bundled
-version it falls back to the default for *nixes (enabled), fixes:
-http://autobuild.buildroot.net/results/c0b/c0b65be99603a2c2f07a38078f6b5622353915ca/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 ---
- package/kompexsqlite/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/libnet/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/kompexsqlite/Config.in b/package/kompexsqlite/Config.in
-index b6d7d7f..5b71842 100644
---- a/package/kompexsqlite/Config.in
-+++ b/package/kompexsqlite/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_KOMPEXSQLITE
- 	bool "kompexsqlite"
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
+diff --git a/package/libnet/Config.in b/package/libnet/Config.in
+index 7186972..8a88128 100644
+--- a/package/libnet/Config.in
++++ b/package/libnet/Config.in
+@@ -1,7 +1,12 @@
+ config BR2_PACKAGE_LIBNET
+ 	bool "libnet"
++	# Build with musl fails due to header issues
++	depends on !BR2_TOOLCHAIN_USES_MUSL
  	help
-@@ -8,5 +10,6 @@ config BR2_PACKAGE_KOMPEXSQLITE
+ 	  libnet provides a portable framework for low-level network
+ 	  packet construction.
  
- 	  http://sqlitewrapper.kompex-online.com/index.php
- 
--comment "kompexsqlite needs a toolchain w/ C++, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+comment "kompexsqlite needs a toolchain w/ C++, wchar, threads, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	  http://sourceforge.net/projects/libnet-dev
++
++comment "libnet needs a (e)glibc or uClibc toolchain"
++	depends on BR2_TOOLCHAIN_USES_MUSL
 -- 
-2.4.10
+1.8.3.1
