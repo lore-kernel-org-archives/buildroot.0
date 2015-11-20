@@ -1,57 +1,78 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 20 Nov 2015 21:01:28 +0000
-Subject: [Buildroot] Analysis of build results for 2015-11-18
-In-Reply-To: <20151120001552.51c1b21b@free-electrons.com>
-References: <20151119073014.0017E101A9A@stock.ovh.net>
- <20151120001552.51c1b21b@free-electrons.com>
-Message-ID: <1448053288.2964.12.camel@synopsys.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 20 Nov 2015 22:27:25 +0100
+Subject: [Buildroot] [PATCH 5/6] gst-plugins-ugly: add legal info
+In-Reply-To: <564E47F9.1080404@free-electrons.com>
+References: <1447850352-26299-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <1447850352-26299-5-git-send-email-gustavo.zacarias@free-electrons.com>
+ <564CF7C8.3030901@mind.be> <564E47F9.1080404@free-electrons.com>
+Message-ID: <564F903D.3000107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Fri, 2015-11-20 at 00:15 +0100, Thomas Petazzoni wrote:
-> Hello,
+On 19-11-15 23:06, Gustavo Zacarias wrote:
+> On 18/11/15 19:12, Arnout Vandecappelle wrote:
 > 
-> J?r?me, Johan, Bernd, Yann, Martin, Gustavo, R?mi, Samuel, Alexey,
-> Waldemar, Clayton, please read below, there are some interesting issues
-> for you :-) Thanks !
-
-[snip]
-
-> > arc |                  mesa3d-11.0.4 | NOK | 
-> > http://autobuild.buildroot.net/results/6baca535cf492f23112e39e4ced677a969e15d64/
->
->   CXXLD    gallium_dri.la
-> collect2: error: ld terminated with signal 11 [Segmentation fault]
->
-> Alexey, this looks like an ARC toolchain bug.
-
-Indeed that we were able to reproduce and reported that issue as
-9000976236 "Segmentation fault during mesa3d build" to our toolchain guys.
-Hopefully will be fixed soon.
-
-[snip]
-
-> > arc |              util-linux-2.27.1 | NOK | 
-> > http://autobuild.buildroot.net/results/75960db671807091fe9155aee9e46a6245e32590/
+>> On 18-11-15 13:39, gustavo.zacarias at free-electrons.com wrote:
+>>> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+>>>
+>>> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+>>> ---
+>>>   package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
+>>> b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
+>>> index e8f2362..9662623 100644
+>>> --- a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
+>>> +++ b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
+>>> @@ -7,6 +7,8 @@
+>>>   GST_PLUGINS_UGLY_VERSION = 0.10.19
+>>>   GST_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST_PLUGINS_UGLY_VERSION).tar.xz
+>>>   GST_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
+>>> +GST_PLUGINS_UGLY_LICENSE = LGPLv2.1+
+>>
+>>   synaesthesia is GPLv2+ (and is always enabled)
+>>
+>>   All the rest is LGPLv2+...
+>>
+>>> +GST_PLUGINS_UGLY_LICENSE_FILES = COPYING
+>>
+>>   ...except this file which is 2.1...
+>>
+>>   I guess there's a reason it's called ugly :-)
+>>
+>>
+>>   Regards,
+>>   Arnout
 > 
-> checking for prlimit... no
-> configure: error: flock selected, but required timer_create function not available
+> Hi Arnout.
+> Actually it's more ugly, in fact tests/check/elements/xingmux.c is LGPLv2.1+ :)
+
+ When checking licenses, I skip stuff in tests, docs, config, ... because we
+don't build that.
+
+
+ Regards,
+ Arnout
+
+> So i'm going for:
 > 
-> Not sure. Alexey ?
+> # COPYING is in fact LGPLv2.1, but all of the code is v2+
+> # (except for one test, xingmux)
+> GST_PLUGINS_UGLY_LICENSE = LGPLv2+, GPLv2+ (synaesthesia)
+> 
+> Since in general we don't ship/use tests.
+> Regards.
+> 
 
-Well I was trying to reproduce that locally but to no avail.
-Indeed I tried to strip everything but "util-linux" from defconfig to save time so
-might be that's the reason of my failed attempt.
 
-Still google tells me there's a similar issue with MIPSEL, see
-http://autobuild.buildroot.org/results/112/112e8b85783f5aaba42a937a6eb064317615a21b/build-end.log
-
-So I would assume that's not just ARC. Still I'm going to start building full defconfig
-from failed build and we'll see if I'll be able to trigger that same issue.
-
--Alexey
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
