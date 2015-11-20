@@ -1,39 +1,58 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 20 Nov 2015 14:17:53 +0100
-Subject: [Buildroot] [PATCH] systemd: Bump version
-Message-ID: <1448025473-10465-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Fri, 20 Nov 2015 10:34:15 -0300
+Subject: [Buildroot] [PATCH] squashfs: always enable xattr support
+Message-ID: <1448026455-8146-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 60aebcf..8090200 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 6766e8489e359f3d608a9f032eb1f52d7c55d76d0f9171837cf2b3284b2b904b  systemd-227.tar.gz
-+sha256 dd124ff561a07e6439ed2b3713f38ca914df7747f110ce86deea17b56d245ae6  systemd-228.tar.gz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 35dac83..e432069 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+In 785fef10 xattr support was disabled, probably because the old version
+did require the xattr package to be present to support it.
+In a409d76e xattr support was made optional via (lib)attr, however the
+squashfs package does in fact include all of the required bits to
+support xattr without the need for the attr package.
+
+So enable xattr support by default for both the host and target
+variants.
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/squashfs/squashfs.mk | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 3204d05..cdeb9c8 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -9,13 +9,7 @@ SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
+ SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
+ SQUASHFS_LICENSE = GPLv2+
+ SQUASHFS_LICENSE_FILES = COPYING
+-
+-ifeq ($(BR2_PACKAGE_ATTR),y)
+-SQUASHFS_DEPENDENCIES += attr
+-SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
+-else
+-SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
+-endif
++SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
  
--SYSTEMD_VERSION = 227
-+SYSTEMD_VERSION = 228
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+ ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
+ SQUASHFS_DEPENDENCIES += lz4
+@@ -54,9 +48,8 @@ endif
+ 
+ HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz
+ 
+-# no libattr/xz in BR
+ HOST_SQUASHFS_MAKE_ARGS = \
+-	XATTR_SUPPORT=0 \
++	XATTR_SUPPORT=1 \
+ 	XZ_SUPPORT=1    \
+ 	GZIP_SUPPORT=1  \
+ 	LZ4_SUPPORT=1	\
 -- 
-2.6.2
+2.4.10
