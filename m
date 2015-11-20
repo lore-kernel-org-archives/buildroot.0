@@ -1,48 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Nov 2015 23:41:45 +0100
-Subject: [Buildroot] [PATCH v2 5/5] gst-plugins-ugly: add legal info
-In-Reply-To: <1447971261-26290-5-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1447971261-26290-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1447971261-26290-5-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <564FA1A9.1000509@mind.be>
+Date: Fri, 20 Nov 2015 23:43:45 +0100
+Subject: [Buildroot] [PATCH v3] sdl: overwrite libpth autodetection
+In-Reply-To: <1447969367-21983-1-git-send-email-ps.report@gmx.net>
+References: <1447969367-21983-1-git-send-email-ps.report@gmx.net>
+Message-ID: <564FA221.9090104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19-11-15 23:14, gustavo.zacarias at free-electrons.com wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> 
-> Even though COPYING is LGPLv2.1+ many code files state v2+
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+On 19-11-15 22:42, Peter Seiderer wrote:
+> The sdl libpth autodetection gets confused in case a host
+> version is present. Overwrite libpth autodection for the
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ For future reference: it's override, not overwrite. You could say "overwrite"
+if you had a patch that fixes the autodetection, but you want to say that you
+force it not to use autodetection.
 
  Regards,
  Arnout
 
-> ---
->  package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
-> index e8f2362..b921dc1 100644
-> --- a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
-> +++ b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
-> @@ -7,6 +7,10 @@
->  GST_PLUGINS_UGLY_VERSION = 0.10.19
->  GST_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST_PLUGINS_UGLY_VERSION).tar.xz
->  GST_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
-> +# COPYING is in fact LGPLv2.1, but all of the code is v2+
-> +# (except for one test, xingmux)
-> +GST_PLUGINS_UGLY_LICENSE = LGPLv2+, GPLv2+ (synaesthesia)
-> +GST_PLUGINS_UGLY_LICENSE_FILES = COPYING
->  
->  GST_PLUGINS_UGLY_CONF_OPTS = \
->  	--disable-examples
-> 
+> target build dependent on BR2_PACKAGE_LIBPTHSEM_COMPAT and
+> use pth-config from staging directory.
 
 
 -- 
