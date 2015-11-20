@@ -1,50 +1,39 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Fri, 20 Nov 2015 10:06:51 -0300
-Subject: [Buildroot] [PATCH] gstreamer: can optionally use libxml2
-Message-ID: <1448024811-5447-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Fri, 20 Nov 2015 14:17:53 +0100
+Subject: [Buildroot] [PATCH] systemd: Bump version
+Message-ID: <1448025473-10465-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-
-gstreamer can optionally build against libxml2, so account for it in
-the dependencies.
-Functionality seems somewhat reduced without it, an example being
-misdetecting subtitle (.srt) files as subrip mime type instead of
-subtitle itself.
-
-A failed scenario would be:
-
-$ gst-typefind-0.10 some.srt
-some.srt - application/x-subrip
-
-When built with libxml2:
-
-$ gst-typefind-0.10 some.srt
-some.srt - application/x-subtitle
-
-This doesn't affect gstreamer 1.x since it dropped any use of libxml2.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/gstreamer/gstreamer/gstreamer.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
-index 3705298..74a5840 100644
---- a/package/gstreamer/gstreamer/gstreamer.mk
-+++ b/package/gstreamer/gstreamer/gstreamer.mk
-@@ -30,6 +30,7 @@ GSTREAMER_CONF_OPTS = \
- 	$(if $(BR2_PACKAGE_GSTREAMER_GST_DEBUG),,--disable-gst-debug) \
- 	$(if $(BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY),,--disable-registry)
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 60aebcf..8090200 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 6766e8489e359f3d608a9f032eb1f52d7c55d76d0f9171837cf2b3284b2b904b  systemd-227.tar.gz
++sha256 dd124ff561a07e6439ed2b3713f38ca914df7747f110ce86deea17b56d245ae6  systemd-228.tar.gz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 35dac83..e432069 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--GSTREAMER_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
-+GSTREAMER_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex \
-+	$(if $(BR2_PACKAGE_LIBXML2),libxml2)
- 
- $(eval $(autotools-package))
+-SYSTEMD_VERSION = 227
++SYSTEMD_VERSION = 228
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
 -- 
-2.4.10
+2.6.2
