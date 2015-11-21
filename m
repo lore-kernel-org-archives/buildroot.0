@@ -1,45 +1,45 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Sat, 21 Nov 2015 20:53:34 +0100
-Subject: [Buildroot] [PATCH 2/2 v3] package/nodejs: add version 4.1.2
-In-Reply-To: <CAFGQKxeC83GJHc5+kHb3gJyyeXdSMJ6fFrSL8eRQXCjPVaHQ_A@mail.gmail.com>
-References: <cover.1445291882.git.yann.morin.1998@free.fr>
- <eb34ab6d35a15dfbec70263091f58c3e7ec2efab.1445291882.git.yann.morin.1998@free.fr>
- <CAFGQKxcBe5fzTCrQQxBXH7OtAf_qy7v+5TeAfFxhzY1C9QhS8g@mail.gmail.com>
- <20151020162527.GA3738@free.fr>
- <CAFGQKxeC83GJHc5+kHb3gJyyeXdSMJ6fFrSL8eRQXCjPVaHQ_A@mail.gmail.com>
-Message-ID: <5650CBBE.4080604@jcz.nl>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 21 Nov 2015 22:10:07 +0100
+Subject: [Buildroot] [PATCH] bullet: disable on microblaze
+Message-ID: <1448140207-28861-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+gcc doesn't finish compiling btSoftBody.cpp when optimization is
+enabled.
 
+Fixes:
+http://autobuild.buildroot.net/results/6e4/6e4a9ede477b031f47f7e271c38f67f432a3573c
+http://autobuild.buildroot.net/results/7dc/7dc4ab759dd3b1e3e03fe52c78e31327340bf8c9
+http://autobuild.buildroot.net/results/637/637bae8b2be6c4c64f4f7c661cc8d4606b553538
 
-Can somebody please add the following (might not be completely right, that's why I post it
-like this):
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+An option would have been to disable optimisation, but I couldn't be
+bothered...
+---
+ package/bullet/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[jaap at jaap /data/work/zupr/git/buildroot ]$ git diff
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 5128901..8d0ecad 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -32,7 +32,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-        # On supported architectures other than ARM, no special requirement
-        default y if !BR2_arm
-        # On ARM, at least ARMv6+ with VFPv2+ is needed
--       default y if !BR2_ARM_CPU_ARMV5 && BR2_ARM_CPU_HAS_VFPV2
-+	default y if !BR2_ARM_CPU_ARMV5 && BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_HAS_NEON
-
- choice
-        prompt "Node.js version"
-[jaap at jaap /data/work/zupr/git/buildroot ]$
-
-To my oppinion Neon is a VFPv2 succesor. NodeJS builds and runs fine with Neon selected
-instead of VFPv2 for Cortex-A9.
-
-
-Kind regards,
-
-Jaap Crezee
+diff --git a/package/bullet/Config.in b/package/bullet/Config.in
+index fc285ab..56b3d62 100644
+--- a/package/bullet/Config.in
++++ b/package/bullet/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BULLET
+ 	bool "bullet"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_microblaze
+ 	help
+ 	  Bullet is a Collision Detection and Rigid Body Dynamics
+ 	  Library.
+@@ -9,3 +10,4 @@ config BR2_PACKAGE_BULLET
+ 
+ comment "bullet needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_microblaze
+-- 
+2.6.2
