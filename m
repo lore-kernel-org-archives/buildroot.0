@@ -1,103 +1,73 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat, 21 Nov 2015 19:53:22 -0200
-Subject: [Buildroot] [PATCH 1/1] gpsd: re-enable on microblaze architecture
-Message-ID: <1448142802-1294-1-git-send-email-sergio.prado@e-labworks.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Nov 2015 23:17:26 +0100
+Subject: [Buildroot] Analysis of build results for 2015-11-18
+In-Reply-To: <CAFGQKxd7LUYDN-whwsdhenu=bMJXnd7nQ=ungrxvt2NnMG5fiA@mail.gmail.com>
+References: <20151119073014.0017E101A9A@stock.ovh.net>
+ <20151120001552.51c1b21b@free-electrons.com>
+ <CAFGQKxd7LUYDN-whwsdhenu=bMJXnd7nQ=ungrxvt2NnMG5fiA@mail.gmail.com>
+Message-ID: <5650ED76.6070409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix (works around) bug #6872
-https://bugs.busybox.net/show_bug.cgi?id=6872
+On 21-11-15 15:45, Martin Bark wrote:
+> Thomas, All,
+> 
+> On 19 November 2015 at 23:15, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> J?r?me, Johan, Bernd, Yann, Martin, Gustavo, R?mi, Samuel, Alexey,
+>> Waldemar, Clayton, please read below, there are some interesting issues
+>> for you :-) Thanks !
+>>
+>> On Thu, 19 Nov 2015 08:30:13 +0100 (CET), Thomas Petazzoni wrote:
 
-The gpsd package was disabled due to an internal compiler error for
-the microblaze architecture in the following commit:
-http://git.buildroot.net/buildroot/commit/?id=d517415bcda380336f4a27bf248cef4d81791c9e
+[snip]
 
-The problem is due to an specific GCC optimization flag
-(-fexpensive-optimizations), so disabling it we can work around this
-problem and compile gpsd for the microblaze architecture.
+>>>       x86_64 |              host-nodejs-4.1.2 | NOK | http://autobuild.buildroot.net/results/3fd1d18f0535bb8b969f808a5837c4a8111e69b9/
+>>
+>> Seems like nodejs doesn't like the native gcc 4.7 that this machine
+>> uses. Martin, can you have a look ?
+>>
+>> BTW Martin, there's also this other error that popped up on a different
+>> machine:
+>> http://autobuild.buildroot.org/results/72b/72b80a434547931e1deb6f0ba793a6d68accc9a2/build-end.log.
+> 
+> Yes i think you're right, the issue looks like gcc 4.7 on the host.
+> This issue https://github.com/nodejs/node-gyp/issues/790 and this one
+> https://github.com/nodejs/node/issues/432 have similar build issues
+> and they both come down to node.js needs at least gcc 4.8
+> 
+> The Config.in already has BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 for node.js
+> 4.x, is there a way to specify this for the host build too?
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- package/gpsd/Config.in        | 3 ---
- package/gpsd/gpsd.mk          | 7 ++++++-
- package/sconeserver/Config.in | 2 --
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ There currently isn't.
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index fa8b8f6b2ad5..b4008ebd8353 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -1,7 +1,6 @@
- comment "gpsd needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
--	depends on !BR2_microblaze
- 
- config BR2_PACKAGE_GPSD
- 	bool "gpsd"
-@@ -10,8 +9,6 @@ config BR2_PACKAGE_GPSD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# Always tries to build a shared library
- 	depends on !BR2_STATIC_LIBS
--	# triggers gcc ice
--	depends on !BR2_microblaze
- 	help
- 	  gpsd is a service daemon that monitors one or more GPSes or AIS
- 	  receivers attached to a host computer through serial or USB ports,
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 87911c3905fe..18715f8f2933 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -13,6 +13,7 @@ GPSD_INSTALL_STAGING = YES
- GPSD_DEPENDENCIES = host-scons host-pkgconf
- 
- GPSD_LDFLAGS = $(TARGET_LDFLAGS)
-+GPSD_CFLAGS = $(TARGET_CFLAGS)
- 
- GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
- 
-@@ -37,6 +38,10 @@ else
- GPSD_SCONS_OPTS += libgpsmm=no
- endif
- 
-+ifeq ($(BR2_microblaze),y)
-+GPSD_CFLAGS += -fno-expensive-optimizations
-+endif
-+
- # Enable or disable Qt binding
- ifeq ($(BR2_PACKAGE_QT_NETWORK),y)
- GPSD_SCONS_ENV += QMAKE="$(QT_QMAKE)"
-@@ -185,7 +190,7 @@ ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
- GPSD_SCONS_OPTS += limited_max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
- endif
- 
--GPSD_SCONS_ENV += LDFLAGS="$(GPSD_LDFLAGS)"
-+GPSD_SCONS_ENV += LDFLAGS="$(GPSD_LDFLAGS)" CFLAGS="$(GPSD_CFLAGS)"
- 
- define GPSD_BUILD_CMDS
- 	(cd $(@D); \
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index f16e683bf563..4083aa7dce36 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -63,7 +63,6 @@ config BR2_PACKAGE_SCONESERVER_LOCATION
- 	bool "location"
- 	depends on BR2_USE_MMU # gpsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gpsd
--	depends on !BR2_microblaze # gpsd
- 	depends on !BR2_STATIC_LIBS # gpsd
- 	select BR2_PACKAGE_GPSD
- 	help
-@@ -72,7 +71,6 @@ config BR2_PACKAGE_SCONESERVER_LOCATION
- comment "location support needs a toolchain w/ theads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBRARY
--	depends on !BR2_microblaze
- 
- config BR2_PACKAGE_SCONESERVER_LETTUCE
- 	bool "lettuce"
+ I will try to make a patch that adds BR2_HOST_GCC_AT_LEAST_*, but I don't have
+the older gcc to test it with. There are three packages that have
+BR2_TOOLCHAIN_GCC_AT_LEAST and that also have a host variant:
+
+- nodejs (4.8)
+- directfb (4.5), but host-directfb is not used and never has been used
+- cmake (4.7), but that's only needed for ctest which needs jsoncpp which
+doesn't have a host variant.
+
+ So probably only nodejs will need this, but it would be good to test host-cmake
+with gcc 4.6 or earlier. Does anyone have that lying around?
+
+ Regards,
+ Arnout
+
+[snip]
+
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
