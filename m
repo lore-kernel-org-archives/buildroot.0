@@ -1,35 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Nov 2015 09:33:42 +0100
-Subject: [Buildroot] [PATCH] glibmm: bump to version 2.46.2
-In-Reply-To: <20151121093103.1bf8c375@free-electrons.com>
-References: <1448045148-23789-1-git-send-email-gustavo@zacarias.com.ar>
- <20151121093103.1bf8c375@free-electrons.com>
-Message-ID: <20151121093342.5415e950@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 21 Nov 2015 10:23:31 +0100
+Subject: [Buildroot] [PATCH] jimtcl: fix compile problem for sparc64
+Message-ID: <20151121092330.GA14832@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+It is general safe to use -fPIC for all architectures.
+-fpic breaks sparc64 compile.
 
-On Sat, 21 Nov 2015 09:31:03 +0100, Thomas Petazzoni wrote:
+Runtime tested on Qemu ARM, MIPS and SPARC64.
 
-> On Fri, 20 Nov 2015 15:45:48 -0300, Gustavo Zacarias wrote:
-> > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> > ---
-> >  package/glibmm/glibmm.hash | 4 ++--
-> >  package/glibmm/glibmm.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> Applied, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/98f391ad13f22828c022f185c0166daabdb4c1ad/
 
-Of course, this should have been:
+It also addresses a problem with the wrong symlink for the shared library
+recognized while runtime testing.
 
-Applied to next, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+---
+ package/jimtcl/jimtcl.mk |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index e79e0f6..79fa742 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -33,8 +33,8 @@ else
+ JIMTCL_SHARED = --shared
+ define JIMTCL_INSTALL_LIB
+ 	$(INSTALL) -m 0755 -D $(@D)/libjim.so.$(JIMTCL_VERSION) \
+-		$(1)/usr/lib/libjim.$(JIMTCL_VERSION)
+-	ln -s libjim.$(JIMTCL_VERSION) $(1)/usr/lib/libjim.so
++		$(1)/usr/lib/libjim.so.$(JIMTCL_VERSION)
++	ln -sf libjim.so.$(JIMTCL_VERSION) $(1)/usr/lib/libjim.so
+ endef
+ endif
+ 
+@@ -47,6 +47,8 @@ define JIMTCL_CONFIGURE_CMDS
+ endef
+ 
+ define JIMTCL_BUILD_CMDS
++	SH_CFLAGS="-fPIC" \
++	SHOBJ_CFLAGS="-fPIC" \
+ 	$(MAKE) -C $(@D)
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
