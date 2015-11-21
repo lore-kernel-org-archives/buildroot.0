@@ -1,45 +1,54 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Nov 2015 22:10:07 +0100
-Subject: [Buildroot] [PATCH] bullet: disable on microblaze
-Message-ID: <1448140207-28861-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Nov 2015 22:14:05 +0100
+Subject: [Buildroot] Analysis of build results for 2015-11-18
+In-Reply-To: <20151121092308.51921dcc@free-electrons.com>
+References: <20151119073014.0017E101A9A@stock.ovh.net>
+ <20151120001552.51c1b21b@free-electrons.com> <564F9E17.2090501@mind.be>
+ <20151121092308.51921dcc@free-electrons.com>
+Message-ID: <5650DE9D.90803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc doesn't finish compiling btSoftBody.cpp when optimization is
-enabled.
+On 21-11-15 09:23, Thomas Petazzoni wrote:
+> Arnout,
+> 
+> On Fri, 20 Nov 2015 23:26:31 +0100, Arnout Vandecappelle wrote:
+> 
+>>  This is in fact also a real build failure, not just a webkit-related timeout.
+>> The bullet package seems to have a problem on microblaze. This was with gcc 4.9,
+>> but I just tried with gcc 5 and that has the same problem.
+>>
+>>  First there is a run of:
+>>
+>> fde encoding in CMakeFiles/BulletXmlWorldImporter.dir/tinyxmlparser.o(.eh_frame)
+>> prevents .eh_frame_hdr table being created
+>>
+>> but then the build hangs in cc1plus of btSoftBody.cpp
+>>
+>>
+>>  Just disable the package on microblaze?
+> 
+> OK, but it would be good to report the appropriate bugs to
+> gcc/binutils, especially if it's still reproducible with a recent gcc
+> 5.x/binutils 2.25 toolchain.
 
-Fixes:
-http://autobuild.buildroot.net/results/6e4/6e4a9ede477b031f47f7e271c38f67f432a3573c
-http://autobuild.buildroot.net/results/7dc/7dc4ab759dd3b1e3e03fe52c78e31327340bf8c9
-http://autobuild.buildroot.net/results/637/637bae8b2be6c4c64f4f7c661cc8d4606b553538
+ binutils doesn't matter, since it's cc1plus that hangs.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-An option would have been to disable optimisation, but I couldn't be
-bothered...
----
- package/bullet/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ Bug reported at https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68476
 
-diff --git a/package/bullet/Config.in b/package/bullet/Config.in
-index fc285ab..56b3d62 100644
---- a/package/bullet/Config.in
-+++ b/package/bullet/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BULLET
- 	bool "bullet"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_microblaze
- 	help
- 	  Bullet is a Collision Detection and Rigid Body Dynamics
- 	  Library.
-@@ -9,3 +10,4 @@ config BR2_PACKAGE_BULLET
- 
- comment "bullet needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_microblaze
+ Patch sent.
+
+ Regards,
+ Arnout
+
+
 -- 
-2.6.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
