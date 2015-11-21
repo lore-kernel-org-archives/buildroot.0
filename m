@@ -1,49 +1,48 @@
 From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Fri, 20 Nov 2015 18:55:39 -0600
-Subject: [Buildroot] [PATCH v2] openssl: fix race condition when symlink
- shared libs
-In-Reply-To: <1448036610-7077-1-git-send-email-ryan.barnett@rockwellcollins.com>
-References: <1448036610-7077-1-git-send-email-ryan.barnett@rockwellcollins.com>
-Message-ID: <CALq67GC8mvMfpwVLpaticcDxewr12Xxk7p3UUSQrEfmxB0ZWZg@mail.gmail.com>
+Date: Fri, 20 Nov 2015 19:45:04 -0600
+Subject: [Buildroot] [PATCH v2 1/2] apply-patches: only use first field of
+	line for series file
+Message-ID: <1448070305-10768-1-git-send-email-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+A series file for quilt has a valid syntax of:
 
-On Fri, Nov 20, 2015 at 10:23 AM, Ryan Barnett
-<ryan.barnett@rockwellcollins.com> wrote:
-> The build-shared target depends on do_crypto and link-shared, which
-> will be executed in parallel. do_crypto calls
-> link_a.linux_shared -> link_a.gnu which does SYMLINK_SO; in parallel,
-> link-shared calls symlink.linux_shared which also does SYMLINK_SO.
-> Before the symlink is created, it is rm'ed, but there is a tiny chance
-> that the second one is created after the rm has been called.
->
-> Fix this by using 'ln -sf' instead of 'ln -s' so the build doesn't
-> error out.
->
-> Patch submitted upstream at:
->   https://bugs.gentoo.org/show_bug.cgi?id=566260
+  fixes/autoconf.diff -p1
+  fixes/doc-html-local-css.diff -p1
+  fixes/gnu-inline.diff -p1
 
-So it doesn't appear that using 'ln -sf' is a valid fix as pointed out
-in the bug report on the gentoo forum:
+However, with the current way that a series file is handled, it will
+error out because the -p1 is tried as a file. This is because in the
+for loop that iterates the files, we only look for invalid lines. Then
+each line is used within a bash for loop which uses spaces a
+delimiter. In order to fix this, we should only use the string that
+comes before a space in the series file.
 
- -- Comment #2 from SpanKY <vapier@gentoo.org> ---
- `ln -sf` is no more atomic than `rm; ln`.  there is still a window where things
- can fail.  you can easily check this:
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+CC: Arnout Vandecappelle <arnout@mind.be>
+---
+ support/scripts/apply-patches.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-   i=0; while [ $((i++)) -lt 500 ]; do ln -sf a b & :; done
-
- a good number of those will fail with:
- ln: failed to create symbolic link ?b?: File exists
-
- the deps need to be fixed up
-
-So how do we want to proceed with this? Do we revert the patch for
-parallel builds for openssl?
-
-Thanks,
--Ryan
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 2edf054..6525f94 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -115,7 +115,10 @@ function scan_patchdir {
+     # If there is a series file, use it instead of using ls sort order
+     # to apply patches. Skip line starting with a dash.
+     if [ -e "${path}/series" ] ; then
+-        for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
++        # Some series files for quilt contain a '-p1' at the end, handle this
++        # by only using the first word from series file
++        series_patches="`grep -Ev "^#" ${path}/series | cut -d ' ' -f1 2> /dev/null`"
++        for i in $series_patches; do
+             apply_patch "$path" "$i" series
+         done
+     else
+-- 
+1.9.1
