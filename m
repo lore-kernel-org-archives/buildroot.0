@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Nov 2015 20:40:34 +0100
-Subject: [Buildroot] [PATCH/next 7/8] package/tvheadend: bump version
+Date: Sat, 21 Nov 2015 20:40:32 +0100
+Subject: [Buildroot] [PATCH/next 5/8] package/libfribidi: bump version to
+	0.19.7
 In-Reply-To: <1448134835-27519-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1448134835-27519-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1448134835-27519-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1448134835-27519-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tvheadend/0001-no-check_config.patch | 2 +-
- package/tvheadend/tvheadend.mk               | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libfribidi/libfribidi.hash | 4 ++--
+ package/libfribidi/libfribidi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tvheadend/0001-no-check_config.patch b/package/tvheadend/0001-no-check_config.patch
-index c77ca76..6a0cddd 100644
---- a/package/tvheadend/0001-no-check_config.patch
-+++ b/package/tvheadend/0001-no-check_config.patch
-@@ -16,7 +16,7 @@ diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvhe
-  	$(ROOTDIR)/configure $(CONFIGURE_ARGS)
-  
-  # Binary
---${PROG}: check_config make_webui $(OBJS)
-+-${PROG}: .config.mk make_webui $(OBJS)
- +${PROG}: make_webui $(OBJS)
-  	$(CC) -o $@ $(OBJS) $(CFLAGS) $(LDFLAGS)
-  
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 6b8fdea..60ca524 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
+diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
+index 003944a..79b5dd3 100644
+--- a/package/libfribidi/libfribidi.hash
++++ b/package/libfribidi/libfribidi.hash
+@@ -1,2 +1,2 @@
+-# From http://www.fribidi.org/download/fribidi-0.19.6.tar.bz2.sha256
+-sha256	cba8b7423c817e5adf50d28ec9079d14eafcec9127b9e8c8f1960c5ad585e17d	fribidi-0.19.6.tar.bz2
++# From http://www.fribidi.org/download/fribidi-0.19.7.tar.bz2.sha256
++sha256	08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e	fribidi-0.19.7.tar.bz2
+diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+index 1cf3b7c..4e82a5e 100644
+--- a/package/libfribidi/libfribidi.mk
++++ b/package/libfribidi/libfribidi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = a27b0af2b82dae83cf8a41e01ee1174b911f3aa3
-+TVHEADEND_VERSION = 8902dcbcc48b6a76168882a856111237f13e60ea
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+-LIBFRIBIDI_VERSION = 0.19.6
++LIBFRIBIDI_VERSION = 0.19.7
+ LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
+ LIBFRIBIDI_SITE = http://www.fribidi.org/download
+ LIBFRIBIDI_LICENSE = LGPLv2.1+
 -- 
 2.6.2
