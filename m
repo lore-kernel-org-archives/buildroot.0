@@ -1,57 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Nov 2015 20:40:35 +0100
-Subject: [Buildroot] [PATCH/next 8/8] package/{mesa3d,
-	mesa3d-headers}: bump version to 11.0.6
-In-Reply-To: <1448134835-27519-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1448134835-27519-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1448134835-27519-8-git-send-email-bernd.kuhls@t-online.de>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Sat, 21 Nov 2015 20:53:34 +0100
+Subject: [Buildroot] [PATCH 2/2 v3] package/nodejs: add version 4.1.2
+In-Reply-To: <CAFGQKxeC83GJHc5+kHb3gJyyeXdSMJ6fFrSL8eRQXCjPVaHQ_A@mail.gmail.com>
+References: <cover.1445291882.git.yann.morin.1998@free.fr>
+ <eb34ab6d35a15dfbec70263091f58c3e7ec2efab.1445291882.git.yann.morin.1998@free.fr>
+ <CAFGQKxcBe5fzTCrQQxBXH7OtAf_qy7v+5TeAfFxhzY1C9QhS8g@mail.gmail.com>
+ <20151020162527.GA3738@free.fr>
+ <CAFGQKxeC83GJHc5+kHb3gJyyeXdSMJ6fFrSL8eRQXCjPVaHQ_A@mail.gmail.com>
+Message-ID: <5650CBBE.4080604@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Hi all,
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index e65f01d..6db845d 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 11.0.5
-+MESA3D_HEADERS_VERSION = 11.0.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 8b9c8c6..6eaa5d6 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-November/000181.html
--sha256	9c255a2a6695fcc6ef4a279e1df0aeaf417dc142f39ee59dfb533d80494bb67a	mesa-11.0.5.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-November/000184.html
-+sha256	8340e64cdc91999840404c211496f3de38e7b4cb38db34e2f72f1642c5134760	mesa-11.0.6.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 4f484f7..457babc 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 11.0.5
-+MESA3D_VERSION = 11.0.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.6.2
+
+Can somebody please add the following (might not be completely right, that's why I post it
+like this):
+
+[jaap at jaap /data/work/zupr/git/buildroot ]$ git diff
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 5128901..8d0ecad 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -32,7 +32,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+        # On supported architectures other than ARM, no special requirement
+        default y if !BR2_arm
+        # On ARM, at least ARMv6+ with VFPv2+ is needed
+-       default y if !BR2_ARM_CPU_ARMV5 && BR2_ARM_CPU_HAS_VFPV2
++	default y if !BR2_ARM_CPU_ARMV5 && BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_HAS_NEON
+
+ choice
+        prompt "Node.js version"
+[jaap at jaap /data/work/zupr/git/buildroot ]$
+
+To my oppinion Neon is a VFPv2 succesor. NodeJS builds and runs fine with Neon selected
+instead of VFPv2 for Cortex-A9.
+
+
+Kind regards,
+
+Jaap Crezee
