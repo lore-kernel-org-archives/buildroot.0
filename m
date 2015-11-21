@@ -1,41 +1,58 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Nov 2015 20:40:29 +0100
-Subject: [Buildroot] [PATCH/next 2/8] package/yasm: bump version to 1.3.0
+Date: Sat, 21 Nov 2015 20:40:31 +0100
+Subject: [Buildroot] [PATCH/next 4/8] package/libass: bump version to 0.13.0
 In-Reply-To: <1448134835-27519-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1448134835-27519-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1448134835-27519-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1448134835-27519-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Quote from https://github.com/libass/libass/blob/master/Changelog
+"* Drop ENCA support"
+
+Therefore we remove the dependency to libenca.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/yasm/yasm.hash | 2 +-
- package/yasm/yasm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libass/libass.hash | 2 +-
+ package/libass/libass.mk   | 9 +--------
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/package/yasm/yasm.hash b/package/yasm/yasm.hash
-index d5cf267..016c15b 100644
---- a/package/yasm/yasm.hash
-+++ b/package/yasm/yasm.hash
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index f300166..87d3f26 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256 768ffab457b90a20a6d895c39749adb547c1b7cb5c108e84b151a838a23ccf31 yasm-1.2.0.tar.gz
-+sha256	3dce6601b495f5b3d45b59f7d2492a340ee7e84b5beca17e48f862502bd5603f	yasm-1.3.0.tar.gz
-diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-index 0bbd22d..bf8a481 100644
---- a/package/yasm/yasm.mk
-+++ b/package/yasm/yasm.mk
+ # Locally computed
+-sha256 a67c54ebaf5ec19ae72e86259ee6ab6adfe2e64ed9f9149db03dc863360ea38c  libass-0.12.3.tar.xz
++sha256	e0071a3b2e95411c8d474014678368e3f0b852f7d663e0564b344e7335eb0671	libass-0.13.0.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index f1f00f3..83939e2 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--YASM_VERSION = 1.2.0
-+YASM_VERSION = 1.3.0
- YASM_SITE = http://www.tortall.net/projects/yasm/releases
+-LIBASS_VERSION = 0.12.3
++LIBASS_VERSION = 0.13.0
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
+@@ -38,11 +38,4 @@ else
+ LIBASS_CONF_OPTS += --disable-harfbuzz
+ endif
  
- define YASM_PRE_CONFIGURE_FIXUP
+-ifeq ($(BR2_PACKAGE_LIBENCA),y)
+-LIBASS_DEPENDENCIES += libenca
+-LIBASS_CONF_OPTS += --enable-enca
+-else
+-LIBASS_CONF_OPTS += --disable-enca
+-endif
+-
+ $(eval $(autotools-package))
 -- 
 2.6.2
