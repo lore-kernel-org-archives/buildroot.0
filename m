@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Nov 2015 00:53:12 +0100
+Date: Sun, 22 Nov 2015 00:54:56 +0100
 Subject: [Buildroot] [PATCH 1/1] ustr: fix build issue with GCC5
 In-Reply-To: <1448134108-10089-1-git-send-email-sergio.prado@e-labworks.com>
 References: <1448134108-10089-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <565103E8.5030303@mind.be>
+Message-ID: <56510450.1040106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -32,51 +32,16 @@ On 21-11-15 20:28, Sergio Prado wrote:
 > http://autobuild.buildroot.org/results/fde/fde02ae2883a058b98e57ba087466d820ab1a5eb//
 > http://autobuild.buildroot.org/results/e04/e04849c31e2a2528282ce6cdcf69aa10076d721d//
 > http://autobuild.buildroot.org/results/7b3/7b3295e711fc51907c311adb63f0b7d06a90a7b9//
-> ...and many others.
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 
- I would normally prefer this option (not patching) rather than taking the
-debian patches, so we remain closer to upstream.
+ Oh, small nit: it's better to use the short URLs (which fit in 80 columns):
 
- However, in this case, upstream has been inactive for 7 years, so there's not
-much point following it. In a way, Debian could be considered the new upstream.
+http://autobuild.buildroot.org/results/fde02ae2883a058b98e57ba087466d820ab1a5eb
 
- That said, for 2015.11, this approach is safer.
 
- So I'd propose to take this patch for 2015.11, and Ryan's Debian patch for
-next. Peter, what do you think?
+ Regards,
+ Arnout
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->  package/ustr/ustr.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
-> index 3144c0b47c70..817f0b0c5e9c 100644
-> --- a/package/ustr/ustr.mk
-> +++ b/package/ustr/ustr.mk
-> @@ -12,6 +12,8 @@ USTR_LICENSE_FILES = LICENSE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
->  
->  USTR_INSTALL_STAGING = YES
->  
-> +USTR_CFLAGS = $(TARGET_CFLAGS) -std=gnu89
-> +
->  ifeq ($(BR2_STATIC_LIBS),y)
->  USTR_BUILD_TARGETS = all
->  USTR_INSTALL_TARGETS = install
-> @@ -24,7 +26,8 @@ USTR_INSTALL_TARGETS = all install-shared
->  endif
->  
->  define USTR_BUILD_CMDS
-> -	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(USTR_BUILD_TARGETS)
-> +	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(USTR_CFLAGS)" \
-> +		$(USTR_BUILD_TARGETS)
->  endef
->  
->  define USTR_INSTALL_STAGING_CMDS
-> 
+[snip]
 
 
 -- 
