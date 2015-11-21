@@ -1,64 +1,39 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 22 Nov 2015 00:16:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mpd: fix static build issue with
-	alsa
-Message-ID: <1448147781-18796-1-git-send-email-joerg.krause@embedded.rocks>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 22 Nov 2015 00:18:37 +0100
+Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: remove HOSTCC_VERSION
+Message-ID: <1448147919-5463-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mpd forgets to link the archive libmixer_plugins.a against libasound leading
-to undefined references in a static context.
+HOSTCC_VERSION is no longer used since gcc switched to the package
+infrastructure in e236fe481. It was in fact no longer needed since we
+dropped support for gcc 4.3.
 
-Add a patch sent upstream to fix:
-http://autobuild.buildroot.net/results/f10/f10c6ea2d29bbcef8f33fc9ba1430e99edca895d/
-http://autobuild.buildroot.net/results/312/31212c484f452fe4ea6ae084d3edefc4580830d8/
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/mpd/0003-fix-static-build-with-alsa.patch | 32 +++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/mpd/0003-fix-static-build-with-alsa.patch
+Note that we currently claim to support system gcc >= 2.95, but I don't
+think that matches reality...
+---
+ package/Makefile.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/mpd/0003-fix-static-build-with-alsa.patch b/package/mpd/0003-fix-static-build-with-alsa.patch
-new file mode 100644
-index 0000000..4ba0449
---- /dev/null
-+++ b/package/mpd/0003-fix-static-build-with-alsa.patch
-@@ -0,0 +1,32 @@
-+From bba7b8e5fed79a7fecacf5468ade35a3ae0a0f8e Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Sat, 21 Nov 2015 23:51:43 +0100
-+Subject: [PATCH 1/1] Makefile.am: fix static build with alsa
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Add ALSA_LIBS to MIXER_LIBS, otherwise building mpd in a static context fails
-+with lot of undefined references to alsa-lib (libasound) required by
-+src/mixer/plugins/AlsaMixerPlugin.cxx.
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ Makefile.am | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 89819de..307fcba 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1219,6 +1219,7 @@ liboutput_plugins_a_SOURCES = \
-+ 
-+ MIXER_LIBS = \
-+ 	libmixer_plugins.a \
-++	$(ALSA_LIBS) \
-+ 	$(PULSE_LIBS)
-+ 
-+ MIXER_API_SRC = \
-+-- 
-+2.6.2
-+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 85008bb..82a66c2 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -219,10 +219,6 @@ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+ HOST_CXXFLAGS += $(HOST_CFLAGS)
+ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
+ 
+-# hostcc version as an integer - E.G. 4.3.2 => 432
+-HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
+-	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
+-
+ # host-intltool should be executed with the system perl, so we save
+ # the path to the system perl, before a host-perl built by Buildroot
+ # might get installed into $(HOST_DIR)/usr/bin and therefore appears
 -- 
 2.6.2
