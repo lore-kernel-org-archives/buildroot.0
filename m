@@ -1,72 +1,61 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Sat, 21 Nov 2015 10:32:13 -0600
-Subject: [Buildroot] [PATCH v2] openssl: fix race condition when symlink
- shared libs
-In-Reply-To: <565070A7.10001@mind.be>
-References: <1448036610-7077-1-git-send-email-ryan.barnett@rockwellcollins.com>
- <565070A7.10001@mind.be>
-Message-ID: <CAMQcK5+-nXtVvQPz++ekYdQyZY8vXvqksue5jH80BYUPaXsu_Q@mail.gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 21 Nov 2015 17:36:14 +0100
+Subject: [Buildroot] [PATCH 1/7] toolchain-external: CodeSourcery AMD64:
+	support only one version
+Message-ID: <1448123780-30067-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+See the conclusion about external toolchains during the Buildroot
+meeting [1]:
+"In the future, we stick to a single external toolchain version. The
+Kconfig symbol should not encode the version (avoid legacy handling)"
 
-On Sat, Nov 21, 2015 at 7:24 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 20-11-15 17:23, Ryan Barnett wrote:
->> The build-shared target depends on do_crypto and link-shared, which
->> will be executed in parallel. do_crypto calls
->> link_a.linux_shared -> link_a.gnu which does SYMLINK_SO; in parallel,
->> link-shared calls symlink.linux_shared which also does SYMLINK_SO.
->> Before the symlink is created, it is rm'ed, but there is a tiny chance
->> that the second one is created after the rm has been called.
->>
->> Fix this by using 'ln -sf' instead of 'ln -s' so the build doesn't
->> error out.
->>
->> Patch submitted upstream at:
->>   https://bugs.gentoo.org/show_bug.cgi?id=566260
->
->  Ahem, gentoo is not exactly upstream :-)  From [1]:
->
-> To report a bug or make an enhancement request, send email to rt at openssl.org. In
-> the subject line, please make sure to indicate if it's a bug or a fix, and a
-> brief description of the issue. In the body of your mail, please include the
-> versions of the operating system and OpenSSL you are using. If you have a patch
-> or diff, please send it as an attachment, and not inline in the message body.
->
->  As far as I can see, this patch should still apply (in slightly adapted form)
-> to the real upstream.
+[1] http://elinux.org/index.php?title=Buildroot:DeveloperDaysELCE2015#Report
 
-Yes I agree to submit it upstream directly to openssl. However, I
-started with Gentoo since there are the ones that seem most interested
-in making OpenSSL work in parallel. I have also just sent an email to
-OpenSSL about the issue.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ toolchain/toolchain-external/Config.in             | 4 ++--
+ toolchain/toolchain-external/toolchain-external.mk | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I think this patch is pointless now since it doesn't actually fix the
-problem that existed before. Please see my reply to this patch earlier
-describing that 'ln -sf' isn't an atomic operation and the error from
-the build failures still will exist:
-
-http://lists.busybox.net/pipermail/buildroot/2015-November/144882.html
-
->>
->> Thanks to Arnout for explain the issue (wording used above).
->
->  You're a native English speaker, right? explain -> explaining :-)
-
-Yes but I never claimed to be great at translating my English thoughts
-to properly written sentence ;) This is especially true when I type up
-something in a hurry which this commit message was.
-
-Thanks,
--Ryan
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index f2eed7f..1a08085 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -692,7 +692,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	    - SH4A, uClibc, big endian
+ 	      Not usable in Buildroot yet.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+ 	bool "Sourcery CodeBench AMD64 2014.05"
+ 	depends on BR2_x86_64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -1001,7 +1001,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+-	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
++	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 && BR2_BINFMT_FLAT
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 613ce50..8176370 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -385,7 +385,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405),y)
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/x86_64-amd-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = amd-2014.05-25-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+2.4.3
