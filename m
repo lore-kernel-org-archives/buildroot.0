@@ -1,73 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Nov 2015 20:11:51 +0100
-Subject: [Buildroot] [git commit] configs/arm_foundationv8: fix build and
-	update documentation
-Message-ID: <20151122191432.6317981DAF@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 22 Nov 2015 20:28:33 +0100
+Subject: [Buildroot] [PATCH] package/python-pydal: bump to version 2.11.3
+In-Reply-To: <20151122141122.4f03dc29@free-electrons.com>
+References: <1448120479-7715-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20151122141122.4f03dc29@free-electrons.com>
+Message-ID: <56521761.5010909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4bb1d97b1151ff7c3a8d89e98adf4b1ae3c72741
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22-11-15 14:11, Thomas Petazzoni wrote:
+> Dear Angelo Compagnucci,
+> 
+> On Sat, 21 Nov 2015 16:41:19 +0100, Angelo Compagnucci wrote:
+>> This patch bumps web2py version to 2.11.3
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> ---
+>>  package/python-web2py/python-web2py.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+>> index 2991bb8..02c854d 100644
+>> --- a/package/python-web2py/python-web2py.mk
+>> +++ b/package/python-web2py/python-web2py.mk
+>> @@ -4,7 +4,7 @@
+>>  #
+>>  ################################################################################
+>>  
+>> -PYTHON_WEB2PY_VERSION = R-2.11.2
+>> +PYTHON_WEB2PY_VERSION = R-2.11.3
+>>  PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
+>>  PYTHON_WEB2PY_LICENSE = LGPLv3
+>>  PYTHON_WEB2PY_LICENSE_FILES = LICENSE
+> 
+> The title of the commit was wrong: it's bumping python-web2py, not
+> python-pydal. I've fixed that and applied to next.
+> 
+> Also, if you have time, please send a patch adding a hash file to this
+> package, since github downloads are not assumed to provide stable
+                                      ^^^now - essential difference here :-)
 
-The arm_foundationv8_defconfig currently doesn't build because it uses
-an external AArch64 toolchain that has been updated (Linaro toolchain)
-and is now based on gcc 5.x. Unfortunately, Linux 3.13 is too old to
-be built with gcc 5.x.
+ Regards,
+ Arnout
 
-As a minimal fix to make this defconfig build again, we switch to use
-the internal toolchain backend. At the time this defconfig was
-introduced, there was no support for AArch64 in the internal toolchain
-backend, but now that it is available, there is no reason to not use
-it. This makes the defconfig also more consistent with the other
-defconfigs.
+> tarballs.
+> 
+> Thanks,
+> 
+> Thomas
+> 
 
-Obviously, the kernel headers used to build the toolchain are set to
-the fixed version 3.13, so that they match the kernel being used.
 
-While we're at it, the readme.txt file corresponding to this defconfig
-is updated. Runtime testing has been performed with the latest version
-of the ARM Foundation model.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/arm/foundation-v8/readme.txt |    4 ++--
- configs/arm_foundationv8_defconfig |    4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
-index f6d0698..5406ed3 100644
---- a/board/arm/foundation-v8/readme.txt
-+++ b/board/arm/foundation-v8/readme.txt
-@@ -3,14 +3,14 @@ ARM software simulator of the AArch64 architecture.
- 
- First, one has to download the AArch64 software simulator from:
- 
--  https://silver.arm.com/download/download.tm?pv=1509509
-+  https://silver.arm.com/download/download.tm?pv=2482590
- 
- Then, use the arm_foundationv8_defconfig configuration to build your
- Buildroot system.
- 
- Finally, boot your system with:
- 
-- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/Foundation_v8 \
-+ ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-4.1/Foundation_Platform \
-     --image output/images/linux-system.axf \
-     --block-device output/images/rootfs.ext2 \
-     --network=nat
-diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
-index dbaf3d6..2deb333 100644
---- a/configs/arm_foundationv8_defconfig
-+++ b/configs/arm_foundationv8_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.13"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
