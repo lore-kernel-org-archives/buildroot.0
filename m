@@ -1,66 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Nov 2015 14:12:37 +0100
-Subject: [Buildroot] [PATCH] jimtcl: fix compile problem for sparc64
-In-Reply-To: <20151121092330.GA14832@waldemar-brodkorb.de>
-References: <20151121092330.GA14832@waldemar-brodkorb.de>
-Message-ID: <20151122141237.56376bc9@free-electrons.com>
+Date: Sun, 22 Nov 2015 14:26:18 +0100
+Subject: [Buildroot] [git commit] package/zmqpp: add patch to fix build issue
+Message-ID: <20151122132630.B1F7381DF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+commit: http://git.buildroot.net/buildroot/commit/?id=c9d9bcb4e13651faf1898e9dcfa6d7af707a092b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Nov 2015 10:23:31 +0100, Waldemar Brodkorb wrote:
-> It is general safe to use -fPIC for all architectures.
-> -fpic breaks sparc64 compile.
-> 
-> Runtime tested on Qemu ARM, MIPS and SPARC64.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/98f391ad13f22828c022f185c0166daabdb4c1ad/
-> 
-> It also addresses a problem with the wrong symlink for the shared library
-> recognized while runtime testing.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> ---
->  package/jimtcl/jimtcl.mk |    6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-> index e79e0f6..79fa742 100644
-> --- a/package/jimtcl/jimtcl.mk
-> +++ b/package/jimtcl/jimtcl.mk
-> @@ -33,8 +33,8 @@ else
->  JIMTCL_SHARED = --shared
->  define JIMTCL_INSTALL_LIB
->  	$(INSTALL) -m 0755 -D $(@D)/libjim.so.$(JIMTCL_VERSION) \
-> -		$(1)/usr/lib/libjim.$(JIMTCL_VERSION)
-> -	ln -s libjim.$(JIMTCL_VERSION) $(1)/usr/lib/libjim.so
-> +		$(1)/usr/lib/libjim.so.$(JIMTCL_VERSION)
-> +	ln -sf libjim.so.$(JIMTCL_VERSION) $(1)/usr/lib/libjim.so
+Add a patch from upstream to fix build error:
+  error: no match for 'operator<<'
 
-This is unrelated to sparc64 fix, so it should be a separate patch
-(though it is obviously a good fix).
+Fixes:
+http://autobuild.buildroot.net/results/ed4508a00663b03632a4eb9411ba05852d02fd88/
 
-> @@ -47,6 +47,8 @@ define JIMTCL_CONFIGURE_CMDS
->  endef
->  
->  define JIMTCL_BUILD_CMDS
-> +	SH_CFLAGS="-fPIC" \
-> +	SHOBJ_CFLAGS="-fPIC" \
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/zmqpp/zmqpp.hash |    1 +
+ package/zmqpp/zmqpp.mk   |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-In other packages (such as elfutils), you made passing -fPIC
-conditional on sparc64. Why don't we do the same here? I believe on
-many platforms -fpic and -fPIC are the same, but I think we should be
-consistent in the way we handle this before the different packages.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/zmqpp/zmqpp.hash b/package/zmqpp/zmqpp.hash
+index 3d4a984..7bca39f 100644
+--- a/package/zmqpp/zmqpp.hash
++++ b/package/zmqpp/zmqpp.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	92cb5bf7e1df8b99792fe1eb530bf91fced9c2d14159007bec011bb1b8248269  zmqpp-3.2.0.tar.gz
++sha256	0b76169a48a0ba9dd581b63787b4852f3922de0c22b7a325cab688c1bafb3dd7  260a9304f6c74272bd3c396f6cca685657b4aff1.patch
+diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+index 03c6475..e506eaf 100644
+--- a/package/zmqpp/zmqpp.mk
++++ b/package/zmqpp/zmqpp.mk
+@@ -10,6 +10,7 @@ ZMQPP_INSTALL_STAGING = YES
+ ZMQPP_DEPENDENCIES = zeromq
+ ZMQPP_LICENSE = MIT
+ ZMQPP_LICENSE_FILES = LICENSE
++ZMQPP_PATCH = https://github.com/zeromq/zmqpp/commit/260a9304f6c74272bd3c396f6cca685657b4aff1.patch
+ 
+ ZMQPP_MAKE_OPTS = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
+ ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
