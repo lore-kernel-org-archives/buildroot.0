@@ -1,38 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2015 22:38:26 +0100
-Subject: [Buildroot] [git commit] package/Makefile.in: remove HOSTCC_VERSION
-Message-ID: <20151201232119.EC0A27FEE7@busybox.osuosl.org>
+Date: Sun, 22 Nov 2015 22:53:27 +0100
+Subject: [Buildroot] [git commit] package/libass: bump version to 0.13.0
+Message-ID: <20151201232120.32BFA7FEE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba8ad1383365e0e4c7e6d2570c2a142c0434a41b
+commit: http://git.buildroot.net/buildroot/commit/?id=9e8413a86e9822c6685cc686bbf2b8024c842947
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-HOSTCC_VERSION is no longer used since gcc switched to the package
-infrastructure in e236fe481. It was in fact no longer needed since we
-dropped support for gcc 4.3.
+Quote from https://github.com/libass/libass/blob/master/Changelog
+"* Drop ENCA support"
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Therefore we remove the dependency to libenca.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/libass/libass.hash | 2 +-
+ package/libass/libass.mk   | 9 +--------
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index ca34660..bb2a0f9 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -219,10 +219,6 @@ HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
- HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index f300166..87d3f26 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 a67c54ebaf5ec19ae72e86259ee6ab6adfe2e64ed9f9149db03dc863360ea38c  libass-0.12.3.tar.xz
++sha256	e0071a3b2e95411c8d474014678368e3f0b852f7d663e0564b344e7335eb0671	libass-0.13.0.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index f1f00f3..83939e2 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# hostcc version as an integer - E.G. 4.3.2 => 432
--HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
--	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
+-LIBASS_VERSION = 0.12.3
++LIBASS_VERSION = 0.13.0
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
+@@ -38,11 +38,4 @@ else
+ LIBASS_CONF_OPTS += --disable-harfbuzz
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBENCA),y)
+-LIBASS_DEPENDENCIES += libenca
+-LIBASS_CONF_OPTS += --enable-enca
+-else
+-LIBASS_CONF_OPTS += --disable-enca
+-endif
 -
- # host-intltool should be executed with the system perl, so we save
- # the path to the system perl, before a host-perl built by Buildroot
- # might get installed into $(HOST_DIR)/usr/bin and therefore appears
+ $(eval $(autotools-package))
