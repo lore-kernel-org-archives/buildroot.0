@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Nov 2015 21:46:40 +0100
-Subject: [Buildroot] [PATCH 1/3] core/pkg-autotools: align host
- configure commands to target one
-In-Reply-To: <f288b50c4267ceb0ca24aa1a7937d8f5fa894ed5.1448202976.git.yann.morin.1998@free.fr>
+Date: Sun, 22 Nov 2015 21:48:09 +0100
+Subject: [Buildroot] [PATCH 2/3] package/gcc: comment on why we override
+ the generic configure commands
+In-Reply-To: <71e3b6c662031621f10fc3e1160ae1738204839b.1448202976.git.yann.morin.1998@free.fr>
 References: <cover.1448202976.git.yann.morin.1998@free.fr>
- <f288b50c4267ceb0ca24aa1a7937d8f5fa894ed5.1448202976.git.yann.morin.1998@free.fr>
-Message-ID: <565229B0.7030603@mind.be>
+ <71e3b6c662031621f10fc3e1160ae1738204839b.1448202976.git.yann.morin.1998@free.fr>
+Message-ID: <56522A09.2090200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +13,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 22-11-15 15:39, Yann E. MORIN wrote:
-> The host configure commands are not indented the same way as the target
-> ones. Besides, there are leading spaces (instead of TABs) on one line.
+> The explanations given in the commit log of 7d6c79 (Compile static
+> versions of gcc libraries) do not explain why we have to provide custom
+> configure commands, instead of just adding --enable-static to the
+> configure options.
 > 
-> Replicate the same indentation as used for the target commands.
+> Add a comment in the code that explains why that is so. Add a pointer to
+> the ML archives with the explanations, too.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: J?r?me Pouiller <jezz@sysmic.org>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- [Verified that it's whitespace only change.]
 
 
  Regards,
  Arnout
 
 > ---
->  package/pkg-autotools.mk | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>  package/gcc/gcc-final/gcc-final.mk | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index 4787914..502eeea 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -214,12 +214,12 @@ else
->  # installed.
->  define $(2)_CONFIGURE_CMDS
->  	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache; \
-> -	        $$(HOST_CONFIGURE_OPTS) \
-> -		CFLAGS="$$(HOST_CFLAGS)" \
-> -		LDFLAGS="$$(HOST_LDFLAGS)" \
-> -		$$($$(PKG)_CONF_ENV) \
-> -		CONFIG_SITE=/dev/null \
-> -		./configure \
-> +	$$(HOST_CONFIGURE_OPTS) \
-> +	CFLAGS="$$(HOST_CFLAGS)" \
-> +	LDFLAGS="$$(HOST_LDFLAGS)" \
-> +	$$($$(PKG)_CONF_ENV) \
-> +	CONFIG_SITE=/dev/null \
-> +	./configure \
->  		--prefix="$$(HOST_DIR)/usr" \
->  		--sysconfdir="$$(HOST_DIR)/etc" \
->  		--localstatedir="$$(HOST_DIR)/var" \
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index 7802855..dbdb615 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -27,6 +27,15 @@ HOST_GCC_FINAL_SUBDIR = build
+>  
+>  HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
+>  
+> +# We want to always build the static variants of all the gcc libraries,
+> +# of which libstdc++, libgomp, libmudflap...
+> +# To do so, we can not just pass --enable-static to override the generic
+> +# --disable-static flag, otherwise gcc fails to build some of those
+> +# libraries, see;
+> +#   http://lists.busybox.net/pipermail/buildroot/2013-October/080412.html
+> +#
+> +# So we must completely override the generic commands and provide our own.
+> +#
+>  define  HOST_GCC_FINAL_CONFIGURE_CMDS
+>  	(cd $(HOST_GCC_FINAL_SRCDIR) && rm -rf config.cache; \
+>  		$(HOST_CONFIGURE_OPTS) \
 > 
 
 
