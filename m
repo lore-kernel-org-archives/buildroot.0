@@ -1,33 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2015 22:28:37 +0100
-Subject: [Buildroot] [PATCH] package/rpi-userland: bump version
-In-Reply-To: <1448201014-21381-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 22 Nov 2015 15:03:34 +0100")
-References: <1448201014-21381-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87oael67wa.fsf@dell.be.48ers.dk>
+Date: Sun, 22 Nov 2015 22:31:22 +0100
+Subject: [Buildroot] [PATCH 1/1] fastd: add upstream patch to fix build
+	with musl
+In-Reply-To: <1448199626-16900-1-git-send-email-rprebello@gmail.com> (Rodrigo
+ Rebello's message of "Sun, 22 Nov 2015 11:40:26 -0200")
+References: <1448199626-16900-1-git-send-email-rprebello@gmail.com>
+Message-ID: <87k2p967rp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Rodrigo" == Rodrigo Rebello <rprebello@gmail.com> writes:
 
- > Fixes build with glibc-2.22.
- > Also fixes hard-to-trigger deadlock in highly threaded case, and fix
- > libraries dependencies.
+ > The missing 'sys/queue.h' issue when building with musl has been solved
+ > by an upstream commit which eliminates the dependency on
+ > 'net/if_ether.h' and, consequently, 'sys/queue.h' (needed on OpenBSD
+ > since 'net/if_ether.h' uses LIST_* definitions).
 
- > Misc minor improvements in test programs as well.
+ > As usual, the included patch can be dropped in the future when a new
+ > version of this package gets released and integrated into Buildroot.
 
- > Fixes #8446.
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/14e/14e291e22b8c8a9c590f0c6ef4316f8ab0aa1fff/
+ >   http://autobuild.buildroot.net/results/ed4/ed4437bed01138380cd42c0dc943cd3ec85e26f0/
+ >   http://autobuild.buildroot.net/results/ad2/ad226962413dece4fee07143a2bcfe07c44d55b6/
+ >   ...
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: gamadril.dev at gmail.com
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
- > ---
- > Note: even though this is a bump, it actually fixes build issues,
- > so should be considered for master, not -next.
+ > Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 
 Committed, thanks.
 
