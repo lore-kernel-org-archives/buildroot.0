@@ -1,60 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Nov 2015 15:39:37 +0100
-Subject: [Buildroot] [PATCH 0/3] core+gcc: align configure commands (branch
-	yem/quickies-for-master)
-Message-ID: <cover.1448202976.git.yann.morin.1998@free.fr>
+Date: Sun, 22 Nov 2015 15:39:41 +0100
+Subject: [Buildroot] [PATCH 1/3] core/pkg-autotools: align host configure
+	commands to target one
+In-Reply-To: <cover.1448202976.git.yann.morin.1998@free.fr>
+References: <cover.1448202976.git.yann.morin.1998@free.fr>
+Message-ID: <f288b50c4267ceb0ca24aa1a7937d8f5fa894ed5.1448202976.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+The host configure commands are not indented the same way as the target
+ones. Besides, there are leading spaces (instead of TABs) on one line.
 
-This series is a cleanup of the configure commands, both in the common
-autotools infra and in the gcc-final package:
+Replicate the same indentation as used for the target commands.
 
-  - the host variant of the generic configure command is not indented
-    the same way as the target variant; this is fixed.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-autotools.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-  - the gcc-final package has to override the default configure command,
-    but the reasons for it were not explained in the code, and the
-    corresponding commit is terse on the explanations; a comment is
-    added.
-
-  - the gcc-final custom configure command has diverged quite a bit from
-    the generic one; update it.
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit c9d9bcb4e13651faf1898e9dcfa6d7af707a092b:
-
-  package/zmqpp: add patch to fix build issue (2015-11-22 14:26:18 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/quickies-for-master
-
-for you to fetch changes up to 4d9f7a6896c496372a4f415987e60eeeac79225b:
-
-  package/gcc: align gcc-final configure-cmds to the generic ones (2015-11-22 15:34:53 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      core/pkg-autotools: align host configure commands to target one
-      package/gcc: comment on why we override the generic configure commands
-      package/gcc: align gcc-final configure-cmds to the generic ones
-
- package/gcc/gcc-final/gcc-final.mk | 34 +++++++++++++++++++++++++++++-----
- package/pkg-autotools.mk           | 12 ++++++------
- 2 files changed, 35 insertions(+), 11 deletions(-)
-
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 4787914..502eeea 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -214,12 +214,12 @@ else
+ # installed.
+ define $(2)_CONFIGURE_CMDS
+ 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache; \
+-	        $$(HOST_CONFIGURE_OPTS) \
+-		CFLAGS="$$(HOST_CFLAGS)" \
+-		LDFLAGS="$$(HOST_LDFLAGS)" \
+-		$$($$(PKG)_CONF_ENV) \
+-		CONFIG_SITE=/dev/null \
+-		./configure \
++	$$(HOST_CONFIGURE_OPTS) \
++	CFLAGS="$$(HOST_CFLAGS)" \
++	LDFLAGS="$$(HOST_LDFLAGS)" \
++	$$($$(PKG)_CONF_ENV) \
++	CONFIG_SITE=/dev/null \
++	./configure \
+ 		--prefix="$$(HOST_DIR)/usr" \
+ 		--sysconfdir="$$(HOST_DIR)/etc" \
+ 		--localstatedir="$$(HOST_DIR)/var" \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
