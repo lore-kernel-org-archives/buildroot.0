@@ -1,48 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 22 Nov 2015 22:02:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 8446] rpi-userland failed to build with glibc 2.22
-In-Reply-To: <bug-8446-163@https.bugs.busybox.net/>
-References: <bug-8446-163@https.bugs.busybox.net/>
-Message-ID: <20151122220251.82DB28005F@busybox.osuosl.org>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 23 Nov 2015 12:25:06 +1300
+Subject: [Buildroot] [next PATCH 1/2] micropython: Bump version to v1.5
+Message-ID: <1448234707-1456-1-git-send-email-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8446
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ package/micropython/micropython.hash | 2 ++
+ package/micropython/micropython.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/micropython/micropython.hash
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> 2015-11-22 22:02:49 UTC ---
-Fixed in git, thanks:
-
-commit 2a8e96d05738421898c373ffaeb61ef3ab008ef2
-Author: Yann E. MORIN <yann.morin.1998@free.fr>
-Date:   Sun Nov 22 15:03:34 2015 +0100
-
-    package/rpi-userland: bump version
-
-    Fixes build with glibc-2.22.
-
-    Also fixes hard-to-trigger deadlock in highly threaded case, and fix
-    libraries dependencies.
-
-    Misc minor improvements in test programs as well.
-
-    Fixes #8446.
-
-    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-    Cc: gamadril.dev at gmail.com
-    Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+new file mode 100644
+index 0000000..24b878e
+--- /dev/null
++++ b/package/micropython/micropython.hash
+@@ -0,0 +1,2 @@
++#locally computed
++sha256 4ba128def442275ef528c210d8d3dc6d6e12460069a570706b5fbdb6b4a6a25f  micropython-v1.5.tar.gz
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index f5e0ce7..2126f15 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MICROPYTHON_VERSION = v1.4.6
++MICROPYTHON_VERSION = v1.5
+ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.5.3
