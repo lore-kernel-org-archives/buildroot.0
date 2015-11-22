@@ -1,96 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Nov 2015 17:15:03 +0100
-Subject: [Buildroot] [PATCH 1/1] INSTALL for autotools packages with
- hardcoded '-s'
-In-Reply-To: <alpine.DEB.2.11.1511221751120.17459@tanhuma.tkos.co.il>
-References: <1448206276-6260-1-git-send-email-yba@tkos.co.il>
- <20151122154913.GA3603@free.fr>
- <alpine.DEB.2.11.1511221751120.17459@tanhuma.tkos.co.il>
-Message-ID: <20151122161503.GB3603@free.fr>
+From: Martin Bark <martin@barkynet.com>
+Date: Sun, 22 Nov 2015 18:31:13 +0000
+Subject: [Buildroot] Analysis of build results for 2015-11-18
+In-Reply-To: <5650ED76.6070409@mind.be>
+References: <20151119073014.0017E101A9A@stock.ovh.net>
+ <20151120001552.51c1b21b@free-electrons.com>
+ <CAFGQKxd7LUYDN-whwsdhenu=bMJXnd7nQ=ungrxvt2NnMG5fiA@mail.gmail.com>
+ <5650ED76.6070409@mind.be>
+Message-ID: <CAFGQKxew0nXuX9b76Z3q1m3WghuXEyN4Erm+ofrkqXPtUTFK_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jonathan, All,
+Arnout, All,
 
-On 2015-11-22 18:00 +0200, Jonathan Ben Avraham spake thusly:
-> On Sun, 22 Nov 2015, Yann E. MORIN wrote:
-> >Date: Sun, 22 Nov 2015 16:49:13 +0100
-> >From: Yann E. MORIN <yann.morin.1998@free.fr>
-> >To: Jonathan Ben-Avraham <yba@tkos.co.il>
-> >Cc: buildroot at busybox.net
-> >Subject: Re: [Buildroot] [PATCH 1/1] INSTALL for autotools packages with
-> >    hardcoded '-s'
-> >
-> >Jonathan, All,
-> >
-> >On 2015-11-22 17:31 +0200, Jonathan Ben-Avraham spake thusly:
-> >>From: Jonathan Ben Avraham <yba@tkos.co.il>
-> >>
-> >>The Makefile.in's of some autotools packages such as yp-tools and ypbind-mt do
-> >
-> >Are you planning on submitting those two packages?
-> 
-> Yes, I have already tested them on an unsuspecting client.
+On 21 November 2015 at 22:17, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 21-11-15 15:45, Martin Bark wrote:
+>> Thomas, All,
+>>
+>> On 19 November 2015 at 23:15, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> Hello,
+>>>
+>>> J?r?me, Johan, Bernd, Yann, Martin, Gustavo, R?mi, Samuel, Alexey,
+>>> Waldemar, Clayton, please read below, there are some interesting issues
+>>> for you :-) Thanks !
+>>>
+>>> On Thu, 19 Nov 2015 08:30:13 +0100 (CET), Thomas Petazzoni wrote:
+>
+> [snip]
+>
+>>>>       x86_64 |              host-nodejs-4.1.2 | NOK | http://autobuild.buildroot.net/results/3fd1d18f0535bb8b969f808a5837c4a8111e69b9/
+>>>
+>>> Seems like nodejs doesn't like the native gcc 4.7 that this machine
+>>> uses. Martin, can you have a look ?
+>>>
+>>> BTW Martin, there's also this other error that popped up on a different
+>>> machine:
+>>> http://autobuild.buildroot.org/results/72b/72b80a434547931e1deb6f0ba793a6d68accc9a2/build-end.log.
+>>
+>> Yes i think you're right, the issue looks like gcc 4.7 on the host.
+>> This issue https://github.com/nodejs/node-gyp/issues/790 and this one
+>> https://github.com/nodejs/node/issues/432 have similar build issues
+>> and they both come down to node.js needs at least gcc 4.8
+>>
+>> The Config.in already has BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 for node.js
+>> 4.x, is there a way to specify this for the host build too?
+>
+>  There currently isn't.
+>
+>  I will try to make a patch that adds BR2_HOST_GCC_AT_LEAST_*, but I don't have
+> the older gcc to test it with. There are three packages that have
+> BR2_TOOLCHAIN_GCC_AT_LEAST and that also have a host variant:
+>
+> - nodejs (4.8)
+> - directfb (4.5), but host-directfb is not used and never has been used
+> - cmake (4.7), but that's only needed for ctest which needs jsoncpp which
+> doesn't have a host variant.
+>
+>  So probably only nodejs will need this, but it would be good to test host-cmake
+> with gcc 4.6 or earlier. Does anyone have that lying around?
+>
+>  Regards,
+>  Arnout
 
-Muhahaha! :-)
+Ubuntu 12.04 (precise) has gcc v4.6.3.  I just ran a quick test using
+schroot and debootstrap to setup a precise chroot jail and i can
+reproduce the host-nodejs build error.  If i build host-cmake then it
+works fine so it seems to be ok with gcc v4.6.3.
 
-> >If so, you should probably have sent a patch series with this patch as
-> >patch 1/3, followed by patches 2/3 and 3/3 to add the two packages.
-> 
-> Ok, that might solve the other problem I have been wrestling with
+Thanks
 
-When you have multiple related changes to send, then you should send
-them as what we call a "series". See git-send-email on how to do so. We
-also have a blurb about that in our manual:
-    http://buildroot.org/manual.html#submitting-patches
+Martin
 
-> , which is
-> how to submit each package separately but add a top-level Config.in submenu
-> called "NIS client" beneath "nfs-utils" that has both the yp-tools and
-> ypbind-mt packages in the submenu.
-
-Do not add a sub-directory for this. We only add a sub-directory when we
-have a lot of packages of the same category (or when a single package
-has a lot of options). "A lot" being pretty arbitrary, but "two" is not
-"a lot".
-
-[--SNIP--]
-> >Could you not just set:
-> >   YP_TOOLS_AUTORECONF = YES
-> >   YPBIND_MT_AUTORECONF = YES
-> >
-> >to force re-generation of the autostuff?
-> 
-> That's exactly what I do, but the problem is that the Makefile.in's have the
-> -s parameter hardcoded. This is an old and well-known issue that has a patch
-> for each of these packages in Yocto.
-
-Well, Makefile.in should be regenerated by autoreconf. Also, I've looked
-at the git trees of both projects, and could not spot any hard-coded
-'-s'.
-
-(I tried to autoreconf them, too, but since my gettext is too old, it
-fails).
-
-> >(Note: it will need to depend on host-gettext, since it wants to run
-> >autotopint)
-> 
-> I will study that again. I had thought that by configuring --without-nls I
-> could avoid the gettext dependency. Maybe I didn't look carefully enough.
-
-All I'm saying is that it is needed during autoreconf, hence the need
-for _host-gettext_ (the gettext for the host, not for the target).
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> [snip]
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
