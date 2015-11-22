@@ -1,170 +1,237 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Nov 2015 10:57:11 +0100
-Subject: [Buildroot] Analysis of build results for 2015-11-21
-In-Reply-To: <20151122073011.8CA87102679@stock.ovh.net>
-References: <20151122073011.8CA87102679@stock.ovh.net>
-Message-ID: <20151122105711.185037f6@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 22 Nov 2015 11:00:56 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/eudev: bump version to 3.1.5
+Message-ID: <1448186456-1069-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Remove two patches applied upstream:
+https://github.com/gentoo/eudev/commit/0e2be0c217028e73073e7f9ccb010cc8b4d756db
+https://github.com/gentoo/eudev/commit/24ccb6ebc5e13a128aaedd3a2eb52eef3adf6dcd
 
-Gustavo, Waldemar, J?rg, Alexey, see below.
+Due to the removed patches autoreconf is not necessary anymore.
 
-On Sun, 22 Nov 2015 08:30:11 +0100 (CET), Thomas Petazzoni wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../eudev/0002-build-sys-check-for-mallinfo.patch  | 93 ----------------------
+ .../eudev/0003-build-sys-check-for-strndupa.patch  | 69 ----------------
+ package/eudev/eudev.hash                           |  4 +-
+ package/eudev/eudev.mk                             |  7 +-
+ 4 files changed, 3 insertions(+), 170 deletions(-)
+ delete mode 100644 package/eudev/0002-build-sys-check-for-mallinfo.patch
+ delete mode 100644 package/eudev/0003-build-sys-check-for-strndupa.patch
 
->         success : 93 
->        failures : 24 
->        timeouts : 0  
->           TOTAL : 117
-
-For some reason, my autobuilder instance was stuck in a loop generating
-random configurations. I'll try to investigate what was going on, maybe
-an issue with my latest autobuild-run changes. I've updated my
-autobuild-run script to the latest version, and we'll see.
-
-See below for some analysis of the build failures.
-
->        sparc |                 busybox-1.24.1 | NOK | http://autobuild.buildroot.net/results/3a0b601a3dd1a538247d11054e3623e6a242d854/
-
-The usual SPARC issue. I suggest to disable libtirpc on sparc. Waldemar?
-
->          arm |                   connman-1.30 | NOK | http://autobuild.buildroot.net/results/9dbbb0bea5dcc8a8f38c77c2c95e708bc2797ff2/
-
-musl build problem.
-
->          arm |          conntrack-tools-1.4.3 | NOK | http://autobuild.buildroot.net/results/04613c47b9669c28cc3ff47c65607c23730ef691/
-
-musl build problem.
-
->          arm |                      fastd-v17 | NOK | http://autobuild.buildroot.net/results/14e291e22b8c8a9c590f0c6ef4316f8ab0aa1fff/
-
-musl build problem, missing <sys/queue.h>
-
->          arm |                   gauche-0.9.4 | NOK | http://autobuild.buildroot.net/results/bf9040ab972e4405b2af30e4d496059661457130/
-
-musl build problem: error: redefinition of 'struct sigcontext'
-
->        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/52c2da5590113149cc9984ac74acba0c1716f5d4/
-
-Compiler error:
-
-/tmp/ccjK5rZ3.s: Assembler messages:
-/tmp/ccjK5rZ3.s:946: Error: bad expression
-/tmp/ccjK5rZ3.s:947: Error: bad expression
-/tmp/ccjK5rZ3.s:976: Error: bad expression
-/tmp/ccjK5rZ3.s:977: Error: bad expression
-
-This is with a Buildroot toolchain, so a fairly modern gcc/binutils
-combination. We should: 1/ retry with gcc5/binutils2.25 and report the
-bug upstream if applicable.
-
->          arm |                libnspr-4.10.10 | NOK | http://autobuild.buildroot.net/results/124200fd884ba1bba59f137c16214d35e253709a/
-
-prnetdb.c:898:2: error: #error "Unknown name-to-address translation function"
-
-Gustavo ?
-
->      sparc64 |                 libvips-7.42.2 | NOK | http://autobuild.buildroot.net/results/1515f070c0fd410c681fc8306700244c34eb1635/
-
-Compiler problem:
-
-   error: unable to find a register to spill in class 'FP_REGS'
-
-Waldemar ?
-
->        nios2 |            libvncserver-0.9.10 | NOK | http://autobuild.buildroot.net/results/ee1af79ffa6646d04a10a042c5791a9b01e1c605/
-
-Probably the same compiler error:
-
-  CC       tightvnc-filetransfer/filetransfermsg.lo
-/tmp/ccxoQM9D.s: Assembler messages:
-/tmp/ccxoQM9D.s:177: Error: bad expression
-/tmp/ccxoQM9D.s:178: Error: bad expression
-/tmp/ccxoQM9D.s:247: Error: bad expression
-
->          arm |              lttng-tools-2.6.0 | NOK | http://autobuild.buildroot.net/results/0fa54aceec88e6200e4a779108c9433aed3c4f25/
-
-multiple definition of `mi_lttng_element_snapshots'
-
->          arm |              lttng-tools-2.6.0 | NOK | http://autobuild.buildroot.net/results/d56b816b72a09d707c163eedac4b63288a0fd24a/
-
-configure: error: Cannot find libpopt. Use LDFLAGS=-Ldir to specify its location.
-
->      aarch64 |                 mongrel2-1.9.2 | NOK | http://autobuild.buildroot.net/results/c7568ca976ff8d0d76b84ef4d33d5ee215fed4ee/
-
-Fixed by:
-
-   http://git.buildroot.net/buildroot/commit/?id=1ed2e40497365941cb4b4f486e9ec19ec034fedb
-
->          arm |                    mpd-0.19.11 | NOK | http://autobuild.buildroot.net/results/e959e703a8db81032da27bece295c121e53d830d/
-
-Static linking issue against FLAC. J?rg ?
-
->      sparc64 |                  opencv-2.4.10 | NOK | http://autobuild.buildroot.net/results/4856ca930a8dbb03f31028b60f5c378e81670445/
-
-error: cannot convert 'int*' to 'volatile _Atomic_word* {aka volatile long int*}' for argument '1' to '_Atomic_word __gnu_cxx::__exchange_and_add(volatile _Atomic_word*, int)'
-
-Again some atomic related issues? Waldemar ?
-
-> microblazeel |                 openssl-1.0.2d | NOK | http://autobuild.buildroot.net/results/9a0fc1064010a658155e6a18ec72e0e3c58ec7f6/
-
-Again the openssl parallel issue.
-
->          arm |                 oprofile-1.0.0 | NOK | http://autobuild.buildroot.net/results/2a6604622392a3f127fb61505e2751a88a90af7b/
-
-Trying to install a library that hasn't been built:
-
-  /usr/bin/install: cannot stat '/home/autobuild/instance-1/output/build/oprofile-1.0.0/libopagent/.libs/*.so*': No such file or directory
-
-Indeed, it's a fully static configuration, so installing a .so seems
-wrong.
-
->          arc |             shairport-sync-2.6 | NOK | http://autobuild.buildroot.net/results/5058b22a53d8ea2e6e0e215a9188ce4628fddc19/
-
-Static linking issue. J?rg ?
-
->          arc |              sofia-sip-1.12.11 | NOK | http://autobuild.buildroot.net/results/512b80c395124c4c5b3427a0d9882c1cf374235c/
-
-/home/autobuild/instance-0/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/libpthread.a(lowlevellock.os): In function `__lll_lock_wait_private':
-lowlevellock.c:(.text+0x0): multiple definition of `__lll_lock_wait_private'
-/home/autobuild/instance-0/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-lowlevellock.os):libc-lowlevellock.c:(.text+0x0): first defined here
-collect2: error: ld returned 1 exit status
-Makefile:474: recipe for target 'sip-options' failed
-
-This is a uClibc issue which was affected a number of architectures.
-Has it been fixed already for ARC ? Waldemar, Alexey ?
-
->      aarch64 |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/6c428f3a5f5d09d629c504856c37042bcf140c7b/
-
-I updated the autobuild-run script on my server to fix this issue.
-
->          arm |                      tslib-1.1 | NOK | http://autobuild.buildroot.net/results/cc265cc2dfeef3638040b8bdd15a381d18604107/
-
-ts_close.c:17:19: fatal error: dlfcn.h: No such file or directory
- #include <dlfcn.h>
-
-Cannot be used for static only configurations.
-
->          arm | tstools-08f6be304040e7b8476... | NOK | http://autobuild.buildroot.net/results/b50866d149e0542f86b3088fb96a2738847e3145/
-
-Tries to build a shared library in a static only configuration. Could
-someone have a look ?
-
->          arm |                     ustr-1.0.4 | NOK | http://autobuild.buildroot.net/results/e04849c31e2a2528282ce6cdcf69aa10076d721d/
->          arm |                     ustr-1.0.4 | NOK | http://autobuild.buildroot.net/results/7b3295e711fc51907c311adb63f0b7d06a90a7b9/
->          arm |                     ustr-1.0.4 | NOK | http://autobuild.buildroot.net/results/fde02ae2883a058b98e57ba087466d820ab1a5eb/
-
-gcc 5 issue, fixed by
-http://git.buildroot.net/buildroot/commit/?id=c38ea9a59b36be4ce774c901786a1b461751c227.
-
-Best regads,
-
-Thomas
+diff --git a/package/eudev/0002-build-sys-check-for-mallinfo.patch b/package/eudev/0002-build-sys-check-for-mallinfo.patch
+deleted file mode 100644
+index c2fa2da..0000000
+--- a/package/eudev/0002-build-sys-check-for-mallinfo.patch
++++ /dev/null
+@@ -1,93 +0,0 @@
+-From 1205e0b50067c5ebfa082f149f0996304aa04335 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Thu, 30 Jul 2015 16:55:45 +0200
+-Subject: [PATCH] build-sys: check for mallinfo
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-mallinfo is not specified by POSIX or the C standards, therefore
+-it's not available for all libc libraries (musl).
+-
+-Add the ability to disable mallinfo statistics.
+-
+-Fixes:
+-selinux-util.c: In function ?mac_selinux_init?:
+-selinux-util.c:70:25: error: storage size of ?before_mallinfo? isn?t known
+-         struct mallinfo before_mallinfo, after_mallinfo;
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- configure.ac              |  3 +++
+- src/shared/selinux-util.c | 15 +++++++++++++++
+- 2 files changed, 18 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index ec23ab5..4a293b2 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -226,6 +226,9 @@ else
+- fi
+- AC_SUBST(sushell)
+- 
+-+# selinux-util.c uses struct mallinfo which is not available for all C libraries (musl).
+-+AC_CHECK_FUNCS([mallinfo])
+-+
+- # ------------------------------------------------------------------------------
+- 
+- AC_CHECK_DECL([unshare],
+-diff --git a/src/shared/selinux-util.c b/src/shared/selinux-util.c
+-index 756215e..4e0866b 100644
+---- a/src/shared/selinux-util.c
+-+++ b/src/shared/selinux-util.c
+-@@ -67,7 +67,10 @@ int mac_selinux_init(const char *prefix) {
+- 
+- #ifdef HAVE_SELINUX
+-         usec_t before_timestamp, after_timestamp;
+-+
+-+#ifdef HAVE_MALLINFO
+-         struct mallinfo before_mallinfo, after_mallinfo;
+-+#endif
+- 
+-         if (!mac_selinux_use())
+-                 return 0;
+-@@ -75,7 +78,10 @@ int mac_selinux_init(const char *prefix) {
+-         if (label_hnd)
+-                 return 0;
+- 
+-+#ifdef HAVE_MALLINFO
+-         before_mallinfo = mallinfo();
+-+#endif
+-+
+-         before_timestamp = now(CLOCK_MONOTONIC);
+- 
+-         if (prefix) {
+-@@ -92,9 +98,14 @@ int mac_selinux_init(const char *prefix) {
+-                 r = security_getenforce() == 1 ? -errno : 0;
+-         } else  {
+-                 char timespan[FORMAT_TIMESPAN_MAX];
+-+
+-+#ifdef HAVE_MALLINFO
+-                 int l;
+-+#endif
+- 
+-                 after_timestamp = now(CLOCK_MONOTONIC);
+-+
+-+#ifdef HAVE_MALLINFO
+-                 after_mallinfo = mallinfo();
+- 
+-                 l = after_mallinfo.uordblks > before_mallinfo.uordblks ? after_mallinfo.uordblks - before_mallinfo.uordblks : 0;
+-@@ -102,6 +113,10 @@ int mac_selinux_init(const char *prefix) {
+-                 log_debug("Successfully loaded SELinux database in %s, size on heap is %iK.",
+-                           format_timespan(timespan, sizeof(timespan), after_timestamp - before_timestamp, 0),
+-                           (l+1023)/1024);
+-+#else
+-+                log_debug("Successfully loaded SELinux database in %s",
+-+                          format_timespan(timespan, sizeof(timespan), after_timestamp - before_timestamp, 0));
+-+#endif
+-         }
+- #endif
+- 
+--- 
+-2.4.3
+-
+diff --git a/package/eudev/0003-build-sys-check-for-strndupa.patch b/package/eudev/0003-build-sys-check-for-strndupa.patch
+deleted file mode 100644
+index 9cbd585..0000000
+--- a/package/eudev/0003-build-sys-check-for-strndupa.patch
++++ /dev/null
+@@ -1,69 +0,0 @@
+-From 0b04a8347981ceb1030768c3002ac3c2bc0a0bf1 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Thu, 30 Jul 2015 17:31:31 +0200
+-Subject: [PATCH] build-sys: check for strndupa
+-
+-strndupa is a GNU extension, therefore it's not available
+-for all libc libraries (musl).
+-
+-This patch is based on the one proposed by Emil Renner Berthing for
+-systemd [1].
+-
+-[1] http://lists.freedesktop.org/archives/systemd-devel/2014-September/023190.html
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- configure.ac              |  3 ++-
+- src/shared/missing.h      | 11 +++++++++++
+- src/shared/selinux-util.c |  1 +
+- 3 files changed, 14 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 4a293b2..9c383c2 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -66,8 +66,9 @@ AC_C_INLINE
+- AC_TYPE_MODE_T
+- AC_TYPE_PID_T
+- AC_CHECK_MEMBERS([struct stat.st_rdev])
+--AC_CHECK_DECLS([getrandom, gettid, name_to_handle_at, accept4, mkostemp], [], [], [[#include <sys/types.h>
+-+AC_CHECK_DECLS([getrandom, gettid, name_to_handle_at, accept4, mkostemp, strndupa], [], [], [[#include <sys/types.h>
+- #include <unistd.h>
+-+#include <string.h>
+- #include <sys/mount.h>
+- #include <fcntl.h>
+- #include <sys/socket.h>
+-diff --git a/src/shared/missing.h b/src/shared/missing.h
+-index 2dc9d84..9031119 100644
+---- a/src/shared/missing.h
+-+++ b/src/shared/missing.h
+-@@ -158,3 +158,14 @@ static inline int name_to_handle_at(int fd, const char *name, struct file_handle
+- #ifndef AT_EMPTY_PATH
+- #define AT_EMPTY_PATH 0x1000
+- #endif
+-+
+-+#if !HAVE_DECL_STRNDUPA
+-+#define strndupa(s, n) \
+-+  ({ \
+-+    const char *__old = (s); \
+-+    size_t __len = strnlen(__old, (n)); \
+-+    char *__new = (char *)alloca(__len + 1); \
+-+    __new[__len] = '\0'; \
+-+    (char *)memcpy(__new, __old, __len); \
+-+  })
+-+#endif
+-diff --git a/src/shared/selinux-util.c b/src/shared/selinux-util.c
+-index 4e0866b..a18a5a7 100644
+---- a/src/shared/selinux-util.c
+-+++ b/src/shared/selinux-util.c
+-@@ -31,6 +31,7 @@
+- #include "strv.h"
+- #include "path-util.h"
+- #include "selinux-util.h"
+-+#include "missing.h"
+- 
+- #ifdef HAVE_SELINUX
+- DEFINE_TRIVIAL_CLEANUP_FUNC(security_context_t, freecon);
+--- 
+-2.4.3
+-
+diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
+index d54c8cf..e7c331c 100644
+--- a/package/eudev/eudev.hash
++++ b/package/eudev/eudev.hash
+@@ -1,4 +1,4 @@
+ # From http://dev.gentoo.org/~blueness/eudev/
+-md5	07ab33fe310d250f06fc28f010e3fde2	eudev-3.1.2.tar.gz
++md5	c4dace42deecede102b6c01904042acc	eudev-3.1.5.tar.gz
+ # Locally calculated
+-sha256 4393b69e93dd8117defde6519b199d479f9d051f52061157a1a7a41b8fe10273 eudev-3.1.2.tar.gz
++sha256	f75885a430cd50fe4b31732f808ba7f9b2adf0f26b53b8ba2957b0c1d84b6f2a	eudev-3.1.5.tar.gz
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index a005f45..fecd37c 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -4,18 +4,13 @@
+ #
+ ################################################################################
+ 
+-EUDEV_VERSION = 3.1.2
++EUDEV_VERSION = 3.1.5
+ EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
+ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+ EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+ EUDEV_LICENSE_FILES = COPYING
+ EUDEV_INSTALL_STAGING = YES
+ 
+-# configure.ac is patched by:
+-# 0002-build-sys-check-for-mallinfo.patch
+-# 0003-build-sys-check-for-strndupa.patch
+-EUDEV_AUTORECONF = YES
+-
+ # mq_getattr is in librt
+ EUDEV_CONF_ENV += LIBS=-lrt
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.2
