@@ -1,43 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2015 22:56:35 +0100
-Subject: [Buildroot] [git commit branch/next] package/libfribidi: bump
-	version to 0.19.7
-Message-ID: <20151122220215.F27247FFEB@busybox.osuosl.org>
+Date: Sun, 22 Nov 2015 22:53:27 +0100
+Subject: [Buildroot] [git commit branch/next] package/libass: bump version
+	to 0.13.0
+Message-ID: <20151122220215.F3D8681E18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9334e73358bc2e991b37a8c533095ed127ec5065
+commit: http://git.buildroot.net/buildroot/commit/?id=9e8413a86e9822c6685cc686bbf2b8024c842947
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Quote from https://github.com/libass/libass/blob/master/Changelog
+"* Drop ENCA support"
+
+Therefore we remove the dependency to libenca.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfribidi/libfribidi.hash |    4 ++--
- package/libfribidi/libfribidi.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libass/libass.hash |    2 +-
+ package/libass/libass.mk   |    9 +--------
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
-index 003944a..79b5dd3 100644
---- a/package/libfribidi/libfribidi.hash
-+++ b/package/libfribidi/libfribidi.hash
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index f300166..87d3f26 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
 @@ -1,2 +1,2 @@
--# From http://www.fribidi.org/download/fribidi-0.19.6.tar.bz2.sha256
--sha256	cba8b7423c817e5adf50d28ec9079d14eafcec9127b9e8c8f1960c5ad585e17d	fribidi-0.19.6.tar.bz2
-+# From http://www.fribidi.org/download/fribidi-0.19.7.tar.bz2.sha256
-+sha256	08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e	fribidi-0.19.7.tar.bz2
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index 1cf3b7c..4e82a5e 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
+ # Locally computed
+-sha256 a67c54ebaf5ec19ae72e86259ee6ab6adfe2e64ed9f9149db03dc863360ea38c  libass-0.12.3.tar.xz
++sha256	e0071a3b2e95411c8d474014678368e3f0b852f7d663e0564b344e7335eb0671	libass-0.13.0.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index f1f00f3..83939e2 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFRIBIDI_VERSION = 0.19.6
-+LIBFRIBIDI_VERSION = 0.19.7
- LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
- LIBFRIBIDI_SITE = http://www.fribidi.org/download
- LIBFRIBIDI_LICENSE = LGPLv2.1+
+-LIBASS_VERSION = 0.12.3
++LIBASS_VERSION = 0.13.0
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
+@@ -38,11 +38,4 @@ else
+ LIBASS_CONF_OPTS += --disable-harfbuzz
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBENCA),y)
+-LIBASS_DEPENDENCIES += libenca
+-LIBASS_CONF_OPTS += --enable-enca
+-else
+-LIBASS_CONF_OPTS += --disable-enca
+-endif
+-
+ $(eval $(autotools-package))
