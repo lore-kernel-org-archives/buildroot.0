@@ -1,36 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2015 22:31:22 +0100
-Subject: [Buildroot] [PATCH 1/1] fastd: add upstream patch to fix build
-	with musl
-In-Reply-To: <1448199626-16900-1-git-send-email-rprebello@gmail.com> (Rodrigo
- Rebello's message of "Sun, 22 Nov 2015 11:40:26 -0200")
-References: <1448199626-16900-1-git-send-email-rprebello@gmail.com>
-Message-ID: <87k2p967rp.fsf@dell.be.48ers.dk>
+Date: Sun, 22 Nov 2015 22:26:09 +0100
+Subject: [Buildroot] [git commit] package/rpi-userland: bump version
+Message-ID: <20151122213531.DCDAF81DFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rodrigo" == Rodrigo Rebello <rprebello@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2a8e96d05738421898c373ffaeb61ef3ab008ef2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The missing 'sys/queue.h' issue when building with musl has been solved
- > by an upstream commit which eliminates the dependency on
- > 'net/if_ether.h' and, consequently, 'sys/queue.h' (needed on OpenBSD
- > since 'net/if_ether.h' uses LIST_* definitions).
+Fixes build with glibc-2.22.
 
- > As usual, the included patch can be dropped in the future when a new
- > version of this package gets released and integrated into Buildroot.
+Also fixes hard-to-trigger deadlock in highly threaded case, and fix
+libraries dependencies.
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/14e/14e291e22b8c8a9c590f0c6ef4316f8ab0aa1fff/
- >   http://autobuild.buildroot.net/results/ed4/ed4437bed01138380cd42c0dc943cd3ec85e26f0/
- >   http://autobuild.buildroot.net/results/ad2/ad226962413dece4fee07143a2bcfe07c44d55b6/
- >   ...
+Misc minor improvements in test programs as well.
 
- > Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Fixes #8446.
 
-Committed, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: gamadril.dev at gmail.com
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpi-userland/rpi-userland.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index f1914a2..0a25b2d 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_USERLAND_VERSION = b864a841e5a459a66a890c22b3a34127cd226238
++RPI_USERLAND_VERSION = 8306b7c757f4b8e8d9148789eeb64c666d9244a5
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
