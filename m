@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Nov 2015 10:33:24 +0100
-Subject: [Buildroot] [git commit] package/yajl: add hash
-Message-ID: <20151122123711.C80A980E4B@busybox.osuosl.org>
+Date: Sun, 22 Nov 2015 13:38:01 +0100
+Subject: [Buildroot] [PATCH 1/2] package/yajl: add hash
+In-Reply-To: <1448133726-24457-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1448133726-24457-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20151122133801.783ea5de@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b88f14fdc1abf7ed1b270608a087d8f3e289e1c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/yajl/yajl.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Sat, 21 Nov 2015 20:22:05 +0100, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/yajl/yajl.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/yajl/yajl.hash
 
-diff --git a/package/yajl/yajl.hash b/package/yajl/yajl.hash
-new file mode 100644
-index 0000000..6e025a2
---- /dev/null
-+++ b/package/yajl/yajl.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	0e78f516dc53ecce7dc073f9a9bb0343186b58ef29dcd1dad74e5e853b216dd5  yajl-2.0.4.tar.gz
+Both applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
