@@ -1,44 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Nov 2015 13:59:28 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/eudev: bump version to
- 3.1.5
-In-Reply-To: <1448186456-1069-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1448186456-1069-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151122135928.148e3fcd@free-electrons.com>
+Date: Sun, 22 Nov 2015 14:04:01 +0100
+Subject: [Buildroot] [git commit] bullet: disable on microblaze
+Message-ID: <20151122130414.A43B681E0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=eaa876ad31bc83d6c791ddefcad609a596f5b06e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 22 Nov 2015 11:00:56 +0100, Bernd Kuhls wrote:
-> Remove two patches applied upstream:
-> https://github.com/gentoo/eudev/commit/0e2be0c217028e73073e7f9ccb010cc8b4d756db
-> https://github.com/gentoo/eudev/commit/24ccb6ebc5e13a128aaedd3a2eb52eef3adf6dcd
-> 
-> Due to the removed patches autoreconf is not necessary anymore.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../eudev/0002-build-sys-check-for-mallinfo.patch  | 93 ----------------------
->  .../eudev/0003-build-sys-check-for-strndupa.patch  | 69 ----------------
->  package/eudev/eudev.hash                           |  4 +-
->  package/eudev/eudev.mk                             |  7 +-
->  4 files changed, 3 insertions(+), 170 deletions(-)
->  delete mode 100644 package/eudev/0002-build-sys-check-for-mallinfo.patch
->  delete mode 100644 package/eudev/0003-build-sys-check-for-strndupa.patch
+gcc doesn't finish compiling btSoftBody.cpp when optimization is
+enabled.
 
-Applied to next, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/6e4a9ede477b031f47f7e271c38f67f432a3573c
+http://autobuild.buildroot.net/results/7dc4ab759dd3b1e3e03fe52c78e31327340bf8c9
+http://autobuild.buildroot.net/results/637bae8b2be6c4c64f4f7c661cc8d4606b553538
 
-We have one remaining patch for eudev, which seems quite suitable for
-upstream inclusion. Could you submit it upstream?
+[Thomas: add reference to gcc bug.]
 
-Thanks a lot!
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bullet/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/bullet/Config.in b/package/bullet/Config.in
+index fc285ab..d4d69d2 100644
+--- a/package/bullet/Config.in
++++ b/package/bullet/Config.in
+@@ -1,6 +1,9 @@
+ config BR2_PACKAGE_BULLET
+ 	bool "bullet"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	# Affected by
++	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68476
++	depends on !BR2_microblaze
+ 	help
+ 	  Bullet is a Collision Detection and Rigid Body Dynamics
+ 	  Library.
+@@ -9,3 +12,4 @@ config BR2_PACKAGE_BULLET
+ 
+ comment "bullet needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_microblaze
