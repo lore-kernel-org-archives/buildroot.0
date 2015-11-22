@@ -1,33 +1,78 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Sun, 22 Nov 2015 16:11:57 +0100
-Subject: [Buildroot] [PATCH 2/3] package/gcc: comment on why we override
-	the generic configure commands
-In-Reply-To: <71e3b6c662031621f10fc3e1160ae1738204839b.1448202976.git.yann.morin.1998@free.fr>
-References: <cover.1448202976.git.yann.morin.1998@free.fr>
- <71e3b6c662031621f10fc3e1160ae1738204839b.1448202976.git.yann.morin.1998@free.fr>
-Message-ID: <1841581.bLZWfbY1R1@sagittea>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun, 22 Nov 2015 13:27:13 -0200
+Subject: [Buildroot] [PATCH v2] gpsd: add work-around and re-enable for
+	microblaze
+In-Reply-To: <20151122135732.3fc6bb45@free-electrons.com>
+References: <1448195040-8082-1-git-send-email-sergio.prado@e-labworks.com>
+ <20151122135732.3fc6bb45@free-electrons.com>
+Message-ID: <CANu7NGsAzD7fTSZPr0rRRCaOSR6N9NCpy7mTWzJ9c7436W6LPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 22 November 2015 15:39:42 Yann E. MORIN wrote:
-> The explanations given in the commit log of 7d6c79 (Compile static
-> versions of gcc libraries) do not explain why we have to provide
-> custom configure commands, instead of just adding --enable-static to
-> the configure options.
-> 
-> Add a comment in the code that explains why that is so. Add a pointer
-> to the ML archives with the explanations, too.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: J?r?me Pouiller <jezz@sysmic.org>
-Acked-by: J?r?me Pouiller <jezz@sysmic.org>
+Hello Thomas,
 
+I have tested with GCC 5.2.0. The bug persists and was reported in the gcc
+bug tracker:
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
+
+Actually, in GCC 5.X I had to also disable another optimization flag
+(-fschedule-insns). I'm finishing the tests of this change with both GCC
+4.9 and GCC 5.2 to send you a new patch to fix it.
+
+Regards,
+
+Sergio Prado
+Embedded Labworks
+Office: +55 11 2628-3461
+Mobile: +55 11 97123-3420
+
+2015-11-22 10:57 GMT-02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Dear Sergio Prado,
+>
+> On Sun, 22 Nov 2015 10:24:00 -0200, Sergio Prado wrote:
+> > Fix (works around) bug #6872
+> > https://bugs.busybox.net/show_bug.cgi?id=6872
+> >
+> > The gpsd package was disabled due to an internal compiler error for
+> > the microblaze architecture in the following commit:
+> >
+> http://git.buildroot.net/buildroot/commit/?id=d517415bcda380336f4a27bf248cef4d81791c9e
+> >
+> > The problem is due to an specific GCC optimization flag
+> > (-fexpensive-optimizations), so disabling it we can work around this
+> > problem and compile gpsd for the microblaze architecture.
+> >
+> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> > ---
+> > Changes v1 -> v2:
+> >   - added a comment explaining why we are disabling the optimization
+> flag.
+> > ---
+> >  package/gpsd/Config.in        | 3 ---
+> >  package/gpsd/gpsd.mk          | 8 +++++++-
+> >  package/sconeserver/Config.in | 2 --
+> >  3 files changed, 7 insertions(+), 6 deletions(-)
+>
+> Applied to master, thanks. Could you test with gcc 5.x, and if the
+> problem still exists, report a bug to the gcc bug tracker ? While your
+> workaround is OK, it is not good for gcc to fail this way when building
+> gpsd.
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151122/91d0cc95/attachment.html>
