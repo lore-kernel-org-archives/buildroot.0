@@ -1,50 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Nov 2015 13:57:32 +0100
-Subject: [Buildroot] [PATCH v2] gpsd: add work-around and re-enable for
- microblaze
-In-Reply-To: <1448195040-8082-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1448195040-8082-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20151122135732.3fc6bb45@free-electrons.com>
+Date: Sun, 22 Nov 2015 13:57:45 +0100
+Subject: [Buildroot] [git commit] package/mpd: fix static build issue with
+	alsa
+Message-ID: <20151122125750.D1BDE81D7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+commit: http://git.buildroot.net/buildroot/commit/?id=47cab068fbd29d29d78535787f8f54f2f7f83798
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 22 Nov 2015 10:24:00 -0200, Sergio Prado wrote:
-> Fix (works around) bug #6872
-> https://bugs.busybox.net/show_bug.cgi?id=6872
-> 
-> The gpsd package was disabled due to an internal compiler error for
-> the microblaze architecture in the following commit:
-> http://git.buildroot.net/buildroot/commit/?id=d517415bcda380336f4a27bf248cef4d81791c9e
-> 
-> The problem is due to an specific GCC optimization flag
-> (-fexpensive-optimizations), so disabling it we can work around this
-> problem and compile gpsd for the microblaze architecture.
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Changes v1 -> v2:
->   - added a comment explaining why we are disabling the optimization flag.
-> ---
->  package/gpsd/Config.in        | 3 ---
->  package/gpsd/gpsd.mk          | 8 +++++++-
->  package/sconeserver/Config.in | 2 --
->  3 files changed, 7 insertions(+), 6 deletions(-)
+mpd forgets to link the archive libmixer_plugins.a against libasound leading
+to undefined references in a static context.
 
-Applied to master, thanks. Could you test with gcc 5.x, and if the
-problem still exists, report a bug to the gcc bug tracker ? While your
-workaround is OK, it is not good for gcc to fail this way when building
-gpsd.
+Add a patch sent upstream to fix:
+http://autobuild.buildroot.net/results/f10/f10c6ea2d29bbcef8f33fc9ba1430e99edca895d/
+http://autobuild.buildroot.net/results/312/31212c484f452fe4ea6ae084d3edefc4580830d8/
 
-Thanks a lot!
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpd/0003-fix-static-build-with-alsa.patch |   32 +++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mpd/0003-fix-static-build-with-alsa.patch b/package/mpd/0003-fix-static-build-with-alsa.patch
+new file mode 100644
+index 0000000..4ba0449
+--- /dev/null
++++ b/package/mpd/0003-fix-static-build-with-alsa.patch
+@@ -0,0 +1,32 @@
++From bba7b8e5fed79a7fecacf5468ade35a3ae0a0f8e Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sat, 21 Nov 2015 23:51:43 +0100
++Subject: [PATCH 1/1] Makefile.am: fix static build with alsa
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Add ALSA_LIBS to MIXER_LIBS, otherwise building mpd in a static context fails
++with lot of undefined references to alsa-lib (libasound) required by
++src/mixer/plugins/AlsaMixerPlugin.cxx.
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ Makefile.am | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Makefile.am b/Makefile.am
++index 89819de..307fcba 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1219,6 +1219,7 @@ liboutput_plugins_a_SOURCES = \
++ 
++ MIXER_LIBS = \
++ 	libmixer_plugins.a \
+++	$(ALSA_LIBS) \
++ 	$(PULSE_LIBS)
++ 
++ MIXER_API_SRC = \
++-- 
++2.6.2
++
