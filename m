@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2015 22:57:03 +0100
-Subject: [Buildroot] [git commit branch/next] package/libglew: bump version
-	to 1.13.0
-Message-ID: <20151122220216.14DFF80425@busybox.osuosl.org>
+Date: Sun, 22 Nov 2015 22:47:33 +0100
+Subject: [Buildroot] [git commit branch/next] package/yasm: bump version to
+	1.3.0
+Message-ID: <20151122220216.1310B800E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b49bd873e8cf27e3e4159d3851fac0c04b5fe150
+commit: http://git.buildroot.net/buildroot/commit/?id=590683b1f0677b3c3675647abd222076c3e79c14
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libglew/libglew.hash |    2 +-
- package/libglew/libglew.mk   |    2 +-
+ package/yasm/yasm.hash |    2 +-
+ package/yasm/yasm.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglew/libglew.hash b/package/libglew/libglew.hash
-index 68c3e7a..5e12785 100644
---- a/package/libglew/libglew.hash
-+++ b/package/libglew/libglew.hash
+diff --git a/package/yasm/yasm.hash b/package/yasm/yasm.hash
+index d5cf267..016c15b 100644
+--- a/package/yasm/yasm.hash
++++ b/package/yasm/yasm.hash
 @@ -1,2 +1,2 @@
  # Locally computed:
--sha256	af58103f4824b443e7fa4ed3af593b8edac6f3a7be3b30911edbc7344f48e4bf	glew-1.12.0.tgz
-+sha256	aa25dc48ed84b0b64b8d41cdd42c8f40f149c37fa2ffa39cd97f42c78d128bc7	glew-1.13.0.tgz
-diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
-index 4d26ed8..dc73f39 100644
---- a/package/libglew/libglew.mk
-+++ b/package/libglew/libglew.mk
+-sha256 768ffab457b90a20a6d895c39749adb547c1b7cb5c108e84b151a838a23ccf31 yasm-1.2.0.tar.gz
++sha256	3dce6601b495f5b3d45b59f7d2492a340ee7e84b5beca17e48f862502bd5603f	yasm-1.3.0.tar.gz
+diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
+index 0bbd22d..bf8a481 100644
+--- a/package/yasm/yasm.mk
++++ b/package/yasm/yasm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGLEW_VERSION = 1.12.0
-+LIBGLEW_VERSION = 1.13.0
- LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
- LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
- LIBGLEW_LICENSE = BSD-3c, MIT
+-YASM_VERSION = 1.2.0
++YASM_VERSION = 1.3.0
+ YASM_SITE = http://www.tortall.net/projects/yasm/releases
+ 
+ define YASM_PRE_CONFIGURE_FIXUP
