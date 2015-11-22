@@ -1,40 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Nov 2015 14:04:42 +0100
-Subject: [Buildroot] [PATCH] bullet: disable on microblaze
-In-Reply-To: <1448140207-28861-1-git-send-email-arnout@mind.be>
-References: <1448140207-28861-1-git-send-email-arnout@mind.be>
-Message-ID: <20151122140442.6273cc59@free-electrons.com>
+Date: Sun, 22 Nov 2015 14:05:39 +0100
+Subject: [Buildroot] [git commit] apitrace: do not use bundled version of
+	libpng
+Message-ID: <20151122130712.E09CB819B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+commit: http://git.buildroot.net/buildroot/commit/?id=e189de16464005a2ac95d064e81fc193b5a5cf60
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Nov 2015 22:10:07 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> gcc doesn't finish compiling btSoftBody.cpp when optimization is
-> enabled.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/6e4/6e4a9ede477b031f47f7e271c38f67f432a3573c
-> http://autobuild.buildroot.net/results/7dc/7dc4ab759dd3b1e3e03fe52c78e31327340bf8c9
-> http://autobuild.buildroot.net/results/637/637bae8b2be6c4c64f4f7c661cc8d4606b553538
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> An option would have been to disable optimisation, but I couldn't be
-> bothered...
-> ---
->  package/bullet/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+In case libpng is not found apitrace its own version of libpng. However
+current bundled version (1.1.16) is impacted by
+https://sourceforge.net/p/libpng/bugs/230/. We simplify problem by
+forcing use of external libpng.
 
-I've added a comment in the Config.in with a reference to the gcc bug
-you have reported. Then, applied to master. Thanks!
+Notice this patch also impact use of zlib. Apitrace also use its own
+version of zlib if none was found. Since we select libpng, external
+zlib is also selected.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fix:
+  http://autobuild.buildroot.net/results/ac790191127cf4d8b19d0c7c640981264772f503/
+
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/apitrace/Config.in   |    1 +
+ package/apitrace/apitrace.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
+index 4fe82aa..a977712 100644
+--- a/package/apitrace/Config.in
++++ b/package/apitrace/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_APITRACE
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_LIBPNG
+ 	help
+ 	  Trace and replay OpenGL and OpenGL ES APIs calls to/from a
+ 	  file. You may install apitrace GUI from your distribution to
+diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
+index 28a40e4..fbd957c 100644
+--- a/package/apitrace/apitrace.mk
++++ b/package/apitrace/apitrace.mk
+@@ -9,7 +9,7 @@ APITRACE_SITE = $(call github,apitrace,apitrace,$(APITRACE_VERSION))
+ APITRACE_LICENSE = MIT
+ APITRACE_LICENSE_FILES = LICENSE
+ 
+-APITRACE_DEPENDENCIES = xlib_libX11 host-python
++APITRACE_DEPENDENCIES = xlib_libX11 host-python libpng
+ 
+ # Gui was never tested, so we prefer to explicitly disable it
+ APITRACE_CONF_OPTS += -DENABLE_GUI=false
