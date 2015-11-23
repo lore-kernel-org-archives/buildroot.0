@@ -1,42 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Nov 2015 18:55:57 +0100
-Subject: [Buildroot] [PATCH 1/3] core/pkg-autotools: align host
- configure commands to target one
-In-Reply-To: <20151123175112.GF3857@free.fr>
-References: <cover.1448202976.git.yann.morin.1998@free.fr>
- <f288b50c4267ceb0ca24aa1a7937d8f5fa894ed5.1448202976.git.yann.morin.1998@free.fr>
- <20151123183829.077c602c@free-electrons.com>
- <20151123175112.GF3857@free.fr>
-Message-ID: <20151123175557.GG3857@free.fr>
+Date: Mon, 23 Nov 2015 18:58:17 +0100
+Subject: [Buildroot] [PATCH 06/51] package/perl: include perl-cross in
+ the legal-info output
+In-Reply-To: <56534BFA.8060203@lucaceresoli.net>
+References: <cover.1448289515.git.yann.morin.1998@free.fr>
+ <f360919da5180e26ce4f96eefed14c29b526b428.1448289515.git.yann.morin.1998@free.fr>
+ <56534BFA.8060203@lucaceresoli.net>
+Message-ID: <20151123175817.GH3857@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Luca, All,
 
-On 2015-11-23 18:51 +0100, Yann E. MORIN spake thusly:
-> On 2015-11-23 18:38 +0100, Thomas Petazzoni spake thusly:
-> > On Sun, 22 Nov 2015 15:39:41 +0100, Yann E. MORIN wrote:
-> > > The host configure commands are not indented the same way as the target
-> > > ones. Besides, there are leading spaces (instead of TABs) on one line.
-> > > 
-> > > Replicate the same indentation as used for the target commands.
-> > > 
-> > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > > ---
-> > >  package/pkg-autotools.mk | 12 ++++++------
-> > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > Applied to next, thanks.
+On 2015-11-23 18:25 +0100, Luca Ceresoli spake thusly:
+> Yann E. MORIN wrote:
+> >The perl-cross sources are combined with the perl sources, so they must
+> >be redistributed for proper compliance.
+> >
+> >Add a post-legal-info hook that also installs them in the legal-info
+> >output.
+> >
+> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> >Cc: Francois Perrad <fperrad@gmail.com>
 > 
-> In the cover-letter, I suggestd this be applied to master.
+> Ouch:
+> 
+> $ make legal-info
+> [...]
+> mkdir: missing operand
+> Try 'mkdir --help' for more information.
+> make[1]: *** [perl-legal-info] Error 1
+> make: *** [_all] Error 2
+> 
+> This probably needs patch 10.
 
-No, I did not. It was just the name of the branch. Sigh...
+Damned. That should teach me to re-organise so-big a series *after*
+testing it... :-/
 
-Sorry for the noise...
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
