@@ -1,50 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Nov 2015 15:47:41 +0100
-Subject: [Buildroot] [PATCH 11/51] core/legal-info: add package version to
-	license directory
+Date: Mon, 23 Nov 2015 15:47:40 +0100
+Subject: [Buildroot] [PATCH 10/51] core/legal-info: install source archives
+	in their own sub-dir
 In-Reply-To: <cover.1448289515.git.yann.morin.1998@free.fr>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
-Message-ID: <11dbe139facc8db195d221126c0d69da8ed6bc4d.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <2015f01b3ecd96e43165cbb91c96bfd0ebd196ec.1448289515.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we save the source archives in a directory named after the
-package and its version, do the same for the license files, for
-consistency.
+Currently, we put all source archives side-by-side in the same
+directory.
 
-It has a not-so-bad side-effect of also saving the version string in
-the all-licenses list.
+Since we're about to also save individual patches that were applied
+on those sources, we don't want to make that directory a complete
+mess of unassorted files.
 
-The only (small) drawback, is that the warnings about undefined
-_LICENSE_FILES now contains the version string, too. That's unavoidable,
-since that's what is stored in the legal report.
+So, we install each source archive in its own sub-directory, where
+we'll later store the patches too. Store that location in a variable,
+so it can be re-used later on (to install patches in a future commit).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/pkg-generic.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-generic.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index bb3a6da..07ff820 100644
+index 98db3ba..bb3a6da 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -791,10 +791,10 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- # is that the license still applies to the files distributed as part
- # of the rootfs, even if the sources are not themselves redistributed.
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
--	@$$(call legal-license-nofiles,$$($(2)_RAWNAME),$$(call UPPERCASE,$(4)))
--	@$$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
-+	@$$(call legal-license-nofiles,$$($(2)_RAWNAME)-$$($(2)_VERSION),$$(call UPPERCASE,$(4)))
-+	@$$(call legal-warning-pkg,$$($(2)_RAWNAME)-$$($(2)_VERSION),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-+	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME)-$$($(2)_VERSION),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
+@@ -482,6 +482,8 @@ endif
  
- ifeq ($$($(2)_SITE_METHOD),local)
+ $(2)_REDISTRIBUTE		?= YES
+ 
++$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAWNAME)-$$($(2)_VERSION)
++
+ # When a target package is a toolchain dependency set this variable to
+ # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+ # dependency
+@@ -812,7 +814,7 @@ endif
+ # Copy the source tarball
+ 	$$(Q)$$(call hardlink-copy,\
+ 		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+-		     $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))))
++		     $$($(2)_REDIST_SOURCES_DIR))
+ endif # redistribute
+ 
+ endif # other packages
 -- 
 1.9.1
