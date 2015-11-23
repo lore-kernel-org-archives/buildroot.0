@@ -1,71 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Nov 2015 22:56:59 +0100
-Subject: [Buildroot] [git commit] docs/website: New website
-Message-ID: <20151123221453.E469E818CF@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 23 Nov 2015 23:23:22 +0100
+Subject: [Buildroot] [PATCH 2/2] package/zmqpp: fix missing install of
+	static library
+In-Reply-To: <1448317402-10464-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1448317402-10464-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <1448317402-10464-2-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97ab48658d574ded87f8af799795ba7ed76f6ba4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+zmqpp's Makefile does not install the static library.
 
-This patch introduces a new buildroot website based on a modern flat
-layout inspired by material design.
-
-Each page of the old website is converted to the new css/layout, the
-big bump is in main page which is completely rewritten. Content of
-the old website is copied more or less verbatim, planning to add more
-content in the future.
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- docs/website/about.html                            |   62 -
- docs/website/contribute.html                       |   67 +-
- docs/website/css/bootstrap.min.css                 |    7 -
- docs/website/css/bootswatch.less                   |  127 -
- docs/website/css/buildroot.css                     |   46 -
- docs/website/css/main.css                          |  260 ++
- docs/website/css/timeline.css                      |  184 +
- docs/website/css/variables.less                    |  856 ----
- docs/website/docs.html                             |  178 +-
- docs/website/download.html                         |  262 +-
- .../fonts/glyphicons-halflings-regular.woff        |  Bin 23320 -> 23292 bytes
- docs/website/footer.html                           |   12 +-
- docs/website/git.html                              |   48 -
- docs/website/header.html                           |   93 +-
- docs/website/images/browser.png                    |  Bin 0 -> 18175 bytes
- docs/website/images/bug-buddy.png                  |  Bin 0 -> 5946 bytes
- docs/website/images/buildroot-slides.png           |  Bin 0 -> 32837 bytes
- docs/website/images/clippy.svg                     |    3 +
- docs/website/images/email.png                      |  Bin 0 -> 4101 bytes
- docs/website/images/gift.png                       |  Bin 0 -> 15906 bytes
- docs/website/images/github_hash_mongrel2.png       |  Bin 19029 -> 0 bytes
- docs/website/images/glyphicons-halflings-white.png |  Bin 8777 -> 0 bytes
- docs/website/images/glyphicons-halflings.png       |  Bin 12799 -> 0 bytes
- docs/website/images/gplus.png                      |  Bin 4760 -> 0 bytes
- docs/website/images/hammer.png                     |  Bin 0 -> 18353 bytes
- docs/website/images/irc.png                        |  Bin 0 -> 7696 bytes
- docs/website/images/menuconfig.png                 |  Bin 8604 -> 181491 bytes
- docs/website/images/menuconfig_small.png           |  Bin 8604 -> 0 bytes
- docs/website/images/nconfig.png                    |  Bin 0 -> 88055 bytes
- docs/website/images/package.png                    |  Bin 0 -> 7746 bytes
- docs/website/images/pdf-icon.png                   |  Bin 0 -> 10324 bytes
- docs/website/images/text.png                       |  Bin 0 -> 6437 bytes
- docs/website/images/tux-flat.png                   |  Bin 0 -> 20106 bytes
- docs/website/images/valid-html401.png              |  Bin 1950 -> 0 bytes
- docs/website/images/xconfig.png                    |  Bin 0 -> 224081 bytes
- docs/website/images/zip.png                        |  Bin 0 -> 8208 bytes
- docs/website/index.html                            |  174 +-
- docs/website/js/bootstrap.min.js                   |    6 -
- docs/website/js/buildroot.js                       |   48 +
- docs/website/js/jquery-1.11.1.min.js               |    4 -
- docs/website/news.html                             | 4264 +++++++++++++-------
- docs/website/sponsors.html                         |  358 +-
- docs/website/support.html                          |  117 +-
- 43 files changed, 4012 insertions(+), 3164 deletions(-)
+ ...-Install-static-library-for-static-builds.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/zmqpp/0003-Install-static-library-for-static-builds.patch
 
-Patch is too large, so refusing to show it
+diff --git a/package/zmqpp/0003-Install-static-library-for-static-builds.patch b/package/zmqpp/0003-Install-static-library-for-static-builds.patch
+new file mode 100644
+index 0000000..3b4d488
+--- /dev/null
++++ b/package/zmqpp/0003-Install-static-library-for-static-builds.patch
+@@ -0,0 +1,30 @@
++From 1637443262cc861a161fd7c734bc0610a340335b Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Mon, 23 Nov 2015 22:53:09 +0100
++Subject: [PATCH 3/3] Install static library for static builds
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ Makefile | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/Makefile b/Makefile
++index 90c7059..abed6fa 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -142,6 +142,9 @@ ifeq ($(BUILD_SHARED),yes)
++ 	ln -sf $(LIBRARY_SHARED).$(APP_VERSION) $(LIBDIR)/$(LIBRARY_SHARED).$(VERSION_MAJOR)
++ 	ln -sf $(LIBRARY_SHARED).$(APP_VERSION) $(LIBDIR)/$(LIBRARY_SHARED)
++ endif
+++ifeq ($(BUILD_STATIC),yes)
+++	install -m 755 $(BUILD_PATH)/$(LIBRARY_ARCHIVE) $(LIBDIR)/$(LIBRARY_ARCHIVE)
+++endif
++ 	if [ -f $(BUILD_PATH)/$(CLIENT_TARGET) ]; then install -m 755 $(BUILD_PATH)/$(CLIENT_TARGET) $(BINDIR); fi
++ 	$(LDCONFIG)
++ 	@echo "use make installcheck to test the install"
++-- 
++2.6.2
++
+-- 
+2.6.2
