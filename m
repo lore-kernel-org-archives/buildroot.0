@@ -1,113 +1,84 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 23 Nov 2015 22:18:00 +0100
-Subject: [Buildroot] [PATCH v1] qt5/qt53d: new package
-Message-ID: <1448313480-6101-1-git-send-email-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 23 Nov 2015 22:23:52 +0100
+Subject: [Buildroot] [PATCH 06/51] package/perl: include perl-cross in
+ the legal-info output
+In-Reply-To: <20151123212400.1ae778c8@free-electrons.com>
+References: <cover.1448289515.git.yann.morin.1998@free.fr>
+ <f360919da5180e26ce4f96eefed14c29b526b428.1448289515.git.yann.morin.1998@free.fr>
+ <20151123212400.1ae778c8@free-electrons.com>
+Message-ID: <20151123212352.GK3857@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/Config.in        |  1 +
- package/qt5/qt53d/Config.in  | 18 ++++++++++++++++++
- package/qt5/qt53d/qt53d.hash |  2 ++
- package/qt5/qt53d/qt53d.mk   | 40 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 61 insertions(+)
- create mode 100644 package/qt5/qt53d/Config.in
- create mode 100644 package/qt5/qt53d/qt53d.hash
- create mode 100644 package/qt5/qt53d/qt53d.mk
+Thomas, All,
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 22fd0c0..568fadb 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -41,6 +41,7 @@ source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5sensors/Config.in"
- source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
-+source "package/qt5/qt53d/Config.in"
- source "package/qt5/qt5webchannel/Config.in"
- source "package/qt5/qt5websockets/Config.in"
- source "package/qt5/qt5x11extras/Config.in"
-diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
-new file mode 100644
-index 0000000..d350922
---- /dev/null
-+++ b/package/qt5/qt53d/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_QT53D
-+	bool "qt53d"
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_GUI
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative_quick
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt53d module.
-+
-+	  http://doc.qt.io/qt-5/qt3d-index.html
-+
-+comment "qt53d module needs an OpenGL-capable backend"
-+        depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
-new file mode 100644
-index 0000000..4f6a55c
---- /dev/null
-+++ b/package/qt5/qt53d/qt53d.hash
-@@ -0,0 +1,2 @@
-+# Hash from http://download.qt.io/official_releases/qt/5.5/5.5.0/submodules/md5sums.txt
-+md5  508c90c3a2a5f37f0f7c2dd696ab10f5  qt3d-opensource-src-5.5.0.tar.xz
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-new file mode 100644
-index 0000000..b543efd
---- /dev/null
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# qt53d
-+#
-+################################################################################
-+
-+QT53D_VERSION = $(QT5_VERSION)
-+QT53D_SITE = $(QT5_SITE)
-+QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
-+QT53D_DEPENDENCIES = qt5base qt5declarative
-+QT53D_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT53D_LICENSE = GPLv2+ or LGPLv3
-+QT53D_LICENSE_FILES = LICENSE.GPL  LICENSE.LGPLv3
-+else
-+QT53D_LICENSE = Commercial license
-+QT53D_REDISTRIBUTE = NO
-+endif
-+
-+define QT53D_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT53D_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT53D_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_STATIC_LIBS),)
-+define QT53D_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-+endef
-+endif
-+
-+$(eval $(generic-package))
+On 2015-11-23 21:24 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 23 Nov 2015 15:47:36 +0100, Yann E. MORIN wrote:
+> > The perl-cross sources are combined with the perl sources, so they must
+> > be redistributed for proper compliance.
+> > 
+> > Add a post-legal-info hook that also installs them in the legal-info
+> > output.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> > Cc: Francois Perrad <fperrad@gmail.com>
+> > ---
+> >  package/perl/perl.mk | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> > index f3b7b2b..25294e6 100644
+> > --- a/package/perl/perl.mk
+> > +++ b/package/perl/perl.mk
+> > @@ -32,6 +32,13 @@ define PERL_CROSS_EXTRACT
+> >  endef
+> >  PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
+> >  
+> > +# ... and as such should be part of the legal-info redistribution
+> > +define PERL_CROSS_LEGAL_INFO
+> > +	$(Q)$(call hardlink-copy,$(DL_DIR)/$(PERL_CROSS_SOURCE),\
+> > +				 $(PERL_REDIST_SOURCES_DIR))
+> > +endef
+> > +PERL_POST_LEGAL_INFO_HOOKS += PERL_CROSS_LEGAL_INFO
+> > +
+> >  define PERL_CROSS_SET_POD
+> >  	$(SED) s/$(PERL_CROSS_OLD_POD)/$(PERL_CROSS_NEW_POD)/g $(@D)/Makefile
+> >  endef
+> 
+> I think this is not the proper way of solving the problem. perl-cross
+> is downloaded through <pkg>_EXTRA_DOWNLOADS, and <pkg>_EXTRA_DOWNLOADS
+> files should be saved in legal-info, without requiring some special
+> handling from each package using <pkg>_EXTRA_DOWNLOADS.
+
+Well, that's what I thought initially.
+
+However, I don't think that _EXTRA_DOWNLOADS should be saved to the
+legal-info. A reason I already explained is that _EXTRA_DOWNLOADS are
+used by the Blackfin external toolchains to download extra parts of
+there sysroots, and that should not be part of legal-info.
+
+Furthermore, what if a FLOSS package has an EXTRA_DOWNLOAD to download
+non-redistributable stuff. An example that is easy to understand, would
+be a Doom package, where the engine is FLOSS (GPL), and where the WAD
+files are downlaodable from an internal server. Such a package could use
+_EXTRA_DOWNLOADS to fetch the WAD files. The distributor may have an
+agreement to provide the WAD files in the product, but not reditribute
+them otherwise.
+
+So, I don;t think we should install _EXTRA_DOWNLOADS (or _ALL_DOWNLOADS)
+in the legal-info output.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
