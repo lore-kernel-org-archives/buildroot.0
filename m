@@ -1,115 +1,199 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Nov 2015 15:48:17 +0100
-Subject: [Buildroot] [PATCH 47/51] arc/xtensa: get rid of an intermediate
-	blind kconfig option
+Date: Mon, 23 Nov 2015 15:48:18 +0100
+Subject: [Buildroot] [PATCH 48/51] arch/xtensa: allow specifying path to
+	tarball file
 In-Reply-To: <cover.1448289515.git.yann.morin.1998@free.fr>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
-Message-ID: <ca0bd8d831179771a1c3f02768128f8c237d36f3.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <692427a4dfb2b3b17cc25c5793a14ab19a456668.1448289515.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is not needed to have an intermediate blind option, we can just
-hide the prompt behind the same dependency as the non-blind symbol.
+currently, specifying a custom Xtrensa core is done with two variables:
+  - the core name
+  - the directory containing the overlay tarball
 
-Update our qemu-xtensa defconfig acordingly (note: it was using
-different values for both options, which is not possible; the blind
-option was just set to the non-blind one in the .config).
+However, the core name only serves to construct the tarball name, and is
+not used whatsoever to configure any of the toolchain components
+(binutils, gcc or gdb), except through the files that are overlayed in
+their respective source trees.
 
-Also remove an unneeded empty default for the BR2_XTENSA_OVERLAY_DIR
-string option (strings are empty by default).
+This has two main drawbacks:
+  - the overlay file must be named after the core,
+  - the tarball can not be compressed.
+
+Furthermore, it also makes it extremely complex to implement a download
+of that tarball.
+
+So, those two variables can be squeezed into a single variable, that is
+the complete path of the overlay tarball.
+
+Update the qemu-xtensa defconfig accordingly.
+
+Note: we do not add a legacy entry for BR2_XTENSA_CORE_NAME, since it
+was previously a blind option in the last release, and there's been no
+release since we removed BR2_XTENSA_CUSTOM_NAME. So, we just update the
+legacy comments for BR2_XTENSA_CUSTOM_NAME, since that's all the user
+could have seen in any of our releases so far.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Chris Zankel <chris@zankel.net>
 ---
- Config.in.legacy                   | 14 ++++++++++++++
- arch/Config.in.xtensa              | 18 +++++++-----------
+ Config.in.legacy                   | 18 +++++++++++++++---
+ arch/Config.in.xtensa              | 19 ++++++++-----------
+ arch/arch.mk.xtensa                | 23 ++++++++++-------------
  configs/qemu_xtensa_lx60_defconfig |  3 +--
- 3 files changed, 22 insertions(+), 13 deletions(-)
+ 4 files changed, 34 insertions(+), 29 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c5b8223..b892f38 100644
+index b892f38..1986a1b 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -105,6 +105,20 @@ comment "----------------------------------------------------"
- endif
- 
+@@ -107,11 +107,23 @@ endif
  ###############################################################################
-+comment "Legacy options removed in 2016.02"
-+
-+config BR2_XTENSA_CUSTOM_NAME
-+	string "The BR2_XTENSA_CUSTOM_NAME option has been renamed"
+ comment "Legacy options removed in 2016.02"
+ 
++config BR2_XTENSA_OVERLAY_DIR
++	string "The BR2_XTENSA_OVERLAY_DIR option has been removed"
 +	help
-+	  The BR2_XTENSA_CUSTOM_NAME option has been renamed
-+	  to BR2_XTENSA_CORE_NAME.
++	  The BR2_XTENSA_OVERLAY_DIR has been removed in favour of
++	  BR2_XTENSA_OVERLAY_FILE. You must now pass the cpmplete
++	  path to the overlay file, not to the directory containing
++	  it.
 +
-+config BR2_XTENSA_CUSTOM_NAME_WRAP
++config BR2_XTENSA_OVERLAY_DIR_WRAP
 +	bool
-+	default y if BR2_XTENSA_CUSTOM_NAME != ""
++	default y if BR2_XTENSA_OVERLAY_DIR != ""
 +	select BR2_LEGACY
 +
-+###############################################################################
- comment "Legacy options removed in 2015.11"
+ config BR2_XTENSA_CUSTOM_NAME
+-	string "The BR2_XTENSA_CUSTOM_NAME option has been renamed"
++	string "The BR2_XTENSA_CUSTOM_NAME option has been removed"
+ 	help
+-	  The BR2_XTENSA_CUSTOM_NAME option has been renamed
+-	  to BR2_XTENSA_CORE_NAME.
++	  The BR2_XTENSA_CUSTOM_NAME option has been removed.
  
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REAL
+ config BR2_XTENSA_CUSTOM_NAME_WRAP
+ 	bool
 diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-index a0e18f1..c1c4fa1 100644
+index c1c4fa1..83d0d91 100644
 --- a/arch/Config.in.xtensa
 +++ b/arch/Config.in.xtensa
-@@ -2,30 +2,26 @@ choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_xtensa
- 	default BR2_xtensa_fsf
-+
- config BR2_XTENSA_CUSTOM
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	bool "Custom Xtensa processor configuration"
-+
- config BR2_xtensa_fsf
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	bool "fsf - Default configuration"
--endchoice
+@@ -13,24 +13,21 @@ config BR2_xtensa_fsf
  
--config BR2_XTENSA_CUSTOM_NAME
--	string "Custom Xtensa processor configuration name"
--	depends on BR2_XTENSA_CUSTOM
--	default ""
+ endchoice
+ 
+-config BR2_XTENSA_CORE_NAME
+-	string "Custom Xtensa processor configuration name" if BR2_XTENSA_CUSTOM
+-	default BR2_XTENSA_CUSTOM_NAME if BR2_XTENSA_CUSTOM_NAME != "" # legacy
 -	help
 -	  Name given to a custom Xtensa processor configuration.
-+endchoice
- 
- config BR2_XTENSA_CORE_NAME
--	string
--	default BR2_XTENSA_CUSTOM_NAME	if BR2_XTENSA_CUSTOM
--	default ""			if BR2_xtensa_fsf
-+	string "Custom Xtensa processor configuration name" if BR2_XTENSA_CUSTOM
-+	default BR2_XTENSA_CUSTOM_NAME if BR2_XTENSA_CUSTOM_NAME != "" # legacy
-+	help
-+	  Name given to a custom Xtensa processor configuration.
- 
- config BR2_XTENSA_OVERLAY_DIR
- 	string "Overlay directory for custom configuration"
+-
+-config BR2_XTENSA_OVERLAY_DIR
+-	string "Overlay directory for custom configuration"
++config BR2_XTENSA_OVERLAY_FILE
++	string "Overlay file for custom configuration"
  	depends on BR2_XTENSA_CUSTOM
--	default ""
  	help
- 	  Provide the directory path that contains the overlay file
- 	  for a custom processor configuration. The path is relative
+-	  Provide the directory path that contains the overlay file
+-	  for a custom processor configuration. The path is relative
+-	  to the top directory of buildroot.
++	  Enter the path to the overlay tarball for a custom processor
++	  configuration.
++
+ 	  These overlay files are tar packages with updated configuration
+ 	  files for various toolchain packages and Xtensa processor
+ 	  configurations. They are provided by the processor vendor or
+ 	  directly from Tensilica.
+ 
++	  The path can be either absolute, or relative to the top directory
++	  of buildroot.
++
+ choice
+ 	prompt "Target Architecture Endianness"
+ 	depends on BR2_XTENSA_CUSTOM
+diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
+index d2f4f59..e60c0b2 100644
+--- a/arch/arch.mk.xtensa
++++ b/arch/arch.mk.xtensa
+@@ -1,18 +1,15 @@
+ ################################################################################
+-# Those two variables can be used by packages that need to extract the overlay.
++# This variable can be used by packages that need to extract the overlay.
+ #
+-# ARCH_XTENSA_CORE_NAME   is the name of the Xtensa core; empty if none or the
+-#                         standard 'fsf' core.
+-# ARCH_XTENSA_OVERLAY_TAR is the path to the overlay tarball; only valid when
+-#                         ARCH_XTENSA_CORE_NAME is not empty.
++# ARCH_XTENSA_OVERLAY_FILE is the path to the overlay tarball; empty if not
++#                          using any overlay
+ #
+ # Example:
+-#   ifneq ($(ARCH_XTENSA_CORE_NAME),)
+-#       tar xf $(ARCH_XTENSA_OVERLAY_TAR) -C $(@D) --strip-components=1 gcc
++#   ifneq ($(ARCH_XTENSA_OVERLAY_FILE),)
++#       tar xf $(ARCH_XTENSA_OVERLAY_FILE) -C $(@D) --strip-components=1 gcc
+ #   endif
+ ################################################################################
+-ARCH_XTENSA_CORE_NAME = $(call qstrip,$(BR2_XTENSA_CORE_NAME))
+-ARCH_XTENSA_OVERLAY_TAR = $(call qstrip,$(BR2_XTENSA_OVERLAY_DIR))/xtensa_$(ARCH_XTENSA_CORE_NAME).tar
++ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
+ 
+ ################################################################################
+ # arch-xtensa-overlay-extract -- extract an extensa overlay
+@@ -24,7 +21,7 @@ ARCH_XTENSA_OVERLAY_TAR = $(call qstrip,$(BR2_XTENSA_OVERLAY_DIR))/xtensa_$(ARCH
+ #   $(call arch-xtensa-overlay-extract,/path/to/overlay.tar,$(@D),gcc)
+ ################################################################################
+ define arch-xtensa-overlay-extract
+-	tar xf $(ARCH_XTENSA_OVERLAY_TAR) -C $(1) --strip-components=1 $(2)
++	tar xf $(ARCH_XTENSA_OVERLAY_FILE) -C $(1) --strip-components=1 $(2)
+ endef
+ 
+ ################################################################################
+@@ -37,7 +34,7 @@ endef
+ #   $(call arch-xtensa-overlay-legal-info,/path/to/redist/dir/)
+ ################################################################################
+ define arch-xtensa-overlay-legal-info
+-	$(call hardlink-copy,$(ARCH_XTENSA_OVERLAY_TAR),$(1))
++	$(call hardlink-copy,$(ARCH_XTENSA_OVERLAY_FILE),$(1))
+ endef
+ 
+ ################################################################################
+@@ -53,7 +50,7 @@ endef
+ ################################################################################
+ define arch-xtensa-overlay-inner
+ 
+-ifneq ($$(ARCH_XTENSA_CORE_NAME),)
++ifneq ($$(ARCH_XTENSA_OVERLAY_FILE),)
+ 
+ define $(1)_XTENSA_OVERLAY_EXTRACT
+ 	$$(call arch-xtensa-overlay-extract,$$(@D),$$($(1)_ARCH_XTENSA_OVERLAY_COMPONENT))
+@@ -65,7 +62,7 @@ define $(1)_XTENSA_OVERLAY_LEGAL_INFO
+ endef
+ $(1)_POST_LEGAL_INFO_HOOKS += $(1)_XTENSA_OVERLAY_LEGAL_INFO
+ 
+-endif # ARCH_XTENSA_CORE_NAME != ""
++endif # ARCH_XTENSA_OVERLAY_FILE != ""
+ 
+ endef # arch-xtensa-overlay-inner
+ 
 diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
-index 42b844c..8326381 100644
+index 8326381..457416e 100644
 --- a/configs/qemu_xtensa_lx60_defconfig
 +++ b/configs/qemu_xtensa_lx60_defconfig
 @@ -1,8 +1,7 @@
  # Architecture
  BR2_xtensa=y
  BR2_XTENSA_CUSTOM=y
--BR2_XTENSA_CUSTOM_NAME="dc232b"
--BR2_XTENSA_CORE_NAME="lx60"
-+BR2_XTENSA_CORE_NAME="dc232b"
- BR2_XTENSA_OVERLAY_DIR="board/qemu/xtensa-lx60"
+-BR2_XTENSA_CORE_NAME="dc232b"
+-BR2_XTENSA_OVERLAY_DIR="board/qemu/xtensa-lx60"
++BR2_XTENSA_OVERLAY_FILE="board/qemu/xtensa-lx60/xtensa_dc232b.tar"
  
  # Patches
+ BR2_GLOBAL_PATCH_DIR="board/qemu/xtensa-lx60"
 -- 
 1.9.1
