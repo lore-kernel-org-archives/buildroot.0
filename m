@@ -1,59 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Nov 2015 22:51:20 +0100
-Subject: [Buildroot] Buildroot defconfigs now being built on Travis CI
-In-Reply-To: <20151123223332.3eff11d8@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 23 Nov 2015 22:33:32 +0100")
-References: <20151123223332.3eff11d8@free-electrons.com>
-Message-ID: <874mgc4c6f.fsf@dell.be.48ers.dk>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Mon, 23 Nov 2015 19:06:02 -0300
+Subject: [Buildroot] [PATCH] minizip: new package
+Message-ID: <1448316362-19184-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/Config.in          |  1 +
+ package/minizip/Config.in  | 15 +++++++++++++++
+ package/minizip/minizip.mk | 17 +++++++++++++++++
+ 3 files changed, 33 insertions(+)
+ create mode 100644 package/minizip/Config.in
+ create mode 100644 package/minizip/minizip.mk
 
- > Hello,
- > I used to build the Buildroot defconfigs with a Jenkins instance
- > provided by Free Electrons, but with the increasing number of
- > defconfigs, it started to take too much time on our build server (and
- > therefore less CPU time was available for autobuild.b.o testing).
-
- > So, I've moved the testing of the Buildroot defconfigs to Travis CI,
- > which provides essentially free CPU time to allow open-source projects
- > to do continuous integration.
-
- > You can see the results at:
-
- >   https://travis-ci.org/buildroot/buildroot-defconfig-testing
-
-Cool, great!
-
- > The last build has been fully successful, with all 95 defconfigs
- > building fine. I have scheduled to rebuild all defconfigs every two
- > days, of course only if commits have been made to Buildroot.
-
- > For the moment, notifications of build working fine or failing are just
- > sent to some testing IRC channel. Once the mechanism has proven to work
- > well for a week or two, I'll adjust the notifications so that they are
- > sent to the official #buildroot IRC channel, and possibly by e-mail as
- > well (to the mailing list or directly to interested people).
- > Suggestions on this are welcome.
-
-I wouldn't mind getting a notification per email if something fails.
-
-
- > Now, if you want the gory details of how this is implemented:
-
-Is that XFS issue something we want to fix before 2015.11? What is that
-stupidpid thing about? Does travis stop if it doesn't get any output?
-
-I see that results are copied to the autobuilder server? How are they
-visualized? Just together with the other autobuild results?
-
-Thanks for setting it up!
-
+diff --git a/package/Config.in b/package/Config.in
+index f9af31c..d6d5505 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -746,6 +746,7 @@ menu "Compression and decompression"
+ 	source "package/libsquish/Config.in"
+ 	source "package/libzip/Config.in"
+ 	source "package/lzo/Config.in"
++	source "package/minizip/Config.in"
+ 	source "package/snappy/Config.in"
+ 	source "package/szip/Config.in"
+ 	source "package/zlib/Config.in"
+diff --git a/package/minizip/Config.in b/package/minizip/Config.in
+new file mode 100644
+index 0000000..7205e00
+--- /dev/null
++++ b/package/minizip/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_MINIZIP
++	bool "minizip"
++	select BR2_PACKAGE_ZLIB
++	help
++	  Enables to extract files from a .zip archive file.
++	  It is compatible with PKZip 2.04g, WinZip, InfoZip,
++	  MimarSinan Codex Suite 2002 tools, and compatible sofware.
++
++	  https://github.com/nmoinvaz/minizip
++
++config BR2_PACKAGE_MINIZIP_DEMOS
++	bool "miniunzip/minizip"
++	depends on BR2_PACKAGE_MINIZIP
++	help
++	  Enable miniunzip/minizip binary tools.
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+new file mode 100644
+index 0000000..aa77c56
+--- /dev/null
++++ b/package/minizip/minizip.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# minizip
++#
++################################################################################
++
++MINIZIP_VERSION = 977afb22966e6ab0ee401293a8e85fe808133f9a
++MINIZIP_SITE = https://github.com/nmoinvaz/minizip.git
++MINIZIP_SITE_METHOD = git
++MINIZIP_DEPENDENCIES = zlib
++MINIZIP_AUTORECONF = YES
++MINIZIP_INSTALL_STAGING = YES
++MINIZIP_CONF_OPTS = $(if $(BR2_PACKAGE_MINIZIP_DEMOS),--enable-demos)
++MINIZIP_LICENSE = zlib license
++MINIZIP_LICENSE_FILES = LICENSE
++
++$(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.4.10
