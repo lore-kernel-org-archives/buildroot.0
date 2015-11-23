@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Nov 2015 22:23:52 +0100
-Subject: [Buildroot] [PATCH 06/51] package/perl: include perl-cross in
- the legal-info output
-In-Reply-To: <20151123212400.1ae778c8@free-electrons.com>
+Date: Mon, 23 Nov 2015 22:28:23 +0100
+Subject: [Buildroot] [PATCH 50/51] arch/xtensa: accept the overlay to be
+ an URL
+In-Reply-To: <20151123213523.2668237d@free-electrons.com>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
- <f360919da5180e26ce4f96eefed14c29b526b428.1448289515.git.yann.morin.1998@free.fr>
- <20151123212400.1ae778c8@free-electrons.com>
-Message-ID: <20151123212352.GK3857@free.fr>
+ <fb88a640d6ca2ceb85fc96fa73a960af848c8930.1448289515.git.yann.morin.1998@free.fr>
+ <20151123213523.2668237d@free-electrons.com>
+Message-ID: <20151123212823.GL3857@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,62 +15,17 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2015-11-23 21:24 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 23 Nov 2015 15:47:36 +0100, Yann E. MORIN wrote:
-> > The perl-cross sources are combined with the perl sources, so they must
-> > be redistributed for proper compliance.
-> > 
-> > Add a post-legal-info hook that also installs them in the legal-info
-> > output.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> > Cc: Francois Perrad <fperrad@gmail.com>
-> > ---
-> >  package/perl/perl.mk | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> > index f3b7b2b..25294e6 100644
-> > --- a/package/perl/perl.mk
-> > +++ b/package/perl/perl.mk
-> > @@ -32,6 +32,13 @@ define PERL_CROSS_EXTRACT
-> >  endef
-> >  PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
-> >  
-> > +# ... and as such should be part of the legal-info redistribution
-> > +define PERL_CROSS_LEGAL_INFO
-> > +	$(Q)$(call hardlink-copy,$(DL_DIR)/$(PERL_CROSS_SOURCE),\
-> > +				 $(PERL_REDIST_SOURCES_DIR))
-> > +endef
-> > +PERL_POST_LEGAL_INFO_HOOKS += PERL_CROSS_LEGAL_INFO
-> > +
-> >  define PERL_CROSS_SET_POD
-> >  	$(SED) s/$(PERL_CROSS_OLD_POD)/$(PERL_CROSS_NEW_POD)/g $(@D)/Makefile
-> >  endef
+On 2015-11-23 21:35 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 23 Nov 2015 15:48:20 +0100, Yann E. MORIN wrote:
+> > +# No need for a conditional here, the variable will be enpty when
+> > +# there is no URL to download.
+> > +$(1)_EXTRA_DOWNLOADS += $$(ARCH_XTENSA_OVERLAY_URL)
 > 
-> I think this is not the proper way of solving the problem. perl-cross
-> is downloaded through <pkg>_EXTRA_DOWNLOADS, and <pkg>_EXTRA_DOWNLOADS
-> files should be saved in legal-info, without requiring some special
-> handling from each package using <pkg>_EXTRA_DOWNLOADS.
+> If all EXTRA_DOWNLOADS files are saved as part of legal-info, then you
+> can get rid of patches 38, 39 and 40.
 
-Well, that's what I thought initially.
-
-However, I don't think that _EXTRA_DOWNLOADS should be saved to the
-legal-info. A reason I already explained is that _EXTRA_DOWNLOADS are
-used by the Blackfin external toolchains to download extra parts of
-there sysroots, and that should not be part of legal-info.
-
-Furthermore, what if a FLOSS package has an EXTRA_DOWNLOAD to download
-non-redistributable stuff. An example that is easy to understand, would
-be a Doom package, where the engine is FLOSS (GPL), and where the WAD
-files are downlaodable from an internal server. Such a package could use
-_EXTRA_DOWNLOADS to fetch the WAD files. The distributor may have an
-agreement to provide the WAD files in the product, but not reditribute
-them otherwise.
-
-So, I don;t think we should install _EXTRA_DOWNLOADS (or _ALL_DOWNLOADS)
-in the legal-info output.
+And 37 too. But see my position on saving _EXTRA_DOWNLOADS (or
+_ALL_DOWNLOADS for tha matters).
 
 Regards,
 Yann E. MORIN.
