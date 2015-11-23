@@ -1,41 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2015 22:47:33 +0100
-Subject: [Buildroot] [git commit] package/yasm: bump version to 1.3.0
-Message-ID: <20151201232120.18D5E7FEE7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Nov 2015 18:30:35 +0100
+Subject: [Buildroot] [git commit] nmap: bump version to 7.00
+Message-ID: <20151201232120.AB971802AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=590683b1f0677b3c3675647abd222076c3e79c14
+commit: http://git.buildroot.net/buildroot/commit/?id=764739042d5d7395a61517662271c0c64c909de8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/yasm/yasm.hash | 2 +-
- package/yasm/yasm.mk   | 2 +-
+ package/nmap/nmap.hash | 2 +-
+ package/nmap/nmap.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/yasm/yasm.hash b/package/yasm/yasm.hash
-index d5cf267..016c15b 100644
---- a/package/yasm/yasm.hash
-+++ b/package/yasm/yasm.hash
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index 8c8da00..c7b3cf5 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256 768ffab457b90a20a6d895c39749adb547c1b7cb5c108e84b151a838a23ccf31 yasm-1.2.0.tar.gz
-+sha256	3dce6601b495f5b3d45b59f7d2492a340ee7e84b5beca17e48f862502bd5603f	yasm-1.3.0.tar.gz
-diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-index 0bbd22d..bf8a481 100644
---- a/package/yasm/yasm.mk
-+++ b/package/yasm/yasm.mk
+ # Locally calculated after checking pgp signature
+-sha256 8fa11e9e203ce2d81a207db5ca4f110a525f6c01c1dd0018325a7112a51aa591 nmap-6.47.tar.bz2
++sha256 9f442301c615c608a385831c3505cdfed9b0795cd100f1a258b04509802802ae  nmap-7.00.tar.bz2
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 1a0e977..c4fbe72 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--YASM_VERSION = 1.2.0
-+YASM_VERSION = 1.3.0
- YASM_SITE = http://www.tortall.net/projects/yasm/releases
- 
- define YASM_PRE_CONFIGURE_FIXUP
+-NMAP_VERSION = 6.47
++NMAP_VERSION = 7.00
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
