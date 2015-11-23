@@ -1,59 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Nov 2015 15:47:39 +0100
-Subject: [Buildroot] [PATCH 09/51] core/pkg-virtual: ignore from legal-info
-	output
+Date: Mon, 23 Nov 2015 15:47:41 +0100
+Subject: [Buildroot] [PATCH 11/51] core/legal-info: add package version to
+	license directory
 In-Reply-To: <cover.1448289515.git.yann.morin.1998@free.fr>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
-Message-ID: <2788d5c56e3bbcb579972f9e81003d0625dfefa3.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <11dbe139facc8db195d221126c0d69da8ed6bc4d.1448289515.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Virtual packages really have nothing to save for legal-info, so we just
-ignore them.
+Now that we save the source archives in a directory named after the
+package and its version, do the same for the license files, for
+consistency.
 
-Currently, packages are only extracted if they define _LICENSE_FILES.
-Follow-up patches will always extract and patch non-ignored packages, so
-we would potentially see spurious "extracting" and "patching" messages
-for virtual packages on the console, which would be a bit strange.
-Ignoring virtual packages will get us a cleaner log.
+It has a not-so-bad side-effect of also saving the version string in
+the all-licenses list.
+
+The only (small) drawback, is that the warnings about undefined
+_LICENSE_FILES now contains the version string, too. That's unavoidable,
+since that's what is stored in the legal report.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-virtual.txt | 3 +++
- package/pkg-virtual.mk                  | 2 ++
- 2 files changed, 5 insertions(+)
+ package/pkg-generic.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
-index a5f17a2..11a497d 100644
---- a/docs/manual/adding-packages-virtual.txt
-+++ b/docs/manual/adding-packages-virtual.txt
-@@ -56,6 +56,9 @@ The +.mk+ for the virtual package should just evaluate the +virtual-package+ mac
- The ability to have target and host packages is also available, with the
- +host-virtual-package+ macro.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index bb3a6da..07ff820 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -791,10 +791,10 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ # is that the license still applies to the files distributed as part
+ # of the rootfs, even if the sources are not themselves redistributed.
+ ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
+-	@$$(call legal-license-nofiles,$$($(2)_RAWNAME),$$(call UPPERCASE,$(4)))
+-	@$$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
++	@$$(call legal-license-nofiles,$$($(2)_RAWNAME)-$$($(2)_VERSION),$$(call UPPERCASE,$(4)))
++	@$$(call legal-warning-pkg,$$($(2)_RAWNAME)-$$($(2)_VERSION),cannot save license ($(2)_LICENSE_FILES not defined))
+ else
+-	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
++	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME)-$$($(2)_VERSION),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
+ endif # license files
  
-+.Note:
-+Virtual packages are automatically ignored when generating the +legal-info+ output.
-+
- ==== Provider's +Config.in+ file
- 
- When adding a package as a provider, only the +Config.in+ file requires some
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-index 9c68b51..1471b95 100644
---- a/package/pkg-virtual.mk
-+++ b/package/pkg-virtual.mk
-@@ -57,6 +57,8 @@ endif
- # Add dependency against the provider
- $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
- 
-+$(2)_REDISTRIBUTE = IGNORE
-+
- # Call the generic package infrastructure to generate the necessary
- # make targets
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
+ ifeq ($$($(2)_SITE_METHOD),local)
 -- 
 1.9.1
