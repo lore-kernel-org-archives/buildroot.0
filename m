@@ -1,80 +1,61 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Mon, 23 Nov 2015 09:22:44 +0200 (IST)
-Subject: [Buildroot] [PATCH 1/1] autofs: new package
-In-Reply-To: <20151123071348.GL2177@tarshish>
-References: <1448200100-29006-1-git-send-email-yba@tkos.co.il>
- <20151123054101.GH2177@tarshish>
- <alpine.DEB.2.11.1511230758100.26339@tanhuma.tkos.co.il>
- <20151123062711.GI2177@tarshish>
- <alpine.DEB.2.11.1511230845330.26339@tanhuma.tkos.co.il>
- <20151123071348.GL2177@tarshish>
-Message-ID: <alpine.DEB.2.11.1511230922140.26339@tanhuma.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Nov 2015 08:30:12 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-11-22
+Message-ID: <20151123073012.D78FC101751@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Nov 2015, Baruch Siach wrote:
+Build statistics for 2015-11-22
+===============================
 
-> Date: Mon, 23 Nov 2015 09:13:48 +0200
-> From: Baruch Siach <baruch@tkos.co.il>
-> To: Jonathan Ben Avraham <yba@tkos.co.il>
-> Subject: Re: [Buildroot] [PATCH 1/1] autofs: new package
-> 
-> Hi Yonatan,
->
-> On Mon, Nov 23, 2015 at 08:48:07AM +0200, Jonathan Ben Avraham wrote:
->> On Mon, 23 Nov 2015, Baruch Siach wrote:
->>> On Mon, Nov 23, 2015 at 08:00:32AM +0200, Jonathan Ben Avraham wrote:
->>>> On Mon, 23 Nov 2015, Baruch Siach wrote:
->>>>> On Sun, Nov 22, 2015 at 03:48:20PM +0200, Jonathan Ben-Avraham wrote:
->>>>>> +config BR2_PACKAGE_AUTOFS
->>>>>> +	bool "autofs"
->>>>>> +	select BR2_PACKAGE_NFS_UTILS # runtime
->>>>>> +	select BR2_PACKAGE_RPCBIND # runtime
->>>>>> +	depends on BR2_TOOLCHAIN_HAS_THREADS # rpcbind
->>>>>> +	depends on BR2_USE_MMU # nfs-utils, rpcbind
->>>>>> +	help
->>>>>> +	  Based on the Debian autofs package description:
->>>>>> +	  Autofs controls the operation of the automount daemons. The automount
->>>>>> +	  daemons automatically mount filesystems when they are used and unmount
->>>>>> +	  them after a period of inactivity based on a set of pre-configured
->>>>>> +	  maps defined by default in /etc/auto.master. The kernel automounter
->>>>>> +	  implements SunOS style automounter under Linux and requires a kernel
->>>>>> +	  version of at least 2.6.17 and the autofs4 kernel module.
->>>>>> +
->>>>>> +	  git://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git
->>>>>
->>>>> The browser friendly link
->>>>> https://git.kernel.org/cgit/linux/storage/autofs/autofs.git/ would be better
->>>>> here, I believe.
->>>>
->>>> Why? I always struggle to convert back from the browser URLs to plain git
->>>> URL's so that I can see the sources in vi on my machine and index them. Why
->>>> would anyone want to use an HTML browser to do this? Doesn't make sense.
->>>
->>> Well, we usually put a link to the project homepage. In the absence of a
->>> suitable homepage, we use a git repo link. You can find a git/vi friendly link
->>> if you scroll down the git repo summary page. Converting the other way seems
->>> to me quite a bit harder for the less git/vi literate.
->>
->> What would someone who is not git-literate be doing reading the Buildroot
->> help texts? What is the chance that someone who is not git-literate would be
->> otherwise literate enough to browse the git repo even with a browser?
->
-> OK. You may have a point here. Let's see what the maintainers have to say.
+        success : 85 
+       failures : 17 
+       timeouts : 0  
+          TOTAL : 102
 
-Thanks,
+Classification of failures by reason
+====================================
 
-  - yba
+            libsemanage-2.1.10 | 2 
+libbroadvoice-f65b0f50c8c76... | 2 
+                harfbuzz-1.0.6 | 1 
+                    ustr-1.0.4 | 1 
+                   glog-v0.3.4 | 1 
+                      qt-4.8.7 | 1 
+               libcap-ng-0.7.4 | 1 
+                collectd-5.5.0 | 1 
+                directfb-1.7.7 | 1 
+                    vpnc-0.5.3 | 1 
+           libfreeimage-3.17.0 | 1 
+               libnspr-4.10.10 | 1 
+                 lvm2-2.02.132 | 1 
+                grantlee-0.5.1 | 1 
+                 opencv-2.4.10 | 1 
 
+Detail of failures
+===================
 
-> baruch
->
->
+      x86_64 |                 collectd-5.5.0 | NOK | http://autobuild.buildroot.net/results/e981c08f01d2916246a17b1dc112e8b3e8c628e2/
+       sparc |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/6e02a891b7c3b9f3363b49f16599bbd7ebf35706/
+microblazeel |                    glog-v0.3.4 | NOK | http://autobuild.buildroot.net/results/d3ca5710e3de4fe12945e6ee24e30af8739d78cb/
+microblazeel |                 grantlee-0.5.1 | NOK | http://autobuild.buildroot.net/results/b2889ea5220db6f4f3aa9264591bf1cef57a3612/
+         arc |                 harfbuzz-1.0.6 | NOK | http://autobuild.buildroot.net/results/f039866a548ddee1219e09c39f3a49e577cb7022/
+         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/18fe1d3aac4574b8b07781aa95f643a136cedb68/
+         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/aab32a431822115d57813a96635523025f570e4f/
+       nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/934ab121acdf021e0ea550e999cc098067726a6c/
+         arm |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/a8a8f2a61df58c6076eb97125c8f076fa2b64892/
+      x86_64 |                libnspr-4.10.10 | NOK | http://autobuild.buildroot.net/results/2ca03b5bd2c5bc1336f61fdff6d95858bca1f0fe/
+         arm |             libsemanage-2.1.10 | NOK | http://autobuild.buildroot.net/results/64b2fc5233e24de88904438de8c30de9a2b5e413/
+         arm |             libsemanage-2.1.10 | NOK | http://autobuild.buildroot.net/results/2d6cf6faf869d72c973257af45d39d63d6f2731b/
+      x86_64 |                  lvm2-2.02.132 | NOK | http://autobuild.buildroot.net/results/964b5909dbac97d56b87e22e5141d62c54eba893/
+    mips64el |                  opencv-2.4.10 | NOK | http://autobuild.buildroot.net/results/f6d0a4ffe347cbb868998856aca674ba8bc2e281/
+         arc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/bc641401203aeee76b0f5242d73f7a28ea91ba2b/
+         arm |                     ustr-1.0.4 | NOK | http://autobuild.buildroot.net/results/a51a2c7b2a4ca9562ca07c1b714dbfdfd849a232/
+         arm |                     vpnc-0.5.3 | NOK | http://autobuild.buildroot.net/results/eb75542b44c7ccfd749a5e775bba0d1f6321c618/
+
 
 -- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+http://autobuild.buildroot.net
