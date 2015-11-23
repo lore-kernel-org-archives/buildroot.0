@@ -1,31 +1,48 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Mon, 23 Nov 2015 19:22:18 +0000 (UTC)
-Subject: [Buildroot] No 'zip' utility?
-Message-ID: <n2vp1a$rde$1@ger.gmane.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Nov 2015 20:50:36 +0100
+Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: remove
+	HOSTCC_VERSION
+In-Reply-To: <87fuzx676p.fsf@dell.be.48ers.dk>
+References: <1448147919-5463-1-git-send-email-arnout@mind.be>
+ <87fuzx676p.fsf@dell.be.48ers.dk>
+Message-ID: <56536E0C.1010205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just stumbled across the fact that there doesn't seem to be a 'zip'
-utility available either as a busybox applet or as a stand-alone
-utility with a buildroot package.  I've got a web app running on an
-ARM9 boad that allows users to PUT trees of files to my board in
-either .zip or .tar.gz archives.  When it came time to add a feature
-that required users to GET trees of files from my board, I agreed to
-also support .zip format archives (dimly assuming that since there was
-a zip, there would be an unzip).
+On 22-11-15 22:43, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>
+>  > HOSTCC_VERSION is no longer used since gcc switched to the package
+>  > infrastructure in e236fe481. It was in fact no longer needed since we
+>  > dropped support for gcc 4.3.
+>
+>  > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  > ---
+>  > Note that we currently claim to support system gcc >= 2.95, but I don't
+>  > think that matches reality...
+>
+> Ehh, no. I guess a 4.x version would make more sense. Any idea what 'x'
+> should be? 3? 5? 7?
 
-But, though busybox has an 'unzip', it doesn't have a 'zip'.  And
-there doesn't appear to be a stand-alone 'zip' package in buildroot.
+We'd need to check all the host packages (plus the packages that build a host
+tool as part of the target build, like uboot) to be sure of that. The
+autobuilders tell us that 4.7 at least is OK.
 
-Is it just that I'm the first one dumb enough to sign up for creating
-.zip archives on an embedded linux system? Or is there some
-licensing/patent reason why creation of the .zip archives is
-unsupported?
+Regards,
+Arnout
+
+>
+> Committed to next, thanks.
+>
+
 
 -- 
-Grant Edwards               grant.b.edwards        Yow! Can I have an IMPULSE
-                                  at               ITEM instead?
-                              gmail.com            
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
