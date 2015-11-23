@@ -1,50 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Nov 2015 18:29:55 +0100
-Subject: [Buildroot] [PATCH] jimtcl: fix sparc64 compile
-In-Reply-To: <20151123164853.GA29207@waldemar-brodkorb.de>
-References: <20151123164853.GA29207@waldemar-brodkorb.de>
-Message-ID: <20151123182955.0bd4db5d@free-electrons.com>
+Date: Mon, 23 Nov 2015 18:30:35 +0100
+Subject: [Buildroot] [git commit branch/next] nmap: bump version to 7.00
+Message-ID: <20151123173052.9530E80E4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+commit: http://git.buildroot.net/buildroot/commit/?id=764739042d5d7395a61517662271c0c64c909de8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 23 Nov 2015 17:48:53 +0100, Waldemar Brodkorb wrote:
-> It is general safe to use -fPIC for all architectures.
-> -fpic breaks sparc64 compile.
-> 
-> Generally gcc just optimize position independent code
-> for m68k, powerpc and sparc with -fpic.
-> The size differences are minimal, f.e. for powerpc:
->    text    data     bss     dec     hex filename
->  235983    5336     684  242003   3b153 output/target/usr/lib/libjim.0.75
->  236255    8456     684  245395   3be93 output/target/usr/lib/libjim.so.0.75
-> 
-> So instead of keeping special settings for sparc64 it would be better
-> to always use -fPIC in general.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nmap/nmap.hash |    2 +-
+ package/nmap/nmap.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So in other words, you're saying that in other packages that add -fPIC
-only for sparc/sparc64, we should add it unconditionally?
-
-> +# -fPIC works for any architecture
-
-I think this comment is a bit useless. It should rather be:
-
-# -fPIC is mandatory to build shared libraries on certain architectures
-# (e.g. SPARC) and causes no harm or drawbacks on other architectures
-
->  define JIMTCL_BUILD_CMDS
-> +	SH_CFLAGS="-fPIC" \
-> +	SHOBJ_CFLAGS="-fPIC" \
->  	$(MAKE) -C $(@D)
->  endef
->  
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index 8c8da00..c7b3cf5 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 8fa11e9e203ce2d81a207db5ca4f110a525f6c01c1dd0018325a7112a51aa591 nmap-6.47.tar.bz2
++sha256 9f442301c615c608a385831c3505cdfed9b0795cd100f1a258b04509802802ae  nmap-7.00.tar.bz2
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 1a0e977..c4fbe72 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NMAP_VERSION = 6.47
++NMAP_VERSION = 7.00
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
