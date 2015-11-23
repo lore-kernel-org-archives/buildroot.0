@@ -1,23 +1,272 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Mon, 23 Nov 2015 13:17:22 +0200
-Subject: [Buildroot] [PATCH] collectd: fix musl builds (ipc module)
-In-Reply-To: <20151123105759.GO2177@tarshish>
-References: <20151123105437.GA14445@vostro>
- <20151123105759.GO2177@tarshish>
-Message-ID: <20151123111722.GA15184@vostro>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Mon, 23 Nov 2015 10:36:40 -0200
+Subject: [Buildroot] [PATCH 1/1] libgdiplus: new package
+In-Reply-To: <5652291B.2040408@mind.be>
+References: <1448048842-25060-1-git-send-email-sergio.prado@e-labworks.com>
+ <5652291B.2040408@mind.be>
+Message-ID: <CANu7NGt4W43MVg7Hnob4dO4QY0dB_6+Aw9ejq5=hjvs=e6utkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mon, Nov 23, 2015 at 12:57:59PM +0200, Baruch Siach wrote:
+Hi Arnout,
 
-> > +    Fixes #1147
-> 
-> Please add you sign-off here.
+2015-11-22 18:44 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
 
-Ah, sorry, got confused because it wasn't my patch, it was something
-that I pulled from an external source.
+>  Hi Sergio,
+>
+>  Thanks for your contribution. I have a few comments below. Care to fix
+> them up
+> and resend your patch? Thanks!
+>
+Thank you for reviewing the patch!
 
-v2 sent.
+
+>
+> On 20-11-15 20:47, Sergio Prado wrote:
+> > Libgdiplus is an open source implementation of the GDI+ API.
+> >
+> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> > ---
+> >  package/Config.in                  |  1 +
+> >  package/libgdiplus/Config.in       | 14 ++++++++++++
+> >  package/libgdiplus/libgdiplus.hash |  2 ++
+> >  package/libgdiplus/libgdiplus.mk   | 46
+> ++++++++++++++++++++++++++++++++++++++
+> >  4 files changed, 63 insertions(+)
+> >  create mode 100644 package/libgdiplus/Config.in
+> >  create mode 100644 package/libgdiplus/libgdiplus.hash
+> >  create mode 100644 package/libgdiplus/libgdiplus.mk
+> >
+> > diff --git a/package/Config.in b/package/Config.in
+> > index bdc3063abd1a..ef09361c5440 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -824,6 +824,7 @@ menu "Graphics"
+> >       source "package/libfm-extra/Config.in"
+> >       source "package/libfreeimage/Config.in"
+> >       source "package/libgail/Config.in"
+> > +     source "package/libgdiplus/Config.in"
+> >       source "package/libgeotiff/Config.in"
+> >       source "package/libglade/Config.in"
+> >       source "package/libglew/Config.in"
+> > diff --git a/package/libgdiplus/Config.in b/package/libgdiplus/Config.in
+> > new file mode 100644
+> > index 000000000000..173d9af0d48a
+> > --- /dev/null
+> > +++ b/package/libgdiplus/Config.in
+> > @@ -0,0 +1,14 @@
+> > +config BR2_PACKAGE_LIBGDIPLUS
+> > +     bool "libgdiplus"
+> > +     select BR2_PACKAGE_XLIB_LIBXFT
+> > +     select BR2_PACKAGE_LIBGLIB2
+>
+>  You need to add that package's dependencies to this package, so:
+>
+>         depends on BR2_USE_WCHAR # libglib2 -> gettext
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+>
+        depends on BR2_USE_MMU # libglib2
+>
+Libgdiplus depends on BR2_PACKAGE_XORG7, that already depends on
+BR2_USE_WCHAR and BR2_TOOLCHAIN_HAS_THREADS. That means that, because of
+the xorg dependency, it is not possible to select libgdiplus with a
+toolchain that has no wchar or threads support. Should I still depend on
+wchar and threads?
+
+
+>
+> > +     select BR2_PACKAGE_CAIRO
+>
+>  Same here:
+>
+>         depends on BR2_ARCH_HAS_ATOMICS # cairo
+>
+OK.
+
+
+> > +     select BR2_PACKAGE_LIBPNG
+> > +     depends on BR2_PACKAGE_XORG7
+> > +     help
+> > +       An Open Source implementation of the GDI+ API.
+> > +
+> > +       https://github.com/mono/libgdiplus
+> > +
+> > +comment "libgdiplus depends on X.org"
+> > +     depends on !BR2_PACKAGE_XORG7
+>
+>  We don't add comments for X.org dependencies. But you should add a
+> comment for
+> wchar and threads:
+>
+> comment "libgdiplus needs a toolchain w/ wchar, threads"
+>
+OK.
+
+
+>
+>
+> > diff --git a/package/libgdiplus/libgdiplus.hash
+> b/package/libgdiplus/libgdiplus.hash
+> > new file mode 100644
+> > index 000000000000..f2b0d33d71ab
+> > --- /dev/null
+> > +++ b/package/libgdiplus/libgdiplus.hash
+> > @@ -0,0 +1,2 @@
+> > +# No hash for 3.12, comes from the github-helper:
+>
+>  We noticed that github tarballs are not changing anymore, so we started
+> requiring hashes for github tarballs as well since October.
+>
+Did not know. I will add the hashes.
+
+
+>
+> > +none    xxx     libgdiplus-3.12.tar.gz
+> > diff --git a/package/libgdiplus/libgdiplus.mk b/package/libgdiplus/
+> libgdiplus.mk
+> > new file mode 100644
+> > index 000000000000..c8e2d96a1c82
+> > --- /dev/null
+> > +++ b/package/libgdiplus/libgdiplus.mk
+> > @@ -0,0 +1,46 @@
+> >
+> +################################################################################
+> > +#
+> > +# libgdiplus
+> > +#
+> >
+> +################################################################################
+> > +
+> > +LIBGDIPLUS_VERSION = 3.12
+> > +LIBGDIPLUS_SITE = $(call github,mono,libgdiplus,$(LIBGDIPLUS_VERSION))
+> > +LIBGDIPLUS_LICENSE = LGPL MPLv1.0
+>
+>  Ah, the licensing mess... Even though there is a LICENSE file that
+> specifies
+> LGPL or MPLv1.1, and there is a MPL-1.1.html file which indeed contains
+> the MPL,
+> the actual source files specify that they're licensed under MIT, and so
+> does
+> COPYING. And in fact, all these predate the addition of LICENSE and
+> MPL-1.1.html. There are a few header files that don't specify a license,
+> but I'm
+> pretty confident that the license is MIT and only MIT.
+>
+You are right. Thanks.
+
+
+>
+> > +LIBGDIPLUS_LICENSE_FILES = LICENSE
+>
+>  Unfortunately, COPYING doesn't contain the license text, so this should be
+>
+> LIBGDIPLUS_LICENSE_FILES = COPYING src/carbon-private.h
+>
+OK. Is there any reason to select specifically the src/carbon-private.h
+header file, instead of many others that also have copyright messages?
+
+
+>
+> > +LIBGDIPLUS_AUTORECONF = YES
+>
+>  You should also add a comment here why it is needed, e.g.
+> # github tarball doesn't have configure
+>
+OK.
+
+
+>
+> > +LIBGDIPLUS_INSTALL_STAGING = YES
+> > +
+> > +LIBGDIPLUS_DEPENDENCIES = xlib_libXft libglib2 cairo libpng
+>
+>  It also depends on host-pkgconf
+>
+Right.
+
+
+>
+> > +
+> > +# API changes in recent versions of libgif makes it incompatible with
+> > +# this version of libgdiplus, so we are disabling it for now.
+> > +LIBGDIPLUS_CONF_OPTS = --without-libgif
+> > +
+> > +ifeq ($(BR2_PACKAGE_PANGO),y)
+> > +LIBGDIPLUS_CONF_OPTS += --with-pango
+> > +LIBGDIPLUS_DEPENDENCIES += pango
+>
+>  We prefer to add an explicit --without-pango.
+
+That was my previous implementation, but there is a bug in the configure
+script that *enables* pango support when I pass --without-pango. Looks like
+it is checking only for the string "pango" in the configure parameter to
+enable it. Should I create a patch to fix this bug or just use --with-pango
+as it is, adding a comment to explain why we are not using --without-pango?
+
+
+>
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_LIBEXIF),y)
+> > +LIBGDIPLUS_CONF_OPTS += --with-libexif
+> > +LIBGDIPLUS_DEPENDENCIES += libexif
+> > +else
+> > +LIBGDIPLUS_CONF_OPTS += --without-libexif
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_JPEG),y)
+> > +LIBGDIPLUS_CONF_OPTS += --with-libjpeg
+> > +LIBGDIPLUS_DEPENDENCIES += jpeg
+> > +else
+> > +LIBGDIPLUS_CONF_OPTS += --without-libjpeg
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_TIFF),y)
+> > +LIBGDIPLUS_CONF_OPTS += --with-libtiff
+> > +LIBGDIPLUS_DEPENDENCIES += tiff
+> > +else
+> > +LIBGDIPLUS_CONF_OPTS += --without-libtiff
+> > +endif
+>
+>  There are also optional dependencies on fontconfig, freetype.
+>
+I'm not sure if it is optional. The project documentation says it is a
+requirement (https://github.com/mono/libgdiplus/blob/master/README). I've
+tried to build without them but the configure script does not handle these
+options:
+
+configure: WARNING: unrecognized options: --disable-gtk-doc,
+--disable-gtk-doc-html, --disable-doc, --disable-docs,
+--disable-documentation, --with-xmlto, --with-fop, --enable-ipv6,
+--disable-nls, --without-fontconfig, --without-freetype, --without-freetype2
+
+What do you think?
+
+
+>
+>  Regards,
+>  Arnout
+>
+Thanks!
+
+
+>
+> > +
+> > +$(eval $(autotools-package))
+> >
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151123/81f49a5e/attachment.html>
