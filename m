@@ -1,39 +1,31 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 Nov 2015 16:17:35 +0000
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.135
-Message-ID: <1448295455-11507-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Nov 2015 17:18:33 +0100
+Subject: [Buildroot] [PATCH 07/51] core: add a global variable with
+ already-unquoted global patch dir
+In-Reply-To: <6fdfa014a8ab2bd00ae19074e82a6c91fdeb71de.1448289515.git.yann.morin.1998@free.fr>
+References: <cover.1448289515.git.yann.morin.1998@free.fr>
+ <6fdfa014a8ab2bd00ae19074e82a6c91fdeb71de.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <20151123171833.089fc12a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Dear Yann E. MORIN,
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index c6a9ea1..a51b9a4 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512	d5c695c9f3120d8e20845510f11204e6f8d13b6656a05c78f1b71482e97f63fd93ede54ec99cab14074421d3ecf6e501ec9e6581976ff266158f2910d25bbcf3	LVM2.2.02.132.tgz
-+sha512 698fadf1a12f6bfc6f8bd9d6499d2cf181e2cf7b9a5105b58cb55168f6104c949aa5d5da0585194d54614128a14abc7b939d43b32f7175057ad14cb1c62796a0  LVM2.2.02.135.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 6df9b35..9caa051 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.132
-+LVM2_VERSION = 2.02.135
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+On Mon, 23 Nov 2015 15:47:37 +0100, Yann E. MORIN wrote:
+
+>  		package/gcc/$(GCC_VERSION)/*.patch \
+> -		$(addsuffix $((PKG)_RAWNAME)/$(GCC_VERSION)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
+> -		$(addsuffix $((PKG)_RAWNAME)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))))
+> +		$(addsuffix $((PKG)_RAWNAME)/$(GCC_VERSION)/*.patch,$(BR2_GLOBAL_PATCH_DIR)) \
+> +		$(addsuffix $((PKG)_RAWNAME)/*.patch,$(BR2_GLOBAL_PATCH_DIR))))
+
+Should be BR_GLOBAL_PATCH_DIR, not BR2_GLOBAL_PATCH_DIR.
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
