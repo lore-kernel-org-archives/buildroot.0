@@ -1,39 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 23 Nov 2015 11:03:51 -0300
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.3.19
-Message-ID: <1448287431-25909-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 23 Nov 2015 14:35:56 +0000
+Subject: [Buildroot] [PATCH v5 0/2] package/unscd: new package
+In-Reply-To: <1448287096-18606-1-git-send-email-rdkehn@yahoo.com>
+References: <1448287096-18606-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <5653244C.7060903@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Dear Doug Kehn, everyone,
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 088059b..b33c838 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	7a87e7f486d1ada10007356917a412cde6c6114dac018e3569e3aa09e9f29395	gnutls-3.3.18.tar.xz
-+sha256	888d8779b48f21959b33d4d9ad0b546e5ec3dea20abf0d9bb03869d56b1f44cf	gnutls-3.3.19.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 9fbdb49..1ac3e4e 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).18
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).19
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
--- 
-2.4.10
+just a small question. Perhaps I'm wrong, but..., isn't nscd deprecated
+in favor of sssd? If so, shouldn't we add the sssd package instead?
+
+Regards,
+
+Vincent.
+
+On 23/11/15 13:58, Doug Kehn wrote:
+> systemd recipe/support is removed. systemd support is best left to someone
+> versed in systemd who desires to use unscd with systemd.
+> 
+> The BR2_GLIBC_NSCD suggestion is incorporated. However, I'm not sure what the
+> proper next steps are to properly install glibc nscd for both internal/external
+> toolchains. Is it sufficient, for now, to just define BR2_GLIBC_NSCD?
+> 
+> Doug Kehn (2):
+>   package/unscd: new package
+>   toolchain/toolchain-common.in: install nscd
+> 
+>  package/Config.in             |  1 +
+>  package/unscd/Config.in       | 11 ++++++++++
+>  package/unscd/S46unscd        | 24 ++++++++++++++++++++++
+>  package/unscd/unscd.hash      |  3 +++
+>  package/unscd/unscd.mk        | 47 +++++++++++++++++++++++++++++++++++++++++++
+>  toolchain/toolchain-common.in |  4 ++++
+>  6 files changed, 90 insertions(+)
+>  create mode 100644 package/unscd/Config.in
+>  create mode 100644 package/unscd/S46unscd
+>  create mode 100644 package/unscd/unscd.hash
+>  create mode 100644 package/unscd/unscd.mk
+> 
+> --
+> Changes v4 -> v5
+>   - Reincorporate $(APPLY_PATCHES) suggestion after update by Arnout.
+> Changes v3 -> v4
+>   - Incorporate feedback/suggestions by Yann and Maxime.
+> Changes v2 -> v3
+>   - Remove trailing '/' from UNSCD_SITE.
+>   - Whitespace cleanup.
+> Changes v1 -> v2
+>   - Incorporate feedback/suggestions by Yann (from nss-pam-ldapd patch).
+> 
