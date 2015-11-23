@@ -1,49 +1,27 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 23 Nov 2015 17:48:53 +0100
-Subject: [Buildroot] [PATCH] jimtcl: fix sparc64 compile
-Message-ID: <20151123164853.GA29207@waldemar-brodkorb.de>
+Date: Mon, 23 Nov 2015 17:53:47 +0100
+Subject: [Buildroot] Analysis of build results for 2015-11-21
+In-Reply-To: <20151122105711.185037f6@free-electrons.com>
+References: <20151122073011.8CA87102679@stock.ovh.net>
+ <20151122105711.185037f6@free-electrons.com>
+Message-ID: <20151123165346.GX19876@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is general safe to use -fPIC for all architectures.
--fpic breaks sparc64 compile.
+Hi,
+Thomas Petazzoni wrote,
 
-Generally gcc just optimize position independent code
-for m68k, powerpc and sparc with -fpic.
-The size differences are minimal, f.e. for powerpc:
-   text    data     bss     dec     hex filename
- 235983    5336     684  242003   3b153 output/target/usr/lib/libjim.0.75
- 236255    8456     684  245395   3be93 output/target/usr/lib/libjim.so.0.75
+> >        sparc |                 busybox-1.24.1 | NOK | http://autobuild.buildroot.net/results/3a0b601a3dd1a538247d11054e3623e6a242d854/
+> 
+> The usual SPARC issue. I suggest to disable libtirpc on sparc. Waldemar?
 
-So instead of keeping special settings for sparc64 it would be better
-to always use -fPIC in general.
+The update to 1.0.x would fix it, but this is to late.
+Can someone submit a patch to disable it?
+I don't have an idea how to handle the reverse dependency stuff
+to other packages...
 
-Runtime tested on Qemu ARM, MIPS, PPC and SPARC64.
-Fixes:
-http://autobuild.buildroot.net/results/98f391ad13f22828c022f185c0166daabdb4c1ad/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/jimtcl/jimtcl.mk |    3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 4afb217..50078e7 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -46,7 +46,10 @@ define JIMTCL_CONFIGURE_CMDS
- 	)
- endef
- 
-+# -fPIC works for any architecture
- define JIMTCL_BUILD_CMDS
-+	SH_CFLAGS="-fPIC" \
-+	SHOBJ_CFLAGS="-fPIC" \
- 	$(MAKE) -C $(@D)
- endef
- 
--- 
-1.7.10.4
+best regards
+ Waldemar
