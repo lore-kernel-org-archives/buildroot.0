@@ -1,29 +1,41 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Mon, 23 Nov 2015 20:06:13 +0000 (UTC)
-Subject: [Buildroot] No 'zip' utility?
-References: <n2vp1a$rde$1@ger.gmane.org> <20151123195320.GW2177@tarshish>
-Message-ID: <n2vrjl$3jp$1@ger.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Nov 2015 21:09:42 +0100
+Subject: [Buildroot] [PATCH 1/3] core/pkg-autotools: align host
+ configure commands to target one
+In-Reply-To: <20151123175112.GF3857@free.fr>
+References: <cover.1448202976.git.yann.morin.1998@free.fr>
+ <f288b50c4267ceb0ca24aa1a7937d8f5fa894ed5.1448202976.git.yann.morin.1998@free.fr>
+ <20151123183829.077c602c@free-electrons.com>
+ <20151123175112.GF3857@free.fr>
+Message-ID: <20151123210942.3bc09adc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2015-11-23, Baruch Siach <baruch@tkos.co.il> wrote:
-> On Mon, Nov 23, 2015 at 07:22:18PM +0000, Grant Edwards wrote:
->> I just stumbled across the fact that there doesn't seem to be a 'zip'
->> utility available either as a busybox applet or as a stand-alone
->> utility with a buildroot package.
+Yann,
 
-[...]
+On Mon, 23 Nov 2015 18:51:12 +0100, Yann E. MORIN wrote:
 
-> Try the infozip package. Look under "Compressors and decompressors".
+> > >  package/pkg-autotools.mk | 12 ++++++------
+> > >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > 
+> > Applied to next, thanks.
+> 
+> In the cover-letter, I suggestd this be applied to master. Did you
+> overlook that part, or did you apply to next on-purpose? Ditto the
+> second patch.
 
-Doh!  Thanks.  My (somewhat old) version of buildroot doesn't have an
-infozip package, and I somehow missed it when searching through the
-git tree to see if a zip utility had been added "recently".
+What would the reasoning to apply such patches on master? They don't
+fix any problem or bug, so they have no reason to be applied on master.
+They are good for consistency and documentation, but this is clearly
+not enough to justify being merged for master IMO.
 
+Thanks,
+
+Thomas
 -- 
-Grant Edwards               grant.b.edwards        Yow! Maybe I should have
-                                  at               asked for my Neutron Bomb
-                              gmail.com            in PAISLEY --
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
