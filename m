@@ -1,13 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Nov 2015 21:09:42 +0100
-Subject: [Buildroot] [PATCH 1/3] core/pkg-autotools: align host
- configure commands to target one
-In-Reply-To: <20151123175112.GF3857@free.fr>
+Date: Mon, 23 Nov 2015 21:14:41 +0100
+Subject: [Buildroot] [PATCH 3/3] package/gcc: align gcc-final
+ configure-cmds to the generic ones
+In-Reply-To: <4d9f7a6896c496372a4f415987e60eeeac79225b.1448202976.git.yann.morin.1998@free.fr>
 References: <cover.1448202976.git.yann.morin.1998@free.fr>
- <f288b50c4267ceb0ca24aa1a7937d8f5fa894ed5.1448202976.git.yann.morin.1998@free.fr>
- <20151123183829.077c602c@free-electrons.com>
- <20151123175112.GF3857@free.fr>
-Message-ID: <20151123210942.3bc09adc@free-electrons.com>
+ <4d9f7a6896c496372a4f415987e60eeeac79225b.1448202976.git.yann.morin.1998@free.fr>
+Message-ID: <20151123211441.5135a9d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,23 +14,28 @@ To: buildroot@busybox.net
 
 Yann,
 
-On Mon, 23 Nov 2015 18:51:12 +0100, Yann E. MORIN wrote:
-
-> > >  package/pkg-autotools.mk | 12 ++++++------
-> > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > Applied to next, thanks.
+On Sun, 22 Nov 2015 15:39:43 +0100, Yann E. MORIN wrote:
+> Since 7d6c79 (Compile static versions of gcc libraries) was applied, the
+> generic configure commands have been updated, but those changes have not
+> been propagated to the gcc-final custom configure commands.
 > 
-> In the cover-letter, I suggestd this be applied to master. Did you
-> overlook that part, or did you apply to next on-purpose? Ditto the
-> second patch.
+> Update the gcc-final custom configure commands to better match the
+> generic ones.
+> 
+> We do not propagate --disable-dependency-tracking because it breaks the
+> build, and --enable-shared (because of 169141a).
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-What would the reasoning to apply such patches on master? They don't
-fix any problem or bug, so they have no reason to be applied on master.
-They are good for consistency and documentation, but this is clearly
-not enough to justify being merged for master IMO.
+A little bit like Arnout, I am not sure to see the value of fully
+aligning the configure commands just for the sake of it.
 
-Thanks,
+Another possibility is to add a mechanism in the infra to exclude some
+generic config options from being used. But I tend to hate package
+infrastructure that are needed only for one package, especially when
+there is a way of not changing the infrastructure (which is the case
+here).
 
 Thomas
 -- 
