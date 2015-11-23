@@ -1,49 +1,48 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 23 Nov 2015 18:40:10 +0100
-Subject: [Buildroot] [PATCH] jimtcl: fix sparc64 compile
-In-Reply-To: <20151123182955.0bd4db5d@free-electrons.com>
-References: <20151123164853.GA29207@waldemar-brodkorb.de>
- <20151123182955.0bd4db5d@free-electrons.com>
-Message-ID: <20151123174010.GA19876@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 23 Nov 2015 18:51:12 +0100
+Subject: [Buildroot] [PATCH 1/3] core/pkg-autotools: align host
+ configure commands to target one
+In-Reply-To: <20151123183829.077c602c@free-electrons.com>
+References: <cover.1448202976.git.yann.morin.1998@free.fr>
+ <f288b50c4267ceb0ca24aa1a7937d8f5fa894ed5.1448202976.git.yann.morin.1998@free.fr>
+ <20151123183829.077c602c@free-electrons.com>
+Message-ID: <20151123175112.GF3857@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Thomas, All,
 
-> Waldemar,
-> 
-> On Mon, 23 Nov 2015 17:48:53 +0100, Waldemar Brodkorb wrote:
-> > It is general safe to use -fPIC for all architectures.
-> > -fpic breaks sparc64 compile.
+On 2015-11-23 18:38 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 22 Nov 2015 15:39:41 +0100, Yann E. MORIN wrote:
+> > The host configure commands are not indented the same way as the target
+> > ones. Besides, there are leading spaces (instead of TABs) on one line.
 > > 
-> > Generally gcc just optimize position independent code
-> > for m68k, powerpc and sparc with -fpic.
-> > The size differences are minimal, f.e. for powerpc:
-> >    text    data     bss     dec     hex filename
-> >  235983    5336     684  242003   3b153 output/target/usr/lib/libjim.0.75
-> >  236255    8456     684  245395   3be93 output/target/usr/lib/libjim.so.0.75
+> > Replicate the same indentation as used for the target commands.
 > > 
-> > So instead of keeping special settings for sparc64 it would be better
-> > to always use -fPIC in general.
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  package/pkg-autotools.mk | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> So in other words, you're saying that in other packages that add -fPIC
-> only for sparc/sparc64, we should add it unconditionally?
+> Applied to next, thanks.
 
-Yes. I think we should get those patches upstream. I hope they don't
-come up with any reasons for -fpic. I can't see any in our use case.
- 
-> > +# -fPIC works for any architecture
-> 
-> I think this comment is a bit useless. It should rather be:
-> 
-> # -fPIC is mandatory to build shared libraries on certain architectures
-> # (e.g. SPARC) and causes no harm or drawbacks on other architectures
+In the cover-letter, I suggestd this be applied to master. Did you
+overlook that part, or did you apply to next on-purpose? Ditto the
+second patch.
 
-Can you fix it before commit? :=)
+Thanks! :-)
 
-best regards
- Waldemar
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
