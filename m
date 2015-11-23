@@ -1,46 +1,27 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 Nov 2015 10:50:23 +0000
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 23 Nov 2015 12:51:10 +0200
 Subject: [Buildroot] Which package contains modprobe in buildroot
 In-Reply-To: <1586609756.10722764.1448275592553.JavaMail.zimbra@datacom.ind.br>
 References: <1586609756.10722764.1448275592553.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <5652EF6F.6070504@imgtec.com>
+Message-ID: <20151123105110.GN2177@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Henrique Marks,
+Hi Henrique,
 
-On 23/11/15 10:46, DATACOM - henrique.marks wrote:
-> Hello
-> 
-> I am trying to remove busybox from some platform build, and i am
-> struggling with modprobe. Which package contains modprobe inside
-> buildroot, if i don't want to use busybox ?
+On Mon, Nov 23, 2015 at 08:46:32AM -0200, DATACOM - henrique.marks wrote:
+> I am trying to remove busybox from some platform build, and i am struggling 
+> with modprobe. Which package contains modprobe inside buildroot, if i don't 
+> want to use busybox ? 
 
-the kmod package.
+Try the kmod package.
 
-Regards,
+baruch
 
-Vincent.
-
-> 
-> The other packages i could find the equivalents, and in some cases small
-> changes were necessary (like not using pidof anymore).
-> 
-> Thanks in advance
-> 
-> -- 
-> Dr. Henrique Marks
-> henrique.marks at datacom.ind.br
-> R. Am?rica, 1000 - Eldorado do Sul - RS
-> CEP: 92990-000 - Brasil
-> Fone: +55 51 3933 3000 - Ramal 3466
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
