@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Nov 2015 15:48:09 +0100
-Subject: [Buildroot] [PATCH 39/51] package/binutils: use macro to install
-	Xtensa overlay legal-info
+Date: Mon, 23 Nov 2015 15:48:10 +0100
+Subject: [Buildroot] [PATCH 40/51] package/gdb: use macro to install Xtensa
+	overlay legal-info
 In-Reply-To: <cover.1448289515.git.yann.morin.1998@free.fr>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
-Message-ID: <cfe5169bc2d745dc72a0b2675a6b9bd3cd9f7e23.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <516cd57c36cd5c385b46789f3812aefaf5888a90.1448289515.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +15,24 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/binutils.mk | 5 +++++
+ package/gdb/gdb.mk | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 0e488b6..4740305 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -96,6 +96,11 @@ define BINUTILS_XTENSA_PRE_PATCH
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 987dd5e..8455f88 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -47,6 +47,11 @@ define GDB_XTENSA_PRE_PATCH
  endef
- BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
- HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
-+define BINUTILS_XTENSA_LEGAL_INFO
+ GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+ HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
++define GDB_XTENSA_LEGAL_INFO
 +	$(call arch-xtensa-overlay-legal-info,$($(PKG)_REDIST_SOURCES_DIR))
 +endef
-+BINUTILS_POST_LEGAL_INFO_HOOKS += BINUTILS_XTENSA_LEGAL_INFO
-+HOST_BINUTILS_POST_LEGAL_INFO_HOOKS += BINUTILS_XTENSA_LEGAL_INFO
++GDB_POST_LEGAL_INFO_HOOKS += GDB_XTENSA_LEGAL_INFO
++HOST_GDB_POST_LEGAL_INFO_HOOKS += GDB_XTENSA_LEGAL_INFO
  endif
  
- ifeq ($(BR2_BINUTILS_ENABLE_LTO),y)
+ # Prevent gdb to build the documentation
 -- 
 1.9.1
