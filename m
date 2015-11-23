@@ -1,28 +1,74 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 23 Nov 2015 12:25:07 +1300
-Subject: [Buildroot] [next PATCH 2/2] micropython-lib: Add hash file
-In-Reply-To: <1448234707-1456-1-git-send-email-judge.packham@gmail.com>
-References: <1448234707-1456-1-git-send-email-judge.packham@gmail.com>
-Message-ID: <1448234707-1456-2-git-send-email-judge.packham@gmail.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Mon, 23 Nov 2015 03:28:10 -0200
+Subject: [Buildroot] [PATCH 1/1] conntrack-tools: add patch to fix build
+	with musl
+Message-ID: <1448256490-8383-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- package/micropython-lib/micropython-lib.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/micropython-lib/micropython-lib.hash
+The conntrack-tools sources use the GNU version of 'struct tcphdr',
+which is not exposed by the musl headers unless _GNU_SOURCE is defined.
 
-diff --git a/package/micropython-lib/micropython-lib.hash b/package/micropython-lib/micropython-lib.hash
+The included patch adds the missing definition to 'src/helpers/rpc.c'.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/046/04613c47b9669c28cc3ff47c65607c23730ef691/
+  http://autobuild.buildroot.net/results/520/520e8f327b9bd7eea59657bad702c35c632d115d/
+  http://autobuild.buildroot.net/results/3d3/3d36403ba80089faea5dd06bc7e4414d593bbfc1/
+  ...
+
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ .../0001-src-fix-build-with-musl-libc.patch        | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch
+
+diff --git a/package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch b/package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch
 new file mode 100644
-index 0000000..7ab22d5
+index 0000000..5881f98
 --- /dev/null
-+++ b/package/micropython-lib/micropython-lib.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 f66bfe0e7d2d61119a5def989f74278f42bee7d04162913ea60d3f2955d65909  micropython-lib-v0.5.tar.gz
++++ b/package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch
+@@ -0,0 +1,37 @@
++From d7b20d9bbed23a7a7e40af2f5e78f37ff67e8d93 Mon Sep 17 00:00:00 2001
++From: Rodrigo Rebello <rprebello@gmail.com>
++Date: Mon, 23 Nov 2015 02:12:48 -0200
++Subject: [PATCH] src: fix build with musl libc
++
++The GNU version of 'struct tcphdr' is not exposed by musl libc headers
++unless _GNU_SOURCE is defined. Without this definition, the build fails
++with:
++
++  rpc.c: In function 'rpc_helper_cb':
++  rpc.c:351:15: error: 'struct tcphdr' has no member named 'doff'
++     offset += th->doff * 4;
++                 ^
++
++Upstream status: sent
++http://patchwork.ozlabs.org/patch/547376/
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++---
++ src/helpers/rpc.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/helpers/rpc.c b/src/helpers/rpc.c
++index 82493c2..3a7b337 100644
++--- a/src/helpers/rpc.c
+++++ b/src/helpers/rpc.c
++@@ -28,6 +28,7 @@
++ 
++ #include <rpc/rpc_msg.h>
++ #include <rpc/pmap_prot.h>
+++#define _GNU_SOURCE
++ #include <netinet/tcp.h>
++ #include <netinet/udp.h>
++ 
++-- 
++2.1.4
++
 -- 
-2.5.3
+2.1.4
