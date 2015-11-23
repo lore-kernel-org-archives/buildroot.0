@@ -1,27 +1,62 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 23 Nov 2015 12:51:10 +0200
-Subject: [Buildroot] Which package contains modprobe in buildroot
-In-Reply-To: <1586609756.10722764.1448275592553.JavaMail.zimbra@datacom.ind.br>
-References: <1586609756.10722764.1448275592553.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20151123105110.GN2177@tarshish>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Mon, 23 Nov 2015 12:54:37 +0200
+Subject: [Buildroot] [PATCH] collectd: fix musl builds (ipc module)
+Message-ID: <20151123105437.GA14445@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Henrique,
+src/ipc.c uses shm_info.used_ids which musl only provides when
+_GNU_SOURCE is defined.
 
-On Mon, Nov 23, 2015 at 08:46:32AM -0200, DATACOM - henrique.marks wrote:
-> I am trying to remove busybox from some platform build, and i am struggling 
-> with modprobe. Which package contains modprobe inside buildroot, if i don't 
-> want to use busybox ? 
+The issue has been fixed upstream. Adding their patch as a temporary
+fix to be removed on the next version bump.
 
-Try the kmod package.
+https://github.com/collectd/collectd/issues/1147
+https://github.com/collectd/collectd/commit/3e3848349b753d78a0b1d19648fb394866856bda
 
-baruch
+Fixes
+http://autobuild.buildroot.net/results/e981c08f01d2916246a17b1dc112e8b3e8c628e2/
 
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+---
+ package/collectd/0002-ipc-enable-gnu-source.patch | 26 +++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/collectd/0002-ipc-enable-gnu-source.patch
+
+diff --git a/package/collectd/0002-ipc-enable-gnu-source.patch b/package/collectd/0002-ipc-enable-gnu-source.patch
+new file mode 100644
+index 0000000..5d8813a
+--- /dev/null
++++ b/package/collectd/0002-ipc-enable-gnu-source.patch
+@@ -0,0 +1,26 @@
++https://github.com/collectd/collectd/commit/3e3848349b753d78a0b1d19648fb394866856bda
++
++    ipc: enable _GNU_SOURCE to fix build with musl libc
++
++    This fixes compile the compile error:
++
++    > ipc.c:154:49: error: 'struct shm_info' has no member named 'used_ids'
++    >    ipc_submit_g("shm", "segments", NULL, shm_info.used_ids);
++    >                                                   ^
++
++    Fixes #1147
++
++diff --git a/src/ipc.c b/src/ipc.c
++index 3763f24..b403847 100644
++--- a/src/ipc.c
+++++ b/src/ipc.c
++@@ -32,6 +32,9 @@
++ #include "configfile.h"
++ 
++ #if KERNEL_LINUX
+++  /* _GNU_SOURCE is needed for struct shm_info.used_ids on musl libc */
+++# define _GNU_SOURCE
+++
++   /* X/OPEN tells us to use <sys/{types,ipc,sem}.h> for semctl() */
++   /* X/OPEN tells us to use <sys/{types,ipc,msg}.h> for msgctl() */
++   /* X/OPEN tells us to use <sys/{types,ipc,shm}.h> for shmctl() */
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.0.3
