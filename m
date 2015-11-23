@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Nov 2015 15:48:14 +0100
-Subject: [Buildroot] [PATCH 44/51] package/binutils: use the Xtensa macro
-	generators
+Date: Mon, 23 Nov 2015 15:48:03 +0100
+Subject: [Buildroot] [PATCH 33/51] arch/xtensa: add macro to extract the
+	overlay
 In-Reply-To: <cover.1448289515.git.yann.morin.1998@free.fr>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
-Message-ID: <7fa51ef27ece2063b6bf22a67452a2606ea5d0b3.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <dc9044dddc7f1b2f0f1a1c7ab95899801d9178f6.1448289515.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,35 +14,29 @@ To: buildroot@busybox.net
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/binutils.mk | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+ arch/arch.mk.xtensa | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 09c1d1c..30d71f9 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -90,18 +90,10 @@ define BINUTILS_INSTALL_TARGET_CMDS
- endef
- endif
- 
--ifneq ($(ARCH_XTENSA_CORE_NAME),)
--define BINUTILS_XTENSA_OVERLAY_EXTRACT
--	$(call arch-xtensa-overlay-extract,$(@D),binutils)
--endef
--BINUTILS_POST_EXTRACT_HOOKS += BINUTILS_XTENSA_OVERLAY_EXTRACT
--HOST_BINUTILS_POST_EXTRACT_HOOKS += BINUTILS_XTENSA_OVERLAY_EXTRACT
--define BINUTILS_XTENSA_OVERLAY_LEGAL_INFO
--	$(call arch-xtensa-overlay-legal-info,$($(PKG)_REDIST_SOURCES_DIR))
--endef
--BINUTILS_POST_LEGAL_INFO_HOOKS += BINUTILS_XTENSA_OVERLAY_LEGAL_INFO
--HOST_BINUTILS_POST_LEGAL_INFO_HOOKS += BINUTILS_XTENSA_OVERLAY_LEGAL_INFO
--endif
-+BINUTILS_ARCH_XTENSA_OVERLAY_COMPONENT = binutils
-+HOST_BINUTILS_ARCH_XTENSA_OVERLAY_COMPONENT = binutils
-+$(eval $(arch-xtensa-overlay))
-+$(eval $(host-arch-xtensa-overlay))
- 
- ifeq ($(BR2_BINUTILS_ENABLE_LTO),y)
- HOST_BINUTILS_CONF_OPTS += --enable-plugins --enable-lto
+diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
+index 7c8beb1..2843333 100644
+--- a/arch/arch.mk.xtensa
++++ b/arch/arch.mk.xtensa
+@@ -13,3 +13,16 @@
+ ################################################################################
+ ARCH_XTENSA_CORE_NAME = $(call qstrip,$(BR2_XTENSA_CORE_NAME))
+ ARCH_XTENSA_OVERLAY_TAR = $(call qstrip,$(BR2_XTENSA_OVERLAY_DIR))/xtensa_$(ARCH_XTENSA_CORE_NAME).tar
++
++################################################################################
++# arch-xtensa-overlay-extract -- extract an extensa overlay
++#
++# argument 1 is the path in which to extract
++# argument 2 is the component to extract, one of: gcc, binutils, gdb
++#
++# Example:
++#   $(call arch-xtensa-overlay-extract,/path/to/overlay.tar,$(@D),gcc)
++################################################################################
++define arch-xtensa-overlay-extract
++	tar xf $(ARCH_XTENSA_OVERLAY_TAR) -C $(1) --strip-components=1 $(2)
++endef
 -- 
 1.9.1
