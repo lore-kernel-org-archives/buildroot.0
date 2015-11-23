@@ -1,36 +1,113 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 23 Nov 2015 22:09:52 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-11-22
-In-Reply-To: <20151123073012.D78FC101751@stock.ovh.net>
-References: <20151123073012.D78FC101751@stock.ovh.net>
-Message-ID: <565380A0.8070101@openwide.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 23 Nov 2015 22:18:00 +0100
+Subject: [Buildroot] [PATCH v1] qt5/qt53d: new package
+Message-ID: <1448313480-6101-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/Config.in        |  1 +
+ package/qt5/qt53d/Config.in  | 18 ++++++++++++++++++
+ package/qt5/qt53d/qt53d.hash |  2 ++
+ package/qt5/qt53d/qt53d.mk   | 40 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 61 insertions(+)
+ create mode 100644 package/qt5/qt53d/Config.in
+ create mode 100644 package/qt5/qt53d/qt53d.hash
+ create mode 100644 package/qt5/qt53d/qt53d.mk
 
->       x86_64 |                  lvm2-2.02.132 | NOK | http://autobuild.buildroot.net/results/964b5909dbac97d56b87e22e5141d62c54eba893/
-
-commands/toolcontext.c: In function 'create_toolcontext':
-commands/toolcontext.c:1795:10: error: assignment of read-only variable 'stdin'
-    stdin = new_stream;
-
-This is a musl issue and generally fixed by using freopen(). See [1] [2].
-
-There is a patch from alpinelinux [3] but I'm wondering if it could be simpler
-to get ride of _reopen_stream() an use freopen() instead.
-
-Vincente, what do you think ?
-
-Best regards,
-Romain
-
-[1]
-https://github.com/doughdemon/fdupes/commit/fe2d8334bfa28ff05fa1a2ffe8555a19b41be0ea
-[2] https://github.com/adrianlopezroche/fdupes/pull/31
-[3]
-http://git.alpinelinux.org/cgit/aports/tree/main/lvm2/fix-stdio-usage.patch?h=v3.2.3
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 22fd0c0..568fadb 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -41,6 +41,7 @@ source "package/qt5/qt5quickcontrols/Config.in"
+ source "package/qt5/qt5sensors/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
+ source "package/qt5/qt5svg/Config.in"
++source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5webchannel/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
+new file mode 100644
+index 0000000..d350922
+--- /dev/null
++++ b/package/qt5/qt53d/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_QT53D
++	bool "qt53d"
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5DECLARATIVE
++	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative_quick
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt53d module.
++
++	  http://doc.qt.io/qt-5/qt3d-index.html
++
++comment "qt53d module needs an OpenGL-capable backend"
++        depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
+new file mode 100644
+index 0000000..4f6a55c
+--- /dev/null
++++ b/package/qt5/qt53d/qt53d.hash
+@@ -0,0 +1,2 @@
++# Hash from http://download.qt.io/official_releases/qt/5.5/5.5.0/submodules/md5sums.txt
++md5  508c90c3a2a5f37f0f7c2dd696ab10f5  qt3d-opensource-src-5.5.0.tar.xz
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+new file mode 100644
+index 0000000..b543efd
+--- /dev/null
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# qt53d
++#
++################################################################################
++
++QT53D_VERSION = $(QT5_VERSION)
++QT53D_SITE = $(QT5_SITE)
++QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
++QT53D_DEPENDENCIES = qt5base qt5declarative
++QT53D_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT53D_LICENSE = GPLv2+ or LGPLv3
++QT53D_LICENSE_FILES = LICENSE.GPL  LICENSE.LGPLv3
++else
++QT53D_LICENSE = Commercial license
++QT53D_REDISTRIBUTE = NO
++endif
++
++define QT53D_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT53D_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT53D_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++ifeq ($(BR2_STATIC_LIBS),)
++define QT53D_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
++endef
++endif
++
++$(eval $(generic-package))
+-- 
+2.1.4
