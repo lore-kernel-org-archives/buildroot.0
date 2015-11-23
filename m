@@ -1,74 +1,42 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Mon, 23 Nov 2015 03:28:10 -0200
-Subject: [Buildroot] [PATCH 1/1] conntrack-tools: add patch to fix build
-	with musl
-Message-ID: <1448256490-8383-1-git-send-email-rprebello@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 23 Nov 2015 07:41:01 +0200
+Subject: [Buildroot] [PATCH 1/1] autofs: new package
+In-Reply-To: <1448200100-29006-1-git-send-email-yba@tkos.co.il>
+References: <1448200100-29006-1-git-send-email-yba@tkos.co.il>
+Message-ID: <20151123054101.GH2177@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The conntrack-tools sources use the GNU version of 'struct tcphdr',
-which is not exposed by the musl headers unless _GNU_SOURCE is defined.
+Hi Yonatan,
 
-The included patch adds the missing definition to 'src/helpers/rpc.c'.
+On Sun, Nov 22, 2015 at 03:48:20PM +0200, Jonathan Ben-Avraham wrote:
+> +config BR2_PACKAGE_AUTOFS
+> +	bool "autofs"
+> +	select BR2_PACKAGE_NFS_UTILS # runtime
+> +	select BR2_PACKAGE_RPCBIND # runtime
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # rpcbind
+> +	depends on BR2_USE_MMU # nfs-utils, rpcbind
+> +	help
+> +	  Based on the Debian autofs package description:
+> +	  Autofs controls the operation of the automount daemons. The automount
+> +	  daemons automatically mount filesystems when they are used and unmount
+> +	  them after a period of inactivity based on a set of pre-configured
+> +	  maps defined by default in /etc/auto.master. The kernel automounter
+> +	  implements SunOS style automounter under Linux and requires a kernel
+> +	  version of at least 2.6.17 and the autofs4 kernel module.
+> +
+> +	  git://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git
 
-Fixes:
+The browser friendly link 
+https://git.kernel.org/cgit/linux/storage/autofs/autofs.git/ would be better 
+here, I believe.
 
-  http://autobuild.buildroot.net/results/046/04613c47b9669c28cc3ff47c65607c23730ef691/
-  http://autobuild.buildroot.net/results/520/520e8f327b9bd7eea59657bad702c35c632d115d/
-  http://autobuild.buildroot.net/results/3d3/3d36403ba80089faea5dd06bc7e4414d593bbfc1/
-  ...
+baruch
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
- .../0001-src-fix-build-with-musl-libc.patch        | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch
-
-diff --git a/package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch b/package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch
-new file mode 100644
-index 0000000..5881f98
---- /dev/null
-+++ b/package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch
-@@ -0,0 +1,37 @@
-+From d7b20d9bbed23a7a7e40af2f5e78f37ff67e8d93 Mon Sep 17 00:00:00 2001
-+From: Rodrigo Rebello <rprebello@gmail.com>
-+Date: Mon, 23 Nov 2015 02:12:48 -0200
-+Subject: [PATCH] src: fix build with musl libc
-+
-+The GNU version of 'struct tcphdr' is not exposed by musl libc headers
-+unless _GNU_SOURCE is defined. Without this definition, the build fails
-+with:
-+
-+  rpc.c: In function 'rpc_helper_cb':
-+  rpc.c:351:15: error: 'struct tcphdr' has no member named 'doff'
-+     offset += th->doff * 4;
-+                 ^
-+
-+Upstream status: sent
-+http://patchwork.ozlabs.org/patch/547376/
-+
-+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-+---
-+ src/helpers/rpc.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/helpers/rpc.c b/src/helpers/rpc.c
-+index 82493c2..3a7b337 100644
-+--- a/src/helpers/rpc.c
-++++ b/src/helpers/rpc.c
-+@@ -28,6 +28,7 @@
-+ 
-+ #include <rpc/rpc_msg.h>
-+ #include <rpc/pmap_prot.h>
-++#define _GNU_SOURCE
-+ #include <netinet/tcp.h>
-+ #include <netinet/udp.h>
-+ 
-+-- 
-+2.1.4
-+
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
