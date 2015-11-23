@@ -1,99 +1,57 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 Nov 2015 12:54:32 +0000
-Subject: [Buildroot] [PATCH] opencv: use the same logic as opencv3 for
-	gstreamer support
-Message-ID: <1448283272-56998-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 23 Nov 2015 14:05:28 +0100
+Subject: [Buildroot] [v3 0/2] openssl: parallel build
+In-Reply-To: <20151118135709.125f4afd@free-electrons.com>
+References: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
+ <20151118135709.125f4afd@free-electrons.com>
+Message-ID: <20151123130528.GA3857@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The logic for enabling gstreamer support in opencv is not correct. We
-select gstreamer-0.10 packages but then we enable gstreamer1 support in
-the opencv.mk file. opencv3 has the correct logic, so let's use it in
-opencv as well.
+Thomas, All,
 
-Fixes:
+On 2015-11-18 13:57 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 16 Sep 2015 07:06:23 -0500, Ryan Barnett wrote:
+> > I have adopted Thomas P's patches that we submitted but in May in order
+> > enable parallel build of openssl. I have updated the patches to use the
+> > latest patches available from gentoo and have tested builds only on i386,
+> > ARM, and MIPS.
+> > 
+> > Original Patches:
+> > 
+> > http://patchwork.ozlabs.org/patch/473086/
+> > http://patchwork.ozlabs.org/patch/473087/
+> > 
+> > Ryan Barnett (2):
+> >   openssl: use git formatted patches
+> >   openssl: enable parallel build and installation
+> 
+> I have the feeling that the parallel build patches for OpenSSL are not
+> working properly. Look at the recent build failures we've got for the
+> openssl and host-openssl builds:
+> 
+>   http://autobuild.buildroot.org/?reason=openssl-1.0.2d
+>   http://autobuild.buildroot.org/?reason=host-openssl-1.0.2d
+[--SNIP--]
+> Do you have some ideas? Does Gentoo has some more patches? Should we
+> revert back to non-parallel build for OpenSSL ?
 
-  http://autobuild.buildroot.net/results/f6d/f6d0a4ffe347cbb868998856aca674ba8bc2e281/
+I believe we should just revert the patch.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/opencv/Config.in | 27 +++++++++++++++++++++++++--
- package/opencv/opencv.mk |  9 ++++++++-
- 2 files changed, 33 insertions(+), 3 deletions(-)
+It's unfortunate that we can't buid OpenSSL in parallel, but we can't
+seriously go and patch their broken buildsystem, not at least until they
+are willing to review and apply those patches upstream first.
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index a5fafc1..679ce6f 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -136,8 +136,16 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
- 	help
- 	  Use ffmpeg from the target system.
- 
-+choice
-+	prompt "gstreamer support"
-+	help
-+	  OpenCV prefers gstreamer-1 over gstreamer-0.10.
-+
-+config BR2_PACKAGE_OPENCV_WITHOUT_GSTREAMER
-+	bool "none"
-+
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
--	bool "gstreamer support"
-+	bool "gstreamer-0.10"
- 	depends on BR2_USE_MMU # gstreamer -> libglib2
- 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
-@@ -145,10 +153,25 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
- 
--comment "gstreamer support needs a toolchain w/ wchar, threads"
-+comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
-+	bool "gstreamer-1.x"
-+	depends on BR2_USE_MMU # gstreamer1 -> libglib2
-+	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2
-+	select BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-+
-+comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
-+endchoice
-+
- config BR2_PACKAGE_OPENCV_WITH_GTK
- 	bool "gtk support"
- 	depends on BR2_PACKAGE_XORG7
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index ee11220..21c0268 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -171,9 +171,16 @@ OPENCV_CONF_OPTS += -DWITH_FFMPEG=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),y)
--OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON
-+OPENCV_CONF_OPTS += -DWITH_GSTREAMER_0_10=ON
- OPENCV_DEPENDENCIES += gstreamer gst-plugins-base
- else
-+OPENCV_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),y)
-+OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON
-+OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
-+else
- OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF
- endif
- 
+Regards,
+Yann E. MORIN.
+
 -- 
-2.4.10
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
