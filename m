@@ -1,28 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Nov 2015 18:36:08 +0100
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.3.19
-In-Reply-To: <1448287431-25909-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1448287431-25909-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151123183608.684f2475@free-electrons.com>
+Date: Mon, 23 Nov 2015 18:37:20 +0100
+Subject: [Buildroot] [git commit branch/next] package/gcc: comment on why we
+	override the generic configure commands
+Message-ID: <20151123173738.68A517FE13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=bf23db235ca0f823b89aaf15835011ad0a52732a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 23 Nov 2015 11:03:51 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gnutls/gnutls.hash | 2 +-
->  package/gnutls/gnutls.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+The explanations given in the commit log of 7d6c79 (Compile static
+versions of gcc libraries) do not explain why we have to provide custom
+configure commands, instead of just adding --enable-static to the
+configure options.
 
-Applied to next, thanks.
+Add a comment in the code that explains why that is so. Add a pointer to
+the ML archives with the explanations, too.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: J??r??me Pouiller <jezz@sysmic.org>
+Acked-by: J??r??me Pouiller <jezz@sysmic.org>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/gcc-final/gcc-final.mk |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 0467ac2..c416b44 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -27,6 +27,15 @@ HOST_GCC_FINAL_SUBDIR = build
+ 
+ HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
+ 
++# We want to always build the static variants of all the gcc libraries,
++# of which libstdc++, libgomp, libmudflap...
++# To do so, we can not just pass --enable-static to override the generic
++# --disable-static flag, otherwise gcc fails to build some of those
++# libraries, see;
++#   http://lists.busybox.net/pipermail/buildroot/2013-October/080412.html
++#
++# So we must completely override the generic commands and provide our own.
++#
+ define  HOST_GCC_FINAL_CONFIGURE_CMDS
+ 	(cd $(HOST_GCC_FINAL_SRCDIR) && rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
