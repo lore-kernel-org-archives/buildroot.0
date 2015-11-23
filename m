@@ -1,33 +1,39 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 Nov 2015 14:51:12 +0000
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.3.19
-In-Reply-To: <1448287431-25909-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1448287431-25909-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <565327E0.7@imgtec.com>
+Date: Mon, 23 Nov 2015 15:35:06 +0000
+Subject: [Buildroot] [PATCH] nmap: bump version to 7.00
+Message-ID: <1448292906-11926-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/nmap/nmap.hash | 2 +-
+ package/nmap/nmap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 23/11/15 14:03, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Build test for MIPS architecture:
-
-$ file output/target/usr/bin/gnutls-cli
-output/target/usr/bin/gnutls-cli: ELF 32-bit LSB executable, MIPS,
-MIPS32 rel2 version 1 (SYSV), dynamically linked, interpreter
-/lib/ld.so.1, for GNU/Linux 2.6.32, stripped
-
-$ grep -E ^GNUTLS_VERSION package/gnutls/gnutls.mk
-GNUTLS_VERSION_MAJOR = 3.3
-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).19
-
-Regards,
-
-Vincent.
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index 8c8da00..c7b3cf5 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 8fa11e9e203ce2d81a207db5ca4f110a525f6c01c1dd0018325a7112a51aa591 nmap-6.47.tar.bz2
++sha256 9f442301c615c608a385831c3505cdfed9b0795cd100f1a258b04509802802ae  nmap-7.00.tar.bz2
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 1a0e977..c4fbe72 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NMAP_VERSION = 6.47
++NMAP_VERSION = 7.00
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
+-- 
+2.4.10
