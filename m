@@ -1,83 +1,56 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 23 Nov 2015 10:54:39 +0100
-Subject: [Buildroot] [PATCH 0/5] Introduce alternative archive format
-In-Reply-To: <20151119130253.0dd0aebb@free-electrons.com>
-References: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
- <20151119130253.0dd0aebb@free-electrons.com>
-Message-ID: <72414843.hyilXq2eAF@sagittea>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Mon, 23 Nov 2015 09:55:25 +0000
+Subject: [Buildroot] Build 2015.11-rc2
+In-Reply-To: <20151120191014.25537ab8@free-electrons.com>
+References: <1448041697.3756.15.camel@intel.com>
+ <20151120191014.25537ab8@free-electrons.com>
+Message-ID: <767EFADFF809234DB6CAABD6D2F938478296F64B@IRSMSX107.ger.corp.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 19 November 2015 13:02:53 Thomas Petazzoni wrote:
-> J?r?me,
+Hi Thomas,
+
+No - not a big problem, just looking to understand the rules.
+My guess was that the Galileo merge missed the cut off date and so wasn't included.
+
+Ray K
+
+
+-----Original Message-----
+From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Sent: Friday, November 20, 2015 6:10 PM
+To: Kinsella, Ray
+Cc: buildroot at buildroot.org
+Subject: Re: [Buildroot] Build 2015.11-rc2
+
+Ray,
+
+On Fri, 20 Nov 2015 17:48:19 +0000, Kinsella, Ray wrote:
+
+> I pulled 2015.11-rc2, and while based Quark support is in there.
 > 
-> On Thu, 19 Nov 2015 11:36:01 +0100, J?r?me Pouiller wrote:
-> > As suggested by Arnout [1], this series provide an alternative
-> > archive format. This new format contains a shallowed version of
-> > upstream repository. This format is a little bigger and a little
-> > longer to create but it allow a better workflow with upstream. I
-> > describe some good practice in patch 2.
-> > 
-> > Notice projects hosted by github don't yet benefit of this feature
-> > since I have not found any elegant way to do it :-(.
-> > 
-> > During my tests, I have noticed current shallow clone is mostly
-> > broken (at least with git < 2.5 [2]). Indeed, shallow clone only
-> > work with symbolic references (HEAD, a tag or a branch). However,
-> > we avoid use of symbolic references in VERSION.
+> commit 968f5d5e59195e6e6a9a349ec9a118fb3a50b8b3
+> arch/x86: add support for Intel X1000
 > 
-> Thanks for this contribution.
+> We are missing the support for Galileo Gen 1/2
 > 
-> Your justification in PATCH 2 is just "That simplify workflow with
-> upstream". However, we already have the <pkg>_OVERRIDE_SRCDIR
-> mechanism (and <pkg>_SITE_METHOD = local, which is the same) to
-> specifically address this use case.
+> commit 8715e18e9327cbde4e6b30cfab3982138b727e56
+> board: add support for Intel Galileo Gen 2
 > 
-> The idea with <pkg>_OVERRIDE_SRCDIR is that if you are actively
-> developing on a software component, then it should not be Buildroot's
-> responsibility to download/extract/patch it, but it should instead use
-> a locally available source directory, which is managed completely
-> separately from Buildroot. There you can do whatever Git, Subversion
-> or Mercurial version control you want, Buildroot will simply rsync to
-> the build directory.
+> commit a763d10fd41e85841e074c6584e2b5cb4d54048b
+> board: readme.txt for Intel Galileo Gen 1/2
 > 
-> I think doing development in the build directory, as encouraged by
-> your patch, is a bad practice. The build directory is a temporary
-> location, people should not be encouraged to work from there.
-> 
-> And I fail to see what your solution brings compared to using
-> <pkg>_OVERRIDE_SRCDIR or <pkg>_SITE_METHOD = local. To me, the
-> existing solutions are in fact more flexible and don't encourage the
-> practice of hacking in the build directory.
+> These commits missed the cut off for 2015.11.
+> Is there a way to backport from next?
 
-So I am guilty :-) . I do hack in the build directory. 
+You can do the backport locally, but support for Galileo will not be in 2015.11, but in 2016.02. Indeed, we did not merge the Galileo patches before 2015.11-rc1, and since it's a new feature and not a bug fix, we won't merge it for 2015.11.
 
-However, I think in 70% of cases, I just retrieve information from build 
-directory without touching anything. Sometime, I run "make 
-<pkg>-extract" only to quickly check sources of a package even if I 
-don't use it in my current configuration (else I have to retrieve 
-upstream URL, download tarball, extract it in a temporary directory, 
-apply BR patches and don't forget to remove temporary directory).
+Is this a big problem?
 
-I think it is valuable to have upstream history easily available. 
-
-In add, I have in my drafts a patch to use "git am" to apply patches 
-when possible. I think it would make patch rebasing easier when versions 
-changes. It would be also easier to cherry-pick upstream patches.
-
-
-> Of course, if there is a specific workflow that you could describe
-> that doesn't work with <pkg>_OVERRIDE_SRCDIR, then I'm definitely
-> interested, and from this discussion we can decide whether
-> improvements to OVERRIDE_SRCDIR are needed, or if a completely
-> different solution is needed.
-
-
-
-Regards,
-
--- 
-J?r?me Pouiller
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
