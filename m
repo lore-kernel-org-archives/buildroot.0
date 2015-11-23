@@ -1,40 +1,35 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 23 Nov 2015 18:25:14 +0100
-Subject: [Buildroot] [PATCH 06/51] package/perl: include perl-cross in
- the legal-info output
-In-Reply-To: <f360919da5180e26ce4f96eefed14c29b526b428.1448289515.git.yann.morin.1998@free.fr>
-References: <cover.1448289515.git.yann.morin.1998@free.fr>
- <f360919da5180e26ce4f96eefed14c29b526b428.1448289515.git.yann.morin.1998@free.fr>
-Message-ID: <56534BFA.8060203@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Nov 2015 18:28:40 +0100
+Subject: [Buildroot] [PATCH] jimtcl: fix broken symlinks
+In-Reply-To: <20151123164743.GA28906@waldemar-brodkorb.de>
+References: <20151123164743.GA28906@waldemar-brodkorb.de>
+Message-ID: <20151123182840.0ba2cccb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+Dear Waldemar Brodkorb,
 
-Yann E. MORIN wrote:
-> The perl-cross sources are combined with the perl sources, so they must
-> be redistributed for proper compliance.
->
-> Add a post-legal-info hook that also installs them in the legal-info
-> output.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Francois Perrad <fperrad@gmail.com>
+On Mon, 23 Nov 2015 17:47:43 +0100, Waldemar Brodkorb wrote:
+> The created symlinks are wrong.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/jimtcl/jimtcl.mk |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Ouch:
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-$ make legal-info
-[...]
-mkdir: missing operand
-Try 'mkdir --help' for more information.
-make[1]: *** [perl-legal-info] Error 1
-make: *** [_all] Error 2
+ (runtime testing before and after the patch. Before the patch: cannot
+ run jimsh due to the library being improperly installed)
 
-This probably needs patch 10.
+Thanks,
 
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
