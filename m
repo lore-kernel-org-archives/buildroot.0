@@ -1,34 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Nov 2015 17:13:12 +0100
-Subject: [Buildroot] [v3 0/2] openssl: parallel build
-In-Reply-To: <20151123130528.GA3857@free.fr>
-References: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
- <20151118135709.125f4afd@free-electrons.com>
- <20151123130528.GA3857@free.fr>
-Message-ID: <20151123171312.20b1cf37@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 23 Nov 2015 16:17:35 +0000
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.135
+Message-ID: <1448295455-11507-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, 23 Nov 2015 14:05:28 +0100, Yann E. MORIN wrote:
-
-> > Do you have some ideas? Does Gentoo has some more patches? Should we
-> > revert back to non-parallel build for OpenSSL ?
-> 
-> I believe we should just revert the patch.
-> 
-> It's unfortunate that we can't buid OpenSSL in parallel, but we can't
-> seriously go and patch their broken buildsystem, not at least until they
-> are willing to review and apply those patches upstream first.
-
-Agreed, we should revert the patch.
-
-Thomas
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index c6a9ea1..a51b9a4 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512	d5c695c9f3120d8e20845510f11204e6f8d13b6656a05c78f1b71482e97f63fd93ede54ec99cab14074421d3ecf6e501ec9e6581976ff266158f2910d25bbcf3	LVM2.2.02.132.tgz
++sha512 698fadf1a12f6bfc6f8bd9d6499d2cf181e2cf7b9a5105b58cb55168f6104c949aa5d5da0585194d54614128a14abc7b939d43b32f7175057ad14cb1c62796a0  LVM2.2.02.135.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 6df9b35..9caa051 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.132
++LVM2_VERSION = 2.02.135
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
