@@ -1,79 +1,42 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 23 Nov 2015 19:06:02 -0300
-Subject: [Buildroot] [PATCH] minizip: new package
-Message-ID: <1448316362-19184-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 23 Nov 2015 23:11:52 +0100
+Subject: [Buildroot] docs/website: New website
+In-Reply-To: <CA+TH9VmNdKfHr5v8-OteT6TLC8DK-HGshyUnbHgX_p+A2rW2=A@mail.gmail.com>
+ (Angelo Compagnucci's message of "Tue, 13 Oct 2015 21:54:28 +0200")
+References: <CA+TH9VmNdKfHr5v8-OteT6TLC8DK-HGshyUnbHgX_p+A2rW2=A@mail.gmail.com>
+Message-ID: <87oaek2wnr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- package/Config.in          |  1 +
- package/minizip/Config.in  | 15 +++++++++++++++
- package/minizip/minizip.mk | 17 +++++++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 package/minizip/Config.in
- create mode 100644 package/minizip/minizip.mk
+Hi,
 
-diff --git a/package/Config.in b/package/Config.in
-index f9af31c..d6d5505 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -746,6 +746,7 @@ menu "Compression and decompression"
- 	source "package/libsquish/Config.in"
- 	source "package/libzip/Config.in"
- 	source "package/lzo/Config.in"
-+	source "package/minizip/Config.in"
- 	source "package/snappy/Config.in"
- 	source "package/szip/Config.in"
- 	source "package/zlib/Config.in"
-diff --git a/package/minizip/Config.in b/package/minizip/Config.in
-new file mode 100644
-index 0000000..7205e00
---- /dev/null
-+++ b/package/minizip/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_MINIZIP
-+	bool "minizip"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Enables to extract files from a .zip archive file.
-+	  It is compatible with PKZip 2.04g, WinZip, InfoZip,
-+	  MimarSinan Codex Suite 2002 tools, and compatible sofware.
-+
-+	  https://github.com/nmoinvaz/minizip
-+
-+config BR2_PACKAGE_MINIZIP_DEMOS
-+	bool "miniunzip/minizip"
-+	depends on BR2_PACKAGE_MINIZIP
-+	help
-+	  Enable miniunzip/minizip binary tools.
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-new file mode 100644
-index 0000000..aa77c56
---- /dev/null
-+++ b/package/minizip/minizip.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# minizip
-+#
-+################################################################################
-+
-+MINIZIP_VERSION = 977afb22966e6ab0ee401293a8e85fe808133f9a
-+MINIZIP_SITE = https://github.com/nmoinvaz/minizip.git
-+MINIZIP_SITE_METHOD = git
-+MINIZIP_DEPENDENCIES = zlib
-+MINIZIP_AUTORECONF = YES
-+MINIZIP_INSTALL_STAGING = YES
-+MINIZIP_CONF_OPTS = $(if $(BR2_PACKAGE_MINIZIP_DEMOS),--enable-demos)
-+MINIZIP_LICENSE = zlib license
-+MINIZIP_LICENSE_FILES = LICENSE
-+
-+$(eval $(autotools-package))
+ > This patch introduces a new buildroot website based on a modern
+ > flat layout inspired by material design.
+ > Each page of the old website is converted to the new css/layout,
+ > the big bump is in main page which is completely rewritten.
+ > Content of the old website is copied more or less verbatim,
+ > planning to add more content in the future.
+
+ > You can find a complete demo site here:
+
+ > http://angeloc.github.io
+
+Committed (From Thomas' branch at
+http://git.free-electrons.com/users/thomas-petazzoni/buildroot/?h=website)
+- Thanks!
+
+It looks very nice. I did notice that my browser blocked one of the
+external ressources it uses:
+
+https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js
+
+What is this clipboard.js about and any idea why my browser (chrome)
+would block it?
+
 -- 
-2.4.10
+Bye, Peter Korsgaard
