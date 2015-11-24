@@ -1,131 +1,85 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 24 Nov 2015 22:36:31 +0100
-Subject: [Buildroot] [PATCH v2] wiringpi: new package
-Message-ID: <1448400991-5011-1-git-send-email-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 Nov 2015 22:26:28 +0100
+Subject: [Buildroot] [git commit branch/next] minizip: new package
+Message-ID: <20151124213758.498328191E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+commit: http://git.buildroot.net/buildroot/commit/?id=23e48191071d0b187073dee807ba25b7d4a9255c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
-  - fix typo in commit message (wirinpi vs wiringpi)
----
- package/Config.in                                  |  1 +
- ...-Fix-devLib-gpio-include-and-library-path.patch | 40 ++++++++++++++++++++++
- package/wiringpi/Config.in                         |  6 ++++
- package/wiringpi/wiringpi.mk                       | 29 ++++++++++++++++
- 4 files changed, 76 insertions(+)
- create mode 100644 package/wiringpi/0001-Fix-devLib-gpio-include-and-library-path.patch
- create mode 100644 package/wiringpi/Config.in
- create mode 100644 package/wiringpi/wiringpi.mk
+ package/Config.in            |    1 +
+ package/minizip/Config.in    |   15 +++++++++++++++
+ package/minizip/minizip.hash |    2 ++
+ package/minizip/minizip.mk   |   16 ++++++++++++++++
+ 4 files changed, 34 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index bdc3063..9d273e7 100644
+index 3656c54..988fe84 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -438,6 +438,7 @@ endif
- 	source "package/w_scan/Config.in"
- 	source "package/wf111/Config.in"
- 	source "package/wipe/Config.in"
-+	source "package/wiringpi/Config.in"
- 	source "package/xorriso/Config.in"
- endmenu
- 
-diff --git a/package/wiringpi/0001-Fix-devLib-gpio-include-and-library-path.patch b/package/wiringpi/0001-Fix-devLib-gpio-include-and-library-path.patch
+@@ -741,6 +741,7 @@ menu "Compression and decompression"
+ 	source "package/libsquish/Config.in"
+ 	source "package/libzip/Config.in"
+ 	source "package/lzo/Config.in"
++	source "package/minizip/Config.in"
+ 	source "package/snappy/Config.in"
+ 	source "package/szip/Config.in"
+ 	source "package/zlib/Config.in"
+diff --git a/package/minizip/Config.in b/package/minizip/Config.in
 new file mode 100644
-index 0000000..2a7e754
+index 0000000..7205e00
 --- /dev/null
-+++ b/package/wiringpi/0001-Fix-devLib-gpio-include-and-library-path.patch
-@@ -0,0 +1,40 @@
-+From d0e4c2ac47776e60fac64143a58b4fbe23f433be Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 24 Nov 2015 22:26:13 +0100
-+Subject: [PATCH] Fix devLib/gpio include and library path.
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ devLib/Makefile | 2 +-
-+ gpio/Makefile   | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/devLib/Makefile b/devLib/Makefile
-+index 0fb0033..f956abe 100644
-+--- a/devLib/Makefile
-++++ b/devLib/Makefile
-+@@ -37,7 +37,7 @@ DYNAMIC=libwiringPiDev.so.$(VERSION)
-+ #DEBUG	= -g -O0
-+ DEBUG	= -O2
-+ CC	= gcc
-+-INCLUDE	= -I.
-++INCLUDE	= -I$(DESTDIR)$(PREFIX)/wiringPi  -I$(DESTDIR)$(PREFIX)/devLib
-+ DEFS	= -D_GNU_SOURCE
-+ CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC
-+ 
-+diff --git a/gpio/Makefile b/gpio/Makefile
-+index 7dcd090..f5b588a 100644
-+--- a/gpio/Makefile
-++++ b/gpio/Makefile
-+@@ -33,7 +33,7 @@ endif
-+ #DEBUG	= -g -O0
-+ DEBUG	= -O2
-+ CC	= gcc
-+-INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
-++INCLUDE	= -I$(DESTDIR)$(PREFIX)/wiringPi  -I$(DESTDIR)$(PREFIX)/devLib
-+ CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
-+ 
-+ LDFLAGS	= -L$(DESTDIR)$(PREFIX)/lib
-+-- 
-+2.1.4
-+
-diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
-new file mode 100644
-index 0000000..9275b82
---- /dev/null
-+++ b/package/wiringpi/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_WIRINGPI
-+	bool "wiringpi"
++++ b/package/minizip/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_MINIZIP
++	bool "minizip"
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  wiringPi libraries (and gpio command)
++	  Enables to extract files from a .zip archive file.
++	  It is compatible with PKZip 2.04g, WinZip, InfoZip,
++	  MimarSinan Codex Suite 2002 tools, and compatible sofware.
 +
-+	  http://wiringpi.com/
-diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
++	  https://github.com/nmoinvaz/minizip
++
++config BR2_PACKAGE_MINIZIP_DEMOS
++	bool "miniunzip/minizip"
++	depends on BR2_PACKAGE_MINIZIP
++	help
++	  Enable miniunzip/minizip binary tools.
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
 new file mode 100644
-index 0000000..258bb25
+index 0000000..a303b2c
 --- /dev/null
-+++ b/package/wiringpi/wiringpi.mk
-@@ -0,0 +1,29 @@
-+WIRINGPI_VERSION = 2.29
-+WIRINGPI_SITE = git://git.drogon.net/wiringPi
-+WIRINGPI_INSTALL_STAGING = YES
++++ b/package/minizip/minizip.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	b39158bdf3d8bf81d3a7412dc761851fda398bc93d8989d5e940ed4ae5bbb52c	minizip-977afb22966e6ab0ee401293a8e85fe808133f9a.tar.gz
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+new file mode 100644
+index 0000000..5b87786
+--- /dev/null
++++ b/package/minizip/minizip.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# minizip
++#
++################################################################################
 +
-+define WIRINGPI_BUILD_CMDS
-+	$(MAKE) -C $(@D)/wiringPi CC=$(TARGET_CC)
-+	$(INSTALL) -D -m 0755 $(@D)/wiringPi/libwiringPi.so.2.29 $(STAGING_DIR)/usr/lib/libwiringPi.so.2.29
-+	ln -sf $(STAGING_DIR)/usr/lib/libwiringPi.so.2.29 $(STAGING_DIR)/usr/lib/libwiringPi.so
-+	$(MAKE) -C $(@D)/devLib CC=$(TARGET_CC) PREFIX=$(@D) DESTDIR=
-+	$(INSTALL) -D -m 0755 $(@D)/devLib/libwiringPiDev.so.2.29 $(STAGING_DIR)/usr/lib/libwiringPiDev.so.2.29
-+	ln -sf $(STAGING_DIR)/usr/lib/libwiringPiDev.so.2.29 $(STAGING_DIR)/usr/lib/libwiringPiDev.so
-+	$(MAKE) -C $(@D)/gpio CC=$(TARGET_CC) PREFIX=$(@D) DESTDIR=
-+endef
++MINIZIP_VERSION = 977afb22966e6ab0ee401293a8e85fe808133f9a
++MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
++MINIZIP_DEPENDENCIES = zlib
++MINIZIP_AUTORECONF = YES
++MINIZIP_INSTALL_STAGING = YES
++MINIZIP_CONF_OPTS = $(if $(BR2_PACKAGE_MINIZIP_DEMOS),--enable-demos)
++MINIZIP_LICENSE = zlib license
++MINIZIP_LICENSE_FILES = LICENSE
 +
-+define WIRINGPI_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/wiringPi/*.h $(STAGING_DIR)/usr/include
-+	$(INSTALL) -D -m 0644 $(@D)/devLib/*.h $(STAGING_DIR)/usr/include
-+endef
-+
-+define WIRINGPI_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/wiringPi/libwiringPi.so* $(TARGET_DIR)/usr/lib
-+	ln -sf libwiringPi.so.2.29  $(TARGET_DIR)/usr/lib/libwiringPi.so
-+	$(INSTALL) -D -m 0755 $(@D)/devLib/libwiringPiDev.so* $(TARGET_DIR)/usr/lib
-+	ln -sf libwiringPiDev.so.2.29 $(TARGET_DIR)/usr/lib/libwiringPiDev.so
-+	$(INSTALL) -D -m 0755 $(@D)/gpio/gpio $(TARGET_DIR)/usr/bin
-+	$(INSTALL) -D -m 0755 $(@D)/gpio/pintest $(TARGET_DIR)/usr/bin
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.1.4
++$(eval $(autotools-package))
