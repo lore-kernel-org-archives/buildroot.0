@@ -1,43 +1,45 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 24 Nov 2015 23:51:53 +0100
-Subject: [Buildroot] [PATCH 2/2] package/monolite: bump to version 138
-In-Reply-To: <1448405513-20741-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1448405513-20741-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1448405513-20741-3-git-send-email-angelo.compagnucci@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Nov 2015 23:53:34 +0100
+Subject: [Buildroot] Buildroot defconfigs now being built on Travis CI
+In-Reply-To: <87r3jfyq7c.fsf@dell.be.48ers.dk>
+References: <20151123223332.3eff11d8@free-electrons.com>
+ <874mgc4c6f.fsf@dell.be.48ers.dk>
+ <20151124185221.16a4b432@free-electrons.com>
+ <87d1uz15n2.fsf@dell.be.48ers.dk> <20151124223758.GB3904@free.fr>
+ <87r3jfyq7c.fsf@dell.be.48ers.dk>
+Message-ID: <20151124225334.GD3904@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bump to version 138 needed for mono 4.2.1.102
+Peter, All,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/monolite/monolite.hash | 2 +-
- package/monolite/monolite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2015-11-24 23:42 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> >> Probably it is, I just saw that you were copying them to the
+>  >> autobuilders.
+>  > Thomas did that so we could try to reproduce locally. Since it was
+>  > working on our machines, we hunted a difference on the host. And
+>  > suddenly, XFS... :-/
+> Heh ;) Any ideas about how to fix it for real? I think I saw a reference
+> on IRC to something in e2fsprogs to generate images?
 
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 1139c0a..fa098e2 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 07a8573feef0053ec28b98355feba8c83dcfb3f99c2d0913a16a287382daf4b8  monolite-117-latest.tar.gz
-+sha256 0cf7aeafb22daeb7ed3398057f0ac88015440901f480ef84cba2431a753f8c1e  monolite-138-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index aa6c28c..3c53bff 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONOLITE_VERSION = 117
-+MONOLITE_VERSION = 138
- MONOLITE_SITE = http://storage.bos.xamarin.com/mono-dist-master/latest
- MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPLv2 or commercial
+The ideal solution would be that e2fsprogs do a new major release: there
+is no in their master branch suport for mkfs.ext2 to behave like
+genext2fs and populate the filesystem with the content of a diectory.
+
+But it's only in their master, and there no release with that yet, even
+though they've had that for 1.5 years now...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
