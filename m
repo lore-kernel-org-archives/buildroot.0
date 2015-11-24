@@ -1,38 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Nov 2015 22:46:10 +0100
-Subject: [Buildroot] [git commit] gstreamer1: fix unaligned detection for
-	nios2
-Message-ID: <20151124214817.CFC637FA52@busybox.osuosl.org>
+From: Peter Rosin <peda@lysator.liu.se>
+Date: Tue, 24 Nov 2015 22:52:42 +0100
+Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
+In-Reply-To: <20151124194301.5dd9ece4@free-electrons.com>
+References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
+ <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
+ <20151124194301.5dd9ece4@free-electrons.com>
+Message-ID: <5654DC2A.6060804@lysator.liu.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=caca64ed5ffe62055b13326a62c9bd7605f7ad7d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/cc6/cc6a6cab4f8c405941a71c6665a7dc2e34c39cb9/
-http://autobuild.buildroot.net/results/2a3/2a350ac8be87a25d7f87f240943c816932f80a14/
+On 2015-11-24 19:43, Thomas Petazzoni wrote:
+> Dear Peter Rosin,
+>
+> On Thu,  5 Nov 2015 09:30:10 +0100, Peter Rosin wrote:
+>> From: Peter Rosin <peda@axentia.se>
+>>
+>> Adjust patch 0001 to trivial changes.
+>> Adjust patch 0007 to remove new DES things.
+>> Add patch 0008 directly from upstream to fix a late problem in the
+>> 1.0.1 release.
+>>
+>> Signed-off-by: Peter Rosin <peda@axentia.se>
+> This patch breaks the build of libtirpc, with the following error:
+>
+> rpc_soc.c:64:24: fatal error: rpcsvc/nis.h: No such file or directory
+> compilation terminated.
+> Makefile:749: recipe for target 'libtirpc_la-rpc_soc.lo' failed
+> make[4]: *** [libtirpc_la-rpc_soc.lo] Error 1
+> make[4]: *** Waiting for unfinished jobs....
+> Makefile:552: recipe for target 'all-recursive' failed
+> make[3]: *** [all-recursive] Error 1
+> Makefile:413: recipe for target 'all' failed
+> make[2]: *** [all] Error 2
+> package/pkg-generic.mk:188: recipe for target '/home/thomas/projets/buildroot/output/build/libtirpc-1.0.1/.stamp_built' failed
+> make[1]: *** [/home/thomas/projets/buildroot/output/build/libtirpc-1.0.1/.stamp_built] Error 2
+> Makefile:36: recipe for target '_all' failed
+> make: *** [_all] Error 2
+>
+> Without this patch applied, it builds fine. The failing configuration
+> is:
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.11-rc1-71-g90d1299.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_RPCBIND=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+>
+> Can you look into this? Once fixed, maybe you can resend the series,
+> and fix the permission problem in PATCH 1/2 at the same time?
 
-Similar to how we do it for arc/xtensa/microblaze.
+The toolchain does not match my arch, so I couldn't actually test it, but the fix
+looked simple enough (the include of rpcsvc/nis.h was added in the same
+upstream commit that added a new function that I also had to remove, and
+now I simply killed that include too).
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer1/gstreamer1/gstreamer1.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+So, there's a good chance this will work better even if I didn't actually test the
+failing case.
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 526b0ec..d5982f9 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -14,7 +14,7 @@ GSTREAMER1_LICENSE = LGPLv2+ LGPLv2.1+
- # Checking if unaligned memory access works correctly cannot be done when cross
- # compiling. For the following architectures there is no information available
- # in the configure script.
--ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze),y)
-+ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2),y)
- GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
- endif
- ifeq ($(BR2_aarch64),y)
+Cheers,
+Peter
