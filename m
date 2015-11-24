@@ -1,32 +1,84 @@
-From: Peter Rosin <peda@lysator.liu.se>
-Date: Tue, 24 Nov 2015 23:12:30 +0100
-Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
-In-Reply-To: <20151124230819.58dc05b9@free-electrons.com>
-References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
- <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
- <20151124194301.5dd9ece4@free-electrons.com>
- <5654DC2A.6060804@lysator.liu.se>
- <20151124230819.58dc05b9@free-electrons.com>
-Message-ID: <5654E0CE.70704@lysator.liu.se>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Nov 2015 23:26:18 +0100
+Subject: [Buildroot] [PATCH] [autobuild] autobuild: add config option to set
+	niceness
+Message-ID: <1448403978-22104-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+When the machine running the autobuilder is shared, it is important
+that the autobuilder instances do not hog all of the CPU.
 
-On 2015-11-24 23:08, Thomas Petazzoni wrote:
-> Dear Peter Rosin,
->
-> On Tue, 24 Nov 2015 22:52:42 +0100, Peter Rosin wrote:
->
->> The toolchain does not match my arch, so I couldn't actually test it, but the fix
-> Just curious, which arch are you running? I think this toolchain is a
-> x86 toolchain, so it should work pretty much on every PC out there. But
-> maybe you're using a different platform?
+Add an option to the configuration, so that the user can set the
+niceness to run the instances with. By default, the niceness is 0,
+which means the current niceness.
 
-The toolchain is x86_64 it seems, and I have a plain old x86 kernel on the system
-in question. Yes yes, I could have moved everything over somewhere. But didn't. :-)
+Properly doing so would require setting up a container with proper
+CPU cgroup, but it's a bit complicated.
 
-Cheers,
-Peter
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ scripts/autobuild-run | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 76b7201..fb48950 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -64,6 +64,7 @@ defaults = {
+     '--njobs': '1',
+     '--submitter': 'N/A',
+     '--make-opts': '',
++    '--nice': 0,
+ }
+ 
+ doc = """autobuild-run - run Buildroot autobuilder
+@@ -77,6 +78,8 @@ Options:
+                                  Defaults to %(--ninstances)s.
+   -j, --njobs NJOBS              number of parallel jobs
+                                  Defaults to %(--njobs)s.
++  --nice N                       Niceness, positive number
++                                 No default.
+   -s, --submitter SUBMITTER      name/machine of submitter
+                                  Defaults to %(--submitter)s.
+   --http-login LOGIN             username to send results with
+@@ -101,6 +104,7 @@ Format of the configuration file:
+    [main]
+    ninstances = <value>
+    njobs = <value>
++   nice = <value>
+    http-login = <value>
+    http-password = <value>
+    submitter = <value>
+@@ -540,6 +544,7 @@ def do_build(**kwargs):
+ 
+     idir = "instance-%d" % kwargs['instance']
+     log = kwargs['log']
++    nice = kwargs['nice']
+ 
+     # We need the absolute path to use with O=, because the relative
+     # path to the output directory here is not relative to the
+@@ -551,7 +556,9 @@ def do_build(**kwargs):
+     f = open(os.path.join(outputdir, "logfile"), "w+")
+     log_write(log, "INFO: build started")
+ 
+-    cmd = ["timeout", str(MAX_DURATION), "make", "O=%s" % outputdir,
++    cmd = ["timeout", str(MAX_DURATION),
++            "nice", "-n", nice,
++            "make", "O=%s" % outputdir,
+             "-C", srcdir, "BR2_DL_DIR=%s" % dldir,
+             "BR2_JLEVEL=%s" % kwargs['njobs']] \
+           + kwargs['make_opts'].split()
+@@ -851,6 +858,7 @@ def main():
+                 http_password = args['--http-password'],
+                 submitter = args['--submitter'],
+                 make_opts = (args['--make-opts'] or ''),
++                nice = (args['--nice'] or 0),
+                 upload = upload,
+                 buildpid = buildpid
+             ))
+-- 
+1.9.1
