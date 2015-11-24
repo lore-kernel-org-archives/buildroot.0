@@ -1,40 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Nov 2015 22:23:07 +0100
-Subject: [Buildroot] [git commit branch/next] configs/riotboard: bump kernel
-	to version 4.2.6
-Message-ID: <20151124213758.3F4D881DA3@busybox.osuosl.org>
+Date: Tue, 24 Nov 2015 22:37:24 +0100
+Subject: [Buildroot] [git commit branch/next] kmod: bump version to 22
+Message-ID: <20151124213758.51ABE81955@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7978db9b86183f2dd2b62c222d390d7ad330be49
+commit: http://git.buildroot.net/buildroot/commit/?id=0e6ca919f1167415f0ffb690570a8e8e980c5714
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/riotboard_defconfig |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/kmod/kmod.hash |    2 +-
+ package/kmod/kmod.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-index 7795787..8a3f6b7 100644
---- a/configs/riotboard_defconfig
-+++ b/configs/riotboard_defconfig
-@@ -21,13 +21,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index cf7e802..75b819e 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256  89c1a1a2193c31f9ebe582640bfa2bd401341dc24119f5a7f702588116fadaa0  kmod-20.tar.xz
++sha256  ba3b1ddea33228b473189fcb05b809024a3b86e9a7cf37d420cae06beb749f82  kmod-22.tar.xz
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 3742a03..2b9d002 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # kernel headers
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="4.2.3"
-+BR2_DEFAULT_KERNEL_VERSION="4.2.6"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
- 
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2.6"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-KMOD_VERSION = 20
++KMOD_VERSION = 22
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
