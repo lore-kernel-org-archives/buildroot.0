@@ -1,43 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Nov 2015 21:41:46 +0100
-Subject: [Buildroot] [git commit] systemd: Bump version
-Message-ID: <20151201232121.CB2F57FD28@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Nov 2015 17:35:20 +0100
+Subject: [Buildroot] [git commit] xtables-addons: bump to version 2.10
+Message-ID: <20151201232121.7B9FC81932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2fa01e87f2254dfbea4b153d753d973e0c710c9a
+commit: http://git.buildroot.net/buildroot/commit/?id=4c849ebe70dc5ba8aa949d066d0fd52cf8574b72
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xtables-addons/xtables-addons.hash | 7 ++++---
+ package/xtables-addons/xtables-addons.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 60aebcf..8090200 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 6766e8489e359f3d608a9f032eb1f52d7c55d76d0f9171837cf2b3284b2b904b  systemd-227.tar.gz
-+sha256 dd124ff561a07e6439ed2b3713f38ca914df7747f110ce86deea17b56d245ae6  systemd-228.tar.gz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 35dac83..e432069 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index c82f016..be8cb6e 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,3 +1,4 @@
+-# Locally calculated after checking signature file from:
+-# http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.9/
+-sha256	648f6cd17ba41916df5bb605e617b2f18461090139e67d7cf5c5bd8a04c701b0	xtables-addons-2.9.tar.xz
++# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.10/
++sha1	bc6dcb1eb1328931189f6e73a1a02ef4cc51bc44	xtables-addons-2.10.tar.xz
++# Calculated based on the hash above
++sha256	2a2d92ae924437d757f55514502c6ef3aeccc6106f729c702efe703ad30f4007	xtables-addons-2.10.tar.xz
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 30353a0..66e7386 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSTEMD_VERSION = 227
-+SYSTEMD_VERSION = 228
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+-XTABLES_ADDONS_VERSION = 2.9
++XTABLES_ADDONS_VERSION = 2.10
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+ XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
