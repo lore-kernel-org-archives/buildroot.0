@@ -1,11 +1,11 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 24 Nov 2015 15:22:45 +0000
-Subject: [Buildroot] [PATCH 4/7] toolchain-external: bump CodeSourcery
- NIOSII to 2015.11
-In-Reply-To: <1448123780-30067-4-git-send-email-romain.naour@openwide.fr>
+Date: Tue, 24 Nov 2015 15:31:20 +0000
+Subject: [Buildroot] [PATCH 5/7] toolchain-external: bump CodeSourcery
+ aarch64 to 2014.11
+In-Reply-To: <1448123780-30067-5-git-send-email-romain.naour@openwide.fr>
 References: <1448123780-30067-1-git-send-email-romain.naour@openwide.fr>
- <1448123780-30067-4-git-send-email-romain.naour@openwide.fr>
-Message-ID: <565480C5.2030107@imgtec.com>
+ <1448123780-30067-5-git-send-email-romain.naour@openwide.fr>
+Message-ID: <565482C8.5030609@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,32 @@ To: buildroot@busybox.net
 
 Dear Romain Naour,
 
+the patch subject is wrong. You are bumping to 2015.11 instead of
+2014.11. I guess the maintainer will not mind to fix it for you.
+
 On 21/11/15 16:36, Romain Naour wrote:
-> Some package black list CS NIOSII toolchains, mainly due to _gp link
-> issue. A follow up patch can remove the restriction case by case.
+> Like for 2014.05 [1], this toolchain need a small fixup:
+> 
+> Buildroot picks up aarch64-linux-gnu/libc/lib64 and all its contents, but
+> does not pickup aarch64-linux-gnu/libc/lib to populate the staging directory.
+> aarch64-linux-gnu/libc/lib contain a single symlink which is lost during
+> Buildroot staging install :
+>   aarch64-linux-gnu/libc/lib/ld-linux-aarch64.so.1 -> ../lib64/ld-2.20.so
+> 
+> Add a custom post install staging hook to create it manually.
+> 
+> A runtime testing show that /lib/ld-2.20.so and /lib/ld-linux-aarch64.so.1
+> are missing in the file system.
+> 
+> Add another post install target hook to copy ld-2.20.so and create the
+> symlink.
+> 
+> Runtime tested using qemu_aarch64_virt_defconfig.
+> 
+> [1] http://patchwork.ozlabs.org/patch/467857/
 > 
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Build a minimal rootfs using that toolchain after applying this patch.
