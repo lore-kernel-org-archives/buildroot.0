@@ -1,36 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Nov 2015 17:40:06 +0100
-Subject: [Buildroot] [PATCH next] gmp: bump to version 6.1.0
-In-Reply-To: <1448382253-21279-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1448382253-21279-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151124174006.42710311@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 24 Nov 2015 17:04:37 +0000
+Subject: [Buildroot] [PATCH] systemd: Bump version
+In-Reply-To: <1448025473-10465-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1448025473-10465-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <565498A5.3060001@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Maxime Hadjinlian,
 
-On Tue, 24 Nov 2015 13:24:12 -0300, Gustavo Zacarias wrote:
-> Patches are upstream so drop them.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On 20/11/15 13:17, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Build test for MIPS architecture:
+
+$ grep -E ^SYSTEMD_VERSION package/systemd/systemd.mk
+SYSTEMD_VERSION = 228
+
+$ file output/target/usr/lib/systemd/systemd
+output/target/usr/lib/systemd/systemd: ELF 64-bit LSB shared object,
+MIPS, version 1 (SYSV), dynamically linked, interpreter
+/lib64/ld-linux-mipsn8.so.1, for GNU/Linux 4.0.0, stripped
+
+Regards,
+
+Vincent.
+
 > ---
->  .../0001-arm-asm-conditional-on-no-thumb-1.patch   | 21 ---------------------
->  .../0002-arm-asm-conditional-on-no-thumb-2.patch   | 21 ---------------------
->  ...c-provide-default-bmod-to-mod-threshold-1.patch | 22 ----------------------
->  package/gmp/gmp.hash                               |  2 +-
->  package/gmp/gmp.mk                                 |  2 +-
->  5 files changed, 2 insertions(+), 66 deletions(-)
->  delete mode 100644 package/gmp/0001-arm-asm-conditional-on-no-thumb-1.patch
->  delete mode 100644 package/gmp/0002-arm-asm-conditional-on-no-thumb-2.patch
->  delete mode 100644 package/gmp/0003-powerpc-provide-default-bmod-to-mod-threshold-1.patch
-
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>  package/systemd/systemd.hash | 2 +-
+>  package/systemd/systemd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> index 60aebcf..8090200 100644
+> --- a/package/systemd/systemd.hash
+> +++ b/package/systemd/systemd.hash
+> @@ -1,2 +1,2 @@
+>  # sha256 locally computed
+> -sha256 6766e8489e359f3d608a9f032eb1f52d7c55d76d0f9171837cf2b3284b2b904b  systemd-227.tar.gz
+> +sha256 dd124ff561a07e6439ed2b3713f38ca914df7747f110ce86deea17b56d245ae6  systemd-228.tar.gz
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 35dac83..e432069 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -SYSTEMD_VERSION = 227
+> +SYSTEMD_VERSION = 228
+>  SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+>  SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
+>  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+> 
