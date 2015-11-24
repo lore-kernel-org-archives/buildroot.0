@@ -1,40 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Nov 2015 22:37:24 +0100
-Subject: [Buildroot] [git commit branch/next] kmod: bump version to 22
-Message-ID: <20151124213758.51ABE81955@busybox.osuosl.org>
+From: Peter Rosin <peda@lysator.liu.se>
+Date: Tue, 24 Nov 2015 22:45:51 +0100
+Subject: [Buildroot] [PATCH v2 0/2] bump libtirpc to 1.0.1
+Message-ID: <1448401554-16331-1-git-send-email-peda@lysator.liu.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e6ca919f1167415f0ffb690570a8e8e980c5714
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+From: Peter Rosin <peda@axentia.se>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kmod/kmod.hash |    2 +-
- package/kmod/kmod.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi!
 
-diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
-index cf7e802..75b819e 100644
---- a/package/kmod/kmod.hash
-+++ b/package/kmod/kmod.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
--sha256  89c1a1a2193c31f9ebe582640bfa2bd401341dc24119f5a7f702588116fadaa0  kmod-20.tar.xz
-+sha256  ba3b1ddea33228b473189fcb05b809024a3b86e9a7cf37d420cae06beb749f82  kmod-22.tar.xz
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 3742a03..2b9d002 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KMOD_VERSION = 20
-+KMOD_VERSION = 22
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
- KMOD_INSTALL_STAGING = YES
+I'd like to bump libtirpc to 1.0.1. However there is an api incompatibility
+introduced in 0.3.2 which requires a patch to rpcbind, which I took from
+upstream. The rpcbind patch make rpcbind work with either tirpc 0.3.2 or
+1.0.1, so I added that patch first in the series even if it might seem
+backwards.
+
+Note that I have not tested the rpcbind patch with more than a compile
+test. I know nothing about rpcbind.
+
+That also goes for the changes to libtirpc patch 0007-Disable-DES-..., which
+removes DES support, since apparently musl and uclibc do not provide DES. I
+know nothing about musl and uclibc and have not tested if there are more
+newfangled DES things that needs to be removed...
+
+Fixups since v1:
+
+- Removed execute bit on one of the patches.
+- Thomas found one more newfangled DES thing to remove in patch 0007.
+- Rebased to the next branch.
+
+Cheers,
+Peter
+
+Peter Rosin (2):
+  rpcbind: backport adjustment to changes in libtirpc 1.0.1
+  libtirpc: bump to version 1.0.1
+
+ ...able-parts-of-TIRPC-requiring-NIS-support.patch |   14 +--
+ ...0007-Disable-DES-authentification-support.patch |   93 +++++++++++++++++---
+ ...d-missing-rwlock_unlocks-in-xprt_register.patch |   63 +++++++++++++
+ package/libtirpc/libtirpc.hash                     |    4 +-
+ package/libtirpc/libtirpc.mk                       |    2 +-
+ ...ly-Don-t-use-the-xp_auth-pointer-directly.patch |   42 +++++++++
+ 6 files changed, 199 insertions(+), 19 deletions(-)
+ create mode 100644 package/libtirpc/0008-Add-missing-rwlock_unlocks-in-xprt_register.patch
+ create mode 100644 package/rpcbind/0002-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch
+
+-- 
+1.7.10.4
