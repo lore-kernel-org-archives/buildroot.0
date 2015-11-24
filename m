@@ -1,76 +1,38 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 24 Nov 2015 20:45:46 +0100
-Subject: [Buildroot] WiringPi - problem adding package to my buildroot
-In-Reply-To: <CACvocV5bQo_YG05=ujYEJHygDQCw6_XZDLJ9zdCLO4tGCSswtg@mail.gmail.com>
-References: <CACvocV5bQo_YG05=ujYEJHygDQCw6_XZDLJ9zdCLO4tGCSswtg@mail.gmail.com>
-Message-ID: <20151124204546.2039bf73@gmx.net>
+From: Nikolay Dimitrov <picmaster@mail.bg>
+Date: Tue, 24 Nov 2015 22:08:43 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/riotboard: bump kernel to version
+	4.2.6
+Message-ID: <1448395723-13680-1-git-send-email-picmaster@mail.bg>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Giovanni,
+Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
+---
+ configs/riotboard_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 24 Nov 2015 19:17:43 +0100, "astrolite ." <ciclonite@gmail.com> wrote:
-
-> Hi all,
-> After  sucessfully added pigpio package to buildroot, i'm tried to add
-> wiringPi package.
-> But i've a problem that not understand..
-> 
-> These are my files :
-> Config.in
-> 
-> config BR2_PACKAGE_WIRINGPI
-> bool "wiringPi"
-> help
->  wiringPi libraries
-> 
-> wiringPi.mk
-> 
-> WIRINGPI_VERSION = 488e3729e44721b79ba655429f453f7396157c22
-> WIRINGPI_INSTALL_TARGET = YES
-> WIRINGPI_INSTALL_STAGING = YES
-> WIRINGPI_AUTORECONF = YES
-> WIRINGPI_SITE = $(call github,ciclonite,pigpio,$(LIBPIGPIO_VERSION))
-
-Forgot to ask: Why a fork from the original sources? Whats wrong
-with the original WiringPi buildsystem?
-
-Regards,
-Peter
-
-> 
-> 
-> when i launch make :
-> 
-> make
-> /usr/bin/make -j1  HOSTCC="/usr/bin/gcc" HOSTCXX="/usr/bin/g++"
-> silentoldconfig
-> make[1]: Entering directory
-> `/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05'
-> BR2_DEFCONFIG=''
-> KCONFIG_AUTOCONFIG=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/auto.conf
-> KCONFIG_AUTOHEADER=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/autoconf.h
-> KCONFIG_TRISTATE=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/tristate.config
-> BR2_CONFIG=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/.config
-> BR2_EXTERNAL=support/dummy-external SKIP_LEGACY=
-> /root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/conf
-> --silentoldconfig Config.in
-> make[1]: Leaving directory
-> `/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05'
-> >>> host-gawk 4.1.2 Patching
-> 
-> Applying 0001-no-versioned.patch using patch:
-> patching file Makefile.in
-> Reversed (or previously applied) patch detected!  Skipping patch.
-> 2 out of 2 hunks ignored -- saving rejects to file Makefile.in.rej
-> Patch failed!  Please fix 0001-no-versioned.patch!
-> make: ***
-> [/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/host-gawk-4.1.2/.stamp_patched]
-> Error 1
-> 
-> Someone can help me to find out the problem?
-> Thanks,
-> Giovanni
+diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+index 7795787..8a3f6b7 100644
+--- a/configs/riotboard_defconfig
++++ b/configs/riotboard_defconfig
+@@ -21,13 +21,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # kernel headers
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.2.3"
++BR2_DEFAULT_KERNEL_VERSION="4.2.6"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-- 
+2.1.4
