@@ -1,77 +1,46 @@
-From: Peter Rosin <peda@lysator.liu.se>
-Date: Tue, 24 Nov 2015 22:52:42 +0100
-Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
-In-Reply-To: <20151124194301.5dd9ece4@free-electrons.com>
-References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
- <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
- <20151124194301.5dd9ece4@free-electrons.com>
-Message-ID: <5654DC2A.6060804@lysator.liu.se>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Tue, 24 Nov 2015 18:57:12 -0300
+Subject: [Buildroot] [PATCH] pcre: security bump to version 8.38
+Message-ID: <1448402232-1972-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-On 2015-11-24 19:43, Thomas Petazzoni wrote:
-> Dear Peter Rosin,
->
-> On Thu,  5 Nov 2015 09:30:10 +0100, Peter Rosin wrote:
->> From: Peter Rosin <peda@axentia.se>
->>
->> Adjust patch 0001 to trivial changes.
->> Adjust patch 0007 to remove new DES things.
->> Add patch 0008 directly from upstream to fix a late problem in the
->> 1.0.1 release.
->>
->> Signed-off-by: Peter Rosin <peda@axentia.se>
-> This patch breaks the build of libtirpc, with the following error:
->
-> rpc_soc.c:64:24: fatal error: rpcsvc/nis.h: No such file or directory
-> compilation terminated.
-> Makefile:749: recipe for target 'libtirpc_la-rpc_soc.lo' failed
-> make[4]: *** [libtirpc_la-rpc_soc.lo] Error 1
-> make[4]: *** Waiting for unfinished jobs....
-> Makefile:552: recipe for target 'all-recursive' failed
-> make[3]: *** [all-recursive] Error 1
-> Makefile:413: recipe for target 'all' failed
-> make[2]: *** [all] Error 2
-> package/pkg-generic.mk:188: recipe for target '/home/thomas/projets/buildroot/output/build/libtirpc-1.0.1/.stamp_built' failed
-> make[1]: *** [/home/thomas/projets/buildroot/output/build/libtirpc-1.0.1/.stamp_built] Error 2
-> Makefile:36: recipe for target '_all' failed
-> make: *** [_all] Error 2
->
-> Without this patch applied, it builds fine. The failing configuration
-> is:
->
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.11-rc1-71-g90d1299.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_RPCBIND=y
-> # BR2_TARGET_ROOTFS_TAR is not set
->
-> Can you look into this? Once fixed, maybe you can resend the series,
-> and fix the permission problem in PATCH 1/2 at the same time?
+Fixes:
+https://blog.fuzzing-project.org/29-Heap-Overflow-in-PCRE.html
 
-The toolchain does not match my arch, so I couldn't actually test it, but the fix
-looked simple enough (the include of rpcsvc/nis.h was added in the same
-upstream commit that added a new function that I also had to remove, and
-now I simply killed that include too).
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/pcre/pcre.hash | 5 ++---
+ package/pcre/pcre.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-So, there's a good chance this will work better even if I didn't actually test the
-failing case.
-
-Cheers,
-Peter
+diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
+index 0b2b1c4..5b580a7 100644
+--- a/package/pcre/pcre.hash
++++ b/package/pcre/pcre.hash
+@@ -1,3 +1,2 @@
+-# From http://sourceforge.net/projects/pcre/files/pcre/8.37/
+-md5	ed91be292cb01d21bc7e526816c26981	pcre-8.37.tar.bz2
+-sha1	4c629b3f582366fae4e8912f0d9fa3140347d6e7	pcre-8.37.tar.bz2
++# Locally calculated after checking pgp signature
++sha256	b9e02d36e23024d6c02a2e5b25204b3a4fa6ade43e0a5f869f254f49535079df	pcre-8.38.tar.bz2
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index fd339ed..06652c7 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PCRE_VERSION = 8.37
++PCRE_VERSION = 8.38
+ PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
+ PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
+ PCRE_LICENSE = BSD-3c
+-- 
+2.4.10
