@@ -1,37 +1,43 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 24 Nov 2015 11:01:15 -0500
-Subject: [Buildroot] [v3 0/2] openssl: parallel build
-In-Reply-To: <CAMQcK5+S=aDv3qtA6vdzeqgqSq6Xd4xUBYjvHQat=pg1Ot72gA@mail.gmail.com>
-References: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
- <20151118135709.125f4afd@free-electrons.com>
- <CAMQcK5+S=aDv3qtA6vdzeqgqSq6Xd4xUBYjvHQat=pg1Ot72gA@mail.gmail.com>
-Message-ID: <20151124160115.GK23754@vapier.lan>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 Nov 2015 13:15:37 -0300
+Subject: [Buildroot] [PATCH] xtables-addons: bump to version 2.10
+Message-ID: <1448381737-18580-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18 Nov 2015 13:41, Ryan Barnett wrote:
-> On Wed, Nov 18, 2015 at 6:57 AM, Thomas Petazzoni wrote:
-> >Does Gentoo has some more patches?
-> 
-> No this is the only patch for openssl 1.0.2d. There also hasn't been
-> any updates to this patch other then the one that is currently there.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/xtables-addons/xtables-addons.hash | 7 ++++---
+ package/xtables-addons/xtables-addons.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-that's incorrect.  you have to look at the ebuild and then see that we apply
-four parallel patches for 1.0.2d, one of which specifically for this issue.
-
-https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/openssl/openssl-1.0.2d-r2.ebuild?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-		epatch "${FILESDIR}"/${PN}-1.0.2d-parallel-build.patch
-		epatch "${FILESDIR}"/${PN}-1.0.2a-parallel-obj-headers.patch
-		epatch "${FILESDIR}"/${PN}-1.0.2a-parallel-install-dirs.patch
-		epatch "${FILESDIR}"/${PN}-1.0.2a-parallel-symlinking.patch #545028
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151124/dccb3f2f/attachment.asc>
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index c82f016..be8cb6e 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,3 +1,4 @@
+-# Locally calculated after checking signature file from:
+-# http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.9/
+-sha256	648f6cd17ba41916df5bb605e617b2f18461090139e67d7cf5c5bd8a04c701b0	xtables-addons-2.9.tar.xz
++# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.10/
++sha1	bc6dcb1eb1328931189f6e73a1a02ef4cc51bc44	xtables-addons-2.10.tar.xz
++# Calculated based on the hash above
++sha256	2a2d92ae924437d757f55514502c6ef3aeccc6106f729c702efe703ad30f4007	xtables-addons-2.10.tar.xz
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 30353a0..66e7386 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XTABLES_ADDONS_VERSION = 2.9
++XTABLES_ADDONS_VERSION = 2.10
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+ XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+-- 
+2.4.10
