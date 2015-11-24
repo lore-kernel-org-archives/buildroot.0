@@ -1,52 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Nov 2015 18:37:20 +0100
-Subject: [Buildroot] [git commit] package/gcc: comment on why we override
-	the generic configure commands
-Message-ID: <20151201232121.3B7D77FD28@busybox.osuosl.org>
+Date: Tue, 24 Nov 2015 19:43:50 +0100
+Subject: [Buildroot] [git commit] python/web2py: bump to version 2.12.3 -
+	hash file
+Message-ID: <20151201232121.AE54981932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bf23db235ca0f823b89aaf15835011ad0a52732a
+commit: http://git.buildroot.net/buildroot/commit/?id=2d5158fd62ae9ea2e608f43f2db445aed4613e67
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The explanations given in the commit log of 7d6c79 (Compile static
-versions of gcc libraries) do not explain why we have to provide custom
-configure commands, instead of just adding --enable-static to the
-configure options.
+This patch bumps web2py to the latest released version (2.12.3)
+and adds hash file.
 
-Add a comment in the code that explains why that is so. Add a pointer to
-the ML archives with the explanations, too.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: J??r??me Pouiller <jezz@sysmic.org>
-Acked-by: J??r??me Pouiller <jezz@sysmic.org>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/gcc-final/gcc-final.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/python-web2py/python-web2py.hash | 2 ++
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 0467ac2..c416b44 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -27,6 +27,15 @@ HOST_GCC_FINAL_SUBDIR = build
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+new file mode 100644
+index 0000000..3de8dbf
+--- /dev/null
++++ b/package/python-web2py/python-web2py.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256 7e22a5624d8d2909e165110f0bec6b43ee36ff6834d689f4027e06dece662031   python-web2py-R-2.12.3.tar.gz
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index f5f572c..38faabc 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
- 
-+# We want to always build the static variants of all the gcc libraries,
-+# of which libstdc++, libgomp, libmudflap...
-+# To do so, we can not just pass --enable-static to override the generic
-+# --disable-static flag, otherwise gcc fails to build some of those
-+# libraries, see;
-+#   http://lists.busybox.net/pipermail/buildroot/2013-October/080412.html
-+#
-+# So we must completely override the generic commands and provide our own.
-+#
- define  HOST_GCC_FINAL_CONFIGURE_CMDS
- 	(cd $(HOST_GCC_FINAL_SRCDIR) && rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
+-PYTHON_WEB2PY_VERSION = R-2.11.3
++PYTHON_WEB2PY_VERSION = R-2.12.3
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPLv3
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
