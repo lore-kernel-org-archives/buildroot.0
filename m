@@ -1,25 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Nov 2015 23:08:04 +0100
-Subject: [Buildroot] [PATCH] pcre: security bump to version 8.38
-In-Reply-To: <1448402232-1972-1-git-send-email-gustavo.zacarias@free-electrons.com>
- (gustavo zacarias's message of "Tue, 24 Nov 2015 18:57:12 -0300")
-References: <1448402232-1972-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <87vb8ryrsr.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Nov 2015 23:08:19 +0100
+Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
+In-Reply-To: <5654DC2A.6060804@lysator.liu.se>
+References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
+ <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
+ <20151124194301.5dd9ece4@free-electrons.com>
+ <5654DC2A.6060804@lysator.liu.se>
+Message-ID: <20151124230819.58dc05b9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "gustavo" == gustavo zacarias <gustavo.zacarias@free-electrons.com> writes:
+Dear Peter Rosin,
 
- > From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
- > Fixes:
- > https://blog.fuzzing-project.org/29-Heap-Overflow-in-PCRE.html
+On Tue, 24 Nov 2015 22:52:42 +0100, Peter Rosin wrote:
 
- > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> The toolchain does not match my arch, so I couldn't actually test it, but the fix
 
-Committed, thanks.
+Just curious, which arch are you running? I think this toolchain is a
+x86 toolchain, so it should work pretty much on every PC out there. But
+maybe you're using a different platform?
 
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
