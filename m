@@ -1,139 +1,90 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue, 24 Nov 2015 08:38:11 -0200
-Subject: [Buildroot] [PATCH v2] libgdiplus: new package
-Message-ID: <1448361491-14651-1-git-send-email-sergio.prado@e-labworks.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 24 Nov 2015 12:10:35 +0000
+Subject: [Buildroot] Analysis of build results for 2015-11-18
+In-Reply-To: <1448053288.2964.12.camel@synopsys.com>
+References: <20151119073014.0017E101A9A@stock.ovh.net>
+ <20151120001552.51c1b21b@free-electrons.com>
+ <1448053288.2964.12.camel@synopsys.com>
+Message-ID: <1448367035.6278.18.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libgdiplus is an open source implementation of the GDI+ API.
+Hi Thomas,
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
-Changes v1 -> v2:
-  - because of libglib2, package depends on BR2_USE_WCHAR,
-    BR2_TOOLCHAIN_HAS_THREADS and BR2_USE_MMU
-  - because of cairo, package depends on BR2_PACKAGE_CAIRO
-  - adding hashes
-  - fixing license to MIT
-  - adding a comment explaining why we need to enable autoreconf
-  - adding a dependency on package host-pkgconf
-  - adding a comment explaining why we cannot use --without-pango
----
- package/Config.in                  |  1 +
- package/libgdiplus/Config.in       | 21 ++++++++++++++++
- package/libgdiplus/libgdiplus.hash |  3 +++
- package/libgdiplus/libgdiplus.mk   | 50 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 75 insertions(+)
- create mode 100644 package/libgdiplus/Config.in
- create mode 100644 package/libgdiplus/libgdiplus.hash
- create mode 100644 package/libgdiplus/libgdiplus.mk
+On Sat, 2015-11-21 at 00:01 +0300, Alexey Brodkin wrote:
+> Hi Thomas,
+> 
+> On Fri, 2015-11-20 at 00:15 +0100, Thomas Petazzoni wrote:
+> > Hello,
+> > 
+> > J?r?me, Johan, Bernd, Yann, Martin, Gustavo, R?mi, Samuel, Alexey,
+> > Waldemar, Clayton, please read below, there are some interesting issues
+> > for you :-) Thanks !
 
-diff --git a/package/Config.in b/package/Config.in
-index bdc3063abd1a..ef09361c5440 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -824,6 +824,7 @@ menu "Graphics"
- 	source "package/libfm-extra/Config.in"
- 	source "package/libfreeimage/Config.in"
- 	source "package/libgail/Config.in"
-+	source "package/libgdiplus/Config.in"
- 	source "package/libgeotiff/Config.in"
- 	source "package/libglade/Config.in"
- 	source "package/libglew/Config.in"
-diff --git a/package/libgdiplus/Config.in b/package/libgdiplus/Config.in
-new file mode 100644
-index 000000000000..f860ab339469
---- /dev/null
-+++ b/package/libgdiplus/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_LIBGDIPLUS
-+	bool "libgdiplus"
-+	select BR2_PACKAGE_XLIB_LIBXFT
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_LIBPNG
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_WCHAR # libglib2 -> gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_ARCH_HAS_ATOMICS # cairo
-+	help
-+	  An Open Source implementation of the GDI+ API.
-+
-+	  https://github.com/mono/libgdiplus
-+
-+comment "libgdiplus needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_PACKAGE_XORG7
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libgdiplus/libgdiplus.hash b/package/libgdiplus/libgdiplus.hash
-new file mode 100644
-index 000000000000..8642d5cbf66a
---- /dev/null
-+++ b/package/libgdiplus/libgdiplus.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+md5    6e9a80ba921e4842acd5a12b14c78dc9                                 libgdiplus-3.12.tar.gz
-+sha256 7eadc5105c6352d456c5f8699dc89260bf402e82ce6668e7e0c625519f9e5b44 libgdiplus-3.12.tar.gz
-diff --git a/package/libgdiplus/libgdiplus.mk b/package/libgdiplus/libgdiplus.mk
-new file mode 100644
-index 000000000000..d3b4f218970b
---- /dev/null
-+++ b/package/libgdiplus/libgdiplus.mk
-@@ -0,0 +1,50 @@
-+################################################################################
-+#
-+# libgdiplus
-+#
-+################################################################################
-+
-+LIBGDIPLUS_VERSION = 3.12
-+LIBGDIPLUS_SITE = $(call github,mono,libgdiplus,$(LIBGDIPLUS_VERSION))
-+LIBGDIPLUS_LICENSE = MIT
-+LIBGDIPLUS_LICENSE_FILES = COPYING src/carbon-private.h
-+LIBGDIPLUS_INSTALL_STAGING = YES
-+
-+# github tarball doesn't have configure
-+LIBGDIPLUS_AUTORECONF = YES
-+
-+LIBGDIPLUS_DEPENDENCIES = xlib_libXft libglib2 cairo libpng host-pkgconf
-+
-+# API changes in recent versions of libgif makes it incompatible with
-+# this version of libgdiplus, so we are disabling it for now.
-+LIBGDIPLUS_CONF_OPTS = --without-libgif
-+
-+# there is a bug in the configure script that enables pango support when 
-+# passing --without-pango, so let's just not use it
-+ifeq ($(BR2_PACKAGE_PANGO),y)
-+LIBGDIPLUS_CONF_OPTS += --with-pango
-+LIBGDIPLUS_DEPENDENCIES += pango
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEXIF),y)
-+LIBGDIPLUS_CONF_OPTS += --with-libexif
-+LIBGDIPLUS_DEPENDENCIES += libexif
-+else
-+LIBGDIPLUS_CONF_OPTS += --without-libexif
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+LIBGDIPLUS_CONF_OPTS += --with-libjpeg
-+LIBGDIPLUS_DEPENDENCIES += jpeg 
-+else
-+LIBGDIPLUS_CONF_OPTS += --without-libjpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+LIBGDIPLUS_CONF_OPTS += --with-libtiff
-+LIBGDIPLUS_DEPENDENCIES += tiff
-+else
-+LIBGDIPLUS_CONF_OPTS += --without-libtiff
-+endif
-+
-+$(eval $(autotools-package))
--- 
-1.9.1
+[snip]
+
+> > > arc |              util-linux-2.27.1 | NOK | 
+> > > http://autobuild.buildroot.net/results/75960db671807091fe9155aee9e46a6245e32590/
+> > 
+> > checking for prlimit... no
+> > configure: error: flock selected, but required timer_create function not available
+> > 
+> > Not sure. Alexey ?
+> 
+> Well I was trying to reproduce that locally but to no avail.
+> Indeed I tried to strip everything but "util-linux" from defconfig to save time so
+> might be that's the reason of my failed attempt.
+> 
+> Still google tells me there's a similar issue with MIPSEL, see
+> http://autobuild.buildroot.org/results/112/112e8b85783f5aaba42a937a6eb064317615a21b/build-end.log
+> 
+> So I would assume that's not just ARC. Still I'm going to start building full defconfig
+> from failed build and we'll see if I'll be able to trigger that same issue.
+
+Ok I got it reproduced and it looks like another static build problem.
+What happens util-linux on configuration step tries to build and example that
+uses timer_create() function. That function exists in librt and configuration
+utility correctly adds this lib (-lrt).
+
+But timer_create() uses pthreads internally and so for successful linkage "-lpthread"
+is required as well (in addition to "-lrt").
+
+I think log below is quite self-explaining:
+------------------->8-----------------
+configure:18434: checking for timer_create in -lrt
+configure:18459: /home/autobuild/instance-1/output/host/usr/bin/arc-buildroot-linux-uclibc-gcc -std=gnu99 -o conftest 
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -matomic -Os  -static -D_LARGEFILE_SOURCE 
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static conftest.c -lrt   >&5
+/home/autobuild/instance-1/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/librt.a(timer_create.os): In
+function `timer_create':
+timer_create.c:(.text+0x96): undefined reference to `pthread_once'
+timer_create.c:(.text+0xc8): undefined reference to `pthread_attr_init'
+timer_create.c:(.text+0xec): undefined reference to `pthread_attr_setdetachstate'
+timer_create.c:(.text+0x130): undefined reference to `pthread_mutex_lock'
+timer_create.c:(.text+0x14a): undefined reference to `pthread_mutex_unlock'
+/home/autobuild/instance-1/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/librt.a(timer_routines.os): In
+function `timer_helper_thread':
+timer_routines.c:(.text+0x84): undefined reference to `pthread_mutex_lock'
+timer_routines.c:(.text+0xb8): undefined reference to `pthread_create'
+timer_routines.c:(.text+0xc6): undefined reference to `pthread_mutex_unlock'
+timer_routines.c:(.text+0xd2): undefined reference to `pthread_exit'
+/home/autobuild/instance-1/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/librt.a(timer_routines.os): In
+function `__start_helper_thread':
+timer_routines.c:(.text+0x120): undefined reference to `pthread_attr_init'
+timer_routines.c:(.text+0x12c): undefined reference to `pthread_attr_setstacksize'
+timer_routines.c:(.text+0x166): undefined reference to `pthread_create'
+timer_routines.c:(.text+0x18c): undefined reference to `pthread_attr_destroy'
+timer_routines.c:(.text+0x19c): undefined reference to `pthread_atfork'
+collect2: error: ld returned 1 exit status
+------------------->8-----------------
+
+I've got a fix already but first I'd like to upstream my change and apply it
+as a true back-port once fix is in upstream.
+
+If we don't have enough time I may post my fix for Buildroot
+(these are just 2 additional patches for util-linux) right away.
+
+-Alexey
