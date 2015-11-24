@@ -1,123 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Nov 2015 19:39:06 +0100
-Subject: [Buildroot] [PATCH 3/3] package/gcc: align gcc-final
- configure-cmds to the generic ones
-In-Reply-To: <20151123211441.5135a9d2@free-electrons.com>
-References: <cover.1448202976.git.yann.morin.1998@free.fr>
- <4d9f7a6896c496372a4f415987e60eeeac79225b.1448202976.git.yann.morin.1998@free.fr>
- <20151123211441.5135a9d2@free-electrons.com>
-Message-ID: <20151124183906.GA3904@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Nov 2015 19:43:01 +0100
+Subject: [Buildroot] [PATCH 2/2] libtirpc: bump to version 1.0.1
+In-Reply-To: <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
+References: <1446712210-14129-1-git-send-email-peda@lysator.liu.se>
+ <1446712210-14129-3-git-send-email-peda@lysator.liu.se>
+Message-ID: <20151124194301.5dd9ece4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Peter Rosin,
 
-On 2015-11-23 21:14 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 22 Nov 2015 15:39:43 +0100, Yann E. MORIN wrote:
-> > Since 7d6c79 (Compile static versions of gcc libraries) was applied, the
-> > generic configure commands have been updated, but those changes have not
-> > been propagated to the gcc-final custom configure commands.
-> > 
-> > Update the gcc-final custom configure commands to better match the
-> > generic ones.
-> > 
-> > We do not propagate --disable-dependency-tracking because it breaks the
-> > build, and --enable-shared (because of 169141a).
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Thu,  5 Nov 2015 09:30:10 +0100, Peter Rosin wrote:
+> From: Peter Rosin <peda@axentia.se>
 > 
-> A little bit like Arnout, I am not sure to see the value of fully
-> aligning the configure commands just for the sake of it.
+> Adjust patch 0001 to trivial changes.
+> Adjust patch 0007 to remove new DES things.
+> Add patch 0008 directly from upstream to fix a late problem in the
+> 1.0.1 release.
+> 
+> Signed-off-by: Peter Rosin <peda@axentia.se>
 
-My reasoning is that, when we update the ./configure command in the
-infra, it's always for a good reason. The current set of options is the
-result of many successive fixes to so many build failures and corner
-cases, that we applied over time, and that we know ensure a proper
-build, hopefully in even the harshest conditions.
+This patch breaks the build of libtirpc, with the following error:
 
-It seems logical that we propagate those options to all packages that
-have to override the ./configure command (unless said options actually
-prevent the package from building, obviously). For gcc, we already know
-that the additional options (except the omitted ones) are not causing
-problems when building gcc-initial, at least (and I actually tested that
-they did not cause build failures in gcc-final either, on: arm, mips,
-i386 and xtensa).
+rpc_soc.c:64:24: fatal error: rpcsvc/nis.h: No such file or directory
+compilation terminated.
+Makefile:749: recipe for target 'libtirpc_la-rpc_soc.lo' failed
+make[4]: *** [libtirpc_la-rpc_soc.lo] Error 1
+make[4]: *** Waiting for unfinished jobs....
+Makefile:552: recipe for target 'all-recursive' failed
+make[3]: *** [all-recursive] Error 1
+Makefile:413: recipe for target 'all' failed
+make[2]: *** [all] Error 2
+package/pkg-generic.mk:188: recipe for target '/home/thomas/projets/buildroot/output/build/libtirpc-1.0.1/.stamp_built' failed
+make[1]: *** [/home/thomas/projets/buildroot/output/build/libtirpc-1.0.1/.stamp_built] Error 2
+Makefile:36: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-That way, when we update the command in the infra, we can easily
-propagate it down to overriding packages.
+Without this patch applied, it builds fine. The failing configuration
+is:
 
-> Another possibility is to add a mechanism in the infra to exclude some
-> generic config options from being used. But I tend to hate package
-> infrastructure that are needed only for one package, especially when
-> there is a way of not changing the infrastructure (which is the case
-> here).
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.11-rc1-71-g90d1299.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_RPCBIND=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-Let's see how many autotools packages do redefine their ./configure
-command:
+Can you look into this? Once fixed, maybe you can resend the series,
+and fix the permission problem in PATCH 1/2 at the same time?
 
-    $ git grep -l -E 'eval \$\((host-)?autotools-package' |wc -l
-    1055
+Thanks a lot!
 
-So, we have roughly 1055 (minus the manual) packages using the autotools
-(or the host-autotools) infra.
-
-    $ grep CONFIGURE_CMDS $(git grep -l -E 'eval \$\((host-)?autotools-package') |wc -l
-    10
-
-So, we have 8 (one hit is in the manual, one in a comment) packages that
-override their ./configure command, with the associated reason:
-
-  - berkeleydb: does not support in-tree build
-
-  - fbv:        does not support cross-compilation
-
-  - ffmpeg:     does not support --target and such
-
-  - gcc-final:  needs --enable-static and not --enable-shared, does not
-                support in-tree build, misses options from the infra
-
-  - glibc:      does not support in-tree build, needs bash to execute
-                ./configure, needs -O2 in CFLAGS, touches two files
-                after the ./configure, uses extra options and misses
-                some from the infra
-
-  - libgtk3:    host variant redefines all of the configure, build and
-                install commands, to build just the strictly required
-                stuff
-
-  - libplayer:  does not support --target and --host
-
-  - mdadm:      does nothing!
-
-So, it seems we could go with some cleanup there (any taker?):
-
-  - fbv, ffmpeg, libplayer, mdadm:
-                are not autotools packages, should be switched to the
-                generic package infrastructure
-
-  - libgtk3:    host variant should be switched to the generic package
-                infrastructure
-
-We'd be left with just three packages, berkeleydb, gcc-final and glibc.
-The common symptom for all three in the inability to build in-tree.
-Wecould probably ad dsupport for this in the gneeric infra, but it does
-not make sense to work on the infra just for those three cases, when you
-have a series do it so unconditionally, and for all the infras.
-
-So, only gcc-final needs to ditch one option. It does not make sense to
-add support in the infra just for this case.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
