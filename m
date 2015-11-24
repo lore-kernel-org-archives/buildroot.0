@@ -1,45 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Nov 2015 23:53:34 +0100
-Subject: [Buildroot] Buildroot defconfigs now being built on Travis CI
-In-Reply-To: <87r3jfyq7c.fsf@dell.be.48ers.dk>
-References: <20151123223332.3eff11d8@free-electrons.com>
- <874mgc4c6f.fsf@dell.be.48ers.dk>
- <20151124185221.16a4b432@free-electrons.com>
- <87d1uz15n2.fsf@dell.be.48ers.dk> <20151124223758.GB3904@free.fr>
- <87r3jfyq7c.fsf@dell.be.48ers.dk>
-Message-ID: <20151124225334.GD3904@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 25 Nov 2015 00:00:54 +0100
+Subject: [Buildroot] [PATCH] qt5base: support OVERRIDE_SRCDIR
+In-Reply-To: <20151124224053.GC3904@free.fr>
+References: <1448400109-32767-1-git-send-email-peter@korsgaard.com>
+ <20151124224053.GC3904@free.fr>
+Message-ID: <5654EC26.8070401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+On 24-11-15 23:40, Yann E. MORIN wrote:
+> Peter, All,
+> 
+> On 2015-11-24 22:21 +0100, Peter Korsgaard spake thusly:
+>> With OVERRIDE_SRCDIR we don't apply any of the qt5base patches, but the
+>> custom specs files are needed to be able to build - So install these in the
+>> configure step instead of having them as a patch.
+> 
+> IMHO, it make more sense to install them at post-patch (or post-extract)
+> rather than at the beginning of the configure step.
 
-On 2015-11-24 23:42 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> >> Probably it is, I just saw that you were copying them to the
->  >> autobuilders.
->  > Thomas did that so we could try to reproduce locally. Since it was
->  > working on our machines, we hunted a difference on the host. And
->  > suddenly, XFS... :-/
-> Heh ;) Any ideas about how to fix it for real? I think I saw a reference
-> on IRC to something in e2fsprogs to generate images?
+ But that wouldn't solve the issue, that it is not applied for OVERRIDE_SRCDIR.
+With OVERRIDE_SRCDIR, no extract or patch step is done, instead the rsync step
+is done.
 
-The ideal solution would be that e2fsprogs do a new major release: there
-is no in their master branch suport for mkfs.ext2 to behave like
-genext2fs and populate the filesystem with the content of a diectory.
+ We could add it in a POST_PATCH _and_ a POST_RSYNC hook, however.
 
-But it's only in their master, and there no release with that yet, even
-though they've had that for 1.5 years now...
+ Regards,
+ Arnout
 
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
