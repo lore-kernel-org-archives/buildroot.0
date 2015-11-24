@@ -1,33 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Nov 2015 23:42:31 +0100
-Subject: [Buildroot] Buildroot defconfigs now being built on Travis CI
-In-Reply-To: <20151124223758.GB3904@free.fr> (Yann E. MORIN's message of "Tue, 
- 24 Nov 2015 23:37:58 +0100")
-References: <20151123223332.3eff11d8@free-electrons.com>
- <874mgc4c6f.fsf@dell.be.48ers.dk>
- <20151124185221.16a4b432@free-electrons.com>
- <87d1uz15n2.fsf@dell.be.48ers.dk> <20151124223758.GB3904@free.fr>
-Message-ID: <87r3jfyq7c.fsf@dell.be.48ers.dk>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 24 Nov 2015 23:51:51 +0100
+Subject: [Buildroot] [PATCH 0/2] package/mono: bump to version 4.2.1.102
+Message-ID: <1448405513-20741-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+This patch series bumps mono to version 4.2.1.102
 
-Hi,
+Angelo Compagnucci (2):
+  package/mono: bump to version 4.2.1.102
+  package/monolite: bump to version 138
 
->> Probably it is, I just saw that you were copying them to the
- >> autobuilders.
-
- > Thomas did that so we could try to reproduce locally. Since it was
- > working on our machines, we hunted a difference on the host. And
- > suddenly, XFS... :-/
-
-Heh ;) Any ideas about how to fix it for real? I think I saw a reference
-on IRC to something in e2fsprogs to generate images?
+ package/mono/0003-fix-parallel-install.patch       | 40 ----------------------
+ ...glib-checking-for-locale_charset-function.patch | 28 +++++++++++++++
+ ...6-Remove-unit-tests-from-mono-compilation.patch | 29 ++++++++++++++++
+ package/mono/Config.in                             |  1 -
+ package/mono/mono.hash                             |  2 +-
+ package/mono/mono.mk                               |  2 +-
+ package/monolite/monolite.hash                     |  2 +-
+ package/monolite/monolite.mk                       |  2 +-
+ 8 files changed, 61 insertions(+), 45 deletions(-)
+ delete mode 100644 package/mono/0003-fix-parallel-install.patch
+ create mode 100644 package/mono/0005-eglib-checking-for-locale_charset-function.patch
+ create mode 100644 package/mono/0006-Remove-unit-tests-from-mono-compilation.patch
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+1.9.1
