@@ -1,9 +1,9 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 24 Nov 2015 20:40:35 +0100
+Date: Tue, 24 Nov 2015 20:45:46 +0100
 Subject: [Buildroot] WiringPi - problem adding package to my buildroot
 In-Reply-To: <CACvocV5bQo_YG05=ujYEJHygDQCw6_XZDLJ9zdCLO4tGCSswtg@mail.gmail.com>
 References: <CACvocV5bQo_YG05=ujYEJHygDQCw6_XZDLJ9zdCLO4tGCSswtg@mail.gmail.com>
-Message-ID: <20151124204035.7ecad2e8@gmx.net>
+Message-ID: <20151124204546.2039bf73@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,7 +22,7 @@ On Tue, 24 Nov 2015 19:17:43 +0100, "astrolite ." <ciclonite@gmail.com> wrote:
 > These are my files :
 > Config.in
 > 
-> config BR2_PAGiovanniCKAGE_WIRINGPI
+> config BR2_PACKAGE_WIRINGPI
 > bool "wiringPi"
 > help
 >  wiringPi libraries
@@ -35,19 +35,11 @@ On Tue, 24 Nov 2015 19:17:43 +0100, "astrolite ." <ciclonite@gmail.com> wrote:
 > WIRINGPI_AUTORECONF = YES
 > WIRINGPI_SITE = $(call github,ciclonite,pigpio,$(LIBPIGPIO_VERSION))
 
-Fixup for this line:
+Forgot to ask: Why a fork from the original sources? Whats wrong
+with the original WiringPi buildsystem?
 
-	WIRINGPI_SITE = $(call github,ciclonite,wiringPi,$(WIRINGPI_VERSION))
-
-and the following is missing:
-
-	$(eval $(autotools-package))
-
-but build failed with
-	config.status: error: cannot find input file: `Makefile.in'
-
-in the base directory, maybe a autoreconf/configure/make in the
-subdirectory wiringPi works?
+Regards,
+Peter
 
 > 
 > 
@@ -80,20 +72,5 @@ subdirectory wiringPi works?
 > Error 1
 > 
 > Someone can help me to find out the problem?
-
-I think a previous build was aborted while the package host-gawk was build, the patch was already
-applied, but before the file 'output/build/host-gawk-4.1.2/.stamp_patched' was written...
-
-Best way is to call clean for this package, eg.:
-
-	$ make host-gawk-dirclean
-
-or by hand:
-
-	$ rm -rf output/build/host-gawk-4.1.2
-
-Regards,
-Peter
-
 > Thanks,
 > Giovanni
