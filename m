@@ -1,60 +1,90 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 24 Nov 2015 17:04:37 +0000
-Subject: [Buildroot] [PATCH] systemd: Bump version
-In-Reply-To: <1448025473-10465-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1448025473-10465-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <565498A5.3060001@imgtec.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Tue, 24 Nov 2015 14:11:06 -0300
+Subject: [Buildroot] [PATCH v2] minizip: new package
+Message-ID: <1448385066-16920-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-On 20/11/15 13:17, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+v2: Use github helper, add hash.
+---
+ package/Config.in            |  1 +
+ package/minizip/Config.in    | 15 +++++++++++++++
+ package/minizip/minizip.hash |  2 ++
+ package/minizip/minizip.mk   | 16 ++++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/minizip/Config.in
+ create mode 100644 package/minizip/minizip.hash
+ create mode 100644 package/minizip/minizip.mk
 
-Build test for MIPS architecture:
-
-$ grep -E ^SYSTEMD_VERSION package/systemd/systemd.mk
-SYSTEMD_VERSION = 228
-
-$ file output/target/usr/lib/systemd/systemd
-output/target/usr/lib/systemd/systemd: ELF 64-bit LSB shared object,
-MIPS, version 1 (SYSV), dynamically linked, interpreter
-/lib64/ld-linux-mipsn8.so.1, for GNU/Linux 4.0.0, stripped
-
-Regards,
-
-Vincent.
-
-> ---
->  package/systemd/systemd.hash | 2 +-
->  package/systemd/systemd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-> index 60aebcf..8090200 100644
-> --- a/package/systemd/systemd.hash
-> +++ b/package/systemd/systemd.hash
-> @@ -1,2 +1,2 @@
->  # sha256 locally computed
-> -sha256 6766e8489e359f3d608a9f032eb1f52d7c55d76d0f9171837cf2b3284b2b904b  systemd-227.tar.gz
-> +sha256 dd124ff561a07e6439ed2b3713f38ca914df7747f110ce86deea17b56d245ae6  systemd-228.tar.gz
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 35dac83..e432069 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SYSTEMD_VERSION = 227
-> +SYSTEMD_VERSION = 228
->  SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
->  SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
->  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-> 
+diff --git a/package/Config.in b/package/Config.in
+index f9af31c..d6d5505 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -746,6 +746,7 @@ menu "Compression and decompression"
+ 	source "package/libsquish/Config.in"
+ 	source "package/libzip/Config.in"
+ 	source "package/lzo/Config.in"
++	source "package/minizip/Config.in"
+ 	source "package/snappy/Config.in"
+ 	source "package/szip/Config.in"
+ 	source "package/zlib/Config.in"
+diff --git a/package/minizip/Config.in b/package/minizip/Config.in
+new file mode 100644
+index 0000000..7205e00
+--- /dev/null
++++ b/package/minizip/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_MINIZIP
++	bool "minizip"
++	select BR2_PACKAGE_ZLIB
++	help
++	  Enables to extract files from a .zip archive file.
++	  It is compatible with PKZip 2.04g, WinZip, InfoZip,
++	  MimarSinan Codex Suite 2002 tools, and compatible sofware.
++
++	  https://github.com/nmoinvaz/minizip
++
++config BR2_PACKAGE_MINIZIP_DEMOS
++	bool "miniunzip/minizip"
++	depends on BR2_PACKAGE_MINIZIP
++	help
++	  Enable miniunzip/minizip binary tools.
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+new file mode 100644
+index 0000000..a303b2c
+--- /dev/null
++++ b/package/minizip/minizip.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	b39158bdf3d8bf81d3a7412dc761851fda398bc93d8989d5e940ed4ae5bbb52c	minizip-977afb22966e6ab0ee401293a8e85fe808133f9a.tar.gz
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+new file mode 100644
+index 0000000..5b87786
+--- /dev/null
++++ b/package/minizip/minizip.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# minizip
++#
++################################################################################
++
++MINIZIP_VERSION = 977afb22966e6ab0ee401293a8e85fe808133f9a
++MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
++MINIZIP_DEPENDENCIES = zlib
++MINIZIP_AUTORECONF = YES
++MINIZIP_INSTALL_STAGING = YES
++MINIZIP_CONF_OPTS = $(if $(BR2_PACKAGE_MINIZIP_DEMOS),--enable-demos)
++MINIZIP_LICENSE = zlib license
++MINIZIP_LICENSE_FILES = LICENSE
++
++$(eval $(autotools-package))
+-- 
+2.4.10
