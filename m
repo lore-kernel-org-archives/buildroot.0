@@ -1,184 +1,76 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 23 Nov 2015 23:23:21 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/zmqpp: fix static build issues
-Message-ID: <1448317402-10464-1-git-send-email-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Nov 2015 08:30:12 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-11-23
+Message-ID: <20151124073012.19317101E05@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Makefile for zmqpp builds both shared and static libraries and the client
-binary. This leads to several build issues in a pure static library context:
-  * R_ARM_TLS_LE32 relocation not permitted in shared object
-  * relocation R_ARC_32_ME against `_ZSt7nothrow' can not be used when making
-    a shared object; recompile with -fPIC
+Build statistics for 2015-11-23
+===============================
 
-We add a minimal patch to add some basic handling of building a shared or a
-static library only.
+        success : 77 
+       failures : 28 
+       timeouts : 0  
+          TOTAL : 105
 
-Additionally, disable the client for static only builds as it depends on
-building the shared library in zmqpp's Makefile. As there is already version
-4.1.2 available which provides a CMake build file which solves this issue
-(probably, not tested) we don't care for now.
+Classification of failures by reason
+====================================
 
-Fixes:
-http://autobuild.buildroot.net/results/345/345771eb488c60585e388fbbf4490df936e88e19/
-http://autobuild.buildroot.net/results/21b/21b6912c70a5c300bdabde53bee6a1d9cc3bbb02/
-http://autobuild.buildroot.net/results/d98/d9882d2ba00da16f76cea6d86a84cd4815ebbba2/
+                busybox-1.24.1 | 4 
+                    gmp-6.0.0a | 3 
+             lttng-tools-2.6.0 | 2 
+                openntpd-5.7p4 | 2 
+           libfreeimage-3.17.0 | 2 
+             util-linux-2.27.1 | 2 
+                   jimtcl-0.75 | 1 
+                   glog-v0.3.4 | 1 
+                   mplayer-1.2 | 1 
+freerdp-17834af7bb378f85a3b... | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+pifmrds-0bf57f9ce0d954365a3... | 1 
+         qt5connectivity-5.5.0 | 1 
+                  autossh-1.4e | 1 
+               arptables-0.0.4 | 1 
+                libgsasl-1.8.0 | 1 
+                   systemd-227 | 1 
+       openpgm-release-5-2-122 | 1 
+                   msmtp-1.6.2 | 1 
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
-Changes v2:
- - Preserve existing behaviour and build both the static and shared libraries
-   by default (suggested by Thomas Petazzoni)
- - For consistency reasons, add additional BUILD_STATIC variable.
- - Rename patch
- - Update commit log
----
- ...ow-building-shared-or-static-library-only.patch | 81 ++++++++++++++++++++++
- package/zmqpp/Config.in                            |  5 +-
- package/zmqpp/zmqpp.mk                             | 14 +++-
- 3 files changed, 97 insertions(+), 3 deletions(-)
- create mode 100644 package/zmqpp/0002-Allow-building-shared-or-static-library-only.patch
+Detail of failures
+===================
 
-diff --git a/package/zmqpp/0002-Allow-building-shared-or-static-library-only.patch b/package/zmqpp/0002-Allow-building-shared-or-static-library-only.patch
-new file mode 100644
-index 0000000..5dc2d86
---- /dev/null
-+++ b/package/zmqpp/0002-Allow-building-shared-or-static-library-only.patch
-@@ -0,0 +1,81 @@
-+From 4c83dd96d1f92627ecdb6b6ed80b8c278aea82f7 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Fri, 20 Nov 2015 19:51:50 +0100
-+Subject: [PATCH 2/3] Allow building shared or static library only
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ Makefile | 19 ++++++++++++++++---
-+ 1 file changed, 16 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 7d63077..90c7059 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -57,6 +57,9 @@ LIBRARY_ARCHIVE = lib$(LIBRARY_NAME).a
-+ CLIENT_TARGET   = $(LIBRARY_NAME)
-+ TESTS_TARGET    = $(LIBRARY_NAME)-tests
-+ 
-++BUILD_SHARED   ?= yes
-++BUILD_SHARED   ?= yes
-++
-+ CONFIG_FLAGS =
-+ ifeq ($(CONFIG),debug)
-+ 	CONFIG_FLAGS = -g -fno-inline -ftemplate-depth-1000
-+@@ -71,7 +74,7 @@ ifneq (,$(findstring $(CONFIG),release loadtest))
-+ 	CONFIG_FLAGS = -O3 -funroll-loops -ffast-math -finline-functions -fomit-frame-pointer -DNO_DEBUG_LOG -DNO_TRACE_LOG -DNDEBUG
-+ endif
-+ 
-+-COMMON_FLAGS = -MMD -std=c++0x -pipe -Wall -fPIC \
-++COMMON_FLAGS = -MMD -std=c++0x -pipe -Wall \
-+ 	-DBUILD_ENV=$(CONFIG) \
-+ 	-DBUILD_VERSION='"$(APP_VERSION)"' \
-+ 	-DBUILD_VERSION_MAJOR=$(VERSION_MAJOR) \
-+@@ -82,6 +85,15 @@ COMMON_FLAGS = -MMD -std=c++0x -pipe -Wall -fPIC \
-+ 	-DBUILD_CLIENT_NAME='"$(CLIENT_TARGET)"' \
-+ 	-I$(SRC_PATH)
-+ 
-++ifeq ($(BUILD_SHARED),yes)
-++COMMON_FLAGS += -fPIC
-++LIBRARY_TARGETS += $(LIBRARY_SHARED)
-++endif
-++
-++ifeq ($(BUILD_STATIC),yes)
-++LIBRARY_TARGETS += $(LIBRARY_ARCHIVE)
-++endif
-++
-+ COMMON_LIBS = -lzmq
-+ 
-+ LIBRARY_LIBS =  
-+@@ -125,9 +137,11 @@ check: $(LIBRARY_SHARED) $(LIBRARY_ARCHIVE) test
-+ 
-+ install:
-+ 	install -m 644 $(ALL_LIBRARY_INCLUDES) $(INCLUDEDIR)/$(LIBRARY_DIR)
-++ifeq ($(BUILD_SHARED),yes)
-+ 	install -m 755 $(BUILD_PATH)/$(LIBRARY_SHARED).$(VERSION_MAJOR) $(LIBDIR)/$(LIBRARY_SHARED).$(APP_VERSION)
-+ 	ln -sf $(LIBRARY_SHARED).$(APP_VERSION) $(LIBDIR)/$(LIBRARY_SHARED).$(VERSION_MAJOR)
-+ 	ln -sf $(LIBRARY_SHARED).$(APP_VERSION) $(LIBDIR)/$(LIBRARY_SHARED)
-++endif
-+ 	if [ -f $(BUILD_PATH)/$(CLIENT_TARGET) ]; then install -m 755 $(BUILD_PATH)/$(CLIENT_TARGET) $(BINDIR); fi
-+ 	$(LDCONFIG)
-+ 	@echo "use make installcheck to test the install"
-+@@ -148,7 +162,7 @@ clean:
-+ 
-+ client: $(CLIENT_TARGET)
-+ 
-+-library: $(LIBRARY_SHARED) $(LIBRARY_ARCHIVE)
-++library: $(LIBRARY_TARGETS)
-+ 
-+ #
-+ # BUILD Targets
-+@@ -187,4 +201,3 @@ test: $(TESTS_TARGET)
-+ $(OBJECT_PATH)/%.o: $(SRC_PATH)/%.cpp
-+ 	-mkdir -p $(dir $@)
-+ 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(COMMON_FLAGS) $(CONFIG_FLAGS) -c -o $@ $<
-+-
-+-- 
-+2.6.2
-+
-diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
-index a10602f..0379224 100644
---- a/package/zmqpp/Config.in
-+++ b/package/zmqpp/Config.in
-@@ -22,6 +22,7 @@ if BR2_PACKAGE_ZMQPP
- 
- config BR2_PACKAGE_ZMQPP_CLIENT
- 	bool "zmqpp client"
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BOOST
-@@ -30,8 +31,8 @@ config BR2_PACKAGE_ZMQPP_CLIENT
- 	  Build and install the zmqpp client, a command line tool that can be
- 	  used to listen or send to zeromq sockets.
- 
--comment "zmqpp client needs a toolchain w/ threads"
-+comment "zmqpp client needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
- 
- endif
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index e506eaf..d6cffc7 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -19,10 +19,22 @@ ifeq ($(BR2_PACKAGE_ZMQPP_CLIENT),y)
- ZMQPP_DEPENDENCIES += boost
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+TARGET_CONFIGURE_OPTS += BUILD_STATIC=yes
-+else
-+TARGET_CONFIGURE_OPTS += BUILD_STATIC=no
-+endif # Static enabled
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+TARGET_CONFIGURE_OPTS += BUILD_SHARED=yes
-+else
-+TARGET_CONFIGURE_OPTS += BUILD_SHARED=no
-+endif # Shared enabled
-+
- define ZMQPP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		LDFLAGS="$(ZMQPP_LDFLAGS)" \
--		$(ZMQPP_MAKE_OPTS) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),all) -C $(@D)
-+		$(ZMQPP_MAKE_OPTS) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),client,library) -C $(@D)
- endef
- 
- define ZMQPP_INSTALL_TARGET_CMDS
+      x86_64 |                arptables-0.0.4 | NOK | http://autobuild.buildroot.net/results/716e81f49f8894b7248f394919c8f22efb908277/
+       nios2 |                   autossh-1.4e | NOK | http://autobuild.buildroot.net/results/fcede62abe47e5c6b674ddc6691506dc97cc5a42/
+       sparc |                 busybox-1.24.1 | NOK | http://autobuild.buildroot.net/results/3c547fac82919bc303f7eead2c340ac57a44eec7/
+       sparc |                 busybox-1.24.1 | NOK | http://autobuild.buildroot.net/results/2337448d4acf560584b582a66d6e0ee6493d8b14/
+       sparc |                 busybox-1.24.1 | NOK | http://autobuild.buildroot.net/results/ff8e5877b778babf8373930c3595c98434d6fca8/
+       sparc |                 busybox-1.24.1 | NOK | http://autobuild.buildroot.net/results/eeba99bdb4001ce7aa5d749c4ea93d763fcf5293/
+        i686 | freerdp-17834af7bb378f85a3b... | NOK | http://autobuild.buildroot.net/results/820dbf441ecb3a91b1b936bd0bf39ed83148c69a/
+microblazeel |                    glog-v0.3.4 | NOK | http://autobuild.buildroot.net/results/db0babfa7319a9148640758e0632167037343e12/
+    mips64el |                     gmp-6.0.0a | NOK | http://autobuild.buildroot.net/results/d0686b3e7b8884f93034d4ea4b79fa8590ffa221/
+    mips64el |                     gmp-6.0.0a | NOK | http://autobuild.buildroot.net/results/e41bdf620e101ef294fcadbddc4ba324ca2d44b9/
+    mips64el |                     gmp-6.0.0a | NOK | http://autobuild.buildroot.net/results/a898d0284acb5bb1fef015f5b2575d1bab48b6d6/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/9274bc28c540938ae9563d6afb8e79bb82ab03cc/
+     sparc64 |                    jimtcl-0.75 | NOK | http://autobuild.buildroot.net/results/0fe2d7384f1b4d162fdfde4b1ba4dad1fe5bcdae/
+         arm |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/0cb2f0c69301c7a85a354c435da245cd904533fb/
+     aarch64 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/52c2967015aa79843db05e901a1563447a4029b2/
+      x86_64 |                 libgsasl-1.8.0 | NOK | http://autobuild.buildroot.net/results/df75c6ee9bb7c2b4c7ca3c46922116623cc71c49/
+         arm |              lttng-tools-2.6.0 | NOK | http://autobuild.buildroot.net/results/b78cf56568e600273235dfa2e52044a02d517bfd/
+         arm |              lttng-tools-2.6.0 | NOK | http://autobuild.buildroot.net/results/d55798e30b40ea717a742a8621b57bf21ba394a8/
+     aarch64 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/d6030fe8fd6cedb2b2a7b8b4296f072d6301fa1e/
+         arm |                    msmtp-1.6.2 | NOK | http://autobuild.buildroot.net/results/e82eced45fc9628dfe404caa56d1e7401c2b522c/
+         arm |                 openntpd-5.7p4 | NOK | http://autobuild.buildroot.net/results/9013241676f08c96b1c09caee634029a265b07b0/
+         arm |                 openntpd-5.7p4 | NOK | http://autobuild.buildroot.net/results/9da6bdec21e93c1d1cfff045531b22edf9baf4c3/
+      x86_64 |        openpgm-release-5-2-122 | NOK | http://autobuild.buildroot.net/results/b2dc2914d55f71b3817fdc03afe922ba1d21df28/
+         arm | pifmrds-0bf57f9ce0d954365a3... | NOK | http://autobuild.buildroot.net/results/e0609db8ce1e3a3411f34c0716ced2e2da9940fe/
+     powerpc |          qt5connectivity-5.5.0 | NOK | http://autobuild.buildroot.net/results/c0517f5a1365bf80291e480c273767b0ada5e74b/
+       sparc |                    systemd-227 | NOK | http://autobuild.buildroot.net/results/dd7b7f5cb6fdd29d0d3010a66440e6e5af0535ae/
+         arm |              util-linux-2.27.1 | NOK | http://autobuild.buildroot.net/results/8c8e2e6bce4c15c0538fab659316d118cab6197b/
+         arm |              util-linux-2.27.1 | NOK | http://autobuild.buildroot.net/results/3fe1219694778333ee863f6752e829a711f74c3e/
+
+
 -- 
-2.6.2
+http://autobuild.buildroot.net
