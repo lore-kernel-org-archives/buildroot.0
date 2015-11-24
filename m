@@ -1,90 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Nov 2015 18:52:21 +0100
-Subject: [Buildroot] Buildroot defconfigs now being built on Travis CI
-In-Reply-To: <874mgc4c6f.fsf@dell.be.48ers.dk>
-References: <20151123223332.3eff11d8@free-electrons.com>
- <874mgc4c6f.fsf@dell.be.48ers.dk>
-Message-ID: <20151124185221.16a4b432@free-electrons.com>
+From: astrolite . <ciclonite@gmail.com>
+Date: Tue, 24 Nov 2015 19:17:43 +0100
+Subject: [Buildroot] WiringPi - problem adding package to my buildroot
+Message-ID: <CACvocV5bQo_YG05=ujYEJHygDQCw6_XZDLJ9zdCLO4tGCSswtg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hi all,
+After  sucessfully added pigpio package to buildroot, i'm tried to add
+wiringPi package.
+But i've a problem that not understand..
 
-On Mon, 23 Nov 2015 22:51:20 +0100, Peter Korsgaard wrote:
+These are my files :
+Config.in
 
->  > The last build has been fully successful, with all 95 defconfigs
->  > building fine. I have scheduled to rebuild all defconfigs every two
->  > days, of course only if commits have been made to Buildroot.
-> 
->  > For the moment, notifications of build working fine or failing are just
->  > sent to some testing IRC channel. Once the mechanism has proven to work
->  > well for a week or two, I'll adjust the notifications so that they are
->  > sent to the official #buildroot IRC channel, and possibly by e-mail as
->  > well (to the mailing list or directly to interested people).
->  > Suggestions on this are welcome.
-> 
-> I wouldn't mind getting a notification per email if something fails.
+config BR2_PACKAGE_WIRINGPI
+bool "wiringPi"
+help
+ wiringPi libraries
 
-Sure, I'll add that soon.
+wiringPi.mk
 
->  > Now, if you want the gory details of how this is implemented:
-> 
-> Is that XFS issue something we want to fix before 2015.11?
+WIRINGPI_VERSION = 488e3729e44721b79ba655429f453f7396157c22
+WIRINGPI_INSTALL_TARGET = YES
+WIRINGPI_INSTALL_STAGING = YES
+WIRINGPI_AUTORECONF = YES
+WIRINGPI_SITE = $(call github,ciclonite,pigpio,$(LIBPIGPIO_VERSION))
 
-I don't think we can fix it before 2015.11. The hack I've done in
-Travis is just what it is: a crude hack. The underlying problem is that
-we ask the host filesystem how many blocks are needed to store
-output/target/. It works fine if your host filesystem == target
-filesystem == ext2/3/4. And it probably works for most target
-filesystems, by chance. But it is clearly not correct, since the
-filesystem on your host may be different than the one used on your
-target.
 
-Specifically, XFS stores small files and symlinks directly inside the
-inode instead of allocating a block for them. So the number of blocks
-needed to store output/target on the host is much smaller than what is
-needed on the target ext2 filesystem.
+when i launch make :
 
-> What is that
-> stupidpid thing about? Does travis stop if it doesn't get any output?
+make
+/usr/bin/make -j1  HOSTCC="/usr/bin/gcc" HOSTCXX="/usr/bin/g++"
+silentoldconfig
+make[1]: Entering directory
+`/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05'
+BR2_DEFCONFIG=''
+KCONFIG_AUTOCONFIG=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/auto.conf
+KCONFIG_AUTOHEADER=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/autoconf.h
+KCONFIG_TRISTATE=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/tristate.config
+BR2_CONFIG=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/.config
+BR2_EXTERNAL=support/dummy-external SKIP_LEGACY=
+/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/conf
+--silentoldconfig Config.in
+make[1]: Leaving directory
+`/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05'
+>>> host-gawk 4.1.2 Patching
 
-Travis is somewhat annoying in his handling of logs:
+Applying 0001-no-versioned.patch using patch:
+patching file Makefile.in
+Reversed (or previously applied) patch detected!  Skipping patch.
+2 out of 2 hunks ignored -- saving rejects to file Makefile.in.rej
+Patch failed!  Please fix 0001-no-versioned.patch!
+make: ***
+[/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/host-gawk-4.1.2/.stamp_patched]
+Error 1
 
- * Originally, I was just calling "make", so Travis was seeing the
-   entire make output. But Travis doesn't like to have more than 4 MB
-   of text displayed on the standard output, so it was killing the
-   builds when they reached 4 MB.
-
- * So, I pipped the output into tee to keep the log, and then grep to
-   only show the ">>>" messages on stdout. But then, Travis is not
-   happy because stdout is sometimes quiet for "too long".
-
-So, I ended up starting a stupid background process that just says
-"Still building" every minute. A bit silly, but works.
-
-> I see that results are copied to the autobuilder server? How are they
-> visualized? Just together with the other autobuild results?
-
-Right now they are not publicly available. However, they are indeed on
-the machine that hosts autobuild.buildroot.org, so it's just a matter
-of doing a bit of webserver configuration to provide access to them. My
-plan is to add a message at the end of the build that tells the URL at
-which the full log has been saved.
-
-However, the logs are quite big, so I don't think I will be able to
-keep them forever (just like I don't keep the full logs of the random
-tests on autobuild.b.o, I only keep build-end.log).
-
-Isn't the last 1000 lines of log already displayed in the Travis
-console sufficient to debug most problems anyway?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Someone can help me to find out the problem?
+Thanks,
+Giovanni
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151124/b4b92be0/attachment.html>
