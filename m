@@ -1,7 +1,7 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 24 Nov 2015 22:34:06 +0100
-Subject: [Buildroot] [PATCH v1] wirinpi: new package
-Message-ID: <1448400846-4931-1-git-send-email-ps.report@gmx.net>
+Date: Tue, 24 Nov 2015 22:36:31 +0100
+Subject: [Buildroot] [PATCH v2] wiringpi: new package
+Message-ID: <1448400991-5011-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,6 +9,9 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - fix typo in commit message (wirinpi vs wiringpi)
 ---
  package/Config.in                                  |  1 +
  ...-Fix-devLib-gpio-include-and-library-path.patch | 40 ++++++++++++++++++++++
