@@ -1,68 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Nov 2015 18:23:09 +0100
-Subject: [Buildroot] [PATCH v2] libgdiplus: new package
-In-Reply-To: <1448361491-14651-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1448361491-14651-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20151124182309.5bd10f9a@free-electrons.com>
+Date: Tue, 24 Nov 2015 18:52:21 +0100
+Subject: [Buildroot] Buildroot defconfigs now being built on Travis CI
+In-Reply-To: <874mgc4c6f.fsf@dell.be.48ers.dk>
+References: <20151123223332.3eff11d8@free-electrons.com>
+ <874mgc4c6f.fsf@dell.be.48ers.dk>
+Message-ID: <20151124185221.16a4b432@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+Peter,
 
-This package looks almost ready to go, there are just two remaining
-things I believe. See below.
+On Mon, 23 Nov 2015 22:51:20 +0100, Peter Korsgaard wrote:
 
-On Tue, 24 Nov 2015 08:38:11 -0200, Sergio Prado wrote:
+>  > The last build has been fully successful, with all 95 defconfigs
+>  > building fine. I have scheduled to rebuild all defconfigs every two
+>  > days, of course only if commits have been made to Buildroot.
+> 
+>  > For the moment, notifications of build working fine or failing are just
+>  > sent to some testing IRC channel. Once the mechanism has proven to work
+>  > well for a week or two, I'll adjust the notifications so that they are
+>  > sent to the official #buildroot IRC channel, and possibly by e-mail as
+>  > well (to the mailing list or directly to interested people).
+>  > Suggestions on this are welcome.
+> 
+> I wouldn't mind getting a notification per email if something fails.
 
-> diff --git a/package/libgdiplus/libgdiplus.hash b/package/libgdiplus/libgdiplus.hash
-> new file mode 100644
-> index 000000000000..8642d5cbf66a
-> --- /dev/null
-> +++ b/package/libgdiplus/libgdiplus.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +md5    6e9a80ba921e4842acd5a12b14c78dc9                                 libgdiplus-3.12.tar.gz
-> +sha256 7eadc5105c6352d456c5f8699dc89260bf402e82ce6668e7e0c625519f9e5b44 libgdiplus-3.12.tar.gz
+Sure, I'll add that soon.
 
-Only the sha256 is useful here. It's a strong hash, there's no need to
-add another weak hash such as md5.
+>  > Now, if you want the gory details of how this is implemented:
+> 
+> Is that XFS issue something we want to fix before 2015.11?
 
-> +LIBGDIPLUS_VERSION = 3.12
-> +LIBGDIPLUS_SITE = $(call github,mono,libgdiplus,$(LIBGDIPLUS_VERSION))
-> +LIBGDIPLUS_LICENSE = MIT
-> +LIBGDIPLUS_LICENSE_FILES = COPYING src/carbon-private.h
+I don't think we can fix it before 2015.11. The hack I've done in
+Travis is just what it is: a crude hack. The underlying problem is that
+we ask the host filesystem how many blocks are needed to store
+output/target/. It works fine if your host filesystem == target
+filesystem == ext2/3/4. And it probably works for most target
+filesystems, by chance. But it is clearly not correct, since the
+filesystem on your host may be different than the one used on your
+target.
 
-This is the part that I didn't like. I looked at LICENSE, and got
-confused. Then I saw the discussion you had with Arnout about all the
-licensing mess in this package.
+Specifically, XFS stores small files and symlinks directly inside the
+inode instead of allocating a block for them. So the number of blocks
+needed to store output/target on the host is much smaller than what is
+needed on the target ext2 filesystem.
 
-So what I'd like to see here is:
+> What is that
+> stupidpid thing about? Does travis stop if it doesn't get any output?
 
- 1/ A comment above those two lines that explain the situation (that
- the LICENSE file is incorrect, that the real license is indeed MIT,
- etc.)
+Travis is somewhat annoying in his handling of logs:
 
- 2/ A bug report being made to the upstream project to ask them to fix
- this mess.
+ * Originally, I was just calling "make", so Travis was seeing the
+   entire make output. But Travis doesn't like to have more than 4 MB
+   of text displayed on the standard output, so it was killing the
+   builds when they reached 4 MB.
 
-> +# there is a bug in the configure script that enables pango support when 
-> +# passing --without-pango, so let's just not use it
-> +ifeq ($(BR2_PACKAGE_PANGO),y)
-> +LIBGDIPLUS_CONF_OPTS += --with-pango
-> +LIBGDIPLUS_DEPENDENCIES += pango
-> +endif
+ * So, I pipped the output into tee to keep the log, and then grep to
+   only show the ">>>" messages on stdout. But then, Travis is not
+   happy because stdout is sometimes quiet for "too long".
 
-You could also report this bug upstream. Since upstream uses github,
-it's pretty trivial to report bugs, so I think we should do it when we
-discover problems.
+So, I ended up starting a stupid background process that just says
+"Still building" every minute. A bit silly, but works.
 
-Can you respin a new version of the patch that fixes the hash thing and
-adds more details about the license?
+> I see that results are copied to the autobuilder server? How are they
+> visualized? Just together with the other autobuild results?
 
-Thanks a lot!
+Right now they are not publicly available. However, they are indeed on
+the machine that hosts autobuild.buildroot.org, so it's just a matter
+of doing a bit of webserver configuration to provide access to them. My
+plan is to add a message at the end of the build that tells the URL at
+which the full log has been saved.
+
+However, the logs are quite big, so I don't think I will be able to
+keep them forever (just like I don't keep the full logs of the random
+tests on autobuild.b.o, I only keep build-end.log).
+
+Isn't the last 1000 lines of log already displayed in the Travis
+console sufficient to debug most problems anyway?
+
+Best regards,
 
 Thomas
 -- 
