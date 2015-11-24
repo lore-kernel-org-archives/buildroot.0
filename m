@@ -1,50 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Nov 2015 18:36:35 +0100
-Subject: [Buildroot] [git commit] core/pkg-autotools: align host configure
-	commands to target one
-Message-ID: <20151201232121.1F297802AD@busybox.osuosl.org>
+Date: Tue, 24 Nov 2015 17:17:19 +0100
+Subject: [Buildroot] [git commit] micropython-lib: Add hash file
+Message-ID: <20151201232121.6337581932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d6858dd7410ee97546fc09d55a46e39289c456f
+commit: http://git.buildroot.net/buildroot/commit/?id=ba47817d52fb304b0227c318e3a8d9a8e5494ea9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The host configure commands are not indented the same way as the target
-ones. Besides, there are leading spaces (instead of TABs) on one line.
-
-Replicate the same indentation as used for the target commands.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotools.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/micropython-lib/micropython-lib.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 4787914..502eeea 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -214,12 +214,12 @@ else
- # installed.
- define $(2)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache; \
--	        $$(HOST_CONFIGURE_OPTS) \
--		CFLAGS="$$(HOST_CFLAGS)" \
--		LDFLAGS="$$(HOST_LDFLAGS)" \
--		$$($$(PKG)_CONF_ENV) \
--		CONFIG_SITE=/dev/null \
--		./configure \
-+	$$(HOST_CONFIGURE_OPTS) \
-+	CFLAGS="$$(HOST_CFLAGS)" \
-+	LDFLAGS="$$(HOST_LDFLAGS)" \
-+	$$($$(PKG)_CONF_ENV) \
-+	CONFIG_SITE=/dev/null \
-+	./configure \
- 		--prefix="$$(HOST_DIR)/usr" \
- 		--sysconfdir="$$(HOST_DIR)/etc" \
- 		--localstatedir="$$(HOST_DIR)/var" \
+diff --git a/package/micropython-lib/micropython-lib.hash b/package/micropython-lib/micropython-lib.hash
+new file mode 100644
+index 0000000..7ab22d5
+--- /dev/null
++++ b/package/micropython-lib/micropython-lib.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 f66bfe0e7d2d61119a5def989f74278f42bee7d04162913ea60d3f2955d65909  micropython-lib-v0.5.tar.gz
