@@ -1,34 +1,56 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 24 Nov 2015 15:34:07 +0000
-Subject: [Buildroot] [PATCH 6/7] toolchain-external: CodeSourcery MIPS:
- support only one version
-In-Reply-To: <1448123780-30067-6-git-send-email-romain.naour@openwide.fr>
-References: <1448123780-30067-1-git-send-email-romain.naour@openwide.fr>
- <1448123780-30067-6-git-send-email-romain.naour@openwide.fr>
-Message-ID: <5654836F.6020507@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Nov 2015 16:41:07 +0100
+Subject: [Buildroot] Overriding Buildroot packages
+In-Reply-To: <CAPER3A0P1Qyd_=ktyHt=udawndUfHue8SE_zDQxMHjz+r+pPtg@mail.gmail.com>
+References: <CAPER3A0P1Qyd_=ktyHt=udawndUfHue8SE_zDQxMHjz+r+pPtg@mail.gmail.com>
+Message-ID: <20151124164107.3570084a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Hello,
 
-On 21/11/15 16:36, Romain Naour wrote:
-> See the conclusion about external toolchains during the Buildroot
-> meeting [1]:
-> "In the future, we stick to a single external toolchain version. The
-> Kconfig symbol should not encode the version (avoid legacy handling)"
+On Tue, 24 Nov 2015 14:43:21 +0100, Hajime Branko Yamasaki Vukelic
+wrote:
+
+> I've set up my build such that all modification are done in
+> BR2_EXTERNAL directory, and I have a submodule that points to
+> unmodified upstream buildroot sources.
 > 
-> [1] http://elinux.org/index.php?title=Buildroot:DeveloperDaysELCE2015#Report
+> I've been trying to find a way to override a package that is normally
+> provided by Buildroot. By 'override' I mean completely swap it with
+> another package definition, possibly with different patches, etc.
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Right now I've created a package that has a completely different name
+> (e.g., for package 'foo', I have 'foo-custom'), but this breaks
+> dependencies for packages that would otherwise depend on the original.
+> 
+> I've dug into pkg-generic.mk and I see that it may not really be
+> possible, but I wanted to confirm. Can someone tell me if I'm missing
+> something or this really isn't possible without modifying the
+> buildroot version of the package?
 
-Build a minimal rootfs using that toolchain after applying this patch.
+This is really not possible with the current Buildroot, and would be
+quite complicated to implement in a generic way.
 
-Regards,
+If all you need is to apply a set of additional patches, then you can
+do so without modifying the Buildroot package itself by using the
+BR2_GLOBAL_PATCH_DIR mechanism.
 
-Vincent.
+However, if you indeed need a completely different version of the
+package, we don't have a really good way of handling that.
+
+Are you able to give more details about which specific package you need
+to override and why? It would be useful for us to understand such use
+cases, and see if there is a different solution/option, or if the use
+case is really too specific.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
