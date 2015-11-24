@@ -1,82 +1,126 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Nov 2015 21:53:05 +0100
-Subject: [Buildroot] Buildroot defconfigs now being built on Travis CI
-In-Reply-To: <20151124185221.16a4b432@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 24 Nov 2015 18:52:21 +0100")
-References: <20151123223332.3eff11d8@free-electrons.com>
- <874mgc4c6f.fsf@dell.be.48ers.dk>
- <20151124185221.16a4b432@free-electrons.com>
-Message-ID: <87d1uz15n2.fsf@dell.be.48ers.dk>
+Date: Tue, 24 Nov 2015 22:21:49 +0100
+Subject: [Buildroot] [PATCH] qt5base: support OVERRIDE_SRCDIR
+Message-ID: <1448400109-32767-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+With OVERRIDE_SRCDIR we don't apply any of the qt5base patches, but the
+custom specs files are needed to be able to build - So install these in the
+configure step instead of having them as a patch.
 
-Hi,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/0002-mkspecs-files.patch | 41 ----------------------------
+ package/qt5/qt5base/qmake.conf               | 24 ++++++++++++++++
+ package/qt5/qt5base/qplatformdefs.h          |  1 +
+ package/qt5/qt5base/qt5base.mk               |  4 +++
+ 4 files changed, 29 insertions(+), 41 deletions(-)
+ delete mode 100644 package/qt5/qt5base/0002-mkspecs-files.patch
+ create mode 100644 package/qt5/qt5base/qmake.conf
+ create mode 100644 package/qt5/qt5base/qplatformdefs.h
 
->> Is that XFS issue something we want to fix before 2015.11?
-
- > I don't think we can fix it before 2015.11. The hack I've done in
- > Travis is just what it is: a crude hack. The underlying problem is that
- > we ask the host filesystem how many blocks are needed to store
- > output/target/. It works fine if your host filesystem == target
- > filesystem == ext2/3/4. And it probably works for most target
- > filesystems, by chance. But it is clearly not correct, since the
- > filesystem on your host may be different than the one used on your
- > target.
-
- > Specifically, XFS stores small files and symlinks directly inside the
- > inode instead of allocating a block for them. So the number of blocks
- > needed to store output/target on the host is much smaller than what is
- > needed on the target ext2 filesystem.
-
-Ok :/
-
-
- >> What is that
- >> stupidpid thing about? Does travis stop if it doesn't get any output?
-
- > Travis is somewhat annoying in his handling of logs:
-
- >  * Originally, I was just calling "make", so Travis was seeing the
- >    entire make output. But Travis doesn't like to have more than 4 MB
- >    of text displayed on the standard output, so it was killing the
- >    builds when they reached 4 MB.
-
- >  * So, I pipped the output into tee to keep the log, and then grep to
- >    only show the ">>>" messages on stdout. But then, Travis is not
- >    happy because stdout is sometimes quiet for "too long".
-
- > So, I ended up starting a stupid background process that just says
- > "Still building" every minute. A bit silly, but works.
-
-Gaah, silly - But ok, if it works..
-
-
- >> I see that results are copied to the autobuilder server? How are they
- >> visualized? Just together with the other autobuild results?
-
- > Right now they are not publicly available. However, they are indeed on
- > the machine that hosts autobuild.buildroot.org, so it's just a matter
- > of doing a bit of webserver configuration to provide access to them. My
- > plan is to add a message at the end of the build that tells the URL at
- > which the full log has been saved.
-
- > However, the logs are quite big, so I don't think I will be able to
- > keep them forever (just like I don't keep the full logs of the random
- > tests on autobuild.b.o, I only keep build-end.log).
-
- > Isn't the last 1000 lines of log already displayed in the Travis
- > console sufficient to debug most problems anyway?
-
-Probably it is, I just saw that you were copying them to the
-autobuilders.
-
-Thanks!
-
+diff --git a/package/qt5/qt5base/0002-mkspecs-files.patch b/package/qt5/qt5base/0002-mkspecs-files.patch
+deleted file mode 100644
+index adeabdf..0000000
+--- a/package/qt5/qt5base/0002-mkspecs-files.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-Add a Buildroot 'device' to ease cross-compilation
+-
+-Qt5 has a mechanism to support "device" profiles, so that people can
+-specify the compiler, compiler flags and so on for a specific device.
+-
+-We leverage this mechanism in the Buildroot packaging of qt5 to
+-simplify cross-compilation: we have our own "device" definition, which
+-allows us to easily pass the cross-compiler paths and flags from our
+-qt5.mk.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-[Arnout: remove ccache support]
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+-
+-Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+-===================================================================
+---- /dev/null
+-+++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+-@@ -0,0 +1,16 @@
+-+include(../common/linux_device_pre.conf)
+-+
+-+# modifications to g++-unix.conf
+-+QMAKE_CC                = $${CROSS_COMPILE}gcc
+-+QMAKE_CXX               = $${CROSS_COMPILE}g++
+-+
+-+#modifications to gcc-base.conf
+-+QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+-+QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
+-+QMAKE_CXXFLAGS_RELEASE += -O3
+-+CONFIG                 += nostrip
+-+
+-+QMAKE_LIBS             += -lrt -lpthread -ldl
+-+
+-+include(../common/linux_device_post.conf)
+-+load(qt_config)
+-Index: b/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+-===================================================================
+---- /dev/null
+-+++ b/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+-@@ -0,0 +1 @@
+-+#include "../../linux-g++/qplatformdefs.h"
+diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
+new file mode 100644
+index 0000000..2152d3c
+--- /dev/null
++++ b/package/qt5/qt5base/qmake.conf
+@@ -0,0 +1,24 @@
++# Qt5 has a mechanism to support "device" profiles, so that people can
++# specify the compiler, compiler flags and so on for a specific device.
++
++# We leverage this mechanism in the Buildroot packaging of qt5 to
++# simplify cross-compilation: we have our own "device" definition, which
++# allows us to easily pass the cross-compiler paths and flags from our
++# qt5.mk.
++
++include(../common/linux_device_pre.conf)
++
++# modifications to g++-unix.conf
++QMAKE_CC                = $${CROSS_COMPILE}gcc
++QMAKE_CXX               = $${CROSS_COMPILE}g++
++
++# modifications to gcc-base.conf
++QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
++QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
++QMAKE_CXXFLAGS_RELEASE += -O3
++CONFIG                 += nostrip
++
++QMAKE_LIBS             += -lrt -lpthread -ldl
++
++include(../common/linux_device_post.conf)
++load(qt_config)
+diff --git a/package/qt5/qt5base/qplatformdefs.h b/package/qt5/qt5base/qplatformdefs.h
+new file mode 100644
+index 0000000..99e9a27
+--- /dev/null
++++ b/package/qt5/qt5base/qplatformdefs.h
+@@ -0,0 +1 @@
++#include "../../linux-g++/qplatformdefs.h"
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 827a85e..6eeb619 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -179,6 +179,10 @@ endef
+ endif
+ 
+ define QT5BASE_CONFIGURE_CMDS
++	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
++		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
++	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
++		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) \
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.1.4
