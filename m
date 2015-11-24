@@ -1,19 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Nov 2015 13:24:13 -0300
-Subject: [Buildroot] [PATCH] xtables-addons: bump to version 2.10
-In-Reply-To: <1448382253-21279-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1448382253-21279-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1448382253-21279-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Nov 2015 17:35:20 +0100
+Subject: [Buildroot] [git commit branch/next] xtables-addons: bump to
+	version 2.10
+Message-ID: <20151124163900.DFA5881E61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=4c849ebe70dc5ba8aa949d066d0fd52cf8574b72
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xtables-addons/xtables-addons.hash | 7 ++++---
- package/xtables-addons/xtables-addons.mk   | 2 +-
+ package/xtables-addons/xtables-addons.hash |    7 ++++---
+ package/xtables-addons/xtables-addons.mk   |    2 +-
  2 files changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
@@ -41,5 +44,3 @@ index 30353a0..66e7386 100644
  XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
  XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
  XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
--- 
-2.4.10
