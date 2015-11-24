@@ -1,34 +1,36 @@
-From: Hajime Branko Yamasaki Vukelic <branko@brankovukelic.com>
-Date: Tue, 24 Nov 2015 14:43:21 +0100
-Subject: [Buildroot] Overriding Buildroot packages
-Message-ID: <CAPER3A0P1Qyd_=ktyHt=udawndUfHue8SE_zDQxMHjz+r+pPtg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 Nov 2015 10:51:08 -0300
+Subject: [Buildroot] [PATCH] gmp: disable for MIPS R6
+In-Reply-To: <20151124144126.4d6ad588@free-electrons.com>
+References: <1448368861-24776-1-git-send-email-Vincent.Riera@imgtec.com>
+ <56545FE6.7060405@zacarias.com.ar>
+ <20151124144126.4d6ad588@free-electrons.com>
+Message-ID: <56546B4C.1040105@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone!
+On 24/11/15 10:41, Thomas Petazzoni wrote:
 
-I've set up my build such that all modification are done in
-BR2_EXTERNAL directory, and I have a submodule that points to
-unmodified upstream buildroot sources.
+>> Hi.
+>> How about in package/gmp.mk:
+>>
+>> ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
+>> GMP_CONF_OPTS += --disable-assembly
+>> endif
+>
+> If this works, sounds a *lot* better than duplicating the !mipsr6
+> dependency to zillions of packages.
+>
+> Vicente ?
+>
+> Thomas
 
-I've been trying to find a way to override a package that is normally
-provided by Buildroot. By 'override' I mean completely swap it with
-another package definition, possibly with different patches, etc.
-
-Right now I've created a package that has a completely different name
-(e.g., for package 'foo', I have 'foo-custom'), but this breaks
-dependencies for packages that would otherwise depend on the original.
-
-I've dug into pkg-generic.mk and I see that it may not really be
-possible, but I wanted to confirm. Can someone tell me if I'm missing
-something or this really isn't possible without modifying the
-buildroot version of the package?
-
--- 
-Branko
-branko at brankovukelic.com
-
-/dev/blog: brankovukelic.com
+Hi.
+Already sent a patch and build-tested for both 32r6 & 64r6.
+That codepath is used for architectures that don't have 
+assembly-optimized routines, so it's pretty safe. Slower of course, but 
+better than nothing.
+Regards.
