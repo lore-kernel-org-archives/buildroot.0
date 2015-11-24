@@ -1,84 +1,31 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 24 Nov 2015 14:33:18 +0000
-Subject: [Buildroot] [PATCH] minizip: new package
-In-Reply-To: <1448316362-19184-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1448316362-19184-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <5654752E.1040009@imgtec.com>
+Date: Tue, 24 Nov 2015 15:05:36 +0000
+Subject: [Buildroot] [PATCH 1/7] toolchain-external: CodeSourcery AMD64:
+ support only one version
+In-Reply-To: <1448123780-30067-1-git-send-email-romain.naour@openwide.fr>
+References: <1448123780-30067-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <56547CC0.8090309@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Romain Naour,
 
-On 23/11/15 22:06, gustavo.zacarias at free-electrons.com wrote:
-
-[snip]
-
-> diff --git a/package/minizip/Config.in b/package/minizip/Config.in
-> new file mode 100644
-> index 0000000..7205e00
-> --- /dev/null
-> +++ b/package/minizip/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_MINIZIP
-> +	bool "minizip"
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  Enables to extract files from a .zip archive file.
-> +	  It is compatible with PKZip 2.04g, WinZip, InfoZip,
-> +	  MimarSinan Codex Suite 2002 tools, and compatible sofware.
-> +
-> +	  https://github.com/nmoinvaz/minizip
-> +
-> +config BR2_PACKAGE_MINIZIP_DEMOS
-> +	bool "miniunzip/minizip"
-
-Personally I would write something more obvious like "Install tools".
-
-> +	depends on BR2_PACKAGE_MINIZIP
-> +	help
-> +	  Enable miniunzip/minizip binary tools.
-> diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-> new file mode 100644
-> index 0000000..aa77c56
-> --- /dev/null
-> +++ b/package/minizip/minizip.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# minizip
-> +#
-> +################################################################################
-> +
-> +MINIZIP_VERSION = 977afb22966e6ab0ee401293a8e85fe808133f9a
-> +MINIZIP_SITE = https://github.com/nmoinvaz/minizip.git
-
-Why not using the github helper?
-
-MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
-
-> +MINIZIP_SITE_METHOD = git
-
-Not needed if you use the github helper, although I'm sure you already
-know that.
-
-> +MINIZIP_DEPENDENCIES = zlib
-> +MINIZIP_AUTORECONF = YES
-> +MINIZIP_INSTALL_STAGING = YES
-> +MINIZIP_CONF_OPTS = $(if $(BR2_PACKAGE_MINIZIP_DEMOS),--enable-demos)
-> +MINIZIP_LICENSE = zlib license
-> +MINIZIP_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(autotools-package))
+On 21/11/15 16:36, Romain Naour wrote:
+> See the conclusion about external toolchains during the Buildroot
+> meeting [1]:
+> "In the future, we stick to a single external toolchain version. The
+> Kconfig symbol should not encode the version (avoid legacy handling)"
 > 
+> [1] http://elinux.org/index.php?title=Buildroot:DeveloperDaysELCE2015#Report
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-And you forgot to add a hash file like this:
-
-# Locally calculated
-sha256 b39158bdf3d8bf81d3a7412dc761851fda398bc93d8989d5e940ed4ae5bbb52c
- minizip-977afb22966e6ab0ee401293a8e85fe808133f9a.tar.gz
+Build a minimal rootfs using that toolchain after applying this patch.
 
 Regards,
 
