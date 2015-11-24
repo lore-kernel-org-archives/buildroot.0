@@ -1,62 +1,242 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 24 Nov 2015 09:32:01 +0100
-Subject: [Buildroot] docs/website: New website
-In-Reply-To: <87oaek2wnr.fsf@dell.be.48ers.dk>
-References: <CA+TH9VmNdKfHr5v8-OteT6TLC8DK-HGshyUnbHgX_p+A2rW2=A@mail.gmail.com>
- <87oaek2wnr.fsf@dell.be.48ers.dk>
-Message-ID: <CA+TH9VmKn1HuQ_G41izgvY-5Sc+8NOrACQTra=EUAQs5oj8ZxQ@mail.gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 24 Nov 2015 07:58:11 -0200
+Subject: [Buildroot] [PATCH 1/1] libgdiplus: new package
+In-Reply-To: <5653886E.2000800@mind.be>
+References: <1448048842-25060-1-git-send-email-sergio.prado@e-labworks.com>
+ <5652291B.2040408@mind.be>
+ <CANu7NGt4W43MVg7Hnob4dO4QY0dB_6+Aw9ejq5=hjvs=e6utkw@mail.gmail.com>
+ <5653886E.2000800@mind.be>
+Message-ID: <CANu7NGu7w08RQwAJ3JV8aLp=jwS+WdkErHtAUF5udanmCSmDYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hello Arnout,
 
-2015-11-23 23:11 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
->
-> Hi,
->
->  > This patch introduces a new buildroot website based on a modern
->  > flat layout inspired by material design.
->  > Each page of the old website is converted to the new css/layout,
->  > the big bump is in main page which is completely rewritten.
->  > Content of the old website is copied more or less verbatim,
->  > planning to add more content in the future.
->
->  > You can find a complete demo site here:
->
->  > http://angeloc.github.io
->
-> Committed (From Thomas' branch at
-> http://git.free-electrons.com/users/thomas-petazzoni/buildroot/?h=website)
-> - Thanks!
->
-> It looks very nice. I did notice that my browser blocked one of the
-> external ressources it uses:
->
-> https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js
+2015-11-23 19:43 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
 
-This scripts makes possible to copy something into your clipboard from
-a website and it is used at the download page for the buttons on the
-right of textboxes. It works similarly to github copy to clipboard
-button.
+> On 23-11-15 13:36, Sergio Prado wrote:
+> > Hi Arnout,
+> >
+> > 2015-11-22 18:44 GMT-02:00 Arnout Vandecappelle <arnout@mind.be
+> > <mailto:arnout@mind.be>>:
+> [snip]
+> >     > diff --git a/package/libgdiplus/Config.in
+> b/package/libgdiplus/Config.in
+> >     > new file mode 100644
+> >     > index 000000000000..173d9af0d48a
+> >     > --- /dev/null
+> >     > +++ b/package/libgdiplus/Config.in
+> >     > @@ -0,0 +1,14 @@
+> >     > +config BR2_PACKAGE_LIBGDIPLUS
+> >     > +     bool "libgdiplus"
+> >     > +     select BR2_PACKAGE_XLIB_LIBXFT
+> >     > +     select BR2_PACKAGE_LIBGLIB2
+> >
+> >      You need to add that package's dependencies to this package, so:
+> >
+> >             depends on BR2_USE_WCHAR # libglib2 -> gettext
+> >             depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> >
+> >             depends on BR2_USE_MMU # libglib2
+> >
+> > Libgdiplus depends on BR2_PACKAGE_XORG7, that already depends on
+> BR2_USE_WCHAR
+> > and BR2_TOOLCHAIN_HAS_THREADS. That means that, because of the xorg
+> dependency,
+> > it is not possible to select libgdiplus with a toolchain that has no
+> wchar or
+> > threads support. Should I still depend on wchar and threads?
+>
+>  You can choose :-). The advantage of still specifying is that if the Xorg
+> dependency is ever removed (e.g. when it also works for wayland), the
+> dependencies coming from libglib2 are still there. But indeed, it's not
+> really
+> necessary.
+>
+>  It would be good to mention that in a comment though, so that people like
+> me
+> don't get confused :-).
+>
+Understood. I'm gonna keep these dependencies.
 
-> What is this clipboard.js about and any idea why my browser (chrome)
-> would block it?
 
-Honestly I don't know, probably you have some sort of javascript
-filtering, I personally tested this button on the vanilla chrome and
-it works.
+>  The MMU is still needed, right?
+>
+Yes. This one is necessary.
 
-Sincerely, Angelo
 
+>
+> >
+> >
+> >
+> >     > +     select BR2_PACKAGE_CAIRO
+> >
+> >      Same here:
+> >
+> >             depends on BR2_ARCH_HAS_ATOMICS # cairo
+> >
+> > OK.
+> >
+> >
+> >     > +     select BR2_PACKAGE_LIBPNG
+> >     > +     depends on BR2_PACKAGE_XORG7
+> >     > +     help
+> >     > +       An Open Source implementation of the GDI+ API.
+> >     > +
+> >     > +       https://github.com/mono/libgdiplus
+> >     > +
+> >     > +comment "libgdiplus depends on X.org"
+> >     > +     depends on !BR2_PACKAGE_XORG7
+> >
+> >      We don't add comments for X.org dependencies. But you should add a
+> comment for
+> >     wchar and threads:
+> >
+> >     comment "libgdiplus needs a toolchain w/ wchar, threads"
+> >
+> > OK.
+>
+>  This will not be needed then, it would anyway never be visible.
+>
+> [snip]
+> >     > +LIBGDIPLUS_LICENSE_FILES = LICENSE
+> >
+> >      Unfortunately, COPYING doesn't contain the license text, so this
+> should be
+> >
+> >     LIBGDIPLUS_LICENSE_FILES = COPYING src/carbon-private.h
+> >
+> > OK. Is there any reason to select specifically the src/carbon-private.h
+> header
+> > file, instead of many others that also have copyright messages?
+>
+>  It's the smallest file that has a copyright header.
+>
+OK.
+
+
+>
+> [snip]
+> >     > +ifeq ($(BR2_PACKAGE_PANGO),y)
+> >     > +LIBGDIPLUS_CONF_OPTS += --with-pango
+> >     > +LIBGDIPLUS_DEPENDENCIES += pango
+> >
+> >      We prefer to add an explicit --without-pango.
+> >
+> > That was my previous implementation, but there is a bug in the configure
+> script
+> > that *enables* pango support when I pass --without-pango. Looks like it
+> is
+> > checking only for the string "pango" in the configure parameter to
+> enable it.
+> > Should I create a patch to fix this bug or just use --with-pango as it
+> is,
+> > adding a comment to explain why we are not using --without-pango?
+>
+>  Adding a comment would be good, yes.
+>
+Right.
+
+
+>
+> >
+> >
+> >
+> >     > +endif
+> >     > +
+> >     > +ifeq ($(BR2_PACKAGE_LIBEXIF),y)
+> >     > +LIBGDIPLUS_CONF_OPTS += --with-libexif
+> >     > +LIBGDIPLUS_DEPENDENCIES += libexif
+> >     > +else
+> >     > +LIBGDIPLUS_CONF_OPTS += --without-libexif
+> >     > +endif
+> >     > +
+> >     > +ifeq ($(BR2_PACKAGE_JPEG),y)
+> >     > +LIBGDIPLUS_CONF_OPTS += --with-libjpeg
+> >     > +LIBGDIPLUS_DEPENDENCIES += jpeg
+> >     > +else
+> >     > +LIBGDIPLUS_CONF_OPTS += --without-libjpeg
+> >     > +endif
+> >     > +
+> >     > +ifeq ($(BR2_PACKAGE_TIFF),y)
+> >     > +LIBGDIPLUS_CONF_OPTS += --with-libtiff
+> >     > +LIBGDIPLUS_DEPENDENCIES += tiff
+> >     > +else
+> >     > +LIBGDIPLUS_CONF_OPTS += --without-libtiff
+> >     > +endif
+> >
+> >      There are also optional dependencies on fontconfig, freetype.
+> >
+> > I'm not sure if it is optional. The project documentation says it is a
+> > requirement (https://github.com/mono/libgdiplus/blob/master/README).
+> I've tried
+> > to build without them but the configure script does not handle these
+> options:
+>
+>  Sorry, fontconfig and freetype are of course already selected by
+> xlib_libXft.
+> So never mind this.
+>
+OK.
+
+
+>
+>
+>  Regards,
+>  Arnout
+>
+I'm gonna send v2. Thanks!
+
+
+>
+> >
+> > configure: WARNING: unrecognized options: --disable-gtk-doc,
+> > --disable-gtk-doc-html, --disable-doc, --disable-docs,
+> --disable-documentation,
+> > --with-xmlto, --with-fop, --enable-ipv6, --disable-nls,
+> --without-fontconfig,
+> > --without-freetype, --without-freetype2
+> >
+> > What do you think?
+> >
+> >
+> >
+> >      Regards,
+> >      Arnout
+> >
+> > Thanks!
+> >
+> >
+> >
+> >     > +
+> >     > +$(eval $(autotools-package))
+> >     >
+> >
+> >
+> >     --
+> >     Arnout Vandecappelle                          arnout at mind be
+> >     Senior Embedded Software Architect            +32-16-286500
+> >     <tel:%2B32-16-286500>
+> >     Essensium/Mind                                http://www.mind.be
+> >     G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR
+> Leuven
+> >     LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> >     GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> >
+> >
+>
 >
 > --
-> Bye, Peter Korsgaard
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151124/973433a0/attachment.html>
