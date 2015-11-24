@@ -1,66 +1,45 @@
-From: astrolite . <ciclonite@gmail.com>
-Date: Tue, 24 Nov 2015 19:17:43 +0100
-Subject: [Buildroot] WiringPi - problem adding package to my buildroot
-Message-ID: <CACvocV5bQo_YG05=ujYEJHygDQCw6_XZDLJ9zdCLO4tGCSswtg@mail.gmail.com>
+From: Hajime Branko Yamasaki Vukelic <branko@brankovukelic.com>
+Date: Tue, 24 Nov 2015 19:27:12 +0100
+Subject: [Buildroot] Overriding Buildroot packages
+In-Reply-To: <20151124164107.3570084a@free-electrons.com>
+References: <CAPER3A0P1Qyd_=ktyHt=udawndUfHue8SE_zDQxMHjz+r+pPtg@mail.gmail.com>
+ <20151124164107.3570084a@free-electrons.com>
+Message-ID: <CAPER3A0tE2_edxtE65MaVUVUh3BOdqywb4jUANOe_4Jm+0fihw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-After  sucessfully added pigpio package to buildroot, i'm tried to add
-wiringPi package.
-But i've a problem that not understand..
+Hi Thomas,
 
-These are my files :
-Config.in
+On Tue, Nov 24, 2015 at 4:41 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 
-config BR2_PACKAGE_WIRINGPI
-bool "wiringPi"
-help
- wiringPi libraries
+[SNIP]
 
-wiringPi.mk
+> Are you able to give more details about which specific package you need
+> to override and why? It would be useful for us to understand such use
+> cases, and see if there is a different solution/option, or if the use
+> case is really too specific.
 
-WIRINGPI_VERSION = 488e3729e44721b79ba655429f453f7396157c22
-WIRINGPI_INSTALL_TARGET = YES
-WIRINGPI_INSTALL_STAGING = YES
-WIRINGPI_AUTORECONF = YES
-WIRINGPI_SITE = $(call github,ciclonite,pigpio,$(LIBPIGPIO_VERSION))
+I have a need to ship postgresql 9.5 beta instead of the stable 9.4.5.
+Current solution is to create a postgres-95 package and modify
+dependencies accordingly. Fortunately, this is currently just one
+package, so it wasn't a big issue. Another package was bottle, on
+which we gave up as not critical.
 
+Ideally, ability to override some aspect of an existing package (e.g.,
+only its version, or only the source URL, or something along those
+lines) would be great to have. If not, then, a mechanism to make two
+packages equivalent (something like virtual packages but applicaable
+to packages that are not explicitly virtual) would also work (e.g.,
+`POSTGRES_95_PROVIDES = postgres`, that causes having postgres-95
+selected to satisfy dependency requirement for a package that
+selects/depends on postgres).
 
-when i launch make :
+-- 
+Branko
+branko at brankovukelic.com
 
-make
-/usr/bin/make -j1  HOSTCC="/usr/bin/gcc" HOSTCXX="/usr/bin/g++"
-silentoldconfig
-make[1]: Entering directory
-`/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05'
-BR2_DEFCONFIG=''
-KCONFIG_AUTOCONFIG=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/auto.conf
-KCONFIG_AUTOHEADER=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/autoconf.h
-KCONFIG_TRISTATE=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/tristate.config
-BR2_CONFIG=/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/.config
-BR2_EXTERNAL=support/dummy-external SKIP_LEGACY=
-/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/buildroot-config/conf
---silentoldconfig Config.in
-make[1]: Leaving directory
-`/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05'
->>> host-gawk 4.1.2 Patching
-
-Applying 0001-no-versioned.patch using patch:
-patching file Makefile.in
-Reversed (or previously applied) patch detected!  Skipping patch.
-2 out of 2 hunks ignored -- saving rejects to file Makefile.in.rej
-Patch failed!  Please fix 0001-no-versioned.patch!
-make: ***
-[/root/qt-pi2-pigpio-wiringpi/buildroot-qt-dev/buildroot-2015.05/output/build/host-gawk-4.1.2/.stamp_patched]
-Error 1
-
-Someone can help me to find out the problem?
-Thanks,
-Giovanni
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151124/b4b92be0/attachment.html>
+/dev/blog: brankovukelic.com
