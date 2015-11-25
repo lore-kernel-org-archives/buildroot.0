@@ -1,49 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Nov 2015 09:22:09 +0100
-Subject: [Buildroot] defconfig build failure on cubieboard2_defconfig
-Message-ID: <20151125092209.6e1bb1ff@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 25 Nov 2015 09:19:09 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-11-24
+In-Reply-To: <20151125073016.2AB38102454@stock.ovh.net>
+References: <20151125073016.2AB38102454@stock.ovh.net>
+Message-ID: <56557D0D.4070606@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear maintainer,
 
-The Travis build of all defconfigs failed last night, on the
-cubieboard2_defconfig:
+On 25/11/15 07:30, Thomas Petazzoni wrote:
+> Build statistics for 2015-11-24
+> ===============================
 
-   https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/93053316
+>       mipsel |                     gmp-6.0.0a | NOK | http://autobuild.buildroot.net/results/3488597208974691d407d509b2976e0a29017c9e/
+>       mipsel |                     gmp-6.0.0a | NOK | http://autobuild.buildroot.net/results/3dbbeba52f8ac7dea2736e2d2eea740af8c45ad5/
+>       mipsel |                     gmp-6.0.0a | NOK | http://autobuild.buildroot.net/results/34a8a894a1d23022576979b77a6678117d16ed24/
+>       mipsel |                     gmp-6.0.0a | NOK | http://autobuild.buildroot.net/results/e9a645a4f2ce98b44c9478b90907598a8304dee6/
+>     mips64el |                     gmp-6.0.0a | NOK | http://autobuild.buildroot.net/results/284a11ed81c4a4037d5e1ad386da67577b471c88/
+>     mips64el |                     gmp-6.0.0a | NOK | http://autobuild.buildroot.net/results/16c69a0c6bbe694e13d6153e64e5ab430552ba87/
 
-The error is:
+This patch fixes the problem:
 
-/home/travis/build/buildroot/buildroot-defconfig-testing/buildroot/output/build/uboot-b4bca5e0651b460a4511582f07a935cb48f74948/spl/lib/vsprintf.o:
-file not recognized: File truncated
+http://patchwork.ozlabs.org/patch/548069/
 
-The previous build on 953b84a930fe6872ec349fb977fc9475da501931 was
-entirely successful, but last night build on
-b29cb968040e31c5fa1abdfbe8d4c26e237d730a failed. But I don't quite see
-between those two commits what could have caused the problem:
+Regards,
 
-b29cb968040e31c5fa1abdfbe8d4c26e237d730a pcre: security bump to version 8.38
-caca64ed5ffe62055b13326a62c9bd7605f7ad7d gstreamer1: fix unaligned detection for nios2
-a8362d11c55468c624e1edb2c495beb56db1b9f6 gstreamer: fix unaligned detection for nios2
-c626998d47e14cc8086917fe17c28045a2f9b09a libfreeimage: fix build issue with gcc 5.x
-7f1ec872cd163ff1b5dd2448f8ff8af1a7178347 openntpd: fix linking problem when building statically
-97ab48658d574ded87f8af799795ba7ed76f6ba4 docs/website: New website
-a597e3c676948c6c1eb6440c82f19b7460f29192 Revert "openssl: enable parallel build and installation"
-917b6e72ea01c689a2376b24c87d7f6f1570a06f fastd: add upstream patch to fix build with musl
-2a8e96d05738421898c373ffaeb61ef3ab008ef2 package/rpi-userland: bump version
-
-So this looks like a parallel build issue. Is it possible that U-Boot
-doesn't build properly in parallel ? Seems unlikely, no ? Any ideas ?
-
-All other defconfigs built fine.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Vincent.
