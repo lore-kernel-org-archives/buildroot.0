@@ -1,35 +1,30 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Wed, 25 Nov 2015 09:44:13 -0300
-Subject: [Buildroot] [PATCH] c-ares: define random file
-Message-ID: <1448455453-22572-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Peter Rosin <peda@lysator.liu.se>
+Date: Wed, 25 Nov 2015 13:45:34 +0100
+Subject: [Buildroot] [PATCH] macchanger: add license file
+Message-ID: <1448455534-766-1-git-send-email-peda@lysator.liu.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+From: Peter Rosin <peda@axentia.se>
 
-When cross-compiling it assumes there's none, however that's not true.
-Specify the usual /dev/urandom for this usage, it's used for random key
-generation on startup.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Peter Rosin <peda@axentia.se>
 ---
- package/c-ares/c-ares.mk | 1 +
+ package/macchanger/macchanger.mk |    1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index c858887..77ae4b9 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -7,6 +7,7 @@
- C_ARES_VERSION = 1.10.0
- C_ARES_SITE = http://c-ares.haxx.se/download
- C_ARES_INSTALL_STAGING = YES
-+C_ARES_CONF_OPTS = --with-random=/dev/urandom
- # Rebuild configure to avoid XC_CHECK_USER_CFLAGS
- C_ARES_AUTORECONF = YES
- C_ARES_LICENSE = MIT
+diff --git a/package/macchanger/macchanger.mk b/package/macchanger/macchanger.mk
+index 5ded0b8..a74337a 100644
+--- a/package/macchanger/macchanger.mk
++++ b/package/macchanger/macchanger.mk
+@@ -7,5 +7,6 @@
+ MACCHANGER_VERSION = 1.6.0
+ MACCHANGER_SITE = $(BR2_GNU_MIRROR)/macchanger
+ MACCHANGER_LICENSE = GPLv2+
++MACCHANGER_LICENSE_FILES = src/mac.h
+ 
+ $(eval $(autotools-package))
 -- 
-2.4.10
+1.7.10.4
