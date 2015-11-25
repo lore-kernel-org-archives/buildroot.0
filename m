@@ -1,34 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Nov 2015 13:46:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 8321] invalid opcode error with minidlna and ffmpeg
-In-Reply-To: <bug-8321-163@https.bugs.busybox.net/>
-References: <bug-8321-163@https.bugs.busybox.net/>
-Message-ID: <20151125134650.994DA81830@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Nov 2015 14:48:10 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/qemu: add DTB support for ARM
+ Versatile PB
+In-Reply-To: <1448457599-29371-1-git-send-email-guillaume.delbergue@greensocs.com>
+References: <1448457599-29371-1-git-send-email-guillaume.delbergue@greensocs.com>
+Message-ID: <20151125144810.04e7ed7e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8321
+Dear Guillaume Delbergue,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Wed, 25 Nov 2015 14:19:59 +0100, Guillaume Delbergue wrote:
+> Currently, without this option, you can't boot
+> ARM Versatile PB with a DTB on QEMU. You get the
+> following error (using earlyprintk):
+> 
+> Uncompressing Linux... done, booting the kernel.
+> 
+> Error: unrecognized/unsupported device tree compatible list:
+> [ 'arm,versatile-pb' ]
+> 
+> Available machine support:
+> 
+> ID (hex)	NAME
+> 00000183	ARM-Versatile PB
+> 0000025e	ARM-Versatile AB
+> 
+> Please check your kernel config and/or bootloader.
+> 
+> Add CONFIG_MACH_VERSATILE_DT to support Versatile platform from device tree
+> 
+> Signed-off-by: Guillaume Delbergue <guillaume.delbergue@greensocs.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
+Then maybe the board/qemu/arm-versatile/readme.txt file should be
+updated to make use of the DTB ?
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-11-25 13:46:50 UTC ---
-Bug reporter never provided information about the HW being used and the
-Buildroot configuration. The problem might very well be due to the use of an
-invalid Buildroot configuration not matching the HW. So, closing for now.
+Gustavo ?
 
-Ramesh, if you are still facing this problem, feel free to reopen this bug, but
-then please add the relevant details, as requested in my previous message.
-Thanks!
+Thanks,
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
