@@ -1,28 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Nov 2015 22:42:44 +0100
-Subject: [Buildroot] [git commit] spidev_test: add a hash file
-Message-ID: <20151125214948.05ED481EC0@busybox.osuosl.org>
+Date: Wed, 25 Nov 2015 22:47:01 +0100
+Subject: [Buildroot] [git commit] package/autossh: do not look for the
+	host's ssh command
+Message-ID: <20151125214948.0139D801E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a388405947d339c215d728a4016daa87588ce94
+commit: http://git.buildroot.net/buildroot/commit/?id=870e13d916bab55e0e517853463aef520f361472
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+autossh looks for 'ssh' in the PATH, which may not exist on a build
+machine.
+
+Fixes a private autobuild failure (soon to go public).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/spidev_test/spidev_test.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/autossh/autossh.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/spidev_test/spidev_test.hash b/package/spidev_test/spidev_test.hash
-new file mode 100644
-index 0000000..6871288
---- /dev/null
-+++ b/package/spidev_test/spidev_test.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 80471c330d8c0bf5ba6479c434a54a54bdd2dc59a703b9c76c2541ec04cfb8c3  spidev_test.c?id=v3.0
-+sha256 57fa6c534e0b7b4d234075e18bc89e2f3c9fc4ecc27e80f349a8057708e0de46  spidev_test.c?id=v3.15
+diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
+index 01d3c65..8a9def3 100644
+--- a/package/autossh/autossh.mk
++++ b/package/autossh/autossh.mk
+@@ -10,6 +10,8 @@ AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
+ AUTOSSH_LICENSE = Modified BSD
+ AUTOSSH_LICENSE_FILES = autossh.c
+ 
++AUTOSSH_CONF_OPTS = --with-ssh=/usr/bin/ssh
++
+ define AUTOSSH_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 755 -D $(@D)/autossh $(TARGET_DIR)/usr/bin/autossh
+ endef
