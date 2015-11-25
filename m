@@ -1,33 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Nov 2015 23:22:21 +0100
-Subject: [Buildroot] [git commit] sqlite: add license file
-Message-ID: <20151125222250.5778A81EFB@busybox.osuosl.org>
+Date: Wed, 25 Nov 2015 23:23:06 +0100
+Subject: [Buildroot] [git commit branch/next] harfbuzz: bump to version 1.1.1
+Message-ID: <20151125222312.A995581EBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d644777683abdc2a6fad8c662ed86f719cf1b21
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=08e06ababeb17c79b0fe4927e258e05e14bf223a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Rosin <peda@axentia.se>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/harfbuzz/harfbuzz.hash |    4 ++--
+ package/harfbuzz/harfbuzz.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index d08e933..0758fe9 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -8,6 +8,7 @@ SQLITE_VERSION = 3090200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
-+SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_INSTALL_STAGING = YES
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 3772242..e15cc17 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.0.tar.bz2.sha256
+-sha256	0f584a5947e60ede565e7a4e122baa5e4b17a62eab872abf5f73d8552ceb716b	harfbuzz-1.1.0.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.1.tar.bz2.sha256
++sha256	0c366a77276fa69d40006cf8a2f2dbcd82f3fb406f3960c3c3a0d34dd3a0f06c	harfbuzz-1.1.1.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 703e15c..8251e1f 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Patching Makefile.am:
+-HARFBUZZ_VERSION = 1.1.0
++HARFBUZZ_VERSION = 1.1.1
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
