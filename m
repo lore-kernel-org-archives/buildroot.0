@@ -1,43 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Nov 2015 15:58:35 +0100
-Subject: [Buildroot] [PATCH next 1/2] at: bump version to 3.1.16
-In-Reply-To: <1448458575-60714-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1448458575-60714-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151125155835.67264729@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 25 Nov 2015 15:16:53 +0000
+Subject: [Buildroot] [PATCH] spidev_test: add a hash file
+Message-ID: <1448464613-20619-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/spidev_test/spidev_test.hash | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 package/spidev_test/spidev_test.hash
 
-On Wed, 25 Nov 2015 13:36:14 +0000, Vicente Olivert Riera wrote:
-> - Bump version to 3.1.16
-> - Update the hash value
-> - Remove upstreamed patches:
->   0001-configure.ac-remove-manual-compiler-check-with-AC_TR.patch
->   0003-Makefile.in-add-LDFLAGS-to-linking-stage.patch
-> - Tweak patches for the new version:
->   0004-Makefile.in-replace-IROOT-by-DESTDIR.patch
->   0005-Makefile.in-make-install-fix.patch
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  ...c-remove-manual-compiler-check-with-AC_TR.patch | 33 ------------------
->  ...-Makefile.in-add-LDFLAGS-to-linking-stage.patch | 38 ---------------------
->  ...0004-Makefile.in-replace-IROOT-by-DESTDIR.patch | 39 ++++++++++++++--------
->  package/at/0005-Makefile.in-make-install-fix.patch | 34 +++++++++++++------
->  package/at/at.hash                                 |  6 ++--
->  package/at/at.mk                                   |  2 +-
->  6 files changed, 52 insertions(+), 100 deletions(-)
->  delete mode 100644 package/at/0001-configure.ac-remove-manual-compiler-check-with-AC_TR.patch
->  delete mode 100644 package/at/0003-Makefile.in-add-LDFLAGS-to-linking-stage.patch
-
-Both applied to next, thanks.
-
-Thomas
+diff --git a/package/spidev_test/spidev_test.hash b/package/spidev_test/spidev_test.hash
+new file mode 100644
+index 0000000..6871288
+--- /dev/null
++++ b/package/spidev_test/spidev_test.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 80471c330d8c0bf5ba6479c434a54a54bdd2dc59a703b9c76c2541ec04cfb8c3  spidev_test.c?id=v3.0
++sha256 57fa6c534e0b7b4d234075e18bc89e2f3c9fc4ecc27e80f349a8057708e0de46  spidev_test.c?id=v3.15
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
