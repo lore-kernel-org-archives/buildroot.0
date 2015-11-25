@@ -1,42 +1,74 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 25 Nov 2015 19:44:27 -0300
-Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.25
-Message-ID: <1448491467-3196-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 26 Nov 2015 00:06:36 +0100
+Subject: [Buildroot] [PATCH 0/4] autobuild: new config options;
+	conf file, startup script (branch yem/limits)
+Message-ID: <cover.1448492437.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/memcached/memcached.hash | 6 ++++--
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Hello All!
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 55376ce..ed330cf 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,2 +1,4 @@
--# From http://www.memcached.org/files/memcached-1.4.24.tar.gz.sha1
--sha1	32a798a37ef782da10a09d74aa1e5be91f2861db	memcached-1.4.24.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.25.tar.gz.sha1
-+sha1	7fd0ba9283c61204f196638ecf2e9295688b2314	memcached-1.4.25.tar.gz
-+# Calculated based on the hash above
-+sha256	f058437b3c224d321919a9a6bb4e3eedb2312ed718c0caf087ff2f04ab795dda	memcached-1.4.25.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 2d39bd8..b0753e4 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.4.24
-+MEMCACHED_VERSION = 1.4.25
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+This series, against the autobuilder tree, adds two new configuration
+options, a sample runtime config file, and a SysV init startup script.
+
+The two new rutime options are:
+  --nice N      specify the niceness of the 'make' command
+  --pid-file    file where to save the main process PID
+
+The niceness allows limitting the impact of the autobuilder on the rest
+of the job, when on a shared machine. A better solution would be to
+implement a container with cgroups, but a systemd unit file would be so
+much convenient! ;-)
+
+The PID file allows to simplify the startup script, and really ensure
+that we get the autobuild process' PID.
+
+A SysV init startup script, as well as a sample defaults config file are
+provided, to ease running the autobuild script as a daemon.
+
+A sample runtime configuration file is provided as well.
+
+Note that nothing in there is really bullet-proof...
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 611b515aa40c635d1af24883a9eab9e1e363a33c:
+
+  Add mips32r6 and mips64r6 toolchains (2015-11-22 15:31:07 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot-test yem/limits
+
+for you to fetch changes up to 9243b48a5bc32c35039519eabf4b6946f36f3260:
+
+  etc: add SysV-init startup script and sample config file (2015-11-25 23:58:32 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      autobuild: add config option to set niceness
+      autobuild: store PID to PID file
+      conf: add a sample run-time configuration file
+      etc: add SysV-init startup script and sample config file
+
+ conf/buildroot-autobuild.sample |   5 ++
+ etc/default/buildroot-autobuild |  23 +++++++
+ etc/init.d/buildroot-autobuild  | 148 ++++++++++++++++++++++++++++++++++++++++
+ scripts/autobuild-run           |  17 ++++-
+ 4 files changed, 192 insertions(+), 1 deletion(-)
+ create mode 100644 conf/buildroot-autobuild.sample
+ create mode 100644 etc/default/buildroot-autobuild
+ create mode 100755 etc/init.d/buildroot-autobuild
+
 -- 
-2.4.10
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
