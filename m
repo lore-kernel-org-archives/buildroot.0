@@ -1,31 +1,35 @@
-From: Peter Rosin <peda@lysator.liu.se>
-Date: Wed, 25 Nov 2015 13:29:11 +0100
-Subject: [Buildroot] [PATCH] sqlite: add license file
-Message-ID: <1448454551-31095-1-git-send-email-peda@lysator.liu.se>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Wed, 25 Nov 2015 09:44:13 -0300
+Subject: [Buildroot] [PATCH] c-ares: define random file
+Message-ID: <1448455453-22572-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Peter Rosin <peda@axentia.se>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-Signed-off-by: Peter Rosin <peda@axentia.se>
+When cross-compiling it assumes there's none, however that's not true.
+Specify the usual /dev/urandom for this usage, it's used for random key
+generation on startup.
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/sqlite/sqlite.mk |    1 +
+ package/c-ares/c-ares.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index d08e933..0758fe9 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -8,6 +8,7 @@ SQLITE_VERSION = 3090200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
-+SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_INSTALL_STAGING = YES
- 
- # Patching Makefile.am:
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index c858887..77ae4b9 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -7,6 +7,7 @@
+ C_ARES_VERSION = 1.10.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
++C_ARES_CONF_OPTS = --with-random=/dev/urandom
+ # Rebuild configure to avoid XC_CHECK_USER_CFLAGS
+ C_ARES_AUTORECONF = YES
+ C_ARES_LICENSE = MIT
 -- 
-1.7.10.4
+2.4.10
