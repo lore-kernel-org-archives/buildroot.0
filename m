@@ -1,94 +1,105 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Wed, 25 Nov 2015 10:53:42 +1100
-Subject: [Buildroot] [PATCH] linux: Build and install kernel selftests
-In-Reply-To: <1448409222-4510-1-git-send-email-cyrilbur@gmail.com>
-References: <1448409222-4510-1-git-send-email-cyrilbur@gmail.com>
-Message-ID: <1448409222-4510-2-git-send-email-cyrilbur@gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 24 Nov 2015 22:09:44 -0200
+Subject: [Buildroot] [PATCH v2] libgdiplus: new package
+In-Reply-To: <20151124182309.5bd10f9a@free-electrons.com>
+References: <1448361491-14651-1-git-send-email-sergio.prado@e-labworks.com>
+ <20151124182309.5bd10f9a@free-electrons.com>
+Message-ID: <CANu7NGuwTUEG780u9N_Er6O+vUasr7XZ68U6NsbyKZofNhrYMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch simply adds the ability to compile and install the kernel
-selftests into the target.
+Hi Thomas,
 
-This is likely to be a rarely used debugging/performance feature for
-development and unlikely to be used in a production configuration.
+2015-11-24 15:23 GMT-02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
----
- linux/Config.tools.in         | 12 ++++++++++++
- linux/linux-tool-selftests.mk | 40 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 52 insertions(+)
- create mode 100644 linux/linux-tool-selftests.mk
+> Dear Sergio Prado,
+>
+> This package looks almost ready to go, there are just two remaining
+> things I believe. See below.
+>
+> On Tue, 24 Nov 2015 08:38:11 -0200, Sergio Prado wrote:
+>
+> > diff --git a/package/libgdiplus/libgdiplus.hash
+> b/package/libgdiplus/libgdiplus.hash
+> > new file mode 100644
+> > index 000000000000..8642d5cbf66a
+> > --- /dev/null
+> > +++ b/package/libgdiplus/libgdiplus.hash
+> > @@ -0,0 +1,3 @@
+> > +# Locally computed:
+> > +md5    6e9a80ba921e4842acd5a12b14c78dc9
+>  libgdiplus-3.12.tar.gz
+> > +sha256 7eadc5105c6352d456c5f8699dc89260bf402e82ce6668e7e0c625519f9e5b44
+> libgdiplus-3.12.tar.gz
+>
+> Only the sha256 is useful here. It's a strong hash, there's no need to
+> add another weak hash such as md5.
+>
+OK.
 
-diff --git a/linux/Config.tools.in b/linux/Config.tools.in
-index 24ef8cd..68655dc 100644
---- a/linux/Config.tools.in
-+++ b/linux/Config.tools.in
-@@ -26,4 +26,16 @@ config BR2_LINUX_KERNEL_TOOL_PERF
- 
- 	  https://perf.wiki.kernel.org/
- 
-+config BR2_LINUX_KERNEL_TOOL_SELFTESTS
-+	bool "selftests"
-+	help
-+	  Build and install (to /usr/lib/selftests) kernel selftests.
-+
-+	  Use of this option implies you know the process using and compiling
-+	  the kernel selftests. The Makefile to build and install these is very
-+	  noisy and may appear to cause your build to fail for strange reasons.
-+
-+	  This is very much a use at your risk option and may not work for
-+	  every setup or every architecture.
-+
- endmenu
-diff --git a/linux/linux-tool-selftests.mk b/linux/linux-tool-selftests.mk
-new file mode 100644
-index 0000000..573ba0c
---- /dev/null
-+++ b/linux/linux-tool-selftests.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# selftests
-+#
-+################################################################################
-+
-+LINUX_TOOLS += selftests
-+
-+ifeq ($(KERNEL_ARCH),x86_64)
-+SELFTESTS_ARCH=x86
-+else
-+SELFTESTS_ARCH=$(KERNEL_ARCH)
-+endif
-+
-+SELFTESTS_DEPENDENCIES = bash
-+
-+SELFTESTS_INSTALL_STAGING = YES
-+SELFTESTS_MAKE_FLAGS = \
-+	$(LINUX_MAKE_FLAGS) \
-+	ARCH=$(SELFTESTS_ARCH)
-+
-+# O must be redefined here to overwrite the one used by Buildroot for
-+# out of tree build. We build the selftests in $(@D)/tools/selftests and
-+# not just $(@D) so that it isn't built in the root directory of the kernel
-+# sources.
-+define SELFTESTS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) headers_install
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(SELFTESTS_MAKE_FLAGS) \
-+		-C $(@D)/tools/testing/selftests O=$(@D)/tools/testing/selftests
-+endef
-+
-+define SELFTESTS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE1) INSTALL_PATH=$(STAGING_DIR)/usr/lib/selftests $(SELFTESTS_MAKE_FLAGS) \
-+		-C $(@D)/tools/testing/selftests install
-+endef
-+
-+define SELFTESTS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE1) INSTALL_PATH=$(TARGET_DIR)/usr/lib/selftests $(SELFTESTS_MAKE_FLAGS) \
-+		-C $(@D)/tools/testing/selftests install
-+endef
--- 
-2.6.2
+
+>
+> > +LIBGDIPLUS_VERSION = 3.12
+> > +LIBGDIPLUS_SITE = $(call github,mono,libgdiplus,$(LIBGDIPLUS_VERSION))
+> > +LIBGDIPLUS_LICENSE = MIT
+> > +LIBGDIPLUS_LICENSE_FILES = COPYING src/carbon-private.h
+>
+> This is the part that I didn't like. I looked at LICENSE, and got
+> confused. Then I saw the discussion you had with Arnout about all the
+> licensing mess in this package.
+>
+> So what I'd like to see here is:
+>
+>  1/ A comment above those two lines that explain the situation (that
+>  the LICENSE file is incorrect, that the real license is indeed MIT,
+>  etc.)
+>
+OK.
+
+
+>
+>  2/ A bug report being made to the upstream project to ask them to fix
+>  this mess.
+>
+Done: https://bugzilla.xamarin.com/show_bug.cgi?id=36227
+
+
+> > +# there is a bug in the configure script that enables pango support when
+> > +# passing --without-pango, so let's just not use it
+> > +ifeq ($(BR2_PACKAGE_PANGO),y)
+> > +LIBGDIPLUS_CONF_OPTS += --with-pango
+> > +LIBGDIPLUS_DEPENDENCIES += pango
+> > +endif
+>
+> You could also report this bug upstream. Since upstream uses github,
+> it's pretty trivial to report bugs, so I think we should do it when we
+> discover problems.
+>
+You are right. Done: https://bugzilla.xamarin.com/show_bug.cgi?id=36228
+
+>
+> Can you respin a new version of the patch that fixes the hash thing and
+> adds more details about the license?
+>
+V3 is on the way.
+
+
+> Thanks a lot!
+>
+Thanks!
+
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151124/0cfdbb65/attachment.html>
