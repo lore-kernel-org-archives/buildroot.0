@@ -1,40 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 25 Nov 2015 15:38:06 -0300
-Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.1.1
-Message-ID: <1448476686-12980-1-git-send-email-gustavo@zacarias.com.ar>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Wed, 25 Nov 2015 14:31:38 -0500
+Subject: [Buildroot] [PATCH v2] openssl: fix race condition when symlink
+ shared libs
+In-Reply-To: <565070A7.10001@mind.be>
+References: <1448036610-7077-1-git-send-email-ryan.barnett@rockwellcollins.com>
+ <565070A7.10001@mind.be>
+Message-ID: <20151125193138.GO23754@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 21 Nov 2015 14:24, Arnout Vandecappelle wrote:
+> On 20-11-15 17:23, Ryan Barnett wrote:
+> > The build-shared target depends on do_crypto and link-shared, which
+> > will be executed in parallel. do_crypto calls
+> > link_a.linux_shared -> link_a.gnu which does SYMLINK_SO; in parallel,
+> > link-shared calls symlink.linux_shared which also does SYMLINK_SO.
+> > Before the symlink is created, it is rm'ed, but there is a tiny chance
+> > that the second one is created after the rm has been called.
+> > 
+> > Fix this by using 'ln -sf' instead of 'ln -s' so the build doesn't
+> > error out.
+> > 
+> > Patch submitted upstream at:
+> >   https://bugs.gentoo.org/show_bug.cgi?id=566260
+> 
+>  Ahem, gentoo is not exactly upstream :-)  From [1]:
+> 
+> To report a bug or make an enhancement request, send email to rt at openssl.org.
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 3772242..e15cc17 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.0.tar.bz2.sha256
--sha256	0f584a5947e60ede565e7a4e122baa5e4b17a62eab872abf5f73d8552ceb716b	harfbuzz-1.1.0.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.1.tar.bz2.sha256
-+sha256	0c366a77276fa69d40006cf8a2f2dbcd82f3fb406f3960c3c3a0d34dd3a0f06c	harfbuzz-1.1.1.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 703e15c..8251e1f 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 1.1.0
-+HARFBUZZ_VERSION = 1.1.1
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
--- 
-2.4.10
+which these have been already.  they don't respond.  in fact, you can see
+a link to the relevant upstream report in every Gentoo parallel patch.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151125/729563ba/attachment.asc>
