@@ -1,42 +1,31 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 25 Nov 2015 12:18:00 +0000
-Subject: [Buildroot] [PATCH 2/2] rubix: make the rubix.mk file more readable
-In-Reply-To: <1448453880-62053-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1448453880-62053-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1448453880-62053-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Rosin <peda@lysator.liu.se>
+Date: Wed, 25 Nov 2015 13:29:11 +0100
+Subject: [Buildroot] [PATCH] sqlite: add license file
+Message-ID: <1448454551-31095-1-git-send-email-peda@lysator.liu.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/rubix/rubix.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+From: Peter Rosin <peda@axentia.se>
 
-diff --git a/package/rubix/rubix.mk b/package/rubix/rubix.mk
-index dd23edf..b808bc0 100644
---- a/package/rubix/rubix.mk
-+++ b/package/rubix/rubix.mk
-@@ -7,12 +7,15 @@
- RUBIX_VERSION = 1.0.5
- RUBIX_SOURCE = rubix-$(RUBIX_VERSION).tar.bz2
- RUBIX_SITE = http://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/Rubix
--RUBIX_INSTALL_TARGET_OPTS = GAMESDIR=$(TARGET_DIR)/usr/games install
- RUBIX_LICENSE = Public Domain
- RUBIX_LICENSE_FILES = LICENCE
-+RUBIX_DEPENDENCIES = xlib_libX11
+Signed-off-by: Peter Rosin <peda@axentia.se>
+---
+ package/sqlite/sqlite.mk |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index d08e933..0758fe9 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -8,6 +8,7 @@ SQLITE_VERSION = 3090200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2015
+ SQLITE_LICENSE = Public domain
++SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
  
--RUBIX_MAKE_OPTS = CC="$(TARGET_CC)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
-+RUBIX_MAKE_OPTS = \
-+	CC="$(TARGET_CC)" \
-+	XINC="-I$(STAGING_DIR)/usr/include/X11" \
-+	XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
- 
--RUBIX_DEPENDENCIES = xlib_libX11
-+RUBIX_INSTALL_TARGET_OPTS = GAMESDIR=$(TARGET_DIR)/usr/games install
- 
- $(eval $(autotools-package))
+ # Patching Makefile.am:
 -- 
-2.4.10
+1.7.10.4
