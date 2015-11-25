@@ -1,48 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Nov 2015 23:24:27 +0100
-Subject: [Buildroot] [git commit] kompexsqlite: needs threads and wchar
-Message-ID: <20151125222649.B50B57F97D@busybox.osuosl.org>
+Date: Wed, 25 Nov 2015 23:24:09 +0100
+Subject: [Buildroot] [git commit] dropbear: bump to version 2015.69
+Message-ID: <20151125222649.A32FC81EA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5646333c3c94f56b0f20686c0eea54b332d5a7e
+commit: http://git.buildroot.net/buildroot/commit/?id=37ec6ceaa8cedd40524686d46f39638a9876af6c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Wchar is used by the wrapper, fixes:
-http://autobuild.buildroot.net/results/763/763d9aff86085b67077fc665e462cee81962246d/
-
-Threads can be disabled by the sqlite build system, but since
-kompexsqlite doesn't use the sqlite buildsystem and only uses a bundled
-version it falls back to the default for *nixes (enabled), fixes:
-http://autobuild.buildroot.net/results/c0b/c0b65be99603a2c2f07a38078f6b5622353915ca/
+Fixes a port-forwarding regression in 2015.68
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kompexsqlite/Config.in |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+ package/dropbear/dropbear.hash |    2 +-
+ package/dropbear/dropbear.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kompexsqlite/Config.in b/package/kompexsqlite/Config.in
-index b6d7d7f..5b71842 100644
---- a/package/kompexsqlite/Config.in
-+++ b/package/kompexsqlite/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_KOMPEXSQLITE
- 	bool "kompexsqlite"
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
- 	help
-@@ -8,5 +10,6 @@ config BR2_PACKAGE_KOMPEXSQLITE
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index 981bb1d..1727ed9 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,2 +1,2 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256	55ea7c1e904ffe4b1cdbe1addca8291a2533d7d285fd22ac33608e9502a62446  dropbear-2015.68.tar.bz2
++sha256	5d4f5362fc102a0d7cdf1c8cd908c3c4c5cf5c8772936ed639774a08e27517c9  dropbear-2015.69.tar.bz2
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 57c1b5c..d2c194c 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://sqlitewrapper.kompex-online.com/index.php
- 
--comment "kompexsqlite needs a toolchain w/ C++, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+comment "kompexsqlite needs a toolchain w/ C++, wchar, threads, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+-DROPBEAR_VERSION = 2015.68
++DROPBEAR_VERSION = 2015.69
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
