@@ -1,74 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Nov 2015 00:06:36 +0100
-Subject: [Buildroot] [PATCH 0/4] autobuild: new config options;
-	conf file, startup script (branch yem/limits)
-Message-ID: <cover.1448492437.git.yann.morin.1998@free.fr>
+Date: Thu, 26 Nov 2015 00:06:39 +0100
+Subject: [Buildroot] [PATCH 2/4] autobuild: store PID to PID file
+In-Reply-To: <cover.1448492437.git.yann.morin.1998@free.fr>
+References: <cover.1448492437.git.yann.morin.1998@free.fr>
+Message-ID: <f019be8cc9f667ab1cc5fc03dbce926482790945.1448492437.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Let the autobuild script store its own PID file, rather than retrieve it
+from the init script.
 
-This series, against the autobuilder tree, adds two new configuration
-options, a sample runtime config file, and a SysV init startup script.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ scripts/autobuild-run | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-The two new rutime options are:
-  --nice N      specify the niceness of the 'make' command
-  --pid-file    file where to save the main process PID
-
-The niceness allows limitting the impact of the autobuilder on the rest
-of the job, when on a shared machine. A better solution would be to
-implement a container with cgroups, but a systemd unit file would be so
-much convenient! ;-)
-
-The PID file allows to simplify the startup script, and really ensure
-that we get the autobuild process' PID.
-
-A SysV init startup script, as well as a sample defaults config file are
-provided, to ease running the autobuild script as a daemon.
-
-A sample runtime configuration file is provided as well.
-
-Note that nothing in there is really bullet-proof...
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 611b515aa40c635d1af24883a9eab9e1e363a33c:
-
-  Add mips32r6 and mips64r6 toolchains (2015-11-22 15:31:07 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot-test yem/limits
-
-for you to fetch changes up to 9243b48a5bc32c35039519eabf4b6946f36f3260:
-
-  etc: add SysV-init startup script and sample config file (2015-11-25 23:58:32 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      autobuild: add config option to set niceness
-      autobuild: store PID to PID file
-      conf: add a sample run-time configuration file
-      etc: add SysV-init startup script and sample config file
-
- conf/buildroot-autobuild.sample |   5 ++
- etc/default/buildroot-autobuild |  23 +++++++
- etc/init.d/buildroot-autobuild  | 148 ++++++++++++++++++++++++++++++++++++++++
- scripts/autobuild-run           |  17 ++++-
- 4 files changed, 192 insertions(+), 1 deletion(-)
- create mode 100644 conf/buildroot-autobuild.sample
- create mode 100644 etc/default/buildroot-autobuild
- create mode 100755 etc/init.d/buildroot-autobuild
-
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index db60f5c..397c770 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -65,6 +65,7 @@ defaults = {
+     '--submitter': 'N/A',
+     '--make-opts': '',
+     '--nice': 0,
++    '--pid-file': '/tmp/buildroot-autobuild.pid',
+ }
+ 
+ doc = """autobuild-run - run Buildroot autobuilder
+@@ -92,6 +93,8 @@ Options:
+   --make-opts OPTSTRING          string of extra options to pass to Buildroot
+                                  make, such as specific command wrappers
+                                  Empty by default.
++  --pid-file PATH                path to a file where to store the PID
++                                 Defaults to %(--pid-file)s.
+   -c, --config CONFIG            path to configuration file
+                                  Not set by default.
+ 
+@@ -807,6 +810,10 @@ def main():
+     # load in defaults at lowest priority
+     args = merge(args, defaults)
+ 
++    # Save our PID very early, so we can be stopped
++    with open(args['--pid-file'], "w+") as pidf:
++        pidf.write("%d" % os.getpid())
++
+     # http_login/password could theoretically be allowed as empty, so check
+     # explicitly on None.
+     upload = (args['--http-login'] is not None) \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
