@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 25 Nov 2015 12:04:06 +0000
-Subject: [Buildroot] [PATCH] localedef: add a hash file
-Message-ID: <1448453046-30116-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 25 Nov 2015 12:17:59 +0000
+Subject: [Buildroot] [PATCH 1/2] rubix: add a hash file
+Message-ID: <1448453880-62053-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,17 +10,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/localedef/localedef.hash | 2 ++
+ package/rubix/rubix.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/localedef/localedef.hash
+ create mode 100644 package/rubix/rubix.hash
 
-diff --git a/package/localedef/localedef.hash b/package/localedef/localedef.hash
+diff --git a/package/rubix/rubix.hash b/package/rubix/rubix.hash
 new file mode 100644
-index 0000000..ee14fb1
+index 0000000..90fc9cd
 --- /dev/null
-+++ b/package/localedef/localedef.hash
++++ b/package/rubix/rubix.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 9a60f7cdab6fb39adf23a12102f2d950d5f07f0cd7e51e85ec327e07440a79c6  localedef-eglibc-2.14.1-r17443-ptx1.tar.bz2
++sha256 d3c6bf8bfa891e72baac0250a79d26045ddb4412b72d90de7c46091c07516b43  rubix-1.0.5.tar.bz2
 -- 
 2.4.10
