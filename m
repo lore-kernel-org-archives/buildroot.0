@@ -1,27 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Nov 2015 17:17:19 +0100
-Subject: [Buildroot] [git commit] micropython-lib: Add hash file
-Message-ID: <20151201232121.6337581932@busybox.osuosl.org>
+Date: Wed, 25 Nov 2015 12:10:26 +0100
+Subject: [Buildroot] [git commit] rpcbind: backport adjustment to changes in
+	libtirpc 1.0.1
+Message-ID: <20151201232122.606978194A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba47817d52fb304b0227c318e3a8d9a8e5494ea9
+commit: http://git.buildroot.net/buildroot/commit/?id=c091f2333a97127a919a9e77ee09f5dea90a8dd4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Peter Rosin <peda@axentia.se>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/micropython-lib/micropython-lib.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ ...ly-Don-t-use-the-xp_auth-pointer-directly.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/micropython-lib/micropython-lib.hash b/package/micropython-lib/micropython-lib.hash
+diff --git a/package/rpcbind/0002-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch b/package/rpcbind/0002-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch
 new file mode 100644
-index 0000000..7ab22d5
+index 0000000..6145514
 --- /dev/null
-+++ b/package/micropython-lib/micropython-lib.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 f66bfe0e7d2d61119a5def989f74278f42bee7d04162913ea60d3f2955d65909  micropython-lib-v0.5.tar.gz
++++ b/package/rpcbind/0002-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch
+@@ -0,0 +1,42 @@
++From 9194122389f2a56b1cd1f935e64307e2e963c2da Mon Sep 17 00:00:00 2001
++From: Steve Dickson <steved@redhat.com>
++Date: Mon, 2 Nov 2015 17:05:18 -0500
++Subject: [PATCH] handle_reply: Don't use the xp_auth pointer directly
++
++In the latest libtirpc version to access the xp_auth
++one must use the SVC_XP_AUTH macro. To be backwards
++compatible a couple ifdefs were added to use the
++macro when it exists.
++
++Signed-off-by: Steve Dickson <steved@redhat.com>
++[peda at axentia.se: backport from upstream]
++Signed-off-by: Peter Rosin <peda@axentia.se>
++---
++ src/rpcb_svc_com.c | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/src/rpcb_svc_com.c b/src/rpcb_svc_com.c
++index 4ae93f1..22d6c84 100644
++--- a/src/rpcb_svc_com.c
+++++ b/src/rpcb_svc_com.c
++@@ -1295,10 +1295,17 @@ handle_reply(int fd, SVCXPRT *xprt)
++ 	a.rmt_localvers = fi->versnum;
++ 
++ 	xprt_set_caller(xprt, fi);
+++#if defined(SVC_XP_AUTH)
+++	SVC_XP_AUTH(xprt) = svc_auth_none;
+++#else 
++ 	xprt->xp_auth = &svc_auth_none;
+++#endif
++ 	svc_sendreply(xprt, (xdrproc_t) xdr_rmtcall_result, (char *) &a);
+++#if !defined(SVC_XP_AUTH)
++ 	SVCAUTH_DESTROY(xprt->xp_auth);
++ 	xprt->xp_auth = NULL;
+++#endif
+++
++ done:
++ 	if (buffer)
++ 		free(buffer);
++-- 
++2.5.3
++
