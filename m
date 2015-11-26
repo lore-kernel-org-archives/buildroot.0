@@ -1,69 +1,152 @@
-From: Alexey Galakhov <agalakhov@gmail.com>
-Date: Thu, 26 Nov 2015 21:43:14 +0100
-Subject: [Buildroot] [PATCH 1/1] core: add option to force compiling C++
- as C++11
-In-Reply-To: <20151126175115.58c84720@free-electrons.com>
-References: <1448549404-11670-1-git-send-email-agalakhov@gmail.com>
- <20151126175115.58c84720@free-electrons.com>
-Message-ID: <20151126214314.278f4531.agalakhov@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 26 Nov 2015 22:01:06 +0100
+Subject: [Buildroot] [PATCH] qt5base: support OVERRIDE_SRCDIR
+In-Reply-To: <1448400109-32767-1-git-send-email-peter@korsgaard.com>
+References: <1448400109-32767-1-git-send-email-peter@korsgaard.com>
+Message-ID: <20151126210106.GA3724@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Peter, All,
 
-> I am not familiar with C++ issues, can you give some more details and
-> specific examples here ?
+On 2015-11-24 22:21 +0100, Peter Korsgaard spake thusly:
+> With OVERRIDE_SRCDIR we don't apply any of the qt5base patches, but the
+> custom specs files are needed to be able to build - So install these in the
+> configure step instead of having them as a patch.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-This is more or less a toolchain issue. Consider we're building a C++
-library with a class declaration in *.h and its implementation in
-*.cpp. Compilation with a C++03 compiler results in the generation of
-several functions corresponding to class methods. Compilation with a
-C++11 compiler gives two additional functions, corresponding to the
-move constructor and the move assignment operator (new features of
-C++11).
+After your comments:
 
-If a C++ library is compiled with an C++03 compiler (that is the
-default when using g++), its object files won't contain the
-implementations of these new methods. The library is then unusable for
-C++11 compiler. In the worst case we have to recompile all the
-libraries in the system with a C++11 compiler.
-
-Example linker error is:
-
-In function log4cplus::detail::macros_get_logger(log4cplus::Logger&&)':
-/usr/include/log4cplus/loggingmacros.h:106: undefined reference
-tolog4cplus::Logger::Logger(log4cplus::Logger&&)'
-
-This function is only generated when compiling in C++11 mode. It does
-not exist in C++03 mode.
-
-To clarify: This is NOT an error inside buildroot! This only happens if
-compiling some 3rd-party or proprietary code against previously
-compiled buildroot system. If I want to compile my program with
---std=c++11, I have to compile buildroot with --std=c++11 as well.
-
-
-> I don't think it is appropriate for Buildroot to have an option to be
-> enabled "if you encounter <foo> errors". If there is a problem, it
-> should be fixed properly, without having to rely on the user enabling
-> (or not enabling) a given option.
-
-Unfortunately, there is no "proper" solution. An alternative solution
-could be compiling most of the C++ libraries twice and thus providing
-two versions of each *.so file, one for C++03 and C++11. We could also
-try to make this option on per-package basis, but this should be then
-done in every library package using C++ and would be confusing.
-
-The proper help text would probably be something like this:
-"""
-? Enable this option if you need the move-semantics implementation in ?
-? the shared C++ libraries of buildroot. I.e., if you want to link your
-? own C++11 applications against them and the linker complains about
-? non-existing move constructor.
-"""
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
-Alexey
+Yann E. MORIN.
+
+> ---
+>  package/qt5/qt5base/0002-mkspecs-files.patch | 41 ----------------------------
+>  package/qt5/qt5base/qmake.conf               | 24 ++++++++++++++++
+>  package/qt5/qt5base/qplatformdefs.h          |  1 +
+>  package/qt5/qt5base/qt5base.mk               |  4 +++
+>  4 files changed, 29 insertions(+), 41 deletions(-)
+>  delete mode 100644 package/qt5/qt5base/0002-mkspecs-files.patch
+>  create mode 100644 package/qt5/qt5base/qmake.conf
+>  create mode 100644 package/qt5/qt5base/qplatformdefs.h
+> 
+> diff --git a/package/qt5/qt5base/0002-mkspecs-files.patch b/package/qt5/qt5base/0002-mkspecs-files.patch
+> deleted file mode 100644
+> index adeabdf..0000000
+> --- a/package/qt5/qt5base/0002-mkspecs-files.patch
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -Add a Buildroot 'device' to ease cross-compilation
+> -
+> -Qt5 has a mechanism to support "device" profiles, so that people can
+> -specify the compiler, compiler flags and so on for a specific device.
+> -
+> -We leverage this mechanism in the Buildroot packaging of qt5 to
+> -simplify cross-compilation: we have our own "device" definition, which
+> -allows us to easily pass the cross-compiler paths and flags from our
+> -qt5.mk.
+> -
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -[Arnout: remove ccache support]
+> -Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> -
+> -Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+> -===================================================================
+> ---- /dev/null
+> -+++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+> -@@ -0,0 +1,16 @@
+> -+include(../common/linux_device_pre.conf)
+> -+
+> -+# modifications to g++-unix.conf
+> -+QMAKE_CC                = $${CROSS_COMPILE}gcc
+> -+QMAKE_CXX               = $${CROSS_COMPILE}g++
+> -+
+> -+#modifications to gcc-base.conf
+> -+QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+> -+QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
+> -+QMAKE_CXXFLAGS_RELEASE += -O3
+> -+CONFIG                 += nostrip
+> -+
+> -+QMAKE_LIBS             += -lrt -lpthread -ldl
+> -+
+> -+include(../common/linux_device_post.conf)
+> -+load(qt_config)
+> -Index: b/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+> -===================================================================
+> ---- /dev/null
+> -+++ b/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+> -@@ -0,0 +1 @@
+> -+#include "../../linux-g++/qplatformdefs.h"
+> diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
+> new file mode 100644
+> index 0000000..2152d3c
+> --- /dev/null
+> +++ b/package/qt5/qt5base/qmake.conf
+> @@ -0,0 +1,24 @@
+> +# Qt5 has a mechanism to support "device" profiles, so that people can
+> +# specify the compiler, compiler flags and so on for a specific device.
+> +
+> +# We leverage this mechanism in the Buildroot packaging of qt5 to
+> +# simplify cross-compilation: we have our own "device" definition, which
+> +# allows us to easily pass the cross-compiler paths and flags from our
+> +# qt5.mk.
+> +
+> +include(../common/linux_device_pre.conf)
+> +
+> +# modifications to g++-unix.conf
+> +QMAKE_CC                = $${CROSS_COMPILE}gcc
+> +QMAKE_CXX               = $${CROSS_COMPILE}g++
+> +
+> +# modifications to gcc-base.conf
+> +QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+> +QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
+> +QMAKE_CXXFLAGS_RELEASE += -O3
+> +CONFIG                 += nostrip
+> +
+> +QMAKE_LIBS             += -lrt -lpthread -ldl
+> +
+> +include(../common/linux_device_post.conf)
+> +load(qt_config)
+> diff --git a/package/qt5/qt5base/qplatformdefs.h b/package/qt5/qt5base/qplatformdefs.h
+> new file mode 100644
+> index 0000000..99e9a27
+> --- /dev/null
+> +++ b/package/qt5/qt5base/qplatformdefs.h
+> @@ -0,0 +1 @@
+> +#include "../../linux-g++/qplatformdefs.h"
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 827a85e..6eeb619 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -179,6 +179,10 @@ endef
+>  endif
+>  
+>  define QT5BASE_CONFIGURE_CMDS
+> +	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
+> +		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+> +	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
+> +		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+>  	$(QT5BASE_CONFIGURE_CONFIG_FILE)
+>  	(cd $(@D); \
+>  		$(TARGET_MAKE_ENV) \
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
