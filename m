@@ -1,36 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Nov 2015 22:28:11 +0100
-Subject: [Buildroot] [PATCH v2] collectd: fix musl builds (ipc module)
-In-Reply-To: <20151123111242.GA15180@vostro> (Alex Suykov's message of "Mon,
- 23 Nov 2015 13:12:42 +0200")
-References: <20151123111242.GA15180@vostro>
-Message-ID: <874mg8v4b8.fsf@dell.be.48ers.dk>
+Date: Thu, 26 Nov 2015 22:19:36 +0100
+Subject: [Buildroot] [git commit] localedef: add a hash file
+Message-ID: <20151126212822.E80D081683@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alex" == Alex Suykov <alex.suykov@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ac43476f544edf4d3c551c5fa6e44fbe2b97ce64
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > src/ipc.c uses shm_info.used_ids which musl only provides when
- > _GNU_SOURCE is defined.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/localedef/localedef.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- > The issue has been fixed upstream, but the fix is not in their
- > latest 5.5.0 release. Adding their patch as a temporary fix
- > to be removed on the next version bump.
-
- > https://github.com/collectd/collectd/issues/1147
- > https://github.com/collectd/collectd/commit/3e3848349b753d78a0b1d19648fb394866856bda
-
- > Fixes
- > http://autobuild.buildroot.net/results/e981c08f01d2916246a17b1dc112e8b3e8c628e2/
-
- > Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
- > ---
- > v2: s-o-b line for the patch itself
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/localedef/localedef.hash b/package/localedef/localedef.hash
+new file mode 100644
+index 0000000..ee14fb1
+--- /dev/null
++++ b/package/localedef/localedef.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 9a60f7cdab6fb39adf23a12102f2d950d5f07f0cd7e51e85ec327e07440a79c6  localedef-eglibc-2.14.1-r17443-ptx1.tar.bz2
