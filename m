@@ -1,56 +1,86 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Nov 2015 23:13:38 +0100
-Subject: [Buildroot] [PATCH 0/2] core: use merged /usr in staging (branch
-	merged-usr-staging)
-Message-ID: <cover.1448575841.git.yann.morin.1998@free.fr>
+Date: Thu, 26 Nov 2015 23:13:40 +0100
+Subject: [Buildroot] [PATCH 1/2] package/skeleton: parametrise the
+	symlinks-or-mkdir macro
+In-Reply-To: <cover.1448575841.git.yann.morin.1998@free.fr>
+References: <cover.1448575841.git.yann.morin.1998@free.fr>
+Message-ID: <0c601430e0de47ba5a18c933ace701ccf1e0eca4.1448575841.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+currently, we only make the merged symlinks or non-merged mkdirs in the
+target directory. This is fine, as long as one does not run gdb.
 
-As reported by Pieterjan, when doing remote debugging with gdbserver on
-a merged /usr setup, the remote gdb would only look for libraries in
-staging/lib and never in staging/usr/lib.
+However, as soon as one wants to run gdb (or gdbserver) on the target,
+gdb will only search for libraries in /lib in the sysroot.
 
-This series replicates in staging the same merged /usr handling as we
-have for target/.
+In preparation for a patch to fix that, make the symlink-or-mkdir macro
+a function that takes as parameter the base directory where to create
+symlinks or mkdir in.
 
-This is implemented in the skeleton package, as it is the only easy
-place that is guaranteed to be before all other packages *and* before
-the toolchains.
+Move the function declarations our of the custom/non-custom skeleton
+conditional block, so they are always available.
 
-Regards,
-Yann E. MORIN.
+Reported-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/skeleton/skeleton.mk | 31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
 
-
-The following changes since commit 66fb7028ed2779fcba45221143d6d2c5b9084303:
-
-  strongswan: bump to version 5.3.5 (2015-11-26 21:23:18 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot merged-usr-staging
-
-for you to fetch changes up to 0934812eeec64cb2cdc2b7600879b53695859652:
-
-  package/skeleton: also handle merged /usr in the staging (2015-11-26 23:00:48 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/skeleton: parametrise the symlinks-or-mkdir macro
-      package/skeleton: also handle merged /usr in the staging
-
- Makefile                     |  9 ++------
- package/skeleton/skeleton.mk | 49 ++++++++++++++++++++++++++++++--------------
- 2 files changed, 36 insertions(+), 22 deletions(-)
-
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 46e8cc4..b296cbd 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -57,27 +57,28 @@ else # ! custom skeleton
+ 
+ SKELETON_PATH = system/skeleton
+ 
+-ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+-define SKELETON_USR_SYMLINKS_OR_DIRS
+-	ln -snf usr/bin $(TARGET_DIR)/bin
+-	ln -snf usr/sbin $(TARGET_DIR)/sbin
+-	ln -snf usr/lib $(TARGET_DIR)/lib
+-endef
+-else
+-define SKELETON_USR_SYMLINKS_OR_DIRS
+-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin
+-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/sbin
+-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib
+-endef
+-endif
+-
+ endif # ! custom skeleton
+ 
++# This function handles the merged or non-merged /usr cases
++ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++define SKELETON_USR_SYMLINKS_OR_DIRS
++	ln -snf usr/bin $(1)/bin
++	ln -snf usr/sbin $(1)/sbin
++	ln -snf usr/lib $(1)/lib
++endef
++else
++define SKELETON_USR_SYMLINKS_OR_DIRS
++	$(INSTALL) -d -m 0755 $(1)/bin
++	$(INSTALL) -d -m 0755 $(1)/sbin
++	$(INSTALL) -d -m 0755 $(1)/lib
++endef
++endif
++
+ define SKELETON_INSTALL_TARGET_CMDS
+ 	rsync -a --ignore-times $(SYNC_VCS_EXCLUSIONS) \
+ 		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+ 		$(SKELETON_PATH)/ $(TARGET_DIR)/
+-	$(SKELETON_USR_SYMLINKS_OR_DIRS)
++	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+ 	ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+ 	ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+ 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
