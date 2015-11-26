@@ -1,115 +1,93 @@
-From: Alan Ott <alan@signal11.us>
-Date: Wed, 25 Nov 2015 23:14:29 -0500
-Subject: [Buildroot] [PATCH] hidapi: new package
-In-Reply-To: <1447692852-21669-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1447692852-21669-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <56568725.8030900@signal11.us>
+From: Abhishek Singh <Abhishek.Singh@imgtec.com>
+Date: Thu, 26 Nov 2015 11:09:49 +0530
+Subject: [Buildroot] [PATCH 1/1] cxxtest: new package
+Message-ID: <1448516389-6669-1-git-send-email-Abhishek.Singh@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/16/2015 11:54 AM, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->   package/Config.in          |    1 +
->   package/hidapi/Config.in   |   20 ++++++++++++++++++++
->   package/hidapi/hidapi.hash |    2 ++
->   package/hidapi/hidapi.mk   |   27 +++++++++++++++++++++++++++
->   4 files changed, 50 insertions(+), 0 deletions(-)
->   create mode 100644 package/hidapi/Config.in
->   create mode 100644 package/hidapi/hidapi.hash
->   create mode 100644 package/hidapi/hidapi.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index bdc3063..04800c5 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -864,6 +864,7 @@ menu "Hardware handling"
->   	source "package/ccid/Config.in"
->   	source "package/dtc/Config.in"
->   	source "package/gnu-efi/Config.in"
-> +	source "package/hidapi/Config.in"
->   	source "package/lcdapi/Config.in"
->   	source "package/libaio/Config.in"
->   	source "package/libatasmart/Config.in"
-> diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
-> new file mode 100644
-> index 0000000..7fbc1c2
-> --- /dev/null
-> +++ b/package/hidapi/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_HIDAPI
-> +	bool "hidapi"
-> +	depends on BR2_PACKAGE_HAS_UDEV
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-> +	select BR2_PACKAGE_LIBUSB
-> +	# When eudev is used as the udev provider, libgudev is
-> +	# automatically provided as it is part of eudev. However, when
-> +	# systemd is used as the udev provider, libgudev is not
-> +	# provided, and needs to be built separately. This is why we
-> +	# select the libgudev package only if systemd is used.
-> +	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_SYSTEMD
-> +	help
-> +	  HIDAPI is a multi-platform library which allows an application
-> +	  to interface with USB and Bluetooth HID-Class devices on
-> +	  Windows, Linux, and Mac OS X.
-> +
-> +	  http://www.signal11.us/oss/hidapi/
-> +
-> +comment "hidapi needs udev /dev management and a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
-> diff --git a/package/hidapi/hidapi.hash b/package/hidapi/hidapi.hash
-> new file mode 100644
-> index 0000000..ba00df2
-> --- /dev/null
-> +++ b/package/hidapi/hidapi.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 33e206f5e145fc1bc6aeb55084d71b55d686533d23ad5bb762746ceba81e728b  hidapi-d17db57b9d4354752e0af42f5f33007a42ef2906.tar.gz
-> diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
-> new file mode 100644
-> index 0000000..23d5eab
-> --- /dev/null
-> +++ b/package/hidapi/hidapi.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# hidapi
-> +#
-> +################################################################################
-> +
-> +# Use master version as the current stable is very old and some bugs
-> +# have been fixed since then.
-> +HIDAPI_VERSION = d17db57b9d4354752e0af42f5f33007a42ef2906
-> +HIDAPI_SITE = $(call github,signal11,hidapi,$(HIDAPI_VERSION))
-> +HIDAPI_INSTALL_STAGING = YES
-> +# No configure provided, so we need to autoreconf.
-> +HIDAPI_AUTORECONF = YES
-> +HIDAPI_LICENSE = GPLv3, BSD-3c
-> +HIDAPI_LICENSE_FILES = LICENSE.txt LICENSE-gpl3.txt LICENSE-bsd.txt
-> +
-> +HIDAPI_DEPENDENCIES = libusb
-> +# When eudev is used as the udev provider, libgudev is automatically
-> +# provided as it is part of eudev. However, when systemd is used as the
-> +# udev provider, libgudev is not provided, and needs to be built
-> +# separately. This is why we select the libgudev package only if systemd
-> +# is used.
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +HIDAPI_DEPENDENCIES += libgudev
-> +endif
-> +
-> +$(eval $(autotools-package))
+Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Reviewed-by: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
+Signed-off-by: Abhishek Singh <Abhishek.Singh@imgtec.com>
+---
+ package/Config.in            |  1 +
+ package/cxxtest/Config.in    | 10 ++++++++++
+ package/cxxtest/cxxtest.hash |  2 ++
+ package/cxxtest/cxxtest.mk   | 25 +++++++++++++++++++++++++
+ 4 files changed, 38 insertions(+)
+ create mode 100644 package/cxxtest/Config.in
+ create mode 100644 package/cxxtest/cxxtest.hash
+ create mode 100644 package/cxxtest/cxxtest.mk
 
-Hi Vicente,
-
-This looks ok to me.
-
-For embedded, it would be nice to be able to build with only one 
-back-end (hidraw or libusb), but hidapi doesn't currently support 
-building that way. One day I'll get there.
-
-Thanks for doing this!
-
-Alan.
+diff --git a/package/Config.in b/package/Config.in
+index bdc3063..6e71d25 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -116,6 +116,7 @@ menu "Development tools"
+ 	source "package/cmake/Config.in"
+ 	source "package/cppunit/Config.in"
+ 	source "package/cvs/Config.in"
++	source "package/cxxtest/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/diffutils/Config.in"
+ 	source "package/dos2unix/Config.in"
+diff --git a/package/cxxtest/Config.in b/package/cxxtest/Config.in
+new file mode 100644
+index 0000000..7512e4b
+--- /dev/null
++++ b/package/cxxtest/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_CXXTEST
++	bool "cxxtest"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  CxxTest is a unit testing framework for C++
++
++	  http://cxxtest.com/
++
++comment "cxxtest needs toolchain with C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/cxxtest/cxxtest.hash b/package/cxxtest/cxxtest.hash
+new file mode 100644
+index 0000000..f552e80
+--- /dev/null
++++ b/package/cxxtest/cxxtest.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	1c154fef91c65dbf1cd4519af7ade70a61d85a923b6e0c0b007dc7f4895cf7d8	cxxtest-4.4.tar.gz
+diff --git a/package/cxxtest/cxxtest.mk b/package/cxxtest/cxxtest.mk
+new file mode 100644
+index 0000000..5089f92
+--- /dev/null
++++ b/package/cxxtest/cxxtest.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# cxxtest
++#
++################################################################################
++
++CXXTEST_VERSION = 4.4
++CXXTEST_SOURCE = cxxtest-$(CXXTEST_VERSION).tar.gz
++CXXTEST_SITE = http://sourceforge.net/projects/cxxtest/files/cxxtest/$(CXXTEST_VERSION)
++CXXTEST_LICENSE = LGPLv3
++CXXTEST_LICENSE_FILES = COPYING
++CXXTEST_INSTALL_STAGING = YES
++CXXTEST_INSTALL_TARGET = NO
++CXXTEST_DEPENDENCIES = host-cxxtest
++HOST_CXXTEST_DEPENDENCIES = host-python
++HOST_CXXTEST_SETUP_TYPE = setuptools
++HOST_CXXTEST_SUBDIR = python
++
++define CXXTEST_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/cxxtest
++	cp $(@D)/cxxtest/* $(STAGING_DIR)/usr/include/cxxtest
++endef
++
++$(eval $(generic-package))
++$(eval $(host-python-package))
+-- 
+2.6.2
