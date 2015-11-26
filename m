@@ -1,55 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Nov 2015 23:21:24 +0100
-Subject: [Buildroot] Buildroot 2015.11-rc3 released
-Message-ID: <87wpt4s8pn.fsf@dell.be.48ers.dk>
+Date: Thu, 26 Nov 2015 23:27:21 +0100
+Subject: [Buildroot] [PATCH] gcc: fix incorrect handling of the
+	comparison arguments
+In-Reply-To: <1448575918.2773.23.camel@synopsys.com> (Alexey Brodkin's message
+ of "Thu, 26 Nov 2015 22:13:09 +0000")
+References: <1448558498-8518-1-git-send-email-ltrimas@synopsys.com>
+ <871tbctoxe.fsf@dell.be.48ers.dk>
+ <1448575918.2773.23.camel@synopsys.com>
+Message-ID: <87si3ss8fq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-Buildroot 2015.11-rc3 is released - Go download it at:
+ >> Alex/Anton, an acked-by would be good. Should this go into the 2015.11
+ >> release?
 
-http://buildroot.net/downloads/buildroot-2015.11-rc3.tar.gz
+ > I think it worth applying onto 2015.11 because this is a bugfix but not
+ > new feature.
 
-or
+ > Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
 
-http://buildroot.net/downloads/buildroot-2015.11-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2015.11-rc2..
-    17  Gustavo Zacarias
-    12  Peter Korsgaard
-     6  J?rg Krause
-     6  Thomas Petazzoni
-     3  Rodrigo Rebello
-     3  Vicente Olivert Riera
-     3  Yann E. MORIN
-     2  Peter Rosin
-     2  Sergio Prado
-     2  Waldemar Brodkorb
-     1  Alex Suykov
-     1  Angelo Compagnucci
-     1  Arnout Vandecappelle
-     1  Danomi Manchego
-     1  J?r?me Pouiller
-     1  Peter Seiderer
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.11-rc3
-
-Expect the final 2015.11 release by the end of the month.
+Ok - Committed, thanks.
 
 -- 
-Bye, Peter Korsgaard
+Venlig hilsen,
+Peter Korsgaard 
