@@ -1,27 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Nov 2015 21:18:37 +0100
-Subject: [Buildroot] [PATCH] quagga: fix static linking
-In-Reply-To: <1448551499-24162-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 26 Nov 2015 16:24:59 +0100")
-References: <1448551499-24162-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878u5kwm3m.fsf@dell.be.48ers.dk>
+Date: Thu, 26 Nov 2015 21:21:36 +0100
+Subject: [Buildroot] [PATCH] libgsasl: fix auto dependencies
+In-Reply-To: <1448560021-14096-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 26 Nov 2015 14:47:01 -0300")
+References: <1448560021-14096-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874mg8wlyn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > This commit adds a patch to quagga's configure.ac to fix a library
- > ordering problem that is causing a build failure in static linking
- > scenario.
+ > IDN can be picked up from the distro installation so use a prefix when
+ > it's available or otherwise just disable it, fixes:
+ > http://autobuild.buildroot.org/results/5d9/5d9baf528c47c5167ec8d2a6941cb06b4ca761ca/
 
- > Fixes:
+ > Also disable libgcrypt support which wasn't accounted for and doesn't
+ > seem to work either to possibly avoid the same problem.
 
- >   http://autobuild.buildroot.org/results/c08/c086f3128232af70d24fd5faf9282ce91d6488ef/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
