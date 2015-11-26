@@ -1,93 +1,58 @@
-From: Abhishek Singh <Abhishek.Singh@imgtec.com>
-Date: Thu, 26 Nov 2015 11:09:49 +0530
-Subject: [Buildroot] [PATCH 1/1] cxxtest: new package
-Message-ID: <1448516389-6669-1-git-send-email-Abhishek.Singh@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Nov 2015 07:16:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/audiofile: add patch to fix
+	static linking issue
+In-Reply-To: <1448400166-4487-1-git-send-email-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Tue, 24 Nov 2015 22:22:46
+ +0100")
+References: <1448400166-4487-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <87si3twaj4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Reviewed-by: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-Signed-off-by: Abhishek Singh <Abhishek.Singh@imgtec.com>
----
- package/Config.in            |  1 +
- package/cxxtest/Config.in    | 10 ++++++++++
- package/cxxtest/cxxtest.hash |  2 ++
- package/cxxtest/cxxtest.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/cxxtest/Config.in
- create mode 100644 package/cxxtest/cxxtest.hash
- create mode 100644 package/cxxtest/cxxtest.mk
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-diff --git a/package/Config.in b/package/Config.in
-index bdc3063..6e71d25 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -116,6 +116,7 @@ menu "Development tools"
- 	source "package/cmake/Config.in"
- 	source "package/cppunit/Config.in"
- 	source "package/cvs/Config.in"
-+	source "package/cxxtest/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/diffutils/Config.in"
- 	source "package/dos2unix/Config.in"
-diff --git a/package/cxxtest/Config.in b/package/cxxtest/Config.in
-new file mode 100644
-index 0000000..7512e4b
---- /dev/null
-+++ b/package/cxxtest/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_CXXTEST
-+	bool "cxxtest"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  CxxTest is a unit testing framework for C++
-+
-+	  http://cxxtest.com/
-+
-+comment "cxxtest needs toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/cxxtest/cxxtest.hash b/package/cxxtest/cxxtest.hash
-new file mode 100644
-index 0000000..f552e80
---- /dev/null
-+++ b/package/cxxtest/cxxtest.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	1c154fef91c65dbf1cd4519af7ade70a61d85a923b6e0c0b007dc7f4895cf7d8	cxxtest-4.4.tar.gz
-diff --git a/package/cxxtest/cxxtest.mk b/package/cxxtest/cxxtest.mk
-new file mode 100644
-index 0000000..5089f92
---- /dev/null
-+++ b/package/cxxtest/cxxtest.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# cxxtest
-+#
-+################################################################################
-+
-+CXXTEST_VERSION = 4.4
-+CXXTEST_SOURCE = cxxtest-$(CXXTEST_VERSION).tar.gz
-+CXXTEST_SITE = http://sourceforge.net/projects/cxxtest/files/cxxtest/$(CXXTEST_VERSION)
-+CXXTEST_LICENSE = LGPLv3
-+CXXTEST_LICENSE_FILES = COPYING
-+CXXTEST_INSTALL_STAGING = YES
-+CXXTEST_INSTALL_TARGET = NO
-+CXXTEST_DEPENDENCIES = host-cxxtest
-+HOST_CXXTEST_DEPENDENCIES = host-python
-+HOST_CXXTEST_SETUP_TYPE = setuptools
-+HOST_CXXTEST_SUBDIR = python
-+
-+define CXXTEST_INSTALL_STAGING_CMDS
-+	mkdir -p $(STAGING_DIR)/usr/include/cxxtest
-+	cp $(@D)/cxxtest/* $(STAGING_DIR)/usr/include/cxxtest
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-python-package))
+ > Static linking userspace programs such as MPD against libaudiofile fails if
+ > FLAC is available, because libaudiofile is linked against FLAC, but this isn't
+ > expressed in the pkg-config file:
+
+ > [..]
+ > arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libaudiofile.a(FLAC.o): In function `FLACDecoder::reset2()':
+ > FLAC.cpp:(.text+0x58): undefined reference to `FLAC__stream_decoder_seek_absolute'
+ > /home/buildroot/build/instance-1/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libaudiofile.a(FLAC.o): In function `FLACEncoder::sync2()':
+ > FLAC.cpp:(.text+0x88): undefined reference to `FLAC__stream_encoder_finish'
+ > /home/buildroot/build/instance-1/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libaudiofile.a(FLAC.o): In function `FLACDecoder::~FLACDecoder()':
+ > FLAC.cpp:(.text+0xc4): undefined reference to `FLAC__stream_decoder_delete'
+ > /home/buildroot/build/instance-1/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libaudiofile.a(FLAC.o): In function `FLACEncoder::~FLACEncoder()':
+ > FLAC.cpp:(.text+0x164): undefined reference to `FLAC__stream_encoder_delete'
+ > /home/buildroot/build/instance-1/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libaudiofile.a(FLAC.o): In function `FLACDecoder::runPull()':
+ > [..]
+
+ > The Libs.private field is specifically designed for such usage:
+
+ > From pkg-config documentation:
+
+ >   Libs.private:
+
+ >     This line should list any private libraries in use.  Private
+ >     libraries are libraries which are not exposed through your
+ >     library, but are needed in the case of static linking.
+
+ > Therefore, this patch adds a reference to FLAC as well as to lcov in the
+ > Libs.private field of the pkg-config file.
+
+ > Patch status: Pending
+ > https://github.com/mpruett/audiofile/pull/26
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/e95/e959e703a8db81032da27bece295c121e53d830d/
+ > http://autobuild.buildroot.net/results/10b/10bd00209f098e8782016355cb2f46d1d3e7d3a3/
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+
+Committed, thanks.
+
 -- 
-2.6.2
+Bye, Peter Korsgaard
