@@ -1,79 +1,87 @@
-From: Alexey Galakhov <agalakhov@gmail.com>
-Date: Thu, 26 Nov 2015 15:50:04 +0100
-Subject: [Buildroot] [PATCH 1/1] core: add option to force compiling C++ as
-	C++11
-Message-ID: <1448549404-11670-1-git-send-email-agalakhov@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Nov 2015 16:24:59 +0100
+Subject: [Buildroot] [PATCH] quagga: fix static linking
+Message-ID: <1448551499-24162-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Many C++ libraries like boost and log4cplus use defines to be compatible with
-both C++03 and C++11 standards. This causes ABI incompatibilities between
-a library built with C++03 and an application built with C++11. To avoid this,
-one has to built libraries as C++11 as well.
+This commit adds a patch to quagga's configure.ac to fix a library
+ordering problem that is causing a build failure in static linking
+scenario.
 
-This patch introduces the BR2_ENABLE_CPP11 configuration option that forces
-passing --std=c++11 to the compiler while building C++ target libraries.
+Fixes:
 
-Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
+  http://autobuild.buildroot.org/results/c08/c086f3128232af70d24fd5faf9282ce91d6488ef/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in           | 16 ++++++++++++++++
- package/Makefile.in | 12 +++++++++++-
- 2 files changed, 27 insertions(+), 1 deletion(-)
+ ...onfigure-fix-static-linking-with-readline.patch | 41 ++++++++++++++++++++++
+ package/quagga/quagga.mk                           |  2 ++
+ 2 files changed, 43 insertions(+)
+ create mode 100644 package/quagga/0002-configure-fix-static-linking-with-readline.patch
 
-diff --git a/Config.in b/Config.in
-index d795361..79e4d31 100644
---- a/Config.in
-+++ b/Config.in
-@@ -533,6 +533,22 @@ config BR2_ENABLE_SSP
- comment "enabling Stack Smashing Protection requires support in the toolchain"
- 	depends on !BR2_TOOLCHAIN_HAS_SSP
+diff --git a/package/quagga/0002-configure-fix-static-linking-with-readline.patch b/package/quagga/0002-configure-fix-static-linking-with-readline.patch
+new file mode 100644
+index 0000000..243dfaf
+--- /dev/null
++++ b/package/quagga/0002-configure-fix-static-linking-with-readline.patch
+@@ -0,0 +1,41 @@
++From 62ede7482da15d276b880f6d8540dce400dc50a7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 26 Nov 2015 15:59:07 +0100
++Subject: [PATCH] configure: fix static linking with readline
++
++When static linking is used, the order of the libraries is important,
++and the libraries using a symbol from another library should be listed
++*before* the library providing that symbol (see
++http://eli.thegreenplace.net/2013/07/09/library-order-in-static-linking)
++for details.
++
++When vtysh is linked statically, the command line contains "-lcurses
++-lreadline", which causes a build failure due to unresolved
++symbols. This is because readline is using symbols from the curses
++library: the order should be the opposite.
++
++This patch fixes that problem by putting the -lreadline at the
++beginning of the LIBREADLINE variable calcualted by the configure
++script.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 3003e62..290953d 100755
++--- a/configure.ac
+++++ b/configure.ac
++@@ -652,7 +652,7 @@ dnl	 [TODO] on Linux, and in [TODO] on Solaris.
++ 	      )]
++ 	    )]
++ 	  )
++-         AC_CHECK_LIB(readline, main, LIBREADLINE="$LIBREADLINE -lreadline",,
+++         AC_CHECK_LIB(readline, main, LIBREADLINE="-lreadline $LIBREADLINE",,
++                       "$LIBREADLINE")
++          if test $ac_cv_lib_readline_main = no; then
++            AC_MSG_ERROR([vtysh needs libreadline but was not found and usable on your system.])
++-- 
++2.6.3
++
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index ce1d34b..c5dd2ba 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -11,6 +11,8 @@ QUAGGA_DEPENDENCIES = host-gawk
+ QUAGGA_LICENSE = GPLv2+
+ QUAGGA_LICENSE_FILES = COPYING
+ QUAGGA_CONF_OPTS = --program-transform-name=''
++# 0002-configure-fix-static-linking-with-readline.patch
++QUAGGA_AUTORECONF = YES
  
-+config BR2_ENABLE_CPP11
-+	bool "force C++11 when building libraries"
-+	default n
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
-+	help
-+	  Force building of C++ libraries in C++11 mode.
-+
-+	  Some C++ libraries (i.e. boost) behave differently if compiled with
-+	  and without --std=c++11 flag. They define classes differently. This
-+	  causes linker errors while trying to use such a library in a C++11
-+	  project.
-+
-+	  This option forces building of all such libraries in C++11 mode.
-+	  Enable it if you encounter C++11-related linker errors.
-+
- choice
- 	bool "libraries"
- 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 85008bb..0bb911e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -135,9 +135,19 @@ ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
- endif
- 
-+ifeq ($(BR2_ENABLE_CPP11),y)
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
-+TARGET_CXXLANGUAGE = --std=c++11
-+else
-+TARGET_CXXLANGUAGE = --std=c++0x
-+endif
-+else
-+TARGET_CXXLANGUAGE =
-+endif
-+
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
--TARGET_CXXFLAGS = $(TARGET_CFLAGS)
-+TARGET_CXXFLAGS = $(TARGET_CFLAGS) $(TARGET_CXXLANGUAGE)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
- ifeq ($(BR2_BINFMT_FLAT),y)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ZEBRA),--enable-zebra,--disable-zebra)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BABELD),--enable-babeld,--disable-babeld)
 -- 
-2.6.2
+2.6.3
