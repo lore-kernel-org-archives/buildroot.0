@@ -1,125 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Nov 2015 22:16:25 +0100
-Subject: [Buildroot] [git commit] qt5base: support OVERRIDE_SRCDIR
-Message-ID: <20151126211736.9314081826@busybox.osuosl.org>
+Date: Thu, 26 Nov 2015 22:20:23 +0100
+Subject: [Buildroot] [PATCH] localedef: add a hash file
+In-Reply-To: <1448453046-30116-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 25 Nov 2015 12:04:06 +0000")
+References: <1448453046-30116-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87d1uwv4o8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e76d59c258f868f7958409d3c99e431596153645
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-With OVERRIDE_SRCDIR we don't apply any of the qt5base patches, but the
-custom specs files are needed to be able to build - So install these in the
-configure step instead of having them as a patch.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/qt5/qt5base/0002-mkspecs-files.patch |   41 --------------------------
- package/qt5/qt5base/qmake.conf               |   24 +++++++++++++++
- package/qt5/qt5base/qplatformdefs.h          |    1 +
- package/qt5/qt5base/qt5base.mk               |    4 ++
- 4 files changed, 29 insertions(+), 41 deletions(-)
+Committed, thanks.
 
-diff --git a/package/qt5/qt5base/0002-mkspecs-files.patch b/package/qt5/qt5base/0002-mkspecs-files.patch
-deleted file mode 100644
-index adeabdf..0000000
---- a/package/qt5/qt5base/0002-mkspecs-files.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--Add a Buildroot 'device' to ease cross-compilation
--
--Qt5 has a mechanism to support "device" profiles, so that people can
--specify the compiler, compiler flags and so on for a specific device.
--
--We leverage this mechanism in the Buildroot packaging of qt5 to
--simplify cross-compilation: we have our own "device" definition, which
--allows us to easily pass the cross-compiler paths and flags from our
--qt5.mk.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Arnout: remove ccache support]
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
--
--Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
--===================================================================
----- /dev/null
--+++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
--@@ -0,0 +1,16 @@
--+include(../common/linux_device_pre.conf)
--+
--+# modifications to g++-unix.conf
--+QMAKE_CC                = $${CROSS_COMPILE}gcc
--+QMAKE_CXX               = $${CROSS_COMPILE}g++
--+
--+#modifications to gcc-base.conf
--+QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
--+QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
--+QMAKE_CXXFLAGS_RELEASE += -O3
--+CONFIG                 += nostrip
--+
--+QMAKE_LIBS             += -lrt -lpthread -ldl
--+
--+include(../common/linux_device_post.conf)
--+load(qt_config)
--Index: b/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
--===================================================================
----- /dev/null
--+++ b/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
--@@ -0,0 +1 @@
--+#include "../../linux-g++/qplatformdefs.h"
-diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
-new file mode 100644
-index 0000000..2152d3c
---- /dev/null
-+++ b/package/qt5/qt5base/qmake.conf
-@@ -0,0 +1,24 @@
-+# Qt5 has a mechanism to support "device" profiles, so that people can
-+# specify the compiler, compiler flags and so on for a specific device.
-+
-+# We leverage this mechanism in the Buildroot packaging of qt5 to
-+# simplify cross-compilation: we have our own "device" definition, which
-+# allows us to easily pass the cross-compiler paths and flags from our
-+# qt5.mk.
-+
-+include(../common/linux_device_pre.conf)
-+
-+# modifications to g++-unix.conf
-+QMAKE_CC                = $${CROSS_COMPILE}gcc
-+QMAKE_CXX               = $${CROSS_COMPILE}g++
-+
-+# modifications to gcc-base.conf
-+QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
-+QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
-+QMAKE_CXXFLAGS_RELEASE += -O3
-+CONFIG                 += nostrip
-+
-+QMAKE_LIBS             += -lrt -lpthread -ldl
-+
-+include(../common/linux_device_post.conf)
-+load(qt_config)
-diff --git a/package/qt5/qt5base/qplatformdefs.h b/package/qt5/qt5base/qplatformdefs.h
-new file mode 100644
-index 0000000..99e9a27
---- /dev/null
-+++ b/package/qt5/qt5base/qplatformdefs.h
-@@ -0,0 +1 @@
-+#include "../../linux-g++/qplatformdefs.h"
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 827a85e..6eeb619 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -179,6 +179,10 @@ endef
- endif
- 
- define QT5BASE_CONFIGURE_CMDS
-+	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
-+		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
-+	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
-+		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
- 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
- 	(cd $(@D); \
- 		$(TARGET_MAKE_ENV) \
+-- 
+Bye, Peter Korsgaard
