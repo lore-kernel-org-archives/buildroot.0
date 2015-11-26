@@ -1,46 +1,56 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 26 Nov 2015 22:13:09 +0000
-Subject: [Buildroot] [PATCH] gcc: fix incorrect handling of the
-	comparison arguments
-In-Reply-To: <871tbctoxe.fsf@dell.be.48ers.dk>
-References: <1448558498-8518-1-git-send-email-ltrimas@synopsys.com>
- <871tbctoxe.fsf@dell.be.48ers.dk>
-Message-ID: <1448575918.2773.23.camel@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 26 Nov 2015 23:13:38 +0100
+Subject: [Buildroot] [PATCH 0/2] core: use merged /usr in staging (branch
+	merged-usr-staging)
+Message-ID: <cover.1448575841.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello All!
 
-On Thu, 2015-11-26 at 22:45 +0100, Peter Korsgaard wrote:
-> > > > > > "Lada" == Lada Trimasova <Lada.Trimasova@synopsys.com> writes:
-> 
-> Hi,
-> 
->  > This patch fixes compiler error during libbroadvoice build.
->  > The comparison arguments where not correctly handled.
->  > The fix is done in development tree:
->  > https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/b4035128ba8f8bbbf9527f54f261a87b304ca4c5
->  > and will be a part of the next release of ARC GNU tools.
->  > Once that new release happens this patch must be removed.
-> 
->  > Fixes:
->  > http://autobuild.buildroot.net/results/bea/beace68a19382b43370c798dcf7d2ef412f9d75e/
-> 
->  > Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
->  > Cc: Alexey Brodkin <abrodkin@synopsys.com>
->  > Cc: Anton Kolesov <akolesov@synopsys.com>
->  > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  > Cc: Peter Korsgaard <peter@korsgaard.com>
-> 
-> Alex/Anton, an acked-by would be good. Should this go into the 2015.11
-> release?
+As reported by Pieterjan, when doing remote debugging with gdbserver on
+a merged /usr setup, the remote gdb would only look for libraries in
+staging/lib and never in staging/usr/lib.
 
-I think it worth applying onto 2015.11 because this is a bugfix but not
-new feature.
+This series replicates in staging the same merged /usr handling as we
+have for target/.
 
-Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
+This is implemented in the skeleton package, as it is the only easy
+place that is guaranteed to be before all other packages *and* before
+the toolchains.
 
--Alexey
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 66fb7028ed2779fcba45221143d6d2c5b9084303:
+
+  strongswan: bump to version 5.3.5 (2015-11-26 21:23:18 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot merged-usr-staging
+
+for you to fetch changes up to 0934812eeec64cb2cdc2b7600879b53695859652:
+
+  package/skeleton: also handle merged /usr in the staging (2015-11-26 23:00:48 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/skeleton: parametrise the symlinks-or-mkdir macro
+      package/skeleton: also handle merged /usr in the staging
+
+ Makefile                     |  9 ++------
+ package/skeleton/skeleton.mk | 49 ++++++++++++++++++++++++++++++--------------
+ 2 files changed, 36 insertions(+), 22 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
