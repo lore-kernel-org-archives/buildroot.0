@@ -1,90 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Nov 2015 09:32:57 +0100
-Subject: [Buildroot] [PATCH 1/1] cxxtest: new package
-In-Reply-To: <1448516389-6669-1-git-send-email-Abhishek.Singh@imgtec.com>
-References: <1448516389-6669-1-git-send-email-Abhishek.Singh@imgtec.com>
-Message-ID: <20151126093257.6b3d26e6@free-electrons.com>
+Date: Thu, 26 Nov 2015 09:35:55 +0100
+Subject: [Buildroot] [git commit] guile: use libltdl,
+ needs dynamic libraries
+In-Reply-To: <20151125222250.4B3B07FC4C@busybox.osuosl.org>
+References: <20151125222250.4B3B07FC4C@busybox.osuosl.org>
+Message-ID: <20151126093555.5459974e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Abhishek Singh,
+Peter,
 
-On Thu, 26 Nov 2015 11:09:49 +0530, Abhishek Singh wrote:
+On Wed, 25 Nov 2015 23:10:40 +0100, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=f1ad7a74587843925b85adb2cfb6d35bfb3247f9
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/8d0/8d0e8ab0e7a83fda9ee65f973b5b749b246f1c1a/
+> http://autobuild.buildroot.net/results/381/38137ccf29023f38c540483a6655c4b8d6778abd/
+> http://autobuild.buildroot.net/results/1d8/1d864588f71b8c13a67781cf91ad058c74eb7abc/
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-> diff --git a/package/cxxtest/Config.in b/package/cxxtest/Config.in
-> new file mode 100644
-> index 0000000..7512e4b
-> --- /dev/null
-> +++ b/package/cxxtest/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_CXXTEST
-> +	bool "cxxtest"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	help
-> +	  CxxTest is a unit testing framework for C++
-> +
-> +	  http://cxxtest.com/
-> +
-> +comment "cxxtest needs toolchain with C++ support"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/cxxtest/cxxtest.hash b/package/cxxtest/cxxtest.hash
-> new file mode 100644
-> index 0000000..f552e80
-> --- /dev/null
-> +++ b/package/cxxtest/cxxtest.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256	1c154fef91c65dbf1cd4519af7ade70a61d85a923b6e0c0b007dc7f4895cf7d8	cxxtest-4.4.tar.gz
-> diff --git a/package/cxxtest/cxxtest.mk b/package/cxxtest/cxxtest.mk
-> new file mode 100644
-> index 0000000..5089f92
-> --- /dev/null
-> +++ b/package/cxxtest/cxxtest.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# cxxtest
-> +#
-> +################################################################################
-> +
-> +CXXTEST_VERSION = 4.4
-> +CXXTEST_SOURCE = cxxtest-$(CXXTEST_VERSION).tar.gz
-> +CXXTEST_SITE = http://sourceforge.net/projects/cxxtest/files/cxxtest/$(CXXTEST_VERSION)
-> +CXXTEST_LICENSE = LGPLv3
-> +CXXTEST_LICENSE_FILES = COPYING
-> +CXXTEST_INSTALL_STAGING = YES
-> +CXXTEST_INSTALL_TARGET = NO
+Then you should remove:
 
-Is CxxTest just a set of C++ headers with no library ?
+ifeq ($(BR2_STATIC_LIBS),y)
+GUILE_CFLAGS += -DGC_NO_DLOPEN
+endif
 
-> +CXXTEST_DEPENDENCIES = host-cxxtest
-> +HOST_CXXTEST_DEPENDENCIES = host-python
+from guile.mk. But it is weird, because I remember adding those three
+lines in guile.mk in commit 49593aba5a56c9c297c31c12fc4dc3de5679e7b1,
+and at the time, I tested a static build of guile and it worked fine.
+But maybe it was a static build with a dynamic capable toolchain, so I
+didn't see all the problems.
 
-This is not needed. host-cxxtest is using host-python-package, so the
-dependency on host-python is automatically added by the
-host-python-package infrastructure.
-
-> +HOST_CXXTEST_SETUP_TYPE = setuptools
-> +HOST_CXXTEST_SUBDIR = python
-> +
-> +define CXXTEST_INSTALL_STAGING_CMDS
-> +	mkdir -p $(STAGING_DIR)/usr/include/cxxtest
-> +	cp $(@D)/cxxtest/* $(STAGING_DIR)/usr/include/cxxtest
-> +endef
-> +
-> +$(eval $(generic-package))
-> +$(eval $(host-python-package))
-
-I have to say it is quite strange to have the host variant of the
-package using the python package infrastructure, and the target variant
-use the generic package infra. I think it would deserve an additional
-comment in the .mk file to give a bit of context about why you're doing
-this.
-
-Thanks!
+In any case, it is not good to have the package depends
+on !BR2_STATIC_LIBS and have code in the package to support the
+BR2_STATIC_LIBS case.
 
 Thomas
 -- 
