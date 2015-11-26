@@ -1,33 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Nov 2015 22:23:03 +0100
-Subject: [Buildroot] BR2_ROOTFS_MERGED_USR and gdb
-In-Reply-To: <CAMOMa6N-h2JaWhA96f2JE12Nq1i4aFC2p8t4LLDB1X44Txh3Rg@mail.gmail.com>
- (Pieterjan Camerlynck's message of "Wed, 25 Nov 2015 14:53:36 +0100")
-References: <CAMOMa6N-h2JaWhA96f2JE12Nq1i4aFC2p8t4LLDB1X44Txh3Rg@mail.gmail.com>
-Message-ID: <878u5kv4js.fsf@dell.be.48ers.dk>
+Date: Thu, 26 Nov 2015 22:28:11 +0100
+Subject: [Buildroot] [PATCH v2] collectd: fix musl builds (ipc module)
+In-Reply-To: <20151123111242.GA15180@vostro> (Alex Suykov's message of "Mon,
+ 23 Nov 2015 13:12:42 +0200")
+References: <20151123111242.GA15180@vostro>
+Message-ID: <874mg8v4b8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pieterjan" == Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com> writes:
+>>>>> "Alex" == Alex Suykov <alex.suykov@gmail.com> writes:
 
- > Hi,
- > Since the introduction of BR2_ROOTFS_MERGED_USR, /lib is now a symlink
- > to /usr/lib on the target. In the sysroot directory however, /lib and
- > /usr/lib are separate directories.
+ > src/ipc.c uses shm_info.used_ids which musl only provides when
+ > _GNU_SOURCE is defined.
 
- > When remote debugging, this causes gdb to search only for libraries in
- > /lib under the sysroot directory.
- > Is there a way to fix this situation other than using "set solib-search-path"?
+ > The issue has been fixed upstream, but the fix is not in their
+ > latest 5.5.0 release. Adding their patch as a temporary fix
+ > to be removed on the next version bump.
 
-Thanks for the report. I guess we'll need to do the same merged-usr
-handling (and workarounds) we do for the target directory also for
-staging.
+ > https://github.com/collectd/collectd/issues/1147
+ > https://github.com/collectd/collectd/commit/3e3848349b753d78a0b1d19648fb394866856bda
 
-Yann is looking into it, but it is nontrivial so it will most likely not
-make it for 2015.11.
+ > Fixes
+ > http://autobuild.buildroot.net/results/e981c08f01d2916246a17b1dc112e8b3e8c628e2/
+
+ > Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+ > ---
+ > v2: s-o-b line for the patch itself
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
