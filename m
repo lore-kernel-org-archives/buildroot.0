@@ -1,46 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Nov 2015 21:21:12 +0100
-Subject: [Buildroot] [git commit] libgsasl: fix auto dependencies
-Message-ID: <20151126202156.12A1D816D3@busybox.osuosl.org>
+Date: Thu, 26 Nov 2015 21:23:08 +0100
+Subject: [Buildroot] [PATCH] strongswan: bump to version 5.3.5
+In-Reply-To: <1448563995-3643-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 26 Nov 2015 15:53:15 -0300")
+References: <1448563995-3643-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ziy0v7bn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b4b915dd02b4c36568876350c3930ec357553d3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-IDN can be picked up from the distro installation so use a prefix when
-it's available or otherwise just disable it, fixes:
-http://autobuild.buildroot.org/results/5d9/5d9baf528c47c5167ec8d2a6941cb06b4ca761ca/
+ > Fixes only one connection regresssion in 5.3.4, see
+ > https://wiki.strongswan.org/issues/1213
 
-Also disable libgcrypt support which wasn't accounted for and doesn't
-seem to work either to possibly avoid the same problem.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgsasl/libgsasl.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
-index f2660ca..00ce8e0 100644
---- a/package/libgsasl/libgsasl.mk
-+++ b/package/libgsasl/libgsasl.mk
-@@ -9,6 +9,14 @@ LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
- LIBGSASL_LICENSE = LGPLv2.1+ (library), GPLv3+ (programs)
- LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
- LIBGSASL_INSTALL_STAGING = YES
--LIBGSASL_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
-+# It doesn't seem to build with our libgcrypt so better be safe
-+LIBGSASL_CONF_OPTS = --without-libgcrypt
-+
-+ifeq ($(BR2_PACKAGE_LIBIDN),y)
-+LIBGSASL_CONF_OPTS += --with-libidn-prefix=$(STAGING_DIR)/usr
-+LIBGSASL_DEPENDENCIES += libidn
-+else
-+LIBGSASL_CONF_OPTS += --without-stringprep
-+endif
- 
- $(eval $(autotools-package))
+-- 
+Bye, Peter Korsgaard
