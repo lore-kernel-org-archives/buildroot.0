@@ -1,102 +1,79 @@
-From: Abhishek Singh <Abhishek.Singh@imgtec.com>
-Date: Thu, 26 Nov 2015 19:35:06 +0530
-Subject: [Buildroot] [PATCH v2] cxxtest: new package
-Message-ID: <1448546706-31297-1-git-send-email-Abhishek.Singh@imgtec.com>
+From: Alexey Galakhov <agalakhov@gmail.com>
+Date: Thu, 26 Nov 2015 15:50:04 +0100
+Subject: [Buildroot] [PATCH 1/1] core: add option to force compiling C++ as
+	C++11
+Message-ID: <1448549404-11670-1-git-send-email-agalakhov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Reviewed-by: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-Signed-off-by: Abhishek Singh <Abhishek.Singh@imgtec.com>
----
-changes v1 -> v2:
-	- remove dependency on host-python
-	- add comments in mk file
----
- package/Config.in            |  1 +
- package/cxxtest/Config.in    | 10 ++++++++++
- package/cxxtest/cxxtest.hash |  2 ++
- package/cxxtest/cxxtest.mk   | 30 ++++++++++++++++++++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 package/cxxtest/Config.in
- create mode 100644 package/cxxtest/cxxtest.hash
- create mode 100644 package/cxxtest/cxxtest.mk
+Many C++ libraries like boost and log4cplus use defines to be compatible with
+both C++03 and C++11 standards. This causes ABI incompatibilities between
+a library built with C++03 and an application built with C++11. To avoid this,
+one has to built libraries as C++11 as well.
 
-diff --git a/package/Config.in b/package/Config.in
-index bdc3063..6e71d25 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -116,6 +116,7 @@ menu "Development tools"
- 	source "package/cmake/Config.in"
- 	source "package/cppunit/Config.in"
- 	source "package/cvs/Config.in"
-+	source "package/cxxtest/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/diffutils/Config.in"
- 	source "package/dos2unix/Config.in"
-diff --git a/package/cxxtest/Config.in b/package/cxxtest/Config.in
-new file mode 100644
-index 0000000..7512e4b
---- /dev/null
-+++ b/package/cxxtest/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_CXXTEST
-+	bool "cxxtest"
+This patch introduces the BR2_ENABLE_CPP11 configuration option that forces
+passing --std=c++11 to the compiler while building C++ target libraries.
+
+Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
+---
+ Config.in           | 16 ++++++++++++++++
+ package/Makefile.in | 12 +++++++++++-
+ 2 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/Config.in b/Config.in
+index d795361..79e4d31 100644
+--- a/Config.in
++++ b/Config.in
+@@ -533,6 +533,22 @@ config BR2_ENABLE_SSP
+ comment "enabling Stack Smashing Protection requires support in the toolchain"
+ 	depends on !BR2_TOOLCHAIN_HAS_SSP
+ 
++config BR2_ENABLE_CPP11
++	bool "force C++11 when building libraries"
++	default n
 +	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
 +	help
-+	  CxxTest is a unit testing framework for C++
++	  Force building of C++ libraries in C++11 mode.
 +
-+	  http://cxxtest.com/
++	  Some C++ libraries (i.e. boost) behave differently if compiled with
++	  and without --std=c++11 flag. They define classes differently. This
++	  causes linker errors while trying to use such a library in a C++11
++	  project.
 +
-+comment "cxxtest needs toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/cxxtest/cxxtest.hash b/package/cxxtest/cxxtest.hash
-new file mode 100644
-index 0000000..f552e80
---- /dev/null
-+++ b/package/cxxtest/cxxtest.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	1c154fef91c65dbf1cd4519af7ade70a61d85a923b6e0c0b007dc7f4895cf7d8	cxxtest-4.4.tar.gz
-diff --git a/package/cxxtest/cxxtest.mk b/package/cxxtest/cxxtest.mk
-new file mode 100644
-index 0000000..cc29608
---- /dev/null
-+++ b/package/cxxtest/cxxtest.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# cxxtest
-+#
-+################################################################################
++	  This option forces building of all such libraries in C++11 mode.
++	  Enable it if you encounter C++11-related linker errors.
 +
-+CXXTEST_VERSION = 4.4
-+CXXTEST_SOURCE = cxxtest-$(CXXTEST_VERSION).tar.gz
-+CXXTEST_SITE = http://sourceforge.net/projects/cxxtest/files/cxxtest/$(CXXTEST_VERSION)
-+CXXTEST_LICENSE = LGPLv3
-+CXXTEST_LICENSE_FILES = COPYING
-+CXXTEST_INSTALL_STAGING = YES
-+CXXTEST_INSTALL_TARGET = NO
-+CXXTEST_DEPENDENCIES = host-cxxtest
-+HOST_CXXTEST_SETUP_TYPE = setuptools
-+HOST_CXXTEST_SUBDIR = python
+ choice
+ 	bool "libraries"
+ 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 85008bb..0bb911e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -135,9 +135,19 @@ ifeq ($(BR2_DEBUG_3),y)
+ TARGET_DEBUGGING = -g3
+ endif
+ 
++ifeq ($(BR2_ENABLE_CPP11),y)
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
++TARGET_CXXLANGUAGE = --std=c++11
++else
++TARGET_CXXLANGUAGE = --std=c++0x
++endif
++else
++TARGET_CXXLANGUAGE =
++endif
 +
-+# Copy CxxTest header files to staging directory
-+define CXXTEST_INSTALL_STAGING_CMDS
-+	mkdir -p $(STAGING_DIR)/usr/include/cxxtest
-+	cp $(@D)/cxxtest/* $(STAGING_DIR)/usr/include/cxxtest
-+endef
-+
-+# CxxTest uses python infrastructure as the build system. cxxtestgen is
-+# a script which is used to process header files to generate C++ source files.
-+# Compiling test runner requires CxxTest header files which are installed in
-+# the staging directory.
-+
-+$(eval $(generic-package))
-+$(eval $(host-python-package))
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+-TARGET_CXXFLAGS = $(TARGET_CFLAGS)
++TARGET_CXXFLAGS = $(TARGET_CFLAGS) $(TARGET_CXXLANGUAGE)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+ 
+ ifeq ($(BR2_BINFMT_FLAT),y)
 -- 
 2.6.2
