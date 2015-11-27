@@ -1,80 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Nov 2015 12:09:21 +0100
-Subject: [Buildroot] [git commit] sunxi-tools: bump version, add hash
-Message-ID: <20151201232122.452A081945@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Nov 2015 13:16:03 +0100
+Subject: [Buildroot] [git commit] lttng-tools: bump to version 2.7.0
+Message-ID: <20151201232122.D8CFB81952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e5ec5b9074bd7732c02b891eed5d3db0a442d9e
+commit: http://git.buildroot.net/buildroot/commit/?id=df25b501a5d17211ac67833a53f636e84511a716
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream has reworked its build system, so it now supports PREFIX and 'make
-install', so use those.
+0001-Fix-Mark-MI-and-Config-string-declarations-as-extern.patch
+is gone with commit 4965f956f3ef47388fb4a1b2f8f504abfe31afe7.
 
-Notice that the tools have also gained a sunxi- prefix, so use that as well
-when installing the target variant.
-
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sunxi-tools/sunxi-tools.hash |  2 ++
- package/sunxi-tools/sunxi-tools.mk   | 17 ++++++++---------
- 2 files changed, 10 insertions(+), 9 deletions(-)
+ package/lttng-tools/lttng-tools.hash | 2 +-
+ package/lttng-tools/lttng-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
-new file mode 100644
-index 0000000..c0499cd
---- /dev/null
-+++ b/package/sunxi-tools/sunxi-tools.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	2aa0afc21476ee9b03acff20a19f32c522106e61bcbfa1a9463168fe90a85fc5  sunxi-tools-v1.3.tar.gz
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-index 049af9b..4c497c7 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index a356911..94e389f 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256  128166445126d76da7d9f42a56dec12716732a1ed697a6cfdf40c9e135384f32  lttng-tools-2.6.0.tar.bz2
++sha256  261d1b60ef0f451be42df70f019b24fda9130372e326e7bdba3e3ffab7ca0c40  lttng-tools-2.7.0.tar.bz2
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 0cd381c..efca6d7 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUNXI_TOOLS_VERSION = 82b9c656868d99553f11b1c8853ca808c7ce41ae
-+SUNXI_TOOLS_VERSION = v1.3
- SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
- SUNXI_TOOLS_LICENSE = GPLv2+
- SUNXI_TOOLS_LICENSE_FILES = COPYING
-@@ -12,25 +12,24 @@ HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb host-pkgconf
- FEX2BIN = $(HOST_DIR)/usr/bin/fex2bin
- 
- define HOST_SUNXI_TOOLS_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
- 		CFLAGS="$(HOST_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
--		-C $(@D)
-+		-C $(@D) tools
- endef
- 
- define HOST_SUNXI_TOOLS_INSTALL_CMDS
--	for i in fexc bin2fex fex2bin bootinfo fel pio; do \
--		$(INSTALL) -D -m 0755 $(@D)/$$i $(HOST_DIR)/usr/bin/$$i ; \
--	done
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
-+		-C $(@D) install-tools
- endef
- 
- define SUNXI_TOOLS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) PREFIX=/usr \
- 		CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
--		-C $(@D) nand-part
-+		-C $(@D) sunxi-nand-part
- endef
- 
- define SUNXI_TOOLS_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/nand-part $(TARGET_DIR)/usr/bin/nand-part
-+	$(INSTALL) -D -m 0755 $(@D)/sunxi-nand-part $(TARGET_DIR)/usr/bin/sunxi-nand-part
- endef
- 
- $(eval $(generic-package))
+-LTTNG_TOOLS_VERSION = 2.6.0
++LTTNG_TOOLS_VERSION = 2.7.0
+ LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_LICENSE = GPLv2+; LGPLv2.1+ for include/lttng/* and src/lib/lttng-ctl/*
