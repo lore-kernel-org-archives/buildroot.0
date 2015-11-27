@@ -1,64 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Nov 2015 19:49:49 +0100
-Subject: [Buildroot] [git commit] espeak: fix build on sparc64
-Message-ID: <20151127185004.2D1A181F97@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 27 Nov 2015 20:14:39 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-11-26
+In-Reply-To: <20151127162035.49cabe73@free-electrons.com>
+References: <20151127073014.F0A24102391@stock.ovh.net>
+ <1448629389.16816.4.camel@embedded.rocks>
+ <20151127162035.49cabe73@free-electrons.com>
+Message-ID: <1448651679.3542.9.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=645750d1c891a17b6d01a1b763bf4a27389c25b4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fr, 2015-11-27 at 16:20 +0100, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
+> 
+> On Fri, 27 Nov 2015 14:03:09 +0100, J?rg Krause wrote:
+> 
+> > > ?????????arm |????????????????arptables-0.0.4 | NOK | http://auto
+> > > buil
+> > > d.buildroot.net/results/b721e4fa24a0728c20fd2ec0663c2b5981387642/
+> > 
+> > I had a look at this. Build fails because of namespace collision
+> > between netinet and linux headers, e.g IPPROTO_IP is both defined
+> > in
+> > linux/in.h and?netinet/in.h.
+> > 
+> > Unfortunatly, I am not sure how to fix this properly.
+> 
+> That's a typical case of issue exhibited by musl. You can probably
+> just
+> remove the <linux/in.h> include completely.
+> 
 
-sparc64 needs object files to be built with -fPIC in order to be
-usable in shared libraries, otherwise the shared library cannot be
-created.
+Unfortunatly it is not so easy: 'libarptc.h' includes 'netinit/in.h'
+through the local header file 'libarptc/arpt_kernel_headers.h' directly
+and indirectly, e.g. through 'netinet/ip.h'. On the other hand it
+includes 'linux/in.h' indirectly through the system header file
+'linux/netfilter_arp/arp_tables.h'. The declarations from
+'linux/netfilter_arp/arp_tables.h' are required, so this header cannot
+be removed easily.
 
-Fixes:
+Any idea?
 
-  http://autobuild.buildroot.org/results/8b8/8b894f0bd42c18e7cda98c15480757f10d743423/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...f-shared-library-on-architectures-needing.patch |   31 ++++++++++++++++++++
- 1 files changed, 31 insertions(+), 0 deletions(-)
-
-diff --git a/package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch b/package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch
-new file mode 100644
-index 0000000..2590e15
---- /dev/null
-+++ b/package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch
-@@ -0,0 +1,31 @@
-+From 08a464e2b6bd31bb2bf4e258ebfa9b9d65805abf Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 27 Nov 2015 15:17:02 +0100
-+Subject: [PATCH] Fix build of shared library on architectures needing -fPIC
-+
-+Certain architectures, like Sparc and Sparc64 require objects to be
-+built with -fPIC (and not just -fpic) to be usable in shared
-+libraries. On other architectures, -fPIC is the same as -fpic so this
-+patch doesn't affect such architectures.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index 95fe549..c293611 100755
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -110,7 +110,7 @@ $(BIN2_NAME): $(OBJS3) $(LIB_NAME)
-+ 
-+ 
-+ x_%.o: %.cpp
-+-	$(CXX) $(CXXFLAGS) $(USE_AUDIO) -D PATH_ESPEAK_DATA=\"$(DATADIR)\" -Wall -fpic -fvisibility=hidden -pedantic \
-++	$(CXX) $(CXXFLAGS) $(USE_AUDIO) -D PATH_ESPEAK_DATA=\"$(DATADIR)\" -Wall -fPIC -fvisibility=hidden -pedantic \
-+ 	-I. -D LIBRARY -c -fno-exceptions  $<  -o x_$*.o
-+ 
-+ $(LIB_NAME): $(OBJS2)
-+-- 
-+2.6.3
-+
+Best regards
+J?rg Krause
