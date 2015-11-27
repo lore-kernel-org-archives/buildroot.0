@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 27 Nov 2015 23:50:26 +0100
-Subject: [Buildroot] [PATCH 1/2] package/skeleton: parametrise the
- symlinks-or-mkdir macro
-In-Reply-To: <5658D217.1020905@mind.be>
-References: <cover.1448575841.git.yann.morin.1998@free.fr>
- <0c601430e0de47ba5a18c933ace701ccf1e0eca4.1448575841.git.yann.morin.1998@free.fr>
- <5658D217.1020905@mind.be>
-Message-ID: <20151127225026.GC4144@free.fr>
+Date: Sat, 28 Nov 2015 00:04:43 +0100
+Subject: [Buildroot] [PATCH] support/dependencies: ensure we have 'file'
+ on the host
+In-Reply-To: <5658C8C7.4080104@mind.be>
+References: <1448654529-27021-1-git-send-email-yann.morin.1998@free.fr>
+ <5658C8C7.4080104@mind.be>
+Message-ID: <20151127230443.GD4144@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,73 +14,64 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2015-11-27 22:58 +0100, Arnout Vandecappelle spake thusly:
-> On 26-11-15 23:13, Yann E. MORIN wrote:
-> > currently, we only make the merged symlinks or non-merged mkdirs in the
-> > target directory. This is fine, as long as one does not run gdb.
+On 2015-11-27 22:19 +0100, Arnout Vandecappelle spake thusly:
+> On 27-11-15 21:02, Yann E. MORIN wrote:
+> > When 'file' is missing on the host, libtool fails miserably. Packages
+> > that use libtool will suddenly FTBFS, with cryptic error messages, like
+> > missing libraries on the linker invocation.
+> 
+>  I've taken a look at an ltmain.sh and a libtool, but the only two calls to
+> 'file' I could find were for darwin and for win32.
+> 
 > > 
-> > However, as soon as one wants to run gdb (or gdbserver) on the target,
-> > gdb will only search for libraries in /lib in the sysroot.
+> > We could ensure that autotools based packages now all depend on
+> > host-file. But It itself is an autotools package, so it's again a
+> > chicken-n-egg issue. And even non-autotools package may use libtool.
 > > 
-> > In preparation for a patch to fix that, make the symlink-or-mkdir macro
-> > a function that takes as parameter the base directory where to create
-> > symlinks or mkdir in.
+> > So, just require that 'file' is present on the host.
 > > 
-> > Move the function declarations our of the custom/non-custom skeleton
-> > conditional block, so they are always available.
-> > 
-> > Reported-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
 > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> > Cc: Peter Korsgaard <jacmet@uclibc.org>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
->  But...
-> 
 > > ---
-> >  package/skeleton/skeleton.mk | 31 ++++++++++++++++---------------
-> >  1 file changed, 16 insertions(+), 15 deletions(-)
+> >  support/dependencies/dependencies.sh | 6 ++++++
+> >  1 file changed, 6 insertions(+)
 > > 
-> > diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> > index 46e8cc4..b296cbd 100644
-> > --- a/package/skeleton/skeleton.mk
-> > +++ b/package/skeleton/skeleton.mk
-> > @@ -57,27 +57,28 @@ else # ! custom skeleton
+> > diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> > index 3146401..f14fb79 100755
+> > --- a/support/dependencies/dependencies.sh
+> > +++ b/support/dependencies/dependencies.sh
+> > @@ -69,6 +69,12 @@ check_prog_host "which"
+> >  # Verify that sed is installed
+> >  check_prog_host "sed"
 > >  
-> >  SKELETON_PATH = system/skeleton
-> >  
-> > -ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-> > -define SKELETON_USR_SYMLINKS_OR_DIRS
-> > -	ln -snf usr/bin $(TARGET_DIR)/bin
-> > -	ln -snf usr/sbin $(TARGET_DIR)/sbin
-> > -	ln -snf usr/lib $(TARGET_DIR)/lib
-> > -endef
-> > -else
-> > -define SKELETON_USR_SYMLINKS_OR_DIRS
-> > -	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin
-> > -	$(INSTALL) -d -m 0755 $(TARGET_DIR)/sbin
-> > -	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib
-> > -endef
-> > -endif
-> > -
-> >  endif # ! custom skeleton
-> >  
-> > +# This function handles the merged or non-merged /usr cases
-> > +ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-> > +define SKELETON_USR_SYMLINKS_OR_DIRS
+> > +# 'file' must be present, otherwise libtool fails in incomprehensible
+> > +# ways. For example, bandwidthd would fail to link with -lz, even
 > 
->  We usually make functions lowercase rather than uppercase, although there are
-> notable exceptions like MESSAGE and UPPERCASE.
+>  bandwidthd doesn't even have a libtool...
+> 
+>  Could you give a concrete example of where libtool uses file?
 
-Well, one may argue that hooks are functions like any other, and we
-write them in upper-case.
+Damn... It seems I confused the netsnmp and the bandwidthd cases.
 
-So yes, we usually write lower-case functions in the infras. But
-(almost?) everything in packages is upper-case, so I think it is
-best to not get diverge too much to what we do in other packages.
+If you look at netsnmp, they have all this blurb about file being
+required for libtool otherwise it breaks, in configure.d/config_os_progs
+And indeed, my minimalistic chroot does not have file installed.
+
+And then you have bandwidthd that also fails miserably in that chroot,
+even though the same configuration works on my machine.
+
+So I installed 'file' and then both now compile without any issue in
+that minimalistic chroot.
+
+And then I did the commit log for this patch, and only accounted for the
+reasons explained in netsnmp (without trying to validat etheir point, I
+admit), but referenced bandwidthd.
+
+Sigh.
+
+Anyway, here's my minimalistic chroot:
+    debootstrap --arch=amd64 --variant buildd trusty $(pwd)/chroot
+
+and the list of installed packages is in attachment.
 
 Regards,
 Yann E. MORIN.
@@ -93,3 +83,799 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+accountsservice
+acl
+acpid
+adduser
+apparmor
+apt
+apt-file
+apt-listchanges
+apt-transport-https
+apt-utils
+apt-xapian-index
+aptitude
+aptitude-common
+asciidoc
+at
+autoconf
+automake
+autotools-dev
+base-files
+base-passwd
+bash
+bash-completion
+bc
+bind9
+bind9-host
+bind9utils
+binfmt-support
+binutils
+bison
+bsdmainutils
+bsdutils
+btrfs-tools
+build-essential
+busybox-initramfs
+busybox-static
+bwm-ng
+bzip2
+bzr
+ca-certificates
+ca-certificates-java
+colordiff
+command-not-found
+command-not-found-data
+console-setup
+coreutils
+cpio
+cpp
+cpp-4.8
+cpu-checker
+crda
+cron
+curl
+cvs
+dash
+dblatex
+dbus
+debconf
+debconf-i18n
+debconf-utils
+debian-archive-keyring
+debianutils
+debootstrap
+dh-python
+diffstat
+diffutils
+ditaa
+dmidecode
+dmsetup
+dnsutils
+docbook
+docbook-dsssl
+docbook-utils
+docbook-xml
+docbook-xsl
+dos2unix
+dosfstools
+dpkg
+dpkg-dev
+dtach
+e2fslibs:amd64
+e2fsprogs
+ed
+eject
+ethtool
+fakeroot
+fastjar
+findutils
+flex
+fontconfig
+fontconfig-config
+fonts-dejavu-core
+fonts-liberation
+fonts-ubuntu-font-family-console
+fop
+friendly-recovery
+ftp
+fuse
+g++
+g++-4.8
+gawk
+gcc
+gcc-4.8
+gcc-4.8-base:amd64
+gcc-4.8-multilib
+gcc-4.9-base:amd64
+gcc-multilib
+geoip-database
+gettext-base
+ghostscript
+gir1.2-glib-2.0
+git
+git-gui
+git-man
+gitk
+gnupg
+gperf
+gpgv
+graphviz
+grep
+groff-base
+grub-common
+grub-gfxpayload-lists
+grub-pc
+grub-pc-bin
+grub2-common
+gsfonts
+gzip
+hddtemp
+hdparm
+help2man
+hostname
+htop
+ifupdown
+info
+init-system-helpers
+initramfs-tools
+initramfs-tools-bin
+initscripts
+insserv
+install-info
+installation-report
+iotop
+ipmitool
+iproute2
+iptables
+iputils-ping
+iputils-tracepath
+ipxe-qemu
+irqbalance
+isc-dhcp-client
+isc-dhcp-common
+iso-codes
+iw
+jadetex
+jarwrapper
+java-common
+java-wrappers
+junit4
+kbd
+keyboard-configuration
+klibc-utils
+kmod
+krb5-locales
+language-pack-en
+language-pack-en-base
+language-pack-fr
+language-pack-fr-base
+language-selector-common
+laptop-detect
+latex-xcolor
+less
+lib32asan0
+lib32atomic1
+lib32gcc-4.8-dev
+lib32gcc1
+lib32gomp1
+lib32itm1
+lib32quadmath0
+lib32stdc++6
+lib32z1
+libaccountsservice0:amd64
+libacl1:amd64
+libaio1:amd64
+libalgorithm-diff-perl
+libalgorithm-diff-xs-perl
+libalgorithm-merge-perl
+libapache-pom-java
+libapparmor-perl
+libapparmor1:amd64
+libapr1:amd64
+libaprutil1:amd64
+libapt-inst1.5:amd64
+libapt-pkg-perl
+libapt-pkg4.12:amd64
+libarchive-extract-perl
+libasan0:amd64
+libasn1-8-heimdal:amd64
+libasound2:amd64
+libasound2-data
+libasprintf0c2:amd64
+libasyncns0:amd64
+libatk-wrapper-java
+libatk-wrapper-java-jni:amd64
+libatk1.0-0:amd64
+libatk1.0-data
+libatomic1:amd64
+libattr1:amd64
+libaudit-common
+libaudit1:amd64
+libavahi-client3:amd64
+libavahi-common-data:amd64
+libavahi-common3:amd64
+libavalon-framework-java
+libbatik-java
+libbind9-90
+libbison-dev:amd64
+libblas3
+libblkid1:amd64
+libbluetooth3:amd64
+libboost-iostreams1.54.0:amd64
+libboost-regex1.54.0:amd64
+libboost-system1.54.0:amd64
+libboost-thread1.54.0:amd64
+libbrlapi0.6:amd64
+libbsd0:amd64
+libbsf-java
+libbz2-1.0:amd64
+libc-bin
+libc-dev-bin
+libc6:amd64
+libc6-dev:amd64
+libc6-dev-i386
+libc6-dev-x32
+libc6-i386
+libc6-x32
+libcaca0:amd64
+libcairo2:amd64
+libcap-ng0
+libcap2:amd64
+libcap2-bin
+libcdt5
+libcgmanager0:amd64
+libcgraph6
+libck-connector0:amd64
+libclass-accessor-perl
+libcloog-isl4:amd64
+libcomerr2:amd64
+libcommons-cli-java
+libcommons-io-java
+libcommons-lang-java
+libcommons-logging-java
+libcommons-parent-java
+libconfig-file-perl
+libcups2:amd64
+libcupsfilters1:amd64
+libcupsimage2:amd64
+libcurl3:amd64
+libcurl3-gnutls:amd64
+libcwidget3
+libdatrie1:amd64
+libdb5.3:amd64
+libdbus-1-3:amd64
+libdbus-glib-1-2:amd64
+libdebconfclient0:amd64
+libdevmapper-event1.02.1:amd64
+libdevmapper1.02.1:amd64
+libdns100
+libdpkg-perl
+libdrm2:amd64
+libedit2:amd64
+libelf1:amd64
+libept1.4.12:amd64
+liberror-perl
+libestr0
+libevent-2.0-5:amd64
+libexpat1:amd64
+libexpat1-dev:amd64
+libfakeroot:amd64
+libfdt1:amd64
+libffi6:amd64
+libfile-fcntllock-perl
+libfl-dev:amd64
+libflac8:amd64
+libfontconfig1:amd64
+libfontenc1:amd64
+libfop-java
+libfreetype6:amd64
+libfuse2:amd64
+libgc1c2:amd64
+libgcc-4.8-dev:amd64
+libgcc1:amd64
+libgck-1-0:amd64
+libgcr-3-common
+libgcr-base-3-1:amd64
+libgcrypt11:amd64
+libgd3:amd64
+libgdbm3:amd64
+libgdk-pixbuf2.0-0:amd64
+libgdk-pixbuf2.0-common
+libgeoip1:amd64
+libgif4:amd64
+libgirepository-1.0-1
+libgl1-mesa-glx:amd64
+libglapi-mesa:amd64
+libglib2.0-0:amd64
+libglib2.0-data
+libgmp10:amd64
+libgnutls-openssl27:amd64
+libgnutls26:amd64
+libgomp1:amd64
+libgpg-error0:amd64
+libgpm2:amd64
+libgraphite2-3:amd64
+libgs9
+libgs9-common
+libgssapi-krb5-2:amd64
+libgssapi3-heimdal:amd64
+libgtk2.0-0:amd64
+libgtk2.0-common
+libgvc6
+libgvpr2
+libhamcrest-java
+libharfbuzz0b:amd64
+libhcrypto4-heimdal:amd64
+libheimbase1-heimdal:amd64
+libheimntlm0-heimdal:amd64
+libhx509-5-heimdal:amd64
+libice6:amd64
+libicu52:amd64
+libidn11:amd64
+libijs-0.35
+libintl-perl
+libio-string-perl
+libisc95
+libisccc90
+libisccfg90
+libisl10:amd64
+libitm1:amd64
+libiw30:amd64
+libjasper1:amd64
+libjaxp1.3-java
+libjbig0:amd64
+libjbig2dec0
+libjericho-html-java
+libjline-java
+libjpeg-turbo8:amd64
+libjpeg8:amd64
+libjson-c2:amd64
+libjson0:amd64
+libk5crypto3:amd64
+libkeyutils1:amd64
+libklibc
+libkmod2:amd64
+libkpathsea6
+libkrb5-26-heimdal:amd64
+libkrb5-3:amd64
+libkrb5support0:amd64
+liblcms2-2:amd64
+libldap-2.4-2:amd64
+liblinear-tools
+liblinear1
+liblist-moreutils-perl
+liblocale-gettext-perl
+liblockfile-bin
+liblockfile1:amd64
+liblog-message-simple-perl
+libltdl-dev:amd64
+libltdl7:amd64
+liblua5.2-0:amd64
+liblwres90
+liblzma5:amd64
+liblzo2-2:amd64
+libmodule-pluggable-perl
+libmount1:amd64
+libmpc3:amd64
+libmpdec2:amd64
+libmpfr4:amd64
+libncurses5:amd64
+libncurses5-dev:amd64
+libncursesw5:amd64
+libnewt0.52:amd64
+libnfnetlink0:amd64
+libnih-dbus1:amd64
+libnih1:amd64
+libnl-3-200:amd64
+libnl-genl-3-200:amd64
+libnspr4:amd64
+libnss3:amd64
+libnss3-nssdb
+libnuma1:amd64
+libogg0:amd64
+libopts25:amd64
+libosp5
+libostyle1c2
+libp11-kit0:amd64
+libpam-cap:amd64
+libpam-modules:amd64
+libpam-modules-bin
+libpam-runtime
+libpam-systemd:amd64
+libpam0g:amd64
+libpango-1.0-0:amd64
+libpangocairo-1.0-0:amd64
+libpangoft2-1.0-0:amd64
+libpaper-utils
+libpaper1:amd64
+libparse-debianchangelog-perl
+libparted0debian1:amd64
+libpathplan4
+libpcap0.8:amd64
+libpci3:amd64
+libpcre3:amd64
+libpcsclite1:amd64
+libpipeline1:amd64
+libpixman-1-0:amd64
+libplymouth2:amd64
+libpng12-0:amd64
+libpod-latex-perl
+libpolkit-agent-1-0:amd64
+libpolkit-backend-1-0:amd64
+libpolkit-gobject-1-0:amd64
+libpoppler44:amd64
+libpopt0:amd64
+libprocps3:amd64
+libptexenc1
+libpulse0:amd64
+libpython-dev:amd64
+libpython-stdlib:amd64
+libpython2.7:amd64
+libpython2.7-dev:amd64
+libpython2.7-minimal:amd64
+libpython2.7-stdlib:amd64
+libpython3-stdlib:amd64
+libpython3.4-minimal:amd64
+libpython3.4-stdlib:amd64
+libquadmath0:amd64
+librados2
+librbd1
+libreadline5:amd64
+libreadline6:amd64
+libregexp-assemble-perl
+librhino-java
+libroken18-heimdal:amd64
+librtmp0:amd64
+libruby1.9.1
+libsasl2-2:amd64
+libsasl2-modules:amd64
+libsasl2-modules-db:amd64
+libsaxon-java
+libsctp1:amd64
+libsdl1.2debian:amd64
+libseccomp2:amd64
+libselinux1:amd64
+libsemanage-common
+libsemanage1:amd64
+libsepol1:amd64
+libserf-1-1:amd64
+libsgmls-perl
+libsigc++-2.0-0c2a:amd64
+libsigsegv2:amd64
+libslang2:amd64
+libsm6:amd64
+libsndfile1:amd64
+libsource-highlight-common
+libsource-highlight4
+libsp1c2
+libspice-server1:amd64
+libsqlite3-0:amd64
+libss2:amd64
+libssl1.0.0:amd64
+libstatgrab9
+libstdc++-4.8-dev:amd64
+libstdc++6:amd64
+libsub-name-perl
+libsvn1:amd64
+libsystemd-daemon0:amd64
+libsystemd-login0:amd64
+libtasn1-6:amd64
+libtcl8.6:amd64
+libterm-ui-perl
+libtext-charwidth-perl
+libtext-iconv-perl
+libtext-soundex-perl
+libtext-unidecode-perl
+libtext-wrapi18n-perl
+libthai-data
+libthai0:amd64
+libtiff5:amd64
+libtimedate-perl
+libtinfo-dev:amd64
+libtinfo5:amd64
+libtk8.6:amd64
+libtool
+libtsan0:amd64
+libudev1:amd64
+libusb-0.1-4:amd64
+libusb-1.0-0:amd64
+libusbredirparser1:amd64
+libustr-1.0-1:amd64
+libutempter0
+libuuid1:amd64
+libvorbis0a:amd64
+libvorbisenc2:amd64
+libvpx1:amd64
+libwind0-heimdal:amd64
+libwrap0:amd64
+libx11-6:amd64
+libx11-data
+libx11-xcb1:amd64
+libx32asan0
+libx32atomic1
+libx32gcc-4.8-dev
+libx32gcc1
+libx32gomp1
+libx32itm1
+libx32quadmath0
+libxalan2-java
+libxapian22
+libxau6:amd64
+libxaw7:amd64
+libxcb-dri2-0:amd64
+libxcb-dri3-0:amd64
+libxcb-glx0:amd64
+libxcb-present0:amd64
+libxcb-render0:amd64
+libxcb-shape0:amd64
+libxcb-shm0:amd64
+libxcb-sync1:amd64
+libxcb1:amd64
+libxcomposite1:amd64
+libxcursor1:amd64
+libxdamage1:amd64
+libxdmcp6:amd64
+libxen-4.4
+libxenstore3.0
+libxerces2-java
+libxext6:amd64
+libxfixes3:amd64
+libxft2:amd64
+libxi6:amd64
+libxinerama1:amd64
+libxml-commons-external-java
+libxml-commons-resolver1.1-java
+libxml-libxml-perl
+libxml-namespacesupport-perl
+libxml-sax-base-perl
+libxml-sax-perl
+libxml2:amd64
+libxml2-utils
+libxmlgraphics-commons-java
+libxmu6:amd64
+libxmuu1:amd64
+libxpm4:amd64
+libxrandr2:amd64
+libxrender1:amd64
+libxshmfence1:amd64
+libxslt1.1:amd64
+libxss1:amd64
+libxt6:amd64
+libxtables10
+libxtst6:amd64
+libxv1:amd64
+libxxf86dga1:amd64
+libxxf86vm1:amd64
+libyajl2:amd64
+libyaml-0-2:amd64
+linux-firmware
+linux-image-3.13.0-68-generic
+linux-image-extra-3.13.0-68-generic
+linux-image-generic
+linux-image-server
+linux-libc-dev:amd64
+lksctp-tools
+locales
+lockfile-progs
+login
+logrotate
+lsb-base
+lsb-release
+lshw
+lsof
+ltrace
+luatex
+lvm2
+lzop
+m4
+make
+makedev
+man-db
+manpages
+manpages-de
+manpages-dev
+manpages-es
+manpages-fr
+manpages-it
+manpages-pl
+manpages-pt
+mawk
+mdadm
+mercurial
+mercurial-common
+mime-support
+mlocate
+module-init-tools
+mount
+mountall
+msr-tools
+mtr-tiny
+multiarch-support
+nano
+ncftp
+ncurses-base
+ncurses-bin
+ncurses-term
+net-tools
+netbase
+netcat-openbsd
+nmap
+ntfs-3g
+ntp
+ntpdate
+openjade
+openjdk-7-jdk:amd64
+openjdk-7-jre:amd64
+openjdk-7-jre-headless:amd64
+openssh-client
+openssh-server
+openssh-sftp-server
+openssl
+os-prober
+parted
+passwd
+patch
+pciutils
+perl
+perl-base
+perl-modules
+pgf
+plymouth
+plymouth-theme-ubuntu-text
+policykit-1
+poppler-data
+powermgmt-base
+preview-latex-style
+procps
+psmisc
+pv
+python
+python-apt
+python-apt-common
+python-bzrlib
+python-chardet
+python-configobj
+python-debian
+python-dev
+python-gdbm
+python-minimal
+python-openssl
+python-pam
+python-pkg-resources
+python-requests
+python-serial
+python-six
+python-twisted-bin
+python-twisted-core
+python-urllib3
+python-xapian
+python-zope.interface
+python2.7
+python2.7-dev
+python2.7-minimal
+python3
+python3-apt
+python3-commandnotfound
+python3-dbus
+python3-distupgrade
+python3-gdbm:amd64
+python3-gi
+python3-minimal
+python3-newt
+python3-pycurl
+python3-update-manager
+python3.4
+python3.4-minimal
+qemu
+qemu-keymaps
+qemu-slof
+qemu-system
+qemu-system-arm
+qemu-system-common
+qemu-system-mips
+qemu-system-misc
+qemu-system-ppc
+qemu-system-sparc
+qemu-system-x86
+qemu-user
+qemu-user-static
+qemu-utils
+readline-common
+rhino
+rsync
+rsyslog
+ruby
+ruby1.9.1
+run-one
+screen
+seabios
+sed
+sensible-utils
+sgml-base
+sgml-data
+sgmlspl
+shared-mime-info
+sharutils
+smartmontools
+source-highlight
+sp
+ssh-import-id
+strace
+subversion
+sudo
+systemd-services
+systemd-shim
+sysv-rc
+sysvinit-utils
+tar
+tasksel
+tasksel-data
+tcl
+tcl8.6
+tcpd
+tcpdump
+telnet
+tex-common
+texinfo
+texlive
+texlive-base
+texlive-bibtex-extra
+texlive-binaries
+texlive-extra-utils
+texlive-fonts-recommended
+texlive-generic-recommended
+texlive-latex-base
+texlive-latex-extra
+texlive-latex-extra-doc
+texlive-latex-recommended
+texlive-math-extra
+texlive-pictures
+texlive-pictures-doc
+time
+tinyproxy
+tipa
+tk
+tk8.6
+tmux
+tree
+tzdata
+tzdata-java
+ubuntu-keyring
+ucf
+udev
+unzip
+upstart
+ureadahead
+usbutils
+util-linux
+uuid-runtime
+vim
+vim-common
+vim-runtime
+vim-tiny
+vlan
+w3m
+watershed
+wget
+whiptail
+whois
+wireless-regdb
+x11-common
+x11-utils
+xauth
+xbitmaps
+xdg-utils
+xfsprogs
+xkb-data
+xml-core
+xmlto
+xsel
+xsltproc
+xterm
+xz-utils
+youtube-dl
+zip
+zlib1g:amd64
+zlib1g-dev:amd64
