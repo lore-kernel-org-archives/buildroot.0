@@ -1,61 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Nov 2015 19:30:30 +0100
-Subject: [Buildroot] [git commit] rpi-userland: fix musl compile
-Message-ID: <20151127185004.2BA23818A5@busybox.osuosl.org>
+Date: Fri, 27 Nov 2015 19:28:45 +0100
+Subject: [Buildroot] [git commit] mongrel2: disable polarssl assembly as we
+	do in the polarssl package
+Message-ID: <20151127185004.10FAA81F94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=044a0f2919911b00bb38d4f1c2e486799cd4d670
+commit: http://git.buildroot.net/buildroot/commit/?id=7a0d47340c963985b026fc050a3b26be1d3c154b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When building with musl, the build fails with a conflicting type
-qualifier error.
-
-This is because musl defines stdout and stderr as const pointers
-and RaspiVidYUV.c adds an extern declaration as normal pointers.
-
-Since this declaration already comes in on the header (stdio.h),
-there is no need to add an extern declaration, so removes it.
-
 Fixes:
+http://autobuild.buildroot.net/results/a92292a1defd441938d3de6c5049473d520ebc4e/
+http://autobuild.buildroot.net/results/f3db555dc29e0e0e87762fcace913853ffe2b176/
 
-http://autobuild.buildroot.net/results/27bd6f32cecdb4e7c95247c1feaf2732c1d8e3fa
+mongrel2 bundles polarssl so it has the same problem as the polarssl
+with the assembly optimization, so let's use the same solution here.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ting-type-qualifiers-errors-when-building.patch |   23 ++++++++++++++++++++
- 1 files changed, 23 insertions(+), 0 deletions(-)
+ package/mongrel2/mongrel2.mk |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch b/package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch
-new file mode 100644
-index 0000000..4db6014
---- /dev/null
-+++ b/package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch
-@@ -0,0 +1,23 @@
-+Fix conflicting type qualifiers errors when building with musl.
+diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+index 0be4832..d0640c9 100644
+--- a/package/mongrel2/mongrel2.mk
++++ b/package/mongrel2/mongrel2.mk
+@@ -13,6 +13,21 @@ MONGREL2_LICENSE = BSD-3c
+ MONGREL2_LICENSE_FILES = LICENSE
+ MONGREL2_DEPENDENCIES = sqlite zeromq
+ 
++define MONGREL2_POLARSSL_DISABLE_ASM
++	$(SED) '/^#define POLARSSL_HAVE_ASM/d' $(@D)/src/polarssl/include/polarssl/config.h
++endef
 +
-+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-+---
-+ host_applications/linux/apps/raspicam/RaspiVidYUV.c | 2 --
-+ 1 file changed, 2 deletions(-)
++# ARM in thumb mode breaks debugging with asm optimizations
++# Microblaze asm optimizations are broken in general
++# MIPS R6 asm is not yet supported
++ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
++MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
++else ifeq ($(BR2_microblaze),y)
++MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
++else ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
++MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
++endif
 +
-+diff --git a/host_applications/linux/apps/raspicam/RaspiVidYUV.c b/host_applications/linux/apps/raspicam/RaspiVidYUV.c
-+index b340d63c913f..13e6a6ccf5bf 100644
-+--- a/host_applications/linux/apps/raspicam/RaspiVidYUV.c
-++++ b/host_applications/linux/apps/raspicam/RaspiVidYUV.c
-+@@ -106,8 +106,6 @@ const int ABORT_INTERVAL = 100; // ms
-+ /// Run/record forever
-+ #define WAIT_METHOD_FOREVER        4
-+ 
-+-extern FILE *stderr, *stdout;
-+-
-+ int mmal_status_to_int(MMAL_STATUS_T status);
-+ static void signal_handler(int signal_number);
-+ 
-+-- 
-+1.9.1
-+
+ define MONGREL2_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+ 		PREFIX=/usr all
