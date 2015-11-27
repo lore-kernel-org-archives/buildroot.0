@@ -1,63 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Nov 2015 15:24:21 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Nov 2015 11:35:27 -0300
 Subject: [Buildroot] [PATCH] espeak: fix build on sparc64
-Message-ID: <1448634261-6630-1-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1448634261-6630-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1448634261-6630-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56586A2F.3040905@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sparc64 needs object files to be built with -fPIC in order to be
-usable in shared libraries, otherwise the shared library cannot be
-created.
+On 27/11/15 11:24, Thomas Petazzoni wrote:
 
-Fixes:
+> sparc64 needs object files to be built with -fPIC in order to be
+> usable in shared libraries, otherwise the shared library cannot be
+> created.
+>
+> Fixes:
+>
+>    http://autobuild.buildroot.org/results/8b8/8b894f0bd42c18e7cda98c15480757f10d743423/
 
-  http://autobuild.buildroot.org/results/8b8/8b894f0bd42c18e7cda98c15480757f10d743423/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...f-shared-library-on-architectures-needing.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch
-
-diff --git a/package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch b/package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch
-new file mode 100644
-index 0000000..2590e15
---- /dev/null
-+++ b/package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch
-@@ -0,0 +1,31 @@
-+From 08a464e2b6bd31bb2bf4e258ebfa9b9d65805abf Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 27 Nov 2015 15:17:02 +0100
-+Subject: [PATCH] Fix build of shared library on architectures needing -fPIC
-+
-+Certain architectures, like Sparc and Sparc64 require objects to be
-+built with -fPIC (and not just -fpic) to be usable in shared
-+libraries. On other architectures, -fPIC is the same as -fpic so this
-+patch doesn't affect such architectures.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index 95fe549..c293611 100755
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -110,7 +110,7 @@ $(BIN2_NAME): $(OBJS3) $(LIB_NAME)
-+ 
-+ 
-+ x_%.o: %.cpp
-+-	$(CXX) $(CXXFLAGS) $(USE_AUDIO) -D PATH_ESPEAK_DATA=\"$(DATADIR)\" -Wall -fpic -fvisibility=hidden -pedantic \
-++	$(CXX) $(CXXFLAGS) $(USE_AUDIO) -D PATH_ESPEAK_DATA=\"$(DATADIR)\" -Wall -fPIC -fvisibility=hidden -pedantic \
-+ 	-I. -D LIBRARY -c -fno-exceptions  $<  -o x_$*.o
-+ 
-+ $(LIB_NAME): $(OBJS2)
-+-- 
-+2.6.3
-+
--- 
-2.6.3
+Hi.
+I wonder if all these sparc fixes wouldn't be better suited for the 
+wrapper, after all -fpic in sparc is generally useless, and try to 
+handle these upstream would be a PITA.
+Regards.
