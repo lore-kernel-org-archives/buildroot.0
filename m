@@ -1,53 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Nov 2015 19:28:45 +0100
-Subject: [Buildroot] [git commit] mongrel2: disable polarssl assembly as we
-	do in the polarssl package
-Message-ID: <20151127185004.10FAA81F94@busybox.osuosl.org>
+Date: Fri, 27 Nov 2015 19:49:49 +0100
+Subject: [Buildroot] [git commit] espeak: fix build on sparc64
+Message-ID: <20151127185004.2D1A181F97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a0d47340c963985b026fc050a3b26be1d3c154b
+commit: http://git.buildroot.net/buildroot/commit/?id=645750d1c891a17b6d01a1b763bf4a27389c25b4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+sparc64 needs object files to be built with -fPIC in order to be
+usable in shared libraries, otherwise the shared library cannot be
+created.
+
 Fixes:
-http://autobuild.buildroot.net/results/a92292a1defd441938d3de6c5049473d520ebc4e/
-http://autobuild.buildroot.net/results/f3db555dc29e0e0e87762fcace913853ffe2b176/
 
-mongrel2 bundles polarssl so it has the same problem as the polarssl
-with the assembly optimization, so let's use the same solution here.
+  http://autobuild.buildroot.org/results/8b8/8b894f0bd42c18e7cda98c15480757f10d743423/
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongrel2/mongrel2.mk |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+ ...f-shared-library-on-architectures-needing.patch |   31 ++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
 
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-index 0be4832..d0640c9 100644
---- a/package/mongrel2/mongrel2.mk
-+++ b/package/mongrel2/mongrel2.mk
-@@ -13,6 +13,21 @@ MONGREL2_LICENSE = BSD-3c
- MONGREL2_LICENSE_FILES = LICENSE
- MONGREL2_DEPENDENCIES = sqlite zeromq
- 
-+define MONGREL2_POLARSSL_DISABLE_ASM
-+	$(SED) '/^#define POLARSSL_HAVE_ASM/d' $(@D)/src/polarssl/include/polarssl/config.h
-+endef
+diff --git a/package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch b/package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch
+new file mode 100644
+index 0000000..2590e15
+--- /dev/null
++++ b/package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch
+@@ -0,0 +1,31 @@
++From 08a464e2b6bd31bb2bf4e258ebfa9b9d65805abf Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 27 Nov 2015 15:17:02 +0100
++Subject: [PATCH] Fix build of shared library on architectures needing -fPIC
 +
-+# ARM in thumb mode breaks debugging with asm optimizations
-+# Microblaze asm optimizations are broken in general
-+# MIPS R6 asm is not yet supported
-+ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
-+MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
-+else ifeq ($(BR2_microblaze),y)
-+MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
-+else ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
-+MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
-+endif
++Certain architectures, like Sparc and Sparc64 require objects to be
++built with -fPIC (and not just -fpic) to be usable in shared
++libraries. On other architectures, -fPIC is the same as -fpic so this
++patch doesn't affect such architectures.
 +
- define MONGREL2_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		PREFIX=/usr all
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/Makefile b/src/Makefile
++index 95fe549..c293611 100755
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -110,7 +110,7 @@ $(BIN2_NAME): $(OBJS3) $(LIB_NAME)
++ 
++ 
++ x_%.o: %.cpp
++-	$(CXX) $(CXXFLAGS) $(USE_AUDIO) -D PATH_ESPEAK_DATA=\"$(DATADIR)\" -Wall -fpic -fvisibility=hidden -pedantic \
+++	$(CXX) $(CXXFLAGS) $(USE_AUDIO) -D PATH_ESPEAK_DATA=\"$(DATADIR)\" -Wall -fPIC -fvisibility=hidden -pedantic \
++ 	-I. -D LIBRARY -c -fno-exceptions  $<  -o x_$*.o
++ 
++ $(LIB_NAME): $(OBJS2)
++-- 
++2.6.3
++
