@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 27 Nov 2015 23:48:00 +0100
-Subject: [Buildroot] [PATCH 2/2] package/skeleton: also handle merged
- /usr in the staging
-In-Reply-To: <5658DA6B.8040305@mind.be>
+Date: Fri, 27 Nov 2015 23:50:26 +0100
+Subject: [Buildroot] [PATCH 1/2] package/skeleton: parametrise the
+ symlinks-or-mkdir macro
+In-Reply-To: <5658D217.1020905@mind.be>
 References: <cover.1448575841.git.yann.morin.1998@free.fr>
- <0934812eeec64cb2cdc2b7600879b53695859652.1448575841.git.yann.morin.1998@free.fr>
- <5658DA6B.8040305@mind.be>
-Message-ID: <20151127224800.GB4144@free.fr>
+ <0c601430e0de47ba5a18c933ace701ccf1e0eca4.1448575841.git.yann.morin.1998@free.fr>
+ <5658D217.1020905@mind.be>
+Message-ID: <20151127225026.GC4144@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +15,20 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2015-11-27 23:34 +0100, Arnout Vandecappelle spake thusly:
+On 2015-11-27 22:58 +0100, Arnout Vandecappelle spake thusly:
 > On 26-11-15 23:13, Yann E. MORIN wrote:
-> > When the target uses a merged /usr setup, gdbserver will only report
-> > paths in /lib to the remote gdb, which in turn will only look libraries
-> > in staging/lib and never in staging/usr/lib.
+> > currently, we only make the merged symlinks or non-merged mkdirs in the
+> > target directory. This is fine, as long as one does not run gdb.
 > > 
-> > So. the mreged (or non-merged) /usr setup must be replicated in the
-> > staging.
+> > However, as soon as one wants to run gdb (or gdbserver) on the target,
+> > gdb will only search for libraries in /lib in the sysroot.
 > > 
-> > The best solution where to do so is in the skeleton package, since it
-> > is guaranteed to come before any package that installs things in the
-> > staging, and even before the (internal or external) toolchain as well.
+> > In preparation for a patch to fix that, make the symlink-or-mkdir macro
+> > a function that takes as parameter the base directory where to create
+> > symlinks or mkdir in.
+> > 
+> > Move the function declarations our of the custom/non-custom skeleton
+> > conditional block, so they are always available.
 > > 
 > > Reported-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
 > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -37,23 +39,49 @@ On 2015-11-27 23:34 +0100, Arnout Vandecappelle spake thusly:
 > 
 > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
->  However, this only applies to next - shouldn't we do this on master as well?
-> This will be the first time we release the merged /usr, so we should probably
-> get it right...
+>  But...
+> 
+> > ---
+> >  package/skeleton/skeleton.mk | 31 ++++++++++++++++---------------
+> >  1 file changed, 16 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> > index 46e8cc4..b296cbd 100644
+> > --- a/package/skeleton/skeleton.mk
+> > +++ b/package/skeleton/skeleton.mk
+> > @@ -57,27 +57,28 @@ else # ! custom skeleton
+> >  
+> >  SKELETON_PATH = system/skeleton
+> >  
+> > -ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+> > -define SKELETON_USR_SYMLINKS_OR_DIRS
+> > -	ln -snf usr/bin $(TARGET_DIR)/bin
+> > -	ln -snf usr/sbin $(TARGET_DIR)/sbin
+> > -	ln -snf usr/lib $(TARGET_DIR)/lib
+> > -endef
+> > -else
+> > -define SKELETON_USR_SYMLINKS_OR_DIRS
+> > -	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin
+> > -	$(INSTALL) -d -m 0755 $(TARGET_DIR)/sbin
+> > -	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib
+> > -endef
+> > -endif
+> > -
+> >  endif # ! custom skeleton
+> >  
+> > +# This function handles the merged or non-merged /usr cases
+> > +ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+> > +define SKELETON_USR_SYMLINKS_OR_DIRS
+> 
+>  We usually make functions lowercase rather than uppercase, although there are
+> notable exceptions like MESSAGE and UPPERCASE.
 
-Hmmm... Surely this patch was done against master, not next. Or did I
-foobared my tree?... ;-)
+Well, one may argue that hooks are functions like any other, and we
+write them in upper-case.
 
-Yes, I'd like we get that in master, but I'd like some testing first (of
-course, I did my homework, but a note from the reporter would have been
-great, too).
-
->  Perhaps this would be a good time to move this to the
-> SKELETON_USR_SYMLINKS_OR_DIRS macro and remove these directories from the skeleton.
-
-*That* would be for next. Or after the release, since it's so close...
-
-Thanks! :-)
+So yes, we usually write lower-case functions in the infras. But
+(almost?) everything in packages is upper-case, so I think it is
+best to not get diverge too much to what we do in other packages.
 
 Regards,
 Yann E. MORIN.
