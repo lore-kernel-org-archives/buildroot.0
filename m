@@ -1,23 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Nov 2015 19:29:24 +0100
-Subject: [Buildroot] [PATCH] mongrel2: disable polarssl assembly as we
-	do in the polarssl package
-In-Reply-To: <1448632468-45374-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Fri, 27 Nov 2015 13:54:28 +0000")
-References: <1448632468-45374-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87poyvqosb.fsf@dell.be.48ers.dk>
+Date: Fri, 27 Nov 2015 19:29:48 +0100
+Subject: [Buildroot] [PATCH] libsoc: fix MUSL build issue
+In-Reply-To: <1448638281-1170-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Fri, 27 Nov 2015 16:31:21
+ +0100")
+References: <1448638281-1170-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87lh9jqorn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
- > mongrel2 bundles polarssl so it has the same problem as the polarssl
- > with the assembly optimization, so let's use the same solution here.
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Without <linux/ioctl.h> include compiler cannot find _IOC_SIZEBITS
+ > macro, when using MUSL C library.
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/c86/c86fc75212df75906222772854c283396bb880d2/
+
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed, thanks.
 
