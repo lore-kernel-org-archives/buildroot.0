@@ -1,34 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Nov 2015 16:20:35 +0100
+Date: Fri, 27 Nov 2015 16:21:30 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2015-11-26
-In-Reply-To: <1448629389.16816.4.camel@embedded.rocks>
+In-Reply-To: <CAGm1_ksSkug_jUekevDLO8BX50oP6WHd_V1CjEoYntHD+8tSeg@mail.gmail.com>
 References: <20151127073014.F0A24102391@stock.ovh.net>
- <1448629389.16816.4.camel@embedded.rocks>
-Message-ID: <20151127162035.49cabe73@free-electrons.com>
+ <CAGm1_ksSkug_jUekevDLO8BX50oP6WHd_V1CjEoYntHD+8tSeg@mail.gmail.com>
+Message-ID: <20151127162130.13713ead@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Yegor,
 
-On Fri, 27 Nov 2015 14:03:09 +0100, J?rg Krause wrote:
+On Fri, 27 Nov 2015 10:33:33 +0100, Yegor Yefremov wrote:
 
-> > ?????????arm |????????????????arptables-0.0.4 | NOK | http://autobuil
-> > d.buildroot.net/results/b721e4fa24a0728c20fd2ec0663c2b5981387642/
+> >                   libsoc-0.6.4 | 1
 > 
-> I had a look at this. Build fails because of namespace collision
-> between netinet and linux headers, e.g IPPROTO_IP is both defined in
-> linux/in.h and?netinet/in.h.
+> Seems to fix the build issue:
 > 
-> Unfortunatly, I am not sure how to fix this properly.
+> https://github.com/jackmitch/libsoc/pull/37
 
-That's a typical case of issue exhibited by musl. You can probably just
-remove the <linux/in.h> include completely.
+Can you submit a Buildroot patch for it?
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
