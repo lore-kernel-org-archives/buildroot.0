@@ -1,45 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 27 Nov 2015 21:02:09 +0100
-Subject: [Buildroot] [PATCH] support/dependencies: ensure we have 'file' on
-	the host
-Message-ID: <1448654529-27021-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 27 Nov 2015 21:50:58 +0100
+Subject: [Buildroot] [PATCH] rpi-userland: fix musl compile
+In-Reply-To: <1448645857-14999-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1448645857-14999-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <5658C232.9030600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When 'file' is missing on the host, libtool fails miserably. Packages
-that use libtool will suddenly FTBFS, with cryptic error messages, like
-missing libraries on the linker invocation.
+ Hi Sergio,
 
-We could ensure that autotools based packages now all depend on
-host-file. But It itself is an autotools package, so it's again a
-chicken-n-egg issue. And even non-autotools package may use libtool.
+On 27-11-15 18:37, Sergio Prado wrote:
+> When building with musl, the build fails with a conflicting type
+> qualifier error.
+> 
+> This is because musl defines stdout and stderr as const pointers
+> and RaspiVidYUV.c adds an extern declaration as normal pointers.
+> 
+> Since this declaration already comes in on the header (stdio.h),
+> there is no need to add an extern declaration, so removes it.
+> 
+> Fixes:
+> 
+> http://autobuild.buildroot.net/results/27bd6f32cecdb4e7c95247c1feaf2732c1d8e3fa
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> ---
+>  ...ting-type-qualifiers-errors-when-building.patch | 23 ++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>  create mode 100644 package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch
+> 
+> diff --git a/package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch b/package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch
+> new file mode 100644
+> index 000000000000..4db60142c6ad
+> --- /dev/null
+> +++ b/package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch
+> @@ -0,0 +1,23 @@
+> +Fix conflicting type qualifiers errors when building with musl.
+> +
+> +Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 
-So, just require that 'file' is present on the host.
+ Did you send this patch upstream?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- support/dependencies/dependencies.sh | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Regards,
+ Arnout
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 3146401..f14fb79 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -69,6 +69,12 @@ check_prog_host "which"
- # Verify that sed is installed
- check_prog_host "sed"
- 
-+# 'file' must be present, otherwise libtool fails in incomprehensible
-+# ways. For example, bandwidthd would fail to link with -lz, even
-+# though the library is there (and it's not a static/shared issue).
-+# Adding the 'file' program on the system miraculously fixes the issue.
-+check_prog_host "file"
-+
- # Check make
- MAKE=$(which make 2> /dev/null)
- if [ -z "$MAKE" ] ; then
+> +---
+> + host_applications/linux/apps/raspicam/RaspiVidYUV.c | 2 --
+> + 1 file changed, 2 deletions(-)
+> +
+> +diff --git a/host_applications/linux/apps/raspicam/RaspiVidYUV.c b/host_applications/linux/apps/raspicam/RaspiVidYUV.c
+> +index b340d63c913f..13e6a6ccf5bf 100644
+> +--- a/host_applications/linux/apps/raspicam/RaspiVidYUV.c
+> ++++ b/host_applications/linux/apps/raspicam/RaspiVidYUV.c
+> +@@ -106,8 +106,6 @@ const int ABORT_INTERVAL = 100; // ms
+> + /// Run/record forever
+> + #define WAIT_METHOD_FOREVER        4
+> + 
+> +-extern FILE *stderr, *stdout;
+> +-
+> + int mmal_status_to_int(MMAL_STATUS_T status);
+> + static void signal_handler(int signal_number);
+> + 
+> +-- 
+> +1.9.1
+> +
+> 
+
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
