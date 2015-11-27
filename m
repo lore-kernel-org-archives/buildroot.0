@@ -1,55 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Nov 2015 13:22:04 +0100
-Subject: [Buildroot] [git commit] polarssl: disable assembly for MIPS R6
-Message-ID: <20151127122301.09BCC81F7E@busybox.osuosl.org>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Fri, 27 Nov 2015 21:47:56 +0900
+Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
+ for target, fix a typo
+In-Reply-To: Your message of Tue, 10 Nov 2015 18:22:47 +0900.
+ <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
+Message-ID: <201511271247.tARCluui012500@ms-omx02.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=47dd01f1aca80801ed6dcfa2359989c17acf4874
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear maintainer.
 
-Fixes:
-http://autobuild.buildroot.net/results/c34/c343c68d3e0dae4a7ecd59693298a9622bc56662/
+Could you pullup this before 2015.11 official release ?
+I think discussion for this patch is already done.
 
-Is not yet supported and the compilation will fail like this:
+https://patchwork.ozlabs.org/patch/542211/
 
-[  4%] Building C object library/CMakeFiles/polarssl.dir/bignum.c.o
-/tmp/ccLDxl9G.s: Assembler messages:
-/tmp/ccLDxl9G.s:92: Error: opcode not supported on this processor:
-mips32r6 (mips32r6) `multu $13,$14'
-/tmp/ccLDxl9G.s:93: Error: opcode not supported on this processor:
-mips32r6 (mips32r6) `addi $10,$10,4'
-/tmp/ccLDxl9G.s:94: Error: opcode not supported on this processor:
-mips32r6 (mips32r6) `mflo $14'
-/tmp/ccLDxl9G.s:95: Error: opcode not supported on this processor:
-mips32r6 (mips32r6) `mfhi $9'
-
-[...]
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/polarssl/polarssl.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
-
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index c589ec7..d988bf1 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -20,10 +20,13 @@ endef
- 
- # ARM in thumb mode breaks debugging with asm optimizations
- # Microblaze asm optimizations are broken in general
-+# MIPS R6 asm is not yet supported
- ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
- POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
- else ifeq ($(BR2_microblaze),y)
- POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
-+else ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
-+POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
- endif
- 
- $(eval $(cmake-package))
+Hiroshi Kawashima writes:
+> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+> ---
+> diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
+> index b887c6a..8406774 100644
+> --- a/package/gauche/gauche.mk
+> +++ b/package/gauche/gauche.mk
+> @@ -4,7 +4,8 @@
+>  #
+>  ############################################################################
+> ####
+>  
+> -GAUCHE_VERSION = 0.9.4
+> +GAUCHE_VERSION_MAJOR = 0.9
+> +GAUCHE_VERSION = $(GAUCHE_VERSION_MAJOR).4
+>  GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
+>  GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
+>  GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
+> @@ -23,10 +24,24 @@ endif
+>  # Detection of c99 support in configure fails without WCHAR. To enable
+>  # automatic detection of c99 support by configure, we need to enable
+>  # WCHAR in toolchain. But actually we do not need WCHAR at gauche
+> -# runtime. So reuesting WCHAR in toolchain just for automatic detection
+> +# runtime. So requesting WCHAR in toolchain just for automatic detection
+>  # will be overkill. To solve this, explicitly -std=gnu99 is specified
+>  # here.
+>  GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+>  
+> +define GAUCHE_REMOVE_UNNEEDED
+> +	for i in gauche-config gauche-install gauche-package ; do \
+> +		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+> +		rm -f $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GA
+> UCHE_VERSION)/$(GNU_TARGET_NAME)/$$i ; \
+> +	done
+> +	for i in gencomp genstub precomp ; do \
+> +		rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(
+> GAUCHE_VERSION)/lib/$$i ; \
+> +	done
+> +	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_V
+> ERSION)/aclocal.m4
+> +	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_V
+> ERSION)/template.*
+> +	rm -fr $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VE
+> RSION)/include
+> +endef
+> +GAUCHE_POST_INSTALL_TARGET_HOOKS += GAUCHE_REMOVE_UNNEEDED
+> +
+>  $(eval $(host-autotools-package))
+>  $(eval $(autotools-package))
+============================================================
+    Hiroshi Kawashima
