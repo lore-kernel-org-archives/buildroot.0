@@ -1,44 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Nov 2015 16:21:18 +0100
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20151127174441.5322C81F91@busybox.osuosl.org>
+Date: Fri, 27 Nov 2015 19:29:24 +0100
+Subject: [Buildroot] [PATCH] mongrel2: disable polarssl assembly as we
+	do in the polarssl package
+In-Reply-To: <1448632468-45374-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Fri, 27 Nov 2015 13:54:28 +0000")
+References: <1448632468-45374-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87poyvqosb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db80b0a5d6fe463d758b5413f2231f18bc38f100
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Should have been part of -rc3, but seems like I forgot to save the file :/
+ > mongrel2 bundles polarssl so it has the same problem as the polarssl
+ > with the assembly optimization, so let's use the same solution here.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES |   13 ++++++++++++-
- 1 files changed, 12 insertions(+), 1 deletions(-)
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-diff --git a/CHANGES b/CHANGES
-index 60c7824..5ef9a20 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,18 @@
- 
- 	Fixes all over the tree.
- 
--	Updated/fixed packages:
-+	We have a new modern website!
-+
-+	Updated/fixed packages: apitrace, audiofile, autossh, bullet,
-+	c-ares, collectd, conntrack-tools, cryptodev-linux, dropbear,
-+	fastd, gmp, gpsd, gst-plugins-bad, gst-plugins-base,
-+	gst-plugins-good, gst-plugins-ugly, gstreamer, gstreamer1,
-+	guile, iodine, iproute2, jimtcl, kompexsqlite, libethumb,
-+	libfreeimage, libgsasl, libgtk3, libxml2, localedef,
-+	lttng-tools, macchanger, mongrel2, mpd, openntpd, openssl,
-+	oprofile, pcre, qt5base, quagga, rpi-userland, sconeserver,
-+	sdl, spidev_test, sqlite, strongswan, ustr, xapp_sessreg,
-+	yajl, zmqpp
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
