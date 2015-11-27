@@ -1,43 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Nov 2015 13:18:35 +0100
-Subject: [Buildroot] [git commit branch/next] lttng-libust: bump to version
-	2.7.1
-Message-ID: <20151127122053.56AE081F88@busybox.osuosl.org>
+Date: Fri, 27 Nov 2015 13:22:45 +0100
+Subject: [Buildroot] [PATCH] polarssl: disable assembly for MIPS R6
+In-Reply-To: <1448620638-44691-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Fri, 27 Nov 2015 10:37:18 +0000")
+References: <1448620638-44691-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87fuzrskbu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d2e7e4e38842a383457fdfe43397653e6ee1f4d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lttng-libust/lttng-libust.hash |    4 ++--
- package/lttng-libust/lttng-libust.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Is not yet supported and the compilation will fail like this:
+ > [  4%] Building C object library/CMakeFiles/polarssl.dir/bignum.c.o
+ > /tmp/ccLDxl9G.s: Assembler messages:
+ > /tmp/ccLDxl9G.s:92: Error: opcode not supported on this processor:
+ > mips32r6 (mips32r6) `multu $13,$14'
+ > /tmp/ccLDxl9G.s:93: Error: opcode not supported on this processor:
+ > mips32r6 (mips32r6) `addi $10,$10,4'
+ > /tmp/ccLDxl9G.s:94: Error: opcode not supported on this processor:
+ > mips32r6 (mips32r6) `mflo $14'
+ > /tmp/ccLDxl9G.s:95: Error: opcode not supported on this processor:
+ > mips32r6 (mips32r6) `mfhi $9'
 
-diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
-index aafc2ba..57c7e00 100644
---- a/package/lttng-libust/lttng-libust.hash
-+++ b/package/lttng-libust/lttng-libust.hash
-@@ -1,2 +1,2 @@
--# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.2.tar.bz2.sha1
--sha1  bfa9cbdabd8698cf5b98667eac5c39775127f634  lttng-ust-2.6.2.tar.bz2
-+# http://www.lttng.org/files/lttng-ust/lttng-ust-2.7.1.tar.bz2.sha1
-+sha1  597ebecb885debb58c263de57f30b1096d4eefc6  lttng-ust-2.7.1.tar.bz2
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index 4976ff4..cfd2367 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
--LTTNG_LIBUST_VERSION = 2.6.2
-+LTTNG_LIBUST_VERSION = 2.7.1
- LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
- LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
- LTTNG_LIBUST_LICENSE_FILES = COPYING
+ > [...]
+
+Committed after adding an autobuilder reference, thanks.
+
+-- 
+Bye, Peter Korsgaard
