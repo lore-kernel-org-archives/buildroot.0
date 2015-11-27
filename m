@@ -1,201 +1,144 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 27 Nov 2015 18:38:00 +0100
-Subject: [Buildroot] [PATCH 1/2] infozip: rename to zip
-Message-ID: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
+Date: Fri, 27 Nov 2015 18:38:01 +0100
+Subject: [Buildroot] [PATCH 2/2] unzip: new package
+In-Reply-To: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
+References: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1448645881-32202-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently have a package named "infozip" for Info-Zip's Zip.
-
-With the upcoming addition of a package the Info-Zip's UnZip the name
-is becoming ambiguous. Rename it to the more specific name "zip".
-
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Romain Naour <romain.naour@openwide.fr>
 Cc: Jan Pedersen <jp@jp-embedded.com>
 ---
- Config.in.legacy                                   | 12 ++++++++
- package/Config.in                                  |  2 +-
- ...emove-Check-C-compiler-type-optimization-.patch |  0
- .../0002-configure-Don-t-use-host-CPP.patch        |  0
- ...003-Makefile-Use-CFLAGS-from-command-line.patch |  0
- ...4-configure-use-LDFLAGS-from-command-line.patch |  0
- ...-unix-configure-remove-GID-UID-size-check.patch |  0
- ...figure-borrow-the-LFS-test-from-autotools.patch |  0
- package/{infozip => zip}/Config.in                 |  4 +--
- package/{infozip/infozip.hash => zip/zip.hash}     |  0
- package/{infozip/infozip.mk => zip/zip.mk}         | 32 +++++++++++-----------
- 11 files changed, 31 insertions(+), 19 deletions(-)
- rename package/{infozip => zip}/0001-configure-Remove-Check-C-compiler-type-optimization-.patch (100%)
- rename package/{infozip => zip}/0002-configure-Don-t-use-host-CPP.patch (100%)
- rename package/{infozip => zip}/0003-Makefile-Use-CFLAGS-from-command-line.patch (100%)
- rename package/{infozip => zip}/0004-configure-use-LDFLAGS-from-command-line.patch (100%)
- rename package/{infozip => zip}/0005-unix-configure-remove-GID-UID-size-check.patch (100%)
- rename package/{infozip => zip}/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch (100%)
- rename package/{infozip => zip}/Config.in (88%)
- rename package/{infozip/infozip.hash => zip/zip.hash} (100%)
- rename package/{infozip/infozip.mk => zip/zip.mk} (66%)
+ package/Config.in                                  |  1 +
+ ...a-CMakeFile.txt-to-ease-cross-compilation.patch | 53 ++++++++++++++++++++++
+ package/unzip/Config.in                            | 11 +++++
+ package/unzip/unzip.hash                           |  2 +
+ package/unzip/unzip.mk                             | 13 ++++++
+ 5 files changed, 80 insertions(+)
+ create mode 100644 package/unzip/0001-Add-a-CMakeFile.txt-to-ease-cross-compilation.patch
+ create mode 100644 package/unzip/Config.in
+ create mode 100644 package/unzip/unzip.hash
+ create mode 100644 package/unzip/unzip.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index c5b8223..2bbf2ed 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -105,6 +105,18 @@ comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
-+comment "Legacy options removed in 2016.02"
-+
-+config BR2_PACKAGE_INFOZIP
-+	bool "infozip option has been renamed to zip"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_ZIP
-+	help
-+	  Info-Zip's Zip package has been renamed from infozip to zip,
-+	  to avoid ambiguities with Info-Zip's UnZip which has been added
-+	  in the unzip package.
-+
-+###############################################################################
- comment "Legacy options removed in 2015.11"
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REAL
 diff --git a/package/Config.in b/package/Config.in
-index 988fe84..9e3494a 100644
+index 9e3494a..311d744 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -51,11 +51,11 @@ menu "Compressors and decompressors"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/gzip/Config.in"
- endif
--	source "package/infozip/Config.in"
+@@ -54,6 +54,7 @@ endif
  	source "package/lz4/Config.in"
  	source "package/lzip/Config.in"
  	source "package/lzop/Config.in"
++	source "package/unzip/Config.in"
  	source "package/xz/Config.in"
-+	source "package/zip/Config.in"
+ 	source "package/zip/Config.in"
  endmenu
- 
- menu "Debugging, profiling and benchmark"
-diff --git a/package/infozip/0001-configure-Remove-Check-C-compiler-type-optimization-.patch b/package/zip/0001-configure-Remove-Check-C-compiler-type-optimization-.patch
-similarity index 100%
-rename from package/infozip/0001-configure-Remove-Check-C-compiler-type-optimization-.patch
-rename to package/zip/0001-configure-Remove-Check-C-compiler-type-optimization-.patch
-diff --git a/package/infozip/0002-configure-Don-t-use-host-CPP.patch b/package/zip/0002-configure-Don-t-use-host-CPP.patch
-similarity index 100%
-rename from package/infozip/0002-configure-Don-t-use-host-CPP.patch
-rename to package/zip/0002-configure-Don-t-use-host-CPP.patch
-diff --git a/package/infozip/0003-Makefile-Use-CFLAGS-from-command-line.patch b/package/zip/0003-Makefile-Use-CFLAGS-from-command-line.patch
-similarity index 100%
-rename from package/infozip/0003-Makefile-Use-CFLAGS-from-command-line.patch
-rename to package/zip/0003-Makefile-Use-CFLAGS-from-command-line.patch
-diff --git a/package/infozip/0004-configure-use-LDFLAGS-from-command-line.patch b/package/zip/0004-configure-use-LDFLAGS-from-command-line.patch
-similarity index 100%
-rename from package/infozip/0004-configure-use-LDFLAGS-from-command-line.patch
-rename to package/zip/0004-configure-use-LDFLAGS-from-command-line.patch
-diff --git a/package/infozip/0005-unix-configure-remove-GID-UID-size-check.patch b/package/zip/0005-unix-configure-remove-GID-UID-size-check.patch
-similarity index 100%
-rename from package/infozip/0005-unix-configure-remove-GID-UID-size-check.patch
-rename to package/zip/0005-unix-configure-remove-GID-UID-size-check.patch
-diff --git a/package/infozip/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch b/package/zip/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch
-similarity index 100%
-rename from package/infozip/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch
-rename to package/zip/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch
-diff --git a/package/infozip/Config.in b/package/zip/Config.in
-similarity index 88%
-rename from package/infozip/Config.in
-rename to package/zip/Config.in
-index cfd7533..4b6360a 100644
---- a/package/infozip/Config.in
-+++ b/package/zip/Config.in
-@@ -1,5 +1,5 @@
--config BR2_PACKAGE_INFOZIP
--	bool "infozip"
-+config BR2_PACKAGE_ZIP
-+	bool "zip"
- 	help
- 	  Zip is a compression and file packaging/archive utility.
- 	  Although highly compatible both with PKWARE's PKZIP and
-diff --git a/package/infozip/infozip.hash b/package/zip/zip.hash
-similarity index 100%
-rename from package/infozip/infozip.hash
-rename to package/zip/zip.hash
-diff --git a/package/infozip/infozip.mk b/package/zip/zip.mk
-similarity index 66%
-rename from package/infozip/infozip.mk
-rename to package/zip/zip.mk
-index e57f7e1..5338f88 100644
---- a/package/infozip/infozip.mk
-+++ b/package/zip/zip.mk
-@@ -1,51 +1,51 @@
- ################################################################################
- #
--# infozip
-+# zip
- #
- ################################################################################
- 
--INFOZIP_VERSION = 30
--INFOZIP_SOURCE = zip$(INFOZIP_VERSION).tgz
--INFOZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
--INFOZIP_LICENSE = Info-ZIP
--INFOZIP_LICENSE_FILES = LICENSE
-+ZIP_VERSION = 30
-+ZIP_SOURCE = zip$(ZIP_VERSION).tgz
-+ZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
-+ZIP_LICENSE = Info-ZIP
-+ZIP_LICENSE_FILES = LICENSE
- 
- ifeq ($(BR2_PACKAGE_BZIP2),y)
--INFOZIP_DEPENDENCIES += bzip2
-+ZIP_DEPENDENCIES += bzip2
- endif
- 
- # Infozip's default CFLAGS.
--INFOZIP_CFLAGS = -I. -DUNIX
-+ZIP_CFLAGS = -I. -DUNIX
- 
- # Disable the support of 16-bit UIDs/GIDs, the test in unix/configure was
- # removed since it can't work for cross-compilation.
--INFOZIP_CFLAGS += -DUIDGID_NOT_16BIT
-+ZIP_CFLAGS += -DUIDGID_NOT_16BIT
- 
- # infozip already defines _LARGEFILE_SOURCE and _LARGEFILE64_SOURCE when
- # necessary, redefining it on the command line causes some warnings.
--INFOZIP_TARGET_CFLAGS = \
-+ZIP_TARGET_CFLAGS = \
- 	$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
- 
--define INFOZIP_BUILD_CMDS
-+define ZIP_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		CFLAGS="$(INFOZIP_TARGET_CFLAGS) $(INFOZIP_CFLAGS)" \
-+		CFLAGS="$(ZIP_TARGET_CFLAGS) $(ZIP_CFLAGS)" \
- 		AS="$(TARGET_CC) -c" \
- 		-f unix/Makefile generic
- endef
- 
--define INFOZIP_INSTALL_TARGET_CMDS
-+define ZIP_INSTALL_TARGET_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile install \
- 		prefix=$(TARGET_DIR)/usr
- endef
- 
--define HOST_INFOZIP_BUILD_CMDS
-+define HOST_ZIP_BUILD_CMDS
- 	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
--		CFLAGS="$(HOST_CFLAGS) $(INFOZIP_CFLAGS)" \
-+		CFLAGS="$(HOST_CFLAGS) $(ZIP_CFLAGS)" \
- 		AS="$(HOSTCC) -c" \
- 		-f unix/Makefile generic
- endef
- 
--define HOST_INFOZIP_INSTALL_CMDS
-+define HOST_ZIP_INSTALL_CMDS
- 	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile install \
- 		prefix=$(HOST_DIR)/usr
- endef
+diff --git a/package/unzip/0001-Add-a-CMakeFile.txt-to-ease-cross-compilation.patch b/package/unzip/0001-Add-a-CMakeFile.txt-to-ease-cross-compilation.patch
+new file mode 100644
+index 0000000..cbc58e4
+--- /dev/null
++++ b/package/unzip/0001-Add-a-CMakeFile.txt-to-ease-cross-compilation.patch
+@@ -0,0 +1,53 @@
++From 992a497e9c5c421d3931e02a01e9d7c159f27135 Mon Sep 17 00:00:00 2001
++From: Luca Ceresoli <luca@lucaceresoli.net>
++Date: Thu, 26 Nov 2015 12:49:10 +0100
++Subject: [PATCH] Add a CMakeFile.txt to ease cross-compilation
++
++Info-ZIP's UnZip 6.0 has a complex, hand-crafted Makefile with a
++companion configure script which try to support an extremely wide
++range of UNIX-like operating systems. The result is an overly complex
++mass of code that does not support cross-compilation in several ways.
++
++Zip 3.0 has a similar build system, and has as many as 6 patches in
++Buildroot to cross-compile [0]. UnZip fails at building even with
++these patches adapted and a few more on top of them.
++
++Instead of tweaking and fixing a huge and complex build system, skip
++it entirely and add a pretty simple CMakeLists.txt that cross-compiles
++smoothly using CMake. It also preserves all of the Buildroot-provided
++build options and flags as the original Makefile does.
++
++[0] http://git.buildroot.net/buildroot/tree/package/infozip?id=2015.11-rc3
++
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++---
++ CMakeLists.txt | 17 +++++++++++++++++
++ 1 file changed, 17 insertions(+)
++ create mode 100644 CMakeLists.txt
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++new file mode 100644
++index 0000000..27951b4
++--- /dev/null
+++++ b/CMakeLists.txt
++@@ -0,0 +1,17 @@
+++cmake_minimum_required(VERSION 2.8)
+++INCLUDE(CheckFunctionExists)
+++
+++project(unzip C)
+++
+++CHECK_FUNCTION_EXISTS(lchmod HAVE_LCHMOD)
+++if(NOT HAVE_LCHMOD)
+++add_definitions("-DNO_LCHMOD")
+++endif()
+++
+++set(UNZIP_SOURCES unzip.c crc32.c crypt.c envargs.c explode.c
+++  extract.c fileio.c globals.c inflate.c list.c match.c process.c
+++  ttyio.c ubz2err.c unreduce.c unshrink.c zipinfo.c unix/unix.c)
+++
+++include_directories(.)
+++add_executable(unzip ${UNZIP_SOURCES})
+++install(TARGETS unzip DESTINATION bin)
++-- 
++1.9.1
++
+diff --git a/package/unzip/Config.in b/package/unzip/Config.in
+new file mode 100644
+index 0000000..0d98d28
+--- /dev/null
++++ b/package/unzip/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_UNZIP
++	bool "unzip"
++	help
++	  UnZip is an extraction utility for archives compressed in
++	  .zip format (also called "zipfiles"). Although highly
++	  compatible both with PKWARE's PKZIP and PKUNZIP utilities
++	  for MS-DOS and with Info-ZIP's own Zip program, our primary
++	  objectives have been portability and non-MSDOS
++	  functionality.
++
++	  http://www.info-zip.org/UnZip.html
+diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
+new file mode 100644
+index 0000000..a138cc2
+--- /dev/null
++++ b/package/unzip/unzip.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37 unzip60.tgz
+diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+new file mode 100644
+index 0000000..cff5951
+--- /dev/null
++++ b/package/unzip/unzip.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# unzip
++#
++################################################################################
++
++UNZIP_VERSION = 60
++UNZIP_SOURCE = unzip$(UNZIP_VERSION).tgz
++UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
++UNZIP_LICENSE = Info-ZIP
++UNZIP_LICENSE_FILES = LICENSE
++
++$(eval $(cmake-package))
 -- 
 1.9.1
