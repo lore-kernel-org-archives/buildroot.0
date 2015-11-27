@@ -1,72 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 27 Nov 2015 23:39:14 +0100
-Subject: [Buildroot] [PATCH 7/7 v3] autobuild: check for Linaro toolchains
-	earlier
-In-Reply-To: <cover.1448663846.git.yann.morin.1998@free.fr>
-References: <cover.1448663846.git.yann.morin.1998@free.fr>
-Message-ID: <a89f4ae40bd1f7d5600226eb0ac20f27098413fb.1448663846.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 27 Nov 2015 23:45:49 +0100
+Subject: [Buildroot] [PATCH 2/2] unzip: new package
+In-Reply-To: <1448645881-32202-2-git-send-email-luca@lucaceresoli.net>
+References: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
+ <1448645881-32202-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <5658DD1D.6060506@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When we get a configuration with those toolchains, we can not fix it.
-So we need to abort that configuration.
+Hi Luca, all
 
-Fix the glibc version we check against (2.14, not 2.24).
+Le 27/11/2015 18:38, Luca Ceresoli a ?crit :
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> Cc: Jan Pedersen <jp@jp-embedded.com>
+> ---
+>  package/Config.in                                  |  1 +
+>  ...a-CMakeFile.txt-to-ease-cross-compilation.patch | 53 ++++++++++++++++++++++
+>  package/unzip/Config.in                            | 11 +++++
+>  package/unzip/unzip.hash                           |  2 +
+>  package/unzip/unzip.mk                             | 13 ++++++
+>  5 files changed, 80 insertions(+)
+>  create mode 100644 package/unzip/0001-Add-a-CMakeFile.txt-to-ease-cross-compilation.patch
+>  create mode 100644 package/unzip/Config.in
+>  create mode 100644 package/unzip/unzip.hash
+>  create mode 100644 package/unzip/unzip.mk
+> 
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- scripts/autobuild-run | 29 +++++++++++++++++++----------
- 1 file changed, 19 insertions(+), 10 deletions(-)
+[snip]
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 1c7c91f..55619b6 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -339,6 +339,25 @@ def is_config_fixable(**kwargs):
-     any unfixable options.
-     """
- 
-+    idir = "instance-%d" % kwargs['instance']
-+    sysinfo = kwargs['sysinfo']
-+
-+    outputdir = os.path.join(idir, "output")
-+    with open(os.path.join(outputdir, ".config")) as configf:
-+        configlines = configf.readlines()
-+
-+    # The latest Linaro toolchains on x86-64 hosts requires glibc
-+    # 2.14+ on the host.
-+    if platform.machine() == 'x86_64':
-+        if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
-+           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
-+           'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
-+            ldd_version_output = subprocess.Popen(['ldd', '--version'], stdout=subprocess.PIPE).communicate()[0]
-+            glibc_version = ldd_version_output.splitlines()[0].split()[-1]
-+            if StrictVersion('2.14') > StrictVersion(glibc_version):
-+                log_write(log, "WARN: ignoring the Linaro ARM toolchains becausee too old host glibc")
-+                return False
-+
-     return True
- 
- def fixup_config(**kwargs):
-@@ -457,16 +476,6 @@ def fixup_config(**kwargs):
-     if 'BR2_PACKAGE_WESTON=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
--    # The latest Linaro toolchains on x86-64 hosts requires glibc
--    # 2.24+ on the host.
--    if platform.machine() == 'x86_64':
--        if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
--           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
--           'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
--            ldd_version_output = subprocess.Popen(['ldd', '--version'], stdout=subprocess.PIPE).communicate()[0]
--            glibc_version = ldd_version_output.splitlines()[0].split()[-1]
--            if StrictVersion('2.24') > StrictVersion(glibc_version):
--                return False
- 
-     with open(os.path.join(outputdir, ".config"), "w+") as configf:
-         configf.writelines(configlines)
+> diff --git a/package/unzip/Config.in b/package/unzip/Config.in
+> new file mode 100644
+> index 0000000..0d98d28
+> --- /dev/null
+> +++ b/package/unzip/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_UNZIP
+> +	bool "unzip"
+
+Have you checked some toolchain dependencies ?
+It seems that process.c use wchar_t so "depends on BR2_USE_WCHAR" is needed.
+
+Also, I checked if unzip build correctly with a musl and uClibc-ng toolchains.
+
+Best regards,
+Romain
+
+> +	help
+> +	  UnZip is an extraction utility for archives compressed in
+> +	  .zip format (also called "zipfiles"). Although highly
+> +	  compatible both with PKWARE's PKZIP and PKUNZIP utilities
+> +	  for MS-DOS and with Info-ZIP's own Zip program, our primary
+> +	  objectives have been portability and non-MSDOS
+> +	  functionality.
+> +
+> +	  http://www.info-zip.org/UnZip.html
+> diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
+> new file mode 100644
+> index 0000000..a138cc2
+> --- /dev/null
+> +++ b/package/unzip/unzip.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37 unzip60.tgz
+> diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+> new file mode 100644
+> index 0000000..cff5951
+> --- /dev/null
+> +++ b/package/unzip/unzip.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# unzip
+> +#
+> +################################################################################
+> +
+> +UNZIP_VERSION = 60
+> +UNZIP_SOURCE = unzip$(UNZIP_VERSION).tgz
+> +UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
+> +UNZIP_LICENSE = Info-ZIP
+> +UNZIP_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(cmake-package))
+> 
+
 -- 
-1.9.1
+Romain Naour
+
+OPEN WIDE Ing?nierie - Paris
+23/25, rue Daviel| 75013 PARIS
+http://ingenierie.openwide.fr
+
+Le blog des technologies libres et embarqu?es :
+http://www.linuxembedded.fr
