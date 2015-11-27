@@ -1,82 +1,50 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 27 Nov 2015 10:33:33 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-11-26
-In-Reply-To: <20151127073014.F0A24102391@stock.ovh.net>
-References: <20151127073014.F0A24102391@stock.ovh.net>
-Message-ID: <CAGm1_ksSkug_jUekevDLO8BX50oP6WHd_V1CjEoYntHD+8tSeg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 27 Nov 2015 10:37:18 +0000
+Subject: [Buildroot] [PATCH] polarssl: disable assembly for MIPS R6
+Message-ID: <1448620638-44691-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 27, 2015 at 8:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2015-11-26
-> ===============================
->
->         success : 87
->        failures : 20
->        timeouts : 0
->           TOTAL : 107
->
-> Classification of failures by reason
-> ====================================
->
-> freerdp-17834af7bb378f85a3b... | 2
->                   ffmpeg-2.8.1 | 2
->                  igmpproxy-0.1 | 1
->                 harfbuzz-1.0.6 | 1
->                    bdwgc-7.4.2 | 1
->                    jimtcl-0.75 | 1
->               libethumb-1.7.10 | 1
->             libsemanage-2.1.10 | 1
->                       pv-1.5.7 | 1
->                arptables-0.0.4 | 1
-> host-gdb-6be65fb56ea6694a92... | 1
->                 mongrel2-1.9.2 | 1
->                 espeak-1.48.04 | 1
->                  mesa3d-11.0.4 | 1
->                    erlang-17.5 | 1
->                 libgsasl-1.8.0 | 1
->                   libsoc-0.6.4 | 1
+Is not yet supported and the compilation will fail like this:
 
-Seems to fix the build issue:
+[  4%] Building C object library/CMakeFiles/polarssl.dir/bignum.c.o
+/tmp/ccLDxl9G.s: Assembler messages:
+/tmp/ccLDxl9G.s:92: Error: opcode not supported on this processor:
+mips32r6 (mips32r6) `multu $13,$14'
+/tmp/ccLDxl9G.s:93: Error: opcode not supported on this processor:
+mips32r6 (mips32r6) `addi $10,$10,4'
+/tmp/ccLDxl9G.s:94: Error: opcode not supported on this processor:
+mips32r6 (mips32r6) `mflo $14'
+/tmp/ccLDxl9G.s:95: Error: opcode not supported on this processor:
+mips32r6 (mips32r6) `mfhi $9'
 
-https://github.com/jackmitch/libsoc/pull/37
+[...]
 
->                libcap-ng-0.7.4 | 1
->
-> Detail of failures
-> ===================
->
->          arm |                arptables-0.0.4 | NOK | http://autobuild.buildroot.net/results/b721e4fa24a0728c20fd2ec0663c2b5981387642/
->        sparc |                    bdwgc-7.4.2 | NOK | http://autobuild.buildroot.net/results/408bc73145f79c9a2368f71cfeac8e373c60f0ae/
->      aarch64 |                    erlang-17.5 | NOK | http://autobuild.buildroot.net/results/6d0140790edb585777bf2b2ff02ca597a4b48353/
->      sparc64 |                 espeak-1.48.04 | NOK | http://autobuild.buildroot.net/results/8b894f0bd42c18e7cda98c15480757f10d743423/
->         mips |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/8636ab7eb362026843589be8ca5b736c180d34d9/
->     mips64el |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/4a207cd09d1cbaac29ebbf165321c06c430ec2f2/
->         i686 | freerdp-17834af7bb378f85a3b... | NOK | http://autobuild.buildroot.net/results/b0060f16c7464c240bc7d3b0ff17c9cb311fe30d/
->          arm | freerdp-17834af7bb378f85a3b... | NOK | http://autobuild.buildroot.net/results/754af2ee63591ba8c7c10c943867fdab5d4452ad/
->        sparc |                 harfbuzz-1.0.6 | NOK | http://autobuild.buildroot.net/results/b89dd5a936e65bd02ce503df59489f1c3e9ceb89/
-> microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/0cdbe600b5f0f42736cb4b449e092045fa0fecdd/
->       x86_64 |                  igmpproxy-0.1 | NOK | http://autobuild.buildroot.net/results/83b71049848b4e396339996fe849b1c25bb7f31f/
->      sparc64 |                    jimtcl-0.75 | NOK | http://autobuild.buildroot.net/results/3b2636b3a204847213adb711a9d2dd872033bfdc/
->        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/984cd8887925121823a477c8cb88487de4081936/
->          arm |               libethumb-1.7.10 | NOK | http://autobuild.buildroot.net/results/060c4b7303976994a13ecd286e936fee59c7a095/
->       x86_64 |                 libgsasl-1.8.0 | NOK | http://autobuild.buildroot.net/results/5d9baf528c47c5167ec8d2a6941cb06b4ca761ca/
->       mipsel |             libsemanage-2.1.10 | NOK | http://autobuild.buildroot.net/results/a20c8b2127feea59acfb84239b183bfc4d53961a/
->          arm |                   libsoc-0.6.4 | NOK | http://autobuild.buildroot.net/results/c86fc75212df75906222772854c283396bb880d2/
->          arc |                  mesa3d-11.0.4 | NOK | http://autobuild.buildroot.net/results/25a9c9af318cab667eef6657ef7716e560b050e1/
->       mipsel |                 mongrel2-1.9.2 | NOK | http://autobuild.buildroot.net/results/a92292a1defd441938d3de6c5049473d520ebc4e/
->      sparc64 |                       pv-1.5.7 | NOK | http://autobuild.buildroot.net/results/410b52169292472da6151c3c011427e91235d399/
->
->
-> --
-> http://autobuild.buildroot.net
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/polarssl/polarssl.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index c589ec7..d988bf1 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -20,10 +20,13 @@ endef
+ 
+ # ARM in thumb mode breaks debugging with asm optimizations
+ # Microblaze asm optimizations are broken in general
++# MIPS R6 asm is not yet supported
+ ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
+ POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
+ else ifeq ($(BR2_microblaze),y)
+ POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
++else ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
++POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
+ endif
+ 
+ $(eval $(cmake-package))
+-- 
+2.4.10
