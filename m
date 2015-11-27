@@ -1,31 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Nov 2015 16:19:01 +0100
-Subject: [Buildroot] [PATCH] espeak: fix build on sparc64
-In-Reply-To: <56586A2F.3040905@zacarias.com.ar>
-References: <1448634261-6630-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <56586A2F.3040905@zacarias.com.ar>
-Message-ID: <20151127161901.18e741c9@free-electrons.com>
+From: Alexey Galakhov <agalakhov@gmail.com>
+Date: Fri, 27 Nov 2015 16:20:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.59.0
+In-Reply-To: <87oaefskj5.fsf@dell.be.48ers.dk>
+References: <1448552157-1394-1-git-send-email-agalakhov@gmail.com>
+ <87oaefskj5.fsf@dell.be.48ers.dk>
+Message-ID: <1448637625.2038.39.camel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+Am Freitag, den 27.11.2015, 13:18 +0100 schrieb Peter Korsgaard:
+> > > > > > "Alexey" == Alexey Galakhov <agalakhov@gmail.com> writes:
+> 
+> ?> Removed boost patches that are already updtream.
+> 
+> What about the known issue / new libraries in 1.59?
+> 
+> See my reply to Bernd's recent patch doing the same bump:
+> 
+> https://patchwork.ozlabs.org/patch/547228/
 
-On Fri, 27 Nov 2015 11:35:27 -0300, Gustavo Zacarias wrote:
+Thank you for pointing me at this issue. I'll make a backport of the
+fix since it is fixed in git.
 
-> I wonder if all these sparc fixes wouldn't be better suited for the 
-> wrapper, after all -fpic in sparc is generally useless, and try to 
-> handle these upstream would be a PITA.
+(boost 1.58 is not better, we made this bump due to the bug #11222 of
+1.58).
 
-This is indeed another possibility. Generally speaking, I am not a huge
-fan of hiding too much magic/sorcery in the wrapper. But it's already a
-big amount of black magic, so a little bit more or less maybe does not
-hurt that much.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Alexey
