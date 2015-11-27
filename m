@@ -1,98 +1,67 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 27 Nov 2015 23:45:49 +0100
-Subject: [Buildroot] [PATCH 2/2] unzip: new package
-In-Reply-To: <1448645881-32202-2-git-send-email-luca@lucaceresoli.net>
-References: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
- <1448645881-32202-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <5658DD1D.6060506@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 27 Nov 2015 23:48:00 +0100
+Subject: [Buildroot] [PATCH 2/2] package/skeleton: also handle merged
+ /usr in the staging
+In-Reply-To: <5658DA6B.8040305@mind.be>
+References: <cover.1448575841.git.yann.morin.1998@free.fr>
+ <0934812eeec64cb2cdc2b7600879b53695859652.1448575841.git.yann.morin.1998@free.fr>
+ <5658DA6B.8040305@mind.be>
+Message-ID: <20151127224800.GB4144@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca, all
+Arnout, All,
 
-Le 27/11/2015 18:38, Luca Ceresoli a ?crit :
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> Cc: Jan Pedersen <jp@jp-embedded.com>
-> ---
->  package/Config.in                                  |  1 +
->  ...a-CMakeFile.txt-to-ease-cross-compilation.patch | 53 ++++++++++++++++++++++
->  package/unzip/Config.in                            | 11 +++++
->  package/unzip/unzip.hash                           |  2 +
->  package/unzip/unzip.mk                             | 13 ++++++
->  5 files changed, 80 insertions(+)
->  create mode 100644 package/unzip/0001-Add-a-CMakeFile.txt-to-ease-cross-compilation.patch
->  create mode 100644 package/unzip/Config.in
->  create mode 100644 package/unzip/unzip.hash
->  create mode 100644 package/unzip/unzip.mk
+On 2015-11-27 23:34 +0100, Arnout Vandecappelle spake thusly:
+> On 26-11-15 23:13, Yann E. MORIN wrote:
+> > When the target uses a merged /usr setup, gdbserver will only report
+> > paths in /lib to the remote gdb, which in turn will only look libraries
+> > in staging/lib and never in staging/usr/lib.
+> > 
+> > So. the mreged (or non-merged) /usr setup must be replicated in the
+> > staging.
+> > 
+> > The best solution where to do so is in the skeleton package, since it
+> > is guaranteed to come before any package that installs things in the
+> > staging, and even before the (internal or external) toolchain as well.
+> > 
+> > Reported-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> > Cc: Peter Korsgaard <jacmet@uclibc.org>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-
-[snip]
-
-> diff --git a/package/unzip/Config.in b/package/unzip/Config.in
-> new file mode 100644
-> index 0000000..0d98d28
-> --- /dev/null
-> +++ b/package/unzip/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_UNZIP
-> +	bool "unzip"
-
-Have you checked some toolchain dependencies ?
-It seems that process.c use wchar_t so "depends on BR2_USE_WCHAR" is needed.
-
-Also, I checked if unzip build correctly with a musl and uClibc-ng toolchains.
-
-Best regards,
-Romain
-
-> +	help
-> +	  UnZip is an extraction utility for archives compressed in
-> +	  .zip format (also called "zipfiles"). Although highly
-> +	  compatible both with PKWARE's PKZIP and PKUNZIP utilities
-> +	  for MS-DOS and with Info-ZIP's own Zip program, our primary
-> +	  objectives have been portability and non-MSDOS
-> +	  functionality.
-> +
-> +	  http://www.info-zip.org/UnZip.html
-> diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
-> new file mode 100644
-> index 0000000..a138cc2
-> --- /dev/null
-> +++ b/package/unzip/unzip.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37 unzip60.tgz
-> diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-> new file mode 100644
-> index 0000000..cff5951
-> --- /dev/null
-> +++ b/package/unzip/unzip.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# unzip
-> +#
-> +################################################################################
-> +
-> +UNZIP_VERSION = 60
-> +UNZIP_SOURCE = unzip$(UNZIP_VERSION).tgz
-> +UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
-> +UNZIP_LICENSE = Info-ZIP
-> +UNZIP_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(cmake-package))
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
+>  However, this only applies to next - shouldn't we do this on master as well?
+> This will be the first time we release the merged /usr, so we should probably
+> get it right...
+
+Hmmm... Surely this patch was done against master, not next. Or did I
+foobared my tree?... ;-)
+
+Yes, I'd like we get that in master, but I'd like some testing first (of
+course, I did my homework, but a note from the reporter would have been
+great, too).
+
+>  Perhaps this would be a good time to move this to the
+> SKELETON_USR_SYMLINKS_OR_DIRS macro and remove these directories from the skeleton.
+
+*That* would be for next. Or after the release, since it's so close...
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Romain Naour
-
-OPEN WIDE Ing?nierie - Paris
-23/25, rue Daviel| 75013 PARIS
-http://ingenierie.openwide.fr
-
-Le blog des technologies libres et embarqu?es :
-http://www.linuxembedded.fr
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
