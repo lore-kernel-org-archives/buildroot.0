@@ -1,32 +1,37 @@
-From: Alexey Galakhov <agalakhov@gmail.com>
-Date: Fri, 27 Nov 2015 16:20:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.59.0
-In-Reply-To: <87oaefskj5.fsf@dell.be.48ers.dk>
-References: <1448552157-1394-1-git-send-email-agalakhov@gmail.com>
- <87oaefskj5.fsf@dell.be.48ers.dk>
-Message-ID: <1448637625.2038.39.camel@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Nov 2015 16:20:35 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-11-26
+In-Reply-To: <1448629389.16816.4.camel@embedded.rocks>
+References: <20151127073014.F0A24102391@stock.ovh.net>
+ <1448629389.16816.4.camel@embedded.rocks>
+Message-ID: <20151127162035.49cabe73@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Freitag, den 27.11.2015, 13:18 +0100 schrieb Peter Korsgaard:
-> > > > > > "Alexey" == Alexey Galakhov <agalakhov@gmail.com> writes:
-> 
-> ?> Removed boost patches that are already updtream.
-> 
-> What about the known issue / new libraries in 1.59?
-> 
-> See my reply to Bernd's recent patch doing the same bump:
-> 
-> https://patchwork.ozlabs.org/patch/547228/
+Dear J?rg Krause,
 
-Thank you for pointing me at this issue. I'll make a backport of the
-fix since it is fixed in git.
+On Fri, 27 Nov 2015 14:03:09 +0100, J?rg Krause wrote:
 
-(boost 1.58 is not better, we made this bump due to the bug #11222 of
-1.58).
+> > ?????????arm |????????????????arptables-0.0.4 | NOK | http://autobuil
+> > d.buildroot.net/results/b721e4fa24a0728c20fd2ec0663c2b5981387642/
+> 
+> I had a look at this. Build fails because of namespace collision
+> between netinet and linux headers, e.g IPPROTO_IP is both defined in
+> linux/in.h and?netinet/in.h.
+> 
+> Unfortunatly, I am not sure how to fix this properly.
 
-Regards,
-Alexey
+That's a typical case of issue exhibited by musl. You can probably just
+remove the <linux/in.h> include completely.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
