@@ -1,71 +1,63 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 27 Nov 2015 21:50:58 +0100
-Subject: [Buildroot] [PATCH] rpi-userland: fix musl compile
-In-Reply-To: <1448645857-14999-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1448645857-14999-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <5658C232.9030600@mind.be>
+Date: Fri, 27 Nov 2015 22:19:03 +0100
+Subject: [Buildroot] [PATCH] support/dependencies: ensure we have 'file'
+ on the host
+In-Reply-To: <1448654529-27021-1-git-send-email-yann.morin.1998@free.fr>
+References: <1448654529-27021-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <5658C8C7.4080104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Sergio,
+On 27-11-15 21:02, Yann E. MORIN wrote:
+> When 'file' is missing on the host, libtool fails miserably. Packages
+> that use libtool will suddenly FTBFS, with cryptic error messages, like
+> missing libraries on the linker invocation.
 
-On 27-11-15 18:37, Sergio Prado wrote:
-> When building with musl, the build fails with a conflicting type
-> qualifier error.
+ I've taken a look at an ltmain.sh and a libtool, but the only two calls to
+'file' I could find were for darwin and for win32.
+
 > 
-> This is because musl defines stdout and stderr as const pointers
-> and RaspiVidYUV.c adds an extern declaration as normal pointers.
+> We could ensure that autotools based packages now all depend on
+> host-file. But It itself is an autotools package, so it's again a
+> chicken-n-egg issue. And even non-autotools package may use libtool.
 > 
-> Since this declaration already comes in on the header (stdio.h),
-> there is no need to add an extern declaration, so removes it.
+> So, just require that 'file' is present on the host.
 > 
-> Fixes:
-> 
-> http://autobuild.buildroot.net/results/27bd6f32cecdb4e7c95247c1feaf2732c1d8e3fa
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  ...ting-type-qualifiers-errors-when-building.patch | 23 ++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->  create mode 100644 package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch
+>  support/dependencies/dependencies.sh | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch b/package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch
-> new file mode 100644
-> index 000000000000..4db60142c6ad
-> --- /dev/null
-> +++ b/package/rpi-userland/0006-Fix-conflicting-type-qualifiers-errors-when-building.patch
-> @@ -0,0 +1,23 @@
-> +Fix conflicting type qualifiers errors when building with musl.
-> +
-> +Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 3146401..f14fb79 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -69,6 +69,12 @@ check_prog_host "which"
+>  # Verify that sed is installed
+>  check_prog_host "sed"
+>  
+> +# 'file' must be present, otherwise libtool fails in incomprehensible
+> +# ways. For example, bandwidthd would fail to link with -lz, even
 
- Did you send this patch upstream?
+ bandwidthd doesn't even have a libtool...
+
+ Could you give a concrete example of where libtool uses file?
+
 
  Regards,
  Arnout
 
-> +---
-> + host_applications/linux/apps/raspicam/RaspiVidYUV.c | 2 --
-> + 1 file changed, 2 deletions(-)
+
+> +# though the library is there (and it's not a static/shared issue).
+> +# Adding the 'file' program on the system miraculously fixes the issue.
+> +check_prog_host "file"
 > +
-> +diff --git a/host_applications/linux/apps/raspicam/RaspiVidYUV.c b/host_applications/linux/apps/raspicam/RaspiVidYUV.c
-> +index b340d63c913f..13e6a6ccf5bf 100644
-> +--- a/host_applications/linux/apps/raspicam/RaspiVidYUV.c
-> ++++ b/host_applications/linux/apps/raspicam/RaspiVidYUV.c
-> +@@ -106,8 +106,6 @@ const int ABORT_INTERVAL = 100; // ms
-> + /// Run/record forever
-> + #define WAIT_METHOD_FOREVER        4
-> + 
-> +-extern FILE *stderr, *stdout;
-> +-
-> + int mmal_status_to_int(MMAL_STATUS_T status);
-> + static void signal_handler(int signal_number);
-> + 
-> +-- 
-> +1.9.1
-> +
+>  # Check make
+>  MAKE=$(which make 2> /dev/null)
+>  if [ -z "$MAKE" ] ; then
 > 
 
 
