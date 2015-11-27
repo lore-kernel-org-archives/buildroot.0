@@ -1,26 +1,29 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 27 Nov 2015 14:04:04 +0000
-Subject: [Buildroot] [PATCH] mongrel2: disable polarssl assembly as we
- do in the polarssl package
-In-Reply-To: <1448632468-45374-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1448632468-45374-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <565862D4.50105@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Nov 2015 15:15:44 +0100
+Subject: [Buildroot] [PATCH] polarssl: disable assembly for MIPS R6
+In-Reply-To: <565854C0.1090508@imgtec.com> (Vicente Olivert Riera's message of
+ "Fri, 27 Nov 2015 13:04:00 +0000")
+References: <1448620638-44691-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87fuzrskbu.fsf@dell.be.48ers.dk> <565854C0.1090508@imgtec.com>
+Message-ID: <87bnafsf3j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On 27/11/15 13:54, Vicente Olivert Riera wrote:
-> mongrel2 bundles polarssl so it has the same problem as the polarssl
-> with the assembly optimization, so let's use the same solution here.
+Hi,
 
-could you please add this autobuilder reference when you apply it?
+>> Committed after adding an autobuilder reference, thanks.
 
-http://autobuild.buildroot.net/results/a92292a1defd441938d3de6c5049473d520ebc4e/
+ > Where did you get that autobuilder reference from?
 
-Thanks,
+Ehh, from the autobuilders:
 
-Vincent.
+http://autobuild.buildroot.net/?reason=polarssl-1.2.18
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
