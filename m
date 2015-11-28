@@ -1,35 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 28 Nov 2015 22:30:41 +0200
-Subject: [Buildroot] [PATCH] support/dependencies: ensure we have 'file'
- on the host
-In-Reply-To: <1448654529-27021-1-git-send-email-yann.morin.1998@free.fr>
-References: <1448654529-27021-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20151128203041.GB2193@tarshish>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat, 28 Nov 2015 18:42:37 -0200
+Subject: [Buildroot] Missing 'sys/queue.h' on musl
+In-Reply-To: <20151128192022.6bc8d7fd@free-electrons.com>
+References: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
+ <20151128184915.6017fae9@free-electrons.com>
+ <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
+ <20151128192022.6bc8d7fd@free-electrons.com>
+Message-ID: <CANu7NGvmMFc9xADTq_ES7h=13LcnLH5yYJO9KV+8mSYSB-VVtg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Instead of making each package that needs 'sys/queue.h' select this
+package, it would be better to select this package automatically when a
+musl toolchain is used. That way, we won't need to change any package.
 
-On Fri, Nov 27, 2015 at 09:02:09PM +0100, Yann E. MORIN wrote:
-> When 'file' is missing on the host, libtool fails miserably. Packages
-> that use libtool will suddenly FTBFS, with cryptic error messages, like
-> missing libraries on the linker invocation.
-> 
-> We could ensure that autotools based packages now all depend on
-> host-file. But It itself is an autotools package, so it's again a
-> chicken-n-egg issue. And even non-autotools package may use libtool.
-> 
-> So, just require that 'file' is present on the host.
+It is possible to do that?
 
-The "Mandatory packages" section in docs/manual/prerequisite.txt should 
-mention that.
+Sergio Prado
+Embedded Labworks
+Office: +55 11 2628-3461
+Mobile: +55 11 97123-3420
 
-baruch
+2015-11-28 16:20 GMT-02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> Dear Sergio Prado,
+>
+> On Sat, 28 Nov 2015 16:18:27 -0200, Sergio Prado wrote:
+>
+> > The idea is use the implementation from NetBSD. Should queue.h stays
+> inside
+> > its package directory or should we create a repository for it? Another
+> > option is to download the NetBSD sources from [1] but it is too big
+> > (~140M). What is the best option?
+>
+> Just add it inside the package directory. See package/makedevs/ for an
+> example.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151128/dad23612/attachment.html>
