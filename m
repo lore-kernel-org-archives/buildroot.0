@@ -1,34 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 15:38:59 +0100
-Subject: [Buildroot] [PATCH 7/7 v3] autobuild: check for Linaro
- toolchains earlier
-In-Reply-To: <a89f4ae40bd1f7d5600226eb0ac20f27098413fb.1448663846.git.yann.morin.1998@free.fr>
-References: <cover.1448663846.git.yann.morin.1998@free.fr>
- <a89f4ae40bd1f7d5600226eb0ac20f27098413fb.1448663846.git.yann.morin.1998@free.fr>
-Message-ID: <20151128153859.511d71af@free-electrons.com>
+From: Sergi Granell <sergi_g_12@hotmail.com>
+Date: Sat, 28 Nov 2015 15:55:21 +0100
+Subject: [Buildroot] [PATCH 1/1] Add ARM11 MPCore CPU target support
+Message-ID: <BLU437-SMTP123CD239C2AFC2F2A7D66EC1020@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+gcc differentiates the mpcore-with-vfp from the mcpore-without-vfp
+CPUs. The former is named just 'mpcore', while the latter is named
+'mpcorenovfp'.
 
-On Fri, 27 Nov 2015 23:39:14 +0100, Yann E. MORIN wrote:
-> When we get a configuration with those toolchains, we can not fix it.
-> So we need to abort that configuration.
-> 
-> Fix the glibc version we check against (2.14, not 2.24).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  scripts/autobuild-run | 29 +++++++++++++++++++----------
->  1 file changed, 19 insertions(+), 10 deletions(-)
+We only add one entry, 'mpcore' and let the user select whether or
+not to use the VFP. We then name the CPU according to the user's
+selection.
 
-Applied to buildroot-test, thanks!
+Signed-off-by: Sergi Granell <xerpi.g.12@gmail.com>
+---
+ arch/Config.in.arm | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Thomas
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 67ff384..1bf1fe2 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -104,6 +104,13 @@ config BR2_arm1176jzf_s
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++config BR2_arm11mpcore
++	bool "mpcore"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
++	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV6
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a5
+ 	bool "cortex-A5"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -419,6 +426,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "arm1136jf-s"	if BR2_arm1136jf_s
+ 	default "arm1176jz-s"	if BR2_arm1176jz_s
+ 	default "arm1176jzf-s"	if BR2_arm1176jzf_s
++	default "mpcore"	if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
++	default "mpcorenovfp"	if BR2_arm11mpcore
+ 	default "cortex-a5"	if BR2_cortex_a5
+ 	default "cortex-a7"	if BR2_cortex_a7
+ 	default "cortex-a8"	if BR2_cortex_a8
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.2
