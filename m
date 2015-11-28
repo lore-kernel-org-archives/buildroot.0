@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Nov 2015 15:44:47 +0100
-Subject: [Buildroot] [git commit] package/monolite: bump to version 138
-Message-ID: <20151201232123.3209781952@busybox.osuosl.org>
+Date: Sat, 28 Nov 2015 18:10:19 +0100
+Subject: [Buildroot] [git commit] rubix: make the rubix.mk file more readable
+Message-ID: <20151201232123.90FE381952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c423a91b9596b77550a7ea2b004b0e8b31ebb725
+commit: http://git.buildroot.net/buildroot/commit/?id=b8a834b4170a8769c8e160eebeff72d867386ca5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bump to version 138 needed for mono 4.2.1.102
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/monolite/monolite.hash | 2 +-
- package/monolite/monolite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rubix/rubix.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 1139c0a..fa098e2 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 07a8573feef0053ec28b98355feba8c83dcfb3f99c2d0913a16a287382daf4b8  monolite-117-latest.tar.gz
-+sha256 0cf7aeafb22daeb7ed3398057f0ac88015440901f480ef84cba2431a753f8c1e  monolite-138-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index aa6c28c..3c53bff 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rubix/rubix.mk b/package/rubix/rubix.mk
+index dd23edf..b808bc0 100644
+--- a/package/rubix/rubix.mk
++++ b/package/rubix/rubix.mk
+@@ -7,12 +7,15 @@
+ RUBIX_VERSION = 1.0.5
+ RUBIX_SOURCE = rubix-$(RUBIX_VERSION).tar.bz2
+ RUBIX_SITE = http://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/Rubix
+-RUBIX_INSTALL_TARGET_OPTS = GAMESDIR=$(TARGET_DIR)/usr/games install
+ RUBIX_LICENSE = Public Domain
+ RUBIX_LICENSE_FILES = LICENCE
++RUBIX_DEPENDENCIES = xlib_libX11
  
--MONOLITE_VERSION = 117
-+MONOLITE_VERSION = 138
- MONOLITE_SITE = http://storage.bos.xamarin.com/mono-dist-master/latest
- MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPLv2 or commercial
+-RUBIX_MAKE_OPTS = CC="$(TARGET_CC)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
++RUBIX_MAKE_OPTS = \
++	CC="$(TARGET_CC)" \
++	XINC="-I$(STAGING_DIR)/usr/include/X11" \
++	XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
+ 
+-RUBIX_DEPENDENCIES = xlib_libX11
++RUBIX_INSTALL_TARGET_OPTS = GAMESDIR=$(TARGET_DIR)/usr/games install
+ 
+ $(eval $(autotools-package))
