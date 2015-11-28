@@ -1,101 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Nov 2015 23:04:42 +0100
-Subject: [Buildroot] [git commit] opencv: use the same logic as opencv3 for
-	gstreamer support
-Message-ID: <20151128221537.0FD7681DEC@busybox.osuosl.org>
+Date: Sat, 28 Nov 2015 23:08:33 +0100
+Subject: [Buildroot] [git commit] package/skeleton: also handle merged /usr
+	in the staging
+Message-ID: <20151128221537.883F37FB84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=235d97225f8b4a93e84f6f78e3eaa86c19549c41
+commit: http://git.buildroot.net/buildroot/commit/?id=cb34ea5d6ad5a26d43994f18825366983ab69f47
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The logic for enabling gstreamer support in opencv is not correct. We
-select gstreamer-0.10 packages but then we enable gstreamer1 support in
-the opencv.mk file. opencv3 has the correct logic, so let's use it in
-opencv as well.
+When the target uses a merged /usr setup, gdbserver will only report
+paths in /lib to the remote gdb, which in turn will only look for
+libraries in staging/lib and never in staging/usr/lib.
 
-Fixes:
+So. the merged (or non-merged) /usr setup must be replicated in the
+staging.
 
-  http://autobuild.buildroot.net/results/f6d/f6d0a4ffe347cbb868998856aca674ba8bc2e281/
+The best solution where to do so is in the skeleton package, since it
+is guaranteed to come before any package that installs things in the
+staging, and even before the (internal or external) toolchain as well.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reported-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv/Config.in |   27 +++++++++++++++++++++++++--
- package/opencv/opencv.mk |    9 ++++++++-
- 2 files changed, 33 insertions(+), 3 deletions(-)
+ Makefile                     |    9 ++-------
+ package/skeleton/skeleton.mk |   18 ++++++++++++++++++
+ 2 files changed, 20 insertions(+), 7 deletions(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index a5fafc1..679ce6f 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -136,8 +136,16 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
- 	help
- 	  Use ffmpeg from the target system.
- 
-+choice
-+	prompt "gstreamer support"
-+	help
-+	  OpenCV prefers gstreamer-1 over gstreamer-0.10.
-+
-+config BR2_PACKAGE_OPENCV_WITHOUT_GSTREAMER
-+	bool "none"
-+
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
--	bool "gstreamer support"
-+	bool "gstreamer-0.10"
- 	depends on BR2_USE_MMU # gstreamer -> libglib2
- 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
-@@ -145,10 +153,25 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
- 
--comment "gstreamer support needs a toolchain w/ wchar, threads"
-+comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
-+	bool "gstreamer-1.x"
-+	depends on BR2_USE_MMU # gstreamer1 -> libglib2
-+	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2
-+	select BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-+
-+comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
-+endchoice
-+
- config BR2_PACKAGE_OPENCV_WITH_GTK
- 	bool "gtk support"
- 	depends on BR2_PACKAGE_XORG7
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index ee11220..21c0268 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -171,9 +171,16 @@ OPENCV_CONF_OPTS += -DWITH_FFMPEG=OFF
+diff --git a/Makefile b/Makefile
+index da29444..86b9d0a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -456,14 +456,9 @@ else
+ LIB_SYMLINK = lib32
  endif
  
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),y)
--OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON
-+OPENCV_CONF_OPTS += -DWITH_GSTREAMER_0_10=ON
- OPENCV_DEPENDENCIES += gstreamer gst-plugins-base
- else
-+OPENCV_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),y)
-+OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON
-+OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
-+else
- OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF
- endif
++# Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+-	@mkdir -p $(STAGING_DIR)/bin
+-	@mkdir -p $(STAGING_DIR)/lib
+-	@ln -snf lib $(STAGING_DIR)/$(LIB_SYMLINK)
+-	@mkdir -p $(STAGING_DIR)/usr/lib
+-	@ln -snf lib $(STAGING_DIR)/usr/$(LIB_SYMLINK)
+-	@mkdir -p $(STAGING_DIR)/usr/include
+-	@mkdir -p $(STAGING_DIR)/usr/bin
++	@mkdir -p $(STAGING_DIR)
+ 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
  
+ RSYNC_VCS_EXCLUSIONS = \
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index b296cbd..205687c 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -13,6 +13,9 @@ SKELETON_SOURCE =
+ # on skeleton.
+ SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
++# The skeleton also handles the merged /usr case in the sysroot
++SKELETON_INSTALL_STAGING = YES
++
+ ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
+ 
+ SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
+@@ -85,6 +88,21 @@ define SKELETON_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR_WARNING_FILE)
+ endef
+ 
++# For the staging dir, we don't really care about /bin and /sbin.
++# But for consistency with the target dir, and to simplify the code,
++# we still handle them for the merged or non-merged /usr cases.
++# Since the toolchain is not yet available, the staging is not yet
++# populated, so we need to create the directories in /usr
++define SKELETON_INSTALL_STAGING_CMDS
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
++	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
++	ln -snf lib $(STAGING_DIR)/$(LIB_SYMLINK)
++	ln -snf lib $(STAGING_DIR)/usr/$(LIB_SYMLINK)
++endef
++
+ SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ SKELETON_TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+ SKELETON_TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
