@@ -1,12 +1,16 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Nov 2015 12:52:19 +0100
-Subject: [Buildroot] [PATCH v2/next 1/1] package/swig: bump version to 3.0.7
-Message-ID: <1448711539-24295-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Nov 2015 14:31:09 +0100
+Subject: [Buildroot] [git commit branch/next] package/swig: bump version to
+	3.0.7
+Message-ID: <20151128133143.C12D981D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=d21e5cfc443fe699501c16c4008c50083f1e7d69
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 This patch bumps the swig package to the current major release, the
 comment about the CMake fix was also updated to reflect the version
@@ -28,9 +32,10 @@ BR2_PACKAGE_LIBSEMANAGE=y
 BR2_PACKAGE_GNURADIO=y
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/swig/swig.hash |  2 +-
- package/swig/swig.mk   | 21 +++++++++++----------
+ package/swig/swig.hash |    2 +-
+ package/swig/swig.mk   |   21 +++++++++++----------
  2 files changed, 12 insertions(+), 11 deletions(-)
 
 diff --git a/package/swig/swig.hash b/package/swig/swig.hash
@@ -80,5 +85,3 @@ index 6b9b8ae..cd816b4 100644
  
  define HOST_SWIG_INSTALL_SYMLINK
  	ln -fs swig $(HOST_DIR)/usr/bin/swig$(SWIG_VERSION_MAJOR)
--- 
-2.6.2
