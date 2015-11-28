@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 14:32:10 +0100
-Subject: [Buildroot] [git commit] package/php: bump version to 5.6.16
-Message-ID: <20151201232123.636C08198C@busybox.osuosl.org>
+Date: Sat, 28 Nov 2015 19:12:46 +0100
+Subject: [Buildroot] [git commit] libplist: download from the official
+	project website and use a tar.bz2
+Message-ID: <20151201232123.F22AC81D5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f67ffb437566562be47188097f846ade231daf3c
+commit: http://git.buildroot.net/buildroot/commit/?id=d4d337d736f091f26c3a9a5e3a525d70c26e02cc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libplist/libplist.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index e4a3e73..ec632bf 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256	cf52e2e621e60997269663fa4bc06253191fa2a41dc9b08c8c911435b3ebcca9	php-5.6.15.tar.xz
-+sha256	8ef43271d9bd8cc8f8d407d3ba569de9fa14a28985ae97c76085bb50d597de98	php-5.6.16.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 76e3d62..5f87d07 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
+index b87c5ba..7f60b5e 100644
+--- a/package/libplist/libplist.mk
++++ b/package/libplist/libplist.mk
+@@ -5,7 +5,8 @@
  ################################################################################
  
- PHP_VERSION_MAJOR = 5.6
--PHP_VERSION = $(PHP_VERSION_MAJOR).15
-+PHP_VERSION = $(PHP_VERSION_MAJOR).16
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ LIBPLIST_VERSION = 1.12
+-LIBPLIST_SITE = http://cgit.sukimashita.com/libplist.git/snapshot
++LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
++LIBPLIST_SITE = http://www.libimobiledevice.org/downloads
+ LIBPLIST_DEPENDENCIES = libxml2 host-pkgconf
+ LIBPLIST_INSTALL_STAGING = YES
+ LIBPLIST_LICENSE = LGPLv2.1+
