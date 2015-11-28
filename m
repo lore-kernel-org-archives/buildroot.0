@@ -1,43 +1,39 @@
-From: Sergi Granell <sergi_g_12@hotmail.com>
-Date: Sat, 28 Nov 2015 10:59:24 +0100
-Subject: [Buildroot] [PATCH 1/1] Add ARM11 MPCore CPU target support
-Message-ID: <BLU437-SMTP302AFC715EFB42C4E0320FC1020@phx.gbl>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 28 Nov 2015 11:13:35 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to 2.8.3
+Message-ID: <1448705615-24890-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sergi Granell <xerpi.g.12@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- arch/Config.in.arm | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 67ff384..f9cfc22 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -104,6 +104,13 @@ config BR2_arm1176jzf_s
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV6
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
-+config BR2_arm11mpcore
-+	bool "arm11mpcore"
-+	select BR2_ARM_CPU_HAS_ARM
-+	select BR2_ARM_CPU_HAS_VFPV2
-+	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV6
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a5
- 	bool "cortex-A5"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -419,6 +426,7 @@ config BR2_GCC_TARGET_CPU
- 	default "arm1136jf-s"	if BR2_arm1136jf_s
- 	default "arm1176jz-s"	if BR2_arm1176jz_s
- 	default "arm1176jzf-s"	if BR2_arm1176jzf_s
-+	default "mpcore"	if BR2_arm11mpcore
- 	default "cortex-a5"	if BR2_cortex_a5
- 	default "cortex-a7"	if BR2_cortex_a7
- 	default "cortex-a8"	if BR2_cortex_a8
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index e984b58..d50c2cf 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	d2e61d445397940e24ed5afeccfa2c70484a2db1bdc15614f5eaaf171f1d350e	ffmpeg-2.8.2.tar.xz
++sha256	18e22e3866d3b5fefcb1911c0d87ae8ababc30b7ea15901c1cf02885ccf6704a	ffmpeg-2.8.3.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 988374f..dbf3a5b 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 2.8.2
++FFMPEG_VERSION = 2.8.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
 2.6.2
