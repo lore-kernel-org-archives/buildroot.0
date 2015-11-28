@@ -1,49 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 15:28:27 +0100
-Subject: [Buildroot] [PATCH 3/7 v3] conf: add a sample run-time
- configuration file
-In-Reply-To: <591c08819a0c2a46abbf4ab8219c3ad582487da3.1448663846.git.yann.morin.1998@free.fr>
-References: <cover.1448663846.git.yann.morin.1998@free.fr>
- <591c08819a0c2a46abbf4ab8219c3ad582487da3.1448663846.git.yann.morin.1998@free.fr>
-Message-ID: <20151128152827.77680210@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 28 Nov 2015 15:30:30 +0100
+Subject: [Buildroot] [PATCH 1/1] Add ARM11 MPCore CPU target support
+In-Reply-To: <BLU437-SMTP302AFC715EFB42C4E0320FC1020@phx.gbl>
+References: <BLU437-SMTP302AFC715EFB42C4E0320FC1020@phx.gbl>
+Message-ID: <20151128143030.GA3816@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Sergi, All,
 
-On Fri, 27 Nov 2015 23:39:10 +0100, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2015-11-28 10:59 +0100, Sergi Granell spake thusly:
+> Signed-off-by: Sergi Granell <xerpi.g.12@gmail.com>
 > ---
->  conf/buildroot-autobuild.sample | 5 +++++
->  1 file changed, 5 insertions(+)
->  create mode 100644 conf/buildroot-autobuild.sample
+>  arch/Config.in.arm | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/conf/buildroot-autobuild.sample b/conf/buildroot-autobuild.sample
-> new file mode 100644
-> index 0000000..dcb74b1
-> --- /dev/null
-> +++ b/conf/buildroot-autobuild.sample
-> @@ -0,0 +1,5 @@
-> +[main]
-> +ninstances = 4
-> +njobs = 4
-> +nice = 20
+> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> index 67ff384..f9cfc22 100644
+> --- a/arch/Config.in.arm
+> +++ b/arch/Config.in.arm
+> @@ -104,6 +104,13 @@ config BR2_arm1176jzf_s
+>  	select BR2_ARM_CPU_HAS_THUMB
+>  	select BR2_ARM_CPU_ARMV6
+>  	select BR2_ARCH_HAS_MMU_OPTIONAL
+> +config BR2_arm11mpcore
+> +	bool "arm11mpcore"
+> +	select BR2_ARM_CPU_HAS_ARM
+> +	select BR2_ARM_CPU_HAS_VFPV2
 
-From man nice(1):
+I wonder if we should not make VFP optional, and change the CPU nme on
+whether the user has enabled VFP, like:
 
-   Niceness values range  from  -20 (most favorable to the process) to
-   19 (least favorable to the process).
+    config BR2_arm11mpcore
+        bool "mpcore"
+        [...]
+        select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+        [...]
 
-So I've changed your example nice value from 20 to 19, and then applied
-to buildroot-test.
+    config BR2_GCC_TARGET_CPU
+        [...]
+        default "mpcore"        if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
+        default "mpcorenovfp"   if BR2_arm11mpcore
+        [...]
 
-Thanks!
+(note that the second default does not need !VFPV2, since Kconfig will
+stop on the first matching default, so the second will only match if the
+first does not, which means it would only match without a VFP).
 
-Thomas
+(also note that I just named the prompt 'mpcore' instead of
+'arm11mpcore', since that's how gcc knows it as).
+
+Also, since the selection gets a bit more tricky, you need to explain
+that in the commit log, with something along the lines of (feel free to
+adapt to your own taste! ;-) ):
+
+    gcc differentiates the mpcore-with-vfp from the mcpore-without-vfp
+    CPUs. The former is named just 'mpcore', while the latter is named
+    'mpcorenovfp'.
+
+    We only add one entry, 'mpcore' and let the user select whether or
+    not to use the VFP. We then name the CPU according to the user's
+    selection.
+
+Care to fix and resend, please?
+
+Regards,
+Yann E. MORIN.
+
+> +	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_ARMV6
+> +	select BR2_ARCH_HAS_MMU_OPTIONAL
+>  config BR2_cortex_a5
+>  	bool "cortex-A5"
+>  	select BR2_ARM_CPU_HAS_ARM
+> @@ -419,6 +426,7 @@ config BR2_GCC_TARGET_CPU
+>  	default "arm1136jf-s"	if BR2_arm1136jf_s
+>  	default "arm1176jz-s"	if BR2_arm1176jz_s
+>  	default "arm1176jzf-s"	if BR2_arm1176jzf_s
+> +	default "mpcore"	if BR2_arm11mpcore
+>  	default "cortex-a5"	if BR2_cortex_a5
+>  	default "cortex-a7"	if BR2_cortex_a7
+>  	default "cortex-a8"	if BR2_cortex_a8
+> -- 
+> 2.6.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
