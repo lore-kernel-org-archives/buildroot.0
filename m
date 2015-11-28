@@ -1,51 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Nov 2015 16:46:19 +0100
-Subject: [Buildroot] [git commit] docs/website: fix invalid link
-In-Reply-To: <20151128135415.4FA0681DAF@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 28 Nov 2015 14:54:07 +0100")
-References: <20151128135415.4FA0681DAF@busybox.osuosl.org>
-Message-ID: <874mg6qg8k.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Nov 2015 16:47:29 +0100
+Subject: [Buildroot] [git commit] rubix: add a hash file
+Message-ID: <20151128155228.3658E8180F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f5d9d417018dd18d9e85f5e32d1f3db18427d754
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > commit: http://git.buildroot.net/buildroot/commit/?id=15cec18f6c3aa5b1e8d6b9d39fe48f4ccc4c8eeb
- > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rubix/rubix.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- >  docs/website/news.html |    2 +-
- >  1 files changed, 1 insertions(+), 1 deletions(-)
-
- > diff --git a/docs/website/news.html b/docs/website/news.html
- > index eb4ec6c..405a9e2 100644
- > --- a/docs/website/news.html
- > +++ b/docs/website/news.html
- > @@ -25,7 +25,7 @@
- >  	  pick up
- >  	  the <a href="/downloads/buildroot-2015.11-rc3.tar.bz2">2015.11-rc3
- >  	    release candidate</a>, and report any problems found to
- > -	  the <a href="lists.html">mailing list</a>
- > +	  the <a href="support.html">mailing list</a>
-
-Thanks, but please also fix all the other references to lists.html while
-you're at it:
-
-git grep lists.html
-docs/website/news.html:   the <a href="lists.html">mailing list</a>
-docs/website/news.html:   the <a href="lists.html">mailing list</a>
-docs/website/news.html:   the <a href="lists.html">mailing list</a>
-docs/website/news.html:   the <a href="lists.html">mailing list</a>
-docs/website/news.html:   the <a href="lists.html">mailing list</a>
-docs/website/news.html:   the <a href="lists.html">mailing list</a>
-docs/website/news.html:   the <a href="lists.html">mailing list</a>
-
-lists.html appprently got removed when we added the previous (Maxime's)
-website.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rubix/rubix.hash b/package/rubix/rubix.hash
+new file mode 100644
+index 0000000..90fc9cd
+--- /dev/null
++++ b/package/rubix/rubix.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 d3c6bf8bfa891e72baac0250a79d26045ddb4412b72d90de7c46091c07516b43  rubix-1.0.5.tar.bz2
