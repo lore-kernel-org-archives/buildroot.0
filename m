@@ -1,75 +1,56 @@
-From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Date: Sat, 28 Nov 2015 17:46:53 +0100
-Subject: [Buildroot] [PATCH 2/2] package/skeleton: also handle merged
- /usr in the staging
-In-Reply-To: <20151127224800.GB4144@free.fr>
-References: <cover.1448575841.git.yann.morin.1998@free.fr>
- <0934812eeec64cb2cdc2b7600879b53695859652.1448575841.git.yann.morin.1998@free.fr>
- <5658DA6B.8040305@mind.be> <20151127224800.GB4144@free.fr>
-Message-ID: <CAMOMa6PBdA+Cb2+knyxwi37MfMiLVBEr5KizzW++ja93x9Z+EA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Nov 2015 18:07:38 +0100
+Subject: [Buildroot] [PATCH] libtirpc: add dependency on atomic
+ operations
+In-Reply-To: <1448728422-24462-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1448728422-24462-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <20151128180738.747a776a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Sergio,
 
-Sorry for the delay. I've tested the patch and everything seems ok to me.
+Thanks for the patch.
 
-Thanks!
-Pieterjan
+On Sat, 28 Nov 2015 14:33:42 -0200, Sergio Prado wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/9e6c3c701e09007860bf842f1877142ea20cbb55
+> http://autobuild.buildroot.net/results/dce2b68429734dbd63bab0bf75593b9dc44a5e42
+> http://autobuild.buildroot.net/results/9a13d40e7cc54a632b1a4063e7e9fcea5402c368
+> 
+> And many more.
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> ---
+>  package/libtirpc/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+> index 2e9c939fa815..a7dfaf79db08 100644
+> --- a/package/libtirpc/Config.in
+> +++ b/package/libtirpc/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_LIBTIRPC
+>  	bool "libtirpc"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_ARCH_HAS_ATOMICS
+>  	help
 
-2015-11-27 23:48 GMT+01:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Arnout, All,
->
-> On 2015-11-27 23:34 +0100, Arnout Vandecappelle spake thusly:
->> On 26-11-15 23:13, Yann E. MORIN wrote:
->> > When the target uses a merged /usr setup, gdbserver will only report
->> > paths in /lib to the remote gdb, which in turn will only look libraries
->> > in staging/lib and never in staging/usr/lib.
->> >
->> > So. the mreged (or non-merged) /usr setup must be replicated in the
->> > staging.
->> >
->> > The best solution where to do so is in the skeleton package, since it
->> > is guaranteed to come before any package that installs things in the
->> > staging, and even before the (internal or external) toolchain as well.
->> >
->> > Reported-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
->> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> > Cc: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
->> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->> > Cc: Peter Korsgaard <jacmet@uclibc.org>
->> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>
->> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->>
->>  However, this only applies to next - shouldn't we do this on master as well?
->> This will be the first time we release the merged /usr, so we should probably
->> get it right...
->
-> Hmmm... Surely this patch was done against master, not next. Or did I
-> foobared my tree?... ;-)
->
-> Yes, I'd like we get that in master, but I'd like some testing first (of
-> course, I did my homework, but a note from the reporter would have been
-> great, too).
->
->>  Perhaps this would be a good time to move this to the
->> SKELETON_USR_SYMLINKS_OR_DIRS macro and remove these directories from the skeleton.
->
-> *That* would be for next. Or after the release, since it's so close...
->
-> Thanks! :-)
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+This is not correct, because when you add such dependencies, they must
+be replicated in all packages that do "select BR2_PACKAGE_LIBTIRPC".
+
+Also, we have updated libtirpc to version 1.0.1 in the next branch, and
+this new version no longer requires atomic operations. So I believe we
+will leave things as is for 2015.11 (i.e libtirpc broken for
+sparc), and 2016.02 will have the update of libtirpc to 1.0.1.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
