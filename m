@@ -1,43 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Nov 2015 23:11:40 +0100
-Subject: [Buildroot] [PATCH] support/dependencies: ensure we have 'file'
- on the host
-In-Reply-To: <20151128203041.GB2193@tarshish>
-References: <1448654529-27021-1-git-send-email-yann.morin.1998@free.fr>
- <20151128203041.GB2193@tarshish>
-Message-ID: <20151128221140.GD3816@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 28 Nov 2015 23:04:42 +0100
+Subject: [Buildroot] [git commit] opencv: use the same logic as opencv3 for
+	gstreamer support
+Message-ID: <20151128221537.0FD7681DEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=235d97225f8b4a93e84f6f78e3eaa86c19549c41
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-11-28 22:30 +0200, Baruch Siach spake thusly:
-> On Fri, Nov 27, 2015 at 09:02:09PM +0100, Yann E. MORIN wrote:
-> > When 'file' is missing on the host, libtool fails miserably. Packages
-> > that use libtool will suddenly FTBFS, with cryptic error messages, like
-> > missing libraries on the linker invocation.
-> > 
-> > We could ensure that autotools based packages now all depend on
-> > host-file. But It itself is an autotools package, so it's again a
-> > chicken-n-egg issue. And even non-autotools package may use libtool.
-> > 
-> > So, just require that 'file' is present on the host.
-> 
-> The "Mandatory packages" section in docs/manual/prerequisite.txt should 
-> mention that.
+The logic for enabling gstreamer support in opencv is not correct. We
+select gstreamer-0.10 packages but then we enable gstreamer1 support in
+the opencv.mk file. opencv3 has the correct logic, so let's use it in
+opencv as well.
 
-Yes, sure. Thanks! :-)
+Fixes:
 
-Regards,
-Yann E. MORIN.
+  http://autobuild.buildroot.net/results/f6d/f6d0a4ffe347cbb868998856aca674ba8bc2e281/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/opencv/Config.in |   27 +++++++++++++++++++++++++--
+ package/opencv/opencv.mk |    9 ++++++++-
+ 2 files changed, 33 insertions(+), 3 deletions(-)
+
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index a5fafc1..679ce6f 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -136,8 +136,16 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
+ 	help
+ 	  Use ffmpeg from the target system.
+ 
++choice
++	prompt "gstreamer support"
++	help
++	  OpenCV prefers gstreamer-1 over gstreamer-0.10.
++
++config BR2_PACKAGE_OPENCV_WITHOUT_GSTREAMER
++	bool "none"
++
+ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
+-	bool "gstreamer support"
++	bool "gstreamer-0.10"
+ 	depends on BR2_USE_MMU # gstreamer -> libglib2
+ 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
+@@ -145,10 +153,25 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
+ 
+-comment "gstreamer support needs a toolchain w/ wchar, threads"
++comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
++	bool "gstreamer-1.x"
++	depends on BR2_USE_MMU # gstreamer1 -> libglib2
++	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++
++comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
++endchoice
++
+ config BR2_PACKAGE_OPENCV_WITH_GTK
+ 	bool "gtk support"
+ 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index ee11220..21c0268 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -171,9 +171,16 @@ OPENCV_CONF_OPTS += -DWITH_FFMPEG=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),y)
+-OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON
++OPENCV_CONF_OPTS += -DWITH_GSTREAMER_0_10=ON
+ OPENCV_DEPENDENCIES += gstreamer gst-plugins-base
+ else
++OPENCV_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),y)
++OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON
++OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
++else
+ OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF
+ endif
+ 
