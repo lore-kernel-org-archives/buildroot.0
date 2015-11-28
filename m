@@ -1,35 +1,31 @@
-From: David du Colombier <0intro@gmail.com>
-Date: Sat, 28 Nov 2015 22:17:30 +0100
-Subject: [Buildroot] [PATCH 1/1] coreutils: disable stdbuf for static builds
-Message-ID: <1448745450-19283-1-git-send-email-0intro@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 28 Nov 2015 23:05:05 +0100
+Subject: [Buildroot] [PATCH] opencv: use the same logic as opencv3 for
+	gstreamer support
+In-Reply-To: <1448283272-56998-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 23 Nov 2015 12:54:32 +0000")
+References: <1448283272-56998-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87a8pxpypa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When stdbuf is enabled, it builds a shared library,
-but it will fail in a static-only scenario.
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Signed-off-by: David du Colombier <0intro@gmail.com>
----
- package/coreutils/coreutils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > The logic for enabling gstreamer support in opencv is not correct. We
+ > select gstreamer-0.10 packages but then we enable gstreamer1 support in
+ > the opencv.mk file. opencv3 has the correct logic, so let's use it in
+ > opencv as well.
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 60455ac..d8e2ee6 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -109,6 +109,10 @@ endef
- COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP_BIN
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+COREUTILS_CONF_OPTS += --enable-no-install-program=stdbuf
-+endif
-+
- define COREUTILS_CLEANUP
- 	# link for archaic shells
- 	ln -fs test $(TARGET_DIR)/usr/bin/[
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/f6d/f6d0a4ffe347cbb868998856aca674ba8bc2e281/
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
+
 -- 
-2.4.3
+Bye, Peter Korsgaard
