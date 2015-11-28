@@ -1,89 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 18:14:45 +0100
-Subject: [Buildroot] [git commit] docs/website: fix invalid links to the
-	mailing list page
-Message-ID: <20151128171531.9A5CD8198D@busybox.osuosl.org>
+Date: Sat, 28 Nov 2015 18:15:47 +0100
+Subject: [Buildroot] [git commit branch/next] package/luv: bump to version
+	1.7.4-5
+Message-ID: <20151128171554.D54348198D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e99163a8265444b30112814d93e1de6536c231a7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=d563c0d5ac76b59379dcc228c02408b2a402b721
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As noticed by Peter Korsgaard, all the links to links.html are broken,
-they should point to support.html instead.
-
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/website/news.html |   14 +++++++-------
- 1 files changed, 7 insertions(+), 7 deletions(-)
+ package/luv/luv.hash |    2 +-
+ package/luv/luv.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 405a9e2..42fb7a3 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -197,7 +197,7 @@
- 	  pick up
- 	  the <a href="/downloads/buildroot-2015.05-rc3.tar.bz2">2015.05-rc3
- 	    release candidate</a>, and report any problems found to
--	  the <a href="lists.html">mailing list</a>
-+	  the <a href="support.html">mailing list</a>
- 	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
-       </div>
-     </div>
-@@ -283,7 +283,7 @@
- 	  pick up the
- 	  <a href="/downloads/buildroot-2015.02-rc3.tar.bz2">2015.02-rc3
- 	    release candidate</a>, and report any problems found to
--	  the <a href="lists.html">mailing list</a>
-+	  the <a href="support.html">mailing list</a>
- 	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
-       </div>
-     </div>
-@@ -370,7 +370,7 @@
- 	  pick up the
- 	  <a href="/downloads/buildroot-2014.11-rc3.tar.bz2">2014.11-rc3
- 	    release candidate</a>, and report any problems found to
--	  the <a href="lists.html">mailing list</a>
-+	  the <a href="support.html">mailing list</a>
- 	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
-       </div>
-     </div>
-@@ -481,7 +481,7 @@
- 	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
- 	  <a href="/downloads/buildroot-2014.08-rc3.tar.bz2">2014.08-rc3
- 	    release candidate</a>, and report any problems found to
--	  the <a href="lists.html">mailing list</a>
-+	  the <a href="support.html">mailing list</a>
- 	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
-       </div>
-     </div>
-@@ -567,7 +567,7 @@
- 	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
- 	  <a href="/downloads/buildroot-2014.05-rc3.tar.bz2">2014.05-rc3
- 	    release candidate</a>, and report any problems found to
--	  the <a href="lists.html">mailing list</a>
-+	  the <a href="support.html">mailing list</a>
- 	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
-       </div>
-     </div>
-@@ -653,7 +653,7 @@
- 	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
- 	  <a href="/downloads/buildroot-2014.02-rc3.tar.bz2">2014.02-rc3
- 	    release candidate</a>, and report any problems found to
--	  the <a href="lists.html">mailing list</a>
-+	  the <a href="support.html">mailing list</a>
- 	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
-       </div>
-     </div>
-@@ -675,7 +675,7 @@
- 	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
- 	  <a href="/downloads/buildroot-2014.02-rc2.tar.bz2">2014.02-rc2
- 	    release candidate</a>, and report any problems found to
--	  the <a href="lists.html">mailing list</a>
-+	  the <a href="support.html">mailing list</a>
- 	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
-       </div>
-     </div>
+diff --git a/package/luv/luv.hash b/package/luv/luv.hash
+index 307fc19..31d29c7 100644
+--- a/package/luv/luv.hash
++++ b/package/luv/luv.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 9ea1c2343e76f653f8e7d3420d2c7718ef4eca67a645a9d17297ae91caa224b5 luv-1.7.4-4.tar.gz
++sha256 7f558461225dd57fbc784cd8b4f7ec8270dd1c179e8bdce3f7009c835c828317  luv-1.7.4-5.tar.gz
+diff --git a/package/luv/luv.mk b/package/luv/luv.mk
+index a810c63..85da7d1 100644
+--- a/package/luv/luv.mk
++++ b/package/luv/luv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUV_VERSION = 1.7.4-4
++LUV_VERSION = 1.7.4-5
+ LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
+ LUV_LICENSE = Apache-2.0
+ LUV_LICENSE_FILES = LICENSE.txt
