@@ -1,56 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 18:22:18 +0100
-Subject: [Buildroot] [PATCH 1/2] infozip: rename to zip
-In-Reply-To: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
-References: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20151128182218.4f1ed922@free-electrons.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat, 28 Nov 2015 15:31:36 -0200
+Subject: [Buildroot] Missing 'sys/queue.h' on musl
+Message-ID: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Dear all,
 
-On Fri, 27 Nov 2015 18:38:00 +0100, Luca Ceresoli wrote:
-> We currently have a package named "infozip" for Info-Zip's Zip.
-> 
-> With the upcoming addition of a package the Info-Zip's UnZip the name
-> is becoming ambiguous. Rename it to the more specific name "zip".
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> Cc: Jan Pedersen <jp@jp-embedded.com>
-> ---
->  Config.in.legacy                                   | 12 ++++++++
->  package/Config.in                                  |  2 +-
->  ...emove-Check-C-compiler-type-optimization-.patch |  0
->  .../0002-configure-Don-t-use-host-CPP.patch        |  0
->  ...003-Makefile-Use-CFLAGS-from-command-line.patch |  0
->  ...4-configure-use-LDFLAGS-from-command-line.patch |  0
->  ...-unix-configure-remove-GID-UID-size-check.patch |  0
->  ...figure-borrow-the-LFS-test-from-autotools.patch |  0
->  package/{infozip => zip}/Config.in                 |  4 +--
->  package/{infozip/infozip.hash => zip/zip.hash}     |  0
->  package/{infozip/infozip.mk => zip/zip.mk}         | 32 +++++++++++-----------
->  11 files changed, 31 insertions(+), 19 deletions(-)
->  rename package/{infozip => zip}/0001-configure-Remove-Check-C-compiler-type-optimization-.patch (100%)
->  rename package/{infozip => zip}/0002-configure-Don-t-use-host-CPP.patch (100%)
->  rename package/{infozip => zip}/0003-Makefile-Use-CFLAGS-from-command-line.patch (100%)
->  rename package/{infozip => zip}/0004-configure-use-LDFLAGS-from-command-line.patch (100%)
->  rename package/{infozip => zip}/0005-unix-configure-remove-GID-UID-size-check.patch (100%)
->  rename package/{infozip => zip}/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch (100%)
->  rename package/{infozip => zip}/Config.in (88%)
->  rename package/{infozip/infozip.hash => zip/zip.hash} (100%)
->  rename package/{infozip/infozip.mk => zip/zip.mk} (66%)
+Musl does not provide a 'sys/queue.h' implementation [1].
 
-Applied to next, thanks. Your second patch had some comments, so I will
-wait for an updated version.
+This is causing problems with some packages that depends on it, like
+f2fs-tools [2] and others packages that are already fixed like libtirpc [3].
 
-Thanks,
+Adding an implementation of 'sys/queue.h' as a patch (like in [3]) is a
+proper way to fix this problem?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+What about creating a package with the 'sys/queue.h' implementation and
+installing it in the staging directory. Then we would just need to make all
+packages that need it depend on it when compiling with musl. Is this a good
+solution?
+
+Any other suggestion?
+
+[1]
+http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_sys.2Fqueue.h_not_included_.3F
+[2]
+http://autobuild.buildroot.net/results/24bad2d06ab40024dacf136bee722072d587f84e
+[3]
+http://git.buildroot.net/buildroot/commit/?id=633d3320c16b5a3c6c4df82e89b9748daa9fd1fb
+
+Best regards,
+
+Sergio Prado
+Embedded Labworks
+Office: +55 11 2628-3461
+Mobile: +55 11 97123-3420
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151128/86af57a1/attachment.html>
