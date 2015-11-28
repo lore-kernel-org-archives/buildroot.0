@@ -1,27 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 16:47:29 +0100
-Subject: [Buildroot] [git commit] rubix: add a hash file
-Message-ID: <20151128155228.3658E8180F@busybox.osuosl.org>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat, 28 Nov 2015 14:33:42 -0200
+Subject: [Buildroot] [PATCH] libtirpc: add dependency on atomic operations
+Message-ID: <1448728422-24462-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5d9d417018dd18d9e85f5e32d1f3db18427d754
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.net/results/9e6c3c701e09007860bf842f1877142ea20cbb55
+http://autobuild.buildroot.net/results/dce2b68429734dbd63bab0bf75593b9dc44a5e42
+http://autobuild.buildroot.net/results/9a13d40e7cc54a632b1a4063e7e9fcea5402c368
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+And many more.
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- package/rubix/rubix.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libtirpc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/rubix/rubix.hash b/package/rubix/rubix.hash
-new file mode 100644
-index 0000000..90fc9cd
---- /dev/null
-+++ b/package/rubix/rubix.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 d3c6bf8bfa891e72baac0250a79d26045ddb4412b72d90de7c46091c07516b43  rubix-1.0.5.tar.bz2
+diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+index 2e9c939fa815..a7dfaf79db08 100644
+--- a/package/libtirpc/Config.in
++++ b/package/libtirpc/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBTIRPC
+ 	bool "libtirpc"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  Libtirpc is a port of Sun's Transport-Independent RPC
+ 	  library to Linux.
+@@ -8,4 +9,5 @@ config BR2_PACKAGE_LIBTIRPC
+ 	  http://sourceforge.net/projects/libtirpc/
+ 
+ comment "libtirpc needs a toolchain w/ threads"
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+1.9.1
