@@ -1,96 +1,102 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 28 Nov 2015 01:24:30 +0100
+Date: Sat, 28 Nov 2015 01:33:47 +0100
 Subject: [Buildroot] [PATCH 1/1] core: add option to force compiling C++
  as C++11
-In-Reply-To: <20151126214314.278f4531.agalakhov@gmail.com>
+In-Reply-To: <1448549404-11670-1-git-send-email-agalakhov@gmail.com>
 References: <1448549404-11670-1-git-send-email-agalakhov@gmail.com>
- <20151126175115.58c84720@free-electrons.com>
- <20151126214314.278f4531.agalakhov@gmail.com>
-Message-ID: <5658F43E.70103@mind.be>
+Message-ID: <5658F66B.5040003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26-11-15 21:43, Alexey Galakhov wrote:
-> Dear Thomas,
+On 26-11-15 15:50, Alexey Galakhov wrote:
+> Many C++ libraries like boost and log4cplus use defines to be compatible with
+> both C++03 and C++11 standards. This causes ABI incompatibilities between
+> a library built with C++03 and an application built with C++11. To avoid this,
+> one has to built libraries as C++11 as well.
 > 
->> I am not familiar with C++ issues, can you give some more details and
->> specific examples here ?
+> This patch introduces the BR2_ENABLE_CPP11 configuration option that forces
+> passing --std=c++11 to the compiler while building C++ target libraries.
 > 
-> This is more or less a toolchain issue. Consider we're building a C++
-> library with a class declaration in *.h and its implementation in
-> *.cpp. Compilation with a C++03 compiler results in the generation of
-> several functions corresponding to class methods. Compilation with a
-> C++11 compiler gives two additional functions, corresponding to the
-> move constructor and the move assignment operator (new features of
-> C++11).
+> Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
+> ---
+>  Config.in           | 16 ++++++++++++++++
+>  package/Makefile.in | 12 +++++++++++-
+>  2 files changed, 27 insertions(+), 1 deletion(-)
 > 
-> If a C++ library is compiled with an C++03 compiler (that is the
-> default when using g++), its object files won't contain the
-> implementations of these new methods. The library is then unusable for
-> C++11 compiler. In the worst case we have to recompile all the
-> libraries in the system with a C++11 compiler.
-> 
-> Example linker error is:
-> 
-> In function log4cplus::detail::macros_get_logger(log4cplus::Logger&&)':
-> /usr/include/log4cplus/loggingmacros.h:106: undefined reference
-> tolog4cplus::Logger::Logger(log4cplus::Logger&&)'
-> 
-> This function is only generated when compiling in C++11 mode. It does
-> not exist in C++03 mode.
-> 
-> To clarify: This is NOT an error inside buildroot! This only happens if
-> compiling some 3rd-party or proprietary code against previously
-> compiled buildroot system. If I want to compile my program with
-> --std=c++11, I have to compile buildroot with --std=c++11 as well.
+> diff --git a/Config.in b/Config.in
+> index d795361..79e4d31 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -533,6 +533,22 @@ config BR2_ENABLE_SSP
+>  comment "enabling Stack Smashing Protection requires support in the toolchain"
+>  	depends on !BR2_TOOLCHAIN_HAS_SSP
+>  
+> +config BR2_ENABLE_CPP11
+> +	bool "force C++11 when building libraries"
+> +	default n
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
 
- Well, we _have_ packages that build with --std=c++11 or similar, and that use
-boost. For example pulseview. So I would think we would see build failures there
-as well.
+ As I understand it, the move constructor was only introduced in gcc 4.6 so we
+should take that as the base, no? And actually, in practice, any package that
+relies on C++11 will probably need gcc 4.7 anyway since that's the first one to
+support a reasonable subset of the standard. So I'd propose to take that as the
+minimum version. This also simplifies the selection of the --std= option.
 
- Point is: if this is a problem for external code, it will also be a problem for
-buildroot packages. So we have to find a way to solve it fundamentally.
+> +	help
+> +	  Force building of C++ libraries in C++11 mode.
+> +
+> +	  Some C++ libraries (i.e. boost) behave differently if compiled with
+> +	  and without --std=c++11 flag. They define classes differently. This
+> +	  causes linker errors while trying to use such a library in a C++11
+> +	  project.
+> +
+> +	  This option forces building of all such libraries in C++11 mode.
+> +	  Enable it if you encounter C++11-related linker errors.
+> +
+>  choice
+>  	bool "libraries"
+>  	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 85008bb..0bb911e 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -135,9 +135,19 @@ ifeq ($(BR2_DEBUG_3),y)
+>  TARGET_DEBUGGING = -g3
+>  endif
+>  
+> +ifeq ($(BR2_ENABLE_CPP11),y)
+> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
+> +TARGET_CXXLANGUAGE = --std=c++11
+> +else
+> +TARGET_CXXLANGUAGE = --std=c++0x
+> +endif
+> +else
+> +TARGET_CXXLANGUAGE =
 
-> 
-> 
->> I don't think it is appropriate for Buildroot to have an option to be
->> enabled "if you encounter <foo> errors". If there is a problem, it
->> should be fixed properly, without having to rely on the user enabling
->> (or not enabling) a given option.
-> 
-> Unfortunately, there is no "proper" solution. An alternative solution
-> could be compiling most of the C++ libraries twice and thus providing
-> two versions of each *.so file, one for C++03 and C++11. We could also
-> try to make this option on per-package basis, but this should be then
-> done in every library package using C++ and would be confusing.
+ There's no need to define it empty, just remove the else branch.
 
- We're definitely not going to build everything twice. We might make packages
-like glibmm that add the --std=c++11 option select the BR2_ENABLE_CPP11 option,
-for example.
+> +endif
+> +
+>  TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+>  TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+> -TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+> +TARGET_CXXFLAGS = $(TARGET_CFLAGS) $(TARGET_CXXLANGUAGE)
+
+ I was thinking if it wouldn't be better to add this to the toolchain wrapper,
+but in fact it is a good idea to let the package's build system know explicitly
+that we're going to enable C++11 support. So this is fine.
 
 
  Regards,
  Arnout
 
-> 
-> The proper help text would probably be something like this:
-> """
->   Enable this option if you need the move-semantics implementation in  
->   the shared C++ libraries of buildroot. I.e., if you want to link your
->   own C++11 applications against them and the linker complains about
->   non-existing move constructor.
-> """
-> 
-> Regards,
-> Alexey
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+>  
+>  ifeq ($(BR2_BINFMT_FLAT),y)
 > 
 
 
