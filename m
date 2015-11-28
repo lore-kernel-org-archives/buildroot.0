@@ -1,37 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 19:06:25 +0100
-Subject: [Buildroot] [PATCH] package/minidlna/S60minidlnad: add
- force-reload to rebuild DB
-In-Reply-To: <1440179718-1864-1-git-send-email-benoit@wsystem.com>
-References: <1440179718-1864-1-git-send-email-benoit@wsystem.com>
-Message-ID: <20151128190625.3fbe0163@free-electrons.com>
+Date: Sat, 28 Nov 2015 19:12:49 +0100
+Subject: [Buildroot] [git commit branch/next] libplist: add a hash file
+Message-ID: <20151128181404.B42FF7FEB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Beno?t Th?baudeau,
+commit: http://git.buildroot.net/buildroot/commit/?id=30ef60be787d2ed94af14b6f2daebf181054ddbc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 21 Aug 2015 19:55:18 +0200, Beno?t Th?baudeau wrote:
-> Add a force-reload operation that restarts minidlnad and makes it
-> rebuild its database. This is what Debian does, and this is useful when
-> media_dir is changed in the configuration file or when inotify can not
-> detect changes inside the media directories (e.g. in case of a mount).
-> 
-> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
-> ---
->  package/minidlna/S60minidlnad | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libplist/libplist.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Applied, thanks. I've mistakenly applied it to master, my intention was
-to apply it to next. But now that it is pushed, it is too late. Anyway,
-not a big deal, since your patch can hardly introduce a regression.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
+new file mode 100644
+index 0000000..06d1b16
+--- /dev/null
++++ b/package/libplist/libplist.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 0effdedcb3de128c4930d8c03a3854c74c426c16728b8ab5f0a5b6bdc0b644be  libplist-1.12.tar.bz2
