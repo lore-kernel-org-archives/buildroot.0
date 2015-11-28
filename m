@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 14:31:57 +0100
-Subject: [Buildroot] [PATCH v2/next 1/1] package/swig: bump version to
- 3.0.7
-In-Reply-To: <1448711539-24295-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1448711539-24295-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151128143157.439059ac@free-electrons.com>
+Date: Sat, 28 Nov 2015 14:32:29 +0100
+Subject: [Buildroot] [git commit branch/next] package/ffmpeg: bump version
+	to 2.8.3
+Message-ID: <20151128133322.9481881A0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=a2d454a959b4b783010c59bf83a0e6ed479a17a5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 28 Nov 2015 12:52:19 +0100, Bernd Kuhls wrote:
-> This patch bumps the swig package to the current major release, the
-> comment about the CMake fix was also updated to reflect the version
-> bump. Swig 3.0.7 was positively tested using this defconfig:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_KODI_LIBCEC=y
-> BR2_PACKAGE_TRACE_CMD=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_LIBFTDI1=y
-> BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS=y
-> BR2_PACKAGE_LIBSEMANAGE=y
-> BR2_PACKAGE_GNURADIO=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/swig/swig.hash |  2 +-
->  package/swig/swig.mk   | 21 +++++++++++----------
->  2 files changed, 12 insertions(+), 11 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.hash |    2 +-
+ package/ffmpeg/ffmpeg.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index e984b58..d50c2cf 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	d2e61d445397940e24ed5afeccfa2c70484a2db1bdc15614f5eaaf171f1d350e	ffmpeg-2.8.2.tar.xz
++sha256	18e22e3866d3b5fefcb1911c0d87ae8ababc30b7ea15901c1cf02885ccf6704a	ffmpeg-2.8.3.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 988374f..dbf3a5b 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 2.8.2
++FFMPEG_VERSION = 2.8.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
