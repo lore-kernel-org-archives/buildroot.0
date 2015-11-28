@@ -1,53 +1,35 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat, 28 Nov 2015 18:42:37 -0200
-Subject: [Buildroot] Missing 'sys/queue.h' on musl
-In-Reply-To: <20151128192022.6bc8d7fd@free-electrons.com>
-References: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
- <20151128184915.6017fae9@free-electrons.com>
- <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
- <20151128192022.6bc8d7fd@free-electrons.com>
-Message-ID: <CANu7NGvmMFc9xADTq_ES7h=13LcnLH5yYJO9KV+8mSYSB-VVtg@mail.gmail.com>
+From: David du Colombier <0intro@gmail.com>
+Date: Sat, 28 Nov 2015 22:17:30 +0100
+Subject: [Buildroot] [PATCH 1/1] coreutils: disable stdbuf for static builds
+Message-ID: <1448745450-19283-1-git-send-email-0intro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of making each package that needs 'sys/queue.h' select this
-package, it would be better to select this package automatically when a
-musl toolchain is used. That way, we won't need to change any package.
+When stdbuf is enabled, it builds a shared library,
+but it will fail in a static-only scenario.
 
-It is possible to do that?
+Signed-off-by: David du Colombier <0intro@gmail.com>
+---
+ package/coreutils/coreutils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Sergio Prado
-Embedded Labworks
-Office: +55 11 2628-3461
-Mobile: +55 11 97123-3420
-
-2015-11-28 16:20 GMT-02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
-
-> Dear Sergio Prado,
->
-> On Sat, 28 Nov 2015 16:18:27 -0200, Sergio Prado wrote:
->
-> > The idea is use the implementation from NetBSD. Should queue.h stays
-> inside
-> > its package directory or should we create a repository for it? Another
-> > option is to download the NetBSD sources from [1] but it is too big
-> > (~140M). What is the best option?
->
-> Just add it inside the package directory. See package/makedevs/ for an
-> example.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151128/dad23612/attachment.html>
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 60455ac..d8e2ee6 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -109,6 +109,10 @@ endef
+ COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP_BIN
+ endif
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++COREUTILS_CONF_OPTS += --enable-no-install-program=stdbuf
++endif
++
+ define COREUTILS_CLEANUP
+ 	# link for archaic shells
+ 	ln -fs test $(TARGET_DIR)/usr/bin/[
+-- 
+2.4.3
