@@ -1,52 +1,107 @@
-From: Sergi Granell <sergi_g_12@hotmail.com>
-Date: Sat, 28 Nov 2015 15:55:21 +0100
-Subject: [Buildroot] [PATCH 1/1] Add ARM11 MPCore CPU target support
-Message-ID: <BLU437-SMTP123CD239C2AFC2F2A7D66EC1020@phx.gbl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 28 Nov 2015 16:40:54 +0100
+Subject: [Buildroot] [PATCH 4/7 v3] etc: add SysV-init startup script
+ and sample config file
+In-Reply-To: <20151128153611.26a6f491@free-electrons.com>
+References: <cover.1448663846.git.yann.morin.1998@free.fr>
+ <9243b48a5bc32c35039519eabf4b6946f36f3260.1448663846.git.yann.morin.1998@free.fr>
+ <20151128153611.26a6f491@free-electrons.com>
+Message-ID: <20151128154054.GB3816@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc differentiates the mpcore-with-vfp from the mcpore-without-vfp
-CPUs. The former is named just 'mpcore', while the latter is named
-'mpcorenovfp'.
+Thomas, All,
 
-We only add one entry, 'mpcore' and let the user select whether or
-not to use the VFP. We then name the CPU according to the user's
-selection.
+On 2015-11-28 15:36 +0100, Thomas Petazzoni spake thusly:
+> On Fri, 27 Nov 2015 23:39:11 +0100, Yann E. MORIN wrote:
+> 
+> > diff --git a/etc/default/buildroot-autobuild b/etc/default/buildroot-autobuild
+> > new file mode 100644
+> > index 0000000..93b7365
+> > --- /dev/null
+> > +++ b/etc/default/buildroot-autobuild
+> > @@ -0,0 +1,23 @@
+> > +# The absolute path, outside the chroot, where the
+> > +# buildroot-test tree is cloned, optional
+> > +AUTOBUILD_DIR="/home/johndoe/buildroot-test"
+> 
+> What if my buildroot-test tree is just inside the chroot ?
 
-Signed-off-by: Sergi Granell <xerpi.g.12@gmail.com>
----
- arch/Config.in.arm | 9 +++++++++
- 1 file changed, 9 insertions(+)
+That setting is "optional". See below for how it is used.
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 67ff384..1bf1fe2 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -104,6 +104,13 @@ config BR2_arm1176jzf_s
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV6
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
-+config BR2_arm11mpcore
-+	bool "mpcore"
-+	select BR2_ARM_CPU_HAS_ARM
-+	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
-+	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV6
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_a5
- 	bool "cortex-A5"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -419,6 +426,8 @@ config BR2_GCC_TARGET_CPU
- 	default "arm1136jf-s"	if BR2_arm1136jf_s
- 	default "arm1176jz-s"	if BR2_arm1176jz_s
- 	default "arm1176jzf-s"	if BR2_arm1176jzf_s
-+	default "mpcore"	if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
-+	default "mpcorenovfp"	if BR2_arm11mpcore
- 	default "cortex-a5"	if BR2_cortex_a5
- 	default "cortex-a7"	if BR2_cortex_a7
- 	default "cortex-a8"	if BR2_cortex_a8
+> > +# The absolute path, outside the chroot, where to
+> > +# share downloads (not yet implemented)
+> 
+> "not yet implemented" -> why do we have some code about it in the
+> script below ?
+
+Damn, I forgot to remove it...
+
+> > +AUTOBUILD_USER="buildroot"
+> > +
+> > +# The absolute path, in the chroot, that is the base of the
+> > +# autobuild work dir. In there, you'll have:
+> 
+> What does it mean "you'll have" ? Does it mean that the init script
+> will set up everything this way, or that it expect things to be already
+> set up that way ?
+
+Ok, I should have expanded on it. Here it is:
+
+  - the buildroot-autobuild.conf has to be provided
+  - the run/ directory is created
+  - the buildroot-test/ directory is either:
+    - bind-mounted if AUTOBUILD_DIR is set, or
+    - must be already present otherwise
+
+> > +autobuild_start() {
+> > +    echo "Starting buildroot-autobuild"
+> > +
+> > +    CMD="cd '${AUTOBUILD_RUN_DIR}'"
+> > +    CMD="${CMD}; '${AUTOBUILD_CMD}' -c '${AUTOBUILD_CFG}' --pid-file '${AUTOBUILD_CHROOT_PID_FILE}' &"
+> > +
+> > +    do_chroot "rm -rf '${AUTOBUILD_RUN_DIR}'"
+> 
+> Why ? Not only this is unnecessary because the autobuild-run script
+> automatically removes instance-X/output.
+
+Ah, damn. It's in prepare_build(). I missed it.
+
+> > +autobuild_stop() {
+> > +    echo "Stopping buildroot-autobuild"
+> > +    if [ -f "${AUTOBUILD_PID_FILE}" ]; then
+> > +        kill $(cat "${AUTOBUILD_PID_FILE}")
+> > +    fi
+> > +    rm -f "${AUTOBUILD_PID_FILE}"
+> 
+> The rm -f could possibly be within the if, no ?
+
+Yes.
+
+> Other than that, it generally looks good, but maybe
+> the /etc/default/buildroot-autobuild file needs a few more comments to
+> explain the expected directory layout and preparations to be done by
+> the user in order to be able to use this script.
+
+Will update.
+
+> Also, maybe you should make the use of the chroot optional: both of us
+> are running autobuild-run in a chroot, but not everyone is doing this.
+
+Yes. It will anyway be needed when we implement the multi-chroot setup.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.6.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
