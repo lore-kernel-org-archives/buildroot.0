@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 19:20:22 +0100
-Subject: [Buildroot] Missing 'sys/queue.h' on musl
-In-Reply-To: <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
-References: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
- <20151128184915.6017fae9@free-electrons.com>
- <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
-Message-ID: <20151128192022.6bc8d7fd@free-electrons.com>
+Date: Sat, 28 Nov 2015 19:24:06 +0100
+Subject: [Buildroot] [PATCH v6 1/1] yad: new package
+In-Reply-To: <1446219567-4540-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1446219567-4540-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <20151128192406.1820a83b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+Dear James Knight,
 
-On Sat, 28 Nov 2015 16:18:27 -0200, Sergio Prado wrote:
+On Fri, 30 Oct 2015 11:39:27 -0400, James Knight wrote:
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 
-> The idea is use the implementation from NetBSD. Should queue.h stays inside
-> its package directory or should we create a repository for it? Another
-> option is to download the NetBSD sources from [1] but it is too big
-> (~140M). What is the best option?
+This package is causing some build failure:
 
-Just add it inside the package directory. See package/makedevs/ for an
-example.
+  http://autobuild.buildroot.org/?reason=yad-0.31.2
 
-Thanks!
+(they are all the same).
+
+Can you have a look into it ?
+
+Thanks,
 
 Thomas
 -- 
