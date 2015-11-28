@@ -1,30 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 15:10:11 +0100
-Subject: [Buildroot] [PATCH 1/1] gpsd: enable kpps support
-In-Reply-To: <1448641557-18100-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1448641557-18100-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20151128151011.278e75e6@free-electrons.com>
+Date: Sat, 28 Nov 2015 15:27:02 +0100
+Subject: [Buildroot] [PATCH 1/7 v3] autobuild: add config option to set
+ niceness
+In-Reply-To: <f54d1b32d670e6b3db28e6810ad9ab1460176803.1448663846.git.yann.morin.1998@free.fr>
+References: <cover.1448663846.git.yann.morin.1998@free.fr>
+ <f54d1b32d670e6b3db28e6810ad9ab1460176803.1448663846.git.yann.morin.1998@free.fr>
+Message-ID: <20151128152702.7949558a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+Yann,
 
-On Fri, 27 Nov 2015 11:25:57 -0500, James Knight wrote:
-> GPSD has the ability to support KPPS. Its enablement is determined
-> primarily from the existence of `sys/timepps.h`. This file is provided
-> from the pps-tools package. Adjusting GPSD's Makefile to depend on the
-> pps-tools package if a developer has included pps-tools as part of a
-> build.
+On Fri, 27 Nov 2015 23:39:08 +0100, Yann E. MORIN wrote:
+> When the machine running the autobuilder is shared, it is important
+> that the autobuilder instances do not hog all of the CPU.
 > 
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+> Add an option to the configuration, so that the user can set the
+> niceness to run the instances with. By default, the niceness is 0,
+> which means the current niceness.
+> 
+> Properly doing so would require setting up a container with proper
+> CPU cgroup, but it's a bit complicated.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/gpsd/gpsd.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  scripts/autobuild-run | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 
-Applied to next, thanks.
+Applied to buildroot-test, thanks!
 
 Thomas
 -- 
