@@ -1,35 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 15:37:20 +0100
-Subject: [Buildroot] [git commit branch/next] libnet: PF_PACKET is always
-	available on Linux
-Message-ID: <20151129143737.6A6827FB2C@busybox.osuosl.org>
+Date: Sun, 29 Nov 2015 15:40:39 +0100
+Subject: [Buildroot] [PATCH 1/2] libnet: disable for musl toolchains
+In-Reply-To: <1448033368-8081-1-git-send-email-joris.lijssens@gmail.com>
+References: <1448033368-8081-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <20151129154039.349ecdd8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=546a661ecc64d4c93bffe47ea93d9ca1c4422fdf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Joris Lijssens,
 
-[Thomas: remove mistakenly added empty line.]
+On Fri, 20 Nov 2015 16:29:27 +0100, Joris Lijssens wrote:
+> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+> ---
+>  package/libnet/Config.in | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnet/libnet.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Both patches applied to next, with the minor nit noticed by Arnout on
+the second patch fixed.
 
-diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
-index 3b62a79..d13c453 100644
---- a/package/libnet/libnet.mk
-+++ b/package/libnet/libnet.mk
-@@ -7,6 +7,8 @@
- LIBNET_VERSION = 1.1.6
- LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
- LIBNET_INSTALL_STAGING = YES
-+# PF_PACKET is always available on Linux
-+LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
- LIBNET_LICENSE = BSD-2c, BSD-3c
- LIBNET_LICENSE_FILES = doc/COPYING
- 
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
