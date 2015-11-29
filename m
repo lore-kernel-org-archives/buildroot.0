@@ -1,37 +1,31 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 29 Nov 2015 13:10:13 +0100
-Subject: [Buildroot] [PATCH 2/2] unzip: new package
-In-Reply-To: <5658DD1D.6060506@openwide.fr>
-References: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
- <1448645881-32202-2-git-send-email-luca@lucaceresoli.net>
- <5658DD1D.6060506@openwide.fr>
-Message-ID: <565AEB25.7070605@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 29 Nov 2015 13:25:41 +0100
+Subject: [Buildroot] [PATCH v1] fbgrab: bump verstion to 1.3
+In-Reply-To: <20151129112354.342b7f06@gmx.net> (Peter Seiderer's message of
+ "Sun, 29 Nov 2015 11:23:54 +0100")
+References: <1447456618-4352-1-git-send-email-ps.report@gmx.net>
+ <87k2plj7l4.fsf@dell.be.48ers.dk> <20151129112354.342b7f06@gmx.net>
+Message-ID: <871tb9ouuy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Romain Naour wrote:
-[...]
->> diff --git a/package/unzip/Config.in b/package/unzip/Config.in
->> new file mode 100644
->> index 0000000..0d98d28
->> --- /dev/null
->> +++ b/package/unzip/Config.in
->> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_UNZIP
->> +	bool "unzip"
->
-> Have you checked some toolchain dependencies ?
-> It seems that process.c use wchar_t so "depends on BR2_USE_WCHAR" is needed.
+Hi,
 
-The CMakeLists.txt that I wrote does never define UNICODE_SUPPORT nor
-UNICODE_WCHAR. So it builds both with and without wchar support, but
-never uses it. I would like to have a basic package working,
-conditional support can be added later at any time.
+>> Could you try submitting 0001-fix-static-build.patch upstream, please?
+
+ > Tried to send to 'gmo at linux.nu' (the address given at the web page and
+ > in the source code file and man page file), but failed with
+ > 'delivery retry timeout exceeded'...
+
+:/
+
+Thanks for trying anyway!
 
 -- 
-Luca
+Venlig hilsen,
+Peter Korsgaard 
