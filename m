@@ -1,87 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Nov 2015 21:26:50 +0100
-Subject: [Buildroot] [PATCH 1/2] help: add a way to document targets
- declared in local.mk/external.mk
-In-Reply-To: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
-References: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20151129202650.GI3630@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 29 Nov 2015 21:31:37 +0100
+Subject: [Buildroot] [PATCHv4] core/pkg-generic: check proper package
+ installation
+In-Reply-To: <20151129192708.5120d6a3@free-electrons.com>
+References: <1446837330-31048-1-git-send-email-yann.morin.1998@free.fr>
+ <20151129185859.3fa69ae8@free-electrons.com> <20151129181007.GF3630@free.fr>
+ <20151129192708.5120d6a3@free-electrons.com>
+Message-ID: <565B60A9.7030706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
-
-On 2015-11-18 15:37 +0100, J?r?me Pouiller spake thusly:
-> It is handy to use local.mk or external.mk to add specific targets
-> for current project. However, until now, it not possible to add help
-> message these targets.
-> This patch add LOCAL_HELP variable. This variable is aimed to be assigned
-> from any .mk files. Its content is displayed with 'make help'.
+On 29-11-15 19:27, Thomas Petazzoni wrote:
+> Hello,
 > 
-> For exemple:
->   LOCAL_HELP += "flash                  - Flash target"
->   LOCAL_HELP += "chroot                 - Chroot into target/"
->   LOCAL_HELP += "qemu                   - Run image with qemu"
->   LOCAL_HELP += "install-nfs            - Extract rootfs in \$$NFSROOT (=$(NFSROOT))"
->   LOCAL_HELP += "`printf '%-22s%s' '$(var)-feature' ' - Call $(var) feature'`"
->   LOCAL_HELP += "Please contact support at company.com in case of problem."
+> On Sun, 29 Nov 2015 19:10:07 +0100, Yann E. MORIN wrote:
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  Makefile | 5 +++++
->  1 file changed, 5 insertions(+)
+>> Well, I for one would prefer we fail right on the culprit package,
+>> rather than port-pone the check until the end. This way, it is obvious
+>> which package is the cuplrit.
 > 
-> diff --git a/Makefile b/Makefile
-> index 80c264f..4322da9 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -901,6 +901,11 @@ ifeq ($(BR2_TARGET_BAREBOX),y)
->  	@echo '  barebox-menuconfig     - Run barebox menuconfig'
->  	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
->  endif
-> +ifneq ($(LOCAL_HELP),)
-> +	@echo
-> +	@echo 'Local targets:'
-> +	@for i in $(LOCAL_HELP); do echo "  $$i"; done
-> +endif
+> It's a matter of trade-off between the benefits and the additional
+> complexity. IMO, the benefits of failing immediately on the culprit
+> package are not that big. When we'll look at the incorrectly installed
+> files, it will in 99% of the cases be obvious from which packages the
+> files are coming, and in the 1% remaining cases, a simple "find" on a
+> file with a name that isn't too generic will give us the answer.
 
-Well, for help from extenal.mk (or local.mk, but I'd arue that would be
-a bad idea, given that local.mk is supposedly short-lived), there is in
-my opinion a much better solution.
+ And in addition, in 99% of the cases this failure will occur for a package that
+was just added.
 
-Change the 'help' rule to a double-colon make rule, like so:
-
-    help::
-        echo Current Buildroot help
-
-Then you can add as many such rules in as many places you want,
-especially in external.mk, and the will be appended one after the
-others.
-
-We just have to ensure that our help comes before the external ones, so
-maybe you'll have to move our help block before inclusion of
-external.mk...
-
-Regards,
-Yann E. MORIN.
-
->  	@echo
->  	@echo 'Documentation:'
->  	@echo '  manual                 - build manual in all formats'
-> -- 
-> 2.1.4
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>> Except we now have a file-> package mapping (thanks to your graph-size),
+>> so we could re-use that in a target-inalise hook, indeed.
+>>
+>> Well, except maybe not... Can target-finalise be called before we have
+>> all the host packages (most notably the filesystem image generators)?
+> 
+> The dependencies of rootfs generators are added to PACKAGES, so they
+> are built before target-finalize:
+> 
+> in fs/common.mk:
+> 
+> PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES))
+> 
+> in Makefile:
+> 
+> target-finalize: $(PACKAGES)
+> 
+>>> Or alternatively, use the existing instrumentation hooks.
+>>
+>> Arnout did not like that, hence why I put in the common install rule.
+> 
+> What was Arnout reasoning?
+
+ The hooks make it more difficult to find out where the commands that are being
+executed come from. This makes it more difficult for an infra developer to
+understand what's going on exactly.
+
+ Your proposal of creating a new .mk file for the checks would significantly
+decrease the impact of this issue, since in that case an infra developer knows
+to look in four places:
+
+- the _CMDS definition in the package.mk;
+- the default _CMDS definition in pkg-<buildsystem>.mk
+- the %-rule in pkg-generic.mk;
+- the hooks in pkg-checks.mk.
+
+ Four places is still worse than three, but we do need the hooks so we'll always
+have those four places.
+
+ Regards,
+ Arnout
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
