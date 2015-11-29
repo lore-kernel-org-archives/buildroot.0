@@ -1,42 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2015 13:06:07 +0100
-Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.1.2
-Message-ID: <20151201232124.C80C982214@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Nov 2015 19:04:53 +0100
+Subject: [Buildroot] [git commit] core/printvars: allow dumping a set of
+	variables
+Message-ID: <20151201232124.B87A9821FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66a1ecb17afa904fee69d34aff03cb922cb9d27e
+commit: http://git.buildroot.net/buildroot/commit/?id=376fda8f99cd0511c03be4b937e9684a565745da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Dumping our 176164 variables can take quite some time (~12s here). What
+takes the most time is sorting the variables (~9s), followed by the
+parsing of our Makefiles (~3s), with the actual printing in the noise.
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index e15cc17..0b2bdcb 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.1.tar.bz2.sha256
--sha256	0c366a77276fa69d40006cf8a2f2dbcd82f3fb406f3960c3c3a0d34dd3a0f06c	harfbuzz-1.1.1.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.2.tar.bz2.sha256
-+sha256	4a2c5790bd3db7c3ca8c02e4858f2fd592df7932c1d2fa9f6b99acbce0f8461f	harfbuzz-1.1.2.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 8251e1f..be8a899 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+However, sometimes only one or a few variables are needed. For example,
+one may want to retrieve the Linux build dir from a post-build hook (to
+get the Linux' actual .config after our fixups and check for various
+features).
+
+Add the possibility to only dump the variables listed in $(VAR) which
+must be passed as a make argument, like so:
+
+    $ make -s printvars VARS="LINUX_DIR TOPDIR O"
+    LINUX_DIR=/home/ymorin/dev/buildroot/O/build/linux-4.3 ($(BUILD_DIR)/$(LINUX_BASE_NAME))
+    O=/home/ymorin/dev/buildroot/O/. (/home/ymorin/dev/buildroot/O/.)
+    TOPDIR=/home/ymorin/dev/buildroot/buildroot (/home/ymorin/dev/buildroot/buildroot)
+
+It is also possible to use make-appterns, like:
+
+    $ make -s printvars VARS="BUSYBOX_%"
+
+This is much faster (the time is just about the time it takes to parse
+our Makefiles, 3s here) and easier to parse.
+
+[Thomas: improve comment above the printvars target.]
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 9950a26..641aeff 100644
+--- a/Makefile
++++ b/Makefile
+@@ -823,10 +823,13 @@ ifeq ($(NEED_WRAPPER),y)
+ 	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
+ endif
  
--HARFBUZZ_VERSION = 1.1.1
-+HARFBUZZ_VERSION = 1.1.2
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-# printvars prints all the variables currently defined in our Makefiles
++# printvars prints all the variables currently defined in our
++# Makefiles. Alternatively, if a non-empty VARS variable is passed,
++# only the variables matching the make pattern passed in VARS are
++# displayed.
+ printvars:
+ 	@$(foreach V, \
+-		$(sort $(.VARIABLES)), \
++		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
+ 		$(info $V=$($V) ($(value $V)))))
