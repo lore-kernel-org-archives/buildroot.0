@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Nov 2015 14:32:29 +0100
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 2.8.3
-Message-ID: <20151201232123.7110381952@busybox.osuosl.org>
+Date: Sun, 29 Nov 2015 15:30:34 +0100
+Subject: [Buildroot] [git commit] libnet: disable for musl toolchains
+Message-ID: <20151201232124.4EE4C821F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2d454a959b4b783010c59bf83a0e6ed479a17a5
+commit: http://git.buildroot.net/buildroot/commit/?id=b0e6d657d48487081db2738b93fa8b33ec1e2c7f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnet/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index e984b58..d50c2cf 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	d2e61d445397940e24ed5afeccfa2c70484a2db1bdc15614f5eaaf171f1d350e	ffmpeg-2.8.2.tar.xz
-+sha256	18e22e3866d3b5fefcb1911c0d87ae8ababc30b7ea15901c1cf02885ccf6704a	ffmpeg-2.8.3.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 988374f..dbf3a5b 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libnet/Config.in b/package/libnet/Config.in
+index 7186972..8a88128 100644
+--- a/package/libnet/Config.in
++++ b/package/libnet/Config.in
+@@ -1,7 +1,12 @@
+ config BR2_PACKAGE_LIBNET
+ 	bool "libnet"
++	# Build with musl fails due to header issues
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  libnet provides a portable framework for low-level network
+ 	  packet construction.
  
--FFMPEG_VERSION = 2.8.2
-+FFMPEG_VERSION = 2.8.3
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+ 	  http://sourceforge.net/projects/libnet-dev
++
++comment "libnet needs a (e)glibc or uClibc toolchain"
++	depends on BR2_TOOLCHAIN_USES_MUSL
