@@ -1,37 +1,40 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 29 Nov 2015 11:23:54 +0100
-Subject: [Buildroot] [PATCH v1] fbgrab: bump verstion to 1.3
-In-Reply-To: <87k2plj7l4.fsf@dell.be.48ers.dk>
-References: <1447456618-4352-1-git-send-email-ps.report@gmx.net>
- <87k2plj7l4.fsf@dell.be.48ers.dk>
-Message-ID: <20151129112354.342b7f06@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Nov 2015 12:18:38 +0100
+Subject: [Buildroot] defconfig build failure on cubieboard2_defconfig
+In-Reply-To: <20151125092209.6e1bb1ff@free-electrons.com>
+References: <20151125092209.6e1bb1ff@free-electrons.com>
+Message-ID: <20151129121838.1ae8011d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello all,
 
-On Sat, 14 Nov 2015 09:41:59 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+On Wed, 25 Nov 2015 09:22:09 +0100, Thomas Petazzoni wrote:
 
-> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+> The Travis build of all defconfigs failed last night, on the
+> cubieboard2_defconfig:
 > 
->  > Changelog (see [1] for details):
->  >   - Added support when active framebuffer is not starting at offset 0
->  >   - Fixed broken re-ordering of colors, rgba to argb
->  >   - Fixed broken path for man page
+>    https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/93053316
 > 
->  > [1] http://fbgrab.monells.se
+> The error is:
 > 
-> Committed to next, thanks.
-> 
-> Could you try submitting 0001-fix-static-build.patch upstream, please?
-> 
+> /home/travis/build/buildroot/buildroot-defconfig-testing/buildroot/output/build/uboot-b4bca5e0651b460a4511582f07a935cb48f74948/spl/lib/vsprintf.o:
+> file not recognized: File truncated
 
-Tried to send to 'gmo at linux.nu' (the address given at the web page and
-in the source code file and man page file), but failed with
-'delivery retry timeout exceeded'...
+FWIW, two days later the problem did not reproduce, and then again two
+days later, the same problem occurred on the same defconfig, while
+building U-Boot, but just on a different file.
 
-Regards,
-Peter
+Bottom line: we have a parallel build issue happening here I believe.
+This there is cubieboard2 support in mainline U-Boot it seems, so it
+would probably be a good idea to use this instead of this custom
+version.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
