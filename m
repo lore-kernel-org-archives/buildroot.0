@@ -1,44 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 12:22:12 +0100
-Subject: [Buildroot] Buildroot meeting at FOSDEM 2016 !
-Message-ID: <20151129122212.05f2dd15@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 29 Nov 2015 08:39:50 -0300
+Subject: [Buildroot] [PATCH] yad: needs gtk3-x11
+Message-ID: <1448797190-18243-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Doesn't build with broadway or wayland since it wants the X-variant of
+gdk. Fixes:
+http://autobuild.buildroot.net/results/91d/91dc6ab749f967ae046f856f3f592d5a548499c6/
 
-As usual, we are organizing a Buildroot Developers meeting right after
-FOSDEM 2016. Since FOSDEM is on January 30-31, the Buildroot Developers
-meeting will take place on February 1-2 (two days event). This event
-will once again be sponsored by Google, who is providing the meeting
-room. Therefore, the meeting will take place "Chauss?e d'Etterbeek 180,
-1040 Brussels", which is the very center of Brussels.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/yad/yad.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-See http://elinux.org/Buildroot:DeveloperDaysFOSDEM2016 for a few more
-details.
-
-This event is free, and is meant for Buildroot contributors and
-developers to meet together, get some hacking done, and socialize.
-During the day, the event is typically a mix of discussion about
-current open topics and hacking sessions aimed at clearing up the
-backlog of pending patches. On Sunday and Monday evenings, we generally
-meet up in some place in Brussels to continue doing some hacking around
-some food and drinks.
-
-I would really like to encourage all people who contribute to Buildroot
-to consider attending this event. It is really a great opportunity to
-meet and work together.
-
-To register, simply write down your name on the Wiki, or if you don't
-have an eLinux.org Wiki account, you can ask me to write your name.
-
-Best regards,
-
-Thomas
+diff --git a/package/yad/yad.mk b/package/yad/yad.mk
+index 9d7ab37..fc25267 100644
+--- a/package/yad/yad.mk
++++ b/package/yad/yad.mk
+@@ -13,7 +13,7 @@ YAD_DEPENDENCIES = host-intltool host-pkgconf
+ 
+ YAD_CONF_OPTS = --enable-html=no
+ 
+-ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ YAD_DEPENDENCIES += libgtk3
+ YAD_CONF_OPTS += --with-gtk=gtk3
+ else
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
