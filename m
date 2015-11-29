@@ -1,142 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Nov 2015 23:30:50 +0100
-Subject: [Buildroot] [PATCH] support/dependencies: ensure we have 'file'
- on the host
-In-Reply-To: <5658E868.5090006@mind.be>
-References: <1448654529-27021-1-git-send-email-yann.morin.1998@free.fr>
- <5658C8C7.4080104@mind.be> <20151127230443.GD4144@free.fr>
- <5658E868.5090006@mind.be>
-Message-ID: <20151128223049.GE3816@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Nov 2015 08:30:17 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-11-28
+Message-ID: <20151129073018.04C72101FF6@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Build statistics for 2015-11-28
+===============================
 
-On 2015-11-28 00:34 +0100, Arnout Vandecappelle spake thusly:
-> On 28-11-15 00:04, Yann E. MORIN wrote:
-> > On 2015-11-27 22:19 +0100, Arnout Vandecappelle spake thusly:
-> >> On 27-11-15 21:02, Yann E. MORIN wrote:
-> >>> When 'file' is missing on the host, libtool fails miserably. Packages
-> >>> that use libtool will suddenly FTBFS, with cryptic error messages, like
-> >>> missing libraries on the linker invocation.
-[--SNIP--]
-> >>  bandwidthd doesn't even have a libtool...
-> >>
-> >>  Could you give a concrete example of where libtool uses file?
-> > 
-> > Damn... It seems I confused the netsnmp and the bandwidthd cases.
-> > 
-> > If you look at netsnmp, they have all this blurb about file being
-> > required for libtool otherwise it breaks, in configure.d/config_os_progs
-> > And indeed, my minimalistic chroot does not have file installed.
-> 
->  Well, I ran
-> 
-> strace -f -e trace=execve make netsnmp
+        success : 118
+       failures : 33 
+       timeouts : 0  
+          TOTAL : 151
 
-OK, so I have some more info on this. Not yet completely clear-cut, but
-here it goes...
+Classification of failures by reason
+====================================
 
-Target: mips64el
-Libraries: shared only
-Toolchain: http://autobuild.buildroot.org/toolchains/tarballs/br-mips64r6-n64-el-hf-2015.11-rc1-71-g90d1299.tar.bz2
+                  ffmpeg-2.8.1 | 3 
+               libsigsegv-2.10 | 2 
+                      qt-4.8.7 | 2 
+                busybox-1.24.1 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+                   mplayer-1.2 | 1 
+freerdp-17834af7bb378f85a3b... | 1 
+                  mono-4.0.2.5 | 1 
+               arptables-0.0.4 | 1 
+                 lvm2-2.02.132 | 1 
+                  libv4l-1.8.1 | 1 
+         conntrack-tools-1.4.3 | 1 
+                    bind-9.9.8 | 1 
+            libsemanage-2.1.10 | 1 
+                 gnuplot-4.6.6 | 1 
+                  gauche-0.9.4 | 1 
+pifmrds-0bf57f9ce0d954365a3... | 1 
+glmark2-499aa81a68fb4c8aac1... | 1 
+      kismet-Kismet-2014-02-R1 | 1 
+                    kbd-1.15.5 | 1 
+                 dropwatch-1.4 | 1 
+                   zmqpp-3.2.0 | 1 
+                   tinc-1.0.24 | 1 
+libbroadvoice-f65b0f50c8c76... | 1 
+                     vlc-2.2.1 | 1 
+              xmlstarlet-1.5.0 | 1 
+                    yad-0.31.2 | 1 
+               valgrind-3.11.0 | 1 
+                    php-5.6.15 | 1 
 
-The failing package is still bandwidthd, with messages like:
+Detail of failures
+===================
 
-    /home/buildroot/autobuild/reproduce/O/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/libpng16.a(pngrutil.o):
-    In function `.L78':
-    pngrutil.c:(.text+0x55c): undefined reference to `inflate'
-    pngrutil.c:(.text+0x56c): undefined reference to `inflate'
+      x86_64 |                arptables-0.0.4 | NOK | http://autobuild.buildroot.net/results/002bea21e0b902eecca245c9c889a55583c0751c/
+         arm |                     bind-9.9.8 | NOK | http://autobuild.buildroot.net/results/2201f04170ea8ef0961e907efce07c041a57c229/
+       sparc |                 busybox-1.24.1 | NOK | http://autobuild.buildroot.net/results/dce2b68429734dbd63bab0bf75593b9dc44a5e42/
+         arm |          conntrack-tools-1.4.3 | NOK | http://autobuild.buildroot.net/results/624a0d48decd819eb58cbb3c58ee904b87ebfb21/
+         arm |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/61754104cbf574de04990f9a2df7490f39d01cc0/
+       nios2 |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/5ac519320ec79cf8117060dcc2620aa517845000/
+        mips |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/8274ac47169f11ae15d1c529dcf8b9d852cb5945/
+    mips64el |                   ffmpeg-2.8.1 | NOK | http://autobuild.buildroot.net/results/ed321e7d4afc7fb68c3f933000c7b32dd604a40a/
+       sparc | freerdp-17834af7bb378f85a3b... | NOK | http://autobuild.buildroot.net/results/fe627db27b07e1d24f8ee9e3d4f626e34df83e6c/
+      x86_64 |                   gauche-0.9.4 | NOK | http://autobuild.buildroot.net/results/c0e5d46ae11bd1ffd78191bb3966eb8aee41e120/
+        i686 | glmark2-499aa81a68fb4c8aac1... | NOK | http://autobuild.buildroot.net/results/8587d0cea86efa4c6e98817cadc7cce0b1b36e3d/
+     powerpc |                  gnuplot-4.6.6 | NOK | http://autobuild.buildroot.net/results/320b9d7413a208bf5f5a37b6949ebaaf8fe5314e/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/680776cc663f982768528b8a35b5066db0090099/
+      x86_64 |                     kbd-1.15.5 | NOK | http://autobuild.buildroot.net/results/f9f5971133d2bf2445f99cda7cb1b0e763a11c1f/
+      x86_64 |       kismet-Kismet-2014-02-R1 | NOK | http://autobuild.buildroot.net/results/94c115c969dd4bc60b8f14f488dc69e599ac41d7/
+         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/3723945b16d835dfc6b32edb008e831e9566b9c8/
+         arm |             libsemanage-2.1.10 | NOK | http://autobuild.buildroot.net/results/41a453bc4d9eb4f125705d94c2c58adfe697bb4d/
+     sparc64 |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/1d8e0c22594aef53f7a4de3491454aa78311c815/
+     sparc64 |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/ed22201e368bc0c81da937b747dedac7fa48332d/
+     powerpc |                   libv4l-1.8.1 | NOK | http://autobuild.buildroot.net/results/fe56063ddd2232fea7699f5117497beb3deca11e/
+         arm |                  lvm2-2.02.132 | NOK | http://autobuild.buildroot.net/results/9bff7eef713fac2c1bfd7d7cff38406ea80785f0/
+     powerpc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/6b23b912b8a405f5ea65384af12d4c41e8d4e0c0/
+        i686 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/7891ce4fcbce2b3ad1c13bfc03bf590fcf96bd86/
+     powerpc |                     php-5.6.15 | NOK | http://autobuild.buildroot.net/results/a757edcfce00d3e52c6787f28dc31cbaf8d2d2ab/
+         arm | pifmrds-0bf57f9ce0d954365a3... | NOK | http://autobuild.buildroot.net/results/ea0db5e948ea8446b57fa6a117f7af10e6176548/
+         arm |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/9aa6ffca461fb7d881cc2560947b9e406cec149d/
+         arm |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/54fdd06c17400fc4ac93d2d9dd54f4fe75136b3d/
+         arm |                    tinc-1.0.24 | NOK | http://autobuild.buildroot.net/results/c40ad161959359c09d6cb82e6c5a4b365819b0aa/
+    mips64el |                valgrind-3.11.0 | NOK | http://autobuild.buildroot.net/results/6c14daadffeb0f03facff6b23e9cda8529424b23/
+microblazeel |                      vlc-2.2.1 | NOK | http://autobuild.buildroot.net/results/94719d6d2e7a84f3e50d1ea051670767b595fcb2/
+        bfin |               xmlstarlet-1.5.0 | NOK | http://autobuild.buildroot.net/results/0358cd890b4721c21c9bd6e28a4d033c8374cfae/
+     aarch64 |                     yad-0.31.2 | NOK | http://autobuild.buildroot.net/results/e69699a1d322d14a70d3cf4f69bb856b48ece9d8/
+         arc |                    zmqpp-3.2.0 | NOK | http://autobuild.buildroot.net/results/711333c0639aee135bc97cc028179376f7b091db/
 
-So, what strikes me odd here, is that it is trying to link to the static
-variant of libpng. And indeed, the shared variant is not installed.
-
-And it does not try to link with -lz, which is a dependency of libpng,
-not badnwidthd, so it is expected. In shared case, libz would be pulled
-because it is a NEEDED of libpng.  (See not [0], too)
-
-Weird, considering that static are disabled, and we are supposed to only
-build shared libs.
-
-OK, let's see why libpng does not install a shared library:
-
-    checking whether the /home/buildroot/autobuild/reproduce/O/host/usr/bin/mips64el-linux-gcc linker
-    (/home/buildroot/autobuild/reproduce/O/host/usr/bin/mips64el-linux-ld -m elf) supports shared libraries...
-    /home/buildroot/autobuild/reproduce/O/host/usr/bin/mips64el-linux-ld: unrecognised emulation mode: elf
-    Supported emulations: elf32ltsmipn32 elf32btsmipn32 elf32ltsmip
-    elf32btsmip elf64ltsmip elf64btsmip
-    no
-
-Uh-oh... Weird.
-
-Ah, what's a few line above, then?
-
-    ./configure: line 6838: /usr/bin/file: No such file or directory
-    ./configure: line 6846: /usr/bin/file: No such file or directory
-    ./configure: line 6854: /usr/bin/file: No such file or directory
-
-Haha... So, where do these come from?
-
-Looking at the output of ./configure, and at configure.ac, the 'file'
-errors are right between:
-     AC_PROG_MAKE_SET
-and
-    AC_MSG_CHECKING([that AWK works])
-
-And guess what's in there? Hint: I already spoke about it...
-
-    LT_INIT([win32-dll])
-    LT_PREREQ([2.4.2])
-
-Ah... libtool... But then, what's really failing, that libtool requires
-'file' for?
-
-    case $host in
-    [...]
-    mips64*-*linux*)
-    [...]
-    (eval $ac_compile) 2>&5
-    [...]
-        case `/usr/bin/file conftest.$ac_objext` in
-          *32-bit*)
-            emul="${emul}32"
-            ;;
-          *64-bit*)
-            emul="${emul}64"
-            ;;
-        esac
-
-(the two other failures are similar)
-
-So, libtool injects code that checks the output of a compilation to see
-what type of file was generated. And of course, it fails miserably...
-
-
-So, the failing package, bandwidthd, is not the culprit. It is jut the
-trigger. The real failure is earlier in the dependency chain. Damn...
-
-I hope this is enough information to warant the commit log that libtool
-is foobared when 'file' is not present? Yes, I can add some more details
-now, but I will certainly not duplicate all that message in the commit
-log.
-
-
-[0] Now I wonder if we would have a similar build failure in a real
-static-only scenario... Afterall, libpng install a .la file with -lz in
-there... But of course, in our failing test, that .la file is not used,
-because we're not even supposed to attempt a static link, but a shared
-link.
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+http://autobuild.buildroot.net
