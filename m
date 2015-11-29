@@ -1,50 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 14:45:18 +0100
-Subject: [Buildroot] [PATCH v2] libvips: fix compile error for sparc64
-In-Reply-To: <20151123214222.GA8423@waldemar-brodkorb.de>
-References: <20151123214222.GA8423@waldemar-brodkorb.de>
-Message-ID: <20151129144518.34fd1a05@free-electrons.com>
+Date: Sun, 29 Nov 2015 14:45:53 +0100
+Subject: [Buildroot] [git commit] gpsd: work-around ICE when compiling for
+	microblaze with GCC5
+Message-ID: <20151129135144.0523580E23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+commit: http://git.buildroot.net/buildroot/commit/?id=0f48e36873b9106b6b38ed0d413bc3cecaf495be
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 23 Nov 2015 22:42:22 +0100, Waldemar Brodkorb wrote:
+GCC 5.X generates an ICE when compiling gpsd for microblaze due
+to optimizations, so lets disable it for now to works around
+this problem.
 
-> diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-> index d6dddc8..eb034b1 100644
-> --- a/package/libvips/libvips.mk
-> +++ b/package/libvips/libvips.mk
-> @@ -12,6 +12,17 @@ LIBVIPS_LICENSE = LGPLv2.1+
->  LIBVIPS_LICENSE_FILES = COPYING
->  # We're patching gtk-doc.make, so need to autoreconf
->  LIBVIPS_AUTORECONF = YES
-> +
-> +# Sparc64 compile fails, this seems to be caused by the -Os option we pass
-> +# by default. To fix the problem, use -O0 with no optimization instead.
-> +ifeq ($(BR2_sparc64),y)
-> +LIBVIPS_CXXFLAGS = $(filter-out -Os,$(TARGET_CXXFLAGS))
-> +LIBVIPS_CXXFLAGS += -O0
-> +else
-> +LIBVIPS_CXXFLAGS = $(TARGET_CXXFLAGS)
-> +endif
-> +LIBVIPS_CONF_ENV += CXXFLAGS="$(LIBVIPS_CXXFLAGS)"
+A bug was reported to the gcc bug tracker:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
 
-I am still not super happy with this solution, since it's really work
-arounding a compiler bug it seems, and the way it's implemented will
-never allow to notice when the bug gets fixed. But I don't really have
-a much better solution.
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gpsd/gpsd.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-Has at least the problem been reported to upstream gcc? If it's already
-reported, do you have a pointer to the upstream bug?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index aa35053..d603ba5 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -39,8 +39,10 @@ GPSD_SCONS_OPTS += libgpsmm=no
+ endif
+ 
+ # prevents from triggering GCC ICE
++# A bug was reported to the gcc bug tracker:
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
+ ifeq ($(BR2_microblaze),y)
+-GPSD_CFLAGS += -fno-expensive-optimizations
++GPSD_CFLAGS += -fno-expensive-optimizations -fno-schedule-insns
+ endif
+ 
+ # Enable or disable Qt binding
