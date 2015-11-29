@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 15:30:34 +0100
-Subject: [Buildroot] [git commit branch/next] libnet: disable for musl
-	toolchains
-Message-ID: <20151129143737.6263181E18@busybox.osuosl.org>
+Date: Sun, 29 Nov 2015 15:37:20 +0100
+Subject: [Buildroot] [git commit branch/next] libnet: PF_PACKET is always
+	available on Linux
+Message-ID: <20151129143737.6A6827FB2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b0e6d657d48487081db2738b93fa8b33ec1e2c7f
+commit: http://git.buildroot.net/buildroot/commit/?id=546a661ecc64d4c93bffe47ea93d9ca1c4422fdf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+[Thomas: remove mistakenly added empty line.]
+
 Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnet/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/libnet/libnet.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnet/Config.in b/package/libnet/Config.in
-index 7186972..8a88128 100644
---- a/package/libnet/Config.in
-+++ b/package/libnet/Config.in
-@@ -1,7 +1,12 @@
- config BR2_PACKAGE_LIBNET
- 	bool "libnet"
-+	# Build with musl fails due to header issues
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  libnet provides a portable framework for low-level network
- 	  packet construction.
+diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
+index 3b62a79..d13c453 100644
+--- a/package/libnet/libnet.mk
++++ b/package/libnet/libnet.mk
+@@ -7,6 +7,8 @@
+ LIBNET_VERSION = 1.1.6
+ LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
+ LIBNET_INSTALL_STAGING = YES
++# PF_PACKET is always available on Linux
++LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
+ LIBNET_LICENSE = BSD-2c, BSD-3c
+ LIBNET_LICENSE_FILES = doc/COPYING
  
- 	  http://sourceforge.net/projects/libnet-dev
-+
-+comment "libnet needs a (e)glibc or uClibc toolchain"
-+	depends on BR2_TOOLCHAIN_USES_MUSL
