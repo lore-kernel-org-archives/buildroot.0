@@ -1,35 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 15:37:20 +0100
-Subject: [Buildroot] [git commit] libnet: PF_PACKET is always available on
-	Linux
-Message-ID: <20151201232124.6E89F821F8@busybox.osuosl.org>
+Date: Sun, 29 Nov 2015 15:43:07 +0100
+Subject: [Buildroot] [git commit] squashfs: always enable xattr support
+Message-ID: <20151201232124.83668821F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=546a661ecc64d4c93bffe47ea93d9ca1c4422fdf
+commit: http://git.buildroot.net/buildroot/commit/?id=10478514a51427e855f83eeb24a0502b1380150c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: remove mistakenly added empty line.]
+In 785fef10 xattr support was disabled, probably because the old version
+did require the xattr package to be present to support it.
+In a409d76e xattr support was made optional via (lib)attr, however the
+squashfs package does in fact include all of the required bits to
+support xattr without the need for the attr package.
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+So enable xattr support by default for both the host and target
+variants.
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnet/libnet.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/squashfs/squashfs.mk | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
-index 3b62a79..d13c453 100644
---- a/package/libnet/libnet.mk
-+++ b/package/libnet/libnet.mk
-@@ -7,6 +7,8 @@
- LIBNET_VERSION = 1.1.6
- LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
- LIBNET_INSTALL_STAGING = YES
-+# PF_PACKET is always available on Linux
-+LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
- LIBNET_LICENSE = BSD-2c, BSD-3c
- LIBNET_LICENSE_FILES = doc/COPYING
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 3204d05..cdeb9c8 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -9,13 +9,7 @@ SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
+ SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
+ SQUASHFS_LICENSE = GPLv2+
+ SQUASHFS_LICENSE_FILES = COPYING
+-
+-ifeq ($(BR2_PACKAGE_ATTR),y)
+-SQUASHFS_DEPENDENCIES += attr
+-SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
+-else
+-SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
+-endif
++SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
  
+ ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
+ SQUASHFS_DEPENDENCIES += lz4
+@@ -54,9 +48,8 @@ endif
+ 
+ HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz
+ 
+-# no libattr/xz in BR
+ HOST_SQUASHFS_MAKE_ARGS = \
+-	XATTR_SUPPORT=0 \
++	XATTR_SUPPORT=1 \
+ 	XZ_SUPPORT=1    \
+ 	GZIP_SUPPORT=1  \
+ 	LZ4_SUPPORT=1	\
