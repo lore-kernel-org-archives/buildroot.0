@@ -1,40 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Nov 2015 13:57:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glmark2: Wayland-gl support also
-	needs egl
-Message-ID: <1448801858-22306-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 29 Nov 2015 14:07:48 +0100
+Subject: [Buildroot] [PATCH 1/2] package/minidlna: Fix typo
+Message-ID: <1448802469-18096-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We were missing the egl dependency when enabling Wayland GL support:
-https://github.com/glmark2/glmark2/blob/master/src/wscript_build#L28
-
 Fixes
-http://autobuild.buildroot.net/results/858/8587d0cea86efa4c6e98817cadc7cce0b1b36e3d/
-http://autobuild.buildroot.net/results/1f6/1f6853d5f7a83be60ccdf4f071a1df1491cf8137/
-http://autobuild.buildroot.net/results/a4d/a4d830291ee8550b3c544ade7169218d5edd4d52/
-http://autobuild.buildroot.net/results/536/536a8dc62783633943770a278dc9f1c6c5c0807c/
+http://autobuild.buildroot.net/results/5ac/5ac519320ec79cf8117060dcc2620aa517845000/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/glmark2/glmark2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/minidlna/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
-index a2e8852..bd5b51a 100644
---- a/package/glmark2/glmark2.mk
-+++ b/package/glmark2/glmark2.mk
-@@ -36,7 +36,7 @@ GLMARK2_DEPENDENCIES += wayland
- GLMARK2_FLAVORS += wayland-glesv2
- endif
+diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
+index 9799672..0a475f7 100644
+--- a/package/minidlna/Config.in
++++ b/package/minidlna/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_MINIDLNA
+ 	select BR2_PACKAGE_LIBJPEG
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+-	depends on !nios2 # ffmpeg
++	depends on !BR2_nios2 # ffmpeg
+ 	help
+ 	  MiniDLNA (aka ReadyDLNA) is server software with the aim of being
+ 	  fully compliant with DLNA/UPnP-AV clients.
+@@ -21,5 +21,5 @@ config BR2_PACKAGE_MINIDLNA
  
--ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBGL),yy)
-+ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL),yyy)
- GLMARK2_DEPENDENCIES += wayland
- GLMARK2_FLAVORS += wayland-gl
- endif
+ comment "minidlna needs a toolchain w/ threads, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !nios2
++	depends on !BR2_nios2
+ 	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
 -- 
 2.6.2
