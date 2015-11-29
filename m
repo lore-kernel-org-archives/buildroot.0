@@ -1,51 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 15:55:36 +0100
-Subject: [Buildroot] [PATCH 1/1] spi-tools: new package
-In-Reply-To: <1448072069-5007-1-git-send-email-nunes.erico@gmail.com>
-References: <1448072069-5007-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <20151129155536.5bad0012@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 29 Nov 2015 15:59:04 +0100
+Subject: [Buildroot] [PATCH] libsigsegv: fix sparc64 compile
+Message-ID: <20151129145904.GA12312@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Erico Nunes,
+Compile tested for sparc/glibc and sparc64/glibc.
+Fixes following autobuilder problem:
+http://autobuild.buildroot.net/results/1d8e0c22594aef53f7a4de3491454aa78311c815/
 
-On Sat, 21 Nov 2015 00:14:29 -0200, Erico Nunes wrote:
-> This package contains some simple command line tools to help using Linux
-> spidev devices.
-> 
-> https://github.com/cpb-/spi-tools
-> 
-> The included version is based in a sha1 and not a tagged version as the
-> current master branch contains autotools support for build but there is
-> no tagged version with autotools support yet.
-> 
-> The only other quirk with the recipe is related to the VERSION define
-> which is normally obtained in build time via git for this package, but
-> that would fail within Buildroot as the package build is normally not
-> performed inside a git repository.
-> To work around that, I have added a hook which will substitute change
-> the VERSION to match that of the Buildroot package.
-> 
-> I have tested this package in an ARM target with a custom SPI device.
-> 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> ---
->  package/Config.in                |  1 +
->  package/spi-tools/Config.in      |  7 +++++++
->  package/spi-tools/spi-tools.hash |  2 ++
->  package/spi-tools/spi-tools.mk   | 24 ++++++++++++++++++++++++
->  4 files changed, 34 insertions(+)
->  create mode 100644 package/spi-tools/Config.in
->  create mode 100644 package/spi-tools/spi-tools.hash
->  create mode 100644 package/spi-tools/spi-tools.mk
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+--- 
+Debian has a similar fix, but they don't care for sparc.
+---
+ package/libsigsegv/0005-fix-sparc64-stackpointer.patch |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 package/libsigsegv/0005-fix-sparc64-stackpointer.patch
 
-Applied to next, thanks!
-
-Thomas
+diff --git a/package/libsigsegv/0005-fix-sparc64-stackpointer.patch b/package/libsigsegv/0005-fix-sparc64-stackpointer.patch
+new file mode 100644
+index 0000000..62de35f
+--- /dev/null
++++ b/package/libsigsegv/0005-fix-sparc64-stackpointer.patch
+@@ -0,0 +1,16 @@
++Fix sparc64 build.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur libsigsegv-2.10.orig/src/fault-linux-sparc.h libsigsegv-2.10/src/fault-linux-sparc.h
++--- libsigsegv-2.10.orig/src/fault-linux-sparc.h	2009-08-01 17:06:49.000000000 +0200
+++++ libsigsegv-2.10/src/fault-linux-sparc.h	2015-11-29 11:55:29.000000000 +0100
++@@ -27,4 +27,8 @@
++    (see also <asm/sigcontext.h>)
++    are quite different types.  */
++ 
+++#if __WORDSIZE == 64
+++#define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.mc_gregs[REG_O6]
+++#else
++ #define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gregs[REG_O6]
+++#endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
