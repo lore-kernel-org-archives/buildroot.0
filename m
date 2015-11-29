@@ -1,60 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Nov 2015 10:53:06 +0100
-Subject: [Buildroot] Missing 'sys/queue.h' on musl
-In-Reply-To: <20151129092811.0d05dabd@free-electrons.com>
-References: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
- <20151128184915.6017fae9@free-electrons.com>
- <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
- <20151128192022.6bc8d7fd@free-electrons.com>
- <CANu7NGvmMFc9xADTq_ES7h=13LcnLH5yYJO9KV+8mSYSB-VVtg@mail.gmail.com>
- <20151129092811.0d05dabd@free-electrons.com>
-Message-ID: <20151129095306.GA3630@free.fr>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 29 Nov 2015 11:08:41 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-11-28
+In-Reply-To: <20151129073018.04C72101FF6@stock.ovh.net>
+References: <20151129073018.04C72101FF6@stock.ovh.net>
+Message-ID: <1448791721.2011.9.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
-On 2015-11-29 09:28 +0100, Thomas Petazzoni spake thusly:
-> On Sat, 28 Nov 2015 18:42:37 -0200, Sergio Prado wrote:
-> > Instead of making each package that needs 'sys/queue.h' select this
-> > package, it would be better to select this package automatically when a
-> > musl toolchain is used. That way, we won't need to change any package.
-> > 
-> > It is possible to do that?
+On So, 2015-11-29 at 08:30 +0100, Thomas Petazzoni wrote:
+> Build statistics for 2015-11-28
+> ===============================
 > 
-> Well, we could probably put this logic in the toolchain virtual
-> package, since it is the common point between the internal toolchain
-> and external toolchain backends (and we need sys/queue.h in both cases).
+> ????????success : 118
+> ???????failures : 33 
+> ???????timeouts : 0??
+> ??????????TOTAL : 151
 > 
-> However, I am not sure if I wouldn't prefer packages that need
-> sys/queue.h to have an explicit dependency on the package installing
-> sys/queue.h. Since such package would itself have no dependency, it
-> would be just a matter of adding "select BR2_PACKAGE_SYS_QUEUE" in
-> Config.in and adding "sys-queue" in <pkg>_DEPENDENCIES.
 > 
-> Peter, Arnout, Yann, your opinion?
+> Detail of failures
+> ===================
+> 
+> ??????x86_64 |????????????????arptables-0.0.4 | NOK | http://autobuil
+> d.buildroot.net/results/002bea21e0b902eecca245c9c889a55583c0751c/
 
-I think it is best to handle it as a dependency of the toolchain
-package. That way, it is transparent to packages.
+I suggest to disable arptables for musl toolchains for now. I think it
+is not easily feasible to untangle the mixed used of linux/netinet
+headers [1].
 
-That musl refuses to carry a sys/queue.h on philosophical reasons (as
-they explain in their FAQ) while all the other main C libraries do (even
-newlib!) is not ground for making it difficult for packagers to add a
-new package.
+> ??????x86_64 |??????????????host-nodejs-4.1.2 | NOK | http://autobuil
+> d.buildroot.net/results/e9810d31c7cbff3e20ee7f09920cb44dfcf1c27e/
+> ??????x86_64 |??????????????host-nodejs-4.1.2 | NOK | http://autobuil
+> d.buildroot.net/results/f1ebd1ccf2eff37e2c70e63512ca6bf508953a13/
 
-Adding such a package would be a Buildroot peculiarity, which I would
-prefer we avoid.
+WARNING: C++ compiler too old, need g++ 4.8 or clang++ 3.4
+(CXX=/usr/bin/g++)
 
-Regards,
-Yann E. MORIN.
+How to handle this?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> microblazeel |????????????????????mpd-0.19.11 | NOK | http://autobuil
+> d.buildroot.net/results/86d40c2b2069580a4ccf4a9fb496c9bd75207da1/
+
+undefined reference to `__atomic_exchange_1'
+
+Toolchain issue?
+
+> ?????????arm |?????????????shairport-sync-2.6 | NOK | http://autobuil
+> d.buildroot.net/results/04498ba9e44f022f4bebb339f26aac76fce3e06c/
+
+I'll have a look at this later today.
+
+> ?????????arc |????????????????????zmqpp-3.2.0 | NOK |
+> http://autobuild.buildroot.net/results/711333c0639aee135bc97cc0281793
+> 76f7b091db/
+> 
+
+Fixed by [2].
+
+[1]?http://lists.busybox.net/pipermail/buildroot/2015-November/145468.h
+tml
+[2]?https://patchwork.ozlabs.org/patch/547778/
