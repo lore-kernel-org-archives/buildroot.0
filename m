@@ -1,115 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 29 Nov 2015 21:55:55 +0100
-Subject: [Buildroot] [PATCH 2/3] Config.in: add symbols for
- BR2_HOST_GCC_AT_LEAST_X_Y
-In-Reply-To: <20151129174805.GC3630@free.fr>
-References: <1448147919-5463-1-git-send-email-arnout@mind.be>
- <1448147919-5463-2-git-send-email-arnout@mind.be>
- <20151129174805.GC3630@free.fr>
-Message-ID: <565B665B.9050304@mind.be>
+Date: Sun, 29 Nov 2015 22:05:22 +0100
+Subject: [Buildroot] [PATCH 0/5] Introduce alternative archive format
+In-Reply-To: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
+References: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
+Message-ID: <565B6892.9040706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29-11-15 18:48, Yann E. MORIN wrote:
-> Arnout, All,
+On 19-11-15 11:36, J?r?me Pouiller wrote:
+> Hello,
 > 
-> On 2015-11-22 00:18 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
->> Some host packages need a recent gcc version. Add symbols to Config.in
->> to specify the HOSTCC version. The values are passed through the
->> environment, and this environment is generated in a new support script.
-> 
-> I really don't like this...
+> As suggested by Arnout [1], this series provide an alternative archive
+> format. This new format contains a shallowed version of upstream
+> repository. This format is a little bigger and a little longer to
+> create but it allow a better workflow with upstream. I describe some
+> good practice in patch 2.
 
- I originally had it as a make fragment :-P
-
-> 
-> Maybe it is a good candidate for a generated kconfig snippet, instead of
-> this generated-environment oddity?
-
- I never thought of that, it would be a possibility. If I would have time :-)
-I'd have a go at it.
-
-> 
-> Anyway, see below, you could generate only one environment variable,
-> instead of all of them...
-> 
->> Also update the documentation to mention the new symbols.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->>  Config.in                                 | 17 ++++++++++
->>  Makefile                                  |  1 +
->>  docs/manual/adding-packages-directory.txt |  7 ++++
->>  support/scripts/gcc-version-variables     | 56 +++++++++++++++++++++++++++++++
->>  4 files changed, 81 insertions(+)
->>  create mode 100755 support/scripts/gcc-version-variables
->>
->> diff --git a/Config.in b/Config.in
->> index d795361..7bec90c 100644
->> --- a/Config.in
->> +++ b/Config.in
->> @@ -18,6 +18,23 @@ config BR2_EXTERNAL
->>  	string
->>  	option env="BR2_EXTERNAL"
->>  
->> +# Hidden config symbols for packages to check system gcc version
->> +config BR2_HOST_GCC_AT_LEAST_4_7
->> +	bool
->> +	option env="HOST_GCC_AT_LEAST_4_7"
->> +
->> +config BR2_HOST_GCC_AT_LEAST_4_8
->> +	bool
->> +	option env="HOST_GCC_AT_LEAST_4_8"
->> +
->> +config BR2_HOST_GCC_AT_LEAST_4_9
->> +	bool
->> +	option env="HOST_GCC_AT_LEAST_4_9"
->> +
->> +config BR2_HOST_GCC_AT_LEAST_5
->> +	bool
->> +	option env="HOST_GCC_AT_LEAST_5"
-> 
-> If you make each of those options actually select the N-1 option, then
-> all you need if to set one environment variable.
-
- Alas, that is not possible with the env option. You'd need two symbols, one for
-getting it from the environment and a real one that can be selected.
-
-> 
-> [--SNIP--]
->> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
->> index 139123e..c2d9f75 100644
->> --- a/docs/manual/adding-packages-directory.txt
->> +++ b/docs/manual/adding-packages-directory.txt
->> @@ -283,6 +283,13 @@ use in the comment.
->>  ** Comment string: +gcc >= X.Y+ and/or `gcc <= X.Y` (replace
->>     +X.Y+ with the proper version)
->>  
->> +* Host GCC version
->> +** Dependency symbol: +BR2_HOST_GCC_AT_LEAST_X_Y+, (replace
->> +   +X_Y+ with the proper version, see +Config.in+)
->> +** Comment string: no comment to be added
->> +** Note that it is usually not the package itself that has a minimum
->> +   host GCC version, but rather a host-package on which it depends.
-> 
-> Well, in case the package builds an internal host tool, and properly
-> separates BUILD_CC from CC, then the restriction does apply to the
-> package itself and not a host-package.
-
- Yeah I know, however it's complicated to explain that well in the manual, and I
-don't believe it will ever happen in practice. Things built with BUILD_CC are
-usually pretty simple tools.
+ The use case I had in mind with [1] was not so much working with upstream (for
+that, OVERRIDE_SRCDIR is much more appropriate), but rather to make it cheaper
+to get different upstream versions. Particularly for linux repositories, if you
+downloaded one of them, you can reuse a large part of it when you get another
+version. When you can do a shallow clone there is often not so much to gain from
+that, but in many of our defconfigs a shallow clone is not possible because we
+specify a sha. In that case, an incremental download really saves a lot of time.
 
 
  Regards,
  Arnout
 
 > 
-> Regards,
-> Yann E. MORIN.
+> Notice projects hosted by github don't yet benefit of this feature
+> since I have not found any elegant way to do it :-(. 
+> 
+> During my tests, I have noticed current shallow clone is mostly broken
+> (at least with git < 2.5 [2]). Indeed, shallow clone only work with
+> symbolic references (HEAD, a tag or a branch). However, we avoid use of
+> symbolic references in VERSION.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-November/144296.html
+> [2] http://stackoverflow.com/a/30701724/301717
+> 
+> 
+> J?r?me Pouiller (5):
+>   pkg-download: do not test SITE_METHOD
+>   download/git: allow to create archives containing shallowed git repos
+>   pkg-generic: allow to populate build directory from a git archive
+>   pkg-generic: provide an option to use git archives
+>   pkg-generic: tag sources if git is used
+> 
+>  Config.in               | 13 +++++++++++
+>  package/pkg-download.mk |  7 +-----
+>  package/pkg-generic.mk  | 60 ++++++++++++++++++++++++++++++++++---------------
+>  support/download/git    | 30 ++++++++++++++++++++++---
+>  4 files changed, 83 insertions(+), 27 deletions(-)
 > 
 
 
