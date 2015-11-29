@@ -1,108 +1,286 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Nov 2015 23:23:12 +0100
-Subject: [Buildroot] [git commit] miraclecast: new package
-Message-ID: <20151201232125.1F35C821F8@busybox.osuosl.org>
+Date: Sun, 29 Nov 2015 15:25:35 +0100
+Subject: [Buildroot] [git commit] at: bump version to 3.1.16
+Message-ID: <20151201232124.2AAB381D5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0209b529b09868352cbfd456bbfbf47c0d8aa9d6
+commit: http://git.buildroot.net/buildroot/commit/?id=bcf25bffbe9887c6749d41a40637895fbe74f965
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas:
-  - add hash file
-  - fix license information: use comma as a separator in
-    <pkg>_LICENSE, and htable is under LGPLv2.1+ and not GPLv2.1+
-    (which doesn't exist)]
+- Bump version to 3.1.16
+- Update the hash value
+- Remove upstreamed patches:
+  0001-configure.ac-remove-manual-compiler-check-with-AC_TR.patch
+  0003-Makefile.in-add-LDFLAGS-to-linking-stage.patch
+- Tweak patches for the new version:
+  0004-Makefile.in-replace-IROOT-by-DESTDIR.patch
+  0005-Makefile.in-make-install-fix.patch
 
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-CC: Baruch Siach <baruch@tkos.co.il>
-CC: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |  1 +
- package/miraclecast/Config.in        | 23 +++++++++++++++++++++++
- package/miraclecast/miraclecast.hash |  2 ++
- package/miraclecast/miraclecast.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 49 insertions(+)
+ ...c-remove-manual-compiler-check-with-AC_TR.patch | 33 ------------------
+ ...-Makefile.in-add-LDFLAGS-to-linking-stage.patch | 38 ---------------------
+ ...0004-Makefile.in-replace-IROOT-by-DESTDIR.patch | 39 ++++++++++++++--------
+ package/at/0005-Makefile.in-make-install-fix.patch | 34 +++++++++++++------
+ package/at/at.hash                                 |  6 ++--
+ package/at/at.mk                                   |  2 +-
+ 6 files changed, 52 insertions(+), 100 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 658dc03..3343a53 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -21,6 +21,7 @@ menu "Audio and video applications"
- 	source "package/kodi/Config.in"
- 	source "package/lame/Config.in"
- 	source "package/madplay/Config.in"
-+	source "package/miraclecast/Config.in"
- 	source "package/mjpegtools/Config.in"
- 	source "package/modplugtools/Config.in"
- 	source "package/mpd/Config.in"
-diff --git a/package/miraclecast/Config.in b/package/miraclecast/Config.in
-new file mode 100644
-index 0000000..4c6a8aa
---- /dev/null
-+++ b/package/miraclecast/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_MIRACLECAST
-+	bool "miraclecast"
-+	depends on BR2_PACKAGE_SYSTEMD
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_USE_MMU # glib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_SYSTEMD_KDBUS
-+	help
-+	  The MiracleCast project provides software to connect external
-+	  monitors to your system via Wifi. It is compatible to the
-+	  Wifi-Display specification also known as Miracast. MiracleCast
-+	  implements the Display-Source as well as Display-Sink side.
+diff --git a/package/at/0001-configure.ac-remove-manual-compiler-check-with-AC_TR.patch b/package/at/0001-configure.ac-remove-manual-compiler-check-with-AC_TR.patch
+deleted file mode 100644
+index 9e69922..0000000
+--- a/package/at/0001-configure.ac-remove-manual-compiler-check-with-AC_TR.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From a182f18fa3b9fb3dd817b601b51c758f9a77f407 Mon Sep 17 00:00:00 2001
+-From: Marc Kleine-Budde <mkl@pengutronix.de>
+-Date: Tue, 1 Dec 2009 17:08:14 +0100
+-Subject: [PATCH 1/5] configure.ac: remove manual compiler check with AC_TRY_RUN
+-
+-AC_TRY_RUN breaks cross compilation, so remove it. autotools will take
+-care about a working (cross-) compiler.
+-
+-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+----
+- configure.ac |    6 ------
+- 1 files changed, 0 insertions(+), 6 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index a8c2a14..997a37f 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -38,12 +38,6 @@ case "$host" in
+-     AC_MSG_RESULT(no)
+-     ;;
+- esac
+--AC_MSG_CHECKING(Trying to compile a trivial ANSI C program)
+--AC_TRY_RUN([ main(int ac, char **av) { return 0; } ],
+--    AC_MSG_RESULT(yes),
+--    AC_MSG_RESULT(no)
+--    AC_MSG_ERROR(Could not compile and run even a trivial ANSI C program - check CC.),
+--    AC_MSG_ERROR(Could not compile and run even a trivial ANSI C program - check CC.))
+- 
+- AC_MSG_CHECKING(__attribute__((noreturn)))
+- AC_TRY_COMPILE([], [void __attribute__((noreturn)) panic(void);],
+--- 
+-1.6.5.3
+-
+diff --git a/package/at/0003-Makefile.in-add-LDFLAGS-to-linking-stage.patch b/package/at/0003-Makefile.in-add-LDFLAGS-to-linking-stage.patch
+deleted file mode 100644
+index e1ab3d3..0000000
+--- a/package/at/0003-Makefile.in-add-LDFLAGS-to-linking-stage.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 8720a71757f3626bf3bbc3a7aa2185e6387e5689 Mon Sep 17 00:00:00 2001
+-From: Marc Kleine-Budde <mkl@pengutronix.de>
+-Date: Tue, 1 Dec 2009 20:37:31 +0100
+-Subject: [PATCH 3/5] Makefile.in: add LDFLAGS to linking stage
+-
+-The linking stage ignores the LDFLAGS, this breaks if the flex library
+-lives in a non standard location.
+-
+-This patch add LDFLAGS to both "at" and "atd" linking stage.
+-
+-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+----
+- Makefile.in |    4 ++--
+- 1 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index dae6b7d..b766bbb 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -65,13 +65,13 @@ LIST = Filelist Filelist.asc
+- all: at atd atrun
+- 
+- at: $(ATOBJECTS)
+--	$(CC) $(CFLAGS) -o at $(ATOBJECTS) $(LIBS) $(LEXLIB)
+-+	$(CC) $(CFLAGS) $(LDFLAGS) -o at $(ATOBJECTS) $(LIBS) $(LEXLIB)
+- 	rm -f $(CLONES)
+- 	$(LN_S) -f at atq
+- 	$(LN_S) -f at atrm
+- 
+- atd: $(RUNOBJECTS)
+--	$(CC) $(CFLAGS) -o atd $(RUNOBJECTS) $(LIBS) $(PAMLIB)
+-+	$(CC) $(CFLAGS) $(LDFLAGS) -o atd $(RUNOBJECTS) $(LIBS) $(PAMLIB)
+- 
+- y.tab.c y.tab.h: parsetime.y
+- 	$(YACC) -d parsetime.y
+--- 
+-1.6.5.3
+-
+diff --git a/package/at/0004-Makefile.in-replace-IROOT-by-DESTDIR.patch b/package/at/0004-Makefile.in-replace-IROOT-by-DESTDIR.patch
+index 0d1d5f6..856b6c8 100644
+--- a/package/at/0004-Makefile.in-replace-IROOT-by-DESTDIR.patch
++++ b/package/at/0004-Makefile.in-replace-IROOT-by-DESTDIR.patch
+@@ -6,27 +6,30 @@ Subject: [PATCH 5/5] Makefile.in: replace IROOT by DESTDIR
+ This patch replaces IROOT by DESTDIR, which is the autotools standard
+ variable. For backwards compatibilty IROOT overwrites the DESTDIR.
+ 
++[Vincent: tweak the patch for the new version]
 +
-+	  https://github.com/albfan/miraclecast
+ Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ ---
+- Makefile.in |   64 +++++++++++++++++++++++++++++++-----------------------------
+- 1 file changed, 34 insertions(+), 30 deletions(-)
++ Makefile.in | 68 ++++++++++++++++++++++++++++++++-----------------------------
++ 1 file changed, 36 insertions(+), 32 deletions(-)
+ 
+-Index: at-3.1.13/Makefile.in
+-===================================================================
+---- at-3.1.13.orig/Makefile.in
+-+++ at-3.1.13/Makefile.in
+-@@ -16,6 +16,10 @@ docdir		= $(prefix)/doc
+- atdocdir	= $(docdir)/at
++diff --git a/Makefile.in b/Makefile.in
++index 06544f9..1f699d9 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -17,6 +17,10 @@ atdocdir	= $(docdir)/at
+  etcdir		= @ETCDIR@
++ systemdsystemunitdir = @systemdsystemunitdir@
+  
+ +ifdef IROOT
+-+DESTDIR		= $(IROOT)
+++DESTDIR		= $(DESTDIR)
+ +endif
+ +
+  DAEMON_USERNAME	= @DAEMON_USERNAME@
+  DAEMON_GROUPNAME= @DAEMON_GROUPNAME@
+  LOADAVG_MX	= @LOADAVG_MX@
+-@@ -86,38 +90,38 @@ atrun: atrun.in
++@@ -91,41 +95,41 @@ atrun: atrun.in
+  	$(CC) -c $(CFLAGS) $(DEFS) $*.c
+  
+  install: all
+@@ -63,15 +66,15 @@ Index: at-3.1.13/Makefile.in
+ +	touch $(DESTDIR)$(LFILE)
+ +	chmod 600 $(DESTDIR)$(LFILE)
+ +	chown $(DAEMON_USERNAME):$(DAEMON_GROUPNAME) $(DESTDIR)$(LFILE)
+-+	test -f $(DESTDIR)$(etcdir)/at.allow || test -f $(DESTDIR)$(etcdir)/at.deny || $(INSTALL) -o root -g $(DAEMON_GROUPNAME) -m 640 at.deny $(DESTDIR$
+-+	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 -s at $(DESTDIR)$(bindir)
+++	test -f $(DESTDIR)$(etcdir)/at.allow || test -f $(DESTDIR)$(etcdir)/at.deny || $(INSTALL) -o root -g $(DAEMON_GROUPNAME) -m 640 at.deny $(DESTDIR)$(etcdir)/
+++	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 at $(DESTDIR)$(bindir)
+ +	$(LN_S) -f at $(DESTDIR)$(bindir)/atq
+ +	$(LN_S) -f at $(DESTDIR)$(bindir)/atrm
+ +	$(INSTALL) -g root -o root -m 755 batch $(DESTDIR)$(bindir)
+ +	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man1dir)
+ +	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man5dir)
+ +	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man8dir)
+-+	$(INSTALL) -g root -o root -m 755 -s atd $(DESTDIR)$(sbindir)
+++	$(INSTALL) -g root -o root -m 755 atd $(DESTDIR)$(sbindir)
+ +	$(INSTALL) -g root -o root -m 755 atrun $(DESTDIR)$(sbindir)
+ +	$(INSTALL) -g root -o root -m 644 at.1 $(DESTDIR)$(man1dir)/
+ +	cd $(DESTDIR)$(man1dir) && $(LN_S) -f at.1 atq.1 && $(LN_S) -f at.1 batch.1 && $(LN_S) -f at.1 atrm.1
+@@ -92,6 +95,14 @@ Index: at-3.1.13/Makefile.in
+ +	rm -f $(DESTDIR)$(mandir)/cat1/at.1* $(DESTDIR)$(mandir)/cat1/batch.1* \
+ +		$(DESTDIR)$(mandir)/cat1/atq.1*
+ +	rm -f $(DESTDIR)$(mandir)/cat1/atd.8*
++ 	if test x"$(systemdsystemunitdir)" != xno; then \
++-		$(INSTALL) -o root -g root -m 755 -d $(IROOT)$(systemdsystemunitdir); \
++-		$(INSTALL) -o root -g root -m 644 atd.service $(IROOT)$(systemdsystemunitdir); \
+++		$(INSTALL) -o root -g root -m 755 -d $(DESTDIR)$(systemdsystemunitdir); \
+++		$(INSTALL) -o root -g root -m 644 atd.service $(DESTDIR)$(systemdsystemunitdir); \
++ 	fi
+  
+  dist: checkin $(DIST) $(LIST) Filelist.asc
+- 	(cd ..; tar cf - `for a in $(DIST) $(LIST); do echo at-$(VERSION)/$$a; done` |\
++-- 
++2.4.10
 +
-+comment "miraclecast needs systemd and a glibc toolchain w/ threads and wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_USE_WCHAR \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_SYSTEMD
-diff --git a/package/miraclecast/miraclecast.hash b/package/miraclecast/miraclecast.hash
-new file mode 100644
-index 0000000..2a92cbf
---- /dev/null
-+++ b/package/miraclecast/miraclecast.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 deef87155ed07bcf737260c29599e886bd248b573e72ba167369df93acb1fa61 miraclecast-8b61f733da124ccbfd1b85e188581fad1c41c1e1.tar.gz
-diff --git a/package/miraclecast/miraclecast.mk b/package/miraclecast/miraclecast.mk
-new file mode 100644
-index 0000000..598dbd5
---- /dev/null
-+++ b/package/miraclecast/miraclecast.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# miraclecast
-+#
-+################################################################################
+diff --git a/package/at/0005-Makefile.in-make-install-fix.patch b/package/at/0005-Makefile.in-make-install-fix.patch
+index ad84344..831ea1a 100644
+--- a/package/at/0005-Makefile.in-make-install-fix.patch
++++ b/package/at/0005-Makefile.in-make-install-fix.patch
+@@ -3,16 +3,19 @@
+ Buildroot will ensure all files are owned by root and stripped anyway
+ (if needed) before the rootfs is created.
+ 
++[Vincent: tweak the patch for the new version]
 +
-+MIRACLECAST_VERSION = 8b61f733da124ccbfd1b85e188581fad1c41c1e1
-+MIRACLECAST_SITE = $(call github,albfan,miraclecast,$(MIRACLECAST_VERSION))
-+MIRACLECAST_LICENSE = LGPLv2.1+, GPLv2 (gdhcp)
-+MIRACLECAST_LICENSE_FILES = COPYING LICENSE_gdhcp LICENSE_htable LICENSE_lgpl
-+MIRACLECAST_DEPENDENCIES = host-pkgconf systemd gstreamer1 \
-+	readline libglib2
-+# Straight out the repository, no ./configure
-+MIRACLECAST_AUTORECONF = YES
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ ---
+- Makefile.in |   39 +++++++++++++++++++--------------------
+- 1 file changed, 19 insertions(+), 20 deletions(-)
++ Makefile.in | 43 +++++++++++++++++++++----------------------
++ 1 file changed, 21 insertions(+), 22 deletions(-)
+ 
+-Index: at-3.1.13/Makefile.in
+-===================================================================
+---- at-3.1.13.orig/Makefile.in
+-+++ at-3.1.13/Makefile.in
+-@@ -90,35 +90,34 @@ atrun: atrun.in
++diff --git a/Makefile.in b/Makefile.in
++index 1f699d9..f313f9b 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -95,41 +95,40 @@ atrun: atrun.in
+  	$(CC) -c $(CFLAGS) $(DEFS) $*.c
+  
+  install: all
+@@ -32,8 +35,8 @@ Index: at-3.1.13/Makefile.in
+  	touch $(DESTDIR)$(LFILE)
+  	chmod 600 $(DESTDIR)$(LFILE)
+ -	chown $(DAEMON_USERNAME):$(DAEMON_GROUPNAME) $(DESTDIR)$(LFILE)
+--	test -f $(DESTDIR)$(etcdir)/at.allow || test -f $(DESTDIR)$(etcdir)/at.deny || $(INSTALL) -o root -g $(DAEMON_GROUPNAME) -m 640 at.deny $(DESTDIR$
+--	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 -s at $(DESTDIR)$(bindir)
++-	test -f $(DESTDIR)$(etcdir)/at.allow || test -f $(DESTDIR)$(etcdir)/at.deny || $(INSTALL) -o root -g $(DAEMON_GROUPNAME) -m 640 at.deny $(DESTDIR)$(etcdir)/
++-	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 at $(DESTDIR)$(bindir)
+ +	test -f $(DESTDIR)$(etcdir)/at.allow || test -f $(DESTDIR)$(etcdir)/at.deny || $(INSTALL) -m 640 at.deny $(DESTDIR)$(etcdir)/
+ +	$(INSTALL) -m 6755 at $(DESTDIR)$(bindir)
+  	$(LN_S) -f at $(DESTDIR)$(bindir)/atq
+@@ -42,7 +45,7 @@ Index: at-3.1.13/Makefile.in
+ -	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man1dir)
+ -	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man5dir)
+ -	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man8dir)
+--	$(INSTALL) -g root -o root -m 755 -s atd $(DESTDIR)$(sbindir)
++-	$(INSTALL) -g root -o root -m 755 atd $(DESTDIR)$(sbindir)
+ -	$(INSTALL) -g root -o root -m 755 atrun $(DESTDIR)$(sbindir)
+ -	$(INSTALL) -g root -o root -m 644 at.1 $(DESTDIR)$(man1dir)/
+ +	$(INSTALL) -m 755 batch $(DESTDIR)$(bindir)
+@@ -67,3 +70,14 @@ Index: at-3.1.13/Makefile.in
+  	rm -f $(DESTDIR)$(mandir)/cat1/at.1* $(DESTDIR)$(mandir)/cat1/batch.1* \
+  		$(DESTDIR)$(mandir)/cat1/atq.1*
+  	rm -f $(DESTDIR)$(mandir)/cat1/atd.8*
++ 	if test x"$(systemdsystemunitdir)" != xno; then \
++-		$(INSTALL) -o root -g root -m 755 -d $(DESTDIR)$(systemdsystemunitdir); \
++-		$(INSTALL) -o root -g root -m 644 atd.service $(DESTDIR)$(systemdsystemunitdir); \
+++		$(INSTALL) -m 755 -d $(DESTDIR)$(systemdsystemunitdir); \
+++		$(INSTALL) -m 644 atd.service $(DESTDIR)$(systemdsystemunitdir); \
++ 	fi
++ 
++ dist: checkin $(DIST) $(LIST) Filelist.asc
++-- 
++2.4.10
 +
-+define MIRACLECAST_INSTALL_DBUS_POLICY
-+	$(INSTALL) -m 0644 -D \
-+		$(@D)/res/org.freedesktop.miracle.conf \
-+		$(TARGET_DIR)/etc/dbus-1/system.d/org.freedesktop.miracle.conf
-+endef
-+MIRACLECAST_POST_INSTALL_TARGET_HOOKS += MIRACLECAST_INSTALL_DBUS_POLICY
-+
-+$(eval $(autotools-package))
+diff --git a/package/at/at.hash b/package/at/at.hash
+index 481c937..22c732c 100644
+--- a/package/at/at.hash
++++ b/package/at/at.hash
+@@ -1,4 +1,2 @@
+-# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/a/at/at_3.1.13-2%2Bdeb7u1.dsc
+-sha1	9873e0c38403ef58364912d0b505fd20798fd400  at_3.1.13.orig.tar.gz
+-sha256	3a8b90868d615d21a92f4986ea9a823886329af8fae8dd7ab4eed9b273bca072  at_3.1.13.orig.tar.gz
+-md5	1da61af6c29e323abaaf13ee1a8dad79  at_3.1.13.orig.tar.gz
++# From: http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/a/at/at_3.1.16-1.dsc
++sha256 cb9af59c6a54edce9536ba629841055409d1f89d8ae26494727a97141fb4d5c1  at_3.1.16.orig.tar.gz
+diff --git a/package/at/at.mk b/package/at/at.mk
+index 1504e32..8865360 100644
+--- a/package/at/at.mk
++++ b/package/at/at.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AT_VERSION = 3.1.13
++AT_VERSION = 3.1.16
+ AT_SOURCE = at_$(AT_VERSION).orig.tar.gz
+ AT_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/a/at
+ # missing deps for parsetime.l
