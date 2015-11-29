@@ -1,52 +1,83 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Nov 2015 14:55:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: Always link with libpthread
-	for static builds
-Message-ID: <1448805351-17846-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Nov 2015 15:00:31 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-11-28
+In-Reply-To: <1448791721.2011.9.camel@embedded.rocks>
+References: <20151129073018.04C72101FF6@stock.ovh.net>
+ <1448791721.2011.9.camel@embedded.rocks>
+Message-ID: <20151129150031.5f26aeba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/c9f/c9fb2b4a25817d6455472767819018a62281d5f9/
-http://autobuild.buildroot.net/results/a75/a757edcfce00d3e52c6787f28dc31cbaf8d2d2ab/
-http://autobuild.buildroot.net/results/8df/8df836b6c241954449544c7b4c74a1cb19e7ff7b/
-http://autobuild.buildroot.net/results/1b6/1b6e571e307c2b190116601bade382c43e8d3858/
-http://autobuild.buildroot.net/results/aa3/aa34b2326a0702093162eb1f9d7bdf9c7cf45311/
-http://autobuild.buildroot.net/results/74a/74ae21d78f7ea9d71407accd3e43900af6766e68/
-http://autobuild.buildroot.net/results/7ec/7ec28c23b3f12e5b7e2376c7913329d2a38dd232/
+J?rg,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/php/php.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+On Sun, 29 Nov 2015 11:08:41 +0100, J?rg Krause wrote:
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 76e3d62..8e28089 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -29,6 +29,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
- PHP_CONF_ENV += LIBS="$(PHP_STATIC_LIBS)"
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-+PHP_STATIC_LIBS += -lpthread
-+endif
-+
- ifeq ($(BR2_TARGET_LOCALTIME),)
- PHP_LOCALTIME = UTC
- else
-@@ -209,9 +213,6 @@ endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_UNIXODBC),y)
- PHP_CONF_OPTS += --with-pdo-odbc=unixODBC,$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += unixodbc
--ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
--PHP_STATIC_LIBS += -lpthread
--endif
- endif
- endif
- 
+> > ??????x86_64 |????????????????arptables-0.0.4 | NOK | http://autobuil
+> > d.buildroot.net/results/002bea21e0b902eecca245c9c889a55583c0751c/
+> 
+> I suggest to disable arptables for musl toolchains for now. I think it
+> is not easily feasible to untangle the mixed used of linux/netinet
+> headers [1].
+
+I'm fine with this option since arptables does not have any reverse
+dependency. However:
+
+ 1/ We have two patches in package/arptables/ that were meant to fix
+    the build of arptables with musl, so we should get rid of them. Or
+    instead, you can contact Brendan Heading
+    <brendanheading@gmail.com>, who did commit
+    61fe902bacaca7c5fdcc7d3a68ded95a835fe2e1, which was supposed to
+    make arptables build properly with musl. Brendan ?
+
+ 2/ The problem should be reported upstream (either to musl to get some
+    better insight, or to arptables)
+
+> 
+> > ??????x86_64 |??????????????host-nodejs-4.1.2 | NOK | http://autobuil
+> > d.buildroot.net/results/e9810d31c7cbff3e20ee7f09920cb44dfcf1c27e/
+> > ??????x86_64 |??????????????host-nodejs-4.1.2 | NOK | http://autobuil
+> > d.buildroot.net/results/f1ebd1ccf2eff37e2c70e63512ca6bf508953a13/
+> 
+> WARNING: C++ compiler too old, need g++ 4.8 or clang++ 3.4
+> (CXX=/usr/bin/g++)
+> 
+> How to handle this?
+
+We have a patch series adding the possibility of doing checks on the
+host gcc version, see in patchwork.
+
+> > microblazeel |????????????????????mpd-0.19.11 | NOK | http://autobuil
+> > d.buildroot.net/results/86d40c2b2069580a4ccf4a9fb496c9bd75207da1/
+> 
+> undefined reference to `__atomic_exchange_1'
+> 
+> Toolchain issue?
+
+No, missing -latomic I believe.
+
+> > ?????????arm |?????????????shairport-sync-2.6 | NOK | http://autobuil
+> > d.buildroot.net/results/04498ba9e44f022f4bebb339f26aac76fce3e06c/
+> 
+> I'll have a look at this later today.
+
+Good.
+
+> 
+> > ?????????arc |????????????????????zmqpp-3.2.0 | NOK |
+> > http://autobuild.buildroot.net/results/711333c0639aee135bc97cc0281793
+> > 76f7b091db/
+> > 
+> 
+> Fixed by [2].
+
+Thanks, will apply.
+
+Thomas
 -- 
-2.6.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
