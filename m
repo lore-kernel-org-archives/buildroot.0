@@ -1,68 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 29 Nov 2015 22:05:22 +0100
-Subject: [Buildroot] [PATCH 0/5] Introduce alternative archive format
-In-Reply-To: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
-References: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
-Message-ID: <565B6892.9040706@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 29 Nov 2015 22:12:54 +0100
+Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: remove
+	HOSTCC_VERSION
+In-Reply-To: <565B63EC.70907@mind.be> (Arnout Vandecappelle's message of "Sun, 
+ 29 Nov 2015 21:45:32 +0100")
+References: <1448147919-5463-1-git-send-email-arnout@mind.be>
+ <87fuzx676p.fsf@dell.be.48ers.dk> <56536E0C.1010205@mind.be>
+ <20151129185224.695095a2@free-electrons.com> <565B63EC.70907@mind.be>
+Message-ID: <87si3oo6g9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19-11-15 11:36, J?r?me Pouiller wrote:
-> Hello,
-> 
-> As suggested by Arnout [1], this series provide an alternative archive
-> format. This new format contains a shallowed version of upstream
-> repository. This format is a little bigger and a little longer to
-> create but it allow a better workflow with upstream. I describe some
-> good practice in patch 2.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- The use case I had in mind with [1] was not so much working with upstream (for
-that, OVERRIDE_SRCDIR is much more appropriate), but rather to make it cheaper
-to get different upstream versions. Particularly for linux repositories, if you
-downloaded one of them, you can reuse a large part of it when you get another
-version. When you can do a shallow clone there is often not so much to gain from
-that, but in many of our defconfigs a shallow clone is not possible because we
-specify a sha. In that case, an incremental download really saves a lot of time.
+Hi,
+
+ >> gcc version 4.4.5 (Debian 4.4.5-8)
+ >> 
+ >> (Yes, I'm running old stuff. On purpose.)
+
+ >  So, should we set it to 4.4?
+
+I think so, yes. With the autobuilder running we're fairly confident
+that it really works with such an old gcc.
 
 
- Regards,
- Arnout
+ >  Ideally we should have a test instance on RHEL5 as well, there are definitely
+ > still company deployments based on that. RHEL5 has gcc 4.1.
 
-> 
-> Notice projects hosted by github don't yet benefit of this feature
-> since I have not found any elegant way to do it :-(. 
-> 
-> During my tests, I have noticed current shallow clone is mostly broken
-> (at least with git < 2.5 [2]). Indeed, shallow clone only work with
-> symbolic references (HEAD, a tag or a branch). However, we avoid use of
-> symbolic references in VERSION.
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2015-November/144296.html
-> [2] http://stackoverflow.com/a/30701724/301717
-> 
-> 
-> J?r?me Pouiller (5):
->   pkg-download: do not test SITE_METHOD
->   download/git: allow to create archives containing shallowed git repos
->   pkg-generic: allow to populate build directory from a git archive
->   pkg-generic: provide an option to use git archives
->   pkg-generic: tag sources if git is used
-> 
->  Config.in               | 13 +++++++++++
->  package/pkg-download.mk |  7 +-----
->  package/pkg-generic.mk  | 60 ++++++++++++++++++++++++++++++++++---------------
->  support/download/git    | 30 ++++++++++++++++++++++---
->  4 files changed, 83 insertions(+), 27 deletions(-)
-> 
+I agree that we should have an autobuilder instance running with our
+minimum hostcc version we support, as these kind of things can very
+easily break without us noticing.
 
+With that said, I really question the sensibility of building modern
+packages on a 10 year old host system (gcc 4.1.0 is from February 2006),
+and I would guess quite some stuff is broken.
+
+And if something important is (or becomes in the future) broken, do we
+spend time on fixing it?  What if upstream doesn't care about ancient
+systems?
+
+
+ >  RHEL4 has gcc 3.4 but I don't think that that is very useful.
+
+No, please not.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Venlig hilsen,
+Peter Korsgaard 
