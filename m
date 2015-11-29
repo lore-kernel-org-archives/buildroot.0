@@ -1,98 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Nov 2015 18:48:05 +0100
-Subject: [Buildroot] [PATCH 2/3] Config.in: add symbols for
- BR2_HOST_GCC_AT_LEAST_X_Y
-In-Reply-To: <1448147919-5463-2-git-send-email-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Nov 2015 18:52:24 +0100
+Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: remove
+ HOSTCC_VERSION
+In-Reply-To: <56536E0C.1010205@mind.be>
 References: <1448147919-5463-1-git-send-email-arnout@mind.be>
- <1448147919-5463-2-git-send-email-arnout@mind.be>
-Message-ID: <20151129174805.GC3630@free.fr>
+ <87fuzx676p.fsf@dell.be.48ers.dk> <56536E0C.1010205@mind.be>
+Message-ID: <20151129185224.695095a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Arnout,
 
-On 2015-11-22 00:18 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> Some host packages need a recent gcc version. Add symbols to Config.in
-> to specify the HOSTCC version. The values are passed through the
-> environment, and this environment is generated in a new support script.
+On Mon, 23 Nov 2015 20:50:36 +0100, Arnout Vandecappelle wrote:
 
-I really don't like this...
-
-Maybe it is a good candidate for a generated kconfig snippet, instead of
-this generated-environment oddity?
-
-Anyway, see below, you could generate only one environment variable,
-instead of all of them...
-
-> Also update the documentation to mention the new symbols.
+> > Ehh, no. I guess a 4.x version would make more sense. Any idea what 'x'
+> > should be? 3? 5? 7?
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  Config.in                                 | 17 ++++++++++
->  Makefile                                  |  1 +
->  docs/manual/adding-packages-directory.txt |  7 ++++
->  support/scripts/gcc-version-variables     | 56 +++++++++++++++++++++++++++++++
->  4 files changed, 81 insertions(+)
->  create mode 100755 support/scripts/gcc-version-variables
-> 
-> diff --git a/Config.in b/Config.in
-> index d795361..7bec90c 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -18,6 +18,23 @@ config BR2_EXTERNAL
->  	string
->  	option env="BR2_EXTERNAL"
->  
-> +# Hidden config symbols for packages to check system gcc version
-> +config BR2_HOST_GCC_AT_LEAST_4_7
-> +	bool
-> +	option env="HOST_GCC_AT_LEAST_4_7"
-> +
-> +config BR2_HOST_GCC_AT_LEAST_4_8
-> +	bool
-> +	option env="HOST_GCC_AT_LEAST_4_8"
-> +
-> +config BR2_HOST_GCC_AT_LEAST_4_9
-> +	bool
-> +	option env="HOST_GCC_AT_LEAST_4_9"
-> +
-> +config BR2_HOST_GCC_AT_LEAST_5
-> +	bool
-> +	option env="HOST_GCC_AT_LEAST_5"
+> We'd need to check all the host packages (plus the packages that build a host
+> tool as part of the target build, like uboot) to be sure of that. The
+> autobuilders tell us that 4.7 at least is OK.
 
-If you make each of those options actually select the N-1 option, then
-all you need if to set one environment variable.
+My autobuilder instance uses gcc 4.4:
 
-[--SNIP--]
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 139123e..c2d9f75 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -283,6 +283,13 @@ use in the comment.
->  ** Comment string: +gcc >= X.Y+ and/or `gcc <= X.Y` (replace
->     +X.Y+ with the proper version)
->  
-> +* Host GCC version
-> +** Dependency symbol: +BR2_HOST_GCC_AT_LEAST_X_Y+, (replace
-> +   +X_Y+ with the proper version, see +Config.in+)
-> +** Comment string: no comment to be added
-> +** Note that it is usually not the package itself that has a minimum
-> +   host GCC version, but rather a host-package on which it depends.
+test at build:~$ gcc -v
+[...]
+gcc version 4.4.5 (Debian 4.4.5-8)
 
-Well, in case the package builds an internal host tool, and properly
-separates BUILD_CC from CC, then the restriction does apply to the
-package itself and not a host-package.
+(Yes, I'm running old stuff. On purpose.)
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
