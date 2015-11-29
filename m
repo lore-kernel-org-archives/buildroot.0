@@ -1,84 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Nov 2015 21:35:56 +0100
-Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
- for target, fix a typo
-In-Reply-To: <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
-References: <201511100922.tAA9Ml77000486@ms-omx02.plus.so-net.ne.jp>
-Message-ID: <20151129203556.GJ3630@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 29 Nov 2015 20:36:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 8496] New: Toolchain -> Target Optimizations
+ ignored & not applied.
+Message-ID: <bug-8496-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hiroshi, All,
+https://bugs.busybox.net/show_bug.cgi?id=8496
 
-On 2015-11-10 18:22 +0900, Hiroshi Kawashima spake thusly:
-> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-> ---
-> diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
-> index b887c6a..8406774 100644
-> --- a/package/gauche/gauche.mk
-> +++ b/package/gauche/gauche.mk
-> @@ -4,7 +4,8 @@
->  #
->  ################################################################################
->  
-> -GAUCHE_VERSION = 0.9.4
-> +GAUCHE_VERSION_MAJOR = 0.9
-> +GAUCHE_VERSION = $(GAUCHE_VERSION_MAJOR).4
->  GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
->  GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
->  GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
-> @@ -23,10 +24,24 @@ endif
->  # Detection of c99 support in configure fails without WCHAR. To enable
->  # automatic detection of c99 support by configure, we need to enable
->  # WCHAR in toolchain. But actually we do not need WCHAR at gauche
-> -# runtime. So reuesting WCHAR in toolchain just for automatic detection
-> +# runtime. So requesting WCHAR in toolchain just for automatic detection
->  # will be overkill. To solve this, explicitly -std=gnu99 is specified
->  # here.
->  GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
->  
-> +define GAUCHE_REMOVE_UNNEEDED
-> +	for i in gauche-config gauche-install gauche-package ; do \
-> +		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
-> +		rm -f $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/$(GNU_TARGET_NAME)/$$i ; \
-> +	done
-> +	for i in gencomp genstub precomp ; do \
-> +		rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/lib/$$i ; \
-> +	done
-> +	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/aclocal.m4
-> +	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/template.*
-> +	rm -fr $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VERSION)/include
-> +endef
-> +GAUCHE_POST_INSTALL_TARGET_HOOKS += GAUCHE_REMOVE_UNNEEDED
+           Summary: Toolchain -> Target Optimizations ignored & not
+                    applied.
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P2
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: brandurs at yahoo.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-There's been some discussion around that patch, sorry for chiming in so
-late...
 
-Rather than remove what is not wanted, why not just install what is
-required? If the number of actions to install is smaller than what we
-try to remove, then maybe it is better.
+With the entry "(-mtune=xscale) Target Optimizations" for arm926ej-s
+The package configuration ignores "Target Optimizations" settings
 
-What's your opinon? Do you think that it's achievable?
-
-Regards,
-Yann E. MORIN.
-
->  $(eval $(host-autotools-package))
->  $(eval $(autotools-package))
-> ============================================================
->     Hiroshi Kawashima
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 "
+CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2
+"
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
