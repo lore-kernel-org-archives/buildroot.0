@@ -1,36 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 14:25:36 +0100
-Subject: [Buildroot] [git commit] yad: needs gtk3-x11
-Message-ID: <20151129132539.9720C817F1@busybox.osuosl.org>
+Date: Sun, 29 Nov 2015 14:26:39 +0100
+Subject: [Buildroot] [git commit] package/glmark2: Wayland-gl support also
+	needs egl
+Message-ID: <20151129132644.895DC801A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b17d8285096087bff8543d79e8a2b6ea0810192
+commit: http://git.buildroot.net/buildroot/commit/?id=f58cf6ddb25b347571ddb62c796a0545bbfc9805
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Doesn't build with broadway or wayland since it wants the X-variant of
-gdk. Fixes:
-http://autobuild.buildroot.net/results/91d/91dc6ab749f967ae046f856f3f592d5a548499c6/
+We were missing the egl dependency when enabling Wayland GL support:
+https://github.com/glmark2/glmark2/blob/master/src/wscript_build#L28
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes
+http://autobuild.buildroot.net/results/858/8587d0cea86efa4c6e98817cadc7cce0b1b36e3d/
+http://autobuild.buildroot.net/results/1f6/1f6853d5f7a83be60ccdf4f071a1df1491cf8137/
+http://autobuild.buildroot.net/results/a4d/a4d830291ee8550b3c544ade7169218d5edd4d52/
+http://autobuild.buildroot.net/results/536/536a8dc62783633943770a278dc9f1c6c5c0807c/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/yad/yad.mk |    2 +-
+ package/glmark2/glmark2.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/yad/yad.mk b/package/yad/yad.mk
-index 9d7ab37..fc25267 100644
---- a/package/yad/yad.mk
-+++ b/package/yad/yad.mk
-@@ -13,7 +13,7 @@ YAD_DEPENDENCIES = host-intltool host-pkgconf
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index a2e8852..bd5b51a 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -36,7 +36,7 @@ GLMARK2_DEPENDENCIES += wayland
+ GLMARK2_FLAVORS += wayland-glesv2
+ endif
  
- YAD_CONF_OPTS = --enable-html=no
- 
--ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
- YAD_DEPENDENCIES += libgtk3
- YAD_CONF_OPTS += --with-gtk=gtk3
- else
+-ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBGL),yy)
++ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL),yyy)
+ GLMARK2_DEPENDENCIES += wayland
+ GLMARK2_FLAVORS += wayland-gl
+ endif
