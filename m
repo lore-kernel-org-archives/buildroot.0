@@ -1,38 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 18:52:24 +0100
-Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: remove
- HOSTCC_VERSION
-In-Reply-To: <56536E0C.1010205@mind.be>
-References: <1448147919-5463-1-git-send-email-arnout@mind.be>
- <87fuzx676p.fsf@dell.be.48ers.dk> <56536E0C.1010205@mind.be>
-Message-ID: <20151129185224.695095a2@free-electrons.com>
+Date: Sun, 29 Nov 2015 18:52:44 +0100
+Subject: [Buildroot] [git commit branch/next] support/download: fetch all
+	refs on full git clone
+Message-ID: <20151129175259.1E1AA8164F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+commit: http://git.buildroot.net/buildroot/commit/?id=f8b8251a921a7fa4e05b545e503cfc4e736d1d0d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 23 Nov 2015 20:50:36 +0100, Arnout Vandecappelle wrote:
+When specifying BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION, a user may want to
+specify the SHA of a reference different than a branch or tag.
 
-> > Ehh, no. I guess a 4.x version would make more sense. Any idea what 'x'
-> > should be? 3? 5? 7?
-> 
-> We'd need to check all the host packages (plus the packages that build a host
-> tool as part of the target build, like uboot) to be sure of that. The
-> autobuilders tell us that 4.7 at least is OK.
+For instance, Gerrit stores the patchsets under refs/changes/xx/xxx, and
+Github stores the pull requests under refs/pull/xxx/head.
 
-My autobuilder instance uses gcc 4.4:
+When cloning a repository with --bare, you don't fetch these references.
+This patch uses --mirror for a full clone, in order to give the user
+access to all references of the Git repository.
 
-test at build:~$ gcc -v
-[...]
-gcc version 4.4.5 (Debian 4.4.5-8)
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Reviewed-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/download/git |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-(Yes, I'm running old stuff. On purpose.)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/download/git b/support/download/git
+index 0e6103b..357a558 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -43,7 +43,7 @@ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+ fi
+ if [ ${git_done} -eq 0 ]; then
+     printf "Doing full clone\n"
+-    ${GIT} clone ${verbose} --bare "${repo}" "${basename}"
++    ${GIT} clone ${verbose} --mirror "${repo}" "${basename}"
+ fi
+ 
+ GIT_DIR="${basename}" \
