@@ -1,31 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 14:25:16 +0100
-Subject: [Buildroot] [PATCH 1/2] package/minidlna: Fix typo
-In-Reply-To: <1448802469-18096-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1448802469-18096-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151129142516.51e6ce2b@free-electrons.com>
+Date: Sun, 29 Nov 2015 14:25:36 +0100
+Subject: [Buildroot] [git commit] yad: needs gtk3-x11
+Message-ID: <20151129132539.9720C817F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=9b17d8285096087bff8543d79e8a2b6ea0810192
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Nov 2015 14:07:48 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/5ac/5ac519320ec79cf8117060dcc2620aa517845000/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/minidlna/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Doesn't build with broadway or wayland since it wants the X-variant of
+gdk. Fixes:
+http://autobuild.buildroot.net/results/91d/91dc6ab749f967ae046f856f3f592d5a548499c6/
 
-Gaah, obviously. And I'm the culprit for those mistakes. Thanks for
-spotting and fixing. Applied to master, thanks!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/yad/yad.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/yad/yad.mk b/package/yad/yad.mk
+index 9d7ab37..fc25267 100644
+--- a/package/yad/yad.mk
++++ b/package/yad/yad.mk
+@@ -13,7 +13,7 @@ YAD_DEPENDENCIES = host-intltool host-pkgconf
+ 
+ YAD_CONF_OPTS = --enable-html=no
+ 
+-ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ YAD_DEPENDENCIES += libgtk3
+ YAD_CONF_OPTS += --with-gtk=gtk3
+ else
