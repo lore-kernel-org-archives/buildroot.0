@@ -1,59 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 29 Nov 2015 21:39:39 +0100
-Subject: [Buildroot] [PATCH 2/2] help: relocate help messages specific
- to one package
-In-Reply-To: <20151118154912.408690e7@free-electrons.com>
-References: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
- <1447857421-9380-2-git-send-email-jezz@sysmic.org>
- <20151118154912.408690e7@free-electrons.com>
-Message-ID: <565B628B.2040107@mind.be>
+Date: Sun, 29 Nov 2015 21:45:32 +0100
+Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: remove
+ HOSTCC_VERSION
+In-Reply-To: <20151129185224.695095a2@free-electrons.com>
+References: <1448147919-5463-1-git-send-email-arnout@mind.be>
+ <87fuzx676p.fsf@dell.be.48ers.dk> <56536E0C.1010205@mind.be>
+ <20151129185224.695095a2@free-electrons.com>
+Message-ID: <565B63EC.70907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18-11-15 15:49, Thomas Petazzoni wrote:
-> Hello,
+On 29-11-15 18:52, Thomas Petazzoni wrote:
+> Arnout,
 > 
-> On Wed, 18 Nov 2015 15:37:01 +0100, J?r?me Pouiller wrote:
->> Use $LOCAL_HELP feature in order to integrate help messages specific
->> to one package (linux-menuconfig, etc...) package they are
->> related.
+> On Mon, 23 Nov 2015 20:50:36 +0100, Arnout Vandecappelle wrote:
+> 
+>>> Ehh, no. I guess a 4.x version would make more sense. Any idea what 'x'
+>>> should be? 3? 5? 7?
 >>
->> It would be possible to do it using kconfig framework, but I was not
->> sure it is necessary to document kconfig targets systematicaly.
->>
->> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
->> ---
->>  Makefile                   | 16 ----------------
->>  boot/barebox/barebox.mk    |  5 +++++
->>  linux/linux.mk             |  7 +++++++
->>  package/busybox/busybox.mk |  4 ++++
->>  package/uclibc/uclibc.mk   |  4 ++++
->>  5 files changed, 20 insertions(+), 16 deletions(-)
+>> We'd need to check all the host packages (plus the packages that build a host
+>> tool as part of the target build, like uboot) to be sure of that. The
+>> autobuilders tell us that 4.7 at least is OK.
 > 
-> I already proposed something achieving a similar thing (but more
-> integrated into the package infrastructure) a while ago, and it wasn't
-> accepted.
+> My autobuilder instance uses gcc 4.4:
 > 
-> See:
+> test at build:~$ gcc -v
+> [...]
+> gcc version 4.4.5 (Debian 4.4.5-8)
 > 
->   http://lists.busybox.net/pipermail/buildroot/2015-January/118159.html
+> (Yes, I'm running old stuff. On purpose.)
 
- Your proposal had a lot more impact. J?r?me's proposal is diffstat-neutral
-(except for 4 added empty lines, and with 5 additional lines needed in the infra
-in patch 1/2). So I'm not opposed to this proposal at all.
 
+ So, should we set it to 4.4?
+
+ Ideally we should have a test instance on RHEL5 as well, there are definitely
+still company deployments based on that. RHEL5 has gcc 4.1.
+
+ RHEL4 has gcc 3.4 but I don't think that that is very useful.
 
  Regards,
  Arnout
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
 
 
 -- 
