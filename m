@@ -1,49 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 15:26:40 +0100
-Subject: [Buildroot] [git commit] at: rename patches so they are in a
-	consecutive order
-Message-ID: <20151201232124.3C7EC81D5F@busybox.osuosl.org>
+Date: Sun, 29 Nov 2015 15:37:20 +0100
+Subject: [Buildroot] [git commit] libnet: PF_PACKET is always available on
+	Linux
+Message-ID: <20151201232124.6E89F821F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a7fce0c953c6f90e2da29e349a65a1335610e42
+commit: http://git.buildroot.net/buildroot/commit/?id=546a661ecc64d4c93bffe47ea93d9ca1c4422fdf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Thomas: remove mistakenly added empty line.]
+
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ch => 0001-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch} | 0
- ...T-by-DESTDIR.patch => 0002-Makefile.in-replace-IROOT-by-DESTDIR.patch} | 0
- ....in-make-install-fix.patch => 0003-Makefile.in-make-install-fix.patch} | 0
- package/at/{0006-getloadavg.c-fix.patch => 0004-getloadavg.c-fix.patch}   | 0
- ...e.l-include-config-h.patch => 0005-parsetime.l-include-config-h.patch} | 0
- ...sleap-assumption.patch => 0006-remove-glibc-__isleap-assumption.patch} | 0
- 6 files changed, 0 insertions(+), 0 deletions(-)
+ package/libnet/libnet.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/at/0002-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch b/package/at/0001-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch
-similarity index 100%
-rename from package/at/0002-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch
-rename to package/at/0001-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch
-diff --git a/package/at/0004-Makefile.in-replace-IROOT-by-DESTDIR.patch b/package/at/0002-Makefile.in-replace-IROOT-by-DESTDIR.patch
-similarity index 100%
-rename from package/at/0004-Makefile.in-replace-IROOT-by-DESTDIR.patch
-rename to package/at/0002-Makefile.in-replace-IROOT-by-DESTDIR.patch
-diff --git a/package/at/0005-Makefile.in-make-install-fix.patch b/package/at/0003-Makefile.in-make-install-fix.patch
-similarity index 100%
-rename from package/at/0005-Makefile.in-make-install-fix.patch
-rename to package/at/0003-Makefile.in-make-install-fix.patch
-diff --git a/package/at/0006-getloadavg.c-fix.patch b/package/at/0004-getloadavg.c-fix.patch
-similarity index 100%
-rename from package/at/0006-getloadavg.c-fix.patch
-rename to package/at/0004-getloadavg.c-fix.patch
-diff --git a/package/at/0007-parsetime.l-include-config-h.patch b/package/at/0005-parsetime.l-include-config-h.patch
-similarity index 100%
-rename from package/at/0007-parsetime.l-include-config-h.patch
-rename to package/at/0005-parsetime.l-include-config-h.patch
-diff --git a/package/at/0008-remove-glibc-__isleap-assumption.patch b/package/at/0006-remove-glibc-__isleap-assumption.patch
-similarity index 100%
-rename from package/at/0008-remove-glibc-__isleap-assumption.patch
-rename to package/at/0006-remove-glibc-__isleap-assumption.patch
+diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
+index 3b62a79..d13c453 100644
+--- a/package/libnet/libnet.mk
++++ b/package/libnet/libnet.mk
+@@ -7,6 +7,8 @@
+ LIBNET_VERSION = 1.1.6
+ LIBNET_SITE = http://sourceforge.net/projects/libnet-dev/files
+ LIBNET_INSTALL_STAGING = YES
++# PF_PACKET is always available on Linux
++LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
+ LIBNET_LICENSE = BSD-2c, BSD-3c
+ LIBNET_LICENSE_FILES = doc/COPYING
+ 
