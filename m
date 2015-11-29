@@ -1,31 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Nov 2015 13:25:41 +0100
-Subject: [Buildroot] [PATCH v1] fbgrab: bump verstion to 1.3
-In-Reply-To: <20151129112354.342b7f06@gmx.net> (Peter Seiderer's message of
- "Sun, 29 Nov 2015 11:23:54 +0100")
-References: <1447456618-4352-1-git-send-email-ps.report@gmx.net>
- <87k2plj7l4.fsf@dell.be.48ers.dk> <20151129112354.342b7f06@gmx.net>
-Message-ID: <871tb9ouuy.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 29 Nov 2015 13:57:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/glmark2: Wayland-gl support also
+	needs egl
+Message-ID: <1448801858-22306-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+We were missing the egl dependency when enabling Wayland GL support:
+https://github.com/glmark2/glmark2/blob/master/src/wscript_build#L28
 
-Hi,
+Fixes
+http://autobuild.buildroot.net/results/858/8587d0cea86efa4c6e98817cadc7cce0b1b36e3d/
+http://autobuild.buildroot.net/results/1f6/1f6853d5f7a83be60ccdf4f071a1df1491cf8137/
+http://autobuild.buildroot.net/results/a4d/a4d830291ee8550b3c544ade7169218d5edd4d52/
+http://autobuild.buildroot.net/results/536/536a8dc62783633943770a278dc9f1c6c5c0807c/
 
->> Could you try submitting 0001-fix-static-build.patch upstream, please?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/glmark2/glmark2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Tried to send to 'gmo at linux.nu' (the address given at the web page and
- > in the source code file and man page file), but failed with
- > 'delivery retry timeout exceeded'...
-
-:/
-
-Thanks for trying anyway!
-
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index a2e8852..bd5b51a 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -36,7 +36,7 @@ GLMARK2_DEPENDENCIES += wayland
+ GLMARK2_FLAVORS += wayland-glesv2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBGL),yy)
++ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL),yyy)
+ GLMARK2_DEPENDENCIES += wayland
+ GLMARK2_FLAVORS += wayland-gl
+ endif
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.6.2
