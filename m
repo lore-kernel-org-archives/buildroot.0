@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 14:27:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glmark2: Wayland-gl support
- also needs egl
-In-Reply-To: <1448801858-22306-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1448801858-22306-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151129142705.58ee422b@free-electrons.com>
+Date: Sun, 29 Nov 2015 14:29:25 +0100
+Subject: [Buildroot] [git commit] uemacs: remove XCASE flag to allow musl
+	builds
+Message-ID: <20151129132930.E8B3F819A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=03e75132b7ec6d90563c00350993e6178e9d4684
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Nov 2015 13:57:38 +0100, Bernd Kuhls wrote:
-> We were missing the egl dependency when enabling Wayland GL support:
-> https://github.com/glmark2/glmark2/blob/master/src/wscript_build#L28
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/858/8587d0cea86efa4c6e98817cadc7cce0b1b36e3d/
-> http://autobuild.buildroot.net/results/1f6/1f6853d5f7a83be60ccdf4f071a1df1491cf8137/
-> http://autobuild.buildroot.net/results/a4d/a4d830291ee8550b3c544ade7169218d5edd4d52/
-> http://autobuild.buildroot.net/results/536/536a8dc62783633943770a278dc9f1c6c5c0807c/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/glmark2/glmark2.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes
+http://autobuild.buildroot.net/results/e92/e929de08954684e275a2f682264551b6cb07886a/
 
-Applied to master, thanks.
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uemacs/02-skip-xcase-termios-flag.patch |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uemacs/02-skip-xcase-termios-flag.patch b/package/uemacs/02-skip-xcase-termios-flag.patch
+new file mode 100644
+index 0000000..2cc5357
+--- /dev/null
++++ b/package/uemacs/02-skip-xcase-termios-flag.patch
+@@ -0,0 +1,16 @@
++From termios(3): "XCASE (not in POSIX; not supported under Linux)".
++musl does not define it, and even if defined it's a no-op.
++
++Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++
++--- a/posix.c
+++++ b/posix.c
++@@ -65,7 +65,7 @@
++ 	    ~(OPOST | ONLCR | OLCUC | OCRNL | ONOCR | ONLRET);
++ 
++ 	/* No signal handling, no echo etc */
++-	ntermios.c_lflag &= ~(ISIG | ICANON | XCASE | ECHO | ECHOE | ECHOK
+++	ntermios.c_lflag &= ~(ISIG | ICANON | ECHO | ECHOE | ECHOK
++ 			      | ECHONL | NOFLSH | TOSTOP | ECHOCTL |
++ 			      ECHOPRT | ECHOKE | FLUSHO | PENDIN | IEXTEN);
++ 
