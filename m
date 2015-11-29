@@ -1,9 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 12:18:38 +0100
-Subject: [Buildroot] defconfig build failure on cubieboard2_defconfig
-In-Reply-To: <20151125092209.6e1bb1ff@free-electrons.com>
-References: <20151125092209.6e1bb1ff@free-electrons.com>
-Message-ID: <20151129121838.1ae8011d@free-electrons.com>
+Date: Sun, 29 Nov 2015 12:22:12 +0100
+Subject: [Buildroot] Buildroot meeting at FOSDEM 2016 !
+Message-ID: <20151129122212.05f2dd15@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +10,32 @@ To: buildroot@busybox.net
 
 Hello all,
 
-On Wed, 25 Nov 2015 09:22:09 +0100, Thomas Petazzoni wrote:
+As usual, we are organizing a Buildroot Developers meeting right after
+FOSDEM 2016. Since FOSDEM is on January 30-31, the Buildroot Developers
+meeting will take place on February 1-2 (two days event). This event
+will once again be sponsored by Google, who is providing the meeting
+room. Therefore, the meeting will take place "Chauss?e d'Etterbeek 180,
+1040 Brussels", which is the very center of Brussels.
 
-> The Travis build of all defconfigs failed last night, on the
-> cubieboard2_defconfig:
-> 
->    https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/93053316
-> 
-> The error is:
-> 
-> /home/travis/build/buildroot/buildroot-defconfig-testing/buildroot/output/build/uboot-b4bca5e0651b460a4511582f07a935cb48f74948/spl/lib/vsprintf.o:
-> file not recognized: File truncated
+See http://elinux.org/Buildroot:DeveloperDaysFOSDEM2016 for a few more
+details.
 
-FWIW, two days later the problem did not reproduce, and then again two
-days later, the same problem occurred on the same defconfig, while
-building U-Boot, but just on a different file.
+This event is free, and is meant for Buildroot contributors and
+developers to meet together, get some hacking done, and socialize.
+During the day, the event is typically a mix of discussion about
+current open topics and hacking sessions aimed at clearing up the
+backlog of pending patches. On Sunday and Monday evenings, we generally
+meet up in some place in Brussels to continue doing some hacking around
+some food and drinks.
 
-Bottom line: we have a parallel build issue happening here I believe.
-This there is cubieboard2 support in mainline U-Boot it seems, so it
-would probably be a good idea to use this instead of this custom
-version.
+I would really like to encourage all people who contribute to Buildroot
+to consider attending this event. It is really a great opportunity to
+meet and work together.
+
+To register, simply write down your name on the Wiki, or if you don't
+have an eLinux.org Wiki account, you can ask me to write your name.
+
+Best regards,
 
 Thomas
 -- 
