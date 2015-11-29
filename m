@@ -1,41 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2015 22:57:03 +0100
-Subject: [Buildroot] [git commit] package/libglew: bump version to 1.13.0
-Message-ID: <20151201232120.64CCD802AD@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Nov 2015 15:53:25 +0100
+Subject: [Buildroot] [git commit] spi-tools: new package
+Message-ID: <20151201232124.94483821F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b49bd873e8cf27e3e4159d3851fac0c04b5fe150
+commit: http://git.buildroot.net/buildroot/commit/?id=9ed8750b4313bf26798c063c83a071995c90bb40
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libglew/libglew.hash | 2 +-
- package/libglew/libglew.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This package contains some simple command line tools to help using Linux
+spidev devices.
 
-diff --git a/package/libglew/libglew.hash b/package/libglew/libglew.hash
-index 68c3e7a..5e12785 100644
---- a/package/libglew/libglew.hash
-+++ b/package/libglew/libglew.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	af58103f4824b443e7fa4ed3af593b8edac6f3a7be3b30911edbc7344f48e4bf	glew-1.12.0.tgz
-+sha256	aa25dc48ed84b0b64b8d41cdd42c8f40f149c37fa2ffa39cd97f42c78d128bc7	glew-1.13.0.tgz
-diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
-index 4d26ed8..dc73f39 100644
---- a/package/libglew/libglew.mk
-+++ b/package/libglew/libglew.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGLEW_VERSION = 1.12.0
-+LIBGLEW_VERSION = 1.13.0
- LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
- LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
- LIBGLEW_LICENSE = BSD-3c, MIT
+https://github.com/cpb-/spi-tools
+
+The included version is based in a sha1 and not a tagged version as the
+current master branch contains autotools support for build but there is
+no tagged version with autotools support yet.
+
+The only other quirk with the recipe is related to the VERSION define
+which is normally obtained in build time via git for this package, but
+that would fail within Buildroot as the package build is normally not
+performed inside a git repository.
+To work around that, I have added a hook which will substitute change
+the VERSION to match that of the Buildroot package.
+
+I have tested this package in an ARM target with a custom SPI device.
+
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                |  1 +
+ package/spi-tools/Config.in      |  7 +++++++
+ package/spi-tools/spi-tools.hash |  2 ++
+ package/spi-tools/spi-tools.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 34 insertions(+)
+
+diff --git a/package/Config.in b/package/Config.in
+index 9e3494a..658dc03 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -417,6 +417,7 @@ endif
+ 	source "package/smartmontools/Config.in"
+ 	source "package/smstools3/Config.in"
+ 	source "package/snowball-hdmiservice/Config.in"
++	source "package/spi-tools/Config.in"
+ 	source "package/sredird/Config.in"
+ 	source "package/statserial/Config.in"
+ 	source "package/stm32flash/Config.in"
+diff --git a/package/spi-tools/Config.in b/package/spi-tools/Config.in
+new file mode 100644
+index 0000000..8d26344
+--- /dev/null
++++ b/package/spi-tools/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SPI_TOOLS
++	bool "spi-tools"
++	help
++	  This package contains some simple command line tools to help
++	  using Linux spidev devices.
++
++	  https://github.com/cpb-/spi-tools
+diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
+new file mode 100644
+index 0000000..61ccd5e
+--- /dev/null
++++ b/package/spi-tools/spi-tools.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256	52ab1f1de29afbac95983f5af58adcb1807e1f3479a897e9331e020b5cfa296f  spi-tools-cc6a41fdcec60610703ba6db488c621c64952898.tar.gz
+diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
+new file mode 100644
+index 0000000..f3df435
+--- /dev/null
++++ b/package/spi-tools/spi-tools.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# spi-tools
++#
++################################################################################
++
++# git commit sha1 is used as there is no release tag with autotools support yet
++SPI_TOOLS_VERSION = cc6a41fdcec60610703ba6db488c621c64952898
++SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
++# autoreconf must be run as specified in package documentation
++SPI_TOOLS_AUTORECONF = YES
++SPI_TOOLS_LICENSE = GPLv2
++SPI_TOOLS_LICENSE_FILES = LICENSE
++
++# Package attempts to use git to obtain version, that fails within Buildroot.
++# To avoid it, set the GIT_VERSION variable to the Buildroot package version.
++define SPI_TOOLS_SET_VERSION
++	$(SED) "s/^\(GIT_VERSION:=\).*/\1$(SPI_TOOLS_VERSION)/" \
++		$(@D)/src/Makefile.am
++endef
++
++SPI_TOOLS_POST_PATCH_HOOKS = SPI_TOOLS_SET_VERSION
++
++$(eval $(autotools-package))
