@@ -1,36 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 15:28:51 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-11-28
-In-Reply-To: <CA+BsyQ5F3z5Ha8j_6Whaj3qvWMDifGiDeOmqiFODqxHyNn9DDQ@mail.gmail.com>
-References: <20151129073018.04C72101FF6@stock.ovh.net>
- <1448791721.2011.9.camel@embedded.rocks>
- <20151129150031.5f26aeba@free-electrons.com>
- <CA+BsyQ7SgoOs4GT0AFrqbdc+DWLG2+CyMA6EN+Oqbob1LR9OoQ@mail.gmail.com>
- <20151129151532.4d11d3b2@free-electrons.com>
- <CA+BsyQ5F3z5Ha8j_6Whaj3qvWMDifGiDeOmqiFODqxHyNn9DDQ@mail.gmail.com>
-Message-ID: <20151129152851.1a6111d3@free-electrons.com>
+Date: Sun, 29 Nov 2015 15:26:40 +0100
+Subject: [Buildroot] [git commit branch/next] at: rename patches so they are
+	in a consecutive order
+Message-ID: <20151129142905.5ABDF7F8FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+commit: http://git.buildroot.net/buildroot/commit/?id=3a7fce0c953c6f90e2da29e349a65a1335610e42
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 29 Nov 2015 14:24:35 +0000, Brendan Heading wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch} |    0
+ ...002-Makefile.in-replace-IROOT-by-DESTDIR.patch} |    0
+ ...tch => 0003-Makefile.in-make-install-fix.patch} |    0
+ ...avg.c-fix.patch => 0004-getloadavg.c-fix.patch} |    0
+ ...tch => 0005-parsetime.l-include-config-h.patch} |    0
+ ...=> 0006-remove-glibc-__isleap-assumption.patch} |    0
+ 6 files changed, 0 insertions(+), 0 deletions(-)
 
-> Yeah I'm seeing it here. First guess is that it looks like a bit of a
-> pain to fix. I will take another look later on.
-> 
-> Wondering why this worked before .. did we change the version of musl
-> we are building against since the summer ? (I'm guessing we did).
-
-Yes, we did. Bumped to 1.1.10 on June, 1.1.11 in September and 1.1.12
-in October.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/at/0002-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch b/package/at/0001-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch
+similarity index 100%
+rename from package/at/0002-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch
+rename to package/at/0001-configure.ac-convert-AC_TRY_COMPILE-AC_COMPILE_IFELS.patch
+diff --git a/package/at/0004-Makefile.in-replace-IROOT-by-DESTDIR.patch b/package/at/0002-Makefile.in-replace-IROOT-by-DESTDIR.patch
+similarity index 100%
+rename from package/at/0004-Makefile.in-replace-IROOT-by-DESTDIR.patch
+rename to package/at/0002-Makefile.in-replace-IROOT-by-DESTDIR.patch
+diff --git a/package/at/0005-Makefile.in-make-install-fix.patch b/package/at/0003-Makefile.in-make-install-fix.patch
+similarity index 100%
+rename from package/at/0005-Makefile.in-make-install-fix.patch
+rename to package/at/0003-Makefile.in-make-install-fix.patch
+diff --git a/package/at/0006-getloadavg.c-fix.patch b/package/at/0004-getloadavg.c-fix.patch
+similarity index 100%
+rename from package/at/0006-getloadavg.c-fix.patch
+rename to package/at/0004-getloadavg.c-fix.patch
+diff --git a/package/at/0007-parsetime.l-include-config-h.patch b/package/at/0005-parsetime.l-include-config-h.patch
+similarity index 100%
+rename from package/at/0007-parsetime.l-include-config-h.patch
+rename to package/at/0005-parsetime.l-include-config-h.patch
+diff --git a/package/at/0008-remove-glibc-__isleap-assumption.patch b/package/at/0006-remove-glibc-__isleap-assumption.patch
+similarity index 100%
+rename from package/at/0008-remove-glibc-__isleap-assumption.patch
+rename to package/at/0006-remove-glibc-__isleap-assumption.patch
