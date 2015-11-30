@@ -1,47 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Nov 2015 23:08:42 +0100
-Subject: [Buildroot] [PATCH v5 2/2] toolchain/toolchain-common.in:
- install nscd
-In-Reply-To: <1448287096-18606-3-git-send-email-rdkehn@yahoo.com>
-References: <1448287096-18606-1-git-send-email-rdkehn@yahoo.com>
- <1448287096-18606-3-git-send-email-rdkehn@yahoo.com>
-Message-ID: <20151130230842.12a0851a@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 30 Nov 2015 23:09:48 +0100
+Subject: [Buildroot] [PATCH 2/2] unzip: new package
+In-Reply-To: <565AEB25.7070605@lucaceresoli.net>
+References: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
+ <1448645881-32202-2-git-send-email-luca@lucaceresoli.net>
+ <5658DD1D.6060506@openwide.fr> <565AEB25.7070605@lucaceresoli.net>
+Message-ID: <565CC92C.5080800@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Doug Kehn,
+Hi Luca,
 
-On Mon, 23 Nov 2015 07:58:16 -0600, Doug Kehn wrote:
+Le 29/11/2015 13:10, Luca Ceresoli a ?crit :
+> Dear Romain,
+> 
+> Romain Naour wrote:
+> [...]
+>>> diff --git a/package/unzip/Config.in b/package/unzip/Config.in
+>>> new file mode 100644
+>>> index 0000000..0d98d28
+>>> --- /dev/null
+>>> +++ b/package/unzip/Config.in
+>>> @@ -0,0 +1,11 @@
+>>> +config BR2_PACKAGE_UNZIP
+>>> +    bool "unzip"
+>>
+>> Have you checked some toolchain dependencies ?
+>> It seems that process.c use wchar_t so "depends on BR2_USE_WCHAR" is needed.
+> 
+> The CMakeLists.txt that I wrote does never define UNICODE_SUPPORT nor
+> UNICODE_WCHAR. So it builds both with and without wchar support, but
+> never uses it. I would like to have a basic package working,
+> conditional support can be added later at any time.
+> 
 
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index 6871d8b..a119c9c 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -136,6 +136,10 @@ config BR2_ECLIPSE_REGISTER
->  	  configuration files to make your toolchain appear within
->  	  Eclipse, through the Eclipse Buildroot plugin.
->  
-> +config BR2_GLIBC_NSCD
-> +	bool "Install nscd"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+Thanks for the answer, I only grepped for wchar_t, fork etc (usual build issues)
+and I missed the UNICODE_SUPPORT/UNICODE_WCHAR conditional... my bad.
+So your initial patch looks good except for the Busybox dependency as you
+noticed ;-)
 
-If this option were to be used by PATCH 1/2, then it should be
-introduced before.
-
-However, it is very useless to add an option that doesn't do anything
-at all: if you add this option, it should actually install nscd.
-
-If you want an example on how to do that, look at how the gconv library
-installation is implemented. It works fine for both internal and
-external toolchains.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
