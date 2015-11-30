@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Nov 2015 08:08:34 -0300
-Subject: [Buildroot] [PATCH 1/2] harfbuzz: bump to version 1.1.2
-Message-ID: <1448881715-1868-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 30 Nov 2015 08:08:35 -0300
+Subject: [Buildroot] [PATCH 2/2] freetype: bump to version 2.6.2
+In-Reply-To: <1448881715-1868-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1448881715-1868-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1448881715-1868-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +12,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/freetype/freetype.hash | 6 +++---
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index e15cc17..0b2bdcb 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.1.tar.bz2.sha256
--sha256	0c366a77276fa69d40006cf8a2f2dbcd82f3fb406f3960c3c3a0d34dd3a0f06c	harfbuzz-1.1.1.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.2.tar.bz2.sha256
-+sha256	4a2c5790bd3db7c3ca8c02e4858f2fd592df7932c1d2fa9f6b99acbce0f8461f	harfbuzz-1.1.2.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 8251e1f..be8a899 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index d857a38..dc238f2 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.1/
+-md5 35cb8f4d9e5906847901bb39324c2f80  freetype-2.6.1.tar.bz2
+-sha1 393447fbf64c107b20a1ccc9e9a9a52f39786ae0  freetype-2.6.1.tar.bz2
++# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.2/
++md5 86109d0c998787d81ac582bad9adf82e  freetype-2.6.2.tar.bz2
++sha1 29c22b85b77cb22cf95c13e7062e21f39fe6b17a  freetype-2.6.2.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 1fb5b8f..fa11b0c 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.1.1
-+HARFBUZZ_VERSION = 1.1.2
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-FREETYPE_VERSION = 2.6.1
++FREETYPE_VERSION = 2.6.2
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
 -- 
 2.4.10
