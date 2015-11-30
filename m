@@ -1,39 +1,78 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 30 Nov 2015 13:51:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 8496] Toolchain -> Target Optimizations ignored &
-	not applied.
-In-Reply-To: <bug-8496-163@https.bugs.busybox.net/>
-References: <bug-8496-163@https.bugs.busybox.net/>
-Message-ID: <20151130135146.A6AB181D82@busybox.osuosl.org>
+From: Alexey Galakhov <agalakhov@gmail.com>
+Date: Mon, 30 Nov 2015 15:19:36 +0100
+Subject: [Buildroot] [PATCH v2 1/1] core: add option to force compiling C++
+	as C++11
+Message-ID: <1448893176-21456-1-git-send-email-agalakhov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8496
+Many C++ libraries like boost and log4cplus use defines to be compatible with
+both C++03 and C++11 standards. This causes ABI incompatibilities between
+a library built with C++03 and an application built with C++11. To avoid this,
+one has to built libraries as C++11 as well.
 
-brandurs at yahoo.com changed:
+This patch introduces the BR2_ENABLE_CPP11 configuration option that forces
+passing --std=c++11 to the compiler while building C++ target libraries.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|WORKSFORME                  |
+Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
+---
+ Config.in           | 17 +++++++++++++++++
+ package/Makefile.in | 10 +++++++++-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
 
---- Comment #2 from brandurs at yahoo.com 2015-11-30 13:51:46 UTC ---
-
-Apparently no "Target Optimizations" are applied to the CFLAGS and CXXFLAGS,
-but "Target Linker Options" are applied to LDFLAGS. ?
-Is this a white flag to red flags? 
-
-"-mtune=xscale" was an example, my documentation states armv5te compatible with
-xscale core, and I follow that advice. But that fact is irrelevant in this
-bug-report. 
-
-Other uses could be "-flto -fgraphite-identity". These flags are apparently not
-applied to CFLAGS or the compilation. None are.
-
+diff --git a/Config.in b/Config.in
+index d795361..1ee2ca3 100644
+--- a/Config.in
++++ b/Config.in
+@@ -533,6 +533,23 @@ config BR2_ENABLE_SSP
+ comment "enabling Stack Smashing Protection requires support in the toolchain"
+ 	depends on !BR2_TOOLCHAIN_HAS_SSP
+ 
++config BR2_ENABLE_CPP11
++	bool "force C++11 when building libraries"
++	default n
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
++	help
++	  Force building of C++ libraries in C++11 mode.
++
++	  Some C++ libraries (i.e. boost) behave differently if compiled with
++	  and without --std=c++11 flag. They define classes differently. This
++	  causes linker errors while trying to use such a library in a C++11
++	  project.
++
++	  This option forces building of all such libraries in C++11 mode.
++	  Enable it if you encounter C++11-related linker errors while building
++	  your own or some 3rd-party software against buildroot libraries.
++
+ choice
+ 	bool "libraries"
+ 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 85008bb..0cca97e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -135,9 +135,17 @@ ifeq ($(BR2_DEBUG_3),y)
+ TARGET_DEBUGGING = -g3
+ endif
+ 
++ifeq ($(BR2_ENABLE_CPP11),y)
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
++TARGET_CXXLANGUAGE = --std=c++11
++else
++TARGET_CXXLANGUAGE = --std=c++0x
++endif
++endif
++
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+-TARGET_CXXFLAGS = $(TARGET_CFLAGS)
++TARGET_CXXFLAGS = $(TARGET_CFLAGS) $(TARGET_CXXLANGUAGE)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+ 
+ ifeq ($(BR2_BINFMT_FLAT),y)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.6.2
