@@ -1,31 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Dec 2015 00:00:41 +0100
-Subject: [Buildroot] Buildroot 2015.11 released
-In-Reply-To: <87k2ozje8u.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 30 Nov 2015 23:48:01 +0100")
-References: <87k2ozje8u.fsf@dell.be.48ers.dk>
-Message-ID: <87fuznjdnq.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Dec 2015 00:06:40 +0100
+Subject: [Buildroot] [PATCH v2] docs/website: cosmetic changes
+In-Reply-To: <CA+TH9V=d-jMcuj0UBWgALZwXOm+sx4EHLb2ewNMutFf2VgmcMw@mail.gmail.com>
+References: <1448920481-21268-1-git-send-email-angelo.compagnucci@gmail.com>
+ <87oaebjgf3.fsf@dell.be.48ers.dk>
+ <CA+TH9V=qDnTm+qyGOCbQE6=EFskevW31jZewqQhk_JS9G35k7w@mail.gmail.com>
+ <565CCBC3.9010903@mind.be>
+ <CA+TH9V=d-jMcuj0UBWgALZwXOm+sx4EHLb2ewNMutFf2VgmcMw@mail.gmail.com>
+Message-ID: <565CD680.9050506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Hi,
 
- > During the 2015.11 cycle we had a very nice developers meeting in
- > Dublin, Ireland. Many thanks to Orange Business Services for sponsoring
- > the event and for all the participants for joining!
+On 30-11-15 23:43, Angelo Compagnucci wrote:
+> Dear Arnout Vandecappelle,
+> 
+> 2015-11-30 23:20 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+[snip]
+>>  And then please also avoid the whitespace change :-)
+> 
+> Ok, it's very difficult to maintain that page without reformatting, will try.
 
- > http://elinux.org/Buildroot:DeveloperDaysFOSDEM2015
+ In that case, do the whitespace change as a separate patch so we can see what
+changed.
 
-This should naturally have been:
-
-http://elinux.org/Buildroot:DeveloperDaysELCE2015
-
-Sorry and thanks to Thomas for noticing.
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
