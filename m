@@ -1,58 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 30 Nov 2015 06:01:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libv4l: v4l-utils need locale
-Message-ID: <1448859698-20684-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Nov 2015 08:19:59 +0100
+Subject: [Buildroot] [git commit] libglib2: force arm mode when building
+	with thumb1
+Message-ID: <20151130072203.4FC84807A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To reproduce the setlocale-related build error use this minimal
-defconfig:
+commit: http://git.buildroot.net/buildroot/commit/?id=26013972ce568e55a121c21a55afce45bc0675e9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_LIBV4L=y
-BR2_PACKAGE_LIBV4L_UTILS=y
+Fixes #8491
 
-After enabling locale support the build error is fixed:
+glib/valgrind.h contains inline asm not compatible with thumb1, so build it
+in arm mode:
 
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_LIBV4L=y
-BR2_PACKAGE_LIBV4L_UTILS=y
+  CC       libglib_2_0_la-gstringchunk.lo
+/tmp/ccSVEXME.s: Assembler messages:
+/tmp/ccSVEXME.s:587: Error: shifts in CMP/MOV instructions are only supported
+in unified syntax -- `mov r12,r12,ror#3'
+/tmp/ccSVEXME.s:587: Error: shifts in CMP/MOV instructions are only supported
+in unified syntax -- `mov r12,r12,ror#13'
+/tmp/ccSVEXME.s:588: Error: shifts in CMP/MOV instructions are only supported
+in unified syntax -- `mov r12,r12,ror#29'
+/tmp/ccSVEXME.s:588: Error: shifts in CMP/MOV instructions are only supported
+in unified syntax -- `mov r12,r12,ror#19'
+/tmp/ccSVEXME.s:589: Error: lo register required -- `orr r10,r10,r10'
+Makefile:2087: recipe for target 'libglib_2_0_la-gslice.lo' failed
 
-Fixes
-http://autobuild.buildroot.net/results/f2e/f2e4e34fb14ce355a6e92afc83024b0445f52513/
-http://autobuild.buildroot.net/results/fe5/fe56063ddd2232fea7699f5117497beb3deca11e/
-http://autobuild.buildroot.net/results/1be/1be55f096ddef2aa38fdba681ed97cf74905477a/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libv4l/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libglib2/libglib2.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index 16dc6bb..8d7eca1 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -23,6 +23,7 @@ comment "libv4l JPEG support not enabled"
- 
- config BR2_PACKAGE_LIBV4L_UTILS
- 	bool "v4l-utils tools"
-+	depends on BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  v4l-utils is a collection of various video4linux and DVB utilities.
-@@ -38,6 +39,9 @@ config BR2_PACKAGE_LIBV4L_UTILS
- 	  - rds-ctl
- 	  - qv4l2 (if Qt is enabled)
- 
-+comment "libv4l-utils tools need a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-+
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 8f6ca83..8cf055d 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -85,6 +85,11 @@ else
+ LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=yes
  endif
  
- comment "libv4l needs an uClibc or (e)glibc toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
--- 
-2.6.2
++# glib/valgrind.h contains inline asm not compatible with thumb1
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
++endif
++
+ HOST_LIBGLIB2_CONF_OPTS = \
+ 	--disable-coverage \
+ 	--disable-dtrace \
