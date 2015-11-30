@@ -1,67 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 19:04:53 +0100
-Subject: [Buildroot] [git commit] core/printvars: allow dumping a set of
-	variables
-Message-ID: <20151201232124.B87A9821FC@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Nov 2015 13:06:15 +0100
+Subject: [Buildroot] [git commit] freetype: bump to version 2.6.2
+Message-ID: <20151201232124.DB21E821F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=376fda8f99cd0511c03be4b937e9684a565745da
+commit: http://git.buildroot.net/buildroot/commit/?id=76a861290416532cb1c5b5191d2b064091bc1c8c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Dumping our 176164 variables can take quite some time (~12s here). What
-takes the most time is sorting the variables (~9s), followed by the
-parsing of our Makefiles (~3s), with the actual printing in the noise.
-
-However, sometimes only one or a few variables are needed. For example,
-one may want to retrieve the Linux build dir from a post-build hook (to
-get the Linux' actual .config after our fixups and check for various
-features).
-
-Add the possibility to only dump the variables listed in $(VAR) which
-must be passed as a make argument, like so:
-
-    $ make -s printvars VARS="LINUX_DIR TOPDIR O"
-    LINUX_DIR=/home/ymorin/dev/buildroot/O/build/linux-4.3 ($(BUILD_DIR)/$(LINUX_BASE_NAME))
-    O=/home/ymorin/dev/buildroot/O/. (/home/ymorin/dev/buildroot/O/.)
-    TOPDIR=/home/ymorin/dev/buildroot/buildroot (/home/ymorin/dev/buildroot/buildroot)
-
-It is also possible to use make-appterns, like:
-
-    $ make -s printvars VARS="BUSYBOX_%"
-
-This is much faster (the time is just about the time it takes to parse
-our Makefiles, 3s here) and easier to parse.
-
-[Thomas: improve comment above the printvars target.]
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/freetype/freetype.hash | 6 +++---
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 9950a26..641aeff 100644
---- a/Makefile
-+++ b/Makefile
-@@ -823,10 +823,13 @@ ifeq ($(NEED_WRAPPER),y)
- 	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
- endif
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index d857a38..dc238f2 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.1/
+-md5 35cb8f4d9e5906847901bb39324c2f80  freetype-2.6.1.tar.bz2
+-sha1 393447fbf64c107b20a1ccc9e9a9a52f39786ae0  freetype-2.6.1.tar.bz2
++# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.2/
++md5 86109d0c998787d81ac582bad9adf82e  freetype-2.6.2.tar.bz2
++sha1 29c22b85b77cb22cf95c13e7062e21f39fe6b17a  freetype-2.6.2.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 1fb5b8f..fa11b0c 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# printvars prints all the variables currently defined in our Makefiles
-+# printvars prints all the variables currently defined in our
-+# Makefiles. Alternatively, if a non-empty VARS variable is passed,
-+# only the variables matching the make pattern passed in VARS are
-+# displayed.
- printvars:
- 	@$(foreach V, \
--		$(sort $(.VARIABLES)), \
-+		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
- 		$(if $(filter-out environment% default automatic, \
- 				$(origin $V)), \
- 		$(info $V=$($V) ($(value $V)))))
+-FREETYPE_VERSION = 2.6.1
++FREETYPE_VERSION = 2.6.2
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
