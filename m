@@ -1,34 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2015 17:08:27 +0100
-Subject: [Buildroot] [PATCH] valgrind: add a patch to fix MIPS R6 by
-	replacing ADDI with ADDIU
-In-Reply-To: <1448886346-62868-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Mon, 30 Nov 2015 12:25:46 +0000")
-References: <1448886346-62868-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87vb8jlbb8.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 30 Nov 2015 16:08:57 +0000
+Subject: [Buildroot] [PATCH] mplayer: use autodetection for dvdnav
+In-Reply-To: <1447927571-38206-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1447927571-38206-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <565C7499.4080808@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+ping. This patch is quite trivial, I think.
 
- > The ADDI instruction has been removed for MIPS R6, so valgrind fails to
- > build for this revision level because it uses that assembly
- > instruction. Using ADDIU instead fixes the problem.
+Regards,
 
- > The patch has been sent upstream:
+Vincent.
 
- >   https://bugs.kde.org/show_bug.cgi?id=356112
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/488/488937704b3b6bae8daed7b24da8c740b56f4d84/
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+On 19/11/15 10:06, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/mplayer/mplayer.mk |    3 ++-
+>  1 files changed, 2 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+> index ad2d9dd..3051afa 100644
+> --- a/package/mplayer/mplayer.mk
+> +++ b/package/mplayer/mplayer.mk
+> @@ -125,9 +125,10 @@ MPLAYER_CONF_OPTS +=  \
+>  MPLAYER_DEPENDENCIES += libdvdread
+>  endif
+>  
+> +# We intentionally don't pass --enable-dvdnav to let the autodetection
+> +# find which library to link with.
+>  ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
+>  MPLAYER_CONF_OPTS +=  \
+> -	--enable-dvdnav \
+>  	--with-dvdnav-config=$(STAGING_DIR)/usr/bin/dvdnav-config
+>  MPLAYER_DEPENDENCIES += libdvdnav
+>  endif
+> 
