@@ -1,51 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 30 Nov 2015 00:09:15 +0100
-Subject: [Buildroot] Overriding Buildroot packages
-In-Reply-To: <CAPER3A3yd6N6VWhM4uYJTq7pjBdiQ2=zQ-Mzu_aH+LBSNoaDSw@mail.gmail.com>
-References: <CAPER3A0P1Qyd_=ktyHt=udawndUfHue8SE_zDQxMHjz+r+pPtg@mail.gmail.com>
- <20151124164107.3570084a@free-electrons.com>
- <CAPER3A0tE2_edxtE65MaVUVUh3BOdqywb4jUANOe_4Jm+0fihw@mail.gmail.com>
- <5654E4F2.2020405@mind.be>
- <CAPER3A3yd6N6VWhM4uYJTq7pjBdiQ2=zQ-Mzu_aH+LBSNoaDSw@mail.gmail.com>
-Message-ID: <565B859B.10400@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 30 Nov 2015 06:01:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libv4l: v4l-utils need locale
+Message-ID: <1448859698-20684-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25-11-15 10:48, Hajime Branko Yamasaki Vukelic wrote:
-> On Tue, Nov 24, 2015 at 11:30 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
-> [SNIP]
-> 
->>> Ideally, ability to override some aspect of an existing package (e.g.,
->>> only its version, or only the source URL, or something along those
->>> lines) would be great to have. If not, then, a mechanism to make two
->>> packages equivalent (something like virtual packages but applicaable
->>> to packages that are not explicitly virtual) would also work (e.g.,
->>> `POSTGRES_95_PROVIDES = postgres`, that causes having postgres-95
->>> selected to satisfy dependency requirement for a package that
->>> selects/depends on postgres).
->>
->>  There is a fairly easy way to make it possible to override the version and
->> dependencies, but I think it's a bit ugly. In inner-generic-package, instead of
->> defining all the rules directly, we could add yet another level of direction and
->> delay the definition of the rules until after BR2_EXTERNAL has been included.
-> 
-> What if a package has <pkgname>.hash file? If I simply override the
-> version, wouldn't that still break when checking the hash?
+To reproduce the setlocale-related build error use this minimal
+defconfig:
 
- That's right, we'd need to find a workaround of that as well.
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_LIBV4L=y
+BR2_PACKAGE_LIBV4L_UTILS=y
 
- Regards,
- Arnout
+After enabling locale support the build error is fixed:
 
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_LIBV4L=y
+BR2_PACKAGE_LIBV4L_UTILS=y
 
+Fixes
+http://autobuild.buildroot.net/results/f2e/f2e4e34fb14ce355a6e92afc83024b0445f52513/
+http://autobuild.buildroot.net/results/fe5/fe56063ddd2232fea7699f5117497beb3deca11e/
+http://autobuild.buildroot.net/results/1be/1be55f096ddef2aa38fdba681ed97cf74905477a/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libv4l/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index 16dc6bb..8d7eca1 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -23,6 +23,7 @@ comment "libv4l JPEG support not enabled"
+ 
+ config BR2_PACKAGE_LIBV4L_UTILS
+ 	bool "v4l-utils tools"
++	depends on BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  v4l-utils is a collection of various video4linux and DVB utilities.
+@@ -38,6 +39,9 @@ config BR2_PACKAGE_LIBV4L_UTILS
+ 	  - rds-ctl
+ 	  - qv4l2 (if Qt is enabled)
+ 
++comment "libv4l-utils tools need a toolchain w/ locale"
++	depends on !BR2_ENABLE_LOCALE
++
+ endif
+ 
+ comment "libv4l needs an uClibc or (e)glibc toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.6.2
