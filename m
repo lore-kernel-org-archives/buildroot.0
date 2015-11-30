@@ -1,45 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2015 17:15:57 +0100
-Subject: [Buildroot] [git commit] libsigsegv: fix sparc64 compile
-Message-ID: <20151130164029.0487E81E79@busybox.osuosl.org>
+Date: Mon, 30 Nov 2015 17:13:04 +0100
+Subject: [Buildroot] [git commit] package/libv4l: v4l-utils need locale
+Message-ID: <20151130164028.E3D9780096@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbc93033b589b8b3e2a14a0bffe549584943df53
+commit: http://git.buildroot.net/buildroot/commit/?id=cf5f3fcc5a1783229c5cb0f832f832f4f43d72f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Compile tested for sparc/glibc and sparc64/glibc.
-Fixes following autobuilder problem:
-http://autobuild.buildroot.net/results/1d8e0c22594aef53f7a4de3491454aa78311c815/
+To reproduce the setlocale-related build error use this minimal
+defconfig:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_LIBV4L=y
+BR2_PACKAGE_LIBV4L_UTILS=y
+
+After enabling locale support the build error is fixed:
+
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_LIBV4L=y
+BR2_PACKAGE_LIBV4L_UTILS=y
+
+Fixes
+http://autobuild.buildroot.net/results/f2e/f2e4e34fb14ce355a6e92afc83024b0445f52513/
+http://autobuild.buildroot.net/results/fe5/fe56063ddd2232fea7699f5117497beb3deca11e/
+http://autobuild.buildroot.net/results/1be/1be55f096ddef2aa38fdba681ed97cf74905477a/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libsigsegv/0005-fix-sparc64-stackpointer.patch |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
+ package/libv4l/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsigsegv/0005-fix-sparc64-stackpointer.patch b/package/libsigsegv/0005-fix-sparc64-stackpointer.patch
-new file mode 100644
-index 0000000..62de35f
---- /dev/null
-+++ b/package/libsigsegv/0005-fix-sparc64-stackpointer.patch
-@@ -0,0 +1,16 @@
-+Fix sparc64 build.
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index 16dc6bb..8d7eca1 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -23,6 +23,7 @@ comment "libv4l JPEG support not enabled"
+ 
+ config BR2_PACKAGE_LIBV4L_UTILS
+ 	bool "v4l-utils tools"
++	depends on BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  v4l-utils is a collection of various video4linux and DVB utilities.
+@@ -38,6 +39,9 @@ config BR2_PACKAGE_LIBV4L_UTILS
+ 	  - rds-ctl
+ 	  - qv4l2 (if Qt is enabled)
+ 
++comment "libv4l-utils tools need a toolchain w/ locale"
++	depends on !BR2_ENABLE_LOCALE
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur libsigsegv-2.10.orig/src/fault-linux-sparc.h libsigsegv-2.10/src/fault-linux-sparc.h
-+--- libsigsegv-2.10.orig/src/fault-linux-sparc.h	2009-08-01 17:06:49.000000000 +0200
-++++ libsigsegv-2.10/src/fault-linux-sparc.h	2015-11-29 11:55:29.000000000 +0100
-+@@ -27,4 +27,8 @@
-+    (see also <asm/sigcontext.h>)
-+    are quite different types.  */
-+ 
-++#if __WORDSIZE == 64
-++#define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.mc_gregs[REG_O6]
-++#else
-+ #define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gregs[REG_O6]
-++#endif
+ endif
+ 
+ comment "libv4l needs an uClibc or (e)glibc toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
