@@ -1,99 +1,41 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Mon, 30 Nov 2015 20:56:24 -0200
-Subject: [Buildroot] Missing 'sys/queue.h' on musl
-In-Reply-To: <565CC0DD.6010206@mind.be>
-References: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
- <20151128184915.6017fae9@free-electrons.com>
- <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
- <20151128192022.6bc8d7fd@free-electrons.com>
- <CANu7NGvmMFc9xADTq_ES7h=13LcnLH5yYJO9KV+8mSYSB-VVtg@mail.gmail.com>
- <20151129092811.0d05dabd@free-electrons.com> <20151129095306.GA3630@free.fr>
- <565B78D8.6070103@mind.be> <20151129233338.261cf080@free-electrons.com>
- <87h9k3n4f9.fsf@dell.be.48ers.dk>
- <CANu7NGuKGNtVyiWqN=KW1kW5zQA35NLaFVE2JP4GoS0wh3vuqw@mail.gmail.com>
- <20151130173202.4f4933cc@free-electrons.com> <565CC0DD.6010206@mind.be>
-Message-ID: <CANu7NGuXTuVO00Ai=VFVCX6cFx206iT2HDjpzv20OXr-6bP87A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Nov 2015 23:58:00 +0100
+Subject: [Buildroot] [PATCH 1/1 v2] package/nss-pam-ldapd: new package
+In-Reply-To: <1432494752-5077-1-git-send-email-rdkehn@yahoo.com>
+References: <1432494752-5077-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <20151130235800.77e46f3e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-11-30 19:34 GMT-02:00 Arnout Vandecappelle <arnout@mind.be>:
+Dear Doug Kehn,
 
-> On 30-11-15 17:32, Thomas Petazzoni wrote:
-> > Dear Sergio Prado,
-> >
-> > On Mon, 30 Nov 2015 13:07:36 -0200, Sergio Prado wrote:
-> >
-> >> I have created a package called sys-queue that will only install
-> queue.h on
-> >> the staging dir.
-> >>
-> >> Then to make musl generated toolchain depends on sys-queue, I added the
-> >> following lines to toolchain/toolchain-buildroot/toolchain-buildroot.mk
-> :
-> >>
-> >> ifeq ($(BR2_TOOLCHAIN_BUILDROOT_MUSL),y)
-> >> TOOLCHAIN_BUILDROOT_DEPENDENCIES += sys-queue
-> >> endif
-> >>
-> >> It worked like a charm. Is this the correct approach?
-> >
-> > No, because this will only work for internal toolchains. So instead,
-> > you need to put this dependency in two places:
->
->  That's what Sergio was doing...
->
+On Sun, 24 May 2015 14:12:32 -0500, Doug Kehn wrote:
+> Name Service Switch (NSS) module that allows your LDAP server to provide
+> user account, group, host name, alias, netgroup, and basically any other
+> information that you would normally get from /etc flat files or NIS. It
+> also provides a Pluggable Authentication Module (PAM) to do
+> authentication to an LDAP server.
+> 
+> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> ---
+> Changes v1 -> v2
+>   - Incorporate feedback/suggestions by Yann.
 
-Yes, that's what I was doing. I will move the change to the musl package.
+Applied to next, after doing a few minimal changes:
 
-
->
-> >
-> >  1/ In package/musl/musl.mk, where it should be an unconditional
-> >     dependency.
-> >
-> >  2/ In toolchain/toolchain-external/toolchain-external.mk, where it
-> >     should be conditional on BR2_TOOLCHAIN_USES_MUSL.
-> >
-> >> Also, I am struggling to find out a way to do the same thing on the
-> >> external toolchain. Using the DEPENDENCIES approach, it will process the
-> >> sys-queue package before the external toolchain package, and it is best
-> to
-> >> do it after. Any ideas?
-> >
-> > Is it really a problem if it is processed before?
->
->  It's actually good if it is processed before, so if there is a queue.h in
-> the
-> external toolchain after all (e.g. for a buildroot-built external
-> toolchain), it
-> will overwrite ours. At least, I think that that is what we want.
->
-
-OK. I thought that maybe the staging directory would be cleared out when
-processing the external toolchain, but seems that's not the case.
+    [Thomas:
+     - bump to version 0.9.6
+     - use --disable-<foo> rather than --enable-<foo>=no.
+     - fix license information: there is no LICENSE file, it is named
+       COPYING.]
 
 Thanks!
 
-
->  Regards,
->  Arnout
->
-> >
-> > Thomas
-> >
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151130/3cfa9910/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
