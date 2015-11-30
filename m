@@ -1,124 +1,62 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 30 Nov 2015 23:20:51 +0100
-Subject: [Buildroot] [PATCH v2] docs/website: cosmetic changes
-In-Reply-To: <CA+TH9V=qDnTm+qyGOCbQE6=EFskevW31jZewqQhk_JS9G35k7w@mail.gmail.com>
-References: <1448920481-21268-1-git-send-email-angelo.compagnucci@gmail.com>
- <87oaebjgf3.fsf@dell.be.48ers.dk>
- <CA+TH9V=qDnTm+qyGOCbQE6=EFskevW31jZewqQhk_JS9G35k7w@mail.gmail.com>
-Message-ID: <565CCBC3.9010903@mind.be>
+Date: Mon, 30 Nov 2015 23:22:18 +0100
+Subject: [Buildroot] [PATCH 1/2] help: add a way to document targets
+ declared in local.mk/external.mk
+In-Reply-To: <1691926.UbH5yYOTKg@sagittea>
+References: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
+ <20151129202650.GI3630@free.fr> <1691926.UbH5yYOTKg@sagittea>
+Message-ID: <565CCC1A.5010209@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-11-15 23:06, Angelo Compagnucci wrote:
-> Hi Peter,
+On 30-11-15 13:04, J?r?me Pouiller wrote:
+> Hello Yann,
 > 
-> 2015-11-30 23:01 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+> On Sunday 29 November 2015 21:26:50 Yann E. MORIN wrote:
+>> J?r?me, All,
 >>
->>  > * Resized too big icons in download and documentation
->>  >   pages
+>> On 2015-11-18 15:37 +0100, J?r?me Pouiller spake thusly:
+[snip]
+>> Well, for help from extenal.mk (or local.mk, but I'd arue that would
+>> be a bad idea, given that local.mk is supposedly short-lived), there
+>> is in my opinion a much better solution.
 >>
->>  > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->>  > ---
->>  > Cheangelog:
+>> Change the 'help' rule to a double-colon make rule, like so:
 >>
->>  > v1 -> v2:
->>  > Rebase to the latest git version
+>>     help::
+>>         echo Current Buildroot help
 >>
->>  >  docs/website/css/main.css  |  15 ++-
->>  >  docs/website/docs.html     |  30 ++---
->>  >  docs/website/download.html | 330 ++++++++++++++++++++++-----------------------
->>  >  3 files changed, 189 insertions(+), 186 deletions(-)
->>
->>  > diff --git a/docs/website/css/main.css b/docs/website/css/main.css
->>  > index db9c4c9..57009cf 100644
->>  > --- a/docs/website/css/main.css
->>  > +++ b/docs/website/css/main.css
->>  > @@ -207,16 +207,21 @@ i {
->>  >  .flip-container {
->>  >      perspective: 1000;
->>  >  }
->>  > -    /* flip the pane when hovered */
->>  > -    .flip-container:hover .flipper, .flip-container.hover .flipper {
->>  > -            transform: rotateY(180deg);
->>  > -    }
->>  > +/* flip the pane when hovered */
->>  > +.flip-container:hover .flipper, .flip-container.hover .flipper {
->>  > +    transform: rotateY(180deg);
->>  > +}
->>
->>  > -.flip-container, .front, .back {
->>  > +.flip-container, .flip-container .front, .flip-container .back {
->>  >      width: 180px;
->>  >      height: 180px;
->>  >  }
->>
->>  > +.flip-container-small, .flip-container-small .front, .flip-container-small .back {
->>  > +    width: 120px;
->>  > +    height: 120px;
->>  > +}
->>  > +
->>  >  /* flip speed goes here */
->>  >  .flipper {
->>  >      transition: 0.6s;
->>  > diff --git a/docs/website/docs.html b/docs/website/docs.html
->>  > index 9cee36d..23cc13f 100644
->>  > --- a/docs/website/docs.html
->>  > +++ b/docs/website/docs.html
->>  > @@ -13,59 +13,59 @@
->>
->>  >        <div class="row mt centered">
->>  >      <div class="col-sm-4">
->>  > -      <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
->>  > +      <div class="flip-container flip-container-small center-block" ontouchstart="this.classList.toggle('hover');">
->>  >          <div class="flipper">
->>  >            <div class="front">
->>  > -            <a href="/manual.html"><img src="images/browser.png" width="180" alt=""></a>
->>  > +            <a href="/manual.html"><img src="images/browser.png" width="120" alt=""></a>
->>
->> I'm far from a web expert, but why are we telling the browser to
->> downscale these images?
->>
->> file docs/website/images/browser.png
->> docs/website/images/browser.png: PNG image data, 256 x 256, 8-bit/color RGBA, non-interlaced
->>
->> E.G. why don't we send a 180x180 (or 120x120) image in the first place?
+>> Then you can add as many such rules in as many places you want,
+>> especially in external.mk, and the will be appended one after the
+>> others.
+>
+> Nice trick.
+
+ IMHO tricks (nice or not) are no good because they make things more difficult
+to understand. Also, we don't currently use the :: construct so I'd prefer to
+avoid introducing it.
+
+
+>> We just have to ensure that our help comes before the external ones,
+>> so maybe you'll have to move our help block before inclusion of
+>> external.mk...
 > 
-> They were from a smashing magazine free theme at that resolution, so i
-> left the original image size. They can be rescaled, I'll glad to do it
-> if you think it's important (to me not so much!)
+> I have a slight preference for my proposal since I think it allows a 
+> finer control of the way extra help is handled. However, I have no 
+> problem to send a new patch using your trick.
 
- There are various reasons why it's better to scale at the server side:
+ Because of what I wrote above, I also prefer your proposal.
 
-- smaller image => less bandwidth;
-- often better scaling algorithm with a real tool than with the browser;
-- less visual discrepancy between different browsers.
-
-> 
->>
->> Same for the other images.
->>
->>> +++ b/docs/website/download.html
->>  > @@ -4,176 +4,174 @@
->>  >  <div class="row nh">
->>  >  <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
->>
->>  > -  <div class="panel panel-primary">
->>
->> This diff is not very readable to me. Notice that I'm right now changing
->> download.html (to release 2015.11), so it would be good if you could
->> rebase (again!).
-> 
-> No problem, I'll wait for a few more minutes (I'm tired!) and if the
-> git tree will be updated, I'll send a patch in no time!
-
- And then please also avoid the whitespace change :-)
 
  Regards,
  Arnout
+
+> 
+> Regards,
+> 
 
 
 -- 
