@@ -1,44 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2015 13:06:37 +0100
-Subject: [Buildroot] [git commit branch/next] squid: bump to version 3.5.12
-Message-ID: <20151130122224.6212E81E89@busybox.osuosl.org>
+Date: Mon, 30 Nov 2015 13:06:15 +0100
+Subject: [Buildroot] [git commit branch/next] freetype: bump to version 2.6.2
+Message-ID: <20151130122224.5CEB47FE13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2940576b0b5ea4d69e8043da6a3ab46bd2f2bed8
+commit: http://git.buildroot.net/buildroot/commit/?id=76a861290416532cb1c5b5191d2b064091bc1c8c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash |    6 +++---
- package/squid/squid.mk   |    2 +-
+ package/freetype/freetype.hash |    6 +++---
+ package/freetype/freetype.mk   |    2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 8d81862..c806dc9 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index d857a38..dc238f2 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
 @@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.11.tar.xz.asc
--md5	eb5e1cf3cf012e5b85d6f7ca78b7afab	squid-3.5.11.tar.xz
--sha1	623e0d4a41ddc70e0f59a3f38c091e0dc946172c	squid-3.5.11.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.12.tar.xz.asc
-+md5	50016bf6e2d3a3a186a6c7236d251f63	squid-3.5.12.tar.xz
-+sha1	59b0dcb2c9c04f1a0586f7a1f346197ddb6d5be5	squid-3.5.12.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 7471488..dcaab0a 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+-# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.1/
+-md5 35cb8f4d9e5906847901bb39324c2f80  freetype-2.6.1.tar.bz2
+-sha1 393447fbf64c107b20a1ccc9e9a9a52f39786ae0  freetype-2.6.1.tar.bz2
++# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.2/
++md5 86109d0c998787d81ac582bad9adf82e  freetype-2.6.2.tar.bz2
++sha1 29c22b85b77cb22cf95c13e7062e21f39fe6b17a  freetype-2.6.2.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 1fb5b8f..fa11b0c 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).11
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).12
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-FREETYPE_VERSION = 2.6.1
++FREETYPE_VERSION = 2.6.2
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
