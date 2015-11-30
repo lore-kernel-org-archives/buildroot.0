@@ -1,46 +1,44 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 30 Nov 2015 23:09:48 +0100
-Subject: [Buildroot] [PATCH 2/2] unzip: new package
-In-Reply-To: <565AEB25.7070605@lucaceresoli.net>
-References: <1448645881-32202-1-git-send-email-luca@lucaceresoli.net>
- <1448645881-32202-2-git-send-email-luca@lucaceresoli.net>
- <5658DD1D.6060506@openwide.fr> <565AEB25.7070605@lucaceresoli.net>
-Message-ID: <565CC92C.5080800@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Nov 2015 23:10:04 +0100
+Subject: [Buildroot] [PATCH v3] docs/website: cosmetic changes
+In-Reply-To: <1448920882-28065-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1448920882-28065-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20151130231004.45726f67@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca,
+Dear Angelo Compagnucci,
 
-Le 29/11/2015 13:10, Luca Ceresoli a ?crit :
-> Dear Romain,
+On Mon, 30 Nov 2015 23:01:22 +0100, Angelo Compagnucci wrote:
+> * Resized too big icons in download and documentation
+>   pages
 > 
-> Romain Naour wrote:
-> [...]
->>> diff --git a/package/unzip/Config.in b/package/unzip/Config.in
->>> new file mode 100644
->>> index 0000000..0d98d28
->>> --- /dev/null
->>> +++ b/package/unzip/Config.in
->>> @@ -0,0 +1,11 @@
->>> +config BR2_PACKAGE_UNZIP
->>> +    bool "unzip"
->>
->> Have you checked some toolchain dependencies ?
->> It seems that process.c use wchar_t so "depends on BR2_USE_WCHAR" is needed.
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+> Cheangelog:
 > 
-> The CMakeLists.txt that I wrote does never define UNICODE_SUPPORT nor
-> UNICODE_WCHAR. So it builds both with and without wchar support, but
-> never uses it. I would like to have a basic package working,
-> conditional support can be added later at any time.
+> v1 -> v2:
+> Rebase to the latest git version
 > 
+> v2 -> v3:
+> Minor fixing to missing tags
+> 
+>  docs/website/css/main.css  |  15 ++-
+>  docs/website/docs.html     |  30 ++---
+>  docs/website/download.html | 330 ++++++++++++++++++++++-----------------------
+>  3 files changed, 189 insertions(+), 186 deletions(-)
 
-Thanks for the answer, I only grepped for wchar_t, fork etc (usual build issues)
-and I missed the UNICODE_SUPPORT/UNICODE_WCHAR conditional... my bad.
-So your initial patch looks good except for the Busybox dependency as you
-noticed ;-)
+Please don't re-indent the entire file again. I did re-indent it with
+Emacs HTML mode (I know Peter is also using Emacs, so I was assuming
+this would simplify things for him).
 
-Best regards,
-Romain
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
