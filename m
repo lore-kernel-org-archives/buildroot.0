@@ -1,68 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 30 Nov 2015 23:22:18 +0100
-Subject: [Buildroot] [PATCH 1/2] help: add a way to document targets
- declared in local.mk/external.mk
-In-Reply-To: <1691926.UbH5yYOTKg@sagittea>
-References: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
- <20151129202650.GI3630@free.fr> <1691926.UbH5yYOTKg@sagittea>
-Message-ID: <565CCC1A.5010209@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Nov 2015 23:22:38 +0100
+Subject: [Buildroot] [PATCH v5 1/2] package/unscd: new package
+In-Reply-To: <565CCAEE.7070503@mind.be>
+References: <1448287096-18606-1-git-send-email-rdkehn@yahoo.com>
+ <1448287096-18606-2-git-send-email-rdkehn@yahoo.com>
+ <20151130224457.4baa3ab6@free-electrons.com>
+ <565CCAEE.7070503@mind.be>
+Message-ID: <20151130232238.401bc727@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-11-15 13:04, J?r?me Pouiller wrote:
-> Hello Yann,
+Arnout,
+
+On Mon, 30 Nov 2015 23:17:18 +0100, Arnout Vandecappelle wrote:
+
+> >>>> unscd 0.51 Patching
+> > support/scripts/apply-patches.sh  /home/thomas/projets/buildroot/output/build/unscd-0.51 /home/thomas/projets/buildroot/output/build/unscd-0.51/debian/patches
+> > Unsupported file type for /home/thomas/projets/buildroot/output/build/unscd-0.51/debian/patches/change_invalidate_request_info_output, skipping
+> > Unsupported file type for /home/thomas/projets/buildroot/output/build/unscd-0.51/debian/patches/support_large_numbers_in_config, skipping
 > 
-> On Sunday 29 November 2015 21:26:50 Yann E. MORIN wrote:
->> J?r?me, All,
->>
->> On 2015-11-18 15:37 +0100, J?r?me Pouiller spake thusly:
-[snip]
->> Well, for help from extenal.mk (or local.mk, but I'd arue that would
->> be a bad idea, given that local.mk is supposedly short-lived), there
->> is in my opinion a much better solution.
->>
->> Change the 'help' rule to a double-colon make rule, like so:
->>
->>     help::
->>         echo Current Buildroot help
->>
->> Then you can add as many such rules in as many places you want,
->> especially in external.mk, and the will be appended one after the
->> others.
->
-> Nice trick.
+>  Uh, that shouldn't happen, since 7caf464 everything in the series file should
+> be applied regardless of name...
 
- IMHO tricks (nice or not) are no good because they make things more difficult
-to understand. Also, we don't currently use the :: construct so I'd prefer to
-avoid introducing it.
+I tested on top of next, so it should have worked... but it did not. I
+didn't check if the patches were actually applied, but it is clear that
+this message was displayed, since I copy/pasted from my terminal.
 
-
->> We just have to ensure that our help comes before the external ones,
->> so maybe you'll have to move our help block before inclusion of
->> external.mk...
-> 
-> I have a slight preference for my proposal since I think it allows a 
-> finer control of the way extra help is handled. However, I have no 
-> problem to send a new patch using your trick.
-
- Because of what I wrote above, I also prefer your proposal.
-
-
- Regards,
- Arnout
-
-> 
-> Regards,
-> 
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
