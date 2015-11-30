@@ -1,103 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Nov 2015 15:53:25 +0100
-Subject: [Buildroot] [git commit] spi-tools: new package
-Message-ID: <20151201232124.94483821F8@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Nov 2015 13:06:07 +0100
+Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.1.2
+Message-ID: <20151201232124.C80C982214@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ed8750b4313bf26798c063c83a071995c90bb40
+commit: http://git.buildroot.net/buildroot/commit/?id=66a1ecb17afa904fee69d34aff03cb922cb9d27e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package contains some simple command line tools to help using Linux
-spidev devices.
-
-https://github.com/cpb-/spi-tools
-
-The included version is based in a sha1 and not a tagged version as the
-current master branch contains autotools support for build but there is
-no tagged version with autotools support yet.
-
-The only other quirk with the recipe is related to the VERSION define
-which is normally obtained in build time via git for this package, but
-that would fail within Buildroot as the package build is normally not
-performed inside a git repository.
-To work around that, I have added a hook which will substitute change
-the VERSION to match that of the Buildroot package.
-
-I have tested this package in an ARM target with a custom SPI device.
-
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                |  1 +
- package/spi-tools/Config.in      |  7 +++++++
- package/spi-tools/spi-tools.hash |  2 ++
- package/spi-tools/spi-tools.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 34 insertions(+)
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9e3494a..658dc03 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -417,6 +417,7 @@ endif
- 	source "package/smartmontools/Config.in"
- 	source "package/smstools3/Config.in"
- 	source "package/snowball-hdmiservice/Config.in"
-+	source "package/spi-tools/Config.in"
- 	source "package/sredird/Config.in"
- 	source "package/statserial/Config.in"
- 	source "package/stm32flash/Config.in"
-diff --git a/package/spi-tools/Config.in b/package/spi-tools/Config.in
-new file mode 100644
-index 0000000..8d26344
---- /dev/null
-+++ b/package/spi-tools/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SPI_TOOLS
-+	bool "spi-tools"
-+	help
-+	  This package contains some simple command line tools to help
-+	  using Linux spidev devices.
-+
-+	  https://github.com/cpb-/spi-tools
-diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
-new file mode 100644
-index 0000000..61ccd5e
---- /dev/null
-+++ b/package/spi-tools/spi-tools.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256	52ab1f1de29afbac95983f5af58adcb1807e1f3479a897e9331e020b5cfa296f  spi-tools-cc6a41fdcec60610703ba6db488c621c64952898.tar.gz
-diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
-new file mode 100644
-index 0000000..f3df435
---- /dev/null
-+++ b/package/spi-tools/spi-tools.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# spi-tools
-+#
-+################################################################################
-+
-+# git commit sha1 is used as there is no release tag with autotools support yet
-+SPI_TOOLS_VERSION = cc6a41fdcec60610703ba6db488c621c64952898
-+SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
-+# autoreconf must be run as specified in package documentation
-+SPI_TOOLS_AUTORECONF = YES
-+SPI_TOOLS_LICENSE = GPLv2
-+SPI_TOOLS_LICENSE_FILES = LICENSE
-+
-+# Package attempts to use git to obtain version, that fails within Buildroot.
-+# To avoid it, set the GIT_VERSION variable to the Buildroot package version.
-+define SPI_TOOLS_SET_VERSION
-+	$(SED) "s/^\(GIT_VERSION:=\).*/\1$(SPI_TOOLS_VERSION)/" \
-+		$(@D)/src/Makefile.am
-+endef
-+
-+SPI_TOOLS_POST_PATCH_HOOKS = SPI_TOOLS_SET_VERSION
-+
-+$(eval $(autotools-package))
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index e15cc17..0b2bdcb 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.1.tar.bz2.sha256
+-sha256	0c366a77276fa69d40006cf8a2f2dbcd82f3fb406f3960c3c3a0d34dd3a0f06c	harfbuzz-1.1.1.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.2.tar.bz2.sha256
++sha256	4a2c5790bd3db7c3ca8c02e4858f2fd592df7932c1d2fa9f6b99acbce0f8461f	harfbuzz-1.1.2.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 8251e1f..be8a899 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 1.1.1
++HARFBUZZ_VERSION = 1.1.2
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
