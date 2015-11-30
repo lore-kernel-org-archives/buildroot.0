@@ -1,36 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2015 17:23:38 +0100
-Subject: [Buildroot] [PATCH] libsigsegv: fix sparc64 compile
-In-Reply-To: <20151130161821.GZ19876@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Mon, 30 Nov 2015 17:18:22 +0100")
-References: <20151129145904.GA12312@waldemar-brodkorb.de>
- <87a8pvlaxn.fsf@dell.be.48ers.dk>
- <20151130161821.GZ19876@waldemar-brodkorb.de>
-Message-ID: <871tb7lalx.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Nov 2015 17:24:58 +0100
+Subject: [Buildroot] Compile kernel module within buildroot package
+In-Reply-To: <20151119183653.GA1025@arthur-bzh>
+References: <20151119183653.GA1025@arthur-bzh>
+Message-ID: <20151130172458.0a226cd6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+Dear Arthur LAMBERT,
 
-Hi,
+On Thu, 19 Nov 2015 19:36:53 +0100, Arthur LAMBERT wrote:
 
->> > Debian has a similar fix, but they don't care for sparc.
- >> 
- >> So why do they carry the fix?
+> I am currently using the 2015.08 version of buildroot. Kernel module compilation
+> is broken :
 
- > Because they care for sparc64 (sparcv9).
+This problem has been fixed in 2015.08.1, you should upgrade to this
+version (which has just three commits on top of 2015.08), or
+alternatively backport
 
-Ahh, like that.
+  http://git.buildroot.net/buildroot/commit/?h=2015.08.x&id=16768877e324f6e3e1291613ae5db9af0da5a2bf
 
->> Please try to submit the fix upstream.
+I was able to reproduce your problem on 2015.08, and with just this
+commit applied, lttng-modules could be built successfully.
 
- > Okay, I'll try.
+Best regards,
 
-Great, thanks!
-
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
