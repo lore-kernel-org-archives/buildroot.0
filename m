@@ -1,42 +1,142 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Nov 2015 23:44:21 +0100
-Subject: [Buildroot] [PATCH v5 1/2] package/unscd: new package
-In-Reply-To: <565CCC8C.3080106@mind.be>
-References: <1448287096-18606-1-git-send-email-rdkehn@yahoo.com>
- <1448287096-18606-2-git-send-email-rdkehn@yahoo.com>
- <20151130224457.4baa3ab6@free-electrons.com>
- <565CCAEE.7070503@mind.be>
- <20151130232238.401bc727@free-electrons.com>
- <565CCC8C.3080106@mind.be>
-Message-ID: <20151130234421.19d81f1c@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 30 Nov 2015 23:43:52 +0100
+Subject: [Buildroot] [PATCH v2] docs/website: cosmetic changes
+In-Reply-To: <565CCBC3.9010903@mind.be>
+References: <1448920481-21268-1-git-send-email-angelo.compagnucci@gmail.com>
+ <87oaebjgf3.fsf@dell.be.48ers.dk>
+ <CA+TH9V=qDnTm+qyGOCbQE6=EFskevW31jZewqQhk_JS9G35k7w@mail.gmail.com>
+ <565CCBC3.9010903@mind.be>
+Message-ID: <CA+TH9V=d-jMcuj0UBWgALZwXOm+sx4EHLb2ewNMutFf2VgmcMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Arnout Vandecappelle,
 
-On Mon, 30 Nov 2015 23:24:12 +0100, Arnout Vandecappelle wrote:
+2015-11-30 23:20 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+> On 30-11-15 23:06, Angelo Compagnucci wrote:
+>> Hi Peter,
+>>
+>> 2015-11-30 23:01 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+>>>
+>>>  > * Resized too big icons in download and documentation
+>>>  >   pages
+>>>
+>>>  > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>>>  > ---
+>>>  > Cheangelog:
+>>>
+>>>  > v1 -> v2:
+>>>  > Rebase to the latest git version
+>>>
+>>>  >  docs/website/css/main.css  |  15 ++-
+>>>  >  docs/website/docs.html     |  30 ++---
+>>>  >  docs/website/download.html | 330 ++++++++++++++++++++++-----------------------
+>>>  >  3 files changed, 189 insertions(+), 186 deletions(-)
+>>>
+>>>  > diff --git a/docs/website/css/main.css b/docs/website/css/main.css
+>>>  > index db9c4c9..57009cf 100644
+>>>  > --- a/docs/website/css/main.css
+>>>  > +++ b/docs/website/css/main.css
+>>>  > @@ -207,16 +207,21 @@ i {
+>>>  >  .flip-container {
+>>>  >      perspective: 1000;
+>>>  >  }
+>>>  > -    /* flip the pane when hovered */
+>>>  > -    .flip-container:hover .flipper, .flip-container.hover .flipper {
+>>>  > -            transform: rotateY(180deg);
+>>>  > -    }
+>>>  > +/* flip the pane when hovered */
+>>>  > +.flip-container:hover .flipper, .flip-container.hover .flipper {
+>>>  > +    transform: rotateY(180deg);
+>>>  > +}
+>>>
+>>>  > -.flip-container, .front, .back {
+>>>  > +.flip-container, .flip-container .front, .flip-container .back {
+>>>  >      width: 180px;
+>>>  >      height: 180px;
+>>>  >  }
+>>>
+>>>  > +.flip-container-small, .flip-container-small .front, .flip-container-small .back {
+>>>  > +    width: 120px;
+>>>  > +    height: 120px;
+>>>  > +}
+>>>  > +
+>>>  >  /* flip speed goes here */
+>>>  >  .flipper {
+>>>  >      transition: 0.6s;
+>>>  > diff --git a/docs/website/docs.html b/docs/website/docs.html
+>>>  > index 9cee36d..23cc13f 100644
+>>>  > --- a/docs/website/docs.html
+>>>  > +++ b/docs/website/docs.html
+>>>  > @@ -13,59 +13,59 @@
+>>>
+>>>  >        <div class="row mt centered">
+>>>  >      <div class="col-sm-4">
+>>>  > -      <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+>>>  > +      <div class="flip-container flip-container-small center-block" ontouchstart="this.classList.toggle('hover');">
+>>>  >          <div class="flipper">
+>>>  >            <div class="front">
+>>>  > -            <a href="/manual.html"><img src="images/browser.png" width="180" alt=""></a>
+>>>  > +            <a href="/manual.html"><img src="images/browser.png" width="120" alt=""></a>
+>>>
+>>> I'm far from a web expert, but why are we telling the browser to
+>>> downscale these images?
+>>>
+>>> file docs/website/images/browser.png
+>>> docs/website/images/browser.png: PNG image data, 256 x 256, 8-bit/color RGBA, non-interlaced
+>>>
+>>> E.G. why don't we send a 180x180 (or 120x120) image in the first place?
+>>
+>> They were from a smashing magazine free theme at that resolution, so i
+>> left the original image size. They can be rescaled, I'll glad to do it
+>> if you think it's important (to me not so much!)
+>
+>  There are various reasons why it's better to scale at the server side:
+>
+> - smaller image => less bandwidth;
+> - often better scaling algorithm with a real tool than with the browser;
+> - less visual discrepancy between different browsers.
+>
+>>
+>>>
+>>> Same for the other images.
+>>>
+>>>> +++ b/docs/website/download.html
+>>>  > @@ -4,176 +4,174 @@
+>>>  >  <div class="row nh">
+>>>  >  <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
+>>>
+>>>  > -  <div class="panel panel-primary">
+>>>
+>>> This diff is not very readable to me. Notice that I'm right now changing
+>>> download.html (to release 2015.11), so it would be good if you could
+>>> rebase (again!).
+>>
+>> No problem, I'll wait for a few more minutes (I'm tired!) and if the
+>> git tree will be updated, I'll send a patch in no time!
+>
+>  And then please also avoid the whitespace change :-)
 
->  7caf464 was applied to master only, and there has been no merge from master to
-> next. So that explains it.
+Ok, it's very difficult to maintain that page without reformatting, will try.
 
-Ah damn, ok.
+>
+>  Regards,
+>  Arnout
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
->  next will be gone soon so don't worry ;-)
 
-Indeed.
 
-Doug: can you resend a new version of the unscd patch, without the
-attempt to integrate the installation of the glibc provided nscd
-daemon? This way, we can merge unscd quickly, and then work on
-installing the one from glibc if you are interested.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Profile: http://it.linkedin.com/in/compagnucciangelo
