@@ -1,54 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2015 11:54:18 +0100
-Subject: [Buildroot] Missing 'sys/queue.h' on musl
-In-Reply-To: <20151129233338.261cf080@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 29 Nov 2015 23:33:38 +0100")
-References: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
- <20151128184915.6017fae9@free-electrons.com>
- <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
- <20151128192022.6bc8d7fd@free-electrons.com>
- <CANu7NGvmMFc9xADTq_ES7h=13LcnLH5yYJO9KV+8mSYSB-VVtg@mail.gmail.com>
- <20151129092811.0d05dabd@free-electrons.com>
- <20151129095306.GA3630@free.fr> <565B78D8.6070103@mind.be>
- <20151129233338.261cf080@free-electrons.com>
-Message-ID: <87h9k3n4f9.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 30 Nov 2015 08:08:34 -0300
+Subject: [Buildroot] [PATCH 1/2] harfbuzz: bump to version 1.1.2
+Message-ID: <1448881715-1868-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Hello,
- > On Sun, 29 Nov 2015 23:14:48 +0100, Arnout Vandecappelle wrote:
-
- >> > Adding such a package would be a Buildroot peculiarity, which I would
- >> > prefer we avoid.
- >> 
- >> +1 to that.
- >> 
- >> Also take into account that we only install it to staging, so there is really
- >> nothing to gain from installing it conditionally.
- >> 
- >> The only question is whether to do it in the toolchain virtual package (which
- >> would be unusual to say the least), or duplicate it in the musl and external
- >> toolchain packages. I actually think the latter is the way to go.
-
- > That's all fine with me. It is a lot better than duplicating
- > sys/queue.h everywhere. It is kind of adding a patch on top of musl
- > that we would have to keep on our side forever, but since it's just a
- > separate header file, there's no maintenance cost, so I think it's fine.
-
- > Regarding doing it in the toolchain virtual package or duplicate in
- > musl and external toolchain packages, I don't have a strong opinion
- > either way, so if Arnout feels like doing the duplication is better
- > then so be it. Despite the duplication I also believe it is more
- > logical to have it in the musl and external toolchain packages, since
- > doing that in the toolchain virtual package would make that package no
- > longer purely virtual.
-
-Indeed, I agree with Arnout here.
-
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index e15cc17..0b2bdcb 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.1.tar.bz2.sha256
+-sha256	0c366a77276fa69d40006cf8a2f2dbcd82f3fb406f3960c3c3a0d34dd3a0f06c	harfbuzz-1.1.1.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.2.tar.bz2.sha256
++sha256	4a2c5790bd3db7c3ca8c02e4858f2fd592df7932c1d2fa9f6b99acbce0f8461f	harfbuzz-1.1.2.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 8251e1f..be8a899 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 1.1.1
++HARFBUZZ_VERSION = 1.1.2
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
-Bye, Peter Korsgaard
+2.4.10
