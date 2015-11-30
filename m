@@ -1,78 +1,41 @@
-From: Alexey Galakhov <agalakhov@gmail.com>
-Date: Mon, 30 Nov 2015 15:19:36 +0100
-Subject: [Buildroot] [PATCH v2 1/1] core: add option to force compiling C++
-	as C++11
-Message-ID: <1448893176-21456-1-git-send-email-agalakhov@gmail.com>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Mon, 30 Nov 2015 15:28:30 +0100
+Subject: [Buildroot] [PATCH 1/1] netsniff-ng:Prevent finding host installed
+	nacl
+Message-ID: <1448893710-21961-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Many C++ libraries like boost and log4cplus use defines to be compatible with
-both C++03 and C++11 standards. This causes ABI incompatibilities between
-a library built with C++03 and an application built with C++11. To avoid this,
-one has to built libraries as C++11 as well.
-
-This patch introduces the BR2_ENABLE_CPP11 configuration option that forces
-passing --std=c++11 to the compiler while building C++ target libraries.
-
-Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 ---
- Config.in           | 17 +++++++++++++++++
- package/Makefile.in | 10 +++++++++-
- 2 files changed, 26 insertions(+), 1 deletion(-)
+ package/netsniff-ng/netsniff-ng.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index d795361..1ee2ca3 100644
---- a/Config.in
-+++ b/Config.in
-@@ -533,6 +533,23 @@ config BR2_ENABLE_SSP
- comment "enabling Stack Smashing Protection requires support in the toolchain"
- 	depends on !BR2_TOOLCHAIN_HAS_SSP
- 
-+config BR2_ENABLE_CPP11
-+	bool "force C++11 when building libraries"
-+	default n
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
-+	help
-+	  Force building of C++ libraries in C++11 mode.
-+
-+	  Some C++ libraries (i.e. boost) behave differently if compiled with
-+	  and without --std=c++11 flag. They define classes differently. This
-+	  causes linker errors while trying to use such a library in a C++11
-+	  project.
-+
-+	  This option forces building of all such libraries in C++11 mode.
-+	  Enable it if you encounter C++11-related linker errors while building
-+	  your own or some 3rd-party software against buildroot libraries.
-+
- choice
- 	bool "libraries"
- 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 85008bb..0cca97e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -135,9 +135,17 @@ ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
- endif
- 
-+ifeq ($(BR2_ENABLE_CPP11),y)
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
-+TARGET_CXXLANGUAGE = --std=c++11
-+else
-+TARGET_CXXLANGUAGE = --std=c++0x
-+endif
-+endif
-+
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
--TARGET_CXXFLAGS = $(TARGET_CFLAGS)
-+TARGET_CXXFLAGS = $(TARGET_CFLAGS) $(TARGET_CXXLANGUAGE)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
- ifeq ($(BR2_BINFMT_FLAT),y)
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index 4fed88c..40eecab 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -8,6 +8,10 @@ NETSNIFF_NG_VERSION = v0.5.9
+ NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
+ NETSNIFF_NG_LICENSE = GPLv2
+ NETSNIFF_NG_LICENSE_FILES = README COPYING
++# Prevent netsniff-ng configure script from finding a host installed nacl
++NETSNIFF_NG_CONF_ENV = \
++	NACL_INC_DIR=/dev/null \
++	NACL_LIB_DIR=/dev/null
+ NETSNIFF_NG_DEPENDENCIES = \
+ 	libnl libpcap libcli libnetfilter_conntrack \
+ 	liburcu libnet
+@@ -15,6 +19,7 @@ NETSNIFF_NG_DEPENDENCIES = \
+ # hand-written configure script and makefile
+ define NETSNIFF_NG_CONFIGURE_CMDS
+ 	(cd $(@D); \
++		$(NETSNIFF_NG_CONF_ENV) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		./configure \
 -- 
-2.6.2
+1.8.3.1
