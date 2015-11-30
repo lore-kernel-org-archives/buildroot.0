@@ -1,58 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Nov 2015 17:32:02 +0100
-Subject: [Buildroot] Missing 'sys/queue.h' on musl
-In-Reply-To: <CANu7NGuKGNtVyiWqN=KW1kW5zQA35NLaFVE2JP4GoS0wh3vuqw@mail.gmail.com>
-References: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
- <20151128184915.6017fae9@free-electrons.com>
- <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
- <20151128192022.6bc8d7fd@free-electrons.com>
- <CANu7NGvmMFc9xADTq_ES7h=13LcnLH5yYJO9KV+8mSYSB-VVtg@mail.gmail.com>
- <20151129092811.0d05dabd@free-electrons.com>
- <20151129095306.GA3630@free.fr> <565B78D8.6070103@mind.be>
- <20151129233338.261cf080@free-electrons.com>
- <87h9k3n4f9.fsf@dell.be.48ers.dk>
- <CANu7NGuKGNtVyiWqN=KW1kW5zQA35NLaFVE2JP4GoS0wh3vuqw@mail.gmail.com>
-Message-ID: <20151130173202.4f4933cc@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Nov 2015 17:08:10 +0100
+Subject: [Buildroot] [git commit] valgrind: add a patch to fix MIPS R6 by
+	replacing ADDI with ADDIU
+Message-ID: <20151130164028.DECA881EA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+commit: http://git.buildroot.net/buildroot/commit/?id=03ac181e049e8ce29156b05cb5e830de15f1692a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Nov 2015 13:07:36 -0200, Sergio Prado wrote:
+The ADDI instruction has been removed for MIPS R6, so valgrind fails to
+build for this revision level because it uses that assembly
+instruction. Using ADDIU instead fixes the problem.
 
-> I have created a package called sys-queue that will only install queue.h on
-> the staging dir.
-> 
-> Then to make musl generated toolchain depends on sys-queue, I added the
-> following lines to toolchain/toolchain-buildroot/toolchain-buildroot.mk:
-> 
-> ifeq ($(BR2_TOOLCHAIN_BUILDROOT_MUSL),y)
-> TOOLCHAIN_BUILDROOT_DEPENDENCIES += sys-queue
-> endif
-> 
-> It worked like a charm. Is this the correct approach?
+The patch has been sent upstream:
 
-No, because this will only work for internal toolchains. So instead,
-you need to put this dependency in two places:
+  https://bugs.kde.org/show_bug.cgi?id=356112
 
- 1/ In package/musl/musl.mk, where it should be an unconditional
-    dependency.
+Fixes:
 
- 2/ In toolchain/toolchain-external/toolchain-external.mk, where it
-    should be conditional on BR2_TOOLCHAIN_USES_MUSL.
+  http://autobuild.buildroot.net/results/488/488937704b3b6bae8daed7b24da8c740b56f4d84/
 
-> Also, I am struggling to find out a way to do the same thing on the
-> external toolchain. Using the DEPENDENCIES approach, it will process the
-> sys-queue package before the external toolchain package, and it is best to
-> do it after. Any ideas?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0003-mips-replace-addi-with-addiu.patch        |   51 ++++++++++++++++++++
+ 1 files changed, 51 insertions(+), 0 deletions(-)
 
-Is it really a problem if it is processed before?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/valgrind/0003-mips-replace-addi-with-addiu.patch b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
+new file mode 100644
+index 0000000..9168dce
+--- /dev/null
++++ b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
+@@ -0,0 +1,51 @@
++mips: replace addi with addiu
++
++ADDI instruction has been removed in R6 so let's use ADDIU instead.
++
++This patch has been sent upstream:
++
++  https://bugs.kde.org/show_bug.cgi?id=356112
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++Index: valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S
++===================================================================
++--- valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(revision 15740)
+++++ valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(working copy)
++@@ -196,7 +196,7 @@
++         addu $13, $13, $14
++ 
++         lw $12, 0($13) /* t3 = VG_(tt_fast)[hash] :: ULong* */
++-        addi $13, $13, 4
+++        addiu $13, $13, 4
++         lw $25, 0($13) /* little-endian, so comparing 1st 32bit word */
++         nop
++ 
++Index: valgrind/coregrind/m_libcsetjmp.c
++===================================================================
++--- valgrind/coregrind/m_libcsetjmp.c	(revision 15740)
+++++ valgrind/coregrind/m_libcsetjmp.c	(working copy)
++@@ -594,7 +594,7 @@
++ /* Checking whether second argument is zero. */
++ "   bnez $a1, 1f                \n\t"
++ "   nop                         \n\t"
++-"   addi $a1, $a1, 1            \n\t"  /* We must return 1 if val=0. */
+++"   addiu $a1, $a1, 1           \n\t"  /* We must return 1 if val=0. */
++ "1:                             \n\t"
++ "   move $v0, $a1               \n\t"  /* Return value of second argument. */
++ "   j    $ra                    \n\t"
++Index: valgrind/coregrind/m_trampoline.S
++===================================================================
++--- valgrind/coregrind/m_trampoline.S	(revision 15740)
+++++ valgrind/coregrind/m_trampoline.S	(working copy)
++@@ -1254,8 +1254,8 @@
++       //la $a0, string
++       j strlen_cond
++    strlen_loop:
++-      addi $v0, $v0, 1
++-      addi $a0, $a0, 1
+++      addiu $v0, $v0, 1
+++      addiu $a0, $a0, 1
++    strlen_cond:
++       lbu $t0, ($a0)
++       bne $t0, $zero, strlen_loop
