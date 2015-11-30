@@ -1,136 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Nov 2015 22:10:30 +0100
-Subject: [Buildroot] [PATCH v2] wiringpi: new package
-In-Reply-To: <1448400991-5011-1-git-send-email-ps.report@gmx.net>
-References: <1448400991-5011-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151130221030.3f74feb7@free-electrons.com>
+Date: Mon, 30 Nov 2015 22:20:11 +0100
+Subject: [Buildroot] [git commit] guile: use libltdl,
+	needs dynamic libraries
+In-Reply-To: <87k2p5vxdn.fsf@dell.be.48ers.dk>
+References: <20151125222250.4B3B07FC4C@busybox.osuosl.org>
+ <20151126093555.5459974e@free-electrons.com>
+ <87k2p5vxdn.fsf@dell.be.48ers.dk>
+Message-ID: <20151130222011.14df7412@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Peter,
 
-On Tue, 24 Nov 2015 22:36:31 +0100, Peter Seiderer wrote:
+On Thu, 26 Nov 2015 12:00:20 +0100, Peter Korsgaard wrote:
 
-> diff --git a/package/Config.in b/package/Config.in
-> index bdc3063..9d273e7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -438,6 +438,7 @@ endif
->  	source "package/w_scan/Config.in"
->  	source "package/wf111/Config.in"
->  	source "package/wipe/Config.in"
-> +	source "package/wiringpi/Config.in"
+>  > from guile.mk. But it is weird, because I remember adding those three
+>  > lines in guile.mk in commit 49593aba5a56c9c297c31c12fc4dc3de5679e7b1,
+>  > and at the time, I tested a static build of guile and it worked fine.
+>  > But maybe it was a static build with a dynamic capable toolchain, so I
+>  > didn't see all the problems.
+> 
+> The problem is really about toolchains with dynamic library support but
+> used in a static buildroot configuration. The libtool configure script
+> detects that the system supports dlopen/dlsym and builds libltdl with
+> that backend, but then later the guile configure script fails to link a
+> test program with libltdl as it doesn't link with -ldl.
+> 
+> As far as I can see libltdl with a toolchain not supporting shared
+> libraries doesn't do anything sensible. Perhaps libtool itself should
+> depend on !BR2_STATIC_LIBS?
 
-Isn't wiringpi mainly a library ? Maybe it should go under Libraries ->
-Hardware handling.
+Perhaps, yes.
 
-> +diff --git a/devLib/Makefile b/devLib/Makefile
-> +index 0fb0033..f956abe 100644
-> +--- a/devLib/Makefile
-> ++++ b/devLib/Makefile
-> +@@ -37,7 +37,7 @@ DYNAMIC=libwiringPiDev.so.$(VERSION)
-> + #DEBUG	= -g -O0
-> + DEBUG	= -O2
-> + CC	= gcc
-> +-INCLUDE	= -I.
-> ++INCLUDE	= -I$(DESTDIR)$(PREFIX)/wiringPi  -I$(DESTDIR)$(PREFIX)/devLib
-> + DEFS	= -D_GNU_SOURCE
-> + CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC
-> + 
-> +diff --git a/gpio/Makefile b/gpio/Makefile
-> +index 7dcd090..f5b588a 100644
-> +--- a/gpio/Makefile
-> ++++ b/gpio/Makefile
-> +@@ -33,7 +33,7 @@ endif
-> + #DEBUG	= -g -O0
-> + DEBUG	= -O2
-> + CC	= gcc
-> +-INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
-> ++INCLUDE	= -I$(DESTDIR)$(PREFIX)/wiringPi  -I$(DESTDIR)$(PREFIX)/devLib
+> With that said, I am not sure if guile works at runtime without shared
+> libraries so I went with the safe approach of disallowing it for
+> 2015.11.
 
-This patch is not correct I believe. It makes the assumption that
-wiringPi is already installed in $(DESTDIR)$(PREFIX), which it is not
-when you are building it.
-
-> diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
-> new file mode 100644
-> index 0000000..258bb25
-> --- /dev/null
-> +++ b/package/wiringpi/wiringpi.mk
-> @@ -0,0 +1,29 @@
-
-Missing comment header.
-
-> +WIRINGPI_VERSION = 2.29
-> +WIRINGPI_SITE = git://git.drogon.net/wiringPi
-> +WIRINGPI_INSTALL_STAGING = YES
-
-Missing license + license file information.
-
-> +
-> +define WIRINGPI_BUILD_CMDS
-> +	$(MAKE) -C $(@D)/wiringPi CC=$(TARGET_CC)
-
-It would be a lot better to use $(TARGET_CONFIGURE_OPTS), and
-$(TARGET_MAKE_ENV), i.e:
-
-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/wiringPi
-
-the CC=$(TARGET_CC) is already part of TARGET_CONFIGURE_OPTS. Also you
-will probably have to adjust the Makefile to turn CFLAGS = into CFLAGS
-+=.
-
-> +	$(INSTALL) -D -m 0755 $(@D)/wiringPi/libwiringPi.so.2.29 $(STAGING_DIR)/usr/lib/libwiringPi.so.2.29
-> +	ln -sf $(STAGING_DIR)/usr/lib/libwiringPi.so.2.29 $(STAGING_DIR)/usr/lib/libwiringPi.so
-
-Why are you doing installation within the <pkg>_BUILDS_CMDS ? This is not good ?
-
-> +	$(MAKE) -C $(@D)/devLib CC=$(TARGET_CC) PREFIX=$(@D) DESTDIR=
-
-Why is DESTDIR= needed here ?
-
-> +	$(INSTALL) -D -m 0755 $(@D)/devLib/libwiringPiDev.so.2.29 $(STAGING_DIR)/usr/lib/libwiringPiDev.so.2.29
-> +	ln -sf $(STAGING_DIR)/usr/lib/libwiringPiDev.so.2.29 $(STAGING_DIR)/usr/lib/libwiringPiDev.so
-
-Ditto installation.
-
-> +	$(MAKE) -C $(@D)/gpio CC=$(TARGET_CC) PREFIX=$(@D) DESTDIR=
-> +endef
-> +
-> +define WIRINGPI_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 0644 $(@D)/wiringPi/*.h $(STAGING_DIR)/usr/include
-> +	$(INSTALL) -D -m 0644 $(@D)/devLib/*.h $(STAGING_DIR)/usr/include
-
-This is not good because $(INSTALL) -D expect a full destination path.
-I guess the easiest is just:
-
-	cp -dpfr $(@D)/wiringPi/*.h $(STAGING_DIR)/usr/include
-
-> +define WIRINGPI_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/wiringPi/libwiringPi.so* $(TARGET_DIR)/usr/lib
-> +	ln -sf libwiringPi.so.2.29  $(TARGET_DIR)/usr/lib/libwiringPi.so
-> +	$(INSTALL) -D -m 0755 $(@D)/devLib/libwiringPiDev.so* $(TARGET_DIR)/usr/lib
-> +	ln -sf libwiringPiDev.so.2.29 $(TARGET_DIR)/usr/lib/libwiringPiDev.so
-> +	$(INSTALL) -D -m 0755 $(@D)/gpio/gpio $(TARGET_DIR)/usr/bin
-> +	$(INSTALL) -D -m 0755 $(@D)/gpio/pintest $(TARGET_DIR)/usr/bin
-
-Same comments here: $(INSTALL) -D requires a full destination path.
-Otherwise, if $(TARGET_DIR)/usr/bin doesn't exist as a directory, you
-will have you "pintest" program installed as "bin" in $(TARGET_DIR)/usr.
-
-Moreover, the upstream project has some "install" and "install-static"
-targets. You should use them instead of doing manual installation.
-
-Finally, if you're installing unconditionally shared libraries, then it
-means that they are always being built. So your package should depend
-on !BR2_STATIC_LIBS.
-
-Can you fix those comments and send an updated version ?
-
-Thanks!
+Yes, and I also don't care about guile too much, and even less so in
+static configurations :)
 
 Thomas
 -- 
