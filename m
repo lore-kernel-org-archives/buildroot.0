@@ -1,44 +1,88 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2015 13:06:15 +0100
-Subject: [Buildroot] [git commit branch/next] freetype: bump to version 2.6.2
-Message-ID: <20151130122224.5CEB47FE13@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 30 Nov 2015 12:25:46 +0000
+Subject: [Buildroot] [PATCH] valgrind: add a patch to fix MIPS R6 by
+	replacing ADDI with ADDIU
+Message-ID: <1448886346-62868-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=76a861290416532cb1c5b5191d2b064091bc1c8c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+The ADDI instruction has been removed for MIPS R6, so valgrind fails to
+build for this revision level because it uses that assembly
+instruction. Using ADDIU instead fixes the problem.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The patch has been sent upstream:
+
+  https://bugs.kde.org/show_bug.cgi?id=356112
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/488/488937704b3b6bae8daed7b24da8c740b56f4d84/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/freetype/freetype.hash |    6 +++---
- package/freetype/freetype.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0003-mips-replace-addi-with-addiu.patch        | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/valgrind/0003-mips-replace-addi-with-addiu.patch
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index d857a38..dc238f2 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.1/
--md5 35cb8f4d9e5906847901bb39324c2f80  freetype-2.6.1.tar.bz2
--sha1 393447fbf64c107b20a1ccc9e9a9a52f39786ae0  freetype-2.6.1.tar.bz2
-+# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.2/
-+md5 86109d0c998787d81ac582bad9adf82e  freetype-2.6.2.tar.bz2
-+sha1 29c22b85b77cb22cf95c13e7062e21f39fe6b17a  freetype-2.6.2.tar.bz2
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 1fb5b8f..fa11b0c 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.6.1
-+FREETYPE_VERSION = 2.6.2
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
- FREETYPE_INSTALL_STAGING = YES
+diff --git a/package/valgrind/0003-mips-replace-addi-with-addiu.patch b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
+new file mode 100644
+index 0000000..9168dce
+--- /dev/null
++++ b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
+@@ -0,0 +1,51 @@
++mips: replace addi with addiu
++
++ADDI instruction has been removed in R6 so let's use ADDIU instead.
++
++This patch has been sent upstream:
++
++  https://bugs.kde.org/show_bug.cgi?id=356112
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++Index: valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S
++===================================================================
++--- valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(revision 15740)
+++++ valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(working copy)
++@@ -196,7 +196,7 @@
++         addu $13, $13, $14
++ 
++         lw $12, 0($13) /* t3 = VG_(tt_fast)[hash] :: ULong* */
++-        addi $13, $13, 4
+++        addiu $13, $13, 4
++         lw $25, 0($13) /* little-endian, so comparing 1st 32bit word */
++         nop
++ 
++Index: valgrind/coregrind/m_libcsetjmp.c
++===================================================================
++--- valgrind/coregrind/m_libcsetjmp.c	(revision 15740)
+++++ valgrind/coregrind/m_libcsetjmp.c	(working copy)
++@@ -594,7 +594,7 @@
++ /* Checking whether second argument is zero. */
++ "   bnez $a1, 1f                \n\t"
++ "   nop                         \n\t"
++-"   addi $a1, $a1, 1            \n\t"  /* We must return 1 if val=0. */
+++"   addiu $a1, $a1, 1           \n\t"  /* We must return 1 if val=0. */
++ "1:                             \n\t"
++ "   move $v0, $a1               \n\t"  /* Return value of second argument. */
++ "   j    $ra                    \n\t"
++Index: valgrind/coregrind/m_trampoline.S
++===================================================================
++--- valgrind/coregrind/m_trampoline.S	(revision 15740)
+++++ valgrind/coregrind/m_trampoline.S	(working copy)
++@@ -1254,8 +1254,8 @@
++       //la $a0, string
++       j strlen_cond
++    strlen_loop:
++-      addi $v0, $v0, 1
++-      addi $a0, $a0, 1
+++      addiu $v0, $v0, 1
+++      addiu $a0, $a0, 1
++    strlen_cond:
++       lbu $t0, ($a0)
++       bne $t0, $zero, strlen_loop
+-- 
+2.4.10
