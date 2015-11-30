@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2015 17:04:48 +0100
-Subject: [Buildroot] [git commit] imagemagick: bump version to 6.9.2-7
-Message-ID: <20151201232125.05344821F8@busybox.osuosl.org>
+Date: Mon, 30 Nov 2015 21:17:20 +0100
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.136
+Message-ID: <20151201232125.10D1A821F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b768ed4d06524204dbed46df68a24887fab48ea9
+commit: http://git.buildroot.net/buildroot/commit/?id=15e062edde24e6b92b741acbb3364c99da754b25
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 61f73fb..3931762 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index a51b9a4..99c576e 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
 @@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 19fb341725a13c01458cfce23d0a260fd032432a5daeebdd4f06c92d716ded40 ImageMagick-6.9.2-5.tar.xz
-+sha256 eef80bf259823523dafbcdae15e236b443ecf6d4ae415106d7a861d1fa8d9d13  ImageMagick-6.9.2-7.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index c149829..9238952 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 698fadf1a12f6bfc6f8bd9d6499d2cf181e2cf7b9a5105b58cb55168f6104c949aa5d5da0585194d54614128a14abc7b939d43b32f7175057ad14cb1c62796a0  LVM2.2.02.135.tgz
++sha512 ebda683e7dbeb2c4860a583d47e60756d18127e37a373ab2958af8e54b9bee0d2e3370b7803d88fa4b08564345c88af55bfbac317081160118ce4b3733b69f9d  LVM2.2.02.136.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 9caa051..71e69d6 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 6.9.2-5
-+IMAGEMAGICK_VERSION = 6.9.2-7
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+-LVM2_VERSION = 2.02.135
++LVM2_VERSION = 2.02.136
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
