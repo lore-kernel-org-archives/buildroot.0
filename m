@@ -1,149 +1,76 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Mon, 30 Nov 2015 12:30:58 -0300
-Subject: [Buildroot] [PATCH] openbox: new package
-Message-ID: <1448897458-28332-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Mon, 30 Nov 2015 13:40:39 -0200
+Subject: [Buildroot] [PATCH 1/1] conntrack-tools: work around build issue
+	with musl
+Message-ID: <1448898039-27784-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for the Openbox Windows Manager.
+Building conntrack-tools with kernel headers >= 4.2 + musl fails due to
+a well-known symbol clash that occurs when userspace and kernel headers
+are included simultaneously (see [1], question 7, for details).
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+In the case of conntrack-tools, the inclusion of both 'netinet/in.h' and
+'linux/in.h' occurs inside the C helper files (src/helpers/*.c)
+indirectly via e.g. 'libnetfilter_conntrack/libnetfilter_conntrack.h',
+which itself includes 'netinet/in.h', and 'linux/netfilter.h', which
+includes 'linux/in.h' in kernel headers >= 4.2.
+
+The approach to solving this type of conflict with musl usually involves
+removing the inclusion of kernel headers or refactoring the code so as
+to avoid the mentioned simultaneous inclusion. This is unfortunately
+non-trivial in the case of conntrack-tools since the clashing headers
+get included indirectly by headers that are strictly necessary (because
+of definitions used in some helper callbacks).
+
+Work around the issue by defining __GLIBC__ when musl is used. This
+eliminates the conflicts as the kernel headers avoid redefining certain
+symbols when they see __GLIBC__ defined (linux/libc-compat.h). Note that
+other glibc-compatible libraries, like uClibc, already do that
+internally.
+
+Fixes:
+  http://autobuild.buildroot.net/results/66e/66ec247fa0fc385bef8d2084c65bf5cad3a8e8ca/
+  http://autobuild.buildroot.net/results/624/624a0d48decd819eb58cbb3c58ee904b87ebfb21/
+
+[1] http://wiki.musl-libc.org/wiki/FAQ
+
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 ---
-Openbox was submitted long ago to Buildroot but it never got accepted:
+ package/conntrack-tools/conntrack-tools.mk | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-http://lists.busybox.net/pipermail/buildroot/2009-December/030717.html
-
-The current patch was written independently and completely unaware
-of the above submission.
-
-Tested on a Beaglebone Black.
-
- package/Config.in            |  1 +
- package/openbox/Config.in    | 20 ++++++++++++++
- package/openbox/openbox.hash |  3 +++
- package/openbox/openbox.mk   | 62 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 86 insertions(+)
- create mode 100644 package/openbox/Config.in
- create mode 100644 package/openbox/openbox.hash
- create mode 100644 package/openbox/openbox.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index bdc3063abd1a..042cc6723682 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -303,6 +303,7 @@ comment "X window managers"
- 	source "package/fluxbox/Config.in"
- 	source "package/matchbox/Config.in"
- 	source "package/metacity/Config.in"
-+	source "package/openbox/Config.in"
- endmenu
+diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
+index eac5841..7287587 100644
+--- a/package/conntrack-tools/conntrack-tools.mk
++++ b/package/conntrack-tools/conntrack-tools.mk
+@@ -13,10 +13,22 @@ CONNTRACK_TOOLS_DEPENDENCIES = host-pkgconf \
+ CONNTRACK_TOOLS_LICENSE = GPLv2+
+ CONNTRACK_TOOLS_LICENSE_FILES = COPYING
  
- menu "Hardware handling"
-diff --git a/package/openbox/Config.in b/package/openbox/Config.in
-new file mode 100644
-index 000000000000..796047142c3e
---- /dev/null
-+++ b/package/openbox/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_OPENBOX
-+	bool "openbox"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_USE_MMU # glib2
-+	depends on BR2_USE_WCHAR # glib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_PANGO
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	help
-+	  Openbox is a highly configurable, next generation window
-+	  manager with extensive standards support.
++CONNTRACK_TOOLS_CFLAGS = $(TARGET_CFLAGS)
 +
-+	  http://openbox.org
-+
-+comment "openbox needs a MMU and a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_XORG7
-diff --git a/package/openbox/openbox.hash b/package/openbox/openbox.hash
-new file mode 100644
-index 000000000000..b8839cae2dec
---- /dev/null
-+++ b/package/openbox/openbox.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  abe75855cc5616554ffd47134ad15291fe37ebbebf1a80b69cbde9d670f0e26d  openbox-3.6.1.tar.xz
-+
-diff --git a/package/openbox/openbox.mk b/package/openbox/openbox.mk
-new file mode 100644
-index 000000000000..da88f17b54d9
---- /dev/null
-+++ b/package/openbox/openbox.mk
-@@ -0,0 +1,62 @@
-+################################################################################
-+#
-+# openbox
-+#
-+################################################################################
-+
-+OPENBOX_VERSION = 3.6.1
-+OPENBOX_SOURCE = openbox-$(OPENBOX_VERSION).tar.xz
-+
-+OPENBOX_SITE = http://openbox.org/dist/openbox
-+OPENBOX_LICENSE = GPLv2+
-+OPENBOX_LICENSE_FILES = COPYING
-+
-+OPENBOX_CONF_OPTS = \
-+	--x-includes=$(STAGING_DIR)/usr/include/X11 \
-+	--x-libraries=$(STAGING_DIR)/usr/lib
-+
-+OPENBOX_DEPENDENCIES = xlib_libX11 libxml2 libglib2 pango
-+
-+ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
-+OPENBOX_CONF_OPTS += --enable-imlib2
-+OPENBOX_DEPENDENCIES += imlib2
-+else
-+OPENBOX_CONF_OPTS += --disable-imlib2
++# Some of conntrack-tools source files include both linux/in.h (via
++# linux/netfilter.h for kernel headers >= 4.2) and netinet/in.h, which
++# causes some symbol conflicts when musl is used. Defining __GLIBC__
++# works around that issue since the kernel headers are prepared to
++# avoid redefinition of certain symbols when they see __GLIBC__.
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++CONNTRACK_TOOLS_CFLAGS += -D__GLIBC__
 +endif
 +
-+ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
-+OPENBOX_CONF_OPTS += --enable-startup-notification
-+OPENBOX_DEPENDENCIES += startup-notification
-+else
-+OPENBOX_CONF_OPTS += --disable-startup-notification
-+endif
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+-CONNTRACK_TOOLS_CONF_ENV += \
+-	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
++CONNTRACK_TOOLS_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+ CONNTRACK_TOOLS_DEPENDENCIES += libtirpc host-pkgconf
+ endif
+ 
++CONNTRACK_TOOLS_CONF_ENV = CFLAGS="$(CONNTRACK_TOOLS_CFLAGS)"
 +
-+ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
-+OPENBOX_CONF_OPTS += --enable-session-management
-+OPENBOX_DEPENDENCIES += xlib_libSM
-+else
-+OPENBOX_CONF_OPTS += --disable-session-management
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-+OPENBOX_CONF_OPTS += --enable-xinerama
-+OPENBOX_DEPENDENCIES += xlib_libXinerama
-+else
-+OPENBOX_CONF_OPTS += --disable-xinerama
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-+OPENBOX_CONF_OPTS += --enable-xrandr
-+OPENBOX_DEPENDENCIES += xlib_libXrandr
-+else
-+OPENBOX_CONF_OPTS += --disable-xrandr
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
-+OPENBOX_DEPENDENCIES += xlib_libXcursor
-+OPENBOX_CONF_OPTS += --enable-xcursor
-+else
-+OPENBOX_CONF_OPTS += --disable-xcursor
-+endif
-+
-+$(eval $(autotools-package))
+ $(eval $(autotools-package))
 -- 
-2.6.2
+2.1.4
