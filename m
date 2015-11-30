@@ -1,66 +1,89 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 30 Nov 2015 23:15:29 +0100
-Subject: [Buildroot] [PATCH v3] docs/website: cosmetic changes
-In-Reply-To: <20151130231004.45726f67@free-electrons.com>
-References: <1448920882-28065-1-git-send-email-angelo.compagnucci@gmail.com>
- <20151130231004.45726f67@free-electrons.com>
-Message-ID: <CA+TH9VntiF2dpe7VuU5RtvTtAwTKvaCg02o4ihyNLY=MGL3iSw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 30 Nov 2015 23:17:18 +0100
+Subject: [Buildroot] [PATCH v5 1/2] package/unscd: new package
+In-Reply-To: <20151130224457.4baa3ab6@free-electrons.com>
+References: <1448287096-18606-1-git-send-email-rdkehn@yahoo.com>
+ <1448287096-18606-2-git-send-email-rdkehn@yahoo.com>
+ <20151130224457.4baa3ab6@free-electrons.com>
+Message-ID: <565CCAEE.7070503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+On 30-11-15 22:44, Thomas Petazzoni wrote:
+> Dear Doug Kehn,
+> 
+> On Mon, 23 Nov 2015 07:58:15 -0600, Doug Kehn wrote:
+> 
+>> diff --git a/package/unscd/Config.in b/package/unscd/Config.in
+>> new file mode 100644
+>> index 0000000..1639bca
+>> --- /dev/null
+>> +++ b/package/unscd/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_UNSCD
+>> +	bool "unscd"
+>> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+>> +	depends on !BR2_GLIBC_NSCD
+> 
+> I think you should leave this BR2_GLIBC_NSCD thing on the side for now.
+> Just make unscd a normal package, and don't worry about nscd coming
+> from glibc: there is anyway no mechanism in Buildroot today to install
+> the nscd coming from the toolchain.
+> 
+>> +UNSCD_POST_EXTRACT_HOOKS += UNSCD_EXTRACT_DEBIAN
+>> +
+>> +define UNSCD_APPLY_DEBIAN_PATCHES
+>> +	$(APPLY_PATCHES) $(@D) $(@D)/debian/patches
+>> +endef
+>> +
+>> +UNSCD_POST_PATCH_HOOKS += UNSCD_APPLY_DEBIAN_PATCHES
+> 
+> This doesn't work because the patches don't end with an extension that
+> is recognized by our apply-patch script. So all what you see is:
+> 
+>>>> unscd 0.51 Patching
+> support/scripts/apply-patches.sh  /home/thomas/projets/buildroot/output/build/unscd-0.51 /home/thomas/projets/buildroot/output/build/unscd-0.51/debian/patches
+> Unsupported file type for /home/thomas/projets/buildroot/output/build/unscd-0.51/debian/patches/change_invalidate_request_info_output, skipping
+> Unsupported file type for /home/thomas/projets/buildroot/output/build/unscd-0.51/debian/patches/support_large_numbers_in_config, skipping
 
-2015-11-30 23:10 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Angelo Compagnucci,
->
-> On Mon, 30 Nov 2015 23:01:22 +0100, Angelo Compagnucci wrote:
->> * Resized too big icons in download and documentation
->>   pages
->>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> ---
->> Cheangelog:
->>
->> v1 -> v2:
->> Rebase to the latest git version
->>
->> v2 -> v3:
->> Minor fixing to missing tags
->>
->>  docs/website/css/main.css  |  15 ++-
->>  docs/website/docs.html     |  30 ++---
->>  docs/website/download.html | 330 ++++++++++++++++++++++-----------------------
->>  3 files changed, 189 insertions(+), 186 deletions(-)
->
-> Please don't re-indent the entire file again. I did re-indent it with
-> Emacs HTML mode (I know Peter is also using Emacs, so I was assuming
-> this would simplify things for him).
+ Uh, that shouldn't happen, since 7caf464 everything in the series file should
+be applied regardless of name...
 
-It was very difficult to me to follow the new indentation, mixed
-spaces and tabs was a big mess to my eyes.
+> 
+> which makes the entire dance around applying the Debian patches useless.
+> 
+> Unfortunately, fixing this requires fixing our apply-patches script.
 
-At this point I think this patch could be abandoned, I'll rework it as
-soon I have again a little bit of free time.
+ Which I did :-)
 
-Probably it could be better to stick to some html formatter external
-to emacs (I'm more a vim guy!)
 
-Sincerely, Angelo
+ Regards,
+ Arnout
 
->
-> Thanks!
->
+> Generally speaking, I am not super happy with all the logic we need to
+> add in various packages to get them to apply the Debian patches. But
+> Debian packages vary quite a bit in the way the patches are organized,
+> so I don't know if it's doable to fix.
+> 
+> BTW any reason to not use the upstream version, at
+> http://busybox.net/~vda/unscd/nscd-0.52.c, which is higher than 0.51 ?
+> 
+> Can you look into this patching issue (or alternatively use 0.52 with
+> no patches) and send an updated version ?
+> 
+> Thanks !
+> 
 > Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
+> 
 
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
