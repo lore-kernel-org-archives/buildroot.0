@@ -1,100 +1,92 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 30 Nov 2015 13:32:18 +0100
-Subject: [Buildroot] [PATCH 0/5] Introduce alternative archive format
-In-Reply-To: <20151129180227.GE3630@free.fr>
-References: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
- <20151119130253.0dd0aebb@free-electrons.com> <20151129180227.GE3630@free.fr>
-Message-ID: <10204706.XvmL4o525s@sagittea>
+From: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Date: Mon, 30 Nov 2015 21:32:29 +0900
+Subject: [Buildroot] [PATCH] package/gauche: remove unnecessary files
+ for target, fix a typo
+In-Reply-To: Your message of Sun, 29 Nov 2015 21:35:56 +0100.
+ <20151129203556.GJ3630@free.fr>
+Message-ID: <201511301232.tAUCWTLU006812@ms-omx01.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Dear Yann.
 
-On Sunday 29 November 2015 19:02:27 Yann E. MORIN wrote:
-> J?r?me, Thomas, All,
-> 
-> On 2015-11-19 13:02 +0100, Thomas Petazzoni spake thusly:
-> > On Thu, 19 Nov 2015 11:36:01 +0100, J?r?me Pouiller wrote:
-> > > As suggested by Arnout [1], this series provide an alternative
-> > > archive format. This new format contains a shallowed version of
-> > > upstream repository. This format is a little bigger and a little
-> > > longer to create but it allow a better workflow with upstream. I
-> > > describe some good practice in patch 2.
-> > > 
-> > > Notice projects hosted by github don't yet benefit of this feature
-> > > since I have not found any elegant way to do it :-(.
-> > > 
-> > > During my tests, I have noticed current shallow clone is mostly
-> > > broken (at least with git < 2.5 [2]). Indeed, shallow clone only
-> > > work with symbolic references (HEAD, a tag or a branch). However,
-> > > we avoid use of symbolic references in VERSION.
-> > 
-> > Thanks for this contribution.
-> > 
-> > Your justification in PATCH 2 is just "That simplify workflow with
-> > upstream". However, we already have the <pkg>_OVERRIDE_SRCDIR
-> > mechanism (and <pkg>_SITE_METHOD = local, which is the same) to
-> > specifically address this use case.
-> > 
-> > The idea with <pkg>_OVERRIDE_SRCDIR is that if you are actively
-> > developing on a software component, then it should not be
-> > Buildroot's
-> > responsibility to download/extract/patch it, but it should instead
-> > use a locally available source directory, which is managed
-> > completely separately from Buildroot. There you can do whatever
-> > Git, Subversion or Mercurial version control you want, Buildroot
-> > will simply rsync to the build directory.
-> > 
-> > I think doing development in the build directory, as encouraged by
-> > your patch, is a bad practice. The build directory is a temporary
-> > location, people should not be encouraged to work from there.
-> > 
-> > And I fail to see what your solution brings compared to using
-> > <pkg>_OVERRIDE_SRCDIR or <pkg>_SITE_METHOD = local. To me, the
-> > existing solutions are in fact more flexible and don't encourage
-> > the practice of hacking in the build directory.
-> > 
-> > Of course, if there is a specific workflow that you could describe
-> > that doesn't work with <pkg>_OVERRIDE_SRCDIR, then I'm definitely
-> > interested, and from this discussion we can decide whether
-> > improvements to OVERRIDE_SRCDIR are needed, or if a completely
-> > different solution is needed.
-> 
-> I have to agree with Thomas: we already have one mechanism to do
-> actual development on packages, and I believe that it is the best we
-> can offer:
-> 
->   - it is not removed on 'make clean'  (the killing feature for it)
-> 
->   - it can be managed however the developer wants to  (that too is a
->     killing feature)
-> 
->   - it is not too complex to setup
-> 
-> Also, I believe it covers all use-cases we can imagine.
-> 
-> The one thing that is made a bit more complex is gdb-ing, because path
-> in the build directory are referenced, rather than in the actual
-> source dir. IMHO, that's a minor annoyance, and it is easy to
-> mentally match the former to the latter.
-> 
-> So, except for the first patch which is indeed a nice cleanup, I'm not
-> too favourable to that series as a whole...
+Thank you for your comment.
 
-hmm... You suggest to use <pkg>_OVERRIDE_SRCDIR even to do small fixes 
-like build failures or version changes? In this case, I offer to provide 
-a script to do same thing than in my proposal (get git repo if available 
-and apply BR patches) but in an external directory. But I don't like 
-this approach because it break concept that everything is launched from 
-"make"
-
+Building of gauche is based on autotools, so installation process
+is embedded in it. I think this (in my patch) method will be more
+straightforward and comprehensive way rather than tweeking configure.ac
+or something like that.
+What do you think ?
 
 Regards,
+Kawashima
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+"Yann E. MORIN" writes:
+> Hiroshi, All,
+> 
+> On 2015-11-10 18:22 +0900, Hiroshi Kawashima spake thusly:
+> > Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+> > ---
+> > diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
+> > index b887c6a..8406774 100644
+> > --- a/package/gauche/gauche.mk
+> > +++ b/package/gauche/gauche.mk
+> > @@ -4,7 +4,8 @@
+> >  #
+> >  ##########################################################################
+> ######
+> >  
+> > -GAUCHE_VERSION = 0.9.4
+> > +GAUCHE_VERSION_MAJOR = 0.9
+> > +GAUCHE_VERSION = $(GAUCHE_VERSION_MAJOR).4
+> >  GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
+> >  GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
+> >  GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
+> > @@ -23,10 +24,24 @@ endif
+> >  # Detection of c99 support in configure fails without WCHAR. To enable
+> >  # automatic detection of c99 support by configure, we need to enable
+> >  # WCHAR in toolchain. But actually we do not need WCHAR at gauche
+> > -# runtime. So reuesting WCHAR in toolchain just for automatic detection
+> > +# runtime. So requesting WCHAR in toolchain just for automatic detection
+> >  # will be overkill. To solve this, explicitly -std=gnu99 is specified
+> >  # here.
+> >  GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+> >  
+> > +define GAUCHE_REMOVE_UNNEEDED
+> > +	for i in gauche-config gauche-install gauche-package ; do \
+> > +		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+> > +		rm -f $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GA
+> UCHE_VERSION)/$(GNU_TARGET_NAME)/$$i ; \
+> > +	done
+> > +	for i in gencomp genstub precomp ; do \
+> > +		rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(
+> GAUCHE_VERSION)/lib/$$i ; \
+> > +	done
+> > +	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_V
+> ERSION)/aclocal.m4
+> > +	rm -f $(TARGET_DIR)/usr/share/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_V
+> ERSION)/template.*
+> > +	rm -fr $(TARGET_DIR)/usr/lib/gauche-$(GAUCHE_VERSION_MAJOR)/$(GAUCHE_VE
+> RSION)/include
+> > +endef
+> > +GAUCHE_POST_INSTALL_TARGET_HOOKS += GAUCHE_REMOVE_UNNEEDED
+> 
+> There's been some discussion around that patch, sorry for chiming in so
+> late...
+> 
+> Rather than remove what is not wanted, why not just install what is
+> required? If the number of actions to install is smaller than what we
+> try to remove, then maybe it is better.
+> 
+> What's your opinon? Do you think that it's achievable?
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> >  $(eval $(host-autotools-package))
+> >  $(eval $(autotools-package))
+============================================================
+    Hiroshi Kawashima
