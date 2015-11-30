@@ -1,89 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2015 17:08:10 +0100
-Subject: [Buildroot] [git commit] valgrind: add a patch to fix MIPS R6 by
-	replacing ADDI with ADDIU
-Message-ID: <20151130164028.DECA881EA1@busybox.osuosl.org>
+Date: Mon, 30 Nov 2015 17:15:57 +0100
+Subject: [Buildroot] [git commit] libsigsegv: fix sparc64 compile
+Message-ID: <20151130164029.0487E81E79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03ac181e049e8ce29156b05cb5e830de15f1692a
+commit: http://git.buildroot.net/buildroot/commit/?id=fbc93033b589b8b3e2a14a0bffe549584943df53
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ADDI instruction has been removed for MIPS R6, so valgrind fails to
-build for this revision level because it uses that assembly
-instruction. Using ADDIU instead fixes the problem.
+Compile tested for sparc/glibc and sparc64/glibc.
+Fixes following autobuilder problem:
+http://autobuild.buildroot.net/results/1d8e0c22594aef53f7a4de3491454aa78311c815/
 
-The patch has been sent upstream:
-
-  https://bugs.kde.org/show_bug.cgi?id=356112
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/488/488937704b3b6bae8daed7b24da8c740b56f4d84/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-mips-replace-addi-with-addiu.patch        |   51 ++++++++++++++++++++
- 1 files changed, 51 insertions(+), 0 deletions(-)
+ .../libsigsegv/0005-fix-sparc64-stackpointer.patch |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/package/valgrind/0003-mips-replace-addi-with-addiu.patch b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
+diff --git a/package/libsigsegv/0005-fix-sparc64-stackpointer.patch b/package/libsigsegv/0005-fix-sparc64-stackpointer.patch
 new file mode 100644
-index 0000000..9168dce
+index 0000000..62de35f
 --- /dev/null
-+++ b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
-@@ -0,0 +1,51 @@
-+mips: replace addi with addiu
++++ b/package/libsigsegv/0005-fix-sparc64-stackpointer.patch
+@@ -0,0 +1,16 @@
++Fix sparc64 build.
 +
-+ADDI instruction has been removed in R6 so let's use ADDIU instead.
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +
-+This patch has been sent upstream:
-+
-+  https://bugs.kde.org/show_bug.cgi?id=356112
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+Index: valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S
-+===================================================================
-+--- valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(revision 15740)
-++++ valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(working copy)
-+@@ -196,7 +196,7 @@
-+         addu $13, $13, $14
++diff -Nur libsigsegv-2.10.orig/src/fault-linux-sparc.h libsigsegv-2.10/src/fault-linux-sparc.h
++--- libsigsegv-2.10.orig/src/fault-linux-sparc.h	2009-08-01 17:06:49.000000000 +0200
+++++ libsigsegv-2.10/src/fault-linux-sparc.h	2015-11-29 11:55:29.000000000 +0100
++@@ -27,4 +27,8 @@
++    (see also <asm/sigcontext.h>)
++    are quite different types.  */
 + 
-+         lw $12, 0($13) /* t3 = VG_(tt_fast)[hash] :: ULong* */
-+-        addi $13, $13, 4
-++        addiu $13, $13, 4
-+         lw $25, 0($13) /* little-endian, so comparing 1st 32bit word */
-+         nop
-+ 
-+Index: valgrind/coregrind/m_libcsetjmp.c
-+===================================================================
-+--- valgrind/coregrind/m_libcsetjmp.c	(revision 15740)
-++++ valgrind/coregrind/m_libcsetjmp.c	(working copy)
-+@@ -594,7 +594,7 @@
-+ /* Checking whether second argument is zero. */
-+ "   bnez $a1, 1f                \n\t"
-+ "   nop                         \n\t"
-+-"   addi $a1, $a1, 1            \n\t"  /* We must return 1 if val=0. */
-++"   addiu $a1, $a1, 1           \n\t"  /* We must return 1 if val=0. */
-+ "1:                             \n\t"
-+ "   move $v0, $a1               \n\t"  /* Return value of second argument. */
-+ "   j    $ra                    \n\t"
-+Index: valgrind/coregrind/m_trampoline.S
-+===================================================================
-+--- valgrind/coregrind/m_trampoline.S	(revision 15740)
-++++ valgrind/coregrind/m_trampoline.S	(working copy)
-+@@ -1254,8 +1254,8 @@
-+       //la $a0, string
-+       j strlen_cond
-+    strlen_loop:
-+-      addi $v0, $v0, 1
-+-      addi $a0, $a0, 1
-++      addiu $v0, $v0, 1
-++      addiu $a0, $a0, 1
-+    strlen_cond:
-+       lbu $t0, ($a0)
-+       bne $t0, $zero, strlen_loop
+++#if __WORDSIZE == 64
+++#define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.mc_gregs[REG_O6]
+++#else
++ #define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gregs[REG_O6]
+++#endif
