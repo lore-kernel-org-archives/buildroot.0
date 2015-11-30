@@ -1,96 +1,149 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Mon, 30 Nov 2015 13:07:36 -0200
-Subject: [Buildroot] Missing 'sys/queue.h' on musl
-In-Reply-To: <87h9k3n4f9.fsf@dell.be.48ers.dk>
-References: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
- <20151128184915.6017fae9@free-electrons.com>
- <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
- <20151128192022.6bc8d7fd@free-electrons.com>
- <CANu7NGvmMFc9xADTq_ES7h=13LcnLH5yYJO9KV+8mSYSB-VVtg@mail.gmail.com>
- <20151129092811.0d05dabd@free-electrons.com> <20151129095306.GA3630@free.fr>
- <565B78D8.6070103@mind.be> <20151129233338.261cf080@free-electrons.com>
- <87h9k3n4f9.fsf@dell.be.48ers.dk>
-Message-ID: <CANu7NGuKGNtVyiWqN=KW1kW5zQA35NLaFVE2JP4GoS0wh3vuqw@mail.gmail.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Mon, 30 Nov 2015 12:30:58 -0300
+Subject: [Buildroot] [PATCH] openbox: new package
+Message-ID: <1448897458-28332-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+Add support for the Openbox Windows Manager.
 
-I'm not so familiar with the toolchain infrastructure, so I need some help
-from buildroot wizards...:)
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+Openbox was submitted long ago to Buildroot but it never got accepted:
 
-I have created a package called sys-queue that will only install queue.h on
-the staging dir.
+http://lists.busybox.net/pipermail/buildroot/2009-December/030717.html
 
-Then to make musl generated toolchain depends on sys-queue, I added the
-following lines to toolchain/toolchain-buildroot/toolchain-buildroot.mk:
+The current patch was written independently and completely unaware
+of the above submission.
 
-ifeq ($(BR2_TOOLCHAIN_BUILDROOT_MUSL),y)
-TOOLCHAIN_BUILDROOT_DEPENDENCIES += sys-queue
-endif
+Tested on a Beaglebone Black.
 
-It worked like a charm. Is this the correct approach?
+ package/Config.in            |  1 +
+ package/openbox/Config.in    | 20 ++++++++++++++
+ package/openbox/openbox.hash |  3 +++
+ package/openbox/openbox.mk   | 62 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 86 insertions(+)
+ create mode 100644 package/openbox/Config.in
+ create mode 100644 package/openbox/openbox.hash
+ create mode 100644 package/openbox/openbox.mk
 
-Also, I am struggling to find out a way to do the same thing on the
-external toolchain. Using the DEPENDENCIES approach, it will process the
-sys-queue package before the external toolchain package, and it is best to
-do it after. Any ideas?
-
-Thanks!
-
-Sergio Prado
-Embedded Labworks
-Office: +55 11 2628-3461
-Mobile: +55 11 97123-3420
-
-2015-11-30 8:54 GMT-02:00 Peter Korsgaard <peter@korsgaard.com>:
-
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> writes:
->
->  > Hello,
->  > On Sun, 29 Nov 2015 23:14:48 +0100, Arnout Vandecappelle wrote:
->
->  >> > Adding such a package would be a Buildroot peculiarity, which I would
->  >> > prefer we avoid.
->  >>
->  >> +1 to that.
->  >>
->  >> Also take into account that we only install it to staging, so there is
-> really
->  >> nothing to gain from installing it conditionally.
->  >>
->  >> The only question is whether to do it in the toolchain virtual package
-> (which
->  >> would be unusual to say the least), or duplicate it in the musl and
-> external
->  >> toolchain packages. I actually think the latter is the way to go.
->
->  > That's all fine with me. It is a lot better than duplicating
->  > sys/queue.h everywhere. It is kind of adding a patch on top of musl
->  > that we would have to keep on our side forever, but since it's just a
->  > separate header file, there's no maintenance cost, so I think it's fine.
->
->  > Regarding doing it in the toolchain virtual package or duplicate in
->  > musl and external toolchain packages, I don't have a strong opinion
->  > either way, so if Arnout feels like doing the duplication is better
->  > then so be it. Despite the duplication I also believe it is more
->  > logical to have it in the musl and external toolchain packages, since
->  > doing that in the toolchain virtual package would make that package no
->  > longer purely virtual.
->
-> Indeed, I agree with Arnout here.
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151130/d90f7f70/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index bdc3063abd1a..042cc6723682 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -303,6 +303,7 @@ comment "X window managers"
+ 	source "package/fluxbox/Config.in"
+ 	source "package/matchbox/Config.in"
+ 	source "package/metacity/Config.in"
++	source "package/openbox/Config.in"
+ endmenu
+ 
+ menu "Hardware handling"
+diff --git a/package/openbox/Config.in b/package/openbox/Config.in
+new file mode 100644
+index 000000000000..796047142c3e
+--- /dev/null
++++ b/package/openbox/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_OPENBOX
++	bool "openbox"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
++	depends on BR2_USE_WCHAR # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_PANGO
++	select BR2_PACKAGE_XLIB_LIBX11
++	help
++	  Openbox is a highly configurable, next generation window
++	  manager with extensive standards support.
++
++	  http://openbox.org
++
++comment "openbox needs a MMU and a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_XORG7
+diff --git a/package/openbox/openbox.hash b/package/openbox/openbox.hash
+new file mode 100644
+index 000000000000..b8839cae2dec
+--- /dev/null
++++ b/package/openbox/openbox.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  abe75855cc5616554ffd47134ad15291fe37ebbebf1a80b69cbde9d670f0e26d  openbox-3.6.1.tar.xz
++
+diff --git a/package/openbox/openbox.mk b/package/openbox/openbox.mk
+new file mode 100644
+index 000000000000..da88f17b54d9
+--- /dev/null
++++ b/package/openbox/openbox.mk
+@@ -0,0 +1,62 @@
++################################################################################
++#
++# openbox
++#
++################################################################################
++
++OPENBOX_VERSION = 3.6.1
++OPENBOX_SOURCE = openbox-$(OPENBOX_VERSION).tar.xz
++
++OPENBOX_SITE = http://openbox.org/dist/openbox
++OPENBOX_LICENSE = GPLv2+
++OPENBOX_LICENSE_FILES = COPYING
++
++OPENBOX_CONF_OPTS = \
++	--x-includes=$(STAGING_DIR)/usr/include/X11 \
++	--x-libraries=$(STAGING_DIR)/usr/lib
++
++OPENBOX_DEPENDENCIES = xlib_libX11 libxml2 libglib2 pango
++
++ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
++OPENBOX_CONF_OPTS += --enable-imlib2
++OPENBOX_DEPENDENCIES += imlib2
++else
++OPENBOX_CONF_OPTS += --disable-imlib2
++endif
++
++ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
++OPENBOX_CONF_OPTS += --enable-startup-notification
++OPENBOX_DEPENDENCIES += startup-notification
++else
++OPENBOX_CONF_OPTS += --disable-startup-notification
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
++OPENBOX_CONF_OPTS += --enable-session-management
++OPENBOX_DEPENDENCIES += xlib_libSM
++else
++OPENBOX_CONF_OPTS += --disable-session-management
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
++OPENBOX_CONF_OPTS += --enable-xinerama
++OPENBOX_DEPENDENCIES += xlib_libXinerama
++else
++OPENBOX_CONF_OPTS += --disable-xinerama
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
++OPENBOX_CONF_OPTS += --enable-xrandr
++OPENBOX_DEPENDENCIES += xlib_libXrandr
++else
++OPENBOX_CONF_OPTS += --disable-xrandr
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
++OPENBOX_DEPENDENCIES += xlib_libXcursor
++OPENBOX_CONF_OPTS += --enable-xcursor
++else
++OPENBOX_CONF_OPTS += --disable-xcursor
++endif
++
++$(eval $(autotools-package))
+-- 
+2.6.2
