@@ -1,83 +1,124 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 30 Nov 2015 23:17:18 +0100
-Subject: [Buildroot] [PATCH v5 1/2] package/unscd: new package
-In-Reply-To: <20151130224457.4baa3ab6@free-electrons.com>
-References: <1448287096-18606-1-git-send-email-rdkehn@yahoo.com>
- <1448287096-18606-2-git-send-email-rdkehn@yahoo.com>
- <20151130224457.4baa3ab6@free-electrons.com>
-Message-ID: <565CCAEE.7070503@mind.be>
+Date: Mon, 30 Nov 2015 23:20:51 +0100
+Subject: [Buildroot] [PATCH v2] docs/website: cosmetic changes
+In-Reply-To: <CA+TH9V=qDnTm+qyGOCbQE6=EFskevW31jZewqQhk_JS9G35k7w@mail.gmail.com>
+References: <1448920481-21268-1-git-send-email-angelo.compagnucci@gmail.com>
+ <87oaebjgf3.fsf@dell.be.48ers.dk>
+ <CA+TH9V=qDnTm+qyGOCbQE6=EFskevW31jZewqQhk_JS9G35k7w@mail.gmail.com>
+Message-ID: <565CCBC3.9010903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-11-15 22:44, Thomas Petazzoni wrote:
-> Dear Doug Kehn,
+On 30-11-15 23:06, Angelo Compagnucci wrote:
+> Hi Peter,
 > 
-> On Mon, 23 Nov 2015 07:58:15 -0600, Doug Kehn wrote:
+> 2015-11-30 23:01 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+>>
+>>  > * Resized too big icons in download and documentation
+>>  >   pages
+>>
+>>  > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>>  > ---
+>>  > Cheangelog:
+>>
+>>  > v1 -> v2:
+>>  > Rebase to the latest git version
+>>
+>>  >  docs/website/css/main.css  |  15 ++-
+>>  >  docs/website/docs.html     |  30 ++---
+>>  >  docs/website/download.html | 330 ++++++++++++++++++++++-----------------------
+>>  >  3 files changed, 189 insertions(+), 186 deletions(-)
+>>
+>>  > diff --git a/docs/website/css/main.css b/docs/website/css/main.css
+>>  > index db9c4c9..57009cf 100644
+>>  > --- a/docs/website/css/main.css
+>>  > +++ b/docs/website/css/main.css
+>>  > @@ -207,16 +207,21 @@ i {
+>>  >  .flip-container {
+>>  >      perspective: 1000;
+>>  >  }
+>>  > -    /* flip the pane when hovered */
+>>  > -    .flip-container:hover .flipper, .flip-container.hover .flipper {
+>>  > -            transform: rotateY(180deg);
+>>  > -    }
+>>  > +/* flip the pane when hovered */
+>>  > +.flip-container:hover .flipper, .flip-container.hover .flipper {
+>>  > +    transform: rotateY(180deg);
+>>  > +}
+>>
+>>  > -.flip-container, .front, .back {
+>>  > +.flip-container, .flip-container .front, .flip-container .back {
+>>  >      width: 180px;
+>>  >      height: 180px;
+>>  >  }
+>>
+>>  > +.flip-container-small, .flip-container-small .front, .flip-container-small .back {
+>>  > +    width: 120px;
+>>  > +    height: 120px;
+>>  > +}
+>>  > +
+>>  >  /* flip speed goes here */
+>>  >  .flipper {
+>>  >      transition: 0.6s;
+>>  > diff --git a/docs/website/docs.html b/docs/website/docs.html
+>>  > index 9cee36d..23cc13f 100644
+>>  > --- a/docs/website/docs.html
+>>  > +++ b/docs/website/docs.html
+>>  > @@ -13,59 +13,59 @@
+>>
+>>  >        <div class="row mt centered">
+>>  >      <div class="col-sm-4">
+>>  > -      <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+>>  > +      <div class="flip-container flip-container-small center-block" ontouchstart="this.classList.toggle('hover');">
+>>  >          <div class="flipper">
+>>  >            <div class="front">
+>>  > -            <a href="/manual.html"><img src="images/browser.png" width="180" alt=""></a>
+>>  > +            <a href="/manual.html"><img src="images/browser.png" width="120" alt=""></a>
+>>
+>> I'm far from a web expert, but why are we telling the browser to
+>> downscale these images?
+>>
+>> file docs/website/images/browser.png
+>> docs/website/images/browser.png: PNG image data, 256 x 256, 8-bit/color RGBA, non-interlaced
+>>
+>> E.G. why don't we send a 180x180 (or 120x120) image in the first place?
 > 
->> diff --git a/package/unscd/Config.in b/package/unscd/Config.in
->> new file mode 100644
->> index 0000000..1639bca
->> --- /dev/null
->> +++ b/package/unscd/Config.in
->> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_UNSCD
->> +	bool "unscd"
->> +	depends on BR2_TOOLCHAIN_USES_GLIBC
->> +	depends on !BR2_GLIBC_NSCD
-> 
-> I think you should leave this BR2_GLIBC_NSCD thing on the side for now.
-> Just make unscd a normal package, and don't worry about nscd coming
-> from glibc: there is anyway no mechanism in Buildroot today to install
-> the nscd coming from the toolchain.
-> 
->> +UNSCD_POST_EXTRACT_HOOKS += UNSCD_EXTRACT_DEBIAN
->> +
->> +define UNSCD_APPLY_DEBIAN_PATCHES
->> +	$(APPLY_PATCHES) $(@D) $(@D)/debian/patches
->> +endef
->> +
->> +UNSCD_POST_PATCH_HOOKS += UNSCD_APPLY_DEBIAN_PATCHES
-> 
-> This doesn't work because the patches don't end with an extension that
-> is recognized by our apply-patch script. So all what you see is:
-> 
->>>> unscd 0.51 Patching
-> support/scripts/apply-patches.sh  /home/thomas/projets/buildroot/output/build/unscd-0.51 /home/thomas/projets/buildroot/output/build/unscd-0.51/debian/patches
-> Unsupported file type for /home/thomas/projets/buildroot/output/build/unscd-0.51/debian/patches/change_invalidate_request_info_output, skipping
-> Unsupported file type for /home/thomas/projets/buildroot/output/build/unscd-0.51/debian/patches/support_large_numbers_in_config, skipping
+> They were from a smashing magazine free theme at that resolution, so i
+> left the original image size. They can be rescaled, I'll glad to do it
+> if you think it's important (to me not so much!)
 
- Uh, that shouldn't happen, since 7caf464 everything in the series file should
-be applied regardless of name...
+ There are various reasons why it's better to scale at the server side:
+
+- smaller image => less bandwidth;
+- often better scaling algorithm with a real tool than with the browser;
+- less visual discrepancy between different browsers.
 
 > 
-> which makes the entire dance around applying the Debian patches useless.
+>>
+>> Same for the other images.
+>>
+>>> +++ b/docs/website/download.html
+>>  > @@ -4,176 +4,174 @@
+>>  >  <div class="row nh">
+>>  >  <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
+>>
+>>  > -  <div class="panel panel-primary">
+>>
+>> This diff is not very readable to me. Notice that I'm right now changing
+>> download.html (to release 2015.11), so it would be good if you could
+>> rebase (again!).
 > 
-> Unfortunately, fixing this requires fixing our apply-patches script.
+> No problem, I'll wait for a few more minutes (I'm tired!) and if the
+> git tree will be updated, I'll send a patch in no time!
 
- Which I did :-)
-
+ And then please also avoid the whitespace change :-)
 
  Regards,
  Arnout
-
-> Generally speaking, I am not super happy with all the logic we need to
-> add in various packages to get them to apply the Debian patches. But
-> Debian packages vary quite a bit in the way the patches are organized,
-> so I don't know if it's doable to fix.
-> 
-> BTW any reason to not use the upstream version, at
-> http://busybox.net/~vda/unscd/nscd-0.52.c, which is higher than 0.51 ?
-> 
-> Can you look into this patching issue (or alternatively use 0.52 with
-> no patches) and send an updated version ?
-> 
-> Thanks !
-> 
-> Thomas
-> 
 
 
 -- 
