@@ -1,32 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Nov 2015 17:24:58 +0100
-Subject: [Buildroot] Compile kernel module within buildroot package
-In-Reply-To: <20151119183653.GA1025@arthur-bzh>
-References: <20151119183653.GA1025@arthur-bzh>
-Message-ID: <20151130172458.0a226cd6@free-electrons.com>
+Date: Mon, 30 Nov 2015 17:32:02 +0100
+Subject: [Buildroot] Missing 'sys/queue.h' on musl
+In-Reply-To: <CANu7NGuKGNtVyiWqN=KW1kW5zQA35NLaFVE2JP4GoS0wh3vuqw@mail.gmail.com>
+References: <CANu7NGtDTbf+0uOcqZQON_E4cwQtRzqiGU=y-NGDe3jjOF0+RQ@mail.gmail.com>
+ <20151128184915.6017fae9@free-electrons.com>
+ <CANu7NGsZ6J3-n+zmKf+Ueds8_ePbvZydEPchfQokgqTAWhELHw@mail.gmail.com>
+ <20151128192022.6bc8d7fd@free-electrons.com>
+ <CANu7NGvmMFc9xADTq_ES7h=13LcnLH5yYJO9KV+8mSYSB-VVtg@mail.gmail.com>
+ <20151129092811.0d05dabd@free-electrons.com>
+ <20151129095306.GA3630@free.fr> <565B78D8.6070103@mind.be>
+ <20151129233338.261cf080@free-electrons.com>
+ <87h9k3n4f9.fsf@dell.be.48ers.dk>
+ <CANu7NGuKGNtVyiWqN=KW1kW5zQA35NLaFVE2JP4GoS0wh3vuqw@mail.gmail.com>
+Message-ID: <20151130173202.4f4933cc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arthur LAMBERT,
+Dear Sergio Prado,
 
-On Thu, 19 Nov 2015 19:36:53 +0100, Arthur LAMBERT wrote:
+On Mon, 30 Nov 2015 13:07:36 -0200, Sergio Prado wrote:
 
-> I am currently using the 2015.08 version of buildroot. Kernel module compilation
-> is broken :
+> I have created a package called sys-queue that will only install queue.h on
+> the staging dir.
+> 
+> Then to make musl generated toolchain depends on sys-queue, I added the
+> following lines to toolchain/toolchain-buildroot/toolchain-buildroot.mk:
+> 
+> ifeq ($(BR2_TOOLCHAIN_BUILDROOT_MUSL),y)
+> TOOLCHAIN_BUILDROOT_DEPENDENCIES += sys-queue
+> endif
+> 
+> It worked like a charm. Is this the correct approach?
 
-This problem has been fixed in 2015.08.1, you should upgrade to this
-version (which has just three commits on top of 2015.08), or
-alternatively backport
+No, because this will only work for internal toolchains. So instead,
+you need to put this dependency in two places:
 
-  http://git.buildroot.net/buildroot/commit/?h=2015.08.x&id=16768877e324f6e3e1291613ae5db9af0da5a2bf
+ 1/ In package/musl/musl.mk, where it should be an unconditional
+    dependency.
 
-I was able to reproduce your problem on 2015.08, and with just this
-commit applied, lttng-modules could be built successfully.
+ 2/ In toolchain/toolchain-external/toolchain-external.mk, where it
+    should be conditional on BR2_TOOLCHAIN_USES_MUSL.
 
-Best regards,
+> Also, I am struggling to find out a way to do the same thing on the
+> external toolchain. Using the DEPENDENCIES approach, it will process the
+> sys-queue package before the external toolchain package, and it is best to
+> do it after. Any ideas?
+
+Is it really a problem if it is processed before?
 
 Thomas
 -- 
