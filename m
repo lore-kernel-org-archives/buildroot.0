@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Nov 2015 23:32:54 +0100
-Subject: [Buildroot] [PATCH v3] lighttpd: add option to enable php-fpm
- configuration
-In-Reply-To: <1430611794-12123-2-git-send-email-bos@je-eigen-domein.nl>
-References: <1430611794-12123-1-git-send-email-bos@je-eigen-domein.nl>
- <1430611794-12123-2-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20151130233254.3bacb82d@free-electrons.com>
+Date: Mon, 30 Nov 2015 23:44:21 +0100
+Subject: [Buildroot] [PATCH v5 1/2] package/unscd: new package
+In-Reply-To: <565CCC8C.3080106@mind.be>
+References: <1448287096-18606-1-git-send-email-rdkehn@yahoo.com>
+ <1448287096-18606-2-git-send-email-rdkehn@yahoo.com>
+ <20151130224457.4baa3ab6@free-electrons.com>
+ <565CCAEE.7070503@mind.be>
+ <20151130232238.401bc727@free-electrons.com>
+ <565CCC8C.3080106@mind.be>
+Message-ID: <20151130234421.19d81f1c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+Hello,
 
-On Sun,  3 May 2015 02:09:54 +0200, Floris Bos wrote:
-> If both lighttpd and php-fpm are selected, offer to
-> enable PHP in the lighttpd configuration.
-> 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+On Mon, 30 Nov 2015 23:24:12 +0100, Arnout Vandecappelle wrote:
 
-Thanks for your patch. Your patch is well-documented and written, but
-after some discussion on IRC, we believe that the sort of custom
-configuration you are doing belongs more to your rootfs overlay +
-post-build script than to an option in the official Buildroot.
+>  7caf464 was applied to master only, and there has been no merge from master to
+> next. So that explains it.
 
-Indeed, we could add zillions of options to customize all aspects of
-lighttpd, but it would be a nightmare to maintain in Buildroot. So we
-try to stick with mainly compile-time configuration of lighttpd,
-installing a minimally working configuration file by default. The rest
-of the runtime configuration should be done in each user's rootfs
-overlay and post build scripts.
+Ah damn, ok.
 
-Best regards,
+>  next will be gone soon so don't worry ;-)
+
+Indeed.
+
+Doug: can you resend a new version of the unscd patch, without the
+attempt to integrate the installation of the glibc provided nscd
+daemon? This way, we can merge unscd quickly, and then work on
+installing the one from glibc if you are interested.
+
+Thanks!
 
 Thomas
 -- 
