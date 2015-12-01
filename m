@@ -1,73 +1,66 @@
 From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Tue,  1 Dec 2015 19:54:10 -0200
-Subject: [Buildroot] [PATCH v2 1/2] vnstat: bump to version 1.14
-Message-ID: <1449006851-20917-1-git-send-email-rprebello@gmail.com>
+Date: Tue,  1 Dec 2015 19:54:11 -0200
+Subject: [Buildroot] [PATCH v2 2/2] vnstat: add upstream patch to fix build
+	with musl
+In-Reply-To: <1449006851-20917-1-git-send-email-rprebello@gmail.com>
+References: <1449006851-20917-1-git-send-email-rprebello@gmail.com>
+Message-ID: <1449006851-20917-2-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add new dependency on BR2_USE_WCHAR (version 1.14 uses mbstowcs())
-and rewrap help text to 72 characters.
+The header file 'fcntl.h' was missing from 'src/common.h', which caused
+the build with musl to fail with undeclared symbol errors like the
+following:
+
+  dbaccess.c: In function ?backupdb?:
+  dbaccess.c:268:25: error: ?O_RDONLY? undeclared (first use in this function)
+    if ((c = open(current, O_RDONLY)) == -1) {
+                           ^
+This has already been fixed upstream, so the included patch must be
+dropped on the next version bump.
 
 Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 ---
-Changes v1 -> v2:
-  - Add dependency on BR2_USE_MMU to comment section (Thomas Petazzoni)
----
- package/vnstat/Config.in   | 16 +++++++++++-----
- package/vnstat/vnstat.hash |  2 +-
- package/vnstat/vnstat.mk   |  2 +-
- 3 files changed, 13 insertions(+), 7 deletions(-)
+ ...-fcntl.h-include-needed-by-open-closes-21.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch
 
-diff --git a/package/vnstat/Config.in b/package/vnstat/Config.in
-index 0df4982..bb68c14 100644
---- a/package/vnstat/Config.in
-+++ b/package/vnstat/Config.in
-@@ -1,11 +1,17 @@
- config BR2_PACKAGE_VNSTAT
- 	bool "vnstat"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR # mbstowcs()
- 	help
--	  vnStat is a console-based network traffic monitor that keeps a log of
--	  network traffic for the selected interface(s). It uses the network
--	  interface statistics provided by the kernel as information source.
--	  This means that vnStat won't actually be sniffing any traffic and also
--	  ensures light use of system resources.
-+	  vnStat is a console-based network traffic monitor that keeps a
-+	  log of network traffic for the selected interface(s). It uses
-+	  the network interface statistics provided by the kernel as
-+	  information source. This means that vnStat won't actually be
-+	  sniffing any traffic and also ensures light use of system
-+	  resources.
- 
- 	  http://humdi.net/vnstat
+diff --git a/package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch b/package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch
+new file mode 100644
+index 0000000..5489580
+--- /dev/null
++++ b/package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch
+@@ -0,0 +1,28 @@
++From a222434e096ce42c7937839f9666691f2b8a612f Mon Sep 17 00:00:00 2001
++From: Teemu Toivola <git@humdi.net>
++Date: Sat, 27 Jun 2015 18:29:22 +0300
++Subject: [PATCH] add missing fcntl.h include needed by open(), closes #21
 +
-+comment "vnstat needs a toolchain w/ wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
-index a3334d6..43438a7 100644
---- a/package/vnstat/vnstat.hash
-+++ b/package/vnstat/vnstat.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	af1050d9c1b22d4b9742fe0d1818de9eb1037b8e7f9ba67b962e108d8527be69	vnstat-1.12.tar.gz
-+sha256	f8462a47d85d0890493dc9eaeafbc725ae631aa5b103fb7f8af4ddb2314e8386	vnstat-1.14.tar.gz
-diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
-index e0a64d5..8512d2d 100644
---- a/package/vnstat/vnstat.mk
-+++ b/package/vnstat/vnstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VNSTAT_VERSION = 1.12
-+VNSTAT_VERSION = 1.14
- VNSTAT_SITE = http://humdi.net/vnstat
- VNSTAT_LICENSE = GPLv2
- VNSTAT_LICENSE_FILES = COPYING
++[Backport from upstream commit 964d7cd62b8626d51bf7ce06564aa9bd1d2b4d4c.
++Fixes undeclared symbol issues when building with musl.]
++
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++---
++ src/common.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/common.h b/src/common.h
++index 7616e55..eb0b61f 100644
++--- a/src/common.h
+++++ b/src/common.h
++@@ -22,6 +22,7 @@
++ #include <pwd.h>
++ #include <grp.h>
++ #include <libgen.h>
+++#include <fcntl.h>
++ 
++ #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__APPLE__) || defined(__FreeBSD_kernel__)
++ #include <sys/param.h>
++-- 
++2.1.4
++
 -- 
 2.1.4
