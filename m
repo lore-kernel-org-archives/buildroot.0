@@ -1,112 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 01 Dec 2015 23:21:16 -0000
-Subject: [Buildroot] [git commit] linux-firmware: menu entries for mwifiex
-	blobs
-Message-ID: <20151201232115.76BE68220E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gvfs: bump to version 1.26.2
+Message-ID: <20151201232115.2856D821F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1cb8db0b2d3f561ca7aba7b945118c525bfc9cb3
+commit: http://git.buildroot.net/buildroot/commit/?id=2db62b3164b6b14a7a83baecc51c355def70bdd8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Firmware blobs for Marvell WiFi-Ex 8797, 8887, 8897 were already
-there in linux-firmware tree but relevant options were not in Config.in.
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/Config.in         | 30 ++++++++++++++++++++++++++
- package/linux-firmware/linux-firmware.mk | 36 ++++++++++++++++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ package/gvfs/gvfs.hash | 4 ++--
+ package/gvfs/gvfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 2e4c205..32e9c6e 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -159,6 +159,36 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8787 module on SDIO.
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index cc9e4f6..19e820a 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.1.1.sha256sum
+-sha256	2dadf986e464db1d7f007b178a5432b30ba93ef0cb31a2795156540d496dc06d	gvfs-1.26.1.1.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.2.sha256sum
++sha256	695b6e0f3de5ac2cb4d188917edef3f13299328150a2413f1a7131d9b2d48d18	gvfs-1.26.2.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index e1da18f..48d2b50 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797
-+	bool "Marvell Wifi-Ex SD 8797"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8797 module on SDIO.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797
-+	bool "Marvell Wifi-Ex USB 8797"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8797 module on USB.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887
-+	bool "Marvell Wifi-Ex SD 8887"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8887 module on SDIO.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897
-+	bool "Marvell Wifi-Ex SD 8897"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8897 module on SDIO.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8897
-+	bool "Marvell Wifi-Ex USB 8897"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8897 module on USB.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897
-+	bool "Marvell Wifi-Ex PCI-E 8897"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8897 module on PCI-E.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
- 	bool "Ralink rt2501/rt61"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 768f3c4..d3efd65 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -129,6 +129,42 @@ LINUX_FIRMWARE_FILES += mrvl/sd8787_uapsta.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
- endif
- 
-+# sd8797
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797),y)
-+LINUX_FIRMWARE_FILES += mrvl/sd8797_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# usb8797
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797),y)
-+LINUX_FIRMWARE_FILES += mrvl/usb8797_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# sd8887
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887),y)
-+LINUX_FIRMWARE_FILES += mrvl/sd8887_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# sd8897
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897),y)
-+LINUX_FIRMWARE_FILES += mrvl/sd8897_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# usb8897
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8897),y)
-+LINUX_FIRMWARE_FILES += mrvl/usb8897_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
-+# pcie8897
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897),y)
-+LINUX_FIRMWARE_FILES += mrvl/pcie8897_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
- # wl127x
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
- # wl1271-nvs.bin is a symlink to wl127x-nvs.bin
+ GVFS_VERSION_MAJOR = 1.26
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).1.1
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
