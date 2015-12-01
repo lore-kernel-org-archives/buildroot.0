@@ -1,167 +1,78 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 1 Dec 2015 21:30:29 +0100
-Subject: [Buildroot] [PATCH] busybox: add another upstream patch to fix unzip
-Message-ID: <1449001829-26507-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Dec 2015 21:34:26 +0100
+Subject: [Buildroot] [PATCH] musl: add a sys/queue.h implementation
+In-Reply-To: <1449001048.1893.30.camel@embedded.rocks>
+References: <1448924535-8093-1-git-send-email-sergio.prado@e-labworks.com>
+ <1449001048.1893.30.camel@embedded.rocks>
+Message-ID: <565E0452.30002@mind.be>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-0002-unzip.patch which was added in 69516e0 to fix a segmentation
-fault in the gunzip applet. However, it introduced a new issue that
-made the unzipping of some files fail.
+On 01-12-15 21:17, J?rg Krause wrote:
+> Hi all,
+> 
+> On Mo, 2015-11-30 at 21:02 -0200, Sergio Prado wrote:
+>> Musl does not provide a 'sys/queue.h' implementation, and this has
+>> been
+>> a problem for packages that depend on it.
+>>
+>> So lets create a package called sys-queue that will install
+>> 'sys/queue.h'
+>> in the staging directory when enabled.
+>>
+>> Musl toolchain and external toolchain packages will depend on this
+>> package, so that 'sys/queue.h' will be always installed when
+>> compiling
+>> with a musl based toolchain.
+>>
+> 
+> Maybe we can handle this similiar to the gettext integration and define
+> a BR2_NEEDS_SYS_QUEUE for toolchains not providing a queue library.
+> 
+> Packages that need a queue implementation can use 'select
+> BR2_PACKAGE_NETBSD_QUEUE if BR2_NEEDS_SYS_QUEUE' in their Config.in
+> file and add a '$(if $(BR2_NEEDS_SYS_QUEUE),netbsd-queue)' to their
+> dependencies in the .mk file. 
 
-Add an upstream patch that fixes this new issue.
+ This would add quite a lot of complexity. Unconditionally installing
+sys/queue.h for musl libraries is really a lot simpler.
 
-Fixes #8501.
+> 
+> This means we have a package 'netbsd-queue' with the sources of the
+> NetBSD project you proposed. Note, there exists more implementations of
+> the queue library, e.g. OpenBSD, Apple, so I would prefer to use the
+> name of the implementation as there is no *the* sys/queue.h.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Jason Rush <rush0033@hotmail.com>
----
-Jason, could you apply this patch to your buildroot tree, rebuild
-busybox, and add your Tested-by if it solves the issue?
----
- .../busybox/0003-g-unzip-fix-recent-breakage.patch | 134 +++++++++++++++++++++
- 1 file changed, 134 insertions(+)
- create mode 100644 package/busybox/0003-g-unzip-fix-recent-breakage.patch
+ That's a good idea. Not that I expect we'll ever carry another queue
+implementation (actually we already have two: uClibc and glibc).
 
-diff --git a/package/busybox/0003-g-unzip-fix-recent-breakage.patch b/package/busybox/0003-g-unzip-fix-recent-breakage.patch
-new file mode 100644
-index 0000000..061e2c4
---- /dev/null
-+++ b/package/busybox/0003-g-unzip-fix-recent-breakage.patch
-@@ -0,0 +1,134 @@
-+From 6bd3fff51aa74e2ee2d87887b12182a3b09792ef Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Fri, 30 Oct 2015 23:41:53 +0100
-+Subject: [PATCH] [g]unzip: fix recent breakage.
-+
-+Also, do emit error message we so painstakingly pass from gzip internals
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ archival/libarchive/decompress_gunzip.c | 33 +++++++++++++++++++++------------
-+ testsuite/unzip.tests                   |  1 +
-+ 2 files changed, 22 insertions(+), 12 deletions(-)
-+
-+diff --git a/archival/libarchive/decompress_gunzip.c b/archival/libarchive/decompress_gunzip.c
-+index 30bf451..20e4d9a 100644
-+--- a/archival/libarchive/decompress_gunzip.c
-++++ b/archival/libarchive/decompress_gunzip.c
-+@@ -309,8 +309,7 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 	huft_t *q;              /* points to current table */
-+ 	huft_t r;               /* table entry for structure assignment */
-+ 	huft_t *u[BMAX];        /* table stack */
-+-	unsigned v[N_MAX];      /* values in order of bit length */
-+-	unsigned v_end;
-++	unsigned v[N_MAX + 1];  /* values in order of bit length. last v[] is never used */
-+ 	int ws[BMAX + 1];       /* bits decoded stack */
-+ 	int w;                  /* bits decoded */
-+ 	unsigned x[BMAX + 1];   /* bit offsets, then code stack */
-+@@ -365,15 +364,17 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 		*xp++ = j;
-+ 	}
-+ 
-+-	/* Make a table of values in order of bit lengths */
-++	/* Make a table of values in order of bit lengths.
-++	 * To detect bad input, unused v[i]'s are set to invalid value UINT_MAX.
-++	 * In particular, last v[i] is never filled and must not be accessed.
-++	 */
-++	memset(v, 0xff, sizeof(v));
-+ 	p = b;
-+ 	i = 0;
-+-	v_end = 0;
-+ 	do {
-+ 		j = *p++;
-+ 		if (j != 0) {
-+ 			v[x[j]++] = i;
-+-			v_end = x[j];
-+ 		}
-+ 	} while (++i < n);
-+ 
-+@@ -435,7 +436,9 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 
-+ 			/* set up table entry in r */
-+ 			r.b = (unsigned char) (k - w);
-+-			if (p >= v + v_end) { // Was "if (p >= v + n)" but v[] can be shorter!
-++			if (/*p >= v + n || -- redundant, caught by the second check: */
-++			    *p == UINT_MAX /* do we access uninited v[i]? (see memset(v))*/
-++			) {
-+ 				r.e = 99; /* out of values--invalid code */
-+ 			} else if (*p < s) {
-+ 				r.e = (unsigned char) (*p < 256 ? 16 : 15);	/* 256 is EOB code */
-+@@ -520,8 +523,9 @@ static NOINLINE int inflate_codes(STATE_PARAM_ONLY)
-+ 		e = t->e;
-+ 		if (e > 16)
-+ 			do {
-+-				if (e == 99)
-+-					abort_unzip(PASS_STATE_ONLY);;
-++				if (e == 99) {
-++					abort_unzip(PASS_STATE_ONLY);
-++				}
-+ 				bb >>= t->b;
-+ 				k -= t->b;
-+ 				e -= 16;
-+@@ -557,8 +561,9 @@ static NOINLINE int inflate_codes(STATE_PARAM_ONLY)
-+ 			e = t->e;
-+ 			if (e > 16)
-+ 				do {
-+-					if (e == 99)
-++					if (e == 99) {
-+ 						abort_unzip(PASS_STATE_ONLY);
-++					}
-+ 					bb >>= t->b;
-+ 					k -= t->b;
-+ 					e -= 16;
-+@@ -824,8 +829,9 @@ static int inflate_block(STATE_PARAM smallint *e)
-+ 
-+ 		b_dynamic >>= 4;
-+ 		k_dynamic -= 4;
-+-		if (nl > 286 || nd > 30)
-++		if (nl > 286 || nd > 30) {
-+ 			abort_unzip(PASS_STATE_ONLY);	/* bad lengths */
-++		}
-+ 
-+ 		/* read in bit-length-code lengths */
-+ 		for (j = 0; j < nb; j++) {
-+@@ -906,12 +912,14 @@ static int inflate_block(STATE_PARAM smallint *e)
-+ 		bl = lbits;
-+ 
-+ 		i = huft_build(ll, nl, 257, cplens, cplext, &inflate_codes_tl, &bl);
-+-		if (i != 0)
-++		if (i != 0) {
-+ 			abort_unzip(PASS_STATE_ONLY);
-++		}
-+ 		bd = dbits;
-+ 		i = huft_build(ll + nl, nd, 0, cpdist, cpdext, &inflate_codes_td, &bd);
-+-		if (i != 0)
-++		if (i != 0) {
-+ 			abort_unzip(PASS_STATE_ONLY);
-++		}
-+ 
-+ 		/* set up data for inflate_codes() */
-+ 		inflate_codes_setup(PASS_STATE bl, bd);
-+@@ -999,6 +1007,7 @@ inflate_unzip_internal(STATE_PARAM transformer_state_t *xstate)
-+ 	error_msg = "corrupted data";
-+ 	if (setjmp(error_jmp)) {
-+ 		/* Error from deep inside zip machinery */
-++		bb_error_msg(error_msg);
-+ 		n = -1;
-+ 		goto ret;
-+ 	}
-+diff --git a/testsuite/unzip.tests b/testsuite/unzip.tests
-+index ca0a458..d8738a3 100755
-+--- a/testsuite/unzip.tests
-++++ b/testsuite/unzip.tests
-+@@ -34,6 +34,7 @@ rm foo.zip
-+ testing "unzip (bad archive)" "uudecode; unzip bad.zip 2>&1; echo \$?" \
-+ "Archive:  bad.zip
-+   inflating: ]3j?r?IK-%Ix
-++unzip: corrupted data
-+ unzip: inflate error
-+ 1
-+ " \
-+-- 
-+2.6.2
-+
+ Regards,
+ Arnout
+
+> 
+> Furthermore, we allow a package to use, for whatever reasons, to select
+> a different queue implementation.
+> 
+> On the other hand, maybe it is to confusing for the package maintainer
+> to have different options for a queue library, so we just provide a
+> default package named 'sys-queue' using the sources of NetBSD?
+> 
+> Best regards
+> J?rg Krause
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
 -- 
-2.6.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
