@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 17:53:44 +0100
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.7
-In-Reply-To: <1448889395-16383-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1448889395-16383-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151201175344.77a580b3@free-electrons.com>
+Date: Tue, 1 Dec 2015 17:55:51 +0100
+Subject: [Buildroot] [PATCH v3] docs/website: cosmetic changes
+In-Reply-To: <CA+TH9VntiF2dpe7VuU5RtvTtAwTKvaCg02o4ihyNLY=MGL3iSw@mail.gmail.com>
+References: <1448920882-28065-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20151130231004.45726f67@free-electrons.com>
+ <CA+TH9VntiF2dpe7VuU5RtvTtAwTKvaCg02o4ihyNLY=MGL3iSw@mail.gmail.com>
+Message-ID: <20151201175551.4d21abb1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Angelo,
 
-On Mon, 30 Nov 2015 10:16:35 -0300, Gustavo Zacarias wrote:
-> The 3.4 series has been promoted to stable.
-> Handle autodeps more concisely (idn, p11-kit, zlib).
-> libtasn1 is now mandatory, since otherwise gnutls uses the bundled
-> version it makes no sense to try that because of target duplication.
-> Disable tpm support since we've got no trousers package.
+On Mon, 30 Nov 2015 23:15:29 +0100, Angelo Compagnucci wrote:
 
-Note that we have a trousers package pending in the queue.
-
-> Disable libdane support since we've got no dane package.
+> It was very difficult to me to follow the new indentation, mixed
+> spaces and tabs was a big mess to my eyes.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gnutls/Config.in   |  1 +
->  package/gnutls/gnutls.hash |  2 +-
->  package/gnutls/gnutls.mk   | 41 ++++++++++++++++++++++++++++++-----------
->  3 files changed, 32 insertions(+), 12 deletions(-)
+> At this point I think this patch could be abandoned, I'll rework it as
+> soon I have again a little bit of free time.
+> 
+> Probably it could be better to stick to some html formatter external
+> to emacs (I'm more a vim guy!)
 
-Applied to next-soon-to-be-master, thanks.
+I don't mind changing the indentation, but your indentation style with
+one tab for each level associated with the very deep nesting required
+by the new website layout made it a bit unreadable IMO.
+
+I don't mind changing the indentation style to something else, but it
+should be consistent. Peter, any suggestion on your preference?
 
 Thomas
 -- 
