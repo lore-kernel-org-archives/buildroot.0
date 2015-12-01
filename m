@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 23:05:51 +0100
-Subject: [Buildroot] [PATCH v1 1/3] aufs-standalone: new package
-In-Reply-To: <1438387017-10597-1-git-send-email-christian@paral.in>
-References: <1438387017-10597-1-git-send-email-christian@paral.in>
-Message-ID: <20151201230551.7eabb769@free-electrons.com>
+Date: Tue, 1 Dec 2015 23:09:01 +0100
+Subject: [Buildroot] [PATCH 1/1] python-colorama: new package
+In-Reply-To: <1438634219-22000-1-git-send-email-farina@datacom.ind.br>
+References: <1438634219-22000-1-git-send-email-farina@datacom.ind.br>
+Message-ID: <20151201230901.5dfcb1f2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
+Dear Augusto Farina,
 
-On Fri, 31 Jul 2015 16:56:55 -0700, Christian Stewart wrote:
-> aufs-standalone is a metapackage that downloads the correct
-> aufs-standalone sources for patching the kernel with the aufs
-> filesystem. The package is not selectable because it does nothing but
-> download the sources on default. It is a dependency of the Aufs kernel
-> extension.
+On Mon,  3 Aug 2015 17:36:59 -0300, Augusto Farina wrote:
+> Colorama is a simple cross-platform colored terminal text in Python.
 > 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> Tested on a PowerPC e500v2 board. Host build support is also added in
+> the package makefile, as python-jinja2, because we have third-party
+> software that requires it (e.g. ARM mbed build-system).
+> 
+> Signed-off-by: Augusto Farina <farina@datacom.ind.br>
 
-Your patches are 4 months old, and you got a lot of review comments.
-Could you address them and resend an updated version, if you are still
-interested in getting aufs support merged in Buildroot ?
+So Arnout agreed with me that we don't want this host only package that
+is not used by any other package in Buildroot. Can you resubmit when
+this package gets actually used by another menuconfig-selectable
+package in Buildroot ?
 
-In the mean time, I'll mark your patches as Changes Requested in
-patchwork.
+In the mean time, I'll mark your patch as Changes Requested.
 
-Thanks!
+Peter: you never raised your opinion on this one, but please speak up
+if you don't agree with the reasoning of Arnout and myself. Thanks!
+
+Augusto, if you still want the target side to be merged, can you resend
+an updated version with just the target variant?
+
+Thanks,
 
 Thomas
 -- 
