@@ -1,33 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Dec 2015 22:15:28 +0100
-Subject: [Buildroot] [git commit] docs/website/news.html: add 2015.11
-	announcement link
-Message-ID: <20151201214334.9BD8F801BA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Dec 2015 22:45:06 +0100
+Subject: [Buildroot] [PATCH v6] package/unscd: new package
+In-Reply-To: <565E130B.7090201@mind.be>
+References: <1448982954-5055-1-git-send-email-rdkehn@yahoo.com>
+ <565E130B.7090201@mind.be>
+Message-ID: <20151201224506.6555d6b5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2723fa4a5066b8820b4ff03e2912ccea9ea7c5e0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Arnout Vandecappelle,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+On Tue, 1 Dec 2015 22:37:15 +0100, Arnout Vandecappelle wrote:
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 4024737..89c5062 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -20,7 +20,8 @@
- 	<p>The stable 2015.11 release is out - Thanks to everyone
- 	  contributing and testing the release candidates. See the
- 	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.11">CHANGES</a>
--	  file for more details
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2015-November/145727.html">announcement</a>
- 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
- 	  <a href="/downloads/buildroot-2015.11.tar.bz2">2015.11 release</a>.</p>
-       </div>
+> > +define UNSCD_EXTRACT_CMDS
+> > +	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/nscd.c
+> > +endef
+> > +
+> > +define UNSCD_BUILD_CMDS
+> > +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) nscd
+> 
+>  Although it works because of the default rules, it looks very strange to me to
+> call make when there is no Makefile. I would instead call the compiler directly:
+> 
+> 	cd $(@D); \
+> 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o nscd nscd.c
+> 
+>  What do the others think?
+
+Fully agree with you.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
