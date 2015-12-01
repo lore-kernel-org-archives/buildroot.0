@@ -1,42 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 01 Dec 2015 23:21:16 -0000
-Subject: [Buildroot] [git commit] libglib2: bump to version 2.46.2
-Message-ID: <20151201232115.3A3F4821F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cmake: bump to version 3.4.0
+Message-ID: <20151201232116.0C2D77FBD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=739d2b41b99a1dc2a44c49cee2fa99efa7c613a3
+commit: http://git.buildroot.net/buildroot/commit/?id=7453c4bf6010b3a8dd794c39e327641abea15503
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 6032c30..7bce911 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 8d130d7..469f559 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
 @@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.46/glib-2.46.1.sha256sum
--sha256  5a1f03b952ebc3a7e9f612b8724f70898183e31503db329b4f15d07163c8fdfb  glib-2.46.1.tar.xz
-+# https://download.gnome.org/sources/glib/2.46/glib-2.46.2.sha256sum
-+sha256  5031722e37036719c1a09163cc6cf7c326e4c4f1f1e074b433c156862bd733db  glib-2.46.2.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 8f6ca83..c3c9cf8 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
+-# From http://www.cmake.org/files/v3.3/cmake-3.3.2-SHA-256.txt
+-sha256	e75a178d6ebf182b048ebfe6e0657c49f0dc109779170bad7ffcb17463f2fc22	cmake-3.3.2.tar.gz
++# From http://www.cmake.org/files/v3.4/cmake-3.4.0-SHA-256.txt
++sha256	a5b82bf6ace6c481cdb911fd5d372a302740cbefd387e05297cb37f7468d1cea	cmake-3.4.0.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 0f888fd..87ed8ff 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- LIBGLIB2_VERSION_MAJOR = 2.46
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPLv2+
+-CMAKE_VERSION_MAJOR = 3.3
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
++CMAKE_VERSION_MAJOR = 3.4
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
