@@ -1,39 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 22:45:06 +0100
-Subject: [Buildroot] [PATCH v6] package/unscd: new package
-In-Reply-To: <565E130B.7090201@mind.be>
-References: <1448982954-5055-1-git-send-email-rdkehn@yahoo.com>
- <565E130B.7090201@mind.be>
-Message-ID: <20151201224506.6555d6b5@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Dec 2015 21:45:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 8346] wf111 package removes all kernel module
+	dependencies
+In-Reply-To: <bug-8346-163@https.bugs.busybox.net/>
+References: <bug-8346-163@https.bugs.busybox.net/>
+Message-ID: <20151201214531.E79FB80475@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+https://bugs.busybox.net/show_bug.cgi?id=8346
 
-On Tue, 1 Dec 2015 22:37:15 +0100, Arnout Vandecappelle wrote:
-
-> > +define UNSCD_EXTRACT_CMDS
-> > +	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/nscd.c
-> > +endef
-> > +
-> > +define UNSCD_BUILD_CMDS
-> > +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) nscd
+--- Comment #2 from Martin <martin@barkynet.com> 2015-12-01 21:45:31 UTC ---
+(In reply to comment #1)
+> I have managed to reproduce this issue using qemu_x86_64_defconfig in the
+> 2015.11 release.  My initial tests seem to show it's related to using uclibc.
 > 
->  Although it works because of the default rules, it looks very strange to me to
-> call make when there is no Makefile. I would instead call the compiler directly:
+> To reproduce the npm crash do the following:
 > 
-> 	cd $(@D); \
-> 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o nscd nscd.c
+> 1) start with qemu_x86_64_defconfig
+> 2) add the C++ compiler
+> 3) enable node.js version 0.12.7
+> 4) enable npm for the target
+> 5) build and run in qemu as per the instructions in
+> board/qemu/x86_64/readme.txt
+> 6) login and type npm -v, it will crash.
 > 
->  What do the others think?
+> Changing the toolchain from uclibc to glibc causes npm to start working. So as
+> a work around use glibc.  I'll try and narrow down the issue further.
 
-Fully agree with you.
+Oops, this is meant for bug #8296 not this bug.  Sorry.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
