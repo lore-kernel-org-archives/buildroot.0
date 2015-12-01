@@ -1,90 +1,112 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 01 Dec 2015 23:21:16 -0000
-Subject: [Buildroot] [git commit] exiv2: bump to version 0.25
-Message-ID: <20151201232115.9D91E8220E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux-firmware: menu entries for mwifiex
+	blobs
+Message-ID: <20151201232115.76BE68220E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8645710da335c1afeea3cdb7754f07d016ae9432
+commit: http://git.buildroot.net/buildroot/commit/?id=1cb8db0b2d3f561ca7aba7b945118c525bfc9cb3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Firmware blobs for Marvell WiFi-Ex 8797, 8887, 8897 were already
+there in linux-firmware tree but relevant options were not in Config.in.
+
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exiv2/0001-remove-useless-header.patch | 19 -------------------
- package/exiv2/Config.in                        |  6 ++++--
- package/exiv2/exiv2.hash                       |  4 ++--
- package/exiv2/exiv2.mk                         |  2 +-
- 4 files changed, 7 insertions(+), 24 deletions(-)
+ package/linux-firmware/Config.in         | 30 ++++++++++++++++++++++++++
+ package/linux-firmware/linux-firmware.mk | 36 ++++++++++++++++++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
-diff --git a/package/exiv2/0001-remove-useless-header.patch b/package/exiv2/0001-remove-useless-header.patch
-deleted file mode 100644
-index 96a3734..0000000
---- a/package/exiv2/0001-remove-useless-header.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--version.cpp: remove useless header inclusion
--
--The inclusion of link.h header is not required and can create build
--error with some toolchains.
--The patch is pushed on the upstream for the next release.
--http://dev.exiv2.org/issues/1007
--
--Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
--
----- exiv2-0.24.orig/src/version.cpp	2013-12-01 13:13:42.000000000 +0100
--+++ exiv2-0.24/src/version.cpp	2014-12-04 09:30:39.667234130 +0100
--@@ -116,7 +116,6 @@ typedef string_v::iterator  string_i;
-- #elif defined(__linux__)
-- # include <unistd.h>
-- // http://syprog.blogspot.com/2011/12/listing-loaded-shared-objects-in-linux.html
---# include "link.h"
-- # include <dlfcn.h>
--   struct something
--   {
-diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-index 9a7cf44..8ca95eb 100644
---- a/package/exiv2/Config.in
-+++ b/package/exiv2/Config.in
-@@ -1,10 +1,12 @@
--comment "exiv2 needs a toolchain w/ C++, dynamic library"
--	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
-+comment "exiv2 needs a toolchain w/ C++, wchar, dynamic library"
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_EXIV2
- 	bool "exiv2"
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 2e4c205..32e9c6e 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -159,6 +159,36 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
  	help
- 	  Exiv2 is a C++ library and a command line utility to manage
- 	  image metadata. It provides fast and easy read and write
-diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-index d4f8c60..b1e78d2 100644
---- a/package/exiv2/exiv2.hash
-+++ b/package/exiv2/exiv2.hash
-@@ -1,4 +1,4 @@
- # From http://www.exiv2.org/download.html
--md5 b8a23dc56a98ede85c00718a97a8d6fc exiv2-0.24.tar.gz
-+md5 258d4831b30f75a01e0234065c6c2806 exiv2-0.25.tar.gz
- # Locally calculated
--sha256 f4a443e6c7fb9d9f5e787732f76969a64c72c4c04af69b10ed57f949c2dfef8e exiv2-0.24.tar.gz
-+sha256 c80bfc778a15fdb06f71265db2c3d49d8493c382e516cb99b8c9f9cbde36efa4 exiv2-0.25.tar.gz
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index 93e36f7..45f9289 100644
---- a/package/exiv2/exiv2.mk
-+++ b/package/exiv2/exiv2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	  Firmware files for the Marvell Wifi-Ex 8787 module on SDIO.
  
--EXIV2_VERSION = 0.24
-+EXIV2_VERSION = 0.25
- EXIV2_SITE = http://www.exiv2.org
- EXIV2_INSTALL_STAGING = YES
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797
++	bool "Marvell Wifi-Ex SD 8797"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8797 module on SDIO.
++
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797
++	bool "Marvell Wifi-Ex USB 8797"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8797 module on USB.
++
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887
++	bool "Marvell Wifi-Ex SD 8887"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8887 module on SDIO.
++
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897
++	bool "Marvell Wifi-Ex SD 8897"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8897 module on SDIO.
++
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8897
++	bool "Marvell Wifi-Ex USB 8897"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8897 module on USB.
++
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897
++	bool "Marvell Wifi-Ex PCI-E 8897"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8897 module on PCI-E.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
+ 	bool "Ralink rt2501/rt61"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 768f3c4..d3efd65 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -129,6 +129,42 @@ LINUX_FIRMWARE_FILES += mrvl/sd8787_uapsta.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
+ endif
  
++# sd8797
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797),y)
++LINUX_FIRMWARE_FILES += mrvl/sd8797_uapsta.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
++# usb8797
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797),y)
++LINUX_FIRMWARE_FILES += mrvl/usb8797_uapsta.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
++# sd8887
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887),y)
++LINUX_FIRMWARE_FILES += mrvl/sd8887_uapsta.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
++# sd8897
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8897),y)
++LINUX_FIRMWARE_FILES += mrvl/sd8897_uapsta.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
++# usb8897
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8897),y)
++LINUX_FIRMWARE_FILES += mrvl/usb8897_uapsta.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
++# pcie8897
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897),y)
++LINUX_FIRMWARE_FILES += mrvl/pcie8897_uapsta.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
+ # wl127x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
+ # wl1271-nvs.bin is a symlink to wl127x-nvs.bin
