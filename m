@@ -1,44 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 Dec 2015 15:14:39 -0300
-Subject: [Buildroot] [PATCH 2/2] libsodium: bump to version 1.0.6
-In-Reply-To: <1448993679-15036-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1448993679-15036-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1448993679-15036-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 Dec 2015 20:14:00 +0100
+Subject: [Buildroot] [PATCH v3] docs/website: cosmetic changes
+In-Reply-To: <20151201175551.4d21abb1@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 1 Dec 2015 17:55:51 +0100")
+References: <1448920882-28065-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20151130231004.45726f67@free-electrons.com>
+ <CA+TH9VntiF2dpe7VuU5RtvTtAwTKvaCg02o4ihyNLY=MGL3iSw@mail.gmail.com>
+ <20151201175551.4d21abb1@free-electrons.com>
+Message-ID: <87bnaaj81z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libsodium/libsodium.hash | 4 ++--
- package/libsodium/libsodium.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
-index 089dc03..3544237 100644
---- a/package/libsodium/libsodium.hash
-+++ b/package/libsodium/libsodium.hash
-@@ -1,2 +1,2 @@
--# Locally computed:
--sha256	cbcfc63cc90c05d18a20f229a62c7e7054a73731d0aa858c0517152c549b1288	libsodium-1.0.3.tar.gz
-+# Locally calculated after checking pgp signature
-+sha256	940d03ea7d2caa7940e24564bf6d9f66d6edd1df1e0111ff8e3655f3b864fb59	libsodium-1.0.6.tar.gz
-diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-index 18035f3..09bc777 100644
---- a/package/libsodium/libsodium.mk
-+++ b/package/libsodium/libsodium.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSODIUM_VERSION = 1.0.3
--LIBSODIUM_SITE = https://github.com/jedisct1/libsodium/releases/download/$(LIBSODIUM_VERSION)
-+LIBSODIUM_VERSION = 1.0.6
-+LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
- LIBSODIUM_LICENSE = ISC
- LIBSODIUM_LICENSE_FILES = LICENSE
- LIBSODIUM_INSTALL_STAGING = YES
+ > Angelo,
+ > On Mon, 30 Nov 2015 23:15:29 +0100, Angelo Compagnucci wrote:
+
+ >> It was very difficult to me to follow the new indentation, mixed
+ >> spaces and tabs was a big mess to my eyes.
+ >> 
+ >> At this point I think this patch could be abandoned, I'll rework it as
+ >> soon I have again a little bit of free time.
+ >> 
+ >> Probably it could be better to stick to some html formatter external
+ >> to emacs (I'm more a vim guy!)
+
+ > I don't mind changing the indentation, but your indentation style with
+ > one tab for each level associated with the very deep nesting required
+ > by the new website layout made it a bit unreadable IMO.
+
+ > I don't mind changing the indentation style to something else, but it
+ > should be consistent. Peter, any suggestion on your preference?
+
+I don't particular care, as long as:
+
+- Indentation changes are done seperately from functional changes
+- It stays readable without a bunch of scrolling
+
 -- 
-2.4.10
+Venlig hilsen,
+Peter Korsgaard 
