@@ -1,28 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 01 Dec 2015 23:21:18 -0000
-Subject: [Buildroot] [git commit] cryptsetup: fix hash source link
-Message-ID: <20151201232116.EEB4A7F9FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+	package/x11r7/xdriver_xf86-input-synaptics: bump version to 1.8.3
+Message-ID: <20151201232117.7E2A28220E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8058e622b5dd78b1ad9a11d2efd8fca5c2a8c98b
+commit: http://git.buildroot.net/buildroot/commit/?id=de2ea6ad54907c575120cf0d613f1a7b8a7162f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptsetup/cryptsetup.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash    | 4 ++--
+ .../xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk      | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index e770f95..8fbbc7d 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
+index 7b7216d..3cb0758 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
 @@ -1,2 +1,2 @@
--# From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/sha256sums.asc
-+# From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/sha256sums.asc
- sha256	075524a7cc0db36d12119fa79116750accb1c6c8825d5faa2534b74b8ce3d148	cryptsetup-1.7.0.tar.xz
+-# From http://lists.x.org/archives/xorg-announce/2015-March/002556.html
+-sha256	7b0e164ebd02a680e0c695955e783059f37edb0c2656398e0a972adc8e698c80	xf86-input-synaptics-1.8.2.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-November/002652.html
++sha256	d39f100c74f3673778b53f17bab7690161925e25dd998a15dd8cc69b52e83f01	xf86-input-synaptics-1.8.3.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+index 28663d1..b6ade4c 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.8.2
++XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.8.3
+ XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
