@@ -1,80 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 01 Dec 2015 23:21:16 -0000
-Subject: [Buildroot] [git commit] alsa-utils: bump to version 1.1.0
-Message-ID: <20151201232114.D9391821F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libsoup: bump to version 2.52.2
+Message-ID: <20151201232115.4CD74821F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c835db65fa9084690ce244a5401d5943d98274c5
+commit: http://git.buildroot.net/buildroot/commit/?id=beec4437a06a570c41050c0abc2865110b54f828
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add BAT (Basic Audio Testing) tool option.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/alsa-utils/Config.in       |  4 ++++
- package/alsa-utils/alsa-utils.hash |  2 +-
- package/alsa-utils/alsa-utils.mk   | 10 +++++++++-
- 3 files changed, 14 insertions(+), 2 deletions(-)
+ package/libsoup/libsoup.hash | 4 ++--
+ package/libsoup/libsoup.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index 3a99279..a08743e 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -50,6 +50,10 @@ config BR2_PACKAGE_ALSA_UTILS_APLAY
- 	select BR2_PACKAGE_ALSA_LIB_PCM
- 	bool "aplay/arecord"
- 
-+config BR2_PACKAGE_ALSA_UTILS_BAT
-+	select BR2_PACKAGE_FFTW
-+	bool "bat"
-+
- config BR2_PACKAGE_ALSA_UTILS_IECSET
- 	select BR2_PACKAGE_ALSA_LIB_PCM
- 	bool "iecset"
-diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
-index ba5061b..e6530eb 100644
---- a/package/alsa-utils/alsa-utils.hash
-+++ b/package/alsa-utils/alsa-utils.hash
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index 58e3eb2..7878550 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	5160058f3e14483ced5de919dd473f93932059454530a9b7ef97dcabd6833e9b	alsa-utils-1.0.29.tar.bz2
-+sha256	3b1c3135b76e14532d3dd23fb15759ddd7daf9ffbc183f7a9a0a3a86374748f1	alsa-utils-1.1.0.tar.bz2
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 06bda9a..11b46c4 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.52/libsoup-2.52.1.sha256sum
+-sha256	0e19bca047ad50b28e8ed7663840f9e45a94909148822ca44dcb3e8cafb5cc48	libsoup-2.52.1.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.52/libsoup-2.52.2.sha256sum
++sha256	db55628b5c7d952945bb71b236469057c8dfb8dea0c271513579c6273c2093dc	libsoup-2.52.2.tar.xz
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index e43e25c..fd51a0e 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ALSA_UTILS_VERSION = 1.0.29
-+ALSA_UTILS_VERSION = 1.1.0
- ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
- ALSA_UTILS_LICENSE = GPLv2
-@@ -33,12 +33,20 @@ ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
- ALSA_UTILS_CONF_OPTS += --disable-alsamixer --disable-alsatest
- endif
- 
-+ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
-+ALSA_UTILS_CONF_OPTS += --enable-bat
-+ALSA_UTILS_DEPENDENCIES += fftw
-+else
-+ALSA_UTILS_CONF_OPTS += --disable-bat
-+endif
-+
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACONF) += usr/sbin/alsaconf
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACTL) += usr/sbin/alsactl
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER) += usr/bin/alsamixer
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIDI) += usr/bin/amidi
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIXER) += usr/bin/amixer
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_APLAY) += usr/bin/aplay usr/bin/arecord
-+ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_BAT) += usr/bin/bat
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_IECSET) += usr/bin/iecset
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ACONNECT) += usr/bin/aconnect
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAUCM) += usr/bin/alsaucm
+ LIBSOUP_VERSION_MAJOR = 2.52
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).1
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).2
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPLv2+
