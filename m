@@ -1,42 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Dec 2015 23:21:23 -0000
-Subject: [Buildroot] [git commit] gdk-pixbuf: bump to version 2.32.2
-Message-ID: <20151201232116.26B1E7FBD5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Dec 2015 17:35:03 +0100
+Subject: [Buildroot] [git commit] dhcpcd: bump to version 6.9.4
+Message-ID: <20151201232125.551E8821FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e5d5036686320294bc16def57fab8cda6f46815
+commit: http://git.buildroot.net/buildroot/commit/?id=34bb11e25659931765956c3978d778705a3fdda9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.hash | 4 ++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dhcpcd/dhcpcd.hash | 2 +-
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index 3bf6ae6..478d96a 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 71d0e28..94ab89e 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.32/gdk-pixbuf-2.32.1.sha256sum
--sha256	4432b74f25538c7d6bcb3ca51adabdd666168955f25812a2568dc9637697f3bc	gdk-pixbuf-2.32.1.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.32/gdk-pixbuf-2.32.2.sha256sum
-+sha256	d3ab06fc123b13effed4c27c77cebdfad2173ff20628d82c397b7660ae926145	gdk-pixbuf-2.32.2.tar.xz
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 1167fb9..a41c262 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	6089471ed695fa62ac8351466b96b4b6365fd14ec455a120a6524663808eae53	dhcpcd-6.9.3.tar.xz
++sha256	c3f3ff7473ef158a1e71db9aea7424df2c3477ad064e2b542f27948a5abc9ba0	dhcpcd-6.9.4.tar.xz
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 66928e2..2d0cb0c 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GDK_PIXBUF_VERSION_MAJOR = 2.32
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).1
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).2
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPLv2+
+-DHCPCD_VERSION = 6.9.3
++DHCPCD_VERSION = 6.9.4
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
