@@ -1,36 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 17:55:51 +0100
-Subject: [Buildroot] [PATCH v3] docs/website: cosmetic changes
-In-Reply-To: <CA+TH9VntiF2dpe7VuU5RtvTtAwTKvaCg02o4ihyNLY=MGL3iSw@mail.gmail.com>
-References: <1448920882-28065-1-git-send-email-angelo.compagnucci@gmail.com>
- <20151130231004.45726f67@free-electrons.com>
- <CA+TH9VntiF2dpe7VuU5RtvTtAwTKvaCg02o4ihyNLY=MGL3iSw@mail.gmail.com>
-Message-ID: <20151201175551.4d21abb1@free-electrons.com>
+Date: Tue, 1 Dec 2015 17:58:32 +0100
+Subject: [Buildroot] [PATCH] lua: bump to version 5.3.2
+In-Reply-To: <1448912908-6459-1-git-send-email-francois.perrad@gadz.org>
+References: <1448912908-6459-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20151201175832.237f4de3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo,
+Fran?ois,
 
-On Mon, 30 Nov 2015 23:15:29 +0100, Angelo Compagnucci wrote:
+On Mon, 30 Nov 2015 20:48:28 +0100, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/lua/{5.3.1 => 5.3.2}/0001-root-path.patch           | 0
+>  package/lua/{5.3.1 => 5.3.2}/0002-shared-libs-for-lua.patch | 0
+>  package/lua/{5.3.1 => 5.3.2}/0004-lua-pc.patch              | 2 +-
+>  package/lua/{5.3.1 => 5.3.2}/0011-linenoise.patch           | 6 ++----
+>  package/lua/lua.hash                                        | 4 ++--
+>  package/lua/lua.mk                                          | 2 +-
+>  6 files changed, 7 insertions(+), 9 deletions(-)
+>  rename package/lua/{5.3.1 => 5.3.2}/0001-root-path.patch (100%)
+>  rename package/lua/{5.3.1 => 5.3.2}/0002-shared-libs-for-lua.patch (100%)
+>  rename package/lua/{5.3.1 => 5.3.2}/0004-lua-pc.patch (97%)
+>  rename package/lua/{5.3.1 => 5.3.2}/0011-linenoise.patch (78%)
 
-> It was very difficult to me to follow the new indentation, mixed
-> spaces and tabs was a big mess to my eyes.
-> 
-> At this point I think this patch could be abandoned, I'll rework it as
-> soon I have again a little bit of free time.
-> 
-> Probably it could be better to stick to some html formatter external
-> to emacs (I'm more a vim guy!)
+I didn't look at the details, but this patch doesn't apply here (on
+either next or master) :
 
-I don't mind changing the indentation, but your indentation style with
-one tab for each level associated with the very deep nesting required
-by the new website layout made it a bit unreadable IMO.
-
-I don't mind changing the indentation style to something else, but it
-should be consistent. Peter, any suggestion on your preference?
+thomas at skate:~/projets/buildroot (next)$ git pwam 550316
+Applying patch #550316 using 'git am -s -3'
+Description: lua: bump to version 5.3.2
+Applying: lua: bump to version 5.3.2
+Using index info to reconstruct a base tree...
+error: patch failed: package/lua/5.3.1/0011-linenoise.patch:8
+error: package/lua/5.3.1/0011-linenoise.patch: patch does not apply
+error: Did you hand edit your patch?
+It does not apply to blobs recorded in its index.
+Patch failed at 0001 lua: bump to version 5.3.2
+The copy of the patch that failed is found in: .git/rebase-apply/patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
 
 Thomas
 -- 
