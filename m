@@ -1,52 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 17:58:32 +0100
-Subject: [Buildroot] [PATCH] lua: bump to version 5.3.2
-In-Reply-To: <1448912908-6459-1-git-send-email-francois.perrad@gadz.org>
-References: <1448912908-6459-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20151201175832.237f4de3@free-electrons.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Tue,  1 Dec 2015 15:24:57 -0200
+Subject: [Buildroot] [PATCH 1/2] vnstat: bump to version 1.14
+Message-ID: <1448990698-31684-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois,
+Also add new dependency on BR2_USE_WCHAR (version 1.14 uses mbstowcs())
+and rewrap help text to 72 characters.
 
-On Mon, 30 Nov 2015 20:48:28 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/lua/{5.3.1 => 5.3.2}/0001-root-path.patch           | 0
->  package/lua/{5.3.1 => 5.3.2}/0002-shared-libs-for-lua.patch | 0
->  package/lua/{5.3.1 => 5.3.2}/0004-lua-pc.patch              | 2 +-
->  package/lua/{5.3.1 => 5.3.2}/0011-linenoise.patch           | 6 ++----
->  package/lua/lua.hash                                        | 4 ++--
->  package/lua/lua.mk                                          | 2 +-
->  6 files changed, 7 insertions(+), 9 deletions(-)
->  rename package/lua/{5.3.1 => 5.3.2}/0001-root-path.patch (100%)
->  rename package/lua/{5.3.1 => 5.3.2}/0002-shared-libs-for-lua.patch (100%)
->  rename package/lua/{5.3.1 => 5.3.2}/0004-lua-pc.patch (97%)
->  rename package/lua/{5.3.1 => 5.3.2}/0011-linenoise.patch (78%)
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ package/vnstat/Config.in   | 15 ++++++++++-----
+ package/vnstat/vnstat.hash |  2 +-
+ package/vnstat/vnstat.mk   |  2 +-
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-I didn't look at the details, but this patch doesn't apply here (on
-either next or master) :
-
-thomas at skate:~/projets/buildroot (next)$ git pwam 550316
-Applying patch #550316 using 'git am -s -3'
-Description: lua: bump to version 5.3.2
-Applying: lua: bump to version 5.3.2
-Using index info to reconstruct a base tree...
-error: patch failed: package/lua/5.3.1/0011-linenoise.patch:8
-error: package/lua/5.3.1/0011-linenoise.patch: patch does not apply
-error: Did you hand edit your patch?
-It does not apply to blobs recorded in its index.
-Patch failed at 0001 lua: bump to version 5.3.2
-The copy of the patch that failed is found in: .git/rebase-apply/patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
-
-Thomas
+diff --git a/package/vnstat/Config.in b/package/vnstat/Config.in
+index 0df4982..ed86701 100644
+--- a/package/vnstat/Config.in
++++ b/package/vnstat/Config.in
+@@ -1,11 +1,16 @@
+ config BR2_PACKAGE_VNSTAT
+ 	bool "vnstat"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR # mbstowcs()
+ 	help
+-	  vnStat is a console-based network traffic monitor that keeps a log of
+-	  network traffic for the selected interface(s). It uses the network
+-	  interface statistics provided by the kernel as information source.
+-	  This means that vnStat won't actually be sniffing any traffic and also
+-	  ensures light use of system resources.
++	  vnStat is a console-based network traffic monitor that keeps a
++	  log of network traffic for the selected interface(s). It uses
++	  the network interface statistics provided by the kernel as
++	  information source. This means that vnStat won't actually be
++	  sniffing any traffic and also ensures light use of system
++	  resources.
+ 
+ 	  http://humdi.net/vnstat
++
++comment "vnstat needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
+index a3334d6..43438a7 100644
+--- a/package/vnstat/vnstat.hash
++++ b/package/vnstat/vnstat.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	af1050d9c1b22d4b9742fe0d1818de9eb1037b8e7f9ba67b962e108d8527be69	vnstat-1.12.tar.gz
++sha256	f8462a47d85d0890493dc9eaeafbc725ae631aa5b103fb7f8af4ddb2314e8386	vnstat-1.14.tar.gz
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+index e0a64d5..8512d2d 100644
+--- a/package/vnstat/vnstat.mk
++++ b/package/vnstat/vnstat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VNSTAT_VERSION = 1.12
++VNSTAT_VERSION = 1.14
+ VNSTAT_SITE = http://humdi.net/vnstat
+ VNSTAT_LICENSE = GPLv2
+ VNSTAT_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
