@@ -1,66 +1,50 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Tue,  1 Dec 2015 19:54:11 -0200
-Subject: [Buildroot] [PATCH v2 2/2] vnstat: add upstream patch to fix build
-	with musl
-In-Reply-To: <1449006851-20917-1-git-send-email-rprebello@gmail.com>
-References: <1449006851-20917-1-git-send-email-rprebello@gmail.com>
-Message-ID: <1449006851-20917-2-git-send-email-rprebello@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 Dec 2015 22:55:54 +0100
+Subject: [Buildroot] [PATCH] busybox: add another upstream patch to fix
+	unzip
+In-Reply-To: <20151201223025.0b777fd7@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 1 Dec 2015 22:30:25 +0100")
+References: <1449001829-26507-1-git-send-email-arnout@mind.be>
+ <20151201223025.0b777fd7@free-electrons.com>
+Message-ID: <87y4ddj0k5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The header file 'fcntl.h' was missing from 'src/common.h', which caused
-the build with musl to fail with undeclared symbol errors like the
-following:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-  dbaccess.c: In function ?backupdb?:
-  dbaccess.c:268:25: error: ?O_RDONLY? undeclared (first use in this function)
-    if ((c = open(current, O_RDONLY)) == -1) {
-                           ^
-This has already been fixed upstream, so the included patch must be
-dropped on the next version bump.
+ > Arnout, Peter,
+ > On Tue, 1 Dec 2015 21:30:29 +0100, Arnout Vandecappelle
+ > (Essensium/Mind) wrote:
+ >> 0002-unzip.patch which was added in 69516e0 to fix a segmentation
+ >> fault in the gunzip applet. However, it introduced a new issue that
+ >> made the unzipping of some files fail.
+ >> 
+ >> Add an upstream patch that fixes this new issue.
+ >> 
+ >> Fixes #8501.
+ >> 
+ >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ >> Cc: Jason Rush <rush0033@hotmail.com>
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
- ...-fcntl.h-include-needed-by-open-closes-21.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch
+ > It is really nasty to have this problem affecting 2015.11 in such a
+ > fundamental package IMO, so I would like to suggest to merge this and
+ > release 2015.11.1 with the fix.
 
-diff --git a/package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch b/package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch
-new file mode 100644
-index 0000000..5489580
---- /dev/null
-+++ b/package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch
-@@ -0,0 +1,28 @@
-+From a222434e096ce42c7937839f9666691f2b8a612f Mon Sep 17 00:00:00 2001
-+From: Teemu Toivola <git@humdi.net>
-+Date: Sat, 27 Jun 2015 18:29:22 +0300
-+Subject: [PATCH] add missing fcntl.h include needed by open(), closes #21
-+
-+[Backport from upstream commit 964d7cd62b8626d51bf7ce06564aa9bd1d2b4d4c.
-+Fixes undeclared symbol issues when building with musl.]
-+
-+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-+---
-+ src/common.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/common.h b/src/common.h
-+index 7616e55..eb0b61f 100644
-+--- a/src/common.h
-++++ b/src/common.h
-+@@ -22,6 +22,7 @@
-+ #include <pwd.h>
-+ #include <grp.h>
-+ #include <libgen.h>
-++#include <fcntl.h>
-+ 
-+ #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__APPLE__) || defined(__FreeBSD_kernel__)
-+ #include <sys/param.h>
-+-- 
-+2.1.4
-+
+ > Sad to have to do this just one day after 2015.11 release, but it's
+ > really not great to have such a major issue left in 2015.11.
+
+No, indeed not :/ And the patch was even an upstream fix. Where does
+this new patch come from, I don't see it on
+http://busybox.net/downloads/fixes-1.24.1/?
+
+While this is an important thing to fix, I don't think it is urgent
+enough to release a 2015.11.1 right away. It sounds like we might need a
+fix for the host rpath checks as well, so I'll wait a few days to see
+what shows up.
+
 -- 
-2.1.4
+Venlig hilsen,
+Peter Korsgaard 
