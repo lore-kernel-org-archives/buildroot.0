@@ -1,45 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 01 Dec 2015 23:21:15 -0000
-Subject: [Buildroot] [git commit] ipset: bump to version 6.27
-Message-ID: <20151201232114.6B0AB821F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] alsa-lib: bump to version 1.1.0
+Message-ID: <20151201232114.C3892821F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18566c37dc226fb22fee3a069afaf70a97e656b8
+commit: http://git.buildroot.net/buildroot/commit/?id=f98e865074a6c6f9cc38721b3320f95de5f2967b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ipset/ipset.hash | 6 +++---
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/alsa-lib/0001-add-missing-include.patch | 29 +++++++++++++++++++++++++
+ package/alsa-lib/alsa-lib.hash                  |  2 +-
+ package/alsa-lib/alsa-lib.mk                    |  2 +-
+ 3 files changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index e0f11d9..844bebb 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,4 +1,4 @@
--# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.25.1.tar.bz2.md5sum.txt
--md5	e58262af2d53bda271f43883eebc8d54	ipset-6.25.1.tar.bz2
-+# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.27.tar.bz2.md5sum.txt
-+md5	c39f8958908b1396e2c69f082b75d924	ipset-6.27.tar.bz2
- # Calculated based on the hash above
--sha256	658e15d0d0d6a7160137ef1c2bc2c8669cfee996eb9e049df8d7313e34795e7b	ipset-6.25.1.tar.bz2
-+sha256	724897a80395534466142c3542184e5a480a5046140ca2a7d9097690b931b235	ipset-6.27.tar.bz2
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index e5e9218..fff67e2 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
+diff --git a/package/alsa-lib/0001-add-missing-include.patch b/package/alsa-lib/0001-add-missing-include.patch
+new file mode 100644
+index 0000000..ac7dfa9
+--- /dev/null
++++ b/package/alsa-lib/0001-add-missing-include.patch
+@@ -0,0 +1,29 @@
++Subject: [PATCH] topology: Add missing include sys/stat.h
++
++Necessary for proper definitions of S_IRUSR & co.  Otherwise it
++results in compile errors with old glibc:
++  parser.c: In function 'snd_tplg_build_file':
++  parser.c:262: error: 'S_IRUSR' undeclared (first use in this function)
++  parser.c:262: error: (Each undeclared identifier is reported only once
++  parser.c:262: error: for each function it appears in.)
++
++Signed-off-by: Takashi Iwai <tiwai@suse.de>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Status: upstream
++
++diff --git a/src/topology/parser.c b/src/topology/parser.c
++index 80a0ae0..18bb9c7 100644
++--- a/src/topology/parser.c
+++++ b/src/topology/parser.c
++@@ -16,6 +16,7 @@
++            Liam Girdwood <liam.r.girdwood@linux.intel.com>
++ */
++ 
+++#include <sys/stat.h>
++ #include "list.h"
++ #include "tplg_local.h"
++ 
++-- 
++1.7.11.7
++
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 3e132c8..506416d 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	73043c35eb9636be0f4af6a240235c213f12a25feb1f04aeeac8cb7e30fcbdd0	alsa-lib-1.0.29.tar.bz2
++sha256	dfde65d11e82b68f82e562ab6228c1fb7c78854345d3c57e2c68a9dd3dae1f15	alsa-lib-1.1.0.tar.bz2
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 3115433..ea2351c 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPSET_VERSION = 6.25.1
-+IPSET_VERSION = 6.27
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+-ALSA_LIB_VERSION = 1.0.29
++ALSA_LIB_VERSION = 1.1.0
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_LICENSE = LGPLv2.1+
