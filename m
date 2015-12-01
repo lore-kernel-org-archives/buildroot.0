@@ -1,49 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Dec 2015 21:37:34 +0100
-Subject: [Buildroot] [PATCH 1/1] Update the libhttpparser package
-In-Reply-To: <1449001232.1893.32.camel@embedded.rocks>
-References: <241359bd-aef1-44f4-b489-d4f690e92d64@email.android.com>
- <1449001232.1893.32.camel@embedded.rocks>
-Message-ID: <565E050E.6080104@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 1 Dec 2015 21:41:55 +0100
+Subject: [Buildroot] [PATCH] manual: clarify policy when updating a package
+	patch
+Message-ID: <1449002515-27302-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-12-15 21:20, J?rg Krause wrote:
-> On Di, 2015-12-01 at 13:21 +0100, Renaud AUBIN wrote:
->> I have resubmitted by figuring out by myself the ad hoc git am
->> processing? 
->> Maybe the Contributing chapter could be slightly improved by a
->> section on packages' patching policies?
->>
->> Thank you for your review.
->>
-> 
-> We have a section about patch policy in the Buildroot manual:
-> http://nightly.buildroot.org/#patch-policy
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Renaud AUBIN <root@renaud.io>
+---
+ docs/manual/patch-policy.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- But it doesn't say anything about what you have to do when you update a patch.
-I'll try to cook something up.
-
- Regards,
- Arnout
-
-> 
-> Best regards
-> J?rg Krause
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 6e27e71..bb859bd 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -106,6 +106,10 @@ upstream SCM software to generate the patch set.
+ Otherwise, concatenate the header with the output of the
+ +diff -purN package-version.orig/ package-version/+ command.
+ 
++If you update an existing patch (e.g. when bumping the package version),
++make sure the original author and existing Signed-off-by tags are not
++removed.
++
+ At the end, the patch should look like:
+ 
+ ---------------
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.6.2
