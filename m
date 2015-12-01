@@ -1,55 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 01 Dec 2015 23:21:16 -0000
-Subject: [Buildroot] [git commit] barebox: bump to version 2015.11.0
-Message-ID: <20151201232115.60A2E8220E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libmicrohttpd: bump to version 0.9.46
+Message-ID: <20151201232115.C7CEB821FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d977440126e09d4eb0feafc8f9682a06341bfd1a
+commit: http://git.buildroot.net/buildroot/commit/?id=2a5e86c9ef1eb5197b04f7734d810330daacd158
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 7e81181..e9021fb 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 618d53a..5594cba 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	1075def48da9327be22441f4a3460d24159fae2bf4bcfb4ab6e7ca5e95e54a69	libmicrohttpd-0.9.45.tar.gz
++sha256	06dbd2654f390fa1e8196fe063fc1449a6c2ed65a38199a49bf29ad8a93b8979	libmicrohttpd-0.9.46.tar.gz
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 06b40a1..3e8bbb1 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.10.0"
-+	bool "2015.11.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 1b927ba..bb2ecc2 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2015.10.0.tar.bz2.md5
--md5 50b787db3f91bebd5ed646e80a05caab barebox-2015.10.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2015.11.0.tar.bz2.md5
-+md5 05951fa64000f5baedfc1064dbcfcad0 barebox-2015.11.0.tar.bz2
- 
- # Locally calculated
--sha256 8353042fe27a30a01a00fe1e1f4a34f292a291027b9637d3ea8f305387407880 barebox-2015.10.0.tar.bz2
-+sha256 ea40cef0a5ef76c4d68e76ac0e5c71c758c563ffa48c08e0b284688ec6f9d422 barebox-2015.11.0.tar.bz2
+-LIBMICROHTTPD_VERSION = 0.9.45
++LIBMICROHTTPD_VERSION = 0.9.46
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
