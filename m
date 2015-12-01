@@ -1,68 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 01 Dec 2015 23:21:17 -0000
-Subject: [Buildroot] [git commit] libxmlpp: bump to version 2.40.1
-Message-ID: <20151201232116.A8A3D8220E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fbgrab: bump verstion to 1.3
+Message-ID: <20151201232116.BEDEE7F9FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d7f2977eb6b17713f9741db26a8efe9083849b05
+commit: http://git.buildroot.net/buildroot/commit/?id=67a723248f6e4adcf868a1cdeff71640411dd40d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Changelog (see [1] for details):
+  - Added support when active framebuffer is not starting at offset 0
+  - Fixed broken re-ordering of colors, rgba to argb
+  - Fixed broken path for man page
+
+[1] http://fbgrab.monells.se
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxmlpp/Config.in     | 7 ++++---
- package/libxmlpp/libxmlpp.hash | 4 ++--
- package/libxmlpp/libxmlpp.mk   | 4 ++--
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ package/fbgrab/fbgrab.hash | 2 +-
+ package/fbgrab/fbgrab.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxmlpp/Config.in b/package/libxmlpp/Config.in
-index cb5f3c0..0f2da98 100644
---- a/package/libxmlpp/Config.in
-+++ b/package/libxmlpp/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBXMLPP
- 	bool "libxml++"
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_GLIBMM
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # glibmm -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glibmm -> libglib2
-@@ -11,7 +12,7 @@ config BR2_PACKAGE_LIBXMLPP
- 
- 	  http://libxmlplusplus.sourceforge.net/
- 
--comment "libxml++ needs a toolchain w/ C++, wchar, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--	!BR2_TOOLCHAIN_HAS_THREADS
-+comment "libxml++ needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
-+		||!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU
-diff --git a/package/libxmlpp/libxmlpp.hash b/package/libxmlpp/libxmlpp.hash
-index 9e1ae18..5fc7f5b 100644
---- a/package/libxmlpp/libxmlpp.hash
-+++ b/package/libxmlpp/libxmlpp.hash
+diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
+index 4652f2c..de3bc1f 100644
+--- a/package/fbgrab/fbgrab.hash
++++ b/package/fbgrab/fbgrab.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/2.34/libxml++-2.34.2.sha256sum
--sha256	77daba20ab76631071d4ed4cc18fa2e981160ca05ae661e8d146f2b0728f9baa	libxml++-2.34.2.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/2.40/libxml++-2.40.1.sha256sum
-+sha256	4ad4abdd3258874f61c2e2a41d08e9930677976d303653cd1670d3e9f35463e9	libxml++-2.40.1.tar.xz
-diff --git a/package/libxmlpp/libxmlpp.mk b/package/libxmlpp/libxmlpp.mk
-index d9dd862..d428199 100644
---- a/package/libxmlpp/libxmlpp.mk
-+++ b/package/libxmlpp/libxmlpp.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated
+-sha256	61e0772ad6ea744ee597ae478398ddd0ba6fceee2cf343859bebde2c15bafb91	fbgrab-1.2.tar.gz
++sha256 5fab478cbf8731fbacefaa76236a8f8b38ccff920c53b3a8253bc35509fba8ed fbgrab-1.3.tar.gz
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index b60da9a..4455423 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXMLPP_VERSION_MAJOR = 2.34
--LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).2
-+LIBXMLPP_VERSION_MAJOR = 2.40
-+LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).1
- LIBXMLPP_LICENSE = LGPLv2.1 (library), LGPLv2+ (examples)
- LIBXMLPP_LICENSE_FILES = COPYING
- LIBXMLPP_SOURCE = libxml++-$(LIBXMLPP_VERSION).tar.xz
+-FBGRAB_VERSION = 1.2
++FBGRAB_VERSION = 1.3
+ FBGRAB_SITE = http://fbgrab.monells.se
+ FBGRAB_DEPENDENCIES = libpng
+ FBGRAB_LICENSE = GPLv2
