@@ -1,99 +1,62 @@
-From: Renaud AUBIN <root@renaud.io>
-Date: Tue, 01 Dec 2015 09:35:04 +0100
-Subject: [Buildroot] [PATCH 1/1] Update the libhttpparser package
-Message-ID: <1448958904-12009-1-git-send-email-root@renaud.io>
+From: Arthur LAMBERT <lambertarthur22@gmail.com>
+Date: Tue, 1 Dec 2015 09:49:06 +0100
+Subject: [Buildroot] Compile kernel module within buildroot package
+In-Reply-To: <20151130172458.0a226cd6@free-electrons.com>
+References: <20151119183653.GA1025@arthur-bzh>
+ <20151130172458.0a226cd6@free-electrons.com>
+Message-ID: <20151201084906.GA4026@arthur-bzh>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The http-parser repository has been transfered from joyent to nodejs.
-Bump version to 2.6.0.
+Le Monday 30 Nov 2015 ? 17:24:58 (+0100), Thomas Petazzoni a ?crit :
+> Dear Arthur LAMBERT,
+> 
 
-Signed-off-by: Renaud AUBIN <root@renaud.io>
----
- ...-f-option-when-calling-ln-at-install-time.patch | 22 ++++++++++------------
- package/libhttpparser/Config.in                    |  2 +-
- package/libhttpparser/libhttpparser.mk             |  4 ++--
- 3 files changed, 13 insertions(+), 15 deletions(-)
+Hi Thomas,
 
-diff --git a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
-index 29fe04d..336a9e0 100644
---- a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
-+++ b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
-@@ -1,34 +1,32 @@
--From d9dfeca8736318eaad5cd4554cbae059469decde Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 28 Aug 2015 19:02:11 +0200
-+From fb2d2803bdad4847b3116a325a9ae0a56f906a08 Mon Sep 17 00:00:00 2001
-+From: Renaud AUBIN <root@renaud.io>
-+Date: Tue, 1 Dec 2015 09:24:41 +0100
- Subject: [PATCH] Use -f option when calling ln at install time
- 
- This allows "make install; make install" to work properly.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-  Makefile | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/Makefile b/Makefile
--index 373709c..6206b09 100644
-+index 33c8ba0..b36d95a 100644
- --- a/Makefile
- +++ b/Makefile
--@@ -113,12 +113,12 @@ tags: http_parser.c http_parser.h test.c
-+@@ -125,12 +125,12 @@ tags: http_parser.c http_parser.h test.c
-  install: library
-  	$(INSTALL) -D  http_parser.h $(INCLUDEDIR)/http_parser.h
-  	$(INSTALL) -D $(SONAME) $(LIBDIR)/$(SONAME)
---	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
--+	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
-+-	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.$(SOEXT)
-++	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.$(SOEXT)
-  
-  install-strip: library
-  	$(INSTALL) -D  http_parser.h $(INCLUDEDIR)/http_parser.h
-  	$(INSTALL) -D -s $(SONAME) $(LIBDIR)/$(SONAME)
---	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
--+	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
-+-	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.$(SOEXT)
-++	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.$(SOEXT)
-  
-  uninstall:
-  	rm $(INCLUDEDIR)/http_parser.h
- -- 
--2.5.0
-+2.6.2
- 
-diff --git a/package/libhttpparser/Config.in b/package/libhttpparser/Config.in
-index 31b8b9b..4356304 100644
---- a/package/libhttpparser/Config.in
-+++ b/package/libhttpparser/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_LIBHTTPPARSER
- 	  40 bytes of data per message stream (in a web server
- 	  that is per connection).
- 
--	  https://github.com/joyent/http-parser
-+	  https://github.com/nodejs/http-parser
- 
- comment "libhttpparser needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index d6ec236..015efc0 100644
---- a/package/libhttpparser/libhttpparser.mk
-+++ b/package/libhttpparser/libhttpparser.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBHTTPPARSER_VERSION = v2.5.0
--LIBHTTPPARSER_SITE = $(call github,joyent,http-parser,$(LIBHTTPPARSER_VERSION))
-+LIBHTTPPARSER_VERSION = v2.6.0
-+LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,$(LIBHTTPPARSER_VERSION))
- LIBHTTPPARSER_INSTALL_STAGING = YES
- LIBHTTPPARSER_LICENSE = MIT
- LIBHTTPPARSER_LICENSE_FILES = LICENSE-MIT
--- 
-2.6.2
+> On Thu, 19 Nov 2015 19:36:53 +0100, Arthur LAMBERT wrote:
+> 
+> > I am currently using the 2015.08 version of buildroot. Kernel module compilation
+> > is broken :
+> 
+> This problem has been fixed in 2015.08.1, you should upgrade to this
+> version (which has just three commits on top of 2015.08), or
+> alternatively backport
+> 
+>   http://git.buildroot.net/buildroot/commit/?h=2015.08.x&id=16768877e324f6e3e1291613ae5db9af0da5a2bf
+> 
+> I was able to reproduce your problem on 2015.08, and with just this
+> commit applied, lttng-modules could be built successfully.
+
+I already found this patch. The compilation issue is fixed thanks to this commit.
+But I am always not able to get a ko file at the end of the compilation process.
+Even with the master branch.
+
+Process to run the test :
+
+* git checkout 2015.08.1
+* git checkout -f
+* make distclean
+* make wandboard_defconfig (I am using this defconfig for my test)
+* enable lttng-modules through make menuconfig
+* make lttng-modules
+
+Check ko file in output/target, output/builf/lttng-modules-X, output/build/linux-X
+ => no lttng kernel module file found.
+
+The compilation seems to work without error. But in fact nothing is compiled at
+the end of the process.
+
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+Arthur.
