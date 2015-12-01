@@ -1,88 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 17:44:10 +0100
-Subject: [Buildroot] [git commit branch/next] cryptodev-linux: bump to
-	version 1.8
-Message-ID: <20151201164500.A8227802D0@busybox.osuosl.org>
+Date: Tue, 1 Dec 2015 17:47:14 +0100
+Subject: [Buildroot] [git commit branch/next] openldap: bump version to
+	2.4.43
+Message-ID: <20151201164719.5A836802EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f1c58f64cde17beea3d9f246b6a4bea411def12
+commit: http://git.buildroot.net/buildroot/commit/?id=8c088c6d5402d898af23016b56c734e9c82fc2f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Patches are upstream so remove them.
+- Bump version to 2.4.43
+- Use md5 and sha1 upstream provided hashes. This combination is
+  stronger than a sha256 hash.
+- Switch to an http download site to avoid problems with firewalls
+  blocking the ftp.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-fix-compilation-against-linux-3.19.patch  |   37 --------------------
- package/cryptodev-linux/cryptodev-linux.hash       |    2 +-
- package/cryptodev-linux/cryptodev-linux.mk         |    2 +-
- 3 files changed, 2 insertions(+), 39 deletions(-)
+ package/openldap/openldap.hash |    8 ++++----
+ package/openldap/openldap.mk   |    4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch b/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
-deleted file mode 100644
-index aebbc9b..0000000
---- a/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 5054d20d45571cc85339351fde52f872eeb82206 Mon Sep 17 00:00:00 2001
--From: Phil Sutter <phil@nwl.cc>
--Date: Tue, 10 Feb 2015 04:57:05 +0100
--Subject: [PATCH] fix compilation against linux-3.19
--
--Commit f938612dd97d481b8b5bf960c992ae577f081c17 in linux.git removes
--get_unused_fd() macro. This patch changes the calling code to use it's
--content 'get_unused_fd_flags(0)' instead. Checking for when
--get_unused_fd_flags was introduced shows it's been there since 2.6.23 at
--least, so probably no need to make this change conditional on the target
--kernel version.
--
--Original patch by Ricardo Ribalda Delgado for Open Embedded, reported by
--Oleg Rakhmanov.
--
--Signed-off-by: Phil Sutter <phil@nwl.cc>
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- ioctl.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/ioctl.c b/ioctl.c
--index 5a55a76..b23f5fd 100644
----- a/ioctl.c
--+++ b/ioctl.c
--@@ -546,7 +546,7 @@ static int
-- clonefd(struct file *filp)
-- {
-- 	int ret;
---	ret = get_unused_fd();
--+	ret = get_unused_fd_flags(0);
-- 	if (ret >= 0) {
-- 			get_file(filp);
-- 			fd_install(ret, filp);
---- 
--2.0.5
--
-diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
-index d5e0bae..d7195ac 100644
---- a/package/cryptodev-linux/cryptodev-linux.hash
-+++ b/package/cryptodev-linux/cryptodev-linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking php signature
--sha256	41880533b53de4d7b3f054e230f576988dafb8eed7bef5ebcf6422bb2e3a3b25	cryptodev-linux-1.7.tar.gz
-+sha256	67fabde9fb67b286a96c4f45b594b0eccd0f761b495705c18f2ae9461b831376	cryptodev-linux-1.8.tar.gz
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 6001c71..c3f5355 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index cca1e38..83e790f 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,4 +1,4 @@
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.41.sha1
+-sha1  c6880df9fec928a5f010b78a4285b497e8a12d6b  openldap-2.4.41.tgz
+-# Locally computed:
+-sha256  27856bb4a8b44feca2b326c309000e16a9dadd52362c8ab6eec6c67a43737f6e  openldap-2.4.41.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.43.md5
++md5 49ca65e27891fcf977d78c10f073c705  openldap-2.4.43.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.43.sha1
++sha1 3b52924df2f45e81f25ecbe37551bc837d090cfa  openldap-2.4.43.tgz
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 4c3a71a..17bf991 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--CRYPTODEV_LINUX_VERSION = 1.7
-+CRYPTODEV_LINUX_VERSION = 1.8
- CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPLv2+
+-OPENLDAP_VERSION = 2.4.41
++OPENLDAP_VERSION = 2.4.43
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+-OPENLDAP_SITE = ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release
++OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+ OPENLDAP_LICENSE_FILES = LICENSE
+ OPENLDAP_INSTALL_STAGING = YES
