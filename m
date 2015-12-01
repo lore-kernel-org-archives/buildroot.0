@@ -1,32 +1,19 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 1 Dec 2015 23:02:21 +0000
-Subject: [Buildroot] [Bug 8296] nodejs 0.12.7 - npm crashes (seg core
-	dump)
-In-Reply-To: <20151201220441.682418018E@busybox.osuosl.org>
-References: <bug-8296-163@https.bugs.busybox.net/>
- <20151201220441.682418018E@busybox.osuosl.org>
-Message-ID: <CAFGQKxdWRz-KepYPOEamNSKfV50X5iDN8jCcVgBzQZZeE47UyQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 01 Dec 2015 23:21:14 -0000
+Subject: [Buildroot] [git commit] Kickoff 2016.02 cycle
+Message-ID: <20151201232114.26785821FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=2f8a72079112bed85afff89c34b5a070a0fce015
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 1 December 2015 at 22:04,  <bugzilla@busybox.net> wrote:
-> https://bugs.busybox.net/show_bug.cgi?id=8296
->
-> --- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-12-01 22:04:34 UTC ---
-> Thanks for the investigation. Can you rebuild with debugging symbols, and get a
-> core dump, to see where we are crashing?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://bugs.busybox.net just died :(  I was in the middle of posting
-a back trace form the core dump and bugzilla stopped working.  It
-gives a perl error about DateTime.pm missing.
-
-Any ideas?
-
-Thanks
-
-Martin
+Patch is too large, so refusing to show it
