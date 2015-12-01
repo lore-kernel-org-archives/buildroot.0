@@ -1,60 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  1 Dec 2015 23:19:02 +0100
-Subject: [Buildroot] [PATCH 0/2 for 2015.11.x] rpath: fix fallout of
-	check-host-rpath (branch yem/host-gawk)
-Message-ID: <cover.1449008170.git.yann.morin.1998@free.fr>
+Date: Tue,  1 Dec 2015 23:19:06 +0100
+Subject: [Buildroot] [PATCH 1/2 for 2015.11.x] support/check-host-rpath:
+	remove trailing '/' in host dir
+In-Reply-To: <cover.1449008170.git.yann.morin.1998@free.fr>
+References: <cover.1449008170.git.yann.morin.1998@free.fr>
+Message-ID: <b8b895896ff04a0551c1d4b63a623e8c24eb9dfa.1449008170.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Despite the comment saying so, the trailing '/' in the host directory is
+not removed. note however that it is properly removed from extracted
+RPATH tags.
 
-This series, intended for master *and* a 2015.11.x maitenance branch,
-fixes two bugs related to the RPATH handling that we introduced in
-2015.11.
+This is not visible when the host directory is our default $(O)/host
+location, but breaks for user-supplied external host ditrectory, when
+the user leaves a trailing slash in the path.
 
-The first is a trivial oversight in sanitising the host directory in the
-check-host-rpath script.
+Fix that.
 
-The second is more complex. It simply disables optional features of our
-host gawk when the user has gmp and mpfr or readline development files
-installed on its host system.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-See the second commit log, the topic is fully explained there, and is
-not trivial to sumarise.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 3f90e532ff48669873f682a4f0c3b6f0910cb2e9:
-
-  Update for 2015.11 (2015-11-30 23:13:41 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/host-gawk
-
-for you to fetch changes up to 9cd7b6bdd9790d4105829b278c0e6acba9f103f3:
-
-  package/gawk: do not use readeline ormpfr in host variant (2015-12-01 22:56:50 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      support/check-host-rpath: remove trailing '/' in host dir
-      package/gawk: do not use readeline ormpfr in host variant
-
- package/gawk/gawk.mk             | 4 +++-
+---
+Peter, for the maintenance branch over 2015.11.
+Sorry for the mess, it's a case I did not test...
+---
  support/scripts/check-host-rpath | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index dc9e17f..48d69da 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -14,7 +14,7 @@ main() {
+     local file ret
+ 
+     # Remove duplicate and trailing '/' for proper match
+-    hostdir="$( sed -r -e 's:/+:/:g;' <<<"${hostdir}" )"
++    hostdir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${hostdir}" )"
+ 
+     ret=0
+     while read file; do
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
