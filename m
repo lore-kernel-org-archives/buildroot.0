@@ -1,66 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 23:22:49 +0100
-Subject: [Buildroot] [PATCH 2/2 for 2015.11.x] package/gawk: do not use
- readeline ormpfr in host variant
-In-Reply-To: <9cd7b6bdd9790d4105829b278c0e6acba9f103f3.1449008170.git.yann.morin.1998@free.fr>
-References: <cover.1449008170.git.yann.morin.1998@free.fr>
- <9cd7b6bdd9790d4105829b278c0e6acba9f103f3.1449008170.git.yann.morin.1998@free.fr>
-Message-ID: <20151201232249.57de6d15@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Dec 2015 23:25:52 +0100
+Subject: [Buildroot] [PATCH 2/2] v4l2grab: new package
+In-Reply-To: <1449007230-3175-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1449007230-3175-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1449007230-3175-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <565E1E70.30403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
-
-Two typos in the commit title.
-
-On Tue,  1 Dec 2015 23:19:07 +0100, Yann E. MORIN wrote:
-> gawk has an optional dependency on mpfr (and thus gmp) and readline,
-> and will probe for them. If they are present, they are used; if they
-> are missing, that's not an error. mpfr (and gmp) is used for "BIGNUM"
-> support on gawk; readline is used by the gawk debugger.
+On 01-12-15 23:00, Thomas Petazzoni wrote:
+> From: Volkov Viacheslav <sv99@inbox.ru>
 > 
-> However, mpfr (bringing gmp) are also host-packages in Buildroot, but in
-> the standard build order (i.e. a plain 'make'), they are built after
-> gawk. Ditto readline (from ncurses).
+> [Thomas:
+>  - remove dependency on musl, since libv4l can now be built without
+>    musl
+>  - add missing Config.in comment for the toolchain dependencies
+>  - add hash file.
+>  - rework commit log.
+>  - expand Config.in help text.]
 > 
-> If the user has the development files for gmp and mpfr, then gawk is
-> linked to them. Ditto readline.
-> 
-> Now, further on in the build, we build gmp and mpfr (for gcci or guile),
-> so we install them in the host dir. Ditto readline (for gdb, ncurses
-> itself and a few other packages...)
-> 
-> But because we forcibly set an RPATH tag on all our host binaries, our
-> host gawk will now dynamically link with our versions, when it was in
-> fact built against the host ones.
-> 
-> This did not seem to cause any harm dso far, but is far from ideal.
-
-dso -> so
-
-> 
-> Since we do not really need BIGNUM or the debugger in our host gawk, we
-> just forcibly disable them and configure gawk without readline or mpfr
-> (there's no switch for gmp, but it;s not a direct dependency, it comes
-
-it;s -> it's
-
-> -# We don't have a host-busybox
-> +# We don't have a host-busybox, and we don't want to use mpfr
-
-Is the comment really important, especially when it talks about mpfr
-but not about readline ?
-
->  HOST_GAWK_DEPENDENCIES =
->  
-> +HOST_GAWK_CONF_OPTS = --without-readline --without-mpfr
+> Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[snip]
+> +++ b/package/v4l2grab/v4l2grab.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# v4l2grab
+> +#
+> +################################################################################
 > +
+> +V4L2GRAB_VERSION = 7815752fafb8b797047e819a08a3b6e2f2880846
+> +V4L2GRAB_SITE = $(call github,twam,v4l2grab,$(V4L2GRAB_VERSION))
+> +V4L2GRAB_LICENSE = GPLv2+
+> +V4L2GRAB_LICENSE_FILE = LICENSE
 
-Thomas
+ I only see LICENSE.md in the repository. Oh, that's because it changed name
+just two days ago. Perhaps it would be a good idea to bump to
+0abed72532bee02e545a1924b6883c839d50febf now and fix the license file name,
+since it will most likely be forgotten in the next bump.
+
+ Regards,
+ Arnout
+
+> +# Fetched from github, no pre-generated configure script provided
+> +V4L2GRAB_AUTORECONF = YES
+> +V4L2GRAB_DEPENDENCIES = libjpeg libv4l
+
+ You select BR2_PACKAGE_JPEG, not BR2_PACKAGE_LIBJPEG, so you should depend on
+jpeg instead of libjpeg.
+
+ With that fixed you can add my
+ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Regards,
+ Arnout
+
+> +
+> +$(eval $(autotools-package))
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
