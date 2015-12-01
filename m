@@ -1,19 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  1 Dec 2015 21:41:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 8346] wf111 package removes all kernel module
-	dependencies
-In-Reply-To: <bug-8346-163@https.bugs.busybox.net/>
-References: <bug-8346-163@https.bugs.busybox.net/>
-Message-ID: <20151201214151.A953B8028C@busybox.osuosl.org>
+Date: Tue,  1 Dec 2015 21:42:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 8296] nodejs 0.12.7 - npm crashes (seg core dump)
+In-Reply-To: <bug-8296-163@https.bugs.busybox.net/>
+References: <bug-8296-163@https.bugs.busybox.net/>
+Message-ID: <20151201214225.D412E801D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8346
+https://bugs.busybox.net/show_bug.cgi?id=8296
 
---- Comment #1 from Martin <martin@barkynet.com> 2015-12-01 21:41:51 UTC ---
+--- Comment #1 from Martin <martin@barkynet.com> 2015-12-01 21:42:25 UTC ---
 I have managed to reproduce this issue using qemu_x86_64_defconfig in the
 2015.11 release.  My initial tests seem to show it's related to using uclibc.
 
