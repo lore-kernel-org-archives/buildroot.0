@@ -1,43 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 01 Dec 2015 23:21:16 -0000
-Subject: [Buildroot] [git commit] cryptsetup: bump to version 1.7.0
-Message-ID: <20151201232115.B432F8220E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] barebox: bump to version 2015.11.0
+Message-ID: <20151201232115.60A2E8220E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f11f5d541abe6628c50bf7e0a3999dc6e8914e3
+commit: http://git.buildroot.net/buildroot/commit/?id=d977440126e09d4eb0feafc8f9682a06341bfd1a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index a0b975d..e770f95 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/sha256sums.asc
--sha256	45a6ccd3c65b7d904e58e1cb3656a7e997190b6a05b5ff7c6887e4a41c5f19bc	cryptsetup-1.6.8.tar.xz
-+sha256	075524a7cc0db36d12119fa79116750accb1c6c8825d5faa2534b74b8ce3d148	cryptsetup-1.7.0.tar.xz
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 78cbe8f..986b131 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 7e81181..e9021fb 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--CRYPTSETUP_VERSION_MAJOR = 1.6
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).8
-+CRYPTSETUP_VERSION_MAJOR = 1.7
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.10.0"
++	bool "2015.11.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2015.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 1b927ba..bb2ecc2 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# http://www.barebox.org/download/barebox-2015.10.0.tar.bz2.md5
+-md5 50b787db3f91bebd5ed646e80a05caab barebox-2015.10.0.tar.bz2
++# http://www.barebox.org/download/barebox-2015.11.0.tar.bz2.md5
++md5 05951fa64000f5baedfc1064dbcfcad0 barebox-2015.11.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 8353042fe27a30a01a00fe1e1f4a34f292a291027b9637d3ea8f305387407880 barebox-2015.10.0.tar.bz2
++sha256 ea40cef0a5ef76c4d68e76ac0e5c71c758c563ffa48c08e0b284688ec6f9d422 barebox-2015.11.0.tar.bz2
