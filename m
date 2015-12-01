@@ -1,48 +1,119 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 01 Dec 2015 23:21:17 -0000
-Subject: [Buildroot] [git commit] fbgrab: bump verstion to 1.3
-Message-ID: <20151201232116.BEDEE7F9FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] glibmm: bump to version 2.46.1
+Message-ID: <20151201232116.7966E7FBD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67a723248f6e4adcf868a1cdeff71640411dd40d
+commit: http://git.buildroot.net/buildroot/commit/?id=5fcd6c4a3aed1a7ef7e5f27fa4c2b59eef7374f9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog (see [1] for details):
-  - Added support when active framebuffer is not starting at offset 0
-  - Fixed broken re-ordering of colors, rgba to argb
-  - Fixed broken path for man page
+Adjust pulseview/libsigrok for the gcc >= 4.8 dependency.
 
-[1] http://fbgrab.monells.se
+Line wrap comment depends for pulseview.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Drop redundant libsigrok depend on comment for libsigrok++.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbgrab/fbgrab.hash | 2 +-
- package/fbgrab/fbgrab.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/glibmm/Config.in    | 7 ++++---
+ package/glibmm/glibmm.hash  | 4 ++--
+ package/glibmm/glibmm.mk    | 2 +-
+ package/libsigrok/Config.in | 7 ++++---
+ package/pulseview/Config.in | 7 ++++---
+ 5 files changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
-index 4652f2c..de3bc1f 100644
---- a/package/fbgrab/fbgrab.hash
-+++ b/package/fbgrab/fbgrab.hash
+diff --git a/package/glibmm/Config.in b/package/glibmm/Config.in
+index 6ac4be5..fdbb438 100644
+--- a/package/glibmm/Config.in
++++ b/package/glibmm/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GLIBMM
+ 	bool "glibmm"
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBSIGC
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+@@ -11,7 +12,7 @@ config BR2_PACKAGE_GLIBMM
+ 
+ 	  http://www.gtkmm.org/
+ 
+-comment "glibmm needs a toolchain w/ C++, wchar, threads"
++comment "glibmm needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
+index 4fbde55..9a7a6c8 100644
+--- a/package/glibmm/glibmm.hash
++++ b/package/glibmm/glibmm.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	61e0772ad6ea744ee597ae478398ddd0ba6fceee2cf343859bebde2c15bafb91	fbgrab-1.2.tar.gz
-+sha256 5fab478cbf8731fbacefaa76236a8f8b38ccff920c53b3a8253bc35509fba8ed fbgrab-1.3.tar.gz
-diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
-index b60da9a..4455423 100644
---- a/package/fbgrab/fbgrab.mk
-+++ b/package/fbgrab/fbgrab.mk
+-# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.36/glibmm-2.36.1.sha256sum
+-sha256	d1f7dec2fd75ea95034ec143fcf2ff77a02e92aacf3e0cc110f9c67e7fe23766	glibmm-2.36.1.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.46/glibmm-2.46.1.sha256sum
++sha256	9647e596c1081d2ea202bd3da2824ec2ea359498fa86eb59a55b1b307dd8c4aa	glibmm-2.46.1.tar.xz
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index 4081251..66b357d 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FBGRAB_VERSION = 1.2
-+FBGRAB_VERSION = 1.3
- FBGRAB_SITE = http://fbgrab.monells.se
- FBGRAB_DEPENDENCIES = libpng
- FBGRAB_LICENSE = GPLv2
+-GLIBMM_VERSION_MAJOR = 2.36
++GLIBMM_VERSION_MAJOR = 2.46
+ GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).1
+ GLIBMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
+ GLIBMM_LICENSE_FILES = COPYING COPYING.tools
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index 6ef3776..ff2d249 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -24,12 +24,13 @@ config BR2_PACKAGE_LIBSIGROKCXX
+ 	bool "build C++ bindings"
+ 	select BR2_PACKAGE_GLIBMM
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # glibmm
+ 	help
+ 	  Build libsigrok C++ bindings as well.
+ 
+-comment "C++ bindings need a toolchain w/ C++"
+-	depends on BR2_PACKAGE_LIBSIGROK
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "C++ bindings need a toolchain w/ C++, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ endif
+ 
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index e6ddc21..bbbfd76 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -17,15 +17,16 @@ config BR2_PACKAGE_PULSEVIEW
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 	# libsigrok
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	help
+ 	  PulseView is a Qt based logic analyzer, oscilloscope
+ 	  and MSO GUI for sigrok.
+ 
+ 	  http://sigrok.org/wiki/PulseView
+ 
+-comment "pulseview needs a toolchain w/ wchar, threads, C++, gcc >= 4.7"
++comment "pulseview needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
++		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
