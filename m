@@ -1,74 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Dec 2015 23:25:52 +0100
-Subject: [Buildroot] [PATCH 2/2] v4l2grab: new package
-In-Reply-To: <1449007230-3175-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1449007230-3175-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1449007230-3175-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <565E1E70.30403@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Dec 2015 23:31:59 +0100
+Subject: [Buildroot] [PATCH] package/mke2img: set sparse_super for
+ revision 1
+In-Reply-To: <1440760370-61713-1-git-send-email-benoit@wsystem.com>
+References: <1440760370-61713-1-git-send-email-benoit@wsystem.com>
+Message-ID: <20151201223159.GA13900@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-12-15 23:00, Thomas Petazzoni wrote:
-> From: Volkov Viacheslav <sv99@inbox.ru>
+Beno?t, All,
+
+On 2015-08-28 13:12 +0200, Beno?t Th?baudeau spake thusly:
+> The sparse_super feature is more efficient in terms of speed and
+> available space, so set it by default if supported, i.e. for revision 1.
 > 
-> [Thomas:
->  - remove dependency on musl, since libv4l can now be built without
->    musl
->  - add missing Config.in comment for the toolchain dependencies
->  - add hash file.
->  - rework commit log.
->  - expand Config.in help text.]
+> This gives a huge speed gain for large resize2fs operations, especially
+> for expansion.
 > 
-> Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[snip]
-> +++ b/package/v4l2grab/v4l2grab.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# v4l2grab
-> +#
-> +################################################################################
-> +
-> +V4L2GRAB_VERSION = 7815752fafb8b797047e819a08a3b6e2f2880846
-> +V4L2GRAB_SITE = $(call github,twam,v4l2grab,$(V4L2GRAB_VERSION))
-> +V4L2GRAB_LICENSE = GPLv2+
-> +V4L2GRAB_LICENSE_FILE = LICENSE
+> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
 
- I only see LICENSE.md in the repository. Oh, that's because it changed name
-just two days ago. Perhaps it would be a good idea to bump to
-0abed72532bee02e545a1924b6883c839d50febf now and fix the license file name,
-since it will most likely be forgotten in the next bump.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
-> +# Fetched from github, no pre-generated configure script provided
-> +V4L2GRAB_AUTORECONF = YES
-> +V4L2GRAB_DEPENDENCIES = libjpeg libv4l
-
- You select BR2_PACKAGE_JPEG, not BR2_PACKAGE_LIBJPEG, so you should depend on
-jpeg instead of libjpeg.
-
- With that fixed you can add my
- Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> +
-> +$(eval $(autotools-package))
+> ---
+>  package/mke2img/mke2img | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-
+> diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+> index 5e2f62f..806cb1f 100755
+> --- a/package/mke2img/mke2img
+> +++ b/package/mke2img/mke2img
+> @@ -76,7 +76,7 @@ main() {
+>  
+>      # Upgrade to rev1 if needed
+>      if [ ${rev} -ge 1 ]; then
+> -        tune2fs_O_opts+=",filetype"
+> +        tune2fs_O_opts+=",filetype,sparse_super"
+>      fi
+>  
+>      # Add a journal for ext3 and above
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
