@@ -1,26 +1,30 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 01 Dec 2015 21:20:32 +0100
-Subject: [Buildroot] [PATCH 1/1] Update the libhttpparser package
-In-Reply-To: <241359bd-aef1-44f4-b489-d4f690e92d64@email.android.com>
-References: <241359bd-aef1-44f4-b489-d4f690e92d64@email.android.com>
-Message-ID: <1449001232.1893.32.camel@embedded.rocks>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Dec 2015 20:21:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 8501] gunzip fails to uncompress files
+In-Reply-To: <bug-8501-163@https.bugs.busybox.net/>
+References: <bug-8501-163@https.bugs.busybox.net/>
+Message-ID: <20151201202129.AB46E80096@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Di, 2015-12-01 at 13:21 +0100, Renaud AUBIN wrote:
-> I have resubmitted by figuring out by myself the ad hoc git am
-> processing? 
-> Maybe the Contributing chapter could be slightly improved by a
-> section on packages' patching policies?
-> 
-> Thank you for your review.
-> 
+https://bugs.busybox.net/show_bug.cgi?id=8501
 
-We have a section about patch policy in the Buildroot manual:
-http://nightly.buildroot.org/#patch-policy
+Arnout Vandecappelle <arnout@mind.be> changed:
 
-Best regards
-J?rg Krause
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+         AssignedTo|unassigned at buildroot.uclibc |arnout at mind.be
+                   |.org                        |
+
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> 2015-12-01 20:21:29 UTC ---
+That's due to 0002-unzip.patch; upstream has got an additional fix in
+6bd3fff51aa74e2ee2d87887b12182a3b09792ef. I'll add it.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
