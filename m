@@ -1,81 +1,87 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue, 1 Dec 2015 08:17:56 -0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Dec 2015 11:29:16 +0100
 Subject: [Buildroot] [PATCH] musl: add a sys/queue.h implementation
-In-Reply-To: <20151201043806.GA2193@tarshish>
+In-Reply-To: <1448924535-8093-1-git-send-email-sergio.prado@e-labworks.com>
 References: <1448924535-8093-1-git-send-email-sergio.prado@e-labworks.com>
- <20151201043806.GA2193@tarshish>
-Message-ID: <CANu7NGvZavDSGeeYLrn_K_zo0J8+Zr1WCVYshU+EJ=p4jAkG9g@mail.gmail.com>
+Message-ID: <20151201112916.57ef96b3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Sergio,
 
-2015-12-01 2:38 GMT-02:00 Baruch Siach <baruch@tkos.co.il>:
+On Mon, 30 Nov 2015 21:02:15 -0200, Sergio Prado wrote:
 
-> Hi Sergio,
->
-> On Mon, Nov 30, 2015 at 09:02:15PM -0200, Sergio Prado wrote:
-> > Musl does not provide a 'sys/queue.h' implementation, and this has been
-> > a problem for packages that depend on it.
-> >
-> > So lets create a package called sys-queue that will install 'sys/queue.h'
-> > in the staging directory when enabled.
-> >
-> > Musl toolchain and external toolchain packages will depend on this
-> > package, so that 'sys/queue.h' will be always installed when compiling
-> > with a musl based toolchain.
-> >
-> > Tested on ARM and x86 in the following cases:
-> >   - Buildroot musl toolchain.
-> >   - External musl toolchain without 'sys/queue.h'.
-> >   - External musl toolchain with 'sys/queue.h'.
-> >
-> > Fixes:
-> >
-> http://autobuild.buildroot.net/results/24bad2d06ab40024dacf136bee722072d587f84e
-> >
-> > And possibly many others.
-> >
-> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
->
-> Thanks for working on this.
->
-> > +define SYS_QUEUE_INSTALL_STAGING_CMDS
-> > +     if [ ! -f $(STAGING_DIR)/usr/include/sys/queue.h ]; then \
->
-> We generally don't check for existence of files in target/staging, just
-> overwrite them. Is there a reason to do this here? As I understand
-> sys-queue
-> is now a dependency of the toolchain, so if the toolchain provides
-> sys/queue.h
-> it will overwrite this one anyway.
->
+>  package/musl/musl.mk                               |   5 +
+>  package/sys-queue/Config.in                        |   8 +
+>  package/sys-queue/queue.h                          | 846 +++++++++++++++++++++
 
-You are right. Initially, sys-queue would be installed after the external
-toolchain package, so this would prevents from overriding the toolchain's
-sys/queue.h implementation. But that's not the case anymore, so I'm OK with
-removing this check.
+Rather than bundling the queue.h file, can we download it from some
+location ? For example, you could use
+http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.30.
+
+> diff --git a/package/sys-queue/Config.in b/package/sys-queue/Config.in
+> new file mode 100644
+> index 000000000000..edc6610f6e65
+> --- /dev/null
+> +++ b/package/sys-queue/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_SYS_QUEUE
+> +	bool "sys/queue.h support"
+> +	help
+> +	  Musl does not provide a 'sys/queue.h' implementation, and this would
+> +	  be a problem for packages that depend on it.
+> +
+> +	  This package provides an implementation of 'sys/queue.h', based on 
+> +	  the NetBSD implementation.
+
+Do we really need this package to have a prompt? I think it could
+remain a hidden package, no?
+
+> diff --git a/package/sys-queue/sys-queue.mk b/package/sys-queue/sys-queue.mk
+> new file mode 100644
+> index 000000000000..053ef8fd9e0d
+> --- /dev/null
+> +++ b/package/sys-queue/sys-queue.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# sys-queue
+> +#
+> +################################################################################
+> +
+> +# source included in buildroot
+> +SYS_QUEUE_SOURCE =
+> +SYS_QUEUE_VERSION = 1.70
+
+Where is this version coming from ?
+
+> +
+> +SYS_QUEUE_LICENSE = BSD
+
+BSD-3c
+
+> +SYS_QUEUE_LICENSE_FILES = queue.h
+> +
+> +SYS_QUEUE_INSTALL_STAGING = YES
+> +
+> +define SYS_QUEUE_INSTALL_STAGING_CMDS
+> +	if [ ! -f $(STAGING_DIR)/usr/include/sys/queue.h ]; then \
+> +		$(INSTALL) -D -m 0644 package/sys-queue/queue.h \
+> +			$(STAGING_DIR)/usr/include/sys/queue.h; \
+> +	fi
+> +endef
+
+As Baruch said, please install unconditionally.
+
+Otherwise, looks good to me.
 
 Thanks!
 
-
->
-> > +             $(INSTALL) -D -m 0644 package/sys-queue/queue.h \
-> > +                     $(STAGING_DIR)/usr/include/sys/queue.h; \
-> > +     fi
-> > +endef
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151201/dc644e9e/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
