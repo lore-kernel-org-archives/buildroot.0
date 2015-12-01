@@ -1,136 +1,220 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 1 Dec 2015 14:58:34 +0000
-Subject: [Buildroot] [PATCH] valgrind: update
-	0003-mips-replace-addi-with-addiu.patch
-Message-ID: <1448981914-46671-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Doug Kehn <rdkehn@yahoo.com>
+Date: Tue,  1 Dec 2015 09:15:54 -0600
+Subject: [Buildroot] [PATCH v6] package/unscd: new package
+Message-ID: <1448982954-5055-1-git-send-email-rdkehn@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch has been updated in the upstream bug report, so let's update
-it in Buildroot as well. It will fix the build issue for mips64r6:
+A daemon which handles passwd, group and host lookups for running
+programs and caches the results for the next query. You only need this
+package if you are using slow Name Services like LDAP, NIS or NIS+.
 
-m_dispatch/dispatch-mips64-linux.S:199: Error: opcode not supported on
-this processor: mips64r6 (mips64r6) `daddi $13,$13,8'
+This particular NSCD is a complete rewrite of the GNU glibc nscd which
+is a single threaded server process which offloads all NSS lookups to
+worker children; cache hits are handled by the parent, and only cache
+misses start worker children, making the parent immune to resource
+leaks, hangs, and crashes in NSS libraries.
 
-Fixes:
+It should mostly be a drop-in replacement for existing installs using
+nscd.
 
-  http://autobuild.buildroot.net/results/6ca/6ca3a31d1542fbbb44238e296565b40d6afcd5fa/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 ---
- .../0003-mips-replace-addi-with-addiu.patch        | 86 ++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
+Changes v5 -> v6
+  - Remove toolchain patch/BR2_GLIBC_NSCD (Thomas).
+  - Change source site from Debian to upstream (Thomas).
+  - Update to version 0.52 (Thomas).
+Changes v4 -> v5
+  - Reincorporate $(APPLY_PATCHES) suggestion after update by Arnout.
+Changes v3 -> v4
+  - Incorporate feedback/suggestions by Yann and Maxime.
+Changes v2 -> v3
+  - Remove trailing '/' from UNSCD_SITE.
+  - Whitespace cleanup.
+Changes v1 -> v2
+  - Incorporate feedback/suggestions by Yann (from nss-pam-ldapd patch).
+---
+ package/unscd/Config.in  |  8 ++++++
+ package/unscd/S46unscd   | 24 ++++++++++++++++++
+ package/unscd/nscd.conf  | 65 ++++++++++++++++++++++++++++++++++++++++++++++++
+ package/unscd/unscd.hash |  2 ++
+ package/unscd/unscd.mk   | 35 ++++++++++++++++++++++++++
+ 5 files changed, 134 insertions(+)
+ create mode 100644 package/unscd/Config.in
+ create mode 100644 package/unscd/S46unscd
+ create mode 100644 package/unscd/nscd.conf
+ create mode 100644 package/unscd/unscd.hash
+ create mode 100644 package/unscd/unscd.mk
 
-diff --git a/package/valgrind/0003-mips-replace-addi-with-addiu.patch b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
-index 9168dce..624f6fa 100644
---- a/package/valgrind/0003-mips-replace-addi-with-addiu.patch
-+++ b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
-@@ -21,6 +21,19 @@ Index: valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S
-          lw $25, 0($13) /* little-endian, so comparing 1st 32bit word */
-          nop
-  
-+Index: valgrind/coregrind/m_dispatch/dispatch-mips64-linux.S
-+===================================================================
-+--- valgrind/coregrind/m_dispatch/dispatch-mips64-linux.S	(revision 15740)
-++++ valgrind/coregrind/m_dispatch/dispatch-mips64-linux.S	(working copy)
-+@@ -196,7 +196,7 @@
-+         daddu $13, $13, $14
+diff --git a/package/unscd/Config.in b/package/unscd/Config.in
+new file mode 100644
+index 0000000..937aeb2
+--- /dev/null
++++ b/package/unscd/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_UNSCD
++	bool "unscd"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  Micro Name Service Caching Daemon
 +
-+         ld $12, 0($13) /* t3 = VG_(tt_fast)[hash] :: ULong* */
-+-        daddi $13, $13, 8
-++        daddiu $13, $13, 8
-+         ld $25, 0($13) /* little-endian, so comparing 1st 32bit word */
-+         nop
++comment "unscd needs an (e)glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/unscd/S46unscd b/package/unscd/S46unscd
+new file mode 100644
+index 0000000..7d18f94
+--- /dev/null
++++ b/package/unscd/S46unscd
+@@ -0,0 +1,24 @@
++#!/bin/sh
 +
- Index: valgrind/coregrind/m_libcsetjmp.c
- ===================================================================
- --- valgrind/coregrind/m_libcsetjmp.c	(revision 15740)
-@@ -34,6 +47,19 @@ Index: valgrind/coregrind/m_libcsetjmp.c
-  "1:                             \n\t"
-  "   move $v0, $a1               \n\t"  /* Return value of second argument. */
-  "   j    $ra                    \n\t"
-+Index: valgrind/coregrind/m_syswrap/syswrap-mips64-linux.c
-+===================================================================
-+--- valgrind/coregrind/m_syswrap/syswrap-mips64-linux.c	(revision 15740)
-++++ valgrind/coregrind/m_syswrap/syswrap-mips64-linux.c	(working copy)
-+@@ -173,7 +173,7 @@
-+ "   ld $30, 8($29)\n"
-+ "   ld $28, 16($29)\n"
-+ "   jr $31\n"
-+-"   daddi $29,$29, 32\n"
-++"   daddiu $29,$29, 32\n"
-+ ".previous\n"
-+ );
++NAME="nscd"
++DAEMON="/usr/sbin/${NAME}"
 +
- Index: valgrind/coregrind/m_trampoline.S
- ===================================================================
- --- valgrind/coregrind/m_trampoline.S	(revision 15740)
-@@ -49,3 +75,63 @@ Index: valgrind/coregrind/m_trampoline.S
-     strlen_cond:
-        lbu $t0, ($a0)
-        bne $t0, $zero, strlen_loop
-+Index: valgrind/helgrind/tests/tc08_hbl2.c
-+===================================================================
-+--- valgrind/helgrind/tests/tc08_hbl2.c	(revision 15740)
-++++ valgrind/helgrind/tests/tc08_hbl2.c	(working copy)
-+@@ -125,11 +125,11 @@
-+ #  define INC(_lval,_lqual)                         \
-+      __asm__ __volatile__ (                         \
-+       "L1xyzzy1" _lqual":\n"                        \
-+-      "        move $t0, %0\n"                      \
-+-      "        ll   $t1, 0($t0)\n"                  \
-+-      "        addi $t1, $t1, 1\n"                  \
-+-      "        sc   $t1, 0($t0)\n"                  \
-+-      "        beqz $t1, L1xyzzy1" _lqual           \
-++      "        move  $t0, %0\n"                     \
-++      "        ll    $t1, 0($t0)\n"                 \
-++      "        addiu $t1, $t1, 1\n"                 \
-++      "        sc    $t1, 0($t0)\n"                 \
-++      "        beqz  $t1, L1xyzzy1" _lqual          \
-+       : /*out*/ : /*in*/ "r"(&(_lval))              \
-+       : /*trash*/ "t0", "t1", "memory"              \
-+         )
-+Index: valgrind/VEX/priv/guest_mips_toIR.c
-+===================================================================
-+--- valgrind/VEX/priv/guest_mips_toIR.c	(revision 3206)
-++++ valgrind/VEX/priv/guest_mips_toIR.c	(working copy)
-+@@ -16794,6 +16794,7 @@
-+                                      mkU64(0x0) : mkU32(0x0)))), imm);
-+       break;
++case "$1" in
++start)
++        printf "Starting ${NAME}: "
++        start-stop-daemon -S -x ${DAEMON}
++        [ $? -eq 0 ] && echo "OK" || echo "FAIL"
++        ;;
++stop)
++        printf "Stopping ${NAME}: "
++        start-stop-daemon -K -x ${DAEMON}
++        [ $? -eq 0 ] && echo "OK" || echo "FAIL"
++        ;;
++restart|reload)
++        $0 stop
++        $0 start
++        ;;
++*)
++        echo "Usage: $0 {start|stop|restart|reload}"
++        exit 1
++esac
+diff --git a/package/unscd/nscd.conf b/package/unscd/nscd.conf
+new file mode 100644
+index 0000000..fe77d05
+--- /dev/null
++++ b/package/unscd/nscd.conf
+@@ -0,0 +1,65 @@
++# This file is currently taken verbatim from the version distributed
++# with GNU glibc's nscd with unused configurations removed
++# 
++# /etc/nscd.conf
++#
++# An example Name Service Cache config file.  This file is needed by nscd.
++#
++# Legal entries are:
++#
++#	logfile			<file>
++#	debug-level		<level>
++#	threads			<initial #threads to use>
++#	max-threads		<maximum #threads to use>
++#	server-user             <user to run server as instead of root>
++#		server-user is ignored if nscd is started with -S parameters
++#       stat-user               (ignored; any user can stat)
++#	reload-count		(ignored; unscd should never crash)
++#	paranoia		(ignored)
++#	restart-interval	(ignored; unscd should never crash)
++#
++#       enable-cache		<service> <yes|no>
++#	positive-time-to-live	<service> <time in seconds>
++#	negative-time-to-live   <service> <time in seconds>
++#       suggested-size		<service> <prime number>
++#	check-files		<service> <yes|no>
++#	persistent		<service> (ignored)
++#	shared			<service> (ignored)
++#	auto-propagate		<service> (ignored)
++#
++# Currently supported cache names (services): passwd, group, hosts
 +
-++#if defined(__mips__) && ((defined(__mips_isa_rev) && __mips_isa_rev < 6))
-+    case 0x08: {  /* ADDI */
-+       DIP("addi r%u, r%u, %u", rt, rs, imm);
-+       IRTemp tmpRs32 = newTemp(Ity_I32);
-+@@ -16831,6 +16832,8 @@
-+       putIReg(rt,  mkWidenFrom32(ty, mkexpr(t0), True));
-+       break;
-+    }
-++#endif
-++
-+    case 0x09:  /* ADDIU */
-+       DIP("addiu r%u, r%u, %u", rt, rs, imm);
-+       if (mode64) {
-+@@ -16888,7 +16891,8 @@
-+                                             mkU32(extend_s_16to32(imm)))));
-+       break;
 +
-+-   case 0x18: {  /* Doubleword Add Immidiate - DADD; MIPS64 */
-++#if defined(__mips__) && ((defined(__mips_isa_rev) && __mips_isa_rev < 6))
-++   case 0x18: {  /* Doubleword Add Immidiate - DADDI; MIPS64 */
-+       DIP("daddi r%u, r%u, %u", rt, rs, imm);
-+       IRTemp tmpRs64 = newTemp(Ity_I64);
-+       assign(tmpRs64, getIReg(rs));
-+@@ -16926,6 +16930,7 @@
-+       putIReg(rt,  mkexpr(t0));
-+       break;
-+    }
-++#endif
 +
-+    case 0x19:  /* Doubleword Add Immidiate Unsigned - DADDIU; MIPS64 */
-+       DIP("daddiu r%u, r%u, %u", rt, rs, imm);
++# logfile /var/log/nscd.log
++# threads 14
++# max-threads 32
++server-user unscd
++debug-level 0
++
++enable-cache            passwd  yes
++positive-time-to-live   passwd  600
++negative-time-to-live   passwd  20
++suggested-size          passwd  1001
++check-files             passwd  yes
++
++enable-cache            group   yes
++positive-time-to-live   group   3600
++negative-time-to-live   group   60
++suggested-size          group   1001
++check-files             group   yes
++
++# hosts caching is broken with gethostby* calls, hence is now disabled
++# by default. Specifically, the caching does not obey DNS TTLs, and
++# thus could lead to problems if the positive-time-to-live is
++# significantly larger than the actual TTL.
++#
++# You should really use a caching nameserver instead of nscd for this
++# sort of request. However, you can easily re-enable this by default.
++enable-cache            hosts   no
++positive-time-to-live   hosts   3600
++negative-time-to-live   hosts   20
++suggested-size	        hosts   1001
++check-files             hosts   yes
++
++# unscd does not support services caching
+diff --git a/package/unscd/unscd.hash b/package/unscd/unscd.hash
+new file mode 100644
+index 0000000..ab8ffdc
+--- /dev/null
++++ b/package/unscd/unscd.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	4c1f83dcd120469fceef749050cb29fa666fa4666bd308dfe92e933a4c200d55	nscd-0.52.c
+diff --git a/package/unscd/unscd.mk b/package/unscd/unscd.mk
+new file mode 100644
+index 0000000..87ba1bf
+--- /dev/null
++++ b/package/unscd/unscd.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# unscd
++#
++################################################################################
++
++UNSCD_VERSION = 0.52
++UNSCD_SOURCE = nscd-$(UNSCD_VERSION).c
++UNSCD_SITE = http://busybox.net/~vda/unscd
++UNSCD_LICENSE = GPLv2
++UNSCD_LICENSE_FILES = COPYING
++
++define UNSCD_EXTRACT_CMDS
++	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/nscd.c
++endef
++
++define UNSCD_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) nscd
++endef
++
++define UNSCD_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 -D $(@D)/nscd $(TARGET_DIR)/usr/sbin/nscd
++	$(INSTALL) -m 600 -D package/unscd/nscd.conf $(TARGET_DIR)/etc/nscd.conf
++endef
++
++define UNSCD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 755 -D package/unscd/S46unscd \
++		$(TARGET_DIR)/etc/init.d/S46unscd
++endef
++
++define UNSCD_USERS
++	unscd -1 unscd -1 * - - - unscd user
++endef
++
++$(eval $(generic-package))
 -- 
-2.4.10
+2.6.2
