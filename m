@@ -1,61 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Dec 2015 23:31:59 +0100
-Subject: [Buildroot] [PATCH] package/mke2img: set sparse_super for
- revision 1
-In-Reply-To: <1440760370-61713-1-git-send-email-benoit@wsystem.com>
-References: <1440760370-61713-1-git-send-email-benoit@wsystem.com>
-Message-ID: <20151201223159.GA13900@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 Dec 2015 23:33:03 +0100
+Subject: [Buildroot] [PATCH] busybox: add another upstream patch to fix
+	unzip
+In-Reply-To: <565E1A6A.2030707@mind.be> (Arnout Vandecappelle's message of
+ "Tue, 1 Dec 2015 23:08:42 +0100")
+References: <1449001829-26507-1-git-send-email-arnout@mind.be>
+ <20151201223025.0b777fd7@free-electrons.com>
+ <87y4ddj0k5.fsf@dell.be.48ers.dk> <565E1A6A.2030707@mind.be>
+Message-ID: <87h9k1iyu8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Beno?t, All,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 2015-08-28 13:12 +0200, Beno?t Th?baudeau spake thusly:
-> The sparse_super feature is more efficient in terms of speed and
-> available space, so set it by default if supported, i.e. for revision 1.
-> 
-> This gives a huge speed gain for large resize2fs operations, especially
-> for expansion.
-> 
-> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+Hi,
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >> > Sad to have to do this just one day after 2015.11 release, but it's
+ >> > really not great to have such a major issue left in 2015.11.
+ >> 
+ >> No, indeed not :/ And the patch was even an upstream fix. Where does
+ >> this new patch come from, I don't see it on
+ >> http://busybox.net/downloads/fixes-1.24.1/?
 
-Regards,
-Yann E. MORIN.
+ >  I took it straight from git.
 
-> ---
->  package/mke2img/mke2img | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
-> index 5e2f62f..806cb1f 100755
-> --- a/package/mke2img/mke2img
-> +++ b/package/mke2img/mke2img
-> @@ -76,7 +76,7 @@ main() {
->  
->      # Upgrade to rev1 if needed
->      if [ ${rev} -ge 1 ]; then
-> -        tune2fs_O_opts+=",filetype"
-> +        tune2fs_O_opts+=",filetype,sparse_super"
->      fi
->  
->      # Add a journal for ext3 and above
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Ahh, saw it now. It would be good to get Denys to add it to the fixes
+directory as well.
+
+How easy is it to trigger? I did a quick test in qemu and wasn't able to
+trigger it.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Venlig hilsen,
+Peter Korsgaard 
