@@ -1,87 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 17:44:10 +0100
-Subject: [Buildroot] [git commit] cryptodev-linux: bump to version 1.8
-Message-ID: <20151201232125.7821081D5F@busybox.osuosl.org>
+Date: Tue, 1 Dec 2015 17:47:51 +0100
+Subject: [Buildroot] [git commit] libhttpparser: bump to 2.6.0
+Message-ID: <20151201232125.938B081D5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f1c58f64cde17beea3d9f246b6a4bea411def12
+commit: http://git.buildroot.net/buildroot/commit/?id=3e280283b7d4f4a7f7bb17edeea84dbb4fe09383
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patches are upstream so remove them.
+The http-parser repository has been transfered from joyent to nodejs.
+Bump version to 2.6.0.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Renaud AUBIN <root@renaud.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-fix-compilation-against-linux-3.19.patch  | 37 ----------------------
- package/cryptodev-linux/cryptodev-linux.hash       |  2 +-
- package/cryptodev-linux/cryptodev-linux.mk         |  2 +-
- 3 files changed, 2 insertions(+), 39 deletions(-)
+ ...1-Use-f-option-when-calling-ln-at-install-time.patch | 17 +++++++++--------
+ package/libhttpparser/Config.in                         |  2 +-
+ package/libhttpparser/libhttpparser.mk                  |  4 ++--
+ 3 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch b/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
-deleted file mode 100644
-index aebbc9b..0000000
---- a/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 5054d20d45571cc85339351fde52f872eeb82206 Mon Sep 17 00:00:00 2001
--From: Phil Sutter <phil@nwl.cc>
--Date: Tue, 10 Feb 2015 04:57:05 +0100
--Subject: [PATCH] fix compilation against linux-3.19
--
--Commit f938612dd97d481b8b5bf960c992ae577f081c17 in linux.git removes
--get_unused_fd() macro. This patch changes the calling code to use it's
--content 'get_unused_fd_flags(0)' instead. Checking for when
--get_unused_fd_flags was introduced shows it's been there since 2.6.23 at
--least, so probably no need to make this change conditional on the target
--kernel version.
--
--Original patch by Ricardo Ribalda Delgado for Open Embedded, reported by
--Oleg Rakhmanov.
--
--Signed-off-by: Phil Sutter <phil@nwl.cc>
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- ioctl.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/ioctl.c b/ioctl.c
--index 5a55a76..b23f5fd 100644
----- a/ioctl.c
--+++ b/ioctl.c
--@@ -546,7 +546,7 @@ static int
-- clonefd(struct file *filp)
-- {
-- 	int ret;
---	ret = get_unused_fd();
--+	ret = get_unused_fd_flags(0);
-- 	if (ret >= 0) {
-- 			get_file(filp);
-- 			fd_install(ret, filp);
---- 
--2.0.5
--
-diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
-index d5e0bae..d7195ac 100644
---- a/package/cryptodev-linux/cryptodev-linux.hash
-+++ b/package/cryptodev-linux/cryptodev-linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking php signature
--sha256	41880533b53de4d7b3f054e230f576988dafb8eed7bef5ebcf6422bb2e3a3b25	cryptodev-linux-1.7.tar.gz
-+sha256	67fabde9fb67b286a96c4f45b594b0eccd0f761b495705c18f2ae9461b831376	cryptodev-linux-1.8.tar.gz
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 6001c71..c3f5355 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
+index 29fe04d..df16656 100644
+--- a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
++++ b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
+@@ -1,4 +1,4 @@
+-From d9dfeca8736318eaad5cd4554cbae059469decde Mon Sep 17 00:00:00 2001
++From 384917321c45e492b0ca7aaa94d4b15324aef95d Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Fri, 28 Aug 2015 19:02:11 +0200
+ Subject: [PATCH] Use -f option when calling ln at install time
+@@ -6,29 +6,30 @@ Subject: [PATCH] Use -f option when calling ln at install time
+ This allows "make install; make install" to work properly.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Renaud AUBIN <root@renaud.io>
+ ---
+  Makefile | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+ diff --git a/Makefile b/Makefile
+-index 373709c..6206b09 100644
++index 33c8ba0..b36d95a 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -113,12 +113,12 @@ tags: http_parser.c http_parser.h test.c
++@@ -125,12 +125,12 @@ tags: http_parser.c http_parser.h test.c
+  install: library
+  	$(INSTALL) -D  http_parser.h $(INCLUDEDIR)/http_parser.h
+  	$(INSTALL) -D $(SONAME) $(LIBDIR)/$(SONAME)
+--	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
+-+	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
++-	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.$(SOEXT)
+++	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.$(SOEXT)
+  
+  install-strip: library
+  	$(INSTALL) -D  http_parser.h $(INCLUDEDIR)/http_parser.h
+  	$(INSTALL) -D -s $(SONAME) $(LIBDIR)/$(SONAME)
+--	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
+-+	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
++-	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.$(SOEXT)
+++	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.$(SOEXT)
+  
+  uninstall:
+  	rm $(INCLUDEDIR)/http_parser.h
+ -- 
+-2.5.0
++2.6.2
+ 
+diff --git a/package/libhttpparser/Config.in b/package/libhttpparser/Config.in
+index 31b8b9b..4356304 100644
+--- a/package/libhttpparser/Config.in
++++ b/package/libhttpparser/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_LIBHTTPPARSER
+ 	  40 bytes of data per message stream (in a web server
+ 	  that is per connection).
+ 
+-	  https://github.com/joyent/http-parser
++	  https://github.com/nodejs/http-parser
+ 
+ comment "libhttpparser needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
+index d6ec236..015efc0 100644
+--- a/package/libhttpparser/libhttpparser.mk
++++ b/package/libhttpparser/libhttpparser.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CRYPTODEV_LINUX_VERSION = 1.7
-+CRYPTODEV_LINUX_VERSION = 1.8
- CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPLv2+
+-LIBHTTPPARSER_VERSION = v2.5.0
+-LIBHTTPPARSER_SITE = $(call github,joyent,http-parser,$(LIBHTTPPARSER_VERSION))
++LIBHTTPPARSER_VERSION = v2.6.0
++LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,$(LIBHTTPPARSER_VERSION))
+ LIBHTTPPARSER_INSTALL_STAGING = YES
+ LIBHTTPPARSER_LICENSE = MIT
+ LIBHTTPPARSER_LICENSE_FILES = LICENSE-MIT
