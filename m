@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 01 Dec 2015 23:21:17 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-evdev:
-	bump version to 2.10.0
-Message-ID: <20151201232117.470B07FA3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbcomp: bump version
+	to 1.3.1
+Message-ID: <20151201232117.207A47F9FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a458f926bb6afce2791ffb5e76595c7e4834126d
+commit: http://git.buildroot.net/buildroot/commit/?id=f39fff6d698db939d9e4d313d58c7ab28e6cd1a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash | 4 ++--
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk   | 2 +-
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 4 ++--
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-index 330ac30..cd892d3 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+index b49d5a2..bc85caa 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-March/002557.html
--sha256	792329b531afc6928ccda94e4b51a5520d4ddf8ef9a00890a5d0d31898acefec	xf86-input-evdev-2.9.2.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-October/002649.html
-+sha256	d097298eb07b7a9edf4493b5c3c058041458ca52c8c62dbd4f40b84c5086d117	xf86-input-evdev-2.10.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 6019412..1e90afa 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+-# From http://lists.x.org/archives/xorg-announce/2014-November/002497.html
+-sha256	cfac973778fabf5216121ad60b7af8ab74ce7513af0f9260cf8c5309e1622b2a	xkbcomp-1.3.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-November/002653.html
++sha256	0304dc9e0d4ac10831a9ef5d5419722375ddbc3eac3ff4413094d57bc1f1923d	xkbcomp-1.3.1.tar.bz2
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+index 0a72742..fea7fa8 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.9.2
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.0
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+-XAPP_XKBCOMP_VERSION = 1.3.0
++XAPP_XKBCOMP_VERSION = 1.3.1
+ XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
+ XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBCOMP_LICENSE = MIT
