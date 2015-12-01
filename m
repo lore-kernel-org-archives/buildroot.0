@@ -1,50 +1,39 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 1 Dec 2015 14:29:28 +0100
-Subject: [Buildroot] [PATCH] openocd: bump to 0.9.0
-In-Reply-To: <20151201122054.GG2193@tarshish>
-References: <1448959942-22748-1-git-send-email-yegorslists@googlemail.com>
- <20151201095826.GC2193@tarshish>
- <CAGm1_ks+db-1cASJWweJ6B2LHBa+zNfzj1V2+aQvdhFYbT=UOQ@mail.gmail.com>
- <20151201115651.0f1d7b34@free-electrons.com>
- <CAGm1_ksRfJUZt=1Hm8Lzn7C=hCSJwgENG5ac6jLfRO06mt_gsg@mail.gmail.com>
- <20151201122054.GG2193@tarshish>
-Message-ID: <CAGm1_kttUzd0XEHV0Jbkb9i3=kww5UKx25KE0hmRF82c9qe-=g@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  1 Dec 2015 10:49:19 -0300
+Subject: [Buildroot] [PATCH] dhcpcd: bump to version 6.9.4
+Message-ID: <1448977759-12855-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 1, 2015 at 1:20 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Yegor,
->
-> On Tue, Dec 01, 2015 at 12:25:46PM +0100, Yegor Yefremov wrote:
->> On Tue, Dec 1, 2015 at 11:56 AM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->> > On Tue, 1 Dec 2015 11:33:25 +0100, Yegor Yefremov wrote:
->> >
->> >> Commit message states: Pass -std=gnu99, needed to build with a basic toolchain.
->> >>
->> >> I've commented this like and could successfully compile with musl +
->> >> gcc 4.9.3 and also with Linaro ARM 2015.08 (GCC 5.x).
->> >>
->> >> @Thomas and @Claudio: any idea, what configuration produced compiling issues?
->> >
->> > Can you try with
->> > http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config ?
->> > This is what I call a "basic" toolchain, i.e a minimal uClibc toolchain
->> > with no wchar and al. enabled.
->>
->> Compilation *fails* without gnu99 with basic toolchain.
->
-> Just curious, do you have any idea why the build fails, and how -std=gnu99
-> fixes the problem?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dhcpcd/dhcpcd.hash | 2 +-
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-The error occurs because openocd uses some C99 constructs, like this
-one for example:
-
-../../../src/helper/binarybuffer.h:53:3: error: 'for' loop initial
-declarations are only allowed in C99 or C11 mode
-   for (unsigned i = first; i < first + num; i++) {
-
-Yegor
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 71d0e28..94ab89e 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	6089471ed695fa62ac8351466b96b4b6365fd14ec455a120a6524663808eae53	dhcpcd-6.9.3.tar.xz
++sha256	c3f3ff7473ef158a1e71db9aea7424df2c3477ad064e2b542f27948a5abc9ba0	dhcpcd-6.9.4.tar.xz
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 66928e2..2d0cb0c 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCPCD_VERSION = 6.9.3
++DHCPCD_VERSION = 6.9.4
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
+-- 
+2.4.10
