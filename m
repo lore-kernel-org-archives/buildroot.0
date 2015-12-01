@@ -1,31 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 17:47:30 +0100
-Subject: [Buildroot] [PATCH] openldap: bump version to 2.4.43
-In-Reply-To: <1448966532-21914-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1448966532-21914-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151201174730.4af014c7@free-electrons.com>
+Date: Tue, 1 Dec 2015 17:50:59 +0100
+Subject: [Buildroot] [PATCH 1/1] Update the libhttpparser package
+In-Reply-To: <1448972119-12298-1-git-send-email-root@renaud.io>
+References: <1448972119-12298-1-git-send-email-root@renaud.io>
+Message-ID: <20151201175059.2c0444b8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Renaud,
 
-On Tue, 1 Dec 2015 10:42:12 +0000, Vicente Olivert Riera wrote:
-> - Bump version to 2.4.43
-> - Use md5 and sha1 upstream provided hashes. This combination is
->   stronger than a sha256 hash.
-> - Switch to an http download site to avoid problems with firewalls
->   blocking the ftp.
+On Tue, 01 Dec 2015 13:15:19 +0100, Renaud AUBIN wrote:
+> The http-parser repository has been transfered from joyent to nodejs.
+> Bump version to 2.6.0.
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/openldap/openldap.hash | 8 ++++----
->  package/openldap/openldap.mk   | 4 ++--
->  2 files changed, 6 insertions(+), 6 deletions(-)
+> Signed-off-by: Renaud AUBIN <root@renaud.io>
 
-Applied to next-soon-to-be-master, thanks.
+The commit title for packages should always look like:
+
+	<package>: <description>
+
+So in the case of this commit, it should be:
+
+	libhttpparser: bump to version 2.6.0
+
+Also, when you send a new version of a patch, it should be titled
+[PATCHv2] and include a changelog of what has changed since the
+previous iteration of the patch. See the Buildroot manual for details
+about this, and "git help format-patch" for details on how to do it.
+
+> diff --git a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
+> index 29fe04d..df16656 100644
+> --- a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
+> +++ b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
+> @@ -1,4 +1,4 @@
+> -From d9dfeca8736318eaad5cd4554cbae059469decde Mon Sep 17 00:00:00 2001
+> +From 384917321c45e492b0ca7aaa94d4b15324aef95d Mon Sep 17 00:00:00 2001
+>  From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  Date: Fri, 28 Aug 2015 19:02:11 +0200
+>  Subject: [PATCH] Use -f option when calling ln at install time
+> @@ -6,29 +6,30 @@ Subject: [PATCH] Use -f option when calling ln at install time
+>  This allows "make install; make install" to work properly.
+
+Since you're using libhttpparser, could you submit this patch to the
+upstream project, so that we can hopefully get rid of it in the future ?
+
+Finally, if you have some time, could you submit a patch to add a hash
+file to this package, since it's fetched from github ?
+
+I've fixed the commit title, and applied to the next branch (soon to be
+merged into master).
+
+Thanks,
 
 Thomas
 -- 
