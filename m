@@ -1,39 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 Dec 2015 12:19:02 -0300
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.3.2
-Message-ID: <1448983142-10807-1-git-send-email-gustavo@zacarias.com.ar>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Tue, 1 Dec 2015 11:17:52 -0500
+Subject: [Buildroot] [PATCH v6 1/1] yad: new package
+In-Reply-To: <20151128192406.1820a83b@free-electrons.com>
+References: <1446219567-4540-1-git-send-email-james.knight@rockwellcollins.com>
+ <20151128192406.1820a83b@free-electrons.com>
+Message-ID: <CALe+oY_M2LbQh4cf+KYnSa5nbNv7ae_-kDtSx5U+mhNFG+Hqgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thomas,
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 48860a7..2959e5b 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	9908a80d95b9e2583906ed4347a8c80b769539a2788158992fb48ea9fb4d2c82	samba-4.3.1.tar.gz
-+sha256	61989195caadf0f6fb51ce6bed5e203e6146facc2c276a26ad41901ad9129a75	samba-4.3.2.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 1d02e86..388a40c 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.3.1
-+SAMBA4_VERSION = 4.3.2
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
--- 
-2.4.10
+On Sat, Nov 28, 2015 at 1:24 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> This package is causing some build failure:
+>
+>   http://autobuild.buildroot.org/?reason=yad-0.31.2
+>
+> (they are all the same).
+>
+> Can you have a look into it ?
+>
+
+Sure. I'll take a stab at it this week.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151201/9f849bba/attachment.html>
