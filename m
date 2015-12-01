@@ -1,144 +1,69 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 Dec 2015 10:52:46 -0300
-Subject: [Buildroot] [PATCH] cryptodev-linux: bump to version 1.8
-Message-ID: <1448977966-15980-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 1 Dec 2015 14:56:20 +0100
+Subject: [Buildroot] [PATCH] openocd: bump to 0.9.0
+In-Reply-To: <CAGm1_kttUzd0XEHV0Jbkb9i3=kww5UKx25KE0hmRF82c9qe-=g@mail.gmail.com>
+References: <1448959942-22748-1-git-send-email-yegorslists@googlemail.com>
+ <20151201095826.GC2193@tarshish>
+ <CAGm1_ks+db-1cASJWweJ6B2LHBa+zNfzj1V2+aQvdhFYbT=UOQ@mail.gmail.com>
+ <20151201115651.0f1d7b34@free-electrons.com>
+ <CAGm1_ksRfJUZt=1Hm8Lzn7C=hCSJwgENG5ac6jLfRO06mt_gsg@mail.gmail.com>
+ <20151201122054.GG2193@tarshish>
+ <CAGm1_kttUzd0XEHV0Jbkb9i3=kww5UKx25KE0hmRF82c9qe-=g@mail.gmail.com>
+Message-ID: <CAGm1_ktyQ_BJ4c2d-Z6rFRK14f_-XeMVA6XF_N3jhSz7AJ89OQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patches are upstream so remove them.
+On Tue, Dec 1, 2015 at 2:29 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Tue, Dec 1, 2015 at 1:20 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+>> Hi Yegor,
+>>
+>> On Tue, Dec 01, 2015 at 12:25:46PM +0100, Yegor Yefremov wrote:
+>>> On Tue, Dec 1, 2015 at 11:56 AM, Thomas Petazzoni
+>>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> > On Tue, 1 Dec 2015 11:33:25 +0100, Yegor Yefremov wrote:
+>>> >
+>>> >> Commit message states: Pass -std=gnu99, needed to build with a basic toolchain.
+>>> >>
+>>> >> I've commented this like and could successfully compile with musl +
+>>> >> gcc 4.9.3 and also with Linaro ARM 2015.08 (GCC 5.x).
+>>> >>
+>>> >> @Thomas and @Claudio: any idea, what configuration produced compiling issues?
+>>> >
+>>> > Can you try with
+>>> > http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config ?
+>>> > This is what I call a "basic" toolchain, i.e a minimal uClibc toolchain
+>>> > with no wchar and al. enabled.
+>>>
+>>> Compilation *fails* without gnu99 with basic toolchain.
+>>
+>> Just curious, do you have any idea why the build fails, and how -std=gnu99
+>> fixes the problem?
+>
+> The error occurs because openocd uses some C99 constructs, like this
+> one for example:
+>
+> ../../../src/helper/binarybuffer.h:53:3: error: 'for' loop initial
+> declarations are only allowed in C99 or C11 mode
+>    for (unsigned i = first; i < first + num; i++) {
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../0001-fix-compilation-against-linux-3.19.patch  | 37 ----------------
- .../0002-Fix-compilation-against-linux-4.3.patch   | 50 ----------------------
- package/cryptodev-linux/cryptodev-linux.hash       |  2 +-
- package/cryptodev-linux/cryptodev-linux.mk         |  2 +-
- 4 files changed, 2 insertions(+), 89 deletions(-)
- delete mode 100644 package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
- delete mode 100644 package/cryptodev-linux/0002-Fix-compilation-against-linux-4.3.patch
+I've added AC_PROG_CC_STDC to configure.ac. When running on my host directly:
 
-diff --git a/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch b/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
-deleted file mode 100644
-index aebbc9b..0000000
---- a/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 5054d20d45571cc85339351fde52f872eeb82206 Mon Sep 17 00:00:00 2001
--From: Phil Sutter <phil@nwl.cc>
--Date: Tue, 10 Feb 2015 04:57:05 +0100
--Subject: [PATCH] fix compilation against linux-3.19
--
--Commit f938612dd97d481b8b5bf960c992ae577f081c17 in linux.git removes
--get_unused_fd() macro. This patch changes the calling code to use it's
--content 'get_unused_fd_flags(0)' instead. Checking for when
--get_unused_fd_flags was introduced shows it's been there since 2.6.23 at
--least, so probably no need to make this change conditional on the target
--kernel version.
--
--Original patch by Ricardo Ribalda Delgado for Open Embedded, reported by
--Oleg Rakhmanov.
--
--Signed-off-by: Phil Sutter <phil@nwl.cc>
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- ioctl.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/ioctl.c b/ioctl.c
--index 5a55a76..b23f5fd 100644
----- a/ioctl.c
--+++ b/ioctl.c
--@@ -546,7 +546,7 @@ static int
-- clonefd(struct file *filp)
-- {
-- 	int ret;
---	ret = get_unused_fd();
--+	ret = get_unused_fd_flags(0);
-- 	if (ret >= 0) {
-- 			get_file(filp);
-- 			fd_install(ret, filp);
---- 
--2.0.5
--
-diff --git a/package/cryptodev-linux/0002-Fix-compilation-against-linux-4.3.patch b/package/cryptodev-linux/0002-Fix-compilation-against-linux-4.3.patch
-deleted file mode 100644
-index e8e8423..0000000
---- a/package/cryptodev-linux/0002-Fix-compilation-against-linux-4.3.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From e8acc16d455876855ac3e13efa5f24f1e93a42e0 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Thu, 19 Nov 2015 10:41:30 -0300
--Subject: [PATCH] Fix compilation against linux 4.3
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Linux Crypto API changed to using aead_request_set_ad()
--instead of aead_request_set_assoc().
--
--Based on Horia Geant?'s patch from
--https://mail.gna.org/public/cryptodev-linux-devel/2015-11/msg00002.html
--
--However we need to version-guard the change for older versions of the
--kernel to avoid the build from breaking for them.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- cryptlib.h | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/cryptlib.h b/cryptlib.h
--index a0a8a63..f0c2736 100644
----- a/cryptlib.h
--+++ b/cryptlib.h
--@@ -1,6 +1,8 @@
-- #ifndef CRYPTLIB_H
-- # define CRYPTLIB_H
-- 
--+#include <linux/version.h>
--+
-- struct cipher_data {
-- 	int init; /* 0 uninitialized */
-- 	int blocksize;
--@@ -40,7 +42,11 @@ static inline void cryptodev_cipher_auth(struct cipher_data *cdata,
-- 					 struct scatterlist *sg1, size_t len)
-- {
-- 	/* for some reason we _have_ to call that even for zero length sgs */
--+#if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 3, 0))
-- 	aead_request_set_assoc(cdata->async.arequest, len ? sg1 : NULL, len);
--+#else
--+	aead_request_set_ad(cdata->async.arequest, len);
--+#endif
-- }
-- 
-- static inline void cryptodev_cipher_set_tag_size(struct cipher_data *cdata, int size)
---- 
--2.4.10
--
-diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
-index d5e0bae..d7195ac 100644
---- a/package/cryptodev-linux/cryptodev-linux.hash
-+++ b/package/cryptodev-linux/cryptodev-linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking php signature
--sha256	41880533b53de4d7b3f054e230f576988dafb8eed7bef5ebcf6422bb2e3a3b25	cryptodev-linux-1.7.tar.gz
-+sha256	67fabde9fb67b286a96c4f45b594b0eccd0f761b495705c18f2ae9461b831376	cryptodev-linux-1.8.tar.gz
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 6001c71..c3f5355 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CRYPTODEV_LINUX_VERSION = 1.7
-+CRYPTODEV_LINUX_VERSION = 1.8
- CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPLv2+
--- 
-2.4.10
+checking for gcc option to accept ISO C99... -std=gnu99
+checking for gcc -std=gnu99 option to accept ISO C99... (cached) -std=gnu99
+checking for gcc -std=gnu99 -std=gnu99 option to accept ISO Standard
+C... (cached) -std=gnu99
+
+When running BR (OPENOCD_OVERRIDE_SRCDIR) with basic toolchain:
+
+checking for buildroot/testing/host/usr/bin/arm-linux-gcc option to
+accept ISO C99... unsupported
+checking for buildroot/testing/host/usr/bin/arm-linux-gcc option to
+accept ISO C99... (cached) unsupported
+checking for buildroot/testing/host/usr/bin/arm-linux-gcc option to
+accept ISO C89... (cached) none needed
+checking for buildroot/testing/host/usr/bin/arm-linux-gcc option to
+accept ISO Standard C... (cached) none needed
