@@ -1,42 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 01 Dec 2015 23:21:16 -0000
-Subject: [Buildroot] [git commit] libsoup: bump to version 2.52.2
-Message-ID: <20151201232115.4CD74821F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] exiv2: bump to version 0.25
+Message-ID: <20151201232115.9D91E8220E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=beec4437a06a570c41050c0abc2865110b54f828
+commit: http://git.buildroot.net/buildroot/commit/?id=8645710da335c1afeea3cdb7754f07d016ae9432
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsoup/libsoup.hash | 4 ++--
- package/libsoup/libsoup.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/exiv2/0001-remove-useless-header.patch | 19 -------------------
+ package/exiv2/Config.in                        |  6 ++++--
+ package/exiv2/exiv2.hash                       |  4 ++--
+ package/exiv2/exiv2.mk                         |  2 +-
+ 4 files changed, 7 insertions(+), 24 deletions(-)
 
-diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
-index 58e3eb2..7878550 100644
---- a/package/libsoup/libsoup.hash
-+++ b/package/libsoup/libsoup.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.52/libsoup-2.52.1.sha256sum
--sha256	0e19bca047ad50b28e8ed7663840f9e45a94909148822ca44dcb3e8cafb5cc48	libsoup-2.52.1.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.52/libsoup-2.52.2.sha256sum
-+sha256	db55628b5c7d952945bb71b236469057c8dfb8dea0c271513579c6273c2093dc	libsoup-2.52.2.tar.xz
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index e43e25c..fd51a0e 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/exiv2/0001-remove-useless-header.patch b/package/exiv2/0001-remove-useless-header.patch
+deleted file mode 100644
+index 96a3734..0000000
+--- a/package/exiv2/0001-remove-useless-header.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-version.cpp: remove useless header inclusion
+-
+-The inclusion of link.h header is not required and can create build
+-error with some toolchains.
+-The patch is pushed on the upstream for the next release.
+-http://dev.exiv2.org/issues/1007
+-
+-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+-
+---- exiv2-0.24.orig/src/version.cpp	2013-12-01 13:13:42.000000000 +0100
+-+++ exiv2-0.24/src/version.cpp	2014-12-04 09:30:39.667234130 +0100
+-@@ -116,7 +116,6 @@ typedef string_v::iterator  string_i;
+- #elif defined(__linux__)
+- # include <unistd.h>
+- // http://syprog.blogspot.com/2011/12/listing-loaded-shared-objects-in-linux.html
+--# include "link.h"
+- # include <dlfcn.h>
+-   struct something
+-   {
+diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+index 9a7cf44..8ca95eb 100644
+--- a/package/exiv2/Config.in
++++ b/package/exiv2/Config.in
+@@ -1,10 +1,12 @@
+-comment "exiv2 needs a toolchain w/ C++, dynamic library"
+-	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
++comment "exiv2 needs a toolchain w/ C++, wchar, dynamic library"
++	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_EXIV2
+ 	bool "exiv2"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  Exiv2 is a C++ library and a command line utility to manage
+ 	  image metadata. It provides fast and easy read and write
+diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+index d4f8c60..b1e78d2 100644
+--- a/package/exiv2/exiv2.hash
++++ b/package/exiv2/exiv2.hash
+@@ -1,4 +1,4 @@
+ # From http://www.exiv2.org/download.html
+-md5 b8a23dc56a98ede85c00718a97a8d6fc exiv2-0.24.tar.gz
++md5 258d4831b30f75a01e0234065c6c2806 exiv2-0.25.tar.gz
+ # Locally calculated
+-sha256 f4a443e6c7fb9d9f5e787732f76969a64c72c4c04af69b10ed57f949c2dfef8e exiv2-0.24.tar.gz
++sha256 c80bfc778a15fdb06f71265db2c3d49d8493c382e516cb99b8c9f9cbde36efa4 exiv2-0.25.tar.gz
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 93e36f7..45f9289 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBSOUP_VERSION_MAJOR = 2.52
--LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).1
-+LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).2
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
- LIBSOUP_LICENSE = LGPLv2+
+-EXIV2_VERSION = 0.24
++EXIV2_VERSION = 0.25
+ EXIV2_SITE = http://www.exiv2.org
+ EXIV2_INSTALL_STAGING = YES
+ 
