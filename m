@@ -1,38 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 02 Dec 2015 22:58:42 +0000
-Subject: [Buildroot] [Bug 8066] nodejs crashes when built with gcc 4.9
-In-Reply-To: <bug-8066-163@https.bugs.busybox.net/>
-References: <bug-8066-163@https.bugs.busybox.net/>
-Message-ID: <bug-8066-163-G7pcntx3vV@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 02 Dec 2015 23:59:28 +0100
+Subject: [Buildroot] uClibc-admins post from martin@barkynet.com
+	requires approval
+In-Reply-To: <20151202220028.GG23754@vapier.lan> (Mike Frysinger's message of
+ "Wed, 2 Dec 2015 17:00:28 -0500")
+References: <mailman.2362.1449086836.25824.uclibc-admins@busybox.net>
+ <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
+ <878u5cfs82.fsf@dell.be.48ers.dk> <20151202220028.GG23754@vapier.lan>
+Message-ID: <87a8pse9tb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8066
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
---- Comment #8 from Martin <martin@barkynet.com> ---
-(In reply to Jeroen Roovers from comment #6)
-> On an ARM system (cortex-a7) I am seeing a similar problem when I build
-> everything with gcc-4.9.*. It doesn't crash, though, it merely exits certain
-> functions early, causing it to output invalid HTTP headers. I have seen some
-> references on the wider Internet pointing to similar problems, but those
-> were not connected to a specific GCC version or even the same OS. The only
-> thing I am certain of is that GCC 4.9 miscompiles nodejs, including version
-> 4.1.1. I haven't tried with libuv and libhttpparser properly in place,
-> though.
+Hi,
 
-I think this might be a different issue, the original issue is about a crash.  
+ > i've added a bugzilla component, but not sure that'll really help smooth
+ > over this scenario.  i looked at the API available, but i'm not seeing a
+ > callback to update the versions list.
+ > 	https://www.bugzilla.org/docs/4.4/en/html/api/
 
-If you think you still have an issue can you please raise a new bug.  In the
-bug please attach a minimal non-working Buildroot configuration so we can try
-to reproduce it.  
+ > there is one to get the current list:
+ > 	https://www.bugzilla.org/docs/4.4/en/html/api/Bugzilla/WebService/Product.html
 
-Thanks
+ > maybe the buildroot release scripts can print a reminder ?
 
-Martin
+It actually already does, it was just late and I forgot:
+
+echo "also don't forget to add the version to bugzilla"
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Venlig hilsen,
+Peter Korsgaard 
