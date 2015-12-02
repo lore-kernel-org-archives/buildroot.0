@@ -1,113 +1,123 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2015 17:52:28 +0100
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.4.7
-Message-ID: <20151201232125.9F23B82210@busybox.osuosl.org>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue,  1 Dec 2015 22:58:28 -0200
+Subject: [Buildroot] [PATCH v2] musl: add a sys/queue.h implementation
+Message-ID: <1449017908-7935-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01e3d2eff15eb2535c4c15eb4f62467a50fe6a5f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Musl does not provide a 'sys/queue.h' implementation, and this has been
+a problem for packages that depend on it.
 
-The 3.4 series has been promoted to stable.
-Handle autodeps more concisely (idn, p11-kit, zlib).
-libtasn1 is now mandatory, since otherwise gnutls uses the bundled
-version it makes no sense to try that because of target duplication.
-Disable tpm support since we've got no trousers package.
-Disable libdane support since we've got no dane package.
+So lets create a package called netbsd-queue that will install a
+'sys/queue.h' in the staging directory when enabled, based on the
+NetBSD implementation.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Musl toolchain and external toolchain packages will depend on this
+package, so that 'sys/queue.h' will be always installed when compiling
+with a musl based toolchain.
+
+Tested on ARM and x86 in the following cases:
+  - Buildroot musl toolchain.
+  - External musl toolchain without 'sys/queue.h'.
+  - External musl toolchain with 'sys/queue.h'.
+
+Fixes:
+http://autobuild.buildroot.net/results/24bad2d06ab40024dacf136bee722072d587f84e
+
+And possibly many others.
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+
 ---
- package/gnutls/Config.in   |  1 +
- package/gnutls/gnutls.hash |  2 +-
- package/gnutls/gnutls.mk   | 41 ++++++++++++++++++++++++++++++-----------
- 3 files changed, 32 insertions(+), 12 deletions(-)
+Changes v1 -> v2:
+  - package name changed to netbsd-queue
+  - queue.h is now downloaded from NetBSD CVS server
+  - Config.in removed
+  - license changed to BSD-3c
+  - instead of checking if queue.h already exists before installing, 
+    it will be installed unconditionally.
+---
+ package/musl/musl.mk                               |  5 +++++
+ package/netbsd-queue/netbsd-queue.hash             |  2 ++
+ package/netbsd-queue/netbsd-queue.mk               | 23 ++++++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |  7 +++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/netbsd-queue/netbsd-queue.hash
+ create mode 100644 package/netbsd-queue/netbsd-queue.mk
 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index ecb6756..dde23ce 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_GNUTLS
- 	bool "gnutls"
-+	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_NETTLE
- 	select BR2_PACKAGE_PCRE
- 	depends on BR2_USE_WCHAR
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index b33c838..f062041 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	888d8779b48f21959b33d4d9ad0b546e5ec3dea20abf0d9bb03869d56b1f44cf	gnutls-3.3.19.tar.xz
-+sha256	c1be9e4b30295d7b5f96fa332c6a908e6fa2254377b67811301fca92eb882e5a	gnutls-3.4.7.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 1ac3e4e..3b9fc7f 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,24 +4,22 @@
- #
- ################################################################################
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 6fdcc7312288..2cc6699a35b2 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -13,6 +13,11 @@ MUSL_LICENSE_FILES = COPYRIGHT
+ # cross-compiler and the kernel headers
+ MUSL_DEPENDENCIES = host-gcc-initial linux-headers
  
--GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).19
-+GNUTLS_VERSION_MAJOR = 3.4
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
- GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER
--GNUTLS_DEPENDENCIES = host-pkgconf nettle pcre \
--	$(if $(BR2_PACKAGE_P11_KIT),p11-kit) \
--	$(if $(BR2_PACKAGE_LIBIDN),libidn) \
--	$(if $(BR2_PACKAGE_LIBTASN1),libtasn1) \
--	$(if $(BR2_PACKAGE_ZLIB),zlib)
-+GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
- GNUTLS_CONF_OPTS = \
--	--with-libnettle-prefix=$(STAGING_DIR)/usr \
--	--with-librt-prefix=$(STAGING_DIR) \
--	--disable-rpath \
- 	--disable-doc \
- 	--disable-guile \
--	--enable-local-libopts
-+	--disable-libdane \
-+	--disable-rpath \
-+	--enable-local-libopts \
-+	--with-libnettle-prefix=$(STAGING_DIR)/usr \
-+	--with-librt-prefix=$(STAGING_DIR) \
-+	--without-tpm
- GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
- 	ac_cv_header_wchar_h=$(if $(BR2_USE_WCHAR),yes,no) \
- 	gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no) \
-@@ -54,6 +52,27 @@ GNUTLS_CONF_OPTS += --enable-cryptodev
- GNUTLS_DEPENDENCIES += cryptodev-linux
++# musl does not provide a sys/queue.h implementation, so add the
++# netbsd-queue package that will install a sys/queue.h file in the
++# staging directory based on the NetBSD implementation.
++MUSL_DEPENDENCIES += netbsd-queue
++
+ # musl is part of the toolchain so disable the toolchain dependency
+ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+diff --git a/package/netbsd-queue/netbsd-queue.hash b/package/netbsd-queue/netbsd-queue.hash
+new file mode 100644
+index 000000000000..f8e2a6c59878
+--- /dev/null
++++ b/package/netbsd-queue/netbsd-queue.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 c13407edd0e33be73cae72514cb234f8612e1c0e54401c9448daffd3a240158b  queue.h?rev=1.70
+diff --git a/package/netbsd-queue/netbsd-queue.mk b/package/netbsd-queue/netbsd-queue.mk
+new file mode 100644
+index 000000000000..0f486fa25880
+--- /dev/null
++++ b/package/netbsd-queue/netbsd-queue.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# netbsd-queue
++#
++################################################################################
++
++NETBSD_QUEUE_VERSION = 1.70
++NETBSD_QUEUE_SITE = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys
++NETBSD_QUEUE_SOURCE = queue.h?rev=$(NETBSD_QUEUE_VERSION)
++NETBSD_QUEUE_LICENSE = BSD-3c
++
++NETBSD_QUEUE_INSTALL_STAGING = YES
++
++define NETBSD_QUEUE_EXTRACT_CMDS
++	cp $(DL_DIR)/$(NETBSD_QUEUE_SOURCE) $(@D)/queue.h
++endef
++
++define NETBSD_QUEUE_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/queue.h \
++		$(STAGING_DIR)/usr/include/sys/queue.h
++endef
++
++$(eval $(generic-package))
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 613ce506608b..745b6858a2a7 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -237,6 +237,13 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBIDN),y)
-+GNUTLS_CONF_OPTS += --with-idn
-+GNUTLS_DEPENDENCIES += libidn
-+else
-+GNUTLS_CONF_OPTS += --without-idn
++# musl does not provide a sys/queue.h implementation, so add the
++# netbsd-queue package that will install a sys/queue.h file in the
++# staging directory based on the NetBSD implementation.
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
 +endif
 +
-+ifeq ($(BR2_PACKAGE_P11_KIT),y)
-+GNUTLS_CONF_OPTS += --with-p11-kit
-+GNUTLS_DEPENDENCIES += p11-kit
-+else
-+GNUTLS_CONF_OPTS += --without-p11-kit
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+GNUTLS_CONF_OPTS += --with-zlib
-+GNUTLS_DEPENDENCIES += zlib
-+else
-+GNUTLS_CONF_OPTS += --without-zlib
-+endif
-+
- # Some examples in doc/examples use wchar
- define GNUTLS_DISABLE_DOCS
- 	$(SED) 's/ doc / /' $(@D)/Makefile.in
+ # The Linaro ARMhf toolchain expects the libraries in
+ # {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
+ # {/usr,}/lib, so we need to create a symbolic link.
+-- 
+1.9.1
