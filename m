@@ -1,35 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 02 Dec 2015 22:36:29 +0100
-Subject: [Buildroot] uClibc-admins post from martin@barkynet.com
-	requires approval
-In-Reply-To: <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
- (Bernhard Reutner-Fischer's message of "Wed, 2 Dec 2015 21:29:44
- +0100")
-References: <mailman.2362.1449086836.25824.uclibc-admins@busybox.net>
- <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
-Message-ID: <878u5cfs82.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 2 Dec 2015 22:36:44 +0100
+Subject: [Buildroot] [PATCH v6 20/33] package/enlightenment: bump to
+ version 0.19.12
+In-Reply-To: <565F0835.4020807@imgtec.com>
+References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
+ <1446401289-9059-21-git-send-email-romain.naour@openwide.fr>
+ <565F0835.4020807@imgtec.com>
+Message-ID: <565F646C.5070901@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+Hi Vicente,
 
- >> From: Martin Bark <martin@barkynet.com>
- >> Cc:
- >> Date: Wed, 2 Dec 2015 20:07:13 +0000
- >> Subject: 2015.11 missing from version field
- >> Hi,
- >> 
- >> Can you please add 2015.11 to the version field in bugzilla.
+Le 02/12/2015 16:03, Vicente Olivert Riera a ?crit :
+> Hi Romain,
+> 
+> Version 0.20.0 released :P
 
- > Done. I'd prefer if you could ask the buildroot folks directly next time.
+Indeed, but for now I'm waiting for the merge of this series.
+If a v7 is needed, I'm not going to bump efl or enlightenment since most of the
+series has been tested and reviewed.
 
-Yes, me too. I normally remember to add the releases, but this time I
-forgot.
+Also, 0.20 would require efl 1.16.
 
-Thanks for fixing it.
+Thanks anyway for the info :)
 
--- 
-Bye, Peter Korsgaard
+Best regards,
+Romain
+
+> 
+> Regards,
+> 
+> Vincent.
