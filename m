@@ -1,60 +1,67 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 02 Dec 2015 22:49:06 +0000
-Subject: [Buildroot] [Bug 8066] nodejs crashes when built with gcc 4.9
-In-Reply-To: <bug-8066-163@https.bugs.busybox.net/>
-References: <bug-8066-163@https.bugs.busybox.net/>
-Message-ID: <bug-8066-163-6pHeVx7aby@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 2 Dec 2015 23:42:02 +0100
+Subject: [Buildroot] [git commit] package/gawk: do not use readeline ormpfr
+	in host variant
+Message-ID: <20151202225655.CA91A802C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8066
+commit: http://git.buildroot.net/buildroot/commit/?id=fc08a57305264d8dd0b6c54a4e35ecd3e151c22f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Martin <martin@barkynet.com> changed:
+gawk has an optional dependency on mpfr (and thus gmp) and readline,
+and will probe for them. If they are present, they are used; if they
+are missing, that's not an error. mpfr (and gmp) is used for "BIGNUM"
+support on gawk; readline is used by the gawk debugger.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |martin at barkynet.com
-                   |.org                        |
+However, mpfr (bringing gmp) are also host-packages in Buildroot, but in
+the standard build order (i.e. a plain 'make'), they are built after
+gawk. Ditto readline (from ncurses).
 
---- Comment #7 from Martin <martin@barkynet.com> ---
-(In reply to Dr I J Ormshaw from comment #5)
-> I've re-created the issue and attached the good and bad config files, I've
-> also attaches the differences between the two, as a patch.
-> 
-> The version of buildroot I am using is
-> 
-> 2015.02
-> 6bf057b0f2ba188397a691f74877a4a30aaea3f9
-> 
-> The console output for the failure is:
-> 
-> 
-> [root at buildroot ~]# node
-> traps: node[194] general protection ip:736725 sp:7ffc3c721350 error:0 in
-> node[400000+73c000]
-> Segmentation fault
+If the user has the development files for gmp and mpfr, then gawk is
+linked to them. Ditto readline.
 
-I've not managed to reproduce your issue.  Your config files contains various
-customisations like an override file, kernel patches, overlay etc so I'm not
-able to full replicate your setup.
+Now, further on in the build, we build gmp and mpfr (for gcci or guile),
+so we install them in the host dir. Ditto readline (for gdb, ncurses
+itself and a few other packages...)
 
-Instead I used buildroot version 2015.11 and the qemu_x86_64_defconfig as a
-start point.  I configured for a core i7, gcc 4.9.3, glibc and node.js v0.10.40
-and node works fine in qemu.  I even tried eglibc as you do (which is now
-deprecated) and it worked fine too.
+But because we forcibly set an RPATH tag on all our host binaries, our
+host gawk will now dynamically link with our versions, when it was in
+fact built against the host ones.
 
-I can only suggest you try to upgrade to buildroot 2015.11 and test again,
-perhaps your issue has been fixed.  If you still find the issue then can you
-please attach a minimal non-working Buildroot configuration, removing any
-custom override files and packages which are not needed to reproduce the issue.
+This did not seem to cause any harm so far, but is far from ideal.
 
-Thanks
+Since we do not really need BIGNUM or the debugger in our host gawk, we
+just forcibly disable them and configure gawk without readline or mpfr
+(there's no switch for gmp, but it's not a direct dependency, it comes
+just with mpfr).
 
-Martin
+[Adjust comment as suggested by Thomas/Yann]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gawk/gawk.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 1820689..6702c48 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -16,9 +16,11 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ GAWK_DEPENDENCIES += busybox
+ endif
+ 
+-# We don't have a host-busybox
++# We don't have a host-busybox, and we don't want to use readline or mpfr
+ HOST_GAWK_DEPENDENCIES =
+ 
++HOST_GAWK_CONF_OPTS = --without-readline --without-mpfr
++
+ define GAWK_CREATE_SYMLINK
+ 	ln -sf /usr/bin/gawk $(TARGET_DIR)/usr/bin/awk
+ endef
