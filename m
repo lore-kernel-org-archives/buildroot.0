@@ -1,56 +1,48 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 3 Dec 2015 00:26:58 +0100
-Subject: [Buildroot] [PATCH v6 20/33] package/enlightenment: bump to
- version 0.19.12
-In-Reply-To: <565F646C.5070901@openwide.fr>
-References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
- <1446401289-9059-21-git-send-email-romain.naour@openwide.fr>
- <565F0835.4020807@imgtec.com> <565F646C.5070901@openwide.fr>
-Message-ID: <565F7E42.90003@openwide.fr>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Wed, 2 Dec 2015 18:31:18 -0500
+Subject: [Buildroot] uClibc-admins post from martin@barkynet.com
+	requires approval
+In-Reply-To: <87a8pse9tb.fsf@dell.be.48ers.dk>
+References: <mailman.2362.1449086836.25824.uclibc-admins@busybox.net>
+ <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
+ <878u5cfs82.fsf@dell.be.48ers.dk>
+ <20151202220028.GG23754@vapier.lan>
+ <87a8pse9tb.fsf@dell.be.48ers.dk>
+Message-ID: <20151202233118.GH23754@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, Yann, All,
+On 02 Dec 2015 23:59, Peter Korsgaard wrote:
+> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+> 
+>  > i've added a bugzilla component, but not sure that'll really help smooth
+>  > over this scenario.  i looked at the API available, but i'm not seeing a
+>  > callback to update the versions list.
+>  > 	https://www.bugzilla.org/docs/4.4/en/html/api/
+> 
+>  > there is one to get the current list:
+>  > 	https://www.bugzilla.org/docs/4.4/en/html/api/Bugzilla/WebService/Product.html
+> 
+>  > maybe the buildroot release scripts can print a reminder ?
+> 
+> It actually already does, it was just late and I forgot:
+> 
+> echo "also don't forget to add the version to bugzilla"
 
-Le 02/12/2015 22:36, Romain Naour a ?crit :
-> Hi Vicente,
-> 
-> Le 02/12/2015 16:03, Vicente Olivert Riera a ?crit :
->> Hi Romain,
->>
->> Version 0.20.0 released :P
-> 
-> Indeed, but for now I'm waiting for the merge of this series.
-> If a v7 is needed, I'm not going to bump efl or enlightenment since most of the
-> series has been tested and reviewed.
+there is an update API:
+	https://www.bugzilla.org/docs/4.4/en/html/api/Bugzilla/WebService/Product.html#update
 
-As discussed on IRC, I give another try to this series rebased on current master
-(after next merge) and I didn't see any build issue due do updated
-package used by efl or enlightenment.
-Also I did a quick runtime test by starting enlightenment.
-
-So, It's ok on my side to merge it.
-
-Best regards,
-Romain
-
-> 
-> Also, 0.20 would require efl 1.16.
-> 
-> Thanks anyway for the info :)
-> 
-> Best regards,
-> Romain
-> 
->>
->> Regards,
->>
->> Vincent.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+but version fields aren't yet exposed.  there's an open bug upstream w/code,
+but looks like things have stalled.  i'll let you know if/when that shows up.
+	https://bugzilla.mozilla.org/show_bug.cgi?id=777047
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/172cd810/attachment.asc>
