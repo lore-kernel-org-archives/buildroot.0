@@ -1,123 +1,118 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue,  1 Dec 2015 22:58:28 -0200
-Subject: [Buildroot] [PATCH v2] musl: add a sys/queue.h implementation
-Message-ID: <1449017908-7935-1-git-send-email-sergio.prado@e-labworks.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed,  2 Dec 2015 05:33:03 +0100
+Subject: [Buildroot] [PATCH] package/arptables: add patch to fix musl build
+	issue
+Message-ID: <1449030783-19533-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Musl does not provide a 'sys/queue.h' implementation, and this has been
-a problem for packages that depend on it.
+Due to clashes in the namespace between the Linux Kernel headers and the
+netinet headers building arptables with the musl C library fails.
 
-So lets create a package called netbsd-queue that will install a
-'sys/queue.h' in the staging directory when enabled, based on the
-NetBSD implementation.
+Best advice from the musl developers is to not include both headers in a
+userspace tool (see the thread on the musl mailing list [1], especially [2]).
 
-Musl toolchain and external toolchain packages will depend on this
-package, so that 'sys/queue.h' will be always installed when compiling
-with a musl based toolchain.
+Since arptables only requires a few definitions from the Linux Kernel headers
+we opt-out the clashing header files and define the needed definitions.
 
-Tested on ARM and x86 in the following cases:
-  - Buildroot musl toolchain.
-  - External musl toolchain without 'sys/queue.h'.
-  - External musl toolchain with 'sys/queue.h'.
+Patch sent upstream [3].
 
 Fixes:
-http://autobuild.buildroot.net/results/24bad2d06ab40024dacf136bee722072d587f84e
+http://autobuild.buildroot.net/results/b72/b721e4fa24a0728c20fd2ec0663c2b5981387642/
+http://autobuild.buildroot.net/results/4e9/4e9e0ed9454d258ef4333e847dc394ff22378ca4/
+http://autobuild.buildroot.net/results/b39/b3951f700ab1664e06e14d95964875fc8e3dd8f4/
+http://autobuild.buildroot.net/results/716/716e81f49f8894b7248f394919c8f22efb908277/
 
-And possibly many others.
+[1] http://www.openwall.com/lists/musl/2012/10/09/1
+[2] http://www.openwall.com/lists/musl/2012/10/11/1
+[3] http://marc.info/?l=netfilter&m=144903021705206&w=2
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-
+Cc: Brendan Heading <brendanheading@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2:
-  - package name changed to netbsd-queue
-  - queue.h is now downloaded from NetBSD CVS server
-  - Config.in removed
-  - license changed to BSD-3c
-  - instead of checking if queue.h already exists before installing, 
-    it will be installed unconditionally.
----
- package/musl/musl.mk                               |  5 +++++
- package/netbsd-queue/netbsd-queue.hash             |  2 ++
- package/netbsd-queue/netbsd-queue.mk               | 23 ++++++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |  7 +++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/netbsd-queue/netbsd-queue.hash
- create mode 100644 package/netbsd-queue/netbsd-queue.mk
+ package/arptables/0004-Fix-musl-build-issue.patch | 71 +++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/arptables/0004-Fix-musl-build-issue.patch
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 6fdcc7312288..2cc6699a35b2 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -13,6 +13,11 @@ MUSL_LICENSE_FILES = COPYRIGHT
- # cross-compiler and the kernel headers
- MUSL_DEPENDENCIES = host-gcc-initial linux-headers
- 
-+# musl does not provide a sys/queue.h implementation, so add the
-+# netbsd-queue package that will install a sys/queue.h file in the
-+# staging directory based on the NetBSD implementation.
-+MUSL_DEPENDENCIES += netbsd-queue
-+
- # musl is part of the toolchain so disable the toolchain dependency
- MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
-diff --git a/package/netbsd-queue/netbsd-queue.hash b/package/netbsd-queue/netbsd-queue.hash
+diff --git a/package/arptables/0004-Fix-musl-build-issue.patch b/package/arptables/0004-Fix-musl-build-issue.patch
 new file mode 100644
-index 000000000000..f8e2a6c59878
+index 0000000..e9419b0
 --- /dev/null
-+++ b/package/netbsd-queue/netbsd-queue.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 c13407edd0e33be73cae72514cb234f8612e1c0e54401c9448daffd3a240158b  queue.h?rev=1.70
-diff --git a/package/netbsd-queue/netbsd-queue.mk b/package/netbsd-queue/netbsd-queue.mk
-new file mode 100644
-index 000000000000..0f486fa25880
---- /dev/null
-+++ b/package/netbsd-queue/netbsd-queue.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# netbsd-queue
-+#
-+################################################################################
++++ b/package/arptables/0004-Fix-musl-build-issue.patch
+@@ -0,0 +1,71 @@
++From cbf84a0bc377c6a368d30571f37ebfab27784697 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Wed, 2 Dec 2015 04:57:33 +0100
++Subject: [PATCH 4/4] Fix musl build issue
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+NETBSD_QUEUE_VERSION = 1.70
-+NETBSD_QUEUE_SITE = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys
-+NETBSD_QUEUE_SOURCE = queue.h?rev=$(NETBSD_QUEUE_VERSION)
-+NETBSD_QUEUE_LICENSE = BSD-3c
++Due to clashes in the namespace between the Linux Kernel headers and the
++netinet headers building arptables with the musl C library fails.
 +
-+NETBSD_QUEUE_INSTALL_STAGING = YES
++Best advice from the musl developers is to not include both headers in a
++userspace tool (see the thread on the musl mailing list [1], especially [2]).
 +
-+define NETBSD_QUEUE_EXTRACT_CMDS
-+	cp $(DL_DIR)/$(NETBSD_QUEUE_SOURCE) $(@D)/queue.h
-+endef
++Since arptables only requires a few definitions from the Linux Kernel headers
++we opt-out the clashing header files and define the needed definitions.
 +
-+define NETBSD_QUEUE_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/queue.h \
-+		$(STAGING_DIR)/usr/include/sys/queue.h
-+endef
++[1] http://www.openwall.com/lists/musl/2012/10/09/1
++[2] http://www.openwall.com/lists/musl/2012/10/11/1
 +
-+$(eval $(generic-package))
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 613ce506608b..745b6858a2a7 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -237,6 +237,13 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
- TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
- endif
- 
-+# musl does not provide a sys/queue.h implementation, so add the
-+# netbsd-queue package that will install a sys/queue.h file in the
-+# staging directory based on the NetBSD implementation.
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
-+endif
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ extensions/arpt_CLASSIFY.c    |  7 +++++++
++ include/linux/netfilter_arp.h | 11 +++++++++++
++ 2 files changed, 18 insertions(+)
 +
- # The Linaro ARMhf toolchain expects the libraries in
- # {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
- # {/usr,}/lib, so we need to create a symbolic link.
++diff --git a/extensions/arpt_CLASSIFY.c b/extensions/arpt_CLASSIFY.c
++index cb5770b..c58129f 100644
++--- a/extensions/arpt_CLASSIFY.c
+++++ b/extensions/arpt_CLASSIFY.c
++@@ -21,7 +21,14 @@
++ #include <stdio.h>
++ #include <getopt.h>
++ #include <arptables.h>
+++
+++#ifdef __KERNEL__
++ #include <linux/netfilter/xt_CLASSIFY.h>
+++#else
+++struct xt_classify_target_info {
+++	uint32_t priority;
+++};
+++#endif
++ 
++ #define TC_H_MAJ_MASK (0xFFFF0000U)
++ #define TC_H_MIN_MASK (0x0000FFFFU)
++diff --git a/include/linux/netfilter_arp.h b/include/linux/netfilter_arp.h
++index 92bc6dd..2a63e82 100644
++--- a/include/linux/netfilter_arp.h
+++++ b/include/linux/netfilter_arp.h
++@@ -5,7 +5,18 @@
++  * (C)2002 Rusty Russell IBM -- This code is GPL.
++  */
++ 
+++#ifdef __KERNEL__
++ #include <linux/netfilter.h>
+++#else
+++/* Responses from hook functions. */
+++#define NF_DROP 0
+++#define NF_ACCEPT 1
+++#define NF_STOLEN 2
+++#define NF_QUEUE 3
+++#define NF_REPEAT 4
+++#define NF_STOP 5
+++#define NF_MAX_VERDICT NF_STOP
+++#endif
++ 
++ /* There is no PF_ARP. */
++ #define NF_ARP		0
++-- 
++2.6.2
++
 -- 
-1.9.1
+2.6.2
