@@ -1,34 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Dec 2015 23:23:59 +0100
-Subject: [Buildroot] [PATCH v2] unzip: new package
-In-Reply-To: <1448967209-23907-1-git-send-email-luca@lucaceresoli.net>
-References: <1448967209-23907-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <565F6F7F.7030405@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 02 Dec 2015 23:34:52 +0100
+Subject: [Buildroot] [PATCH 2/2 for 2015.11.x] package/gawk: do not use
+	readeline ormpfr in host variant
+In-Reply-To: <20151202221602.GK5773@free.fr> (Yann E. MORIN's message of "Wed, 
+ 2 Dec 2015 23:16:02 +0100")
+References: <cover.1449008170.git.yann.morin.1998@free.fr>
+ <9cd7b6bdd9790d4105829b278c0e6acba9f103f3.1449008170.git.yann.morin.1998@free.fr>
+ <20151201232249.57de6d15@free-electrons.com>
+ <20151202221602.GK5773@free.fr>
+Message-ID: <87r3j4eayb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-12-15 11:53, Luca Ceresoli wrote:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> Cc: Jan Pedersen <jp@jp-embedded.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Hi,
 
+>> > -# We don't have a host-busybox
+ >> > +# We don't have a host-busybox, and we don't want to use mpfr
+ >> 
+ >> Is the comment really important, especially when it talks about mpfr
+ >> but not about readline ?
 
- Regards,
- Arnout
+ > Or just append 'or readline' to the comment.
 
-[snip]
-
+But we _DO_ have a host-readline?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
