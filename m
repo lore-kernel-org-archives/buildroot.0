@@ -1,74 +1,49 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 2 Dec 2015 11:00:46 -0200
-Subject: [Buildroot] [PATCH v2] musl: add a sys/queue.h implementation
-In-Reply-To: <20151202104554.1c667515@free-electrons.com>
-References: <1449017908-7935-1-git-send-email-sergio.prado@e-labworks.com>
- <20151202104554.1c667515@free-electrons.com>
-Message-ID: <CANu7NGu6Y7Uh02hygwa6FfyjL7kgExhZ14wzyLGbNcMGSrnRKw@mail.gmail.com>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Wed, 2 Dec 2015 07:20:31 -0600
+Subject: [Buildroot] [PATCH v6] package/unscd: new package
+In-Reply-To: <565E130B.7090201@mind.be>
+References: <1448982954-5055-1-git-send-email-rdkehn@yahoo.com>
+ <565E130B.7090201@mind.be>
+Message-ID: <20151202132031.GB547@dkarchlinux64.currentcomm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Arnout, Thomas:
 
-2015-12-02 7:45 GMT-02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+On Tue, Dec 01, 2015 at 10:37:15PM +0100, Arnout Vandecappelle wrote:
+>  Hi Doug,
+> 
+>  Even though it's already v6 I still have some comments :-(
+> 
+> On 01-12-15 16:15, Doug Kehn wrote:
+> > A daemon which handles passwd, group and host lookups for running
+> > programs and caches the results for the next query. You only need this
+> > package if you are using slow Name Services like LDAP, NIS or NIS+.
+> > 
+> > This particular NSCD is a complete rewrite of the GNU glibc nscd which
+> > is a single threaded server process which offloads all NSS lookups to
+> > worker children; cache hits are handled by the parent, and only cache
+> > misses start worker children, making the parent immune to resource
+> > leaks, hangs, and crashes in NSS libraries.
+> > 
+> > It should mostly be a drop-in replacement for existing installs using
+> > nscd.
+> 
+>  This explanation is not really relevant for the commit log. Just keep the first
+> sentence. All this text should be present in the package help text, however.
+> 
+>  It would be good however to explain in the commit log that glibc's nscd is not
+> installed by buildroot at the moment, and why it only works with glibc.
+> 
 
-> Dear Sergio Prado,
->
-> On Tue,  1 Dec 2015 22:58:28 -0200, Sergio Prado wrote:
-> > Musl does not provide a 'sys/queue.h' implementation, and this has been
-> > a problem for packages that depend on it.
-> >
-> > So lets create a package called netbsd-queue that will install a
-> > 'sys/queue.h' in the staging directory when enabled, based on the
-> > NetBSD implementation.
-> >
-> > Musl toolchain and external toolchain packages will depend on this
-> > package, so that 'sys/queue.h' will be always installed when compiling
-> > with a musl based toolchain.
-> >
-> > Tested on ARM and x86 in the following cases:
-> >   - Buildroot musl toolchain.
-> >   - External musl toolchain without 'sys/queue.h'.
-> >   - External musl toolchain with 'sys/queue.h'.
-> >
-> > Fixes:
-> >
-> http://autobuild.buildroot.net/results/24bad2d06ab40024dacf136bee722072d587f84e
-> >
-> > And possibly many others.
-> >
-> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
->
-> From a quick look, it looks good. Can you chase down the packages that
-> had their own workaround for the lack of queue.h ?
->
+I'm not sure if unscd, by itself, only works with glibc. Associated
+packages that benefit from unscd require glibc. My system is glibc
+based so I know this works. I'm not sure about other c-libs.
 
-OK. I will do it.
+What is your suggestion here?
 
-
->
-> At the moment, I see only libtirpc, but I might have missed others. If
-> you could prepare a patch for those packages to make them use the now
-> globally available queue.h, it would be good.
-
-
-> Thanks!
->
-
-Thanks,
-
-
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/898bf979/attachment.html>
+Regards,
+...doug
