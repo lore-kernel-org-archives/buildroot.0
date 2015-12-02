@@ -1,45 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 02 Dec 2015 23:09:40 +0000
-Subject: [Buildroot] [Bug 8501] gunzip fails to uncompress files
-In-Reply-To: <bug-8501-163@https.bugs.busybox.net/>
-References: <bug-8501-163@https.bugs.busybox.net/>
-Message-ID: <bug-8501-163-FLGSH7rMqn@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 3 Dec 2015 00:26:58 +0100
+Subject: [Buildroot] [PATCH v6 20/33] package/enlightenment: bump to
+ version 0.19.12
+In-Reply-To: <565F646C.5070901@openwide.fr>
+References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
+ <1446401289-9059-21-git-send-email-romain.naour@openwide.fr>
+ <565F0835.4020807@imgtec.com> <565F646C.5070901@openwide.fr>
+Message-ID: <565F7E42.90003@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8501
+Hi Arnout, Yann, All,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Le 02/12/2015 22:36, Romain Naour a ?crit :
+> Hi Vicente,
+> 
+> Le 02/12/2015 16:03, Vicente Olivert Riera a ?crit :
+>> Hi Romain,
+>>
+>> Version 0.20.0 released :P
+> 
+> Indeed, but for now I'm waiting for the merge of this series.
+> If a v7 is needed, I'm not going to bump efl or enlightenment since most of the
+> series has been tested and reviewed.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
+As discussed on IRC, I give another try to this series rebased on current master
+(after next merge) and I didn't see any build issue due do updated
+package used by efl or enlightenment.
+Also I did a quick runtime test by starting enlightenment.
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
-Fixed in git and will be part of 2015.11.1, thanks.
+So, It's ok on my side to merge it.
 
-commit 63fdab6b4fcc860abd8dbc8342c7b01643a37e1a
-Author: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date:   Tue Dec 1 21:30:29 2015 +0100
+Best regards,
+Romain
 
-    busybox: add another upstream patch to fix (g)unzip
-
-    0002-unzip.patch was added in 69516e0 to fix a segmentation fault in the
-    gunzip applet.  However, it introduced a new issue that made the unzipping
-    of some files fail.
-
-    Add an upstream patch that fixes this new issue.
-
-    Fixes #8501.
-
-    Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-    Cc: Jason Rush <rush0033@hotmail.com>
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> 
+> Also, 0.20 would require efl 1.16.
+> 
+> Thanks anyway for the info :)
+> 
+> Best regards,
+> Romain
+> 
+>>
+>> Regards,
+>>
+>> Vincent.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
