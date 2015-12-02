@@ -1,166 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Dec 2015 23:48:58 +0100
-Subject: [Buildroot] [git commit] busybox: add another upstream patch to fix
-	(g)unzip
-Message-ID: <20151202225655.D5543802C0@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 02 Dec 2015 22:58:42 +0000
+Subject: [Buildroot] [Bug 8066] nodejs crashes when built with gcc 4.9
+In-Reply-To: <bug-8066-163@https.bugs.busybox.net/>
+References: <bug-8066-163@https.bugs.busybox.net/>
+Message-ID: <bug-8066-163-G7pcntx3vV@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63fdab6b4fcc860abd8dbc8342c7b01643a37e1a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=8066
 
-0002-unzip.patch was added in 69516e0 to fix a segmentation fault in the
-gunzip applet.  However, it introduced a new issue that made the unzipping
-of some files fail.
+--- Comment #8 from Martin <martin@barkynet.com> ---
+(In reply to Jeroen Roovers from comment #6)
+> On an ARM system (cortex-a7) I am seeing a similar problem when I build
+> everything with gcc-4.9.*. It doesn't crash, though, it merely exits certain
+> functions early, causing it to output invalid HTTP headers. I have seen some
+> references on the wider Internet pointing to similar problems, but those
+> were not connected to a specific GCC version or even the same OS. The only
+> thing I am certain of is that GCC 4.9 miscompiles nodejs, including version
+> 4.1.1. I haven't tried with libuv and libhttpparser properly in place,
+> though.
 
-Add an upstream patch that fixes this new issue.
+I think this might be a different issue, the original issue is about a crash.  
 
-Fixes #8501.
+If you think you still have an issue can you please raise a new bug.  In the
+bug please attach a minimal non-working Buildroot configuration so we can try
+to reproduce it.  
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Jason Rush <rush0033@hotmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../busybox/0003-g-unzip-fix-recent-breakage.patch | 134 +++++++++++++++++++++
- 1 file changed, 134 insertions(+)
+Thanks
 
-diff --git a/package/busybox/0003-g-unzip-fix-recent-breakage.patch b/package/busybox/0003-g-unzip-fix-recent-breakage.patch
-new file mode 100644
-index 0000000..061e2c4
---- /dev/null
-+++ b/package/busybox/0003-g-unzip-fix-recent-breakage.patch
-@@ -0,0 +1,134 @@
-+From 6bd3fff51aa74e2ee2d87887b12182a3b09792ef Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Fri, 30 Oct 2015 23:41:53 +0100
-+Subject: [PATCH] [g]unzip: fix recent breakage.
-+
-+Also, do emit error message we so painstakingly pass from gzip internals
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ archival/libarchive/decompress_gunzip.c | 33 +++++++++++++++++++++------------
-+ testsuite/unzip.tests                   |  1 +
-+ 2 files changed, 22 insertions(+), 12 deletions(-)
-+
-+diff --git a/archival/libarchive/decompress_gunzip.c b/archival/libarchive/decompress_gunzip.c
-+index 30bf451..20e4d9a 100644
-+--- a/archival/libarchive/decompress_gunzip.c
-++++ b/archival/libarchive/decompress_gunzip.c
-+@@ -309,8 +309,7 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 	huft_t *q;              /* points to current table */
-+ 	huft_t r;               /* table entry for structure assignment */
-+ 	huft_t *u[BMAX];        /* table stack */
-+-	unsigned v[N_MAX];      /* values in order of bit length */
-+-	unsigned v_end;
-++	unsigned v[N_MAX + 1];  /* values in order of bit length. last v[] is never used */
-+ 	int ws[BMAX + 1];       /* bits decoded stack */
-+ 	int w;                  /* bits decoded */
-+ 	unsigned x[BMAX + 1];   /* bit offsets, then code stack */
-+@@ -365,15 +364,17 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 		*xp++ = j;
-+ 	}
-+ 
-+-	/* Make a table of values in order of bit lengths */
-++	/* Make a table of values in order of bit lengths.
-++	 * To detect bad input, unused v[i]'s are set to invalid value UINT_MAX.
-++	 * In particular, last v[i] is never filled and must not be accessed.
-++	 */
-++	memset(v, 0xff, sizeof(v));
-+ 	p = b;
-+ 	i = 0;
-+-	v_end = 0;
-+ 	do {
-+ 		j = *p++;
-+ 		if (j != 0) {
-+ 			v[x[j]++] = i;
-+-			v_end = x[j];
-+ 		}
-+ 	} while (++i < n);
-+ 
-+@@ -435,7 +436,9 @@ static int huft_build(const unsigned *b, const unsigned n,
-+ 
-+ 			/* set up table entry in r */
-+ 			r.b = (unsigned char) (k - w);
-+-			if (p >= v + v_end) { // Was "if (p >= v + n)" but v[] can be shorter!
-++			if (/*p >= v + n || -- redundant, caught by the second check: */
-++			    *p == UINT_MAX /* do we access uninited v[i]? (see memset(v))*/
-++			) {
-+ 				r.e = 99; /* out of values--invalid code */
-+ 			} else if (*p < s) {
-+ 				r.e = (unsigned char) (*p < 256 ? 16 : 15);	/* 256 is EOB code */
-+@@ -520,8 +523,9 @@ static NOINLINE int inflate_codes(STATE_PARAM_ONLY)
-+ 		e = t->e;
-+ 		if (e > 16)
-+ 			do {
-+-				if (e == 99)
-+-					abort_unzip(PASS_STATE_ONLY);;
-++				if (e == 99) {
-++					abort_unzip(PASS_STATE_ONLY);
-++				}
-+ 				bb >>= t->b;
-+ 				k -= t->b;
-+ 				e -= 16;
-+@@ -557,8 +561,9 @@ static NOINLINE int inflate_codes(STATE_PARAM_ONLY)
-+ 			e = t->e;
-+ 			if (e > 16)
-+ 				do {
-+-					if (e == 99)
-++					if (e == 99) {
-+ 						abort_unzip(PASS_STATE_ONLY);
-++					}
-+ 					bb >>= t->b;
-+ 					k -= t->b;
-+ 					e -= 16;
-+@@ -824,8 +829,9 @@ static int inflate_block(STATE_PARAM smallint *e)
-+ 
-+ 		b_dynamic >>= 4;
-+ 		k_dynamic -= 4;
-+-		if (nl > 286 || nd > 30)
-++		if (nl > 286 || nd > 30) {
-+ 			abort_unzip(PASS_STATE_ONLY);	/* bad lengths */
-++		}
-+ 
-+ 		/* read in bit-length-code lengths */
-+ 		for (j = 0; j < nb; j++) {
-+@@ -906,12 +912,14 @@ static int inflate_block(STATE_PARAM smallint *e)
-+ 		bl = lbits;
-+ 
-+ 		i = huft_build(ll, nl, 257, cplens, cplext, &inflate_codes_tl, &bl);
-+-		if (i != 0)
-++		if (i != 0) {
-+ 			abort_unzip(PASS_STATE_ONLY);
-++		}
-+ 		bd = dbits;
-+ 		i = huft_build(ll + nl, nd, 0, cpdist, cpdext, &inflate_codes_td, &bd);
-+-		if (i != 0)
-++		if (i != 0) {
-+ 			abort_unzip(PASS_STATE_ONLY);
-++		}
-+ 
-+ 		/* set up data for inflate_codes() */
-+ 		inflate_codes_setup(PASS_STATE bl, bd);
-+@@ -999,6 +1007,7 @@ inflate_unzip_internal(STATE_PARAM transformer_state_t *xstate)
-+ 	error_msg = "corrupted data";
-+ 	if (setjmp(error_jmp)) {
-+ 		/* Error from deep inside zip machinery */
-++		bb_error_msg(error_msg);
-+ 		n = -1;
-+ 		goto ret;
-+ 	}
-+diff --git a/testsuite/unzip.tests b/testsuite/unzip.tests
-+index ca0a458..d8738a3 100755
-+--- a/testsuite/unzip.tests
-++++ b/testsuite/unzip.tests
-+@@ -34,6 +34,7 @@ rm foo.zip
-+ testing "unzip (bad archive)" "uudecode; unzip bad.zip 2>&1; echo \$?" \
-+ "Archive:  bad.zip
-+   inflating: ]3j??r??IK-%Ix
-++unzip: corrupted data
-+ unzip: inflate error
-+ 1
-+ " \
-+-- 
-+2.6.2
-+
+Martin
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
