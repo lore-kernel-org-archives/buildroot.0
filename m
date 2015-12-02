@@ -1,21 +1,24 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 02 Dec 2015 21:29:16 +0100
-Subject: [Buildroot] [PATCH 1/1] libhttpparser: add a hash file
-In-Reply-To: <1449072637-6547-1-git-send-email-root@renaud.io> (Renaud AUBIN's
- message of "Wed, 2 Dec 2015 17:10:37 +0100")
-References: <1449072637-6547-1-git-send-email-root@renaud.io>
-Message-ID: <87bna8h9wj.fsf@dell.be.48ers.dk>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 2 Dec 2015 21:29:44 +0100
+Subject: [Buildroot] uClibc-admins post from martin@barkynet.com
+	requires approval
+In-Reply-To: <mailman.2362.1449086836.25824.uclibc-admins@busybox.net>
+References: <mailman.2362.1449086836.25824.uclibc-admins@busybox.net>
+Message-ID: <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Renaud" == Renaud AUBIN <root@renaud.io> writes:
+> From: Martin Bark <martin@barkynet.com>
+> Cc:
+> Date: Wed, 2 Dec 2015 20:07:13 +0000
+> Subject: 2015.11 missing from version field
+> Hi,
+>
+> Can you please add 2015.11 to the version field in bugzilla.
 
- > Signed-off-by: Renaud AUBIN <root@renaud.io>
+Done. I'd prefer if you could ask the buildroot folks directly next time.
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+TIA,
