@@ -1,49 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Dec 2015 22:58:00 +0100
-Subject: [Buildroot] [PATCH 1/4] dhrystone: add a hash file
-In-Reply-To: <87poyofulj.fsf@dell.be.48ers.dk>
-References: <1449059383-62131-1-git-send-email-Vincent.Riera@imgtec.com>
- <87poyofulj.fsf@dell.be.48ers.dk>
-Message-ID: <565F6968.7090403@mind.be>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Wed, 2 Dec 2015 17:00:28 -0500
+Subject: [Buildroot] uClibc-admins post from martin@barkynet.com
+ requires approval
+In-Reply-To: <878u5cfs82.fsf@dell.be.48ers.dk>
+References: <mailman.2362.1449086836.25824.uclibc-admins@busybox.net>
+ <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
+ <878u5cfs82.fsf@dell.be.48ers.dk>
+Message-ID: <20151202220028.GG23754@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02-12-15 21:45, Peter Korsgaard wrote:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+On 02 Dec 2015 22:36, Peter Korsgaard wrote:
+> >>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 > 
->  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->  > ---
->  >  package/dhrystone/dhrystone.hash | 2 ++
->  >  1 file changed, 2 insertions(+)
->  >  create mode 100644 package/dhrystone/dhrystone.hash
+>  >> From: Martin Bark <martin@barkynet.com>
+>  >> Cc:
+>  >> Date: Wed, 2 Dec 2015 20:07:13 +0000
+>  >> Subject: 2015.11 missing from version field
+>  >> Hi,
+>  >> 
+>  >> Can you please add 2015.11 to the version field in bugzilla.
 > 
->  > diff --git a/package/dhrystone/dhrystone.hash b/package/dhrystone/dhrystone.hash
->  > new file mode 100644
->  > index 0000000..9ea22a3
->  > --- /dev/null
->  > +++ b/package/dhrystone/dhrystone.hash
->  > @@ -0,0 +1,2 @@
->  > +# Locally calculated
->  > +sha256 038a7e9169787125c3451a6c941f3aca5db2d2f3863871afcdce154ef17f4e3e  dhry-c
+>  > Done. I'd prefer if you could ask the buildroot folks directly next time.
 > 
-> Hmm, what are we going to do if this file ever changes?
-> 
+> Yes, me too. I normally remember to add the releases, but this time I
+> forgot.
 
- Isn't that the whole point of the hash, that we notice when it changes?
+i've added a bugzilla component, but not sure that'll really help smooth
+over this scenario.  i looked at the API available, but i'm not seeing a
+callback to update the versions list.
+	https://www.bugzilla.org/docs/4.4/en/html/api/
 
- That said, I'm not sure what we can do about it when that happens, except
-switch to a more reliable mirror.
+there is one to get the current list:
+	https://www.bugzilla.org/docs/4.4/en/html/api/Bugzilla/WebService/Product.html
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+maybe the buildroot release scripts can print a reminder ?
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/85f18ca6/attachment.asc>
