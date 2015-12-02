@@ -1,36 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Dec 2015 21:36:19 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{2, 12}.x series
-Message-ID: <20151202204630.D56CB80AE0@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  2 Dec 2015 17:48:13 -0300
+Subject: [Buildroot] [PATCH 1/9] wireshark: forcibly disable lua
+Message-ID: <1449089301-29762-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3f4ee36e881a0a2b36a4c944728e5d7431b7434
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+If host arch = target arch and liblua is in the host the buildsystem
+will pick it up and try to use it since it passes basic build tests.
+Forcibly disable it, since it causes no build failure, rather runtime
+failures because said liblua is not present on the target.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/wireshark/wireshark.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 560cad7..6559c5e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -199,10 +199,10 @@ endchoice
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 366134d..867b945 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -26,6 +26,7 @@ WIRESHARK_CONF_OPTS = \
+ 	--enable-static=no \
+ 	--with-gnutls=no \
+ 	--with-libsmi=no \
++	--with-lua=no \
+ 	--includedir=$(STAGING_DIR)/usr/include
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.73"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.74"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.93"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.50"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.51"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.57"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ $(eval $(autotools-package))
+-- 
+2.4.10
