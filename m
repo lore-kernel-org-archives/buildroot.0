@@ -1,74 +1,76 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 2 Dec 2015 10:39:41 +0000
-Subject: [Buildroot] [PATCH 2/2] bcache-tools: fix build with gcc-5
-In-Reply-To: <1449052781-51345-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1449052781-51345-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1449052781-51345-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Pascal Mazon <pascal.mazon@6wind.com>
+Date: Wed, 02 Dec 2015 11:39:32 +0100
+Subject: [Buildroot] [PATCH 1/1] ncurses: generate libtermcap
+In-Reply-To: <20151130233049.3ad42bd1@free-electrons.com>
+References: <1429880066-7743-1-git-send-email-pascal.mazon@6wind.com>
+ <20151130233049.3ad42bd1@free-electrons.com>
+Message-ID: <565ECA64.3070503@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport a Debian patch to fix a build failure with gcc-5:
+On 11/30/2015 11:30 PM, Thomas Petazzoni wrote:
+ > Dear Pascal Mazon,
+ >
+ > On Fri, 24 Apr 2015 14:54:26 +0200, Pascal Mazon wrote:
+ >> There is no libtermcap package in buildroot, but ncurses implements 
+termcap
+ >> natively. Furthermore, ncurses already provides the termcap.h header 
+file.
+ >>
+ >> With this patch, we fix an issue encountered with some external 
+toolchains
+ >> that include a libtermcap.a (typically the GNU libtermcap version) 
+in their
+ >> sysroot folder.
+ >> Bash, for instance, would be linking with this libtermcap while using
+ >> headers from ncurses.
+ >>
+ >> In order to be consistent, let's make sure there is only the ncurses'
+ >> termcap library. To that effect, we:
+ >> - remove any libtermcap.* in the staging dir,
+ >> - install a link to libncurses static and/or shared in staging and 
+target
+ >>    dirs.
+ >>
+ >> Signed-off-by: Pascal Mazon <pascal.mazon@6wind.com>
+ >
+ > We finally took a bit of time on IRC today to discuss your patch. From
+ > our point of view, the fact that your toolchain provides libtermcap.a
+ > is a bug of the toolchain. From Buildroot's point of view, a toolchain
+ > should not provide in its sysroot anything but the C library and its
+ > headers, and the kernel headers.
+ >
+ > If we start doing hacks in packages to cope with toolchain sysroot
+ > already shipped with some libraries, it's going to be an endless fight
+ > against those toolchains. You have the problem with libtermcap.a, but
+ > the next person will have it with libz.a, and then lib<something>, and
+ > again.
+ >
+ > Our suggestion is that you fix your toolchain either by asking your
+ > toolchain vendor, or by doing a quick hack to remove libtermcap.a
+ > before using the toolchain with Buildroot. If you add this toolchain as
+ > a known Buildroot profile, you can even automate this and make it part
+ > of the build process.
+ >
+ > Best regards,
+ >
+ > Thomas
+ >
 
-bcache.c:125:9: warning: 'crc_table' is static but used in inline
-function 'crc64' which is not static
-...
-make-bcache.c:277: undefined reference to `crc64'
+I understand buildroot's point of view.
+Indeed, it does not look like the best solution to hack in packages for 
+a problem from the toolchain.
 
-This issue has been reported upstream but is not yet fixed.
+I will try your suggestion.
+Maybe we can modify copy_toolchain_sysroot in toolchain/helpers.mk to 
+add a custom "--exclude" when rsync-ing (with values taken from an newly 
+added option)?
 
-Fixes:
+Best regards,
 
-  http://autobuild.buildroot.net/results/410/410954d33206475d70b8e5ba55a2c955a229af9b/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- ...on-t-inline-crc64-for-gcc-5-compatability.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/bcache-tools/0001-Don-t-inline-crc64-for-gcc-5-compatability.patch
-
-diff --git a/package/bcache-tools/0001-Don-t-inline-crc64-for-gcc-5-compatability.patch b/package/bcache-tools/0001-Don-t-inline-crc64-for-gcc-5-compatability.patch
-new file mode 100644
-index 0000000..1a437a8
---- /dev/null
-+++ b/package/bcache-tools/0001-Don-t-inline-crc64-for-gcc-5-compatability.patch
-@@ -0,0 +1,35 @@
-+Don't inline crc64 for gcc-5 compatability
-+
-+This patch is backported from Debian and it fixes the following error:
-+
-+bcache.c:125:9: warning: 'crc_table' is static but used in inline
-+function 'crc64' which is not static
-+...
-+make-bcache.c:277: undefined reference to `crc64'
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From: David Mohr <david@mcbf.net>
-+Date: Tue, 26 May 2015 20:34:31 -0600
-+Subject: Don't inline crc64 for gcc-5 compatability
-+
-+Forwarded: http://article.gmane.org/gmane.linux.kernel.bcache.devel/2919
-+
-+By James Cowgill, see Debian bug #777798
-+---
-+ bcache.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/bcache.c b/bcache.c
-+index 8f37445..8b4b986 100644
-+--- a/bcache.c
-++++ b/bcache.c
-+@@ -115,7 +115,7 @@ static const uint64_t crc_table[256] = {
-+ 	0x9AFCE626CE85B507ULL
-+ };
-+ 
-+-inline uint64_t crc64(const void *_data, size_t len)
-++uint64_t crc64(const void *_data, size_t len)
-+ {
-+ 	uint64_t crc = 0xFFFFFFFFFFFFFFFFULL;
-+ 	const unsigned char *data = _data;
 -- 
-2.4.10
+Pascal Mazon
+www.6wind.com
