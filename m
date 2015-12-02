@@ -1,37 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 02 Dec 2015 23:59:28 +0100
-Subject: [Buildroot] uClibc-admins post from martin@barkynet.com
-	requires approval
-In-Reply-To: <20151202220028.GG23754@vapier.lan> (Mike Frysinger's message of
- "Wed, 2 Dec 2015 17:00:28 -0500")
-References: <mailman.2362.1449086836.25824.uclibc-admins@busybox.net>
- <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
- <878u5cfs82.fsf@dell.be.48ers.dk> <20151202220028.GG23754@vapier.lan>
-Message-ID: <87a8pse9tb.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 02 Dec 2015 23:09:40 +0000
+Subject: [Buildroot] [Bug 8501] gunzip fails to uncompress files
+In-Reply-To: <bug-8501-163@https.bugs.busybox.net/>
+References: <bug-8501-163@https.bugs.busybox.net/>
+Message-ID: <bug-8501-163-FLGSH7rMqn@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+https://bugs.busybox.net/show_bug.cgi?id=8501
 
-Hi,
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- > i've added a bugzilla component, but not sure that'll really help smooth
- > over this scenario.  i looked at the API available, but i'm not seeing a
- > callback to update the versions list.
- > 	https://www.bugzilla.org/docs/4.4/en/html/api/
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|ASSIGNED                    |RESOLVED
 
- > there is one to get the current list:
- > 	https://www.bugzilla.org/docs/4.4/en/html/api/Bugzilla/WebService/Product.html
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed in git and will be part of 2015.11.1, thanks.
 
- > maybe the buildroot release scripts can print a reminder ?
+commit 63fdab6b4fcc860abd8dbc8342c7b01643a37e1a
+Author: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date:   Tue Dec 1 21:30:29 2015 +0100
 
-It actually already does, it was just late and I forgot:
+    busybox: add another upstream patch to fix (g)unzip
 
-echo "also don't forget to add the version to bugzilla"
+    0002-unzip.patch was added in 69516e0 to fix a segmentation fault in the
+    gunzip applet.  However, it introduced a new issue that made the unzipping
+    of some files fail.
+
+    Add an upstream patch that fixes this new issue.
+
+    Fixes #8501.
+
+    Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+    Cc: Jason Rush <rush0033@hotmail.com>
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+You are receiving this mail because:
+You are on the CC list for the bug.
