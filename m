@@ -1,29 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 02 Dec 2015 19:38:43 +0000
-Subject: [Buildroot] [Bug 4021] uClibc: undefined reference to
-	`__GI___errno_location'
-In-Reply-To: <bug-4021-163@https.bugs.busybox.net/>
-References: <bug-4021-163@https.bugs.busybox.net/>
-Message-ID: <bug-4021-163-Dz7f7tlw5S@https.bugs.busybox.net/>
+Date: Wed, 02 Dec 2015 19:38:55 +0000
+Subject: [Buildroot] [Bug 8066] nodejs crashes when built with gcc 4.9
+In-Reply-To: <bug-8066-163@https.bugs.busybox.net/>
+References: <bug-8066-163@https.bugs.busybox.net/>
+Message-ID: <bug-8066-163-NqaMoPn55P@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4021
+https://bugs.busybox.net/show_bug.cgi?id=8066
 
 Mike Frysinger <vapier@gentoo.org> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-              Build|                            |x86
-             Target|sparc                       |
-               Host|x86                         |sparc
+               Host|Xeon                        |Xeon x86_64 i7
+             Target|x86_64 i7                   |
 
 -- 
 You are receiving this mail because:
 You are on the CC list for the bug.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/427b46c3/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/80af0736/attachment.html>
