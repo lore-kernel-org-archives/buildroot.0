@@ -1,45 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Dec 2015 14:58:57 -0300
-Subject: [Buildroot] [PATCH] fakeroot: bump to version 1.20.2
-Message-ID: <1449079137-8470-1-git-send-email-gustavo@zacarias.com.ar>
+From: Nikolay Dimitrov <picmaster@mail.bg>
+Date: Wed, 02 Dec 2015 20:38:52 +0200
+Subject: [Buildroot] [psa] various server software upgrades
+In-Reply-To: <20151202173134.GB23754@vapier.lan>
+References: <20151202073542.GY23754@vapier.lan> <565EB926.6030809@mail.bg>
+ <20151202173134.GB23754@vapier.lan>
+Message-ID: <565F3ABC.5030500@mail.bg>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/fakeroot/fakeroot.hash | 6 ++++--
- package/fakeroot/fakeroot.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Hi Mike,
 
-diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
-index c9e1f0c..f0d436e 100644
---- a/package/fakeroot/fakeroot.hash
-+++ b/package/fakeroot/fakeroot.hash
-@@ -1,2 +1,4 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/f/fakeroot/fakeroot_1.18.4-2.debian.tar.gz
--sha256	0a359efa3e9496c33234b3e9c89306a09bb4da9d33de43c261f1d8447e6ebea2	fakeroot_1.18.4.orig.tar.bz2
-+# From http://snapshot.debian.org/package/fakeroot/1.20.2-1/
-+sha1	367040df07043edb630942b21939e493f3fad888	fakeroot_1.20.2.orig.tar.bz2
-+# Calculated based on the hash above
-+sha256	7c0a164d19db3efa9e802e0fc7cdfeff70ec6d26cdbdc4338c9c2823c5ea230c	fakeroot_1.20.2.orig.tar.bz2
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 3f1c803..8bb9294 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--FAKEROOT_VERSION = 1.18.4
-+FAKEROOT_VERSION = 1.20.2
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
--FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/f/fakeroot
-+FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
- FAKEROOT_LICENSE = GPLv3+
- FAKEROOT_LICENSE_FILES = COPYING
- 
--- 
-2.4.10
+On 12/02/2015 07:31 PM, Mike Frysinger wrote:
+> On 02 Dec 2015 11:25, Nikolay Dimitrov wrote:
+>> On 12/02/2015 09:35 AM, Mike Frysinger wrote:
+>>> the busybox.net software has been languishing for quite a long time,
+>>> so i gave it a strong kick today.  just about every piece of software
+>>> has been upgraded on the box including bugzilla.  my various testing
+>>> looks like it still works, but if you guys notice anything weird, feel
+>>> free to let me know.
+>>> -mike
+>>
+>> I started seeing this warning in the last few days:
+>>
+>> Cloning into 'buildroot'...
+>> remote: warning: unable to access '/root/.config/git/attributes':
+>> Permission denied
+>> ...
+>
+> i fixed that once, but my fix was reset.  i've made it work in a diff
+> way now though so you shouldn't see that again.
+> -mike
+
+Seems to work better now. Thanks!
+
+Regards,
+Nikolay
