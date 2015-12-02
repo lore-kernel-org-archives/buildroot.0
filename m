@@ -1,39 +1,43 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 2 Dec 2015 12:55:50 +0000
-Subject: [Buildroot] [PATCH] libcurl: bump version to 7.46.0
-Message-ID: <1449060950-22761-1-git-send-email-Vincent.Riera@imgtec.com>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Wed, 2 Dec 2015 07:00:24 -0600
+Subject: [Buildroot] [PATCH v6] package/unscd: new package
+In-Reply-To: <20151201224506.6555d6b5@free-electrons.com>
+References: <1448982954-5055-1-git-send-email-rdkehn@yahoo.com>
+ <565E130B.7090201@mind.be>
+ <20151201224506.6555d6b5@free-electrons.com>
+Message-ID: <20151202130024.GA547@dkarchlinux64.currentcomm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas and Arnout,
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index d8c6ea1..eb5bab1 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 65154e66b9f8a442b57c436904639507b4ac37ec13d6f8a48248f1b4012b98ea  curl-7.45.0.tar.bz2
-+sha256 b7d726cdd8ed4b6db0fa1b474a3c59ebbbe4dcd4c61ac5e7ade0e0270d3195ad  curl-7.46.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 7c259b2..e64014d 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.45.0
-+LIBCURL_VERSION = 7.46.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
--- 
-2.4.10
+On Tue, Dec 01, 2015 at 10:45:06PM +0100, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+> 
+> On Tue, 1 Dec 2015 22:37:15 +0100, Arnout Vandecappelle wrote:
+> 
+> > > +define UNSCD_EXTRACT_CMDS
+> > > +	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/nscd.c
+> > > +endef
+> > > +
+> > > +define UNSCD_BUILD_CMDS
+> > > +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) nscd
+> > 
+> >  Although it works because of the default rules, it looks very strange to me to
+> > call make when there is no Makefile. I would instead call the compiler directly:
+> > 
+> > 	cd $(@D); \
+> > 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o nscd nscd.c
+> > 
+> >  What do the others think?
+> 
+> Fully agree with you.
+
+I will change as suggested. For what it's worth, I was following the
+whetstone recipe (which is also a single source file).
+
+Regards,
+...doug
