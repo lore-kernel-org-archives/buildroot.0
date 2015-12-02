@@ -1,60 +1,39 @@
-From: Jordon Wu <jordon.wu@gmail.com>
-Date: Wed, 2 Dec 2015 12:57:49 +0800
-Subject: [Buildroot] [PATCH 1/1] qt5/qt53d: new package
-In-Reply-To: <20151201132035.3058e4f6@free-electrons.com>
-References: <1448950356-5581-1-git-send-email-jordon.wu@gmail.com>
- <20151201132035.3058e4f6@free-electrons.com>
-Message-ID: <CAAH=mgMQagBAV7+c3+QZFsoOwHOzdAkhmDd3-hPrnr6Cs6KK7w@mail.gmail.com>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Wed, 2 Dec 2015 00:20:53 -0500
+Subject: [Buildroot] [PATCH] busybox: add another upstream patch to fix
+ unzip
+In-Reply-To: <87h9k1iyu8.fsf@dell.be.48ers.dk>
+References: <1449001829-26507-1-git-send-email-arnout@mind.be>
+ <20151201223025.0b777fd7@free-electrons.com>
+ <87y4ddj0k5.fsf@dell.be.48ers.dk> <565E1A6A.2030707@mind.be>
+ <87h9k1iyu8.fsf@dell.be.48ers.dk>
+Message-ID: <20151202052053.GW23754@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 01 Dec 2015 23:33, Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>  >> > Sad to have to do this just one day after 2015.11 release, but it's
+>  >> > really not great to have such a major issue left in 2015.11.
+>  >> 
+>  >> No, indeed not :/ And the patch was even an upstream fix. Where does
+>  >> this new patch come from, I don't see it on
+>  >> http://busybox.net/downloads/fixes-1.24.1/?
+> 
+>  >  I took it straight from git.
+> 
+> Ahh, saw it now. It would be good to get Denys to add it to the fixes
+> directory as well.
 
-I tested Peter's patch, It didn't handle qt3d's plugins, qml and examples
-cases.
-
-Best Regards
-Jordon Wu
-
-2015-12-01 20:20 GMT+08:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
-
-> Dear Jordon Wu,
->
-> On Tue,  1 Dec 2015 14:12:36 +0800, Jordon Wu wrote:
-> > Signed-off-by: Jordon Wu <jordon.wu@gmail.com>
-> > ---
-> >  package/qt5/Config.in        |  1 +
-> >  package/qt5/qt53d/Config.in  | 22 ++++++++++++++++
-> >  package/qt5/qt53d/qt53d.hash |  4 +++
-> >  package/qt5/qt53d/qt53d.mk   | 61
-> ++++++++++++++++++++++++++++++++++++++++++++
-> >  4 files changed, 88 insertions(+)
-> >  create mode 100755 package/qt5/qt53d/Config.in
-> >  create mode 100755 package/qt5/qt53d/qt53d.hash
-> >  create mode 100755 package/qt5/qt53d/qt53d.mk
->
-> For information, we have already a patch pending to add qt5 3d, from
-> Peter Seiderer, which was sent just a few days ago. See:
-> http://patchwork.ozlabs.org/patch/547753/.
->
-> Maybe you can compare your implementation proposed by Peter (in Cc) and
-> see if there's anything to add to Peter's patch ?
->
-> Don't hesitate to test Peter's patch and provide your Tested-by if it
-> works for you.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
+done
+-mike
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/940fc91e/attachment-0001.html>
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/9ad4a69b/attachment.asc>
