@@ -1,43 +1,74 @@
-From: rdkehn at yahoo.com <rdkehn@yahoo.com>
-Date: Wed, 2 Dec 2015 07:00:24 -0600
-Subject: [Buildroot] [PATCH v6] package/unscd: new package
-In-Reply-To: <20151201224506.6555d6b5@free-electrons.com>
-References: <1448982954-5055-1-git-send-email-rdkehn@yahoo.com>
- <565E130B.7090201@mind.be>
- <20151201224506.6555d6b5@free-electrons.com>
-Message-ID: <20151202130024.GA547@dkarchlinux64.currentcomm.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Wed, 2 Dec 2015 11:00:46 -0200
+Subject: [Buildroot] [PATCH v2] musl: add a sys/queue.h implementation
+In-Reply-To: <20151202104554.1c667515@free-electrons.com>
+References: <1449017908-7935-1-git-send-email-sergio.prado@e-labworks.com>
+ <20151202104554.1c667515@free-electrons.com>
+Message-ID: <CANu7NGu6Y7Uh02hygwa6FfyjL7kgExhZ14wzyLGbNcMGSrnRKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas and Arnout,
+Hi Thomas,
 
-On Tue, Dec 01, 2015 at 10:45:06PM +0100, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Tue, 1 Dec 2015 22:37:15 +0100, Arnout Vandecappelle wrote:
-> 
-> > > +define UNSCD_EXTRACT_CMDS
-> > > +	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/nscd.c
-> > > +endef
-> > > +
-> > > +define UNSCD_BUILD_CMDS
-> > > +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) nscd
-> > 
-> >  Although it works because of the default rules, it looks very strange to me to
-> > call make when there is no Makefile. I would instead call the compiler directly:
-> > 
-> > 	cd $(@D); \
-> > 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o nscd nscd.c
-> > 
-> >  What do the others think?
-> 
-> Fully agree with you.
+2015-12-02 7:45 GMT-02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-I will change as suggested. For what it's worth, I was following the
-whetstone recipe (which is also a single source file).
+> Dear Sergio Prado,
+>
+> On Tue,  1 Dec 2015 22:58:28 -0200, Sergio Prado wrote:
+> > Musl does not provide a 'sys/queue.h' implementation, and this has been
+> > a problem for packages that depend on it.
+> >
+> > So lets create a package called netbsd-queue that will install a
+> > 'sys/queue.h' in the staging directory when enabled, based on the
+> > NetBSD implementation.
+> >
+> > Musl toolchain and external toolchain packages will depend on this
+> > package, so that 'sys/queue.h' will be always installed when compiling
+> > with a musl based toolchain.
+> >
+> > Tested on ARM and x86 in the following cases:
+> >   - Buildroot musl toolchain.
+> >   - External musl toolchain without 'sys/queue.h'.
+> >   - External musl toolchain with 'sys/queue.h'.
+> >
+> > Fixes:
+> >
+> http://autobuild.buildroot.net/results/24bad2d06ab40024dacf136bee722072d587f84e
+> >
+> > And possibly many others.
+> >
+> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+>
+> From a quick look, it looks good. Can you chase down the packages that
+> had their own workaround for the lack of queue.h ?
+>
 
-Regards,
-...doug
+OK. I will do it.
+
+
+>
+> At the moment, I see only libtirpc, but I might have missed others. If
+> you could prepare a patch for those packages to make them use the now
+> globally available queue.h, it would be good.
+
+
+> Thanks!
+>
+
+Thanks,
+
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/898bf979/attachment.html>
