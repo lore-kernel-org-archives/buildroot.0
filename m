@@ -1,39 +1,153 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Dec 2015 12:02:12 -0300
-Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.6
-Message-ID: <1449068532-14408-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 2 Dec 2015 15:03:17 +0000
+Subject: [Buildroot] [PATCH v6 20/33] package/enlightenment: bump to
+ version 0.19.12
+In-Reply-To: <1446401289-9059-21-git-send-email-romain.naour@openwide.fr>
+References: <1446401289-9059-1-git-send-email-romain.naour@openwide.fr>
+ <1446401289-9059-21-git-send-email-romain.naour@openwide.fr>
+Message-ID: <565F0835.4020807@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dbus/dbus.hash | 2 +-
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Romain,
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 87efd4b..10ebc81 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	ad7dcad73ad9b0ff55819985d354eacfffe07e2eb8c763e155efc21d6001084b  dbus-1.10.4.tar.gz
-+sha256	b5fefa08a77edd76cd64d872db949eebc02cf6f3f8be82e4bbc641742af5d35f  dbus-1.10.6.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 79cd678..ed54575 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.10.4
-+DBUS_VERSION = 1.10.6
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 GPLv2+
- DBUS_LICENSE_FILES = COPYING
--- 
-2.4.10
+Version 0.20.0 released :P
+
+Regards,
+
+Vincent.
+
+On 01/11/15 18:07, Romain Naour wrote:
+> Use the newly added libefl package wich provide a new version
+> of efl libraries.
+> This new version needs libelementary dependency.
+> 
+> Update upstream url, add hash file and use xz archive.
+> 
+> Select png and jpeg image loader since enlightenment_start
+> fail at runtime if png and jpeg image loader are not
+> available in elf libraries.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+> v6: disable systemd and linux-pam explicitely since it's auto
+>     detected. (A patch adding their support can be added latter)
+> v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
+>     remove comment on dependencies
+> v4: update Config.in to use libefl
+>     improve commit log
+>     keep the dependency on threads
+> v3: bymp to 0.19.12
+>     remove trailing slash (Vicente Bergas)
+> v2: bump to 0.19.9
+>     remove glibc only dependency
+> ---
+>  package/enlightenment/Config.in          | 23 +++++++----------------
+>  package/enlightenment/enlightenment.hash |  2 ++
+>  package/enlightenment/enlightenment.mk   | 26 +++++++++++---------------
+>  3 files changed, 20 insertions(+), 31 deletions(-)
+>  create mode 100644 package/enlightenment/enlightenment.hash
+> 
+> diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+> index 9dad571..1a39ac4 100644
+> --- a/package/enlightenment/Config.in
+> +++ b/package/enlightenment/Config.in
+> @@ -8,26 +8,17 @@ config BR2_PACKAGE_ENLIGHTENMENT
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	# libedbus -> dbus, efl libraries
+>  	depends on BR2_USE_MMU
+> +	depends on BR2_PACKAGE_EFL
+>  	depends on BR2_PACKAGE_XORG7
+>  	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
+>  	depends on BR2_ARCH_HAS_ATOMICS
+> -	select BR2_PACKAGE_EFL
+> -	select BR2_PACKAGE_LIBECORE
+> -	select BR2_PACKAGE_LIBECORE_X
+> -	select BR2_PACKAGE_LIBEINA
+> -	select BR2_PACKAGE_LIBEET
+> -	select BR2_PACKAGE_LIBEVAS
+> -	select BR2_PACKAGE_LIBEVAS_JPEG
+> -	select BR2_PACKAGE_LIBEVAS_PNG
+> -	select BR2_PACKAGE_LIBEVAS_EET
+> -	select BR2_PACKAGE_LIBECORE_EVAS
+> -	select BR2_PACKAGE_LIBEDJE
+> -	select BR2_PACKAGE_LIBEFREET
+> -	select BR2_PACKAGE_LIBEDBUS
+> -	select BR2_PACKAGE_LIBEIO
+> -	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+> +	select BR2_PACKAGE_LIBEFL_X
+> +	select BR2_PACKAGE_LIBEFL_JPEG # needed at runtime by enlightenment_start
+> +	select BR2_PACKAGE_LIBEFL_PNG # needed at runtime by enlightenment_start
+> +	select BR2_PACKAGE_LIBELEMENTARY
+>  	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+>  	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+> +	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+>  	help
+>  	  Enlightenment, also known simply as E, is a stacking window
+>  	  manager for the X Window System which can be used alone or
+> @@ -38,6 +29,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
+>  	  http://www.enlightenment.org/
+>  
+>  comment "enlightenment needs a toolchain w/ wchar, C++, threads"
+> -	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
+> +	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_ARCH_HAS_ATOMICS
+> diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+> new file mode 100644
+> index 0000000..c9b1284
+> --- /dev/null
+> +++ b/package/enlightenment/enlightenment.hash
+> @@ -0,0 +1,2 @@
+> +# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
+> +sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
+> diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+> index ddebe06..f2e0bc3 100644
+> --- a/package/enlightenment/enlightenment.mk
+> +++ b/package/enlightenment/enlightenment.mk
+> @@ -4,30 +4,26 @@
+>  #
+>  ################################################################################
+>  
+> -ENLIGHTENMENT_VERSION = 0.17.6
+> -ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
+> +ENLIGHTENMENT_VERSION = 0.19.12
+> +ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+> +ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+>  ENLIGHTENMENT_LICENSE = BSD-2c
+>  ENLIGHTENMENT_LICENSE_FILES = COPYING
+>  
+> -ENLIGHTENMENT_DEPENDENCIES = 	\
+> -	host-pkgconf 		\
+> -	libecore 		\
+> -	libeet 			\
+> -	libeina 		\
+> -	libevas 		\
+> +ENLIGHTENMENT_DEPENDENCIES = \
+> +	host-pkgconf \
+> +	host-libefl \
+> +	libefl \
+> +	libelementary \
+>  	libevas-generic-loaders \
+> -	libedje 		\
+> -	libefreet 		\
+> -	libedbus 		\
+> -	libeio 			\
+> -	host-libedje 		\
+> -	host-libeet		\
+>  	xcb-util-keysyms
+>  
+>  ENLIGHTENMENT_CONF_OPTS = \
+>  	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+>  	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+> -	--disable-rpath
+> +	--disable-pam \
+> +	--disable-rpath \
+> +	--disable-systemd
+>  
+>  # uClibc has an old incomplete sys/ptrace.h for powerpc & sparc
+>  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
+> 
