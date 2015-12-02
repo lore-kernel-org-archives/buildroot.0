@@ -1,49 +1,21 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 02 Dec 2015 20:00:45 +0000
-Subject: [Buildroot] [Bug 8296] nodejs 0.12.7 - npm crashes (seg core dump)
-In-Reply-To: <bug-8296-163@https.bugs.busybox.net/>
-References: <bug-8296-163@https.bugs.busybox.net/>
-Message-ID: <bug-8296-163-bhZlrmlnfE@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 02 Dec 2015 21:27:41 +0100
+Subject: [Buildroot] [PATCH] libcurl: bump version to 7.46.0
+In-Reply-To: <1449060950-22761-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 2 Dec 2015 12:55:50 +0000")
+References: <1449060950-22761-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87k2owh9z6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8296
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
---- Comment #4 from Martin <martin@barkynet.com> ---
-Created attachment 6241
-  --> https://bugs.busybox.net/attachment.cgi?id=6241&action=edit
-backtrace from npm core dump
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-I have attached a back trace from the npm crash.  I see
-node::os::GetInterfaceAddresses is called so as an experiment i tried the
-following javascript
-
-    var os = require('os');
-    var ifaces = os.networkInterfaces();
-    console.log(ifaces);
-
-This produces the same back trace as running npm.  Running this code using
-glibc works.  So it seems the issues is npm is using os.networkInterfaces()
-which works with glibc but not uclibc.
-
-You can find the code for node::os::GetInterfaceAddresses in node.js v0.12.7
-here
-https://github.com/nodejs/node/blob/d3492aa7b386946e3a156440cad346e5b0a82838/src/node_os.cc#L225-L300.
-
-The back trace shows the crash is in OneByteString which is called in several
-places in node::os::GetInterfaceAddresses.  The data it's operating on comes
-from a call to uv_interface_addresses() which is part libuv that's in node.js. 
-The code for uv_interface_addresses() is here
-https://github.com/nodejs/node/blob/d3492aa7b386946e3a156440cad346e5b0a82838/deps/uv/src/unix/linux-core.c#L786-L878.
-
-I suspect uv_interface_addresses() is where the issue lies.
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/48523521/attachment.html>
+Bye, Peter Korsgaard
