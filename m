@@ -1,39 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Dec 2015 22:54:59 +0100
-Subject: [Buildroot] [PATCH v7 1/1] package/unscd: new package
-In-Reply-To: <1449068177-24100-1-git-send-email-rdkehn@yahoo.com>
-References: <1449068177-24100-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <565F68B3.7020309@mind.be>
+Date: Wed, 2 Dec 2015 22:58:00 +0100
+Subject: [Buildroot] [PATCH 1/4] dhrystone: add a hash file
+In-Reply-To: <87poyofulj.fsf@dell.be.48ers.dk>
+References: <1449059383-62131-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87poyofulj.fsf@dell.be.48ers.dk>
+Message-ID: <565F6968.7090403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02-12-15 15:56, Doug Kehn wrote:
-> A daemon which handles passwd, group and host lookups for running
-> programs and caches the results for the next query. This package is
-> intended to replace glibc nscd. Presently, glibc nscd is not installed
-> by Buildroot.
+On 02-12-15 21:45, Peter Korsgaard wrote:
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 > 
-> unscd depends on glibc because it relies on glibc function
-> __nss_disable_nscd.
+>  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>  > ---
+>  >  package/dhrystone/dhrystone.hash | 2 ++
+>  >  1 file changed, 2 insertions(+)
+>  >  create mode 100644 package/dhrystone/dhrystone.hash
 > 
-> nscd.conf is taken from glibc with unused configurations removed.
+>  > diff --git a/package/dhrystone/dhrystone.hash b/package/dhrystone/dhrystone.hash
+>  > new file mode 100644
+>  > index 0000000..9ea22a3
+>  > --- /dev/null
+>  > +++ b/package/dhrystone/dhrystone.hash
+>  > @@ -0,0 +1,2 @@
+>  > +# Locally calculated
+>  > +sha256 038a7e9169787125c3451a6c941f3aca5db2d2f3863871afcdce154ef17f4e3e  dhry-c
 > 
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> Hmm, what are we going to do if this file ever changes?
+> 
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Isn't that the whole point of the hash, that we notice when it changes?
 
+ That said, I'm not sure what we can do about it when that happens, except
+switch to a more reliable mirror.
 
  Regards,
  Arnout
-
-
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
