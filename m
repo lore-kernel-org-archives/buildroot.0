@@ -1,29 +1,56 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 2 Dec 2015 19:17:41 -0300
-Subject: [Buildroot] [PATCH 8/9] wireshark: add optional geoip support
-In-Reply-To: <20151202215256.GH5773@free.fr>
+Date: Wed, 2 Dec 2015 19:21:24 -0300
+Subject: [Buildroot] [PATCH 3/9] wireshark: enable GUI options
+In-Reply-To: <20151202215508.GI5773@free.fr>
 References: <1449089301-29762-1-git-send-email-gustavo@zacarias.com.ar>
- <1449089301-29762-8-git-send-email-gustavo@zacarias.com.ar>
- <20151202215256.GH5773@free.fr>
-Message-ID: <565F6E05.8000306@zacarias.com.ar>
+ <1449089301-29762-3-git-send-email-gustavo@zacarias.com.ar>
+ <20151202215508.GI5773@free.fr>
+Message-ID: <565F6EE4.4020201@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/12/15 18:52, Yann E. MORIN wrote:
+On 02/12/15 18:55, Yann E. MORIN wrote:
 
-> Is it needed to specify the path? Can't we just have;
->      WIRESHARK_CONF_OPTS += --with-geoip
+
+> And add this variable, too:
 >
-> If the path is needed, then a little blrb in the commit log would be
-> nice.
+>      WIRESHARK_HAS_GUI = NO
+...
+>> +# Qt4 needs accessibility, we don't support it
+>> +ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
+>> +WIRESHARK_CONF_OPTS += --with-qt=5
+>> +WIRESHARK_DEPENDENCIES += qt5base
+>> +# Seems it expects wrappers and passes a -qt=X parameter for version
+>> +WIRESHARK_MAKE_OPTS += \
+>> +	MOC="$(HOST_DIR)/usr/bin/moc" \
+>> +	RCC="$(HOST_DIR)/usr/bin/rcc" \
+>> +	UIC="$(HOST_DIR)/usr/bin/uic"
+>> +else
+>> +WIRESHARK_CONF_OPTS += --with-qt=no
 >
-> And I forgot to add a similar comment for the --with-XXX=yes options.
+> Ditto.
+>
+>> +endif
+>> +
+>> +# No GUI at all
+>> +ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3)$(BR2_PACKAGE_QT5BASE_WIDGETS),)
+>
+> And then change that condition to:
+>
+>      ifeq ($(WIRESHARK_HAS_GUI),NO)
+>
+> which is simpler to manage should there be other toolkit we can use in
+> the future.
 
 Hi.
-I don't have geoip in the distro, however it doesn't use pkgconfig so in 
-this case and given other wireshark options having issues "better safe 
-than sorry".
+Well, only one gtk and/or qt variant can be built at the same time, and 
+i don't expect any other major toolkit to show up in the near future.
+I think it can be adjusted in the future if that's the case, but right 
+now that's only cosmetic.
+If someone fails to specify --disable-wireshark the wireshark 
+buildsystem will balk anyway since it's default on and won't detect any 
+usable toolkit.
 Regards.
