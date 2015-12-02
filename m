@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Dec 2015 22:02:17 +0100
-Subject: [Buildroot] [PATCH 4/9] wireshark: add optional libnl suport
-In-Reply-To: <1449089301-29762-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 2 Dec 2015 22:08:51 +0100
+Subject: [Buildroot] [PATCH 5/9] wireshark: add optional c-ares support
+In-Reply-To: <1449089301-29762-5-git-send-email-gustavo@zacarias.com.ar>
 References: <1449089301-29762-1-git-send-email-gustavo@zacarias.com.ar>
- <1449089301-29762-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151202210217.GC5773@free.fr>
+ <1449089301-29762-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151202210851.GD5773@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,21 +26,23 @@ Yann E. MORIN.
 >  1 file changed, 7 insertions(+)
 > 
 > diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-> index 9a8d370..d60f3b4 100644
+> index d60f3b4..2940d26 100644
 > --- a/package/wireshark/wireshark.mk
 > +++ b/package/wireshark/wireshark.mk
-> @@ -57,4 +57,11 @@ ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3)$(BR2_PACKAGE_QT5BASE_WIDGETS)
+> @@ -57,6 +57,13 @@ ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3)$(BR2_PACKAGE_QT5BASE_WIDGETS)
 >  WIRESHARK_CONF_OPTS += --disable-wireshark
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_LIBNL),y)
-> +WIRESHARK_CONF_OPTS += --with-libnl
-> +WIRESHARK_DEPENDENCIES += libnl
+> +ifeq ($(BR2_PACKAGE_C_ARES),y)
+> +WIRESHARK_CONF_OPTS += --with-c-ares=$(STAGING_DIR)/usr
+> +WIRESHARK_DEPENDENCIES += c-ares
 > +else
-> +WIRESHARK_CONF_OPTS += --without-libnl
+> +WIREHARK_CONF_OPTS += --without-c-ares
 > +endif
 > +
->  $(eval $(autotools-package))
+>  ifeq ($(BR2_PACKAGE_LIBNL),y)
+>  WIRESHARK_CONF_OPTS += --with-libnl
+>  WIRESHARK_DEPENDENCIES += libnl
 > -- 
 > 2.4.10
 > 
