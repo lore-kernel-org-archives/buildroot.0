@@ -1,49 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Dec 2015 22:11:53 +0100
-Subject: [Buildroot] [PATCH 9/9] wireshark: add optional sbc support
-In-Reply-To: <565F5BCA.4070802@zacarias.com.ar>
-References: <1449089301-29762-1-git-send-email-gustavo@zacarias.com.ar>
- <1449089301-29762-9-git-send-email-gustavo@zacarias.com.ar>
- <20151202205636.GR2193@tarshish> <565F5BCA.4070802@zacarias.com.ar>
-Message-ID: <20151202211153.GE5773@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 02 Dec 2015 22:36:29 +0100
+Subject: [Buildroot] uClibc-admins post from martin@barkynet.com
+	requires approval
+In-Reply-To: <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
+ (Bernhard Reutner-Fischer's message of "Wed, 2 Dec 2015 21:29:44
+ +0100")
+References: <mailman.2362.1449086836.25824.uclibc-admins@busybox.net>
+ <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
+Message-ID: <878u5cfs82.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
-On 2015-12-02 17:59 -0300, Gustavo Zacarias spake thusly:
-> On 02/12/15 17:56, Baruch Siach wrote:
-> 
-> >Hi Gustavo,
-> >
-> >On Wed, Dec 02, 2015 at 05:48:21PM -0300, Gustavo Zacarias wrote:
-> >>+ifeq ($(BR2_PACKAGE_SBC),y)
-> >>+WIRESHARK_CONF_OPTS += --with-sbc=yes
-> >>+WIRESHARK_DEPENDENCIES += sbc
-> >>+else
-> >>+WIRESHARK_CONF_OPTS += --with-sbc=no
-> >>+endif
-> >
-> >Which package is that? I couldn't find BR2_PACKAGE_SBC in current master.
-> 
-> Hi Baruch.
-> http://patchwork.ozlabs.org/patch/545815/
-> Already warned Peter about that prereq on IRC.
+ >> From: Martin Bark <martin@barkynet.com>
+ >> Cc:
+ >> Date: Wed, 2 Dec 2015 20:07:13 +0000
+ >> Subject: 2015.11 missing from version field
+ >> Hi,
+ >> 
+ >> Can you please add 2015.11 to the version field in bugzilla.
 
-Then, you could have said so in a post-commit note, so we all know that
-this package is pending in the patchwork.
+ > Done. I'd prefer if you could ask the buildroot folks directly next time.
 
-Regards,
-Yann E. MORIN.
+Yes, me too. I normally remember to add the releases, but this time I
+forgot.
 
+Thanks for fixing it.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
