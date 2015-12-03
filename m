@@ -1,22 +1,16 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Wed, 2 Dec 2015 18:53:56 -0500
-Subject: [Buildroot] [psa] shutting down svn web services
-Message-ID: <20151202235356.GI23754@vapier.lan>
+From: tomhearingy <tomhearingy@163.com>
+Date: Thu, 3 Dec 2015 11:47:06 +0800 (CST)
+Subject: [Buildroot] =?gbk?q?HELP=A3=BAdoes_anybody_have_kernel_2=2E4_conf?=
+	=?gbk?q?ig_file=3F?=
+Message-ID: <39e1fb08.9346.15165f35df4.Coremail.tomhearingy@163.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i'm not sure how many people care since it seems to have been broken for a
-while, but i'm officially turning off svn access via the webserver, as well
-as the viewvcs instance.  i'm leaving open the raw rsync and svn access as
-both are trivial to maintain and rely on other services we want to keep.
--mike
+    Hi, bros. I have tryed to cross compile a linux 2.4.30 kernel. As experted, i failed. Then i found buildroot provided serverl .config file, but from 2.6. So i want to ask for some help that is there anyone having any suggests to build kernel 2.4 or to provide a .config file.
+    Many thanks.
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151202/7b5f4aac/attachment-0001.asc>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151203/54559b7b/attachment.html>
