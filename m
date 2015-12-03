@@ -1,58 +1,78 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Thu,  3 Dec 2015 14:49:42 -0300
-Subject: [Buildroot] [PATCH v2] openssl: security bump to version 1.0.2e
-Message-ID: <1449164982-20789-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Dec 2015 19:36:39 +0100
+Subject: [Buildroot] [PATCH 08/51] core/legal-info: allow ignoring
+ packages from the legal-info
+In-Reply-To: <56607808.2020509@lucaceresoli.net>
+References: <cover.1448289515.git.yann.morin.1998@free.fr>
+ <2462093e5e97e8e420b7119ac6ca6078e39f4621.1448289515.git.yann.morin.1998@free.fr>
+ <20151123212649.794b7583@free-electrons.com>
+ <87ziy3yrxm.fsf@dell.be.48ers.dk>
+ <56607808.2020509@lucaceresoli.net>
+Message-ID: <20151203183639.GC3834@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Luca, Thomas, Peter,
 
-Fixes:
-CVE-2015-3193 - BN_mod_exp may produce incorrect results on x86_64
-CVE-2015-3194 - Certificate verify crash with missing PSS parameter
-CVE-2015-3195 - X509_ATTRIBUTE memory leak
+On 2015-12-03 18:12 +0100, Luca Ceresoli spake thusly:
+> Peter Korsgaard wrote:
+> >>>>>>"Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> >  > Can you give your opinion on the semantic/usage of the
+> >  > <pkg>_REDISTRIBUTE variable.
+> >
+> >  > I am personally not a big fan of the non-boolean behavior introduced by
+> >  > this patch for this variable. With this patch, <pkg>_REDISTRIBUTE
+> >  > switches from a normal YES/NO boolean variable to a weird tristate
+> >  > variable YES/IGNORE/NO.
+> >
+> >  > I have already stated my opinion that there should be two boolean
+> >  > variables instead:
+> >
+> >  >  * One which allows the package to indicate if the package should be
+> >  >    mentioned in the legal-info or not.
+> >
+> >  >  * One which allows the package to indicate if the package "source"
+> >  >    should be saved to the legal-info or not. Of course, this variable
+> >  >    is ignored if the first one is set to "NO".
+> >
+> >  > This is IMO a lot clearer than a single variable with the YES/IGNORE/NO
+> >  > values.
+> >
+> >  > Peter ?
+> >
+> >I thought I had already replied to this, but perhaps that was only on
+> >IRC? In general, I feel that the legal-info is purely an aid that can
+> >serve as input to whatever license compliancy effort the user has to do
+> >- E.G. include the various license texts in the user manual, provide
+> >source offer and so on, so if the data contains a bit of extra
+> >information that isn't such a big deal.
+> 
+> Agreed, yet it's good to automate whatever we can _and_ is simple to
+> implement. Since Yann's is only an 8-lines patch (+docs), I like it.
+> 
+> >
+> >But ok, if we want to do it I would atleast want it to be as simple and
+> >easy to use as possible. I agree with Thomas that splitting the two
+> >things we want to do into two seperate variables is probably the easiest
+> >to understand.
+> 
+> I proposed one three-valued variable, but I'm fine with the two boolean
+> idea as well. Thus, Yann, can you re-cook it accordingly?
 
-Enable IDEA as well since otherwise the build breaks (always great
-upstream) - it's no longer patent encumbered.
+Yes, I will.
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+Thanks all for the input! :-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 355be79..bed1c1c 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,2 +1,2 @@
--# From https://www.openssl.org/source/openssl-1.0.2d.tar.gz.sha256
--sha256	671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8	openssl-1.0.2d.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2e.tar.gz.sha256
-+sha256	eee11def03647aa2267434a779608af6fca645023c9a194ddb82f14426835537	openssl-1.0.2e.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index da492ff..1f07df1 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.2d
-+OPENSSL_VERSION = 1.0.2e
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
-@@ -77,7 +77,6 @@ define OPENSSL_CONFIGURE_CMDS
- 			--libdir=/lib \
- 			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
- 			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
--			no-idea \
- 			no-rc5 \
- 			enable-camellia \
- 			enable-mdc2 \
+Regards,
+Yann E. MORIN.
+
 -- 
-2.4.10
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
