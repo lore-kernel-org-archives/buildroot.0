@@ -1,73 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Dec 2015 21:38:50 +0100
-Subject: [Buildroot] [git commit] hostapd: make ACS optional
-Message-ID: <20151203211258.BD3C58198D@busybox.osuosl.org>
+Date: Thu, 3 Dec 2015 14:25:01 +0100
+Subject: [Buildroot] [git commit] Makefile: fix copyright year
+Message-ID: <20151203211258.9918281991@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5919b1ef8b850248c4132f58a28926575aa8778f
+commit: http://git.buildroot.net/buildroot/commit/?id=ac2071b864b1dbf1af1a90ab2b98d05dd80f916e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make ACS (Automatic Channel Selection) support in hostapd optional.
-There's a clash of standard vs. propietary solutions, hence when hostapd
-has builtin ACS support (standard) and it's enabled (channel=0 in the
-config) this will preclude the propietary driver from using ACS (it
-won't work at all).
+It is no longer 2014.
 
-See:
-http://e2e.ti.com/support/wireless_connectivity/f/307/p/465333/1669270
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hostapd/Config.in  | 10 ++++++++++
- package/hostapd/hostapd.mk |  5 ++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index 656645b..62fbb66 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -14,6 +14,16 @@ config BR2_PACKAGE_HOSTAPD
- 
- if BR2_PACKAGE_HOSTAPD
- 
-+config BR2_PACKAGE_HOSTAPD_ACS
-+	bool "Enable ACS"
-+	default y
-+	help
-+	  Enable support for standard ACS (Automatic Channel Selection).
-+	  Some propietary drivers use a custom algorithm which requires
-+	  channel to be set to '0' (which enables ACS in the config),
-+	  causing hostapd to use the standard one which doesn't work
-+	  for those cases.
-+
- config BR2_PACKAGE_HOSTAPD_EAP
- 	bool "Enable EAP"
- 	depends on !BR2_STATIC_LIBS
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index e22e53f..88867e6 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -15,7 +15,6 @@ HOSTAPD_LICENSE_FILES = README
- HOSTAPD_CONFIG_SET =
- 
- HOSTAPD_CONFIG_ENABLE = \
--	CONFIG_ACS \
- 	CONFIG_FULL_DYNAMIC_VLAN \
- 	CONFIG_HS20 \
- 	CONFIG_IEEE80211AC \
-@@ -45,6 +44,10 @@ HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
- HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOSTAPD_ACS),y)
-+HOSTAPD_CONFIG_ENABLE += CONFIG_ACS
-+endif
-+
- ifeq ($(BR2_PACKAGE_HOSTAPD_EAP),y)
- HOSTAPD_CONFIG_ENABLE += \
- 	CONFIG_EAP \
+diff --git a/Makefile b/Makefile
+index b2535d3..8e8514e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ #
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
+-# Copyright (C) 2014 by the Buildroot developers <buildroot@buildroot.org>
++# Copyright (C) 2014-2015 by the Buildroot developers <buildroot@buildroot.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
