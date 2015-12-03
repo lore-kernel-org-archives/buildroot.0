@@ -1,66 +1,64 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 3 Dec 2015 18:12:40 +0100
-Subject: [Buildroot] [PATCH 08/51] core/legal-info: allow ignoring
- packages from the legal-info
-In-Reply-To: <87ziy3yrxm.fsf@dell.be.48ers.dk>
+Date: Thu, 3 Dec 2015 18:13:07 +0100
+Subject: [Buildroot] [PATCH 09/51] core/pkg-virtual: ignore from
+ legal-info output
+In-Reply-To: <2788d5c56e3bbcb579972f9e81003d0625dfefa3.1448289515.git.yann.morin.1998@free.fr>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
- <2462093e5e97e8e420b7119ac6ca6078e39f4621.1448289515.git.yann.morin.1998@free.fr>
- <20151123212649.794b7583@free-electrons.com>
- <87ziy3yrxm.fsf@dell.be.48ers.dk>
-Message-ID: <56607808.2020509@lucaceresoli.net>
+ <2788d5c56e3bbcb579972f9e81003d0625dfefa3.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <56607823.40409@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Thomas, Peter,
+Dear Yann,
 
-Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Yann E. MORIN wrote:
+> Virtual packages really have nothing to save for legal-info, so we just
+> ignore them.
 >
->   > Peter,
->   > Can you give your opinion on the semantic/usage of the
->   > <pkg>_REDISTRIBUTE variable.
+> Currently, packages are only extracted if they define _LICENSE_FILES.
+> Follow-up patches will always extract and patch non-ignored packages, so
+> we would potentially see spurious "extracting" and "patching" messages
+> for virtual packages on the console, which would be a bit strange.
+> Ignoring virtual packages will get us a cleaner log.
 >
->   > I am personally not a big fan of the non-boolean behavior introduced by
->   > this patch for this variable. With this patch, <pkg>_REDISTRIBUTE
->   > switches from a normal YES/NO boolean variable to a weird tristate
->   > variable YES/IGNORE/NO.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>   docs/manual/adding-packages-virtual.txt | 3 +++
+>   package/pkg-virtual.mk                  | 2 ++
+>   2 files changed, 5 insertions(+)
 >
->   > I have already stated my opinion that there should be two boolean
->   > variables instead:
+> diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+> index a5f17a2..11a497d 100644
+> --- a/docs/manual/adding-packages-virtual.txt
+> +++ b/docs/manual/adding-packages-virtual.txt
+> @@ -56,6 +56,9 @@ The +.mk+ for the virtual package should just evaluate the +virtual-package+ mac
+>   The ability to have target and host packages is also available, with the
+>   +host-virtual-package+ macro.
 >
->   >  * One which allows the package to indicate if the package should be
->   >    mentioned in the legal-info or not.
+> +.Note:
+> +Virtual packages are automatically ignored when generating the +legal-info+ output.
+> +
+>   ==== Provider's +Config.in+ file
 >
->   >  * One which allows the package to indicate if the package "source"
->   >    should be saved to the legal-info or not. Of course, this variable
->   >    is ignored if the first one is set to "NO".
+>   When adding a package as a provider, only the +Config.in+ file requires some
+> diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+> index 9c68b51..1471b95 100644
+> --- a/package/pkg-virtual.mk
+> +++ b/package/pkg-virtual.mk
+> @@ -57,6 +57,8 @@ endif
+>   # Add dependency against the provider
+>   $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
 >
->   > This is IMO a lot clearer than a single variable with the YES/IGNORE/NO
->   > values.
->
->   > Peter ?
->
-> I thought I had already replied to this, but perhaps that was only on
-> IRC? In general, I feel that the legal-info is purely an aid that can
-> serve as input to whatever license compliancy effort the user has to do
-> - E.G. include the various license texts in the user manual, provide
-> source offer and so on, so if the data contains a bit of extra
-> information that isn't such a big deal.
+> +$(2)_REDISTRIBUTE = IGNORE
+> +
 
-Agreed, yet it's good to automate whatever we can _and_ is simple to
-implement. Since Yann's is only an 8-lines patch (+docs), I like it.
-
->
-> But ok, if we want to do it I would atleast want it to be as simple and
-> easy to use as possible. I agree with Thomas that splitting the two
-> things we want to do into two seperate variables is probably the easiest
-> to understand.
-
-I proposed one three-valued variable, but I'm fine with the two boolean
-idea as well. Thus, Yann, can you re-cook it accordingly?
+Ack on the idea, but of course the patch shall be re-written to use the
+boolean variables instead.
 
 -- 
 Luca
