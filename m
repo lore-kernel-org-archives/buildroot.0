@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Dec 2015 19:57:48 +0100
-Subject: [Buildroot] [git commit] sysstat: bump version to 11.0.8
-Message-ID: <20151203211258.AA8AF8198D@busybox.osuosl.org>
+Date: Thu, 3 Dec 2015 21:45:27 +0100
+Subject: [Buildroot] [git commit] dropbear: bump to version 2015.71
+Message-ID: <20151203211258.D335480ADB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b69288af7c99e3f7e92ddc10fa4af86685285e39
+commit: http://git.buildroot.net/buildroot/commit/?id=c2505381d0103d94e4202bad949fa37184b01920
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysstat/sysstat.hash | 4 ++--
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dropbear/dropbear.hash | 2 +-
+ package/dropbear/dropbear.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index f535b54..fc55ec9 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index 4b2d99a..934b26b 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
 @@ -1,2 +1,2 @@
--# From http://sebastien.godard.pagesperso-orange.fr/download.html
--md5	438d607cd14357a24969633b9798d2be	sysstat-11.0.5.tar.xz
-+# From: http://sebastien.godard.pagesperso-orange.fr/download.html
-+sha1 22910242c6c5c1a0ff9699ef212195f90aa4d9ae  sysstat-11.0.8.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 7568a4b..7747a68 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256	62a8cc3df1d0f136d46f50d4f8d92f7ab7ce1addac76b25446b3f6aaf80bf257  dropbear-2015.70.tar.bz2
++sha256	376214169c0e187ee9f48ae1a99b3f835016ad5b98ede4bfd1cf581deba783af  dropbear-2015.71.tar.bz2
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index f32a60d..e7633ae 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSSTAT_VERSION = 11.0.5
-+SYSSTAT_VERSION = 11.0.8
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
+-DROPBEAR_VERSION = 2015.70
++DROPBEAR_VERSION = 2015.71
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
