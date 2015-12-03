@@ -1,53 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Dec 2015 11:44:24 +0100
-Subject: [Buildroot] [PATCH 1/4] dhrystone: add a hash file
-In-Reply-To: <56601AD5.1090608@imgtec.com>
-References: <1449059383-62131-1-git-send-email-Vincent.Riera@imgtec.com>
- <87poyofulj.fsf@dell.be.48ers.dk> <56601AD5.1090608@imgtec.com>
-Message-ID: <20151203114424.6f129af3@free-electrons.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu,  3 Dec 2015 12:02:56 +0100
+Subject: [Buildroot] [PATCH] python-backports-abc: new package
+Message-ID: <1449140576-18883-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Thu, 3 Dec 2015 10:35:01 +0000, Vicente Olivert Riera wrote:
+A backport of recent additions to the 'collections.abc' module.
 
-> >  > diff --git a/package/dhrystone/dhrystone.hash b/package/dhrystone/dhrystone.hash
-> >  > new file mode 100644
-> >  > index 0000000..9ea22a3
-> >  > --- /dev/null
-> >  > +++ b/package/dhrystone/dhrystone.hash
-> >  > @@ -0,0 +1,2 @@
-> >  > +# Locally calculated
-> >  > +sha256 038a7e9169787125c3451a6c941f3aca5db2d2f3863871afcdce154ef17f4e3e  dhry-c
-> > 
-> > Hmm, what are we going to do if this file ever changes?
-> 
-> isn't the purpose of the hash files to ensure that we download exactly
-> what we want to download, so we can make the builds reproducible?
-> 
-> If that file changes, we will notice it thanks to its hash file. You
-> could ask the same for tarballs. What are we going to do if this
-> tarballs ever changes?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                                      |  1 +
+ package/python-backports-abc/Config.in                 |  7 +++++++
+ package/python-backports-abc/python-backports-abc.hash |  3 +++
+ package/python-backports-abc/python-backports-abc.mk   | 13 +++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-backports-abc/Config.in
+ create mode 100644 package/python-backports-abc/python-backports-abc.hash
+ create mode 100644 package/python-backports-abc/python-backports-abc.mk
 
-It also took me a bit to understand Peter's comment. I believe what
-Peter means is that this file has no version in its name. So if
-upstream changes the file, the hash will change, and we will notice.
-But it will break every previous Buildroot version that has been
-released, since the old file can no longer be fetched from anywhere.
-
-But unless I'm missing something, I believe that this is exactly what
-we want: if upstream changes the file, it *does* affect old Buildroot
-versions, and we want users of such old Buildroot versions to be loudly
-notified that the dhry-c file they are building from is no longer the
-same than the one that existed at the time the Buildroot they are using
-was released.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 9b399f9..e6eda4c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -597,6 +597,7 @@ endif
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+ 	source "package/python-alsaaudio/Config.in"
++	source "package/python-backports-abc/Config.in"
+ 	source "package/python-bottle/Config.in"
+ 	source "package/python-can/Config.in"
+ 	source "package/python-certifi/Config.in"
+diff --git a/package/python-backports-abc/Config.in b/package/python-backports-abc/Config.in
+new file mode 100644
+index 0000000..26d8cfd
+--- /dev/null
++++ b/package/python-backports-abc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_BACKPORTS_ABC
++	bool "python-backports-abc"
++	help
++	  A backport of recent additions to the 'collections.abc'
++	  module.
++
++	  https://pypi.python.org/pypi/backports_abc
+diff --git a/package/python-backports-abc/python-backports-abc.hash b/package/python-backports-abc/python-backports-abc.hash
+new file mode 100644
+index 0000000..07e954e
+--- /dev/null
++++ b/package/python-backports-abc/python-backports-abc.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0b65a216ce9dc9c1a7e20a729dd7c05b, sha256 locally computed
++md5     0b65a216ce9dc9c1a7e20a729dd7c05b backports_abc-0.4.tar.gz
++sha256  8b3e4092ba3d541c7a2f9b7d0d9c0275b21c6a01c53a61c731eba6686939d0a5  backports_abc-0.4.tar.gz
+diff --git a/package/python-backports-abc/python-backports-abc.mk b/package/python-backports-abc/python-backports-abc.mk
+new file mode 100644
+index 0000000..1e3a9a6
+--- /dev/null
++++ b/package/python-backports-abc/python-backports-abc.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-backports-abc
++#
++################################################################################
++
++PYTHON_BACKPORTS_ABC_VERSION = 0.4
++PYTHON_BACKPORTS_ABC_SOURCE = backports_abc-$(PYTHON_BACKPORTS_ABC_VERSION).tar.gz
++PYTHON_BACKPORTS_ABC_SITE = https://pypi.python.org/packages/source/b/backports_abc
++PYTHON_BACKPORTS_ABC_LICENSE = Python Software Foundation License
++PYTHON_BACKPORTS_ABC_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
