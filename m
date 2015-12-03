@@ -1,10 +1,11 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 3 Dec 2015 18:19:46 +0100
-Subject: [Buildroot] [PATCH 13/51] core/legal-info: also save patches
-In-Reply-To: <1eb83a36a7550616342ee9c69059059b111f3f78.1448289515.git.yann.morin.1998@free.fr>
+Date: Thu, 3 Dec 2015 18:21:30 +0100
+Subject: [Buildroot] [PATCH 14/51] core/legal-info: update the
+ legal-info report header
+In-Reply-To: <83f76ca51bb54091f3d490fbbcfdcbf7b0950e1a.1448289515.git.yann.morin.1998@free.fr>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
- <1eb83a36a7550616342ee9c69059059b111f3f78.1448289515.git.yann.morin.1998@free.fr>
-Message-ID: <566079B2.9040905@lucaceresoli.net>
+ <83f76ca51bb54091f3d490fbbcfdcbf7b0950e1a.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <56607A1A.8070402@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +14,44 @@ To: buildroot@busybox.net
 
 Dear Yann,
 
+thanks for having updated this forgotten file! See my comments below.
+
 Yann E. MORIN wrote:
-> Currently, the legal-info infra only saves the source archive of a
-> package. However, that's not enough as we may apply some patches on
-> packages sources.
+> In some cases, the toolchain sources are now recovered and available in
+> the legal-info output. So, adapt the header to use conditional instead
+> of an definitive negation.
 >
-> We do suggest users to also redistribute the Buildroot sources as part
-> of their compliance distribution, so the patches bundled in Buildroot
-> would indeed be included in the compliance distribution.
+> Also update the part about saving the sources: it's not the license list
+> that defines whether sources are installed, but rather whether the
+> package is reditributable or not. Update the header acoordingly.
 >
-> However, that's still not enough, since we may download some patches, or
-> the user may use a global patch directory. Patches in there might not
-> end up in the compliance distribution, and there are risks of
-> non-conformity.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>   support/legal-info/README.header | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> So, always include patches alongside the source archive.
->
-> To ensure reproducibility, we also generate a series file, so patches
-> can be re-applied in the correct order.
->
-> We get the list of patches to include from the list of patches that were
-> applied by the package infrastructure (via the apply-patches support
-> script). So, we need to get packages properly extracted and patched
-> before we can save their legal-info, not just in the case they define
-> _LICENSE_FILES (however, we need not extract and patch a package if it
-> is set to be ignored for redistribution).
->
-> Update the legal-info header accordingly.
->
-> Note: this means that, when a (non-ignored) package is not patched and
-> defines no LICENSE_FILES, we will extract and patch it for nothing.
-> There is no easy way to know whether we have to patch a package or not.
-> We can only either duplicate the logic to detect patches (bad) or rely
-> on the infra actually patching the package.  Also, a vast majority of
-> packages are either patched, or define _LICENSE_FILES, so it is best and
-> easiest to always extract and patch them prior to legal-info.
+> diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+> index 90fc445..08aa74d 100644
+> --- a/support/legal-info/README.header
+> +++ b/support/legal-info/README.header
+> @@ -12,11 +12,11 @@ This material is composed of the following items.
+>    * The Buildroot configuration file; this has been saved in buildroot.config.
+>    * The toolchain (cross-compiler and related tools) used to generate all the
+>      compiled programs.
+> -   Note: this has not been saved due to technical limitations, you must
+> +   Note: this may not been saved due to technical limitations, you may need to
 
-Anything else would be more complex and give little advantage. Ideally
-we should have _LICENSE_FILES defined for nearly all packages, after
-all.
+"may not been saved" -> "may have not been saved" I guess.
 
-So:
+With that fixed:
+  Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Since you're updating the README about features that are already in
+master, this patch could be applied immediately. Except it probably
+conflicts, so you might want to rework it and move it at the beginning
+of your patchset (or submit independently) if you want it to be merged
+more quickly.
 
 -- 
 Luca
