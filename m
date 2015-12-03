@@ -1,37 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Dec 2015 22:07:04 +0100
-Subject: [Buildroot] [PATCH] libsemanage: fix build error when linking
- with ustr
-In-Reply-To: <1449174328-8317-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1449174328-8317-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20151203220704.306a6bf0@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 03 Dec 2015 22:09:25 +0100
+Subject: [Buildroot] [PATCH v2] openssl: security bump to version 1.0.2e
+In-Reply-To: <1449164982-20789-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ (gustavo zacarias's message of "Thu, 3 Dec 2015 14:49:42 -0300")
+References: <1449164982-20789-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <87si3jb5oa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergio,
+>>>>> "gustavo" == gustavo zacarias <gustavo.zacarias@free-electrons.com> writes:
 
-On Thu,  3 Dec 2015 18:25:28 -0200, Sergio Prado wrote:
-> Disable ustr inline functions to avoid multiple definition of symbols error
-> when linking with ustr.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/e7012c7a734dbdd1c697cf63b6df6e834e8eafc7
-> http://autobuild.buildroot.net/results/0783a63e4694ffa8463ef5533b635c7e7c43dd42
-> http://autobuild.buildroot.net/results/40726abf3419a727c5762ef2791dbf53fa1736c0
-> http://autobuild.buildroot.net/results/a6a0c827c393a5fb41653d71d1ee50df283a32fb
-> ...
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+ > From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+ > Fixes:
+ > CVE-2015-3193 - BN_mod_exp may produce incorrect results on x86_64
+ > CVE-2015-3194 - Certificate verify crash with missing PSS parameter
+ > CVE-2015-3195 - X509_ATTRIBUTE memory leak
 
-There is another fix pending for this problem, which consists in
-bumping the ustr version. See http://patchwork.ozlabs.org/patch/547117/
-and http://patchwork.ozlabs.org/patch/547118/.
+ > Enable IDEA as well since otherwise the build breaks (always great
+ > upstream) - it's no longer patent encumbered.
 
-Thomas
+ > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+ > ---
+ >  package/openssl/openssl.hash | 4 ++--
+ >  package/openssl/openssl.mk   | 3 +--
+ >  2 files changed, 3 insertions(+), 4 deletions(-)
+
+ > diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+ > index 355be79..bed1c1c 100644
+ > --- a/package/openssl/openssl.hash
+ > +++ b/package/openssl/openssl.hash
+ > @@ -1,2 +1,2 @@
+ > -# From https://www.openssl.org/source/openssl-1.0.2d.tar.gz.sha256
+ > -sha256	671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8	openssl-1.0.2d.tar.gz
+ > +# From https://www.openssl.org/source/openssl-1.0.2e.tar.gz.sha256
+ > +sha256	eee11def03647aa2267434a779608af6fca645023c9a194ddb82f14426835537	openssl-1.0.2e.tar.gz
+
+I'm not sure if you got it wrong of if upstream changed the tarball, but
+that isn't the correct sha256:
+
+curl https://www.openssl.org/source/openssl-1.0.2e.tar.gz.sha256
+e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff
+
+curl -s https://www.openssl.org/source/openssl-1.0.2e.tar.gz | sha256sum
+e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff  -
+
+Committed with that fixed, thanks. I'll also add it to the 2015.11.x
+branch.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
