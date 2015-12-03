@@ -1,76 +1,39 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 3 Dec 2015 18:25:57 +0100
-Subject: [Buildroot] [PATCH 10/51] core/legal-info: install source
- archives in their own sub-dir
-In-Reply-To: <566078E6.5080308@lucaceresoli.net>
-References: <cover.1448289515.git.yann.morin.1998@free.fr>
- <2015f01b3ecd96e43165cbb91c96bfd0ebd196ec.1448289515.git.yann.morin.1998@free.fr>
- <566078E6.5080308@lucaceresoli.net>
-Message-ID: <56607B25.5010608@lucaceresoli.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Dec 2015 14:40:44 -0300
+Subject: [Buildroot] [PATCH] gesftpserver: bump to version 0.2.1
+Message-ID: <1449164444-4848-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gesftpserver/gesftpserver.hash | 2 +-
+ package/gesftpserver/gesftpserver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-Il 03/12/2015 18:16, Luca Ceresoli ha scritto:
-> Yann,
->
-> Yann E. MORIN wrote:
->> Currently, we put all source archives side-by-side in the same
->> directory.
->>
->> Since we're about to also save individual patches that were applied
->> on those sources, we don't want to make that directory a complete
->> mess of unassorted files.
->>
->> So, we install each source archive in its own sub-directory, where
->> we'll later store the patches too. Store that location in a variable,
->> so it can be re-used later on (to install patches in a future commit).
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Luca Ceresoli <luca@lucaceresoli.net>
->> ---
->>   package/pkg-generic.mk | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index 98db3ba..bb3a6da 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -482,6 +482,8 @@ endif
->>
->>   $(2)_REDISTRIBUTE        ?= YES
->>
->> +$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call
->> UPPERCASE,$(4)))/$$($(2)_RAWNAME)-$$($(2)_VERSION)
->> +
->>   # When a target package is a toolchain dependency set this variable to
->>   # 'NO' so the 'toolchain' dependency is not added to prevent a circular
->>   # dependency
->> @@ -812,7 +814,7 @@ endif
->>   # Copy the source tarball
->>       $$(Q)$$(call hardlink-copy,\
->>                $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
->> -             $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))))
->> +             $$($(2)_REDIST_SOURCES_DIR))
->>   endif # redistribute
->>
->>   endif # other packages
->>
->
-> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
->
-> Although this makes little sense without the further patches up to:
->
->    [PATCH 12/51] core/apply-patches: store full path of applied patches
-
-Sorry, I actually meant:
-
-   [PATCH 13/51] core/legal-info: also save patches
-
+diff --git a/package/gesftpserver/gesftpserver.hash b/package/gesftpserver/gesftpserver.hash
+index b952cf0..b4c9fdf 100644
+--- a/package/gesftpserver/gesftpserver.hash
++++ b/package/gesftpserver/gesftpserver.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	1db183e2d4cca5cc3ef10526f417ddef28e0402d0119030a06227bf925e63872	sftpserver-0.1.tar.gz
++sha256	5f744c38df9bb82f5ab500858a0fb4767ac3ee2254301da03cbcf8e6c587cbf5	sftpserver-0.2.1.tar.gz
+diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
+index 16f70fd..25c947a 100644
+--- a/package/gesftpserver/gesftpserver.mk
++++ b/package/gesftpserver/gesftpserver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GESFTPSERVER_VERSION = 0.1
++GESFTPSERVER_VERSION = 0.2.1
+ GESFTPSERVER_SOURCE = sftpserver-$(GESFTPSERVER_VERSION).tar.gz
+ GESFTPSERVER_SITE = http://www.greenend.org.uk/rjk/sftpserver
+ GESFTPSERVER_LICENSE = GPLv2+
 -- 
-Luca
+2.4.10
