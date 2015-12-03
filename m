@@ -1,42 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Dec 2015 19:58:39 +0100
-Subject: [Buildroot] [git commit] cmake: bump to version 3.4.1
-Message-ID: <20151203211258.B3FAB81999@busybox.osuosl.org>
+Date: Thu, 3 Dec 2015 21:38:50 +0100
+Subject: [Buildroot] [git commit] hostapd: make ACS optional
+Message-ID: <20151203211258.BD3C58198D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=626ad58b27b5e873b4321c7bfbb57ab988878522
+commit: http://git.buildroot.net/buildroot/commit/?id=5919b1ef8b850248c4132f58a28926575aa8778f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Make ACS (Automatic Channel Selection) support in hostapd optional.
+There's a clash of standard vs. propietary solutions, hence when hostapd
+has builtin ACS support (standard) and it's enabled (channel=0 in the
+config) this will preclude the propietary driver from using ACS (it
+won't work at all).
+
+See:
+http://e2e.ti.com/support/wireless_connectivity/f/307/p/465333/1669270
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/hostapd/Config.in  | 10 ++++++++++
+ package/hostapd/hostapd.mk |  5 ++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 469f559..be0b464 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.4/cmake-3.4.0-SHA-256.txt
--sha256	a5b82bf6ace6c481cdb911fd5d372a302740cbefd387e05297cb37f7468d1cea	cmake-3.4.0.tar.gz
-+# From http://www.cmake.org/files/v3.4/cmake-3.4.1-SHA-256.txt
-+sha256	d41462bdd80dc37f0d5608167b354bb3af8c068eee640be04c907154c5c113e2	cmake-3.4.1.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 87ed8ff..8c3da1e 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+index 656645b..62fbb66 100644
+--- a/package/hostapd/Config.in
++++ b/package/hostapd/Config.in
+@@ -14,6 +14,16 @@ config BR2_PACKAGE_HOSTAPD
  
- CMAKE_VERSION_MAJOR = 3.4
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
- CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+ if BR2_PACKAGE_HOSTAPD
+ 
++config BR2_PACKAGE_HOSTAPD_ACS
++	bool "Enable ACS"
++	default y
++	help
++	  Enable support for standard ACS (Automatic Channel Selection).
++	  Some propietary drivers use a custom algorithm which requires
++	  channel to be set to '0' (which enables ACS in the config),
++	  causing hostapd to use the standard one which doesn't work
++	  for those cases.
++
+ config BR2_PACKAGE_HOSTAPD_EAP
+ 	bool "Enable EAP"
+ 	depends on !BR2_STATIC_LIBS
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index e22e53f..88867e6 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -15,7 +15,6 @@ HOSTAPD_LICENSE_FILES = README
+ HOSTAPD_CONFIG_SET =
+ 
+ HOSTAPD_CONFIG_ENABLE = \
+-	CONFIG_ACS \
+ 	CONFIG_FULL_DYNAMIC_VLAN \
+ 	CONFIG_HS20 \
+ 	CONFIG_IEEE80211AC \
+@@ -45,6 +44,10 @@ HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
+ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HOSTAPD_ACS),y)
++HOSTAPD_CONFIG_ENABLE += CONFIG_ACS
++endif
++
+ ifeq ($(BR2_PACKAGE_HOSTAPD_EAP),y)
+ HOSTAPD_CONFIG_ENABLE += \
+ 	CONFIG_EAP \
