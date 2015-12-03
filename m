@@ -1,54 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Dec 2015 22:09:25 +0100
-Subject: [Buildroot] [PATCH v2] openssl: security bump to version 1.0.2e
-In-Reply-To: <1449164982-20789-1-git-send-email-gustavo.zacarias@free-electrons.com>
- (gustavo zacarias's message of "Thu, 3 Dec 2015 14:49:42 -0300")
-References: <1449164982-20789-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <87si3jb5oa.fsf@dell.be.48ers.dk>
+Date: Thu, 3 Dec 2015 21:52:05 +0100
+Subject: [Buildroot] [git commit] connman: disable for sparc
+Message-ID: <20151203211258.E791E80ADB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "gustavo" == gustavo zacarias <gustavo.zacarias@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=99031f0b82f3627762167923a187e9c5f7489128
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
- > Fixes:
- > CVE-2015-3193 - BN_mod_exp may produce incorrect results on x86_64
- > CVE-2015-3194 - Certificate verify crash with missing PSS parameter
- > CVE-2015-3195 - X509_ATTRIBUTE memory leak
+Fixes:
+http://autobuild.buildroot.net/results/333/3336df777c758cba9a660a0f6f31646258baec52/
+http://autobuild.buildroot.net/results/efe/efeb197654b552ad9a80e102226c3e507640f037/
 
- > Enable IDEA as well since otherwise the build breaks (always great
- > upstream) - it's no longer patent encumbered.
+Connman uses __sync_fetch_and_add, which is not available for sparc.
 
- > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
- > ---
- >  package/openssl/openssl.hash | 4 ++--
- >  package/openssl/openssl.mk   | 3 +--
- >  2 files changed, 3 insertions(+), 4 deletions(-)
+[Peter: add !sparc dependency to comment, add autobuild reference]
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/connman/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
- > index 355be79..bed1c1c 100644
- > --- a/package/openssl/openssl.hash
- > +++ b/package/openssl/openssl.hash
- > @@ -1,2 +1,2 @@
- > -# From https://www.openssl.org/source/openssl-1.0.2d.tar.gz.sha256
- > -sha256	671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8	openssl-1.0.2d.tar.gz
- > +# From https://www.openssl.org/source/openssl-1.0.2e.tar.gz.sha256
- > +sha256	eee11def03647aa2267434a779608af6fca645023c9a194ddb82f14426835537	openssl-1.0.2e.tar.gz
-
-I'm not sure if you got it wrong of if upstream changed the tarball, but
-that isn't the correct sha256:
-
-curl https://www.openssl.org/source/openssl-1.0.2e.tar.gz.sha256
-e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff
-
-curl -s https://www.openssl.org/source/openssl-1.0.2e.tar.gz | sha256sum
-e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff  -
-
-Committed with that fixed, thanks. I'll also add it to the 2015.11.x
-branch.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index ba238af..5ca38bf 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_CONNMAN
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
+ 	depends on !BR2_STATIC_LIBS # needs dlopen()
++	depends on !BR2_sparc # needs atomic operation __sync_fetch_and_add
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon
+ 	  for managing internet connections within embedded devices
+@@ -66,4 +67,5 @@ endif # BR2_PACKAGE_CONNMAN
+ 
+ comment "connman needs a toolchain w/ wchar, threads, resolver, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_sparc
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
