@@ -1,33 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Dec 2015 14:25:01 +0100
-Subject: [Buildroot] [git commit] Makefile: fix copyright year
-Message-ID: <20151203211258.9918281991@busybox.osuosl.org>
+Date: Thu, 3 Dec 2015 19:57:48 +0100
+Subject: [Buildroot] [git commit] sysstat: bump version to 11.0.8
+Message-ID: <20151203211258.AA8AF8198D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac2071b864b1dbf1af1a90ab2b98d05dd80f916e
+commit: http://git.buildroot.net/buildroot/commit/?id=b69288af7c99e3f7e92ddc10fa4af86685285e39
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It is no longer 2014.
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sysstat/sysstat.hash | 4 ++--
+ package/sysstat/sysstat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index b2535d3..8e8514e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -2,7 +2,7 @@
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+index f535b54..fc55ec9 100644
+--- a/package/sysstat/sysstat.hash
++++ b/package/sysstat/sysstat.hash
+@@ -1,2 +1,2 @@
+-# From http://sebastien.godard.pagesperso-orange.fr/download.html
+-md5	438d607cd14357a24969633b9798d2be	sysstat-11.0.5.tar.xz
++# From: http://sebastien.godard.pagesperso-orange.fr/download.html
++sha1 22910242c6c5c1a0ff9699ef212195f90aa4d9ae  sysstat-11.0.8.tar.xz
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index 7568a4b..7747a68 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -4,7 +4,7 @@
  #
- # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
- # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
--# Copyright (C) 2014 by the Buildroot developers <buildroot@buildroot.org>
-+# Copyright (C) 2014-2015 by the Buildroot developers <buildroot@buildroot.org>
- #
- # This program is free software; you can redistribute it and/or modify
- # it under the terms of the GNU General Public License as published by
+ ################################################################################
+ 
+-SYSSTAT_VERSION = 11.0.5
++SYSSTAT_VERSION = 11.0.8
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
