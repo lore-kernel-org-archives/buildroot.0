@@ -1,69 +1,74 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 3 Dec 2015 18:16:22 +0100
-Subject: [Buildroot] [PATCH 10/51] core/legal-info: install source
- archives in their own sub-dir
-In-Reply-To: <2015f01b3ecd96e43165cbb91c96bfd0ebd196ec.1448289515.git.yann.morin.1998@free.fr>
+Date: Thu, 3 Dec 2015 18:17:29 +0100
+Subject: [Buildroot] [PATCH 11/51] core/legal-info: add package version
+ to license directory
+In-Reply-To: <11dbe139facc8db195d221126c0d69da8ed6bc4d.1448289515.git.yann.morin.1998@free.fr>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
- <2015f01b3ecd96e43165cbb91c96bfd0ebd196ec.1448289515.git.yann.morin.1998@free.fr>
-Message-ID: <566078E6.5080308@lucaceresoli.net>
+ <11dbe139facc8db195d221126c0d69da8ed6bc4d.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <56607929.9050504@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Dear Yann,
 
 Yann E. MORIN wrote:
-> Currently, we put all source archives side-by-side in the same
-> directory.
+> Now that we save the source archives in a directory named after the
+> package and its version, do the same for the license files, for
+> consistency.
 >
-> Since we're about to also save individual patches that were applied
-> on those sources, we don't want to make that directory a complete
-> mess of unassorted files.
+> It has a not-so-bad side-effect of also saving the version string in
+> the all-licenses list.
 >
-> So, we install each source archive in its own sub-directory, where
-> we'll later store the patches too. Store that location in a variable,
-> so it can be re-used later on (to install patches in a future commit).
+> The only (small) drawback, is that the warnings about undefined
+> _LICENSE_FILES now contains the version string, too. That's unavoidable,
+> since that's what is stored in the legal report.
+
+Is it a drawback at all? I don't think so.
+
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
->   package/pkg-generic.mk | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+>   package/pkg-generic.mk | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 >
 > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 98db3ba..bb3a6da 100644
+> index bb3a6da..07ff820 100644
 > --- a/package/pkg-generic.mk
 > +++ b/package/pkg-generic.mk
-> @@ -482,6 +482,8 @@ endif
->
->   $(2)_REDISTRIBUTE		?= YES
->
-> +$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAWNAME)-$$($(2)_VERSION)
-> +
->   # When a target package is a toolchain dependency set this variable to
->   # 'NO' so the 'toolchain' dependency is not added to prevent a circular
->   # dependency
-> @@ -812,7 +814,7 @@ endif
->   # Copy the source tarball
->   	$$(Q)$$(call hardlink-copy,\
->   		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
-> -		     $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))))
-> +		     $$($(2)_REDIST_SOURCES_DIR))
->   endif # redistribute
->
->   endif # other packages
->
+> @@ -791,10 +791,10 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+>   # is that the license still applies to the files distributed as part
+>   # of the rootfs, even if the sources are not themselves redistributed.
+>   ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
+> -	@$$(call legal-license-nofiles,$$($(2)_RAWNAME),$$(call UPPERCASE,$(4)))
+> -	@$$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
+> +	@$$(call legal-license-nofiles,$$($(2)_RAWNAME)-$$($(2)_VERSION),$$(call UPPERCASE,$(4)))
+> +	@$$(call legal-warning-pkg,$$($(2)_RAWNAME)-$$($(2)_VERSION),cannot save license ($(2)_LICENSE_FILES not defined))
+>   else
+> -	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
+> +	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME)-$$($(2)_VERSION),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Mmh, you're computing "$$($(2)_RAWNAME)-$$($(2)_VERSION)" three times
+in a few lines. And it's also computed elsewhere:
 
-Although this makes little sense without the further patches up to:
+package/pkg-generic.mk:156:$(BUILD_DIR)/%/.stamp_patched: NAMEVER = 
+$(RAWNAME)-$($(PKG)_VERSION)
+package/pkg-generic.mk:427:  $(2)_SOURCE                        ?= 
+$$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
+package/pkg-generic.mk:485:$(2)_REDIST_SOURCES_DIR = 
+$$(REDIST_SOURCES_DIR_$$(call 
+UPPERCASE,$(4)))/$$($(2)_RAWNAME)-$$($(2)_VERSION)
+package/pkg-generic.mk:821:     @$$(call 
+legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call 
+UPPERCASE,$(4)))
 
-   [PATCH 12/51] core/apply-patches: store full path of applied patches
+We should compute it once and store it in a new per-package variable.
 
-which are under discussion.
+BTW, I tested this patch and it works, but I'd like to give my
+"Tested-by" tag after you do these changes, thanks.
 
 -- 
 Luca
