@@ -1,42 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Dec 2015 21:47:26 +0100
-Subject: [Buildroot] [git commit] stunnel: bump to version 5.27
-Message-ID: <20151203211258.DEA5D80ADB@busybox.osuosl.org>
+Date: Thu, 03 Dec 2015 22:18:58 +0100
+Subject: [Buildroot] [PATCH 1/4] dhrystone: add a hash file
+In-Reply-To: <20151203215235.08f8d18c@gmx.net> (Peter Seiderer's message of
+ "Thu, 3 Dec 2015 21:52:35 +0100")
+References: <1449059383-62131-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87poyofulj.fsf@dell.be.48ers.dk> <56601AD5.1090608@imgtec.com>
+ <20151203114424.6f129af3@free-electrons.com>
+ <87610fep1h.fsf@dell.be.48ers.dk> <20151203215235.08f8d18c@gmx.net>
+Message-ID: <87oae7b58d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=182a18f8faeef7d57fb98b4a79d0c0f54ab1be05
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index bae02ac..eab2035 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-users/2015-November/005281.html
--sha256	1fb2209f1e006cc01813e1688599c4d0fb0adde4434c31ab95745b1db97484b7	stunnel-5.25.tar.gz
-+# From https://www.stunnel.org/pipermail/stunnel-announce/2015-December/000113.html
-+sha256	7474e986710e88a5cc3330b6b1762f9449f01eccf826fa0f97e56d064c05ead3	stunnel-5.27.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index f43a7cb..20a0c95 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).25
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).27
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ > Hello Peter,
+
+ > Why not append a (short) hash to the saved file for unversioned downloads?
+
+ > e.g. dhry-c-038a7e9
+
+This could be done, but it complicates the primary/backup site handling
+(E.G. should they use the upstream name or "our" name) - The way
+sources.buildroot.net is kept up to date would mean that they would need
+to use "our" name.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
