@@ -1,64 +1,69 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 3 Dec 2015 18:13:07 +0100
-Subject: [Buildroot] [PATCH 09/51] core/pkg-virtual: ignore from
- legal-info output
-In-Reply-To: <2788d5c56e3bbcb579972f9e81003d0625dfefa3.1448289515.git.yann.morin.1998@free.fr>
+Date: Thu, 3 Dec 2015 18:16:22 +0100
+Subject: [Buildroot] [PATCH 10/51] core/legal-info: install source
+ archives in their own sub-dir
+In-Reply-To: <2015f01b3ecd96e43165cbb91c96bfd0ebd196ec.1448289515.git.yann.morin.1998@free.fr>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
- <2788d5c56e3bbcb579972f9e81003d0625dfefa3.1448289515.git.yann.morin.1998@free.fr>
-Message-ID: <56607823.40409@lucaceresoli.net>
+ <2015f01b3ecd96e43165cbb91c96bfd0ebd196ec.1448289515.git.yann.morin.1998@free.fr>
+Message-ID: <566078E6.5080308@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+Yann,
 
 Yann E. MORIN wrote:
-> Virtual packages really have nothing to save for legal-info, so we just
-> ignore them.
+> Currently, we put all source archives side-by-side in the same
+> directory.
 >
-> Currently, packages are only extracted if they define _LICENSE_FILES.
-> Follow-up patches will always extract and patch non-ignored packages, so
-> we would potentially see spurious "extracting" and "patching" messages
-> for virtual packages on the console, which would be a bit strange.
-> Ignoring virtual packages will get us a cleaner log.
+> Since we're about to also save individual patches that were applied
+> on those sources, we don't want to make that directory a complete
+> mess of unassorted files.
+>
+> So, we install each source archive in its own sub-directory, where
+> we'll later store the patches too. Store that location in a variable,
+> so it can be re-used later on (to install patches in a future commit).
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->   docs/manual/adding-packages-virtual.txt | 3 +++
->   package/pkg-virtual.mk                  | 2 ++
->   2 files changed, 5 insertions(+)
+>   package/pkg-generic.mk | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
-> index a5f17a2..11a497d 100644
-> --- a/docs/manual/adding-packages-virtual.txt
-> +++ b/docs/manual/adding-packages-virtual.txt
-> @@ -56,6 +56,9 @@ The +.mk+ for the virtual package should just evaluate the +virtual-package+ mac
->   The ability to have target and host packages is also available, with the
->   +host-virtual-package+ macro.
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 98db3ba..bb3a6da 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -482,6 +482,8 @@ endif
 >
-> +.Note:
-> +Virtual packages are automatically ignored when generating the +legal-info+ output.
+>   $(2)_REDISTRIBUTE		?= YES
+>
+> +$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAWNAME)-$$($(2)_VERSION)
 > +
->   ==== Provider's +Config.in+ file
+>   # When a target package is a toolchain dependency set this variable to
+>   # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+>   # dependency
+> @@ -812,7 +814,7 @@ endif
+>   # Copy the source tarball
+>   	$$(Q)$$(call hardlink-copy,\
+>   		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+> -		     $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))))
+> +		     $$($(2)_REDIST_SOURCES_DIR))
+>   endif # redistribute
 >
->   When adding a package as a provider, only the +Config.in+ file requires some
-> diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-> index 9c68b51..1471b95 100644
-> --- a/package/pkg-virtual.mk
-> +++ b/package/pkg-virtual.mk
-> @@ -57,6 +57,8 @@ endif
->   # Add dependency against the provider
->   $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+>   endif # other packages
 >
-> +$(2)_REDISTRIBUTE = IGNORE
-> +
 
-Ack on the idea, but of course the patch shall be re-written to use the
-boolean variables instead.
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Although this makes little sense without the further patches up to:
+
+   [PATCH 12/51] core/apply-patches: store full path of applied patches
+
+which are under discussion.
 
 -- 
 Luca
