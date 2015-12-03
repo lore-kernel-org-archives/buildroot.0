@@ -1,100 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Dec 2015 19:37:29 +0100
-Subject: [Buildroot] [PATCH 06/51] package/perl: include perl-cross in
- the legal-info output
-In-Reply-To: <566077DF.5000709@lucaceresoli.net>
-References: <cover.1448289515.git.yann.morin.1998@free.fr>
- <f360919da5180e26ce4f96eefed14c29b526b428.1448289515.git.yann.morin.1998@free.fr>
- <20151123212400.1ae778c8@free-electrons.com>
- <20151123212352.GK3857@free.fr> <566077DF.5000709@lucaceresoli.net>
-Message-ID: <20151203183729.GD3834@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Dec 2015 15:39:13 -0300
+Subject: [Buildroot] [PATCH] stunnel: bump to version 5.27
+Message-ID: <1449167953-4549-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, Thomas, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/stunnel/stunnel.hash | 4 ++--
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2015-12-03 18:11 +0100, Luca Ceresoli spake thusly:
-> Yann E. MORIN wrote:
-> >On 2015-11-23 21:24 +0100, Thomas Petazzoni spake thusly:
-> >>On Mon, 23 Nov 2015 15:47:36 +0100, Yann E. MORIN wrote:
-> >>>The perl-cross sources are combined with the perl sources, so they must
-> >>>be redistributed for proper compliance.
-> >>>
-> >>>Add a post-legal-info hook that also installs them in the legal-info
-> >>>output.
-> >>>
-> >>>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >>>Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> >>>Cc: Francois Perrad <fperrad@gmail.com>
-> >>>---
-> >>>  package/perl/perl.mk | 7 +++++++
-> >>>  1 file changed, 7 insertions(+)
-> >>>
-> >>>diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> >>>index f3b7b2b..25294e6 100644
-> >>>--- a/package/perl/perl.mk
-> >>>+++ b/package/perl/perl.mk
-> >>>@@ -32,6 +32,13 @@ define PERL_CROSS_EXTRACT
-> >>>  endef
-> >>>  PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
-> >>>
-> >>>+# ... and as such should be part of the legal-info redistribution
-> >>>+define PERL_CROSS_LEGAL_INFO
-> >>>+	$(Q)$(call hardlink-copy,$(DL_DIR)/$(PERL_CROSS_SOURCE),\
-> >>>+				 $(PERL_REDIST_SOURCES_DIR))
-> >>>+endef
-> >>>+PERL_POST_LEGAL_INFO_HOOKS += PERL_CROSS_LEGAL_INFO
-> >>>+
-> >>>  define PERL_CROSS_SET_POD
-> >>>  	$(SED) s/$(PERL_CROSS_OLD_POD)/$(PERL_CROSS_NEW_POD)/g $(@D)/Makefile
-> >>>  endef
-> >>
-> >>I think this is not the proper way of solving the problem. perl-cross
-> >>is downloaded through <pkg>_EXTRA_DOWNLOADS, and <pkg>_EXTRA_DOWNLOADS
-> >>files should be saved in legal-info, without requiring some special
-> >>handling from each package using <pkg>_EXTRA_DOWNLOADS.
-> >
-> >Well, that's what I thought initially.
-> >
-> >However, I don't think that _EXTRA_DOWNLOADS should be saved to the
-> >legal-info. A reason I already explained is that _EXTRA_DOWNLOADS are
-> >used by the Blackfin external toolchains to download extra parts of
-> >there sysroots, and that should not be part of legal-info.
-> >
-> >Furthermore, what if a FLOSS package has an EXTRA_DOWNLOAD to download
-> >non-redistributable stuff. An example that is easy to understand, would
-> >be a Doom package, where the engine is FLOSS (GPL), and where the WAD
-> >files are downlaodable from an internal server. Such a package could use
-> >_EXTRA_DOWNLOADS to fetch the WAD files. The distributor may have an
-> >agreement to provide the WAD files in the product, but not reditribute
-> >them otherwise.
-> 
-> I think Thomas' position is correct. Generally speaking, there's no
-> specific reason an _EXTRA_DOWNLOAD should be non-redistributable. All we
-> know is it's a file. Arguing on what potential packages might do is a
-> bit arbitrary IMO.
-> 
-> I think the best thing to do in legal-info is to save both _SORUCE and
-> _EXTRA_DOWNLOADS by default, and to save neither when _REDISTRIBUTE =
-> NO. Packages that need to save some files but not all of them should
-> set _REDISTRIBUTE = NO and save manually everything needed.
-> 
-> The manual handling we'd need is anyway pretty limited with current
-> Buildroot, as _EXTRA_DOWNLOADS is only user by two packages: the
-> Blackfin external toolchain and perl.
-
-OK, so _EXTRA_DOWNLOADS to be saved too. Will do.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index bae02ac..eab2035 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,2 +1,2 @@
+-# From http://www.stunnel.org/pipermail/stunnel-users/2015-November/005281.html
+-sha256	1fb2209f1e006cc01813e1688599c4d0fb0adde4434c31ab95745b1db97484b7	stunnel-5.25.tar.gz
++# From https://www.stunnel.org/pipermail/stunnel-announce/2015-December/000113.html
++sha256	7474e986710e88a5cc3330b6b1762f9449f01eccf826fa0f97e56d064c05ead3	stunnel-5.27.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index f43a7cb..20a0c95 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).25
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).27
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.4.10
