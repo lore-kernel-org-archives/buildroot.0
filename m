@@ -1,468 +1,71 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 3 Dec 2015 15:46:55 +0100
-Subject: [Buildroot] [PATCH] bdwgc: fix compile for sparc
-Message-ID: <20151203144655.GA13813@waldemar-brodkorb.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Dec 2015 13:40:38 -0300
+Subject: [Buildroot] [PATCH] hostapd: make ACS optional
+Message-ID: <1449160838-15039-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to use a patch from master git.
-https://github.com/ivmai/bdwgc/commit/e2bf29b7801357c1ad28c2948a3f88c655dd722a
+Make ACS (Automatic Channel Selection) support in hostapd optional.
+There's a clash of standard vs. propietary solutions, hence when hostapd
+has builtin ACS support (standard) and it's enabled (channel=0 in the
+config) this will preclude the propietary driver from using ACS (it
+won't work at all).
 
-Fixes following autobuilder failures:
-http://autobuild.buildroot.net/results/220b3d49b8ad891e5dd3aae759319100a1500701/
-http://autobuild.buildroot.net/results/b7465d175f03c9461693a92885028723772c7814/
+See:
+http://e2e.ti.com/support/wireless_connectivity/f/307/p/465333/1669270
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...-asm-machine-dependent-files-to-src-folde.patch |  422 ++++++++++++++++++++
- package/bdwgc/bdwgc.mk                             |    3 +
- 2 files changed, 425 insertions(+)
- create mode 100644 package/bdwgc/0003-Revert-Move-asm-machine-dependent-files-to-src-folde.patch
+ package/hostapd/Config.in  | 10 ++++++++++
+ package/hostapd/hostapd.mk |  5 ++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/package/bdwgc/0003-Revert-Move-asm-machine-dependent-files-to-src-folde.patch b/package/bdwgc/0003-Revert-Move-asm-machine-dependent-files-to-src-folde.patch
-new file mode 100644
-index 0000000..ff7bd4d
---- /dev/null
-+++ b/package/bdwgc/0003-Revert-Move-asm-machine-dependent-files-to-src-folde.patch
-@@ -0,0 +1,422 @@
-+From 5e756d4d8df2949cb3b6e51532d3016cbb276fd7 Mon Sep 17 00:00:00 2001
-+From: Ivan Maidanski <ivmai@mail.ru>
-+Date: Fri, 27 Feb 2015 21:32:22 +0300
-+Subject: [PATCH 004/135] Revert "Move asm machine-dependent files to 'src'
-+ folder" (partly)
-+
-+Asm files moved back to base folder to avoid build issues (reported
-+for NetBSD and Solaris on Sparc).  Alternative way is to adjust
-+configure.ac and Makefile.am properly but it requires more efforts
-+(including testing).
-+
-+* Makefile.am (EXTRA_libgc_la_SOURCES): Remove "src/" prefix.
-+* Makefile.direct (SRCS, mach_dep.o): Likewise.
-+* src/ia64_save_regs_in_stack.s: Move to base folder.
-+* src/sparc_mach_dep.S: Likewise.
-+* src/sparc_netbsd_mach_dep.s: Likewise.
-+* src/sparc_sunos4_mach_dep.s: Likewise.
-+
-+---
-+ Makefile.am                   |    4 +--
-+ Makefile.direct               |   20 +++++++-------
-+ ia64_save_regs_in_stack.s     |   11 ++++++++
-+ sparc_mach_dep.S              |   61 +++++++++++++++++++++++++++++++++++++++++
-+ sparc_netbsd_mach_dep.s       |   34 +++++++++++++++++++++++
-+ sparc_sunos4_mach_dep.s       |   32 +++++++++++++++++++++
-+ src/ia64_save_regs_in_stack.s |   11 --------
-+ src/sparc_mach_dep.S          |   61 -----------------------------------------
-+ src/sparc_netbsd_mach_dep.s   |   34 -----------------------
-+ src/sparc_sunos4_mach_dep.s   |   32 ---------------------
-+ 11 files changed, 151 insertions(+), 151 deletions(-)
-+ create mode 100644 ia64_save_regs_in_stack.s
-+ create mode 100644 sparc_mach_dep.S
-+ create mode 100644 sparc_netbsd_mach_dep.s
-+ create mode 100644 sparc_sunos4_mach_dep.s
-+ delete mode 100644 src/ia64_save_regs_in_stack.s
-+ delete mode 100644 src/sparc_mach_dep.S
-+ delete mode 100644 src/sparc_netbsd_mach_dep.s
-+ delete mode 100644 src/sparc_sunos4_mach_dep.s
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index f8057db..1688be2 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -100,8 +100,8 @@ libgc_la_LIBADD = @addobjs@ $(THREADDLLIBS) $(UNWINDLIBS) $(ATOMIC_OPS_LIBS)
-+ libgc_la_DEPENDENCIES = @addobjs@
-+ libgc_la_LDFLAGS = $(extra_ldflags_libgc) -version-info 1:3:0 -no-undefined
-+ 
-+-EXTRA_libgc_la_SOURCES = src/ia64_save_regs_in_stack.s src/sparc_mach_dep.S \
-+-    src/sparc_netbsd_mach_dep.s src/sparc_sunos4_mach_dep.s
-++EXTRA_libgc_la_SOURCES = ia64_save_regs_in_stack.s sparc_mach_dep.S \
-++    sparc_netbsd_mach_dep.s sparc_sunos4_mach_dep.s
-+ 
-+ 
-+ # C++ Interface
-+diff --git a/Makefile.direct b/Makefile.direct
-+index d64598b..8ab80e8 100644
-+--- a/Makefile.direct
-++++ b/Makefile.direct
-+@@ -108,8 +108,8 @@ SRCS= $(CSRCS) \
-+   include/gc_config_macros.h include/private/pthread_support.h \
-+   include/private/pthread_stop_world.h include/private/darwin_semaphore.h \
-+   include/private/darwin_stop_world.h include/private/thread_local_alloc.h \
-+-  src/ia64_save_regs_in_stack.s src/sparc_mach_dep.S \
-+-  src/sparc_netbsd_mach_dep.s src/sparc_sunos4_mach_dep.s $(CORD_SRCS)
-++  ia64_save_regs_in_stack.s sparc_mach_dep.S \
-++  sparc_netbsd_mach_dep.s sparc_sunos4_mach_dep.s $(CORD_SRCS)
-+ 
-+ DOC_FILES= README.QUICK TODO doc/README.Mac doc/README.OS2 \
-+   doc/README.amiga doc/README.cords doc/debugging.html \
-+@@ -309,17 +309,17 @@ dyn_test:
-+ # 	gcc -shared -Wl,-soname=libgc.so.0 -o libgc.so.0 $(LIBOBJS) dyn_load.lo
-+ #	touch liblinuxgc.so
-+ 
-+-mach_dep.o: $(srcdir)/mach_dep.c $(srcdir)/src/sparc_mach_dep.S \
-+-	    $(srcdir)/src/sparc_sunos4_mach_dep.s \
-+-	    $(srcdir)/src/ia64_save_regs_in_stack.s \
-+-	    $(srcdir)/src/sparc_netbsd_mach_dep.s $(UTILS)
-++mach_dep.o: $(srcdir)/mach_dep.c $(srcdir)/sparc_mach_dep.S \
-++	    $(srcdir)/sparc_sunos4_mach_dep.s \
-++	    $(srcdir)/ia64_save_regs_in_stack.s \
-++	    $(srcdir)/sparc_netbsd_mach_dep.s $(UTILS)
-+ 	rm -f mach_dep.o
-+-	./if_mach SPARC SOLARIS $(CC) -c -o mach_dep2.o $(srcdir)/src/sparc_mach_dep.S
-+-	./if_mach SPARC OPENBSD $(AS) -o mach_dep2.o $(srcdir)/src/sparc_sunos4_mach_dep.s
-+-	./if_mach SPARC NETBSD $(AS) -o mach_dep2.o $(srcdir)/src/sparc_netbsd_mach_dep.s
-++	./if_mach SPARC SOLARIS $(CC) -c -o mach_dep2.o $(srcdir)/sparc_mach_dep.S
-++	./if_mach SPARC OPENBSD $(AS) -o mach_dep2.o $(srcdir)/sparc_sunos4_mach_dep.s
-++	./if_mach SPARC NETBSD $(AS) -o mach_dep2.o $(srcdir)/sparc_netbsd_mach_dep.s
-+ 	./if_mach SPARC "" $(CC) -c -o mach_dep1.o $(SPECIALCFLAGS) $(srcdir)/mach_dep.c
-+ 	./if_mach SPARC "" ld -r -o mach_dep.o mach_dep1.o mach_dep2.o
-+-	./if_mach IA64 "" as $(AS_ABI_FLAG) -o ia64_save_regs_in_stack.o $(srcdir)/src/ia64_save_regs_in_stack.s
-++	./if_mach IA64 "" as $(AS_ABI_FLAG) -o ia64_save_regs_in_stack.o $(srcdir)/ia64_save_regs_in_stack.s
-+ 	./if_mach IA64 "" $(CC) -c -o mach_dep1.o $(SPECIALCFLAGS) $(srcdir)/mach_dep.c
-+ 	./if_mach IA64 "" ld -r -o mach_dep.o mach_dep1.o ia64_save_regs_in_stack.o
-+ 	./if_not_there mach_dep.o $(CC) -c $(SPECIALCFLAGS) $(srcdir)/mach_dep.c
-+diff --git a/ia64_save_regs_in_stack.s b/ia64_save_regs_in_stack.s
-+new file mode 100644
-+index 0000000..2b81edf
-+--- /dev/null
-++++ b/ia64_save_regs_in_stack.s
-+@@ -0,0 +1,11 @@
-++        .text
-++        .align 16
-++        .global GC_save_regs_in_stack
-++        .proc GC_save_regs_in_stack
-++GC_save_regs_in_stack:
-++        .body
-++        flushrs
-++        ;;
-++        mov r8=ar.bsp
-++        br.ret.sptk.few rp
-++        .endp GC_save_regs_in_stack
-+diff --git a/sparc_mach_dep.S b/sparc_mach_dep.S
-+new file mode 100644
-+index 0000000..d204dc4
-+--- /dev/null
-++++ b/sparc_mach_dep.S
-+@@ -0,0 +1,61 @@
-++!	SPARCompiler 3.0 and later apparently no longer handles
-++!	asm outside functions.  So we need a separate .s file
-++!	This is only set up for SunOS 5, not SunOS 4.
-++!	Assumes this is called before the stack contents are
-++!	examined.
-++
-++	.seg 	"text"
-++	.globl	GC_save_regs_in_stack
-++GC_save_regs_in_stack:
-++#if defined(__arch64__) || defined(__sparcv9)
-++	save	%sp,-128,%sp
-++	flushw
-++	ret
-++	  restore %sp,2047+128,%o0
-++#else /* 32 bit SPARC */
-++	ta	0x3   ! ST_FLUSH_WINDOWS
-++	mov	%sp,%o0
-++	retl
-++	nop
-++#endif /* 32 bit SPARC */
-++.GC_save_regs_in_stack_end:
-++	.size GC_save_regs_in_stack,.GC_save_regs_in_stack_end-GC_save_regs_in_stack
-++
-++! GC_clear_stack_inner(arg, limit) clears stack area up to limit and
-++! returns arg.  Stack clearing is crucial on SPARC, so we supply
-++! an assembly version that s more careful.  Assumes limit is hotter
-++! than sp, and limit is 8 byte aligned.
-++	.globl	GC_clear_stack_inner
-++GC_clear_stack_inner:
-++#if defined(__arch64__) || defined(__sparcv9)
-++	mov %sp,%o2		! Save sp
-++	add %sp,2047-8,%o3	! p = sp+bias-8
-++	add %o1,-2047-192,%sp	! Move sp out of the way,
-++  				! so that traps still work.
-++  				! Includes some extra words
-++  				! so we can be sloppy below.
-++loop:
-++	stx %g0,[%o3]		! *(long *)p = 0
-++	cmp %o3,%o1
-++	bgu,pt %xcc, loop	! if (p > limit) goto loop
-++          add %o3,-8,%o3	! p -= 8 (delay slot)
-++	retl
-++    	  mov %o2,%sp		! Restore sp., delay slot
-++#else  /* 32 bit SPARC */
-++	mov	%sp,%o2		! Save sp
-++	add	%sp,-8,%o3	! p = sp-8
-++	clr	%g1		! [g0,g1] = 0
-++	add	%o1,-0x60,%sp	! Move sp out of the way,
-++				! so that traps still work.
-++				! Includes some extra words
-++				! so we can be sloppy below.
-++loop:
-++	std	%g0,[%o3]	! *(long long *)p = 0
-++	cmp	%o3,%o1
-++	bgu	loop		! if (p > limit) goto loop
-++	  add	%o3,-8,%o3	! p -= 8 (delay slot)
-++	retl
-++	  mov	%o2,%sp		! Restore sp., delay slot
-++#endif  /* 32 bit SPARC */
-++.GC_clear_stack_inner_end:
-++      	.size GC_clear_stack_inner,.GC_clear_stack_inner_end-GC_clear_stack_inner
-+diff --git a/sparc_netbsd_mach_dep.s b/sparc_netbsd_mach_dep.s
-+new file mode 100644
-+index 0000000..14feb15
-+--- /dev/null
-++++ b/sparc_netbsd_mach_dep.s
-+@@ -0,0 +1,34 @@
-++!	SPARCompiler 3.0 and later apparently no longer handles
-++!	asm outside functions.  So we need a separate .s file
-++!	This is only set up for SunOS 4.
-++!	Assumes this is called before the stack contents are
-++!	examined.
-++
-++#include "machine/asm.h"
-++
-++	.seg 	"text"
-++	.globl	_C_LABEL(GC_save_regs_in_stack)
-++	.globl 	_C_LABEL(GC_push_regs)
-++_C_LABEL(GC_save_regs_in_stack):
-++_C_LABEL(GC_push_regs):
-++	ta	0x3   ! ST_FLUSH_WINDOWS
-++	mov	%sp,%o0
-++	retl
-++	nop
-++
-++	.globl	_C_LABEL(GC_clear_stack_inner)
-++_C_LABEL(GC_clear_stack_inner):
-++	mov	%sp,%o2		! Save sp
-++	add	%sp,-8,%o3	! p = sp-8
-++	clr	%g1		! [g0,g1] = 0
-++	add	%o1,-0x60,%sp	! Move sp out of the way,
-++				! so that traps still work.
-++				! Includes some extra words
-++				! so we can be sloppy below.
-++loop:
-++	std	%g0,[%o3]	! *(long long *)p = 0
-++	cmp	%o3,%o1
-++	bgu	loop		! if (p > limit) goto loop
-++	add	%o3,-8,%o3	! p -= 8 (delay slot)
-++	retl
-++	mov	%o2,%sp		! Restore sp., delay slot
-+diff --git a/sparc_sunos4_mach_dep.s b/sparc_sunos4_mach_dep.s
-+new file mode 100644
-+index 0000000..923f5ea
-+--- /dev/null
-++++ b/sparc_sunos4_mach_dep.s
-+@@ -0,0 +1,32 @@
-++!	SPARCompiler 3.0 and later apparently no longer handles
-++!	asm outside functions.  So we need a separate .s file
-++!	This is only set up for SunOS 4.
-++!	Assumes this is called before the stack contents are
-++!	examined.
-++
-++	.seg 	"text"
-++	.globl	_GC_save_regs_in_stack
-++	.globl 	_GC_push_regs
-++_GC_save_regs_in_stack:
-++_GC_push_regs:
-++	ta	0x3   ! ST_FLUSH_WINDOWS
-++	mov	%sp,%o0
-++	retl
-++	nop
-++
-++	.globl	_GC_clear_stack_inner
-++_GC_clear_stack_inner:
-++	mov	%sp,%o2		! Save sp
-++	add	%sp,-8,%o3	! p = sp-8
-++	clr	%g1		! [g0,g1] = 0
-++	add	%o1,-0x60,%sp	! Move sp out of the way,
-++				! so that traps still work.
-++				! Includes some extra words
-++				! so we can be sloppy below.
-++loop:
-++	std	%g0,[%o3]	! *(long long *)p = 0
-++	cmp	%o3,%o1
-++	bgu	loop		! if (p > limit) goto loop
-++	  add	%o3,-8,%o3	! p -= 8 (delay slot)
-++	retl
-++	  mov	%o2,%sp		! Restore sp., delay slot
-+diff --git a/src/ia64_save_regs_in_stack.s b/src/ia64_save_regs_in_stack.s
-+deleted file mode 100644
-+index 2b81edf..0000000
-+--- a/src/ia64_save_regs_in_stack.s
-++++ /dev/null
-+@@ -1,11 +0,0 @@
-+-        .text
-+-        .align 16
-+-        .global GC_save_regs_in_stack
-+-        .proc GC_save_regs_in_stack
-+-GC_save_regs_in_stack:
-+-        .body
-+-        flushrs
-+-        ;;
-+-        mov r8=ar.bsp
-+-        br.ret.sptk.few rp
-+-        .endp GC_save_regs_in_stack
-+diff --git a/src/sparc_mach_dep.S b/src/sparc_mach_dep.S
-+deleted file mode 100644
-+index d204dc4..0000000
-+--- a/src/sparc_mach_dep.S
-++++ /dev/null
-+@@ -1,61 +0,0 @@
-+-!	SPARCompiler 3.0 and later apparently no longer handles
-+-!	asm outside functions.  So we need a separate .s file
-+-!	This is only set up for SunOS 5, not SunOS 4.
-+-!	Assumes this is called before the stack contents are
-+-!	examined.
-+-
-+-	.seg 	"text"
-+-	.globl	GC_save_regs_in_stack
-+-GC_save_regs_in_stack:
-+-#if defined(__arch64__) || defined(__sparcv9)
-+-	save	%sp,-128,%sp
-+-	flushw
-+-	ret
-+-	  restore %sp,2047+128,%o0
-+-#else /* 32 bit SPARC */
-+-	ta	0x3   ! ST_FLUSH_WINDOWS
-+-	mov	%sp,%o0
-+-	retl
-+-	nop
-+-#endif /* 32 bit SPARC */
-+-.GC_save_regs_in_stack_end:
-+-	.size GC_save_regs_in_stack,.GC_save_regs_in_stack_end-GC_save_regs_in_stack
-+-
-+-! GC_clear_stack_inner(arg, limit) clears stack area up to limit and
-+-! returns arg.  Stack clearing is crucial on SPARC, so we supply
-+-! an assembly version that s more careful.  Assumes limit is hotter
-+-! than sp, and limit is 8 byte aligned.
-+-	.globl	GC_clear_stack_inner
-+-GC_clear_stack_inner:
-+-#if defined(__arch64__) || defined(__sparcv9)
-+-	mov %sp,%o2		! Save sp
-+-	add %sp,2047-8,%o3	! p = sp+bias-8
-+-	add %o1,-2047-192,%sp	! Move sp out of the way,
-+-  				! so that traps still work.
-+-  				! Includes some extra words
-+-  				! so we can be sloppy below.
-+-loop:
-+-	stx %g0,[%o3]		! *(long *)p = 0
-+-	cmp %o3,%o1
-+-	bgu,pt %xcc, loop	! if (p > limit) goto loop
-+-          add %o3,-8,%o3	! p -= 8 (delay slot)
-+-	retl
-+-    	  mov %o2,%sp		! Restore sp., delay slot
-+-#else  /* 32 bit SPARC */
-+-	mov	%sp,%o2		! Save sp
-+-	add	%sp,-8,%o3	! p = sp-8
-+-	clr	%g1		! [g0,g1] = 0
-+-	add	%o1,-0x60,%sp	! Move sp out of the way,
-+-				! so that traps still work.
-+-				! Includes some extra words
-+-				! so we can be sloppy below.
-+-loop:
-+-	std	%g0,[%o3]	! *(long long *)p = 0
-+-	cmp	%o3,%o1
-+-	bgu	loop		! if (p > limit) goto loop
-+-	  add	%o3,-8,%o3	! p -= 8 (delay slot)
-+-	retl
-+-	  mov	%o2,%sp		! Restore sp., delay slot
-+-#endif  /* 32 bit SPARC */
-+-.GC_clear_stack_inner_end:
-+-      	.size GC_clear_stack_inner,.GC_clear_stack_inner_end-GC_clear_stack_inner
-+diff --git a/src/sparc_netbsd_mach_dep.s b/src/sparc_netbsd_mach_dep.s
-+deleted file mode 100644
-+index 14feb15..0000000
-+--- a/src/sparc_netbsd_mach_dep.s
-++++ /dev/null
-+@@ -1,34 +0,0 @@
-+-!	SPARCompiler 3.0 and later apparently no longer handles
-+-!	asm outside functions.  So we need a separate .s file
-+-!	This is only set up for SunOS 4.
-+-!	Assumes this is called before the stack contents are
-+-!	examined.
-+-
-+-#include "machine/asm.h"
-+-
-+-	.seg 	"text"
-+-	.globl	_C_LABEL(GC_save_regs_in_stack)
-+-	.globl 	_C_LABEL(GC_push_regs)
-+-_C_LABEL(GC_save_regs_in_stack):
-+-_C_LABEL(GC_push_regs):
-+-	ta	0x3   ! ST_FLUSH_WINDOWS
-+-	mov	%sp,%o0
-+-	retl
-+-	nop
-+-
-+-	.globl	_C_LABEL(GC_clear_stack_inner)
-+-_C_LABEL(GC_clear_stack_inner):
-+-	mov	%sp,%o2		! Save sp
-+-	add	%sp,-8,%o3	! p = sp-8
-+-	clr	%g1		! [g0,g1] = 0
-+-	add	%o1,-0x60,%sp	! Move sp out of the way,
-+-				! so that traps still work.
-+-				! Includes some extra words
-+-				! so we can be sloppy below.
-+-loop:
-+-	std	%g0,[%o3]	! *(long long *)p = 0
-+-	cmp	%o3,%o1
-+-	bgu	loop		! if (p > limit) goto loop
-+-	add	%o3,-8,%o3	! p -= 8 (delay slot)
-+-	retl
-+-	mov	%o2,%sp		! Restore sp., delay slot
-+diff --git a/src/sparc_sunos4_mach_dep.s b/src/sparc_sunos4_mach_dep.s
-+deleted file mode 100644
-+index 923f5ea..0000000
-+--- a/src/sparc_sunos4_mach_dep.s
-++++ /dev/null
-+@@ -1,32 +0,0 @@
-+-!	SPARCompiler 3.0 and later apparently no longer handles
-+-!	asm outside functions.  So we need a separate .s file
-+-!	This is only set up for SunOS 4.
-+-!	Assumes this is called before the stack contents are
-+-!	examined.
-+-
-+-	.seg 	"text"
-+-	.globl	_GC_save_regs_in_stack
-+-	.globl 	_GC_push_regs
-+-_GC_save_regs_in_stack:
-+-_GC_push_regs:
-+-	ta	0x3   ! ST_FLUSH_WINDOWS
-+-	mov	%sp,%o0
-+-	retl
-+-	nop
-+-
-+-	.globl	_GC_clear_stack_inner
-+-_GC_clear_stack_inner:
-+-	mov	%sp,%o2		! Save sp
-+-	add	%sp,-8,%o3	! p = sp-8
-+-	clr	%g1		! [g0,g1] = 0
-+-	add	%o1,-0x60,%sp	! Move sp out of the way,
-+-				! so that traps still work.
-+-				! Includes some extra words
-+-				! so we can be sloppy below.
-+-loop:
-+-	std	%g0,[%o3]	! *(long long *)p = 0
-+-	cmp	%o3,%o1
-+-	bgu	loop		! if (p > limit) goto loop
-+-	  add	%o3,-8,%o3	! p -= 8 (delay slot)
-+-	retl
-+-	  mov	%o2,%sp		! Restore sp., delay slot
-+-- 
-+1.7.10.4
-+
-diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-index 19a66f3..4603151 100644
---- a/package/bdwgc/bdwgc.mk
-+++ b/package/bdwgc/bdwgc.mk
-@@ -19,6 +19,9 @@ BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
- BDWGC_AUTORECONF = YES
+diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+index 656645b..62fbb66 100644
+--- a/package/hostapd/Config.in
++++ b/package/hostapd/Config.in
+@@ -14,6 +14,16 @@ config BR2_PACKAGE_HOSTAPD
  
- BDWGC_CFLAGS = $(TARGET_CFLAGS)
-+ifeq ($(BR2_sparc),y)
-+BDWGC_CFLAGS += -DAO_NO_SPARC_V9
-+endif
- ifeq ($(BR2_STATIC_LIBS),y)
- BDWGC_CFLAGS += -DGC_NO_DLOPEN
+ if BR2_PACKAGE_HOSTAPD
+ 
++config BR2_PACKAGE_HOSTAPD_ACS
++	bool "Enable ACS"
++	default y
++	help
++	  Enable support for standard ACS (Automatic Channel Selection).
++	  Some propietary drivers use a custom algorithm which requires
++	  channel to be set to '0' (which enables ACS in the config),
++	  causing hostapd to use the standard one which doesn't work
++	  for those cases.
++
+ config BR2_PACKAGE_HOSTAPD_EAP
+ 	bool "Enable EAP"
+ 	depends on !BR2_STATIC_LIBS
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index e22e53f..88867e6 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -15,7 +15,6 @@ HOSTAPD_LICENSE_FILES = README
+ HOSTAPD_CONFIG_SET =
+ 
+ HOSTAPD_CONFIG_ENABLE = \
+-	CONFIG_ACS \
+ 	CONFIG_FULL_DYNAMIC_VLAN \
+ 	CONFIG_HS20 \
+ 	CONFIG_IEEE80211AC \
+@@ -45,6 +44,10 @@ HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
+ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
  endif
+ 
++ifeq ($(BR2_PACKAGE_HOSTAPD_ACS),y)
++HOSTAPD_CONFIG_ENABLE += CONFIG_ACS
++endif
++
+ ifeq ($(BR2_PACKAGE_HOSTAPD_EAP),y)
+ HOSTAPD_CONFIG_ENABLE += \
+ 	CONFIG_EAP \
 -- 
-1.7.10.4
+2.4.10
