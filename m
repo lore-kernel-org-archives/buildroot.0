@@ -1,60 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Dec 2015 12:42:50 +0100
-Subject: [Buildroot] [PATCH 1/4] dhrystone: add a hash file
-In-Reply-To: <20151203114424.6f129af3@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 3 Dec 2015 11:44:24 +0100")
-References: <1449059383-62131-1-git-send-email-Vincent.Riera@imgtec.com>
- <87poyofulj.fsf@dell.be.48ers.dk> <56601AD5.1090608@imgtec.com>
- <20151203114424.6f129af3@free-electrons.com>
-Message-ID: <87610fep1h.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Dec 2015 09:57:10 -0300
+Subject: [Buildroot] [PATCH] zsh: bump to version 5.2
+Message-ID: <1449147430-17234-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/zsh/zsh.hash | 4 ++--
+ package/zsh/zsh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Hi,
-
->> > Hmm, what are we going to do if this file ever changes?
- >> 
- >> isn't the purpose of the hash files to ensure that we download exactly
- >> what we want to download, so we can make the builds reproducible?
- >> 
- >> If that file changes, we will notice it thanks to its hash file. You
- >> could ask the same for tarballs. What are we going to do if this
- >> tarballs ever changes?
-
- > It also took me a bit to understand Peter's comment. I believe what
- > Peter means is that this file has no version in its name. So if
- > upstream changes the file, the hash will change, and we will notice.
-
-Yes, my reply was perhaps a bit too terse.
-
- > But it will break every previous Buildroot version that has been
- > released, since the old file can no longer be fetched from anywhere.
-
-No, it will not break as long as we keep a backup of the old file on
-sources.buildroot.net, as buildroot will fall back to using that.
-
-
- > But unless I'm missing something, I believe that this is exactly what
- > we want: if upstream changes the file, it *does* affect old Buildroot
- > versions, and we want users of such old Buildroot versions to be loudly
- > notified that the dhry-c file they are building from is no longer the
- > same than the one that existed at the time the Buildroot they are using
- > was released.
-
-Agreed, but the problem is if upstream ever changes the file content (for
-bugfixes or new features) then we cannot use the new version without
-updating our sources.buildroot.net mirror (and hence break old
-releases).
-
-But ok, for something as old as dhrystone this probably isn't very
-likely to happen (and we could carry the improvements/fixes as a local
-patch if it does).
-
+diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
+index 57c34be..6793162 100644
+--- a/package/zsh/zsh.hash
++++ b/package/zsh/zsh.hash
+@@ -1,4 +1,4 @@
+ # From http://www.zsh.org/pub/MD5SUM
+-md5	0e8ea3313300277a04cee80836507bae	zsh-5.1.1.tar.xz
++md5	afe96fde08b70e23c1cab1ca7a68fb34	zsh-5.2.tar.xz
+ # Calculated based on the hash above
+-sha256	74e9453b5470b3c0970f9f93cfd603d241c3d7b1968adc0e4b3951073e8d3dec	zsh-5.1.1.tar.xz
++sha256	f17916320ffaa844bbd7ce48ceeb5945fc5f3eff64b149b4229bbfbdf3795a9d	zsh-5.2.tar.xz
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 212305b..03456b8 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZSH_VERSION = 5.1.1
++ZSH_VERSION = 5.2
+ ZSH_SITE = http://www.zsh.org/pub
+ ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
+ ZSH_DEPENDENCIES = ncurses
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.4.10
