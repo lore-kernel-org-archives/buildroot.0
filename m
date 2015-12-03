@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Dec 2015 19:54:26 +0100
-Subject: [Buildroot] [git commit] zsh: bump to version 5.2
-Message-ID: <20151203211258.A3AEE80ADB@busybox.osuosl.org>
+Date: Thu, 3 Dec 2015 21:41:42 +0100
+Subject: [Buildroot] [git commit] gesftpserver: bump to version 0.2.1
+Message-ID: <20151203211258.CA1A780ADB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eaf375197f4d9f147e04592465f86d26b87f6de6
+commit: http://git.buildroot.net/buildroot/commit/?id=1736fc2a3465b2711b0e1678ede5ebd440d17814
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zsh/zsh.hash | 4 ++--
- package/zsh/zsh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gesftpserver/gesftpserver.hash | 2 +-
+ package/gesftpserver/gesftpserver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 57c34be..6793162 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,4 +1,4 @@
- # From http://www.zsh.org/pub/MD5SUM
--md5	0e8ea3313300277a04cee80836507bae	zsh-5.1.1.tar.xz
-+md5	afe96fde08b70e23c1cab1ca7a68fb34	zsh-5.2.tar.xz
- # Calculated based on the hash above
--sha256	74e9453b5470b3c0970f9f93cfd603d241c3d7b1968adc0e4b3951073e8d3dec	zsh-5.1.1.tar.xz
-+sha256	f17916320ffaa844bbd7ce48ceeb5945fc5f3eff64b149b4229bbfbdf3795a9d	zsh-5.2.tar.xz
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 212305b..03456b8 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
+diff --git a/package/gesftpserver/gesftpserver.hash b/package/gesftpserver/gesftpserver.hash
+index b952cf0..b4c9fdf 100644
+--- a/package/gesftpserver/gesftpserver.hash
++++ b/package/gesftpserver/gesftpserver.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	1db183e2d4cca5cc3ef10526f417ddef28e0402d0119030a06227bf925e63872	sftpserver-0.1.tar.gz
++sha256	5f744c38df9bb82f5ab500858a0fb4767ac3ee2254301da03cbcf8e6c587cbf5	sftpserver-0.2.1.tar.gz
+diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
+index 16f70fd..25c947a 100644
+--- a/package/gesftpserver/gesftpserver.mk
++++ b/package/gesftpserver/gesftpserver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZSH_VERSION = 5.1.1
-+ZSH_VERSION = 5.2
- ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
+-GESFTPSERVER_VERSION = 0.1
++GESFTPSERVER_VERSION = 0.2.1
+ GESFTPSERVER_SOURCE = sftpserver-$(GESFTPSERVER_VERSION).tar.gz
+ GESFTPSERVER_SITE = http://www.greenend.org.uk/rjk/sftpserver
+ GESFTPSERVER_LICENSE = GPLv2+
