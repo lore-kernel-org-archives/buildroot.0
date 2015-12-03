@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Dec 2015 21:45:08 +0100
-Subject: [Buildroot] [PATCH] gesftpserver: bump to version 0.2.1
-In-Reply-To: <1449164444-4848-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 3 Dec 2015 14:40:44 -0300")
-References: <1449164444-4848-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d1uncld7.fsf@dell.be.48ers.dk>
+Date: Thu, 03 Dec 2015 21:47:05 +0100
+Subject: [Buildroot] [PATCH] dropbear: bump to version 2015.71
+In-Reply-To: <1449164463-5525-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 3 Dec 2015 14:41:03 -0300")
+References: <1449164463-5525-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878u5bcl9y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,6 +16,9 @@ To: buildroot@busybox.net
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
+
+I'll also cherry pick it on 2015.11.x as it fixes quite some serious
+issues.
 
 -- 
 Bye, Peter Korsgaard
