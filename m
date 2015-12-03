@@ -1,52 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  3 Dec 2015 23:22:06 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gawk: clean the mpfr dependency
+Date: Thu,  3 Dec 2015 23:22:07 +0100
+Subject: [Buildroot] [PATCH 2/2] package/gawk: add optional readline
+	dependency
 In-Reply-To: <cover.1449181275.git.yann.morin.1998@free.fr>
 References: <cover.1449181275.git.yann.morin.1998@free.fr>
-Message-ID: <6dcb0e2bfe0573ddcfba8f9b7c90d18090c46a1a.1449181275.git.yann.morin.1998@free.fr>
+Message-ID: <f37416a8d0f491f30efbc89ddd3a2ce82e56b65c.1449181275.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When available, mpfr provides support for BIGNUM, which allows gawk to
-work on arbitrarily-large numbers (hence the name).
+The gawk debugger can optionally use readline for user input during
+the debugging session (for the usual autocompletion and stuff).
 
-Forcibly disable mpfr if the mpfr package is not enabled. Let
-./configure find it automatically when it is enabled.
-
-To be noted, the host-gawk needs not have BIGNUM to build the target
-variant with support for BIGNUM.
+Enable readline support when the readline package is enabled; let
+./configure automatically find it. Forcibly disable readline support
+when the readline package is disabled.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- package/gawk/gawk.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/gawk/gawk.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 6702c48..74c1fe4 100644
+index 74c1fe4..4145025 100644
 --- a/package/gawk/gawk.mk
 +++ b/package/gawk/gawk.mk
-@@ -7,7 +7,7 @@
- GAWK_VERSION = 4.1.3
- GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
--GAWK_DEPENDENCIES = host-gawk $(if $(BR2_PACKAGE_MPFR),mpfr)
-+GAWK_DEPENDENCIES = host-gawk
- GAWK_LICENSE = GPLv3+
- GAWK_LICENSE_FILES = COPYING
- 
-@@ -16,6 +16,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- GAWK_DEPENDENCIES += busybox
+@@ -23,6 +23,13 @@ else
+ GAWK_CONF_OPTS += --without-mpfr
  endif
  
 +# When enabled, let ./configure find it automatically
-+ifeq ($(BR2_PACKAGE_MPFR),y)
-+GAWK_DEPENDENCIES += mpfr
++ifeq ($(BR2_PACKAGE_READLINE),y)
++GAWK_DEPENDENCIES += readline
 +else
-+GAWK_CONF_OPTS += --without-mpfr
++GAWK_CONF_OPTS += --without-readline
 +endif
 +
  # We don't have a host-busybox, and we don't want to use readline or mpfr
