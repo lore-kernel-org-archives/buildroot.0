@@ -1,59 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Dec 2015 22:08:27 +0100
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.2e
-Message-ID: <20151203211259.161FC80ADB@busybox.osuosl.org>
+Date: Thu, 3 Dec 2015 19:54:26 +0100
+Subject: [Buildroot] [git commit] zsh: bump to version 5.2
+Message-ID: <20151203211258.A3AEE80ADB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9fb14ecef2427d3b98586c667f1e19112de5f90
+commit: http://git.buildroot.net/buildroot/commit/?id=eaf375197f4d9f147e04592465f86d26b87f6de6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2015-3193 - BN_mod_exp may produce incorrect results on x86_64
-CVE-2015-3194 - Certificate verify crash with missing PSS parameter
-CVE-2015-3195 - X509_ATTRIBUTE memory leak
-
-Enable IDEA as well since otherwise the build breaks (always great
-upstream) - it's no longer patent encumbered.
-
-[Peter: correct sha256]
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/zsh/zsh.hash | 4 ++--
+ package/zsh/zsh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 355be79..dee8ab9 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,2 +1,2 @@
--# From https://www.openssl.org/source/openssl-1.0.2d.tar.gz.sha256
--sha256	671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8	openssl-1.0.2d.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2e.tar.gz.sha256
-+sha256	e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff	openssl-1.0.2e.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index da492ff..1f07df1 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
+diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
+index 57c34be..6793162 100644
+--- a/package/zsh/zsh.hash
++++ b/package/zsh/zsh.hash
+@@ -1,4 +1,4 @@
+ # From http://www.zsh.org/pub/MD5SUM
+-md5	0e8ea3313300277a04cee80836507bae	zsh-5.1.1.tar.xz
++md5	afe96fde08b70e23c1cab1ca7a68fb34	zsh-5.2.tar.xz
+ # Calculated based on the hash above
+-sha256	74e9453b5470b3c0970f9f93cfd603d241c3d7b1968adc0e4b3951073e8d3dec	zsh-5.1.1.tar.xz
++sha256	f17916320ffaa844bbd7ce48ceeb5945fc5f3eff64b149b4229bbfbdf3795a9d	zsh-5.2.tar.xz
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 212305b..03456b8 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSL_VERSION = 1.0.2d
-+OPENSSL_VERSION = 1.0.2e
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
-@@ -77,7 +77,6 @@ define OPENSSL_CONFIGURE_CMDS
- 			--libdir=/lib \
- 			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
- 			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
--			no-idea \
- 			no-rc5 \
- 			enable-camellia \
- 			enable-mdc2 \
+-ZSH_VERSION = 5.1.1
++ZSH_VERSION = 5.2
+ ZSH_SITE = http://www.zsh.org/pub
+ ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
+ ZSH_DEPENDENCIES = ncurses
