@@ -1,68 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Dec 2015 22:34:55 +0100
-Subject: [Buildroot] [git commit] wireshark: enable GUI options
-Message-ID: <20151203214015.D85C981D4D@busybox.osuosl.org>
+Date: Thu, 3 Dec 2015 22:26:42 +0100
+Subject: [Buildroot] [git commit] python-lxml: bump to 3.5.0
+Message-ID: <20151203214015.A0ADF81D4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00be67d846963f2f2b9f7ccc25299d2fbfdecf58
+commit: http://git.buildroot.net/buildroot/commit/?id=0d879a268fd8ecddd096d45c1a741f5c91759ae9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable gtk2, gtk3 & qt5 automatic GUI options.
-gtk2 & qt5 only build-time tested, gtk3 runtime-tested with wayland.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.mk | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 5d1d5f6..9a8d370 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -20,7 +20,6 @@ WIRESHARK_AUTORECONF = YES
- # wireshark adds -I$includedir to CFLAGS, causing host/target headers mixup.
- # Work around it by pointing includedir at staging
- WIRESHARK_CONF_OPTS = \
--	--disable-wireshark \
- 	--without-krb5 \
- 	--disable-usr-local \
- 	--enable-static=no \
-@@ -29,4 +28,33 @@ WIRESHARK_CONF_OPTS = \
- 	--with-lua=no \
- 	--includedir=$(STAGING_DIR)/usr/include
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 624d8b0..08402ed 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  b3d362bac471172747cda3513238f115cbd6c5f8b8e6319bf6a97a7892724099  lxml-3.4.4.tgz
++sha256  349f93e3a4b09cc59418854ab8013d027d246757c51744bf20069bc89016f578  lxml-3.5.0.tgz
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 321e56d..8bfbb3b 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# wireshark GUI options
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+WIRESHARK_CONF_OPTS += --with-gtk3=yes
-+WIRESHARK_DEPENDENCIES += libgtk3
-+else ifeq ($(BR2_PACKAGE_LIBGTK2),y)
-+WIRESHARK_CONF_OPTS += --with-gtk2=yes
-+WIRESHARK_DEPENDECIES += libgtk2
-+else
-+WIRESHARK_CONF_OPTS += --with-gtk3=no --with-gtk2=no
-+endif
-+
-+# Qt4 needs accessibility, we don't support it
-+ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
-+WIRESHARK_CONF_OPTS += --with-qt=5
-+WIRESHARK_DEPENDENCIES += qt5base
-+# Seems it expects wrappers and passes a -qt=X parameter for version
-+WIRESHARK_MAKE_OPTS += \
-+	MOC="$(HOST_DIR)/usr/bin/moc" \
-+	RCC="$(HOST_DIR)/usr/bin/rcc" \
-+	UIC="$(HOST_DIR)/usr/bin/uic"
-+else
-+WIRESHARK_CONF_OPTS += --with-qt=no
-+endif
-+
-+# No GUI at all
-+ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3)$(BR2_PACKAGE_QT5BASE_WIDGETS),)
-+WIRESHARK_CONF_OPTS += --disable-wireshark
-+endif
-+
- $(eval $(autotools-package))
+-PYTHON_LXML_VERSION = 3.4.4
++PYTHON_LXML_VERSION = 3.5.0
+ PYTHON_LXML_SITE = http://lxml.de/files
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
+ 
