@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Dec 2015 19:52:29 +0100
-Subject: [Buildroot] [PATCH 12/51] core/apply-patches: store full path
- of applied patches
-In-Reply-To: <56607974.9090508@lucaceresoli.net>
+Date: Thu, 3 Dec 2015 19:53:35 +0100
+Subject: [Buildroot] [PATCH 14/51] core/legal-info: update the
+ legal-info report header
+In-Reply-To: <56607A1A.8070402@lucaceresoli.net>
 References: <cover.1448289515.git.yann.morin.1998@free.fr>
- <5a0a287345904fab50326aa020b60e8cb08ca5be.1448289515.git.yann.morin.1998@free.fr>
- <56607974.9090508@lucaceresoli.net>
-Message-ID: <20151203185229.GF3834@free.fr>
+ <83f76ca51bb54091f3d490fbbcfdcbf7b0950e1a.1448289515.git.yann.morin.1998@free.fr>
+ <56607A1A.8070402@lucaceresoli.net>
+Message-ID: <20151203185335.GG3834@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,42 +15,47 @@ To: buildroot@busybox.net
 
 Luca, All,
 
-On 2015-12-03 18:18 +0100, Luca Ceresoli spake thusly:
+On 2015-12-03 18:21 +0100, Luca Ceresoli spake thusly:
 > Yann E. MORIN wrote:
-> >Currently, we only store the filename of the applied patches.
+> >In some cases, the toolchain sources are now recovered and available in
+> >the legal-info output. So, adapt the header to use conditional instead
+> >of an definitive negation.
 > >
-> >However, we are soon to want to install those patches in the legal-info
-> >directory, so we'll have to know where those patches come from.
+> >Also update the part about saving the sources: it's not the license list
+> >that defines whether sources are installed, but rather whether the
+> >package is reditributable or not. Update the header acoordingly.
 > >
-> >Instead of duplicating the logic to find the patches, just store the
-> >full path to each of those patches so we can retrieve them more easily
-> >later on.
+> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> >---
+> >  support/legal-info/README.header | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> >diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+> >index 90fc445..08aa74d 100644
+> >--- a/support/legal-info/README.header
+> >+++ b/support/legal-info/README.header
+> >@@ -12,11 +12,11 @@ This material is composed of the following items.
+> >   * The Buildroot configuration file; this has been saved in buildroot.config.
+> >   * The toolchain (cross-compiler and related tools) used to generate all the
+> >     compiled programs.
+> >-   Note: this has not been saved due to technical limitations, you must
+> >+   Note: this may not been saved due to technical limitations, you may need to
 > 
-> Mmh, storing absolute pathnames always look a bit ugly... Any simple
-> way to store the relative path ("package/busybox/0002-unzip.patch")?
+> "may not been saved" -> "may have not been saved" I guess.
 
-What about GLOBAL_PATCH_DIR or downloaded patches, or patches from
-BR2_EXTERNAL?
+Hehe! :-)
 
-As I said in the commit log, it's better not to replicate the logic
-to find the patches. We already have a non-trivial heuristic in
-pkg-generic, so better make use of it.
+> With that fixed:
+>  Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> Since you're updating the README about features that are already in
+> master, this patch could be applied immediately. Except it probably
+> conflicts, so you might want to rework it and move it at the beginning
+> of your patchset (or submit independently) if you want it to be merged
+> more quickly.
 
-> Also, there's a double slash in the output:
-> $ cat ./output/build/busybox-1.24.1/.applied_patches_list
-> /home/murray/devel/buildroot/package/busybox//0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
-
-Yeah, is that a problem?
-
-If that bothers you, I can try to fix that. But the directory component
-is passed straight from the pkg-generic infra (the $(@D) as set by make).
-
-> BTW, in order to evaluate the risk that your change breaks something,
-> I found myself wondering what .applied_patches_list is used for. And it
-> seems unused... am I missing something?
-
-Not at all. Nothing uses it so far. Hence we're free to change its
-content.
+Yep, good idea, thanks!
 
 Regards,
 Yann E. MORIN.
