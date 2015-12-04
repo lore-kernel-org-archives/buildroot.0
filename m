@@ -1,39 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Dec 2015 21:31:27 +0100
-Subject: [Buildroot] [PATCH] directfb: disable for sparc
-In-Reply-To: <20151204165415.GA5835@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Fri, 4 Dec 2015 17:54:15 +0100")
-References: <20151204165415.GA5835@waldemar-brodkorb.de>
-Message-ID: <87d1um9crk.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Dec 2015 21:37:13 +0100
+Subject: [Buildroot] [PATCH] flite: disable ALSA support
+In-Reply-To: <1449248389-33123-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Fri, 4 Dec 2015 16:59:49 +0000")
+References: <1449248389-33123-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <878u5a9chy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Requires atomic operations.
- > Fixes following autobuild failure:
- > http://autobuild.buildroot.net/results/8205100c166659c47daff66b1e63edc82eeb7930/
+ > Upstream says that ALSA support in flite is broken for earlier versions:
+ > "Seems the alsa code I have breaks on earlier versions I'm not sure what
+ > the threshold version is, but made this depend on the one I know -- you
+ > can still specific --with-audio=alsa"
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
- > ---
- >  package/directfb/Config.in |    1 +
- >  1 file changed, 1 insertion(+)
+But we have the newest alsa-lib release in Buildroot, right?
 
- > diff --git a/package/directfb/Config.in b/package/directfb/Config.in
- > index 8c13d30..d9008a4 100644
- > --- a/package/directfb/Config.in
- > +++ b/package/directfb/Config.in
- > @@ -4,6 +4,7 @@ config BR2_PACKAGE_DIRECTFB
- >  	depends on BR2_INSTALL_LIBSTDCPP
- >  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- >  	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t issue
- > +	depends on !BR2_sparc # needs atomic operation __sync_fetch_and_add
 
-You forgot to hide the toolchain comment on sparc. Committed with that
-fixed, thanks.
+> So let's disable it. It will prevent failures like this one:
+
+ > /br/output/host/usr/bin/mipsel-linux-gcc -D_LARGEFILE_SOURCE
+ > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -Wall -o
+ > ../bin/find_sts find_sts_main.o -L../build/mipsel-linux-uclibc/lib
+ > -lflite -lm
+ > ../build/mipsel-linux-uclibc/lib/libflite.a(audio.o): In function
+ > `audio_open':
+ > audio.c:(.text+0x1c): undefined reference to `audio_open_oss'
+
+This sounds more like it is building without alsa support. From
+flite-1.4-release/src/audio/native_audio.h:
+
+#ifdef CST_AUDIO_LINUX
+
+#define AUDIO_OPEN_NATIVE audio_open_oss
+..
+
+#endif
+
+#ifdef CST_AUDIO_ALSA
+
+#define AUDIO_OPEN_NATIVE audio_open_alsa
+..
+
+#endif
+
+Could you check config.log why it fails?
 
 -- 
 Bye, Peter Korsgaard
