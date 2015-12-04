@@ -1,49 +1,59 @@
-From: penman <paul.enman@gmail.com>
-Date: Fri,  4 Dec 2015 16:56:35 -0600
-Subject: [Buildroot] [PATCH 1/1] [1/1] package/uclibc: Enable compile in
-	thumb mode when selected
-Message-ID: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat,  5 Dec 2015 00:34:07 +0100
+Subject: [Buildroot] [PATCH v1] qt53d: enabled assimpsceneparser plugin
+In-Reply-To: <1449272047-15249-1-git-send-email-ps.report@gmx.net>
+References: <1449272047-15249-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1449272047-15249-2-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: penman <paul.enman@gmail.com>
----
- package/uclibc/uclibc.mk | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+- select assimp package
+- copy enabled assimpsceneparser plugin
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index c62a40f..4f5c605 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -86,9 +86,15 @@ define UCLIBC_ARM_ABI_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_EABI,$(@D)/.config)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Depends on '[PATCH v2] qt5/qt53d: new package' (see [1]).
+
+[1] https://patchwork.ozlabs.org/patch/552897
+---
+ package/qt5/qt53d/Config.in | 1 +
+ package/qt5/qt53d/qt53d.mk  | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
+index d350922..6c09358 100644
+--- a/package/qt5/qt53d/Config.in
++++ b/package/qt5/qt53d/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_QT53D
+ 	bool "qt53d"
++	select BR2_PACKAGE_ASSIMP
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+index 810242b..15d8999 100644
+--- a/package/qt5/qt53d/qt53d.mk
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -7,7 +7,7 @@
+ QT53D_VERSION = $(QT5_VERSION)
+ QT53D_SITE = $(QT5_SITE)
+ QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
+-QT53D_DEPENDENCIES = qt5base qt5declarative
++QT53D_DEPENDENCIES = assimp qt5base qt5declarative
+ QT53D_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+@@ -34,6 +34,7 @@ endef
+ ifeq ($(BR2_STATIC_LIBS),)
+ define QT53D_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
  endef
- 
--# Thumb build is broken with threads, build in ARM mode
--ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
--UCLIBC_EXTRA_CFLAGS += -marm
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),y)
-+define UCLIBC_ARM_THUMB_CONFIG
-+	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
-+endef
-+else
-+define UCLIBC_ARM_THUMB_CONFIG
-+	$(call KCONFIG_DISABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
-+endef
  endif
- 
- ifeq ($(BR2_UCLIBC_ARM_BX),y)
-@@ -373,6 +379,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(UCLIBC_ARC_TYPE_CONFIG)
- 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
- 	$(UCLIBC_ARM_ABI_CONFIG)
-+	$(UCLIBC_ARM_THUMB_CONFIG)
- 	$(UCLIBC_ARM_BX_CONFIG)
- 	$(UCLIBC_MIPS_ABI_CONFIG)
- 	$(UCLIBC_MIPS_ISA_CONFIG)
 -- 
-1.9.1
+2.1.4
