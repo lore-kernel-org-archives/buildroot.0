@@ -1,29 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Dec 2015 21:46:53 +0100
-Subject: [Buildroot] [PATCH] libpng: security bump to version 1.6.20
-In-Reply-To: <1449179287-23960-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 3 Dec 2015 18:48:07 -0300")
-References: <1449179287-23960-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a8pq7xhe.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Dec 2015 21:55:22 +0100
+Subject: [Buildroot] [PATCH] at91bootstrap3: bump to v3.8
+In-Reply-To: <1449181918-15596-1-git-send-email-alexandre.belloni@free-electrons.com>
+ (Alexandre Belloni's message of "Thu, 3 Dec 2015 23:31:58 +0100")
+References: <1449181918-15596-1-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <87610e7x39.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@free-electrons.com> writes:
 
- > Fixes:
- > CVE-2015-8126 - incorrect implementation of png_set_PLTE() that uses
- > png_ptr not info_ptr, that left png_set_PLTE() open to this vuln.
+ > In preparation for sama5d2 xplained support, bump at91bootstrap3 to 3.8
+ > Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 
- > (fix in previous release was incomplete)
-
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
-Should this also be applied to the 2015.11.x branch?
+You forgot to add a hash file for the new release. Committed with that
+added, thanks.
 
 -- 
 Bye, Peter Korsgaard
