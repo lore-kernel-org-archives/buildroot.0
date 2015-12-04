@@ -1,23 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Dec 2015 21:55:22 +0100
-Subject: [Buildroot] [PATCH] at91bootstrap3: bump to v3.8
-In-Reply-To: <1449181918-15596-1-git-send-email-alexandre.belloni@free-electrons.com>
- (Alexandre Belloni's message of "Thu, 3 Dec 2015 23:31:58 +0100")
-References: <1449181918-15596-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <87610e7x39.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 4 Dec 2015 17:55:32 -0300
+Subject: [Buildroot] [PATCH] libpng: security bump to version 1.6.20
+In-Reply-To: <87a8pq7xhe.fsf@dell.be.48ers.dk>
+References: <1449179287-23960-1-git-send-email-gustavo@zacarias.com.ar>
+ <87a8pq7xhe.fsf@dell.be.48ers.dk>
+Message-ID: <5661FDC4.6060504@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@free-electrons.com> writes:
+On 04/12/15 17:46, Peter Korsgaard wrote:
 
- > In preparation for sama5d2 xplained support, bump at91bootstrap3 to 3.8
- > Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> Committed, thanks.
+>
+> Should this also be applied to the 2015.11.x branch?
 
-You forgot to add a hash file for the new release. Committed with that
-added, thanks.
-
--- 
-Bye, Peter Korsgaard
+Hi, yes, recommended if the plan is to throw security updates back at it 
+as well.
+Regards.
