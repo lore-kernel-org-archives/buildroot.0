@@ -1,23 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Dec 2015 21:38:09 +0100
-Subject: [Buildroot] [PATCH] gnutls: needs argp-standalone for
-	musl/uclibc
-In-Reply-To: <1449248499-2852-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 4 Dec 2015 14:01:39 -0300")
-References: <1449248499-2852-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874mfy9cge.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Dec 2015 21:40:35 +0100
+Subject: [Buildroot] [PATCH] libatomic_ops: enable sparc64 / sparcv9
+In-Reply-To: <20151204053406.GA16004@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Fri, 4 Dec 2015 06:34:06 +0100")
+References: <20151204053406.GA16004@waldemar-brodkorb.de>
+Message-ID: <87mvtq7xrw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
- > It's required for crywrap (tools), fixes:
- > http://autobuild.buildroot.net/results/2d9/2d98fced7ff7c3b5c39a97eb1c8db7dd651fa86c/
-
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Works fine for sparc64.
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
 Committed, thanks.
 
