@@ -1,93 +1,78 @@
-From: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Fri,  4 Dec 2015 11:22:47 +0100
-Subject: [Buildroot] [PATCH 1/1] emlog:new package
-Message-ID: <1449224567-14412-1-git-send-email-joris.lijssens@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 4 Dec 2015 12:40:35 +0100
+Subject: [Buildroot] [PATCH 17/51] core/legal-info: generate a hash of
+ all saved files
+In-Reply-To: <20151203191122.GH3834@free.fr>
+References: <cover.1448289515.git.yann.morin.1998@free.fr>
+ <c5429b51639c27b6770d01282dc7beee72fd581d.1448289515.git.yann.morin.1998@free.fr>
+ <56607AD4.9010801@lucaceresoli.net> <20151203191122.GH3834@free.fr>
+Message-ID: <56617BB3.1070003@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
----
- package/Config.in        |  1 +
- package/emlog/Config.in  | 12 ++++++++++++
- package/emlog/emlog.hash |  2 ++
- package/emlog/emlog.mk   | 26 ++++++++++++++++++++++++++
- 4 files changed, 41 insertions(+)
- create mode 100644 package/emlog/Config.in
- create mode 100644 package/emlog/emlog.hash
- create mode 100644 package/emlog/emlog.mk
+Dear Yann,
 
-diff --git a/package/Config.in b/package/Config.in
-index 2bdad01..c862c40 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1499,6 +1499,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/debianutils/Config.in"
- endif
- 	source "package/dsp-tools/Config.in"
-+	source "package/emlog/Config.in"
- 	source "package/ftop/Config.in"
- 	source "package/getent/Config.in"
- 	source "package/htop/Config.in"
-diff --git a/package/emlog/Config.in b/package/emlog/Config.in
-new file mode 100644
-index 0000000..85a9ed6
---- /dev/null
-+++ b/package/emlog/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_EMLOG
-+	bool "emlog"
-+	help
-+	  emlog is a Linux kernel module that makes it easy to access the most
-+	  recent (and only the most recent) output from a process. It works
-+	  just like "tail -f" on a log file, except that the storage required
-+	  never grows. This can be useful in embedded systems where there isn't
-+	  enough memory or disk space for keeping complete log files, but the
-+	  most recent debugging messages are sometimes needed (e.g., after an
-+	  error is observed).
-+
-+	  https://github.com/nicupavel/emlog
-diff --git a/package/emlog/emlog.hash b/package/emlog/emlog.hash
-new file mode 100644
-index 0000000..ab729f8
---- /dev/null
-+++ b/package/emlog/emlog.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 37b03b79684245ddcb33cfff388a7f2d74f465f2e1fce4f661b81726f5ccd595 emlog-0.52.tar.gz
-diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
-new file mode 100644
-index 0000000..9264849
---- /dev/null
-+++ b/package/emlog/emlog.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# emlog
-+#
-+################################################################################
-+
-+EMLOG_VERSION = 0.52
-+EMLOG_SITE = $(call github,nicupavel,emlog,emlog-$(EMLOG_VERSION))
-+EMLOG_LICENSE = GPLv2
-+EMLOG_LICENSE_FILES = COPYING
-+
-+EMLOG_DEPENDENCIES = linux
-+
-+define EMLOG_BUILD_CMDS
-+       $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
-+       $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(@D) nbcat
-+endef
-+
-+define EMLOG_INSTALL_TARGET_CMDS
-+       $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) \
-+               INSTALL_MOD_STRIP=1 \
-+               modules_install
-+       $(INSTALL) -m 0755 $(@D)/nbcat $(TARGET_DIR)/usr/bin
-+endef
-+
-+$(eval $(generic-package))
+Yann E. MORIN wrote:
+> Luca, All,
+>
+> On 2015-12-03 18:24 +0100, Luca Ceresoli spake thusly:
+>> Yann E. MORIN wrote:
+>>> Having a hash of the saved files can be interesting for the recipient to
+>>> verify the integrity of the files.
+>>>
+>>> We remove the warning file earlier, to exclude it from the hash list.
+>>>
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+>>> ---
+>>>   Makefile | 7 ++++++-
+>>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Makefile b/Makefile
+>>> index 5e62275..947f941 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -662,8 +662,13 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+>>>   		cat support/legal-info/README.warnings-header \
+>>>   			$(LEGAL_WARNINGS) >>$(LEGAL_REPORT); \
+>>>   		cat $(LEGAL_WARNINGS); fi
+>>> -	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
+>>>   	@rm -f $(LEGAL_WARNINGS)
+>>> +	@find $(LEGAL_INFO_DIR) -type f -exec sha256sum {} + \
+>>> +	 |sed -r -e 's:  $(LEGAL_INFO_DIR)/+:  :' \
+>>> +	 |sort -k2 \
+>>> +	 >$(BUILD_DIR)/legal-info.sha256
+>>
+>> Not sure I like the first sed invocation... It's written in a way that
+>> heavily depends on how sha256 formats its output,
+>
+> Output which is mirrored from the output of md5sum?which has been the
+> same for eons. But OK...
+
+Yes, mine is mostly an aesthetic issue.
+
+>
+>> and it's not very
+>> much readable by the average Buildroot user (*). It will most likely
+>> never cause any problems, it's mostly a style issue.
+>>
+>> How about:
+>>
+>> 	@( cd $(LEGAL_INFO_DIR) &&
+>> 	   find . -type f -exec sha256sum {} + | sort -k2 ) \
+>> 	 >$(BUILD_DIR)/legal-info.sha256
+>
+> Still the output would look like:
+>
+>      sha2-hash  ./path/to/file
+>      sha2-hash  ./path/to/other/file
+>
+> That is, with a leading './' which is ugly... :-/
+
+Mmmh... how about 'find * [...]'?
+
 -- 
-1.8.3.1
+Luca
