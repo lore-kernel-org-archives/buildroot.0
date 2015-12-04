@@ -1,54 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Dec 2015 21:37:13 +0100
-Subject: [Buildroot] [PATCH] flite: disable ALSA support
-In-Reply-To: <1449248389-33123-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Fri, 4 Dec 2015 16:59:49 +0000")
-References: <1449248389-33123-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <878u5a9chy.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Dec 2015 21:38:09 +0100
+Subject: [Buildroot] [PATCH] gnutls: needs argp-standalone for
+	musl/uclibc
+In-Reply-To: <1449248499-2852-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 4 Dec 2015 14:01:39 -0300")
+References: <1449248499-2852-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874mfy9cge.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Upstream says that ALSA support in flite is broken for earlier versions:
- > "Seems the alsa code I have breaks on earlier versions I'm not sure what
- > the threshold version is, but made this depend on the one I know -- you
- > can still specific --with-audio=alsa"
+ > It's required for crywrap (tools), fixes:
+ > http://autobuild.buildroot.net/results/2d9/2d98fced7ff7c3b5c39a97eb1c8db7dd651fa86c/
 
-But we have the newest alsa-lib release in Buildroot, right?
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-
-> So let's disable it. It will prevent failures like this one:
-
- > /br/output/host/usr/bin/mipsel-linux-gcc -D_LARGEFILE_SOURCE
- > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -Wall -o
- > ../bin/find_sts find_sts_main.o -L../build/mipsel-linux-uclibc/lib
- > -lflite -lm
- > ../build/mipsel-linux-uclibc/lib/libflite.a(audio.o): In function
- > `audio_open':
- > audio.c:(.text+0x1c): undefined reference to `audio_open_oss'
-
-This sounds more like it is building without alsa support. From
-flite-1.4-release/src/audio/native_audio.h:
-
-#ifdef CST_AUDIO_LINUX
-
-#define AUDIO_OPEN_NATIVE audio_open_oss
-..
-
-#endif
-
-#ifdef CST_AUDIO_ALSA
-
-#define AUDIO_OPEN_NATIVE audio_open_alsa
-..
-
-#endif
-
-Could you check config.log why it fails?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
