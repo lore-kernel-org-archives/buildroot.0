@@ -1,187 +1,241 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  4 Dec 2015 20:26:57 +0100
-Subject: [Buildroot] [V3 2/2] perl-mail-spamassassin: new package
-In-Reply-To: <1449257217-8021-1-git-send-email-francois.perrad@gadz.org>
-References: <1449257217-8021-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1449257217-8021-3-git-send-email-francois.perrad@gadz.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  4 Dec 2015 21:01:22 +0100
+Subject: [Buildroot] [PATCH v4] wiringpi: new package
+Message-ID: <1449259282-5663-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/Config.in                                  |  1 +
- .../0001-without-host-perl-dependencies.patch      | 64 ++++++++++++++++++++++
- package/perl-mail-spamassassin/Config.in           | 26 +++++++++
- .../perl-mail-spamassassin.hash                    |  3 +
- .../perl-mail-spamassassin.mk                      | 31 +++++++++++
- 5 files changed, 125 insertions(+)
- create mode 100644 package/perl-mail-spamassassin/0001-without-host-perl-dependencies.patch
- create mode 100644 package/perl-mail-spamassassin/Config.in
- create mode 100644 package/perl-mail-spamassassin/perl-mail-spamassassin.hash
- create mode 100644 package/perl-mail-spamassassin/perl-mail-spamassassin.mk
+Changes v1 -> v2:
+  - fix typo in commit message (wirinpi vs wiringpi)
+
+Changes v2 -> v3:
+  - moved from Hardware to Libraries/Hardware handling (suggested by Thomas Petazzoni)
+  - add comment header (suggested by Thomas Petazzoni)
+  - use original buildsystem install targets for libraries
+  - rework the complete build/install (and add static build)
+  - ...
+
+Changes v3 -> v4:
+  - add license information (suggested by Thomas Petazzoni)
+  - bump version from 2.29 to 2.31
+---
+ package/Config.in                                  |   1 +
+ .../wiringpi/0001-Adjust-for-buildroot-build.patch | 123 +++++++++++++++++++++
+ package/wiringpi/Config.in                         |   6 +
+ package/wiringpi/wiringpi.mk                       |  45 ++++++++
+ 4 files changed, 175 insertions(+)
+ create mode 100644 package/wiringpi/0001-Adjust-for-buildroot-build.patch
+ create mode 100644 package/wiringpi/Config.in
+ create mode 100644 package/wiringpi/wiringpi.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bdc3063..f0989d4 100644
+index bdc3063..4a7f637 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -553,6 +553,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-libwww-perl/Config.in"
- 	source "package/perl-lwp-mediatypes/Config.in"
- 	source "package/perl-mail-dkim/Config.in"
-+	source "package/perl-mail-spamassassin/Config.in"
- 	source "package/perl-mailtools/Config.in"
- 	source "package/perl-mime-base64/Config.in"
- 	source "package/perl-mojolicious/Config.in"
-diff --git a/package/perl-mail-spamassassin/0001-without-host-perl-dependencies.patch b/package/perl-mail-spamassassin/0001-without-host-perl-dependencies.patch
+@@ -900,6 +900,7 @@ menu "Hardware handling"
+ 	source "package/pcsc-lite/Config.in"
+ 	source "package/tslib/Config.in"
+ 	source "package/urg/Config.in"
++	source "package/wiringpi/Config.in"
+ endmenu
+ 
+ menu "Javascript"
+diff --git a/package/wiringpi/0001-Adjust-for-buildroot-build.patch b/package/wiringpi/0001-Adjust-for-buildroot-build.patch
 new file mode 100644
-index 0000000..8edab10
+index 0000000..4add46e
 --- /dev/null
-+++ b/package/perl-mail-spamassassin/0001-without-host-perl-dependencies.patch
-@@ -0,0 +1,64 @@
-+Remove host-perl-* dependencies
++++ b/package/wiringpi/0001-Adjust-for-buildroot-build.patch
+@@ -0,0 +1,123 @@
++From a16012bf4ea63f714468d80ebe101481c917e4b8 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Wed, 2 Dec 2015 00:22:26 +0100
++Subject: [PATCH] Adjust for buildroot build.
 +
-+The module  Mail-SpamAssassin tries to do the following things:
-+1) as usual CPAN module, install many .pm files in /usr/lib/perl5/site_perl/
-+and few scripts in /usr/bin.
-+No issue here.
-+2) "compile" SpamAssassin rules, that requires to install/run SpamAssassin on the host side.
-+As we don't want install host-perl modules, this step is disabled.
-+Please, considere the installed script `sa-update` for installing the rules for the first time.
-+3) spamc, an executable which embeds libperl
-+The cross compilation is not handled, I obtain an host executable.
-+This step is disabled (note: the option BUILD_SPAMC=yes/no is handled only on Windows)
++ - enable CC override
++ - fix devLib/gpio include path for local build (without installing first)
++ - change CFLAGS from '=' to '+=' to honour buildroot given flags
++ - add linker name link for libwiringPiDev and libwiringPi for local linking
++   (without installing first)
++ - fix install linker name link (do not link with absolute path)
++ - add gpio-static linking target
 +
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ devLib/Makefile   |  9 +++++----
++ gpio/Makefile     | 12 ++++++++----
++ wiringPi/Makefile |  7 ++++---
++ 3 files changed, 17 insertions(+), 11 deletions(-)
 +
-+--- a/Makefile.PL
-++++ b/Makefile.PL
-+@@ -133,10 +133,8 @@
-+       'spamassassin.raw' => 'spamassassin',
-+       'sa-learn.raw'     => 'sa-learn',
-+       'sa-update.raw'    => 'sa-update',
-+-      'sa-compile.raw'   => 'sa-compile',
-+       'sa-awl.raw'       => 'sa-awl',
-+       'sa-check_spamd.raw' => 'sa-check_spamd',
-+-      'spamc/spamc.c'    => 'spamc/spamc$(EXE_EXT)',
-+       'spamd/spamd.raw'  => 'spamd/spamd',
-+     },
++diff --git a/devLib/Makefile b/devLib/Makefile
++index 0fb0033..3117479 100644
++--- a/devLib/Makefile
+++++ b/devLib/Makefile
++@@ -36,10 +36,10 @@ DYNAMIC=libwiringPiDev.so.$(VERSION)
 + 
-+@@ -304,16 +302,6 @@
++ #DEBUG	= -g -O0
++ DEBUG	= -O2
++-CC	= gcc
++-INCLUDE	= -I.
+++CC	?= gcc
+++INCLUDE	= -I../wiringPi
++ DEFS	= -D_GNU_SOURCE
++-CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC
+++CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC
 + 
-+ ';
++ LIBS    =
 + 
-+-# check optional module versions
-+-use lib 'lib';
-+-use Mail::SpamAssassin::Util::DependencyInfo;
-+-if (Mail::SpamAssassin::Util::DependencyInfo::long_diagnostics() != 0) {
-+-  # missing required module?  die!
-+-  # bug 5908: http://cpantest.grango.org/wiki/CPANAuthorNotes says
-+-  # we should exit with a status of 0, but without creating Makefile
-+-  exit 0;
-+-}
-+-
-+ foreach my $file (@FILES_THAT_MUST_EXIST) {
-+   open (TOUCH, ">>$file") or die "cannot touch '$file'";
-+   close TOUCH;
-+@@ -1013,7 +1001,7 @@
++@@ -67,6 +67,7 @@ $(STATIC):	$(OBJ)
++ $(DYNAMIC):	$(OBJ)
++ 	$Q echo "[Link (Dynamic)]"
++ 	$Q $(CC) -shared -Wl,-soname,libwiringPiDev.so$(WIRINGPI_SONAME_SUFFIX) -o libwiringPiDev.so.$(VERSION) -lpthread $(OBJ)
+++	$Q ln -sf libwiringPiDev.so.$(VERSION) libwiringPiDev.so
 + 
-+ FIXBANG		= -Msharpbang \
-+                   -Mconditional \
-+-		  -DPERL_BIN="$(PERL_BIN)" \
-++		  -DPERL_BIN="/usr/bin/perl" \
-+ 		  -DPERL_WARN="$(PERL_WARN)" \
-+ 		  -DPERL_TAINT="$(PERL_TAINT)"
++ .c.o:
++ 	$Q echo [Compile] $<
++@@ -91,7 +92,7 @@ install:	$(DYNAMIC)
++ 	$Q echo "[Install Dynamic Lib]"
++ 	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
++ 	$Q install -m 0755 libwiringPiDev.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)
++-	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)	$(DESTDIR)/lib/libwiringPiDev.so
+++	$Q ln -sf libwiringPiDev.so.$(VERSION)				$(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so
++ 	$Q $(LDCONFIG)
 + 
-+@@ -1023,7 +1011,7 @@
-+ sa-learn: sa-learn.raw
-+ 	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) $(FIXBANG) -m$(PERM_RWX) -i$? -o$@
++ .PHONY:	install-static
++diff --git a/gpio/Makefile b/gpio/Makefile
++index 7dcd090..e8e43f9 100644
++--- a/gpio/Makefile
+++++ b/gpio/Makefile
++@@ -32,11 +32,11 @@ endif
 + 
-+-sa-update: sa-update.raw build_rules
-++sa-update: sa-update.raw
-+ 	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) $(FIXBANG) -m$(PERM_RWX) -isa-update.raw -osa-update
++ #DEBUG	= -g -O0
++ DEBUG	= -O2
++-CC	= gcc
++-INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
++-CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
+++CC	?= gcc
+++INCLUDE	= -I../wiringPi -I../devLib
+++CFLAGS	+= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
 + 
-+ sa-compile: sa-compile.raw
++-LDFLAGS	= -L$(DESTDIR)$(PREFIX)/lib
+++LDFLAGS	= -L../wiringPi -L../devLib
++ LIBS    = -lwiringPi -lwiringPiDev -lpthread
++ 
++ # May not need to  alter anything below this line
++@@ -55,6 +55,10 @@ gpio:	$(OBJ)
++ 	$Q echo [Link]
++ 	$Q $(CC) -o $@ $(OBJ) $(LDFLAGS) $(LIBS)
++ 
+++gpio-static: $(OBJ)
+++	$Q echo [Link]
+++	$Q $(CC) -o gpio $(OBJ) ../wiringPi/libwiringPi.a ../devLib/libwiringPiDev.a -lpthread
+++
++ .c.o:
++ 	$Q echo [Compile] $<
++ 	$Q $(CC) -c $(CFLAGS) $< -o $@
++diff --git a/wiringPi/Makefile b/wiringPi/Makefile
++index 6bbcc5d..e0ccc52 100644
++--- a/wiringPi/Makefile
+++++ b/wiringPi/Makefile
++@@ -36,10 +36,10 @@ DYNAMIC=libwiringPi.so.$(VERSION)
++ 
++ #DEBUG	= -g -O0
++ DEBUG	= -O2
++-CC	= gcc
+++CC	?= gcc
++ INCLUDE	= -I.
++ DEFS	= -D_GNU_SOURCE
++-CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC
+++CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC
++ 
++ LIBS    =
++ 
++@@ -90,6 +90,7 @@ $(STATIC):	$(OBJ)
++ $(DYNAMIC):	$(OBJ)
++ 	$Q echo "[Link (Dynamic)]"
++ 	$Q $(CC) -shared -Wl,-soname,libwiringPi.so$(WIRINGPI_SONAME_SUFFIX) -o libwiringPi.so.$(VERSION) -lpthread $(OBJ)
+++	$Q ln -sf libwiringPi.so.$(VERSION) libwiringPi.so
++ 
++ .c.o:
++ 	$Q echo [Compile] $<
++@@ -115,7 +116,7 @@ install:	$(DYNAMIC)
++ 	$Q echo "[Install Dynamic Lib]"
++ 	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
++ 	$Q install -m 0755 libwiringPi.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)
++-	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)	$(DESTDIR)/lib/libwiringPi.so
+++	$Q ln -sf libwiringPi.so.$(VERSION)				$(DESTDIR)$(PREFIX)/lib/libwiringPi.so
++ 	$Q $(LDCONFIG)
++ 
++ .PHONY:	install-static
++-- 
++2.1.4
 +
-diff --git a/package/perl-mail-spamassassin/Config.in b/package/perl-mail-spamassassin/Config.in
+diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
 new file mode 100644
-index 0000000..4d1b0e0
+index 0000000..9275b82
 --- /dev/null
-+++ b/package/perl-mail-spamassassin/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN
-+	bool "perl-mail-spamassassin"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_DIGEST_SHA1
-+	select BR2_PACKAGE_PERL_HTML_PARSER
-+	select BR2_PACKAGE_PERL_MAIL_DKIM
-+	select BR2_PACKAGE_PERL_NET_DNS
-+	select BR2_PACKAGE_PERL_NETADDR_IP
++++ b/package/wiringpi/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_WIRINGPI
++	bool "wiringpi"
 +	help
-+	  SpamAssassin is an extensible email filter which is used to identify spam
++	  wiringPi libraries (and gpio command)
 +
-+	  http://spamassassin.apache.com/
-+
-+comment "perl-mail-spamassassin needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
-+if BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN
-+
-+config BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN_CONTACT_ADDRESS
-+	string "contact address"
-+	default "the administrator of that BR system"
-+	help
-+	  What email address or URL should be used in the suspected-spam report
-+	  text for users who want more information on your filter installation?
-+
-+endif
-diff --git a/package/perl-mail-spamassassin/perl-mail-spamassassin.hash b/package/perl-mail-spamassassin/perl-mail-spamassassin.hash
++	  http://wiringpi.com/
+diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
 new file mode 100644
-index 0000000..7708008
+index 0000000..4c0fc34
 --- /dev/null
-+++ b/package/perl-mail-spamassassin/perl-mail-spamassassin.hash
-@@ -0,0 +1,3 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    76eca1f38c11635d319e62c26d5b034b Mail-SpamAssassin-3.4.1.tar.gz
-+sha256 9b7a95a594cdca4f265707364478b57813b82a0ec7e520d9bc818bfbcafdd726 Mail-SpamAssassin-3.4.1.tar.gz
-diff --git a/package/perl-mail-spamassassin/perl-mail-spamassassin.mk b/package/perl-mail-spamassassin/perl-mail-spamassassin.mk
-new file mode 100644
-index 0000000..0ad586b
---- /dev/null
-+++ b/package/perl-mail-spamassassin/perl-mail-spamassassin.mk
-@@ -0,0 +1,31 @@
++++ b/package/wiringpi/wiringpi.mk
+@@ -0,0 +1,45 @@
 +################################################################################
 +#
-+# perl-mail-spamassassin
++# wiringpi
 +#
 +################################################################################
 +
-+PERL_MAIL_SPAMASSASSIN_VERSION = 3.4.1
-+PERL_MAIL_SPAMASSASSIN_SOURCE = Mail-SpamAssassin-$(PERL_MAIL_SPAMASSASSIN_VERSION).tar.gz
-+PERL_MAIL_SPAMASSASSIN_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KM/KMCGRAIL/SpamAssassin
-+PERL_MAIL_SPAMASSASSIN_DEPENDENCIES = perl-digest-sha1 perl-html-parser perl-mail-dkim perl-net-dns perl-netaddr-ip
-+PERL_MAIL_SPAMASSASSIN_LICENSE = Apache-2.0
++WIRINGPI_VERSION = 2.31
++WIRINGPI_SITE = git://git.drogon.net/wiringPi
++WIRINGPI_LICENSE = LGPLv3+
++WIRINGPI_LICENSE_FILES = COPYING.LESSER
++WIRINGPI_INSTALL_STAGING = YES
 +
-+ifeq ($(BR2_PACKAGE_PERL_ENCODE_DETECT),y)
-+PERL_MAIL_SPAMASSASSIN_DEPENDENCIES += perl-encode-detect
++ifeq ($(BR2_STATIC_LIBS),y)
++WIRINGPI_LIB_BUILD_TARGETS = static
++WIRINGPI_LIB_INSTALL_TARGETS = install-static
++WIRINGPI_BIN_BUILD_TARGETS = gpio-static
++else ifeq ($(BR2_SHARED_LIBS),y)
++WIRINGPI_LIB_BUILD_TARGETS = all
++WIRINGPI_LIB_INSTALL_TARGETS = install
++WIRINGPI_BIN_BUILD_TARGETS = all
++else
++WIRINGPI_LIB_BUILD_TARGETS = all static
++WIRINGPI_LIB_INSTALL_TARGETS = install install-static
++WIRINGPI_BIN_BUILD_TARGETS = all
 +endif
 +
-+ifeq ($(BR2_PACKAGE_PERL_HTTP_DATE),y)
-+PERL_MAIL_SPAMASSASSIN_DEPENDENCIES += perl-http-date
-+endif
++define WIRINGPI_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/wiringPi $(WIRINGPI_LIB_BUILD_TARGETS)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/devLib $(WIRINGPI_LIB_BUILD_TARGETS)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/gpio $(WIRINGPI_BIN_BUILD_TARGETS)
++endef
 +
-+ifeq ($(BR2_PACKAGE_PERL_IO_SOCKET_SSL),y)
-+PERL_MAIL_SPAMASSASSIN_DEPENDENCIES += perl-io-socket-ssl
-+endif
++define WIRINGPI_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D)/wiringPi $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(STAGING_DIR) PREFIX=/usr LDCONFIG=true
++	$(MAKE) -C $(@D)/devLib $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(STAGING_DIR) PREFIX=/usr LDCONFIG=true
++endef
 +
-+ifeq ($(BR2_PACKAGE_PERL_LIBWWW_PERL),y)
-+PERL_MAIL_SPAMASSASSIN_DEPENDENCIES += perl-libwww-perl
-+endif
++define WIRINGPI_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D)/wiringPi $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR) PREFIX=/usr LDCONFIG=true
++	$(MAKE) -C $(@D)/devLib $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR) PREFIX=/usr LDCONFIG=true
++	$(INSTALL) -D -m 0755 $(@D)/gpio/gpio $(TARGET_DIR)/usr/bin/gpio
++	$(INSTALL) -D -m 0755 $(@D)/gpio/pintest $(TARGET_DIR)/usr/bin/pintest
++endef
 +
-+PERL_MAIL_SPAMASSASSIN_CONF_OPTS += CONTACT_ADDRESS="$(call qstrip,$(BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN_CONTACT_ADDRESS))"
-+
-+$(eval $(perl-package))
++$(eval $(generic-package))
 -- 
-2.5.0
+2.1.4
