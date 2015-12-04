@@ -1,43 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Dec 2015 21:31:05 +0100
-Subject: [Buildroot] [git commit] directfb: disable for sparc
-Message-ID: <20151204205652.A7C5881D36@busybox.osuosl.org>
+Date: Fri, 4 Dec 2015 21:26:09 +0100
+Subject: [Buildroot] [git commit] fakeroot: disable capabilities
+Message-ID: <20151204205653.10786821FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3e53aca96153f74f0718818b5a270e8f889d23f
+commit: http://git.buildroot.net/buildroot/commit/?id=c994c3db1f7d76b5dfe79e3b1133d66fdd06212c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Requires atomic operations.
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/8205100c166659c47daff66b1e63edc82eeb7930/
+These don't autodetect consistently and are process rather than file
+capabilities, so not very useful in the buildroot context.
+Otherwise we'd have to unconditionally pull host-libcap (or fix the
+detection, but again, not useful so there's no need).
 
-[Peter: also hide toolchain comment]
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/directfb/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/fakeroot/fakeroot.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 8c13d30..2d09460 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_DIRECTFB
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t issue
-+	depends on !BR2_sparc # needs atomic operation __sync_fetch_and_add
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -166,5 +167,6 @@ config BR2_PACKAGE_DIRECTFB_TESTS
- endif # BR2_PACKAGE_DIRECTFB
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 8bb9294..837c2b9 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -7,6 +7,10 @@
+ FAKEROOT_VERSION = 1.20.2
+ FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
+ FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
++# Force capabilities detection off
++# For now these are process capabilities (faked) rather than file
++# so they're of no real use
++HOST_FAKEROOT_CONF_ENV = ac_cv_func_capset=no
+ FAKEROOT_LICENSE = GPLv3+
+ FAKEROOT_LICENSE_FILES = COPYING
  
- comment "directfb needs a (e)glibc or uClibc toolchain w/ C++, threads, gcc >= 4.5"
-+	depends on !BR2_sparc # needs atomic operation __sync_fetch_and_add
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || BR2_TOOLCHAIN_USES_MUSL
