@@ -1,50 +1,51 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 4 Dec 2015 16:59:49 +0000
-Subject: [Buildroot] [PATCH] flite: disable ALSA support
-Message-ID: <1449248389-33123-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  4 Dec 2015 14:01:39 -0300
+Subject: [Buildroot] [PATCH] gnutls: needs argp-standalone for musl/uclibc
+Message-ID: <1449248499-2852-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream says that ALSA support in flite is broken for earlier versions:
+It's required for crywrap (tools), fixes:
+http://autobuild.buildroot.net/results/2d9/2d98fced7ff7c3b5c39a97eb1c8db7dd651fa86c/
 
-"Seems the alsa code I have breaks on earlier versions I'm not sure what
-the threshold version is, but made this depend on the one I know -- you
-can still specific --with-audio=alsa"
-
-So let's disable it. It will prevent failures like this one:
-
-/br/output/host/usr/bin/mipsel-linux-gcc -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -Wall -o
-../bin/find_sts find_sts_main.o -L../build/mipsel-linux-uclibc/lib
--lflite -lm
-../build/mipsel-linux-uclibc/lib/libflite.a(audio.o): In function
-`audio_open':
-audio.c:(.text+0x1c): undefined reference to `audio_open_oss'
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/flite/flite.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ package/gnutls/Config.in | 2 ++
+ package/gnutls/gnutls.mk | 6 ++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/package/flite/flite.mk b/package/flite/flite.mk
-index 611e334..c5d7828 100644
---- a/package/flite/flite.mk
-+++ b/package/flite/flite.mk
-@@ -36,11 +36,6 @@ FLITE_DEPENDENCIES = host-pkgconf
- # shared libraries.
- FLITE_MAKE = $(MAKE1)
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index dde23ce..998e213 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -14,6 +14,8 @@ if BR2_PACKAGE_GNUTLS
  
--ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
--FLITE_DEPENDENCIES += alsa-lib
--FLITE_CONF_OPTS += --with-audio=alsa
--else
--FLITE_CONF_OPTS += --with-audio=oss
--endif
-+FLITE_CONF_OPTS = --with-audio=oss
+ config BR2_PACKAGE_GNUTLS_TOOLS
+ 	bool "install tools"
++	select BR2_PACKAGE_ARGP_STANDALONE \
++		if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  Install GnuTLS command line tools for various cryptographic tasks.
  
- $(eval $(autotools-package))
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 3b9fc7f..a7342d6 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -44,6 +44,12 @@ ifeq ($(BR2_PACKAGE_GNUTLS_TOOLS),)
+ GNUTLS_CONF_OPTS += --disable-crywrap
+ endif
+ 
++# Prerequisite for crywrap
++ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
++GNUTLS_CONF_ENV += LIBS="-largp"
++GNUTLS_DEPENDENCIES += argp-standalone
++endif
++
+ # libidn support for nommu must exclude the crywrap wrapper (uses fork)
+ GNUTLS_CONF_OPTS += $(if $(BR2_USE_MMU),,--disable-crywrap)
+ 
 -- 
 2.4.10
