@@ -1,51 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  4 Dec 2015 14:01:39 -0300
-Subject: [Buildroot] [PATCH] gnutls: needs argp-standalone for musl/uclibc
-Message-ID: <1449248499-2852-1-git-send-email-gustavo@zacarias.com.ar>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri,  4 Dec 2015 20:26:55 +0100
+Subject: [Buildroot] [V3 0/2] SpamAssassin
+Message-ID: <1449257217-8021-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's required for crywrap (tools), fixes:
-http://autobuild.buildroot.net/results/2d9/2d98fced7ff7c3b5c39a97eb1c8db7dd651fa86c/
+V3:
+- fix Perl/CPAN infrastructure
+- patch SpamAssassin in order to avoid host-perl modules dependencies
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/Config.in | 2 ++
- package/gnutls/gnutls.mk | 6 ++++++
- 2 files changed, 8 insertions(+)
+See previous discussion in https://patchwork.ozlabs.org/patch/464635/
 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index dde23ce..998e213 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -14,6 +14,8 @@ if BR2_PACKAGE_GNUTLS
- 
- config BR2_PACKAGE_GNUTLS_TOOLS
- 	bool "install tools"
-+	select BR2_PACKAGE_ARGP_STANDALONE \
-+		if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  Install GnuTLS command line tools for various cryptographic tasks.
- 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 3b9fc7f..a7342d6 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -44,6 +44,12 @@ ifeq ($(BR2_PACKAGE_GNUTLS_TOOLS),)
- GNUTLS_CONF_OPTS += --disable-crywrap
- endif
- 
-+# Prerequisite for crywrap
-+ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-+GNUTLS_CONF_ENV += LIBS="-largp"
-+GNUTLS_DEPENDENCIES += argp-standalone
-+endif
-+
- # libidn support for nommu must exclude the crywrap wrapper (uses fork)
- GNUTLS_CONF_OPTS += $(if $(BR2_USE_MMU),,--disable-crywrap)
- 
--- 
-2.4.10
+Francois Perrad (2):
+  pkg-perl: avoid insertion of host-perl in the shebang of scripts
+  perl-mail-spamassassin: new package
+
+ package/Config.in                                  |  1 +
+ .../0001-without-host-perl-dependencies.patch      | 64 ++++++++++++++++++++++
+ package/perl-mail-spamassassin/Config.in           | 26 +++++++++
+ .../perl-mail-spamassassin.hash                    |  3 +
+ .../perl-mail-spamassassin.mk                      | 31 +++++++++++
+ package/pkg-perl.mk                                |  1 +
+ 6 files changed, 126 insertions(+)
+ create mode 100644 package/perl-mail-spamassassin/0001-without-host-perl-dependencies.patch
+ create mode 100644 package/perl-mail-spamassassin/Config.in
+ create mode 100644 package/perl-mail-spamassassin/perl-mail-spamassassin.hash
+ create mode 100644 package/perl-mail-spamassassin/perl-mail-spamassassin.mk
+
+--
+2.5.0
