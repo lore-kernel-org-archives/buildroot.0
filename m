@@ -1,50 +1,33 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 4 Dec 2015 17:53:30 +0100
-Subject: [Buildroot] [PATCH] openvmtools: enable for uClibc toolchains
-Message-ID: <20151204165330.GA5268@waldemar-brodkorb.de>
+Date: Fri, 4 Dec 2015 17:54:15 +0100
+Subject: [Buildroot] [PATCH] directfb: disable for sparc
+Message-ID: <20151204165415.GA5835@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since uClibc-ng 1.0.9 openvmtools can be compiled as
-the missing euidaccess function was added.
+Requires atomic operations.
+Fixes following autobuild failure:
+http://autobuild.buildroot.net/results/8205100c166659c47daff66b1e63edc82eeb7930/
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/openvmtools/Config.in |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ package/directfb/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index 64bf65c..528ddbe 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_OPENVMTOOLS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on BR2_ENABLE_LOCALE
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBDNET
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 8c13d30..d9008a4 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_DIRECTFB
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t issue
++	depends on !BR2_sparc # needs atomic operation __sync_fetch_and_add
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_ZLIB
  	help
-@@ -41,14 +40,13 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
- 	help
- 	  Support for PAM in openvmtools
- 
--comment "PAM support needs an (e)glibc toolchain w/ dynamic library"
-+comment "PAM support needs an (e)glibc or uClibc toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
- 
- endif
- 
--comment "openvmtools needs an (e)glibc or musl toolchain w/ wchar, threads, RPC, locale"
-+comment "openvmtools needs a toolchain w/ wchar, threads, RPC, locale"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE || \
--		BR2_TOOLCHAIN_USES_UCLIBC
-+		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE
 -- 
 1.7.10.4
