@@ -1,119 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  4 Dec 2015 23:08:14 +0100
-Subject: [Buildroot] [PATCH v2] qt5/qt53d: new package
-Message-ID: <1449266894-20997-1-git-send-email-ps.report@gmx.net>
+From: penman <paul.enman@gmail.com>
+Date: Fri,  4 Dec 2015 16:56:35 -0600
+Subject: [Buildroot] [PATCH 1/1] [1/1] package/uclibc: Enable compile in
+	thumb mode when selected
+Message-ID: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: penman <paul.enman@gmail.com>
 ---
-Changes v1 -> v2:
-  - remove extra space from license list
-  - update from md5 to sha256 hash
-  - add copy of qml/Qt3D directory (thanks to Jordon Wu for the hint)
----
- package/qt5/Config.in        |  1 +
- package/qt5/qt53d/Config.in  | 18 ++++++++++++++++++
- package/qt5/qt53d/qt53d.hash |  2 ++
- package/qt5/qt53d/qt53d.mk   | 41 +++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 62 insertions(+)
- create mode 100644 package/qt5/qt53d/Config.in
- create mode 100644 package/qt5/qt53d/qt53d.hash
- create mode 100644 package/qt5/qt53d/qt53d.mk
+ package/uclibc/uclibc.mk | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 22fd0c0..568fadb 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -41,6 +41,7 @@ source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5sensors/Config.in"
- source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
-+source "package/qt5/qt53d/Config.in"
- source "package/qt5/qt5webchannel/Config.in"
- source "package/qt5/qt5websockets/Config.in"
- source "package/qt5/qt5x11extras/Config.in"
-diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
-new file mode 100644
-index 0000000..d350922
---- /dev/null
-+++ b/package/qt5/qt53d/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_QT53D
-+	bool "qt53d"
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_GUI
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative_quick
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt53d module.
-+
-+	  http://doc.qt.io/qt-5/qt3d-index.html
-+
-+comment "qt53d module needs an OpenGL-capable backend"
-+        depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
-new file mode 100644
-index 0000000..0ba111e
---- /dev/null
-+++ b/package/qt5/qt53d/qt53d.hash
-@@ -0,0 +1,2 @@
-+# Hash from http://download.qt.io/official_releases/qt/5.5/5.5.0/submodules/qt3d-opensource-src-5.5.0.tar.xz.mirrorlist
-+sha256 bf6c54fbb6f279e9bd6fd67f7faa8e61ac4273baa06a56f8946346adc8c3568e qt3d-opensource-src-5.5.0.tar.xz
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-new file mode 100644
-index 0000000..810242b
---- /dev/null
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# qt53d
-+#
-+################################################################################
-+
-+QT53D_VERSION = $(QT5_VERSION)
-+QT53D_SITE = $(QT5_SITE)
-+QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
-+QT53D_DEPENDENCIES = qt5base qt5declarative
-+QT53D_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT53D_LICENSE = GPLv2+ or LGPLv3
-+QT53D_LICENSE_FILES = LICENSE.GPL LICENSE.LGPLv3
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index c62a40f..4f5c605 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -86,9 +86,15 @@ define UCLIBC_ARM_ABI_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_EABI,$(@D)/.config)
+ endef
+ 
+-# Thumb build is broken with threads, build in ARM mode
+-ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+-UCLIBC_EXTRA_CFLAGS += -marm
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),y)
++define UCLIBC_ARM_THUMB_CONFIG
++	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
++endef
 +else
-+QT53D_LICENSE = Commercial license
-+QT53D_REDISTRIBUTE = NO
-+endif
-+
-+define QT53D_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
++define UCLIBC_ARM_THUMB_CONFIG
++	$(call KCONFIG_DISABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
 +endef
-+
-+define QT53D_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT53D_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_STATIC_LIBS),)
-+define QT53D_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
-+endef
-+endif
-+
-+$(eval $(generic-package))
+ endif
+ 
+ ifeq ($(BR2_UCLIBC_ARM_BX),y)
+@@ -373,6 +379,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
++	$(UCLIBC_ARM_THUMB_CONFIG)
+ 	$(UCLIBC_ARM_BX_CONFIG)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
+ 	$(UCLIBC_MIPS_ISA_CONFIG)
 -- 
-2.1.4
+1.9.1
