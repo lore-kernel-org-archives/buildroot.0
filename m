@@ -1,52 +1,119 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Dec 2015 22:02:01 +0100
-Subject: [Buildroot] [git commit branch/2015.11.x] libpng: security bump to
-	version 1.6.20
-Message-ID: <20151204211051.B81747FE29@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  4 Dec 2015 23:08:14 +0100
+Subject: [Buildroot] [PATCH v2] qt5/qt53d: new package
+Message-ID: <1449266894-20997-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c76f557eefa2ce1f17ecd948186a1fb3dc4d2ba3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/2015.11.x
-
-Fixes:
-CVE-2015-8126 - incorrect implementation of png_set_PLTE() that uses
-png_ptr not info_ptr, that left png_set_PLTE() open to this vuln.
-
-(fix in previous release was incomplete)
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 371e2f7f3c2f66eadba91e5d33c32f462f9691b7)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libpng/libpng.hash | 6 +++---
- package/libpng/libpng.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Changes v1 -> v2:
+  - remove extra space from license list
+  - update from md5 to sha256 hash
+  - add copy of qml/Qt3D directory (thanks to Jordon Wu for the hint)
+---
+ package/qt5/Config.in        |  1 +
+ package/qt5/qt53d/Config.in  | 18 ++++++++++++++++++
+ package/qt5/qt53d/qt53d.hash |  2 ++
+ package/qt5/qt53d/qt53d.mk   | 41 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 62 insertions(+)
+ create mode 100644 package/qt5/qt53d/Config.in
+ create mode 100644 package/qt5/qt53d/qt53d.hash
+ create mode 100644 package/qt5/qt53d/qt53d.mk
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index a26538d..264dd45 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.19/
--md5	1e6a458429e850fc93c1f3b6dc00a48f	libpng-1.6.19.tar.xz
--sha1	483d72ced11c9258f9d1119105273d9af9ff151c	libpng-1.6.19.tar.xz
-+# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.20/
-+md5	3968acb7c66ef81a9dab867f35d0eb4b	libpng-1.6.20.tar.xz
-+sha1	c4f02051e0b86613076ce390fd15824f3506a148	libpng-1.6.20.tar.xz
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 649a3e0..36ccf83 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.19
-+LIBPNG_VERSION = 1.6.20
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 22fd0c0..568fadb 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -41,6 +41,7 @@ source "package/qt5/qt5quickcontrols/Config.in"
+ source "package/qt5/qt5sensors/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
+ source "package/qt5/qt5svg/Config.in"
++source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5webchannel/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
+new file mode 100644
+index 0000000..d350922
+--- /dev/null
++++ b/package/qt5/qt53d/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_QT53D
++	bool "qt53d"
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5DECLARATIVE
++	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative_quick
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt53d module.
++
++	  http://doc.qt.io/qt-5/qt3d-index.html
++
++comment "qt53d module needs an OpenGL-capable backend"
++        depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
+new file mode 100644
+index 0000000..0ba111e
+--- /dev/null
++++ b/package/qt5/qt53d/qt53d.hash
+@@ -0,0 +1,2 @@
++# Hash from http://download.qt.io/official_releases/qt/5.5/5.5.0/submodules/qt3d-opensource-src-5.5.0.tar.xz.mirrorlist
++sha256 bf6c54fbb6f279e9bd6fd67f7faa8e61ac4273baa06a56f8946346adc8c3568e qt3d-opensource-src-5.5.0.tar.xz
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+new file mode 100644
+index 0000000..810242b
+--- /dev/null
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# qt53d
++#
++################################################################################
++
++QT53D_VERSION = $(QT5_VERSION)
++QT53D_SITE = $(QT5_SITE)
++QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
++QT53D_DEPENDENCIES = qt5base qt5declarative
++QT53D_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT53D_LICENSE = GPLv2+ or LGPLv3
++QT53D_LICENSE_FILES = LICENSE.GPL LICENSE.LGPLv3
++else
++QT53D_LICENSE = Commercial license
++QT53D_REDISTRIBUTE = NO
++endif
++
++define QT53D_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT53D_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT53D_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++ifeq ($(BR2_STATIC_LIBS),)
++define QT53D_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
++endef
++endif
++
++$(eval $(generic-package))
+-- 
+2.1.4
