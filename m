@@ -1,203 +1,99 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  4 Dec 2015 12:49:57 -0300
-Subject: [Buildroot] [PATCH] configs/qemu: specify drive image file format
-	(raw)
-Message-ID: <1449244197-8456-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Fri, 4 Dec 2015 17:52:31 +0100
+Subject: [Buildroot] [PATCH] wine: fix sane related build failure
+In-Reply-To: <1436094900-3217-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1436094900-3217-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <5661C4CF.7030709@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Specify that the drive image file format is raw to avoid warnings and
-restrictions.
-Also switch to -drive syntax for all configs.
+Hi Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- board/qemu/arm-versatile/readme.txt  | 2 +-
- board/qemu/arm-vexpress/readme.txt   | 2 +-
- board/qemu/mips-malta/readme.txt     | 2 +-
- board/qemu/mips64-malta/readme.txt   | 2 +-
- board/qemu/mips64el-malta/readme.txt | 2 +-
- board/qemu/mipsel-malta/readme.txt   | 2 +-
- board/qemu/ppc-g3beige/readme.txt    | 2 +-
- board/qemu/ppc64-pseries/readme.txt  | 2 +-
- board/qemu/sh4-r2d/readme.txt        | 2 +-
- board/qemu/sh4eb-r2d/readme.txt      | 2 +-
- board/qemu/sparc-ss10/readme.txt     | 2 +-
- board/qemu/sparc64-sun4u/readme.txt  | 2 +-
- board/qemu/x86/readme.txt            | 2 +-
- board/qemu/x86_64/readme.txt         | 2 +-
- 14 files changed, 14 insertions(+), 14 deletions(-)
+Moving this discussion to the correct thread...
+I meanwhile submitted https://bugs.winehq.org/show_bug.cgi?id=39660 which didn't caught much attention yet.
+But I looked at it myself and I think I found a way to avoid patching Wine.
+Wines configure exposes special COMPONENT_CFLAGS and COMPONENT_LIBS variables which get prioritized over "guessed" tools.
+What's your opinion on this (afaict it works):
 
-diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
-index 1812994..4af2f46 100644
---- a/board/qemu/arm-versatile/readme.txt
-+++ b/board/qemu/arm-versatile/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
+
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 38576db..e29d616 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -173,8 +173,9 @@ endif
  
--  qemu-system-arm -M versatilepb -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=scsi -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user
-+  qemu-system-arm -M versatilepb -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=scsi,format=raw -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
-diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
-index a3dc6e4..7ca4e89 100644
---- a/board/qemu/arm-vexpress/readme.txt
-+++ b/board/qemu/arm-vexpress/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-arm -M vexpress-a9 -m 256 -kernel output/images/zImage -dtb output/images/vexpress-v2p-ca9.dtb -drive file=output/images/rootfs.ext2,if=sd -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -net nic,model=lan9118 -net user
-+  qemu-system-arm -M vexpress-a9 -m 256 -kernel output/images/zImage -dtb output/images/vexpress-v2p-ca9.dtb -drive file=output/images/rootfs.ext2,if=sd,format=raw -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -net nic,model=lan9118 -net user
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
-diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips-malta/readme.txt
-index 96c952c..3886cce 100644
---- a/board/qemu/mips-malta/readme.txt
-+++ b/board/qemu/mips-malta/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
-- qemu-system-mips -M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append "root=/dev/hda" -net nic,model=pcnet -net user
-+ qemu-system-mips -M malta -kernel output/images/vmlinux -serial stdio -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/hda" -net nic,model=pcnet -net user
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer. No keyboard support has been
-diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
-index 9aa7aa1..5eb4cac 100644
---- a/board/qemu/mips64-malta/readme.txt
-+++ b/board/qemu/mips64-malta/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
-- qemu-system-mips64 -M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append "root=/dev/hda"
-+ qemu-system-mips64 -M malta -kernel output/images/vmlinux -serial stdio -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/hda"
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
-diff --git a/board/qemu/mips64el-malta/readme.txt b/board/qemu/mips64el-malta/readme.txt
-index d6da29b..4c9fbe4 100644
---- a/board/qemu/mips64el-malta/readme.txt
-+++ b/board/qemu/mips64el-malta/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
-- qemu-system-mips64el -M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append "root=/dev/hda"
-+ qemu-system-mips64el -M malta -kernel output/images/vmlinux -serial stdio -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/hda"
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
-diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
-index 7dbb50b..d2dfbec 100644
---- a/board/qemu/mipsel-malta/readme.txt
-+++ b/board/qemu/mipsel-malta/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
-- qemu-system-mipsel -M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append "root=/dev/hda" -net nic,model=pcnet -net user
-+ qemu-system-mipsel -M malta -kernel output/images/vmlinux -serial stdio -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/hda" -net nic,model=pcnet -net user
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer. No keyboard support has been
-diff --git a/board/qemu/ppc-g3beige/readme.txt b/board/qemu/ppc-g3beige/readme.txt
-index fd19b68..8e70dbd 100644
---- a/board/qemu/ppc-g3beige/readme.txt
-+++ b/board/qemu/ppc-g3beige/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-ppc -M g3beige -kernel output/images/vmlinux -hda output/images/rootfs.ext2 -append "console=ttyS0 root=/dev/hda" -serial stdio -net nic,model=rtl8139 -net user
-+  qemu-system-ppc -M g3beige -kernel output/images/vmlinux -hda -drive file=output/images/rootfs.ext2,format=raw -append "console=ttyS0 root=/dev/hda" -serial stdio -net nic,model=rtl8139 -net user
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
-diff --git a/board/qemu/ppc64-pseries/readme.txt b/board/qemu/ppc64-pseries/readme.txt
-index 0dd1682..014edfa 100644
---- a/board/qemu/ppc64-pseries/readme.txt
-+++ b/board/qemu/ppc64-pseries/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
-- qemu-system-ppc64 -M pseries -cpu POWER7 -m 256 -kernel output/images/vmlinux -append 'console=hvc0 root=/dev/sda' -drive file=output/images/rootfs.ext2,if=scsi,index=0 -serial stdio -display curses
-+ qemu-system-ppc64 -M pseries -cpu POWER7 -m 256 -kernel output/images/vmlinux -append 'console=hvc0 root=/dev/sda' -drive file=output/images/rootfs.ext2,if=scsi,index=0,format=raw -serial stdio -display curses
- 
- The login prompt will appear in the terminal that started Qemu.
- 
-diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
-index d877bbf..ad55eac 100644
---- a/board/qemu/sh4-r2d/readme.txt
-+++ b/board/qemu/sh4-r2d/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-sh4 -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide -append "root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user
-+  qemu-system-sh4 -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user
- 
- The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
-diff --git a/board/qemu/sh4eb-r2d/readme.txt b/board/qemu/sh4eb-r2d/readme.txt
-index 7f5eec4..2c09de0 100644
---- a/board/qemu/sh4eb-r2d/readme.txt
-+++ b/board/qemu/sh4eb-r2d/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-sh4eb -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide -append "root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user
-+  qemu-system-sh4eb -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user
- 
- The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
-diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
-index 1e27380..56cadd9 100644
---- a/board/qemu/sparc-ss10/readme.txt
-+++ b/board/qemu/sparc-ss10/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user
-+  qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user
- 
- The login prompt will appear in the terminal that started Qemu.
- 
-diff --git a/board/qemu/sparc64-sun4u/readme.txt b/board/qemu/sparc64-sun4u/readme.txt
-index 9b37394..763f89b 100644
---- a/board/qemu/sparc64-sun4u/readme.txt
-+++ b/board/qemu/sparc64-sun4u/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-sparc64 -M sun4u -kernel output/images/vmlinux -append "root=/dev/sda console=ttyS0,115200" -serial stdio output/images/rootfs.ext2 -net nic,model=e1000 -net user
-+  qemu-system-sparc64 -M sun4u -kernel output/images/vmlinux -append "root=/dev/sda console=ttyS0,115200" -serial stdio -drive file=output/images/rootfs.ext2,format=raw -net nic,model=e1000 -net user
- 
- The login prompt will appear in the terminal that started Qemu.
- 
-diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
-index daf62f4..da8384a 100644
---- a/board/qemu/x86/readme.txt
-+++ b/board/qemu/x86/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append root=/dev/sda -net nic,model=rtl8139 -net user
-+  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append root=/dev/sda -net nic,model=rtl8139 -net user
- 
- The login prompt will appear in the graphical window.
- 
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-index cfd52ee..7c39563 100644
---- a/board/qemu/x86_64/readme.txt
-+++ b/board/qemu/x86_64/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append root=/dev/sda -net nic,model=rtl8139 -net user
-+  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append root=/dev/sda -net nic,model=rtl8139 -net user
- 
- The login prompt will appear in the graphical window.
- 
--- 
-2.4.10
+ ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
+ WINE_CONF_OPTS += --with-sane
++WINE_CONF_OPTS += SANE_CFLAGS="`$(STAGING_DIR)/usr/bin/sane-config --cflags 2>/dev/null`"
++WINE_CONF_OPTS += SANE_LIBS="`$(STAGING_DIR)/usr/bin/sane-config --ldflags 2>/dev/null`"
+ WINE_DEPENDENCIES += sane-backends
+-WINE_CONF_ENV += SANE_CONFIG=$(STAGING_DIR)/usr/bin/sane-config
+ else
+ WINE_CONF_OPTS += --without-sane
+ endif
+
+
+
+Am 05.07.2015 um 13:15 schrieb Thomas Petazzoni:
+> If sane is installed system-wide on the build machine, then the
+> sane-config binary found is the one of the system, which returns
+> incorrect library paths for cross-compilation.
+> 
+> To fix this, this commit adds a patch to wine to make it support a
+> SANE_CONFIG environment variable, and then adjusts wine.mk to
+> explicitly pass the path to $(STAGING_DIR)/usr/bin/sane-config.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/8bd/8bdc1eed55075313403aa8a6c9af6a427bce198e/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/wine/0003-sane-config-fix.patch | 21 +++++++++++++++++++++
+>  package/wine/wine.mk                    |  1 +
+>  2 files changed, 22 insertions(+)
+>  create mode 100644 package/wine/0003-sane-config-fix.patch
+> 
+> diff --git a/package/wine/0003-sane-config-fix.patch b/package/wine/0003-sane-config-fix.patch
+> new file mode 100644
+> index 0000000..d53843a
+> --- /dev/null
+> +++ b/package/wine/0003-sane-config-fix.patch
+> @@ -0,0 +1,21 @@
+> +Add support for SANE_CONFIG variable
+> +
+> +Instead of using directly the sane-config command, allow to pass a
+> +SANE_CONFIG environment variable to override where to find the
+> +sane-config tool.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +Index: b/configure.ac
+> +===================================================================
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -1375,7 +1375,7 @@
+> + if test "x$with_sane" != "xno"
+> + then
+> +     ac_save_CPPFLAGS="$CPPFLAGS"
+> +-    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`])
+> ++    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`])
+> +     AC_CHECK_HEADER(sane/sane.h,
+> +         [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
+> +         [SANE_CFLAGS=""])
+> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+> index 1ae038e..d6fb9c6 100644
+> --- a/package/wine/wine.mk
+> +++ b/package/wine/wine.mk
+> @@ -174,6 +174,7 @@ endif
+>  ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
+>  WINE_CONF_OPTS += --with-sane
+>  WINE_DEPENDENCIES += sane-backends
+> +WINE_CONF_ENV += SANE_CONFIG=$(STAGING_DIR)/usr/bin/sane-config
+>  else
+>  WINE_CONF_OPTS += --without-sane
+>  endif
+> 
