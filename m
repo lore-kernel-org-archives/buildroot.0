@@ -1,50 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Dec 2015 21:46:34 +0100
-Subject: [Buildroot] [git commit] libpng: security bump to version 1.6.20
-Message-ID: <20151204205655.04B4A81F84@busybox.osuosl.org>
+Date: Fri, 04 Dec 2015 21:59:15 +0100
+Subject: [Buildroot] [PATCH] libpng: security bump to version 1.6.20
+In-Reply-To: <5661FDC4.6060504@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Fri, 4 Dec 2015 17:55:32 -0300")
+References: <1449179287-23960-1-git-send-email-gustavo@zacarias.com.ar>
+ <87a8pq7xhe.fsf@dell.be.48ers.dk> <5661FDC4.6060504@zacarias.com.ar>
+Message-ID: <871tb27wws.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=371e2f7f3c2f66eadba91e5d33c32f462f9691b7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Fixes:
-CVE-2015-8126 - incorrect implementation of png_set_PLTE() that uses
-png_ptr not info_ptr, that left png_set_PLTE() open to this vuln.
+ > On 04/12/15 17:46, Peter Korsgaard wrote:
+ >> Committed, thanks.
+ >> 
+ >> Should this also be applied to the 2015.11.x branch?
 
-(fix in previous release was incomplete)
+ > Hi, yes, recommended if the plan is to throw security updates back at
+ > it as well.
+ > Regards.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libpng/libpng.hash | 6 +++---
- package/libpng/libpng.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Well, I would like to keep it to as few patches as possible to keep the
+risk of additional breakage low, but if these are really important fixes
+then I think we should take them.
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index a26538d..264dd45 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.19/
--md5	1e6a458429e850fc93c1f3b6dc00a48f	libpng-1.6.19.tar.xz
--sha1	483d72ced11c9258f9d1119105273d9af9ff151c	libpng-1.6.19.tar.xz
-+# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.20/
-+md5	3968acb7c66ef81a9dab867f35d0eb4b	libpng-1.6.20.tar.xz
-+sha1	c4f02051e0b86613076ce390fd15824f3506a148	libpng-1.6.20.tar.xz
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 649a3e0..36ccf83 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.19
-+LIBPNG_VERSION = 1.6.20
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+I've added it to the branch now, thanks.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
