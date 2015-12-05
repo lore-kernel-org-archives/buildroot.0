@@ -1,39 +1,74 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Dec 2015 23:42:23 +0100
-Subject: [Buildroot] [PATCH 2/2] package/perl-db-file: Berkeley DB 1.85
-	compatibility API is not needed
-In-Reply-To: <1449355343-19014-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1449355343-19014-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1449355343-19014-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 06 Dec 2015 00:09:51 +0100
+Subject: [Buildroot] [V3 2/2] perl-mail-spamassassin: new package
+References: <1449257217-8021-1-git-send-email-francois.perrad@gadz.org>
+ <1449257217-8021-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <ve7cjcx654.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is also compatible with Berkeley DB v2 or higher:
-https://metacpan.org/source/PMQS/DB_File-1.835/Changes
+Hi Francois,
 
-1.50
-    DB_File can now build with either DB 1.x or 2.x, but not both at
-    the same time.
+thank you very much for your patch, several months ago I tried to create 
+a working Spamassassin package and failed, your patch works fine! I now 
+have a working Spamassassin 3.4.1 daemon running on my buildroot 
+machine :)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/perl-db-file/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+Please add perl-db-file as optional package, because
 
-diff --git a/package/perl-db-file/Config.in b/package/perl-db-file/Config.in
-index 37bc5da..cf6cb72 100644
---- a/package/perl-db-file/Config.in
-+++ b/package/perl-db-file/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PERL_DB_FILE
- 	bool "perl-db-file"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_BERKELEYDB
--	select BR2_PACKAGE_BERKELEYDB_COMPAT185
- 	help
- 	  Perl5 access to Berkeley DB version 1.x
- 
--- 
-2.6.2
+https://api.metacpan.org/source/KMCGRAIL/Mail-SpamAssassin-3.4.1/UPGRADE
+"Note for Users Upgrading from SpamAssassin 2.5x
+-----------------------------------------------
+
+- Due to major reliability shortcomings in the database support libraries
+  other than DB_File, we now require that the DB_File module be installed
+  to use SpamAssassin's Bayes rules.
+
+  SpamAssassin will still work without DB_File installed, but the Bayes
+  support will be disabled."
+
+using Spamassassin without a Bayes database makes not much sense:
+
+ifeq ($(BR2_PACKAGE_PERL_DB_FILE),y)
+PERL_MAIL_SPAMASSASSIN_DEPENDENCIES += perl-db-file
+endif
+
+An additional patch is needed to get a working perl-db-file module:
+http://patchwork.ozlabs.org/patch/553054/
+
+Furthermore the default paths produced by your package make not much 
+sense:
+
+$ grep "'make' time" output/target/usr/bin/spamassassin 
+my $PREFIX          = '';             # substituted at 'make' time
+my $DEF_RULES_DIR   = '/share/spamassassin';      # substituted at 'make' 
+time
+my $LOCAL_RULES_DIR = '/mail/spamassassin';    # substituted at 'make' 
+time
+my $LOCAL_STATE_DIR = '';    # substituted at 'make' time
+
+I recommend this patch
+
+-PERL_MAIL_SPAMASSASSIN_CONF_OPTS += CONTACT_ADDRESS="$(call qstrip,
+$(BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN_CONTACT_ADDRESS))"
++PERL_MAIL_SPAMASSASSIN_CONF_OPTS += \
++       CONTACT_ADDRESS="$(call qstrip,
+$(BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN_CONTACT_ADDRESS))" \
++       VENDORPREFIX=/usr \
++       INSTALLVENDORCONF=/etc/mail/spamassassin
+
+to have paths like these:
+
+$ grep "'make' time" output/target/usr/bin/spamassassin 
+my $PREFIX          = '/usr';             # substituted at 'make' time
+my $DEF_RULES_DIR   = '/usr/share/spamassassin';      # substituted at 
+'make' time
+my $LOCAL_RULES_DIR = '/etc/mail/spamassassin';    # substituted at 
+'make' time
+my $LOCAL_STATE_DIR = '/var/lib/spamassassin';    # substituted at 'make' 
+time
+
+Regards, Bernd
