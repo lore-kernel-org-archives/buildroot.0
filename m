@@ -1,40 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Dec 2015 15:40:08 +0100
-Subject: [Buildroot] [PATCH] package/pixman: disable tests
-In-Reply-To: <1449316134-27852-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 5 Dec 2015 12:48:54 +0100")
-References: <1449316134-27852-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87wpst6jsn.fsf@dell.be.48ers.dk>
+Date: Sat, 5 Dec 2015 15:37:50 +0100
+Subject: [Buildroot] [git commit] boost: make package less verbose when
+	building with -s
+Message-ID: <20151205144026.6055180AD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=27281af4bf969a943c81afcfbcd881728a3c1172
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Tests are broken on some architectures because of an incomplete fenv.
- > Since the tests are not really useful in the Buildroot environment, just
- > disable them.
+The boost build is very verbose (11K+ lines even when no sub options are
+enabled).  While this can be handy for debugging, make is less verbose when
+'make -s' is used, similar to how we do it for autotools.
 
- > Fixes a lot of build failures:
- >     http://autobuild.buildroot.org/results/cd7/cd722620832c28d22eacfc43336f6952b82305ff/
- >     http://autobuild.buildroot.org/results/3f4/3f4f1e88988d66b052432885b4f044a0eddcee2c/
- >     ...
+With this, make -s boost outputs less than 100 lines.
 
- > Pixman was already autoreconfed (but that was not needed). Since we now
- > really need to autoreconf it, add a comment stating why we do.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/boost/boost.mk | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
-> +---
-> +Status: Buildroot specific, not suitable for upstream in this state.
-
-Indeed. It would be good to work on an upstreamable solution
-(E.G. probably a --disable-tests option) and send it upstream.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 178f7b8..36710f7 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -118,6 +118,10 @@ BOOST_WITHOUT_FLAGS_COMMASEPARATED += $(subst $(space),$(comma),$(strip $(BOOST_
+ BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPARATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPARATED))
+ BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
+ 
++# how verbose should the build be?
++BOOST_OPTS += $(if $(QUIET),-d,-d+1)
++HOST_BOOST_OPTS += $(if $(QUIET),-d,-d+1)
++
+ define BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
+ 	echo "using gcc : `$(TARGET_CC) -dumpversion` : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
+@@ -131,7 +135,7 @@ define HOST_BOOST_CONFIGURE_CMDS
+ endef
+ 
+ define BOOST_INSTALL_TARGET_CMDS
+-	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
++	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPTS) \
+ 	--prefix=$(TARGET_DIR)/usr \
+@@ -140,7 +144,7 @@ define BOOST_INSTALL_TARGET_CMDS
+ endef
+ 
+ define HOST_BOOST_BUILD_CMDS
+-	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
++	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPTS) \
+ 	--ignore-site-config \
+@@ -148,7 +152,7 @@ define HOST_BOOST_BUILD_CMDS
+ endef
+ 
+ define HOST_BOOST_INSTALL_CMDS
+-	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
++	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPTS) \
+ 	--prefix=$(HOST_DIR)/usr \
+@@ -157,7 +161,7 @@ define HOST_BOOST_INSTALL_CMDS
+ endef
+ 
+ define BOOST_INSTALL_STAGING_CMDS
+-	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -q -d+1 \
++	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -q \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPTS) \
+ 	--prefix=$(STAGING_DIR)/usr \
