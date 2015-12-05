@@ -1,70 +1,107 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 5 Dec 2015 16:08:19 +0100
-Subject: [Buildroot] [PATCH 1/1] [1/1] package/uclibc: Enable compile in
- thumb mode when selected
-In-Reply-To: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
-References: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
-Message-ID: <5662FDE3.6070809@mind.be>
+Date: Sat, 5 Dec 2015 16:52:55 +0100
+Subject: [Buildroot] [PATCH] openvmtools: enable for uClibc toolchains
+In-Reply-To: <20151204165330.GA5268@waldemar-brodkorb.de>
+References: <20151204165330.GA5268@waldemar-brodkorb.de>
+Message-ID: <56630857.9060704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi penman,
+ Waldemar, all,
 
-On 04-12-15 23:56, penman wrote:
-> Signed-off-by: penman <paul.enman@gmail.com>
+On 04-12-15 17:53, Waldemar Brodkorb wrote:
+> Since uClibc-ng 1.0.9 openvmtools can be compiled as
+> the missing euidaccess function was added.
 
- Please use your full real name in the Sob (I guess that's Paul Enman).
+ We actually still support older uClibc-based toolchains, including an internal
+one based on 0.9.33.2, custom external ones (buildroot or crosstool-NG) that may
+also be based on that, custom external ones based on -ng pre-1.0.9, and the
+Blackfin toolchains.
 
-> ---
->  package/uclibc/uclibc.mk | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index c62a40f..4f5c605 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -86,9 +86,15 @@ define UCLIBC_ARM_ABI_CONFIG
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_EABI,$(@D)/.config)
->  endef
->  
-> -# Thumb build is broken with threads, build in ARM mode
+ This comment is not specific for this patch but rather applies to all packages
+that will work with -ng but not with 0.9.33.2, and there are ever more of those.
 
- Can you explain what changed in the last two years since this fix was
-introduced in commit d244782ca? It might have been fixed in -ng, but 0.9.33.2
-hasn't changed in a very long time so I guess it's still broken there. You'll
-need to add a condition on -NG.
+ There are several things we can do here:
 
- Or it could be gcc that has been fixed, but in that case please verify that it
-works with gcc-4.7
+- Ignore it and let the user deal with the build failure.
+
+- Ignore it and add a comment in the Config.in, so that the user at least is
+warned. See e.g. rt-tests. This is not a great solution either because the user
+will not see the comment when there is another package that selects openvmtools.
+
+- Depend on an internal -ng toolchain. That sucks pretty hard because you'll
+often want to build the toolchain once and then use it as an external toolchain.
+
+- Kill 0.9.33.2 and depend on an internal toolchain. See above.
+
+- Give a more explicit warning in the custom external toolchain and in the
+0.9.33.x and snapshot uClibc version choices that some packages may fail to
+build. This should be combined with an explicit exclusion of the Blackfin
+binaries (not necessary for openvmtools since it depends on MMU).
+
+- Explicitly exclude non-ng toolchains. We can add a hidden symbol for that, and
+add -ng as a separate option for the custom external toolchain. For this
+particular patch, that doesn't solve the issue however because it will still
+fail with uclibc-ng 1.0.8.
+
+
+ I don't think any of these options is perfect, but the last one is the least
+bad IMO.
+
+
+ Note that we probably already have a bunch of packages that have this problem,
+because the only uClibc-based toolchains that we test in the autobuilders are
+Buildroot-generated, except for the Blackfin ones.
+
+ We probably should kill the non-ng options in the uclibc package as well. We
+also should make it more explicit in the documentation of the custom external
+toolchains that you're on your own.
+
+
+ Otherwise, the patch looks good to me though :-)
 
  Regards,
  Arnout
 
-> -ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-> -UCLIBC_EXTRA_CFLAGS += -marm
-> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),y)
-> +define UCLIBC_ARM_THUMB_CONFIG
-> +	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
-> +	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
-> +endef
-> +else
-> +define UCLIBC_ARM_THUMB_CONFIG
-> +	$(call KCONFIG_DISABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
-> +endef
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/openvmtools/Config.in |    8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+> index 64bf65c..528ddbe 100644
+> --- a/package/openvmtools/Config.in
+> +++ b/package/openvmtools/Config.in
+> @@ -6,7 +6,6 @@ config BR2_PACKAGE_OPENVMTOOLS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+>  	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	depends on BR2_ENABLE_LOCALE
+> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+>  	select BR2_PACKAGE_LIBGLIB2
+>  	select BR2_PACKAGE_LIBDNET
+>  	help
+> @@ -41,14 +40,13 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
+>  	help
+>  	  Support for PAM in openvmtools
+>  
+> -comment "PAM support needs an (e)glibc toolchain w/ dynamic library"
+> +comment "PAM support needs an (e)glibc or uClibc toolchain w/ dynamic library"
+>  	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+>  
 >  endif
 >  
->  ifeq ($(BR2_UCLIBC_ARM_BX),y)
-> @@ -373,6 +379,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
->  	$(UCLIBC_ARC_TYPE_CONFIG)
->  	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
->  	$(UCLIBC_ARM_ABI_CONFIG)
-> +	$(UCLIBC_ARM_THUMB_CONFIG)
->  	$(UCLIBC_ARM_BX_CONFIG)
->  	$(UCLIBC_MIPS_ABI_CONFIG)
->  	$(UCLIBC_MIPS_ISA_CONFIG)
+> -comment "openvmtools needs an (e)glibc or musl toolchain w/ wchar, threads, RPC, locale"
+> +comment "openvmtools needs a toolchain w/ wchar, threads, RPC, locale"
+>  	depends on BR2_i386 || BR2_x86_64
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+> -		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE || \
+> -		BR2_TOOLCHAIN_USES_UCLIBC
+> +		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE
 > 
 
 
