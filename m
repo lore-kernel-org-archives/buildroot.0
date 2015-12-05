@@ -1,74 +1,36 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 06 Dec 2015 00:09:51 +0100
-Subject: [Buildroot] [V3 2/2] perl-mail-spamassassin: new package
+Date: Sun, 06 Dec 2015 00:11:24 +0100
+Subject: [Buildroot] [V3 1/2] pkg-perl: avoid insertion of host-perl in
+ the	shebang of scripts
 References: <1449257217-8021-1-git-send-email-francois.perrad@gadz.org>
- <1449257217-8021-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <ve7cjcx654.ln2@ID-313208.user.individual.net>
+ <1449257217-8021-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <sh7cjcx654.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+Am Fri, 04 Dec 2015 20:26:56 +0100 schrieb Francois Perrad:
 
-thank you very much for your patch, several months ago I tried to create 
-a working Spamassassin package and failed, your patch works fine! I now 
-have a working Spamassassin 3.4.1 daemon running on my buildroot 
-machine :)
+> Signed-off-by: Francois Perrad
+> <francois.perrad@gadz.org>
+> ---
+>  package/pkg-perl.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk index
+> a06c068..a027810 100644 --- a/package/pkg-perl.mk +++
+> b/package/pkg-perl.mk @@ -140,6 +140,7 @@ define $(2)_BUILD_CMDS
+>  	else \
+>  		$$(MAKE1) \
+>  			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$
+$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE
+>  			\
+> +			FIXIN=: \
+>  			$$($(2)_BUILD_OPTS) pure_all; \
+>  	fi
+>  endef
 
-Please add perl-db-file as optional package, because
-
-https://api.metacpan.org/source/KMCGRAIL/Mail-SpamAssassin-3.4.1/UPGRADE
-"Note for Users Upgrading from SpamAssassin 2.5x
------------------------------------------------
-
-- Due to major reliability shortcomings in the database support libraries
-  other than DB_File, we now require that the DB_File module be installed
-  to use SpamAssassin's Bayes rules.
-
-  SpamAssassin will still work without DB_File installed, but the Bayes
-  support will be disabled."
-
-using Spamassassin without a Bayes database makes not much sense:
-
-ifeq ($(BR2_PACKAGE_PERL_DB_FILE),y)
-PERL_MAIL_SPAMASSASSIN_DEPENDENCIES += perl-db-file
-endif
-
-An additional patch is needed to get a working perl-db-file module:
-http://patchwork.ozlabs.org/patch/553054/
-
-Furthermore the default paths produced by your package make not much 
-sense:
-
-$ grep "'make' time" output/target/usr/bin/spamassassin 
-my $PREFIX          = '';             # substituted at 'make' time
-my $DEF_RULES_DIR   = '/share/spamassassin';      # substituted at 'make' 
-time
-my $LOCAL_RULES_DIR = '/mail/spamassassin';    # substituted at 'make' 
-time
-my $LOCAL_STATE_DIR = '';    # substituted at 'make' time
-
-I recommend this patch
-
--PERL_MAIL_SPAMASSASSIN_CONF_OPTS += CONTACT_ADDRESS="$(call qstrip,
-$(BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN_CONTACT_ADDRESS))"
-+PERL_MAIL_SPAMASSASSIN_CONF_OPTS += \
-+       CONTACT_ADDRESS="$(call qstrip,
-$(BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN_CONTACT_ADDRESS))" \
-+       VENDORPREFIX=/usr \
-+       INSTALLVENDORCONF=/etc/mail/spamassassin
-
-to have paths like these:
-
-$ grep "'make' time" output/target/usr/bin/spamassassin 
-my $PREFIX          = '/usr';             # substituted at 'make' time
-my $DEF_RULES_DIR   = '/usr/share/spamassassin';      # substituted at 
-'make' time
-my $LOCAL_RULES_DIR = '/etc/mail/spamassassin';    # substituted at 
-'make' time
-my $LOCAL_STATE_DIR = '/var/lib/spamassassin';    # substituted at 'make' 
-time
-
-Regards, Bernd
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+(compile tested with Spamassassin, noticed no problems)
