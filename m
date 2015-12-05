@@ -1,48 +1,80 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Dec 2015 18:29:32 +0100
-Subject: [Buildroot] Overriding Buildroot packages
-In-Reply-To: <565B859B.10400@mind.be>
-References: <CAPER3A0P1Qyd_=ktyHt=udawndUfHue8SE_zDQxMHjz+r+pPtg@mail.gmail.com>
- <20151124164107.3570084a@free-electrons.com>
- <CAPER3A0tE2_edxtE65MaVUVUh3BOdqywb4jUANOe_4Jm+0fihw@mail.gmail.com>
- <5654E4F2.2020405@mind.be>
- <CAPER3A3yd6N6VWhM4uYJTq7pjBdiQ2=zQ-Mzu_aH+LBSNoaDSw@mail.gmail.com>
- <565B859B.10400@mind.be>
-Message-ID: <20151205172932.GB3666@free.fr>
+Date: Sat, 5 Dec 2015 18:39:00 +0100
+Subject: [Buildroot] [PATCH 1/1] ncurses: generate libtermcap
+In-Reply-To: <565ECA64.3070503@6wind.com>
+References: <1429880066-7743-1-git-send-email-pascal.mazon@6wind.com>
+ <20151130233049.3ad42bd1@free-electrons.com>
+ <565ECA64.3070503@6wind.com>
+Message-ID: <20151205173900.GC3666@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2015-11-30 00:09 +0100, Arnout Vandecappelle spake thusly:
-> On 25-11-15 10:48, Hajime Branko Yamasaki Vukelic wrote:
-> > On Tue, Nov 24, 2015 at 11:30 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> > 
-> > [SNIP]
-> > 
-> >>> Ideally, ability to override some aspect of an existing package (e.g.,
-> >>> only its version, or only the source URL, or something along those
-> >>> lines) would be great to have. If not, then, a mechanism to make two
-> >>> packages equivalent (something like virtual packages but applicaable
-> >>> to packages that are not explicitly virtual) would also work (e.g.,
-> >>> `POSTGRES_95_PROVIDES = postgres`, that causes having postgres-95
-> >>> selected to satisfy dependency requirement for a package that
-> >>> selects/depends on postgres).
+Pascal, All,
+
+On 2015-12-02 11:39 +0100, Pascal Mazon spake thusly:
+> On 11/30/2015 11:30 PM, Thomas Petazzoni wrote:
+> > On Fri, 24 Apr 2015 14:54:26 +0200, Pascal Mazon wrote:
+> >> There is no libtermcap package in buildroot, but ncurses implements
+> termcap
+> >> natively. Furthermore, ncurses already provides the termcap.h header
+> file.
 > >>
-> >>  There is a fairly easy way to make it possible to override the version and
-> >> dependencies, but I think it's a bit ugly. In inner-generic-package, instead of
-> >> defining all the rules directly, we could add yet another level of direction and
-> >> delay the definition of the rules until after BR2_EXTERNAL has been included.
-> > 
-> > What if a package has <pkgname>.hash file? If I simply override the
-> > version, wouldn't that still break when checking the hash?
+> >> With this patch, we fix an issue encountered with some external
+> toolchains
+> >> that include a libtermcap.a (typically the GNU libtermcap version) in
+> their
+> >> sysroot folder.
+> >> Bash, for instance, would be linking with this libtermcap while using
+> >> headers from ncurses.
+> >>
+> >> In order to be consistent, let's make sure there is only the ncurses'
+> >> termcap library. To that effect, we:
+> >> - remove any libtermcap.* in the staging dir,
+> >> - install a link to libncurses static and/or shared in staging and target
+> >>    dirs.
+> >>
+> >> Signed-off-by: Pascal Mazon <pascal.mazon@6wind.com>
+> >
+> > We finally took a bit of time on IRC today to discuss your patch. From
+> > our point of view, the fact that your toolchain provides libtermcap.a
+> > is a bug of the toolchain. From Buildroot's point of view, a toolchain
+> > should not provide in its sysroot anything but the C library and its
+> > headers, and the kernel headers.
+> >
+> > If we start doing hacks in packages to cope with toolchain sysroot
+> > already shipped with some libraries, it's going to be an endless fight
+> > against those toolchains. You have the problem with libtermcap.a, but
+> > the next person will have it with libz.a, and then lib<something>, and
+> > again.
+> >
+> > Our suggestion is that you fix your toolchain either by asking your
+> > toolchain vendor, or by doing a quick hack to remove libtermcap.a
+> > before using the toolchain with Buildroot. If you add this toolchain as
+> > a known Buildroot profile, you can even automate this and make it part
+> > of the build process.
+> >
+> > Best regards,
+> >
+> > Thomas
+> >
 > 
->  That's right, we'd need to find a workaround of that as well.
+> I understand buildroot's point of view.
+> Indeed, it does not look like the best solution to hack in packages for a
+> problem from the toolchain.
+> 
+> I will try your suggestion.
+> Maybe we can modify copy_toolchain_sysroot in toolchain/helpers.mk to add a
+> custom "--exclude" when rsync-ing (with values taken from an newly added
+> option)?
 
-We already have a mechanism to avoid checking hashes;
+Like a patch I submitted a while ago and was rejected?
+    https://patchwork.ozlabs.org/patch/535404/
 
-    BR_NO_CHECK_HASH_FOR += tarball-name
+Thomas, Peter, it seems we now have a valid use-case for that patch.
+Should I respin it, now?
 
 Regards,
 Yann E. MORIN.
