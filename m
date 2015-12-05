@@ -1,76 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Dec 2015 15:37:50 +0100
-Subject: [Buildroot] [git commit] boost: make package less verbose when
-	building with -s
-Message-ID: <20151205144026.6055180AD5@busybox.osuosl.org>
+Date: Sat, 5 Dec 2015 15:38:36 +0100
+Subject: [Buildroot] [git commit] package/pixman: disable tests
+Message-ID: <20151205144026.8E02C803EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27281af4bf969a943c81afcfbcd881728a3c1172
+commit: http://git.buildroot.net/buildroot/commit/?id=0e7081abb15632e88597a7d9defa99538e91f220
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The boost build is very verbose (11K+ lines even when no sub options are
-enabled).  While this can be handy for debugging, make is less verbose when
-'make -s' is used, similar to how we do it for autotools.
+Tests are broken on some architectures because of an incomplete fenv.
 
-With this, make -s boost outputs less than 100 lines.
+Since the tests are not really useful in the Buildroot environment, just
+disable them.
 
+Fixes a lot of build failures:
+    http://autobuild.buildroot.org/results/cd7/cd722620832c28d22eacfc43336f6952b82305ff/
+    http://autobuild.buildroot.org/results/3f4/3f4f1e88988d66b052432885b4f044a0eddcee2c/
+    ...
+
+Pixman was already autoreconfed (but that was not needed). Since we now
+really need to autoreconf it, add a comment stating why we do.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/boost.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ package/pixman/0001-Disable-tests.patch | 29 +++++++++++++++++++++++++++++
+ package/pixman/pixman.mk                |  2 ++
+ 2 files changed, 31 insertions(+)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 178f7b8..36710f7 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -118,6 +118,10 @@ BOOST_WITHOUT_FLAGS_COMMASEPARATED += $(subst $(space),$(comma),$(strip $(BOOST_
- BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPARATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPARATED))
- BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
- 
-+# how verbose should the build be?
-+BOOST_OPTS += $(if $(QUIET),-d,-d+1)
-+HOST_BOOST_OPTS += $(if $(QUIET),-d,-d+1)
+diff --git a/package/pixman/0001-Disable-tests.patch b/package/pixman/0001-Disable-tests.patch
+new file mode 100644
+index 0000000..dfadd69
+--- /dev/null
++++ b/package/pixman/0001-Disable-tests.patch
+@@ -0,0 +1,29 @@
++From 9b8132738c364fc3c886e81e7d383aaff80dc867 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sat, 5 Dec 2015 12:00:53 +0100
++Subject: [PATCH] Disable tests
 +
- define BOOST_CONFIGURE_CMDS
- 	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
- 	echo "using gcc : `$(TARGET_CC) -dumpversion` : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
-@@ -131,7 +135,7 @@ define HOST_BOOST_CONFIGURE_CMDS
- endef
++Tests are causing build failures on some architectures that are missing
++a proper fenv.h, so just disable them.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Status: Buildroot specific, not suitable for upstream in this state.
++---
++ Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 5137c9e..eae79fd 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,4 +1,4 @@
++-SUBDIRS = pixman demos test
+++SUBDIRS = pixman demos
++ 
++ pkgconfigdir=$(libdir)/pkgconfig
++ pkgconfig_DATA=pixman-1.pc
++-- 
++1.9.1
++
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index cbf57fe..8281773 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -12,6 +12,8 @@ PIXMAN_LICENSE_FILES = COPYING
  
- define BOOST_INSTALL_TARGET_CMDS
--	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
-+	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPTS) \
- 	--prefix=$(TARGET_DIR)/usr \
-@@ -140,7 +144,7 @@ define BOOST_INSTALL_TARGET_CMDS
- endef
+ PIXMAN_INSTALL_STAGING = YES
+ PIXMAN_DEPENDENCIES = host-pkgconf
++
++# For 0001-Disable-tests.patch
+ PIXMAN_AUTORECONF = YES
  
- define HOST_BOOST_BUILD_CMDS
--	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
-+	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q \
- 	--user-config=$(@D)/user-config.jam \
- 	$(HOST_BOOST_OPTS) \
- 	--ignore-site-config \
-@@ -148,7 +152,7 @@ define HOST_BOOST_BUILD_CMDS
- endef
- 
- define HOST_BOOST_INSTALL_CMDS
--	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
-+	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q \
- 	--user-config=$(@D)/user-config.jam \
- 	$(HOST_BOOST_OPTS) \
- 	--prefix=$(HOST_DIR)/usr \
-@@ -157,7 +161,7 @@ define HOST_BOOST_INSTALL_CMDS
- endef
- 
- define BOOST_INSTALL_STAGING_CMDS
--	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -q -d+1 \
-+	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -q \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPTS) \
- 	--prefix=$(STAGING_DIR)/usr \
+ # don't build gtk based demos
