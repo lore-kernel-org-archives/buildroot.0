@@ -1,100 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Dec 2015 23:17:04 +0100
-Subject: [Buildroot] [git commit] docs: website: update for 2015.11.1
-Message-ID: <20151205221735.6FDA780ADC@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 5 Dec 2015 23:36:29 +0100
+Subject: [Buildroot] [PATCH v2] bdwgc: fix compile for sparc
+In-Reply-To: <20151205182951.GO19876@waldemar-brodkorb.de>
+References: <20151204053311.GA15667@waldemar-brodkorb.de>
+ <5662FAE6.2000407@mind.be> <20151205182951.GO19876@waldemar-brodkorb.de>
+Message-ID: <566366ED.6020903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8daafddb2339d5d34af1ed23f7dcf4380b775bc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05-12-15 19:29, Waldemar Brodkorb wrote:
+> Hi Arnout,
+> Arnout Vandecappelle wrote,
+> 
+>> On 04-12-15 06:33, Waldemar Brodkorb wrote:
+>>> We need to use a patch from master git.
+>>> https://github.com/ivmai/bdwgc/commit/e2bf29b7801357c1ad28c2948a3f88c655dd722a
+>>>
+>>> Fixes following autobuilder failures:
+>>> http://autobuild.buildroot.net/results/220b3d49b8ad891e5dd3aae759319100a1500701/
+>>> http://autobuild.buildroot.net/results/b7465d175f03c9461693a92885028723772c7814/
+>>>
+>>
+>>  gauche uses a private copy of bdwgc, does that one also need this patch?
+> 
+> May be. But gauche is disabled for architectures without
+> BR2_ARCH_HAS_ATOMICS. Should this be removed and sparc tested?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ Ah, no gauche has bundled atomics so it indeed won't work on sparc.
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 4f8d67a..46f601d 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2015.11</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2015.11.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2015.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2015.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2015.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2015.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2015.11.tar.gz">buildroot-2015.11.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2015.11.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2015.11.1.tar.gz">buildroot-2015.11.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2015.11.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2015.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2015.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2015.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2015.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2015.11.tar.bz2">buildroot-2015.11.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2015.11.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2015.11.1.tar.bz2">buildroot-2015.11.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2015.11.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 89c5062..5d4c264 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2015.11.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 December 2015</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2015.11.1 bugfix release is out - Thanks to everyone
-+	contributing. This release fixes critical issues discovered
-+	since the 2015.11 release. See the
-+	<a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.11.1">CHANGES</a>
-+	file for more details, and go to the
-+	<a href="/downloads/">downloads page</a> to pick up the
-+	<a href="/downloads/buildroot-2015.11.1.tar.bz2">2015.11.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+
+ Regards,
+ Arnout
+
+> 
+> best regards
+>  Waldemar
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
