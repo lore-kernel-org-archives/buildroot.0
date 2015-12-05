@@ -1,112 +1,80 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 5 Dec 2015 17:56:40 +0100
-Subject: [Buildroot] [PATCH 2/4] docs/website: html cleaning and
- indentation fixing
-In-Reply-To: <1449213674-11333-3-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sat, 5 Dec 2015 18:21:25 +0100
+Subject: [Buildroot] [PATCH 0/4] website caring
+In-Reply-To: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
 References: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
- <1449213674-11333-3-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <56631748.1090002@mind.be>
+Message-ID: <56631D15.7090302@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Angelo,
+
+ Thanks for this series, it's really good that someone cares for the website!
+
 On 04-12-15 08:21, Angelo Compagnucci wrote:
-> * Fixing indentation and cleaning with html tidy
-> * Adding tidy_config.txt containing tidy settings
+> This patch series:
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  docs/website/contribute.html |   74 +-
->  docs/website/docs.html       |  232 +-
->  docs/website/download.html   |  356 +--
->  docs/website/footer.html     |   12 +-
->  docs/website/header.html     |  120 +-
->  docs/website/index.html      |  241 +-
->  docs/website/news.html       | 6342 ++++++++++++++++++++++++------------------
->  docs/website/sponsors.html   |  461 +--
->  docs/website/support.html    |  187 +-
->  docs/website/tidy_config.txt |    5 +
->  10 files changed, 4481 insertions(+), 3549 deletions(-)
->  create mode 100644 docs/website/tidy_config.txt
+> * Fixes all errors found by html tidy
+> * Fixes indentation on all html using html tidy rules
+> * Add tidy_config.txt with tidy configuration used in
+>   reindentation
+> * Resizes images to a correct size
+
+ It would be good to also specify the size of the images everywhere in the img
+tags, since that speeds up page rendering and makes sure that it is still laid
+out in the same way when showing without images.
+
+
+ Also, there are quite a lot of images with an empty alt tag. That's pretty
+useless and it would be good to add real alt text, e.g. "gzip" for the .tar.gz
+and "bz2" for the tar.bz2.
+
+> * Minor cosmetic changes to docs and download pages
 > 
-> diff --git a/docs/website/contribute.html b/docs/website/contribute.html
-> index da5700c..5e2e159 100644
-> --- a/docs/website/contribute.html
-> +++ b/docs/website/contribute.html
-> @@ -1,43 +1,43 @@
->  <!--#include file="header.html" -->
-> -
->  <div class="container">
-> -<div class="row nh">
-> -<div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
-> -
-> -  <div class="panel panel-primary">
-> -    <div class="panel-heading">Contribute</div>
-> -    <div class="panel-body">
-> -      <p>Buildroot is an open source project and you are very welcome to contribute to
-> -	it.<br />
-> -	There are many different ways to contribute:</p>
-> -
-> -      <ul>
-> -	<li>Reproducing, analyzing and fixing bugs from our
-> -	  <a href="https://bugs.buildroot.org/">bug tracker</a></li>
-> -	<li>Analyzing and fixing <a href="http://autobuild.buildroot.org/">
-> -	    autobuild failures</a></li>
-> -	<li>Reviewing and testing patches sent by other developers. See the
-> -	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
-> -	  </a> or <a href="http://patchwork.ozlabs.org/project/buildroot/list/">
-> -	    patchwork</a>.</li>
-> -	<li>Working on items from the
-> -	  <a href="http://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
-> -	<li>Submitting your own patches through the
-> -	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
-> -	</a></li>
-> -      </ul>
-> -
-> -      <p>For more details on these topics, check out the
-> -	<a href="http://buildroot.org/manual.html#_contributing_to_buildroot">
-> -	  Contributing to buildroot</a> chapter in the Buildroot manual. Thanks for your help!</p>
-> -
-> -      <p>If you need any support yourself, have a look at <a href="./support.html">
-> -	  Support</a>.</p>
-> +  <div class="row nh">
-> +    <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
-> +      <div class="panel panel-primary">
-> +        <div class="panel-heading">Contribute</div>
-> +        <div class="panel-body">
-> +          <p>Buildroot is an open source project and you are very welcome
-> +          to contribute to it.
-> +          <br />There are many different ways to contribute:</p>
-> +          <ul>
-> +            <li>Reproducing, analyzing and fixing bugs from our 
-> +            <a href="https://bugs.buildroot.org/">bug tracker</a></li>
-> +            <li>Analyzing and fixing 
-> +            <a href="http://autobuild.buildroot.org/">autobuild
-> +            failures</a></li>
-> +            <li>Reviewing and testing patches sent by other developers. See
-> +            the 
-> +            <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">
-> +            mailing list</a>or 
+> Angelo Compagnucci (4):
+>   docs/website: fixing html tidy errors and warnings
+>   docs/website: html cleaning and indentation fixing
+>   docs/website: resizing images
 
- Forget the Ack, there is a space missing here, so possibly in other places as
-well... Looks like tidy is not doing the right thing here.
+ The list didn't receive this one, probably because it was too big. Peter, did
+you get it?
 
+ I guess that one can be applied independently of the other patches?
 
  Regards,
  Arnout
 
-> +            <a href="http://patchwork.ozlabs.org/project/buildroot/list/">
-> +            patchwork</a>.</li>
-> +            <li>Working on items from the 
-> +            <a href="http://www.elinux.org/Buildroot#Todo_list">TODO
-> +            list</a></li>
-> +            <li>Submitting your own patches through the 
-> +            <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">
-> +            mailing list</a></li>
-> +          </ul>
-[snip]
+
+>   docs/website: cosmetic changes
+> 
+>  docs/website/contribute.html     |   74 +-
+>  docs/website/css/main.css        |   15 +-
+>  docs/website/docs.html           |  237 +-
+>  docs/website/download.html       |  354 +--
+>  docs/website/footer.html         |   12 +-
+>  docs/website/header.html         |  120 +-
+>  docs/website/images/browser.png  |  Bin 18175 -> 8927 bytes
+>  docs/website/images/gift.png     |  Bin 15906 -> 10565 bytes
+>  docs/website/images/hammer.png   |  Bin 18353 -> 11740 bytes
+>  docs/website/images/logo.png     |  Bin 117499 -> 83758 bytes
+>  docs/website/images/package.png  |  Bin 7746 -> 5449 bytes
+>  docs/website/images/pdf-icon.png |  Bin 10324 -> 5798 bytes
+>  docs/website/images/text.png     |  Bin 6437 -> 3824 bytes
+>  docs/website/images/tux-flat.png |  Bin 20106 -> 14812 bytes
+>  docs/website/images/zip.png      |  Bin 8208 -> 5164 bytes
+>  docs/website/index.html          |  241 +-
+>  docs/website/news.html           | 6343 +++++++++++++++++++++-----------------
+>  docs/website/sponsors.html       |  459 +--
+>  docs/website/support.html        |  187 +-
+>  docs/website/tidy_config.txt     |    5 +
+>  20 files changed, 4495 insertions(+), 3552 deletions(-)
+>  create mode 100644 docs/website/tidy_config.txt
+> 
+
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
