@@ -1,50 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 5 Dec 2015 23:36:29 +0100
-Subject: [Buildroot] [PATCH v2] bdwgc: fix compile for sparc
-In-Reply-To: <20151205182951.GO19876@waldemar-brodkorb.de>
-References: <20151204053311.GA15667@waldemar-brodkorb.de>
- <5662FAE6.2000407@mind.be> <20151205182951.GO19876@waldemar-brodkorb.de>
-Message-ID: <566366ED.6020903@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  5 Dec 2015 23:42:22 +0100
+Subject: [Buildroot] [PATCH 1/2] package/perl-db-file: Fix berkeleydb
+	detection
+Message-ID: <1449355343-19014-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05-12-15 19:29, Waldemar Brodkorb wrote:
-> Hi Arnout,
-> Arnout Vandecappelle wrote,
-> 
->> On 04-12-15 06:33, Waldemar Brodkorb wrote:
->>> We need to use a patch from master git.
->>> https://github.com/ivmai/bdwgc/commit/e2bf29b7801357c1ad28c2948a3f88c655dd722a
->>>
->>> Fixes following autobuilder failures:
->>> http://autobuild.buildroot.net/results/220b3d49b8ad891e5dd3aae759319100a1500701/
->>> http://autobuild.buildroot.net/results/b7465d175f03c9461693a92885028723772c7814/
->>>
->>
->>  gauche uses a private copy of bdwgc, does that one also need this patch?
-> 
-> May be. But gauche is disabled for architectures without
-> BR2_ARCH_HAS_ATOMICS. Should this be removed and sparc tested?
+Without this patch libdb.so is not detected and
+lib/perl5/site_perl/5.22.0/i586-linux/auto/DB_File/DB_File.so
+is not linked against it:
 
- Ah, no gauche has bundled atomics so it indeed won't work on sparc.
+Parsing config.in...
+Looks Good.
+Checking if your kit is complete...
+Looks good
+Warning (mostly harmless): No library found for -ldb
+Generating a Unix-style Makefile
+Writing Makefile for DB_File
+Writing MYMETA.yml and MYMETA.json
+>>> perl-db-file 1.835 Building
 
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/perl5/site_perl/5.22.0/i586-linux/auto/DB_File/DB_File.so | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
 
- Regards,
- Arnout
+After applying this patch configure output will look like this:
 
-> 
-> best regards
->  Waldemar
-> 
+Parsing config.in...
+Looks Good.
+Checking if your kit is complete...
+Looks good
+Generating a Unix-style Makefile
+Writing Makefile for DB_File
+Writing MYMETA.yml and MYMETA.json
+>>> perl-db-file 1.835 Building
 
+and the resulting library is correctly linked against libdb:
 
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/perl5/site_perl/5.22.0/i586-linux/auto/DB_File/DB_File.so | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libdb-5.3.so]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/perl-db-file/perl-db-file.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/perl-db-file/perl-db-file.mk b/package/perl-db-file/perl-db-file.mk
+index 6d611ea..3db8c56 100644
+--- a/package/perl-db-file/perl-db-file.mk
++++ b/package/perl-db-file/perl-db-file.mk
+@@ -11,4 +11,12 @@ PERL_DB_FILE_DEPENDENCIES = berkeleydb
+ PERL_DB_FILE_LICENSE = Artistic or GPLv1+
+ PERL_DB_FILE_LICENSE_FILES = README
+ 
++define PERL_DB_FILE_FIX_CONFIG_IN
++	$(SED) 's%^INCLUDE.*%INCLUDE = $(STAGING_DIR)/usr/include%' \
++		$(@D)/config.in
++	$(SED) 's%^LIB.*%LIB = $(STAGING_DIR)/usr/lib%' \
++		$(@D)/config.in
++endef
++PERL_DB_FILE_POST_PATCH_HOOKS += PERL_DB_FILE_FIX_CONFIG_IN
++
+ $(eval $(perl-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.6.2
