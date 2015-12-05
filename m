@@ -1,92 +1,101 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Sat,  5 Dec 2015 21:35:45 +0100
-Subject: [Buildroot] [PATCH 1/1] mongoose: bump to version 6.1
-Message-ID: <1449347746-13496-1-git-send-email-zinosat@tiscali.it>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Dec 2015 21:38:37 +0100
+Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
+In-Reply-To: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
+References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20151205203837.GD3666@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- - the example does not accept optional parameters anymore
- - listening port is now forced to 8000
+All,
 
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
----
- package/mongoose/S85mongoose      |  2 +-
- package/mongoose/mongoose.hash    |  2 +-
- package/mongoose/mongoose.mk      | 10 ++++++----
- package/mongoose/mongoose.service |  2 +-
- 4 files changed, 9 insertions(+), 7 deletions(-)
+On 2015-09-13 23:13 +0200, Yann E. MORIN spake thusly:
+> Kodi segfaults as soon as it tries to load a python module:
+> 
+>     Could not find platform independent libraries <prefix>
+>     Consider setting $PYTHONHOME to <prefix>[:<exec_prefix>]
+>     ImportError: No module named site
+>     Segmentation fault
+> 
+> Turns out that keeping .py modules (with or without .pyc) fixes the
+> issue.
+> 
+> Currently, Kodi selects python, but since the format of modules is a
+> choice, we can not select it.
+> 
+> Fix that by inverting the dependency on python from Kodi:
+>   - turn it into a depends rather than a select,
+>   - add the dependency to ! pyc-only
+>   - update the comment accordingly.
 
-diff --git a/package/mongoose/S85mongoose b/package/mongoose/S85mongoose
-index 9f24e06..932d713 100755
---- a/package/mongoose/S85mongoose
-+++ b/package/mongoose/S85mongoose
-@@ -10,7 +10,7 @@ NAME=mongoose
- DESC="Mongoose HTTP server"
- 
- DAEMON=`which mongoose`
--OPTIONS="-document_root /var/www -listening_port 80"
-+OPTIONS=""
- 
- [ -e /etc/default/mongoose ] && . /etc/default/mongoose
- 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index 5687094..1ed4a78 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	cc2557c7cf9f15e1e691f285a4c6c705cc7e56cb70c64cb49703a428a0677065  mongoose-5.6.tar.gz
-+sha256	512b406714d31a178fc41263ca6ecafd0c1e2dd091e9685a7b2462fecdaaea8e  mongoose-6.1.tar.gz
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 14f2aae..a689c9d 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 5.6
-+MONGOOSE_VERSION = 6.1
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPLv2
- MONGOOSE_LICENSE_FILES = LICENSE
-@@ -18,16 +18,18 @@ MONGOOSE_DEPENDENCIES += openssl
- MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
- endif
- 
-+MONGOOSE_WEBSERVER = $(@D)/examples/simplest_web_server
- define MONGOOSE_BUILD_CMDS
--	$(TARGET_CC) $(@D)/examples/web_server/web_server.c $(@D)/mongoose.c \
--		-I$(@D) -o $(@D)/examples/web_server/web_server \
-+	$(TARGET_CC) \
-+		$(MONGOOSE_WEBSERVER)/simplest_web_server.c $(@D)/mongoose.c \
-+		-I$(@D) -o $(MONGOOSE_WEBSERVER)/simplest_web_server \
- 		$(MONGOOSE_CFLAGS) -pthread
- 	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
- 	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
- endef
- 
- define MONGOOSE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 755 $(@D)/examples/web_server/web_server \
-+	$(INSTALL) -D -m 755 $(MONGOOSE_WEBSERVER)/simplest_web_server \
- 		$(TARGET_DIR)/usr/sbin/mongoose
- endef
- 
-diff --git a/package/mongoose/mongoose.service b/package/mongoose/mongoose.service
-index 12a731c..ebec9a0 100644
---- a/package/mongoose/mongoose.service
-+++ b/package/mongoose/mongoose.service
-@@ -3,7 +3,7 @@ Description=Mongoose HTTP server
- After=network.target
- 
- [Service]
--ExecStart=/usr/sbin/mongoose -document_root /var/www -listening_port 80
-+ExecStart=/usr/sbin/mongoose
- Restart=always
- 
- [Install]
+This is wrong and causes reursive dependencies:
+
+    package/kodi/Config.in:33:error: recursive dependency detected!
+    package/kodi/Config.in:33:      symbol BR2_PACKAGE_KODI depends on BR2_PACKAGE_PYTHON
+    package/python/Config.in:5:     symbol BR2_PACKAGE_PYTHON is selected by BR2_PACKAGE_SAMBA4
+    package/samba4/Config.in:7:     symbol BR2_PACKAGE_SAMBA4 is selected by BR2_PACKAGE_KODI_LIBSMBCLIENT
+    package/kodi/Config.in:216:     symbol BR2_PACKAGE_KODI_LIBSMBCLIENT depends on BR2_PACKAGE_KODI
+
+Marking as "rejected". I'll try to find a better solution.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> ---
+> changes v1 -> v2:
+>   - fix spurious 'i' (vim insert)
+> ---
+>  package/kodi/Config.in | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index 797f59d..6d6c47b 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -2,10 +2,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+>  	bool
+>  	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+>  
+> -comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
+> +comment "kodi needs python and .py modiules, and a toolchain w/ C++, threads, wchar, dynamic library"
+>  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+> -		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
+> +		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+> +		|| !BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON_PYC_ONLY
+>  	depends on BR2_USE_MMU
+>  
+>  config BR2_PACKAGE_KODI_EGL_GLES
+> @@ -65,7 +66,6 @@ menuconfig BR2_PACKAGE_KODI
+>  	select BR2_PACKAGE_OPENSSL
+>  	select BR2_PACKAGE_PCRE
+>  	select BR2_PACKAGE_PCRE_UCP
+> -	select BR2_PACKAGE_PYTHON
+>  	select BR2_PACKAGE_PYTHON_BSDDB
+>  	select BR2_PACKAGE_PYTHON_BZIP2
+>  	select BR2_PACKAGE_PYTHON_CURSES
+> @@ -94,6 +94,8 @@ menuconfig BR2_PACKAGE_KODI
+>  	depends on BR2_USE_WCHAR
+>  	depends on !BR2_STATIC_LIBS # python
+>  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_PYTHON
+> +	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
+>  	help
+>  	  Kodi is an award-winning free and open source (GPL) software
+>  	  media player and entertainment hub for digital media.
+> -- 
+> 1.9.1
+> 
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
