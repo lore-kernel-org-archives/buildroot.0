@@ -1,77 +1,282 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 5 Dec 2015 18:21:25 +0100
-Subject: [Buildroot] [PATCH 0/4] website caring
-In-Reply-To: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sat, 5 Dec 2015 18:21:12 +0100
+Subject: [Buildroot] [PATCH 4/4] docs/website: cosmetic changes
+In-Reply-To: <1449213674-11333-5-git-send-email-angelo.compagnucci@gmail.com>
 References: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <56631D15.7090302@mind.be>
+ <1449213674-11333-5-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <56631D08.2050105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Angelo,
-
- Thanks for this series, it's really good that someone cares for the website!
-
 On 04-12-15 08:21, Angelo Compagnucci wrote:
-> This patch series:
+> * Smaller images in download and docs pages
+> * Fixes to links in docs
+> * Minor fixings in index
+
+ This should probably be three patches, maybe even more. Also, preferably say
+something more specific than "Minor fixes".
+
 > 
-> * Fixes all errors found by html tidy
-> * Fixes indentation on all html using html tidy rules
-> * Add tidy_config.txt with tidy configuration used in
->   reindentation
-> * Resizes images to a correct size
-
- It would be good to also specify the size of the images everywhere in the img
-tags, since that speeds up page rendering and makes sure that it is still laid
-out in the same way when showing without images.
-
-
- Also, there are quite a lot of images with an empty alt tag. That's pretty
-useless and it would be good to add real alt text, e.g. "gzip" for the .tar.gz
-and "bz2" for the tar.bz2.
-
-> * Minor cosmetic changes to docs and download pages
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  docs/website/css/main.css  | 15 ++++++++++-----
+>  docs/website/docs.html     | 43 ++++++++++++++++++++++++-------------------
+>  docs/website/download.html | 17 ++++++++---------
+>  docs/website/header.html   | 12 ++++++------
+>  4 files changed, 48 insertions(+), 39 deletions(-)
 > 
-> Angelo Compagnucci (4):
->   docs/website: fixing html tidy errors and warnings
->   docs/website: html cleaning and indentation fixing
->   docs/website: resizing images
+> diff --git a/docs/website/css/main.css b/docs/website/css/main.css
+> index db9c4c9..57009cf 100644
+> --- a/docs/website/css/main.css
+> +++ b/docs/website/css/main.css
+> @@ -207,16 +207,21 @@ i {
+>  .flip-container {
+>  	perspective: 1000;
+>  }
+> -	/* flip the pane when hovered */
+> -	.flip-container:hover .flipper, .flip-container.hover .flipper {
+> -		transform: rotateY(180deg);
+> -	}
+> +/* flip the pane when hovered */
+> +.flip-container:hover .flipper, .flip-container.hover .flipper {
+> +	transform: rotateY(180deg);
+> +}
 
- The list didn't receive this one, probably because it was too big. Peter, did
-you get it?
+ Whitespace change -> separate patch.
 
- I guess that one can be applied independently of the other patches?
+>  
+> -.flip-container, .front, .back {
+> +.flip-container, .flip-container .front, .flip-container .back {
+
+ I'm not a CSS expert (to say the least), but isn't this equivalent to
+
+.flip-container {
+
+because the two other specifiers are a subset of the first one?
+
+>  	width: 180px;
+>  	height: 180px;
+>  }
+>  
+> +.flip-container-small, .flip-container-small .front, .flip-container-small .back {
+
+ Same here.
+
+ Also, wouldn't it be better to add .flip-container-small to the other two
+.flip-container specifications, so that you can remove the flip-container class
+from the classes in the HTML files?
+
+> +	width: 120px;
+> +	height: 120px;
+> +}
+> +
+>  /* flip speed goes here */
+>  .flipper {
+>  	transition: 0.6s;
+> diff --git a/docs/website/docs.html b/docs/website/docs.html
+> index 4b86383..f2a8597 100644
+> --- a/docs/website/docs.html
+> +++ b/docs/website/docs.html
+> @@ -10,60 +10,65 @@
+>            change/extend/fix things. It is available as:</p>
+>            <div class="row mt centered">
+>              <div class="col-sm-4">
+> -              <div class="flip-container center-block"
+> +              <div class="flip-container flip-container-small center-block"
+>                ontouchstart="this.classList.toggle('hover');">
+>                  <div class="flipper">
+>                    <div class="front">
+>                      <a href="/manual.html">
+> -                      <img src="images/browser.png" width="180" alt="" />
+> +                      <img src="images/browser.png" alt="" />
+>                      </a>
+>                    </div>
+>                    <div class="back">
+>                      <a href="/manual.html">
+> -                      <img src="images/browser.png" width="180" alt="" />
+> +                      <img src="images/browser.png" alt="" />
+>                      </a>
+>                    </div>
+>                  </div>
+>                </div>
+> -              <h3>HTML 
+> -              <br />
+> -              <a href="/manual.html">Stable</a>| 
+> +              <h3>HTML</h3>
+> +              <h4><a href="/manual.html">Stable</a>| 
+>                <a href="http://nightly.buildroot.org/manual.html">
+> -              Nightly</a></h3>
+> +              Nightly</a></h4>
+>              </div>
+>              <div class="col-sm-4">
+> -              <div class="flip-container center-block"
+> +              <div class="flip-container flip-container-small center-block"
+>                ontouchstart="this.classList.toggle('hover');">
+>                  <div class="flipper">
+>                    <div class="front">
+> -                    <img src="images/pdf-icon.png" width="180" alt="" />
+> +                    <a href="downloads/manual/manual.pdf">
+> +                      <img src="images/pdf-icon.png" alt="" />
+> +                    </a>
+>                    </div>
+>                    <div class="back">
+> -                    <img src="images/pdf-icon.png" width="180" alt="" />
+> +                    <a href="downloads/manual/manual.pdf">
+> +                      <img src="images/pdf-icon.png" alt="" />
+> +                    </a>
+>                    </div>
+>                  </div>
+>                </div>
+> -              <h3>PDF 
+> -              <br />
+> -              <a href="/downloads/manual/manual.pdf">Stable</a>| 
+> +              <h3>PDF</h3>
+> +              <h4><a href="/downloads/manual/manual.pdf">Stable</a>| 
+>                <a href="http://nightly.buildroot.org/manual.pdf">
+>                Nightly</a></h3>
+>              </div>
+>              <div class="col-sm-4">
+> -              <div class="flip-container center-block"
+> +              <div class="flip-container flip-container-small center-block"
+>                ontouchstart="this.classList.toggle('hover');">
+>                  <div class="flipper">
+>                    <div class="front">
+> -                    <img src="images/text.png" width="180" alt="" />
+> +                    <a href="downloads/manual/manual.text">
+> +                      <img src="images/text.png" alt="" />
+> +                    </a>
+>                    </div>
+>                    <div class="back">
+> -                    <img src="images/text.png" width="180" alt="" />
+> +                    <a href="downloads/manual/manual.text">
+> +                      <img src="images/text.png" alt="" />
+> +                    </a>
+>                    </div>
+>                  </div>
+>                </div>
+> -              <h3>ASCII 
+> -              <br />
+> -              <a href="/downloads/manual/manual.text">Stable</a>| 
+> +              <h3>ASCII</h3> 
+> +              <h4><a href="/downloads/manual/manual.text">Stable</a>| 
+>                <a href="http://nightly.buildroot.org/manual.text">
+>                Nightly</a></h3>
+>              </div>
+> diff --git a/docs/website/download.html b/docs/website/download.html
+> index 4ff397d..ea77b25 100644
+> --- a/docs/website/download.html
+> +++ b/docs/website/download.html
+> @@ -9,17 +9,17 @@
+>          <b>2015.11</b></h3>
+>          <div class="row mt centered">
+>            <div class="col-sm-6">
+> -            <div class="flip-container center-block"
+> +            <div class="flip-container flip-container-small center-block"
+>              ontouchstart="this.classList.toggle('hover');">
+>                <div class="flipper">
+>                  <div class="front">
+>                    <a href="/downloads/buildroot-2015.11.tar.gz">
+> -                    <img src="images/zip.png" width="180" alt="" />
+> +                    <img src="images/zip.png" alt="" />
+>                    </a>
+>                  </div>
+>                  <div class="back">
+>                    <a href="/downloads/buildroot-2015.11.tar.gz">
+> -                    <img src="images/zip.png" width="180" alt="" />
+> +                    <img src="images/zip.png" alt="" />
+>                    </a>
+>                  </div>
+>                </div>
+> @@ -34,17 +34,17 @@
+>              </p>
+>            </div>
+>            <div class="col-sm-6">
+> -            <div class="flip-container center-block"
+> +            <div class="flip-container flip-container-small center-block"
+>              ontouchstart="this.classList.toggle('hover');">
+>                <div class="flipper">
+>                  <div class="front">
+>                    <a href="/downloads/buildroot-2015.11.tar.bz2">
+> -                    <img src="images/package.png" width="180" alt="" />
+> +                    <img src="images/package.png" alt="" />
+>                    </a>
+>                  </div>
+>                  <div class="back">
+>                    <a href="/downloads/buildroot-2015.11.tar.bz2">
+> -                    <img src="images/package.png" width="180" alt="" />
+> +                    <img src="images/package.png" alt="" />
+>                    </a>
+>                  </div>
+>                </div>
+> @@ -153,9 +153,8 @@
+>                    can update your source tree at any time so it is in sync
+>                    with the latest and greatest by entering your buildroot
+>                    directory and running the command:</p>
+> -                  <pre>
+> -                  git pull
+> -                
+> +<pre>
+> +git pull
+
+ This bit should have been part of the tidy patch - and tidy shouldn't add
+indentation here...
+
+>  </pre>
+>                    <p>Because you've only been granted anonymous access to
+>                    the tree, you won't be able to push your changes to the
+> diff --git a/docs/website/header.html b/docs/website/header.html
+> index 69f4203..c348ebb 100644
+> --- a/docs/website/header.html
+> +++ b/docs/website/header.html
+> @@ -36,31 +36,31 @@
+>            <ul class="nav navbar-nav navbar-right">
+>              <li>
+>                <a href="/news.html">
+> -              <span class="glyphicon glyphicon-star"></span>News</a>
+> +              <span class="glyphicon glyphicon-star"></span> News</a>
+
+ I'm not sure I agree with this. Currently the icon and the text are nice and
+tight together, adding a space here makes the icon come closer to the text left
+of it.
 
  Regards,
  Arnout
 
-
->   docs/website: cosmetic changes
-> 
->  docs/website/contribute.html     |   74 +-
->  docs/website/css/main.css        |   15 +-
->  docs/website/docs.html           |  237 +-
->  docs/website/download.html       |  354 +--
->  docs/website/footer.html         |   12 +-
->  docs/website/header.html         |  120 +-
->  docs/website/images/browser.png  |  Bin 18175 -> 8927 bytes
->  docs/website/images/gift.png     |  Bin 15906 -> 10565 bytes
->  docs/website/images/hammer.png   |  Bin 18353 -> 11740 bytes
->  docs/website/images/logo.png     |  Bin 117499 -> 83758 bytes
->  docs/website/images/package.png  |  Bin 7746 -> 5449 bytes
->  docs/website/images/pdf-icon.png |  Bin 10324 -> 5798 bytes
->  docs/website/images/text.png     |  Bin 6437 -> 3824 bytes
->  docs/website/images/tux-flat.png |  Bin 20106 -> 14812 bytes
->  docs/website/images/zip.png      |  Bin 8208 -> 5164 bytes
->  docs/website/index.html          |  241 +-
->  docs/website/news.html           | 6343 +++++++++++++++++++++-----------------
->  docs/website/sponsors.html       |  459 +--
->  docs/website/support.html        |  187 +-
->  docs/website/tidy_config.txt     |    5 +
->  20 files changed, 4495 insertions(+), 3552 deletions(-)
->  create mode 100644 docs/website/tidy_config.txt
+>              </li>
+>              <li>
+>                <a href="/docs.html">
+>                <span class="glyphicon glyphicon-book">
+> -              </span>Documentation</a>
+> +              </span> Documentation</a>
+>              </li>
+>              <li>
+>                <a href="/support.html">
+>                <span class="glyphicon glyphicon-question-sign">
+> -              </span>Support</a>
+> +              </span> Support</a>
+>              </li>
+>              <li>
+>                <a href="/contribute.html">
+> -              <span class="glyphicon glyphicon-share"></span>Contribute</a>
+> +              <span class="glyphicon glyphicon-share"></span> Contribute</a>
+>              </li>
+>              <li>
+>                <a href="/sponsors.html">
+> -              <span class="glyphicon glyphicon-usd"></span>Sponsors</a>
+> +              <span class="glyphicon glyphicon-usd"></span> Sponsors</a>
+>              </li>
+>              <li>
+>                <a id="menubutton" class="btn btn-success btn-shrink"
+>                href="/download.html">
+>                  <span class="glyphicon glyphicon-cloud-download"></span>
+> -                <span class="text-shrink">Download</span>
+> +                <span class="text-shrink"> Download</span>
+>                </a>
+>              </li>
+>            </ul>
 > 
 
 
