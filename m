@@ -1,78 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 5 Dec 2015 18:25:07 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gawk: clean the mpfr dependency
-In-Reply-To: <20151205160851.GA3666@free.fr>
-References: <cover.1449181275.git.yann.morin.1998@free.fr>
- <6dcb0e2bfe0573ddcfba8f9b7c90d18090c46a1a.1449181275.git.yann.morin.1998@free.fr>
- <5660D1B6.5040404@mind.be> <20151205160851.GA3666@free.fr>
-Message-ID: <56631DF3.5050403@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Dec 2015 18:29:32 +0100
+Subject: [Buildroot] Overriding Buildroot packages
+In-Reply-To: <565B859B.10400@mind.be>
+References: <CAPER3A0P1Qyd_=ktyHt=udawndUfHue8SE_zDQxMHjz+r+pPtg@mail.gmail.com>
+ <20151124164107.3570084a@free-electrons.com>
+ <CAPER3A0tE2_edxtE65MaVUVUh3BOdqywb4jUANOe_4Jm+0fihw@mail.gmail.com>
+ <5654E4F2.2020405@mind.be>
+ <CAPER3A3yd6N6VWhM4uYJTq7pjBdiQ2=zQ-Mzu_aH+LBSNoaDSw@mail.gmail.com>
+ <565B859B.10400@mind.be>
+Message-ID: <20151205172932.GB3666@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 2015-11-30 00:09 +0100, Arnout Vandecappelle spake thusly:
+> On 25-11-15 10:48, Hajime Branko Yamasaki Vukelic wrote:
+> > On Tue, Nov 24, 2015 at 11:30 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> > 
+> > [SNIP]
+> > 
+> >>> Ideally, ability to override some aspect of an existing package (e.g.,
+> >>> only its version, or only the source URL, or something along those
+> >>> lines) would be great to have. If not, then, a mechanism to make two
+> >>> packages equivalent (something like virtual packages but applicaable
+> >>> to packages that are not explicitly virtual) would also work (e.g.,
+> >>> `POSTGRES_95_PROVIDES = postgres`, that causes having postgres-95
+> >>> selected to satisfy dependency requirement for a package that
+> >>> selects/depends on postgres).
+> >>
+> >>  There is a fairly easy way to make it possible to override the version and
+> >> dependencies, but I think it's a bit ugly. In inner-generic-package, instead of
+> >> defining all the rules directly, we could add yet another level of direction and
+> >> delay the definition of the rules until after BR2_EXTERNAL has been included.
+> > 
+> > What if a package has <pkgname>.hash file? If I simply override the
+> > version, wouldn't that still break when checking the hash?
+> 
+>  That's right, we'd need to find a workaround of that as well.
 
+We already have a mechanism to avoid checking hashes;
 
-On 05-12-15 17:08, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2015-12-04 00:35 +0100, Arnout Vandecappelle spake thusly:
->> On 03-12-15 23:22, Yann E. MORIN wrote:
->>> When available, mpfr provides support for BIGNUM, which allows gawk to
->>> work on arbitrarily-large numbers (hence the name).
->>>
->>> Forcibly disable mpfr if the mpfr package is not enabled. Let
->>> ./configure find it automatically when it is enabled.
->>>
->>> To be noted, the host-gawk needs not have BIGNUM to build the target
->>                              ^^^^^^^^^ doesn't need to have
-> 
-> No, sorry, this was correct english grammar:
->     https://dictionary.cambridge.org/grammar/british-grammar/need
-> 
->     We form the negative by adding not after need. Need not can be
->     contracted to needn?t. We don?t use don?t/doesn?t/didn?t with the
->     semi-modal verb need:
-> 
->     You need not spend a lot of money on presents. (formal) (or You
->     needn?t spend a lot of money on presents.)
-> 
->     Not: You don?t need spend a lot of money on presents.
-> 
-> Or:
->     http://www.merriam-webster.com/dictionary/need
-> 
->     verbal auxiliary
->     : be under necessity or obligation to <you need not answer>
->     <she need only wait> 
-> 
-> In this case, 'need' is a verbal auxiliary, not a transitive verb (and
-> even less so an intransitive verb).
+    BR_NO_CHECK_HASH_FOR += tarball-name
 
- But then it's "need not", not "needs not". (Quotation marks really are needed
-in this sentence :-)
-
- Or, to avoid discussion:
-
-The build of the target gawk doesn't require host-gawk with BIGNUM support.
-
-:-P
-
-
- Regards,
- Arnout
-
-> 
-> (yes, in case you still had a doubt, I speak british English, not
-> american English.)
-> 
-[snip]
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
