@@ -1,69 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Dec 2015 23:42:22 +0100
-Subject: [Buildroot] [PATCH 1/2] package/perl-db-file: Fix berkeleydb
-	detection
-Message-ID: <1449355343-19014-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  5 Dec 2015 23:42:23 +0100
+Subject: [Buildroot] [PATCH 2/2] package/perl-db-file: Berkeley DB 1.85
+	compatibility API is not needed
+In-Reply-To: <1449355343-19014-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1449355343-19014-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1449355343-19014-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this patch libdb.so is not detected and
-lib/perl5/site_perl/5.22.0/i586-linux/auto/DB_File/DB_File.so
-is not linked against it:
+This package is also compatible with Berkeley DB v2 or higher:
+https://metacpan.org/source/PMQS/DB_File-1.835/Changes
 
-Parsing config.in...
-Looks Good.
-Checking if your kit is complete...
-Looks good
-Warning (mostly harmless): No library found for -ldb
-Generating a Unix-style Makefile
-Writing Makefile for DB_File
-Writing MYMETA.yml and MYMETA.json
->>> perl-db-file 1.835 Building
-
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/perl5/site_perl/5.22.0/i586-linux/auto/DB_File/DB_File.so | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
-
-After applying this patch configure output will look like this:
-
-Parsing config.in...
-Looks Good.
-Checking if your kit is complete...
-Looks good
-Generating a Unix-style Makefile
-Writing Makefile for DB_File
-Writing MYMETA.yml and MYMETA.json
->>> perl-db-file 1.835 Building
-
-and the resulting library is correctly linked against libdb:
-
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/perl5/site_perl/5.22.0/i586-linux/auto/DB_File/DB_File.so | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libdb-5.3.so]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
+1.50
+    DB_File can now build with either DB 1.x or 2.x, but not both at
+    the same time.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/perl-db-file/perl-db-file.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/perl-db-file/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/perl-db-file/perl-db-file.mk b/package/perl-db-file/perl-db-file.mk
-index 6d611ea..3db8c56 100644
---- a/package/perl-db-file/perl-db-file.mk
-+++ b/package/perl-db-file/perl-db-file.mk
-@@ -11,4 +11,12 @@ PERL_DB_FILE_DEPENDENCIES = berkeleydb
- PERL_DB_FILE_LICENSE = Artistic or GPLv1+
- PERL_DB_FILE_LICENSE_FILES = README
+diff --git a/package/perl-db-file/Config.in b/package/perl-db-file/Config.in
+index 37bc5da..cf6cb72 100644
+--- a/package/perl-db-file/Config.in
++++ b/package/perl-db-file/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PERL_DB_FILE
+ 	bool "perl-db-file"
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_BERKELEYDB
+-	select BR2_PACKAGE_BERKELEYDB_COMPAT185
+ 	help
+ 	  Perl5 access to Berkeley DB version 1.x
  
-+define PERL_DB_FILE_FIX_CONFIG_IN
-+	$(SED) 's%^INCLUDE.*%INCLUDE = $(STAGING_DIR)/usr/include%' \
-+		$(@D)/config.in
-+	$(SED) 's%^LIB.*%LIB = $(STAGING_DIR)/usr/lib%' \
-+		$(@D)/config.in
-+endef
-+PERL_DB_FILE_POST_PATCH_HOOKS += PERL_DB_FILE_FIX_CONFIG_IN
-+
- $(eval $(perl-package))
 -- 
 2.6.2
