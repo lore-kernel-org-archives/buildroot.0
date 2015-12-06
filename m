@@ -1,42 +1,45 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 6 Dec 2015 14:50:38 +0100
-Subject: [Buildroot] [PATCH] package/kodi: fix fallout after infozip
-	rename
-In-Reply-To: <1449394133-4017-1-git-send-email-yann.morin.1998@free.fr>
-References: <1449394133-4017-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <56643D2E.8090501@lucaceresoli.net>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun,  6 Dec 2015 15:14:33 +0100
+Subject: [Buildroot] [V4 0/3] SpamAssassin
+Message-ID: <1449411276-27492-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+V3 -> V4: add remarks from Bernd Kuhls
+- SpamAssassin
+    - add perl-db-file as optional dependency
+    - set VENDORPREFIX
+    - set INSTALLVENDORCONF
+- fix perl-db-file
+    - patch from Bernd Kuhls, see https://patchwork.ozlabs.org/patch/553054/
 
-Yann E. MORIN wrote:
-> Commit f0c9470 (infozip: rename to zip) forgot to propagate the rename
-> down to the only user of the host variant of infozip.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->   package/kodi/kodi.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index 46d8650..bf3aa7a 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -10,7 +10,7 @@ KODI_LICENSE = GPLv2
->   KODI_LICENSE_FILES = LICENSE.GPL
->   # needed for binary addons
->   KODI_INSTALL_STAGING = YES
-> -KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-giflib \
-> +KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-zip host-giflib \
+V3:
+- fix Perl/CPAN infrastructure
+- patch SpamAssassin in order to avoid host-perl modules dependencies
 
-Sorry for the mistake! Of course:
+See previous discussion in https://patchwork.ozlabs.org/patch/464635/
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Francois Perrad (2):
+  pkg-perl: avoid insertion of host-perl in shebang of scripts
+  perl-mail-spamassassin: new package
+Bernd Kuhls (1):
+  package/perl-db-file: Fix berkeleydb detection
 
--- 
-Luca
+ package/Config.in                                  |  1 +
+ package/perl-db-file/perl-db-file.mk               |  8 +++
+ .../0001-without-host-perl-dependencies.patch      | 64 ++++++++++++++++++++++
+ package/perl-mail-spamassassin/Config.in           | 26 +++++++++
+ .../perl-mail-spamassassin.hash                    |  3 +
+ .../perl-mail-spamassassin.mk                      | 38 +++++++++++++
+ package/pkg-perl.mk                                |  1 +
+ 7 files changed, 141 insertions(+)
+ create mode 100644 package/perl-mail-spamassassin/0001-without-host-perl-dependencies.patch
+ create mode 100644 package/perl-mail-spamassassin/Config.in
+ create mode 100644 package/perl-mail-spamassassin/perl-mail-spamassassin.hash
+ create mode 100644 package/perl-mail-spamassassin/perl-mail-spamassassin.mk
+
+--
+2.5.0
