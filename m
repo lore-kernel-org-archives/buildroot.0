@@ -1,52 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Dec 2015 12:13:59 +0100
-Subject: [Buildroot] [PATCH 2/2 v2] package/gawk: add optional readline
-	dependency
-In-Reply-To: <cover.1449400403.git.yann.morin.1998@free.fr>
-References: <cover.1449400403.git.yann.morin.1998@free.fr>
-Message-ID: <2b971b558fa20e875348aa2213e0ad385f72d20f.1449400403.git.yann.morin.1998@free.fr>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 6 Dec 2015 14:50:38 +0100
+Subject: [Buildroot] [PATCH] package/kodi: fix fallout after infozip
+	rename
+In-Reply-To: <1449394133-4017-1-git-send-email-yann.morin.1998@free.fr>
+References: <1449394133-4017-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <56643D2E.8090501@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gawk debugger can optionally use readline for user input during
-the debugging session (for the usual autocompletion and stuff).
+Dear Yann,
 
-Enable readline support when the readline package is enabled; let
-./configure automatically find it. Forcibly disable readline support
-when the readline package is disabled.
+Yann E. MORIN wrote:
+> Commit f0c9470 (infozip: rename to zip) forgot to propagate the rename
+> down to the only user of the host variant of infozip.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>   package/kodi/kodi.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 46d8650..bf3aa7a 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -10,7 +10,7 @@ KODI_LICENSE = GPLv2
+>   KODI_LICENSE_FILES = LICENSE.GPL
+>   # needed for binary addons
+>   KODI_INSTALL_STAGING = YES
+> -KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-giflib \
+> +KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-zip host-giflib \
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Sorry for the mistake! Of course:
 
----
-Changes v1 -> v2:
-  - better comment on why no --with-readline  (Arnout)
----
- package/gawk/gawk.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 0fd131d..507ea6d 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -24,6 +24,14 @@ else
- GAWK_CONF_OPTS += --without-mpfr
- endif
- 
-+# --with-readline requires an argument so just let
-+# configure find it automatically
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+GAWK_DEPENDENCIES += readline
-+else
-+GAWK_CONF_OPTS += --without-readline
-+endif
-+
- # We don't have a host-busybox, and we don't want to use readline or mpfr
- HOST_GAWK_DEPENDENCIES =
- 
 -- 
-1.9.1
+Luca
