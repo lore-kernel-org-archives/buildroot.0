@@ -1,58 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Dec 2015 23:00:44 +0100
-Subject: [Buildroot] [psa] various server software upgrades
-In-Reply-To: <20151206214229.GE4023@free.fr> (Yann E. MORIN's message of "Sun, 
- 6 Dec 2015 22:42:29 +0100")
-References: <20151202073542.GY23754@vapier.lan> <20151206214229.GE4023@free.fr>
-Message-ID: <87610bs0dv.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun,  6 Dec 2015 23:17:56 +0100
+Subject: [Buildroot] [PATCH v2] qt53d: enabled assimpsceneparser plugin
+In-Reply-To: <1449440276-6133-1-git-send-email-ps.report@gmx.net>
+References: <1449440276-6133-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1449440276-6133-2-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+- select assimp package
+- copy enabled assimpsceneparser plugin
 
- > Hello Mike,
- > On 2015-12-02 02:35 -0500, Mike Frysinger spake thusly:
- >> the busybox.net software has been languishing for quite a long time,
- >> so i gave it a strong kick today.  just about every piece of software
- >> has been upgraded on the box including bugzilla.  my various testing
- >> looks like it still works, but if you guys notice anything weird, feel
- >> free to let me know.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Depends on '[PATCH v2] qt5/qt53d: new package' (see [1]).
 
- > Yes, I've noticed that buildroot.org has switched to https with:
- >     Strict-Transport-Security: max-age=63072000; includeSubDomains
+[1] https://patchwork.ozlabs.org/patch/552897
 
- > Unfortunately, we do have subdomains that are not https-enabled, and are
- > on another machine:
- >     http://autobuild.buildroot.org/
+Changes v1 -> v2:
+  - no changes
+---
+ package/qt5/qt53d/Config.in | 1 +
+ package/qt5/qt53d/qt53d.mk  | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-sources.buildroot.{org,net} is another example (even though that it
-normally only accessed from wget, so less critical).
-
-We have the same problem for lists.{buildroot,busybox,uclibc}.*, as that
-ends up serving an osuosl certificate.
-
-We also have nightly.buildroot.{org,net} for the nightly generated
-manual.
-
-And finally we have patchwork.buildroot.{org,net} which redirects to the
-ozlabs patchwork.
-
- > Which means anyone that has visited buildroot.org will be blocked from
- > the sub-domains for the next two years (unles sthey switch to https
- > too).
-
-:/
-
- > What can we do about this?
-
-Step 1 should imho be to disable HTST as soon as possible. Then we might
-consider if we could HTTPS enable some of these subdomains, but they are
-on different hosts, which complicates stuff (E.G. we presumably need to
-distribute the buildroot.org private keys and update everywhere every 90
-days).
-
+diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
+index d350922..6c09358 100644
+--- a/package/qt5/qt53d/Config.in
++++ b/package/qt5/qt53d/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_QT53D
+ 	bool "qt53d"
++	select BR2_PACKAGE_ASSIMP
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+index 810242b..15d8999 100644
+--- a/package/qt5/qt53d/qt53d.mk
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -7,7 +7,7 @@
+ QT53D_VERSION = $(QT5_VERSION)
+ QT53D_SITE = $(QT5_SITE)
+ QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
+-QT53D_DEPENDENCIES = qt5base qt5declarative
++QT53D_DEPENDENCIES = assimp qt5base qt5declarative
+ QT53D_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+@@ -34,6 +34,7 @@ endef
+ ifeq ($(BR2_STATIC_LIBS),)
+ define QT53D_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
+ endef
+ endif
 -- 
-Bye, Peter Korsgaard
+2.1.4
