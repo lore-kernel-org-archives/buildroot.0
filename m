@@ -1,68 +1,95 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  7 Dec 2015 22:29:09 +0100
-Subject: [Buildroot] [PATCH v7 07/33] package/efl/libefl: add harfbuzz
-	dependency
+Date: Mon,  7 Dec 2015 22:29:03 +0100
+Subject: [Buildroot] [PATCH v7 01/33] package/expedite: move to package
+	directory
 In-Reply-To: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449523775-6582-8-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449523775-6582-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Harfbuzz allow to enable complex text shaping and layouting
-support in efl libraries.
+There is no advantage for efl related packages to share the same version
+number anymore (except for Efl and Elementary).
 
-Also, it one of the "highly recommended" dependecies
-according to the README but disabling it doesn't need
-the --enable-i-really-know-what-i-am-doing... option.
-That's why harfbuzz is not added to
-BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
+Here are the version number used for the 1.15 stable release:
+EFL                     1.15.2
+Elementary              1.15.2
+Emotion Generic Players 1.15.0
+Evas Generic Loaders    1.15.0
+Python-EFL              1.15.0
+
+Also, we usually do not have a sub-directory for a family of related
+packages which don't share the same version number, so move expedite
+to the package directory. Expedite now appears in the
+"Graphic libraries and applications (graphic/text)" in the Kconfig menu.
+
+In a followup patch, expedite will be downloaded directly from the 1.15
+branch in the git repository since there is no new tarball release after
+1.7.0.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: use --enable/disable options
-v4: rename to libefl
-    improve commit log.
+v5: fixes typos (ThomasP)
+    Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
+v4: improve the commit log (ThomasP)
+    move expedite to "Graphic applications" under
+    "Graphic libraries and applications" menu (ThomasP)
+    fix package comment dependency on BR2_USE_MMU
 ---
- package/efl/libefl/libefl.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/Config.in                      | 1 +
+ package/efl/Config.in                  | 1 -
+ package/{efl => }/expedite/Config.in   | 1 +
+ package/{efl => }/expedite/expedite.mk | 0
+ 4 files changed, 2 insertions(+), 1 deletion(-)
+ rename package/{efl => }/expedite/Config.in (95%)
+ rename package/{efl => }/expedite/expedite.mk (100%)
 
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 7bd3820..80eb3d8 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -31,7 +31,6 @@ LIBEFL_GETTEXTIZE = YES
- # Configure options:
- # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-fb: disable frame buffer support.
--# --disable-harfbuzz: disable harfbuzz support.
- # --disable-image-loader-jp2k: disable JPEG 2000 support.
- # --disable-image-loader-webp: disable webp support.
- # --disable-sdl: disable sdl2 support.
-@@ -46,7 +45,6 @@ LIBEFL_CONF_OPTS = \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--disable-cxx-bindings \
- 	--disable-fb \
--	--disable-harfbuzz \
- 	--disable-image-loader-jp2k \
- 	--disable-image-loader-webp \
- 	--disable-sdl \
-@@ -110,6 +108,13 @@ else
- LIBEFL_CONF_OPTS += --disable-pulseaudio
- endif
+diff --git a/package/Config.in b/package/Config.in
+index 2bdad01..2a2fdfb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -220,6 +220,7 @@ endmenu
+ menu "Graphic libraries and applications (graphic/text)"
  
-+ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
-+LIBEFL_DEPENDENCIES += harfbuzz
-+LIBEFL_CONF_OPTS += --enable-harfbuzz
-+else
-+LIBEFL_CONF_OPTS += --disable-harfbuzz
-+endif
-+
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- LIBEFL_DEPENDENCIES += tslib
- LIBEFL_CONF_OPTS += --enable-tslib
+ comment "Graphic applications"
++	source "package/expedite/Config.in"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/glmark2/Config.in"
+ 	source "package/gnuplot/Config.in"
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 3d31a26..cb91660 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -10,7 +10,6 @@ menuconfig BR2_PACKAGE_EFL
+ 
+ if BR2_PACKAGE_EFL
+ 
+-source "package/efl/expedite/Config.in"
+ source "package/efl/libeina/Config.in"
+ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+diff --git a/package/efl/expedite/Config.in b/package/expedite/Config.in
+similarity index 95%
+rename from package/efl/expedite/Config.in
+rename to package/expedite/Config.in
+index 1e12108..de6a056 100644
+--- a/package/efl/expedite/Config.in
++++ b/package/expedite/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_EXPEDITE
+ 	select BR2_PACKAGE_LIBEINA
+ 	select BR2_PACKAGE_LIBEVAS
+ 	select BR2_PACKAGE_LIBEET
++	depends on BR2_PACKAGE_EFL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+ 	help
+diff --git a/package/efl/expedite/expedite.mk b/package/expedite/expedite.mk
+similarity index 100%
+rename from package/efl/expedite/expedite.mk
+rename to package/expedite/expedite.mk
 -- 
 2.4.3
