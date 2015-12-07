@@ -1,46 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Dec 2015 08:34:33 +0100
-Subject: [Buildroot] [git commit] gcc: bump 5.x series to version 5.3.0
-Message-ID: <20151207073617.32CBA81991@busybox.osuosl.org>
+Date: Mon, 7 Dec 2015 08:34:17 +0100
+Subject: [Buildroot] [git commit] gcc: host-cloog is not needed for graphite
+	support on gcc 5.x
+Message-ID: <20151207073617.26D137FA81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e0c39672e958dac5cff800d101cbf00fdf401ff5
+commit: http://git.buildroot.net/buildroot/commit/?id=a4a1c47f289ef2d8e3a888f65a617444dccd8baa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-201-libgcc-remove-unistd-header.patch is upstream so remove it.
+See https://gcc.gnu.org/gcc-5/changes.html
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/5.2.0/201-libgcc-remove-unistd-header.patch    | 14 --------------
- package/gcc/{5.2.0 => 5.3.0}/100-uclibc-conf.patch         |  0
- ...-config.gcc-fix-typo-for-powerpc-e6500-cpu_is_64b.patch |  0
- package/gcc/{5.2.0 => 5.3.0}/301-missing-execinfo_h.patch  |  0
- .../gcc/{5.2.0 => 5.3.0}/810-arm-softfloat-libgcc.patch    |  0
- package/gcc/{5.2.0 => 5.3.0}/830-arm_unbreak_armv4t.patch  |  0
- .../840-microblaze-enable-dwarf-eh-support.patch           |  0
- .../gcc/{5.2.0 => 5.3.0}/850-libstdcxx-uclibc-c99.patch    |  0
- package/gcc/{5.2.0 => 5.3.0}/860-cilk-wchar.patch          |  0
- .../870-xtensa-add-mauto-litpools-option.patch             |  0
- .../871-xtensa-reimplement-register-spilling.patch         |  0
- ...nsa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch |  0
- .../{5.2.0 => 5.3.0}/873-xtensa-fix-_Unwind_GetCFA.patch   |  0
- .../900-libitm-fixes-for-musl-support.patch                |  0
- .../901-fixincludes-update-for-musl-support.patch          |  0
- package/gcc/{5.2.0 => 5.3.0}/902-unwind-fix-for-musl.patch |  0
- ...03-libstdc++-libgfortran-gthr-workaround-for-musl.patch |  0
- package/gcc/{5.2.0 => 5.3.0}/904-musl-libc-config.patch    |  0
- .../gcc/{5.2.0 => 5.3.0}/905-add-musl-support-to-gcc.patch |  0
- package/gcc/{5.2.0 => 5.3.0}/906-mips-musl-support.patch   |  0
- package/gcc/{5.2.0 => 5.3.0}/907-x86-musl-support.patch    |  0
- package/gcc/{5.2.0 => 5.3.0}/908-arm-musl-support.patch    |  0
- .../gcc/{5.2.0 => 5.3.0}/909-aarch64-musl-support.patch    |  0
- package/gcc/Config.in.host                                 |  2 +-
- package/gcc/gcc.hash                                       |  4 ++--
- 25 files changed, 3 insertions(+), 17 deletions(-)
+ package/gcc/gcc.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b9551e8..07883d0 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -170,8 +170,14 @@ HOST_GCC_COMMON_CONF_OPTS += --with-mpc=$(HOST_DIR)/usr
+ endif
+ 
+ ifeq ($(BR2_GCC_ENABLE_GRAPHITE),y)
+-HOST_GCC_COMMON_DEPENDENCIES += host-isl host-cloog
+-HOST_GCC_COMMON_CONF_OPTS += --with-isl=$(HOST_DIR)/usr --with-cloog=$(HOST_DIR)/usr
++HOST_GCC_COMMON_DEPENDENCIES += host-isl
++HOST_GCC_COMMON_CONF_OPTS += --with-isl=$(HOST_DIR)/usr
++# gcc 5 doesn't need cloog any more, see
++# https://gcc.gnu.org/gcc-5/changes.html
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
++HOST_GCC_COMMON_DEPENDENCIES += host-cloog
++HOST_GCC_COMMON_CONF_OPTS += --with-cloog=$(HOST_DIR)/usr
++endif
+ else
+ HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
+ endif
