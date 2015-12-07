@@ -1,137 +1,116 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  7 Dec 2015 22:29:20 +0100
-Subject: [Buildroot] [PATCH v7 18/33] package/efl/libelementary: bump to
-	version 1.15.2
+Date: Mon,  7 Dec 2015 22:29:25 +0100
+Subject: [Buildroot] [PATCH v7 23/33] package/efl/libethumb: remove package
 In-Reply-To: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449523775-6582-19-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449523775-6582-24-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the newly added libefl package wich provide a new version
-of libeina, libevas, libecore and libedje.
-
-Update the upstream url and add a hash file.
-
-We need to add a host package to provide elm_prefs_cc the
-host machine to cross-compile correctly libelementary
-for the target. Otherwise, elm_prefs_cc for the
-target is used on the host machine.
-
-Since eet, eolian_gen and eldbus_codegen are installed in
-HOST_DIR by host-efl package, help configure script to find
-them.
-
-Explicitly disable doxygen and elementary-test.
+Libethumb is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: squash with the patch adding host-libelementary (Yann E.Morin)
-v5: move the hash file to package/efl/libelementary
-v4: keep libelementary in package/efl/
-v3: bump to 1.15.2
-    remove trailing slash (Vicente Bergas)
-v2: bump to 1.15.1
-    remove glibc only dependency
+v6: Improve lecacy help text (Yann E.Morin)
+v4: remove libethumb from package/efl/
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/efl/libelementary/Config.in          | 14 ++++-------
- package/efl/libelementary/libelementary.hash |  2 ++
- package/efl/libelementary/libelementary.mk   | 35 ++++++++++++++++------------
- 3 files changed, 27 insertions(+), 24 deletions(-)
- create mode 100644 package/efl/libelementary/libelementary.hash
+ Config.in.legacy                   |  7 +++++++
+ package/efl/Config.in              |  1 -
+ package/efl/libethumb/Config.in    | 15 ---------------
+ package/efl/libethumb/libethumb.mk | 27 ---------------------------
+ 4 files changed, 7 insertions(+), 43 deletions(-)
+ delete mode 100644 package/efl/libethumb/Config.in
+ delete mode 100644 package/efl/libethumb/libethumb.mk
 
-diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
-index fcc7025..1f8c962 100644
---- a/package/efl/libelementary/Config.in
-+++ b/package/efl/libelementary/Config.in
-@@ -1,17 +1,13 @@
--comment "libelementary needs a toolchain w/ threads, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2bbf2ed..92dc3ac 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
+ 
++config BR2_PACKAGE_LIBETHUMB
++	bool "libethumb package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  With EFL 1.15, libethumb is now provided by the libefl package.
++
+ config BR2_PACKAGE_INFOZIP
+ 	bool "infozip option has been renamed to zip"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 1c6f9e5..ff8ba83 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -24,7 +24,6 @@ source "package/efl/libeio/Config.in"
+ source "package/efl/libevas/Config.in"
+ source "package/efl/libembryo/Config.in"
+ source "package/efl/libedje/Config.in"
+-source "package/efl/libethumb/Config.in"
+ source "package/efl/libelementary/Config.in"
+ source "package/efl/libedbus/Config.in"
+ 
+diff --git a/package/efl/libethumb/Config.in b/package/efl/libethumb/Config.in
+deleted file mode 100644
+index 3e9cbde..0000000
+--- a/package/efl/libethumb/Config.in
++++ /dev/null
+@@ -1,15 +0,0 @@
+-comment "libethumb needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -
- config BR2_PACKAGE_LIBELEMENTARY
- 	bool "libelementary"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # elm_store.c
- 	depends on !BR2_STATIC_LIBS
+-config BR2_PACKAGE_LIBETHUMB
+-	bool "libethumb"
 -	select BR2_PACKAGE_LIBEINA
 -	select BR2_PACKAGE_LIBEVAS
 -	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBECORE_EVAS
 -	select BR2_PACKAGE_LIBEDJE
- 	help
- 	  Elementary is a widget toolkit and EFL wrapper and convenience
- 	  library to make it easy to build applications and tools with UIs
- 	  with less code.
- 
--	  http://trac.enlightenment.org/e/wiki/Elementary
-+	  https://enlightenment.org
-+
-+comment "libelementary needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/efl/libelementary/libelementary.hash b/package/efl/libelementary/libelementary.hash
-new file mode 100644
-index 0000000..2cd36d8
---- /dev/null
-+++ b/package/efl/libelementary/libelementary.hash
-@@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.15.2.tar.xz.sha256
-+sha256	523c3073210b611817d0f56aa8348962ec757282f9f7dfde93825afa164a0f3f	elementary-1.15.2.tar.xz
-diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
-index 8bd69fe..4ba8681 100644
---- a/package/efl/libelementary/libelementary.mk
-+++ b/package/efl/libelementary/libelementary.mk
-@@ -4,29 +4,34 @@
- #
- ################################################################################
- 
--LIBELEMENTARY_VERSION = 1.7.10
--LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.bz2
--LIBELEMENTARY_SITE = http://download.enlightenment.org/releases
-+LIBELEMENTARY_VERSION = 1.15.2
-+LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
-+LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
- LIBELEMENTARY_LICENSE = LGPLv2.1
- LIBELEMENTARY_LICENSE_FILES = COPYING
- 
- LIBELEMENTARY_INSTALL_STAGING = YES
- 
--LIBELEMENTARY_DEPENDENCIES = \
--	libeina libevas libecore libedje host-libedje \
--	host-libeet
-+LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl host-libelementary libefl
- 
- LIBELEMENTARY_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
--	--with-eet-eet=$(HOST_DIR)/usr/bin/eet
-+	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
-+	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-+	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
-+	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
-+	--with-doxygen=no \
-+	--disable-elementary-test
- 
--# libethumb_client is only built when ethumbd is built.
--# ethumbd is only built if edbus is built.
--ifeq ($(BR2_PACKAGE_LIBETHUMB)$(BR2_PACKAGE_LIBEDBUS),yy)
--LIBELEMENTARY_DEPENDENCIES += libethumb
--LIBELEMENTARY_CONF_OPTS += --enable-ethumb
--else
--LIBELEMENTARY_CONF_OPTS += --disable-ethumb
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+-	help
+-	  Ethumb is a library for generating thumbnail images of documents.
+-
+-	  http://trac.enlightenment.org/e/wiki/Ethumb
+diff --git a/package/efl/libethumb/libethumb.mk b/package/efl/libethumb/libethumb.mk
+deleted file mode 100644
+index 314ddf9..0000000
+--- a/package/efl/libethumb/libethumb.mk
++++ /dev/null
+@@ -1,27 +0,0 @@
+-################################################################################
+-#
+-# libethumb
+-#
+-################################################################################
+-
+-LIBETHUMB_VERSION = 1.7.10
+-LIBETHUMB_SOURCE = ethumb-$(LIBETHUMB_VERSION).tar.bz2
+-LIBETHUMB_SITE = http://download.enlightenment.org/releases
+-LIBETHUMB_LICENSE = LGPLv2.1+
+-LIBETHUMB_LICENSE_FILES = COPYING
+-
+-LIBETHUMB_INSTALL_STAGING = YES
+-
+-LIBETHUMB_DEPENDENCIES = libeina libevas libecore libedje host-libedje
+-
+-LIBETHUMB_CONF_OPTS = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc
+-
+-ifeq ($(BR2_PACKAGE_LIBEXIF),y)
+-LIBETHUMB_DEPENDENCIES += libexif
 -endif
-+# We need a host package in order to provide elm_prefs_cc and
-+# elementary_codegen.
-+HOST_LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl
-+HOST_LIBELEMENTARY_CONF_OPTS = \
-+	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-+	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
-+	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-+	--with-doxygen=no \
-+	--disable-elementary-test
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS),y)
+-LIBETHUMB_DEPENDENCIES += libedbus
+-endif
+-
+-$(eval $(autotools-package))
 -- 
 2.4.3
