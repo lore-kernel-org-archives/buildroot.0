@@ -1,20 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 07 Dec 2015 17:19:22 +0100
-Subject: [Buildroot] [PATCH 2/2] lvm2: bump version to 2.02.137
-In-Reply-To: <1449485924-10042-2-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Mon, 7 Dec 2015 10:58:44 +0000")
-References: <1449485924-10042-1-git-send-email-Vincent.Riera@imgtec.com>
- <1449485924-10042-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <877fkqp6yd.fsf@dell.be.48ers.dk>
+Date: Mon, 07 Dec 2015 17:19:38 +0100
+Subject: [Buildroot] [PATCH] gdb: bump 7.10 series to 7.10.1
+In-Reply-To: <1449489748-18741-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 7 Dec 2015 09:02:28 -0300")
+References: <1449489748-18741-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8737vep6xx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
