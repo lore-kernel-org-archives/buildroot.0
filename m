@@ -1,109 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 7 Dec 2015 23:41:56 +0100
-Subject: [Buildroot] [PATCH v7 09/33] package/efl/libefl: add webp
- dependency
-In-Reply-To: <1449523775-6582-10-git-send-email-romain.naour@openwide.fr>
-References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
- <1449523775-6582-10-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151207224156.GF14874@free.fr>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 7 Dec 2015 17:54:08 -0500
+Subject: [Buildroot] [psa] various server software upgrades
+In-Reply-To: <87egexoqf4.fsf@dell.be.48ers.dk>
+References: <20151202073542.GY23754@vapier.lan> <20151206214229.GE4023@free.fr>
+ <87610bs0dv.fsf@dell.be.48ers.dk>
+ <20151207015525.GH23754@vapier.lan>
+ <87bna2rckx.fsf@dell.be.48ers.dk>
+ <20151207185106.GF11489@vapier.lan>
+ <87r3iyngfx.fsf@dell.be.48ers.dk>
+ <20151207215548.GB24430@vapier.lan>
+ <87egexoqf4.fsf@dell.be.48ers.dk>
+Message-ID: <20151207225408.GC24430@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
-
-On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
-> WebP is a new image format that provides lossless and lossy
-> compression for images on the web. So enabling webp support
-> in efl libraries allow to loads images using WebP.
+On 07 Dec 2015 23:16, Peter Korsgaard wrote:
+> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 > 
-> Also, it one of the "highly recommended" dependecies [1]
-> according to the README but disabling it doesn't need
-> the --enable-i-really-know-what-i-am-doing... option.
-> That's why BR2_PACKAGE_LIBEFL_WEBP is not added to
-> BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
+>  >> I would actually prefer if we only enforce https where it matters,
+>  >> E.G. on bugs.*. We can (and SHOULD now that we've uses the HSTS headers)
+>  >> support https on the other subdomains, but I don't think we should
+>  >> redirect http to https.
 > 
-> [1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
+>  > i guess we disagree on the "where it matters" part.  any unencrypted
+>  > connection can be injected with ads/javascript which can redirect the
+>  > content to any site or capture any state the user has.
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> v6: select BR2_PACKAGE_WEBP (Yann E.Morin)
-> v4: rename to libefl
->     improve commit log
-> ---
->  package/efl/libefl/Config.in | 6 ++++++
->  package/efl/libefl/libefl.mk | 9 +++++++--
->  2 files changed, 13 insertions(+), 2 deletions(-)
+> Well, what I mean is that this is always about trade offs. The risk of
+> man in the middle attacks / ads vs the risks of various breakage because
+> of missing/invalid certs/old clients/whatever.
 > 
-> diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-> index 3cf4b4e..0b89411 100644
-> --- a/package/efl/libefl/Config.in
-> +++ b/package/efl/libefl/Config.in
-> @@ -112,4 +112,10 @@ config BR2_PACKAGE_LIBEFL_TIFF
->  	help
->  	  This enables the loader code that loads tiff files.
->  
-> +config BR2_PACKAGE_LIBEFL_WEBP
-> +	bool "libevas webp image loader"
-> +	select BR2_PACKAGE_WEBP
-> +	help
-> +	  This enables the loader code that loads images using WebP.
-> +
->  endif # BR2_PACKAGE_LIBEFL
-> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-> index 10d0a98..e479cfc 100644
-> --- a/package/efl/libefl/libefl.mk
-> +++ b/package/efl/libefl/libefl.mk
-> @@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
->  # --disable-cxx-bindings: disable C++11 bindings.
->  # --disable-fb: disable frame buffer support.
->  # --disable-image-loader-jp2k: disable JPEG 2000 support.
-> -# --disable-image-loader-webp: disable webp support.
->  # --disable-sdl: disable sdl2 support.
->  # --disable-systemd: disable systemd support.
->  # --disable-xinput22: disable X11 XInput v2.2+ support.
-> @@ -45,7 +44,6 @@ LIBEFL_CONF_OPTS = \
->  	--disable-cxx-bindings \
->  	--disable-fb \
->  	--disable-image-loader-jp2k \
-> -	--disable-image-loader-webp \
->  	--disable-sdl \
->  	--disable-systemd \
->  	--enable-lua-old \
-> @@ -177,6 +175,13 @@ else
->  LIBEFL_CONF_OPTS += --disable-image-loader-tiff
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
-> +LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
-> +LIBEFL_DEPENDENCIES += webp
-> +else
-> +LIBEFL_CONF_OPTS += --disable-image-loader-webp
-> +endif
-> +
->  $(eval $(autotools-package))
->  
->  ################################################################################
-> -- 
-> 2.4.3
+> Bugzilla is a bit special as we have user authentication, the other sub
+> domains less so.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Don't get me wrong, I find it very good that we are improving the
+> security situation - I just would prefer we keep the amount of breakage
+> to a minimum while we configure this.
+> 
+> So how about if we drop the global HSTS headers and http->https
+> redirects for now and then move a bit more slowly forward sub domain by
+> subdomain:
+> 
+> 1: Enable https next to http and verify that it works
+> 2: Add http->https redirect and verify that it works
+> 3: add HSTS header
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+we're already at (3).  even if we weren't, i don't see how transitioning
+would affect the SNI issue.  the question is simple: how long do you want
+to (try to) support old systems where people refuse to fix their setup ?
+we're talking about systems that are over three years old (wget-1.14 was
+released in Aug 2012).  what is your cut off ?  3 years ?  4 years ?  i'd
+also highlight <wget-1.16 versions have@least one security vuln that
+can be remotely exploited (when you download via ftp -- CVE-2014-4877).
+
+>  > imo, if a dev's system is so old it doesn't support SNI, then it's their
+>  > problem to workaround it.  even if they get the latest buildroot version,
+>  > they're going to keep having the same problem when they try to download
+>  > and build software as other servers use SNI.  are we now responsible for
+>  > bootstrapping openssl/ca-certificates/wget as host tools so SNI/etc...
+>  > are supported ?  how do you get the software for those packages in order
+>  > to bootstrap ?  do you bundle the openssl/ca-certificates/wget tarballs
+>  > inside of buildroot itself ?  let's just rip the band aid off and be done.
+> 
+> I agree, old systems are a pain - But we do try to keep buildroot
+> working on various enterprise distributions when possible. So far we've
+> worked around SNI issues by using http URLs from those locations instead
+> (and verifying against our local hashes).
+
+that doesn't help when sites transition to http->https redirects such as
+uclibc.org now does.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151207/72336cb1/attachment.asc>
