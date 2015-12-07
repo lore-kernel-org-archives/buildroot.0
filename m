@@ -1,95 +1,85 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  7 Dec 2015 22:29:03 +0100
-Subject: [Buildroot] [PATCH v7 01/33] package/expedite: move to package
-	directory
+Date: Mon,  7 Dec 2015 22:29:11 +0100
+Subject: [Buildroot] [PATCH v7 09/33] package/efl/libefl: add webp dependency
 In-Reply-To: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449523775-6582-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449523775-6582-10-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no advantage for efl related packages to share the same version
-number anymore (except for Efl and Elementary).
+WebP is a new image format that provides lossless and lossy
+compression for images on the web. So enabling webp support
+in efl libraries allow to loads images using WebP.
 
-Here are the version number used for the 1.15 stable release:
-EFL                     1.15.2
-Elementary              1.15.2
-Emotion Generic Players 1.15.0
-Evas Generic Loaders    1.15.0
-Python-EFL              1.15.0
+Also, it one of the "highly recommended" dependecies [1]
+according to the README but disabling it doesn't need
+the --enable-i-really-know-what-i-am-doing... option.
+That's why BR2_PACKAGE_LIBEFL_WEBP is not added to
+BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
 
-Also, we usually do not have a sub-directory for a family of related
-packages which don't share the same version number, so move expedite
-to the package directory. Expedite now appears in the
-"Graphic libraries and applications (graphic/text)" in the Kconfig menu.
-
-In a followup patch, expedite will be downloaded directly from the 1.15
-branch in the git repository since there is no new tarball release after
-1.7.0.
+[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v5: fixes typos (ThomasP)
-    Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
-v4: improve the commit log (ThomasP)
-    move expedite to "Graphic applications" under
-    "Graphic libraries and applications" menu (ThomasP)
-    fix package comment dependency on BR2_USE_MMU
+v6: select BR2_PACKAGE_WEBP (Yann E.Morin)
+v4: rename to libefl
+    improve commit log
 ---
- package/Config.in                      | 1 +
- package/efl/Config.in                  | 1 -
- package/{efl => }/expedite/Config.in   | 1 +
- package/{efl => }/expedite/expedite.mk | 0
- 4 files changed, 2 insertions(+), 1 deletion(-)
- rename package/{efl => }/expedite/Config.in (95%)
- rename package/{efl => }/expedite/expedite.mk (100%)
+ package/efl/libefl/Config.in | 6 ++++++
+ package/efl/libefl/libefl.mk | 9 +++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2bdad01..2a2fdfb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -220,6 +220,7 @@ endmenu
- menu "Graphic libraries and applications (graphic/text)"
- 
- comment "Graphic applications"
-+	source "package/expedite/Config.in"
- 	source "package/fswebcam/Config.in"
- 	source "package/glmark2/Config.in"
- 	source "package/gnuplot/Config.in"
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 3d31a26..cb91660 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -10,7 +10,6 @@ menuconfig BR2_PACKAGE_EFL
- 
- if BR2_PACKAGE_EFL
- 
--source "package/efl/expedite/Config.in"
- source "package/efl/libeina/Config.in"
- source "package/efl/libecore/Config.in"
- source "package/efl/libeet/Config.in"
-diff --git a/package/efl/expedite/Config.in b/package/expedite/Config.in
-similarity index 95%
-rename from package/efl/expedite/Config.in
-rename to package/expedite/Config.in
-index 1e12108..de6a056 100644
---- a/package/efl/expedite/Config.in
-+++ b/package/expedite/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_EXPEDITE
- 	select BR2_PACKAGE_LIBEINA
- 	select BR2_PACKAGE_LIBEVAS
- 	select BR2_PACKAGE_LIBEET
-+	depends on BR2_PACKAGE_EFL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index 3cf4b4e..0b89411 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -112,4 +112,10 @@ config BR2_PACKAGE_LIBEFL_TIFF
  	help
-diff --git a/package/efl/expedite/expedite.mk b/package/expedite/expedite.mk
-similarity index 100%
-rename from package/efl/expedite/expedite.mk
-rename to package/expedite/expedite.mk
+ 	  This enables the loader code that loads tiff files.
+ 
++config BR2_PACKAGE_LIBEFL_WEBP
++	bool "libevas webp image loader"
++	select BR2_PACKAGE_WEBP
++	help
++	  This enables the loader code that loads images using WebP.
++
+ endif # BR2_PACKAGE_LIBEFL
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index 10d0a98..e479cfc 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
+ # --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-fb: disable frame buffer support.
+ # --disable-image-loader-jp2k: disable JPEG 2000 support.
+-# --disable-image-loader-webp: disable webp support.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+ # --disable-xinput22: disable X11 XInput v2.2+ support.
+@@ -45,7 +44,6 @@ LIBEFL_CONF_OPTS = \
+ 	--disable-cxx-bindings \
+ 	--disable-fb \
+ 	--disable-image-loader-jp2k \
+-	--disable-image-loader-webp \
+ 	--disable-sdl \
+ 	--disable-systemd \
+ 	--enable-lua-old \
+@@ -177,6 +175,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-image-loader-tiff
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
++LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
++LIBEFL_DEPENDENCIES += webp
++else
++LIBEFL_CONF_OPTS += --disable-image-loader-webp
++endif
++
+ $(eval $(autotools-package))
+ 
+ ################################################################################
 -- 
 2.4.3
