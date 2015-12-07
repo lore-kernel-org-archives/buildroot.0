@@ -1,62 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Dec 2015 23:38:00 +0100
-Subject: [Buildroot] [git commit] flite: fix alsa version check
-Message-ID: <20151207073616.F26468198D@busybox.osuosl.org>
+Date: Mon, 7 Dec 2015 08:34:33 +0100
+Subject: [Buildroot] [git commit] package/mpython-m2crypto: bump version
+Message-ID: <20151207073617.50CC57FA81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25129550c325ee29ccb976c136c7f9bb56c9ef03
+commit: http://git.buildroot.net/buildroot/commit/?id=1682aeefa312f8cc759cbf576a9b8d2e54a97695
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The alsa version check broke with the recent alsa-lib bump to 1.1.0 as it
-was only checking subminor >= 11.
 
 Fixes:
 
-http://autobuild.buildroot.net/results/b62/b62cd6de04ff83bf7025a8f1aca49dbcbc8d7e2d/
-http://autobuild.buildroot.net/results/2c9/2c98458fef8c38ff36cd20d77c2d651129146857/
-http://autobuild.buildroot.net/results/ca7/ca78c1029ef1d91b66bbc91c5e5269bf663afe8e/
-http://autobuild.buildroot.net/results/eac/eacb973e7fcce385d1686ab364f60dec9e0dd2e9/
+http://autobuild.buildroot.org/results/ee1/ee1bb80214a51c212712de8193b89a32e9901408/
+http://autobuild.buildroot.org/results/ce8/ce8d5d68eef312ca168f351b845920eb62ca4eb1/
+http://autobuild.buildroot.org/results/500/5004a2a9cabe75669bbe90f3ee35ab3869617fc9/
 
-And many more.
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flite/0003-fix-alsa-version-check.patch | 26 +++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ package/python-m2crypto/python-m2crypto.hash | 4 ++--
+ package/python-m2crypto/python-m2crypto.mk   | 8 +++++++-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/flite/0003-fix-alsa-version-check.patch b/package/flite/0003-fix-alsa-version-check.patch
-new file mode 100644
-index 0000000..8832ac3
---- /dev/null
-+++ b/package/flite/0003-fix-alsa-version-check.patch
-@@ -0,0 +1,26 @@
-+[PATCH] fix alsa version check
+diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
+index a5231ec..a2603b9 100644
+--- a/package/python-m2crypto/python-m2crypto.hash
++++ b/package/python-m2crypto/python-m2crypto.hash
+@@ -1,2 +1,2 @@
+-# From https://pypi.python.org/pypi/M2Crypto/0.21.1
+-md5 f93d8462ff7646397a9f77a2fe602d17 M2Crypto-0.21.1.tar.gz
++# From https://pypi.python.org/pypi/M2Crypto/0.22.5
++md5 f84eb07aa1687f39bc26ee7b1ba5a105 M2Crypto-0.22.5.tar.gz
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+index 7e46f1d..1f038e3 100644
+--- a/package/python-m2crypto/python-m2crypto.mk
++++ b/package/python-m2crypto/python-m2crypto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_M2CRYPTO_VERSION = 0.21.1
++PYTHON_M2CRYPTO_VERSION = 0.22.5
+ PYTHON_M2CRYPTO_SITE = http://pypi.python.org/packages/source/M/M2Crypto
+ PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
+ PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
+@@ -13,10 +13,16 @@ HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
+ # We need to use python2 because m2crypto is not python3 compliant.
+ HOST_PYTHON_M2CRYPTO_NEEDS_HOST_PYTHON = python2
+ 
++HOST_PYTHON_M2CRYPTO_BUILD_DIR = $(@D)/build/lib.linux-$(HOSTARCH)-$(PYTHON_VERSION_MAJOR)
 +
-+Check the entire alsa version, and not just the subminor - As this broke
-+with the recent alsa 1.0.x -> 1.1.0 release.
-+
-+It is not clear what major/minor versions the check was supposed to be
-+against (0.9 or 1.0).  I went with 1.0.11 to be on the safe side.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ flite-1.4-release/configure.in |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: flite-1.4/flite-1.4-release/configure.in
-+===================================================================
-+--- flite-1.4.orig/flite-1.4-release/configure.in
-++++ flite-1.4/flite-1.4-release/configure.in
-+@@ -270,7 +270,7 @@
-+ # the one I know -- you can still specific --with-audio=alsa
-+ AC_TRY_COMPILE([#include <alsa/version.h>],
-+                [int j=
-+-                #if SND_LIB_SUBMINOR >= 11
-++                #if SND_LIB_VERSION >= 0x1000b
-+                 3;
-+                 #endif],
-+               [AUDIODRIVER="alsa"
+ # * We need to override the build commands to be able to use build_ext,
+ #   which accepts the --openssl option.
+ # * Use python2 interpreter to avoid trying building some python3 objects.
++# * because build_ext is flawed, is forgets to copy the files prior to
++#   the build, so we do it manually.
+ define HOST_PYTHON_M2CRYPTO_BUILD_CMDS
++	mkdir -p $(HOST_PYTHON_M2CRYPTO_BUILD_DIR)
++	cp -av $(@D)/M2Crypto $(HOST_PYTHON_M2CRYPTO_BUILD_DIR)/M2Crypto
+ 	(cd $(@D); \
+ 		$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
+ 		$(HOST_DIR)/usr/bin/python2 setup.py build_ext \
