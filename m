@@ -1,74 +1,75 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  7 Dec 2015 22:29:10 +0100
-Subject: [Buildroot] [PATCH v7 08/33] package/efl/libefl: add wayland
-	dependency
+Date: Mon,  7 Dec 2015 22:29:16 +0100
+Subject: [Buildroot] [PATCH v7 14/33] package/efl/libefl: enable xinput2.2
 In-Reply-To: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449523775-6582-9-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449523775-6582-15-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See:
-https://www.enlightenment.org/about-wayland
+X11 XInput v2.2+ support is one of the recommended
+feature for the efl libraries:
+https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n490
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: use --enable/disable options
+v6: add missing dependency on xlib_libXi (Yann E.Morin)
 v4: rename to libefl
+    improve commit log
+v3: new patch
 ---
  package/efl/libefl/Config.in | 1 +
- package/efl/libefl/libefl.mk | 9 +++++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/efl/libefl/libefl.mk | 6 ++++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index ac871bf..3cf4b4e 100644
+index b0cb675..98c369c 100644
 --- a/package/efl/libefl/Config.in
 +++ b/package/efl/libefl/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_LIBEFL
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
- 	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
-+	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_UTIL_LINUX
- 	# libblkid is part of required tools, see EFL's README.
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+@@ -97,6 +97,7 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXI
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	select BR2_PACKAGE_XLIB_LIBXP
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 80eb3d8..10d0a98 100644
+index fa1ee74..d2537dc 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -35,7 +35,6 @@ LIBEFL_GETTEXTIZE = YES
- # --disable-image-loader-webp: disable webp support.
+@@ -33,7 +33,6 @@ LIBEFL_GETTEXTIZE = YES
+ # --disable-cxx-bindings: disable C++11 bindings.
  # --disable-sdl: disable sdl2 support.
  # --disable-systemd: disable systemd support.
--# --disable-wayland: disable wayland support.
- # --disable-xinput22: disable X11 XInput v2.2+ support.
+-# --disable-xinput22: disable X11 XInput v2.2+ support.
  # --enable-lua-old: disable Elua and remove luajit dependency.
  # --with-opengl=none: disable opengl support.
-@@ -49,7 +48,6 @@ LIBEFL_CONF_OPTS = \
- 	--disable-image-loader-webp \
- 	--disable-sdl \
- 	--disable-systemd \
--	--disable-wayland \
- 	--enable-lua-old \
- 	--with-opengl=none \
- 	--with-x11=none
-@@ -141,6 +139,13 @@ else
- LIBEFL_CONF_OPTS += --with-crypto=none
- endif # BR2_PACKAGE_OPENSSL
+ # --with-x11=none: remove dependency on X.org.
+@@ -146,10 +145,12 @@ LIBEFL_CONF_OPTS += --disable-fb
+ endif
  
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+LIBEFL_DEPENDENCIES += wayland libxkbcommon
-+LIBEFL_CONF_OPTS += --enable-wayland
-+else
-+LIBEFL_CONF_OPTS += --disable-wayland
-+endif
-+
- # Loaders that need external dependencies needs to be --enable-XXX=yes
- # otherwise the default is '=static'.
- # All other loaders are statically built-in
+ ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
++# --enable-xinput22 is recommended
+ LIBEFL_CONF_OPTS += --with-x=$(STAGING_DIR) \
+ 	--with-x11=xlib \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+-	--x-libraries=$(STAGING_DIR)/usr/lib
++	--x-libraries=$(STAGING_DIR)/usr/lib \
++	--enable-xinput22
+ 
+ LIBEFL_DEPENDENCIES += \
+ 	xlib_libX11 \
+@@ -157,6 +158,7 @@ LIBEFL_DEPENDENCIES += \
+ 	xlib_libXcursor \
+ 	xlib_libXdamage \
+ 	xlib_libXext \
++	xlib_libXi \
+ 	xlib_libXinerama \
+ 	xlib_libXrandr \
+ 	xlib_libXrender \
 -- 
 2.4.3
