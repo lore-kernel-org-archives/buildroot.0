@@ -1,36 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  7 Dec 2015 11:27:11 -0300
-Subject: [Buildroot] [PATCH] pixman: disable vmx for powerpc CS toolchains
-Message-ID: <1449498431-5872-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 7 Dec 2015 14:55:43 +0000
+Subject: [Buildroot] [PATCH 1/2] libgudev: remove systemd dependency
+In-Reply-To: <1449055626-4640-1-git-send-email-yegorslists@googlemail.com>
+References: <1449055626-4640-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <56659DEF.1050004@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ppc CS toolchains have flaky VMX (AKA altivec) implementation
-causing build failure. Disable it for these toolchains. Fixes:
-http://autobuild.buildroot.net/results/3b4/3b4cda40f074578f6b35b1fb381ba37b93174e86/
+Dear Yegor Yefremov,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/pixman/pixman.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+On 02/12/15 11:27, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Since version 3.1.3 eudev doesn't provide internal libgudev,
+> so this package can now be used as an ordinary stand-alone
+> package.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 8281773..8845315 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -32,5 +32,10 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405),y)
- PIXMAN_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DPIXMAN_NO_TLS"
- endif
- 
-+# Altivec detection isn't reliable for CS toolchains
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103)$(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
-+PIXMAN_CONF_OPTS += --disable-vmx
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.4.10
+Regards,
+
+Vincent.
