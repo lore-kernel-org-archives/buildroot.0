@@ -1,65 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 7 Dec 2015 08:34:33 +0100
-Subject: [Buildroot] [git commit] package/mpython-m2crypto: bump version
-Message-ID: <20151207073617.50CC57FA81@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gcc: bump 5.x series to version 5.3.0
+Message-ID: <20151207073617.32CBA81991@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1682aeefa312f8cc759cbf576a9b8d2e54a97695
+commit: http://git.buildroot.net/buildroot/commit/?id=e0c39672e958dac5cff800d101cbf00fdf401ff5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-
-http://autobuild.buildroot.org/results/ee1/ee1bb80214a51c212712de8193b89a32e9901408/
-http://autobuild.buildroot.org/results/ce8/ce8d5d68eef312ca168f351b845920eb62ca4eb1/
-http://autobuild.buildroot.org/results/500/5004a2a9cabe75669bbe90f3ee35ab3869617fc9/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+201-libgcc-remove-unistd-header.patch is upstream so remove it.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-m2crypto/python-m2crypto.hash | 4 ++--
- package/python-m2crypto/python-m2crypto.mk   | 8 +++++++-
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ package/gcc/5.2.0/201-libgcc-remove-unistd-header.patch    | 14 --------------
+ package/gcc/{5.2.0 => 5.3.0}/100-uclibc-conf.patch         |  0
+ ...-config.gcc-fix-typo-for-powerpc-e6500-cpu_is_64b.patch |  0
+ package/gcc/{5.2.0 => 5.3.0}/301-missing-execinfo_h.patch  |  0
+ .../gcc/{5.2.0 => 5.3.0}/810-arm-softfloat-libgcc.patch    |  0
+ package/gcc/{5.2.0 => 5.3.0}/830-arm_unbreak_armv4t.patch  |  0
+ .../840-microblaze-enable-dwarf-eh-support.patch           |  0
+ .../gcc/{5.2.0 => 5.3.0}/850-libstdcxx-uclibc-c99.patch    |  0
+ package/gcc/{5.2.0 => 5.3.0}/860-cilk-wchar.patch          |  0
+ .../870-xtensa-add-mauto-litpools-option.patch             |  0
+ .../871-xtensa-reimplement-register-spilling.patch         |  0
+ ...nsa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch |  0
+ .../{5.2.0 => 5.3.0}/873-xtensa-fix-_Unwind_GetCFA.patch   |  0
+ .../900-libitm-fixes-for-musl-support.patch                |  0
+ .../901-fixincludes-update-for-musl-support.patch          |  0
+ package/gcc/{5.2.0 => 5.3.0}/902-unwind-fix-for-musl.patch |  0
+ ...03-libstdc++-libgfortran-gthr-workaround-for-musl.patch |  0
+ package/gcc/{5.2.0 => 5.3.0}/904-musl-libc-config.patch    |  0
+ .../gcc/{5.2.0 => 5.3.0}/905-add-musl-support-to-gcc.patch |  0
+ package/gcc/{5.2.0 => 5.3.0}/906-mips-musl-support.patch   |  0
+ package/gcc/{5.2.0 => 5.3.0}/907-x86-musl-support.patch    |  0
+ package/gcc/{5.2.0 => 5.3.0}/908-arm-musl-support.patch    |  0
+ .../gcc/{5.2.0 => 5.3.0}/909-aarch64-musl-support.patch    |  0
+ package/gcc/Config.in.host                                 |  2 +-
+ package/gcc/gcc.hash                                       |  4 ++--
+ 25 files changed, 3 insertions(+), 17 deletions(-)
 
-diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
-index a5231ec..a2603b9 100644
---- a/package/python-m2crypto/python-m2crypto.hash
-+++ b/package/python-m2crypto/python-m2crypto.hash
-@@ -1,2 +1,2 @@
--# From https://pypi.python.org/pypi/M2Crypto/0.21.1
--md5 f93d8462ff7646397a9f77a2fe602d17 M2Crypto-0.21.1.tar.gz
-+# From https://pypi.python.org/pypi/M2Crypto/0.22.5
-+md5 f84eb07aa1687f39bc26ee7b1ba5a105 M2Crypto-0.22.5.tar.gz
-diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
-index 7e46f1d..1f038e3 100644
---- a/package/python-m2crypto/python-m2crypto.mk
-+++ b/package/python-m2crypto/python-m2crypto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_M2CRYPTO_VERSION = 0.21.1
-+PYTHON_M2CRYPTO_VERSION = 0.22.5
- PYTHON_M2CRYPTO_SITE = http://pypi.python.org/packages/source/M/M2Crypto
- PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
- PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
-@@ -13,10 +13,16 @@ HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
- # We need to use python2 because m2crypto is not python3 compliant.
- HOST_PYTHON_M2CRYPTO_NEEDS_HOST_PYTHON = python2
- 
-+HOST_PYTHON_M2CRYPTO_BUILD_DIR = $(@D)/build/lib.linux-$(HOSTARCH)-$(PYTHON_VERSION_MAJOR)
-+
- # * We need to override the build commands to be able to use build_ext,
- #   which accepts the --openssl option.
- # * Use python2 interpreter to avoid trying building some python3 objects.
-+# * because build_ext is flawed, is forgets to copy the files prior to
-+#   the build, so we do it manually.
- define HOST_PYTHON_M2CRYPTO_BUILD_CMDS
-+	mkdir -p $(HOST_PYTHON_M2CRYPTO_BUILD_DIR)
-+	cp -av $(@D)/M2Crypto $(HOST_PYTHON_M2CRYPTO_BUILD_DIR)/M2Crypto
- 	(cd $(@D); \
- 		$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
- 		$(HOST_DIR)/usr/bin/python2 setup.py build_ext \
+Patch is too large, so refusing to show it
