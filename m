@@ -1,45 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Dec 2015 17:19:34 +0100
-Subject: [Buildroot] [git commit] gdb: bump 7.10 series to 7.10.1
-Message-ID: <20151207162023.7283A819ED@busybox.osuosl.org>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Mon, 7 Dec 2015 08:47:46 -0800
+Subject: [Buildroot] Mosh and buildroot: UTF-8 locale issue
+In-Reply-To: <CAK9TtU2RHCgLAJnpL9Wq6Oao99VsB3Q7F1UeUiPsM_TZGH87uQ@mail.gmail.com>
+References: <CAK9TtU2RHCgLAJnpL9Wq6Oao99VsB3Q7F1UeUiPsM_TZGH87uQ@mail.gmail.com>
+Message-ID: <CAJJ6jxuHpCC9DepibBFG=eYOFbzYkLknj-jMUWuWzBo+bmPYaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22bfeff9f4ff414560d1dd7f2adc0c7699586e7b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gdb/Config.in.host | 2 +-
- package/gdb/gdb.hash       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This is a true user issue. Most of the mailing list traffic is on the
+build infrastructure. However, most people here are also users....
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index b65dd52..6bf7e84 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -57,4 +57,4 @@ config BR2_GDB_VERSION
- 	default "7.7.1"    if BR2_GDB_VERSION_7_7
- 	default "7.8.2"	   if BR2_GDB_VERSION_7_8
- 	default "7.9.1"    if BR2_GDB_VERSION_7_9 || !BR2_PACKAGE_HOST_GDB
--	default "7.10"     if BR2_GDB_VERSION_7_10
-+	default "7.10.1"   if BR2_GDB_VERSION_7_10
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 2646a32..b511a3e 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -2,7 +2,7 @@
- sha512	887b9b726dae8f6e3e5e41574460a67e4f9002b0d47bc985dcf63bdf3518397a90b6a208cb5b19e5ed2341715ad75cfeed4df4fb423f39f74218e36bc87f1cab	gdb-7.7.1.tar.bz2
- sha512	face5bf1b4ce144fc8604fc84620beed956177a11fd632b4e41906fc7f632910b2b43a50e6cfdfd6cbd876ee527c813bddab8df29dc560a6c36694cdb8edc4e4	gdb-7.8.2.tar.xz
- sha512	eebdf88b24e52e792b8a4b89ea85790de72b462a7810b44975fdf4232c068f353b15506071f450102a9d4bcecdde8e93dc3748a10699b7f73f3e04fb2d9d8414	gdb-7.9.1.tar.xz
--sha512	4d9d7b536ad46f881689fca9f3f0b60268ff413c7900115fed5030d81d1d794793cc51d51510584ea1a63fe5891d006a9867ba36981b86b50806d469b717457d	gdb-7.10.tar.xz
-+sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe504958b5372de610dcb952c679cf8fa9c1bdadd380294fbf59b6e366010	gdb-7.10.1.tar.xz
- # No hash for the ARC & microblaze variants, comes from the github-helper:
- none	xxx	gdb-arc-2015.06-gdb.tar.gz
- none	xxx	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
+I could not get utf-8 to work on my buildroot target system. The
+problem is someone, upstream conflated the relatively simple utf-8
+encoding with the much more complicated localization. IMHO, most
+embedded system would like to use uft-8, but are not that interested
+in getting commas, or periods straight for formatting numbers and
+dates etc.
+
+The Linux kernel avoids the whole issue by just treating filenames as
+strings of bytes, without caring (much "/") about what the bytes are.
+
+I was trying to read in python files in a filesystem written by
+another Ubuntu system which did handle utf-8. Part of the problem is
+Busybox needs to have options set for it to use locales and utf8. I
+gave up as it involved getting user space shell variables (locale
+etc), assumed file system location of the huge locale info, and the
+Byzantine design of python 2 and utf8.
+
+If you make progress with this, please post your results, it will help others.
+
+Regards, Steve
+
+On Fri, Dec 4, 2015 at 5:26 AM, Sylvain LG <forum@sylvainlegourr.com> wrote:
+> Hello,
+>
+> I've just built a filesystem with Buildroot and I've selected Mosh package.
+>
+> But an error appears when I try to connect with Mosh to my system:
+>
+> $ mosh root at 192.168.1.10
+>
+>> The locale requested by LC_CTYPE=UTF-8 isn't available here.
+>> Running `locale-gen UTF-8' may be necessary.
+>> mosh-server needs a UTF-8 native locale to run.
+>> Unfortunately, the local environment ([no charset variables]) specifies
+>> the character set "US-ASCII",
+>> The client-supplied environment (LC_CTYPE=UTF-8) specifies
+>> the character set "US-ASCII".
+>> sh: locale: not found
+>> Connection to 192.168.1.10 closed.
+>> /usr/local/bin/mosh: Did not find mosh server startup message.
+>
+> How can I set Buildroot config to fix the issue?
+>
+>
+> Thank you,
+>
+>
+> Sylvain
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
