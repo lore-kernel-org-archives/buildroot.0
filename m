@@ -1,99 +1,78 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  7 Dec 2015 22:29:34 +0100
-Subject: [Buildroot] [PATCH v7 32/33] package/efl/libeina: remove package
+Date: Mon,  7 Dec 2015 22:29:19 +0100
+Subject: [Buildroot] [PATCH v7 17/33] package/libevas-generic-loaders: add
+	libraw dependency
 In-Reply-To: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449523775-6582-33-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449523775-6582-18-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libeina is now available in efl package.
+libraw it's one of the "highly recommended" dependecies
+according to the README [1].
+
+[1] https://git.enlightenment.org/core/evas_generic_loaders.git/tree/README?id=v1.15.0#n31
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: Improve lecacy help text (Yann E.Morin)
-v5: remove libeina directory
-v4: update Config.in to use libefl
-v3: update legacy option for 2015.11
-    update help text
+v6: select BR2_PACKAGE_LIBRAW and propagate its dependency on
+    C++. (Yann E.Morin)
+v4: improve commit log
 ---
- Config.in.legacy               |  7 +++++++
- package/efl/Config.in          |  1 -
- package/efl/libeina/Config.in  |  6 ------
- package/efl/libeina/libeina.mk | 18 ------------------
- 4 files changed, 7 insertions(+), 25 deletions(-)
- delete mode 100644 package/efl/libeina/Config.in
- delete mode 100644 package/efl/libeina/libeina.mk
+ package/libevas-generic-loaders/Config.in                  | 10 ++++++++++
+ package/libevas-generic-loaders/libevas-generic-loaders.mk |  9 +++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1df81ea..e1ea06f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.02"
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index 65ced8a..1d5b717 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -11,6 +11,16 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
  
-+config BR2_PACKAGE_LIBEINA
-+	bool "libeina package has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_EFL
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 
++config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
++	bool "libraw loader"
++	depends on BR2_INSTALL_LIBSTDCPP # libraw
++	select BR2_PACKAGE_LIBRAW
 +	help
-+	  With EFL 1.15, libeina is now provided by the libefl package.
++	  This option enables the Evas generic Libraw loader
 +
- config BR2_PACKAGE_LIBEET
- 	bool "libeet package has been removed"
- 	select BR2_LEGACY
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 1dc466e..4e802ba 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -15,7 +15,6 @@ menuconfig BR2_PACKAGE_EFL
++comment "libraw loader needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+ 	depends on BR2_USE_MMU # librsvg -> glib2
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index 47dfa9a..2c1c1cd 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -14,15 +14,20 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
  
- if BR2_PACKAGE_EFL
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = host-pkgconf libefl zlib
  
--source "package/efl/libeina/Config.in"
- source "package/efl/libefl/Config.in"
- source "package/efl/libelementary/Config.in"
+-# For now, we only support the SVG loader
+ # poppler >= 0.32 is not supported by the current version of
+ # libevas-generic-loaders.
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
+-	--disable-libraw \
+ 	--disable-gstreamer
  
-diff --git a/package/efl/libeina/Config.in b/package/efl/libeina/Config.in
-deleted file mode 100644
-index 80600ad..0000000
---- a/package/efl/libeina/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_LIBEINA
--	bool "libeina"
--	help
--	  Eina is a tiny library to handle data types (list, hash, etc.)
--
--	  http://trac.enlightenment.org/e/wiki/Eina
-diff --git a/package/efl/libeina/libeina.mk b/package/efl/libeina/libeina.mk
-deleted file mode 100644
-index ae9f1c6..0000000
---- a/package/efl/libeina/libeina.mk
-+++ /dev/null
-@@ -1,18 +0,0 @@
--################################################################################
--#
--# libeina
--#
--################################################################################
--
--LIBEINA_VERSION = 1.7.10
--LIBEINA_SOURCE = eina-$(LIBEINA_VERSION).tar.bz2
--LIBEINA_SITE = http://download.enlightenment.org/releases
--LIBEINA_LICENSE = LGPLv2.1+
--LIBEINA_LICENSE_FILES = COPYING
--
--LIBEINA_INSTALL_STAGING = YES
--
--LIBEINA_DEPENDENCIES = host-pkgconf
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
++ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
++else
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
 -- 
 2.4.3
