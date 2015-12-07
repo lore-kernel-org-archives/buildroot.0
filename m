@@ -1,7 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 7 Dec 2015 10:58:43 +0000
-Subject: [Buildroot] [PATCH 1/2] lighttpd: bump version to 1.4.38
-Message-ID: <1449485924-10042-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 7 Dec 2015 10:58:44 +0000
+Subject: [Buildroot] [PATCH 2/2] lvm2: bump version to 2.02.137
+In-Reply-To: <1449485924-10042-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1449485924-10042-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1449485924-10042-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lighttpd/lighttpd.hash | 2 +-
- package/lighttpd/lighttpd.mk   | 2 +-
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index b06e2ae..1158652 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 99c576e..539bf49 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
 @@ -1,2 +1,2 @@
- # From http://www.lighttpd.net/
--sha256	804e6f60567ca1da2b3927f92b7e9332b93aca9560f282ca135b86b7558979bd	lighttpd-1.4.37.tar.xz
-+sha256 4912568b7befcf3f552ca4668bd7f38cd85f42a22944359d00816ec27eb1e504  lighttpd-1.4.38.tar.xz
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 9ff8cfe..49b9ac6 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 ebda683e7dbeb2c4860a583d47e60756d18127e37a373ab2958af8e54b9bee0d2e3370b7803d88fa4b08564345c88af55bfbac317081160118ce4b3733b69f9d  LVM2.2.02.136.tgz
++sha512 d042bad51eacc350e3a2b08a631498d7bdff29032804e7db4c6a0723e8896628b89e6395a311535c09429429c17adfeb45794d5f53bdeb5d51b195114fca309a  LVM2.2.02.137.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 71e69d6..59206cc 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).37
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).38
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3c
+-LVM2_VERSION = 2.02.136
++LVM2_VERSION = 2.02.137
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
 2.4.10
