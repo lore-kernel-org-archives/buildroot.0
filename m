@@ -1,106 +1,76 @@
-From: Abhishek Singh <abhishek.singh@imgtec.com>
-Date: Mon, 7 Dec 2015 11:24:56 +0530
-Subject: [Buildroot] [PATCH v2] cxxtest: new package
-In-Reply-To: <1448546706-31297-1-git-send-email-Abhishek.Singh@imgtec.com>
-References: <1448546706-31297-1-git-send-email-Abhishek.Singh@imgtec.com>
-Message-ID: <56651F30.9000704@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 07 Dec 2015 07:34:54 +0100
+Subject: [Buildroot] [psa] various server software upgrades
+In-Reply-To: <20151207015525.GH23754@vapier.lan> (Mike Frysinger's message of
+ "Sun, 6 Dec 2015 20:55:25 -0500")
+References: <20151202073542.GY23754@vapier.lan>
+ <20151206214229.GE4023@free.fr> <87610bs0dv.fsf@dell.be.48ers.dk>
+ <20151207015525.GH23754@vapier.lan>
+Message-ID: <87bna2rckx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please treat this as a polite reminder for this pending patch.
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+
+Hi,
+
+ >> > Unfortunately, we do have subdomains that are not https-enabled, and are
+ >> > on another machine:
+ >> >     http://autobuild.buildroot.org/
+ >> 
+ >> sources.buildroot.{org,net} is another example (even though that it
+ >> normally only accessed from wget, so less critical).
+
+ > there's really no reason you can't generate a cert for those domains using
+ > let's encrypt.  let's encrypt doesn't require you to own the root domain,
+ > just be in control of the web server the domain resolves to.
+
+Ok, but for sources.buildroot.net I wouldn't want to enforce TLS as
+E.G. wget on ancient enterprice dists wont recognize the CA and fail.
 
 
-On Thursday 26 November 2015 07:35 PM, Abhishek Singh wrote:
-> Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-> Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> Reviewed-by: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-> Signed-off-by: Abhishek Singh <Abhishek.Singh@imgtec.com>
-> ---
-> changes v1 -> v2:
-> 	- remove dependency on host-python
-> 	- add comments in mk file
-> ---
->   package/Config.in            |  1 +
->   package/cxxtest/Config.in    | 10 ++++++++++
->   package/cxxtest/cxxtest.hash |  2 ++
->   package/cxxtest/cxxtest.mk   | 30 ++++++++++++++++++++++++++++++
->   4 files changed, 43 insertions(+)
->   create mode 100644 package/cxxtest/Config.in
->   create mode 100644 package/cxxtest/cxxtest.hash
->   create mode 100644 package/cxxtest/cxxtest.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index bdc3063..6e71d25 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -116,6 +116,7 @@ menu "Development tools"
->   	source "package/cmake/Config.in"
->   	source "package/cppunit/Config.in"
->   	source "package/cvs/Config.in"
-> +	source "package/cxxtest/Config.in"
->   if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->   	source "package/diffutils/Config.in"
->   	source "package/dos2unix/Config.in"
-> diff --git a/package/cxxtest/Config.in b/package/cxxtest/Config.in
-> new file mode 100644
-> index 0000000..7512e4b
-> --- /dev/null
-> +++ b/package/cxxtest/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_CXXTEST
-> +	bool "cxxtest"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	help
-> +	  CxxTest is a unit testing framework for C++
-> +
-> +	  http://cxxtest.com/
-> +
-> +comment "cxxtest needs toolchain with C++ support"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/cxxtest/cxxtest.hash b/package/cxxtest/cxxtest.hash
-> new file mode 100644
-> index 0000000..f552e80
-> --- /dev/null
-> +++ b/package/cxxtest/cxxtest.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256	1c154fef91c65dbf1cd4519af7ade70a61d85a923b6e0c0b007dc7f4895cf7d8	cxxtest-4.4.tar.gz
-> diff --git a/package/cxxtest/cxxtest.mk b/package/cxxtest/cxxtest.mk
-> new file mode 100644
-> index 0000000..cc29608
-> --- /dev/null
-> +++ b/package/cxxtest/cxxtest.mk
-> @@ -0,0 +1,30 @@
-> +################################################################################
-> +#
-> +# cxxtest
-> +#
-> +################################################################################
-> +
-> +CXXTEST_VERSION = 4.4
-> +CXXTEST_SOURCE = cxxtest-$(CXXTEST_VERSION).tar.gz
-> +CXXTEST_SITE = http://sourceforge.net/projects/cxxtest/files/cxxtest/$(CXXTEST_VERSION)
-> +CXXTEST_LICENSE = LGPLv3
-> +CXXTEST_LICENSE_FILES = COPYING
-> +CXXTEST_INSTALL_STAGING = YES
-> +CXXTEST_INSTALL_TARGET = NO
-> +CXXTEST_DEPENDENCIES = host-cxxtest
-> +HOST_CXXTEST_SETUP_TYPE = setuptools
-> +HOST_CXXTEST_SUBDIR = python
-> +
-> +# Copy CxxTest header files to staging directory
-> +define CXXTEST_INSTALL_STAGING_CMDS
-> +	mkdir -p $(STAGING_DIR)/usr/include/cxxtest
-> +	cp $(@D)/cxxtest/* $(STAGING_DIR)/usr/include/cxxtest
-> +endef
-> +
-> +# CxxTest uses python infrastructure as the build system. cxxtestgen is
-> +# a script which is used to process header files to generate C++ source files.
-> +# Compiling test runner requires CxxTest header files which are installed in
-> +# the staging directory.
-> +
-> +$(eval $(generic-package))
-> +$(eval $(host-python-package))
+ >> We have the same problem for lists.{buildroot,busybox,uclibc}.*, as that
+ >> ends up serving an osuosl certificate.
+
+ > those aren't a new issue ... they've always used osuosl certs.  those are
+ > out of my control.
+
+Yes, but with the HSTS headers we now force people to access it through
+https, and atleast my browser won't allow it because the certificate
+doesn't match.
+
+
+ >> > What can we do about this?
+ >> 
+ >> Step 1 should imho be to disable HTST as soon as possible.
+
+ > i've turned of HTST for subdomains for buildroot.org/buildroot.net.  i'm
+ > leaving it on for the domains served directly off the box, and for all
+ > uclibc.org and busybox.net domains.
+
+Ok, great - Thanks. The fact that you still have it enabled on busybox
+means that lists.busybox.net (which is referred in the list- headers)
+won't work, so it would be good if you could also disable
+includeSubDomains there.
+
+
+ >> Then we might
+ >> consider if we could HTTPS enable some of these subdomains, but they are
+ >> on different hosts, which complicates stuff (E.G. we presumably need to
+ >> distribute the buildroot.org private keys and update everywhere every 90
+ >> days).
+
+ > there is no need to distribute the same keys here.  just generate ones
+ > for the domains in question using let's encrypt.
+
+I'll have a look at generating letsencrypt keys for nightly.* and
+patchwork.*.
+
+Any specific hints about it?
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
