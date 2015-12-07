@@ -1,39 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  7 Dec 2015 10:21:23 -0300
-Subject: [Buildroot] [PATCH] nano: bump to version 2.5.0
-Message-ID: <1449494483-14576-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  7 Dec 2015 10:40:59 -0300
+Subject: [Buildroot] [PATCH] gnutls: re-enable gnutls-openssl compat library
+Message-ID: <1449495659-25501-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This was disabled in the 3.4.x branch by default and is required by
+inadyn, fixes:
+http://autobuild.buildroot.net/results/51f/51f7e9275c2d23952c7558a126a8843d5476e4b1/
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnutls/gnutls.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index c924151..8da4b55 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  32d627072b6026678e4f4095c047adec92ac7ec542dd6d91cf27f49b601768f2  nano-2.4.3.tar.gz
-+sha256  ff323e6fef74caf0a924304841c07ac65ec30db99dc5c1f8272b4c536a5c89ee  nano-2.5.0.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 28161f3..5bcdfd4 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NANO_VERSION = 2.4.3
-+NANO_VERSION = 2.5.0
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index a7342d6..d97e5e5 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -17,6 +17,7 @@ GNUTLS_CONF_OPTS = \
+ 	--disable-libdane \
+ 	--disable-rpath \
+ 	--enable-local-libopts \
++	--enable-openssl-compatibility \
+ 	--with-libnettle-prefix=$(STAGING_DIR)/usr \
+ 	--with-librt-prefix=$(STAGING_DIR) \
+ 	--without-tpm
 -- 
 2.4.10
