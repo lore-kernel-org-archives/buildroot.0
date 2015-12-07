@@ -1,41 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  7 Dec 2015 09:02:28 -0300
-Subject: [Buildroot] [PATCH] gdb: bump 7.10 series to 7.10.1
-Message-ID: <1449489748-18741-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 7 Dec 2015 12:22:07 +0000
+Subject: [Buildroot] libeet and removed gnutls functions
+In-Reply-To: <20151207073022.BE3B6101727@stock.ovh.net>
+References: <20151207073022.BE3B6101727@stock.ovh.net>
+Message-ID: <566579EF.6050906@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gdb/Config.in.host | 2 +-
- package/gdb/gdb.hash       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Dear Romain, all,
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index b65dd52..6bf7e84 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -57,4 +57,4 @@ config BR2_GDB_VERSION
- 	default "7.7.1"    if BR2_GDB_VERSION_7_7
- 	default "7.8.2"	   if BR2_GDB_VERSION_7_8
- 	default "7.9.1"    if BR2_GDB_VERSION_7_9 || !BR2_PACKAGE_HOST_GDB
--	default "7.10"     if BR2_GDB_VERSION_7_10
-+	default "7.10.1"   if BR2_GDB_VERSION_7_10
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 2646a32..b511a3e 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -2,7 +2,7 @@
- sha512	887b9b726dae8f6e3e5e41574460a67e4f9002b0d47bc985dcf63bdf3518397a90b6a208cb5b19e5ed2341715ad75cfeed4df4fb423f39f74218e36bc87f1cab	gdb-7.7.1.tar.bz2
- sha512	face5bf1b4ce144fc8604fc84620beed956177a11fd632b4e41906fc7f632910b2b43a50e6cfdfd6cbd876ee527c813bddab8df29dc560a6c36694cdb8edc4e4	gdb-7.8.2.tar.xz
- sha512	eebdf88b24e52e792b8a4b89ea85790de72b462a7810b44975fdf4232c068f353b15506071f450102a9d4bcecdde8e93dc3748a10699b7f73f3e04fb2d9d8414	gdb-7.9.1.tar.xz
--sha512	4d9d7b536ad46f881689fca9f3f0b60268ff413c7900115fed5030d81d1d794793cc51d51510584ea1a63fe5891d006a9867ba36981b86b50806d469b717457d	gdb-7.10.tar.xz
-+sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe504958b5372de610dcb952c679cf8fa9c1bdadd380294fbf59b6e366010	gdb-7.10.1.tar.xz
- # No hash for the ARC & microblaze variants, comes from the github-helper:
- none	xxx	gdb-arc-2015.06-gdb.tar.gz
- none	xxx	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
--- 
-2.4.10
+On 07/12/15 07:30, Thomas Petazzoni wrote:
+
+>      sparc64 |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/826a8f36631daa35ebd49850e12304e784ff9be8/
+>          arm |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/7d5f483cdce508d27678acf5ac387b57fffae9bd/
+>         i686 |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/e47b75bf07892126eb1fa21268edd24077f140c7/
+>         i686 |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/1025f598e3995ce2157fd028345796e00ac36da6/
+>         mips |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/a5f9100346aca894188126b499ba2ac84579c8d3/
+>          arm |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/1a90ae4963a73ce1f12b743272e61697dee25454/
+>       xtensa |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/bb4a2715923f9d098607b2de76f208ea6c9f2c42/
+>      aarch64 |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/5836d5758ff8c8421973b325fdd80ab70f04699e/
+>         mips |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/5d7202143f0ca453a251ac147421b9d284ed942e/
+>          arm |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/746be354f6372df33dae9e2cc969e2a497fe9a3b/
+>          arc |                  libeet-1.7.10 | NOK | http://autobuild.buildroot.net/results/46896031bcf3195716ee2224679400eff37c4151/
+
+According to gnutls upstream:
+
+------------------
+"GnuTLS 3.4.x is source compatible with GnuTLS 3.3.x releases; however,
+several deprecated functions were removed, and are listed below."
+
+Old function	Replacement
+[...]
+gnutls_x509_crt_verify_data	gnutls_pubkey_verify_data2
+------------------
+
+So, gnutls_x509_crt_verify_data no longer exists because has been
+replaced by gnutls_pubkey_verify_data2.
+
+libeet uses the former one:
+
+src/lib/eet_cipher.c:   if (!gnutls_x509_crt_verify_data(cert, 0,
+&datum, &signature))
+
+And it fails with an error like this one:
+
+../../src/lib/.libs/libeet.so: undefined reference to
+`gnutls_x509_crt_verify_data'
+
+You are more in touch with the enlightenment packages, so, how do you
+suggest to fix this? Do you think we could disable the gnutls support in
+libeet until upstream adds support for the 3.4.x branch?
+
+Regards,
+
+Vincent.
