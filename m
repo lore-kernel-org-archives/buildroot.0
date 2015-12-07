@@ -1,48 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 7 Dec 2015 20:59:24 +0100
-Subject: [Buildroot] [psa] various server software upgrades
-In-Reply-To: <20151207195709.GA24430@vapier.lan>
-References: <20151202073542.GY23754@vapier.lan> <20151206214229.GE4023@free.fr>
- <87610bs0dv.fsf@dell.be.48ers.dk>
- <20151207015525.GH23754@vapier.lan>
- <8737ver8lr.fsf@dell.be.48ers.dk>
- <20151207185234.GH11489@vapier.lan>
- <20151207195709.GA24430@vapier.lan>
-Message-ID: <20151207195924.GH4258@free.fr>
+From: DATACOM - Farina <farina@datacom.ind.br>
+Date: Mon, 07 Dec 2015 18:14:46 -0200
+Subject: [Buildroot] [PATCH 1/1] python-colorama: new package
+In-Reply-To: <20151201230901.5dfcb1f2@free-electrons.com>
+References: <1438634219-22000-1-git-send-email-farina@datacom.ind.br>
+ <20151201230901.5dfcb1f2@free-electrons.com>
+Message-ID: <5665E8B6.9040801@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mike, All,
+Hi Thomas,
 
-On 2015-12-07 14:57 -0500, Mike Frysinger spake thusly:
-> On 07 Dec 2015 13:52, Mike Frysinger wrote:
-> > On 07 Dec 2015 09:00, Peter Korsgaard wrote:
-> > > FYI, there also seems to be an issue with the git.* certificates and
-> > > atleast python on the box, as I get this when pushing:
-> > 
-> > the certs shouldn't be causing issues with `git push` ...
-> > i'll take a look at that
-> 
-> was there a commit bot operating in #buildroot ?  i can't find references
-> to the client that actually connected to freenode.
+On 01-12-2015 20:09, Thomas Petazzoni wrote:
+> Dear Augusto Farina,
+>
+> On Mon,  3 Aug 2015 17:36:59 -0300, Augusto Farina wrote:
+>> Colorama is a simple cross-platform colored terminal text in Python.
+>>
+>> Tested on a PowerPC e500v2 board. Host build support is also added in
+>> the package makefile, as python-jinja2, because we have third-party
+>> software that requires it (e.g. ARM mbed build-system).
+>>
+>> Signed-off-by: Augusto Farina <farina@datacom.ind.br>
+>
+> So Arnout agreed with me that we don't want this host only package that
+> is not used by any other package in Buildroot. Can you resubmit when
+> this package gets actually used by another menuconfig-selectable
+> package in Buildroot ?
+>
 
-Yes, we add a commit bot, but it disapeared a while ago.
+No problem, we keep it local.
 
-I tried to follow the explanations to launmch it again, but it did not
-work (and I'm no longer sudoer, so I could not dedicate mor etime on it).
 
-It would be nice if you could re-launch it, yes! ;-)
+> In the mean time, I'll mark your patch as Changes Requested.
+>
+> Peter: you never raised your opinion on this one, but please speak up
+> if you don't agree with the reasoning of Arnout and myself. Thanks!
+>
+> Augusto, if you still want the target side to be merged, can you resend
+> an updated version with just the target variant?
 
-Regards,
-Yann E. MORIN.
+We can forget this for now, I believe that this will not add much to 
+Buildroot.
+
+Thanks for the feedback.
+
+Cheers,
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Augusto Farina
+DATACOM
+R&D - Access
+Rua America, 1000 - Eldorado do Sul, RS
+Tel.: +55 51 3933 3638
+Fax.: +55 51 3933 3003
+farina at datacom.ind.br
+www.datacom.ind.br
