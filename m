@@ -1,71 +1,74 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Mon, 7 Dec 2015 08:47:46 -0800
-Subject: [Buildroot] Mosh and buildroot: UTF-8 locale issue
-In-Reply-To: <CAK9TtU2RHCgLAJnpL9Wq6Oao99VsB3Q7F1UeUiPsM_TZGH87uQ@mail.gmail.com>
-References: <CAK9TtU2RHCgLAJnpL9Wq6Oao99VsB3Q7F1UeUiPsM_TZGH87uQ@mail.gmail.com>
-Message-ID: <CAJJ6jxuHpCC9DepibBFG=eYOFbzYkLknj-jMUWuWzBo+bmPYaQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  7 Dec 2015 19:00:36 +0100
+Subject: [Buildroot] [PATCH] package/xfsprogs: disable crc32selftest
+Message-ID: <1449511236-21470-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+xfsprogs generates a crc32 table, and wants to test it. So it builds a
+native crc32selftest binary. So far, so good; except the host may not
+have the required headers (uuid/uuid.h), and probably libs (like
+libuuid).
 
-This is a true user issue. Most of the mailing list traffic is on the
-build infrastructure. However, most people here are also users....
+And anyway, testing the table on the host is flawed, as it does not mean
+it would be correct on the target (due to differences in bitness,
+endianness, alignment...).
 
-I could not get utf-8 to work on my buildroot target system. The
-problem is someone, upstream conflated the relatively simple utf-8
-encoding with the much more complicated localization. IMHO, most
-embedded system would like to use uft-8, but are not that interested
-in getting commas, or periods straight for formatting numbers and
-dates etc.
+So we just disable the crc32selftest for Buildroot.
 
-The Linux kernel avoids the whole issue by just treating filenames as
-strings of bytes, without caring (much "/") about what the bytes are.
+Fixes:
+    http://autobuild.buildroot.org/results/5d0/5d0ed24b4d368fed100bc3c4959520ebaa48e693/
+    http://autobuild.buildroot.org/results/aef/aef223ee2646599eaab7c82f63ff5f19569d69a5/
+    http://autobuild.buildroot.org/results/fb6/fb6679f3b1473169702c303ee5060abe7559b0b3/
+    ....
 
-I was trying to read in python files in a filesystem written by
-another Ubuntu system which did handle utf-8. Part of the problem is
-Busybox needs to have options set for it to use locales and utf8. I
-gave up as it involved getting user space shell variables (locale
-etc), assumed file system location of the huge locale info, and the
-Byzantine design of python 2 and utf8.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/xfsprogs/0002-no-crc32-checks.patch | 32 +++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/xfsprogs/0002-no-crc32-checks.patch
 
-If you make progress with this, please post your results, it will help others.
-
-Regards, Steve
-
-On Fri, Dec 4, 2015 at 5:26 AM, Sylvain LG <forum@sylvainlegourr.com> wrote:
-> Hello,
->
-> I've just built a filesystem with Buildroot and I've selected Mosh package.
->
-> But an error appears when I try to connect with Mosh to my system:
->
-> $ mosh root at 192.168.1.10
->
->> The locale requested by LC_CTYPE=UTF-8 isn't available here.
->> Running `locale-gen UTF-8' may be necessary.
->> mosh-server needs a UTF-8 native locale to run.
->> Unfortunately, the local environment ([no charset variables]) specifies
->> the character set "US-ASCII",
->> The client-supplied environment (LC_CTYPE=UTF-8) specifies
->> the character set "US-ASCII".
->> sh: locale: not found
->> Connection to 192.168.1.10 closed.
->> /usr/local/bin/mosh: Did not find mosh server startup message.
->
-> How can I set Buildroot config to fix the issue?
->
->
-> Thank you,
->
->
-> Sylvain
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/xfsprogs/0002-no-crc32-checks.patch b/package/xfsprogs/0002-no-crc32-checks.patch
+new file mode 100644
+index 0000000..2cf6634
+--- /dev/null
++++ b/package/xfsprogs/0002-no-crc32-checks.patch
+@@ -0,0 +1,32 @@
++libxfs: do not try to run the crc32selftest
++
++Even though the crc32selftest is natively compiled (because it is to be
++executed), it fails in cross-compilation as the host may lack the
++required headers, like uuid/uuid.h (e.g. in a minimal environment).
++
++Moreover, running the crc32selftest natively is completely wrong,
++because it passing on the host does not mean it would still pass n the
++target (because endianness or bitness or alignment differences).
++
++So, just disable running the crc32selftest altogether.
++
++Note that there's a remaining bug-in-hiding, because the crc32 table
++generator is natively built, but with the target CLFAGS.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN xfsprogs-4.3.0.orig/libxfs/Makefile xfsprogs-4.3.0/libxfs/Makefile
++--- xfsprogs-4.3.0.orig/libxfs/Makefile	2015-09-22 03:42:41.000000000 +0200
+++++ xfsprogs-4.3.0/libxfs/Makefile	2015-12-07 18:45:27.190082913 +0100
++@@ -105,9 +105,9 @@
++ # don't try linking xfs_repair with a debug libxfs.
++ DEBUG = -DNDEBUG
++ 
++-LDIRT = gen_crc32table crc32table.h crc32selftest
+++LDIRT = gen_crc32table crc32table.h
++ 
++-default: crc32selftest ltdepend $(LTLIBRARY)
+++default: ltdepend $(LTLIBRARY)
++ 
++ crc32table.h: gen_crc32table.c
++ 	@echo "    [CC]     gen_crc32table"
+-- 
+1.9.1
