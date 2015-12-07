@@ -1,115 +1,101 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  7 Dec 2015 22:29:25 +0100
-Subject: [Buildroot] [PATCH v7 23/33] package/efl/libethumb: remove package
+Date: Mon,  7 Dec 2015 22:29:29 +0100
+Subject: [Buildroot] [PATCH v7 27/33] package/efl/libefreet: remove package
 In-Reply-To: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449523775-6582-24-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449523775-6582-28-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libethumb is now available in efl package.
+Libefreet is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 v6: Improve lecacy help text (Yann E.Morin)
-v4: remove libethumb from package/efl/
+v5: remove libefreet directory
+v4: update Config.in to use libefl
 v3: update legacy option for 2015.11
     update help text
 ---
  Config.in.legacy                   |  7 +++++++
  package/efl/Config.in              |  1 -
- package/efl/libethumb/Config.in    | 15 ---------------
- package/efl/libethumb/libethumb.mk | 27 ---------------------------
- 4 files changed, 7 insertions(+), 43 deletions(-)
- delete mode 100644 package/efl/libethumb/Config.in
- delete mode 100644 package/efl/libethumb/libethumb.mk
+ package/efl/libefreet/Config.in    | 10 ----------
+ package/efl/libefreet/libefreet.mk | 17 -----------------
+ 4 files changed, 7 insertions(+), 28 deletions(-)
+ delete mode 100644 package/efl/libefreet/Config.in
+ delete mode 100644 package/efl/libefreet/libefreet.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 2bbf2ed..92dc3ac 100644
+index 4a99c7b..c6dd9e3 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.02"
  
-+config BR2_PACKAGE_LIBETHUMB
-+	bool "libethumb package has been removed"
++config BR2_PACKAGE_LIBEFREET
++	bool "libefreet package has been removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  With EFL 1.15, libethumb is now provided by the libefl package.
++	  With EFL 1.15, libefreet is now provided by the libefl package.
 +
- config BR2_PACKAGE_INFOZIP
- 	bool "infozip option has been renamed to zip"
+ config BR2_PACKAGE_LIBEIO
+ 	bool "libeio package has been removed"
  	select BR2_LEGACY
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 1c6f9e5..ff8ba83 100644
+index 509f356..a4ad1d9 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -24,7 +24,6 @@ source "package/efl/libeio/Config.in"
+@@ -19,7 +19,6 @@ source "package/efl/libeina/Config.in"
+ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
+-source "package/efl/libefreet/Config.in"
  source "package/efl/libevas/Config.in"
- source "package/efl/libembryo/Config.in"
- source "package/efl/libedje/Config.in"
--source "package/efl/libethumb/Config.in"
  source "package/efl/libelementary/Config.in"
  source "package/efl/libedbus/Config.in"
- 
-diff --git a/package/efl/libethumb/Config.in b/package/efl/libethumb/Config.in
+diff --git a/package/efl/libefreet/Config.in b/package/efl/libefreet/Config.in
 deleted file mode 100644
-index 3e9cbde..0000000
---- a/package/efl/libethumb/Config.in
+index 8687db4..0000000
+--- a/package/efl/libefreet/Config.in
 +++ /dev/null
-@@ -1,15 +0,0 @@
--comment "libethumb needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
--config BR2_PACKAGE_LIBETHUMB
--	bool "libethumb"
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_LIBEFREET
+-	bool "libefreet"
 -	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBEET
 -	select BR2_PACKAGE_LIBECORE
--	select BR2_PACKAGE_LIBECORE_EVAS
--	select BR2_PACKAGE_LIBEDJE
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
 -	help
--	  Ethumb is a library for generating thumbnail images of documents.
+-	  Efreet is a library designed to help apps work with several of the
+-	  Freedesktop.org standards regarding Icons, Desktop files and Menus.
 -
--	  http://trac.enlightenment.org/e/wiki/Ethumb
-diff --git a/package/efl/libethumb/libethumb.mk b/package/efl/libethumb/libethumb.mk
+-	  http://trac.enlightenment.org/e/wiki/Efreet
+diff --git a/package/efl/libefreet/libefreet.mk b/package/efl/libefreet/libefreet.mk
 deleted file mode 100644
-index 314ddf9..0000000
---- a/package/efl/libethumb/libethumb.mk
+index 65dbd12..0000000
+--- a/package/efl/libefreet/libefreet.mk
 +++ /dev/null
-@@ -1,27 +0,0 @@
+@@ -1,17 +0,0 @@
 -################################################################################
 -#
--# libethumb
+-# libefreet
 -#
 -################################################################################
 -
--LIBETHUMB_VERSION = 1.7.10
--LIBETHUMB_SOURCE = ethumb-$(LIBETHUMB_VERSION).tar.bz2
--LIBETHUMB_SITE = http://download.enlightenment.org/releases
--LIBETHUMB_LICENSE = LGPLv2.1+
--LIBETHUMB_LICENSE_FILES = COPYING
+-LIBEFREET_VERSION = 1.7.10
+-LIBEFREET_SOURCE = efreet-$(LIBEFREET_VERSION).tar.bz2
+-LIBEFREET_SITE = http://download.enlightenment.org/releases
+-LIBEFREET_LICENSE = BSD-2c
+-LIBEFREET_LICENSE_FILES = COPYING
 -
--LIBETHUMB_INSTALL_STAGING = YES
+-LIBEFREET_INSTALL_STAGING = YES
 -
--LIBETHUMB_DEPENDENCIES = libeina libevas libecore libedje host-libedje
--
--LIBETHUMB_CONF_OPTS = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc
--
--ifeq ($(BR2_PACKAGE_LIBEXIF),y)
--LIBETHUMB_DEPENDENCIES += libexif
--endif
--
--ifeq ($(BR2_PACKAGE_LIBEDBUS),y)
--LIBETHUMB_DEPENDENCIES += libedbus
--endif
+-LIBEFREET_DEPENDENCIES = libeina libeet libecore
 -
 -$(eval $(autotools-package))
 -- 
