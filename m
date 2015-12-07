@@ -1,170 +1,137 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  7 Dec 2015 22:29:12 +0100
-Subject: [Buildroot] [PATCH v7 10/33] package/efl/libefl: add frame buffer
-	config option
+Date: Mon,  7 Dec 2015 22:29:20 +0100
+Subject: [Buildroot] [PATCH v7 18/33] package/efl/libelementary: bump to
+	version 1.15.2
 In-Reply-To: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449523775-6582-11-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449523775-6582-19-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an config option to enable frame buffer support
-in the efl libraries.
+Use the newly added libefl package wich provide a new version
+of libeina, libevas, libecore and libedje.
 
-From the README [1]:
-This requires linux frame-buffer support, headers etc. This supports
-basic frame-buffers like /dev/fb as well as input via /dev/input for
-keyboards and mice in a basic way.
+Update the upstream url and add a hash file.
 
-There is a bug eina_module_load().
-From [2]:
-When running terminology, a message appears in eina_module_load with:
-could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
-Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
-ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
-It seems like the EAPI macro has no effect...
+We need to add a host package to provide elm_prefs_cc the
+host machine to cross-compile correctly libelementary
+for the target. Otherwise, elm_prefs_cc for the
+target is used on the host machine.
 
-A patch from Ross Vandegrift has been posted on enlightenment mailing
-list [3], but it's not yet an upstream patch.
+Since eet, eolian_gen and eldbus_codegen are installed in
+HOST_DIR by host-efl package, help configure script to find
+them.
 
-[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n521
-[2] http://sourceforge.net/p/enlightenment/mailman/message/34493376
-[3] http://sourceforge.net/p/enlightenment/mailman/message/34492801
+Explicitly disable doxygen and elementary-test.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: squash with the patch adding the fix provided by Vicente Bergas.
-v4: rename to libefl
-    improve commit log
+v6: squash with the patch adding host-libelementary (Yann E.Morin)
+v5: move the hash file to package/efl/libelementary
+v4: keep libelementary in package/efl/
+v3: bump to 1.15.2
+    remove trailing slash (Vicente Bergas)
+v2: bump to 1.15.1
+    remove glibc only dependency
 ---
- ...ecore_fb_private.h-define-EAPI-before-use.patch | 64 ++++++++++++++++++++++
- package/efl/libefl/Config.in                       |  5 ++
- package/efl/libefl/libefl.mk                       |  8 ++-
- 3 files changed, 75 insertions(+), 2 deletions(-)
- create mode 100644 package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
+ package/efl/libelementary/Config.in          | 14 ++++-------
+ package/efl/libelementary/libelementary.hash |  2 ++
+ package/efl/libelementary/libelementary.mk   | 35 ++++++++++++++++------------
+ 3 files changed, 27 insertions(+), 24 deletions(-)
+ create mode 100644 package/efl/libelementary/libelementary.hash
 
-diff --git a/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
+diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+index fcc7025..1f8c962 100644
+--- a/package/efl/libelementary/Config.in
++++ b/package/efl/libelementary/Config.in
+@@ -1,17 +1,13 @@
+-comment "libelementary needs a toolchain w/ threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+ config BR2_PACKAGE_LIBELEMENTARY
+ 	bool "libelementary"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
++	depends on BR2_TOOLCHAIN_HAS_THREADS # elm_store.c
+ 	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBEDJE
+ 	help
+ 	  Elementary is a widget toolkit and EFL wrapper and convenience
+ 	  library to make it easy to build applications and tools with UIs
+ 	  with less code.
+ 
+-	  http://trac.enlightenment.org/e/wiki/Elementary
++	  https://enlightenment.org
++
++comment "libelementary needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/efl/libelementary/libelementary.hash b/package/efl/libelementary/libelementary.hash
 new file mode 100644
-index 0000000..81d14f9
+index 0000000..2cd36d8
 --- /dev/null
-+++ b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
-@@ -0,0 +1,64 @@
-+From 2fb4fdf641e67e49b87a3524038a694c8dd0ba4e Mon Sep 17 00:00:00 2001
-+From: Vicente Bergas <vicencb@gmail.com>
-+Date: Fri, 9 Oct 2015 23:35:20 +0200
-+Subject: [PATCH] ecore_fb_private.h: define EAPI before use
-+
-+From [1]:
-+When running terminology, a message appears in eina_module_load with:
-+could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
-+Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
-+ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
-+It seems like the EAPI macro has no effect...
-+
-+A patch from Ross Vandegrift has been posted on enlightenment mailing
-+list [2], but it's not yet an upstream patch.
-+
-+[1] http://sourceforge.net/p/enlightenment/mailman/message/34493376
-+[2] http://sourceforge.net/p/enlightenment/mailman/message/34492801
-+
-+Signed-off-by: Vicente Bergas <vicencb@gmail.com>
-+[Romain:
-+  - Add a commit log
-+  - Add a link to the enlightenment mailing list
-+  - Add Vicente's SoB line]
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ src/lib/ecore_fb/ecore_fb_private.h | 17 +++++++++++++++++
-+ 1 file changed, 17 insertions(+)
-+
-+diff --git a/src/lib/ecore_fb/ecore_fb_private.h b/src/lib/ecore_fb/ecore_fb_private.h
-+index f7dc0c6..f54c8d2 100644
-+--- a/src/lib/ecore_fb/ecore_fb_private.h
-++++ b/src/lib/ecore_fb/ecore_fb_private.h
-+@@ -33,6 +33,20 @@
-+ 
-+ #include <Ecore_Fb.h>
-+ 
-++#ifdef EAPI
-++# undef EAPI
-++#endif
-++
-++#ifdef __GNUC__
-++# if __GNUC__ >= 4
-++#  define EAPI __attribute__ ((visibility("default")))
-++# else
-++#  define EAPI
-++# endif
-++#else
-++# define EAPI
-++#endif
-++
-+ /* ecore_fb_li.c */
-+ struct _Ecore_Fb_Input_Device
-+ {
-+@@ -92,4 +106,7 @@ void ecore_fb_vt_shutdown(void);
-+ #define TS_GET_CAL 0x8014660a
-+ #endif
-+   
-++#undef EAPI
-++#define EAPI
-++
-+ #endif
-+-- 
-+2.4.3
-+
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 0b89411..4a202a0 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -84,6 +84,11 @@ config BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG
- 	    support of removable devices etc... and disabling this will
- 	    hurt support for Enlightenment and its filemanager.
++++ b/package/efl/libelementary/libelementary.hash
+@@ -0,0 +1,2 @@
++# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.15.2.tar.xz.sha256
++sha256	523c3073210b611817d0f56aa8348962ec757282f9f7dfde93825afa164a0f3f	elementary-1.15.2.tar.xz
+diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
+index 8bd69fe..4ba8681 100644
+--- a/package/efl/libelementary/libelementary.mk
++++ b/package/efl/libelementary/libelementary.mk
+@@ -4,29 +4,34 @@
+ #
+ ################################################################################
  
-+comment "libecore video support"
-+
-+config BR2_PACKAGE_LIBEFL_FB
-+	bool "FB support"
-+
- comment "libevas loaders"
+-LIBELEMENTARY_VERSION = 1.7.10
+-LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.bz2
+-LIBELEMENTARY_SITE = http://download.enlightenment.org/releases
++LIBELEMENTARY_VERSION = 1.15.2
++LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
++LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
+ LIBELEMENTARY_LICENSE = LGPLv2.1
+ LIBELEMENTARY_LICENSE_FILES = COPYING
  
- config BR2_PACKAGE_LIBEFL_PNG
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index e479cfc..5adbfd6 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -30,7 +30,6 @@ LIBEFL_GETTEXTIZE = YES
+ LIBELEMENTARY_INSTALL_STAGING = YES
  
- # Configure options:
- # --disable-cxx-bindings: disable C++11 bindings.
--# --disable-fb: disable frame buffer support.
- # --disable-image-loader-jp2k: disable JPEG 2000 support.
- # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
-@@ -42,7 +41,6 @@ LIBEFL_CONF_OPTS = \
+-LIBELEMENTARY_DEPENDENCIES = \
+-	libeina libevas libecore libedje host-libedje \
+-	host-libeet
++LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl host-libelementary libefl
+ 
+ LIBELEMENTARY_CONF_OPTS = \
  	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--disable-cxx-bindings \
--	--disable-fb \
- 	--disable-image-loader-jp2k \
- 	--disable-sdl \
- 	--disable-systemd \
-@@ -144,6 +142,12 @@ else
- LIBEFL_CONF_OPTS += --disable-wayland
- endif
+-	--with-eet-eet=$(HOST_DIR)/usr/bin/eet
++	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
++	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
++	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
++	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
++	--with-doxygen=no \
++	--disable-elementary-test
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_FB),y)
-+LIBEFL_CONF_OPTS += --enable-fb
-+else
-+LIBEFL_CONF_OPTS += --disable-fb
-+endif
-+
- # Loaders that need external dependencies needs to be --enable-XXX=yes
- # otherwise the default is '=static'.
- # All other loaders are statically built-in
+-# libethumb_client is only built when ethumbd is built.
+-# ethumbd is only built if edbus is built.
+-ifeq ($(BR2_PACKAGE_LIBETHUMB)$(BR2_PACKAGE_LIBEDBUS),yy)
+-LIBELEMENTARY_DEPENDENCIES += libethumb
+-LIBELEMENTARY_CONF_OPTS += --enable-ethumb
+-else
+-LIBELEMENTARY_CONF_OPTS += --disable-ethumb
+-endif
++# We need a host package in order to provide elm_prefs_cc and
++# elementary_codegen.
++HOST_LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl
++HOST_LIBELEMENTARY_CONF_OPTS = \
++	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
++	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
++	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
++	--with-doxygen=no \
++	--disable-elementary-test
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.4.3
