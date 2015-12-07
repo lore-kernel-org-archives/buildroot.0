@@ -1,33 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  7 Dec 2015 10:40:59 -0300
-Subject: [Buildroot] [PATCH] gnutls: re-enable gnutls-openssl compat library
-Message-ID: <1449495659-25501-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 7 Dec 2015 13:50:37 +0000
+Subject: [Buildroot] [PATCH] nano: bump to version 2.5.0
+In-Reply-To: <1449494483-14576-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1449494483-14576-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <56658EAD.3050309@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This was disabled in the 3.4.x branch by default and is required by
-inadyn, fixes:
-http://autobuild.buildroot.net/results/51f/51f7e9275c2d23952c7558a126a8843d5476e4b1/
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.mk | 1 +
- 1 file changed, 1 insertion(+)
+On 07/12/15 13:21, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index a7342d6..d97e5e5 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -17,6 +17,7 @@ GNUTLS_CONF_OPTS = \
- 	--disable-libdane \
- 	--disable-rpath \
- 	--enable-local-libopts \
-+	--enable-openssl-compatibility \
- 	--with-libnettle-prefix=$(STAGING_DIR)/usr \
- 	--with-librt-prefix=$(STAGING_DIR) \
- 	--without-tpm
--- 
-2.4.10
+Build test for MIPS architecture:
+
+$ file output/target/usr/bin/nano
+output/target/usr/bin/nano: ELF 32-bit LSB executable, MIPS, MIPS32 rel2
+version 1 (SYSV), dynamically linked, interpreter /lib/ld.so.1, for
+GNU/Linux 2.6.32, stripped
+
+$ grep -E ^NANO_VERSION package/nano/nano.mk
+NANO_VERSION = 2.5.0
+
+Regards,
+
+Vincent.
