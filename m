@@ -1,43 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Dec 2015 17:19:50 +0100
-Subject: [Buildroot] [git commit] nano: bump to version 2.5.0
-Message-ID: <20151207235205.70A7081A0E@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 7 Dec 2015 18:52:25 -0500
+Subject: [Buildroot] [psa] various server software upgrades
+In-Reply-To: <20151207195924.GH4258@free.fr>
+References: <20151202073542.GY23754@vapier.lan> <20151206214229.GE4023@free.fr>
+ <87610bs0dv.fsf@dell.be.48ers.dk>
+ <20151207015525.GH23754@vapier.lan>
+ <8737ver8lr.fsf@dell.be.48ers.dk>
+ <20151207185234.GH11489@vapier.lan>
+ <20151207195709.GA24430@vapier.lan> <20151207195924.GH4258@free.fr>
+Message-ID: <20151207235225.GG24430@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a1c53430c4c103f9da18a461a1fb12b76d322d5c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07 Dec 2015 20:59, Yann E. MORIN wrote:
+> On 2015-12-07 14:57 -0500, Mike Frysinger spake thusly:
+> > On 07 Dec 2015 13:52, Mike Frysinger wrote:
+> > > On 07 Dec 2015 09:00, Peter Korsgaard wrote:
+> > > > FYI, there also seems to be an issue with the git.* certificates and
+> > > > atleast python on the box, as I get this when pushing:
+> > > 
+> > > the certs shouldn't be causing issues with `git push` ...
+> > > i'll take a look at that
+> > 
+> > was there a commit bot operating in #buildroot ?  i can't find references
+> > to the client that actually connected to freenode.
+> 
+> Yes, we add a commit bot, but it disapeared a while ago.
+> 
+> I tried to follow the explanations to launmch it again, but it did not
+> work (and I'm no longer sudoer, so I could not dedicate mor etime on it).
+> 
+> It would be nice if you could re-launch it, yes! ;-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index c924151..8da4b55 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  32d627072b6026678e4f4095c047adec92ac7ec542dd6d91cf27f49b601768f2  nano-2.4.3.tar.gz
-+sha256  ff323e6fef74caf0a924304841c07ac65ec30db99dc5c1f8272b4c536a5c89ee  nano-2.5.0.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 28161f3..5bcdfd4 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NANO_VERSION = 2.4.3
-+NANO_VERSION = 2.5.0
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+should be restored.  lemme know if you see any other issues.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151207/1b263203/attachment.asc>
