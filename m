@@ -1,114 +1,152 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 7 Dec 2015 16:55:48 -0500
-Subject: [Buildroot] [psa] various server software upgrades
-In-Reply-To: <87r3iyngfx.fsf@dell.be.48ers.dk>
-References: <20151202073542.GY23754@vapier.lan> <20151206214229.GE4023@free.fr>
- <87610bs0dv.fsf@dell.be.48ers.dk>
- <20151207015525.GH23754@vapier.lan>
- <87bna2rckx.fsf@dell.be.48ers.dk>
- <20151207185106.GF11489@vapier.lan>
- <87r3iyngfx.fsf@dell.be.48ers.dk>
-Message-ID: <20151207215548.GB24430@vapier.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 Dec 2015 22:58:39 +0100
+Subject: [Buildroot] [PATCH v7 04/33] package/{efl packages}: reorder
+ select/depends
+In-Reply-To: <1449523775-6582-5-git-send-email-romain.naour@openwide.fr>
+References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
+ <1449523775-6582-5-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151207215839.GC14874@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07 Dec 2015 21:37, Peter Korsgaard wrote:
-> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
-> 
-> >> Ok, but for sources.buildroot.net I wouldn't want to enforce TLS as
->  >> E.G. wget on ancient enterprice dists wont recognize the CA and fail.
-> 
->  > are you sure about that ?  LE's CA is cross-signed and has pretty good support:
->  > https://community.letsencrypt.org/t/which-browsers-and-operating-systems-support-lets-encrypt/4394
-> 
-> I'm not 100% sure, but we have had various issues in the
-> past. E.G. checking with an old wget version here I see it can no longer
-> download our tarballs:
-> 
-> wget http://buildroot.org/downloads/buildroot-2015.11.1.tar.gz
-> --2015-12-07 21:29:37--  http://buildroot.org/downloads/buildroot-2015.11.1.tar.gz
-> Resolving buildroot.org... 140.211.167.224
-> Connecting to buildroot.org|140.211.167.224|:80... connected.
-> HTTP request sent, awaiting response... 301 Moved Permanently
-> Location: https://buildroot.org/downloads/buildroot-2015.11.1.tar.gz [following]
-> --2015-12-07 21:29:37--  https://buildroot.org/downloads/buildroot-2015.11.1.tar.gz
-> Connecting to buildroot.org|140.211.167.224|:443... connected.
-> ERROR: certificate common name `bugs.busybox.net' doesn't match requested host name `buildroot.org'.
-> To connect to buildroot.org insecurely, use `--no-check-certificate'.
-> 
-> (this is with wget 1.12 from 2009).
-> 
-> Now, this isn't about the letsencrypt CA as such, but presumably because
-> it doesn't understand SNI - But the end result is the same.
+Romain, All,
 
-right, this has nothing to do with any CA, it's because that version lacks
-SNI support.  the current buildroot.org cert is only for that domain, and
-buildroot.org/downloads is off that vhost.  but the client has to support
-SNI to select the correct vhost during the SSL handshaking otherwise it is
-sent to the default ("bugs.busybox.net" in this case).
-
-looking at lib/server/client support, it seems like wget is the biggest
-red flag:
-https://en.wikipedia.org/wiki/Server_Name_Indication
-it didn't include support until 1.14 in 2012.
-
-i can see about changing the default vhost to a stub domain so it'll be
-more clear what the issue is as that log is misleading -- at its face, it
-makes no sense why the client was sent to bugs.busybox.net.
-
-> I would actually prefer if we only enforce https where it matters,
-> E.G. on bugs.*. We can (and SHOULD now that we've uses the HSTS headers)
-> support https on the other subdomains, but I don't think we should
-> redirect http to https.
-
-i guess we disagree on the "where it matters" part.  any unencrypted
-connection can be injected with ads/javascript which can redirect the
-content to any site or capture any state the user has.
-
-imo, if a dev's system is so old it doesn't support SNI, then it's their
-problem to workaround it.  even if they get the latest buildroot version,
-they're going to keep having the same problem when they try to download
-and build software as other servers use SNI.  are we now responsible for
-bootstrapping openssl/ca-certificates/wget as host tools so SNI/etc...
-are supported ?  how do you get the software for those packages in order
-to bootstrap ?  do you bundle the openssl/ca-certificates/wget tarballs
-inside of buildroot itself ?  let's just rip the band aid off and be done.
-
->  >> >> We have the same problem for lists.{buildroot,busybox,uclibc}.*, as that
->  >> >> ends up serving an osuosl certificate.
->  >> 
->  >> > those aren't a new issue ... they've always used osuosl certs.  those are
->  >> > out of my control.
+On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
+> As noticed by Yann [1], move the package dependencies
+> before selected packages/options.
 > 
-> Yes, but when we sent HSTS headers with includeSubDomains I atleast get
-> the following error in chromium:
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
 > 
-> lists.busybox.net normally uses encryption to protect your
-> information. When Chromium tried to connect to lists.busybox.net this
-> time, the website sent back unusual and incorrect credentials. Either an
-> attacker is trying to pretend to be lists.busybox.net, or a Wi-Fi
-> sign-in screen has interrupted the connection. Your information is still
-> secure because Chromium stopped the connection before any data was
-> exchanged.
-> 
-> You cannot visit lists.busybox.net right now because the website uses
-> HSTS. Network errors and attacks are usually temporary, so this page
-> will probably work later.
-> 
-> NET::ERR_CERT_COMMON_NAME_INVALID
-> 
-> With no option of continuing.
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-mine has an "Advanced" link after that which includes "Proceed".  i went
-to bugs.busybox.net first, then to lists.busybox.net, and it worked fine.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151207/9afeea0c/attachment.asc>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> v6: new patch
+> ---
+>  package/efl/libelementary/Config.in       |  4 ++--
+>  package/enlightenment/Config.in           | 22 +++++++++++-----------
+>  package/expedite/Config.in                |  6 +++---
+>  package/libevas-generic-loaders/Config.in |  4 ++--
+>  4 files changed, 18 insertions(+), 18 deletions(-)
+> 
+> diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+> index 4f62592..fcc7025 100644
+> --- a/package/efl/libelementary/Config.in
+> +++ b/package/efl/libelementary/Config.in
+> @@ -3,12 +3,12 @@ comment "libelementary needs a toolchain w/ threads, dynamic library"
+>  
+>  config BR2_PACKAGE_LIBELEMENTARY
+>  	bool "libelementary"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+> +	depends on !BR2_STATIC_LIBS
+>  	select BR2_PACKAGE_LIBEINA
+>  	select BR2_PACKAGE_LIBEVAS
+>  	select BR2_PACKAGE_LIBECORE
+>  	select BR2_PACKAGE_LIBEDJE
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+> -	depends on !BR2_STATIC_LIBS
+>  	help
+>  	  Elementary is a widget toolkit and EFL wrapper and convenience
+>  	  library to make it easy to build applications and tools with UIs
+> diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+> index 58f8f39..9dad571 100644
+> --- a/package/enlightenment/Config.in
+> +++ b/package/enlightenment/Config.in
+> @@ -1,5 +1,16 @@
+>  config BR2_PACKAGE_ENLIGHTENMENT
+>  	bool "enlightenment"
+> +	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	# libedbus -> dbus
+> +	# libedbus -> glib2, libevas
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	# libedbus -> dbus, efl libraries
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_PACKAGE_XORG7
+> +	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
+> +	depends on BR2_ARCH_HAS_ATOMICS
+>  	select BR2_PACKAGE_EFL
+>  	select BR2_PACKAGE_LIBECORE
+>  	select BR2_PACKAGE_LIBECORE_X
+> @@ -17,17 +28,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
+>  	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+>  	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+>  	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+> -	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
+> -	depends on BR2_USE_WCHAR
+> -	depends on BR2_INSTALL_LIBSTDCPP
+> -	# libedbus -> dbus
+> -	# libedbus -> glib2, libevas
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	# libedbus -> dbus, efl libraries
+> -	depends on BR2_USE_MMU
+> -	depends on BR2_PACKAGE_XORG7
+> -	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	help
+>  	  Enlightenment, also known simply as E, is a stacking window
+>  	  manager for the X Window System which can be used alone or
+> diff --git a/package/expedite/Config.in b/package/expedite/Config.in
+> index de6a056..e60510b 100644
+> --- a/package/expedite/Config.in
+> +++ b/package/expedite/Config.in
+> @@ -1,11 +1,11 @@
+>  config BR2_PACKAGE_EXPEDITE
+>  	bool "expedite"
+> -	select BR2_PACKAGE_LIBEINA
+> -	select BR2_PACKAGE_LIBEVAS
+> -	select BR2_PACKAGE_LIBEET
+>  	depends on BR2_PACKAGE_EFL
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+> +	select BR2_PACKAGE_LIBEET
+> +	select BR2_PACKAGE_LIBEINA
+> +	select BR2_PACKAGE_LIBEVAS
+>  	help
+>  	  Expedite is the official Evas benchmark tool. It can test different
+>  	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+> diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+> index 72d4adb..f42f8a6 100644
+> --- a/package/libevas-generic-loaders/Config.in
+> +++ b/package/libevas-generic-loaders/Config.in
+> @@ -14,13 +14,13 @@ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+>  
+>  config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+>  	bool "SVG loader"
+> -	select BR2_PACKAGE_LIBRSVG
+> -	select BR2_PACKAGE_CAIRO
+>  	depends on BR2_USE_MMU # librsvg -> glib2
+>  	depends on BR2_USE_WCHAR # librsvg -> glib2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
+>  	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+>  	depends on BR2_ARCH_HAS_ATOMICS # cairo
+> +	select BR2_PACKAGE_LIBRSVG
+> +	select BR2_PACKAGE_CAIRO
+>  	help
+>  	  This option enables the Evas generic SVG loader
+>  
+> -- 
+> 2.4.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
