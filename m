@@ -1,38 +1,36 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon,  7 Dec 2015 12:08:45 -0200
-Subject: [Buildroot] [PATCH 1/1] merge_config.sh: create temporary files in
-	/tmp
-Message-ID: <1449497325-5148-1-git-send-email-casantos@datacom.ind.br>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  7 Dec 2015 11:27:11 -0300
+Subject: [Buildroot] [PATCH] pixman: disable vmx for powerpc CS toolchains
+Message-ID: <1449498431-5872-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Henrique Marks <henrique.marks@datacom.ind.br>
+The ppc CS toolchains have flaky VMX (AKA altivec) implementation
+causing build failure. Disable it for these toolchains. Fixes:
+http://autobuild.buildroot.net/results/3b4/3b4cda40f074578f6b35b1fb381ba37b93174e86/
 
-Creating temporary files in /tmp (or the path pointed by $TMPDIR) allows the
-buildroot top directory to be read-only and shareable between multible builds.
-This follows what other scripts do, e.g. check-kernel-headers.sh.
-
-Signed-off-by: Henrique Marks <henrique.marks@datacom.ind.br>
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- support/kconfig/merge_config.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pixman/pixman.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 81b0c61..8a1708b 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -82,7 +82,7 @@ shift;
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 8281773..8845315 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -32,5 +32,10 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405),y)
+ PIXMAN_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DPIXMAN_NO_TLS"
+ endif
  
- MERGE_LIST=$*
- SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
--TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
-+TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
- 
- echo "Using $INITFILE as base"
- cat $INITFILE > $TMP_FILE
++# Altivec detection isn't reliable for CS toolchains
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103)$(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
++PIXMAN_CONF_OPTS += --disable-vmx
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-2.5.0
+2.4.10
