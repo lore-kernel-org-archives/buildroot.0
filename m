@@ -1,105 +1,104 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  7 Dec 2015 21:33:09 +0100
-Subject: [Buildroot] [PATCH v1] read-edid: bump version to 3.0.2
-Message-ID: <1449520389-23420-1-git-send-email-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 07 Dec 2015 21:37:22 +0100
+Subject: [Buildroot] [psa] various server software upgrades
+In-Reply-To: <20151207185106.GF11489@vapier.lan> (Mike Frysinger's message of
+ "Mon, 7 Dec 2015 13:51:06 -0500")
+References: <20151202073542.GY23754@vapier.lan>
+ <20151206214229.GE4023@free.fr> <87610bs0dv.fsf@dell.be.48ers.dk>
+ <20151207015525.GH23754@vapier.lan> <87bna2rckx.fsf@dell.be.48ers.dk>
+ <20151207185106.GF11489@vapier.lan>
+Message-ID: <87r3iyngfx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- update hash
-- change from autotools to cmake package
-- update license info
-- enable get-edid command (i2c build)
-- add patch fixing install error because of missing file COPYING
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/read-edid/0001-Fix-install-file-list.patch | 29 ++++++++++++++++++++++
- package/read-edid/Config.in                        |  2 --
- package/read-edid/read-edid.hash                   |  2 +-
- package/read-edid/read-edid.mk                     | 13 +++++-----
- 4 files changed, 36 insertions(+), 10 deletions(-)
- create mode 100644 package/read-edid/0001-Fix-install-file-list.patch
+Hi,
 
-diff --git a/package/read-edid/0001-Fix-install-file-list.patch b/package/read-edid/0001-Fix-install-file-list.patch
-new file mode 100644
-index 0000000..622e97d
---- /dev/null
-+++ b/package/read-edid/0001-Fix-install-file-list.patch
-@@ -0,0 +1,29 @@
-+From 562f48bee3443bda0ac257f2b0c52a72208163e0 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 7 Dec 2015 21:20:38 +0100
-+Subject: [PATCH] Fix install file list.
-+
-+Fixes:
-+  CMake Error at cmake_install.cmake:40 (file):
-+    file INSTALL cannot find
-+    ".../build/read-edid-3.0.2/COPYING".
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 7bf4561..2b9bc86 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -13,5 +13,5 @@ endif ()
-+ add_subdirectory (parse-edid)
-+ 
-+ INSTALL(FILES get-edid.1 DESTINATION share/man/man1)
-+-INSTALL(FILES AUTHORS ChangeLog COPYING README DESTINATION
-++INSTALL(FILES AUTHORS ChangeLog README DESTINATION
-+ 	share/doc/read-edid)
-+-- 
-+2.1.4
-+
-diff --git a/package/read-edid/Config.in b/package/read-edid/Config.in
-index a4668e6..c830e17 100644
---- a/package/read-edid/Config.in
-+++ b/package/read-edid/Config.in
-@@ -10,6 +10,4 @@ config BR2_PACKAGE_READ_EDID
- 	  which turns the raw binary information into an
- 	  XF86Config-compatible monitor section.
- 
--	  Notice that the get-edid tool is only available on x86.
--
- 	  http://polypux.org/projects/read-edid/
-diff --git a/package/read-edid/read-edid.hash b/package/read-edid/read-edid.hash
-index 2c5501c..3005217 100644
---- a/package/read-edid/read-edid.hash
-+++ b/package/read-edid/read-edid.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	c1b5d839fe6349efc183b3a3d33a8be1cd0dfea3c94015a86159d8aaeb6e9dd7	read-edid-1.4.2.tar.gz
-+sha256 c7c6d8440f5b90f98e276829271ccea5b2ff5a3413df8a0f87ec09f834af186f read-edid-3.0.2.tar.gz
-diff --git a/package/read-edid/read-edid.mk b/package/read-edid/read-edid.mk
-index f047e79..3e38f50 100644
---- a/package/read-edid/read-edid.mk
-+++ b/package/read-edid/read-edid.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
- 
--READ_EDID_VERSION = 1.4.2
-+READ_EDID_VERSION = 3.0.2
- READ_EDID_SITE = http://www.polypux.org/projects/read-edid
--READ_EDID_LICENSE = GPLv2
--READ_EDID_LICENSE_FILES = COPYING
-+READ_EDID_LICENSE = BSD-like
-+READ_EDID_LICENSE_FILES = LICENSE
- 
--define READ_EDID_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
--endef
-+# disable classic get-edid support (needs libx86)
-+READ_EDID_CONF_OPTS += -DCLASSICBUILD=OFF
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+>> Ok, but for sources.buildroot.net I wouldn't want to enforce TLS as
+ >> E.G. wget on ancient enterprice dists wont recognize the CA and fail.
+
+ > are you sure about that ?  LE's CA is cross-signed and has pretty good support:
+ > https://community.letsencrypt.org/t/which-browsers-and-operating-systems-support-lets-encrypt/4394
+
+I'm not 100% sure, but we have had various issues in the
+past. E.G. checking with an old wget version here I see it can no longer
+download our tarballs:
+
+wget http://buildroot.org/downloads/buildroot-2015.11.1.tar.gz
+--2015-12-07 21:29:37--  http://buildroot.org/downloads/buildroot-2015.11.1.tar.gz
+Resolving buildroot.org... 140.211.167.224
+Connecting to buildroot.org|140.211.167.224|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://buildroot.org/downloads/buildroot-2015.11.1.tar.gz [following]
+--2015-12-07 21:29:37--  https://buildroot.org/downloads/buildroot-2015.11.1.tar.gz
+Connecting to buildroot.org|140.211.167.224|:443... connected.
+ERROR: certificate common name `bugs.busybox.net' doesn't match requested host name `buildroot.org'.
+To connect to buildroot.org insecurely, use `--no-check-certificate'.
+
+(this is with wget 1.12 from 2009).
+
+Now, this isn't about the letsencrypt CA as such, but presumably because
+it doesn't understand SNI - But the end result is the same.
+
+I would actually prefer if we only enforce https where it matters,
+E.G. on bugs.*. We can (and SHOULD now that we've uses the HSTS headers)
+support https on the other subdomains, but I don't think we should
+redirect http to https.
+
+ >> >> We have the same problem for lists.{buildroot,busybox,uclibc}.*, as that
+ >> >> ends up serving an osuosl certificate.
+ >> 
+ >> > those aren't a new issue ... they've always used osuosl certs.  those are
+ >> > out of my control.
+
+Yes, but when we sent HSTS headers with includeSubDomains I atleast get
+the following error in chromium:
+
+lists.busybox.net normally uses encryption to protect your
+information. When Chromium tried to connect to lists.busybox.net this
+time, the website sent back unusual and incorrect credentials. Either an
+attacker is trying to pretend to be lists.busybox.net, or a Wi-Fi
+sign-in screen has interrupted the connection. Your information is still
+secure because Chromium stopped the connection before any data was
+exchanged.
+
+You cannot visit lists.busybox.net right now because the website uses
+HSTS. Network errors and attacks are usually temporary, so this page
+will probably work later.
+
+NET::ERR_CERT_COMMON_NAME_INVALID
+
+With no option of continuing.
+
+
+>> Yes, but with the HSTS headers we now force people to access it through
+ >> https, and atleast my browser won't allow it because the certificate
+ >> doesn't match.
+
+ > so click through the warning message.  firefox/chrome/etc... have no problem
+ > here.
+
+See above, not possible with atleast chromium after it has seen HSTS
+with includeSubDomains.
+
+
+ >> > there is no need to distribute the same keys here.  just generate ones
+ >> > for the domains in question using let's encrypt.
+ >> 
+ >> I'll have a look at generating letsencrypt keys for nightly.* and
+ >> patchwork.*.
+ >> 
+ >> Any specific hints about it?
+
+ > $ letsencrypt certonly --webroot --webroot-path /path/to/your/webserver/ \
+ > 	-d main-dns-name -d an-alias-if-you-have-one -d more...
+
+Thanks!
+
 -- 
-2.1.4
+Venlig hilsen,
+Peter Korsgaard 
