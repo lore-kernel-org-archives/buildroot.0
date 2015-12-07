@@ -1,94 +1,153 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 07 Dec 2015 23:16:31 +0100
-Subject: [Buildroot] [psa] various server software upgrades
-In-Reply-To: <20151207215548.GB24430@vapier.lan> (Mike Frysinger's message of
- "Mon, 7 Dec 2015 16:55:48 -0500")
-References: <20151202073542.GY23754@vapier.lan>
- <20151206214229.GE4023@free.fr> <87610bs0dv.fsf@dell.be.48ers.dk>
- <20151207015525.GH23754@vapier.lan> <87bna2rckx.fsf@dell.be.48ers.dk>
- <20151207185106.GF11489@vapier.lan> <87r3iyngfx.fsf@dell.be.48ers.dk>
- <20151207215548.GB24430@vapier.lan>
-Message-ID: <87egexoqf4.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 Dec 2015 23:17:51 +0100
+Subject: [Buildroot] [PATCH v7 05/33] package/efl/libefl: new
+	host-package
+In-Reply-To: <1449523775-6582-6-git-send-email-romain.naour@openwide.fr>
+References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
+ <1449523775-6582-6-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151207221751.GD14874@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+Romain, All,
 
-Hi,
+On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
+> This new host-package provide edje_cc, embryo_cc and eet binaries
+> that will be used by the upcomming libefl packages which will
+> contain the new version of efl libraries.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
- >> (this is with wget 1.12 from 2009).
- >> 
- >> Now, this isn't about the letsencrypt CA as such, but presumably because
- >> it doesn't understand SNI - But the end result is the same.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > right, this has nothing to do with any CA, it's because that version lacks
- > SNI support.  the current buildroot.org cert is only for that domain, and
- > buildroot.org/downloads is off that vhost.  but the client has to support
- > SNI to select the correct vhost during the SSL handshaking otherwise it is
- > sent to the default ("bugs.busybox.net" in this case).
+Regards,
+Yann E. MORIN.
 
-Indeed.
-
- >> I would actually prefer if we only enforce https where it matters,
- >> E.G. on bugs.*. We can (and SHOULD now that we've uses the HSTS headers)
- >> support https on the other subdomains, but I don't think we should
- >> redirect http to https.
-
- > i guess we disagree on the "where it matters" part.  any unencrypted
- > connection can be injected with ads/javascript which can redirect the
- > content to any site or capture any state the user has.
-
-Well, what I mean is that this is always about trade offs. The risk of
-man in the middle attacks / ads vs the risks of various breakage because
-of missing/invalid certs/old clients/whatever.
-
-Bugzilla is a bit special as we have user authentication, the other sub
-domains less so.
-
-Don't get me wrong, I find it very good that we are improving the
-security situation - I just would prefer we keep the amount of breakage
-to a minimum while we configure this.
-
-So how about if we drop the global HSTS headers and http->https
-redirects for now and then move a bit more slowly forward sub domain by
-subdomain:
-
-1: Enable https next to http and verify that it works
-2: Add http->https redirect and verify that it works
-3: add HSTS header
-
-
- > imo, if a dev's system is so old it doesn't support SNI, then it's their
- > problem to workaround it.  even if they get the latest buildroot version,
- > they're going to keep having the same problem when they try to download
- > and build software as other servers use SNI.  are we now responsible for
- > bootstrapping openssl/ca-certificates/wget as host tools so SNI/etc...
- > are supported ?  how do you get the software for those packages in order
- > to bootstrap ?  do you bundle the openssl/ca-certificates/wget tarballs
- > inside of buildroot itself ?  let's just rip the band aid off and be done.
-
-I agree, old systems are a pain - But we do try to keep buildroot
-working on various enterprise distributions when possible. So far we've
-worked around SNI issues by using http URLs from those locations instead
-(and verifying against our local hashes).
-
-
- >> You cannot visit lists.busybox.net right now because the website uses
- >> HSTS. Network errors and attacks are usually temporary, so this page
- >> will probably work later.
- >> 
- >> NET::ERR_CERT_COMMON_NAME_INVALID
- >> 
- >> With no option of continuing.
-
- > mine has an "Advanced" link after that which includes "Proceed".  i went
- > to bugs.busybox.net first, then to lists.busybox.net, and it worked fine.
-
-I can do that as well in iceweasel, but not in Chromium :/
+> ---
+> v6: Add more license files (Yann E.Morin)
+> v4: keep efl as a sub-directory.
+>     rename this new package to libefl since we want to keep a efl
+>     and elementary version in sync.
+> v3: remove trailing slash (Vicente Bergas)
+>     bump to 1.15.2
+> ---
+>  package/efl/libefl/libefl.hash |  2 ++
+>  package/efl/libefl/libefl.mk   | 82 ++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 84 insertions(+)
+>  create mode 100644 package/efl/libefl/libefl.hash
+>  create mode 100644 package/efl/libefl/libefl.mk
+> 
+> diff --git a/package/efl/libefl/libefl.hash b/package/efl/libefl/libefl.hash
+> new file mode 100644
+> index 0000000..7ac26f4
+> --- /dev/null
+> +++ b/package/efl/libefl/libefl.hash
+> @@ -0,0 +1,2 @@
+> +# From https://download.enlightenment.org/rel/libs/efl/efl-1.15.2.tar.xz.sha256
+> +sha256	dd738f19f454621a7fa1fdb4c008457c170989f5f0c535edfed7b6773ae6c2a4	efl-1.15.2.tar.xz
+> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+> new file mode 100644
+> index 0000000..d070131
+> --- /dev/null
+> +++ b/package/efl/libefl/libefl.mk
+> @@ -0,0 +1,82 @@
+> +################################################################################
+> +#
+> +# libefl
+> +#
+> +################################################################################
+> +
+> +# hardcode the version here since the bump to 1.15 is not complete in Buildroot
+> +LIBEFL_VERSION = 1.15.2
+> +LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
+> +LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
+> +LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
+> +LIBEFL_LICENSE_FILES = \
+> +	COMPLIANCE \
+> +	COPYING \
+> +	licenses/COPYING.BSD \
+> +	licenses/COPYING.FTL \
+> +	licenses/COPYING.GPL \
+> +	licenses/COPYING.LGPL \
+> +	licenses/COPYING.SMALL
+> +
+> +################################################################################
+> +#
+> +# host-libefl
+> +#
+> +################################################################################
+> +
+> +# We want to build only some host tools used later in the build.
+> +# Actually we want: edje_cc, embryo_cc and eet.
+> +
+> +# Host dependencies:
+> +# * host-dbus: for Eldbus
+> +# * host-freetype: for libevas
+> +# * host-libglib2: for libecore
+> +# * host-libjpeg, host-libpng: for libevas image loader
+> +# * host-lua: disable luajit dependency
+> +HOST_LIBEFL_DEPENDENCIES = \
+> +	host-pkgconf \
+> +	host-dbus \
+> +	host-freetype \
+> +	host-libglib2 \
+> +	host-libjpeg \
+> +	host-libpng \
+> +	host-lua \
+> +	host-zlib
+> +
+> +# Configure options:
+> +# --disable-audio, --disable-multisense remove libsndfile dependency.
+> +# --disable-cxx-bindings: disable C++11 bindings.
+> +# --disable-fontconfig: remove dependency on fontconfig.
+> +# --disable-fribidi: remove dependency on libfribidi.
+> +# --disable-gstreamer1: remove dependency on gtreamer 1.0.
+> +# --disable-libeeze: remove libudev dependency.
+> +# --disable-libmount: remove dependency on host-util-linux libmount.
+> +# --disable-physics: remove Bullet dependency.
+> +# --enable-image-loader-gif=no: disable Gif dependency.
+> +# --enable-image-loader-tiff=no: disable Tiff dependency.
+> +# --enable-lua-old: disable Elua and remove luajit dependency.
+> +# --with-crypto=none: remove dependencies on openssl or gnutls.
+> +# --with-x11=none: remove dependency on X.org.
+> +#   Yes I really know what I am doing.
+> +HOST_LIBEFL_CONF_OPTS += \
+> +	--disable-audio \
+> +	--disable-cxx-bindings \
+> +	--disable-fontconfig \
+> +	--disable-fribidi \
+> +	--disable-gstreamer1 \
+> +	--disable-libeeze \
+> +	--disable-libmount \
+> +	--disable-multisense \
+> +	--disable-physics \
+> +	--enable-image-loader-gif=no \
+> +	--enable-image-loader-jpeg=yes \
+> +	--enable-image-loader-png=yes \
+> +	--enable-image-loader-tiff=no \
+> +	--enable-lua-old \
+> +	--with-crypto=none \
+> +	--with-glib=yes \
+> +	--with-opengl=none \
+> +	--with-x11=none \
+> +	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
+> +
+> +$(eval $(host-autotools-package))
+> -- 
+> 2.4.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
