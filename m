@@ -1,105 +1,117 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 7 Dec 2015 22:00:12 +0100
-Subject: [Buildroot] [PATCH 0/4] website caring
-In-Reply-To: <56631D15.7090302@mind.be>
-References: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
- <56631D15.7090302@mind.be>
-Message-ID: <CA+TH9V=yHMRvnwSUqz_N8LrN0TWa-y-MXp+oc5Z4XrwGeJ4rRQ@mail.gmail.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Mon, 7 Dec 2015 22:01:08 +0100
+Subject: [Buildroot] [PATCH v4] openal: New package
+Message-ID: <5665F394.4010008@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
 
-2015-12-05 18:21 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
->  Hi Angelo,
->
->  Thanks for this series, it's really good that someone cares for the website!
->
-> On 04-12-15 08:21, Angelo Compagnucci wrote:
->> This patch series:
->>
->> * Fixes all errors found by html tidy
->> * Fixes indentation on all html using html tidy rules
->> * Add tidy_config.txt with tidy configuration used in
->>   reindentation
->> * Resizes images to a correct size
->
->  It would be good to also specify the size of the images everywhere in the img
-> tags, since that speeds up page rendering and makes sure that it is still laid
-> out in the same way when showing without images.
->
->
->  Also, there are quite a lot of images with an empty alt tag. That's pretty
-> useless and it would be good to add real alt text, e.g. "gzip" for the .tar.gz
-> and "bz2" for the tar.bz2.
+Tested on various backends, archs and toolchains (uclibc, glibc, musl, extern, intern)
 
-I read your review for the patch series. Honestly I have not enough
-free time to respin a patch series I consider ameliorative.
+v4: Bump to 1.17; Removed selections/dependencies on backends as it is already useful for computations without a backend
+v3: Added dependency on threads and select alsa as default backend, fixed license and check for dependencies (suggested by Thomas Petazzoni)
+    Fixed ordering in Config.in and patch style (suggested by Vicente Olivert Riera)
+    Added C++ dependency (spotted myself)
+v2: Added check for static lib build, added URL to description (suggested by Bernd Kuhls)
 
-My goal here was to have a better looking docs/download web page, and
-I took all the steps to reach that goal.
+ package/Config.in          |  1 +
+ package/openal/Config.in   | 14 ++++++++++++++
+ package/openal/openal.hash |  2 ++
+ package/openal/openal.mk   | 39 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 56 insertions(+)
+ create mode 100644 package/openal/Config.in
+ create mode 100644 package/openal/openal.hash
+ create mode 100644 package/openal/openal.mk
 
-If it's acceptable to have a sufficiently better website, please apply
-this patch series. Alternatively, please discard it.
-
-Sincerely, Angelo
-
->
->> * Minor cosmetic changes to docs and download pages
->>
->> Angelo Compagnucci (4):
->>   docs/website: fixing html tidy errors and warnings
->>   docs/website: html cleaning and indentation fixing
->>   docs/website: resizing images
->
->  The list didn't receive this one, probably because it was too big. Peter, did
-> you get it?
->
->  I guess that one can be applied independently of the other patches?
->
->  Regards,
->  Arnout
->
->
->>   docs/website: cosmetic changes
->>
->>  docs/website/contribute.html     |   74 +-
->>  docs/website/css/main.css        |   15 +-
->>  docs/website/docs.html           |  237 +-
->>  docs/website/download.html       |  354 +--
->>  docs/website/footer.html         |   12 +-
->>  docs/website/header.html         |  120 +-
->>  docs/website/images/browser.png  |  Bin 18175 -> 8927 bytes
->>  docs/website/images/gift.png     |  Bin 15906 -> 10565 bytes
->>  docs/website/images/hammer.png   |  Bin 18353 -> 11740 bytes
->>  docs/website/images/logo.png     |  Bin 117499 -> 83758 bytes
->>  docs/website/images/package.png  |  Bin 7746 -> 5449 bytes
->>  docs/website/images/pdf-icon.png |  Bin 10324 -> 5798 bytes
->>  docs/website/images/text.png     |  Bin 6437 -> 3824 bytes
->>  docs/website/images/tux-flat.png |  Bin 20106 -> 14812 bytes
->>  docs/website/images/zip.png      |  Bin 8208 -> 5164 bytes
->>  docs/website/index.html          |  241 +-
->>  docs/website/news.html           | 6343 +++++++++++++++++++++-----------------
->>  docs/website/sponsors.html       |  459 +--
->>  docs/website/support.html        |  187 +-
->>  docs/website/tidy_config.txt     |    5 +
->>  20 files changed, 4495 insertions(+), 3552 deletions(-)
->>  create mode 100644 docs/website/tidy_config.txt
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 2bdad01..ea344b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -726,6 +726,7 @@ menu "Audio/Sound"
+ 	source "package/libsoxr/Config.in"
+ 	source "package/libvorbis/Config.in"
+ 	source "package/mp4v2/Config.in"
++	source "package/openal/Config.in"
+ 	source "package/opencore-amr/Config.in"
+ 	source "package/opus/Config.in"
+ 	source "package/opusfile/Config.in"
+diff --git a/package/openal/Config.in b/package/openal/Config.in
+new file mode 100644
+index 0000000..cfd41fa
+--- /dev/null
++++ b/package/openal/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_OPENAL
++	bool "openal"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	help
++	  OpenAL provides capabilities for playing audio in a virtual
++	  3D environment. Distance attenuation, doppler shift, and
++	  directional sound emitters are among the features handled by
++	  the API.
++
++	  http://kcat.strangesoft.net/openal.html
++
++comment "openal needs a toolchain w/ threads, C++"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+new file mode 100644
+index 0000000..26a9919
+--- /dev/null
++++ b/package/openal/openal.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 5e93336de2e7c50f3a01beba51861d6f61c3e4045a896191dc806591e46264d1 openal-soft-1.17.0.tar.bz2
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+new file mode 100644
+index 0000000..ff1cc3d
+--- /dev/null
++++ b/package/openal/openal.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# openal
++#
++################################################################################
++
++OPENAL_VERSION = 1.17.0
++OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
++OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
++OPENAL_LICENSE = LGPLv2+
++OPENAL_LICENSE_FILES = COPYING
++OPENAL_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++OPENAL_DEPENDENCIES += alsa-lib
++OPENAL_CONF_OPTS += -DALSOFT_REQUIRE_ALSA=ON
++else
++OPENAL_CONF_OPTS += -DALSOFT_REQUIRE_ALSA=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++OPENAL_DEPENDENCIES += portaudio
++OPENAL_CONF_OPTS += -DALSOFT_REQUIRE_PORTAUDIO=ON
++else
++OPENAL_CONF_OPTS += -DALSOFT_REQUIRE_PORTAUDIO=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++OPENAL_DEPENDENCIES += pulseaudio
++OPENAL_CONF_OPTS += -DALSOFT_REQUIRE_PULSEAUDIO=ON
++else
++OPENAL_CONF_OPTS += -DALSOFT_REQUIRE_PULSEAUDIO=OFF
++endif
++
++ifeq ($(BR2_STATIC_LIBS),y)
++OPENAL_CONF_OPTS += -DLIBTYPE=STATIC
++endif
++
++$(eval $(cmake-package))
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+1.9.1
