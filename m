@@ -1,83 +1,68 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  7 Dec 2015 22:29:04 +0100
-Subject: [Buildroot] [PATCH v7 02/33] package/libevas-generic-loaders: move
-	to package directory
+Date: Mon,  7 Dec 2015 22:29:09 +0100
+Subject: [Buildroot] [PATCH v7 07/33] package/efl/libefl: add harfbuzz
+	dependency
 In-Reply-To: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449523775-6582-3-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449523775-6582-8-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As for expedite package, there is no advantage for efl related
-packages to share the same version number anymore
-(except for efl and libelementary).
+Harfbuzz allow to enable complex text shaping and layouting
+support in efl libraries.
 
-Also, we usually do not have a sub-directory for a family of related
-packages which doen't share the same version number, so move
-libevas-generic-loaders to package directory.
-Libevas-generic-loaders appear now in "Libraries" -> "Graphics" in
-the Kconfig menu.
+Also, it one of the "highly recommended" dependecies
+according to the README but disabling it doesn't need
+the --enable-i-really-know-what-i-am-doing... option.
+That's why harfbuzz is not added to
+BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: keep the reverse dependency on BR2_USE_WCHAR (Yann E.Morin)
-v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
-v4: improve the commit log (ThomasP)
-    move libevas-generic-loaders to "Libraries" -> "Graphics" (ThomasP)
-    fix package comment dependency on BR2_USE_MMU
+v6: use --enable/disable options
+v4: rename to libefl
+    improve commit log.
 ---
- package/Config.in                                                    | 1 +
- package/efl/Config.in                                                | 1 -
- package/{efl => }/libevas-generic-loaders/Config.in                  | 1 +
- package/{efl => }/libevas-generic-loaders/libevas-generic-loaders.mk | 0
- 4 files changed, 2 insertions(+), 1 deletion(-)
- rename package/{efl => }/libevas-generic-loaders/Config.in (97%)
- rename package/{efl => }/libevas-generic-loaders/libevas-generic-loaders.mk (100%)
+ package/efl/libefl/libefl.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2a2fdfb..ac29967 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -826,6 +826,7 @@ menu "Graphics"
- 	source "package/libdri2/Config.in"
- 	source "package/libdrm/Config.in"
- 	source "package/libexif/Config.in"
-+	source "package/libevas-generic-loaders/Config.in"
- 	source "package/libfm/Config.in"
- 	source "package/libfm-extra/Config.in"
- 	source "package/libfreeimage/Config.in"
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index cb91660..7ce5a36 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -16,7 +16,6 @@ source "package/efl/libeet/Config.in"
- source "package/efl/libefreet/Config.in"
- source "package/efl/libeio/Config.in"
- source "package/efl/libevas/Config.in"
--source "package/efl/libevas-generic-loaders/Config.in"
- source "package/efl/libembryo/Config.in"
- source "package/efl/libedje/Config.in"
- source "package/efl/libethumb/Config.in"
-diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-similarity index 97%
-rename from package/efl/libevas-generic-loaders/Config.in
-rename to package/libevas-generic-loaders/Config.in
-index 3f7581f..c69f5e8 100644
---- a/package/efl/libevas-generic-loaders/Config.in
-+++ b/package/libevas-generic-loaders/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	bool "libevas generic loaders"
-+	depends on BR2_PACKAGE_EFL
- 	select BR2_PACKAGE_LIBEINA
- 	select BR2_PACKAGE_ZLIB
- 	help
-diff --git a/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-similarity index 100%
-rename from package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
-rename to package/libevas-generic-loaders/libevas-generic-loaders.mk
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index 7bd3820..80eb3d8 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -31,7 +31,6 @@ LIBEFL_GETTEXTIZE = YES
+ # Configure options:
+ # --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-fb: disable frame buffer support.
+-# --disable-harfbuzz: disable harfbuzz support.
+ # --disable-image-loader-jp2k: disable JPEG 2000 support.
+ # --disable-image-loader-webp: disable webp support.
+ # --disable-sdl: disable sdl2 support.
+@@ -46,7 +45,6 @@ LIBEFL_CONF_OPTS = \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--disable-cxx-bindings \
+ 	--disable-fb \
+-	--disable-harfbuzz \
+ 	--disable-image-loader-jp2k \
+ 	--disable-image-loader-webp \
+ 	--disable-sdl \
+@@ -110,6 +108,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-pulseaudio
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
++LIBEFL_DEPENDENCIES += harfbuzz
++LIBEFL_CONF_OPTS += --enable-harfbuzz
++else
++LIBEFL_CONF_OPTS += --disable-harfbuzz
++endif
++
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ LIBEFL_DEPENDENCIES += tslib
+ LIBEFL_CONF_OPTS += --enable-tslib
 -- 
 2.4.3
