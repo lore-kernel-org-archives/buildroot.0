@@ -1,198 +1,158 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue,  8 Dec 2015 22:18:19 +0100
-Subject: [Buildroot] [PATCH 2/3] package/nodejs: bump 0.12.x branch to
-	version 0.12.9
+Date: Tue,  8 Dec 2015 22:18:20 +0100
+Subject: [Buildroot] [PATCH 3/3] package/nodejs: bump 4.x branch to version
+	4.2.3
 In-Reply-To: <1449609500-10071-1-git-send-email-joerg.krause@embedded.rocks>
 References: <1449609500-10071-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <1449609500-10071-2-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <1449609500-10071-3-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch #4 was applied upstream, however a new bug was introduced which breaks
-building nodejs without OpenSSL support. We replace the applied patch with a
-new patch to fix:
- error: ?ALLOW_INSECURE_SERVER_DHPARAM? was not declared in this scope
-       ALLOW_INSECURE_SERVER_DHPARAM = true;
-
-Patch #4 status: Sent upstream [1]
-
-[1] https://github.com/nodejs/node/pull/4201
-
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...4-fix-build-error-without-OpenSSL-support.patch | 46 ----------------------
+ package/nodejs/4.1.2/0004-fix-arm-vfpv2.patch      | 18 ---------
  ...01-Remove-dependency-on-Python-bz2-module.patch |  0
  .../0002-gyp-force-link-command-to-use-CXX.patch   |  0
  ...hon-variable-instead-of-hardcoding-Python.patch |  0
- ...c-fix-build-error-without-OpenSSL-support.patch | 44 +++++++++++++++++++++
- ...or-arm-predefined-macro-in-atomicops_inte.patch |  0
- package/nodejs/Config.in                           |  4 +-
+ package/nodejs/4.2.3/0004-fix-arm-vfpv2.patch      | 46 ++++++++++++++++++++++
+ package/nodejs/Config.in                           |  6 +--
  package/nodejs/nodejs.hash                         |  4 +-
- 8 files changed, 48 insertions(+), 50 deletions(-)
- delete mode 100644 package/nodejs/0.12.7/0004-fix-build-error-without-OpenSSL-support.patch
- rename package/nodejs/{0.12.7 => 0.12.9}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
- rename package/nodejs/{0.12.7 => 0.12.9}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{0.12.7 => 0.12.9}/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch (100%)
- create mode 100644 package/nodejs/0.12.9/0004-src-fix-build-error-without-OpenSSL-support.patch
- rename package/nodejs/{0.12.7 => 0.12.9}/0005-Fix-typo-for-arm-predefined-macro-in-atomicops_inte.patch (100%)
+ 7 files changed, 51 insertions(+), 23 deletions(-)
+ delete mode 100644 package/nodejs/4.1.2/0004-fix-arm-vfpv2.patch
+ rename package/nodejs/{4.1.2 => 4.2.3}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
+ rename package/nodejs/{4.1.2 => 4.2.3}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
+ rename package/nodejs/{4.1.2 => 4.2.3}/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch (100%)
+ create mode 100644 package/nodejs/4.2.3/0004-fix-arm-vfpv2.patch
 
-diff --git a/package/nodejs/0.12.7/0004-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/0.12.7/0004-fix-build-error-without-OpenSSL-support.patch
+diff --git a/package/nodejs/4.1.2/0004-fix-arm-vfpv2.patch b/package/nodejs/4.1.2/0004-fix-arm-vfpv2.patch
 deleted file mode 100644
-index ccb29b1..0000000
---- a/package/nodejs/0.12.7/0004-fix-build-error-without-OpenSSL-support.patch
+index b753dfe..0000000
+--- a/package/nodejs/4.1.2/0004-fix-arm-vfpv2.patch
 +++ /dev/null
-@@ -1,46 +0,0 @@
--From 6bfa497dceb83de5257c64da59fbcf6a32d83305 Mon Sep 17 00:00:00 2001
--From: Martin Bark <martin@barkynet.com>
--Date: Tue, 30 Jun 2015 09:45:07 +0100
--Subject: [PATCH 4/4] fix build error without OpenSSL support
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,18 +0,0 @@
+-configure: fix ARM VFPv2
 -
--Signed-off-by: J?rg Krause <jkrause@posteo.de>
--[Martin: adapt to 0.12.5]
--Signed-off-by: Martin Bark <martin@barkynet.com>
-----
-- src/node.cc | 4 ++++
-- 1 file changed, 4 insertions(+)
+-The gcc -mfpu flag for VFPv2 is 'vfp', not 'vfpv2'.
 -
--diff --git a/src/node.cc b/src/node.cc
--index e669706..d43b791 100644
----- a/src/node.cc
--+++ b/src/node.cc
--@@ -2934,8 +2934,10 @@ static void PrintHelp() {
--          "                       present.\n"
-- #endif
-- #endif
--+#if HAVE_OPENSSL
--          "  --enable-ssl2        enable ssl2\n"
--          "  --enable-ssl3        enable ssl3\n"
--+#endif
--          "\n"
--          "Environment variables:\n"
-- #ifdef _WIN32
--@@ -3003,10 +3005,12 @@ static void ParseArgs(int* argc,
--     } else if (strcmp(arg, "--version") == 0 || strcmp(arg, "-v") == 0) {
--       printf("%s\n", NODE_VERSION);
--       exit(0);
--+#if HAVE_OPENSSL
--     } else if (strcmp(arg, "--enable-ssl2") == 0) {
--       SSL2_ENABLE = true;
--     } else if (strcmp(arg, "--enable-ssl3") == 0) {
--       SSL3_ENABLE = true;
--+#endif
--     } else if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
--       PrintHelp();
--       exit(0);
---- 
--2.1.4
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 -
-diff --git a/package/nodejs/0.12.7/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/0.12.9/0001-Remove-dependency-on-Python-bz2-module.patch
+-diff -durN a/configure b/configure
+---- a/configure
+-+++ b/configure
+-@@ -611,7 +611,7 @@
+-     o['variables']['arm_fpu'] = 'vfpv3'
+-     o['variables']['arm_version'] = '7'
+-   else:
+--    o['variables']['arm_fpu'] = 'vfpv2'
+-+    o['variables']['arm_fpu'] = 'vfp'
+-     o['variables']['arm_version'] = '6' if is_arch_armv6() else 'default'
+- 
+-   o['variables']['arm_thumb'] = 0      # -marm
+diff --git a/package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/4.2.3/0001-Remove-dependency-on-Python-bz2-module.patch
 similarity index 100%
-rename from package/nodejs/0.12.7/0001-Remove-dependency-on-Python-bz2-module.patch
-rename to package/nodejs/0.12.9/0001-Remove-dependency-on-Python-bz2-module.patch
-diff --git a/package/nodejs/0.12.7/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.12.9/0002-gyp-force-link-command-to-use-CXX.patch
+rename from package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch
+rename to package/nodejs/4.2.3/0001-Remove-dependency-on-Python-bz2-module.patch
+diff --git a/package/nodejs/4.1.2/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/4.2.3/0002-gyp-force-link-command-to-use-CXX.patch
 similarity index 100%
-rename from package/nodejs/0.12.7/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/0.12.9/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/0.12.7/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch b/package/nodejs/0.12.9/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+rename from package/nodejs/4.1.2/0002-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/4.2.3/0002-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/4.1.2/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch b/package/nodejs/4.2.3/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
 similarity index 100%
-rename from package/nodejs/0.12.7/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-rename to package/nodejs/0.12.9/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-diff --git a/package/nodejs/0.12.9/0004-src-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/0.12.9/0004-src-fix-build-error-without-OpenSSL-support.patch
+rename from package/nodejs/4.1.2/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+rename to package/nodejs/4.2.3/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+diff --git a/package/nodejs/4.2.3/0004-fix-arm-vfpv2.patch b/package/nodejs/4.2.3/0004-fix-arm-vfpv2.patch
 new file mode 100644
-index 0000000..62966eb
+index 0000000..7ff280b
 --- /dev/null
-+++ b/package/nodejs/0.12.9/0004-src-fix-build-error-without-OpenSSL-support.patch
-@@ -0,0 +1,44 @@
-+From ba6142dbaebe06738686da150043abbd1ef1fbf5 Mon Sep 17 00:00:00 2001
++++ b/package/nodejs/4.2.3/0004-fix-arm-vfpv2.patch
+@@ -0,0 +1,46 @@
++From 0b07d813adcfdc13ef6a0c56f88b864eb3dc4be9 Mon Sep 17 00:00:00 2001
 +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Tue, 8 Dec 2015 21:22:45 +0100
-+Subject: [PATCH] src: fix build error without OpenSSL support
++Date: Tue, 8 Dec 2015 21:53:06 +0100
++Subject: [PATCH] configure: fix arm vfpv2
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+PR #3890 [1] introduced the variable ALLOW_INSECURE_SERVER_DHPARAM defined
-+in src/node_crypto.cc. However, if nodejs is built without OpenSSL support,
-+the build fails:
-+ error: ?ALLOW_INSECURE_SERVER_DHPARAM? was not declared in this scope
-+       ALLOW_INSECURE_SERVER_DHPARAM = true;
-+
-+Fix this by using the preprocessor macro HAVE_OPENSSL to opt-out the use of
-+ALLOW_INSECURE_SERVER_DHPARAM in non-OpenSSL builds.
++The gcc -mfpu flag for VFPv2 is 'vfp', not 'vfpv2' [1].
 +
 +Patch status: Sent upstream [2]
 +
-+[1] https://github.com/nodejs/node/pull/3890
-+[2] https://github.com/nodejs/node/pull/4201
++[1] https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
++[2] https://github.com/nodejs/node/pull/4202
 +
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++[J?rg Krause: adapt to version 4.2.3]
 +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 +---
-+ src/node.cc | 2 ++
-+ 1 file changed, 2 insertions(+)
++ configure | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/node.cc b/src/node.cc
-+index 1da8328..e5239ac 100644
-+--- a/src/node.cc
-++++ b/src/node.cc
-+@@ -3042,7 +3042,9 @@ static void ParseArgs(int* argc,
-+       SSL3_ENABLE = true;
-+ #endif
-+     } else if (strcmp(arg, "--allow-insecure-server-dhparam") == 0) {
-++#if HAVE_OPENSSL
-+       ALLOW_INSECURE_SERVER_DHPARAM = true;
-++#endif
-+     } else if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
-+       PrintHelp();
-+       exit(0);
-+-- 
++diff --git a/configure b/configure
++index d4aff36..c783bab 100755
++--- a/configure
+++++ b/configure
++@@ -30,7 +30,7 @@ valid_os = ('win', 'mac', 'solaris', 'freebsd', 'openbsd', 'linux',
++ valid_arch = ('arm', 'arm64', 'ia32', 'mips', 'mipsel', 'ppc', 'ppc64', 'x32',
++               'x64', 'x86')
++ valid_arm_float_abi = ('soft', 'softfp', 'hard')
++-valid_arm_fpu = ('vfp', 'vfpv2', 'vfpv3', 'vfpv3-d16', 'neon')
+++valid_arm_fpu = ('vfp', 'vfpv3', 'vfpv3-d16', 'neon')
++ valid_mips_arch = ('loongson', 'r1', 'r2', 'r6', 'rx')
++ valid_mips_fpu = ('fp32', 'fp64', 'fpxx')
++ valid_mips_float_abi = ('soft', 'hard')
++@@ -622,7 +622,7 @@ def configure_arm(o):
++   else:
++     arm_float_abi = 'default'
++
++-  arm_fpu = 'vfpv2'
+++  arm_fpu = 'vfp'
++
++   if is_arch_armv7():
++     arm_fpu = 'vfpv3'
++--
 +2.6.3
-+
-diff --git a/package/nodejs/0.12.7/0005-Fix-typo-for-arm-predefined-macro-in-atomicops_inte.patch b/package/nodejs/0.12.9/0005-Fix-typo-for-arm-predefined-macro-in-atomicops_inte.patch
-similarity index 100%
-rename from package/nodejs/0.12.7/0005-Fix-typo-for-arm-predefined-macro-in-atomicops_inte.patch
-rename to package/nodejs/0.12.9/0005-Fix-typo-for-arm-predefined-macro-in-atomicops_inte.patch
 diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 30b7495..6ffe1f1 100644
+index 6ffe1f1..b0f4f2b 100644
 --- a/package/nodejs/Config.in
 +++ b/package/nodejs/Config.in
-@@ -45,7 +45,7 @@ config BR2_BR2_PACKAGE_NODEJS_0_10_X
- 	bool "v0.10.41"
- 
- config BR2_BR2_PACKAGE_NODEJS_0_12_X
--	bool "v0.12.7"
-+	bool "v0.12.9"
+@@ -49,11 +49,11 @@ config BR2_BR2_PACKAGE_NODEJS_0_12_X
  	depends on BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
  
  config BR2_BR2_PACKAGE_NODEJS_4_X
-@@ -62,7 +62,7 @@ endchoice
- config BR2_PACKAGE_NODEJS_VERSION_STRING
+-	bool "v4.1.2"
++	bool "v4.2.3"
+ 	depends on BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+-comment "v4.1.2 needs a toolchain w/ gcc >= 4.8"
++comment "v4.2.3 needs a toolchain w/ gcc >= 4.8"
+ 	depends on BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+@@ -63,7 +63,7 @@ config BR2_PACKAGE_NODEJS_VERSION_STRING
  	string
  	default "0.10.41"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
--	default "0.12.7"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
-+	default "0.12.9"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
- 	default "4.1.2"		if BR2_BR2_PACKAGE_NODEJS_4_X
+ 	default "0.12.9"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
+-	default "4.1.2"		if BR2_BR2_PACKAGE_NODEJS_4_X
++	default "4.2.3"		if BR2_BR2_PACKAGE_NODEJS_4_X
  
  menu "Module Selection"
+ 
 diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index d4e6edb..800af73 100644
+index 800af73..7d58a54 100644
 --- a/package/nodejs/nodejs.hash
 +++ b/package/nodejs/nodejs.hash
-@@ -1,8 +1,8 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.41/SHASUMS256.txt
- sha256	79f694e2a5c42543b75d0c69f6860499d7593136d0f6b59e7163b9e66fb2c995  node-v0.10.41.tar.gz
+@@ -4,5 +4,5 @@ sha256	79f694e2a5c42543b75d0c69f6860499d7593136d0f6b59e7163b9e66fb2c995  node-v0
+ # From upstream URL: http://nodejs.org/dist/v0.12.9/SHASUMS256.txt
+ sha256	35daad301191e5f8dd7e5d2fbb711d081b82d1837d59837b8ee224c256cfe5e4  node-v0.12.9.tar.gz
  
--# From upstream URL: http://nodejs.org/dist/v0.12.7/SHASUMS256.txt
--sha256	b23d64df051c9c969b0c583f802d5d71de342e53067127a5061415be7e12f39d  node-v0.12.7.tar.gz
-+# From upstream URL: http://nodejs.org/dist/v0.12.9/SHASUMS256.txt
-+sha256	35daad301191e5f8dd7e5d2fbb711d081b82d1837d59837b8ee224c256cfe5e4  node-v0.12.9.tar.gz
- 
- # From upstream URL: http://nodejs.org/dist/v4.1.2/SHASUMS256.txt
- sha256  443c8251e812b1f2c4b3e9152a47df23c55567ade739e017e2c0ca0869b71e74  node-v4.1.2.tar.xz
+-# From upstream URL: http://nodejs.org/dist/v4.1.2/SHASUMS256.txt
+-sha256  443c8251e812b1f2c4b3e9152a47df23c55567ade739e017e2c0ca0869b71e74  node-v4.1.2.tar.xz
++# From upstream URL: http://nodejs.org/dist/v4.2.3/SHASUMS256.txt
++sha256  9e8aef1e47b317575c421c8d10a80e6c319b26969b566d3b84e49e65a92837f4  node-v4.2.3.tar.xz
 -- 
 2.6.3
