@@ -1,105 +1,131 @@
-From: Paul Enman <paul.enman@gmail.com>
-Date: Tue, 8 Dec 2015 13:34:30 -0600
-Subject: [Buildroot] [PATCH 1/1] [1/1] package/uclibc: Enable compile in
- thumb mode when selected
-In-Reply-To: <5662FDE3.6070809@mind.be>
-References: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
- <5662FDE3.6070809@mind.be>
-Message-ID: <CAEp4hJ1sT=Kp4_a4Tn862_mvcECYrBuQGCRUXOZUfO98orqVmw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Dec 2015 21:05:55 +0100
+Subject: [Buildroot] [PATCH 2/4] package/lttng-tools: fix static build
+In-Reply-To: <1449092893-30664-2-git-send-email-s.martin49@gmail.com>
+References: <1449092893-30664-1-git-send-email-s.martin49@gmail.com>
+ <1449092893-30664-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20151208200555.GQ4188@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-Thanks, I checked the old commit and tested with both uClibc-0.9.33 and
-uClibc-ng and older gcc; I was suprised to discover updated gcc versions
-resolve the issue (uclibc/arm: doesn't build in thumb(1) mode with threads).
+Samuel, All,
 
-With this existing (v1) patch, for example:
-Config: arm926t, thumb1; builds only with gcc-4.9 or better
-Config: cortex-a5, thumb2; builds with all configuration options gcc-4.7
-through gcc-5.x
-Config: cortex-m3, thumb1 or thumb2; builds with all configuration options
-gcc-4.7 though gcc-5.x
+On 2015-12-02 22:48 +0100, Samuel Martin spake thusly:
+> Add patch fixing configure.ac for library detection on static build.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/0f1/0f1e015a0c5a5ac2beeb5011d31a1e0058a32a0d/
+> 
+> Upstream status: Merged
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Since uclibc has some unresolved cases building with older gcc using
-thumb1, I'll limit the scope and prepare a v2 patch that will pass the
-thumb config option to uclibc when using thumb2 instruction set and not
-interfere with the existing thumb1 workaround that relies on interworking
-between arm and thumb instructions.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Sat, Dec 5, 2015 at 9:08 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+See below for a minor comment...
 
->  Hi penman,
->
-> On 04-12-15 23:56, penman wrote:
-> > Signed-off-by: penman <paul.enman@gmail.com>
->
->  Please use your full real name in the Sob (I guess that's Paul Enman).
->
-> > ---
-> >  package/uclibc/uclibc.mk | 13 ++++++++++---
-> >  1 file changed, 10 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> > index c62a40f..4f5c605 100644
-> > --- a/package/uclibc/uclibc.mk
-> > +++ b/package/uclibc/uclibc.mk
-> > @@ -86,9 +86,15 @@ define UCLIBC_ARM_ABI_CONFIG
-> >       $(call KCONFIG_ENABLE_OPT,CONFIG_ARM_EABI,$(@D)/.config)
-> >  endef
-> >
-> > -# Thumb build is broken with threads, build in ARM mode
->
->  Can you explain what changed in the last two years since this fix was
-> introduced in commit d244782ca? It might have been fixed in -ng, but
-> 0.9.33.2
-> hasn't changed in a very long time so I guess it's still broken there.
-> You'll
-> need to add a condition on -NG.
->
->  Or it could be gcc that has been fixed, but in that case please verify
-> that it
-> works with gcc-4.7
->
->  Regards,
->  Arnout
->
-> > -ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-> > -UCLIBC_EXTRA_CFLAGS += -marm
-> > +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),y)
-> > +define UCLIBC_ARM_THUMB_CONFIG
-> > +     $(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
-> > +     $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
-> > +endef
-> > +else
-> > +define UCLIBC_ARM_THUMB_CONFIG
-> > +     $(call KCONFIG_DISABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
-> > +endef
-> >  endif
-> >
-> >  ifeq ($(BR2_UCLIBC_ARM_BX),y)
-> > @@ -373,6 +379,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
-> >       $(UCLIBC_ARC_TYPE_CONFIG)
-> >       $(UCLIBC_ARC_PAGE_SIZE_CONFIG)
-> >       $(UCLIBC_ARM_ABI_CONFIG)
-> > +     $(UCLIBC_ARM_THUMB_CONFIG)
-> >       $(UCLIBC_ARM_BX_CONFIG)
-> >       $(UCLIBC_MIPS_ABI_CONFIG)
-> >       $(UCLIBC_MIPS_ISA_CONFIG)
-> >
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151208/b7827b23/attachment.html>
+> ---
+>  .../0001-configure.ac-fix-static-build.patch       | 54 ++++++++++++++++++++++
+>  package/lttng-tools/lttng-tools.mk                 |  2 +
+>  2 files changed, 56 insertions(+)
+>  create mode 100644 package/lttng-tools/0001-configure.ac-fix-static-build.patch
+> 
+> diff --git a/package/lttng-tools/0001-configure.ac-fix-static-build.patch b/package/lttng-tools/0001-configure.ac-fix-static-build.patch
+> new file mode 100644
+> index 0000000..182f3e0
+> --- /dev/null
+> +++ b/package/lttng-tools/0001-configure.ac-fix-static-build.patch
+> @@ -0,0 +1,54 @@
+> +Upstream status: merged
+> +From 75df93099f6fc18ddd1599efd1313d5260c4d49a Mon Sep 17 00:00:00 2001
+> +From: Samuel Martin <s.martin49@gmail.com>
+> +Date: Sun, 22 Nov 2015 23:38:00 +0100
+> +Subject: [PATCH] configure.ac: fix static build
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +For static build, some extra LDFLAGS may be needed.
+> +
+> +Using PKG_CHECK_MODULES instead of AC_CHECK_LIB for librairy detection
+> +allows to get all these flags. Then, the LIBS variable can be extended
+> +with everything that is needed.
+> +
+> +So, use PKG_CHECK_MODULES for popt and uuid detection; which both depend
+> +on libintl.
+> +
+> +This changes fixes build failures triggered with Buildroot, e.g.:
+> +  http://autobuild.buildroot.net/results/0f1/0f1e015a0c5a5ac2beeb5011d31a1e0058a32a0d/build-end.log
+> +
+> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> +Signed-off-by: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
+
+It would have been good to poitn to the upstream commit:
+
+    https://git.lttng.org/?p=lttng-tools.git;a=commit;h=e9cee23a2e92694ba1347fd1242026d4c19413a8
+
+Regards,
+Yann E. MORIN.
+
+> +---
+> + configure.ac | 6 ++++--
+> + 1 file changed, 4 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 4dee4b4..9208cb3 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -175,15 +175,17 @@ AC_CHECK_LIB([pthread], [pthread_create], [],
+> + )
+> + 
+> + # Check libpopt
+> +-AC_CHECK_LIB([popt], [poptGetContext], [],
+> ++PKG_CHECK_MODULES([POPT], [popt],
+> ++	[LIBS="$LIBS $POPT_LIBS"],
+> + 	[AC_MSG_ERROR([Cannot find libpopt. Use [LDFLAGS]=-Ldir to specify its location.])]
+> + )
+> + 
+> + AM_PATH_XML2(2.7.6, true, AC_MSG_ERROR(No supported version of libxml2 found.))
+> + 
+> + # Check for libuuid
+> +-AC_CHECK_LIB([uuid], [uuid_generate],
+> ++PKG_CHECK_MODULES([UUID], [uuid],
+> + [
+> ++	LIBS="$LIBS $UUID_LIBS"
+> + 	AC_DEFINE_UNQUOTED([LTTNG_HAVE_LIBUUID], 1, [Has libuuid support.])
+> + 	have_libuuid=yes
+> + ],
+> +-- 
+> +2.6.2
+> +
+> diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+> index efca6d7..b14b7e7 100644
+> --- a/package/lttng-tools/lttng-tools.mk
+> +++ b/package/lttng-tools/lttng-tools.mk
+> @@ -10,6 +10,8 @@ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+>  LTTNG_TOOLS_LICENSE = GPLv2+; LGPLv2.1+ for include/lttng/* and src/lib/lttng-ctl/*
+>  LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
+>  LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr
+> +# Need autoreconf because of a patch touching configure.ac
+> +LTTNG_TOOLS_AUTORECONF = YES
+>  
+>  # The host-lttng-babeltrace technically isn't a required build
+>  # dependency. However, having the babeltrace utilities built for the
+> -- 
+> 2.6.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
