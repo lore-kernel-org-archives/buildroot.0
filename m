@@ -1,11 +1,12 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 8 Dec 2015 22:43:34 +0100
-Subject: [Buildroot] [PATCH v7 06/33] package/efl/libefl: new package
-In-Reply-To: <20151208104727.GD4188@free.fr>
-References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
- <1449523775-6582-7-git-send-email-romain.naour@openwide.fr>
- <20151208104727.GD4188@free.fr>
-Message-ID: <56674F06.7000905@openwide.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 8 Dec 2015 23:26:01 +0100
+Subject: [Buildroot] [PATCH 3/4] package/lttng-tools: backport patch
+ fixing pthread_setname_np failure
+In-Reply-To: <20151208200858.GR4188@free.fr>
+References: <1449092893-30664-1-git-send-email-s.martin49@gmail.com>
+ <1449092893-30664-3-git-send-email-s.martin49@gmail.com>
+ <20151208200858.GR4188@free.fr>
+Message-ID: <CAHXCMM+XLCRDXL=T3wbGgkEummVoyRD34W_gH_-_u-gzFu41eQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,79 +15,32 @@ To: buildroot@busybox.net
 
 Hi Yann,
 
-Le 08/12/2015 11:47, Yann E. MORIN a ?crit :
-> Romain, All,
-> 
-> On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
->> Add the libefl package which contains an updated version of the following
->> libraries:
->> libecore, libedje, libeet, libfreet, libeina, libeio, libembryo, libthumb
->> and libevas. It also contains eldbus, ephysics, and escape, see [1].
-> [--SNIP--]
->> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
->> index d070131..7bd3820 100644
->> --- a/package/efl/libefl/libefl.mk
->> +++ b/package/efl/libefl/libefl.mk
->> @@ -18,6 +18,157 @@ LIBEFL_LICENSE_FILES = \
->>  	licenses/COPYING.LGPL \
->>  	licenses/COPYING.SMALL
->>  
->> +LIBEFL_INSTALL_STAGING = YES
->> +
->> +LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg lua udev \
->> +	util-linux zlib
->> +
->> +# regenerate the configure script:
->> +# https://phab.enlightenment.org/T2718
->> +LIBEFL_AUTORECONF = YES
->> +LIBEFL_GETTEXTIZE = YES
->> +
->> +# Configure options:
->> +# --disable-cxx-bindings: disable C++11 bindings.
->> +# --disable-fb: disable frame buffer support.
->> +# --disable-harfbuzz: disable harfbuzz support.
->> +# --disable-image-loader-jp2k: disable JPEG 2000 support.
->> +# --disable-image-loader-webp: disable webp support.
->> +# --disable-sdl: disable sdl2 support.
->> +# --disable-systemd: disable systemd support.
->> +# --disable-wayland: disable wayland support.
->> +# --disable-xinput22: disable X11 XInput v2.2+ support.
-> 
-> I just nmoticed that this option is not present in the list, below.
-> I guess it is in fact not needed since you specify --with-x11=none.
+On Tue, Dec 8, 2015 at 9:08 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Samuel, All,
+>
+> On 2015-12-02 22:48 +0100, Samuel Martin spake thusly:
+>> This patch, backported from upstream, prevent the build from failing due
+>> to:
+>>
+>>   [...]
+>>     CCLD     lttng-consumerd
+>>   ../../../src/common/.libs/libcommon.a(runas.o): In function `run_as_worker':
+>>   /tmp/br/build/lttng-tools-2.7.0/src/common/runas.c:325: undefined reference to `pthread_setname_np'
+>>   collect2: error: ld returned 1 exit status
+>>   Makefile:475: recipe for target 'lttng-consumerd' failed
+>>   [...]
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Same comment as for patch 2:
+>
+>     https://git.lttng.org/?p=lttng-tools.git;a=commit;h=b8090274814e5f6a22cff0dd656e14769cc7a7df
 
-Humm, yes. I'll remove it.
+Thanks, I'll respin the series with the updates soon.
 
-> 
->> +# --enable-lua-old: disable Elua and remove luajit dependency.
->> +# --with-opengl=none: disable opengl support.
->> +# --with-x11=none: remove dependency on X.org.
->> +LIBEFL_CONF_OPTS = \
->> +	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
->> +	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
->> +	--disable-cxx-bindings \
->> +	--disable-fb \
->> +	--disable-harfbuzz \
->> +	--disable-image-loader-jp2k \
->> +	--disable-image-loader-webp \
->> +	--disable-sdl \
->> +	--disable-systemd \
->> +	--disable-wayland \
->> +	--enable-lua-old \
->> +	--with-opengl=none \
->> +	--with-x11=none
-> [--SNIP--]
-> 
-> However, I guess your patch that adds support for X11 will have to
-> introduce that --disable-xinput22 until the patch that actually enables
-> that support.
+Regards,
 
-Ok I'll do it.
-
-Best regards,
-Romain
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+-- 
+Samuel
