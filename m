@@ -1,75 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Dec 2015 21:51:58 +0100
-Subject: [Buildroot] [git commit] package/xfsprogs: disable crc32selftest
-Message-ID: <20151208210009.6501B819E1@busybox.osuosl.org>
+Date: Tue, 8 Dec 2015 21:52:16 +0100
+Subject: [Buildroot] [git commit] p11-kit: bump to version 0.23.2
+Message-ID: <20151208210009.6D72181DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dfe6005daa4a8abef44d8f1b76cfc64044e4ac6e
+commit: http://git.buildroot.net/buildroot/commit/?id=fa99d9469beae6fef1c2e510f5cbd60d61c7b280
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xfsprogs generates a crc32 table, and wants to test it. So it builds a
-native crc32selftest binary. So far, so good; except the host may not
-have the required headers (uuid/uuid.h), and probably libs (like
-libuuid).
+0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch is upstream
+so drop it.
 
-And anyway, testing the table on the host is flawed, as it does not mean
-it would be correct on the target (due to differences in bitness,
-endianness, alignment...).
-
-So we just disable the crc32selftest for Buildroot.
-
-Fixes:
-    http://autobuild.buildroot.org/results/5d0/5d0ed24b4d368fed100bc3c4959520ebaa48e693/
-    http://autobuild.buildroot.org/results/aef/aef223ee2646599eaab7c82f63ff5f19569d69a5/
-    http://autobuild.buildroot.org/results/fb6/fb6679f3b1473169702c303ee5060abe7559b0b3/
-    ....
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xfsprogs/0002-no-crc32-checks.patch | 32 +++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ ...ansport.c-include-sys-select.h-for-fd_set.patch | 36 ----------------------
+ package/p11-kit/p11-kit.hash                       |  2 +-
+ package/p11-kit/p11-kit.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 38 deletions(-)
 
-diff --git a/package/xfsprogs/0002-no-crc32-checks.patch b/package/xfsprogs/0002-no-crc32-checks.patch
-new file mode 100644
-index 0000000..6f97092
---- /dev/null
-+++ b/package/xfsprogs/0002-no-crc32-checks.patch
-@@ -0,0 +1,32 @@
-+libxfs: do not try to run the crc32selftest
-+
-+Even though the crc32selftest is natively compiled (because it is to be
-+executed), it fails in cross-compilation as the host may lack the
-+required headers, like uuid/uuid.h (e.g. in a minimal environment).
-+
-+Moreover, running the crc32selftest natively is completely wrong,
-+because it passing on the host does not mean it would still pass n the
-+target (because endianness or bitness or alignment differences).
-+
-+So, just disable running the crc32selftest altogether.
-+
-+Note that there's a remaining bug-in-hiding, because the crc32 table
-+generator is natively built, but with the target CFLAGS.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN xfsprogs-4.3.0.orig/libxfs/Makefile xfsprogs-4.3.0/libxfs/Makefile
-+--- xfsprogs-4.3.0.orig/libxfs/Makefile	2015-09-22 03:42:41.000000000 +0200
-++++ xfsprogs-4.3.0/libxfs/Makefile	2015-12-07 18:45:27.190082913 +0100
-+@@ -105,9 +105,9 @@
-+ # don't try linking xfs_repair with a debug libxfs.
-+ DEBUG = -DNDEBUG
-+ 
-+-LDIRT = gen_crc32table crc32table.h crc32selftest
-++LDIRT = gen_crc32table crc32table.h
-+ 
-+-default: crc32selftest ltdepend $(LTLIBRARY)
-++default: ltdepend $(LTLIBRARY)
-+ 
-+ crc32table.h: gen_crc32table.c
-+ 	@echo "    [CC]     gen_crc32table"
+diff --git a/package/p11-kit/0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch b/package/p11-kit/0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch
+deleted file mode 100644
+index bff732c..0000000
+--- a/package/p11-kit/0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 1071268d06da269de56c895af940e6f15bcf79e7 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Wed, 2 Dec 2015 07:15:43 -0300
+-Subject: [PATCH] rpc-transport.c: include sys/select.h for fd_set
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-fd_set and friends, according to POSIX.1-2001, needs sys/select.h, so
+-include it otherwise the build fails for uClibc:
+-
+-p11-kit/rpc-transport.c: In function ???rpc_socket_read???:
+-p11-kit/rpc-transport.c:350:2: error: unknown type name ???fd_set???
+-p11-kit/rpc-transport.c:416:4: warning: implicit declaration of function
+-???FD_ZERO??? [-Wimplicit-function-declaration]
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- p11-kit/rpc-transport.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/p11-kit/rpc-transport.c b/p11-kit/rpc-transport.c
+-index 7176b39..5251e11 100644
+---- a/p11-kit/rpc-transport.c
+-+++ b/p11-kit/rpc-transport.c
+-@@ -55,6 +55,7 @@
+- #include <string.h>
+- 
+- #ifdef OS_UNIX
+-+#include <sys/select.h>
+- #include <sys/socket.h>
+- #include <sys/wait.h>
+- #include <sys/un.h>
+--- 
+-2.4.10
+-
+diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
+index d43a8fd..c0182eb 100644
+--- a/package/p11-kit/p11-kit.hash
++++ b/package/p11-kit/p11-kit.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e57371669f3b157141b86c429bd9c29741994b2f5ff115fcb8a03e751b0f6ac4	p11-kit-0.23.1.tar.gz
++sha256	ba726ea8303c97467a33fca50ee79b7b35212964be808ecf9b145e9042fdfaf0	p11-kit-0.23.2.tar.gz
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index 03d26e2..e856cac 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-P11_KIT_VERSION = 0.23.1
++P11_KIT_VERSION = 0.23.2
+ P11_KIT_SITE = http://p11-glue.freedesktop.org/releases
+ P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
+ P11_KIT_INSTALL_STAGING = YES
