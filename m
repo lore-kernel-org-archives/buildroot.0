@@ -1,41 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Dec 2015 21:54:42 +0100
-Subject: [Buildroot] [git commit] pixman: disable vmx for powerpc CS
-	toolchains
-Message-ID: <20151208210009.6E5D981DCC@busybox.osuosl.org>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Tue, 8 Dec 2015 22:02:28 +0100
+Subject: [Buildroot] [PATCH 1/2] wine: Make the sane-config patch
+ obsolete by using configure flags
+In-Reply-To: <20151208094815.7200558c@free-electrons.com>
+References: <5665EE7A.1080409@dawncrow.de>
+ <20151208094815.7200558c@free-electrons.com>
+Message-ID: <56674564.70707@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=50b02a639558b5319e88d2c3ce66e3950352d694
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am 08.12.2015 um 09:48 schrieb Thomas Petazzoni:
+> Andr?,
+> 
+> On Mon, 7 Dec 2015 21:39:22 +0100, Andr? Hentschel wrote:
+>> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+>> ---
+>>  package/wine/0003-sane-config-fix.patch | 21 ---------------------
+>>  package/wine/wine.mk                    |  3 ++-
+>>  2 files changed, 2 insertions(+), 22 deletions(-)
+>>  delete mode 100644 package/wine/0003-sane-config-fix.patch
+> 
+> IMO, this is not the good choice. The patch should be kept and
+> submitted upstream. There is absolutely no reason for upstream to
+> reject the patch: it simply *adds* the possibility of passing a custom
+> sane-config path through SANE_CONFIG, without changing *anything* to
+> the existing behavior if SANE_CONFIG is not used.
+> 
 
-The ppc CS toolchains have flaky VMX (AKA altivec) implementation
-causing build failure. Disable it for these toolchains. Fixes:
-http://autobuild.buildroot.net/results/3b4/3b4cda40f074578f6b35b1fb381ba37b93174e86/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pixman/pixman.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 8281773..8845315 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -32,5 +32,10 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405),y)
- PIXMAN_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DPIXMAN_NO_TLS"
- endif
- 
-+# Altivec detection isn't reliable for CS toolchains
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103)$(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
-+PIXMAN_CONF_OPTS += --disable-vmx
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+Hi Thomas,
+rebase it, send it to wine-patches at winehq.org (maybe you need to register first, not sure), I'll also sign it off, but I totally doubt it gets in.
+One point might be that there's already a way with the variables I used in my patch or that your patch is not generic enough.
