@@ -1,46 +1,57 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 8 Dec 2015 23:26:01 +0100
-Subject: [Buildroot] [PATCH 3/4] package/lttng-tools: backport patch
- fixing pthread_setname_np failure
-In-Reply-To: <20151208200858.GR4188@free.fr>
-References: <1449092893-30664-1-git-send-email-s.martin49@gmail.com>
- <1449092893-30664-3-git-send-email-s.martin49@gmail.com>
- <20151208200858.GR4188@free.fr>
-Message-ID: <CAHXCMM+XLCRDXL=T3wbGgkEummVoyRD34W_gH_-_u-gzFu41eQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  8 Dec 2015 23:27:53 +0100
+Subject: [Buildroot] [PATCH 0/2 v2] package/ustr: bump and cleanup (branch
+	yem/ustr)
+Message-ID: <cover.1449613577.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello All!
 
-On Tue, Dec 8, 2015 at 9:08 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Samuel, All,
->
-> On 2015-12-02 22:48 +0100, Samuel Martin spake thusly:
->> This patch, backported from upstream, prevent the build from failing due
->> to:
->>
->>   [...]
->>     CCLD     lttng-consumerd
->>   ../../../src/common/.libs/libcommon.a(runas.o): In function `run_as_worker':
->>   /tmp/br/build/lttng-tools-2.7.0/src/common/runas.c:325: undefined reference to `pthread_setname_np'
->>   collect2: error: ld returned 1 exit status
->>   Makefile:475: recipe for target 'lttng-consumerd' failed
->>   [...]
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Same comment as for patch 2:
->
->     https://git.lttng.org/?p=lttng-tools.git;a=commit;h=b8090274814e5f6a22cff0dd656e14769cc7a7df
+This series updates and cleans up ustr, and fixes numerous build
+failures in libsemanage (which uses ustr).
 
-Thanks, I'll respin the series with the updates soon.
+
+Changes v1 -> v2:
+  - better document the change in apply-patch  (Yann)
+  - build everything at build time, not install time  (Yann)
+
 
 Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 50b02a639558b5319e88d2c3ce66e3950352d694:
+
+  pixman: disable vmx for powerpc CS toolchains (2015-12-08 21:54:42 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/ustr
+
+for you to fetch changes up to 6bbfb3b8cb1249d1243175c8d0c46e9206621712:
+
+  ustr: use Debian patches to compile w/ GCC 5.x (2015-12-08 23:02:51 +0100)
+
+----------------------------------------------------------------
+Ryan Barnett (2):
+      apply-patches: only use first field of line for series file
+      ustr: use Debian patches to compile w/ GCC 5.x
+
+ .../ustr/0001-cross-compile-modifications.patch    | 144 ---------------------
+ package/ustr/ustr.hash                             |   2 +
+ package/ustr/ustr.mk                               |  56 ++------
+ support/scripts/apply-patches.sh                   |   8 +-
+ 4 files changed, 22 insertions(+), 188 deletions(-)
+ delete mode 100644 package/ustr/0001-cross-compile-modifications.patch
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
