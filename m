@@ -1,51 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 08 Dec 2015 08:55:26 +0100
-Subject: [Buildroot] [psa] various server software upgrades
-In-Reply-To: <20151208001743.GJ11489@vapier.lan> (Mike Frysinger's message of
- "Mon, 7 Dec 2015 19:17:43 -0500")
-References: <20151202073542.GY23754@vapier.lan>
- <20151206214229.GE4023@free.fr> <87610bs0dv.fsf@dell.be.48ers.dk>
- <20151207015525.GH23754@vapier.lan> <87bna2rckx.fsf@dell.be.48ers.dk>
- <20151207185106.GF11489@vapier.lan> <87r3iyngfx.fsf@dell.be.48ers.dk>
- <20151207215548.GB24430@vapier.lan> <87egexoqf4.fsf@dell.be.48ers.dk>
- <20151208001743.GJ11489@vapier.lan>
-Message-ID: <871taxnzm9.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Dec 2015 09:48:15 +0100
+Subject: [Buildroot] [PATCH 1/2] wine: Make the sane-config patch
+ obsolete by using configure flags
+In-Reply-To: <5665EE7A.1080409@dawncrow.de>
+References: <5665EE7A.1080409@dawncrow.de>
+Message-ID: <20151208094815.7200558c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+Andr?,
 
- > On 07 Dec 2015 23:16, Peter Korsgaard wrote:
- >> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
- >> 
- >> >> You cannot visit lists.busybox.net right now because the website uses
- >> >> HSTS. Network errors and attacks are usually temporary, so this page
- >> >> will probably work later.
- >> >> 
- >> >> NET::ERR_CERT_COMMON_NAME_INVALID
- >> >> 
- >> >> With no option of continuing.
- >> 
- >> > mine has an "Advanced" link after that which includes "Proceed".  i went
- >> > to bugs.busybox.net first, then to lists.busybox.net, and it worked fine.
- >> 
- >> I can do that as well in iceweasel, but not in Chromium :/
+On Mon, 7 Dec 2015 21:39:22 +0100, Andr? Hentschel wrote:
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  package/wine/0003-sane-config-fix.patch | 21 ---------------------
+>  package/wine/wine.mk                    |  3 ++-
+>  2 files changed, 2 insertions(+), 22 deletions(-)
+>  delete mode 100644 package/wine/0003-sane-config-fix.patch
 
- > i've disabled HSTS on subdomains for busybox.net for now and started a
- > thread with the OSU guys about getting lists.busybox.net fixed finally.
+IMO, this is not the good choice. The patch should be kept and
+submitted upstream. There is absolutely no reason for upstream to
+reject the patch: it simply *adds* the possibility of passing a custom
+sane-config path through SANE_CONFIG, without changing *anything* to
+the existing behavior if SANE_CONFIG is not used.
 
-Thanks! I saw you only removed it for the main busybox.net, and not from
-E.G. git.busybox.net:
+Best regards,
 
-curl -s -I --insecure https://busybox.net | grep Strict
-Strict-Transport-Security: max-age=63072000
-
-But ok, I don't think we will be adding subdomains under git, so it
-doesn't really matter.
-
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
