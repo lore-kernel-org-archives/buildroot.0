@@ -1,86 +1,144 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed,  9 Dec 2015 00:02:17 +0100
-Subject: [Buildroot] [PATCH v8 14/33] package/efl/libefl: enable xinput2.2
+Date: Wed,  9 Dec 2015 00:02:23 +0100
+Subject: [Buildroot] [PATCH v8 20/33] package/enlightenment: bump to version
+	0.19.12
 In-Reply-To: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
 References: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449615756-19115-15-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449615756-19115-21-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-X11 XInput v2.2+ support is one of the recommended
-feature for the efl libraries:
-https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n490
+Use the newly added libefl package wich provide a new version
+of efl libraries.
+This new version needs libelementary dependency.
+
+Update upstream url, add hash file and use xz archive.
+
+Select png and jpeg image loader since enlightenment_start
+fail at runtime if png and jpeg image loader are not
+available in elf libraries.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v8: Remove --disable-xinput22 added by the patch adding X11 support
-    (Yann E.Morin)
-v6: add missing dependency on xlib_libXi (Yann E.Morin)
-v4: rename to libefl
+v6: disable systemd and linux-pam explicitely since it's auto
+    detected. (A patch adding their support can be added latter)
+v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
+    remove comment on dependencies
+v4: update Config.in to use libefl
     improve commit log
-v3: new patch
+    keep the dependency on threads
+v3: bymp to 0.19.12
+    remove trailing slash (Vicente Bergas)
+v2: bump to 0.19.9
+    remove glibc only dependency
 ---
- package/efl/libefl/Config.in | 1 +
- package/efl/libefl/libefl.mk | 7 ++++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/enlightenment/Config.in          | 23 +++++++----------------
+ package/enlightenment/enlightenment.hash |  2 ++
+ package/enlightenment/enlightenment.mk   | 26 +++++++++++---------------
+ 3 files changed, 20 insertions(+), 31 deletions(-)
+ create mode 100644 package/enlightenment/enlightenment.hash
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index b0cb675..98c369c 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -97,6 +97,7 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXI
- 	select BR2_PACKAGE_XLIB_LIBXINERAMA
- 	select BR2_PACKAGE_XLIB_LIBXP
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index acc4c06..134531c 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -33,7 +33,6 @@ LIBEFL_GETTEXTIZE = YES
- # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
--# --disable-xinput22: disable X11 XInput v2.2+ support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
- # --with-opengl=none: disable opengl support.
- # --with-x11=none: remove dependency on X.org.
-@@ -43,7 +42,6 @@ LIBEFL_CONF_OPTS = \
- 	--disable-cxx-bindings \
- 	--disable-sdl \
- 	--disable-systemd \
--	--disable-xinput22 \
- 	--enable-lua-old
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 9dad571..1a39ac4 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -8,26 +8,17 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# libedbus -> dbus, efl libraries
+ 	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_EFL
+ 	depends on BR2_PACKAGE_XORG7
+ 	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
+ 	depends on BR2_ARCH_HAS_ATOMICS
+-	select BR2_PACKAGE_EFL
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBECORE_X
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBEVAS_JPEG
+-	select BR2_PACKAGE_LIBEVAS_PNG
+-	select BR2_PACKAGE_LIBEVAS_EET
+-	select BR2_PACKAGE_LIBECORE_EVAS
+-	select BR2_PACKAGE_LIBEDJE
+-	select BR2_PACKAGE_LIBEFREET
+-	select BR2_PACKAGE_LIBEDBUS
+-	select BR2_PACKAGE_LIBEIO
+-	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
++	select BR2_PACKAGE_LIBEFL_X
++	select BR2_PACKAGE_LIBEFL_JPEG # needed at runtime by enlightenment_start
++	select BR2_PACKAGE_LIBEFL_PNG # needed at runtime by enlightenment_start
++	select BR2_PACKAGE_LIBELEMENTARY
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
++	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+ 	help
+ 	  Enlightenment, also known simply as E, is a stacking window
+ 	  manager for the X Window System which can be used alone or
+@@ -38,6 +29,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	  http://www.enlightenment.org/
  
- # Disable untested configuration warning.
-@@ -147,11 +145,13 @@ LIBEFL_CONF_OPTS += --disable-fb
- endif
+ comment "enlightenment needs a toolchain w/ wchar, C++, threads"
+-	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
++	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_ARCH_HAS_ATOMICS
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+new file mode 100644
+index 0000000..c9b1284
+--- /dev/null
++++ b/package/enlightenment/enlightenment.hash
+@@ -0,0 +1,2 @@
++# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
++sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index ddebe06..f2e0bc3 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,30 +4,26 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
-+# --enable-xinput22 is recommended
- LIBEFL_CONF_OPTS += \
- 	--with-x11=xlib \
- 	--with-x=$(STAGING_DIR) \
- 	--x-includes=$(STAGING_DIR)/usr/include \
--	--x-libraries=$(STAGING_DIR)/usr/lib
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	--enable-xinput22
+-ENLIGHTENMENT_VERSION = 0.17.6
+-ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
++ENLIGHTENMENT_VERSION = 0.19.12
++ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
++ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2c
+ ENLIGHTENMENT_LICENSE_FILES = COPYING
  
- LIBEFL_DEPENDENCIES += \
- 	xlib_libX11 \
-@@ -159,6 +159,7 @@ LIBEFL_DEPENDENCIES += \
- 	xlib_libXcursor \
- 	xlib_libXdamage \
- 	xlib_libXext \
-+	xlib_libXi \
- 	xlib_libXinerama \
- 	xlib_libXrandr \
- 	xlib_libXrender \
+-ENLIGHTENMENT_DEPENDENCIES = 	\
+-	host-pkgconf 		\
+-	libecore 		\
+-	libeet 			\
+-	libeina 		\
+-	libevas 		\
++ENLIGHTENMENT_DEPENDENCIES = \
++	host-pkgconf \
++	host-libefl \
++	libefl \
++	libelementary \
+ 	libevas-generic-loaders \
+-	libedje 		\
+-	libefreet 		\
+-	libedbus 		\
+-	libeio 			\
+-	host-libedje 		\
+-	host-libeet		\
+ 	xcb-util-keysyms
+ 
+ ENLIGHTENMENT_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+-	--disable-rpath
++	--disable-pam \
++	--disable-rpath \
++	--disable-systemd
+ 
+ # uClibc has an old incomplete sys/ptrace.h for powerpc & sparc
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
 -- 
 2.4.3
