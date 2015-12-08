@@ -1,125 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Dec 2015 19:02:01 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-12-07
-In-Reply-To: <20151208073019.9BDA510542E@stock.ovh.net>
-References: <20151208073019.9BDA510542E@stock.ovh.net>
-Message-ID: <20151208180201.GP4188@free.fr>
+From: Paul Enman <paul.enman@gmail.com>
+Date: Tue, 8 Dec 2015 13:34:30 -0600
+Subject: [Buildroot] [PATCH 1/1] [1/1] package/uclibc: Enable compile in
+ thumb mode when selected
+In-Reply-To: <5662FDE3.6070809@mind.be>
+References: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
+ <5662FDE3.6070809@mind.be>
+Message-ID: <CAEp4hJ1sT=Kp4_a4Tn862_mvcECYrBuQGCRUXOZUfO98orqVmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, All,
+Hi Arnout,
+Thanks, I checked the old commit and tested with both uClibc-0.9.33 and
+uClibc-ng and older gcc; I was suprised to discover updated gcc versions
+resolve the issue (uclibc/arm: doesn't build in thumb(1) mode with threads).
 
-Here is a quick summarry of the most important failures, to help
-concentrate on the patches already submitted to fix them...
+With this existing (v1) patch, for example:
+Config: arm926t, thumb1; builds only with gcc-4.9 or better
+Config: cortex-a5, thumb2; builds with all configuration options gcc-4.7
+through gcc-5.x
+Config: cortex-m3, thumb1 or thumb2; builds with all configuration options
+gcc-4.7 though gcc-5.x
 
-On 2015-12-08 08:30 +0100, Thomas Petazzoni spake thusly:
-> Build statistics for 2015-12-07
->                  libeet-1.7.10 | 16
+Since uclibc has some unresolved cases building with older gcc using
+thumb1, I'll limit the scope and prepare a v2 patch that will pass the
+thumb config option to uclibc when using thumb2 instruction set and not
+interfere with the existing thumb1 workaround that relies on interworking
+between arm and thumb instructions.
 
-Will be fixed when the EFL series by Romain is merged (libeet no longer
-exists in recent EFL). I've done the review of the series, still a few
-minor comments, but it is now in a vey good shape! :-)
+On Sat, Dec 5, 2015 at 9:08 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
 
->              lttng-tools-2.7.0 | 15
-
-Supposedly fixed with the series from Samuel:
-    https://patchwork.ozlabs.org/patch/551787/  (removes faulty patch)
-    https://patchwork.ozlabs.org/patch/551789/  (static build failures)
-    https://patchwork.ozlabs.org/patch/551790/  (ditto)
-    https://patchwork.ozlabs.org/patch/551788/  (backport from upstream)
-
->                      crda-3.18 | 13
-
-These are already fixed (or better, worked around in host-python-m2crypto).
-A proper fix would be to kill the weirdness of the m2crypto buildsystem,
-but that will have to be done upstream. Thomas already reported the
-issue:
-    https://gitlab.com/m2crypto/m2crypto/issues/89
-
-(current master of m2crypto is still broken).
-
->                  libass-0.13.0 | 11
-
-A patch has been proposed:
-    https://patchwork.ozlabs.org/patch/553448/
-
->                 xfsprogs-4.3.0 | 11
-
-A patch has been submitted:
-    https://patchwork.ozlabs.org/patch/553503/
-
->                     gcr-3.18.0 | 8 
-
-Already fixed.
-
->                  pixman-0.33.4 | 7 
-
-A patch has been submitted:
-    https://patchwork.ozlabs.org/patch/553414/
-
->                      flite-1.4 | 7 
-
-Already fixed.
-
->             libsemanage-2.1.10 | 4 
-
-Patches to bumpt ustr (the culprit) have been submited:
-    http://patchwork.ozlabs.org/patch/547117/
-    http://patchwork.ozlabs.org/patch/547118/
-
-A patch to fix the issue with the current ustr version is also
-available:
-    https://patchwork.ozlabs.org/patch/552445/
-
->               alsa-utils-1.1.0 | 4 
-
-Patch pending (to backport upstream changes):
-    https://patchwork.ozlabs.org/patch/553430/
-
->                arptables-0.0.4 | 4 
-
-Patch available, but not sure I understand it fully:
-    https://patchwork.ozlabs.org/patch/551152/
-
->                   ffmpeg-2.8.3 | 4 
-
-Issue seems to be that fontconfig is not found. Real issue if ffmpeg
-doing complete crazy and stupid auto-detection code that fails miserably
-on MIPS. Vicente has already submitted patches upstream, some of which
-ahve already been applied (can we get a backport? ;-) ) and the others
-still being under review (with positive feedback).
-
-Vicente is handling this. :-)
-
-
-I'll try to review (and possibly test) all those pending patches
-tonight.
-
-
-That's all for the 4-or-more build failures, but there is a long-trail
-of other build failures, especially single-failure build issues.
-
-Note that we still have build failures early in the alphabet, so it
-could well hide other build failures in later packages. We won't see
-those later build issues until we fix the early ones.
-
-However, we're getting back into shape, with build sucesses now passing
-over the build failures by a good margin. Let's continue the good job,
-and try to reach the 10% mark from the good ol' days. Yes, we can! ;-)
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>  Hi penman,
+>
+> On 04-12-15 23:56, penman wrote:
+> > Signed-off-by: penman <paul.enman@gmail.com>
+>
+>  Please use your full real name in the Sob (I guess that's Paul Enman).
+>
+> > ---
+> >  package/uclibc/uclibc.mk | 13 ++++++++++---
+> >  1 file changed, 10 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> > index c62a40f..4f5c605 100644
+> > --- a/package/uclibc/uclibc.mk
+> > +++ b/package/uclibc/uclibc.mk
+> > @@ -86,9 +86,15 @@ define UCLIBC_ARM_ABI_CONFIG
+> >       $(call KCONFIG_ENABLE_OPT,CONFIG_ARM_EABI,$(@D)/.config)
+> >  endef
+> >
+> > -# Thumb build is broken with threads, build in ARM mode
+>
+>  Can you explain what changed in the last two years since this fix was
+> introduced in commit d244782ca? It might have been fixed in -ng, but
+> 0.9.33.2
+> hasn't changed in a very long time so I guess it's still broken there.
+> You'll
+> need to add a condition on -NG.
+>
+>  Or it could be gcc that has been fixed, but in that case please verify
+> that it
+> works with gcc-4.7
+>
+>  Regards,
+>  Arnout
+>
+> > -ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+> > -UCLIBC_EXTRA_CFLAGS += -marm
+> > +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),y)
+> > +define UCLIBC_ARM_THUMB_CONFIG
+> > +     $(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
+> > +     $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
+> > +endef
+> > +else
+> > +define UCLIBC_ARM_THUMB_CONFIG
+> > +     $(call KCONFIG_DISABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
+> > +endef
+> >  endif
+> >
+> >  ifeq ($(BR2_UCLIBC_ARM_BX),y)
+> > @@ -373,6 +379,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+> >       $(UCLIBC_ARC_TYPE_CONFIG)
+> >       $(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+> >       $(UCLIBC_ARM_ABI_CONFIG)
+> > +     $(UCLIBC_ARM_THUMB_CONFIG)
+> >       $(UCLIBC_ARM_BX_CONFIG)
+> >       $(UCLIBC_MIPS_ABI_CONFIG)
+> >       $(UCLIBC_MIPS_ISA_CONFIG)
+> >
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151208/b7827b23/attachment.html>
