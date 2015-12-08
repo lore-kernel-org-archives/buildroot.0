@@ -1,80 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Dec 2015 18:16:27 +0100
-Subject: [Buildroot] [PATCH] libass: allow compilation without a system
- font provider
-In-Reply-To: <1449505148-9046-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1449505148-9046-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151208171627.GO4188@free.fr>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Tue, 8 Dec 2015 12:27:52 -0500
+Subject: [Buildroot] [psa] various server software upgrades
+In-Reply-To: <87poygnb6l.fsf@dell.be.48ers.dk>
+References: <20151207185106.GF11489@vapier.lan>
+ <87r3iyngfx.fsf@dell.be.48ers.dk>
+ <20151207215548.GB24430@vapier.lan>
+ <87egexoqf4.fsf@dell.be.48ers.dk>
+ <20151207225408.GC24430@vapier.lan>
+ <20151207230201.GG14874@free.fr>
+ <20151207232256.GD24430@vapier.lan>
+ <876109nzql.fsf@dell.be.48ers.dk>
+ <20151208164023.GL11489@vapier.lan>
+ <87poygnb6l.fsf@dell.be.48ers.dk>
+Message-ID: <20151208172752.GM11489@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, All,
-
-On 2015-12-07 16:19 +0000, Vicente Olivert Riera spake thusly:
-> If no system font provider is provided, then libass will fail to build
-> because it requires one by default. The error looks like this:
+On 08 Dec 2015 17:43, Peter Korsgaard wrote:
+> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 > 
-> configure: error: Either DirectWrite (on Windows), CoreText (on OSX), or
-> Fontconfig(Linux, other) is required. If you really want to compile
-> withouta system font provider, add
-> --disable-require-system-font-provider
+>  >> I don't believe we will ever bootstrap wget, but we might add
+>  >> --no-check-certificates in the future (with the download hashes,
+>  >> checking certificates doesn't add much).
 > 
-> But, as the error messages says, we can allow the compilation without a
-> system font provider if we use the above configure option, so let's do
-> it.
+>  > except there is no checking on the initial download.
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/3a4/3a4c07a0a54d5497fa8a4be2191856e286729637/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/libass/libass.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-> index 83939e2..f1ec503 100644
-> --- a/package/libass/libass.mk
-> +++ b/package/libass/libass.mk
-> @@ -24,6 +24,9 @@ ifeq ($(BR2_i386)$(BR2_x86_64),y)
->  LIBASS_DEPENDENCIES += host-yasm
->  endif
->  
-> +# Allow compilation without a system font provider
-> +LIBASS_CONF_OPTS = --disable-require-system-font-provider
+> With initial download I take it you mean Buildroot, right? That we have
+> alternatives for (gpg signatures, git clones, download though browser) -
+> But sources.buildroot.{net,org} is almost exclusively used by wget, so I
+> prefer to not break it for non-sni capable versions.
 
-It is my understanding that fontconfig *is* a "system font provider", so
-maybe that should go n the else-case for fontconfig, below?
-
->  ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
->  LIBASS_DEPENDENCIES += fontconfig
->  LIBASS_CONF_OPTS += --enable-fontconfig
-Here:
-
-    else
-    LIBASS_CONF_OPTS += \
-        --disable-fontconfig \
-        --disable-require-system-font-provider
-    endif
-
-Regards,
-Yann E. MORIN.
-
-> -- 
-> 2.4.10
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+realistically, how many people do you think actually leverage gpg
+signatures ?  having transparent https is better imo than people
+running old insecure setups and just telling them to use the one
+flag when downloading the initial file.  if they're running wget,
+then they're probably reading some doc right ?  just put a foot
+note in there mentioning the flag and old clients.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151208/8af0243f/attachment.asc>
