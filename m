@@ -1,90 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Dec 2015 21:55:14 +0100
-Subject: [Buildroot] [PATCH v2 1/2] apply-patches: only use first field
- of line for series file
-In-Reply-To: <1448070305-10768-1-git-send-email-ryanbarnett3@gmail.com>
-References: <1448070305-10768-1-git-send-email-ryanbarnett3@gmail.com>
-Message-ID: <20151208205514.GV4188@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 8 Dec 2015 21:59:03 +0100
+Subject: [Buildroot] [PATCH v1] read-edid: bump version to 3.0.2
+In-Reply-To: <566700EC.4070000@imgtec.com>
+References: <1449520389-23420-1-git-send-email-ps.report@gmx.net>
+ <566700EC.4070000@imgtec.com>
+Message-ID: <20151208215903.700a6353@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+Hello Vincent,
 
-On 2015-11-20 19:45 -0600, Ryan Barnett spake thusly:
-> A series file for quilt has a valid syntax of:
+On Tue, 8 Dec 2015 16:10:20 +0000, Vicente Olivert Riera <Vincent.Riera@imgtec.com> wrote:
+
+> Dear Peter Seiderer,
 > 
->   fixes/autoconf.diff -p1
->   fixes/doc-html-local-css.diff -p1
->   fixes/gnu-inline.diff -p1
+> On 07/12/15 20:33, Peter Seiderer wrote:
+> > - update hash
+> > - change from autotools to cmake package
+> > - update license info
+> > - enable get-edid command (i2c build)
+> > - add patch fixing install error because of missing file COPYING
 > 
-> However, with the current way that a series file is handled, it will
-> error out because the -p1 is tried as a file. This is because in the
-> for loop that iterates the files, we only look for invalid lines. Then
-> each line is used within a bash for loop which uses spaces a
-> delimiter. In order to fix this, we should only use the string that
-> comes before a space in the series file.
+> Out of curiosity, have you reported that problem upstream? I think it
+> always good to know the upstream status of the patches we add in Buildroot.
 > 
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> CC: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  support/scripts/apply-patches.sh | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+
+O.k, done now...
+
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > 
-> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> index 2edf054..6525f94 100755
-> --- a/support/scripts/apply-patches.sh
-> +++ b/support/scripts/apply-patches.sh
-> @@ -115,7 +115,10 @@ function scan_patchdir {
->      # If there is a series file, use it instead of using ls sort order
->      # to apply patches. Skip line starting with a dash.
->      if [ -e "${path}/series" ] ; then
-> -        for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
-> +        # Some series files for quilt contain a '-p1' at the end, handle this
-> +        # by only using the first word from series file
+> Build test for MIPS architecture:
+> 
+> $ grep -E ^READ_EDID_VERSION package/read-edid/read-edid.mk
+> READ_EDID_VERSION = 3.0.2
+> 
+> $ file output/target/usr/bin/get-edid
+> output/target/usr/bin/get-edid: ELF 32-bit LSB executable, MIPS, MIPS32
+> rel2 version 1, dynamically linked, interpreter /lib/ld.so.1, for
+> GNU/Linux 2.6.32, not stripped
+> 
 
-Wrong. The format is not -p1, but -pN where N is an integer greater than
-or equal to 0. Some quilt series (in some Debian packages or in some
-Gentoo packages) has -p0 or -p1 or -p2 ; I even saw -p4 once.
-
-So, simply ditching the last field in incorrect.
-
-However, since we only have one packge that has the -pN field, and all
-of them are -p1, we don't have a test-case against a generic -pN
-handling. We can deal with that when/if the issue is raised.
-
-Still, I'd prefer we have a little comment stating that we explicitly do
-not deal with the genericc -pN format, and just assume -p1, whether that
-field is present or missing, something like so maybe:
-
-    # The format of a series file accepts a second field that is
-    # used to specify the number of directory components to strip
-    # when applying the patch, in the form -pN (N an integer >= 0)
-    # We assume this field to always be -p1 wheter it is present or
-    # missing.
+Thanks for testing...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> +        series_patches="`grep -Ev "^#" ${path}/series | cut -d ' ' -f1 2> /dev/null`"
-> +        for i in $series_patches; do
->              apply_patch "$path" "$i" series
->          done
->      else
-> -- 
-> 1.9.1
+> Regards,
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Vincent.
