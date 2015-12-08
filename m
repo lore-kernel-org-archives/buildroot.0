@@ -1,131 +1,77 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  9 Dec 2015 00:11:14 +0100
-Subject: [Buildroot] [PATCH v2 4/4] package/lttng-tools: fix static build
-In-Reply-To: <1449616274-10251-1-git-send-email-s.martin49@gmail.com>
-References: <1449616274-10251-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1449616274-10251-4-git-send-email-s.martin49@gmail.com>
+From: Trent Piepho <tpiepho@kymetacorp.com>
+Date: Tue, 8 Dec 2015 23:27:28 +0000
+Subject: [Buildroot] [PATCH] gptfdisk: Add host package
+Message-ID: <1449617254.26955.31.camel@rtred1test09.kymeta.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some unit tests depend on objects from src/common/.
-This patch makes sure to points to the location of the non-PIC object files.
-Otherwise, in case of static only build, the PIC object are not built, so
-the link will fail.
+This tool is useful for scripts that create flash images with
+multiple partitions.  The host-parted package can do this too, but is
+missing a number of features that the gptfdisk program has for dealing
+with GPT.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The interactive gdisk and curses based sgdisk aren't built.  Just the
+scriptable tool sgdisk.  The target package allows configuring which
+tools are built, but this seem unnecessarily complex for the host
+package.
 
+Signed-off-by: Trent Piepho <tpiepho@kymetacorp.com>
 ---
-changes v1->v2:
-- update ART tags
-- fetched merged patch from upstream, and add the patch link
----
- ...0003-tests-unit-fix-object-files-location.patch | 94 ++++++++++++++++++++++
- 1 file changed, 94 insertions(+)
- create mode 100644 package/lttng-tools/0003-tests-unit-fix-object-files-location.patch
+ package/Config.in.host          |  1 +
+ package/gptfdisk/Config.in.host |  9 +++++++++
+ package/gptfdisk/gptfdisk.mk    | 11 +++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/gptfdisk/Config.in.host
 
-diff --git a/package/lttng-tools/0003-tests-unit-fix-object-files-location.patch b/package/lttng-tools/0003-tests-unit-fix-object-files-location.patch
+diff --git a/package/Config.in.host b/package/Config.in.host
+index ce1b6bc..d757316 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -12,6 +12,7 @@ menu "Host utilities"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+ 	source "package/genpart/Config.in.host"
++	source "package/gptfdisk/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
+ 	source "package/lpc3250loader/Config.in.host"
+diff --git a/package/gptfdisk/Config.in.host b/package/gptfdisk/Config.in.host
 new file mode 100644
-index 0000000..9bfee4b
+index 0000000..7bdfd00
 --- /dev/null
-+++ b/package/lttng-tools/0003-tests-unit-fix-object-files-location.patch
-@@ -0,0 +1,94 @@
-+Upstream status: Merged
-+Fetched from: https://git.lttng.org/?p=lttng-tools.git;a=commit;h=3622d7c3931685fab8d1b2e5585a369b78cefd12
-+From 3622d7c3931685fab8d1b2e5585a369b78cefd12 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Wed, 2 Dec 2015 00:36:45 +0100
-+Subject: [PATCH] tests/unit: fix object files' location
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/gptfdisk/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_GPTFDISK
++	bool "host gptfdisk"
++	help
++          GPT fdisk (consisting of the gdisk and sgdisk programs) is a
++          text-mode partitioning tool that works on Globally Unique Identifier
++          (GUID) Partition Table (GPT) disks, rather than on the more common
++          (through 2010) Master Boot Record (MBR) partition tables.
 +
-+Referring to *.o files under a .libs/ directory is not recommended
-+because this belongs to libtool's innards.
++          http://www.rodsbooks.com/gdisk/
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index abfddfb..089e862 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -46,4 +46,15 @@ define GPTFDISK_INSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
++HOST_GPTFDISK_DEPENDENCIES = host-util-linux host-popt
++define HOST_GPTFDISK_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
++		sgdisk
++endef
 +
-+Indeed, libtool decides to place the *.o files in an
-+implementation-specific location:
-+- PIC *.o files go into a .libs/ directory;
-+- non-PIC *.o files are generated along side to their corresponding
-+  source files.
++define HOST_GPTFDISK_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/sgdisk $(HOST_DIR)/usr/sbin/sgdisk
++endef
 +
-+Using PIC objects to build executable is legit, thought it may
-+introduce some minor overhead at runtime.
-+
-+However, hard-coding these PIC object files in the Makefile.am to build
-+executables breaks the build in case of static only build.
-+
-+In this case, no PIC object files is generated, so the linker will not
-+found some of the needed objects files.
-+
-+Changing these dependencies' path fixes the static build, keeping the
-+shared one ok, though the non-PIC object files are now always built.
-+
-+Fixes #983.
-+
-+Fix tested on git master and v2.6 with no change needed.
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+Signed-off-by: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
-+---
-+ tests/unit/Makefile.am | 18 +++++++++---------
-+ 1 file changed, 9 insertions(+), 9 deletions(-)
-+
-+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
-+index c0c9c45..7bfe65a 100644
-+--- a/tests/unit/Makefile.am
-++++ b/tests/unit/Makefile.am
-+@@ -34,9 +34,9 @@ SESSIONS=$(top_builddir)/src/bin/lttng-sessiond/session.o	\
-+ 	 $(top_builddir)/src/bin/lttng-sessiond/consumer.o \
-+ 	 $(top_builddir)/src/bin/lttng-sessiond/utils.o \
-+ 	 $(top_builddir)/src/bin/lttng-sessiond/snapshot.o \
-+-	 $(top_builddir)/src/common/.libs/uri.o \
-+-	 $(top_builddir)/src/common/.libs/utils.o \
-+-	 $(top_builddir)/src/common/.libs/error.o \
-++	 $(top_builddir)/src/common/uri.o \
-++	 $(top_builddir)/src/common/utils.o \
-++	 $(top_builddir)/src/common/error.o \
-+ 	 $(top_builddir)/src/common/health/libhealth.la \
-+ 	 $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
-+ 
-+@@ -60,8 +60,8 @@ UST_DATA_TRACE=$(top_builddir)/src/bin/lttng-sessiond/trace-ust.o \
-+ 		   $(top_builddir)/src/bin/lttng-sessiond/session.o \
-+ 		   $(top_builddir)/src/bin/lttng-sessiond/snapshot.o \
-+ 		   $(top_builddir)/src/bin/lttng-sessiond/agent.o \
-+-		   $(top_builddir)/src/common/.libs/uri.o \
-+-		   $(top_builddir)/src/common/.libs/utils.o \
-++		   $(top_builddir)/src/common/uri.o \
-++		   $(top_builddir)/src/common/utils.o \
-+ 		   $(top_builddir)/src/common/health/libhealth.la \
-+ 		   $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
-+ 
-+@@ -75,8 +75,8 @@ endif
-+ KERN_DATA_TRACE=$(top_builddir)/src/bin/lttng-sessiond/trace-kernel.o	\
-+ 		$(top_builddir)/src/bin/lttng-sessiond/consumer.o	\
-+ 		$(top_builddir)/src/bin/lttng-sessiond/utils.o \
-+-		$(top_builddir)/src/common/.libs/uri.o \
-+-		$(top_builddir)/src/common/.libs/utils.o \
-++		$(top_builddir)/src/common/uri.o \
-++		$(top_builddir)/src/common/utils.o \
-+ 		$(top_builddir)/src/common/health/libhealth.la \
-+ 		$(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
-+ 
-+@@ -86,8 +86,8 @@ test_kernel_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBRELAYD) $(LIBSESSIOND_COMM)
-+ test_kernel_data_LDADD += $(KERN_DATA_TRACE)
-+ 
-+ # utils suffix for unit test
-+-UTILS_SUFFIX=$(top_builddir)/src/common/.libs/utils.o \
-+-		$(top_builddir)/src/common/.libs/runas.o
-++UTILS_SUFFIX=$(top_builddir)/src/common/utils.o \
-++		$(top_builddir)/src/common/runas.o
-+ 
-+ # parse_size_suffix unit test
-+ test_utils_parse_size_suffix_SOURCES = test_utils_parse_size_suffix.c
-+-- 
-+2.6.3
-+
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-2.6.3
+1.8.3.1
