@@ -1,16 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 08 Dec 2015 08:52:50 +0100
+Date: Tue, 08 Dec 2015 08:55:26 +0100
 Subject: [Buildroot] [psa] various server software upgrades
-In-Reply-To: <20151207232256.GD24430@vapier.lan> (Mike Frysinger's message of
- "Mon, 7 Dec 2015 18:22:56 -0500")
-References: <20151206214229.GE4023@free.fr> <87610bs0dv.fsf@dell.be.48ers.dk>
- <20151207015525.GH23754@vapier.lan>
- <87bna2rckx.fsf@dell.be.48ers.dk>
+In-Reply-To: <20151208001743.GJ11489@vapier.lan> (Mike Frysinger's message of
+ "Mon, 7 Dec 2015 19:17:43 -0500")
+References: <20151202073542.GY23754@vapier.lan>
+ <20151206214229.GE4023@free.fr> <87610bs0dv.fsf@dell.be.48ers.dk>
+ <20151207015525.GH23754@vapier.lan> <87bna2rckx.fsf@dell.be.48ers.dk>
  <20151207185106.GF11489@vapier.lan> <87r3iyngfx.fsf@dell.be.48ers.dk>
  <20151207215548.GB24430@vapier.lan> <87egexoqf4.fsf@dell.be.48ers.dk>
- <20151207225408.GC24430@vapier.lan> <20151207230201.GG14874@free.fr>
- <20151207232256.GD24430@vapier.lan>
-Message-ID: <876109nzql.fsf@dell.be.48ers.dk>
+ <20151208001743.GJ11489@vapier.lan>
+Message-ID: <871taxnzm9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,18 +18,33 @@ To: buildroot@busybox.net
 
 >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-Hi,
+ > On 07 Dec 2015 23:16, Peter Korsgaard wrote:
+ >> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+ >> 
+ >> >> You cannot visit lists.busybox.net right now because the website uses
+ >> >> HSTS. Network errors and attacks are usually temporary, so this page
+ >> >> will probably work later.
+ >> >> 
+ >> >> NET::ERR_CERT_COMMON_NAME_INVALID
+ >> >> 
+ >> >> With no option of continuing.
+ >> 
+ >> > mine has an "Advanced" link after that which includes "Proceed".  i went
+ >> > to bugs.busybox.net first, then to lists.busybox.net, and it worked fine.
+ >> 
+ >> I can do that as well in iceweasel, but not in Chromium :/
 
- > and it doesn't address the other issue i raised: is buildroot going to
- > bootstrap wget and such to be sure SNI is supported ?  otherwise, even
- > if you get the buildroot source, sticking to http doesn't help when the
- > server transparently redirects you to https.  like getting busybox or
- > uclibc archives :).  or will buildroot detect wget is old and then use
- > --no-check-certificate everywhere ?
+ > i've disabled HSTS on subdomains for busybox.net for now and started a
+ > thread with the OSU guys about getting lists.busybox.net fixed finally.
 
-I don't believe we will ever bootstrap wget, but we might add
---no-check-certificates in the future (with the download hashes,
-checking certificates doesn't add much).
+Thanks! I saw you only removed it for the main busybox.net, and not from
+E.G. git.busybox.net:
+
+curl -s -I --insecure https://busybox.net | grep Strict
+Strict-Transport-Security: max-age=63072000
+
+But ok, I don't think we will be adding subdomains under git, so it
+doesn't really matter.
 
 -- 
 Venlig hilsen,
