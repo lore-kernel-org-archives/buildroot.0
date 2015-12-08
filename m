@@ -1,481 +1,100 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  9 Dec 2015 00:11:11 +0100
-Subject: [Buildroot] [PATCH v2 1/4] package/lttng-tools: remove no longer
-	needed patch
-Message-ID: <1449616274-10251-1-git-send-email-s.martin49@gmail.com>
+Date: Wed,  9 Dec 2015 00:11:13 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/lttng-tools: backport patch
+	fixing pthread_setname_np failure
+In-Reply-To: <1449616274-10251-1-git-send-email-s.martin49@gmail.com>
+References: <1449616274-10251-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1449616274-10251-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is already merged since the v2.7.0-rc1 version.
+This patch, backported from upstream, prevent the build from failing due
+to:
 
-Fixes:
-  http://autobuild.buildroot.net/results/0178e243eb27376d1507f1adde5d12bdbc0f352b
-  (and many others)
+  [...]
+    CCLD     lttng-consumerd
+  ../../../src/common/.libs/libcommon.a(runas.o): In function `run_as_worker':
+  /tmp/br/build/lttng-tools-2.7.0/src/common/runas.c:325: undefined reference to `pthread_setname_np'
+  collect2: error: ld returned 1 exit status
+  Makefile:475: recipe for target 'lttng-consumerd' failed
+  [...]
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 changes v1->v2:
-- update commit log with abo ref.
 - update ART tags
+- add patch link
 ---
- ...-and-Config-string-declarations-as-extern.patch | 443 ---------------------
- 1 file changed, 443 deletions(-)
- delete mode 100644 package/lttng-tools/0001-Fix-Mark-MI-and-Config-string-declarations-as-extern.patch
+ ...dependency-on-glibc-2.12-caused-by-pthrea.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/lttng-tools/0002-Fix-Remove-dependency-on-glibc-2.12-caused-by-pthrea.patch
 
-diff --git a/package/lttng-tools/0001-Fix-Mark-MI-and-Config-string-declarations-as-extern.patch b/package/lttng-tools/0001-Fix-Mark-MI-and-Config-string-declarations-as-extern.patch
-deleted file mode 100644
-index 3de69c2..0000000
---- a/package/lttng-tools/0001-Fix-Mark-MI-and-Config-string-declarations-as-extern.patch
-+++ /dev/null
-@@ -1,443 +0,0 @@
--From b369e4bfd0490739a66c65a56a30be8e1405e540 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-- <jeremie.galarneau@efficios.com>
--Date: Fri, 22 May 2015 12:53:30 -0400
--Subject: [PATCH] Fix: Mark MI and Config string declarations as extern
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--This fixes a build issue with GCC 5.1 which would complain about
--these symbols being defined multiple times.
--
--Signed-off-by: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
--[Thomas: backported on 2.6.0.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- src/common/config/config-session-abi.h | 166 +++++++++++++--------------
-- src/common/mi-lttng.h                  | 198 ++++++++++++++++-----------------
-- 2 files changed, 182 insertions(+), 182 deletions(-)
--
--diff --git a/src/common/config/config-session-abi.h b/src/common/config/config-session-abi.h
--index 1a1feec..e414a20 100644
----- a/src/common/config/config-session-abi.h
--+++ b/src/common/config/config-session-abi.h
--@@ -18,95 +18,95 @@
-- #ifndef CONFIG_SESSION_INTERNAL_H
-- #define CONFIG_SESSION_INTERNAL_H
-- 
---const char * const config_element_channel;
---const char * const config_element_channels;
---const char * const config_element_domain;
---const char * const config_element_domains;
---const char * const config_element_event;
---const char * const config_element_events;
---const char * const config_element_context;
---const char * const config_element_contexts;
---const char * const config_element_attributes;
---const char * const config_element_exclusion;
---const char * const config_element_exclusions;
---const char * const config_element_function_attributes;
---const char * const config_element_probe_attributes;
---const char * const config_element_symbol_name;
---const char * const config_element_address;
---const char * const config_element_offset;
---const char * const config_element_name;
---const char * const config_element_enabled;
---const char * const config_element_overwrite_mode;
---const char * const config_element_subbuf_size;
---const char * const config_element_num_subbuf;
---const char * const config_element_switch_timer_interval;
---const char * const config_element_read_timer_interval;
---const char * const config_element_output;
---const char * const config_element_output_type;
---const char * const config_element_tracefile_size;
---const char * const config_element_tracefile_count;
---const char * const config_element_live_timer_interval;
---const char * const config_element_type;
---const char * const config_element_buffer_type;
---const char * const config_element_session;
---const char * const config_element_sessions;
---const char * const config_element_perf;
---const char * const config_element_config;
---const char * const config_element_started;
---const char * const config_element_snapshot_mode;
---const char * const config_element_loglevel;
---const char * const config_element_loglevel_type;
---const char * const config_element_filter;
---const char * const config_element_snapshot_outputs;
---const char * const config_element_consumer_output;
---const char * const config_element_destination;
---const char * const config_element_path;
---const char * const config_element_net_output;
---const char * const config_element_control_uri;
---const char * const config_element_data_uri;
---const char * const config_element_max_size;
--+extern const char * const config_element_channel;
--+extern const char * const config_element_channels;
--+extern const char * const config_element_domain;
--+extern const char * const config_element_domains;
--+extern const char * const config_element_event;
--+extern const char * const config_element_events;
--+extern const char * const config_element_context;
--+extern const char * const config_element_contexts;
--+extern const char * const config_element_attributes;
--+extern const char * const config_element_exclusion;
--+extern const char * const config_element_exclusions;
--+extern const char * const config_element_function_attributes;
--+extern const char * const config_element_probe_attributes;
--+extern const char * const config_element_symbol_name;
--+extern const char * const config_element_address;
--+extern const char * const config_element_offset;
--+extern const char * const config_element_name;
--+extern const char * const config_element_enabled;
--+extern const char * const config_element_overwrite_mode;
--+extern const char * const config_element_subbuf_size;
--+extern const char * const config_element_num_subbuf;
--+extern const char * const config_element_switch_timer_interval;
--+extern const char * const config_element_read_timer_interval;
--+extern const char * const config_element_output;
--+extern const char * const config_element_output_type;
--+extern const char * const config_element_tracefile_size;
--+extern const char * const config_element_tracefile_count;
--+extern const char * const config_element_live_timer_interval;
--+extern const char * const config_element_type;
--+extern const char * const config_element_buffer_type;
--+extern const char * const config_element_session;
--+extern const char * const config_element_sessions;
--+extern const char * const config_element_perf;
--+extern const char * const config_element_config;
--+extern const char * const config_element_started;
--+extern const char * const config_element_snapshot_mode;
--+extern const char * const config_element_loglevel;
--+extern const char * const config_element_loglevel_type;
--+extern const char * const config_element_filter;
--+extern const char * const config_element_snapshot_outputs;
--+extern const char * const config_element_consumer_output;
--+extern const char * const config_element_destination;
--+extern const char * const config_element_path;
--+extern const char * const config_element_net_output;
--+extern const char * const config_element_control_uri;
--+extern const char * const config_element_data_uri;
--+extern const char * const config_element_max_size;
-- 
---const char * const config_domain_type_kernel;
---const char * const config_domain_type_ust;
---const char * const config_domain_type_jul;
---const char * const config_domain_type_log4j;
--+extern const char * const config_domain_type_kernel;
--+extern const char * const config_domain_type_ust;
--+extern const char * const config_domain_type_jul;
--+extern const char * const config_domain_type_log4j;
-- 
---const char * const config_buffer_type_per_pid;
---const char * const config_buffer_type_per_uid;
---const char * const config_buffer_type_global;
--+extern const char * const config_buffer_type_per_pid;
--+extern const char * const config_buffer_type_per_uid;
--+extern const char * const config_buffer_type_global;
-- 
---const char * const config_overwrite_mode_discard;
---const char * const config_overwrite_mode_overwrite;
--+extern const char * const config_overwrite_mode_discard;
--+extern const char * const config_overwrite_mode_overwrite;
-- 
---const char * const config_output_type_splice;
---const char * const config_output_type_mmap;
--+extern const char * const config_output_type_splice;
--+extern const char * const config_output_type_mmap;
-- 
---const char * const config_loglevel_type_all;
---const char * const config_loglevel_type_range;
---const char * const config_loglevel_type_single;
--+extern const char * const config_loglevel_type_all;
--+extern const char * const config_loglevel_type_range;
--+extern const char * const config_loglevel_type_single;
-- 
---const char * const config_event_type_all;
---const char * const config_event_type_tracepoint;
---const char * const config_event_type_probe;
---const char * const config_event_type_function;
---const char * const config_event_type_function_entry;
---const char * const config_event_type_noop;
---const char * const config_event_type_syscall;
---const char * const config_event_type_kprobe;
---const char * const config_event_type_kretprobe;
--+extern const char * const config_event_type_all;
--+extern const char * const config_event_type_tracepoint;
--+extern const char * const config_event_type_probe;
--+extern const char * const config_event_type_function;
--+extern const char * const config_event_type_function_entry;
--+extern const char * const config_event_type_noop;
--+extern const char * const config_event_type_syscall;
--+extern const char * const config_event_type_kprobe;
--+extern const char * const config_event_type_kretprobe;
-- 
---const char * const config_event_context_pid;
---const char * const config_event_context_procname;
---const char * const config_event_context_prio;
---const char * const config_event_context_nice;
---const char * const config_event_context_vpid;
---const char * const config_event_context_tid;
---const char * const config_event_context_vtid;
---const char * const config_event_context_ppid;
---const char * const config_event_context_vppid;
---const char * const config_event_context_pthread_id;
---const char * const config_event_context_hostname;
---const char * const config_event_context_ip;
---const char * const config_event_context_perf_thread_counter;
--+extern const char * const config_event_context_pid;
--+extern const char * const config_event_context_procname;
--+extern const char * const config_event_context_prio;
--+extern const char * const config_event_context_nice;
--+extern const char * const config_event_context_vpid;
--+extern const char * const config_event_context_tid;
--+extern const char * const config_event_context_vtid;
--+extern const char * const config_event_context_ppid;
--+extern const char * const config_event_context_vppid;
--+extern const char * const config_event_context_pthread_id;
--+extern const char * const config_event_context_hostname;
--+extern const char * const config_event_context_ip;
--+extern const char * const config_event_context_perf_thread_counter;
-- 
-- #endif /* CONFIG_SESSION_INTERNAL_H */
--diff --git a/src/common/mi-lttng.h b/src/common/mi-lttng.h
--index a181e0b..06b0812 100644
----- a/src/common/mi-lttng.h
--+++ b/src/common/mi-lttng.h
--@@ -49,133 +49,133 @@ struct mi_lttng_version {
-- };
-- 
-- /* Strings related to command */
---const char * const mi_lttng_element_command;
---const char * const mi_lttng_element_command_action;
---const char * const mi_lttng_element_command_add_context;
---const char * const mi_lttng_element_command_calibrate;
---const char * const mi_lttng_element_command_create;
---const char * const mi_lttng_element_command_destroy;
---const char * const mi_lttng_element_command_disable_channel;
---const char * const mi_lttng_element_command_disable_event;
---const char * const mi_lttng_element_command_enable_channels;
---const char * const mi_lttng_element_command_enable_event;
---const char * const mi_lttng_element_command_list;
---const char * const mi_lttng_element_command_load;
---const char * const mi_lttng_element_command_name;
---const char * const mi_lttng_element_command_output;
---const char * const mi_lttng_element_command_save;
---const char * const mi_lttng_element_command_set_session;
---const char * const mi_lttng_element_command_snapshot;
---const char * const mi_lttng_element_command_snapshot_add;
---const char * const mi_lttng_element_command_snapshot_del;
---const char * const mi_lttng_element_command_snapshot_list;
---const char * const mi_lttng_element_command_snapshot_record;
---const char * const mi_lttng_element_command_start;
---const char * const mi_lttng_element_command_stop;
---const char * const mi_lttng_element_command_success;
---const char * const mi_lttng_element_command_version;
--+extern const char * const mi_lttng_element_command;
--+extern const char * const mi_lttng_element_command_action;
--+extern const char * const mi_lttng_element_command_add_context;
--+extern const char * const mi_lttng_element_command_calibrate;
--+extern const char * const mi_lttng_element_command_create;
--+extern const char * const mi_lttng_element_command_destroy;
--+extern const char * const mi_lttng_element_command_disable_channel;
--+extern const char * const mi_lttng_element_command_disable_event;
--+extern const char * const mi_lttng_element_command_enable_channels;
--+extern const char * const mi_lttng_element_command_enable_event;
--+extern const char * const mi_lttng_element_command_list;
--+extern const char * const mi_lttng_element_command_load;
--+extern const char * const mi_lttng_element_command_name;
--+extern const char * const mi_lttng_element_command_output;
--+extern const char * const mi_lttng_element_command_save;
--+extern const char * const mi_lttng_element_command_set_session;
--+extern const char * const mi_lttng_element_command_snapshot;
--+extern const char * const mi_lttng_element_command_snapshot_add;
--+extern const char * const mi_lttng_element_command_snapshot_del;
--+extern const char * const mi_lttng_element_command_snapshot_list;
--+extern const char * const mi_lttng_element_command_snapshot_record;
--+extern const char * const mi_lttng_element_command_start;
--+extern const char * const mi_lttng_element_command_stop;
--+extern const char * const mi_lttng_element_command_success;
--+extern const char * const mi_lttng_element_command_version;
-- 
-- /* Strings related to version command */
---const char * const mi_lttng_element_version;
---const char * const mi_lttng_element_version_commit;
---const char * const mi_lttng_element_version_description;
---const char * const mi_lttng_element_version_license;
---const char * const mi_lttng_element_version_major;
---const char * const mi_lttng_element_version_minor;
---const char * const mi_lttng_element_version_patch_level;
---const char * const mi_lttng_element_version_str;
---const char * const mi_lttng_element_version_web;
--+extern const char * const mi_lttng_element_version;
--+extern const char * const mi_lttng_element_version_commit;
--+extern const char * const mi_lttng_element_version_description;
--+extern const char * const mi_lttng_element_version_license;
--+extern const char * const mi_lttng_element_version_major;
--+extern const char * const mi_lttng_element_version_minor;
--+extern const char * const mi_lttng_element_version_patch_level;
--+extern const char * const mi_lttng_element_version_str;
--+extern const char * const mi_lttng_element_version_web;
-- 
-- /* String related to a lttng_event_field */
---const char * const mi_lttng_element_event_field;
---const char * const mi_lttng_element_event_fields;
--+extern const char * const mi_lttng_element_event_field;
--+extern const char * const mi_lttng_element_event_fields;
-- 
-- /* String related to lttng_event_context */
---const char * const mi_lttng_context_type_perf_counter;
---const char * const mi_lttng_context_type_perf_cpu_counter;
---const char * const mi_lttng_context_type_perf_thread_counter;
--+extern const char * const mi_lttng_context_type_perf_counter;
--+extern const char * const mi_lttng_context_type_perf_cpu_counter;
--+extern const char * const mi_lttng_context_type_perf_thread_counter;
-- 
-- /* String related to lttng_event_perf_counter_ctx */
---const char * const mi_lttng_element_perf_counter_context;
--+extern const char * const mi_lttng_element_perf_counter_context;
-- 
-- /* Strings related to pid */
---const char * const mi_lttng_element_pids;
---const char * const mi_lttng_element_pid;
---const char * const mi_lttng_element_pid_id;
--+extern const char * const mi_lttng_element_pids;
--+extern const char * const mi_lttng_element_pid;
--+extern const char * const mi_lttng_element_pid_id;
-- 
-- /* Strings related to save command */
---const char * const mi_lttng_element_save;
--+extern const char * const mi_lttng_element_save;
-- 
-- /* Strings related to load command */
---const char * const mi_lttng_element_load;
--+extern const char * const mi_lttng_element_load;
-- 
-- /* General element of mi_lttng */
---const char * const mi_lttng_element_empty;
---const char * const mi_lttng_element_id;
---const char * const mi_lttng_element_nowrite;
---const char * const mi_lttng_element_success;
---const char * const mi_lttng_element_type_enum;
---const char * const mi_lttng_element_type_float;
---const char * const mi_lttng_element_type_integer;
---const char * const mi_lttng_element_type_other;
---const char * const mi_lttng_element_type_string;
--+extern const char * const mi_lttng_element_empty;
--+extern const char * const mi_lttng_element_id;
--+extern const char * const mi_lttng_element_nowrite;
--+extern const char * const mi_lttng_element_success;
--+extern const char * const mi_lttng_element_type_enum;
--+extern const char * const mi_lttng_element_type_float;
--+extern const char * const mi_lttng_element_type_integer;
--+extern const char * const mi_lttng_element_type_other;
--+extern const char * const mi_lttng_element_type_string;
-- 
-- /* String related to loglevel */
---const char * const mi_lttng_loglevel_str_alert;
---const char * const mi_lttng_loglevel_str_crit;
---const char * const mi_lttng_loglevel_str_debug;
---const char * const mi_lttng_loglevel_str_debug_function;
---const char * const mi_lttng_loglevel_str_debug_line;
---const char * const mi_lttng_loglevel_str_debug_module;
---const char * const mi_lttng_loglevel_str_debug_process;
---const char * const mi_lttng_loglevel_str_debug_program;
---const char * const mi_lttng_loglevel_str_debug_system;
---const char * const mi_lttng_loglevel_str_debug_unit;
---const char * const mi_lttng_loglevel_str_emerg;
---const char * const mi_lttng_loglevel_str_err;
---const char * const mi_lttng_loglevel_str_info;
---const char * const mi_lttng_loglevel_str_notice;
---const char * const mi_lttng_loglevel_str_unknown;
---const char * const mi_lttng_loglevel_str_warning;
--+extern const char * const mi_lttng_loglevel_str_alert;
--+extern const char * const mi_lttng_loglevel_str_crit;
--+extern const char * const mi_lttng_loglevel_str_debug;
--+extern const char * const mi_lttng_loglevel_str_debug_function;
--+extern const char * const mi_lttng_loglevel_str_debug_line;
--+extern const char * const mi_lttng_loglevel_str_debug_module;
--+extern const char * const mi_lttng_loglevel_str_debug_process;
--+extern const char * const mi_lttng_loglevel_str_debug_program;
--+extern const char * const mi_lttng_loglevel_str_debug_system;
--+extern const char * const mi_lttng_loglevel_str_debug_unit;
--+extern const char * const mi_lttng_loglevel_str_emerg;
--+extern const char * const mi_lttng_loglevel_str_err;
--+extern const char * const mi_lttng_loglevel_str_info;
--+extern const char * const mi_lttng_loglevel_str_notice;
--+extern const char * const mi_lttng_loglevel_str_unknown;
--+extern const char * const mi_lttng_loglevel_str_warning;
-- 
-- /* String related to loglevel JUL */
---const char * const mi_lttng_loglevel_str_jul_all;
---const char * const mi_lttng_loglevel_str_jul_config;
---const char * const mi_lttng_loglevel_str_jul_fine;
---const char * const mi_lttng_loglevel_str_jul_finer;
---const char * const mi_lttng_loglevel_str_jul_finest;
---const char * const mi_lttng_loglevel_str_jul_info;
---const char * const mi_lttng_loglevel_str_jul_off;
---const char * const mi_lttng_loglevel_str_jul_severe;
---const char * const mi_lttng_loglevel_str_jul_warning;
--+extern const char * const mi_lttng_loglevel_str_jul_all;
--+extern const char * const mi_lttng_loglevel_str_jul_config;
--+extern const char * const mi_lttng_loglevel_str_jul_fine;
--+extern const char * const mi_lttng_loglevel_str_jul_finer;
--+extern const char * const mi_lttng_loglevel_str_jul_finest;
--+extern const char * const mi_lttng_loglevel_str_jul_info;
--+extern const char * const mi_lttng_loglevel_str_jul_off;
--+extern const char * const mi_lttng_loglevel_str_jul_severe;
--+extern const char * const mi_lttng_loglevel_str_jul_warning;
-- 
-- /* String related to loglevel Log4j */
---const char * const mi_lttng_loglevel_str_log4j_off;
---const char * const mi_lttng_loglevel_str_log4j_fatal;
---const char * const mi_lttng_loglevel_str_log4j_error;
---const char * const mi_lttng_loglevel_str_log4j_warn;
---const char * const mi_lttng_loglevel_str_log4j_info;
---const char * const mi_lttng_loglevel_str_log4j_debug;
---const char * const mi_lttng_loglevel_str_log4j_trace;
---const char * const mi_lttng_loglevel_str_log4j_all;
--+extern const char * const mi_lttng_loglevel_str_log4j_off;
--+extern const char * const mi_lttng_loglevel_str_log4j_fatal;
--+extern const char * const mi_lttng_loglevel_str_log4j_error;
--+extern const char * const mi_lttng_loglevel_str_log4j_warn;
--+extern const char * const mi_lttng_loglevel_str_log4j_info;
--+extern const char * const mi_lttng_loglevel_str_log4j_debug;
--+extern const char * const mi_lttng_loglevel_str_log4j_trace;
--+extern const char * const mi_lttng_loglevel_str_log4j_all;
-- 
-- /* String related to loglevel type */
---const char * const mi_lttng_loglevel_type_all;
---const char * const mi_lttng_loglevel_type_range;
---const char * const mi_lttng_loglevel_type_single;
---const char * const mi_lttng_loglevel_type_unknown;
--+extern const char * const mi_lttng_loglevel_type_all;
--+extern const char * const mi_lttng_loglevel_type_range;
--+extern const char * const mi_lttng_loglevel_type_single;
--+extern const char * const mi_lttng_loglevel_type_unknown;
-- 
-- /* Sting related to lttng_calibrate */
---const char * const mi_lttng_element_calibrate;
---const char * const mi_lttng_element_calibrate_function;
--+extern const char * const mi_lttng_element_calibrate;
--+extern const char * const mi_lttng_element_calibrate_function;
-- 
-- /* String related to a lttng_snapshot */
---const char * const mi_lttng_element_snapshot_ctrl_url;
---const char * const mi_lttng_element_snapshot_data_url;
---const char * const mi_lttng_element_snapshot_max_size;
---const char * const mi_lttng_element_snapshot_n_ptr;
---const char * const mi_lttng_element_snapshot_session_name;
---const char * const mi_lttng_element_snapshots;
--+extern const char * const mi_lttng_element_snapshot_ctrl_url;
--+extern const char * const mi_lttng_element_snapshot_data_url;
--+extern const char * const mi_lttng_element_snapshot_max_size;
--+extern const char * const mi_lttng_element_snapshot_n_ptr;
--+extern const char * const mi_lttng_element_snapshot_session_name;
--+extern const char * const mi_lttng_element_snapshots;
-- 
-- /* Utility string function  */
-- const char *mi_lttng_loglevel_string(int value, enum lttng_domain_type domain);
---- 
--2.6.3
--
+diff --git a/package/lttng-tools/0002-Fix-Remove-dependency-on-glibc-2.12-caused-by-pthrea.patch b/package/lttng-tools/0002-Fix-Remove-dependency-on-glibc-2.12-caused-by-pthrea.patch
+new file mode 100644
+index 0000000..6c0fee9
+--- /dev/null
++++ b/package/lttng-tools/0002-Fix-Remove-dependency-on-glibc-2.12-caused-by-pthrea.patch
+@@ -0,0 +1,56 @@
++Upstream status: Merged
++Fetched from: https://git.lttng.org/?p=lttng-tools.git;a=commit;h=b8090274814e5f6a22cff0dd656e14769cc7a7df
++From b8090274814e5f6a22cff0dd656e14769cc7a7df Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
++ <jeremie.galarneau@efficios.com>
++Date: Wed, 30 Sep 2015 16:48:12 -0400
++Subject: [PATCH] Fix: Remove dependency on glibc 2.12 caused by
++ pthread_setname_np
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++prctl() can be used to set the same attribute set by
++pthread_setname_np, but doesn't introduce a dependency on a newer
++glibc. Using prctl(PR_SET_NAME) introduces a soft dependency on
++Linux 2.6.9. However, the worker won't fail to launch if the call
++fails as it is set out of convenience (debugger output).
++
++Signed-off-by: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ src/common/runas.c | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/src/common/runas.c b/src/common/runas.c
++index 3826c61..bc7356b 100644
++--- a/src/common/runas.c
+++++ b/src/common/runas.c
++@@ -31,6 +31,7 @@
++ #include <sched.h>
++ #include <sys/signal.h>
++ #include <assert.h>
+++#include <sys/prctl.h>
++ 
++ #include <common/common.h>
++ #include <common/utils.h>
++@@ -322,12 +323,11 @@ int run_as_worker(struct run_as_worker *worker)
++ 	memset(worker->procname, 0, proc_orig_len);
++ 	strncpy(worker->procname, DEFAULT_RUN_AS_WORKER_NAME, proc_orig_len);
++ 
++-	ret = pthread_setname_np(pthread_self(), DEFAULT_RUN_AS_WORKER_NAME);
+++	ret = prctl(PR_SET_NAME, DEFAULT_RUN_AS_WORKER_NAME, 0, 0, 0);
++ 	if (ret) {
++-		errno = ret;
++-		ret = -1;
++-		PERROR("pthread_setname_np");
++-		return EXIT_FAILURE;
+++		/* Don't fail as this is not essential. */
+++		PERROR("prctl PR_SET_NAME");
+++		ret = 0;
++ 	}
++ 
++ 	sendret.ret = 0;
++-- 
++2.6.3
++
 -- 
 2.6.3
