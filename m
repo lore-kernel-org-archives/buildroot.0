@@ -1,86 +1,148 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  8 Dec 2015 09:09:07 -0300
-Subject: [Buildroot] [PATCH] p11-kit: bump to version 0.23.2
-Message-ID: <1449576547-5982-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Dec 2015 13:46:36 +0100
+Subject: [Buildroot] [PATCH v7 13/33] package/efl/libefl: add
+ OpenGL/OpenGLES support
+In-Reply-To: <1449523775-6582-14-git-send-email-romain.naour@openwide.fr>
+References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
+ <1449523775-6582-14-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151208124636.GL4188@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch is upstream
-so drop it.
+romain, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...ansport.c-include-sys-select.h-for-fd_set.patch | 36 ----------------------
- package/p11-kit/p11-kit.hash                       |  2 +-
- package/p11-kit/p11-kit.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 38 deletions(-)
- delete mode 100644 package/p11-kit/0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch
+On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
+> Allow to enable graphic acceleration using OpenGL or
+> OpenGLES with efl libraries.
+> 
+> The full opengl option depend on X11, because full openGL means GLX,
+> which means X11.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+> v6: Rename OpenGL options (Yann E.Morin)
+>     Only full OpenGL support depends on X11.
+> v4: rename libefl
+>     improve commit log
+> ---
+>  package/efl/libefl/Config.in | 28 ++++++++++++++++++++++++++++
+>  package/efl/libefl/libefl.mk | 17 +++++++++++++++--
+>  2 files changed, 43 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+> index 560a7b3..b0cb675 100644
+> --- a/package/efl/libefl/Config.in
+> +++ b/package/efl/libefl/Config.in
+> @@ -105,6 +105,34 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
+>  	select BR2_PACKAGE_XLIB_LIBXTST
+>  	select BR2_PACKAGE_XPROTO_GLPROTO
+>  
+> +choice
+> +	bool "OpenGL support"
+> +	default BR2_PACKAGE_LIBEFL_OPENGL   if BR2_PACKAGE_HAS_LIBGL && BR2_PACKAGE_XORG7
+> +	default BR2_PACKAGE_LIBEFL_OPENGLES if BR2_PACKAGE_HAS_LIBGLES
+> +	help
+> +	  libevas can be configured to use HW acceleration with OpenGL or
+> +	  OpenGLES.
+> +
+> +config BR2_PACKAGE_LIBEFL_OPENGL_NONE
+> +	bool "none"
+> +
+> +config BR2_PACKAGE_LIBEFL_OPENGL
+> +	bool "opengl"
+> +	depends on BR2_PACKAGE_HAS_LIBGL
+> +	depends on BR2_PACKAGE_XORG7
 
-diff --git a/package/p11-kit/0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch b/package/p11-kit/0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch
-deleted file mode 100644
-index bff732c..0000000
---- a/package/p11-kit/0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 1071268d06da269de56c895af940e6f15bcf79e7 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Wed, 2 Dec 2015 07:15:43 -0300
--Subject: [PATCH] rpc-transport.c: include sys/select.h for fd_set
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--fd_set and friends, according to POSIX.1-2001, needs sys/select.h, so
--include it otherwise the build fails for uClibc:
--
--p11-kit/rpc-transport.c: In function ?rpc_socket_read?:
--p11-kit/rpc-transport.c:350:2: error: unknown type name ?fd_set?
--p11-kit/rpc-transport.c:416:4: warning: implicit declaration of function
--?FD_ZERO? [-Wimplicit-function-declaration]
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- p11-kit/rpc-transport.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/p11-kit/rpc-transport.c b/p11-kit/rpc-transport.c
--index 7176b39..5251e11 100644
----- a/p11-kit/rpc-transport.c
--+++ b/p11-kit/rpc-transport.c
--@@ -55,6 +55,7 @@
-- #include <string.h>
-- 
-- #ifdef OS_UNIX
--+#include <sys/select.h>
-- #include <sys/socket.h>
-- #include <sys/wait.h>
-- #include <sys/un.h>
---- 
--2.4.10
--
-diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-index d43a8fd..c0182eb 100644
---- a/package/p11-kit/p11-kit.hash
-+++ b/package/p11-kit/p11-kit.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	e57371669f3b157141b86c429bd9c29741994b2f5ff115fcb8a03e751b0f6ac4	p11-kit-0.23.1.tar.gz
-+sha256	ba726ea8303c97467a33fca50ee79b7b35212964be808ecf9b145e9042fdfaf0	p11-kit-0.23.2.tar.gz
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 03d26e2..e856cac 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--P11_KIT_VERSION = 0.23.1
-+P11_KIT_VERSION = 0.23.2
- P11_KIT_SITE = http://p11-glue.freedesktop.org/releases
- P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
- P11_KIT_INSTALL_STAGING = YES
+As an aferthought, and after playing around with the options in the
+menuconfig, I now wonder if it really makes sense to have full OpenGL
+support without X11 support (introduced in the previous patch)?
+
+In which case we would probably write:
+
+    config BR2_PACKAGE_LIBEFL_OPENGL
+        bool "opengl"
+        depends on BR2_PACKAGE_HAS_LIBGL
+        depends on BR2_PACKAGE_LIBEFL_X_XLIB
+
+    comment "opengl support needs an opengl provider and X11 support"
+        depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_LIBEFL_X_XLIB
+
+But then we reference "X11 support" which is directly hidden when Xorg
+is not enabled, so maybe add another comment in the X11 support patch:
+
+    comment "X11 support needs Xorg"
+        depends on !BR2_PACKAGE_XORG7
+
+Thoughts?
+
+Regards,
+Yann E. MORIN.
+
+> +comment "opengl support needs X11 and an opengl provider"
+> +	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
+> +
+> +config BR2_PACKAGE_LIBEFL_OPENGLES
+> +	bool "opengles"
+> +	depends on BR2_PACKAGE_HAS_LIBGLES
+> +
+> +comment "opengles support needs an opengles provider"
+> +	depends on !BR2_PACKAGE_HAS_LIBGLES
+> +
+> +endchoice # OpenGL support
+> +
+>  comment "libevas loaders"
+>  
+>  config BR2_PACKAGE_LIBEFL_PNG
+> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+> index 4ebc20f..fa1ee74 100644
+> --- a/package/efl/libefl/libefl.mk
+> +++ b/package/efl/libefl/libefl.mk
+> @@ -43,8 +43,7 @@ LIBEFL_CONF_OPTS = \
+>  	--disable-cxx-bindings \
+>  	--disable-sdl \
+>  	--disable-systemd \
+> -	--enable-lua-old \
+> -	--with-opengl=none
+> +	--enable-lua-old
+>  
+>  # Disable untested configuration warning.
+>  ifeq ($(BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG),)
+> @@ -167,6 +166,20 @@ else
+>  LIBEFL_CONF_OPTS += --with-x11=none
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBEFL_OPENGL),y)
+> +LIBEFL_CONF_OPTS += --with-opengl=full
+> +LIBEFL_DEPENDENCIES += libgl
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBEFL_OPENGLES),y)
+> +LIBEFL_CONF_OPTS += --with-opengl=es
+> +LIBEFL_DEPENDENCIES += libgles
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBEFL_OPENGL_NONE),y)
+> +LIBEFL_CONF_OPTS += --with-opengl=none
+> +endif
+> +
+>  # Loaders that need external dependencies needs to be --enable-XXX=yes
+>  # otherwise the default is '=static'.
+>  # All other loaders are statically built-in
+> -- 
+> 2.4.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.4.10
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
