@@ -1,78 +1,86 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed,  9 Dec 2015 00:02:20 +0100
-Subject: [Buildroot] [PATCH v8 17/33] package/libevas-generic-loaders: add
-	libraw dependency
+Date: Wed,  9 Dec 2015 00:02:17 +0100
+Subject: [Buildroot] [PATCH v8 14/33] package/efl/libefl: enable xinput2.2
 In-Reply-To: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
 References: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449615756-19115-18-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449615756-19115-15-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libraw it's one of the "highly recommended" dependecies
-according to the README [1].
-
-[1] https://git.enlightenment.org/core/evas_generic_loaders.git/tree/README?id=v1.15.0#n31
+X11 XInput v2.2+ support is one of the recommended
+feature for the efl libraries:
+https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n490
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v6: select BR2_PACKAGE_LIBRAW and propagate its dependency on
-    C++. (Yann E.Morin)
-v4: improve commit log
+v8: Remove --disable-xinput22 added by the patch adding X11 support
+    (Yann E.Morin)
+v6: add missing dependency on xlib_libXi (Yann E.Morin)
+v4: rename to libefl
+    improve commit log
+v3: new patch
 ---
- package/libevas-generic-loaders/Config.in                  | 10 ++++++++++
- package/libevas-generic-loaders/libevas-generic-loaders.mk |  9 +++++++--
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ package/efl/libefl/Config.in | 1 +
+ package/efl/libefl/libefl.mk | 7 ++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-index 65ced8a..1d5b717 100644
---- a/package/libevas-generic-loaders/Config.in
-+++ b/package/libevas-generic-loaders/Config.in
-@@ -11,6 +11,16 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index b0cb675..98c369c 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -97,6 +97,7 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXI
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	select BR2_PACKAGE_XLIB_LIBXP
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index acc4c06..134531c 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -33,7 +33,6 @@ LIBEFL_GETTEXTIZE = YES
+ # --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+-# --disable-xinput22: disable X11 XInput v2.2+ support.
+ # --enable-lua-old: disable Elua and remove luajit dependency.
+ # --with-opengl=none: disable opengl support.
+ # --with-x11=none: remove dependency on X.org.
+@@ -43,7 +42,6 @@ LIBEFL_CONF_OPTS = \
+ 	--disable-cxx-bindings \
+ 	--disable-sdl \
+ 	--disable-systemd \
+-	--disable-xinput22 \
+ 	--enable-lua-old
  
- if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ # Disable untested configuration warning.
+@@ -147,11 +145,13 @@ LIBEFL_CONF_OPTS += --disable-fb
+ endif
  
-+config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
-+	bool "libraw loader"
-+	depends on BR2_INSTALL_LIBSTDCPP # libraw
-+	select BR2_PACKAGE_LIBRAW
-+	help
-+	  This option enables the Evas generic Libraw loader
-+
-+comment "libraw loader needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	bool "SVG loader"
- 	depends on BR2_USE_MMU # librsvg -> glib2
-diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-index 47dfa9a..2c1c1cd 100644
---- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
-+++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-@@ -14,15 +14,20 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
++# --enable-xinput22 is recommended
+ LIBEFL_CONF_OPTS += \
+ 	--with-x11=xlib \
+ 	--with-x=$(STAGING_DIR) \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+-	--x-libraries=$(STAGING_DIR)/usr/lib
++	--x-libraries=$(STAGING_DIR)/usr/lib \
++	--enable-xinput22
  
- LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = host-pkgconf libefl zlib
- 
--# For now, we only support the SVG loader
- # poppler >= 0.32 is not supported by the current version of
- # libevas-generic-loaders.
- LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
- 	--disable-poppler \
- 	--disable-spectre \
--	--disable-libraw \
- 	--disable-gstreamer
- 
-+ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
-+LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
-+LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
-+else
-+LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
- LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
- LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
+ LIBEFL_DEPENDENCIES += \
+ 	xlib_libX11 \
+@@ -159,6 +159,7 @@ LIBEFL_DEPENDENCIES += \
+ 	xlib_libXcursor \
+ 	xlib_libXdamage \
+ 	xlib_libXext \
++	xlib_libXi \
+ 	xlib_libXinerama \
+ 	xlib_libXrandr \
+ 	xlib_libXrender \
 -- 
 2.4.3
