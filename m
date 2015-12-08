@@ -1,49 +1,92 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 8 Dec 2015 16:11:02 -0500
-Subject: [Buildroot] [PATCH 1/2] vboot-utils: new package
-In-Reply-To: <20151116215244.GA8630@vostro>
-References: <cover.1447689401.git.alex.suykov@gmail.com>
- <39f87349d2f42ac5d2acec7a00c94c4e5e9400a8.1447689401.git.alex.suykov@gmail.com>
- <564A3A5F.3010301@mind.be> <20151116215244.GA8630@vostro>
-Message-ID: <20151208211102.GR11489@vapier.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Dec 2015 22:15:32 +0100
+Subject: [Buildroot] [PATCH v7 13/33] package/efl/libefl: add
+ OpenGL/OpenGLES support
+In-Reply-To: <20151208124636.GL4188@free.fr>
+References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
+ <1449523775-6582-14-git-send-email-romain.naour@openwide.fr>
+ <20151208124636.GL4188@free.fr>
+Message-ID: <20151208211532.GX4188@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16 Nov 2015 23:52, Alex Suykov wrote:
-> Mon, Nov 16, 2015 at 09:19:43PM +0100, Arnout Vandecappelle wrote:
-> 
-> > > +	  ChromeOS verified boot utils: futility and cgpt.
+Romain, All,
+
+On 2015-12-08 13:46 +0100, Yann E. MORIN spake thusly:
+> On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
+> > Allow to enable graphic acceleration using OpenGL or
+> > OpenGLES with efl libraries.
 > > 
-> >  ChromeOS or Chromius OS? Please be consistent :-)
->  
-> Fixed that in v2 already. Should be Chromium OS throughout of course.
-> Chromium OS but Chrome-book.
-
-mmm, it should be "Chromium OS" and "Chrome OS", but it should be "Chromebook"
-
-> > > +VBOOT_UTILS_VERSION = bbdd62f9b030db7ad8eef789aaf58a7ff9a25656
-> > > +VBOOT_UTILS_SITE = https://chromium.googlesource.com/chromiumos/platform/vboot_reference
+> > The full opengl option depend on X11, because full openGL means GLX,
+> > which means X11.
 > > 
-> >  Since googlesource is shutting down: is there an alternative location already?
-> > Possibly one which doesn't require git download method?
+> > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+[--SNIP--]
+> > diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+> > index 560a7b3..b0cb675 100644
+> > --- a/package/efl/libefl/Config.in
+> > +++ b/package/efl/libefl/Config.in
+> > @@ -105,6 +105,34 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
+> >  	select BR2_PACKAGE_XLIB_LIBXTST
+> >  	select BR2_PACKAGE_XPROTO_GLPROTO
+> >  
+> > +choice
+> > +	bool "OpenGL support"
+> > +	default BR2_PACKAGE_LIBEFL_OPENGL   if BR2_PACKAGE_HAS_LIBGL && BR2_PACKAGE_XORG7
+> > +	default BR2_PACKAGE_LIBEFL_OPENGLES if BR2_PACKAGE_HAS_LIBGLES
+> > +	help
+> > +	  libevas can be configured to use HW acceleration with OpenGL or
+> > +	  OpenGLES.
+> > +
+> > +config BR2_PACKAGE_LIBEFL_OPENGL_NONE
+> > +	bool "none"
+> > +
+> > +config BR2_PACKAGE_LIBEFL_OPENGL
+> > +	bool "opengl"
+> > +	depends on BR2_PACKAGE_HAS_LIBGL
+> > +	depends on BR2_PACKAGE_XORG7
 > 
-> Isn't it Google Code that's shutting down?
-> It does not look like they have any other site for Chromium OS sources.
-> https://www.chromium.org/chromium-os/developer-guide#TOC-Get-the-Source
+> As an aferthought, and after playing around with the options in the
+> menuconfig, I now wonder if it really makes sense to have full OpenGL
+> support without X11 support (introduced in the previous patch)?
 > 
-> They do have tgz shapshots however, I overlooked that.
-> Should be better than git checkouts.
+> In which case we would probably write:
+> 
+>     config BR2_PACKAGE_LIBEFL_OPENGL
+>         bool "opengl"
+>         depends on BR2_PACKAGE_HAS_LIBGL
+>         depends on BR2_PACKAGE_LIBEFL_X_XLIB
+> 
+>     comment "opengl support needs an opengl provider and X11 support"
+>         depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_LIBEFL_X_XLIB
+> 
+> But then we reference "X11 support" which is directly hidden when Xorg
+> is not enabled, so maybe add another comment in the X11 support patch:
+> 
+>     comment "X11 support needs Xorg"
+>         depends on !BR2_PACKAGE_XORG7
 
-unfortunately, the tgz snapshots are not stable (same code but diff hash).
-there's a bug open to get it fixed, but i don't know when/if it'll change :(.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151208/89878b60/attachment.asc>
+Alternatively, we could keep the dependencies as you wrote them, but
+add:
+
+    config BR2_PACKAGE_LIBEFL_OPENGL
+        bool "opengl"
+        depends on BR2_PACKAGE_HAS_LIBGL
+        depends on BR2_PACKAGE_XORG7
+        select BR2_PACKAGE_LIBEFL_X_XLIB
+
+Thoughts?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
