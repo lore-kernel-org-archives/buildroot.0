@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Dec 2015 12:00:54 +0100
-Subject: [Buildroot] [PATCH v7 17/33] package/libevas-generic-loaders:
- add libraw dependency
-In-Reply-To: <1449523775-6582-18-git-send-email-romain.naour@openwide.fr>
+Date: Tue, 8 Dec 2015 12:06:26 +0100
+Subject: [Buildroot] [PATCH v7 20/33] package/enlightenment: bump to
+ version 0.19.12
+In-Reply-To: <1449523775-6582-21-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
- <1449523775-6582-18-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151208110054.GF4188@free.fr>
+ <1449523775-6582-21-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151208110626.GG4188@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,82 +15,69 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
-> libraw it's one of the "highly recommended" dependecies
-> according to the README [1].
+> Use the newly added libefl package wich provide a new version
+> of efl libraries.
+> This new version needs libelementary dependency.
 > 
-> [1] https://git.enlightenment.org/core/evas_generic_loaders.git/tree/README?id=v1.15.0#n31
+> Update upstream url, add hash file and use xz archive.
+> 
+> Select png and jpeg image loader since enlightenment_start
+> fail at runtime if png and jpeg image loader are not
+> available in elf libraries.
 > 
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+> v6: disable systemd and linux-pam explicitely since it's auto
+>     detected. (A patch adding their support can be added latter)
+[--SNIP--]
+> diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+> index ddebe06..f2e0bc3 100644
+> --- a/package/enlightenment/enlightenment.mk
+> +++ b/package/enlightenment/enlightenment.mk
+> @@ -4,30 +4,26 @@
+>  #
+>  ################################################################################
+>  
+> -ENLIGHTENMENT_VERSION = 0.17.6
+> -ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
+> +ENLIGHTENMENT_VERSION = 0.19.12
+> +ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+> +ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+>  ENLIGHTENMENT_LICENSE = BSD-2c
+>  ENLIGHTENMENT_LICENSE_FILES = COPYING
+>  
+> -ENLIGHTENMENT_DEPENDENCIES = 	\
+> -	host-pkgconf 		\
+> -	libecore 		\
+> -	libeet 			\
+> -	libeina 		\
+> -	libevas 		\
+> +ENLIGHTENMENT_DEPENDENCIES = \
+> +	host-pkgconf \
+> +	host-libefl \
+> +	libefl \
+> +	libelementary \
+>  	libevas-generic-loaders \
+> -	libedje 		\
+> -	libefreet 		\
+> -	libedbus 		\
+> -	libeio 			\
+> -	host-libedje 		\
+> -	host-libeet		\
+>  	xcb-util-keysyms
+>  
+>  ENLIGHTENMENT_CONF_OPTS = \
+>  	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+>  	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+> -	--disable-rpath
+> +	--disable-pam \
+> +	--disable-rpath \
+> +	--disable-systemd
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+What if libefl has systemd support but enlightenment hasn't?
 
 Regards,
 Yann E. MORIN.
-
-> ---
-> v6: select BR2_PACKAGE_LIBRAW and propagate its dependency on
->     C++. (Yann E.Morin)
-> v4: improve commit log
-> ---
->  package/libevas-generic-loaders/Config.in                  | 10 ++++++++++
->  package/libevas-generic-loaders/libevas-generic-loaders.mk |  9 +++++++--
->  2 files changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-> index 65ced8a..1d5b717 100644
-> --- a/package/libevas-generic-loaders/Config.in
-> +++ b/package/libevas-generic-loaders/Config.in
-> @@ -11,6 +11,16 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
->  
->  if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
->  
-> +config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
-> +	bool "libraw loader"
-> +	depends on BR2_INSTALL_LIBSTDCPP # libraw
-> +	select BR2_PACKAGE_LIBRAW
-> +	help
-> +	  This option enables the Evas generic Libraw loader
-> +
-> +comment "libraw loader needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> +
->  config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
->  	bool "SVG loader"
->  	depends on BR2_USE_MMU # librsvg -> glib2
-> diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-> index 47dfa9a..2c1c1cd 100644
-> --- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
-> +++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-> @@ -14,15 +14,20 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
->  
->  LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = host-pkgconf libefl zlib
->  
-> -# For now, we only support the SVG loader
->  # poppler >= 0.32 is not supported by the current version of
->  # libevas-generic-loaders.
->  LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
->  	--disable-poppler \
->  	--disable-spectre \
-> -	--disable-libraw \
->  	--disable-gstreamer
->  
-> +ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
-> +LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
-> +LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
-> +else
-> +LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
->  LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
->  LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
-> -- 
-> 2.4.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
