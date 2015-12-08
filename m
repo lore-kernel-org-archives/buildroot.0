@@ -1,113 +1,131 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed,  9 Dec 2015 00:02:29 +0100
-Subject: [Buildroot] [PATCH v8 26/33] package/efl/libeio: remove package
+Date: Wed,  9 Dec 2015 00:02:27 +0100
+Subject: [Buildroot] [PATCH v8 24/33] package/efl/libedje: remove package
 In-Reply-To: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
 References: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449615756-19115-27-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449615756-19115-25-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libeio is now available in efl package.
+Libedje is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 v6: Improve lecacy help text (Yann E.Morin)
-v5: remove libeio directory
+v5: remove libedje directory
 v4: update Config.in to use libefl
 v3: update legacy option for 2015.11
     update help text
 ---
- Config.in.legacy             |  7 +++++++
- package/efl/Config.in        |  1 -
- package/efl/libeio/Config.in | 22 ----------------------
- package/efl/libeio/libeio.mk | 16 ----------------
- 4 files changed, 7 insertions(+), 39 deletions(-)
- delete mode 100644 package/efl/libeio/Config.in
- delete mode 100644 package/efl/libeio/libeio.mk
+ Config.in.legacy               |  7 +++++++
+ package/efl/Config.in          |  1 -
+ package/efl/libedje/Config.in  | 28 ----------------------------
+ package/efl/libedje/libedje.mk | 28 ----------------------------
+ 4 files changed, 7 insertions(+), 57 deletions(-)
+ delete mode 100644 package/efl/libedje/Config.in
+ delete mode 100644 package/efl/libedje/libedje.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c161687..4a99c7b 100644
+index 92dc3ac..da7e690 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.02"
  
-+config BR2_PACKAGE_LIBEIO
-+	bool "libeio package has been removed"
++config BR2_PACKAGE_LIBEDJE
++	bool "libedje package has been removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  With EFL 1.15, libeio is now provided by the libefl package.
++	  With EFL 1.15, libedje is now provided by the libefl package.
 +
- config BR2_PACKAGE_LIBEMBRYO
- 	bool "libembryo package has been removed"
+ config BR2_PACKAGE_LIBETHUMB
+ 	bool "libethumb package has been removed"
  	select BR2_LEGACY
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 2f6d94d..509f356 100644
+index ff8ba83..417534c 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -20,7 +20,6 @@ source "package/efl/libecore/Config.in"
- source "package/efl/libeet/Config.in"
- source "package/efl/libefl/Config.in"
- source "package/efl/libefreet/Config.in"
--source "package/efl/libeio/Config.in"
+@@ -23,7 +23,6 @@ source "package/efl/libefreet/Config.in"
+ source "package/efl/libeio/Config.in"
  source "package/efl/libevas/Config.in"
+ source "package/efl/libembryo/Config.in"
+-source "package/efl/libedje/Config.in"
  source "package/efl/libelementary/Config.in"
  source "package/efl/libedbus/Config.in"
-diff --git a/package/efl/libeio/Config.in b/package/efl/libeio/Config.in
+ 
+diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
 deleted file mode 100644
-index 5b1e395..0000000
---- a/package/efl/libeio/Config.in
+index b163508..0000000
+--- a/package/efl/libedje/Config.in
 +++ /dev/null
-@@ -1,22 +0,0 @@
--config BR2_PACKAGE_LIBEIO
--	bool "libeio"
--	select BR2_PACKAGE_LIBEET
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBECORE
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	help
--	  Eio integrates with EFL (Ecore, Eina) to provide efficient
--	  filesystem Input/Output (I/O). It use the best techniques to
--	  achieve such purpose, like using at-variants, splice,
--	  properly handling errors and doing it in an asynchronous
--	  fashion by means of worker threads. It is also ported to
--	  Windows, so multi-platform.
--
--	  Whenever you need to list a directory, copy, move or delete
--	  files, Eio will do that task better than you'd achieve with
--	  naive implementations, and it is easy to use.
--
--	  http://trac.enlightenment.org/e/wiki/Eio
--
--comment "libeio needs a toolchain w/ threads"
+@@ -1,28 +0,0 @@
+-comment "libedje needs a toolchain w/ threads"
 -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/efl/libeio/libeio.mk b/package/efl/libeio/libeio.mk
+-
+-config BR2_PACKAGE_LIBEDJE
+-	bool "libedje"
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBECORE_EVAS
+-	select BR2_PACKAGE_LIBEMBRYO
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LUA
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+-	help
+-	  A graphical layout and animation library for animated
+-	  resizable, compressed and scalable themes.
+-
+-	  http://trac.enlightenment.org/e/wiki/Edje
+-
+-if BR2_PACKAGE_LIBEDJE
+-
+-config BR2_PACKAGE_LIBEDJE_CC
+-	bool "build edje_cc"
+-	help
+-	  Build and install the Edje compiler for the target. Normally this
+-	  is not required.
+-
+-endif
+diff --git a/package/efl/libedje/libedje.mk b/package/efl/libedje/libedje.mk
 deleted file mode 100644
-index e687c32..0000000
---- a/package/efl/libeio/libeio.mk
+index 59189e4..0000000
+--- a/package/efl/libedje/libedje.mk
 +++ /dev/null
-@@ -1,16 +0,0 @@
+@@ -1,28 +0,0 @@
 -################################################################################
 -#
--# libeio
+-# libedje
 -#
 -################################################################################
 -
--LIBEIO_VERSION = 1.7.10
--LIBEIO_SOURCE = eio-$(LIBEIO_VERSION).tar.bz2
--LIBEIO_SITE = http://download.enlightenment.org/releases
--LIBEIO_LICENSE = LGPLv2.1
--LIBEIO_LICENSE_FILES = COPYING
+-LIBEDJE_VERSION = 1.7.10
+-LIBEDJE_SOURCE = edje-$(LIBEDJE_VERSION).tar.bz2
+-LIBEDJE_SITE = http://download.enlightenment.org/releases
+-LIBEDJE_LICENSE = GPLv2+ (epp binary), BSD-2c (everything else)
+-LIBEDJE_LICENSE_FILES = COPYING
 -
--LIBEIO_INSTALL_STAGING = YES
--LIBEIO_DEPENDENCIES = libeina libeet libecore
+-LIBEDJE_INSTALL_STAGING = YES
+-
+-LIBEDJE_DEPENDENCIES = \
+-	host-pkgconf lua libeina libeet libecore libevas \
+-	libembryo
+-
+-ifeq ($(BR2_PACKAGE_LIBEDJE_CC),y)
+-LIBEDJE_CONF_OPTS += --enable-edje-cc
+-else
+-LIBEDJE_CONF_OPTS += --disable-edje-cc
+-endif
+-
+-HOST_LIBEDJE_CONF_OPTS = --enable-edje-cc
 -
 -$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
 -- 
 2.4.3
