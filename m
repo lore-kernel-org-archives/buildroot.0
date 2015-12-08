@@ -1,57 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  8 Dec 2015 23:27:53 +0100
-Subject: [Buildroot] [PATCH 0/2 v2] package/ustr: bump and cleanup (branch
-	yem/ustr)
-Message-ID: <cover.1449613577.git.yann.morin.1998@free.fr>
+Date: Tue,  8 Dec 2015 23:27:56 +0100
+Subject: [Buildroot] [PATCH 1/2 v2] apply-patches: only use first field of
+	line for series file
+In-Reply-To: <cover.1449613577.git.yann.morin.1998@free.fr>
+References: <cover.1449613577.git.yann.morin.1998@free.fr>
+Message-ID: <aed789ed32d5218482a5850d86daa74747f10318.1449613577.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Ryan Barnett <ryanbarnett3@gmail.com>
 
-This series updates and cleans up ustr, and fixes numerous build
-failures in libsemanage (which uses ustr).
+A series file for quilt has a valid syntax of:
 
+  fixes/autoconf.diff -p1
+  fixes/doc-html-local-css.diff -p1
+  fixes/gnu-inline.diff -p1
 
+However, with the current way that a series file is handled, it will
+error out because the -p1 is tried as a file. This is because in the
+for loop that iterates the files, we only look for comment lines. Then
+each line is used within a bash for loop which uses spaces a
+delimiter. In order to fix this, we should only use the string that
+comes before a space in the series file.
+
+Note that the format allows for any arbitrary depth to the -pN field.
+But since we'll have only one package with -pN fields, and all will be
+-p1, we for now always assume -p1. This will have to be fixed whenever
+we get a package with other values.
+
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+[yann.morin.1998 at free.fr: expand comment about the format of a series
+file and how we interpret it]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+CC: Arnout Vandecappelle <arnout@mind.be>
+
+---
 Changes v1 -> v2:
-  - better document the change in apply-patch  (Yann)
-  - build everything at build time, not install time  (Yann)
+  - adopted by Yann by lack of time from Ryan
+  - expand comment
+  - fix commit log (we filter out comment lines, not invalid lines)
+---
+ support/scripts/apply-patches.sh | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 50b02a639558b5319e88d2c3ce66e3950352d694:
-
-  pixman: disable vmx for powerpc CS toolchains (2015-12-08 21:54:42 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/ustr
-
-for you to fetch changes up to 6bbfb3b8cb1249d1243175c8d0c46e9206621712:
-
-  ustr: use Debian patches to compile w/ GCC 5.x (2015-12-08 23:02:51 +0100)
-
-----------------------------------------------------------------
-Ryan Barnett (2):
-      apply-patches: only use first field of line for series file
-      ustr: use Debian patches to compile w/ GCC 5.x
-
- .../ustr/0001-cross-compile-modifications.patch    | 144 ---------------------
- package/ustr/ustr.hash                             |   2 +
- package/ustr/ustr.mk                               |  56 ++------
- support/scripts/apply-patches.sh                   |   8 +-
- 4 files changed, 22 insertions(+), 188 deletions(-)
- delete mode 100644 package/ustr/0001-cross-compile-modifications.patch
-
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 2edf054..aa13e88 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -115,7 +115,13 @@ function scan_patchdir {
+     # If there is a series file, use it instead of using ls sort order
+     # to apply patches. Skip line starting with a dash.
+     if [ -e "${path}/series" ] ; then
+-        for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
++        # The format of a series file accepts a second field that is
++        # used to specify the number of directory components to strip
++        # when applying the patch, in the form -pN (N an integer >= 0)
++        # We assume this field to always be -p1 whether it is present
++        # or missing.
++        series_patches="`grep -Ev "^#" ${path}/series | cut -d ' ' -f1 2> /dev/null`"
++        for i in $series_patches; do
+             apply_patch "$path" "$i" series
+         done
+     else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
