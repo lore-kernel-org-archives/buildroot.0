@@ -1,18 +1,25 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 8 Dec 2015 14:18:15 +0000
-Subject: [Buildroot] [PATCH 2/2] nodejs: build for the right MIPS
+Date: Tue, 8 Dec 2015 14:24:47 +0000
+Subject: [Buildroot] [PATCH v2 2/2] nodejs: build for the right MIPS
 	architecture variant
-In-Reply-To: <1449584295-21736-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1449584295-21736-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1449584295-21736-2-git-send-email-Vincent.Riera@imgtec.com>
+In-Reply-To: <1449584295-21736-2-git-send-email-Vincent.Riera@imgtec.com>
+References: <1449584295-21736-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1449584687-23841-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+
+  http://autobuild.buildroot.net/results/faa/faae16b543e146b230256d7653d181fb895c83fc/
+
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
+Changes v1 -> v2:
+ - Add autobuild failure URL.
+
  package/nodejs/nodejs.mk | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
