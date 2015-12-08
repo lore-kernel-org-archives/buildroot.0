@@ -1,102 +1,102 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed,  9 Dec 2015 00:02:28 +0100
-Subject: [Buildroot] [PATCH v8 25/33] package/efl/libembryo: remove package
+Date: Wed,  9 Dec 2015 00:02:30 +0100
+Subject: [Buildroot] [PATCH v8 27/33] package/efl/libefreet: remove package
 In-Reply-To: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
 References: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449615756-19115-26-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449615756-19115-28-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libembryo is now available in efl package.
+Libefreet is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 v6: Improve lecacy help text (Yann E.Morin)
-v5: remove libembryo directory
+v5: remove libefreet directory
 v4: update Config.in to use libefl
 v3: update legacy option for 2015.11
     update help text
 ---
  Config.in.legacy                   |  7 +++++++
  package/efl/Config.in              |  1 -
- package/efl/libembryo/Config.in    |  9 ---------
- package/efl/libembryo/libembryo.mk | 18 ------------------
+ package/efl/libefreet/Config.in    | 10 ----------
+ package/efl/libefreet/libefreet.mk | 17 -----------------
  4 files changed, 7 insertions(+), 28 deletions(-)
- delete mode 100644 package/efl/libembryo/Config.in
- delete mode 100644 package/efl/libembryo/libembryo.mk
+ delete mode 100644 package/efl/libefreet/Config.in
+ delete mode 100644 package/efl/libefreet/libefreet.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index da7e690..c161687 100644
+index 4a99c7b..c6dd9e3 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.02"
  
-+config BR2_PACKAGE_LIBEMBRYO
-+	bool "libembryo package has been removed"
++config BR2_PACKAGE_LIBEFREET
++	bool "libefreet package has been removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  With EFL 1.15, libembryo is now provided by the libefl package.
++	  With EFL 1.15, libefreet is now provided by the libefl package.
 +
- config BR2_PACKAGE_LIBEDJE
- 	bool "libedje package has been removed"
+ config BR2_PACKAGE_LIBEIO
+ 	bool "libeio package has been removed"
  	select BR2_LEGACY
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 417534c..2f6d94d 100644
+index 509f356..a4ad1d9 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -22,7 +22,6 @@ source "package/efl/libefl/Config.in"
- source "package/efl/libefreet/Config.in"
- source "package/efl/libeio/Config.in"
+@@ -19,7 +19,6 @@ source "package/efl/libeina/Config.in"
+ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
+-source "package/efl/libefreet/Config.in"
  source "package/efl/libevas/Config.in"
--source "package/efl/libembryo/Config.in"
  source "package/efl/libelementary/Config.in"
  source "package/efl/libedbus/Config.in"
- 
-diff --git a/package/efl/libembryo/Config.in b/package/efl/libembryo/Config.in
+diff --git a/package/efl/libefreet/Config.in b/package/efl/libefreet/Config.in
 deleted file mode 100644
-index 63c7064..0000000
---- a/package/efl/libembryo/Config.in
+index 8687db4..0000000
+--- a/package/efl/libefreet/Config.in
 +++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_LIBEMBRYO
--	bool "libembryo"
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_LIBEFREET
+-	bool "libefreet"
 -	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBECORE
 -	help
--	  Embryo is primarily a shared library that gives you an API
--	  to load and control interpreted programs compiled into an
--	  abstract machine bytecode that it understands.
+-	  Efreet is a library designed to help apps work with several of the
+-	  Freedesktop.org standards regarding Icons, Desktop files and Menus.
 -
--	  http://trac.enlightenment.org/e/wiki/Embryo
-diff --git a/package/efl/libembryo/libembryo.mk b/package/efl/libembryo/libembryo.mk
+-	  http://trac.enlightenment.org/e/wiki/Efreet
+diff --git a/package/efl/libefreet/libefreet.mk b/package/efl/libefreet/libefreet.mk
 deleted file mode 100644
-index fc45e42..0000000
---- a/package/efl/libembryo/libembryo.mk
+index 65dbd12..0000000
+--- a/package/efl/libefreet/libefreet.mk
 +++ /dev/null
-@@ -1,18 +0,0 @@
+@@ -1,17 +0,0 @@
 -################################################################################
 -#
--# libembryo
+-# libefreet
 -#
 -################################################################################
 -
--LIBEMBRYO_VERSION = 1.7.10
--LIBEMBRYO_SOURCE = embryo-$(LIBEMBRYO_VERSION).tar.bz2
--LIBEMBRYO_SITE = http://download.enlightenment.org/releases
--LIBEMBRYO_LICENSE = BSD-2c, Embryo license
--LIBEMBRYO_LICENSE_FILES = COPYING
+-LIBEFREET_VERSION = 1.7.10
+-LIBEFREET_SOURCE = efreet-$(LIBEFREET_VERSION).tar.bz2
+-LIBEFREET_SITE = http://download.enlightenment.org/releases
+-LIBEFREET_LICENSE = BSD-2c
+-LIBEFREET_LICENSE_FILES = COPYING
 -
--LIBEMBRYO_INSTALL_STAGING = YES
+-LIBEFREET_INSTALL_STAGING = YES
 -
--LIBEMBRYO_DEPENDENCIES = host-pkgconf libeina
+-LIBEFREET_DEPENDENCIES = libeina libeet libecore
 -
 -$(eval $(autotools-package))
--$(eval $(host-autotools-package))
 -- 
 2.4.3
