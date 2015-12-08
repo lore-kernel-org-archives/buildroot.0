@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Dec 2015 21:08:58 +0100
-Subject: [Buildroot] [PATCH 3/4] package/lttng-tools: backport patch
- fixing pthread_setname_np failure
-In-Reply-To: <1449092893-30664-3-git-send-email-s.martin49@gmail.com>
+Date: Tue, 8 Dec 2015 21:11:32 +0100
+Subject: [Buildroot] [PATCH 4/4] package/lttng-tools: fix static build
+In-Reply-To: <1449092893-30664-4-git-send-email-s.martin49@gmail.com>
 References: <1449092893-30664-1-git-send-email-s.martin49@gmail.com>
- <1449092893-30664-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <20151208200858.GR4188@free.fr>
+ <1449092893-30664-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <20151208201132.GS4188@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,91 +14,120 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2015-12-02 22:48 +0100, Samuel Martin spake thusly:
-> This patch, backported from upstream, prevent the build from failing due
-> to:
-> 
->   [...]
->     CCLD     lttng-consumerd
->   ../../../src/common/.libs/libcommon.a(runas.o): In function `run_as_worker':
->   /tmp/br/build/lttng-tools-2.7.0/src/common/runas.c:325: undefined reference to `pthread_setname_np'
->   collect2: error: ld returned 1 exit status
->   Makefile:475: recipe for target 'lttng-consumerd' failed
->   [...]
+> Some unit tests depend on objects from src/common/.
+> This patch makes sure to points to the location of the non-PIC object files.
+> Otherwise, in case of static only build, the PIC object are not built, so
+> the link will fail.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Same comment as for patch 2:
+This patch has now been accepted upstream:
 
-    https://git.lttng.org/?p=lttng-tools.git;a=commit;h=b8090274814e5f6a22cff0dd656e14769cc7a7df
+    https://git.lttng.org/?p=lttng-tools.git;a=commit;h=3622d7c3931685fab8d1b2e5585a369b78cefd12
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  ...dependency-on-glibc-2.12-caused-by-pthrea.patch | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 package/lttng-tools/0002-Fix-Remove-dependency-on-glibc-2.12-caused-by-pthrea.patch
+>  ...0003-tests-unit-fix-object-files-location.patch | 90 ++++++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 package/lttng-tools/0003-tests-unit-fix-object-files-location.patch
 > 
-> diff --git a/package/lttng-tools/0002-Fix-Remove-dependency-on-glibc-2.12-caused-by-pthrea.patch b/package/lttng-tools/0002-Fix-Remove-dependency-on-glibc-2.12-caused-by-pthrea.patch
+> diff --git a/package/lttng-tools/0003-tests-unit-fix-object-files-location.patch b/package/lttng-tools/0003-tests-unit-fix-object-files-location.patch
 > new file mode 100644
-> index 0000000..5ab187c
+> index 0000000..3233a1b
 > --- /dev/null
-> +++ b/package/lttng-tools/0002-Fix-Remove-dependency-on-glibc-2.12-caused-by-pthrea.patch
-> @@ -0,0 +1,55 @@
-> +Upstream status: merged
-> +From 8c40c9d05cca5c9fd6b98055cb26462bc0efdab2 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-> + <jeremie.galarneau@efficios.com>
-> +Date: Wed, 30 Sep 2015 16:48:12 -0400
-> +Subject: [PATCH] Fix: Remove dependency on glibc 2.12 caused by
-> + pthread_setname_np
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
+> +++ b/package/lttng-tools/0003-tests-unit-fix-object-files-location.patch
+> @@ -0,0 +1,90 @@
+> +Upstream status: submitted
+> +Fetched from: https://lists.lttng.org/pipermail/lttng-dev/2015-December/025331.html
+> +From 15b43f3b61adecb62ed6b297fa709313ada7bf89 Mon Sep 17 00:00:00 2001
+> +From: Samuel Martin <s.martin49@gmail.com>
+> +Date: Mon, 23 Nov 2015 00:11:36 +0100
+> +Subject: [PATCH] tests/unit: fix object files' location
 > +
-> +prctl() can be used to set the same attribute set by
-> +pthread_setname_np, but doesn't introduce a dependency on a newer
-> +glibc. Using prctl(PR_SET_NAME) introduces a soft dependency on
-> +Linux 2.6.9. However, the worker won't fail to launch if the call
-> +fails as it is set out of convenience (debugger output).
+> +Referring to *.o files under a .libs/ directory is not recommended
+> +because this belongs to libtool's innards.
 > +
-> +Signed-off-by: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
+> +Indeed, libtool decides to place the *.o files in an
+> +implementation-specific location:
+> +- PIC *.o files go into a .libs/ directory;
+> +- non-PIC *.o files are generated along side to their corresponding
+> +  source files.
+> +
+> +Using PIC objects to build executable is legit, thought it may
+> +introduce some minor overhead at runtime.
+> +
+> +However, hard-coding these PIC object files in the Makefile.am to build
+> +executables breaks the build in case of static only build.
+> +
+> +In this case, no PIC object files is generated, so the linker will not
+> +found some of the needed objects files.
+> +
+> +Changing these dependencies' path fixes the static build, keeping the
+> +shared one ok, though the non-PIC object files are now always built.
+> +
+> +Fixes #983.
+> +
+> +Fix tested on git master and v2.6 with no change needed.
+> +
 > +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > +---
-> + src/common/runas.c | 10 +++++-----
-> + 1 file changed, 5 insertions(+), 5 deletions(-)
+> + tests/unit/Makefile.am | 18 +++++++++---------
+> + 1 file changed, 9 insertions(+), 9 deletions(-)
 > +
-> +diff --git a/src/common/runas.c b/src/common/runas.c
-> +index fc30a55..57f7382 100644
-> +--- a/src/common/runas.c
-> ++++ b/src/common/runas.c
-> +@@ -31,6 +31,7 @@
-> + #include <sched.h>
-> + #include <sys/signal.h>
-> + #include <assert.h>
-> ++#include <sys/prctl.h>
+> +diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+> +index c0c9c45..7bfe65a 100644
+> +--- a/tests/unit/Makefile.am
+> ++++ b/tests/unit/Makefile.am
+> +@@ -34,9 +34,9 @@ SESSIONS=$(top_builddir)/src/bin/lttng-sessiond/session.o	\
+> + 	 $(top_builddir)/src/bin/lttng-sessiond/consumer.o \
+> + 	 $(top_builddir)/src/bin/lttng-sessiond/utils.o \
+> + 	 $(top_builddir)/src/bin/lttng-sessiond/snapshot.o \
+> +-	 $(top_builddir)/src/common/.libs/uri.o \
+> +-	 $(top_builddir)/src/common/.libs/utils.o \
+> +-	 $(top_builddir)/src/common/.libs/error.o \
+> ++	 $(top_builddir)/src/common/uri.o \
+> ++	 $(top_builddir)/src/common/utils.o \
+> ++	 $(top_builddir)/src/common/error.o \
+> + 	 $(top_builddir)/src/common/health/libhealth.la \
+> + 	 $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
 > + 
-> + #include <common/common.h>
-> + #include <common/utils.h>
-> +@@ -322,12 +323,11 @@ int run_as_worker(struct run_as_worker *worker)
-> + 	memset(worker->procname, 0, proc_orig_len);
-> + 	strncpy(worker->procname, DEFAULT_RUN_AS_WORKER_NAME, proc_orig_len);
+> +@@ -60,8 +60,8 @@ UST_DATA_TRACE=$(top_builddir)/src/bin/lttng-sessiond/trace-ust.o \
+> + 		   $(top_builddir)/src/bin/lttng-sessiond/session.o \
+> + 		   $(top_builddir)/src/bin/lttng-sessiond/snapshot.o \
+> + 		   $(top_builddir)/src/bin/lttng-sessiond/agent.o \
+> +-		   $(top_builddir)/src/common/.libs/uri.o \
+> +-		   $(top_builddir)/src/common/.libs/utils.o \
+> ++		   $(top_builddir)/src/common/uri.o \
+> ++		   $(top_builddir)/src/common/utils.o \
+> + 		   $(top_builddir)/src/common/health/libhealth.la \
+> + 		   $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
 > + 
-> +-	ret = pthread_setname_np(pthread_self(), DEFAULT_RUN_AS_WORKER_NAME);
-> ++	ret = prctl(PR_SET_NAME, DEFAULT_RUN_AS_WORKER_NAME, 0, 0, 0);
-> + 	if (ret) {
-> +-		errno = ret;
-> +-		ret = -1;
-> +-		PERROR("pthread_setname_np");
-> +-		return EXIT_FAILURE;
-> ++		/* Don't fail as this is not essential. */
-> ++		PERROR("prctl PR_SET_NAME");
-> ++		ret = 0;
-> + 	}
+> +@@ -75,8 +75,8 @@ endif
+> + KERN_DATA_TRACE=$(top_builddir)/src/bin/lttng-sessiond/trace-kernel.o	\
+> + 		$(top_builddir)/src/bin/lttng-sessiond/consumer.o	\
+> + 		$(top_builddir)/src/bin/lttng-sessiond/utils.o \
+> +-		$(top_builddir)/src/common/.libs/uri.o \
+> +-		$(top_builddir)/src/common/.libs/utils.o \
+> ++		$(top_builddir)/src/common/uri.o \
+> ++		$(top_builddir)/src/common/utils.o \
+> + 		$(top_builddir)/src/common/health/libhealth.la \
+> + 		$(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
 > + 
-> + 	sendret.ret = 0;
+> +@@ -86,8 +86,8 @@ test_kernel_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBRELAYD) $(LIBSESSIOND_COMM)
+> + test_kernel_data_LDADD += $(KERN_DATA_TRACE)
+> + 
+> + # utils suffix for unit test
+> +-UTILS_SUFFIX=$(top_builddir)/src/common/.libs/utils.o \
+> +-		$(top_builddir)/src/common/.libs/runas.o
+> ++UTILS_SUFFIX=$(top_builddir)/src/common/utils.o \
+> ++		$(top_builddir)/src/common/runas.o
+> + 
+> + # parse_size_suffix unit test
+> + test_utils_parse_size_suffix_SOURCES = test_utils_parse_size_suffix.c
 > +-- 
 > +2.6.2
 > +
