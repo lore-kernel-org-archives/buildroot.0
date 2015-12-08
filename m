@@ -1,63 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Dec 2015 21:22:21 +0100
-Subject: [Buildroot] [PATCH] pixman: disable vmx for powerpc CS
-	toolchains
-In-Reply-To: <1449498431-5872-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1449498431-5872-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151208202220.GT4188@free.fr>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 08 Dec 2015 20:34:22 +0000
+Subject: [Buildroot] About Golang package
+In-Reply-To: <565ECD45.9090407@huawei.com>
+References: <565ECD45.9090407@huawei.com>
+Message-ID: <CA+h8R2qnWQTiE66NOH9gczQORTgcJu=NLSuYou2X7p+5AjKagg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+All,
 
-On 2015-12-07 11:27 -0300, Gustavo Zacarias spake thusly:
-> The ppc CS toolchains have flaky VMX (AKA altivec) implementation
-> causing build failure. Disable it for these toolchains. Fixes:
-> http://autobuild.buildroot.net/results/3b4/3b4cda40f074578f6b35b1fb381ba37b93174e86/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+I'll get to this later this week, hopefully. Been bogged down lately.
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: build-tested only]
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Best,
+Christian
 
-Regards,
-Yann E. MORIN.
+On Wed, Dec 2, 2015 at 5:52 AM Liuhua <sdu.liu@huawei.com> wrote:
 
-> ---
->  package/pixman/pixman.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-> index 8281773..8845315 100644
-> --- a/package/pixman/pixman.mk
-> +++ b/package/pixman/pixman.mk
-> @@ -32,5 +32,10 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405),y)
->  PIXMAN_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DPIXMAN_NO_TLS"
->  endif
->  
-> +# Altivec detection isn't reliable for CS toolchains
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103)$(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
-> +PIXMAN_CONF_OPTS += --disable-vmx
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> -- 
-> 2.4.10
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Hi Christian, Yann and Jerzy
+>
+>
+> I'd like to cross compile Golang programs for AARCH64 platfrom, which is
+> supported
+> by Golang1.5+. And I like buildroot.
+>
+> Becasuse I subscribed to this mailing list for a while. So I must find you
+> patchset
+> "package/golang: new package" using Google. And I may miss somethis about
+> the discussion.
+> So I have a few questions as following.
+>
+>
+> 1. What's the status of adding Golang to buildroot?
+> 2. It is a runnable way to add gccgo into the toolchain for Go program
+> compiling?
+>
+>
+> Thanks,
+> Liu Hua
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151208/99e1f586/attachment.html>
