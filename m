@@ -1,128 +1,81 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed,  9 Dec 2015 00:02:07 +0100
-Subject: [Buildroot] [PATCH v8 04/33] package/{efl packages}: reorder
-	select/depends
+Date: Wed,  9 Dec 2015 00:02:14 +0100
+Subject: [Buildroot] [PATCH v8 11/33] package/efl/libefl: add jp2k config
+	option
 In-Reply-To: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
 References: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449615756-19115-5-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449615756-19115-12-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As noticed by Yann [1], move the package dependencies
-before selected packages/options.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
+Like for webp format, add an option to enable the JPEG 2000
+codec support in the efl libraries.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: new patch
+v6: use --disable option
+v4: rename to libefl
+    improve commit log
 ---
- package/efl/libelementary/Config.in       |  4 ++--
- package/enlightenment/Config.in           | 22 +++++++++++-----------
- package/expedite/Config.in                |  6 +++---
- package/libevas-generic-loaders/Config.in |  4 ++--
- 4 files changed, 18 insertions(+), 18 deletions(-)
+ package/efl/libefl/Config.in | 7 +++++++
+ package/efl/libefl/libefl.mk | 9 +++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
-index 4f62592..fcc7025 100644
---- a/package/efl/libelementary/Config.in
-+++ b/package/efl/libelementary/Config.in
-@@ -3,12 +3,12 @@ comment "libelementary needs a toolchain w/ threads, dynamic library"
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index 4a202a0..72b7347 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -98,6 +98,13 @@ config BR2_PACKAGE_LIBEFL_PNG
+ 	  This enables the loader code that loads png files using
+ 	  libpng.
  
- config BR2_PACKAGE_LIBELEMENTARY
- 	bool "libelementary"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBEINA
- 	select BR2_PACKAGE_LIBEVAS
- 	select BR2_PACKAGE_LIBECORE
- 	select BR2_PACKAGE_LIBEDJE
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
--	depends on !BR2_STATIC_LIBS
++config BR2_PACKAGE_LIBEFL_JP2K
++	bool "libevas jp2k loader"
++	select BR2_PACKAGE_OPENJPEG
++	help
++	  This enables the loader code that loads jp2k files using
++	  openjpeg.
++
+ config BR2_PACKAGE_LIBEFL_JPEG
+ 	bool "libevas jpeg loader"
  	help
- 	  Elementary is a widget toolkit and EFL wrapper and convenience
- 	  library to make it easy to build applications and tools with UIs
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index 58f8f39..9dad571 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -1,5 +1,16 @@
- config BR2_PACKAGE_ENLIGHTENMENT
- 	bool "enlightenment"
-+	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	# libedbus -> dbus
-+	# libedbus -> glib2, libevas
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# libedbus -> dbus, efl libraries
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_XORG7
-+	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	select BR2_PACKAGE_EFL
- 	select BR2_PACKAGE_LIBECORE
- 	select BR2_PACKAGE_LIBECORE_X
-@@ -17,17 +28,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
--	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
--	depends on BR2_USE_WCHAR
--	depends on BR2_INSTALL_LIBSTDCPP
--	# libedbus -> dbus
--	# libedbus -> glib2, libevas
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# libedbus -> dbus, efl libraries
--	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_XORG7
--	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
--	depends on BR2_ARCH_HAS_ATOMICS
- 	help
- 	  Enlightenment, also known simply as E, is a stacking window
- 	  manager for the X Window System which can be used alone or
-diff --git a/package/expedite/Config.in b/package/expedite/Config.in
-index de6a056..e60510b 100644
---- a/package/expedite/Config.in
-+++ b/package/expedite/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_EXPEDITE
- 	bool "expedite"
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBEET
- 	depends on BR2_PACKAGE_EFL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-+	select BR2_PACKAGE_LIBEET
-+	select BR2_PACKAGE_LIBEINA
-+	select BR2_PACKAGE_LIBEVAS
- 	help
- 	  Expedite is the official Evas benchmark tool. It can test different
- 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
-diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-index 72d4adb..f42f8a6 100644
---- a/package/libevas-generic-loaders/Config.in
-+++ b/package/libevas-generic-loaders/Config.in
-@@ -14,13 +14,13 @@ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index cdc28bb..e1eb313 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -30,7 +30,6 @@ LIBEFL_GETTEXTIZE = YES
  
- config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	bool "SVG loader"
--	select BR2_PACKAGE_LIBRSVG
--	select BR2_PACKAGE_CAIRO
- 	depends on BR2_USE_MMU # librsvg -> glib2
- 	depends on BR2_USE_WCHAR # librsvg -> glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
- 	depends on BR2_ARCH_HAS_ATOMICS # cairo
-+	select BR2_PACKAGE_LIBRSVG
-+	select BR2_PACKAGE_CAIRO
- 	help
- 	  This option enables the Evas generic SVG loader
+ # Configure options:
+ # --disable-cxx-bindings: disable C++11 bindings.
+-# --disable-image-loader-jp2k: disable JPEG 2000 support.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+ # --enable-lua-old: disable Elua and remove luajit dependency.
+@@ -40,7 +39,6 @@ LIBEFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--disable-cxx-bindings \
+-	--disable-image-loader-jp2k \
+ 	--disable-sdl \
+ 	--disable-systemd \
+ 	--enable-lua-old \
+@@ -178,6 +176,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-image-loader-tiff
+ endif
  
++ifeq ($(BR2_PACKAGE_LIBEFL_JP2K),y)
++LIBEFL_CONF_OPTS += --enable-image-loader-jp2k=yes
++LIBEFL_DEPENDENCIES += openjpeg
++else
++LIBEFL_CONF_OPTS += --disable-image-loader-jp2k
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
+ LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
+ LIBEFL_DEPENDENCIES += webp
 -- 
 2.4.3
