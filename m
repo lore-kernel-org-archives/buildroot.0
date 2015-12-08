@@ -1,144 +1,130 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed,  9 Dec 2015 00:02:23 +0100
-Subject: [Buildroot] [PATCH v8 20/33] package/enlightenment: bump to version
-	0.19.12
+Date: Wed,  9 Dec 2015 00:02:08 +0100
+Subject: [Buildroot] [PATCH v8 05/33] package/efl/libefl: new host-package
 In-Reply-To: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
 References: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449615756-19115-21-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449615756-19115-6-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the newly added libefl package wich provide a new version
-of efl libraries.
-This new version needs libelementary dependency.
-
-Update upstream url, add hash file and use xz archive.
-
-Select png and jpeg image loader since enlightenment_start
-fail at runtime if png and jpeg image loader are not
-available in elf libraries.
+This new host-package provide edje_cc, embryo_cc and eet binaries
+that will be used by the upcomming libefl packages which will
+contain the new version of efl libraries.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: disable systemd and linux-pam explicitely since it's auto
-    detected. (A patch adding their support can be added latter)
-v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
-    remove comment on dependencies
-v4: update Config.in to use libefl
-    improve commit log
-    keep the dependency on threads
-v3: bymp to 0.19.12
-    remove trailing slash (Vicente Bergas)
-v2: bump to 0.19.9
-    remove glibc only dependency
+v6: Add more license files (Yann E.Morin)
+v4: keep efl as a sub-directory.
+    rename this new package to libefl since we want to keep a efl
+    and elementary version in sync.
+v3: remove trailing slash (Vicente Bergas)
+    bump to 1.15.2
 ---
- package/enlightenment/Config.in          | 23 +++++++----------------
- package/enlightenment/enlightenment.hash |  2 ++
- package/enlightenment/enlightenment.mk   | 26 +++++++++++---------------
- 3 files changed, 20 insertions(+), 31 deletions(-)
- create mode 100644 package/enlightenment/enlightenment.hash
+ package/efl/libefl/libefl.hash |  2 ++
+ package/efl/libefl/libefl.mk   | 82 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 84 insertions(+)
+ create mode 100644 package/efl/libefl/libefl.hash
+ create mode 100644 package/efl/libefl/libefl.mk
 
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index 9dad571..1a39ac4 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -8,26 +8,17 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# libedbus -> dbus, efl libraries
- 	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_EFL
- 	depends on BR2_PACKAGE_XORG7
- 	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
- 	depends on BR2_ARCH_HAS_ATOMICS
--	select BR2_PACKAGE_EFL
--	select BR2_PACKAGE_LIBECORE
--	select BR2_PACKAGE_LIBECORE_X
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEET
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBEVAS_JPEG
--	select BR2_PACKAGE_LIBEVAS_PNG
--	select BR2_PACKAGE_LIBEVAS_EET
--	select BR2_PACKAGE_LIBECORE_EVAS
--	select BR2_PACKAGE_LIBEDJE
--	select BR2_PACKAGE_LIBEFREET
--	select BR2_PACKAGE_LIBEDBUS
--	select BR2_PACKAGE_LIBEIO
--	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
-+	select BR2_PACKAGE_LIBEFL_X
-+	select BR2_PACKAGE_LIBEFL_JPEG # needed at runtime by enlightenment_start
-+	select BR2_PACKAGE_LIBEFL_PNG # needed at runtime by enlightenment_start
-+	select BR2_PACKAGE_LIBELEMENTARY
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
-+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
- 	help
- 	  Enlightenment, also known simply as E, is a stacking window
- 	  manager for the X Window System which can be used alone or
-@@ -38,6 +29,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	  http://www.enlightenment.org/
- 
- comment "enlightenment needs a toolchain w/ wchar, C++, threads"
--	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
-+	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_ARCH_HAS_ATOMICS
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+diff --git a/package/efl/libefl/libefl.hash b/package/efl/libefl/libefl.hash
 new file mode 100644
-index 0000000..c9b1284
+index 0000000..7ac26f4
 --- /dev/null
-+++ b/package/enlightenment/enlightenment.hash
++++ b/package/efl/libefl/libefl.hash
 @@ -0,0 +1,2 @@
-+# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
-+sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index ddebe06..f2e0bc3 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,30 +4,26 @@
- #
- ################################################################################
- 
--ENLIGHTENMENT_VERSION = 0.17.6
--ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
-+ENLIGHTENMENT_VERSION = 0.19.12
-+ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
-+ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
- ENLIGHTENMENT_LICENSE_FILES = COPYING
- 
--ENLIGHTENMENT_DEPENDENCIES = 	\
--	host-pkgconf 		\
--	libecore 		\
--	libeet 			\
--	libeina 		\
--	libevas 		\
-+ENLIGHTENMENT_DEPENDENCIES = \
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.15.2.tar.xz.sha256
++sha256	dd738f19f454621a7fa1fdb4c008457c170989f5f0c535edfed7b6773ae6c2a4	efl-1.15.2.tar.xz
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+new file mode 100644
+index 0000000..d070131
+--- /dev/null
++++ b/package/efl/libefl/libefl.mk
+@@ -0,0 +1,82 @@
++################################################################################
++#
++# libefl
++#
++################################################################################
++
++# hardcode the version here since the bump to 1.15 is not complete in Buildroot
++LIBEFL_VERSION = 1.15.2
++LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
++LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
++LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
++LIBEFL_LICENSE_FILES = \
++	COMPLIANCE \
++	COPYING \
++	licenses/COPYING.BSD \
++	licenses/COPYING.FTL \
++	licenses/COPYING.GPL \
++	licenses/COPYING.LGPL \
++	licenses/COPYING.SMALL
++
++################################################################################
++#
++# host-libefl
++#
++################################################################################
++
++# We want to build only some host tools used later in the build.
++# Actually we want: edje_cc, embryo_cc and eet.
++
++# Host dependencies:
++# * host-dbus: for Eldbus
++# * host-freetype: for libevas
++# * host-libglib2: for libecore
++# * host-libjpeg, host-libpng: for libevas image loader
++# * host-lua: disable luajit dependency
++HOST_LIBEFL_DEPENDENCIES = \
 +	host-pkgconf \
-+	host-libefl \
-+	libefl \
-+	libelementary \
- 	libevas-generic-loaders \
--	libedje 		\
--	libefreet 		\
--	libedbus 		\
--	libeio 			\
--	host-libedje 		\
--	host-libeet		\
- 	xcb-util-keysyms
- 
- ENLIGHTENMENT_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
--	--disable-rpath
-+	--disable-pam \
-+	--disable-rpath \
-+	--disable-systemd
- 
- # uClibc has an old incomplete sys/ptrace.h for powerpc & sparc
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
++	host-dbus \
++	host-freetype \
++	host-libglib2 \
++	host-libjpeg \
++	host-libpng \
++	host-lua \
++	host-zlib
++
++# Configure options:
++# --disable-audio, --disable-multisense remove libsndfile dependency.
++# --disable-cxx-bindings: disable C++11 bindings.
++# --disable-fontconfig: remove dependency on fontconfig.
++# --disable-fribidi: remove dependency on libfribidi.
++# --disable-gstreamer1: remove dependency on gtreamer 1.0.
++# --disable-libeeze: remove libudev dependency.
++# --disable-libmount: remove dependency on host-util-linux libmount.
++# --disable-physics: remove Bullet dependency.
++# --enable-image-loader-gif=no: disable Gif dependency.
++# --enable-image-loader-tiff=no: disable Tiff dependency.
++# --enable-lua-old: disable Elua and remove luajit dependency.
++# --with-crypto=none: remove dependencies on openssl or gnutls.
++# --with-x11=none: remove dependency on X.org.
++#   Yes I really know what I am doing.
++HOST_LIBEFL_CONF_OPTS += \
++	--disable-audio \
++	--disable-cxx-bindings \
++	--disable-fontconfig \
++	--disable-fribidi \
++	--disable-gstreamer1 \
++	--disable-libeeze \
++	--disable-libmount \
++	--disable-multisense \
++	--disable-physics \
++	--enable-image-loader-gif=no \
++	--enable-image-loader-jpeg=yes \
++	--enable-image-loader-png=yes \
++	--enable-image-loader-tiff=no \
++	--enable-lua-old \
++	--with-crypto=none \
++	--with-glib=yes \
++	--with-opengl=none \
++	--with-x11=none \
++	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
++
++$(eval $(host-autotools-package))
 -- 
 2.4.3
