@@ -1,26 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 08 Dec 2015 21:54:45 +0100
-Subject: [Buildroot] [PATCH] pixman: disable vmx for powerpc CS
-	toolchains
-In-Reply-To: <1449498431-5872-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 7 Dec 2015 11:27:11 -0300")
-References: <1449498431-5872-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871tawmzje.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Dec 2015 21:55:14 +0100
+Subject: [Buildroot] [PATCH v2 1/2] apply-patches: only use first field
+ of line for series file
+In-Reply-To: <1448070305-10768-1-git-send-email-ryanbarnett3@gmail.com>
+References: <1448070305-10768-1-git-send-email-ryanbarnett3@gmail.com>
+Message-ID: <20151208205514.GV4188@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Ryan, All,
 
- > The ppc CS toolchains have flaky VMX (AKA altivec) implementation
- > causing build failure. Disable it for these toolchains. Fixes:
- > http://autobuild.buildroot.net/results/3b4/3b4cda40f074578f6b35b1fb381ba37b93174e86/
+On 2015-11-20 19:45 -0600, Ryan Barnett spake thusly:
+> A series file for quilt has a valid syntax of:
+> 
+>   fixes/autoconf.diff -p1
+>   fixes/doc-html-local-css.diff -p1
+>   fixes/gnu-inline.diff -p1
+> 
+> However, with the current way that a series file is handled, it will
+> error out because the -p1 is tried as a file. This is because in the
+> for loop that iterates the files, we only look for invalid lines. Then
+> each line is used within a bash for loop which uses spaces a
+> delimiter. In order to fix this, we should only use the string that
+> comes before a space in the series file.
+> 
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+> CC: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  support/scripts/apply-patches.sh | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index 2edf054..6525f94 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -115,7 +115,10 @@ function scan_patchdir {
+>      # If there is a series file, use it instead of using ls sort order
+>      # to apply patches. Skip line starting with a dash.
+>      if [ -e "${path}/series" ] ; then
+> -        for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
+> +        # Some series files for quilt contain a '-p1' at the end, handle this
+> +        # by only using the first word from series file
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Wrong. The format is not -p1, but -pN where N is an integer greater than
+or equal to 0. Some quilt series (in some Debian packages or in some
+Gentoo packages) has -p0 or -p1 or -p2 ; I even saw -p4 once.
 
-Committed, thanks.
+So, simply ditching the last field in incorrect.
+
+However, since we only have one packge that has the -pN field, and all
+of them are -p1, we don't have a test-case against a generic -pN
+handling. We can deal with that when/if the issue is raised.
+
+Still, I'd prefer we have a little comment stating that we explicitly do
+not deal with the genericc -pN format, and just assume -p1, whether that
+field is present or missing, something like so maybe:
+
+    # The format of a series file accepts a second field that is
+    # used to specify the number of directory components to strip
+    # when applying the patch, in the form -pN (N an integer >= 0)
+    # We assume this field to always be -p1 wheter it is present or
+    # missing.
+
+Regards,
+Yann E. MORIN.
+
+> +        series_patches="`grep -Ev "^#" ${path}/series | cut -d ' ' -f1 2> /dev/null`"
+> +        for i in $series_patches; do
+>              apply_patch "$path" "$i" series
+>          done
+>      else
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
