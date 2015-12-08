@@ -1,56 +1,81 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 8 Dec 2015 21:59:03 +0100
-Subject: [Buildroot] [PATCH v1] read-edid: bump version to 3.0.2
-In-Reply-To: <566700EC.4070000@imgtec.com>
-References: <1449520389-23420-1-git-send-email-ps.report@gmx.net>
- <566700EC.4070000@imgtec.com>
-Message-ID: <20151208215903.700a6353@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Dec 2015 21:59:10 +0100
+Subject: [Buildroot] [PATCH] libsemanage: fix build error when linking
+ with ustr
+In-Reply-To: <1449174328-8317-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1449174328-8317-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <20151208205910.GW4188@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vincent,
+Sergio, All,
 
-On Tue, 8 Dec 2015 16:10:20 +0000, Vicente Olivert Riera <Vincent.Riera@imgtec.com> wrote:
+Thanks for your patch! :-)
 
-> Dear Peter Seiderer,
+On 2015-12-03 18:25 -0200, Sergio Prado spake thusly:
+> Disable ustr inline functions to avoid multiple definition of symbols error
+> when linking with ustr.
 > 
-> On 07/12/15 20:33, Peter Seiderer wrote:
-> > - update hash
-> > - change from autotools to cmake package
-> > - update license info
-> > - enable get-edid command (i2c build)
-> > - add patch fixing install error because of missing file COPYING
+> Fixes:
+> http://autobuild.buildroot.net/results/e7012c7a734dbdd1c697cf63b6df6e834e8eafc7
+> http://autobuild.buildroot.net/results/0783a63e4694ffa8463ef5533b635c7e7c43dd42
+> http://autobuild.buildroot.net/results/40726abf3419a727c5762ef2791dbf53fa1736c0
+> http://autobuild.buildroot.net/results/a6a0c827c393a5fb41653d71d1ee50df283a32fb
+> ...
 > 
-> Out of curiosity, have you reported that problem upstream? I think it
-> always good to know the upstream status of the patches we add in Buildroot.
-> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 
-O.k, done now...
+As Thomas already pointed to, there is already a two-patch series to fix
+the issue by bumping and fixing ustr itself.
 
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> 
-> Build test for MIPS architecture:
-> 
-> $ grep -E ^READ_EDID_VERSION package/read-edid/read-edid.mk
-> READ_EDID_VERSION = 3.0.2
-> 
-> $ file output/target/usr/bin/get-edid
-> output/target/usr/bin/get-edid: ELF 32-bit LSB executable, MIPS, MIPS32
-> rel2 version 1, dynamically linked, interpreter /lib/ld.so.1, for
-> GNU/Linux 2.6.32, not stripped
-> 
+So I've marked your patch as rejected in our patchwork:
+    https://patchwork.ozlabs.org/patch/552445/
 
-Thanks for testing...
+Thanks! :-)
 
 Regards,
-Peter
+Yann E. MORIN.
 
-> Regards,
+> ---
+>  package/libsemanage/libsemanage.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> Vincent.
+> diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+> index 197c14e4229a..ea9f4c9f67de 100644
+> --- a/package/libsemanage/libsemanage.mk
+> +++ b/package/libsemanage/libsemanage.mk
+> @@ -13,10 +13,15 @@ LIBSEMANAGE_INSTALL_STAGING = YES
+>  
+>  LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+>  
+> +# disable ustr inline functions to avoid multiple definition of symbols
+> +# error when linking
+> +LIBSEMANAGE_CFLAGS = $(TARGET_CFLAGS) -DUSTR_CONF_COMPILE_USE_INLINE=0
+> +
+>  define LIBSEMANAGE_BUILD_CMDS
+>  	# DESTDIR is needed during the compile to compute library and
+>  	# header paths.
+> -	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
+> +	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) CFLAGS="$(LIBSEMANAGE_CFLAGS)" \
+> +		DESTDIR=$(STAGING_DIR) all
+>  endef
+>  
+>  define LIBSEMANAGE_INSTALL_STAGING_CMDS
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
