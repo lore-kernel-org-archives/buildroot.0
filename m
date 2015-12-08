@@ -1,39 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Dec 2015 16:25:47 +0100
-Subject: [Buildroot] [PATCH v7 33/33]
- package/libemotion-generic-players: new package
-In-Reply-To: <20151208142734.GM4188@free.fr>
-References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
- <1449523775-6582-34-git-send-email-romain.naour@openwide.fr>
- <20151208142734.GM4188@free.fr>
-Message-ID: <20151208152547.GN4188@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 8 Dec 2015 15:50:26 +0000
+Subject: [Buildroot] [PATCH] p11-kit: bump to version 0.23.2
+In-Reply-To: <1449576547-5982-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1449576547-5982-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5666FC42.7070007@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Dear Gustavo Zacarias,
 
-On 2015-12-08 15:27 +0100, Yann E. MORIN spake thusly:
-> On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
-> > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-[--SNIP--]
-> I'll just try another biuld-test, with no X11 support but with full
-> OpenGL (see my comments in the GL patch).
+On 08/12/15 12:09, Gustavo Zacarias wrote:
+> 0002-rpc-transport.c-include-sys-select.h-for-fd_set.patch is upstream
+> so drop it.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-OK, that build is working fine...
+Build test for MIPS architecture:
 
-Still, it does not, IMHO, make sense to enable full OpenGL support when
-EFL does not have X11 support to begin with.
+$ grep -E ^P11_KIT_VERSION package/p11-kit/p11-kit.mk
+P11_KIT_VERSION = 0.23.2
+
+$ file output/target/usr/bin/p11-kit
+output/target/usr/bin/p11-kit: ELF 32-bit LSB executable, MIPS, version
+1 (SYSV), dynamically linked, interpreter /lib/ld-linux-mipsn8.so.1, for
+GNU/Linux 4.0.0, stripped
 
 Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Vincent.
