@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Dec 2015 11:28:44 +0100
-Subject: [Buildroot] [PATCH v7 12/33] package/efl/libefl: add X11 support
-In-Reply-To: <1449523775-6582-13-git-send-email-romain.naour@openwide.fr>
+Date: Tue, 8 Dec 2015 11:35:22 +0100
+Subject: [Buildroot] [PATCH v7 13/33] package/efl/libefl: add
+ OpenGL/OpenGLES support
+In-Reply-To: <1449523775-6582-14-git-send-email-romain.naour@openwide.fr>
 References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
- <1449523775-6582-13-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151208102844.GB4188@free.fr>
+ <1449523775-6582-14-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151208103522.GC4188@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,71 +15,98 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
-> Add an option to enable X11 support in libecore without graphic
-> acceleration. libecore can use xlib or xcb support but the latter
-> in not recommended by efl developpers [1]. Thereby the xcb support
-> has been dropped with the bump to efl 1.15.
+> Allow to enable graphic acceleration using OpenGL or
+> OpenGLES with efl libraries.
 > 
-> Also, set x-includes and x-libraries configure option for cross-compiling.
-> Previous efl versions had cross-compilation issue (poisoned paths)
-> if these options are not passed to configure script.
-> 
-> In order to remove the dependency on libXp wich is no longer bundled in
-> recent X11 release [2], backport an upstream patch [3] to remove xprint
-> usage.
-> 
-> [1] https://git.enlightenment.org/core/efl.git/tree/configure.ac#n5002
-> [2] http://www.x.org/wiki/Releases/ModuleVersions
-> [3] https://git.enlightenment.org/core/efl.git/commit/?h=efl-1.15&id=434572355c7e929b84210b2f795634d38f13c913
+> The full opengl option depend on X11, because full openGL means GLX,
+> which means X11.
 > 
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-[--SNIP--]
-> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-> index 38fade1..4ebc20f 100644
-> --- a/package/efl/libefl/libefl.mk
-> +++ b/package/efl/libefl/libefl.mk
-[--SNIP--]
-> @@ -146,6 +146,27 @@ else
->  LIBEFL_CONF_OPTS += --disable-fb
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
-> +LIBEFL_CONF_OPTS += --with-x=$(STAGING_DIR) \
-> +	--with-x11=xlib \
-> +	--x-includes=$(STAGING_DIR)/usr/include \
-> +	--x-libraries=$(STAGING_DIR)/usr/lib
-
-Nit-picking, but it would have been nicer to write:
-
-    LIBEFL_CONF_OPTS += \
-        --with-x11=xlib \
-        --with-x=$(STAGING_DIR) \
-        --x-includes=$(STAGING_DIR)/usr/include \
-        --x-libraries=$(STAGING_DIR)/usr/lib
-
-I.e. all the path options together, after the feature option, with no
-option on the first line. But that's just really personal preference...
-
-Otherwise:
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> +LIBEFL_DEPENDENCIES += \
-> +	xlib_libX11 \
-> +	xlib_libXcomposite \
-> +	xlib_libXcursor \
-> +	xlib_libXdamage \
-> +	xlib_libXext \
-> +	xlib_libXinerama \
-> +	xlib_libXrandr \
-> +	xlib_libXrender \
-> +	xlib_libXScrnSaver \
-> +	xlib_libXtst
-> +else
-> +LIBEFL_CONF_OPTS += --with-x11=none
+> ---
+> v6: Rename OpenGL options (Yann E.Morin)
+>     Only full OpenGL support depends on X11.
+> v4: rename libefl
+>     improve commit log
+> ---
+>  package/efl/libefl/Config.in | 28 ++++++++++++++++++++++++++++
+>  package/efl/libefl/libefl.mk | 17 +++++++++++++++--
+>  2 files changed, 43 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+> index 560a7b3..b0cb675 100644
+> --- a/package/efl/libefl/Config.in
+> +++ b/package/efl/libefl/Config.in
+> @@ -105,6 +105,34 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
+>  	select BR2_PACKAGE_XLIB_LIBXTST
+>  	select BR2_PACKAGE_XPROTO_GLPROTO
+>  
+> +choice
+> +	bool "OpenGL support"
+> +	default BR2_PACKAGE_LIBEFL_OPENGL   if BR2_PACKAGE_HAS_LIBGL && BR2_PACKAGE_XORG7
+> +	default BR2_PACKAGE_LIBEFL_OPENGLES if BR2_PACKAGE_HAS_LIBGLES
+> +	help
+> +	  libevas can be configured to use HW acceleration with OpenGL or
+> +	  OpenGLES.
+> +
+> +config BR2_PACKAGE_LIBEFL_OPENGL_NONE
+> +	bool "none"
+> +
+> +config BR2_PACKAGE_LIBEFL_OPENGL
+> +	bool "opengl"
+> +	depends on BR2_PACKAGE_HAS_LIBGL
+> +	depends on BR2_PACKAGE_XORG7
+> +
+> +comment "opengl support needs X11 and an opengl provider"
+> +	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
+> +
+> +config BR2_PACKAGE_LIBEFL_OPENGLES
+> +	bool "opengles"
+> +	depends on BR2_PACKAGE_HAS_LIBGLES
+> +
+> +comment "opengles support needs an opengles provider"
+> +	depends on !BR2_PACKAGE_HAS_LIBGLES
+> +
+> +endchoice # OpenGL support
+> +
+>  comment "libevas loaders"
+>  
+>  config BR2_PACKAGE_LIBEFL_PNG
+> diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+> index 4ebc20f..fa1ee74 100644
+> --- a/package/efl/libefl/libefl.mk
+> +++ b/package/efl/libefl/libefl.mk
+> @@ -43,8 +43,7 @@ LIBEFL_CONF_OPTS = \
+>  	--disable-cxx-bindings \
+>  	--disable-sdl \
+>  	--disable-systemd \
+> -	--enable-lua-old \
+> -	--with-opengl=none
+> +	--enable-lua-old
+>  
+>  # Disable untested configuration warning.
+>  ifeq ($(BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG),)
+> @@ -167,6 +166,20 @@ else
+>  LIBEFL_CONF_OPTS += --with-x11=none
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBEFL_OPENGL),y)
+> +LIBEFL_CONF_OPTS += --with-opengl=full
+> +LIBEFL_DEPENDENCIES += libgl
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBEFL_OPENGLES),y)
+> +LIBEFL_CONF_OPTS += --with-opengl=es
+> +LIBEFL_DEPENDENCIES += libgles
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBEFL_OPENGL_NONE),y)
+> +LIBEFL_CONF_OPTS += --with-opengl=none
 > +endif
 > +
 >  # Loaders that need external dependencies needs to be --enable-XXX=yes
