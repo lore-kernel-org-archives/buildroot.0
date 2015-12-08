@@ -1,130 +1,94 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed,  9 Dec 2015 00:02:08 +0100
-Subject: [Buildroot] [PATCH v8 05/33] package/efl/libefl: new host-package
+Date: Wed,  9 Dec 2015 00:02:19 +0100
+Subject: [Buildroot] [PATCH v8 16/33] package/libevas-generic-loaders: bump
+	to version 1.15.0
 In-Reply-To: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
 References: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449615756-19115-6-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449615756-19115-17-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new host-package provide edje_cc, embryo_cc and eet binaries
-that will be used by the upcomming libefl packages which will
-contain the new version of efl libraries.
+Use the newly added libefl package wich provide a new version
+of libeina.
+
+Also, update the upstream url and add a hash file.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: Add more license files (Yann E.Morin)
-v4: keep efl as a sub-directory.
-    rename this new package to libefl since we want to keep a efl
-    and elementary version in sync.
+v6: add host-pkgconfig dependency (Yann E.Morin)
+v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
+v4: rename to libefl
+    improve commit log
+    add a dependency on threads
 v3: remove trailing slash (Vicente Bergas)
-    bump to 1.15.2
+v2: bump to 1.15
+    remove glibc only dependency
 ---
- package/efl/libefl/libefl.hash |  2 ++
- package/efl/libefl/libefl.mk   | 82 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 84 insertions(+)
- create mode 100644 package/efl/libefl/libefl.hash
- create mode 100644 package/efl/libefl/libefl.mk
+ package/libevas-generic-loaders/Config.in                    |  3 +--
+ package/libevas-generic-loaders/libevas-generic-loaders.hash |  2 ++
+ package/libevas-generic-loaders/libevas-generic-loaders.mk   | 10 ++++++----
+ 3 files changed, 9 insertions(+), 6 deletions(-)
+ create mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.hash
 
-diff --git a/package/efl/libefl/libefl.hash b/package/efl/libefl/libefl.hash
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index f42f8a6..65ced8a 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -1,14 +1,13 @@
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	bool "libevas generic loaders"
+ 	depends on BR2_PACKAGE_EFL
+-	select BR2_PACKAGE_LIBEINA
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  These are additional "generic" loaders for Evas that are
+ 	  stand-alone executables that evas may run from its generic
+ 	  loader module.
+ 
+-	  http://trac.enlightenment.org/e/wiki/Evas_Generic_Loaders
++	  https://www.enlightenment.org/
+ 
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.hash b/package/libevas-generic-loaders/libevas-generic-loaders.hash
 new file mode 100644
-index 0000000..7ac26f4
+index 0000000..32723ba
 --- /dev/null
-+++ b/package/efl/libefl/libefl.hash
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.hash
 @@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.15.2.tar.xz.sha256
-+sha256	dd738f19f454621a7fa1fdb4c008457c170989f5f0c535edfed7b6773ae6c2a4	efl-1.15.2.tar.xz
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-new file mode 100644
-index 0000000..d070131
---- /dev/null
-+++ b/package/efl/libefl/libefl.mk
-@@ -0,0 +1,82 @@
-+################################################################################
-+#
-+# libefl
-+#
-+################################################################################
-+
-+# hardcode the version here since the bump to 1.15 is not complete in Buildroot
-+LIBEFL_VERSION = 1.15.2
-+LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
-+LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
-+LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
-+LIBEFL_LICENSE_FILES = \
-+	COMPLIANCE \
-+	COPYING \
-+	licenses/COPYING.BSD \
-+	licenses/COPYING.FTL \
-+	licenses/COPYING.GPL \
-+	licenses/COPYING.LGPL \
-+	licenses/COPYING.SMALL
-+
-+################################################################################
-+#
-+# host-libefl
-+#
-+################################################################################
-+
-+# We want to build only some host tools used later in the build.
-+# Actually we want: edje_cc, embryo_cc and eet.
-+
-+# Host dependencies:
-+# * host-dbus: for Eldbus
-+# * host-freetype: for libevas
-+# * host-libglib2: for libecore
-+# * host-libjpeg, host-libpng: for libevas image loader
-+# * host-lua: disable luajit dependency
-+HOST_LIBEFL_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-dbus \
-+	host-freetype \
-+	host-libglib2 \
-+	host-libjpeg \
-+	host-libpng \
-+	host-lua \
-+	host-zlib
-+
-+# Configure options:
-+# --disable-audio, --disable-multisense remove libsndfile dependency.
-+# --disable-cxx-bindings: disable C++11 bindings.
-+# --disable-fontconfig: remove dependency on fontconfig.
-+# --disable-fribidi: remove dependency on libfribidi.
-+# --disable-gstreamer1: remove dependency on gtreamer 1.0.
-+# --disable-libeeze: remove libudev dependency.
-+# --disable-libmount: remove dependency on host-util-linux libmount.
-+# --disable-physics: remove Bullet dependency.
-+# --enable-image-loader-gif=no: disable Gif dependency.
-+# --enable-image-loader-tiff=no: disable Tiff dependency.
-+# --enable-lua-old: disable Elua and remove luajit dependency.
-+# --with-crypto=none: remove dependencies on openssl or gnutls.
-+# --with-x11=none: remove dependency on X.org.
-+#   Yes I really know what I am doing.
-+HOST_LIBEFL_CONF_OPTS += \
-+	--disable-audio \
-+	--disable-cxx-bindings \
-+	--disable-fontconfig \
-+	--disable-fribidi \
-+	--disable-gstreamer1 \
-+	--disable-libeeze \
-+	--disable-libmount \
-+	--disable-multisense \
-+	--disable-physics \
-+	--enable-image-loader-gif=no \
-+	--enable-image-loader-jpeg=yes \
-+	--enable-image-loader-png=yes \
-+	--enable-image-loader-tiff=no \
-+	--enable-lua-old \
-+	--with-crypto=none \
-+	--with-glib=yes \
-+	--with-opengl=none \
-+	--with-x11=none \
-+	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
-+
-+$(eval $(host-autotools-package))
++# From https://download.enlightenment.org/rel/libs/evas_generic_loaders/evas_generic_loaders-1.15.0.tar.xz.sha256
++sha256	1e539e4d4d4e1590345caeb7fdd84f47ec7cd63bb76b6b7107a87420a401fd7f	evas_generic_loaders-1.15.0.tar.xz
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index ac6b1cc..47dfa9a 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -4,17 +4,19 @@
+ #
+ ################################################################################
+ 
+-LIBEVAS_GENERIC_LOADERS_VERSION = 1.7.10
+-LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.bz2
+-LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/releases
++LIBEVAS_GENERIC_LOADERS_VERSION = 1.15.0
++LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.xz
++LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/rel/libs/evas_generic_loaders
+ LIBEVAS_GENERIC_LOADERS_LICENSE = GPLv2
+ LIBEVAS_GENERIC_LOADERS_LICENSE_FILES = COPYING
+ 
+ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+ 
+-LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libeina zlib
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = host-pkgconf libefl zlib
+ 
+ # For now, we only support the SVG loader
++# poppler >= 0.32 is not supported by the current version of
++# libevas-generic-loaders.
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
 -- 
 2.4.3
