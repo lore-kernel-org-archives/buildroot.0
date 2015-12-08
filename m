@@ -1,106 +1,78 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed,  9 Dec 2015 00:02:16 +0100
-Subject: [Buildroot] [PATCH v8 13/33] package/efl/libefl: add
-	OpenGL/OpenGLES support
+Date: Wed,  9 Dec 2015 00:02:20 +0100
+Subject: [Buildroot] [PATCH v8 17/33] package/libevas-generic-loaders: add
+	libraw dependency
 In-Reply-To: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
 References: <1449615756-19115-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449615756-19115-14-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449615756-19115-18-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow to enable graphic acceleration using OpenGL or
-OpenGLES with efl libraries.
+libraw it's one of the "highly recommended" dependecies
+according to the README [1].
 
-The full opengl option depend on X11, because full openGL means GLX,
-which means X11.
+[1] https://git.enlightenment.org/core/evas_generic_loaders.git/tree/README?id=v1.15.0#n31
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v6: Rename OpenGL options (Yann E.Morin)
-    Only full OpenGL support depends on X11.
-v4: rename libefl
-    improve commit log
+v6: select BR2_PACKAGE_LIBRAW and propagate its dependency on
+    C++. (Yann E.Morin)
+v4: improve commit log
 ---
- package/efl/libefl/Config.in | 28 ++++++++++++++++++++++++++++
- package/efl/libefl/libefl.mk | 17 +++++++++++++++--
- 2 files changed, 43 insertions(+), 2 deletions(-)
+ package/libevas-generic-loaders/Config.in                  | 10 ++++++++++
+ package/libevas-generic-loaders/libevas-generic-loaders.mk |  9 +++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 560a7b3..b0cb675 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -105,6 +105,34 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XPROTO_GLPROTO
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index 65ced8a..1d5b717 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -11,6 +11,16 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
  
-+choice
-+	bool "OpenGL support"
-+	default BR2_PACKAGE_LIBEFL_OPENGL   if BR2_PACKAGE_HAS_LIBGL && BR2_PACKAGE_XORG7
-+	default BR2_PACKAGE_LIBEFL_OPENGLES if BR2_PACKAGE_HAS_LIBGLES
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 
++config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
++	bool "libraw loader"
++	depends on BR2_INSTALL_LIBSTDCPP # libraw
++	select BR2_PACKAGE_LIBRAW
 +	help
-+	  libevas can be configured to use HW acceleration with OpenGL or
-+	  OpenGLES.
++	  This option enables the Evas generic Libraw loader
 +
-+config BR2_PACKAGE_LIBEFL_OPENGL_NONE
-+	bool "none"
++comment "libraw loader needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
 +
-+config BR2_PACKAGE_LIBEFL_OPENGL
-+	bool "opengl"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on BR2_PACKAGE_XORG7
-+
-+comment "opengl support needs X11 and an opengl provider"
-+	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
-+
-+config BR2_PACKAGE_LIBEFL_OPENGLES
-+	bool "opengles"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "opengles support needs an opengles provider"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES
-+
-+endchoice # OpenGL support
-+
- comment "libevas loaders"
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+ 	depends on BR2_USE_MMU # librsvg -> glib2
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index 47dfa9a..2c1c1cd 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -14,15 +14,20 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
  
- config BR2_PACKAGE_LIBEFL_PNG
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 2b9ed2c..acc4c06 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -44,8 +44,7 @@ LIBEFL_CONF_OPTS = \
- 	--disable-sdl \
- 	--disable-systemd \
- 	--disable-xinput22 \
--	--enable-lua-old \
--	--with-opengl=none
-+	--enable-lua-old
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = host-pkgconf libefl zlib
  
- # Disable untested configuration warning.
- ifeq ($(BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG),)
-@@ -169,6 +168,20 @@ else
- LIBEFL_CONF_OPTS += --with-x11=none
- endif
+-# For now, we only support the SVG loader
+ # poppler >= 0.32 is not supported by the current version of
+ # libevas-generic-loaders.
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
+-	--disable-libraw \
+ 	--disable-gstreamer
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_OPENGL),y)
-+LIBEFL_CONF_OPTS += --with-opengl=full
-+LIBEFL_DEPENDENCIES += libgl
++ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
++else
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBEFL_OPENGLES),y)
-+LIBEFL_CONF_OPTS += --with-opengl=es
-+LIBEFL_DEPENDENCIES += libgles
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEFL_OPENGL_NONE),y)
-+LIBEFL_CONF_OPTS += --with-opengl=none
-+endif
-+
- # Loaders that need external dependencies needs to be --enable-XXX=yes
- # otherwise the default is '=static'.
- # All other loaders are statically built-in
+ ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
 -- 
 2.4.3
