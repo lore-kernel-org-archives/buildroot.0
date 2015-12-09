@@ -1,96 +1,53 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 9 Dec 2015 17:30:24 +0000
-Subject: [Buildroot] [PATCH] libass: allow compilation without a system
- font provider
-In-Reply-To: <20151209172813.GA3743@free.fr>
-References: <1449505148-9046-1-git-send-email-Vincent.Riera@imgtec.com>
- <20151208171627.GO4188@free.fr> <5668002F.90802@imgtec.com>
- <20151209172813.GA3743@free.fr>
-Message-ID: <56686530.3060209@imgtec.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed,  9 Dec 2015 18:48:35 +0100
+Subject: [Buildroot] [PATCH] barebox: bump to version 2015.12.0
+Message-ID: <1449683315-20454-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-On 09/12/15 17:28, Yann E. MORIN wrote:
-> Vicente, All,
-> 
-> On 2015-12-09 10:19 +0000, Vicente Olivert Riera spake thusly:
->> On 08/12/15 17:16, Yann E. MORIN wrote:
->>> On 2015-12-07 16:19 +0000, Vicente Olivert Riera spake thusly:
->>>> If no system font provider is provided, then libass will fail to build
->>>> because it requires one by default. The error looks like this:
->>>>
->>>> configure: error: Either DirectWrite (on Windows), CoreText (on OSX), or
->>>> Fontconfig(Linux, other) is required. If you really want to compile
->>>> withouta system font provider, add
->>>> --disable-require-system-font-provider
->>>>
->>>> But, as the error messages says, we can allow the compilation without a
->>>> system font provider if we use the above configure option, so let's do
->>>> it.
->>>>
->>>> Fixes:
->>>>
->>>>   http://autobuild.buildroot.net/results/3a4/3a4c07a0a54d5497fa8a4be2191856e286729637/
->>>>
->>>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>>> ---
->>>>  package/libass/libass.mk | 3 +++
->>>>  1 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/package/libass/libass.mk b/package/libass/libass.mk
->>>> index 83939e2..f1ec503 100644
->>>> --- a/package/libass/libass.mk
->>>> +++ b/package/libass/libass.mk
->>>> @@ -24,6 +24,9 @@ ifeq ($(BR2_i386)$(BR2_x86_64),y)
->>>>  LIBASS_DEPENDENCIES += host-yasm
->>>>  endif
->>>>  
->>>> +# Allow compilation without a system font provider
->>>> +LIBASS_CONF_OPTS = --disable-require-system-font-provider
->>>
->>> It is my understanding that fontconfig *is* a "system font provider", so
->>> maybe that should go n the else-case for fontconfig, below?
->>>
->>>>  ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
->>>>  LIBASS_DEPENDENCIES += fontconfig
->>>>  LIBASS_CONF_OPTS += --enable-fontconfig
->>> Here:
->>>
->>>     else
->>>     LIBASS_CONF_OPTS += \
->>>         --disable-fontconfig \
->>>         --disable-require-system-font-provider
->>>     endif
->>
->> That was my first approach, but then I thought a bit more about it, and
->> I realized that there could be more system font providers in the future
->> (not only fontconfig). So, by using that option we enable the
->> possibility to build libass without a system font provider. That doesn't
->> mean necessarily that libass will be built without one. If the
->> fontconfig package is selected, it will be built with support for it.
-> 
-> But since that is currently not the case (i.e. we have a single font
-> provider), I think we should do as I suggest. When/if we have another
-> font provider, then we can revisit that at that time.
-
-With my approach we won't need to revisit it :P
-
-> And I don't know what other font provider we'd have on Linux, beside
-> fontconfig. Arguably, I'm not a font expert either! ;-)
-
-Me neither.
-
-Anyway, let's the maintainer decide.
-
-Regards,
-
-Vincent.
-
-> Regards,
-> Yann E. MORIN.
-> 
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index e9021fb..207d9b2 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.11.0"
++	bool "2015.12.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2015.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index bb2ecc2..178655d 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# http://www.barebox.org/download/barebox-2015.11.0.tar.bz2.md5
+-md5 05951fa64000f5baedfc1064dbcfcad0 barebox-2015.11.0.tar.bz2
++# http://www.barebox.org/download/barebox-2015.12.0.tar.bz2.md5
++md5 1ef8926cd2eadc39ce779b8377e7cfcc barebox-2015.12.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 ea40cef0a5ef76c4d68e76ac0e5c71c758c563ffa48c08e0b284688ec6f9d422 barebox-2015.11.0.tar.bz2
++sha256 b0b7df82dafcc7aceeaa6285755855a71f6422c5a278949c717096f4ffd7f315 barebox-2015.12.0.tar.bz2
+-- 
+2.5.0
