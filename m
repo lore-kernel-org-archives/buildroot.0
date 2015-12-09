@@ -1,50 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Dec 2015 22:48:31 +0100
-Subject: [Buildroot] [PATCH 2/5 v3] docs/manual: document the new
-	kconfig-package variable
+Date: Wed,  9 Dec 2015 22:48:32 +0100
+Subject: [Buildroot] [PATCH 3/5 v3] package/linux: Handle generated
+	defconfigs
 In-Reply-To: <cover.1449697131.git.yann.morin.1998@free.fr>
 References: <cover.1449697131.git.yann.morin.1998@free.fr>
-Message-ID: <881f5e705fecf086b638fcbdc3cfc12210389e83.1449697131.git.yann.morin.1998@free.fr>
+Message-ID: <f7e0e40386adf567cd65f739588fd0877ca15682.1449697131.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The previous patch introduced the new FOO_KCONFIG_DEFCONFIG variable
-to specify a defconfig rule rather than a (def)config file.
+From: Sam bobroff <sam.bobroff@au1.ibm.com>
 
-Add this to the manual.
-
-Also document the pre-existing FOO_KCONFIG_FILE for which the
-explanations were missing altogether.
-
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+[yann.morin.1998 at free.fr: move the kconfig-package hunk to the
+ corresponding patch]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Sam Bobroff <sam.bobroff@au1.ibm.com>
 ---
- docs/manual/adding-packages-kconfig.txt | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ linux/linux.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/adding-packages-kconfig.txt b/docs/manual/adding-packages-kconfig.txt
-index 17f91e3..3290024 100644
---- a/docs/manual/adding-packages-kconfig.txt
-+++ b/docs/manual/adding-packages-kconfig.txt
-@@ -46,6 +46,16 @@ This snippet creates the following make targets:
- and ensures that the source configuration file is copied to the build
- directory at the right moment.
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 9507837..a2ee349 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -168,12 +168,10 @@ endef
+ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
  
-+There are two options to specify a configuration file to use, either
-++FOO_KCONFIG_FILE+ (as in the example, above) or +FOO_KCONFIG_DEFCONFIG+.
-+It is mandatory to provide either, but not both:
-+
-+* +FOO_KCONFIG_FILE+ specifies the path to a defconfig or full-config file
-+  to be used to configure the package.
-+
-+* +FOO_KCONFIG_DEFCONFIG+ specifies the defconfig 'make' rule to call to
-+  configure the package.
-+
- In addition to these minimally required lines, several optional variables can
- be set to suit the needs of the package under consideration:
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+-KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
++LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
++LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
+ endif
+-
+-LINUX_KCONFIG_FILE = $(KERNEL_SOURCE_CONFIG)
+ LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
+ LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
+@@ -365,13 +363,13 @@ LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
+ ifeq ($(BR_BUILDING),y)
  
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+-ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG)),)
++ifeq ($(LINUX_KCONFIG_DEFCONFIG),)
+ $(error No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting)
+ endif
+ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)),)
++ifeq ($(LINUX_KCONFIG_FILE),)
+ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting)
+ endif
+ endif
 -- 
 1.9.1
