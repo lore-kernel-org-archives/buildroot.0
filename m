@@ -1,70 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  9 Dec 2015 09:55:16 +0100
-Subject: [Buildroot] [PATCH] python-m2crypto: different fix for the OpenSSL
-	problem
-Message-ID: <1449651316-31595-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 9 Dec 2015 10:19:27 +0000
+Subject: [Buildroot] [PATCH] libass: allow compilation without a system
+ font provider
+In-Reply-To: <20151208171627.GO4188@free.fr>
+References: <1449505148-9046-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20151208171627.GO4188@free.fr>
+Message-ID: <5668002F.90802@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m2crypto provides a --openssl option to specify the location of the
-OpenSSL library, when not installed in /usr. However, this option does
-not apply to the standard "build" command normally called by the
-python-package infrastructure, but only to the "build_ext" command.
+Hello Yann,
 
-This already required to override the default python-package build
-commands for this package. Moreover, this the last bump to version
-0.22.5, things got even more complicated since calling just
-"build_ext" does not work, and additional quirks are needed.
+On 08/12/15 17:16, Yann E. MORIN wrote:
+> Vicente, All,
+> 
+> On 2015-12-07 16:19 +0000, Vicente Olivert Riera spake thusly:
+>> If no system font provider is provided, then libass will fail to build
+>> because it requires one by default. The error looks like this:
+>>
+>> configure: error: Either DirectWrite (on Windows), CoreText (on OSX), or
+>> Fontconfig(Linux, other) is required. If you really want to compile
+>> withouta system font provider, add
+>> --disable-require-system-font-provider
+>>
+>> But, as the error messages says, we can allow the compilation without a
+>> system font provider if we use the above configure option, so let's do
+>> it.
+>>
+>> Fixes:
+>>
+>>   http://autobuild.buildroot.net/results/3a4/3a4c07a0a54d5497fa8a4be2191856e286729637/
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>>  package/libass/libass.mk | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+>> index 83939e2..f1ec503 100644
+>> --- a/package/libass/libass.mk
+>> +++ b/package/libass/libass.mk
+>> @@ -24,6 +24,9 @@ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+>>  LIBASS_DEPENDENCIES += host-yasm
+>>  endif
+>>  
+>> +# Allow compilation without a system font provider
+>> +LIBASS_CONF_OPTS = --disable-require-system-font-provider
+> 
+> It is my understanding that fontconfig *is* a "system font provider", so
+> maybe that should go n the else-case for fontconfig, below?
+> 
+>>  ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
+>>  LIBASS_DEPENDENCIES += fontconfig
+>>  LIBASS_CONF_OPTS += --enable-fontconfig
+> Here:
+> 
+>     else
+>     LIBASS_CONF_OPTS += \
+>         --disable-fontconfig \
+>         --disable-require-system-font-provider
+>     endif
 
-This commit proposes to get away with this by relying on the default
-python-package behavior, and simply hardcoding the OpenSSL location by
-patching the setup.py script in a post-patch hook.
+That was my first approach, but then I thought a bit more about it, and
+I realized that there could be more system font providers in the future
+(not only fontconfig). So, by using that option we enable the
+possibility to build libass without a system font provider. That doesn't
+mean necessarily that libass will be built without one. If the
+fontconfig package is selected, it will be built with support for it.
 
-This issue has also been reported upstream at
-https://gitlab.com/m2crypto/m2crypto/issues/89.
+Regards,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-m2crypto/python-m2crypto.mk | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
-
-diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
-index 1f038e3..0416957 100644
---- a/package/python-m2crypto/python-m2crypto.mk
-+++ b/package/python-m2crypto/python-m2crypto.mk
-@@ -13,20 +13,16 @@ HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
- # We need to use python2 because m2crypto is not python3 compliant.
- HOST_PYTHON_M2CRYPTO_NEEDS_HOST_PYTHON = python2
- 
--HOST_PYTHON_M2CRYPTO_BUILD_DIR = $(@D)/build/lib.linux-$(HOSTARCH)-$(PYTHON_VERSION_MAJOR)
--
--# * We need to override the build commands to be able to use build_ext,
--#   which accepts the --openssl option.
--# * Use python2 interpreter to avoid trying building some python3 objects.
--# * because build_ext is flawed, is forgets to copy the files prior to
--#   the build, so we do it manually.
--define HOST_PYTHON_M2CRYPTO_BUILD_CMDS
--	mkdir -p $(HOST_PYTHON_M2CRYPTO_BUILD_DIR)
--	cp -av $(@D)/M2Crypto $(HOST_PYTHON_M2CRYPTO_BUILD_DIR)/M2Crypto
--	(cd $(@D); \
--		$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
--		$(HOST_DIR)/usr/bin/python2 setup.py build_ext \
--			--openssl=$(HOST_DIR)/usr)
-+# The --openssl option that allows to specify a custom path to OpenSSL
-+# can only be used with the non-default build_ext setup.py command,
-+# and calling this command directly fails. To work around this, simply
-+# hardcode the path to OpenSSL in setup.py.
-+# Bug reported at https://gitlab.com/m2crypto/m2crypto/issues/89
-+define HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
-+	$(SED) "s%self.openssl = '/usr'%self.openssl = '$(HOST_DIR)/usr'%" \
-+		$(@D)/setup.py
- endef
- 
-+HOST_PYTHON_M2CRYPTO_POST_PATCH_HOOKS += HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
-+
- $(eval $(host-python-package))
--- 
-2.6.3
+Vincent.
