@@ -1,27 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Dec 2015 23:07:03 +0100
-Subject: [Buildroot] [git commit] leafnode2: add a hash file
-Message-ID: <20151209220731.5B40281EE0@busybox.osuosl.org>
+Date: Wed, 9 Dec 2015 23:08:02 +0100
+Subject: [Buildroot] [git commit] mc: bump to 4.8.15
+Message-ID: <20151209220806.A8B6381EE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1de998cd480a8d80bebe039d6d1b45e2ca2e58dc
+commit: http://git.buildroot.net/buildroot/commit/?id=615e8c6963f1512cdb9d99e0400374a88b0ff7f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/leafnode2/leafnode2.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mc/mc.hash | 4 ++--
+ package/mc/mc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/leafnode2/leafnode2.hash b/package/leafnode2/leafnode2.hash
-new file mode 100644
-index 0000000..9c94fb9
---- /dev/null
-+++ b/package/leafnode2/leafnode2.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 34eba2cbbb871b724c8d5dd402d1c358aeb21ba426beb5658e155ed0d7461075  leafnode-2.0.0.alpha20140727b.tar.bz2
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index 7ae1c3b..810d144 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.14.sha256:
+-sha256  6b1f74efbdf394bfab084f4d2ea2e72173de5f12cd42be2533ca2c3b72edb8e6  mc-4.8.14.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.15.sha256:
++sha256  cf4e8f5dfe419830d56ca7e5f2495898e37ebcd05da1e47ff7041446c87fba16  mc-4.8.15.tar.xz
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index 2803c90..39de165 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MC_VERSION = 4.8.14
++MC_VERSION = 4.8.15
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPLv3+
