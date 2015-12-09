@@ -1,91 +1,50 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 9 Dec 2015 13:19:19 +0000
-Subject: [Buildroot] [git commit] edid-decode: new package
-In-Reply-To: <20151209131631.4526981DA0@busybox.osuosl.org>
-References: <20151209131631.4526981DA0@busybox.osuosl.org>
-Message-ID: <56682A57.4090207@imgtec.com>
+From: Viacheslav Volkov <sv99@inbox.ru>
+Date: Wed, 9 Dec 2015 16:40:49 +0300
+Subject: [Buildroot] [PATCH] gstreamer/gst-plugins-good correct patch
+ 0001-linux36.patch
+Message-ID: <56682F61.90106@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Supress warning message
 
-$(TARGET_MAKE_ENV) should have been used before $(MAKE), as I said in my
-review for this patch:
+>>> gst-plugins-good 0.10.31 Patching
 
-http://patchwork.ozlabs.org/patch/553537/
+Applying 0001-linux36.patch using patch:
+patching file sys/v4l2/gstv4l2bufferpool.c
+Hunk #1 succeeded at 181 with fuzz 2 (offset -1 lines).
+ 
+Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
+---
+ package/gstreamer/gst-plugins-good/0001-linux36.patch | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
+diff --git a/package/gstreamer/gst-plugins-good/0001-linux36.patch
+b/package/gstreamer/gst-plugins-good/0001-linux36.patch
+index 5d7cd93..99d62dd 100644
+--- a/package/gstreamer/gst-plugins-good/0001-linux36.patch
++++ b/package/gstreamer/gst-plugins-good/0001-linux36.patch
+@@ -25,13 +25,13 @@ diff --git a/sys/v4l2/gstv4l2bufferpool.c
+b/sys/v4l2/gstv4l2bufferpool.c
+ index 2e3a563..5aaed5a 100644
+ --- a/sys/v4l2/gstv4l2bufferpool.c
+ +++ b/sys/v4l2/gstv4l2bufferpool.c
+-@@ -182,7 +182,6 @@ gst_v4l2_buffer_new (GstV4l2BufferPool * pool,
+guint index, GstCaps * caps)
++@@ -181,7 +181,6 @@ gst_v4l2_buffer_new (GstV4l2BufferPool * pool,
+guint index, GstCaps * caps)
+      GST_LOG_OBJECT (pool->v4l2elem, "  MMAP offset:  %u",
+          ret->vbuffer.m.offset);
+    GST_LOG_OBJECT (pool->v4l2elem, "  length:    %u", ret->vbuffer.length);
+ -  GST_LOG_OBJECT (pool->v4l2elem, "  input:     %u", ret->vbuffer.input);
 
-Vincent.
-
-On 09/12/15 13:15, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=f856c1f7542cc7544ccea42d29922f118b9d40e2
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> [Peter: pass TARGET_CFLAGS/LDFLAGS, quote TARGET_DIR]
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/Config.in                  |  1 +
->  package/edid-decode/Config.in      |  6 ++++++
->  package/edid-decode/edid-decode.mk | 20 ++++++++++++++++++++
->  3 files changed, 27 insertions(+)
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 2bdad01..0eb6fda 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -340,6 +340,7 @@ endif
->  	source "package/dtv-scan-tables/Config.in"
->  	source "package/dvb-apps/Config.in"
->  	source "package/dvbsnoop/Config.in"
-> +	source "package/edid-decode/Config.in"
->  	source "package/eeprog/Config.in"
->  	source "package/eudev/Config.in"
->  	source "package/evemu/Config.in"
-> diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
-> new file mode 100644
-> index 0000000..64297b4
-> --- /dev/null
-> +++ b/package/edid-decode/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_EDID_DECODE
-> +	bool "edid-decode"
-> +	help
-> +	  Decode EDID data in human-readable format.
-> +
-> +	  http://cgit.freedesktop.org/xorg/app/edid-decode/
-> diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-> new file mode 100644
-> index 0000000..8fcc19e
-> --- /dev/null
-> +++ b/package/edid-decode/edid-decode.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# edid-decode
-> +#
-> +################################################################################
-> +
-> +EDID_DECODE_VERSION = 681153145d5e05ee15032ea792e967cda06e7622
-> +EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
-> +EDID_DECODE_LICENSE = MIT
-> +EDID_DECODE_LICENSE_FILES = edid-decode.c
-> +
-> +define EDID_DECODE_BUILD_CMDS
-> +	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
-> +endef
-> +
-> +define EDID_DECODE_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-> +endef
-> +
-> +$(eval $(generic-package))
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-   ret->mmap_length = ret->vbuffer.length;
+    data = (guint8 *) v4l2_mmap (0, ret->vbuffer.length,
++       PROT_READ | PROT_WRITE, MAP_SHARED, pool->video_fd,
+ --
+ cgit v0.9.0.2-2-gbebe
+-- 
+1.9.1
