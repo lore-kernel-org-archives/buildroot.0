@@ -1,18 +1,20 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 9 Dec 2015 15:18:40 +0100
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 9 Dec 2015 14:19:35 +0000
 Subject: [Buildroot] [PATCH v2 2/3] python-pexpect: new package
 In-Reply-To: <1449670313-3613-3-git-send-email-viktorin@rehivetech.com>
 References: <1446203156-26848-1-git-send-email-viktorin@rehivetech.com>
  <1449670313-3613-1-git-send-email-viktorin@rehivetech.com>
  <1449670313-3613-3-git-send-email-viktorin@rehivetech.com>
-Message-ID: <CAGm1_kuj=i5Z4uY92oM4-PH7kcnSK1PeYSHFQedUh3KGzdWNzA@mail.gmail.com>
+Message-ID: <56683877.40501@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 9, 2015 at 3:11 PM, Jan Viktorin <viktorin@rehivetech.com> wrote:
+Dear Jan Viktorin,
+
+On 09/12/15 14:11, Jan Viktorin wrote:
 > Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 > ---
 >  package/Config.in                        |  1 +
@@ -21,19 +23,22 @@ On Wed, Dec 9, 2015 at 3:11 PM, Jan Viktorin <viktorin@rehivetech.com> wrote:
 >  3 files changed, 25 insertions(+)
 >  create mode 100644 package/python-pexpect/Config.in
 >  create mode 100644 package/python-pexpect/python-pexpect.mk
->
+> 
 > diff --git a/package/Config.in b/package/Config.in
 > index 69bc347..77a92d2 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
 > @@ -638,6 +638,7 @@ menu "External python modules"
->         source "package/python-networkmanager/Config.in"
->         source "package/python-nfc/Config.in"
->         source "package/python-numpy/Config.in"
-> +       source "package/python-pexpect/Config.in"
->         source "package/python-pam/Config.in"
->         source "package/python-posix-ipc/Config.in"
->         source "package/python-protobuf/Config.in"
+>  	source "package/python-networkmanager/Config.in"
+>  	source "package/python-nfc/Config.in"
+>  	source "package/python-numpy/Config.in"
+> +	source "package/python-pexpect/Config.in"
+
+This should be alphabetically ordered.
+
+>  	source "package/python-pam/Config.in"
+>  	source "package/python-posix-ipc/Config.in"
+>  	source "package/python-protobuf/Config.in"
 > diff --git a/package/python-pexpect/Config.in b/package/python-pexpect/Config.in
 > new file mode 100644
 > index 0000000..a42aec7
@@ -41,48 +46,17 @@ On Wed, Dec 9, 2015 at 3:11 PM, Jan Viktorin <viktorin@rehivetech.com> wrote:
 > +++ b/package/python-pexpect/Config.in
 > @@ -0,0 +1,10 @@
 > +config BR2_PACKAGE_PYTHON_PEXPECT
-> +       bool "python-pexpect"
-> +       depends on BR2_PACKAGE_PYTHON
+> +	bool "python-pexpect"
+> +	depends on BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_PTYPROCESS
+> +	help
+> +	  Pexpect is a pure Python module for spawning child applications; controlling them; and responding to
+> +	  expected patterns in their output. Pexpect works like Don Libes? Expect. Pexpect allows your script
+> +	  to spawn a child application and control it as if a human were typing commands.
 
-remove BR2_PACKAGE_PYTHON dependency
+Wrap that line to 72 characters length, taking into account that we
+consider a tab as 8 characters wide.
 
-> +       select BR2_PACKAGE_PYTHON_PTYPROCESS
-> +       help
-> +         Pexpect is a pure Python module for spawning child applications; controlling them; and responding to
-> +         expected patterns in their output. Pexpect works like Don Libes? Expect. Pexpect allows your script
-> +         to spawn a child application and control it as if a human were typing commands.
+Regards,
 
-Lines must be max. 80 characters long
-
-> +
-> +         https://pexpect.readthedocs.org
-> diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
-> new file mode 100644
-> index 0000000..9de7849
-> --- /dev/null
-> +++ b/package/python-pexpect/python-pexpect.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-pexpect
-> +#
-> +################################################################################
-> +
-> +PYTHON_PEXPECT_VERSION = 4.0.1
-> +PYTHON_PEXPECT_SITE = $(call github,pexpect,pexpect,$(PYTHON_PEXPECT_VERSION))
-> +PYTHON_PEXPECT_LICENSE = ISC
-> +PYTHON_PEXPECT_LICENSE_FILES = LICENSE
-> +PYTHON_PEXPECT_SETUP_TYPE = distutils
-> +PYTHON_PEXPECT_DEPENDENCIES = python-ptyprocess
-
-is this a run-time or build dependency?
-
-> +
-> +$(eval $(python-package))
-> --
-> 2.6.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Vincent.
