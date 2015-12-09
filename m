@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Dec 2015 22:48:32 +0100
-Subject: [Buildroot] [PATCH 3/5 v3] package/linux: Handle generated
+Date: Wed,  9 Dec 2015 22:48:33 +0100
+Subject: [Buildroot] [PATCH 4/5 v3] boot/at91bootstrap3: Handled generated
 	defconfigs
 In-Reply-To: <cover.1449697131.git.yann.morin.1998@free.fr>
 References: <cover.1449697131.git.yann.morin.1998@free.fr>
-Message-ID: <f7e0e40386adf567cd65f739588fd0877ca15682.1449697131.git.yann.morin.1998@free.fr>
+Message-ID: <55ecc9e3a3c579b382d1ebb54dfad4b58d20e892.1449697131.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,42 +18,42 @@ Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
  corresponding patch]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- linux/linux.mk | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ boot/at91bootstrap3/at91bootstrap3.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 9507837..a2ee349 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -168,12 +168,10 @@ endef
- LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index fa67ea6..1910d46 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -41,12 +41,11 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
+ endef
  
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
--KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
-+LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
--KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
-+LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+-AT91BOOTSTRAP3_SOURCE_CONFIG = $(AT91BOOTSTRAP3_DIR)/board/*/$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG))_defconfig
++AT91BOOTSTRAP3_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG))
+ else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+-AT91BOOTSTRAP3_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
++AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
  endif
--
--LINUX_KCONFIG_FILE = $(KERNEL_SOURCE_CONFIG)
- LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
- LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
-@@ -365,13 +363,13 @@ LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
+ 
+-AT91BOOTSTRAP3_KCONFIG_FILE = $(AT91BOOTSTRAP3_SOURCE_CONFIG)
+ AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+ 
+@@ -55,13 +54,13 @@ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
  ifeq ($(BR_BUILDING),y)
  
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
--ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG)),)
-+ifeq ($(LINUX_KCONFIG_DEFCONFIG),)
- $(error No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting)
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+-ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
++ifeq ($(AT91BOOTSTRAP3_KCONFIG_DEFCONFIG),)
+ $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
  endif
  endif
  
- ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
--ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)),)
-+ifeq ($(LINUX_KCONFIG_FILE),)
- $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting)
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+-ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)),)
++ifeq ($(AT91BOOTSTRAP3_KCONFIG_FILE),)
+ $(error No at91bootstrap3 configuration file specified, check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE setting)
  endif
  endif
 -- 
