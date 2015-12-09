@@ -1,125 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Dec 2015 23:39:11 +0100
-Subject: [Buildroot] [git commit] package/lttng-tools: fix static build
-Message-ID: <20151209223915.4426C81F75@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Dec 2015 23:39:31 +0100
+Subject: [Buildroot] [PATCH v7 20/33] package/enlightenment: bump to
+ version 0.19.12
+In-Reply-To: <5668AC6C.4090802@openwide.fr>
+References: <1449523775-6582-1-git-send-email-romain.naour@openwide.fr>
+ <1449523775-6582-21-git-send-email-romain.naour@openwide.fr>
+ <20151208110626.GG4188@free.fr> <5668AC6C.4090802@openwide.fr>
+Message-ID: <20151209223931.GE3743@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e85a0bb03face4963b1e93b83cdb01066d68b79b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Romain, All,
 
-Some unit tests depend on objects from src/common/.
-This patch makes sure to points to the location of the non-PIC object files.
-Otherwise, in case of static only build, the PIC object are not built, so
-the link will fail.
+On 2015-12-09 23:34 +0100, Romain Naour spake thusly:
+> Le 08/12/2015 12:06, Yann E. MORIN a ?crit :
+> > On 2015-12-07 22:29 +0100, Romain Naour spake thusly:
+> >> Use the newly added libefl package wich provide a new version
+> >> of efl libraries.
+> >> This new version needs libelementary dependency.
+> >>
+> >> Update upstream url, add hash file and use xz archive.
+> >>
+> >> Select png and jpeg image loader since enlightenment_start
+> >> fail at runtime if png and jpeg image loader are not
+> >> available in elf libraries.
+> >>
+> >> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> >> ---
+> >> v6: disable systemd and linux-pam explicitely since it's auto
+> >>     detected. (A patch adding their support can be added latter)
+> > [--SNIP--]
+> >> diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+> >> index ddebe06..f2e0bc3 100644
+> >> --- a/package/enlightenment/enlightenment.mk
+> >> +++ b/package/enlightenment/enlightenment.mk
+[--SNIP--]
+> >>  ENLIGHTENMENT_CONF_OPTS = \
+> >>  	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+> >>  	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+> >> -	--disable-rpath
+> >> +	--disable-pam \
+> >> +	--disable-rpath \
+> >> +	--disable-systemd
+> > 
+> > What if libefl has systemd support but enlightenment hasn't?
+> 
+> You're right, systemd should be enabled in this case...
+> But I haven't fully tested enlightenment with systemd.
+> Maybe we can drop the systemd support for libefl for now ?
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...0003-tests-unit-fix-object-files-location.patch | 94 ++++++++++++++++++++++
- 1 file changed, 94 insertions(+)
+If you have not tested it, then don't add it, indeed.
 
-diff --git a/package/lttng-tools/0003-tests-unit-fix-object-files-location.patch b/package/lttng-tools/0003-tests-unit-fix-object-files-location.patch
-new file mode 100644
-index 0000000..9bfee4b
---- /dev/null
-+++ b/package/lttng-tools/0003-tests-unit-fix-object-files-location.patch
-@@ -0,0 +1,94 @@
-+Upstream status: Merged
-+Fetched from: https://git.lttng.org/?p=lttng-tools.git;a=commit;h=3622d7c3931685fab8d1b2e5585a369b78cefd12
-+From 3622d7c3931685fab8d1b2e5585a369b78cefd12 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Wed, 2 Dec 2015 00:36:45 +0100
-+Subject: [PATCH] tests/unit: fix object files' location
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Referring to *.o files under a .libs/ directory is not recommended
-+because this belongs to libtool's innards.
-+
-+Indeed, libtool decides to place the *.o files in an
-+implementation-specific location:
-+- PIC *.o files go into a .libs/ directory;
-+- non-PIC *.o files are generated along side to their corresponding
-+  source files.
-+
-+Using PIC objects to build executable is legit, thought it may
-+introduce some minor overhead at runtime.
-+
-+However, hard-coding these PIC object files in the Makefile.am to build
-+executables breaks the build in case of static only build.
-+
-+In this case, no PIC object files is generated, so the linker will not
-+found some of the needed objects files.
-+
-+Changing these dependencies' path fixes the static build, keeping the
-+shared one ok, though the non-PIC object files are now always built.
-+
-+Fixes #983.
-+
-+Fix tested on git master and v2.6 with no change needed.
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+Signed-off-by: J??r??mie Galarneau <jeremie.galarneau@efficios.com>
-+---
-+ tests/unit/Makefile.am | 18 +++++++++---------
-+ 1 file changed, 9 insertions(+), 9 deletions(-)
-+
-+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
-+index c0c9c45..7bfe65a 100644
-+--- a/tests/unit/Makefile.am
-++++ b/tests/unit/Makefile.am
-+@@ -34,9 +34,9 @@ SESSIONS=$(top_builddir)/src/bin/lttng-sessiond/session.o	\
-+ 	 $(top_builddir)/src/bin/lttng-sessiond/consumer.o \
-+ 	 $(top_builddir)/src/bin/lttng-sessiond/utils.o \
-+ 	 $(top_builddir)/src/bin/lttng-sessiond/snapshot.o \
-+-	 $(top_builddir)/src/common/.libs/uri.o \
-+-	 $(top_builddir)/src/common/.libs/utils.o \
-+-	 $(top_builddir)/src/common/.libs/error.o \
-++	 $(top_builddir)/src/common/uri.o \
-++	 $(top_builddir)/src/common/utils.o \
-++	 $(top_builddir)/src/common/error.o \
-+ 	 $(top_builddir)/src/common/health/libhealth.la \
-+ 	 $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
-+ 
-+@@ -60,8 +60,8 @@ UST_DATA_TRACE=$(top_builddir)/src/bin/lttng-sessiond/trace-ust.o \
-+ 		   $(top_builddir)/src/bin/lttng-sessiond/session.o \
-+ 		   $(top_builddir)/src/bin/lttng-sessiond/snapshot.o \
-+ 		   $(top_builddir)/src/bin/lttng-sessiond/agent.o \
-+-		   $(top_builddir)/src/common/.libs/uri.o \
-+-		   $(top_builddir)/src/common/.libs/utils.o \
-++		   $(top_builddir)/src/common/uri.o \
-++		   $(top_builddir)/src/common/utils.o \
-+ 		   $(top_builddir)/src/common/health/libhealth.la \
-+ 		   $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
-+ 
-+@@ -75,8 +75,8 @@ endif
-+ KERN_DATA_TRACE=$(top_builddir)/src/bin/lttng-sessiond/trace-kernel.o	\
-+ 		$(top_builddir)/src/bin/lttng-sessiond/consumer.o	\
-+ 		$(top_builddir)/src/bin/lttng-sessiond/utils.o \
-+-		$(top_builddir)/src/common/.libs/uri.o \
-+-		$(top_builddir)/src/common/.libs/utils.o \
-++		$(top_builddir)/src/common/uri.o \
-++		$(top_builddir)/src/common/utils.o \
-+ 		$(top_builddir)/src/common/health/libhealth.la \
-+ 		$(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
-+ 
-+@@ -86,8 +86,8 @@ test_kernel_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBRELAYD) $(LIBSESSIOND_COMM)
-+ test_kernel_data_LDADD += $(KERN_DATA_TRACE)
-+ 
-+ # utils suffix for unit test
-+-UTILS_SUFFIX=$(top_builddir)/src/common/.libs/utils.o \
-+-		$(top_builddir)/src/common/.libs/runas.o
-++UTILS_SUFFIX=$(top_builddir)/src/common/utils.o \
-++		$(top_builddir)/src/common/runas.o
-+ 
-+ # parse_size_suffix unit test
-+ test_utils_parse_size_suffix_SOURCES = test_utils_parse_size_suffix.c
-+-- 
-+2.6.3
-+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
