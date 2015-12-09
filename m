@@ -1,53 +1,44 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed,  9 Dec 2015 18:48:35 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2015.12.0
-Message-ID: <1449683315-20454-1-git-send-email-fabio.porcedda@gmail.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Wed,  9 Dec 2015 15:30:23 -0300
+Subject: [Buildroot] [PATCH] netsnmp: enable tsm + DTLSUDP/TLSTCP with
+	openssl
+Message-ID: <1449685823-30946-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index e9021fb..207d9b2 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.11.0"
-+	bool "2015.12.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index bb2ecc2..178655d 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2015.11.0.tar.bz2.md5
--md5 05951fa64000f5baedfc1064dbcfcad0 barebox-2015.11.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2015.12.0.tar.bz2.md5
-+md5 1ef8926cd2eadc39ce779b8377e7cfcc barebox-2015.12.0.tar.bz2
- 
- # Locally calculated
--sha256 ea40cef0a5ef76c4d68e76ac0e5c71c758c563ffa48c08e0b284688ec6f9d422 barebox-2015.11.0.tar.bz2
-+sha256 b0b7df82dafcc7aceeaa6285755855a71f6422c5a278949c717096f4ffd7f315 barebox-2015.12.0.tar.bz2
+Otherwise the openssl support is basically unused.
+
+net-snmp provides a stripped-down openssl implementation that can be
+used to enable tsm/DTLSUDP/TLSTCP but given it's security track record
+it's best to rely on the external one, it also saves space.
+
+usm is the user validation module, it's default on, however when passing
+--with-security-modules we must keep it otherwise it won't be.
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/netsnmp/netsnmp.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 6eff5e3..fb72179 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -49,7 +49,9 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NETSNMP_DEPENDENCIES += openssl
+ NETSNMP_CONF_OPTS += \
+-	--with-openssl=$(STAGING_DIR)/usr/include/openssl
++	--with-openssl=$(STAGING_DIR)/usr/include/openssl \
++	--with-security-modules="tsm,usm" \
++	--with-transports="DTLSUDP,TLSTCP"
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # openssl uses zlib, so we need to explicitly link with it when static
+ NETSNMP_CONF_ENV += LIBS=-lz
 -- 
-2.5.0
+2.4.10
