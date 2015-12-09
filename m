@@ -1,21 +1,75 @@
-From: Arthur LAMBERT <lambertarthur22@gmail.com>
-Date: Wed, 9 Dec 2015 12:50:08 +0100
-Subject: [Buildroot] Compile kernel module within buildroot package
-In-Reply-To: <20151130172458.0a226cd6@free-electrons.com>
-References: <20151119183653.GA1025@arthur-bzh>
- <20151130172458.0a226cd6@free-electrons.com>
-Message-ID: <20151209115008.GA28179@arthur-bzh>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 09 Dec 2015 14:15:02 +0100
+Subject: [Buildroot] [PATCH v1] edid-decode: new package
+In-Reply-To: <1449522884-8290-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Mon, 7 Dec 2015 22:14:44 +0100")
+References: <1449522884-8290-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87oadzlq5l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Sorry for the delay of my answer. I did not get the notification on your answer.
-In fact you right... Everything is working great after applying the fix... Just need
-to add CONFIG_TRACEPOINTS in kernel config.
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ >  package/Config.in                  |  1 +
+ >  package/edid-decode/Config.in      |  6 ++++++
+ >  package/edid-decode/edid-decode.mk | 20 ++++++++++++++++++++
+ >  3 files changed, 27 insertions(+)
+ >  create mode 100644 package/edid-decode/Config.in
+ >  create mode 100644 package/edid-decode/edid-decode.mk
 
-Thanks again !
-Arthur.
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 38436e2..07461e5 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -338,6 +338,7 @@ endif
+ >  	source "package/dtv-scan-tables/Config.in"
+ >  	source "package/dvb-apps/Config.in"
+ >  	source "package/dvbsnoop/Config.in"
+ > +	source "package/edid-decode/Config.in"
+ >  	source "package/eeprog/Config.in"
+ >  	source "package/eudev/Config.in"
+ >  	source "package/evemu/Config.in"
+ > diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
+ > new file mode 100644
+ > index 0000000..64297b4
+ > --- /dev/null
+ > +++ b/package/edid-decode/Config.in
+ > @@ -0,0 +1,6 @@
+ > +config BR2_PACKAGE_EDID_DECODE
+ > +	bool "edid-decode"
+ > +	help
+ > +	  Decode EDID data in human-readable format.
+ > +
+ > +	  http://cgit.freedesktop.org/xorg/app/edid-decode/
+ > diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+ > new file mode 100644
+ > index 0000000..da6a1d1
+ > --- /dev/null
+ > +++ b/package/edid-decode/edid-decode.mk
+ > @@ -0,0 +1,20 @@
+ > +################################################################################
+ > +#
+ > +# edid-decode
+ > +#
+ > +################################################################################
+ > +
+ > +EDID_DECODE_VERSION = 681153145d5e05ee15032ea792e967cda06e7622
+ > +EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
+ > +EDID_DECODE_LICENSE = MIT
+ > +EDID_DECODE_LICENSE_FILES = edid-decode.c
+ > +
+ > +define EDID_DECODE_BUILD_CMDS
+ > +	$(MAKE) -C $(@D) CC="$(TARGET_CC)" edid-decode
+
+We should also use our CFLAGS / LDFLAGS. The Makefile doesn't directly
+provide support for this, so I've changed it to pass it in CC="".
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
