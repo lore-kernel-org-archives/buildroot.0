@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Dec 2015 23:06:48 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2015.12.0
-In-Reply-To: <1449683315-20454-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1449683315-20454-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20151209230648.39c89bcc@free-electrons.com>
+Date: Wed, 9 Dec 2015 23:07:03 +0100
+Subject: [Buildroot] [git commit] leafnode2: add a hash file
+Message-ID: <20151209220731.5B40281EE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+commit: http://git.buildroot.net/buildroot/commit/?id=1de998cd480a8d80bebe039d6d1b45e2ca2e58dc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  9 Dec 2015 18:48:35 +0100, Fabio Porcedda wrote:
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  boot/barebox/Config.in    | 4 ++--
->  boot/barebox/barebox.hash | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/leafnode2/leafnode2.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/leafnode2/leafnode2.hash b/package/leafnode2/leafnode2.hash
+new file mode 100644
+index 0000000..9c94fb9
+--- /dev/null
++++ b/package/leafnode2/leafnode2.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 34eba2cbbb871b724c8d5dd402d1c358aeb21ba426beb5658e155ed0d7461075  leafnode-2.0.0.alpha20140727b.tar.bz2
