@@ -1,44 +1,43 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Wed,  9 Dec 2015 15:30:23 -0300
-Subject: [Buildroot] [PATCH] netsnmp: enable tsm + DTLSUDP/TLSTCP with
-	openssl
-Message-ID: <1449685823-30946-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  9 Dec 2015 17:10:03 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14}.x and 4.{1, 2,
+	3}.x series
+Message-ID: <1449691804-1972-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-
-Otherwise the openssl support is basically unused.
-
-net-snmp provides a stripped-down openssl implementation that can be
-used to enable tsm/DTLSUDP/TLSTCP but given it's security track record
-it's best to rely on the external one, it also saves space.
-
-usm is the user validation module, it's default on, however when passing
---with-security-modules we must keep it otherwise it won't be.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/netsnmp/netsnmp.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 6eff5e3..fb72179 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -49,7 +49,9 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NETSNMP_DEPENDENCIES += openssl
- NETSNMP_CONF_OPTS += \
--	--with-openssl=$(STAGING_DIR)/usr/include/openssl
-+	--with-openssl=$(STAGING_DIR)/usr/include/openssl \
-+	--with-security-modules="tsm,usm" \
-+	--with-transports="DTLSUDP,TLSTCP"
- ifeq ($(BR2_STATIC_LIBS),y)
- # openssl uses zlib, so we need to explicitly link with it when static
- NETSNMP_CONF_ENV += LIBS=-lz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6559c5e..3102ea9 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -201,15 +201,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.74"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.93"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.94"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.51"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.57"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.58"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.24"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.13"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.2.6"		if BR2_KERNEL_HEADERS_4_2
+-	default "4.3"		if BR2_KERNEL_HEADERS_4_3
++	default "4.1.14"	if BR2_KERNEL_HEADERS_4_1
++	default "4.2.7"		if BR2_KERNEL_HEADERS_4_2
++	default "4.3.1"		if BR2_KERNEL_HEADERS_4_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
 2.4.10
