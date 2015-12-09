@@ -1,34 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Dec 2015 22:51:08 +0100
-Subject: [Buildroot] [git commit] edid-decode: new package
-In-Reply-To: <56682A57.4090207@imgtec.com> (Vicente Olivert Riera's message of
- "Wed, 9 Dec 2015 13:19:19 +0000")
-References: <20151209131631.4526981DA0@busybox.osuosl.org>
- <56682A57.4090207@imgtec.com>
-Message-ID: <87k2onl29f.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Dec 2015 22:53:42 +0100
+Subject: [Buildroot] [PATCH v2 0/4] Handle generated kconfig defconfigs
+In-Reply-To: <cover.1441166076.git.sam.bobroff@au1.ibm.com>
+References: <cover.1441166076.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20151209215342.GB3743@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Sam, All,
 
- > Hello Peter,
- > $(TARGET_MAKE_ENV) should have been used before $(MAKE), as I said in my
- > review for this patch:
+On 2015-09-02 13:54 +1000, Sam Bobroff spake thusly:
+[--SNIP--]
+> Sam Bobroff (4):
+>   Handle kconfig generated defconfigs
+>   package/linux: Handle generated defconfigs
+>   boot/at91bootstrap3: Handled generated defconfigs
+>   boot/barebox: Handle generated defconfigs
 
- > http://patchwork.ozlabs.org/patch/553537/
+We've discussed this series of yours a while ago on IRC, and we decided
+I would adopt it to clean it and respin it. I've now done that, and just
+resent an updated version of your patches:
 
-Strange, I didn't see your mail when I applied the patch - My mail has
-been acting up a bit.
+    https://patchwork.ozlabs.org/patch/554822/
+    https://patchwork.ozlabs.org/patch/554823/
+    https://patchwork.ozlabs.org/patch/554824/
+    https://patchwork.ozlabs.org/patch/554825/
+    https://patchwork.ozlabs.org/patch/554826/
 
-TARGET_MAKE_ENV doesn't really matter here as it doesn't call anything
-else than $CC / mkdir / install, but I'll add it for consistency and in
-case future versions do.
+Of course, those patches are still attributed to you as the author.
+You ar ewelcome to review them and give your opinion and this new
+iteration.
 
-Thanks for the review!
+Thank you very much for your initial submission! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
