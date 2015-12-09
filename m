@@ -1,38 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Dec 2015 23:16:10 +0100
-Subject: [Buildroot] [PATCH] gstreamer/gst-plugins-good correct patch
- 0001-linux36.patch
-In-Reply-To: <56682F61.90106@inbox.ru>
-References: <56682F61.90106@inbox.ru>
-Message-ID: <20151209231610.7e099e62@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 9 Dec 2015 23:31:45 +0100
+Subject: [Buildroot] [PATCH] libsoc: bump to 0.7.1
+In-Reply-To: <20151209231125.754af784@free-electrons.com>
+References: <1449669809-8380-1-git-send-email-yegorslists@googlemail.com>
+ <20151209231125.754af784@free-electrons.com>
+Message-ID: <CAGm1_kvTyGyDtvnsVpo_Tw53jUqEAWHqGZwapp9vsifxt=vPAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Viacheslav,
+On Wed, Dec 9, 2015 at 11:11 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Yegor,
+>
+> On Wed,  9 Dec 2015 15:03:29 +0100, yegorslists at googlemail.com wrote:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> Remove upstreamed patch.
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>  ...0001-spi-fix-build-against-MUSL-C-library.patch | 28 ----------------------
+>>  package/libsoc/libsoc.mk                           |  2 +-
+>>  2 files changed, 1 insertion(+), 29 deletions(-)
+>>  delete mode 100644 package/libsoc/0001-spi-fix-build-against-MUSL-C-library.patch
+>
+> Applied, thanks. You could add a hash file for this package, since we
+> now add hash files for github-sourced packages.
 
-On Wed, 9 Dec 2015 16:40:49 +0300, Viacheslav Volkov wrote:
-> Supress warning message
-> 
-> >>> gst-plugins-good 0.10.31 Patching
-> 
-> Applying 0001-linux36.patch using patch:
-> patching file sys/v4l2/gstv4l2bufferpool.c
-> Hunk #1 succeeded at 181 with fuzz 2 (offset -1 lines).
->  
-> Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
+Will do. Thanks.
 
-I'm sorry but your patch doesn't apply on top of master, I believe
-because it was line wrapped. Can you send it with 'git send-email'
-instead, which ensures that your e-mail client does not mess up the
-patch ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Yegor
