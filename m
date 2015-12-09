@@ -1,70 +1,68 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  9 Dec 2015 15:03:29 +0100
-Subject: [Buildroot] [PATCH] libsoc: bump to 0.7.1
-Message-ID: <1449669809-8380-1-git-send-email-yegorslists@googlemail.com>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Wed,  9 Dec 2015 15:11:50 +0100
+Subject: [Buildroot] [PATCH v2 0/3] dpdk: new package
+In-Reply-To: <1446203156-26848-1-git-send-email-viktorin@rehivetech.com>
+References: <1446203156-26848-1-git-send-email-viktorin@rehivetech.com>
+Message-ID: <1449670313-3613-1-git-send-email-viktorin@rehivetech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+This patch series introduces the DPDK package into Buildroot. The DPDK
+library (www.dpdk.org) allows high-speed packet sending/receiving
+while bypassing the Linux Kernel. It allows to reach a high throughput
+for 10-100 Gbps networks on the x86 platform.
 
-Remove upstreamed patch.
+The ARM ports can be tested by
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- ...0001-spi-fix-build-against-MUSL-C-library.patch | 28 ----------------------
- package/libsoc/libsoc.mk                           |  2 +-
- 2 files changed, 1 insertion(+), 29 deletions(-)
- delete mode 100644 package/libsoc/0001-spi-fix-build-against-MUSL-C-library.patch
+ qemu_aarch64_virt_defconfig
+ qemu_arm_vexpress_defconfig
 
-diff --git a/package/libsoc/0001-spi-fix-build-against-MUSL-C-library.patch b/package/libsoc/0001-spi-fix-build-against-MUSL-C-library.patch
-deleted file mode 100644
-index 7e8061b..0000000
---- a/package/libsoc/0001-spi-fix-build-against-MUSL-C-library.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 647a3af126943b2251c82340ab7c81706b2eb805 Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Fri, 27 Nov 2015 10:24:12 +0100
--Subject: [PATCH] spi: fix build against MUSL C library
--
--Without <linux/ioctl.h> include compiler cannot find _IOC_SIZEBITS
--macro, when using MUSL C library.
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- lib/spi.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/lib/spi.c b/lib/spi.c
--index 8465f75..6d1f78a 100644
----- a/lib/spi.c
--+++ b/lib/spi.c
--@@ -6,6 +6,7 @@
-- #include <fcntl.h>
-- #include <sys/ioctl.h>
-- #include <linux/types.h>
--+#include <linux/ioctl.h>
-- #include <linux/spi/spidev.h>
-- 
-- #include "libsoc_spi.h"
---- 
--2.1.4
--
-diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
-index 99bea17..84e281f 100644
---- a/package/libsoc/libsoc.mk
-+++ b/package/libsoc/libsoc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSOC_VERSION = 0.6.4
-+LIBSOC_VERSION = 0.7.1
- LIBSOC_SITE = $(call github,jackmitch,libsoc,$(LIBSOC_VERSION))
- LIBSOC_LICENSE = LGPLv2.1
- LIBSOC_LICENSE_FILES = COPYING
+I did not test, how it works with x86 as I do not use Buildroot
+for this.
+
+There are unfortunately some pitfalls:
+
+* There is a new install infra in DPDK that is not reflected in
+  this patch set. I will send v3 of this patch set that uses the
+  new install infra after I make the intergration.
+
+* The DPDK may require to enable PCI, MSIX, UIO in the Linux Kernel
+  (some defconfigs does not include as default and it is platform
+  dependent as ARMv7 almost does not use PCI).
+
+* When building PCAP PMD driver, the libpcap is required (partially
+  fixed as suggested by Arnout).
+
+* Some tools the DPDK provides depend on Python(2) so the user has
+  to enable it to install those.
+
+The DPDK tests require pexpect and ptyprocess python packages to run
+so they are included.
+
+Jan Viktorin (3):
+  python-ptyprocess: new package
+  python-pexpect: new package
+  dpdk: new package
+
+ package/Config.in                              |   3 +
+ package/dpdk/Config.in                         |  47 +++++++++++
+ package/dpdk/dpdk.hash                         |   4 +
+ package/dpdk/dpdk.mk                           | 112 +++++++++++++++++++++++++
+ package/python-pexpect/Config.in               |  10 +++
+ package/python-pexpect/python-pexpect.mk       |  14 ++++
+ package/python-ptyprocess/Config.in            |   7 ++
+ package/python-ptyprocess/python-ptyprocess.mk |  13 +++
+ 8 files changed, 210 insertions(+)
+ create mode 100644 package/dpdk/Config.in
+ create mode 100644 package/dpdk/dpdk.hash
+ create mode 100644 package/dpdk/dpdk.mk
+ create mode 100644 package/python-pexpect/Config.in
+ create mode 100644 package/python-pexpect/python-pexpect.mk
+ create mode 100644 package/python-ptyprocess/Config.in
+ create mode 100644 package/python-ptyprocess/python-ptyprocess.mk
+
 -- 
-2.1.4
+2.6.3
