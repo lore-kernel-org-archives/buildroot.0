@@ -1,39 +1,23 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Dec 2015 22:41:25 +0200
-Subject: [Buildroot] [PATCH 3/3] ltp-testsuite: disable tirpc tests
- using authdes_create
-In-Reply-To: <1449740174-11062-3-git-send-email-patrickdepinguin@gmail.com>
-References: <1449740174-11062-1-git-send-email-patrickdepinguin@gmail.com>
- <1449740174-11062-3-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20151210204125.GB3021@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Dec 2015 21:50:10 +0100
+Subject: [Buildroot] [PATCH] libsoc: add a hash file
+In-Reply-To: <1449737189-25758-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Thu, 10 Dec 2015 09:46:29
+ +0100")
+References: <1449737189-25758-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87si3ajaf1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-On Thu, Dec 10, 2015 at 10:36:14AM +0100, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> In buildroot, libtirpc is patched to remove authdes_create functions.
-> As a result, compilation of tests that use these functions, fails.
-> 
-> A previous fix was implemented in commit
-> 8f1c4c49a2ab0fc9e6cf73370f4483e253e5ac2d, but simply disabled linking with
-> libtirpc entirely. This broke usage of ltp-testsuite on targets where the
-> toolchain does not have RPC support and libtirpc is mandatory.
-> 
-> Instead, disable only the problematic tests, leaving ltp-testsuite usable
-> with libtirpc.
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Thanks for following up on this. I think however that this patch should come 
-first in this series for the sake of bisectability.
-
-baruch
+Committed, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
