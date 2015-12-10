@@ -1,38 +1,38 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Dec 2015 17:17:12 -0300
-Subject: [Buildroot] [PATCH] cairo: drop CAIRO_CONF_ENV variables
-Message-ID: <1449778632-9069-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 10 Dec 2015 17:17:25 -0300
+Subject: [Buildroot] [PATCH] pango: drop PANGO_CONF_ENV variables
+Message-ID: <1449778645-9112-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These are completely historic from the initial commit (3a0a8791) and
+These are completely historic from the initial commit (d106a63d) and
 completely unused.
 
 Two separate builds with/without give nothing relevant with:
 
-$ diff -u cairo.cv/config.log cairo-1.14.4/config.log|grep ^+
+$ diff -u pango.cv/config.log pango-1.38.1/config.log|grep ^+
 
 Same applies to removals with:
 
-$ diff -u cairo.cv/config.log cairo-1.14.4/config.log|grep ^-
+$ diff -u pango.cv/config.log pango-1.38.1/config.log|grep ^-
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/cairo/cairo.mk | 52 --------------------------------------------------
- 1 file changed, 52 deletions(-)
+ package/pango/pango.mk | 53 --------------------------------------------------
+ 1 file changed, 53 deletions(-)
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 9018b29..d80d068 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -12,58 +12,6 @@ CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
- CAIRO_AUTORECONF = YES
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 6c96cd3..a6b1a60 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -13,59 +13,6 @@ PANGO_INSTALL_STAGING = YES
+ PANGO_LICENSE = LGPLv2+
+ PANGO_LICENSE_FILES = COPYING
  
--CAIRO_CONF_ENV = \
+-PANGO_CONF_ENV = \
 -	ac_cv_func_posix_getpwuid_r=yes \
 -	glib_cv_stack_grows=no \
 -	glib_cv_uscore=no \
@@ -82,10 +82,11 @@ index 9018b29..d80d068 100644
 -	ac_cv_func_working_mktime=yes \
 -	jm_cv_func_working_re_compile_pattern=yes \
 -	ac_use_included_regex=no \
--	gl_cv_c_restrict=no
+-	gl_cv_c_restrict=no \
+-	ac_cv_path_FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
 -
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
- CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
- endif
+ PANGO_CONF_OPTS = --enable-explicit-deps=no
+ HOST_PANGO_CONF_OPTS = --enable-explicit-deps=no
+ 
 -- 
 2.4.10
