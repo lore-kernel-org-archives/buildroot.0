@@ -1,51 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Dec 2015 19:53:19 +0100
-Subject: [Buildroot] [PATCH 7/7] package/xtables-addons: require kernel
-	modules from Kconfig
-In-Reply-To: <cover.1449771844.git.yann.morin.1998@free.fr>
-References: <cover.1449771844.git.yann.morin.1998@free.fr>
-Message-ID: <94c80013dc21effd198e7fe4b21ddf5f1d41e8fe.1449771844.git.yann.morin.1998@free.fr>
+From: Andreas Ehmanns <universeii@gmx.de>
+Date: Thu, 10 Dec 2015 20:03:46 +0100
+Subject: [Buildroot] Move openldap package and enable LDAP server?
+In-Reply-To: <56614CF8.5050804@gmx.de>
+References: <56614B18.4030703@gmx.de>
+ <20151204091924.2f5f9c22@free-electrons.com> <56614CF8.5050804@gmx.de>
+Message-ID: <5669CC92.8080504@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xtables-addons/Config.in         | 1 +
- package/xtables-addons/xtables-addons.mk | 6 ------
- 2 files changed, 1 insertion(+), 6 deletions(-)
+Am 04.12.2015 um 09:21 schrieb Andreas Ehmanns:
+> Am 04.12.2015 um 09:19 schrieb Thomas Petazzoni:
+>> Hello,
+>>
+>> On Fri, 4 Dec 2015 09:13:12 +0100, Andreas Ehmanns wrote:
+>>
+>>> I was going to use openLDAP on my embedded device and found the
+>>> configuration under Target Packages -> Libraries -> Networking.
+>>> You can enable openldap which only generates the ldap libraries but 
+>>> have
+>>> an option to let the client applications being built.
+>>> Since I need the LDAP server I added an option to compile the LDAP
+>>> server too. Everything works fine and I thought about submitting the
+>>> patch but then I asked me if the configuration location is still the
+>>> right place.
+>>> Wouldn't it be better to place the openldap configuration under
+>>> Target Packages -> Networking Applications
+>>> instead of
+>>> Target Packages -> Libraries -> Networking
+>>>
+>>> What is your opinion?
+>> Yes, I agree that it probably makes more sense to have OpenLDAP in
+>> Networking Applications, even if it indeed also provides a client
+>> library.
+>>
+>> Thomas
+> O.k., I will prepare/propose a patch for adding the ldap server option 
+> and moving the configuration to Networking Applications.
+>
+> Regards,
+> Andreas
 
-diff --git a/package/xtables-addons/Config.in b/package/xtables-addons/Config.in
-index a687618..4538519 100644
---- a/package/xtables-addons/Config.in
-+++ b/package/xtables-addons/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_XTABLES_ADDONS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # extensions are .so
- 	select BR2_PACKAGE_IPTABLES
-+	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
- 	help
- 	  Xtables-addons is the successor to patch-o-matic(-ng).
- 	  Likewise, it contains extensions that were not, or are not yet,
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index 66e7386..b4e5992 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -16,12 +16,6 @@ XTABLES_ADDONS_CONF_OPTS = \
- 	--with-xtables="$(STAGING_DIR)/usr" \
- 	--with-xtlibdir="/usr/lib/xtables"
- 
--# We're building a kernel module without using the kernel-module infra,
--# so we need to tell we want module support in the kernel
--ifeq ($(BR2_PACKAGE_XTABLES_ADDONS),y)
--LINUX_NEEDS_MODULES = y
--endif
--
- # geoip helpers need perl with modules and unzip so disable
- define XTABLES_DISABLE_GEOIP_HELPERS
- 	$(SED) 's/ geoip//' $(@D)/Makefile.in
--- 
-1.9.1
+Thomas,
+please find attached the patch for adding the openldap server. It 
+contains the server option, moves the configuration to "Networking 
+Applications" and adds an init script for the ldap server.
+
+Please let me know what you think about the patch and if there are 
+things that I should change.
+
+Regards,
+Andreas
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0002-Added-server-to-openldap-package-and-changed-package.patch
+Type: text/x-patch
+Size: 4722 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151210/939c16b9/attachment.bin>
