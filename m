@@ -1,33 +1,44 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 10 Dec 2015 14:24:06 +0100
-Subject: [Buildroot] [PATCH] atmel: fix xplained documentation
-Message-ID: <1449753846-26374-1-git-send-email-gary.bisson@boundarydevices.com>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Thu, 10 Dec 2015 19:21:42 +0530
+Subject: [Buildroot] buildroot config file not saving -- to particular
+	location
+In-Reply-To: <CAKpDV8u_w7sCDth528JXyc94312BFnJWrC34Gdk1_M3Bkt+7Dg@mail.gmail.com>
+References: <CAKpDV8u_w7sCDth528JXyc94312BFnJWrC34Gdk1_M3Bkt+7Dg@mail.gmail.com>
+Message-ID: <CAKpDV8tLLdsGa+0uE0-pyCddK66GBz9msFO6sDeGCAubXSG8mQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Documentation is referring to nandflash.txt which doesn't exist.
-Instead, readme.txt provides the instructions to flash the NAND storage.
+Hi,
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- board/atmel/xplained/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I am following steps 4 & 5 in this link :--
+https://buildroot.org/downloads/manual/manual.html#_quick_guide_to_storing_your_project_specific_customizations
 
-diff --git a/board/atmel/xplained/readme.txt b/board/atmel/xplained/readme.txt
-index 7919c60..1d19327 100644
---- a/board/atmel/xplained/readme.txt
-+++ b/board/atmel/xplained/readme.txt
-@@ -11,7 +11,7 @@ Note that the default Buildroot configuration is prepared to boot from
- an SD card: the first stage bootloader, second stage bootloader,
- kernel image and root filesystem are all located on the SD card. Some
- adjustments in the bootloader configuration will be needed to boot
--from NAND flash, see board/atmel/nandflash.txt
-+from NAND flash, see board/atmel/readme.txt
- 
- Configuring and building Buildroot
- ----------------------------------
--- 
-2.6.2
+But busybox .config file doesn't go to right path set.
+
+Regards,
+Dinesh
+On Dec 10, 2015 11:32 AM, "Dinesh Guleria" <din.gulu.er@gmail.com> wrote:
+
+> Hello Everyone,
+>
+> I am trying to copy buildroot configuation file to /home/dinesh/busybox
+> location.
+> But file is not saving at right location.
+>
+> I am running following command :---
+> make busybox-update-config
+> BR2_PACKAGE_BUSYBOX_CONFIG=/home/dinesh/busybox/busybox.config
+>
+> Please see the attached image, what output i am getting.
+>
+> How to resolve this.
+>
+> Regards,
+> Dinesh
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151210/46bf4620/attachment.html>
