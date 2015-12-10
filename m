@@ -1,21 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Dec 2015 21:52:30 +0100
-Subject: [Buildroot] [PATCH] python-six: bump to 0.10.0
-In-Reply-To: <1449760707-20957-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Thu, 10 Dec 2015 16:18:27
- +0100")
-References: <1449760707-20957-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <877fkmjab5.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Dec 2015 21:52:44 +0100
+Subject: [Buildroot] [PATCH] nmap: bump version to 7.01
+In-Reply-To: <1449763282-41650-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 10 Dec 2015 16:01:22 +0000")
+References: <1449763282-41650-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <8737vajaar.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
