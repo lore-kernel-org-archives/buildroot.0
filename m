@@ -1,77 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Dec 2015 21:53:25 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-firmware: bump version
-In-Reply-To: <1449756107-9441-1-git-send-email-john@keeping.me.uk>
-References: <1449756107-9441-1-git-send-email-john@keeping.me.uk>
-Message-ID: <20151210205325.GE3597@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Dec 2015 21:44:37 +0100
+Subject: [Buildroot] [git commit] edid-decode: use TARGET_MAKE_ENV
+Message-ID: <20151210205359.83CF1822E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-John, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=8e38b5e556306de17fb0c6c718825c8d816356b7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-12-10 14:01 +0000, John Keeping spake thusly:
-> From: John Keeping <john@metanate.com>
-> 
-> CXGB4 firmware files have been renamed upstream.
-> 
-> Signed-off-by: John Keeping <john@metanate.com>
+No functional change as it only uses $CC / mkdir / install, but add it for
+consistency and in case future versions need it.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Suggested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/edid-decode/edid-decode.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/linux-firmware/linux-firmware.mk | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-> index 768f3c4..9ae4d47 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LINUX_FIRMWARE_VERSION = 3161bfa479d5e9ed4f46b57df9bcecbbc4f8eb3c
-> +LINUX_FIRMWARE_VERSION = bbe4917c054eb0a73e250c6363341e3bf6725839
->  LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
->  LINUX_FIRMWARE_SITE_METHOD = git
->  
-> @@ -225,14 +225,14 @@ LINUX_FIRMWARE_FILES += \
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4),y)
-> -# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.11.27.0.bin
-> -LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.11.27.0.bin cxgb4/t4fw.bin
-> +# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.14.4.0.bin
-> +LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.14.4.0.bin cxgb4/t4fw.bin
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5),y)
-> -# cxgb4/t5fw.bin is a symlink to cxgb4/t5fw-1.11.27.0.bin
-> -LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.11.27.0.bin cxgb4/t5fw.bin
-> +# cxgb4/t5fw.bin is a symlink to cxgb4/t5fw-1.14.4.0.bin
-> +LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.14.4.0.bin cxgb4/t5fw.bin
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
->  endif
->  
-> -- 
-> 2.6.3.462.gbe2c914
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+index 8fcc19e..243ccfb 100644
+--- a/package/edid-decode/edid-decode.mk
++++ b/package/edid-decode/edid-decode.mk
+@@ -10,11 +10,12 @@ EDID_DECODE_LICENSE = MIT
+ EDID_DECODE_LICENSE_FILES = edid-decode.c
+ 
+ define EDID_DECODE_BUILD_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
+ endef
+ 
+ define EDID_DECODE_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+ endef
+ 
+ $(eval $(generic-package))
