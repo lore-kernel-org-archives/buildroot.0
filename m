@@ -1,22 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Dec 2015 21:50:30 +0100
-Subject: [Buildroot] [PATCH] atmel: fix xplained documentation
-In-Reply-To: <1449753846-26374-1-git-send-email-gary.bisson@boundarydevices.com>
- (Gary Bisson's message of "Thu, 10 Dec 2015 14:24:06 +0100")
-References: <1449753846-26374-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <87oadyjaeh.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Dec 2015 21:51:15 +0100
+Subject: [Buildroot] [PATCH] atk: drop ATK_CONF_ENV variables
+In-Reply-To: <1449755844-1146-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 10 Dec 2015 10:57:24 -0300")
+References: <1449755844-1146-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k2omjad8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Documentation is referring to nandflash.txt which doesn't exist.
- > Instead, readme.txt provides the instructions to flash the NAND storage.
+ > These are completely historic from the initial commit (810184bb) and
+ > completely unused.
 
- > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+ > Two separate builds with/without give nothing with:
+
+ > $ diff -u atk.cv/config.log atk-2.18.0/config.log|grep ^+
+
+ > And all removals with:
+
+ > $ diff -u atk.cv/config.log atk-2.18.0/config.log|grep ^-
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
