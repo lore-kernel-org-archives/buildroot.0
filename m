@@ -1,44 +1,119 @@
-From: Dinesh Guleria <din.gulu.er@gmail.com>
-Date: Thu, 10 Dec 2015 19:21:42 +0530
-Subject: [Buildroot] buildroot config file not saving -- to particular
-	location
-In-Reply-To: <CAKpDV8u_w7sCDth528JXyc94312BFnJWrC34Gdk1_M3Bkt+7Dg@mail.gmail.com>
-References: <CAKpDV8u_w7sCDth528JXyc94312BFnJWrC34Gdk1_M3Bkt+7Dg@mail.gmail.com>
-Message-ID: <CAKpDV8tLLdsGa+0uE0-pyCddK66GBz9msFO6sDeGCAubXSG8mQ@mail.gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 10 Dec 2015 14:52:36 +0100
+Subject: [Buildroot] [PATCH v2 0/4] libfsl*: fix install path + update conf
+	opts
+Message-ID: <1449755560-2911-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi all,
 
-I am following steps 4 & 5 in this link :--
-https://buildroot.org/downloads/manual/manual.html#_quick_guide_to_storing_your_project_specific_customizations
+I meant to do this series for a long time:
+http://patchwork.ozlabs.org/patch/409684/
 
-But busybox .config file doesn't go to right path set.
+I tried to split what Jeff offered into separate patches.
+
+Some are taking care of the install path that was causing troubles to
+gst-fsl-plugins at runtime since we don't use ldconfig.
+
+The other patches enable some missing configure options (hard float and vpu)
+as pointed by Jeff.
+
+Changelog:
+v1->v2:
+- add staging for libfslparser although not required so far
+  -> suggested by Jerome for consistency between libfsl packages
+- use symlinks for both staging and install dir
+  -> suggested by Jerome for consistency between both folders
+
+Here is the defconfig that has been used to test those patches:
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_EABIHF=y
+BR2_ARM_ENABLE_NEON=y
+BR2_ARM_FPU_NEON=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/d7a412b/linux-imx6-d7a412b.tar.gz"
+BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+BR2_LINUX_KERNEL_ZIMAGE=y
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6q-nitrogen6_max imx6q-sabrelite"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_PACKAGE_ALSA_UTILS=y
+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
+BR2_PACKAGE_ALSA_UTILS_AMIDI=y
+BR2_PACKAGE_ALSA_UTILS_AMIXER=y
+BR2_PACKAGE_ALSA_UTILS_APLAY=y
+BR2_PACKAGE_ALSA_UTILS_APLAYMIDI=y
+BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
+BR2_PACKAGE_GSTREAMER=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA=y
+BR2_PACKAGE_GST_PLUGINS_GOOD=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUTODETECT=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUGUTILS=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLV=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOBOX=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_V4L2=y
+BR2_PACKAGE_GST_FSL_PLUGINS=y
+BR2_PACKAGE_GSTREAMER1=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_SUBPARSE=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_TCP=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
+BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOPARSERS=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_DEBUGUTILS=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLV=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA=y
+BR2_PACKAGE_GST1_IMX=y
+BR2_PACKAGE_STRACE=y
+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
+BR2_PACKAGE_IMX_GPU_VIV=y
+BR2_PACKAGE_IMX_GPU_VIV_APITRACE=y
+BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES=y
+BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO=y
+BR2_PACKAGE_FONTCONFIG=y
+BR2_PACKAGE_IPERF3=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_RSYNC=y
+BR2_PACKAGE_HOST_MKE2IMG=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+
+I'll detail on each patch what has been done.
 
 Regards,
-Dinesh
-On Dec 10, 2015 11:32 AM, "Dinesh Guleria" <din.gulu.er@gmail.com> wrote:
+Gary
 
-> Hello Everyone,
->
-> I am trying to copy buildroot configuation file to /home/dinesh/busybox
-> location.
-> But file is not saving at right location.
->
-> I am running following command :---
-> make busybox-update-config
-> BR2_PACKAGE_BUSYBOX_CONFIG=/home/dinesh/busybox/busybox.config
->
-> Please see the attached image, what output i am getting.
->
-> How to resolve this.
->
-> Regards,
-> Dinesh
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151210/46bf4620/attachment.html>
+Gary Bisson (4):
+  libfslcodec: add install hooks to fix libraries path
+  libfslcodec: add missing configure options
+  libfslparser: add install hooks to fix libraries path
+  libfslparser: add missing configure options
+
+ package/libfslcodec/libfslcodec.mk   | 23 +++++++++++++++++++++++
+ package/libfslparser/libfslparser.mk | 19 +++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+
+-- 
+2.6.2
