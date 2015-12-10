@@ -1,21 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Dec 2015 21:50:10 +0100
-Subject: [Buildroot] [PATCH] libsoc: add a hash file
-In-Reply-To: <1449737189-25758-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Thu, 10 Dec 2015 09:46:29
- +0100")
-References: <1449737189-25758-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87si3ajaf1.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Dec 2015 21:50:30 +0100
+Subject: [Buildroot] [PATCH] atmel: fix xplained documentation
+In-Reply-To: <1449753846-26374-1-git-send-email-gary.bisson@boundarydevices.com>
+ (Gary Bisson's message of "Thu, 10 Dec 2015 14:24:06 +0100")
+References: <1449753846-26374-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <87oadyjaeh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Documentation is referring to nandflash.txt which doesn't exist.
+ > Instead, readme.txt provides the instructions to flash the NAND storage.
+
+ > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
 Committed, thanks.
 
