@@ -1,81 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Dec 2015 19:53:13 +0100
-Subject: [Buildroot] [PATCH 1/7] linux: add blind kconfig option to require
-	kernel modules
+Date: Thu, 10 Dec 2015 19:53:14 +0100
+Subject: [Buildroot] [PATCH 2/7] package/linux-fusion: require kernel
+	modules from Kconfig
 In-Reply-To: <cover.1449771844.git.yann.morin.1998@free.fr>
 References: <cover.1449771844.git.yann.morin.1998@free.fr>
-Message-ID: <ea2708973539054f813d0b4835e1eb2ddf287e05.1449771844.git.yann.morin.1998@free.fr>
+Message-ID: <0d83b1082db086fe18ae44a30b27735586a8a89a.1449771844.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, packages that need the kernel to have support for laodable
-modules have two ways to require it:
+And reorder 'depends' after 'bool'.
 
-  - either the use the kernel-module infra, which does it automatically,
-
-  - or they do not use it, and they need to requrie it manually, by
-    setting the corresponding Makefile variable; however, they must only
-    set it when they are actually enabled, which makes for a slightly
-    cumbersome and ugly code, like:
-
-        ifeq ($(BR2_PACKAGE_FOO),y)
-        LINUX_NEEDS_MODULES = y
-        endif
-
-Introduce a nw blind Kconfig option that packages can select to signify
-they need kernel modules. That Kconfig option is then used to set the
-Makefile variable.
-
-It makes it cleaner:
-
-  - code is simpler (one Kconfig line instead of a Makefile if-block,
-
-  - this is handled at the Kconfig level, which is where we usually
-    handle such dependencies.
-
-Packages will be updated in follow-up commits.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in | 6 ++++++
- linux/linux.mk  | 3 +++
- 2 files changed, 9 insertions(+)
+ package/linux-fusion/Config.in       | 3 ++-
+ package/linux-fusion/linux-fusion.mk | 6 ------
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index dfb9453..55c548f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -8,6 +8,12 @@ config BR2_LINUX_KERNEL
+diff --git a/package/linux-fusion/Config.in b/package/linux-fusion/Config.in
+index cdc1dd2..ed8bd6a 100644
+--- a/package/linux-fusion/Config.in
++++ b/package/linux-fusion/Config.in
+@@ -2,8 +2,9 @@ comment "linux-fusion needs a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL
  
- if BR2_LINUX_KERNEL
+ config BR2_PACKAGE_LINUX_FUSION
+-	depends on BR2_LINUX_KERNEL
+ 	bool "linux-fusion communication layer for DirectFB multi"
++	depends on BR2_LINUX_KERNEL
++	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+ 	help
+ 	  DirectFB Communication Layer allowing multiple DirectFB
+ 	  applications to run concurrently
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index ba4bb31..35ed28e 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -12,12 +12,6 @@ LINUX_FUSION_DEPENDENCIES = linux
+ LINUX_FUSION_LICENSE = GPLv2+
+ LINUX_FUSION_LICENSE_FILES = debian/copyright
  
-+# Packages that need to have a kernel with support for loadable modules,
-+# but do not use the kernel-modules infrastructure, should select that
-+# option.
-+config BR2_LINUX_NEEDS_MODULES
-+	bool
-+
- #
- # Version selection. We provide the choice between:
- #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 9507837..ea07efc 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -178,6 +178,9 @@ LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_
- LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
+-# We're building a kernel module without using the kernel-module infra,
+-# so we need to tell we want module support in the kernel
+-ifeq ($(BR2_PACKAGE_LINUX_FUSION),y)
+-LINUX_NEEDS_MODULES = y
+-endif
+-
+ LINUX_FUSION_ETC_DIR = $(TARGET_DIR)/etc/udev/rules.d
  
-+# If no package has yet set it, set it from the Kconfig option
-+LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
-+
- define LINUX_KCONFIG_FIXUP_CMDS
- 	$(if $(LINUX_NEEDS_MODULES),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_MODULES,$(@D)/.config))
+ LINUX_FUSION_MAKE_OPTS = \
 -- 
 1.9.1
