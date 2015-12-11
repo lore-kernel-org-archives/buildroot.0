@@ -1,178 +1,58 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 11 Dec 2015 23:22:52 +0100
-Subject: [Buildroot] [PATCH v4] python: rework *.pyc files generation
-In-Reply-To: <1447948334-8440-1-git-send-email-yegorslists@googlemail.com>
-References: <1447948334-8440-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAHXCMM+fZO0q-wTzwHMGK9cB5NWOJrh5Q_YNMU=G+dHM9OoHAQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 11 Dec 2015 23:27:07 +0100
+Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG not working fine
+In-Reply-To: <CAKpDV8u01myqCx7ROq9C_7B9Wgomb8Assh_SmUeyCRAc3UkAXQ@mail.gmail.com>
+References: <CAKpDV8u01myqCx7ROq9C_7B9Wgomb8Assh_SmUeyCRAc3UkAXQ@mail.gmail.com>
+Message-ID: <566B4DBB.6010105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor, all,
-
-On Thu, Nov 19, 2015 at 4:52 PM,  <yegorslists@googlemail.com> wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On 11-12-15 12:07, Dinesh Guleria wrote:
+> Hi,
 >
-> This patch generates all *.pyc files from *.py located in
-> <target>/usr/lib/python*, before stripping the rootfs.
+> I am following steps 4 & 5 in this link
+> :--https://buildroot.org/downloads/manual/manual.html#_quick_guide_to_storing_your_project_specific_customizations
 >
-> *.pyc generation on per package basis is disabled through
-> "--no-compile" option.
->
-> *.pyc generation for Python's internal packages is disabled
-> through --disable-pyc-build configure option.
->
-> This prevents modules from packages, that do not compile the *.py
-> files, from disappearing.
+> I am running following command :--- make busybox-update-config
+> BR2_PACKAGE_BUSYBOX_CONFIG=/home/dinesh/busybox/busybox.config
 
-AFAI have tested, this change works as expected, except for broken
-python modules.
-In such cases, 'compileall.compile_dir(...)' does not raise any
-exceptions when it failed to compile the *.py file, leading to the
-unfortunate consequence: the *.pyc file is not generated and the *.py
-file is lost if BR2_PACKAGE_PYTHON_PYC_ONLY is enabled.
+ Please check yout spelling. The screenshot you posted has
+BR2_PACKAGE_BUSYBOX_CONFIG_FILE=... .
 
-This raises the question: do we want to make the build fail if some
-*.pyc generation failed?
-IMHO, the answer is yes.
+ You may notice that computers are not so forgiving when it comes to spelling
+mistakes.
 
-Digging a bit this issue, the solution [2] inspired from [1] works
-fine with python2 and python3.
-
-Note: with python2: compileall.compile_dir fails on python-pyxml
-package; with python3 I have not trigger any failure but I only tested
-a limited number of packages
-
-[1] http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
-[2] http://code.bulix.org/2zk0mg-89949?raw
-
-Regards,
+ Regards,
+ Arnout
 
 >
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> ---
-> Changes:
->         v4: disable *.pyc creation for Python own modules (Thomas Petazzoni)
->         v3: put pyc compilation command into own macro (Thomas Petazzoni)
->         v2: move finalization code from root Makefile to python.mk and python3.mk (Thomas Petazzoni)
+> But busybox .config file doesn't go to right path set
+> "/home/dinesh/busybox/busybox.config".
 >
->  package/pkg-python.mk      |  2 +-
->  package/python/python.mk   | 16 +++++++++++++++-
->  package/python3/python3.mk | 20 +++++++++++++++-----
->  3 files changed, 31 insertions(+), 7 deletions(-)
+> Please suggets why is it going to location "package/busybox/busybox.config" ?
 >
-> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> index b7a702d..9725d24 100644
-> --- a/package/pkg-python.mk
-> +++ b/package/pkg-python.mk
-> @@ -253,7 +253,7 @@ ifndef $(2)_INSTALL_TARGET_CMDS
->  define $(2)_INSTALL_TARGET_CMDS
->         (cd $$($$(PKG)_BUILDDIR)/; \
->                 $$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
-> -               $$($(2)_PYTHON_INTERPRETER) setup.py install \
-> +               $$($(2)_PYTHON_INTERPRETER) setup.py install --no-compile \
->                 $$($$(PKG)_BASE_INSTALL_TARGET_OPTS) \
->                 $$($$(PKG)_INSTALL_TARGET_OPTS))
->  endef
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index 80ffbde..5ef3589 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -143,7 +143,8 @@ PYTHON_CONF_OPTS += \
->         --disable-tk            \
->         --disable-nis           \
->         --disable-dbm           \
-> -       --disable-pyo-build
-> +       --disable-pyo-build     \
-> +       --disable-pyc-build
+> See the attached image.
 >
->  # This is needed to make sure the Python build process doesn't try to
->  # regenerate those files with the pgen program. Otherwise, it builds
-> @@ -217,12 +218,25 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
+> Regards,
 >
-> +define PYTHON_CREATE_PYC_FILES
-> +       PYTHONPATH="$(PYTHON_PATH)" \
-> +               $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) -c "import compileall; \
-> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)')"
-> +endef
-> +
->  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
->  define PYTHON_FINALIZE_TARGET
-> +       $(PYTHON_CREATE_PYC_FILES)
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
->  endef
->  endif
+> Dinesh
 >
-> +ifeq ($(BR2_PACKAGE_PYTHON_PY_PYC),y)
-> +define PYTHON_FINALIZE_TARGET
-> +       $(PYTHON_CREATE_PYC_FILES)
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
->  define PYTHON_FINALIZE_TARGET
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index fd5709a..c87092f 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -79,10 +79,6 @@ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
->  PYTHON3_CONF_OPTS += --enable-old-stdlib-cache
->  endif
 >
-> -ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
-> -PYTHON3_CONF_OPTS += --disable-pyc-build
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_PYTHON3_SQLITE),y)
->  PYTHON3_DEPENDENCIES += sqlite
->  else
-> @@ -137,7 +133,8 @@ PYTHON3_CONF_OPTS += \
->         --disable-tk            \
->         --disable-nis           \
->         --disable-idle3         \
-> -       --disable-pyo-build
-> +       --disable-pyo-build     \
-> +       --disable-pyc-build
 >
->  # This is needed to make sure the Python build process doesn't try to
->  # regenerate those files with the pgen program. Otherwise, it builds
-> @@ -208,12 +205,25 @@ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdat
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> +define PYTHON3_CREATE_PYC_FILES
-> +       PYTHONPATH="$(PYTHON3_PATH)" \
-> +               $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) -c "import compileall; \
-> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)')"
-> +endef
-> +
->  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
->  define PYTHON3_FINALIZE_TARGET
-> +       $(PYTHON3_CREATE_PYC_FILES)
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
->  endef
->  endif
->
-> +ifeq ($(BR2_PACKAGE_PYTHON3_PY_PYC),y)
-> +define PYTHON3_FINALIZE_TARGET
-> +       $(PYTHON3_CREATE_PYC_FILES)
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
->  define PYTHON3_FINALIZE_TARGET
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
-> --
-> 2.1.4
->
-
 
 
 -- 
-Samuel
+Arnout Vandecappelle arnout at mind be
+Senior Embedded Software Architect +32-16-286500
+Essensium/Mind http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint: 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
