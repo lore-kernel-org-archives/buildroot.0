@@ -1,38 +1,45 @@
-From: John Keeping <john@keeping.me.uk>
-Date: Fri, 11 Dec 2015 12:29:07 +0000
-Subject: [Buildroot] [PATCH] linux-firmware: update Broadcom 43xxx file list
-Message-ID: <1449836947-28866-1-git-send-email-john@keeping.me.uk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Dec 2015 14:50:56 +0100
+Subject: [Buildroot] Need help in enabling the ulimit command to
+	busybox-1.23.2
+In-Reply-To: <C9AC9E8BC6C75F478EDF2670B45767282A3B3E88@NOIMEX10.barco.com>
+ (Rajneesh Gaur's message of "Fri, 11 Dec 2015 07:50:06 +0000")
+References: <C9AC9E8BC6C75F478EDF2670B45767282A3B3E88@NOIMEX10.barco.com>
+Message-ID: <878u51hz5r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: John Keeping <john@metanate.com>
+>>>>> "Gaur," == Gaur, Rajneesh <Rajneesh.Gaur@barco.com> writes:
 
-These files have been added upstream.
+ > Dear,
+ > We wanted to enable the core dump on our target which is buildroot based.
+ > We searched a lot on the web but we were not able to get it so far.
 
-Signed-off-by: John Keeping <john@metanate.com>
----
- package/linux-firmware/linux-firmware.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ > Can you please update me with the steps to do the above mentioned.
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 2767452..083a381 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -340,7 +340,11 @@ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX),y)
- LINUX_FIRMWARE_FILES += \
- 	brcm/brcmfmac43143.bin brcm/brcmfmac43143-sdio.bin \
- 	brcm/brcmfmac43236b.bin brcm/brcmfmac43241b0-sdio.bin \
--	brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43362-sdio.bin
-+	brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43241b5-sdio.bin \
-+	brcm/brcmfmac43242a.bin brcm/brcmfmac43340-sdio.bin \
-+	brcm/brcmfmac43362-sdio.bin brcm/brcmfmac43455-sdio.bin \
-+	brcm/brcmfmac43569.bin brcm/brcmfmac43570-pcie.bin \
-+	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
- endif
- 
+Ehh, the default buildroot configuration uses busybox ash as the shell,
+which does support ulimit:
+
+Welcome to Buildroot
+buildroot login: root
+
+# ulimit -a
+-f: file size (blocks)             unlimited
+-t: cpu time (seconds)             unlimited
+-d: data seg size (kb)             unlimited
+-s: stack size (kb)                8192
+-c: core file size (blocks)        0
+-m: resident set size (kb)         unlimited
+-l: locked memory (kb)             64
+-p: processes                      978
+-n: file descriptors               1024
+-v: address space (kb)             unlimited
+-w: locks                          unlimited
+-e: scheduling priority            0
+-r: real-time priority             0
+
 -- 
-2.7.0.rc0.76.g531d676
+Bye, Peter Korsgaard
