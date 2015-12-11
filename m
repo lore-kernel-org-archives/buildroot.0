@@ -1,38 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Dec 2015 21:29:32 +0100
-Subject: [Buildroot] [PATCH] pango: drop PANGO_CONF_ENV variables
-In-Reply-To: <1449778645-9112-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1449778645-9112-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151211212932.66dc350f@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Dec 2015 17:31:24 -0300
+Subject: [Buildroot] [PATCH] driver_xf86-input-evdev: mtdev is mandatory now
+Message-ID: <1449865884-26291-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+mtdev is no longer optional, so select it and depend upon it, otherwise
+it leads to build failure.
 
-On Thu, 10 Dec 2015 17:17:25 -0300, Gustavo Zacarias wrote:
-> These are completely historic from the initial commit (d106a63d) and
-> completely unused.
-> 
-> Two separate builds with/without give nothing relevant with:
-> 
-> $ diff -u pango.cv/config.log pango-1.38.1/config.log|grep ^+
-> 
-> Same applies to removals with:
-> 
-> $ diff -u pango.cv/config.log pango-1.38.1/config.log|grep ^-
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/pango/pango.mk | 53 --------------------------------------------------
->  1 file changed, 53 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/x11r7/xdriver_xf86-input-evdev/Config.in                   | 1 +
+ package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+index f44e79f..70e950d 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
++++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
+ 	bool "xf86-input-evdev"
+ 	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
+ 	select BR2_PACKAGE_LIBEVDEV
++	select BR2_PACKAGE_MTDEV
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 1e90afa..6f692ab 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+@@ -12,11 +12,11 @@ XDRIVER_XF86_INPUT_EVDEV_LICENSE_FILES = COPYING
+ XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	libevdev \
++	mtdev \
+ 	xproto_inputproto \
+ 	xserver_xorg-server \
+ 	xproto_randrproto \
+ 	xproto_xproto \
+-	udev \
+-	$(if $(BR2_PACKAGE_MTDEV),mtdev)
++	udev
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
