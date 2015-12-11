@@ -1,40 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Dec 2015 17:35:16 -0300
-Subject: [Buildroot] [PATCH] libgtk2: bump to version 2.24.29
-Message-ID: <1449866116-27040-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Dec 2015 21:33:59 +0100
+Subject: [Buildroot] [git commit] ltp-testsuite: disable tirpc tests using
+	authdes_create
+Message-ID: <20151211203817.8A59082524@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libgtk2/libgtk2.hash | 4 ++--
- package/libgtk2/libgtk2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=d1d735a1480f0f37a5996cb57c5a35ca2c3c3d90
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libgtk2/libgtk2.hash b/package/libgtk2/libgtk2.hash
-index 21e8eb7..1eb795d 100644
---- a/package/libgtk2/libgtk2.hash
-+++ b/package/libgtk2/libgtk2.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.28.sha256sum
--sha256	b2c6441e98bc5232e5f9bba6965075dcf580a8726398f7374d39f90b88ed4656	gtk+-2.24.28.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.29.sha256sum
-+sha256	0741c59600d3d810a223866453dc2bbb18ce4723828681ba24aa6519c37631b8	gtk+-2.24.29.tar.xz
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 0617b9e..b5c0bf5 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGTK2_VERSION_MAJOR = 2.24
--LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).28
-+LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).29
- LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
- LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
- LIBGTK2_INSTALL_STAGING = YES
--- 
-2.4.10
+In buildroot, libtirpc is patched to remove authdes_create functions.
+As a result, compilation of tests that use these functions, fails.
+
+A previous fix was implemented in commit
+8f1c4c49a2ab0fc9e6cf73370f4483e253e5ac2d, but simply disabled linking with
+libtirpc entirely. This broke usage of ltp-testsuite on targets where the
+toolchain does not have RPC support and libtirpc is mandatory.
+
+Instead, disable only the problematic tests, leaving ltp-testsuite usable
+with libtirpc.
+
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...isable-tirpc_auth_authdes_seccreate-tests.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/package/ltp-testsuite/0002-rpc-tirpc-disable-tirpc_auth_authdes_seccreate-tests.patch b/package/ltp-testsuite/0002-rpc-tirpc-disable-tirpc_auth_authdes_seccreate-tests.patch
+new file mode 100644
+index 0000000..6ab9d13
+--- /dev/null
++++ b/package/ltp-testsuite/0002-rpc-tirpc-disable-tirpc_auth_authdes_seccreate-tests.patch
+@@ -0,0 +1,30 @@
++rpc-tirpc: disable tirpc_auth_authdes_seccreate tests
++
++Due to Buildroot patch 0007-Disable-DES-authentification-support.patch on
++libtirpc, this library is built without method authdes_create. Any code
++that uses this library, like the rpc-tirpc testsuite, thus fails to link.
++
++In the context of Buildroot, instead of disabling ltp-testsuite entirely,
++just disable the problematic tests.
++
++Upstream-status: not applicable
++Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++---
++ testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/Makefile | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/Makefile b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/Makefile
++index 45bc8a6..6c4089e 100644
++--- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/Makefile
+++++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/Makefile
++@@ -19,4 +19,7 @@
++ top_srcdir		?= ../../../../../../..
++ 
++ include	$(top_srcdir)/include/mk/env_pre.mk
+++
+++FILTER_OUT_DIRS += tirpc_auth_authdes_seccreate
+++
++ include $(top_srcdir)/include/mk/generic_trunk_target.mk
++-- 
++1.9.5
++
