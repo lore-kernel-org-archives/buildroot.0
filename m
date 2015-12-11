@@ -1,84 +1,58 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Dec 2015 17:46:40 -0300
-Subject: [Buildroot] [PATCH] libgtk2: drop most of the LIBGTK2_CONF_ENV vars
-Message-ID: <1449866800-28952-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 11 Dec 2015 22:52:47 +0100
+Subject: [Buildroot] [PATCH] mysql: fix start script for /run on separate
+	tmpfs
+Message-ID: <1449870767-19685-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Most are legacy from when the package was added and not really necessary.
+Recently the default skeleton was changed to have /run as a separate
+tmpfs instead of a symlink to /tmp. /run is not world-writable, but
+mysqld tries to write its PID file as user mysql. Therefore, it fails
+to start.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+To fix, create /run/mysql and give it to user mysql.
+
+While we're at it, change the paths to /run instead of /var/run.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libgtk2/libgtk2.mk | 52 ----------------------------------------------
- 1 file changed, 52 deletions(-)
+I don't think something similar needs to be done for systemd - AFAICS
+no PID file is saved for systemd.
+---
+ package/mysql/S97mysqld | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index b5c0bf5..17cdfcb 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -15,60 +15,8 @@ LIBGTK2_LICENSE_FILES = COPYING
- LIBGTK2_AUTORECONF = YES
+diff --git a/package/mysql/S97mysqld b/package/mysql/S97mysqld
+index dd7f57f..1d87e68 100644
+--- a/package/mysql/S97mysqld
++++ b/package/mysql/S97mysqld
+@@ -7,16 +7,20 @@ case "$1" in
+ 			mysql_install_db --user=mysql --ldata=/var/mysql
+ 		fi
  
- LIBGTK2_CONF_ENV = \
--	ac_cv_func_posix_getpwuid_r=yes \
--	glib_cv_stack_grows=no \
--	glib_cv_uscore=no \
--	ac_cv_func_strtod=yes \
--	ac_fsusage_space=yes \
--	fu_cv_sys_stat_statfs2_bsize=yes \
--	ac_cv_func_closedir_void=no \
--	ac_cv_func_getloadavg=no \
--	ac_cv_lib_util_getloadavg=no \
--	ac_cv_lib_getloadavg_getloadavg=no \
--	ac_cv_func_getgroups=yes \
--	ac_cv_func_getgroups_works=yes \
--	ac_cv_func_chown_works=yes \
--	ac_cv_have_decl_euidaccess=no \
--	ac_cv_func_euidaccess=no \
--	ac_cv_have_decl_strnlen=yes \
--	ac_cv_func_strnlen_working=yes \
--	ac_cv_func_lstat_dereferences_slashed_symlink=yes \
--	ac_cv_func_lstat_empty_string_bug=no \
--	ac_cv_func_stat_empty_string_bug=no \
--	vb_cv_func_rename_trailing_slash_bug=no \
--	ac_cv_have_decl_nanosleep=yes \
--	jm_cv_func_nanosleep_works=yes \
--	gl_cv_func_working_utimes=yes \
--	ac_cv_func_utime_null=yes \
--	ac_cv_have_decl_strerror_r=yes \
--	ac_cv_func_strerror_r_char_p=no \
--	jm_cv_func_svid_putenv=yes \
--	ac_cv_func_getcwd_null=yes \
--	ac_cv_func_getdelim=yes \
--	ac_cv_func_mkstemp=yes \
--	utils_cv_func_mkstemp_limitations=no \
--	utils_cv_func_mkdir_trailing_slash_bug=no \
--	jm_cv_func_gettimeofday_clobber=no \
--	gl_cv_func_working_readdir=yes \
--	jm_ac_cv_func_link_follows_symlink=no \
--	utils_cv_localtime_cache=no \
--	ac_cv_struct_st_mtim_nsec=no \
--	gl_cv_func_tzset_clobber=no \
--	gl_cv_func_getcwd_null=yes \
--	gl_cv_func_getcwd_path_max=yes \
--	ac_cv_func_fnmatch_gnu=yes \
--	am_getline_needs_run_time_check=no \
--	am_cv_func_working_getline=yes \
--	gl_cv_func_mkdir_trailing_slash_bug=no \
--	gl_cv_func_mkstemp_limitations=no \
--	ac_cv_func_working_mktime=yes \
--	jm_cv_func_working_re_compile_pattern=yes \
--	ac_use_included_regex=no \
--	gl_cv_c_restrict=no \
- 	ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_DIR)/usr/bin/gtk-update-icon-cache \
- 	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource \
--	ac_cv_prog_F77=no \
--	ac_cv_path_CUPS_CONFIG=no \
- 	DB2HTML=false
- 
- LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
++		# mysqld runs as user mysql, but /run is only writable by root
++		# so create a subdirectory for mysql.
++		install -d -o mysql -g root -m 0700 /run/mysql
++
+ 		# We don't use start-stop-daemon because mysqld has
+ 		# its own wrapper script.
+ 		printf "Starting mysql..."
+-		/usr/bin/mysqld_safe --pid-file=/var/run/mysqld.pid &
++		/usr/bin/mysqld_safe --pid-file=/run/mysql/mysqld.pid &
+ 		echo "done."
+ 		;;
+ 	stop)
+ 		printf "Stopping mysql..."
+-		if test -f /var/run/mysqld.pid ; then
+-			kill `cat /var/run/mysqld.pid`
++		if test -f /run/mysql/mysqld.pid ; then
++			kill `cat /run/mysql/mysqld.pid`
+ 		fi
+ 		echo "done."
+ 		;;
 -- 
-2.4.10
+2.6.4
