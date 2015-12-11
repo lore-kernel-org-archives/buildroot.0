@@ -1,96 +1,53 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 11 Dec 2015 16:46:44 +0100
-Subject: [Buildroot] [PATCH 3/3] package/boost: add library coroutine2
-In-Reply-To: <566AED7B.3060206@imgtec.com>
-References: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
- <1449842279-22712-3-git-send-email-joerg.krause@embedded.rocks>
- <566AE6EA.9040005@imgtec.com> <20151211163013.1c10a143@free-electrons.com>
- <566AED7B.3060206@imgtec.com>
-Message-ID: <1449848804.1950.7.camel@embedded.rocks>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 11 Dec 2015 16:55:09 +0100
+Subject: [Buildroot] [RFC] Relocatable host tools
+In-Reply-To: <20151211162850.327b9e71@free-electrons.com>
+References: <CAAXf6LX2uJ7p+SzdZq2LKL0JsHXB0PzO_1Lx5tTjcBfDq-7wZg@mail.gmail.com>
+ <20151211162850.327b9e71@free-electrons.com>
+Message-ID: <CAAXf6LWo1kud7n4pxUcd+yuU7Pz-BpaDF+ipv3Mwh4dZmjgvEA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente,
-Hi Thomas,
+On Fri, Dec 11, 2015 at 4:28 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Thomas,
+>
+> On Fri, 11 Dec 2015 15:11:27 +0100, Thomas De Schampheleire wrote:
+>
+>> I believe this is one step closer to having a relocatable host SDK for
+>> Buildroot. While I'm not claiming (nor have I tested) a completely
+>> relocatable host SDK, by changing the RPATH from an absolute path to
+>> '$ORIGIN/../lib'.
+>>
+>> '$ORIGIN' here is a literal string encoded in the ELF binary and
+>> replaced at runtime by the location of the binary. So, a binary
+>> originally created in /home/foo/buildroot/output/host/usr/bin and run
+>> from there will expect its libraries in
+>> /home/foo/buildroot/output/host/usr/lib, but the same binary copied
+>> and run from /tmp/hostsdk/bin will expect its libraries in
+>> /tmp/hostsdk/lib.
+>
+> Have you seen:
+>
+>   http://patchwork.ozlabs.org/patch/494781/
+>   http://patchwork.ozlabs.org/patch/494782/
+>   http://patchwork.ozlabs.org/patch/494783/
+>   http://patchwork.ozlabs.org/patch/494784/
+>   http://patchwork.ozlabs.org/patch/494785/
+>
 
-On Fr, 2015-12-11 at 15:36 +0000, Vicente Olivert Riera wrote:
-> Hi Thomas,
-> 
-> On 11/12/15 15:30, Thomas Petazzoni wrote:
-> > Vicente,
-> > 
-> > On Fri, 11 Dec 2015 15:08:26 +0000, Vicente Olivert Riera wrote:
-> > 
-> > > I was trying to test your patch and I have noticed that despite
-> > > of
-> > > having coroutine2 selected...
-> > > 
-> > > BR2_PACKAGE_BOOST_COROUTINE2=y
-> > > 
-> > > ...there isn't any libboost_coroutine2.so file installed on
-> > > target. Is
-> > > that normal?
-> > 
-> > The vast majority of Boost "libraries" are not libraries in the .so
-> > sense, but purely header based libraries, i.e just a bunch of .h
-> > with
-> > very complicated C++ code.
-> 
-> But there is a libboost_coroutine.so library, that's why I asked. Is
-> it
-> expected to have a lib for coroutine and not for coroutine2? That's
-> my
-> doubt.
+Ah, clearly not! Thanks for the reference.
+(I did search in my gmail, but had deleted old mails a while back)
 
-The Jamfile for coroutine contains:
+Are there blocking issues with these patches? There are still some
+open comments on v5 but no objections in that iteration.
+(I haven't reviewed the code myself yet).
 
-lib boost_coroutine
-????: detail/coroutine_context.cpp
-??????exceptions.cpp
-??????stack_traits_sources
-????: <link>shared:<library>../../context/build//boost_context
-??????<link>shared:<library>../../system/build//boost_system
-??????<link>shared:<library>../../thread/build//boost_thread
-????;
+Samuel, could you also share your view on the status of these patches?
+Are you planning a new iteration with Baruch's comments fixed?
 
-While the Jamfile for coroutine2 contains:
-
-lib boost_coroutine2
-????: 
-????: <link>shared:<library>../../context/build//boost_context
-????;
-
-So, coroutine has some sources to link with, while coroutine2 does not.
-Also, look at the config.hpp in coroutine2:
-
-    #if (defined(BOOST_ALL_DYN_LINK) ||
-    defined(BOOST_COROUTINES2_DYN_LINK) ) && !
-    defined(BOOST_COROUTINES2_STATIC_LINK)
-    # if defined(BOOST_COROUTINES2_SOURCE)
-    #??define BOOST_COROUTINES2_DECL BOOST_SYMBOL_EXPORT
-    #??define BOOST_COROUTINES2_BUILD_DLL
-    # else
-    #??define BOOST_COROUTINES2_DECL BOOST_SYMBOL_IMPORT
-    # endif
-    #endif
-
-    #if ! defined(BOOST_COROUTINES2_DECL)
-    # define BOOST_COROUTINES2_DECL
-    #endif
-
-    #if ! defined(BOOST_COROUTINES2_SOURCE) && !
-    defined(BOOST_ALL_NO_LIB) && ! defined(BOOST_COROUTINES2_NO_LIB)
-    # define BOOST_LIB_NAME boost_coroutine
-    # if defined(BOOST_ALL_DYN_LINK) ||
-    defined(BOOST_COROUTINES2_DYN_LINK)
-    #??define BOOST_DYN_LINK
-    # endif
-    # include <boost/config/auto_link.hpp>
-    #endif
-
-For coroutine a library name is defined, for coroutine2 not.
-
-J?rg
+Thanks,
+Thomas
