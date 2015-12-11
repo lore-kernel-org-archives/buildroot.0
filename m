@@ -1,39 +1,38 @@
-From: Dinesh Guleria <din.gulu.er@gmail.com>
-Date: Fri, 11 Dec 2015 16:37:43 +0530
-Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG not working fine
-Message-ID: <CAKpDV8u01myqCx7ROq9C_7B9Wgomb8Assh_SmUeyCRAc3UkAXQ@mail.gmail.com>
+From: John Keeping <john@keeping.me.uk>
+Date: Fri, 11 Dec 2015 12:29:07 +0000
+Subject: [Buildroot] [PATCH] linux-firmware: update Broadcom 43xxx file list
+Message-ID: <1449836947-28866-1-git-send-email-john@keeping.me.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: John Keeping <john@metanate.com>
 
-I am following steps 4 & 5 in this link :--
-https://buildroot.org/downloads/manual/manual.html#_quick_guide_to_storing_your_project_specific_customizations
+These files have been added upstream.
 
-I am running following command :--- make busybox-update-config
-BR2_PACKAGE_BUSYBOX_CONFIG=/home/dinesh/busybox/busybox.config
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ package/linux-firmware/linux-firmware.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-But busybox .config file doesn't go to right path set
-"/home/dinesh/busybox/busybox.config".
-
-Please suggets why is it going to location "package/busybox/busybox.config"
-?
-
-See the attached image.
-
-Regards,
-
-Dinesh
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151211/8ce2dca8/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot_terminal_output.png
-Type: image/png
-Size: 10189 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151211/8ce2dca8/attachment.png>
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 2767452..083a381 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -340,7 +340,11 @@ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX),y)
+ LINUX_FIRMWARE_FILES += \
+ 	brcm/brcmfmac43143.bin brcm/brcmfmac43143-sdio.bin \
+ 	brcm/brcmfmac43236b.bin brcm/brcmfmac43241b0-sdio.bin \
+-	brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43362-sdio.bin
++	brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43241b5-sdio.bin \
++	brcm/brcmfmac43242a.bin brcm/brcmfmac43340-sdio.bin \
++	brcm/brcmfmac43362-sdio.bin brcm/brcmfmac43455-sdio.bin \
++	brcm/brcmfmac43569.bin brcm/brcmfmac43570-pcie.bin \
++	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+ endif
+ 
+-- 
+2.7.0.rc0.76.g531d676
