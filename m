@@ -1,65 +1,43 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 11 Dec 2015 14:57:59 +0100
-Subject: [Buildroot] [PATCH 3/3] package/boost: add library coroutine2
-In-Reply-To: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <1449842279-22712-3-git-send-email-joerg.krause@embedded.rocks>
+Date: Fri, 11 Dec 2015 15:10:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python: bump to version 2.7.11
+Message-ID: <1449843048-13116-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Coroutine2 is a new (C++14) library added in boost 1.59.0. We also add
-coroutine2 to the '--without-libraries' configuration flag for the host
-variant.
-
-Build successfully tested with Arago ARMv5 2011.09 - a gcc v4.5.3 toolchain.
-
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/boost/Config.in | 4 ++++
- package/boost/boost.mk  | 7 ++++---
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/python/python.hash | 6 +++---
+ package/python/python.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 97d0802..83f6871 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -78,6 +78,10 @@ config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT
+diff --git a/package/python/python.hash b/package/python/python.hash
+index ef8dd98..d1cf1ba 100644
+--- a/package/python/python.hash
++++ b/package/python/python.hash
+@@ -1,4 +1,4 @@
+-# From https://www.python.org/downloads/release/python-2710/
+-md5	c685ef0b8e9f27b5e3db5db12b268ac6	Python-2.7.10.tar.xz
++# From https://www.python.org/downloads/release/python-2711/
++md5	1dbcc848b4cd8399a8199d000f9f823c	Python-2.7.11.tar.xz
+ # Locally calculated
+-sha256	1cd3730781b91caf0fa1c4d472dc29274186480161a150294c42ce9b5c5effc0	Python-2.7.10.tar.xz
++sha256	962b4c45af50124ea61f11a30deb4342fc0bc21126790fa1d7f6c79809413f46  Python-2.7.11.tar.xz
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 80ffbde..4ecd0d1 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+config BR2_PACKAGE_BOOST_COROUTINE2
-+	bool "boost-coroutine2"
-+	depends on BR2_PACKAGE_BOOST_CONTEXT
-+
- config BR2_PACKAGE_BOOST_DATE_TIME
- 	bool "boost-date_time"
- 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 2f23fe1..0161d68 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -16,15 +16,16 @@ HOST_BOOST_DEPENDENCIES =
- # keep host variant as minimal as possible
- HOST_BOOST_FLAGS = --without-icu \
- 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
--	coroutine date_time exception filesystem graph graph_parallel \
--	iostreams locale log math mpi program_options python random regex \
--	serialization signals system test thread timer wave)
-+	coroutine coroutine2 date_time exception filesystem graph \
-+	graph_parallel iostreams locale log math mpi program_options python \
-+	random regex serialization signals system test thread timer wave)
- 
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE2),,coroutine2)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
+ PYTHON_VERSION_MAJOR = 2.7
+-PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).10
++PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).11
+ PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
+ PYTHON_SITE = http://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_LICENSE = Python software foundation license v2, others
 -- 
 2.6.4
