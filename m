@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Dec 2015 16:28:50 +0100
-Subject: [Buildroot] [RFC] Relocatable host tools
-In-Reply-To: <CAAXf6LX2uJ7p+SzdZq2LKL0JsHXB0PzO_1Lx5tTjcBfDq-7wZg@mail.gmail.com>
-References: <CAAXf6LX2uJ7p+SzdZq2LKL0JsHXB0PzO_1Lx5tTjcBfDq-7wZg@mail.gmail.com>
-Message-ID: <20151211162850.327b9e71@free-electrons.com>
+Date: Fri, 11 Dec 2015 16:30:13 +0100
+Subject: [Buildroot] [PATCH 3/3] package/boost: add library coroutine2
+In-Reply-To: <566AE6EA.9040005@imgtec.com>
+References: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
+ <1449842279-22712-3-git-send-email-joerg.krause@embedded.rocks>
+ <566AE6EA.9040005@imgtec.com>
+Message-ID: <20151211163013.1c10a143@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Vicente,
 
-On Fri, 11 Dec 2015 15:11:27 +0100, Thomas De Schampheleire wrote:
+On Fri, 11 Dec 2015 15:08:26 +0000, Vicente Olivert Riera wrote:
 
-> I believe this is one step closer to having a relocatable host SDK for
-> Buildroot. While I'm not claiming (nor have I tested) a completely
-> relocatable host SDK, by changing the RPATH from an absolute path to
-> '$ORIGIN/../lib'.
+> I was trying to test your patch and I have noticed that despite of
+> having coroutine2 selected...
 > 
-> '$ORIGIN' here is a literal string encoded in the ELF binary and
-> replaced at runtime by the location of the binary. So, a binary
-> originally created in /home/foo/buildroot/output/host/usr/bin and run
-> from there will expect its libraries in
-> /home/foo/buildroot/output/host/usr/lib, but the same binary copied
-> and run from /tmp/hostsdk/bin will expect its libraries in
-> /tmp/hostsdk/lib.
+> BR2_PACKAGE_BOOST_COROUTINE2=y
+> 
+> ...there isn't any libboost_coroutine2.so file installed on target. Is
+> that normal?
 
-Have you seen:
-
-  http://patchwork.ozlabs.org/patch/494781/
-  http://patchwork.ozlabs.org/patch/494782/
-  http://patchwork.ozlabs.org/patch/494783/
-  http://patchwork.ozlabs.org/patch/494784/
-  http://patchwork.ozlabs.org/patch/494785/
+The vast majority of Boost "libraries" are not libraries in the .so
+sense, but purely header based libraries, i.e just a bunch of .h with
+very complicated C++ code.
 
 Thomas
 -- 
