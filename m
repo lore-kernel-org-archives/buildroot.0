@@ -1,42 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Dec 2015 16:57:33 +0100
-Subject: [Buildroot] [RFC] Relocatable host tools
-In-Reply-To: <CAAXf6LWo1kud7n4pxUcd+yuU7Pz-BpaDF+ipv3Mwh4dZmjgvEA@mail.gmail.com>
-References: <CAAXf6LX2uJ7p+SzdZq2LKL0JsHXB0PzO_1Lx5tTjcBfDq-7wZg@mail.gmail.com>
- <20151211162850.327b9e71@free-electrons.com>
- <CAAXf6LWo1kud7n4pxUcd+yuU7Pz-BpaDF+ipv3Mwh4dZmjgvEA@mail.gmail.com>
-Message-ID: <20151211165733.158cd59b@free-electrons.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 11 Dec 2015 17:00:59 +0100
+Subject: [Buildroot] [PATCH 3/3] package/boost: add library coroutine2
+In-Reply-To: <1449848804.1950.7.camel@embedded.rocks>
+References: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
+ <1449842279-22712-3-git-send-email-joerg.krause@embedded.rocks>
+ <566AE6EA.9040005@imgtec.com> <20151211163013.1c10a143@free-electrons.com>
+ <566AED7B.3060206@imgtec.com> <1449848804.1950.7.camel@embedded.rocks>
+Message-ID: <1449849659.1950.13.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-
-On Fri, 11 Dec 2015 16:55:09 +0100, Thomas De Schampheleire wrote:
-
-> Ah, clearly not! Thanks for the reference.
-> (I did search in my gmail, but had deleted old mails a while back)
+On Fr, 2015-12-11 at 16:46 +0100, J?rg Krause wrote:
+> Hi Vicente,
+> Hi Thomas,
 > 
-> Are there blocking issues with these patches? There are still some
-> open comments on v5 but no objections in that iteration.
-> (I haven't reviewed the code myself yet).
+> Also, look at the config.hpp in coroutine2:
 > 
-> Samuel, could you also share your view on the status of these patches?
-> Are you planning a new iteration with Baruch's comments fixed?
+> ????#if (defined(BOOST_ALL_DYN_LINK) ||
+> ????defined(BOOST_COROUTINES2_DYN_LINK) ) && !
+> ????defined(BOOST_COROUTINES2_STATIC_LINK)
+> ????# if defined(BOOST_COROUTINES2_SOURCE)
+> ????#??define BOOST_COROUTINES2_DECL BOOST_SYMBOL_EXPORT
+> ????#??define BOOST_COROUTINES2_BUILD_DLL
+> ????# else
+> ????#??define BOOST_COROUTINES2_DECL BOOST_SYMBOL_IMPORT
+> ????# endif
+> ????#endif
+> 
+> ????#if ! defined(BOOST_COROUTINES2_DECL)
+> ????# define BOOST_COROUTINES2_DECL
+> ????#endif
+> 
+> ????#if ! defined(BOOST_COROUTINES2_SOURCE) && !
+> ????defined(BOOST_ALL_NO_LIB) && ! defined(BOOST_COROUTINES2_NO_LIB)
+> ????# define BOOST_LIB_NAME boost_coroutine
+> ????# if defined(BOOST_ALL_DYN_LINK) ||
+> ????defined(BOOST_COROUTINES2_DYN_LINK)
+> ????#??define BOOST_DYN_LINK
+> ????# endif
+> ????# include <boost/config/auto_link.hpp>
+> ????#endif
+> 
+> For coroutine a library name is defined, for coroutine2 not.
 
-My objection is that the host rpath checks is done in shell scripts,
-and the target rpath mungling in python scripts. I'd like to use either
-one or the other language, but not both.
+Sorry, I got this wrong.
 
-I believe Samuel said he wanted to respin his series, to use python
-scripts to also do the host rpath checks that were added by Yann.
+What I really meant is that there would be no library name
+boost_coroutine2, but one named boost_coroutine, but only in case it is
+built. Since coroutine2 is just a bunch of header files as Thomas
+explained, no shared library named boost_coroutine is built at all.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+J?rg
