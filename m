@@ -1,33 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Dec 2015 23:32:42 +0100
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 11 Dec 2015 23:58:30 +0100
 Subject: [Buildroot] [PATCH v4] python: rework *.pyc files generation
-In-Reply-To: <CAHXCMM+fZO0q-wTzwHMGK9cB5NWOJrh5Q_YNMU=G+dHM9OoHAQ@mail.gmail.com>
+In-Reply-To: <20151211233242.50a12f09@free-electrons.com>
 References: <1447948334-8440-1-git-send-email-yegorslists@googlemail.com>
  <CAHXCMM+fZO0q-wTzwHMGK9cB5NWOJrh5Q_YNMU=G+dHM9OoHAQ@mail.gmail.com>
-Message-ID: <20151211233242.50a12f09@free-electrons.com>
+ <20151211233242.50a12f09@free-electrons.com>
+Message-ID: <CAHXCMMJOKia1N9wxf3z5se3k=2WsNWBz9gNR26p1EpA3i8BCJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel,
+On Fri, Dec 11, 2015 at 11:32 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Samuel,
+>
+> On Fri, 11 Dec 2015 23:22:52 +0100, Samuel Martin wrote:
+>
+>> AFAI have tested, this change works as expected, except for broken
+>> python modules.
+>> In such cases, 'compileall.compile_dir(...)' does not raise any
+>> exceptions when it failed to compile the *.py file, leading to the
+>> unfortunate consequence: the *.pyc file is not generated and the *.py
+>> file is lost if BR2_PACKAGE_PYTHON_PYC_ONLY is enabled.
+>
+> Do you have some specific examples that exhibit this behavior?
+Do you mean some case where this happens and the trace it does?
 
-On Fri, 11 Dec 2015 23:22:52 +0100, Samuel Martin wrote:
+Here is a log exhibiting the kind of issue aforementioned [1] (got
+with this defconfig [2] on top of master + this patch)
+In this case, /usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedRelativeLocationPath.py
+and /usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedAbsoluteLocationPath.py
+cannot be compiled due to syntax error, so only their corresponding
+*.pyc are missing in the final target fs.
 
-> AFAI have tested, this change works as expected, except for broken
-> python modules.
-> In such cases, 'compileall.compile_dir(...)' does not raise any
-> exceptions when it failed to compile the *.py file, leading to the
-> unfortunate consequence: the *.pyc file is not generated and the *.py
-> file is lost if BR2_PACKAGE_PYTHON_PYC_ONLY is enabled.
+[1] http://code.bulix.org/k3brrc-89950?raw
+[2] http://code.bulix.org/idvog6-89952?raw
 
-Do you have some specific examples that exhibit this behavior?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-Thanks,
+Regards,
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
