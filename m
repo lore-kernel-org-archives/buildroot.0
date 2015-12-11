@@ -1,51 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Dec 2015 17:31:24 -0300
-Subject: [Buildroot] [PATCH] driver_xf86-input-evdev: mtdev is mandatory now
-Message-ID: <1449865884-26291-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 11 Dec 2015 17:35:16 -0300
+Subject: [Buildroot] [PATCH] libgtk2: bump to version 2.24.29
+Message-ID: <1449866116-27040-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mtdev is no longer optional, so select it and depend upon it, otherwise
-it leads to build failure.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/x11r7/xdriver_xf86-input-evdev/Config.in                   | 1 +
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libgtk2/libgtk2.hash | 4 ++--
+ package/libgtk2/libgtk2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
-index f44e79f..70e950d 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
- 	bool "xf86-input-evdev"
- 	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
- 	select BR2_PACKAGE_LIBEVDEV
-+	select BR2_PACKAGE_MTDEV
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 1e90afa..6f692ab 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-@@ -12,11 +12,11 @@ XDRIVER_XF86_INPUT_EVDEV_LICENSE_FILES = COPYING
- XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
- 	host-pkgconf \
- 	libevdev \
-+	mtdev \
- 	xproto_inputproto \
- 	xserver_xorg-server \
- 	xproto_randrproto \
- 	xproto_xproto \
--	udev \
--	$(if $(BR2_PACKAGE_MTDEV),mtdev)
-+	udev
+diff --git a/package/libgtk2/libgtk2.hash b/package/libgtk2/libgtk2.hash
+index 21e8eb7..1eb795d 100644
+--- a/package/libgtk2/libgtk2.hash
++++ b/package/libgtk2/libgtk2.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.28.sha256sum
+-sha256	b2c6441e98bc5232e5f9bba6965075dcf580a8726398f7374d39f90b88ed4656	gtk+-2.24.28.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.29.sha256sum
++sha256	0741c59600d3d810a223866453dc2bbb18ce4723828681ba24aa6519c37631b8	gtk+-2.24.29.tar.xz
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index 0617b9e..b5c0bf5 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- $(eval $(autotools-package))
+ LIBGTK2_VERSION_MAJOR = 2.24
+-LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).28
++LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).29
+ LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
+ LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
+ LIBGTK2_INSTALL_STAGING = YES
 -- 
 2.4.10
