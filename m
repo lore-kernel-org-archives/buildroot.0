@@ -1,26 +1,52 @@
-From: Gaur, Rajneesh <Rajneesh.Gaur@barco.com>
-Date: Fri, 11 Dec 2015 07:50:06 +0000
-Subject: [Buildroot] Need help in enabling the ulimit command to
-	busybox-1.23.2
-Message-ID: <C9AC9E8BC6C75F478EDF2670B45767282A3B3E88@NOIMEX10.barco.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 11 Dec 2015 09:51:41 +0100
+Subject: [Buildroot] [PATCHv2 2/3] Revert "ltp-testsuite: don't link with
+	libtirpc"
+In-Reply-To: <1449823902-3309-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1449823902-3309-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1449823902-3309-2-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear,
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-We wanted to enable the core dump on our target which is buildroot based.
-We searched a lot on the web but we were not able to get it so far.
+This reverts commit 8f1c4c49a2ab0fc9e6cf73370f4483e253e5ac2d in favor of an
+alternative solution in a subsequent patch.
 
-Can you please update me with the steps to do the above mentioned.
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ package/ltp-testsuite/ltp-testsuite.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Thanks for your cooperation.
+v2: reorder patches only
 
-Best Regards,
-Rajneesh Gaur
-This message is subject to the following terms and conditions: MAIL DISCLAIMER<http://www.barco.com/en/maildisclaimer>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151211/b383d0f5/attachment.html>
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 78dc9f4..da36636 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -24,11 +24,18 @@ endif
+ # support.
+ LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+ LTP_TESTSUITE_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
++LTP_TESTSUITE_LIBS =
++
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++LTP_TESTSUITE_DEPENDENCIES += libtirpc host-pkgconf
++LTP_TESTSUITE_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
++LTP_TESTSUITE_LIBS += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
++endif
+ 
+ LTP_TESTSUITE_CONF_ENV += \
+-	ac_cv_header_tirpc_netconfig_h=no \
+ 	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+ 	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
++	LIBS="$(LTP_TESTSUITE_LIBS)" \
+ 	SYSROOT="$(STAGING_DIR)"
+ 
+ $(eval $(autotools-package))
+-- 
+1.9.5
