@@ -1,121 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 14:41:57 +0100
-Subject: [Buildroot] [git commit] package/efl/libefl: new host-package
-Message-ID: <20151212134520.B9438802E2@busybox.osuosl.org>
+Date: Sat, 12 Dec 2015 14:37:04 +0100
+Subject: [Buildroot] [git commit] package/expedite: move to package directory
+Message-ID: <20151212134520.67778802E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40afc40cc41073554c284edb4afcf7cbc328ea23
+commit: http://git.buildroot.net/buildroot/commit/?id=15d288520c10b7edf311e87b3ae45503957a66f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new host-package provide edje_cc, embryo_cc and eet binaries
-that will be used by the upcomming libefl packages which will
-contain the new version of efl libraries.
+There is no advantage for efl related packages to share the same version
+number anymore (except for Efl and Elementary).
+
+Here are the version number used for the 1.15 stable release:
+EFL                     1.15.2
+Elementary              1.15.2
+Emotion Generic Players 1.15.0
+Evas Generic Loaders    1.15.0
+Python-EFL              1.15.0
+
+Also, we usually do not have a sub-directory for a family of related
+packages which don't share the same version number, so move expedite
+to the package directory. Expedite now appears in the
+"Graphic libraries and applications (graphic/text)" in the Kconfig menu.
+
+In a followup patch, expedite will be downloaded directly from the 1.15
+branch in the git repository since there is no new tarball release after
+1.7.0.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libefl/libefl.hash |  2 ++
- package/efl/libefl/libefl.mk   | 82 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 84 insertions(+)
+ package/Config.in                      | 1 +
+ package/efl/Config.in                  | 1 -
+ package/{efl => }/expedite/Config.in   | 1 +
+ package/{efl => }/expedite/expedite.mk | 0
+ 4 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/efl/libefl/libefl.hash b/package/efl/libefl/libefl.hash
-new file mode 100644
-index 0000000..7ac26f4
---- /dev/null
-+++ b/package/efl/libefl/libefl.hash
-@@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.15.2.tar.xz.sha256
-+sha256	dd738f19f454621a7fa1fdb4c008457c170989f5f0c535edfed7b6773ae6c2a4	efl-1.15.2.tar.xz
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-new file mode 100644
-index 0000000..d070131
---- /dev/null
-+++ b/package/efl/libefl/libefl.mk
-@@ -0,0 +1,82 @@
-+################################################################################
-+#
-+# libefl
-+#
-+################################################################################
-+
-+# hardcode the version here since the bump to 1.15 is not complete in Buildroot
-+LIBEFL_VERSION = 1.15.2
-+LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
-+LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
-+LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
-+LIBEFL_LICENSE_FILES = \
-+	COMPLIANCE \
-+	COPYING \
-+	licenses/COPYING.BSD \
-+	licenses/COPYING.FTL \
-+	licenses/COPYING.GPL \
-+	licenses/COPYING.LGPL \
-+	licenses/COPYING.SMALL
-+
-+################################################################################
-+#
-+# host-libefl
-+#
-+################################################################################
-+
-+# We want to build only some host tools used later in the build.
-+# Actually we want: edje_cc, embryo_cc and eet.
-+
-+# Host dependencies:
-+# * host-dbus: for Eldbus
-+# * host-freetype: for libevas
-+# * host-libglib2: for libecore
-+# * host-libjpeg, host-libpng: for libevas image loader
-+# * host-lua: disable luajit dependency
-+HOST_LIBEFL_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-dbus \
-+	host-freetype \
-+	host-libglib2 \
-+	host-libjpeg \
-+	host-libpng \
-+	host-lua \
-+	host-zlib
-+
-+# Configure options:
-+# --disable-audio, --disable-multisense remove libsndfile dependency.
-+# --disable-cxx-bindings: disable C++11 bindings.
-+# --disable-fontconfig: remove dependency on fontconfig.
-+# --disable-fribidi: remove dependency on libfribidi.
-+# --disable-gstreamer1: remove dependency on gtreamer 1.0.
-+# --disable-libeeze: remove libudev dependency.
-+# --disable-libmount: remove dependency on host-util-linux libmount.
-+# --disable-physics: remove Bullet dependency.
-+# --enable-image-loader-gif=no: disable Gif dependency.
-+# --enable-image-loader-tiff=no: disable Tiff dependency.
-+# --enable-lua-old: disable Elua and remove luajit dependency.
-+# --with-crypto=none: remove dependencies on openssl or gnutls.
-+# --with-x11=none: remove dependency on X.org.
-+#   Yes I really know what I am doing.
-+HOST_LIBEFL_CONF_OPTS += \
-+	--disable-audio \
-+	--disable-cxx-bindings \
-+	--disable-fontconfig \
-+	--disable-fribidi \
-+	--disable-gstreamer1 \
-+	--disable-libeeze \
-+	--disable-libmount \
-+	--disable-multisense \
-+	--disable-physics \
-+	--enable-image-loader-gif=no \
-+	--enable-image-loader-jpeg=yes \
-+	--enable-image-loader-png=yes \
-+	--enable-image-loader-tiff=no \
-+	--enable-lua-old \
-+	--with-crypto=none \
-+	--with-glib=yes \
-+	--with-opengl=none \
-+	--with-x11=none \
-+	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
-+
-+$(eval $(host-autotools-package))
+diff --git a/package/Config.in b/package/Config.in
+index 0eb6fda..9610423 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -220,6 +220,7 @@ endmenu
+ menu "Graphic libraries and applications (graphic/text)"
+ 
+ comment "Graphic applications"
++	source "package/expedite/Config.in"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/glmark2/Config.in"
+ 	source "package/gnuplot/Config.in"
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 3d31a26..cb91660 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -10,7 +10,6 @@ menuconfig BR2_PACKAGE_EFL
+ 
+ if BR2_PACKAGE_EFL
+ 
+-source "package/efl/expedite/Config.in"
+ source "package/efl/libeina/Config.in"
+ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+diff --git a/package/efl/expedite/Config.in b/package/expedite/Config.in
+similarity index 95%
+rename from package/efl/expedite/Config.in
+rename to package/expedite/Config.in
+index 1e12108..de6a056 100644
+--- a/package/efl/expedite/Config.in
++++ b/package/expedite/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_EXPEDITE
+ 	select BR2_PACKAGE_LIBEINA
+ 	select BR2_PACKAGE_LIBEVAS
+ 	select BR2_PACKAGE_LIBEET
++	depends on BR2_PACKAGE_EFL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+ 	help
+diff --git a/package/efl/expedite/expedite.mk b/package/expedite/expedite.mk
+similarity index 100%
+rename from package/efl/expedite/expedite.mk
+rename to package/expedite/expedite.mk
