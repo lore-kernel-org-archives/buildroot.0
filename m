@@ -1,47 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 18:32:35 +0100
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: bump 0.10.x branch to
- version 0.10.41
-In-Reply-To: <1449609500-10071-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1449609500-10071-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151212183235.09bb8139@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 12 Dec 2015 19:31:37 +0100
+Subject: [Buildroot] [PATCH 2/8] package/tvheadend: bump version
+In-Reply-To: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1449945103-23715-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tvheadend/tvheadend.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue,  8 Dec 2015 22:18:18 +0100, J?rg Krause wrote:
-> Also remove a patch applied upstream.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  ...4-fix-build-error-without-OpenSSL-support.patch | 54 ----------------------
->  .../0001-remove-python-bz2-dependency.patch        |  0
->  .../0002-gyp-force-link-command-to-use-CXX.patch   |  0
->  .../0003-use-python-variable.patch                 |  0
->  .../0004-fix-musl-USE-MISC-build-issue.patch}      |  0
->  package/nodejs/Config.in                           |  4 +-
->  package/nodejs/nodejs.hash                         |  4 +-
->  7 files changed, 4 insertions(+), 58 deletions(-)
->  delete mode 100644 package/nodejs/0.10.40/0004-fix-build-error-without-OpenSSL-support.patch
->  rename package/nodejs/{0.10.40 => 0.10.41}/0001-remove-python-bz2-dependency.patch (100%)
->  rename package/nodejs/{0.10.40 => 0.10.41}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
->  rename package/nodejs/{0.10.40 => 0.10.41}/0003-use-python-variable.patch (100%)
->  rename package/nodejs/{0.10.40/0005-fix-musl-USE-MISC-build-issue.patch => 0.10.41/0004-fix-musl-USE-MISC-build-issue.patch} (100%)
-
-I've applied all three patches. However, there is a problem: if you
-select a Cortex-A9 ARM processor, only the 0.10 version is visible, the
-0.12 and 4.x versions are not visible. This is because for Cortex-A9,
-BR2_ARM_CPU_HAS_VFPV2 is not true. This is something that should be
-fixed at some point.
-
-Thanks!
-
-Thomas
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 60ca524..8177057 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 8902dcbcc48b6a76168882a856111237f13e60ea
++TVHEADEND_VERSION = 676a34f24b182928770cef5d4ba2903a6a25323d
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.2
