@@ -1,45 +1,43 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sat, 12 Dec 2015 20:55:38 +0100
-Subject: [Buildroot] [PATCH] wine: Add OSMesa dependency
-Message-ID: <566C7BBA.3010009@dawncrow.de>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 12 Dec 2015 21:38:05 +0100
+Subject: [Buildroot] [PATCH] python-cffi: bump to 1.3.1
+Message-ID: <1449952685-28745-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have support for building the OSMesa lib since 81537f284f62c6586d50bd5cca78c2bf1375b88c
-
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/wine/wine.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/python-cffi/python-cffi.hash | 6 +++---
+ package/python-cffi/python-cffi.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 38576db..1a1fea0 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -27,7 +27,6 @@ WINE_CONF_OPTS = \
- 	--without-hal \
- 	--without-openal \
- 	--without-opencl \
--	--without-osmesa \
- 	--without-oss
+diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+index b41c979..200ef33 100644
+--- a/package/python-cffi/python-cffi.hash
++++ b/package/python-cffi/python-cffi.hash
+@@ -1,4 +1,4 @@
+-# From https://pypi.python.org/pypi/cffi/0.8.6
+-md5	474b5a68299a6f05009171de1dc91be6	cffi-0.8.6.tar.gz
++# From https://pypi.python.org/pypi?:action=show_md5&digest=deeba7c1fd32a66f1db587988d760c11
++md5	deeba7c1fd32a66f1db587988d760c11	cffi-1.3.1.tar.gz
+ # Calculated based on the hash above
+-sha256	2532d9e3af9e3c6d0f710fc98b0295b563c7f39cfd97dd2242bd36fbf4900610	cffi-0.8.6.tar.gz
++sha256	d45dd39a770b4afb591c82555f6a8bbc1ac7eb019eda9b621eee1a0a72201220	cffi-1.3.1.tar.gz
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index 17efbab..70fbe02 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Wine uses a wrapper around gcc, and uses the value of --host to
-@@ -171,6 +170,13 @@ else
- WINE_CONF_OPTS += --without-ldap
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
-+WINE_CONF_OPTS += --with-osmesa
-+WINE_DEPENDENCIES += mesa3d
-+else
-+WINE_CONF_OPTS += --without-osmesa
-+endif
-+
- ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
- WINE_CONF_OPTS += --with-sane
- WINE_DEPENDENCIES += sane-backends
+-PYTHON_CFFI_VERSION = 0.8.6
++PYTHON_CFFI_VERSION = 1.3.1
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+ PYTHON_CFFI_SITE = https://pypi.python.org/packages/source/c/cffi
+ PYTHON_CFFI_SETUP_TYPE = setuptools
 -- 
-1.9.1
+2.1.4
