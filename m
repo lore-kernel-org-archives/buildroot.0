@@ -1,86 +1,84 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 12 Dec 2015 14:33:12 +0100
-Subject: [Buildroot] [PATCH v9 09/32] package/efl/libefl: add webp dependency
+Date: Sat, 12 Dec 2015 14:33:05 +0100
+Subject: [Buildroot] [PATCH v9 02/32] package/libevas-generic-loaders: move
+	to package directory
 In-Reply-To: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
 References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449927215-3452-10-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449927215-3452-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WebP is a new image format that provides lossless and lossy
-compression for images on the web. So enabling webp support
-in efl libraries allow to loads images using WebP.
+As for expedite package, there is no advantage for efl related
+packages to share the same version number anymore
+(except for efl and libelementary).
 
-Also, it one of the "highly recommended" dependecies [1]
-according to the README but disabling it doesn't need
-the --enable-i-really-know-what-i-am-doing... option.
-That's why BR2_PACKAGE_LIBEFL_WEBP is not added to
-BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
-
-[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
+Also, we usually do not have a sub-directory for a family of related
+packages which doen't share the same version number, so move
+libevas-generic-loaders to package directory.
+Libevas-generic-loaders appear now in "Libraries" -> "Graphics" in
+the Kconfig menu.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: select BR2_PACKAGE_WEBP (Yann E.Morin)
-v4: rename to libefl
-    improve commit log
+v6: keep the reverse dependency on BR2_USE_WCHAR (Yann E.Morin)
+v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
+v4: improve the commit log (ThomasP)
+    move libevas-generic-loaders to "Libraries" -> "Graphics" (ThomasP)
+    fix package comment dependency on BR2_USE_MMU
 ---
- package/efl/libefl/Config.in | 6 ++++++
- package/efl/libefl/libefl.mk | 9 +++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ package/Config.in                                                    | 1 +
+ package/efl/Config.in                                                | 1 -
+ package/{efl => }/libevas-generic-loaders/Config.in                  | 1 +
+ package/{efl => }/libevas-generic-loaders/libevas-generic-loaders.mk | 0
+ 4 files changed, 2 insertions(+), 1 deletion(-)
+ rename package/{efl => }/libevas-generic-loaders/Config.in (97%)
+ rename package/{efl => }/libevas-generic-loaders/libevas-generic-loaders.mk (100%)
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 3cf4b4e..0b89411 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -112,4 +112,10 @@ config BR2_PACKAGE_LIBEFL_TIFF
+diff --git a/package/Config.in b/package/Config.in
+index 9610423..00aedad 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -827,6 +827,7 @@ menu "Graphics"
+ 	source "package/libdri2/Config.in"
+ 	source "package/libdrm/Config.in"
+ 	source "package/libexif/Config.in"
++	source "package/libevas-generic-loaders/Config.in"
+ 	source "package/libfm/Config.in"
+ 	source "package/libfm-extra/Config.in"
+ 	source "package/libfreeimage/Config.in"
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index cb91660..7ce5a36 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -16,7 +16,6 @@ source "package/efl/libeet/Config.in"
+ source "package/efl/libefreet/Config.in"
+ source "package/efl/libeio/Config.in"
+ source "package/efl/libevas/Config.in"
+-source "package/efl/libevas-generic-loaders/Config.in"
+ source "package/efl/libembryo/Config.in"
+ source "package/efl/libedje/Config.in"
+ source "package/efl/libethumb/Config.in"
+diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+similarity index 97%
+rename from package/efl/libevas-generic-loaders/Config.in
+rename to package/libevas-generic-loaders/Config.in
+index 3f7581f..c69f5e8 100644
+--- a/package/efl/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	bool "libevas generic loaders"
++	depends on BR2_PACKAGE_EFL
+ 	select BR2_PACKAGE_LIBEINA
+ 	select BR2_PACKAGE_ZLIB
  	help
- 	  This enables the loader code that loads tiff files.
- 
-+config BR2_PACKAGE_LIBEFL_WEBP
-+	bool "libevas webp image loader"
-+	select BR2_PACKAGE_WEBP
-+	help
-+	  This enables the loader code that loads images using WebP.
-+
- endif # BR2_PACKAGE_LIBEFL
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index db150d0..bd20039 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
- # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-fb: disable frame buffer support.
- # --disable-image-loader-jp2k: disable JPEG 2000 support.
--# --disable-image-loader-webp: disable webp support.
- # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
-@@ -44,7 +43,6 @@ LIBEFL_CONF_OPTS = \
- 	--disable-cxx-bindings \
- 	--disable-fb \
- 	--disable-image-loader-jp2k \
--	--disable-image-loader-webp \
- 	--disable-sdl \
- 	--disable-systemd \
- 	--enable-lua-old \
-@@ -176,6 +174,13 @@ else
- LIBEFL_CONF_OPTS += --disable-image-loader-tiff
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
-+LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
-+LIBEFL_DEPENDENCIES += webp
-+else
-+LIBEFL_CONF_OPTS += --disable-image-loader-webp
-+endif
-+
- $(eval $(autotools-package))
- 
- ################################################################################
+diff --git a/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+similarity index 100%
+rename from package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
+rename to package/libevas-generic-loaders/libevas-generic-loaders.mk
 -- 
 2.4.3
