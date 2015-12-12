@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Dec 2015 19:31:41 +0100
-Subject: [Buildroot] [PATCH 6/8] package/dovecot: bump version to 2.2.21
+Date: Sat, 12 Dec 2015 19:31:43 +0100
+Subject: [Buildroot] [PATCH 8/8] package/mesa3d-demos: add glut support
 In-Reply-To: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1449945103-23715-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1449945103-23715-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-demos/mesa3d-demos.mk | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 9386df0..42a187a 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 759e1e3f9d907cdaabad1f5fbacc793ca191d234c084bec3bba42966952a4e9f  dovecot-2.2.19.tar.gz
-+sha256	7ab7139e59e1f0353bf9c24251f13c893cf1a6ef4bcc47e2d44de437108d0b20	dovecot-2.2.21.tar.gz
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 69f722f..8451e52 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+index c0f889a..016095b 100644
+--- a/package/mesa3d-demos/mesa3d-demos.mk
++++ b/package/mesa3d-demos/mesa3d-demos.mk
+@@ -11,8 +11,6 @@ MESA3D_DEMOS_AUTORECONF = YES
+ MESA3D_DEMOS_DEPENDENCIES = host-pkgconf
+ MESA3D_DEMOS_LICENSE = MIT
  
- DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).21
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPLv2.1
+-MESA3D_DEMOS_CONF_OPTS += --without-glut --disable-osmesa
+-
+ ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_HAS_LIBGL),yy)
+ MESA3D_DEMOS_DEPENDENCIES += libgl libglew libglu xlib_libX11 xlib_libXext
+ MESA3D_DEMOS_CONF_OPTS += --enable-gl --enable-x11
+@@ -55,6 +53,19 @@ else
+ MESA3D_DEMOS_CONF_OPTS += --disable-freetype2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
++MESA3D_DEMOS_DEPENDENCIES += libfreeglut
++MESA3D_DEMOS_CONF_OPTS += --with-glut=$(STAGING_DIR)/usr
++# osmesa support depends on glut
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++MESA3D_DEMOS_CONF_OPTS += --enable-osmesa
++else
++MESA3D_DEMOS_CONF_OPTS += --disable-osmesa
++endif
++else
++MESA3D_DEMOS_CONF_OPTS += --without-glut --disable-osmesa
++endif
++
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEMOS_DEPENDENCIES += wayland
+ MESA3D_DEMOS_CONF_OPTS += --enable-wayland
 -- 
 2.6.2
