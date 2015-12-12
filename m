@@ -1,85 +1,126 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 14:37:04 +0100
-Subject: [Buildroot] [git commit] package/expedite: move to package directory
-Message-ID: <20151212134520.67778802E2@busybox.osuosl.org>
+Date: Sat, 12 Dec 2015 14:39:41 +0100
+Subject: [Buildroot] [git commit] package/{efl packages}: reorder
+	select/depends
+Message-ID: <20151212134520.ABDE1802E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15d288520c10b7edf311e87b3ae45503957a66f6
+commit: http://git.buildroot.net/buildroot/commit/?id=99a1dbb82aa78a126a50fc5a13dd0b184e8d61b4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is no advantage for efl related packages to share the same version
-number anymore (except for Efl and Elementary).
+As noticed by Yann [1], move the package dependencies
+before selected packages/options.
 
-Here are the version number used for the 1.15 stable release:
-EFL                     1.15.2
-Elementary              1.15.2
-Emotion Generic Players 1.15.0
-Evas Generic Loaders    1.15.0
-Python-EFL              1.15.0
-
-Also, we usually do not have a sub-directory for a family of related
-packages which don't share the same version number, so move expedite
-to the package directory. Expedite now appears in the
-"Graphic libraries and applications (graphic/text)" in the Kconfig menu.
-
-In a followup patch, expedite will be downloaded directly from the 1.15
-branch in the git repository since there is no new tarball release after
-1.7.0.
+[1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                      | 1 +
- package/efl/Config.in                  | 1 -
- package/{efl => }/expedite/Config.in   | 1 +
- package/{efl => }/expedite/expedite.mk | 0
- 4 files changed, 2 insertions(+), 1 deletion(-)
+ package/efl/libelementary/Config.in       |  4 ++--
+ package/enlightenment/Config.in           | 22 +++++++++++-----------
+ package/expedite/Config.in                |  6 +++---
+ package/libevas-generic-loaders/Config.in |  4 ++--
+ 4 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 0eb6fda..9610423 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -220,6 +220,7 @@ endmenu
- menu "Graphic libraries and applications (graphic/text)"
+diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+index 4f62592..fcc7025 100644
+--- a/package/efl/libelementary/Config.in
++++ b/package/efl/libelementary/Config.in
+@@ -3,12 +3,12 @@ comment "libelementary needs a toolchain w/ threads, dynamic library"
  
- comment "Graphic applications"
-+	source "package/expedite/Config.in"
- 	source "package/fswebcam/Config.in"
- 	source "package/glmark2/Config.in"
- 	source "package/gnuplot/Config.in"
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 3d31a26..cb91660 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -10,7 +10,6 @@ menuconfig BR2_PACKAGE_EFL
- 
- if BR2_PACKAGE_EFL
- 
--source "package/efl/expedite/Config.in"
- source "package/efl/libeina/Config.in"
- source "package/efl/libecore/Config.in"
- source "package/efl/libeet/Config.in"
-diff --git a/package/efl/expedite/Config.in b/package/expedite/Config.in
-similarity index 95%
-rename from package/efl/expedite/Config.in
-rename to package/expedite/Config.in
-index 1e12108..de6a056 100644
---- a/package/efl/expedite/Config.in
-+++ b/package/expedite/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_EXPEDITE
+ config BR2_PACKAGE_LIBELEMENTARY
+ 	bool "libelementary"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
++	depends on !BR2_STATIC_LIBS
  	select BR2_PACKAGE_LIBEINA
  	select BR2_PACKAGE_LIBEVAS
- 	select BR2_PACKAGE_LIBEET
-+	depends on BR2_PACKAGE_EFL
+ 	select BR2_PACKAGE_LIBECORE
+ 	select BR2_PACKAGE_LIBEDJE
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+-	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Elementary is a widget toolkit and EFL wrapper and convenience
+ 	  library to make it easy to build applications and tools with UIs
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 58f8f39..9dad571 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -1,5 +1,16 @@
+ config BR2_PACKAGE_ENLIGHTENMENT
+ 	bool "enlightenment"
++	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
++	depends on BR2_USE_WCHAR
++	depends on BR2_INSTALL_LIBSTDCPP
++	# libedbus -> dbus
++	# libedbus -> glib2, libevas
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# libedbus -> dbus, efl libraries
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_XORG7
++	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	select BR2_PACKAGE_EFL
+ 	select BR2_PACKAGE_LIBECORE
+ 	select BR2_PACKAGE_LIBECORE_X
+@@ -17,17 +28,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+-	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	# libedbus -> dbus
+-	# libedbus -> glib2, libevas
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# libedbus -> dbus, efl libraries
+-	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_XORG7
+-	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  Enlightenment, also known simply as E, is a stacking window
+ 	  manager for the X Window System which can be used alone or
+diff --git a/package/expedite/Config.in b/package/expedite/Config.in
+index de6a056..e60510b 100644
+--- a/package/expedite/Config.in
++++ b/package/expedite/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_EXPEDITE
+ 	bool "expedite"
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBEET
+ 	depends on BR2_PACKAGE_EFL
  	depends on BR2_INSTALL_LIBSTDCPP
  	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
++	select BR2_PACKAGE_LIBEET
++	select BR2_PACKAGE_LIBEINA
++	select BR2_PACKAGE_LIBEVAS
  	help
-diff --git a/package/efl/expedite/expedite.mk b/package/expedite/expedite.mk
-similarity index 100%
-rename from package/efl/expedite/expedite.mk
-rename to package/expedite/expedite.mk
+ 	  Expedite is the official Evas benchmark tool. It can test different
+ 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index 72d4adb..f42f8a6 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -14,13 +14,13 @@ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+-	select BR2_PACKAGE_LIBRSVG
+-	select BR2_PACKAGE_CAIRO
+ 	depends on BR2_USE_MMU # librsvg -> glib2
+ 	depends on BR2_USE_WCHAR # librsvg -> glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+ 	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	select BR2_PACKAGE_LIBRSVG
++	select BR2_PACKAGE_CAIRO
+ 	help
+ 	  This option enables the Evas generic SVG loader
+ 
