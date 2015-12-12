@@ -1,47 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 14:16:27 +0100
-Subject: [Buildroot] [git commit] package/python: bump to version 2.7.11
-Message-ID: <20151212131720.3FB6680E16@busybox.osuosl.org>
+Date: Sat, 12 Dec 2015 14:17:58 +0100
+Subject: [Buildroot] [git commit] linux-firmware: update Broadcom 43xxx file
+	list
+Message-ID: <20151212132927.014A080ACF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9fd47ce1a84c335a4d57b995571534ebfb0b79e5
+commit: http://git.buildroot.net/buildroot/commit/?id=e29134e96220060e2f8d7e08602cd544ca82eb12
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [Thomas: quick run-time test on ARM.]
----
- package/python/python.hash | 6 +++---
- package/python/python.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+These files have been added upstream.
 
-diff --git a/package/python/python.hash b/package/python/python.hash
-index ef8dd98..d1cf1ba 100644
---- a/package/python/python.hash
-+++ b/package/python/python.hash
-@@ -1,4 +1,4 @@
--# From https://www.python.org/downloads/release/python-2710/
--md5	c685ef0b8e9f27b5e3db5db12b268ac6	Python-2.7.10.tar.xz
-+# From https://www.python.org/downloads/release/python-2711/
-+md5	1dbcc848b4cd8399a8199d000f9f823c	Python-2.7.11.tar.xz
- # Locally calculated
--sha256	1cd3730781b91caf0fa1c4d472dc29274186480161a150294c42ce9b5c5effc0	Python-2.7.10.tar.xz
-+sha256	962b4c45af50124ea61f11a30deb4342fc0bc21126790fa1d7f6c79809413f46  Python-2.7.11.tar.xz
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 80ffbde..4ecd0d1 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-firmware/linux-firmware.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 2767452..083a381 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -340,7 +340,11 @@ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX),y)
+ LINUX_FIRMWARE_FILES += \
+ 	brcm/brcmfmac43143.bin brcm/brcmfmac43143-sdio.bin \
+ 	brcm/brcmfmac43236b.bin brcm/brcmfmac43241b0-sdio.bin \
+-	brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43362-sdio.bin
++	brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43241b5-sdio.bin \
++	brcm/brcmfmac43242a.bin brcm/brcmfmac43340-sdio.bin \
++	brcm/brcmfmac43362-sdio.bin brcm/brcmfmac43455-sdio.bin \
++	brcm/brcmfmac43569.bin brcm/brcmfmac43570-pcie.bin \
++	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+ endif
  
- PYTHON_VERSION_MAJOR = 2.7
--PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).10
-+PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).11
- PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
- PYTHON_SITE = http://python.org/ftp/python/$(PYTHON_VERSION)
- PYTHON_LICENSE = Python software foundation license v2, others
