@@ -1,104 +1,137 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 12 Dec 2015 14:33:16 +0100
-Subject: [Buildroot] [PATCH v9 13/32] package/efl/libefl: add OpenGLES
-	support
+Date: Sat, 12 Dec 2015 14:33:20 +0100
+Subject: [Buildroot] [PATCH v9 17/32] package/efl/libelementary: bump to
+	version 1.15.2
 In-Reply-To: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
 References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449927215-3452-14-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449927215-3452-18-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow to enable graphic acceleration using OpenGLES
-with efl libraries.
+Use the newly added libefl package wich provide a new version
+of libeina, libevas, libecore and libedje.
 
-The full opengl option (--with-opengl=full) is still disabled
-for now since it's mainly used with Tizen on GPU Intel and ARM Mali.
+Update the upstream url and add a hash file.
 
-With the upcomming Wayland support in EFL 1.16 and Enlightenment 0.20,
-only OpenGLES support is recommanded.
+We need to add a host package to provide elm_prefs_cc the
+host machine to cross-compile correctly libelementary
+for the target. Otherwise, elm_prefs_cc for the
+target is used on the host machine.
+
+Since eet, eolian_gen and eldbus_codegen are installed in
+HOST_DIR by host-efl package, help configure script to find
+them.
+
+Explicitly disable doxygen and elementary-test.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v9: remove OpenGL full support
-v6: Rename OpenGL options (Yann E.Morin)
-    Only full OpenGL support depends on X11.
-v4: rename libefl
-    improve commit log
+v6: squash with the patch adding host-libelementary (Yann E.Morin)
+v5: move the hash file to package/efl/libelementary
+v4: keep libelementary in package/efl/
+v3: bump to 1.15.2
+    remove trailing slash (Vicente Bergas)
+v2: bump to 1.15.1
+    remove glibc only dependency
 ---
- package/efl/libefl/Config.in | 19 +++++++++++++++++++
- package/efl/libefl/libefl.mk | 13 ++++++++++---
- 2 files changed, 29 insertions(+), 3 deletions(-)
+ package/efl/libelementary/Config.in          | 14 ++++-------
+ package/efl/libelementary/libelementary.hash |  2 ++
+ package/efl/libelementary/libelementary.mk   | 35 ++++++++++++++++------------
+ 3 files changed, 27 insertions(+), 24 deletions(-)
+ create mode 100644 package/efl/libelementary/libelementary.hash
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 560a7b3..73e14ae 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -105,6 +105,25 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XPROTO_GLPROTO
+diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+index fcc7025..1f8c962 100644
+--- a/package/efl/libelementary/Config.in
++++ b/package/efl/libelementary/Config.in
+@@ -1,17 +1,13 @@
+-comment "libelementary needs a toolchain w/ threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+ config BR2_PACKAGE_LIBELEMENTARY
+ 	bool "libelementary"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
++	depends on BR2_TOOLCHAIN_HAS_THREADS # elm_store.c
+ 	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBEDJE
+ 	help
+ 	  Elementary is a widget toolkit and EFL wrapper and convenience
+ 	  library to make it easy to build applications and tools with UIs
+ 	  with less code.
  
-+choice
-+	bool "OpenGL support"
-+	default BR2_PACKAGE_LIBEFL_OPENGLES if BR2_PACKAGE_HAS_LIBGLES
-+	help
-+	  libevas can be configured to use HW acceleration only with
-+	  OpenGLES.
+-	  http://trac.enlightenment.org/e/wiki/Elementary
++	  https://enlightenment.org
 +
-+config BR2_PACKAGE_LIBEFL_OPENGL_NONE
-+	bool "none"
-+
-+config BR2_PACKAGE_LIBEFL_OPENGLES
-+	bool "opengles"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "opengles support needs an opengles provider"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES
-+
-+endchoice # OpenGL support
-+
- comment "libevas loaders"
++comment "libelementary needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/efl/libelementary/libelementary.hash b/package/efl/libelementary/libelementary.hash
+new file mode 100644
+index 0000000..2cd36d8
+--- /dev/null
++++ b/package/efl/libelementary/libelementary.hash
+@@ -0,0 +1,2 @@
++# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.15.2.tar.xz.sha256
++sha256	523c3073210b611817d0f56aa8348962ec757282f9f7dfde93825afa164a0f3f	elementary-1.15.2.tar.xz
+diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
+index 8bd69fe..4ba8681 100644
+--- a/package/efl/libelementary/libelementary.mk
++++ b/package/efl/libelementary/libelementary.mk
+@@ -4,29 +4,34 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LIBEFL_PNG
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 3d58e24..0eb17c2 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -35,7 +35,6 @@ LIBEFL_GETTEXTIZE = YES
- # --disable-systemd: disable systemd support.
- # --disable-xinput22: disable X11 XInput v2.2+ support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
--# --with-opengl=none: disable opengl support.
- LIBEFL_CONF_OPTS = \
+-LIBELEMENTARY_VERSION = 1.7.10
+-LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.bz2
+-LIBELEMENTARY_SITE = http://download.enlightenment.org/releases
++LIBELEMENTARY_VERSION = 1.15.2
++LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
++LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
+ LIBELEMENTARY_LICENSE = LGPLv2.1
+ LIBELEMENTARY_LICENSE_FILES = COPYING
+ 
+ LIBELEMENTARY_INSTALL_STAGING = YES
+ 
+-LIBELEMENTARY_DEPENDENCIES = \
+-	libeina libevas libecore libedje host-libedje \
+-	host-libeet
++LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl host-libelementary libefl
+ 
+ LIBELEMENTARY_CONF_OPTS = \
  	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-@@ -43,8 +42,7 @@ LIBEFL_CONF_OPTS = \
- 	--disable-sdl \
- 	--disable-systemd \
- 	--disable-xinput22 \
--	--enable-lua-old \
--	--with-opengl=none
-+	--enable-lua-old
+-	--with-eet-eet=$(HOST_DIR)/usr/bin/eet
++	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
++	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
++	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
++	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
++	--with-doxygen=no \
++	--disable-elementary-test
  
- # Disable untested configuration warning.
- ifeq ($(BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG),)
-@@ -168,6 +166,15 @@ else
- LIBEFL_CONF_OPTS += --with-x11=none
- endif
+-# libethumb_client is only built when ethumbd is built.
+-# ethumbd is only built if edbus is built.
+-ifeq ($(BR2_PACKAGE_LIBETHUMB)$(BR2_PACKAGE_LIBEDBUS),yy)
+-LIBELEMENTARY_DEPENDENCIES += libethumb
+-LIBELEMENTARY_CONF_OPTS += --enable-ethumb
+-else
+-LIBELEMENTARY_CONF_OPTS += --disable-ethumb
+-endif
++# We need a host package in order to provide elm_prefs_cc and
++# elementary_codegen.
++HOST_LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl
++HOST_LIBELEMENTARY_CONF_OPTS = \
++	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
++	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
++	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
++	--with-doxygen=no \
++	--disable-elementary-test
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_OPENGLES),y)
-+LIBEFL_CONF_OPTS += --with-opengl=es
-+LIBEFL_DEPENDENCIES += libgles
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEFL_OPENGL_NONE),y)
-+LIBEFL_CONF_OPTS += --with-opengl=none
-+endif
-+
- # Loaders that need external dependencies needs to be --enable-XXX=yes
- # otherwise the default is '=static'.
- # All other loaders are statically built-in
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.4.3
