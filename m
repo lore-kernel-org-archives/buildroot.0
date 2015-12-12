@@ -1,34 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 13:54:30 +0100
-Subject: [Buildroot] [PATCH 1/3] package/boost: bump to version 1.59.0
-In-Reply-To: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151212135430.2ecfa9af@free-electrons.com>
+Date: Sat, 12 Dec 2015 14:01:45 +0100
+Subject: [Buildroot] Move openldap package and enable LDAP server?
+In-Reply-To: <5669CC92.8080504@gmx.de>
+References: <56614B18.4030703@gmx.de>
+ <20151204091924.2f5f9c22@free-electrons.com>
+ <56614CF8.5050804@gmx.de> <5669CC92.8080504@gmx.de>
+Message-ID: <20151212140145.5a7583dc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Hello Andreas,
 
-On Fri, 11 Dec 2015 14:57:57 +0100, J?rg Krause wrote:
-> Also:
-> * remove patch "gcc.jam compiler options fix" - merged upstream
-> * renumber patch "fix uclibc eventfd".
+On Thu, 10 Dec 2015 20:03:46 +0100, Andreas Ehmanns wrote:
+
+> please find attached the patch for adding the openldap server. It 
+> contains the server option, moves the configuration to "Networking 
+> Applications" and adds an init script for the ldap server.
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  ...eventfd.patch => 0002-fix-uclibc-eventfd.patch} |  0
->  .../boost/0002-gcc.jam-compiler-options-fix.patch  | 37 ----------------------
->  package/boost/boost.hash                           |  6 ++--
->  package/boost/boost.mk                             |  2 +-
->  4 files changed, 4 insertions(+), 41 deletions(-)
->  rename package/boost/{0004-fix-uclibc-eventfd.patch => 0002-fix-uclibc-eventfd.patch} (100%)
->  delete mode 100644 package/boost/0002-gcc.jam-compiler-options-fix.patch
+> Please let me know what you think about the patch and if there are 
+> things that I should change.
 
-All three patches merged, thanks! And thanks to Vicente for the
-review/testing.
+Thanks. But could you please send the patch with 'git send-email'
+rather than as an attachment? It allows the patch to be reviewed
+properly, and also easily applied.
+
+A few comments though:
+
+ * The commit title is too long. Something like:
+
+	openldap: add support to build the server
+
+   would be preferable.
+
+ * I think you should keep the "default y" on
+   BR2_PACKAGE_OPENLDAP_CLIENTS in order to preserve the existing
+   behavior, and not breaking things for current users.
+
+ * In the S75sldapd script, I believe checking for the presence of the
+   daemon and config file is not really needed.
+
+   If the -4 in ARGS is to force IPv4 only, I believe it's not really
+   great. Why not also support IPv6 ?
+
+ * There is a fix of tabs and spaces for the indentation in the shell
+   script, please try to be consistent.
+
+ * Please use "printf" rather than "echo -n" in the shell script, since
+   printf is POSIX, while "echo -n" is not.
+
+ * We normally use a PID file, see S50dropbear for example. Is slapd
+   already managing its own PID file ?
+
+ * In the .mk file, the OPENLDAP_USERS definition is inside a condition
+   that is commented out, it doesn't look good.
+
+ * Don't do ifeq ($(BR2_PACKAGE_OPENLDAP_SERVER),n), but just ifeq
+   ($(BR2_PACKAGE_OPENLDAP_SERVER),). An option will never have the
+   value 'n': when an option is disabled, its value is the empty string.
+
+Could you take those comments into account and send an updated version?
+
+Thanks a lot!
 
 Thomas
 -- 
