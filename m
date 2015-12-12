@@ -1,81 +1,94 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 12 Dec 2015 14:33:14 +0100
-Subject: [Buildroot] [PATCH v9 11/32] package/efl/libefl: add jp2k config
-	option
+Date: Sat, 12 Dec 2015 14:33:18 +0100
+Subject: [Buildroot] [PATCH v9 15/32] package/libevas-generic-loaders: bump
+	to version 1.15.0
 In-Reply-To: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
 References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449927215-3452-12-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449927215-3452-16-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like for webp format, add an option to enable the JPEG 2000
-codec support in the efl libraries.
+Use the newly added libefl package wich provide a new version
+of libeina.
+
+Also, update the upstream url and add a hash file.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: use --disable option
+v6: add host-pkgconfig dependency (Yann E.Morin)
+v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
 v4: rename to libefl
     improve commit log
+    add a dependency on threads
+v3: remove trailing slash (Vicente Bergas)
+v2: bump to 1.15
+    remove glibc only dependency
 ---
- package/efl/libefl/Config.in | 7 +++++++
- package/efl/libefl/libefl.mk | 9 +++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ package/libevas-generic-loaders/Config.in                    |  3 +--
+ package/libevas-generic-loaders/libevas-generic-loaders.hash |  2 ++
+ package/libevas-generic-loaders/libevas-generic-loaders.mk   | 10 ++++++----
+ 3 files changed, 9 insertions(+), 6 deletions(-)
+ create mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.hash
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 4a202a0..72b7347 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -98,6 +98,13 @@ config BR2_PACKAGE_LIBEFL_PNG
- 	  This enables the loader code that loads png files using
- 	  libpng.
- 
-+config BR2_PACKAGE_LIBEFL_JP2K
-+	bool "libevas jp2k loader"
-+	select BR2_PACKAGE_OPENJPEG
-+	help
-+	  This enables the loader code that loads jp2k files using
-+	  openjpeg.
-+
- config BR2_PACKAGE_LIBEFL_JPEG
- 	bool "libevas jpeg loader"
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index f42f8a6..65ced8a 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -1,14 +1,13 @@
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	bool "libevas generic loaders"
+ 	depends on BR2_PACKAGE_EFL
+-	select BR2_PACKAGE_LIBEINA
+ 	select BR2_PACKAGE_ZLIB
  	help
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index cdc28bb..e1eb313 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -30,7 +30,6 @@ LIBEFL_GETTEXTIZE = YES
+ 	  These are additional "generic" loaders for Evas that are
+ 	  stand-alone executables that evas may run from its generic
+ 	  loader module.
  
- # Configure options:
- # --disable-cxx-bindings: disable C++11 bindings.
--# --disable-image-loader-jp2k: disable JPEG 2000 support.
- # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
-@@ -40,7 +39,6 @@ LIBEFL_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--disable-cxx-bindings \
--	--disable-image-loader-jp2k \
- 	--disable-sdl \
- 	--disable-systemd \
- 	--enable-lua-old \
-@@ -178,6 +176,13 @@ else
- LIBEFL_CONF_OPTS += --disable-image-loader-tiff
- endif
+-	  http://trac.enlightenment.org/e/wiki/Evas_Generic_Loaders
++	  https://www.enlightenment.org/
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_JP2K),y)
-+LIBEFL_CONF_OPTS += --enable-image-loader-jp2k=yes
-+LIBEFL_DEPENDENCIES += openjpeg
-+else
-+LIBEFL_CONF_OPTS += --disable-image-loader-jp2k
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
- LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
- LIBEFL_DEPENDENCIES += webp
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.hash b/package/libevas-generic-loaders/libevas-generic-loaders.hash
+new file mode 100644
+index 0000000..32723ba
+--- /dev/null
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.hash
+@@ -0,0 +1,2 @@
++# From https://download.enlightenment.org/rel/libs/evas_generic_loaders/evas_generic_loaders-1.15.0.tar.xz.sha256
++sha256	1e539e4d4d4e1590345caeb7fdd84f47ec7cd63bb76b6b7107a87420a401fd7f	evas_generic_loaders-1.15.0.tar.xz
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index ac6b1cc..47dfa9a 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -4,17 +4,19 @@
+ #
+ ################################################################################
+ 
+-LIBEVAS_GENERIC_LOADERS_VERSION = 1.7.10
+-LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.bz2
+-LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/releases
++LIBEVAS_GENERIC_LOADERS_VERSION = 1.15.0
++LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.xz
++LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/rel/libs/evas_generic_loaders
+ LIBEVAS_GENERIC_LOADERS_LICENSE = GPLv2
+ LIBEVAS_GENERIC_LOADERS_LICENSE_FILES = COPYING
+ 
+ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+ 
+-LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libeina zlib
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = host-pkgconf libefl zlib
+ 
+ # For now, we only support the SVG loader
++# poppler >= 0.32 is not supported by the current version of
++# libevas-generic-loaders.
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
 -- 
 2.4.3
