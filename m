@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Dec 2015 19:31:37 +0100
-Subject: [Buildroot] [PATCH 2/8] package/tvheadend: bump version
+Date: Sat, 12 Dec 2015 19:31:38 +0100
+Subject: [Buildroot] [PATCH 3/8] package/znc: bump version to 1.6.2
 In-Reply-To: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1449945103-23715-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1449945103-23715-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tvheadend/tvheadend.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/znc/znc.hash | 2 +-
+ package/znc/znc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 60ca524..8177057 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
+diff --git a/package/znc/znc.hash b/package/znc/znc.hash
+index 9d2b4a2..a0b27aa 100644
+--- a/package/znc/znc.hash
++++ b/package/znc/znc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	ba49397364f48d6d32ae5242bc1166f21d972f85dd390d6bbe68a63ecbb6c140	znc-1.6.1.tar.gz
++sha256	eef17727c0c6433fed1affba0ea76ec7fd60198d2f3c234d8529bd5fb26f0593	znc-1.6.2.tar.gz
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index 106be2d..0844b0f 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = 8902dcbcc48b6a76168882a856111237f13e60ea
-+TVHEADEND_VERSION = 676a34f24b182928770cef5d4ba2903a6a25323d
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+-ZNC_VERSION = 1.6.1
++ZNC_VERSION = 1.6.2
+ ZNC_SITE = http://znc.in/releases
+ ZNC_LICENSE = Apache-2.0
+ ZNC_LICENSE_FILES = LICENSE
 -- 
 2.6.2
