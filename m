@@ -1,53 +1,74 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 11 Dec 2015 23:58:30 +0100
-Subject: [Buildroot] [PATCH v4] python: rework *.pyc files generation
-In-Reply-To: <20151211233242.50a12f09@free-electrons.com>
-References: <1447948334-8440-1-git-send-email-yegorslists@googlemail.com>
- <CAHXCMM+fZO0q-wTzwHMGK9cB5NWOJrh5Q_YNMU=G+dHM9OoHAQ@mail.gmail.com>
- <20151211233242.50a12f09@free-electrons.com>
-Message-ID: <CAHXCMMJOKia1N9wxf3z5se3k=2WsNWBz9gNR26p1EpA3i8BCJQ@mail.gmail.com>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Sat, 12 Dec 2015 12:15:06 +0530
+Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG not working fine
+In-Reply-To: <566B4DBB.6010105@mind.be>
+References: <CAKpDV8u01myqCx7ROq9C_7B9Wgomb8Assh_SmUeyCRAc3UkAXQ@mail.gmail.com>
+ <566B4DBB.6010105@mind.be>
+Message-ID: <CAKpDV8uOLr-cPu2UweHwLDSw5i1ZgpSBdjxeEzDCRwpp21gDZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 11, 2015 at 11:32 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Samuel,
->
-> On Fri, 11 Dec 2015 23:22:52 +0100, Samuel Martin wrote:
->
->> AFAI have tested, this change works as expected, except for broken
->> python modules.
->> In such cases, 'compileall.compile_dir(...)' does not raise any
->> exceptions when it failed to compile the *.py file, leading to the
->> unfortunate consequence: the *.pyc file is not generated and the *.py
->> file is lost if BR2_PACKAGE_PYTHON_PYC_ONLY is enabled.
->
-> Do you have some specific examples that exhibit this behavior?
-Do you mean some case where this happens and the trace it does?
-
-Here is a log exhibiting the kind of issue aforementioned [1] (got
-with this defconfig [2] on top of master + this patch)
-In this case, /usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedRelativeLocationPath.py
-and /usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedAbsoluteLocationPath.py
-cannot be compiled due to syntax error, so only their corresponding
-*.pyc are missing in the final target fs.
-
-[1] http://code.bulix.org/k3brrc-89950?raw
-[2] http://code.bulix.org/idvog6-89952?raw
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Thanks Arnout, i will try this.
 
 Regards,
+Dinesh
 
--- 
-Samuel
+On Sat, Dec 12, 2015 at 3:57 AM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
+
+> On 11-12-15 12:07, Dinesh Guleria wrote:
+> > Hi,
+> >
+> > I am following steps 4 & 5 in this link
+> > :--
+> https://buildroot.org/downloads/manual/manual.html#_quick_guide_to_storing_your_project_specific_customizations
+> >
+> > I am running following command :--- make busybox-update-config
+> > BR2_PACKAGE_BUSYBOX_CONFIG=/home/dinesh/busybox/busybox.config
+>
+>  Please check yout spelling. The screenshot you posted has
+> BR2_PACKAGE_BUSYBOX_CONFIG_FILE=... .
+>
+>  You may notice that computers are not so forgiving when it comes to
+> spelling
+> mistakes.
+>
+>  Regards,
+>  Arnout
+>
+> >
+> > But busybox .config file doesn't go to right path set
+> > "/home/dinesh/busybox/busybox.config".
+> >
+> > Please suggets why is it going to location
+> "package/busybox/busybox.config" ?
+> >
+> > See the attached image.
+> >
+> > Regards,
+> >
+> > Dinesh
+> >
+> >
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+>
+>
+> --
+> Arnout Vandecappelle arnout at mind be
+> Senior Embedded Software Architect +32-16-286500
+> Essensium/Mind http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint: 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151212/9311268f/attachment.html>
