@@ -1,170 +1,86 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 12 Dec 2015 14:33:13 +0100
-Subject: [Buildroot] [PATCH v9 10/32] package/efl/libefl: add frame buffer
-	config option
+Date: Sat, 12 Dec 2015 14:33:12 +0100
+Subject: [Buildroot] [PATCH v9 09/32] package/efl/libefl: add webp dependency
 In-Reply-To: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
 References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449927215-3452-11-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449927215-3452-10-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an config option to enable frame buffer support
-in the efl libraries.
+WebP is a new image format that provides lossless and lossy
+compression for images on the web. So enabling webp support
+in efl libraries allow to loads images using WebP.
 
-From the README [1]:
-This requires linux frame-buffer support, headers etc. This supports
-basic frame-buffers like /dev/fb as well as input via /dev/input for
-keyboards and mice in a basic way.
+Also, it one of the "highly recommended" dependecies [1]
+according to the README but disabling it doesn't need
+the --enable-i-really-know-what-i-am-doing... option.
+That's why BR2_PACKAGE_LIBEFL_WEBP is not added to
+BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
 
-There is a bug eina_module_load().
-From [2]:
-When running terminology, a message appears in eina_module_load with:
-could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
-Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
-ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
-It seems like the EAPI macro has no effect...
-
-A patch from Ross Vandegrift has been posted on enlightenment mailing
-list [3], but it's not yet an upstream patch.
-
-[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n521
-[2] http://sourceforge.net/p/enlightenment/mailman/message/34493376
-[3] http://sourceforge.net/p/enlightenment/mailman/message/34492801
+[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: squash with the patch adding the fix provided by Vicente Bergas.
+v6: select BR2_PACKAGE_WEBP (Yann E.Morin)
 v4: rename to libefl
     improve commit log
 ---
- ...ecore_fb_private.h-define-EAPI-before-use.patch | 64 ++++++++++++++++++++++
- package/efl/libefl/Config.in                       |  5 ++
- package/efl/libefl/libefl.mk                       |  8 ++-
- 3 files changed, 75 insertions(+), 2 deletions(-)
- create mode 100644 package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
+ package/efl/libefl/Config.in | 6 ++++++
+ package/efl/libefl/libefl.mk | 9 +++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
-new file mode 100644
-index 0000000..81d14f9
---- /dev/null
-+++ b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
-@@ -0,0 +1,64 @@
-+From 2fb4fdf641e67e49b87a3524038a694c8dd0ba4e Mon Sep 17 00:00:00 2001
-+From: Vicente Bergas <vicencb@gmail.com>
-+Date: Fri, 9 Oct 2015 23:35:20 +0200
-+Subject: [PATCH] ecore_fb_private.h: define EAPI before use
-+
-+From [1]:
-+When running terminology, a message appears in eina_module_load with:
-+could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
-+Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
-+ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
-+It seems like the EAPI macro has no effect...
-+
-+A patch from Ross Vandegrift has been posted on enlightenment mailing
-+list [2], but it's not yet an upstream patch.
-+
-+[1] http://sourceforge.net/p/enlightenment/mailman/message/34493376
-+[2] http://sourceforge.net/p/enlightenment/mailman/message/34492801
-+
-+Signed-off-by: Vicente Bergas <vicencb@gmail.com>
-+[Romain:
-+  - Add a commit log
-+  - Add a link to the enlightenment mailing list
-+  - Add Vicente's SoB line]
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ src/lib/ecore_fb/ecore_fb_private.h | 17 +++++++++++++++++
-+ 1 file changed, 17 insertions(+)
-+
-+diff --git a/src/lib/ecore_fb/ecore_fb_private.h b/src/lib/ecore_fb/ecore_fb_private.h
-+index f7dc0c6..f54c8d2 100644
-+--- a/src/lib/ecore_fb/ecore_fb_private.h
-++++ b/src/lib/ecore_fb/ecore_fb_private.h
-+@@ -33,6 +33,20 @@
-+ 
-+ #include <Ecore_Fb.h>
-+ 
-++#ifdef EAPI
-++# undef EAPI
-++#endif
-++
-++#ifdef __GNUC__
-++# if __GNUC__ >= 4
-++#  define EAPI __attribute__ ((visibility("default")))
-++# else
-++#  define EAPI
-++# endif
-++#else
-++# define EAPI
-++#endif
-++
-+ /* ecore_fb_li.c */
-+ struct _Ecore_Fb_Input_Device
-+ {
-+@@ -92,4 +106,7 @@ void ecore_fb_vt_shutdown(void);
-+ #define TS_GET_CAL 0x8014660a
-+ #endif
-+   
-++#undef EAPI
-++#define EAPI
-++
-+ #endif
-+-- 
-+2.4.3
-+
 diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 0b89411..4a202a0 100644
+index 3cf4b4e..0b89411 100644
 --- a/package/efl/libefl/Config.in
 +++ b/package/efl/libefl/Config.in
-@@ -84,6 +84,11 @@ config BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG
- 	    support of removable devices etc... and disabling this will
- 	    hurt support for Enlightenment and its filemanager.
+@@ -112,4 +112,10 @@ config BR2_PACKAGE_LIBEFL_TIFF
+ 	help
+ 	  This enables the loader code that loads tiff files.
  
-+comment "libecore video support"
++config BR2_PACKAGE_LIBEFL_WEBP
++	bool "libevas webp image loader"
++	select BR2_PACKAGE_WEBP
++	help
++	  This enables the loader code that loads images using WebP.
 +
-+config BR2_PACKAGE_LIBEFL_FB
-+	bool "FB support"
-+
- comment "libevas loaders"
- 
- config BR2_PACKAGE_LIBEFL_PNG
+ endif # BR2_PACKAGE_LIBEFL
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index bd20039..cdc28bb 100644
+index db150d0..bd20039 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -30,7 +30,6 @@ LIBEFL_GETTEXTIZE = YES
- 
- # Configure options:
+@@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
  # --disable-cxx-bindings: disable C++11 bindings.
--# --disable-fb: disable frame buffer support.
+ # --disable-fb: disable frame buffer support.
  # --disable-image-loader-jp2k: disable JPEG 2000 support.
+-# --disable-image-loader-webp: disable webp support.
  # --disable-sdl: disable sdl2 support.
  # --disable-systemd: disable systemd support.
-@@ -41,7 +40,6 @@ LIBEFL_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ # --enable-lua-old: disable Elua and remove luajit dependency.
+@@ -44,7 +43,6 @@ LIBEFL_CONF_OPTS = \
  	--disable-cxx-bindings \
--	--disable-fb \
+ 	--disable-fb \
  	--disable-image-loader-jp2k \
+-	--disable-image-loader-webp \
  	--disable-sdl \
  	--disable-systemd \
-@@ -143,6 +141,12 @@ else
- LIBEFL_CONF_OPTS += --disable-wayland
+ 	--enable-lua-old \
+@@ -176,6 +174,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-image-loader-tiff
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_FB),y)
-+LIBEFL_CONF_OPTS += --enable-fb
++ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
++LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
++LIBEFL_DEPENDENCIES += webp
 +else
-+LIBEFL_CONF_OPTS += --disable-fb
++LIBEFL_CONF_OPTS += --disable-image-loader-webp
 +endif
 +
- # Loaders that need external dependencies needs to be --enable-XXX=yes
- # otherwise the default is '=static'.
- # All other loaders are statically built-in
+ $(eval $(autotools-package))
+ 
+ ################################################################################
 -- 
 2.4.3
