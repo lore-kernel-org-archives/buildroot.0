@@ -1,68 +1,86 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 12 Dec 2015 14:33:10 +0100
-Subject: [Buildroot] [PATCH v9 07/32] package/efl/libefl: add harfbuzz
-	dependency
+Date: Sat, 12 Dec 2015 14:33:17 +0100
+Subject: [Buildroot] [PATCH v9 14/32] package/efl/libefl: enable xinput2.2
 In-Reply-To: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
 References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449927215-3452-8-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449927215-3452-15-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Harfbuzz allow to enable complex text shaping and layouting
-support in efl libraries.
-
-Also, it one of the "highly recommended" dependecies
-according to the README but disabling it doesn't need
-the --enable-i-really-know-what-i-am-doing... option.
-That's why harfbuzz is not added to
-BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
+X11 XInput v2.2+ support is one of the recommended
+feature for the efl libraries:
+https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n490
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: use --enable/disable options
+v8: Remove --disable-xinput22 added by the patch adding X11 support
+    (Yann E.Morin)
+v6: add missing dependency on xlib_libXi (Yann E.Morin)
 v4: rename to libefl
-    improve commit log.
+    improve commit log
+v3: new patch
 ---
- package/efl/libefl/libefl.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/efl/libefl/Config.in | 1 +
+ package/efl/libefl/libefl.mk | 7 ++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index 73e14ae..ecc54f2 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -97,6 +97,7 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXI
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	select BR2_PACKAGE_XLIB_LIBXP
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index dad5e40..5059f8c 100644
+index 0eb17c2..5e8009e 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -31,7 +31,6 @@ LIBEFL_GETTEXTIZE = YES
- # Configure options:
+@@ -33,7 +33,6 @@ LIBEFL_GETTEXTIZE = YES
  # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-fb: disable frame buffer support.
--# --disable-harfbuzz: disable harfbuzz support.
- # --disable-image-loader-jp2k: disable JPEG 2000 support.
- # --disable-image-loader-webp: disable webp support.
  # --disable-sdl: disable sdl2 support.
-@@ -45,7 +44,6 @@ LIBEFL_CONF_OPTS = \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ # --disable-systemd: disable systemd support.
+-# --disable-xinput22: disable X11 XInput v2.2+ support.
+ # --enable-lua-old: disable Elua and remove luajit dependency.
+ LIBEFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+@@ -41,7 +40,6 @@ LIBEFL_CONF_OPTS = \
  	--disable-cxx-bindings \
- 	--disable-fb \
--	--disable-harfbuzz \
- 	--disable-image-loader-jp2k \
- 	--disable-image-loader-webp \
  	--disable-sdl \
-@@ -109,6 +107,13 @@ else
- LIBEFL_CONF_OPTS += --disable-pulseaudio
+ 	--disable-systemd \
+-	--disable-xinput22 \
+ 	--enable-lua-old
+ 
+ # Disable untested configuration warning.
+@@ -145,11 +143,13 @@ LIBEFL_CONF_OPTS += --disable-fb
  endif
  
-+ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
-+LIBEFL_DEPENDENCIES += harfbuzz
-+LIBEFL_CONF_OPTS += --enable-harfbuzz
-+else
-+LIBEFL_CONF_OPTS += --disable-harfbuzz
-+endif
-+
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- LIBEFL_DEPENDENCIES += tslib
- LIBEFL_CONF_OPTS += --enable-tslib
+ ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
++# --enable-xinput22 is recommended
+ LIBEFL_CONF_OPTS += \
+ 	--with-x11=xlib \
+ 	--with-x=$(STAGING_DIR) \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+-	--x-libraries=$(STAGING_DIR)/usr/lib
++	--x-libraries=$(STAGING_DIR)/usr/lib \
++	--enable-xinput22
+ 
+ LIBEFL_DEPENDENCIES += \
+ 	xlib_libX11 \
+@@ -157,6 +157,7 @@ LIBEFL_DEPENDENCIES += \
+ 	xlib_libXcursor \
+ 	xlib_libXdamage \
+ 	xlib_libXext \
++	xlib_libXi \
+ 	xlib_libXinerama \
+ 	xlib_libXrandr \
+ 	xlib_libXrender \
 -- 
 2.4.3
