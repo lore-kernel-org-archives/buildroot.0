@@ -1,47 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 13:50:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/clamav: bump to version 0.99
-In-Reply-To: <1449359915-18919-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1449359915-18919-1-git-send-email-bernd.kuhls@t-online.de>
- <1449359915-18919-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151212135058.254bbdd3@free-electrons.com>
+Date: Sat, 12 Dec 2015 13:51:57 +0100
+Subject: [Buildroot] [git commit] libgtk2: drop most of the LIBGTK2_CONF_ENV
+	vars
+Message-ID: <20151212125226.88148807ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=4d80cbdf6c2c186da26f36575d6635604f00d29a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  6 Dec 2015 00:58:35 +0100, Bernd Kuhls wrote:
-> - removed autoreconf and two patches applied upstream
-> https://github.com/vrtadmin/clamav-devel/commit/b20eeffadb7675bf1a74e35b0aef80e26e1c0462
-> https://github.com/vrtadmin/clamav-devel/commit/785e4a90e0b5bf60f55eb0987300da2e1e12abbb
-> 
-> - removed clamuko configure option
-> - disabled fanotify support because UCLIBC_HAS_FTS is disabled
-> https://github.com/vrtadmin/clamav-devel/blob/master/README
-> "Support for on-access scanning using Clamuko/Dazuko has been replaced
->  with fanotify."
-> 
-> - added host-pkgconf dependency, used by configure
-> - added optional dependency to pcre
-> - added sha256 hash
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/clamav/0002-static-linking.patch   | 58 ------------------------------
->  package/clamav/0004-fix-static-build.patch | 21 -----------
->  package/clamav/clamav.hash                 |  6 ++--
->  package/clamav/clamav.mk                   | 20 ++++++++---
->  4 files changed, 19 insertions(+), 86 deletions(-)
->  delete mode 100644 package/clamav/0002-static-linking.patch
->  delete mode 100644 package/clamav/0004-fix-static-build.patch
+Most are legacy from when the package was added and not really necessary.
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libgtk2/libgtk2.mk | 52 ----------------------------------------------
+ 1 file changed, 52 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index b5c0bf5..17cdfcb 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -15,60 +15,8 @@ LIBGTK2_LICENSE_FILES = COPYING
+ LIBGTK2_AUTORECONF = YES
+ 
+ LIBGTK2_CONF_ENV = \
+-	ac_cv_func_posix_getpwuid_r=yes \
+-	glib_cv_stack_grows=no \
+-	glib_cv_uscore=no \
+-	ac_cv_func_strtod=yes \
+-	ac_fsusage_space=yes \
+-	fu_cv_sys_stat_statfs2_bsize=yes \
+-	ac_cv_func_closedir_void=no \
+-	ac_cv_func_getloadavg=no \
+-	ac_cv_lib_util_getloadavg=no \
+-	ac_cv_lib_getloadavg_getloadavg=no \
+-	ac_cv_func_getgroups=yes \
+-	ac_cv_func_getgroups_works=yes \
+-	ac_cv_func_chown_works=yes \
+-	ac_cv_have_decl_euidaccess=no \
+-	ac_cv_func_euidaccess=no \
+-	ac_cv_have_decl_strnlen=yes \
+-	ac_cv_func_strnlen_working=yes \
+-	ac_cv_func_lstat_dereferences_slashed_symlink=yes \
+-	ac_cv_func_lstat_empty_string_bug=no \
+-	ac_cv_func_stat_empty_string_bug=no \
+-	vb_cv_func_rename_trailing_slash_bug=no \
+-	ac_cv_have_decl_nanosleep=yes \
+-	jm_cv_func_nanosleep_works=yes \
+-	gl_cv_func_working_utimes=yes \
+-	ac_cv_func_utime_null=yes \
+-	ac_cv_have_decl_strerror_r=yes \
+-	ac_cv_func_strerror_r_char_p=no \
+-	jm_cv_func_svid_putenv=yes \
+-	ac_cv_func_getcwd_null=yes \
+-	ac_cv_func_getdelim=yes \
+-	ac_cv_func_mkstemp=yes \
+-	utils_cv_func_mkstemp_limitations=no \
+-	utils_cv_func_mkdir_trailing_slash_bug=no \
+-	jm_cv_func_gettimeofday_clobber=no \
+-	gl_cv_func_working_readdir=yes \
+-	jm_ac_cv_func_link_follows_symlink=no \
+-	utils_cv_localtime_cache=no \
+-	ac_cv_struct_st_mtim_nsec=no \
+-	gl_cv_func_tzset_clobber=no \
+-	gl_cv_func_getcwd_null=yes \
+-	gl_cv_func_getcwd_path_max=yes \
+-	ac_cv_func_fnmatch_gnu=yes \
+-	am_getline_needs_run_time_check=no \
+-	am_cv_func_working_getline=yes \
+-	gl_cv_func_mkdir_trailing_slash_bug=no \
+-	gl_cv_func_mkstemp_limitations=no \
+-	ac_cv_func_working_mktime=yes \
+-	jm_cv_func_working_re_compile_pattern=yes \
+-	ac_use_included_regex=no \
+-	gl_cv_c_restrict=no \
+ 	ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_DIR)/usr/bin/gtk-update-icon-cache \
+ 	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource \
+-	ac_cv_prog_F77=no \
+-	ac_cv_path_CUPS_CONFIG=no \
+ 	DB2HTML=false
+ 
+ LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
