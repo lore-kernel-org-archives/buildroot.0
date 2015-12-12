@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Dec 2015 19:31:38 +0100
-Subject: [Buildroot] [PATCH 3/8] package/znc: bump version to 1.6.2
+Date: Sat, 12 Dec 2015 19:31:41 +0100
+Subject: [Buildroot] [PATCH 6/8] package/dovecot: bump version to 2.2.21
 In-Reply-To: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1449945103-23715-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1449945103-23715-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/znc/znc.hash | 2 +-
- package/znc/znc.mk   | 2 +-
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-index 9d2b4a2..a0b27aa 100644
---- a/package/znc/znc.hash
-+++ b/package/znc/znc.hash
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 9386df0..42a187a 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	ba49397364f48d6d32ae5242bc1166f21d972f85dd390d6bbe68a63ecbb6c140	znc-1.6.1.tar.gz
-+sha256	eef17727c0c6433fed1affba0ea76ec7fd60198d2f3c234d8529bd5fb26f0593	znc-1.6.2.tar.gz
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 106be2d..0844b0f 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally computed
+-sha256 759e1e3f9d907cdaabad1f5fbacc793ca191d234c084bec3bba42966952a4e9f  dovecot-2.2.19.tar.gz
++sha256	7ab7139e59e1f0353bf9c24251f13c893cf1a6ef4bcc47e2d44de437108d0b20	dovecot-2.2.21.tar.gz
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 69f722f..8451e52 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ZNC_VERSION = 1.6.1
-+ZNC_VERSION = 1.6.2
- ZNC_SITE = http://znc.in/releases
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).21
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPLv2.1
 -- 
 2.6.2
