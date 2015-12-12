@@ -1,87 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 13:51:57 +0100
-Subject: [Buildroot] [git commit] libgtk2: drop most of the LIBGTK2_CONF_ENV
-	vars
-Message-ID: <20151212125226.88148807ED@busybox.osuosl.org>
+Date: Sat, 12 Dec 2015 13:52:22 +0100
+Subject: [Buildroot] [git commit] driver_xf86-input-evdev: mtdev is
+	mandatory now
+Message-ID: <20151212125226.9372D807ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d80cbdf6c2c186da26f36575d6635604f00d29a
+commit: http://git.buildroot.net/buildroot/commit/?id=d3e3dd67e79160504f4d220c05bcfc460873c9af
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Most are legacy from when the package was added and not really necessary.
+mtdev is no longer optional, so select it and depend upon it, otherwise
+it leads to build failure.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk2/libgtk2.mk | 52 ----------------------------------------------
- 1 file changed, 52 deletions(-)
+ package/x11r7/xdriver_xf86-input-evdev/Config.in                   | 1 +
+ package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index b5c0bf5..17cdfcb 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -15,60 +15,8 @@ LIBGTK2_LICENSE_FILES = COPYING
- LIBGTK2_AUTORECONF = YES
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+index f44e79f..70e950d 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
++++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
+ 	bool "xf86-input-evdev"
+ 	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
+ 	select BR2_PACKAGE_LIBEVDEV
++	select BR2_PACKAGE_MTDEV
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 1e90afa..6f692ab 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+@@ -12,11 +12,11 @@ XDRIVER_XF86_INPUT_EVDEV_LICENSE_FILES = COPYING
+ XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	libevdev \
++	mtdev \
+ 	xproto_inputproto \
+ 	xserver_xorg-server \
+ 	xproto_randrproto \
+ 	xproto_xproto \
+-	udev \
+-	$(if $(BR2_PACKAGE_MTDEV),mtdev)
++	udev
  
- LIBGTK2_CONF_ENV = \
--	ac_cv_func_posix_getpwuid_r=yes \
--	glib_cv_stack_grows=no \
--	glib_cv_uscore=no \
--	ac_cv_func_strtod=yes \
--	ac_fsusage_space=yes \
--	fu_cv_sys_stat_statfs2_bsize=yes \
--	ac_cv_func_closedir_void=no \
--	ac_cv_func_getloadavg=no \
--	ac_cv_lib_util_getloadavg=no \
--	ac_cv_lib_getloadavg_getloadavg=no \
--	ac_cv_func_getgroups=yes \
--	ac_cv_func_getgroups_works=yes \
--	ac_cv_func_chown_works=yes \
--	ac_cv_have_decl_euidaccess=no \
--	ac_cv_func_euidaccess=no \
--	ac_cv_have_decl_strnlen=yes \
--	ac_cv_func_strnlen_working=yes \
--	ac_cv_func_lstat_dereferences_slashed_symlink=yes \
--	ac_cv_func_lstat_empty_string_bug=no \
--	ac_cv_func_stat_empty_string_bug=no \
--	vb_cv_func_rename_trailing_slash_bug=no \
--	ac_cv_have_decl_nanosleep=yes \
--	jm_cv_func_nanosleep_works=yes \
--	gl_cv_func_working_utimes=yes \
--	ac_cv_func_utime_null=yes \
--	ac_cv_have_decl_strerror_r=yes \
--	ac_cv_func_strerror_r_char_p=no \
--	jm_cv_func_svid_putenv=yes \
--	ac_cv_func_getcwd_null=yes \
--	ac_cv_func_getdelim=yes \
--	ac_cv_func_mkstemp=yes \
--	utils_cv_func_mkstemp_limitations=no \
--	utils_cv_func_mkdir_trailing_slash_bug=no \
--	jm_cv_func_gettimeofday_clobber=no \
--	gl_cv_func_working_readdir=yes \
--	jm_ac_cv_func_link_follows_symlink=no \
--	utils_cv_localtime_cache=no \
--	ac_cv_struct_st_mtim_nsec=no \
--	gl_cv_func_tzset_clobber=no \
--	gl_cv_func_getcwd_null=yes \
--	gl_cv_func_getcwd_path_max=yes \
--	ac_cv_func_fnmatch_gnu=yes \
--	am_getline_needs_run_time_check=no \
--	am_cv_func_working_getline=yes \
--	gl_cv_func_mkdir_trailing_slash_bug=no \
--	gl_cv_func_mkstemp_limitations=no \
--	ac_cv_func_working_mktime=yes \
--	jm_cv_func_working_re_compile_pattern=yes \
--	ac_use_included_regex=no \
--	gl_cv_c_restrict=no \
- 	ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_DIR)/usr/bin/gtk-update-icon-cache \
- 	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource \
--	ac_cv_prog_F77=no \
--	ac_cv_path_CUPS_CONFIG=no \
- 	DB2HTML=false
- 
- LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
+ $(eval $(autotools-package))
