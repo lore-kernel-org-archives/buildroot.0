@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 16:55:20 +0100
-Subject: [Buildroot] [PATCH v9 06/32] package/efl/libefl: new package
-In-Reply-To: <20151212151023.GA3713@free.fr>
-References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
- <1449927215-3452-7-git-send-email-romain.naour@openwide.fr>
- <20151212151524.0b711e40@free-electrons.com>
- <20151212151023.GA3713@free.fr>
-Message-ID: <20151212165520.6a257c5a@free-electrons.com>
+Date: Sat, 12 Dec 2015 16:58:56 +0100
+Subject: [Buildroot] [git commit] netsnmp: enable tsm + DTLSUDP/TLSTCP with
+	openssl
+Message-ID: <20151212155907.BD87580835@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=984ec386096513c5b3fcfbc4f77f3dbe1ef9d35d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 12 Dec 2015 16:10:23 +0100, Yann E. MORIN wrote:
+Otherwise the openssl support is basically unused.
 
-> Because BR2_PACKAGE_LUA is a provider for the virual package
-> lua-interpreter, and you should not select a provider of a virtual
-> package:
-> 
->     https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_virtual_packages
-> 
->     If your package really requires a specific provider, then you?ll
->     have to make your package depends on this provider; you can not
->     select a provider.
+net-snmp provides a stripped-down openssl implementation that can be
+used to enable tsm/DTLSUDP/TLSTCP but given it's security track record
+it's best to rely on the external one, it also saves space.
 
-Ah, yes, right, I forgot that Lua was a virtual package. Then indeed,
-we don't have any other option here.
+usm is the user validation module, it's default on, however when passing
+--with-security-modules we must keep it otherwise it won't be.
 
-Thanks for the explanation,
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/netsnmp/netsnmp.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 6eff5e3..fb72179 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -49,7 +49,9 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NETSNMP_DEPENDENCIES += openssl
+ NETSNMP_CONF_OPTS += \
+-	--with-openssl=$(STAGING_DIR)/usr/include/openssl
++	--with-openssl=$(STAGING_DIR)/usr/include/openssl \
++	--with-security-modules="tsm,usm" \
++	--with-transports="DTLSUDP,TLSTCP"
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # openssl uses zlib, so we need to explicitly link with it when static
+ NETSNMP_CONF_ENV += LIBS=-lz
