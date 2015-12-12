@@ -1,14 +1,18 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 12 Dec 2015 07:50:55 -0300
-Subject: [Buildroot] [PATCH] wget: bump to version 1.17.1
-Message-ID: <1449917455-25872-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 12 Dec 2015 12:02:41 +0100
+Subject: [Buildroot] [git commit] wget: bump to version 1.17.1
+Message-ID: <20151212110249.580AC7FF9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=bada891fdb3117aab62e29c1680c28df0718168d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/wget/wget.hash | 2 +-
  package/wget/wget.mk   | 2 +-
@@ -35,5 +39,3 @@ index 960b92d..2c6ccf2 100644
  WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
  WGET_SITE = $(BR2_GNU_MIRROR)/wget
  WGET_DEPENDENCIES = host-pkgconf
--- 
-2.4.10
