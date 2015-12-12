@@ -1,61 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 14:34:47 +0100
-Subject: [Buildroot] [git commit] apply-patches: only use first field of
-	line for series file
-Message-ID: <20151212133529.111EF8009E@busybox.osuosl.org>
+Date: Sat, 12 Dec 2015 14:34:30 +0100
+Subject: [Buildroot] [PATCH] gob2: add a hash file
+In-Reply-To: <1449675697-34390-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1449675697-34390-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20151212143430.25a9827b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aab481c14e37d0e5491882b53209db2fa50084f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Vicente Olivert Riera,
 
-A series file for quilt has a valid syntax of:
+On Wed, 9 Dec 2015 15:41:37 +0000, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/gob2/gob2.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/gob2/gob2.hash
 
-  fixes/autoconf.diff -p1
-  fixes/doc-html-local-css.diff -p1
-  fixes/gnu-inline.diff -p1
+Applied, thanks.
 
-However, with the current way that a series file is handled, it will
-error out because the -p1 is tried as a file. This is because in the
-for loop that iterates the files, we only look for comment lines. Then
-each line is used within a bash for loop which uses spaces a
-delimiter. In order to fix this, we should only use the string that
-comes before a space in the series file.
-
-Note that the format allows for any arbitrary depth to the -pN field.
-But since we'll have only one package with -pN fields, and all will be
--p1, we for now always assume -p1. This will have to be fixed whenever
-we get a package with other values.
-
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-[yann.morin.1998 at free.fr: expand comment about the format of a series
-file and how we interpret it]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-CC: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/apply-patches.sh | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 2edf054..aa13e88 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -115,7 +115,13 @@ function scan_patchdir {
-     # If there is a series file, use it instead of using ls sort order
-     # to apply patches. Skip line starting with a dash.
-     if [ -e "${path}/series" ] ; then
--        for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
-+        # The format of a series file accepts a second field that is
-+        # used to specify the number of directory components to strip
-+        # when applying the patch, in the form -pN (N an integer >= 0)
-+        # We assume this field to always be -p1 whether it is present
-+        # or missing.
-+        series_patches="`grep -Ev "^#" ${path}/series | cut -d ' ' -f1 2> /dev/null`"
-+        for i in $series_patches; do
-             apply_patch "$path" "$i" series
-         done
-     else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
