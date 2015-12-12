@@ -1,52 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Dec 2015 19:31:43 +0100
-Subject: [Buildroot] [PATCH 8/8] package/mesa3d-demos: add glut support
+Date: Sat, 12 Dec 2015 19:31:40 +0100
+Subject: [Buildroot] [PATCH 5/8] package/dovecot-pigeonhole: bum version to
+	0.4.10.rc2
 In-Reply-To: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1449945103-23715-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1449945103-23715-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed for Dovecot 2.2.21
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-demos/mesa3d-demos.mk | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
-index c0f889a..016095b 100644
---- a/package/mesa3d-demos/mesa3d-demos.mk
-+++ b/package/mesa3d-demos/mesa3d-demos.mk
-@@ -11,8 +11,6 @@ MESA3D_DEMOS_AUTORECONF = YES
- MESA3D_DEMOS_DEPENDENCIES = host-pkgconf
- MESA3D_DEMOS_LICENSE = MIT
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 1371492..58f4196 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	82892f876d26008a076973dfddf1cffaf5a0451825fd44e06287e94b89078649	dovecot-2.2-pigeonhole-0.4.9.tar.gz
++sha256	7fd01d731b264703fb6d965400f8e3e660841cd51cf7cec1fd648c1326fe0b77	dovecot-2.2-pigeonhole-0.4.10.rc2.tar.gz
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 06ff2f1..e65a2a9 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--MESA3D_DEMOS_CONF_OPTS += --without-glut --disable-osmesa
--
- ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_HAS_LIBGL),yy)
- MESA3D_DEMOS_DEPENDENCIES += libgl libglew libglu xlib_libX11 xlib_libXext
- MESA3D_DEMOS_CONF_OPTS += --enable-gl --enable-x11
-@@ -55,6 +53,19 @@ else
- MESA3D_DEMOS_CONF_OPTS += --disable-freetype2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
-+MESA3D_DEMOS_DEPENDENCIES += libfreeglut
-+MESA3D_DEMOS_CONF_OPTS += --with-glut=$(STAGING_DIR)/usr
-+# osmesa support depends on glut
-+ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
-+MESA3D_DEMOS_CONF_OPTS += --enable-osmesa
-+else
-+MESA3D_DEMOS_CONF_OPTS += --disable-osmesa
-+endif
-+else
-+MESA3D_DEMOS_CONF_OPTS += --without-glut --disable-osmesa
-+endif
-+
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- MESA3D_DEMOS_DEPENDENCIES += wayland
- MESA3D_DEMOS_CONF_OPTS += --enable-wayland
+-DOVECOT_PIGEONHOLE_VERSION = 0.4.9
++DOVECOT_PIGEONHOLE_VERSION = 0.4.10.rc2
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+-DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
++DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2/rc
+ DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
+ DOVECOT_PIGEONHOLE_LICENSE_FILES = COPYING
+ DOVECOT_PIGEONHOLE_DEPENDENCIES = dovecot
 -- 
 2.6.2
