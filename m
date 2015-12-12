@@ -1,63 +1,43 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 12 Dec 2015 14:33:21 +0100
-Subject: [Buildroot] [PATCH v9 18/32] package/efl: libefl and libelementary
-	share the same version number
+Date: Sat, 12 Dec 2015 14:33:24 +0100
+Subject: [Buildroot] [PATCH v9 21/32] package/dbus-cpp: switch to libefl
 In-Reply-To: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
 References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449927215-3452-19-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449927215-3452-22-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The libecore package will be removed in a followup
+patch, so switch to libefl package which contain an
+updated version of libecore.
+
+Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: Even if we are not sure if libefl and libelementary will always
-    be released in tandem, keep it in sync since there is no reason
-    to use a different version.
+v6: new patch
 ---
- package/efl/efl.mk                         | 2 ++
- package/efl/libefl/libefl.mk               | 3 +--
- package/efl/libelementary/libelementary.mk | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/dbus-cpp/dbus-cpp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 99e4d14..151ac28 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -1,2 +1,4 @@
+diff --git a/package/dbus-cpp/dbus-cpp.mk b/package/dbus-cpp/dbus-cpp.mk
+index 37d12e7..9236ba7 100644
+--- a/package/dbus-cpp/dbus-cpp.mk
++++ b/package/dbus-cpp/dbus-cpp.mk
+@@ -26,9 +26,9 @@ DBUS_CPP_AUTORECONF = YES
+ DBUS_CPP_LICENSE = LGPLv2.1+
+ DBUS_CPP_LICENSE_FILES = COPYING
  
-+EFL_VERSION = 1.15.2
-+
- include $(sort $(wildcard package/efl/*/*.mk))
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 5e8009e..c60a507 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -4,8 +4,7 @@
- #
- ################################################################################
- 
--# hardcode the version here since the bump to 1.15 is not complete in Buildroot
--LIBEFL_VERSION = 1.15.2
-+LIBEFL_VERSION = $(EFL_VERSION)
- LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
- LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
- LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
-diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
-index 4ba8681..c920801 100644
---- a/package/efl/libelementary/libelementary.mk
-+++ b/package/efl/libelementary/libelementary.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBELEMENTARY_VERSION = 1.15.2
-+LIBELEMENTARY_VERSION = $(EFL_VERSION)
- LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
- LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
- LIBELEMENTARY_LICENSE = LGPLv2.1
+-ifeq ($(BR2_PACKAGE_LIBECORE),y)
++ifeq ($(BR2_PACKAGE_EFL),y)
+ DBUS_CPP_CONF_OPTS += --enable-ecore
+-DBUS_CPP_DEPENDENCIES += libecore
++DBUS_CPP_DEPENDENCIES += libefl
+ else
+ DBUS_CPP_CONF_OPTS += --disable-ecore
+ endif
 -- 
 2.4.3
