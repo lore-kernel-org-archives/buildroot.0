@@ -1,84 +1,74 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 12 Dec 2015 14:33:05 +0100
-Subject: [Buildroot] [PATCH v9 02/32] package/libevas-generic-loaders: move
-	to package directory
+Date: Sat, 12 Dec 2015 14:33:11 +0100
+Subject: [Buildroot] [PATCH v9 08/32] package/efl/libefl: add wayland
+	dependency
 In-Reply-To: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
 References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449927215-3452-3-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449927215-3452-9-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As for expedite package, there is no advantage for efl related
-packages to share the same version number anymore
-(except for efl and libelementary).
-
-Also, we usually do not have a sub-directory for a family of related
-packages which doen't share the same version number, so move
-libevas-generic-loaders to package directory.
-Libevas-generic-loaders appear now in "Libraries" -> "Graphics" in
-the Kconfig menu.
+See:
+https://www.enlightenment.org/about-wayland
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: keep the reverse dependency on BR2_USE_WCHAR (Yann E.Morin)
-v5: Use depends on BR2_PACKAGE_EFL instead of select (ThomasP)
-v4: improve the commit log (ThomasP)
-    move libevas-generic-loaders to "Libraries" -> "Graphics" (ThomasP)
-    fix package comment dependency on BR2_USE_MMU
+v6: use --enable/disable options
+v4: rename to libefl
 ---
- package/Config.in                                                    | 1 +
- package/efl/Config.in                                                | 1 -
- package/{efl => }/libevas-generic-loaders/Config.in                  | 1 +
- package/{efl => }/libevas-generic-loaders/libevas-generic-loaders.mk | 0
- 4 files changed, 2 insertions(+), 1 deletion(-)
- rename package/{efl => }/libevas-generic-loaders/Config.in (97%)
- rename package/{efl => }/libevas-generic-loaders/libevas-generic-loaders.mk (100%)
+ package/efl/libefl/Config.in | 1 +
+ package/efl/libefl/libefl.mk | 9 +++++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9610423..00aedad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -827,6 +827,7 @@ menu "Graphics"
- 	source "package/libdri2/Config.in"
- 	source "package/libdrm/Config.in"
- 	source "package/libexif/Config.in"
-+	source "package/libevas-generic-loaders/Config.in"
- 	source "package/libfm/Config.in"
- 	source "package/libfm-extra/Config.in"
- 	source "package/libfreeimage/Config.in"
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index cb91660..7ce5a36 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -16,7 +16,6 @@ source "package/efl/libeet/Config.in"
- source "package/efl/libefreet/Config.in"
- source "package/efl/libeio/Config.in"
- source "package/efl/libevas/Config.in"
--source "package/efl/libevas-generic-loaders/Config.in"
- source "package/efl/libembryo/Config.in"
- source "package/efl/libedje/Config.in"
- source "package/efl/libethumb/Config.in"
-diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-similarity index 97%
-rename from package/efl/libevas-generic-loaders/Config.in
-rename to package/libevas-generic-loaders/Config.in
-index 3f7581f..c69f5e8 100644
---- a/package/efl/libevas-generic-loaders/Config.in
-+++ b/package/libevas-generic-loaders/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	bool "libevas generic loaders"
-+	depends on BR2_PACKAGE_EFL
- 	select BR2_PACKAGE_LIBEINA
- 	select BR2_PACKAGE_ZLIB
- 	help
-diff --git a/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-similarity index 100%
-rename from package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
-rename to package/libevas-generic-loaders/libevas-generic-loaders.mk
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index ac871bf..3cf4b4e 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_LIBEFL
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
+ 	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
++	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	# libblkid is part of required tools, see EFL's README.
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index 5059f8c..db150d0 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -35,7 +35,6 @@ LIBEFL_GETTEXTIZE = YES
+ # --disable-image-loader-webp: disable webp support.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+-# --disable-wayland: disable wayland support.
+ # --enable-lua-old: disable Elua and remove luajit dependency.
+ # --with-opengl=none: disable opengl support.
+ # --with-x11=none: remove dependency on X.org.
+@@ -48,7 +47,6 @@ LIBEFL_CONF_OPTS = \
+ 	--disable-image-loader-webp \
+ 	--disable-sdl \
+ 	--disable-systemd \
+-	--disable-wayland \
+ 	--enable-lua-old \
+ 	--with-opengl=none \
+ 	--with-x11=none
+@@ -140,6 +138,13 @@ else
+ LIBEFL_CONF_OPTS += --with-crypto=none
+ endif # BR2_PACKAGE_OPENSSL
+ 
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBEFL_DEPENDENCIES += wayland libxkbcommon
++LIBEFL_CONF_OPTS += --enable-wayland
++else
++LIBEFL_CONF_OPTS += --disable-wayland
++endif
++
+ # Loaders that need external dependencies needs to be --enable-XXX=yes
+ # otherwise the default is '=static'.
+ # All other loaders are statically built-in
 -- 
 2.4.3
