@@ -1,74 +1,68 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 12 Dec 2015 14:33:11 +0100
-Subject: [Buildroot] [PATCH v9 08/32] package/efl/libefl: add wayland
+Date: Sat, 12 Dec 2015 14:33:10 +0100
+Subject: [Buildroot] [PATCH v9 07/32] package/efl/libefl: add harfbuzz
 	dependency
 In-Reply-To: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
 References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1449927215-3452-9-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1449927215-3452-8-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See:
-https://www.enlightenment.org/about-wayland
+Harfbuzz allow to enable complex text shaping and layouting
+support in efl libraries.
+
+Also, it one of the "highly recommended" dependecies
+according to the README but disabling it doesn't need
+the --enable-i-really-know-what-i-am-doing... option.
+That's why harfbuzz is not added to
+BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 v6: use --enable/disable options
 v4: rename to libefl
+    improve commit log.
 ---
- package/efl/libefl/Config.in | 1 +
  package/efl/libefl/libefl.mk | 9 +++++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index ac871bf..3cf4b4e 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_LIBEFL
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
- 	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
-+	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_UTIL_LINUX
- 	# libblkid is part of required tools, see EFL's README.
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 5059f8c..db150d0 100644
+index dad5e40..5059f8c 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -35,7 +35,6 @@ LIBEFL_GETTEXTIZE = YES
+@@ -31,7 +31,6 @@ LIBEFL_GETTEXTIZE = YES
+ # Configure options:
+ # --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-fb: disable frame buffer support.
+-# --disable-harfbuzz: disable harfbuzz support.
+ # --disable-image-loader-jp2k: disable JPEG 2000 support.
  # --disable-image-loader-webp: disable webp support.
  # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
--# --disable-wayland: disable wayland support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
- # --with-opengl=none: disable opengl support.
- # --with-x11=none: remove dependency on X.org.
-@@ -48,7 +47,6 @@ LIBEFL_CONF_OPTS = \
+@@ -45,7 +44,6 @@ LIBEFL_CONF_OPTS = \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--disable-cxx-bindings \
+ 	--disable-fb \
+-	--disable-harfbuzz \
+ 	--disable-image-loader-jp2k \
  	--disable-image-loader-webp \
  	--disable-sdl \
- 	--disable-systemd \
--	--disable-wayland \
- 	--enable-lua-old \
- 	--with-opengl=none \
- 	--with-x11=none
-@@ -140,6 +138,13 @@ else
- LIBEFL_CONF_OPTS += --with-crypto=none
- endif # BR2_PACKAGE_OPENSSL
+@@ -109,6 +107,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-pulseaudio
+ endif
  
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+LIBEFL_DEPENDENCIES += wayland libxkbcommon
-+LIBEFL_CONF_OPTS += --enable-wayland
++ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
++LIBEFL_DEPENDENCIES += harfbuzz
++LIBEFL_CONF_OPTS += --enable-harfbuzz
 +else
-+LIBEFL_CONF_OPTS += --disable-wayland
++LIBEFL_CONF_OPTS += --disable-harfbuzz
 +endif
 +
- # Loaders that need external dependencies needs to be --enable-XXX=yes
- # otherwise the default is '=static'.
- # All other loaders are statically built-in
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ LIBEFL_DEPENDENCIES += tslib
+ LIBEFL_CONF_OPTS += --enable-tslib
 -- 
 2.4.3
