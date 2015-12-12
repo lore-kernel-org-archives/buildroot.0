@@ -1,25 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Dec 2015 14:34:30 +0100
-Subject: [Buildroot] [PATCH] gob2: add a hash file
-In-Reply-To: <1449675697-34390-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1449675697-34390-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151212143430.25a9827b@free-electrons.com>
+Date: Sat, 12 Dec 2015 14:36:11 +0100
+Subject: [Buildroot] [PATCH 0/2 v2] package/ustr: bump and cleanup
+ (branch yem/ustr)
+In-Reply-To: <cover.1449613577.git.yann.morin.1998@free.fr>
+References: <cover.1449613577.git.yann.morin.1998@free.fr>
+Message-ID: <20151212143611.11510656@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Yann, Ryan,
 
-On Wed, 9 Dec 2015 15:41:37 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/gob2/gob2.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/gob2/gob2.hash
+On Tue,  8 Dec 2015 23:27:53 +0100, Yann E. MORIN wrote:
 
-Applied, thanks.
+> Ryan Barnett (2):
+>       apply-patches: only use first field of line for series file
+>       ustr: use Debian patches to compile w/ GCC 5.x
+
+Both applied, thanks.
 
 Thomas
 -- 
