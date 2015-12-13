@@ -1,128 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Dec 2015 14:39:23 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/libhdhomerun: new package
-Message-ID: <1450013963-32728-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Dec 2015 14:39:16 +0100
+Subject: [Buildroot] [PATCH 1/8] package/mesa3d-demos: bump version to
+ 8.3.0
+In-Reply-To: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151213143916.18c62c5e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for new kodi-pvr-hdhomerun package.
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: do not install hdhomerun_config on target anymore (Baruch)
+On Sat, 12 Dec 2015 19:31:36 +0100, Bernd Kuhls wrote:
+> Currently buildroot lacks glut support so add configure options to
+> disable glut support, also disable osmesa support because it also
+> depends on glut.
+> 
+> Re-numbered and rebased 0001-demos-optional-gl.patch
+> 
+> Removed patches:
+> - 0001-demos-non-mesa-impl.patch
+> All files related to this patch have been removed upstream:
+> http://cgit.freedesktop.org/mesa/demos/commit/?id=74443c6ee79f3251f643ea05e94df58183e37d0d
+> 
+> - 0003-demos-x11-fix.patch
+> Applied upstream:
+> http://cgit.freedesktop.org/mesa/demos/commit/?id=6f7ad3f242943242021d1c42c6ed6933b76137fd
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../mesa3d-demos/0001-demos-non-mesa-impl.patch    | 244 ---------------------
+>  ...ional-gl.patch => 0001-demos-optional-gl.patch} |  22 +-
+>  package/mesa3d-demos/0003-demos-x11-fix.patch      |  30 ---
+>  package/mesa3d-demos/mesa3d-demos.hash             |   4 +-
+>  package/mesa3d-demos/mesa3d-demos.mk               |   4 +-
+>  5 files changed, 17 insertions(+), 287 deletions(-)
+>  delete mode 100644 package/mesa3d-demos/0001-demos-non-mesa-impl.patch
+>  rename package/mesa3d-demos/{0002-demos-optional-gl.patch => 0001-demos-optional-gl.patch} (81%)
+>  delete mode 100644 package/mesa3d-demos/0003-demos-x11-fix.patch
 
- package/Config.in                          |  1 +
- package/libhdhomerun/0001-dont-strip.patch | 18 +++++++++++++++++
- package/libhdhomerun/Config.in             | 12 ++++++++++++
- package/libhdhomerun/libhdhomerun.hash     |  2 ++
- package/libhdhomerun/libhdhomerun.mk       | 31 ++++++++++++++++++++++++++++++
- 5 files changed, 64 insertions(+)
- create mode 100644 package/libhdhomerun/0001-dont-strip.patch
- create mode 100644 package/libhdhomerun/Config.in
- create mode 100644 package/libhdhomerun/libhdhomerun.hash
- create mode 100644 package/libhdhomerun/libhdhomerun.mk
+Applied, thanks.
 
-diff --git a/package/Config.in b/package/Config.in
-index fd9863a..dfb89c3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -982,6 +982,7 @@ menu "Multimedia"
- 	source "package/libfslcodec/Config.in"
- 	source "package/libfslparser/Config.in"
- 	source "package/libfslvpuwrap/Config.in"
-+	source "package/libhdhomerun/Config.in"
- 	source "package/libmatroska/Config.in"
- 	source "package/libmms/Config.in"
- 	source "package/libmpeg2/Config.in"
-diff --git a/package/libhdhomerun/0001-dont-strip.patch b/package/libhdhomerun/0001-dont-strip.patch
-new file mode 100644
-index 0000000..17a9ff4
---- /dev/null
-+++ b/package/libhdhomerun/0001-dont-strip.patch
-@@ -0,0 +1,18 @@
-+Disable strip in Makefile.
-+
-+Patch downloaded from Gentoo:
-+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libhdhomerun/files/dont-strip.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -Nur libhdhomerun/Makefile libhdhomerun.fix/Makefile
-+--- libhdhomerun/Makefile	2012-08-30 15:46:27.000000000 -0500
-++++ libhdhomerun.fix/Makefile	2013-03-24 14:47:08.740937164 -0500
-+@@ -42,7 +42,6 @@
-+ 
-+ hdhomerun_config$(BINEXT) : hdhomerun_config.c $(LIBSRCS)
-+ 	$(CC) $(CFLAGS) $+ $(LDFLAGS) -o $@
-+-	$(STRIP) $@
-+ 
-+ libhdhomerun$(LIBEXT) : $(LIBSRCS)
-+ 	$(CC) $(CFLAGS) -fPIC -DDLL_EXPORT $(SHARED) $+ $(LDFLAGS) -o $@
-diff --git a/package/libhdhomerun/Config.in b/package/libhdhomerun/Config.in
-new file mode 100644
-index 0000000..a49527a
---- /dev/null
-+++ b/package/libhdhomerun/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBHDHOMERUN
-+	bool "libhdhomerun"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  HDHomeRun is a network-attached digital television tuner box,
-+	  produced by the company SiliconDust USA, Inc.
-+
-+	  http://www.silicondust.com
-+
-+comment "libhdhomerun needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
-new file mode 100644
-index 0000000..7897764
---- /dev/null
-+++ b/package/libhdhomerun/libhdhomerun.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	907dfbd1eb82aebd8b09e7c00c21a02433e6baaacf4a4f99aa2511b1d5244baf	libhdhomerun_20150826.tgz
-diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
-new file mode 100644
-index 0000000..fb12f14
---- /dev/null
-+++ b/package/libhdhomerun/libhdhomerun.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# libhdhomerun
-+#
-+################################################################################
-+
-+LIBHDHOMERUN_VERSION = 20150826
-+LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
-+LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
-+LIBHDHOMERUN_LICENSE = LGPLv2.1+
-+LIBHDHOMERUN_LICENSE_FILES = lgpl.txt
-+LIBHDHOMERUN_INSTALL_STAGING = YES
-+
-+define LIBHDHOMERUN_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
-+endef
-+
-+define LIBHDHOMERUN_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libhdhomerun.so \
-+		$(STAGING_DIR)/usr/lib/libhdhomerun.so
-+	$(INSTALL) -D -m 0644 $(@D)/*.h \
-+		$(STAGING_DIR)/usr/include/
-+endef
-+
-+define LIBHDHOMERUN_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libhdhomerun.so \
-+		$(TARGET_DIR)/usr/lib/libhdhomerun.so
-+endef
-+
-+$(eval $(generic-package))
+Thomas
 -- 
-2.6.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
