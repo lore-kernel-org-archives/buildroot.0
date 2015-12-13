@@ -1,45 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Dec 2015 17:57:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libass: Fix fontconfig detection
-Message-ID: <1450025851-2594-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 13 Dec 2015 18:00:25 +0100
+Subject: [Buildroot] [PATCH] libass: allow compilation without a system
+ font provider
+References: <1449505148-9046-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20151208171627.GO4188@free.fr> <5668002F.90802@imgtec.com>
+ <20151209172813.GA3743@free.fr> <56686530.3060209@imgtec.com>
+Message-ID: <9qk0kcx3eu.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is a combination of the approaches by Vicente and Yann
-discussed in http://patchwork.ozlabs.org/patch/553448/ to fix the
-configure bug due to fontconfig being disabled.
+Am Wed, 09 Dec 2015 17:30:24 +0000 schrieb Vicente Olivert Riera:
 
-Fixes
-http://autobuild.buildroot.net/results/923/923e8688ab6a294b51fa146cd2ed23db20fe7341/
-and many others
+> Hi Yann,
+> 
+> On 09/12/15 17:28, Yann E. MORIN wrote:
+>> Vicente, All,
+>> 
+>> On 2015-12-09 10:19 +0000, Vicente Olivert Riera spake thusly:
+>>> On 08/12/15 17:16, Yann E. MORIN wrote:
+>>>> On 2015-12-07 16:19 +0000, Vicente Olivert Riera spake thusly:
+>>>>>  
+>>>>> +# Allow compilation without a system font provider
+>>>>> +LIBASS_CONF_OPTS = --disable-require-system-font-provider
+>>>>
+>>>> It is my understanding that fontconfig *is* a "system font provider",
+>>>> so maybe that should go n the else-case for fontconfig, below?
+>>>>
+>>>>>  ifeq ($(BR2_PACKAGE_FONTCONFIG),y) LIBASS_DEPENDENCIES +=
+>>>>>  fontconfig LIBASS_CONF_OPTS += --enable-fontconfig
+>>>> Here:
+>>>>
+>>>>     else LIBASS_CONF_OPTS += \
+>>>>         --disable-fontconfig \ --disable-require-system-font-provider
+>>>>     endif
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libass/libass.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Hi Vicente, hi Yann,
 
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index 83939e2..72770e2 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
-@@ -24,6 +24,15 @@ ifeq ($(BR2_i386)$(BR2_x86_64),y)
- LIBASS_DEPENDENCIES += host-yasm
- endif
- 
-+# libass uses the concept of a "system font provider", in the linux case
-+# this is currently only fontconfig. If fontconfig is disabled we need
-+# the following configure option to avoid a configure error. This option
-+# can be appended in the future when other linux packages are taking care
-+# of the role as "system font provider".
-+ifneq ($(BR2_PACKAGE_FONTCONFIG),y)
-+LIBASS_CONF_OPTS = --disable-require-system-font-provider
-+endif
-+
- ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
- LIBASS_DEPENDENCIES += fontconfig
- LIBASS_CONF_OPTS += --enable-fontconfig
--- 
-2.6.2
+reading your comments about this problem I created a patch
+http://patchwork.ozlabs.org/patch/556201/
+combining both of your approaches, what do you think?
+
+Regards, Bernd
