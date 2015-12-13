@@ -1,50 +1,72 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Dec 2015 22:41:23 +0100
-Subject: [Buildroot] [PATCH v2] package/libfreeglut: new package
-References: <1450024301-24083-1-git-send-email-bernd.kuhls@t-online.de>
- <20151213222402.311e1895@free-electrons.com>
-Message-ID: <3951kcx3eu.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Dec 2015 22:44:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mplayer: Needs threads
+In-Reply-To: <1450031671-24884-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1450031671-24884-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151213214441.GE18449@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 13 Dec 2015 22:24:02 +0100 schrieb Thomas Petazzoni:
+Bernd, all,
 
-> Dear Bernd Kuhls,
+On 2015-12-13 19:34 +0100, Bernd Kuhls spake thusly:
+> Fixes
+> http://autobuild.buildroot.net/results/fc0/fc02e01514965e13ee1de8f520a5b45f63a1103e/
+> http://autobuild.buildroot.net/results/b9c/b9cb712b321de4528d1a8dfb9bdfb16190bb660a/
+> http://autobuild.buildroot.net/results/22a/22aa0367ff76a3024faec69c762a08a4a441f45f/
+> and others
 > 
-> Thanks for the new version.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mplayer/Config.in | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> On Sun, 13 Dec 2015 17:31:41 +0100, Bernd Kuhls wrote:
+> diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
+> index 7a8b03f..686b3b0 100644
+> --- a/package/mplayer/Config.in
+> +++ b/package/mplayer/Config.in
+> @@ -10,12 +10,17 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+>  config BR2_PACKAGE_MPLAYER
+>  	bool "mplayer"
+>  	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+
+There's an option to disable threads in mplayer, but I think it odes not
+make much sense to do so, so your patch is fine with me.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+>  	help
+>  	  MPlayer is a movie player which runs on many systems and supports
+>  	  many different file formats.
+>  
+>  	  http://www.mplayerhq.hu/
+>  
+> +comment "mplayer needs a toolchain w/ threads"
+> +	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+>  if BR2_PACKAGE_MPLAYER
+>  
+>  config BR2_PACKAGE_MPLAYER_MPLAYER
+> -- 
+> 2.6.2
 > 
->> diff --git a/package/libfreeglut/Config.in
->> b/package/libfreeglut/Config.in new file mode 100644 index
->> 0000000..e09e7ef --- /dev/null +++ b/package/libfreeglut/Config.in @@
->> -0,0 +1,20 @@
->> +config BR2_PACKAGE_LIBFREEGLUT +	bool "libfreeglut"
->> +	select BR2_PACKAGE_LIBGLU +	select BR2_PACKAGE_XLIB_LIBXI
-> 
-> Where is this libXi dependency coming from? (It was already a question
-> from my previous review).
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Hi,
-
-and I tried to answer your question this afternoon ;)
-http://lists.busybox.net/pipermail/buildroot/2015-December/146911.html
-
-libXi is mentioned in the compile instructions in README.cmake:
-http://sourceforge.net/p/freeglut/code/HEAD/tree/tags/FG_3_0_0/
-README.cmake#l45
-
-because X11/extensions/XInput.h is used in fg_internal_x11.h:
-http://sourceforge.net/p/freeglut/code/HEAD/tree/tags/FG_3_0_0/src/x11/
-fg_internal_x11.h#l42
-
-This file, X11/extensions/XInput.h, is part of libXi:
-http://cgit.freedesktop.org/xorg/lib/libXi/tree/include/X11/extensions
-
-https://packages.debian.org/search?searchon=contents&keywords=X11%
-2Fextensions%2FXInput.h&mode=path&suite=stable&arch=any
-
-Regards, Bernd
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
