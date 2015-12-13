@@ -1,79 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2015 18:34:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libass: Fix fontconfig detection
-In-Reply-To: <1450025851-2594-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1450025851-2594-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151213173443.GF3679@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Dec 2015 18:57:44 +0100
+Subject: [Buildroot] [V4 2/3] perl-mail-spamassassin: new package
+In-Reply-To: <CAB0FRsvGc-vVB0o9cATPAPaTG3B_aSWVPMV2MYX_vyKFio2Kiw@mail.gmail.com>
+References: <1449411276-27492-1-git-send-email-francois.perrad@gadz.org>
+ <1449411276-27492-3-git-send-email-francois.perrad@gadz.org>
+ <20151213160055.68f009ef@free-electrons.com>
+ <CAB0FRsvGc-vVB0o9cATPAPaTG3B_aSWVPMV2MYX_vyKFio2Kiw@mail.gmail.com>
+Message-ID: <20151213185744.263016b5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, all,
+Fran?ois,
 
-On 2015-12-13 17:57 +0100, Bernd Kuhls spake thusly:
-> This patch is a combination of the approaches by Vicente and Yann
-> discussed in http://patchwork.ozlabs.org/patch/553448/ to fix the
-> configure bug due to fontconfig being disabled.
+On Sun, 13 Dec 2015 17:12:32 +0100, Fran?ois Perrad wrote:
 
-Thanks for your patch! :-)
-
-however, see my comments, below...
-
-> Fixes
-> http://autobuild.buildroot.net/results/923/923e8688ab6a294b51fa146cd2ed23db20fe7341/
-> and many others
+> > Also, since you're fixing several independent problems, what about
+> > doing a single patch for each problem ?
+> >
+> > Do you think you could write the patches in a way that makes them
+> > potentially acceptable upstream ?
+> >
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libass/libass.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> No way.
+
+Why ? After all, everything that you did could be made conditional
+under a CROSS_COMPILE boolean variable for example. Or the BUILD_SPAMC
+variable could be made to work also on Linux and not only on Windows,
+etc.
+
+> >> +config BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN_CONTACT_ADDRESS
+> >> +     string "contact address"
+> >> +     default "the administrator of that BR system"
+> >
+> > Do we really need a compile time option for this? Can't this be
+> > configured at run-time in some configuration file?
+> >
 > 
-> diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-> index 83939e2..72770e2 100644
-> --- a/package/libass/libass.mk
-> +++ b/package/libass/libass.mk
-> @@ -24,6 +24,15 @@ ifeq ($(BR2_i386)$(BR2_x86_64),y)
->  LIBASS_DEPENDENCIES += host-yasm
->  endif
->  
-> +# libass uses the concept of a "system font provider", in the linux case
-> +# this is currently only fontconfig. If fontconfig is disabled we need
-> +# the following configure option to avoid a configure error. This option
-> +# can be appended in the future when other linux packages are taking care
-> +# of the role as "system font provider".
-> +ifneq ($(BR2_PACKAGE_FONTCONFIG),y)
-> +LIBASS_CONF_OPTS = --disable-require-system-font-provider
-> +endif
+> Yes, the string is subsituted in several scripts, not in single
+> configuration file.
 
-Again, I'm not too happy with this. We already have a fontconfig
-conditional block, below. So this code should go strainght in the else
-clause.
+Argh :/
 
-Then, when/if (and *only* then) libass gains support for another system
-font provider, we can think of changing it.
-
-At worse, I'd prefer Vicente's solution.
-
-Regards,
-Yann E. MORIN.
-
->  ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
->  LIBASS_DEPENDENCIES += fontconfig
->  LIBASS_CONF_OPTS += --enable-fontconfig
-> -- 
-> 2.6.2
+> > Shouldn't the default be an empty string rather than the "the
+> > administrator of that BR system" ?
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> This is the default value from the SpamAssassin Makefile.PL, I just added "BR".
 
+I think "the administrator of that BR system" is a pretty silly default
+string, especially when what is wanted is an e-mail address or URL. So
+either put contact at dummy.net, or http://dummy.net or something like
+that.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
