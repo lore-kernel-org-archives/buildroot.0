@@ -1,142 +1,84 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun, 13 Dec 2015 10:40:38 -0200
-Subject: [Buildroot] [PATCH 1/1] mongodb: new package
-Message-ID: <1450010438-10933-1-git-send-email-sergio.prado@e-labworks.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Dec 2015 14:07:30 +0100
+Subject: [Buildroot] [PATCH v2] assimp: new package
+In-Reply-To: <1449440276-6133-1-git-send-email-ps.report@gmx.net>
+References: <1449440276-6133-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20151213140730.70890ee3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compiled and tested on arm (beaglebone black), aarch64 (qemu),
-i386 (qemu) and x86_64 (qemu).
+Peter,
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- package/Config.in            |  1 +
- package/mongodb/Config.in    | 20 ++++++++++++++
- package/mongodb/mongodb.hash |  2 ++
- package/mongodb/mongodb.mk   | 64 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 87 insertions(+)
- create mode 100644 package/mongodb/Config.in
- create mode 100644 package/mongodb/mongodb.hash
- create mode 100644 package/mongodb/mongodb.mk
+On Sun,  6 Dec 2015 23:17:55 +0100, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ----
+> Changes v1 -> v2:
+>   - use github helper (thanks to J?rg Krause)
 
-diff --git a/package/Config.in b/package/Config.in
-index 00aedad84395..9f4457d0810c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -783,6 +783,7 @@ menu "Database"
- 	source "package/gdbm/Config.in"
- 	source "package/kompexsqlite/Config.in"
- 	source "package/leveldb/Config.in"
-+	source "package/mongodb/Config.in"
- 	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
- 	source "package/redis/Config.in"
-diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
-new file mode 100644
-index 000000000000..31f5f7459395
---- /dev/null
-+++ b/package/mongodb/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_MONGODB
-+	bool "mongodb"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # needs glibc malloc_usable_size
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	help
-+	  MongoDB is a cross-platform document-oriented database (NoSQL). 
-+	  
-+	  It uses JSON-like documents with dynamic schemas (BSON), making
-+	  the integration of data in certain types of applications easier
-+	  and faster.
-+
-+	  https://www.mongodb.org/
-+
-+comment "mongodb needs a (e)glibc toolchain w/ wchar, threads, C++, gcc >= 4.8"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
-new file mode 100644
-index 000000000000..0bdd66db93f8
---- /dev/null
-+++ b/package/mongodb/mongodb.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 316496375f41f322839529d36e75e3275fdec468f7656fdbeb53ec8dc1ca5275  mongodb-r3.2.0.tar.gz
-diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
-new file mode 100644
-index 000000000000..3bf449a23183
---- /dev/null
-+++ b/package/mongodb/mongodb.mk
-@@ -0,0 +1,64 @@
-+################################################################################
-+#
-+# mongodb
-+#
-+################################################################################
-+
-+MONGODB_VERSION_BASE = 3.2.0
-+MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
-+MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
-+
-+MONGODB_LICENSE = AGPLv3, Apache-2.0
-+MONGODB_LICENSE_FILES = GNU-AGPL-3.0.txt, APACHE-2.0.txt
-+
-+MONGODB_DEPENDENCIES = host-scons
-+
-+MONGODB_SCONS_TARGETS = mongod mongos
-+
-+MONGODB_SCONS_ENV = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" \
-+	-j"$(PARALLEL_JOBS)"
-+
-+# need to pass mongo version when not building from git repo
-+MONGODB_SCONS_OPTS = MONGO_VERSION=$(MONGODB_VERSION_BASE)-
-+
-+# WiredTiger database storage engine only supported on 64 bits
-+ifeq ($(BR2_ARCH_IS_64),y)
-+MONGODB_SCONS_OPTS += --wiredtiger=on
-+else
-+MONGODB_SCONS_OPTS += --wiredtiger=off
-+endif
-+
-+# JavaScript scripting engine and tcmalloc supported only on 
-+# x86/x86-64 systems. Mongo target is a shell interface that 
-+# depends on the javascript engine, so it will also only be 
-+# build on x86/x86-64 systems.
-+ifeq ($(BR2_i386)$(BR2_x86_64),y)
-+MONGODB_SCONS_OPTS += --js-engine=mozjs --allocator=tcmalloc
-+MONGODB_SCONS_TARGETS += mongo
-+else
-+MONGODB_SCONS_OPTS += --js-engine=none --allocator=system
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+MONGODB_DEPENDENCIES += openssl
-+MONGODB_SCONS_OPTS += --ssl=SSL
-+endif
-+
-+define MONGODB_BUILD_CMDS
-+	(cd $(@D); \
-+		$(SCONS) \
-+		$(MONGODB_SCONS_ENV) \
-+		$(MONGODB_SCONS_OPTS) \
-+		$(MONGODB_SCONS_TARGETS))
-+endef
-+
-+define MONGODB_INSTALL_TARGET_CMDS
-+	(cd $(@D); \
-+		$(SCONS) \
-+		$(MONGODB_SCONS_ENV) \
-+		$(MONGODB_SCONS_OPTS) \
-+		--prefix=$(TARGET_DIR)/usr \
-+		install)
-+endef
-+
-+$(eval $(generic-package))
+It seems that it needs a C++ compiler, so you need to add this
+dependency, otherwise the build fails with:
+
+CMake Error at CMakeLists.txt:3 (PROJECT):
+  The CMAKE_CXX_COMPILER:
+
+    /home/thomas/projets/outputs/assimp-minimal/host/usr/bin/arm-linux-g++
+
+  is not a full path to an existing compiler tool.
+
+  Tell CMake where to find the compiler by setting either the environment
+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
+  to the compiler, or to the compiler name if it is in the PATH.
+
+Also, it fails to build with musl, with the following error:
+
+In file included from /home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/contrib/irrXML/irrXML.cpp:10:0:
+/home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/contrib/irrXML/irrString.h: In member function ?irr::core::string<char_type> irr::io::CXMLReaderImpl<char_type, superclass>::replaceSpecialCharacters(irr::core::string<char_type>&) [with char_type = char; superclass = irr::io::IXMLBase]?:
+/home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/contrib/irrXML/irrString.h:639:3: warning: assuming signed overflow does not occur when assuming that (X + c) < X is always false [-Wstrict-overflow]
+   if (allocated < used)
+   ^
+[ 96%] Linking CXX shared library ../lib/libassimp.so
+/home/thomas/projets/outputs/assimp-musl/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/4.9.3/../../../../arm-buildroot-linux-musleabihf/bin/ld: ../lib/libzlibstatic.a(compress.o): relocation R_ARM_MOVW_ABS_NC against `a local symbol' can not be used when making a shared object; recompile with -fPIC
+../lib/libzlibstatic.a: error adding symbols: Bad value
+collect2: error: ld returned 1 exit status
+code/CMakeFiles/assimp.dir/build.make:4307: recipe for target 'lib/libassimp.so.3.2.0' failed
+make[4]: *** [lib/libassimp.so.3.2.0] Error 1
+CMakeFiles/Makefile2:172: recipe for target 'code/CMakeFiles/assimp.dir/all' failed
+make[3]: *** [code/CMakeFiles/assimp.dir/all] Error 2
+Makefile:127: recipe for target 'all' failed
+make[2]: *** [all] Error 2
+package/pkg-generic.mk:196: recipe for target '/home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/.stamp_built' failed
+make[1]: *** [/home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/.stamp_built] Error 2
+Makefile:16: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+Defconfig to reproduce:
+
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_EABIHF=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2015.11-rc1-71-g90d1299.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_ASSIMP=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+Can you look into these issues and send an updated version?
+
+Thanks!
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
