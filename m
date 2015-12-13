@@ -1,39 +1,35 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Dec 2015 10:35:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/read-edid: Needs c++
-Message-ID: <1449999343-6032-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 13 Dec 2015 10:53:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xmlstarlet: Fix static build
+Message-ID: <1450000426-2564-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+If libxml2 depends on xz (liblzma) static linking is broken.
+
 Fixes
-http://autobuild.buildroot.net/results/8c1/8c11e463b68121fe0331acf9f8a42a1d3fef40c7//
-and others
+http://autobuild.buildroot.net/results/df3/df3f5fa770833c8c4344ee0bc67f45aa578ce542/
+http://autobuild.buildroot.net/results/070/07021c8bd6e2031c2717fc58e2d3ff30c412fa90/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/read-edid/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/xmlstarlet/xmlstarlet.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/read-edid/Config.in b/package/read-edid/Config.in
-index c830e17..6f39037 100644
---- a/package/read-edid/Config.in
-+++ b/package/read-edid/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_READ_EDID
- 	bool "read-edid"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Read-edid is a pair of tools for reading the EDID from a
- 	  monitor. It should work with most monitors made since 1996
-@@ -11,3 +12,6 @@ config BR2_PACKAGE_READ_EDID
- 	  XF86Config-compatible monitor section.
+diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
+index 992bb8f..e0abf04 100644
+--- a/package/xmlstarlet/xmlstarlet.mk
++++ b/package/xmlstarlet/xmlstarlet.mk
+@@ -21,6 +21,7 @@ XMLSTARLET_CONF_OPTS += \
  
- 	  http://polypux.org/projects/read-edid/
-+
-+comment "read-edid needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+ ifeq ($(BR2_STATIC_LIBS),y)
+ XMLSTARLET_CONF_OPTS += --enable-static-libs
++XMLSTARLET_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libxml-2.0`"
+ else
+ XMLSTARLET_CONF_OPTS += --disable-static-libs
+ endif
 -- 
 2.6.2
