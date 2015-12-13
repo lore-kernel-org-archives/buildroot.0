@@ -1,111 +1,72 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Dec 2015 17:31:41 +0100
-Subject: [Buildroot] [PATCH v2] package/libfreeglut: new package
-Message-ID: <1450024301-24083-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 13 Dec 2015 17:32:40 +0100
+Subject: [Buildroot] [PATCH 7/8] package/libfreeglut: new package
+References: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
+ <1449945103-23715-7-git-send-email-bernd.kuhls@t-online.de>
+ <20151213144626.5a7db29f@free-electrons.com>
+Message-ID: <86j0kcx3eu.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: added xlib_libXxf86vm as dependency (Thomas)
-    handle shared-only build (Thomas)
+Hi Thomas,
 
- package/Config.in                    |  1 +
- package/libfreeglut/Config.in        | 20 ++++++++++++++++++++
- package/libfreeglut/libfreeglut.hash |  2 ++
- package/libfreeglut/libfreeglut.mk   | 33 +++++++++++++++++++++++++++++++++
- 4 files changed, 56 insertions(+)
- create mode 100644 package/libfreeglut/Config.in
- create mode 100644 package/libfreeglut/libfreeglut.hash
- create mode 100644 package/libfreeglut/libfreeglut.mk
+Am Sun, 13 Dec 2015 14:46:26 +0100 schrieb Thomas Petazzoni:
 
-diff --git a/package/Config.in b/package/Config.in
-index 7cd6f9d..e27332b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -833,6 +833,7 @@ menu "Graphics"
- 	source "package/libevas-generic-loaders/Config.in"
- 	source "package/libfm/Config.in"
- 	source "package/libfm-extra/Config.in"
-+	source "package/libfreeglut/Config.in"
- 	source "package/libfreeimage/Config.in"
- 	source "package/libgail/Config.in"
- 	source "package/libgeotiff/Config.in"
-diff --git a/package/libfreeglut/Config.in b/package/libfreeglut/Config.in
-new file mode 100644
-index 0000000..e09e7ef
---- /dev/null
-+++ b/package/libfreeglut/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_LIBFREEGLUT
-+	bool "libfreeglut"
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_XLIB_LIBXI
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXXF86VM
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on BR2_PACKAGE_XORG7
-+	help
-+	  FreeGLUT is a free-software/open-source alternative to the
-+	  OpenGL Utility Toolkit (GLUT) library. GLUT (and hence
-+	  FreeGLUT) takes care of all the system-specific chores required
-+	  for creating windows, initializing OpenGL contexts, and
-+	  handling input events, to allow for trully portable OpenGL
-+	  programs.
-+
-+	  http://freeglut.sourceforge.net
-+
-+comment "libfreeglut depends on X.org and needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/libfreeglut/libfreeglut.hash b/package/libfreeglut/libfreeglut.hash
-new file mode 100644
-index 0000000..a69a0b4
---- /dev/null
-+++ b/package/libfreeglut/libfreeglut.hash
-@@ -0,0 +1,2 @@
-+# From http://sourceforge.net/projects/freeglut/files/freeglut/3.0.0/
-+sha1	fca52242f9344627a30f11487ee42002e6b0dacd	freeglut-3.0.0.tar.gz
-diff --git a/package/libfreeglut/libfreeglut.mk b/package/libfreeglut/libfreeglut.mk
-new file mode 100644
-index 0000000..507cb52
---- /dev/null
-+++ b/package/libfreeglut/libfreeglut.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# libfreeglut
-+#
-+################################################################################
-+
-+LIBFREEGLUT_VERSION = 3.0.0
-+LIBFREEGLUT_SOURCE = freeglut-$(LIBFREEGLUT_VERSION).tar.gz
-+LIBFREEGLUT_SITE = http://downloads.sourceforge.net/freeglut
-+LIBFREEGLUT_LICENSE = MIT
-+LIBFREEGLUT_LICENSE_FILES = COPYING
-+LIBFREEGLUT_INSTALL_STAGING = YES
-+LIBFREEGLUT_DEPENDENCIES = \
-+	libgl \
-+	libglu \
-+	xlib_libXi \
-+	xlib_libXrandr \
-+	xlib_libXxf86vm
-+
-+LIBFREEGLUT_CONF_OPTS = -DFREEGLUT_BUILD_DEMOS=OFF
-+
-+# package depends on X.org which depends on !BR2_STATIC_LIBS
-+ifeq ($(BR2_SHARED_LIBS),y)
-+LIBFREEGLUT_CONF_OPTS += \
-+	-DFREEGLUT_BUILD_SHARED_LIBS=ON \
-+	-DFREEGLUT_BUILD_STATIC_LIBS=OFF
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+LIBFREEGLUT_CONF_OPTS += \
-+	-DFREEGLUT_BUILD_SHARED_LIBS=ON \
-+	-DFREEGLUT_BUILD_STATIC_LIBS=ON
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.6.2
+> Bernd,
+> 
+> On Sat, 12 Dec 2015 19:31:42 +0100, Bernd Kuhls wrote:
+> 
+>> diff --git a/package/libfreeglut/Config.in
+>> b/package/libfreeglut/Config.in new file mode 100644 index
+>> 0000000..e67fdae --- /dev/null +++ b/package/libfreeglut/Config.in @@
+>> -0,0 +1,19 @@
+>> +config BR2_PACKAGE_LIBFREEGLUT +	bool "libfreeglut"
+>> +	select BR2_PACKAGE_LIBGLU +	select BR2_PACKAGE_XLIB_LIBXI
+> 
+> Are you sure about this dependency? I don't see any reference to libXi
+> in the libfreeglut source code? However, I do see a reference to
+> libXxf86vm:
+> 
+>   SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGL -lm")
+
+Yes, libXi is needed:
+http://sourceforge.net/p/freeglut/code/HEAD/tree/tags/FG_3_0_0/
+README.cmake#l45
+http://sourceforge.net/p/freeglut/code/HEAD/tree/tags/FG_3_0_0/src/x11/
+fg_internal_x11.h#l42
+
+V2 of the patch added libXxf86vm as dependency.
+
+>> +	select BR2_PACKAGE_XLIB_LIBXRANDR +	depends on 
+BR2_PACKAGE_HAS_LIBGL
+> 
+> There seems to be provisions for using OpenGLES and not only full
+> OpenGL:
+> 
+> # OpenGL ES support OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)"
+> OFF)
+
+After seeing this note in the Gentoo package
+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/freeglut/
+freeglut-3.0.0.ebuild#n17
+I did not bother to handle OpenGLES support atm.
+
+> Also, have you test static/shared build ? There are some options to
+> control this:
+> 
+> OPTION(FREEGLUT_BUILD_SHARED_LIBS "Build FreeGLUT shared library." ON)
+> OPTION(FREEGLUT_BUILD_STATIC_LIBS "Build FreeGLUT static library." ON)
+> 
+> But it's true you depend on BR2_PACKAGE_XORG7, so a pure static lib
+> build is not possible. But what about BR2_STATIC_SHARED_LIBS vs.
+> BR2_SHARED_LIBS ?
+
+I just sent v2 of the patch handling the shared-only case:
+http://patchwork.ozlabs.org/patch/556195/
+
+Thanks for the review!
+
+Regards, Bernd
