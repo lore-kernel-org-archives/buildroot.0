@@ -1,73 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2015 21:13:58 +0100
-Subject: [Buildroot] Wrong rpath after linking with libmysqlclient
-In-Reply-To: <566DCFFE.5070504@mind.be>
-References: <566DCFFE.5070504@mind.be>
-Message-ID: <20151213201358.GC27971@free.fr>
+Date: Sun, 13 Dec 2015 21:15:27 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/lttng-tools: use
+ BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS dependency
+In-Reply-To: <1450032471-3405-3-git-send-email-s.martin49@gmail.com>
+References: <1450032471-3405-1-git-send-email-s.martin49@gmail.com>
+ <1450032471-3405-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20151213201527.GD27971@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Samuel, All,
 
-On 2015-12-13 21:07 +0100, Arnout Vandecappelle spake thusly:
->  First of all, the symptomps: build the defconfig in attachment, run with
+On 2015-12-13 19:47 +0100, Samuel Martin spake thusly:
+> Using this newly introduced symbol lets to simplify the dependency code.
 > 
-> qemu-system-arm -M nuri -kernel output/images/zImage -append \
->  "console=ttySAC1,115200" -smp 2 -serial null -serial stdio
+> This change also adds the missing architecture dependencies on the second
+> comment.
 > 
-> and you'll see:
-> 
-> Starting php-fpm /usr/sbin/php-fpm: error while loading shared libraries:
-> libmysqlclient.so.16: cannot open shared object file: No such file or directory
-> 
-> 
->  readelf reveals:
-> 
-> Library rpath: [.../host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/mysql]
-> 
->  i.e. rpath points to staging instead of the on-target directory.
-> 
->  Indeed, in libmysqlclient.la we find:
-> 
-> libdir='.../host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/mysql'
-> 
-> 
->  This happens because our 'Fixing libtool files' step makes sure that all
-> absolute paths have STAGING_DIR prepended to them.
-> 
-> 
->  This problem will occur for any library that doesn't install in /lib or
-> /usr/lib and that uses libtool.
-> 
-> 
->  My first idea was to install libmysqlclient.so in /usr/lib instead, but that's
-> probably a great idea.
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-that's what Thomas and I were discussing the other day: why are those
-libraries not in /usr/lib to start with? We believe this should be the
-case.
-
-> So the next idea is to skip the libdir= line when fixing
-> up the libtool files. However, I'm not sure if that won't have some other
-> effects (i.e. missing required link flags). But worse, it doesn't even work:
-> php's libtool still converts it into
-> -Wl,--rpath -Wl,.../host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/mysql
-> (and gives warnings that the libraries have moved.
-> 
->  Any idea?
-> 
->  A final option is to fix up the rpaths of all ELF files in the target after
-> build. I believe Yann has a series that does exactl that, no?
-
-The fixup I've been doing is to just get rid of rpath since it should
-not be needed on the target, as we should expect all NEEDED libraries to
-either be in /usr/lib or /lib .
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> changes v1-> v2:
+> - new patch
+> ---
+>  package/lttng-tools/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+> index 4c5b5f6..599095d 100644
+> --- a/package/lttng-tools/Config.in
+> +++ b/package/lttng-tools/Config.in
+> @@ -6,7 +6,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
+>  	select BR2_PACKAGE_UTIL_LINUX
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	# liburcu only works on some architectures and requires thread support
+> -	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+> +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+>  	depends on BR2_USE_WCHAR # util-linux
+> @@ -30,10 +30,11 @@ config BR2_PACKAGE_LTTNG_TOOLS
+>  	  http://lttng.org
+>  
+>  comment "lttng-tools needs a toolchain w/ threads, wchar"
+> -	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+> +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+>  
+>  comment "lttng-tools needs a toolchain not affected by GCC bug 58854 and 58595"
+> +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854 || BR2_TOOLCHAIN_HAS_GCC_BUG_58595
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
