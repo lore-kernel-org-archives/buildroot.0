@@ -1,60 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 18:57:44 +0100
-Subject: [Buildroot] [V4 2/3] perl-mail-spamassassin: new package
-In-Reply-To: <CAB0FRsvGc-vVB0o9cATPAPaTG3B_aSWVPMV2MYX_vyKFio2Kiw@mail.gmail.com>
-References: <1449411276-27492-1-git-send-email-francois.perrad@gadz.org>
- <1449411276-27492-3-git-send-email-francois.perrad@gadz.org>
- <20151213160055.68f009ef@free-electrons.com>
- <CAB0FRsvGc-vVB0o9cATPAPaTG3B_aSWVPMV2MYX_vyKFio2Kiw@mail.gmail.com>
-Message-ID: <20151213185744.263016b5@free-electrons.com>
+Date: Sun, 13 Dec 2015 19:05:32 +0100
+Subject: [Buildroot] [PATCH] package/netsniff: fix missing depend on
+ statements
+In-Reply-To: <1450023577-5019-1-git-send-email-s.martin49@gmail.com>
+References: <1450023577-5019-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20151213190532.3fc1ab96@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois,
+Dear Samuel Martin,
 
-On Sun, 13 Dec 2015 17:12:32 +0100, Fran?ois Perrad wrote:
-
-> > Also, since you're fixing several independent problems, what about
-> > doing a single patch for each problem ?
-> >
-> > Do you think you could write the patches in a way that makes them
-> > potentially acceptable upstream ?
-> >
+On Sun, 13 Dec 2015 17:19:37 +0100, Samuel Martin wrote:
+> Add missing architecture dependencies inherited from liburcu.
 > 
-> No way.
-
-Why ? After all, everything that you did could be made conditional
-under a CROSS_COMPILE boolean variable for example. Or the BUILD_SPAMC
-variable could be made to work also on Linux and not only on Windows,
-etc.
-
-> >> +config BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN_CONTACT_ADDRESS
-> >> +     string "contact address"
-> >> +     default "the administrator of that BR system"
-> >
-> > Do we really need a compile time option for this? Can't this be
-> > configured at run-time in some configuration file?
-> >
+> Fixes:
+>   http://autobuild.buildroot.org/results/0a9/0a90d7c8f523b90b8a4ca6312ab4835547590fb2/
 > 
-> Yes, the string is subsituted in several scripts, not in single
-> configuration file.
-
-Argh :/
-
-> > Shouldn't the default be an empty string rather than the "the
-> > administrator of that BR system" ?
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/netsniff-ng/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> This is the default value from the SpamAssassin Makefile.PL, I just added "BR".
+> diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+> index 8c48f39..65b2a0f 100644
+> --- a/package/netsniff-ng/Config.in
+> +++ b/package/netsniff-ng/Config.in
+> @@ -11,14 +11,17 @@ config BR2_PACKAGE_NETSNIFF_NG
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu
+> +	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64 # liburcu
 
-I think "the administrator of that BR system" is a pretty silly default
-string, especially when what is wanted is an e-mail address or URL. So
-either put contact at dummy.net, or http://dummy.net or something like
-that.
+The list of architecture dependencies from liburcu is already
+duplicated in liburcu (two times), in lttng-libust (two times),
+lttng-tools (two times) and now in netsniff (three times).
 
-Thanks!
+Isn't it time to switch to BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS ?
+
+Thanks,
 
 Thomas
 -- 
