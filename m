@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2015 21:36:42 +0100
-Subject: [Buildroot] [PATCH v2 1/4] libfslcodec: add install hooks to
+Date: Sun, 13 Dec 2015 21:38:37 +0100
+Subject: [Buildroot] [PATCH v2 3/4] libfslparser: add install hooks to
  fix libraries path
-In-Reply-To: <1449755560-2911-2-git-send-email-gary.bisson@boundarydevices.com>
+In-Reply-To: <1449755560-2911-4-git-send-email-gary.bisson@boundarydevices.com>
 References: <1449755560-2911-1-git-send-email-gary.bisson@boundarydevices.com>
- <1449755560-2911-2-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20151213203642.GD27769@free.fr>
+ <1449755560-2911-4-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <20151213203837.GA18449@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,82 +18,52 @@ On 2015-12-10 14:52 +0100, Gary Bisson spake thusly:
 > By default, all the libraries are installed under /usr/lib/imx-mm which
 > causes problems at runtime.
 > 
-> The hooks are inspired from the mechanism used in the Yocto recipe:
-> https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-
-> multimedia/libfslcodec/libfslcodec.inc
-> 
 > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 > ---
 > 
-> Here are the dependencies the pipelines above are testing:
-> $ for i in `find target/usr/lib/gstreamer*/*`; do readelf -d $i | grep NEEDED | grep lib_ && echo "($i)"; done
->  0x00000001 (NEEDED)                     Shared library: [lib_nb_amr_dec_arm9_elinux.so.2]
->  0x00000001 (NEEDED)                     Shared library: [lib_wb_amr_dec_arm9_elinux.so.2]
-> (target/usr/lib/gstreamer-0.10/libmfw_gst_amrdec.so)
->  0x00000001 (NEEDED)                     Shared library: [lib_peq_arm11_elinux.so.1.fhw]
-> (target/usr/lib/gstreamer-0.10/libmfw_gst_audio_pp.so)
->  0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
-> (target/usr/lib/gstreamer-0.10/libmfw_gst_mp3enc.so)
->  0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
-> (target/usr/lib/gstreamer-1.0/libgstimxaudio.so)
-> 
-> Note that I added a staging install hook as well because otherwise the
-> gst1-imx plugin doesn't find lib_mp3_enc_arm12_elinux.so at build time.
-> 
-> Not to copy the same library twice I decided to go with a symlink. Let
-> me know if that's acceptable.
+> I'm actually not sure if libfslparser is needed at all. I couldn't find
+> a library depending on any of the one from the package. But Yocto still has
+> depency on the package for gst-fsl-plugins:
+> https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-multimedia/gstreamer/gst-fsl-plugin.inc#L9
 > 
 > Regards,
 > Gary
 > 
 > ---
->  package/libfslcodec/libfslcodec.mk | 15 +++++++++++++++
+>  package/libfslparser/libfslparser.mk | 15 +++++++++++++++
 >  1 file changed, 15 insertions(+)
 > 
-> diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
-> index 473d662..f8c6aa8 100644
-> --- a/package/libfslcodec/libfslcodec.mk
-> +++ b/package/libfslcodec/libfslcodec.mk
+> diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
+> index 2b53d62..221d5e4 100644
+> --- a/package/libfslparser/libfslparser.mk
+> +++ b/package/libfslparser/libfslparser.mk
 > @@ -20,4 +20,19 @@ endef
->  # FIXME The Makefile installs both the arm9 and arm11 versions of the
->  # libraries, but we only need one of them.
+>  # The Makefile installs several versions of the libraries, but we only
+>  # need one of them, depending on the platform.
 >  
 > +# Use symlinks in staging dir so every application can link against the libs
 > +# whether they look at imx-mm or not (gst-fsl-plugins vs. gst1-imx).
 
-Hmmm.. I may have overlooked that part.
+Same comments as my previous replies to the first patch in this series.
 
-So, gst-fsl-plugins looks for the libraries in /usr/lib/imx-mm/ , while
-gst1-imx looks for them in /usr/lib , right?
-
-Is it possible to make gst-fsl-plugins look in /usr/lib, too?
-
-(or the other way around if the lookup is the other way around, of
-course...)
-
-Regards,
-Yann E. MORIN.
-
-> +define LIBFSLCODEC_FIXUP_STAGING_PATH
+> +define LIBFSLPARSER_FIXUP_STAGING_PATH
 > +	find $(STAGING_DIR)/usr/lib/imx-mm -mindepth 2 -maxdepth 2 -not -type d \
 > +		-exec ln -fs {} $(STAGING_DIR)/usr/lib \;
 > +endef
-> +LIBFSLCODEC_POST_INSTALL_STAGING_HOOKS += LIBFSLCODEC_FIXUP_STAGING_PATH
+> +LIBFSLPARSER_POST_INSTALL_STAGING_HOOKS += LIBFSLPARSER_FIXUP_STAGING_PATH
 > +
-> +# Use symlinks in install dir as well to match staging setup.
+> +# Use symlinks for install dir as well to match staging setup.
 
-In complement to my previous reply, with insight from what you said
-above: even if gst-fsl-plugins looks for in /usr/lib/imx-mm at build
-time, does it still look there at runtime? If not, then just do a move.
+Ditto.
 
 Regards,
 Yann E. MORIN.
 
-> +define LIBFSLCODEC_FIXUP_TARGET_PATH
+> +define LIBFSLPARSER_FIXUP_TARGET_PATH
 > +	find $(TARGET_DIR)/usr/lib/imx-mm -mindepth 2 -maxdepth 2 -not -type d \
 > +		-exec ln -fs {} $(TARGET_DIR)/usr/lib \;
 > +endef
-> +LIBFSLCODEC_POST_INSTALL_TARGET_HOOKS += LIBFSLCODEC_FIXUP_TARGET_PATH
+> +LIBFSLPARSER_POST_INSTALL_TARGET_HOOKS += LIBFSLPARSER_FIXUP_TARGET_PATH
 > +
 >  $(eval $(autotools-package))
 > -- 
