@@ -1,51 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 13 Dec 2015 19:47:51 +0100
-Subject: [Buildroot] [PATCH v2 4/4] package/netsniff: fix missing depend on
-	statements
-In-Reply-To: <1450032471-3405-1-git-send-email-s.martin49@gmail.com>
-References: <1450032471-3405-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1450032471-3405-4-git-send-email-s.martin49@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 13 Dec 2015 20:59:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: new package
+In-Reply-To: <e890kcx3eu.ln2@ID-313208.user.individual.net>
+References: <1450004296-5335-1-git-send-email-bernd.kuhls@t-online.de>
+ <20151213113342.GF2318@tarshish>
+ <ve20kcx3eu.ln2@ID-313208.user.individual.net>
+ <20151213120353.GG2318@tarshish>
+ <e890kcx3eu.ln2@ID-313208.user.individual.net>
+Message-ID: <20151213185911.GI2318@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add missing architecture dependencies inherited from liburcu.
+Hi Bernd,
 
-Fixes:
-  http://autobuild.buildroot.org/results/0a9/0a90d7c8f523b90b8a4ca6312ab4835547590fb2/
+On Sun, Dec 13, 2015 at 02:43:10PM +0100, Bernd Kuhls wrote:
+> Am Sun, 13 Dec 2015 14:03:53 +0200 schrieb Baruch Siach:
+> > Agreed. But is this file really intended for target use? Most library
+> > *_config files are only useful during build. What is the purpose of
+> > hdhomerun_config?
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Some digging shows that this is a configuration utility for the Silicon Dust 
+HDHomeRun hardware. Debian ships it in a separate hdhomerun-config package.
 
----
-changes v1->v2:
-- use BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS (ThomasP)
----
- package/netsniff-ng/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+> Honestly I do not know, so I sent v2 of my patch:
+> http://patchwork.ozlabs.org/patch/556182/
+> If someone misses hdhomerun_config a follow-up patch is needed ;)
 
-diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-index 8c48f39..b39ec96 100644
---- a/package/netsniff-ng/Config.in
-+++ b/package/netsniff-ng/Config.in
-@@ -11,14 +11,17 @@ config BR2_PACKAGE_NETSNIFF_NG
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu
-+	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	help
- 	  netsniff-ng is a free, performant Linux network analyzer and
- 	  networking toolkit. If you will, the Swiss army knife for
- 	  network packets.
- 
- comment "netsniff-ng needs an (e)glibc toolchain w/ threads"
-+	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854
- 
- comment "netsniff-ng needs a toolchain not affected by GCC bug 58854"
-+	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854
+Fair enough.
+
+baruch
+
 -- 
-2.6.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
