@@ -1,29 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 14:29:51 +0100
-Subject: [Buildroot] [PATCH] wine: Add OSMesa dependency
-In-Reply-To: <566C7BBA.3010009@dawncrow.de>
-References: <566C7BBA.3010009@dawncrow.de>
-Message-ID: <20151213142951.7f1a6301@free-electrons.com>
+Date: Sun, 13 Dec 2015 14:30:26 +0100
+Subject: [Buildroot] [git commit] package/clamav: Fix LICENSE_FILES after
+	last version bump
+Message-ID: <20151213133032.3BF8081794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
+commit: http://git.buildroot.net/buildroot/commit/?id=beb67930c621b7b474c37631b02830c2b93dab74
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 12 Dec 2015 20:55:38 +0100, Andr? Hentschel wrote:
-> We have support for building the OSMesa lib since 81537f284f62c6586d50bd5cca78c2bf1375b88c
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/wine/wine.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+Fixes
+http://autobuild.buildroot.net/results/3a1/3a12aea6a7a3500883a6d0184da3bd8cebf50e7b/
+and many others
 
-Applied, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/clamav/clamav.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 75d88bc..35afd1e 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -8,7 +8,7 @@ CLAMAV_VERSION = 0.99
+ CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
+ CLAMAV_LICENSE = GPLv2
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+-	COPYING.LGPL COPYING.llvm COPYING.lzma COPYING.regex COPYING.sha256 \
++	COPYING.LGPL COPYING.llvm COPYING.lzma COPYING.pcre COPYING.regex \
+ 	COPYING.unrar COPYING.zlib
+ CLAMAV_DEPENDENCIES = \
+ 	host-pkgconf \
