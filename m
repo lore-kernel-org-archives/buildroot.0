@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 22:56:30 +0100
-Subject: [Buildroot] [PATCH] erlang: disable for sparc
-In-Reply-To: <20151206151004.GA23217@waldemar-brodkorb.de>
-References: <20151206151004.GA23217@waldemar-brodkorb.de>
-Message-ID: <20151213225630.50edd839@free-electrons.com>
+Date: Sun, 13 Dec 2015 23:01:45 +0100
+Subject: [Buildroot] [PATCH] openvmtools: enable for uClibc toolchains
+In-Reply-To: <20151204165330.GA5268@waldemar-brodkorb.de>
+References: <20151204165330.GA5268@waldemar-brodkorb.de>
+Message-ID: <20151213230145.765dd4a1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+Dear Waldemar Brodkorb,
 
-On Sun, 6 Dec 2015 16:10:04 +0100, Waldemar Brodkorb wrote:
-> Required atomic operations not available for sparc.
-> Fixes autobuild failures:
-> http://autobuild.buildroot.net/results/688278236e6d5bcd63b7d4413303eb115a38f3a7/
-> http://autobuild.buildroot.net/results/7875a7425bfe1f43d46c9a1db9f96b54f7a99b19/
+On Fri, 4 Dec 2015 17:53:30 +0100, Waldemar Brodkorb wrote:
+> Since uClibc-ng 1.0.9 openvmtools can be compiled as
+> the missing euidaccess function was added.
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/openvmtools/Config.in |    8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 
-While I agree that this would fix the problem, I am not too happy with
-this solution. We have lots of packages that are affected by atomic
-operations issues, not only on SPARC, so I'd prefer to have a better
-understanding of the handling of those atomic operations and add proper
-dependencies.
+Arnout explained very well that this patch is not super great due to
+the need to keep things working with older uClibc toolchains. Could you
+instead cook a patch that changes openvmtools to detect if euidaccess()
+is available or not. If it is available, then it uses it, otherwise, it
+open-codes it (the euidaccess implementation in uClibc is just one
+line, so it's not a big deal to copy that in the openvmtools source
+code).
 
-For example, we have BR2_ARCH_HAS_ATOMICS. What does this Config.in
-option means exactly ?
+Are you willing to implement such a solution?
 
-There are some __sync_*() builtins and __atomic_*() builtins. There is
-libatomic on some architectures.
+I'd say that within 6/12 months, we should be able to kill non-ng
+uClibc support. Blackfin will be a problem... but Blackfin has always
+been a problem.
 
-This is a rather big mess, and to me adding one more "depends
-on !BR2_sparc" is just a band-aid rather than a proper solution.
-
-Gustavo ?
+Thanks,
 
 Thomas
 -- 
