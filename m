@@ -1,60 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 14:46:26 +0100
-Subject: [Buildroot] [PATCH 7/8] package/libfreeglut: new package
-In-Reply-To: <1449945103-23715-7-git-send-email-bernd.kuhls@t-online.de>
-References: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
- <1449945103-23715-7-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151213144626.5a7db29f@free-electrons.com>
+Date: Sun, 13 Dec 2015 14:33:10 +0100
+Subject: [Buildroot] [git commit] package/znc: bump version to 1.6.2
+Message-ID: <20151213134718.3A86D817EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+commit: http://git.buildroot.net/buildroot/commit/?id=0f8891224dad399c063e75164837fa388a7009e8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 12 Dec 2015 19:31:42 +0100, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/znc/znc.hash | 2 +-
+ package/znc/znc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> diff --git a/package/libfreeglut/Config.in b/package/libfreeglut/Config.in
-> new file mode 100644
-> index 0000000..e67fdae
-> --- /dev/null
-> +++ b/package/libfreeglut/Config.in
-> @@ -0,0 +1,19 @@
-> +config BR2_PACKAGE_LIBFREEGLUT
-> +	bool "libfreeglut"
-> +	select BR2_PACKAGE_LIBGLU
-> +	select BR2_PACKAGE_XLIB_LIBXI
-
-Are you sure about this dependency? I don't see any reference to libXi
-in the libfreeglut source code? However, I do see a reference to
-libXxf86vm:
-
-  SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGL -lm")
-
-> +	select BR2_PACKAGE_XLIB_LIBXRANDR
-> +	depends on BR2_PACKAGE_HAS_LIBGL
-
-There seems to be provisions for using OpenGLES and not only full
-OpenGL:
-
-# OpenGL ES support
-OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
-
-Also, have you test static/shared build ? There are some options to
-control this:
-
-OPTION(FREEGLUT_BUILD_SHARED_LIBS "Build FreeGLUT shared library." ON)
-OPTION(FREEGLUT_BUILD_STATIC_LIBS "Build FreeGLUT static library." ON)
-
-But it's true you depend on BR2_PACKAGE_XORG7, so a pure static lib
-build is not possible. But what about BR2_STATIC_SHARED_LIBS vs.
-BR2_SHARED_LIBS ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/znc/znc.hash b/package/znc/znc.hash
+index 9d2b4a2..a0b27aa 100644
+--- a/package/znc/znc.hash
++++ b/package/znc/znc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	ba49397364f48d6d32ae5242bc1166f21d972f85dd390d6bbe68a63ecbb6c140	znc-1.6.1.tar.gz
++sha256	eef17727c0c6433fed1affba0ea76ec7fd60198d2f3c234d8529bd5fb26f0593	znc-1.6.2.tar.gz
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index 106be2d..0844b0f 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZNC_VERSION = 1.6.1
++ZNC_VERSION = 1.6.2
+ ZNC_SITE = http://znc.in/releases
+ ZNC_LICENSE = Apache-2.0
+ ZNC_LICENSE_FILES = LICENSE
