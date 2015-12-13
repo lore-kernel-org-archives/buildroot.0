@@ -1,63 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 16:01:07 +0100
-Subject: [Buildroot] [V4 3/3] package/perl-db-file: Fix berkeleydb
- detection
-In-Reply-To: <1449411276-27492-4-git-send-email-francois.perrad@gadz.org>
-References: <1449411276-27492-1-git-send-email-francois.perrad@gadz.org>
- <1449411276-27492-4-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20151213160107.2d31a09d@free-electrons.com>
+Date: Sun, 13 Dec 2015 16:01:18 +0100
+Subject: [Buildroot] [git commit] package/gawk: clean the mpfr dependency
+Message-ID: <20151213150127.B3A0581810@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=a3fd70c0431a8905ff7840071373265d8fe28229
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  6 Dec 2015 15:14:36 +0100, Francois Perrad wrote:
-> Without this patch libdb.so is not detected and
-> lib/perl5/site_perl/5.22.0/i586-linux/auto/DB_File/DB_File.so
-> is not linked against it:
-> 
-> Parsing config.in...
-> Looks Good.
-> Checking if your kit is complete...
-> Looks good
-> Warning (mostly harmless): No library found for -ldb
-> Generating a Unix-style Makefile
-> Writing Makefile for DB_File
-> Writing MYMETA.yml and MYMETA.json
-> >>> perl-db-file 1.835 Building
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/perl5/site_perl/5.22.0/i586-linux/auto/DB_File/DB_File.so | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
-> 
-> After applying this patch configure output will look like this:
-> 
-> Parsing config.in...
-> Looks Good.
-> Checking if your kit is complete...
-> Looks good
-> Generating a Unix-style Makefile
-> Writing Makefile for DB_File
-> Writing MYMETA.yml and MYMETA.json
-> >>> perl-db-file 1.835 Building
-> 
-> and the resulting library is correctly linked against libdb:
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/perl5/site_perl/5.22.0/i586-linux/auto/DB_File/DB_File.so | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libdb-5.3.so]
->  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/perl-db-file/perl-db-file.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+When available, mpfr provides support for BIGNUM, which allows gawk to
+work on arbitrarily-large numbers (hence the name).
 
-Applied, thanks.
+Forcibly disable mpfr if the mpfr package is not enabled. Let
+./configure find it automatically when it is enabled.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+To be noted, the host-gawk need not have BIGNUM to build the target
+variant with support for BIGNUM.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gawk/gawk.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 6702c48..0fd131d 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -7,7 +7,7 @@
+ GAWK_VERSION = 4.1.3
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+-GAWK_DEPENDENCIES = host-gawk $(if $(BR2_PACKAGE_MPFR),mpfr)
++GAWK_DEPENDENCIES = host-gawk
+ GAWK_LICENSE = GPLv3+
+ GAWK_LICENSE_FILES = COPYING
+ 
+@@ -16,6 +16,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ GAWK_DEPENDENCIES += busybox
+ endif
+ 
++# --with-mpfr requires an argument so just let
++# configure find it automatically
++ifeq ($(BR2_PACKAGE_MPFR),y)
++GAWK_DEPENDENCIES += mpfr
++else
++GAWK_CONF_OPTS += --without-mpfr
++endif
++
+ # We don't have a host-busybox, and we don't want to use readline or mpfr
+ HOST_GAWK_DEPENDENCIES =
+ 
