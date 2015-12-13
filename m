@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 14:33:10 +0100
-Subject: [Buildroot] [git commit] package/znc: bump version to 1.6.2
-Message-ID: <20151213134718.3A86D817EF@busybox.osuosl.org>
+Date: Sun, 13 Dec 2015 14:33:20 +0100
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bum version to
+	0.4.10.rc2
+Message-ID: <20151213134718.4FB59803D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f8891224dad399c063e75164837fa388a7009e8
+commit: http://git.buildroot.net/buildroot/commit/?id=fb97ee474ff959ebe8f0e463b8b802cb9bdefa34
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Needed for Dovecot 2.2.21
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/znc/znc.hash | 2 +-
- package/znc/znc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-index 9d2b4a2..a0b27aa 100644
---- a/package/znc/znc.hash
-+++ b/package/znc/znc.hash
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 1371492..58f4196 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	ba49397364f48d6d32ae5242bc1166f21d972f85dd390d6bbe68a63ecbb6c140	znc-1.6.1.tar.gz
-+sha256	eef17727c0c6433fed1affba0ea76ec7fd60198d2f3c234d8529bd5fb26f0593	znc-1.6.2.tar.gz
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 106be2d..0844b0f 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256	82892f876d26008a076973dfddf1cffaf5a0451825fd44e06287e94b89078649	dovecot-2.2-pigeonhole-0.4.9.tar.gz
++sha256	7fd01d731b264703fb6d965400f8e3e660841cd51cf7cec1fd648c1326fe0b77	dovecot-2.2-pigeonhole-0.4.10.rc2.tar.gz
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 06ff2f1..e65a2a9 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ZNC_VERSION = 1.6.1
-+ZNC_VERSION = 1.6.2
- ZNC_SITE = http://znc.in/releases
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
+-DOVECOT_PIGEONHOLE_VERSION = 0.4.9
++DOVECOT_PIGEONHOLE_VERSION = 0.4.10.rc2
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+-DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
++DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2/rc
+ DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
+ DOVECOT_PIGEONHOLE_LICENSE_FILES = COPYING
+ DOVECOT_PIGEONHOLE_DEPENDENCIES = dovecot
