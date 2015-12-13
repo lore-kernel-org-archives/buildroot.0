@@ -1,49 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2015 19:35:14 +0100
-Subject: [Buildroot] [PATCH 05/13 v2] core/pkg-generic: add variable to
-	store the package rawname-version
+Date: Sun, 13 Dec 2015 19:35:15 +0100
+Subject: [Buildroot] [PATCH 06/13 v2] core/legal-info: install source
+	archives in their own sub-dir
 In-Reply-To: <cover.1450031251.git.yann.morin.1998@free.fr>
 References: <cover.1450031251.git.yann.morin.1998@free.fr>
-Message-ID: <4640c83000bc6b54c6949415dc94a50187766f15.1450031251.git.yann.morin.1998@free.fr>
+Message-ID: <72f53f4f69afe29c7621731bae6eb536864501c5.1450031251.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce a new per-package variable to store the 'rawname-version'
-tuple, instead of computing it every time we need it.
+Currently, we put all source archives side-by-side in the same
+directory.
 
-Currently, it's only a single location, but follw-up patches will
-introduce more use of it.
+Since we're about to also save individual patches that were applied
+on those sources, we don't want to make that directory a complete
+mess of unassorted files.
 
-Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
+So, we install each source archive in its own sub-directory, where
+we'll later store the patches too. Store that location in a variable,
+so it can be re-used later on (to install patches in a future commit).
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+
 ---
- package/pkg-generic.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes v1 -> v2:
+  - perl no longer has a post-legal-info hook  (Thoams, Luca)
+---
+ package/pkg-generic.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 832045e..784c39c 100644
+index 784c39c..3b6240a 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -388,6 +388,7 @@ else
-  $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
- endif
- $(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
-+$(2)_RAWNAME_VERSION = $$($(2)_RAWNAME)-$$($(2)_VERSION)
+@@ -491,6 +491,8 @@ endif
  
- ifdef $(3)_OVERRIDE_SRCDIR
-   $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
-@@ -424,7 +425,7 @@ ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $$($(3)_SOURCE)
-  else
--  $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
-+  $(2)_SOURCE			?= $$($(2)_RAWNAME_VERSION).tar.gz
-  endif
- endif
+ $(2)_REDISTRIBUTE		?= YES
  
++$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAWNAME_VERSION)
++
+ # When a target package is a toolchain dependency set this variable to
+ # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+ # dependency
+@@ -824,7 +826,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ # Copy the source tarball
+ 	$$(Q)$$(call hardlink-copy,\
+ 		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+-		     $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))))
++		     $$($(2)_REDIST_SOURCES_DIR))
+ endif # redistribute
+ 
+ endif # other packages
 -- 
 1.9.1
