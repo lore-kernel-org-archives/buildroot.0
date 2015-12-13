@@ -1,145 +1,106 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2015 16:00:45 +0100
-Subject: [Buildroot] [PATCH 1/1 v4] Add kernel compression selection.
-In-Reply-To: <1428017467-856-1-git-send-email-sagaert.johan@proximus.be>
-References: <1428017467-856-1-git-send-email-sagaert.johan@proximus.be>
-Message-ID: <20151213150045.GA3679@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Dec 2015 16:00:55 +0100
+Subject: [Buildroot] [V4 2/3] perl-mail-spamassassin: new package
+In-Reply-To: <1449411276-27492-3-git-send-email-francois.perrad@gadz.org>
+References: <1449411276-27492-1-git-send-email-francois.perrad@gadz.org>
+ <1449411276-27492-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20151213160055.68f009ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan, All,
+Dear Francois Perrad,
 
-Sorry for the slow response... :-/
+Thanks a lot for working on this. Definitely a lot better than the
+previous solution from Bernd that required tons of host Perl packages
+to be added. A few comments below.
 
-On 2015-04-03 01:31 +0200, Sagaert Johan spake thusly:
-> This selection will ensure that the correct host tools
-> will be build used for the kernel compression method used.
+On Sun,  6 Dec 2015 15:14:35 +0100, Francois Perrad wrote:
 
-Yes, that is much better. Thanks! :-)
-
-However, just a comment below...
-
-> Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
-> ---
-> V3->V4
-> 	Add selection menu in the kernel menu section.
-> 	This ensures only things needed are build.
-> V2->V3
-> 	Unconditionally build lz4.
-> 	The building overhead is negligible.
-> V1->V2
-> 	Only add the host-lz4 dependency when ARM is selected.
-> 	Don't touch host-lz4 package.
-> ---
->  linux/Config.in | 28 ++++++++++++++++++++++++++++
->  linux/linux.mk  | 13 ++++++++++++-
->  2 files changed, 40 insertions(+), 1 deletion(-)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index a1113dd..e5372cb 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -247,6 +247,34 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
->  
->  endchoice
->  
-> +#
-> +# Kernel compression format
-> +#
+> diff --git a/package/perl-mail-spamassassin/0001-without-host-perl-dependencies.patch b/package/perl-mail-spamassassin/0001-without-host-perl-dependencies.patch
+> new file mode 100644
+> index 0000000..8edab10
+> --- /dev/null
+> +++ b/package/perl-mail-spamassassin/0001-without-host-perl-dependencies.patch
+> @@ -0,0 +1,64 @@
+> +Remove host-perl-* dependencies
 > +
-> +choice
-> +	prompt "Kernel compression format"
+> +The module  Mail-SpamAssassin tries to do the following things:
+> +1) as usual CPAN module, install many .pm files in /usr/lib/perl5/site_perl/
+> +and few scripts in /usr/bin.
+> +No issue here.
+
+So, if there's no issue, why do you mention this?
+
+> +2) "compile" SpamAssassin rules, that requires to install/run SpamAssassin on the host side.
+> +As we don't want install host-perl modules, this step is disabled.
+> +Please, considere the installed script `sa-update` for installing the rules for the first time.
+
+considere -> consider
+
+Also, I think this should probably be mentioned in the Config.in help
+text.
+
+> +3) spamc, an executable which embeds libperl
+> +The cross compilation is not handled, I obtain an host executable.
+
+I -> not good to use such formulation. What about:
+
+"The cross-compilation case is not supported, a host executable gets
+built. For this reason, this step is disabled."
+
+Also, since you're fixing several independent problems, what about
+doing a single patch for each problem ?
+
+Do you think you could write the patches in a way that makes them
+potentially acceptable upstream ?
+
+> diff --git a/package/perl-mail-spamassassin/Config.in b/package/perl-mail-spamassassin/Config.in
+> new file mode 100644
+> index 0000000..4d1b0e0
+> --- /dev/null
+> +++ b/package/perl-mail-spamassassin/Config.in
+> @@ -0,0 +1,26 @@
+> +config BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN
+> +	bool "perl-mail-spamassassin"
+> +	depends on !BR2_STATIC_LIBS
+> +	select BR2_PACKAGE_PERL_DIGEST_SHA1
+> +	select BR2_PACKAGE_PERL_HTML_PARSER
+> +	select BR2_PACKAGE_PERL_MAIL_DKIM
+> +	select BR2_PACKAGE_PERL_NET_DNS
+> +	select BR2_PACKAGE_PERL_NETADDR_IP
 > +	help
-> +	  This selection will just ensure that the correct host tools are build.
-> +	  The actual compression for the kernel should be selected in the
-> +	  kernel configuration menu.
+> +	  SpamAssassin is an extensible email filter which is used to identify spam
 > +
-> +config BR2_LINUX_KERNEL_GZIP
-> +	bool "gzip compression"
-> +	
-> +config BR2_LINUX_KERNEL_LZ4
-> +	bool "lz4 compression"
-> +	
-> +config BR2_LINUX_KERNEL_LZMA
-> +	bool "lzma compression"
+> +	  http://spamassassin.apache.com/
 > +
-> +config BR2_LINUX_KERNEL_LZO
-> +	bool "lzo compression"
-> +	
-> +config BR2_LINUX_KERNEL_XZ
-> +	bool "xz compression"
+> +comment "perl-mail-spamassassin needs a toolchain w/ dynamic library"
+> +	depends on BR2_STATIC_LIBS
 > +
-> +endchoice
+> +if BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN
 > +
->  config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
->  	string "Kernel image target name"
->  	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 22fce35..67ea544 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -49,7 +49,18 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
->  LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
->  
->  LINUX_INSTALL_IMAGES = YES
-> -LINUX_DEPENDENCIES += host-kmod host-lzop
-> +LINUX_DEPENDENCIES += host-kmod
-> +
-> +# host tools needed for kernel compression
-> +ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
-> +LINUX_DEPENDENCIES += host-lz4
-> +else ifeq ($(BR2_LINUX_KERNEL_LZMA),y)
-> +LINUX_DEPENDENCIES += host-lzma
-> +else ifeq ($(BR2_LINUX_KERNEL_LZO),y)
-> +LINUX_DEPENDENCIES += host-lzop
-> +else ifeq ($(BR2_LINUX_KERNEL_XZ),y)
-> +LINUX_DEPENDENCIES += host-xz
-> +endif
+> +config BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN_CONTACT_ADDRESS
+> +	string "contact address"
+> +	default "the administrator of that BR system"
 
-Shouldn't we also call something like:
+Do we really need a compile time option for this? Can't this be
+configured at run-time in some configuration file?
 
-    $(call KCONFIG_DISABLE_OPT,CONFIG_KERNEL_GZIP,$(@D)/.config))
-    $(call KCONFIG_DISABLE_OPT,CONFIG_KERNEL_LZ4,$(@D)/.config))
-    ... nad so on ...
-    ifeq ($(BR2_LINUX_KERNEL_GZIP),y)
-    LINUX_COMP_CONFIG = $(call KCONFIG_ENABLE_OPT,CONFIG_KERNEL_GZIP,$(@D)/.config))
-    else ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
-    LINUX_DEPENDENCIES += host-lz4
-    LINUX_COMP_CONFIG = $(call KCONFIG_ENABLE_OPT,CONFIG_KERNEL_LZ4,$(@D)/.config))
-    else ifeq ($(BR2_LINUX_KERNEL_LZO),y)
-    LINUX_DEPENDENCIES += host-lzop
-    LINUX_COMP_CONFIG = $(call KCONFIG_ENABLE_OPT,CONFIG_KERNEL_LZO,$(@D)/.config))
-    ... and so on ...
+Shouldn't the default be an empty string rather than the "the
+administrator of that BR system" ?
 
-So that what the user jas selected in the Buildroot menuconfig gets
-actually applied to the Linux configuration, to avoid having to manually
-handle the coherence between the two?
+> +	help
+> +	  What email address or URL should be used in the suspected-spam report
+> +	  text for users who want more information on your filter installation?
 
-But anmyway, your patch is an improvement against the current situation,
-so:
+Lines too long I believe, please wrap at 72 characters.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thanks!
 
-Regards,
-Yann E. MORIN.
-
->  ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
->  LINUX_DEPENDENCIES += host-uboot-tools
-> -- 
-> 2.3.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
