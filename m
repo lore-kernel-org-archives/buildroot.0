@@ -1,56 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Dec 2015 14:43:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: new package
-References: <1450004296-5335-1-git-send-email-bernd.kuhls@t-online.de>
- <20151213113342.GF2318@tarshish>
- <ve20kcx3eu.ln2@ID-313208.user.individual.net>
- <20151213120353.GG2318@tarshish>
-Message-ID: <e890kcx3eu.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Dec 2015 14:46:26 +0100
+Subject: [Buildroot] [PATCH 7/8] package/libfreeglut: new package
+In-Reply-To: <1449945103-23715-7-git-send-email-bernd.kuhls@t-online.de>
+References: <1449945103-23715-1-git-send-email-bernd.kuhls@t-online.de>
+ <1449945103-23715-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151213144626.5a7db29f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Bernd,
 
-Am Sun, 13 Dec 2015 14:03:53 +0200 schrieb Baruch Siach:
+On Sat, 12 Dec 2015 19:31:42 +0100, Bernd Kuhls wrote:
 
-> Hi Bernd,
-> 
-> On Sun, Dec 13, 2015 at 12:47:11PM +0100, Bernd Kuhls wrote:
->> Am Sun, 13 Dec 2015 13:33:42 +0200 schrieb Baruch Siach:
->> > 
->> > Are you sure this is not for staging?
->> 
->> yes, because it is not a script but a binary compiled for the target:
->> 
->> $ file /home/bernd/buildroot/br2_kodi16/output/target/usr/bin/
->> hdhomerun_config
->> /home/bernd/buildroot/br2_kodi16/output/target/usr/bin/
-hdhomerun_config:
->> ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically
->> linked, interpreter /lib/ld64-uClibc.so.0, not stripped
-> 
-> This most likely matches your host. Is that your target as well?
+> diff --git a/package/libfreeglut/Config.in b/package/libfreeglut/Config.in
+> new file mode 100644
+> index 0000000..e67fdae
+> --- /dev/null
+> +++ b/package/libfreeglut/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_LIBFREEGLUT
+> +	bool "libfreeglut"
+> +	select BR2_PACKAGE_LIBGLU
+> +	select BR2_PACKAGE_XLIB_LIBXI
 
-coincidentally yes, here is the arm version:
+Are you sure about this dependency? I don't see any reference to libXi
+in the libfreeglut source code? However, I do see a reference to
+libXxf86vm:
 
-$ file /home/bernd/buildroot/br2_kodi16/output/target/usr/bin/
-hdhomerun_config
-/home/bernd/buildroot/br2_kodi16/output/target/usr/bin/hdhomerun_config: 
-ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically 
-linked, interpreter /lib/ld-uClibc.so.0, not stripped
+  SET(PC_LIBS_PRIVATE "-lX11 -lXxf86vm -lXrandr -lGL -lm")
 
->> I am not sure whether the file is really needed on the target or not
->> but it is definitely not suited for staging.
-> 
-> Agreed. But is this file really intended for target use? Most library
-> *_config files are only useful during build. What is the purpose of
-> hdhomerun_config?
+> +	select BR2_PACKAGE_XLIB_LIBXRANDR
+> +	depends on BR2_PACKAGE_HAS_LIBGL
 
-Honestly I do not know, so I sent v2 of my patch:
-http://patchwork.ozlabs.org/patch/556182/
-If someone misses hdhomerun_config a follow-up patch is needed ;)
+There seems to be provisions for using OpenGLES and not only full
+OpenGL:
 
-Regards, Bernd
+# OpenGL ES support
+OPTION(FREEGLUT_GLES "Use OpenGL ES (requires EGL)" OFF)
+
+Also, have you test static/shared build ? There are some options to
+control this:
+
+OPTION(FREEGLUT_BUILD_SHARED_LIBS "Build FreeGLUT shared library." ON)
+OPTION(FREEGLUT_BUILD_STATIC_LIBS "Build FreeGLUT static library." ON)
+
+But it's true you depend on BR2_PACKAGE_XORG7, so a pure static lib
+build is not possible. But what about BR2_STATIC_SHARED_LIBS vs.
+BR2_SHARED_LIBS ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
