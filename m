@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 22:24:02 +0100
-Subject: [Buildroot] [PATCH v2] package/libfreeglut: new package
-In-Reply-To: <1450024301-24083-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1450024301-24083-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151213222402.311e1895@free-electrons.com>
+Date: Sun, 13 Dec 2015 22:28:27 +0100
+Subject: [Buildroot] [PATCH 1/3] package/boost: bump to version 1.59.0
+In-Reply-To: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20151213222827.027599c4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear J?rg Krause,
 
-Thanks for the new version.
+On Fri, 11 Dec 2015 14:57:57 +0100, J?rg Krause wrote:
+> Also:
+> * remove patch "gcc.jam compiler options fix" - merged upstream
+> * renumber patch "fix uclibc eventfd".
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-On Sun, 13 Dec 2015 17:31:41 +0100, Bernd Kuhls wrote:
+I am not sure if it is related to the version bump or not, but boost is
+causing some build issues:
 
-> diff --git a/package/libfreeglut/Config.in b/package/libfreeglut/Config.in
-> new file mode 100644
-> index 0000000..e09e7ef
-> --- /dev/null
-> +++ b/package/libfreeglut/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_LIBFREEGLUT
-> +	bool "libfreeglut"
-> +	select BR2_PACKAGE_LIBGLU
-> +	select BR2_PACKAGE_XLIB_LIBXI
+   http://autobuild.buildroot.org/?reason=boost-1.59.0
 
-Where is this libXi dependency coming from? (It was already a question
-from my previous review).
+Could you have a look ?
+
+Thanks,
 
 Thomas
 -- 
