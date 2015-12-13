@@ -1,44 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 22:34:41 +0100
-Subject: [Buildroot] [git commit] package/perl-xml-libxml: bump version to
-	2.0123
-Message-ID: <20151213213445.4CBCE8184F@busybox.osuosl.org>
+Date: Sun, 13 Dec 2015 22:34:36 +0100
+Subject: [Buildroot] [git commit] package/perl-net-dns: bump version to 1.04
+Message-ID: <20151213213445.44AA47FC07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d4b9490b6736845196e01334ee63afc8dcd4ff3d
+commit: http://git.buildroot.net/buildroot/commit/?id=1477118df3df0e44ec2c7c6db9db9fd833159095
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-xml-libxml/perl-xml-libxml.hash | 4 ++--
- package/perl-xml-libxml/perl-xml-libxml.mk   | 2 +-
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.hash b/package/perl-xml-libxml/perl-xml-libxml.hash
-index b2b6518..782cf5c 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.hash
-+++ b/package/perl-xml-libxml/perl-xml-libxml.hash
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 6533e2b..bb1fdfa 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    8bf504427a44ed6b84be807b55684271 XML-LibXML-2.0122.tar.gz
--sha256 767663f819d2cc579422f773375aadbeab127dc6510a77f2f9ff70e6e29b8f52 XML-LibXML-2.0122.tar.gz
-+md5    c9eb502f8aa2586c4a4dce3c784a2a0b XML-LibXML-2.0123.tar.gz
-+sha256 0525a2491f152cadee8c63550c79a380fb393851fdfc4c1e6cd5f0f92614f7c4 XML-LibXML-2.0123.tar.gz
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
-index 8867c93..9d7216a 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.mk
-+++ b/package/perl-xml-libxml/perl-xml-libxml.mk
+-md5    adbb3fd9bc1677d8fd79605925a35106 Net-DNS-1.02.tar.gz
+-sha256 9473c322b036592663bb20383e85190a682d142688b162efc975a61bcc7534f2 Net-DNS-1.02.tar.gz
++md5    5a6f6e6811d6bf8eefd84ce778c2bc2e Net-DNS-1.04.tar.gz
++sha256 4b9f220304c5722658fbdbe4db31ab77486b5f0aaada78c9d1b528e4b0680965 Net-DNS-1.04.tar.gz
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index 59d2b60..6337612 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_XML_LIBXML_VERSION = 2.0122
-+PERL_XML_LIBXML_VERSION = 2.0123
- PERL_XML_LIBXML_SOURCE = XML-LibXML-$(PERL_XML_LIBXML_VERSION).tar.gz
- PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
- PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2 perl-xml-sax perl-xml-namespacesupport
+-PERL_NET_DNS_VERSION = 1.02
++PERL_NET_DNS_VERSION = 1.04
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_DEPENDENCIES = perl-digest-hmac
