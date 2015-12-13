@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2015 21:15:27 +0100
-Subject: [Buildroot] [PATCH v2 3/4] package/lttng-tools: use
- BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS dependency
-In-Reply-To: <1450032471-3405-3-git-send-email-s.martin49@gmail.com>
+Date: Sun, 13 Dec 2015 21:16:21 +0100
+Subject: [Buildroot] [PATCH v2 4/4] package/netsniff: fix missing depend
+ on statements
+In-Reply-To: <1450032471-3405-4-git-send-email-s.martin49@gmail.com>
 References: <1450032471-3405-1-git-send-email-s.martin49@gmail.com>
- <1450032471-3405-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <20151213201527.GD27971@free.fr>
+ <1450032471-3405-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <20151213201621.GA27769@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +15,10 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2015-12-13 19:47 +0100, Samuel Martin spake thusly:
-> Using this newly introduced symbol lets to simplify the dependency code.
+> Add missing architecture dependencies inherited from liburcu.
 > 
-> This change also adds the missing architecture dependencies on the second
-> comment.
+> Fixes:
+>   http://autobuild.buildroot.org/results/0a9/0a90d7c8f523b90b8a4ca6312ab4835547590fb2/
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -28,38 +28,34 @@ Regards,
 Yann E. MORIN.
 
 > ---
-> changes v1-> v2:
-> - new patch
+> changes v1->v2:
+> - use BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS (ThomasP)
 > ---
->  package/lttng-tools/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  package/netsniff-ng/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-> index 4c5b5f6..599095d 100644
-> --- a/package/lttng-tools/Config.in
-> +++ b/package/lttng-tools/Config.in
-> @@ -6,7 +6,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
->  	select BR2_PACKAGE_UTIL_LINUX
->  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->  	# liburcu only works on some architectures and requires thread support
-> -	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+> diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+> index 8c48f39..b39ec96 100644
+> --- a/package/netsniff-ng/Config.in
+> +++ b/package/netsniff-ng/Config.in
+> @@ -11,14 +11,17 @@ config BR2_PACKAGE_NETSNIFF_NG
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu
 > +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
->  	depends on BR2_USE_WCHAR # util-linux
-> @@ -30,10 +30,11 @@ config BR2_PACKAGE_LTTNG_TOOLS
->  	  http://lttng.org
+>  	help
+>  	  netsniff-ng is a free, performant Linux network analyzer and
+>  	  networking toolkit. If you will, the Swiss army knife for
+>  	  network packets.
 >  
->  comment "lttng-tools needs a toolchain w/ threads, wchar"
-> -	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+>  comment "netsniff-ng needs an (e)glibc toolchain w/ threads"
 > +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854
 >  
->  comment "lttng-tools needs a toolchain not affected by GCC bug 58854 and 58595"
+>  comment "netsniff-ng needs a toolchain not affected by GCC bug 58854"
 > +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854 || BR2_TOOLCHAIN_HAS_GCC_BUG_58595
+>  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854
 > -- 
 > 2.6.4
 > 
