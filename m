@@ -1,74 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2015 21:39:11 +0100
-Subject: [Buildroot] [PATCH v2 4/4] libfslparser: add missing configure
- options
-In-Reply-To: <1449755560-2911-5-git-send-email-gary.bisson@boundarydevices.com>
-References: <1449755560-2911-1-git-send-email-gary.bisson@boundarydevices.com>
- <1449755560-2911-5-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20151213203911.GB18449@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 13 Dec 2015 21:42:13 +0100
+Subject: [Buildroot] [PATCH 1/3] package/nodejs: bump 0.10.x branch to
+ version 0.10.41
+In-Reply-To: <20151212183235.09bb8139@free-electrons.com>
+References: <1449609500-10071-1-git-send-email-joerg.krause@embedded.rocks>
+ <20151212183235.09bb8139@free-electrons.com>
+Message-ID: <566DD825.3000105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary, All,
+On 12-12-15 18:32, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
+> 
+> On Tue,  8 Dec 2015 22:18:18 +0100, J?rg Krause wrote:
+>> Also remove a patch applied upstream.
+>>
+>> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+>> ---
+>>  ...4-fix-build-error-without-OpenSSL-support.patch | 54 ----------------------
+>>  .../0001-remove-python-bz2-dependency.patch        |  0
+>>  .../0002-gyp-force-link-command-to-use-CXX.patch   |  0
+>>  .../0003-use-python-variable.patch                 |  0
+>>  .../0004-fix-musl-USE-MISC-build-issue.patch}      |  0
+>>  package/nodejs/Config.in                           |  4 +-
+>>  package/nodejs/nodejs.hash                         |  4 +-
+>>  7 files changed, 4 insertions(+), 58 deletions(-)
+>>  delete mode 100644 package/nodejs/0.10.40/0004-fix-build-error-without-OpenSSL-support.patch
+>>  rename package/nodejs/{0.10.40 => 0.10.41}/0001-remove-python-bz2-dependency.patch (100%)
+>>  rename package/nodejs/{0.10.40 => 0.10.41}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
+>>  rename package/nodejs/{0.10.40 => 0.10.41}/0003-use-python-variable.patch (100%)
+>>  rename package/nodejs/{0.10.40/0005-fix-musl-USE-MISC-build-issue.patch => 0.10.41/0004-fix-musl-USE-MISC-build-issue.patch} (100%)
+> 
+> I've applied all three patches. However, there is a problem: if you
+> select a Cortex-A9 ARM processor, only the 0.10 version is visible, the
+> 0.12 and 4.x versions are not visible. This is because for Cortex-A9,
+> BR2_ARM_CPU_HAS_VFPV2 is not true. This is something that should be
+> fixed at some point.
 
-On 2015-12-10 14:52 +0100, Gary Bisson spake thusly:
-> Enable hard float support when the proper configuration is setup.
-> BR2_ARM_EABIHF=y
-> 
-> See Yocto equivalent:
-> https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-
-> multimedia/libfslparser/libfslparser.inc
-> 
-> Tested with Linaro ARM 2014.09 toolchain.
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
-> 
-> Thanks to those options, I could see that libraries from copied from
-> release/lib/yocto/hw instead of release/lib/yocto/sw.
-> 
-> Regards,
-> Gary
-> 
-> ---
->  package/libfslparser/libfslparser.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-> index 221d5e4..c2b63ce 100644
-> --- a/package/libfslparser/libfslparser.mk
-> +++ b/package/libfslparser/libfslparser.mk
-> @@ -13,6 +13,10 @@ LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
->  LIBFSLPARSER_LICENSE_FILES = EULA COPYING
->  LIBFSLPARSER_REDISTRIBUTE = NO
->  
-> +ifeq ($(BR2_ARM_EABIHF),y)
-> +LIBFSLPARSER_CONF_OPTS += --enable-fhw
-> +endif
+ I guess, when BR2_ARM_FPU_VFPV3 of _D16 is selected, we should also select
+BR2_ARM_CPU_HAS_VFPV3. Which is of course not possible because then we get a
+circular dependency. So more hidden intermediate symbols...
 
-What about adding --disable-fhw when not EABIhf?
+ I wonder BTW, does v8 still work when SOFT_FLOAT is selected?
 
-Regards,
-Yann E. MORIN.
 
->  define LIBFSLPARSER_EXTRACT_CMDS
->  	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLPARSER_SOURCE))
->  endef
-> -- 
-> 2.6.2
+ Regards,
+ Arnout
+
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thanks!
+> 
+> Thomas
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
