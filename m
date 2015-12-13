@@ -1,44 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 23:01:45 +0100
-Subject: [Buildroot] [PATCH] openvmtools: enable for uClibc toolchains
-In-Reply-To: <20151204165330.GA5268@waldemar-brodkorb.de>
-References: <20151204165330.GA5268@waldemar-brodkorb.de>
-Message-ID: <20151213230145.765dd4a1@free-electrons.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Sun, 13 Dec 2015 23:22:46 +0100
+Subject: [Buildroot] [PATCH 1/2] openal: Bump to 1.17.1
+Message-ID: <566DEFB6.1050402@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Fixes
+http://autobuild.buildroot.org/results/3b8/3b8dadb1fcb71dae3daf500df95e270c2f86ec3b/
+by fixing the jack without pulseaudio bug
 
-On Fri, 4 Dec 2015 17:53:30 +0100, Waldemar Brodkorb wrote:
-> Since uClibc-ng 1.0.9 openvmtools can be compiled as
-> the missing euidaccess function was added.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/openvmtools/Config.in |    8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
 
-Arnout explained very well that this patch is not super great due to
-the need to keep things working with older uClibc toolchains. Could you
-instead cook a patch that changes openvmtools to detect if euidaccess()
-is available or not. If it is available, then it uses it, otherwise, it
-open-codes it (the euidaccess implementation in uClibc is just one
-line, so it's not a big deal to copy that in the openvmtools source
-code).
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Are you willing to implement such a solution?
-
-I'd say that within 6/12 months, we should be able to kill non-ng
-uClibc support. Blackfin will be a problem... but Blackfin has always
-been a problem.
-
-Thanks,
-
-Thomas
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index 26a9919..c614180 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 5e93336de2e7c50f3a01beba51861d6f61c3e4045a896191dc806591e46264d1 openal-soft-1.17.0.tar.bz2
++sha256 087153baab375c23d7aa7e9f3237c0a1d02e336537b485aee56d9ac312baf6f8 openal-soft-1.17.1.tar.bz2
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index ff1cc3d..0580526 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENAL_VERSION = 1.17.0
++OPENAL_VERSION = 1.17.1
+ OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+ OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
+ OPENAL_LICENSE = LGPLv2+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
