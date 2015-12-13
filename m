@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 22:28:27 +0100
-Subject: [Buildroot] [PATCH 1/3] package/boost: bump to version 1.59.0
-In-Reply-To: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1449842279-22712-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151213222827.027599c4@free-electrons.com>
+Date: Sun, 13 Dec 2015 22:29:59 +0100
+Subject: [Buildroot] [PATCH v4] openal: New package
+In-Reply-To: <5665F394.4010008@dawncrow.de>
+References: <5665F394.4010008@dawncrow.de>
+Message-ID: <20151213222959.1f56cad8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Andr? Hentschel,
 
-On Fri, 11 Dec 2015 14:57:57 +0100, J?rg Krause wrote:
-> Also:
-> * remove patch "gcc.jam compiler options fix" - merged upstream
-> * renumber patch "fix uclibc eventfd".
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+On Mon, 7 Dec 2015 22:01:08 +0100, Andr? Hentschel wrote:
 
-I am not sure if it is related to the version bump or not, but boost is
-causing some build issues:
+> diff --git a/package/openal/Config.in b/package/openal/Config.in
+> new file mode 100644
+> index 0000000..cfd41fa
+> --- /dev/null
+> +++ b/package/openal/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_OPENAL
+> +	bool "openal"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
 
-   http://autobuild.buildroot.org/?reason=boost-1.59.0
+The comment "# alsa-lib" was bogus, since you don't select alsa-lib.
+However, even without ALSA support, OpenAL needs thread support, so
+I've removed this comment.
 
-Could you have a look ?
+The rest of your patch looked good, so I applied it. However, quickly
+after being pushed, a first build issue appeared:
 
-Thanks,
+  http://autobuild.buildroot.org/results/3b8/3b8dadb1fcb71dae3daf500df95e270c2f86ec3b/build-end.log
+
+Can you have a look ?
+
+Thanks!
 
 Thomas
 -- 
