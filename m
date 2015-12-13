@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 22:22:12 +0100
-Subject: [Buildroot] Wrong rpath after linking with libmysqlclient
-In-Reply-To: <20151213201358.GC27971@free.fr>
-References: <566DCFFE.5070504@mind.be>
-	<20151213201358.GC27971@free.fr>
-Message-ID: <20151213222212.5cafd797@free-electrons.com>
+Date: Sun, 13 Dec 2015 22:24:02 +0100
+Subject: [Buildroot] [PATCH v2] package/libfreeglut: new package
+In-Reply-To: <1450024301-24083-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1450024301-24083-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151213222402.311e1895@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Bernd Kuhls,
 
-On Sun, 13 Dec 2015 21:13:58 +0100, Yann E. MORIN wrote:
+Thanks for the new version.
 
-> >  My first idea was to install libmysqlclient.so in /usr/lib instead, but that's
-> > probably a great idea.
-> 
-> that's what Thomas and I were discussing the other day: why are those
-> libraries not in /usr/lib to start with? We believe this should be the
-> case.
+On Sun, 13 Dec 2015 17:31:41 +0100, Bernd Kuhls wrote:
 
-Agreed, all libraries should be in /lib or /usr/lib, so that we can get
-rid of /etc/ld.so.conf and /etc/ld.so.cache handling, which doesn't
-work since there is no cross-ldconfig. Yes, it could work without
-ld.so.conf configuration using rpath, but I don't think it's a good
-idea.
+> diff --git a/package/libfreeglut/Config.in b/package/libfreeglut/Config.in
+> new file mode 100644
+> index 0000000..e09e7ef
+> --- /dev/null
+> +++ b/package/libfreeglut/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_LIBFREEGLUT
+> +	bool "libfreeglut"
+> +	select BR2_PACKAGE_LIBGLU
+> +	select BR2_PACKAGE_XLIB_LIBXI
 
-It would really be preferable if libmysqlclient.so was in /usr/lib like
-any other libraries.
+Where is this libXi dependency coming from? (It was already a question
+from my previous review).
 
 Thomas
 -- 
