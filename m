@@ -1,32 +1,36 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 13 Dec 2015 10:58:39 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-12-12
-In-Reply-To: <20151213073021.B22AB10164A@stock.ovh.net>
-References: <20151213073021.B22AB10164A@stock.ovh.net>
-Message-ID: <1450000719.6489.2.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Dec 2015 11:37:19 +0100
+Subject: [Buildroot] [PATCH v9 06/32] package/efl/libefl: new package
+In-Reply-To: <566CA22C.6010808@openwide.fr>
+References: <1449927215-3452-1-git-send-email-romain.naour@openwide.fr>
+ <1449927215-3452-7-git-send-email-romain.naour@openwide.fr>
+ <20151212151524.0b711e40@free-electrons.com>
+ <566C699E.5070804@openwide.fr> <566CA22C.6010808@openwide.fr>
+Message-ID: <20151213113719.4ad6135c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On So, 2015-12-13 at 08:30 +0100, Thomas Petazzoni wrote:
-> Build statistics for 2015-12-12
-> ===============================
+Romain,
+
+On Sat, 12 Dec 2015 23:39:40 +0100, Romain Naour wrote:
+
+> > I've keept libgcrypt dependency from the old libecore package. I'm not sure we
+> > still need it.
 > 
-> ?????????arm |???????????????????boost-1.59.0 | NOK |
-> http://autobuild.buildroot.net/results/1660b2fb373b375aed82242d277003
-> 901443c57f/
-> ??????mipsel |???????????????????boost-1.59.0 | NOK | http://autobuil
-> d.buildroot.net/results/a4f7e4c00acf1ba2c826ff8a93b98301e71be655/
-> ?????powerpc |???????????????????boost-1.59.0 | NOK | http://autobuil
-> d.buildroot.net/results/e0acc7ee67c6bee20d98586e70317e24bad1c2ba/
-> ?????powerpc |???????????????????boost-1.59.0 | NOK | http://autobuil
-> d.buildroot.net/results/23078923dcd9bbe0c3aae95833c75f1d53596e15/
+> libgcrypt is still needed for the gnutls support otherwise:
+> 
+> lib/emile/emile_main.c:8:20: fatal error: gcrypt.h: No such file or directory
+>  #include <gcrypt.h>
 
-<fenv.h> exists, but does not define?FE_DIVBYZERO and co. Is this true
-for all uclibc-based toolchains or is it dependent of the architecture?
+OK. A bit weird, but well, if that's how it's done, let's go for it.
 
-Best regards
-J?rg Krause
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
