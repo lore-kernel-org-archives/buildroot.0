@@ -1,46 +1,74 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Dec 2015 18:00:25 +0100
-Subject: [Buildroot] [PATCH] libass: allow compilation without a system
- font provider
-References: <1449505148-9046-1-git-send-email-Vincent.Riera@imgtec.com>
- <20151208171627.GO4188@free.fr> <5668002F.90802@imgtec.com>
- <20151209172813.GA3743@free.fr> <56686530.3060209@imgtec.com>
-Message-ID: <9qk0kcx3eu.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Dec 2015 18:20:47 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/read-edid: Fix compiler
+ check, c++ is not needed
+In-Reply-To: <1450019762-21731-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1450019762-21731-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151213172047.GD3679@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 09 Dec 2015 17:30:24 +0000 schrieb Vicente Olivert Riera:
+Bernd, All,
 
-> Hi Yann,
+On 2015-12-13 16:16 +0100, Bernd Kuhls spake thusly:
+> Fixes
+> http://autobuild.buildroot.net/results/8c1/8c11e463b68121fe0331acf9f8a42a1d3fef40c7//
+> and others
 > 
-> On 09/12/15 17:28, Yann E. MORIN wrote:
->> Vicente, All,
->> 
->> On 2015-12-09 10:19 +0000, Vicente Olivert Riera spake thusly:
->>> On 08/12/15 17:16, Yann E. MORIN wrote:
->>>> On 2015-12-07 16:19 +0000, Vicente Olivert Riera spake thusly:
->>>>>  
->>>>> +# Allow compilation without a system font provider
->>>>> +LIBASS_CONF_OPTS = --disable-require-system-font-provider
->>>>
->>>> It is my understanding that fontconfig *is* a "system font provider",
->>>> so maybe that should go n the else-case for fontconfig, below?
->>>>
->>>>>  ifeq ($(BR2_PACKAGE_FONTCONFIG),y) LIBASS_DEPENDENCIES +=
->>>>>  fontconfig LIBASS_CONF_OPTS += --enable-fontconfig
->>>> Here:
->>>>
->>>>     else LIBASS_CONF_OPTS += \
->>>>         --disable-fontconfig \ --disable-require-system-font-provider
->>>>     endif
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Hi Vicente, hi Yann,
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-reading your comments about this problem I created a patch
-http://patchwork.ozlabs.org/patch/556201/
-combining both of your approaches, what do you think?
+Regards,
+Yann E. MORIN.
 
-Regards, Bernd
+> ---
+> v2: read-edid does not need c++, added new patch suggested by Thomas
+> 
+>  package/read-edid/0002-Fix-compiler-check.patch | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>  create mode 100644 package/read-edid/0002-Fix-compiler-check.patch
+> 
+> diff --git a/package/read-edid/0002-Fix-compiler-check.patch b/package/read-edid/0002-Fix-compiler-check.patch
+> new file mode 100644
+> index 0000000..6c5f58c
+> --- /dev/null
+> +++ b/package/read-edid/0002-Fix-compiler-check.patch
+> @@ -0,0 +1,19 @@
+> +Fix compiler check
+> +
+> +By default CMake looks for c++ which the project does not need.
+> +
+> +Patch by Thomas:
+> +http://lists.busybox.net/pipermail/buildroot/2015-December/146865.html
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +
+> +diff -uNr read-edid-3.0.2.org/CMakeLists.txt read-edid-3.0.2/CMakeLists.txt
+> +--- read-edid-3.0.2.org/CMakeLists.txt	2014-02-05 17:27:26.000000000 +0100
+> ++++ read-edid-3.0.2/CMakeLists.txt	2015-12-13 16:08:43.000000000 +0100
+> +@@ -1,5 +1,5 @@
+> + cmake_minimum_required (VERSION 2.6)
+> +-project (read-edid)
+> ++project (read-edid C)
+> + 
+> + option(I2CBUILD "Build I2C get-edid implementation" ON)
+> + option(CLASSICBUILD "Build VBE get-edid implementation" ON)
+> -- 
+> 2.6.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
