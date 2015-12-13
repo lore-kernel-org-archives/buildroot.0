@@ -1,39 +1,75 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 13 Dec 2015 20:59:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: new package
-In-Reply-To: <e890kcx3eu.ln2@ID-313208.user.individual.net>
-References: <1450004296-5335-1-git-send-email-bernd.kuhls@t-online.de>
- <20151213113342.GF2318@tarshish>
- <ve20kcx3eu.ln2@ID-313208.user.individual.net>
- <20151213120353.GG2318@tarshish>
- <e890kcx3eu.ln2@ID-313208.user.individual.net>
-Message-ID: <20151213185911.GI2318@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Dec 2015 21:05:57 +0100
+Subject: [Buildroot] [PATCH v2 1/4] package/liburcu: introduce
+ BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS symbol
+In-Reply-To: <1450032471-3405-1-git-send-email-s.martin49@gmail.com>
+References: <1450032471-3405-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20151213200557.GA27971@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Samuel, All,
 
-On Sun, Dec 13, 2015 at 02:43:10PM +0100, Bernd Kuhls wrote:
-> Am Sun, 13 Dec 2015 14:03:53 +0200 schrieb Baruch Siach:
-> > Agreed. But is this file really intended for target use? Most library
-> > *_config files are only useful during build. What is the purpose of
-> > hdhomerun_config?
+On 2015-12-13 19:47 +0100, Samuel Martin spake thusly:
+> This new hidden symbol will allow simplifying the architecture dependencies
+> on package that depends on liburcu. These packages will be updated in follow-up
+> patches.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Some digging shows that this is a configuration utility for the Silicon Dust 
-HDHomeRun hardware. Debian ships it in a separate hdhomerun-config package.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Honestly I do not know, so I sent v2 of my patch:
-> http://patchwork.ozlabs.org/patch/556182/
-> If someone misses hdhomerun_config a follow-up patch is needed ;)
+Regards,
+Yann E. MORIN.
 
-Fair enough.
-
-baruch
+> ---
+> changes v1->v2:
+> - new patch
+> ---
+>  package/liburcu/Config.in | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+> index a4e8dc8..36d5353 100644
+> --- a/package/liburcu/Config.in
+> +++ b/package/liburcu/Config.in
+> @@ -1,6 +1,11 @@
+> +config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+> +	bool
+> +	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+> +	default y
+> +
+>  config BR2_PACKAGE_LIBURCU
+>  	bool "liburcu"
+> -	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+> +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	help
+> @@ -18,7 +23,7 @@ config BR2_PACKAGE_LIBURCU
+>  	  http://lttng.org/urcu
+>  
+>  comment "liburcu needs a toolchain w/ threads"
+> -	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+> +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS
+>  
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
