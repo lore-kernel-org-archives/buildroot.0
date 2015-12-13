@@ -1,36 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 22:47:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: Needs threads
-In-Reply-To: <1450031671-24884-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1450031671-24884-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151213224748.753b5345@free-electrons.com>
+Date: Sun, 13 Dec 2015 22:50:13 +0100
+Subject: [Buildroot] [git commit] package/libxml2: Remove autoreconf
+Message-ID: <20151213215028.8378E81848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=a6f1b45e64b1507406ede1ed8728050202c8808c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 Dec 2015 19:34:31 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/fc0/fc02e01514965e13ee1de8f520a5b45f63a1103e/
-> http://autobuild.buildroot.net/results/b9c/b9cb712b321de4528d1a8dfb9bdfb16190bb660a/
-> http://autobuild.buildroot.net/results/22a/22aa0367ff76a3024faec69c762a08a4a441f45f/
-> and others
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mplayer/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+Autoreconf is not necessary since we do not patch this package anymore.
 
-I agree with Yann, we could disable thread support in Mplayer, but who
-wants a big thing like Mplayer on a non-threaded system anyway?
+LIBXML2_AUTORECONF was added back in 2012
+https://git.busybox.net/buildroot/commit/package/libxml2?id=aa5d9ba3b86f21be934fdb436525a833bf120305
 
-So: applied. Thanks!
+and apparently not removed along with the patches applied before
+https://git.busybox.net/buildroot/commit/package/libxml2?id=dc0e7cfc3e4050ce7c0404b11f747bf1500c50b7
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libxml2/libxml2.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index acfe59f..ee9b2ca 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -7,7 +7,6 @@
+ LIBXML2_VERSION = 2.9.3
+ LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+ LIBXML2_INSTALL_STAGING = YES
+-LIBXML2_AUTORECONF = YES
+ LIBXML2_LICENSE = MIT
+ LIBXML2_LICENSE_FILES = COPYING
+ LIBXML2_CONFIG_SCRIPTS = xml2-config
