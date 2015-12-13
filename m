@@ -1,59 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2015 19:35:19 +0100
-Subject: [Buildroot] [PATCH 10/13 v2] core/legal-info: also save extra
-	downloads
+Date: Sun, 13 Dec 2015 19:35:21 +0100
+Subject: [Buildroot] [PATCH 12/13 v2] core/legal-info: allow ignoring
+	packages from the legal-info
 In-Reply-To: <cover.1450031251.git.yann.morin.1998@free.fr>
 References: <cover.1450031251.git.yann.morin.1998@free.fr>
-Message-ID: <97333826d04c0cf0b6696c44ab2d8d79d1bfca75.1450031251.git.yann.morin.1998@free.fr>
+Message-ID: <a71868a7785eb3bc195b65fd7ab3941aaf828184.1450031251.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages, like perl, download extra files that end up as part of
-the source that Biuldroot builds. Up until now, those files were not
-saved in the legal-info output.
+It might be necessary to not even mention a package in the output of
+legal-info:
 
-Add those files to the legal-info output.
+  - virtual package have virtually nothing to save in the legal-info
+    output;
+
+  - for Buildroot itself, host-gcc-initial and host-gcc-final are
+    not real packages, they are just two different steps of the same
+    package, gcc;
+
+  - for proprietary packages, it might not even be legal to even
+    mention them, being under NDA or some other such restrictive
+    conditions.
+
+Itroduce the new FOO_LEGAL_INGORE variable that a package can set to
+'YES' (default to 'NO') to indicate that the package should be
+completely ignored from the legal-info output, in which case the package
+is not metionned in the maniufest, its source archive, patches and
+license files are not saved into legal-info/ .
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 
 ---
-The unfortnate side-effect is that we will also save the secondary
-archive for the external blackfin toolchains; however, we already to
-save the binary release of some external toolchains when they do not
-provide actual source archives.
-
-This is inherently bad, but solving this is a bigger concern, for
-another series...
+Changes v1 -> v2:
+  - introduce a new variable, instead of making _REDISTRIBUTE a
+    tri-state  (Thomas, Peter, Luca)
 ---
- package/pkg-generic.mk | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ docs/manual/adding-packages-generic.txt | 9 +++++++++
+ package/pkg-generic.mk                  | 7 +++++++
+ 2 files changed, 16 insertions(+)
 
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 1c25c4e..1219292 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -416,6 +416,15 @@ information is (assuming the package name is +libfoo+) :
+   non-opensource packages: Buildroot will not save the source code for this
+   package when collecting the +legal-info+.
+ 
++* +LIBFOO_LEGAL_IGNORE+ can be set to +YES+ or +NO+ (the default) to indicate
++  that this package should be completely ignored when saving the licensing
++  information. If set to +YES+, then the package is not listed in the manifest,
++  its source archive and its license files are not saved. You probably do not
++  want to set it to +YES+, unless under very specific conditions (e.g. when
++  you use the `legal-info/` output directory as-is to provide a compliance
++  delivery, and do not want your proprietary, non-redistributable packages to
++  even be mentionned in the manifest).
++
+ * +LIBFOO_FLAT_STACKSIZE+ defines the stack size of an application built into
+   the FLAT binary format. The application stack size on the NOMMU architecture
+   processors can't be enlarged at run time. The default stack size for the
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f873e9c..7468e54 100644
+index 7468e54..6ede09d 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -821,10 +821,13 @@ else
- # Other packages
+@@ -763,7 +763,10 @@ $(2)_MANIFEST_LICENSE_FILES ?= not saved
+ # We need to extract and patch a package to be able to retrieve its
+ # license files (if any) and the list of patches applied to it (if
+ # any).
++# But not if we want to ignore that package completely.
++ifneq ($$($(2)_LEGAL_IGNORE),YES)
+ $(1)-legal-info: $(1)-patch
++endif
  
- ifeq ($$($(2)_REDISTRIBUTE),YES)
--# Copy the source tarball
--	$$(Q)$$(call hardlink-copy,\
--		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
--		     $$($(2)_REDIST_SOURCES_DIR))
-+# Copy the source tarball and eny extra downloads, but not
-+# patches, as they are handled specially afterwards.
-+	$$(foreach e,$$($(2)_ACTUAL_SOURCE_TARBALL) $$(notdir $$($(2)_EXTRA_DOWNLOADS)),\
-+			$$(Q)$$(call hardlink-copy,\
-+				$$(DL_DIR)/$$(e),\
-+				$$($(2)_REDIST_SOURCES_DIR))$$(sep))
-+# Copy patches and generate the series file
- 	$$(Q)while read f; do \
- 		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR)) || exit 1; \
- 		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
+ # We only save the sources of packages we want to redistribute, that are
+ # non-local, and non-overriden. So only store, in the manifest, the tarball
+@@ -793,6 +796,8 @@ endif # actuall source != ""
+ 
+ # legal-info: produce legally relevant info.
+ $(1)-legal-info:
++ifneq ($$($(2)_LEGAL_IGNORE),YES)
++
+ # Packages without a source are assumed to be part of Buildroot, skip them.
+ 	$$(foreach hook,$$($(2)_PRE_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+@@ -839,6 +844,8 @@ endif # other packages
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ 
++endif # $(2)_LEGAL_IGNORE != YES
++
+ # add package to the general list of targets if requested by the buildroot
+ # configuration
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
 -- 
 1.9.1
