@@ -1,50 +1,79 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Dec 2015 16:16:02 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/read-edid: Fix compiler check,
-	c++ is not needed
-Message-ID: <1450019762-21731-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Dec 2015 16:21:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: bump to version
+ 1.20
+In-Reply-To: <1449437176-30596-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1449437176-30596-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20151213162117.0720e354@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/8c1/8c11e463b68121fe0331acf9f8a42a1d3fef40c7//
-and others
+Dear J?rg Krause,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: read-edid does not need c++, added new patch suggested by Thomas
+On Sun,  6 Dec 2015 22:26:16 +0100, J?rg Krause wrote:
 
- package/read-edid/0002-Fix-compiler-check.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/read-edid/0002-Fix-compiler-check.patch
+> -LIBGPG_ERROR_VERSION = 1.12
+> +LIBGPG_ERROR_VERSION = 1.20
+>  LIBGPG_ERROR_SITE = ftp://ftp.gnupg.org/gcrypt/libgpg-error
+>  LIBGPG_ERROR_LICENSE = LGPLv2.1+
+>  LIBGPG_ERROR_LICENSE_FILES = COPYING.LIB
+>  LIBGPG_ERROR_INSTALL_STAGING = YES
+>  LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
+> -# we patch src/Makefile.am
+> -LIBGPG_ERROR_AUTORECONF = YES
+>  LIBGPG_ERROR_GETTEXTIZE = YES
 
-diff --git a/package/read-edid/0002-Fix-compiler-check.patch b/package/read-edid/0002-Fix-compiler-check.patch
-new file mode 100644
-index 0000000..6c5f58c
---- /dev/null
-+++ b/package/read-edid/0002-Fix-compiler-check.patch
-@@ -0,0 +1,19 @@
-+Fix compiler check
-+
-+By default CMake looks for c++ which the project does not need.
-+
-+Patch by Thomas:
-+http://lists.busybox.net/pipermail/buildroot/2015-December/146865.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr read-edid-3.0.2.org/CMakeLists.txt read-edid-3.0.2/CMakeLists.txt
-+--- read-edid-3.0.2.org/CMakeLists.txt	2014-02-05 17:27:26.000000000 +0100
-++++ read-edid-3.0.2/CMakeLists.txt	2015-12-13 16:08:43.000000000 +0100
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required (VERSION 2.6)
-+-project (read-edid)
-++project (read-edid C)
-+ 
-+ option(I2CBUILD "Build I2C get-edid implementation" ON)
-+ option(CLASSICBUILD "Build VBE get-edid implementation" ON)
+The GETTEXTIZE = YES was added together with AUTORECONF = YES when the
+gcc5 compatibility patch was added. So I believe it is probably no
+longer needed.
+
+> +# libgpg-error needs to figure out some platform specific properties. The
+> +# detection is done during build time, by setting the proper --host value.
+> +# To match any of the platform specific syscfg files we must replace the
+> +# toolchain's vendor name to 'unknown'.
+> +# Note we are overriding the host value set by the autotools package
+> +# infrastructure.
+> +LIBGPG_ERROR_CONF_OPTS += \
+> +	--host=$(subst $(TARGET_VENDOR),unknown,$(GNU_TARGET_NAME))
+
+Unfortunately, this clearly doesn't work well. Since there is no
+uclibcgnueabi file, libgpg-error fails to build with uClibc with this
+update. It will also fail to build with musl. Basically, with your
+bump, libgpg-error will only build on the following platforms:
+
+lock-obj-pub.aarch64-unknown-linux-gnu.h
+lock-obj-pub.alpha-unknown-linux-gnu.h
+lock-obj-pub.arm-unknown-linux-androideabi.h
+lock-obj-pub.arm-unknown-linux-gnueabi.h
+lock-obj-pub.arm-unknown-linux-gnueabihf.h
+lock-obj-pub.hppa-unknown-linux-gnu.h
+lock-obj-pub.i686-pc-linux-gnu.h
+lock-obj-pub.m68k-unknown-linux-gnu.h
+lock-obj-pub.mips64el-unknown-linux-gnuabi64.h
+lock-obj-pub.mipsel-unknown-linux-gnu.h
+lock-obj-pub.mips-unknown-linux-gnu.h
+lock-obj-pub.or1k-unknown-linux-gnu.h
+lock-obj-pub.powerpc64le-unknown-linux-gnu.h
+lock-obj-pub.powerpc64-unknown-linux-gnu.h
+lock-obj-pub.powerpc-unknown-linux-gnu.h
+lock-obj-pub.s390x-ibm-linux-gnu.h
+lock-obj-pub.sh4-unknown-linux-gnu.h
+lock-obj-pub.sparc64-unknown-linux-gnu.h
+lock-obj-pub.sparc-unknown-linux-gnu.h
+lock-obj-pub.x86_64-pc-linux-gnu.h
+lock-obj-pub.x86_64-pc-linux-gnux32.h
+
+I believe this problem should be reported upstream, as it is a bit
+silly to be forced to use the "unknown" vendor tuple, and to have lost
+compatibility with uclibc, musl, and many other architecture / variants.
+
+Best regards,
+
+Thomas
 -- 
-2.6.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
