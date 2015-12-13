@@ -1,30 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Dec 2015 15:55:09 +0100
-Subject: [Buildroot] [PATCH 1/2] package/dtv-scan-tables: bump version
-Message-ID: <1450018510-17443-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Dec 2015 15:43:36 +0100
+Subject: [Buildroot] [git commit] pkg-perl: avoid insertion of host-perl in
+	shebang of scripts
+Message-ID: <20151213145615.945A7817EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dtv-scan-tables/dtv-scan-tables.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=90cf8d87abc1715ad0475c0d817a164303e1ad0f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index 4114d23..58d794a 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DTV_SCAN_TABLES_VERSION = f2053b34a5ac6f263edc22888b0db4b1fa563fe4
-+DTV_SCAN_TABLES_VERSION = 6da0f5e851dd5e51e43b87136228a88705a7ba69
- DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
--- 
-2.6.2
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-perl.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index a06c068..a027810 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -140,6 +140,7 @@ define $(2)_BUILD_CMDS
+ 	else \
+ 		$$(MAKE1) \
+ 			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
++			FIXIN=: \
+ 			$$($(2)_BUILD_OPTS) pure_all; \
+ 	fi
+ endef
