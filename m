@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 14:15:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/read-edid: Needs c++
-In-Reply-To: <1449999343-6032-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1449999343-6032-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151213141509.17b78748@free-electrons.com>
+Date: Sun, 13 Dec 2015 14:28:22 +0100
+Subject: [Buildroot] [git commit] package/xmlstarlet: Fix static build
+Message-ID: <20151213132842.408808178A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=4edc0f1cddf4948abb45e6c78a0a12b82bca8d14
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 Dec 2015 10:35:43 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/8c1/8c11e463b68121fe0331acf9f8a42a1d3fef40c7//
-> and others
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+If libxml2 depends on xz (liblzma) static linking is broken.
 
-This is not the proper fix: there is no C++ code in this package. The
-proper fix is to adjust CMakeLists.txt to remove the C++ check. This is
-done by doing:
+Fixes
+http://autobuild.buildroot.net/results/df3/df3f5fa770833c8c4344ee0bc67f45aa578ce542/
+http://autobuild.buildroot.net/results/070/07021c8bd6e2031c2717fc58e2d3ff30c412fa90/
 
-	project (read-edid C)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xmlstarlet/xmlstarlet.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-See https://cmake.org/cmake/help/v3.0/command/project.html for details,
-and especially: "Optionally you can specify which languages your
-project supports. Example languages are C, CXX (i.e. C++), Fortran,
-etc. By default C and CXX are enabled if no language options are given."
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
+index 992bb8f..e0abf04 100644
+--- a/package/xmlstarlet/xmlstarlet.mk
++++ b/package/xmlstarlet/xmlstarlet.mk
+@@ -21,6 +21,7 @@ XMLSTARLET_CONF_OPTS += \
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ XMLSTARLET_CONF_OPTS += --enable-static-libs
++XMLSTARLET_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libxml-2.0`"
+ else
+ XMLSTARLET_CONF_OPTS += --disable-static-libs
+ endif
