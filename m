@@ -1,29 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Dec 2015 22:34:59 +0100
-Subject: [Buildroot] [PATCH 1/4] package/perl-io-socket-ssl: bump
- version to 2.022
-In-Reply-To: <1450039938-32320-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1450039938-32320-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151213223459.30c9e75f@free-electrons.com>
+Date: Sun, 13 Dec 2015 22:36:53 +0100
+Subject: [Buildroot] [git commit] package/liburcu: introduce
+	BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS symbol
+Message-ID: <20151213213707.072268184F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=f50bd3c0b80374fdbab37285e1d7670f4ea43f83
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 Dec 2015 21:52:15 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
->  package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+This new hidden symbol will allow simplifying the architecture dependencies
+on package that depends on liburcu. These packages will be updated in follow-up
+patches.
 
-Al four patches applied, thanks.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/liburcu/Config.in | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+index a4e8dc8..36d5353 100644
+--- a/package/liburcu/Config.in
++++ b/package/liburcu/Config.in
+@@ -1,6 +1,11 @@
++config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
++	bool
++	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
++	default y
++
+ config BR2_PACKAGE_LIBURCU
+ 	bool "liburcu"
+-	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
++	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+@@ -18,7 +23,7 @@ config BR2_PACKAGE_LIBURCU
+ 	  http://lttng.org/urcu
+ 
+ comment "liburcu needs a toolchain w/ threads"
+-	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
++	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
