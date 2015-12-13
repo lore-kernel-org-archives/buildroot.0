@@ -1,53 +1,142 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 13 Dec 2015 14:03:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: new package
-In-Reply-To: <ve20kcx3eu.ln2@ID-313208.user.individual.net>
-References: <1450004296-5335-1-git-send-email-bernd.kuhls@t-online.de>
- <20151213113342.GF2318@tarshish>
- <ve20kcx3eu.ln2@ID-313208.user.individual.net>
-Message-ID: <20151213120353.GG2318@tarshish>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun, 13 Dec 2015 10:40:38 -0200
+Subject: [Buildroot] [PATCH 1/1] mongodb: new package
+Message-ID: <1450010438-10933-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Compiled and tested on arm (beaglebone black), aarch64 (qemu),
+i386 (qemu) and x86_64 (qemu).
 
-On Sun, Dec 13, 2015 at 12:47:11PM +0100, Bernd Kuhls wrote:
-> Am Sun, 13 Dec 2015 13:33:42 +0200 schrieb Baruch Siach:
-> > On Sun, Dec 13, 2015 at 11:58:16AM +0100, Bernd Kuhls wrote:
-> >> +define LIBHDHOMERUN_INSTALL_STAGING_CMDS +	$(INSTALL) -D -m 0755
-> >> $(@D)/libhdhomerun.so \ +		$(STAGING_DIR)/usr/lib/
-> libhdhomerun.so +
-> >> $(INSTALL) -D -m 0644 $(@D)/*.h \ +		$(STAGING_DIR)/usr/
-> include/
-> >> +endef +
-> >> +define LIBHDHOMERUN_INSTALL_TARGET_CMDS +	$(INSTALL) -D -m 0755
-> >> $(@D)/hdhomerun_config \
-> >> +		$(TARGET_DIR)/usr/bin/hdhomerun_config
-> > 
-> > Are you sure this is not for staging?
-> 
-> yes, because it is not a script but a binary compiled for the target:
-> 
-> $ file /home/bernd/buildroot/br2_kodi16/output/target/usr/bin/
-> hdhomerun_config
-> /home/bernd/buildroot/br2_kodi16/output/target/usr/bin/hdhomerun_config: 
-> ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, 
-> interpreter /lib/ld64-uClibc.so.0, not stripped
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/Config.in            |  1 +
+ package/mongodb/Config.in    | 20 ++++++++++++++
+ package/mongodb/mongodb.hash |  2 ++
+ package/mongodb/mongodb.mk   | 64 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 87 insertions(+)
+ create mode 100644 package/mongodb/Config.in
+ create mode 100644 package/mongodb/mongodb.hash
+ create mode 100644 package/mongodb/mongodb.mk
 
-This most likely matches your host. Is that your target as well?
-
-> I am not sure whether the file is really needed on the target or not but it 
-> is definitely not suited for staging.
-
-Agreed. But is this file really intended for target use? Most library *_config 
-files are only useful during build. What is the purpose of hdhomerun_config?
-
-baruch
-
+diff --git a/package/Config.in b/package/Config.in
+index 00aedad84395..9f4457d0810c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -783,6 +783,7 @@ menu "Database"
+ 	source "package/gdbm/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
++	source "package/mongodb/Config.in"
+ 	source "package/mysql/Config.in"
+ 	source "package/postgresql/Config.in"
+ 	source "package/redis/Config.in"
+diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
+new file mode 100644
+index 000000000000..31f5f7459395
+--- /dev/null
++++ b/package/mongodb/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_MONGODB
++	bool "mongodb"
++	depends on BR2_TOOLCHAIN_USES_GLIBC # needs glibc malloc_usable_size
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	help
++	  MongoDB is a cross-platform document-oriented database (NoSQL). 
++	  
++	  It uses JSON-like documents with dynamic schemas (BSON), making
++	  the integration of data in certain types of applications easier
++	  and faster.
++
++	  https://www.mongodb.org/
++
++comment "mongodb needs a (e)glibc toolchain w/ wchar, threads, C++, gcc >= 4.8"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+new file mode 100644
+index 000000000000..0bdd66db93f8
+--- /dev/null
++++ b/package/mongodb/mongodb.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 316496375f41f322839529d36e75e3275fdec468f7656fdbeb53ec8dc1ca5275  mongodb-r3.2.0.tar.gz
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+new file mode 100644
+index 000000000000..3bf449a23183
+--- /dev/null
++++ b/package/mongodb/mongodb.mk
+@@ -0,0 +1,64 @@
++################################################################################
++#
++# mongodb
++#
++################################################################################
++
++MONGODB_VERSION_BASE = 3.2.0
++MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
++MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
++
++MONGODB_LICENSE = AGPLv3, Apache-2.0
++MONGODB_LICENSE_FILES = GNU-AGPL-3.0.txt, APACHE-2.0.txt
++
++MONGODB_DEPENDENCIES = host-scons
++
++MONGODB_SCONS_TARGETS = mongod mongos
++
++MONGODB_SCONS_ENV = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" \
++	-j"$(PARALLEL_JOBS)"
++
++# need to pass mongo version when not building from git repo
++MONGODB_SCONS_OPTS = MONGO_VERSION=$(MONGODB_VERSION_BASE)-
++
++# WiredTiger database storage engine only supported on 64 bits
++ifeq ($(BR2_ARCH_IS_64),y)
++MONGODB_SCONS_OPTS += --wiredtiger=on
++else
++MONGODB_SCONS_OPTS += --wiredtiger=off
++endif
++
++# JavaScript scripting engine and tcmalloc supported only on 
++# x86/x86-64 systems. Mongo target is a shell interface that 
++# depends on the javascript engine, so it will also only be 
++# build on x86/x86-64 systems.
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++MONGODB_SCONS_OPTS += --js-engine=mozjs --allocator=tcmalloc
++MONGODB_SCONS_TARGETS += mongo
++else
++MONGODB_SCONS_OPTS += --js-engine=none --allocator=system
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++MONGODB_DEPENDENCIES += openssl
++MONGODB_SCONS_OPTS += --ssl=SSL
++endif
++
++define MONGODB_BUILD_CMDS
++	(cd $(@D); \
++		$(SCONS) \
++		$(MONGODB_SCONS_ENV) \
++		$(MONGODB_SCONS_OPTS) \
++		$(MONGODB_SCONS_TARGETS))
++endef
++
++define MONGODB_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++		$(SCONS) \
++		$(MONGODB_SCONS_ENV) \
++		$(MONGODB_SCONS_OPTS) \
++		--prefix=$(TARGET_DIR)/usr \
++		install)
++endef
++
++$(eval $(generic-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
