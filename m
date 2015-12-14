@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Dec 2015 10:11:16 -0300
-Subject: [Buildroot] [PATCH 37/45] ltp-testsuite: comma separate licenses
+Date: Mon, 14 Dec 2015 10:11:17 -0300
+Subject: [Buildroot] [PATCH 38/45] taglib: comma separate licenses
 In-Reply-To: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1450098684-17399-38-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1450098684-17399-39-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ltp-testsuite/ltp-testsuite.mk | 2 +-
+ package/taglib/taglib.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index da36636..e081cfa 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index ed08874..2410650 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
 @@ -7,7 +7,7 @@
- LTP_TESTSUITE_VERSION = 20150903
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
--LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
-+LTP_TESTSUITE_LICENSE = GPLv2, GPLv2+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
- LTP_TESTSUITE_CONF_OPTS += \
- 			   --with-power-management-testsuite \
+ TAGLIB_VERSION = 1.9.1
+ TAGLIB_SITE = http://taglib.github.io/releases
+ TAGLIB_INSTALL_STAGING = YES
+-TAGLIB_LICENSE = LGPLv2.1 MPL
++TAGLIB_LICENSE = LGPLv2.1, MPL
+ TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
 -- 
 2.4.10
