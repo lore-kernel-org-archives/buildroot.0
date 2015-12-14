@@ -1,104 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Dec 2015 23:36:55 +0100
-Subject: [Buildroot] [PATCH v2] cxxtest: new package
-In-Reply-To: <1448546706-31297-1-git-send-email-Abhishek.Singh@imgtec.com>
-References: <1448546706-31297-1-git-send-email-Abhishek.Singh@imgtec.com>
-Message-ID: <20151214223655.GE4152@free.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 14 Dec 2015 23:48:23 +0100
+Subject: [Buildroot] [PATCH] package/libuv: bump to version 1.8.0
+Message-ID: <1450133303-7756-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Abhishek, All,
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sorry for the delay, I'm now looking at your patch...
-
-On 2015-11-26 19:35 +0530, Abhishek Singh spake thusly:
-> Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-> Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> Reviewed-by: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-> Signed-off-by: Abhishek Singh <Abhishek.Singh@imgtec.com>
-> ---
-> changes v1 -> v2:
-> 	- remove dependency on host-python
-> 	- add comments in mk file
-[--SNIP--]
-> diff --git a/package/cxxtest/cxxtest.mk b/package/cxxtest/cxxtest.mk
-> new file mode 100644
-> index 0000000..cc29608
-> --- /dev/null
-> +++ b/package/cxxtest/cxxtest.mk
-> @@ -0,0 +1,30 @@
-> +################################################################################
-> +#
-> +# cxxtest
-> +#
-> +################################################################################
-> +
-> +CXXTEST_VERSION = 4.4
-> +CXXTEST_SOURCE = cxxtest-$(CXXTEST_VERSION).tar.gz
-> +CXXTEST_SITE = http://sourceforge.net/projects/cxxtest/files/cxxtest/$(CXXTEST_VERSION)
-
-SF.net is getting a bad reputation these days, and there is an official
-Github repository with the latest 4.4 release:
-    https://github.com/CxxTest/cxxtest
-
-Can we use Github instead?
-
-> +CXXTEST_LICENSE = LGPLv3
-> +CXXTEST_LICENSE_FILES = COPYING
-> +CXXTEST_INSTALL_STAGING = YES
-> +CXXTEST_INSTALL_TARGET = NO
-> +CXXTEST_DEPENDENCIES = host-cxxtest
-> +HOST_CXXTEST_SETUP_TYPE = setuptools
-> +HOST_CXXTEST_SUBDIR = python
-> +
-> +# Copy CxxTest header files to staging directory
-> +define CXXTEST_INSTALL_STAGING_CMDS
-> +	mkdir -p $(STAGING_DIR)/usr/include/cxxtest
-> +	cp $(@D)/cxxtest/* $(STAGING_DIR)/usr/include/cxxtest
-> +endef
-> +
-> +# CxxTest uses python infrastructure as the build system. cxxtestgen is
-> +# a script which is used to process header files to generate C++ source files.
-> +# Compiling test runner requires CxxTest header files which are installed in
-> +# the staging directory.
-
-OK, I think we need a bit more info about all tis, as I am not sure I
-understand. Let me try to reformulate from what I understood:
-
-  - cxxtest is made of twoo parts:
-    - a tool to parse header files (supposedly from a project)
-    - a set of header files
-
-  - the tool is built as a host package, so it can be used natively
-
-  - the headers set is installed in staging
-
-Then the use-case is for a user to use the csstest tool to parse his own
-headers, that will supposedly generate a test harness, which is then
-cross-compiled and run on the target. Right?
-
-Could you expand a bit on the explanations, please?
-
-Regards,
-Yann E. MORIN.
-
-> +$(eval $(generic-package))
-> +$(eval $(host-python-package))
-> -- 
-> 2.6.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 6f38b8b..abbbb0c 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 11d10f12d68fa655fff18c6021e8e45bc610e7baee006f17247b1830ee316093  libuv-v1.7.5.tar.gz
++sha256 906e1a5c673c95cb261adeacdb7308a65b4a8f7c9c50d85f3021364951fa9cde  libuv-v1.8.0.tar.gz
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index da47b62..bf1dead 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.7.5
++LIBUV_VERSION = v1.8.0
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.6.4
