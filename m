@@ -1,85 +1,69 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Dec 2015 18:39:56 -0300
-Subject: [Buildroot] [PATCH v2] gnutls: fix --disable-crywrap
-Message-ID: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 14 Dec 2015 22:34:05 +0100
+Subject: [Buildroot] [PATCH v2 1/4] libfslcodec: add install hooks to
+ fix libraries path
+In-Reply-To: <20151213203114.GB27769@free.fr>
+References: <1449755560-2911-1-git-send-email-gary.bisson@boundarydevices.com>
+ <1449755560-2911-2-git-send-email-gary.bisson@boundarydevices.com>
+ <20151213203114.GB27769@free.fr>
+Message-ID: <CAAMH-yscbiH8px5daX93ZvAzfEF57UePuLHC64DaXw_qpKxfRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to really enable the --disable-crywrap option in gnutls.
-Fixes:
-http://autobuild.buildroot.org/results/d86/d8604fe448bb11395e8443726d09b041eb34c6d5/
+Yann, All,
 
-Status: sent upstream (mailing list).
+On Sun, Dec 13, 2015 at 9:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Gary, All,
+>
+> On 2015-12-10 14:52 +0100, Gary Bisson spake thusly:
+>> By default, all the libraries are installed under /usr/lib/imx-mm which
+>> causes problems at runtime.
+>>
+>> The hooks are inspired from the mechanism used in the Yocto recipe:
+>> https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-
+>> multimedia/libfslcodec/libfslcodec.inc
+>>
+>> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+>> ---
+>>
+>> Here are the dependencies the pipelines above are testing:
+>> $ for i in `find target/usr/lib/gstreamer*/*`; do readelf -d $i | grep NEEDED | grep lib_ && echo "($i)"; done
+>>  0x00000001 (NEEDED)                     Shared library: [lib_nb_amr_dec_arm9_elinux.so.2]
+>>  0x00000001 (NEEDED)                     Shared library: [lib_wb_amr_dec_arm9_elinux.so.2]
+>> (target/usr/lib/gstreamer-0.10/libmfw_gst_amrdec.so)
+>>  0x00000001 (NEEDED)                     Shared library: [lib_peq_arm11_elinux.so.1.fhw]
+>> (target/usr/lib/gstreamer-0.10/libmfw_gst_audio_pp.so)
+>>  0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
+>> (target/usr/lib/gstreamer-0.10/libmfw_gst_mp3enc.so)
+>>  0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
+>> (target/usr/lib/gstreamer-1.0/libgstimxaudio.so)
+>>
+>> Note that I added a staging install hook as well because otherwise the
+>> gst1-imx plugin doesn't find lib_mp3_enc_arm12_elinux.so at build time.
+>>
+>> Not to copy the same library twice I decided to go with a symlink. Let
+>> me know if that's acceptable.
+>
+> The link you pointed to does a move, not a copy. Why do you do a symlink?
+>
+> 1) Where are the libraries searched for at build time? If they are
+>    only searched for in /usr/lib/ , then do a move. If womething is
+>    positively looking for them in /usr/lin/imx-mm/ , then do a symlink,
+>    indeed.
+>
+> 2) Where are libraries searched for at runtime? Same logic as for build
+>    time.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
-v2: need gettextize
+Just want to add something here, my v1 was doing a symlink in staging
+(because of the build time dependencies) and a move at runtime since
+everything is looking at the same location in that case. But then
+J?r?me said that he would prefer to have the same mechanism (symlink)
+in both even though it is not necessary for the target. The reason was
+to have some consistency between staging and target. What are thoughts
+on that?
 
- ...onfigure-really-make-disable-crywrap-work.patch | 38 ++++++++++++++++++++++
- package/gnutls/gnutls.mk                           |  3 ++
- 2 files changed, 41 insertions(+)
- create mode 100644 package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
-
-diff --git a/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch b/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
-new file mode 100644
-index 0000000..01ed6bf
---- /dev/null
-+++ b/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
-@@ -0,0 +1,38 @@
-+From 996b3741e8c7a5d19ae6c554e062f20c259f52d7 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 14 Dec 2015 15:16:24 -0300
-+Subject: [PATCH] configure: really make --disable-crywrap work
-+
-+The crywrap variable is set regardless of the state of enable_crywrap,
-+hence --disable-crywrap never works.
-+Just put the tests for crywrap deps inside the enable_crywrap
-+conditional.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ configure.ac | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index e1d1df0..efacc30 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -836,11 +836,10 @@ AC_ARG_ENABLE(crywrap,
-+ 
-+ 
-+  if test "x$enable_crywrap" != "xno" ; then
-+-	AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
-+- fi
-+-
-+- if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
-+-  crywrap=yes
-++   AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
-++   if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
-++     crywrap=yes
-++   fi
-+  fi
-+ 
-+ fi
-+-- 
-+2.4.10
-+
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index d681c10..d5b3147 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -11,6 +11,9 @@ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
- GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER
- GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
-+# For 0001-configure-really-make-disable-crywrap-work.patch
-+GNUTLS_AUTORECONF = YES
-+GNUTLS_GETTEXTIZE = YES
- GNUTLS_CONF_OPTS = \
- 	--disable-doc \
- 	--disable-guile \
--- 
-2.4.10
+Regards,
+Gary
