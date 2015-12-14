@@ -1,42 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2015 21:05:08 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Dec 2015 17:08:27 -0300
 Subject: [Buildroot] [PATCH] gnutls: needs argp-standalone for
- musl/uclibc
-In-Reply-To: <566EF951.3010500@zacarias.com.ar>
+	musl/uclibc
+In-Reply-To: <20151214210508.42d636b4@free-electrons.com>
 References: <1449248499-2852-1-git-send-email-gustavo@zacarias.com.ar>
  <20151213223250.77e3dbfb@free-electrons.com>
  <566EF951.3010500@zacarias.com.ar>
-Message-ID: <20151214210508.42d636b4@free-electrons.com>
+ <20151214210508.42d636b4@free-electrons.com>
+Message-ID: <566F21BB.9000103@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 14/12/15 17:05, Thomas Petazzoni wrote:
 
-On Mon, 14 Dec 2015 14:16:01 -0300, Gustavo Zacarias wrote:
-> On 13/12/15 18:32, Thomas Petazzoni wrote:
-> 
-> >>   config BR2_PACKAGE_GNUTLS_TOOLS
-> >>   	bool "install tools"
-> >> +	select BR2_PACKAGE_ARGP_STANDALONE \
-> >> +		if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-> >>   	help
-> >>   	  Install GnuTLS command line tools for various cryptographic tasks.
-> >
-> > Seems like BR2_PACKAGE_GNUTLS needs argp.h as well, not only
-> > BR2_PACKAGE_GNUTLS_TOOLS. See
-> > http://autobuild.buildroot.org/results/d86/d8604fe448bb11395e8443726d09b041eb34c6d5//.
-> 
-> Hi.
-> It's still crywrap failing, hence tools.
+>> Hi.
+>> It's still crywrap failing, hence tools.
+>
+> Well the failing config I'm pointing to has BR2_PACKAGE_GNUTLS_TOOLS
+> disabled, but BR2_PACKAGE_GNUTLS enabled.
+>
+> Thomas
 
-Well the failing config I'm pointing to has BR2_PACKAGE_GNUTLS_TOOLS
-disabled, but BR2_PACKAGE_GNUTLS enabled.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+crywrap isn't part of tools in the gnutls sense, it's only so in the 
+buildroot package sense/option.
+Essentially --disable-crywrap is a no-op in gnutls, that's what the 
+patch fixes, so it was never disabled.
+Regards.
