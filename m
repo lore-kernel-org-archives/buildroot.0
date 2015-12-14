@@ -1,29 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2015 15:06:41 +0100
-Subject: [Buildroot] [PATCH 03/45] gst1-plugins-base: comma separate
- licenses
-In-Reply-To: <1450098684-17399-4-git-send-email-gustavo@zacarias.com.ar>
-References: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
- <1450098684-17399-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151214150641.35efe163@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 14 Dec 2015 14:17:00 +0000
+Subject: [Buildroot] [PATCH 1/2] expedite: use a tar.bz2 tarball to save
+	bandwitdh and disk space
+Message-ID: <1450102621-33053-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/expedite/expedite.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Mon, 14 Dec 2015 10:10:42 -0300, Gustavo Zacarias wrote:
-
-> -GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
-> +GST1_PLUGINS_BAD_LICENSE_FILES = COPYING, COPYING.LIB
-
-Wrong: the list of license files is space separated, not comma
-separated.
-
-Thomas
+diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
+index 9b232f8..27b4c44 100644
+--- a/package/expedite/expedite.mk
++++ b/package/expedite/expedite.mk
+@@ -5,6 +5,7 @@
+ ################################################################################
+ 
+ EXPEDITE_VERSION = 1.7.10
++EXPEDITE_SOURCE = expedite-$(EXPEDITE_VERSION).tar.bz2
+ EXPEDITE_SITE = http://download.enlightenment.org/releases
+ EXPEDITE_LICENSE = BSD-2c
+ EXPEDITE_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
