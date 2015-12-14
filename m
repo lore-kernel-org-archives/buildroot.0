@@ -1,45 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2015 21:43:37 +0100
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: Add version 5.2.0
-In-Reply-To: <CAFGQKxfvQwA3v8W=OKEvNR6SE06DTng6PxQGj4q7o4zUWYbU2g@mail.gmail.com>
-References: <1450122295-5311-1-git-send-email-martin@barkynet.com>
- <20151214210913.227563c9@free-electrons.com>
- <CAFGQKxfvQwA3v8W=OKEvNR6SE06DTng6PxQGj4q7o4zUWYbU2g@mail.gmail.com>
-Message-ID: <20151214214337.2933ea41@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Dec 2015 18:04:26 -0300
+Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.12.14
+Message-ID: <1450127066-26017-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, 14 Dec 2015 20:24:30 +0000, Martin Bark wrote:
-
-> I'm not sure the answer to that.  What i can say is that all four are
-> getting maintained.  Also, according to https://github.com/nodejs/LTS
-> node.js 0.10.x will be maintained all the way until October 2016.
-> 
-> I see two logical approaches for buildroot:
-> 
-> 1) Support all four in buildroot because node.js support all four
-> 2) Only Support the 4.x and 5.x because they are the current LTS and
-> Stable releases (i.e. the ones on the front page of
-> https://nodejs.org)
-> 
-> Personally I'd vote for 2) because it simplifies things.
-> 
-> What are your thoughts?
-
-I'm fine with option (2) as well, but do we have other NodeJS users
-that would like to see 0.10.x and 0.12.x being kept?
-
-Is there any issue for users of 0.10.x/0.12.x to migrate to 4.2 or 5.2 ?
-
-Thanks,
-
-Thomas
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 4c98067..cafc631 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	19ef80c2b9d24f0c483c32294258640b2510df1775ea1c6323e84cced02f1612	wireless-regdb-2015.10.22.tar.xz
++sha256	013e07d988f5cd7d24e4aa7a6cd406615d441ea6b882a02d2a46a78edeb2cfb6	wireless-regdb-2015.12.14.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index b82bbce..38d1c26 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRELESS_REGDB_VERSION = 2015.10.22
++WIRELESS_REGDB_VERSION = 2015.12.14
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
