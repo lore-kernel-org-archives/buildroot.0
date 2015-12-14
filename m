@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2015 17:54:46 +0100
-Subject: [Buildroot] [PATCH 1/2] expedite: use a tar.bz2 tarball to save
- bandwitdh and disk space
-In-Reply-To: <1450102621-33053-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1450102621-33053-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151214175446.1d301e36@free-electrons.com>
+Date: Mon, 14 Dec 2015 17:55:06 +0100
+Subject: [Buildroot] [git commit] trinity: add a hash file
+Message-ID: <20151214165523.B4F2681861@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=c82bbfb24fa0a04724fcdb443ee5c9ca1cce19c1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Dec 2015 14:17:00 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/expedite/expedite.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/trinity/trinity.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Both applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/trinity/trinity.hash b/package/trinity/trinity.hash
+new file mode 100644
+index 0000000..e290a40
+--- /dev/null
++++ b/package/trinity/trinity.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 3ef7ae05dba14f8bb626121983a08bb09d1d51a19de38bd9a8e0f29b11d9e3c9  trinity-v1.6.tar.gz
