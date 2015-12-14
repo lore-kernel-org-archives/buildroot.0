@@ -1,28 +1,32 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 14 Dec 2015 14:17:01 +0000
-Subject: [Buildroot] [PATCH 2/2] expedite: add a hash file
-In-Reply-To: <1450102621-33053-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1450102621-33053-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1450102621-33053-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Dec 2015 11:37:04 -0300
+Subject: [Buildroot] [PATCH v2] gst1-plugins-base: comma separate licenses
+Message-ID: <1450103824-21002-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/expedite/expedite.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/expedite/expedite.hash
+v2: drop -bad changes
 
-diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
-new file mode 100644
-index 0000000..cde3689
---- /dev/null
-+++ b/package/expedite/expedite.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 91d0290ba3635a4440c389647643beaa8e39def2789d685d54a58a723398cc10  expedite-1.7.10.tar.bz2
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 3321274..00e1be7 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -9,7 +9,7 @@ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+ GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+ GST1_PLUGINS_BASE_LICENSE_FILES = COPYING.LIB
+-GST1_PLUGINS_BASE_LICENSE = LGPLv2+ LGPLv2.1+
++GST1_PLUGINS_BASE_LICENSE = LGPLv2+, LGPLv2.1+
+ 
+ # freetype is only used by examples, but if it is not found
+ # and the host has a freetype-config script, then the host
 -- 
 2.4.10
