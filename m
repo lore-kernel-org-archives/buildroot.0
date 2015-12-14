@@ -1,32 +1,29 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Dec 2015 11:37:04 -0300
-Subject: [Buildroot] [PATCH v2] gst1-plugins-base: comma separate licenses
-Message-ID: <1450103824-21002-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 14 Dec 2015 11:37:30 -0300
+Subject: [Buildroot] [PATCH 03/45] gst1-plugins-base: comma separate
+ licenses
+In-Reply-To: <20151214150641.35efe163@free-electrons.com>
+References: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
+ <1450098684-17399-4-git-send-email-gustavo@zacarias.com.ar>
+ <20151214150641.35efe163@free-electrons.com>
+Message-ID: <566ED42A.3050105@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
-v2: drop -bad changes
+On 14/12/15 11:06, Thomas Petazzoni wrote:
 
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Dear Gustavo Zacarias,
+>
+> On Mon, 14 Dec 2015 10:10:42 -0300, Gustavo Zacarias wrote:
+>
+>> -GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
+>> +GST1_PLUGINS_BAD_LICENSE_FILES = COPYING, COPYING.LIB
+>
+> Wrong: the list of license files is space separated, not comma
+> separated.
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 3321274..00e1be7 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -9,7 +9,7 @@ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
- GST1_PLUGINS_BASE_LICENSE_FILES = COPYING.LIB
--GST1_PLUGINS_BASE_LICENSE = LGPLv2+ LGPLv2.1+
-+GST1_PLUGINS_BASE_LICENSE = LGPLv2+, LGPLv2.1+
- 
- # freetype is only used by examples, but if it is not found
- # and the host has a freetype-config script, then the host
--- 
-2.4.10
+Fixed in v2, another change leaked in by mistake.
+Regards.
