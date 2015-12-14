@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Dec 2015 10:10:57 -0300
-Subject: [Buildroot] [PATCH 18/45] libiscsi: comma separate licenses
+Date: Mon, 14 Dec 2015 10:10:58 -0300
+Subject: [Buildroot] [PATCH 19/45] pppd: comma separate licenses
 In-Reply-To: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1450098684-17399-19-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1450098684-17399-20-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libiscsi/libiscsi.mk | 2 +-
+ package/pppd/pppd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
-index adb94bd..71c10c1 100644
---- a/package/libiscsi/libiscsi.mk
-+++ b/package/libiscsi/libiscsi.mk
-@@ -6,7 +6,7 @@
- 
- LIBISCSI_VERSION = 1.15.0
- LIBISCSI_SITE = https://sites.google.com/site/libiscsitarballs/libiscsitarballs
--LIBISCSI_LICENSE = GPLv2+ LGPLv2.1+
-+LIBISCSI_LICENSE = GPLv2+, LGPLv2.1+
- LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
- LIBISCSI_INSTALL_STAGING = YES
- 
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 554b830..92897be 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -7,7 +7,7 @@
+ PPPD_VERSION = 2.4.7
+ PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
+ PPPD_SITE = https://download.samba.org/pub/ppp
+-PPPD_LICENSE = LGPLv2+ LGPL BSD-4c BSD-3c GPLv2+
++PPPD_LICENSE = LGPLv2+, LGPL, BSD-4c, BSD-3c, GPLv2+
+ PPPD_LICENSE_FILES = \
+ 	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
+ 	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
 -- 
 2.4.10
