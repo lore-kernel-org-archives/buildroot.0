@@ -1,33 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2015 18:00:34 +0100
-Subject: [Buildroot] [PATCH 1/2] python-pyasn: bump to 0.1.9
-In-Reply-To: <1450081557-29241-1-git-send-email-yegorslists@googlemail.com>
-References: <1450081557-29241-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20151214180034.64eed355@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Dec 2015 14:16:01 -0300
+Subject: [Buildroot] [PATCH] gnutls: needs argp-standalone for
+	musl/uclibc
+In-Reply-To: <20151213223250.77e3dbfb@free-electrons.com>
+References: <1449248499-2852-1-git-send-email-gustavo@zacarias.com.ar>
+ <20151213223250.77e3dbfb@free-electrons.com>
+Message-ID: <566EF951.3010500@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor,
+On 13/12/15 18:32, Thomas Petazzoni wrote:
 
-On Mon, 14 Dec 2015 09:25:56 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Add a hash file.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-pyasn/python-pyasn.hash | 3 +++
->  package/python-pyasn/python-pyasn.mk   | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
->  create mode 100644 package/python-pyasn/python-pyasn.hash
+>>   config BR2_PACKAGE_GNUTLS_TOOLS
+>>   	bool "install tools"
+>> +	select BR2_PACKAGE_ARGP_STANDALONE \
+>> +		if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+>>   	help
+>>   	  Install GnuTLS command line tools for various cryptographic tasks.
+>
+> Seems like BR2_PACKAGE_GNUTLS needs argp.h as well, not only
+> BR2_PACKAGE_GNUTLS_TOOLS. See
+> http://autobuild.buildroot.org/results/d86/d8604fe448bb11395e8443726d09b041eb34c6d5//.
 
-Both applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi.
+It's still crywrap failing, hence tools.
+Probably --disable-crywrap isn't doing it's job efficently, i'll take a 
+look.
+Regards.
