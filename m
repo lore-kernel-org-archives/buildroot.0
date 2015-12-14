@@ -1,170 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Dec 2015 23:18:46 +0100
-Subject: [Buildroot] [PATCH] linux: Build and install kernel selftests
-In-Reply-To: <1448409222-4510-2-git-send-email-cyrilbur@gmail.com>
-References: <1448409222-4510-1-git-send-email-cyrilbur@gmail.com>
- <1448409222-4510-2-git-send-email-cyrilbur@gmail.com>
-Message-ID: <20151214221846.GD4152@free.fr>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 14 Dec 2015 23:35:40 +0100
+Subject: [Buildroot] [PATCH 1/3] package/nodejs: Add version 5.2.0
+In-Reply-To: <20151214211045.GA4152@free.fr>
+References: <1450122295-5311-1-git-send-email-martin@barkynet.com>
+ <20151214210913.227563c9@free-electrons.com>
+ <CAFGQKxfvQwA3v8W=OKEvNR6SE06DTng6PxQGj4q7o4zUWYbU2g@mail.gmail.com>
+ <20151214214337.2933ea41@free-electrons.com>
+ <20151214211045.GA4152@free.fr>
+Message-ID: <1450132540.4928.24.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cyril, All,
-
-Sorry for the delay, but I'm now looking at this patch...
-
-On 2015-11-25 10:53 +1100, Cyril Bur spake thusly:
-> This patch simply adds the ability to compile and install the kernel
-> selftests into the target.
+On Mo, 2015-12-14 at 22:10 +0100, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> This is likely to be a rarely used debugging/performance feature for
-> development and unlikely to be used in a production configuration.
+> On 2015-12-14 21:43 +0100, Thomas Petazzoni spake thusly:
+> > On Mon, 14 Dec 2015 20:24:30 +0000, Martin Bark wrote:
+> > > I'm not sure the answer to that.??What i can say is that all four
+> > > are
+> > > getting maintained.??Also, according to https://github.com/nodejs
+> > > /LTS
+> > > node.js 0.10.x will be maintained all the way until October 2016.
+> > > 
+> > > I see two logical approaches for buildroot:
+> > > 
+> > > 1) Support all four in buildroot because node.js support all four
+> > > 2) Only Support the 4.x and 5.x because they are the current LTS
+> > > and
+> > > Stable releases (i.e. the ones on the front page of
+> > > https://nodejs.org)
+> > > 
+> > > Personally I'd vote for 2) because it simplifies things.
+> > > 
+> > > What are your thoughts?
+> > 
+> > I'm fine with option (2) as well, but do we have other NodeJS users
+> > that would like to see 0.10.x and 0.12.x being kept?
+> > 
+> > Is there any issue for users of 0.10.x/0.12.x to migrate to 4.2 or
+> > 5.2 ?
 > 
-> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
-> ---
->  linux/Config.tools.in         | 12 ++++++++++++
->  linux/linux-tool-selftests.mk | 40 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 52 insertions(+)
->  create mode 100644 linux/linux-tool-selftests.mk
+> We do have the various version of nodejs, because:
 > 
-> diff --git a/linux/Config.tools.in b/linux/Config.tools.in
-> index 24ef8cd..68655dc 100644
-> --- a/linux/Config.tools.in
-> +++ b/linux/Config.tools.in
-> @@ -26,4 +26,16 @@ config BR2_LINUX_KERNEL_TOOL_PERF
->  
->  	  https://perf.wiki.kernel.org/
->  
-> +config BR2_LINUX_KERNEL_TOOL_SELFTESTS
-> +	bool "selftests"
-
-Since the .mk has:
-    SELFTESTS_DEPENDENCIES = bash
-
-then you must either depend on bash or select it here. I think a select
-is better, so:
-
-    depends on BR2_USE_MMU  # bash
-    select BR2_PACKAGE_BASH
-
-> +	help
-> +	  Build and install (to /usr/lib/selftests) kernel selftests.
-
-Why do you install in there?
-
-I'm not sure what the kernel selftests are, but two options:
-  - if they are executables, they should go into /usr/sbin
-  - if they are libraries, they should go in /usr/lib
-
-> +	  Use of this option implies you know the process using and compiling
-> +	  the kernel selftests. The Makefile to build and install these is very
-> +	  noisy and may appear to cause your build to fail for strange reasons.
-> +
-> +	  This is very much a use at your risk option and may not work for
-> +	  every setup or every architecture.
-> +
->  endmenu
-> diff --git a/linux/linux-tool-selftests.mk b/linux/linux-tool-selftests.mk
-> new file mode 100644
-> index 0000000..573ba0c
-> --- /dev/null
-> +++ b/linux/linux-tool-selftests.mk
-> @@ -0,0 +1,40 @@
-> +################################################################################
-> +#
-> +# selftests
-> +#
-> +################################################################################
-> +
-> +LINUX_TOOLS += selftests
-
-linux-tool infrastructure. Yeah! :-)
-
-> +ifeq ($(KERNEL_ARCH),x86_64)
-> +SELFTESTS_ARCH=x86
-> +else
-> +SELFTESTS_ARCH=$(KERNEL_ARCH)
-> +endif
-
-Not related to your patch, but I wonder if we should not make that a
-common conditional, so that all tools do not have to repeat it.
-
-Since there are only two such tool (with selftests) that do it, it can
-be put aside for now, and we can revisit it later.
-
-> +SELFTESTS_DEPENDENCIES = bash
-> +
-> +SELFTESTS_INSTALL_STAGING = YES
-
-Why install it in staging?
-
-> +SELFTESTS_MAKE_FLAGS = \
-> +	$(LINUX_MAKE_FLAGS) \
-> +	ARCH=$(SELFTESTS_ARCH)
-> +
-> +# O must be redefined here to overwrite the one used by Buildroot for
-> +# out of tree build. We build the selftests in $(@D)/tools/selftests and
-> +# not just $(@D) so that it isn't built in the root directory of the kernel
-> +# sources.
-> +define SELFTESTS_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) headers_install
-
-Headers are target dependent, so I think you also need to pass
-$(SELFTESTS_MAKE_FLAGS) in there, no?
-
-Why are headers needed?
-
-> +	$(TARGET_MAKE_ENV) $(MAKE1) $(SELFTESTS_MAKE_FLAGS) \
-> +		-C $(@D)/tools/testing/selftests O=$(@D)/tools/testing/selftests
-
-I prefer when the -C args are passed early (if possible first) because
-it is then much obvious where the build is taking place:
-
-    $(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/tools/testing/selftests \
-        $(SELFTESTS_MAKE_FLAGS) \
-        O=$(@D)/tools/testing/selftests
-
-> +endef
-> +
-> +define SELFTESTS_INSTALL_STAGING_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE1) INSTALL_PATH=$(STAGING_DIR)/usr/lib/selftests $(SELFTESTS_MAKE_FLAGS) \
-> +		-C $(@D)/tools/testing/selftests install
-
-Line too long, split it to below ~72 chars; also, I prefer we keep the
-generic flags early; probably you also have to repeat the O arg:
-
-    $(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/tools/testing/selftests \
-        $(SELFTESTS_MAKE_FLAGS) \
-        O=$(@D)/tools/testing/selftests \
-        INSTALL_PATH=$(STAGING_DIR)/usr/lib/selftests \
-        install
-
-> +endef
-> +
-> +define SELFTESTS_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE1) INSTALL_PATH=$(TARGET_DIR)/usr/lib/selftests $(SELFTESTS_MAKE_FLAGS) \
-> +		-C $(@D)/tools/testing/selftests install
-
-Ditto.
-
-Regards,
-Yann E. MORIN.
-
-> +endef
-> -- 
-> 2.6.2
+> ? - 4.2.x needs gcc >= 4.8 and armv6+
+> ? - 0.12.x needs armv6+
+> ? - 0.10.x has not requirement
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Going back in our history:
+> 
+> ? - we had nodejs-0.10
+> ? - someone proposed to bump to 0.12
+> ? - someone else wanted to keep 0.10 around because of armv6+
+> ????requirement
+> ? - so we added 0.12, and kept 0.10
+> ? - the story repeated itself with 4.2.x
+> 
+> So, I think we have a few options here:
+> 
+> ?1) keep all the three existing versions, add 5.2
+> ?2) keep 0.10 and 0.12, replace 4.2 with 5.2
+> ?3) keep 0.10, ditch 0.12, replace 4.2 with 5.2
+> ?4) dith 0.10 and 0.12, replace 4.2 with 5.2
+> 
+> I would lean toward either 2 or 3.
+> 
+> 3 is IMHO the best solution: 5.2 is the best choice when all the
+> conditions are met; 0.10 is the fallback, maybe not the optimum in
+> case 0.12 would have fit, but since that's a fallback I don't think
+> it matters much...
+> 
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+As 4.x is a LTS release I would not drop it for the 5.x release.
+
+I would keep all the three version we have - they are all still
+maintained and v0.12 and v4 are both even LTS releases.
+
+New versions are often not compatible with older versions of Node.js -
+it's similiar to Lua.
+
+So I would lean toward 1.
+
+Best regards
+J?rg Krause
