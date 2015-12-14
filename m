@@ -1,57 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2015 14:03:30 +0100
-Subject: [Buildroot] [PATCH] python-pyxml: add a patch to fix syntax
- errors
-In-Reply-To: <1450094225-4625-1-git-send-email-yegorslists@googlemail.com>
-References: <1450094225-4625-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20151214140330.2904ec0b@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Dec 2015 10:10:39 -0300
+Subject: [Buildroot] [PATCH 00/45] Comma separate licenses
+Message-ID: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, Clayton,
+This series sanitizes the PKG_LICENSE entries.
+No attempt is made to interpret and/or improve upton the conditions of
+each license, it's just a style fix.
 
-On Mon, 14 Dec 2015 12:57:05 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Patch renames variable 'as' to 'pas' to avoid reserved keyword usage.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Gustavo Zacarias (45):
+  elfutils: comma separate licenses
+  gstreamer1: comma separate licenses
+  gst1-plugins-base: comma separate licenses
+  dtv-scan-tables: comma separate licenses
+  dbus-glib: comma separate licenses
+  trace-cmd: comma separate licenses
+  bluez5_utils: comma separate licenses
+  qemu: comma separate licenses
+  lvm2: comma separate licenses
+  libbsd: comma separate licenses
+  liboping: comma separate licenses
+  gdb: comma separate licenses
+  xz: comma separate licenses
+  bc: comma separate licenses
+  omniorb: comma separate licenses
+  libfuse: comma separate licenses
+  collectd: comma separate licenses
+  libiscsi: comma separate licenses
+  pppd: comma separate licenses
+  minidlna: comma separate licenses
+  ustr: comma separate licenses
+  python-pyzmq: comma separate licenses
+  ntfs-3g: comma separate licenses
+  bluez_utils: comma separate licenses
+  dvb_apps: comma separate licenses
+  keyutils: comma separate licenses
+  dbus: comma separate licenses
+  rsyslog: comma separate licenses
+  webkitgtk24: comma separate licenses
+  iputils: comma separate licenses
+  libidn: comma separate licenses
+  olsr: comma separate licenses
+  libtasn1: comma separate licenses
+  gnutls: comma separate licenses
+  fmlib: comma separate licenses
+  vde2: comma separate licenses
+  ltp-testsuite: comma separate licenses
+  taglib: comma separate licenses
+  setools: comma separate licenses
+  swig: comma separate licenses
+  audiofile: comma separate licenses
+  lttng-babeltrace: comma separate licenses
+  lttng-libust: comma separate licenses
+  lttng-modules: comma separate licenses
+  lttng-tools: comma separate licenses
 
-I was surprised that issue was not fixed upstream, so I looked a bit.
-It has been reported upstream in June this year:
+ package/audiofile/audiofile.mk                            | 2 +-
+ package/bc/bc.mk                                          | 2 +-
+ package/bluez5_utils/bluez5_utils.mk                      | 2 +-
+ package/bluez_utils/bluez_utils.mk                        | 2 +-
+ package/collectd/collectd.mk                              | 2 +-
+ package/dbus-glib/dbus-glib.mk                            | 2 +-
+ package/dbus/dbus.mk                                      | 2 +-
+ package/dtv-scan-tables/dtv-scan-tables.mk                | 2 +-
+ package/dvb-apps/dvb-apps.mk                              | 2 +-
+ package/elfutils/elfutils.mk                              | 2 +-
+ package/fmlib/fmlib.mk                                    | 2 +-
+ package/gdb/gdb.mk                                        | 2 +-
+ package/gnutls/gnutls.mk                                  | 2 +-
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
+ package/gstreamer1/gstreamer1/gstreamer1.mk               | 2 +-
+ package/iputils/iputils.mk                                | 2 +-
+ package/keyutils/keyutils.mk                              | 2 +-
+ package/libbsd/libbsd.mk                                  | 2 +-
+ package/libfuse/libfuse.mk                                | 2 +-
+ package/libidn/libidn.mk                                  | 2 +-
+ package/libiscsi/libiscsi.mk                              | 2 +-
+ package/liboping/liboping.mk                              | 2 +-
+ package/libtasn1/libtasn1.mk                              | 2 +-
+ package/ltp-testsuite/ltp-testsuite.mk                    | 2 +-
+ package/lttng-babeltrace/lttng-babeltrace.mk              | 2 +-
+ package/lttng-libust/lttng-libust.mk                      | 2 +-
+ package/lttng-modules/lttng-modules.mk                    | 2 +-
+ package/lttng-tools/lttng-tools.mk                        | 2 +-
+ package/lvm2/lvm2.mk                                      | 2 +-
+ package/minidlna/minidlna.mk                              | 2 +-
+ package/ntfs-3g/ntfs-3g.mk                                | 2 +-
+ package/olsr/olsr.mk                                      | 2 +-
+ package/omniorb/omniorb.mk                                | 2 +-
+ package/pppd/pppd.mk                                      | 2 +-
+ package/python-pyzmq/python-pyzmq.mk                      | 2 +-
+ package/qemu/qemu.mk                                      | 2 +-
+ package/rsyslog/rsyslog.mk                                | 2 +-
+ package/setools/setools.mk                                | 2 +-
+ package/swig/swig.mk                                      | 2 +-
+ package/taglib/taglib.mk                                  | 2 +-
+ package/trace-cmd/trace-cmd.mk                            | 2 +-
+ package/ustr/ustr.mk                                      | 2 +-
+ package/vde2/vde2.mk                                      | 2 +-
+ package/webkitgtk24/webkitgtk24.mk                        | 2 +-
+ package/xz/xz.mk                                          | 2 +-
+ 46 files changed, 46 insertions(+), 46 deletions(-)
 
-  https://mail.python.org/pipermail/xml-sig/2015-June/012271.html
-
-But the answer at
-https://mail.python.org/pipermail/xml-sig/2015-June/012272.html was
-pretty clear:
-
-   PyXML is bitrotten and obsolete. You'll find the functionality it
-   previously provided is now included in the Python standard library;
-
-And later in the thread:
-
-   PyXML has been largely obsolete since around Python 2.1 (circa 2001).
-   The last PyXML release was in 2004, and the project page very
-   specifically advertises it as unmaintained, out of date, do not use.
-   Specifically, the "as" keyword has been reserved since Python 2.5
-   (roughly 10 years ago), which is only one of many things which could
-   cause such an old package to no longer function.
-
-So, the big question is: Clayton, why did you submit the pyxml package
-for addition in Buildroot ? It is not used as a dependency in any other
-package as far as I can see, and it is an obsolete and deprecated XML
-library, since more than 10 years.
-
-Can we get rid of it from Buildroot ?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
