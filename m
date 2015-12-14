@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Dec 2015 10:10:52 -0300
-Subject: [Buildroot] [PATCH 13/45] xz: comma separate licenses
+Date: Mon, 14 Dec 2015 10:10:53 -0300
+Subject: [Buildroot] [PATCH 14/45] bc: comma separate licenses
 In-Reply-To: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1450098684-17399-14-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1450098684-17399-15-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/xz/xz.mk | 2 +-
+ package/bc/bc.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index ac6f809..5e1d7c6 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -9,7 +9,7 @@ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = http://tukaani.org/xz
- XZ_INSTALL_STAGING = YES
- XZ_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
--XZ_LICENSE = GPLv2+ GPLv3+ LGPLv2.1+
-+XZ_LICENSE = GPLv2+, GPLv3+, LGPLv2.1+
- XZ_LICENSE_FILES = COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
+diff --git a/package/bc/bc.mk b/package/bc/bc.mk
+index 146c472..8f3e08d 100644
+--- a/package/bc/bc.mk
++++ b/package/bc/bc.mk
+@@ -8,7 +8,7 @@ BC_VERSION = 1.06.95
+ BC_SOURCE = bc-$(BC_VERSION).tar.bz2
+ BC_SITE = http://alpha.gnu.org/gnu/bc
+ BC_DEPENDENCIES = host-flex
+-BC_LICENSE = GPLv2+ LGPLv2.1+
++BC_LICENSE = GPLv2+, LGPLv2.1+
+ BC_LICENSE_FILES = COPYING COPYING.LIB
  
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ # Build after busybox so target ends up with bc's "dc" version
 -- 
 2.4.10
