@@ -1,32 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2015 16:38:34 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/boost: bump to version 1.59.0
-In-Reply-To: <1449052364-1829-1-git-send-email-agalakhov@gmail.com>
-References: <1449052364-1829-1-git-send-email-agalakhov@gmail.com>
-Message-ID: <20151214163834.0da8755d@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 14 Dec 2015 15:40:26 +0000
+Subject: [Buildroot] [Bug 8296] nodejs 0.12.7 - npm crashes (seg core dump)
+In-Reply-To: <bug-8296-163@https.bugs.busybox.net/>
+References: <bug-8296-163@https.bugs.busybox.net/>
+Message-ID: <bug-8296-163-EYEF20J86B@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey,
+https://bugs.busybox.net/show_bug.cgi?id=8296
 
-On Wed,  2 Dec 2015 11:32:44 +0100, Alexey Galakhov wrote:
-> Remove boost patches that are already upstream.
-> 
-> Add a backport of fix of #11549 (Boost.Log contains has a regression
-> that prevents some of the logging statements from compiling).
-> 
-> Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
+--- Comment #8 from Martin <martin@barkynet.com> ---
+I have submitted 2 patches upsteam:
 
-Thanks Alexey. A similar patch was contributed and merged, see
-https://git.busybox.net/buildroot/commit/package/boost?id=12ec0cd9af0a9754d97fafddef3c281e95ebe59a.
+1) https://github.com/nodejs/node/pull/4272 - Fixes the crash in node.js
+2) https://github.com/libuv/libuv/pull/653 - Fixes the underlying issues of
+uClibc-ng support in libuv
 
-Thanks,
+I have tested these patches for node.js 0.12.9, 4.2.3 and 5.2.0 and it fixes
+the issues.  I'll submit patches to buildroot tonight.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
