@@ -1,50 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2015 17:55:42 +0100
-Subject: [Buildroot] [PATCH 1/2] trinity: fix typo in MIPS' GET_FP_MODE
- and SET_FP_MODE macros
-In-Reply-To: <1450105236-11224-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1450105236-11224-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151214175542.2e5d3b2d@free-electrons.com>
+Date: Mon, 14 Dec 2015 17:55:57 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-base: comma separate licenses
+Message-ID: <20151214165601.046248177C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=d3098ba4f959ce7e223d67ae3f00bc59ef57c074
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Dec 2015 15:00:35 +0000, Vicente Olivert Riera wrote:
-> Add a patch to fix a typo in the syscalls/prctl.c file. The
-> PR_GET_FP_MODE and PR_SET_FP_MODE macros are defined in
-> include/compat.h, but then syscalls/prctl.c tries to use GET_FP_MODE and
-> SET_FP_MODE. It's lacking the PR_ preffix, and this is causing build
-> failures like this one:
-> 
->   CC	syscalls/prctl.o
-> syscalls/prctl.c:37:2: error: 'GET_FP_MODE' undeclared here (not in a
-> function)
->   GET_FP_MODE, SET_FP_MODE,
->   ^
-> syscalls/prctl.c:37:15: error: 'SET_FP_MODE' undeclared here (not
-> in a function)
->   GET_FP_MODE, SET_FP_MODE,
->                ^
-> 
-> This patch has been sent upstream.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/12f/12f3144b5d99aa1872f6073f3aaac7f8a9c5cfdc/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/trinity/0001-mips-fix-prctl-s.patch | 39 +++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/trinity/0001-mips-fix-prctl-s.patch
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Both applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 3321274..00e1be7 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -9,7 +9,7 @@ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+ GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+ GST1_PLUGINS_BASE_LICENSE_FILES = COPYING.LIB
+-GST1_PLUGINS_BASE_LICENSE = LGPLv2+ LGPLv2.1+
++GST1_PLUGINS_BASE_LICENSE = LGPLv2+, LGPLv2.1+
+ 
+ # freetype is only used by examples, but if it is not found
+ # and the host has a freetype-config script, then the host
