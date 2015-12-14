@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Dec 2015 10:10:56 -0300
-Subject: [Buildroot] [PATCH 17/45] collectd: comma separate licenses
+Date: Mon, 14 Dec 2015 10:10:57 -0300
+Subject: [Buildroot] [PATCH 18/45] libiscsi: comma separate licenses
 In-Reply-To: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1450098684-17399-18-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1450098684-17399-19-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/collectd/collectd.mk | 2 +-
+ package/libiscsi/libiscsi.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 6e1ea5c..d7fd8f9 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -9,7 +9,7 @@ COLLECTD_SITE = http://collectd.org/files
- COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
- COLLECTD_INSTALL_STAGING = YES
--COLLECTD_LICENSE = GPLv2 LGPLv2.1
-+COLLECTD_LICENSE = GPLv2, LGPLv2.1
- COLLECTD_LICENSE_FILES = COPYING
- # For 0001-build-add-libavltree-libcommon-libheap-dependencies.patch
- COLLECTD_AUTORECONF = YES
+diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
+index adb94bd..71c10c1 100644
+--- a/package/libiscsi/libiscsi.mk
++++ b/package/libiscsi/libiscsi.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBISCSI_VERSION = 1.15.0
+ LIBISCSI_SITE = https://sites.google.com/site/libiscsitarballs/libiscsitarballs
+-LIBISCSI_LICENSE = GPLv2+ LGPLv2.1+
++LIBISCSI_LICENSE = GPLv2+, LGPLv2.1+
+ LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
+ LIBISCSI_INSTALL_STAGING = YES
+ 
 -- 
 2.4.10
