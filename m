@@ -1,231 +1,96 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 Dec 2015 01:09:30 +0100
-Subject: [Buildroot] [PATCH] Don't install in mysql directory
-In-Reply-To: <1450051027-23633-1-git-send-email-arnout@mind.be>
-References: <1450051027-23633-1-git-send-email-arnout@mind.be>
-Message-ID: <566E08BA.6070506@mind.be>
+From: Paul Enman <paul.enman@gmail.com>
+Date: Sun, 13 Dec 2015 19:28:40 -0600
+Subject: [Buildroot] [PATCH v2] package/uclibc: Enable compile in thumb mode
+	configuration option
+In-Reply-To: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
+References: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
+Message-ID: <1450056520-18750-1-git-send-email-paul.enman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Oops, forgot to put 'mysql:' in the subject line. Fixed up locally but I'll
-wait for more review before resubmitting.
+From: penman <paul.enman@gmail.com>
 
- Regards,
- Arnout
+Signed-off-by: Paul Enman <paul.enman@gmail.com>
+---
 
-On 14-12-15 00:57, Arnout Vandecappelle (Essensium/Mind) wrote:
-> Installing libraries in a subdirectory of /usr/lib leads to no end of
-> trouble. It requires either setting a RUN_PATH in the ELF files linked
-> with it or adding the path to ld.so.conf and calling ldconfig on the
-> target.
-> 
-> So to simplify things, put everything in /usr/lib instead of
-> /usr/lib/mysql
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  .../0007-dont-install-in-mysql-directory.patch     | 182 +++++++++++++++++++++
->  1 file changed, 182 insertions(+)
->  create mode 100644 package/mysql/0007-dont-install-in-mysql-directory.patch
-> 
-> diff --git a/package/mysql/0007-dont-install-in-mysql-directory.patch b/package/mysql/0007-dont-install-in-mysql-directory.patch
-> new file mode 100644
-> index 0000000..971b9ce
-> --- /dev/null
-> +++ b/package/mysql/0007-dont-install-in-mysql-directory.patch
-> @@ -0,0 +1,182 @@
-> +Don't install in mysql directory
-> +
-> +Installing libraries in a subdirectory of /usr/lib leads to no end of
-> +trouble. It requires either setting a RUN_PATH in the ELF files linked
-> +with it or adding the path to ld.so.conf and calling ldconfig on the
-> +target.
-> +
-> +So to simplify things, put everything in /usr/lib instead of
-> +/usr/lib/mysql
-> +
-> +Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> +
-> +diff -Nrup mysql-5.1.73.orig/dbug/Makefile.am mysql-5.1.73/dbug/Makefile.am
-> +--- mysql-5.1.73.orig/dbug/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/dbug/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-> +@@ -17,7 +17,7 @@
-> + 
-> + INCLUDES =              -I$(top_builddir)/include -I$(top_srcdir)/include
-> + LDADD =                 libdbug.a ../mysys/libmysys.a ../strings/libmystrings.a
-> +-pkglib_LIBRARIES =      libdbug.a
-> ++lib_LIBRARIES =      libdbug.a
-> + noinst_HEADERS =        dbug_long.h
-> + libdbug_a_SOURCES =     dbug.c sanity.c
-> + EXTRA_DIST =            CMakeLists.txt example1.c example2.c example3.c \
-> +diff -Nrup mysql-5.1.73.orig/libmysql/Makefile.shared mysql-5.1.73/libmysql/Makefile.shared
-> +--- mysql-5.1.73.orig/libmysql/Makefile.shared	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/libmysql/Makefile.shared	2015-12-14 00:34:58.567937603 +0100
-> +@@ -25,7 +25,7 @@ MYSQLBASEdir=			$(prefix)
-> + ## We'll use CLIENT_EXTRA_LDFLAGS for threaded and non-threaded
-> + ## until someone complains that they need separate options.
-> + LDADD =				@CLIENT_EXTRA_LDFLAGS@ $(target)
-> +-pkglib_LTLIBRARIES =		$(target)
-> ++lib_LTLIBRARIES =		$(target)
-> + 
-> + noinst_PROGRAMS = conf_to_src
-> + 
-> +diff -Nrup mysql-5.1.73.orig/libmysqld/Makefile.am mysql-5.1.73/libmysqld/Makefile.am
-> +--- mysql-5.1.73.orig/libmysqld/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/libmysqld/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-> +@@ -38,7 +38,7 @@ INCLUDES=		-I$(top_builddir)/include -I$
-> + 			@condition_dependent_plugin_includes@
-> + 
-> + noinst_LIBRARIES =	libmysqld_int.a
-> +-pkglib_LIBRARIES =	libmysqld.a
-> ++lib_LIBRARIES =	libmysqld.a
-> + SUBDIRS =		. examples
-> + libmysqld_sources=	libmysqld.c lib_sql.cc emb_qcache.cc
-> + libmysqlsources =	errmsg.c get_password.c libmysql.c client.c pack.c \
-> +diff -Nrup mysql-5.1.73.orig/mysys/Makefile.am mysql-5.1.73/mysys/Makefile.am
-> +--- mysql-5.1.73.orig/mysys/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/mysys/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-> +@@ -18,7 +18,7 @@ MYSQLSHAREdir =		$(pkgdatadir)
-> + MYSQLBASEdir=		$(prefix)
-> + INCLUDES =		@ZLIB_INCLUDES@ -I$(top_builddir)/include \
-> + 			-I$(top_srcdir)/include -I$(srcdir)
-> +-pkglib_LIBRARIES =	libmysys.a
-> ++lib_LIBRARIES =	libmysys.a
-> + LDADD =			libmysys.a $(top_builddir)/strings/libmystrings.a $(top_builddir)/dbug/libdbug.a
-> + noinst_HEADERS =	mysys_priv.h my_static.h my_handler_errors.h
-> + libmysys_a_SOURCES =    my_init.c my_getwd.c mf_getdate.c my_mmap.c \
-> +diff -Nrup mysql-5.1.73.orig/storage/csv/Makefile.am mysql-5.1.73/storage/csv/Makefile.am
-> +--- mysql-5.1.73.orig/storage/csv/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/storage/csv/Makefile.am	2015-12-14 00:34:58.563937596 +0100
-> +@@ -30,7 +30,7 @@ DEFS =	@DEFS@
-> + noinst_HEADERS	  =	ha_tina.h transparent_file.h
-> + 
-> + EXTRA_LTLIBRARIES =	ha_csv.la
-> +-pkglib_LTLIBRARIES =	@plugin_csv_shared_target@
-> ++lib_LTLIBRARIES =	@plugin_csv_shared_target@
-> + ha_csv_la_LDFLAGS =	-module -rpath $(MYSQLLIBdir)
-> + ha_csv_la_CXXFLAGS =	$(AM_CXXFLAGS) -DMYSQL_PLUGIN
-> + ha_csv_la_SOURCES =	transparent_file.cc ha_tina.cc 
-> +diff -Nrup mysql-5.1.73.orig/storage/heap/Makefile.am mysql-5.1.73/storage/heap/Makefile.am
-> +--- mysql-5.1.73.orig/storage/heap/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/storage/heap/Makefile.am	2015-12-14 00:34:58.563937596 +0100
-> +@@ -26,7 +26,7 @@ WRAPLIBS=
-> + LDADD =
-> + 
-> + DEFS =                  @DEFS@
-> +-pkglib_LIBRARIES =	libheap.a
-> ++lib_LIBRARIES =	libheap.a
-> + noinst_PROGRAMS	=	hp_test1 hp_test2
-> + noinst_LIBRARIES =	libheap.a
-> + hp_test1_LDFLAGS = @NOINST_LDFLAGS@
-> +diff -Nrup mysql-5.1.73.orig/storage/myisam/Makefile.am mysql-5.1.73/storage/myisam/Makefile.am
-> +--- mysql-5.1.73.orig/storage/myisam/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/storage/myisam/Makefile.am	2015-12-14 00:34:58.563937596 +0100
-> +@@ -30,7 +30,7 @@ DEFS =                  @DEFS@
-> + EXTRA_DIST =		mi_test_all.sh mi_test_all.res ft_stem.c CMakeLists.txt plug.in
-> + pkgdata_DATA =		mi_test_all mi_test_all.res
-> + 
-> +-pkglib_LIBRARIES =	libmyisam.a
-> ++lib_LIBRARIES =	libmyisam.a
-> + bin_PROGRAMS =		myisamchk myisamlog myisampack myisam_ftdump
-> + myisamchk_DEPENDENCIES=	$(LIBRARIES)
-> + myisamchk_LDADD=		@CLIENT_EXTRA_LDFLAGS@ libmyisam.a \
-> +diff -Nrup mysql-5.1.73.orig/storage/myisammrg/Makefile.am mysql-5.1.73/storage/myisammrg/Makefile.am
-> +--- mysql-5.1.73.orig/storage/myisammrg/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/storage/myisammrg/Makefile.am	2015-12-14 00:34:58.563937596 +0100
-> +@@ -26,7 +26,7 @@ WRAPLIBS=
-> + LDADD =
-> + 
-> + DEFS =                  @DEFS@
-> +-pkglib_LIBRARIES =	libmyisammrg.a
-> ++lib_LIBRARIES =	libmyisammrg.a
-> + noinst_HEADERS =	myrg_def.h ha_myisammrg.h
-> + noinst_LIBRARIES =	libmyisammrg.a
-> + libmyisammrg_a_SOURCES = myrg_open.c myrg_extra.c myrg_info.c myrg_locking.c \
-> +diff -Nrup mysql-5.1.73.orig/strings/Makefile.am mysql-5.1.73/strings/Makefile.am
-> +--- mysql-5.1.73.orig/strings/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/strings/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-> +@@ -16,7 +16,7 @@
-> + # This file is public domain and comes with NO WARRANTY of any kind
-> + 
-> + INCLUDES =		-I$(top_builddir)/include -I$(top_srcdir)/include
-> +-pkglib_LIBRARIES =	libmystrings.a
-> ++lib_LIBRARIES =	libmystrings.a
-> + 
-> + # Exact one of ASSEMBLER_X
-> + if ASSEMBLER_x86
-> +@@ -69,15 +69,15 @@ conf_to_src_LDFLAGS= @NOINST_LDFLAGS@
-> + 
-> + FLAGS=$(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) @NOINST_LDFLAGS@
-> + 
-> +-str_test: str_test.c $(pkglib_LIBRARIES)
-> +-	$(LINK) $(FLAGS) -DMAIN $(INCLUDES) $(srcdir)/str_test.c $(LDADD) $(pkglib_LIBRARIES)
-> ++str_test: str_test.c $(lib_LIBRARIES)
-> ++	$(LINK) $(FLAGS) -DMAIN $(INCLUDES) $(srcdir)/str_test.c $(LDADD) $(lib_LIBRARIES)
-> + 
-> + uctypedump: uctypedump.c
-> + 	$(LINK) $(INCLUDES) $(srcdir)/uctypedump.c
-> + 
-> +-test_decimal$(EXEEXT): decimal.c $(pkglib_LIBRARIES)
-> ++test_decimal$(EXEEXT): decimal.c $(lib_LIBRARIES)
-> + 	$(CP) $(srcdir)/decimal.c ./test_decimal.c
-> +-	$(LINK) $(FLAGS) -DMAIN  ./test_decimal.c $(LDADD) $(pkglib_LIBRARIES)
-> ++	$(LINK) $(FLAGS) -DMAIN  ./test_decimal.c $(LDADD) $(lib_LIBRARIES)
-> + 	$(RM) -f ./test_decimal.c
-> + 
-> + # Don't update the files from bitkeeper
-> +diff -Nrup mysql-5.1.73.orig/tests/Makefile.am mysql-5.1.73/tests/Makefile.am
-> +--- mysql-5.1.73.orig/tests/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/tests/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-> +@@ -51,11 +51,11 @@ mysql_client_test.o:	mysql_client_fw.c
-> + 
-> + insert_test_SOURCES=       insert_test.c
-> + select_test_SOURCES=       select_test.c
-> +-insert_test_DEPENDENCIES=	$(LIBRARIES) $(pkglib_LTLIBRARIES)
-> +-select_test_DEPENDENCIES=	$(LIBRARIES) $(pkglib_LTLIBRARIES)
-> ++insert_test_DEPENDENCIES=	$(LIBRARIES) $(lib_LTLIBRARIES)
-> ++select_test_DEPENDENCIES=	$(LIBRARIES) $(lib_LTLIBRARIES)
-> + 
-> + bug25714_SOURCES=          bug25714.c
-> +-bug25714_DEPENDENCIES=     $(LIBRARIES) $(pkglib_LTLIBRARIES)
-> ++bug25714_DEPENDENCIES=     $(LIBRARIES) $(lib_LTLIBRARIES)
-> + 
-> + # Fix for mit-threads
-> + DEFS =			-DMYSQL_CLIENT_NO_THREADS
-> +diff -Nrup mysql-5.1.73.orig/vio/Makefile.am mysql-5.1.73/vio/Makefile.am
-> +--- mysql-5.1.73.orig/vio/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/vio/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-> +@@ -16,7 +16,7 @@
-> + INCLUDES =		-I$(top_builddir)/include -I$(top_srcdir)/include \
-> + 			$(openssl_includes)
-> + LDADD =			@CLIENT_EXTRA_LDFLAGS@ $(openssl_libs) $(yassl_libs)
-> +-pkglib_LIBRARIES =	libvio.a
-> ++lib_LIBRARIES =	libvio.a
-> + 
-> + noinst_HEADERS =	vio_priv.h
-> + 
-> +diff -Nrup mysql-5.1.73.orig/zlib/Makefile.am mysql-5.1.73/zlib/Makefile.am
-> +--- mysql-5.1.73.orig/zlib/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-> ++++ mysql-5.1.73/zlib/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-> +@@ -19,7 +19,7 @@ INCLUDES=		-I$(top_builddir)/include -I$
-> + 
-> + LIBS= $(NON_THREADED_LIBS)
-> + 
-> +-pkglib_LTLIBRARIES = libz.la
-> ++lib_LTLIBRARIES = libz.la
-> + noinst_LTLIBRARIES = libzlt.la
-> + 
-> + libz_la_LDFLAGS    = -static
-> 
+When buildroot is configured to build uClibc with thumb, it uses a workaround
+ for that relies on interworking between arm and thumb instructions and does
+ not set the config file to enable compile in thumb mode.
 
+This patch enables buildroot to configure and compile uClibc in thumb mode.
 
+ arch/Config.in.arm       | 18 +++++++++---------
+ package/uclibc/uclibc.mk | 12 ++++++++++++
+ 2 files changed, 21 insertions(+), 9 deletions(-)
+
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 67ff384..2d318f2 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -374,6 +374,15 @@ config BR2_ARM_INSTRUCTIONS_ARM
+ 	  This option instructs the compiler to generate regular ARM
+ 	  instructions, that are all 32 bits wide.
+ 
++config BR2_ARM_INSTRUCTIONS_THUMB2
++	bool "Thumb2"
++	depends on BR2_ARM_CPU_HAS_THUMB2
++	help
++	  This option instructions the compiler to generate Thumb2
++	  instructions, which allows to mix 16 bits instructions and
++	  32 bits instructions. This generally provides a much smaller
++	  compiled binary size.
++
+ config BR2_ARM_INSTRUCTIONS_THUMB
+ 	bool "Thumb"
+ 	depends on BR2_ARM_CPU_HAS_THUMB
+@@ -389,15 +398,6 @@ comment "Thumb1 is not compatible with VFP"
+ 	depends on BR2_ARM_CPU_HAS_THUMB
+ 	depends on !BR2_ARM_SOFT_FLOAT
+ 
+-config BR2_ARM_INSTRUCTIONS_THUMB2
+-	bool "Thumb2"
+-	depends on BR2_ARM_CPU_HAS_THUMB2
+-	help
+-	  This option instructions the compiler to generate Thumb2
+-	  instructions, which allows to mix 16 bits instructions and
+-	  32 bits instructions. This generally provides a much smaller
+-	  compiled binary size.
+-
+ endchoice
+ 
+ config BR2_ARCH
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index c62a40f..6685325 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -91,6 +91,17 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ UCLIBC_EXTRA_CFLAGS += -marm
+ endif
+ 
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB2),y)
++define UCLIBC_ARM_THUMB_CONFIG
++	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
++endef
++else
++define UCLIBC_ARM_THUMB_CONFIG
++	$(call KCONFIG_DISABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
++endef
++endif
++
+ ifeq ($(BR2_UCLIBC_ARM_BX),y)
+ define UCLIBC_ARM_BX_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,USE_BX,$(@D)/.config)
+@@ -373,6 +384,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
++	$(UCLIBC_ARM_THUMB_CONFIG)
+ 	$(UCLIBC_ARM_BX_CONFIG)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
+ 	$(UCLIBC_MIPS_ISA_CONFIG)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
