@@ -1,47 +1,40 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 14 Dec 2015 09:25:57 +0100
-Subject: [Buildroot] [PATCH 2/2] python-webpy: add a hash file and use pypi
-	download location
-In-Reply-To: <1450081557-29241-1-git-send-email-yegorslists@googlemail.com>
-References: <1450081557-29241-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1450081557-29241-2-git-send-email-yegorslists@googlemail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Dec 2015 08:13:42 -0300
+Subject: [Buildroot] [PATCH] glibmm: bump to version 2.46.3
+Message-ID: <1450091622-7219-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/python-webpy/python-webpy.hash | 3 +++
- package/python-webpy/python-webpy.mk   | 3 ++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
- create mode 100644 package/python-webpy/python-webpy.hash
+ package/glibmm/glibmm.hash | 4 ++--
+ package/glibmm/glibmm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
-new file mode 100644
-index 0000000..05ee808
---- /dev/null
-+++ b/package/python-webpy/python-webpy.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=93375e3f03e74d6bf5c5096a4962a8db, sha256 locally computed
-+md5     93375e3f03e74d6bf5c5096a4962a8db  web.py-0.37.tar.gz
-+sha256  748c7e99ad9e36f62ea19f7965eb7dd7860b530e8f563ed60ce3e53e7409a550  web.py-0.37.tar.gz
-diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
-index ef5b6b3..2074b39 100644
---- a/package/python-webpy/python-webpy.mk
-+++ b/package/python-webpy/python-webpy.mk
-@@ -5,7 +5,8 @@
+diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
+index aeb26bf..c070363 100644
+--- a/package/glibmm/glibmm.hash
++++ b/package/glibmm/glibmm.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.46/glibmm-2.46.2.sha256sum
+-sha256	7221a01a768c1cce2bb994cb6ebfe634246dba4788f910484d04e3b0d903a3c8	glibmm-2.46.2.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.46/glibmm-2.46.3.sha256sum
++sha256	c78654addeb27a1213bedd7cd21904a45bbb98a5ba2f2f0de2b2f1a5682d86cf	glibmm-2.46.3.tar.xz
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index 7f8ee9f..4b6d68f 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
- PYTHON_WEBPY_VERSION = 0.37
--PYTHON_WEBPY_SITE = $(call github,webpy,webpy,webpy-$(PYTHON_WEBPY_VERSION))
-+PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
-+PYTHON_WEBPY_SITE = https://pypi.python.org/packages/source/w/web.py
- PYTHON_WEBPY_SETUP_TYPE = distutils
- PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
- PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt web/wsgiserver/LICENSE.txt
+ GLIBMM_VERSION_MAJOR = 2.46
+-GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).2
++GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).3
+ GLIBMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
+ GLIBMM_LICENSE_FILES = COPYING COPYING.tools
+ GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.xz
 -- 
-2.1.4
+2.4.10
