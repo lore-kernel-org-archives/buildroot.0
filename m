@@ -1,163 +1,86 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Mon, 14 Dec 2015 22:44:54 +0100
-Subject: [Buildroot] [PATCH v2] mongoose: bump to version 6.1
-Message-ID: <1450129494-5625-1-git-send-email-zinosat@tiscali.it>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Dec 2015 22:49:30 +0100
+Subject: [Buildroot] [PATCH 1/3] package/nodejs: Add version 5.2.0
+In-Reply-To: <CAFGQKxe61V2J6WjQobptUS4RJucGmMXuWyAgLy+415CH4ZUT+A@mail.gmail.com>
+References: <1450122295-5311-1-git-send-email-martin@barkynet.com>
+ <20151214210913.227563c9@free-electrons.com>
+ <CAFGQKxfvQwA3v8W=OKEvNR6SE06DTng6PxQGj4q7o4zUWYbU2g@mail.gmail.com>
+ <20151214214337.2933ea41@free-electrons.com>
+ <20151214211045.GA4152@free.fr>
+ <CAFGQKxe61V2J6WjQobptUS4RJucGmMXuWyAgLy+415CH4ZUT+A@mail.gmail.com>
+Message-ID: <20151214214930.GB4152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- - provide only libmongoose.a
- - rework package description
+Martin, All,
 
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
----
-Changes v1 -> v2:
-   - Compile only libmongoose.a (suggested by Peter Korsgaard)
-   - Remove init scripts
-   - Rework package description (Config.in)
-   - Make sure the update does not break swupdate which provides its own
-     version of mongoose (suggested by Peter Korsgaard)
-   
- package/mongoose/Config.in        |  3 ++-
- package/mongoose/S85mongoose      | 41 ---------------------------------------
- package/mongoose/mongoose.hash    |  2 +-
- package/mongoose/mongoose.mk      | 23 +---------------------
- package/mongoose/mongoose.service | 10 ----------
- 5 files changed, 4 insertions(+), 75 deletions(-)
- delete mode 100755 package/mongoose/S85mongoose
- delete mode 100644 package/mongoose/mongoose.service
+On 2015-12-14 21:31 +0000, Martin Bark spake thusly:
+> On 14 December 2015 at 21:10, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2015-12-14 21:43 +0100, Thomas Petazzoni spake thusly:
+> >> On Mon, 14 Dec 2015 20:24:30 +0000, Martin Bark wrote:
+> >> > I'm not sure the answer to that.  What i can say is that all four are
+> >> > getting maintained.  Also, according to https://github.com/nodejs/LTS
+> >> > node.js 0.10.x will be maintained all the way until October 2016.
+> >> >
+> >> > I see two logical approaches for buildroot:
+> >> >
+> >> > 1) Support all four in buildroot because node.js support all four
+> >> > 2) Only Support the 4.x and 5.x because they are the current LTS and
+> >> > Stable releases (i.e. the ones on the front page of
+> >> > https://nodejs.org)
+> >> >
+> >> > Personally I'd vote for 2) because it simplifies things.
+> >> >
+> >> > What are your thoughts?
+> >>
+> >> I'm fine with option (2) as well, but do we have other NodeJS users
+> >> that would like to see 0.10.x and 0.12.x being kept?
+> >>
+> >> Is there any issue for users of 0.10.x/0.12.x to migrate to 4.2 or 5.2 ?
+> >
+> > We do have the various version of nodejs, because:
+> >
+> >   - 4.2.x needs gcc >= 4.8 and armv6+
+> >   - 0.12.x needs armv6+
+> >   - 0.10.x has not requirement
+[--SNIP--]
+> > So, I think we have a few options here:
+> >
+> >  1) keep all the three existing versions, add 5.2
+> >  2) keep 0.10 and 0.12, replace 4.2 with 5.2
+> >  3) keep 0.10, ditch 0.12, replace 4.2 with 5.2
+> >  4) dith 0.10 and 0.12, replace 4.2 with 5.2
+> >
+> > I would lean toward either 2 or 3.
+> >
+> > 3 is IMHO the best solution: 5.2 is the best choice when all the
+> > conditions are met; 0.10 is the fallback, maybe not the optimum in
+> > case 0.12 would have fit, but since that's a fallback I don't think
+> > it matters much...
+> 
+> Yes I like option 3) too.  This would clarify the situation so that
+> buildroot supports the latest version of node.js only, except 0.10.x
+> which is kept purely for armv5 support.  Then in the buildroot 2016.11
+> release 0.10.x can be dropped too as it will no longer be maintained.
 
-diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
-index df706b9..22b385d 100644
---- a/package/mongoose/Config.in
-+++ b/package/mongoose/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_MONGOOSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	help
--	  Mongoose is a small and easy to use web server
-+	  Mongoose is an embedded networking library, which can turn
-+	  anything into a web server
- 
- 	  https://github.com/cesanta/mongoose
- 
-diff --git a/package/mongoose/S85mongoose b/package/mongoose/S85mongoose
-deleted file mode 100755
-index 9f24e06..0000000
---- a/package/mongoose/S85mongoose
-+++ /dev/null
-@@ -1,41 +0,0 @@
--#!/bin/sh
--#
--# Start/stop the mongoose HTTP server
--#
--
--set -e
--
--PATH=/sbin:/bin:/usr/sbin:/usr/bin
--NAME=mongoose
--DESC="Mongoose HTTP server"
--
--DAEMON=`which mongoose`
--OPTIONS="-document_root /var/www -listening_port 80"
--
--[ -e /etc/default/mongoose ] && . /etc/default/mongoose
--
--case "$1" in
--  start)
--	echo "Starting $DESC:"
--	start-stop-daemon -S -x "$DAEMON" -b -- $OPTIONS
--	echo "$NAME."
--	;;
--  stop)
--	printf "Stopping $DESC: "
--	start-stop-daemon -K -x "$DAEMON"
--	echo "$NAME."
--	;;
--  restart|force-reload)
--	printf "Restarting $DESC: "
--	start-stop-daemon -K -x "$DAEMON"
--	sleep 1
--	start-stop-daemon -S -x "$DAEMON" -b -- $OPTIONS
--	echo "$NAME."
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart|force-reload}" >&2
--	exit 1
--	;;
--esac
--
--exit 0
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index 5687094..1ed4a78 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	cc2557c7cf9f15e1e691f285a4c6c705cc7e56cb70c64cb49703a428a0677065  mongoose-5.6.tar.gz
-+sha256	512b406714d31a178fc41263ca6ecafd0c1e2dd091e9685a7b2462fecdaaea8e  mongoose-6.1.tar.gz
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 14f2aae..6caaf2e 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 5.6
-+MONGOOSE_VERSION = 6.1
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPLv2
- MONGOOSE_LICENSE_FILES = LICENSE
-@@ -19,31 +19,10 @@ MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
- endif
- 
- define MONGOOSE_BUILD_CMDS
--	$(TARGET_CC) $(@D)/examples/web_server/web_server.c $(@D)/mongoose.c \
--		-I$(@D) -o $(@D)/examples/web_server/web_server \
--		$(MONGOOSE_CFLAGS) -pthread
- 	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
- 	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
- endef
- 
--define MONGOOSE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 755 $(@D)/examples/web_server/web_server \
--		$(TARGET_DIR)/usr/sbin/mongoose
--endef
--
--define MONGOOSE_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
--		$(TARGET_DIR)/etc/init.d/S85mongoose
--endef
--
--define MONGOOSE_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 package/mongoose/mongoose.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/mongoose.service
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../usr/lib/systemd/system/mongoose.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mongoose.service
--endef
--
- define MONGOOSE_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 644 $(@D)/libmongoose.a \
- 		$(STAGING_DIR)/usr/lib/libmongoose.a
-diff --git a/package/mongoose/mongoose.service b/package/mongoose/mongoose.service
-deleted file mode 100644
-index 12a731c..0000000
---- a/package/mongoose/mongoose.service
-+++ /dev/null
-@@ -1,10 +0,0 @@
--[Unit]
--Description=Mongoose HTTP server
--After=network.target
--
--[Service]
--ExecStart=/usr/sbin/mongoose -document_root /var/www -listening_port 80
--Restart=always
--
--[Install]
--WantedBy=multi-user.target
+Most probably we'd keep it forever. If we were to ditch 0.10, we would
+have no fallback. As long as it builds and still works fine, we should
+just keep it.
+
+One option would be to completely get rid of the selection choice, and
+always build the best version for the curent system. I.e. for an armv5
+we'd build 0.10, for gcc <4.8, we'd build 0.10. Otherwise, we'd build
+5.2. Of course, we'd have to tell the user what version was being used.
+
+Opinions?
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
