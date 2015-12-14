@@ -1,67 +1,88 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 14 Dec 2015 12:30:55 +0100
-Subject: [Buildroot] [PATCH v4] python: rework *.pyc files generation
-In-Reply-To: <CAHXCMMJOKia1N9wxf3z5se3k=2WsNWBz9gNR26p1EpA3i8BCJQ@mail.gmail.com>
-References: <1447948334-8440-1-git-send-email-yegorslists@googlemail.com>
- <CAHXCMM+fZO0q-wTzwHMGK9cB5NWOJrh5Q_YNMU=G+dHM9OoHAQ@mail.gmail.com>
- <20151211233242.50a12f09@free-electrons.com>
- <CAHXCMMJOKia1N9wxf3z5se3k=2WsNWBz9gNR26p1EpA3i8BCJQ@mail.gmail.com>
-Message-ID: <CAGm1_kuTj1HTYSADE122ApXXqr75JU2v27Qp5EFYjZmKQCJ6bg@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 14 Dec 2015 12:57:05 +0100
+Subject: [Buildroot] [PATCH] python-pyxml: add a patch to fix syntax errors
+Message-ID: <1450094225-4625-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 11, 2015 at 11:58 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> On Fri, Dec 11, 2015 at 11:32 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Samuel,
->>
->> On Fri, 11 Dec 2015 23:22:52 +0100, Samuel Martin wrote:
->>
->>> AFAI have tested, this change works as expected, except for broken
->>> python modules.
->>> In such cases, 'compileall.compile_dir(...)' does not raise any
->>> exceptions when it failed to compile the *.py file, leading to the
->>> unfortunate consequence: the *.pyc file is not generated and the *.py
->>> file is lost if BR2_PACKAGE_PYTHON_PYC_ONLY is enabled.
->>
->> Do you have some specific examples that exhibit this behavior?
-> Do you mean some case where this happens and the trace it does?
->
-> Here is a log exhibiting the kind of issue aforementioned [1] (got
-> with this defconfig [2] on top of master + this patch)
-> In this case, /usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedRelativeLocationPath.py
-> and /usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedAbsoluteLocationPath.py
-> cannot be compiled due to syntax error, so only their corresponding
-> *.pyc are missing in the final target fs.
->
-> [1] http://code.bulix.org/k3brrc-89950?raw
-> [2] http://code.bulix.org/idvog6-89952?raw
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-I could reproduce the syntax error issue for pyxml package:
+Patch renames variable 'as' to 'pas' to avoid reserved keyword usage.
 
-Compiling /home/YegorYefremov/MyProjects/oss/buildroot/testing/target/usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedAbsoluteLocationPath.py
-...
-  File "/home/YegorYefremov/MyProjects/oss/buildroot/testing/target/usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedAbsoluteLocationPath.py",
-line 27
-    as = ParsedAxisSpecifier.ParsedAxisSpecifier('descendant-or-self')
-     ^
-SyntaxError: invalid syntax
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ .../python-pyxml-fix-syntax-errors.patch           | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 package/python-pyxml/python-pyxml-fix-syntax-errors.patch
 
-Compiling /home/YegorYefremov/MyProjects/oss/buildroot/testing/target/usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedRelativeLocationPath.py
-...
-  File "/home/YegorYefremov/MyProjects/oss/buildroot/testing/target/usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedRelativeLocationPath.py",
-line 31
-    as = ParsedAxisSpecifier.ParsedAxisSpecifier('descendant-or-self')
-     ^
-SyntaxError: invalid syntax
-
-What should we do next? I'd suggest to commit this patch as is, add
-Samuel's compiling error detection patch and a syntax fix patch for
-pyxml. I'll try to hack it.
-
-What do you think about it?
-
-Yegor
+diff --git a/package/python-pyxml/python-pyxml-fix-syntax-errors.patch b/package/python-pyxml/python-pyxml-fix-syntax-errors.patch
+new file mode 100644
+index 0000000..1628d5f
+--- /dev/null
++++ b/package/python-pyxml/python-pyxml-fix-syntax-errors.patch
+@@ -0,0 +1,60 @@
++python-pyxml: fix syntax errors
++
++Rename 'as' variable to 'pas' to avoid reserved keyword usage.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ xml/xpath/ParsedAbbreviatedAbsoluteLocationPath.py |   10 +++++-----
++ xml/xpath/ParsedAbbreviatedRelativeLocationPath.py |    4 ++--
++ 2 files changed, 7 insertions(+), 7 deletions(-)
++
++--- a/xml/xpath/ParsedAbbreviatedAbsoluteLocationPath.py
+++++ b/xml/xpath/ParsedAbbreviatedAbsoluteLocationPath.py
++@@ -24,8 +24,8 @@
++         self._rel = rel
++         nt = ParsedNodeTest.ParsedNodeTest('node', '')
++         ppl = ParsedPredicateList.ParsedPredicateList([])
++-        as = ParsedAxisSpecifier.ParsedAxisSpecifier('descendant-or-self')
++-        self._step = ParsedStep.ParsedStep(as, nt, ppl)
+++        pas = ParsedAxisSpecifier.ParsedAxisSpecifier('descendant-or-self')
+++        self._step = ParsedStep.ParsedStep(pas, nt, ppl)
++         return
++ 
++     def evaluate(self, context):
++@@ -36,7 +36,7 @@
++         rt = self._step.select(context)
++         res = []
++         l = len(rt)
++-        
+++
++         sub_rt = []
++         for ctr in range(l):
++             n = rt[ctr]
++@@ -51,7 +51,7 @@
++         context.setNodePosSize(origState)
++         return result
++     select = evaluate
++-    
+++
++     def pprint(self, indent=''):
++         print indent + str(self)
++         self._step.pprint(indent + '  ')
++@@ -65,4 +65,4 @@
++ 
++     def __repr__(self):
++         return '/%s/%s' % (repr(self._step), repr(self._rel))
++-        
+++
++--- a/xml/xpath/ParsedAbbreviatedRelativeLocationPath.py
+++++ b/xml/xpath/ParsedAbbreviatedRelativeLocationPath.py
++@@ -28,8 +28,8 @@
++         self._right = right
++         nt = ParsedNodeTest.ParsedNodeTest('node','')
++         ppl = ParsedPredicateList.ParsedPredicateList([])
++-        as = ParsedAxisSpecifier.ParsedAxisSpecifier('descendant-or-self')
++-        self._middle = ParsedStep.ParsedStep(as, nt, ppl)
+++        pas = ParsedAxisSpecifier.ParsedAxisSpecifier('descendant-or-self')
+++        self._middle = ParsedStep.ParsedStep(pas, nt, ppl)
++ 
++     def evaluate(self, context):
++         res = []
+-- 
+2.1.4
