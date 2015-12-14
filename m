@@ -1,80 +1,67 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 14 Dec 2015 08:29:44 -0300
-Subject: [Buildroot] [PATCH v2] sbc: new package
-Message-ID: <1450092584-17940-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 14 Dec 2015 12:30:55 +0100
+Subject: [Buildroot] [PATCH v4] python: rework *.pyc files generation
+In-Reply-To: <CAHXCMMJOKia1N9wxf3z5se3k=2WsNWBz9gNR26p1EpA3i8BCJQ@mail.gmail.com>
+References: <1447948334-8440-1-git-send-email-yegorslists@googlemail.com>
+ <CAHXCMM+fZO0q-wTzwHMGK9cB5NWOJrh5Q_YNMU=G+dHM9OoHAQ@mail.gmail.com>
+ <20151211233242.50a12f09@free-electrons.com>
+ <CAHXCMMJOKia1N9wxf3z5se3k=2WsNWBz9gNR26p1EpA3i8BCJQ@mail.gmail.com>
+Message-ID: <CAGm1_kuTj1HTYSADE122ApXXqr75JU2v27Qp5EFYjZmKQCJ6bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+On Fri, Dec 11, 2015 at 11:58 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> On Fri, Dec 11, 2015 at 11:32 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Samuel,
+>>
+>> On Fri, 11 Dec 2015 23:22:52 +0100, Samuel Martin wrote:
+>>
+>>> AFAI have tested, this change works as expected, except for broken
+>>> python modules.
+>>> In such cases, 'compileall.compile_dir(...)' does not raise any
+>>> exceptions when it failed to compile the *.py file, leading to the
+>>> unfortunate consequence: the *.pyc file is not generated and the *.py
+>>> file is lost if BR2_PACKAGE_PYTHON_PYC_ONLY is enabled.
+>>
+>> Do you have some specific examples that exhibit this behavior?
+> Do you mean some case where this happens and the trace it does?
+>
+> Here is a log exhibiting the kind of issue aforementioned [1] (got
+> with this defconfig [2] on top of master + this patch)
+> In this case, /usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedRelativeLocationPath.py
+> and /usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedAbsoluteLocationPath.py
+> cannot be compiled due to syntax error, so only their corresponding
+> *.pyc are missing in the final target fs.
+>
+> [1] http://code.bulix.org/k3brrc-89950?raw
+> [2] http://code.bulix.org/idvog6-89952?raw
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- package/Config.in     |  1 +
- package/sbc/Config.in |  8 ++++++++
- package/sbc/sbc.hash  |  2 ++
- package/sbc/sbc.mk    | 15 +++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/sbc/Config.in
- create mode 100644 package/sbc/sbc.hash
- create mode 100644 package/sbc/sbc.mk
+I could reproduce the syntax error issue for pyxml package:
 
-diff --git a/package/Config.in b/package/Config.in
-index 1ab5133..1c7c64b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -739,6 +739,7 @@ menu "Audio/Sound"
- 	source "package/opus/Config.in"
- 	source "package/opusfile/Config.in"
- 	source "package/portaudio/Config.in"
-+	source "package/sbc/Config.in"
- 	source "package/speex/Config.in"
- 	source "package/taglib/Config.in"
- 	source "package/tinyalsa/Config.in"
-diff --git a/package/sbc/Config.in b/package/sbc/Config.in
-new file mode 100644
-index 0000000..f1dbc0e
---- /dev/null
-+++ b/package/sbc/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SBC
-+	bool "sbc"
-+	select BR2_PACKAGE_LIBSNDFILE
-+	help
-+	  An audio codec to connect bluetooth high quality audio
-+	  devices like headphones or loudspeakers.
-+
-+	  http://www.bluez.org/
-diff --git a/package/sbc/sbc.hash b/package/sbc/sbc.hash
-new file mode 100644
-index 0000000..be3c8f7
---- /dev/null
-+++ b/package/sbc/sbc.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc
-+sha256	e61022cf576f14190241e7071753fdacdce5d1dea89ffd704110fc50be689309	sbc-1.3.tar.xz
-diff --git a/package/sbc/sbc.mk b/package/sbc/sbc.mk
-new file mode 100644
-index 0000000..60ebc74
---- /dev/null
-+++ b/package/sbc/sbc.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# sbc
-+#
-+################################################################################
-+
-+SBC_VERSION = 1.3
-+SBC_SOURCE = sbc-$(SBC_VERSION).tar.xz
-+SBC_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
-+SBC_INSTALL_STAGING = YES
-+SBC_DEPENDENCIES = libsndfile host-pkgconf
-+SBC_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
-+SBC_LICENSE_FILES = COPYING COPYING.LIB
-+
-+$(eval $(autotools-package))
--- 
-2.4.10
+Compiling /home/YegorYefremov/MyProjects/oss/buildroot/testing/target/usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedAbsoluteLocationPath.py
+...
+  File "/home/YegorYefremov/MyProjects/oss/buildroot/testing/target/usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedAbsoluteLocationPath.py",
+line 27
+    as = ParsedAxisSpecifier.ParsedAxisSpecifier('descendant-or-self')
+     ^
+SyntaxError: invalid syntax
+
+Compiling /home/YegorYefremov/MyProjects/oss/buildroot/testing/target/usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedRelativeLocationPath.py
+...
+  File "/home/YegorYefremov/MyProjects/oss/buildroot/testing/target/usr/lib/python2.7/site-packages/_xmlplus/xpath/ParsedAbbreviatedRelativeLocationPath.py",
+line 31
+    as = ParsedAxisSpecifier.ParsedAxisSpecifier('descendant-or-self')
+     ^
+SyntaxError: invalid syntax
+
+What should we do next? I'd suggest to commit this patch as is, add
+Samuel's compiling error detection patch and a syntax fix patch for
+pyxml. I'll try to hack it.
+
+What do you think about it?
+
+Yegor
