@@ -1,69 +1,163 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 14 Dec 2015 22:34:05 +0100
-Subject: [Buildroot] [PATCH v2 1/4] libfslcodec: add install hooks to
- fix libraries path
-In-Reply-To: <20151213203114.GB27769@free.fr>
-References: <1449755560-2911-1-git-send-email-gary.bisson@boundarydevices.com>
- <1449755560-2911-2-git-send-email-gary.bisson@boundarydevices.com>
- <20151213203114.GB27769@free.fr>
-Message-ID: <CAAMH-yscbiH8px5daX93ZvAzfEF57UePuLHC64DaXw_qpKxfRA@mail.gmail.com>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Mon, 14 Dec 2015 22:44:54 +0100
+Subject: [Buildroot] [PATCH v2] mongoose: bump to version 6.1
+Message-ID: <1450129494-5625-1-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+ - provide only libmongoose.a
+ - rework package description
 
-On Sun, Dec 13, 2015 at 9:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Gary, All,
->
-> On 2015-12-10 14:52 +0100, Gary Bisson spake thusly:
->> By default, all the libraries are installed under /usr/lib/imx-mm which
->> causes problems at runtime.
->>
->> The hooks are inspired from the mechanism used in the Yocto recipe:
->> https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-
->> multimedia/libfslcodec/libfslcodec.inc
->>
->> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
->> ---
->>
->> Here are the dependencies the pipelines above are testing:
->> $ for i in `find target/usr/lib/gstreamer*/*`; do readelf -d $i | grep NEEDED | grep lib_ && echo "($i)"; done
->>  0x00000001 (NEEDED)                     Shared library: [lib_nb_amr_dec_arm9_elinux.so.2]
->>  0x00000001 (NEEDED)                     Shared library: [lib_wb_amr_dec_arm9_elinux.so.2]
->> (target/usr/lib/gstreamer-0.10/libmfw_gst_amrdec.so)
->>  0x00000001 (NEEDED)                     Shared library: [lib_peq_arm11_elinux.so.1.fhw]
->> (target/usr/lib/gstreamer-0.10/libmfw_gst_audio_pp.so)
->>  0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
->> (target/usr/lib/gstreamer-0.10/libmfw_gst_mp3enc.so)
->>  0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
->> (target/usr/lib/gstreamer-1.0/libgstimxaudio.so)
->>
->> Note that I added a staging install hook as well because otherwise the
->> gst1-imx plugin doesn't find lib_mp3_enc_arm12_elinux.so at build time.
->>
->> Not to copy the same library twice I decided to go with a symlink. Let
->> me know if that's acceptable.
->
-> The link you pointed to does a move, not a copy. Why do you do a symlink?
->
-> 1) Where are the libraries searched for at build time? If they are
->    only searched for in /usr/lib/ , then do a move. If womething is
->    positively looking for them in /usr/lin/imx-mm/ , then do a symlink,
->    indeed.
->
-> 2) Where are libraries searched for at runtime? Same logic as for build
->    time.
+Signed-off-by: Davide Viti <zinosat@tiscali.it>
+---
+Changes v1 -> v2:
+   - Compile only libmongoose.a (suggested by Peter Korsgaard)
+   - Remove init scripts
+   - Rework package description (Config.in)
+   - Make sure the update does not break swupdate which provides its own
+     version of mongoose (suggested by Peter Korsgaard)
+   
+ package/mongoose/Config.in        |  3 ++-
+ package/mongoose/S85mongoose      | 41 ---------------------------------------
+ package/mongoose/mongoose.hash    |  2 +-
+ package/mongoose/mongoose.mk      | 23 +---------------------
+ package/mongoose/mongoose.service | 10 ----------
+ 5 files changed, 4 insertions(+), 75 deletions(-)
+ delete mode 100755 package/mongoose/S85mongoose
+ delete mode 100644 package/mongoose/mongoose.service
 
-Just want to add something here, my v1 was doing a symlink in staging
-(because of the build time dependencies) and a move at runtime since
-everything is looking at the same location in that case. But then
-J?r?me said that he would prefer to have the same mechanism (symlink)
-in both even though it is not necessary for the target. The reason was
-to have some consistency between staging and target. What are thoughts
-on that?
-
-Regards,
-Gary
+diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
+index df706b9..22b385d 100644
+--- a/package/mongoose/Config.in
++++ b/package/mongoose/Config.in
+@@ -3,7 +3,8 @@ config BR2_PACKAGE_MONGOOSE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+-	  Mongoose is a small and easy to use web server
++	  Mongoose is an embedded networking library, which can turn
++	  anything into a web server
+ 
+ 	  https://github.com/cesanta/mongoose
+ 
+diff --git a/package/mongoose/S85mongoose b/package/mongoose/S85mongoose
+deleted file mode 100755
+index 9f24e06..0000000
+--- a/package/mongoose/S85mongoose
++++ /dev/null
+@@ -1,41 +0,0 @@
+-#!/bin/sh
+-#
+-# Start/stop the mongoose HTTP server
+-#
+-
+-set -e
+-
+-PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-NAME=mongoose
+-DESC="Mongoose HTTP server"
+-
+-DAEMON=`which mongoose`
+-OPTIONS="-document_root /var/www -listening_port 80"
+-
+-[ -e /etc/default/mongoose ] && . /etc/default/mongoose
+-
+-case "$1" in
+-  start)
+-	echo "Starting $DESC:"
+-	start-stop-daemon -S -x "$DAEMON" -b -- $OPTIONS
+-	echo "$NAME."
+-	;;
+-  stop)
+-	printf "Stopping $DESC: "
+-	start-stop-daemon -K -x "$DAEMON"
+-	echo "$NAME."
+-	;;
+-  restart|force-reload)
+-	printf "Restarting $DESC: "
+-	start-stop-daemon -K -x "$DAEMON"
+-	sleep 1
+-	start-stop-daemon -S -x "$DAEMON" -b -- $OPTIONS
+-	echo "$NAME."
+-	;;
+-  *)
+-	echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+-	exit 1
+-	;;
+-esac
+-
+-exit 0
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 5687094..1ed4a78 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	cc2557c7cf9f15e1e691f285a4c6c705cc7e56cb70c64cb49703a428a0677065  mongoose-5.6.tar.gz
++sha256	512b406714d31a178fc41263ca6ecafd0c1e2dd091e9685a7b2462fecdaaea8e  mongoose-6.1.tar.gz
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 14f2aae..6caaf2e 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGOOSE_VERSION = 5.6
++MONGOOSE_VERSION = 6.1
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPLv2
+ MONGOOSE_LICENSE_FILES = LICENSE
+@@ -19,31 +19,10 @@ MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
+ endif
+ 
+ define MONGOOSE_BUILD_CMDS
+-	$(TARGET_CC) $(@D)/examples/web_server/web_server.c $(@D)/mongoose.c \
+-		-I$(@D) -o $(@D)/examples/web_server/web_server \
+-		$(MONGOOSE_CFLAGS) -pthread
+ 	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
+ 	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
+ endef
+ 
+-define MONGOOSE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 755 $(@D)/examples/web_server/web_server \
+-		$(TARGET_DIR)/usr/sbin/mongoose
+-endef
+-
+-define MONGOOSE_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+-		$(TARGET_DIR)/etc/init.d/S85mongoose
+-endef
+-
+-define MONGOOSE_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/mongoose/mongoose.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/mongoose.service
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -sf ../../../../usr/lib/systemd/system/mongoose.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mongoose.service
+-endef
+-
+ define MONGOOSE_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 644 $(@D)/libmongoose.a \
+ 		$(STAGING_DIR)/usr/lib/libmongoose.a
+diff --git a/package/mongoose/mongoose.service b/package/mongoose/mongoose.service
+deleted file mode 100644
+index 12a731c..0000000
+--- a/package/mongoose/mongoose.service
++++ /dev/null
+@@ -1,10 +0,0 @@
+-[Unit]
+-Description=Mongoose HTTP server
+-After=network.target
+-
+-[Service]
+-ExecStart=/usr/sbin/mongoose -document_root /var/www -listening_port 80
+-Restart=always
+-
+-[Install]
+-WantedBy=multi-user.target
+-- 
+2.1.4
