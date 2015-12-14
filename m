@@ -1,92 +1,85 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 14 Dec 2015 21:31:15 +0000
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: Add version 5.2.0
-In-Reply-To: <20151214211045.GA4152@free.fr>
-References: <1450122295-5311-1-git-send-email-martin@barkynet.com>
- <20151214210913.227563c9@free-electrons.com>
- <CAFGQKxfvQwA3v8W=OKEvNR6SE06DTng6PxQGj4q7o4zUWYbU2g@mail.gmail.com>
- <20151214214337.2933ea41@free-electrons.com>
- <20151214211045.GA4152@free.fr>
-Message-ID: <CAFGQKxe61V2J6WjQobptUS4RJucGmMXuWyAgLy+415CH4ZUT+A@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Dec 2015 18:39:56 -0300
+Subject: [Buildroot] [PATCH v2] gnutls: fix --disable-crywrap
+Message-ID: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Add a patch to really enable the --disable-crywrap option in gnutls.
+Fixes:
+http://autobuild.buildroot.org/results/d86/d8604fe448bb11395e8443726d09b041eb34c6d5/
 
-On 14 December 2015 at 21:10, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, All,
->
-> On 2015-12-14 21:43 +0100, Thomas Petazzoni spake thusly:
->> On Mon, 14 Dec 2015 20:24:30 +0000, Martin Bark wrote:
->> > I'm not sure the answer to that.  What i can say is that all four are
->> > getting maintained.  Also, according to https://github.com/nodejs/LTS
->> > node.js 0.10.x will be maintained all the way until October 2016.
->> >
->> > I see two logical approaches for buildroot:
->> >
->> > 1) Support all four in buildroot because node.js support all four
->> > 2) Only Support the 4.x and 5.x because they are the current LTS and
->> > Stable releases (i.e. the ones on the front page of
->> > https://nodejs.org)
->> >
->> > Personally I'd vote for 2) because it simplifies things.
->> >
->> > What are your thoughts?
->>
->> I'm fine with option (2) as well, but do we have other NodeJS users
->> that would like to see 0.10.x and 0.12.x being kept?
->>
->> Is there any issue for users of 0.10.x/0.12.x to migrate to 4.2 or 5.2 ?
->
-> We do have the various version of nodejs, because:
->
->   - 4.2.x needs gcc >= 4.8 and armv6+
->   - 0.12.x needs armv6+
->   - 0.10.x has not requirement
->
-> Going back in our history:
->
->   - we had nodejs-0.10
->   - someone proposed to bump to 0.12
->   - someone else wanted to keep 0.10 around because of armv6+
->     requirement
->   - so we added 0.12, and kept 0.10
->   - the story repeated itself with 4.2.x
->
-> So, I think we have a few options here:
->
->  1) keep all the three existing versions, add 5.2
->  2) keep 0.10 and 0.12, replace 4.2 with 5.2
->  3) keep 0.10, ditch 0.12, replace 4.2 with 5.2
->  4) dith 0.10 and 0.12, replace 4.2 with 5.2
->
-> I would lean toward either 2 or 3.
->
-> 3 is IMHO the best solution: 5.2 is the best choice when all the
-> conditions are met; 0.10 is the fallback, maybe not the optimum in
-> case 0.12 would have fit, but since that's a fallback I don't think
-> it matters much...
+Status: sent upstream (mailing list).
 
-Yes I like option 3) too.  This would clarify the situation so that
-buildroot supports the latest version of node.js only, except 0.10.x
-which is kept purely for armv5 support.  Then in the buildroot 2016.11
-release 0.10.x can be dropped too as it will no longer be maintained.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+v2: need gettextize
 
-Thanks
+ ...onfigure-really-make-disable-crywrap-work.patch | 38 ++++++++++++++++++++++
+ package/gnutls/gnutls.mk                           |  3 ++
+ 2 files changed, 41 insertions(+)
+ create mode 100644 package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
 
-Martin
-
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch b/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
+new file mode 100644
+index 0000000..01ed6bf
+--- /dev/null
++++ b/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
+@@ -0,0 +1,38 @@
++From 996b3741e8c7a5d19ae6c554e062f20c259f52d7 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Mon, 14 Dec 2015 15:16:24 -0300
++Subject: [PATCH] configure: really make --disable-crywrap work
++
++The crywrap variable is set regardless of the state of enable_crywrap,
++hence --disable-crywrap never works.
++Just put the tests for crywrap deps inside the enable_crywrap
++conditional.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ configure.ac | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index e1d1df0..efacc30 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -836,11 +836,10 @@ AC_ARG_ENABLE(crywrap,
++ 
++ 
++  if test "x$enable_crywrap" != "xno" ; then
++-	AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
++- fi
++-
++- if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
++-  crywrap=yes
+++   AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
+++   if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
+++     crywrap=yes
+++   fi
++  fi
++ 
++ fi
++-- 
++2.4.10
++
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index d681c10..d5b3147 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -11,6 +11,9 @@ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
+ GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER
+ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
++# For 0001-configure-really-make-disable-crywrap-work.patch
++GNUTLS_AUTORECONF = YES
++GNUTLS_GETTEXTIZE = YES
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+ 	--disable-guile \
+-- 
+2.4.10
