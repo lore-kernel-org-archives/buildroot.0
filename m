@@ -1,41 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 14 Dec 2015 05:37:42 +0000
-Subject: [Buildroot] [Bug 8516] mkcubiecard.sh uses outdated sfdisk switch -D
-In-Reply-To: <bug-8516-163@https.bugs.busybox.net/>
-References: <bug-8516-163@https.bugs.busybox.net/>
-Message-ID: <bug-8516-163-Tx4321OLsV@https.bugs.busybox.net/>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 14 Dec 2015 07:04:18 +0100
+Subject: [Buildroot] revert GLIBC_MINOR bump in uClibc-ng 1.0 branch
+Message-ID: <20151214060418.GA8958@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8516
+Hi Thomas, Khem, Alexey,
 
---- Comment #1 from Tudor <tudor@tudorholton.com> ---
-According to the linux-sunxi wiki at
-http://linux-sunxi.org/Bootable_SD_card#Partitioning , the correct process is:
+recently Khem tried to use systemd with openembedded and uClibc-ng.
+Most of the needed stuff is ready and will be committed soon.
 
-sfdisk -R ${card}
-cat <<EOT | sfdisk --in-order -L -uM ${card}
-1,16,c
-,,L
-EOT
+There is one open issue I want to discuss with you.
+The GLIBC_MINOR bump in commit
+4a05ed87ceb946608100642121c32e642b58cd0d is breaking SSP detection
+in GCC. This was discovered in Buildroot and fixed.
+It seems there is a major problem to fix it in OpenEmbedded, so
+Khem is asking for revert of this commit for the next release.
 
+What do you think about it?
 
-This makes more sense, since we're explicitly specifying units.  I've tested
-the above and it works correctly.
+Isn't the boost problem solved anyway in another way?
 
-Alternatively, for a fully ext boot partition:
+May be we just learned what it means to bump this number and
+can revert it back to the old value. We should still try
+to get a patch into gcc to avoid any misdetection regarding
+SSP for the next major gcc release.
 
-sfdisk -R ${card}
-cat <<EOT | sfdisk -L --in-order -uM ${card}
-1,,L
-EOT
-
-...and then copy uImage and script.bin to /boot on the ext partition...but
-that's considered experimental.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thanks for any opinion,
+ best regards
+  Waldemar
