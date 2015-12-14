@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Dec 2015 10:10:55 -0300
-Subject: [Buildroot] [PATCH 16/45] libfuse: comma separate licenses
+Date: Mon, 14 Dec 2015 10:10:56 -0300
+Subject: [Buildroot] [PATCH 17/45] collectd: comma separate licenses
 In-Reply-To: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1450098684-17399-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1450098684-17399-17-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1450098684-17399-18-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libfuse/libfuse.mk | 2 +-
+ package/collectd/collectd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index 7a28a81..8360c82 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -7,7 +7,7 @@
- LIBFUSE_VERSION = 2.9.4
- LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = http://downloads.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
--LIBFUSE_LICENSE = GPLv2 LGPLv2.1
-+LIBFUSE_LICENSE = GPLv2, LGPLv2.1
- LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
- LIBFUSE_INSTALL_STAGING = YES
- LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 6e1ea5c..d7fd8f9 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -9,7 +9,7 @@ COLLECTD_SITE = http://collectd.org/files
+ COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+ COLLECTD_INSTALL_STAGING = YES
+-COLLECTD_LICENSE = GPLv2 LGPLv2.1
++COLLECTD_LICENSE = GPLv2, LGPLv2.1
+ COLLECTD_LICENSE_FILES = COPYING
+ # For 0001-build-add-libavltree-libcommon-libheap-dependencies.patch
+ COLLECTD_AUTORECONF = YES
 -- 
 2.4.10
