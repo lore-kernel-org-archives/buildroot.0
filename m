@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 22:04:45 +0100
-Subject: [Buildroot] [git commit] ltp-testsuite: comma separate licenses
-Message-ID: <20151215210845.169A280409@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 22:05:48 +0100
+Subject: [Buildroot] [git commit] lttng-babeltrace: comma separate licenses
+Message-ID: <20151215210845.4EF87818FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8988b2b1e29b4e1e75f69b5decf7985eecc914ce
+commit: http://git.buildroot.net/buildroot/commit/?id=addcd86e10037bc188c574fffbf2a4416f9d467f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+[Thomas: put between parenthesis the description of what is covered by
+each license.]
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltp-testsuite/ltp-testsuite.mk | 2 +-
+ package/lttng-babeltrace/lttng-babeltrace.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index da36636..e081cfa 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index dacb15a..5de77fb 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
 @@ -7,7 +7,7 @@
- LTP_TESTSUITE_VERSION = 20150903
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
--LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
-+LTP_TESTSUITE_LICENSE = GPLv2, GPLv2+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
- LTP_TESTSUITE_CONF_OPTS += \
- 			   --with-power-management-testsuite \
+ LTTNG_BABELTRACE_SITE = http://lttng.org/files/babeltrace
+ LTTNG_BABELTRACE_VERSION = 1.2.4
+ LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+-LTTNG_BABELTRACE_LICENSE = MIT; LGPLv2.1 for include/babeltrace/list.h; GPLv2 for test code
++LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
+ LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+ 
+ LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
