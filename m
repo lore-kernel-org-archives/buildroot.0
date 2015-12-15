@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 22:01:44 +0100
-Subject: [Buildroot] [git commit] lvm2: comma separate licenses
-Message-ID: <20151215210843.98DB780409@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 22:02:57 +0100
+Subject: [Buildroot] [git commit] minidlna: comma separate licenses
+Message-ID: <20151215210844.5019380409@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=552c7e17b57b557f532cbdb0483202ab109ddc16
+commit: http://git.buildroot.net/buildroot/commit/?id=071d4f47bf5ba139455c69679427c2fdfd7adf37
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.mk | 2 +-
+ package/minidlna/minidlna.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index cfee44b..0d0dc2c 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -8,7 +8,7 @@ LVM2_VERSION = 2.02.138
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
--LVM2_LICENSE = GPLv2 LGPLv2.1
-+LVM2_LICENSE = GPLv2, LGPLv2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index e00fa09..6902aa8 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -6,7 +6,7 @@
  
- # Make sure that binaries and libraries are installed with write
+ MINIDLNA_VERSION = 1.1.5
+ MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
+-MINIDLNA_LICENSE = GPLv2 BSD-3c
++MINIDLNA_LICENSE = GPLv2, BSD-3c
+ MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+ 
+ MINIDLNA_DEPENDENCIES = \
