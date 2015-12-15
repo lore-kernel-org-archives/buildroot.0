@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 21:48:23 +0100
-Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
-	to 0.4.10
-Message-ID: <20151215204833.2EE1F81DC9@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 21:48:08 +0100
+Subject: [Buildroot] [git commit] gdk-pixbuf: security bump to version 2.32.3
+Message-ID: <20151215204833.2226181DD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2979e17af744e19981a01b0b43dc7ceca8d78c33
+commit: http://git.buildroot.net/buildroot/commit/?id=e7b80100b8fab231a8d41fe0b55eb41623c9d2ca
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+* Fix two crashes in the bmp loader (#747605, #758991)
+* ico: integer overflow fixes
+
+No CVEs assigned yet.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.hash | 4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index 58f4196..9500ab1 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 478d96a..186e158 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256	7fd01d731b264703fb6d965400f8e3e660841cd51cf7cec1fd648c1326fe0b77	dovecot-2.2-pigeonhole-0.4.10.rc2.tar.gz
-+sha256	e9dfe7160fd3b465d6d5068f219122626ef790cce507e290cd09852c7d90726f	dovecot-2.2-pigeonhole-0.4.10.tar.gz
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index e65a2a9..d057c7a 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,9 +4,9 @@
- #
+-# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.32/gdk-pixbuf-2.32.2.sha256sum
+-sha256	d3ab06fc123b13effed4c27c77cebdfad2173ff20628d82c397b7660ae926145	gdk-pixbuf-2.32.2.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.32/gdk-pixbuf-2.32.3.sha256sum
++sha256	2b6771f1ac72f687a8971e59810b8dc658e65e7d3086bd2e676e618fd541d031	gdk-pixbuf-2.32.3.tar.xz
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index a41c262..be79e11 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--DOVECOT_PIGEONHOLE_VERSION = 0.4.10.rc2
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.10
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
--DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2/rc
-+DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
- DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
- DOVECOT_PIGEONHOLE_LICENSE_FILES = COPYING
- DOVECOT_PIGEONHOLE_DEPENDENCIES = dovecot
+ GDK_PIXBUF_VERSION_MAJOR = 2.32
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).2
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).3
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPLv2+
