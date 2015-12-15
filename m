@@ -1,47 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 21:50:04 +0100
-Subject: [Buildroot] [PATCH v2] gnutls: fix --disable-crywrap
-In-Reply-To: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151215215004.282f0afc@free-electrons.com>
+Date: Tue, 15 Dec 2015 21:50:18 +0100
+Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2015.12.14
+Message-ID: <20151215205022.D854681DD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+commit: http://git.buildroot.net/buildroot/commit/?id=5f9a9a5ca48c08285f1d1c1c5aa4126f77658697
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Dec 2015 18:39:56 -0300, Gustavo Zacarias wrote:
-> Add a patch to really enable the --disable-crywrap option in gnutls.
-> Fixes:
-> http://autobuild.buildroot.org/results/d86/d8604fe448bb11395e8443726d09b041eb34c6d5/
-> 
-> Status: sent upstream (mailing list).
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This patch does not apply (probably because it was based in your tree
-on other commits that are not in the official Buildroot git repo).
-Also, it would be good if you could take into account the two comments
-made by Baruch.
-
-thomas at skate:~/projets/buildroot (master)$ git pwam 556658
-Applying patch #556658 using 'git am -s -3'
-Description: [v2] gnutls: fix --disable-crywrap
-Applying: gnutls: fix --disable-crywrap
-fatal: sha1 information is lacking or useless (package/gnutls/gnutls.mk).
-error: could not build fake ancestor
-Patch failed at 0001 gnutls: fix --disable-crywrap
-The copy of the patch that failed is found in: .git/rebase-apply/patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 4c98067..cafc631 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	19ef80c2b9d24f0c483c32294258640b2510df1775ea1c6323e84cced02f1612	wireless-regdb-2015.10.22.tar.xz
++sha256	013e07d988f5cd7d24e4aa7a6cd406615d441ea6b882a02d2a46a78edeb2cfb6	wireless-regdb-2015.12.14.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index b82bbce..38d1c26 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRELESS_REGDB_VERSION = 2015.10.22
++WIRELESS_REGDB_VERSION = 2015.12.14
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
