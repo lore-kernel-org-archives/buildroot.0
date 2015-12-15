@@ -1,152 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Dec 2015 21:37:02 +0100
-Subject: [Buildroot] [PATCH] graph-depends: optimize
-	remove_transitive_deps()
-In-Reply-To: <1450174901-30667-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1450174901-30667-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20151215203702.GB3596@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Dec 2015 21:36:58 +0100
+Subject: [Buildroot] [git commit] popt: change POPT_SITE back to original url
+Message-ID: <20151215203912.0DB3581974@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=a54cde49d51f25b135a3751965e6c59b79d2cddc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-12-15 11:21 +0100, Thomas Petazzoni spake thusly:
-> For large configurations, the execution time of
-> remove_transitive_deps() becomes really high, due to the number of
-> nested loops + the is_dep() function being recursive.
-> 
-> For an allyespackageconfig, the remove_extra_deps() function takes 334
-> seconds to execute, and the overall time to generate the .dot file is
-> 6 minutes and 39 seconds. Here is a timing of the different
-> graph-depends steps and the overall execution time:
-> 
->   Getting dependencies:   42.5735 seconds
->   Turn deps into a dict:   0.0023 seconds
->   Remove extra deps:     334.1542 seconds
->   Get version:            22.4919 seconds
->   Generate .dot:           0.0197 seconds
-> 
->   real	6m39.289s
->   user	6m16.644s
->   sys	0m8.792s
-> 
-> By adding a very simple cache for the results of is_dep(), we bring
-> down the execution time of the "Remove extra deps" step from 334
-> seconds to just 4 seconds, reducing the overall execution time to 1
-> minutes and 10 seconds:
-> 
->   Getting dependencies:  42.9546 seconds
->   Turn deps into a dict:  0.0025 seconds
->   Remove extra deps:      4.9643 seconds
->   Get version:           22.1865 seconds
->   Generate .dot:          0.0207 seconds
-> 
->   real	1m10.201s
->   user	0m47.716s
->   sys	0m7.948s
+The popt-1.16.tar.gz file is no more available at current URL and
+rmp5.org is online.
 
-Wee! :-)
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/popt/popt.hash | 2 +-
+ package/popt/popt.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-Still, somme comments, see below...
-
-I did use the Python profiler to investigate:
-    python -m cProfile -s cumulative support/scripts/graph-depends >foo.list
-
-Unfortunately, it is not possible to dump a text version to a file...  :-(
-Or I'm too dumb for that. :-]
-
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/scripts/graph-depends | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index 5f77038..d39306e 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -237,16 +237,43 @@ for dep in dependencies:
->          dict_deps[dep[0]] = []
->      dict_deps[dep[0]].append(dep[1])
->  
-> +# Basic cache for the results of the is_dep() function, in order to
-> +# optimize the execution time. The cache is a dict of dict of boolean
-> +# values. The key to the primary dict is "pkg", and the key of the
-> +# sub-dicts is "pkg2".
-> +is_dep_cache = {}
-> +
-> +def is_dep_cache_insert(pkg, pkg2, val):
-> +    if is_dep_cache.has_key(pkg):
-
-    if pkg in is_dep_cache
-
-> +        is_dep_cache[pkg].update({pkg2: val})
-> +    else:
-> +        is_dep_cache[pkg] = {pkg2: val}
-> +
-> +# Returns a tuple (r, val), where r is a boolean that indicates if a
-> +# value was found in the cache or not, and val being the value found
-> +# (only when r is True).
-> +def is_dep_cache_lookup(pkg, pkg2):
-> +    if is_dep_cache.has_key(pkg):
-> +        if is_dep_cache[pkg].has_key(pkg2):
-> +            return (True, is_dep_cache[pkg][pkg2])
-> +    return (False, False)
-
-I think using exceptions is better:
-
-    return is_dep_cache[pkg][pkg2]
-
-Don't catch any exception, it'll be propagated up as usual, see below...
-
->  # This function return True if pkg is a dependency (direct or
->  # transitive) of pkg2, dependencies being listed in the deps
->  # dictionary. Returns False otherwise.
->  def is_dep(pkg,pkg2,deps):
-> +    (r, val) = is_dep_cache_lookup(pkg, pkg2)
-> +    if r:
-> +        return val
->      if pkg2 in deps:
->          for p in deps[pkg2]:
->              if pkg == p:
-> +                is_dep_cache_insert(pkg, pkg2, True)
->                  return True
->              if is_dep(pkg,p,deps):
-> +                is_dep_cache_insert(pkg, pkg2, True)
->                  return True
-> +    is_dep_cache_insert(pkg, pkg2, False)
->      return False
-
-Here, I would have dome a bit differently:
-
-  - keep is_dep() untouched
-  - rename is_dep() to is_dep_uncached()
-  - add is_dep() as such:
-
-    def is_dep(pkg,pkg2,deps):
-        try:
-            return is_dep_cache_lookup(pkg,pkg2)
-        except KeyError:
-            val = is_dep_uncached(pkg, pkg2, deps)
-            is_dep_cache_insert(pkg, pkg2, val)
-            return val
-
-Not really tested, but should work I hope! ;-)
-
-Regards,
-Yann E. MORIN.
-
->  # This function eliminates transitive dependencies; for example, given
-> -- 
-> 2.6.4
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/popt/popt.hash b/package/popt/popt.hash
+index 4d93e47..875bbae 100644
+--- a/package/popt/popt.hash
++++ b/package/popt/popt.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated based on http://anduin.linuxfromscratch.org/sources/BLFS/svn/p/popt-1.16.tar.gz.md5sum
++# Locally calculated:
+ sha256	e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8	popt-1.16.tar.gz
+diff --git a/package/popt/popt.mk b/package/popt/popt.mk
+index 605649b..863a47a 100644
+--- a/package/popt/popt.mk
++++ b/package/popt/popt.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ POPT_VERSION = 1.16
+-# rpm5.org down
+-POPT_SITE = http://anduin.linuxfromscratch.org/sources/BLFS/svn/p
++POPT_SITE = http://rpm5.org/files/popt
+ POPT_INSTALL_STAGING = YES
+ POPT_LICENSE = MIT
+ POPT_LICENSE_FILES = COPYING
