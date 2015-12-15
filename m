@@ -1,61 +1,39 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 15 Dec 2015 08:34:06 +0100
-Subject: [Buildroot] [PATCH] linux: add support for vmlinuz.bin kernel image
-	format
-Message-ID: <1450164846-10371-1-git-send-email-yegorslists@googlemail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 15 Dec 2015 09:04:49 +0000
+Subject: [Buildroot] [PATCH 1/1] package/libuv: bump version to 1.8.0
+Message-ID: <1450170289-24258-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-Linux for MIPS supports raw binary zboot image (vmlinuz.bin).
-Add it to the "Kernel binary format" list.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- linux/Config.in | 4 ++++
- linux/linux.mk  | 4 ++++
- 2 files changed, 8 insertions(+)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 57b3490..8b29b71 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -249,6 +249,10 @@ config BR2_LINUX_KERNEL_VMLINUZ
- 	bool "vmlinuz"
- 	depends on BR2_mips || BR2_mipsel
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 6f38b8b..abbbb0c 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 11d10f12d68fa655fff18c6021e8e45bc610e7baee006f17247b1830ee316093  libuv-v1.7.5.tar.gz
++sha256 906e1a5c673c95cb261adeacdb7308a65b4a8f7c9c50d85f3021364951fa9cde  libuv-v1.8.0.tar.gz
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index da47b62..bf1dead 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_LINUX_KERNEL_VMLINUZ_BIN
-+	bool "vmlinuz.bin"
-+	depends on BR2_mips || BR2_mipsel
-+
- config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 	bool "custom target"
- 	help
-diff --git a/linux/linux.mk b/linux/linux.mk
-index dd2cc49..f95bc58 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -139,6 +139,8 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
- LINUX_IMAGE_NAME = vmlinux
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
- LINUX_IMAGE_NAME = vmlinuz
-+else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ_BIN),y)
-+LINUX_IMAGE_NAME = vmlinuz.bin
- endif
- # The if-else blocks above are all the image types we know of, and all
- # come from a Kconfig choice, so we know we have LINUX_IMAGE_NAME set
-@@ -167,6 +169,8 @@ ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
- LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
- LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-+else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ_BIN),y)
-+LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else
- LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
- endif # BR2_LINUX_KERNEL_VMLINUX
+-LIBUV_VERSION = v1.7.5
++LIBUV_VERSION = v1.8.0
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
 -- 
-2.1.4
+2.5.0
