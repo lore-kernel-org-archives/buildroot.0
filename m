@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 22:05:14 +0100
-Subject: [Buildroot] [git commit] audiofile: comma separate licenses
-Message-ID: <20151215210845.3F53E80409@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 22:04:57 +0100
+Subject: [Buildroot] [git commit] swig: comma separate licenses
+Message-ID: <20151215210845.3654780409@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=13a3cf66434304b37839f4b61746b6787b959bd0
+commit: http://git.buildroot.net/buildroot/commit/?id=3e0627c88fcb11939c5661c406ff3fd7862709dd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/audiofile/audiofile.mk | 2 +-
+ package/swig/swig.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/audiofile/audiofile.mk b/package/audiofile/audiofile.mk
-index c685ce1..ee3f833 100644
---- a/package/audiofile/audiofile.mk
-+++ b/package/audiofile/audiofile.mk
-@@ -12,7 +12,7 @@ AUDIOFILE_CONF_OPTS = --disable-examples
- AUDIOFILE_DEPENDENCIES = host-pkgconf
- # configure is outdated and has old bugs because of it
- AUDIOFILE_AUTORECONF = YES
--AUDIOFILE_LICENSE = GPLv2+ LGPLv2.1+
-+AUDIOFILE_LICENSE = GPLv2+, LGPLv2.1+
- AUDIOFILE_LICENSE_FILES = COPYING COPYING.GPL
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index cd816b4..e4bd64c 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -12,7 +12,7 @@ HOST_SWIG_CONF_OPTS = \
+ 	--without-pcre \
+ 	--disable-ccache \
+ 	--without-octave
+-SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
++SWIG_LICENSE = GPLv3+, BSD-2c, BSD-3c
+ SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
  
- ifeq ($(BR2_PACKAGE_FLAC),y)
+ # CMake looks first at swig3.0, then swig2.0 and then swig. However,
