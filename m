@@ -1,86 +1,99 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 15 Dec 2015 23:40:21 +0100
-Subject: [Buildroot] [PATCH v10 09/28] package/efl/libefl: enable xinput2.2
+Date: Tue, 15 Dec 2015 23:40:38 +0100
+Subject: [Buildroot] [PATCH v10 26/28] package/efl/libeina: remove package
 In-Reply-To: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
 References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1450219240-16938-10-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1450219240-16938-27-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-X11 XInput v2.2+ support is one of the recommended
-feature for the efl libraries:
-https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n490
+Libeina is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v8: Remove --disable-xinput22 added by the patch adding X11 support
-    (Yann E.Morin)
-v6: add missing dependency on xlib_libXi (Yann E.Morin)
-v4: rename to libefl
-    improve commit log
-v3: new patch
+v6: Improve lecacy help text (Yann E.Morin)
+v5: remove libeina directory
+v4: update Config.in to use libefl
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/efl/libefl/Config.in | 1 +
- package/efl/libefl/libefl.mk | 7 ++++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ Config.in.legacy               |  7 +++++++
+ package/efl/Config.in          |  1 -
+ package/efl/libeina/Config.in  |  6 ------
+ package/efl/libeina/libeina.mk | 18 ------------------
+ 4 files changed, 7 insertions(+), 25 deletions(-)
+ delete mode 100644 package/efl/libeina/Config.in
+ delete mode 100644 package/efl/libeina/libeina.mk
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 333456e..7f76b94 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -130,6 +130,7 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXI
- 	select BR2_PACKAGE_XLIB_LIBXINERAMA
- 	select BR2_PACKAGE_XLIB_LIBXP
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 0eb17c2..5e8009e 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -33,7 +33,6 @@ LIBEFL_GETTEXTIZE = YES
- # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
--# --disable-xinput22: disable X11 XInput v2.2+ support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
- LIBEFL_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-@@ -41,7 +40,6 @@ LIBEFL_CONF_OPTS = \
- 	--disable-cxx-bindings \
- 	--disable-sdl \
- 	--disable-systemd \
--	--disable-xinput22 \
- 	--enable-lua-old
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 1df81ea..e1ea06f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
  
- # Disable untested configuration warning.
-@@ -145,11 +143,13 @@ LIBEFL_CONF_OPTS += --disable-fb
- endif
++config BR2_PACKAGE_LIBEINA
++	bool "libeina package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  With EFL 1.15, libeina is now provided by the libefl package.
++
+ config BR2_PACKAGE_LIBEET
+ 	bool "libeet package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index a01b971..80658b2 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -15,7 +15,6 @@ menuconfig BR2_PACKAGE_EFL
  
- ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
-+# --enable-xinput22 is recommended
- LIBEFL_CONF_OPTS += \
- 	--with-x11=xlib \
- 	--with-x=$(STAGING_DIR) \
- 	--x-includes=$(STAGING_DIR)/usr/include \
--	--x-libraries=$(STAGING_DIR)/usr/lib
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	--enable-xinput22
+ if BR2_PACKAGE_EFL
  
- LIBEFL_DEPENDENCIES += \
- 	xlib_libX11 \
-@@ -157,6 +157,7 @@ LIBEFL_DEPENDENCIES += \
- 	xlib_libXcursor \
- 	xlib_libXdamage \
- 	xlib_libXext \
-+	xlib_libXi \
- 	xlib_libXinerama \
- 	xlib_libXrandr \
- 	xlib_libXrender \
+-source "package/efl/libeina/Config.in"
+ source "package/efl/libefl/Config.in"
+ source "package/efl/libelementary/Config.in"
+ 
+diff --git a/package/efl/libeina/Config.in b/package/efl/libeina/Config.in
+deleted file mode 100644
+index 80600ad..0000000
+--- a/package/efl/libeina/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_LIBEINA
+-	bool "libeina"
+-	help
+-	  Eina is a tiny library to handle data types (list, hash, etc.)
+-
+-	  http://trac.enlightenment.org/e/wiki/Eina
+diff --git a/package/efl/libeina/libeina.mk b/package/efl/libeina/libeina.mk
+deleted file mode 100644
+index ae9f1c6..0000000
+--- a/package/efl/libeina/libeina.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# libeina
+-#
+-################################################################################
+-
+-LIBEINA_VERSION = 1.7.10
+-LIBEINA_SOURCE = eina-$(LIBEINA_VERSION).tar.bz2
+-LIBEINA_SITE = http://download.enlightenment.org/releases
+-LIBEINA_LICENSE = LGPLv2.1+
+-LIBEINA_LICENSE_FILES = COPYING
+-
+-LIBEINA_INSTALL_STAGING = YES
+-
+-LIBEINA_DEPENDENCIES = host-pkgconf
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
 -- 
 2.4.3
