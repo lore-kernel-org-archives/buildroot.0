@@ -1,104 +1,155 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 15 Dec 2015 23:40:20 +0100
-Subject: [Buildroot] [PATCH v10 08/28] package/efl/libefl: add OpenGLES
-	support
+Date: Tue, 15 Dec 2015 23:40:34 +0100
+Subject: [Buildroot] [PATCH v10 22/28] package/efl/libedbus: remove package
 In-Reply-To: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
 References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1450219240-16938-9-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1450219240-16938-23-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow to enable graphic acceleration using OpenGLES
-with efl libraries.
-
-The full opengl option (--with-opengl=full) is still disabled
-for now since it's mainly used with Tizen on GPU Intel and ARM Mali.
-
-With the upcomming Wayland support in EFL 1.16 and Enlightenment 0.20,
-only OpenGLES support is recommanded.
+Libedbus is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v9: remove OpenGL full support
-v6: Rename OpenGL options (Yann E.Morin)
-    Only full OpenGL support depends on X11.
-v4: rename libefl
-    improve commit log
+v6: Improve lecacy help text (Yann E.Morin)
+v5: remove libedbus directory
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/efl/libefl/Config.in | 19 +++++++++++++++++++
- package/efl/libefl/libefl.mk | 13 ++++++++++---
- 2 files changed, 29 insertions(+), 3 deletions(-)
+ Config.in.legacy                 |  7 +++++++
+ package/efl/Config.in            |  1 -
+ package/efl/libedbus/Config.in   | 44 ----------------------------------------
+ package/efl/libedbus/libedbus.mk | 37 ---------------------------------
+ 4 files changed, 7 insertions(+), 82 deletions(-)
+ delete mode 100644 package/efl/libedbus/Config.in
+ delete mode 100644 package/efl/libedbus/libedbus.mk
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index bf15de7..333456e 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -138,6 +138,25 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XPROTO_GLPROTO
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c6dd9e3..f44a1af 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
  
-+choice
-+	bool "OpenGL support"
-+	default BR2_PACKAGE_LIBEFL_OPENGLES if BR2_PACKAGE_HAS_LIBGLES
++config BR2_PACKAGE_LIBEDBUS
++	bool "libedbus package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
 +	help
-+	  libevas can be configured to use HW acceleration only with
-+	  OpenGLES.
++	  With EFL 1.15, libedbus is now provided by the libefl package.
 +
-+config BR2_PACKAGE_LIBEFL_OPENGL_NONE
-+	bool "none"
-+
-+config BR2_PACKAGE_LIBEFL_OPENGLES
-+	bool "opengles"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "opengles support needs an opengles provider"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES
-+
-+endchoice # OpenGL support
-+
- comment "libevas loaders"
+ config BR2_PACKAGE_LIBEFREET
+ 	bool "libefreet package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 682164d..98ca114 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -21,7 +21,6 @@ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
+ source "package/efl/libevas/Config.in"
+ source "package/efl/libelementary/Config.in"
+-source "package/efl/libedbus/Config.in"
  
- config BR2_PACKAGE_LIBEFL_PNG
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 3d58e24..0eb17c2 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -35,7 +35,6 @@ LIBEFL_GETTEXTIZE = YES
- # --disable-systemd: disable systemd support.
- # --disable-xinput22: disable X11 XInput v2.2+ support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
--# --with-opengl=none: disable opengl support.
- LIBEFL_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-@@ -43,8 +42,7 @@ LIBEFL_CONF_OPTS = \
- 	--disable-sdl \
- 	--disable-systemd \
- 	--disable-xinput22 \
--	--enable-lua-old \
--	--with-opengl=none
-+	--enable-lua-old
+ endif # BR2_PACKAGE_EFL
  
- # Disable untested configuration warning.
- ifeq ($(BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG),)
-@@ -168,6 +166,15 @@ else
- LIBEFL_CONF_OPTS += --with-x11=none
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEFL_OPENGLES),y)
-+LIBEFL_CONF_OPTS += --with-opengl=es
-+LIBEFL_DEPENDENCIES += libgles
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEFL_OPENGL_NONE),y)
-+LIBEFL_CONF_OPTS += --with-opengl=none
-+endif
-+
- # Loaders that need external dependencies needs to be --enable-XXX=yes
- # otherwise the default is '=static'.
- # All other loaders are statically built-in
+diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
+deleted file mode 100644
+index 7e862d3..0000000
+--- a/package/efl/libedbus/Config.in
++++ /dev/null
+@@ -1,44 +0,0 @@
+-config BR2_PACKAGE_LIBEDBUS
+-	bool "libedbus"
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_DBUS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+-	depends on BR2_USE_MMU # dbus
+-	help
+-	  E_Dbus is a set of wrappers around D-Bus APIs so they can be
+-	  easily used by EFL applications, automatically providing
+-	  Ecore/main loop integration, as well as Eina data types.
+-
+-	  http://trac.enlightenment.org/e/wiki/E_Dbus
+-
+-if BR2_PACKAGE_LIBEDBUS
+-
+-config BR2_PACKAGE_LIBEDBUS_BLUEZ
+-	bool "bluez support"
+-	depends on !BR2_STATIC_LIBS # bluez_utils
+-	depends on BR2_USE_WCHAR # bluez_utils -> glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> glib2
+-	select BR2_PACKAGE_BLUEZ_UTILS
+-	help
+-	  Bluetooth support.
+-
+-comment "bluez support needs a toolchain w/ wchar, threads, dynamic library"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+-config BR2_PACKAGE_LIBEDBUS_CONNMAN
+-	bool "connman support"
+-	depends on BR2_PACKAGE_CONNMAN
+-	help
+-	  Connection manager support.
+-
+-config BR2_PACKAGE_LIBEDBUS_NOTIFY
+-	bool "notify support"
+-	help
+-	  Notify support.
+-
+-endif
+-
+-comment "libedbus needs a toolchain w/ threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/efl/libedbus/libedbus.mk b/package/efl/libedbus/libedbus.mk
+deleted file mode 100644
+index 634ceaf..0000000
+--- a/package/efl/libedbus/libedbus.mk
++++ /dev/null
+@@ -1,37 +0,0 @@
+-################################################################################
+-#
+-# libedbus
+-#
+-################################################################################
+-
+-LIBEDBUS_VERSION = 1.7.10
+-LIBEDBUS_SOURCE = e_dbus-$(LIBEDBUS_VERSION).tar.bz2
+-LIBEDBUS_SITE = http://download.enlightenment.org/releases
+-LIBEDBUS_LICENSE = BSD-2c
+-LIBEDBUS_LICENSE_FILES = COPYING
+-
+-LIBEDBUS_INSTALL_STAGING = YES
+-
+-LIBEDBUS_DEPENDENCIES = host-pkgconf dbus libeina libecore
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_BLUEZ),y)
+-LIBEDBUS_CONF_OPTS += --enable-ebluez
+-LIBEDBUS_DEPENDENCIES += bluez_utils
+-else
+-LIBEDBUS_CONF_OPTS += --disable-ebluez
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_CONNMAN),y)
+-LIBEDBUS_CONF_OPTS += --enable-econnman0_7x
+-LIBEDBUS_DEPENDENCIES += connman
+-else
+-LIBEDBUS_CONF_OPTS += --disable-econnman0_7x
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_NOTIFY),y)
+-LIBEDBUS_CONF_OPTS += --enable-enotify --disable-edbus-notify-test
+-else
+-LIBEDBUS_CONF_OPTS += --disable-enotify
+-endif
+-
+-$(eval $(autotools-package))
 -- 
 2.4.3
