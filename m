@@ -1,39 +1,32 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 15 Dec 2015 09:04:49 +0000
-Subject: [Buildroot] [PATCH 1/1] package/libuv: bump version to 1.8.0
-Message-ID: <1450170289-24258-1-git-send-email-martin@barkynet.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 15 Dec 2015 06:34:42 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{1, 2, 3}.x series
+Message-ID: <1450172083-21347-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 6f38b8b..abbbb0c 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 11d10f12d68fa655fff18c6021e8e45bc610e7baee006f17247b1830ee316093  libuv-v1.7.5.tar.gz
-+sha256 906e1a5c673c95cb261adeacdb7308a65b4a8f7c9c50d85f3021364951fa9cde  libuv-v1.8.0.tar.gz
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index da47b62..bf1dead 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.7.5
-+LIBUV_VERSION = v1.8.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f1ca16b..c02c940 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -209,7 +209,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.18.24"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.14"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.2.7"		if BR2_KERNEL_HEADERS_4_2
+-	default "4.3.2"		if BR2_KERNEL_HEADERS_4_3
++	default "4.1.15"	if BR2_KERNEL_HEADERS_4_1
++	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
++	default "4.3.3"		if BR2_KERNEL_HEADERS_4_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.5.0
+2.4.10
