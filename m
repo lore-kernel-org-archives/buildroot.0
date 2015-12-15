@@ -1,137 +1,113 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 15 Dec 2015 23:40:24 +0100
-Subject: [Buildroot] [PATCH v10 12/28] package/efl/libelementary: bump to
-	version 1.15.2
+Date: Tue, 15 Dec 2015 23:40:32 +0100
+Subject: [Buildroot] [PATCH v10 20/28] package/efl/libeio: remove package
 In-Reply-To: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
 References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1450219240-16938-13-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1450219240-16938-21-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the newly added libefl package wich provide a new version
-of libeina, libevas, libecore and libedje.
-
-Update the upstream url and add a hash file.
-
-We need to add a host package to provide elm_prefs_cc the
-host machine to cross-compile correctly libelementary
-for the target. Otherwise, elm_prefs_cc for the
-target is used on the host machine.
-
-Since eet, eolian_gen and eldbus_codegen are installed in
-HOST_DIR by host-efl package, help configure script to find
-them.
-
-Explicitly disable doxygen and elementary-test.
+Libeio is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: squash with the patch adding host-libelementary (Yann E.Morin)
-v5: move the hash file to package/efl/libelementary
-v4: keep libelementary in package/efl/
-v3: bump to 1.15.2
-    remove trailing slash (Vicente Bergas)
-v2: bump to 1.15.1
-    remove glibc only dependency
+v6: Improve lecacy help text (Yann E.Morin)
+v5: remove libeio directory
+v4: update Config.in to use libefl
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/efl/libelementary/Config.in          | 14 ++++-------
- package/efl/libelementary/libelementary.hash |  2 ++
- package/efl/libelementary/libelementary.mk   | 35 ++++++++++++++++------------
- 3 files changed, 27 insertions(+), 24 deletions(-)
- create mode 100644 package/efl/libelementary/libelementary.hash
+ Config.in.legacy             |  7 +++++++
+ package/efl/Config.in        |  1 -
+ package/efl/libeio/Config.in | 22 ----------------------
+ package/efl/libeio/libeio.mk | 16 ----------------
+ 4 files changed, 7 insertions(+), 39 deletions(-)
+ delete mode 100644 package/efl/libeio/Config.in
+ delete mode 100644 package/efl/libeio/libeio.mk
 
-diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
-index fcc7025..1f8c962 100644
---- a/package/efl/libelementary/Config.in
-+++ b/package/efl/libelementary/Config.in
-@@ -1,17 +1,13 @@
--comment "libelementary needs a toolchain w/ threads, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
--
- config BR2_PACKAGE_LIBELEMENTARY
- 	bool "libelementary"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # elm_store.c
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBECORE
--	select BR2_PACKAGE_LIBEDJE
- 	help
- 	  Elementary is a widget toolkit and EFL wrapper and convenience
- 	  library to make it easy to build applications and tools with UIs
- 	  with less code.
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c161687..4a99c7b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
  
--	  http://trac.enlightenment.org/e/wiki/Elementary
-+	  https://enlightenment.org
++config BR2_PACKAGE_LIBEIO
++	bool "libeio package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  With EFL 1.15, libeio is now provided by the libefl package.
 +
-+comment "libelementary needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/efl/libelementary/libelementary.hash b/package/efl/libelementary/libelementary.hash
-new file mode 100644
-index 0000000..2cd36d8
---- /dev/null
-+++ b/package/efl/libelementary/libelementary.hash
-@@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.15.2.tar.xz.sha256
-+sha256	523c3073210b611817d0f56aa8348962ec757282f9f7dfde93825afa164a0f3f	elementary-1.15.2.tar.xz
-diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
-index 8bd69fe..4ba8681 100644
---- a/package/efl/libelementary/libelementary.mk
-+++ b/package/efl/libelementary/libelementary.mk
-@@ -4,29 +4,34 @@
- #
- ################################################################################
- 
--LIBELEMENTARY_VERSION = 1.7.10
--LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.bz2
--LIBELEMENTARY_SITE = http://download.enlightenment.org/releases
-+LIBELEMENTARY_VERSION = 1.15.2
-+LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
-+LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
- LIBELEMENTARY_LICENSE = LGPLv2.1
- LIBELEMENTARY_LICENSE_FILES = COPYING
- 
- LIBELEMENTARY_INSTALL_STAGING = YES
- 
--LIBELEMENTARY_DEPENDENCIES = \
--	libeina libevas libecore libedje host-libedje \
--	host-libeet
-+LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl host-libelementary libefl
- 
- LIBELEMENTARY_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
--	--with-eet-eet=$(HOST_DIR)/usr/bin/eet
-+	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
-+	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-+	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
-+	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
-+	--with-doxygen=no \
-+	--disable-elementary-test
- 
--# libethumb_client is only built when ethumbd is built.
--# ethumbd is only built if edbus is built.
--ifeq ($(BR2_PACKAGE_LIBETHUMB)$(BR2_PACKAGE_LIBEDBUS),yy)
--LIBELEMENTARY_DEPENDENCIES += libethumb
--LIBELEMENTARY_CONF_OPTS += --enable-ethumb
--else
--LIBELEMENTARY_CONF_OPTS += --disable-ethumb
--endif
-+# We need a host package in order to provide elm_prefs_cc and
-+# elementary_codegen.
-+HOST_LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-libefl
-+HOST_LIBELEMENTARY_CONF_OPTS = \
-+	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-+	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
-+	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-+	--with-doxygen=no \
-+	--disable-elementary-test
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ config BR2_PACKAGE_LIBEMBRYO
+ 	bool "libembryo package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 5947de2..58e8f65 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -20,7 +20,6 @@ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
+ source "package/efl/libefreet/Config.in"
+-source "package/efl/libeio/Config.in"
+ source "package/efl/libevas/Config.in"
+ source "package/efl/libelementary/Config.in"
+ source "package/efl/libedbus/Config.in"
+diff --git a/package/efl/libeio/Config.in b/package/efl/libeio/Config.in
+deleted file mode 100644
+index 5b1e395..0000000
+--- a/package/efl/libeio/Config.in
++++ /dev/null
+@@ -1,22 +0,0 @@
+-config BR2_PACKAGE_LIBEIO
+-	bool "libeio"
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBECORE
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	help
+-	  Eio integrates with EFL (Ecore, Eina) to provide efficient
+-	  filesystem Input/Output (I/O). It use the best techniques to
+-	  achieve such purpose, like using at-variants, splice,
+-	  properly handling errors and doing it in an asynchronous
+-	  fashion by means of worker threads. It is also ported to
+-	  Windows, so multi-platform.
+-
+-	  Whenever you need to list a directory, copy, move or delete
+-	  files, Eio will do that task better than you'd achieve with
+-	  naive implementations, and it is easy to use.
+-
+-	  http://trac.enlightenment.org/e/wiki/Eio
+-
+-comment "libeio needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/efl/libeio/libeio.mk b/package/efl/libeio/libeio.mk
+deleted file mode 100644
+index e687c32..0000000
+--- a/package/efl/libeio/libeio.mk
++++ /dev/null
+@@ -1,16 +0,0 @@
+-################################################################################
+-#
+-# libeio
+-#
+-################################################################################
+-
+-LIBEIO_VERSION = 1.7.10
+-LIBEIO_SOURCE = eio-$(LIBEIO_VERSION).tar.bz2
+-LIBEIO_SITE = http://download.enlightenment.org/releases
+-LIBEIO_LICENSE = LGPLv2.1
+-LIBEIO_LICENSE_FILES = COPYING
+-
+-LIBEIO_INSTALL_STAGING = YES
+-LIBEIO_DEPENDENCIES = libeina libeet libecore
+-
+-$(eval $(autotools-package))
 -- 
 2.4.3
