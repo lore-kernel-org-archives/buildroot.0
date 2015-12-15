@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 22:04:49 +0100
-Subject: [Buildroot] [git commit] taglib: comma separate licenses
-Message-ID: <20151215210845.1F36B80409@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 22:05:14 +0100
+Subject: [Buildroot] [git commit] audiofile: comma separate licenses
+Message-ID: <20151215210845.3F53E80409@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd493457b339bbb1d7e94cdb4be1add2790db7eb
+commit: http://git.buildroot.net/buildroot/commit/?id=13a3cf66434304b37839f4b61746b6787b959bd0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/taglib/taglib.mk | 2 +-
+ package/audiofile/audiofile.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index ed08874..2410650 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -7,7 +7,7 @@
- TAGLIB_VERSION = 1.9.1
- TAGLIB_SITE = http://taglib.github.io/releases
- TAGLIB_INSTALL_STAGING = YES
--TAGLIB_LICENSE = LGPLv2.1 MPL
-+TAGLIB_LICENSE = LGPLv2.1, MPL
- TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
+diff --git a/package/audiofile/audiofile.mk b/package/audiofile/audiofile.mk
+index c685ce1..ee3f833 100644
+--- a/package/audiofile/audiofile.mk
++++ b/package/audiofile/audiofile.mk
+@@ -12,7 +12,7 @@ AUDIOFILE_CONF_OPTS = --disable-examples
+ AUDIOFILE_DEPENDENCIES = host-pkgconf
+ # configure is outdated and has old bugs because of it
+ AUDIOFILE_AUTORECONF = YES
+-AUDIOFILE_LICENSE = GPLv2+ LGPLv2.1+
++AUDIOFILE_LICENSE = GPLv2+, LGPLv2.1+
+ AUDIOFILE_LICENSE_FILES = COPYING COPYING.GPL
  
- ifeq ($(BR2_PACKAGE_ZLIB),y)
+ ifeq ($(BR2_PACKAGE_FLAC),y)
