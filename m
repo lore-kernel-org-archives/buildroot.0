@@ -1,44 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 23:15:55 +0100
-Subject: [Buildroot] [git commit] libsodium: bump to version 1.0.6
-Message-ID: <20151215221833.431D981DF8@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 23:18:51 +0100
+Subject: [Buildroot] [PATCH 1/2] zeromq: bump to version 4.1.3
+In-Reply-To: <1448993679-15036-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1448993679-15036-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151215231851.28b5d278@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33065a35a41d8648d1066b2d499cfea6af9b8903
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsodium/libsodium.hash | 4 ++--
- package/libsodium/libsodium.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Tue,  1 Dec 2015 15:14:38 -0300, Gustavo Zacarias wrote:
+> Add upstream patch to fix build failure of zeromq with latest
+> libsodium, since sodium_init() has a retval and is now declared to warn
+> on unused result, with zeromq treating warnings as errors.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  ...return-code-of-sodium_init-is-not-checked.patch | 73 ++++++++++++++++++++++
+>  package/zeromq/zeromq.hash                         |  6 +-
+>  package/zeromq/zeromq.mk                           |  2 +-
+>  3 files changed, 77 insertions(+), 4 deletions(-)
+>  create mode 100644 package/zeromq/0003-Problem-return-code-of-sodium_init-is-not-checked.patch
 
-diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
-index 089dc03..3544237 100644
---- a/package/libsodium/libsodium.hash
-+++ b/package/libsodium/libsodium.hash
-@@ -1,2 +1,2 @@
--# Locally computed:
--sha256	cbcfc63cc90c05d18a20f229a62c7e7054a73731d0aa858c0517152c549b1288	libsodium-1.0.3.tar.gz
-+# Locally calculated after checking pgp signature
-+sha256	940d03ea7d2caa7940e24564bf6d9f66d6edd1df1e0111ff8e3655f3b864fb59	libsodium-1.0.6.tar.gz
-diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-index 18035f3..09bc777 100644
---- a/package/libsodium/libsodium.mk
-+++ b/package/libsodium/libsodium.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSODIUM_VERSION = 1.0.3
--LIBSODIUM_SITE = https://github.com/jedisct1/libsodium/releases/download/$(LIBSODIUM_VERSION)
-+LIBSODIUM_VERSION = 1.0.6
-+LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
- LIBSODIUM_LICENSE = ISC
- LIBSODIUM_LICENSE_FILES = LICENSE
- LIBSODIUM_INSTALL_STAGING = YES
+Both applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
