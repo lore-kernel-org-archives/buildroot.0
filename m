@@ -1,113 +1,104 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 15 Dec 2015 23:40:32 +0100
-Subject: [Buildroot] [PATCH v10 20/28] package/efl/libeio: remove package
+Date: Tue, 15 Dec 2015 23:40:20 +0100
+Subject: [Buildroot] [PATCH v10 08/28] package/efl/libefl: add OpenGLES
+	support
 In-Reply-To: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
 References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1450219240-16938-21-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1450219240-16938-9-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libeio is now available in efl package.
+Allow to enable graphic acceleration using OpenGLES
+with efl libraries.
+
+The full opengl option (--with-opengl=full) is still disabled
+for now since it's mainly used with Tizen on GPU Intel and ARM Mali.
+
+With the upcomming Wayland support in EFL 1.16 and Enlightenment 0.20,
+only OpenGLES support is recommanded.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: Improve lecacy help text (Yann E.Morin)
-v5: remove libeio directory
-v4: update Config.in to use libefl
-v3: update legacy option for 2015.11
-    update help text
+v9: remove OpenGL full support
+v6: Rename OpenGL options (Yann E.Morin)
+    Only full OpenGL support depends on X11.
+v4: rename libefl
+    improve commit log
 ---
- Config.in.legacy             |  7 +++++++
- package/efl/Config.in        |  1 -
- package/efl/libeio/Config.in | 22 ----------------------
- package/efl/libeio/libeio.mk | 16 ----------------
- 4 files changed, 7 insertions(+), 39 deletions(-)
- delete mode 100644 package/efl/libeio/Config.in
- delete mode 100644 package/efl/libeio/libeio.mk
+ package/efl/libefl/Config.in | 19 +++++++++++++++++++
+ package/efl/libefl/libefl.mk | 13 ++++++++++---
+ 2 files changed, 29 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index c161687..4a99c7b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.02"
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index bf15de7..333456e 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -138,6 +138,25 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	select BR2_PACKAGE_XPROTO_GLPROTO
  
-+config BR2_PACKAGE_LIBEIO
-+	bool "libeio package has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_EFL
++choice
++	bool "OpenGL support"
++	default BR2_PACKAGE_LIBEFL_OPENGLES if BR2_PACKAGE_HAS_LIBGLES
 +	help
-+	  With EFL 1.15, libeio is now provided by the libefl package.
++	  libevas can be configured to use HW acceleration only with
++	  OpenGLES.
 +
- config BR2_PACKAGE_LIBEMBRYO
- 	bool "libembryo package has been removed"
- 	select BR2_LEGACY
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 5947de2..58e8f65 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -20,7 +20,6 @@ source "package/efl/libecore/Config.in"
- source "package/efl/libeet/Config.in"
- source "package/efl/libefl/Config.in"
- source "package/efl/libefreet/Config.in"
--source "package/efl/libeio/Config.in"
- source "package/efl/libevas/Config.in"
- source "package/efl/libelementary/Config.in"
- source "package/efl/libedbus/Config.in"
-diff --git a/package/efl/libeio/Config.in b/package/efl/libeio/Config.in
-deleted file mode 100644
-index 5b1e395..0000000
---- a/package/efl/libeio/Config.in
-+++ /dev/null
-@@ -1,22 +0,0 @@
--config BR2_PACKAGE_LIBEIO
--	bool "libeio"
--	select BR2_PACKAGE_LIBEET
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBECORE
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	help
--	  Eio integrates with EFL (Ecore, Eina) to provide efficient
--	  filesystem Input/Output (I/O). It use the best techniques to
--	  achieve such purpose, like using at-variants, splice,
--	  properly handling errors and doing it in an asynchronous
--	  fashion by means of worker threads. It is also ported to
--	  Windows, so multi-platform.
--
--	  Whenever you need to list a directory, copy, move or delete
--	  files, Eio will do that task better than you'd achieve with
--	  naive implementations, and it is easy to use.
--
--	  http://trac.enlightenment.org/e/wiki/Eio
--
--comment "libeio needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/efl/libeio/libeio.mk b/package/efl/libeio/libeio.mk
-deleted file mode 100644
-index e687c32..0000000
---- a/package/efl/libeio/libeio.mk
-+++ /dev/null
-@@ -1,16 +0,0 @@
--################################################################################
--#
--# libeio
--#
--################################################################################
--
--LIBEIO_VERSION = 1.7.10
--LIBEIO_SOURCE = eio-$(LIBEIO_VERSION).tar.bz2
--LIBEIO_SITE = http://download.enlightenment.org/releases
--LIBEIO_LICENSE = LGPLv2.1
--LIBEIO_LICENSE_FILES = COPYING
--
--LIBEIO_INSTALL_STAGING = YES
--LIBEIO_DEPENDENCIES = libeina libeet libecore
--
--$(eval $(autotools-package))
++config BR2_PACKAGE_LIBEFL_OPENGL_NONE
++	bool "none"
++
++config BR2_PACKAGE_LIBEFL_OPENGLES
++	bool "opengles"
++	depends on BR2_PACKAGE_HAS_LIBGLES
++
++comment "opengles support needs an opengles provider"
++	depends on !BR2_PACKAGE_HAS_LIBGLES
++
++endchoice # OpenGL support
++
+ comment "libevas loaders"
+ 
+ config BR2_PACKAGE_LIBEFL_PNG
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index 3d58e24..0eb17c2 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -35,7 +35,6 @@ LIBEFL_GETTEXTIZE = YES
+ # --disable-systemd: disable systemd support.
+ # --disable-xinput22: disable X11 XInput v2.2+ support.
+ # --enable-lua-old: disable Elua and remove luajit dependency.
+-# --with-opengl=none: disable opengl support.
+ LIBEFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+@@ -43,8 +42,7 @@ LIBEFL_CONF_OPTS = \
+ 	--disable-sdl \
+ 	--disable-systemd \
+ 	--disable-xinput22 \
+-	--enable-lua-old \
+-	--with-opengl=none
++	--enable-lua-old
+ 
+ # Disable untested configuration warning.
+ ifeq ($(BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG),)
+@@ -168,6 +166,15 @@ else
+ LIBEFL_CONF_OPTS += --with-x11=none
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBEFL_OPENGLES),y)
++LIBEFL_CONF_OPTS += --with-opengl=es
++LIBEFL_DEPENDENCIES += libgles
++endif
++
++ifeq ($(BR2_PACKAGE_LIBEFL_OPENGL_NONE),y)
++LIBEFL_CONF_OPTS += --with-opengl=none
++endif
++
+ # Loaders that need external dependencies needs to be --enable-XXX=yes
+ # otherwise the default is '=static'.
+ # All other loaders are statically built-in
 -- 
 2.4.3
