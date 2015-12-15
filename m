@@ -1,41 +1,28 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Dec 2015 06:34:43 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 4.3.3
-In-Reply-To: <1450172083-21347-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1450172083-21347-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1450172083-21347-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 15 Dec 2015 06:36:25 -0300
+Subject: [Buildroot] [PATCH v2] gnutls: fix --disable-crywrap
+In-Reply-To: <20151215070511.GN2318@tarshish>
+References: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
+ <20151215070511.GN2318@tarshish>
+Message-ID: <566FDF19.90104@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 15/12/15 04:05, Baruch Siach wrote:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 57b3490..2704ab6 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.3.2"
-+	bool "4.3.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.3.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.3.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-2.4.10
+> Hi Gustavo,
+
+Hi Baruch.
+
+> Also, a link to your gnutls submission
+> (http://lists.gnutls.org/pipermail/gnutls-devel/2015-December/007818.html)
+> would be helpful.
+
+At the time i sent the patch the archives weren't updated yet, so i 
+didn't have a link to it.
+Unfortunately that's quite common of them (archives) taking some time to 
+update.
+Regards.
