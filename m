@@ -1,30 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 21:40:10 +0100
-Subject: [Buildroot] [PATCH] python-pyasn: fix license file
-In-Reply-To: <1450189654-24076-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1450189654-24076-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151215214010.748a96d3@free-electrons.com>
+Date: Tue, 15 Dec 2015 21:40:44 +0100
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.138
+Message-ID: <20151215204048.C108281DBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=61ba27c16a48ba4657c4ebaec55eb59a2330f17d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Dec 2015 11:27:34 -0300, Gustavo Zacarias wrote:
-> It's not LICENSE.txt and not LICENSE, fixes:
-> http://autobuild.buildroot.net/results/d29/d293f35d8034eaaa519565b14641d1b56206cbc8/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/python-pyasn/python-pyasn.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 539bf49..17434ff 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 d042bad51eacc350e3a2b08a631498d7bdff29032804e7db4c6a0723e8896628b89e6395a311535c09429429c17adfeb45794d5f53bdeb5d51b195114fca309a  LVM2.2.02.137.tgz
++sha512 d827cbd5dde6079f9fedb6bd64025d33a93a00cd1af6d57873be78df07069c5b9921077d6be98a6445829cfea28ba7a5520db0be58d6e7a7824f1a722d739fb6  LVM2.2.02.138.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 59206cc..cfee44b 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.137
++LVM2_VERSION = 2.02.138
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
