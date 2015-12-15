@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 22:04:18 +0100
-Subject: [Buildroot] [git commit] olsr: comma separate licenses
-Message-ID: <20151215210844.D493480409@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 22:04:39 +0100
+Subject: [Buildroot] [git commit] vde2: comma separate licenses
+Message-ID: <20151215210845.0B99680409@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4824243aa418ada76191acd65e6be9c4a2c6ba6f
+commit: http://git.buildroot.net/buildroot/commit/?id=d6d12d94af7682b9dc7f1cc4e5c02cade968e0d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/olsr/olsr.mk | 2 +-
+ package/vde2/vde2.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index a96c898..60c8098 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -12,7 +12,7 @@ OLSR_PLUGINS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo \
- 	mdns nameservice p2pd pgraph secure txtinfo watchdog
- # Doesn't really need quagga but not very useful without it
- OLSR_PLUGINS += $(if $(BR2_PACKAGE_QUAGGA),quagga)
--OLSR_LICENSE = BSD-3c LGPLv2.1+
-+OLSR_LICENSE = BSD-3c, LGPLv2.1+
- OLSR_LICENSE_FILES = license.txt lib/pud/nmealib/LICENSE
- OLSR_DEPENDENCIES = host-flex host-bison
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index f4a8c84..bad758d 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -7,7 +7,7 @@
+ VDE2_VERSION = 2.3.2
+ VDE2_SOURCE = vde2-$(VDE2_VERSION).tar.bz2
+ VDE2_SITE = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
+-VDE2_LICENSE = GPLv2+ LGPLv2.1+ BSD-3c
++VDE2_LICENSE = GPLv2+, LGPLv2.1+, BSD-3c
+ VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug COPYING.slirpvde
+ VDE2_INSTALL_STAGING = YES
  
