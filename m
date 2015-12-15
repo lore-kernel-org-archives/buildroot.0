@@ -1,43 +1,70 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Tue, 15 Dec 2015 14:50:21 +0100
-Subject: [Buildroot] [PATCH 1/1] popt: change POPT_SITE back to original url
-Message-ID: <1450187421-32639-1-git-send-email-sebastien.szymanski@armadeus.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 15 Dec 2015 16:21:23 +0000
+Subject: [Buildroot] [PATCH v4 1/3] toolchain: allow side by side sysroot
+	directories
+Message-ID: <1450196485-19214-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The popt-1.16.tar.gz file is no more available at current URL and
-rmp5.org is online.
+Currently our toolchain infrastructure assumes that every toolchain has
+nested sysroot directories. However that's not true for all of them. The
+Codescape toolchains from Imagination Technologies use a side by side
+sysroot structure, for instance.
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+This patch allows our toolchain infrastructure to detect what kind of
+sysroot structure we have (nested or side by side) and performs the
+appropriate actions.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/popt/popt.hash | 2 +-
- package/popt/popt.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+Changes v1 -> v4:
+ - This patch didn't exist before. It has been introduced in v4.
 
-diff --git a/package/popt/popt.hash b/package/popt/popt.hash
-index 4d93e47..875bbae 100644
---- a/package/popt/popt.hash
-+++ b/package/popt/popt.hash
-@@ -1,2 +1,2 @@
--# Locally calculated based on http://anduin.linuxfromscratch.org/sources/BLFS/svn/p/popt-1.16.tar.gz.md5sum
-+# Locally calculated:
- sha256	e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8	popt-1.16.tar.gz
-diff --git a/package/popt/popt.mk b/package/popt/popt.mk
-index 605649b..863a47a 100644
---- a/package/popt/popt.mk
-+++ b/package/popt/popt.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- POPT_VERSION = 1.16
--# rpm5.org down
--POPT_SITE = http://anduin.linuxfromscratch.org/sources/BLFS/svn/p
-+POPT_SITE = http://rpm5.org/files/popt
- POPT_INSTALL_STAGING = YES
- POPT_LICENSE = MIT
- POPT_LICENSE_FILES = COPYING
+ toolchain/helpers.mk | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 1452ec6..1b9d12f 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -142,18 +142,24 @@ copy_toolchain_sysroot = \
+ 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+ 		fi ; \
+ 	done ; \
+-	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+-		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+-			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+-		fi ; \
+-		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
++	SYSROOT_DIR_CANON=`readlink -f $${SYSROOT_DIR}` ; \
++	ARCH_SYSROOT_DIR_CANON=`readlink -f $${ARCH_SYSROOT_DIR}` ; \
++	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} ] ; then \
+ 		relpath="./" ; \
+-		nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
+-		for slash in `seq 1 $${nbslashs}` ; do \
+-			relpath=$${relpath}"../" ; \
+-		done ; \
+-		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
+-		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
++		if [ $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
++			if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
++				cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
++			fi ; \
++			mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
++			nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
++			for slash in `seq 1 $${nbslashs}` ; do \
++				relpath=$${relpath}"../" ; \
++			done ; \
++			ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
++			echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
++		elif [ `dirname $${ARCH_SYSROOT_DIR_CANON}` == `dirname $${SYSROOT_DIR_CANON}` ] ; then \
++			ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
++		fi ; \
+ 	fi ; \
+ 	if test -n "$${SUPPORT_LIB_DIR}" ; then \
+ 		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
 -- 
-2.3.6
+2.4.10
