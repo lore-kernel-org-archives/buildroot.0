@@ -1,129 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 23:15:52 +0100
-Subject: [Buildroot] [git commit] zeromq: bump to version 4.1.3
-Message-ID: <20151215221833.34F5B81E5E@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 23:15:55 +0100
+Subject: [Buildroot] [git commit] libsodium: bump to version 1.0.6
+Message-ID: <20151215221833.431D981DF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba010bc1382d5c4126fda29baaaf175ac5fadb95
+commit: http://git.buildroot.net/buildroot/commit/?id=33065a35a41d8648d1066b2d499cfea6af9b8903
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add upstream patch to fix build failure of zeromq with latest
-libsodium, since sodium_init() has a retval and is now declared to warn
-on unused result, with zeromq treating warnings as errors.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...return-code-of-sodium_init-is-not-checked.patch | 73 ++++++++++++++++++++++
- package/zeromq/zeromq.hash                         |  6 +-
- package/zeromq/zeromq.mk                           |  2 +-
- 3 files changed, 77 insertions(+), 4 deletions(-)
+ package/libsodium/libsodium.hash | 4 ++--
+ package/libsodium/libsodium.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/zeromq/0003-Problem-return-code-of-sodium_init-is-not-checked.patch b/package/zeromq/0003-Problem-return-code-of-sodium_init-is-not-checked.patch
-new file mode 100644
-index 0000000..fcdbc9c
---- /dev/null
-+++ b/package/zeromq/0003-Problem-return-code-of-sodium_init-is-not-checked.patch
-@@ -0,0 +1,73 @@
-+From 479db2113643e459c11db392e0fefd6400657c9e Mon Sep 17 00:00:00 2001
-+From: Constantin Rack <constantin@rack.li>
-+Date: Sat, 8 Nov 2014 10:50:17 +0100
-+Subject: [PATCH] Problem: return code of sodium_init() is not checked.
-+
-+There are two todo comments in curve_client.cpp and curve_server.cpp that suggest
-+checking the return code of sodium_init() call. sodium_init() returns -1 on error,
-+0 on success and 1 if it has been called before and is already initalized:
-+https://github.com/jedisct1/libsodium/blob/master/src/libsodium/sodium/core.c
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: Upstream
-+
-+diff --git a/src/curve_client.cpp b/src/curve_client.cpp
-+index 6019c54..77fc420 100644
-+--- a/src/curve_client.cpp
-++++ b/src/curve_client.cpp
-+@@ -38,6 +38,7 @@ zmq::curve_client_t::curve_client_t (const options_t &options_) :
-+     cn_peer_nonce(1),
-+     sync()
-+ {
-++    int rc;
-+     memcpy (public_key, options_.curve_public_key, crypto_box_PUBLICKEYBYTES);
-+     memcpy (secret_key, options_.curve_secret_key, crypto_box_SECRETKEYBYTES);
-+     memcpy (server_key, options_.curve_server_key, crypto_box_PUBLICKEYBYTES);
-+@@ -47,12 +48,12 @@ zmq::curve_client_t::curve_client_t (const options_t &options_) :
-+     unsigned char tmpbytes[4];
-+     randombytes(tmpbytes, 4);
-+ #else
-+-    // todo check return code
-+-    sodium_init();
-++    rc = sodium_init ();
-++    zmq_assert (rc != -1);
-+ #endif
-+ 
-+     //  Generate short-term key pair
-+-    const int rc = crypto_box_keypair (cn_public, cn_secret);
-++    rc = crypto_box_keypair (cn_public, cn_secret);
-+     zmq_assert (rc == 0);
-+ }
-+ 
-+diff --git a/src/curve_server.cpp b/src/curve_server.cpp
-+index a3c4243..22c32d6 100644
-+--- a/src/curve_server.cpp
-++++ b/src/curve_server.cpp
-+@@ -42,6 +42,7 @@ zmq::curve_server_t::curve_server_t (session_base_t *session_,
-+     cn_peer_nonce(1),
-+     sync()
-+ {
-++    int rc;
-+     //  Fetch our secret key from socket options
-+     memcpy (secret_key, options_.curve_secret_key, crypto_box_SECRETKEYBYTES);
-+     scoped_lock_t lock (sync);
-+@@ -50,12 +51,12 @@ zmq::curve_server_t::curve_server_t (session_base_t *session_,
-+     unsigned char tmpbytes[4];
-+     randombytes(tmpbytes, 4);
-+ #else
-+-    // todo check return code
-+-    sodium_init();
-++    rc = sodium_init ();
-++    zmq_assert (rc != -1);
-+ #endif
-+ 
-+     //  Generate short-term key pair
-+-    const int rc = crypto_box_keypair (cn_public, cn_secret);
-++    rc = crypto_box_keypair (cn_public, cn_secret);
-+     zmq_assert (rc == 0);
-+ }
-+ 
-+-- 
-+2.4.10
-+
-diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
-index 6c7916e..b744740 100644
---- a/package/zeromq/zeromq.hash
-+++ b/package/zeromq/zeromq.hash
-@@ -1,4 +1,4 @@
--# Locally calculated from download (no sig, hash)
--sha256	f9162ead6d68521e5154d871bac304f88857308bb02366b81bb588497a345927	zeromq-4.1.2.tar.gz
- # From http://download.zeromq.org/SHA1SUMS:
--sha1	86c17096f7f4bf46cbcd2ad242cf8fec8a7cfb7b	zeromq-4.1.2.tar.gz
-+sha1	b7185724f2fd56d0face50047757ac2a04d26ca4	zeromq-4.1.3.tar.gz
-+# Calculated based on the hash above
-+sha256	61b31c830db377777e417235a24d3660a4bcc3f40d303ee58df082fcd68bf411	zeromq-4.1.3.tar.gz
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index a58a6fe..ab30b78 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
+index 089dc03..3544237 100644
+--- a/package/libsodium/libsodium.hash
++++ b/package/libsodium/libsodium.hash
+@@ -1,2 +1,2 @@
+-# Locally computed:
+-sha256	cbcfc63cc90c05d18a20f229a62c7e7054a73731d0aa858c0517152c549b1288	libsodium-1.0.3.tar.gz
++# Locally calculated after checking pgp signature
++sha256	940d03ea7d2caa7940e24564bf6d9f66d6edd1df1e0111ff8e3655f3b864fb59	libsodium-1.0.6.tar.gz
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index 18035f3..09bc777 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--ZEROMQ_VERSION = 4.1.2
-+ZEROMQ_VERSION = 4.1.3
- ZEROMQ_SITE = http://download.zeromq.org
- ZEROMQ_INSTALL_STAGING = YES
- ZEROMQ_DEPENDENCIES = util-linux
+-LIBSODIUM_VERSION = 1.0.3
+-LIBSODIUM_SITE = https://github.com/jedisct1/libsodium/releases/download/$(LIBSODIUM_VERSION)
++LIBSODIUM_VERSION = 1.0.6
++LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
+ LIBSODIUM_LICENSE = ISC
+ LIBSODIUM_LICENSE_FILES = LICENSE
+ LIBSODIUM_INSTALL_STAGING = YES
