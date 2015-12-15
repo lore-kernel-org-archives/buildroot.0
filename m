@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Dec 2015 06:34:42 -0300
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{1, 2, 3}.x series
-Message-ID: <1450172083-21347-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 15 Dec 2015 06:34:43 -0300
+Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 4.3.3
+In-Reply-To: <1450172083-21347-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450172083-21347-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1450172083-21347-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,23 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f1ca16b..c02c940 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -209,7 +209,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.18.24"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.14"	if BR2_KERNEL_HEADERS_4_1
--	default "4.2.7"		if BR2_KERNEL_HEADERS_4_2
--	default "4.3.2"		if BR2_KERNEL_HEADERS_4_3
-+	default "4.1.15"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
-+	default "4.3.3"		if BR2_KERNEL_HEADERS_4_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index 57b3490..2704ab6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.3.2"
++	bool "4.3.3"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.3.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.3.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
 2.4.10
