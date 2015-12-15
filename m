@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 21:36:46 +0100
-Subject: [Buildroot] [PATCH] netsnmp: add explicit support for pciutils
-In-Reply-To: <1450200018-9984-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1450200018-9984-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151215213646.1de04f9d@free-electrons.com>
+Date: Tue, 15 Dec 2015 21:36:48 +0100
+Subject: [Buildroot] [PATCH] libsndfile: security bump to version 1.0.26
+In-Reply-To: <1450201485-5400-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450201485-5400-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151215213648.4a6c733b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,17 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 15 Dec 2015 14:20:18 -0300, Gustavo Zacarias wrote:
-> As pointed by Lonnie Abelbeck via email.
+On Tue, 15 Dec 2015 14:44:45 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> CVE-2014-9496 - SD2 buffer read overflow.
+> CVE-2014-9756 - file_io.c divide by zero.
+> CVE-2015-7805 - AIIF heap write overflow.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/netsnmp/netsnmp.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/libsndfile/libsndfile.hash | 2 +-
+>  package/libsndfile/libsndfile.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
