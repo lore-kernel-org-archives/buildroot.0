@@ -1,27 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 13:39:02 +0100
-Subject: [Buildroot] [PATCH] mplayer: use autodetection for dvdnav
-In-Reply-To: <1447927571-38206-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1447927571-38206-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151215133902.653a0c26@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 15 Dec 2015 11:27:34 -0300
+Subject: [Buildroot] [PATCH] python-pyasn: fix license file
+Message-ID: <1450189654-24076-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+It's not LICENSE.txt and not LICENSE, fixes:
+http://autobuild.buildroot.net/results/d29/d293f35d8034eaaa519565b14641d1b56206cbc8/
 
-On Thu, 19 Nov 2015 10:06:11 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/mplayer/mplayer.mk |    3 ++-
->  1 files changed, 2 insertions(+), 1 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/python-pyasn/python-pyasn.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
+index 8b10958..80d18cd 100644
+--- a/package/python-pyasn/python-pyasn.mk
++++ b/package/python-pyasn/python-pyasn.mk
+@@ -8,7 +8,7 @@ PYTHON_PYASN_VERSION = 0.1.9
+ PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
+ PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1
+ PYTHON_PYASN_LICENSE = BSD-2c
+-PYTHON_PYASN_LICENSE_FILES = LICENSE
++PYTHON_PYASN_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYASN_SETUP_TYPE = distutils
+ 
+ $(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
