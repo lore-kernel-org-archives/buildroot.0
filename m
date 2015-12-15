@@ -1,48 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 21:48:08 +0100
-Subject: [Buildroot] [git commit] gdk-pixbuf: security bump to version 2.32.3
-Message-ID: <20151215204833.2226181DD5@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 21:50:04 +0100
+Subject: [Buildroot] [PATCH v2] gnutls: fix --disable-crywrap
+In-Reply-To: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151215215004.282f0afc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7b80100b8fab231a8d41fe0b55eb41623c9d2ca
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Gustavo,
 
-Fixes:
-* Fix two crashes in the bmp loader (#747605, #758991)
-* ico: integer overflow fixes
+On Mon, 14 Dec 2015 18:39:56 -0300, Gustavo Zacarias wrote:
+> Add a patch to really enable the --disable-crywrap option in gnutls.
+> Fixes:
+> http://autobuild.buildroot.org/results/d86/d8604fe448bb11395e8443726d09b041eb34c6d5/
+> 
+> Status: sent upstream (mailing list).
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-No CVEs assigned yet.
+This patch does not apply (probably because it was based in your tree
+on other commits that are not in the official Buildroot git repo).
+Also, it would be good if you could take into account the two comments
+made by Baruch.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gdk-pixbuf/gdk-pixbuf.hash | 4 ++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+thomas at skate:~/projets/buildroot (master)$ git pwam 556658
+Applying patch #556658 using 'git am -s -3'
+Description: [v2] gnutls: fix --disable-crywrap
+Applying: gnutls: fix --disable-crywrap
+fatal: sha1 information is lacking or useless (package/gnutls/gnutls.mk).
+error: could not build fake ancestor
+Patch failed at 0001 gnutls: fix --disable-crywrap
+The copy of the patch that failed is found in: .git/rebase-apply/patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index 478d96a..186e158 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.32/gdk-pixbuf-2.32.2.sha256sum
--sha256	d3ab06fc123b13effed4c27c77cebdfad2173ff20628d82c397b7660ae926145	gdk-pixbuf-2.32.2.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.32/gdk-pixbuf-2.32.3.sha256sum
-+sha256	2b6771f1ac72f687a8971e59810b8dc658e65e7d3086bd2e676e618fd541d031	gdk-pixbuf-2.32.3.tar.xz
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index a41c262..be79e11 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GDK_PIXBUF_VERSION_MAJOR = 2.32
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).2
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).3
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPLv2+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
