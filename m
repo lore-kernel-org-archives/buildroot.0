@@ -1,28 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Dec 2015 06:36:25 -0300
-Subject: [Buildroot] [PATCH v2] gnutls: fix --disable-crywrap
-In-Reply-To: <20151215070511.GN2318@tarshish>
-References: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
- <20151215070511.GN2318@tarshish>
-Message-ID: <566FDF19.90104@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Dec 2015 10:47:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libuv: bump version to 1.8.0
+In-Reply-To: <1450170289-24258-1-git-send-email-martin@barkynet.com>
+References: <1450170289-24258-1-git-send-email-martin@barkynet.com>
+Message-ID: <20151215104718.2f559772@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/12/15 04:05, Baruch Siach wrote:
+Dear Martin Bark,
 
-> Hi Gustavo,
+On Tue, 15 Dec 2015 09:04:49 +0000, Martin Bark wrote:
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> ---
+>  package/libuv/libuv.hash | 2 +-
+>  package/libuv/libuv.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi Baruch.
+We already have a similar patch from J?rg sent yesterday.
 
-> Also, a link to your gnutls submission
-> (http://lists.gnutls.org/pipermail/gnutls-devel/2015-December/007818.html)
-> would be helpful.
+Thanks,
 
-At the time i sent the patch the archives weren't updated yet, so i 
-didn't have a link to it.
-Unfortunately that's quite common of them (archives) taking some time to 
-update.
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
