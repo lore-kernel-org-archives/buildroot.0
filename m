@@ -1,64 +1,110 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Dec 2015 23:06:28 +0100
-Subject: [Buildroot] [PATCH] python-pyxml: add a patch to fix syntax
- errors
-In-Reply-To: <CAGm1_kswNpWvuHbQvTN39bn6BaWtoRAv=o4FgPrdk19ZGc=W_A@mail.gmail.com>
-References: <1450094225-4625-1-git-send-email-yegorslists@googlemail.com>
- <20151214140330.2904ec0b@free-electrons.com>
- <20151215210413.GC3596@free.fr>
- <CAGm1_kswNpWvuHbQvTN39bn6BaWtoRAv=o4FgPrdk19ZGc=W_A@mail.gmail.com>
-Message-ID: <20151215220628.GD3596@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Dec 2015 23:03:51 +0100
+Subject: [Buildroot] [PATCH v2] package/uclibc: Enable compile in thumb
+ mode configuration option
+In-Reply-To: <1450056520-18750-1-git-send-email-paul.enman@gmail.com>
+References: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
+ <1450056520-18750-1-git-send-email-paul.enman@gmail.com>
+Message-ID: <20151215230351.5dc6e91d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, All,
+Paul,
 
-On 2015-12-15 23:03 +0100, Yegor Yefremov spake thusly:
-> On Tue, Dec 15, 2015 at 10:04 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Thomas, Yegor, Clayton, All,
-> >
-> > On 2015-12-14 14:03 +0100, Thomas Petazzoni spake thusly:
-> >> Yegor, Clayton,
-> >>
-> >> On Mon, 14 Dec 2015 12:57:05 +0100, yegorslists at googlemail.com wrote:
-> >> > From: Yegor Yefremov <yegorslists@googlemail.com>
-> >> >
-> >> > Patch renames variable 'as' to 'pas' to avoid reserved keyword usage.
-> >> >
-> >> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > [--SNIP--]
-> >> But the answer at
-> >> https://mail.python.org/pipermail/xml-sig/2015-June/012272.html was
-> >> pretty clear:
-> >>
-> >>    PyXML is bitrotten and obsolete. You'll find the functionality it
-> >>    previously provided is now included in the Python standard library;
-> > [--SNIP--]
-> >> Can we get rid of it from Buildroot ?
-> >
-> > Unless Clayton (the original submitter) or Yegor (the reporter of the
-> > breakage) actually use it, It'd be of the opinion to get rid of it.
+On Sun, 13 Dec 2015 19:28:40 -0600, Paul Enman wrote:
+> From: penman <paul.enman@gmail.com>
+
+This is still not good, it should be your full name here as well.
+
 > 
-> I'm also for removing this package.
+> Signed-off-by: Paul Enman <paul.enman@gmail.com>
+> ---
+> 
+> When buildroot is configured to build uClibc with thumb, it uses a workaround
+>  for that relies on interworking between arm and thumb instructions and does
+>  not set the config file to enable compile in thumb mode.
+> 
+> This patch enables buildroot to configure and compile uClibc in thumb mode.
 
-Care to send a path removing it, then, please? ;-)
+Why do you put all these explanations after the "---" sign? They should
+really be part of the commit log.
 
-> One positive thing about this
-> package is, that Samuel could find a way to track down Python compile
-> errors in the future.
+> 
+>  arch/Config.in.arm       | 18 +++++++++---------
+>  package/uclibc/uclibc.mk | 12 ++++++++++++
+>  2 files changed, 21 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> index 67ff384..2d318f2 100644
+> --- a/arch/Config.in.arm
+> +++ b/arch/Config.in.arm
+> @@ -374,6 +374,15 @@ config BR2_ARM_INSTRUCTIONS_ARM
+>  	  This option instructs the compiler to generate regular ARM
+>  	  instructions, that are all 32 bits wide.
+>  
+> +config BR2_ARM_INSTRUCTIONS_THUMB2
+> +	bool "Thumb2"
+> +	depends on BR2_ARM_CPU_HAS_THUMB2
+> +	help
+> +	  This option instructions the compiler to generate Thumb2
+> +	  instructions, which allows to mix 16 bits instructions and
+> +	  32 bits instructions. This generally provides a much smaller
+> +	  compiled binary size.
+> +
+>  config BR2_ARM_INSTRUCTIONS_THUMB
+>  	bool "Thumb"
+>  	depends on BR2_ARM_CPU_HAS_THUMB
+> @@ -389,15 +398,6 @@ comment "Thumb1 is not compatible with VFP"
+>  	depends on BR2_ARM_CPU_HAS_THUMB
+>  	depends on !BR2_ARM_SOFT_FLOAT
+>  
+> -config BR2_ARM_INSTRUCTIONS_THUMB2
+> -	bool "Thumb2"
+> -	depends on BR2_ARM_CPU_HAS_THUMB2
+> -	help
+> -	  This option instructions the compiler to generate Thumb2
+> -	  instructions, which allows to mix 16 bits instructions and
+> -	  32 bits instructions. This generally provides a much smaller
+> -	  compiled binary size.
 
-Muhahaha! :-)
+I don't understand why you are re-ordering the options here. Why are
+you doing this?
 
-Regards,
-Yann E. MORIN.
+> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB2),y)
+> +define UCLIBC_ARM_THUMB_CONFIG
+> +	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
 
+According to the help text of this uClibc option:
+
+          Say 'y' here to force building uClibc in thumb mode.
+          Say 'n' to use your compiler's default mode.
+
+When you have BR2_ARM_INSTRUCTIONS_THUMB2, the compiler already
+produces Thumb2 code by default, because the compiler is built with
+--with-mode=thumb.
+
+So could you be more specific on which cases this patch is fixing by
+expanding the commit log?
+
+> +	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
+
+What is the relation between this and Thumb ?
+
+Also, note that there is already some Thumb-related stuff in uclibc.mk,
+which precisely forces to *not* use Thumb (1):
+
+# Thumb build is broken with threads, build in ARM mode
+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+UCLIBC_EXTRA_CFLAGS += -marm
+endif
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
