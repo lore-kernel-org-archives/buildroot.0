@@ -1,57 +1,39 @@
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Date: Tue, 15 Dec 2015 08:20:55 -0300
-Subject: [Buildroot] [PATCH] graph-depends: optimize
- remove_transitive_deps()
-In-Reply-To: <1450174901-30667-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1450174901-30667-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <566FF797.9090905@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 15 Dec 2015 11:57:21 +0000
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.138
+Message-ID: <1450180641-938-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/12/15 07:21, Thomas Petazzoni wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> For large configurations, the execution time of
-> remove_transitive_deps() becomes really high, due to the number of
-> nested loops + the is_dep() function being recursive.
->
-> For an allyespackageconfig, the remove_extra_deps() function takes 334
-> seconds to execute, and the overall time to generate the .dot file is
-> 6 minutes and 39 seconds. Here is a timing of the different
-> graph-depends steps and the overall execution time:
->
->    Getting dependencies:   42.5735 seconds
->    Turn deps into a dict:   0.0023 seconds
->    Remove extra deps:     334.1542 seconds
->    Get version:            22.4919 seconds
->    Generate .dot:           0.0197 seconds
->
->    real	6m39.289s
->    user	6m16.644s
->    sys	0m8.792s
->
-> By adding a very simple cache for the results of is_dep(), we bring
-> down the execution time of the "Remove extra deps" step from 334
-> seconds to just 4 seconds, reducing the overall execution time to 1
-> minutes and 10 seconds:
->
->    Getting dependencies:  42.9546 seconds
->    Turn deps into a dict:  0.0025 seconds
->    Remove extra deps:      4.9643 seconds
->    Get version:           22.1865 seconds
->    Generate .dot:          0.0207 seconds
->
->    real	1m10.201s
->    user	0m47.716s
->    sys	0m7.948s
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Tested-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-
-For a lot of transitive deps (custom package set) the difference is even 
-bigger, akin to hours (previous version) vs 2 minutes (patch applied).
-
-Regards.
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 539bf49..17434ff 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 d042bad51eacc350e3a2b08a631498d7bdff29032804e7db4c6a0723e8896628b89e6395a311535c09429429c17adfeb45794d5f53bdeb5d51b195114fca309a  LVM2.2.02.137.tgz
++sha512 d827cbd5dde6079f9fedb6bd64025d33a93a00cd1af6d57873be78df07069c5b9921077d6be98a6445829cfea28ba7a5520db0be58d6e7a7824f1a722d739fb6  LVM2.2.02.138.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 59206cc..cfee44b 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.137
++LVM2_VERSION = 2.02.138
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
+-- 
+2.4.10
