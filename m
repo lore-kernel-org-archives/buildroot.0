@@ -1,25 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 21:42:17 +0100
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.138
-In-Reply-To: <1450180641-938-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1450180641-938-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151215214217.5b854cd9@free-electrons.com>
+Date: Tue, 15 Dec 2015 21:42:25 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{1, 2, 3}.x series
+In-Reply-To: <1450172083-21347-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450172083-21347-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151215214225.067a148b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Gustavo Zacarias,
 
-On Tue, 15 Dec 2015 11:57:21 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Tue, 15 Dec 2015 06:34:42 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/lvm2/lvm2.hash | 2 +-
->  package/lvm2/lvm2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/linux-headers/Config.in.host | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied, thanks.
+Both applied, thanks.
 
 Thomas
 -- 
