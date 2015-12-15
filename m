@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 22:05:48 +0100
-Subject: [Buildroot] [git commit] lttng-babeltrace: comma separate licenses
-Message-ID: <20151215210845.4EF87818FB@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 22:04:23 +0100
+Subject: [Buildroot] [git commit] libtasn1: comma separate licenses
+Message-ID: <20151215210844.DE60180409@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=addcd86e10037bc188c574fffbf2a4416f9d467f
+commit: http://git.buildroot.net/buildroot/commit/?id=756b0b7b1a5774fb1a15404c9fa730bdfe84b2d4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-[Thomas: put between parenthesis the description of what is covered by
-each license.]
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lttng-babeltrace/lttng-babeltrace.mk | 2 +-
+ package/libtasn1/libtasn1.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index dacb15a..5de77fb 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index 6818f30..701e0e1 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
 @@ -7,7 +7,7 @@
- LTTNG_BABELTRACE_SITE = http://lttng.org/files/babeltrace
- LTTNG_BABELTRACE_VERSION = 1.2.4
- LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
--LTTNG_BABELTRACE_LICENSE = MIT; LGPLv2.1 for include/babeltrace/list.h; GPLv2 for test code
-+LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
- LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
- 
- LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
+ LIBTASN1_VERSION = 4.6
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+-LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
++LIBTASN1_LICENSE = GPLv3+, LGPLv2.1+
+ LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
+ LIBTASN1_INSTALL_STAGING = YES
+ # 'missing' fallback logic botched so disable it completely
