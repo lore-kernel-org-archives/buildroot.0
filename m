@@ -1,110 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 23:03:51 +0100
-Subject: [Buildroot] [PATCH v2] package/uclibc: Enable compile in thumb
- mode configuration option
-In-Reply-To: <1450056520-18750-1-git-send-email-paul.enman@gmail.com>
-References: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
- <1450056520-18750-1-git-send-email-paul.enman@gmail.com>
-Message-ID: <20151215230351.5dc6e91d@free-electrons.com>
+Date: Tue, 15 Dec 2015 23:05:30 +0100
+Subject: [Buildroot] [git commit] package/mesa3d-demos: Disable glesv1
+	support
+Message-ID: <20151215221257.1447181E5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul,
+commit: http://git.buildroot.net/buildroot/commit/?id=b030363ab1bc74cad7ae2e22cf8ce43e52d64a1a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 Dec 2015 19:28:40 -0600, Paul Enman wrote:
-> From: penman <paul.enman@gmail.com>
+The only files enabled by glesv1 support are in src/egl/opengles1/
 
-This is still not good, it should be your full name here as well.
+Quoting src/egl/opengles1/Makefile.am:
 
-> 
-> Signed-off-by: Paul Enman <paul.enman@gmail.com>
-> ---
-> 
-> When buildroot is configured to build uClibc with thumb, it uses a workaround
->  for that relies on interworking between arm and thumb instructions and does
->  not set the config file to enable compile in thumb mode.
-> 
-> This patch enables buildroot to configure and compile uClibc in thumb mode.
+"# These programs aren't intended to be included with the normal distro."
+"# They're not too interesting but they're good for testing."
 
-Why do you put all these explanations after the "---" sign? They should
-really be part of the commit log.
+Most of the files present in this directory contain
 
-> 
->  arch/Config.in.arm       | 18 +++++++++---------
->  package/uclibc/uclibc.mk | 12 ++++++++++++
->  2 files changed, 21 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index 67ff384..2d318f2 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -374,6 +374,15 @@ config BR2_ARM_INSTRUCTIONS_ARM
->  	  This option instructs the compiler to generate regular ARM
->  	  instructions, that are all 32 bits wide.
->  
-> +config BR2_ARM_INSTRUCTIONS_THUMB2
-> +	bool "Thumb2"
-> +	depends on BR2_ARM_CPU_HAS_THUMB2
-> +	help
-> +	  This option instructions the compiler to generate Thumb2
-> +	  instructions, which allows to mix 16 bits instructions and
-> +	  32 bits instructions. This generally provides a much smaller
-> +	  compiled binary size.
-> +
->  config BR2_ARM_INSTRUCTIONS_THUMB
->  	bool "Thumb"
->  	depends on BR2_ARM_CPU_HAS_THUMB
-> @@ -389,15 +398,6 @@ comment "Thumb1 is not compatible with VFP"
->  	depends on BR2_ARM_CPU_HAS_THUMB
->  	depends on !BR2_ARM_SOFT_FLOAT
->  
-> -config BR2_ARM_INSTRUCTIONS_THUMB2
-> -	bool "Thumb2"
-> -	depends on BR2_ARM_CPU_HAS_THUMB2
-> -	help
-> -	  This option instructions the compiler to generate Thumb2
-> -	  instructions, which allows to mix 16 bits instructions and
-> -	  32 bits instructions. This generally provides a much smaller
-> -	  compiled binary size.
+"#include <X11/Xlib.h>"
 
-I don't understand why you are re-ordering the options here. Why are
-you doing this?
+which breaks a wayland-only build because the build system does not take
+care of the x11 dependency here. Since these files are "not too
+interesting" anyway we just disable glesv1 support.
 
-> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB2),y)
-> +define UCLIBC_ARM_THUMB_CONFIG
-> +	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
+Fixes
+http://autobuild.buildroot.net/results/b3e/b3ed3ee174a3ddce84bf64039eac39d4e6e75b71/
 
-According to the help text of this uClibc option:
+[Thomas: adapt on top of master.]
 
-          Say 'y' here to force building uClibc in thumb mode.
-          Say 'n' to use your compiler's default mode.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d-demos/mesa3d-demos.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-When you have BR2_ARM_INSTRUCTIONS_THUMB2, the compiler already
-produces Thumb2 code by default, because the compiler is built with
---with-mode=thumb.
-
-So could you be more specific on which cases this patch is fixing by
-expanding the commit log?
-
-> +	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
-
-What is the relation between this and Thumb ?
-
-Also, note that there is already some Thumb-related stuff in uclibc.mk,
-which precisely forces to *not* use Thumb (1):
-
-# Thumb build is broken with threads, build in ARM mode
-ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-UCLIBC_EXTRA_CFLAGS += -marm
-endif
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+index c0f889a..094239c 100644
+--- a/package/mesa3d-demos/mesa3d-demos.mk
++++ b/package/mesa3d-demos/mesa3d-demos.mk
+@@ -11,7 +11,10 @@ MESA3D_DEMOS_AUTORECONF = YES
+ MESA3D_DEMOS_DEPENDENCIES = host-pkgconf
+ MESA3D_DEMOS_LICENSE = MIT
+ 
+-MESA3D_DEMOS_CONF_OPTS += --without-glut --disable-osmesa
++MESA3D_DEMOS_CONF_OPTS += \
++	--without-glut \
++	--disable-osmesa \
++	--disable-gles1
+ 
+ ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_HAS_LIBGL),yy)
+ MESA3D_DEMOS_DEPENDENCIES += libgl libglew libglu xlib_libX11 xlib_libXext
+@@ -29,9 +32,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+ MESA3D_DEMOS_DEPENDENCIES += libgles
+-MESA3D_DEMOS_CONF_OPTS += --enable-gles1 --enable-gles2
++MESA3D_DEMOS_CONF_OPTS += --enable-gles2
+ else
+-MESA3D_DEMOS_CONF_OPTS += --disable-gles1 --disable-gles2
++MESA3D_DEMOS_CONF_OPTS += --disable-gles2
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
