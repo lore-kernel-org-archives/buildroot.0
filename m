@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 22:03:19 +0100
-Subject: [Buildroot] [git commit] ustr: comma separate licenses
-Message-ID: <20151215210844.5E8BE818FB@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 22:03:23 +0100
+Subject: [Buildroot] [git commit] python-pyzmq: comma separate licenses
+Message-ID: <20151215210844.6AF71818FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e42e268a242e66cdc0bcf236399587e79b24e4d8
+commit: http://git.buildroot.net/buildroot/commit/?id=e3936707ca060bd316d47977c366d5f10b213ffd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ustr/ustr.mk | 2 +-
+ package/python-pyzmq/python-pyzmq.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
-index d6b0ee4..174f055 100644
---- a/package/ustr/ustr.mk
-+++ b/package/ustr/ustr.mk
+diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
+index 7f86b52..0e787b1 100644
+--- a/package/python-pyzmq/python-pyzmq.mk
++++ b/package/python-pyzmq/python-pyzmq.mk
 @@ -7,7 +7,7 @@
- USTR_VERSION = 1.0.4
- USTR_SOURCE = ustr-$(USTR_VERSION).tar.bz2
- USTR_SITE = http://www.and.org/ustr/$(USTR_VERSION)
--USTR_LICENSE = BSD-2c MIT LGPLv2+
-+USTR_LICENSE = BSD-2c, MIT, LGPLv2+
- USTR_LICENSE_FILES = LICENSE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
- USTR_AUTORECONF = YES
- USTR_PATCH = \
+ PYTHON_PYZMQ_VERSION = 14.3.1
+ PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
+ PYTHON_PYZMQ_SITE = http://pypi.python.org/packages/source/p/pyzmq
+-PYTHON_PYZMQ_LICENSE = LGPLv3+ BSD-3c Apache-2.0
++PYTHON_PYZMQ_LICENSE = LGPLv3+, BSD-3c, Apache-2.0
+ # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
+ PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
+ PYTHON_PYZMQ_DEPENDENCIES = zeromq
