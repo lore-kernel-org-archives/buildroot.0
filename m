@@ -1,31 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 23:05:46 +0100
-Subject: [Buildroot] [git commit] package/mesa3d-demos: remove
-	copy-and-paste artifact from 0001-demos-optional-gl.patch
-Message-ID: <20151215221257.20D037F8C1@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 23:14:08 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/mesa3d-demos: Disable glesv1
+ support
+In-Reply-To: <1450074776-18055-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1450074776-18055-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151215231408.6fadbb08@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36a974dbc4d0d42a9aea0788ed3e59f09357e74f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mesa3d-demos/0001-demos-optional-gl.patch | 3 ---
- 1 file changed, 3 deletions(-)
+On Mon, 14 Dec 2015 07:32:55 +0100, Bernd Kuhls wrote:
+> The only files enabled by glesv1 support are in src/egl/opengles1/
+> 
+> Quoting src/egl/opengles1/Makefile.am:
+> 
+> "# These programs aren't intended to be included with the normal distro."
+> "# They're not too interesting but they're good for testing."
+> 
+> Most of the files present in this directory contain
+> 
+> "#include <X11/Xlib.h>"
+> 
+> which breaks a wayland-only build because the build system does not take
+> care of the x11 dependency here. Since these files are "not too
+> interesting" anyway we just disable glesv1 support.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/b3e/b3ed3ee174a3ddce84bf64039eac39d4e6e75b71/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: fixed patch description, git does not like "#" in comments ;) (Thomas)
+>     split 0001-demos-optional-gl.patch into seperate patch
 
-diff --git a/package/mesa3d-demos/0001-demos-optional-gl.patch b/package/mesa3d-demos/0001-demos-optional-gl.patch
-index 0415bbc..6470e9d 100644
---- a/package/mesa3d-demos/0001-demos-optional-gl.patch
-+++ b/package/mesa3d-demos/0001-demos-optional-gl.patch
-@@ -72,6 +72,3 @@ Index: mesa3d-demos-8.1.0/src/util/Makefile.am
-  
-  if HAVE_GLUT
-  AM_CFLAGS += \
--diff -uNr mesa-demos-8.3.0.org/configure.ac mesa-demos-8.3.0/configure.ac
----- mesa-demos-8.3.0.org/configure.ac	2015-12-09 22:06:44.000000000 +0100
--+++ mesa-demos-8.3.0/configure.ac	2015-12-12 17:06:10.484295811 +0100
+Both applied. For the first patch, I had to adapt it slightly, since it
+didn't apply directly on top of master.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
