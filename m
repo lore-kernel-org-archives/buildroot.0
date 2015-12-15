@@ -1,113 +1,86 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 15 Dec 2015 23:40:37 +0100
-Subject: [Buildroot] [PATCH v10 25/28] package/efl/libeet: remove package
+Date: Tue, 15 Dec 2015 23:40:21 +0100
+Subject: [Buildroot] [PATCH v10 09/28] package/efl/libefl: enable xinput2.2
 In-Reply-To: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
 References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1450219240-16938-26-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1450219240-16938-10-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libeet is now available in efl package.
+X11 XInput v2.2+ support is one of the recommended
+feature for the efl libraries:
+https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n490
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: Improve lecacy help text (Yann E.Morin)
-v5: remove libeet directory
-v4: update Config.in to use libefl
-v3: update legacy option for 2015.11
-    update help text
+v8: Remove --disable-xinput22 added by the patch adding X11 support
+    (Yann E.Morin)
+v6: add missing dependency on xlib_libXi (Yann E.Morin)
+v4: rename to libefl
+    improve commit log
+v3: new patch
 ---
- Config.in.legacy             |  7 +++++++
- package/efl/Config.in        |  1 -
- package/efl/libeet/Config.in | 11 -----------
- package/efl/libeet/libeet.mk | 27 ---------------------------
- 4 files changed, 7 insertions(+), 39 deletions(-)
- delete mode 100644 package/efl/libeet/Config.in
- delete mode 100644 package/efl/libeet/libeet.mk
+ package/efl/libefl/Config.in | 1 +
+ package/efl/libefl/libefl.mk | 7 ++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 2ee2f42..1df81ea 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.02"
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index 333456e..7f76b94 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -130,6 +130,7 @@ config BR2_PACKAGE_LIBEFL_X_XLIB
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXI
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	select BR2_PACKAGE_XLIB_LIBXP
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index 0eb17c2..5e8009e 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -33,7 +33,6 @@ LIBEFL_GETTEXTIZE = YES
+ # --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+-# --disable-xinput22: disable X11 XInput v2.2+ support.
+ # --enable-lua-old: disable Elua and remove luajit dependency.
+ LIBEFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+@@ -41,7 +40,6 @@ LIBEFL_CONF_OPTS = \
+ 	--disable-cxx-bindings \
+ 	--disable-sdl \
+ 	--disable-systemd \
+-	--disable-xinput22 \
+ 	--enable-lua-old
  
-+config BR2_PACKAGE_LIBEET
-+	bool "libeet package has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_EFL
-+	help
-+	  With EFL 1.15, libeet is now provided by the libefl package.
-+
- config BR2_PACKAGE_LIBEVAS
- 	bool "libevas package has been removed"
- 	select BR2_LEGACY
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 48ea706..a01b971 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -16,7 +16,6 @@ menuconfig BR2_PACKAGE_EFL
- if BR2_PACKAGE_EFL
+ # Disable untested configuration warning.
+@@ -145,11 +143,13 @@ LIBEFL_CONF_OPTS += --disable-fb
+ endif
  
- source "package/efl/libeina/Config.in"
--source "package/efl/libeet/Config.in"
- source "package/efl/libefl/Config.in"
- source "package/efl/libelementary/Config.in"
+ ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
++# --enable-xinput22 is recommended
+ LIBEFL_CONF_OPTS += \
+ 	--with-x11=xlib \
+ 	--with-x=$(STAGING_DIR) \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+-	--x-libraries=$(STAGING_DIR)/usr/lib
++	--x-libraries=$(STAGING_DIR)/usr/lib \
++	--enable-xinput22
  
-diff --git a/package/efl/libeet/Config.in b/package/efl/libeet/Config.in
-deleted file mode 100644
-index 48631a0..0000000
---- a/package/efl/libeet/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_LIBEET
--	bool "libeet"
--	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_JPEG
--	select BR2_PACKAGE_LIBEINA
--	help
--	  Eet is a tiny library designed to write an arbitary set of
--	  chunks of data to a file and optionally compress each chunk
--	  (very much like a zip file).
--
--	  http://trac.enlightenment.org/e/wiki/Eet
-diff --git a/package/efl/libeet/libeet.mk b/package/efl/libeet/libeet.mk
-deleted file mode 100644
-index fc3d7f9..0000000
---- a/package/efl/libeet/libeet.mk
-+++ /dev/null
-@@ -1,27 +0,0 @@
--################################################################################
--#
--# libeet
--#
--################################################################################
--
--LIBEET_VERSION = 1.7.10
--LIBEET_SOURCE = eet-$(LIBEET_VERSION).tar.bz2
--LIBEET_SITE = http://download.enlightenment.org/releases
--LIBEET_LICENSE = BSD-2c
--LIBEET_LICENSE_FILES = COPYING
--
--LIBEET_INSTALL_STAGING = YES
--
--LIBEET_DEPENDENCIES = host-pkgconf zlib jpeg libeina
--HOST_LIBEET_DEPENDENCIES = host-pkgconf host-zlib host-libjpeg host-libeina
--
--ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
--LIBEET_DEPENDENCIES += gnutls libgcrypt
--LIBEET_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
--LIBEET_CONF_OPTS += --enable-gnutls
--else
--LIBEET_CONF_OPTS += --disable-gnutls
--endif
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
+ LIBEFL_DEPENDENCIES += \
+ 	xlib_libX11 \
+@@ -157,6 +157,7 @@ LIBEFL_DEPENDENCIES += \
+ 	xlib_libXcursor \
+ 	xlib_libXdamage \
+ 	xlib_libXext \
++	xlib_libXi \
+ 	xlib_libXinerama \
+ 	xlib_libXrandr \
+ 	xlib_libXrender \
 -- 
 2.4.3
