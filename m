@@ -1,87 +1,68 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 15 Dec 2015 23:40:16 +0100
-Subject: [Buildroot] [PATCH v10 04/28] package/efl/libefl: add webp
+Date: Tue, 15 Dec 2015 23:40:14 +0100
+Subject: [Buildroot] [PATCH v10 02/28] package/efl/libefl: add harfbuzz
 	dependency
 In-Reply-To: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
 References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1450219240-16938-5-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1450219240-16938-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WebP is a new image format that provides lossless and lossy
-compression for images on the web. So enabling webp support
-in efl libraries allow to loads images using WebP.
+Harfbuzz allow to enable complex text shaping and layouting
+support in efl libraries.
 
-Also, it one of the "highly recommended" dependecies [1]
+Also, it one of the "highly recommended" dependecies
 according to the README but disabling it doesn't need
 the --enable-i-really-know-what-i-am-doing... option.
-That's why BR2_PACKAGE_LIBEFL_WEBP is not added to
+That's why harfbuzz is not added to
 BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
-
-[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v6: select BR2_PACKAGE_WEBP (Yann E.Morin)
+v6: use --enable/disable options
 v4: rename to libefl
-    improve commit log
+    improve commit log.
 ---
- package/efl/libefl/Config.in | 6 ++++++
  package/efl/libefl/libefl.mk | 9 +++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 41160d4..74e75ec 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -145,4 +145,10 @@ config BR2_PACKAGE_LIBEFL_TIFF
- 	help
- 	  This enables the loader code that loads tiff files.
- 
-+config BR2_PACKAGE_LIBEFL_WEBP
-+	bool "libevas webp image loader"
-+	select BR2_PACKAGE_WEBP
-+	help
-+	  This enables the loader code that loads images using WebP.
-+
- endif # BR2_PACKAGE_LIBEFL
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index db150d0..bd20039 100644
+index dad5e40..5059f8c 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
+@@ -31,7 +31,6 @@ LIBEFL_GETTEXTIZE = YES
+ # Configure options:
  # --disable-cxx-bindings: disable C++11 bindings.
  # --disable-fb: disable frame buffer support.
+-# --disable-harfbuzz: disable harfbuzz support.
  # --disable-image-loader-jp2k: disable JPEG 2000 support.
--# --disable-image-loader-webp: disable webp support.
+ # --disable-image-loader-webp: disable webp support.
  # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
-@@ -44,7 +43,6 @@ LIBEFL_CONF_OPTS = \
+@@ -45,7 +44,6 @@ LIBEFL_CONF_OPTS = \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
  	--disable-cxx-bindings \
  	--disable-fb \
+-	--disable-harfbuzz \
  	--disable-image-loader-jp2k \
--	--disable-image-loader-webp \
+ 	--disable-image-loader-webp \
  	--disable-sdl \
- 	--disable-systemd \
- 	--enable-lua-old \
-@@ -176,6 +174,13 @@ else
- LIBEFL_CONF_OPTS += --disable-image-loader-tiff
+@@ -109,6 +107,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-pulseaudio
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
-+LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
-+LIBEFL_DEPENDENCIES += webp
++ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
++LIBEFL_DEPENDENCIES += harfbuzz
++LIBEFL_CONF_OPTS += --enable-harfbuzz
 +else
-+LIBEFL_CONF_OPTS += --disable-image-loader-webp
++LIBEFL_CONF_OPTS += --disable-harfbuzz
 +endif
 +
- $(eval $(autotools-package))
- 
- ################################################################################
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ LIBEFL_DEPENDENCIES += tslib
+ LIBEFL_CONF_OPTS += --enable-tslib
 -- 
 2.4.3
