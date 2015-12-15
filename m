@@ -1,34 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 23:18:51 +0100
-Subject: [Buildroot] [PATCH 1/2] zeromq: bump to version 4.1.3
-In-Reply-To: <1448993679-15036-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1448993679-15036-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151215231851.28b5d278@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 15 Dec 2015 23:40:16 +0100
+Subject: [Buildroot] [PATCH v10 04/28] package/efl/libefl: add webp
+	dependency
+In-Reply-To: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1450219240-16938-5-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+WebP is a new image format that provides lossless and lossy
+compression for images on the web. So enabling webp support
+in efl libraries allow to loads images using WebP.
 
-On Tue,  1 Dec 2015 15:14:38 -0300, Gustavo Zacarias wrote:
-> Add upstream patch to fix build failure of zeromq with latest
-> libsodium, since sodium_init() has a retval and is now declared to warn
-> on unused result, with zeromq treating warnings as errors.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...return-code-of-sodium_init-is-not-checked.patch | 73 ++++++++++++++++++++++
->  package/zeromq/zeromq.hash                         |  6 +-
->  package/zeromq/zeromq.mk                           |  2 +-
->  3 files changed, 77 insertions(+), 4 deletions(-)
->  create mode 100644 package/zeromq/0003-Problem-return-code-of-sodium_init-is-not-checked.patch
+Also, it one of the "highly recommended" dependecies [1]
+according to the README but disabling it doesn't need
+the --enable-i-really-know-what-i-am-doing... option.
+That's why BR2_PACKAGE_LIBEFL_WEBP is not added to
+BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG.
 
-Both applied, thanks.
+[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
 
-Thomas
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+v6: select BR2_PACKAGE_WEBP (Yann E.Morin)
+v4: rename to libefl
+    improve commit log
+---
+ package/efl/libefl/Config.in | 6 ++++++
+ package/efl/libefl/libefl.mk | 9 +++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index 41160d4..74e75ec 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -145,4 +145,10 @@ config BR2_PACKAGE_LIBEFL_TIFF
+ 	help
+ 	  This enables the loader code that loads tiff files.
+ 
++config BR2_PACKAGE_LIBEFL_WEBP
++	bool "libevas webp image loader"
++	select BR2_PACKAGE_WEBP
++	help
++	  This enables the loader code that loads images using WebP.
++
+ endif # BR2_PACKAGE_LIBEFL
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index db150d0..bd20039 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
+ # --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-fb: disable frame buffer support.
+ # --disable-image-loader-jp2k: disable JPEG 2000 support.
+-# --disable-image-loader-webp: disable webp support.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+ # --enable-lua-old: disable Elua and remove luajit dependency.
+@@ -44,7 +43,6 @@ LIBEFL_CONF_OPTS = \
+ 	--disable-cxx-bindings \
+ 	--disable-fb \
+ 	--disable-image-loader-jp2k \
+-	--disable-image-loader-webp \
+ 	--disable-sdl \
+ 	--disable-systemd \
+ 	--enable-lua-old \
+@@ -176,6 +174,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-image-loader-tiff
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
++LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
++LIBEFL_DEPENDENCIES += webp
++else
++LIBEFL_CONF_OPTS += --disable-image-loader-webp
++endif
++
+ $(eval $(autotools-package))
+ 
+ ################################################################################
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.3
