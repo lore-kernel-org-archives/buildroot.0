@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 21:40:54 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{1, 2, 3}.x series
-Message-ID: <20151215204244.2CD4081DBB@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 21:40:58 +0100
+Subject: [Buildroot] [git commit] linux: bump default version to 4.3.3
+Message-ID: <20151215204244.3E1A281974@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4d7580c0f04f656f5ff7b7b7a897562eeec68cd
+commit: http://git.buildroot.net/buildroot/commit/?id=053b3f978b579dedabeafe4455f6321fb98010da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f1ca16b..c02c940 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -209,7 +209,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.18.24"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.14"	if BR2_KERNEL_HEADERS_4_1
--	default "4.2.7"		if BR2_KERNEL_HEADERS_4_2
--	default "4.3.2"		if BR2_KERNEL_HEADERS_4_3
-+	default "4.1.15"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
-+	default "4.3.3"		if BR2_KERNEL_HEADERS_4_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index 57b3490..2704ab6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.3.2"
++	bool "4.3.3"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.3.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.3.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
