@@ -1,45 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 21:36:58 +0100
-Subject: [Buildroot] [git commit] popt: change POPT_SITE back to original url
-Message-ID: <20151215203912.0DB3581974@busybox.osuosl.org>
+Date: Tue, 15 Dec 2015 21:39:40 +0100
+Subject: [Buildroot] [git commit] python-pyasn: fix license file
+Message-ID: <20151215203946.E629880142@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a54cde49d51f25b135a3751965e6c59b79d2cddc
+commit: http://git.buildroot.net/buildroot/commit/?id=5936822be13db38af0c9e0bf6805186543195689
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The popt-1.16.tar.gz file is no more available at current URL and
-rmp5.org is online.
+It's not LICENSE.txt and not LICENSE, fixes:
+http://autobuild.buildroot.net/results/d29/d293f35d8034eaaa519565b14641d1b56206cbc8/
 
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/popt/popt.hash | 2 +-
- package/popt/popt.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/python-pyasn/python-pyasn.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/popt/popt.hash b/package/popt/popt.hash
-index 4d93e47..875bbae 100644
---- a/package/popt/popt.hash
-+++ b/package/popt/popt.hash
-@@ -1,2 +1,2 @@
--# Locally calculated based on http://anduin.linuxfromscratch.org/sources/BLFS/svn/p/popt-1.16.tar.gz.md5sum
-+# Locally calculated:
- sha256	e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8	popt-1.16.tar.gz
-diff --git a/package/popt/popt.mk b/package/popt/popt.mk
-index 605649b..863a47a 100644
---- a/package/popt/popt.mk
-+++ b/package/popt/popt.mk
-@@ -5,8 +5,7 @@
- ################################################################################
+diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
+index 8b10958..80d18cd 100644
+--- a/package/python-pyasn/python-pyasn.mk
++++ b/package/python-pyasn/python-pyasn.mk
+@@ -8,7 +8,7 @@ PYTHON_PYASN_VERSION = 0.1.9
+ PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
+ PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1
+ PYTHON_PYASN_LICENSE = BSD-2c
+-PYTHON_PYASN_LICENSE_FILES = LICENSE
++PYTHON_PYASN_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYASN_SETUP_TYPE = distutils
  
- POPT_VERSION = 1.16
--# rpm5.org down
--POPT_SITE = http://anduin.linuxfromscratch.org/sources/BLFS/svn/p
-+POPT_SITE = http://rpm5.org/files/popt
- POPT_INSTALL_STAGING = YES
- POPT_LICENSE = MIT
- POPT_LICENSE_FILES = COPYING
+ $(eval $(python-package))
