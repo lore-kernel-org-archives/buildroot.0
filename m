@@ -1,22 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2015 21:48:00 +0100
-Subject: [Buildroot] [PATCH] package/libuv: bump to version 1.8.0
-In-Reply-To: <1450133303-7756-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1450133303-7756-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151215214800.7e92016d@free-electrons.com>
+Date: Tue, 15 Dec 2015 21:48:13 +0100
+Subject: [Buildroot] [PATCH] gdk-pixbuf: security bump to version 2.32.3
+In-Reply-To: <1450135196-23993-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450135196-23993-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151215214813.5618480e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Gustavo Zacarias,
 
-On Mon, 14 Dec 2015 23:48:23 +0100, J?rg Krause wrote:
+On Mon, 14 Dec 2015 20:19:56 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> * Fix two crashes in the bmp loader (#747605, #758991)
+> * ico: integer overflow fixes
+> 
+> No CVEs assigned yet.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libuv/libuv.hash | 2 +-
->  package/libuv/libuv.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/gdk-pixbuf/gdk-pixbuf.hash | 4 ++--
+>  package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied, thanks.
 
