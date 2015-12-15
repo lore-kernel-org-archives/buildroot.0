@@ -1,22 +1,35 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 15 Dec 2015 12:06:05 +0000
-Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 4.3.3
-In-Reply-To: <1450172083-21347-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1450172083-21347-1-git-send-email-gustavo@zacarias.com.ar>
- <1450172083-21347-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5670022D.8050003@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Dec 2015 13:38:15 +0100
+Subject: [Buildroot] [git commit] mplayer: use autodetection for dvdnav
+Message-ID: <20151215123828.0E2BC81D60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=25f1a0d16ac62f223de8ce8e727202300df2e818
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 15/12/15 09:34, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mplayer/mplayer.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Regards,
-
-Vincent.
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index ad2d9dd..3051afa 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -125,9 +125,10 @@ MPLAYER_CONF_OPTS +=  \
+ MPLAYER_DEPENDENCIES += libdvdread
+ endif
+ 
++# We intentionally don't pass --enable-dvdnav to let the autodetection
++# find which library to link with.
+ ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
+ MPLAYER_CONF_OPTS +=  \
+-	--enable-dvdnav \
+ 	--with-dvdnav-config=$(STAGING_DIR)/usr/bin/dvdnav-config
+ MPLAYER_DEPENDENCIES += libdvdnav
+ endif
