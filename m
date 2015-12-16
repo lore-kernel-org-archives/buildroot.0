@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2015 22:59:50 +0100
-Subject: [Buildroot] [PATCH 2/4] libpangomm: new package
-In-Reply-To: <1449178605-8568-2-git-send-email-james.knight@rockwellcollins.com>
-References: <1449178605-8568-1-git-send-email-james.knight@rockwellcollins.com>
- <1449178605-8568-2-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20151216225950.61f9e939@free-electrons.com>
+Date: Wed, 16 Dec 2015 23:06:37 +0100
+Subject: [Buildroot] [git commit] pangomm: fix typo in Config.in following
+	package rename
+Message-ID: <20151216220708.1415880D95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+commit: http://git.buildroot.net/buildroot/commit/?id=1d3a2dc186272a17f09e5aa1b5cd0351e2b868a0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  3 Dec 2015 16:36:43 -0500, James Knight wrote:
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> ---
->  package/Config.in                  |  1 +
->  package/libpangomm/Config.in       | 21 +++++++++++++++++++++
->  package/libpangomm/libpangomm.hash |  2 ++
->  package/libpangomm/libpangomm.mk   | 16 ++++++++++++++++
->  4 files changed, 40 insertions(+)
->  create mode 100644 package/libpangomm/Config.in
->  create mode 100644 package/libpangomm/libpangomm.hash
->  create mode 100644 package/libpangomm/libpangomm.mk
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pangomm/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, after doing some changes:
-
-    [Thomas:
-     - rename to pangomm.
-     - move next to pango in menuconfig.
-     - add dependency to libsigc.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pangomm/Config.in b/package/pangomm/Config.in
+index 241aa9f..6a84c42 100644
+--- a/package/pangomm/Config.in
++++ b/package/pangomm/Config.in
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_PANGOMM
+ 
+ 	  http://www.gtkmm.org/
+ 
+-comment "libpangomm needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
++comment "pangomm needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
