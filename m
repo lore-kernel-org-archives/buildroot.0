@@ -1,37 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Dec 2015 21:05:46 -0300
-Subject: [Buildroot] [PATCH v2] gnutls: fix --disable-crywrap
-In-Reply-To: <20151215215004.282f0afc@free-electrons.com>
-References: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
- <20151215215004.282f0afc@free-electrons.com>
-Message-ID: <5670AADA.1080605@zacarias.com.ar>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 16 Dec 2015 08:10:10 +0100
+Subject: [Buildroot] [PATCH v2] package/uclibc: Enable compile in thumb
+ mode configuration option
+In-Reply-To: <20151215230351.5dc6e91d@free-electrons.com>
+References: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
+ <1450056520-18750-1-git-send-email-paul.enman@gmail.com>
+ <20151215230351.5dc6e91d@free-electrons.com>
+Message-ID: <20151216071009.GW19876@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/12/15 17:50, Thomas Petazzoni wrote:
+Hi,
+Thomas Petazzoni wrote,
+> Paul,
+> 
+> > +	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
+> 
+> What is the relation between this and Thumb ?
 
-> Gustavo,
->
-> On Mon, 14 Dec 2015 18:39:56 -0300, Gustavo Zacarias wrote:
->> Add a patch to really enable the --disable-crywrap option in gnutls.
->> Fixes:
->> http://autobuild.buildroot.org/results/d86/d8604fe448bb11395e8443726d09b041eb34c6d5/
->>
->> Status: sent upstream (mailing list).
->>
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->
-> This patch does not apply (probably because it was based in your tree
-> on other commits that are not in the official Buildroot git repo).
-> Also, it would be good if you could take into account the two comments
-> made by Baruch.
+The user context manipulation functions in uClibc are using
+non-thumb instructions and result in a compile failure.
+ 
+> Also, note that there is already some Thumb-related stuff in uclibc.mk,
+> which precisely forces to *not* use Thumb (1):
+> 
+> # Thumb build is broken with threads, build in ARM mode
+> ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+> UCLIBC_EXTRA_CFLAGS += -marm
+> endif
 
-Hi.
-It does, after the licensing fixes that were previously sent.
-As i mentioned to Baruch and you probably already know, mailing list 
-archives usually don't update quickly, so i didn't have a URL to copy/paste.
-Mundanely trivial v3 sent.
-Regards.
+This is no longer the case for uClibc-ng. There where fixes made,
+even in uClibc master to allow building thumb-only builds with
+threads enabled.
+
+I can just not recall, if Linuxthreads or NPTL must be used for
+that, or if both are working. May be Paul can check it? 
+Paul, do you have a embedded system, where you test this?
+Is it a noMMU cortex-m3/cortex-m4 or some MMU system?
+
+best regards
+ Waldemar
