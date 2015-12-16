@@ -1,96 +1,95 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 16 Dec 2015 11:26:29 +0000
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: Add version 5.2.0
-In-Reply-To: <1450132540.4928.24.camel@embedded.rocks>
-References: <1450122295-5311-1-git-send-email-martin@barkynet.com>
- <20151214210913.227563c9@free-electrons.com>
- <CAFGQKxfvQwA3v8W=OKEvNR6SE06DTng6PxQGj4q7o4zUWYbU2g@mail.gmail.com>
- <20151214214337.2933ea41@free-electrons.com> <20151214211045.GA4152@free.fr>
- <1450132540.4928.24.camel@embedded.rocks>
-Message-ID: <56714A65.80301@imgtec.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 16 Dec 2015 12:30:41 +0100
+Subject: [Buildroot] [PATCH 04/13 v2] core/legal-info: ensure legal-info
+ works in off-line mode
+In-Reply-To: <82f1af6280a8c913d3df331813dec4376fda2fb5.1450031251.git.yann.morin.1998@free.fr>
+References: <cover.1450031251.git.yann.morin.1998@free.fr>
+ <82f1af6280a8c913d3df331813dec4376fda2fb5.1450031251.git.yann.morin.1998@free.fr>
+Message-ID: <56714B61.8040308@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+Dear Yann,
 
-On 14/12/15 22:35, J?rg Krause wrote:
-> On Mo, 2015-12-14 at 22:10 +0100, Yann E. MORIN wrote:
->> Thomas, All,
->>
->> On 2015-12-14 21:43 +0100, Thomas Petazzoni spake thusly:
->>> On Mon, 14 Dec 2015 20:24:30 +0000, Martin Bark wrote:
->>>> I'm not sure the answer to that.  What i can say is that all four
->>>> are
->>>> getting maintained.  Also, according to https://github.com/nodejs
->>>> /LTS
->>>> node.js 0.10.x will be maintained all the way until October 2016.
->>>>
->>>> I see two logical approaches for buildroot:
->>>>
->>>> 1) Support all four in buildroot because node.js support all four
->>>> 2) Only Support the 4.x and 5.x because they are the current LTS
->>>> and
->>>> Stable releases (i.e. the ones on the front page of
->>>> https://nodejs.org)
->>>>
->>>> Personally I'd vote for 2) because it simplifies things.
->>>>
->>>> What are your thoughts?
->>>
->>> I'm fine with option (2) as well, but do we have other NodeJS users
->>> that would like to see 0.10.x and 0.12.x being kept?
->>>
->>> Is there any issue for users of 0.10.x/0.12.x to migrate to 4.2 or
->>> 5.2 ?
->>
->> We do have the various version of nodejs, because:
->>
->>   - 4.2.x needs gcc >= 4.8 and armv6+
->>   - 0.12.x needs armv6+
->>   - 0.10.x has not requirement
->>
->> Going back in our history:
->>
->>   - we had nodejs-0.10
->>   - someone proposed to bump to 0.12
->>   - someone else wanted to keep 0.10 around because of armv6+
->>     requirement
->>   - so we added 0.12, and kept 0.10
->>   - the story repeated itself with 4.2.x
->>
->> So, I think we have a few options here:
->>
->>  1) keep all the three existing versions, add 5.2
->>  2) keep 0.10 and 0.12, replace 4.2 with 5.2
->>  3) keep 0.10, ditch 0.12, replace 4.2 with 5.2
->>  4) dith 0.10 and 0.12, replace 4.2 with 5.2
->>
->> I would lean toward either 2 or 3.
->>
->> 3 is IMHO the best solution: 5.2 is the best choice when all the
->> conditions are met; 0.10 is the fallback, maybe not the optimum in
->> case 0.12 would have fit, but since that's a fallback I don't think
->> it matters much...
->>
-> 
-> As 4.x is a LTS release I would not drop it for the 5.x release.
-> 
-> I would keep all the three version we have - they are all still
-> maintained and v0.12 and v4 are both even LTS releases.
-> 
-> New versions are often not compatible with older versions of Node.js -
-> it's similiar to Lua.
-> 
-> So I would lean toward 1.
+Yann E. MORIN wrote:
+> Almost all packages which are saved for legal-info have their source
+> archives downloaded as part of 'make source', which makes an off-line
+> build completely possible [0].
+>
+> However, for the pre-configured external toolchains, the source tarball
+> is different, as the main tarball is a binary package. And that source
+> tarball is only downloaded during the legal-info phase, which makes it
+> inconvenient for full off-line builds.
+>
+> We fix that in two steps:
+>
+>    - first, we move the declaration of _ACTUAL_SOURCE_TARBALL and _SITE
+>      earlier in the pkg-generic.mk file, so we get those definitions at
+>      the time we define the -source and -all-source rules;
+>
+>    - second, we add a new rule, $(1)-legal-source which only
+>      $(1)-all-source depends on, so that we only download it for a
+>      top-level 'make source', not as part of the standard download
+>      mechanism (i.e. only what is really needed to build).
+>
+> This way, we can do a complete [0] off-line build and are still able to
+> generate legal-info, while at the same time we do not incur any download
+> overhead during a simple build.
+>
+> Also, we previously downloaded the _ACTUAL_SOURCE_TARBALL when it was
+> not empty. However, since _ACTUAL_SOURCE_TARBALL default to the value of
+> _SOURCE, it can not be empty when _SOURCE is not. Thus, we'd get a
+> spurious report of a missing hash for the tarball, since it was not in
+> a standard package rule (configure, build, install..) and thus would
+> miss the PKG and PKGDIR variables to find the .hash file.
+>
+> We fix that in this commit as well, by:
+>
+>    - setting PKG and PKGDIR just for the -legal-source rule;
+>
+>    - only downloading _ACTUAL_SOURCE_TARBALL if it is not empty *and* not
+>      the same as _SOURCE (to avoid a second report about the hash).
+>
+> [0] Save for nodejs which invarriably wants to download stuff at build
+> time. Sigh... :-( Fixing that is work for another time...
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
 
-I agree with you. Dropping a LTS version doesn't look good to me. We
-could do it when it's not maintained anymore. Right now I vote for
-keeping the three versions we already have plus adding the 5.2.0 because
-is the new stable: option 1.
+Thanks for the very detailed commit log message. It's very useful!
 
-Regards,
+Just a couple of minor notes below.
 
-Vincent.
+[...]
+> +# Download actual sources if they differ from the extracted sources
+> +# (e.g. for external toolchains)
+> +#
+> +# We need to provide PKG and PKGDIR, because there's no .stamp file for
+> +# the legal-info step.
+> +$(1)-legal-source:	PKG=$(2)
+> +$(1)-legal-source:	PKGDIR=$(pkgdir)
+> +$(1)-legal-source:
+> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
+> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+> +	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
+> +endif # actuall sources != sources
+
+actuall sources -> actual source
+
+> +endif # actuall source != ""
+
+actuall -> actual
+
+With these fixed:
+  Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+[Tested with a minimal Sourcery ARM 2014.05 config]
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+-- 
+Luca
