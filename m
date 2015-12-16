@@ -1,32 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2015 23:44:22 +0100
-Subject: [Buildroot] [PATCH v2] manual: clarify policy when updating a
- package patch
-In-Reply-To: <1449094406-29088-1-git-send-email-arnout@mind.be>
-References: <1449094406-29088-1-git-send-email-arnout@mind.be>
-Message-ID: <20151216234422.0557ddc0@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 16 Dec 2015 19:46:40 -0300
+Subject: [Buildroot] [PATCH] xutil_util-macros: move outside x11r7 scope
+In-Reply-To: <20151216234223.6abe26c3@free-electrons.com>
+References: <1449096338-8006-1-git-send-email-gustavo@zacarias.com.ar>
+ <20151216234223.6abe26c3@free-electrons.com>
+Message-ID: <5671E9D0.9000703@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+On 16/12/15 19:42, Thomas Petazzoni wrote:
 
-On Wed, 2 Dec 2015 23:13:26 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Renaud AUBIN <root@renaud.io>
-> ---
-> v2: talk about 'From header' rather than 'author' (Baruch)
-> ---
->  docs/manual/patch-policy.txt | 4 ++++
->  1 file changed, 4 insertions(+)
+> Since you're renaming the Config.in option, some Config.in.legacy
+> handling is needed.
 
-Applied, thanks.
+Hi.
+True, however much i doubt anybody is using it in their packages.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> I am wondering if util-macros isn't too generic. Should we name it
+> xorg-util-macros ? xorg-autotools-macros ? But admittedly, that's not
+> matching the upstream name.
+
+In gentoo there's only one util-macros which has far more packages than 
+buildroot, however in the future some other util-macros might appear so 
+yes, xorg-util-macros sounds about right.
+This is just the tip of getting wayland/weston/gtk3 support back in 
+shape, it's still WIP in some aspects but i want to push as many as the 
+little bits as possible since they don't hurt and i don't want to pile 
+up patches.
+I'll respin a v2.
+Regards.
