@@ -1,95 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2015 23:06:03 +0100
-Subject: [Buildroot] [git commit] atkmm: new package
-Message-ID: <20151216220708.02FA181FB5@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 16 Dec 2015 23:08:16 +0100
+Subject: [Buildroot] [PATCH v2] package/uclibc: Enable compile in thumb
+ mode configuration option
+In-Reply-To: <20151215230351.5dc6e91d@free-electrons.com>
+References: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
+ <1450056520-18750-1-git-send-email-paul.enman@gmail.com>
+ <20151215230351.5dc6e91d@free-electrons.com>
+Message-ID: <5671E0D0.3030002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6b3dc20f5e3c2baad8abcf6836dd5978f4234f2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15-12-15 23:03, Thomas Petazzoni wrote:
+> Paul,
+> 
+> On Sun, 13 Dec 2015 19:28:40 -0600, Paul Enman wrote:
+[snip]
+>> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB2),y)
+>> +define UCLIBC_ARM_THUMB_CONFIG
+>> +	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
+> 
+> According to the help text of this uClibc option:
+> 
+>           Say 'y' here to force building uClibc in thumb mode.
+>           Say 'n' to use your compiler's default mode.
+> 
+> When you have BR2_ARM_INSTRUCTIONS_THUMB2, the compiler already
+> produces Thumb2 code by default, because the compiler is built with
+> --with-mode=thumb.
 
-[Thomas:
- - rename to atkmm
- - move next to atk in menuconfig
- - add dependency to libsigc]
+ And in fact, the only thing that this option does is add -mthumb to CFLAGS,
+which is indeed quite useless for our internal compiler.
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in        |  1 +
- package/atkmm/Config.in  | 20 ++++++++++++++++++++
- package/atkmm/atkmm.hash |  2 ++
- package/atkmm/atkmm.mk   | 16 ++++++++++++++++
- 4 files changed, 39 insertions(+)
+ Or actually, it's not, because it also selects USE_BX and USE_LDREXSTREX.
+USE_BX is currently handled by BR2_UCLIBC_ARM_BX but this is a cleaner way I
+think. USE_LDREXSTREX is a better alternative to the SWP instruction so that's
+interesting as well.
 
-diff --git a/package/Config.in b/package/Config.in
-index e6ad109..a3d96cf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -808,6 +808,7 @@ endmenu
- 
- menu "Graphics"
- 	source "package/atk/Config.in"
-+	source "package/atkmm/Config.in"
- 	source "package/bullet/Config.in"
- 	source "package/cairo/Config.in"
- 	source "package/cairomm/Config.in"
-diff --git a/package/atkmm/Config.in b/package/atkmm/Config.in
-new file mode 100644
-index 0000000..2091eab
---- /dev/null
-+++ b/package/atkmm/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_ATKMM
-+	bool "atkmm"
-+	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_GLIBMM
-+	select BR2_PACKAGE_LIBSIGC
-+	depends on BR2_INSTALL_LIBSTDCPP # glibmm
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # atk/glibmm -> libglib2
-+	depends on BR2_USE_MMU # atk/glibmm -> libglib2
-+	depends on BR2_USE_WCHAR # atk/glibmm -> libglib2
-+
-+	help
-+	  The atkmm package is a set of C++ bindings for Atk.
-+
-+	  http://www.gtkmm.org/
-+
-+comment "atkmm needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/atkmm/atkmm.hash b/package/atkmm/atkmm.hash
-new file mode 100644
-index 0000000..4b3577c
---- /dev/null
-+++ b/package/atkmm/atkmm.hash
-@@ -0,0 +1,2 @@
-+# From http://ftp.gnome.org/pub/gnome/sources/atkmm/2.24/atkmm-2.24.2.sha256sum
-+sha256	ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd	atkmm-2.24.2.tar.xz
-diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
-new file mode 100644
-index 0000000..2c070f2
---- /dev/null
-+++ b/package/atkmm/atkmm.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# atkmm
-+#
-+################################################################################
-+
-+ATKMM_VERSION_MAJOR = 2.24
-+ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).2
-+ATKMM_SOURCE = atkmm-$(ATKMM_VERSION).tar.xz
-+ATKMM_SITE = http://ftp.gnome.org/pub/gnome/sources/atkmm/$(ATKMM_VERSION_MAJOR)
-+ATKMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
-+ATKMM_LICENSE_FILES = COPYING COPYING.tools
-+ATKMM_INSTALL_STAGING = YES
-+ATKMM_DEPENDENCIES = atk glibmm libsigc host-pkgconf
-+
-+$(eval $(autotools-package))
+ Hm, looking at the uClibc code, there's something I don't quite understand.
+USE_LDREXSTREX is selected by COMPILE_IN_THUMB_MODE, but in fact ldrex/strex are
+only available on ARMv6+, so won't this break down on ARMv5?
+
+
+ Regards,
+ Arnout
+
+
+> 
+> So could you be more specific on which cases this patch is fixing by
+> expanding the commit log?
+
+[snip]
+
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
