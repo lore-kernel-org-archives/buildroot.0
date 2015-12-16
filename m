@@ -1,112 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Dec 2015 09:32:33 +0100
-Subject: [Buildroot] [PATCH] python-pyxml: remove obsolete package
-In-Reply-To: <1450251868-7288-1-git-send-email-yegorslists@googlemail.com>
-References: <1450251868-7288-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20151216083233.GA3434@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Dec 2015 09:35:01 +0100
+Subject: [Buildroot] [git commit] gnutls: fix --disable-crywrap
+Message-ID: <20151216083517.E9DB48012E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=cb2334b92645c8244c875446195d9237063e4c78
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-12-16 08:44 +0100, yegorslists at googlemail.com spake thusly:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> PyXML is bitrotten and obsolete. You'll find the functionality it
-> previously provided is now included in the Python standard library.
-> 
-> So no need to keep this package in Buildroot anymore.
+Add a patch to really enable the --disable-crywrap option in gnutls.
+Fixes:
+http://autobuild.buildroot.org/results/d86/d8604fe448bb11395e8443726d09b041eb34c6d5/
 
-You forgot to add it to Config.in.legacy .
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...onfigure-really-make-disable-crywrap-work.patch | 40 ++++++++++++++++++++++
+ package/gnutls/gnutls.mk                           |  3 ++
+ 2 files changed, 43 insertions(+)
 
-Otherwise OK for me.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                      |  1 -
->  package/python-pyxml/Config.in         | 12 ------------
->  package/python-pyxml/python-pyxml.hash |  2 --
->  package/python-pyxml/python-pyxml.mk   | 17 -----------------
->  4 files changed, 32 deletions(-)
->  delete mode 100644 package/python-pyxml/Config.in
->  delete mode 100644 package/python-pyxml/python-pyxml.hash
->  delete mode 100644 package/python-pyxml/python-pyxml.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index d31b503..d2476f7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -666,7 +666,6 @@ menu "External python modules"
->  	source "package/python-pyudev/Config.in"
->  	source "package/python-pyusb/Config.in"
->  	source "package/python-pyxb/Config.in"
-> -	source "package/python-pyxml/Config.in"
->  	source "package/python-pyyaml/Config.in"
->  	source "package/python-pyzmq/Config.in"
->  	source "package/python-requests/Config.in"
-> diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
-> deleted file mode 100644
-> index 82316ba..0000000
-> --- a/package/python-pyxml/Config.in
-> +++ /dev/null
-> @@ -1,12 +0,0 @@
-> -config BR2_PACKAGE_PYTHON_PYXML
-> -	bool "python-pyxml"
-> -	depends on BR2_PACKAGE_PYTHON
-> -	select BR2_PACKAGE_EXPAT
-> -	help
-> -	  This is the Python XML package. The distribution contains a
-> -	  validating XML parser, an implementation of the SAX and DOM
-> -	  programming interfaces, an interface to the Expat parser (and the
-> -	  Expat parser itself), and a C helper module that can speed up
-> -	  xmllib.py by a factor of 5. There's even documentation!
-> -
-> -	  http://pyxml.sourceforge.net/topics/index.html
-> diff --git a/package/python-pyxml/python-pyxml.hash b/package/python-pyxml/python-pyxml.hash
-> deleted file mode 100644
-> index df98c46..0000000
-> --- a/package/python-pyxml/python-pyxml.hash
-> +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -# Locally computed
-> -sha256 9fab66f9584fb8e67aebd8745a5c97bf1c5a2e2e461adf68862bcec64e448c13  PyXML-0.8.4.tar.gz
-> diff --git a/package/python-pyxml/python-pyxml.mk b/package/python-pyxml/python-pyxml.mk
-> deleted file mode 100644
-> index 7ccce8e..0000000
-> --- a/package/python-pyxml/python-pyxml.mk
-> +++ /dev/null
-> @@ -1,17 +0,0 @@
-> -################################################################################
-> -#
-> -# python-pyxml
-> -#
-> -################################################################################
-> -
-> -PYTHON_PYXML_VERSION = 0.8.4
-> -PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
-> -PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/$(PYTHON_PYXML_VERSION)
-> -PYTHON_PYXML_LICENSE = BSD-3c
-> -PYTHON_PYXML_LICENSE_FILES = LICENCE
-> -PYTHON_PYXML_SETUP_TYPE = distutils
-> -PYTHON_PYXML_DEPENDENCIES = expat
-> -PYTHON_PYXML_BUILD_OPTS = --with-libexpat=$(STAGING_DIR)/usr
-> -PYTHON_PYXML_INSTALL_TARGET_OPTS = --with-libexpat=$(STAGING_DIR)/usr
-> -
-> -$(eval $(python-package))
-> -- 
-> 2.1.4
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch b/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
+new file mode 100644
+index 0000000..52d34f0
+--- /dev/null
++++ b/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
+@@ -0,0 +1,40 @@
++From 996b3741e8c7a5d19ae6c554e062f20c259f52d7 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Mon, 14 Dec 2015 15:16:24 -0300
++Subject: [PATCH] configure: really make --disable-crywrap work
++
++The crywrap variable is set regardless of the state of enable_crywrap,
++hence --disable-crywrap never works.
++Just put the tests for crywrap deps inside the enable_crywrap
++conditional.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Status: applied upstream.
++
++ configure.ac | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index e1d1df0..efacc30 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -836,11 +836,10 @@ AC_ARG_ENABLE(crywrap,
++ 
++ 
++  if test "x$enable_crywrap" != "xno" ; then
++-	AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
++- fi
++-
++- if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
++-  crywrap=yes
+++   AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
+++   if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
+++     crywrap=yes
+++   fi
++  fi
++ 
++ fi
++-- 
++2.4.10
++
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 452d382..6c01c1b 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -11,6 +11,9 @@ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
+ GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER
+ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
++# For 0001-configure-really-make-disable-crywrap-work.patch
++GNUTLS_AUTORECONF = YES
++GNUTLS_GETTEXTIZE = YES
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+ 	--disable-guile \
