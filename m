@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Dec 2015 23:21:41 +0100
-Subject: [Buildroot] [PATCH 02/13 v2] core/pkg-utils: add macro to
- hardlink-or-copy
-In-Reply-To: <93ea588e7a3964caeae171b480bfc5cd534607f2.1450031251.git.yann.morin.1998@free.fr>
+Date: Wed, 16 Dec 2015 23:23:58 +0100
+Subject: [Buildroot] [PATCH 03/13 v2] core/legal-info: use the macro to
+ install source archives
+In-Reply-To: <6b0e6c050f742b793b551e95b122d791b7477513.1450031251.git.yann.morin.1998@free.fr>
 References: <cover.1450031251.git.yann.morin.1998@free.fr>
- <93ea588e7a3964caeae171b480bfc5cd534607f2.1450031251.git.yann.morin.1998@free.fr>
-Message-ID: <5671E3F5.4070005@mind.be>
+ <6b0e6c050f742b793b551e95b122d791b7477513.1450031251.git.yann.morin.1998@free.fr>
+Message-ID: <5671E47E.2010709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,46 +20,33 @@ On 13-12-15 19:35, Yann E. MORIN wrote:
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+ There's a small functional change here as well: @ -> $Q
+
  Regards,
  Arnout
 
-> 
 > ---
-> Changes RFC -> v1:
->   - move to pkg-utils  (Luca)
-> ---
->  package/pkg-utils.mk | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+>  package/pkg-generic.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 44bd2c9..41799b0 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -113,6 +113,24 @@ $$(error Package error: use $(2) instead of $(1). Please fix your .mk file)
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 357a5c7..e69c970 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -805,9 +805,10 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+>  ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+>  	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
 >  endif
->  endef
+> -# Copy the source tarball (just hardlink if possible)
+> -	@cp -l $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))) 2>/dev/null || \
+> -	    cp $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+> +# Copy the source tarball
+> +	$$(Q)$$(call hardlink-copy,\
+> +		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+> +		     $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))))
+>  endif # redistribute
 >  
-> +################################################################################
-> +# hardlink-copy -- hardlink source and destination if possible, otherwise
-> +# do a simple copy
-> +#
-> +# argument 1 is the source *file*
-> +# argument 2 is the destination *directory*
-> +#
-> +# example:
-> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir/)
-> +#
-> +# Note: we make that a single command, so se can:
-> +#  - use '$(Q)' in front of it and properly silence the whole macro,
-> +#  - use '|| exit 1' after it, so we can exit on error in compound commands.
-> +################################################################################
-> +define hardlink-copy
-> +	{ mkdir -p $(2) && { cp -l $(1) $(2) 2>/dev/null || cp $(1) $(2); } }
-> +endef
-> +
->  #
->  # legal-info helper functions
->  #
+>  endif # other packages
 > 
 
 
