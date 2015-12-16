@@ -1,9 +1,7 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 16 Dec 2015 08:36:12 +0100
-Subject: [Buildroot] [PATCH v2 3/3] python-tornado: bump to 4.3
-In-Reply-To: <1450251372-7064-1-git-send-email-yegorslists@googlemail.com>
-References: <1450251372-7064-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1450251372-7064-3-git-send-email-yegorslists@googlemail.com>
+Date: Wed, 16 Dec 2015 08:44:28 +0100
+Subject: [Buildroot] [PATCH] python-pyxml: remove obsolete package
+Message-ID: <1450251868-7288-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +10,82 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Add new run-time dependencies:
+PyXML is bitrotten and obsolete. You'll find the functionality it
+previously provided is now included in the Python standard library.
 
-PYTHON_SINGLEDISPATCH for Python 2.7.x
-PYTHON_BACKPORTS_ABC for both Python versions
+So no need to keep this package in Buildroot anymore.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-tornado/Config.in           | 2 ++
- package/python-tornado/python-tornado.hash | 4 ++--
- package/python-tornado/python-tornado.mk   | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ package/Config.in                      |  1 -
+ package/python-pyxml/Config.in         | 12 ------------
+ package/python-pyxml/python-pyxml.hash |  2 --
+ package/python-pyxml/python-pyxml.mk   | 17 -----------------
+ 4 files changed, 32 deletions(-)
+ delete mode 100644 package/python-pyxml/Config.in
+ delete mode 100644 package/python-pyxml/python-pyxml.hash
+ delete mode 100644 package/python-pyxml/python-pyxml.mk
 
-diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-index 85c7891..ac86682 100644
---- a/package/python-tornado/Config.in
-+++ b/package/python-tornado/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_PYTHON_TORNADO
- 	bool "python-tornado"
- 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	# runtime
- 	help
- 	  Tornado is a Python web framework and asynchronous networking
- 	  library, originally developed at FriendFeed.
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-index 88e3956..e0f3c39 100644
---- a/package/python-tornado/python-tornado.hash
-+++ b/package/python-tornado/python-tornado.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c548d7b77a11d523c3d7255bd7fd6df8, sha256 locally computed
--md5     c548d7b77a11d523c3d7255bd7fd6df8 tornado-4.2.tar.gz
--sha256  e8b1207da67dbdceebfb291292b4ef1b547d6171525bec1b366853f923456a5f  tornado-4.2.tar.gz
-+md5     d13a99dc0b60ba69f5f8ec1235e5b232 tornado-4.3.tar.gz
-+sha256  c9c2d32593d16eedf2cec1b6a41893626a2649b40b21ca9c4cac4243bde2efbf  tornado-4.3.tar.gz
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index a8d1f94..64809b7 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_TORNADO_VERSION = 4.2
-+PYTHON_TORNADO_VERSION = 4.3
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
- PYTHON_TORNADO_SITE = https://pypi.python.org/packages/source/t/tornado
- PYTHON_TORNADO_LICENSE = Apache-2.0
+diff --git a/package/Config.in b/package/Config.in
+index d31b503..d2476f7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -666,7 +666,6 @@ menu "External python modules"
+ 	source "package/python-pyudev/Config.in"
+ 	source "package/python-pyusb/Config.in"
+ 	source "package/python-pyxb/Config.in"
+-	source "package/python-pyxml/Config.in"
+ 	source "package/python-pyyaml/Config.in"
+ 	source "package/python-pyzmq/Config.in"
+ 	source "package/python-requests/Config.in"
+diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
+deleted file mode 100644
+index 82316ba..0000000
+--- a/package/python-pyxml/Config.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_PYTHON_PYXML
+-	bool "python-pyxml"
+-	depends on BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_EXPAT
+-	help
+-	  This is the Python XML package. The distribution contains a
+-	  validating XML parser, an implementation of the SAX and DOM
+-	  programming interfaces, an interface to the Expat parser (and the
+-	  Expat parser itself), and a C helper module that can speed up
+-	  xmllib.py by a factor of 5. There's even documentation!
+-
+-	  http://pyxml.sourceforge.net/topics/index.html
+diff --git a/package/python-pyxml/python-pyxml.hash b/package/python-pyxml/python-pyxml.hash
+deleted file mode 100644
+index df98c46..0000000
+--- a/package/python-pyxml/python-pyxml.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 9fab66f9584fb8e67aebd8745a5c97bf1c5a2e2e461adf68862bcec64e448c13  PyXML-0.8.4.tar.gz
+diff --git a/package/python-pyxml/python-pyxml.mk b/package/python-pyxml/python-pyxml.mk
+deleted file mode 100644
+index 7ccce8e..0000000
+--- a/package/python-pyxml/python-pyxml.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# python-pyxml
+-#
+-################################################################################
+-
+-PYTHON_PYXML_VERSION = 0.8.4
+-PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
+-PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/$(PYTHON_PYXML_VERSION)
+-PYTHON_PYXML_LICENSE = BSD-3c
+-PYTHON_PYXML_LICENSE_FILES = LICENCE
+-PYTHON_PYXML_SETUP_TYPE = distutils
+-PYTHON_PYXML_DEPENDENCIES = expat
+-PYTHON_PYXML_BUILD_OPTS = --with-libexpat=$(STAGING_DIR)/usr
+-PYTHON_PYXML_INSTALL_TARGET_OPTS = --with-libexpat=$(STAGING_DIR)/usr
+-
+-$(eval $(python-package))
 -- 
 2.1.4
