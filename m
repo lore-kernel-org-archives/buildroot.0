@@ -1,91 +1,77 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Dec 2015 23:16:32 +0100
-Subject: [Buildroot] [PATCH 2/2] package/gnupg2: really do not run tests
- in cross-compilation
-In-Reply-To: <c7dd2e8bb5db5e326a7a4e7cb3611b8a0eea0e68.1450302183.git.yann.morin.1998@free.fr>
-References: <cover.1450302183.git.yann.morin.1998@free.fr>
- <c7dd2e8bb5db5e326a7a4e7cb3611b8a0eea0e68.1450302183.git.yann.morin.1998@free.fr>
-Message-ID: <5671E2C0.6030006@mind.be>
+Date: Wed, 16 Dec 2015 23:20:27 +0100
+Subject: [Buildroot] [PATCH 01/13 v2] core/legal-info: update the
+ legal-info report header
+In-Reply-To: <f0470f8dbed2b03668b7539bcf1cbbdbb99eeeea.1450031251.git.yann.morin.1998@free.fr>
+References: <cover.1450031251.git.yann.morin.1998@free.fr>
+ <f0470f8dbed2b03668b7539bcf1cbbdbb99eeeea.1450031251.git.yann.morin.1998@free.fr>
+Message-ID: <5671E3AB.9000800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16-12-15 22:44, Yann E. MORIN wrote:
-> gnupg2 still tries to run test even if it tries to avoid it in
-> cross-compilation.
+On 13-12-15 19:35, Yann E. MORIN wrote:
+> In some cases, the toolchain sources are now recovered and available in
+> the legal-info output. So, adapt the header to use conditional instead
+> of an definitive negation.
 > 
-> Really disable running the tests.
+> Also update the part about saving the sources: it's not the license list
+> that defines whether sources are installed, but rather whether the
+> package is reditributable or not.
+
+ redistributable
+
 > 
-> Since that requires a complete autoreconf, the existing patch against
-> configure is turned into a patch against the m4 macro.
-> 
-> since we autoreconf, we slightly patch configure.ac to not emit git
-> errors on stderr because it is not in a git tree.
+> Update the header acoordingly.
+
+ accordingly
+
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- but minor nits.
-
-> ---
->  .../0000-silence-git-when-not-in-git-tree.patch    | 26 +++++++++++++++
-
- I would have prefered to renumber the patches rather than adding a 0000. And
-anyway it's not necessary to add it as the first patch, you can add it as a 0004
-as well.
-
->  package/gnupg2/0001-fix-pth-config-usage.patch     | 29 ++++++++--------
->  package/gnupg2/0003-dont-run-tests.patch           | 39 ++++++++++++++++++++++
->  package/gnupg2/gnupg2.mk                           |  4 +++
->  4 files changed, 82 insertions(+), 16 deletions(-)
->  create mode 100644 package/gnupg2/0000-silence-git-when-not-in-git-tree.patch
->  create mode 100644 package/gnupg2/0003-dont-run-tests.patch
-> 
-> diff --git a/package/gnupg2/0000-silence-git-when-not-in-git-tree.patch b/package/gnupg2/0000-silence-git-when-not-in-git-tree.patch
-> new file mode 100644
-> index 0000000..5eaefe4
-> --- /dev/null
-> +++ b/package/gnupg2/0000-silence-git-when-not-in-git-tree.patch
-> @@ -0,0 +1,26 @@
-> +configure: silence autoreconf when not in a git tree
-> +
-> +When autoreconfiguring ourside of a git tree, the output is verbose
-> +with git errors.
-> +
-> +Silence that by consigning stderr to oblivion.
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
- Is this upstreamable?
-
+ This can go in regardless of the rest of the series.
 
  Regards,
  Arnout
 
-
-> +
-> +diff -durN gnupg2-2.0.29.orig/configure.ac gnupg2-2.0.29/configure.ac
-> +--- gnupg2-2.0.29.orig/configure.ac	2015-09-08 14:39:24.000000000 +0200
-> ++++ gnupg2-2.0.29/configure.ac	2015-12-16 18:34:47.099493863 +0100
-> +@@ -33,11 +33,11 @@
-> + # flag indicating a development version (mym4_isgit).  Note that the
-> + # m4 processing is done by autoconf and not during the configure run.
-> + m4_define([mym4_revision],
-> +-          m4_esyscmd([git rev-parse --short HEAD | tr -d '\n\r']))
-> ++          m4_esyscmd([git rev-parse --short HEAD 2>/dev/null | tr -d '\n\r']))
-> + m4_define([mym4_revision_dec],
-> +           m4_esyscmd_s([echo $((0x$(echo ]mym4_revision[|head -c 4)))]))
-> + m4_define([mym4_betastring],
-> +-          m4_esyscmd_s([git describe --match 'gnupg-2.[0-9].*[0-9]' --long|\
-> ++          m4_esyscmd_s([git describe --match 'gnupg-2.[0-9].*[0-9]' --long 2>/dev/null |\
-> +                         awk -F- '$3!=0{print"-beta"$3}']))
-> + m4_define([mym4_isgit],m4_if(mym4_betastring,[],[no],[yes]))
-> + m4_define([mym4_full_version],[mym4_version[]mym4_betastring])
-[snip]
+> 
+> ---
+> Changes v1 -> v2:
+>   - slight rephrasing  (Luca)
+>   - move early in the series  (Luca)
+> ---
+>  support/legal-info/README.header | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+> index 3321adb..d07c45d 100644
+> --- a/support/legal-info/README.header
+> +++ b/support/legal-info/README.header
+> @@ -12,12 +12,12 @@ This material is composed of the following items.
+>   * The Buildroot configuration file; this has been saved in buildroot.config.
+>   * The toolchain (cross-compiler and related tools) used to generate all the
+>     compiled programs.
+> -   Note: this has not been saved due to technical limitations, you must
+> -   collect it manually.
+> +   Note: this may have not been saved due to technical limitations, you may
+> +   need to collect it manually.
+>   * The source code for all packages; this has been saved in the sources/
+> -   subdirectory (except for the proprietary packages, which have not been
+> -   saved); patches applied to some packages by Buildroot are included in the
+> -   Buildroot sources and were not duplicated in the sources/ subdirectory.
+> +   subdirectory (except for the non-redistributable packages, which have not
+> +   been saved); patches applied to some packages by Buildroot are included in
+> +   the Buildroot sources and were not duplicated in the sources/ subdirectory.
+>   * A manifest file listing the configured packages and related information.
+>   * The license text of the packages; they have been saved in the licenses/
+>     subdirectory.
+> 
 
 
 -- 
