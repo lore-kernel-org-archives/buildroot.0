@@ -1,67 +1,86 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Dec 2015 20:58:55 -0300
-Subject: [Buildroot] [PATCH] xfsprogs: add cross-compile fix patch
-Message-ID: <1450223935-19936-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 15 Dec 2015 21:05:03 -0300
+Subject: [Buildroot] [PATCH v3] gnutls: fix --disable-crywrap
+Message-ID: <1450224303-20348-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't use CFLAGS (target) with BUILD_CC (host), fixes:
-http://autobuild.buildroot.net/results/c94/c945bdb1427b55e03901027fa674b577e45963a1/
+Add a patch to really enable the --disable-crywrap option in gnutls.
+Fixes:
+http://autobuild.buildroot.org/results/d86/d8604fe448bb11395e8443726d09b041eb34c6d5/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...3-xfsprogs-don-t-use-CFLAGS-with-BUILD_CC.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/xfsprogs/0003-xfsprogs-don-t-use-CFLAGS-with-BUILD_CC.patch
+v2: needs gettextize
+v3: say "applied"
 
-diff --git a/package/xfsprogs/0003-xfsprogs-don-t-use-CFLAGS-with-BUILD_CC.patch b/package/xfsprogs/0003-xfsprogs-don-t-use-CFLAGS-with-BUILD_CC.patch
+ ...onfigure-really-make-disable-crywrap-work.patch | 40 ++++++++++++++++++++++
+ package/gnutls/gnutls.mk                           |  3 ++
+ 2 files changed, 43 insertions(+)
+ create mode 100644 package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
+
+diff --git a/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch b/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
 new file mode 100644
-index 0000000..6617935
+index 0000000..52d34f0
 --- /dev/null
-+++ b/package/xfsprogs/0003-xfsprogs-don-t-use-CFLAGS-with-BUILD_CC.patch
++++ b/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
 @@ -0,0 +1,40 @@
-+From 5b3dd8eb1f7720c68dab032c3d89d4e3102d6347 Mon Sep 17 00:00:00 2001
++From 996b3741e8c7a5d19ae6c554e062f20c259f52d7 Mon Sep 17 00:00:00 2001
 +From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 15 Dec 2015 20:51:35 -0300
-+Subject: [PATCH] xfsprogs: don't use CFLAGS with BUILD_CC
++Date: Mon, 14 Dec 2015 15:16:24 -0300
++Subject: [PATCH] configure: really make --disable-crywrap work
 +
-+When cross-compiling CFLAGS might not be suitable for the host
-+(BUILD_CC) compiler since it might contain arch-specific options.
++The crywrap variable is set regardless of the state of enable_crywrap,
++hence --disable-crywrap never works.
++Just put the tests for crywrap deps inside the enable_crywrap
++conditional.
 +
 +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +---
-+Status: reported http://oss.sgi.com/bugzilla/show_bug.cgi?id=1132
++Status: applied upstream.
 +
-+ libxfs/Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ configure.ac | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
 +
-+diff --git a/libxfs/Makefile b/libxfs/Makefile
-+index ecf1921..3979077 100644
-+--- a/libxfs/Makefile
-++++ b/libxfs/Makefile
-+@@ -111,7 +111,7 @@ default: crc32selftest ltdepend $(LTLIBRARY)
++diff --git a/configure.ac b/configure.ac
++index e1d1df0..efacc30 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -836,11 +836,10 @@ AC_ARG_ENABLE(crywrap,
 + 
-+ crc32table.h: gen_crc32table.c
-+ 	@echo "    [CC]     gen_crc32table"
-+-	$(Q) $(BUILD_CC) $(CFLAGS) -o gen_crc32table $<
-++	$(Q) $(BUILD_CC) -o gen_crc32table $<
-+ 	@echo "    [GENERATE] $@"
-+ 	$(Q) ./gen_crc32table > crc32table.h
 + 
-+@@ -122,7 +122,7 @@ crc32table.h: gen_crc32table.c
-+ # disk.
-+ crc32selftest: gen_crc32table.c crc32table.h crc32.c
-+ 	@echo "    [TEST]    CRC32"
-+-	$(Q) $(BUILD_CC) $(CFLAGS) -D CRC32_SELFTEST=1 crc32.c -o $@
-++	$(Q) $(BUILD_CC) -D CRC32_SELFTEST=1 crc32.c -o $@
-+ 	$(Q) ./$@
++  if test "x$enable_crywrap" != "xno" ; then
++-	AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
++- fi
++-
++- if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
++-  crywrap=yes
+++   AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
+++   if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
+++     crywrap=yes
+++   fi
++  fi
 + 
-+ # set up include/xfs header directory
++ fi
 +-- 
 +2.4.10
 +
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 452d382..6c01c1b 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -11,6 +11,9 @@ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
+ GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER
+ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
++# For 0001-configure-really-make-disable-crywrap-work.patch
++GNUTLS_AUTORECONF = YES
++GNUTLS_GETTEXTIZE = YES
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+ 	--disable-guile \
 -- 
 2.4.10
