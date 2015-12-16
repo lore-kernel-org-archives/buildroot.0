@@ -1,83 +1,35 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 16 Dec 2015 23:47:05 +0100
-Subject: [Buildroot] [PATCH 04/13 v2] core/legal-info: ensure legal-info
- works in off-line mode
-In-Reply-To: <56714B61.8040308@lucaceresoli.net>
-References: <cover.1450031251.git.yann.morin.1998@free.fr>
- <82f1af6280a8c913d3df331813dec4376fda2fb5.1450031251.git.yann.morin.1998@free.fr>
- <56714B61.8040308@lucaceresoli.net>
-Message-ID: <5671E9E9.4090705@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Dec 2015 23:44:40 +0100
+Subject: [Buildroot] [git commit] wireshark: add optional sbc support
+Message-ID: <20151216224948.BA63C82238@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=9599b0de55e1673768db297333c079d30419476b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Luca Ceresoli wrote:
-[...]
->> +# Download actual sources if they differ from the extracted sources
->> +# (e.g. for external toolchains)
->> +#
->> +# We need to provide PKG and PKGDIR, because there's no .stamp file for
->> +# the legal-info step.
->> +$(1)-legal-source:    PKG=$(2)
->> +$(1)-legal-source:    PKGDIR=$(pkgdir)
->> +$(1)-legal-source:
->> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
->> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
->> +    $$(call
->> DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
->> +endif # actuall sources != sources
->
-> actuall sources -> actual source
->
->> +endif # actuall source != ""
->
-> actuall -> actual
->
-> With these fixed:
->   Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
->
-> [Tested with a minimal Sourcery ARM 2014.05 config]
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireshark/wireshark.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Hey, NO! This patch is wrong.
-
-It makes off-line legal-info work, and that's what I tested
-successfully:
-
-   $ make clean
-   $ rm -fr dl/
-   $ make source
-   $ make legal-info (offline)
-
-with this defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-
-But it breaks online 'make legal-info' when _ACTUAL_SOURCES have not
-yet been downloaded, i.e.:
-
-   $ make clean
-   $ rm -fr dl/
-   $ make legal-info
-   [...]
-   cp: cannot stat 
-'/home/murray/devel/buildroot/dl/arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2': 
-No such file or directory
-
-I think this is because you moved the downloading of _ACTUAL_SOURCE
-from the $(1)-legal-info to $(1)-legal-source, and the former does not
-depend on the latter.
-
-Perhaps we just need this?
-
-   $(1)-legal-info: $(1)-legal-source
-
-Sorry for having missed this during my first review.
-
--- 
-Luca
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 2b06699..02f37da 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -92,4 +92,11 @@ else
+ WIRESHARK_CONF_OPTS += --without-libnl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SBC),y)
++WIRESHARK_CONF_OPTS += --with-sbc=yes
++WIRESHARK_DEPENDENCIES += sbc
++else
++WIRESHARK_CONF_OPTS += --with-sbc=no
++endif
++
+ $(eval $(autotools-package))
