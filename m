@@ -1,91 +1,32 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 16 Dec 2015 08:44:28 +0100
-Subject: [Buildroot] [PATCH] python-pyxml: remove obsolete package
-Message-ID: <1450251868-7288-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Dec 2015 09:12:17 +0100
+Subject: [Buildroot] [PATCH v2] gnutls: fix --disable-crywrap
+In-Reply-To: <5670AADA.1080605@zacarias.com.ar>
+References: <1450129196-15461-1-git-send-email-gustavo@zacarias.com.ar>
+ <20151215215004.282f0afc@free-electrons.com>
+ <5670AADA.1080605@zacarias.com.ar>
+Message-ID: <20151216091217.6aa6ecf3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Gustavo,
 
-PyXML is bitrotten and obsolete. You'll find the functionality it
-previously provided is now included in the Python standard library.
+On Tue, 15 Dec 2015 21:05:46 -0300, Gustavo Zacarias wrote:
 
-So no need to keep this package in Buildroot anymore.
+> It does, after the licensing fixes that were previously sent.
+> As i mentioned to Baruch and you probably already know, mailing list 
+> archives usually don't update quickly, so i didn't have a URL to copy/paste.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                      |  1 -
- package/python-pyxml/Config.in         | 12 ------------
- package/python-pyxml/python-pyxml.hash |  2 --
- package/python-pyxml/python-pyxml.mk   | 17 -----------------
- 4 files changed, 32 deletions(-)
- delete mode 100644 package/python-pyxml/Config.in
- delete mode 100644 package/python-pyxml/python-pyxml.hash
- delete mode 100644 package/python-pyxml/python-pyxml.mk
+Sure. If the patch had applied, I would have added the mailing list
+archive link myself before committing. But since the patch didn't apply
+as is, and there were plenty of other patches to take care of, I
+preferred to let you update and resend the patch :)
 
-diff --git a/package/Config.in b/package/Config.in
-index d31b503..d2476f7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -666,7 +666,6 @@ menu "External python modules"
- 	source "package/python-pyudev/Config.in"
- 	source "package/python-pyusb/Config.in"
- 	source "package/python-pyxb/Config.in"
--	source "package/python-pyxml/Config.in"
- 	source "package/python-pyyaml/Config.in"
- 	source "package/python-pyzmq/Config.in"
- 	source "package/python-requests/Config.in"
-diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
-deleted file mode 100644
-index 82316ba..0000000
---- a/package/python-pyxml/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_PYTHON_PYXML
--	bool "python-pyxml"
--	depends on BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_EXPAT
--	help
--	  This is the Python XML package. The distribution contains a
--	  validating XML parser, an implementation of the SAX and DOM
--	  programming interfaces, an interface to the Expat parser (and the
--	  Expat parser itself), and a C helper module that can speed up
--	  xmllib.py by a factor of 5. There's even documentation!
--
--	  http://pyxml.sourceforge.net/topics/index.html
-diff --git a/package/python-pyxml/python-pyxml.hash b/package/python-pyxml/python-pyxml.hash
-deleted file mode 100644
-index df98c46..0000000
---- a/package/python-pyxml/python-pyxml.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed
--sha256 9fab66f9584fb8e67aebd8745a5c97bf1c5a2e2e461adf68862bcec64e448c13  PyXML-0.8.4.tar.gz
-diff --git a/package/python-pyxml/python-pyxml.mk b/package/python-pyxml/python-pyxml.mk
-deleted file mode 100644
-index 7ccce8e..0000000
---- a/package/python-pyxml/python-pyxml.mk
-+++ /dev/null
-@@ -1,17 +0,0 @@
--################################################################################
--#
--# python-pyxml
--#
--################################################################################
--
--PYTHON_PYXML_VERSION = 0.8.4
--PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
--PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/$(PYTHON_PYXML_VERSION)
--PYTHON_PYXML_LICENSE = BSD-3c
--PYTHON_PYXML_LICENSE_FILES = LICENCE
--PYTHON_PYXML_SETUP_TYPE = distutils
--PYTHON_PYXML_DEPENDENCIES = expat
--PYTHON_PYXML_BUILD_OPTS = --with-libexpat=$(STAGING_DIR)/usr
--PYTHON_PYXML_INSTALL_TARGET_OPTS = --with-libexpat=$(STAGING_DIR)/usr
--
--$(eval $(python-package))
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
