@@ -1,39 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2015 21:22:53 +0100
-Subject: [Buildroot] [PATCH v7] board: add support for ARM Juno
- Development Board
-In-Reply-To: <b132a8d9bc9e51f56f7b4a5c0e4c02404aaabd8a.1444647414.git.jpinto@synopsys.com>
-References: <b132a8d9bc9e51f56f7b4a5c0e4c02404aaabd8a.1444647414.git.jpinto@synopsys.com>
-Message-ID: <20151216212253.7b5e731e@free-electrons.com>
+Date: Wed, 16 Dec 2015 21:32:04 +0100
+Subject: [Buildroot] [PATCH v10 01/28] package/efl/libefl: new package
+In-Reply-To: <1450219240-16938-2-git-send-email-romain.naour@openwide.fr>
+References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+ <1450219240-16938-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151216213204.198f5387@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joao,
+Romain,
 
-On Wed, 16 Dec 2015 15:22:24 +0000, Joao Pinto wrote:
-> The Juno ARM Development Platform (ADP) is a software development
-> platform for ARMv8-A, it includes the Juno Versatile Express board 
-> and an ARMv8-A reference software port available through Linaro.
-> 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+On Tue, 15 Dec 2015 23:40:13 +0100, Romain Naour wrote:
 
-There is something weird with your posting: this PATCH v7 e-mail has
-the exact same Message-Id as your PATCH v5 (for the same topic). This
-breaks threading.
+> Also, add BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG config option in order to
+> select all recommended packages that allows to build libefl without the
+> extra-long --enable-i-really-know-what-i-am-doing...
 
-Did you do something special to re-use the same Message-Id ?
+I am still not entirely happy with your recommended config mechanism.
+What I want to see is the visible option "recommended config"
+completely removed. See my proposal in the attached patch 0001.
 
-If your intent was to make this PATCH v7 e-mail appear as a reply to
-the PATCH v5 one, you should have used git send-e-amil
---in-reply-to=<message-id-of-PATCHv5>.
+My attached patch 0002 also rewraps some Config.in help text.
 
-Best regards,
+But I have more issues, see below.
+
+
+> diff --git a/package/efl/Config.in b/package/efl/Config.in
+> index 7ce5a36..3a5e708 100644
+> --- a/package/efl/Config.in
+> +++ b/package/efl/Config.in
+> @@ -1,8 +1,13 @@
+>  menuconfig BR2_PACKAGE_EFL
+>  	bool "Enlightenment Foundation Libraries"
+> -	depends on BR2_USE_WCHAR
+> -	# libeina uses madvise(). To revisit when bumping EFL to 1.8
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_PACKAGE_HAS_UDEV # libudev
+> +	depends on BR2_PACKAGE_LUA # lua 5.1 or better
+
+So we really need Lua itself, and not LuaJIT ? If we need only Lua (and
+not LuaJIT), why don't we select it ? If we can use either Lua or
+LuaJIT, then we should "depends on BR2_PACKAGE_LUAINTERPRETER.
+
+Also, if I apply just this patch, I get some kconfig warnings:
+
+package/efl/Config.in:1:error: recursive dependency detected!
+package/efl/Config.in:1:	symbol BR2_PACKAGE_EFL depends on BR2_PACKAGE_LUA
+package/lua/Config.in:1:	symbol BR2_PACKAGE_LUA is selected by BR2_PACKAGE_LIBEDJE
+package/efl/libedje/Config.in:4:	symbol BR2_PACKAGE_LIBEDJE is selected by BR2_PACKAGE_LIBETHUMB
+package/efl/libethumb/Config.in:4:	symbol BR2_PACKAGE_LIBETHUMB depends on BR2_PACKAGE_EFL
+
+But it's true that your series later removes libedje, so maybe I should
+just not care about this: it's hard to do the big change you're doing
+without having some intermediate steps that are imperfect.
+
+Can you let me know the answer for the Lua/LuaJIT question so that we
+can move forward with this ?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-efl-rework-recommended-config-mechanism.patch
+Type: text/x-patch
+Size: 2939 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151216/90e0d879/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0002-efl-rewrap-Config.in-help-texts.patch
+Type: text/x-patch
+Size: 4920 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151216/90e0d879/attachment-0001.bin>
