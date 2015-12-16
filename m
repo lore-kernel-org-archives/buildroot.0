@@ -1,95 +1,174 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 16 Dec 2015 12:30:41 +0100
-Subject: [Buildroot] [PATCH 04/13 v2] core/legal-info: ensure legal-info
- works in off-line mode
-In-Reply-To: <82f1af6280a8c913d3df331813dec4376fda2fb5.1450031251.git.yann.morin.1998@free.fr>
-References: <cover.1450031251.git.yann.morin.1998@free.fr>
- <82f1af6280a8c913d3df331813dec4376fda2fb5.1450031251.git.yann.morin.1998@free.fr>
-Message-ID: <56714B61.8040308@lucaceresoli.net>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Wed, 16 Dec 2015 09:31:12 -0200
+Subject: [Buildroot] [PATCH 1/1] configs/toradex_apalis_imx6_defconfig: new
+	board
+Message-ID: <1450265472-18428-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ board/toradex/apalis-imx6/genimage.cfg  | 15 ++++++++++
+ board/toradex/apalis-imx6/post-image.sh | 20 +++++++++++++
+ board/toradex/apalis-imx6/readme.txt    | 50 +++++++++++++++++++++++++++++++++
+ board/toradex/apalis-imx6/uEnv.txt      |  6 ++++
+ configs/toradex_apalis_imx6_defconfig   | 26 +++++++++++++++++
+ 5 files changed, 117 insertions(+)
+ create mode 100644 board/toradex/apalis-imx6/genimage.cfg
+ create mode 100755 board/toradex/apalis-imx6/post-image.sh
+ create mode 100644 board/toradex/apalis-imx6/readme.txt
+ create mode 100644 board/toradex/apalis-imx6/uEnv.txt
+ create mode 100644 configs/toradex_apalis_imx6_defconfig
 
-Yann E. MORIN wrote:
-> Almost all packages which are saved for legal-info have their source
-> archives downloaded as part of 'make source', which makes an off-line
-> build completely possible [0].
->
-> However, for the pre-configured external toolchains, the source tarball
-> is different, as the main tarball is a binary package. And that source
-> tarball is only downloaded during the legal-info phase, which makes it
-> inconvenient for full off-line builds.
->
-> We fix that in two steps:
->
->    - first, we move the declaration of _ACTUAL_SOURCE_TARBALL and _SITE
->      earlier in the pkg-generic.mk file, so we get those definitions at
->      the time we define the -source and -all-source rules;
->
->    - second, we add a new rule, $(1)-legal-source which only
->      $(1)-all-source depends on, so that we only download it for a
->      top-level 'make source', not as part of the standard download
->      mechanism (i.e. only what is really needed to build).
->
-> This way, we can do a complete [0] off-line build and are still able to
-> generate legal-info, while at the same time we do not incur any download
-> overhead during a simple build.
->
-> Also, we previously downloaded the _ACTUAL_SOURCE_TARBALL when it was
-> not empty. However, since _ACTUAL_SOURCE_TARBALL default to the value of
-> _SOURCE, it can not be empty when _SOURCE is not. Thus, we'd get a
-> spurious report of a missing hash for the tarball, since it was not in
-> a standard package rule (configure, build, install..) and thus would
-> miss the PKG and PKGDIR variables to find the .hash file.
->
-> We fix that in this commit as well, by:
->
->    - setting PKG and PKGDIR just for the -legal-source rule;
->
->    - only downloading _ACTUAL_SOURCE_TARBALL if it is not empty *and* not
->      the same as _SOURCE (to avoid a second report about the hash).
->
-> [0] Save for nodejs which invarriably wants to download stuff at build
-> time. Sigh... :-( Fixing that is work for another time...
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-
-Thanks for the very detailed commit log message. It's very useful!
-
-Just a couple of minor notes below.
-
-[...]
-> +# Download actual sources if they differ from the extracted sources
-> +# (e.g. for external toolchains)
-> +#
-> +# We need to provide PKG and PKGDIR, because there's no .stamp file for
-> +# the legal-info step.
-> +$(1)-legal-source:	PKG=$(2)
-> +$(1)-legal-source:	PKGDIR=$(pkgdir)
-> +$(1)-legal-source:
-> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
-> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
-> +	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
-> +endif # actuall sources != sources
-
-actuall sources -> actual source
-
-> +endif # actuall source != ""
-
-actuall -> actual
-
-With these fixed:
-  Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-[Tested with a minimal Sourcery ARM 2014.05 config]
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-
+diff --git a/board/toradex/apalis-imx6/genimage.cfg b/board/toradex/apalis-imx6/genimage.cfg
+new file mode 100644
+index 000000000000..3458dc4f09fa
+--- /dev/null
++++ b/board/toradex/apalis-imx6/genimage.cfg
+@@ -0,0 +1,15 @@
++# Minimal SD card image for the Toradex Apalis i.MX6 COM
++#
++# It does not need a boot section for a bootloader since it is 
++# booted from its internal flash memory (eMMC).
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++    size = 512M
++  }
++}
+diff --git a/board/toradex/apalis-imx6/post-image.sh b/board/toradex/apalis-imx6/post-image.sh
+new file mode 100755
+index 000000000000..c547049e4fdf
+--- /dev/null
++++ b/board/toradex/apalis-imx6/post-image.sh
+@@ -0,0 +1,20 @@
++#!/usr/bin/env bash
++
++GENIMAGE_CFG="board/toradex/apalis-imx6/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++# copy the uEnv.txt to the output/images directory
++cp board/toradex/apalis-imx6/uEnv.txt $BINARIES_DIR/uEnv.txt
++
++rm -rf "${GENIMAGE_TMP}"
++
++# generate rootfs.img
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
++
++RET=${?}
++exit ${RET}
+diff --git a/board/toradex/apalis-imx6/readme.txt b/board/toradex/apalis-imx6/readme.txt
+new file mode 100644
+index 000000000000..1367a469160b
+--- /dev/null
++++ b/board/toradex/apalis-imx6/readme.txt
+@@ -0,0 +1,50 @@
++Toradex Apalis i.MX6 Computer on Module
++
++Intro
++=====
++
++The Apalis iMX6 is a small form-factor Computer on Module that comes in
++both quad core and dual core versions based on Freescale i.MX6Q and 
++Freescale i.MX6D SoCs respectively. The Cortex A9 quad core and dual 
++core CPU peaks at 1 GHz for commercial temperature variant, while the 
++industrial temperature variant has a peak frequency of 800 MHz.
++
++https://www.toradex.com/computer-on-modules/apalis-arm-family/freescale-imx-6
++
++It supports two carrier boards:
++
++Apalis Evaluation Board
++https://www.toradex.com/products/carrier-boards/apalis-evaluation-board
++
++Ixora Carrier Board
++https://www.toradex.com/products/carrier-boards/ixora-carrier-board
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make toradex_apalis_imx6_defconfig
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++How to boot the image
++========================
++
++The board only boots from its internal flash memory eMMC, so the
++bootloader image should be copied to it, following the procedures 
++described in Toradex website.
++
++http://developer.toradex.com/knowledge-base/flashing-linux-on-imx6-modules
++
++Buildroot prepares a "sdcard.img" in output/images/ with the kernel 
++image, device trees and a root filesystem, ready to be dumped on an 
++SD card.
++
++    $ dd if=output/images/sdcard.img of=/dev/sdX bs=1M
++
++To boot from the SD card, you should change U-Boot environment. For 
++convenience, a default environment "uEnv.txt" is provided in 
++output/images/.
+diff --git a/board/toradex/apalis-imx6/uEnv.txt b/board/toradex/apalis-imx6/uEnv.txt
+new file mode 100644
+index 000000000000..96ab80cfb6fa
+--- /dev/null
++++ b/board/toradex/apalis-imx6/uEnv.txt
+@@ -0,0 +1,6 @@
++boot_file=zImage
++fdt_file=imx6q-apalis_v1_0-ixora.dtb
++sdargs=ip=off root=/dev/mmcblk1p1 rw,noatime rootfstype=ext4 rootwait
++sddtbload=ext2load mmc 2:1 ${fdt_addr_r} boot/${fdt_file}
++sdkernelload=ext2load mmc 2:1 ${kernel_addr_r} boot/${boot_file}
++bootcmd=run setup; setenv bootargs ${defargs} ${sdargs} ${setupargs} ${vidargs}; echo Booting from SD card...; run sddtbload; run sdkernelload; bootz ${kernel_addr_r} - ${fdt_addr_r}
+diff --git a/configs/toradex_apalis_imx6_defconfig b/configs/toradex_apalis_imx6_defconfig
+new file mode 100644
+index 000000000000..1700fbd42036
+--- /dev/null
++++ b/configs/toradex_apalis_imx6_defconfig
+@@ -0,0 +1,26 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_FPU_VFPV3=y
++BR2_KERNEL_HEADERS_3_14=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/toradex/apalis-imx6/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8f237ebe42f2cb911245369276a6b3043c2815f2"
++BR2_LINUX_KERNEL_DEFCONFIG="apalis_imx6"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apalis-eval imx6q-apalis-ixora imx6q-apalis_v1_0-eval imx6q-apalis_v1_0-ixora"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.toradex.com/u-boot-toradex.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="1ef4a29e8cea0239411dde64f9617ad76248fd02"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="apalis_imx6"
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.imx"
++BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
-Luca
+1.9.1
