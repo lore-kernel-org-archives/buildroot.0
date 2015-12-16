@@ -1,31 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2015 09:36:41 +0100
-Subject: [Buildroot] [PATCH] librsvg: needs host-gdk-pixbuf
-In-Reply-To: <1450223026-23191-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1450223026-23191-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151216093641.6abf0f7e@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 16 Dec 2015 08:16:42 -0300
+Subject: [Buildroot] [PATCH] openal: needs NPTL threads
+Message-ID: <1450264602-18028-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Fixes:
+http://autobuild.buildroot.net/results/ef2/ef22efa0f8a73458852b529a32a7f21e9c72caa8/
 
-On Tue, 15 Dec 2015 20:43:46 -0300, Gustavo Zacarias wrote:
-> It's required for the gdk-pixbuf-query-loaders tool, to build the svg
-> gdk-pixbuf module. Fixes:
-> http://autobuild.buildroot.net/results/603/6031dbb937dadd04b6b9d1d77fc6106728502152/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/librsvg/librsvg.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openal/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/openal/Config.in b/package/openal/Config.in
+index 0f9d03d..4a73f45 100644
+--- a/package/openal/Config.in
++++ b/package/openal/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_OPENAL
+ 	bool "openal"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	help
+ 	  OpenAL provides capabilities for playing audio in a virtual
+ 	  3D environment. Distance attenuation, doppler shift, and
+@@ -10,5 +10,6 @@ config BR2_PACKAGE_OPENAL
+ 
+ 	  http://kcat.strangesoft.net/openal.html
+ 
+-comment "openal needs a toolchain w/ threads, C++"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++comment "openal needs a toolchain w/ NPTL, C++"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
++		|| !BR2_INSTALL_LIBSTDCPP
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
