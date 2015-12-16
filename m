@@ -1,34 +1,83 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 16 Dec 2015 19:46:40 -0300
-Subject: [Buildroot] [PATCH] xutil_util-macros: move outside x11r7 scope
-In-Reply-To: <20151216234223.6abe26c3@free-electrons.com>
-References: <1449096338-8006-1-git-send-email-gustavo@zacarias.com.ar>
- <20151216234223.6abe26c3@free-electrons.com>
-Message-ID: <5671E9D0.9000703@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 16 Dec 2015 23:47:05 +0100
+Subject: [Buildroot] [PATCH 04/13 v2] core/legal-info: ensure legal-info
+ works in off-line mode
+In-Reply-To: <56714B61.8040308@lucaceresoli.net>
+References: <cover.1450031251.git.yann.morin.1998@free.fr>
+ <82f1af6280a8c913d3df331813dec4376fda2fb5.1450031251.git.yann.morin.1998@free.fr>
+ <56714B61.8040308@lucaceresoli.net>
+Message-ID: <5671E9E9.4090705@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/12/15 19:42, Thomas Petazzoni wrote:
+Dear Yann,
 
-> Since you're renaming the Config.in option, some Config.in.legacy
-> handling is needed.
+Luca Ceresoli wrote:
+[...]
+>> +# Download actual sources if they differ from the extracted sources
+>> +# (e.g. for external toolchains)
+>> +#
+>> +# We need to provide PKG and PKGDIR, because there's no .stamp file for
+>> +# the legal-info step.
+>> +$(1)-legal-source:    PKG=$(2)
+>> +$(1)-legal-source:    PKGDIR=$(pkgdir)
+>> +$(1)-legal-source:
+>> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
+>> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+>> +    $$(call
+>> DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
+>> +endif # actuall sources != sources
+>
+> actuall sources -> actual source
+>
+>> +endif # actuall source != ""
+>
+> actuall -> actual
+>
+> With these fixed:
+>   Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+>
+> [Tested with a minimal Sourcery ARM 2014.05 config]
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Hi.
-True, however much i doubt anybody is using it in their packages.
+Hey, NO! This patch is wrong.
 
-> I am wondering if util-macros isn't too generic. Should we name it
-> xorg-util-macros ? xorg-autotools-macros ? But admittedly, that's not
-> matching the upstream name.
+It makes off-line legal-info work, and that's what I tested
+successfully:
 
-In gentoo there's only one util-macros which has far more packages than 
-buildroot, however in the future some other util-macros might appear so 
-yes, xorg-util-macros sounds about right.
-This is just the tip of getting wayland/weston/gtk3 support back in 
-shape, it's still WIP in some aspects but i want to push as many as the 
-little bits as possible since they don't hurt and i don't want to pile 
-up patches.
-I'll respin a v2.
-Regards.
+   $ make clean
+   $ rm -fr dl/
+   $ make source
+   $ make legal-info (offline)
+
+with this defconfig:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+
+But it breaks online 'make legal-info' when _ACTUAL_SOURCES have not
+yet been downloaded, i.e.:
+
+   $ make clean
+   $ rm -fr dl/
+   $ make legal-info
+   [...]
+   cp: cannot stat 
+'/home/murray/devel/buildroot/dl/arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2': 
+No such file or directory
+
+I think this is because you moved the downloading of _ACTUAL_SOURCE
+from the $(1)-legal-info to $(1)-legal-source, and the former does not
+depend on the latter.
+
+Perhaps we just need this?
+
+   $(1)-legal-info: $(1)-legal-source
+
+Sorry for having missed this during my first review.
+
+-- 
+Luca
