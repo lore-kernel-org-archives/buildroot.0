@@ -1,49 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2015 23:38:27 +0100
-Subject: [Buildroot] [PATCH] libass: allow compilation without a system
- font provider
-In-Reply-To: <1450300308-8371-1-git-send-email-yann.morin.1998@free.fr>
-References: <1450300308-8371-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20151216233827.7c87780a@free-electrons.com>
+Date: Wed, 16 Dec 2015 23:42:23 +0100
+Subject: [Buildroot] [PATCH] xutil_util-macros: move outside x11r7 scope
+In-Reply-To: <1449096338-8006-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1449096338-8006-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151216234223.6abe26c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Gustavo,
 
-On Wed, 16 Dec 2015 22:11:48 +0100, Yann E. MORIN wrote:
-> From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Wed,  2 Dec 2015 19:45:38 -0300, Gustavo Zacarias wrote:
+> Move to package/util-macros and rename all symbols.
+> They don't really require x11r7 infrastructure and are in fact needed by
+> libepoxy which can be made x11r7-less.
 > 
-> If no system font provider is provided, then libass will fail to build
-> because it requires one by default. The error looks like this:
+> Also add missing select in xfont_encoding for util-macros.
 > 
->     configure: error: Either DirectWrite (on Windows), CoreText (on OSX),
->     or Fontconfig(Linux, other) is required. If you really want to compile
->     withouta system font provider, add --disable-require-system-font-provider
-> 
-> (typo is from the actual message)
-> 
-> But, as the error messages says, we can allow the compilation without a
-> system font provider if we use the above configure option, so let's do
-> it.
-> 
-> Fixes:
->     http://autobuild.buildroot.net/results/3a4/3a4c07a0a54d5497fa8a4be2191856e286729637/
->     http://autobuild.buildroot.org/results/d5a/d5a93b5a870de748259b097ec0b98b207cfaa303/
->     and many others...
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> [yann.morin.1998 at free.fr: move the --disable option in the !fontconfig
->  case]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libass/libass.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Applied, thanks.
+Since you're renaming the Config.in option, some Config.in.legacy
+handling is needed.
+
+
+> diff --git a/package/util-macros/Config.in b/package/util-macros/Config.in
+> new file mode 100644
+> index 0000000..de0b5bb
+> --- /dev/null
+> +++ b/package/util-macros/Config.in
+> @@ -0,0 +1,4 @@
+> +config BR2_PACKAGE_UTIL_MACROS
+> +	bool "util-macros"
+> +	help
+> +	  X.Org autotools utility macros
+
+I am wondering if util-macros isn't too generic. Should we name it
+xorg-util-macros ? xorg-autotools-macros ? But admittedly, that's not
+matching the upstream name.
 
 Thomas
 -- 
