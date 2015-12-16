@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2015 23:43:45 +0100
-Subject: [Buildroot] [pull request] package/gnmupg2: build fixes
-In-Reply-To: <cover.1450302183.git.yann.morin.1998@free.fr>
-References: <cover.1450302183.git.yann.morin.1998@free.fr>
-Message-ID: <20151216234345.21429cc0@free-electrons.com>
+Date: Wed, 16 Dec 2015 23:44:03 +0100
+Subject: [Buildroot] [git commit] manual: clarify policy when updating a
+	package patch
+Message-ID: <20151216224416.9A544822DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=aafff45965b44344eb1207847bc40ca60c27083d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 16 Dec 2015 22:44:26 +0100, Yann E. MORIN wrote:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Renaud AUBIN <root@renaud.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/patch-policy.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> Yann E. MORIN (2):
->       package/gnupg2: fix build with musl
->       package/gnupg2: really do not run tests in cross-compilation
-
-Both applied. On patch 2, as suggested by Arnout, I have renamed patch
-0000 to 0004.
-
-As suggested by Arnout as well, please submit the patches upstream :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 6e27e71..0b4604e 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -106,6 +106,10 @@ upstream SCM software to generate the patch set.
+ Otherwise, concatenate the header with the output of the
+ +diff -purN package-version.orig/ package-version/+ command.
+ 
++If you update an existing patch (e.g. when bumping the package version),
++make sure the existing From header and Signed-off-by tags are not
++removed, but do update the rest of the patch comment when appropriate.
++
+ At the end, the patch should look like:
+ 
+ ---------------
