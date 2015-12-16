@@ -1,64 +1,95 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Dec 2015 17:31:32 +0100
-Subject: [Buildroot] [PATCH v2] cxxtest: new package
-In-Reply-To: <567161CF.2060709@imgtec.com>
-References: <1448546706-31297-1-git-send-email-Abhishek.Singh@imgtec.com>
- <20151214223655.GE4152@free.fr> <567161CF.2060709@imgtec.com>
-Message-ID: <20151216163131.GA4309@free.fr>
+Date: Wed, 16 Dec 2015 17:39:20 +0100
+Subject: [Buildroot] [PATCH 1/3] package/nodejs: Add version 5.2.0
+In-Reply-To: <20151216144140.3b3224c5@free-electrons.com>
+References: <1450122295-5311-1-git-send-email-martin@barkynet.com>
+ <20151214210913.227563c9@free-electrons.com>
+ <CAFGQKxfvQwA3v8W=OKEvNR6SE06DTng6PxQGj4q7o4zUWYbU2g@mail.gmail.com>
+ <20151214214337.2933ea41@free-electrons.com>
+ <20151214211045.GA4152@free.fr>
+ <1450132540.4928.24.camel@embedded.rocks>
+ <56714A65.80301@imgtec.com>
+ <20151216144140.3b3224c5@free-electrons.com>
+Message-ID: <20151216163920.GB4309@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Abhishek, All,
+Thomas, All,
 
-On 2015-12-16 18:36 +0530, Abhishek Singh spake thusly:
-> On Tuesday 15 December 2015 04:06 AM, Yann E. MORIN wrote:
-> >On 2015-11-26 19:35 +0530, Abhishek Singh spake thusly:
-[--SNIP--]
-> >>+# CxxTest uses python infrastructure as the build system. cxxtestgen is
-> >>+# a script which is used to process header files to generate C++ source files.
-> >>+# Compiling test runner requires CxxTest header files which are installed in
-> >>+# the staging directory.
-> >OK, I think we need a bit more info about all tis, as I am not sure I
-> >understand. Let me try to reformulate from what I understood:
-> >
-> >   - cxxtest is made of twoo parts:
-> >     - a tool to parse header files (supposedly from a project)
-> >     - a set of header files
-> >
-> >   - the tool is built as a host package, so it can be used natively
-> >
-> >   - the headers set is installed in staging
-> >
-> >Then the use-case is for a user to use the csstest tool to parse his own
-> >headers, that will supposedly generate a test harness, which is then
-> >cross-compiled and run on the target. Right?
-> >
-> >Could you expand a bit on the explanations, please?
-> >
-> >Regards,
-> >Yann E. MORIN.
+On 2015-12-16 14:41 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 16 Dec 2015 11:26:29 +0000, Vicente Olivert Riera wrote:
+> > >> So, I think we have a few options here:
+> > >>
+> > >>  1) keep all the three existing versions, add 5.2
+> > >>  2) keep 0.10 and 0.12, replace 4.2 with 5.2
+> > >>  3) keep 0.10, ditch 0.12, replace 4.2 with 5.2
+> > >>  4) dith 0.10 and 0.12, replace 4.2 with 5.2
+> > >>
+> > >> I would lean toward either 2 or 3.
+> > >>
+> > >> 3 is IMHO the best solution: 5.2 is the best choice when all the
+> > >> conditions are met; 0.10 is the fallback, maybe not the optimum in
+> > >> case 0.12 would have fit, but since that's a fallback I don't think
+> > >> it matters much...
+> > >>
+> > > 
+> > > As 4.x is a LTS release I would not drop it for the 5.x release.
+> > > 
+> > > I would keep all the three version we have - they are all still
+> > > maintained and v0.12 and v4 are both even LTS releases.
+> > > 
+> > > New versions are often not compatible with older versions of Node.js -
+> > > it's similiar to Lua.
+> > > 
+> > > So I would lean toward 1.
+> > 
+> > I agree with you. Dropping a LTS version doesn't look good to me. We
+> > could do it when it's not maintained anymore. Right now I vote for
+> > keeping the three versions we already have plus adding the 5.2.0 because
+> > is the new stable: option 1.
 > 
-> What you understood is correct. I am planning to add following comments
-> in next patch. Please tell, does it explains what you expect?
-> 
-> "CxxTest uses python infrastructure as the build system. It consists
-> of two parts:
-> 
-> 1. cxxtestgen tool to process tests defined in header files to generate
-> C++ source files. cxxtestgen is built as a host package, so that it can
-> be used natively.
-> 
-> 2. A set of header files which are installed in staging directory. This
-> will be used to cross-compile test harness to generate executable which
-> will run on target."
+> I am personally not very happy with option (1). Keeping gazillions of
+> versions means that we have potentially to test all those options. And
+> the random testing done by the autobuilders does not work to randomize
+> "choice" options, i.e we will never test the non-default versions.
 
-That's good for me. Thanks! :-)
+Not completey true, since the higher versions ahve dependencies not
+always fulfilled (armv6+, gcc >= 4.8...) so, as we do randomize the CPU
+from time to time, we would eventually have all versions being built.
+
+But I do agree that this is not the best situation. I would prefer if we
+could find a solution that does not imply having so many versions. I
+deeply believe that we should limit ourselves to just having 0.10.x and
+5.2.x .
+
+> What is the motivation for keeping all those versions around? While I
+> can understand that keeping 0.10.x around to have a fallback solution
+> for ARMv5 platform is desired, I don't understand why we would keep
+> 0.12.x and 4.2.x.
+> 
+> The fact that 0.12.x and 4.2.x are still maintained upstream as LTS
+> versions is completely irrelevant. There are other projects that may
+> maintain older branches as LTS, and still we don't support all the
+> possible maintained versions.
+
+Totally agreed. LTS status of uostream versions does not mean we should
+have all of them.
+
+> Are there incompatibilities between 0.12.x, 4.2.x and 5.2.x that
+> prevent a user from easily upgrading?
+
+Are all those versions API/ABI/whatevrer incompatible with each others?
+Or is it possible to narrow down the set of versions?
+
+I.e. if 4.2.x and 5.2.x are compatible, there is no reason to keep
+4.2.x, since 5.2.x is enough and does not have requirements more
+stringents than 4.2.x. And so on...
 
 Regards,
-Yann E. MORIN.
+Yann E. MORIN, in the train...
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
