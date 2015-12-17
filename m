@@ -1,34 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 11:53:16 +0100
-Subject: [Buildroot] [git commit] pkg-generic: remove unused NAMEVER
-Message-ID: <20151217105348.0310182531@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 11:54:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gauche: fix musl build issue
+In-Reply-To: <1450349254-18577-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1450349254-18577-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20151217115404.7927666a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f464fdfa93560e33a46192e59500d222fb7004a3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-Commit 5538e476 (from 2013!) removed the use of the NAMEVER variable in
-.stamp_patched, but it was still defined. So remove the definition now.
+On Thu, 17 Dec 2015 11:47:34 +0100, J?rg Krause wrote:
+> Add a patch from upstream to fix a musl build issue:
+> 
+>   In file included from os_dep.c:44:0:
+>   /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/asm/sigcontext.h:9:8: error: redefinition of 'struct sigcontext'
+>    struct sigcontext {
+>           ^
+>   In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/signal.h:243:0,
+>                    from ./include/private/../gc_pthread_redirects.h:42,
+>                    from ./include/private/../gc.h:1443,
+>                    from ./include/private/gc_priv.h:46,
+>                    from os_dep.c:17:
+>   /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/bits/signal.h:11:16: note: originally defined here
+>    typedef struct sigcontext
+> 
+> The Linux headers sigcontext and asm/sigcontext are no longer used and were
+> replaced with ucontext_t in GC 7.0alpha1 (gauche uses a private copy of bdwgc).
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/411/4111ea586143410649b78c8dfc737f0f83d78441/
+> http://autobuild.buildroot.net/results/b19/b19dbcc7ddf0f24472afcecf4c684915045550bf/
+> http://autobuild.buildroot.net/results/9eb/9ebf7ad0d721433dcc8523a55d08ca074d037e58/
+> http://autobuild.buildroot.net/results/223/22328dbe8ea86c59ceff3ba40da1d9ef39e10533/
+> and many more.
+> 
+> Fetch from:
+> https://github.com/shirok/Gauche/commit/13a196557848f22a1607a300643131345e9f32b3
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/gauche/gauche.hash | 1 +
+>  package/gauche/gauche.mk   | 1 +
+>  2 files changed, 2 insertions(+)
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-generic.mk | 1 -
- 1 file changed, 1 deletion(-)
+Applied, thanks.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 357a5c7..1e024d3 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -153,7 +153,6 @@ $(BUILD_DIR)/%/.stamp_rsynced:
- # prefix of the patches
- #
- # For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
--$(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
- $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $(PKGDIR)
- $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
- $(BUILD_DIR)/%/.stamp_patched:
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
