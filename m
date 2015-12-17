@@ -1,29 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 17:35:52 +0100
-Subject: [Buildroot] [PATCH 2/2] netsniff-ng: bump version to v0.6.0
-In-Reply-To: <1450362837-8087-2-git-send-email-joris.lijssens@gmail.com>
-References: <1450362837-8087-1-git-send-email-joris.lijssens@gmail.com>
- <1450362837-8087-2-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <20151217173552.3e09bc9e@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 17 Dec 2015 16:39:53 +0000
+Subject: [Buildroot] [PATCH 1/2] Config.in: Introduce a new
+	BR2_DEPRECATED_SINCE_2015_11 variable
+Message-ID: <1450370394-51267-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Joris Lijssens,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On Thu, 17 Dec 2015 15:33:57 +0100, Joris Lijssens wrote:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-> ---
->  package/netsniff-ng/netsniff-ng.hash | 2 +-
->  package/netsniff-ng/netsniff-ng.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-
-Applied, thanks.
-
-Thomas
+diff --git a/Config.in b/Config.in
+index 1809eeb..0be44d9 100644
+--- a/Config.in
++++ b/Config.in
+@@ -337,6 +337,10 @@ config BR2_DEPRECATED_SINCE_2015_08
+ 	bool
+ 	default y
+ 
++config BR2_DEPRECATED_SINCE_2015_11
++	bool
++	default y
++
+ endif
+ 
+ config BR2_ENABLE_DEBUG
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
