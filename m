@@ -1,47 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Dec 2015 23:40:26 +0100
-Subject: [Buildroot] [PATCH 3/4 v2] package/lighttpd: do not select Lua,
-	depend on it
-In-Reply-To: <cover.1450391976.git.yann.morin.1998@free.fr>
-References: <cover.1450391976.git.yann.morin.1998@free.fr>
-Message-ID: <6cb9d95b49cc1174b87738095575444415730ad7.1450391976.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 17 Dec 2015 19:42:25 -0300
+Subject: [Buildroot] [PATCH] libcroco: bump to version 0.6.11
+Message-ID: <1450392145-14955-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lua is a provider for the virtual package lua-interpreter, so it cannot
-be selected, as explained in the manual.
-
-Turn the 'select' into a 'depends on'.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Note: I haven't check if lighttpd could use luajit instead of Lua. This
-change is just a mechanical change.
+ package/libcroco/libcroco.hash | 4 ++--
+ package/libcroco/libcroco.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
----
-Changes v1 -> v2:
-  - drop comment  (Thomas)
----
- package/lighttpd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index 2c101e7..f62ccb9 100644
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -52,7 +52,7 @@ config BR2_PACKAGE_LIGHTTPD_WEBDAV
+diff --git a/package/libcroco/libcroco.hash b/package/libcroco/libcroco.hash
+index 20328e4..edf0b1f 100644
+--- a/package/libcroco/libcroco.hash
++++ b/package/libcroco/libcroco.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libcroco/0.6/libcroco-0.6.10.sha256sum
+-sha256	72066611df77f5c4fb28268cfc7306ecc1517212a6182c2ea756c326a154246c	libcroco-0.6.10.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libcroco/0.6/libcroco-0.6.11.sha256sum
++sha256	132b528a948586b0dfa05d7e9e059901bca5a3be675b6071a90a90b81ae5a056	libcroco-0.6.11.tar.xz
+diff --git a/package/libcroco/libcroco.mk b/package/libcroco/libcroco.mk
+index 2376684..0cda9da 100644
+--- a/package/libcroco/libcroco.mk
++++ b/package/libcroco/libcroco.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_PACKAGE_LIGHTTPD_LUA
- 	bool "lua support"
--	select BR2_PACKAGE_LUA
-+	depends on BR2_PACKAGE_LUA
- 	help
- 	  Enable Lua support. Needed to support mod_magnet
- 
+ LIBCROCO_VERSION_MAJOR = 0.6
+-LIBCROCO_VERSION = $(LIBCROCO_VERSION_MAJOR).10
++LIBCROCO_VERSION = $(LIBCROCO_VERSION_MAJOR).11
+ LIBCROCO_SITE = http://ftp.gnome.org/pub/gnome/sources/libcroco/$(LIBCROCO_VERSION_MAJOR)
+ LIBCROCO_SOURCE = libcroco-$(LIBCROCO_VERSION).tar.xz
+ LIBCROCO_INSTALL_STAGING = YES
 -- 
-1.9.1
+2.4.10
