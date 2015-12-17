@@ -1,93 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Dec 2015 21:04:24 +0100
-Subject: [Buildroot] [PATCH 1/1] Add config to nfsd to set number of
- threads
-In-Reply-To: <1450381505-3796-1-git-send-email-universeII@gmx.de>
-References: <1450381505-3796-1-git-send-email-universeII@gmx.de>
-Message-ID: <20151217200424.GC3653@free.fr>
+Date: Thu, 17 Dec 2015 21:05:36 +0100
+Subject: [Buildroot] [PATCH 1/3] package/nodejs: Add version 5.2.0
+In-Reply-To: <CAFGQKxdz_pPBRU=qB98ft1TuYcXOnaEdmVBtEBh3KKr-CinquA@mail.gmail.com>
+References: <CAFGQKxfvQwA3v8W=OKEvNR6SE06DTng6PxQGj4q7o4zUWYbU2g@mail.gmail.com>
+ <20151214214337.2933ea41@free-electrons.com>
+ <20151214211045.GA4152@free.fr>
+ <1450132540.4928.24.camel@embedded.rocks>
+ <56714A65.80301@imgtec.com>
+ <20151216144140.3b3224c5@free-electrons.com>
+ <20151216163920.GB4309@free.fr>
+ <CAFGQKxe1NUGfL3kY-T2VQE0ShhUh5G+oQVZmmDJaEvQ-5NQbHQ@mail.gmail.com>
+ <20151217182739.GB3653@free.fr>
+ <CAFGQKxdz_pPBRU=qB98ft1TuYcXOnaEdmVBtEBh3KKr-CinquA@mail.gmail.com>
+Message-ID: <20151217200536.GD3653@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+Martin, All,
 
-On 2015-12-17 20:45 +0100, Andreas Ehmanns spake thusly:
-> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+On 2015-12-17 19:55 +0000, Martin Bark spake thusly:
+> On 17 December 2015 at 18:27, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > So, my position, and I guess Thomas will agree: please respin this patch
+> > byt replacing 4.2 with 5.2, and a follow-up patch to get rid of 0.12.x.
+> > In the meantime, I'll mark this one as "Changes Requested" in our
+> > Patchwork.
+> Will do.  I have an updated patch set ready, just need to do more testing.
 
-I forgot in my previous reply, but subject should have been:
-
-    package/nfsd: accept config to set number of threads
-
-This can be fixed by a maintainer when he applies, so no need to
-resubmit...
-
-Otherwise:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Unrelated yto this change, I noticed that this script is completely
-consistent with how it stops services:
-  - sometimes, we killall, sometimes we kill-9
-  - the order in which we kill, echo and rm pid file is not consistent
-
-It would be nice if we stopped all the NFS services in a consistent way,
-like always use killall, then remove the pid file, and eventually echo
-the status. Would you like to send a follow-up patch that does that
-cleanup, please? ;-)
+Great! Thanks! :-)
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/nfs-utils/S60nfs | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-> index ec7c909..5639b8f 100755
-> --- a/package/nfs-utils/S60nfs
-> +++ b/package/nfs-utils/S60nfs
-> @@ -13,6 +13,14 @@ mkdir -p /run/nfs/sm
->  mkdir -p /run/nfs/sm.bak
->  touch /run/nfs/rmtab
->  
-> +CFG_FILE=/etc/default/nfsd
-> +
-> +NR_THREADS=2
-> +if [ -f "${CFG_FILE}" ]; then
-> +    . "${CFG_FILE}"
-> +fi
-> +
-> +
->  start() {
->  	# Start daemons.
->  	printf "Starting NFS statd: "
-> @@ -25,7 +33,7 @@ start() {
->  	echo "done"
->  
->  	printf "Starting NFS daemon: "
-> -	rpc.nfsd 2
-> +	rpc.nfsd ${NR_THREADS}
->  	echo "done"
->  
->  	printf "Starting NFS mountd: "
-> @@ -40,7 +48,7 @@ stop() {
->  	killall -q rpc.mountd
->  	echo "done"
->  
-> -	echo "Shutting down NFS daemon: "
-> +	printf "Shutting down NFS daemon: "
->  	kill -9 `pidof nfsd` 2>/dev/null
->  	echo "done"
->  
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
