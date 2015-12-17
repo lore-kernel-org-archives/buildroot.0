@@ -1,7 +1,9 @@
 From: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Thu, 17 Dec 2015 15:33:56 +0100
-Subject: [Buildroot] [PATCH 1/2] netsniff-ng: check for geoip,ncurses,zlib
-Message-ID: <1450362837-8087-1-git-send-email-joris.lijssens@gmail.com>
+Date: Thu, 17 Dec 2015 15:33:57 +0100
+Subject: [Buildroot] [PATCH 2/2] netsniff-ng: bump version to v0.6.0
+In-Reply-To: <1450362837-8087-1-git-send-email-joris.lijssens@gmail.com>
+References: <1450362837-8087-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <1450362837-8087-2-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 ---
- package/netsniff-ng/netsniff-ng.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/netsniff-ng/netsniff-ng.hash | 2 +-
+ package/netsniff-ng/netsniff-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index 935003c..b4b0500 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 f0008edd31df93822b7befe50cfb3740ce6fd35b1013ae3a73b2a389a41022e4 netsniff-ng-v0.5.9.tar.gz
++sha256 a76911f5a8ef0b92c42da568ceebc9e6559c02760f498785e22c8426b623d43f netsniff-ng-v0.6.0.tar.gz
 diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-index 40eecab..5774ccd 100644
+index 5774ccd..eecceea 100644
 --- a/package/netsniff-ng/netsniff-ng.mk
 +++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -16,6 +16,18 @@ NETSNIFF_NG_DEPENDENCIES = \
- 	libnl libpcap libcli libnetfilter_conntrack \
- 	liburcu libnet
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_GEOIP),y)
-+NETSNIFF_NG_DEPENDENCIES += geoip
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+NETSNIFF_NG_DEPENDENCIES += ncurses
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+NETSNIFF_NG_DEPENDENCIES += zlib
-+endif
-+
- # hand-written configure script and makefile
- define NETSNIFF_NG_CONFIGURE_CMDS
- 	(cd $(@D); \
+-NETSNIFF_NG_VERSION = v0.5.9
++NETSNIFF_NG_VERSION = v0.6.0
+ NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
+ NETSNIFF_NG_LICENSE = GPLv2
+ NETSNIFF_NG_LICENSE_FILES = README COPYING
 -- 
 1.8.3.1
