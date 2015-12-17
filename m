@@ -1,94 +1,148 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 00:05:04 +0100
-Subject: [Buildroot] [git commit] package/efl/libembryo: remove package
-Message-ID: <20151217230816.A46B082650@busybox.osuosl.org>
+Date: Fri, 18 Dec 2015 00:05:18 +0100
+Subject: [Buildroot] [git commit] package/efl/libedbus: remove package
+Message-ID: <20151217230816.B92507F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b728fb77e35fdd6125cb466a0f8ece98092b261e
+commit: http://git.buildroot.net/buildroot/commit/?id=8c05c38d17203ea437f2a772ebfd267886d8cdd0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libembryo is now available in efl package.
+Libedbus is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                   |  7 +++++++
- package/efl/Config.in              |  1 -
- package/efl/libembryo/Config.in    |  9 ---------
- package/efl/libembryo/libembryo.mk | 18 ------------------
- 4 files changed, 7 insertions(+), 28 deletions(-)
+ Config.in.legacy                 |  7 +++++++
+ package/efl/Config.in            |  1 -
+ package/efl/libedbus/Config.in   | 44 ----------------------------------------
+ package/efl/libedbus/libedbus.mk | 37 ---------------------------------
+ 4 files changed, 7 insertions(+), 82 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index da7e690..c161687 100644
+index c6dd9e3..f44a1af 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.02"
  
-+config BR2_PACKAGE_LIBEMBRYO
-+	bool "libembryo package has been removed"
++config BR2_PACKAGE_LIBEDBUS
++	bool "libedbus package has been removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  With EFL 1.15, libembryo is now provided by the libefl package.
++	  With EFL 1.15, libedbus is now provided by the libefl package.
 +
- config BR2_PACKAGE_LIBEDJE
- 	bool "libedje package has been removed"
+ config BR2_PACKAGE_LIBEFREET
+ 	bool "libefreet package has been removed"
  	select BR2_LEGACY
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 489aa18..5947de2 100644
+index 682164d..98ca114 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -22,7 +22,6 @@ source "package/efl/libefl/Config.in"
- source "package/efl/libefreet/Config.in"
- source "package/efl/libeio/Config.in"
+@@ -21,7 +21,6 @@ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
  source "package/efl/libevas/Config.in"
--source "package/efl/libembryo/Config.in"
  source "package/efl/libelementary/Config.in"
- source "package/efl/libedbus/Config.in"
+-source "package/efl/libedbus/Config.in"
  
-diff --git a/package/efl/libembryo/Config.in b/package/efl/libembryo/Config.in
+ endif # BR2_PACKAGE_EFL
+ 
+diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
 deleted file mode 100644
-index 63c7064..0000000
---- a/package/efl/libembryo/Config.in
+index 7e862d3..0000000
+--- a/package/efl/libedbus/Config.in
 +++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_LIBEMBRYO
--	bool "libembryo"
+@@ -1,44 +0,0 @@
+-config BR2_PACKAGE_LIBEDBUS
+-	bool "libedbus"
 -	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_DBUS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+-	depends on BR2_USE_MMU # dbus
 -	help
--	  Embryo is primarily a shared library that gives you an API
--	  to load and control interpreted programs compiled into an
--	  abstract machine bytecode that it understands.
+-	  E_Dbus is a set of wrappers around D-Bus APIs so they can be
+-	  easily used by EFL applications, automatically providing
+-	  Ecore/main loop integration, as well as Eina data types.
 -
--	  http://trac.enlightenment.org/e/wiki/Embryo
-diff --git a/package/efl/libembryo/libembryo.mk b/package/efl/libembryo/libembryo.mk
+-	  http://trac.enlightenment.org/e/wiki/E_Dbus
+-
+-if BR2_PACKAGE_LIBEDBUS
+-
+-config BR2_PACKAGE_LIBEDBUS_BLUEZ
+-	bool "bluez support"
+-	depends on !BR2_STATIC_LIBS # bluez_utils
+-	depends on BR2_USE_WCHAR # bluez_utils -> glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> glib2
+-	select BR2_PACKAGE_BLUEZ_UTILS
+-	help
+-	  Bluetooth support.
+-
+-comment "bluez support needs a toolchain w/ wchar, threads, dynamic library"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+-config BR2_PACKAGE_LIBEDBUS_CONNMAN
+-	bool "connman support"
+-	depends on BR2_PACKAGE_CONNMAN
+-	help
+-	  Connection manager support.
+-
+-config BR2_PACKAGE_LIBEDBUS_NOTIFY
+-	bool "notify support"
+-	help
+-	  Notify support.
+-
+-endif
+-
+-comment "libedbus needs a toolchain w/ threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/efl/libedbus/libedbus.mk b/package/efl/libedbus/libedbus.mk
 deleted file mode 100644
-index fc45e42..0000000
---- a/package/efl/libembryo/libembryo.mk
+index 634ceaf..0000000
+--- a/package/efl/libedbus/libedbus.mk
 +++ /dev/null
-@@ -1,18 +0,0 @@
+@@ -1,37 +0,0 @@
 -################################################################################
 -#
--# libembryo
+-# libedbus
 -#
 -################################################################################
 -
--LIBEMBRYO_VERSION = 1.7.10
--LIBEMBRYO_SOURCE = embryo-$(LIBEMBRYO_VERSION).tar.bz2
--LIBEMBRYO_SITE = http://download.enlightenment.org/releases
--LIBEMBRYO_LICENSE = BSD-2c, Embryo license
--LIBEMBRYO_LICENSE_FILES = COPYING
+-LIBEDBUS_VERSION = 1.7.10
+-LIBEDBUS_SOURCE = e_dbus-$(LIBEDBUS_VERSION).tar.bz2
+-LIBEDBUS_SITE = http://download.enlightenment.org/releases
+-LIBEDBUS_LICENSE = BSD-2c
+-LIBEDBUS_LICENSE_FILES = COPYING
 -
--LIBEMBRYO_INSTALL_STAGING = YES
+-LIBEDBUS_INSTALL_STAGING = YES
 -
--LIBEMBRYO_DEPENDENCIES = host-pkgconf libeina
+-LIBEDBUS_DEPENDENCIES = host-pkgconf dbus libeina libecore
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_BLUEZ),y)
+-LIBEDBUS_CONF_OPTS += --enable-ebluez
+-LIBEDBUS_DEPENDENCIES += bluez_utils
+-else
+-LIBEDBUS_CONF_OPTS += --disable-ebluez
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_CONNMAN),y)
+-LIBEDBUS_CONF_OPTS += --enable-econnman0_7x
+-LIBEDBUS_DEPENDENCIES += connman
+-else
+-LIBEDBUS_CONF_OPTS += --disable-econnman0_7x
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_NOTIFY),y)
+-LIBEDBUS_CONF_OPTS += --enable-enotify --disable-edbus-notify-test
+-else
+-LIBEDBUS_CONF_OPTS += --disable-enotify
+-endif
 -
 -$(eval $(autotools-package))
--$(eval $(host-autotools-package))
