@@ -1,57 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 11:53:34 +0100
-Subject: [Buildroot] [git commit] libsecret: bump to version 0.18.3
-Message-ID: <20151217105348.1D19481FB9@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 11:53:16 +0100
+Subject: [Buildroot] [git commit] pkg-generic: remove unused NAMEVER
+Message-ID: <20151217105348.0310182531@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22d11e7e6cc86e906121226579654a92cf655040
+commit: http://git.buildroot.net/buildroot/commit/?id=f464fdfa93560e33a46192e59500d222fb7004a3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also forcibly disable GIR (default=auto) to avoid issues.
+Commit 5538e476 (from 2013!) removed the use of the NAMEVER variable in
+.stamp_patched, but it was still defined. So remove the definition now.
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsecret/libsecret.hash |  4 ++--
- package/libsecret/libsecret.mk   | 12 +++++++++---
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ package/pkg-generic.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
-index 8e5bbf7..d40f320 100644
---- a/package/libsecret/libsecret.hash
-+++ b/package/libsecret/libsecret.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.sha256sum
--sha256	0c73aa762dbd1e38ba7b03de350e23ce818cb810b0784375e95ef61e004b02e3	libsecret-0.18.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.3.sha256sum
-+sha256	f2bf1d0c5ab4640664f3e3c7ef6b086c180e50ff415720b5e22f96750dbf84c9	libsecret-0.18.3.tar.xz
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-index 5a230ae..a762dd7 100644
---- a/package/libsecret/libsecret.mk
-+++ b/package/libsecret/libsecret.mk
-@@ -4,12 +4,18 @@
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 357a5c7..1e024d3 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -153,7 +153,6 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ # prefix of the patches
  #
- ################################################################################
- 
--LIBSECRET_VERSION = 0.18
--LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION)
-+LIBSECRET_VERSION_MAJOR = 0.18
-+LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).3
-+LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
- LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
- LIBSECRET_INSTALL_STAGING = YES
- LIBSECRET_DEPENDENCIES = libglib2 host-intltool
--LIBSECRET_CONF_OPTS = --disable-manpages --disable-strict --disable-coverage --enable-vala=no
-+LIBSECRET_CONF_OPTS = \
-+	--disable-manpages \
-+	--disable-strict \
-+	--disable-coverage \
-+	--enable-introspection=no \
-+	--enable-vala=no
- LIBSECRET_LICENSE = LGPLv2.1+
- LIBSECRET_LICENSE_FILES = COPYING
- 
+ # For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
+-$(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+ $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $(PKGDIR)
+ $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
+ $(BUILD_DIR)/%/.stamp_patched:
