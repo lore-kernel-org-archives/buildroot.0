@@ -1,45 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 17:26:38 +0100
-Subject: [Buildroot] [git commit] netsniff-ng: add optional dependencies on
-	geoip, ncurses and zlib
-Message-ID: <20151217163457.8419181EE0@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 17:35:49 +0100
+Subject: [Buildroot] [PATCH 1/2] netsniff-ng: check for geoip, ncurses,
+ zlib
+In-Reply-To: <1450362837-8087-1-git-send-email-joris.lijssens@gmail.com>
+References: <1450362837-8087-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <20151217173549.4ba4fd19@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2efeb839611525f8eef5c6bb20fc00ea4043eeab
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Joris Lijssens,
 
-[Thomas: rework commit title.]
+On Thu, 17 Dec 2015 15:33:56 +0100, Joris Lijssens wrote:
+> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+> ---
+>  package/netsniff-ng/netsniff-ng.mk | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/netsniff-ng/netsniff-ng.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+I've applied after slightly editing the commit title: in Buildroot
+speak, we generally don't talk about "checks" but rather "optional
+dependencies". So a title like "netsniff-ng: add optional dependencies
+on geoip, ncurses and zlib" was more appropriate.
 
-diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-index 40eecab..5774ccd 100644
---- a/package/netsniff-ng/netsniff-ng.mk
-+++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -16,6 +16,18 @@ NETSNIFF_NG_DEPENDENCIES = \
- 	libnl libpcap libcli libnetfilter_conntrack \
- 	liburcu libnet
- 
-+ifeq ($(BR2_PACKAGE_GEOIP),y)
-+NETSNIFF_NG_DEPENDENCIES += geoip
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+NETSNIFF_NG_DEPENDENCIES += ncurses
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+NETSNIFF_NG_DEPENDENCIES += zlib
-+endif
-+
- # hand-written configure script and makefile
- define NETSNIFF_NG_CONFIGURE_CMDS
- 	(cd $(@D); \
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
