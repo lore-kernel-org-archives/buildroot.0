@@ -1,34 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:51:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: Always link with
- libpthread for static builds
-In-Reply-To: <1448805351-17846-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1448805351-17846-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151217225106.5b939956@free-electrons.com>
+Date: Thu, 17 Dec 2015 22:54:08 +0100
+Subject: [Buildroot] [PATCH] util-linux: fix static builds with uClibc
+In-Reply-To: <1448573664-5556-1-git-send-email-abrodkin@synopsys.com>
+References: <1448573664-5556-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20151217225408.2247b076@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Alexey Brodkin,
 
-On Sun, 29 Nov 2015 14:55:51 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/c9f/c9fb2b4a25817d6455472767819018a62281d5f9/
-> http://autobuild.buildroot.net/results/a75/a757edcfce00d3e52c6787f28dc31cbaf8d2d2ab/
-> http://autobuild.buildroot.net/results/8df/8df836b6c241954449544c7b4c74a1cb19e7ff7b/
-> http://autobuild.buildroot.net/results/1b6/1b6e571e307c2b190116601bade382c43e8d3858/
-> http://autobuild.buildroot.net/results/aa3/aa34b2326a0702093162eb1f9d7bdf9c7cf45311/
-> http://autobuild.buildroot.net/results/74a/74ae21d78f7ea9d71407accd3e43900af6766e68/
-> http://autobuild.buildroot.net/results/7ec/7ec28c23b3f12e5b7e2376c7913329d2a38dd232/
+On Fri, 27 Nov 2015 00:34:24 +0300, Alexey Brodkin wrote:
+> What happens util-linux on configuration step tries to build
+> and example that uses timer_create() function. That function
+> exists in librt and configuration utility correctly adds this
+> lib (-lrt).
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/php/php.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> But timer_create() uses pthreads internally and so for successful
+> linkage "-lpthread" is required as well (in addition to "-lrt").
+> 
+> 0005-build-sys-use-REALTIME_LIBS.patch is a back-port of upstream
+> commit
+> https://github.com/karelzak/util-linux/commit/b97edfe731fdf3d3e92e40494b22658207ab6d3c
+> that won't apply cleanly on v2.27.1
+> 
+> 0006-buildsys-fix-static-configuration-and-building.patch was just
+> sent upstream, see https://github.com/karelzak/util-linux/pull/234
+> 
+> Both patches must be removed on util-linux version bump.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Applied, thanks.
+You got some feedback from upstream on patch 0006, could you take it
+into account and resend an updated patch?
+
+They fixed the timer_createx problem spotted by Yann in
+https://github.com/karelzak/util-linux/commit/f07a82c9d8141dd295c2453e3c5804f997ed7ce5.
+
+Thanks!
 
 Thomas
 -- 
