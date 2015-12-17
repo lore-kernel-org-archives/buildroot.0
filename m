@@ -1,58 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 09:30:05 +0100
-Subject: [Buildroot] [PATCH 1/4] libcairomm: new package
-In-Reply-To: <CALe+oY_R1++xZWeZbv9E1LuWoUi76DxEOOeE2zPgs151krSS0w@mail.gmail.com>
-References: <1449178605-8568-1-git-send-email-james.knight@rockwellcollins.com>
- <20151216224558.0855b564@free-electrons.com>
- <CALe+oY_R1++xZWeZbv9E1LuWoUi76DxEOOeE2zPgs151krSS0w@mail.gmail.com>
-Message-ID: <20151217093005.01a726e3@free-electrons.com>
+From: Abhishek Singh <Abhishek.Singh@imgtec.com>
+Date: Thu, 17 Dec 2015 14:37:52 +0530
+Subject: [Buildroot] [PATCH v3] cxxtest: new package
+Message-ID: <1450343273-13731-1-git-send-email-Abhishek.Singh@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James,
+Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Reviewed-by: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
+Signed-off-by: Abhishek Singh <Abhishek.Singh@imgtec.com>
+---
+changes v2 -> v3:
+	- change source download path (suggested by Yann E. Morin)
+	- modify comment (suggested by Yann E. Morin)
 
-On Wed, 16 Dec 2015 20:36:26 -0500, James Knight wrote:
+changes v1 -> v2:
+	- remove dependency on host-python (suggested by Thomas Petazzoni)
+	- add comments in mk file (suggested by Thomas Petazzoni)
+---
+ package/Config.in            |  1 +
+ package/cxxtest/Config.in    | 10 ++++++++++
+ package/cxxtest/cxxtest.hash |  2 ++
+ package/cxxtest/cxxtest.mk   | 31 +++++++++++++++++++++++++++++++
+ 4 files changed, 44 insertions(+)
+ create mode 100644 package/cxxtest/Config.in
+ create mode 100644 package/cxxtest/cxxtest.hash
+ create mode 100644 package/cxxtest/cxxtest.mk
 
-> > I was a bit surprised by the missing dependency on libsigc.
-> 
-> My apologies. I am surprised I messed that as well. No excuse; I'll have to
-> rework how I check things but I submit stuff upstream.
-
-No problem. It's anyway the sort of things that the autobuilders would
-have caught. If I didn't had to rename the packages, I probably
-wouldn't have even build tested them, leaving that work for the
-autobuilders.
-
-> >      - rename package from libcairomm to cairomm in order to match
-> >        upstream name.
-> 
-> Was this changed to match existing Buildroot's packages naming style or
-> something else? I was trying to make sure I selected the right name for
-> these packages; a bit frustrated that I messed up on this as well. I guess
-> I started with trying to match gtkmm's package to gtk's packages seen in
-> Buildroot (ie GTK 2 is libgtk2 and not gtk2), then followed suit with the
-> package dependencies I was adding. I guess my main question is why the GTK
-> packages are named libgtk2/libgtk3 over gtk2/gtk3?
-
-In general, we try to use the upstream name, which in this case was
-cairomm, atkmm, etc. Also another reason was that the cairo package was
-named cairo, not libcairo, not it was strange to have "cairo" and
-"libcairomm", it made more sense to have "cairo" and "cairomm".
-
-Regarding gtk, yes we deviated from this rule. This has its origin many
-many years ago. Back in the time, the gtk (version 1) package was named
-libgtk, so we followed that for libgtk2 and then libgtk3.
-
-Yes, it is not super consistent, but renaming all that stuff would be
-quite a lot of churn for no real benefit.
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 1eea89b..d9015c8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -118,6 +118,7 @@ menu "Development tools"
+ 	source "package/cmake/Config.in"
+ 	source "package/cppunit/Config.in"
+ 	source "package/cvs/Config.in"
++	source "package/cxxtest/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/diffutils/Config.in"
+ 	source "package/dos2unix/Config.in"
+diff --git a/package/cxxtest/Config.in b/package/cxxtest/Config.in
+new file mode 100644
+index 0000000..7512e4b
+--- /dev/null
++++ b/package/cxxtest/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_CXXTEST
++	bool "cxxtest"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  CxxTest is a unit testing framework for C++
++
++	  http://cxxtest.com/
++
++comment "cxxtest needs toolchain with C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/cxxtest/cxxtest.hash b/package/cxxtest/cxxtest.hash
+new file mode 100644
+index 0000000..f552e80
+--- /dev/null
++++ b/package/cxxtest/cxxtest.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	1c154fef91c65dbf1cd4519af7ade70a61d85a923b6e0c0b007dc7f4895cf7d8	cxxtest-4.4.tar.gz
+diff --git a/package/cxxtest/cxxtest.mk b/package/cxxtest/cxxtest.mk
+new file mode 100644
+index 0000000..ab0da3d
+--- /dev/null
++++ b/package/cxxtest/cxxtest.mk
+@@ -0,0 +1,31 @@
++#######################################################################################
++#
++# cxxtest
++#
++#######################################################################################
++
++CXXTEST_VERSION = 4.4
++CXXTEST_SOURCE = cxxtest-$(CXXTEST_VERSION).tar.gz
++CXXTEST_SITE = https://github.com/CxxTest/cxxtest/releases/download/$(CXXTEST_VERSION)
++CXXTEST_LICENSE = LGPLv3
++CXXTEST_LICENSE_FILES = COPYING
++CXXTEST_INSTALL_STAGING = YES
++CXXTEST_INSTALL_TARGET = NO
++CXXTEST_DEPENDENCIES = host-cxxtest
++HOST_CXXTEST_SETUP_TYPE = setuptools
++HOST_CXXTEST_SUBDIR = python
++
++# Copy CxxTest header files to staging directory
++define CXXTEST_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/cxxtest
++	cp $(@D)/cxxtest/* $(STAGING_DIR)/usr/include/cxxtest
++endef
++
++# CxxTest uses python infrastructure as the build system. It consists of two parts:
++# 1. cxxtestgen tool to process tests defined in header files to generate C++ source
++# files. cxxtestgen is built as a host package, so that it can be used natively.
++# 2. A set of header files which are installed in staging directory. This will be
++# used in cross-compiling test harness to generate executable which will run on target.
++
++$(eval $(generic-package))
++$(eval $(host-python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.2
