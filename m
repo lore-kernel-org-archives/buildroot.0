@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 21:53:46 +0100
-Subject: [Buildroot] [PATCH 1/1] irssi: update download URL
-In-Reply-To: <1450379974-899-1-git-send-email-rprebello@gmail.com>
-References: <1450379974-899-1-git-send-email-rprebello@gmail.com>
-Message-ID: <20151217215346.4e56bb0d@free-electrons.com>
+Date: Thu, 17 Dec 2015 21:54:06 +0100
+Subject: [Buildroot] [git commit] Config.in: Introduce a new
+	BR2_DEPRECATED_SINCE_2015_11 variable
+Message-ID: <20151217205545.2815682565@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rodrigo Rebello,
+commit: http://git.buildroot.net/buildroot/commit/?id=429a11647a3e0eb1e6781a0008252144729f255e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Dec 2015 17:19:34 -0200, Rodrigo Rebello wrote:
-> Irssi source packages are now hosted on GitHub.
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-> ---
->  package/irssi/irssi.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Config.in b/Config.in
+index 1809eeb..0be44d9 100644
+--- a/Config.in
++++ b/Config.in
+@@ -337,6 +337,10 @@ config BR2_DEPRECATED_SINCE_2015_08
+ 	bool
+ 	default y
+ 
++config BR2_DEPRECATED_SINCE_2015_11
++	bool
++	default y
++
+ endif
+ 
+ config BR2_ENABLE_DEBUG
