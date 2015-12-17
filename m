@@ -1,165 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 23:53:52 +0100
-Subject: [Buildroot] [git commit] package/efl/libefl: add frame buffer
-	config option
-Message-ID: <20151217230816.3399C7F892@busybox.osuosl.org>
+Date: Fri, 18 Dec 2015 00:04:23 +0100
+Subject: [Buildroot] [git commit] package/expedite: bump to efl-1.15 branch
+Message-ID: <20151217230816.75FF7803E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f781a12df069c3c8eac051053a204f4b24a40c3c
+commit: http://git.buildroot.net/buildroot/commit/?id=40e6f4ee0754878c337d39800281e25b89e34b66
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an config option to enable frame buffer support
-in the efl libraries.
+Since expedite hasn't been released since 1.7.10 release,
+use efl-1.15 branch in the git tree.
 
-From the README [1]:
-This requires linux frame-buffer support, headers etc. This supports
-basic frame-buffers like /dev/fb as well as input via /dev/input for
-keyboards and mice in a basic way.
+Use the newly added libefl package wich provide a new version
+of efl libraries.
 
-There is a bug eina_module_load().
-From [2]:
-When running terminology, a message appears in eina_module_load with:
-could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
-Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
-ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
-It seems like the EAPI macro has no effect...
-
-A patch from Ross Vandegrift has been posted on enlightenment mailing
-list [3], but it's not yet an upstream patch.
-
-[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n521
-[2] http://sourceforge.net/p/enlightenment/mailman/message/34493376
-[3] http://sourceforge.net/p/enlightenment/mailman/message/34492801
+Autoreconf the package since there is no configure script
+in the git tree.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ecore_fb_private.h-define-EAPI-before-use.patch | 64 ++++++++++++++++++++++
- package/efl/libefl/Config.in                       |  5 ++
- package/efl/libefl/libefl.mk                       |  8 ++-
- 3 files changed, 75 insertions(+), 2 deletions(-)
+ package/expedite/Config.in     |  8 ++------
+ package/expedite/expedite.hash |  2 --
+ package/expedite/expedite.mk   | 14 +++++++++-----
+ 3 files changed, 11 insertions(+), 13 deletions(-)
 
-diff --git a/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
-new file mode 100644
-index 0000000..81d14f9
---- /dev/null
-+++ b/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
-@@ -0,0 +1,64 @@
-+From 2fb4fdf641e67e49b87a3524038a694c8dd0ba4e Mon Sep 17 00:00:00 2001
-+From: Vicente Bergas <vicencb@gmail.com>
-+Date: Fri, 9 Oct 2015 23:35:20 +0200
-+Subject: [PATCH] ecore_fb_private.h: define EAPI before use
-+
-+From [1]:
-+When running terminology, a message appears in eina_module_load with:
-+could not dlopen("/usr/lib/ecore_evas/engines/fb/v-1.15/module.so",
-+Error relocating /usr/lib/ecore_evas/engines/fb/v-1.15/module.so:
-+ecore_fb_ts_shutdown: symbol not found): RTLD_NOW
-+It seems like the EAPI macro has no effect...
-+
-+A patch from Ross Vandegrift has been posted on enlightenment mailing
-+list [2], but it's not yet an upstream patch.
-+
-+[1] http://sourceforge.net/p/enlightenment/mailman/message/34493376
-+[2] http://sourceforge.net/p/enlightenment/mailman/message/34492801
-+
-+Signed-off-by: Vicente Bergas <vicencb@gmail.com>
-+[Romain:
-+  - Add a commit log
-+  - Add a link to the enlightenment mailing list
-+  - Add Vicente's SoB line]
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ src/lib/ecore_fb/ecore_fb_private.h | 17 +++++++++++++++++
-+ 1 file changed, 17 insertions(+)
-+
-+diff --git a/src/lib/ecore_fb/ecore_fb_private.h b/src/lib/ecore_fb/ecore_fb_private.h
-+index f7dc0c6..f54c8d2 100644
-+--- a/src/lib/ecore_fb/ecore_fb_private.h
-++++ b/src/lib/ecore_fb/ecore_fb_private.h
-+@@ -33,6 +33,20 @@
-+ 
-+ #include <Ecore_Fb.h>
-+ 
-++#ifdef EAPI
-++# undef EAPI
-++#endif
-++
-++#ifdef __GNUC__
-++# if __GNUC__ >= 4
-++#  define EAPI __attribute__ ((visibility("default")))
-++# else
-++#  define EAPI
-++# endif
-++#else
-++# define EAPI
-++#endif
-++
-+ /* ecore_fb_li.c */
-+ struct _Ecore_Fb_Input_Device
-+ {
-+@@ -92,4 +106,7 @@ void ecore_fb_vt_shutdown(void);
-+ #define TS_GET_CAL 0x8014660a
-+ #endif
-+   
-++#undef EAPI
-++#define EAPI
-++
-+ #endif
-+-- 
-+2.4.3
-+
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 41b1243..2a5149e 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -109,6 +109,11 @@ config BR2_PACKAGE_LIBEFL_HAS_RECOMMENDED_CONFIG
- comment "Warning: one of the recommended option for EFL is not enabled"
- 	depends on !BR2_PACKAGE_LIBEFL_HAS_RECOMMENDED_CONFIG
+diff --git a/package/expedite/Config.in b/package/expedite/Config.in
+index e60510b..0bcf343 100644
+--- a/package/expedite/Config.in
++++ b/package/expedite/Config.in
+@@ -2,15 +2,11 @@ config BR2_PACKAGE_EXPEDITE
+ 	bool "expedite"
+ 	depends on BR2_PACKAGE_EFL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEVAS
+ 	help
+ 	  Expedite is the official Evas benchmark tool. It can test different
+ 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+ 	  DirectFB and so on. Its tests are quite extensive, trying to
+ 	  reproduce real world usage cases.
  
-+comment "libecore video support"
-+
-+config BR2_PACKAGE_LIBEFL_FB
-+	bool "FB support"
-+
- comment "libevas loaders"
+-comment "expedite needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "expedite needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
+deleted file mode 100644
+index cde3689..0000000
+--- a/package/expedite/expedite.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256 91d0290ba3635a4440c389647643beaa8e39def2789d685d54a58a723398cc10  expedite-1.7.10.tar.bz2
+diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
+index 27b4c44..4a4e2ee 100644
+--- a/package/expedite/expedite.mk
++++ b/package/expedite/expedite.mk
+@@ -4,15 +4,19 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LIBEFL_PNG
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 2ebf6fb..75af6c9 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -30,7 +30,6 @@ LIBEFL_GETTEXTIZE = YES
+-EXPEDITE_VERSION = 1.7.10
+-EXPEDITE_SOURCE = expedite-$(EXPEDITE_VERSION).tar.bz2
+-EXPEDITE_SITE = http://download.enlightenment.org/releases
++# efl-1.15 branch
++EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
++EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
++EXPEDITE_SITE_METHOD = git
+ EXPEDITE_LICENSE = BSD-2c
+ EXPEDITE_LICENSE_FILES = COPYING
  
- # Configure options:
- # --disable-cxx-bindings: disable C++11 bindings.
--# --disable-fb: disable frame buffer support.
- # --disable-image-loader-jp2k: disable JPEG 2000 support.
- # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
-@@ -41,7 +40,6 @@ LIBEFL_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--disable-cxx-bindings \
--	--disable-fb \
- 	--disable-image-loader-jp2k \
- 	--disable-sdl \
- 	--disable-systemd \
-@@ -143,6 +141,12 @@ else
- LIBEFL_CONF_OPTS += --disable-wayland
- endif
+-EXPEDITE_DEPENDENCIES = libevas libeina libeet
++EXPEDITE_DEPENDENCIES = host-libefl host-pkgconf libefl
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_FB),y)
-+LIBEFL_CONF_OPTS += --enable-fb
-+else
-+LIBEFL_CONF_OPTS += --disable-fb
-+endif
+-ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
++# There is no configure script in the git tree.
++EXPEDITE_AUTORECONF = YES
 +
- # Loaders that need external dependencies needs to be --enable-XXX=yes
- # otherwise the default is '=static'.
- # All other loaders are statically built-in
++ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
+ EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+ 	--x-libraries=$(STAGING_DIR)/usr/lib
