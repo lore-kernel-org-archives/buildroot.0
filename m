@@ -1,48 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:54:08 +0100
-Subject: [Buildroot] [PATCH] util-linux: fix static builds with uClibc
-In-Reply-To: <1448573664-5556-1-git-send-email-abrodkin@synopsys.com>
-References: <1448573664-5556-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20151217225408.2247b076@free-electrons.com>
+Date: Thu, 17 Dec 2015 22:57:16 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/lzlib: bump to version 0.4.3
+In-Reply-To: <20151010114009.3ad10ecb@free-electrons.com>
+References: <1444270374-11645-1-git-send-email-joerg.krause@embedded.rocks>
+ <20151010114009.3ad10ecb@free-electrons.com>
+Message-ID: <20151217225716.6da27dd2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Fran?ois,
 
-On Fri, 27 Nov 2015 00:34:24 +0300, Alexey Brodkin wrote:
-> What happens util-linux on configuration step tries to build
-> and example that uses timer_create() function. That function
-> exists in librt and configuration utility correctly adds this
-> lib (-lrt).
-> 
-> But timer_create() uses pthreads internally and so for successful
-> linkage "-lpthread" is required as well (in addition to "-lrt").
-> 
-> 0005-build-sys-use-REALTIME_LIBS.patch is a back-port of upstream
-> commit
-> https://github.com/karelzak/util-linux/commit/b97edfe731fdf3d3e92e40494b22658207ab6d3c
-> that won't apply cleanly on v2.27.1
-> 
-> 0006-buildsys-fix-static-configuration-and-building.patch was just
-> sent upstream, see https://github.com/karelzak/util-linux/pull/234
-> 
-> Both patches must be removed on util-linux version bump.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-You got some feedback from upstream on patch 0006, could you take it
-into account and resend an updated patch?
-
-They fixed the timer_createx problem spotted by Yann in
-https://github.com/karelzak/util-linux/commit/f07a82c9d8141dd295c2453e3c5804f997ed7ce5.
+Another ping about this patch. It is moving away from the luarocks
+infrastructure to the cmake-package infra, so I'd like to have your Lua
+expert agreement.
 
 Thanks!
 
 Thomas
+
+On Sat, 10 Oct 2015 11:40:09 +0200, Thomas Petazzoni wrote:
+> Fran?ois,
+> 
+> The patch below is touching a Lua package, can you review/test/ack ?
+> 
+> Thanks a lot!
+> 
+> Thomas
+> 
+> On Thu,  8 Oct 2015 04:12:54 +0200, J?rg Krause wrote:
+> > Switch to more recent github repository.
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > ---
+> > Changes v1 -> v2:
+> >   - fix install paths for lib and lua files
+> > ---
+> >  package/lzlib/Config.in  | 2 +-
+> >  package/lzlib/lzlib.hash | 2 --
+> >  package/lzlib/lzlib.mk   | 8 +++++---
+> >  3 files changed, 6 insertions(+), 6 deletions(-)
+> >  delete mode 100644 package/lzlib/lzlib.hash
+> > 
+> > diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
+> > index c123019..f7fae15 100644
+> > --- a/package/lzlib/Config.in
+> > +++ b/package/lzlib/Config.in
+> > @@ -7,4 +7,4 @@ config BR2_PACKAGE_LZLIB
+> >  	  functions and also to read/write gzip files using an
+> >  	  interface similar to the base io package.
+> >  
+> > -	  http://luaforge.net/projects/lzlib/
+> > +	  https://github.com/LuaDist/lzlib
+> > diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
+> > deleted file mode 100644
+> > index d823e8b..0000000
+> > --- a/package/lzlib/lzlib.hash
+> > +++ /dev/null
+> > @@ -1,2 +0,0 @@
+> > -# Locally calculated
+> > -sha256	c10055bde2c0a0ed14f22c1ee0701910b0b9885245baf7911201ab4dfd3b828c  lzlib-0.4.work3-1.src.rock
+> > diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+> > index ec37842..91f380a 100644
+> > --- a/package/lzlib/lzlib.mk
+> > +++ b/package/lzlib/lzlib.mk
+> > @@ -4,9 +4,11 @@
+> >  #
+> >  ################################################################################
+> >  
+> > -LZLIB_VERSION = 0.4.work3-1
+> > -LZLIB_SUBDIR = lzlib-0.4-work3
+> > +LZLIB_VERSION = 0.4.3
+> > +LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+> >  LZLIB_DEPENDENCIES = zlib
+> >  LZLIB_LICENSE = MIT
+> > +LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+> > +	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+> >  
+> > -$(eval $(luarocks-package))
+> > +$(eval $(cmake-package))
+> 
+> 
+> 
+
+
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
