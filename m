@@ -1,28 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 21:52:38 +0100
-Subject: [Buildroot] [PATCH 1/1] Add config to nfsd to set number of
- threads
-In-Reply-To: <1450381505-3796-1-git-send-email-universeII@gmx.de>
-References: <1450381505-3796-1-git-send-email-universeII@gmx.de>
-Message-ID: <20151217215238.388d3877@free-electrons.com>
+Date: Thu, 17 Dec 2015 21:53:00 +0100
+Subject: [Buildroot] [git commit] irssi: update download URL
+Message-ID: <20151217205343.F180F82563@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas Ehmanns,
+commit: http://git.buildroot.net/buildroot/commit/?id=97767366f5bcce6c8bec71706e61e82956fb4723
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Dec 2015 20:45:05 +0100, Andreas Ehmanns wrote:
-> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-> ---
->  package/nfs-utils/S60nfs | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+Irssi source packages are now hosted on GitHub.
 
-Applied after adjusting the commit title, thanks.
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/irssi/irssi.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 2207daf..176dce7 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -6,7 +6,9 @@
+ 
+ IRSSI_VERSION = 0.8.17
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.bz2
+-IRSSI_SITE = http://irssi.org/files
++# Do not use the github helper here. The generated tarball is *NOT* the
++# same as the one uploaded by upstream for the release.
++IRSSI_SITE = https://github.com/irssi-import/irssi/releases/download/$(IRSSI_VERSION)
+ IRSSI_LICENSE = GPLv2+
+ IRSSI_LICENSE_FILES = COPYING
+ IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses
