@@ -1,32 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:05:18 +0100
-Subject: [Buildroot] [PATCH] libtirpc: using sys/queue.h from staging
-In-Reply-To: <1449068879-29945-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1449068879-29945-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20151217220518.4ba77ecc@free-electrons.com>
+Date: Thu, 17 Dec 2015 22:08:13 +0100
+Subject: [Buildroot] [PATCH] package/arptables: add patch to fix musl
+ build issue
+In-Reply-To: <1449030783-19533-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1449030783-19533-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20151217220813.5aab367a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+Dear J?rg Krause,
 
-On Wed,  2 Dec 2015 13:07:59 -0200, Sergio Prado wrote:
-> Now that musl toolchains depend on netbsd-queue package, a
-> implementation of sys/queue.h will always be available in the
-> staging directory, so we can remove the patch that adds a local
-> sys/queue.h implementation.
+On Wed,  2 Dec 2015 05:33:03 +0100, J?rg Krause wrote:
+> Due to clashes in the namespace between the Linux Kernel headers and the
+> netinet headers building arptables with the musl C library fails.
 > 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> Best advice from the musl developers is to not include both headers in a
+> userspace tool (see the thread on the musl mailing list [1], especially [2]).
+> 
+> Since arptables only requires a few definitions from the Linux Kernel headers
+> we opt-out the clashing header files and define the needed definitions.
+> 
+> Patch sent upstream [3].
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/b72/b721e4fa24a0728c20fd2ec0663c2b5981387642/
+> http://autobuild.buildroot.net/results/4e9/4e9e0ed9454d258ef4333e847dc394ff22378ca4/
+> http://autobuild.buildroot.net/results/b39/b3951f700ab1664e06e14d95964875fc8e3dd8f4/
+> http://autobuild.buildroot.net/results/716/716e81f49f8894b7248f394919c8f22efb908277/
+> 
+> [1] http://www.openwall.com/lists/musl/2012/10/09/1
+> [2] http://www.openwall.com/lists/musl/2012/10/11/1
+> [3] http://marc.info/?l=netfilter&m=144903021705206&w=2
+> 
+> Cc: Brendan Heading <brendanheading@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  ...006-Disable-DES-authentification-support.patch} |   0
->  package/libtirpc/0006-Use-local-bsdqueue.h.patch   | 903 ---------------------
->  ...-missing-rwlock_unlocks-in-xprt_register.patch} |   0
->  3 files changed, 903 deletions(-)
->  rename package/libtirpc/{0007-Disable-DES-authentification-support.patch => 0006-Disable-DES-authentification-support.patch} (100%)
->  delete mode 100644 package/libtirpc/0006-Use-local-bsdqueue.h.patch
->  rename package/libtirpc/{0008-Add-missing-rwlock_unlocks-in-xprt_register.patch => 0007-Add-missing-rwlock_unlocks-in-xprt_register.patch} (100%)
+>  package/arptables/0004-Fix-musl-build-issue.patch | 71 +++++++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 package/arptables/0004-Fix-musl-build-issue.patch
 
 Applied, thanks.
 
