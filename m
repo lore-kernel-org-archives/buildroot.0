@@ -1,31 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 23:49:55 +0100
-Subject: [Buildroot] [PATCH v2] sysvinit: arm64 build fix
-In-Reply-To: <875368a848cb37f12c0c13638c987ce0f7783700.1442850883.git.jpinto@synopsys.com>
-References: <875368a848cb37f12c0c13638c987ce0f7783700.1442850883.git.jpinto@synopsys.com>
-Message-ID: <20151217234955.3d27d823@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 18 Dec 2015 00:06:07 +0100
+Subject: [Buildroot] [PATCH 0/4] website caring
+In-Reply-To: <20151217133243.6101f826@free-electrons.com>
+References: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20151217133243.6101f826@free-electrons.com>
+Message-ID: <56733FDF.805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Joao Pinto,
-
-On Wed, 16 Dec 2015 15:21:38 +0000, Joao Pinto wrote:
-> sysvinit was not able to be built for arm64 architectures.
-> The package patch was changed according to the suggestion of 
-> Thomas Petazzoni.
+On 17-12-15 13:32, Thomas Petazzoni wrote:
+> Angelo,
 > 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-> ---
->  package/sysvinit/0001-fix-libcrypt-test.patch | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+> On Fri,  4 Dec 2015 08:21:10 +0100, Angelo Compagnucci wrote:
+>> This patch series:
+>>
+>> * Fixes all errors found by html tidy
+>> * Fixes indentation on all html using html tidy rules
+>> * Add tidy_config.txt with tidy configuration used in
+>>   reindentation
+>> * Resizes images to a correct size
+>> * Minor cosmetic changes to docs and download pages
+>>
+>> Angelo Compagnucci (4):
+>>   docs/website: fixing html tidy errors and warnings
+>>   docs/website: html cleaning and indentation fixing
+>>   docs/website: resizing images
+>>   docs/website: cosmetic changes
+> 
+> Thanks for this patch series. You received numerous comments from
+> Arnout. Could you take them into account and resend an updated patch
+> series ?
 
-Applied, thanks.
+ Angelo already replied that he would not continue to work on it. So you could
+just as well have marked it as rejected.
 
-Thomas
+ Regards,
+ Arnout
+
+> 
+> In the mean time, I will mark your patches as "Changes Requested" in
+> patchwork.
+> 
+> Thanks,
+> 
+> Thomas
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
