@@ -1,39 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:29:52 +0100
-Subject: [Buildroot] [PATCH v3] libgdiplus: new package
-In-Reply-To: <1448410510-23087-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1448410510-23087-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20151217222952.28cfb35c@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 17 Dec 2015 22:34:15 +0100
+Subject: [Buildroot] [PATCH 3/4] torsmo: add a hash file
+In-Reply-To: <20151217172305.7636801d@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 17 Dec 2015 17:23:05 +0100")
+References: <1449059383-62131-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1449059383-62131-3-git-send-email-Vincent.Riera@imgtec.com>
+ <20151217172305.7636801d@free-electrons.com>
+Message-ID: <87bn9oiwtk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 24 Nov 2015 22:15:10 -0200, Sergio Prado wrote:
-> Libgdiplus is an open source implementation of the GDI+ API.
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
-> Changes v2 -> v3:
->   - removing md5 hash
->   - adding a comment explaining the source code license
+ > Dear Vicente Olivert Riera,
+ > On Wed, 2 Dec 2015 12:29:42 +0000, Vicente Olivert Riera wrote:
+ >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ >> ---
+ >> package/torsmo/torsmo.hash | 2 ++
+ >> 1 file changed, 2 insertions(+)
+ >> create mode 100644 package/torsmo/torsmo.hash
 
-There were a few remaining trailing whitespaces. It would be good if
-you could tune your text editor configuration so that you can clearly
-see the trailing whitespaces.
+ > Applied, thanks. However, I think you could send a patch to deprecate
+ > this package. It is really not something that is maintained or
+ > evolving, it doesn't have a website or anything. It's really a leftover
+ > from the time where we had some avr32 support contributed by Atmel and
+ > other folks.
 
-Other than that, I couldn't spot any issue, so I applied. Don't
-hesitate to monitor http://autobuild.buildroot.org and/or the daily
-autobuild report e-mails to see if there are any libgdiplus related
-failures.
+I agree, it is very old and hasn't been updated since it was added.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
