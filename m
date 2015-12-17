@@ -1,76 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Dec 2015 23:40:23 +0100
-Subject: [Buildroot] [PATCH 0/4 v2] Do not select providers of virtual
-	packages (branch yem/dont-select-providers)
-Message-ID: <cover.1450391976.git.yann.morin.1998@free.fr>
+Date: Thu, 17 Dec 2015 23:40:24 +0100
+Subject: [Buildroot] [PATCH 1/4 v2] package/dnsmasq: do not select Lua,
+	depend on it
+In-Reply-To: <cover.1450391976.git.yann.morin.1998@free.fr>
+References: <cover.1450391976.git.yann.morin.1998@free.fr>
+Message-ID: <2f7b5dcb7130aaea8ac3cdc19381c3d9db0ebfe3.1450391976.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Lua is a provider for the virtual package lua-interpreter, so it cannot
+be selected, as explained in the manual.
 
-This series fixes the selection of the Lua package, a sit is a provider
-for the virtual package lua-interpreter.
+Turn the 'select' into a 'depends on'.
 
-As explained in the manual, it is not allowed to select the provider of
-a virtual package. Quoting:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-    If your package really requires a specific provider, then you?ll
-    have to make your package depends on this provider; you can not
-    select a provider.
+---
+Note: I haven't check if dnsmasq could use luajit instead of Lua. This
+change is just a mechanical change.
 
-Followed by an explanations on the reasons this should not be done:
+---
+Changes v1 -> v2;
+  - drop the comment  (Thomas)
+---
+ package/dnsmasq/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_virtual_packages
-
-This series just cleanups the situation with respect to the
-lua-interpreter virtual package. It has not been checked if we
-had other virtual packages for which providers were selected.
-This can be done in a later series.
-
-
-Changes v1 -> v2:
-  - drop the comment about Lua beeing needed  (Thomas)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 1edb4c51dee78d7d26700c037f29558e73d27ee0:
-
-  Makefile: valgrind needs non-stripped dynamic linker library (2015-12-17 23:21:17 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/dont-select-providers
-
-for you to fetch changes up to 84fa969c68f847a8cbc781c28da5a5c2bc56dce8:
-
-  package/libedje: do not select Lua, depend on it (2015-12-17 23:38:13 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      package/dnsmasq: do not select Lua, depend on it
-      package/haserl: do not select Lua, depend on it
-      package/lighttpd: do not select Lua, depend on it
-      package/libedje: do not select Lua, depend on it
-
- package/dnsmasq/Config.in           | 2 +-
- package/efl/libedje/Config.in       | 4 ++--
- package/efl/libelementary/Config.in | 4 +++-
- package/efl/libethumb/Config.in     | 3 ++-
- package/enlightenment/Config.in     | 6 ++++--
- package/haserl/Config.in            | 2 +-
- package/lighttpd/Config.in          | 2 +-
- 7 files changed, 14 insertions(+), 9 deletions(-)
-
+diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
+index 9e1c462..b4f34b8 100644
+--- a/package/dnsmasq/Config.in
++++ b/package/dnsmasq/Config.in
+@@ -38,7 +38,7 @@ config BR2_PACKAGE_DNSMASQ_IDN
+ 
+ config BR2_PACKAGE_DNSMASQ_LUA
+ 	bool "Lua scripting support"
+-	select BR2_PACKAGE_LUA
++	depends on BR2_PACKAGE_LUA
+ 	help
+ 	  Enable Lua scripting for dnsmasq
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
