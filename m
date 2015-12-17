@@ -1,292 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 23:54:58 +0100
-Subject: [Buildroot] [git commit] package/efl/libefl: add X11 support
-Message-ID: <20151217230816.430E9803E2@busybox.osuosl.org>
+Date: Fri, 18 Dec 2015 00:11:44 +0100
+Subject: [Buildroot] [PATCH v10 00/28] efl bump to 1.15.2
+In-Reply-To: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151218001144.5a685de2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c23d7f73514623d705872958436ee91b4db53d5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-Add an option to enable X11 support in libecore without graphic
-acceleration. libecore can use xlib or xcb support but the latter
-in not recommended by efl developpers [1]. Thereby the xcb support
-has been dropped with the bump to efl 1.15.
+On Tue, 15 Dec 2015 23:40:12 +0100, Romain Naour wrote:
 
-Also, set x-includes and x-libraries configure option for cross-compiling.
-Previous efl versions had cross-compilation issue (poisoned paths)
-if these options are not passed to configure script.
+> Romain Naour (28):
+>   package/efl/libefl: new package
+>   package/efl/libefl: add harfbuzz dependency
+>   package/efl/libefl: add wayland dependency
+>   package/efl/libefl: add webp dependency
+>   package/efl/libefl: add frame buffer config option
+>   package/efl/libefl: add jp2k config option
+>   package/efl/libefl: add X11 support
 
-In order to remove the dependency on libXp wich is no longer bundled in
-recent X11 release [2], backport an upstream patch [3] to remove xprint
-usage.
+All those ones applied. On the "libefl: new package" patch I've applied
+my two patches that I showed you on the mailing list.
 
-[1] https://git.enlightenment.org/core/efl.git/tree/configure.ac#n5002
-[2] http://www.x.org/wiki/Releases/ModuleVersions
-[3] https://git.enlightenment.org/core/efl.git/commit/?h=efl-1.15&id=434572355c7e929b84210b2f795634d38f13c913
+>   package/efl/libefl: add OpenGLES support
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../libefl/0002-ecore_x-Remove-XPrint-usage.patch  | 153 +++++++++++++++++++++
- package/efl/libefl/Config.in                       |  16 +++
- package/efl/libefl/libefl.mk                       |  33 ++++-
- 3 files changed, 197 insertions(+), 5 deletions(-)
+This one I wasn't sure about the "choice"; we had some discussion about
+it with Yann on IRC.
 
-diff --git a/package/efl/libefl/0002-ecore_x-Remove-XPrint-usage.patch b/package/efl/libefl/0002-ecore_x-Remove-XPrint-usage.patch
-new file mode 100644
-index 0000000..4687e4c
---- /dev/null
-+++ b/package/efl/libefl/0002-ecore_x-Remove-XPrint-usage.patch
-@@ -0,0 +1,153 @@
-+From 434572355c7e929b84210b2f795634d38f13c913 Mon Sep 17 00:00:00 2001
-+From: Derek Foreman <derekf@osg.samsung.com>
-+Date: Tue, 6 Oct 2015 13:13:01 -0400
-+Subject: [PATCH] ecore_x: Remove XPrint usage
-+
-+Summary:
-+Xprint has been deprecated since 2008.
-+
-+It's recently (August 2015) been removed from debian.
-+
-+Reviewers: zmike, devilhorns
-+
-+Subscribers: cedric
-+
-+Differential Revision: https://phab.enlightenment.org/D3150
-+---
-+ configure.ac                           |  1 -
-+ src/lib/ecore_x/xlib/ecore_x.c         | 78 ----------------------------------
-+ src/lib/ecore_x/xlib/ecore_x_private.h |  3 --
-+ 3 files changed, 82 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 9c17946..c34191c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -3624,7 +3624,6 @@ if test "x${want_x11_xlib}" = "xyes" ; then
-+    ECORE_CHECK_X_EXTENSION([Xdpms], [dpms.h], [Xext], [DPMSQueryExtension])
-+    ECORE_CHECK_X_EXTENSION([Xfixes], [Xfixes.h], [Xfixes], [XFixesExpandRegion])
-+    ECORE_CHECK_X_EXTENSION([Xinerama], [Xinerama.h], [Xinerama], [XineramaQueryScreens])
-+-   ECORE_CHECK_X_EXTENSION([Xprint], [Print.h], [Xp], [XpQueryScreens])
-+    ECORE_CHECK_X_EXTENSION([Xrandr], [Xrandr.h], [Xrandr], [XRRGetScreenResourcesCurrent])
-+    ECORE_CHECK_X_EXTENSION([Xrender], [Xrender.h], [Xrender], [XRenderFindVisualFormat])
-+    ECORE_CHECK_X_EXTENSION([Xtest], [XTest.h], [Xtst], [XTestFakeKeyEvent])
-+diff --git a/src/lib/ecore_x/xlib/ecore_x.c b/src/lib/ecore_x/xlib/ecore_x.c
-+index 096f64d..8e2057e 100644
-+--- a/src/lib/ecore_x/xlib/ecore_x.c
-++++ b/src/lib/ecore_x/xlib/ecore_x.c
-+@@ -1219,9 +1219,6 @@ ecore_x_window_root_list(int *num_ret)
-+ {
-+    int num, i;
-+    Ecore_X_Window *roots;
-+-#ifdef ECORE_XPRINT
-+-   int xp_base, xp_err_base;
-+-#endif /* ifdef ECORE_XPRINT */
-+ 
-+    if (!num_ret)
-+      return NULL;
-+@@ -1229,80 +1226,6 @@ ecore_x_window_root_list(int *num_ret)
-+    *num_ret = 0;
-+ 
-+    LOGFN(__FILE__, __LINE__, __FUNCTION__);
-+-#ifdef ECORE_XPRINT
-+-   num = ScreenCount(_ecore_x_disp);
-+-   if (XpQueryExtension(_ecore_x_disp, &xp_base, &xp_err_base))
-+-     {
-+-        Screen **ps = NULL;
-+-        int psnum = 0;
-+-
-+-        ps = XpQueryScreens(_ecore_x_disp, &psnum);
-+-        if (ps)
-+-          {
-+-             int overlap, j;
-+-
-+-             overlap = 0;
-+-             for (i = 0; i < num; i++)
-+-               {
-+-                  for (j = 0; j < psnum; j++)
-+-                    {
-+-                       if (ScreenOfDisplay(_ecore_x_disp, i) == ps[j])
-+-                         overlap++;
-+-                    }
-+-               }
-+-             roots = malloc(MAX((num - overlap) * sizeof(Ecore_X_Window), 1));
-+-             if (roots)
-+-               {
-+-                  int k;
-+-
-+-                  k = 0;
-+-                  for (i = 0; i < num; i++)
-+-                    {
-+-                       int is_print;
-+-
-+-                       is_print = 0;
-+-                       for (j = 0; j < psnum; j++)
-+-                         {
-+-                            if (ScreenOfDisplay(_ecore_x_disp, i) == ps[j])
-+-                              {
-+-                                 is_print = 1;
-+-                                 break;
-+-                              }
-+-                         }
-+-                       if (!is_print)
-+-                         {
-+-                            roots[k] = RootWindow(_ecore_x_disp, i);
-+-                            k++;
-+-                         }
-+-                    }
-+-                  *num_ret = k;
-+-               }
-+-
-+-             XFree(ps);
-+-          }
-+-        else
-+-          {
-+-             roots = malloc(num * sizeof(Ecore_X_Window));
-+-             if (!roots)
-+-               return NULL;
-+-
-+-             *num_ret = num;
-+-             for (i = 0; i < num; i++)
-+-               roots[i] = RootWindow(_ecore_x_disp, i);
-+-          }
-+-     }
-+-   else
-+-     {
-+-        roots = malloc(num * sizeof(Ecore_X_Window));
-+-        if (!roots)
-+-          return NULL;
-+-
-+-        *num_ret = num;
-+-        for (i = 0; i < num; i++)
-+-          roots[i] = RootWindow(_ecore_x_disp, i);
-+-     }
-+-
-+-#else /* ifdef ECORE_XPRINT */
-+    num = ScreenCount(_ecore_x_disp);
-+    roots = malloc(num * sizeof(Ecore_X_Window));
-+    if (!roots)
-+@@ -1311,7 +1234,6 @@ ecore_x_window_root_list(int *num_ret)
-+    *num_ret = num;
-+    for (i = 0; i < num; i++)
-+      roots[i] = RootWindow(_ecore_x_disp, i);
-+-#endif /* ifdef ECORE_XPRINT */
-+    return roots;
-+ }
-+ 
-+diff --git a/src/lib/ecore_x/xlib/ecore_x_private.h b/src/lib/ecore_x/xlib/ecore_x_private.h
-+index 97b3858..07c09fb 100644
-+--- a/src/lib/ecore_x/xlib/ecore_x_private.h
-++++ b/src/lib/ecore_x/xlib/ecore_x_private.h
-+@@ -19,9 +19,6 @@
-+ #ifdef ECORE_XCURSOR
-+ #include <X11/Xcursor/Xcursor.h>
-+ #endif /* ifdef ECORE_XCURSOR */
-+-#ifdef ECORE_XPRINT
-+-#include <X11/extensions/Print.h>
-+-#endif /* ifdef ECORE_XPRINT */
-+ #ifdef ECORE_XINERAMA
-+ #include <X11/extensions/Xinerama.h>
-+ #endif /* ifdef ECORE_XINERAMA */
-+-- 
-+2.4.3
-+
-diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 3ce5606..b2c8773 100644
---- a/package/efl/libefl/Config.in
-+++ b/package/efl/libefl/Config.in
-@@ -114,6 +114,22 @@ comment "libecore video support"
- config BR2_PACKAGE_LIBEFL_FB
- 	bool "FB support"
- 
-+config BR2_PACKAGE_LIBEFL_X_XLIB
-+	bool "X11 support (xlib)"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXINERAMA
-+	select BR2_PACKAGE_XLIB_LIBXP
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
-+	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_GLPROTO
-+
- comment "libevas loaders"
- 
- config BR2_PACKAGE_LIBEFL_PNG
-diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index 5c02440..0472827 100644
---- a/package/efl/libefl/libefl.mk
-+++ b/package/efl/libefl/libefl.mk
-@@ -23,8 +23,9 @@ LIBEFL_INSTALL_STAGING = YES
- LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg lua udev \
- 	util-linux zlib
- 
--# regenerate the configure script:
--# https://phab.enlightenment.org/T2718
-+# Regenerate the autotools:
-+#  - to fix an issue in eldbus-codegen: https://phab.enlightenment.org/T2718
-+#  - to remove dependency on libXp: https://phab.enlightenment.org/D3150
- LIBEFL_AUTORECONF = YES
- LIBEFL_GETTEXTIZE = YES
- 
-@@ -32,18 +33,18 @@ LIBEFL_GETTEXTIZE = YES
- # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-sdl: disable sdl2 support.
- # --disable-systemd: disable systemd support.
-+# --disable-xinput22: disable X11 XInput v2.2+ support.
- # --enable-lua-old: disable Elua and remove luajit dependency.
- # --with-opengl=none: disable opengl support.
--# --with-x11=none: remove dependency on X.org.
- LIBEFL_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--disable-cxx-bindings \
- 	--disable-sdl \
- 	--disable-systemd \
-+	--disable-xinput22 \
- 	--enable-lua-old \
--	--with-opengl=none \
--	--with-x11=none
-+	--with-opengl=none
- 
- # Disable untested configuration warning.
- ifeq ($(BR2_PACKAGE_LIBEFL_HAS_RECOMMENDED_CONFIG),)
-@@ -145,6 +146,28 @@ else
- LIBEFL_CONF_OPTS += --disable-fb
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
-+LIBEFL_CONF_OPTS += \
-+	--with-x11=xlib \
-+	--with-x=$(STAGING_DIR) \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib
-+
-+LIBEFL_DEPENDENCIES += \
-+	xlib_libX11 \
-+	xlib_libXcomposite \
-+	xlib_libXcursor \
-+	xlib_libXdamage \
-+	xlib_libXext \
-+	xlib_libXinerama \
-+	xlib_libXrandr \
-+	xlib_libXrender \
-+	xlib_libXScrnSaver \
-+	xlib_libXtst
-+else
-+LIBEFL_CONF_OPTS += --with-x11=none
-+endif
-+
- # Loaders that need external dependencies needs to be --enable-XXX=yes
- # otherwise the default is '=static'.
- # All other loaders are statically built-in
+>   package/efl/libefl: enable xinput2.2
+
+This one I thought should have been part of the X11 support patch, but
+now that I have applied the X11 support patch, I think I'll apply this
+one separately.
+
+>   package/libevas-generic-loaders: bump to version 1.15.0
+>   package/libevas-generic-loaders: add libraw dependency
+>   package/efl/libelementary: bump to version 1.15.2
+>   package/efl: libefl and libelementary share the same version number
+>   package/enlightenment: bump to version 0.19.12
+>   package/expedite: bump to efl-1.15 branch
+>   package/dbus-cpp: switch to libefl
+>   package/efl/libethumb: remove package
+>   package/efl/libedje: remove package
+>   package/efl/libembryo: remove package
+>   package/efl/libeio: remove package
+>   package/efl/libefreet: remove package
+>   package/efl/libedbus: remove package
+>   package/efl/libecore: remove package
+>   package/efl/libevas: remove package
+>   package/efl/libeet: remove package
+>   package/efl/libeina: remove package
+
+All applied.
+
+>   package/libemotion-generic-players: new package
+
+I want to do some more review on this one.
+
+>   package/efl: rename libefl to efl
+
+I don't understand the logic of this one, and why we're moving from a
+'menuconfig' to a 'menu'.
+
+So there are four patches left to be applied out of 28.
+
+Thanks a lot for working on this, definitely great to have an
+up-to-date EFL stack.
+
+To be honest, with the version number now being shared with just libefl
+and libelementary, I am not sure it is really worth the effort to have
+a package/efl/ directory with those two packages. What about making
+them normal top-level packages ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
