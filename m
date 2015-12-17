@@ -1,72 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:10:20 +0100
-Subject: [Buildroot] [git commit] vnstat: bump to version 1.14
-Message-ID: <20151217211415.65BD17F8DF@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 22:07:53 +0100
+Subject: [Buildroot] [git commit] package/arptables: add patch to fix musl
+	build issue
+Message-ID: <20151217211415.4B7AD82571@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7fe163368e33873035a7ff3b66e15f3240155eee
+commit: http://git.buildroot.net/buildroot/commit/?id=fdfd17c7e19889ac61a449df373421f4dfefda85
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add new dependency on BR2_USE_WCHAR (version 1.14 uses mbstowcs())
-and rewrap help text to 72 characters.
+Due to clashes in the namespace between the Linux Kernel headers and the
+netinet headers building arptables with the musl C library fails.
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Best advice from the musl developers is to not include both headers in a
+userspace tool (see the thread on the musl mailing list [1], especially [2]).
+
+Since arptables only requires a few definitions from the Linux Kernel headers
+we opt-out the clashing header files and define the needed definitions.
+
+Patch sent upstream [3].
+
+Fixes:
+http://autobuild.buildroot.net/results/b72/b721e4fa24a0728c20fd2ec0663c2b5981387642/
+http://autobuild.buildroot.net/results/4e9/4e9e0ed9454d258ef4333e847dc394ff22378ca4/
+http://autobuild.buildroot.net/results/b39/b3951f700ab1664e06e14d95964875fc8e3dd8f4/
+http://autobuild.buildroot.net/results/716/716e81f49f8894b7248f394919c8f22efb908277/
+
+[1] http://www.openwall.com/lists/musl/2012/10/09/1
+[2] http://www.openwall.com/lists/musl/2012/10/11/1
+[3] http://marc.info/?l=netfilter&m=144903021705206&w=2
+
+Cc: Brendan Heading <brendanheading@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vnstat/Config.in   | 16 +++++++++++-----
- package/vnstat/vnstat.hash |  2 +-
- package/vnstat/vnstat.mk   |  2 +-
- 3 files changed, 13 insertions(+), 7 deletions(-)
+ package/arptables/0004-Fix-musl-build-issue.patch | 71 +++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-diff --git a/package/vnstat/Config.in b/package/vnstat/Config.in
-index 0df4982..bb68c14 100644
---- a/package/vnstat/Config.in
-+++ b/package/vnstat/Config.in
-@@ -1,11 +1,17 @@
- config BR2_PACKAGE_VNSTAT
- 	bool "vnstat"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR # mbstowcs()
- 	help
--	  vnStat is a console-based network traffic monitor that keeps a log of
--	  network traffic for the selected interface(s). It uses the network
--	  interface statistics provided by the kernel as information source.
--	  This means that vnStat won't actually be sniffing any traffic and also
--	  ensures light use of system resources.
-+	  vnStat is a console-based network traffic monitor that keeps a
-+	  log of network traffic for the selected interface(s). It uses
-+	  the network interface statistics provided by the kernel as
-+	  information source. This means that vnStat won't actually be
-+	  sniffing any traffic and also ensures light use of system
-+	  resources.
- 
- 	  http://humdi.net/vnstat
+diff --git a/package/arptables/0004-Fix-musl-build-issue.patch b/package/arptables/0004-Fix-musl-build-issue.patch
+new file mode 100644
+index 0000000..e9419b0
+--- /dev/null
++++ b/package/arptables/0004-Fix-musl-build-issue.patch
+@@ -0,0 +1,71 @@
++From cbf84a0bc377c6a368d30571f37ebfab27784697 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Wed, 2 Dec 2015 04:57:33 +0100
++Subject: [PATCH 4/4] Fix musl build issue
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+comment "vnstat needs a toolchain w/ wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
-index a3334d6..43438a7 100644
---- a/package/vnstat/vnstat.hash
-+++ b/package/vnstat/vnstat.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	af1050d9c1b22d4b9742fe0d1818de9eb1037b8e7f9ba67b962e108d8527be69	vnstat-1.12.tar.gz
-+sha256	f8462a47d85d0890493dc9eaeafbc725ae631aa5b103fb7f8af4ddb2314e8386	vnstat-1.14.tar.gz
-diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
-index e0a64d5..8512d2d 100644
---- a/package/vnstat/vnstat.mk
-+++ b/package/vnstat/vnstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VNSTAT_VERSION = 1.12
-+VNSTAT_VERSION = 1.14
- VNSTAT_SITE = http://humdi.net/vnstat
- VNSTAT_LICENSE = GPLv2
- VNSTAT_LICENSE_FILES = COPYING
++Due to clashes in the namespace between the Linux Kernel headers and the
++netinet headers building arptables with the musl C library fails.
++
++Best advice from the musl developers is to not include both headers in a
++userspace tool (see the thread on the musl mailing list [1], especially [2]).
++
++Since arptables only requires a few definitions from the Linux Kernel headers
++we opt-out the clashing header files and define the needed definitions.
++
++[1] http://www.openwall.com/lists/musl/2012/10/09/1
++[2] http://www.openwall.com/lists/musl/2012/10/11/1
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ extensions/arpt_CLASSIFY.c    |  7 +++++++
++ include/linux/netfilter_arp.h | 11 +++++++++++
++ 2 files changed, 18 insertions(+)
++
++diff --git a/extensions/arpt_CLASSIFY.c b/extensions/arpt_CLASSIFY.c
++index cb5770b..c58129f 100644
++--- a/extensions/arpt_CLASSIFY.c
+++++ b/extensions/arpt_CLASSIFY.c
++@@ -21,7 +21,14 @@
++ #include <stdio.h>
++ #include <getopt.h>
++ #include <arptables.h>
+++
+++#ifdef __KERNEL__
++ #include <linux/netfilter/xt_CLASSIFY.h>
+++#else
+++struct xt_classify_target_info {
+++	uint32_t priority;
+++};
+++#endif
++ 
++ #define TC_H_MAJ_MASK (0xFFFF0000U)
++ #define TC_H_MIN_MASK (0x0000FFFFU)
++diff --git a/include/linux/netfilter_arp.h b/include/linux/netfilter_arp.h
++index 92bc6dd..2a63e82 100644
++--- a/include/linux/netfilter_arp.h
+++++ b/include/linux/netfilter_arp.h
++@@ -5,7 +5,18 @@
++  * (C)2002 Rusty Russell IBM -- This code is GPL.
++  */
++ 
+++#ifdef __KERNEL__
++ #include <linux/netfilter.h>
+++#else
+++/* Responses from hook functions. */
+++#define NF_DROP 0
+++#define NF_ACCEPT 1
+++#define NF_STOLEN 2
+++#define NF_QUEUE 3
+++#define NF_REPEAT 4
+++#define NF_STOP 5
+++#define NF_MAX_VERDICT NF_STOP
+++#endif
++ 
++ /* There is no PF_ARP. */
++ #define NF_ARP		0
++-- 
++2.6.2
++
