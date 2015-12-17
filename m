@@ -1,52 +1,44 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 17 Dec 2015 12:31:08 +0000
-Subject: [Buildroot] [PATCH 2/3] qemu: wrap lines to 72 characters length
-In-Reply-To: <20151217130858.058c2c65@free-electrons.com>
-References: <1450353428-57815-1-git-send-email-Vincent.Riera@imgtec.com>
- <1450353428-57815-2-git-send-email-Vincent.Riera@imgtec.com>
- <20151217130858.058c2c65@free-electrons.com>
-Message-ID: <5672AB0C.7050806@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Dec 2015 13:32:43 +0100
+Subject: [Buildroot] [PATCH 0/4] website caring
+In-Reply-To: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20151217133243.6101f826@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/15 12:08, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> I'm with the commit, with one exception.
-> 
-> On Thu, 17 Dec 2015 11:57:07 +0000, Vicente Olivert Riera wrote:
-> 
->> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
->> index c5c3f05..e9b944b 100644
->> --- a/package/qemu/Config.in.host
->> +++ b/package/qemu/Config.in.host
->> @@ -3,15 +3,16 @@ config BR2_PACKAGE_HOST_QEMU
->>  	# So far, we only build the user mode emulation, so this list
->>  	# of architecture dependencies only takes into account this
->>  	# emulation mode.
->> -	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
->> -		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
->> -		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
->> -		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
->> -		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
->> -		BR2_sparc        || BR2_x86_64
->> +	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || \
->> +		BR2_m68k || BR2_microblazeel || BR2_microblazebe || \
->> +		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el \
->> +		|| BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
->> +		BR2_sh || BR2_sparc || BR2_x86_64
-> 
-> Why are you doing this? The original version is much more readable.
+Angelo,
 
-Ok, no problem. You can apply the patch with that part removed. Or do
-you prefer a v2?
-
-Regards,
-
-Vincent.
-
-> Thomas
+On Fri,  4 Dec 2015 08:21:10 +0100, Angelo Compagnucci wrote:
+> This patch series:
 > 
+> * Fixes all errors found by html tidy
+> * Fixes indentation on all html using html tidy rules
+> * Add tidy_config.txt with tidy configuration used in
+>   reindentation
+> * Resizes images to a correct size
+> * Minor cosmetic changes to docs and download pages
+> 
+> Angelo Compagnucci (4):
+>   docs/website: fixing html tidy errors and warnings
+>   docs/website: html cleaning and indentation fixing
+>   docs/website: resizing images
+>   docs/website: cosmetic changes
+
+Thanks for this patch series. You received numerous comments from
+Arnout. Could you take them into account and resend an updated patch
+series ?
+
+In the mean time, I will mark your patches as "Changes Requested" in
+patchwork.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
