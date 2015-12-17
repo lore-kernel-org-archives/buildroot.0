@@ -1,82 +1,292 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 23:52:59 +0100
-Subject: [Buildroot] [git commit] package/efl/libefl: add webp dependency
-Message-ID: <20151217230816.2B9FA7F892@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 23:54:58 +0100
+Subject: [Buildroot] [git commit] package/efl/libefl: add X11 support
+Message-ID: <20151217230816.430E9803E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=128526c7678c912f6636a165a810f27bacc30fcc
+commit: http://git.buildroot.net/buildroot/commit/?id=1c23d7f73514623d705872958436ee91b4db53d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-WebP is a new image format that provides lossless and lossy
-compression for images on the web. So enabling webp support in efl
-libraries allow to loads images using WebP.
+Add an option to enable X11 support in libecore without graphic
+acceleration. libecore can use xlib or xcb support but the latter
+in not recommended by efl developpers [1]. Thereby the xcb support
+has been dropped with the bump to efl 1.15.
 
-Also, it one of the "highly recommended" dependencies [1] according to
-the README but disabling it doesn't need the
---enable-i-really-know-what-i-am-doing... option.  That's why
-BR2_PACKAGE_LIBEFL_WEBP is not added to
-BR2_PACKAGE_LIBEFL_HAS_RECOMMENDED_CONFIG.
+Also, set x-includes and x-libraries configure option for cross-compiling.
+Previous efl versions had cross-compilation issue (poisoned paths)
+if these options are not passed to configure script.
 
-[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
+In order to remove the dependency on libXp wich is no longer bundled in
+recent X11 release [2], backport an upstream patch [3] to remove xprint
+usage.
+
+[1] https://git.enlightenment.org/core/efl.git/tree/configure.ac#n5002
+[2] http://www.x.org/wiki/Releases/ModuleVersions
+[3] https://git.enlightenment.org/core/efl.git/commit/?h=efl-1.15&id=434572355c7e929b84210b2f795634d38f13c913
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libefl/Config.in | 6 ++++++
- package/efl/libefl/libefl.mk | 9 +++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ .../libefl/0002-ecore_x-Remove-XPrint-usage.patch  | 153 +++++++++++++++++++++
+ package/efl/libefl/Config.in                       |  16 +++
+ package/efl/libefl/libefl.mk                       |  33 ++++-
+ 3 files changed, 197 insertions(+), 5 deletions(-)
 
+diff --git a/package/efl/libefl/0002-ecore_x-Remove-XPrint-usage.patch b/package/efl/libefl/0002-ecore_x-Remove-XPrint-usage.patch
+new file mode 100644
+index 0000000..4687e4c
+--- /dev/null
++++ b/package/efl/libefl/0002-ecore_x-Remove-XPrint-usage.patch
+@@ -0,0 +1,153 @@
++From 434572355c7e929b84210b2f795634d38f13c913 Mon Sep 17 00:00:00 2001
++From: Derek Foreman <derekf@osg.samsung.com>
++Date: Tue, 6 Oct 2015 13:13:01 -0400
++Subject: [PATCH] ecore_x: Remove XPrint usage
++
++Summary:
++Xprint has been deprecated since 2008.
++
++It's recently (August 2015) been removed from debian.
++
++Reviewers: zmike, devilhorns
++
++Subscribers: cedric
++
++Differential Revision: https://phab.enlightenment.org/D3150
++---
++ configure.ac                           |  1 -
++ src/lib/ecore_x/xlib/ecore_x.c         | 78 ----------------------------------
++ src/lib/ecore_x/xlib/ecore_x_private.h |  3 --
++ 3 files changed, 82 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 9c17946..c34191c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -3624,7 +3624,6 @@ if test "x${want_x11_xlib}" = "xyes" ; then
++    ECORE_CHECK_X_EXTENSION([Xdpms], [dpms.h], [Xext], [DPMSQueryExtension])
++    ECORE_CHECK_X_EXTENSION([Xfixes], [Xfixes.h], [Xfixes], [XFixesExpandRegion])
++    ECORE_CHECK_X_EXTENSION([Xinerama], [Xinerama.h], [Xinerama], [XineramaQueryScreens])
++-   ECORE_CHECK_X_EXTENSION([Xprint], [Print.h], [Xp], [XpQueryScreens])
++    ECORE_CHECK_X_EXTENSION([Xrandr], [Xrandr.h], [Xrandr], [XRRGetScreenResourcesCurrent])
++    ECORE_CHECK_X_EXTENSION([Xrender], [Xrender.h], [Xrender], [XRenderFindVisualFormat])
++    ECORE_CHECK_X_EXTENSION([Xtest], [XTest.h], [Xtst], [XTestFakeKeyEvent])
++diff --git a/src/lib/ecore_x/xlib/ecore_x.c b/src/lib/ecore_x/xlib/ecore_x.c
++index 096f64d..8e2057e 100644
++--- a/src/lib/ecore_x/xlib/ecore_x.c
+++++ b/src/lib/ecore_x/xlib/ecore_x.c
++@@ -1219,9 +1219,6 @@ ecore_x_window_root_list(int *num_ret)
++ {
++    int num, i;
++    Ecore_X_Window *roots;
++-#ifdef ECORE_XPRINT
++-   int xp_base, xp_err_base;
++-#endif /* ifdef ECORE_XPRINT */
++ 
++    if (!num_ret)
++      return NULL;
++@@ -1229,80 +1226,6 @@ ecore_x_window_root_list(int *num_ret)
++    *num_ret = 0;
++ 
++    LOGFN(__FILE__, __LINE__, __FUNCTION__);
++-#ifdef ECORE_XPRINT
++-   num = ScreenCount(_ecore_x_disp);
++-   if (XpQueryExtension(_ecore_x_disp, &xp_base, &xp_err_base))
++-     {
++-        Screen **ps = NULL;
++-        int psnum = 0;
++-
++-        ps = XpQueryScreens(_ecore_x_disp, &psnum);
++-        if (ps)
++-          {
++-             int overlap, j;
++-
++-             overlap = 0;
++-             for (i = 0; i < num; i++)
++-               {
++-                  for (j = 0; j < psnum; j++)
++-                    {
++-                       if (ScreenOfDisplay(_ecore_x_disp, i) == ps[j])
++-                         overlap++;
++-                    }
++-               }
++-             roots = malloc(MAX((num - overlap) * sizeof(Ecore_X_Window), 1));
++-             if (roots)
++-               {
++-                  int k;
++-
++-                  k = 0;
++-                  for (i = 0; i < num; i++)
++-                    {
++-                       int is_print;
++-
++-                       is_print = 0;
++-                       for (j = 0; j < psnum; j++)
++-                         {
++-                            if (ScreenOfDisplay(_ecore_x_disp, i) == ps[j])
++-                              {
++-                                 is_print = 1;
++-                                 break;
++-                              }
++-                         }
++-                       if (!is_print)
++-                         {
++-                            roots[k] = RootWindow(_ecore_x_disp, i);
++-                            k++;
++-                         }
++-                    }
++-                  *num_ret = k;
++-               }
++-
++-             XFree(ps);
++-          }
++-        else
++-          {
++-             roots = malloc(num * sizeof(Ecore_X_Window));
++-             if (!roots)
++-               return NULL;
++-
++-             *num_ret = num;
++-             for (i = 0; i < num; i++)
++-               roots[i] = RootWindow(_ecore_x_disp, i);
++-          }
++-     }
++-   else
++-     {
++-        roots = malloc(num * sizeof(Ecore_X_Window));
++-        if (!roots)
++-          return NULL;
++-
++-        *num_ret = num;
++-        for (i = 0; i < num; i++)
++-          roots[i] = RootWindow(_ecore_x_disp, i);
++-     }
++-
++-#else /* ifdef ECORE_XPRINT */
++    num = ScreenCount(_ecore_x_disp);
++    roots = malloc(num * sizeof(Ecore_X_Window));
++    if (!roots)
++@@ -1311,7 +1234,6 @@ ecore_x_window_root_list(int *num_ret)
++    *num_ret = num;
++    for (i = 0; i < num; i++)
++      roots[i] = RootWindow(_ecore_x_disp, i);
++-#endif /* ifdef ECORE_XPRINT */
++    return roots;
++ }
++ 
++diff --git a/src/lib/ecore_x/xlib/ecore_x_private.h b/src/lib/ecore_x/xlib/ecore_x_private.h
++index 97b3858..07c09fb 100644
++--- a/src/lib/ecore_x/xlib/ecore_x_private.h
+++++ b/src/lib/ecore_x/xlib/ecore_x_private.h
++@@ -19,9 +19,6 @@
++ #ifdef ECORE_XCURSOR
++ #include <X11/Xcursor/Xcursor.h>
++ #endif /* ifdef ECORE_XCURSOR */
++-#ifdef ECORE_XPRINT
++-#include <X11/extensions/Print.h>
++-#endif /* ifdef ECORE_XPRINT */
++ #ifdef ECORE_XINERAMA
++ #include <X11/extensions/Xinerama.h>
++ #endif /* ifdef ECORE_XINERAMA */
++-- 
++2.4.3
++
 diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
-index 7d635d9..41b1243 100644
+index 3ce5606..b2c8773 100644
 --- a/package/efl/libefl/Config.in
 +++ b/package/efl/libefl/Config.in
-@@ -137,4 +137,10 @@ config BR2_PACKAGE_LIBEFL_TIFF
- 	help
- 	  This enables the loader code that loads tiff files.
+@@ -114,6 +114,22 @@ comment "libecore video support"
+ config BR2_PACKAGE_LIBEFL_FB
+ 	bool "FB support"
  
-+config BR2_PACKAGE_LIBEFL_WEBP
-+	bool "libevas webp image loader"
-+	select BR2_PACKAGE_WEBP
-+	help
-+	  This enables the loader code that loads images using WebP.
++config BR2_PACKAGE_LIBEFL_X_XLIB
++	bool "X11 support (xlib)"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
++	select BR2_PACKAGE_XLIB_LIBXCURSOR
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXINERAMA
++	select BR2_PACKAGE_XLIB_LIBXP
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_XLIB_LIBXRENDER
++	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
++	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_XPROTO_GLPROTO
 +
- endif # BR2_PACKAGE_LIBEFL
+ comment "libevas loaders"
+ 
+ config BR2_PACKAGE_LIBEFL_PNG
 diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
-index e21d89c..2ebf6fb 100644
+index 5c02440..0472827 100644
 --- a/package/efl/libefl/libefl.mk
 +++ b/package/efl/libefl/libefl.mk
-@@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
+@@ -23,8 +23,9 @@ LIBEFL_INSTALL_STAGING = YES
+ LIBEFL_DEPENDENCIES = host-pkgconf host-libefl dbus freetype jpeg lua udev \
+ 	util-linux zlib
+ 
+-# regenerate the configure script:
+-# https://phab.enlightenment.org/T2718
++# Regenerate the autotools:
++#  - to fix an issue in eldbus-codegen: https://phab.enlightenment.org/T2718
++#  - to remove dependency on libXp: https://phab.enlightenment.org/D3150
+ LIBEFL_AUTORECONF = YES
+ LIBEFL_GETTEXTIZE = YES
+ 
+@@ -32,18 +33,18 @@ LIBEFL_GETTEXTIZE = YES
  # --disable-cxx-bindings: disable C++11 bindings.
- # --disable-fb: disable frame buffer support.
- # --disable-image-loader-jp2k: disable JPEG 2000 support.
--# --disable-image-loader-webp: disable webp support.
  # --disable-sdl: disable sdl2 support.
  # --disable-systemd: disable systemd support.
++# --disable-xinput22: disable X11 XInput v2.2+ support.
  # --enable-lua-old: disable Elua and remove luajit dependency.
-@@ -44,7 +43,6 @@ LIBEFL_CONF_OPTS = \
+ # --with-opengl=none: disable opengl support.
+-# --with-x11=none: remove dependency on X.org.
+ LIBEFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
  	--disable-cxx-bindings \
- 	--disable-fb \
- 	--disable-image-loader-jp2k \
--	--disable-image-loader-webp \
  	--disable-sdl \
  	--disable-systemd \
++	--disable-xinput22 \
  	--enable-lua-old \
-@@ -176,6 +174,13 @@ else
- LIBEFL_CONF_OPTS += --disable-image-loader-tiff
+-	--with-opengl=none \
+-	--with-x11=none
++	--with-opengl=none
+ 
+ # Disable untested configuration warning.
+ ifeq ($(BR2_PACKAGE_LIBEFL_HAS_RECOMMENDED_CONFIG),)
+@@ -145,6 +146,28 @@ else
+ LIBEFL_CONF_OPTS += --disable-fb
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
-+LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
-+LIBEFL_DEPENDENCIES += webp
++ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
++LIBEFL_CONF_OPTS += \
++	--with-x11=xlib \
++	--with-x=$(STAGING_DIR) \
++	--x-includes=$(STAGING_DIR)/usr/include \
++	--x-libraries=$(STAGING_DIR)/usr/lib
++
++LIBEFL_DEPENDENCIES += \
++	xlib_libX11 \
++	xlib_libXcomposite \
++	xlib_libXcursor \
++	xlib_libXdamage \
++	xlib_libXext \
++	xlib_libXinerama \
++	xlib_libXrandr \
++	xlib_libXrender \
++	xlib_libXScrnSaver \
++	xlib_libXtst
 +else
-+LIBEFL_CONF_OPTS += --disable-image-loader-webp
++LIBEFL_CONF_OPTS += --with-x11=none
 +endif
 +
- $(eval $(autotools-package))
- 
- ################################################################################
+ # Loaders that need external dependencies needs to be --enable-XXX=yes
+ # otherwise the default is '=static'.
+ # All other loaders are statically built-in
