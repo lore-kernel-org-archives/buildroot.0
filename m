@@ -1,39 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 23:08:46 +0100
-Subject: [Buildroot] [PATCH 1/4] package/dnsmasq: do not select Lua,
-	depend on it
-In-Reply-To: <42b88076d63c1a1043ee22090f819d1ad09df1d0.1450389598.git.yann.morin.1998@free.fr>
-References: <cover.1450389598.git.yann.morin.1998@free.fr>
- <42b88076d63c1a1043ee22090f819d1ad09df1d0.1450389598.git.yann.morin.1998@free.fr>
-Message-ID: <20151217230846.729a6caa@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 17 Dec 2015 23:09:33 +0100
+Subject: [Buildroot] [PATCH v10 01/28] package/efl/libefl: new package
+In-Reply-To: <20151216213204.198f5387@free-electrons.com>
+References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+ <1450219240-16938-2-git-send-email-romain.naour@openwide.fr>
+ <20151216213204.198f5387@free-electrons.com>
+Message-ID: <5673329D.4040406@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi Thomas, Yann, All,
 
-On Thu, 17 Dec 2015 23:06:33 +0100, Yann E. MORIN wrote:
+Le 16/12/2015 21:32, Thomas Petazzoni a ?crit :
+> Romain,
+> 
+> On Tue, 15 Dec 2015 23:40:13 +0100, Romain Naour wrote:
+> 
+>> Also, add BR2_PACKAGE_LIBEFL_RECOMMENDED_CONFIG config option in order to
+>> select all recommended packages that allows to build libefl without the
+>> extra-long --enable-i-really-know-what-i-am-doing...
+> 
+> I am still not entirely happy with your recommended config mechanism.
+> What I want to see is the visible option "recommended config"
+> completely removed. See my proposal in the attached patch 0001.
+> 
+> My attached patch 0002 also rewraps some Config.in help text.
 
->  config BR2_PACKAGE_DNSMASQ_LUA
->  	bool "Lua scripting support"
-> -	select BR2_PACKAGE_LUA
-> +	depends on BR2_PACKAGE_LUA
->  	help
->  	  Enable Lua scripting for dnsmasq
->  
-> +comment "Lau scripting support needs the Lua interpreter"
+ok, I'll merge these two patches. Thanks.
 
-Lau -> Lua
+> 
+> But I have more issues, see below.
+> 
+> 
+>> diff --git a/package/efl/Config.in b/package/efl/Config.in
+>> index 7ce5a36..3a5e708 100644
+>> --- a/package/efl/Config.in
+>> +++ b/package/efl/Config.in
+>> @@ -1,8 +1,13 @@
+>>  menuconfig BR2_PACKAGE_EFL
+>>  	bool "Enlightenment Foundation Libraries"
+>> -	depends on BR2_USE_WCHAR
+>> -	# libeina uses madvise(). To revisit when bumping EFL to 1.8
+>> +	depends on BR2_INSTALL_LIBSTDCPP
+>> +	depends on BR2_PACKAGE_HAS_UDEV # libudev
+>> +	depends on BR2_PACKAGE_LUA # lua 5.1 or better
+> 
+> So we really need Lua itself, and not LuaJIT ? If we need only Lua (and
+> not LuaJIT), why don't we select it ? If we can use either Lua or
+> LuaJIT, then we should "depends on BR2_PACKAGE_LUAINTERPRETER.
+> 
+> Also, if I apply just this patch, I get some kconfig warnings:
+> 
+> package/efl/Config.in:1:error: recursive dependency detected!
+> package/efl/Config.in:1:	symbol BR2_PACKAGE_EFL depends on BR2_PACKAGE_LUA
+> package/lua/Config.in:1:	symbol BR2_PACKAGE_LUA is selected by BR2_PACKAGE_LIBEDJE
+> package/efl/libedje/Config.in:4:	symbol BR2_PACKAGE_LIBEDJE is selected by BR2_PACKAGE_LIBETHUMB
+> package/efl/libethumb/Config.in:4:	symbol BR2_PACKAGE_LIBETHUMB depends on BR2_PACKAGE_EFL
+> 
+> But it's true that your series later removes libedje, so maybe I should
+> just not care about this: it's hard to do the big change you're doing
+> without having some intermediate steps that are imperfect.
 
-But I believe this comment is useless. It is obvious that if we want to
-do Lua stuff, you must enable Lua.
+Well, I tried to do a smooth update series has much as possible ;-)
+But I didn't want to modify efl packages that are removed at the end of the
+series... I didn't test all intermediate test of this series, only when the
+entire series is applied.
+
+> 
+> Can you let me know the answer for the Lua/LuaJIT question so that we
+> can move forward with this ?
+
+I haven't tested all lua interpreter...
+Here is the lua interpreter I used for the runtime test:
+
+BR2_PACKAGE_LUA=y
+BR2_PACKAGE_PROVIDES_LUAINTERPRETER="lua"
+BR2_PACKAGE_LUA_5_1=y
+
+If you want to try with LuaJIT, the --enable-lua-old option must be removed.
+IIRC, I had some build issue with it but it was with efl 1.13.2.
+So, I wanted to avoid LuaJIT for now and be sure that one of LUA packages is
+selected.
+
+I'll check if efl can just depends on BR2_PACKAGE_HAS_LUAINTERPRETER.
 
 Best regards,
+Romain
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+> Thanks!
+> 
+> Thomas
+> 
