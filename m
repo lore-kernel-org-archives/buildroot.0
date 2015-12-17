@@ -1,40 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 17 Dec 2015 19:42:25 -0300
-Subject: [Buildroot] [PATCH] libcroco: bump to version 0.6.11
-Message-ID: <1450392145-14955-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Dec 2015 23:48:02 +0100
+Subject: [Buildroot] [git commit] sysvinit: arm64 build fix
+Message-ID: <20151217224947.2865182571@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcroco/libcroco.hash | 4 ++--
- package/libcroco/libcroco.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=c93805207e24df082495f4d050bc2f29f3d19dd6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libcroco/libcroco.hash b/package/libcroco/libcroco.hash
-index 20328e4..edf0b1f 100644
---- a/package/libcroco/libcroco.hash
-+++ b/package/libcroco/libcroco.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/libcroco/0.6/libcroco-0.6.10.sha256sum
--sha256	72066611df77f5c4fb28268cfc7306ecc1517212a6182c2ea756c326a154246c	libcroco-0.6.10.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/libcroco/0.6/libcroco-0.6.11.sha256sum
-+sha256	132b528a948586b0dfa05d7e9e059901bca5a3be675b6071a90a90b81ae5a056	libcroco-0.6.11.tar.xz
-diff --git a/package/libcroco/libcroco.mk b/package/libcroco/libcroco.mk
-index 2376684..0cda9da 100644
---- a/package/libcroco/libcroco.mk
-+++ b/package/libcroco/libcroco.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBCROCO_VERSION_MAJOR = 0.6
--LIBCROCO_VERSION = $(LIBCROCO_VERSION_MAJOR).10
-+LIBCROCO_VERSION = $(LIBCROCO_VERSION_MAJOR).11
- LIBCROCO_SITE = http://ftp.gnome.org/pub/gnome/sources/libcroco/$(LIBCROCO_VERSION_MAJOR)
- LIBCROCO_SOURCE = libcroco-$(LIBCROCO_VERSION).tar.xz
- LIBCROCO_INSTALL_STAGING = YES
--- 
-2.4.10
+sysvinit was not able to be built for arm64 architectures.
+The package patch was changed according to the suggestion of
+Thomas Petazzoni.
+
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sysvinit/0001-fix-libcrypt-test.patch | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/sysvinit/0001-fix-libcrypt-test.patch b/package/sysvinit/0001-fix-libcrypt-test.patch
+index 207270d..6c22436 100644
+--- a/package/sysvinit/0001-fix-libcrypt-test.patch
++++ b/package/sysvinit/0001-fix-libcrypt-test.patch
+@@ -6,12 +6,15 @@ Index: b/src/Makefile
+ ===================================================================
+ --- a/src/Makefile
+ +++ b/src/Makefile
+-@@ -78,7 +78,7 @@
++@@ -78,8 +78,9 @@ else
+  endif
+  
+  # Additional libs for GNU libc.
+ -ifneq ($(wildcard /usr/lib*/libcrypt.a),)
+-+ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
+-   SULOGINLIBS	+= -lcrypt
++-  SULOGINLIBS	+= -lcrypt
+++HAS_LIBCRYPT=$(shell f=`mktemp` && echo 'int main(void) {}' | $(CC) -o $$f -xc - -lcrypt >/dev/null 2>&1 && echo yes; rm -f $$f)
+++ifeq ($(HAS_LIBCRYPT),yes)
+++  SULOGINLIBS += -lcrypt
+  endif
+  
++ all:		$(BIN) $(SBIN) $(USRBIN)
