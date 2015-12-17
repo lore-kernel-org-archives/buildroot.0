@@ -1,40 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 17:02:02 +0100
-Subject: [Buildroot] Make error with Builroot
-In-Reply-To: <CACG_XU1kK1G6KeANOF1d-3eXwe=TyLL_3F9YcE=T0P2aJ_AgSw@mail.gmail.com>
-References: <1450364297578-120495.post@n4.nabble.com>
- <20151217162514.751e3cc3@free-electrons.com>
- <CACG_XU1kK1G6KeANOF1d-3eXwe=TyLL_3F9YcE=T0P2aJ_AgSw@mail.gmail.com>
-Message-ID: <20151217170202.3985ce98@free-electrons.com>
+Date: Thu, 17 Dec 2015 16:34:27 +0100
+Subject: [Buildroot] [git commit] whetstone: add a hash file
+Message-ID: <20151217161946.786FB8230B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=c6a4e95233f56c5eefa16d2e542db1ce5ed70285
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Dec 2015 07:19:46 -0800 (PST), yann12 wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/whetstone/whetstone.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Thanks for your help, here is the pastebin of the /home/novtech/Projects/me_
-> buildroot-2014.08/output/build/ncurses-5.9/config.log :
-> 
-> http://code.bulix.org/li2yfp-90040
-
-Thanks. It shows that the cross-compiler is not available, which is
-clearly not possible, since all target packages depend on the toolchain.
-
-Is this what happens after a complete "make clean all" cycle ?
-
-Please pastebin the entire output of "make clean all" so we can see
-what's going on. Alternatively, you may want to join our #buildroot IRC
-channel on Freenode to get some live support, which might be easier
-than over e-mail.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/whetstone/whetstone.hash b/package/whetstone/whetstone.hash
+new file mode 100644
+index 0000000..db9bbb4
+--- /dev/null
++++ b/package/whetstone/whetstone.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 333e4ceca042c146f63eec605573d16ae8b07166cbc44a17bec1ea97c6f1efbf  whetstone.c
