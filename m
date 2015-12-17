@@ -1,85 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 00:11:44 +0100
-Subject: [Buildroot] [PATCH v10 00/28] efl bump to 1.15.2
-In-Reply-To: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
-References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151218001144.5a685de2@free-electrons.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 17 Dec 2015 23:20:24 +0000
+Subject: [Buildroot] [PATCH v2 3/5] package/nodejs: correct 0.10.x option
+	name
+In-Reply-To: <1450394426-3349-1-git-send-email-martin@barkynet.com>
+References: <1450394426-3349-1-git-send-email-martin@barkynet.com>
+Message-ID: <1450394426-3349-3-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+The nodejs options incorrectly started BR2_BR2_xxx.  This change corrects
+the name for 0.10.x releases to BR2_PACKAGE_NODEJS_0_10_X
 
-On Tue, 15 Dec 2015 23:40:12 +0100, Romain Naour wrote:
+Signed-off-by: Martin Bark <martin@barkynet.com>
 
-> Romain Naour (28):
->   package/efl/libefl: new package
->   package/efl/libefl: add harfbuzz dependency
->   package/efl/libefl: add wayland dependency
->   package/efl/libefl: add webp dependency
->   package/efl/libefl: add frame buffer config option
->   package/efl/libefl: add jp2k config option
->   package/efl/libefl: add X11 support
+---
+Changes v1 -> v2
+ - New in v2
+---
+ Config.in.legacy         | 8 ++++++++
+ package/nodejs/Config.in | 6 +++---
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-All those ones applied. On the "libefl: new package" patch I've applied
-my two patches that I showed you on the mailing list.
-
->   package/efl/libefl: add OpenGLES support
-
-This one I wasn't sure about the "choice"; we had some discussion about
-it with Yann on IRC.
-
->   package/efl/libefl: enable xinput2.2
-
-This one I thought should have been part of the X11 support patch, but
-now that I have applied the X11 support patch, I think I'll apply this
-one separately.
-
->   package/libevas-generic-loaders: bump to version 1.15.0
->   package/libevas-generic-loaders: add libraw dependency
->   package/efl/libelementary: bump to version 1.15.2
->   package/efl: libefl and libelementary share the same version number
->   package/enlightenment: bump to version 0.19.12
->   package/expedite: bump to efl-1.15 branch
->   package/dbus-cpp: switch to libefl
->   package/efl/libethumb: remove package
->   package/efl/libedje: remove package
->   package/efl/libembryo: remove package
->   package/efl/libeio: remove package
->   package/efl/libefreet: remove package
->   package/efl/libedbus: remove package
->   package/efl/libecore: remove package
->   package/efl/libevas: remove package
->   package/efl/libeet: remove package
->   package/efl/libeina: remove package
-
-All applied.
-
->   package/libemotion-generic-players: new package
-
-I want to do some more review on this one.
-
->   package/efl: rename libefl to efl
-
-I don't understand the logic of this one, and why we're moving from a
-'menuconfig' to a 'menu'.
-
-So there are four patches left to be applied out of 28.
-
-Thanks a lot for working on this, definitely great to have an
-up-to-date EFL stack.
-
-To be honest, with the version number now being shared with just libefl
-and libelementary, I am not sure it is really worth the effort to have
-a package/efl/ directory with those two packages. What about making
-them normal top-level packages ?
-
-Thanks!
-
-Thomas
+diff --git a/Config.in.legacy b/Config.in.legacy
+index db1eeae..5d9a3ee 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -186,6 +186,14 @@ config BR2_PACKAGE_INFOZIP
+ 	  to avoid ambiguities with Info-Zip's UnZip which has been added
+ 	  in the unzip package.
+ 
++config BR2_BR2_PACKAGE_NODEJS_0_10_X
++	bool "nodejs 0.10.x option renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_NODEJS_0_10_X
++	help
++	  nodejs 0.10.x option was named incorrectly and been renamed
++	  to BR2_PACKAGE_NODEJS_0_10_X.
++
+ config BR2_BR2_PACKAGE_NODEJS_0_12_X
+ 	bool "nodejs version 0.12.x has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index cba320c..5d776d7 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -36,12 +36,12 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 
+ choice
+ 	prompt "Node.js version"
+-	default BR2_BR2_PACKAGE_NODEJS_0_10_X if BR2_ARM_CPU_ARMV5
++	default BR2_PACKAGE_NODEJS_0_10_X if BR2_ARM_CPU_ARMV5
+ 	default BR2_PACKAGE_NODEJS_5_X
+ 	help
+ 	  Select the version of Node.js you wish to use.
+ 
+-config BR2_BR2_PACKAGE_NODEJS_0_10_X
++config BR2_PACKAGE_NODEJS_0_10_X
+ 	bool "v0.10.41"
+ 
+ config BR2_PACKAGE_NODEJS_5_X
+@@ -59,7 +59,7 @@ endchoice
+ 
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "0.10.41"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
++	default "0.10.41"	if BR2_PACKAGE_NODEJS_0_10_X
+ 	default "5.3.0"		if BR2_PACKAGE_NODEJS_5_X
+ 
+ menu "Module Selection"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
