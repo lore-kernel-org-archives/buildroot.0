@@ -1,144 +1,227 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 00:04:50 +0100
-Subject: [Buildroot] [git commit] package/efl/libethumb: remove package
-Message-ID: <20151217230816.8C528803E2@busybox.osuosl.org>
+Date: Fri, 18 Dec 2015 00:05:21 +0100
+Subject: [Buildroot] [git commit] package/efl/libecore: remove package
+Message-ID: <20151217230816.C18BB7F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=905dba10d74acc7440ca84abca632148a523a022
+commit: http://git.buildroot.net/buildroot/commit/?id=1fe1b60ba55172946f1f4233cba3bfe0452b8653
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libethumb is now available in efl package.
+Libecore is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                   |  7 ++++++
- package/efl/Config.in                              |  1 -
- .../0001-ethumb-drop-unused-dlfcn.h-include.patch  | 28 ----------------------
- package/efl/libethumb/Config.in                    | 15 ------------
- package/efl/libethumb/libethumb.mk                 | 27 ---------------------
- 5 files changed, 7 insertions(+), 71 deletions(-)
+ Config.in.legacy                 |   7 +++
+ package/efl/Config.in            |   1 -
+ package/efl/libecore/Config.in   |  46 ----------------
+ package/efl/libecore/libecore.mk | 114 ---------------------------------------
+ 4 files changed, 7 insertions(+), 161 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 2bbf2ed..92dc3ac 100644
+index f44a1af..7a9095c 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.02"
  
-+config BR2_PACKAGE_LIBETHUMB
-+	bool "libethumb package has been removed"
++config BR2_PACKAGE_LIBECORE
++	bool "libecore package has been removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  With EFL 1.15, libethumb is now provided by the libefl package.
++	  With EFL 1.15, libecore is now provided by the libefl package.
 +
- config BR2_PACKAGE_INFOZIP
- 	bool "infozip option has been renamed to zip"
+ config BR2_PACKAGE_LIBEDBUS
+ 	bool "libedbus package has been removed"
  	select BR2_LEGACY
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 3a5e708..bc70952 100644
+index 98ca114..df7c446 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -24,7 +24,6 @@ source "package/efl/libeio/Config.in"
- source "package/efl/libevas/Config.in"
- source "package/efl/libembryo/Config.in"
- source "package/efl/libedje/Config.in"
--source "package/efl/libethumb/Config.in"
- source "package/efl/libelementary/Config.in"
- source "package/efl/libedbus/Config.in"
+@@ -16,7 +16,6 @@ menuconfig BR2_PACKAGE_EFL
+ if BR2_PACKAGE_EFL
  
-diff --git a/package/efl/libethumb/0001-ethumb-drop-unused-dlfcn.h-include.patch b/package/efl/libethumb/0001-ethumb-drop-unused-dlfcn.h-include.patch
+ source "package/efl/libeina/Config.in"
+-source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+ source "package/efl/libefl/Config.in"
+ source "package/efl/libevas/Config.in"
+diff --git a/package/efl/libecore/Config.in b/package/efl/libecore/Config.in
 deleted file mode 100644
-index 834b0a8..0000000
---- a/package/efl/libethumb/0001-ethumb-drop-unused-dlfcn.h-include.patch
+index a9408dc..0000000
+--- a/package/efl/libecore/Config.in
 +++ /dev/null
-@@ -1,28 +0,0 @@
--From f7eeddc88ce67c248ebb1e6b8a3cb74d61de42b4 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Thu, 26 Nov 2015 22:07:24 +0100
--Subject: [PATCH] ethumb: drop unused dlfcn.h include
+@@ -1,46 +0,0 @@
+-config BR2_PACKAGE_LIBECORE
+-	bool "libecore"
+-	select BR2_PACKAGE_LIBEINA
+-	help
+-	  Ecore is the event/X abstraction layer that makes doing
+-	  selections, Xdnd, general X stuff, event loops, timeouts and
+-	  idle handlers fast, optimized, and convenient.
 -
--ethumb includes dlfcn.h even though it isn't used, breaking builds with
--purely static toolchains.
+-	  http://trac.enlightenment.org/e/wiki/Ecore
 -
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/lib/ethumb.c | 1 -
-- 1 file changed, 1 deletion(-)
+-if BR2_PACKAGE_LIBECORE
 -
--diff --git a/src/lib/ethumb.c b/src/lib/ethumb.c
--index d1453a0..48c6a2d 100644
----- a/src/lib/ethumb.c
--+++ b/src/lib/ethumb.c
--@@ -58,7 +58,6 @@ void *alloca (size_t);
-- #include <sys/types.h>
-- #include <sys/stat.h>
-- #include <dirent.h>
---#include <dlfcn.h>
-- #include <ctype.h>
-- 
-- #ifdef HAVE_XATTR
---- 
--2.1.4
+-config BR2_PACKAGE_LIBECORE_DIRECTFB
+-	bool "libecore DirectFB support"
+-	depends on BR2_PACKAGE_DIRECTFB
+-	default y
 -
-diff --git a/package/efl/libethumb/Config.in b/package/efl/libethumb/Config.in
-deleted file mode 100644
-index 3e9cbde..0000000
---- a/package/efl/libethumb/Config.in
-+++ /dev/null
-@@ -1,15 +0,0 @@
--comment "libethumb needs a toolchain w/ threads"
+-config BR2_PACKAGE_LIBECORE_FB
+-	bool "libecore framebuffer support"
+-
+-config BR2_PACKAGE_LIBECORE_SDL
+-	bool "libecore SDL support"
+-	select BR2_PACKAGE_SDL
+-
+-config BR2_PACKAGE_LIBECORE_X
+-	bool "libecore X support"
+-	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+-
+-config BR2_PACKAGE_LIBECORE_X_XCB
+-	bool "libecore XCB support"
+-	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_LIBXCB
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XCB_UTIL
+-
+-config BR2_PACKAGE_LIBECORE_EVAS
+-	bool "libecore Evas support"
+-	select BR2_PACKAGE_LIBEVAS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-
+-comment "evas support needs a toolchain w/ threads"
 -	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -
--config BR2_PACKAGE_LIBETHUMB
--	bool "libethumb"
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBECORE
--	select BR2_PACKAGE_LIBECORE_EVAS
--	select BR2_PACKAGE_LIBEDJE
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
--	help
--	  Ethumb is a library for generating thumbnail images of documents.
--
--	  http://trac.enlightenment.org/e/wiki/Ethumb
-diff --git a/package/efl/libethumb/libethumb.mk b/package/efl/libethumb/libethumb.mk
+-endif # BR2_PACKAGE_LIBECORE
+diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
 deleted file mode 100644
-index 314ddf9..0000000
---- a/package/efl/libethumb/libethumb.mk
+index 28a8bae..0000000
+--- a/package/efl/libecore/libecore.mk
 +++ /dev/null
-@@ -1,27 +0,0 @@
+@@ -1,114 +0,0 @@
 -################################################################################
 -#
--# libethumb
+-# libecore
 -#
 -################################################################################
 -
--LIBETHUMB_VERSION = 1.7.10
--LIBETHUMB_SOURCE = ethumb-$(LIBETHUMB_VERSION).tar.bz2
--LIBETHUMB_SITE = http://download.enlightenment.org/releases
--LIBETHUMB_LICENSE = LGPLv2.1+
--LIBETHUMB_LICENSE_FILES = COPYING
+-LIBECORE_VERSION = 1.7.10
+-LIBECORE_SOURCE = ecore-$(LIBECORE_VERSION).tar.bz2
+-LIBECORE_SITE = http://download.enlightenment.org/releases
+-LIBECORE_LICENSE = BSD-2c
+-LIBECORE_LICENSE_FILES = COPYING
 -
--LIBETHUMB_INSTALL_STAGING = YES
+-LIBECORE_INSTALL_STAGING = YES
 -
--LIBETHUMB_DEPENDENCIES = libeina libevas libecore libedje host-libedje
+-LIBECORE_DEPENDENCIES = host-pkgconf libeina
 -
--LIBETHUMB_CONF_OPTS = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc
+-HOST_LIBECORE_DEPENDENCIES = host-pkgconf host-libeina host-libevas
+-HOST_LIBECORE_CONF_OPTS += 		\
+-	--enable-ecore-evas 		\
+-	--disable-simple-x11 		\
+-	--disable-ecore-directfb 	\
+-	--disable-ecore-x 		\
+-	--disable-ecore-x-xcb 		\
+-	--disable-ecore-imf-xim
 -
--ifeq ($(BR2_PACKAGE_LIBEXIF),y)
--LIBETHUMB_DEPENDENCIES += libexif
+-# default options
+-LIBECORE_CONF_OPTS = --disable-simple-x11
+-
+-ifeq ($(BR2_PACKAGE_TSLIB),y)
+-LIBECORE_DEPENDENCIES += tslib
 -endif
 -
--ifeq ($(BR2_PACKAGE_LIBEDBUS),y)
--LIBETHUMB_DEPENDENCIES += libedbus
+-ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+-LIBECORE_DEPENDENCIES += libglib2
+-endif
+-
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LIBECORE_DEPENDENCIES += openssl
+-LIBECORE_CONF_OPTS += --enable-openssl
+-else
+-LIBECORE_CONF_OPTS += --disable-openssl
+-endif
+-
+-ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
+-LIBECORE_DEPENDENCIES += gnutls libgcrypt
+-LIBECORE_CONF_OPTS += --enable-gnutls --with-libgcrypt-prefix=$(STAGING_DIR)/usr
+-else
+-LIBECORE_CONF_OPTS += --disable-gnutls
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBCURL),y)
+-LIBECORE_DEPENDENCIES += libcurl
+-endif
+-
+-# libecore
+-ifeq ($(BR2_PACKAGE_LIBECORE_DIRECTFB),y)
+-LIBECORE_CONF_OPTS += --enable-ecore-directfb
+-LIBECORE_DEPENDENCIES += directfb
+-else
+-LIBECORE_CONF_OPTS += --disable-ecore-directfb
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBECORE_FB),y)
+-LIBECORE_CONF_OPTS += --enable-ecore-fb
+-else
+-LIBECORE_CONF_OPTS += --disable-ecore-fb
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBECORE_SDL),y)
+-LIBECORE_CONF_OPTS += --enable-ecore-sdl
+-LIBECORE_DEPENDENCIES += sdl
+-else
+-LIBECORE_CONF_OPTS += --disable-ecore-sdl
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBECORE_X),y)
+-LIBECORE_CONF_OPTS += --enable-ecore-x \
+-	--with-x=$(STAGING_DIR) \
+-	--x-includes=$(STAGING_DIR)/usr/include \
+-	--x-libraries=$(STAGING_DIR)/usr/lib
+-LIBECORE_DEPENDENCIES += xlib_libXext xlib_libX11
+-else
+-LIBECORE_CONF_OPTS += --disable-ecore-x --disable-ecore-imf-xim
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBECORE_X_XCB),y)
+-LIBECORE_CONF_OPTS += --enable-ecore-x-xcb
+-LIBECORE_DEPENDENCIES += libxcb xlib_libX11 xcb-util pixman
+-
+-# src/util/makekeys is executed at build time to generate
+-# ecore_xcb_keysym_table.h, so it should get compiled for the host.
+-# The ecore makefile unfortunately doesn't know about cross
+-# compilation so this doesn't work.  Long term, we should probably
+-# teach it about CC_FOR_BUILD, but for now simply build makekeys by
+-# hand in advance
+-define LIBECORE_BUILD_MAKEKEYS_FOR_HOST
+-	$(HOST_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/src/util makekeys.o makekeys
+-endef
+-
+-LIBECORE_PRE_CONFIGURE_HOOKS += LIBECORE_BUILD_MAKEKEYS_FOR_HOST
+-else
+-LIBECORE_CONF_OPTS += --disable-ecore-x-xcb
+-endif
+-
+-# libecore-evas
+-ifeq ($(BR2_PACKAGE_LIBECORE_EVAS),y)
+-LIBECORE_CONF_OPTS += --enable-ecore-evas
+-LIBECORE_DEPENDENCIES += libevas
+-else
+-LIBECORE_CONF_OPTS += --disable-ecore-evas
 -endif
 -
 -$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
