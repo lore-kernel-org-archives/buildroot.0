@@ -1,39 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 13:32:43 +0100
-Subject: [Buildroot] [PATCH 0/4] website caring
-In-Reply-To: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1449213674-11333-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20151217133243.6101f826@free-electrons.com>
+Date: Thu, 17 Dec 2015 13:46:09 +0100
+Subject: [Buildroot] [PATCH 3/3] qemu: fix project's URL
+In-Reply-To: <5672AAB8.2030600@imgtec.com>
+References: <1450353428-57815-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1450353428-57815-3-git-send-email-Vincent.Riera@imgtec.com>
+ <20151217130946.4748c491@free-electrons.com>
+ <5672AAB8.2030600@imgtec.com>
+Message-ID: <20151217134609.250aa771@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo,
+Vicente,
 
-On Fri,  4 Dec 2015 08:21:10 +0100, Angelo Compagnucci wrote:
-> This patch series:
-> 
-> * Fixes all errors found by html tidy
-> * Fixes indentation on all html using html tidy rules
-> * Add tidy_config.txt with tidy configuration used in
->   reindentation
-> * Resizes images to a correct size
-> * Minor cosmetic changes to docs and download pages
-> 
-> Angelo Compagnucci (4):
->   docs/website: fixing html tidy errors and warnings
->   docs/website: html cleaning and indentation fixing
->   docs/website: resizing images
->   docs/website: cosmetic changes
+On Thu, 17 Dec 2015 12:29:44 +0000, Vicente Olivert Riera wrote:
+> No problem, I will mark this patch as rejected if you haven't done it
+> already.
 
-Thanks for this patch series. You received numerous comments from
-Arnout. Could you take them into account and resend an updated patch
-series ?
-
-In the mean time, I will mark your patches as "Changes Requested" in
-patchwork.
+Already done.
 
 Thanks,
 
