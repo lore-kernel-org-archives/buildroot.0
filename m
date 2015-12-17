@@ -1,91 +1,131 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 00:05:40 +0100
-Subject: [Buildroot] [git commit] package/efl/libeina: remove package
-Message-ID: <20151217230816.DE79B7F892@busybox.osuosl.org>
+Date: Fri, 18 Dec 2015 00:03:17 +0100
+Subject: [Buildroot] [git commit] package/enlightenment: bump to version
+	0.19.12
+Message-ID: <20151217230816.6DB07803E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9d1f5f6ad10b3d536316ffd87ae95290c626424
+commit: http://git.buildroot.net/buildroot/commit/?id=00702320cbfa6c29bee30e9df452359f2ac28c22
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libeina is now available in efl package.
+Use the newly added libefl package wich provide a new version
+of efl libraries.
+This new version needs libelementary dependency.
+
+Update upstream url, add hash file and use xz archive.
+
+Select png and jpeg image loader since enlightenment_start
+fail at runtime if png and jpeg image loader are not
+available in elf libraries.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy               |  7 +++++++
- package/efl/Config.in          |  1 -
- package/efl/libeina/Config.in  |  6 ------
- package/efl/libeina/libeina.mk | 18 ------------------
- 4 files changed, 7 insertions(+), 25 deletions(-)
+ package/enlightenment/Config.in          | 23 +++++++----------------
+ package/enlightenment/enlightenment.hash |  2 ++
+ package/enlightenment/enlightenment.mk   | 26 +++++++++++---------------
+ 3 files changed, 20 insertions(+), 31 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1df81ea..e1ea06f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.02"
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 9dad571..7f0d583 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -8,26 +8,17 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# libedbus -> dbus, efl libraries
+ 	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_EFL
+ 	depends on BR2_PACKAGE_XORG7
+ 	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
+ 	depends on BR2_ARCH_HAS_ATOMICS
+-	select BR2_PACKAGE_EFL
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBECORE_X
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBEVAS_JPEG
+-	select BR2_PACKAGE_LIBEVAS_PNG
+-	select BR2_PACKAGE_LIBEVAS_EET
+-	select BR2_PACKAGE_LIBECORE_EVAS
+-	select BR2_PACKAGE_LIBEDJE
+-	select BR2_PACKAGE_LIBEFREET
+-	select BR2_PACKAGE_LIBEDBUS
+-	select BR2_PACKAGE_LIBEIO
+-	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
++	select BR2_PACKAGE_LIBEFL_X_XLIB
++	select BR2_PACKAGE_LIBEFL_JPEG # needed at runtime by enlightenment_start
++	select BR2_PACKAGE_LIBEFL_PNG # needed at runtime by enlightenment_start
++	select BR2_PACKAGE_LIBELEMENTARY
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
++	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+ 	help
+ 	  Enlightenment, also known simply as E, is a stacking window
+ 	  manager for the X Window System which can be used alone or
+@@ -38,6 +29,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	  http://www.enlightenment.org/
  
-+config BR2_PACKAGE_LIBEINA
-+	bool "libeina package has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_EFL
-+	help
-+	  With EFL 1.15, libeina is now provided by the libefl package.
-+
- config BR2_PACKAGE_LIBEET
- 	bool "libeet package has been removed"
- 	select BR2_LEGACY
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index a01b971..80658b2 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -15,7 +15,6 @@ menuconfig BR2_PACKAGE_EFL
+ comment "enlightenment needs a toolchain w/ wchar, C++, threads"
+-	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
++	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_ARCH_HAS_ATOMICS
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+new file mode 100644
+index 0000000..c9b1284
+--- /dev/null
++++ b/package/enlightenment/enlightenment.hash
+@@ -0,0 +1,2 @@
++# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
++sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index ddebe06..f2e0bc3 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,30 +4,26 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_EFL
+-ENLIGHTENMENT_VERSION = 0.17.6
+-ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
++ENLIGHTENMENT_VERSION = 0.19.12
++ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
++ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2c
+ ENLIGHTENMENT_LICENSE_FILES = COPYING
  
--source "package/efl/libeina/Config.in"
- source "package/efl/libefl/Config.in"
- source "package/efl/libelementary/Config.in"
+-ENLIGHTENMENT_DEPENDENCIES = 	\
+-	host-pkgconf 		\
+-	libecore 		\
+-	libeet 			\
+-	libeina 		\
+-	libevas 		\
++ENLIGHTENMENT_DEPENDENCIES = \
++	host-pkgconf \
++	host-libefl \
++	libefl \
++	libelementary \
+ 	libevas-generic-loaders \
+-	libedje 		\
+-	libefreet 		\
+-	libedbus 		\
+-	libeio 			\
+-	host-libedje 		\
+-	host-libeet		\
+ 	xcb-util-keysyms
  
-diff --git a/package/efl/libeina/Config.in b/package/efl/libeina/Config.in
-deleted file mode 100644
-index 80600ad..0000000
---- a/package/efl/libeina/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_LIBEINA
--	bool "libeina"
--	help
--	  Eina is a tiny library to handle data types (list, hash, etc.)
--
--	  http://trac.enlightenment.org/e/wiki/Eina
-diff --git a/package/efl/libeina/libeina.mk b/package/efl/libeina/libeina.mk
-deleted file mode 100644
-index ae9f1c6..0000000
---- a/package/efl/libeina/libeina.mk
-+++ /dev/null
-@@ -1,18 +0,0 @@
--################################################################################
--#
--# libeina
--#
--################################################################################
--
--LIBEINA_VERSION = 1.7.10
--LIBEINA_SOURCE = eina-$(LIBEINA_VERSION).tar.bz2
--LIBEINA_SITE = http://download.enlightenment.org/releases
--LIBEINA_LICENSE = LGPLv2.1+
--LIBEINA_LICENSE_FILES = COPYING
--
--LIBEINA_INSTALL_STAGING = YES
--
--LIBEINA_DEPENDENCIES = host-pkgconf
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
+ ENLIGHTENMENT_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+-	--disable-rpath
++	--disable-pam \
++	--disable-rpath \
++	--disable-systemd
+ 
+ # uClibc has an old incomplete sys/ptrace.h for powerpc & sparc
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
