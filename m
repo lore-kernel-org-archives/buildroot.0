@@ -1,120 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:07:53 +0100
-Subject: [Buildroot] [git commit] package/arptables: add patch to fix musl
-	build issue
-Message-ID: <20151217211415.4B7AD82571@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 22:10:29 +0100
+Subject: [Buildroot] [git commit] vnstat: add upstream patch to fix build
+	with musl
+Message-ID: <20151217211415.6CF74825B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fdfd17c7e19889ac61a449df373421f4dfefda85
+commit: http://git.buildroot.net/buildroot/commit/?id=288f7541196d31bd43e6450ccad4ed0fa6ed6c08
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Due to clashes in the namespace between the Linux Kernel headers and the
-netinet headers building arptables with the musl C library fails.
+The header file 'fcntl.h' was missing from 'src/common.h', which caused
+the build with musl to fail with undeclared symbol errors like the
+following:
 
-Best advice from the musl developers is to not include both headers in a
-userspace tool (see the thread on the musl mailing list [1], especially [2]).
+  dbaccess.c: In function ???backupdb???:
+  dbaccess.c:268:25: error: ???O_RDONLY??? undeclared (first use in this function)
+    if ((c = open(current, O_RDONLY)) == -1) {
+                           ^
+This has already been fixed upstream, so the included patch must be
+dropped on the next version bump.
 
-Since arptables only requires a few definitions from the Linux Kernel headers
-we opt-out the clashing header files and define the needed definitions.
-
-Patch sent upstream [3].
-
-Fixes:
-http://autobuild.buildroot.net/results/b72/b721e4fa24a0728c20fd2ec0663c2b5981387642/
-http://autobuild.buildroot.net/results/4e9/4e9e0ed9454d258ef4333e847dc394ff22378ca4/
-http://autobuild.buildroot.net/results/b39/b3951f700ab1664e06e14d95964875fc8e3dd8f4/
-http://autobuild.buildroot.net/results/716/716e81f49f8894b7248f394919c8f22efb908277/
-
-[1] http://www.openwall.com/lists/musl/2012/10/09/1
-[2] http://www.openwall.com/lists/musl/2012/10/11/1
-[3] http://marc.info/?l=netfilter&m=144903021705206&w=2
-
-Cc: Brendan Heading <brendanheading@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/arptables/0004-Fix-musl-build-issue.patch | 71 +++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ ...-fcntl.h-include-needed-by-open-closes-21.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/arptables/0004-Fix-musl-build-issue.patch b/package/arptables/0004-Fix-musl-build-issue.patch
+diff --git a/package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch b/package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch
 new file mode 100644
-index 0000000..e9419b0
+index 0000000..5489580
 --- /dev/null
-+++ b/package/arptables/0004-Fix-musl-build-issue.patch
-@@ -0,0 +1,71 @@
-+From cbf84a0bc377c6a368d30571f37ebfab27784697 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Wed, 2 Dec 2015 04:57:33 +0100
-+Subject: [PATCH 4/4] Fix musl build issue
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch
+@@ -0,0 +1,28 @@
++From a222434e096ce42c7937839f9666691f2b8a612f Mon Sep 17 00:00:00 2001
++From: Teemu Toivola <git@humdi.net>
++Date: Sat, 27 Jun 2015 18:29:22 +0300
++Subject: [PATCH] add missing fcntl.h include needed by open(), closes #21
 +
-+Due to clashes in the namespace between the Linux Kernel headers and the
-+netinet headers building arptables with the musl C library fails.
++[Backport from upstream commit 964d7cd62b8626d51bf7ce06564aa9bd1d2b4d4c.
++Fixes undeclared symbol issues when building with musl.]
 +
-+Best advice from the musl developers is to not include both headers in a
-+userspace tool (see the thread on the musl mailing list [1], especially [2]).
-+
-+Since arptables only requires a few definitions from the Linux Kernel headers
-+we opt-out the clashing header files and define the needed definitions.
-+
-+[1] http://www.openwall.com/lists/musl/2012/10/09/1
-+[2] http://www.openwall.com/lists/musl/2012/10/11/1
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 +---
-+ extensions/arpt_CLASSIFY.c    |  7 +++++++
-+ include/linux/netfilter_arp.h | 11 +++++++++++
-+ 2 files changed, 18 insertions(+)
++ src/common.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/extensions/arpt_CLASSIFY.c b/extensions/arpt_CLASSIFY.c
-+index cb5770b..c58129f 100644
-+--- a/extensions/arpt_CLASSIFY.c
-++++ b/extensions/arpt_CLASSIFY.c
-+@@ -21,7 +21,14 @@
-+ #include <stdio.h>
-+ #include <getopt.h>
-+ #include <arptables.h>
-++
-++#ifdef __KERNEL__
-+ #include <linux/netfilter/xt_CLASSIFY.h>
-++#else
-++struct xt_classify_target_info {
-++	uint32_t priority;
-++};
-++#endif
++diff --git a/src/common.h b/src/common.h
++index 7616e55..eb0b61f 100644
++--- a/src/common.h
+++++ b/src/common.h
++@@ -22,6 +22,7 @@
++ #include <pwd.h>
++ #include <grp.h>
++ #include <libgen.h>
+++#include <fcntl.h>
 + 
-+ #define TC_H_MAJ_MASK (0xFFFF0000U)
-+ #define TC_H_MIN_MASK (0x0000FFFFU)
-+diff --git a/include/linux/netfilter_arp.h b/include/linux/netfilter_arp.h
-+index 92bc6dd..2a63e82 100644
-+--- a/include/linux/netfilter_arp.h
-++++ b/include/linux/netfilter_arp.h
-+@@ -5,7 +5,18 @@
-+  * (C)2002 Rusty Russell IBM -- This code is GPL.
-+  */
-+ 
-++#ifdef __KERNEL__
-+ #include <linux/netfilter.h>
-++#else
-++/* Responses from hook functions. */
-++#define NF_DROP 0
-++#define NF_ACCEPT 1
-++#define NF_STOLEN 2
-++#define NF_QUEUE 3
-++#define NF_REPEAT 4
-++#define NF_STOP 5
-++#define NF_MAX_VERDICT NF_STOP
-++#endif
-+ 
-+ /* There is no PF_ARP. */
-+ #define NF_ARP		0
++ #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__APPLE__) || defined(__FreeBSD_kernel__)
++ #include <sys/param.h>
 +-- 
-+2.6.2
++2.1.4
 +
