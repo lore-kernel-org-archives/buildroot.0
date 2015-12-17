@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:05:14 +0100
-Subject: [Buildroot] [PATCH v2] musl: add a sys/queue.h implementation
-In-Reply-To: <1449017908-7935-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1449017908-7935-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20151217220514.409622e1@free-electrons.com>
+Date: Thu, 17 Dec 2015 22:05:18 +0100
+Subject: [Buildroot] [PATCH] libtirpc: using sys/queue.h from staging
+In-Reply-To: <1449068879-29945-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1449068879-29945-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <20151217220518.4ba77ecc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,21 @@ To: buildroot@busybox.net
 
 Dear Sergio Prado,
 
-On Tue,  1 Dec 2015 22:58:28 -0200, Sergio Prado wrote:
-> Musl does not provide a 'sys/queue.h' implementation, and this has been
-> a problem for packages that depend on it.
-> 
-> So lets create a package called netbsd-queue that will install a
-> 'sys/queue.h' in the staging directory when enabled, based on the
-> NetBSD implementation.
-> 
-> Musl toolchain and external toolchain packages will depend on this
-> package, so that 'sys/queue.h' will be always installed when compiling
-> with a musl based toolchain.
-> 
-> Tested on ARM and x86 in the following cases:
->   - Buildroot musl toolchain.
->   - External musl toolchain without 'sys/queue.h'.
->   - External musl toolchain with 'sys/queue.h'.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/24bad2d06ab40024dacf136bee722072d587f84e
-> 
-> And possibly many others.
+On Wed,  2 Dec 2015 13:07:59 -0200, Sergio Prado wrote:
+> Now that musl toolchains depend on netbsd-queue package, a
+> implementation of sys/queue.h will always be available in the
+> staging directory, so we can remove the patch that adds a local
+> sys/queue.h implementation.
 > 
 > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> 
 > ---
-> Changes v1 -> v2:
->   - package name changed to netbsd-queue
->   - queue.h is now downloaded from NetBSD CVS server
->   - Config.in removed
->   - license changed to BSD-3c
->   - instead of checking if queue.h already exists before installing, 
->     it will be installed unconditionally.
-> ---
->  package/musl/musl.mk                               |  5 +++++
->  package/netbsd-queue/netbsd-queue.hash             |  2 ++
->  package/netbsd-queue/netbsd-queue.mk               | 23 ++++++++++++++++++++++
->  toolchain/toolchain-external/toolchain-external.mk |  7 +++++++
->  4 files changed, 37 insertions(+)
->  create mode 100644 package/netbsd-queue/netbsd-queue.hash
->  create mode 100644 package/netbsd-queue/netbsd-queue.mk
+>  ...006-Disable-DES-authentification-support.patch} |   0
+>  package/libtirpc/0006-Use-local-bsdqueue.h.patch   | 903 ---------------------
+>  ...-missing-rwlock_unlocks-in-xprt_register.patch} |   0
+>  3 files changed, 903 deletions(-)
+>  rename package/libtirpc/{0007-Disable-DES-authentification-support.patch => 0006-Disable-DES-authentification-support.patch} (100%)
+>  delete mode 100644 package/libtirpc/0006-Use-local-bsdqueue.h.patch
+>  rename package/libtirpc/{0008-Add-missing-rwlock_unlocks-in-xprt_register.patch => 0007-Add-missing-rwlock_unlocks-in-xprt_register.patch} (100%)
 
 Applied, thanks.
 
