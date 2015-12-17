@@ -1,42 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 21:50:29 +0100
-Subject: [Buildroot] [PATCH 1/1] rabbitmq-c:new package
-In-Reply-To: <1447843327-22577-1-git-send-email-joris.lijssens@gmail.com>
-References: <1447843327-22577-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <20151217215029.4256b85a@free-electrons.com>
+Date: Thu, 17 Dec 2015 21:51:42 +0100
+Subject: [Buildroot] [git commit] nfsd: accept config to set number of
+	threads
+Message-ID: <20151217205200.16B7182563@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Joris Lijssens,
+commit: http://git.buildroot.net/buildroot/commit/?id=af3befec827fcda0e2578e099f8c1a89533f3323
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Nov 2015 11:42:07 +0100, Joris Lijssens wrote:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-> ---
->  package/Config.in                  |  1 +
->  package/rabbitmq-c/Config.in       |  7 +++++++
->  package/rabbitmq-c/rabbitmq-c.hash |  2 ++
->  package/rabbitmq-c/rabbitmq-c.mk   | 29 +++++++++++++++++++++++++++++
->  4 files changed, 39 insertions(+)
->  create mode 100644 package/rabbitmq-c/Config.in
->  create mode 100644 package/rabbitmq-c/rabbitmq-c.hash
->  create mode 100644 package/rabbitmq-c/rabbitmq-c.mk
+[Thomas: tweak commit title and author.]
 
-Applied, with some changes:
+Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nfs-utils/S60nfs | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-    [Thomas:
-     - pass -DBUILD_TOOLS_DOCS=OFF in <pkg>_CONF_OPTS
-     - use -DBUILD_SHARED_LIBS and -DBUILD_STATIC_LIBS to enable/disable
-       the creation of shared/static libraries depending on the
-       configuration.
-     - remove trailing spaces.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
+index ec7c909..5639b8f 100755
+--- a/package/nfs-utils/S60nfs
++++ b/package/nfs-utils/S60nfs
+@@ -13,6 +13,14 @@ mkdir -p /run/nfs/sm
+ mkdir -p /run/nfs/sm.bak
+ touch /run/nfs/rmtab
+ 
++CFG_FILE=/etc/default/nfsd
++
++NR_THREADS=2
++if [ -f "${CFG_FILE}" ]; then
++    . "${CFG_FILE}"
++fi
++
++
+ start() {
+ 	# Start daemons.
+ 	printf "Starting NFS statd: "
+@@ -25,7 +33,7 @@ start() {
+ 	echo "done"
+ 
+ 	printf "Starting NFS daemon: "
+-	rpc.nfsd 2
++	rpc.nfsd ${NR_THREADS}
+ 	echo "done"
+ 
+ 	printf "Starting NFS mountd: "
+@@ -40,7 +48,7 @@ stop() {
+ 	killall -q rpc.mountd
+ 	echo "done"
+ 
+-	echo "Shutting down NFS daemon: "
++	printf "Shutting down NFS daemon: "
+ 	kill -9 `pidof nfsd` 2>/dev/null
+ 	echo "done"
+ 
