@@ -1,89 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 00:04:23 +0100
-Subject: [Buildroot] [git commit] package/expedite: bump to efl-1.15 branch
-Message-ID: <20151217230816.75FF7803E2@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 23:52:55 +0100
+Subject: [Buildroot] [git commit] package/efl/libefl: add harfbuzz dependency
+Message-ID: <20151217230816.127A3803E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40e6f4ee0754878c337d39800281e25b89e34b66
+commit: http://git.buildroot.net/buildroot/commit/?id=da02d8fc67d10a1201e341bf552a2f2dbac1c77a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since expedite hasn't been released since 1.7.10 release,
-use efl-1.15 branch in the git tree.
+Harfbuzz allow to enable complex text shaping and layouting support in
+efl libraries.
 
-Use the newly added libefl package wich provide a new version
-of efl libraries.
-
-Autoreconf the package since there is no configure script
-in the git tree.
+Also, it one of the "highly recommended" dependencies according to the
+README but disabling it doesn't need the
+--enable-i-really-know-what-i-am-doing... option.  That's why harfbuzz
+is not added to BR2_PACKAGE_LIBEFL_HAS_RECOMMENDED_CONFIG.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/expedite/Config.in     |  8 ++------
- package/expedite/expedite.hash |  2 --
- package/expedite/expedite.mk   | 14 +++++++++-----
- 3 files changed, 11 insertions(+), 13 deletions(-)
+ package/efl/libefl/libefl.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/expedite/Config.in b/package/expedite/Config.in
-index e60510b..0bcf343 100644
---- a/package/expedite/Config.in
-+++ b/package/expedite/Config.in
-@@ -2,15 +2,11 @@ config BR2_PACKAGE_EXPEDITE
- 	bool "expedite"
- 	depends on BR2_PACKAGE_EFL
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
--	select BR2_PACKAGE_LIBEET
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEVAS
- 	help
- 	  Expedite is the official Evas benchmark tool. It can test different
- 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
- 	  DirectFB and so on. Its tests are quite extensive, trying to
- 	  reproduce real world usage cases.
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index 615968e..184604b 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -31,7 +31,6 @@ LIBEFL_GETTEXTIZE = YES
+ # Configure options:
+ # --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-fb: disable frame buffer support.
+-# --disable-harfbuzz: disable harfbuzz support.
+ # --disable-image-loader-jp2k: disable JPEG 2000 support.
+ # --disable-image-loader-webp: disable webp support.
+ # --disable-sdl: disable sdl2 support.
+@@ -45,7 +44,6 @@ LIBEFL_CONF_OPTS = \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--disable-cxx-bindings \
+ 	--disable-fb \
+-	--disable-harfbuzz \
+ 	--disable-image-loader-jp2k \
+ 	--disable-image-loader-webp \
+ 	--disable-sdl \
+@@ -109,6 +107,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-pulseaudio
+ endif
  
--comment "expedite needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "expedite needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
-deleted file mode 100644
-index cde3689..0000000
---- a/package/expedite/expedite.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256 91d0290ba3635a4440c389647643beaa8e39def2789d685d54a58a723398cc10  expedite-1.7.10.tar.bz2
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-index 27b4c44..4a4e2ee 100644
---- a/package/expedite/expedite.mk
-+++ b/package/expedite/expedite.mk
-@@ -4,15 +4,19 @@
- #
- ################################################################################
- 
--EXPEDITE_VERSION = 1.7.10
--EXPEDITE_SOURCE = expedite-$(EXPEDITE_VERSION).tar.bz2
--EXPEDITE_SITE = http://download.enlightenment.org/releases
-+# efl-1.15 branch
-+EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
-+EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
-+EXPEDITE_SITE_METHOD = git
- EXPEDITE_LICENSE = BSD-2c
- EXPEDITE_LICENSE_FILES = COPYING
- 
--EXPEDITE_DEPENDENCIES = libevas libeina libeet
-+EXPEDITE_DEPENDENCIES = host-libefl host-pkgconf libefl
- 
--ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
-+# There is no configure script in the git tree.
-+EXPEDITE_AUTORECONF = YES
++ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
++LIBEFL_DEPENDENCIES += harfbuzz
++LIBEFL_CONF_OPTS += --enable-harfbuzz
++else
++LIBEFL_CONF_OPTS += --disable-harfbuzz
++endif
 +
-+ifeq ($(BR2_PACKAGE_LIBEFL_X_XLIB),y)
- EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
- 	--x-includes=$(STAGING_DIR)/usr/include \
- 	--x-libraries=$(STAGING_DIR)/usr/lib
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ LIBEFL_DEPENDENCIES += tslib
+ LIBEFL_CONF_OPTS += --enable-tslib
