@@ -1,45 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 12:56:25 +0100
-Subject: [Buildroot] [git commit] ruby: security bump to version 2.2.4
-Message-ID: <20151217115704.C9554821FA@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 12:56:30 +0100
+Subject: [Buildroot] [git commit] samba4: security bump to version 4.3.3
+Message-ID: <20151217115704.D73D3821FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ce39dd0489ebb066bb8d53ff1649a596052bb21
+commit: http://git.buildroot.net/buildroot/commit/?id=8075406e899834f3ab728cb93ae6d5bf3086ae9e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-CVE-2015-7551 - Unsafe tainted string usage in Fiddle and DL
+CVE-2015-7540 - Remote DoS in Samba (AD) LDAP server
+CVE-2015-3223 - Denial of service in Samba Active Directory server
+CVE-2015-5252 - Insufficient symlink verification in smbd)
+CVE-2015-5299 - Missing access control check in shadow copy code
+CVE-2015-5296 - Samba client requesting encryption vulnerable to
+downgrade attack
+CVE-2015-8467 - Denial of service attack against Windows Active
+Directory server
+CVE-2015-5330 - Remote memory read in Samba LDAP server
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 4a1861c..06faed6 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 2959e5b..494ad17 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
 @@ -1,2 +1,2 @@
--# From https://www.ruby-lang.org/en/news/2015/08/18/ruby-2-2-3-released/
--sha256	c6ec90e9ed018e6d9a578fc93755d8565839908d5796809e1aecd1798c7ea8a7	ruby-2.2.3.tar.xz
-+# From https://www.ruby-lang.org/en/news/2015/12/16/ruby-2-2-4-released/
-+sha256	d28bff4641e382681c58072ddc244d025ac47ff71dd9426a92fcfc3830d1773c	ruby-2.2.4.tar.xz
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 17104b6..fd8be90 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated after checking pgp signature
+-sha256	61989195caadf0f6fb51ce6bed5e203e6146facc2c276a26ad41901ad9129a75	samba-4.3.2.tar.gz
++sha256	e62d21313acbb29e24b0b80aaf2b63fdd1ccce4cfb741f333deca95a1a3a70df	samba-4.3.3.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 388a40c..50a2692 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 2.2
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
- RUBY_VERSION_EXT = 2.2.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-SAMBA4_VERSION = 4.3.2
++SAMBA4_VERSION = 4.3.3
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
