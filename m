@@ -1,93 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:57:16 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/lzlib: bump to version 0.4.3
-In-Reply-To: <20151010114009.3ad10ecb@free-electrons.com>
-References: <1444270374-11645-1-git-send-email-joerg.krause@embedded.rocks>
- <20151010114009.3ad10ecb@free-electrons.com>
-Message-ID: <20151217225716.6da27dd2@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Dec 2015 23:06:32 +0100
+Subject: [Buildroot] [PATCH 0/4] Do not select providers of virtual packages
+	(branch yem/dont-select-providers)
+Message-ID: <cover.1450389598.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois,
+Hello All!
 
-Another ping about this patch. It is moving away from the luarocks
-infrastructure to the cmake-package infra, so I'd like to have your Lua
-expert agreement.
+This series fixes the selection of the Lua package, a sit is a provider
+for the virtual package lua-interpreter.
 
-Thanks!
+As explained in the manual, it is not allowed to select the provider of
+a virtual package. Quoting:
 
-Thomas
+    If your package really requires a specific provider, then you?ll
+    have to make your package depends on this provider; you can not
+    select a provider.
 
-On Sat, 10 Oct 2015 11:40:09 +0200, Thomas Petazzoni wrote:
-> Fran?ois,
-> 
-> The patch below is touching a Lua package, can you review/test/ack ?
-> 
-> Thanks a lot!
-> 
-> Thomas
-> 
-> On Thu,  8 Oct 2015 04:12:54 +0200, J?rg Krause wrote:
-> > Switch to more recent github repository.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> > Changes v1 -> v2:
-> >   - fix install paths for lib and lua files
-> > ---
-> >  package/lzlib/Config.in  | 2 +-
-> >  package/lzlib/lzlib.hash | 2 --
-> >  package/lzlib/lzlib.mk   | 8 +++++---
-> >  3 files changed, 6 insertions(+), 6 deletions(-)
-> >  delete mode 100644 package/lzlib/lzlib.hash
-> > 
-> > diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
-> > index c123019..f7fae15 100644
-> > --- a/package/lzlib/Config.in
-> > +++ b/package/lzlib/Config.in
-> > @@ -7,4 +7,4 @@ config BR2_PACKAGE_LZLIB
-> >  	  functions and also to read/write gzip files using an
-> >  	  interface similar to the base io package.
-> >  
-> > -	  http://luaforge.net/projects/lzlib/
-> > +	  https://github.com/LuaDist/lzlib
-> > diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
-> > deleted file mode 100644
-> > index d823e8b..0000000
-> > --- a/package/lzlib/lzlib.hash
-> > +++ /dev/null
-> > @@ -1,2 +0,0 @@
-> > -# Locally calculated
-> > -sha256	c10055bde2c0a0ed14f22c1ee0701910b0b9885245baf7911201ab4dfd3b828c  lzlib-0.4.work3-1.src.rock
-> > diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
-> > index ec37842..91f380a 100644
-> > --- a/package/lzlib/lzlib.mk
-> > +++ b/package/lzlib/lzlib.mk
-> > @@ -4,9 +4,11 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -LZLIB_VERSION = 0.4.work3-1
-> > -LZLIB_SUBDIR = lzlib-0.4-work3
-> > +LZLIB_VERSION = 0.4.3
-> > +LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
-> >  LZLIB_DEPENDENCIES = zlib
-> >  LZLIB_LICENSE = MIT
-> > +LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
-> > +	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
-> >  
-> > -$(eval $(luarocks-package))
-> > +$(eval $(cmake-package))
-> 
-> 
-> 
+Followed by an explanations on the reasons this should not be done:
+
+    https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_virtual_packages
+
+This series just cleanups the situation with respect to the
+lua-interpreter virtual package. It has not been checked if we
+had other virtual packages for which providers were selected.
+This can be done in a later series.
+
+Regards,
+Yann E. MORIN.
 
 
+The following changes since commit aee53f8b6f29916ca5d322f793828c24874459d5:
+
+  package/php: Always link with libpthread for static builds (2015-12-17 22:50:56 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/dont-select-providers
+
+for you to fetch changes up to cb0f7634e0c32e0e383baa52e48047dc7a82b7ea:
+
+  package/libedje: do not select Lua, depend on it (2015-12-17 22:58:46 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      package/dnsmasq: do not select Lua, depend on it
+      package/haserl: do not select Lua, depend on it
+      package/lighttpd: do not select Lua, depend on it
+      package/libedje: do not select Lua, depend on it
+
+ package/dnsmasq/Config.in           |  5 ++++-
+ package/efl/libedje/Config.in       |  6 +++---
+ package/efl/libelementary/Config.in |  6 ++++--
+ package/efl/libethumb/Config.in     |  5 +++--
+ package/enlightenment/Config.in     |  6 ++++--
+ package/haserl/Config.in            | 10 ++++++++--
+ package/lighttpd/Config.in          |  5 ++++-
+ 7 files changed, 30 insertions(+), 13 deletions(-)
 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
