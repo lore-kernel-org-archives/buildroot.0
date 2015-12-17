@@ -1,75 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 23:21:17 +0100
-Subject: [Buildroot] [git commit] Makefile: valgrind needs non-stripped
-	dynamic linker library
-Message-ID: <20151217222157.D3CF6825CA@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Dec 2015 23:21:51 +0100
+Subject: [Buildroot] [PATCH v10 01/28] package/efl/libefl: new package
+In-Reply-To: <5673329D.4040406@openwide.fr>
+References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+ <1450219240-16938-2-git-send-email-romain.naour@openwide.fr>
+ <20151216213204.198f5387@free-electrons.com>
+ <5673329D.4040406@openwide.fr>
+Message-ID: <20151217222151.GG3653@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1edb4c51dee78d7d26700c037f29558e73d27ee0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Romain, Thomas, All,
 
-Fixes the following valgrind error (tested on freescale imx6):
+On 2015-12-17 23:09 +0100, Romain Naour spake thusly:
+> Le 16/12/2015 21:32, Thomas Petazzoni a ?crit :
+> > On Tue, 15 Dec 2015 23:40:13 +0100, Romain Naour wrote:
+[--SNIP--]
+> > Also, if I apply just this patch, I get some kconfig warnings:
+> > 
+> > package/efl/Config.in:1:error: recursive dependency detected!
+> > package/efl/Config.in:1:	symbol BR2_PACKAGE_EFL depends on BR2_PACKAGE_LUA
+> > package/lua/Config.in:1:	symbol BR2_PACKAGE_LUA is selected by BR2_PACKAGE_LIBEDJE
+> > package/efl/libedje/Config.in:4:	symbol BR2_PACKAGE_LIBEDJE is selected by BR2_PACKAGE_LIBETHUMB
+> > package/efl/libethumb/Config.in:4:	symbol BR2_PACKAGE_LIBETHUMB depends on BR2_PACKAGE_EFL
+> > 
+> > But it's true that your series later removes libedje, so maybe I should
+> > just not care about this: it's hard to do the big change you're doing
+> > without having some intermediate steps that are imperfect.
+> 
+> Well, I tried to do a smooth update series has much as possible ;-)
+> But I didn't want to modify efl packages that are removed at the end of the
+> series... I didn't test all intermediate test of this series, only when the
+> entire series is applied.
 
-valgrind:  Fatal error at startup: a function redirection
-valgrind:  which is mandatory for this platform-tool combination
-valgrind:  cannot be set up.  Details of the redirection are:
-valgrind:
-valgrind:  A must-be-redirected function
-valgrind:  whose name matches the pattern:      strcmp
-valgrind:  in an object with soname matching:   ld-linux-armhf.so.3
-valgrind:  was not found whilst processing
-valgrind:  symbols from the object with soname: ld-linux-armhf.so.3
-valgrind:
-valgrind:  Possible fixes: (1, short term): install glibc's debuginfo
-valgrind:  package on this machine.  (2, longer term): ask the packagers
-valgrind:  for your Linux distribution to please in future ship a non-
-valgrind:  stripped ld.so (or whatever the dynamic linker .so is called)
-valgrind:  that exports the above-named function using the standard
-valgrind:  calling conventions for this platform.  The package you need
-valgrind:  to install for fix (1) is called
+For what it's worth, I just sent a series actually fixing that very
+issue.
 
-Note that we can still strip the dynamic linker, but only strip the
-debugging symbols and nothing else.
+> > Can you let me know the answer for the Lua/LuaJIT question so that we
+> > can move forward with this ?
+> 
+> I haven't tested all lua interpreter...
+> Here is the lua interpreter I used for the runtime test:
+> 
+> BR2_PACKAGE_LUA=y
+> BR2_PACKAGE_PROVIDES_LUAINTERPRETER="lua"
+> BR2_PACKAGE_LUA_5_1=y
+> 
+> If you want to try with LuaJIT, the --enable-lua-old option must be removed.
+> IIRC, I had some build issue with it but it was with efl 1.13.2.
+> So, I wanted to avoid LuaJIT for now and be sure that one of LUA packages is
+> selected.
+> 
+> I'll check if efl can just depends on BR2_PACKAGE_HAS_LUAINTERPRETER.
 
-[Thomas: slightly adjust comment in the code.]
+I would say: don't.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+If you manage to make it work with the 'full' Lua, just keep it as is.
+Checking for luajit can be done is a followup series.
 
-diff --git a/Makefile b/Makefile
-index 8e8514e..dc657d9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -473,11 +473,12 @@ STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
- # file exclusions:
- # - libpthread.so: a non-stripped libpthread shared library is needed for
- #   proper debugging of pthread programs using gdb.
-+# - ld.so: a non-stripped dynamic linker library is needed for valgrind
- # - kernel modules (*.ko): do not function properly when stripped like normal
- #   applications and libraries. Normally kernel modules are already excluded
- #   by the executable permission check above, so the explicit exclusion is only
- #   done for kernel modules with incorrect permissions.
--STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
-+STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
- 
- ifeq ($(BR2_ECLIPSE_REGISTER),y)
- define TOOLCHAIN_ECLIPSE_REGISTER
-@@ -590,6 +591,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
- endif
- 
-+# Valgrind needs ld.so with enough information, so only strip
-+# debugging symbols.
-+	find $(TARGET_DIR)/lib -type f -name 'ld-*.so*' | \
-+		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
-+
- 	mkdir -p $(TARGET_DIR)/etc
- 	# Mandatory configuration file and auxiliary cache directory
- 	# for recent versions of ldconfig
+But please, no more feature changes in that series. Let's get it
+appplied asap now. Let's just fix the obvious, new features can be added
+*later*.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
