@@ -1,131 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 00:03:17 +0100
-Subject: [Buildroot] [git commit] package/enlightenment: bump to version
-	0.19.12
-Message-ID: <20151217230816.6DB07803E2@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 23:52:59 +0100
+Subject: [Buildroot] [git commit] package/efl/libefl: add webp dependency
+Message-ID: <20151217230816.2B9FA7F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00702320cbfa6c29bee30e9df452359f2ac28c22
+commit: http://git.buildroot.net/buildroot/commit/?id=128526c7678c912f6636a165a810f27bacc30fcc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use the newly added libefl package wich provide a new version
-of efl libraries.
-This new version needs libelementary dependency.
+WebP is a new image format that provides lossless and lossy
+compression for images on the web. So enabling webp support in efl
+libraries allow to loads images using WebP.
 
-Update upstream url, add hash file and use xz archive.
+Also, it one of the "highly recommended" dependencies [1] according to
+the README but disabling it doesn't need the
+--enable-i-really-know-what-i-am-doing... option.  That's why
+BR2_PACKAGE_LIBEFL_WEBP is not added to
+BR2_PACKAGE_LIBEFL_HAS_RECOMMENDED_CONFIG.
 
-Select png and jpeg image loader since enlightenment_start
-fail at runtime if png and jpeg image loader are not
-available in elf libraries.
+[1] https://git.enlightenment.org/core/efl.git/tree/README?id=v1.15.2#n486
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/enlightenment/Config.in          | 23 +++++++----------------
- package/enlightenment/enlightenment.hash |  2 ++
- package/enlightenment/enlightenment.mk   | 26 +++++++++++---------------
- 3 files changed, 20 insertions(+), 31 deletions(-)
+ package/efl/libefl/Config.in | 6 ++++++
+ package/efl/libefl/libefl.mk | 9 +++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index 9dad571..7f0d583 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -8,26 +8,17 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# libedbus -> dbus, efl libraries
- 	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_EFL
- 	depends on BR2_PACKAGE_XORG7
- 	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
- 	depends on BR2_ARCH_HAS_ATOMICS
--	select BR2_PACKAGE_EFL
--	select BR2_PACKAGE_LIBECORE
--	select BR2_PACKAGE_LIBECORE_X
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEET
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBEVAS_JPEG
--	select BR2_PACKAGE_LIBEVAS_PNG
--	select BR2_PACKAGE_LIBEVAS_EET
--	select BR2_PACKAGE_LIBECORE_EVAS
--	select BR2_PACKAGE_LIBEDJE
--	select BR2_PACKAGE_LIBEFREET
--	select BR2_PACKAGE_LIBEDBUS
--	select BR2_PACKAGE_LIBEIO
--	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
-+	select BR2_PACKAGE_LIBEFL_X_XLIB
-+	select BR2_PACKAGE_LIBEFL_JPEG # needed at runtime by enlightenment_start
-+	select BR2_PACKAGE_LIBEFL_PNG # needed at runtime by enlightenment_start
-+	select BR2_PACKAGE_LIBELEMENTARY
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
-+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+diff --git a/package/efl/libefl/Config.in b/package/efl/libefl/Config.in
+index 7d635d9..41b1243 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/efl/libefl/Config.in
+@@ -137,4 +137,10 @@ config BR2_PACKAGE_LIBEFL_TIFF
  	help
- 	  Enlightenment, also known simply as E, is a stacking window
- 	  manager for the X Window System which can be used alone or
-@@ -38,6 +29,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	  http://www.enlightenment.org/
+ 	  This enables the loader code that loads tiff files.
  
- comment "enlightenment needs a toolchain w/ wchar, C++, threads"
--	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
-+	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_ARCH_HAS_ATOMICS
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-new file mode 100644
-index 0000000..c9b1284
---- /dev/null
-+++ b/package/enlightenment/enlightenment.hash
-@@ -0,0 +1,2 @@
-+# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
-+sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index ddebe06..f2e0bc3 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,30 +4,26 @@
- #
++config BR2_PACKAGE_LIBEFL_WEBP
++	bool "libevas webp image loader"
++	select BR2_PACKAGE_WEBP
++	help
++	  This enables the loader code that loads images using WebP.
++
+ endif # BR2_PACKAGE_LIBEFL
+diff --git a/package/efl/libefl/libefl.mk b/package/efl/libefl/libefl.mk
+index e21d89c..2ebf6fb 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/efl/libefl/libefl.mk
+@@ -32,7 +32,6 @@ LIBEFL_GETTEXTIZE = YES
+ # --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-fb: disable frame buffer support.
+ # --disable-image-loader-jp2k: disable JPEG 2000 support.
+-# --disable-image-loader-webp: disable webp support.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+ # --enable-lua-old: disable Elua and remove luajit dependency.
+@@ -44,7 +43,6 @@ LIBEFL_CONF_OPTS = \
+ 	--disable-cxx-bindings \
+ 	--disable-fb \
+ 	--disable-image-loader-jp2k \
+-	--disable-image-loader-webp \
+ 	--disable-sdl \
+ 	--disable-systemd \
+ 	--enable-lua-old \
+@@ -176,6 +174,13 @@ else
+ LIBEFL_CONF_OPTS += --disable-image-loader-tiff
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBEFL_WEBP),y)
++LIBEFL_CONF_OPTS += --enable-image-loader-webp=yes
++LIBEFL_DEPENDENCIES += webp
++else
++LIBEFL_CONF_OPTS += --disable-image-loader-webp
++endif
++
+ $(eval $(autotools-package))
+ 
  ################################################################################
- 
--ENLIGHTENMENT_VERSION = 0.17.6
--ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
-+ENLIGHTENMENT_VERSION = 0.19.12
-+ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
-+ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
- ENLIGHTENMENT_LICENSE_FILES = COPYING
- 
--ENLIGHTENMENT_DEPENDENCIES = 	\
--	host-pkgconf 		\
--	libecore 		\
--	libeet 			\
--	libeina 		\
--	libevas 		\
-+ENLIGHTENMENT_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-libefl \
-+	libefl \
-+	libelementary \
- 	libevas-generic-loaders \
--	libedje 		\
--	libefreet 		\
--	libedbus 		\
--	libeio 			\
--	host-libedje 		\
--	host-libeet		\
- 	xcb-util-keysyms
- 
- ENLIGHTENMENT_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
--	--disable-rpath
-+	--disable-pam \
-+	--disable-rpath \
-+	--disable-systemd
- 
- # uClibc has an old incomplete sys/ptrace.h for powerpc & sparc
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
