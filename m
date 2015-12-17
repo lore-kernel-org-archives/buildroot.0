@@ -1,38 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:01:22 +0100
-Subject: [Buildroot] [PATCH] valgrind: update
- 0003-mips-replace-addi-with-addiu.patch
-In-Reply-To: <1448981914-46671-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1448981914-46671-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151217220122.47d71bfc@free-electrons.com>
+Date: Thu, 17 Dec 2015 22:02:27 +0100
+Subject: [Buildroot] [git commit] musl: add a sys/queue.h implementation
+Message-ID: <20151217210441.C835182571@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=fa6473729cf868dff232dfbc9674a168cc3f9b97
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 1 Dec 2015 14:58:34 +0000, Vicente Olivert Riera wrote:
-> This patch has been updated in the upstream bug report, so let's update
-> it in Buildroot as well. It will fix the build issue for mips64r6:
-> 
-> m_dispatch/dispatch-mips64-linux.S:199: Error: opcode not supported on
-> this processor: mips64r6 (mips64r6) `daddi $13,$13,8'
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/6ca/6ca3a31d1542fbbb44238e296565b40d6afcd5fa/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  .../0003-mips-replace-addi-with-addiu.patch        | 86 ++++++++++++++++++++++
->  1 file changed, 86 insertions(+)
+Musl does not provide a 'sys/queue.h' implementation, and this has been
+a problem for packages that depend on it.
 
-Applied, thanks.
+So lets create a package called netbsd-queue that will install a
+'sys/queue.h' in the staging directory when enabled, based on the
+NetBSD implementation.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Musl toolchain and external toolchain packages will depend on this
+package, so that 'sys/queue.h' will be always installed when compiling
+with a musl based toolchain.
+
+Tested on ARM and x86 in the following cases:
+  - Buildroot musl toolchain.
+  - External musl toolchain without 'sys/queue.h'.
+  - External musl toolchain with 'sys/queue.h'.
+
+Fixes:
+http://autobuild.buildroot.net/results/24bad2d06ab40024dacf136bee722072d587f84e
+
+And possibly many others.
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/musl/musl.mk                               |  5 +++++
+ package/netbsd-queue/netbsd-queue.hash             |  2 ++
+ package/netbsd-queue/netbsd-queue.mk               | 23 ++++++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |  7 +++++++
+ 4 files changed, 37 insertions(+)
+
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 6fdcc73..2cc6699 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -13,6 +13,11 @@ MUSL_LICENSE_FILES = COPYRIGHT
+ # cross-compiler and the kernel headers
+ MUSL_DEPENDENCIES = host-gcc-initial linux-headers
+ 
++# musl does not provide a sys/queue.h implementation, so add the
++# netbsd-queue package that will install a sys/queue.h file in the
++# staging directory based on the NetBSD implementation.
++MUSL_DEPENDENCIES += netbsd-queue
++
+ # musl is part of the toolchain so disable the toolchain dependency
+ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+diff --git a/package/netbsd-queue/netbsd-queue.hash b/package/netbsd-queue/netbsd-queue.hash
+new file mode 100644
+index 0000000..f8e2a6c
+--- /dev/null
++++ b/package/netbsd-queue/netbsd-queue.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 c13407edd0e33be73cae72514cb234f8612e1c0e54401c9448daffd3a240158b  queue.h?rev=1.70
+diff --git a/package/netbsd-queue/netbsd-queue.mk b/package/netbsd-queue/netbsd-queue.mk
+new file mode 100644
+index 0000000..0f486fa
+--- /dev/null
++++ b/package/netbsd-queue/netbsd-queue.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# netbsd-queue
++#
++################################################################################
++
++NETBSD_QUEUE_VERSION = 1.70
++NETBSD_QUEUE_SITE = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys
++NETBSD_QUEUE_SOURCE = queue.h?rev=$(NETBSD_QUEUE_VERSION)
++NETBSD_QUEUE_LICENSE = BSD-3c
++
++NETBSD_QUEUE_INSTALL_STAGING = YES
++
++define NETBSD_QUEUE_EXTRACT_CMDS
++	cp $(DL_DIR)/$(NETBSD_QUEUE_SOURCE) $(@D)/queue.h
++endef
++
++define NETBSD_QUEUE_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/queue.h \
++		$(STAGING_DIR)/usr/include/sys/queue.h
++endef
++
++$(eval $(generic-package))
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 613ce50..745b685 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -237,6 +237,13 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+ endif
+ 
++# musl does not provide a sys/queue.h implementation, so add the
++# netbsd-queue package that will install a sys/queue.h file in the
++# staging directory based on the NetBSD implementation.
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
++endif
++
+ # The Linaro ARMhf toolchain expects the libraries in
+ # {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
+ # {/usr,}/lib, so we need to create a symbolic link.
