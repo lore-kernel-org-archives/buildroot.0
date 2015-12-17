@@ -1,123 +1,65 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 Dec 2015 11:45:46 +0100
-Subject: [Buildroot] [PATCH 09/13 v2] core/legal-info: also save patches
-In-Reply-To: <a0a187ba70eeb0c27ae84cbc52d823d3ca445a83.1450031251.git.yann.morin.1998@free.fr>
-References: <cover.1450031251.git.yann.morin.1998@free.fr>
- <a0a187ba70eeb0c27ae84cbc52d823d3ca445a83.1450031251.git.yann.morin.1998@free.fr>
-Message-ID: <5672925A.5080400@lucaceresoli.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 17 Dec 2015 11:47:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gauche: fix musl build issue
+Message-ID: <1450349254-18577-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+Add a patch from upstream to fix a musl build issue:
 
-Yann E. MORIN wrote:
-> Currently, the legal-info infra only saves the source archive of a
-> package. However, that's not enough as we may apply some patches on
-> packages sources.
->
-> We do suggest users to also redistribute the Buildroot sources as part
-> of their compliance distribution, so the patches bundled in Buildroot
-> would indeed be included in the compliance distribution.
->
-> However, that's still not enough, since we may download some patches, or
-> the user may use a global patch directory. Patches in there might not
-> end up in the compliance distribution, and there are risks of
-> non-conformity.
->
-> So, always include patches alongside the source archive.
->
-> To ensure reproducibility, we also generate a series file, so patches
-> can be re-applied in the correct order.
->
-> We get the list of patches to include from the list of patches that were
-> applied by the package infrastructure (via the apply-patches support
-> script). So, we need to get packages properly extracted and patched
-> before we can save their legal-info, not just in the case they define
-> _LICENSE_FILES.
->
-> Update the legal-info header accordingly.
->
-> Note: this means that, when a package is not patched and defines no
-> LICENSE_FILES, we will extract and patch it for nothing. There is no
-> easy way to know whether we have to patch a package or not. We can only
-> either duplicate the logic to detect patches (bad) or rely on the infra
-> actually patching the package. Also, a vast majority of packages are
-> either patched, or define _LICENSE_FILES, so it is best and easiest to
-> always extract and patch them prior to legal-info.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
->
-> ---
-> Changes v1 -> v2;
->    - don't recompute rawname-version needlessly  (Luca)
-> ---
->   package/pkg-generic.mk           | 12 +++++++-----
->   support/legal-info/README.header |  3 +--
->   2 files changed, 8 insertions(+), 7 deletions(-)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9b9a27f..f873e9c 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -760,12 +760,10 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
->   endif
->   $(2)_MANIFEST_LICENSE_FILES ?= not saved
->
-> -# If the package declares _LICENSE_FILES, we need to extract it,
-> -# for overriden, local or normal remote packages alike, whether
-> -# we want to redistribute it or not.
-> -ifneq ($$($(2)_LICENSE_FILES),)
-> +# We need to extract and patch a package to be able to retrieve its
-> +# license files (if any) and the list of patches applied to it (if
-> +# any).
->   $(1)-legal-info: $(1)-patch
-> -endif
->
->   # We only save the sources of packages we want to redistribute, that are
->   # non-local, and non-overriden. So only store, in the manifest, the tarball
-> @@ -827,6 +825,10 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
->   	$$(Q)$$(call hardlink-copy,\
->   		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
->   		     $$($(2)_REDIST_SOURCES_DIR))
-> +	$$(Q)while read f; do \
-> +		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR)) || exit 1; \
-> +		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
-> +	done <$$($(2)_DIR)/.applied_patches_list
->   endif # redistribute
->
->   endif # other packages
-> diff --git a/support/legal-info/README.header b/support/legal-info/README.header
-> index d07c45d..4d7fd7c 100644
-> --- a/support/legal-info/README.header
-> +++ b/support/legal-info/README.header
-> @@ -16,8 +16,7 @@ This material is composed of the following items.
->      need to collect it manually.
->    * The source code for all packages; this has been saved in the sources/
->      subdirectory (except for the non-redistributable packages, which have not
-> -   been saved); patches applied to some packages by Buildroot are included in
-> -   the Buildroot sources and were not duplicated in the sources/ subdirectory.
-> +   been saved).
+  In file included from os_dep.c:44:0:
+  /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/asm/sigcontext.h:9:8: error: redefinition of 'struct sigcontext'
+   struct sigcontext {
+          ^
+  In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/signal.h:243:0,
+                   from ./include/private/../gc_pthread_redirects.h:42,
+                   from ./include/private/../gc.h:1443,
+                   from ./include/private/gc_priv.h:46,
+                   from os_dep.c:17:
+  /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/bits/signal.h:11:16: note: originally defined here
+   typedef struct sigcontext
 
-Now we could explicitly state we also save patches. E.g. changing the
-above bullet to:
+The Linux headers sigcontext and asm/sigcontext are no longer used and were
+replaced with ucontext_t in GC 7.0alpha1 (gauche uses a private copy of bdwgc).
 
-  * The original source code for all packages; this has been saved in...
-        ^^^^^^^^
+Fixes:
+http://autobuild.buildroot.net/results/411/4111ea586143410649b78c8dfc737f0f83d78441/
+http://autobuild.buildroot.net/results/b19/b19dbcc7ddf0f24472afcecf4c684915045550bf/
+http://autobuild.buildroot.net/results/9eb/9ebf7ad0d721433dcc8523a55d08ca074d037e58/
+http://autobuild.buildroot.net/results/223/22328dbe8ea86c59ceff3ba40da1d9ef39e10533/
+and many more.
 
-And adding:
+Fetch from:
+https://github.com/shirok/Gauche/commit/13a196557848f22a1607a300643131345e9f32b3
 
-  * The patches applied to the source code before building it, along with
-    a file named 'series' that lists the same patches in the order they
-    have been applied.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/gauche/gauche.hash | 1 +
+ package/gauche/gauche.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-But this can be done in a later commit, so:
-
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-
+diff --git a/package/gauche/gauche.hash b/package/gauche/gauche.hash
+index 9ec106a..975e958 100644
+--- a/package/gauche/gauche.hash
++++ b/package/gauche/gauche.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 7b18bcd70beaced1e004594be46c8cff95795318f6f5830dd2a8a700410fc149  Gauche-0.9.4.tgz
++sha256 0ff5986540d8ad89eee595de766810f09e489a6a3363b47a65ce7ad18701ee01  13a196557848f22a1607a300643131345e9f32b3.patch
+diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
+index 95a448b..85fcc71 100644
+--- a/package/gauche/gauche.mk
++++ b/package/gauche/gauche.mk
+@@ -10,6 +10,7 @@ GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
+ GAUCHE_LICENSE = BSD-3c, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
+ GAUCHE_LICENSE_FILES = COPYING
+ GAUCHE_DEPENDENCIES = host-gauche
++GAUCHE_PATCH = https://github.com/shirok/Gauche/commit/13a196557848f22a1607a300643131345e9f32b3.patch
+ 
+ HOST_GAUCHE_CONF_OPTS = --without-zlib
+ GAUCHE_CONF_OPTS = --without-libatomic-ops
 -- 
-Luca
+2.6.4
