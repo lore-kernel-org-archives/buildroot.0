@@ -1,50 +1,73 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 17 Dec 2015 07:59:18 -0300
-Subject: [Buildroot] [PATCH] samba4: security bump to version 4.3.3
-Message-ID: <1450349958-14230-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Dec 2015 12:52:09 +0100
+Subject: [Buildroot] [git commit] bcache-tools: fix build with gcc-5
+Message-ID: <20151217115520.F38DD8230F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=462843e0130c9b3117ed293d372ee21ab9987bb8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Backport a Debian patch to fix a build failure with gcc-5:
+
+bcache.c:125:9: warning: 'crc_table' is static but used in inline
+function 'crc64' which is not static
+...
+make-bcache.c:277: undefined reference to `crc64'
+
+This issue has been reported upstream but is not yet fixed.
+
 Fixes:
-CVE-2015-7540 - Remote DoS in Samba (AD) LDAP server
-CVE-2015-3223 - Denial of service in Samba Active Directory server
-CVE-2015-5252 - Insufficient symlink verification in smbd)
-CVE-2015-5299 - Missing access control check in shadow copy code
-CVE-2015-5296 - Samba client requesting encryption vulnerable to
-downgrade attack
-CVE-2015-8467 - Denial of service attack against Windows Active
-Directory server
-CVE-2015-5330 - Remote memory read in Samba LDAP server
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+  http://autobuild.buildroot.net/results/410/410954d33206475d70b8e5ba55a2c955a229af9b/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...on-t-inline-crc64-for-gcc-5-compatability.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 2959e5b..494ad17 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	61989195caadf0f6fb51ce6bed5e203e6146facc2c276a26ad41901ad9129a75	samba-4.3.2.tar.gz
-+sha256	e62d21313acbb29e24b0b80aaf2b63fdd1ccce4cfb741f333deca95a1a3a70df	samba-4.3.3.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 388a40c..50a2692 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.3.2
-+SAMBA4_VERSION = 4.3.3
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
--- 
-2.4.10
+diff --git a/package/bcache-tools/0001-Don-t-inline-crc64-for-gcc-5-compatability.patch b/package/bcache-tools/0001-Don-t-inline-crc64-for-gcc-5-compatability.patch
+new file mode 100644
+index 0000000..1a437a8
+--- /dev/null
++++ b/package/bcache-tools/0001-Don-t-inline-crc64-for-gcc-5-compatability.patch
+@@ -0,0 +1,35 @@
++Don't inline crc64 for gcc-5 compatability
++
++This patch is backported from Debian and it fixes the following error:
++
++bcache.c:125:9: warning: 'crc_table' is static but used in inline
++function 'crc64' which is not static
++...
++make-bcache.c:277: undefined reference to `crc64'
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From: David Mohr <david@mcbf.net>
++Date: Tue, 26 May 2015 20:34:31 -0600
++Subject: Don't inline crc64 for gcc-5 compatability
++
++Forwarded: http://article.gmane.org/gmane.linux.kernel.bcache.devel/2919
++
++By James Cowgill, see Debian bug #777798
++---
++ bcache.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/bcache.c b/bcache.c
++index 8f37445..8b4b986 100644
++--- a/bcache.c
+++++ b/bcache.c
++@@ -115,7 +115,7 @@ static const uint64_t crc_table[256] = {
++ 	0x9AFCE626CE85B507ULL
++ };
++ 
++-inline uint64_t crc64(const void *_data, size_t len)
+++uint64_t crc64(const void *_data, size_t len)
++ {
++ 	uint64_t crc = 0xFFFFFFFFFFFFFFFFULL;
++ 	const unsigned char *data = _data;
