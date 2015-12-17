@@ -1,23 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 12:57:42 +0100
-Subject: [Buildroot] [PATCH 1/1] netsniff-ng:Prevent finding host
- installed nacl
-In-Reply-To: <1448893710-21961-1-git-send-email-joris.lijssens@gmail.com>
-References: <1448893710-21961-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <20151217125742.3b36883a@free-electrons.com>
+Date: Thu, 17 Dec 2015 13:08:27 +0100
+Subject: [Buildroot] [PATCH 1/3] qemu: bump version to 2.5.0
+In-Reply-To: <1450353428-57815-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1450353428-57815-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20151217130827.02b481e2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Joris Lijssens,
+Dear Vicente Olivert Riera,
 
-On Mon, 30 Nov 2015 15:28:30 +0100, Joris Lijssens wrote:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+On Thu, 17 Dec 2015 11:57:06 +0000, Vicente Olivert Riera wrote:
+> - Bump version to 2.5.0.
+> 
+> - Update hash file.
+> 
+> - Remove upstreamed patch:
+> 
+>   http://git.qemu.org/?p=qemu.git;a=commit;h=fccd35a04640a728f979e6d72b2c7d02c05549f0
+> 
+> - Remove non-existent configure options:
+> 
+>   ERROR: unknown option --disable-guest-base
+>   Try './configure --help' for more information
+> 
+>   ERROR: unknown option --disable-smartcard-nss
+>   Try './configure --help' for more information
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/netsniff-ng/netsniff-ng.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  ...se-appropriate-code-fragment-for-fstack-p.patch | 58 ----------------------
+>  package/qemu/qemu.hash                             |  2 +-
+>  package/qemu/qemu.mk                               |  4 +-
+>  3 files changed, 2 insertions(+), 62 deletions(-)
+>  delete mode 100644 package/qemu/0001-configure-use-appropriate-code-fragment-for-fstack-p.patch
 
 Applied, thanks.
 
