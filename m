@@ -1,143 +1,76 @@
-From: Andreas Ehmanns <universeII@gmx.de>
-Date: Thu, 17 Dec 2015 21:41:19 +0100
-Subject: [Buildroot] [PATCH 1/1] openldap: add support to build the server
-Message-ID: <1450384879-5494-1-git-send-email-universeII@gmx.de>
+From: Andreas Ehmanns <universeii@gmx.de>
+Date: Thu, 17 Dec 2015 21:43:36 +0100
+Subject: [Buildroot] Move openldap package and enable LDAP server?
+In-Reply-To: <20151212140145.5a7583dc@free-electrons.com>
+References: <56614B18.4030703@gmx.de>
+ <20151204091924.2f5f9c22@free-electrons.com> <56614CF8.5050804@gmx.de>
+ <5669CC92.8080504@gmx.de> <20151212140145.5a7583dc@free-electrons.com>
+Message-ID: <56731E78.6080308@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
----
- package/openldap/Config.in   |  8 ++++++-
- package/openldap/S75slapd    | 51 ++++++++++++++++++++++++++++++++++++++++++++
- package/openldap/openldap.mk | 17 ++++++++++++++-
- 3 files changed, 74 insertions(+), 2 deletions(-)
- create mode 100644 package/openldap/S75slapd
+Thomas, All,
 
-diff --git a/package/openldap/Config.in b/package/openldap/Config.in
-index 3085a5c..30c0f65 100644
---- a/package/openldap/Config.in
-+++ b/package/openldap/Config.in
-@@ -6,12 +6,18 @@ config BR2_PACKAGE_OPENLDAP
- 	  OpenLDAP Software is an open source implementation of
- 	  the Lightweight Directory Access Protocol.
- 
--	  This only installs client-side support.
-+	  This only installs library support.
- 
- 	  http://www.openldap.org/
- 
- if BR2_PACKAGE_OPENLDAP
- 
-+config BR2_PACKAGE_OPENLDAP_SERVER
-+	bool "openldap server binary"
-+	select BR2_PACKAGE_BERKELEYDB
-+	help
-+	  Installs the OpenLDAP server slapd
-+
- config BR2_PACKAGE_OPENLDAP_CLIENTS
- 	bool "openldap client binaries"
- 	default y
-diff --git a/package/openldap/S75slapd b/package/openldap/S75slapd
-new file mode 100644
-index 0000000..1365d4b
---- /dev/null
-+++ b/package/openldap/S75slapd
-@@ -0,0 +1,51 @@
-+#!/bin/sh
-+DAEMON=/usr/libexec/slapd
-+NAME=slapd
-+DESC="OpenLDAP server"
-+CONF=/etc/openldap/slapd.conf
-+
-+ARGS="-u ldap -g ldap"
-+
-+set -e
-+
-+case "$1" in
-+    start)
-+        if [ ! -d /var/run/openldap ]; then
-+            install -d -o ldap -g ldap -m 755 /var/run/openldap
-+        fi
-+
-+        if [ ! -d /var/openldap-data ]; then
-+            install -d -o ldap -g ldap -m 755 /var/openldap-data
-+        else
-+            chown -R ldap:ldap /var/openldap-data
-+        fi
-+
-+        printf "Starting $DESC: $NAME: "
-+        start-stop-daemon -S -b -n $NAME -a $DAEMON -- $ARGS
-+        echo "done."
-+        ;;
-+    stop)
-+        printf "Stopping $DESC: $NAME: "
-+        start-stop-daemon -K -n $NAME
-+        echo "done."
-+        ;;
-+    restart)
-+        printf "Restarting $DESC: $NAME: "
-+        $0 stop
-+        $0 start
-+        echo "done."
-+        ;;
-+    reload)
-+        printf "Reloading $DESC: $NAME: "
-+        killall -HUP $(basename ${DAEMON})
-+        echo "done."
-+        ;;
-+    *)
-+        echo "Usage: $0 {start|stop|restart|reload}"
-+        exit 1
-+        ;;
-+esac
-+
-+exit 0
-+
-+
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 17bf991..bcb285a 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -12,6 +12,17 @@ OPENLDAP_LICENSE_FILES = LICENSE
- OPENLDAP_INSTALL_STAGING = YES
- OPENLDAP_DEPENDENCIES = host-pkgconf
- 
-+ifeq ($(BR2_PACKAGE_OPENLDAP_SERVER),y)
-+define OPENLDAP_USERS
-+        ldap -1 ldap -1 * /var/run/openldap - - OpenLDAP server user
-+endef
-+
-+define OPENLDAP_COPY_INITSCRIPT
-+        $(INSTALL) -D -m 755 $(@D)/S75slapd $(TARGET_DIR)/etc/init.d/S75slapd
-+endef
-+OPENLDAP_POST_INSTALL_TARGET_HOOKS += OPENLDAP_COPY_INITSCRIPT
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPENLDAP_TLS = openssl
- OPENLDAP_DEPENDENCIES += openssl
-@@ -44,7 +55,6 @@ OPENLDAP_CONF_ENV += ac_cv_func_memcmp_working=yes
- OPENLDAP_CONF_OPTS += \
- 	--enable-syslog \
- 	--disable-proctitle \
--	--disable-slapd \
- 	--with-yielding-select \
- 	--sysconfdir=/etc \
- 	--enable-dynamic=$(if $(BR2_STATIC_LIBS),no,yes) \
-@@ -52,6 +62,11 @@ OPENLDAP_CONF_OPTS += \
- 	--with-mp=$(OPENLDAP_MP) \
- 	CPPFLAGS="$(TARGET_CPPFLAGS) $(OPENLDAP_CPPFLAGS)"
- 
-+ifeq ($(BR2_PACKAGE_OPENLDAP_SERVER),)
-+OPENLDAP_CONF_OPTS += \
-+        --disable-slapd
-+endif
-+
- # Somehow, ${STRIP} does not percolates through to the shtool script
- # used to install the executables; thus, that script tries to run the
- # executable it is supposed to install, resulting in an error.
--- 
-2.1.4
+Am 12.12.2015 um 14:01 schrieb Thomas Petazzoni:
+> Hello Andreas,
+>
+> On Thu, 10 Dec 2015 20:03:46 +0100, Andreas Ehmanns wrote:
+>
+>> please find attached the patch for adding the openldap server. It
+>> contains the server option, moves the configuration to "Networking
+>> Applications" and adds an init script for the ldap server.
+>>
+>> Please let me know what you think about the patch and if there are
+>> things that I should change.
+> Thanks. But could you please send the patch with 'git send-email'
+> rather than as an attachment? It allows the patch to be reviewed
+> properly, and also easily applied.
+>
+> A few comments though:
+>
+>   * The commit title is too long. Something like:
+>
+> 	openldap: add support to build the server
+>
+>     would be preferable.
+>
+>   * I think you should keep the "default y" on
+>     BR2_PACKAGE_OPENLDAP_CLIENTS in order to preserve the existing
+>     behavior, and not breaking things for current users.
+>
+>   * In the S75sldapd script, I believe checking for the presence of the
+>     daemon and config file is not really needed.
+>
+>     If the -4 in ARGS is to force IPv4 only, I believe it's not really
+>     great. Why not also support IPv6 ?
+>
+>   * There is a fix of tabs and spaces for the indentation in the shell
+>     script, please try to be consistent.
+>
+>   * Please use "printf" rather than "echo -n" in the shell script, since
+>     printf is POSIX, while "echo -n" is not.
+>
+>   * We normally use a PID file, see S50dropbear for example. Is slapd
+>     already managing its own PID file ?
+>
+>   * In the .mk file, the OPENLDAP_USERS definition is inside a condition
+>     that is commented out, it doesn't look good.
+>
+>   * Don't do ifeq ($(BR2_PACKAGE_OPENLDAP_SERVER),n), but just ifeq
+>     ($(BR2_PACKAGE_OPENLDAP_SERVER),). An option will never have the
+>     value 'n': when an option is disabled, its value is the empty string.
+>
+> Could you take those comments into account and send an updated version?
+>
+> Thanks a lot!
+>
+> Thomas
+I incorporated your proposed changes and re-sent the patch using git.
+Note: slapd is managing it's own PID file. So there was no need to add 
+this to the init script.
+
+Regards,
+Andreas
