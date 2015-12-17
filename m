@@ -1,70 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 23:17:16 +0100
-Subject: [Buildroot] [PATCH v10 01/28] package/efl/libefl: new package
-In-Reply-To: <5673329D.4040406@openwide.fr>
-References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
- <1450219240-16938-2-git-send-email-romain.naour@openwide.fr>
- <20151216213204.198f5387@free-electrons.com>
- <5673329D.4040406@openwide.fr>
-Message-ID: <20151217231716.5b8c9eea@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 17 Dec 2015 23:17:34 +0100
+Subject: [Buildroot] [PATCH v2] assimp: new package
+In-Reply-To: <20151213140730.70890ee3@free-electrons.com>
+References: <1449440276-6133-1-git-send-email-ps.report@gmx.net>
+ <20151213140730.70890ee3@free-electrons.com>
+Message-ID: <20151217231734.0b46d158@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+Hello Thomas,
 
-On Thu, 17 Dec 2015 23:09:33 +0100, Romain Naour wrote:
+On Sun, 13 Dec 2015 14:07:30 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-> > So we really need Lua itself, and not LuaJIT ? If we need only Lua (and
-> > not LuaJIT), why don't we select it ? If we can use either Lua or
-> > LuaJIT, then we should "depends on BR2_PACKAGE_LUAINTERPRETER.
-> > 
-> > Also, if I apply just this patch, I get some kconfig warnings:
-> > 
-> > package/efl/Config.in:1:error: recursive dependency detected!
-> > package/efl/Config.in:1:	symbol BR2_PACKAGE_EFL depends on BR2_PACKAGE_LUA
-> > package/lua/Config.in:1:	symbol BR2_PACKAGE_LUA is selected by BR2_PACKAGE_LIBEDJE
-> > package/efl/libedje/Config.in:4:	symbol BR2_PACKAGE_LIBEDJE is selected by BR2_PACKAGE_LIBETHUMB
-> > package/efl/libethumb/Config.in:4:	symbol BR2_PACKAGE_LIBETHUMB depends on BR2_PACKAGE_EFL
-> > 
-> > But it's true that your series later removes libedje, so maybe I should
-> > just not care about this: it's hard to do the big change you're doing
-> > without having some intermediate steps that are imperfect.
+> Peter,
 > 
-> Well, I tried to do a smooth update series has much as possible ;-)
-> But I didn't want to modify efl packages that are removed at the end of the
-> series... I didn't test all intermediate test of this series, only when the
-> entire series is applied.
-
-Yes, that's fine with me. The changes are complicated, it's difficult
-to do a series that is entirely bisectable.
-
-> > Can you let me know the answer for the Lua/LuaJIT question so that we
-> > can move forward with this ?
+> On Sun,  6 Dec 2015 23:17:55 +0100, Peter Seiderer wrote:
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ----
+> > Changes v1 -> v2:
+> >   - use github helper (thanks to J?rg Krause)
 > 
-> I haven't tested all lua interpreter...
-> Here is the lua interpreter I used for the runtime test:
+> It seems that it needs a C++ compiler, so you need to add this
+> dependency, otherwise the build fails with:
 > 
-> BR2_PACKAGE_LUA=y
-> BR2_PACKAGE_PROVIDES_LUAINTERPRETER="lua"
-> BR2_PACKAGE_LUA_5_1=y
+> CMake Error at CMakeLists.txt:3 (PROJECT):
+>   The CMAKE_CXX_COMPILER:
 > 
-> If you want to try with LuaJIT, the --enable-lua-old option must be removed.
-> IIRC, I had some build issue with it but it was with efl 1.13.2.
-> So, I wanted to avoid LuaJIT for now and be sure that one of LUA packages is
-> selected.
+>     /home/thomas/projets/outputs/assimp-minimal/host/usr/bin/arm-linux-g++
 > 
-> I'll check if efl can just depends on BR2_PACKAGE_HAS_LUAINTERPRETER.
+>   is not a full path to an existing compiler tool.
+> 
+>   Tell CMake where to find the compiler by setting either the environment
+>   variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
+>   to the compiler, or to the compiler name if it is in the PATH.
+> 
 
-No, please stick to just Lua for now. I want to merge this series, so
-we should stop doing more and more things on it.
+Ups, missed this one, fixed in next patch version...
 
-Thanks,
+> Also, it fails to build with musl, with the following error:
+> 
+> In file included from /home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/contrib/irrXML/irrXML.cpp:10:0:
+> /home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/contrib/irrXML/irrString.h: In member function ?irr::core::string<char_type> irr::io::CXMLReaderImpl<char_type, superclass>::replaceSpecialCharacters(irr::core::string<char_type>&) [with char_type = char; superclass = irr::io::IXMLBase]?:
+> /home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/contrib/irrXML/irrString.h:639:3: warning: assuming signed overflow does not occur when assuming that (X + c) < X is always false [-Wstrict-overflow]
+>    if (allocated < used)
+>    ^
+> [ 96%] Linking CXX shared library ../lib/libassimp.so
+> /home/thomas/projets/outputs/assimp-musl/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/4.9.3/../../../../arm-buildroot-linux-musleabihf/bin/ld: ../lib/libzlibstatic.a(compress.o): relocation R_ARM_MOVW_ABS_NC against `a local symbol' can not be used when making a shared object; recompile with -fPIC
+> ../lib/libzlibstatic.a: error adding symbols: Bad value
+> collect2: error: ld returned 1 exit status
+> code/CMakeFiles/assimp.dir/build.make:4307: recipe for target 'lib/libassimp.so.3.2.0' failed
+> make[4]: *** [lib/libassimp.so.3.2.0] Error 1
+> CMakeFiles/Makefile2:172: recipe for target 'code/CMakeFiles/assimp.dir/all' failed
+> make[3]: *** [code/CMakeFiles/assimp.dir/all] Error 2
+> Makefile:127: recipe for target 'all' failed
+> make[2]: *** [all] Error 2
+> package/pkg-generic.mk:196: recipe for target '/home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/.stamp_built' failed
+> make[1]: *** [/home/thomas/projets/outputs/assimp-musl/build/assimp-v3.2/.stamp_built] Error 2
+> Makefile:16: recipe for target '_all' failed
+> make: *** [_all] Error 2
+> 
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Seems to be a problem with the built-in zlib (built static without -fPIC) and
+linking into libassimp.so (object files built with -fPIC), see e.g. [1],
+simple workaround is to select buildroot zlib package...
+
+Updated patch follows soon...
+
+Regards,
+Peter
+
+[1] https://cmake.org/pipermail/cmake/2006-March/008482.html
+
+
+> Defconfig to reproduce:
+> 
+> BR2_arm=y
+> BR2_cortex_a9=y
+> BR2_ARM_EABIHF=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2015.11-rc1-71-g90d1299.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_ASSIMP=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
+> Can you look into these issues and send an updated version?
+> 
+> Thanks!
+> 
+> Thomas
