@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 22:47:34 +0100
-Subject: [Buildroot] [git commit] coreutils: disable stdbuf for static builds
-Message-ID: <20151217214809.44A44825B6@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 22:48:26 +0100
+Subject: [Buildroot] [PATCH 1/1] coreutils: disable stdbuf for static
+ builds
+In-Reply-To: <1448745450-19283-1-git-send-email-0intro@gmail.com>
+References: <1448745450-19283-1-git-send-email-0intro@gmail.com>
+Message-ID: <20151217224826.62b06019@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc3b03dcdc9a8c7b763103297fc19929357c1ca7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear David du Colombier,
 
-When stdbuf is enabled, it builds a shared library, but it will fail
-in a static-only scenario.
+On Sat, 28 Nov 2015 22:17:30 +0100, David du Colombier wrote:
+> When stdbuf is enabled, it builds a shared library,
+> but it will fail in a static-only scenario.
+> 
+> Signed-off-by: David du Colombier <0intro@gmail.com>
+> ---
+>  package/coreutils/coreutils.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Fixes:
+Applied, thanks. I've added a reference to the autobuilder failure that
+this patch is fixing.
 
-  http://autobuild.buildroot.org/results/974/9741cc9841fa95f7430a91f585c4464ee2c9311b/
+Thanks!
 
-Signed-off-by: David du Colombier <0intro@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/coreutils/coreutils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 60455ac..d8e2ee6 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -109,6 +109,10 @@ endef
- COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP_BIN
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+COREUTILS_CONF_OPTS += --enable-no-install-program=stdbuf
-+endif
-+
- define COREUTILS_CLEANUP
- 	# link for archaic shells
- 	ln -fs test $(TARGET_DIR)/usr/bin/[
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
