@@ -1,81 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Dec 2015 22:42:20 +0100
-Subject: [Buildroot] [PATCH 1/1] emlog:new package
-In-Reply-To: <1449224567-14412-1-git-send-email-joris.lijssens@gmail.com>
-References: <1449224567-14412-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <20151217214220.GF3653@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 17 Dec 2015 18:43:55 -0300
+Subject: [Buildroot] [PATCH] bind: security bump to version 9.9.8-P2
+Message-ID: <1450388635-429-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joris, All,
+Fixes:
 
-On 2015-12-04 11:22 +0100, Joris Lijssens spake thusly:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-> ---
-[--SNIP--]
-> diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
-> new file mode 100644
-> index 0000000..9264849
-> --- /dev/null
-> +++ b/package/emlog/emlog.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# emlog
-> +#
-> +################################################################################
-> +
-> +EMLOG_VERSION = 0.52
-> +EMLOG_SITE = $(call github,nicupavel,emlog,emlog-$(EMLOG_VERSION))
-> +EMLOG_LICENSE = GPLv2
-> +EMLOG_LICENSE_FILES = COPYING
-> +
-> +EMLOG_DEPENDENCIES = linux
-> +
-> +define EMLOG_BUILD_CMDS
-> +       $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
-> +       $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(@D) nbcat
-> +endef
-> +
-> +define EMLOG_INSTALL_TARGET_CMDS
-> +       $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) \
-> +               INSTALL_MOD_STRIP=1 \
-> +               modules_install
-> +       $(INSTALL) -m 0755 $(@D)/nbcat $(TARGET_DIR)/usr/bin
-> +endef
+Named is potentially vulnerable to the OpenSSL vulnerabilty described in
+CVE-2015-3193.
 
-As far as I can see, this is using the standrad Linux out-of-tree
-external module mechanism to build the emlog module. Buildroot has
-an infrastructure to help write packages that build a kernel module:
-    https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_building_kernel_modules
+CVE-2015-8461 - Incorrect reference counting could result in an INSIST
+failure if a socket error occurred while performing a lookup.
 
-Thomas and I believe emlog should use that kernel-module infra.
-You just need to handle the nbcat userland utility with the
-generic-package infra.
+CVE-2015-8000 - Insufficient testing when parsing a message allowed
+records with an incorrect class to be be accepted, triggering a REQUIRE
+failure when those records were subsequently cached.
 
-Care to update and respin, please?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-In the meantime, I'm marking this patch as "Changes Requested" in our
-Patchwork.
-
-Thanks! :-)
-
-> +$(eval $(generic-package))
-> -- 
-> 1.8.3.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 7f52c55..befc8d7 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.9.8/bind-9.9.8.tar.gz.sha256.asc
+-sha256	643997cdb0dd232a4c9f7c0f1436841fbf325c6b7269e6490bf5f380eda344e3	bind-9.9.8.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.9.8-P2/bind-9.9.8-P2.tar.gz.sha256.asc
++sha256	f5841926e19637b93ec0b44b5abfbab2410e692736cf11143d461f656fbdf329	bind-9.9.8-P2.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index e93b356..0e9a0f4 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.9.8
++BIND_VERSION = 9.9.8-P2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
+ BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.4.10
