@@ -1,35 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Dec 2015 21:54:06 +0100
-Subject: [Buildroot] [git commit] Config.in: Introduce a new
-	BR2_DEPRECATED_SINCE_2015_11 variable
-Message-ID: <20151217205545.2815682565@busybox.osuosl.org>
+Date: Thu, 17 Dec 2015 21:54:30 +0100
+Subject: [Buildroot] [git commit] torsmo: deprecate this package
+Message-ID: <20151217205545.3E6C17FE69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=429a11647a3e0eb1e6781a0008252144729f255e
+commit: http://git.buildroot.net/buildroot/commit/?id=7152c5c5ce9567dd4046bbd27d1e84d619d09228
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/torsmo/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Config.in b/Config.in
-index 1809eeb..0be44d9 100644
---- a/Config.in
-+++ b/Config.in
-@@ -337,6 +337,10 @@ config BR2_DEPRECATED_SINCE_2015_08
- 	bool
- 	default y
- 
-+config BR2_DEPRECATED_SINCE_2015_11
-+	bool
-+	default y
-+
- endif
- 
- config BR2_ENABLE_DEBUG
+diff --git a/package/torsmo/Config.in b/package/torsmo/Config.in
+index a3943bd..5c18ac6 100644
+--- a/package/torsmo/Config.in
++++ b/package/torsmo/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TORSMO
+ 	bool "torsmo"
++	depends on BR2_DEPRECATED_SINCE_2015_11
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_XLIB_LIBX11
