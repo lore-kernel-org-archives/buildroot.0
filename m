@@ -1,82 +1,33 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri, 18 Dec 2015 16:12:57 -0200
-Subject: [Buildroot] [PATCH v3] libgdiplus: new package
-In-Reply-To: <CANu7NGtNLr0u42ZXMoOuuPMOp+Rm=c=GROEF=tZmgrWHQgfPqg@mail.gmail.com>
-References: <1448410510-23087-1-git-send-email-sergio.prado@e-labworks.com>
- <20151217222952.28cfb35c@free-electrons.com>
- <20151218114117.5d273ce1@free-electrons.com>
- <CANu7NGtNLr0u42ZXMoOuuPMOp+Rm=c=GROEF=tZmgrWHQgfPqg@mail.gmail.com>
-Message-ID: <CANu7NGt5xa9gWAxY4ha7VDbo0HxTNQ4VeMD7f4kD74tggmsdYw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 18 Dec 2015 19:14:05 +0100
+Subject: [Buildroot] [PATCH 4/4 v2] package/libedje: do not select Lua,
+	depend on it
+In-Reply-To: <84fa969c68f847a8cbc781c28da5a5c2bc56dce8.1450391976.git.yann.morin.1998@free.fr>
+References: <cover.1450391976.git.yann.morin.1998@free.fr>
+ <84fa969c68f847a8cbc781c28da5a5c2bc56dce8.1450391976.git.yann.morin.1998@free.fr>
+Message-ID: <20151218181404.GA27578@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+All,
 
-There was an error in the configure script that was not generating ldflags
-correctly, and the generated Makefile was trying to link with -L/lib. I
-have sent a patch to fix it, and there is already a patch to fix it
-upstream.
+On 2015-12-17 23:40 +0100, Yann E. MORIN spake thusly:
+> Lua is a provider for the virtual package lua-interpreter, so it cannot
+> be selected, as explained in the manual.
 
-The reason I did not catch this problem was because the toolchains I used
-to test generated a warning instead of an error:
+I've marked that patch as Not Applicable in Patchwork, now that liedje
+no longer exists.
 
-Beaglebone with uclibc
-arm-buildroot-linux-uclibcgnueabihf-gcc: WARNING: unsafe header/library
-path used in cross-compilation: '/lib'
+Regards,
+Yann E. MORIN.
 
-Qemu x86 with glibc
-i686-buildroot-linux-gnu-gcc: WARNING: unsafe header/library path used in
-cross-compilation: '/lib'
-
-Why some toolchains generate an error and others a warning in this
-situation? Is there a configuration to enable this check when generating
-the toolchain?
-
-Sergio Prado
-Embedded Labworks
-Office: +55 11 2628-3461
-Mobile: +55 11 97123-3420
-
-2015-12-18 8:56 GMT-02:00 Sergio Prado <sergio.prado@e-labworks.com>:
-
-> Hi Thomas,
->
-> 2015-12-18 8:41 GMT-02:00 Thomas Petazzoni <
-> thomas.petazzoni at free-electrons.com>:
->
->> Hello,
->>
->> On Thu, 17 Dec 2015 22:29:52 +0100, Thomas Petazzoni wrote:
->>
->> > Other than that, I couldn't spot any issue, so I applied. Don't
->> > hesitate to monitor http://autobuild.buildroot.org and/or the daily
->> > autobuild report e-mails to see if there are any libgdiplus related
->> > failures.
->>
->> There are some build issues:
->>
->>   http://autobuild.buildroot.org/?reason=libgdiplus-3.12
->>
->> There is a -L/lib somewhere which is wrong. Could you have a look?
->>
->
-> Sure, I'll take a look.
->
->
->>
->> Thanks a lot!
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151218/9489ced7/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
