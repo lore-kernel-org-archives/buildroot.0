@@ -1,53 +1,41 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri, 18 Dec 2015 17:16:24 -0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-12-17
-In-Reply-To: <20151218185030.GB27578@free.fr>
-References: <20151218073022.58EAD102409@stock.ovh.net>
- <CANu7NGtPxDk0_hut1qD9nf3Xx-WtbhStzPfPZteLA3XQio+ztw@mail.gmail.com>
- <20151218185030.GB27578@free.fr>
-Message-ID: <CANu7NGsJqp=Ux0MGMaZeVZmV9aPkou5vnTKGyZ-PWeBBJLEH2g@mail.gmail.com>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Fri, 18 Dec 2015 14:54:16 -0500
+Subject: [Buildroot] [PATCH] openssl: re-enable parallel build
+In-Reply-To: <20151217221601.3186ef90@free-electrons.com>
+References: <1449178276-15264-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <20151217221601.3186ef90@free-electrons.com>
+Message-ID: <20151218195416.GY11489@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> > Since it is a critical package because every musl toolchain depends on
-> it,
-> > should we put a copy in sources.buildroot.net?
->
-> Package that are successfully downloaded will automatically end up in our
-> mirror, don't worry.
->
+On 17 Dec 2015 22:16, Thomas Petazzoni wrote:
+> On Thu,  3 Dec 2015 18:31:16 -0300, gustavo.zacarias at free-electrons.com
+> wrote:
+> > From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> > 
+> > The previous incarnation was incomplete, it only applied one of the
+> > Gentoo patches, hence it had corner cases.
+> > Apply all 4 patches as pointed out by Mike on the mailing list.
+> > 
+> > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> > ---
+> >  ...-waste-time-building-manpages-if-we-re-not-going.patch |  5 +++--
+> >  package/openssl/openssl.hash                              |  5 +++++
+> >  package/openssl/openssl.mk                                | 15 ++++++++++-----
+> >  3 files changed, 18 insertions(+), 7 deletions(-)
+> 
+> Let's if this incarnation works properly :-)
 
-Did not know that!
-
-
->
-> Regards,
->
-
-Thanks,
-
-
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
+when you guys see issues when using Gentoo patches, feel free to cc me.
+i don't normally watch this list.
+-mike
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151218/087edf0b/attachment.html>
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151218/e78b2d65/attachment.asc>
