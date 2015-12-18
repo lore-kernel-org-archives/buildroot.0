@@ -1,50 +1,63 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri, 18 Dec 2015 08:56:21 -0200
-Subject: [Buildroot] [PATCH v3] libgdiplus: new package
-In-Reply-To: <20151218114117.5d273ce1@free-electrons.com>
-References: <1448410510-23087-1-git-send-email-sergio.prado@e-labworks.com>
- <20151217222952.28cfb35c@free-electrons.com>
- <20151218114117.5d273ce1@free-electrons.com>
-Message-ID: <CANu7NGtNLr0u42ZXMoOuuPMOp+Rm=c=GROEF=tZmgrWHQgfPqg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 18 Dec 2015 12:00:06 +0000
+Subject: [Buildroot] [Bug 8536] Building sudo with PAM results in unusable
+	sudo
+In-Reply-To: <bug-8536-163@https.bugs.busybox.net/>
+References: <bug-8536-163@https.bugs.busybox.net/>
+Message-ID: <bug-8536-163-raDlQsmQJj@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=8536
 
-2015-12-18 8:41 GMT-02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+--- Comment #3 from nroach44 at gmail.com ---
+Just performed a test using the /etc/pam.d/sudo file from debian.
 
-> Hello,
->
-> On Thu, 17 Dec 2015 22:29:52 +0100, Thomas Petazzoni wrote:
->
-> > Other than that, I couldn't spot any issue, so I applied. Don't
-> > hesitate to monitor http://autobuild.buildroot.org and/or the daily
-> > autobuild report e-mails to see if there are any libgdiplus related
-> > failures.
->
-> There are some build issues:
->
->   http://autobuild.buildroot.org/?reason=libgdiplus-3.12
->
-> There is a -L/lib somewhere which is wrong. Could you have a look?
->
+Using buildroot's sudo file a password is prompted for, but it's always wrong
 
-Sure, I'll take a look.
+cat /etc/pam.d/sudo
+auth        sufficient   pam_rootok.so
+auth        required     pam_wheel.so use_uid
+auth        required     pam_env.so
+auth        required     pam_unix.so nullok
 
+account     required     pam_unix.so
 
->
-> Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151218/538d764f/attachment.html>
+password    required     pam_unix.so nullok
+
+session     required     pam_limits.so
+session     required     pam_env.so
+session     required     pam_unix.so
+###
+
+Using debian's sudo file a password is not prompted for and simply fails three
+times:
+
+cat /etc/pam.d/sudo
+#%PAM-1.0
+
+@include common-auth
+@include common-account
+@include common-session-noninteractive
+###
+
+[nroach44 at charon ~]$ sudo bash
+Sorry, try again.
+Sorry, try again.
+sudo: 3 incorrect password attempts
+
+The following shows in journalctl:
+
+Jan 01 09:01:25 charon sudo[1094]: PAM (sudo) illegal module type: @include
+Jan 01 09:01:25 charon sudo[1094]: PAM pam_parse: expecting return value;
+[...common-auth]
+Jan 01 09:01:25 charon sudo[1094]: PAM (sudo) no module name supplied
+
+So it seems like the format is different for whatever reason.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
