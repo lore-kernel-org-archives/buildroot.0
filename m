@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 22:27:05 +0100
-Subject: [Buildroot] [PATCH v2 3/3] python-tornado: bump to 4.3
-In-Reply-To: <1450251372-7064-3-git-send-email-yegorslists@googlemail.com>
-References: <1450251372-7064-1-git-send-email-yegorslists@googlemail.com>
- <1450251372-7064-3-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20151218222705.6d477414@free-electrons.com>
+Date: Fri, 18 Dec 2015 22:28:28 +0100
+Subject: [Buildroot] [PATCH] python-pyxml: remove obsolete package
+In-Reply-To: <1450251868-7288-1-git-send-email-yegorslists@googlemail.com>
+References: <1450251868-7288-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20151218222828.26ba769f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 16 Dec 2015 08:36:12 +0100, yegorslists at googlemail.com wrote:
+On Wed, 16 Dec 2015 08:44:28 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> PyXML is bitrotten and obsolete. You'll find the functionality it
+> previously provided is now included in the Python standard library.
+> 
+> So no need to keep this package in Buildroot anymore.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/Config.in                      |  1 -
+>  package/python-pyxml/Config.in         | 12 ------------
+>  package/python-pyxml/python-pyxml.hash |  2 --
+>  package/python-pyxml/python-pyxml.mk   | 17 -----------------
+>  4 files changed, 32 deletions(-)
+>  delete mode 100644 package/python-pyxml/Config.in
+>  delete mode 100644 package/python-pyxml/python-pyxml.hash
+>  delete mode 100644 package/python-pyxml/python-pyxml.mk
 
-> diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-> index 85c7891..ac86682 100644
-> --- a/package/python-tornado/Config.in
-> +++ b/package/python-tornado/Config.in
-> @@ -2,6 +2,8 @@ config BR2_PACKAGE_PYTHON_TORNADO
->  	bool "python-tornado"
->  	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
->  	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-> +	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
-> +	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	# runtime
+As Yann said, can you respin this patch after taking care of
+Config.in.legacy handling ?
 
-So I guess that the plan is to make this a Python 2 dependency only
-once we bump Python 3 to 3.5, right ?
+Or maybe instead of removing the package we should mark it as
+deprecated ?
 
-Other than that, applied, thanks!
+Thanks,
 
 Thomas
 -- 
