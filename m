@@ -1,122 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 23:02:01 +0100
-Subject: [Buildroot] [git commit] toolchain-external: bump CodeSourcery MIPS
-	to 2015.11
-Message-ID: <20151219125434.0C74681DEE@busybox.osuosl.org>
+Date: Fri, 18 Dec 2015 22:58:57 +0100
+Subject: [Buildroot] [git commit] toolchain-external: bump CodeSourcery
+	NIOSII to 2015.11
+Message-ID: <20151219125433.D9BCE81DF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6278da1c2de2e36afe7a60880143dd801dd92dbe
+commit: http://git.buildroot.net/buildroot/commit/?id=e7e5a7606b044c7b5d5d2bcaf7183a8860112482
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a stronger hash.
+Some package black list CS NIOSII toolchains, mainly due to _gp link
+issue. A follow up patch can remove the restriction case by case.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 10 +++----
- .../toolchain-external/toolchain-external.hash     |  4 +--
- toolchain/toolchain-external/toolchain-external.mk | 34 +---------------------
- 3 files changed, 8 insertions(+), 40 deletions(-)
+ toolchain/toolchain-external/Config.in               | 10 +++++-----
+ toolchain/toolchain-external/toolchain-external.hash |  2 +-
+ toolchain/toolchain-external/toolchain-external.mk   |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 4368ca6..656e012 100644
+index 6424a8f..9f7a1da 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -237,7 +237,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 	  This toolchain uses software-floating point.
+@@ -502,7 +502,7 @@ comment "Sourcery CodeBench toolchains are only available for MIPS/MIPS64 o32 an
+ 	depends on !BR2_STATIC_LIBS
  
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
--	bool "Sourcery CodeBench MIPS 2015.05"
-+	bool "Sourcery CodeBench MIPS 2015.11"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_mips_32r2 || BR2_mips_64r2
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+-	bool "Sourcery CodeBench Nios-II 2014.05"
++	bool "Sourcery CodeBench Nios-II 2015.11"
+ 	depends on BR2_nios2
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -247,12 +247,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+ 	depends on !BR2_STATIC_LIBS
+@@ -510,12 +510,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
  	select BR2_INSTALL_LIBSTDCPP
  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
 +	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
  	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.9.2, binutils 2.24.51, glibc
--	  2.21, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.19. It
-+	  Mentor Graphics. It uses gcc 5.2, binutils 2.25.51, glibc
-+	  2.22, uClibc 0.9.30 and gdb 7.10.50, kernel headers 4.2. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
+ 	  Sourcery CodeBench toolchain for the Nios-II architecture,
+-	  from Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51,
+-	  glibc 2.19.90, gdb 7.7.50 and kernel headers 3.12.
++	  from Mentor Graphics. It uses gcc 5.2, binutils 2.25.51,
++	  glibc 2.22, gdb 7.10.50 and kernel headers 4.2.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
+ 	bool "Sourcery CodeBench PowerPC 2012.03"
 diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 700c070..1700bad 100644
+index dd95ade..1dc92ef 100644
 --- a/toolchain/toolchain-external/toolchain-external.hash
 +++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -1,6 +1,6 @@
- # Sourcery CodeBench Lite for MIPS
--# From: https://sourcery.mentor.com/GNUToolchain/release3068
--md5  0fcdc0fee260c7bed060c999bfe8440d  mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+# Locally computed
-+sha256 e653102803d0fadc0a83286400c03bc7932ab081d3f8fc8917c34e76468315a2  mips-2015.11-32-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- 
- ######################################
- # Next hashes are all locally computed
+@@ -23,7 +23,7 @@ sha256 395f1c504a8fb6b7a10663143627b7eee2edc8fd884aa13c4b8505a3623960f5  arm-201
+ sha256 8455854d3b3abbc2328e6c061c6b9625ef8f9c1f236db9f1771877715bd70b9b  arm-2013.11-33-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+ sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+ # NiosII
+-sha256 fb02fe3d595bd80a6e0ebc9d59a64010d84ae8d13f47e241b3a335f42b0414dc  sourceryg++-2014.05-47-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
++sha256 cc47745dc1264fcb8fb98fb1315ab772ab98691396021c455229b58abaf887f5  sourceryg++-2015.11-27-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ # PowerPC
+ sha256 d68d1a2a055ece3824a1a11fcc0a8e813ee1d215025247cce0d877caa12c4b54  freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ sha256 525e1f53abbf65c2974ae9af762c45bb38520fe5fc50e968a23fe6a18e9eec04  freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 4669792..f1e3a78 100644
+index 0c0581f..b0502f9 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -262,37 +262,6 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- 	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
- endef
- 
--# The CodeSourcery MIPS 2015.05 toolchain has some missing headers we
--# need to create manually in order to avoid compilation errors. A bug
--# has been already reported and fixed upstream, and the fix will be
--# included in the next release.
--define TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505_LIB_NAMES_FIX
--	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_hard.h \
--		$(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_soft.h
--	$(SED) 's#hard#soft#' $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_soft.h
--
--	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_hard.h \
--		$(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_hard_2008.h
--	$(SED) 's#hard#hard_2008#' $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_hard_2008.h
--	$(SED) 's#ld.so.1#ld-linux-mipsn8.so.1#' $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_hard_2008.h
--	$(SED) '/LD_SO/i \
--		#define LD_LINUX_MIPSN8_SO              "ld-linux-mipsn8.so.1"' \
--		$(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_hard_2008.h
--
--	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_soft.h \
--		$(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-n64_soft.h
--	$(SED) 's#o32#n64#' $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-n64_soft.h
--
--	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_soft.h \
--		$(STAGING_DIR)/usr/include/gnu/
--
--	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-o32_hard_2008.h \
--		$(STAGING_DIR)/usr/include/gnu/
--
--	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/mips-linux-gnu/libc/usr/include/gnu/lib-names-n64_soft.h \
--		$(STAGING_DIR)/usr/include/gnu/
--endef
--
- # Special handling for Blackfin toolchain, because of the split in two
- # tarballs, and the organization of tarball contents. The tarballs
- # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
-@@ -350,8 +319,7 @@ endif
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505_LIB_NAMES_FIX
-+TOOLCHAIN_EXTERNAL_SOURCE = mips-2015.11-32-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -360,7 +360,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505_LIB_NAMES_FIX
  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII),y)
  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2015.11-27-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2014.05-47-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
++TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2015.11-27-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
