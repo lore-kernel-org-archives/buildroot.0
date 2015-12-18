@@ -1,37 +1,41 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 18 Dec 2015 23:29:22 +0100
-Subject: [Buildroot] [PATCH v2 2/3] python-backports-abc: new package
-In-Reply-To: <20151218222629.1c210d8a@free-electrons.com>
+Date: Fri, 18 Dec 2015 23:29:57 +0100
+Subject: [Buildroot] [PATCH v2 3/3] python-tornado: bump to 4.3
+In-Reply-To: <20151218222705.6d477414@free-electrons.com>
 References: <1450251372-7064-1-git-send-email-yegorslists@googlemail.com>
- <1450251372-7064-2-git-send-email-yegorslists@googlemail.com>
- <20151218222629.1c210d8a@free-electrons.com>
-Message-ID: <CAGm1_kt5HjYPYKFWqWVz2FucsNHNWNexduhH=H88_SS6s-BJtw@mail.gmail.com>
+ <1450251372-7064-3-git-send-email-yegorslists@googlemail.com>
+ <20151218222705.6d477414@free-electrons.com>
+Message-ID: <CAGm1_ktuY34FgYN3ijN7x4-2D+WPzi-+YMVWXk71JOtG1tKOEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 18, 2015 at 10:26 PM, Thomas Petazzoni
+On Fri, Dec 18, 2015 at 10:27 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
-> On Wed, 16 Dec 2015 08:36:11 +0100, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> A backport of recent additions to the 'collections.abc' module.
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->> Changes:
->>       v2: make the patch a part of the Tornado update series
+> On Wed, 16 Dec 2015 08:36:12 +0100, yegorslists at googlemail.com wrote:
 >
-> I've applied. However, it is not really great that the package doesn't
-> carry any license information. The PKG-INFO file even says that the
-> license is "UNKNOWN". Can you talk with upstream so that they clarify
-> the license of this package (which obviously must be the same license
-> as Python itself, but it is better if it's clearly said).
+>> diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+>> index 85c7891..ac86682 100644
+>> --- a/package/python-tornado/Config.in
+>> +++ b/package/python-tornado/Config.in
+>> @@ -2,6 +2,8 @@ config BR2_PACKAGE_PYTHON_TORNADO
+>>       bool "python-tornado"
+>>       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+>>       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+>> +     select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+>> +     select BR2_PACKAGE_PYTHON_BACKPORTS_ABC # runtime
+>
+> So I guess that the plan is to make this a Python 2 dependency only
+> once we bump Python 3 to 3.5, right ?
 
-Thanks. I'll take care of this.
+Yes.
+
+> Other than that, applied, thanks!
+
+Thanks.
 
 Yegor
