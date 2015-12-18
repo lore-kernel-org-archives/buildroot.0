@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 22:40:11 +0100
-Subject: [Buildroot] [PATCH 2/2] v4l2grab: new package
-In-Reply-To: <566847AA.3040401@inbox.ru>
+Date: Fri, 18 Dec 2015 22:40:58 +0100
+Subject: [Buildroot] [PATCH 1/2] libv4l: add patches to fix musl build
+ issues, and enable on musl
+In-Reply-To: <1449007230-3175-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1449007230-3175-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1449007230-3175-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <566847AA.3040401@inbox.ru>
-Message-ID: <20151218224011.117e774b@free-electrons.com>
+Message-ID: <20151218224058.5cabc446@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,46 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-I've applied, but there were still two remaining issues. See below.
+On Tue,  1 Dec 2015 23:00:29 +0100, Thomas Petazzoni wrote:
+> This commit adds two patches to the libv4l package, the first one
+> fixes the __off_t usage and the second one fixes locale-related
+> function usage. Those two patches allow libv4l to build fine against
+> musl, so we remove the dependency of glibc || uclibc.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  ...scall-priv.h-Use-off_t-instead-of-__off_t.patch | 108 +++++++++++++++++++++
+>  ...rly-use-ENABLE_NLS-for-locale-related-cod.patch | 107 ++++++++++++++++++++
+>  package/libv4l/Config.in                           |   7 +-
+>  3 files changed, 217 insertions(+), 5 deletions(-)
+>  create mode 100644 package/libv4l/0003-libv4lsyscall-priv.h-Use-off_t-instead-of-__off_t.patch
+>  create mode 100644 package/libv4l/0004-utils-Properly-use-ENABLE_NLS-for-locale-related-cod.patch
 
-On Wed, 9 Dec 2015 18:24:26 +0300, Viacheslav Volkov wrote:
-
-> diff --git a/package/v4l2grab/v4l2grab.hash b/package/v4l2grab/v4l2grab.hash
-> new file mode 100644
-> index 0000000..e0a1797
-> --- /dev/null
-> +++ b/package/v4l2grab/v4l2grab.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 568d51512107226dab1ac809ab1ed4d544ce3f8f505b62c3b2177fb643c8157b v4l2grab-0abed72532bee02e545a1924b6883c839d50febf.tar.gz
-> diff --git a/package/v4l2grab/v4l2grab.mk b/package/v4l2grab/v4l2grab.mk
-> new file mode 100644
-> index 0000000..12b4c3f
-> --- /dev/null
-> +++ b/package/v4l2grab/v4l2grab.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# v4l2grab
-> +#
-> +################################################################################
-> +
-> +V4L2GRAB_VERSION = 0abed72532bee02e545a1924b6883c839d50febf
-> +V4L2GRAB_SITE = $(call github,twam,v4l2grab,$(V4L2GRAB_VERSION))
-> +V4L2GRAB_LICENSE = GPLv2+
-> +V4L2GRAB_LICENSE_FILE = LICENSE.md
-
-This variable should have been named V4L2GRAB_LICENSE_FILES.
-
-> +# Fetched from github, no pre-generated configure script provided
-> +V4L2GRAB_AUTORECONF = YES
-> +V4L2GRAB_DEPENDENCIES = libjpeg libv4l
-
-And as noted by Arnout, we should not depend on libjpeg, but on jpeg.
-
-I've fixed those two issues before applying.
-
-Thanks!
+Since nobody reviewed, ACKed or NAKed, I applied this patch.
 
 Thomas
 -- 
