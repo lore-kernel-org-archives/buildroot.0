@@ -1,77 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Dec 2015 23:47:42 +0100
-Subject: [Buildroot] [PATCH v2 3/5] package/nodejs: correct 0.10.x
- option name
-In-Reply-To: <20151218211213.GD27578@free.fr>
-References: <1450394426-3349-1-git-send-email-martin@barkynet.com>
- <1450394426-3349-3-git-send-email-martin@barkynet.com>
- <20151218211213.GD27578@free.fr>
-Message-ID: <56748D0E.6030501@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 18 Dec 2015 23:53:10 +0100
+Subject: [Buildroot] [PATCH 06/13 v2] core/legal-info: install source
+ archives in their own sub-dir
+In-Reply-To: <5671FA46.2050903@mind.be>
+References: <cover.1450031251.git.yann.morin.1998@free.fr>
+ <72f53f4f69afe29c7621731bae6eb536864501c5.1450031251.git.yann.morin.1998@free.fr>
+ <5671FA46.2050903@mind.be>
+Message-ID: <20151218225310.GC10982@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18-12-15 22:12, Yann E. MORIN wrote:
-> Martin, All,
+Arnout, All,
+
+On 2015-12-17 00:56 +0100, Arnout Vandecappelle spake thusly:
+> On 13-12-15 19:35, Yann E. MORIN wrote:
+> > Currently, we put all source archives side-by-side in the same
+> > directory.
+> > 
+> > Since we're about to also save individual patches that were applied
+> > on those sources, we don't want to make that directory a complete
+> > mess of unassorted files.
+> > 
+> > So, we install each source archive in its own sub-directory, where
+> > we'll later store the patches too. Store that location in a variable,
+> > so it can be re-used later on (to install patches in a future commit).
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> > Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+> > Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 > 
-> On 2015-12-17 23:20 +0000, Martin Bark spake thusly:
->> The nodejs options incorrectly started BR2_BR2_xxx.  This change corrects
->> the name for 0.10.x releases to BR2_PACKAGE_NODEJS_0_10_X
->>
->> Signed-off-by: Martin Bark <martin@barkynet.com>
->>
->> ---
->> Changes v1 -> v2
->>  - New in v2
->> ---
->>  Config.in.legacy         | 8 ++++++++
->>  package/nodejs/Config.in | 6 +++---
->>  2 files changed, 11 insertions(+), 3 deletions(-)
->>
->> diff --git a/Config.in.legacy b/Config.in.legacy
->> index db1eeae..5d9a3ee 100644
->> --- a/Config.in.legacy
->> +++ b/Config.in.legacy
->> @@ -186,6 +186,14 @@ config BR2_PACKAGE_INFOZIP
->>  	  to avoid ambiguities with Info-Zip's UnZip which has been added
->>  	  in the unzip package.
->>  
->> +config BR2_BR2_PACKAGE_NODEJS_0_10_X
->> +	bool "nodejs 0.10.x option renamed"
->> +	select BR2_LEGACY
->> +	select BR2_PACKAGE_NODEJS_0_10_X
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
-> No, you can't select an option that is in a choice. All you can do in
-> this case is tell the user to check his configuration, and refer him
-> to the version choice.
-
- Actually, you can do the same like we do for legacy string options:
-
-config BR2_PACKAGE_NODEJS_0_10_X
-	bool "v0.10.41"
-	default y if BR2_BR2_PACKAGE_NODEJS_0_10_X
-
- In that case you should also add a comment to Config.in.legacy to remind us to
-remove it again when the legacy option is removed.
-
- We should probably add this to the documentation at the top of Config.in.legacy.
-
- Regards,
- Arnout
-
-
+> > 
+> > ---
+> > Changes v1 -> v2:
+> >   - perl no longer has a post-legal-info hook  (Thoams, Luca)
+> > ---
+> >  package/pkg-generic.mk | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 784c39c..3b6240a 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -491,6 +491,8 @@ endif
+> >  
+> >  $(2)_REDISTRIBUTE		?= YES
+> >  
+> > +$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAWNAME_VERSION)
 > 
-> Regards,
-> Yann E. MORIN.
-> 
+>  Not directly related to this patch, but I find this
+> $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))) bit extremely ugly.
+> $(LEGAL_INFO_DIR)/$(4)-sources is a lot nicer. Of course, that means we put
+> things in target-sources instead of plain sources, but I think that's an
+> improvement as well.
 
+I'm not so sure it is better: we do not have the habit of prefixing
+target stuff with 'target-'. Only the host stuff we do prefix with
+'host-'. Why would we derogate from that rule for legal-info?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
