@@ -1,71 +1,126 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 18 Dec 2015 23:32:30 +0000
-Subject: [Buildroot] [Bug 8536] Building sudo with PAM results in unusable
-	sudo
-In-Reply-To: <bug-8536-163@https.bugs.busybox.net/>
-References: <bug-8536-163@https.bugs.busybox.net/>
-Message-ID: <bug-8536-163-TwlWMK3XwW@https.bugs.busybox.net/>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 19 Dec 2015 00:52:03 +0100
+Subject: [Buildroot] [PATCH] Config.in.legacy: document how to handle
+	renaming choice options
+Message-ID: <1450482723-31514-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8536
+When a choice option is renamed, it is not possible to select the new
+option. Instead, the default for the new option should be set in the
+choice itself. So let's document this.
 
---- Comment #6 from James Knight <james.knight@rockwellcollins.com> ---
-(In reply to Thomas Petazzoni from comment #2)
-I am using Buildroot's provided /etc/pam.d/sudo file.
+While we're at it, also reformat the whitespace in the example so a tab
+is used at the appropriate place.
 
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Martin Bark <martin@barkynet.com>
+---
+ Config.in.legacy | 74 ++++++++++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 56 insertions(+), 18 deletions(-)
 
-(In reply to nroach44 from comment #3)
-Interesting.
-
-Just took a gander at Fedora's (22) variant:
-
-cat /etc/pam.d/sudo
-#%PAM-1.0
-auth       include      system-auth
-account    include      system-auth
-password   include      system-auth
-session    optional     pam_keyinit.so revoke
-session    required     pam_limits.so
-session    include      system-auth
-
-(where system-auth file contains a boat load of more entries)
-
-I guess Debian's PAM format varies from RedHat's PAM variant (although I
-haven't really looked into it).
-
-
-(In reply to Doug Kehn from comment #5)
-Should Buildroot's sudo.pam work 'out of the box' with LDAP? I'm not against it
-but just glancing at my own target, I do not have the pam_ldap.so module
-installed.
-
-
-(all)
-While it might not fit all use cases, I believe the Buildroot-provided
-/etc/pam.d/sudo file is generic enough for a standard setup; but, given the
-woes that nroach44 is experiencing, it might be missing something.
-
-@nroach44, in your sudo configuration you mentioned (comment #0) you have the
-following:
-
-%sudo ALL=(ALL) ALL
-
-I assume you're trying to give the "sudo" group permission (instead of using
-the wheel group). What happens when you try to alter the following file (see
-[1]):
-
-auth required pam_wheel.so use_uid group=sudo
-
-I'm also curious if the root user can use sudo in your system (ie. I assume
-`sudo echo a` is failing for your default user but does it also fail when
-running under root)?
-
- [1]: http://www.linux-pam.org/Linux-PAM-html/sag-pam_wheel.html
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e1ea06f..4d22527 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -16,39 +16,77 @@
+ # is informed at build-time about selected legacy options.
+ # If there is an equivalent (set of) new symbols, these should be select'ed by
+ # the old symbol for backwards compatibility.
++# It is not possible to select an option that is part of a choice. In that
++# case, the new option should use the old symbol as default. This requires a
++# change outside of Config.in.legacy, and this should be clearly marked as such
++# in a comment, so that removal of legacy options also include the removal of
++# these external references.
++#
++# [Example: renaming a bool option that is part of a choice from FOO to BAR]
++# original choice:
++# 	choice
++# 		prompt "Choose foobar"
++# 	config BR2_FOO_1
++#		bool "foobar 1"
++# 	config BR2_FOO_2
++# 		bool "foobar 2"
++# 	endchoice
++#
++# becomes:
++#   choice
++#   	prompt "Choose foobar"
++#   	default BR2_BAR_1 if BR2_FOO_1 # legacy
++#   	default BR2_BAR_2 if BR2_FOO_2 # legacy
++#   config BR2_BAR_1
++#		bool "foobar 1"
++#   config BR2_BAR_2
++#   	bool "foobar 2"
++#   endchoice
++#
++# and in Config.in.legacy:
++#   config BR2_FOO_1
++#   	bool "foobar 1 has been renamed"
++#   	help
++#   	  <suitable help text>
++#   # Note: BR2_FOO_1 is still referenced from package/foo/Config.in
++#   config BR2_FOO_2
++#   	bool "foobar 2 has been renamed"
++#   	help
++#   	  <suitable help text>
++#   # Note: BR2_FOO_2 is still referenced from package/foo/Config.in
++#
++# [End of example]
+ #
+ # For string options, it is not possible to directly select another symbol. In
+ # this case, a hidden wrap bool option has to be added, that defaults to y if
+ # the old string is not set at its default value. The wrap symbol should select
+ # BR2_LEGACY.
+ # If the original symbol has been renamed, the new symbol should use the value
+-# of the old symbol as default. This requires a change outside of
+-# Config.in.legacy, and this should be clearly marked as such below, so that
+-# removal of legacy options also include the removal of these external
+-# references.
++# of the old symbol as default. Like for choice options, a comment should be
++# added to flag that the symbol is still used in another file.
+ #
+ # [Example: renaming a string option from FOO to BAR]
+ # original symbol:
+-#     config BR2_FOO_STRING
+-#             string "Some foo string"
++#   config BR2_FOO_STRING
++#   	string "Some foo string"
+ #
+ # becomes:
+-#     config BR2_BAR_STRING
+-#             string "Some bar string"
+-#             default BR2_FOO_STRING if BR2_FOO_STRING != ""  # legacy
++#   config BR2_BAR_STRING
++#   	string "Some bar string"
++#   	default BR2_FOO_STRING if BR2_FOO_STRING != ""  # legacy
+ #
+ # and in Config.in.legacy:
+-#     config BR2_FOO_STRING
+-#             string "The foo string has been renamed"
+-#             help
+-#               <suitable help text>
++#   config BR2_FOO_STRING
++#   	string "The foo string has been renamed"
++#   	help
++#   	  <suitable help text>
+ #
+-#     config BR2_FOO_STRING_WRAP
+-#             bool
+-#             default y if BR2_FOO_STRING != ""
+-#             select BR2_LEGACY
++#   config BR2_FOO_STRING_WRAP
++#   	bool
++#   	default y if BR2_FOO_STRING != ""
++#   	select BR2_LEGACY
+ #
+-#     # Note: BR2_FOO_STRING is still referenced from package/foo/Config.in
++#   # Note: BR2_FOO_STRING is still referenced from package/foo/Config.in
+ #
+ # [End of example]
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.6.4
