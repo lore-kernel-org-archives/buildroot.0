@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 22:03:13 +0100
-Subject: [Buildroot] [PATCH v2] qt5/qt53d: new package
-In-Reply-To: <1449266894-20997-1-git-send-email-ps.report@gmx.net>
-References: <1449266894-20997-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151218220313.782f83e0@free-electrons.com>
+Date: Fri, 18 Dec 2015 22:03:35 +0100
+Subject: [Buildroot] [git commit] package/netbsd-queue: fix circular
+	dependency
+Message-ID: <20151218210339.01719826B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: http://git.buildroot.net/buildroot/commit/?id=a371a4fa3f67d45ad0b2a085ad1dbebf566c7200
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  4 Dec 2015 23:08:14 +0100, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+netbsd-queue is a dependency of musl, so is part of the toolchain.
+As such, it should not depend on the toolchain...
 
-I've applied after doing a few changes. See below.
+Fixes make circular dependencies such as:
 
+    make[1]: Circular toolchain-all-source <- toolchain-external-all-source
+    dependency dropped.
 
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index 22fd0c0..568fadb 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -41,6 +41,7 @@ source "package/qt5/qt5quickcontrols/Config.in"
->  source "package/qt5/qt5sensors/Config.in"
->  source "package/qt5/qt5serialport/Config.in"
->  source "package/qt5/qt5svg/Config.in"
-> +source "package/qt5/qt53d/Config.in"
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/netbsd-queue/netbsd-queue.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Alphabetic ordering should have been used here.
-
-> +comment "qt53d module needs an OpenGL-capable backend"
-> +        depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-
-This line was indented with spaces, while a tab should be used. Also,
-the comment should only be displayed when
-BR2_PACKAGE_QT5_JSCORE_AVAILABLE is met.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/netbsd-queue/netbsd-queue.mk b/package/netbsd-queue/netbsd-queue.mk
+index 0f486fa..5fd926b 100644
+--- a/package/netbsd-queue/netbsd-queue.mk
++++ b/package/netbsd-queue/netbsd-queue.mk
+@@ -9,6 +9,7 @@ NETBSD_QUEUE_SITE = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys
+ NETBSD_QUEUE_SOURCE = queue.h?rev=$(NETBSD_QUEUE_VERSION)
+ NETBSD_QUEUE_LICENSE = BSD-3c
+ 
++NETBSD_QUEUE_ADD_TOOLCHAIN_DEPENDENCY = NO
+ NETBSD_QUEUE_INSTALL_STAGING = YES
+ 
+ define NETBSD_QUEUE_EXTRACT_CMDS
