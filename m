@@ -1,33 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Dec 2015 23:23:20 +0100
-Subject: [Buildroot] buildroot support for OrangePI PC
-In-Reply-To: <08485173-6FC7-42EF-9BFE-7B3B9967EEC0@xiot.nl>
-References: <08485173-6FC7-42EF-9BFE-7B3B9967EEC0@xiot.nl>
-Message-ID: <56748758.7040908@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 18 Dec 2015 23:29:22 +0100
+Subject: [Buildroot] [PATCH v2 2/3] python-backports-abc: new package
+In-Reply-To: <20151218222629.1c210d8a@free-electrons.com>
+References: <1450251372-7064-1-git-send-email-yegorslists@googlemail.com>
+ <1450251372-7064-2-git-send-email-yegorslists@googlemail.com>
+ <20151218222629.1c210d8a@free-electrons.com>
+Message-ID: <CAGm1_kt5HjYPYKFWqWVz2FucsNHNWNexduhH=H88_SS6s-BJtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18-12-15 14:22, Eelco Chaudron wrote:
-> Hi All,
-> 
-> Was wondering if anyone has started working on OrangePi PC board support?
+On Fri, Dec 18, 2015 at 10:26 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Wed, 16 Dec 2015 08:36:11 +0100, yegorslists at googlemail.com wrote:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> A backport of recent additions to the 'collections.abc' module.
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>> Changes:
+>>       v2: make the patch a part of the Tornado update series
+>
+> I've applied. However, it is not really great that the package doesn't
+> carry any license information. The PKG-INFO file even says that the
+> license is "UNKNOWN". Can you talk with upstream so that they clarify
+> the license of this package (which obviously must be the same license
+> as Python itself, but it is better if it's clearly said).
 
- Not that I know of. But it should be quite similar to the cubieboard I think.
+Thanks. I'll take care of this.
 
- If you make a defconfig for it, consider using genimage rather than a custom
-script like mkcubiecard.
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Yegor
