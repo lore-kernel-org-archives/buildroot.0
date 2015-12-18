@@ -1,33 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 18 Dec 2015 19:14:05 +0100
-Subject: [Buildroot] [PATCH 4/4 v2] package/libedje: do not select Lua,
-	depend on it
-In-Reply-To: <84fa969c68f847a8cbc781c28da5a5c2bc56dce8.1450391976.git.yann.morin.1998@free.fr>
-References: <cover.1450391976.git.yann.morin.1998@free.fr>
- <84fa969c68f847a8cbc781c28da5a5c2bc56dce8.1450391976.git.yann.morin.1998@free.fr>
-Message-ID: <20151218181404.GA27578@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 18 Dec 2015 19:48:49 +0100
+Subject: [Buildroot] [PATCH v2] package/mesa3d-demos: add glut support
+Message-ID: <1450464529-2221-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: rebased
 
-On 2015-12-17 23:40 +0100, Yann E. MORIN spake thusly:
-> Lua is a provider for the virtual package lua-interpreter, so it cannot
-> be selected, as explained in the manual.
+ package/mesa3d-demos/mesa3d-demos.mk | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-I've marked that patch as Not Applicable in Patchwork, now that liedje
-no longer exists.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+index 094239c..cbc15c3 100644
+--- a/package/mesa3d-demos/mesa3d-demos.mk
++++ b/package/mesa3d-demos/mesa3d-demos.mk
+@@ -12,7 +12,6 @@ MESA3D_DEMOS_DEPENDENCIES = host-pkgconf
+ MESA3D_DEMOS_LICENSE = MIT
+ 
+ MESA3D_DEMOS_CONF_OPTS += \
+-	--without-glut \
+ 	--disable-osmesa \
+ 	--disable-gles1
+ 
+@@ -58,6 +57,19 @@ else
+ MESA3D_DEMOS_CONF_OPTS += --disable-freetype2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
++MESA3D_DEMOS_DEPENDENCIES += libfreeglut
++MESA3D_DEMOS_CONF_OPTS += --with-glut=$(STAGING_DIR)/usr
++# osmesa support depends on glut
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++MESA3D_DEMOS_CONF_OPTS += --enable-osmesa
++else
++MESA3D_DEMOS_CONF_OPTS += --disable-osmesa
++endif
++else
++MESA3D_DEMOS_CONF_OPTS += --without-glut --disable-osmesa
++endif
++
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEMOS_DEPENDENCIES += wayland
+ MESA3D_DEMOS_CONF_OPTS += --enable-wayland
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.6.4
