@@ -1,100 +1,82 @@
 From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri, 18 Dec 2015 16:00:45 -0200
-Subject: [Buildroot] [PATCH 1/1] libgdiplus: fix cross-compilation error
-Message-ID: <1450461645-28534-1-git-send-email-sergio.prado@e-labworks.com>
+Date: Fri, 18 Dec 2015 16:12:57 -0200
+Subject: [Buildroot] [PATCH v3] libgdiplus: new package
+In-Reply-To: <CANu7NGtNLr0u42ZXMoOuuPMOp+Rm=c=GROEF=tZmgrWHQgfPqg@mail.gmail.com>
+References: <1448410510-23087-1-git-send-email-sergio.prado@e-labworks.com>
+ <20151217222952.28cfb35c@free-electrons.com>
+ <20151218114117.5d273ce1@free-electrons.com>
+ <CANu7NGtNLr0u42ZXMoOuuPMOp+Rm=c=GROEF=tZmgrWHQgfPqg@mail.gmail.com>
+Message-ID: <CANu7NGt5xa9gWAxY4ha7VDbo0HxTNQ4VeMD7f4kD74tggmsdYw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When cross-compiling with toolchains that validate things like headers
-and libraries paths, we were getting errors like:
+Hello Thomas,
 
-sh-linux-gnu-gcc: ERROR: unsafe header/library path used in
+There was an error in the configure script that was not generating ldflags
+correctly, and the generated Makefile was trying to link with -L/lib. I
+have sent a patch to fix it, and there is already a patch to fix it
+upstream.
+
+The reason I did not catch this problem was because the toolchains I used
+to test generated a warning instead of an error:
+
+Beaglebone with uclibc
+arm-buildroot-linux-uclibcgnueabihf-gcc: WARNING: unsafe header/library
+path used in cross-compilation: '/lib'
+
+Qemu x86 with glibc
+i686-buildroot-linux-gnu-gcc: WARNING: unsafe header/library path used in
 cross-compilation: '/lib'
 
-That's because there was an error in the configure script that was not
-generating ldflags correctly, and the generated Makefile was trying to
-link with -L/lib.
+Why some toolchains generate an error and others a warning in this
+situation? Is there a configuration to enable this check when generating
+the toolchain?
 
-Also, it is necessary to pass a prefix when compiling with libjpeg and
-libtiff support.
+Sergio Prado
+Embedded Labworks
+Office: +55 11 2628-3461
+Mobile: +55 11 97123-3420
 
-A patch has already been sent upstream.
+2015-12-18 8:56 GMT-02:00 Sergio Prado <sergio.prado@e-labworks.com>:
 
-Fixes:
-http://autobuild.buildroot.org/results/58cad610b1bde68de82e44bf3c87d7bfcc1fa816/
-http://autobuild.buildroot.org/results/649c258c05293fa5203d7d2c7b20a4265c2815ab/
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- ...01-Fix-compile-error-when-cross-compiling.patch | 35 ++++++++++++++++++++++
- package/libgdiplus/libgdiplus.mk                   |  4 +--
- 2 files changed, 37 insertions(+), 2 deletions(-)
- create mode 100644 package/libgdiplus/0001-Fix-compile-error-when-cross-compiling.patch
-
-diff --git a/package/libgdiplus/0001-Fix-compile-error-when-cross-compiling.patch b/package/libgdiplus/0001-Fix-compile-error-when-cross-compiling.patch
-new file mode 100644
-index 000000000000..321bbd49bb46
---- /dev/null
-+++ b/package/libgdiplus/0001-Fix-compile-error-when-cross-compiling.patch
-@@ -0,0 +1,35 @@
-+From daf96b07c02734dceaf3c3b78c10e4e758b74d9e Mon Sep 17 00:00:00 2001
-+From: Sergio Prado <sergio.prado@e-labworks.com>
-+Date: Fri, 18 Dec 2015 15:08:58 -0200
-+Subject: [PATCH 1/1] Fix compile error when cross-compiling.
-+
-+When cross-compiling with libjpeg enabled, we can get errors like the
-+following when linking:
-+
-+sh-linux-gnu-gcc: ERROR: unsafe header/library path used in
-+cross-compilation: '/lib'
-+
-+That's because there is an error in the configure script that are not
-+generating ldflags correctly, and are trying to link with -L/lib.
-+
-+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 772d5fc9d87a..58d55ade48e3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -223,7 +223,7 @@ AC_ARG_WITH([libjpeg],
-+         jpeg_ok=no)
-+       AC_MSG_RESULT($jpeg_ok)
-+       if test "$jpeg_ok" = yes; then
-+-        JPEG='jpeg'; LIBJPEG='-L${libjpeg_prefix}/lib -ljpeg'
-++        JPEG='jpeg'; LIBJPEG="-L${libjpeg_prefix}/lib -ljpeg"
-+       else
-+         AC_MSG_WARN(*** JPEG loader will not be built (JPEG header file not found) ***)
-+       fi
-+--
-+1.9.1
-+
-diff --git a/package/libgdiplus/libgdiplus.mk b/package/libgdiplus/libgdiplus.mk
-index 3f7b2d7017eb..fdb5b5c1f45a 100644
---- a/package/libgdiplus/libgdiplus.mk
-+++ b/package/libgdiplus/libgdiplus.mk
-@@ -40,14 +40,14 @@ LIBGDIPLUS_CONF_OPTS += --without-libexif
- endif
-
- ifeq ($(BR2_PACKAGE_JPEG),y)
--LIBGDIPLUS_CONF_OPTS += --with-libjpeg
-+LIBGDIPLUS_CONF_OPTS += --with-libjpeg=$(STAGING_DIR)/usr
- LIBGDIPLUS_DEPENDENCIES += jpeg
- else
- LIBGDIPLUS_CONF_OPTS += --without-libjpeg
- endif
-
- ifeq ($(BR2_PACKAGE_TIFF),y)
--LIBGDIPLUS_CONF_OPTS += --with-libtiff
-+LIBGDIPLUS_CONF_OPTS += --with-libtiff=$(STAGING_DIR)/usr
- LIBGDIPLUS_DEPENDENCIES += tiff
- else
- LIBGDIPLUS_CONF_OPTS += --without-libtiff
---
-1.9.1
+> Hi Thomas,
+>
+> 2015-12-18 8:41 GMT-02:00 Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com>:
+>
+>> Hello,
+>>
+>> On Thu, 17 Dec 2015 22:29:52 +0100, Thomas Petazzoni wrote:
+>>
+>> > Other than that, I couldn't spot any issue, so I applied. Don't
+>> > hesitate to monitor http://autobuild.buildroot.org and/or the daily
+>> > autobuild report e-mails to see if there are any libgdiplus related
+>> > failures.
+>>
+>> There are some build issues:
+>>
+>>   http://autobuild.buildroot.org/?reason=libgdiplus-3.12
+>>
+>> There is a -L/lib somewhere which is wrong. Could you have a look?
+>>
+>
+> Sure, I'll take a look.
+>
+>
+>>
+>> Thanks a lot!
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
+>>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151218/9489ced7/attachment.html>
