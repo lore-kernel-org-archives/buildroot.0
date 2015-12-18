@@ -1,83 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 22:58:57 +0100
-Subject: [Buildroot] [git commit] toolchain-external: bump CodeSourcery
-	NIOSII to 2015.11
-Message-ID: <20151219125433.D9BCE81DF6@busybox.osuosl.org>
+Date: Fri, 18 Dec 2015 22:50:30 +0100
+Subject: [Buildroot] [git commit] toolchain-external: CodeSourcery AMD64:
+	support only one version
+Message-ID: <20151219125433.9B20C81DEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7e5a7606b044c7b5d5d2bcaf7183a8860112482
+commit: http://git.buildroot.net/buildroot/commit/?id=23ba818b630df8f58f7d0e731b689750a0fba025
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some package black list CS NIOSII toolchains, mainly due to _gp link
-issue. A follow up patch can remove the restriction case by case.
+See the conclusion about external toolchains during the Buildroot
+meeting [1]:
+"In the future, we stick to a single external toolchain version. The
+Kconfig symbol should not encode the version (avoid legacy handling)"
+
+[1] http://elinux.org/index.php?title=Buildroot:DeveloperDaysELCE2015#Report
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in               | 10 +++++-----
- toolchain/toolchain-external/toolchain-external.hash |  2 +-
- toolchain/toolchain-external/toolchain-external.mk   |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ toolchain/toolchain-external/Config.in             | 4 ++--
+ toolchain/toolchain-external/toolchain-external.mk | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 6424a8f..9f7a1da 100644
+index f2eed7f..1a08085 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -502,7 +502,7 @@ comment "Sourcery CodeBench toolchains are only available for MIPS/MIPS64 o32 an
- 	depends on !BR2_STATIC_LIBS
+@@ -692,7 +692,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	    - SH4A, uClibc, big endian
+ 	      Not usable in Buildroot yet.
  
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
--	bool "Sourcery CodeBench Nios-II 2014.05"
-+	bool "Sourcery CodeBench Nios-II 2015.11"
- 	depends on BR2_nios2
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+ 	bool "Sourcery CodeBench AMD64 2014.05"
+ 	depends on BR2_x86_64
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
-@@ -510,12 +510,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	help
- 	  Sourcery CodeBench toolchain for the Nios-II architecture,
--	  from Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51,
--	  glibc 2.19.90, gdb 7.7.50 and kernel headers 3.12.
-+	  from Mentor Graphics. It uses gcc 5.2, binutils 2.25.51,
-+	  glibc 2.22, gdb 7.10.50 and kernel headers 4.2.
- 
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
- 	bool "Sourcery CodeBench PowerPC 2012.03"
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index dd95ade..1dc92ef 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -23,7 +23,7 @@ sha256 395f1c504a8fb6b7a10663143627b7eee2edc8fd884aa13c4b8505a3623960f5  arm-201
- sha256 8455854d3b3abbc2328e6c061c6b9625ef8f9c1f236db9f1771877715bd70b9b  arm-2013.11-33-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- # NiosII
--sha256 fb02fe3d595bd80a6e0ebc9d59a64010d84ae8d13f47e241b3a335f42b0414dc  sourceryg++-2014.05-47-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 cc47745dc1264fcb8fb98fb1315ab772ab98691396021c455229b58abaf887f5  sourceryg++-2015.11-27-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
- # PowerPC
- sha256 d68d1a2a055ece3824a1a11fcc0a8e813ee1d215025247cce0d877caa12c4b54  freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
- sha256 525e1f53abbf65c2974ae9af762c45bb38520fe5fc50e968a23fe6a18e9eec04  freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -1001,7 +1001,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+-	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
++	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 && BR2_BINFMT_FLAT
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 0c0581f..b0502f9 100644
+index 745b685..351954c 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -360,7 +360,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505_LIB_NAMES_FIX
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2014.05-47-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2015.11-27-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -392,7 +392,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405),y)
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/x86_64-amd-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = amd-2014.05-25-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
