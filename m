@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 18 Dec 2015 22:12:13 +0100
-Subject: [Buildroot] [PATCH v2 3/5] package/nodejs: correct 0.10.x
- option name
-In-Reply-To: <1450394426-3349-3-git-send-email-martin@barkynet.com>
+Date: Fri, 18 Dec 2015 22:15:30 +0100
+Subject: [Buildroot] [PATCH v2 4/5] package/nodejs: fix support for
+ uClibc-ng
+In-Reply-To: <1450394426-3349-4-git-send-email-martin@barkynet.com>
 References: <1450394426-3349-1-git-send-email-martin@barkynet.com>
- <1450394426-3349-3-git-send-email-martin@barkynet.com>
-Message-ID: <20151218211213.GD27578@free.fr>
+ <1450394426-3349-4-git-send-email-martin@barkynet.com>
+Message-ID: <20151218211530.GE27578@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,38 +15,66 @@ To: buildroot@busybox.net
 Martin, All,
 
 On 2015-12-17 23:20 +0000, Martin Bark spake thusly:
-> The nodejs options incorrectly started BR2_BR2_xxx.  This change corrects
-> the name for 0.10.x releases to BR2_PACKAGE_NODEJS_0_10_X
+> Fix segmentation fault in node.js when using uClibc-ng.
+> 
+> This patch fixes bug #8296, see
+> https://bugs.busybox.net/show_bug.cgi?id=8296.
 > 
 > Signed-off-by: Martin Bark <martin@barkynet.com>
 > 
 > ---
-> Changes v1 -> v2
->  - New in v2
-> ---
->  Config.in.legacy         | 8 ++++++++
->  package/nodejs/Config.in | 6 +++---
->  2 files changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index db1eeae..5d9a3ee 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -186,6 +186,14 @@ config BR2_PACKAGE_INFOZIP
->  	  to avoid ambiguities with Info-Zip's UnZip which has been added
->  	  in the unzip package.
->  
-> +config BR2_BR2_PACKAGE_NODEJS_0_10_X
-> +	bool "nodejs 0.10.x option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_NODEJS_0_10_X
+[--SNIP--]
+> diff --git a/package/nodejs/5.3.0/0006-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.3.0/0006-Fix-support-for-uClibc-ng.patch
+> new file mode 100644
+> index 0000000..918a36a
+> --- /dev/null
+> +++ b/package/nodejs/5.3.0/0006-Fix-support-for-uClibc-ng.patch
+> @@ -0,0 +1,32 @@
+> +From 1cc08f6ceacbb0e5ba1f4638ca3a97ac002d7792 Mon Sep 17 00:00:00 2001
+> +From: "Bark, Martin" <martin.bark@te.com>
+> +Date: Mon, 14 Dec 2015 13:26:10 +0000
+> +Subject: [PATCH 2/2] Fix support for uClibc-ng
+> +
+> +uClibc-ng is currently at v1.0.9.  The patch corrects the uClibc
+> +version test so that HAVE_IFADDRS_H is defined for uClibc versions
+> +after v0.9.32.
+> +
+> +Submitted upstream to libuv, see https://github.com/libuv/libuv/pull/653
 
-No, you can't select an option that is in a choice. All you can do in
-this case is tell the user to check his configuration, and refer him
-to the version choice.
+And that has since been accepted and applied:
+    https://github.com/libuv/libuv/commit/c8619721404c2a9f97adc34a8c3b5336317311bc
 
 Regards,
 Yann E. MORIN.
+
+> +Signed-off-by: Bark, Martin <martin.bark@te.com>
+> +---
+> + deps/uv/src/unix/linux-core.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/deps/uv/src/unix/linux-core.c b/deps/uv/src/unix/linux-core.c
+> +index e6e6828..6cbbb71 100644
+> +--- a/deps/uv/src/unix/linux-core.c
+> ++++ b/deps/uv/src/unix/linux-core.c
+> +@@ -39,7 +39,7 @@
+> + #define HAVE_IFADDRS_H 1
+> + 
+> + #ifdef __UCLIBC__
+> +-# if __UCLIBC_MAJOR__ < 0 || __UCLIBC_MINOR__ < 9 || __UCLIBC_SUBLEVEL__ < 32
+> ++# if __UCLIBC_MAJOR__ < 0 && __UCLIBC_MINOR__ < 9 && __UCLIBC_SUBLEVEL__ < 32
+> + #  undef HAVE_IFADDRS_H
+> + # endif
+> + #endif
+> +-- 
+> +2.6.2
+> +
+> -- 
+> 2.5.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
