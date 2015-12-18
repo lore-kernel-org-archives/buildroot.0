@@ -1,42 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2015 17:07:09 +0100
-Subject: [Buildroot] [PATCH 1/1] emlog: new package
-In-Reply-To: <1450446298-3523-1-git-send-email-joris.lijssens@gmail.com>
-References: <1450446298-3523-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <20151218170709.43ddaabd@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 18 Dec 2015 16:09:56 +0000
+Subject: [Buildroot] [Bug 8541] fail to build host-fakeroot-1.20.2
+In-Reply-To: <bug-8541-163@https.bugs.busybox.net/>
+References: <bug-8541-163@https.bugs.busybox.net/>
+Message-ID: <bug-8541-163-uRcgv1Kkcj@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joris,
+https://bugs.busybox.net/show_bug.cgi?id=8541
 
-On Fri, 18 Dec 2015 14:44:58 +0100, Joris Lijssens wrote:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-> ---
->  package/Config.in        |  1 +
->  package/emlog/Config.in  | 12 ++++++++++++
->  package/emlog/emlog.hash |  2 ++
->  package/emlog/emlog.mk   | 21 +++++++++++++++++++++
->  4 files changed, 36 insertions(+)
->  create mode 100644 package/emlog/Config.in
->  create mode 100644 package/emlog/emlog.hash
->  create mode 100644 package/emlog/emlog.mk
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+If it tries to build fakeroot 1.20.2, then surely you're not using Buildroot
+2015.11, but the master branch, right ?
 
-I guess this is a new version of the emlog patch, right?
+And if that's the case, can you update your master branch, to make sure you
+also have commit
+https://git.busybox.net/buildroot/commit/package/fakeroot?id=c994c3db1f7d76b5dfe79e3b1133d66fdd06212c
+?
 
-If so, a new iteration should be labeled as "PATCH v2" and should carry
-a changelog. See
-https://buildroot.org/downloads/manual/manual.html#submitting-patches.
+Also, you should not use Buildroot using the root user on your machine.
 
-This helps us a lot to understand what has changed between the
-different iterations of a patch.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
