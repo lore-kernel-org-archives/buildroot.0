@@ -1,55 +1,43 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 18 Dec 2015 23:31:22 +0100
-Subject: [Buildroot] [PATCH] python-pyxml: remove obsolete package
-In-Reply-To: <20151218224515.65f2b5cc@free-electrons.com>
-References: <1450251868-7288-1-git-send-email-yegorslists@googlemail.com>
- <20151218222828.26ba769f@free-electrons.com> <20151218214021.GG27578@free.fr>
- <20151218224515.65f2b5cc@free-electrons.com>
-Message-ID: <CAGm1_kvdFEA6QmkwEZyVz0CMth_Fk26W_QoTMt5HuTLndawGvQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 18 Dec 2015 23:32:34 +0100
+Subject: [Buildroot] add user script to /etc/rc before rootfs is created
+In-Reply-To: <1161230987.710604.1450475930986.JavaMail.yahoo@mail.yahoo.com>
+References: <1161230987.710604.1450475930986.JavaMail.yahoo.ref@mail.yahoo.com>
+ <1161230987.710604.1450475930986.JavaMail.yahoo@mail.yahoo.com>
+Message-ID: <20151218223234.GB10982@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 18, 2015 at 10:45 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 18 Dec 2015 22:40:21 +0100, Yann E. MORIN wrote:
->
->> I usually agree that we first mark package as being deprecated before we
->> get rid of them.
->>
->> However, python-pyxml is so old, its features have long been incoporated
->> into python stdlib. Probably not many people are using it, if any at
->> all.
->>
->> So, I'd vote in favour of just removing it altogether right now.
->
-> Fine with me. Yegor, can you respin your patch then with
-> Config.in.legacy handling?
+Henry, all,
 
-I'll respin the patch.
+On 2015-12-18 21:58 +0000, hong zhang spake thusly:
+> List,
+> I add user script to /etc/rc/... so that the script can be executed right after kernel is up.
+> What I am doing now is:
+> After building first rootfs, expand rootfs and add my script to /etc/rc... area.
+> Is it possible to add my script to buildroot before rootfs is created?
 
-> It would have been good to hear from Clayton to know why he added this
-> package in May 2015. I think it might have been at some point a
-> dependency of some SELinux stuff, but even the pending SELinux patches
-> don't make any reference to it. The only reference I could find was in
-> the changelog of one of the patches, which says:
->
-> """
->   - Remove dependancy on host-python-pyxml (Ryan B.)
-> """
->
-> But the current python-pyxml package only implements the target
-> variant. So, /me confused.
->
-> Clayton, Ryan?
->
->
->
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Yes, this is covered in the manual, see;
+    https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+
+Regards,
+Yann E. MORIN.
+
+> ---henry
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
