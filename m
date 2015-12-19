@@ -1,118 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 16:14:31 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/vsxu: new package
-In-Reply-To: <1446915053-13783-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1446915053-13783-1-git-send-email-bernd.kuhls@t-online.de>
- <1446915053-13783-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151219161431.7ef99690@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Dec 2015 16:57:40 +0100
+Subject: [Buildroot] [PATCH v10 00/28] efl bump to 1.15.2
+In-Reply-To: <56756A03.7050701@openwide.fr>
+References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+ <20151218001144.5a685de2@free-electrons.com>
+ <56756A03.7050701@openwide.fr>
+Message-ID: <20151219155740.GB3394@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Romain, All,
 
-On Sat,  7 Nov 2015 17:50:53 +0100, Bernd Kuhls wrote:
-> This package needs cal3d source code which is included upstream as a git
-> submodule, something not supported by the git download helper.
-> To include cal3d I used a method described by Arnout:
-> http://lists.busybox.net/pipermail/buildroot/2013-March/069971.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 2015-12-19 15:30 +0100, Romain Naour spake thusly:
+> Le 18/12/2015 00:11, Thomas Petazzoni a ?crit :
+> > On Tue, 15 Dec 2015 23:40:12 +0100, Romain Naour wrote:
+[--SNIP--]
+> >>   package/efl/libefl: add OpenGLES support
+> > This one I wasn't sure about the "choice"; we had some discussion about
+> > it with Yann on IRC.
+> It's not clear to me when we can really use the full OpenGL support.
+> I thought that the full OpenGL support was only needed by some specific hardware...
 
-Here is what I've done to remove the submodule issue:
+You don't care about the hardware in this case. If there is a full
+OpenGL provider *and* Xorg is enabled, then you can do full OpenGL.
+It is the responsibility of the libgl provider to provide hardware
+access (e.g. mesa3d, nvidia-driver, rpi-userland...)
 
-diff --git a/package/vsxu/vsxu.mk b/package/vsxu/vsxu.mk
-index 7dcbf74..9553f81 100644
---- a/package/vsxu/vsxu.mk
-+++ b/package/vsxu/vsxu.mk
-@@ -7,18 +7,22 @@
- # instead of using master branch we use branch glfw3
- VSXU_VERSION = 4a34b08ec9e51605ca55d1a833f23e9601b2aa88
- VSXU_SITE = $(call github,vovoid,vsxu,$(VSXU_VERSION))
-+VSXU_CAL3D_VERSION = 0f640189eec913973c64db3bc1c1685554cb7202
-+VSXU_CAL3D_SOURCE = cal3d-$(VSXU_CAL3D_VERSION).tar.gz
-+VSXU_EXTRA_DOWNLOADS = $(call github,vovoid,cal3d,$(VSXU_CAL3D_VERSION))/$(VSXU_CAL3D_SOURCE)
- VSXU_LICENSE = GPLv3
- VSXU_LICENSE_FILES = COPYING
- VSXU_INSTALL_STAGING = YES
--VSXU_DEPENDENCIES = cal3d freetype jpeg libgl libglew libglfw libglu \
-+VSXU_DEPENDENCIES = freetype jpeg libgl libglew libglfw libglu \
-        libpng zlib
- 
- # cal3d is a git submodule
--define VSXU_LINK_CAL3D
--       rm -rf $(@D)/plugins/src/mesh.importers/cal3d/
--       ln -sf $(CAL3D_DIR) $(@D)/plugins/src/mesh.importers/cal3d
-+define VSXU_EXTRACT_CAL3D
-+       mkdir -p $(@D)/plugins/src/mesh.importers/cal3d
-+        $(call suitable-extractor,$(VSXU_CAL3D_SOURCE)) $(DL_DIR)/$(VSXU_CAL3D_SOURCE) | \
-+        $(TAR) --strip-components=1 -C $(@D)/plugins/src/mesh.importers/cal3d $(TAR_OPTIONS) -
- endef
--VSXU_POST_EXTRACT_HOOKS += VSXU_LINK_CAL3D
-+VSXU_POST_EXTRACT_HOOKS += VSXU_EXTRACT_CAL3D
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- VSXU_DEPENDENCIES += alsa-lib
+So, in case my previous comments were not clear, here we go:
 
-However, it fails to build on ARM because CMakeLists.txt hardcodes
--mtune=nocona:
+  - full OpenGL currently requires Xorg and a libgl provider.
 
-[  2%] Building CXX object engine/CMakeFiles/vsxu_engine.dir/src/vsxfst/Common/String.cpp.o
-arm-linux-g++.br_real: error: unrecognized argument in option ?-mtune=nocona?
+Or, put in other words:
 
-Can you have a look into this and check that it builds on ARM ?
+  - if you have Xorg and you have a libgl provider, then you can do full
+    OpenGL.
 
-> diff --git a/package/vsxu/0001-disable-backtrace.patch b/package/vsxu/0001-disable-backtrace.patch
-> new file mode 100644
-> index 0000000..1c5e2a4
-> --- /dev/null
-> +++ b/package/vsxu/0001-disable-backtrace.patch
-> @@ -0,0 +1,35 @@
-> +uClibc has no support for execinfo.h/backtrace
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> +--- a/engine/include/debug/vsx_backtrace.h	2015-05-23 13:21:46.000000000 +0200
-> ++++ b/engine/include/debug/vsx_backtrace.h	2015-11-05 20:46:48.000000000 +0100
-> +@@ -7,7 +7,7 @@
-> + 
-> + #include <stdio.h>
-> + #include <errno.h>
-> +-#include <execinfo.h>
-> ++//#include <execinfo.h>
+So, for EFL, I would add an new entry to the choice:
 
-This is not a super great solution. What about instead:
+    config BR2_PACKAGE_EFL_GL
+        bool "opengl"
+        depends on BR2_PACKAGE_HAS_LIBGL
+        depends on BR2_PACKAGE_LIBEFL_X_XLIB
 
-include(CheckIncludeFiles)
+    comment "opengl support needs X11 support and a libgl provider"
+        depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_LIBEFL_X_XLIB
 
-check_include_files(execinfo.h HAVE_EXECINFO)
 
-and then #ifdef HAVE_EXECINFO ... #endif in the source code ?
+Alternatively, you can go with a select, like:
 
-This way, the solution is clean, and you can submit the patch upstream :-)
+    config BR2_PACKAGE_EFL_GL
+        bool "opengl"
+        depends on BR2_PACKAGE_HAS_LIBGL
+        depends on BR2_PACKAGE_XORG7  # X_XLIB
+        select BR2_PACKAGE_LIBEFL_X_XLIB
 
-> diff --git a/package/vsxu/0002-fix-includes.patch b/package/vsxu/0002-fix-includes.patch
-> new file mode 100644
-> index 0000000..5d94496
-> --- /dev/null
-> +++ b/package/vsxu/0002-fix-includes.patch
-> @@ -0,0 +1,41 @@
-> +Do not use host paths when cross-compiling.
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+    comment "opengl support needs Xorg and a libgl provider"
+        depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
 
-Looks good, please submit upstream. Since the package is on github, it
-would be better if you used Git formatted patches.
 
-Could you rework the patch to take into account those comments, and
-send an updated version?
+I think I'd prefer the first solution, but either is OK for me.
 
-Thanks!
+But now, if you are not interested in full OpenGL, or you can't test it,
+or really don't care, just leave it aside. Interested parties can submit
+that support later.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
