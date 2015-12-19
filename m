@@ -1,46 +1,57 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 19 Dec 2015 17:57:54 +0100
-Subject: [Buildroot] [PATCH v4
- 2/2]package/x11r7/xdriver_xf86-video-nouveau:new package
-References: <1450534925-9099-1-git-send-email-bernd.kuhls@t-online.de>
- <1450534925-9099-2-git-send-email-bernd.kuhls@t-online.de>
- <20151219155647.0a4ca4b8@free-electrons.com>
-Message-ID: <itegkcxlsq.ln2@ID-313208.user.individual.net>
+From: hong zhang <henryzhang62@yahoo.com>
+Date: Sat, 19 Dec 2015 17:17:18 +0000 (UTC)
+Subject: [Buildroot] add user script to /etc/rc before rootfs is created
+In-Reply-To: <20151218223234.GB10982@free.fr>
+References: <20151218223234.GB10982@free.fr>
+Message-ID: <1459995397.883814.1450545438212.JavaMail.yahoo@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Yann,
+I want to create subdirectory where all USER APIs will sit.Is this guide to follow ashttps://buildroot.org/downloads/manual/manual.html#_quick_guide_to_storing_your_project_specific_customizations
 
-Am Sat, 19 Dec 2015 15:56:47 +0100 schrieb Thomas Petazzoni:
+Any link to specific sample I can reference?
+---henry 
 
-> Dear Bernd Kuhls,
-> [...]
-> I've still applied your package because this issue needs to be fixed
-> separately, and address for all three Config.in options.
+    On Friday, December 18, 2015 2:32 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+ 
 
-thanks!
+ Henry, all,
 
-> Essentially, this happens because I'm building on ARM, and the
-> BR2_PACKAGE_LIBDRM_NOUVEAU option is only available on i386 and x86_64.
-> However, I wonder why BR2_PACKAGE_LIBDRM_NOUVEAU is not available on
-> ARM, since I'm pretty sure that the Nouveau driver is used on ARM on
-> some Tegra platforms.
+On 2015-12-18 21:58 +0000, hong zhang spake thusly:
+> List,
+> I add user script to /etc/rc/... so that the script can be executed right after kernel is up.
+> What I am doing now is:
+> After building first rootfs, expand rootfs and add my script to /etc/rc... area.
+> Is it possible to add my script to buildroot before rootfs is created?
 
-Looking at libdrm/Config.in the restriction on Intel hardware was
-added in 2013, it seems no one cared until now ;)
+Yes, this is covered in the manual, see;
+? ? https://buildroot.org/downloads/manual/manual.html#rootfs-custom
 
-$ git blame package/libdrm/Config.in | grep -A2 NOUVEAU
-b35acfff (Spenser Gilliland 2013-09-05 23:25:15 -0500 37) config BR2_PACKAGE_LIBDRM_NOUVEAU
-b35acfff (Spenser Gilliland 2013-09-05 23:25:15 -0500 38) 	bool "nouveau"
-b35acfff (Spenser Gilliland 2013-09-05 23:25:15 -0500 39) 	depends on BR2_i386 || BR2_x86_64
+Regards,
+Yann E. MORIN.
 
-> Right now, this causes a build failure:
+> ---henry
 
-Should be fixed by
-http://patchwork.ozlabs.org/patch/559217/
-http://patchwork.ozlabs.org/patch/559218/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Regards, Bernd
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software? Designer | \ / CAMPAIGN? ? |? ___? ? ? ? ? ? ? |
+| +33 223 225 172 `------------.-------:? X? AGAINST? ? ? |? \e/? There is no? |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? v? conspiracy.? |
+'------------------------------^-------^------------------^--------------------'
+
+
+  
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151219/8c2edc11/attachment.html>
