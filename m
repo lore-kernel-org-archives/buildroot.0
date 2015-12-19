@@ -1,44 +1,111 @@
-From: Steve Morris <morris@buinea.com>
-Date: Sat, 19 Dec 2015 12:11:26 -0800
-Subject: [Buildroot] Trouble bringing up Raspberry Pi
-Message-ID: <20151219201126.GA9718@buinea.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 19 Dec 2015 21:42:53 +0100
+Subject: [Buildroot] [PATCH v2] python-pyxml: remove obsolete package
+Message-ID: <1450557773-9320-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+PyXML is bitrotten and obsolete. You'll find the functionality it
+previously provided is now included in the Python standard library.
 
-I'm having some trouble bringing up a Raspberry Pi B+ and was hoping
-someone could point me in the right direction. I have successfully used
-buildroot on x86 machines in the past and managed to get them to run.
+So no need to keep this package in Buildroot anymore.
 
-I'm using a Raspberry Pi B+,with a USB keyboard, ethernet and HDMI
-output. The system works properly using a Raspbian image.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes:
+	v2: add Config.in.legacy entry
 
-I'm just trying to bring up a minimal system and then go from there.
+ Config.in.legacy                       |  7 +++++++
+ package/Config.in                      |  1 -
+ package/python-pyxml/Config.in         | 12 ------------
+ package/python-pyxml/python-pyxml.hash |  2 --
+ package/python-pyxml/python-pyxml.mk   | 17 -----------------
+ 5 files changed, 7 insertions(+), 32 deletions(-)
+ delete mode 100644 package/python-pyxml/Config.in
+ delete mode 100644 package/python-pyxml/python-pyxml.hash
+ delete mode 100644 package/python-pyxml/python-pyxml.mk
 
-I'm using buildroot-2015.11.1 and followed the readme.txt under
-board/raspberrypi. I've tried both the volatile and persistent rootfs
-and find the instruction insufficient to get a working system.
-
-After the first failed attempt, I set 
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-which allowed me to boot the machine  and I'm now able to log in via
-SSH/dropbear, but I don't always get a login prompt, and the keyboard
-has no effect even though it's found by the system and I
- get a message when I unplug it or plug it back in again.
-
-I've tried adding items to cmdline.txt from various websites, 
-but still don't have any keyboard input.
-
-Are there other missing notes like the one about enabling MDEV which
-will allow me to log in to the console?
-
-Perhaps a working .config for the Pi B+ would set me in the right
-direction.
-
-Thanks,
-
-Steve Morris
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 4d22527..af30de5 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
+ 
++config BR2_PACKAGE_PYTHON_PYXML
++	bool "python-pyxml package has been removed"
++	select BR2_LEGACY
++	help
++	  PyXML is obsolete and its functionality is covered either via
++	  native Python XML support or python-lxml package.
++
+ config BR2_PACKAGE_LIBEINA
+ 	bool "libeina package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 94898a1..4bd37a4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -675,7 +675,6 @@ menu "External python modules"
+ 	source "package/python-pyudev/Config.in"
+ 	source "package/python-pyusb/Config.in"
+ 	source "package/python-pyxb/Config.in"
+-	source "package/python-pyxml/Config.in"
+ 	source "package/python-pyyaml/Config.in"
+ 	source "package/python-pyzmq/Config.in"
+ 	source "package/python-requests/Config.in"
+diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
+deleted file mode 100644
+index 82316ba..0000000
+--- a/package/python-pyxml/Config.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_PYTHON_PYXML
+-	bool "python-pyxml"
+-	depends on BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_EXPAT
+-	help
+-	  This is the Python XML package. The distribution contains a
+-	  validating XML parser, an implementation of the SAX and DOM
+-	  programming interfaces, an interface to the Expat parser (and the
+-	  Expat parser itself), and a C helper module that can speed up
+-	  xmllib.py by a factor of 5. There's even documentation!
+-
+-	  http://pyxml.sourceforge.net/topics/index.html
+diff --git a/package/python-pyxml/python-pyxml.hash b/package/python-pyxml/python-pyxml.hash
+deleted file mode 100644
+index df98c46..0000000
+--- a/package/python-pyxml/python-pyxml.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 9fab66f9584fb8e67aebd8745a5c97bf1c5a2e2e461adf68862bcec64e448c13  PyXML-0.8.4.tar.gz
+diff --git a/package/python-pyxml/python-pyxml.mk b/package/python-pyxml/python-pyxml.mk
+deleted file mode 100644
+index 7ccce8e..0000000
+--- a/package/python-pyxml/python-pyxml.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# python-pyxml
+-#
+-################################################################################
+-
+-PYTHON_PYXML_VERSION = 0.8.4
+-PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
+-PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/$(PYTHON_PYXML_VERSION)
+-PYTHON_PYXML_LICENSE = BSD-3c
+-PYTHON_PYXML_LICENSE_FILES = LICENCE
+-PYTHON_PYXML_SETUP_TYPE = distutils
+-PYTHON_PYXML_DEPENDENCIES = expat
+-PYTHON_PYXML_BUILD_OPTS = --with-libexpat=$(STAGING_DIR)/usr
+-PYTHON_PYXML_INSTALL_TARGET_OPTS = --with-libexpat=$(STAGING_DIR)/usr
+-
+-$(eval $(python-package))
+-- 
+2.1.4
