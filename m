@@ -1,60 +1,93 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Dec 2015 23:36:38 +0100
-Subject: [Buildroot] [PATCH 1/7] toolchain-external: CodeSourcery ARM:
- support only one version
-In-Reply-To: <1450548886-21937-1-git-send-email-romain.naour@openwide.fr>
-References: <1450548886-21937-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <5675DBF6.2090308@mind.be>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Sun, 20 Dec 2015 00:42:29 +0200 (IST)
+Subject: [Buildroot] [PATCH 1/1] INSTALL for autotools packages with
+ hardcoded '-s'
+In-Reply-To: <20151219140242.588c12ba@free-electrons.com>
+References: <1448206276-6260-1-git-send-email-yba@tkos.co.il>
+ <20151219140242.588c12ba@free-electrons.com>
+Message-ID: <alpine.DEB.2.11.1512192358590.2273@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19-12-15 19:14, Romain Naour wrote:
-> See the conclusion about external toolchains during the Buildroot
-> meeting [1]:
-> "In the future, we stick to a single external toolchain version. The
-> Kconfig symbol should not encode the version (avoid legacy handling)"
+Hi Thomas,
+Summary: This patch is apparently no longer required.
+
+The patch that I submitted seems to be the only way to fix the older 
+autotools packages that have this problem with the hardcoded '-s'. I don't 
+think that there is another solution that is simpler or cleaner.
+
+I submitted the patch in preparation for the ypbind-mt and yp-tools 
+packages that I made using the old tarfiles on 
+https://www.kernel.org/pub/linux/utils/net/NIS/. I had assumed that the 
+presence of these tarballs on linux.org implied that they were the package
+versions that are blessed for use with Linux when in fact they appear to 
+have been left on kernel.org there for the archeologists. Baruch pointed 
+out to me what I had refused to believe beforehand, that the NIS upstream 
+really is https://github.com/thkukuk.
+
+The latest tagged commits for yp-tools and ypbind mount on 
+https://github.com/thkukuk have updated autotools configuration that do 
+not require this '-s' patch. I built them last week for ARM using GCC 5.2 
+with built-in RPC and encountered a -Wcast-align bug for which I 
+submitted a patch to Thorsten and which I included in my Buildroot 
+ypbind-mt package (not yet submitted to this list) until the patch is 
+accepted by Thorsten.
+
+At this point what remains to do is for me to build and test autofs, 
+and the newer yp-tools and ypbind-mt packages using the toolchain without 
+RPC that you sent me and to verify that tirpc builds and works. I hope to 
+finish this coming week. In the meantime the client who ordered the work 
+is using the rootfs with the older versions of yp-tools and ypbind-mt that 
+I built last month which seem to work just fine for his application.
+
+Thanks,
+
+  - yba
+
+
+On Sat, 19 Dec 2015, Thomas Petazzoni wrote:
+
+> Date: Sat, 19 Dec 2015 14:02:42 +0100
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Jonathan Ben-Avraham <yba@tkos.co.il>
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] [PATCH 1/1] INSTALL for autotools packages with
+>     hardcoded '-s'
 > 
-> [1] http://elinux.org/index.php?title=Buildroot:DeveloperDaysELCE2015#Report
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  toolchain/toolchain-external/Config.in             | 65 +---------------------
->  .../toolchain-external/toolchain-external.hash     |  2 -
->  toolchain/toolchain-external/toolchain-external.mk |  8 +--
-
- One remark here (which applies to the whole series): it lacks legacy handling.
-I would propose to let all of the removed symbols select
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM.
-
- Otherwise, looks good to me.
-
- Regards,
- Arnout
-
->  3 files changed, 3 insertions(+), 72 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 656e012..a8f19aa 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -101,7 +101,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
->  	  generated is Thumb 2, with the hard floating point calling
->  	  convention, and uses the VFPv3-D16 FPU instructions.
->  
-> -config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
-> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
->  	bool "Sourcery CodeBench ARM 2014.05"
->  	depends on BR2_arm
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-[snip]
+> Jonathan,
+>
+> On Sun, 22 Nov 2015 17:31:16 +0200, Jonathan Ben-Avraham wrote:
+>> From: Jonathan Ben Avraham <yba@tkos.co.il>
+>>
+>> The Makefile.in's of some autotools packages such as yp-tools and ypbind-mt do
+>> not use the "install-sh" script for installing executables but instead call the
+>> detected BSD compatible 'install' binary directly with hardcoded '-s' parameter.
+>> This results in a build failure when the host 'strip' is invoked on binaries
+>> compiled for a different arch. The 'install-without-strip' script removes the
+>> '-s' parameter and execs the 'install' binary in PATH to solve this problem.
+>> These autotools packages can then be build under Buildroot by specifying
+>> <package>_CONF_ENV = INSTALL=support/scripts/install-without-strip
+>>
+>> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+>> ---
+>>  support/scripts/install-without-strip |   11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>  create mode 100755 support/scripts/install-without-strip
+>
+> Following the feedback and discussion with Yann, I've marked this patch
+> as Changes Requested in our patch tracking system. I guess we will see
+> what the proper solution for the problem will be when you submit the
+> packages affected by the 'install -s' problem.
+>
+> Best regards,
+>
+> Thomas
+>
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
