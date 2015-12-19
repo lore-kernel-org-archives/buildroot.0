@@ -1,99 +1,170 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 19 Dec 2015 17:39:13 +0100
-Subject: [Buildroot] [PATCH 1/4] package/libelementary: move to package
-	directory
-Message-ID: <1450543156-16847-1-git-send-email-romain.naour@openwide.fr>
+Date: Sat, 19 Dec 2015 17:39:15 +0100
+Subject: [Buildroot] [PATCH 3/4] package/libefl: move to package directory
+In-Reply-To: <1450543156-16847-1-git-send-email-romain.naour@openwide.fr>
+References: <1450543156-16847-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1450543156-16847-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed on the list the two remaining packages in
-package/efl subdirectory will be moved to package/
-directory.
+As discussed on the list move the last remaining package
+in package/efl subdirectory to package/ directory.
 
-- Add the efl dependency to libelementary.
-- Set LIBELEMENTARY_VERSION with the version number
-  directly.
+- move the efl dependency to libefl.
+- Set LIBEFL_VERSION with the version number directly.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  | 1 +
- package/efl/Config.in                              | 1 -
- package/{efl => }/libelementary/Config.in          | 3 ++-
- package/{efl => }/libelementary/libelementary.hash | 0
- package/{efl => }/libelementary/libelementary.mk   | 2 +-
- 5 files changed, 4 insertions(+), 3 deletions(-)
- rename package/{efl => }/libelementary/Config.in (89%)
- rename package/{efl => }/libelementary/libelementary.hash (100%)
- rename package/{efl => }/libelementary/libelementary.mk (97%)
+Maybe this patch can be squashed with the following one because
+BR2_PACKAGE_EFL can't be selected since libefl package is not
+yet renamed to efl.
+---
+ package/Config.in                                  |  2 +-
+ package/efl/Config.in                              | 29 ----------------------
+ package/efl/efl.mk                                 |  4 ---
+ ...ecore_fb_private.h-define-EAPI-before-use.patch |  0
+ .../libefl/0002-ecore_x-Remove-XPrint-usage.patch  |  0
+ package/{efl => }/libefl/Config.in                 | 16 ++++++++++++
+ package/{efl => }/libefl/libefl.hash               |  0
+ package/{efl => }/libefl/libefl.mk                 |  2 +-
+ 8 files changed, 18 insertions(+), 35 deletions(-)
+ delete mode 100644 package/efl/Config.in
+ delete mode 100644 package/efl/efl.mk
+ rename package/{efl => }/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch (100%)
+ rename package/{efl => }/libefl/0002-ecore_x-Remove-XPrint-usage.patch (100%)
+ rename package/{efl => }/libefl/Config.in (89%)
+ rename package/{efl => }/libefl/libefl.hash (100%)
+ rename package/{efl => }/libefl/libefl.mk (99%)
 
 diff --git a/package/Config.in b/package/Config.in
-index 94898a1..75d6201 100644
+index 2c1e4d6..09d0d6a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -252,6 +252,7 @@ endif
+@@ -253,6 +253,7 @@ endif
  	source "package/fbv/Config.in"
  	source "package/freerdp/Config.in"
  	source "package/imagemagick/Config.in"
-+	source "package/libelementary/Config.in"
++	source "package/libefl/Config.in"
  	source "package/linux-fusion/Config.in"
  	source "package/lite/Config.in"
  	source "package/mesa3d/Config.in"
+@@ -269,7 +270,6 @@ endif
+ 	source "package/sdl2/Config.in"
+ 
+ comment "Other GUIs"
+-	source "package/efl/Config.in"
+ 	source "package/qt/Config.in"
+ 	source "package/qt5/Config.in"
+ if BR2_PACKAGE_QT || BR2_PACKAGE_QT5
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 80658b2..7ef1b5b 100644
+deleted file mode 100644
+index 7ef1b5b..0000000
 --- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -16,7 +16,6 @@ menuconfig BR2_PACKAGE_EFL
- if BR2_PACKAGE_EFL
- 
- source "package/efl/libefl/Config.in"
--source "package/efl/libelementary/Config.in"
- 
- endif # BR2_PACKAGE_EFL
- 
-diff --git a/package/efl/libelementary/Config.in b/package/libelementary/Config.in
-similarity index 89%
-rename from package/efl/libelementary/Config.in
-rename to package/libelementary/Config.in
-index ce597de..54f8688 100644
---- a/package/efl/libelementary/Config.in
-+++ b/package/libelementary/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBELEMENTARY
- 	bool "libelementary"
++++ /dev/null
+@@ -1,29 +0,0 @@
+-menuconfig BR2_PACKAGE_EFL
+-	bool "Enlightenment Foundation Libraries"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_PACKAGE_HAS_UDEV # libudev
+-	depends on BR2_PACKAGE_LUA # lua 5.1 or better
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+-	depends on BR2_USE_MMU
+-	depends on BR2_USE_WCHAR # use wchar_t
+-	depends on !BR2_STATIC_LIBS # dlfcn.h
 -	select BR2_PACKAGE_LIBEFL
-+	depends on BR2_PACKAGE_EFL
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elm_store.c
- 	depends on !BR2_STATIC_LIBS
- 	help
-@@ -11,4 +11,5 @@ config BR2_PACKAGE_LIBELEMENTARY
- 	  https://enlightenment.org
- 
- comment "libelementary needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_PACKAGE_EFL
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/efl/libelementary/libelementary.hash b/package/libelementary/libelementary.hash
+-	help
+-	  Enlightenment Foundation Libraries
+-
+-	  http://enlightenment.org
+-
+-if BR2_PACKAGE_EFL
+-
+-source "package/efl/libefl/Config.in"
+-
+-endif # BR2_PACKAGE_EFL
+-
+-comment "EFL needs udev /dev management and a toolchain w/ C++, dynamic library, threads, wchar"
+-	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-	depends on BR2_USE_MMU
+-
+-comment "EFL needs lua"
+-	depends on !BR2_PACKAGE_LUA
+-	depends on BR2_USE_MMU
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+deleted file mode 100644
+index 151ac28..0000000
+--- a/package/efl/efl.mk
++++ /dev/null
+@@ -1,4 +0,0 @@
+-
+-EFL_VERSION = 1.15.2
+-
+-include $(sort $(wildcard package/efl/*/*.mk))
+diff --git a/package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch b/package/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
 similarity index 100%
-rename from package/efl/libelementary/libelementary.hash
-rename to package/libelementary/libelementary.hash
-diff --git a/package/efl/libelementary/libelementary.mk b/package/libelementary/libelementary.mk
-similarity index 97%
-rename from package/efl/libelementary/libelementary.mk
-rename to package/libelementary/libelementary.mk
-index c920801..4ba8681 100644
---- a/package/efl/libelementary/libelementary.mk
-+++ b/package/libelementary/libelementary.mk
+rename from package/efl/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
+rename to package/libefl/0001-ecore_fb_private.h-define-EAPI-before-use.patch
+diff --git a/package/efl/libefl/0002-ecore_x-Remove-XPrint-usage.patch b/package/libefl/0002-ecore_x-Remove-XPrint-usage.patch
+similarity index 100%
+rename from package/efl/libefl/0002-ecore_x-Remove-XPrint-usage.patch
+rename to package/libefl/0002-ecore_x-Remove-XPrint-usage.patch
+diff --git a/package/efl/libefl/Config.in b/package/libefl/Config.in
+similarity index 89%
+rename from package/efl/libefl/Config.in
+rename to package/libefl/Config.in
+index b2c8773..08c29fc 100644
+--- a/package/efl/libefl/Config.in
++++ b/package/libefl/Config.in
+@@ -1,5 +1,12 @@
+ config BR2_PACKAGE_LIBEFL
+ 	bool "libefl"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_UDEV # libudev
++	depends on BR2_PACKAGE_LUA # lua 5.1 or better
++	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
++	depends on BR2_USE_MMU
++	depends on BR2_USE_WCHAR # use wchar_t
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
+@@ -172,3 +179,12 @@ config BR2_PACKAGE_LIBEFL_WEBP
+ 	  This enables the loader code that loads images using WebP.
+ 
+ endif # BR2_PACKAGE_LIBEFL
++
++comment "LIBEFL needs udev /dev management and a toolchain w/ C++, dynamic library, threads, wchar"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP \
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on BR2_USE_MMU
++
++comment "LIBEFL needs lua"
++	depends on !BR2_PACKAGE_LUA
++	depends on BR2_USE_MMU
+diff --git a/package/efl/libefl/libefl.hash b/package/libefl/libefl.hash
+similarity index 100%
+rename from package/efl/libefl/libefl.hash
+rename to package/libefl/libefl.hash
+diff --git a/package/efl/libefl/libefl.mk b/package/libefl/libefl.mk
+similarity index 99%
+rename from package/efl/libefl/libefl.mk
+rename to package/libefl/libefl.mk
+index b989d54..f08a4fb 100644
+--- a/package/efl/libefl/libefl.mk
++++ b/package/libefl/libefl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBELEMENTARY_VERSION = $(EFL_VERSION)
-+LIBELEMENTARY_VERSION = 1.15.2
- LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
- LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
- LIBELEMENTARY_LICENSE = LGPLv2.1
+-LIBEFL_VERSION = $(EFL_VERSION)
++LIBEFL_VERSION = 1.15.2
+ LIBEFL_SOURCE = efl-$(LIBEFL_VERSION).tar.xz
+ LIBEFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ LIBEFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
 -- 
 2.4.3
