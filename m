@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 14:13:31 +0100
-Subject: [Buildroot] [PATCH 01/12] package/apache: bump version to 2.4.18
-In-Reply-To: <1450522892-14611-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 19 Dec 2015 14:14:01 +0100
+Subject: [Buildroot] [PATCH 08/12] package/x11r7/xdriver_xf86-video-ati:
+ bump version to 7.6.1
+In-Reply-To: <1450522892-14611-8-git-send-email-bernd.kuhls@t-online.de>
 References: <1450522892-14611-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151219141331.3d0018f3@free-electrons.com>
+ <1450522892-14611-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151219141401.69511d6a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +14,13 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat, 19 Dec 2015 12:01:21 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/apache/apache.hash | 4 ++--
->  package/apache/apache.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+On Sat, 19 Dec 2015 12:01:28 +0100, Bernd Kuhls wrote:
 
-I've applied patches 1 to 9 and patch 11.
+> +# xdriver_xf86-video-ati requires O_CLOEXEC
+> +XDRIVER_XF86_VIDEO_ATI_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
 
-I have some concerns on patch 10, and since I believe the nouveau
-driver probably needs the newer X.org server version, I didn't merge
-patch 12.
+Can you report this problem upstream so that they fix their code to
+define _GNU_SOURCE when needed ?
 
 Thanks!
 
