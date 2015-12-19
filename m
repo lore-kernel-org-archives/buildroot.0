@@ -1,71 +1,119 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 19 Dec 2015 15:25:09 +0100
-Subject: [Buildroot] [PATCH v2 2/3] package/cal3d: new package
-In-Reply-To: <20151219150027.72263718@free-electrons.com>
-References: <1446915053-13783-1-git-send-email-bernd.kuhls@t-online.de>
- <1446915053-13783-3-git-send-email-bernd.kuhls@t-online.de>
- <20151219150027.72263718@free-electrons.com>
-Message-ID: <20151219142509.GA3394@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 19 Dec 2015 15:30:27 +0100
+Subject: [Buildroot] [PATCH v10 00/28] efl bump to 1.15.2
+In-Reply-To: <20151218001144.5a685de2@free-electrons.com>
+References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+ <20151218001144.5a685de2@free-electrons.com>
+Message-ID: <56756A03.7050701@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Thomas, All,
 
-On 2015-12-19 15:00 +0100, Thomas Petazzoni spake thusly:
-> On Sat,  7 Nov 2015 17:50:52 +0100, Bernd Kuhls wrote:
-> > This package only provides a git submodule for the vsxu package.
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Le 18/12/2015 00:11, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> I don't really like the interaction between this package and the vsxu
-> package, but I don't really have a better proposal to be honest.
+> On Tue, 15 Dec 2015 23:40:12 +0100, Romain Naour wrote:
 > 
-> Yann, Peter, Arnout, do you have some suggestions on how to handle such
-> git submodule cases?
+>> Romain Naour (28):
+>>   package/efl/libefl: new package
+>>   package/efl/libefl: add harfbuzz dependency
+>>   package/efl/libefl: add wayland dependency
+>>   package/efl/libefl: add webp dependency
+>>   package/efl/libefl: add frame buffer config option
+>>   package/efl/libefl: add jp2k config option
+>>   package/efl/libefl: add X11 support
+> 
+> All those ones applied. On the "libefl: new package" patch I've applied
+> my two patches that I showed you on the mailing list.
+> 
+>>   package/efl/libefl: add OpenGLES support
+> 
+> This one I wasn't sure about the "choice"; we had some discussion about
+> it with Yann on IRC.
 
-I really don't know what to do with git-submodules.
+It's not clear to me when we can really use the full OpenGL support.
+I thought that the full OpenGL support was only needed by some specific hardware...
 
-But in this precise case, I would:
-  - dump the cal3d package
-  - add a post-download hook (or an extra-download URL) to vsxu to also
-    download cal3d
-  - add a post-extract hook to vsxu to also extract cal3d in the correct
-    location.
+> 
+>>   package/efl/libefl: enable xinput2.2
+> 
+> This one I thought should have been part of the X11 support patch, but
+> now that I have applied the X11 support patch, I think I'll apply this
+> one separately.
 
-Then, when/if cal3d is later used by other packages, we can revisit the
-situation.
+ok.
 
-Otherwise, for proper git-submodule handling, we would have to do
-(roughly):
+> 
+>>   package/libevas-generic-loaders: bump to version 1.15.0
+>>   package/libevas-generic-loaders: add libraw dependency
+>>   package/efl/libelementary: bump to version 1.15.2
+>>   package/efl: libefl and libelementary share the same version number
+>>   package/enlightenment: bump to version 0.19.12
+>>   package/expedite: bump to efl-1.15 branch
+>>   package/dbus-cpp: switch to libefl
+>>   package/efl/libethumb: remove package
+>>   package/efl/libedje: remove package
+>>   package/efl/libembryo: remove package
+>>   package/efl/libeio: remove package
+>>   package/efl/libefreet: remove package
+>>   package/efl/libedbus: remove package
+>>   package/efl/libecore: remove package
+>>   package/efl/libevas: remove package
+>>   package/efl/libeet: remove package
+>>   package/efl/libeina: remove package
+> 
+> All applied.
+> 
+>>   package/libemotion-generic-players: new package
+> 
+> I want to do some more review on this one.
 
-    git clone blabla pkg-version
-    cd pkg-version
-    git checkout pkg-version
-    git submodule update --init --recursive
-    find . -name .git -exec rm -rf {} +
-    cd ..
-    tar czf DL_DIR/pkg-version.tar.gz pkg-version/
+Ok.
 
-This is not very complex, but is stil la significant change from our
-current git wrapper.
+> 
+>>   package/efl: rename libefl to efl
+> 
+> I don't understand the logic of this one, and why we're moving from a
+> 'menuconfig' to a 'menu'.
+> 
+> So there are four patches left to be applied out of 28.
+> 
+> Thanks a lot for working on this, definitely great to have an
+> up-to-date EFL stack.
 
-And then, what about svn externals? About Hg subrepos? Does bzr also
-have such a thing?
+Yes, special thank to Vicente who did a runtime test and Yann complete review of
+this series.
 
-Note that I would not really mind doing such a change. But is it worth
-it, given that we currently have only one package that needs submodules?
-Or do we have others for which we had to "deal with it" in a crude way?
+> 
+> To be honest, with the version number now being shared with just libefl
+> and libelementary, I am not sure it is really worth the effort to have
+> a package/efl/ directory with those two packages. What about making
+> them normal top-level packages ?
 
-Regards,
-Yann E. MORIN.
+This is what I wanted to do initially (in v3):
+- move all old efl package outside of package/efl/ [1]
+- add a new package efl [2]
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[1] http://patchwork.ozlabs.org/patch/528603/
+[2] http://patchwork.ozlabs.org/patch/528573/
+
+But someone asked me to keep in sync libelementary and efl, so I introduced the
+libefl package in the followup series.
+
+Now, we can move libelementary and libefl to package/ directory.
+And even rename libefl to efl because all packages that use efl libraries
+depends on BR2_PACKAGE_EFL.
+
+Thoughts ?
+
+Romain
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
