@@ -1,59 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 15:35:19 +0100
-Subject: [Buildroot] [PATCH v2 2/3] package/cal3d: new package
-In-Reply-To: <20151219142509.GA3394@free.fr>
-References: <1446915053-13783-1-git-send-email-bernd.kuhls@t-online.de>
- <1446915053-13783-3-git-send-email-bernd.kuhls@t-online.de>
- <20151219150027.72263718@free-electrons.com>
- <20151219142509.GA3394@free.fr>
-Message-ID: <20151219153519.38c52050@free-electrons.com>
+Date: Sat, 19 Dec 2015 15:35:48 +0100
+Subject: [Buildroot] [PATCH 1/3] obsidian_cursors: new package
+In-Reply-To: <1447443425-2530-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1447443425-2530-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151219153548.11b5c73e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Dear Gustavo Zacarias,
 
-On Sat, 19 Dec 2015 15:25:09 +0100, Yann E. MORIN wrote:
+On Fri, 13 Nov 2015 16:37:03 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/Config.in                              |  5 ++++-
+>  package/obsidian_cursors/Config.in             |  6 ++++++
+>  package/obsidian_cursors/obsidian_cursors.hash |  2 ++
+>  package/obsidian_cursors/obsidian_cursors.mk   | 18 ++++++++++++++++++
+>  4 files changed, 30 insertions(+), 1 deletion(-)
+>  create mode 100644 package/obsidian_cursors/Config.in
+>  create mode 100644 package/obsidian_cursors/obsidian_cursors.hash
+>  create mode 100644 package/obsidian_cursors/obsidian_cursors.mk
 
-> But in this precise case, I would:
->   - dump the cal3d package
->   - add a post-download hook (or an extra-download URL) to vsxu to also
->     download cal3d
+Applied, after doing some changes:
 
-A post-download hook wouldn't play well with "make source", "make
-legal-info" and all. We have to take this into account. But an
-EXTRA_DOWNLOADS should work fine.
+    [Thomas:
+     - rename from obsidian_cursors to obsidian-cursors
+     - change prompt from obsidian to obsidian-cursors in order to match
+       with the package name.]
 
->   - add a post-extract hook to vsxu to also extract cal3d in the correct
->     location.
-
-Could be a solution, I'll try this.
-
-> Otherwise, for proper git-submodule handling, we would have to do
-> (roughly):
-> 
->     git clone blabla pkg-version
->     cd pkg-version
->     git checkout pkg-version
->     git submodule update --init --recursive
->     find . -name .git -exec rm -rf {} +
->     cd ..
->     tar czf DL_DIR/pkg-version.tar.gz pkg-version/
-> 
-> This is not very complex, but is stil la significant change from our
-> current git wrapper.
-> 
-> And then, what about svn externals? About Hg subrepos? Does bzr also
-> have such a thing?
-> 
-> Note that I would not really mind doing such a change. But is it worth
-> it, given that we currently have only one package that needs submodules?
-> Or do we have others for which we had to "deal with it" in a crude way?
-
-I don't want to go down this route for the moment, I'd prefer to see
-how many of these git submodule users we have.
+Thanks!
 
 Thomas
 -- 
