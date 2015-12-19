@@ -1,28 +1,19 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 19 Dec 2015 11:36:36 -0300
-Subject: [Buildroot] [PATCH] xfont_encodings: add missing xutil_util-macros
-	select
-Message-ID: <1450535796-21922-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 19 Dec 2015 11:38:22 -0300
+Subject: [Buildroot] [PATCH] qemu/x86_64: add midori samples for wayland
+ and x11r7
+In-Reply-To: <1450535744-21877-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450535744-21877-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <56756BDE.4030500@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/x11r7/xfont_encodings/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On 19/12/15 11:35, Gustavo Zacarias wrote:
 
-diff --git a/package/x11r7/xfont_encodings/Config.in b/package/x11r7/xfont_encodings/Config.in
-index af40da1..d771ffb 100644
---- a/package/x11r7/xfont_encodings/Config.in
-+++ b/package/x11r7/xfont_encodings/Config.in
-@@ -1,4 +1,5 @@
- config BR2_PACKAGE_XFONT_ENCODINGS
- 	bool "encodings"
-+	select BR2_PACKAGE_XUTIL_UTIL_MACROS
- 	help
- 	  No description available
--- 
-2.4.10
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Disregard, bad copy/paste, that's not ready yet.
+Regards.
