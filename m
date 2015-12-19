@@ -1,51 +1,56 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 19 Dec 2015 10:35:02 +0100
-Subject: [Buildroot] [PATCH v2] package/uclibc: Enable compile in thumb
- mode configuration option
-In-Reply-To: <567480E6.20407@mind.be>
-References: <1449269795-17864-1-git-send-email-paul.enman@gmail.com>
- <1450056520-18750-1-git-send-email-paul.enman@gmail.com>
- <20151215230351.5dc6e91d@free-electrons.com>
- <5671E0D0.3030002@mind.be>
- <CAEp4hJ1hwzskLYz1J--Y3Z7GfJnsLzSA=D6tFQO3jBMdQQAXqA@mail.gmail.com>
- <567480E6.20407@mind.be>
-Message-ID: <20151219093502.GG19876@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Dec 2015 11:51:17 +0100
+Subject: [Buildroot] [PATCH] package/python-webpy: fix licensing information
+Message-ID: <1450522277-6528-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-Arnout Vandecappelle wrote,
+The license files defined in the .mk do not exist in the release
+tarball. However, they do exist in the git repository.
 
->  Hi Paul,
-> 
->  [Please don't top-post, but reply inline like I do below.]
-> 
-> On 18-12-15 01:11, Paul Enman wrote:
-> > Hi All,
-> > Thanks for your feedback and insight. Buildroot does build a working Cortex-M
-> > (thumb instructions only) uClibc toolchain by touching up the uClibc(-ng) config
-> > file with
-> > 
-> > Enable COMPILE_IN_THUMB_MODE
-> > and
-> > Disable UCLIBC_HAS_CONTEXT_FUNCS
-> > 
-> > ARMv5 and thumb1 targets shouldn't be effected by this patch; I'll look into
-> > guarding packages that depend on (obsolescent?) context control functions and
-> > prepare an updated version for review.
-> 
->  It will be quite hard to find such packages - especially longer term. There
-> probably should be a thumb2 toolchain added to the autobuilders to cover this case.
-> 
->  Also, finding a good explanation for the comment is going to be difficult...
-> Something like "foo needs ARM instructions or a (e)glibc or musl toolchain".
+Since the git tree is rather small, switch to using it instead of the
+released tarball.
 
-Other architectures also have no support for context functions.
-So a more general solution would be better. What packages use
-context functions anyway?
+Fixes:
+    http://autobuild.buildroot.org/results/d94/d944f36220326510c15685efe19075e90e72a5c3/
+    http://autobuild.buildroot.org/results/14f/14f411ef29cbf0ba8cf4a4fed71556eacc96eb04/
+    and many others...
 
-best regards
- Waldemar
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-webpy/python-webpy.hash | 5 ++---
+ package/python-webpy/python-webpy.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
+index 05ee808..0e0a8d0 100644
+--- a/package/python-webpy/python-webpy.hash
++++ b/package/python-webpy/python-webpy.hash
+@@ -1,3 +1,2 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=93375e3f03e74d6bf5c5096a4962a8db, sha256 locally computed
+-md5     93375e3f03e74d6bf5c5096a4962a8db  web.py-0.37.tar.gz
+-sha256  748c7e99ad9e36f62ea19f7965eb7dd7860b530e8f563ed60ce3e53e7409a550  web.py-0.37.tar.gz
++# Locally computed
++sha256  c3cb8930739294103b1ad109e5fd1d0efae67c06d5b6d59fce5b5a2ee6b21624  python-webpy-webpy-0.37.tar.gz
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
+index 2074b39..8bcc8ec 100644
+--- a/package/python-webpy/python-webpy.mk
++++ b/package/python-webpy/python-webpy.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEBPY_VERSION = 0.37
+-PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
+-PYTHON_WEBPY_SITE = https://pypi.python.org/packages/source/w/web.py
++PYTHON_WEBPY_VERSION = webpy-0.37
++PYTHON_WEBPY_SITE = $(call github,webpy,webpy,$(PYTHON_WEBPY_VERSION))
+ PYTHON_WEBPY_SETUP_TYPE = distutils
+ PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
+ PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt web/wsgiserver/LICENSE.txt
+-- 
+1.9.1
