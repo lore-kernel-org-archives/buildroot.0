@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 19 Dec 2015 12:01:22 +0100
-Subject: [Buildroot] [PATCH 02/12] package/{mesa3d,
-	mesa3d-headers}: bump version to 11.1.0
+Date: Sat, 19 Dec 2015 12:01:28 +0100
+Subject: [Buildroot] [PATCH 08/12] package/x11r7/xdriver_xf86-video-ati:
+	bump version to 7.6.1
 In-Reply-To: <1450522892-14611-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1450522892-14611-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1450522892-14611-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1450522892-14611-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,45 +13,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 4 ++--
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   | 5 ++++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 03b596f..bdfc92f 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 11.0.7
-+MESA3D_HEADERS_VERSION = 11.1.0
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 22ee25b..51a456c 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+index ccb8665..57ebfe8 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-November/000190.html
--sha256	e7e90a332ede6c8fd08eff90786a3fd1605a4e62ebf3a9b514047838194538cb	mesa-11.0.7.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-December/000194.html
-+sha256	9befe03b04223eb1ede177fa8cac001e2850292c8c12a3ec9929106afad9cf1f	mesa-11.1.0.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index a082216..4c8a151 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-October/002486.html
+-sha256	ec3e6f06b6cf9a40c72aafa3448aae8b034c80b37410ca9442d5cf6806e07936	xf86-video-ati-7.5.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-November/002658.html
++sha256 2516d9eeb8da8bcd3a01365ed1314919777910fa904ab268af342b5693e1d34c        xf86-video-ati-7.6.1.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index cba9e76..3dd3d07 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 11.0.7
-+MESA3D_VERSION = 11.1.0
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 7.5.0
++XDRIVER_XF86_VIDEO_ATI_VERSION = 7.6.1
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
+@@ -28,4 +28,7 @@ else
+ XDRIVER_XF86_VIDEO_ATI_CONF_OPTS = --disable-glamor
+ endif
+ 
++# xdriver_xf86-video-ati requires O_CLOEXEC
++XDRIVER_XF86_VIDEO_ATI_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
++
+ $(eval $(autotools-package))
 -- 
 2.6.4
