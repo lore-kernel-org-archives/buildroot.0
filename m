@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 19 Dec 2015 19:14:43 +0100
-Subject: [Buildroot] [PATCH 4/7] toolchain-external: CodeSourcery x86:
+Date: Sat, 19 Dec 2015 19:14:42 +0100
+Subject: [Buildroot] [PATCH 3/7] toolchain-external: CodeSourcery SH:
 	support only one version
 In-Reply-To: <1450548886-21937-1-git-send-email-romain.naour@openwide.fr>
 References: <1450548886-21937-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1450548886-21937-4-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1450548886-21937-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,130 +20,152 @@ Kconfig symbol should not encode the version (avoid legacy handling)"
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- toolchain/toolchain-external/Config.in             | 63 +---------------------
+ package/liquid-dsp/Config.in                       |  4 +-
+ package/qt/Config.in                               |  2 +-
+ toolchain/toolchain-external/Config.in             | 55 +---------------------
  .../toolchain-external/toolchain-external.hash     |  2 -
- toolchain/toolchain-external/toolchain-external.mk |  8 +--
- 3 files changed, 3 insertions(+), 70 deletions(-)
+ toolchain/toolchain-external/toolchain-external.mk |  8 +---
+ 5 files changed, 5 insertions(+), 66 deletions(-)
 
+diff --git a/package/liquid-dsp/Config.in b/package/liquid-dsp/Config.in
+index 95233da..a2cd21c 100644
+--- a/package/liquid-dsp/Config.in
++++ b/package/liquid-dsp/Config.in
+@@ -18,9 +18,7 @@ if BR2_PACKAGE_LIQUID_DSP
+ 
+ config BR2_PACKAGE_LIQUID_DSP_FAST
+ 	bool "optimize for speed over accuracy"
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209 && \
+-		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203 && \
+-		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	help
+ 	  Optimize for speed over accuracy.
+ 
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 418248a..bf14724 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -416,7 +416,7 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 	# The CodeSourcery SuperH toolchain fails to build Webkit,
+ 	# with an assertion failure in binutils.
+ 	default y if (BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb) && \
+-		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 
+ config BR2_PACKAGE_QT_WEBKIT
+ 	bool "WebKit Module"
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 120fa9a..7c738cf 100644
+index 2f60fe0..120fa9a 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -352,7 +352,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	  No other architecture variants are supported since glibc
- 	  is optimized for one of these two baselines.
+@@ -303,7 +303,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
+ 	  support for the following variants:
+ 	    - e500v2 glibc, SPE, 32 bits
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
- 	bool "Sourcery CodeBench x86/x86_64 2012.09"
- 	depends on BR2_i386 || BR2_x86_64
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	bool "Sourcery CodeBench SH 2012.09"
+ 	depends on BR2_sh4a || BR2_sh4aeb
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -381,63 +381,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
- 	  Other architecture variants (beyond Pentium-4/Xeon) are
- 	  supported as well, but glibc is not optimised for it.
+@@ -328,55 +328,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
+ 	    - SH4A, uClibc, big endian
+ 	      Not usable in Buildroot yet.
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
--	bool "Sourcery CodeBench x86/x86_64 2012.03"
--	depends on BR2_i386 || BR2_x86_64
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
+-	bool "Sourcery CodeBench SH 2012.03"
+-	depends on BR2_sh4a || BR2_sh4aeb
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 -	depends on !BR2_STATIC_LIBS
--	depends on !BR2_x86_jaguar
--	depends on !BR2_x86_steamroller
 -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 -	select BR2_INSTALL_LIBSTDCPP
 -	select BR2_HOSTARCH_NEEDS_IA32_LIBS
 -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
 -	help
--	  Sourcery CodeBench toolchain for the x86/x86_64
--	  architectures, from Mentor Graphics. It uses gcc 4.6.3,
--	  binutils 2.21.53, glibc 2.15, gdb 7.2.50 and kernel headers
+-	  Sourcery CodeBench toolchain for the SuperH architecture,
+-	  from Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53,
+-	  glibc 2.15, uClibc 0.9.30, gdb 7.2.50 and kernel headers
 -	  3.2.10. It has support for the following variants:
--	    - Intel Pentium 4, glibc, 32 bits
--	      Default for x86, nothing special to do.
--	    - Intel Atom, glibc, 32 bits
--	      Select an Atom core
--	    - Intel Xeon, glibc, 64 bits
--	      Default for x86_64, nothing special to do.
--	    - Intel Core 2, glibc, 64 bits
--	      Select a Core 2 core
--	  Other architecture variants (beyond Pentium-4/Xeon) are
--	  supported as well, but glibc is not optimised for it.
+-	    - SH4A, glibc, little endian
+-	      Default.
+-	    - SH4A, glibc, big endian
+-	      Add -mb to BR2_TARGET_OPTIMIZATION
+-	    - SH4A, uClibc, little endian
+-	      Not usable in Buildroot yet.
+-	    - SH4A, uClibc, big endian
+-	      Not usable in Buildroot yet.
 -
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
--	bool "Sourcery CodeBench x86/x86_64 2011.09"
--	depends on BR2_i386 || BR2_x86_64
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+-	bool "Sourcery CodeBench SH 2011.03"
+-	depends on BR2_sh4a || BR2_sh4aeb
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 -	depends on !BR2_STATIC_LIBS
--	depends on !BR2_x86_jaguar
--	depends on !BR2_x86_steamroller
 -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -	select BR2_INSTALL_LIBSTDCPP
 -	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+-	# kernel headers: 2.6.38
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
 -	help
--	  Sourcery CodeBench toolchain for the x86/x86_64
--	  architectures, from Mentor Graphics. It uses gcc 4.6.1,
--	  binutils 2.21.53, glibc 2.13, gdb 7.2.50 and kernel headers
--	  3.0.1. It has support for the following variants:
--	    - Intel Pentium 4, glibc, 32 bits
--	      Default for x86, nothing special to do.
--	    - Intel Atom, glibc, 32 bits
--	      Select an Atom core
--	    - Intel Xeon, glibc, 64 bits
--	      Default for x86_64, nothing special to do.
--	    - Intel Core 2, glibc, 64 bits
--	      Select a Core 2 core
--	  Other architecture variants (beyond Pentium-4/Xeon) are
--	  supported as well, but glibc is not optimised for it.
+-	  Sourcery CodeBench toolchain for the SuperH architecture,
+-	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
+-	  glibc 2.13, uClibc 0.9.30, gdb 7.2.50 and kernel headers
+-	  2.6.38. It has support for the following variants:
+-	    - SH4A, glibc, little endian
+-	      Default.
+-	    - SH4A, glibc, big endian
+-	      Add -mb to BR2_TARGET_OPTIMIZATION
+-	    - SH4A, uClibc, little endian
+-	      Not usable in Buildroot yet.
+-	    - SH4A, uClibc, big endian
+-	      Not usable in Buildroot yet.
 -
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
- 	bool "Blackfin.uclinux.org 2014R1"
- 	depends on BR2_bfin
-@@ -625,9 +568,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+ 	bool "Sourcery CodeBench AMD64 2015.11"
+ 	depends on BR2_x86_64
+@@ -673,9 +624,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
  	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
  	default "powerpc-mentor-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
--	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
--	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
--	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
-+	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
- 	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
+-	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+-	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
+-	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
++	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
 diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index d5f6957..91dc27c 100644
+index 7a073f1..d5f6957 100644
 --- a/toolchain/toolchain-external/toolchain-external.hash
 +++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -23,8 +23,6 @@ sha256 d6c94587d546197836e7e1a6909f6aabfa5879e91f501ab03088a6887cc242fc  mentor-
+@@ -21,8 +21,6 @@ sha256 cc47745dc1264fcb8fb98fb1315ab772ab98691396021c455229b58abaf887f5  sourcer
+ # PowerPC
+ sha256 d6c94587d546197836e7e1a6909f6aabfa5879e91f501ab03088a6887cc242fc  mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-linux-gnu.tar.bz2
  # SuperH
+-sha256 ce8115844619a8b02f85e801999fe4cc2e603788be784ae860a070f92ab8053d  renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-sha256 a545a9d412c47d85edcad09a86fe1d12a48e2b6e19d0ccf86b63d2cf0bffa687  renesas-2012.03-35-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
  sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
  # x86
--sha256 5f308a3fe0752f181fd0d33a70a17efb8300d0e34a94ed18a1a0304dc18e150e  ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
--sha256 6ac2f0d9ec56242ecbe4315533f3e00a675909850a41bdafc052fbfe27ece300  ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
- sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
- # AMD64
- sha256 cb4d071db8aefb8005fe72824b96568d93a50f5acd85bacf505a34fe2f265f70  amd-2015.11-36-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ sha256 5f308a3fe0752f181fd0d33a70a17efb8300d0e34a94ed18a1a0304dc18e150e  ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 3856e7c..497577f 100644
+index e78865e..3856e7c 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -323,13 +323,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-l
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH),y)
+@@ -320,13 +320,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2015.11-27-nios2-linux-gnu-i686-pc-linux
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-mentor-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
+-TOOLCHAIN_EXTERNAL_SOURCE = renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
+-TOOLCHAIN_EXTERNAL_SOURCE = renesas-2012.03-35-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209),y)
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH),y)
  TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
  TOOLCHAIN_EXTERNAL_SOURCE = renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109),y)
--TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86),y)
- TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64),y)
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109),y)
 -- 
 2.4.3
