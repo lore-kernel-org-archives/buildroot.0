@@ -1,20 +1,98 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sat, 19 Dec 2015 14:49:50 +0100
-Subject: [Buildroot] [PATCH] openal: needs NPTL threads
-In-Reply-To: <1450264602-18028-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1450264602-18028-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5675607E.6090102@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Dec 2015 14:48:48 +0100
+Subject: [Buildroot] [git commit] package/libglfw: new package
+Message-ID: <20151219135906.896A881D8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 16.12.2015 um 12:16 schrieb Gustavo Zacarias:
-> Fixes:
-> http://autobuild.buildroot.net/results/ef2/ef22efa0f8a73458852b529a32a7f21e9c72caa8/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
+commit: http://git.buildroot.net/buildroot/commit/?id=a670ea6049a694c9f4f893122c62ec75740950a7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Acked-by: Andr? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in            |  1 +
+ package/libglfw/Config.in    | 16 ++++++++++++++++
+ package/libglfw/libglfw.hash |  2 ++
+ package/libglfw/libglfw.mk   | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 47 insertions(+)
+
+diff --git a/package/Config.in b/package/Config.in
+index bd07878..0d4d025 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -850,6 +850,7 @@ menu "Graphics"
+ 	source "package/libgeotiff/Config.in"
+ 	source "package/libglade/Config.in"
+ 	source "package/libglew/Config.in"
++	source "package/libglfw/Config.in"
+ 	source "package/libglu/Config.in"
+ 	source "package/libgtk2/Config.in"
+ 	source "package/libgtk3/Config.in"
+diff --git a/package/libglfw/Config.in b/package/libglfw/Config.in
+new file mode 100644
+index 0000000..045bd26
+--- /dev/null
++++ b/package/libglfw/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LIBGLFW
++	bool "libglfw"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_LIBXCURSOR
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXINERAMA
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	help
++	  GLFW is an Open Source, multi-platform library for creating
++	  windows with OpenGL contexts and receiving input and events.
++
++	  http://www.glfw.org
++
++comment "libglfw depends on X.org and needs an OpenGL backend"
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglfw/libglfw.hash b/package/libglfw/libglfw.hash
+new file mode 100644
+index 0000000..3226aad
+--- /dev/null
++++ b/package/libglfw/libglfw.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	6ac642087682aaf7f8397761a41a99042b2c656498217a1c63ba9706d1eef122	libglfw-3.1.2.tar.gz
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
+new file mode 100644
+index 0000000..0b1730d
+--- /dev/null
++++ b/package/libglfw/libglfw.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# libglfw
++#
++################################################################################
++
++LIBGLFW_VERSION = 3.1.2
++LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
++LIBGLFW_INSTALL_STAGING = YES
++LIBGLFW_DEPENDENCIES = libgl xlib_libXcursor xlib_libXext \
++	xlib_libXinerama xlib_libXrandr
++LIBGLFW_LICENSE = zlib
++LIBGLFW_LICENSE_FILES = COPYING.txt
++
++LIBGLFW_CONF_OPTS += \
++	-DGLFW_BUILD_EXAMPLES=OFF \
++	-DGLFW_BUILD_TESTS=OFF \
++	-DGLFW_BUILD_DOCS=OFF
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
++LIBGLFW_DEPENDENCIES += xlib_libXi
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
++LIBGLFW_DEPENDENCIES += xlib_libXxf86vm
++endif
++
++$(eval $(cmake-package))
