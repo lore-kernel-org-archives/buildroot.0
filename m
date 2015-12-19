@@ -1,43 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 14:22:23 +0100
-Subject: [Buildroot] [PATCH v1] valgrind: fix musl compile
-In-Reply-To: <1446317942-18726-1-git-send-email-ps.report@gmx.net>
-References: <1446317942-18726-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151219142223.2d0bb215@free-electrons.com>
+Date: Sat, 19 Dec 2015 14:22:55 +0100
+Subject: [Buildroot] [git commit] package/x11r7/libepoxy: bump to version
+	1.3.1
+Message-ID: <20151219132306.7A55E81DD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: http://git.buildroot.net/buildroot/commit/?id=98c868d3a41d7e091eab2ab6c3488fa42d294fb5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 31 Oct 2015 19:59:02 +0100, Peter Seiderer wrote:
-> Add patch disabling glibc version check and adding some tweaks
-> for musl support (based on OpenWRT patch [1]).
-> 
-> Fixes ([2]):
->   checking the glibc version... unsupported version
->   configure: error: Valgrind requires glibc version 2.2 or later
-> 
-> [1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
-> [2] http://autobuild.buildroot.org/results/7b0/7b048ba58918f0a08498c61327fcf35a85a84837/build-end.log
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Removed call to pkgconf because epoxy configure now uses pkgconf
+itself to find egl headers:
+https://github.com/anholt/libepoxy/commit/d56f21c494b315306215c4730835a9b291360e9b
 
-You have been given a number of comments on this patch. Could you rework
-to take into account the comments and send an updated version?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/libepoxy/libepoxy.mk | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Note that you can also find some musl compatibility patches at
-http://git.alpinelinux.org/cgit/aports/tree/main/valgrind/.
-
-In the mean time, I'll mark your patch as Changes Requested in
-patchwork.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/libepoxy/libepoxy.mk b/package/x11r7/libepoxy/libepoxy.mk
+index 58b094a..12ddd03 100644
+--- a/package/x11r7/libepoxy/libepoxy.mk
++++ b/package/x11r7/libepoxy/libepoxy.mk
+@@ -4,17 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBEPOXY_VERSION = v1.2
++LIBEPOXY_VERSION = v1.3.1
+ LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
+ LIBEPOXY_INSTALL_STAGING = YES
+ LIBEPOXY_AUTORECONF = YES
+ LIBEPOXY_DEPENDENCIES = xlib_libX11 xutil_util-macros libegl \
+-	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
++	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) host-pkgconf
+ LIBEPOXY_LICENSE = MIT
+ LIBEPOXY_LICENSE_FILES = COPYING
+ 
+-# needed for rpi-userland
+-LIBEPOXY_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
+-LIBEPOXY_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) $(LIBEPOXY_CFLAGS)"
+-
+ $(eval $(autotools-package))
