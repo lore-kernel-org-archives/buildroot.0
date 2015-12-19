@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 14:11:20 +0100
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.1.2
-Message-ID: <20151219131256.4CD8881E38@busybox.osuosl.org>
+Date: Sat, 19 Dec 2015 14:08:42 +0100
+Subject: [Buildroot] [git commit] package/libva: bump version to 1.6.2
+Message-ID: <20151219131256.1E0E181E34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2367f8c4e99617a6872a5abc9124e1bf5bee035
+commit: http://git.buildroot.net/buildroot/commit/?id=7901ccfacdfeba471ae168deab49d08514da7100
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
+ package/libva/libva.hash | 4 ++--
+ package/libva/libva.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 18bd4a7..56b2c10 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 07284d2..4d7cdaa 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/wayland-devel/2015-October/025065.html
--sha256	673186ea2a0d2b695afaa9758834f9217b175774d9ae222e1b43ff63c663f582	libinput-1.1.0.tar.xz
-+# From http://lists.freedesktop.org/archives/wayland-devel/2015-December/026041.html
-+sha256	a323a32718a8f0f5e85e1ed3a81f0dde45eb52b215a15c7887bec40961d97a84	libinput-1.1.2.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 8b51b2b..91d6e53 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+-# From http://lists.freedesktop.org/archives/libva/2015-September/003520.html
+-sha1	84a026dfa8e3985a250ca92b135ae859ba5e9728	libva-1.6.1.tar.bz2
++# From http://lists.freedesktop.org/archives/libva/2015-December/003819.html
++sha1	8a857db50305e9e3ddb8fe4e342ddd2924ae16f6	libva-1.6.2.tar.bz2
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index f8eab0f..4adfd52 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.1.0
-+LIBINPUT_VERSION = 1.1.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_LICENSE = MIT
+-LIBVA_VERSION = 1.6.1
++LIBVA_VERSION = 1.6.2
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
+ LIBVA_LICENSE = MIT
