@@ -1,128 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 14:03:50 +0100
-Subject: [Buildroot] [git commit] Config.in.legacy: document how to handle
-	renaming choice options
-Message-ID: <20151219131255.D32A981E34@busybox.osuosl.org>
+Date: Sat, 19 Dec 2015 14:07:07 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: add support for new virgl
+	Gallium driver
+Message-ID: <20151219131256.0B01A81E34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94d403d709eb5d0c487630b2eb651932bb488470
+commit: http://git.buildroot.net/buildroot/commit/?id=d4f51b329e4139cf186a867923dda7b2d27aa79f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When a choice option is renamed, it is not possible to select the new
-option. Instead, the default for the new option should be set in the
-choice itself. So let's document this.
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=11.1&id=a8987b88ff1db4ac00720a9b56c4bc3aeb666537
+"virgl is the 3D acceleration backend for the virtio-gpu shipping with
+ qemu. The 3D acceleration is designed around gallium and TGSI as the
+ virtualisation layer. The backend renderer translates the virgl
+ interface into OpenGL currently."
 
-While we're at it, also reformat the whitespace in the example so a tab
-is used at the appropriate place.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Martin Bark <martin@barkynet.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy | 74 ++++++++++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 56 insertions(+), 18 deletions(-)
+ package/mesa3d/Config.in | 7 +++++++
+ package/mesa3d/mesa3d.mk | 1 +
+ 2 files changed, 8 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index e1ea06f..4d22527 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -16,39 +16,77 @@
- # is informed at build-time about selected legacy options.
- # If there is an equivalent (set of) new symbols, these should be select'ed by
- # the old symbol for backwards compatibility.
-+# It is not possible to select an option that is part of a choice. In that
-+# case, the new option should use the old symbol as default. This requires a
-+# change outside of Config.in.legacy, and this should be clearly marked as such
-+# in a comment, so that removal of legacy options also include the removal of
-+# these external references.
-+#
-+# [Example: renaming a bool option that is part of a choice from FOO to BAR]
-+# original choice:
-+# 	choice
-+# 		prompt "Choose foobar"
-+# 	config BR2_FOO_1
-+#		bool "foobar 1"
-+# 	config BR2_FOO_2
-+# 		bool "foobar 2"
-+# 	endchoice
-+#
-+# becomes:
-+#   choice
-+#   	prompt "Choose foobar"
-+#   	default BR2_BAR_1 if BR2_FOO_1 # legacy
-+#   	default BR2_BAR_2 if BR2_FOO_2 # legacy
-+#   config BR2_BAR_1
-+#		bool "foobar 1"
-+#   config BR2_BAR_2
-+#   	bool "foobar 2"
-+#   endchoice
-+#
-+# and in Config.in.legacy:
-+#   config BR2_FOO_1
-+#   	bool "foobar 1 has been renamed"
-+#   	help
-+#   	  <suitable help text>
-+#   # Note: BR2_FOO_1 is still referenced from package/foo/Config.in
-+#   config BR2_FOO_2
-+#   	bool "foobar 2 has been renamed"
-+#   	help
-+#   	  <suitable help text>
-+#   # Note: BR2_FOO_2 is still referenced from package/foo/Config.in
-+#
-+# [End of example]
- #
- # For string options, it is not possible to directly select another symbol. In
- # this case, a hidden wrap bool option has to be added, that defaults to y if
- # the old string is not set at its default value. The wrap symbol should select
- # BR2_LEGACY.
- # If the original symbol has been renamed, the new symbol should use the value
--# of the old symbol as default. This requires a change outside of
--# Config.in.legacy, and this should be clearly marked as such below, so that
--# removal of legacy options also include the removal of these external
--# references.
-+# of the old symbol as default. Like for choice options, a comment should be
-+# added to flag that the symbol is still used in another file.
- #
- # [Example: renaming a string option from FOO to BAR]
- # original symbol:
--#     config BR2_FOO_STRING
--#             string "Some foo string"
-+#   config BR2_FOO_STRING
-+#   	string "Some foo string"
- #
- # becomes:
--#     config BR2_BAR_STRING
--#             string "Some bar string"
--#             default BR2_FOO_STRING if BR2_FOO_STRING != ""  # legacy
-+#   config BR2_BAR_STRING
-+#   	string "Some bar string"
-+#   	default BR2_FOO_STRING if BR2_FOO_STRING != ""  # legacy
- #
- # and in Config.in.legacy:
--#     config BR2_FOO_STRING
--#             string "The foo string has been renamed"
--#             help
--#               <suitable help text>
-+#   config BR2_FOO_STRING
-+#   	string "The foo string has been renamed"
-+#   	help
-+#   	  <suitable help text>
- #
--#     config BR2_FOO_STRING_WRAP
--#             bool
--#             default y if BR2_FOO_STRING != ""
--#             select BR2_LEGACY
-+#   config BR2_FOO_STRING_WRAP
-+#   	bool
-+#   	default y if BR2_FOO_STRING != ""
-+#   	select BR2_LEGACY
- #
--#     # Note: BR2_FOO_STRING is still referenced from package/foo/Config.in
-+#   # Note: BR2_FOO_STRING is still referenced from package/foo/Config.in
- #
- # [End of example]
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 8dd208f..f38dd98 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -76,6 +76,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
  
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
++	bool "Gallium virgl driver"
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	help
++	  virgl is the 3D acceleration backend for the virtio-gpu
++	  shipping with qemu.
++
+ comment "DRI drivers need X.Org"
+ 	depends on !BR2_PACKAGE_XORG7
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 4c8a151..40e53cc 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -65,6 +65,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+ # DRI Drivers
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST) += swrast
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
