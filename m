@@ -1,66 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 14:17:14 +0100
-Subject: [Buildroot] [PATCH 10/12] package/x11r7/xserver_xorg-server:
- bump version to 1.18.0
-In-Reply-To: <1450522892-14611-10-git-send-email-bernd.kuhls@t-online.de>
-References: <1450522892-14611-1-git-send-email-bernd.kuhls@t-online.de>
- <1450522892-14611-10-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151219141714.5da170a3@free-electrons.com>
+Date: Sat, 19 Dec 2015 14:17:33 +0100
+Subject: [Buildroot] [git commit] package/python-webpy: fix licensing
+	information
+Message-ID: <20151219131738.B1DBE81E1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=85854ac8b3daefea43cad5c289780f3eeef447b2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding Arnout in Cc, since he is our legacy handling expert :)
+The license files defined in the .mk do not exist in the release
+tarball. However, they do exist in the git repository.
 
-On Sat, 19 Dec 2015 12:01:30 +0100, Bernd Kuhls wrote:
-> - added legacy handling for BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+Since the git tree is rather small, switch to using it instead of the
+released tarball.
 
-Is this really needed? In any case, without legacy handling, the thing
-will automatically fall back to version 1.18, which is what we want. So
-I'm questioning whether legacy handling is needed.
+Fixes:
+    http://autobuild.buildroot.org/results/d94/d944f36220326510c15685efe19075e90e72a5c3/
+    http://autobuild.buildroot.org/results/14f/14f411ef29cbf0ba8cf4a4fed71556eacc96eb04/
+    and many others...
 
-> - legacy handling for BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
->   is not needed because this option is not used by other packages
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-webpy/python-webpy.hash | 5 ++---
+ package/python-webpy/python-webpy.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19 is a blind option, so
-there is no point in adding legacy handling for it.
-
-> +config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
-> +	bool "xserver_xorg-server package was bumped to 1.18"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
-
-Doing a "select" on an item of a choice doesn't work. See the commit
-from Arnout about this:
-https://git.busybox.net/buildroot/commit/?id=94d403d709eb5d0c487630b2eb651932bb488470.
-
-> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-> index 84f0298..3e31dc7 100644
-> --- a/package/x11r7/xserver_xorg-server/Config.in
-> +++ b/package/x11r7/xserver_xorg-server/Config.in
-> @@ -64,14 +64,14 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
->  config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI
->  	int
->  	default 14 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
-> -	default 19 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
-> +	default 20 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
-
-I don't see where you are adding the definition of the option
-BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20.
-
-I'll mark this patch (and the nouveau patch) as Changes Requested in
-patchwork. I don't really have any comments on the nouveau patch, but
-since I assumed it depended on this one, I didn't apply it. Can you
-resend both once the xserver bump issues are resolved ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
+index 05ee808..0e0a8d0 100644
+--- a/package/python-webpy/python-webpy.hash
++++ b/package/python-webpy/python-webpy.hash
+@@ -1,3 +1,2 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=93375e3f03e74d6bf5c5096a4962a8db, sha256 locally computed
+-md5     93375e3f03e74d6bf5c5096a4962a8db  web.py-0.37.tar.gz
+-sha256  748c7e99ad9e36f62ea19f7965eb7dd7860b530e8f563ed60ce3e53e7409a550  web.py-0.37.tar.gz
++# Locally computed
++sha256  c3cb8930739294103b1ad109e5fd1d0efae67c06d5b6d59fce5b5a2ee6b21624  python-webpy-webpy-0.37.tar.gz
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
+index 2074b39..8bcc8ec 100644
+--- a/package/python-webpy/python-webpy.mk
++++ b/package/python-webpy/python-webpy.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEBPY_VERSION = 0.37
+-PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
+-PYTHON_WEBPY_SITE = https://pypi.python.org/packages/source/w/web.py
++PYTHON_WEBPY_VERSION = webpy-0.37
++PYTHON_WEBPY_SITE = $(call github,webpy,webpy,$(PYTHON_WEBPY_VERSION))
+ PYTHON_WEBPY_SETUP_TYPE = distutils
+ PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
+ PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt web/wsgiserver/LICENSE.txt
