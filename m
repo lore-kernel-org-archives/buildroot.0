@@ -1,59 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 14:17:33 +0100
-Subject: [Buildroot] [git commit] package/python-webpy: fix licensing
-	information
-Message-ID: <20151219131738.B1DBE81E1A@busybox.osuosl.org>
+Date: Sat, 19 Dec 2015 14:18:27 +0100
+Subject: [Buildroot] [PATCH 2/2] python-webpy: add a hash file and use
+ pypi download location
+In-Reply-To: <1450081557-29241-2-git-send-email-yegorslists@googlemail.com>
+References: <1450081557-29241-1-git-send-email-yegorslists@googlemail.com>
+ <1450081557-29241-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20151219141827.1958b51b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85854ac8b3daefea43cad5c289780f3eeef447b2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yegor,
 
-The license files defined in the .mk do not exist in the release
-tarball. However, they do exist in the git repository.
+On Mon, 14 Dec 2015 09:25:57 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-webpy/python-webpy.hash | 3 +++
+>  package/python-webpy/python-webpy.mk   | 3 ++-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+>  create mode 100644 package/python-webpy/python-webpy.hash
 
-Since the git tree is rather small, switch to using it instead of the
-released tarball.
+We had to essentially revert this commit, because it was breaking
+legal-info. See
+https://git.busybox.net/buildroot/commit/?id=85854ac8b3daefea43cad5c289780f3eeef447b2.
 
-Fixes:
-    http://autobuild.buildroot.org/results/d94/d944f36220326510c15685efe19075e90e72a5c3/
-    http://autobuild.buildroot.org/results/14f/14f411ef29cbf0ba8cf4a4fed71556eacc96eb04/
-    and many others...
+Don't hesitate to talk with upstream to have them include the license
+files in the pypi tarballs.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-webpy/python-webpy.hash | 5 ++---
- package/python-webpy/python-webpy.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 6 deletions(-)
+Thanks!
 
-diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
-index 05ee808..0e0a8d0 100644
---- a/package/python-webpy/python-webpy.hash
-+++ b/package/python-webpy/python-webpy.hash
-@@ -1,3 +1,2 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=93375e3f03e74d6bf5c5096a4962a8db, sha256 locally computed
--md5     93375e3f03e74d6bf5c5096a4962a8db  web.py-0.37.tar.gz
--sha256  748c7e99ad9e36f62ea19f7965eb7dd7860b530e8f563ed60ce3e53e7409a550  web.py-0.37.tar.gz
-+# Locally computed
-+sha256  c3cb8930739294103b1ad109e5fd1d0efae67c06d5b6d59fce5b5a2ee6b21624  python-webpy-webpy-0.37.tar.gz
-diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
-index 2074b39..8bcc8ec 100644
---- a/package/python-webpy/python-webpy.mk
-+++ b/package/python-webpy/python-webpy.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_WEBPY_VERSION = 0.37
--PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
--PYTHON_WEBPY_SITE = https://pypi.python.org/packages/source/w/web.py
-+PYTHON_WEBPY_VERSION = webpy-0.37
-+PYTHON_WEBPY_SITE = $(call github,webpy,webpy,$(PYTHON_WEBPY_VERSION))
- PYTHON_WEBPY_SETUP_TYPE = distutils
- PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
- PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt web/wsgiserver/LICENSE.txt
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
