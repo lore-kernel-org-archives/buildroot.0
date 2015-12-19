@@ -1,42 +1,128 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 14:06:32 +0100
-Subject: [Buildroot] [git commit] package/apache: bump version to 2.4.18
-Message-ID: <20151219131255.E58BE81DCE@busybox.osuosl.org>
+Date: Sat, 19 Dec 2015 14:03:50 +0100
+Subject: [Buildroot] [git commit] Config.in.legacy: document how to handle
+	renaming choice options
+Message-ID: <20151219131255.D32A981E34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e2af5eac443746cd26cd81fbf321e6df99ca519
+commit: http://git.buildroot.net/buildroot/commit/?id=94d403d709eb5d0c487630b2eb651932bb488470
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+When a choice option is renamed, it is not possible to select the new
+option. Instead, the default for the new option should be set in the
+choice itself. So let's document this.
+
+While we're at it, also reformat the whitespace in the example so a tab
+is used at the appropriate place.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy | 74 ++++++++++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 56 insertions(+), 18 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index e99253a..d4a8a9f 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.17.tar.bz2.sha1
--sha1 3a1b0db8b6c71b9c9ac507ba8723b95a8d3da1df  httpd-2.4.17.tar.bz2
-+# From http://www.apache.org/dist/httpd/httpd-2.4.18.tar.bz2.sha1
-+sha1	271a129f2f04e3aa694e5c2091df9b707bf8ef80	httpd-2.4.18.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index daf8fe2..8e7b6be 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e1ea06f..4d22527 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -16,39 +16,77 @@
+ # is informed at build-time about selected legacy options.
+ # If there is an equivalent (set of) new symbols, these should be select'ed by
+ # the old symbol for backwards compatibility.
++# It is not possible to select an option that is part of a choice. In that
++# case, the new option should use the old symbol as default. This requires a
++# change outside of Config.in.legacy, and this should be clearly marked as such
++# in a comment, so that removal of legacy options also include the removal of
++# these external references.
++#
++# [Example: renaming a bool option that is part of a choice from FOO to BAR]
++# original choice:
++# 	choice
++# 		prompt "Choose foobar"
++# 	config BR2_FOO_1
++#		bool "foobar 1"
++# 	config BR2_FOO_2
++# 		bool "foobar 2"
++# 	endchoice
++#
++# becomes:
++#   choice
++#   	prompt "Choose foobar"
++#   	default BR2_BAR_1 if BR2_FOO_1 # legacy
++#   	default BR2_BAR_2 if BR2_FOO_2 # legacy
++#   config BR2_BAR_1
++#		bool "foobar 1"
++#   config BR2_BAR_2
++#   	bool "foobar 2"
++#   endchoice
++#
++# and in Config.in.legacy:
++#   config BR2_FOO_1
++#   	bool "foobar 1 has been renamed"
++#   	help
++#   	  <suitable help text>
++#   # Note: BR2_FOO_1 is still referenced from package/foo/Config.in
++#   config BR2_FOO_2
++#   	bool "foobar 2 has been renamed"
++#   	help
++#   	  <suitable help text>
++#   # Note: BR2_FOO_2 is still referenced from package/foo/Config.in
++#
++# [End of example]
  #
- ################################################################################
+ # For string options, it is not possible to directly select another symbol. In
+ # this case, a hidden wrap bool option has to be added, that defaults to y if
+ # the old string is not set at its default value. The wrap symbol should select
+ # BR2_LEGACY.
+ # If the original symbol has been renamed, the new symbol should use the value
+-# of the old symbol as default. This requires a change outside of
+-# Config.in.legacy, and this should be clearly marked as such below, so that
+-# removal of legacy options also include the removal of these external
+-# references.
++# of the old symbol as default. Like for choice options, a comment should be
++# added to flag that the symbol is still used in another file.
+ #
+ # [Example: renaming a string option from FOO to BAR]
+ # original symbol:
+-#     config BR2_FOO_STRING
+-#             string "Some foo string"
++#   config BR2_FOO_STRING
++#   	string "Some foo string"
+ #
+ # becomes:
+-#     config BR2_BAR_STRING
+-#             string "Some bar string"
+-#             default BR2_FOO_STRING if BR2_FOO_STRING != ""  # legacy
++#   config BR2_BAR_STRING
++#   	string "Some bar string"
++#   	default BR2_FOO_STRING if BR2_FOO_STRING != ""  # legacy
+ #
+ # and in Config.in.legacy:
+-#     config BR2_FOO_STRING
+-#             string "The foo string has been renamed"
+-#             help
+-#               <suitable help text>
++#   config BR2_FOO_STRING
++#   	string "The foo string has been renamed"
++#   	help
++#   	  <suitable help text>
+ #
+-#     config BR2_FOO_STRING_WRAP
+-#             bool
+-#             default y if BR2_FOO_STRING != ""
+-#             select BR2_LEGACY
++#   config BR2_FOO_STRING_WRAP
++#   	bool
++#   	default y if BR2_FOO_STRING != ""
++#   	select BR2_LEGACY
+ #
+-#     # Note: BR2_FOO_STRING is still referenced from package/foo/Config.in
++#   # Note: BR2_FOO_STRING is still referenced from package/foo/Config.in
+ #
+ # [End of example]
  
--APACHE_VERSION = 2.4.17
-+APACHE_VERSION = 2.4.18
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
