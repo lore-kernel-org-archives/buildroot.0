@@ -1,36 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 19 Dec 2015 19:05:23 +0100
-Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
-Message-ID: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Dec 2015 19:10:56 +0100
+Subject: [Buildroot] [PATCH] package/nut: disable libltdl (and nut-scanner)
+	for static-only
+Message-ID: <1450548656-16506-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+nut-scanner needs libltdl, a wrapper around dlopen/dlsym. This does not
+really make sense on a static-only build.
 
-here you will find my current snapshot for the next Kodi release:
-https://github.com/bkuhls/buildroot/tree/kodi16
+Disable use of libltdl in static-only builds; this disble nut-scanner.
 
-Current release status is beta4:
-http://kodi.tv/kodi-16-0-beta-4-jarvis-is-getting-ready-4/
+Fixes:
+    http://autobuild.buildroot.org/results/d8e/d8e769709681b1965f36eb5c27f71f3a1f5adcf1/
+    http://autobuild.buildroot.org/results/6e4/6e403642069093389acbeeccd7030b76d4ab68be/
+    http://autobuild.buildroot.org/results/fa4/fa4c647ce58b91b863d8de5bf9d44b2060a1cf1c/
+    and so many others...
 
-My tree uses HEAD of the Jarvis branch:
-https://github.com/xbmc/xbmc/tree/Jarvis
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/nut/nut.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-The first two patches in my series do not depend on the Kodi version 
-bump, I am using them with 15.2 already, therefore they precede the Kodi 
-version bump:
-http://patchwork.ozlabs.org/patch/538512/
-http://patchwork.ozlabs.org/patch/538513/
-
-Kodi moved to C++11 so we need gcc >= 4.7:
-https://github.com/xbmc/xbmc/pull/6412
-
-I know that hash files are missing, I will add them to the patch series 
-of the final bump after the release of Kodi 16.0-Jarvis.
-
-Feedback welcome ;)
-
-Regards, Bernd
+diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+index d5babee..b0a92ca 100644
+--- a/package/nut/nut.mk
++++ b/package/nut/nut.mk
+@@ -50,8 +50,11 @@ else
+ NUT_CONF_OPTS += --without-cgi
+ endif
+ 
+-# libltdl (libtool) is needed for nut-scanner
+-ifeq ($(BR2_PACKAGE_LIBTOOL),y)
++# nut-scanner needs libltdl, which is a wrapper arounf dlopen/dlsym,
++# so is not available for static-only builds.
++# There is no flag to directly enable/disable nut-scanner, it's done
++# via the --enable/disable-libltdl flag.
++ifeq ($(BR2_STATIC_LIBS):$(BR2_PACKAGE_LIBTOOL),:y)
+ NUT_DEPENDENCIES += libtool
+ NUT_CONF_OPTS += --with-libltdl
+ else
+-- 
+1.9.1
