@@ -1,45 +1,20 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Dec 2015 14:48:34 +0100
-Subject: [Buildroot] [PATCH v4 1/1] package/libsoil: new package
-In-Reply-To: <1446891857-1755-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1446891857-1755-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151219144834.357139e0@free-electrons.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Sat, 19 Dec 2015 14:49:50 +0100
+Subject: [Buildroot] [PATCH] openal: needs NPTL threads
+In-Reply-To: <1450264602-18028-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450264602-18028-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5675607E.6090102@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
-
-On Sat,  7 Nov 2015 11:24:17 +0100, Bernd Kuhls wrote:
-> Needed for these new Kodi addons:
+Am 16.12.2015 um 12:16 schrieb Gustavo Zacarias:
+> Fixes:
+> http://autobuild.buildroot.net/results/ef2/ef22efa0f8a73458852b529a32a7f21e9c72caa8/
 > 
-> kodi-screensaver-asterwave
-> kodi-screensaver-cpblobs
-> kodi-screensaver-matrixtrails
-> kodi-screensaver-planestate
-> kodi-visualisation-fountain
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
-> v4: added various changes after a review by Thomas
->     - moved "-c -fPIC" from _CFLAGS to the patched Makefile
->     - moved extracted source code from the "Simple OpenGL Image Library"
->       subdir into $(@D)
->     - LIBSOIL_MAKEFILE now contains the filename of the Makefile
 
-Applied with some minor changes:
-
-    [Thomas:
-     - don't pass LIBSOIL_CFLAGS since this variable no longer exists.
-     - pass TARGET_CONFIGURE_OPTS on the right hand side of make for the
-       install steps, like was done for the build step.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Acked-by: Andr? Hentschel <nerv@dawncrow.de>
