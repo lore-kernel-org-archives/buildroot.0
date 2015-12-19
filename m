@@ -1,119 +1,87 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 19 Dec 2015 15:30:27 +0100
-Subject: [Buildroot] [PATCH v10 00/28] efl bump to 1.15.2
-In-Reply-To: <20151218001144.5a685de2@free-electrons.com>
-References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
- <20151218001144.5a685de2@free-electrons.com>
-Message-ID: <56756A03.7050701@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Dec 2015 15:32:29 +0100
+Subject: [Buildroot] [git commit] comix-cursors: new package
+Message-ID: <20151219143241.DE7E381E45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=47e0779792f078f0790ac75ec6e54915bdbff5c2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 18/12/2015 00:11, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
-> 
-> On Tue, 15 Dec 2015 23:40:12 +0100, Romain Naour wrote:
-> 
->> Romain Naour (28):
->>   package/efl/libefl: new package
->>   package/efl/libefl: add harfbuzz dependency
->>   package/efl/libefl: add wayland dependency
->>   package/efl/libefl: add webp dependency
->>   package/efl/libefl: add frame buffer config option
->>   package/efl/libefl: add jp2k config option
->>   package/efl/libefl: add X11 support
-> 
-> All those ones applied. On the "libefl: new package" patch I've applied
-> my two patches that I showed you on the mailing list.
-> 
->>   package/efl/libefl: add OpenGLES support
-> 
-> This one I wasn't sure about the "choice"; we had some discussion about
-> it with Yann on IRC.
+[Thomas:
+ - rename from comix_cursors to comix-cursors
+ - change prompt from comix to comix-cursors in order to match the
+   package name
+ - use <pkg>_STRIP_COMPONENTS instead of overriding the extract
+   commands.
+ - the license is GPLv3 according to the project website.]
 
-It's not clear to me when we can really use the full OpenGL support.
-I thought that the full OpenGL support was only needed by some specific hardware...
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                        |  1 +
+ package/comix-cursors/Config.in          |  6 ++++++
+ package/comix-cursors/comix-cursors.hash |  2 ++
+ package/comix-cursors/comix-cursors.mk   | 19 +++++++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-> 
->>   package/efl/libefl: enable xinput2.2
-> 
-> This one I thought should have been part of the X11 support patch, but
-> now that I have applied the X11 support patch, I think I'll apply this
-> one separately.
-
-ok.
-
-> 
->>   package/libevas-generic-loaders: bump to version 1.15.0
->>   package/libevas-generic-loaders: add libraw dependency
->>   package/efl/libelementary: bump to version 1.15.2
->>   package/efl: libefl and libelementary share the same version number
->>   package/enlightenment: bump to version 0.19.12
->>   package/expedite: bump to efl-1.15 branch
->>   package/dbus-cpp: switch to libefl
->>   package/efl/libethumb: remove package
->>   package/efl/libedje: remove package
->>   package/efl/libembryo: remove package
->>   package/efl/libeio: remove package
->>   package/efl/libefreet: remove package
->>   package/efl/libedbus: remove package
->>   package/efl/libecore: remove package
->>   package/efl/libevas: remove package
->>   package/efl/libeet: remove package
->>   package/efl/libeina: remove package
-> 
-> All applied.
-> 
->>   package/libemotion-generic-players: new package
-> 
-> I want to do some more review on this one.
-
-Ok.
-
-> 
->>   package/efl: rename libefl to efl
-> 
-> I don't understand the logic of this one, and why we're moving from a
-> 'menuconfig' to a 'menu'.
-> 
-> So there are four patches left to be applied out of 28.
-> 
-> Thanks a lot for working on this, definitely great to have an
-> up-to-date EFL stack.
-
-Yes, special thank to Vicente who did a runtime test and Yann complete review of
-this series.
-
-> 
-> To be honest, with the version number now being shared with just libefl
-> and libelementary, I am not sure it is really worth the effort to have
-> a package/efl/ directory with those two packages. What about making
-> them normal top-level packages ?
-
-This is what I wanted to do initially (in v3):
-- move all old efl package outside of package/efl/ [1]
-- add a new package efl [2]
-
-[1] http://patchwork.ozlabs.org/patch/528603/
-[2] http://patchwork.ozlabs.org/patch/528573/
-
-But someone asked me to keep in sync libelementary and efl, so I introduced the
-libefl package in the followup series.
-
-Now, we can move libelementary and libefl to package/ directory.
-And even rename libefl to efl because all packages that use efl libraries
-depends on BR2_PACKAGE_EFL.
-
-Thoughts ?
-
-Romain
-
-> 
-> Thanks!
-> 
-> Thomas
-> 
+diff --git a/package/Config.in b/package/Config.in
+index 8e49c46..94898a1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -189,6 +189,7 @@ endmenu
+ menu "Fonts, cursors, icons, sounds and themes"
+ 
+ comment "Cursors"
++	source "package/comix-cursors/Config.in"
+ 	source "package/obsidian-cursors/Config.in"
+ 
+ comment "Fonts"
+diff --git a/package/comix-cursors/Config.in b/package/comix-cursors/Config.in
+new file mode 100644
+index 0000000..ac7a089
+--- /dev/null
++++ b/package/comix-cursors/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_COMIX_CURSORS
++	bool "comix-cursors"
++	help
++	  X11 mouse theme with a comics feeling.
++
++	  http://kde-look.org/content/show.php/ComixCursors?content=32627
+diff --git a/package/comix-cursors/comix-cursors.hash b/package/comix-cursors/comix-cursors.hash
+new file mode 100644
+index 0000000..d7f33ca
+--- /dev/null
++++ b/package/comix-cursors/comix-cursors.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	3109e4d19d930a6a2a5c3422ebaaa2002640169118f9b12c042bb64995f3ec31	ComixCursors-0.8.2.tar.bz2
+diff --git a/package/comix-cursors/comix-cursors.mk b/package/comix-cursors/comix-cursors.mk
+new file mode 100644
+index 0000000..f8e8284
+--- /dev/null
++++ b/package/comix-cursors/comix-cursors.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# comix-cursors
++#
++################################################################################
++
++COMIX_CURSORS_VERSION = 0.8.2
++COMIX_CURSORS_SITE = http://limitland.de/downloads/comixcursors
++COMIX_CURSORS_SOURCE = ComixCursors-$(COMIX_CURSORS_VERSION).tar.bz2
++COMIX_CURSORS_LICENSE = GPLv3
++COMIX_CURSORS_STRIP_COMPONENTS = 0
++
++define COMIX_CURSORS_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/share/cursors/xorg-x11
++	cp -a $(@D)/* \
++		$(TARGET_DIR)/usr/share/cursors/xorg-x11
++endef
++
++$(eval $(generic-package))
