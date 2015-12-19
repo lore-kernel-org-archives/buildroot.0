@@ -1,102 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Dec 2015 15:43:15 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/vsxu: new package
-In-Reply-To: <1446915053-13783-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1446915053-13783-1-git-send-email-bernd.kuhls@t-online.de>
- <1446915053-13783-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56756D03.5020806@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Dec 2015 15:47:13 +0100
+Subject: [Buildroot] [PATCH v10 00/28] efl bump to 1.15.2
+In-Reply-To: <56756A03.7050701@openwide.fr>
+References: <1450219240-16938-1-git-send-email-romain.naour@openwide.fr>
+ <20151218001144.5a685de2@free-electrons.com>
+ <56756A03.7050701@openwide.fr>
+Message-ID: <20151219154713.0084f003@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07-11-15 17:50, Bernd Kuhls wrote:
-> This package needs cal3d source code which is included upstream as a git
-> submodule, something not supported by the git download helper.
-> To include cal3d I used a method described by Arnout:
-> http://lists.busybox.net/pipermail/buildroot/2013-March/069971.html
+Dear Romain Naour,
+
+On Sat, 19 Dec 2015 15:30:27 +0100, Romain Naour wrote:
+
+> > To be honest, with the version number now being shared with just libefl
+> > and libelementary, I am not sure it is really worth the effort to have
+> > a package/efl/ directory with those two packages. What about making
+> > them normal top-level packages ?
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[snip]
-> diff --git a/package/vsxu/Config.in b/package/vsxu/Config.in
-> new file mode 100644
-> index 0000000..8639c0c
-> --- /dev/null
-> +++ b/package/vsxu/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_VSXU
-> +	bool "vsxu"
-> +	depends on BR2_PACKAGE_XORG7
-> +	depends on BR2_PACKAGE_HAS_LIBGL
-
- Since you've added BR2_PACKAGE_CAL3D, you have to select it here. But as I
-wrote, the symbol probably shouldn't even be defined.
-
-
- Regards,
- Arnout
-
-> +	select BR2_PACKAGE_FREETYPE
-> +	select BR2_PACKAGE_JPEG
-> +	select BR2_PACKAGE_LIBGLEW
-> +	select BR2_PACKAGE_LIBGLFW
-> +	select BR2_PACKAGE_LIBGLU
-> +	select BR2_PACKAGE_LIBPNG
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  VSXu (VSX Ultra) is an OpenGL-based (hardware-accelerated),
-> +	  modular programming environment with its main purpose to
-> +	  visualize music and create real time graphic effects.
-> +
-> +	  http://www.vsxu.com
-> +
-> +comment "vsxu depends on X.org and needs an OpenGL backend"
-> +	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
-> diff --git a/package/vsxu/vsxu.mk b/package/vsxu/vsxu.mk
-> new file mode 100644
-> index 0000000..7dcbf74
-> --- /dev/null
-> +++ b/package/vsxu/vsxu.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# vsxu
-> +#
-> +################################################################################
-> +
-> +# instead of using master branch we use branch glfw3
-> +VSXU_VERSION = 4a34b08ec9e51605ca55d1a833f23e9601b2aa88
-> +VSXU_SITE = $(call github,vovoid,vsxu,$(VSXU_VERSION))
-> +VSXU_LICENSE = GPLv3
-> +VSXU_LICENSE_FILES = COPYING
-> +VSXU_INSTALL_STAGING = YES
-> +VSXU_DEPENDENCIES = cal3d freetype jpeg libgl libglew libglfw libglu \
-> +	libpng zlib
-> +
-> +# cal3d is a git submodule
-> +define VSXU_LINK_CAL3D
-> +	rm -rf $(@D)/plugins/src/mesh.importers/cal3d/
-> +	ln -sf $(CAL3D_DIR) $(@D)/plugins/src/mesh.importers/cal3d
-> +endef
-> +VSXU_POST_EXTRACT_HOOKS += VSXU_LINK_CAL3D
-> +
-> +ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-> +VSXU_DEPENDENCIES += alsa-lib
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENCV),y)
-> +VSXU_DEPENDENCIES += opencv
-> +endif
-> +
-> +$(eval $(cmake-package))
+> This is what I wanted to do initially (in v3):
+> - move all old efl package outside of package/efl/ [1]
+> - add a new package efl [2]
 > 
+> [1] http://patchwork.ozlabs.org/patch/528603/
+> [2] http://patchwork.ozlabs.org/patch/528573/
+> 
+> But someone asked me to keep in sync libelementary and efl, so I introduced the
+> libefl package in the followup series.
+> 
+> Now, we can move libelementary and libefl to package/ directory.
+> And even rename libefl to efl because all packages that use efl libraries
+> depends on BR2_PACKAGE_EFL.
+> 
+> Thoughts ?
 
+As said on IRC, I think it's better to have just package/efl/ and
+package/elementary/.
 
+Having a subdirectory for just two components that currently share
+their version, but for which there is no clear statement from upstream
+that they will always been doing in-sync releases, is not a good idea
+IMO. Let's have two separate normal packages.
+
+Thanks,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
