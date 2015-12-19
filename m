@@ -1,30 +1,99 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sat, 19 Dec 2015 17:07:34 +0100
-Subject: [Buildroot] [PATCH 1/1] directfb-examples: indentation cleanup
-Message-ID: <1450541254-26173-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 19 Dec 2015 17:39:13 +0100
+Subject: [Buildroot] [PATCH 1/4] package/libelementary: move to package
+	directory
+Message-ID: <1450543156-16847-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/directfb-examples/directfb-examples.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+As discussed on the list the two remaining packages in
+package/efl subdirectory will be moved to package/
+directory.
 
-diff --git a/package/directfb-examples/directfb-examples.mk b/package/directfb-examples/directfb-examples.mk
-index ee883f7..1ba85df 100644
---- a/package/directfb-examples/directfb-examples.mk
-+++ b/package/directfb-examples/directfb-examples.mk
-@@ -12,7 +12,7 @@ DIRECTFB_EXAMPLES_LICENSE_FILES = COPYING
- DIRECTFB_EXAMPLES_DEPENDENCIES = directfb
+- Add the efl dependency to libelementary.
+- Set LIBELEMENTARY_VERSION with the version number
+  directly.
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  | 1 +
+ package/efl/Config.in                              | 1 -
+ package/{efl => }/libelementary/Config.in          | 3 ++-
+ package/{efl => }/libelementary/libelementary.hash | 0
+ package/{efl => }/libelementary/libelementary.mk   | 2 +-
+ 5 files changed, 4 insertions(+), 3 deletions(-)
+ rename package/{efl => }/libelementary/Config.in (89%)
+ rename package/{efl => }/libelementary/libelementary.hash (100%)
+ rename package/{efl => }/libelementary/libelementary.mk (97%)
+
+diff --git a/package/Config.in b/package/Config.in
+index 94898a1..75d6201 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -252,6 +252,7 @@ endif
+ 	source "package/fbv/Config.in"
+ 	source "package/freerdp/Config.in"
+ 	source "package/imagemagick/Config.in"
++	source "package/libelementary/Config.in"
+ 	source "package/linux-fusion/Config.in"
+ 	source "package/lite/Config.in"
+ 	source "package/mesa3d/Config.in"
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 80658b2..7ef1b5b 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -16,7 +16,6 @@ menuconfig BR2_PACKAGE_EFL
+ if BR2_PACKAGE_EFL
  
- ifeq ($(BR2_STATIC_LIBS),y)
--        DIRECTFB_EXAMPLES_CONF_OPTS += LIBS=-lstdc++
-+DIRECTFB_EXAMPLES_CONF_OPTS += LIBS=-lstdc++
- endif
+ source "package/efl/libefl/Config.in"
+-source "package/efl/libelementary/Config.in"
  
- $(eval $(autotools-package))
+ endif # BR2_PACKAGE_EFL
+ 
+diff --git a/package/efl/libelementary/Config.in b/package/libelementary/Config.in
+similarity index 89%
+rename from package/efl/libelementary/Config.in
+rename to package/libelementary/Config.in
+index ce597de..54f8688 100644
+--- a/package/efl/libelementary/Config.in
++++ b/package/libelementary/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBELEMENTARY
+ 	bool "libelementary"
+-	select BR2_PACKAGE_LIBEFL
++	depends on BR2_PACKAGE_EFL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # elm_store.c
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+@@ -11,4 +11,5 @@ config BR2_PACKAGE_LIBELEMENTARY
+ 	  https://enlightenment.org
+ 
+ comment "libelementary needs a toolchain w/ threads, dynamic library"
++	depends on BR2_PACKAGE_EFL
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/efl/libelementary/libelementary.hash b/package/libelementary/libelementary.hash
+similarity index 100%
+rename from package/efl/libelementary/libelementary.hash
+rename to package/libelementary/libelementary.hash
+diff --git a/package/efl/libelementary/libelementary.mk b/package/libelementary/libelementary.mk
+similarity index 97%
+rename from package/efl/libelementary/libelementary.mk
+rename to package/libelementary/libelementary.mk
+index c920801..4ba8681 100644
+--- a/package/efl/libelementary/libelementary.mk
++++ b/package/libelementary/libelementary.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBELEMENTARY_VERSION = $(EFL_VERSION)
++LIBELEMENTARY_VERSION = 1.15.2
+ LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.xz
+ LIBELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
+ LIBELEMENTARY_LICENSE = LGPLv2.1
 -- 
-1.9.1
+2.4.3
