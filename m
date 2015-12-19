@@ -1,76 +1,71 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 19 Dec 2015 15:22:04 +0100
-Subject: [Buildroot] [PATCH v4 1/2] package/x11r7/xserver_xorg-server: bump
-	version to 1.18.0
-Message-ID: <1450534925-9099-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Dec 2015 15:25:09 +0100
+Subject: [Buildroot] [PATCH v2 2/3] package/cal3d: new package
+In-Reply-To: <20151219150027.72263718@free-electrons.com>
+References: <1446915053-13783-1-git-send-email-bernd.kuhls@t-online.de>
+ <1446915053-13783-3-git-send-email-bernd.kuhls@t-online.de>
+ <20151219150027.72263718@free-electrons.com>
+Message-ID: <20151219142509.GA3394@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: - removed legacy handling (Thomas, Arnout)
-    - fixed option definition of
-      BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20 (Thomas)
+Thomas, All,
 
- package/x11r7/xserver_xorg-server/Config.in                | 12 ++++++------
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash |  6 +++---
- 2 files changed, 9 insertions(+), 9 deletions(-)
+On 2015-12-19 15:00 +0100, Thomas Petazzoni spake thusly:
+> On Sat,  7 Nov 2015 17:50:52 +0100, Bernd Kuhls wrote:
+> > This package only provides a git submodule for the vsxu package.
+> > 
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> 
+> I don't really like the interaction between this package and the vsxu
+> package, but I don't really have a better proposal to be honest.
+> 
+> Yann, Peter, Arnout, do you have some suggestions on how to handle such
+> git submodule cases?
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 84f0298..e2eec55 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -58,20 +58,20 @@ if BR2_PACKAGE_XSERVER_XORG_SERVER
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
- 	bool
- 
--config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
-+config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
- 	bool
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI
- 	int
- 	default 14 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
--	default 19 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
-+	default 20 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
- 
- choice
- 	bool "X Window System server version"
- 
--config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
--	bool "1.17.4"
--	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
-+config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
-+	bool "1.18.0"
-+	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
- 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
-@@ -82,7 +82,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
-+	default "1.18.0" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
- choice
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 0119e37..72c00c4 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
- # From http://lists.x.org/archives/xorg-announce/2014-June/002440.html
- sha1   7a95765e56b124758fcd7b609589e65b8870880b                                xorg-server-1.14.7.tar.bz2
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
--# From http://lists.x.org/archives/xorg-announce/2015-October/002650.html
--sha1	139c4d6795eb4c3848616cc514d134532975e49e				xorg-server-1.17.4.tar.bz2
--sha256	0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457	xorg-server-1.17.4.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-November/002655.html
-+sha1	f37f9ca17d211552c775c3ce78ff03385026bf3a				xorg-server-1.18.0.tar.bz2
-+sha256	195670819695d9cedd8dde95fbe069be0d0f488a77797a2d409f9f702daf312e	xorg-server-1.18.0.tar.bz2
+I really don't know what to do with git-submodules.
+
+But in this precise case, I would:
+  - dump the cal3d package
+  - add a post-download hook (or an extra-download URL) to vsxu to also
+    download cal3d
+  - add a post-extract hook to vsxu to also extract cal3d in the correct
+    location.
+
+Then, when/if cal3d is later used by other packages, we can revisit the
+situation.
+
+Otherwise, for proper git-submodule handling, we would have to do
+(roughly):
+
+    git clone blabla pkg-version
+    cd pkg-version
+    git checkout pkg-version
+    git submodule update --init --recursive
+    find . -name .git -exec rm -rf {} +
+    cd ..
+    tar czf DL_DIR/pkg-version.tar.gz pkg-version/
+
+This is not very complex, but is stil la significant change from our
+current git wrapper.
+
+And then, what about svn externals? About Hg subrepos? Does bzr also
+have such a thing?
+
+Note that I would not really mind doing such a change. But is it worth
+it, given that we currently have only one package that needs submodules?
+Or do we have others for which we had to "deal with it" in a crude way?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.6.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
