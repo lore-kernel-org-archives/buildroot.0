@@ -1,36 +1,149 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 23:10:53 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: add support for musl
- toolchain on ARM EABIhf
-In-Reply-To: <1444382088-15919-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1444382088-15919-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20151220231053.301f501e@free-electrons.com>
+Date: Sun, 20 Dec 2015 23:13:02 +0100
+Subject: [Buildroot] [git commit] luvi: new package
+Message-ID: <20151220222654.ABAC1822D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=0848e9e89c2c427ab6ca35fab25996d7a1cd8c5b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  9 Oct 2015 11:14:48 +0200, Thomas Petazzoni wrote:
-> Since a few releases, the pre-built musl external toolchain has added
-> an ARM EABIhf variant, built for ARMv5T. This commit allows this
-> additional external toolchain to be used.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/toolchain-external/Config.in             | 10 +++++++---
->  toolchain/toolchain-external/toolchain-external.mk |  4 +++-
->  2 files changed, 10 insertions(+), 4 deletions(-)
+Add package luvi version v2.3.5.
 
-I've applied this patch, despite the lack of review, since it was quite
-a trivial patch.
+luvi extends LuaJIT with asynchronous I/O and several optional modules to run
+Lua applications and build self-contained binaries.
 
-Best regards,
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in      |  1 +
+ package/luvi/Config.in | 30 +++++++++++++++++++++++++
+ package/luvi/luvi.hash |  2 ++
+ package/luvi/luvi.mk   | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 93 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 40969fa..066aa06 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -521,6 +521,7 @@ menu "Lua libraries/modules"
+ 	source "package/luasql-sqlite3/Config.in"
+ 	source "package/lunit/Config.in"
+ 	source "package/luv/Config.in"
++	source "package/luvi/Config.in"
+ 	source "package/lzlib/Config.in"
+ 	source "package/orbit/Config.in"
+ 	source "package/rings/Config.in"
+diff --git a/package/luvi/Config.in b/package/luvi/Config.in
+new file mode 100644
+index 0000000..2f01f5c
+--- /dev/null
++++ b/package/luvi/Config.in
+@@ -0,0 +1,30 @@
++config BR2_PACKAGE_LUVI
++	bool "luvi"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
++	depends on BR2_USE_MMU # libuv
++	depends on !BR2_STATIC_LIBS # libuv
++	depends on BR2_PACKAGE_LUAJIT
++	select BR2_PACKAGE_LIBUV
++	select BR2_PACKAGE_LUV
++	help
++	  A project in-between luv and luvit. The goal of this is to make
++	  building luvit and derivatives much easier.
++
++	  luvi extends LuaJIT with asynchronous I/O and several optional
++	  modules to run Lua applications and build self-contained binaries
++	  on systems that don't have a compiler.
++
++	  The luvi core can be extended with several Lua modules by adding its
++	  bundled Lua binding libraries. To get the Lua module...
++	    * 'rex' select PCRE (BR2_PACKAGE_PCRE)
++	    * 'ssl' select OpenSSL (BR2_PACKAGE_OPENSSL)
++	    * 'zlib' select zlib (BR2_PACKAGE_ZLIB)
++
++	  https://github.com/luvit/luvi
++
++comment "luvi needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
++
++comment "luvi needs LuaJIT"
++	depends on !BR2_PACKAGE_LUAJIT
+diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+new file mode 100644
+index 0000000..c967558
+--- /dev/null
++++ b/package/luvi/luvi.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  9d13baba7870160bd0f9be9d52f8ef1dafe282490d5f83a8e14765aa43387765  luvi-src-v2.3.5.tar.gz
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+new file mode 100644
+index 0000000..7611c11
+--- /dev/null
++++ b/package/luvi/luvi.mk
+@@ -0,0 +1,60 @@
++################################################################################
++#
++# luvi
++#
++################################################################################
++
++LUVI_VERSION = v2.3.5
++LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
++LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
++LUVI_LICENSE = Apache-2.0
++LUVI_LICENSE_FILES = LICENSE.txt
++LUVI_DEPENDENCIES = libuv luajit luv host-luajit
++
++# Dispatch all architectures of LuaJIT
++ifeq ($(BR2_i386),y)
++LUVI_TARGET_ARCH = x86
++else ifeq ($(BR2_x86_64),y)
++LUVI_TARGET_ARCH = x64
++else ifeq ($(BR2_powerpc),y)
++LUVI_TARGET_ARCH = ppc
++else ifeq ($(BR2_arm)$(BR2_armeb),y)
++LUVI_TARGET_ARCH = arm
++else ifeq ($(BR2_mips)$(BR2_mipsel),y)
++LUVI_TARGET_ARCH = mips
++else
++LUVI_TARGET_ARCH = $(BR2_ARCH)
++endif
++
++# Bundled lua bindings have to be linked statically into the luvi executable
++LUVI_CONF_OPTS = \
++	-DBUILD_SHARED_LIBS=OFF \
++	-DWithSharedLibluv=ON \
++	-DTARGET_ARCH=$(LUVI_TARGET_ARCH) \
++	-DLUA_PATH=$(HOST_DIR)/usr/share/luajit-2.0.4/?.lua
++
++# Add "rex" module (PCRE via bundled lrexlib)
++ifeq ($(BR2_PACKAGE_PCRE),y)
++LUVI_DEPENDENCIES += pcre
++LUVI_CONF_OPTS += -DWithPCRE=ON -DWithSharedPCRE=ON
++else
++LUVI_CONF_OPTS += -DWithPCRE=OFF -DWithSharedPCRE=OFF
++endif
++
++# Add "ssl" module (via bundled lua-openssl)
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LUVI_DEPENDENCIES += openssl
++LUVI_CONF_OPTS += -DWithOpenSSL=ON -DWithOpenSSLASM=ON -DWithSharedOpenSSL=ON
++else
++LUVI_CONF_OPTS += -DWithOpenSSL=OFF -DWithOpenSSLASM=OFF -DWithSharedOpenSSL=OFF
++endif
++
++# Add "zlib" module (via bundled lua-zlib)
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LUVI_DEPENDENCIES += zlib
++LUVI_CONF_OPTS += -DWithZLIB=ON -DWithSharedZLIB=ON
++else
++LUVI_CONF_OPTS += -DWithZLIB=OFF -DWithSharedZLIB=OFF
++endif
++
++$(eval $(cmake-package))
