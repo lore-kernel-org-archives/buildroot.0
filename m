@@ -1,44 +1,154 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 14:58:26 +0100
-Subject: [Buildroot] [git commit] package/perl-db-file: Berkeley DB 1.85
-	compatibility API is not needed
-Message-ID: <20151220141024.6F83B81D5F@busybox.osuosl.org>
+Date: Sun, 20 Dec 2015 15:07:56 +0100
+Subject: [Buildroot] [git commit] package/wpa_supplicant: add config option
+	to build wpa_client library
+Message-ID: <20151220141024.7CD8481963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=619280aea0b1ddd105e4bf79f8af81576183164b
+commit: http://git.buildroot.net/buildroot/commit/?id=4e793b82a557f9c0cb1c5897a750ef445e95c5d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package is also compatible with Berkeley DB v2 or higher:
-https://metacpan.org/source/PMQS/DB_File-1.835/Changes
+Version 2.5 of wpa_supplicant introduces the config option
+CONFIG_BUILD_WPA_CLIENT_SO to enable building wpa_client as shared library.
 
-1.50
-    DB_File can now build with either DB 1.x or 2.x, but not both at
-    the same time.
+We need to add a patch from upstream to fix a runtime error with
+libwpa_client.so:
+  Error relocating /usr/lib/libwpa_client.so: bin_clear_free: symbol not found
 
-[Thomas: adjust Config.in help text accordingly.]
+[Thomas: renumber patch.]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Martin Bark <martin@barkynet.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Reviewed-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-db-file/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../wpa_supplicant/0006-fix-libwpa_client.patch    | 39 ++++++++++++++++++++++
+ package/wpa_supplicant/Config.in                   |  9 +++++
+ package/wpa_supplicant/wpa_supplicant.mk           | 24 +++++++++++++
+ 3 files changed, 72 insertions(+)
 
-diff --git a/package/perl-db-file/Config.in b/package/perl-db-file/Config.in
-index 37bc5da..f07e5df 100644
---- a/package/perl-db-file/Config.in
-+++ b/package/perl-db-file/Config.in
-@@ -2,9 +2,8 @@ config BR2_PACKAGE_PERL_DB_FILE
- 	bool "perl-db-file"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_BERKELEYDB
--	select BR2_PACKAGE_BERKELEYDB_COMPAT185
+diff --git a/package/wpa_supplicant/0006-fix-libwpa_client.patch b/package/wpa_supplicant/0006-fix-libwpa_client.patch
+new file mode 100644
+index 0000000..11c5402
+--- /dev/null
++++ b/package/wpa_supplicant/0006-fix-libwpa_client.patch
+@@ -0,0 +1,39 @@
++From 6f7e0354a9035ce33742a5f869f817a6b39b2f31 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Thu, 29 Oct 2015 11:39:03 +0100
++Subject: [PATCH 1/1] wpa_supplicant/Makefile: fix libwpa_client
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Building libwpa_client requires src/utils/common.c for bin_clear_free() else
++loading the library fails with:
++
++  Error relocating /usr/lib/libwpa_client.so: bin_clear_free: symbol not found
++
++Backported from: 736b7cb2daf877a0cb9ad42ff15a2efbbd65fa42
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ wpa_supplicant/Makefile | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
++index 61f8f18..0c444b0 100644
++--- a/wpa_supplicant/Makefile
+++++ b/wpa_supplicant/Makefile
++@@ -1706,9 +1706,11 @@ wpa_cli: $(OBJS_c)
++ 
++ LIBCTRL += ../src/common/wpa_ctrl.o
++ LIBCTRL += ../src/utils/os_$(CONFIG_OS).o
+++LIBCTRL += ../src/utils/common.c
++ LIBCTRL += ../src/utils/wpa_debug.o
++ LIBCTRLSO += ../src/common/wpa_ctrl.c
++ LIBCTRLSO += ../src/utils/os_$(CONFIG_OS).c
+++LIBCTRLSO += ../src/utils/common.c
++ LIBCTRLSO += ../src/utils/wpa_debug.c
++ 
++ libwpa_client.a: $(LIBCTRL)
++-- 
++2.6.2
++
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index eb42257..f4c4167 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -63,6 +63,15 @@ config BR2_PACKAGE_WPA_SUPPLICANT_CLI
  	help
--	  Perl5 access to Berkeley DB version 1.x
-+	  Perl5 access to Berkeley DB version 1.x or 2.x.
+ 	  Install wpa_cli command line utility
  
- 	  https://metacpan.org/release/DB_File
++config BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO
++	depends on !BR2_STATIC_LIBS
++	bool "Install wpa_client shared library"
++	help
++	  Install libwpa_client.so.
++
++comment "wpa_client library needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
+ 	bool "Install wpa_passphrase binary"
+ 	help
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 839a419..e3f1434 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -15,6 +15,9 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
+ WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
  
++# install the wpa_client library
++WPA_SUPPLICANT_INSTALL_STAGING = YES
++
+ WPA_SUPPLICANT_CONFIG_EDITS =
+ 
+ WPA_SUPPLICANT_CONFIG_SET =
+@@ -117,6 +120,22 @@ WPA_SUPPLICANT_DEPENDENCIES += readline
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_READLINE
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO),y)
++WPA_SUPPLICANT_CONFIG_SET += CONFIG_BUILD_WPA_CLIENT_SO
++define WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO
++	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/libwpa_client.so \
++		$(TARGET_DIR)/usr/lib/libwpa_client.so
++	$(INSTALL) -m 0644 -D $(@D)/src/common/wpa_ctrl.h \
++		$(TARGET_DIR)/usr/include/wpa_ctrl.h
++endef
++define WPA_SUPPLICANT_INSTALL_STAGING_WPA_CLIENT_SO
++	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/libwpa_client.so \
++		$(STAGING_DIR)/usr/lib/libwpa_client.so
++	$(INSTALL) -m 0644 -D $(@D)/src/common/wpa_ctrl.h \
++		$(STAGING_DIR)/usr/include/wpa_ctrl.h
++endef
++endif
++
+ define WPA_SUPPLICANT_CONFIGURE_CMDS
+ 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
+ 	sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
+@@ -159,6 +178,10 @@ define WPA_SUPPLICANT_INSTALL_DBUS
+ endef
+ endif
+ 
++define WPA_SUPPLICANT_INSTALL_STAGING_CMDS
++	$(WPA_SUPPLICANT_INSTALL_STAGING_WPA_CLIENT_SO)
++endef
++
+ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/wpa_supplicant \
+ 		$(TARGET_DIR)/usr/sbin/wpa_supplicant
+@@ -167,6 +190,7 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+ 	$(WPA_SUPPLICANT_INSTALL_CLI)
+ 	$(WPA_SUPPLICANT_INSTALL_PASSPHRASE)
+ 	$(WPA_SUPPLICANT_INSTALL_DBUS)
++	$(WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO)
+ endef
+ 
+ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
