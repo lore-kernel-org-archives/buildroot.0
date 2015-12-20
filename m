@@ -1,138 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Dec 2015 13:55:17 +0100
-Subject: [Buildroot] [PATCH] directfb: remove cle266 and unichrome
-	support
-In-Reply-To: <1450615477-11659-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1450615477-11659-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20151220125517.GB3677@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Dec 2015 13:56:01 +0100
+Subject: [Buildroot] [git commit] package/nut: disable libltdl (and
+	nut-scanner) for static-only
+Message-ID: <20151220125605.1AB9881F9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=bff7b75552ade4fcafd2adb991e0418ca8fe9196
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-12-20 09:44 -0300, gustavo.zacarias at free-electrons.com spake thusly:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> 
-> They're broken for the latest version and directfb upstream is gone.
-> 
-> cle266 is an old chipset for AMD K7 (32 bit) athlons with integrated
-> graphics - very odd hardware.
-> 
-> unichrome is another VIA graphics standalone chip/chipset used for some
-> odd video cards and VIA CPUs (x86-based: C7, Nano and so on).
-> 
-> Add options to legacy as well. Fixes:
-> 
-> http://autobuild.buildroot.net/results/ab9/ab9a6dd044b5f3e8e42629a2aaf598fd0e0357ed/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> ---
->  Config.in.legacy             | 16 ++++++++++++++++
->  package/directfb/Config.in   | 10 ----------
->  package/directfb/directfb.mk |  2 --
->  3 files changed, 16 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 4d22527..c22e35e 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,22 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2016.02"
->  
-> +config BR2_PACKAGE_DIRECTFB_CLE266
-> +	bool "cle266 driver for directfb"
+nut-scanner needs libltdl, a wrapper around dlopen/dlsym. This does not
+really make sense on a static-only build.
 
-We usually make the prompt explain what was done, like:
+Disable use of libltdl in static-only builds; this disble nut-scanner.
 
-    bool "cle266 driver for directfb was removed"
+Fixes:
+    http://autobuild.buildroot.org/results/d8e/d8e769709681b1965f36eb5c27f71f3a1f5adcf1/
+    http://autobuild.buildroot.org/results/6e4/6e403642069093389acbeeccd7030b76d4ab68be/
+    http://autobuild.buildroot.org/results/fa4/fa4c647ce58b91b863d8de5bf9d44b2060a1cf1c/
+    and so many others...
 
-> +	select BR2_LEGACY
-> +	help
-> +	  The cle266 directfb driver support has been removed.
-> +	  It doesn't build in the latest version and it's unlikely
-> +	  anyone has any use for it.
-> +
-> +config BR2_PACKAGE_DIRECTFB_UNICHROME
-> +	bool "unichrome driver for directfb"
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nut/nut.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Ditto.
-
-Otherwise, OK for me. Wehn you fix, you can add my:
-
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> +	select BR2_LEGACY
-> +	help
-> +	  The unichrome directfb driver support has been removed.
-> +	  It doesn't build in the latest version and it's unlikely
-> +	  anyone has any use for it.
-> +
->  config BR2_PACKAGE_LIBEINA
->  	bool "libeina package has been removed"
->  	select BR2_LEGACY
-> diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-> index 2d09460..73425d3 100644
-> --- a/package/directfb/Config.in
-> +++ b/package/directfb/Config.in
-> @@ -61,11 +61,6 @@ config BR2_PACKAGE_DIRECTFB_ATI128
->  	bool "compile ati128 graphics driver"
->  	depends on BR2_i386 || BR2_x86_64
->  
-> -config BR2_PACKAGE_DIRECTFB_CLE266
-> -	bool "compile cle266 graphics driver"
-> -	default y
-> -	depends on BR2_i386 || BR2_x86_64
-> -
->  config BR2_PACKAGE_DIRECTFB_MATROX
->  	bool "compile matrox graphics driver"
->  	depends on BR2_i386 || BR2_x86_64
-> @@ -89,11 +84,6 @@ config BR2_PACKAGE_DIRECTFB_EP9X
->  
->  	  http://cirrus.com/en/products/arm9.html
->  
-> -config BR2_PACKAGE_DIRECTFB_UNICHROME
-> -	bool "compile unichrome graphics driver"
-> -	default y
-> -	depends on BR2_i386 || BR2_x86_64
-> -
->  config BR2_PACKAGE_DIRECTFB_I830
->  	bool "compile i830 graphics driver"
->  	depends on BR2_i386 || BR2_x86_64
-> diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-> index 5e68b7b..d51094f 100644
-> --- a/package/directfb/directfb.mk
-> +++ b/package/directfb/directfb.mk
-> @@ -67,11 +67,9 @@ endif
->  
->  DIRECTFB_GFX = \
->  	$(if $(BR2_PACKAGE_DIRECTFB_ATI128),ati128) \
-> -	$(if $(BR2_PACKAGE_DIRECTFB_CLE266),cle266) \
->  	$(if $(BR2_PACKAGE_DIRECTFB_CYBER5K),cyber5k) \
->  	$(if $(BR2_PACKAGE_DIRECTFB_MATROX),matrox) \
->  	$(if $(BR2_PACKAGE_DIRECTFB_PXA3XX),pxa3xx) \
-> -	$(if $(BR2_PACKAGE_DIRECTFB_UNICHROME),unichrome) \
->  	$(if $(BR2_PACKAGE_DIRECTFB_I830),i830)	\
->  	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x)
->  
-> -- 
-> 2.4.10
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+index d5babee..b0a92ca 100644
+--- a/package/nut/nut.mk
++++ b/package/nut/nut.mk
+@@ -50,8 +50,11 @@ else
+ NUT_CONF_OPTS += --without-cgi
+ endif
+ 
+-# libltdl (libtool) is needed for nut-scanner
+-ifeq ($(BR2_PACKAGE_LIBTOOL),y)
++# nut-scanner needs libltdl, which is a wrapper arounf dlopen/dlsym,
++# so is not available for static-only builds.
++# There is no flag to directly enable/disable nut-scanner, it's done
++# via the --enable/disable-libltdl flag.
++ifeq ($(BR2_STATIC_LIBS):$(BR2_PACKAGE_LIBTOOL),:y)
+ NUT_DEPENDENCIES += libtool
+ NUT_CONF_OPTS += --with-libltdl
+ else
