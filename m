@@ -1,116 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Dec 2015 17:06:37 +0100
-Subject: [Buildroot] [PATCH 1/1] emlog: new package
-In-Reply-To: <1450446298-3523-1-git-send-email-joris.lijssens@gmail.com>
-References: <1450446298-3523-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <5676D20D.2050304@mind.be>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Sun, 20 Dec 2015 17:36:24 +0100
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: Add OpenAL dependency
+Message-ID: <5676D908.2070505@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18-12-15 14:44, Joris Lijssens wrote:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-> ---
->  package/Config.in        |  1 +
->  package/emlog/Config.in  | 12 ++++++++++++
->  package/emlog/emlog.hash |  2 ++
->  package/emlog/emlog.mk   | 21 +++++++++++++++++++++
->  4 files changed, 36 insertions(+)
->  create mode 100644 package/emlog/Config.in
->  create mode 100644 package/emlog/emlog.hash
->  create mode 100644 package/emlog/emlog.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index c78baac..dfa4d3b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1515,6 +1515,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	source "package/debianutils/Config.in"
->  endif
->  	source "package/dsp-tools/Config.in"
-> +	source "package/emlog/Config.in"
->  	source "package/ftop/Config.in"
->  	source "package/getent/Config.in"
->  	source "package/htop/Config.in"
-> diff --git a/package/emlog/Config.in b/package/emlog/Config.in
-> new file mode 100644
-> index 0000000..85a9ed6
-> --- /dev/null
-> +++ b/package/emlog/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_EMLOG
-> +	bool "emlog"
-> +	help
-> +	  emlog is a Linux kernel module that makes it easy to access the most
-> +	  recent (and only the most recent) output from a process. It works
-> +	  just like "tail -f" on a log file, except that the storage required
-> +	  never grows. This can be useful in embedded systems where there isn't
-> +	  enough memory or disk space for keeping complete log files, but the
-> +	  most recent debugging messages are sometimes needed (e.g., after an
-> +	  error is observed).
-> +
-> +	  https://github.com/nicupavel/emlog
-> diff --git a/package/emlog/emlog.hash b/package/emlog/emlog.hash
-> new file mode 100644
-> index 0000000..ab729f8
-> --- /dev/null
-> +++ b/package/emlog/emlog.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 37b03b79684245ddcb33cfff388a7f2d74f465f2e1fce4f661b81726f5ccd595 emlog-0.52.tar.gz
-> diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
-> new file mode 100644
-> index 0000000..d368652
-> --- /dev/null
-> +++ b/package/emlog/emlog.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# emlog
-> +#
-> +################################################################################
-> +
-> +EMLOG_VERSION = 0.52
-> +EMLOG_SITE = $(call github,nicupavel,emlog,emlog-$(EMLOG_VERSION))
-> +EMLOG_LICENSE = GPLv2
-> +EMLOG_LICENSE_FILES = COPYING
-> +
-> +define EMLOG_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(@D) nbcat
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 10 ++++++++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  8 +++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
- Doesn't $(TARGET_CONFIGURE_OPTS) work here? If not, it's better to explain that
-in the commit message.
-
-> +endef
-> +
-> +define EMLOG_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0755 $(@D)/nbcat $(TARGET_DIR)/usr/bin
-
- Also here a comment would be good:
-
-# make install tries to strip, so install manually.
-
-
- Otherwise, looks good to me, so you can add my
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
-> +endef
-> +
-> +$(eval $(kernel-module))
-> +$(eval $(generic-package))
-> 
-
-
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index f771401..134e1aa 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -562,6 +562,16 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NEON
+ 	help
+ 	  lib neon http client src
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENAL
++	bool "openal"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_PACKAGE_OPENAL
++
++comment "openal plugin needs a toolchain w/ NPTL, C++"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
++		|| !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+ 	bool "opencv"
+ 	depends on BR2_PACKAGE_OPENCV
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index a707df9..64760a8 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -57,7 +57,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	--disable-mplex \
+ 	--disable-nas \
+ 	--disable-ofa \
+-	--disable-openal \
+ 	--disable-openexr \
+ 	--disable-openjpeg \
+ 	--disable-openni2 \
+@@ -702,6 +701,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-neon
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENAL),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-openal
++GST1_PLUGINS_BAD_DEPENDENCIES += openal
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-openal
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-opencv
+ GST1_PLUGINS_BAD_DEPENDENCIES += opencv
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
