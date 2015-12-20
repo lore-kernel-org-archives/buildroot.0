@@ -1,51 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 15:23:07 +0100
-Subject: [Buildroot] [git commit] linux: only install the DTBs when not in
-	appended DTB mode
-Message-ID: <20151220142434.CC1287F975@busybox.osuosl.org>
+Date: Sun, 20 Dec 2015 15:23:01 +0100
+Subject: [Buildroot] [git commit] linux: de-duplicate DTB and Linux image
+	installation
+Message-ID: <20151220142434.AC1B7821FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24745cb4be748df7fea28195236fe60bb14bef0c
+commit: http://git.buildroot.net/buildroot/commit/?id=55b80d3bb92ebfe334ba4b2ba980c45d1d2f1c05
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When you're using the "appended DTB" mode, the Device Tree blob gets
-appended to your kernel image, so there is no point in installing both
-the DTB and the kernel image to the images or target directories,
-installing the kernel image itself is sufficient.
+Currently, the LINUX_INSTALL_DTB and LINUX_INSTALL_DTB_TARGET macros
+are exactly the same, except for the target directory.
 
-Therefore, this commit disables the definition of LINUX_INSTALL_DTB
-when appended DTB is used.
+Similarly, LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET and
+LINUX_INSTALL_IMAGES_CMDS are copying the kernel image, just to a
+different place (and with a different strategy).
+
+As a preparation for future additions, this commit de-duplicate this
+code:
+
+ - LINUX_INSTALL_DTB becomes a make macro that takes one argument: the
+   destination directory.
+
+ - LINUX_INSTALL_IMAGE is a new make macro that also takes on
+   argument: the destination directory.
+
+Both macros are used by LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET and
+LINUX_INSTALL_IMAGES_CMDS to respectively install to the target
+directory and the images directory.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ linux/linux.mk | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 5d6791a..536e931 100644
+index f95bc58..5d6791a 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -257,6 +257,7 @@ ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
- define LINUX_BUILD_DTB
- 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
- endef
-+ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),)
- define LINUX_INSTALL_DTB
- 	# dtbs moved from arch/<ARCH>/boot to arch/<ARCH>/boot/dts since 3.8-rc1
+@@ -262,14 +262,7 @@ define LINUX_INSTALL_DTB
  	cp $(addprefix \
-@@ -264,8 +265,9 @@ define LINUX_INSTALL_DTB
+ 		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
  		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
- 		$(1)
+-		$(BINARIES_DIR)/
+-endef
+-define LINUX_INSTALL_DTB_TARGET
+-	# dtbs moved from arch/<ARCH>/boot to arch/<ARCH>/boot/dts since 3.8-rc1
+-	cp $(addprefix \
+-		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
+-		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
+-		$(TARGET_DIR)/boot/
++		$(1)
  endef
--endif
--endif
-+endif # BR2_LINUX_KERNEL_APPENDED_DTB
-+endif # BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
-+endif # BR2_LINUX_KERNEL_DTS_SUPPORT
+ endif
+ endif
+@@ -310,11 +303,14 @@ define LINUX_BUILD_CMDS
+ 	$(LINUX_APPEND_DTB)
+ endef
  
- ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
- # dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
++define LINUX_INSTALL_IMAGE
++	$(INSTALL) -m 0644 -D $(LINUX_IMAGE_PATH) $(1)/$(LINUX_IMAGE_NAME)
++endef
+ 
+ ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
+ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+-	install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
+-	$(LINUX_INSTALL_DTB_TARGET)
++	$(call LINUX_INSTALL_IMAGE,$(TARGET_DIR)/boot)
++	$(call LINUX_INSTALL_DTB,$(TARGET_DIR)/boot)
+ endef
+ endif
+ 
+@@ -328,8 +324,8 @@ endef
+ 
+ 
+ define LINUX_INSTALL_IMAGES_CMDS
+-	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+-	$(LINUX_INSTALL_DTB)
++	$(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
++	$(call LINUX_INSTALL_DTB,$(BINARIES_DIR))
+ endef
+ 
+ define LINUX_INSTALL_TARGET_CMDS
