@@ -1,137 +1,213 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Dec 2015 01:04:19 +0100
-Subject: [Buildroot] [PATCH] package/v4l2grab: add missing -lrt
-Message-ID: <1450569859-11738-1-git-send-email-yann.morin.1998@free.fr>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Sun, 20 Dec 2015 03:24:12 +0100
+Subject: [Buildroot] [PATCH] wine: Bump to version 1.8
+Message-ID: <5676114C.8020507@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-v4l2grab uses clock_gettime which is provided by -lrt, so we must check
-and link with it. Add a patch for that.
+Bumping to brand new stable version 1.8
 
-Also, silence autoreconf when outside a git tree.
+Upstreamed patches are dropped, sane patch is rebased.
+Adding libpcap, pulseaudio and samba4 as soft dependencies.
+sfnt2fon moved to its own subfolder and needs to be built in host-wine.
 
-Patches sent upstream:
-    https://github.com/twam/v4l2grab/pull/9
-
-Fixes:
-    http://autobuild.buildroot.org/results/9df/9df2c09963b97524621f8323b279b8a1672d4b6c/
-    http://autobuild.buildroot.org/results/448/4484bda010442033d0536a95f45370701c071f92/
-    http://autobuild.buildroot.org/results/b1c/b1ca0c984ec51518a4090039a86a1814582c3c2b/
-    http://autobuild.buildroot.org/results/bef/befbfb29c33621272c5b3fcfed070bcdd5cb6e69/
-    http://autobuild.buildroot.org/results/e2a/e2ab1698f18aecc3dac5dfcb947c157b784bc411/
-    http://autobuild.buildroot.org/results/25b/25b8ad5280f89b3e7d807104e43dbe2ed2c99b40/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Volkov Viacheslav <sv99@inbox.ru>
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- ...ilence-AC_INIT-when-building-outside-a-gi.patch | 49 ++++++++++++++++++++++
- ...heck-for-clock_gettime-and-the-providing-.patch | 39 +++++++++++++++++
- 2 files changed, 88 insertions(+)
- create mode 100644 package/v4l2grab/0001-configure-silence-AC_INIT-when-building-outside-a-gi.patch
- create mode 100644 package/v4l2grab/0002-configure-check-for-clock_gettime-and-the-providing-.patch
+ ...revent-call-to-memset-with-a-null-pointer.patch | 40 ----------------------
+ ...config-fix.patch => 0001-sane-config-fix.patch} | 14 ++++----
+ package/wine/0002-detect-ncursesw.patch            | 17 ---------
+ package/wine/wine.hash                             |  2 +-
+ package/wine/wine.mk                               | 31 +++++++++++++++--
+ 5 files changed, 36 insertions(+), 68 deletions(-)
+ delete mode 100644 package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
+ rename package/wine/{0003-sane-config-fix.patch => 0001-sane-config-fix.patch} (68%)
+ delete mode 100644 package/wine/0002-detect-ncursesw.patch
 
-diff --git a/package/v4l2grab/0001-configure-silence-AC_INIT-when-building-outside-a-gi.patch b/package/v4l2grab/0001-configure-silence-AC_INIT-when-building-outside-a-gi.patch
-new file mode 100644
-index 0000000..944e905
---- /dev/null
-+++ b/package/v4l2grab/0001-configure-silence-AC_INIT-when-building-outside-a-gi.patch
-@@ -0,0 +1,49 @@
-+From bf58805ecfd8276c144ef476f2fb09d81359d62d Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 20 Dec 2015 00:44:18 +0100
-+Subject: [PATCH 1/2] configure: silence AC_INIT when building outside a git
-+ tree
+diff --git a/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch b/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
+deleted file mode 100644
+index f6d5a9d..0000000
+--- a/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-commit deb274226783ab886bdb44876944e156757efe2b
+-Author: Daniel Beitler <dan@dablabs.com>
+-Date:   Sun May 18 13:27:42 2014 -0400
+-
+-    msi: Prevent call to memset with a null pointer
+-         in get_tablecolumns function.
+-
+-Fix miscompilation with gcc >= 4.9
+-See https://bugs.winehq.org/show_bug.cgi?id=36139 for the upstream
+-bug report. There won't be a Wine 1.6.3 so we need to address this
+-anyway.
+-
+-Backported from: deb274226783ab886bdb44876944e156757efe2b
+-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+----
+- dlls/msi/table.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/dlls/msi/table.c b/dlls/msi/table.c
+-index 8012369..9ed9421 100644
+---- a/dlls/msi/table.c
+-+++ b/dlls/msi/table.c
+-@@ -671,7 +671,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
+-     /* Note: _Columns table doesn't have non-persistent data */
+- 
+-     /* if maxcount is non-zero, assume it's exactly right for this table */
+--    memset( colinfo, 0, maxcount * sizeof(*colinfo) );
+-+    if (colinfo) memset( colinfo, 0, maxcount * sizeof(*colinfo) );
+-     count = table->row_count;
+-     for (i = 0; i < count; i++)
+-     {
+-@@ -684,7 +684,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
+-             /* check the column number is in range */
+-             if (col < 1 || col > maxcount)
+-             {
+--                ERR("column %d out of range\n", col);
+-+                ERR("column %d out of range (maxcount: %d)\n", col, maxcount);
+-                 continue;
+-             }
+-             /* check if this column was already set */
+diff --git a/package/wine/0003-sane-config-fix.patch b/package/wine/0001-sane-config-fix.patch
+similarity index 68%
+rename from package/wine/0003-sane-config-fix.patch
+rename to package/wine/0001-sane-config-fix.patch
+index d53843a..bccde7d 100644
+--- a/package/wine/0003-sane-config-fix.patch
++++ b/package/wine/0001-sane-config-fix.patch
+@@ -10,12 +10,12 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1375,7 +1375,7 @@
++@@ -1291,7 +1291,7 @@
++ dnl **** Check for SANE ****
+  if test "x$with_sane" != "xno"
+  then
+-     ac_save_CPPFLAGS="$CPPFLAGS"
+--    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`])
+-+    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`])
+-     AC_CHECK_HEADER(sane/sane.h,
+-         [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
+-         [SANE_CFLAGS=""])
++-    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`],
+++    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`],
++         [AC_CHECK_HEADER(sane/sane.h,
++             [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
++             [SANE_CFLAGS=""])])
+diff --git a/package/wine/0002-detect-ncursesw.patch b/package/wine/0002-detect-ncursesw.patch
+deleted file mode 100644
+index 7f153b1..0000000
+--- a/package/wine/0002-detect-ncursesw.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Detect libncursesw as well.
+-Backport from upstream 8d4e1fa7d77636a88651c9d48a48d39fab931c49
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura wine-1.6.2.orig/configure.ac wine-1.6.2/configure.ac
+---- wine-1.6.2.orig/configure.ac	2015-05-01 09:24:24.741960685 -0300
+-+++ wine-1.6.2/configure.ac	2015-05-01 09:25:26.860069750 -0300
+-@@ -1359,7 +1359,7 @@
+- CURSESLIBS=""
+- if test "$ac_cv_header_ncurses_h" = "yes"
+- then
+--    WINE_CHECK_SONAME(ncurses,waddch,[CURSESLIBS="-lncurses"])
+-+    WINE_CHECK_SONAME(ncurses,waddch,[CURSESLIBS="-lncurses"],,,[[libncursesw\\{0,1\\}]])
+- elif test "$ac_cv_header_curses_h" = "yes"
+- then
+-     WINE_CHECK_SONAME(curses,waddch,[CURSESLIBS="-lcurses"])
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index d1e3494..80c0f68 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 f0ab9eede5a0ccacbf6e50682649f9377b9199e49cf55641f1787cf72405acbe wine-1.6.2.tar.bz2
++sha256 f33b45c18112b2071fbf9edee0e8c575407f9e2a9855ca4ee918ed33efa7c6f4 wine-1.8.tar.bz2
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 98958ef..1d935cc 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 1.6.2
++WINE_VERSION = 1.8
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
+-WINE_SITE = https://dl.winehq.org/wine/source/1.6
++WINE_SITE = https://dl.winehq.org/wine/source/1.8
+ WINE_LICENSE = LGPLv2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
+ WINE_DEPENDENCIES = host-bison host-flex host-wine
+-# For 0002-detect-ncursesw.patch
++# For 0001-sane-config-fix.patch
+ WINE_AUTORECONF = YES
+ 
+ # Wine needs its own directory structure and tools for cross compiling
+@@ -120,6 +120,13 @@ else
+ WINE_CONF_OPTS += --without-glu
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBPCAP),y)
++WINE_CONF_OPTS += --with-pcap
++WINE_DEPENDENCIES += libpcap
++else
++WINE_CONF_OPTS += --without-pcap
++endif
 +
-+When autoreconfiguring outside a git tree, there are lots of spurious
-+git fatal errors because there is no git tree to work on to retrieve the
-+version information:
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ WINE_CONF_OPTS += --with-png
+ WINE_DEPENDENCIES += libpng
+@@ -183,6 +190,20 @@ else
+ WINE_CONF_OPTS += --without-osmesa
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++WINE_CONF_OPTS += --with-pulse
++WINE_DEPENDENCIES += pulseaudio
++else
++WINE_CONF_OPTS += --without-pulse
++endif
 +
-+    fatal: Not a git repository (or any parent up to mount point /home/ymorin/dev)
-+    Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
++ifeq ($(BR2_PACKAGE_SAMBA4),y)
++WINE_CONF_OPTS += --with-netapi
++WINE_DEPENDENCIES += samba4
++else
++WINE_CONF_OPTS += --without-netapi
++endif
 +
-+Or, with an older git version:
-+    http://autobuild.buildroot.org/results/9df/9df2c09963b97524621f8323b279b8a1672d4b6c/build-end.log
-+
-+This is rather discouraging for the unsuspecting user, and even seasoned
-+developpers would have to look twice before they can conclude that's not
-+an actual error.
-+
-+Since the version srring is not strictly required for autoconf to work
-+properly, just consign git's sdterr to oblivion.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+In the Buildroot project, we grab (Aha!) the v4l2grab sources directly
-+from a tarball generated on the fly by Github, we don't clone the
-+repository. Thus we have this nasty message, like so:
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 9d2e616..9e79192 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1,7 +1,7 @@
-+ #                                               -*- Autoconf -*-
-+ # Process this file with autoconf to produce a configure script.
-+ 
-+-AC_INIT([v4l2grab], [m4_esyscmd_s([git describe --always --tag --dirty])], [Tobias_Mueller at twam.info])
-++AC_INIT([v4l2grab], [m4_esyscmd_s([git describe --always --tag --dirty 2>/dev/null])], [Tobias_Mueller at twam.info])
-+ 
-+ # prepare for automake
-+ AM_INIT_AUTOMAKE
-+-- 
-+1.9.1
-+
-diff --git a/package/v4l2grab/0002-configure-check-for-clock_gettime-and-the-providing-.patch b/package/v4l2grab/0002-configure-check-for-clock_gettime-and-the-providing-.patch
-new file mode 100644
-index 0000000..0b3daed
---- /dev/null
-+++ b/package/v4l2grab/0002-configure-check-for-clock_gettime-and-the-providing-.patch
-@@ -0,0 +1,39 @@
-+From 68697adeefd73e28ac3c8cfd86d244a6c496807f Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 20 Dec 2015 00:50:55 +0100
-+Subject: [PATCH 2/2] configure: check for clock_gettime and the providing
-+ library
-+
-+clock_gettime is provided by -lrt so we must check for it.
-+
-+Fixes build issues like observed in Buildroot;
-+    http://autobuild.buildroot.org/results/9df/9df2c09963b97524621f8323b279b8a1672d4b6c/build-end.log
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ configure.ac | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 9e79192..3de9551 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -16,6 +16,8 @@ AC_PROG_CC
-+ # Checks for libraries.
-+ AC_CHECK_LIB([jpeg], [jpeg_start_compress])
-+ AC_CHECK_LIB([v4l2], [v4l2_open])
-++AC_SEARCH_LIBS([clock_gettime],[rt],,
-++               [AC_MSG_ERROR([no library contains clock_gettime])])
-+ 
-+ # Checks for header files.
-+ AC_CHECK_HEADERS([fcntl.h malloc.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h])
-+@@ -26,5 +28,6 @@ AC_TYPE_SIZE_T
-+ # Checks for library functions.
-+ AC_FUNC_MALLOC
-+ AC_CHECK_FUNCS([getpagesize select strerror])
-++AC_CHECK_FUNCS([clock_gettime])
-+ 
-+ AC_OUTPUT
-+-- 
-+1.9.1
-+
+ ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
+ WINE_CONF_OPTS += --with-sane
+ WINE_DEPENDENCIES += sane-backends
+@@ -282,6 +303,7 @@ endif
+ define HOST_WINE_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 	  tools \
++	  tools/sfnt2fon \
+ 	  tools/widl \
+ 	  tools/winebuild \
+ 	  tools/winegcc \
+@@ -318,11 +340,14 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-jpeg \
+ 	--without-ldap \
+ 	--without-mpg123 \
++	--without-netapi \
+ 	--without-openal \
+ 	--without-opencl \
+ 	--without-opengl \
+ 	--without-osmesa \
+ 	--without-oss \
++	--without-pcap \
++	--without-pulse \
+ 	--without-png \
+ 	--without-sane \
+ 	--without-tiff \
 -- 
 1.9.1
