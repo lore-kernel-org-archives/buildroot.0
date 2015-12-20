@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 22:51:04 +0100
-Subject: [Buildroot] [PATCH] start-stop-daemon: bump to version 1.18.3
-In-Reply-To: <1450645384-19542-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1450645384-19542-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151220225104.006f980a@free-electrons.com>
+Date: Sun, 20 Dec 2015 22:51:08 +0100
+Subject: [Buildroot] [PATCH] ifupdown: bump to version 0.8.2
+In-Reply-To: <1450645405-19590-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450645405-19590-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151220225108.46419bdb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,12 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Sun, 20 Dec 2015 18:03:04 -0300, Gustavo Zacarias wrote:
-> Enable developer mode to skip the shared library check in configure and
-> avoid further patching.
-> 
+On Sun, 20 Dec 2015 18:03:25 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  .../0001-add-uclibc-alias-and-musl.patch           | 28 +++++++---------------
->  package/start-stop-daemon/start-stop-daemon.hash   |  4 ++--
->  package/start-stop-daemon/start-stop-daemon.mk     |  7 +++---
->  3 files changed, 14 insertions(+), 25 deletions(-)
+>  package/ifupdown/ifupdown.hash | 4 ++--
+>  package/ifupdown/ifupdown.mk   | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied, thanks.
 
