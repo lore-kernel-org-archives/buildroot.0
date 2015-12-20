@@ -1,47 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 15:27:39 +0100
-Subject: [Buildroot] [PATCH v2] bash: add default bash settings
-In-Reply-To: <1444674610-8022-1-git-send-email-dvanarnem@cmlab.biz>
-References: <1444674610-8022-1-git-send-email-dvanarnem@cmlab.biz>
-Message-ID: <20151220152739.2236b56e@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 20 Dec 2015 15:47:59 +0100
+Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
+In-Reply-To: <20151220141613.22b22bdc@free-electrons.com>
+References: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
+ <vjiikcxh6u.ln2@ID-313208.user.individual.net>
+ <20151220135412.652a8344@free-electrons.com>
+ <20151220130054.GC3677@free.fr>
+ <20151220141613.22b22bdc@free-electrons.com>
+Message-ID: <20151220144759.GD3677@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David,
+Thomas, All,
 
-On Mon, 12 Oct 2015 12:30:10 -0600, David Van Arnem wrote:
-> Settings that were bash-specific were previously removed from
-> system/skeleton/etc/profile.  This measn that users using bash no longer
-> get the "normal" bash prompt with [user at host dir]#/$, and only get #/$.
-> This commit adds back the bash-specific settings, but adds them to the
-> bash package so they are only used when bash is installed on the target
-> system.
+On 2015-12-20 14:16 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 20 Dec 2015 14:00:54 +0100, Yann E. MORIN wrote:
+> > Well, I'm not too fond of that. But indeed, it's a pain to review either
+> > way.
+> > 
+> > Maybe a middle-ground solution would be to bump all the screensavers in
+> > one patch, all the audiocoders in a second one and so on?
 > 
-> bash_profile.sh contains the variables, aliases, and color profile that
-> were previously in system/skeleton/etc/profile.  The changes to bash.mk
-> use a post-install hook to install bash_profile.sh to the target
-> filesystem, where it will later be sourced by /etc/profile when a bash
-> shell is started.
-> ---
-> Changes v1 -> v2
->     - only export PS1 variable for bash_profile.sh
+> I'm fine with this, but I'd like to keep my request to have the "simple
+> bumps" grouped together in certain commits, but as soon as the bump is
+> not just a mechanical one, it should be a separate patch. I.e for
+> example:
 > 
-> Signed-off-by: David Van Arnem <dvanarnem@cmlab.biz>
+> 	kodi-screensaver-*: mechanical bumps
+> 	kodi-screensaver-baz: bump version
 
-Having this or that shell prompt is really a user-specific
-choice/configuration. You can already customize that very easily by
-keeping this bash_profile.sh file in your rootfs overlay.
+Yes, agreed.
 
-Therefore, I don't think it's really useful to have such customization
-by default in Buildroot, and I prefer to not take this patch.
+Regards,
+Yann E. MORIN.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
