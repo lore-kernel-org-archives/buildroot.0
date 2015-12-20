@@ -1,39 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Dec 2015 14:52:23 +0100
-Subject: [Buildroot] [PATCH v4 1/2] package/kodi-visualisation-goom: new
-	package
-References: <1446239247-6651-1-git-send-email-bernd.kuhls@t-online.de>
- <20151220142438.02fc1f98@free-electrons.com>
-Message-ID: <mdoikcxh6u.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Dec 2015 15:04:38 +0100
+Subject: [Buildroot] [PATCH 2/2] package/perl-db-file: Berkeley DB 1.85
+ compatibility API is not needed
+In-Reply-To: <1449355343-19014-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1449355343-19014-1-git-send-email-bernd.kuhls@t-online.de>
+ <1449355343-19014-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151220150438.2c6a94b9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 20 Dec 2015 14:24:38 +0100 schrieb Thomas Petazzoni:
+Dear Bernd Kuhls,
 
-> Dear Bernd Kuhls,
+On Sat,  5 Dec 2015 23:42:23 +0100, Bernd Kuhls wrote:
+> This package is also compatible with Berkeley DB v2 or higher:
+> https://metacpan.org/source/PMQS/DB_File-1.835/Changes
 > 
-> On Fri, 30 Oct 2015 22:07:26 +0100, Bernd Kuhls wrote:
->> Signed-off-by: Bernd Kuhls
->> <bernd.kuhls@t-online.de>
->> ---
->> v4. bumped version, changed _LICENSE_FILES back to ./COPYING,
->>     upstream clarified its license:
->>     https://github.com/notspiff/visualization.goom/commit/
-f8dea024abe2385a91061a7e8e98bdeed3c8f74e
->> v3: added hash, sent patch upstream, updated _LICENSE_FILES (Thomas)
->> v2: rebased
+> 1.50
+>     DB_File can now build with either DB 1.x or 2.x, but not both at
+>     the same time.
 > 
-> Am I right that your upcoming Kodi 16 series will carry a patch adding
-> this package, and ditto for the rsxs thing?
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/perl-db-file/Config.in | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/perl-db-file/Config.in b/package/perl-db-file/Config.in
+> index 37bc5da..cf6cb72 100644
+> --- a/package/perl-db-file/Config.in
+> +++ b/package/perl-db-file/Config.in
+> @@ -2,7 +2,6 @@ config BR2_PACKAGE_PERL_DB_FILE
+>  	bool "perl-db-file"
+>  	depends on !BR2_STATIC_LIBS
+>  	select BR2_PACKAGE_BERKELEYDB
+> -	select BR2_PACKAGE_BERKELEYDB_COMPAT185
+>  	help
+>  	  Perl5 access to Berkeley DB version 1.x
 
-Hi Thomas,
+The Config.in help text needed some update, since it now works with
+Berkeley DB 2.x. I've adjusted that and applied.
 
-yes, because Kodi 16 does not include the code for Goom and rsxs anymore.
-But my Goom/rsxs patches are meant to be used with the current 15.2 
-version of Kodi already, they do not depend on Kodi 16 and can be applied 
-to buildroot after review at any time.
+Fran?ois, don't hesitate to have a look and give a comment if there is
+any issue with this.
 
-Regards, Bernd
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
