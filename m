@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 14:40:59 +0100
-Subject: [Buildroot] Trouble bringing up Raspberry Pi
-In-Reply-To: <20151220133618.GA8906@buinea.com>
-References: <20151219201126.GA9718@buinea.com>
- <20151220102721.16b3d82b@free-electrons.com>
- <20151220133618.GA8906@buinea.com>
-Message-ID: <20151220144059.4099ee63@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 20 Dec 2015 10:40:36 -0300
+Subject: [Buildroot] [PATCH 4/4] weston: bump to version 1.9.0
+In-Reply-To: <1450618836-3845-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450618836-3845-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1450618836-3845-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/weston/weston.hash | 4 ++--
+ package/weston/weston.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Sun, 20 Dec 2015 05:36:18 -0800, Steve Morris wrote:
-
-> Thank you for the response. 
-> 
-> Yes, I followed those instructions at least a  couple of times for both
-> volatile and persistent root.
-> 
-> It hung during boot until I added the mdev selection.
-
-When does it hang? It definitely shouldn't hang. Are you using the
-serial port of your RPi to get the bootloader/kernel/initialization
-messages ?
-
-Thomas
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index e7bc2bb..32035c9 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/wayland-devel/2015-June/022416.html
+-sha256  8963e69f328e815cec42c58046c4af721476c7541bb7d9edc71740fada5ad312  weston-1.8.0.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2015-September/024303.html
++sha256  9c1b03f3184fa0b0dfdf67e215048085156e1a2ca344af6613fed36794ac48cf  weston-1.9.0.tar.xz
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 4ad89ce..392fbb1 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WESTON_VERSION = 1.8.0
++WESTON_VERSION = 1.9.0
+ WESTON_SITE = http://wayland.freedesktop.org/releases
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
