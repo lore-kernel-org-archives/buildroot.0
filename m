@@ -1,134 +1,97 @@
-From: Eelco Chaudron <echaudron@xiot.nl>
-Date: Sun, 20 Dec 2015 19:17:59 +0100
-Subject: [Buildroot] buildroot support for OrangePI PC
-In-Reply-To: <20151220134500.549ecf55@free-electrons.com>
-References: <08485173-6FC7-42EF-9BFE-7B3B9967EEC0@xiot.nl>
- <56748758.7040908@mind.be> <56769FEB.60400@xiot.nl>
- <20151220134500.549ecf55@free-electrons.com>
-Message-ID: <5676F0D7.8010904@xiot.nl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 20 Dec 2015 19:22:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: virgl driver needs egl
+ & drm
+In-Reply-To: <1450630809-17381-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1450630809-17381-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151220182234.GH3677@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Bernd, All,
 
-Thanks for pointing this out...
+On 2015-12-20 18:00 +0100, Bernd Kuhls spake thusly:
+> Fixes
+> http://autobuild.buildroot.net/results/7b3/7b38131ebb6b20daec1a6d2c49b25c5300f319fe/
+> http://autobuild.buildroot.net/results/61b/61b8b87f0460751257f480ef478e753635cab798/
+> http://autobuild.buildroot.net/results/971/97154ea0e780623d23b20b6b9fcc5df6190875c9/
+> http://autobuild.buildroot.net/results/dcf/dcf4e31e6b6eeadc7a2d7c87697f57d699673b9e/
+> http://autobuild.buildroot.net/results/399/399cca80ada5798decc87bff69a3acc432e8f3d0/
+> http://autobuild.buildroot.net/results/60f/60f63958b2310e00937c498ddf2a0295ff77683a/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/Config.in | 1 +
+>  package/mesa3d/mesa3d.mk | 4 ++++
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 40af2ef..dd6a8c6 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -79,6 +79,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
+>  	bool "Gallium virgl driver"
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+>  	help
+>  	  virgl is the 3D acceleration backend for the virtio-gpu
+>  	  shipping with qemu.
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 195ccff..be11724 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -131,6 +131,10 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+>  MESA3D_PROVIDES += libegl
+>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+>  MESA3D_EGL_PLATFORMS = drm
+> +else
+> +ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
+> +MESA3D_EGL_PLATFORMS = drm
+> +endif
 
-I wanted to do some bench marking in big endian to see performance 
-difference in a heavy networking environment.
-However when I saw the endian errors I "thought" I reverted back, and 
-retried. But for some reason make savedefconfig, did not reflect the 
-change, and I did not pay attention to the output :(
+I'm not usre I like this. Having multiple code-paths that set the same
+thing looks dubious to me.
 
-Doing a make distclean, and reconfigure, it worked fine without any 
-build errors.
+At the very least, use else-ifeq construct, to gain one level of
+imbrication:
 
+    ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+    MESA3D_EGL_PLATFORMS = drm
+    else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
+    MESA3D_EGL_PLATFORMS = drm
+    endif
 
-//Eelco
-> Thomas Petazzoni <mailto:thomas.petazzoni@free-electrons.com>
-> December 20, 2015 at 13:45
-> Dear Eelco Chaudron,
->
->
-> Seems like you are hitting bug
-> https://sourceware.org/bugzilla/show_bug.cgi?id=16698. It seems to be
-> fixed in the 2.24.90 snapshot, though it is not clear which specific
-> commit fixed it, so it's hard to backport it.
->
-> Can you try with with binutils 2.25 ?
->
-> Also, you have selected ARM big endian as the architecture, which is
-> almost certainly not what you want. If you're new to ARM and have no
-> reason to use big endian, then use ARM little endian, which is what
-> 99.9999% of the people use.
->
-> Best regards,
->
-> Thomas
-> Eelco Chaudron <mailto:echaudron@xiot.nl>
-> December 20, 2015 at 13:32
-> Hi All,
->
-> I decided to give this a shot, but I already get stuck at doing the 
-> u-boot part...
-> Looks like some toolchain issue, so before I dig into it more let me 
-> see if some one here has ran into something similar.
->
-> This is my config:
->
-> BR2_armeb=y
-> BR2_cortex_a7=y
-> BR2_ARM_EABI=y
-> BR2_ARM_FPU_NEON_VFPV4=y
-> BR2_TARGET_UBOOT=y
-> BR2_TARGET_UBOOT_BOARDNAME="orangepi_pc"
-> BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.denx.de/u-boot.git"
-> BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4832e17787acb29734d895751bc7a594908aecc6"
-> BR2_TARGET_UBOOT_SPL=y
->
-> It all goes wrong when linking u-boot. Here are some snippets from the 
-> output:
->   LD      u-boot
-> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
-> Warning: size of symbol `invalidate_dcache_range' changed from 168 in 
-> arch/arm/cpu/armv7/built-in.o to 4 in arch/arm/lib/built-in.o
-> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
-> Warning: size of symbol `enable_caches' changed from 4 in 
-> arch/arm/cpu/armv7/built-in.o to 12 in arch/arm/lib/built-in.o
-> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
-> Warning: size of symbol `arm_init_before_mmu' changed from 40 in 
-> arch/arm/cpu/armv7/built-in.o to 4 in arch/arm/lib/built-in.o
-> ...
-> ...
-> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
-> /home/echaudron/buildroot_opi/output/host/usr/lib/gcc/armeb-buildroot-linux-uclibcgnueabi/4.9.3/libgcc.a(_dvmd_lnx.o): 
-> compiled for a big endian system and target is little endian
-> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
-> failed to merge target specific data of file 
-> /home/echaudron/buildroot_opi/output/host/usr/lib/gcc/armeb-buildroot-linux-uclibcgnueabi/4.9.3/libgcc.a(_dvmd_lnx.o)
-> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
-> BFD (GNU Binutils) 2.24 assertion fail elf32-arm.c:12387
-> ...
-> ...
-> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
-> BFD (GNU Binutils) 2.24 assertion fail elf32-arm.c:12387
-> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
-> BFD (GNU Binutils) 2.24 assertion fail elf32-arm.c:12387
-> Segmentation fault (core dumped)
-> Makefile:1193: recipe for target 'u-boot' failed
-> make[2]: *** [u-boot] Error 139
->
-> When I build the same u-boot version using the ubuntu provided 
-> "arm-linux-gnueabihf-" toolchain it works fine.
-> I'm using the following to build it;
->
-> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- orangepi_pc_defconfig
-> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
->
-> Any ideas?
->
-> //Eelco
->
->
->
-> Arnout Vandecappelle <mailto:arnout@mind.be>
-> December 18, 2015 at 23:23
->
-> Not that I know of. But it should be quite similar to the cubieboard I 
-> think.
->
-> If you make a defconfig for it, consider using genimage rather than a 
-> custom
-> script like mkcubiecard.
->
-> Regards,
-> Arnout
->
->
+However, I'd prefer if we could somehow commonalise this... But that can
+be done later (IIRC, I have a series somewhere about that...)
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151220/1044dbef/attachment.html>
+When you fix the else-ifeq block, you can add my:
+
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+I've also build-tested, but I'll send that tag on the new patch.
+
+Regards,
+Yann E. MORIN.
+
+>  endif
+>  ifeq ($(BR2_PACKAGE_WAYLAND),y)
+>  MESA3D_DEPENDENCIES += wayland
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
