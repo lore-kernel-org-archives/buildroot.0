@@ -1,110 +1,48 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Dec 2015 22:31:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libasplib: new package
-Message-ID: <1450647112-17364-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Dec 2015 22:48:19 +0100
+Subject: [Buildroot] Trouble bringing up Raspberry Pi
+In-Reply-To: <20151220201235.GA3766@buinea.com>
+References: <20151219201126.GA9718@buinea.com>
+ <20151220102721.16b3d82b@free-electrons.com>
+ <20151220133618.GA8906@buinea.com>
+ <20151220144059.4099ee63@free-electrons.com>
+ <20151220201235.GA3766@buinea.com>
+Message-ID: <20151220224819.2e9d844e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for upcoming kodi-adsp-biquad-filters package
+Dear Steve Morris,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/Config.in                                  |  1 +
- .../0001-Fix-linux-detection-with-buildroot.patch  | 31 ++++++++++++++++++++++
- package/libasplib/Config.in                        | 11 ++++++++
- package/libasplib/libasplib.mk                     | 13 +++++++++
- 4 files changed, 56 insertions(+)
- create mode 100644 package/libasplib/0001-Fix-linux-detection-with-buildroot.patch
- create mode 100644 package/libasplib/Config.in
- create mode 100644 package/libasplib/libasplib.mk
+On Sun, 20 Dec 2015 12:12:35 -0800, Steve Morris wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 3579dc9..8f0d6d4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -719,6 +719,7 @@ menu "Audio/Sound"
- 	source "package/celt051/Config.in"
- 	source "package/fdk-aac/Config.in"
- 	source "package/libao/Config.in"
-+	source "package/libasplib/Config.in"
- 	source "package/libbroadvoice/Config.in"
- 	source "package/libcdaudio/Config.in"
- 	source "package/libcddb/Config.in"
-diff --git a/package/libasplib/0001-Fix-linux-detection-with-buildroot.patch b/package/libasplib/0001-Fix-linux-detection-with-buildroot.patch
-new file mode 100644
-index 0000000..66f5185
---- /dev/null
-+++ b/package/libasplib/0001-Fix-linux-detection-with-buildroot.patch
-@@ -0,0 +1,31 @@
-+From 1dc4480e5157e7ac8eb0364446787128f0a156aa Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 20 Dec 2015 22:25:52 +0100
-+Subject: [PATCH 1/1] Fix linux detection with buildroot
-+
-+Inspired by
-+http://lists.busybox.net/pipermail/buildroot/2015-July/133312.html
-+
-+Patch sent upstream: https://github.com/kodi-adsp/asplib/pull/2
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ asplib_utils/os/asplib_base_os.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/asplib_utils/os/asplib_base_os.h b/asplib_utils/os/asplib_base_os.h
-+index a2d3b98..9a90b54 100644
-+--- a/asplib_utils/os/asplib_base_os.h
-++++ b/asplib_utils/os/asplib_base_os.h
-+@@ -27,7 +27,7 @@
-+   #define TARGET_WINDOWS
-+ #endif
-+   #include "windows/windows_definitions.h"
-+-#elif defined(__gnu_linux__)
-++#elif (defined(__gnu_linux__) || defined(__linux__))
-+ #if !defined(TARGET_WINDOWS)
-+   #define TARGET_LINUX
-+ #endif
-+-- 
-+2.6.4
-+
-diff --git a/package/libasplib/Config.in b/package/libasplib/Config.in
-new file mode 100644
-index 0000000..75f0d3c
---- /dev/null
-+++ b/package/libasplib/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBASPLIB
-+	bool "libasplib"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  asplib (Achim's Signal Processing LIBrary), is a small and
-+	  lightweight C++ library for digital signal processing.
-+
-+	  https://github.com/kodi-adsp/asplib
-+
-+comment "asplib needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libasplib/libasplib.mk b/package/libasplib/libasplib.mk
-new file mode 100644
-index 0000000..27629f5
---- /dev/null
-+++ b/package/libasplib/libasplib.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libasplib
-+#
-+################################################################################
-+
-+LIBASPLIB_VERSION = 2fac1bf34efd210b95949fddcbd4a12d287d3e82
-+LIBASPLIB_SITE = $(call github,kodi-adsp,asplib,$(LIBASPLIB_VERSION))
-+LIBASPLIB_LICENSE = GPLv3+
-+LIBASPLIB_LICENSE_FILES = LICENSE
-+LIBASPLIB_INSTALL_STAGING = YES
-+
-+$(eval $(cmake-package))
+> I retried on a Pi Model B which had a serial adapter already connected.
+> 
+> The major problem appears to be that the USB keyboard is not working
+> using the standard build.  It is found during boot and displays messages
+> when unplugging/pluging. Perhaps I'm expecting too much.
+
+What behavior are you expecting with the USB keyboard ?
+
+If you expect the key presses on your USB keyboard to appear on your
+serial console, then indeed this will not work as it wouldn't make any
+sense. The USB keyboard presses should appear on tty1 (i.e on the
+screen).
+
+> The network only comes up if I put 'ip=dhcp' in cmdline.txt. This may be
+> normal behavior.
+
+By default, Buildroot does not configure any network interface. If all
+you want is DHCP on one interface, you can set option BR2_SYSTEM_DHCP
+to the name of your network interface.
+
+If you need something more complicated, then it's up to you to provide
+a rootfs overlay with your own /etc/network/interfaces file.
+
+Thomas
 -- 
-2.6.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
