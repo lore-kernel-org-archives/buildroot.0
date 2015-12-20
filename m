@@ -1,44 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 20 Dec 2015 17:34:36 -0300
-Subject: [Buildroot] [PATCH] debianutils: bump to version 4.5.1
-Message-ID: <1450643676-16489-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 20 Dec 2015 21:37:09 +0100
+Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
+References: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
+ <vjiikcxh6u.ln2@ID-313208.user.individual.net>
+ <20151220135412.652a8344@free-electrons.com>
+ <20151220130054.GC3677@free.fr>
+ <20151220141613.22b22bdc@free-electrons.com>
+ <j6oikcxh6u.ln2@ID-313208.user.individual.net>
+ <20151220145152.GE3677@free.fr>
+Message-ID: <l4gjkcx7k7.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/debianutils/debianutils.hash | 4 ++--
- package/debianutils/debianutils.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Am Sun, 20 Dec 2015 15:51:53 +0100 schrieb Yann E. MORIN:
 
-diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
-index 089dd42..43f1225 100644
---- a/package/debianutils/debianutils.hash
-+++ b/package/debianutils/debianutils.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.4.dsc
--sha256	190850cdd6b5302e0a1ba1aaed1bc7074d67d3bd8d04c613f242f7145afa53a6	debianutils_4.4.tar.gz
-+# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.5.1.dsc
-+sha256	a531c23e0105fe01cfa928457a8343a1e947e2621b3cd4d05f4e9656020c63b7	debianutils_4.5.1.tar.xz
-diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
-index dd78774..5c78504 100644
---- a/package/debianutils/debianutils.mk
-+++ b/package/debianutils/debianutils.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--DEBIANUTILS_VERSION = 4.4
--DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.gz
--DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20130728T034252Z/pool/main/d/debianutils
-+DEBIANUTILS_VERSION = 4.5.1
-+DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
-+DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20150526T034723Z/pool/main/d/debianutils
- DEBIANUTILS_CONF_OPTS = --exec-prefix=/
- # Make sure we override the busybox tools, such as which
- DEBIANUTILS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
--- 
-2.4.10
+> As long as it is only a mechanical bump, without change to the .mk
+> files, and with n/removed patches (i.e. only the _VERSION variables are
+> changed), then yes, a single commit.
+
+Hi Yann,
+
+done: https://github.com/bkuhls/buildroot/commits/kodi16
+
+Regards, Bernd
