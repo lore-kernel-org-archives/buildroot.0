@@ -1,104 +1,44 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Sun, 20 Dec 2015 09:44:37 -0300
-Subject: [Buildroot] [PATCH] directfb: remove cle266 and unichrome support
-Message-ID: <1450615477-11659-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Dec 2015 13:45:00 +0100
+Subject: [Buildroot] buildroot support for OrangePI PC
+In-Reply-To: <56769FEB.60400@xiot.nl>
+References: <08485173-6FC7-42EF-9BFE-7B3B9967EEC0@xiot.nl>
+ <56748758.7040908@mind.be> <56769FEB.60400@xiot.nl>
+Message-ID: <20151220134500.549ecf55@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Dear Eelco Chaudron,
 
-They're broken for the latest version and directfb upstream is gone.
+On Sun, 20 Dec 2015 13:32:43 +0100, Eelco Chaudron wrote:
 
-cle266 is an old chipset for AMD K7 (32 bit) athlons with integrated
-graphics - very odd hardware.
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> BFD (GNU Binutils) 2.24 assertion fail elf32-arm.c:12387
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> BFD (GNU Binutils) 2.24 assertion fail elf32-arm.c:12387
+> Segmentation fault (core dumped)
+> Makefile:1193: recipe for target 'u-boot' failed
+> make[2]: *** [u-boot] Error 139
 
-unichrome is another VIA graphics standalone chip/chipset used for some
-odd video cards and VIA CPUs (x86-based: C7, Nano and so on).
+Seems like you are hitting bug
+https://sourceware.org/bugzilla/show_bug.cgi?id=16698. It seems to be
+fixed in the 2.24.90 snapshot, though it is not clear which specific
+commit fixed it, so it's hard to backport it.
 
-Add options to legacy as well. Fixes:
+Can you try with with binutils 2.25 ?
 
-http://autobuild.buildroot.net/results/ab9/ab9a6dd044b5f3e8e42629a2aaf598fd0e0357ed/
+Also, you have selected ARM big endian as the architecture, which is
+almost certainly not what you want. If you're new to ARM and have no
+reason to use big endian, then use ARM little endian, which is what
+99.9999% of the people use.
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- Config.in.legacy             | 16 ++++++++++++++++
- package/directfb/Config.in   | 10 ----------
- package/directfb/directfb.mk |  2 --
- 3 files changed, 16 insertions(+), 12 deletions(-)
+Best regards,
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4d22527..c22e35e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,22 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.02"
- 
-+config BR2_PACKAGE_DIRECTFB_CLE266
-+	bool "cle266 driver for directfb"
-+	select BR2_LEGACY
-+	help
-+	  The cle266 directfb driver support has been removed.
-+	  It doesn't build in the latest version and it's unlikely
-+	  anyone has any use for it.
-+
-+config BR2_PACKAGE_DIRECTFB_UNICHROME
-+	bool "unichrome driver for directfb"
-+	select BR2_LEGACY
-+	help
-+	  The unichrome directfb driver support has been removed.
-+	  It doesn't build in the latest version and it's unlikely
-+	  anyone has any use for it.
-+
- config BR2_PACKAGE_LIBEINA
- 	bool "libeina package has been removed"
- 	select BR2_LEGACY
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 2d09460..73425d3 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -61,11 +61,6 @@ config BR2_PACKAGE_DIRECTFB_ATI128
- 	bool "compile ati128 graphics driver"
- 	depends on BR2_i386 || BR2_x86_64
- 
--config BR2_PACKAGE_DIRECTFB_CLE266
--	bool "compile cle266 graphics driver"
--	default y
--	depends on BR2_i386 || BR2_x86_64
--
- config BR2_PACKAGE_DIRECTFB_MATROX
- 	bool "compile matrox graphics driver"
- 	depends on BR2_i386 || BR2_x86_64
-@@ -89,11 +84,6 @@ config BR2_PACKAGE_DIRECTFB_EP9X
- 
- 	  http://cirrus.com/en/products/arm9.html
- 
--config BR2_PACKAGE_DIRECTFB_UNICHROME
--	bool "compile unichrome graphics driver"
--	default y
--	depends on BR2_i386 || BR2_x86_64
--
- config BR2_PACKAGE_DIRECTFB_I830
- 	bool "compile i830 graphics driver"
- 	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 5e68b7b..d51094f 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -67,11 +67,9 @@ endif
- 
- DIRECTFB_GFX = \
- 	$(if $(BR2_PACKAGE_DIRECTFB_ATI128),ati128) \
--	$(if $(BR2_PACKAGE_DIRECTFB_CLE266),cle266) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_CYBER5K),cyber5k) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_MATROX),matrox) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_PXA3XX),pxa3xx) \
--	$(if $(BR2_PACKAGE_DIRECTFB_UNICHROME),unichrome) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_I830),i830)	\
- 	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x)
- 
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
