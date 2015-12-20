@@ -1,48 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 22:48:19 +0100
-Subject: [Buildroot] Trouble bringing up Raspberry Pi
-In-Reply-To: <20151220201235.GA3766@buinea.com>
-References: <20151219201126.GA9718@buinea.com>
- <20151220102721.16b3d82b@free-electrons.com>
- <20151220133618.GA8906@buinea.com>
- <20151220144059.4099ee63@free-electrons.com>
- <20151220201235.GA3766@buinea.com>
-Message-ID: <20151220224819.2e9d844e@free-electrons.com>
+Date: Sun, 20 Dec 2015 22:49:51 +0100
+Subject: [Buildroot] [git commit] ifupdown: bump to version 0.8.2
+Message-ID: <20151220215009.5253E81DC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Morris,
+commit: http://git.buildroot.net/buildroot/commit/?id=a6b9bca7aaed2ca08b10c127c3ab083002c97d9c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 20 Dec 2015 12:12:35 -0800, Steve Morris wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ifupdown/ifupdown.hash | 4 ++--
+ package/ifupdown/ifupdown.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> I retried on a Pi Model B which had a serial adapter already connected.
-> 
-> The major problem appears to be that the USB keyboard is not working
-> using the standard build.  It is found during boot and displays messages
-> when unplugging/pluging. Perhaps I'm expecting too much.
-
-What behavior are you expecting with the USB keyboard ?
-
-If you expect the key presses on your USB keyboard to appear on your
-serial console, then indeed this will not work as it wouldn't make any
-sense. The USB keyboard presses should appear on tty1 (i.e on the
-screen).
-
-> The network only comes up if I put 'ip=dhcp' in cmdline.txt. This may be
-> normal behavior.
-
-By default, Buildroot does not configure any network interface. If all
-you want is DHCP on one interface, you can set option BR2_SYSTEM_DHCP
-to the name of your network interface.
-
-If you need something more complicated, then it's up to you to provide
-a rootfs overlay with your own /etc/network/interfaces file.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
+index f0c314b..02dfd2b 100644
+--- a/package/ifupdown/ifupdown.hash
++++ b/package/ifupdown/ifupdown.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.7.49.dsc
+-sha256	5d07c73610ff90393c7273e2af9003eeb1825fc88144ae5ed11a5517547d0f58	ifupdown_0.7.49.tar.xz
++# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.2.dsc
++sha256	edb08f935fea9bc376c3faa0140c04c7a4d4ef5f22fd280ec4060386a75df10b	ifupdown_0.8.2.tar.xz
+diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
+index 5c78eed..7fbd003 100644
+--- a/package/ifupdown/ifupdown.mk
++++ b/package/ifupdown/ifupdown.mk
+@@ -4,16 +4,16 @@
+ #
+ ################################################################################
+ 
+-IFUPDOWN_VERSION = 0.7.49
++IFUPDOWN_VERSION = 0.8.2
+ IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
+-IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20140923T221921Z/pool/main/i/ifupdown
++IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20151205T042642Z/pool/main/i/ifupdown
+ IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ IFUPDOWN_LICENSE = GPLv2+
+ IFUPDOWN_LICENSE_FILES = COPYING
+ 
+ define IFUPDOWN_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
++		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
+ 		-C $(@D)
+ endef
+ 
