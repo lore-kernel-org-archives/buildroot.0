@@ -1,213 +1,157 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sun, 20 Dec 2015 03:24:12 +0100
-Subject: [Buildroot] [PATCH] wine: Bump to version 1.8
-Message-ID: <5676114C.8020507@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Dec 2015 08:30:21 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-12-19
+Message-ID: <20151220073021.A4CC0101BD8@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping to brand new stable version 1.8
+Build statistics for 2015-12-19
+===============================
 
-Upstreamed patches are dropped, sane patch is rebased.
-Adding libpcap, pulseaudio and samba4 as soft dependencies.
-sfnt2fon moved to its own subfolder and needs to be built in host-wine.
+        success : 275
+       failures : 81 
+       timeouts : 1  
+          TOTAL : 357
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- ...revent-call-to-memset-with-a-null-pointer.patch | 40 ----------------------
- ...config-fix.patch => 0001-sane-config-fix.patch} | 14 ++++----
- package/wine/0002-detect-ncursesw.patch            | 17 ---------
- package/wine/wine.hash                             |  2 +-
- package/wine/wine.mk                               | 31 +++++++++++++++--
- 5 files changed, 36 insertions(+), 68 deletions(-)
- delete mode 100644 package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
- rename package/wine/{0003-sane-config-fix.patch => 0001-sane-config-fix.patch} (68%)
- delete mode 100644 package/wine/0002-detect-ncursesw.patch
+Classification of failures by reason
+====================================
 
-diff --git a/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch b/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
-deleted file mode 100644
-index f6d5a9d..0000000
---- a/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--commit deb274226783ab886bdb44876944e156757efe2b
--Author: Daniel Beitler <dan@dablabs.com>
--Date:   Sun May 18 13:27:42 2014 -0400
--
--    msi: Prevent call to memset with a null pointer
--         in get_tablecolumns function.
--
--Fix miscompilation with gcc >= 4.9
--See https://bugs.winehq.org/show_bug.cgi?id=36139 for the upstream
--bug report. There won't be a Wine 1.6.3 so we need to address this
--anyway.
--
--Backported from: deb274226783ab886bdb44876944e156757efe2b
--Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-----
-- dlls/msi/table.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/dlls/msi/table.c b/dlls/msi/table.c
--index 8012369..9ed9421 100644
----- a/dlls/msi/table.c
--+++ b/dlls/msi/table.c
--@@ -671,7 +671,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
--     /* Note: _Columns table doesn't have non-persistent data */
-- 
--     /* if maxcount is non-zero, assume it's exactly right for this table */
---    memset( colinfo, 0, maxcount * sizeof(*colinfo) );
--+    if (colinfo) memset( colinfo, 0, maxcount * sizeof(*colinfo) );
--     count = table->row_count;
--     for (i = 0; i < count; i++)
--     {
--@@ -684,7 +684,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
--             /* check the column number is in range */
--             if (col < 1 || col > maxcount)
--             {
---                ERR("column %d out of range\n", col);
--+                ERR("column %d out of range (maxcount: %d)\n", col, maxcount);
--                 continue;
--             }
--             /* check if this column was already set */
-diff --git a/package/wine/0003-sane-config-fix.patch b/package/wine/0001-sane-config-fix.patch
-similarity index 68%
-rename from package/wine/0003-sane-config-fix.patch
-rename to package/wine/0001-sane-config-fix.patch
-index d53843a..bccde7d 100644
---- a/package/wine/0003-sane-config-fix.patch
-+++ b/package/wine/0001-sane-config-fix.patch
-@@ -10,12 +10,12 @@ Index: b/configure.ac
- ===================================================================
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1375,7 +1375,7 @@
-+@@ -1291,7 +1291,7 @@
-+ dnl **** Check for SANE ****
-  if test "x$with_sane" != "xno"
-  then
--     ac_save_CPPFLAGS="$CPPFLAGS"
---    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`])
--+    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`])
--     AC_CHECK_HEADER(sane/sane.h,
--         [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
--         [SANE_CFLAGS=""])
-+-    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`],
-++    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`],
-+         [AC_CHECK_HEADER(sane/sane.h,
-+             [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
-+             [SANE_CFLAGS=""])])
-diff --git a/package/wine/0002-detect-ncursesw.patch b/package/wine/0002-detect-ncursesw.patch
-deleted file mode 100644
-index 7f153b1..0000000
---- a/package/wine/0002-detect-ncursesw.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Detect libncursesw as well.
--Backport from upstream 8d4e1fa7d77636a88651c9d48a48d39fab931c49
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura wine-1.6.2.orig/configure.ac wine-1.6.2/configure.ac
----- wine-1.6.2.orig/configure.ac	2015-05-01 09:24:24.741960685 -0300
--+++ wine-1.6.2/configure.ac	2015-05-01 09:25:26.860069750 -0300
--@@ -1359,7 +1359,7 @@
-- CURSESLIBS=""
-- if test "$ac_cv_header_ncurses_h" = "yes"
-- then
---    WINE_CHECK_SONAME(ncurses,waddch,[CURSESLIBS="-lncurses"])
--+    WINE_CHECK_SONAME(ncurses,waddch,[CURSESLIBS="-lncurses"],,,[[libncursesw\\{0,1\\}]])
-- elif test "$ac_cv_header_curses_h" = "yes"
-- then
--     WINE_CHECK_SONAME(curses,waddch,[CURSESLIBS="-lcurses"])
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index d1e3494..80c0f68 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 f0ab9eede5a0ccacbf6e50682649f9377b9199e49cf55641f1787cf72405acbe wine-1.6.2.tar.bz2
-+sha256 f33b45c18112b2071fbf9edee0e8c575407f9e2a9855ca4ee918ed33efa7c6f4 wine-1.8.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 98958ef..1d935cc 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--WINE_VERSION = 1.6.2
-+WINE_VERSION = 1.8
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
--WINE_SITE = https://dl.winehq.org/wine/source/1.6
-+WINE_SITE = https://dl.winehq.org/wine/source/1.8
- WINE_LICENSE = LGPLv2.1+
- WINE_LICENSE_FILES = COPYING.LIB LICENSE
- WINE_DEPENDENCIES = host-bison host-flex host-wine
--# For 0002-detect-ncursesw.patch
-+# For 0001-sane-config-fix.patch
- WINE_AUTORECONF = YES
- 
- # Wine needs its own directory structure and tools for cross compiling
-@@ -120,6 +120,13 @@ else
- WINE_CONF_OPTS += --without-glu
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-+WINE_CONF_OPTS += --with-pcap
-+WINE_DEPENDENCIES += libpcap
-+else
-+WINE_CONF_OPTS += --without-pcap
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- WINE_CONF_OPTS += --with-png
- WINE_DEPENDENCIES += libpng
-@@ -183,6 +190,20 @@ else
- WINE_CONF_OPTS += --without-osmesa
- endif
- 
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-+WINE_CONF_OPTS += --with-pulse
-+WINE_DEPENDENCIES += pulseaudio
-+else
-+WINE_CONF_OPTS += --without-pulse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SAMBA4),y)
-+WINE_CONF_OPTS += --with-netapi
-+WINE_DEPENDENCIES += samba4
-+else
-+WINE_CONF_OPTS += --without-netapi
-+endif
-+
- ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
- WINE_CONF_OPTS += --with-sane
- WINE_DEPENDENCIES += sane-backends
-@@ -282,6 +303,7 @@ endif
- define HOST_WINE_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 	  tools \
-+	  tools/sfnt2fon \
- 	  tools/widl \
- 	  tools/winebuild \
- 	  tools/winegcc \
-@@ -318,11 +340,14 @@ HOST_WINE_CONF_OPTS += \
- 	--without-jpeg \
- 	--without-ldap \
- 	--without-mpg123 \
-+	--without-netapi \
- 	--without-openal \
- 	--without-opencl \
- 	--without-opengl \
- 	--without-osmesa \
- 	--without-oss \
-+	--without-pcap \
-+	--without-pulse \
- 	--without-png \
- 	--without-sane \
- 	--without-tiff \
+                  libffi-3.2.1 | 6 
+                  boost-1.59.0 | 6 
+                  ffmpeg-2.8.3 | 5 
+v4l2grab-0abed72532bee02e54... | 5 
+       python-webpy-legal-info | 5 
+                libvips-7.42.2 | 3 
+canfestival-7740ac6fdedc23e... | 3 
+              rabbitmq-c-0.7.1 | 2 
+                   mpd-0.19.11 | 2 
+                moarvm-2015.10 | 2 
+                 openal-1.17.1 | 2 
+             host-nodejs-4.2.3 | 2 
+                  connman-1.30 | 2 
+               ipmitool-1.8.14 | 2 
+              gst1-libav-1.6.2 | 2 
+                      qt-4.8.7 | 2 
+                 mesa3d-11.1.0 | 2 
+        ltp-testsuite-20150903 | 1 
+                 dropwatch-1.4 | 1 
+               openldap-2.4.43 | 1 
+                   libnss-3.21 | 1 
+make[1]: *** wait: No child... | 1 
+                pinentry-0.9.4 | 1 
+                directfb-1.7.7 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+  xdriver_xf86-video-ati-7.5.0 | 1 
+                minidlna-1.1.5 | 1 
+libbroadvoice-f65b0f50c8c76... | 1 
+                 libraw-0.13.4 | 1 
+                    iperf3-3.1 | 1 
+                      pv-1.5.7 | 1 
+                 opencv3-3.0.0 | 1 
+                  gamin-0.1.10 | 1 
+make[2]: *** wait: No child... | 1 
+              cryptsetup-1.7.0 | 1 
+                 libdrm-2.4.65 | 1 
+freerdp-17834af7bb378f85a3b... | 1 
+            netsniff-ng-v0.6.0 | 1 
+                     nut-2.7.2 | 1 
+                  apitrace-7.0 | 1 
+                   hostapd-2.5 | 1 
+               libcap-ng-0.7.4 | 1 
+tstools-08f6be304040e7b8476... | 1 
+                 gtkmm3-3.14.0 | 1 
+                   mplayer-1.2 | 1 
+             stress-ng-0.04.16 | 1 
+
+Detail of failures
+===================
+
+      x86_64 |                   apitrace-7.0 | NOK | http://autobuild.buildroot.net/results/1e022ef3916ae00ddc053f3af7196e0aee186f81/
+      mipsel |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/512ee5df8a9efdb33f6de61b43ad85738505c4c3/
+     powerpc |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/c46a8bd66abee5b83a04f6fd59de5660eb229270/
+     powerpc |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/8a437005549859ccafed9306f2ea2e96f044e713/
+microblazeel |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/ab8ae0e5d3ca32be22860c66153c083b3266a280/
+microblazeel |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/afc91d398a77bf9066613fda6dd6ebea9352e6ca/
+     powerpc |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/a90f4b6ba5d71ef010d4f7fcdbc6ad1ebb0c6890/
+      x86_64 | canfestival-7740ac6fdedc23e... | NOK | http://autobuild.buildroot.net/results/66fee81b1146220beb16e55bcc0a5a56bbd72257/
+         arm | canfestival-7740ac6fdedc23e... | NOK | http://autobuild.buildroot.net/results/4e16359ac76f0220ef68af9721bcd5d45937fbf6/
+         arm | canfestival-7740ac6fdedc23e... | NOK | http://autobuild.buildroot.net/results/47b000fcebc528397fca705e22b355dbc9477168/
+         arm |                   connman-1.30 | NOK | http://autobuild.buildroot.net/results/a0bc85de3a311c74b1a5fd3d2d08c3fbe9ece6da/
+         arm |                   connman-1.30 | NOK | http://autobuild.buildroot.net/results/68c42a4ccbac58588796b9c71811ac449addb024/
+         arm |               cryptsetup-1.7.0 | NOK | http://autobuild.buildroot.net/results/1b585b0e5ad4f123ca3922994e8ffb56c1dbbaa6/
+        i686 |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/ab9a6dd044b5f3e8e42629a2aaf598fd0e0357ed/
+         arm |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/0650529ee56e9f8b7eea0a82af03bd2f08058fc2/
+    mips64el |                   ffmpeg-2.8.3 | NOK | http://autobuild.buildroot.net/results/12dd96afa5575f3df01acb9950ba7bac07c1d944/
+        mips |                   ffmpeg-2.8.3 | NOK | http://autobuild.buildroot.net/results/7c5e60825a20d6d837fd7b57fae9d464c9785383/
+    mips64el |                   ffmpeg-2.8.3 | NOK | http://autobuild.buildroot.net/results/4fb569160a1b728e5e1a2f9b958c19e31b3ca22e/
+        mips |                   ffmpeg-2.8.3 | NOK | http://autobuild.buildroot.net/results/fff98ee3becf9c7f169d3f698319176b0b869d3b/
+    mips64el |                   ffmpeg-2.8.3 | NOK | http://autobuild.buildroot.net/results/556d6f434613fbc93ed6f7c20ca53766cda4505d/
+       sparc | freerdp-17834af7bb378f85a3b... | NOK | http://autobuild.buildroot.net/results/56364d1700a8d4c10758508a3410516d91a9b0c4/
+      x86_64 |                   gamin-0.1.10 | NOK | http://autobuild.buildroot.net/results/36e26dcedfe427cde733cf9f61645d3aab6ff5b0/
+    mips64el |               gst1-libav-1.6.2 | NOK | http://autobuild.buildroot.net/results/ecb53b6f65a5751a753aa443292d741b40e0fed4/
+    mips64el |               gst1-libav-1.6.2 | NOK | http://autobuild.buildroot.net/results/a3ee13ff46a9f5a184b85121e5357f7565fc2e2e/
+       nios2 |                  gtkmm3-3.14.0 | NOK | http://autobuild.buildroot.net/results/09d8a0c5d541aa5a164a14e047a3fa32d9144871/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/b7fc179fe65b6926324d1ba5eebffc52b0fe803f/
+      x86_64 |              host-nodejs-4.2.3 | NOK | http://autobuild.buildroot.net/results/bfd8d9e19ef97add085db7c20a73c697922386ea/
+      x86_64 |              host-nodejs-4.2.3 | NOK | http://autobuild.buildroot.net/results/ba1bf5cde4088c91c96d80671a077859a35ad2bc/
+      x86_64 |                    hostapd-2.5 | NOK | http://autobuild.buildroot.net/results/e2de1e88a91752cadfe128b2f937ae3f961b1309/
+      x86_64 |                     iperf3-3.1 | NOK | http://autobuild.buildroot.net/results/0a3d19d5dd8887f18f593da8996682a2b1f05393/
+         arm |                ipmitool-1.8.14 | NOK | http://autobuild.buildroot.net/results/24bc8d539a4da43fa02bdccaf5e75f501e6fd6c3/
+      x86_64 |                ipmitool-1.8.14 | NOK | http://autobuild.buildroot.net/results/5034755f6a7061a36e2aa57d8117557fb22b19fe/
+         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/8ff91ecf1e026366e2a2adbe7a4c9ce17f35d26c/
+       nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/81db38ed4986c934b755b4e62272923e8d08f0ad/
+       sparc |                  libdrm-2.4.65 | NOK | http://autobuild.buildroot.net/results/8a7ee09d45e59e35fe5e1e31a9eed4cfae708f26/
+        mips |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/46eb1934c39c8882c4d2cca397053c0abccb5639/
+        mips |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/e0b5ed4bc7671c14cdef11ea10d5ccbe644da1f9/
+    mips64el |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/0dee851bb4adc4340e74bbc0739f79c847f53594/
+    mips64el |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/521d2d635e66743603b4004d1ef9d775cd6706f1/
+        mips |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/ec0f7cde78d206be863821f17ae76f602daa02d5/
+        mips |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/ceba0c87e51a7f47767a7986cc914d6a2fe28fa2/
+     powerpc |                    libnss-3.21 | NOK | http://autobuild.buildroot.net/results/a33a737b3980a4a4f935a9635292f9225827259b/
+         arm |                  libraw-0.13.4 | NOK | http://autobuild.buildroot.net/results/8fba690ab3f6e0e22e738854026c320f9290a08a/
+     sparc64 |                 libvips-7.42.2 | NOK | http://autobuild.buildroot.net/results/71f5b456c1ad71614d24267d9cfa5d0f2775f796/
+     sparc64 |                 libvips-7.42.2 | NOK | http://autobuild.buildroot.net/results/23932cf433c38245d7082ec96b81be5a4e544e07/
+     sparc64 |                 libvips-7.42.2 | NOK | http://autobuild.buildroot.net/results/bf3fd117961e4c16a17d532479561d1c4f27afe1/
+     sparc64 |         ltp-testsuite-20150903 | NOK | http://autobuild.buildroot.net/results/125aa005eebdae33545a619656727ecb40673447/
+      x86_64 | make[1]: *** wait: No child... | NOK | http://autobuild.buildroot.net/results/670306ec5ece115c4fd2f480214917665d578886/
+        i686 | make[2]: *** wait: No child... | TIM | http://autobuild.buildroot.net/results/e5ea05174ba86a2e9fe4ef05d4e28ca4619a33dc/
+    mips64el |                  mesa3d-11.1.0 | NOK | http://autobuild.buildroot.net/results/60f63958b2310e00937c498ddf2a0295ff77683a/
+         arm |                  mesa3d-11.1.0 | NOK | http://autobuild.buildroot.net/results/399cca80ada5798decc87bff69a3acc432e8f3d0/
+      xtensa |                 minidlna-1.1.5 | NOK | http://autobuild.buildroot.net/results/90c9374ea0c79307b8279ce793c1ea4f4f66e4a6/
+     sparc64 |                 moarvm-2015.10 | NOK | http://autobuild.buildroot.net/results/34cfd819099257d07b5640a03a58ba97816153f4/
+       sparc |                 moarvm-2015.10 | NOK | http://autobuild.buildroot.net/results/8420c3dfc54b885751b9cf43c15a0b0996c01c38/
+       sparc |                    mpd-0.19.11 | NOK | http://autobuild.buildroot.net/results/468b6dddadea1b14c8cb75209739f4e36283d969/
+         sh4 |                    mpd-0.19.11 | NOK | http://autobuild.buildroot.net/results/bcd6fe39906f89300598fb71f64ee836969ae4e2/
+        i686 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/4fdd3f9f6a5fe8ecf8588e5caef6ee869b8e0f7f/
+     powerpc |             netsniff-ng-v0.6.0 | NOK | http://autobuild.buildroot.net/results/36d6106f4c68491d0f43ed0b25d86238bb8653f1/
+         arm |                      nut-2.7.2 | NOK | http://autobuild.buildroot.net/results/d8e769709681b1965f36eb5c27f71f3a1f5adcf1/
+     powerpc |                  openal-1.17.1 | NOK | http://autobuild.buildroot.net/results/346a325b9f2365c79f428e4d245e47cb897d1317/
+    mips64el |                  openal-1.17.1 | NOK | http://autobuild.buildroot.net/results/82de078236686d5a1434b746622a7287db1c0f3a/
+         sh4 |                  opencv3-3.0.0 | NOK | http://autobuild.buildroot.net/results/7a11daee3bdddb3fa0b3f49509bffea66a499fa0/
+         arm |                openldap-2.4.43 | NOK | http://autobuild.buildroot.net/results/f134d3ac243073ef89fe4372ef21722e4bfaf950/
+         arm |                 pinentry-0.9.4 | NOK | http://autobuild.buildroot.net/results/e5e8e3de6f5b8b7de79deb749e5bd9ad4930a1b6/
+     sparc64 |                       pv-1.5.7 | NOK | http://autobuild.buildroot.net/results/2d1f6711f31131d2352bbee673be83937fbbfe73/
+         arm |        python-webpy-legal-info | NOK | http://autobuild.buildroot.net/results/14f411ef29cbf0ba8cf4a4fed71556eacc96eb04/
+     powerpc |        python-webpy-legal-info | NOK | http://autobuild.buildroot.net/results/b3cb007bf68d2dbc02e887e4d1e3dd3024ef5921/
+      mipsel |        python-webpy-legal-info | NOK | http://autobuild.buildroot.net/results/604ea0ed365ef49a3884b6f1d025ff2000cb6829/
+         arm |        python-webpy-legal-info | NOK | http://autobuild.buildroot.net/results/d944f36220326510c15685efe19075e90e72a5c3/
+    mips64el |        python-webpy-legal-info | NOK | http://autobuild.buildroot.net/results/4871e9d87680a2cea70479396d6cabf277042b5b/
+       nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/c8b12c919ae818f1f0124ecc8ee99b46b8568287/
+       nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/74d6afce44abfa911807e5d6a3d0a54c2e21600f/
+        bfin |               rabbitmq-c-0.7.1 | NOK | http://autobuild.buildroot.net/results/fcafdb94fb5766481d2d49e20697be7ccbcd8dd0/
+        bfin |               rabbitmq-c-0.7.1 | NOK | http://autobuild.buildroot.net/results/bfac6b5652327857b9f0526106b3c673468e3154/
+     sparc64 |              stress-ng-0.04.16 | NOK | http://autobuild.buildroot.net/results/f05274e7989836450f5b1e785a7e894dbcda35bd/
+         arm | tstools-08f6be304040e7b8476... | NOK | http://autobuild.buildroot.net/results/a63afe98e880fdccbf6251bf533228fbd43718be/
+        i686 | v4l2grab-0abed72532bee02e54... | NOK | http://autobuild.buildroot.net/results/9df2c09963b97524621f8323b279b8a1672d4b6c/
+        i686 | v4l2grab-0abed72532bee02e54... | NOK | http://autobuild.buildroot.net/results/e2ab1698f18aecc3dac5dfcb947c157b784bc411/
+      x86_64 | v4l2grab-0abed72532bee02e54... | NOK | http://autobuild.buildroot.net/results/25b8ad5280f89b3e7d807104e43dbe2ed2c99b40/
+      x86_64 | v4l2grab-0abed72532bee02e54... | NOK | http://autobuild.buildroot.net/results/b1ca0c984ec51518a4090039a86a1814582c3c2b/
+      x86_64 | v4l2grab-0abed72532bee02e54... | NOK | http://autobuild.buildroot.net/results/befbfb29c33621272c5b3fcfed070bcdd5cb6e69/
+      xtensa |   xdriver_xf86-video-ati-7.5.0 | NOK | http://autobuild.buildroot.net/results/2cc5de0beb41bf6357fd2ee114249bb45c6f4011/
+
+
 -- 
-1.9.1
+http://autobuild.buildroot.net
