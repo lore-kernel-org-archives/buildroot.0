@@ -1,38 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 14:24:38 +0100
-Subject: [Buildroot] [PATCH v4 1/2] package/kodi-visualisation-goom: new
- package
-In-Reply-To: <1446239247-6651-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1446239247-6651-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151220142438.02fc1f98@free-electrons.com>
+From: Steve Morris <morris@buinea.com>
+Date: Sun, 20 Dec 2015 05:36:18 -0800
+Subject: [Buildroot] Trouble bringing up Raspberry Pi
+In-Reply-To: <20151220102721.16b3d82b@free-electrons.com>
+References: <20151219201126.GA9718@buinea.com>
+ <20151220102721.16b3d82b@free-electrons.com>
+Message-ID: <20151220133618.GA8906@buinea.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello Thomas,
 
-On Fri, 30 Oct 2015 22:07:26 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v4. bumped version, changed _LICENSE_FILES back to ./COPYING,
->     upstream clarified its license:
->     https://github.com/notspiff/visualization.goom/commit/f8dea024abe2385a91061a7e8e98bdeed3c8f74e
-> v3: added hash, sent patch upstream, updated _LICENSE_FILES (Thomas)
-> v2: rebased
+Thank you for the response. 
 
-Am I right that your upcoming Kodi 16 series will carry a patch adding
-this package, and ditto for the rsxs thing? 
+Yes, I followed those instructions at least a  couple of times for both
+volatile and persistent root.
 
-If that's the case, can you mark
-http://patchwork.ozlabs.org/patch/538512/ and
-http://patchwork.ozlabs.org/patch/538513/ as Superseded in patchwork?
+It hung during boot until I added the mdev selection.
 
-Thanks!
+I was able to get keyboard input working by loading the hid-microsoft
+module  ( microsoft USB keyboard ), but I was assuming a minimal system
+could read a generic USB keyboard.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I'll try it again from scratch and see if I have better results.
+
+Steve
+
+
+
+
+
+
+On Sun, Dec 20, 2015 at 10:27:21AM +0100, Thomas Petazzoni wrote:
+> Steve,
+> 
+> On Sat, 19 Dec 2015 12:11:26 -0800, Steve Morris wrote:
+> 
+> > Perhaps a working .config for the Pi B+ would set me in the right
+> > direction.
+> 
+> Did you try:
+> 
+> 	make raspberrypi_defconfig
+> 	make
+> 
+> And then read the instructions in board/raspberrypi/readme.txt ?
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
