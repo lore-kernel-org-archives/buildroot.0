@@ -1,27 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 13:54:38 +0100
-Subject: [Buildroot] [PATCH 1/1] directfb-examples: indentation cleanup
-In-Reply-To: <1450541254-26173-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1450541254-26173-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20151220135438.3278bad9@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 20 Dec 2015 13:54:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 2.8.4
+Message-ID: <1450616088-30716-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, 19 Dec 2015 17:07:34 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/directfb-examples/directfb-examples.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index d50c2cf..543d65d 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	18e22e3866d3b5fefcb1911c0d87ae8ababc30b7ea15901c1cf02885ccf6704a	ffmpeg-2.8.3.tar.xz
++sha256	8b6380a748fe2e0903d875b30aa613d1057824682d8d52f378d5aa5fc0dd951f	ffmpeg-2.8.4.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index dbf3a5b..0f8b840 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 2.8.3
++FFMPEG_VERSION = 2.8.4
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.4
