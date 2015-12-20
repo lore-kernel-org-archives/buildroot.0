@@ -1,42 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 15:18:26 +0100
-Subject: [Buildroot] [PATCH 1/1] Update Apache2 package
-In-Reply-To: <1445771573-14693-1-git-send-email-geoffrey.ragot@gmail.com>
-References: <1445771573-14693-1-git-send-email-geoffrey.ragot@gmail.com>
-Message-ID: <20151220151826.0f565d81@free-electrons.com>
+Date: Sun, 20 Dec 2015 15:23:07 +0100
+Subject: [Buildroot] [git commit] linux: only install the DTBs when not in
+	appended DTB mode
+Message-ID: <20151220142434.CC1287F975@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Geoffrey Ragot,
+commit: http://git.buildroot.net/buildroot/commit/?id=24745cb4be748df7fea28195236fe60bb14bef0c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 25 Oct 2015 12:12:53 +0100, Geoffrey Ragot wrote:
-> Currently, apache2 package does not allow
-> to use -DBIG_SECURITY_HOLE flag.
-> This flag allow httpd daemon to run as root.
-> It should be the responsability of the user
-> to take this decision.
-> This patch add an option to set this flag.
-> Previous behavior unchanged.
-> 
-> Signed-off-by: Geoffrey Ragot <geoffrey.ragot@gmail.com>
+When you're using the "appended DTB" mode, the Device Tree blob gets
+appended to your kernel image, so there is no point in installing both
+the DTB and the kernel image to the images or target directories,
+installing the kernel image itself is sufficient.
 
-Thanks for your patch, and sorry for the slow response. However, we
-believe that running a web server as root is really a bad idea. All our
-other web servers (lighttpd, nginx, etc.) already default in Buildroot
-to run as the www-data user. We don't think we should encourage users
-to run apache as root.
+Therefore, this commit disables the definition of LINUX_INSTALL_DTB
+when appended DTB is used.
 
-For this reason, I've marked your patch as "Rejected" in our patch
-tracking system. Of course, don't hesitate to get back to us if you
-disagree with a good and valid use case for running apache as root :)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/linux.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 5d6791a..536e931 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -257,6 +257,7 @@ ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
+ define LINUX_BUILD_DTB
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
+ endef
++ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),)
+ define LINUX_INSTALL_DTB
+ 	# dtbs moved from arch/<ARCH>/boot to arch/<ARCH>/boot/dts since 3.8-rc1
+ 	cp $(addprefix \
+@@ -264,8 +265,9 @@ define LINUX_INSTALL_DTB
+ 		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
+ 		$(1)
+ endef
+-endif
+-endif
++endif # BR2_LINUX_KERNEL_APPENDED_DTB
++endif # BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
++endif # BR2_LINUX_KERNEL_DTS_SUPPORT
+ 
+ ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+ # dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
