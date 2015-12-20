@@ -1,59 +1,112 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Dec 2015 16:43:55 +0100
-Subject: [Buildroot] [PATCH v2] bash: add default bash settings
-In-Reply-To: <20151220152739.2236b56e@free-electrons.com>
-References: <1444674610-8022-1-git-send-email-dvanarnem@cmlab.biz>
- <20151220152739.2236b56e@free-electrons.com>
-Message-ID: <20151220154355.GG3677@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 20 Dec 2015 16:49:02 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wireshark: Fix libpcap detection
+In-Reply-To: <20151220124957.GA3677@free.fr>
+References: <1449998185-15082-1-git-send-email-bernd.kuhls@t-online.de>
+ <566DDC20.5000104@mind.be> <20151220124957.GA3677@free.fr>
+Message-ID: <5676CDEE.10206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David, Thomas, All,
-
-On 2015-12-20 15:27 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 12 Oct 2015 12:30:10 -0600, David Van Arnem wrote:
-> > Settings that were bash-specific were previously removed from
-> > system/skeleton/etc/profile.  This measn that users using bash no longer
-> > get the "normal" bash prompt with [user at host dir]#/$, and only get #/$.
-> > This commit adds back the bash-specific settings, but adds them to the
-> > bash package so they are only used when bash is installed on the target
-> > system.
-> > 
-> > bash_profile.sh contains the variables, aliases, and color profile that
-> > were previously in system/skeleton/etc/profile.  The changes to bash.mk
-> > use a post-install hook to install bash_profile.sh to the target
-> > filesystem, where it will later be sourced by /etc/profile when a bash
-> > shell is started.
-> > ---
-> > Changes v1 -> v2
-> >     - only export PS1 variable for bash_profile.sh
-> > 
-> > Signed-off-by: David Van Arnem <dvanarnem@cmlab.biz>
+On 20-12-15 13:49, Yann E. MORIN wrote:
+> Arnout, All,
 > 
-> Having this or that shell prompt is really a user-specific
-> choice/configuration. You can already customize that very easily by
-> keeping this bash_profile.sh file in your rootfs overlay.
+> On 2015-12-13 21:59 +0100, Arnout Vandecappelle spake thusly:
+>> On 13-12-15 10:16, Bernd Kuhls wrote:
+>>> To reproduce the build error I had to install libpcap0.8-dev on my host
+>>> system, then wireshark configure picks up
+>>>
+>>> checking for pcap-config... /usr/bin/pcap-config
+>>
+>>  To fundamentally avoid this type of issue (we have a bunch of fixes like this),
+>> I think we should add an additional directory that is put in the _beginning_ of
+>> the path in TARGET_MAKE_ENV. This directory could then be populated through the
+>> _CONFIG_SCRIPTS mechanism.
+>>
+>>  What do the others think?
 > 
-> Therefore, I don't think it's really useful to have such customization
-> by default in Buildroot, and I prefer to not take this patch.
+> I'v estarted having a look at your suggestion. The basic idea is
+> relatively trivial to do, and I now have a FOO_CONFIG_DIR location
+> where I put those scripts.
+> 
+> However, I'm not facing a wall:
 
-I side with Thomas: this really is a user customisation, so belongs to a
-rootfs overlay (or a post-build script).
+ I guess you _are_ facing a wall :-)
 
-I'll mark this patch as rejected in Patchwork.
+> we use the same PATH for both the target
+> and the host packages, set in BR_PATH. But of course, we do not want the
+> host variants to find those foo-config scripts, since they are for the
+> target; we really want host packages to find the host variants, whether
+> the ones we install as part of our host packages, or the ones from the
+> system.
+> 
+> So, we'd need to split the PATH for host and target variants.
+> 
+> I wonder if that would be acceptable.
 
-Thanks! :-)
+ They used to be, but since they were identical, Samuel factored them away in
+b989976.
 
-Regards,
-Yann E. MORIN.
+> 
+>>  It will be a bit of work to revert all these fixes again :-)
+> 
+> Indeed. I've already tried to hunt down all our "fixes" for this, and I
+> have identified two cases:
+> 
+>   - packages already accept a FOO_CONFIG environement variable; for
+>     those we just need to unset it;
+> 
+>   - we patch the package to replace a hard-coded cal to foo-config with
+>     a construct like ${FOO_CONFIG:-foo-config}, for those, we need to
+>     alse unpatch the package.
+> 
+> My grep-fuu must still be asleep today, since I could only identify wine
+> in the second category, although I'm pretty sure we have at least a few
+> other packages that we do patch for that.
+
+git grep \\-config -- \*.patch
+
+ Lot's of false positives though.
+
+
+> The packages in the first category are reltively rare: only about 50 of
+> them I could identify, so it should be pretty easy to fix.
+
+ I was more concerned with the fixes like the one that was added by this patch:
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 534131b..2b06699 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -24,6 +24,7 @@ WIRESHARK_CONF_OPTS = \
+ 	--enable-static=no \
+ 	--with-libsmi=no \
+ 	--with-lua=no \
++	--with-pcap=$(STAGING_DIR)/usr \
+ 	--includedir=$(STAGING_DIR)/usr/include
+
+ Another grep which turns up lots of false positives:
+git grep '\--with-.*=\$(STAGING_DIR)'
+
+
+ Regards,
+ Arnout
+
+
+> 
+> I'll work on this a bit mor elater today...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
