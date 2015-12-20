@@ -1,306 +1,255 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 20 Dec 2015 10:40:33 -0300
-Subject: [Buildroot] [PATCH 1/4] libepoxy: move outside x11r7 scope
-Message-ID: <1450618836-3845-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 20 Dec 2015 10:40:34 -0300
+Subject: [Buildroot] [PATCH 2/4] libgtk3: bump to version 3.18.6
+In-Reply-To: <1450618836-3845-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450618836-3845-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1450618836-3845-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move it outside x11r7 scope since it can be built without it with a few
-patches (sent upstream via github pull request).
+Also mark wayland backend as good again since the bump fixes it.
 
-Motivation is simple, it's a dependency for newer gtk3 versions which
-can work with a wayland or broadway backend, and having a full x11 stack
-is pointless for that scenario.
+extract-strings is gone so drop 0005-do-not-build-extract-strings.patch
+0004-Fix-undefined-reference-to-get_xkb.patch is already upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                                  |   1 +
- .../0001-Use-target_os-instead-of-host_os.patch    |  39 ++++++++
- package/libepoxy/0002-Make-glx-conditional.patch   | 109 +++++++++++++++++++++
- .../0003-Forward-egl-cflags-into-epoxy.pc.patch    |  45 +++++++++
- package/{x11r7 => }/libepoxy/Config.in             |   1 -
- package/{x11r7 => }/libepoxy/libepoxy.mk           |   7 +-
- package/x11r7/Config.in                            |   1 -
- 7 files changed, 199 insertions(+), 4 deletions(-)
- create mode 100644 package/libepoxy/0001-Use-target_os-instead-of-host_os.patch
- create mode 100644 package/libepoxy/0002-Make-glx-conditional.patch
- create mode 100644 package/libepoxy/0003-Forward-egl-cflags-into-epoxy.pc.patch
- rename package/{x11r7 => }/libepoxy/Config.in (90%)
- rename package/{x11r7 => }/libepoxy/libepoxy.mk (72%)
+ .../0004-Fix-undefined-reference-to-get_xkb.patch  | 33 ---------------
+ .../0005-do-not-build-extract-strings.patch        | 47 ----------------------
+ package/libgtk3/Config.in                          | 25 +++++++-----
+ package/libgtk3/libgtk3.hash                       |  4 +-
+ package/libgtk3/libgtk3.mk                         | 15 ++-----
+ 5 files changed, 22 insertions(+), 102 deletions(-)
+ delete mode 100644 package/libgtk3/0004-Fix-undefined-reference-to-get_xkb.patch
+ delete mode 100644 package/libgtk3/0005-do-not-build-extract-strings.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 4d8c054..a0da1d0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -845,6 +845,7 @@ menu "Graphics"
- 	source "package/libdmtx/Config.in"
- 	source "package/libdri2/Config.in"
- 	source "package/libdrm/Config.in"
-+	source "package/libepoxy/Config.in"
- 	source "package/libexif/Config.in"
- 	source "package/libevas-generic-loaders/Config.in"
- 	source "package/libfm/Config.in"
-diff --git a/package/libepoxy/0001-Use-target_os-instead-of-host_os.patch b/package/libepoxy/0001-Use-target_os-instead-of-host_os.patch
-new file mode 100644
-index 0000000..7ea0740
---- /dev/null
-+++ b/package/libepoxy/0001-Use-target_os-instead-of-host_os.patch
-@@ -0,0 +1,39 @@
-+From 4ef87628ad9ff25115d2fdbe652ca39eeae824c5 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Wed, 28 Oct 2015 15:10:24 -0300
-+Subject: [PATCH 1/3] Use target_os instead of host_os
+diff --git a/package/libgtk3/0004-Fix-undefined-reference-to-get_xkb.patch b/package/libgtk3/0004-Fix-undefined-reference-to-get_xkb.patch
+deleted file mode 100644
+index c2f4b4f..0000000
+--- a/package/libgtk3/0004-Fix-undefined-reference-to-get_xkb.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From b64a04250b1f35923434158beb6ddb5726b41eac Mon Sep 17 00:00:00 2001
+-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-Date: Mon, 27 Oct 2014 10:34:38 +0100
+-Subject: [PATCH 1/1] Fix undefined reference to get_xkb()
+-
+-When configuring Gtk+ with --disable-xkb, the build fails because of an
+-undefined reference to get_xkb().
+-
+-This patch fixes this issue.
+-
+-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+----
+- gdk/x11/gdkkeys-x11.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/gdk/x11/gdkkeys-x11.c b/gdk/x11/gdkkeys-x11.c
+-index c45a971..6a5481b 100644
+---- a/gdk/x11/gdkkeys-x11.c
+-+++ b/gdk/x11/gdkkeys-x11.c
+-@@ -1498,8 +1498,10 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+-   int i, j;
+-   gboolean retval;
+- 
+-+#ifdef HAVE_XKB
+-   if (KEYMAP_USE_XKB (keymap))
+-     get_xkb (keymap_x11);
+-+#endif
+- 
+-   retval = TRUE;
+- 
+--- 
+-1.9.1
+-
+diff --git a/package/libgtk3/0005-do-not-build-extract-strings.patch b/package/libgtk3/0005-do-not-build-extract-strings.patch
+deleted file mode 100644
+index f1fbaaa..0000000
+--- a/package/libgtk3/0005-do-not-build-extract-strings.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-Do not build util/extract-strings
+-
+-Do not build util/extract-strings, as it will be built by host-libgtk3
+-and installed in $(HOST_DIR)/usr/bin (thus avoiding the -lint linking
+-issue with uClibc).
+-
+-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-
+-Index: gtk+-3.14.0/Makefile.am
+-===================================================================
+---- gtk+-3.14.0.orig/Makefile.am	2014-09-22 05:17:44.000000000 +0200
+-+++ gtk+-3.14.0/Makefile.am	2014-09-25 16:08:32.000000000 +0200
+-@@ -1,7 +1,7 @@
+- ## Makefile.am for GTK+
+- include $(top_srcdir)/Makefile.decl
+- 
+--SRC_SUBDIRS = util gdk gtk libgail-util modules demos tests testsuite examples
+-+SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite examples
+- SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
+- 
+- ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+-Index: gtk+-3.14.0/gtk/Makefile.am
+-===================================================================
+---- gtk+-3.14.0.orig/gtk/Makefile.am	2014-09-22 05:09:39.000000000 +0200
+-+++ gtk+-3.14.0/gtk/Makefile.am	2014-09-25 16:09:10.000000000 +0200
+-@@ -1330,7 +1330,7 @@
+- 
+- %.ui.h: %.ui
+- 	$(AM_V_GEN) mkdir -p $(dir $@) \
+--	&& $(top_builddir)/util/extract-strings$(EXEEXT) $< > $@
+-+	&& extract-strings$(EXEEXT) $< > $@
+- 
+- #
+- # rules to generate built sources
+-Index: gtk+-3.14.0/gtk/inspector/Makefile.am
+-===================================================================
+---- gtk+-3.14.0.orig/gtk/inspector/Makefile.am	2014-09-04 20:11:33.000000000 +0200
+-+++ gtk+-3.14.0/gtk/inspector/Makefile.am	2014-09-25 16:09:48.000000000 +0200
+-@@ -114,7 +114,7 @@
+- template_headers = $(templates:.ui=.ui.h)
+- 
+- %.ui.h : %.ui 
+--	$(AM_V_GEN) $(top_builddir)/util/extract-strings$(EXEEXT) $< > $@
+-+	$(AM_V_GEN) extract-strings$(EXEEXT) $< > $@
+- 
+- EXTRA_DIST += 				\
+- 	inspector.gresource.xml 	\
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index 02c7aaf..e29e7d0 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -1,3 +1,12 @@
++comment "libgtk3 needs a toolchain w/ wchar, threads, C++"
++	depends on BR2_USE_MMU
++	depends on BR2_ARCH_HAS_ATOMICS
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS
 +
-+We might be cross-compiling and hence host might be != target.
++comment "libgtk3 needs an OpenGL EGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: pull request https://github.com/anholt/libepoxy/pull/80
-+
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 2d67726..a271cc4 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -60,7 +60,7 @@ XORG_TESTSET_CFLAG(CWARNFLAGS, [-Wno-int-conversion])
-+ 
-+ has_znow=yes
-+ 
-+-case $host_os in
-++case $target_os in
-+     mingw*)
-+         build_egl=no
-+         build_glx=no
-+@@ -122,7 +122,7 @@ AM_CONDITIONAL(HAS_ZNOW, test x$has_znow = xyes)
-+ AC_CHECK_LIB([dl], [dlopen], [DLOPEN_LIBS="-ldl"])
-+ AC_SUBST([DLOPEN_LIBS])
-+ 
-+-case $host_os in
-++case $target_os in
-+     mingw*)
-+         # visibility flags aren't supported for windows DLLs, and the
-+         # compiler whines to tell you so, so don't set them up.
-+-- 
-+2.4.10
-+
-diff --git a/package/libepoxy/0002-Make-glx-conditional.patch b/package/libepoxy/0002-Make-glx-conditional.patch
-new file mode 100644
-index 0000000..18fe2d2
---- /dev/null
-+++ b/package/libepoxy/0002-Make-glx-conditional.patch
-@@ -0,0 +1,109 @@
-+From 54aa14558dc8493e730be209844868131f67c741 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Wed, 11 Nov 2015 14:40:18 -0300
-+Subject: [PATCH 2/3] Make glx conditional
-+
-+Since libgtk3 uses libepoxy and can be built for wayland alone without
-+X11 support it doesn't make sense to force OpenGL support and a full
-+X11 stack.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: pull request https://github.com/anholt/libepoxy/pull/80
-+
-+ configure.ac          | 7 +++++--
-+ src/Makefile.am       | 7 +++++++
-+ src/dispatch_common.c | 4 ++++
-+ src/dispatch_common.h | 4 ----
-+ 4 files changed, 16 insertions(+), 6 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index a271cc4..c7cffb2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -102,6 +102,11 @@ if test x$build_egl = xyes; then
-+     AC_DEFINE([BUILD_EGL], [1], [build EGL tests])
-+ fi
-+ 
-++PKG_CHECK_MODULES(GL, [gl], [gl=yes], [gl=no])
-++if test x$gl = xno; then
-++    build_glx=no
-++fi
-++
-+ AM_CONDITIONAL(BUILD_GLX, test x$build_glx = xyes)
-+ if test x$build_glx = xyes; then
-+     AC_DEFINE([BUILD_GLX], [1], [build GLX tests])
-+@@ -151,8 +156,6 @@ fi
-+ 
-+ AM_CONDITIONAL(HAVE_X11, test x$x11 = xyes)
-+ 
-+-PKG_CHECK_MODULES(GL, [gl], [gl=yes], [gl=no])
-+-
-+ AC_CONFIG_FILES([
-+                 epoxy.pc
-+                 Makefile
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 49c3507..6c0a46b 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -19,7 +19,14 @@
-+ # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-+ # IN THE SOFTWARE.
-+ 
-++if BUILD_GLX
-++PLATFORM_HAS_GLX=1
-++else
-++PLATFORM_HAS_GLX=0
-++endif
-++
-+ AM_CPPFLAGS = \
-++	-DPLATFORM_HAS_GLX=$(PLATFORM_HAS_GLX) \
-+ 	-I$(top_srcdir)/include \
-+ 	-I$(top_builddir)/include \
-+ 	$()
-+diff --git a/src/dispatch_common.c b/src/dispatch_common.c
-+index 013027f..761cee7 100644
-+--- a/src/dispatch_common.c
-++++ b/src/dispatch_common.c
-+@@ -657,7 +657,11 @@ epoxy_get_proc_address(const char *name)
-+     return epoxy_gl_dlsym(name);
-+ #else
-+     if (epoxy_current_context_is_glx()) {
-++#if PLATFORM_HAS_GLX
-+         return glXGetProcAddressARB((const GLubyte *)name);
-++#else
-++	return false;
-++#endif
-+     } else {
-+ #if PLATFORM_HAS_EGL
-+         GLenum egl_api = epoxy_egl_get_current_gl_context_api();
-+diff --git a/src/dispatch_common.h b/src/dispatch_common.h
-+index 676a4d5..01886a3 100644
-+--- a/src/dispatch_common.h
-++++ b/src/dispatch_common.h
-+@@ -25,22 +25,18 @@
-+ 
-+ #ifdef _WIN32
-+ #define PLATFORM_HAS_EGL 0
-+-#define PLATFORM_HAS_GLX 0
-+ #define PLATFORM_HAS_WGL 1
-+ #define EPOXY_IMPORTEXPORT __declspec(dllexport)
-+ #elif defined(__APPLE__)
-+ #define PLATFORM_HAS_EGL 0
-+-#define PLATFORM_HAS_GLX 0
-+ #define PLATFORM_HAS_WGL 0
-+ #define EPOXY_IMPORTEXPORT
-+ #elif defined(ANDROID)
-+ #define PLATFORM_HAS_EGL 1
-+-#define PLATFORM_HAS_GLX 0
-+ #define PLATFORM_HAS_WGL 0
-+ #define EPOXY_IMPORTEXPORT
-+ #else
-+ #define PLATFORM_HAS_EGL 1
-+-#define PLATFORM_HAS_GLX 1
-+ #define PLATFORM_HAS_WGL 0
-+ #define EPOXY_IMPORTEXPORT
-+ #endif
-+-- 
-+2.4.10
-+
-diff --git a/package/libepoxy/0003-Forward-egl-cflags-into-epoxy.pc.patch b/package/libepoxy/0003-Forward-egl-cflags-into-epoxy.pc.patch
-new file mode 100644
-index 0000000..b402649
---- /dev/null
-+++ b/package/libepoxy/0003-Forward-egl-cflags-into-epoxy.pc.patch
-@@ -0,0 +1,45 @@
-+From 68e5f1574758240aedfe8653d7aaae62cdb08bf5 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Sun, 20 Dec 2015 10:07:06 -0300
-+Subject: [PATCH 3/3] Forward egl cflags into epoxy.pc
-+
-+When building mesa egl without x11 and gles2 the headers need a
-+MESA_EGL_NO_X11_HEADERS define, so put them in epoxy.pc as well since
-+otherwise builds will fail.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: pull request https://github.com/anholt/libepoxy/pull/80
-+
-+ configure.ac | 2 ++
-+ epoxy.pc.in  | 2 +-
-+ 2 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index c7cffb2..7b599de 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -102,6 +102,8 @@ if test x$build_egl = xyes; then
-+     AC_DEFINE([BUILD_EGL], [1], [build EGL tests])
-+ fi
-+ 
-++AC_SUBST(EGL_CFLAGS)
-++
-+ PKG_CHECK_MODULES(GL, [gl], [gl=yes], [gl=no])
-+ if test x$gl = xno; then
-+     build_glx=no
-+diff --git a/epoxy.pc.in b/epoxy.pc.in
-+index 8c85a33..f377da5 100644
-+--- a/epoxy.pc.in
-++++ b/epoxy.pc.in
-+@@ -6,6 +6,6 @@ includedir=@includedir@
-+ Name: epoxy
-+ Description: epoxy GL dispatch Library
-+ Version: @PACKAGE_VERSION@
-+-Cflags: -I${includedir}
-++Cflags: -I${includedir} @EGL_CFLAGS@
-+ Libs: -L${libdir} -lepoxy
-+ Libs.private: @DLOPEN_LIBS@
-+-- 
-+2.4.10
-+
-diff --git a/package/x11r7/libepoxy/Config.in b/package/libepoxy/Config.in
-similarity index 90%
-rename from package/x11r7/libepoxy/Config.in
-rename to package/libepoxy/Config.in
-index 5628bf7..21607c2 100644
---- a/package/x11r7/libepoxy/Config.in
-+++ b/package/libepoxy/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBEPOXY
- 	bool "epoxy"
--	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
- 	depends on BR2_PACKAGE_HAS_LIBEGL
+ config BR2_PACKAGE_LIBGTK3
+ 	bool "libgtk3"
+ 	select BR2_PACKAGE_ATK
+@@ -5,10 +14,11 @@ config BR2_PACKAGE_LIBGTK3
+ 	select BR2_PACKAGE_CAIRO_PS
+ 	select BR2_PACKAGE_CAIRO_PDF
+ 	select BR2_PACKAGE_CAIRO_SVG
++	select BR2_PACKAGE_LIBEPOXY
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PANGO
+ 	select BR2_PACKAGE_GDK_PIXBUF
+-	# atleast 1 backend must be enabled
++	# at least one backend must be enabled
+ 	select BR2_PACKAGE_LIBGTK3_BROADWAY if \
+ 		!(BR2_PACKAGE_LIBGTK3_X11 || BR2_PACKAGE_LIBGTK3_WAYLAND)
+ 	depends on BR2_USE_WCHAR # glib2
+@@ -16,6 +26,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
  	help
-diff --git a/package/x11r7/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
-similarity index 72%
-rename from package/x11r7/libepoxy/libepoxy.mk
-rename to package/libepoxy/libepoxy.mk
-index 12ddd03..75ac395 100644
---- a/package/x11r7/libepoxy/libepoxy.mk
-+++ b/package/libepoxy/libepoxy.mk
-@@ -8,9 +8,12 @@ LIBEPOXY_VERSION = v1.3.1
- LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
- LIBEPOXY_INSTALL_STAGING = YES
- LIBEPOXY_AUTORECONF = YES
--LIBEPOXY_DEPENDENCIES = xlib_libX11 xutil_util-macros libegl \
--	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) host-pkgconf
-+LIBEPOXY_DEPENDENCIES = libegl xutil_util-macros
- LIBEPOXY_LICENSE = MIT
- LIBEPOXY_LICENSE_FILES = COPYING
+ 	  The GTK+ version 3 graphical user interface library
  
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_XLIB_LIBX11),yy)
-+LIBEPOXY_DEPENDENCIES += libgl xlib_libX11
-+endif
+@@ -25,10 +36,14 @@ if BR2_PACKAGE_LIBGTK3
+ 
+ comment "GDK backend"
+ 
++comment "X11 backend needs an OpenGL provider"
++	depends on !BR2_PACKAGE_HAS_LIBGL
 +
+ config BR2_PACKAGE_LIBGTK3_X11
+ 	bool "GDK X11 backend"
+ 	default y
+ 	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+@@ -40,8 +55,6 @@ config BR2_PACKAGE_LIBGTK3_X11
+ config BR2_PACKAGE_LIBGTK3_WAYLAND
+ 	bool "GDK Wayland backend"
+ 	default y
+-	# Needs a libgtk3 bump to match API level
+-	depends on BROKEN
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+ 	help
+@@ -81,9 +94,3 @@ config BR2_PACKAGE_LIBGTK3_TESTS
+ 	  allows to install them to the target.
+ 
+ endif
+-
+-comment "libgtk3 needs a toolchain w/ wchar, threads, C++"
+-	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
+-	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index b310aec..42bddb2 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.14/gtk+-3.14.15.sha256sum
+-sha256	3ac87659112ced9e5ee5bd55d055faa881aafd040f26ca40b0d8ba0fa6509c83	gtk+-3.14.15.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.18/gtk+-3.18.6.sha256sum
++sha256	78cabf0fd5a662f8723f62d5ac633072c76c557c1d700454c9c3deaa37e441ef	gtk+-3.18.6.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index d268b56..be10ca1 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGTK3_VERSION_MAJOR = 3.14
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).15
++LIBGTK3_VERSION_MAJOR = 3.18
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).6
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
+@@ -24,7 +24,7 @@ LIBGTK3_CONF_OPTS = \
+ 	--enable-gtk2-dependency \
+ 	--disable-introspection
+ 
+-LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pixbuf
++LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pixbuf libepoxy
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ LIBGTK3_DEPENDENCIES += fontconfig xlib_libX11 xlib_libXext xlib_libXrender xlib_libXi
+@@ -136,8 +136,7 @@ LIBGTK3_POST_INSTALL_TARGET_HOOKS += LIBGTK3_COMPILE_GLIB_SCHEMAS
+ # for both native and target builds).
+ #
+ # But no native version of libintl is available (the functions are
+-# provided by glibc). So gtk-update-icon-cache will not build, and
+-# extract-strings neither.
++# provided by glibc). So gtk-update-icon-cache will not build.
+ #
+ # As a workaround, we build gtk-update-icon-cache on our own, set
+ # --enable-gtk2-dependency=yes and force './configure' to use our version.
+@@ -162,17 +161,11 @@ define HOST_LIBGTK3_BUILD_CMDS
+ 		$(@D)/gtk/updateiconcache.c \
+ 		$(HOST_LIBGTK3_CFLAGS) \
+ 		-o $(@D)/gtk/gtk-update-icon-cache
+-	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
+-		$(@D)/util/extract-strings.c \
+-		$(HOST_LIBGTK3_CFLAGS) \
+-		-o $(@D)/util/extract-strings
+ endef
+ 
+ define HOST_LIBGTK3_INSTALL_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/gtk/gtk-update-icon-cache \
+ 		$(HOST_DIR)/usr/bin/gtk-update-icon-cache
+-	$(INSTALL) -D -m 0755 $(@D)/util/extract-strings \
+-		$(HOST_DIR)/usr/bin/extract-strings
+ endef
+ 
  $(eval $(autotools-package))
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 381157f..f4d0c80 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -15,7 +15,6 @@ if BR2_PACKAGE_XORG7
- 	endmenu
- 	menu "X11R7 Libraries"
- 		source package/x11r7/libxcb/Config.in
--		source package/x11r7/libepoxy/Config.in
- 		source package/x11r7/xcb-util/Config.in
- 		source package/x11r7/xcb-util-cursor/Config.in
- 		source package/x11r7/xcb-util-image/Config.in
 -- 
 2.4.10
