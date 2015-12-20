@@ -1,32 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 13:56:14 +0100
-Subject: [Buildroot] [git commit] package/libdrm: Remove i386/x86_64
-	dependency from Nouveau driver
-Message-ID: <20151220125857.1686181F9A@busybox.osuosl.org>
+Date: Sun, 20 Dec 2015 13:58:58 +0100
+Subject: [Buildroot] [PATCH] package/nut: disable libltdl (and
+ nut-scanner) for static-only
+In-Reply-To: <1450548656-16506-1-git-send-email-yann.morin.1998@free.fr>
+References: <1450548656-16506-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20151220135858.56065e2f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a5518a9135903f86219bb1b23166a001f62fa07
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libdrm/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+On Sat, 19 Dec 2015 19:10:56 +0100, Yann E. MORIN wrote:
+> nut-scanner needs libltdl, a wrapper around dlopen/dlsym. This does not
+> really make sense on a static-only build.
+> 
+> Disable use of libltdl in static-only builds; this disble nut-scanner.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/d8e/d8e769709681b1965f36eb5c27f71f3a1f5adcf1/
+>     http://autobuild.buildroot.org/results/6e4/6e403642069093389acbeeccd7030b76d4ab68be/
+>     http://autobuild.buildroot.org/results/fa4/fa4c647ce58b91b863d8de5bf9d44b2060a1cf1c/
+>     and so many others...
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/nut/nut.mk | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index cf1c13b..445a85b 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -36,7 +36,6 @@ config BR2_PACKAGE_LIBDRM_AMDGPU
- 
- config BR2_PACKAGE_LIBDRM_NOUVEAU
- 	bool "nouveau"
--	depends on BR2_i386 || BR2_x86_64
- 	help
- 	  Install NVIDIA graphics driver.
- 
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
