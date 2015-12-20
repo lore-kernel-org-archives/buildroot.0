@@ -1,108 +1,105 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Dec 2015 15:51:53 +0100
-Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
-In-Reply-To: <j6oikcxh6u.ln2@ID-313208.user.individual.net>
-References: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
- <vjiikcxh6u.ln2@ID-313208.user.individual.net>
- <20151220135412.652a8344@free-electrons.com>
- <20151220130054.GC3677@free.fr>
- <20151220141613.22b22bdc@free-electrons.com>
- <j6oikcxh6u.ln2@ID-313208.user.individual.net>
-Message-ID: <20151220145152.GE3677@free.fr>
+Date: Sun, 20 Dec 2015 16:28:54 +0100
+Subject: [Buildroot] [PATCH v3] support/misc: Adding Vagrant file for
+ provisioning
+In-Reply-To: <1447887095-16773-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1447887095-16773-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20151220152854.GF3677@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Angelo, All,
 
-On 2015-12-20 14:48 +0100, Bernd Kuhls spake thusly:
-> Am Sun, 20 Dec 2015 14:16:13 +0100 schrieb Thomas Petazzoni:
+On 2015-11-18 23:51 +0100, Angelo Compagnucci spake thusly:
+> This patch adds a Vagrant file to buildroot. With this file
+> you can provision a complete buildroot developing environment
+> in minutes on all major platforms (Linux/Mac/Windows).
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 [--SNIP--]
-> > I think Bernd's intention was just to announce that he was going to post
-> > all the patches as soon as Kodi 16 was out, but he wants to wait for
-> > that release to happen before posting 100 patches on the list.
-> 
-> Hi Thomas,
-> 
-> yes, you got my intention right, and, btw, I just followed your advice ;) 
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/120960
+> diff --git a/docs/manual/getting.txt b/docs/manual/getting.txt
+> index 3437f93..84e1f54 100644
+> --- a/docs/manual/getting.txt
+> +++ b/docs/manual/getting.txt
+> @@ -10,6 +10,20 @@ November. Release numbers are in the format YYYY.MM, so for example
+>  
+>  Release tarballs are available at http://buildroot.org/downloads/[].
+>  
+> +An official https://www.vagrantup.com/[Vagrantfile] is distributed within buildroot for your needs.
+> +If you want to setup an isolated buildroot environment on Linux or
+> +Mac Os X, paste this line onto your terminal:
+> +
+> +--------------------
+> +curl -O http://git.buildroot.net/buildroot/plain/support/misc/Vagrantfile; vagrant up
+> +--------------------
+> +
+> +If you are on Windows, paste this into your powershell:
+> +
+> +--------------------
+> +(new-object System.Net.WebClient).DownloadFile("http://git.buildroot.net/buildroot/plain/support/misc/Vagrantfile","Vagrantfile"); vagrant up
+> +--------------------
+> +
+>  If you want to follow development, you can use the daily snapshots or
+>  make a clone of the Git repository. Refer to the
+>  http://buildroot.org/download[Download page] of the Buildroot website
+> diff --git a/docs/website/download.html b/docs/website/download.html
+> index a6c2ac0..00e24bc 100644
+> --- a/docs/website/download.html
+> +++ b/docs/website/download.html
 
-Ah, OK! :-)
+Please keep lines <= 80 chars.
 
-> @Yann: Thomas' comments were about license files and one missing SELECT 
-> in Config.in and the format of a patch file, no big stuff.
+Also, I would prefer we do not suggest that this is the recommended way
+to run Buildroot. The way you state it: "an official vagrantfile...",
+"setup an isolated buildroot environment", makes it sound like that's
+highly suggested people use that. I would really like that we explicitly
+state that this is provided for convenience to quickly set up a working
+environment, but that it is in no way the official way of working (much
+less the only official way).
 
-Good!
+Also, I prefer that there is only one command per line:
 
-> Just to get things right, these patches should be squashed into one patch 
-> bumping all audio en-/decoder addons?
-> 
-> * 13b3dfb - package/kodi-audioencoder-wav: bump version 
-> * cef928f - package/kodi-audioencoder-vorbis: bump version 
-> * f5a66b6 - package/kodi-audioencoder-lame: bump version 
-> * 603a6b6 - package/kodi-audioencoder-flac: bump version 
-> * fd66f18 - package/kodi-audiodecoder-vgmstream: bump version 
-> * 16a8773 - package/kodi-audiodecoder-timidity: bump version 
-> * 91d7adf - package/kodi-audiodecoder-stsound: bump version 
-> * 666a842 - package/kodi-audiodecoder-snesapu: bump version 
-> * 7abfa7e - package/kodi-audiodecoder-sidplay: bump version 
-> * 9476aa9 - package/kodi-audiodecoder-nosefart: bump version 
-> * 6a13973 - package/kodi-audiodecoder-modplug: bump version 
+    wget blablabla
+    vagrant up
 
-As long as it is only a mechanical bump, without change to the .mk
-files, and with n/removed patches (i.e. only the _VERSION variables are
-changed), then yes, a single commit.
+Furthermore, I'm not too happy with those download-and-execute stuff.
+Why don't we just tell the user to git-clone or download the tarball,
+and tell them the Vagrant file is in support/misc/Vagrantfile and let
+them deal with that on their own. If they want to use Vagrant, they sure
+know how to do it, right?
 
-> These should be squashed into one patch to bump all pvr addons:
-> * 909e692 - package/kodi-pvr-wmc: bump version 
-> * 19e326d - package/kodi-pvr-vuplus: bump version 
-> * f8db75b - package/kodi-pvr-vdr-vnsi: bump version 
-> * 7e50b7d - package/kodi-pvr-vbox: bump version 
-> * ebeea23 - package/kodi-pvr-stalker: bump version 
-> * a988af9 - package/kodi-pvr-pctv: bump version 
-> * 35557cb - package/kodi-pvr-njoy: bump version 
-> * 24b0af6 - package/kodi-pvr-nextpvr: bump version 
-> * 59045cb - package/kodi-pvr-mythtv: bump version 
-> * dd75d83 - package/kodi-pvr-mediaportal-tvserver: bump version 
-> * bc96596 - package/kodi-pvr-iptvsimple: bump version 
-> * 8383797 - package/kodi-pvr-hts: bump version 
-> * b0a5951 - package/kodi-pvr-filmon: bump version 
-> * 5d8466f - package/kodi-pvr-dvbviewer: bump version 
-> * c1d70ad - package/kodi-pvr-dvblink: bump version 
-> * 21337f8 - package/kodi-pvr-argustv: bump version 
+Finally, I'd just move that out of "Getting Buildroot" into the "system
+requirements" chapter, after the "amdatory packages" and before the
+"optional packages" chapters.
 
-Yup. And possibly kodi-addon-xvdr too, no?
+What I suggest we add is just something like:
 
-> and one patch for visualisation bumps:
-> * 304d2be - package/kodi-visualisation-waveform: bump version 
-> * d608df6 - package/kodi-visualisation-spectrum: bump version 
-> * 10aaad1 - package/kodi-visualisation-shadertoy: bump version 
+    ---8<--- docs/manual/prerequisite.txt
+    For your convenience, so you can quickly get up and running with
+    Buildroot, we provide a https://www.vagrantup.com/[Vagrantfile] to
+    quickly set up a minimal working environment for testing purproses.
+    The Vagrant file is located in `support/misc/Vagrantfile` in the
+    Buildroot source tree.
 
-Yup.
+    .Note
+    This Vagrant file is in not the official way of using Buildroot,
+    and is really just provided for convenience to quickly get started.
+    You are free to use a classic Linux distribution to run Buildroot,
+    and in fact most Buidlroot developpers are doing so and are not
+    using that Vagrant file.
+    ---8<---
 
-> yet another patch for screensaver bumps:
-> * 3f26e24 - package/kodi-screensaver-stars: bump version 
-> * aa76a13 - package/kodi-screensaver-pyro: bump version 
-> * ccae71c - package/kodi-screensaver-pingpong: bump version 
-> * 8f8c82a - package/kodi-screensaver-greynetic: bump version 
-> * 0d4e7f6 - package/kodi-screensaver-biogenesis: bump version 
-> * 658b5eb - package/kodi-screensaver-asteroids: bump version 
+This part is not required: it's already in the manual.
 
-Yup.
-
-> What about the hash files to be added with the final patch series? Should 
-> they be included in the combined patches or shall I make seperate patches 
-> for each hash file added? If this is the case then I can keep the patch 
-> series as is because I will then include each hash file with the 
-> corresponding version bump patch. I kept the hash files out at this stage 
-> because the Kodi development is still in progress with on-going updates 
-> in the PVR area.
-
-The hashes you include in the same patch as the bumps.
-
-Thanks! :-)
+<rant of an old grey beard>
+I'm not too fond of all those "tools-of-the-new-millenium". After
+Vagrant, are we supposed to add a Puppet or a Chef configuration? Both?
+Then what? Docker and/or Rocket files? Oh, may I add a recipe for
+creating a chroot? ;-)
+</rant>
 
 Regards,
 Yann E. MORIN.
