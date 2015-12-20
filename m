@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 13:47:16 +0100
-Subject: [Buildroot] [git commit] toolchain-external: CodeSourcery x86:
-	support only one version
-Message-ID: <20151220125132.672BA7FC6B@busybox.osuosl.org>
+Date: Sun, 20 Dec 2015 13:47:31 +0100
+Subject: [Buildroot] [git commit] toolchain-external: ADI Blackfin: support
+	only one version
+Message-ID: <20151220125132.710BB81ED5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f4da09eafd9ff60c3c13716bc7d5265efbcc926c
+commit: http://git.buildroot.net/buildroot/commit/?id=063593b77217630ff11389cfd512fbd6f7bb5c6b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 See the conclusion about external toolchains during the Buildroot
@@ -19,131 +19,163 @@ Kconfig symbol should not encode the version (avoid legacy handling)"
 
 [1] http://elinux.org/index.php?title=Buildroot:DeveloperDaysELCE2015#Report
 
+Remove old ADI toolchain handling in glog, openpgm and zeromq.
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 63 +---------------------
- .../toolchain-external/toolchain-external.hash     |  2 -
- toolchain/toolchain-external/toolchain-external.mk |  8 +--
- 3 files changed, 3 insertions(+), 70 deletions(-)
+ package/glog/Config.in                             |  8 +++----
+ package/openpgm/Config.in                          |  5 ++---
+ package/zeromq/Config.in                           |  3 +--
+ toolchain/toolchain-external/Config.in             | 25 +++-------------------
+ .../toolchain-external/toolchain-external.hash     |  4 ----
+ toolchain/toolchain-external/toolchain-external.mk | 10 ++-------
+ 6 files changed, 11 insertions(+), 44 deletions(-)
 
+diff --git a/package/glog/Config.in b/package/glog/Config.in
+index 1c48ed9..f708758 100644
+--- a/package/glog/Config.in
++++ b/package/glog/Config.in
+@@ -3,16 +3,14 @@ config BR2_PACKAGE_GLOG
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+-	# build issues with these external toolchains
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
++	# build issues with this external toolchain
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	help
+ 	  C++ implementation of the Google logging module
+ 
+ 	  https://github.com/google/glog
+ 
+ comment "glog needs a toolchain w/ C++, threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_STATIC_LIBS
+diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
+index d541d13..94816d8 100644
+--- a/package/openpgm/Config.in
++++ b/package/openpgm/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_OPENPGM
+ 	bool "openpgm"
+-	# The following toolchains lack required compiler intrinsics
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
++	# This toolchain lack required compiler intrinsics
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	help
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+index aa5c1a8..b75ed3a 100644
+--- a/package/zeromq/Config.in
++++ b/package/zeromq/Config.in
+@@ -29,8 +29,7 @@ if BR2_PACKAGE_ZEROMQ
+ 
+ config BR2_PACKAGE_ZEROMQ_PGM
+ 	bool "PGM/EPGM support"
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # openpgm
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # openpgm
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX # openpgm
+ 	select BR2_PACKAGE_OPENPGM
+ 	help
+ 	  Add support for Pragmatic General Multicast protocol (RFC 3208)
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 120fa9a..7c738cf 100644
+index 7c738cf..fa4b08b 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -352,7 +352,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	  No other architecture variants are supported since glibc
- 	  is optimized for one of these two baselines.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
- 	bool "Sourcery CodeBench x86/x86_64 2012.09"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -381,63 +381,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+@@ -381,7 +381,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
  	  Other architecture variants (beyond Pentium-4/Xeon) are
  	  supported as well, but glibc is not optimised for it.
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
--	bool "Sourcery CodeBench x86/x86_64 2012.03"
--	depends on BR2_i386 || BR2_x86_64
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on !BR2_STATIC_LIBS
--	depends on !BR2_x86_jaguar
--	depends on !BR2_x86_steamroller
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
--	help
--	  Sourcery CodeBench toolchain for the x86/x86_64
--	  architectures, from Mentor Graphics. It uses gcc 4.6.3,
--	  binutils 2.21.53, glibc 2.15, gdb 7.2.50 and kernel headers
--	  3.2.10. It has support for the following variants:
--	    - Intel Pentium 4, glibc, 32 bits
--	      Default for x86, nothing special to do.
--	    - Intel Atom, glibc, 32 bits
--	      Select an Atom core
--	    - Intel Xeon, glibc, 64 bits
--	      Default for x86_64, nothing special to do.
--	    - Intel Core 2, glibc, 64 bits
--	      Select a Core 2 core
--	  Other architecture variants (beyond Pentium-4/Xeon) are
--	  supported as well, but glibc is not optimised for it.
--
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
--	bool "Sourcery CodeBench x86/x86_64 2011.09"
--	depends on BR2_i386 || BR2_x86_64
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on !BR2_STATIC_LIBS
--	depends on !BR2_x86_jaguar
--	depends on !BR2_x86_steamroller
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
--	help
--	  Sourcery CodeBench toolchain for the x86/x86_64
--	  architectures, from Mentor Graphics. It uses gcc 4.6.1,
--	  binutils 2.21.53, glibc 2.13, gdb 7.2.50 and kernel headers
--	  3.0.1. It has support for the following variants:
--	    - Intel Pentium 4, glibc, 32 bits
--	      Default for x86, nothing special to do.
--	    - Intel Atom, glibc, 32 bits
--	      Select an Atom core
--	    - Intel Xeon, glibc, 64 bits
--	      Default for x86_64, nothing special to do.
--	    - Intel Core 2, glibc, 64 bits
--	      Select a Core 2 core
--	  Other architecture variants (beyond Pentium-4/Xeon) are
--	  supported as well, but glibc is not optimised for it.
--
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+-config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
  	bool "Blackfin.uclinux.org 2014R1"
  	depends on BR2_bfin
-@@ -625,9 +568,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
- 	default "powerpc-mentor-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -398,23 +398,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+-	bool "Blackfin.uclinux.org 2013R1"
+-	depends on BR2_bfin
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_USE_WCHAR
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+-	help
+-	  Toolchain for the Blackfin architecture, from
+-	  http://blackfin.uclinux.org.
+-
+ # See note about Linar ARM/ARMEB toolchains, above.
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	bool "Linaro AArch64 14.09"
+@@ -570,10 +553,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
  	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
--	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
--	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
--	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
-+	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
  	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
+-	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
+-	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
+-	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 && BR2_BINFMT_FLAT
+-	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 && BR2_BINFMT_FDPIC
++	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX && BR2_BINFMT_FLAT
++	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX && BR2_BINFMT_FDPIC
+ 	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm
+ 	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
+ 	default "i486-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_i386
 diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index d5f6957..91dc27c 100644
+index 91dc27c..35ee85c 100644
 --- a/toolchain/toolchain-external/toolchain-external.hash
 +++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -23,8 +23,6 @@ sha256 d6c94587d546197836e7e1a6909f6aabfa5879e91f501ab03088a6887cc242fc  mentor-
- # SuperH
- sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
- # x86
--sha256 5f308a3fe0752f181fd0d33a70a17efb8300d0e34a94ed18a1a0304dc18e150e  ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
--sha256 6ac2f0d9ec56242ecbe4315533f3e00a675909850a41bdafc052fbfe27ece300  ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
- sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
- # AMD64
- sha256 cb4d071db8aefb8005fe72824b96568d93a50f5acd85bacf505a34fe2f265f70  amd-2015.11-36-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -6,11 +6,7 @@ sha256 e653102803d0fadc0a83286400c03bc7932ab081d3f8fc8917c34e76468315a2  mips-20
+ # Next hashes are all locally computed
+ 
+ # Blackfin toolchains from Analog Devices
+-sha256 fba010929c7355a0286fc4b1817d6065ee21380d3c2993383d3778f0b998ca9d  blackfin-toolchain-2012R2-RC2.i386.tar.bz2
+-sha256 90284fe72125f381817da505b6f91f2b0c86a763ffe2c722c7d6b3ae60b25010  blackfin-toolchain-2013R1-RC1.i386.tar.bz2
+ sha256 e424e90d8481d942a40266d78d1488726561fed3ec38403094f98055e61889d0  blackfin-toolchain-2014R1-RC2.i386.tar.bz2
+-sha256 436ca3d901b152094cd6be2b6e274c59643387f46bb0563db1adcab1202f1455  blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
+-sha256 4d66a3390ae9e1c4b9aad214757791a5e0c45ef2bb31977fa6d3a80d96290237  blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
+ sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
+ 
+ # Mentor's Sourcery CodeBench Lite toolchains
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 3856e7c..497577f 100644
+index 497577f..f408bdb 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -323,13 +323,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-l
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH),y)
- TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109),y)
--TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86),y)
- TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+@@ -142,7 +142,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+ TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+ endif
+ else
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX),y)
+ TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
+ else
+ TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
+@@ -329,13 +329,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/x86_64-amd-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = amd-2015.11-36-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2013R1/2013R1-RC1/i386
+-TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2013R1-RC1.i386.tar.bz2
+-TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
+-TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
+-TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1),y)
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1-RC2/i386
+ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
