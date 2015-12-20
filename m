@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 20 Dec 2015 17:23:31 -0300
-Subject: [Buildroot] [PATCH] gnupg: bump to version 1.4.20
-Message-ID: <1450643011-4976-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 20 Dec 2015 17:30:09 -0300
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.48
+Message-ID: <1450643409-22476-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gnupg/gnupg.hash | 4 ++--
- package/gnupg/gnupg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnupg/gnupg.hash b/package/gnupg/gnupg.hash
-index ba38d38..f872d24 100644
---- a/package/gnupg/gnupg.hash
-+++ b/package/gnupg/gnupg.hash
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index d4a68cd..f0f1501 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
 @@ -1,2 +1,2 @@
--# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000363.html
--sha1	5503f7faa0a0e84450838706a67621546241ca50	gnupg-1.4.19.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2015q4/000382.html
-+sha1	cbc9d960e3d8488c32675019a79fbfbf8680387e	gnupg-1.4.20.tar.bz2
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index f358fa3..8893a1c 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
+ # Locally calculated after checking pgp signature
+-sha256	96bdab4352a09fd3952a346bc01898536992f50127d0adea1c3096a8ec9f658c	libmicrohttpd-0.9.47.tar.gz
++sha256	87667e158f2bf8c691a002e256ffe30885d4121a9ee4143af0320c47cdf8a2a4	libmicrohttpd-0.9.48.tar.gz
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 302720d..9c41b89 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG_VERSION = 1.4.19
-+GNUPG_VERSION = 1.4.20
- GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
- GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
- GNUPG_LICENSE = GPLv3+
+-LIBMICROHTTPD_VERSION = 0.9.47
++LIBMICROHTTPD_VERSION = 0.9.48
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
 -- 
 2.4.10
