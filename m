@@ -1,47 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 23:28:56 +0100
-Subject: [Buildroot] [PATCH v5] luvi: new package
-In-Reply-To: <1446104703-21295-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1446104703-21295-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151220232856.12acbfe8@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 20 Dec 2015 23:37:40 +0100
+Subject: [Buildroot] [PATCH v2] package/mesa3d: virgl driver needs egl &
+ drm
+In-Reply-To: <1450636265-32405-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1450636265-32405-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151220223740.GJ3677@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Bernd, All,
 
-On Thu, 29 Oct 2015 08:45:03 +0100, J?rg Krause wrote:
-> Add package luvi version v2.3.5.
+On 2015-12-20 19:31 +0100, Bernd Kuhls spake thusly:
+> Fixes
+> http://autobuild.buildroot.net/results/7b3/7b38131ebb6b20daec1a6d2c49b25c5300f319fe/
+> http://autobuild.buildroot.net/results/61b/61b8b87f0460751257f480ef478e753635cab798/
+> http://autobuild.buildroot.net/results/971/97154ea0e780623d23b20b6b9fcc5df6190875c9/
+> http://autobuild.buildroot.net/results/dcf/dcf4e31e6b6eeadc7a2d7c87697f57d699673b9e/
+> http://autobuild.buildroot.net/results/399/399cca80ada5798decc87bff69a3acc432e8f3d0/
+> http://autobuild.buildroot.net/results/60f/60f63958b2310e00937c498ddf2a0295ff77683a/
 > 
-> luvi extends LuaJIT with asynchronous I/O and several optional modules to run
-> Lua applications and build self-contained binaries.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: build-tested only]
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 > ---
-> Changes v3 -> v5: (v4 is same as v3, forgot commit --amend)
->  - bump to v2.3.5
->  - remove patch from upstream
+> v2: Simplified if-else construct (Yann)
+> 
+>  package/mesa3d/Config.in | 1 +
+>  package/mesa3d/mesa3d.mk | 2 ++
+>  2 files changed, 3 insertions(+)
+> 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 40af2ef..dd6a8c6 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -79,6 +79,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
+>  	bool "Gallium virgl driver"
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+>  	help
+>  	  virgl is the 3D acceleration backend for the virtio-gpu
+>  	  shipping with qemu.
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 195ccff..a62f559 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -131,6 +131,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+>  MESA3D_PROVIDES += libegl
+>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+>  MESA3D_EGL_PLATFORMS = drm
+> +else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
+> +MESA3D_EGL_PLATFORMS = drm
+>  endif
+>  ifeq ($(BR2_PACKAGE_WAYLAND),y)
+>  MESA3D_DEPENDENCIES += wayland
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thanks, patch applied. I must say I don't really understand what this
-luvi thing is doing, but it built fine here, and the packaging seems
-reasonable.
-
-I was somewhat surprised by:
-
-	-DLUA_PATH=$(HOST_DIR)/usr/share/luajit-2.0.4/?.lua
-
-as this ?.lua doesn't really look like a path, but since it builds
-fine, maybe I'm missing something.
-
-I'm CC'ing Fran?ois, in case he has something to say about this new
-package.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
