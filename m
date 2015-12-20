@@ -1,41 +1,134 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Dec 2015 18:58:46 +0100
-Subject: [Buildroot] [PATCH v3] package/vsxu: new package
-References: <1450547215-8524-1-git-send-email-bernd.kuhls@t-online.de>
- <5675E81E.8010606@mind.be>
-Message-ID: <mr6jkcxh6u.ln2@ID-313208.user.individual.net>
+From: Eelco Chaudron <echaudron@xiot.nl>
+Date: Sun, 20 Dec 2015 19:17:59 +0100
+Subject: [Buildroot] buildroot support for OrangePI PC
+In-Reply-To: <20151220134500.549ecf55@free-electrons.com>
+References: <08485173-6FC7-42EF-9BFE-7B3B9967EEC0@xiot.nl>
+ <56748758.7040908@mind.be> <56769FEB.60400@xiot.nl>
+ <20151220134500.549ecf55@free-electrons.com>
+Message-ID: <5676F0D7.8010904@xiot.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Thomas,
 
-Am Sun, 20 Dec 2015 00:28:30 +0100 schrieb Arnout Vandecappelle:
+Thanks for pointing this out...
 
->  This should definitly be inside a if(UNIX). Obviously for buildroot
->  that doesn't matter but for upstream it probably does.
+I wanted to do some bench marking in big endian to see performance 
+difference in a heavy networking environment.
+However when I saw the endian errors I "thought" I reverted back, and 
+retried. But for some reason make savedefconfig, did not reflect the 
+change, and I did not pay attention to the output :(
 
-I will let upstream decide about the patches, until then we have a 
-working buildroot package for vsxu ;)
+Doing a make distclean, and reconfigure, it worked fine without any 
+build errors.
 
->> +VSXU_LICENSE = GPLv3
-> 
->  Only artiste_main.c is really GPLv3+, all the rest is GPLv2+ or
->  LGPLv2.1+.
-> Also, the whole of cal3d is LGPLv2.1+. So I'd give it GPLv3+, LGPLv2.1+.
-> 
->> +VSXU_LICENSE_FILES = COPYING
-> 
->  and add COPYING.LESSER here.
 
-Done.
+//Eelco
+> Thomas Petazzoni <mailto:thomas.petazzoni@free-electrons.com>
+> December 20, 2015 at 13:45
+> Dear Eelco Chaudron,
+>
+>
+> Seems like you are hitting bug
+> https://sourceware.org/bugzilla/show_bug.cgi?id=16698. It seems to be
+> fixed in the 2.24.90 snapshot, though it is not clear which specific
+> commit fixed it, so it's hard to backport it.
+>
+> Can you try with with binutils 2.25 ?
+>
+> Also, you have selected ARM big endian as the architecture, which is
+> almost certainly not what you want. If you're new to ARM and have no
+> reason to use big endian, then use ARM little endian, which is what
+> 99.9999% of the people use.
+>
+> Best regards,
+>
+> Thomas
+> Eelco Chaudron <mailto:echaudron@xiot.nl>
+> December 20, 2015 at 13:32
+> Hi All,
+>
+> I decided to give this a shot, but I already get stuck at doing the 
+> u-boot part...
+> Looks like some toolchain issue, so before I dig into it more let me 
+> see if some one here has ran into something similar.
+>
+> This is my config:
+>
+> BR2_armeb=y
+> BR2_cortex_a7=y
+> BR2_ARM_EABI=y
+> BR2_ARM_FPU_NEON_VFPV4=y
+> BR2_TARGET_UBOOT=y
+> BR2_TARGET_UBOOT_BOARDNAME="orangepi_pc"
+> BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.denx.de/u-boot.git"
+> BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4832e17787acb29734d895751bc7a594908aecc6"
+> BR2_TARGET_UBOOT_SPL=y
+>
+> It all goes wrong when linking u-boot. Here are some snippets from the 
+> output:
+>   LD      u-boot
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> Warning: size of symbol `invalidate_dcache_range' changed from 168 in 
+> arch/arm/cpu/armv7/built-in.o to 4 in arch/arm/lib/built-in.o
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> Warning: size of symbol `enable_caches' changed from 4 in 
+> arch/arm/cpu/armv7/built-in.o to 12 in arch/arm/lib/built-in.o
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> Warning: size of symbol `arm_init_before_mmu' changed from 40 in 
+> arch/arm/cpu/armv7/built-in.o to 4 in arch/arm/lib/built-in.o
+> ...
+> ...
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> /home/echaudron/buildroot_opi/output/host/usr/lib/gcc/armeb-buildroot-linux-uclibcgnueabi/4.9.3/libgcc.a(_dvmd_lnx.o): 
+> compiled for a big endian system and target is little endian
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> failed to merge target specific data of file 
+> /home/echaudron/buildroot_opi/output/host/usr/lib/gcc/armeb-buildroot-linux-uclibcgnueabi/4.9.3/libgcc.a(_dvmd_lnx.o)
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> BFD (GNU Binutils) 2.24 assertion fail elf32-arm.c:12387
+> ...
+> ...
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> BFD (GNU Binutils) 2.24 assertion fail elf32-arm.c:12387
+> /home/echaudron/buildroot_opi/output/host/usr/bin/armeb-buildroot-linux-uclibcgnueabi-ld.bfd: 
+> BFD (GNU Binutils) 2.24 assertion fail elf32-arm.c:12387
+> Segmentation fault (core dumped)
+> Makefile:1193: recipe for target 'u-boot' failed
+> make[2]: *** [u-boot] Error 139
+>
+> When I build the same u-boot version using the ubuntu provided 
+> "arm-linux-gnueabihf-" toolchain it works fine.
+> I'm using the following to build it;
+>
+> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- orangepi_pc_defconfig
+> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+>
+> Any ideas?
+>
+> //Eelco
+>
+>
+>
+> Arnout Vandecappelle <mailto:arnout@mind.be>
+> December 18, 2015 at 23:23
+>
+> Not that I know of. But it should be quite similar to the cubieboard I 
+> think.
+>
+> If you make a defconfig for it, consider using genimage rather than a 
+> custom
+> script like mkcubiecard.
+>
+> Regards,
+> Arnout
+>
+>
 
->  I guess there should be an optional dependency on jack and pulseaudio
->  as well
-> (plugins/src/sound.rtaudio).
-
-Done, sent v4: http://patchwork.ozlabs.org/patch/559352/
-
-Regards, Bernd
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151220/1044dbef/attachment.html>
