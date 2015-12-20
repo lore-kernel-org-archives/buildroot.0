@@ -1,34 +1,54 @@
-From: Eelco Chaudron <echaudron@xiot.nl>
-Date: Sun, 20 Dec 2015 19:25:16 +0100
-Subject: [Buildroot] buildroot support for OrangePI PC
-In-Reply-To: <56748758.7040908@mind.be>
-References: <08485173-6FC7-42EF-9BFE-7B3B9967EEC0@xiot.nl>
- <56748758.7040908@mind.be>
-Message-ID: <5676F28C.1010005@xiot.nl>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 20 Dec 2015 19:31:05 +0100
+Subject: [Buildroot] [PATCH v2] package/mesa3d: virgl driver needs egl & drm
+Message-ID: <1450636265-32405-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Cam,
+Fixes
+http://autobuild.buildroot.net/results/7b3/7b38131ebb6b20daec1a6d2c49b25c5300f319fe/
+http://autobuild.buildroot.net/results/61b/61b8b87f0460751257f480ef478e753635cab798/
+http://autobuild.buildroot.net/results/971/97154ea0e780623d23b20b6b9fcc5df6190875c9/
+http://autobuild.buildroot.net/results/dcf/dcf4e31e6b6eeadc7a2d7c87697f57d699673b9e/
+http://autobuild.buildroot.net/results/399/399cca80ada5798decc87bff69a3acc432e8f3d0/
+http://autobuild.buildroot.net/results/60f/60f63958b2310e00937c498ddf2a0295ff77683a/
 
-If you can share the repo's (uboot/linux) you are thinking to use I can 
-make a head start with the PC version and share whatever I have by 
-January first.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: Simplified if-else construct (Yann)
 
-//Eelco
+ package/mesa3d/Config.in | 1 +
+ package/mesa3d/mesa3d.mk | 2 ++
+ 2 files changed, 3 insertions(+)
 
-Cam Hutchison<camh@xdna.net>  writes:
-
-> Hi All,
-> Was wondering if anyone has started working on OrangePi PC board support?
-I'll be embarking on this in the new year (OrangePi Plus too). I plan is
-to come up with two defconfigs - one for the 3.4 kernel which supports
-the hardware ok but has a lot of code that is not mainlined and has a
-custom build process, and one for mainline which currently has limited
-support for the H3 and Orange Pi (although there is current activity so
-I'll also track the linux-sunxi kernel too).
-
-I'll keep my WIP on a github repo and I can let you know when I make a
-start.
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 40af2ef..dd6a8c6 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -79,6 +79,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
+ 	bool "Gallium virgl driver"
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	help
+ 	  virgl is the 3D acceleration backend for the virtio-gpu
+ 	  shipping with qemu.
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 195ccff..a62f559 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -131,6 +131,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ MESA3D_PROVIDES += libegl
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+ MESA3D_EGL_PLATFORMS = drm
++else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
++MESA3D_EGL_PLATFORMS = drm
+ endif
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEPENDENCIES += wayland
+-- 
+2.6.4
