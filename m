@@ -1,105 +1,109 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Dec 2015 16:49:02 +0100
-Subject: [Buildroot] [PATCH 1/2] package/wireshark: Fix libpcap detection
-In-Reply-To: <20151220124957.GA3677@free.fr>
-References: <1449998185-15082-1-git-send-email-bernd.kuhls@t-online.de>
- <566DDC20.5000104@mind.be> <20151220124957.GA3677@free.fr>
-Message-ID: <5676CDEE.10206@mind.be>
+Date: Sun, 20 Dec 2015 17:06:37 +0100
+Subject: [Buildroot] [PATCH 1/1] emlog: new package
+In-Reply-To: <1450446298-3523-1-git-send-email-joris.lijssens@gmail.com>
+References: <1450446298-3523-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <5676D20D.2050304@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20-12-15 13:49, Yann E. MORIN wrote:
-> Arnout, All,
+On 18-12-15 14:44, Joris Lijssens wrote:
+> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+> ---
+>  package/Config.in        |  1 +
+>  package/emlog/Config.in  | 12 ++++++++++++
+>  package/emlog/emlog.hash |  2 ++
+>  package/emlog/emlog.mk   | 21 +++++++++++++++++++++
+>  4 files changed, 36 insertions(+)
+>  create mode 100644 package/emlog/Config.in
+>  create mode 100644 package/emlog/emlog.hash
+>  create mode 100644 package/emlog/emlog.mk
 > 
-> On 2015-12-13 21:59 +0100, Arnout Vandecappelle spake thusly:
->> On 13-12-15 10:16, Bernd Kuhls wrote:
->>> To reproduce the build error I had to install libpcap0.8-dev on my host
->>> system, then wireshark configure picks up
->>>
->>> checking for pcap-config... /usr/bin/pcap-config
->>
->>  To fundamentally avoid this type of issue (we have a bunch of fixes like this),
->> I think we should add an additional directory that is put in the _beginning_ of
->> the path in TARGET_MAKE_ENV. This directory could then be populated through the
->> _CONFIG_SCRIPTS mechanism.
->>
->>  What do the others think?
-> 
-> I'v estarted having a look at your suggestion. The basic idea is
-> relatively trivial to do, and I now have a FOO_CONFIG_DIR location
-> where I put those scripts.
-> 
-> However, I'm not facing a wall:
+> diff --git a/package/Config.in b/package/Config.in
+> index c78baac..dfa4d3b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1515,6 +1515,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/debianutils/Config.in"
+>  endif
+>  	source "package/dsp-tools/Config.in"
+> +	source "package/emlog/Config.in"
+>  	source "package/ftop/Config.in"
+>  	source "package/getent/Config.in"
+>  	source "package/htop/Config.in"
+> diff --git a/package/emlog/Config.in b/package/emlog/Config.in
+> new file mode 100644
+> index 0000000..85a9ed6
+> --- /dev/null
+> +++ b/package/emlog/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_EMLOG
+> +	bool "emlog"
+> +	help
+> +	  emlog is a Linux kernel module that makes it easy to access the most
+> +	  recent (and only the most recent) output from a process. It works
+> +	  just like "tail -f" on a log file, except that the storage required
+> +	  never grows. This can be useful in embedded systems where there isn't
+> +	  enough memory or disk space for keeping complete log files, but the
+> +	  most recent debugging messages are sometimes needed (e.g., after an
+> +	  error is observed).
+> +
+> +	  https://github.com/nicupavel/emlog
+> diff --git a/package/emlog/emlog.hash b/package/emlog/emlog.hash
+> new file mode 100644
+> index 0000000..ab729f8
+> --- /dev/null
+> +++ b/package/emlog/emlog.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 37b03b79684245ddcb33cfff388a7f2d74f465f2e1fce4f661b81726f5ccd595 emlog-0.52.tar.gz
+> diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
+> new file mode 100644
+> index 0000000..d368652
+> --- /dev/null
+> +++ b/package/emlog/emlog.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# emlog
+> +#
+> +################################################################################
+> +
+> +EMLOG_VERSION = 0.52
+> +EMLOG_SITE = $(call github,nicupavel,emlog,emlog-$(EMLOG_VERSION))
+> +EMLOG_LICENSE = GPLv2
+> +EMLOG_LICENSE_FILES = COPYING
+> +
+> +define EMLOG_BUILD_CMDS
+> +	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(@D) nbcat
 
- I guess you _are_ facing a wall :-)
+ Doesn't $(TARGET_CONFIGURE_OPTS) work here? If not, it's better to explain that
+in the commit message.
 
-> we use the same PATH for both the target
-> and the host packages, set in BR_PATH. But of course, we do not want the
-> host variants to find those foo-config scripts, since they are for the
-> target; we really want host packages to find the host variants, whether
-> the ones we install as part of our host packages, or the ones from the
-> system.
-> 
-> So, we'd need to split the PATH for host and target variants.
-> 
-> I wonder if that would be acceptable.
+> +endef
+> +
+> +define EMLOG_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 $(@D)/nbcat $(TARGET_DIR)/usr/bin
 
- They used to be, but since they were identical, Samuel factored them away in
-b989976.
+ Also here a comment would be good:
 
-> 
->>  It will be a bit of work to revert all these fixes again :-)
-> 
-> Indeed. I've already tried to hunt down all our "fixes" for this, and I
-> have identified two cases:
-> 
->   - packages already accept a FOO_CONFIG environement variable; for
->     those we just need to unset it;
-> 
->   - we patch the package to replace a hard-coded cal to foo-config with
->     a construct like ${FOO_CONFIG:-foo-config}, for those, we need to
->     alse unpatch the package.
-> 
-> My grep-fuu must still be asleep today, since I could only identify wine
-> in the second category, although I'm pretty sure we have at least a few
-> other packages that we do patch for that.
-
-git grep \\-config -- \*.patch
-
- Lot's of false positives though.
+# make install tries to strip, so install manually.
 
 
-> The packages in the first category are reltively rare: only about 50 of
-> them I could identify, so it should be pretty easy to fix.
+ Otherwise, looks good to me, so you can add my
 
- I was more concerned with the fixes like the one that was added by this patch:
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 534131b..2b06699 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -24,6 +24,7 @@ WIRESHARK_CONF_OPTS = \
- 	--enable-static=no \
- 	--with-libsmi=no \
- 	--with-lua=no \
-+	--with-pcap=$(STAGING_DIR)/usr \
- 	--includedir=$(STAGING_DIR)/usr/include
-
- Another grep which turns up lots of false positives:
-git grep '\--with-.*=\$(STAGING_DIR)'
-
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-
-> 
-> I'll work on this a bit mor elater today...
-> 
-> Regards,
-> Yann E. MORIN.
+> +endef
+> +
+> +$(eval $(kernel-module))
+> +$(eval $(generic-package))
 > 
 
 
