@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 15:10:39 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/wpa_supplicant: add config
- option to build wpa_client library
-In-Reply-To: <1446366918-4504-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1446366918-4504-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151220151039.3719aded@free-electrons.com>
+Date: Sun, 20 Dec 2015 15:15:46 +0100
+Subject: [Buildroot] [PATCH 1/1] Add more options to eudev package.
+In-Reply-To: <CAOcYpt2ah7+P2ZJyzN+i0DjxE+x9LiDZPWwg6zqMxzi-x7BhKQ@mail.gmail.com>
+References: <CAOcYpt2ah7+P2ZJyzN+i0DjxE+x9LiDZPWwg6zqMxzi-x7BhKQ@mail.gmail.com>
+Message-ID: <20151220151546.1fbf342f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear David Kosir,
 
-On Sun,  1 Nov 2015 09:35:18 +0100, J?rg Krause wrote:
-> Version 2.5 of wpa_supplicant introduces the config option
-> CONFIG_BUILD_WPA_CLIENT_SO to enable building wpa_client as shared library.
+On Tue, 20 Oct 2015 20:44:25 +0200, David Kosir wrote:
+> From de239fceb033d278ef70924bcea5c0a18b1f930d Mon Sep 17 00:00:00 2001
+> From: David Kosir <david.kosir@bylapis.com>
+> Date: Tue, 20 Oct 2015 19:45:28 +0200
+> Subject: [PATCH 1/1] Add more options to eudev package.
 > 
-> We need to add a patch from upstream to fix a runtime error with
-> libwpa_client.so:
->   Error relocating /usr/lib/libwpa_client.so: bin_clear_free: symbol not found
+> Making possible to install only in /, avoiding /usr.
+> Also, make opinional to use kmod.
 > 
-> Cc: Martin Bark <martin@barkynet.com>
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: David Kosir <david.kosir@bylapis.com>
 > ---
-> Changes v2:
->  - depends on dynamic build (Martin Bark)
->  - Installs -> Install in help text
->  - Add upstream patch
-> ---
->  .../wpa_supplicant/0002-fix-libwpa_client.patch    | 39 ++++++++++++++++++++++
->  package/wpa_supplicant/Config.in                   |  9 +++++
->  package/wpa_supplicant/wpa_supplicant.mk           | 24 +++++++++++++
->  3 files changed, 72 insertions(+)
->  create mode 100644 package/wpa_supplicant/0002-fix-libwpa_client.patch
+>  package/eudev/Config.in | 12 +++++++++++-
+>  package/eudev/eudev.mk  | 16 +++++++++++++---
+>  2 files changed, 24 insertions(+), 4 deletions(-)
 
-Applied, thanks.
+Your patch received a good number of comments, especially from Arnout.
+Could you take them into account and post an updated version of your
+patch?
+
+In the mean time, I'll mark your patch as "Changes Requested" in our
+patch tracking system, which means that if you don't send a new
+version, we'll forget about it.
+
+Thanks a lot!
 
 Thomas
 -- 
