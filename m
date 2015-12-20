@@ -1,63 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 13:35:19 +0100
-Subject: [Buildroot] [git commit] xutil_util-macros: move outside x11r7 scope
-Message-ID: <20151220123524.7023280406@busybox.osuosl.org>
+Date: Sun, 20 Dec 2015 13:37:29 +0100
+Subject: [Buildroot] buildroot support for OrangePI PC
+In-Reply-To: <6b87.5675ed98.926d4@xdna.net>
+References: <08485173-6FC7-42EF-9BFE-7B3B9967EEC0@xiot.nl>
+ <6b87.5675ed98.926d4@xdna.net>
+Message-ID: <20151220133729.10e6021e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9065b1a0443bf18a1d0fea348ea2ce5905d140ae
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Move to baseline package/
-It doesn't really require x11r7 infrastructure and is in fact needed by
-libepoxy which can be made x11r7-less.
+On Sat, 19 Dec 2015 23:51:52 -0000, Cam Hutchison wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                                            | 1 +
- package/x11r7/Config.in                                      | 1 -
- package/{x11r7 => }/xutil_util-macros/Config.in              | 0
- package/{x11r7 => }/xutil_util-macros/xutil_util-macros.hash | 0
- package/{x11r7 => }/xutil_util-macros/xutil_util-macros.mk   | 0
- 5 files changed, 1 insertion(+), 1 deletion(-)
+> I'll be embarking on this in the new year (OrangePi Plus too). I plan is
+> to come up with two defconfigs - one for the 3.4 kernel which supports
+> the hardware ok but has a lot of code that is not mainlined and has a
+> custom build process, and one for mainline which currently has limited
+> support for the H3 and Orange Pi (although there is current activity so
+> I'll also track the linux-sunxi kernel too).
 
-diff --git a/package/Config.in b/package/Config.in
-index f5f323c..45de28f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1245,6 +1245,7 @@ menu "Miscellaneous"
- 	source "package/shared-mime-info/Config.in"
- 	source "package/snowball-init/Config.in"
- 	source "package/wine/Config.in"
-+	source "package/xutil_util-macros/Config.in"
- endmenu
- 
- menu "Networking applications"
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 2f87cbd..381157f 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -265,7 +265,6 @@ if BR2_PACKAGE_XORG7
- 	endmenu
- 	menu "X11R7 Utilities"
- 		source package/x11r7/xutil_makedepend/Config.in
--		source package/x11r7/xutil_util-macros/Config.in
- 		source package/x11r7/mcookie/Config.in
- 	endmenu
- 	menu "X11R7 Other data"
-diff --git a/package/x11r7/xutil_util-macros/Config.in b/package/xutil_util-macros/Config.in
-similarity index 100%
-rename from package/x11r7/xutil_util-macros/Config.in
-rename to package/xutil_util-macros/Config.in
-diff --git a/package/x11r7/xutil_util-macros/xutil_util-macros.hash b/package/xutil_util-macros/xutil_util-macros.hash
-similarity index 100%
-rename from package/x11r7/xutil_util-macros/xutil_util-macros.hash
-rename to package/xutil_util-macros/xutil_util-macros.hash
-diff --git a/package/x11r7/xutil_util-macros/xutil_util-macros.mk b/package/xutil_util-macros/xutil_util-macros.mk
-similarity index 100%
-rename from package/x11r7/xutil_util-macros/xutil_util-macros.mk
-rename to package/xutil_util-macros/xutil_util-macros.mk
+Note that we already have such a dual defconfig situation with the
+Olimex A20 Olinuxino, with olimex_a20_olinuxino_lime_defconfig using
+the mainline kernel, and olimex_a20_olinuxino_lime_mali_defconfig using
+the 3.4 sunxi kernel. So I guess we can do the same for other platforms
+if needed.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
