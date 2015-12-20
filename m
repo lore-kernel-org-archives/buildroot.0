@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Dec 2015 13:54:12 +0100
-Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
-In-Reply-To: <vjiikcxh6u.ln2@ID-313208.user.individual.net>
-References: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
- <vjiikcxh6u.ln2@ID-313208.user.individual.net>
-Message-ID: <20151220135412.652a8344@free-electrons.com>
+Date: Sun, 20 Dec 2015 13:54:31 +0100
+Subject: [Buildroot] [git commit] directfb-examples: indentation cleanup
+Message-ID: <20151220125435.85AF281F80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+commit: http://git.buildroot.net/buildroot/commit/?id=2b06cc9e0ccaaeee7215bb5841b55e974c5d0678
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 20 Dec 2015 13:13:19 +0100, Bernd Kuhls wrote:
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/directfb-examples/directfb-examples.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> after a first review by Thomas I just updated the branch.
-
-Thanks. I don't know if others will agree, but I believe it might make
-things easier to review if all the very simple "bump version" patches
-for all kodi add-ons were merged into a single patch. I know we
-normally don't do that, but it would make the series a lot shorter, and
-would emphasize the few updates for which it's not just a mechanical
-bump. So, this "big" commit would only contain the version bumps for
-the packages that don't require anything but a change to the version.
-If you need to do more than that, then it should be in a separate
-commit per package.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/directfb-examples/directfb-examples.mk b/package/directfb-examples/directfb-examples.mk
+index ee883f7..46263da 100644
+--- a/package/directfb-examples/directfb-examples.mk
++++ b/package/directfb-examples/directfb-examples.mk
+@@ -12,7 +12,7 @@ DIRECTFB_EXAMPLES_LICENSE_FILES = COPYING
+ DIRECTFB_EXAMPLES_DEPENDENCIES = directfb
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-        DIRECTFB_EXAMPLES_CONF_OPTS += LIBS=-lstdc++
++DIRECTFB_EXAMPLES_CONF_OPTS += LIBS=-lstdc++
+ endif
+ 
+ $(eval $(autotools-package))
