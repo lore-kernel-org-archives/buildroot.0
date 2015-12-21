@@ -1,83 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Dec 2015 13:26:37 +0100
-Subject: [Buildroot] [PATCH 1/2] package/wireshark: Fix libpcap detection
-In-Reply-To: <5676CDEE.10206@mind.be>
-References: <1449998185-15082-1-git-send-email-bernd.kuhls@t-online.de>
- <566DDC20.5000104@mind.be> <20151220124957.GA3677@free.fr>
- <5676CDEE.10206@mind.be>
-Message-ID: <20151221122636.GB3454@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 21 Dec 2015 14:29:22 +0100
+Subject: [Buildroot] [PATCH] toolchain: create symlink to 'lib' from
+ ARCH_LIB_DIR iso fixed lib32/lib64
+In-Reply-To: <564A515D.1030800@mind.be>
+References: <1445245676-21017-1-git-send-email-patrickdepinguin@gmail.com>
+ <564A515D.1030800@mind.be>
+Message-ID: <CAAXf6LVq=n35Gq242XiUU3vKkkjZtQwRd+q77OFe8WjZm2jj=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hi Arnout,
 
-On 2015-12-20 16:49 +0100, Arnout Vandecappelle spake thusly:
-> On 20-12-15 13:49, Yann E. MORIN wrote:
-> > On 2015-12-13 21:59 +0100, Arnout Vandecappelle spake thusly:
-[--SNIP--]
-> >>  To fundamentally avoid this type of issue (we have a bunch of fixes like this),
-> >> I think we should add an additional directory that is put in the _beginning_ of
-> >> the path in TARGET_MAKE_ENV. This directory could then be populated through the
-> >> _CONFIG_SCRIPTS mechanism.
-> >>
-> >>  What do the others think?
-> > 
-> > I'v estarted having a look at your suggestion. The basic idea is
-> > relatively trivial to do, and I now have a FOO_CONFIG_DIR location
-> > where I put those scripts.
-> > However, I'm not facing a wall:
->  I guess you _are_ facing a wall :-)
+Sorry, I completely missed your reply. Thanks for reviewing. See below...
 
-s/not/now/ :-)
+On Mon, Nov 16, 2015 at 10:57 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>  Hi Thomas,
+>
+> On 19-10-15 11:07, Thomas De Schampheleire wrote:
+>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> Currently, following symbolic links are created in both target and
+>> staging directories:
+>> - lib(32|64) --> lib
+>> - usr/lib(32|64) --> lib
+>>
+>> The decision for lib32 or lib64 is based on the target architecture
+>> configuration in buildroot (BR2_ARCH_IS_64).
+>>
+>> In at least one case this is not correct: when building for a Cavium Octeon
+>> III processor using the toolchain from the Cavium Networks SDK, and
+>> specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
+>> in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
+>>
+>> More generally, for external toolchains, the correct symbolic link is
+>> from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
+>> toolchains always use either lib32 or lib64.
+>
+>  Sorry, it's not OK (yet). The reason we add the lib32 and lib64 symlinks for
+> the internal toolchain as well is because there are some slightly broken
+> packages that expect these directories to exist. With this patch, the symlink is
+> no longer created for some external toolchains, e.g. musl. Unfortunately, I'm
+> not sure which packages are problematic. A quick search through the archives
+> points at libatomic_ops as a candidate.
 
-> > So, we'd need to split the PATH for host and target variants.
-> > I wonder if that would be acceptable.
->  They used to be, but since they were identical, Samuel factored them away in
-> b989976.
+Did you mean 'external' instead of 'internal' in the second sentence
+of this paragraph?
 
-Ah, thianks for the sha1, I was looking for it earlier.
+For internal toolchains, the lib32 or lib64 symlink is always created,
+with and without this patch. Agreed?
 
-[--SNIP--]
-> > My grep-fuu must still be asleep today, since I could only identify wine
-> > in the second category, although I'm pretty sure we have at least a few
-> > other packages that we do patch for that.
-> git grep \\-config -- \*.patch
->  Lot's of false positives though.
+For external toolchains, if ARCH_LIB_DIR == 'lib', previously symbolic
+links lib32 or lib64 would be created anyhow, but with this patch they
+are not. I guess this is the case you refer to?
 
-I can start with that.
+>
+>  So I think the solution is to keep on creating the symlink like is done now,
+> and just check if ${ARCH_LIB_DIR} exists for the external toolchains.
 
-> > The packages in the first category are reltively rare: only about 50 of
-> > them I could identify, so it should be pretty easy to fix.
-> 
->  I was more concerned with the fixes like the one that was added by this patch:
-> diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-> index 534131b..2b06699 100644
-> --- a/package/wireshark/wireshark.mk
-> +++ b/package/wireshark/wireshark.mk
-> @@ -24,6 +24,7 @@ WIRESHARK_CONF_OPTS = \
->  	--enable-static=no \
->  	--with-libsmi=no \
->  	--with-lua=no \
-> +	--with-pcap=$(STAGING_DIR)/usr \
->  	--includedir=$(STAGING_DIR)/usr/include
-> 
->  Another grep which turns up lots of false positives:
-> git grep '\--with-.*=\$(STAGING_DIR)'
+You mean to create a lib32/lib64 symlink as before, and additionally a
+link '${ARCH_LIB_DIR} -> lib' in case ARCH_LIB_DIR is different from
+'lib32' and 'lib64', right?
 
-Yep, we can hunt them one by one as time passes...
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+Thomas
