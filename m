@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Dec 2015 23:07:02 +0100
-Subject: [Buildroot] [git commit] python-werkzeug: bump to 0.11.3
-Message-ID: <20151221220832.8081A7FD72@busybox.osuosl.org>
+Date: Mon, 21 Dec 2015 23:07:35 +0100
+Subject: [Buildroot] [git commit] python-cherrypy: bump to 4.0.0
+Message-ID: <20151221220832.9703282579@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9a6fe357956ad3b4f919e54e20cd70085098341a
+commit: http://git.buildroot.net/buildroot/commit/?id=b2d925159b45f04cbbc8f1a06cda34b478ca2c63
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 6 +++---
- package/python-werkzeug/python-werkzeug.mk   | 2 +-
+ package/python-cherrypy/python-cherrypy.hash | 6 +++---
+ package/python-cherrypy/python-cherrypy.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 3dcc5b4..f833b89 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
+diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
+index 08fa075..6befa45 100644
+--- a/package/python-cherrypy/python-cherrypy.hash
++++ b/package/python-cherrypy/python-cherrypy.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
--md5	42ebf43b19475bf856fde740050d7707  Werkzeug-0.10.tar.gz
--sha256	9a97a6fcf87390172748da9e5250710b352dff18e979db925d276112cdcfa7ac  Werkzeug-0.10.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9479bc7ea6a42c2d0d82929d3926df67, sha256 locally computed
-+md5	9479bc7ea6a42c2d0d82929d3926df67  Werkzeug-0.11.3.tar.gz
-+sha256	eb5f700a9bfc96420b055635af9002d3662e43d80c3ffd31f224c25bc0d5f462  Werkzeug-0.11.3.tar.gz
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 41ae430..3df481a 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9772dbee426d656f01a13881e2b139d8, sha256 locally computed
+-md5	9772dbee426d656f01a13881e2b139d8  CherryPy-3.6.0.tar.gz
+-sha256	a149271819a15417104aa8f641ad5b96287070f0153e6ef2832a87e2c693d75d  CherryPy-3.6.0.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=4b765329b0b4b65ec25811e3febb6c93, sha256 locally computed
++md5	4b765329b0b4b65ec25811e3febb6c93  CherryPy-4.0.0.tar.gz
++sha256	73ad4f8870b5a3e9988a7778b5d3003a390d440527ec3458a0c7e58865d2611a  CherryPy-4.0.0.tar.gz
+diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
+index a07f9ed..754e0a2 100644
+--- a/package/python-cherrypy/python-cherrypy.mk
++++ b/package/python-cherrypy/python-cherrypy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_WERKZEUG_VERSION = 0.10
-+PYTHON_WERKZEUG_VERSION = 0.11.3
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
- PYTHON_WERKZEUG_SITE = http://pypi.python.org/packages/source/W/Werkzeug
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+-PYTHON_CHERRYPY_VERSION = 3.6.0
++PYTHON_CHERRYPY_VERSION = 4.0.0
+ PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
+ PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
+ PYTHON_CHERRYPY_LICENSE = BSD-3c
