@@ -1,27 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 21 Dec 2015 20:51:50 +0200
-Subject: [Buildroot] [PATCH 3/8 RFC] core/pkg-generic: install
- foo-config scripts in their own dir
-In-Reply-To: <66985474d41d8d25b6f75560665322b88f6e6813.1450712392.git.yann.morin.1998@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 21 Dec 2015 21:46:58 +0100
+Subject: [Buildroot] [PATCH 7/8 RFC] packages: use TARGET_PATH
+In-Reply-To: <20151221184436.GB1548@tarshish>
 References: <cover.1450712392.git.yann.morin.1998@free.fr>
- <66985474d41d8d25b6f75560665322b88f6e6813.1450712392.git.yann.morin.1998@free.fr>
-Message-ID: <20151221185150.GC1548@tarshish>
+ <bfe629a2f300528996a23613fb4661b41e972bac.1450712392.git.yann.morin.1998@free.fr>
+ <20151221184436.GB1548@tarshish>
+Message-ID: <20151221204658.GD3454@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Baruch, All,
 
-On Mon, Dec 21, 2015 at 04:56:54PM +0100, Yann E. MORIN wrote:
-> +# foo-config scripts for the target go here
-> +FOO_CONFIG_DIR := $(HOST_DIR)/opt/foo-config
+On 2015-12-21 20:44 +0200, Baruch Siach spake thusly:
+> On Mon, Dec 21, 2015 at 04:56:58PM +0100, Yann E. MORIN wrote:
+> > Note that libhid should no longer need that trick, but this woill be
+> > fixed independently in a follow-up patch.
+> 
+> So can BR_PATH be removed entirely from top Makefile after this patch?
 
-That's an unusual name for "real" identifiers and directories. But maybe it's 
-just me. How about LIB_CONFIG_SCRIPT_DIR instead?
+I wondered about that.
+
+Still, I think we should keep it, in case we need to update both PATHs
+with new entries.
+
+We could obviously do:
+
+    TARGET_PATH = $(FOO_CONFIG_DIR):$(HOST_PATH)
+
+but that would not fly too far if we need to add dirs to HOST_PATH that
+should not be in TARGET_PATH.
+
+So I prefer to keep BR_PATH (which we could rename as BR_COMMON_PATH).
+
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
