@@ -1,43 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Dec 2015 23:34:58 +0100
-Subject: [Buildroot] [PATCH 0/8 RFC] core: install foo-config scripts
- early in the PATH (branch yem/foo-config-in-PATH)
-In-Reply-To: <20151221223030.GG3454@free.fr>
-References: <cover.1450712392.git.yann.morin.1998@free.fr>
- <20151221232048.1218dd26@free-electrons.com>
- <20151221223030.GG3454@free.fr>
-Message-ID: <20151221233458.32befcc2@free-electrons.com>
+Date: Mon, 21 Dec 2015 23:35:04 +0100
+Subject: [Buildroot] [PATCH] python-pysmb: new package
+In-Reply-To: <1450692907-15497-1-git-send-email-yegorslists@googlemail.com>
+References: <1450692907-15497-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20151221233504.1848da67@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Dear yegorslists at googlemail.com,
 
-On Mon, 21 Dec 2015 23:30:30 +0100, Yann E. MORIN wrote:
-
-> And how do we handle them today? If we don't do anything about it, then
-> this series would indeed not solve those, but it would not break it
-> either, since it would already be broken today.
+On Mon, 21 Dec 2015 11:15:07 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Unless we do have code to manually install them in $(HOST_DIR)/usr/bin ?
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/Config.in                      |  1 +
+>  package/python-pysmb/Config.in         | 15 +++++++++++++++
+>  package/python-pysmb/python-pysmb.hash |  3 +++
+>  package/python-pysmb/python-pysmb.mk   | 14 ++++++++++++++
+>  4 files changed, 33 insertions(+)
+>  create mode 100644 package/python-pysmb/Config.in
+>  create mode 100644 package/python-pysmb/python-pysmb.hash
+>  create mode 100644 package/python-pysmb/python-pysmb.mk
 
-What? No, we are just installing them in $(STAGING_DIR), like all
-libraries. You can look at package/rtai/rtai.mk for an example.
-
-> > Also, this solution doesn't solve the (admittedly unlikely) case of a
-> > package calling /usr/bin/<foo>-config directly.
-> 
-> Indeed. But it is already broken today, and the series does not break it
-> any more.
-
-It is not broken today. Such special *-config scripts get naturally
-installed in $(STAGING_DIR), they might be fixed up by a patch or some
-custom hook. And then on the consumer side, we pass some environment
-variable or other trick to get the consumer build system to use this
-specific -config script rather than the one in the PATH. Nothing
-special.
+Applied, thanks.
 
 Thomas
 -- 
