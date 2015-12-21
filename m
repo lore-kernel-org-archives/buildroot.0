@@ -1,57 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Dec 2015 10:25:13 +0100
-Subject: [Buildroot] [PATCH] linux: Build and install kernel selftests
-In-Reply-To: <20151221164401.4007ce33@camb691>
-References: <1448409222-4510-1-git-send-email-cyrilbur@gmail.com>
- <1448409222-4510-2-git-send-email-cyrilbur@gmail.com>
- <20151214221846.GD4152@free.fr> <20151217124506.616549d9@camb691>
- <20151217180735.GA3653@free.fr> <20151221164401.4007ce33@camb691>
-Message-ID: <20151221092513.GA3454@free.fr>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 21 Dec 2015 11:15:07 +0100
+Subject: [Buildroot] [PATCH] python-pysmb: new package
+Message-ID: <1450692907-15497-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cyril, All,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On 2015-12-21 16:44 +1100, Cyril Bur spake thusly:
-> On Thu, 17 Dec 2015 19:07:35 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> Totally agreed will address everything you mention. I should have mentioned a
-> few in more detail, my bad for not going over it in more detail before posting,
-> you're correct that a few things in there are actually non obvious.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                      |  1 +
+ package/python-pysmb/Config.in         | 15 +++++++++++++++
+ package/python-pysmb/python-pysmb.hash |  3 +++
+ package/python-pysmb/python-pysmb.mk   | 14 ++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/python-pysmb/Config.in
+ create mode 100644 package/python-pysmb/python-pysmb.hash
+ create mode 100644 package/python-pysmb/python-pysmb.mk
 
-No problem! Things just happen to be obvious when you actually do the
-job, because everything is fresh in your memory. Patch reviews are there
-to eventually highlight that fact. So, really, that's not a problem.
-
-[--SNIP--]
-> > > > > +SELFTESTS_INSTALL_STAGING = YES    
-> > > > Why install it in staging?  
-> > > I actually hadn't initially but I did get to a point in my work where I had
-> > > to objdump a test binary. So, since I needed it, it stayed.  
-> > But can't you objdump the binaries that are installed in target/ instead?
-> 
-> I think I tried that initially but IIRC they get stripped when put into target/
-> which proved annoying when objdumping.
-
-But then, the 'original' binaries are still present in the build
-directory, where they are definitely not stripped (at least, not by
-Builroot). Isn't that enough?
-
-Staging is really for libraries and headers that are to be used by
-another package. Kernel selftests are not headers, they are not
-libraries, so nothing will include/link them. So, I still believe
-there's no reason to put them in staging.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index d2476f7..8e82560 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -660,6 +660,7 @@ menu "External python modules"
+ 	source "package/python-pyro/Config.in"
+ 	source "package/python-pyroute2/Config.in"
+ 	source "package/python-pysendfile/Config.in"
++	source "package/python-pysmb/Config.in"
+ 	source "package/python-pysnmp/Config.in"
+ 	source "package/python-pysnmp-apps/Config.in"
+ 	source "package/python-pysnmp-mibs/Config.in"
+diff --git a/package/python-pysmb/Config.in b/package/python-pysmb/Config.in
+new file mode 100644
+index 0000000..42a9984
+--- /dev/null
++++ b/package/python-pysmb/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PYTHON_PYSMB
++	bool "python-pysmb"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_PYTHON_PYASN
++	help
++	  pysmb is an experimental SMB/CIFS library written in Python.
++	  It implements the client-side SMB/CIFS protocol (SMB1 and SMB2)
++	  which allows your Python application to access and transfer files
++	  to/from SMB/CIFS shared folders like your Windows file sharing and
++	  Samba folders.
++
++	  https://miketeo.net/wp/index.php/projects/pysmb
++
++comment "python-pysmb needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pysmb/python-pysmb.hash b/package/python-pysmb/python-pysmb.hash
+new file mode 100644
+index 0000000..b3c91fe
+--- /dev/null
++++ b/package/python-pysmb/python-pysmb.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=256b94bdeb63e6cc63f4b6a380b5918b, sha256 locally computed
++md5     256b94bdeb63e6cc63f4b6a380b5918b  pysmb-1.1.17.tar.gz
++sha256  267def5aef2f0f41be4ba141b29dce9c23214667e84bddefd285b56fd481d813  pysmb-1.1.17.tar.gz
+diff --git a/package/python-pysmb/python-pysmb.mk b/package/python-pysmb/python-pysmb.mk
+new file mode 100644
+index 0000000..1a00a4d
+--- /dev/null
++++ b/package/python-pysmb/python-pysmb.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pysmb
++#
++################################################################################
++
++PYTHON_PYSMB_VERSION = 1.1.17
++PYTHON_PYSMB_SOURCE = pysmb-$(PYTHON_PYSMB_VERSION).tar.gz
++PYTHON_PYSMB_SITE = https://pypi.python.org/packages/source/p/pysmb
++PYTHON_PYSMB_LICENSE = libpng license
++PYTHON_PYSMB_LICENSE_FILES = LICENSE
++PYTHON_PYSMB_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
