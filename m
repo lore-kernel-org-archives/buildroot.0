@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 21 Dec 2015 11:50:21 +0100
-Subject: [Buildroot] [PATCH 1/4] python-zope-interface: bump to 4.1.3
-Message-ID: <1450695024-24875-1-git-send-email-yegorslists@googlemail.com>
+Date: Mon, 21 Dec 2015 11:50:22 +0100
+Subject: [Buildroot] [PATCH 2/4] python-werkzeug: bump to 0.11.3
+In-Reply-To: <1450695024-24875-1-git-send-email-yegorslists@googlemail.com>
+References: <1450695024-24875-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1450695024-24875-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +12,35 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Add pypi MD5 checksum.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-zope-interface/python-zope-interface.hash | 5 +++--
- package/python-zope-interface/python-zope-interface.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/python-werkzeug/python-werkzeug.hash | 6 +++---
+ package/python-werkzeug/python-werkzeug.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
-index bdd05d7..2c161f3 100644
---- a/package/python-zope-interface/python-zope-interface.hash
-+++ b/package/python-zope-interface/python-zope-interface.hash
-@@ -1,2 +1,3 @@
--# Locally computed:
--sha256  441fefcac1fbac57c55239452557d3598571ab82395198b2565a29d45d1232f6  zope.interface-4.1.2.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9ae3d24c0c7415deb249dd1a132f0f79, sha256 locally computed
-+md5     9ae3d24c0c7415deb249dd1a132f0f79  zope.interface-4.1.3.tar.gz
-+sha256  2e221a9eec7ccc58889a278ea13dcfed5ef939d80b07819a9a8b3cb1c681484f  zope.interface-4.1.3.tar.gz
-diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
-index dea6203..ac3c230 100644
---- a/package/python-zope-interface/python-zope-interface.mk
-+++ b/package/python-zope-interface/python-zope-interface.mk
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index 3dcc5b4..f833b89 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
+-md5	42ebf43b19475bf856fde740050d7707  Werkzeug-0.10.tar.gz
+-sha256	9a97a6fcf87390172748da9e5250710b352dff18e979db925d276112cdcfa7ac  Werkzeug-0.10.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9479bc7ea6a42c2d0d82929d3926df67, sha256 locally computed
++md5	9479bc7ea6a42c2d0d82929d3926df67  Werkzeug-0.11.3.tar.gz
++sha256	eb5f700a9bfc96420b055635af9002d3662e43d80c3ffd31f224c25bc0d5f462  Werkzeug-0.11.3.tar.gz
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index 41ae430..3df481a 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_ZOPE_INTERFACE_VERSION = 4.1.2
-+PYTHON_ZOPE_INTERFACE_VERSION = 4.1.3
- PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
- PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/source/z/zope.interface
- PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
+-PYTHON_WERKZEUG_VERSION = 0.10
++PYTHON_WERKZEUG_VERSION = 0.11.3
+ PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+ PYTHON_WERKZEUG_SITE = http://pypi.python.org/packages/source/W/Werkzeug
+ PYTHON_WERKZEUG_SETUP_TYPE = setuptools
 -- 
 2.1.4
