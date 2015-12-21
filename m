@@ -1,7 +1,7 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 21 Dec 2015 11:15:07 +0100
-Subject: [Buildroot] [PATCH] python-pysmb: new package
-Message-ID: <1450692907-15497-1-git-send-email-yegorslists@googlemail.com>
+Date: Mon, 21 Dec 2015 11:50:21 +0100
+Subject: [Buildroot] [PATCH 1/4] python-zope-interface: bump to 4.1.3
+Message-ID: <1450695024-24875-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,78 +10,36 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Add pypi MD5 checksum.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                      |  1 +
- package/python-pysmb/Config.in         | 15 +++++++++++++++
- package/python-pysmb/python-pysmb.hash |  3 +++
- package/python-pysmb/python-pysmb.mk   | 14 ++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/python-pysmb/Config.in
- create mode 100644 package/python-pysmb/python-pysmb.hash
- create mode 100644 package/python-pysmb/python-pysmb.mk
+ package/python-zope-interface/python-zope-interface.hash | 5 +++--
+ package/python-zope-interface/python-zope-interface.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d2476f7..8e82560 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -660,6 +660,7 @@ menu "External python modules"
- 	source "package/python-pyro/Config.in"
- 	source "package/python-pyroute2/Config.in"
- 	source "package/python-pysendfile/Config.in"
-+	source "package/python-pysmb/Config.in"
- 	source "package/python-pysnmp/Config.in"
- 	source "package/python-pysnmp-apps/Config.in"
- 	source "package/python-pysnmp-mibs/Config.in"
-diff --git a/package/python-pysmb/Config.in b/package/python-pysmb/Config.in
-new file mode 100644
-index 0000000..42a9984
---- /dev/null
-+++ b/package/python-pysmb/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_PYSMB
-+	bool "python-pysmb"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_PYTHON_PYASN
-+	help
-+	  pysmb is an experimental SMB/CIFS library written in Python.
-+	  It implements the client-side SMB/CIFS protocol (SMB1 and SMB2)
-+	  which allows your Python application to access and transfer files
-+	  to/from SMB/CIFS shared folders like your Windows file sharing and
-+	  Samba folders.
-+
-+	  https://miketeo.net/wp/index.php/projects/pysmb
-+
-+comment "python-pysmb needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pysmb/python-pysmb.hash b/package/python-pysmb/python-pysmb.hash
-new file mode 100644
-index 0000000..b3c91fe
---- /dev/null
-+++ b/package/python-pysmb/python-pysmb.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=256b94bdeb63e6cc63f4b6a380b5918b, sha256 locally computed
-+md5     256b94bdeb63e6cc63f4b6a380b5918b  pysmb-1.1.17.tar.gz
-+sha256  267def5aef2f0f41be4ba141b29dce9c23214667e84bddefd285b56fd481d813  pysmb-1.1.17.tar.gz
-diff --git a/package/python-pysmb/python-pysmb.mk b/package/python-pysmb/python-pysmb.mk
-new file mode 100644
-index 0000000..1a00a4d
---- /dev/null
-+++ b/package/python-pysmb/python-pysmb.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pysmb
-+#
-+################################################################################
-+
-+PYTHON_PYSMB_VERSION = 1.1.17
-+PYTHON_PYSMB_SOURCE = pysmb-$(PYTHON_PYSMB_VERSION).tar.gz
-+PYTHON_PYSMB_SITE = https://pypi.python.org/packages/source/p/pysmb
-+PYTHON_PYSMB_LICENSE = libpng license
-+PYTHON_PYSMB_LICENSE_FILES = LICENSE
-+PYTHON_PYSMB_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+index bdd05d7..2c161f3 100644
+--- a/package/python-zope-interface/python-zope-interface.hash
++++ b/package/python-zope-interface/python-zope-interface.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  441fefcac1fbac57c55239452557d3598571ab82395198b2565a29d45d1232f6  zope.interface-4.1.2.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9ae3d24c0c7415deb249dd1a132f0f79, sha256 locally computed
++md5     9ae3d24c0c7415deb249dd1a132f0f79  zope.interface-4.1.3.tar.gz
++sha256  2e221a9eec7ccc58889a278ea13dcfed5ef939d80b07819a9a8b3cb1c681484f  zope.interface-4.1.3.tar.gz
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+index dea6203..ac3c230 100644
+--- a/package/python-zope-interface/python-zope-interface.mk
++++ b/package/python-zope-interface/python-zope-interface.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ZOPE_INTERFACE_VERSION = 4.1.2
++PYTHON_ZOPE_INTERFACE_VERSION = 4.1.3
+ PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
+ PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/source/z/zope.interface
+ PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
 -- 
 2.1.4
