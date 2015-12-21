@@ -1,161 +1,49 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Mon, 21 Dec 2015 18:58:24 -0300
-Subject: [Buildroot] [PATCH] openbox: new package
-In-Reply-To: <1448897458-28332-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1448897458-28332-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <CAAEAJfBCJtzb2EEmm=1aXjteRt_2rXJn3ghj-BiNhVK-ztnsLQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Dec 2015 23:04:15 +0100
+Subject: [Buildroot] [git commit] picocom: bump to version 2.1
+Message-ID: <20151221220421.6CDD38256D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(Ccing Thomas and Yann)
+commit: http://git.buildroot.net/buildroot/commit/?id=9f44d4fd6ff2510d1f2eafb9efdf5739018e61a3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 30 November 2015 at 12:30, Ezequiel Garcia
-<ezequiel@vanguardiasur.com.ar> wrote:
-> Add support for the Openbox Windows Manager.
->
-> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> ---
-> Openbox was submitted long ago to Buildroot but it never got accepted:
->
-> http://lists.busybox.net/pipermail/buildroot/2009-December/030717.html
->
-> The current patch was written independently and completely unaware
-> of the above submission.
->
-> Tested on a Beaglebone Black.
->
->  package/Config.in            |  1 +
->  package/openbox/Config.in    | 20 ++++++++++++++
->  package/openbox/openbox.hash |  3 +++
->  package/openbox/openbox.mk   | 62 ++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 86 insertions(+)
->  create mode 100644 package/openbox/Config.in
->  create mode 100644 package/openbox/openbox.hash
->  create mode 100644 package/openbox/openbox.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index bdc3063abd1a..042cc6723682 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -303,6 +303,7 @@ comment "X window managers"
->         source "package/fluxbox/Config.in"
->         source "package/matchbox/Config.in"
->         source "package/metacity/Config.in"
-> +       source "package/openbox/Config.in"
->  endmenu
->
->  menu "Hardware handling"
-> diff --git a/package/openbox/Config.in b/package/openbox/Config.in
-> new file mode 100644
-> index 000000000000..796047142c3e
-> --- /dev/null
-> +++ b/package/openbox/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_OPENBOX
-> +       bool "openbox"
-> +       depends on BR2_PACKAGE_XORG7
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> +       depends on BR2_USE_MMU # glib2
-> +       depends on BR2_USE_WCHAR # glib2
-> +       select BR2_PACKAGE_LIBGLIB2
-> +       select BR2_PACKAGE_LIBXML2
-> +       select BR2_PACKAGE_PANGO
-> +       select BR2_PACKAGE_XLIB_LIBX11
-> +       help
-> +         Openbox is a highly configurable, next generation window
-> +         manager with extensive standards support.
-> +
-> +         http://openbox.org
-> +
-> +comment "openbox needs a MMU and a toolchain w/ threads"
-> +       depends on BR2_USE_MMU
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_PACKAGE_XORG7
-> diff --git a/package/openbox/openbox.hash b/package/openbox/openbox.hash
-> new file mode 100644
-> index 000000000000..b8839cae2dec
-> --- /dev/null
-> +++ b/package/openbox/openbox.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha256  abe75855cc5616554ffd47134ad15291fe37ebbebf1a80b69cbde9d670f0e26d  openbox-3.6.1.tar.xz
-> +
-> diff --git a/package/openbox/openbox.mk b/package/openbox/openbox.mk
-> new file mode 100644
-> index 000000000000..da88f17b54d9
-> --- /dev/null
-> +++ b/package/openbox/openbox.mk
-> @@ -0,0 +1,62 @@
-> +################################################################################
-> +#
-> +# openbox
-> +#
-> +################################################################################
-> +
-> +OPENBOX_VERSION = 3.6.1
-> +OPENBOX_SOURCE = openbox-$(OPENBOX_VERSION).tar.xz
-> +
-> +OPENBOX_SITE = http://openbox.org/dist/openbox
-> +OPENBOX_LICENSE = GPLv2+
-> +OPENBOX_LICENSE_FILES = COPYING
-> +
-> +OPENBOX_CONF_OPTS = \
-> +       --x-includes=$(STAGING_DIR)/usr/include/X11 \
-> +       --x-libraries=$(STAGING_DIR)/usr/lib
-> +
-> +OPENBOX_DEPENDENCIES = xlib_libX11 libxml2 libglib2 pango
-> +
-> +ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
-> +OPENBOX_CONF_OPTS += --enable-imlib2
-> +OPENBOX_DEPENDENCIES += imlib2
-> +else
-> +OPENBOX_CONF_OPTS += --disable-imlib2
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
-> +OPENBOX_CONF_OPTS += --enable-startup-notification
-> +OPENBOX_DEPENDENCIES += startup-notification
-> +else
-> +OPENBOX_CONF_OPTS += --disable-startup-notification
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
-> +OPENBOX_CONF_OPTS += --enable-session-management
-> +OPENBOX_DEPENDENCIES += xlib_libSM
-> +else
-> +OPENBOX_CONF_OPTS += --disable-session-management
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-> +OPENBOX_CONF_OPTS += --enable-xinerama
-> +OPENBOX_DEPENDENCIES += xlib_libXinerama
-> +else
-> +OPENBOX_CONF_OPTS += --disable-xinerama
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-> +OPENBOX_CONF_OPTS += --enable-xrandr
-> +OPENBOX_DEPENDENCIES += xlib_libXrandr
-> +else
-> +OPENBOX_CONF_OPTS += --disable-xrandr
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
-> +OPENBOX_DEPENDENCIES += xlib_libXcursor
-> +OPENBOX_CONF_OPTS += --enable-xcursor
-> +else
-> +OPENBOX_CONF_OPTS += --disable-xcursor
-> +endif
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.6.2
->
+Also remove no longer needed patch (merged upstream before the release
+of v2.1).
 
-Any feedback guys?
--- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/picocom/picocom.hash | 3 +--
+ package/picocom/picocom.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
+index 7eada03..674b620 100644
+--- a/package/picocom/picocom.hash
++++ b/package/picocom/picocom.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256 e0f7095c118f43c1c09787a16ef5c7d4c4ad4457dd3b1281efcc4cdb8906af9a  picocom-2.0.tar.gz
+-sha256 37746613c05ecf4058c989ef7042b85ef0308886f3731a9dfffdadd19cc9ecfb  2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
++sha256 6b152fc5f816eaef6b86336a4cec7cf1496b7c712061e5aea5a36f143a0b09ed  picocom-2.1.tar.gz
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index 106de94..59a749f 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-PICOCOM_VERSION = 2.0
++PICOCOM_VERSION = 2.1
+ PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
+ PICOCOM_LICENSE = GPLv2+
+ PICOCOM_LICENSE_FILES = LICENSE.txt
+-PICOCOM_PATCH = https://github.com/npat-efault/picocom/commit/2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
+ 
+ define PICOCOM_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
