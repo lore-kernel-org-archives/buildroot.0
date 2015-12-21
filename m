@@ -1,45 +1,55 @@
-From: Leonardo Giordano <lgiordano@controlnet.com.ar>
-Date: Mon, 21 Dec 2015 19:19:53 -0300
-Subject: [Buildroot] QT5 and EGL display
-In-Reply-To: <CAAEAJfCzaBPgDDWwb+B7VmLOuEC5T240KQGuLD4yfyjqNhUvJw@mail.gmail.com>
-References: <CAFMv-cxijKErcPy=ZptgjfXskpnUS8LZMW2KSgkeV8novFGB3g@mail.gmail.com>
- <20151221155213.279e62a5@free-electrons.com>
- <CAFMv-cx3j+MKFCfyuQ0nYRLdd64Q-WMD_L_Vbv_arMepbP8Ozw@mail.gmail.com>
- <CAAEAJfBzKs8T1rhZQ_p++GEUPGyoXp1NN_eUfbLrOjRRBF2FnQ@mail.gmail.com>
- <CAFMv-czC-gMRuCy1UyAjgZoEB_C8MwsPN=we+ixheNJwT_hJLQ@mail.gmail.com>
- <CAAEAJfCzaBPgDDWwb+B7VmLOuEC5T240KQGuLD4yfyjqNhUvJw@mail.gmail.com>
-Message-ID: <CAFMv-cyBViHhuCVkv0Wvtp4NWvsCUUX=4wNciB=h52F1Gi-3_A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Dec 2015 23:20:48 +0100
+Subject: [Buildroot] [PATCH 0/8 RFC] core: install foo-config scripts
+ early in the PATH (branch yem/foo-config-in-PATH)
+In-Reply-To: <cover.1450712392.git.yann.morin.1998@free.fr>
+References: <cover.1450712392.git.yann.morin.1998@free.fr>
+Message-ID: <20151221232048.1218dd26@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok thanks!
+Yann,
 
-Enviado desde mi m?vil.
-Sent from my mobile.
-El dic. 21, 2015 7:15 PM, "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>
-escribi?:
+On Mon, 21 Dec 2015 16:56:55 +0100, Yann E. MORIN wrote:
 
-> Leonardo,
->
-> On 21 December 2015 at 19:10, Leonardo Giordano
-> <lgiordano@controlnet.com.ar> wrote:
-> > Thanks for replying.
-> > Today we enabled linuxfb, and as we are using DRM, according to atmel
-> > website, we had to enable a fb legacy emulation. It seems to work, but
-> I'm
-> > not sure if this is the best approach.
->
-> Well, as far as I can know, it's the only sane option as there's no
-> Qt5 platform plugin that can interface into DRM.
-> It's a quite popular combination to develop simple UIs (we're using
-> that here for the UI of an industrial equipment).
-> --
-> Ezequiel Garc?a, VanguardiaSur
-> www.vanguardiasur.com.ar
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151221/3e4b8e77/attachment-0001.html>
+> This RFC series is an attempt at solving once and for all the problem we
+> encounter with foo-config scripts.
+> 
+> The foo-config scripts are usually installed in staging, so are out of
+> the PATH. However, most packages will just simply want to run them, and
+> most are not configurable in where to look for that script and just
+> expect to find them in the PATH.
+> 
+> Up until now, we used to patch those packages so that they accept an
+> environment variable.
+> 
+> Arnout has suggested [0] that we move all the target-related foo-config
+> scripts early in the PATH, so that they are found before the host ones
+> and before the system ones.
+> 
+> This would allow us to drop our local patches, and to no longer set the
+> custom FOO_CONFIG or the ac_cv_foo_config variables from our package
+> recipes.
+
+Unfortunately, I believe it doesn't work completely, because there are
+some <foo>-config scripts that are not listed in <pkg>_CONFIG_SCRIPTS
+because they are for some reason not compatible with the fixup that we
+do. One example that comes to mind is python-*config (they are written
+in shell but don't follow the usual pattern). I believe there might be
+other cases as well.
+
+Also, this solution doesn't solve the (admittedly unlikely) case of a
+package calling /usr/bin/<foo>-config directly.
+
+But I agree that it might solve many of the usual cases. I don't know
+if the additional complexity of yet another special mechanism really
+makes it worth it. I'd like to hear from Peter about this.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
