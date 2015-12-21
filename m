@@ -1,60 +1,45 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Tue, 22 Dec 2015 09:18:59 +1100
-Subject: [Buildroot] [PATCH] linux: Build and install kernel selftests
-In-Reply-To: <20151221092513.GA3454@free.fr>
-References: <1448409222-4510-1-git-send-email-cyrilbur@gmail.com>
- <1448409222-4510-2-git-send-email-cyrilbur@gmail.com>
- <20151214221846.GD4152@free.fr> <20151217124506.616549d9@camb691>
- <20151217180735.GA3653@free.fr> <20151221164401.4007ce33@camb691>
- <20151221092513.GA3454@free.fr>
-Message-ID: <20151222091859.1b3de5c0@camb691>
+From: Leonardo Giordano <lgiordano@controlnet.com.ar>
+Date: Mon, 21 Dec 2015 19:19:53 -0300
+Subject: [Buildroot] QT5 and EGL display
+In-Reply-To: <CAAEAJfCzaBPgDDWwb+B7VmLOuEC5T240KQGuLD4yfyjqNhUvJw@mail.gmail.com>
+References: <CAFMv-cxijKErcPy=ZptgjfXskpnUS8LZMW2KSgkeV8novFGB3g@mail.gmail.com>
+ <20151221155213.279e62a5@free-electrons.com>
+ <CAFMv-cx3j+MKFCfyuQ0nYRLdd64Q-WMD_L_Vbv_arMepbP8Ozw@mail.gmail.com>
+ <CAAEAJfBzKs8T1rhZQ_p++GEUPGyoXp1NN_eUfbLrOjRRBF2FnQ@mail.gmail.com>
+ <CAFMv-czC-gMRuCy1UyAjgZoEB_C8MwsPN=we+ixheNJwT_hJLQ@mail.gmail.com>
+ <CAAEAJfCzaBPgDDWwb+B7VmLOuEC5T240KQGuLD4yfyjqNhUvJw@mail.gmail.com>
+Message-ID: <CAFMv-cyBViHhuCVkv0Wvtp4NWvsCUUX=4wNciB=h52F1Gi-3_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Dec 2015 10:25:13 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Ok thanks!
 
-> Cyril, All,
-> 
-> On 2015-12-21 16:44 +1100, Cyril Bur spake thusly:
-> > On Thu, 17 Dec 2015 19:07:35 +0100
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > Totally agreed will address everything you mention. I should have mentioned a
-> > few in more detail, my bad for not going over it in more detail before posting,
-> > you're correct that a few things in there are actually non obvious.  
-> 
-> No problem! Things just happen to be obvious when you actually do the
-> job, because everything is fresh in your memory. Patch reviews are there
-> to eventually highlight that fact. So, really, that's not a problem.
-> 
-> [--SNIP--]
-> > > > > > +SELFTESTS_INSTALL_STAGING = YES      
-> > > > > Why install it in staging?    
-> > > > I actually hadn't initially but I did get to a point in my work where I had
-> > > > to objdump a test binary. So, since I needed it, it stayed.    
-> > > But can't you objdump the binaries that are installed in target/ instead?  
-> > 
-> > I think I tried that initially but IIRC they get stripped when put into target/
-> > which proved annoying when objdumping.  
-> 
-> But then, the 'original' binaries are still present in the build
-> directory, where they are definitely not stripped (at least, not by
-> Builroot). Isn't that enough?
-> 
+Enviado desde mi m?vil.
+Sent from my mobile.
+El dic. 21, 2015 7:15 PM, "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>
+escribi?:
 
-Doh, you're right of course they'll be in the linux build dir, I'll change that
-too - I'll be sure to comment that one, even I totally forgot that haha.
-
-Thanks
-
-> Staging is really for libraries and headers that are to be used by
-> another package. Kernel selftests are not headers, they are not
-> libraries, so nothing will include/link them. So, I still believe
-> there's no reason to put them in staging.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+> Leonardo,
+>
+> On 21 December 2015 at 19:10, Leonardo Giordano
+> <lgiordano@controlnet.com.ar> wrote:
+> > Thanks for replying.
+> > Today we enabled linuxfb, and as we are using DRM, according to atmel
+> > website, we had to enable a fb legacy emulation. It seems to work, but
+> I'm
+> > not sure if this is the best approach.
+>
+> Well, as far as I can know, it's the only sane option as there's no
+> Qt5 platform plugin that can interface into DRM.
+> It's a quite popular combination to develop simple UIs (we're using
+> that here for the UI of an industrial equipment).
+> --
+> Ezequiel Garc?a, VanguardiaSur
+> www.vanguardiasur.com.ar
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151221/3e4b8e77/attachment-0001.html>
