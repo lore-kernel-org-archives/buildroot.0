@@ -1,81 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Dec 2015 16:56:54 +0100
-Subject: [Buildroot] [PATCH 3/8 RFC] core/pkg-generic: install foo-config
-	scripts in their own dir
+Date: Mon, 21 Dec 2015 16:56:55 +0100
+Subject: [Buildroot] [PATCH 4/8 RFC] core: re-instate different target and
+	host PATHs
 In-Reply-To: <cover.1450712392.git.yann.morin.1998@free.fr>
 References: <cover.1450712392.git.yann.morin.1998@free.fr>
-Message-ID: <66985474d41d8d25b6f75560665322b88f6e6813.1450712392.git.yann.morin.1998@free.fr>
+Message-ID: <98156fa4f1051f9e13e26a0859fd95e01bba3308.1450712392.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After we fixup the foo-config scripts of a package, copy them to their
-own directory that we put early in the PATH, so that packges that
-hard-code calls to foo-config will find them automatically and avoid
-finding those of the host.
+In b989976 and previous commits, the differentiation between host and
+target PATH has been removed, because there was no reason at that time
+to have two different PATHs.
 
-Note that we do keep the fixed-up scripts in staging, because we already
-pass 'FOO_CONFIG=$(STAGING)/usr/bin/foo-config' to a lot of packages,
-some for which we even have patches to accept the FOO_CONFIG environment
-variables. We need to unpatch those packages before we can just move the
-fixed-up foo-config scripts out of staging.
+We now have the foo-config scripts installed in their own directory, and
+that has to come first in the PATH when building for the target. However,
+we do not want to use those directories for the host packages, as those
+foo-config scripts are only for the target packages.
+
+So, we need to differentiate the host and target PATHs again.
+
+This is a preparatory commit, which only introduces the two new
+variables. Follow-up patches will make use of those variables in the
+proper locations.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- Makefile               | 7 +++++--
- package/pkg-generic.mk | 4 +++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ Makefile | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index f2b09ad..780b596 100644
+index 780b596..b5fadf4 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -363,6 +363,9 @@ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
- # packages compiled for the host go here
- HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
+@@ -366,8 +366,12 @@ HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
+ # foo-config scripts for the target go here
+ FOO_CONFIG_DIR := $(HOST_DIR)/opt/foo-config
  
-+# foo-config scripts for the target go here
-+FOO_CONFIG_DIR := $(HOST_DIR)/opt/foo-config
-+
++# Host PATH is just BR_PATH, but target PATH must find the foo-config
++# scripts first.
  # Quotes are needed for spaces and all in the original PATH content.
- BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
+-BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
++BR_PATH = $(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)
++HOST_PATH = "$(BR_PATH)"
++TARGET_PATH = "$(FOO_CONFIG_DIR):$(BR_PATH)"
  
-@@ -426,7 +429,7 @@ include fs/common.mk
- include $(BR2_EXTERNAL)/external.mk
- 
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
--	$(HOST_DIR) $(BINARIES_DIR)
-+	$(HOST_DIR) $(BINARIES_DIR) $(FOO_CONFIG_DIR)
- 
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
- 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-@@ -445,7 +448,7 @@ world: target-post-image
- # dependencies anywhere else
- #
- ################################################################################
--$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR):
-+$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(FOO_CONFIG_DIR):
- 	@mkdir -p $@
- $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
- 	@mkdir -p $@
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 69349f6..6e3aee1 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -246,7 +246,9 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- 				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
- 				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
- 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
--				$(STAGING_DIR)/usr/bin/$(s); ) \
-+				$(STAGING_DIR)/usr/bin/$(s); \
-+			$(INSTALL) -m 0755 -D $(STAGING_DIR)/usr/bin/$(s) \
-+				$(FOO_CONFIG_DIR)/$(s); ) \
- 	fi
- 	@$(call MESSAGE,"Fixing libtool files")
- 	$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+ # Location of a file giving a big fat warning that output/target
+ # should not be used as the root filesystem.
 -- 
 1.9.1
