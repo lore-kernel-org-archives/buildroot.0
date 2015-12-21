@@ -1,63 +1,71 @@
-From: Gaur, Rajneesh <Rajneesh.Gaur@barco.com>
-Date: Mon, 21 Dec 2015 10:59:43 +0000
-Subject: [Buildroot] Need help in enabling the ulimit command to
-	busybox-1.23.2
-In-Reply-To: <878u51hz5r.fsf@dell.be.48ers.dk>
-References: <C9AC9E8BC6C75F478EDF2670B45767282A3B3E88@NOIMEX10.barco.com>
- <878u51hz5r.fsf@dell.be.48ers.dk>
-Message-ID: <C9AC9E8BC6C75F478EDF2670B45767282A3B46F7@NOIMEX10.barco.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon, 21 Dec 2015 12:21:30 +0100
+Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad/Config.in: indentation
+	cleanup
+Message-ID: <1450696890-27233-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-I was able to set up core dump to be able to analyse the possible crash of one of linux processes on our Linux target.
-I deliberately put a bug inside the code and I could get the line where the process crashed after seeing the core dump file.
-Thereafter, I created an EMMC image to reproduce the crash scenario in the real environment.
-However, after 2 days of continuous running, today the specific process hanged instead of getting crashed.
-Could you suggest some way so as to analyse the target so as to figure out the point at which the process hanged.
-
-Br
-Rajneesh Gaur
-
------Original Message-----
-From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter Korsgaard
-Sent: 11 December 2015 19:21
-To: Gaur, Rajneesh
-Cc: buildroot at busybox.net
-Subject: Re: Need help in enabling the ulimit command to busybox-1.23.2
-
->>>>> "Gaur," == Gaur, Rajneesh <Rajneesh.Gaur@barco.com> writes:
-
- > Dear,
- > We wanted to enable the core dump on our target which is buildroot based.
- > We searched a lot on the web but we were not able to get it so far.
-
- > Can you please update me with the steps to do the above mentioned.
-
-Ehh, the default buildroot configuration uses busybox ash as the shell, which does support ulimit:
-
-Welcome to Buildroot
-buildroot login: root
-
-# ulimit -a
--f: file size (blocks)             unlimited
--t: cpu time (seconds)             unlimited
--d: data seg size (kb)             unlimited
--s: stack size (kb)                8192
--c: core file size (blocks)        0
--m: resident set size (kb)         unlimited
--l: locked memory (kb)             64
--p: processes                      978
--n: file descriptors               1024
--v: address space (kb)             unlimited
--w: locks                          unlimited
--e: scheduling priority            0
--r: real-time priority             0
-
---
-Bye, Peter Korsgaard
-This message is subject to the following terms and conditions: MAIL DISCLAIMER<http://www.barco.com/en/maildisclaimer>
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 134e1aa..a834f13 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -70,8 +70,8 @@ comment "glx not supported with rpi-userland"
+ 
+ comment "glx needs the opengl API and modular X.org"
+ 	depends on !BR2_PACKAGE_RPI_USERLAND && \
+-			(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_OPENGL || \
+-			!BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR)
++		(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_OPENGL || \
++		!BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR)
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
+ 	bool "egl"
+@@ -82,7 +82,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
+ 
+ comment "egl needs an API and an EGL backend"
+ 	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_API || \
+-			!BR2_PACKAGE_HAS_LIBEGL
++		!BR2_PACKAGE_HAS_LIBEGL
+ 
+ comment "Window systems"
+ 
+@@ -104,8 +104,8 @@ comment "x11 not supported with rpi-userland"
+ 
+ comment "x11 needs a platform and X.org"
+ 	depends on !BR2_PACKAGE_RPI_USERLAND && \
+-			(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM || \
+-			!BR2_PACKAGE_XORG7)
++		(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM || \
++		!BR2_PACKAGE_XORG7)
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
+ 	bool "wayland"
+@@ -116,7 +116,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
+ 
+ comment "wayland needs the egl platform and the wayland package"
+ 	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL || \
+-			!BR2_PACKAGE_WAYLAND
++		!BR2_PACKAGE_WAYLAND
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_DISPMANX
+ 	bool "dispmanx"
+@@ -129,7 +129,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_DISPMANX
+ 
+ comment "dispmanx needs the egl platform and rpi-userland"
+ 	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL || \
+-			!BR2_PACKAGE_RPI_USERLAND
++		!BR2_PACKAGE_RPI_USERLAND
+ 
+ endif
+ 
+-- 
+1.9.1
