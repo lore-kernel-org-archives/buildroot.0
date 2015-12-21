@@ -1,71 +1,83 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon, 21 Dec 2015 12:21:30 +0100
-Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad/Config.in: indentation
-	cleanup
-Message-ID: <1450696890-27233-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 21 Dec 2015 13:26:37 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wireshark: Fix libpcap detection
+In-Reply-To: <5676CDEE.10206@mind.be>
+References: <1449998185-15082-1-git-send-email-bernd.kuhls@t-online.de>
+ <566DDC20.5000104@mind.be> <20151220124957.GA3677@free.fr>
+ <5676CDEE.10206@mind.be>
+Message-ID: <20151221122636.GB3454@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/gstreamer1/gst1-plugins-bad/Config.in | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Arnout, All,
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 134e1aa..a834f13 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -70,8 +70,8 @@ comment "glx not supported with rpi-userland"
- 
- comment "glx needs the opengl API and modular X.org"
- 	depends on !BR2_PACKAGE_RPI_USERLAND && \
--			(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_OPENGL || \
--			!BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR)
-+		(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_OPENGL || \
-+		!BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR)
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
- 	bool "egl"
-@@ -82,7 +82,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
- 
- comment "egl needs an API and an EGL backend"
- 	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_API || \
--			!BR2_PACKAGE_HAS_LIBEGL
-+		!BR2_PACKAGE_HAS_LIBEGL
- 
- comment "Window systems"
- 
-@@ -104,8 +104,8 @@ comment "x11 not supported with rpi-userland"
- 
- comment "x11 needs a platform and X.org"
- 	depends on !BR2_PACKAGE_RPI_USERLAND && \
--			(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM || \
--			!BR2_PACKAGE_XORG7)
-+		(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM || \
-+		!BR2_PACKAGE_XORG7)
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
- 	bool "wayland"
-@@ -116,7 +116,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
- 
- comment "wayland needs the egl platform and the wayland package"
- 	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL || \
--			!BR2_PACKAGE_WAYLAND
-+		!BR2_PACKAGE_WAYLAND
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_DISPMANX
- 	bool "dispmanx"
-@@ -129,7 +129,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_DISPMANX
- 
- comment "dispmanx needs the egl platform and rpi-userland"
- 	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL || \
--			!BR2_PACKAGE_RPI_USERLAND
-+		!BR2_PACKAGE_RPI_USERLAND
- 
- endif
- 
+On 2015-12-20 16:49 +0100, Arnout Vandecappelle spake thusly:
+> On 20-12-15 13:49, Yann E. MORIN wrote:
+> > On 2015-12-13 21:59 +0100, Arnout Vandecappelle spake thusly:
+[--SNIP--]
+> >>  To fundamentally avoid this type of issue (we have a bunch of fixes like this),
+> >> I think we should add an additional directory that is put in the _beginning_ of
+> >> the path in TARGET_MAKE_ENV. This directory could then be populated through the
+> >> _CONFIG_SCRIPTS mechanism.
+> >>
+> >>  What do the others think?
+> > 
+> > I'v estarted having a look at your suggestion. The basic idea is
+> > relatively trivial to do, and I now have a FOO_CONFIG_DIR location
+> > where I put those scripts.
+> > However, I'm not facing a wall:
+>  I guess you _are_ facing a wall :-)
+
+s/not/now/ :-)
+
+> > So, we'd need to split the PATH for host and target variants.
+> > I wonder if that would be acceptable.
+>  They used to be, but since they were identical, Samuel factored them away in
+> b989976.
+
+Ah, thianks for the sha1, I was looking for it earlier.
+
+[--SNIP--]
+> > My grep-fuu must still be asleep today, since I could only identify wine
+> > in the second category, although I'm pretty sure we have at least a few
+> > other packages that we do patch for that.
+> git grep \\-config -- \*.patch
+>  Lot's of false positives though.
+
+I can start with that.
+
+> > The packages in the first category are reltively rare: only about 50 of
+> > them I could identify, so it should be pretty easy to fix.
+> 
+>  I was more concerned with the fixes like the one that was added by this patch:
+> diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+> index 534131b..2b06699 100644
+> --- a/package/wireshark/wireshark.mk
+> +++ b/package/wireshark/wireshark.mk
+> @@ -24,6 +24,7 @@ WIRESHARK_CONF_OPTS = \
+>  	--enable-static=no \
+>  	--with-libsmi=no \
+>  	--with-lua=no \
+> +	--with-pcap=$(STAGING_DIR)/usr \
+>  	--includedir=$(STAGING_DIR)/usr/include
+> 
+>  Another grep which turns up lots of false positives:
+> git grep '\--with-.*=\$(STAGING_DIR)'
+
+Yep, we can hunt them one by one as time passes...
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
