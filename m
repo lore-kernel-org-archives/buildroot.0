@@ -1,43 +1,32 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 21 Dec 2015 19:11:08 -0300
-Subject: [Buildroot] [PATCH] directfb/legacy: add that it was removed
-Message-ID: <1450735868-20515-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Mon, 21 Dec 2015 19:15:43 -0300
+Subject: [Buildroot] QT5 and EGL display
+In-Reply-To: <CAFMv-czC-gMRuCy1UyAjgZoEB_C8MwsPN=we+ixheNJwT_hJLQ@mail.gmail.com>
+References: <CAFMv-cxijKErcPy=ZptgjfXskpnUS8LZMW2KSgkeV8novFGB3g@mail.gmail.com>
+ <20151221155213.279e62a5@free-electrons.com>
+ <CAFMv-cx3j+MKFCfyuQ0nYRLdd64Q-WMD_L_Vbv_arMepbP8Ozw@mail.gmail.com>
+ <CAAEAJfBzKs8T1rhZQ_p++GEUPGyoXp1NN_eUfbLrOjRRBF2FnQ@mail.gmail.com>
+ <CAFMv-czC-gMRuCy1UyAjgZoEB_C8MwsPN=we+ixheNJwT_hJLQ@mail.gmail.com>
+Message-ID: <CAAEAJfCzaBPgDDWwb+B7VmLOuEC5T240KQGuLD4yfyjqNhUvJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Leonardo,
 
-As pointed by Yann.
+On 21 December 2015 at 19:10, Leonardo Giordano
+<lgiordano@controlnet.com.ar> wrote:
+> Thanks for replying.
+> Today we enabled linuxfb, and as we are using DRM, according to atmel
+> website, we had to enable a fb legacy emulation. It seems to work, but I'm
+> not sure if this is the best approach.
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarisa@free-electrons.com>
----
- Config.in.legacy | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a21ea82..82ab375 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,7 +146,7 @@ endif
- comment "Legacy options removed in 2016.02"
- 
- config BR2_PACKAGE_DIRECTFB_CLE266
--	bool "cle266 driver for directfb"
-+	bool "cle266 driver for directfb removed"
- 	select BR2_LEGACY
- 	help
- 	  The cle266 directfb driver support has been removed.
-@@ -154,7 +154,7 @@ config BR2_PACKAGE_DIRECTFB_CLE266
- 	  anyone has any use for it.
- 
- config BR2_PACKAGE_DIRECTFB_UNICHROME
--	bool "unichrome driver for directfb"
-+	bool "unichrome driver for directfb removed"
- 	select BR2_LEGACY
- 	help
- 	  The unichrome directfb driver support has been removed.
+Well, as far as I can know, it's the only sane option as there's no
+Qt5 platform plugin that can interface into DRM.
+It's a quite popular combination to develop simple UIs (we're using
+that here for the UI of an industrial equipment).
 -- 
-2.4.10
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
