@@ -1,51 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Dec 2015 16:16:58 +0100
-Subject: [Buildroot] [PATCH 1/1] nfs-utils: install /etc/nfsmount.conf
-In-Reply-To: <1450707537-30154-2-git-send-email-yba@tkos.co.il>
-References: <1450707537-30154-1-git-send-email-yba@tkos.co.il>
- <1450707537-30154-2-git-send-email-yba@tkos.co.il>
-Message-ID: <20151221161658.0aaf830d@free-electrons.com>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Mon, 21 Dec 2015 10:20:54 -0500
+Subject: [Buildroot] [PATCH 2/4] libpangomm: new package
+In-Reply-To: <567807AB.5030000@zacarias.com.ar>
+References: <1449178605-8568-1-git-send-email-james.knight@rockwellcollins.com>
+ <1449178605-8568-2-git-send-email-james.knight@rockwellcollins.com>
+ <567807AB.5030000@zacarias.com.ar>
+Message-ID: <CALe+oY8c3T9CUi9sM1iGDt1Bee=SPuOaBafcZdvYKU2V5-qz5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jonathan Ben-Avraham,
+Gustavo,
 
-On Mon, 21 Dec 2015 16:18:56 +0200, Jonathan Ben-Avraham wrote:
+On Mon, Dec 21, 2015 at 9:07 AM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+>
+> Any particular reason you went for a devel/unstable branch version?
 
-> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-> index 30f12fd..55b75e2 100644
-> --- a/package/nfs-utils/nfs-utils.mk
-> +++ b/package/nfs-utils/nfs-utils.mk
-> @@ -38,6 +38,9 @@ endif
->  define NFS_UTILS_INSTALL_FIXUP
->  	rm -f $(NFS_UTILS_TARGETS_)
->  	touch $(TARGET_DIR)/etc/exports
-> +	$(INSTALL) -m 744 \
-
-Why 744 and not 644 ? It doesn't make much sense to have an executable
-configuration file.
-
-Also, please use the -D option.
-
-> +		$(BUILD_DIR)/nfs-utils-$(NFS_UTILS_VERSION)/utils/mount/nfsmount.conf \
-
-Please use:
-
-		$(@D)/utils/mount/nfsmount.conf
-
-> +		$(TARGET_DIR)/etc
-
-And a full destination path here:
-
-		$(TARGET_DIR)/etc/nfsmount.conf
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+No. I only just took the versions I saw available to download. I
+didn't consider the Gnome version stable/devel releases. If we want to
+downgrade to a stable version, I have no objections.
