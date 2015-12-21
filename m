@@ -1,47 +1,27 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Mon, 21 Dec 2015 15:06:28 -0200
-Subject: [Buildroot] [PATCH 1/1] picocom: bump to version 2.1
-Message-ID: <1450717588-7737-1-git-send-email-rprebello@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 21 Dec 2015 20:44:37 +0200
+Subject: [Buildroot] [PATCH 7/8 RFC] packages: use TARGET_PATH
+In-Reply-To: <bfe629a2f300528996a23613fb4661b41e972bac.1450712392.git.yann.morin.1998@free.fr>
+References: <cover.1450712392.git.yann.morin.1998@free.fr>
+ <bfe629a2f300528996a23613fb4661b41e972bac.1450712392.git.yann.morin.1998@free.fr>
+Message-ID: <20151221184436.GB1548@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove no longer needed patch (merged upstream before the release
-of v2.1).
+Hi Yann,
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
- package/picocom/picocom.hash | 3 +--
- package/picocom/picocom.mk   | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+On Mon, Dec 21, 2015 at 04:56:58PM +0100, Yann E. MORIN wrote:
+> Note that libhid should no longer need that trick, but this woill be
+> fixed independently in a follow-up patch.
 
-diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
-index 7eada03..674b620 100644
---- a/package/picocom/picocom.hash
-+++ b/package/picocom/picocom.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256 e0f7095c118f43c1c09787a16ef5c7d4c4ad4457dd3b1281efcc4cdb8906af9a  picocom-2.0.tar.gz
--sha256 37746613c05ecf4058c989ef7042b85ef0308886f3731a9dfffdadd19cc9ecfb  2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
-+sha256 6b152fc5f816eaef6b86336a4cec7cf1496b7c712061e5aea5a36f143a0b09ed  picocom-2.1.tar.gz
-diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
-index 106de94..59a749f 100644
---- a/package/picocom/picocom.mk
-+++ b/package/picocom/picocom.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
- 
--PICOCOM_VERSION = 2.0
-+PICOCOM_VERSION = 2.1
- PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
- PICOCOM_LICENSE = GPLv2+
- PICOCOM_LICENSE_FILES = LICENSE.txt
--PICOCOM_PATCH = https://github.com/npat-efault/picocom/commit/2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
- 
- define PICOCOM_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+So can BR_PATH be removed entirely from top Makefile after this patch?
+
+baruch
+
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
