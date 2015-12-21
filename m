@@ -1,78 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Dec 2015 23:30:30 +0100
-Subject: [Buildroot] [PATCH 0/8 RFC] core: install foo-config scripts
- early in the PATH (branch yem/foo-config-in-PATH)
-In-Reply-To: <20151221232048.1218dd26@free-electrons.com>
-References: <cover.1450712392.git.yann.morin.1998@free.fr>
- <20151221232048.1218dd26@free-electrons.com>
-Message-ID: <20151221223030.GG3454@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Dec 2015 23:11:26 +0100
+Subject: [Buildroot] [git commit] python-pysmb: new package
+Message-ID: <20151221223113.D7DF782571@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=16649b439bd0c9c9de0d34cad93ad371e8667fc9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-12-21 23:20 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 21 Dec 2015 16:56:55 +0100, Yann E. MORIN wrote:
-> > This RFC series is an attempt at solving once and for all the problem we
-> > encounter with foo-config scripts.
-> > 
-> > The foo-config scripts are usually installed in staging, so are out of
-> > the PATH. However, most packages will just simply want to run them, and
-> > most are not configurable in where to look for that script and just
-> > expect to find them in the PATH.
-> > 
-> > Up until now, we used to patch those packages so that they accept an
-> > environment variable.
-> > 
-> > Arnout has suggested [0] that we move all the target-related foo-config
-> > scripts early in the PATH, so that they are found before the host ones
-> > and before the system ones.
-> > 
-> > This would allow us to drop our local patches, and to no longer set the
-> > custom FOO_CONFIG or the ac_cv_foo_config variables from our package
-> > recipes.
-> 
-> Unfortunately, I believe it doesn't work completely, because there are
-> some <foo>-config scripts that are not listed in <pkg>_CONFIG_SCRIPTS
-> because they are for some reason not compatible with the fixup that we
-> do. One example that comes to mind is python-*config (they are written
-> in shell but don't follow the usual pattern).
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                      |  1 +
+ package/python-pysmb/Config.in         | 15 +++++++++++++++
+ package/python-pysmb/python-pysmb.hash |  3 +++
+ package/python-pysmb/python-pysmb.mk   | 14 ++++++++++++++
+ 4 files changed, 33 insertions(+)
 
-And how do we handle them today? If we don't do anything about it, then
-this series would indeed not solve those, but it would not break it
-either, since it would already be broken today.
-
-Unless we do have code to manually install them in $(HOST_DIR)/usr/bin ?
-
-> I believe there might be
-> other cases as well.
-
-Again, what are we doing for those today?
-
-> Also, this solution doesn't solve the (admittedly unlikely) case of a
-> package calling /usr/bin/<foo>-config directly.
-
-Indeed. But it is already broken today, and the series does not break it
-any more.
-
-> But I agree that it might solve many of the usual cases. I don't know
-> if the additional complexity of yet another special mechanism really
-> makes it worth it. I'd like to hear from Peter about this.
-
-Yes, this series is really just an RFC. It was relatively easy to do
-(even a bit easier than what I expected, aha!), so I just spun it on the
-list just to "feel the temperature".
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index 066aa06..b57c3ee 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -671,6 +671,7 @@ menu "External python modules"
+ 	source "package/python-pyro/Config.in"
+ 	source "package/python-pyroute2/Config.in"
+ 	source "package/python-pysendfile/Config.in"
++	source "package/python-pysmb/Config.in"
+ 	source "package/python-pysnmp/Config.in"
+ 	source "package/python-pysnmp-apps/Config.in"
+ 	source "package/python-pysnmp-mibs/Config.in"
+diff --git a/package/python-pysmb/Config.in b/package/python-pysmb/Config.in
+new file mode 100644
+index 0000000..42a9984
+--- /dev/null
++++ b/package/python-pysmb/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PYTHON_PYSMB
++	bool "python-pysmb"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_PYTHON_PYASN
++	help
++	  pysmb is an experimental SMB/CIFS library written in Python.
++	  It implements the client-side SMB/CIFS protocol (SMB1 and SMB2)
++	  which allows your Python application to access and transfer files
++	  to/from SMB/CIFS shared folders like your Windows file sharing and
++	  Samba folders.
++
++	  https://miketeo.net/wp/index.php/projects/pysmb
++
++comment "python-pysmb needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pysmb/python-pysmb.hash b/package/python-pysmb/python-pysmb.hash
+new file mode 100644
+index 0000000..b3c91fe
+--- /dev/null
++++ b/package/python-pysmb/python-pysmb.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=256b94bdeb63e6cc63f4b6a380b5918b, sha256 locally computed
++md5     256b94bdeb63e6cc63f4b6a380b5918b  pysmb-1.1.17.tar.gz
++sha256  267def5aef2f0f41be4ba141b29dce9c23214667e84bddefd285b56fd481d813  pysmb-1.1.17.tar.gz
+diff --git a/package/python-pysmb/python-pysmb.mk b/package/python-pysmb/python-pysmb.mk
+new file mode 100644
+index 0000000..1a00a4d
+--- /dev/null
++++ b/package/python-pysmb/python-pysmb.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pysmb
++#
++################################################################################
++
++PYTHON_PYSMB_VERSION = 1.1.17
++PYTHON_PYSMB_SOURCE = pysmb-$(PYTHON_PYSMB_VERSION).tar.gz
++PYTHON_PYSMB_SITE = https://pypi.python.org/packages/source/p/pysmb
++PYTHON_PYSMB_LICENSE = libpng license
++PYTHON_PYSMB_LICENSE_FILES = LICENSE
++PYTHON_PYSMB_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
