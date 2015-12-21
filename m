@@ -1,22 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Dec 2015 11:07:39 -0300
-Subject: [Buildroot] [PATCH 2/4] libpangomm: new package
-In-Reply-To: <1449178605-8568-2-git-send-email-james.knight@rockwellcollins.com>
-References: <1449178605-8568-1-git-send-email-james.knight@rockwellcollins.com>
- <1449178605-8568-2-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <567807AB.5030000@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 21 Dec 2015 14:08:02 +0000
+Subject: [Buildroot] [Bug 8536] Building sudo with PAM results in unusable
+	sudo
+In-Reply-To: <bug-8536-163@https.bugs.busybox.net/>
+References: <bug-8536-163@https.bugs.busybox.net/>
+Message-ID: <bug-8536-163-lU1g9Ohp6p@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/12/15 18:36, James Knight wrote:
+https://bugs.busybox.net/show_bug.cgi?id=8536
 
-> +LIBPANGOMM_VERSION_MAJOR = 2.39
+--- Comment #8 from Doug Kehn <rdkehn@yahoo.com> ---
+Hi Everyone,
 
-Hi James.
-Any particular reason you went for a devel/unstable branch version?
-(odd numbers for gnome stuff = devel/unstable, even = stable/releases).
-Thanks!
-Regards.
+The /etc/pam.d/sudo line:
+     auth        required    pam_wheel.so use_uid
+requires that the user is a member of the wheel group. When sudo is built
+without PAM, the PAM databases are not queried so the user does not have be a
+member of wheel.
+
+Try changing the line to:
+     auth        sufficient   pam_wheel.so use_uid
+or comment it out to allow non-wheel group users sudo access. The user still
+has to be listed in sudoers.
+
+Hope this helps,
+...doug
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
