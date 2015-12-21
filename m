@@ -1,69 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Dec 2015 23:32:01 +0100
-Subject: [Buildroot] [PATCH] directfb/legacy: add that it was removed
-In-Reply-To: <1450735868-20515-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1450735868-20515-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20151221223201.GH3454@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Dec 2015 23:34:58 +0100
+Subject: [Buildroot] [PATCH 0/8 RFC] core: install foo-config scripts
+ early in the PATH (branch yem/foo-config-in-PATH)
+In-Reply-To: <20151221223030.GG3454@free.fr>
+References: <cover.1450712392.git.yann.morin.1998@free.fr>
+ <20151221232048.1218dd26@free-electrons.com>
+ <20151221223030.GG3454@free.fr>
+Message-ID: <20151221233458.32befcc2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Yann,
 
-On 2015-12-21 19:11 -0300, gustavo.zacarias at free-electrons.com spake thusly:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+On Mon, 21 Dec 2015 23:30:30 +0100, Yann E. MORIN wrote:
+
+> And how do we handle them today? If we don't do anything about it, then
+> this series would indeed not solve those, but it would not break it
+> either, since it would already be broken today.
 > 
-> As pointed by Yann.
+> Unless we do have code to manually install them in $(HOST_DIR)/usr/bin ?
+
+What? No, we are just installing them in $(STAGING_DIR), like all
+libraries. You can look at package/rtai/rtai.mk for an example.
+
+> > Also, this solution doesn't solve the (admittedly unlikely) case of a
+> > package calling /usr/bin/<foo>-config directly.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarisa@free-electrons.com>
+> Indeed. But it is already broken today, and the series does not break it
+> any more.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+It is not broken today. Such special *-config scripts get naturally
+installed in $(STAGING_DIR), they might be fixed up by a patch or some
+custom hook. And then on the consumer side, we pass some environment
+variable or other trick to get the consumer build system to use this
+specific -config script rather than the one in the PATH. Nothing
+special.
 
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  Config.in.legacy | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index a21ea82..82ab375 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,7 +146,7 @@ endif
->  comment "Legacy options removed in 2016.02"
->  
->  config BR2_PACKAGE_DIRECTFB_CLE266
-> -	bool "cle266 driver for directfb"
-> +	bool "cle266 driver for directfb removed"
->  	select BR2_LEGACY
->  	help
->  	  The cle266 directfb driver support has been removed.
-> @@ -154,7 +154,7 @@ config BR2_PACKAGE_DIRECTFB_CLE266
->  	  anyone has any use for it.
->  
->  config BR2_PACKAGE_DIRECTFB_UNICHROME
-> -	bool "unichrome driver for directfb"
-> +	bool "unichrome driver for directfb removed"
->  	select BR2_LEGACY
->  	help
->  	  The unichrome directfb driver support has been removed.
-> -- 
-> 2.4.10
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
