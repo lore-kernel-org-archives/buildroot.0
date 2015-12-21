@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 21 Dec 2015 11:50:22 +0100
-Subject: [Buildroot] [PATCH 2/4] python-werkzeug: bump to 0.11.3
+Date: Mon, 21 Dec 2015 11:50:23 +0100
+Subject: [Buildroot] [PATCH 3/4] python-pyftpdlib: bump to 1.5.0
 In-Reply-To: <1450695024-24875-1-git-send-email-yegorslists@googlemail.com>
 References: <1450695024-24875-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1450695024-24875-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1450695024-24875-3-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,39 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Change download location to pypi and add pypi MD5 checksum.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 6 +++---
- package/python-werkzeug/python-werkzeug.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pyftpdlib/python-pyftpdlib.hash | 5 +++--
+ package/python-pyftpdlib/python-pyftpdlib.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 3dcc5b4..f833b89 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
--md5	42ebf43b19475bf856fde740050d7707  Werkzeug-0.10.tar.gz
--sha256	9a97a6fcf87390172748da9e5250710b352dff18e979db925d276112cdcfa7ac  Werkzeug-0.10.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9479bc7ea6a42c2d0d82929d3926df67, sha256 locally computed
-+md5	9479bc7ea6a42c2d0d82929d3926df67  Werkzeug-0.11.3.tar.gz
-+sha256	eb5f700a9bfc96420b055635af9002d3662e43d80c3ffd31f224c25bc0d5f462  Werkzeug-0.11.3.tar.gz
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 41ae430..3df481a 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
+index e1d2e94..b6d0cca 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.hash
++++ b/package/python-pyftpdlib/python-pyftpdlib.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  e2024de33024582ef26e30395225180048b98cab341f3e9f3a55f56397c9a4b5  python-pyftpdlib-1.4.0.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0c6f7c447fb702af4d5ca0123003c9fd, sha256 locally computed
++md5     0c6f7c447fb702af4d5ca0123003c9fd  pyftpdlib-1.5.0.tar.gz
++sha256  0111127418e9012a8e9e6c05a0c64af1acef8c31128834805fb0f9a49c746261  pyftpdlib-1.5.0.tar.gz
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
+index af9423f..11e24e2 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.mk
++++ b/package/python-pyftpdlib/python-pyftpdlib.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WERKZEUG_VERSION = 0.10
-+PYTHON_WERKZEUG_VERSION = 0.11.3
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
- PYTHON_WERKZEUG_SITE = http://pypi.python.org/packages/source/W/Werkzeug
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+-PYTHON_PYFTPDLIB_VERSION = 1.4.0
+-PYTHON_PYFTPDLIB_SITE = $(call github,giampaolo,pyftpdlib,release-$(PYTHON_PYFTPDLIB_VERSION))
++PYTHON_PYFTPDLIB_VERSION = 1.5.0
++PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
++PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/source/p/pyftpdlib
+ PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
+ PYTHON_PYFTPDLIB_LICENSE = MIT
+ PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
 -- 
 2.1.4
