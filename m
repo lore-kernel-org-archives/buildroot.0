@@ -1,36 +1,31 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Mon, 21 Dec 2015 18:56:06 -0300
-Subject: [Buildroot] QT5 and EGL display
-In-Reply-To: <CAFMv-cx3j+MKFCfyuQ0nYRLdd64Q-WMD_L_Vbv_arMepbP8Ozw@mail.gmail.com>
-References: <CAFMv-cxijKErcPy=ZptgjfXskpnUS8LZMW2KSgkeV8novFGB3g@mail.gmail.com>
- <20151221155213.279e62a5@free-electrons.com>
- <CAFMv-cx3j+MKFCfyuQ0nYRLdd64Q-WMD_L_Vbv_arMepbP8Ozw@mail.gmail.com>
-Message-ID: <CAAEAJfBzKs8T1rhZQ_p++GEUPGyoXp1NN_eUfbLrOjRRBF2FnQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Dec 2015 23:03:46 +0100
+Subject: [Buildroot] [PATCH] trace-cmd: bump to version 2.6
+In-Reply-To: <1450731919-28110-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1450731919-28110-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <20151221230346.3d251495@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Leonardo,
+Dear Sergio Prado,
 
-On 21 December 2015 at 12:14, Leonardo Giordano
-<lgiordano@controlnet.com.ar> wrote:
-> Thanks Thomas for replying. So glad to have an email from you (I have been
-> reading lots of info you published).
->
-> EGL is enabled at mesa3d. Compilation failed but I proceed according to:
-> http://lists.busybox.net/pipermail/buildroot/2014-June/100044.html
-> and its reply:
-> http://lists.busybox.net/pipermail/buildroot/2014-June/100045.html
->
-> Anyway, which would be the best approach for using QT5 on an Atmel board (no
-> gpu) in your opinion? The applications we usually do, just need a simple
-> interface (I mean we don't do games or multimedia apps).
->
+On Mon, 21 Dec 2015 19:05:19 -0200, Sergio Prado wrote:
+> Also remove no longer needed patch (fixed upstream).
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> ---
+>  package/trace-cmd/0001-Fix-ptrace-detection.patch | 36 -----------------------
+>  package/trace-cmd/trace-cmd.mk                    |  2 +-
+>  2 files changed, 1 insertion(+), 37 deletions(-)
+>  delete mode 100644 package/trace-cmd/0001-Fix-ptrace-detection.patch
 
-To build a simple 2D UI, you should be able to use the linuxfb Qt5
-platform, instead of the eglfs platform.
+Applied, thanks.
+
+Thomas
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
