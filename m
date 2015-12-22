@@ -1,43 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Dec 2015 17:59:44 +0100
-Subject: [Buildroot] [PATCH 0/2] Fixing xdriver_xf86-video-ati building
-In-Reply-To: <eh5okcx2hb.ln2@ID-313208.user.individual.net>
-References: <1450790990-28939-1-git-send-email-ltrimas@synopsys.com>
- <eh5okcx2hb.ln2@ID-313208.user.individual.net>
-Message-ID: <20151222165944.GB21998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Dec 2015 18:00:28 +0100
+Subject: [Buildroot] [PATCH v2] emlog: new package
+In-Reply-To: <1450780596-23774-1-git-send-email-joris.lijssens@gmail.com>
+References: <1450780596-23774-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <20151222180028.2684eac8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Dear Joris Lijssens,
 
-On 2015-12-22 16:06 +0100, Bernd Kuhls spake thusly:
-> Am Tue, 22 Dec 2015 16:29:48 +0300 schrieb Lada Trimasova:
-> > xdriver_xf86-video-ati depends on the radeon driver from libdrm and DRI
-> > support in xserver_xorg-server, to achieve this we select the Radeon
-> > mesa3d DRI driver which needs to be enabled for all architectures.
-> please have a look at my patch and join the discussion about whether this 
-> driver can be used outside the Intel world or not ;)
-> 
-> http://patchwork.ozlabs.org/patch/523146/
+On Tue, 22 Dec 2015 11:36:36 +0100, Joris Lijssens wrote:
+> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - use kernel-module infra
+>  - use TARGET_CONFIGURE_OPTS
+>  - add extra comments
+>  - add dependcy on the linux kernel
 
-Well, IIUC, Radeon is the chip in AMD's portfolio, right?
+Applied with a number of extra changes:
 
-So, you culd get that board:
-    http://softiron.co.uk/
-and plugin any PCI-E garphic card to get an Radeon GPU on AArch64.
+    [Thomas:
+     - update to the latest github version, which has a number of
+       fixes/improvements compared to the latest tag.
+     - add a patch to fix the build of the kernel module with recent
+       kernel versions (>= 3.19).
+     - use $(INSTALL) -D with a full destination path.
+     - rewrap Config.in help text, lines were too long.]
 
-So, no Radeon is not restricted to x86.
+Thanks!
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
