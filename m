@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Dec 2015 16:36:05 +0100
-Subject: [Buildroot] [PATCH v2] cantarell: bump to version 0.0.19
-In-Reply-To: <1450782155-32004-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1450782155-32004-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151222163605.37bfb6e8@free-electrons.com>
+Date: Tue, 22 Dec 2015 16:36:09 +0100
+Subject: [Buildroot] [PATCH] rsync: security bump to version 3.1.2
+In-Reply-To: <1450781171-19849-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450781171-19849-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151222163609.6b70501f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,18 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 22 Dec 2015 08:02:34 -0300, Gustavo Zacarias wrote:
-> Also use CANTARELL_VERSION_MAJOR in SITE as reported by Baruch.
+On Tue, 22 Dec 2015 07:46:11 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> Make sure that all transferred files use only path names from inside the
+> transfer.  This makes it impossible for a malicious sender to try to
+> make the receiver use an unsafe destination path for a transferred file,
+> such as a just-sent symlink.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/cantarell/cantarell.hash | 4 ++--
->  package/cantarell/cantarell.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/rsync/rsync.hash | 2 +-
+>  package/rsync/rsync.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
