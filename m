@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Dec 2015 23:06:25 +0100
-Subject: [Buildroot] [PATCH 1/1] linux: avoid multiple dtb append on
- uImages
-In-Reply-To: <1440823702-13736-1-git-send-email-derosier@gmail.com>
-References: <1440823702-13736-1-git-send-email-derosier@gmail.com>
-Message-ID: <20151222230625.13807c38@free-electrons.com>
+Date: Tue, 22 Dec 2015 23:08:58 +0100
+Subject: [Buildroot] [PATCH v4 1/1] package/freeswitch: new package
+In-Reply-To: <1443730534-12501-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1443730534-12501-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151222230858.4bc51ff8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Bernd,
 
-On Fri, 28 Aug 2015 21:48:22 -0700, derosier at gmail.com wrote:
-> From: Steve deRosier <steve.derosier@lairdtech.com>
-> 
-> If using appended dtbs on uImages, a 'make linux-rebuild' will end up just
-> adding the new dtb after the previous dtb if all you did was modify the
-> device tree without a modification that would regenerate the zImage. This
-> results in a surprising effect when you boot your device: your DT changes
-> don't take effect because linux just loads the first dtb.
-> 
-> This patch fixes this little edge case by using an intermediate file for the
-> append work if using BR2_LINUX_KERNEL_APPEND_UIMAGE. Otherwise it must
-> retain the zImage naming, so the situation is unchanged for the case where
-> this flag is not set.
-> 
-> Signed-off-by: Steve deRosier <steve.derosier@lairdtech.com>
+On Thu,  1 Oct 2015 22:15:34 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-FWIW, this bug was finally fixed by
-https://git.busybox.net/buildroot/commit/linux?id=055e6162bba7edb1db78458e089e151abde625b6.
+A few days after you sent this patch, Luca did a pretty extensive
+review of it. One of his comments (amongst others) is that it should be
+split into several simpler patches, the first one adding a minimal
+freeswitch package, and then additional patches adding more and more
+optional functionalities.
 
-Best regards,
+Could you rework this patch in this direction?
+
+In the mean time, I will mark this patch as "Changes Requested" in
+patchwork.
+
+Thanks!
 
 Thomas
 -- 
