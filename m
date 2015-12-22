@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Dec 2015 16:35:15 +0100
-Subject: [Buildroot] [git commit] rsync: security bump to version 3.1.2
-Message-ID: <20151222153556.E5BFD826B2@busybox.osuosl.org>
+Date: Tue, 22 Dec 2015 16:35:35 +0100
+Subject: [Buildroot] [git commit] cantarell: bump to version 0.0.19
+Message-ID: <20151222153557.2702C80254@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8a75f646b2427f9d6c70b88e84d6f2a149628b3
+commit: http://git.buildroot.net/buildroot/commit/?id=44859e68cc52e31eb569ed0a108db156d678f198
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-Make sure that all transferred files use only path names from inside the
-transfer.  This makes it impossible for a malicious sender to try to
-make the receiver use an unsafe destination path for a transferred file,
-such as a just-sent symlink.
+Also use CANTARELL_VERSION_MAJOR in SITE as reported by Baruch.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rsync/rsync.hash | 2 +-
- package/rsync/rsync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cantarell/cantarell.hash | 4 ++--
+ package/cantarell/cantarell.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
-index 032047d..6311116 100644
---- a/package/rsync/rsync.hash
-+++ b/package/rsync/rsync.hash
+diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
+index d3946c6..9597550 100644
+--- a/package/cantarell/cantarell.hash
++++ b/package/cantarell/cantarell.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	7de4364fcf5fe42f3bdb514417f1c40d10bbca896abe7e7f2c581c6ea08a2621	rsync-3.1.1.tar.gz
-+sha256	ecfa62a7fa3c4c18b9eccd8c16eaddee4bd308a76ea50b5c02a5840f09c0a1c2	rsync-3.1.2.tar.gz
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index f326389..e1e850c 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.18.1.sha256sum
+-sha256	9c5b1a2edee1d3acf30eaae3d559b2b2e1d835249cf2770f6f8bfc6af861e8f0	cantarell-fonts-0.0.18.1.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.19.sha256sum
++sha256	c7f975ef3d5cf0ed409636c59d069260783683c47ba1289ac3e66a98446e46ae	cantarell-fonts-0.0.19.tar.xz
+diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
+index ebad1b9..008e1e6 100644
+--- a/package/cantarell/cantarell.mk
++++ b/package/cantarell/cantarell.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--RSYNC_VERSION = 3.1.1
-+RSYNC_VERSION = 3.1.2
- RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPLv3+
- RSYNC_LICENSE_FILES = COPYING
+ CANTARELL_VERSION_MAJOR = 0.0
+-CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).18.1
+-CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/0.0
++CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).19
++CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
+ CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
+ CANTARELL_DEPENDENCIES = host-pkgconf
+ CANTARELL_LICENSE = OFLv1.1
