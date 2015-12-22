@@ -1,99 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Dec 2015 12:06:12 +0100
-Subject: [Buildroot] [PATCH 0/8 RFC] core: install foo-config scripts
- early in the PATH (branch yem/foo-config-in-PATH)
-In-Reply-To: <20151222115326.26177c69@free-electrons.com>
-References: <cover.1450712392.git.yann.morin.1998@free.fr>
- <20151221232048.1218dd26@free-electrons.com>
- <20151221223030.GG3454@free.fr>
- <20151221233458.32befcc2@free-electrons.com>
- <20151221225518.GI3454@free.fr>
- <20151222115326.26177c69@free-electrons.com>
-Message-ID: <20151222110612.GA3479@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 22 Dec 2015 08:12:25 -0300
+Subject: [Buildroot] [PATCH] strace: bump to version 4.11
+Message-ID: <1450782745-28601-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Patch upstream so remove it.
 
-On 2015-12-22 11:53 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 21 Dec 2015 23:55:18 +0100, Yann E. MORIN wrote:
-> 
-> > That one is interesting, indeed. We "fix" rtai-config in-place in
-> > staging, but then we never pass $(STAGING_DIR)/usr/bin/rtai-config to
-> > any variable of any package, which means that any consumer of
-> > rtai-config, if any, is called with $(STAGING_DIR)/usr/bin in its PATH.
-> 
-> Absolutely not.
-> 
-> There are no packages in Buildroot that use the RTAI libraries. The
-> rtai-config script in $(STAGING_DIR) is meant to be used:
-> 
->  1/ by custom packages (i.e not in Buildroot mainline)
-> 
->  2/ by people building their stuff outside of Buildroot
-> 
-> > I think this is an abomination. There are three cases there:
-> 
-> There is absolutely no abomination here. This is a regular *-config
-> script, installed in STAGING_DIR like any other. It is just not used by
-> any package in the upstream Buildroot.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../0001-linux-aarch64-add-missing-header.patch    | 25 ----------------------
+ package/strace/strace.hash                         |  6 +++---
+ package/strace/strace.mk                           |  2 +-
+ 3 files changed, 4 insertions(+), 29 deletions(-)
+ delete mode 100644 package/strace/0001-linux-aarch64-add-missing-header.patch
 
-Oh, sorry, what I meant is:  having staging/usr/bin in the PATH is an
-abomination.
-
-Of course, the rtai-config script is not the abomination I was referring
-too. My bad, I was not carefull enough in proof-reading what I wrote.
-
-> > > It is not broken today. Such special *-config scripts get naturally
-> > > installed in $(STAGING_DIR), they might be fixed up by a patch or some
-> > > custom hook. And then on the consumer side, we pass some environment
-> > > variable or other trick to get the consumer build system to use this
-> > > specific -config script rather than the one in the PATH. Nothing
-> > > special.
-> > 
-> > Then those patch-or-hook fixups should be complemented by a post-install
-> > hook that also installs the -config script in the newly-introduced
-> > FOO_CONFIG_DIR.
-> 
-> Correct.
-> 
-> > Again, nothing that this series would *break*; existing "workarounds"
-> > would continue to work as-is. It's only a new opportunity to cleanup
-> > the mess, but will need much more pathces later on.
-> > 
-> > Ah, that's probably what I forgot to write in my cover later: this
-
-s/later/letter/   Damit... :-)
-
-Cheers! ;-)
-
-Regards,
-Yann E. MORIN.
-
-> > 8-patch series only introduces the "infra" and does not actually fix the
-> > packages, or undo our workarounds, or removes our patches, of add new
-> > fixes. Hmm. Well, actually I did:
-> > 
-> >     When/if the topic is accepted (and the series is fixed after the
-> >     reviews), we can then (un)fix / (un)patch packages in follow-up
-> >     patches.
-> 
-> Yes, yes, this is fully understood, I do understand that we will be
-> able to remove a number of patches, or custom variable passing.
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
+diff --git a/package/strace/0001-linux-aarch64-add-missing-header.patch b/package/strace/0001-linux-aarch64-add-missing-header.patch
+deleted file mode 100644
+index 2b74775..0000000
+--- a/package/strace/0001-linux-aarch64-add-missing-header.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From e1e838360288805b6cb561c21e4e7a1ea32e7772 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Sat, 4 Apr 2015 00:49:52 +0200
+-Subject: [PATCH] linux/aarch64: add missing header.
+-
+-linux/aarch64/arch_regs.h file is missing in the strace-4.10.tar.xz archive.
+-Add the one from the release 4.10 tag.
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- linux/aarch64/arch_regs.h | 2 ++
+- 1 file changed, 2 insertions(+)
+- create mode 100644 linux/aarch64/arch_regs.h
+-
+-diff --git a/linux/aarch64/arch_regs.h b/linux/aarch64/arch_regs.h
+-new file mode 100644
+-index 0000000..9a5e33e
+---- /dev/null
+-+++ b/linux/aarch64/arch_regs.h
+-@@ -0,0 +1,2 @@
+-+extern uint64_t *const aarch64_sp_ptr;
+-+extern uint32_t *const arm_sp_ptr;
+--- 
+-1.9.3
+-
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index a2a1081..f47d51b 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/strace/files/strace/4.10/
+-md5	107a5be455493861189e9b57a3a51912	strace-4.10.tar.xz
+-sha1	5c3ec4c5a9eeb440d7ec70514923c2e7e7f9ab6c	strace-4.10.tar.xz
++# From http://sourceforge.net/projects/strace/files/strace/4.11/
++md5	a15d2555a7febb56d00c6e1a51c655dc	strace-4.11.tar.xz
++sha1	8fd717dc3c51b69fde51ce0bdb066404a678363c	strace-4.11.tar.xz
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 2df2ec6..e25428e 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 4.10
++STRACE_VERSION = 4.11
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
+ STRACE_LICENSE = BSD-3c
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.4.10
