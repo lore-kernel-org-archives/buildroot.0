@@ -1,76 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Dec 2015 21:52:11 +0100
-Subject: [Buildroot] [git commit] ltrace: add patch to fix build on sparc
-Message-ID: <20151222205302.152E4826C3@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 22 Dec 2015 21:53:32 +0100
+Subject: [Buildroot] [PATCH 0/5 v4] core/pkg-kconfig: handle generated
+	kconfig defconfigs (branch yem/kconfig-gen-defconfig)
+Message-ID: <cover.1450817564.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88511ccf4a6e0338cbfd8dc985b9ebcda5d0e6b2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Due to a missing header inclusion, the build of ltrace of sparc fails
-with the following error:
+This series is an attempt to support defconfig that are generated with
+make rules.
 
-plt.c: In function 'sym2addr':
-plt.c:33:12: error: dereferencing pointer to incomplete type
-  return sym->enter_addr;
-            ^
-plt.c:34:1: warning: control reaches end of non-void function [-Wreturn-type]
- }
+The Linux kernel now has at least one defconfig that is not an actual
+file, but a Makefile rule:
 
-This commit fixes that by adding a patch to the ltrace code base.
+    ea4d1a8: powerpc/configs: Replace pseries_le_defconfig with a
+             Makefile target using merge_config
 
-Fixes:
+Which means that we can no longer just copy defconfig files.
 
-  http://autobuild.buildroot.org/results/55c/55ce618dbe1b2867e5738d90afb2eb67c19200e4/
+The series was discussed on IRC a while ago, and it was decided I would
+just adopt it, clean it and resubmit. Thanks go to Sam for the initial
+submission. Thanks! :-)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0002-sparc-add-missing-library.h-include.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
 
-diff --git a/package/ltrace/0002-sparc-add-missing-library.h-include.patch b/package/ltrace/0002-sparc-add-missing-library.h-include.patch
-new file mode 100644
-index 0000000..01f1f2e
---- /dev/null
-+++ b/package/ltrace/0002-sparc-add-missing-library.h-include.patch
-@@ -0,0 +1,36 @@
-+From 4e58f53b7886420d002e5919f279acd6d7c4afd1 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Tue, 22 Dec 2015 21:47:45 +0100
-+Subject: [PATCH] sparc: add missing library.h include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes the following build failure on sparc:
-+
-+plt.c: In function ???sym2addr???:
-+plt.c:33:12: error: dereferencing pointer to incomplete type
-+  return sym->enter_addr;
-+            ^
-+plt.c:34:1: warning: control reaches end of non-void function [-Wreturn-type]
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ sysdeps/linux-gnu/sparc/plt.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/sysdeps/linux-gnu/sparc/plt.c b/sysdeps/linux-gnu/sparc/plt.c
-+index 3d2e589..959eed1 100644
-+--- a/sysdeps/linux-gnu/sparc/plt.c
-++++ b/sysdeps/linux-gnu/sparc/plt.c
-+@@ -21,6 +21,7 @@
-+ #include <gelf.h>
-+ #include "proc.h"
-+ #include "common.h"
-++#include "library.h"
-+ 
-+ GElf_Addr
-+ arch_plt_sym_val(struct ltelf *lte, size_t ndx, GElf_Rela * rela) {
-+-- 
-+2.6.4
-+
+Changes v3 -> v4:
+  - do not append the _defconfig suffix in the infra, let the packages
+    do that (as it was before)  (Thomas)
+
+Changes v2 -> v3 (Yann):
+  - make all core changes in the same patch
+  - update the manual
+  - misc cleanups
+  - misc typoes and rephrasing
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit c61e97a4d9779e72004e563d00e7985104cba462:
+
+  lockdev: fix build with the musl C library (2015-12-22 21:39:17 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/kconfig-gen-defconfig
+
+for you to fetch changes up to 51882e0fdeb29ed2beecc63f2e78be6b0c568e9b:
+
+  boot/barebox: handle generated defconfigs (2015-12-22 21:47:09 +0100)
+
+----------------------------------------------------------------
+Sam bobroff (4):
+      core/pkg-kconfig: handle generated defconfigs
+      package/linux: handle generated defconfigs
+      boot/at91bootstrap3: handle generated defconfigs
+      boot/barebox: handle generated defconfigs
+
+Yann E. MORIN (1):
+      docs/manual: document the new kconfig-package variable
+
+ boot/at91bootstrap3/at91bootstrap3.mk   |  9 ++++-----
+ boot/barebox/barebox.mk                 | 10 ++++------
+ docs/manual/adding-packages-kconfig.txt | 10 ++++++++++
+ linux/linux.mk                          | 10 ++++------
+ package/pkg-kconfig.mk                  | 20 ++++++++++++++++----
+ 5 files changed, 38 insertions(+), 21 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
