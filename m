@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Dec 2015 08:02:34 -0300
-Subject: [Buildroot] [PATCH v2] cantarell: bump to version 0.0.19
-Message-ID: <1450782155-32004-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 22 Dec 2015 08:02:35 -0300
+Subject: [Buildroot] [PATCH] cantarell: bump to version 0.0.19
+In-Reply-To: <1450782155-32004-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1450782155-32004-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1450782155-32004-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
