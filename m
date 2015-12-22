@@ -1,147 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Dec 2015 19:05:49 +0100
-Subject: [Buildroot] [git commit] autofs: new package
-Message-ID: <20151222181156.2846E81D87@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 22 Dec 2015 19:51:31 +0100
+Subject: [Buildroot] [PATCH 1/1 v1] nfs-utils: install /etc/nfsmount.conf
+In-Reply-To: <alpine.DEB.2.11.1512221934050.15569@tanhuma.tkos.co.il>
+References: <1450804337-23440-1-git-send-email-yba@tkos.co.il>
+ <20151222172842.GC21998@free.fr>
+ <alpine.DEB.2.11.1512221934050.15569@tanhuma.tkos.co.il>
+Message-ID: <20151222185131.GD21998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=748131a4c56f092bf302a6fea6901220d50174cd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Jonathan, All,
 
-Tested on i.MX6 using NFS mounts only. Not tested with DAS mounts as
-of this commit.
+On 2015-12-22 19:48 +0200, Jonathan Ben Avraham spake thusly:
+> On Tue, 22 Dec 2015, Yann E. MORIN wrote:
+> >On 2015-12-22 19:12 +0200, Jonathan Ben-Avraham spake thusly:
+> >>From: Jonathan Ben Avraham <yba@tkos.co.il>
+[--SNIP--]
+> >>+	$(INSTALL) -D -m 644 \
+> >>+		$(@D)/utils/mount/nfsmount.conf $(TARGET_DIR)/etc/nfsmount.conf
+> >
+> >This file is only comments, save for a single un-commented line;
+> >   [ NFSMount_Global_Options ]
+> >
+> >Would it not be better that we just generate a file with just that line,
+> >and a comment to see the sources for the format, like so:
+> >
+> >   # See utils/mount/nfsmount.conf in nfs-utils sources
+> >   # for the format of this file.
+> >   [ NFSMount_Global_Options ]
+> 
+> When debugging an unexpected NFS mount problem on a target for which you do
+> not have the build system, at a site that might not have Internet access,
+> with a root filesystem that might not have the "strings" utility, it is much
+> easier to have all of the mount options in front of you rather than to have
+> to leave the premises and start searching for the correct nfs-utils sources
+> in order to find the full nfsmount.conf. It's just a much more friendly way
+> of working. The lack of any nfsmount.conf cost me (my client really) several
+> hours of work while I installed "strings" and figured out that there is such
+> a thing as nfsmount.conf. It would be unfortunate for others to have to
+> repeat this. Most people assigned to debug these types of systems are even
+> less experienced than I.
 
-[Thomas:
- - remove the "# rpcbind" comments on the thread and mmu dependencies,
-   since we don't select rpcbind. The thread and mmu dependencies are
-   still needed though, since autofs uses pthread_*() functions and
-   fork().
- - Remove "Requires a toolchain with native RPC." in the Config.in
-   help text and instead add a proper Config.in comment about the
-   thread and RPC dependency.
- - Add patch to fix building with uClibc, taken from OpenEmbedded.]
+Well, one would argue that the system should have been tested before
+being deployed. That's DevOps in action! Hehe! ;-)  (Kidding!)
 
-Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                                  |  1 +
- ...1-include-linux-nfs.h-directly-in-rpc_sub.patch | 33 ++++++++++++++++++++++
- package/autofs/Config.in                           | 19 +++++++++++++
- package/autofs/autofs.hash                         |  2 ++
- package/autofs/autofs.mk                           | 21 ++++++++++++++
- 5 files changed, 76 insertions(+)
+But as I said: I'm OK with the full file as well. If a user is so
+concerned with the size, he can provide a post-build script to tweak
+that file, or a rootfs-overlay to provide his own version.
 
-diff --git a/package/Config.in b/package/Config.in
-index f8c23c5..910d521 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -155,6 +155,7 @@ endif
- endmenu
- 
- menu "Filesystem and flash utilities"
-+	source "package/autofs/Config.in"
- 	source "package/btrfs-progs/Config.in"
- 	source "package/cifs-utils/Config.in"
- 	source "package/cpio/Config.in"
-diff --git a/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch b/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
-new file mode 100644
-index 0000000..26e86c3
---- /dev/null
-+++ b/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
-@@ -0,0 +1,33 @@
-+Upstream-Status: Pending
-+
-+From 44bdce8c6ed9b30c1643e5981172a4f9025f013c Mon Sep 17 00:00:00 2001
-+From: Andreas Oberritter <obi@opendreambox.org>
-+Date: Wed, 13 Mar 2013 16:17:08 +0100
-+Subject: [PATCH] autofs-5.0.7: include linux/nfs.h directly in rpc_subs.h
-+
-+Fixes compile error with uclibc. Glibc's nfs/nfs.h contains
-+nothing but "#include linux/nfs.h". rpc_subs.h already includes
-+other linux/nfs*.h files directly.
-+
-+Signed-off-by: Andreas Oberritter <obi@opendreambox.org>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ include/rpc_subs.h |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/rpc_subs.h b/include/rpc_subs.h
-+index b6d59f9..a2d9648 100644
-+--- a/include/rpc_subs.h
-++++ b/include/rpc_subs.h
-+@@ -18,7 +18,7 @@
-+ 
-+ #include <rpc/rpc.h>
-+ #include <rpc/pmap_prot.h>
-+-#include <nfs/nfs.h>
-++#include <linux/nfs.h>
-+ #include <linux/nfs2.h>
-+ #include <linux/nfs3.h>
-+ 
-+-- 
-+1.7.10.4
-+
-diff --git a/package/autofs/Config.in b/package/autofs/Config.in
-new file mode 100644
-index 0000000..2933740
---- /dev/null
-+++ b/package/autofs/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_AUTOFS
-+	bool "autofs"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	help
-+	  Autofs controls the operation of the automount daemons. The
-+	  automount daemons automatically mount filesystems when they
-+	  are used and unmount them after a period of inactivity based
-+	  on a set of pre-configured maps defined by default in
-+	  /etc/auto.master. The kernel automounter implements SunOS
-+	  style automounter under Linux and requires a kernel version
-+	  of at least 2.6.17 and the autofs4 kernel module.
-+
-+	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
-+
-+comment "autofs needs a toolchain w/ threads, RPC"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
-new file mode 100644
-index 0000000..2d98375
---- /dev/null
-+++ b/package/autofs/autofs.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
-+sha256 e08ff0ef9ff365d87b6c33dca136d20e4e07675197a324f2816894cb437021c3  autofs-5.1.1.tar.xz
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-new file mode 100644
-index 0000000..f7ff5f3
---- /dev/null
-+++ b/package/autofs/autofs.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# autofs
-+#
-+################################################################################
-+
-+AUTOFS_VERSION = 5.1.1
-+AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
-+AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
-+AUTOFS_LICENSE = GPLv2+
-+AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
-+
-+AUTOFS_CONF_OPTS = \
-+	--disable-mount-locking \
-+	--enable-ignore-busy \
-+	--without-openldap \
-+	--without-sasl
-+
-+AUTOFS_MAKE_ENV = DONTSTRIP=1
-+
-+$(eval $(autotools-package))
+So, my Reviewed-by stands. ;-)
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
