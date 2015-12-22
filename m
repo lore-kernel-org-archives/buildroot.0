@@ -1,25 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 22 Dec 2015 16:06:54 +0100
-Subject: [Buildroot] [PATCH 0/2] Fixing xdriver_xf86-video-ati building
-References: <1450790990-28939-1-git-send-email-ltrimas@synopsys.com>
-Message-ID: <eh5okcx2hb.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Dec 2015 16:35:15 +0100
+Subject: [Buildroot] [git commit] rsync: security bump to version 3.1.2
+Message-ID: <20151222153556.E5BFD826B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 22 Dec 2015 16:29:48 +0300 schrieb Lada Trimasova:
+commit: http://git.buildroot.net/buildroot/commit/?id=e8a75f646b2427f9d6c70b88e84d6f2a149628b3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> xdriver_xf86-video-ati depends on the radeon driver from libdrm and DRI
-> support in xserver_xorg-server, to achieve this we select the Radeon
-> mesa3d DRI driver which needs to be enabled for all architectures.
+Fixes:
+Make sure that all transferred files use only path names from inside the
+transfer.  This makes it impossible for a malicious sender to try to
+make the receiver use an unsafe destination path for a transferred file,
+such as a just-sent symlink.
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rsync/rsync.hash | 2 +-
+ package/rsync/rsync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-please have a look at my patch and join the discussion about whether this 
-driver can be used outside the Intel world or not ;)
-
-http://patchwork.ozlabs.org/patch/523146/
-
-Regards, Bernd
+diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
+index 032047d..6311116 100644
+--- a/package/rsync/rsync.hash
++++ b/package/rsync/rsync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	7de4364fcf5fe42f3bdb514417f1c40d10bbca896abe7e7f2c581c6ea08a2621	rsync-3.1.1.tar.gz
++sha256	ecfa62a7fa3c4c18b9eccd8c16eaddee4bd308a76ea50b5c02a5840f09c0a1c2	rsync-3.1.2.tar.gz
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index f326389..e1e850c 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RSYNC_VERSION = 3.1.1
++RSYNC_VERSION = 3.1.2
+ RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPLv3+
+ RSYNC_LICENSE_FILES = COPYING
