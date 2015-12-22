@@ -1,38 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Dec 2015 22:52:47 +0100
-Subject: [Buildroot] [git commit] boot/uboot: handle generated defconfigs
-Message-ID: <20151222215317.C3DC4826C7@busybox.osuosl.org>
+Date: Tue, 22 Dec 2015 22:39:50 +0100
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: handle generated
+	defconfigs
+Message-ID: <20151222215317.B4A15826C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d7afb1d29fef01c535fb1a9403767c488ac653cf
+commit: http://git.buildroot.net/buildroot/commit/?id=3f971789e2ce94298c24e39acfd9b0e143e87daa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+[yann.morin.1998 at free.fr: move the kconfig-package hunk to the
+ corresponding patch]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/uboot.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ boot/at91bootstrap3/at91bootstrap3.mk | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 0e3f808..868bf08 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -147,13 +147,11 @@ define UBOOT_CONFIGURE_CMDS
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index fa67ea6..0f5d3bd 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -41,12 +41,11 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
  endef
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
- ifeq ($(BR2_TARGET_UBOOT_USE_DEFCONFIG),y)
--UBOOT_SOURCE_CONFIG = $(UBOOT_DIR)/configs/$(call qstrip,\
--	$(BR2_TARGET_UBOOT_BOARD_DEFCONFIG))_defconfig
-+UBOOT_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_TARGET_UBOOT_BOARD_DEFCONFIG))_defconfig
- else ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
--UBOOT_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE))
-+UBOOT_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE))
- endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
  
--UBOOT_KCONFIG_FILE = $(UBOOT_SOURCE_CONFIG)
- UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS)
- endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+-AT91BOOTSTRAP3_SOURCE_CONFIG = $(AT91BOOTSTRAP3_DIR)/board/*/$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG))_defconfig
++AT91BOOTSTRAP3_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+-AT91BOOTSTRAP3_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
++AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
+ endif
+ 
+-AT91BOOTSTRAP3_KCONFIG_FILE = $(AT91BOOTSTRAP3_SOURCE_CONFIG)
+ AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+ 
+@@ -55,13 +54,16 @@ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+ ifeq ($(BR_BUILDING),y)
+ 
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+-ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
++# We must use the user-supplied kconfig value, because
++# AT91BOOTSTRAP3_KCONFIG_DEFCONFIG will at least contain
++# the trailing _defconfig
++ifeq ($(AT91BOOTSTRAP3_KCONFIG_DEFCONFIG),)
+ $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
+ endif
+ endif
+ 
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+-ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)),)
++ifeq ($(AT91BOOTSTRAP3_KCONFIG_FILE),)
+ $(error No at91bootstrap3 configuration file specified, check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE setting)
+ endif
+ endif
