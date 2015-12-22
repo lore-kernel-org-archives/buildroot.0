@@ -1,28 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Dec 2015 18:01:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/Config.in: fix alphabetical
- order
-In-Reply-To: <1450802263-10364-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1450802263-10364-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20151222180127.71f400d7@free-electrons.com>
+From: Jonathan Ben-Avraham <yba@tkos.co.il>
+Date: Tue, 22 Dec 2015 19:12:17 +0200
+Subject: [Buildroot] [PATCH 1/1 v1] nfs-utils: install /etc/nfsmount.conf
+Message-ID: <1450804337-23440-1-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+From: Jonathan Ben Avraham <yba@tkos.co.il>
 
-On Tue, 22 Dec 2015 17:37:43 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Installs /etc/nfsmount.conf on the target, mainly to be able to configure the
+the NFS version that mount.nfs uses by default. Without this ability you are
+likely to encounter mount errors when automounting directories from NFS
+version 3 servers.
 
-Applied, thanks.
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+---
+ package/nfs-utils/nfs-utils.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 30f12fd..6dd175c 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -38,6 +38,8 @@ endif
+ define NFS_UTILS_INSTALL_FIXUP
+ 	rm -f $(NFS_UTILS_TARGETS_)
+ 	touch $(TARGET_DIR)/etc/exports
++	$(INSTALL) -D -m 644 \
++		$(@D)/utils/mount/nfsmount.conf $(TARGET_DIR)/etc/nfsmount.conf
+ endef
+ NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
