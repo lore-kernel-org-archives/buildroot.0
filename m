@@ -1,46 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 23 Dec 2015 20:09:49 +0100
-Subject: [Buildroot] LIB_SYMLINK in top-level Makefile
-In-Reply-To: <CAKbGBLgHuT-cQh4SW_NMBJ9iSpf_gan_3cjRn3Kc4pT+bEtTZw@mail.gmail.com>
-References: <CAKbGBLgHuT-cQh4SW_NMBJ9iSpf_gan_3cjRn3Kc4pT+bEtTZw@mail.gmail.com>
-Message-ID: <20151223190949.GG3426@free.fr>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Wed, 23 Dec 2015 19:46:57 +0000
+Subject: [Buildroot] [PATCH v2] qt5/qt5webchannel: add qwebchannel.js
+ installation in /var/www
+In-Reply-To: <20151223184215.GE3426@free.fr>
+References: <1450890245-16195-1-git-send-email-corjon.j@ecagroup.com>
+ <20151223182401.GA3426@free.fr>
+ <d117a580-8ae1-4711-b455-9a7ec4e2f932@MAIL-SINTERS-01.sinters-int.fr>
+ <20151223184215.GE3426@free.fr>
+Message-ID: <d35408dc-e454-445a-b2fa-04ea3fae7068@MAIL-SINTERS-01.sinters-int.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Steven, All,
+Yann,
 
-On 2015-12-23 00:44 -0800, Steven Noonan spake thusly:
-> Are the LIB_SYMLINK definitions in the top-level Makefile defined at
-> the time they're used in package/skeleton/skeleton.mk? It looks like
-> those lines didn't get moved along with the rest of the bits from the
-> $(STAGING_DIR) target.
+Le 23/12/2015 19:42, Yann E. MORIN a ?crit :
+> Julien, All,
+>
+> On 2015-12-23 18:34 +0000, Julien CORJON spake thusly:
+>> Le 23/12/2015 19:24, Yann E. MORIN a ?crit :
+>>> On 2015-12-23 18:04 +0100, Julien Corjon spake thusly:
+>>>> To use webchannel in an application qwebchannel.js is needed but this file was not
+>>>> installed.
+>>>>
+>>>> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+>>>
+>>> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>
+>>> However, I was having a look at our current package, and there's
+>>> something really odd that struck me. If the Qt5base examples are
+>>> enabled, then we define QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES but we
+>>> never use it.
+>>
+>> I also notice this issue yesterday but I also notice that most of the qt
+>> modules (except qt5base) compile examples but don't install them in
+>> staging and target. Only the sources files are installed.
+>>
+>> I would like fix the examples binary install of all the Qt modules and
+>> in the mean time fix the qwebchannel examples installation.
+>
+> OK, be my guest then! ;-)
+>
+> However, before you actually work on it, I'd like our Qt5 experts chime
+> in and validate that something is to be fixed (may there's some
+> underlying reason not to install them)...
 
-As Thomas already replied, they are.
+I cannot point any reason to have the source on the target (but no qmake 
+and gcc to compile them) and no binaries...
 
-And even if they are defined after they are used', that is not a
-problem. In Makefiles, the expansion of variables is not done at
-the time of parsing, but at the time the rules are executed.
-
-For example, test this simple Makefile:
-
-    $ cat Makefile
-    all:
-        @echo FOO="'$(FOO)'"
-    FOO=1234
-
-    $ make
-    FOO='1234'
+If I want to try Qt examples I want to have only the binaries on the 
+target and I can take a look on the sources on my host not the opposite ;)
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Julien
