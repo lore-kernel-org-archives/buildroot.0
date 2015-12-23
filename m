@@ -1,28 +1,80 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 22 Dec 2015 23:30:29 +0000
-Subject: [Buildroot] [Bug 8546] build instructions for raspberry pi don't
-	work
-In-Reply-To: <bug-8546-163@https.bugs.busybox.net/>
-References: <bug-8546-163@https.bugs.busybox.net/>
-Message-ID: <bug-8546-163-kCugz4HxW8@https.bugs.busybox.net/>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 23 Dec 2015 07:34:35 +0100
+Subject: [Buildroot] [PATCH] jquery-sidebar: new package
+Message-ID: <1450852475-7387-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8546
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
---- Comment #1 from craigswank at gmail.com ---
-I pasted the error output wrong, it is more like:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                          |  1 +
+ package/jquery-sidebar/Config.in           |  6 ++++++
+ package/jquery-sidebar/jquery-sidebar.hash |  2 ++
+ package/jquery-sidebar/jquery-sidebar.mk   | 17 +++++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/jquery-sidebar/Config.in
+ create mode 100644 package/jquery-sidebar/jquery-sidebar.hash
+ create mode 100644 package/jquery-sidebar/jquery-sidebar.mk
 
-$ make raspberrypi_defconfig
-$ make 
-linux/linux.mk:409: *** No kernel defconfig name specified, check your
-BR2_LINUX_KERNEL_DEFCONFIG setting.  Stop.
-Makefile:36: recipe for target '_all' failed
-make: *** [_all] Error 2
-
+diff --git a/package/Config.in b/package/Config.in
+index 82eb305..4bc6b4c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -952,6 +952,7 @@ menu "external jQuery plugins"
+ 	source "package/jquery-datetimepicker/Config.in"
+ 	source "package/jquery-keyboard/Config.in"
+ 	source "package/jquery-mobile/Config.in"
++	source "package/jquery-sidebar/Config.in"
+ 	source "package/jquery-sparkline/Config.in"
+ 	source "package/jquery-ui/Config.in"
+ 	source "package/jquery-ui-themes/Config.in"
+diff --git a/package/jquery-sidebar/Config.in b/package/jquery-sidebar/Config.in
+new file mode 100644
+index 0000000..324a20c
+--- /dev/null
++++ b/package/jquery-sidebar/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_JQUERY_SIDEBAR
++	bool "jquery-sidebar"
++	help
++	  A stupid simple sidebar jQuery plugin.
++
++	  http://jillix.github.io/jQuery-sidebar/
+diff --git a/package/jquery-sidebar/jquery-sidebar.hash b/package/jquery-sidebar/jquery-sidebar.hash
+new file mode 100644
+index 0000000..60e44d4
+--- /dev/null
++++ b/package/jquery-sidebar/jquery-sidebar.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  c96e46439a87555f2200442f597cce64f21f81f94d7601ddfc3b837913ddb42f  jquery-sidebar-3.3.2.tar.gz
+diff --git a/package/jquery-sidebar/jquery-sidebar.mk b/package/jquery-sidebar/jquery-sidebar.mk
+new file mode 100644
+index 0000000..7af3667
+--- /dev/null
++++ b/package/jquery-sidebar/jquery-sidebar.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# jquery-sidebar
++#
++################################################################################
++
++JQUERY_SIDEBAR_VERSION = 3.3.2
++JQUERY_SIDEBAR_SITE = $(call github,jillix,jQuery-sidebar,$(JQUERY_SIDEBAR_VERSION))
++JQUERY_SIDEBAR_LICENSE = MIT
++JQUERY_SIDEBAR_LICENSE_FILES = LICENSE
++
++define JQUERY_SIDEBAR_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/src/jquery.sidebar.min.js \
++		$(TARGET_DIR)/var/www/jquery-plugins/sidebar/jquery.sidebar.min.js
++endef
++
++$(eval $(generic-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.1.4
