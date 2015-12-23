@@ -1,59 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Dec 2015 23:37:18 +0100
-Subject: [Buildroot] [PATCH v4 2/3] doom-wad: bump to version 1.9
-In-Reply-To: <1446839279-9021-2-git-send-email-rprebello@gmail.com>
-References: <1446839279-9021-1-git-send-email-rprebello@gmail.com>
- <1446839279-9021-2-git-send-email-rprebello@gmail.com>
-Message-ID: <20151223233718.2703675c@free-electrons.com>
+From: Craig Swank <craigswank@fastmail.fm>
+Date: Wed, 23 Dec 2015 14:45:36 -0800
+Subject: [Buildroot] trying to use
+ https://github.com/beagleboard/linux.git with buildroot
+In-Reply-To: <20151223193943.21a6f0fc@free-electrons.com>
+References: <1450890296.2355509.475056490.71128E4E@webmail.messagingengine.com>
+ <20151223184751.12365336@free-electrons.com>
+ <1450893821.3034067.475093450.34890777@webmail.messagingengine.com>
+ <1450894505.3036056.475106194.467AC874@webmail.messagingengine.com>
+ <20151223193943.21a6f0fc@free-electrons.com>
+Message-ID: <1450910736.3752716.475291418.490BB3EA@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rodrigo Rebello,
+Is it strange to you that when I do the build the output/build directory
+has both of these dirs?
 
-On Fri,  6 Nov 2015 17:47:58 -0200, Rodrigo Rebello wrote:
+?  buildroot git:(master) ? ls output/build/linux-*
+output/build/linux-4.1.4-ti-r9
+output/build/linux-headers-3.12.10
 
-> diff --git a/package/doom-wad/doom-wad.hash b/package/doom-wad/doom-wad.hash
-> new file mode 100644
-> index 0000000..fa069c1
-> --- /dev/null
-> +++ b/package/doom-wad/doom-wad.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256	cacf0142b31ca1af00796b4a0339e07992ac5f21bc3f81e7532fe1b5e1b486e6	doom19s.zip
-> diff --git a/package/doom-wad/doom-wad.mk b/package/doom-wad/doom-wad.mk
-> index 6f4f9da..6c870d0 100644
-> --- a/package/doom-wad/doom-wad.mk
-> +++ b/package/doom-wad/doom-wad.mk
-> @@ -4,16 +4,18 @@
->  #
->  ################################################################################
->  
-> -DOOM_WAD_VERSION = 1.8
-> -DOOM_WAD_SOURCE = doom-$(DOOM_WAD_VERSION).wad.gz
-> +DOOM_WAD_VERSION = 1.9
-> +DOOM_WAD_SOURCE = doom19s.zip
 
-So shouldn't the version be "19" and not "1.9" ? It is a bit weird to
-have a version not used in the _SOURCE variable. Or if you really want
-to have 1.9 as the version, then:
 
-	DOOM_WAD_SOURCE = doom$(subst .,,$(DOOM_WAD_VERSION))s.zip
+On Wed, Dec 23, 2015, at 10:39 AM, Thomas Petazzoni wrote:
+> Dear Craig Swank,
+> 
+> On Wed, 23 Dec 2015 10:15:05 -0800, Craig Swank wrote:
+> > Here is my response again.  I sent one a few minutes ago but it might be
+> > too big because I tried attaching the build output.
+> > 
+> > > Does it work with some other kernel? 
+> > Yes, it works with the default kernel that is defined in
+> > configs/beaglebone_defconfig
+> > 
+> > > Do you have console= defined in the bootargs to the proper value?
+> > I tried playing around with console= a few days ago, but I didn't get it
+> > working with that.  I really am not sure what the correct args would be.
+> >  I'm going to revisit that now and see if I can find what they should be
+> > set to.  
+> > 
+> > I uploaded the build output to
+> > https://www.dropbox.com/s/nbm6r5520g0wutf/nohup.out.bz2?dl=0 
+> 
+> I don't see anything obviously wrong here. Unfortunately, I don't have
+> a BBB with me to test this right now. Maybe someone else on the list
+> will have this at hand.
+> 
+> That being said, you can still follow my Buildroot tutorial at
+> https://www.youtube.com/watch?v=1PfthHCfudY, where I'm doing a step by
+> step description of building a Buildroot configuration for the BBB.
+> It's not using the kernel from http://github.com/beagleboard/linux.git,
+> but instead the mainline Linux kernel. But it should give you another
+> thing to test and look at.
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
->  DOOM_WAD_SITE = ftp://ftp.idsoftware.com/idstuff/doom
 
-However, the main reason I didn't apply is because this server seems to
-be unavailable at the moment. So I can't test the package, and it would
-cause build failures in the autobuilders.
-
-Are you also experiencing the same issue?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  Craig Swank
+  craigswank at fastmail.fm
