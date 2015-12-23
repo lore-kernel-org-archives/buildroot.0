@@ -1,67 +1,81 @@
-From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Wed, 23 Dec 2015 13:12:48 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5/qt5webchannel: add qwebchannel.js
-	installation choice
-Message-ID: <1450872768-27153-1-git-send-email-corjon.j@ecagroup.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Wed, 23 Dec 2015 12:16:04 +0000
+Subject: [Buildroot] [PATCH v3 3/7] package/nodejs: correct 0.10.x option
+	name
+In-Reply-To: <1450872968-5834-1-git-send-email-martin@barkynet.com>
+References: <1450872968-5834-1-git-send-email-martin@barkynet.com>
+Message-ID: <1450872968-5834-3-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To use webchannel in an application qwebchannel.js is needed but this file is not
-installed. Add an option to fix that and let the user choose the location.
+The nodejs options incorrectly started BR2_BR2_xxx.  This change corrects
+the name for 0.10.x releases to BR2_PACKAGE_NODEJS_0_10_X
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
+
 ---
- package/qt5/qt5webchannel/Config.in        | 12 ++++++++++++
- package/qt5/qt5webchannel/qt5webchannel.mk |  7 +++++++
- 2 files changed, 19 insertions(+)
+Changes v2 -> v3
+ - Corrected help test
+ - Removed select BR2_PACKAGE_NODEJS_0_10_X as this will not work (Yann)
+ - Note that selecting BR2_PACKAGE_NODEJS_0_10_X is not needed as a
+   subsequent patch will remove the version choice.
 
-diff --git a/package/qt5/qt5webchannel/Config.in b/package/qt5/qt5webchannel/Config.in
-index 218629a..3e6bb4e 100644
---- a/package/qt5/qt5webchannel/Config.in
-+++ b/package/qt5/qt5webchannel/Config.in
-@@ -9,3 +9,15 @@ config BR2_PACKAGE_QT5WEBCHANNEL
- 	  This package corresponds to the qt5webchannel module.
+Changes v1 -> v2
+ - New in v2
+---
+ Config.in.legacy         | 8 ++++++++
+ package/nodejs/Config.in | 6 +++---
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7e32df8..2628796 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -248,6 +248,14 @@ config BR2_PACKAGE_INFOZIP
+ 	  to avoid ambiguities with Info-Zip's UnZip which has been added
+ 	  in the unzip package.
  
- 	  http://qt.io
++config BR2_BR2_PACKAGE_NODEJS_0_10_X
++	bool "nodejs 0.10.x option renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_NODEJS
++	help
++	  nodejs 0.10.x option was named incorrectly and has been renamed
++	  to BR2_PACKAGE_NODEJS_0_10_X.
 +
-+if BR2_PACKAGE_QT5WEBCHANNEL
-+
-+config BR2_PACKAGE_QT5WEBCHANNEL_JAVASCRIPT_FILE
-+        string "qwebchannel.js installation path"
-+        help
-+	  It might be useful for your application to install
-+	  qwebchannel.js file in a specific location on the target.
-+
-+	  Leave path empty to cancel qwebchannel.js installation.
-+
-+endif
-diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
-index cfb6da9..6901764 100644
---- a/package/qt5/qt5webchannel/qt5webchannel.mk
-+++ b/package/qt5/qt5webchannel/qt5webchannel.mk
-@@ -35,6 +35,12 @@ define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
- 	$(QT5_LA_PRL_FILES_FIXUP)
- endef
+ config BR2_BR2_PACKAGE_NODEJS_0_12_X
+ 	bool "nodejs version 0.12.x has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 645ca7a..ce35452 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -36,12 +36,12 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
  
-+ifneq ($(BR2_PACKAGE_QT5WEBCHANNEL_JAVASCRIPT_FILE),"")
-+define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
-+        $(INSTALL) -m 0644 -D $(@D)/src/webchannel/qwebchannel.js $(TARGET_DIR)$(BR2_PACKAGE_QT5WEBCHANNEL_JAVASCRIPT_FILE)/qwebchannel.js
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
- define QT5WEBCHANNEL_INSTALL_TARGET_QMLS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebChannel $(TARGET_DIR)/usr/qml/
-@@ -56,6 +62,7 @@ endif
- define QT5WEBCHANNEL_INSTALL_TARGET_CMDS
- 	$(QT5WEBCHANNEL_INSTALL_TARGET_LIBS)
- 	$(QT5WEBCHANNEL_INSTALL_TARGET_QMLS)
-+	$(QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT)
- endef
+ choice
+ 	prompt "Node.js version"
+-	default BR2_BR2_PACKAGE_NODEJS_0_10_X if BR2_ARM_CPU_ARMV5
++	default BR2_PACKAGE_NODEJS_0_10_X if BR2_ARM_CPU_ARMV5
+ 	default BR2_PACKAGE_NODEJS_5_X
+ 	help
+ 	  Select the version of Node.js you wish to use.
  
- $(eval $(generic-package))
+-config BR2_BR2_PACKAGE_NODEJS_0_10_X
++config BR2_PACKAGE_NODEJS_0_10_X
+ 	bool "v0.10.41"
+ 
+ config BR2_PACKAGE_NODEJS_5_X
+@@ -58,7 +58,7 @@ endchoice
+ 
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "0.10.41"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
++	default "0.10.41"	if BR2_PACKAGE_NODEJS_0_10_X
+ 	default "5.3.0"		if BR2_PACKAGE_NODEJS_5_X
+ 
+ menu "Module Selection"
 -- 
 2.5.0
