@@ -1,27 +1,37 @@
 From: Lada Trimasova <Lada.Trimasova@synopsys.com>
-Date: Wed, 23 Dec 2015 15:49:50 +0300
-Subject: [Buildroot] [PATCH v2 0/2] Fixing xdriver_xf86-video-ati building
-Message-ID: <1450874992-15627-1-git-send-email-ltrimas@synopsys.com>
+Date: Wed, 23 Dec 2015 15:49:51 +0300
+Subject: [Buildroot] [PATCH v2 1/2] Enabling mesa3d radeon driver for all
+	architectures
+In-Reply-To: <1450874992-15627-1-git-send-email-ltrimas@synopsys.com>
+References: <1450874992-15627-1-git-send-email-ltrimas@synopsys.com>
+Message-ID: <1450874992-15627-2-git-send-email-ltrimas@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xdriver_xf86-video-ati depends on the radeon driver from libdrm 
-and DRI support in xserver_xorg-server, to achieve this we select
-the Radeon mesa3d DRI driver which needs to be enabled for all architectures.
+Mesa32 radeon driver doesn't depend on x86 and can be built for all architectures.
 
-Fixes:
-http://autobuild.buildroot.net/results/9da/9da4ffdf1c4ec78ae37322e253cb769340116035
+Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mesa3d/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Lada Trimasova (2):
-  Enabling mesa3d radeon driver for all architectures
-  Fixing xdriver_xf86-video-ati dependencies
-
- package/mesa3d/Config.in                       | 1 -
- package/x11r7/xdriver_xf86-video-ati/Config.in | 5 +++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 40af2ef..fcfd3c3 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -122,7 +122,6 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
+ 
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	bool "DRI radeon driver"
+-	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_RADEON
+ 	help
 -- 
 2.5.0
