@@ -1,80 +1,89 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 23 Dec 2015 07:34:35 +0100
-Subject: [Buildroot] [PATCH] jquery-sidebar: new package
-Message-ID: <1450852475-7387-1-git-send-email-yegorslists@googlemail.com>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Wed, 23 Dec 2015 08:53:27 +0200 (IST)
+Subject: [Buildroot] [PATCH 1/1 v1] nfs-utils: install /etc/nfsmount.conf
+In-Reply-To: <20151222185131.GD21998@free.fr>
+References: <1450804337-23440-1-git-send-email-yba@tkos.co.il>
+ <20151222172842.GC21998@free.fr>
+ <alpine.DEB.2.11.1512221934050.15569@tanhuma.tkos.co.il>
+ <20151222185131.GD21998@free.fr>
+Message-ID: <alpine.DEB.2.11.1512230848430.15569@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Tue, 22 Dec 2015, Yann E. MORIN wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                          |  1 +
- package/jquery-sidebar/Config.in           |  6 ++++++
- package/jquery-sidebar/jquery-sidebar.hash |  2 ++
- package/jquery-sidebar/jquery-sidebar.mk   | 17 +++++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/jquery-sidebar/Config.in
- create mode 100644 package/jquery-sidebar/jquery-sidebar.hash
- create mode 100644 package/jquery-sidebar/jquery-sidebar.mk
+> Date: Tue, 22 Dec 2015 19:51:31 +0100
+> From: Yann E. MORIN <yann.morin.1998@free.fr>
+> To: Jonathan Ben Avraham <yba@tkos.co.il>
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] [PATCH 1/1 v1] nfs-utils: install /etc/nfsmount.conf
+> 
+> Jonathan, All,
+>
+> On 2015-12-22 19:48 +0200, Jonathan Ben Avraham spake thusly:
+>> On Tue, 22 Dec 2015, Yann E. MORIN wrote:
+>>> On 2015-12-22 19:12 +0200, Jonathan Ben-Avraham spake thusly:
+>>>> From: Jonathan Ben Avraham <yba@tkos.co.il>
+> [--SNIP--]
+>>>> +	$(INSTALL) -D -m 644 \
+>>>> +		$(@D)/utils/mount/nfsmount.conf $(TARGET_DIR)/etc/nfsmount.conf
+>>>
+>>> This file is only comments, save for a single un-commented line;
+>>>   [ NFSMount_Global_Options ]
+>>>
+>>> Would it not be better that we just generate a file with just that line,
+>>> and a comment to see the sources for the format, like so:
+>>>
+>>>   # See utils/mount/nfsmount.conf in nfs-utils sources
+>>>   # for the format of this file.
+>>>   [ NFSMount_Global_Options ]
+>>
+>> When debugging an unexpected NFS mount problem on a target for which you do
+>> not have the build system, at a site that might not have Internet access,
+>> with a root filesystem that might not have the "strings" utility, it is much
+>> easier to have all of the mount options in front of you rather than to have
+>> to leave the premises and start searching for the correct nfs-utils sources
+>> in order to find the full nfsmount.conf. It's just a much more friendly way
+>> of working. The lack of any nfsmount.conf cost me (my client really) several
+>> hours of work while I installed "strings" and figured out that there is such
+>> a thing as nfsmount.conf. It would be unfortunate for others to have to
+>> repeat this. Most people assigned to debug these types of systems are even
+>> less experienced than I.
+>
+> Well, one would argue that the system should have been tested before
+> being deployed. That's DevOps in action! Hehe! ;-)  (Kidding!)
 
-diff --git a/package/Config.in b/package/Config.in
-index 82eb305..4bc6b4c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -952,6 +952,7 @@ menu "external jQuery plugins"
- 	source "package/jquery-datetimepicker/Config.in"
- 	source "package/jquery-keyboard/Config.in"
- 	source "package/jquery-mobile/Config.in"
-+	source "package/jquery-sidebar/Config.in"
- 	source "package/jquery-sparkline/Config.in"
- 	source "package/jquery-ui/Config.in"
- 	source "package/jquery-ui-themes/Config.in"
-diff --git a/package/jquery-sidebar/Config.in b/package/jquery-sidebar/Config.in
-new file mode 100644
-index 0000000..324a20c
---- /dev/null
-+++ b/package/jquery-sidebar/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_JQUERY_SIDEBAR
-+	bool "jquery-sidebar"
-+	help
-+	  A stupid simple sidebar jQuery plugin.
-+
-+	  http://jillix.github.io/jQuery-sidebar/
-diff --git a/package/jquery-sidebar/jquery-sidebar.hash b/package/jquery-sidebar/jquery-sidebar.hash
-new file mode 100644
-index 0000000..60e44d4
---- /dev/null
-+++ b/package/jquery-sidebar/jquery-sidebar.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  c96e46439a87555f2200442f597cce64f21f81f94d7601ddfc3b837913ddb42f  jquery-sidebar-3.3.2.tar.gz
-diff --git a/package/jquery-sidebar/jquery-sidebar.mk b/package/jquery-sidebar/jquery-sidebar.mk
-new file mode 100644
-index 0000000..7af3667
---- /dev/null
-+++ b/package/jquery-sidebar/jquery-sidebar.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# jquery-sidebar
-+#
-+################################################################################
-+
-+JQUERY_SIDEBAR_VERSION = 3.3.2
-+JQUERY_SIDEBAR_SITE = $(call github,jillix,jQuery-sidebar,$(JQUERY_SIDEBAR_VERSION))
-+JQUERY_SIDEBAR_LICENSE = MIT
-+JQUERY_SIDEBAR_LICENSE_FILES = LICENSE
-+
-+define JQUERY_SIDEBAR_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0644 -D $(@D)/src/jquery.sidebar.min.js \
-+		$(TARGET_DIR)/var/www/jquery-plugins/sidebar/jquery.sidebar.min.js
-+endef
-+
-+$(eval $(generic-package))
+Hi Yann,
+Yes, they usually are tested before deployment, but often the end-user 
+environment changes in ways that the testers did not expect and the 
+default values of unusual parameters need to be changed. I think that NFS 
+mount is particularly problematic in this regard because of the many 
+different ways that sys-admins set it up and the wide range of servers 
+used.
+
+> But as I said: I'm OK with the full file as well. If a user is so
+> concerned with the size, he can provide a post-build script to tweak
+> that file, or a rootfs-overlay to provide his own version.
+>
+> So, my Reviewed-by stands. ;-)
+
+tnx,
+
+  - yba
+
+
+>
+> Thanks!
+>
+> Regards,
+> Yann E. MORIN.
+>
+>
+
 -- 
-2.1.4
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
