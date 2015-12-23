@@ -1,30 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 23 Dec 2015 08:54:59 +0000
-Subject: [Buildroot] [Bug 8546] build instructions for raspberry pi don't
-	work
-In-Reply-To: <bug-8546-163@https.bugs.busybox.net/>
-References: <bug-8546-163@https.bugs.busybox.net/>
-Message-ID: <bug-8546-163-nFO1MLB58t@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Dec 2015 09:56:12 +0100
+Subject: [Buildroot] [PATCH] Fix fallout after generated defconfig
+ support
+In-Reply-To: <1450859856-15891-1-git-send-email-yann.morin.1998@free.fr>
+References: <1450859856-15891-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20151223095612.73714ba0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8546
+Dear Yann E. MORIN,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Wed, 23 Dec 2015 09:37:36 +0100, Yann E. MORIN wrote:
+> Fix improper use of qstrip; use correct variables.
+> 
+> Fixes #8546.
+> 
+> Reported-by: craigswank at gmail.com
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> ---
+> Thomas,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|---                         |FIXED
+Applied, thanks.
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Should be fixed by
-https://git.busybox.net/buildroot/commit/?id=d831f2496441b5454de6a6dc0b4abb3804b94c88.
-Thanks for reporting the bug!
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
