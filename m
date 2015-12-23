@@ -1,42 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Dec 2015 17:46:32 +0100
-Subject: [Buildroot] [PATCH v2 1/1] vnstat: bump to version 1.15
-In-Reply-To: <1450885136-11511-1-git-send-email-rprebello@gmail.com>
-References: <1450885136-11511-1-git-send-email-rprebello@gmail.com>
-Message-ID: <20151223174632.40855537@free-electrons.com>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Wed, 23 Dec 2015 18:04:05 +0100
+Subject: [Buildroot] [PATCH v2] qt5/qt5webchannel: add qwebchannel.js
+	installation in /var/www
+Message-ID: <1450890245-16195-1-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rodrigo Rebello,
+To use webchannel in an application qwebchannel.js is needed but this file was not
+installed.
 
-On Wed, 23 Dec 2015 13:38:56 -0200, Rodrigo Rebello wrote:
-> Also:
-> 
->   - Remove no longer needed patch (merged upstream).
->   - Adapt vnstat.mk to the new autotools-based build system.
->   - Include patch to improve gd library usability check + add
->     configure option to explicitly disable that check.
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Fix typo in commit message (s/longed/longer/).
-> ---
->  ...-fcntl.h-include-needed-by-open-closes-21.patch | 28 ------------
->  ...ure.ac-add-option-to-disable-image-output.patch | 51 ++++++++++++++++++++++
->  package/vnstat/vnstat.hash                         |  2 +-
->  package/vnstat/vnstat.mk                           | 27 +++++-------
->  4 files changed, 64 insertions(+), 44 deletions(-)
->  delete mode 100644 package/vnstat/0001-add-missing-fcntl.h-include-needed-by-open-closes-21.patch
->  create mode 100644 package/vnstat/0001-configure.ac-add-option-to-disable-image-output.patch
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+---
+Changes v1 -> v2:
+  - Replace installation path choise with /var/www (suggested by Thomas)
+---
+ package/qt5/qt5webchannel/qt5webchannel.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
+index cfb6da9..bd4257f 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.mk
++++ b/package/qt5/qt5webchannel/qt5webchannel.mk
+@@ -35,6 +35,11 @@ define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
+ 	$(QT5_LA_PRL_FILES_FIXUP)
+ endef
+ 
++define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
++        $(INSTALL) -m 0644 -D $(@D)/src/webchannel/qwebchannel.js \
++		$(TARGET_DIR)/var/www/qwebchannel.js
++endef
++
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+ define QT5WEBCHANNEL_INSTALL_TARGET_QMLS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebChannel $(TARGET_DIR)/usr/qml/
+@@ -56,6 +61,7 @@ endif
+ define QT5WEBCHANNEL_INSTALL_TARGET_CMDS
+ 	$(QT5WEBCHANNEL_INSTALL_TARGET_LIBS)
+ 	$(QT5WEBCHANNEL_INSTALL_TARGET_QMLS)
++	$(QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
