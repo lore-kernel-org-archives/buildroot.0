@@ -1,33 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Dec 2015 18:54:39 +0100
-Subject: [Buildroot] [PATCH v3 1/7] package/nodejs: bump version to 5.3.0
-In-Reply-To: <1450872968-5834-1-git-send-email-martin@barkynet.com>
+Date: Wed, 23 Dec 2015 18:56:53 +0100
+Subject: [Buildroot] [PATCH v3 5/7] package/nodejs: remove version choice
+In-Reply-To: <1450872968-5834-5-git-send-email-martin@barkynet.com>
 References: <1450872968-5834-1-git-send-email-martin@barkynet.com>
-Message-ID: <20151223185439.4fd76a3e@free-electrons.com>
+ <1450872968-5834-5-git-send-email-martin@barkynet.com>
+Message-ID: <20151223185653.19830dfe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+Martin,
 
-On Wed, 23 Dec 2015 12:16:02 +0000, Martin Bark wrote:
-> Replace 4.2.3 with 5.3.0.  5.3.0 is the current Stable release. See
-> https://nodejs.org/en/blog/release/v5.3.0 for details on the release.
-> 
-> Copied 4.2.3 patched to 5.3.0 with the following exceptions:
->  - Removed 0004-fix-arm-vfpv2.patch, committed upstream and included in
->    5.3.0.  See https://github.com/nodejs/node/commit/84dea1bd0c
->  - Added 0004-Fix-va_list-not-declared.patch, fix for a new bug.  This
->    has already been fixed upstream but is not in 5.3.0
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+On Wed, 23 Dec 2015 12:16:06 +0000, Martin Bark wrote:
 
-I've applied patches 1, 2, 3, 4, 6 and 7. I've left out patch 5 because
-I have some concerns about it. I'll reply to patch 5 with some details.
+> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+> index eb3aeec..1aac38e 100644
+> --- a/package/nodejs/Config.in
+> +++ b/package/nodejs/Config.in
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_NODEJS
+>  	depends on !BR2_MIPS_SOFT_FLOAT
+>  	# ARM needs BLX, so v5t+
+>  	depends on !BR2_ARM_CPU_ARMV4
+> +	depends on BR2_PACKAGE_NODEJS_0_10_X || BR2_PACKAGE_NODEJS_5_X
 
-Thanks a lot!
+I don't like that the main BR2_PACKAGE_NODEJS option depends on
+BR2_PACKAGE_NODEJS_0_10_X || BR2_PACKAGE_NODEJS_5_X.
+
+Instead, please do something like:
+
+BR2_PACKAGE_NODEJS_VERSION
+	string
+	default "5.3.0"   if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && BR2_USE_WCHAR
+	default "0.10.41"
+
+And then use BR2_PACKAGE_NODEJS_VERSION in nodejs.mk to find which
+version to use.
 
 Thomas
 -- 
