@@ -1,7 +1,7 @@
 From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Wed, 23 Dec 2015 13:34:25 -0200
-Subject: [Buildroot] [PATCH 1/1] vnstat: bump to version 1.15
-Message-ID: <1450884865-11266-1-git-send-email-rprebello@gmail.com>
+Date: Wed, 23 Dec 2015 13:38:56 -0200
+Subject: [Buildroot] [PATCH v2 1/1] vnstat: bump to version 1.15
+Message-ID: <1450885136-11511-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,12 +10,15 @@ To: buildroot@busybox.net
 
 Also:
 
-  - Remove no longed needed patch (merged upstream).
+  - Remove no longer needed patch (merged upstream).
   - Adapt vnstat.mk to the new autotools-based build system.
   - Include patch to improve gd library usability check + add
     configure option to explicitly disable that check.
 
 Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+Changes v1 -> v2:
+  - Fix typo in commit message (s/longed/longer/).
 ---
  ...-fcntl.h-include-needed-by-open-closes-21.patch | 28 ------------
  ...ure.ac-add-option-to-disable-image-output.patch | 51 ++++++++++++++++++++++
