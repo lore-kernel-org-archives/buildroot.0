@@ -1,62 +1,63 @@
-From: Craig Swank <craigswank@fastmail.fm>
-Date: Wed, 23 Dec 2015 10:59:07 -0800
-Subject: [Buildroot] trying to use
- https://github.com/beagleboard/linux.git with buildroot
-In-Reply-To: <20151223193943.21a6f0fc@free-electrons.com>
-References: <1450890296.2355509.475056490.71128E4E@webmail.messagingengine.com>
- <20151223184751.12365336@free-electrons.com>
- <1450893821.3034067.475093450.34890777@webmail.messagingengine.com>
- <1450894505.3036056.475106194.467AC874@webmail.messagingengine.com>
- <20151223193943.21a6f0fc@free-electrons.com>
-Message-ID: <1450897147.3137391.475137994.490ED367@webmail.messagingengine.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 23 Dec 2015 20:05:01 +0100
+Subject: [Buildroot] [PATCH v2] jQuery: introduce external plugin menu
+In-Reply-To: <20151222225442.3c06ed95@free-electrons.com>
+References: <1438949409-17023-1-git-send-email-yegorslists@googlemail.com>
+ <20151222225442.3c06ed95@free-electrons.com>
+Message-ID: <20151223190501.GF3426@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok. I'll give that a shot. 
+Yegor, Thomas, All,
 
-On Wed, Dec 23, 2015, at 10:39 AM, Thomas Petazzoni wrote:
-> Dear Craig Swank,
+On 2015-12-22 22:54 +0100, Thomas Petazzoni spake thusly:
+> Dear yegorslists at googlemail.com,
 > 
-> On Wed, 23 Dec 2015 10:15:05 -0800, Craig Swank wrote:
-> > Here is my response again.  I sent one a few minutes ago but it might be
-> > too big because I tried attaching the build output.
+> On Fri,  7 Aug 2015 14:10:09 +0200, yegorslists at googlemail.com wrote:
+> > From: Yegor Yefremov <yegorslists@googlemail.com>
 > > 
-> > > Does it work with some other kernel? 
-> > Yes, it works with the default kernel that is defined in
-> > configs/beaglebone_defconfig
-> > 
-> > > Do you have console= defined in the bootargs to the proper value?
-> > I tried playing around with console= a few days ago, but I didn't get it
-> > working with that.  I really am not sure what the correct args would be.
-> >  I'm going to revisit that now and see if I can find what they should be
-> > set to.  
-> > 
-> > I uploaded the build output to
-> > https://www.dropbox.com/s/nbm6r5520g0wutf/nohup.out.bz2?dl=0 
+> > List all jQuery plugins in a dedicated menu and remove
+> > uneeded jQuery selection.
+
+Hmm... A bit lte to reply, I know, but I tend to prefer we use a
+'menuconfig' in that case, like we do for gstreamer, ffmpeg, Kodi, mpd,
+Freescale i.MX libraries...
+
+Of course, this means the Kconfig 'source' statement must move to the
+jquery's Config.in and the make 'include' statements to jquery.mk.
+
+Right, w ehave many other locations where we still do a simple 'menu'
+below a simple 'config', yet there's no reason to keep it that way.
+
+I'll see if I can do something about it. ;-)
+
+Regards,
+Yann E. MORIN.
+
+> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > ---
+> > Changes:
+> > 	v2: make packages prompt lowercase and hyphenated
 > 
-> I don't see anything obviously wrong here. Unfortunately, I don't have
-> a BBB with me to test this right now. Maybe someone else on the list
-> will have this at hand.
-> 
-> That being said, you can still follow my Buildroot tutorial at
-> https://www.youtube.com/watch?v=1PfthHCfudY, where I'm doing a step by
-> step description of building a Buildroot configuration for the BBB.
-> It's not using the kernel from http://github.com/beagleboard/linux.git,
-> but instead the mainline Linux kernel. But it should give you another
-> thing to test and look at.
-> 
-> Best regards,
+> Applied, thanks.
 > 
 > Thomas
 > -- 
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux, Kernel and Android engineering
 > http://free-electrons.com
-
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-  Craig Swank
-  craigswank at fastmail.fm
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
