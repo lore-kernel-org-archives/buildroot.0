@@ -1,51 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Dec 2015 23:10:24 +0100
-Subject: [Buildroot] [PATCH 1/1] Add ARM11 MPCore CPU target support
-In-Reply-To: <20151128143030.GA3816@free.fr>
-References: <BLU437-SMTP302AFC715EFB42C4E0320FC1020@phx.gbl>
- <20151128143030.GA3816@free.fr>
-Message-ID: <20151223231024.3c760e7b@free-electrons.com>
+Date: Wed, 23 Dec 2015 23:32:39 +0100
+Subject: [Buildroot] [git commit] doom-wad: add BR2_PACKAGE_CHOCOLATE_DOOM
+	as alternate dependency
+Message-ID: <20151223223303.653427FB7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=bc20c1578401e0c619cf0c334d35d97c83500baa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Sergi sent a v2 of his patch... but your suggestion doesn't work. See
-below.
+The shareware WAD file is also supported by Chocolate Doom.
 
-On Sat, 28 Nov 2015 15:30:30 +0100, Yann E. MORIN wrote:
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/doom-wad/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I wonder if we should not make VFP optional, and change the CPU nme on
-> whether the user has enabled VFP, like:
-> 
->     config BR2_arm11mpcore
->         bool "mpcore"
->         [...]
->         select BR2_ARM_CPU_MAYBE_HAS_VFPV2
->         [...]
-> 
->     config BR2_GCC_TARGET_CPU
->         [...]
->         default "mpcore"        if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
->         default "mpcorenovfp"   if BR2_arm11mpcore
->         [...]
-
-This doesn't work, because BR2_ARM_CPU_HAS_VFPV2 is not a user visible
-option, and there is nothing that selects it in the current Buildroot.
-Therefore the "mpcore" case can never be reached.
-
-Consequently, I am tempted to take v1 of Sergi's patch. Yes, it means
-we don't support the no-VFP variant of ARM11 MPCore, but I'm not sure
-there are lots of ARM11 MPCore without a VFP, so maybe supporting
-mpcorenovfp is not worth the effort for the moment.
-
-Thoughts?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/doom-wad/Config.in b/package/doom-wad/Config.in
+index aa1d029..edd299b 100644
+--- a/package/doom-wad/Config.in
++++ b/package/doom-wad/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_DOOM_WAD
+ 	bool "shareware Doom WAD file"
+-	depends on BR2_PACKAGE_PRBOOM
++	depends on BR2_PACKAGE_CHOCOLATE_DOOM || BR2_PACKAGE_PRBOOM
+ 	help
+ 	  This will install the shareware wad data file for the doom game.
+ 
