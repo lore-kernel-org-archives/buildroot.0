@@ -1,76 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 23 Dec 2015 19:31:33 +0100
-Subject: [Buildroot] [PATCH v2 2/2] Fixing xdriver_xf86-video-ati
- dependencies
-In-Reply-To: <1450874992-15627-3-git-send-email-ltrimas@synopsys.com>
-References: <1450874992-15627-1-git-send-email-ltrimas@synopsys.com>
- <1450874992-15627-3-git-send-email-ltrimas@synopsys.com>
-Message-ID: <20151223183133.GD3426@free.fr>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Wed, 23 Dec 2015 18:34:56 +0000
+Subject: [Buildroot] [PATCH v2] qt5/qt5webchannel: add qwebchannel.js
+ installation in /var/www
+In-Reply-To: <20151223182401.GA3426@free.fr>
+References: <1450890245-16195-1-git-send-email-corjon.j@ecagroup.com>
+ <20151223182401.GA3426@free.fr>
+Message-ID: <d117a580-8ae1-4711-b455-9a7ec4e2f932@MAIL-SINTERS-01.sinters-int.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lada, All,
+Yann,
 
-On 2015-12-23 15:49 +0300, Lada Trimasova spake thusly:
-> This package depends on the radeon driver from libdrm and depends on
-> DRI support in xserver_xorg-server, to achieve this we select the
-> Radeon mesa3d DRI driver.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/9da/9da4ffdf1c4ec78ae37322e253cb769340116035
-> 
-> Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/x11r7/xdriver_xf86-video-ati/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-> index 191c20f..00d91bd 100644
-> --- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-> +++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-> @@ -1,8 +1,9 @@
->  config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
->  	bool "xf86-video-ati"
->  	depends on BR2_PACKAGE_MESA3D
-> -	select BR2_PACKAGE_LIBDRM        if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-> -	select BR2_PACKAGE_LIBDRM_RADEON if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-> +	select BR2_PACKAGE_LIBDRM
-> +	select BR2_PACKAGE_LIBDRM_RADEON
-> +	select BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+Le 23/12/2015 19:24, Yann E. MORIN a ?crit :
+> Julien, All,
+>
+> On 2015-12-23 18:04 +0100, Julien Corjon spake thusly:
+>> To use webchannel in an application qwebchannel.js is needed but this file was not
+>> installed.
+>>
+>> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> However, I was having a look at our current package, and there's
+> something really odd that struck me. If the Qt5base examples are
+> enabled, then we define QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES but we
+> never use it.
 
-Sorry that I missed it in my previous reply, but you select libdrm, so
-you need to propagate its dependencies, too:
+I also notice this issue yesterday but I also notice that most of the qt 
+modules (except qt5base) compile examples but don't install them in 
+staging and target. Only the sources files are installed.
 
-    depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm -> libpthread-stubs
+I would like fix the examples binary install of all the Qt modules and 
+in the mean time fix the qwebchannel examples installation.
 
-This dependency is currently not a problem, because mesa3d hasa stricter
-dependency on NPTL, but you still have to propagate the dependencies of
-the packages you select.
+>
+> As it seems you're using qt5webchannels, would you care having a look at
+> this examples stuff, please?
+>
+> Regards,
+> Yann E. MORIN.
 
 Regards,
-Yann E. MORIN.
 
->  	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
->  	select BR2_PACKAGE_XPROTO_FONTSPROTO
->  	select BR2_PACKAGE_XPROTO_GLPROTO
-> -- 
-> 2.5.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Julien
