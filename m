@@ -1,49 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 23 Dec 2015 19:26:58 +0100
-Subject: [Buildroot] [PATCH v3 5/7] package/nodejs: remove version choice
-In-Reply-To: <20151223185653.19830dfe@free-electrons.com>
-References: <1450872968-5834-1-git-send-email-martin@barkynet.com>
- <1450872968-5834-5-git-send-email-martin@barkynet.com>
- <20151223185653.19830dfe@free-electrons.com>
-Message-ID: <20151223182658.GB3426@free.fr>
+Date: Wed, 23 Dec 2015 19:27:58 +0100
+Subject: [Buildroot] [PATCH v2 1/2] Enabling mesa3d radeon driver for
+ all architectures
+In-Reply-To: <1450874992-15627-2-git-send-email-ltrimas@synopsys.com>
+References: <1450874992-15627-1-git-send-email-ltrimas@synopsys.com>
+ <1450874992-15627-2-git-send-email-ltrimas@synopsys.com>
+Message-ID: <20151223182758.GC3426@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, Thomas, All,
+Lada, All,
 
-On 2015-12-23 18:56 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 23 Dec 2015 12:16:06 +0000, Martin Bark wrote:
-> > diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-> > index eb3aeec..1aac38e 100644
-> > --- a/package/nodejs/Config.in
-> > +++ b/package/nodejs/Config.in
-> > @@ -6,6 +6,7 @@ config BR2_PACKAGE_NODEJS
-> >  	depends on !BR2_MIPS_SOFT_FLOAT
-> >  	# ARM needs BLX, so v5t+
-> >  	depends on !BR2_ARM_CPU_ARMV4
-> > +	depends on BR2_PACKAGE_NODEJS_0_10_X || BR2_PACKAGE_NODEJS_5_X
+On 2015-12-23 15:49 +0300, Lada Trimasova spake thusly:
+> Mesa32 radeon driver doesn't depend on x86 and can be built for all architectures.
 > 
-> I don't like that the main BR2_PACKAGE_NODEJS option depends on
-> BR2_PACKAGE_NODEJS_0_10_X || BR2_PACKAGE_NODEJS_5_X.
-> 
-> Instead, please do something like:
-> 
-> BR2_PACKAGE_NODEJS_VERSION
-> 	string
-> 	default "5.3.0"   if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && BR2_USE_WCHAR
-> 	default "0.10.41"
-> 
-> And then use BR2_PACKAGE_NODEJS_VERSION in nodejs.mk to find which
-> version to use.
+> Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
+> Cc: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 
-And even if it is not a visible option, please keep it in the if-nodejs
-conditional block.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/mesa3d/Config.in | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 40af2ef..fcfd3c3 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -122,7 +122,6 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
+>  
+>  config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+>  	bool "DRI radeon driver"
+> -	depends on BR2_i386 || BR2_x86_64
+>  	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+>  	select BR2_PACKAGE_LIBDRM_RADEON
+>  	help
+> -- 
+> 2.5.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
