@@ -1,58 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 23 Dec 2015 20:05:01 +0100
-Subject: [Buildroot] [PATCH v2] jQuery: introduce external plugin menu
-In-Reply-To: <20151222225442.3c06ed95@free-electrons.com>
-References: <1438949409-17023-1-git-send-email-yegorslists@googlemail.com>
- <20151222225442.3c06ed95@free-electrons.com>
-Message-ID: <20151223190501.GF3426@free.fr>
+Date: Wed, 23 Dec 2015 20:09:49 +0100
+Subject: [Buildroot] LIB_SYMLINK in top-level Makefile
+In-Reply-To: <CAKbGBLgHuT-cQh4SW_NMBJ9iSpf_gan_3cjRn3Kc4pT+bEtTZw@mail.gmail.com>
+References: <CAKbGBLgHuT-cQh4SW_NMBJ9iSpf_gan_3cjRn3Kc4pT+bEtTZw@mail.gmail.com>
+Message-ID: <20151223190949.GG3426@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, Thomas, All,
+Steven, All,
 
-On 2015-12-22 22:54 +0100, Thomas Petazzoni spake thusly:
-> Dear yegorslists at googlemail.com,
-> 
-> On Fri,  7 Aug 2015 14:10:09 +0200, yegorslists at googlemail.com wrote:
-> > From: Yegor Yefremov <yegorslists@googlemail.com>
-> > 
-> > List all jQuery plugins in a dedicated menu and remove
-> > uneeded jQuery selection.
+On 2015-12-23 00:44 -0800, Steven Noonan spake thusly:
+> Are the LIB_SYMLINK definitions in the top-level Makefile defined at
+> the time they're used in package/skeleton/skeleton.mk? It looks like
+> those lines didn't get moved along with the rest of the bits from the
+> $(STAGING_DIR) target.
 
-Hmm... A bit lte to reply, I know, but I tend to prefer we use a
-'menuconfig' in that case, like we do for gstreamer, ffmpeg, Kodi, mpd,
-Freescale i.MX libraries...
+As Thomas already replied, they are.
 
-Of course, this means the Kconfig 'source' statement must move to the
-jquery's Config.in and the make 'include' statements to jquery.mk.
+And even if they are defined after they are used', that is not a
+problem. In Makefiles, the expansion of variables is not done at
+the time of parsing, but at the time the rules are executed.
 
-Right, w ehave many other locations where we still do a simple 'menu'
-below a simple 'config', yet there's no reason to keep it that way.
+For example, test this simple Makefile:
 
-I'll see if I can do something about it. ;-)
+    $ cat Makefile
+    all:
+        @echo FOO="'$(FOO)'"
+    FOO=1234
+
+    $ make
+    FOO='1234'
 
 Regards,
 Yann E. MORIN.
-
-> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > ---
-> > Changes:
-> > 	v2: make packages prompt lowercase and hyphenated
-> 
-> Applied, thanks.
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
