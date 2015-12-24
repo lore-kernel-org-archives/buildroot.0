@@ -1,64 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 11:07:53 +0100
-Subject: [Buildroot] [git commit] autofs: really fix build
-Message-ID: <20151224101242.48CFC826F4@busybox.osuosl.org>
+Date: Thu, 24 Dec 2015 11:18:27 +0100
+Subject: [Buildroot] [git commit] libnspr: fix build with the musl C library
+Message-ID: <20151224101958.DE74F826FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b78a95d109ea335406bbac2957c4cc85b98838d4
+commit: http://git.buildroot.net/buildroot/commit/?id=8c6bf50828ee2c027a37ddad0f655ddb1c8b4fd0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The autofs configure script does a number of weird things.
+Even though libnspr uses a configure script, it does look at __GLIBC__
+and other macros to determine whether certain C library features are
+available or not. Such things fails completely with the musl C
+library, since it doesn't define __GLIBC__.
 
-First, instead of using the default search path for AC_CHECK_PROGS(),
-it overrides it its own search path, ignoring the PATH environment
-variable. Due to this, autofs fails to find flex even though flex is
-available in the PATH. Fortunately, the authors provided a --with-path
-configure option which allows to override this search path.
-
-In addition, the configure script is checking on the build machine
-that a number of programs are available, while those programs are in
-fact only needed on the target. The one causing build issues is
-modprobe, because it may not necessarily be installed on build
-machines, so we explicitly tell autofs that modprobe is located in
-/sbin/modprobe. It might be necessary to provide additional values for
-other programs, as we discover other problems.
+To fix this, we borrow some logic from Alpine Linux, which consists in
+explicitly specifying which features are available in the musl C
+library.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/447/4479382b2d4d762991cab2e93fd08ad6160c2921/
+  http://autobuild.buildroot.org/results/ddd/dddd032232126f1e476e6aea2c6a32e9cd1ddfae/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/autofs/autofs.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/libnspr/libnspr.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 0ab8986..a98e5eb 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -11,11 +11,20 @@ AUTOFS_LICENSE = GPLv2+
- AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
- AUTOFS_DEPENDENCIES = host-flex host-bison
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 207da4e..8e58986 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -21,6 +21,22 @@ LIBNSPR_CONF_ENV = \
+ LIBNSPR_CONF_OPTS = --host=$(GNU_HOST_NAME)
+ LIBNSPR_CONF_OPTS += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
  
-+# autofs looks on the build machine for the path of modprobe, so tell
-+# it explicitly where it will be located on the target.
-+AUTOFS_CONF_ENV = \
-+	ac_cv_path_MODPROBE=/sbin/modprobe
++# ./nspr/pr/include/md/_linux.h tests only __GLIBC__ version to detect
++# c-library features, list musl features here for now (taken from
++# Alpine Linux).
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++LIBNSPR_CFLAGS += \
++	-D_PR_POLL_AVAILABLE \
++	-D_PR_HAVE_OFF64_T \
++	-D_PR_INET6 \
++	-D_PR_HAVE_INET_NTOP \
++	-D_PR_HAVE_GETHOSTBYNAME2 \
++	-D_PR_HAVE_GETADDRINFO \
++	-D_PR_INET6_PROBE
++endif
 +
-+# instead of looking in the PATH like any reasonable package, autofs
-+# configure looks only in an hardcoded search path for host tools,
-+# which we have to override with --with-path.
- AUTOFS_CONF_OPTS = \
- 	--disable-mount-locking \
- 	--enable-ignore-busy \
- 	--without-openldap \
--	--without-sasl
-+	--without-sasl \
-+	--with-path="$(BR_PATH)"
- 
- AUTOFS_MAKE_ENV = DONTSTRIP=1
- 
++LIBNSPR_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) $(LIBNSPR_CFLAGS)"
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBNSPR_MAKE_OPTS = SHARED_LIBRARY=
+ LIBNSPR_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SHARED_LIBRARY= install
