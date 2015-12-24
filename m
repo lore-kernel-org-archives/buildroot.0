@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 11:07:17 +0100
-Subject: [Buildroot] [PATCH v2 1/2] trousers: new package
-In-Reply-To: <CAOJKDvLfvzLSG5Z65BcKyE4DrA0nw9XA4aGrgw+uqJj+ss=K-g@mail.gmail.com>
-References: <1446659225-30438-1-git-send-email-nrubinstein@aldebaran.com>
- <20151224084221.12044000@free-electrons.com>
- <CAOJKDvLfvzLSG5Z65BcKyE4DrA0nw9XA4aGrgw+uqJj+ss=K-g@mail.gmail.com>
-Message-ID: <20151224110717.0fda5512@free-electrons.com>
+Date: Thu, 24 Dec 2015 11:12:25 +0100
+Subject: [Buildroot] [PATCH] package/qt: disable Qt GUI module for CS
+ NiosII toolchain
+In-Reply-To: <CANLo3Jih8-QwatDhqeqYcy1G2_2ank2am2LbKWmERpVS1DNtqA@mail.gmail.com>
+References: <1450911817-12589-1-git-send-email-romain.naour@gmail.com>
+ <20151224083849.381556a9@free-electrons.com>
+ <CANLo3JgDh9HBs82x_QoK-ZDTuhP=XTkYKvSMfj34tXRnaQgVyQ@mail.gmail.com>
+ <20151224091911.5380637c@free-electrons.com>
+ <CANLo3Jih8-QwatDhqeqYcy1G2_2ank2am2LbKWmERpVS1DNtqA@mail.gmail.com>
+Message-ID: <20151224111225.24c62183@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Romain Naour,
 
-On Thu, 24 Dec 2015 10:21:00 +0100, No? RUBINSTEIN wrote:
+On Thu, 24 Dec 2015 09:36:57 +0100, Romain Naour wrote:
 
-> >      - select libiconv when locale support is not available, otherwise the
-> >        build fails due to missing iconv.h
-> >      - disable on BR2_STATIC_LIBS configurations as it doesn't build. It
-> >        could be made to build by patching the trousers Makefile.
-> >      - add missing dependency on thread support in the toolchain
-> >
-> 
-> Are you running an automatic test set on your host machine to detect these
-> problems?
+> I think this patch is ok as is because we black list Qt GUI only with the
+> CS toolchain and there is nothing we can do to fix the issue.
+> I will see latter if I found a Binutils patch for it, if not report the
+> issue.
 
-No, I am testing with a bunch of toolchains used by autobuild.b.o.
-Since your package had no toolchain dependencies, I tested with
-http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config.
+Well, since the problem also affects nios2 internal toolchains, I
+believe the dependencies should be !BR2_nios2, of course unless you
+find an existing binutils patch to fix the problem. But if you don't,
+then we will have to exclude nios2 entirely.
 
-Best regards,
+To be honest, the likeliness of having people using Qt GUI on nios2 is
+very small, if not zero. So we shouldn't care too much about this IMO.
+
+Thanks,
 
 Thomas
 -- 
