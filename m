@@ -1,47 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 14:57:17 +0100
-Subject: [Buildroot] [git commit] package/dhcp: make S80dhcp-relay read a
-	file from /etc/default/
-Message-ID: <20151224135818.86FB7826F9@busybox.osuosl.org>
+Date: Thu, 24 Dec 2015 14:48:28 +0100
+Subject: [Buildroot] [git commit] dhcp: read /etc/default/dhcpd,
+	not /etc/default/dhcpd.conf
+Message-ID: <20151224135818.6F58C82703@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0bc15867dad61c24769d635c31c8263695ed92c0
+commit: http://git.buildroot.net/buildroot/commit/?id=6f81baaf47e3f47b131ec2b1c6c5f7d062a48d84
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The S80dhcp-relay init script has configuration variables like
-INTERFACES whose contents have to be passed to the daemon. These
-variables are initialized as empty strings, but some of them are not
-allowed to be empty and there was no means of filling them apart from
-creating a root FS overlay to overwrite these scripts.
+All daemons that read a file from /etc/default/ have it named just
+after the name of daemon, without any extension. This commit fixes the
+dhcp package to do the same.
 
-This commit adds support for reading dhcrelay under /etc/default/ to
-set these configuration variables.
-
-[Thomas: adapt to patch only S80dhcp-relay, since S80dhcp-server has
-already been changed by previous commits.]
-
-Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dhcp/S80dhcp-relay | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/dhcp/S80dhcp-server | 2 +-
+ package/dhcp/dhcpd.service  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dhcp/S80dhcp-relay b/package/dhcp/S80dhcp-relay
-index 5ee06c7..0f383e6 100755
---- a/package/dhcp/S80dhcp-relay
-+++ b/package/dhcp/S80dhcp-relay
-@@ -13,6 +13,10 @@ INTERFACES=""
- # Additional options that are passed to the DHCP relay daemon?
- OPTIONS=""
+diff --git a/package/dhcp/S80dhcp-server b/package/dhcp/S80dhcp-server
+index 356e735..06b7ab1 100755
+--- a/package/dhcp/S80dhcp-server
++++ b/package/dhcp/S80dhcp-server
+@@ -8,7 +8,7 @@
+ INTERFACES=""
  
-+# Read configuration variable file if it is present
-+CFG_FILE="/etc/default/dhcrelay"
-+[ -r "${CFG_FILE}" ] && . "${CFG_FILE}"
-+
+ # Allow a few customizations from a config file
+-test -r /etc/default/dhcpd.conf && . /etc/default/dhcpd.conf
++test -r /etc/default/dhcpd && . /etc/default/dhcpd
+ 
  # Sanity checks
- test -f /usr/sbin/dhcrelay || exit 0
- test -n "$INTERFACES" || exit 0
+ test -f /usr/sbin/dhcpd || exit 0
+diff --git a/package/dhcp/dhcpd.service b/package/dhcp/dhcpd.service
+index d58fbd5..a05deb8 100644
+--- a/package/dhcp/dhcpd.service
++++ b/package/dhcp/dhcpd.service
+@@ -7,7 +7,7 @@ Type=forking
+ PIDFile=/run/dhcpd.pid
+ ExecStart=/usr/sbin/dhcpd -q -pf /run/dhcpd.pid $INTERFACES
+ KillSignal=SIGINT
+-EnvironmentFile=-/etc/default/dhcpd.conf
++EnvironmentFile=-/etc/default/dhcpd
+ 
+ [Install]
+ WantedBy=multi-user.target
