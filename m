@@ -1,47 +1,177 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 11:21:03 +0100
-Subject: [Buildroot] [PATCH] package/libnspr: disable for musl toolchains
-In-Reply-To: <1440870131-17263-1-git-send-email-romain.naour@openwide.fr>
-References: <1440870131-17263-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151224112103.2ad48d11@free-electrons.com>
+Date: Thu, 24 Dec 2015 11:28:59 +0100
+Subject: [Buildroot] buildroot support for OrangePI PC
+In-Reply-To: <1450948540529.50320.154990@webmail2>
+References: <56748758.7040908@mind.be>
+	<1450948540529.50320.154990@webmail2>
+Message-ID: <20151224112859.6f44713d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+Eelco,
 
-On Sat, 29 Aug 2015 19:42:11 +0200, Romain Naour wrote:
-> libnspr use getprotobyname_r() which is not available on musl.
-> 
-> Also there is another error due to missing _PR_HAVE_GETHOSTBYNAME2 define:
-> prnetdb.c: In function ?PR_GetIPNodeByName?:
-> prnetdb.c:898:2: error: #error "Unknown name-to-address translation function"
->  #error "Unknown name-to-address translation function"
-> 
-> _PR_HAVE_GETHOSTBYNAME2 is only set in pr/include/md/_linux.h if __GLIBC__
-> is defined.
-> 
-> To conclude, libnspr is not ready for musl.
-> Add reverse dependency on ecryptfs-utils and libnss.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c75/c756f82dfc49611fa3f650d9cf2a71b59d23c3d0/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/ecryptfs-utils/Config.in | 5 +++--
->  package/libnspr/Config.in        | 5 +++--
->  package/libnss/Config.in         | 5 +++--
->  3 files changed, 9 insertions(+), 6 deletions(-)
+On Thu, 24 Dec 2015 10:15:40 +0100, Eelco Chaudron wrote:
 
-At
-https://git.busybox.net/buildroot/commit/?id=8c6bf50828ee2c027a37ddad0f655ddb1c8b4fd0,
-I've committed a different fix, which consists in making libnspr build
-properly with musl. This is simpler as we don't have to propagate the
-reverse dependency to other packages. Consequently, I've marked your
-patch as Rejected in patchwork.
+> This is the diff;
+
+Thanks for the patch. Can you send it as a proper Git formatted patch?
+See the Buildroot manual for instructions on how to do this. I have a
+couple more comments below.
+
+> diff --git a/board/orangepi/orangepipc/genimage.cfg b/board/orangepi/orangepipc/genimage.cfg
+> new file mode 100644
+> index 0000000..43c2249
+> --- /dev/null
+> +++ b/board/orangepi/orangepipc/genimage.cfg
+> @@ -0,0 +1,36 @@
+> +# Minimal SD card image for the OrangePi PC
+> +#
+> +
+> +image boot.vfat {
+> + vfat {
+> + files = {
+> + "uImage",
+> + "sun8i-h3-orangepi-pc.dtb",
+> + "boot.scr"
+> + }
+> + }
+> + size = 10M
+> +}
+
+Please fix the indentation here. I think we should use at least two
+spaces for indentation, or maybe better one tab.
+
+> diff --git a/board/orangepi/orangepipc/post-build.sh b/board/orangepi/orangepipc/post-build.sh
+> new file mode 100755
+> index 0000000..9f115cb
+> --- /dev/null
+> +++ b/board/orangepi/orangepipc/post-build.sh
+> @@ -0,0 +1,14 @@
+> +#!/bin/sh
+> +# post-build.sh for OrangePi PC taken from CubieBoard's post-build.sh
+> +# 2013, Carlo Caione <<carlo.caione@gmail.com>>
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +MKIMAGE=$HOST_DIR/usr/bin/mkimage
+> +BOOT_CMD=$BOARD_DIR/boot.cmd
+> +BOOT_CMD_H=$BINARIES_DIR/boot.scr
+> +
+> +# U-Boot script
+> +if [ -e $MKIMAGE -a -e $BOOT_CMD ];
+
+This test is not needed IMO, just run the $MKIMAGE command
+unconditionally.
+
+> +then
+> +	$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
+> +fi
+> diff --git a/board/orangepi/orangepipc/post-image.sh b/board/orangepi/orangepipc/post-image.sh
+> new file mode 100755
+> index 0000000..05f6b70
+> --- /dev/null
+> +++ b/board/orangepi/orangepipc/post-image.sh
+> @@ -0,0 +1,16 @@
+> +#!/bin/bash
+
+Do we really need this to be a bash script ? #!/bin/sh is probably
+sufficient.
+
+> +
+> +GENIMAGE_CFG="board/orangepi/orangepipc/genimage.cfg"
+
+Maybe you could use the same BOARD_DIR trick than the one you've used
+in the post-build script?
+
+> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> +
+> +rm -rf "${GENIMAGE_TMP}"
+> +
+> +genimage \
+> + --rootpath "${TARGET_DIR}" \
+> + --tmppath "${GENIMAGE_TMP}" \
+> + --inputpath "${BINARIES_DIR}" \
+> + --outputpath "${BINARIES_DIR}" \
+> + --config "${GENIMAGE_CFG}"
+
+Use tab for indentation.
+
+> +
+> +RET=${?}
+> +exit ${RET}
+
+Just do exit $?
+
+> diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
+> new file mode 100644
+> index 0000000..cd349c5
+> --- /dev/null
+> +++ b/configs/orangepipc_defconfig
+> @@ -0,0 +1,26 @@
+> +BR2_arm=y
+> +BR2_cortex_a7=y
+> +BR2_ARM_FPU_NEON_VFPV4=y
+
+Please use just VFPV4. Using NEON for floating point operations by
+default is not a good idea. From the gcc manual:
+
+   If the selected floating-point hardware includes the NEON extension
+   (e.g. -mfpu=?neon?), note that floating-point operations are not
+   generated by GCC's auto-vectorization pass unless
+   -funsafe-math-optimizations is also specified. This is because NEON
+   hardware does not fully implement the IEEE 754 standard for
+   floating-point arithmetic (in particular denormal values are treated
+   as zero), so the use of NEON instructions may lead to a loss of
+   precision.
+
+
+> +BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
+
+Please force the kernel headers version to a fixed version, like is
+done in all other defconfig files. For example:
+
+# Lock to 4.3 headers to avoid breaking with newer kernels
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="4.3"
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3=y
+
+(Of course adapt 4.3 to whatever kernel version you're using)
+
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="<https://github.com/jwrdegoede/linux-sunxi.git>"
+
+Please remove the < and > before and after the URL. I'm not even sure
+how it can work with such markers.
+
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a516ac6dda21e6f5edceecd08b475b16e360656b"
+> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
+
+The modern way is to boot using a zImage. Can you try using a zImage
+instead?
+
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="orangepi_pc"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="<http://git.denx.de/u-boot.git>"
+
+Ditto < and > markers.
+
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4832e17787acb29734d895751bc7a594908aecc6"
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+> +BR2_PACKAGE_HOST_GENIMAGE=y
 
 Thanks!
 
