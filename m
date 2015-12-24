@@ -1,33 +1,84 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 24 Dec 2015 22:30:39 +0100
-Subject: [Buildroot] [PATCH 3/5] python-cffi: add host variant
+Date: Thu, 24 Dec 2015 22:30:41 +0100
+Subject: [Buildroot] [PATCH 5/5] python-pyopenssl: new package
 In-Reply-To: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
 References: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1450992641-8618-3-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1450992641-8618-5-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Host variant is needed to build python-cryptography package.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-cffi/python-cffi.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/Config.in                              |  1 +
+ package/python-pyopenssl/Config.in             | 12 ++++++++++++
+ package/python-pyopenssl/python-pyopenssl.hash |  3 +++
+ package/python-pyopenssl/python-pyopenssl.mk   | 14 ++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/python-pyopenssl/Config.in
+ create mode 100644 package/python-pyopenssl/python-pyopenssl.hash
+ create mode 100644 package/python-pyopenssl/python-pyopenssl.mk
 
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index 70fbe02..a6e4107 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
-@@ -11,5 +11,7 @@ PYTHON_CFFI_SETUP_TYPE = setuptools
- PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
- PYTHON_CFFI_LICENSE = MIT
- PYTHON_CFFI_LICENSE_FILES = LICENSE
-+HOST_PYTHON_CFFI_DEPENDENCIES = host-python-pycparser
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
+diff --git a/package/Config.in b/package/Config.in
+index 4c96454..1d8496d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -671,6 +671,7 @@ menu "External python modules"
+ 	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
+ 	source "package/python-pyinotify/Config.in"
++	source "package/python-pyopenssl/Config.in"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pypcap/Config.in"
+ 	source "package/python-pyqt/Config.in"
+diff --git a/package/python-pyopenssl/Config.in b/package/python-pyopenssl/Config.in
+new file mode 100644
+index 0000000..cb59e8b
+--- /dev/null
++++ b/package/python-pyopenssl/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_PYOPENSSL
++	bool "python-pyopenssl"
++	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
++	select BR2_PACKAGE_PYTHON_SIX
++	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
++	help
++	  Python wrapper module around the OpenSSL library.
++
++	  https://github.com/pyca/pyopenssl
++
++comment "python-pyopenssl needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
+new file mode 100644
+index 0000000..0c6e25a
+--- /dev/null
++++ b/package/python-pyopenssl/python-pyopenssl.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f447644afcbd5f0a1f47350fec63a4c6, sha256 locally computed
++md5     f447644afcbd5f0a1f47350fec63a4c6  pyOpenSSL-0.15.1.tar.gz
++sha256  f0a26070d6db0881de8bcc7846934b7c3c930d8f9c79d45883ee48984bc0d672  pyOpenSSL-0.15.1.tar.gz
+diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
+new file mode 100644
+index 0000000..239fd98
+--- /dev/null
++++ b/package/python-pyopenssl/python-pyopenssl.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pyopenssl
++#
++################################################################################
++
++PYTHON_PYOPENSSL_VERSION = 0.15.1
++PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
++PYTHON_PYOPENSSL_SITE = https://pypi.python.org/packages/source/p/pyOpenSSL
++PYTHON_PYOPENSSL_LICENSE = Apache-2.0
++PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
++PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
 2.1.4
