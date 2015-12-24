@@ -1,29 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 09:19:11 +0100
-Subject: [Buildroot] [PATCH] package/qt: disable Qt GUI module for CS
- NiosII toolchain
-In-Reply-To: <CANLo3JgDh9HBs82x_QoK-ZDTuhP=XTkYKvSMfj34tXRnaQgVyQ@mail.gmail.com>
-References: <1450911817-12589-1-git-send-email-romain.naour@gmail.com>
- <20151224083849.381556a9@free-electrons.com>
- <CANLo3JgDh9HBs82x_QoK-ZDTuhP=XTkYKvSMfj34tXRnaQgVyQ@mail.gmail.com>
-Message-ID: <20151224091911.5380637c@free-electrons.com>
+Date: Thu, 24 Dec 2015 09:19:54 +0100
+Subject: [Buildroot] [PATCH v2 2/2] tpm-tools: new package
+In-Reply-To: <1446659225-30438-2-git-send-email-nrubinstein@aldebaran.com>
+References: <1446659225-30438-1-git-send-email-nrubinstein@aldebaran.com>
+ <1446659225-30438-2-git-send-email-nrubinstein@aldebaran.com>
+Message-ID: <20151224091954.294b2167@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+Dear No? Rubinstein,
 
-On Thu, 24 Dec 2015 09:14:56 +0100, Romain Naour wrote:
-
-> > Can you check if the internal NIOSII toolchain also has this problem or
-> > not?
+On Wed,  4 Nov 2015 18:47:05 +0100, No? Rubinstein wrote:
+> Signed-off-by: Al West <al.west@v-nova.com>
+> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
 > 
-> Actualy, the second build failure was with the internal NIOSII toolchain.
+> ---
 
-Then it would be good to report the bug to upstream binutils. And
-indeed, your patch needs to be adjusted then :)
+Applied, after doing quite a few changes:
+
+    [Thomas:
+     - move from Libraries/Crypto to System tools in menuconfig
+     - add patch to fix build with uClibc
+     - use 'select' for openssl rather than a 'depends on'
+     - propagate trousers dependencies
+     - add <pkg>_LICENSE and <pkg>_LICENSEFILES
+     - link against libiconv when needed, fixing !locale builds
+     - explicitly disable pkcs11 support, since it is not handled by
+       tpm-tools.mk currently.]
+
+Thanks,
 
 Thomas
 -- 
