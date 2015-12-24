@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 08:30:58 +0100
-Subject: [Buildroot] Newbie boot and fs mount question
-In-Reply-To: <04294576-64CB-4232-80B7-362A7A7DC2FF@gmail.com>
-References: <CA+C+_XSCm9Q1uE7Zg2VcK6xCa3ASEUNFTX=0GF3=KwaUYQWTzQ@mail.gmail.com>
- <20151222210930.7929c662@free-electrons.com>
- <04294576-64CB-4232-80B7-362A7A7DC2FF@gmail.com>
-Message-ID: <20151224083058.1cffa502@free-electrons.com>
+Date: Thu, 24 Dec 2015 08:38:49 +0100
+Subject: [Buildroot] [PATCH] package/qt: disable Qt GUI module for CS
+ NiosII toolchain
+In-Reply-To: <1450911817-12589-1-git-send-email-romain.naour@gmail.com>
+References: <1450911817-12589-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20151224083849.381556a9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mathew Benson,
+Dear Romain Naour,
 
-On Wed, 23 Dec 2015 19:04:05 -0600, Mathew Benson wrote:
+On Thu, 24 Dec 2015 00:03:37 +0100, Romain Naour wrote:
+> The libQtGui.so build triggers an ld error with Binutils 2.25.1
+> 
+> Avoid (GCC 5.2 and Binutils 2.25.51):
+> http://autobuild.buildroot.net/results/c94/c945bce96966e5e39d093c4265058a66f749eea6
+> 
+> Similar (GCC 4.9.3 and Binutils 2.25.1):
+> http://autobuild.buildroot.net/results/ca9/ca981c419bfedb38c591f6e75151a943bc9535ef
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-> I have a possible dumb question.  I enabled initrd to be linked into
-> the kernel, thinking boot time might be faster.  I enabled the
-> "remount filesystem" option, thinking that would remount it from the
-> hard drive rather than the linked in rootfs.  Is that an incorrect
-> assumption?
+Can you check if the internal NIOSII toolchain also has this problem or
+not?
 
-Yes, it is an incorrect assumption. In Buildroot, if you enable
-"initial RAM filesystem linked into linux kernel", then the entire
-root filesystem lives in RAM, and we never switch to another on-storage
-filesystem.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
