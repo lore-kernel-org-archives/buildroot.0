@@ -1,39 +1,76 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Thu, 24 Dec 2015 12:16:59 -0200
-Subject: [Buildroot] [PATCH] libgdiplus: bump to version 4.2
-Message-ID: <1450966619-23588-1-git-send-email-sergio.prado@e-labworks.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 24 Dec 2015 15:25:07 +0100
+Subject: [Buildroot] [PATCH] python-ipaddress: new package
+Message-ID: <1450967107-18489-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/libgdiplus/libgdiplus.hash | 2 +-
- package/libgdiplus/libgdiplus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                              |  1 +
+ package/python-ipaddress/Config.in             |  7 +++++++
+ package/python-ipaddress/python-ipaddress.hash |  3 +++
+ package/python-ipaddress/python-ipaddress.mk   | 13 +++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-ipaddress/Config.in
+ create mode 100644 package/python-ipaddress/python-ipaddress.hash
+ create mode 100644 package/python-ipaddress/python-ipaddress.mk
 
-diff --git a/package/libgdiplus/libgdiplus.hash b/package/libgdiplus/libgdiplus.hash
-index 71ffdd346685..f7fdcb58a46c 100644
---- a/package/libgdiplus/libgdiplus.hash
-+++ b/package/libgdiplus/libgdiplus.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 7eadc5105c6352d456c5f8699dc89260bf402e82ce6668e7e0c625519f9e5b44 libgdiplus-3.12.tar.gz
-+sha256 98f8a8e58ed22e136c4ac6eaafbc860757f5a97901ecc0ea357e2b6e4cfa2be5 libgdiplus-4.2.tar.gz
-diff --git a/package/libgdiplus/libgdiplus.mk b/package/libgdiplus/libgdiplus.mk
-index fdb5b5c1f45a..aac859f865a1 100644
---- a/package/libgdiplus/libgdiplus.mk
-+++ b/package/libgdiplus/libgdiplus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGDIPLUS_VERSION = 3.12
-+LIBGDIPLUS_VERSION = 4.2
- LIBGDIPLUS_SITE = $(call github,mono,libgdiplus,$(LIBGDIPLUS_VERSION))
- 
- # Although there is a LICENSE file thas specifies LGPL or MPLv1.1,
+diff --git a/package/Config.in b/package/Config.in
+index 0c83699..4c96454 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -640,6 +640,7 @@ menu "External python modules"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-idna/Config.in"
+ 	source "package/python-ipaddr/Config.in"
++	source "package/python-ipaddress/Config.in"
+ 	source "package/python-ipy/Config.in"
+ 	source "package/python-ipython/Config.in"
+ 	source "package/python-itsdangerous/Config.in"
+diff --git a/package/python-ipaddress/Config.in b/package/python-ipaddress/Config.in
+new file mode 100644
+index 0000000..b2b9f0b
+--- /dev/null
++++ b/package/python-ipaddress/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_IPADDRESS
++	bool "python-ipaddress"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Python 3.3's ipaddress for older Python versions.
++
++	  https://github.com/phihag/ipaddress
+diff --git a/package/python-ipaddress/python-ipaddress.hash b/package/python-ipaddress/python-ipaddress.hash
+new file mode 100644
+index 0000000..21bc373
+--- /dev/null
++++ b/package/python-ipaddress/python-ipaddress.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12915e923b738107e47827478d553ba1, sha256 locally computed
++md5     12915e923b738107e47827478d553ba1  ipaddress-1.0.15.tar.gz
++sha256  af6c85cfc9cdb12b861655e6b9f2f59618bf3088cbde858727b2c0a98e9f6636  ipaddress-1.0.15.tar.gz
+diff --git a/package/python-ipaddress/python-ipaddress.mk b/package/python-ipaddress/python-ipaddress.mk
+new file mode 100644
+index 0000000..8019aa8
+--- /dev/null
++++ b/package/python-ipaddress/python-ipaddress.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-ipaddress
++#
++################################################################################
++
++PYTHON_IPADDRESS_VERSION = 1.0.15
++PYTHON_IPADDRESS_SOURCE = ipaddress-$(PYTHON_IPADDRESS_VERSION).tar.gz
++PYTHON_IPADDRESS_SITE = https://pypi.python.org/packages/source/i/ipaddress
++PYTHON_IPADDRESS_LICENSE = Python software foundation license
++PYTHON_IPADDRESS_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
-1.9.1
+2.1.4
