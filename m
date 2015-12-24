@@ -1,56 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 12:36:33 +0100
-Subject: [Buildroot] [PATCH 1/2 v3] vboot-utils: new package
-In-Reply-To: <4c9ac9c66d52a2760002718d0827b1c146633aa1.1447714688.git.alex.suykov@gmail.com>
-References: <cover.1447689401.git.alex.suykov@gmail.com>
- <4c9ac9c66d52a2760002718d0827b1c146633aa1.1447714688.git.alex.suykov@gmail.com>
-Message-ID: <20151224123633.6740e4d3@free-electrons.com>
+Date: Thu, 24 Dec 2015 12:40:30 +0100
+Subject: [Buildroot] [PATCH] package/connman: cleanup backtrace patch
+In-Reply-To: <1450956867-15532-1-git-send-email-yann.morin.1998@free.fr>
+References: <1450956867-15532-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20151224124030.53999020@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+Yann,
 
-On Tue, 17 Nov 2015 01:42:21 +0200, Alex Suykov wrote:
-> Chromium OS verified boot utilities.
+On Thu, 24 Dec 2015 12:34:27 +0100, Yann E. MORIN wrote:
+> connman uses execinfo.h to dump a backtrace in case of failure.
+> execinfo.h is optional in uClibc, so we had a patch that conditonally
+> disabled backtraces for uClibc when it was missing execinfo.h
 > 
-> Needed for signing kernel images and manipulating bootable
-> partitions on media intended for Chromebooks.
+> However, musl is also entirely lacking execinfo.h.
 > 
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> Add a proper patch that checks for execinfo.h at ./configure time. This
+> will no longer make any assumption on the C library that is being used.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/f6e/f6ee8ab3a6300f1f527f9e92b8c2ec81e63afb27/
+>     http://autobuild.buildroot.org/results/96b/96b78bb644ed4ef3493782521b17e3b2113a405f/
+>     ...
+> 
+> Note that there might be other issues with musl; this patch only fiexes
 
-I wanted to apply this patch, but it fails to build. It forgets to link
-with the OpenSSL library that has been built in $(HOST_DIR)/usr/lib.
-Can you have a look? To reproduce, make sure you don't have the
-openssl-dev package installed on your system.
+fiexes -> fixes
 
-    AR            libvboot_util21.a
-    LD            futility/futility_s
-    LD            futility/futility
-    LDcgpt        cgpt/cgpt
-/home/thomas/projets/buildroot/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/futility/cmd_create.o: In function `do_create':
-cmd_create.c:(.text+0x42a): undefined reference to `PEM_read_RSAPrivateKey'
-cmd_create.c:(.text+0x5fa): undefined reference to `RSA_free'
-cmd_create.c:(.text+0x65e): undefined reference to `PEM_read_RSAPrivateKey'
-cmd_create.c:(.text+0x680): undefined reference to `PEM_read_RSA_PUBKEY'
-cmd_create.c:(.text+0x962): undefined reference to `RSA_free'
-/home/thomas/projets/buildroot/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/futility/cmd_show.o: In function `ft_show_privkey':
-cmd_show.c:(.text+0x875): undefined reference to `d2i_RSAPrivateKey'
-cmd_show.c:(.text+0x901): undefined reference to `RSA_free'
-/home/thomas/projets/buildroot/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/futility/vb1_helper.o: In function `ft_recognize_vb1_key':
-vb1_helper.c:(.text+0x1141): undefined reference to `d2i_RSAPrivateKey'
-vb1_helper.c:(.text+0x1159): undefined reference to `RSA_free'
-/home/thomas/projets/buildroot/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/futility/vb2_helper.o: In function `rsa_from_buffer':
-vb2_helper.c:(.text+0x4): undefined reference to `BIO_new_mem_buf'
-vb2_helper.c:(.text+0x1a): undefined reference to `PEM_read_bio_RSAPrivateKey'
-vb2_helper.c:(.text+0x33): undefined reference to `BIO_ctrl'
-vb2_helper.c:(.text+0x45): undefined reference to `PEM_read_bio_RSA_PUBKEY'
-vb2_helper.c:(.text+0x55): undefined reference to `BIO_free'
-vb2_helper.c:(.text+0x61): undefined reference to `BIO_free'
+However, I have some comments below.
 
-Thanks,
+
+> diff --git a/package/connman/0001-conditional-backtrace.patch b/package/connman/0001-conditional-backtrace.patch
+> new file mode 100644
+> index 0000000..231eda2
+> --- /dev/null
+> +++ b/package/connman/0001-conditional-backtrace.patch
+> @@ -0,0 +1,74 @@
+> +commit 13cfdf6b01651b0e3d07455ed69f5c328642982e
+> +Author: Yann E. MORIN <yann.morin.1998@free.fr>
+> +Date:   Thu Dec 24 12:04:57 2015 +0100
+> +
+> +    configure: check for execinfo.h
+> +    
+> +    Not all toolchains have execinfo.h. For example, support for it is
+> +    optional in uClibc, while it is entirely missing from musl.
+> +    
+> +    Add a check in configure to look for it.
+> +    
+> +    Since execinfo.h is /only/ used to dump a backtrace in case of failure,
+> +    just do nothing when execinfo.h is missing.
+> +    
+> +    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Please use "git format-patch" to generate a properly Git formatted
+patch. Here is seems like you have simply taken the output of "git
+show".
+
+> +diff --git a/Makefile.am b/Makefile.am
+> +index fb7c74e..ef02cf5 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -210,7 +210,8 @@ AM_CFLAGS = @DBUS_CFLAGS@ @GLIB_CFLAGS@ @XTABLES_CFLAGS@ \
+> + 				-DSCRIPTDIR=\""$(build_scriptdir)"\" \
+> + 				-DSTORAGEDIR=\""$(storagedir)\"" \
+> + 				-DVPN_STORAGEDIR=\""$(vpn_storagedir)\"" \
+> +-				-DCONFIGDIR=\""$(configdir)\""
+> ++				-DCONFIGDIR=\""$(configdir)\"" \
+> ++				-DHAVE_BACKTRACE=$(HAVE_BACKTRACE)
+
+This change is not needed, HAVE_EXECINFO_H will be defined in config.h.
+
+> + 
+> + if VPN
+> + AM_CPPFLAGS = -I$(builddir)/include -I$(srcdir)/gdbus
+> +diff --git a/configure.ac b/configure.ac
+> +index b51d6b3..87701d0 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -182,6 +182,9 @@ AC_CHECK_LIB(resolv, ns_initparse, dummy=yes, [
+> + 		AC_MSG_ERROR(resolver library support is required))
+> + ])
+> + 
+> ++AC_CHECK_HEADERS([execinfo.h],[HAVE_BACKTRACE=1], HAVE_BACKTRACE=0)
+
+HAVE_BACKTRACE=1/HAVE_BACKTRACE=0 are not needed.
+
+Just do:
+
+AC_CHECK_HEADERS([execinfo.h])
+
+HAVE_EXECINFO_H will automatically be defined in config.h.
+
+> ++AC_SUBST([HAVE_BACKTRACE])
+
+Not needed.
+
+> ++
+> + AC_CHECK_FUNC(signalfd, dummy=yes,
+> + 			AC_MSG_ERROR(signalfd support is required))
+> + 
+> +diff --git a/src/log.c b/src/log.c
+> +index a693bd0..69ab50e 100644
+> +--- a/src/log.c
+> ++++ b/src/log.c
+> +@@ -30,7 +30,9 @@
+> + #include <stdlib.h>
+> + #include <string.h>
+> + #include <syslog.h>
+> ++#if defined(HAVE_BACKTRACE) && HAVE_BACKTRACE == 1
+
+Use just:
+
+#ifdef HAVE_EXECINFO_H
+
+> + #include <execinfo.h>
+> ++#endif
+> + #include <dlfcn.h>
+> + 
+> + #include "connman.h"
+> +@@ -112,6 +114,7 @@ void connman_debug(const char *format, ...)
+> + 
+> + static void print_backtrace(unsigned int offset)
+> + {
+> ++#if defined(HAVE_BACKTRACE) && HAVE_BACKTRACE == 1
+
+Ditto.
+
+Thanks!
 
 Thomas
 -- 
