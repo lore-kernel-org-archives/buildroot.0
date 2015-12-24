@@ -1,201 +1,50 @@
-From: Eelco Chaudron <echaudron@xiot.nl>
-Date: Thu, 24 Dec 2015 11:52:46 +0100
-Subject: [Buildroot] buildroot support for OrangePI PC
-In-Reply-To: <20151224112859.6f44713d@free-electrons.com>
-References: <56748758.7040908@mind.be> <1450948540529.50320.154990@webmail2>
- <20151224112859.6f44713d@free-electrons.com>
-Message-ID: <D4ED5787-D6C8-4B61-BDC1-8834ED93FB8D@xiot.nl>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Thu, 24 Dec 2015 09:11:42 -0200
+Subject: [Buildroot] [PATCH v4 1/3] chocolate-doom: new package
+In-Reply-To: <20151224082921.1e482c18@free-electrons.com>
+References: <1446839279-9021-1-git-send-email-rprebello@gmail.com>
+ <20151223233453.0e71a3b6@free-electrons.com>
+ <CABLs7GUV97Ck5V6_vgmsCJfgxgvgZkkrvKvLeV8RX3RZK9+6Ug@mail.gmail.com>
+ <20151224082921.1e482c18@free-electrons.com>
+Message-ID: <CABLs7GWq4j7DPexG+-XnyMBocBJw-GDb2056erdGAWVNizYMpw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas,
+Thomas,
 
-Will take a look at your comments and make the fixes and send you a patch.
+2015-12-24 5:29 GMT-02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Rodrigo Rebello,
+>
+> On Wed, 23 Dec 2015 22:33:01 -0200, Rodrigo Rebello wrote:
+>
+>> Agreed. I have considered exactly that when I was working on the
+>> patch, but I have decided to leave it for later since a patch for
+>> SDL_mixer is also necessary (SDL_mixer.pc is missing a 'Libs.private'
+>> section with libraries necessary for static linking). I've just had a
+>> look at it and the solution is actually quite simple, so I'll work on
+>> it and propose a patch. That will also be useful to fix a recent ltris
+>> autobuild failure related to static linking as well.
+>
+> Indeed, according to your description of the problem, it is really
+> SDL_mixer.pc that needs to be fixed. However, if I looked correctly,
+> chocolate-doom doesn't use pkg-config to find libraries, so it would
+> have to be changed as well.
+>
 
-One quick question on the linux header part; This is a 4.4 based kernel, and no headers are
-available when specifying the version (as they live in a different directory on kernel.org).
+Yes, both SDL_mixer and chocolate-doom need patching. That's actually
+what I meant in my previous email. I'll be working on that soon.
 
-Guess I should force them to 4.3 for now.
+Regards,
+Rodrigo
 
-Thanks,
-
-Eelco
-
-> On 24 Dec 2015, at 11:28, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> Eelco,
-> 
-> On Thu, 24 Dec 2015 10:15:40 +0100, Eelco Chaudron wrote:
-> 
->> This is the diff;
-> 
-> Thanks for the patch. Can you send it as a proper Git formatted patch?
-> See the Buildroot manual for instructions on how to do this. I have a
-> couple more comments below.
-> 
->> diff --git a/board/orangepi/orangepipc/genimage.cfg b/board/orangepi/orangepipc/genimage.cfg
->> new file mode 100644
->> index 0000000..43c2249
->> --- /dev/null
->> +++ b/board/orangepi/orangepipc/genimage.cfg
->> @@ -0,0 +1,36 @@
->> +# Minimal SD card image for the OrangePi PC
->> +#
->> +
->> +image boot.vfat {
->> + vfat {
->> + files = {
->> + "uImage",
->> + "sun8i-h3-orangepi-pc.dtb",
->> + "boot.scr"
->> + }
->> + }
->> + size = 10M
->> +}
-> 
-> Please fix the indentation here. I think we should use at least two
-> spaces for indentation, or maybe better one tab.
-> 
->> diff --git a/board/orangepi/orangepipc/post-build.sh b/board/orangepi/orangepipc/post-build.sh
->> new file mode 100755
->> index 0000000..9f115cb
->> --- /dev/null
->> +++ b/board/orangepi/orangepipc/post-build.sh
->> @@ -0,0 +1,14 @@
->> +#!/bin/sh
->> +# post-build.sh for OrangePi PC taken from CubieBoard's post-build.sh
->> +# 2013, Carlo Caione <<carlo.caione@gmail.com>>
->> +
->> +BOARD_DIR="$(dirname $0)"
->> +MKIMAGE=$HOST_DIR/usr/bin/mkimage
->> +BOOT_CMD=$BOARD_DIR/boot.cmd
->> +BOOT_CMD_H=$BINARIES_DIR/boot.scr
->> +
->> +# U-Boot script
->> +if [ -e $MKIMAGE -a -e $BOOT_CMD ];
-> 
-> This test is not needed IMO, just run the $MKIMAGE command
-> unconditionally.
-> 
->> +then
->> +	$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
->> +fi
->> diff --git a/board/orangepi/orangepipc/post-image.sh b/board/orangepi/orangepipc/post-image.sh
->> new file mode 100755
->> index 0000000..05f6b70
->> --- /dev/null
->> +++ b/board/orangepi/orangepipc/post-image.sh
->> @@ -0,0 +1,16 @@
->> +#!/bin/bash
-> 
-> Do we really need this to be a bash script ? #!/bin/sh is probably
-> sufficient.
-> 
->> +
->> +GENIMAGE_CFG="board/orangepi/orangepipc/genimage.cfg"
-> 
-> Maybe you could use the same BOARD_DIR trick than the one you've used
-> in the post-build script?
-> 
->> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
->> +
->> +rm -rf "${GENIMAGE_TMP}"
->> +
->> +genimage \
->> + --rootpath "${TARGET_DIR}" \
->> + --tmppath "${GENIMAGE_TMP}" \
->> + --inputpath "${BINARIES_DIR}" \
->> + --outputpath "${BINARIES_DIR}" \
->> + --config "${GENIMAGE_CFG}"
-> 
-> Use tab for indentation.
-> 
->> +
->> +RET=${?}
->> +exit ${RET}
-> 
-> Just do exit $?
-> 
->> diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
->> new file mode 100644
->> index 0000000..cd349c5
->> --- /dev/null
->> +++ b/configs/orangepipc_defconfig
->> @@ -0,0 +1,26 @@
->> +BR2_arm=y
->> +BR2_cortex_a7=y
->> +BR2_ARM_FPU_NEON_VFPV4=y
-> 
-> Please use just VFPV4. Using NEON for floating point operations by
-> default is not a good idea. From the gcc manual:
-> 
->   If the selected floating-point hardware includes the NEON extension
->   (e.g. -mfpu=?neon?), note that floating-point operations are not
->   generated by GCC's auto-vectorization pass unless
->   -funsafe-math-optimizations is also specified. This is because NEON
->   hardware does not fully implement the IEEE 754 standard for
->   floating-point arithmetic (in particular denormal values are treated
->   as zero), so the use of NEON instructions may lead to a loss of
->   precision.
-> 
-> 
->> +BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
->> +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
->> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
->> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
-> 
-> Please force the kernel headers version to a fixed version, like is
-> done in all other defconfig files. For example:
-> 
-> # Lock to 4.3 headers to avoid breaking with newer kernels
-> BR2_KERNEL_HEADERS_VERSION=y
-> BR2_DEFAULT_KERNEL_VERSION="4.3"
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3=y
-> 
-> (Of course adapt 4.3 to whatever kernel version you're using)
-> 
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="<https://github.com/jwrdegoede/linux-sunxi.git>"
-> 
-> Please remove the < and > before and after the URL. I'm not even sure
-> how it can work with such markers.
-> 
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a516ac6dda21e6f5edceecd08b475b16e360656b"
->> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
->> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
-> 
-> The modern way is to boot using a zImage. Can you try using a zImage
-> instead?
-> 
->> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
->> +BR2_TARGET_ROOTFS_EXT2=y
->> +BR2_TARGET_ROOTFS_EXT2_4=y
->> +# BR2_TARGET_ROOTFS_TAR is not set
->> +BR2_TARGET_UBOOT=y
->> +BR2_TARGET_UBOOT_BOARDNAME="orangepi_pc"
->> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
->> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="<http://git.denx.de/u-boot.git>"
-> 
-> Ditto < and > markers.
-> 
->> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4832e17787acb29734d895751bc7a594908aecc6"
->> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
->> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
->> +BR2_PACKAGE_HOST_GENIMAGE=y
-> 
 > Thanks!
-> 
+>
 > Thomas
-> -- 
+> --
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux, Kernel and Android engineering
 > http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
