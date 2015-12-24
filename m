@@ -1,59 +1,171 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 13:25:31 +0100
-Subject: [Buildroot] [PATCH v2] libvips: fix compile error for sparc64
-In-Reply-To: <20151123214222.GA8423@waldemar-brodkorb.de>
-References: <20151123214222.GA8423@waldemar-brodkorb.de>
-Message-ID: <20151224132531.6254350f@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 24 Dec 2015 14:00:09 +0100
+Subject: [Buildroot] [PATCHv3] package/connman: cleanup backtrace patch
+Message-ID: <1450962009-12924-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+connman uses execinfo.h to dump a backtrace in case of failure.
+execinfo.h is optional in uClibc, so we had a patch that conditonally
+disabled backtraces for uClibc when it was missing execinfo.h
 
-On Mon, 23 Nov 2015 22:42:22 +0100, Waldemar Brodkorb wrote:
-> Fixes following build error:
-> http://autobuild.buildroot.net/results/1515f070c0fd410c681fc8306700244c34eb1635/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v1 -> v2:
->  - fixes suggested by Thomas Pettazoni
->  - better testing done. Compiles for sparc64 and arm.
->  - same issue happens with gcc 5.x
-> ---
->  package/libvips/libvips.mk |   11 +++++++++++
->  1 file changed, 11 insertions(+)
+However, musl is also entirely lacking execinfo.h.
 
-I've applied after simplifying the logic, and reporting the bug
-upstream to the gcc developers (I was able to reproduce with gcc
-5.3.0). The logic could be simplified a lot by simply doing:
+Add a proper patch that checks for execinfo.h at ./configure time. This
+will no longer make any assumption on the C library that is being used.
 
-# Sparc64 compile fails, for all optimization levels except -O0. To
-# fix the problem, use -O0 with no optimization instead. Bug reported
-# upstream at https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69038.
-ifeq ($(BR2_sparc64),y)
-LIBVIPS_CXXFLAGS += -O0
-endif
+Fixes:
+    http://autobuild.buildroot.org/results/f6e/f6ee8ab3a6300f1f527f9e92b8c2ec81e63afb27/
+    http://autobuild.buildroot.org/results/96b/96b78bb644ed4ef3493782521b17e3b2113a405f/
+    ...
 
-LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)"
+Note that there might be other issues with musl; this patch only fixes
+the execinfo.h one.
 
-Indeed, if you put -O0 *after* a previous -O<something> option, it
-takes precedence. So there's no need to do a filter. In addition, this
-is more correct since the compiler bug also occurs with -O2 or -O3, not
-only -Os.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
 
-See
-https://git.busybox.net/buildroot/commit/?id=c4486e8c947e728b663eb2ac1c0286077129445f
-for the final commit.
+---
+Patch sent upstream:
+    https://lists.01.org/pipermail/connman/2015-December/000188.html
 
-Thanks!
+---
+Changes v2 -> v3:
+  - fix comment  (Baruch)
 
-Best regards,
+Changes v1 -> v2:
+  - use simpler and more autotoolish check  (Thomas)
+---
+ .../0001-configure-check-for-execinfo.h.patch      | 65 ++++++++++++++++++++++
+ package/connman/0001-uclibc-backtrace.patch        | 44 ---------------
+ 2 files changed, 65 insertions(+), 44 deletions(-)
+ create mode 100644 package/connman/0001-configure-check-for-execinfo.h.patch
+ delete mode 100644 package/connman/0001-uclibc-backtrace.patch
 
-Thomas
+diff --git a/package/connman/0001-configure-check-for-execinfo.h.patch b/package/connman/0001-configure-check-for-execinfo.h.patch
+new file mode 100644
+index 0000000..384f41b
+--- /dev/null
++++ b/package/connman/0001-configure-check-for-execinfo.h.patch
+@@ -0,0 +1,65 @@
++From 30642d5b1a3f479987c4d50a237311d84d5f0581 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Thu, 24 Dec 2015 12:04:57 +0100
++Subject: [PATCH] configure: check for execinfo.h
++
++Not all toolchains have execinfo.h. For example, support for it is
++optional in uClibc, while it is entirely missing from musl.
++
++Add a check in configure to look for it.
++
++Since execinfo.h is /only/ used to dump a backtrace in case of failure,
++just do nothing when execinfo.h is missing.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ configure.ac | 2 ++
++ src/log.c    | 4 ++++
++ 2 files changed, 6 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index b51d6b3..28e657b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -182,6 +182,8 @@ AC_CHECK_LIB(resolv, ns_initparse, dummy=yes, [
++ 		AC_MSG_ERROR(resolver library support is required))
++ ])
++ 
+++AC_CHECK_HEADERS([execinfo.h])
+++
++ AC_CHECK_FUNC(signalfd, dummy=yes,
++ 			AC_MSG_ERROR(signalfd support is required))
++ 
++diff --git a/src/log.c b/src/log.c
++index a693bd0..76e10e7 100644
++--- a/src/log.c
+++++ b/src/log.c
++@@ -30,7 +30,9 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <syslog.h>
+++#if defined(HAVE_EXECINFO_H)
++ #include <execinfo.h>
+++#endif
++ #include <dlfcn.h>
++ 
++ #include "connman.h"
++@@ -112,6 +114,7 @@ void connman_debug(const char *format, ...)
++ 
++ static void print_backtrace(unsigned int offset)
++ {
+++#if defined(HAVE_EXECINFO_H)
++ 	void *frames[99];
++ 	size_t n_ptrs;
++ 	unsigned int i;
++@@ -210,6 +213,7 @@ static void print_backtrace(unsigned int offset)
++ 
++ 	close(outfd[1]);
++ 	close(infd[0]);
+++#endif /* HAVE_EXECINFO_H */
++ }
++ 
++ static void signal_handler(int signo)
++-- 
++1.9.1
++
+diff --git a/package/connman/0001-uclibc-backtrace.patch b/package/connman/0001-uclibc-backtrace.patch
+deleted file mode 100644
+index 4b806c6..0000000
+--- a/package/connman/0001-uclibc-backtrace.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-[PATCH] fix build on uClibc without UCLIBC_HAS_BACKTRACE
+-
+-Backtrace support is only used for logging on signal errors, which
+-isn't really critical, so simply remove backtrace info if not
+-available in uClibc.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/log.c |    7 +++++++
+- 1 file changed, 7 insertions(+)
+-
+-Index: connman-0.78/src/log.c
+-===================================================================
+---- connman-0.78.orig/src/log.c
+-+++ connman-0.78/src/log.c
+-@@ -30,7 +30,12 @@
+- #include <stdlib.h>
+- #include <string.h>
+- #include <syslog.h>
+-+#include <features.h>
+-+/* backtrace support is optional on uClibc */
+-+#if !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
+-+#define HAVE_BACKTRACE
+- #include <execinfo.h>
+-+#endif
+- #include <dlfcn.h>
+- 
+- #include "connman.h"
+-@@ -112,6 +117,7 @@
+- 
+- static void print_backtrace(unsigned int offset)
+- {
+-+#ifdef HAVE_BACKTRACE
+- 	void *frames[99];
+- 	size_t n_ptrs;
+- 	unsigned int i;
+-@@ -210,6 +216,7 @@
+- 
+- 	close(outfd[1]);
+- 	close(infd[0]);
+-+#endif /* HAVE_BACKTRACE */
+- }
+- 
+- static void signal_handler(int signo)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
