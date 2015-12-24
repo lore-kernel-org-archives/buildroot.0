@@ -1,50 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 14:48:28 +0100
-Subject: [Buildroot] [git commit] dhcp: read /etc/default/dhcpd,
-	not /etc/default/dhcpd.conf
-Message-ID: <20151224135818.6F58C82703@busybox.osuosl.org>
+Date: Thu, 24 Dec 2015 14:54:01 +0100
+Subject: [Buildroot] [git commit] dhcp: misc improvements to S80dhcp-server
+Message-ID: <20151224135818.8FF1A82700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f81baaf47e3f47b131ec2b1c6c5f7d062a48d84
+commit: http://git.buildroot.net/buildroot/commit/?id=a118f32e9a72994d46818b8a3374f7905967c52d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All daemons that read a file from /etc/default/ have it named just
-after the name of daemon, without any extension. This commit fixes the
-dhcp package to do the same.
+This commit does misc improvements to the S80dhcp-server init script:
+
+ - Use more variables: NAME, DAEMON, CFG_FILE
+
+ - Read the configuration file in /etc/default/ in a more usual way
+   (as done in S21rngd for example)
+
+ - Remove leftover dhcpd3 string in the stopping action.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dhcp/S80dhcp-server | 2 +-
- package/dhcp/dhcpd.service  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dhcp/S80dhcp-server | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/package/dhcp/S80dhcp-server b/package/dhcp/S80dhcp-server
-index 356e735..06b7ab1 100755
+index 06b7ab1..f52ca98 100755
 --- a/package/dhcp/S80dhcp-server
 +++ b/package/dhcp/S80dhcp-server
-@@ -8,7 +8,7 @@
+@@ -7,8 +7,12 @@
+ #       Separate multiple interfaces with spaces, e.g. "eth0 eth1".
  INTERFACES=""
  
- # Allow a few customizations from a config file
--test -r /etc/default/dhcpd.conf && . /etc/default/dhcpd.conf
-+test -r /etc/default/dhcpd && . /etc/default/dhcpd
+-# Allow a few customizations from a config file
+-test -r /etc/default/dhcpd && . /etc/default/dhcpd
++NAME="dhcpd"
++DAEMON="/usr/sbin/${NAME}"
++CFG_FILE="/etc/default/${NAME}"
++
++# Read configuration variable file if it is present
++[ -r "${CFG_FILE}" ] && . "${CFG_FILE}"
  
  # Sanity checks
  test -f /usr/sbin/dhcpd || exit 0
-diff --git a/package/dhcp/dhcpd.service b/package/dhcp/dhcpd.service
-index d58fbd5..a05deb8 100644
---- a/package/dhcp/dhcpd.service
-+++ b/package/dhcp/dhcpd.service
-@@ -7,7 +7,7 @@ Type=forking
- PIDFile=/run/dhcpd.pid
- ExecStart=/usr/sbin/dhcpd -q -pf /run/dhcpd.pid $INTERFACES
- KillSignal=SIGINT
--EnvironmentFile=-/etc/default/dhcpd.conf
-+EnvironmentFile=-/etc/default/dhcpd
- 
- [Install]
- WantedBy=multi-user.target
+@@ -20,12 +24,12 @@ case "$1" in
+ 		printf "Starting DHCP server: "
+ 		test -d /var/lib/dhcp/ || mkdir -p /var/lib/dhcp/
+ 		test -f /var/lib/dhcp/dhcpd.leases || touch /var/lib/dhcp/dhcpd.leases
+-		start-stop-daemon -S -x /usr/sbin/dhcpd -- -q $INTERFACES
++		start-stop-daemon -S -x ${DAEMON} -- -q $INTERFACES
+ 		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+-		printf "Stopping DHCP server: dhcpd3"
+-		start-stop-daemon -K -x /usr/sbin/dhcpd
++		printf "Stopping DHCP server: "
++		start-stop-daemon -K -x ${DAEMON}
+ 		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	restart | force-reload)
