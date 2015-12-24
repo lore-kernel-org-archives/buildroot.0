@@ -1,58 +1,59 @@
-From: Craig Swank <craigswank@fastmail.fm>
-Date: Wed, 23 Dec 2015 16:42:59 -0800
-Subject: [Buildroot] trying to use
- https://github.com/beagleboard/linux.git with buildroot
-In-Reply-To: <20151223235253.0afe702e@free-electrons.com>
-References: <1450890296.2355509.475056490.71128E4E@webmail.messagingengine.com>
- <20151223184751.12365336@free-electrons.com>
- <1450893821.3034067.475093450.34890777@webmail.messagingengine.com>
- <1450894505.3036056.475106194.467AC874@webmail.messagingengine.com>
- <20151223193943.21a6f0fc@free-electrons.com>
- <1450910736.3752716.475291418.490BB3EA@webmail.messagingengine.com>
- <20151223235253.0afe702e@free-electrons.com>
-Message-ID: <1450917779.3775953.475348978.37FAC3A8@webmail.messagingengine.com>
+From: Mathew Benson <mathew.benson@gmail.com>
+Date: Wed, 23 Dec 2015 19:04:05 -0600
+Subject: [Buildroot] Newbie boot and fs mount question
+In-Reply-To: <20151222210930.7929c662@free-electrons.com>
+References: <CA+C+_XSCm9Q1uE7Zg2VcK6xCa3ASEUNFTX=0GF3=KwaUYQWTzQ@mail.gmail.com>
+ <20151222210930.7929c662@free-electrons.com>
+Message-ID: <04294576-64CB-4232-80B7-362A7A7DC2FF@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here is another thing I've found:
+I have root=/dev/sda1 on my kernel command line.
 
-https://github.com/beagleboard/linux/issues/49
+Yes, I ran make qemu_x86_64_defconfig followed by make.  I'm eventually going to load this build on a small PC, but for now, temporarily, I'm using virtual box.  I added a shared drive to both my development VM and my simulated PC VM.  I setup the first partition as bootable with grub.  I also enabled the creation of a rootfs.tar file.  After I run make, I mount the shared drive, and untar the rootfs.tar over the mounted drive, and copy the bzImage over.  The file system is still read only.
 
-In that issue the person had some addresses set incorrectly in uEnv.txt,
-but mine doesn't have any addresses set:
+I have a possible dumb question.  I enabled initrd to be linked into the kernel, thinking boot time might be faster.  I enabled the "remount filesystem" option, thinking that would remount it from the hard drive rather than the linked in rootfs.  Is that an incorrect assumption?
 
-bootpart=0:1
-bootdir=
-uenvcmd=run loadimage;run loadramdisk;run findfdt;run loadfdt;run ram
-boot
+Sent from my iPad
 
-Is there something that needs to be set in uEnv.txt?
-
-
-On Wed, Dec 23, 2015, at 02:52 PM, Thomas Petazzoni wrote:
-> Dear Craig Swank,
+> On Dec 22, 2015, at 2:09 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 > 
-> On Wed, 23 Dec 2015 14:45:36 -0800, Craig Swank wrote:
-> > Is it strange to you that when I do the build the output/build directory
-> > has both of these dirs?
-> > 
-> > ?  buildroot git:(master) ? ls output/build/linux-*
-> > output/build/linux-4.1.4-ti-r9
-> > output/build/linux-headers-3.12.10
+> Dear Mathew Benson,
 > 
-> No, it is perfectly fine. linux-headers is used when building the
-> toolchain. linux is used to build the kernel itself.
+>> On Tue, 22 Dec 2015 10:07:35 -0600, Mathew Benson wrote:
+>> How do I mount / from sda1 rather than RAM disk?
+> 
+> Pass root=/dev/sda1 on your kernel command line.
+> 
+>> Sorry for the simple question and let me know if there is a better forum
+>> for this.  I'm new to buildroot and busybox and haven't compiled a custom
+>> kernel in at least 15 years.  I'm using the latest version of buildroot as
+>> of this weekend, used the predefined i386 config, and built with kernel
+>> version 3.8.17.  It seems to boot just fine but it appears the file system
+>> is mounted from the initial RAM disk.  Any change I make to the file system
+>> is volatile.  What do I need to do to make it mount / from sda1 instead of
+>> the RAM disk?
+> 
+> We don't have anything like a "predefined i386 config".
+> 
+> However, you can see how to use a root filesystem from storage by
+> looking/building our Qemu x86-64 configuration:
+> 
+>    make qemu_x86_64_defconfig
+>    make
+> 
+> And then read board/qemu/x86_64/readme.txt for the details on how to
+> start this configuration under Qemu. You can see in this readme file
+> that we're booting the kernel with root=/dev/sda, since the first hard
+> drive is emulated using the contents of output/images/rootfs.ext2.
+> 
+> Best regards,
 > 
 > Thomas
 > -- 
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux, Kernel and Android engineering
 > http://free-electrons.com
-
-
--- 
-  Craig Swank
-  craigswank at fastmail.fm
