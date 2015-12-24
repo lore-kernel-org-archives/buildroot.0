@@ -1,76 +1,48 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 24 Dec 2015 15:25:07 +0100
-Subject: [Buildroot] [PATCH] python-ipaddress: new package
-Message-ID: <1450967107-18489-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Dec 2015 15:06:47 +0100
+Subject: [Buildroot] [git commit] package/dhcp: remove sleep from SysV init
+	scripts restart
+Message-ID: <20151224142830.1F02082706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                              |  1 +
- package/python-ipaddress/Config.in             |  7 +++++++
- package/python-ipaddress/python-ipaddress.hash |  3 +++
- package/python-ipaddress/python-ipaddress.mk   | 13 +++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/python-ipaddress/Config.in
- create mode 100644 package/python-ipaddress/python-ipaddress.hash
- create mode 100644 package/python-ipaddress/python-ipaddress.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=77cdeaa929d88b9b1736ee503c3f647f967791a9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index 0c83699..4c96454 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -640,6 +640,7 @@ menu "External python modules"
- 	source "package/python-id3/Config.in"
- 	source "package/python-idna/Config.in"
- 	source "package/python-ipaddr/Config.in"
-+	source "package/python-ipaddress/Config.in"
- 	source "package/python-ipy/Config.in"
- 	source "package/python-ipython/Config.in"
- 	source "package/python-itsdangerous/Config.in"
-diff --git a/package/python-ipaddress/Config.in b/package/python-ipaddress/Config.in
-new file mode 100644
-index 0000000..b2b9f0b
---- /dev/null
-+++ b/package/python-ipaddress/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_IPADDRESS
-+	bool "python-ipaddress"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Python 3.3's ipaddress for older Python versions.
-+
-+	  https://github.com/phihag/ipaddress
-diff --git a/package/python-ipaddress/python-ipaddress.hash b/package/python-ipaddress/python-ipaddress.hash
-new file mode 100644
-index 0000000..21bc373
---- /dev/null
-+++ b/package/python-ipaddress/python-ipaddress.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12915e923b738107e47827478d553ba1, sha256 locally computed
-+md5     12915e923b738107e47827478d553ba1  ipaddress-1.0.15.tar.gz
-+sha256  af6c85cfc9cdb12b861655e6b9f2f59618bf3088cbde858727b2c0a98e9f6636  ipaddress-1.0.15.tar.gz
-diff --git a/package/python-ipaddress/python-ipaddress.mk b/package/python-ipaddress/python-ipaddress.mk
-new file mode 100644
-index 0000000..8019aa8
---- /dev/null
-+++ b/package/python-ipaddress/python-ipaddress.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-ipaddress
-+#
-+################################################################################
-+
-+PYTHON_IPADDRESS_VERSION = 1.0.15
-+PYTHON_IPADDRESS_SOURCE = ipaddress-$(PYTHON_IPADDRESS_VERSION).tar.gz
-+PYTHON_IPADDRESS_SITE = https://pypi.python.org/packages/source/i/ipaddress
-+PYTHON_IPADDRESS_LICENSE = Python software foundation license
-+PYTHON_IPADDRESS_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
--- 
-2.1.4
+No sleep is required for the restart and force-reload operations to
+succeed.
+
+Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dhcp/S80dhcp-relay  | 1 -
+ package/dhcp/S80dhcp-server | 1 -
+ 2 files changed, 2 deletions(-)
+
+diff --git a/package/dhcp/S80dhcp-relay b/package/dhcp/S80dhcp-relay
+index 6493eda..211431b 100755
+--- a/package/dhcp/S80dhcp-relay
++++ b/package/dhcp/S80dhcp-relay
+@@ -43,7 +43,6 @@ case "$1" in
+ 		;;
+ 	restart | force-reload)
+ 		$0 stop
+-		sleep 2
+ 		$0 start
+ 		;;
+ 	*)
+diff --git a/package/dhcp/S80dhcp-server b/package/dhcp/S80dhcp-server
+index f4e2209..21092ba 100755
+--- a/package/dhcp/S80dhcp-server
++++ b/package/dhcp/S80dhcp-server
+@@ -36,7 +36,6 @@ case "$1" in
+ 		;;
+ 	restart | force-reload)
+ 		$0 stop
+-		sleep 2
+ 		$0 start
+ 		if [ "$?" != "0" ]; then
+ 			exit 1
