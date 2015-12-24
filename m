@@ -1,73 +1,59 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Thu, 24 Dec 2015 09:35:34 -0200
-Subject: [Buildroot] [PATCH v5 1/1] doom-wad: bump to version 1.9
-Message-ID: <1450956934-18354-1-git-send-email-rprebello@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Dec 2015 12:36:33 +0100
+Subject: [Buildroot] [PATCH 1/2 v3] vboot-utils: new package
+In-Reply-To: <4c9ac9c66d52a2760002718d0827b1c146633aa1.1447714688.git.alex.suykov@gmail.com>
+References: <cover.1447689401.git.alex.suykov@gmail.com>
+ <4c9ac9c66d52a2760002718d0827b1c146633aa1.1447714688.git.alex.suykov@gmail.com>
+Message-ID: <20151224123633.6740e4d3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add a hash file.
+Dear Alex Suykov,
 
-The extraction method had to be changed, since the WAD file for this
-version is not distributed as a stand-alone file, but comes inside a
-2-part DOS self-extracting zip archive.
+On Tue, 17 Nov 2015 01:42:21 +0200, Alex Suykov wrote:
+> Chromium OS verified boot utilities.
+> 
+> Needed for signing kernel images and manipulating bootable
+> partitions on media intended for Chromebooks.
+> 
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
-Changes v1 -> v2:
-  - Upgrade shareware Doom WAD file to the latest 1.9 version. This
-    allows dropping the comment in the next commit about having to pass
-    the option "-gameversion 1.8" to the chocolate-doom-* executables.
+I wanted to apply this patch, but it fails to build. It forgets to link
+with the OpenSSL library that has been built in $(HOST_DIR)/usr/lib.
+Can you have a look? To reproduce, make sure you don't have the
+openssl-dev package installed on your system.
 
-Changes v4 -> v5:
-  - Use temporary download URL as the official server is currently
-    unavailable
-  - Make use of DOOM_WAD_VERSION in DOOM_WAD_SOURCE (Thomas Petazzoni)
----
- package/doom-wad/doom-wad.hash |  2 ++
- package/doom-wad/doom-wad.mk   | 14 +++++++++-----
- 2 files changed, 11 insertions(+), 5 deletions(-)
- create mode 100644 package/doom-wad/doom-wad.hash
+    AR            libvboot_util21.a
+    LD            futility/futility_s
+    LD            futility/futility
+    LDcgpt        cgpt/cgpt
+/home/thomas/projets/buildroot/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/futility/cmd_create.o: In function `do_create':
+cmd_create.c:(.text+0x42a): undefined reference to `PEM_read_RSAPrivateKey'
+cmd_create.c:(.text+0x5fa): undefined reference to `RSA_free'
+cmd_create.c:(.text+0x65e): undefined reference to `PEM_read_RSAPrivateKey'
+cmd_create.c:(.text+0x680): undefined reference to `PEM_read_RSA_PUBKEY'
+cmd_create.c:(.text+0x962): undefined reference to `RSA_free'
+/home/thomas/projets/buildroot/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/futility/cmd_show.o: In function `ft_show_privkey':
+cmd_show.c:(.text+0x875): undefined reference to `d2i_RSAPrivateKey'
+cmd_show.c:(.text+0x901): undefined reference to `RSA_free'
+/home/thomas/projets/buildroot/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/futility/vb1_helper.o: In function `ft_recognize_vb1_key':
+vb1_helper.c:(.text+0x1141): undefined reference to `d2i_RSAPrivateKey'
+vb1_helper.c:(.text+0x1159): undefined reference to `RSA_free'
+/home/thomas/projets/buildroot/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/futility/vb2_helper.o: In function `rsa_from_buffer':
+vb2_helper.c:(.text+0x4): undefined reference to `BIO_new_mem_buf'
+vb2_helper.c:(.text+0x1a): undefined reference to `PEM_read_bio_RSAPrivateKey'
+vb2_helper.c:(.text+0x33): undefined reference to `BIO_ctrl'
+vb2_helper.c:(.text+0x45): undefined reference to `PEM_read_bio_RSA_PUBKEY'
+vb2_helper.c:(.text+0x55): undefined reference to `BIO_free'
+vb2_helper.c:(.text+0x61): undefined reference to `BIO_free'
 
-diff --git a/package/doom-wad/doom-wad.hash b/package/doom-wad/doom-wad.hash
-new file mode 100644
-index 0000000..fa069c1
---- /dev/null
-+++ b/package/doom-wad/doom-wad.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	cacf0142b31ca1af00796b4a0339e07992ac5f21bc3f81e7532fe1b5e1b486e6	doom19s.zip
-diff --git a/package/doom-wad/doom-wad.mk b/package/doom-wad/doom-wad.mk
-index 6f4f9da..d3ac731 100644
---- a/package/doom-wad/doom-wad.mk
-+++ b/package/doom-wad/doom-wad.mk
-@@ -4,16 +4,20 @@
- #
- ################################################################################
- 
--DOOM_WAD_VERSION = 1.8
--DOOM_WAD_SOURCE = doom-$(DOOM_WAD_VERSION).wad.gz
--DOOM_WAD_SITE = ftp://ftp.idsoftware.com/idstuff/doom
-+DOOM_WAD_VERSION = 1.9
-+DOOM_WAD_SOURCE = doom$(subst .,,$(DOOM_WAD_VERSION))s.zip
-+# Official server currently unavailable
-+# DOOM_WAD_SITE = ftp://ftp.idsoftware.com/idstuff/doom
-+DOOM_WAD_SITE = http://www.jbserver.com/downloads/games/doom/misc/shareware
- 
- define DOOM_WAD_EXTRACT_CMDS
--	$(ZCAT) $(DL_DIR)/$($(PKG)_SOURCE) > $(@D)/doom1.wad
-+	$(UNZIP) -p $(DL_DIR)/$($(PKG)_SOURCE) 'DOOMS_19.[12]' > \
-+		$(@D)/doom-$(DOOM_WAD_VERSION).zip
-+	$(UNZIP) -d $(@D) $(@D)/doom-$(DOOM_WAD_VERSION).zip DOOM1.WAD
- endef
- 
- define DOOM_WAD_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D $(@D)/doom1.wad \
-+	$(INSTALL) -m 0644 -D $(@D)/DOOM1.WAD \
- 		$(TARGET_DIR)/usr/share/games/doom/doom1.wad
- endef
- 
+Thanks,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
