@@ -1,48 +1,47 @@
-From: Lada Trimasova <Lada.Trimasova@synopsys.com>
-Date: Thu, 24 Dec 2015 16:57:48 +0300
-Subject: [Buildroot] [PATCH v3] Fixing xdriver_xf86-video-ati dependencies
-Message-ID: <1450965468-22030-1-git-send-email-ltrimas@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Dec 2015 14:57:17 +0100
+Subject: [Buildroot] [git commit] package/dhcp: make S80dhcp-relay read a
+	file from /etc/default/
+Message-ID: <20151224135818.86FB7826F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package depends on the radeon driver from libdrm and depends on
-DRI support in xserver_xorg-server, to achieve this we select the
-Radeon mesa3d DRI driver.
+commit: http://git.buildroot.net/buildroot/commit/?id=0bc15867dad61c24769d635c31c8263695ed92c0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/9da/9da4ffdf1c4ec78ae37322e253cb769340116035
+The S80dhcp-relay init script has configuration variables like
+INTERFACES whose contents have to be passed to the daemon. These
+variables are initialized as empty strings, but some of them are not
+allowed to be empty and there was no means of filling them apart from
+creating a root FS overlay to overwrite these scripts.
 
-Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+This commit adds support for reading dhcrelay under /etc/default/ to
+set these configuration variables.
+
+[Thomas: adapt to patch only S80dhcp-relay, since S80dhcp-server has
+already been changed by previous commits.]
+
+Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v2 -> v3:
- - Libdrm dependencies on libpthread-stubs were propagated.
+ package/dhcp/S80dhcp-relay | 4 ++++
+ 1 file changed, 4 insertions(+)
 
----
- package/x11r7/xdriver_xf86-video-ati/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-index 191c20f..55be603 100644
---- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-@@ -1,8 +1,10 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	bool "xf86-video-ati"
- 	depends on BR2_PACKAGE_MESA3D
--	select BR2_PACKAGE_LIBDRM        if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
--	select BR2_PACKAGE_LIBDRM_RADEON if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm -> libpthread-stubs
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_GLPROTO
--- 
-2.5.0
+diff --git a/package/dhcp/S80dhcp-relay b/package/dhcp/S80dhcp-relay
+index 5ee06c7..0f383e6 100755
+--- a/package/dhcp/S80dhcp-relay
++++ b/package/dhcp/S80dhcp-relay
+@@ -13,6 +13,10 @@ INTERFACES=""
+ # Additional options that are passed to the DHCP relay daemon?
+ OPTIONS=""
+ 
++# Read configuration variable file if it is present
++CFG_FILE="/etc/default/dhcrelay"
++[ -r "${CFG_FILE}" ] && . "${CFG_FILE}"
++
+ # Sanity checks
+ test -f /usr/sbin/dhcrelay || exit 0
+ test -n "$INTERFACES" || exit 0
