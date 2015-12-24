@@ -1,101 +1,64 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 24 Dec 2015 22:30:40 +0100
-Subject: [Buildroot] [PATCH 4/5] python-cryptography: new package
-In-Reply-To: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 24 Dec 2015 22:46:45 +0100
+Subject: [Buildroot] [PATCH 3/5] python-cffi: add host variant
+In-Reply-To: <1450992641-8618-3-git-send-email-yegorslists@googlemail.com>
 References: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1450992641-8618-4-git-send-email-yegorslists@googlemail.com>
+ <1450992641-8618-3-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20151224214645.GA3738@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                                  |  1 +
- package/python-cryptography/Config.in              | 20 +++++++++++++++++++
- .../python-cryptography/python-cryptography.hash   |  3 +++
- package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 package/python-cryptography/Config.in
- create mode 100644 package/python-cryptography/python-cryptography.hash
- create mode 100644 package/python-cryptography/python-cryptography.mk
+Yegor, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index f767ebc..4c96454 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -625,6 +625,7 @@ menu "External python modules"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
-+	source "package/python-cryptography/Config.in"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dialog/Config.in"
- 	source "package/python-django/Config.in"
-diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
-new file mode 100644
-index 0000000..c6d183f
---- /dev/null
-+++ b/package/python-cryptography/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
-+	bool "python-cryptography"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_PYTHON_CFFI
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	select BR2_PACKAGE_PYTHON_IDNA
-+	select BR2_PACKAGE_PYTHON_PYASN
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON
-+	help
-+	  cryptography is a package designed to expose cryptographic
-+	  primitives and recipes to Python developers.
-+
-+	  https://cryptography.io
-+
-+comment "python-cryptography needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-new file mode 100644
-index 0000000..0358624
---- /dev/null
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=15eeba9e31f852bac21155baa3dfbc61, sha256 locally computed
-+md5     15eeba9e31f852bac21155baa3dfbc61  cryptography-1.1.2.tar.gz
-+sha256  7f51459f84d670444275e615839f4542c93547a12e938a0a4906dafe5f7de153  cryptography-1.1.2.tar.gz
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-new file mode 100644
-index 0000000..fbd0caf
---- /dev/null
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# python-cryptography
-+#
-+################################################################################
-+
-+PYTHON_CRYPTOGRAPHY_VERSION = 1.1.2
-+PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
-+PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
-+PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
-+PYTHON_CRYPTOGRAPHY_LICENSE = Apache
-+PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE
-+PYTHON_CRYPTOGRAPHY_DEPENDENCIES = python-six \
-+				   python-idna \
-+				   python-pyasn \
-+				   host-python-cffi \
-+				   openssl
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+PYTHON_CRYPTOGRAPHY_DEPENDENCIES += python-enum34
-+endif
-+
-+$(eval $(python-package))
+On 2015-12-24 22:30 +0100, Yegor Yefremov spake thusly:
+> Host variant is needed to build python-cryptography package.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-cffi/python-cffi.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+> index 70fbe02..a6e4107 100644
+> --- a/package/python-cffi/python-cffi.mk
+> +++ b/package/python-cffi/python-cffi.mk
+> @@ -11,5 +11,7 @@ PYTHON_CFFI_SETUP_TYPE = setuptools
+>  PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+>  PYTHON_CFFI_LICENSE = MIT
+>  PYTHON_CFFI_LICENSE_FILES = LICENSE
+> +HOST_PYTHON_CFFI_DEPENDENCIES = host-python-pycparser
+
+So, the host variant needs python-pycparser, but the target variantdoes
+not?
+
+I would have expect either:
+    PYTHON_CFFI_DEPENDENCIES += host-python-pycparser
+
+or:
+    PYTHON_CFFI_DEPENDENCIES += python-pycparser
+
+Care to shed some light on this, please?
+
+Regards,
+Yann E. MORIN.
+
+>  $(eval $(python-package))
+> +$(eval $(host-python-package))
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
