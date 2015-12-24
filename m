@@ -1,41 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Dec 2015 15:27:15 +0100
-Subject: [Buildroot] [git commit] libgdiplus: bump to version 4.2
-Message-ID: <20151224142830.329AF7FE93@busybox.osuosl.org>
+Date: Thu, 24 Dec 2015 15:26:32 +0100
+Subject: [Buildroot] [PATCH v3 09/13] package/dhcp: SysV init scripts:
+ remove PID files after stop
+In-Reply-To: <1445734779-7212-9-git-send-email-benoit.thebaudeau.dev@gmail.com>
+References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <1445734779-7212-9-git-send-email-benoit.thebaudeau.dev@gmail.com>
+Message-ID: <20151224152632.7af2c1a1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7fed757456d30aae7be381f6a4aa463523ae1bb8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Beno?t,
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libgdiplus/libgdiplus.hash | 2 +-
- package/libgdiplus/libgdiplus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, 25 Oct 2015 02:59:35 +0200, Beno?t Th?baudeau wrote:
+> From: Beno?t Th?baudeau <benoit@wsystem.com>
+> 
+> These daemons do not remove their PID files, so do it manually in the
+> scripts.
+> 
+> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
 
-diff --git a/package/libgdiplus/libgdiplus.hash b/package/libgdiplus/libgdiplus.hash
-index 71ffdd3..f7fdcb5 100644
---- a/package/libgdiplus/libgdiplus.hash
-+++ b/package/libgdiplus/libgdiplus.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 7eadc5105c6352d456c5f8699dc89260bf402e82ce6668e7e0c625519f9e5b44 libgdiplus-3.12.tar.gz
-+sha256 98f8a8e58ed22e136c4ac6eaafbc860757f5a97901ecc0ea357e2b6e4cfa2be5 libgdiplus-4.2.tar.gz
-diff --git a/package/libgdiplus/libgdiplus.mk b/package/libgdiplus/libgdiplus.mk
-index fdb5b5c..aac859f 100644
---- a/package/libgdiplus/libgdiplus.mk
-+++ b/package/libgdiplus/libgdiplus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGDIPLUS_VERSION = 3.12
-+LIBGDIPLUS_VERSION = 4.2
- LIBGDIPLUS_SITE = $(call github,mono,libgdiplus,$(LIBGDIPLUS_VERSION))
- 
- # Although there is a LICENSE file thas specifies LGPL or MPLv1.1,
+I think this is not the right way of handling this and the IPv6
+problem.
+
+What I would suggest is that the S80dhcp-server script should start two
+DHCP servers: one with -4 and one with -6. To avoid IPv6 failures, you
+can test if /proc/net/if_inet6 exists.
+
+Then, I was hoping you could use the --remove-pidfile option of
+start-stop-daemon, but it unfortunately doesn't exist in the Busybox
+implementation of start-stop-daemon.
+
+That being said, I still believe starting two daemons is the best
+solution. I don't think a Config.in option should be added for that.
+Just always start both, with as I propose an exception to not start the
+IPv6 daemon if /proc/net/if_inet6 does not exist.
+
+Could you rework your patches 9 to 13 with this goal in mind ?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
