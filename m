@@ -1,9 +1,9 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 24 Dec 2015 22:30:41 +0100
-Subject: [Buildroot] [PATCH 5/5] python-pyopenssl: new package
+Date: Thu, 24 Dec 2015 22:30:40 +0100
+Subject: [Buildroot] [PATCH 4/5] python-cryptography: new package
 In-Reply-To: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
 References: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1450992641-8618-5-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1450992641-8618-4-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,89 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                              |  1 +
- package/python-pyopenssl/Config.in             | 12 ++++++++++++
- package/python-pyopenssl/python-pyopenssl.hash |  3 +++
- package/python-pyopenssl/python-pyopenssl.mk   | 14 ++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/python-pyopenssl/Config.in
- create mode 100644 package/python-pyopenssl/python-pyopenssl.hash
- create mode 100644 package/python-pyopenssl/python-pyopenssl.mk
+ package/Config.in                                  |  1 +
+ package/python-cryptography/Config.in              | 20 +++++++++++++++++++
+ .../python-cryptography/python-cryptography.hash   |  3 +++
+ package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++++++++++
+ 4 files changed, 47 insertions(+)
+ create mode 100644 package/python-cryptography/Config.in
+ create mode 100644 package/python-cryptography/python-cryptography.hash
+ create mode 100644 package/python-cryptography/python-cryptography.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4c96454..1d8496d 100644
+index f767ebc..4c96454 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -671,6 +671,7 @@ menu "External python modules"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pyinotify/Config.in"
-+	source "package/python-pyopenssl/Config.in"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pypcap/Config.in"
- 	source "package/python-pyqt/Config.in"
-diff --git a/package/python-pyopenssl/Config.in b/package/python-pyopenssl/Config.in
+@@ -625,6 +625,7 @@ menu "External python modules"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
+ 	source "package/python-crc16/Config.in"
++	source "package/python-cryptography/Config.in"
+ 	source "package/python-daemon/Config.in"
+ 	source "package/python-dialog/Config.in"
+ 	source "package/python-django/Config.in"
+diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
 new file mode 100644
-index 0000000..cb59e8b
+index 0000000..c6d183f
 --- /dev/null
-+++ b/package/python-pyopenssl/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_PYOPENSSL
-+	bool "python-pyopenssl"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
-+	select BR2_PACKAGE_PYTHON_SIX
-+	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
++++ b/package/python-cryptography/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
++	bool "python-cryptography"
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_PYTHON_CFFI
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
++	select BR2_PACKAGE_PYTHON_IDNA
++	select BR2_PACKAGE_PYTHON_PYASN
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON
 +	help
-+	  Python wrapper module around the OpenSSL library.
++	  cryptography is a package designed to expose cryptographic
++	  primitives and recipes to Python developers.
 +
-+	  https://github.com/pyca/pyopenssl
++	  https://cryptography.io
 +
-+comment "python-pyopenssl needs a toolchain w/ C++"
++comment "python-cryptography needs a toolchain w/ C++"
 +	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
 new file mode 100644
-index 0000000..0c6e25a
+index 0000000..0358624
 --- /dev/null
-+++ b/package/python-pyopenssl/python-pyopenssl.hash
++++ b/package/python-cryptography/python-cryptography.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f447644afcbd5f0a1f47350fec63a4c6, sha256 locally computed
-+md5     f447644afcbd5f0a1f47350fec63a4c6  pyOpenSSL-0.15.1.tar.gz
-+sha256  f0a26070d6db0881de8bcc7846934b7c3c930d8f9c79d45883ee48984bc0d672  pyOpenSSL-0.15.1.tar.gz
-diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=15eeba9e31f852bac21155baa3dfbc61, sha256 locally computed
++md5     15eeba9e31f852bac21155baa3dfbc61  cryptography-1.1.2.tar.gz
++sha256  7f51459f84d670444275e615839f4542c93547a12e938a0a4906dafe5f7de153  cryptography-1.1.2.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
 new file mode 100644
-index 0000000..239fd98
+index 0000000..fbd0caf
 --- /dev/null
-+++ b/package/python-pyopenssl/python-pyopenssl.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -0,0 +1,23 @@
 +################################################################################
 +#
-+# python-pyopenssl
++# python-cryptography
 +#
 +################################################################################
 +
-+PYTHON_PYOPENSSL_VERSION = 0.15.1
-+PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
-+PYTHON_PYOPENSSL_SITE = https://pypi.python.org/packages/source/p/pyOpenSSL
-+PYTHON_PYOPENSSL_LICENSE = Apache-2.0
-+PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
-+PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
++PYTHON_CRYPTOGRAPHY_VERSION = 1.1.2
++PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
++PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
++PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
++PYTHON_CRYPTOGRAPHY_LICENSE = Apache
++PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE
++PYTHON_CRYPTOGRAPHY_DEPENDENCIES = python-six \
++				   python-idna \
++				   python-pyasn \
++				   host-python-cffi \
++				   openssl
++
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++PYTHON_CRYPTOGRAPHY_DEPENDENCIES += python-enum34
++endif
 +
 +$(eval $(python-package))
 -- 
