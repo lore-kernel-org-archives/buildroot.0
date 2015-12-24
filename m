@@ -1,184 +1,79 @@
-From: Eelco Chaudron <echaudron@xiot.nl>
-Date: Thu, 24 Dec 2015 10:15:40 +0100
-Subject: [Buildroot] buildroot support for OrangePI PC
-In-Reply-To: <56748758.7040908@mind.be>
-References: <56748758.7040908@mind.be>
-Message-ID: <1450948540529.50320.154990@webmail2>
+From: =?UTF-8?Q?No=C3=A9_RUBINSTEIN?= <nrubinstein@aldebaran.com>
+Date: Thu, 24 Dec 2015 10:21:00 +0100
+Subject: [Buildroot] [PATCH v2 1/2] trousers: new package
+In-Reply-To: <20151224084221.12044000@free-electrons.com>
+References: <1446659225-30438-1-git-send-email-nrubinstein@aldebaran.com>
+ <20151224084221.12044000@free-electrons.com>
+Message-ID: <CAOJKDvLfvzLSG5Z65BcKyE4DrA0nw9XA4aGrgw+uqJj+ss=K-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I decided to do some work on the OrangePI PC and I have a basic Linux 4.4 setup running.
-It boots, and I have serial access to the board.
+Good morning Thomas,
 
-Cam if you could share your 3.4 repo (and or 4.4 if it has better OrangePI support) I
-can get started with this too.
+Thanks a lot for all these fixes and for merging.
 
-Cheers,
+2015-12-24 8:42 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-Eelco
+>      - select libiconv when locale support is not available, otherwise the
+>        build fails due to missing iconv.h
+>      - disable on BR2_STATIC_LIBS configurations as it doesn't build. It
+>        could be made to build by patching the trousers Makefile.
+>      - add missing dependency on thread support in the toolchain
+>
 
-This is the diff;
+Are you running an automatic test set on your host machine to detect these
+problems?
 
-diff --git a/board/orangepi/orangepipc/boot.cmd b/board/orangepi/orangepipc/boot.cmd
-new file mode 100644
-index 0000000..7d61e7b
---- /dev/null
-+++ b/board/orangepi/orangepipc/boot.cmd
-@@ -0,0 +1,8 @@
-+setenv fdt_high ffffffff
-+
-+setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-+
-+fatload mmc 0 $kernel_addr_r uImage
-+fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-pc.dtb
-+
-+bootm $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepipc/genimage.cfg b/board/orangepi/orangepipc/genimage.cfg
-new file mode 100644
-index 0000000..43c2249
---- /dev/null
-+++ b/board/orangepi/orangepipc/genimage.cfg
-@@ -0,0 +1,36 @@
-+# Minimal SD card image for the OrangePi PC
-+#
-+
-+image boot.vfat {
-+ vfat {
-+ files = {
-+ "uImage",
-+ "sun8i-h3-orangepi-pc.dtb",
-+ "boot.scr"
-+ }
-+ }
-+ size = 10M
-+}
-+
-+image sdcard.img {
-+ hdimage {
-+ }
-+
-+ partition u-boot {
-+ in-partition-table = "no"
-+ image = "u-boot-sunxi-with-spl.bin"
-+ offset = 8192
-+ }
-+
-+ partition boot {
-+ partition-type = 0xC
-+ bootable = "true"
-+ image = "boot.vfat"
-+ }
-+
-+ partition rootfs {
-+ partition-type = 0x83
-+ image = "rootfs.ext4"
-+ size = 512M
-+ }
-+}
-diff --git a/board/orangepi/orangepipc/post-build.sh b/board/orangepi/orangepipc/post-build.sh
-new file mode 100755
-index 0000000..9f115cb
---- /dev/null
-+++ b/board/orangepi/orangepipc/post-build.sh
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+# post-build.sh for OrangePi PC taken from CubieBoard's post-build.sh
-+# 2013, Carlo Caione <<carlo.caione@gmail.com>>
-+
-+BOARD_DIR="$(dirname $0)"
-+MKIMAGE=$HOST_DIR/usr/bin/mkimage
-+BOOT_CMD=$BOARD_DIR/boot.cmd
-+BOOT_CMD_H=$BINARIES_DIR/boot.scr
-+
-+# U-Boot script
-+if [ -e $MKIMAGE -a -e $BOOT_CMD ];
-+then
-+	$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
-+fi
-diff --git a/board/orangepi/orangepipc/post-image.sh b/board/orangepi/orangepipc/post-image.sh
-new file mode 100755
-index 0000000..05f6b70
---- /dev/null
-+++ b/board/orangepi/orangepipc/post-image.sh
-@@ -0,0 +1,16 @@
-+#!/bin/bash
-+
-+GENIMAGE_CFG="board/orangepi/orangepipc/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage \
-+ --rootpath "${TARGET_DIR}" \
-+ --tmppath "${GENIMAGE_TMP}" \
-+ --inputpath "${BINARIES_DIR}" \
-+ --outputpath "${BINARIES_DIR}" \
-+ --config "${GENIMAGE_CFG}"
-+
-+RET=${?}
-+exit ${RET}
-diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
-new file mode 100644
-index 0000000..cd349c5
---- /dev/null
-+++ b/configs/orangepipc_defconfig
-@@ -0,0 +1,26 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="<https://github.com/jwrdegoede/linux-sunxi.git>"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a516ac6dda21e6f5edceecd08b475b16e360656b"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="orangepi_pc"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="<http://git.denx.de/u-boot.git>"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4832e17787acb29734d895751bc7a594908aecc6"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_PACKAGE_HOST_GENIMAGE=y
 
-On 18 December 2015 23:23:20 +01:00, Arnout Vandecappelle <arnout@mind.be> wrote:
+> Please monitor autobuild.buildroot.org in the coming days to see if
+> there are any failures related to this new package.
+>
 
-> On 18-12-15 14:22, Eelco Chaudron wrote:
-> 
-> > Hi All,
-> > 
-> > Was wondering if anyone has started working on OrangePi PC board support?
-> > 
-> Not that I know of. But it should be quite similar to the cubieboard I think.
-> 
-> If you make a defconfig for it, consider using genimage rather than a custom
-> script like mkcubiecard.
-> 
-> Regards,
-> Arnout
-> 
-> 
-> -- 
-> Arnout Vandecappelle arnout at mind be
-> Senior Embedded Software Architect +32-16-286500
-> Essensium/Mind <http://www.mind.be>
-> G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-> LinkedIn profile: <http://www.linkedin.com/in/arnoutvandecappelle>
-> GPG fingerprint: 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> 
+I will do this.
 
+Thanks again,
+No?.
+
+-- 
+
+
+
+
+*This email and any attachment thereto are confidential and intended solely 
+for the use of the individual or entity to whom they are addressed.If you 
+are not the intended recipient, please be advised that disclosing, copying, 
+distributing or taking any action in reliance on the contents of this email 
+is strictly prohibited. In such case, please immediately advise the sender, 
+and delete all copies and attachment from your system.This email shall not 
+be construed and is not tantamount to an offer, an acceptance of offer, or 
+an agreement by Aldebaran Robotics on any discussion or contractual 
+document whatsoever. No employee or agent is authorized to represent or 
+bind Aldebaran Robotics to third parties by email, or act on behalf of 
+Aldebaran Robotics by email, without express written confirmation by 
+Aldebaran Robotics? duly authorized representatives.*
+------------------------------
+
+*Ce message ?lectronique et ?ventuelles pi?ces jointes sont confidentiels, 
+et exclusivement destin?s ? la personne ou l'entit? ? qui ils sont 
+adress?s.*
+
+*Si vous n'?tes pas le destinataire vis?, vous ?tes pri? de ne pas 
+divulguer, copier, distribuer ou prendre toute d?cision sur la foi de ce 
+message ?lectronique. Merci d'en aviser imm?diatement l'exp?diteur et de 
+supprimer toutes les copies et ?ventuelles pi?ces jointes de votre syst?me.*
+
+*Ce message ?lectronique n'?quivaut pas ? une offre, ? une acceptation 
+d?offre, ou ? un accord d'Aldebaran Robotics sur toute discussion ou 
+document contractuel quel qu?il soit, et ne peut ?tre interpr?t? comme tel. 
+Aucun employ? ou agent d?Aldebaran Robotics n'est autoris? ? repr?senter ou 
+? engager la soci?t? par email, ou ? agir au nom et pour le compte de la 
+soci?t? par email, sans qu?une confirmation ?crite soit donn?e par le 
+repr?sentant l?gal d?Aldebaran Robotics ou par toute autre personne ayant 
+re?u d?l?gation de pouvoir appropri?e.*
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151224/2b954e69/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151224/59abe049/attachment.html>
