@@ -1,75 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2015 22:24:43 +0100
-Subject: [Buildroot] [PATCH 14/84 RFC] package/jquery: include external
-	plugins from jquery's Config.in
+Date: Fri, 25 Dec 2015 22:24:44 +0100
+Subject: [Buildroot] [PATCH 15/84 RFC] package/libdrm: move tests programs
+	to the bottom
 In-Reply-To: <cover.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <805bddfa16ccc143f1c0a871d7304af0f2b155c7.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <a5a4ee71856c2e3b818148d68884a6631cc081bc.1451076704.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... and make it a menuconfig instead of a 'config'+'menu'.
+Tests programs are not that important; at least, they're probably less
+important than the drivers selection.
+
+Move it down to after the drivers selection.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in        | 12 ------------
- package/jquery/Config.in | 17 ++++++++++++++++-
- 2 files changed, 16 insertions(+), 13 deletions(-)
+ package/libdrm/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index dd44743..73a3ac8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -951,18 +951,6 @@ menu "Javascript"
- 	source "package/explorercanvas/Config.in"
- 	source "package/flot/Config.in"
- 	source "package/jquery/Config.in"
--if BR2_PACKAGE_JQUERY
--menu "External jQuery plugins"
--	source "package/jquery-datetimepicker/Config.in"
--	source "package/jquery-keyboard/Config.in"
--	source "package/jquery-mobile/Config.in"
--	source "package/jquery-sidebar/Config.in"
--	source "package/jquery-sparkline/Config.in"
--	source "package/jquery-ui/Config.in"
--	source "package/jquery-ui-themes/Config.in"
--	source "package/jquery-validation/Config.in"
--endmenu
--endif
- 	source "package/jsmin/Config.in"
- 	source "package/json-javascript/Config.in"
- endmenu
-diff --git a/package/jquery/Config.in b/package/jquery/Config.in
-index 92f5604..3133702 100644
---- a/package/jquery/Config.in
-+++ b/package/jquery/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_JQUERY
-+menuconfig BR2_PACKAGE_JQUERY
- 	bool "jQuery"
- 	help
- 	  jQuery is a fast and concise JavaScript Library that
-@@ -6,3 +6,18 @@ config BR2_PACKAGE_JQUERY
- 	  animating, and Ajax interactions for rapid web development.
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 445a85b..ad015f8 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -9,11 +9,6 @@ config BR2_PACKAGE_LIBDRM
  
- 	  http://jquery.com
+ if BR2_PACKAGE_LIBDRM
+ 
+-config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
+-	bool "Install test programs"
+-	help
+-	  This option allows to install the libdrm test programs.
+-
+ menu "DRM Drivers"
+ 
+ config BR2_PACKAGE_LIBDRM_INTEL
+@@ -71,6 +66,11 @@ config BR2_PACKAGE_LIBDRM_TEGRA
+ 
+ endmenu
+ 
++config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
++	bool "Install test programs"
++	help
++	  This option allows to install the libdrm test programs.
 +
-+if BR2_PACKAGE_JQUERY
-+
-+comment "External jQuery plugins"
-+
-+source "package/jquery-datetimepicker/Config.in"
-+source "package/jquery-keyboard/Config.in"
-+source "package/jquery-mobile/Config.in"
-+source "package/jquery-sidebar/Config.in"
-+source "package/jquery-sparkline/Config.in"
-+source "package/jquery-ui/Config.in"
-+source "package/jquery-ui-themes/Config.in"
-+source "package/jquery-validation/Config.in"
-+
-+endif
+ endif
+ 
+ comment "libdrm needs a toolchain w/ threads"
 -- 
 1.9.1
