@@ -1,131 +1,81 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri, 25 Dec 2015 20:28:34 -0200
-Subject: [Buildroot] [PATCH] trousers: remove inline for read_data/write_data
-Message-ID: <1451082514-2730-1-git-send-email-sergio.prado@e-labworks.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 25 Dec 2015 23:47:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.19.12
+Message-ID: <1451083664-12505-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-read_data and write_data functions are declared with inline, but
-their definition is not in a .h file. This is causing errors when
-linking:
+Drop patch "Makefile.am: fix static build with alsa" - applied upstream.
 
-tcsps.c:(.text+0x4ac): undefined reference to `read_data'
-tcsps.c:(.text+0x1888): undefined reference to `write_data'
-...
-
-Patch already applied upstream.
-
-Fixes:
-http://autobuild.buildroot.net/results/1a53d929bcec840cd18185e54b1a6da8aa849269/
-http://autobuild.buildroot.net/results/fad66e88b5a97004b21658d413f4d3a6d0d8838b/
-http://autobuild.buildroot.net/results/c7e23b8ec2c69798482868e18311ebf2c01b65e0/
-...
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...emove-inline-for-read_data-and-write_data.patch | 91 ++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
+ package/mpd/0003-fix-static-build-with-alsa.patch | 32 -----------------------
+ package/mpd/mpd.hash                              |  2 +-
+ package/mpd/mpd.mk                                |  2 +-
+ 3 files changed, 2 insertions(+), 34 deletions(-)
+ delete mode 100644 package/mpd/0003-fix-static-build-with-alsa.patch
 
-diff --git a/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch b/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
-new file mode 100644
-index 000000000000..3bbccb676c95
---- /dev/null
-+++ b/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
-@@ -0,0 +1,91 @@
-+From f03c7987c234a81f7e4274b26bab07318357a2a5 Mon Sep 17 00:00:00 2001
-+From: Sergio Prado <sergio.prado@e-labworks.com>
-+Date: Fri, 25 Dec 2015 20:09:21 -0200
-+Subject: [PATCH] Remove inline for read_data and write_data
-+
-+read_data and write_data functions are declared with inline, but
-+their definition is not in a .h file. This is causing errors when
-+linking:
-+
-+tcsps.c:(.text+0x4ac): undefined reference to `read_data'
-+tcsps.c:(.text+0x1888): undefined reference to `write_data'
-+...
-+
-+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-+---
-+ src/include/tcsps.h    | 5 -----
-+ src/tcs/ps/ps_utils.c  | 8 --------
-+ src/tspi/ps/ps_utils.c | 4 ++--
-+ 3 files changed, 2 insertions(+), 15 deletions(-)
-+
-+diff --git a/src/include/tcsps.h b/src/include/tcsps.h
-+index 87542965877d..dcd5db469822 100644
-+--- a/src/include/tcsps.h
-++++ b/src/include/tcsps.h
-+@@ -23,13 +23,8 @@ int		   get_file();
-+ int		   put_file(int);
-+ void		   close_file(int);
-+ void		   ps_destroy();
-+-#ifdef SOLARIS
-+ TSS_RESULT  read_data(int, void *, UINT32);
-+ TSS_RESULT  write_data(int, void *, UINT32);
-+-#else
-+-inline TSS_RESULT  read_data(int, void *, UINT32);
-+-inline TSS_RESULT  write_data(int, void *, UINT32);
-+-#endif
-+ int		   write_key_init(int, UINT32, UINT32, UINT32);
-+ TSS_RESULT	   cache_key(UINT32, UINT16, TSS_UUID *, TSS_UUID *, UINT16, UINT32, UINT32);
-+ TSS_RESULT	   UnloadBlob_KEY_PS(UINT16 *, BYTE *, TSS_KEY *);
-+diff --git a/src/tcs/ps/ps_utils.c b/src/tcs/ps/ps_utils.c
-+index 2e7f502b9599..35ac89f8fc12 100644
-+--- a/src/tcs/ps/ps_utils.c
-++++ b/src/tcs/ps/ps_utils.c
-+@@ -42,11 +42,7 @@
-+ struct key_disk_cache *key_disk_cache_head = NULL;
-+
-+
-+-#ifdef SOLARIS
-+ TSS_RESULT
-+-#else
-+-inline TSS_RESULT
-+-#endif
-+ read_data(int fd, void *data, UINT32 size)
-+ {
-+	int rc;
-+@@ -64,11 +60,7 @@ read_data(int fd, void *data, UINT32 size)
-+ }
-+
-+
-+-#ifdef SOLARIS
-+ TSS_RESULT
-+-#else
-+-inline TSS_RESULT
-+-#endif
-+ write_data(int fd, void *data, UINT32 size)
-+ {
-+	int rc;
-+diff --git a/src/tspi/ps/ps_utils.c b/src/tspi/ps/ps_utils.c
-+index aac40a147314..83259141d375 100644
-+--- a/src/tspi/ps/ps_utils.c
-++++ b/src/tspi/ps/ps_utils.c
-+@@ -22,7 +22,7 @@
-+ #include "tspps.h"
-+ #include "tsplog.h"
-+
-+-inline TSS_RESULT
-++TSS_RESULT
-+ read_data(int fd, void *data, UINT32 size)
-+ {
-+	int rc;
-+@@ -39,7 +39,7 @@ read_data(int fd, void *data, UINT32 size)
-+	return TSS_SUCCESS;
-+ }
-+
-+-inline TSS_RESULT
-++TSS_RESULT
-+ write_data(int fd, void *data, UINT32 size)
-+ {
-+	int rc;
-+--
-+1.9.1
-+
+diff --git a/package/mpd/0003-fix-static-build-with-alsa.patch b/package/mpd/0003-fix-static-build-with-alsa.patch
+deleted file mode 100644
+index 4ba0449..0000000
+--- a/package/mpd/0003-fix-static-build-with-alsa.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From bba7b8e5fed79a7fecacf5468ade35a3ae0a0f8e Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Sat, 21 Nov 2015 23:51:43 +0100
+-Subject: [PATCH 1/1] Makefile.am: fix static build with alsa
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Add ALSA_LIBS to MIXER_LIBS, otherwise building mpd in a static context fails
+-with lot of undefined references to alsa-lib (libasound) required by
+-src/mixer/plugins/AlsaMixerPlugin.cxx.
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- Makefile.am | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 89819de..307fcba 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -1219,6 +1219,7 @@ liboutput_plugins_a_SOURCES = \
+- 
+- MIXER_LIBS = \
+- 	libmixer_plugins.a \
+-+	$(ALSA_LIBS) \
+- 	$(PULSE_LIBS)
+- 
+- MIXER_API_SRC = \
+--- 
+-2.6.2
+-
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 1b6c80b..bc4792a 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	7a5c66aa5af97a5b7af3dc49e3d2594071dafd62a14e2e9f7c9a5a86342836c6	mpd-0.19.11.tar.xz
++sha256	7b6fe6c7ce72f5f80a276d680072b524ecb395e546e252b8f3a0756377e1e875	mpd-0.19.12.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7e6b60f..c794e82 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).11
++MPD_VERSION = $(MPD_VERSION_MAJOR).12
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
 -- 
-1.9.1
+2.6.4
