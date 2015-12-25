@@ -1,32 +1,32 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2015 22:25:45 +0100
-Subject: [Buildroot] [PATCH 76/84 RFC] package/openobex: use 'menuconfig'
+Date: Fri, 25 Dec 2015 22:25:46 +0100
+Subject: [Buildroot] [PATCH 77/84 RFC] package/quagga: use 'menuconfig'
 In-Reply-To: <cover.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <ce9d0a5706989c176af6880fe98d4240e431e80e.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <a5597bc5618aeb2a09d1caaf4d87e0c964ac28be.1451076704.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openobex has 5 options, so use a 'menuconfig' to group the
+quagga has more than 5 options, so use a 'menuconfig' to group the
 options in an sub-menu.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/openobex/Config.in | 2 +-
+ package/quagga/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openobex/Config.in b/package/openobex/Config.in
-index 5f606fe..d2fd95f 100644
---- a/package/openobex/Config.in
-+++ b/package/openobex/Config.in
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index 89ff6f2..9a23947 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
 @@ -1,4 +1,4 @@
--config BR2_PACKAGE_OPENOBEX
-+menuconfig BR2_PACKAGE_OPENOBEX
- 	bool "openobex"
+-config BR2_PACKAGE_QUAGGA
++menuconfig BR2_PACKAGE_QUAGGA
+ 	bool "quagga"
+ 	depends on BR2_USE_MMU # fork()
  	help
- 	  Free open source implementation of the Object Exchange (OBEX)
 -- 
 1.9.1
