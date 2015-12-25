@@ -1,40 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2015 22:25:11 +0100
-Subject: [Buildroot] [PATCH 42/84 RFC] package/mtd: use 'menuconfig'
+Date: Fri, 25 Dec 2015 22:25:08 +0100
+Subject: [Buildroot] [PATCH 39/84 RFC] docs/manual: use 'menuconfig' when
+	there are more than 5 sub-options
 In-Reply-To: <cover.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <2d78a86477ade68587ed141e66cd19420badd9e4.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <b99c60174e89c794c76df7cb0c2bdd79ddace67c.1451076704.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mtd has more than 5 options, so use a 'menuconfig' to group the
-options in an sub-menu.
+When a package has a lot of sub-options, the layout in menuconfig (the
+mconf UI) is quickly getting messy.
+
+Using 'menuconfig' (the kconfig keyword) will automatically create a
+sub-menu, which provides a cleaner layout.
+
+Document that, with 5 or more options, a 'menuconfig' should be used
+instead of a simple 'config'.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/mtd/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 6e4346f..5add9c1 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_MTD
-+menuconfig BR2_PACKAGE_MTD
- 	bool "mtd, jffs2 and ubi/ubifs tools"
- 	help
- 	  Build mtd, jffs2 and ubi/ubifs tools
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_MTD
- 	  http://www.linux-mtd.infradead.org/
+---
+Note: 5 is arbitrary. We could tweak it to a bit more, but on small
+terminals (the smallest supported is 80x24), there are only 10 lines
+for the menu entries, so 5 looks like a good compromise. YMMV.
+---
+ docs/manual/adding-packages-directory.txt | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 2b9e714..df3011b 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -79,6 +79,34 @@ The sub-options will be cleanly indented below the main symbol when it
+ is enabled, and will be properly hidden when the symbol is disabled.
  
- if BR2_PACKAGE_MTD
--comment "MTD tools selection"
  
- config BR2_PACKAGE_MTD_DOCFDISK
- 	bool "docfdisk"
++If your package has 5 or more options, then you should use +menuconfig+
++to define the main symbol; this will ensure that all the package's
++sub-options are automaticaly classified in a sub-menu:
++
++---------------------------
++menuconfig BR2_PACKAGE_LIBFOO
++	bool "libfoo"
++	help
++	  This is a comment that explains what libfoo is.
++
++	  http://foosoftware.org/libfoo/
++
++if BR2_PACKAGE_LIBFOO
++
++config BR2_PACKAGE_LIBFOO_BAR
++	bool "bar support"
++	help
++	  This is a comment that briefly explains what
++	  bar support is, if it's not obvious.
++
++endif # BR2_PACKAGE_LIBFOO
++---------------------------
++
++In any case, ensure that there is no +comment+ or other symbol in-between
++the main symbol (be it +config+ or +menuconfig+) and the +if+ clause,
++otherwise 'Kconfig' will not properly classify the sub-options.
++
++
+ Finally you have to add your new +libfoo/Config.in+ to
+ +package/Config.in+ (or in a category subdirectory if you decided to
+ put your package in one of the existing categories). The files
 -- 
 1.9.1
