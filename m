@@ -1,39 +1,32 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2015 22:25:34 +0100
-Subject: [Buildroot] [PATCH 65/84 RFC] package/gnuradio: split long omment
+Date: Fri, 25 Dec 2015 22:25:45 +0100
+Subject: [Buildroot] [PATCH 76/84 RFC] package/openobex: use 'menuconfig'
 In-Reply-To: <cover.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <f020ad988a84c95b108db63d7e82e312faa7dae1.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <ce9d0a5706989c176af6880fe98d4240e431e80e.1451076704.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It does not fit even is a wider-than-normal terminal.
+openobex has 5 options, so use a 'menuconfig' to group the
+options in an sub-menu.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/gnuradio/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/openobex/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index f2c884b..d502b06 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -58,8 +58,11 @@ config BR2_PACKAGE_GNURADIO_UTILS
+diff --git a/package/openobex/Config.in b/package/openobex/Config.in
+index 5f606fe..d2fd95f 100644
+--- a/package/openobex/Config.in
++++ b/package/openobex/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_OPENOBEX
++menuconfig BR2_PACKAGE_OPENOBEX
+ 	bool "openobex"
  	help
- 	  Misc python utilities
- 
--comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager depends fftw's single precision"
--	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+if !BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+comment "gr-fft, gr-filter, gr-analog, gr-channels,"
-+comment "gr-digital, gr-trellis and gr-pager all"
-+comment "depend on fftw's single precision"
-+endif
- 
- if BR2_PACKAGE_FFTW_PRECISION_SINGLE
- 
+ 	  Free open source implementation of the Object Exchange (OBEX)
 -- 
 1.9.1
