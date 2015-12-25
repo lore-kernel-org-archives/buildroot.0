@@ -1,74 +1,142 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2015 22:24:50 +0100
-Subject: [Buildroot] [PATCH 21/84 RFC] package/ola: use 'menuconfig' instead
-	of 'config'+'menu'
+Date: Fri, 25 Dec 2015 22:24:51 +0100
+Subject: [Buildroot] [PATCH 22/84 RFC] package/perl: use 'menuconfig'
+	instead of 'config'+'menu'
 In-Reply-To: <cover.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <a76b6dff8629c48b08d9888ec1fa861cd5333cc6.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <9a9c7803ba0a2c468d0a58f809f1fe8d4539e048.1451076704.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since there were multiple sub-menus, their prompts are turned into
-comments.
+Move the perl library/modules inclusion to the perl's Config.in.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/ola/Config.in | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ package/Config.in      | 47 -----------------------------------------------
+ package/perl/Config.in | 48 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 47 insertions(+), 48 deletions(-)
 
-diff --git a/package/ola/Config.in b/package/ola/Config.in
-index fd693de..fb96e11 100644
---- a/package/ola/Config.in
-+++ b/package/ola/Config.in
-@@ -3,7 +3,7 @@ comment "ola needs a toolchain w/ C++, threads, wchar, dynamic library"
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
- 
--config BR2_PACKAGE_OLA
-+menuconfig BR2_PACKAGE_OLA
- 	bool "ola (open lighting architecture)"
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_OLA
- 
- if BR2_PACKAGE_OLA
- 
--menu "bindings and interface"
-+comment "bindings and interface"
- 
- config BR2_PACKAGE_OLA_WEB
- 	bool "http interface"
-@@ -44,9 +44,7 @@ config BR2_PACKAGE_OLA_SLP
- 	help
- 	  Build OLA with slp tools.
- 
+diff --git a/package/Config.in b/package/Config.in
+index 4d2b763..d65730a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -541,53 +541,6 @@ endif
+ 	source "package/mono/Config.in"
+ 	source "package/nodejs/Config.in"
+ 	source "package/perl/Config.in"
+-if BR2_PACKAGE_PERL
+-menu "Perl libraries/modules"
+-	source "package/perl-crypt-openssl-random/Config.in"
+-	source "package/perl-crypt-openssl-rsa/Config.in"
+-	source "package/perl-datetime-tiny/Config.in"
+-	source "package/perl-db-file/Config.in"
+-	source "package/perl-digest-hmac/Config.in"
+-	source "package/perl-digest-sha1/Config.in"
+-	source "package/perl-encode-detect/Config.in"
+-	source "package/perl-encode-locale/Config.in"
+-	source "package/perl-file-listing/Config.in"
+-	source "package/perl-file-util/Config.in"
+-	source "package/perl-gd/Config.in"
+-	source "package/perl-gdgraph/Config.in"
+-	source "package/perl-gdtextutil/Config.in"
+-	source "package/perl-html-parser/Config.in"
+-	source "package/perl-html-tagset/Config.in"
+-	source "package/perl-http-cookies/Config.in"
+-	source "package/perl-http-daemon/Config.in"
+-	source "package/perl-http-date/Config.in"
+-	source "package/perl-http-message/Config.in"
+-	source "package/perl-http-negotiate/Config.in"
+-	source "package/perl-io-html/Config.in"
+-	source "package/perl-io-socket-ssl/Config.in"
+-	source "package/perl-json-tiny/Config.in"
+-	source "package/perl-libwww-perl/Config.in"
+-	source "package/perl-lwp-mediatypes/Config.in"
+-	source "package/perl-mail-dkim/Config.in"
+-	source "package/perl-mailtools/Config.in"
+-	source "package/perl-mime-base64/Config.in"
+-	source "package/perl-mojolicious/Config.in"
+-	source "package/perl-net-dns/Config.in"
+-	source "package/perl-net-http/Config.in"
+-	source "package/perl-net-ssleay/Config.in"
+-	source "package/perl-netaddr-ip/Config.in"
+-	source "package/perl-path-tiny/Config.in"
+-	source "package/perl-time-hires/Config.in"
+-	source "package/perl-timedate/Config.in"
+-	source "package/perl-try-tiny/Config.in"
+-	source "package/perl-uri/Config.in"
+-	source "package/perl-www-robotrules/Config.in"
+-	source "package/perl-xml-libxml/Config.in"
+-	source "package/perl-xml-namespacesupport/Config.in"
+-	source "package/perl-xml-sax/Config.in"
+-	source "package/perl-xml-sax-base/Config.in"
 -endmenu
--
--menu "tests and examples"
-+comment "tests and examples"
- 
- config BR2_PACKAGE_OLA_EXAMPLES
- 	bool "examples"
-@@ -60,9 +58,7 @@ config BR2_PACKAGE_OLA_RDM_TESTS
+-endif
+ 	source "package/php/Config.in"
+ if BR2_PACKAGE_PHP
+ if !BR2_STATIC_LIBS
+diff --git a/package/perl/Config.in b/package/perl/Config.in
+index cdd5aab..635a6f8 100644
+--- a/package/perl/Config.in
++++ b/package/perl/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_PERL
++menuconfig BR2_PACKAGE_PERL
+ 	bool "perl"
+ 	depends on BR2_USE_MMU # fork()
  	help
- 	  Build OLA RDM tests.
+@@ -24,4 +24,50 @@ config BR2_PACKAGE_PERL_MODULES
+ 	  Leave empty for all modules (as far as the external libraries
+ 	  are available).
  
--endmenu
--
--menu "plugin selections"
-+comment "plugin selections"
- 
- config BR2_PACKAGE_OLA_PLUGIN_E131
- 	bool "acn E131"
-@@ -132,6 +128,4 @@ config BR2_PACKAGE_OLA_PLUGIN_USBPRO
- 	help
- 	  Build UsbPro plugin for OLA.
- 
--endmenu
--
++comment "Perl libraries/modules"
++
++source "package/perl-crypt-openssl-random/Config.in"
++source "package/perl-crypt-openssl-rsa/Config.in"
++source "package/perl-datetime-tiny/Config.in"
++source "package/perl-db-file/Config.in"
++source "package/perl-digest-hmac/Config.in"
++source "package/perl-digest-sha1/Config.in"
++source "package/perl-encode-detect/Config.in"
++source "package/perl-encode-locale/Config.in"
++source "package/perl-file-listing/Config.in"
++source "package/perl-file-util/Config.in"
++source "package/perl-gd/Config.in"
++source "package/perl-gdgraph/Config.in"
++source "package/perl-gdtextutil/Config.in"
++source "package/perl-html-parser/Config.in"
++source "package/perl-html-tagset/Config.in"
++source "package/perl-http-cookies/Config.in"
++source "package/perl-http-daemon/Config.in"
++source "package/perl-http-date/Config.in"
++source "package/perl-http-message/Config.in"
++source "package/perl-http-negotiate/Config.in"
++source "package/perl-io-html/Config.in"
++source "package/perl-io-socket-ssl/Config.in"
++source "package/perl-json-tiny/Config.in"
++source "package/perl-libwww-perl/Config.in"
++source "package/perl-lwp-mediatypes/Config.in"
++source "package/perl-mail-dkim/Config.in"
++source "package/perl-mailtools/Config.in"
++source "package/perl-mime-base64/Config.in"
++source "package/perl-mojolicious/Config.in"
++source "package/perl-net-dns/Config.in"
++source "package/perl-net-http/Config.in"
++source "package/perl-net-ssleay/Config.in"
++source "package/perl-netaddr-ip/Config.in"
++source "package/perl-path-tiny/Config.in"
++source "package/perl-time-hires/Config.in"
++source "package/perl-timedate/Config.in"
++source "package/perl-try-tiny/Config.in"
++source "package/perl-uri/Config.in"
++source "package/perl-www-robotrules/Config.in"
++source "package/perl-xml-libxml/Config.in"
++source "package/perl-xml-namespacesupport/Config.in"
++source "package/perl-xml-sax/Config.in"
++source "package/perl-xml-sax-base/Config.in"
++
  endif
 -- 
 1.9.1
