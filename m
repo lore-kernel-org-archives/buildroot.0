@@ -1,78 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2015 22:44:36 +0100
-Subject: [Buildroot] [PATCH 3/5] python-cffi: add host variant
-In-Reply-To: <CAGm1_kvTT4GX63oEHPoD7e2P5SQaoMqU8pAjR0Cqaf0erFnHtA@mail.gmail.com>
-References: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
- <1450992641-8618-3-git-send-email-yegorslists@googlemail.com>
- <20151224214645.GA3738@free.fr>
- <CAGm1_kvud8TAWddmadKqMi+=Mpcfzx=XJ3KMgt2yB-otDq-DpQ@mail.gmail.com>
- <20151225200059.48ac8dd7@free-electrons.com>
- <20151225191207.GA3878@free.fr>
- <CAGm1_kvTT4GX63oEHPoD7e2P5SQaoMqU8pAjR0Cqaf0erFnHtA@mail.gmail.com>
-Message-ID: <20151225214436.GB3878@free.fr>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 25 Dec 2015 22:51:08 +0100
+Subject: [Buildroot] [PATCH v5] luvi: new package
+In-Reply-To: <20151220232856.12acbfe8@free-electrons.com>
+References: <1446104703-21295-1-git-send-email-joerg.krause@embedded.rocks>
+ <20151220232856.12acbfe8@free-electrons.com>
+Message-ID: <1451080268.16818.8.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, All,
+Dear Thomas Petazzoni,
 
-On 2015-12-25 20:58 +0100, Yegor Yefremov spake thusly:
-> On Fri, Dec 25, 2015 at 8:12 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2015-12-25 20:00 +0100, Thomas Petazzoni spake thusly:
-> >> On Thu, 24 Dec 2015 23:12:49 +0100, Yegor Yefremov wrote:
-> >> > Target variant doesn't need pycparser. cffi's setup.py seems to
-> >> > distinguish, if we install real package or cross-compiled one:
-> >> >
-> >> >         install_requires=[
-> >> >             'pycparser',
-> >> >         ] if cpython else [],
-> >>
-> >> I don't understand how this "if cpython" is relevant to make the
-> >> different between the native (host) variant or the cross-compiled
-> >> (target) variant. cpython is defined as is:
-> >>
-> >>     cpython = ('_cffi_backend' not in sys.builtin_module_names)
-> >>
-> >> Can you give some more details?
-> >
-> > Yegor and I briefly discussed this on IRC yesterday, but I'm not really
-> > convinced by this reply either. I forgot to reply yesterday...
-> >
-> > What I understand, however, is that they want to differentiate between
-> > cpython (the 'ofiicial' native Python interpreter), and PyPy (the Python
-> > interpreter written in Python).
-> >
-> > Of course, I don't see how this all works. It seems in
-> > cross-compilation. there differentiation criterai beliveves it is
-> > running under PyPy amd thus they do not need pycparser.
-> >
-> > But thtat's just incorrect, because we may have a host-python with
-> > cffi_backend at one point, and thus the check above will eventually
-> > differentiate toward cpython, and we'd nreak again.
-> >
-> > So, two things:
-> >   - their check is wrong,
-> >   - we probably need host-pycparser
-> >
-> > At least, that's what I understood...
+On So, 2015-12-20 at 23:28 +0100, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
 > 
-> We have host-pycparser: http://patchwork.ozlabs.org/patch/560970/
+> On Thu, 29 Oct 2015 08:45:03 +0100, J?rg Krause wrote:
+> > Add package luvi version v2.3.5.
+> > 
+> > luvi extends LuaJIT with asynchronous I/O and several optional
+> > modules to run
+> > Lua applications and build self-contained binaries.
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > ---
+> > Changes v3 -> v5: (v4 is same as v3, forgot commit --amend)
+> > ?- bump to v2.3.5
+> > ?- remove patch from upstream
+> 
+> Thanks, patch applied. I must say I don't really understand what this
+> luvi thing is doing, but it built fine here, and the packaging seems
+> reasonable.
 
-Well, I meant that we should need host-pycparser as a dependency of
-python-cffi.
+luvi is a LuaJIT runtime with additional bindings, e.g. libuv. You can
+compare it with the V8 engine (the JavaScript engine used by Node.js),
+the main difference is, that luvi already contains the libuv bindings,
+whereas Node.js adds the libuv bindings to V8.
 
-But anyway, there is more to this: we really need to understand what is
-going on...
+All together, it is a Node.js like system for Lua.
 
-Regards,
-Yann E. MORIN.
+I want to integrate some luvi applications like lit and luvit into
+Buildroot. lit is similar to npm and luvit adds a Node.js like API to
+luvi.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+This will be done in follow-up patches...
+
+> I was somewhat surprised by:
+> 
+> 	-DLUA_PATH=$(HOST_DIR)/usr/share/luajit-2.0.4/?.lua
+> 
+> as this ?.lua doesn't really look like a path, but since it builds
+> fine, maybe I'm missing something.
+
+Lua(JIT) uses this string as a path to search for files. In this case
+we have to tell LuaJIT where to search for its bundled modules.
+
+Best regards
+J?rg
