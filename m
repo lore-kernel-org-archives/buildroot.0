@@ -1,60 +1,143 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 25 Dec 2015 20:58:02 +0100
-Subject: [Buildroot] [PATCH 3/5] python-cffi: add host variant
-In-Reply-To: <20151225191207.GA3878@free.fr>
-References: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
- <1450992641-8618-3-git-send-email-yegorslists@googlemail.com>
- <20151224214645.GA3738@free.fr>
- <CAGm1_kvud8TAWddmadKqMi+=Mpcfzx=XJ3KMgt2yB-otDq-DpQ@mail.gmail.com>
- <20151225200059.48ac8dd7@free-electrons.com> <20151225191207.GA3878@free.fr>
-Message-ID: <CAGm1_kvTT4GX63oEHPoD7e2P5SQaoMqU8pAjR0Cqaf0erFnHtA@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Sat, 26 Dec 2015 00:24:08 +0300
+Subject: [Buildroot] [PATCH] strace: fix building for arc, metag, nios2,
+	or1k and tile
+Message-ID: <1451078648-31021-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 25, 2015 at 8:12 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, Yegor, All,
->
-> On 2015-12-25 20:00 +0100, Thomas Petazzoni spake thusly:
->> On Thu, 24 Dec 2015 23:12:49 +0100, Yegor Yefremov wrote:
->> > Target variant doesn't need pycparser. cffi's setup.py seems to
->> > distinguish, if we install real package or cross-compiled one:
->> >
->> >         install_requires=[
->> >             'pycparser',
->> >         ] if cpython else [],
->>
->> I don't understand how this "if cpython" is relevant to make the
->> different between the native (host) variant or the cross-compiled
->> (target) variant. cpython is defined as is:
->>
->>     cpython = ('_cffi_backend' not in sys.builtin_module_names)
->>
->> Can you give some more details?
->
-> Yegor and I briefly discussed this on IRC yesterday, but I'm not really
-> convinced by this reply either. I forgot to reply yesterday...
->
-> What I understand, however, is that they want to differentiate between
-> cpython (the 'ofiicial' native Python interpreter), and PyPy (the Python
-> interpreter written in Python).
->
-> Of course, I don't see how this all works. It seems in
-> cross-compilation. there differentiation criterai beliveves it is
-> running under PyPy amd thus they do not need pycparser.
->
-> But thtat's just incorrect, because we may have a host-python with
-> cffi_backend at one point, and thus the check above will eventually
-> differentiate toward cpython, and we'd nreak again.
->
-> So, two things:
->   - their check is wrong,
->   - we probably need host-pycparser
->
-> At least, that's what I understood...
+Following commit broke building for arc, metag, nios2, or1k and tile:
+http://sourceforge.net/p/strace/code/ci/34683e3926d8c2daa368afb805da422ee7043396/
 
-We have host-pycparser: http://patchwork.ozlabs.org/patch/560970/
+Now we're fixing that breakage with a back-port of upstream fix:
+http://sourceforge.net/p/strace/code/ci/dd1a80c8d213eed95fe55b7ebcb07ee165dd8e4b/
 
-Yegor
+Mentioned fix will be a part of the next strace release,
+i.e. this patch must be removed on strace version bump.
+
+Fixes http://autobuild.buildroot.org/results/f25/f25c23003ed282b935f5289c944615860265364a
+and alike, see http://autobuild.buildroot.org/?reason=strace-4.11
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+---
+ .../0001-arc-metag-nios2-or1k-tile-fix-build.patch | 104 +++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
+
+diff --git a/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch b/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
+new file mode 100644
+index 0000000..0d81b59
+--- /dev/null
++++ b/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
+@@ -0,0 +1,104 @@
++From d83bcfa9a2977c037c638ae09e561f554ab19681 Mon Sep 17 00:00:00 2001
++From: Alexey Brodkin <abrodkin@synopsys.com>
++Date: Sat, 26 Dec 2015 00:13:36 +0300
++Subject: [PATCH] arc, metag, nios2, or1k, tile: fix build
++
++Fix build regression introduced by commit
++34683e3926d8c2daa368afb805da422ee7043396.
++
++* linux/32/syscallent.h: Add sys_ prefix to ARCH_mmap and mmap.
++* linux/arc/syscallent.h: Add sys_ prefix to ARCH_mmap and mmap_pgoff.
++* linux/nios2/syscallent.h: Likewise.
++* linux/or1k/syscallent.h: Likewise.
++* linux/tile/syscallent1.h: Add sys_ prefix to ARCH_mmap and sys_mmap_4koff.
++* pathtrace.c (pathtrace_match): Handle SEN_ARCH_mmap.
++
++This is a back-port of upstream commit
++http://sourceforge.net/p/strace/code/ci/dd1a80c8d213eed95fe55b7ebcb07ee165dd8e4b/
++
++It should be removed upon the next bump of strace version.
++
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++---
++ linux/32/syscallent.h    | 6 +++---
++ linux/arc/syscallent.h   | 2 +-
++ linux/nios2/syscallent.h | 2 +-
++ linux/or1k/syscallent.h  | 2 +-
++ linux/tile/syscallent1.h | 2 +-
++ pathtrace.c              | 1 +
++ 6 files changed, 8 insertions(+), 7 deletions(-)
++
++diff --git a/linux/32/syscallent.h b/linux/32/syscallent.h
++index 5f997e7..e6f895c 100644
++--- a/linux/32/syscallent.h
+++++ b/linux/32/syscallent.h
++@@ -1,5 +1,5 @@
++-#ifndef ARCH_mmap
++-# define ARCH_mmap mmap
+++#ifndef sys_ARCH_mmap
+++# define sys_ARCH_mmap sys_mmap
++ #endif
++ [  0] = { 2,	0,		SEN(io_setup),			"io_setup"		},
++ [  1] = { 1,	0,		SEN(io_destroy),		"io_destroy"		},
++@@ -276,5 +276,5 @@
++ [283] = { 2,	0,		SEN(membarrier),		"membarrier",		},
++ [284] = { 3,	TM,		SEN(mlock2),			"mlock2"		},
++ 
++-#undef ARCH_mmap
+++#undef sys_ARCH_mmap
++ #undef ARCH_WANT_SYNC_FILE_RANGE2
++diff --git a/linux/arc/syscallent.h b/linux/arc/syscallent.h
++index 5847dc4..1100008 100644
++--- a/linux/arc/syscallent.h
+++++ b/linux/arc/syscallent.h
++@@ -1,4 +1,4 @@
++-#define ARCH_mmap mmap_pgoff
+++#define sys_ARCH_mmap sys_mmap_pgoff
++ #include "32/syscallent.h"
++ [244] = { 3,	0,	SEN(printargs),	"arc_cacheflush"},
++ [245] = { 1,	0,	SEN(printargs),	"arc_settls"	},
++diff --git a/linux/nios2/syscallent.h b/linux/nios2/syscallent.h
++index 8a4b70e..01efe3a 100644
++--- a/linux/nios2/syscallent.h
+++++ b/linux/nios2/syscallent.h
++@@ -1,4 +1,4 @@
++-#define ARCH_mmap mmap_pgoff
+++#define sys_ARCH_mmap sys_mmap_pgoff
++ #include "32/syscallent.h"
++ [244] = {4,    0,	SEN(cacheflush), "cacheflush"},
++ [245 ... 259] = { },
++diff --git a/linux/or1k/syscallent.h b/linux/or1k/syscallent.h
++index ed84b3b..351fe25 100644
++--- a/linux/or1k/syscallent.h
+++++ b/linux/or1k/syscallent.h
++@@ -1,4 +1,4 @@
++-#define ARCH_mmap mmap_pgoff
+++#define sys_ARCH_mmap sys_mmap_pgoff
++ #include "32/syscallent.h"
++ [244] = { 3,	NF,	SEN(or1k_atomic),	"or1k_atomic"	},
++ [245 ... 259] = { },
++diff --git a/linux/tile/syscallent1.h b/linux/tile/syscallent1.h
++index c86f059..28dbab4 100644
++--- a/linux/tile/syscallent1.h
+++++ b/linux/tile/syscallent1.h
++@@ -1,4 +1,4 @@
++-#define ARCH_mmap mmap_4koff
+++#define sys_ARCH_mmap sys_mmap_4koff
++ #define ARCH_WANT_SYNC_FILE_RANGE2 1
++ #include "32/syscallent.h"
++ [244] = { 1,	0,	SEN(printargs),	"cmpxchg_badaddr"	},
++diff --git a/pathtrace.c b/pathtrace.c
++index d530ec2..e72cdf7 100644
++--- a/pathtrace.c
+++++ b/pathtrace.c
++@@ -216,6 +216,7 @@ pathtrace_match(struct tcb *tcp)
++ 	case SEN_mmap:
++ 	case SEN_mmap_4koff:
++ 	case SEN_mmap_pgoff:
+++	case SEN_ARCH_mmap:
++ 		/* x, x, x, x, fd */
++ 		return fdmatch(tcp, tcp->u_arg[4]);
++ 
++-- 
++2.4.3
++
+-- 
+2.4.3
