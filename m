@@ -1,60 +1,39 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 25 Dec 2015 22:51:08 +0100
-Subject: [Buildroot] [PATCH v5] luvi: new package
-In-Reply-To: <20151220232856.12acbfe8@free-electrons.com>
-References: <1446104703-21295-1-git-send-email-joerg.krause@embedded.rocks>
- <20151220232856.12acbfe8@free-electrons.com>
-Message-ID: <1451080268.16818.8.camel@embedded.rocks>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 25 Dec 2015 22:51:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/luvi: bump to version 2.5.1
+Message-ID: <1451080302-13464-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/luvi/luvi.hash | 2 +-
+ package/luvi/luvi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On So, 2015-12-20 at 23:28 +0100, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Thu, 29 Oct 2015 08:45:03 +0100, J?rg Krause wrote:
-> > Add package luvi version v2.3.5.
-> > 
-> > luvi extends LuaJIT with asynchronous I/O and several optional
-> > modules to run
-> > Lua applications and build self-contained binaries.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> > Changes v3 -> v5: (v4 is same as v3, forgot commit --amend)
-> > ?- bump to v2.3.5
-> > ?- remove patch from upstream
-> 
-> Thanks, patch applied. I must say I don't really understand what this
-> luvi thing is doing, but it built fine here, and the packaging seems
-> reasonable.
-
-luvi is a LuaJIT runtime with additional bindings, e.g. libuv. You can
-compare it with the V8 engine (the JavaScript engine used by Node.js),
-the main difference is, that luvi already contains the libuv bindings,
-whereas Node.js adds the libuv bindings to V8.
-
-All together, it is a Node.js like system for Lua.
-
-I want to integrate some luvi applications like lit and luvit into
-Buildroot. lit is similar to npm and luvit adds a Node.js like API to
-luvi.
-
-This will be done in follow-up patches...
-
-> I was somewhat surprised by:
-> 
-> 	-DLUA_PATH=$(HOST_DIR)/usr/share/luajit-2.0.4/?.lua
-> 
-> as this ?.lua doesn't really look like a path, but since it builds
-> fine, maybe I'm missing something.
-
-Lua(JIT) uses this string as a path to search for files. In this case
-we have to tell LuaJIT where to search for its bundled modules.
-
-Best regards
-J?rg
+diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+index c967558..325c84f 100644
+--- a/package/luvi/luvi.hash
++++ b/package/luvi/luvi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  9d13baba7870160bd0f9be9d52f8ef1dafe282490d5f83a8e14765aa43387765  luvi-src-v2.3.5.tar.gz
++sha256  883fca4d50c18dc5b248144a00526b718e7c4c91841123b4a0732fef2b8791f4  luvi-src-v2.5.1.tar.gz
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index 7611c11..ef1c2e1 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUVI_VERSION = v2.3.5
++LUVI_VERSION = v2.5.1
+ LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
+ LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
+ LUVI_LICENSE = Apache-2.0
+-- 
+2.6.4
