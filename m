@@ -1,143 +1,255 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Sat, 26 Dec 2015 00:24:08 +0300
-Subject: [Buildroot] [PATCH] strace: fix building for arc, metag, nios2,
-	or1k and tile
-Message-ID: <1451078648-31021-1-git-send-email-abrodkin@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 25 Dec 2015 22:25:48 +0100
+Subject: [Buildroot] [PATCH 0/84 RFC] all: use 'menuconfig' to group
+	sub-options (branch yem/menuconfig)
+Message-ID: <cover.1451076704.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following commit broke building for arc, metag, nios2, or1k and tile:
-http://sourceforge.net/p/strace/code/ci/34683e3926d8c2daa368afb805da422ee7043396/
+Hello All!
 
-Now we're fixing that breakage with a back-port of upstream fix:
-http://sourceforge.net/p/strace/code/ci/dd1a80c8d213eed95fe55b7ebcb07ee165dd8e4b/
+This RFC series is a proposal to cleanup the layout of the menuconfig
+UI. Although it looks to be pretty long (84 patches), it really is only
+three different changes :
 
-Mentioned fix will be a part of the next strace release,
-i.e. this patch must be removed on strace version bump.
+  - patches 1-6: re-order comments to fix indentation of sub-options;
+    this can probably be applied without too much discussion, as it is
+    really only a cleanup;
 
-Fixes http://autobuild.buildroot.org/results/f25/f25c23003ed282b935f5289c944615860265364a
-and alike, see http://autobuild.buildroot.org/?reason=strace-4.11
+  - patches 7-35: changes use of 'config'+'menu' into a 'menuconfig'
+    (the Kconfig keywords) to automatically arrange the sub-options into
+    sub-menus;
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
----
- .../0001-arc-metag-nios2-or1k-tile-fix-build.patch | 104 +++++++++++++++++++++
- 1 file changed, 104 insertions(+)
- create mode 100644 package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
+  - patches 36-84: document that packages with 5 or more options should
+    use sub-menus (with 'menuconfig') to store their sub-options
+    (patches 36-39); it then changes a lot of packages accordingly
+    (patches 40-84).
 
-diff --git a/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch b/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
-new file mode 100644
-index 0000000..0d81b59
---- /dev/null
-+++ b/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
-@@ -0,0 +1,104 @@
-+From d83bcfa9a2977c037c638ae09e561f554ab19681 Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Sat, 26 Dec 2015 00:13:36 +0300
-+Subject: [PATCH] arc, metag, nios2, or1k, tile: fix build
-+
-+Fix build regression introduced by commit
-+34683e3926d8c2daa368afb805da422ee7043396.
-+
-+* linux/32/syscallent.h: Add sys_ prefix to ARCH_mmap and mmap.
-+* linux/arc/syscallent.h: Add sys_ prefix to ARCH_mmap and mmap_pgoff.
-+* linux/nios2/syscallent.h: Likewise.
-+* linux/or1k/syscallent.h: Likewise.
-+* linux/tile/syscallent1.h: Add sys_ prefix to ARCH_mmap and sys_mmap_4koff.
-+* pathtrace.c (pathtrace_match): Handle SEN_ARCH_mmap.
-+
-+This is a back-port of upstream commit
-+http://sourceforge.net/p/strace/code/ci/dd1a80c8d213eed95fe55b7ebcb07ee165dd8e4b/
-+
-+It should be removed upon the next bump of strace version.
-+
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+---
-+ linux/32/syscallent.h    | 6 +++---
-+ linux/arc/syscallent.h   | 2 +-
-+ linux/nios2/syscallent.h | 2 +-
-+ linux/or1k/syscallent.h  | 2 +-
-+ linux/tile/syscallent1.h | 2 +-
-+ pathtrace.c              | 1 +
-+ 6 files changed, 8 insertions(+), 7 deletions(-)
-+
-+diff --git a/linux/32/syscallent.h b/linux/32/syscallent.h
-+index 5f997e7..e6f895c 100644
-+--- a/linux/32/syscallent.h
-++++ b/linux/32/syscallent.h
-+@@ -1,5 +1,5 @@
-+-#ifndef ARCH_mmap
-+-# define ARCH_mmap mmap
-++#ifndef sys_ARCH_mmap
-++# define sys_ARCH_mmap sys_mmap
-+ #endif
-+ [  0] = { 2,	0,		SEN(io_setup),			"io_setup"		},
-+ [  1] = { 1,	0,		SEN(io_destroy),		"io_destroy"		},
-+@@ -276,5 +276,5 @@
-+ [283] = { 2,	0,		SEN(membarrier),		"membarrier",		},
-+ [284] = { 3,	TM,		SEN(mlock2),			"mlock2"		},
-+ 
-+-#undef ARCH_mmap
-++#undef sys_ARCH_mmap
-+ #undef ARCH_WANT_SYNC_FILE_RANGE2
-+diff --git a/linux/arc/syscallent.h b/linux/arc/syscallent.h
-+index 5847dc4..1100008 100644
-+--- a/linux/arc/syscallent.h
-++++ b/linux/arc/syscallent.h
-+@@ -1,4 +1,4 @@
-+-#define ARCH_mmap mmap_pgoff
-++#define sys_ARCH_mmap sys_mmap_pgoff
-+ #include "32/syscallent.h"
-+ [244] = { 3,	0,	SEN(printargs),	"arc_cacheflush"},
-+ [245] = { 1,	0,	SEN(printargs),	"arc_settls"	},
-+diff --git a/linux/nios2/syscallent.h b/linux/nios2/syscallent.h
-+index 8a4b70e..01efe3a 100644
-+--- a/linux/nios2/syscallent.h
-++++ b/linux/nios2/syscallent.h
-+@@ -1,4 +1,4 @@
-+-#define ARCH_mmap mmap_pgoff
-++#define sys_ARCH_mmap sys_mmap_pgoff
-+ #include "32/syscallent.h"
-+ [244] = {4,    0,	SEN(cacheflush), "cacheflush"},
-+ [245 ... 259] = { },
-+diff --git a/linux/or1k/syscallent.h b/linux/or1k/syscallent.h
-+index ed84b3b..351fe25 100644
-+--- a/linux/or1k/syscallent.h
-++++ b/linux/or1k/syscallent.h
-+@@ -1,4 +1,4 @@
-+-#define ARCH_mmap mmap_pgoff
-++#define sys_ARCH_mmap sys_mmap_pgoff
-+ #include "32/syscallent.h"
-+ [244] = { 3,	NF,	SEN(or1k_atomic),	"or1k_atomic"	},
-+ [245 ... 259] = { },
-+diff --git a/linux/tile/syscallent1.h b/linux/tile/syscallent1.h
-+index c86f059..28dbab4 100644
-+--- a/linux/tile/syscallent1.h
-++++ b/linux/tile/syscallent1.h
-+@@ -1,4 +1,4 @@
-+-#define ARCH_mmap mmap_4koff
-++#define sys_ARCH_mmap sys_mmap_4koff
-+ #define ARCH_WANT_SYNC_FILE_RANGE2 1
-+ #include "32/syscallent.h"
-+ [244] = { 1,	0,	SEN(printargs),	"cmpxchg_badaddr"	},
-+diff --git a/pathtrace.c b/pathtrace.c
-+index d530ec2..e72cdf7 100644
-+--- a/pathtrace.c
-++++ b/pathtrace.c
-+@@ -216,6 +216,7 @@ pathtrace_match(struct tcb *tcp)
-+ 	case SEN_mmap:
-+ 	case SEN_mmap_4koff:
-+ 	case SEN_mmap_pgoff:
-++	case SEN_ARCH_mmap:
-+ 		/* x, x, x, x, fd */
-+ 		return fdmatch(tcp, tcp->u_arg[4]);
-+ 
-+-- 
-+2.4.3
-+
+
+Using 'menuconfig' (like bar, below) instead of 'config'+'menu' (like
+foo, below) provides a nicer layout (but that's just my taste!):
+
+    [*] foo
+        foo sub-menu --->
+    [*] bar --->
+
+
+Finally, moving 5-or-more sub-options to sub-menus also provides for a
+nicer layout. Of course, I choose 5 arbitrarily; we can refine this
+value, but 5 looked obvious to me.
+
+
+Last note: I did try to hunt fro all packages, but it is not possible
+to either:
+  - review all Config.in, or
+  - see all packages in the menuconfig UI (because of arch dependencies
+    for example)
+
+So, I may have missed a few... These can be fixed later.
+
+
+This series is just an RFC, and is not available in Patchwork. If we
+decide that we do want it, I'll rebase it and re-submit. However,
+applyingg 84 patches from Patchwork is probably a bit cumbersome, so the
+series is also available for git-pull (see below).
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 3068555c47c15afb62988d35e5e148dc691c6eb9:
+
+  python-ipaddress: new package (2015-12-25 19:48:22 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/menuconfig
+
+for you to fetch changes up to a93897991f9d246db5f8b92c18e4edce191ec6d6:
+
+  boot/uboot: use 'menuconfig' (2015-12-25 20:00:20 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (84):
+      package/alsa-lib: move comment around, to keep proper indentation
+      package/gstreamer: move comment around, to keep proper indentation
+      package/gstreamer1: move comment around, to keep proper indentation
+      package/nodejs: move comment around, to keep proper indentation
+      package/tcl: move comment around, to keep proper indentation
+      package/udpcast: move comment around, to keep proper indentation
+      package/alsa-lib: use 'menuconfig' instad of 'config'+'menu'
+      package/alsa-utils: use 'menuconfig' instead of 'config'+'menu'
+      package/angularjs: use 'menuconfig' instad of 'config'+'menu'
+      package/angularjs: simplify modules selection
+      package/collectd: use 'menuconfig' instead of 'config'+'menu'
+      package/gd: use 'menuconfig' instad of 'config'+'menu'
+      package/gpsd: use 'menuconfig' instead of 'config'+'menu'
+      package/jquery: include external plugins from jquery's Config.in
+      package/libdrm: move tests programs to the bottom
+      package/libdrm: use 'menuconfig' instad of 'config'+'menu'
+      package/mono: use 'menuconfig' instead of 'config'+'menu'
+      package/ncftp: use 'menuconfig' instad of 'config'+'menu'
+      package/nfs-utils: use 'menuconfig' instead of 'config'+'menu'
+      package/nodejs: use 'menuconfig' instead of 'config'+'menu'
+      package/ola: use 'menuconfig' instead of 'config'+'menu'
+      package/perl: use 'menuconfig' instead of 'config'+'menu'
+      package/php: move list of extensions after interface selection
+      package/php: use 'menuconfig' instad of 'config'+'menu'
+      package/python: use 'menuconfig' instad of 'config'+'menu'
+      package/python3: use 'menuconfig' instad of 'config'+'menu'
+      package/python{,3}: move inclusion of external python modules
+      package/sdl_image: use 'menuconfig' instead of 'config'+'menu'
+      package/tcl: use 'menuconfig' instad of 'config'+'menu'
+      package/tiff: use 'menuconfig' instad of 'config'+'menu'
+      package/udpcast: use 'menuconfig' instad of 'config'+'menu'
+      package/gstreamer: include plugins from gstreamer's real Config.in
+      package/gstreamer: use 'menuconfig' instead of 'config'+'menu'
+      package/gstreamer1: include plugins from gstreamer1's real Config.in
+      package/gstreamer1: use 'menuconfig' instead of 'config'+'menu'
+      docs/manual: slightly compactify a paragraph
+      docs/manual: add ordering of kconfig options' attributes
+      docs/manual: add example about sub-options
+      docs/manual: use 'menuconfig' when there are more than 5 sub-options
+      package/valgrind: use 'menuconfig'
+      package/e2fsprogs: use 'menuconfig'
+      package/mtd: use 'menuconfig'
+      package/squashfs: use 'menuconfig'
+      package/dejavu: use 'menuconfig'
+      package/google-material-design-icons: use 'menuconfig'
+      package/directfb: use 'menuconfig'
+      package/efl: use 'menuconfig'
+      package/sdl: use 'menuconfig'
+      package/sdl: include SDL external libraries from sdl's Config.in
+      package/sdl_*: remove redundant dependency
+      package/lm-sensors: use 'menuconfig'
+      package/openocd: use 'menuconfig'
+      package/erlang: include Erlang libraries from erlang's Config.in
+      package/lua{,jit}: move inclusion of external libraries/modules
+      package/sqlite: use 'menuconfig'
+      package/cairo: use 'menuconfig'
+      package/imlib2: use 'menuconfig'
+      package/libiio: use 'menuconfig'
+      package/flot: use 'menuconfig'
+      package/boost: use 'menuconfig'
+      package/poco: use 'menuconfig'
+      package/ncurses: use 'menuconfig'
+      package/dovecot: use 'menuconfig'
+      package/gnuradio: use 'menuconfig'
+      package/gnuradio: split long omment
+      package/connman: use 'menuconfig'
+      package/dnsmasq: use 'menuconfig'
+      package/dropbear: use 'menuconfig'
+      package/igh-ethercat: use 'menuconfig'
+      package/ipsec-tools: use 'menuconfig'
+      package/lftp: use 'menuconfig'
+      package/lighttpd: use 'menuconfig'
+      package/ndisc6: use 'menuconfig'
+      package/netsnmp: use 'menuconfig'
+      package/ntp: use 'menuconfig'
+      package/openobex: use 'menuconfig'
+      package/quagga: use 'menuconfig'
+      package/transmission: use 'menuconfig'
+      package/wpa-supplicant: use 'menuconfig'
+      boot/at91bootstrap3: use 'menuconfig'
+      boot/barebox: use 'menuconfig'
+      boot/grub: use 'menuconfig'
+      boot/mxs-bootlets: use 'menuconfig'
+      boot/uboot: use 'menuconfig'
+
+ boot/at91bootstrap3/Config.in                  |   2 +-
+ boot/barebox/Config.in                         |   3 +-
+ boot/grub/Config.in                            |  10 +-
+ boot/mxs-bootlets/Config.in                    |   2 +-
+ boot/uboot/Config.in                           |   3 +-
+ docs/manual/adding-packages-directory.txt      |  73 +++++++-
+ package/Config.in                              | 250 -------------------------
+ package/alsa-lib/Config.in                     |  12 +-
+ package/alsa-utils/Config.in                   |   7 +-
+ package/angularjs/Config.in                    |  37 ++--
+ package/angularjs/angularjs.mk                 |  24 ++-
+ package/boost/Config.in                        |   2 +-
+ package/cairo/Config.in                        |   2 +-
+ package/collectd/Config.in                     |  21 +--
+ package/connman/Config.in                      |   2 +-
+ package/dejavu/Config.in                       |   2 +-
+ package/directfb/Config.in                     |   2 +-
+ package/dnsmasq/Config.in                      |   2 +-
+ package/dovecot/Config.in                      |   2 +-
+ package/dropbear/Config.in                     |   2 +-
+ package/e2fsprogs/Config.in                    |   3 +-
+ package/efl/Config.in                          |   2 +-
+ package/erlang/Config.in                       |  17 +-
+ package/flot/Config.in                         |   4 +-
+ package/gd/Config.in                           |   6 +-
+ package/gnuradio/Config.in                     |   9 +-
+ package/google-material-design-icons/Config.in |   2 +-
+ package/gpsd/Config.in                         |  25 +--
+ package/gstreamer/Config.in                    |  12 --
+ package/gstreamer/gstreamer/Config.in          |  20 +-
+ package/gstreamer1/Config.in                   |  11 --
+ package/gstreamer1/gstreamer1/Config.in        |  19 +-
+ package/igh-ethercat/Config.in                 |   2 +-
+ package/imlib2/Config.in                       |   3 +-
+ package/ipsec-tools/Config.in                  |   2 +-
+ package/jquery/Config.in                       |  17 +-
+ package/lftp/Config.in                         |   2 +-
+ package/libdrm/Config.in                       |  14 +-
+ package/libiio/Config.in                       |   2 +-
+ package/lighttpd/Config.in                     |   2 +-
+ package/lm-sensors/Config.in                   |   3 +-
+ package/lua/Config.ext                         |  49 +++++
+ package/lua/Config.in                          |   4 +-
+ package/luajit/Config.ext                      |   1 +
+ package/luajit/Config.in                       |   4 +-
+ package/mono/Config.in                         |   8 +-
+ package/mtd/Config.in                          |   3 +-
+ package/ncftp/Config.in                        |   6 +-
+ package/ncurses/Config.in                      |   2 +-
+ package/ndisc6/Config.in                       |   2 +-
+ package/netsnmp/Config.in                      |   2 +-
+ package/nfs-utils/Config.in                    |   6 +-
+ package/nodejs/Config.in                       |  20 +-
+ package/ntp/Config.in                          |   2 +-
+ package/ola/Config.in                          |  14 +-
+ package/openobex/Config.in                     |   2 +-
+ package/openocd/Config.in                      |   4 +-
+ package/perl/Config.in                         |  48 ++++-
+ package/php/Config.ext                         |  20 +-
+ package/php/Config.in                          |   6 +-
+ package/poco/Config.in                         |   4 +-
+ package/python/Config.ext                      |  96 ++++++++++
+ package/python/Config.in                       |   6 +-
+ package/python3/Config.ext                     |   1 +
+ package/python3/Config.in                      |   6 +-
+ package/quagga/Config.in                       |   2 +-
+ package/sdl/Config.in                          |  11 +-
+ package/sdl_gfx/Config.in                      |   1 -
+ package/sdl_image/Config.in                    |   7 +-
+ package/sdl_mixer/Config.in                    |   1 -
+ package/sdl_net/Config.in                      |   1 -
+ package/sdl_sound/Config.in                    |   1 -
+ package/sdl_ttf/Config.in                      |   1 -
+ package/sqlite/Config.in                       |   2 +-
+ package/squashfs/Config.in                     |   2 +-
+ package/tcl/Config.in                          |  15 +-
+ package/tiff/Config.in                         |   4 +-
+ package/transmission/Config.in                 |   3 +-
+ package/udpcast/Config.in                      |  14 +-
+ package/valgrind/Config.in                     |   2 +-
+ package/wpa_supplicant/Config.in               |   2 +-
+ 81 files changed, 526 insertions(+), 496 deletions(-)
+ create mode 100644 package/lua/Config.ext
+ create mode 120000 package/luajit/Config.ext
+ create mode 100644 package/python/Config.ext
+ create mode 120000 package/python3/Config.ext
+
 -- 
-2.4.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
