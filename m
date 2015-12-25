@@ -1,59 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2015 22:25:51 +0100
-Subject: [Buildroot] [PATCH 82/84 RFC] boot/grub: use 'menuconfig'
+Date: Fri, 25 Dec 2015 22:25:53 +0100
+Subject: [Buildroot] [PATCH 84/84 RFC] boot/uboot: use 'menuconfig'
 In-Reply-To: <cover.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <e066fd4b8d753cd95c9d70ca5d91517ee94461eb.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <a93897991f9d246db5f8b92c18e4edce191ec6d6.1451076704.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-grub has more than 5 options, so use a 'menuconfig' to
+uboot has more than 5 options, so use a 'menuconfig' to
 group the options in an sub-menu.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- boot/grub/Config.in | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ boot/uboot/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/boot/grub/Config.in b/boot/grub/Config.in
-index 4db8642..3ae688f 100644
---- a/boot/grub/Config.in
-+++ b/boot/grub/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_GRUB
-+menuconfig BR2_TARGET_GRUB
- 	bool "grub"
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
-@@ -52,7 +52,7 @@ config BR2_TARGET_GRUB_DISKLESS
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index b75006b..a4b2372 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -1,9 +1,10 @@
+-config BR2_TARGET_UBOOT
++menuconfig BR2_TARGET_UBOOT
+ 	bool "U-Boot"
  	help
- 	  enable diskless support
+ 	  Build "Das U-Boot" Boot Monitor
  
--menu "filesystem drivers"
-+comment "Filesystem drivers"
- 
- config BR2_TARGET_GRUB_FS_EXT2
- 	bool "ext2"
-@@ -86,9 +86,7 @@ config BR2_TARGET_GRUB_FS_XFS
- 	help
- 	  Enable support for the XFS filesystem in Grub.
- 
--endmenu
--
--menu "network drivers"
-+comment "Network drivers"
- 
- config BR2_TARGET_GRUB_3c595
- 	bool "3Com595 driver"
-@@ -195,6 +193,4 @@ config BR2_TARGET_GRUB_w89c840
- 	help
- 	  enable Winbond W89c840 driver
- 
--endmenu
--
- endif # BR2_TARGET_GRUB
+ if BR2_TARGET_UBOOT
++
+ choice
+ 	prompt "Build system"
+ 	default BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
 -- 
 1.9.1
