@@ -1,110 +1,78 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Fri, 25 Dec 2015 23:40:10 +0200
-Subject: [Buildroot] [PATCH 1/2 v5] vboot-utils: new package
-Message-ID: <20151225214010.GA30096@vostro>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 25 Dec 2015 22:44:36 +0100
+Subject: [Buildroot] [PATCH 3/5] python-cffi: add host variant
+In-Reply-To: <CAGm1_kvTT4GX63oEHPoD7e2P5SQaoMqU8pAjR0Cqaf0erFnHtA@mail.gmail.com>
+References: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
+ <1450992641-8618-3-git-send-email-yegorslists@googlemail.com>
+ <20151224214645.GA3738@free.fr>
+ <CAGm1_kvud8TAWddmadKqMi+=Mpcfzx=XJ3KMgt2yB-otDq-DpQ@mail.gmail.com>
+ <20151225200059.48ac8dd7@free-electrons.com>
+ <20151225191207.GA3878@free.fr>
+ <CAGm1_kvTT4GX63oEHPoD7e2P5SQaoMqU8pAjR0Cqaf0erFnHtA@mail.gmail.com>
+Message-ID: <20151225214436.GB3878@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chromium OS verified boot utilities.
+Yegor, All,
 
-Needed for signing kernel images and manipulating bootable
-partitions on media intended for Chromebooks.
+On 2015-12-25 20:58 +0100, Yegor Yefremov spake thusly:
+> On Fri, Dec 25, 2015 at 8:12 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2015-12-25 20:00 +0100, Thomas Petazzoni spake thusly:
+> >> On Thu, 24 Dec 2015 23:12:49 +0100, Yegor Yefremov wrote:
+> >> > Target variant doesn't need pycparser. cffi's setup.py seems to
+> >> > distinguish, if we install real package or cross-compiled one:
+> >> >
+> >> >         install_requires=[
+> >> >             'pycparser',
+> >> >         ] if cpython else [],
+> >>
+> >> I don't understand how this "if cpython" is relevant to make the
+> >> different between the native (host) variant or the cross-compiled
+> >> (target) variant. cpython is defined as is:
+> >>
+> >>     cpython = ('_cffi_backend' not in sys.builtin_module_names)
+> >>
+> >> Can you give some more details?
+> >
+> > Yegor and I briefly discussed this on IRC yesterday, but I'm not really
+> > convinced by this reply either. I forgot to reply yesterday...
+> >
+> > What I understand, however, is that they want to differentiate between
+> > cpython (the 'ofiicial' native Python interpreter), and PyPy (the Python
+> > interpreter written in Python).
+> >
+> > Of course, I don't see how this all works. It seems in
+> > cross-compilation. there differentiation criterai beliveves it is
+> > running under PyPy amd thus they do not need pycparser.
+> >
+> > But thtat's just incorrect, because we may have a host-python with
+> > cffi_backend at one point, and thus the check above will eventually
+> > differentiate toward cpython, and we'd nreak again.
+> >
+> > So, two things:
+> >   - their check is wrong,
+> >   - we probably need host-pycparser
+> >
+> > At least, that's what I understood...
+> 
+> We have host-pycparser: http://patchwork.ozlabs.org/patch/560970/
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
----
-v2: _LICENSE_FILES, minor text fixes
-v3: git snapshot over https instead of git checkout
-    comments on unusual make targets
-    proper license name
-v4: host-pkgconf dependency, proper host CC/CFLAGS/LDFLAGS
-v5: revert to git checkout, ChromiumOS -> Chromium OS
+Well, I meant that we should need host-pycparser as a dependency of
+python-cffi.
 
- package/Config.in.host               |  1 +
- package/vboot-utils/Config.in.host   |  6 ++++++
- package/vboot-utils/vboot-utils.hash |  2 ++
- package/vboot-utils/vboot-utils.mk   | 38 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 package/vboot-utils/Config.in.host
- create mode 100644 package/vboot-utils/vboot-utils.hash
- create mode 100644 package/vboot-utils/vboot-utils.mk
+But anyway, there is more to this: we really need to understand what is
+going on...
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index d757316..8e6b870 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -30,5 +30,6 @@ menu "Host utilities"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/uboot-tools/Config.in.host"
- 	source "package/util-linux/Config.in.host"
-+	source "package/vboot-utils/Config.in.host"
- 
- endmenu
-diff --git a/package/vboot-utils/Config.in.host b/package/vboot-utils/Config.in.host
-new file mode 100644
-index 0000000..899f6e7
---- /dev/null
-+++ b/package/vboot-utils/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_VBOOT_UTILS
-+	bool "host vboot utils"
-+	help
-+	  Chromium OS verified boot utilities: futility and cgpt.
-+
-+	  https://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot
-diff --git a/package/vboot-utils/vboot-utils.hash b/package/vboot-utils/vboot-utils.hash
-new file mode 100644
-index 0000000..e161423
---- /dev/null
-+++ b/package/vboot-utils/vboot-utils.hash
-@@ -0,0 +1,2 @@
-+# Git shapshot
-+none	xxx	bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
-diff --git a/package/vboot-utils/vboot-utils.mk b/package/vboot-utils/vboot-utils.mk
-new file mode 100644
-index 0000000..75978cb
---- /dev/null
-+++ b/package/vboot-utils/vboot-utils.mk
-@@ -0,0 +1,38 @@
-+################################################################################
-+#
-+# vboot-utils
-+#
-+################################################################################
-+
-+VBOOT_UTILS_VERSION = bbdd62f9b030db7ad8eef789aaf58a7ff9a25656
-+VBOOT_UTILS_SITE = https://chromium.googlesource.com/chromiumos/platform/vboot_reference
-+VBOOT_UTILS_SITE_METHOD = git
-+VBOOT_UTILS_LICENSE = BSD-3c
-+VBOOT_UTILS_LICENSE_FILES = LICENSE
-+
-+HOST_VBOOT_UTILS_DEPENDENCIES = host-openssl host-pkgconf
-+
-+# vboot_reference contains code that goes into bootloaders,
-+# utilities intended for the target system, and a bunch of scripts
-+# for Chromium OS build system. Most of that does not make sense
-+# in a buildroot host-package.
-+#
-+# We only need futility for signing images, the keys, and cgpt for boot
-+# media partitioning.
-+#
-+# make target for futility is "futil".
-+
-+define HOST_VBOOT_UTILS_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CC="$(HOSTCC)" \
-+		CFLAGS="$(HOST_CFLAGS) -D_LARGEFILE64_SOURCE -D_GNU_SOURCE" \
-+		LDFLAGS="$(HOST_LDFLAGS)" \
-+		futil cgpt
-+endef
-+
-+define HOST_VBOOT_UTILS_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR)/usr \
-+		futil_install cgpt_install devkeys_install
-+endef
-+
-+$(eval $(host-generic-package))
+Regards,
+Yann E. MORIN.
+
 -- 
-2.6.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
