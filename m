@@ -1,75 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Dec 2015 19:48:22 +0100
-Subject: [Buildroot] [git commit] python-ipaddress: new package
-Message-ID: <20151225185033.EFA9782717@busybox.osuosl.org>
+Date: Fri, 25 Dec 2015 19:57:36 +0100
+Subject: [Buildroot] Orangepi-PC Diff: What should I apply this against?
+In-Reply-To: <567D8C8E.6010802@klouds.org>
+References: <567D8C8E.6010802@klouds.org>
+Message-ID: <20151225195736.456f0366@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3068555c47c15afb62988d35e5e148dc691c6eb9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jacob Gadikian,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                              |  1 +
- package/python-ipaddress/Config.in             |  7 +++++++
- package/python-ipaddress/python-ipaddress.hash |  3 +++
- package/python-ipaddress/python-ipaddress.mk   | 13 +++++++++++++
- 4 files changed, 24 insertions(+)
+On Sat, 26 Dec 2015 01:35:58 +0700, Jacob Gadikian wrote:
+> Hi, pretty amateurish question, but I'm not sure what verson of 
+> Buildroot to apply these diff files to-- I'm even guessing that is 
+> somehow indicated in the diff, but well, I'm not getting it.  Anyone 
+> care to enlighten me?
 
-diff --git a/package/Config.in b/package/Config.in
-index d08ce9f..dd44743 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -640,6 +640,7 @@ menu "External python modules"
- 	source "package/python-id3/Config.in"
- 	source "package/python-idna/Config.in"
- 	source "package/python-ipaddr/Config.in"
-+	source "package/python-ipaddress/Config.in"
- 	source "package/python-ipy/Config.in"
- 	source "package/python-ipython/Config.in"
- 	source "package/python-itsdangerous/Config.in"
-diff --git a/package/python-ipaddress/Config.in b/package/python-ipaddress/Config.in
-new file mode 100644
-index 0000000..b2b9f0b
---- /dev/null
-+++ b/package/python-ipaddress/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_IPADDRESS
-+	bool "python-ipaddress"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Python 3.3's ipaddress for older Python versions.
-+
-+	  https://github.com/phihag/ipaddress
-diff --git a/package/python-ipaddress/python-ipaddress.hash b/package/python-ipaddress/python-ipaddress.hash
-new file mode 100644
-index 0000000..21bc373
---- /dev/null
-+++ b/package/python-ipaddress/python-ipaddress.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12915e923b738107e47827478d553ba1, sha256 locally computed
-+md5     12915e923b738107e47827478d553ba1  ipaddress-1.0.15.tar.gz
-+sha256  af6c85cfc9cdb12b861655e6b9f2f59618bf3088cbde858727b2c0a98e9f6636  ipaddress-1.0.15.tar.gz
-diff --git a/package/python-ipaddress/python-ipaddress.mk b/package/python-ipaddress/python-ipaddress.mk
-new file mode 100644
-index 0000000..8019aa8
---- /dev/null
-+++ b/package/python-ipaddress/python-ipaddress.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-ipaddress
-+#
-+################################################################################
-+
-+PYTHON_IPADDRESS_VERSION = 1.0.15
-+PYTHON_IPADDRESS_SOURCE = ipaddress-$(PYTHON_IPADDRESS_VERSION).tar.gz
-+PYTHON_IPADDRESS_SITE = https://pypi.python.org/packages/source/i/ipaddress
-+PYTHON_IPADDRESS_LICENSE = Python software foundation license
-+PYTHON_IPADDRESS_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+Usually, people send patches that apply to the latest version of
+Buildroot available from the Git repository, i.e the latest state of
+the master branch.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
