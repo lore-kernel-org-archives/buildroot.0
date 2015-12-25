@@ -1,42 +1,131 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 25 Dec 2015 23:10:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.60.0
-Message-ID: <1451081406-21991-1-git-send-email-joerg.krause@embedded.rocks>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Fri, 25 Dec 2015 20:28:34 -0200
+Subject: [Buildroot] [PATCH] trousers: remove inline for read_data/write_data
+Message-ID: <1451082514-2730-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/boost/boost.hash | 6 +++---
- package/boost/boost.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+read_data and write_data functions are declared with inline, but
+their definition is not in a .h file. This is causing errors when
+linking:
 
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-index 356242b..294282a 100644
---- a/package/boost/boost.hash
-+++ b/package/boost/boost.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/boost/files/boost/1.59.0/
--md5	6aa9a5c6a4ca1016edd0ed1178e3cb87	boost_1_59_0.tar.bz2
--sha1	b94de47108b2cdb0f931833a7a9834c2dd3ca46e	boost_1_59_0.tar.bz2
-+# From http://sourceforge.net/projects/boost/files/boost/1.60.0/
-+md5	65a840e1a0b13a558ff19eeb2c4f0cbe	boost_1_60_0.tar.bz2
-+sha1	7f56ab507d3258610391b47fef6b11635861175a	boost_1_60_0.tar.bz2
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 0161d68..15f0b77 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BOOST_VERSION = 1.59.0
-+BOOST_VERSION = 1.60.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
- BOOST_INSTALL_STAGING = YES
+tcsps.c:(.text+0x4ac): undefined reference to `read_data'
+tcsps.c:(.text+0x1888): undefined reference to `write_data'
+...
+
+Patch already applied upstream.
+
+Fixes:
+http://autobuild.buildroot.net/results/1a53d929bcec840cd18185e54b1a6da8aa849269/
+http://autobuild.buildroot.net/results/fad66e88b5a97004b21658d413f4d3a6d0d8838b/
+http://autobuild.buildroot.net/results/c7e23b8ec2c69798482868e18311ebf2c01b65e0/
+...
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ ...emove-inline-for-read_data-and-write_data.patch | 91 ++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+ create mode 100644 package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
+
+diff --git a/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch b/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
+new file mode 100644
+index 000000000000..3bbccb676c95
+--- /dev/null
++++ b/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
+@@ -0,0 +1,91 @@
++From f03c7987c234a81f7e4274b26bab07318357a2a5 Mon Sep 17 00:00:00 2001
++From: Sergio Prado <sergio.prado@e-labworks.com>
++Date: Fri, 25 Dec 2015 20:09:21 -0200
++Subject: [PATCH] Remove inline for read_data and write_data
++
++read_data and write_data functions are declared with inline, but
++their definition is not in a .h file. This is causing errors when
++linking:
++
++tcsps.c:(.text+0x4ac): undefined reference to `read_data'
++tcsps.c:(.text+0x1888): undefined reference to `write_data'
++...
++
++Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
++---
++ src/include/tcsps.h    | 5 -----
++ src/tcs/ps/ps_utils.c  | 8 --------
++ src/tspi/ps/ps_utils.c | 4 ++--
++ 3 files changed, 2 insertions(+), 15 deletions(-)
++
++diff --git a/src/include/tcsps.h b/src/include/tcsps.h
++index 87542965877d..dcd5db469822 100644
++--- a/src/include/tcsps.h
+++++ b/src/include/tcsps.h
++@@ -23,13 +23,8 @@ int		   get_file();
++ int		   put_file(int);
++ void		   close_file(int);
++ void		   ps_destroy();
++-#ifdef SOLARIS
++ TSS_RESULT  read_data(int, void *, UINT32);
++ TSS_RESULT  write_data(int, void *, UINT32);
++-#else
++-inline TSS_RESULT  read_data(int, void *, UINT32);
++-inline TSS_RESULT  write_data(int, void *, UINT32);
++-#endif
++ int		   write_key_init(int, UINT32, UINT32, UINT32);
++ TSS_RESULT	   cache_key(UINT32, UINT16, TSS_UUID *, TSS_UUID *, UINT16, UINT32, UINT32);
++ TSS_RESULT	   UnloadBlob_KEY_PS(UINT16 *, BYTE *, TSS_KEY *);
++diff --git a/src/tcs/ps/ps_utils.c b/src/tcs/ps/ps_utils.c
++index 2e7f502b9599..35ac89f8fc12 100644
++--- a/src/tcs/ps/ps_utils.c
+++++ b/src/tcs/ps/ps_utils.c
++@@ -42,11 +42,7 @@
++ struct key_disk_cache *key_disk_cache_head = NULL;
++
++
++-#ifdef SOLARIS
++ TSS_RESULT
++-#else
++-inline TSS_RESULT
++-#endif
++ read_data(int fd, void *data, UINT32 size)
++ {
++	int rc;
++@@ -64,11 +60,7 @@ read_data(int fd, void *data, UINT32 size)
++ }
++
++
++-#ifdef SOLARIS
++ TSS_RESULT
++-#else
++-inline TSS_RESULT
++-#endif
++ write_data(int fd, void *data, UINT32 size)
++ {
++	int rc;
++diff --git a/src/tspi/ps/ps_utils.c b/src/tspi/ps/ps_utils.c
++index aac40a147314..83259141d375 100644
++--- a/src/tspi/ps/ps_utils.c
+++++ b/src/tspi/ps/ps_utils.c
++@@ -22,7 +22,7 @@
++ #include "tspps.h"
++ #include "tsplog.h"
++
++-inline TSS_RESULT
+++TSS_RESULT
++ read_data(int fd, void *data, UINT32 size)
++ {
++	int rc;
++@@ -39,7 +39,7 @@ read_data(int fd, void *data, UINT32 size)
++	return TSS_SUCCESS;
++ }
++
++-inline TSS_RESULT
+++TSS_RESULT
++ write_data(int fd, void *data, UINT32 size)
++ {
++	int rc;
++--
++1.9.1
++
 -- 
-2.6.4
+1.9.1
