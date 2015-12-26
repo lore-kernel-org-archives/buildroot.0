@@ -1,195 +1,174 @@
-From: Craig Swank <craigswank@fastmail.fm>
-Date: Sat, 26 Dec 2015 10:34:13 -0800
-Subject: [Buildroot] trying to use
- https://github.com/beagleboard/linux.git with buildroot
-In-Reply-To: <n5mdi8$5go$1@ger.gmane.org>
-References: <1450890296.2355509.475056490.71128E4E@webmail.messagingengine.com>
- <20151223184751.12365336@free-electrons.com>
- <1450893821.3034067.475093450.34890777@webmail.messagingengine.com>
- <1450894505.3036056.475106194.467AC874@webmail.messagingengine.com>
- <20151223193943.21a6f0fc@free-electrons.com>
- <1450910736.3752716.475291418.490BB3EA@webmail.messagingengine.com>
- <20151223235253.0afe702e@free-electrons.com>
- <1450917779.3775953.475348978.37FAC3A8@webmail.messagingengine.com>
- <n5mdi8$5go$1@ger.gmane.org>
-Message-ID: <1451154853.3394517.476716010.48669FA1@webmail.messagingengine.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 26 Dec 2015 22:11:46 +0100
+Subject: [Buildroot] [PATCH v2 1/1] toolchain-external: CodeSourcery
+	PowerPC: Revert the removal of CS PowerPC 2011.03
+Message-ID: <1451164306-30008-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My build succeeded, but I'm having trouble with booting now.  When I
-boot with the uEnv.txt you pasted:
+As reported by Yann E. MORIN [1], the latest CS PowerPC toolchain (2012.03)
+requires a PPC CPU with SPE, which is basically two variants, 8540 (e500v1) and
+8548 (e500v2) in Buildroot. All other PPC CPU can't use that toolchain.
 
-bootfile=zImage
-fdtfile=am335x-boneblack.dtb
-loadaddr=0x80007fc0
-fdtaddr=0x80F80000
-loadfdt=fatload mmc 0:1 ${fdtaddr} ${fdtfile}
-loaduimage=fatload mmc 0:1 ${loadaddr} ${bootfile}
-console=ttyO0,115200n8
-mmcroot=/dev/mmcblk0p2
-mmcrootfstype=ext2
-uenvcmd=mmc rescan; run loaduimage; run loadfdt; run fdtboot
-fdtboot=run mmc_args; run mmcargs; bootz ${loadaddr} - ${fdtaddr}
-mmc_args=setenv bootargs console=${console} ${optargs} root=${mmcroot}
-rw
-rootfstype=${mmcrootfstype} root wait
+Keep CS PowerPC 2011.03 as latest available version and add a second Kconfig
+symbol for the CS PowerPC 2012.03 since it's verry specific to one CPU type
+(e500v2).
 
-I got an error about mmcargs not being defined.  The fdtboot line has
-both "run mmc_args" and "run mmcargs".  I tried removing the 'run
-mmcargs' part so now the uEnv.txt looks like:
+Previously it was possible to select the CS 2012.03 with a powerpc 8540 (e500v1)
+CPU but the sysroot provided by the toolchain only support the 8548 (e500v2)
+variant. Allow to select CS 2012.03 only with BR2_powerpc_8548.
 
-bootfile=zImage
-fdtfile=am335x-boneblack.dtb
-loadaddr=0x80007fc0
-fdtaddr=0x80F80000
-loadfdt=fatload mmc 0:1 ${fdtaddr} ${fdtfile}
-loaduimage=fatload mmc 0:1 ${loadaddr} ${bootfile}
-console=ttyO0,115200n8
-mmcroot=/dev/mmcblk0p2
-mmcrootfstype=ext2
-uenvcmd=mmc rescan; run loaduimage; run loadfdt; run fdtboot
-fdtboot=run mmc_args; bootz ${loadaddr} - ${fdtaddr}
-mmc_args=setenv bootargs console=${console} ${optargs} root=${mmcroot}
-rw
-rootfstype=${mmcrootfstype} root wait
+Also re-add the previous CS toolchain handling for pixman and liquid-dsp.
 
+[1] http://lists.busybox.net/pipermail/buildroot/2015-December/148308.html
 
-Next, when I boot with the new uEnv.txt file the error I get is:
+Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+v2: Add a second Kconfig symbol for the CS PowerPC 2012.03 since it's verry specific
+    to one CPU type (e500v2)
+---
+ package/liquid-dsp/Config.in                       |  3 ++
+ package/pixman/pixman.mk                           |  5 +++
+ toolchain/toolchain-external/Config.in             | 42 +++++++++++++++++++---
+ .../toolchain-external/toolchain-external.hash     |  1 +
+ toolchain/toolchain-external/toolchain-external.mk |  5 ++-
+ 5 files changed, 51 insertions(+), 5 deletions(-)
 
-U-Boot 2015.10 (Dec 26 2015 - 10:23:47 -0700)
-
-       Watchdog enabled
-I2C:   ready
-DRAM:  512 MiB
-NAND:  0 MiB
-MMC:   OMAP SD/MMC: 0, OMAP SD/MMC: 1
-*** Error - No Valid Environment Area found
-*** Warning - bad CRC, using default environment
-
-Net:   <ethaddr> not set. Validating first E-fuse MAC
-cpsw, usb_ether
-Hit any key to stop autoboot:  0
-switch to partitions #0, OK
-mmc0 is current device
-SD/MMC found on device 0
-reading boot.scr
-** Unable to read file boot.scr **
-reading uEnv.txt
-471 bytes read in 3 ms (153.3 KiB/s)
-Loaded environment from uEnv.txt
-Importing environment from mmc ...
-Running uenvcmd ...
-reading zImage
-7462256 bytes read in 404 ms (17.6 MiB/s)
-reading am335x-boneblack.dtb
-59295 bytes read in 10 ms (5.7 MiB/s)
-Kernel image @ 0x80007fc0 [ 0x000000 - 0x71dd70 ]
-data abort
-pc : [<9ff62ef8>]          lr : [<9ff62f55>]
-reloc pc : [<80810ef8>]    lr : [<80810f55>]
-sp : 9ef31778  ip : 80725d30     fp : 9ef34f74
-r10: 00000002  r9 : 9ef31ed8     r8 : 9ffa35ac
-r7 : 9ffa35b0  r6 : 00000003     r5 : 9ef34f74  r4 : 9ffa3514
-r3 : 00000000  r2 : 9ffa3514     r1 : 9ef34f74  r0 : 00000000
-Flags: nZcv  IRQs off  FIQs on  Mode SVC_32
-Resetting CPU ...
-
-resetting ...
-
-I really need to learn more about u-boot, but google searches suggest
-that it means the loadaddr or fdtaddr is incorrect but I'm unable to
-find a solution.  Any suggestions?
-
-I appreciate you working with me, Chris.  I'm obsessed with getting this
-to work and I feel I'm getting close.
-
-
-
-
-On Sat, Dec 26, 2015, at 08:00 AM, Chris LaRocque wrote:
-> Craig Swank wrote:
-> 
-> > Here is another thing I've found:
-> > 
-> > https://github.com/beagleboard/linux/issues/49
-> > 
-> > In that issue the person had some addresses set incorrectly in uEnv.txt,
-> > but mine doesn't have any addresses set:
-> > 
-> > bootpart=0:1
-> > bootdir=
-> > uenvcmd=run loadimage;run loadramdisk;run findfdt;run loadfdt;run ram
-> > boot
-> > 
-> > Is there something that needs to be set in uEnv.txt?
-> > 
-> > 
-> > On Wed, Dec 23, 2015, at 02:52 PM, Thomas Petazzoni wrote:
-> >> Dear Craig Swank,
-> >> 
-> >> On Wed, 23 Dec 2015 14:45:36 -0800, Craig Swank wrote:
-> >> > Is it strange to you that when I do the build the output/build
-> >> > directory has both of these dirs?
-> >> > 
-> >> > ?  buildroot git:(master) ? ls output/build/linux-*
-> >> > output/build/linux-4.1.4-ti-r9
-> >> > output/build/linux-headers-3.12.10
-> >> 
-> >> No, it is perfectly fine. linux-headers is used when building the
-> >> toolchain. linux is used to build the kernel itself.
-> >> 
-> >> Thomas
-> >> --
-> >> Thomas Petazzoni, CTO, Free Electrons
-> >> Embedded Linux, Kernel and Android engineering
-> >> http://free-electrons.com
-> > 
-> > 
-> Hello Craig
-> 
-> Hopefully the attachments will be accepted.
-> 
-> The kernel defconfig from beagleboard.org:
-> 
-> 1> doesn't set DEPRECATED_PARAM_STRUCT [=y] in the kernel .config.
-> uEnv.txt 
-> (uboot) passes in the console config as "console=ttyO0,115200n8"
-> 
-> 2> doesn't set EXT2_FS [=y] and the default buildroot .config FS image is 
-> ext2. at least for the beaglebone black and I'm trying to keep things
-> sane.
-> 
-> You'll want to do a make source and them make linux-menuconfig and change 
-> the parameters above.
-> 
-> I haven't created a patch file because I'm lazy.
-> 
-> Also attached is my patch (hack) for dtc, derived from Robert Nelsons 
-> bb.org-overlays.
-> 
-> The dtc patch file goes into BR2_GLOBAL_PATCH_DIR , 
-> BR2_GLOBAL_PATCH_DIR"/dtc"
-> 
-> Look in the buildroot .config for how I set BR2_GLOBAL_PATCH_DIR. you'll 
-> need to point that to your own global patch directory.
-> 
-> Regards
-> 
-> Chris
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> Email had 2 attachments:
-> + host-dtc-1.4.1.patch
->   33k (text/x-patch)
-> + cleaned_buildroot_v41_12182015_01.config
->   61k (text/plain)
-
-
+diff --git a/package/liquid-dsp/Config.in b/package/liquid-dsp/Config.in
+index a2cd21c..ad887cb 100644
+--- a/package/liquid-dsp/Config.in
++++ b/package/liquid-dsp/Config.in
+@@ -1,10 +1,13 @@
+ comment "liquid-dsp requires a (e)glibc/musl toolchain w/ dynamic library"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_LIQUID_DSP
+ 	bool "liquid-dsp"
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on !BR2_STATIC_LIBS
++	# These result in internal compiler error
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
+ 	help
+ 	  Liquid-DSP is a free and open-source signal processing
+ 	  library for software-defined radios written in C.  Its
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 29b01ee..a130af9 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -32,5 +32,10 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII),y)
+ PIXMAN_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DPIXMAN_NO_TLS"
+ endif
+ 
++# Altivec detection isn't reliable for CS toolchains
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC),y)
++PIXMAN_CONF_OPTS += --disable-vmx
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 8d4a835..86f24e2 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -284,10 +284,10 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+ 	  from Mentor Graphics. It uses gcc 5.2, binutils 2.25.51,
+ 	  glibc 2.22, gdb 7.10.50 and kernel headers 4.2.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
+-	bool "Sourcery CodeBench PowerPC 2012.03"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2
++	bool "Sourcery CodeBench PowerPC 2012.03 (e500v2 only)"
+ 	depends on BR2_powerpc
+-	depends on BR2_powerpc_SPE
++	depends on BR2_powerpc_8548 # e500v2 support only
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+@@ -303,6 +303,39 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
+ 	  support for the following variants:
+ 	    - e500v2 glibc, SPE, 32 bits
+ 
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
++	bool "Sourcery CodeBench PowerPC 2011.03"
++	depends on BR2_powerpc
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	# kernel headers: 2.6.38
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	help
++	  Sourcery CodeBench toolchain for the PowerPC architecture,
++	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51,
++	  glibc 2.13, gdb 7.2.50 and kernel headers 2.6.38. It has
++	  support for the following variants:
++	    - 603 glibc, 32 bits
++	      Select a generic PowerPC core
++	      Disable BR2_SOFT_FLOAT
++	    - 603 soft float glibc, 32 bits
++	      Select a generic PowerPC core
++	      Enable BR2_SOFT_FLOAT
++	    - e600 altivec glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te600
++	    - e500v1 glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te500v1
++	    - e500v2 glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te500v2
++	    - e500mc glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te500mc
++	    - 970 glibc hard-float, 64 bits
++	      Set BR2_TARGET_OPTIMIZATION to -m64
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	bool "Sourcery CodeBench SH 2012.09"
+ 	depends on BR2_sh4a || BR2_sh4aeb
+@@ -552,7 +585,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+ 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+-	default "powerpc-mentor-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
++	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
++	default "powerpc-mentor-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+ 	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index 35ee85c..64dcdb4 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -15,6 +15,7 @@ sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-201
+ # NiosII
+ sha256 cc47745dc1264fcb8fb98fb1315ab772ab98691396021c455229b58abaf887f5  sourceryg++-2015.11-27-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ # PowerPC
++sha256 525e1f53abbf65c2974ae9af762c45bb38520fe5fc50e968a23fe6a18e9eec04  freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ sha256 d6c94587d546197836e7e1a6909f6aabfa5879e91f501ab03088a6887cc242fc  mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ # SuperH
+ sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 8a9ea88..8fdc7c6 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -317,9 +317,12 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2015.11-32-mips-linux-gnu-i686-pc-linux-gnu.tar
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2015.11-27-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC),y)
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-mentor-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC),y)
++TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu
++TOOLCHAIN_EXTERNAL_SOURCE = freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
-  Craig Swank
-  craigswank at fastmail.fm
+2.4.3
