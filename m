@@ -1,50 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 26 Dec 2015 13:16:30 +0100
-Subject: [Buildroot] [PATCH 1/1] [autobuild] configs: update PowerPC Kconfig
-	symbols
-Message-ID: <1451132190-10801-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 26 Dec 2015 15:42:09 +0100
+Subject: [Buildroot] Nginx package
+In-Reply-To: <567E84A7.70302@gmail.com>
+References: <567E5D9E.1030003@gmail.com>
+ <20151226105836.26a19543@free-electrons.com>
+ <567E84A7.70302@gmail.com>
+Message-ID: <20151226154209.488813de@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Kconfig symbole BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
-has been renamed to BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC in commit
-[1].
+Geoffrey,
 
-The CS PowerPC 2011.03 toolchain is still used if
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC is selected, except if the
-selected PPC CPU has SPE support. In this cas the CS PowerPC 2012.03 will
-be used.
+On Sat, 26 Dec 2015 13:14:31 +0100, Geoffrey Ragot wrote:
 
-[1] https://git.busybox.net/buildroot/commit/?id=fa4214e21b50b791ec365c64897ac2676b45448a
-[2] http://lists.busybox.net/pipermail/buildroot/2015-December/148311.html
+> the pb is that luajit (in the context) is not a builtin module of nginx.
+> It has to be built in a directory and nginx has to be compiled with 
+> "--add-module <path_to_luajit>".
+> 
+> The nginx package has an option to specify "--add-module" arguments but 
+> in this case, the dependency is not clearly mentionned in nginx.mk.
+> I have to care about build luajit before nginx to ensure that 
+> <path_to_luajit> contains required files.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- web/toolchains/configs/sourcery-powerpc-e500v2.config | 1 -
- web/toolchains/configs/sourcery-powerpc.config        | 2 --
- 2 files changed, 3 deletions(-)
+I see two options here:
 
-diff --git a/web/toolchains/configs/sourcery-powerpc-e500v2.config b/web/toolchains/configs/sourcery-powerpc-e500v2.config
-index f4e3b57..95b88a0 100644
---- a/web/toolchains/configs/sourcery-powerpc-e500v2.config
-+++ b/web/toolchains/configs/sourcery-powerpc-e500v2.config
-@@ -1,4 +1,3 @@
- BR2_powerpc=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103=y
- BR2_TARGET_OPTIMIZATION="-te500v2"
-diff --git a/web/toolchains/configs/sourcery-powerpc.config b/web/toolchains/configs/sourcery-powerpc.config
-index 532fab5..385ca88 100644
---- a/web/toolchains/configs/sourcery-powerpc.config
-+++ b/web/toolchains/configs/sourcery-powerpc.config
-@@ -1,4 +1,2 @@
- BR2_powerpc=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103=y
--
+ (1) If you really need to have the source of the Nginx Lua module
+     extracted before building nginx in order to use the --add-module
+     option, then you will have to create a package like nginx-lua,
+     that only downloads/extracts the module source code (and does not
+     build/install it). Then you change the nginx package to depend on
+     this nginx-lua package, and you pass --add-module=$(NGINX_LUA_DIR).
+
+ (2) If however, it is possible to build nginx-lua after nginx, then
+     you can do a better and more traditional packaging. Even though
+     they document --add-module as being the way of building nginx-lua,
+     all it seems to do during nginx configure is calling the "config"
+     script from nginx-lua, and then the "config.make" script. So I am
+     pretty sure it is possible to build nginx-lua after nginx.
+
+If it is possible, (2) would be preferred.
+
+Note that this is clearly not a trivial package to create.
+
+Best regards,
+
+Thomas
 -- 
-2.4.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
