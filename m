@@ -1,80 +1,97 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 26 Dec 2015 10:46:59 -0500
-Subject: [Buildroot] Nginx package
-In-Reply-To: <20151226154209.488813de@free-electrons.com>
-References: <567E5D9E.1030003@gmail.com>
- <20151226105836.26a19543@free-electrons.com>
- <567E84A7.70302@gmail.com>
- <20151226154209.488813de@free-electrons.com>
-Message-ID: <CANxTyt6McsMR=tUQfZf-Nid8H3_dTfGTunF-PARPB9qwgeQDXA@mail.gmail.com>
+From: Chris LaRocque <clarocq@gmail.com>
+Date: Sat, 26 Dec 2015 11:00:07 -0500
+Subject: [Buildroot] trying to use
+	https://github.com/beagleboard/linux.git with buildroot
+References: <1450890296.2355509.475056490.71128E4E@webmail.messagingengine.com>
+ <20151223184751.12365336@free-electrons.com>
+ <1450893821.3034067.475093450.34890777@webmail.messagingengine.com>
+ <1450894505.3036056.475106194.467AC874@webmail.messagingengine.com>
+ <20151223193943.21a6f0fc@free-electrons.com>
+ <1450910736.3752716.475291418.490BB3EA@webmail.messagingengine.com>
+ <20151223235253.0afe702e@free-electrons.com>
+ <1450917779.3775953.475348978.37FAC3A8@webmail.messagingengine.com>
+Message-ID: <n5mdi8$5go$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Dec 26, 2015 at 9:42 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Geoffrey,
->
-> On Sat, 26 Dec 2015 13:14:31 +0100, Geoffrey Ragot wrote:
->
->> the pb is that luajit (in the context) is not a builtin module of nginx.
->> It has to be built in a directory and nginx has to be compiled with
->> "--add-module <path_to_luajit>".
->>
->> The nginx package has an option to specify "--add-module" arguments but
->> in this case, the dependency is not clearly mentionned in nginx.mk.
->> I have to care about build luajit before nginx to ensure that
->> <path_to_luajit> contains required files.
->
-> I see two options here:
->
->  (1) If you really need to have the source of the Nginx Lua module
->      extracted before building nginx in order to use the --add-module
->      option, then you will have to create a package like nginx-lua,
->      that only downloads/extracts the module source code (and does not
->      build/install it). Then you change the nginx package to depend on
->      this nginx-lua package, and you pass --add-module=$(NGINX_LUA_DIR).
->
->  (2) If however, it is possible to build nginx-lua after nginx, then
->      you can do a better and more traditional packaging. Even though
->      they document --add-module as being the way of building nginx-lua,
->      all it seems to do during nginx configure is calling the "config"
->      script from nginx-lua, and then the "config.make" script. So I am
->      pretty sure it is possible to build nginx-lua after nginx.
->
-> If it is possible, (2) would be preferred.
->
-> Note that this is clearly not a trivial package to create.
+Craig Swank wrote:
 
-FWIW: I had to do option 1 for a few ngx-* packages, as Thomas
-described: for each one. I made an ngx-xxx package that simply
-extracts, added a sub-option to nginx's Config.in file, and then added
-lines to the end of nginx.mk to add ngx-xxx to NGINX_DEPENDENCIES, and
-the additional --add-module term.  The result is that the additional
-source files are built and linked in to the one single nginx
-executable - no .so option.
+> Here is another thing I've found:
+> 
+> https://github.com/beagleboard/linux/issues/49
+> 
+> In that issue the person had some addresses set incorrectly in uEnv.txt,
+> but mine doesn't have any addresses set:
+> 
+> bootpart=0:1
+> bootdir=
+> uenvcmd=run loadimage;run loadramdisk;run findfdt;run loadfdt;run ram
+> boot
+> 
+> Is there something that needs to be set in uEnv.txt?
+> 
+> 
+> On Wed, Dec 23, 2015, at 02:52 PM, Thomas Petazzoni wrote:
+>> Dear Craig Swank,
+>> 
+>> On Wed, 23 Dec 2015 14:45:36 -0800, Craig Swank wrote:
+>> > Is it strange to you that when I do the build the output/build
+>> > directory has both of these dirs?
+>> > 
+>> > ?  buildroot git:(master) ? ls output/build/linux-*
+>> > output/build/linux-4.1.4-ti-r9
+>> > output/build/linux-headers-3.12.10
+>> 
+>> No, it is perfectly fine. linux-headers is used when building the
+>> toolchain. linux is used to build the kernel itself.
+>> 
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
+> 
+> 
+Hello Craig
 
-That was maybe six months ago.  At around that time, I heard that
-nginx would eventually be introducing better support to have these
-things be more like plugins or shared objects so that this mechanism
-wouldn't be needed.  That sounded hopeful, but we needed an immediate
-solution.  Even if the feature had been ready, we would have preferred
-to use a "stable" nginx release rather than depending on a brand new
-feature in the "mainline" release.
+Hopefully the attachments will be accepted.
 
-Danomi -
+The kernel defconfig from beagleboard.org:
 
+1> doesn't set DEPRECATED_PARAM_STRUCT [=y] in the kernel .config. uEnv.txt 
+(uboot) passes in the console config as "console=ttyO0,115200n8"
 
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+2> doesn't set EXT2_FS [=y] and the default buildroot .config FS image is 
+ext2. at least for the beaglebone black and I'm trying to keep things sane.
+
+You'll want to do a make source and them make linux-menuconfig and change 
+the parameters above.
+
+I haven't created a patch file because I'm lazy.
+
+Also attached is my patch (hack) for dtc, derived from Robert Nelsons 
+bb.org-overlays.
+
+The dtc patch file goes into BR2_GLOBAL_PATCH_DIR , 
+BR2_GLOBAL_PATCH_DIR"/dtc"
+
+Look in the buildroot .config for how I set BR2_GLOBAL_PATCH_DIR. you'll 
+need to point that to your own global patch directory.
+
+Regards
+
+Chris
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: host-dtc-1.4.1.patch
+Type: text/x-patch
+Size: 32757 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151226/5748b92b/attachment.bin>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: cleaned_buildroot_v41_12182015_01.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151226/5748b92b/attachment.ksh>
