@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Dec 2015 16:04:02 +0100
-Subject: [Buildroot] [git commit] package/boost: bump to version 1.60.0
-Message-ID: <20151226150415.7640481963@busybox.osuosl.org>
+Date: Sat, 26 Dec 2015 16:08:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.60.0
+In-Reply-To: <1451081406-21991-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1451081406-21991-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20151226160826.14f0a247@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef72f660e49c13ffb555440c6f35e085b79d00d6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+J?rg,
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/boost/boost.hash | 6 +++---
- package/boost/boost.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Fri, 25 Dec 2015 23:10:06 +0100, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/boost/boost.hash | 6 +++---
+>  package/boost/boost.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-index 356242b..294282a 100644
---- a/package/boost/boost.hash
-+++ b/package/boost/boost.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/boost/files/boost/1.59.0/
--md5	6aa9a5c6a4ca1016edd0ed1178e3cb87	boost_1_59_0.tar.bz2
--sha1	b94de47108b2cdb0f931833a7a9834c2dd3ca46e	boost_1_59_0.tar.bz2
-+# From http://sourceforge.net/projects/boost/files/boost/1.60.0/
-+md5	65a840e1a0b13a558ff19eeb2c4f0cbe	boost_1_60_0.tar.bz2
-+sha1	7f56ab507d3258610391b47fef6b11635861175a	boost_1_60_0.tar.bz2
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 0161d68..15f0b77 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BOOST_VERSION = 1.59.0
-+BOOST_VERSION = 1.60.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
- BOOST_INSTALL_STAGING = YES
+Applied, thanks. Can you look at some of the recent boost build
+failures ?
+
+         sh4 |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/f400db5d90250aaec3f520532ec2982862e66d4f/
+      xtensa |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/b670a88a80fa27fcac6c0486b4dfdd441150b149/
+       nios2 |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/310e8d50862f6d9c05edaeaa164920309f82d307/
+      x86_64 |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/9e6fb854f4dba2f3ea3882cbeb4c1d4ee067f8f4/
+      xtensa |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/a0d320d9a47e381a3795da82d088d147cc27550c/
+     powerpc |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/449f273cf48f61b17caf4b8c723116d8473bea48/
+         arc |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/ea9c953efb38c617b29ff0bdb90971c4b84e001b/
+microblazeel |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/96c3d0250fa647854ee94cb6b5ec90a29ba1ebc5/
+      xtensa |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/5e646653056ab15bfc25127cd896cd6ebbfd0e31/
+         sh4 |                   boost-1.59.0 | NOK | http://autobuild.buildroot.net/results/c2ded9fd54ecddd17349cebf3fa0f18b662fa8a4/
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
