@@ -1,52 +1,50 @@
-From: Geoffrey Ragot <geoffreyragot@gmail.com>
-Date: Sat, 26 Dec 2015 13:14:31 +0100
-Subject: [Buildroot] Nginx package
-In-Reply-To: <20151226105836.26a19543@free-electrons.com>
-References: <567E5D9E.1030003@gmail.com>
- <20151226105836.26a19543@free-electrons.com>
-Message-ID: <567E84A7.70302@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 26 Dec 2015 13:16:30 +0100
+Subject: [Buildroot] [PATCH 1/1] [autobuild] configs: update PowerPC Kconfig
+	symbols
+Message-ID: <1451132190-10801-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The Kconfig symbole BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+has been renamed to BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC in commit
+[1].
 
-Hello,
+The CS PowerPC 2011.03 toolchain is still used if
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC is selected, except if the
+selected PPC CPU has SPE support. In this cas the CS PowerPC 2012.03 will
+be used.
 
-the pb is that luajit (in the context) is not a builtin module of nginx.
-It has to be built in a directory and nginx has to be compiled with 
-"--add-module <path_to_luajit>".
+[1] https://git.busybox.net/buildroot/commit/?id=fa4214e21b50b791ec365c64897ac2676b45448a
+[2] http://lists.busybox.net/pipermail/buildroot/2015-December/148311.html
 
-The nginx package has an option to specify "--add-module" arguments but 
-in this case, the dependency is not clearly mentionned in nginx.mk.
-I have to care about build luajit before nginx to ensure that 
-<path_to_luajit> contains required files.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ web/toolchains/configs/sourcery-powerpc-e500v2.config | 1 -
+ web/toolchains/configs/sourcery-powerpc.config        | 2 --
+ 2 files changed, 3 deletions(-)
 
-
-On 12/26/2015 10:58 AM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Sat, 26 Dec 2015 10:27:58 +0100, Geoffrey Ragot wrote:
->
->> I have a question related to packages dependencies.
->>
->> I have a case where i want to compile nginx with some additionnal
->> modules (luajit).
->> I can define modules paths in the nginx config, but i don't find a way
->> to say buildroot to compile these additional modules before nginx,
->> otherwise than modifying nginx dependencies.
-> Well, look at nginx.mk, there are plenty of examples:
->
-> ifeq ($(BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE),y)
-> NGINX_DEPENDENCIES += zlib
-> NGINX_CONF_OPTS += --with-http_spdy_module
-> endif
->
-> If BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE is enabled, then zlib is
-> guaranteed to be built before nginx, and the option
-> --with-http_spdy_module will be passed to the nginx configure script.
->
-> Best regards,
->
-> Thomas
+diff --git a/web/toolchains/configs/sourcery-powerpc-e500v2.config b/web/toolchains/configs/sourcery-powerpc-e500v2.config
+index f4e3b57..95b88a0 100644
+--- a/web/toolchains/configs/sourcery-powerpc-e500v2.config
++++ b/web/toolchains/configs/sourcery-powerpc-e500v2.config
+@@ -1,4 +1,3 @@
+ BR2_powerpc=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103=y
+ BR2_TARGET_OPTIMIZATION="-te500v2"
+diff --git a/web/toolchains/configs/sourcery-powerpc.config b/web/toolchains/configs/sourcery-powerpc.config
+index 532fab5..385ca88 100644
+--- a/web/toolchains/configs/sourcery-powerpc.config
++++ b/web/toolchains/configs/sourcery-powerpc.config
+@@ -1,4 +1,2 @@
+ BR2_powerpc=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103=y
+-
+-- 
+2.4.3
