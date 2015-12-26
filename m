@@ -1,85 +1,77 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 26 Dec 2015 23:54:03 +0100
-Subject: [Buildroot] [PATCH 3/5] python-cffi: add host variant
-In-Reply-To: <20151225214436.GB3878@free.fr>
-References: <1450992641-8618-1-git-send-email-yegorslists@googlemail.com>
- <1450992641-8618-3-git-send-email-yegorslists@googlemail.com>
- <20151224214645.GA3738@free.fr>
- <CAGm1_kvud8TAWddmadKqMi+=Mpcfzx=XJ3KMgt2yB-otDq-DpQ@mail.gmail.com>
- <20151225200059.48ac8dd7@free-electrons.com> <20151225191207.GA3878@free.fr>
- <CAGm1_kvTT4GX63oEHPoD7e2P5SQaoMqU8pAjR0Cqaf0erFnHtA@mail.gmail.com>
- <20151225214436.GB3878@free.fr>
-Message-ID: <CAGm1_ksbwjCkjEXFDS7qVe0GFBUxvVxsPNJh4cPM7EipyGUQcQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 26 Dec 2015 21:42:55 +0100
+Subject: [Buildroot] [PATCH 1/1] [autobuild] configs: update PowerPC
+	Kconfig symbols
+In-Reply-To: <20151226145204.GA4083@free.fr>
+References: <1451132190-10801-1-git-send-email-romain.naour@gmail.com>
+ <20151226145204.GA4083@free.fr>
+Message-ID: <567EFBCF.8060408@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 25, 2015 at 10:44 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Yegor, All,
->
-> On 2015-12-25 20:58 +0100, Yegor Yefremov spake thusly:
->> On Fri, Dec 25, 2015 at 8:12 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > On 2015-12-25 20:00 +0100, Thomas Petazzoni spake thusly:
->> >> On Thu, 24 Dec 2015 23:12:49 +0100, Yegor Yefremov wrote:
->> >> > Target variant doesn't need pycparser. cffi's setup.py seems to
->> >> > distinguish, if we install real package or cross-compiled one:
->> >> >
->> >> >         install_requires=[
->> >> >             'pycparser',
->> >> >         ] if cpython else [],
->> >>
->> >> I don't understand how this "if cpython" is relevant to make the
->> >> different between the native (host) variant or the cross-compiled
->> >> (target) variant. cpython is defined as is:
->> >>
->> >>     cpython = ('_cffi_backend' not in sys.builtin_module_names)
->> >>
->> >> Can you give some more details?
->> >
->> > Yegor and I briefly discussed this on IRC yesterday, but I'm not really
->> > convinced by this reply either. I forgot to reply yesterday...
->> >
->> > What I understand, however, is that they want to differentiate between
->> > cpython (the 'ofiicial' native Python interpreter), and PyPy (the Python
->> > interpreter written in Python).
->> >
->> > Of course, I don't see how this all works. It seems in
->> > cross-compilation. there differentiation criterai beliveves it is
->> > running under PyPy amd thus they do not need pycparser.
->> >
->> > But thtat's just incorrect, because we may have a host-python with
->> > cffi_backend at one point, and thus the check above will eventually
->> > differentiate toward cpython, and we'd nreak again.
->> >
->> > So, two things:
->> >   - their check is wrong,
->> >   - we probably need host-pycparser
->> >
->> > At least, that's what I understood...
+Hi Yann,
+
+Le 26/12/2015 15:52, Yann E. MORIN a ?crit :
+> Romain, All,
+> 
+> On 2015-12-26 13:16 +0100, Romain Naour spake thusly:
+>> The Kconfig symbole BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+>> has been renamed to BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC in commit
+>> [1].
 >>
->> We have host-pycparser: http://patchwork.ozlabs.org/patch/560970/
->
-> Well, I meant that we should need host-pycparser as a dependency of
-> python-cffi.
->
-> But anyway, there is more to this: we really need to understand what is
-> going on...
+>> The CS PowerPC 2011.03 toolchain is still used if
+>> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC is selected, except if the
+>> selected PPC CPU has SPE support. In this cas the CS PowerPC 2012.03 will
+>> be used.
+>>
+>> [1] https://git.busybox.net/buildroot/commit/?id=fa4214e21b50b791ec365c64897ac2676b45448a
+>> [2] http://lists.busybox.net/pipermail/buildroot/2015-December/148311.html
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> ---
+>>  web/toolchains/configs/sourcery-powerpc-e500v2.config | 1 -
+>>  web/toolchains/configs/sourcery-powerpc.config        | 2 --
+>>  2 files changed, 3 deletions(-)
+>>
+>> diff --git a/web/toolchains/configs/sourcery-powerpc-e500v2.config b/web/toolchains/configs/sourcery-powerpc-e500v2.config
+>> index f4e3b57..95b88a0 100644
+>> --- a/web/toolchains/configs/sourcery-powerpc-e500v2.config
+>> +++ b/web/toolchains/configs/sourcery-powerpc-e500v2.config
+>> @@ -1,4 +1,3 @@
+>>  BR2_powerpc=y
+>>  BR2_TOOLCHAIN_EXTERNAL=y
+>> -BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103=y
+>>  BR2_TARGET_OPTIMIZATION="-te500v2"
+> 
+> Not directly your fault, but this config is still broken: it needs
+> BR2_powerpc_8248=y too.
 
-I still don't really understand the difference between host and target
-cffi requirements, but at least I can now shed some light on cpython
-definition. Below is sys.builtin_module_names() description:
+I think with CS PowerPC 2012.03 we can also remove
+BR2_TARGET_OPTIMIZATION="-te500v2" since there is only one sysroot.
 
-"A tuple of strings giving the names of all modules that are compiled
-into this Python interpreter."
+Thanks for the review.
 
-So our host-python version won't show '_cffi_backend' even if it is
-installed on the system, because it is not built-in. But PyPy
-(http://pypy.org/) comes with this backend out of the box.
+Best regards,
+Romain
 
-Will debug further.
-
-@Oli: what are you using cffi for?
-
-Yegor
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> diff --git a/web/toolchains/configs/sourcery-powerpc.config b/web/toolchains/configs/sourcery-powerpc.config
+>> index 532fab5..385ca88 100644
+>> --- a/web/toolchains/configs/sourcery-powerpc.config
+>> +++ b/web/toolchains/configs/sourcery-powerpc.config
+>> @@ -1,4 +1,2 @@
+>>  BR2_powerpc=y
+>>  BR2_TOOLCHAIN_EXTERNAL=y
+>> -BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103=y
+>> -
+>> -- 
+>> 2.4.3
+>>
+> 
