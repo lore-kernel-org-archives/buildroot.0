@@ -1,56 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Dec 2015 16:42:10 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: CodeSourcery PowerPC:
- Revert the removal of CS PowerPC 2011.03
-In-Reply-To: <1451131225-9384-1-git-send-email-romain.naour@gmail.com>
-References: <1451131225-9384-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20151226164210.2a30c04f@free-electrons.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sat, 26 Dec 2015 10:46:59 -0500
+Subject: [Buildroot] Nginx package
+In-Reply-To: <20151226154209.488813de@free-electrons.com>
+References: <567E5D9E.1030003@gmail.com>
+ <20151226105836.26a19543@free-electrons.com>
+ <567E84A7.70302@gmail.com>
+ <20151226154209.488813de@free-electrons.com>
+Message-ID: <CANxTyt6McsMR=tUQfZf-Nid8H3_dTfGTunF-PARPB9qwgeQDXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+On Sat, Dec 26, 2015 at 9:42 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Geoffrey,
+>
+> On Sat, 26 Dec 2015 13:14:31 +0100, Geoffrey Ragot wrote:
+>
+>> the pb is that luajit (in the context) is not a builtin module of nginx.
+>> It has to be built in a directory and nginx has to be compiled with
+>> "--add-module <path_to_luajit>".
+>>
+>> The nginx package has an option to specify "--add-module" arguments but
+>> in this case, the dependency is not clearly mentionned in nginx.mk.
+>> I have to care about build luajit before nginx to ensure that
+>> <path_to_luajit> contains required files.
+>
+> I see two options here:
+>
+>  (1) If you really need to have the source of the Nginx Lua module
+>      extracted before building nginx in order to use the --add-module
+>      option, then you will have to create a package like nginx-lua,
+>      that only downloads/extracts the module source code (and does not
+>      build/install it). Then you change the nginx package to depend on
+>      this nginx-lua package, and you pass --add-module=$(NGINX_LUA_DIR).
+>
+>  (2) If however, it is possible to build nginx-lua after nginx, then
+>      you can do a better and more traditional packaging. Even though
+>      they document --add-module as being the way of building nginx-lua,
+>      all it seems to do during nginx configure is calling the "config"
+>      script from nginx-lua, and then the "config.make" script. So I am
+>      pretty sure it is possible to build nginx-lua after nginx.
+>
+> If it is possible, (2) would be preferred.
+>
+> Note that this is clearly not a trivial package to create.
 
-On Sat, 26 Dec 2015 13:00:25 +0100, Romain Naour wrote:
+FWIW: I had to do option 1 for a few ngx-* packages, as Thomas
+described: for each one. I made an ngx-xxx package that simply
+extracts, added a sub-option to nginx's Config.in file, and then added
+lines to the end of nginx.mk to add ngx-xxx to NGINX_DEPENDENCIES, and
+the additional --add-module term.  The result is that the additional
+source files are built and linked in to the one single nginx
+executable - no .so option.
 
-> Also re-add the old CS toolchain handling for pixman and liquid-dsp.
+That was maybe six months ago.  At around that time, I heard that
+nginx would eventually be introducing better support to have these
+things be more like plugins or shared objects so that this mechanism
+wouldn't be needed.  That sounded hopeful, but we needed an immediate
+solution.  Even if the feature had been ready, we would have preferred
+to use a "stable" nginx release rather than depending on a brand new
+feature in the "mainline" release.
 
-This part is not good. With your change, the "fixes" on pixman and
-liquid-dsp are now also applied when using the SPE-capable 2012.03
-toolchain, while in the past they were only used for the non-SPE
-capable 2010.xx and 2011.xx toolchains:
+Danomi -
 
--# Altivec detection isn't reliable for CS toolchains
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103)$(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
--PIXMAN_CONF_OPTS += --disable-vmx
--endif
 
- config BR2_PACKAGE_LIQUID_DSP
-        bool "liquid-dsp"
-        depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
-        depends on !BR2_STATIC_LIBS
--       # These result in internal compiler error
--       depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
--       depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-        help
-          Liquid-DSP is a free and open-source signal processing
-          library for software-defined radios written in C.  Its
-
-So either we need to have two Config.in symbols:
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC and
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_SPE, or you need to adjust
-the fixes to test that SPE is not set, like:
-
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC):$(BR2_POWERPC_CPU_HAS_SPE),y:)
--PIXMAN_CONF_OPTS += --disable-vmx
--endif
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
