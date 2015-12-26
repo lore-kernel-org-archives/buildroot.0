@@ -1,59 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Dec 2015 17:05:42 +0100
-Subject: [Buildroot] [PATCH 2/5 v2] arch/arm: add option to enable an
-	optional VFP unit
+Date: Sat, 26 Dec 2015 17:05:41 +0100
+Subject: [Buildroot] [PATCH 1/5 v2] arch/arm: reorder NEON option
 In-Reply-To: <cover.1451145472.git.yann.morin.1998@free.fr>
 References: <cover.1451145472.git.yann.morin.1998@free.fr>
-Message-ID: <1c0398c75bfad861237b0ba006ac5aecf01fb5da.1451145472.git.yann.morin.1998@free.fr>
+Message-ID: <e7af4f193e9040506b443d979133a3e4ec64dd67.1451145472.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the VFP selection for ARM is a little bit muddy:
-  - some CPUs definitely do not have a VFP or NEON,
-  - some CPUs definitely do have a VFP or NEON,
-  - some CPUs may have a VFP or NEON.
+Stating whether to use the NEON extensions when it is optional in the
+CPU really is completing the definition of the CPU we've just selected.
 
-However, we currently conflate the availability of the VFP/NEON with the
-possibility to use them. Even is the user chooses a floating point
-strategy with a 'lower' solution (i.e. VFPv2 when a VFPv3 exists, or not
-using NEON when the CPU has it), some packages are still using the
-CPU-defined HW availaibility rather thean the usr's selection.
+Move the ENABLE_NEON option just after the choice of the CPU variant,
+and before any "software" option (ABI/VFP).
 
-Furthermore, for CPU that may have a VFP/NEON, there is no way for the
-user to actually specify that the HW is indeed available; the user can
-only specify the floating point strategy. This means that some packages
-or some package versions, like nodejs for example, can not be properly
-selected on some CPU cores, like Cortex-A9 which only may have a VFP.
-
-Like we have an option to enable an optional NEON unit, add a similar
-option to enable an optional VFP unit.
+This will make sense in a moment, when we introduce a similar option for
+enabling an optional VFP unit.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.arm | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/Config.in.arm | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index feac16d..f2c5a58 100644
+index 67ff384..feac16d 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -194,6 +194,13 @@ config BR2_ARM_ENABLE_NEON
- 	  Select this option if you are certain your particular
- 	  implementation has NEON support and you want to use it.
+@@ -185,6 +185,15 @@ config BR2_iwmmxt
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ endchoice
  
-+config BR2_ARM_ENABLE_VFP
-+	bool "Enable VFP extension support"
-+	depends on BR2_ARM_CPU_MAYBE_HAS_VFPV2
-+	select BR2_ARM_CPU_HAS_VFPV4 if BR2_ARM_CPU_MAYBE_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_VFPV3 if BR2_ARM_CPU_MAYBE_HAS_VFPV3
-+	select BR2_ARM_CPU_HAS_VFPV2 if BR2_ARM_CPU_MAYBE_HAS_VFPV2
++config BR2_ARM_ENABLE_NEON
++	bool "Enable NEON SIMD extension support"
++	depends on BR2_ARM_CPU_MAYBE_HAS_NEON
++	select BR2_ARM_CPU_HAS_NEON
++	help
++	  For some CPU cores, the NEON SIMD extension is optional.
++	  Select this option if you are certain your particular
++	  implementation has NEON support and you want to use it.
 +
  choice
  	prompt "Target ABI"
  	depends on BR2_arm || BR2_armeb
+@@ -240,15 +249,6 @@ config BR2_ARM_EABIHF
+ 
+ endchoice
+ 
+-config BR2_ARM_ENABLE_NEON
+-	bool "Enable NEON SIMD extension support"
+-	depends on BR2_ARM_CPU_MAYBE_HAS_NEON
+-	select BR2_ARM_CPU_HAS_NEON
+-	help
+-	  For some CPU cores, the NEON SIMD extension is optional.
+-	  Select this option if you are certain your particular
+-	  implementation has NEON support and you want to use it.
+-
+ choice
+ 	prompt "Floating point strategy"
+ 	depends on BR2_ARM_EABI || BR2_ARM_EABIHF
 -- 
 1.9.1
