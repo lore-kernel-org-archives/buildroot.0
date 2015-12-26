@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Dec 2015 16:11:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.19.12
-In-Reply-To: <1451083664-12505-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1451083664-12505-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151226161108.6361d018@free-electrons.com>
+Date: Sat, 26 Dec 2015 16:15:28 +0100
+Subject: [Buildroot] [git commit] package/libupnpp: bump to version 0.13.1
+Message-ID: <20151226151542.CC72E81E96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg,
+commit: http://git.buildroot.net/buildroot/commit/?id=74c97e8cc6be777f4bb2df82b14911eb34fbc845
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 25 Dec 2015 23:47:44 +0100, J?rg Krause wrote:
-> Drop patch "Makefile.am: fix static build with alsa" - applied upstream.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/mpd/0003-fix-static-build-with-alsa.patch | 32 -----------------------
->  package/mpd/mpd.hash                              |  2 +-
->  package/mpd/mpd.mk                                |  2 +-
->  3 files changed, 2 insertions(+), 34 deletions(-)
->  delete mode 100644 package/mpd/0003-fix-static-build-with-alsa.patch
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-This patch was patching Makefile.am, and we did not had AUTORECONF =
-YES, which was bad. But now, it is no longer needed.
-
-So, applied.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index 52a0b19..a301fb3 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.12.1.tar.gz.sha256
+-sha256 a70b51827875a75860b07d21b709f285e73e3843cf80e272f67afeb08100dc2c  libupnpp-0.12.1.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.13.1.tar.gz.sha256
++sha256 d4604e3e4875e99d0446a436f857a849d1e3dda59096861dcd6a0e6c16474cb7  libupnpp-0.13.1.tar.gz
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index b274433..71ba311 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNPP_VERSION = 0.12.1
++LIBUPNPP_VERSION = 0.13.1
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = GPLv2+
+ LIBUPNPP_LICENSE_FILES = COPYING
