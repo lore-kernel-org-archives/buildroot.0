@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Dec 2015 16:16:27 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libupnpp: bump to version 0.13.1
-In-Reply-To: <1451085287-18089-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1451085287-18089-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151226161627.3b73c047@free-electrons.com>
+Date: Sat, 26 Dec 2015 16:16:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/luv: bump to version 1.8.0
+In-Reply-To: <1451078928-32387-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1451078928-32387-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20151226161632.659c3c22@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,14 @@ To: buildroot@busybox.net
 
 Dear J?rg Krause,
 
-On Sat, 26 Dec 2015 00:14:46 +0100, J?rg Krause wrote:
+On Fri, 25 Dec 2015 22:28:48 +0100, J?rg Krause wrote:
 > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  package/libupnpp/libupnpp.hash | 4 ++--
->  package/libupnpp/libupnpp.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/luv/luv.hash | 2 +-
+>  package/luv/luv.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
