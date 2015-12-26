@@ -1,54 +1,137 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Dec 2015 15:42:09 +0100
-Subject: [Buildroot] Nginx package
-In-Reply-To: <567E84A7.70302@gmail.com>
-References: <567E5D9E.1030003@gmail.com>
- <20151226105836.26a19543@free-electrons.com>
- <567E84A7.70302@gmail.com>
-Message-ID: <20151226154209.488813de@free-electrons.com>
+Date: Sat, 26 Dec 2015 15:49:41 +0100
+Subject: [Buildroot] [git commit] trousers: remove inline for
+	read_data/write_data
+Message-ID: <20151226145051.CD93C81E7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Geoffrey,
+commit: http://git.buildroot.net/buildroot/commit/?id=95789dd06601afb8ad43f7490e6350f9b79b24b9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 26 Dec 2015 13:14:31 +0100, Geoffrey Ragot wrote:
+read_data and write_data functions are declared with inline, but
+their definition is not in a .h file. This is causing errors when
+linking:
 
-> the pb is that luajit (in the context) is not a builtin module of nginx.
-> It has to be built in a directory and nginx has to be compiled with 
-> "--add-module <path_to_luajit>".
-> 
-> The nginx package has an option to specify "--add-module" arguments but 
-> in this case, the dependency is not clearly mentionned in nginx.mk.
-> I have to care about build luajit before nginx to ensure that 
-> <path_to_luajit> contains required files.
+tcsps.c:(.text+0x4ac): undefined reference to `read_data'
+tcsps.c:(.text+0x1888): undefined reference to `write_data'
+...
 
-I see two options here:
+The patch is a partial backport of upstream commit
+3297fcdf5ac0df868778e976b8b59e35542c1ee2.
 
- (1) If you really need to have the source of the Nginx Lua module
-     extracted before building nginx in order to use the --add-module
-     option, then you will have to create a package like nginx-lua,
-     that only downloads/extracts the module source code (and does not
-     build/install it). Then you change the nginx package to depend on
-     this nginx-lua package, and you pass --add-module=$(NGINX_LUA_DIR).
+Fixes:
+http://autobuild.buildroot.net/results/1a53d929bcec840cd18185e54b1a6da8aa849269/
+http://autobuild.buildroot.net/results/fad66e88b5a97004b21658d413f4d3a6d0d8838b/
+http://autobuild.buildroot.net/results/c7e23b8ec2c69798482868e18311ebf2c01b65e0/
+...
 
- (2) If however, it is possible to build nginx-lua after nginx, then
-     you can do a better and more traditional packaging. Even though
-     they document --add-module as being the way of building nginx-lua,
-     all it seems to do during nginx configure is calling the "config"
-     script from nginx-lua, and then the "config.make" script. So I am
-     pretty sure it is possible to build nginx-lua after nginx.
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...emove-inline-for-read_data-and-write_data.patch | 94 ++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
 
-If it is possible, (2) would be preferred.
-
-Note that this is clearly not a trivial package to create.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch b/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
+new file mode 100644
+index 0000000..b0db70b
+--- /dev/null
++++ b/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
+@@ -0,0 +1,94 @@
++From f03c7987c234a81f7e4274b26bab07318357a2a5 Mon Sep 17 00:00:00 2001
++From: Sergio Prado <sergio.prado@e-labworks.com>
++Date: Fri, 25 Dec 2015 20:09:21 -0200
++Subject: [PATCH] Remove inline for read_data and write_data
++
++read_data and write_data functions are declared with inline, but
++their definition is not in a .h file. This is causing errors when
++linking:
++
++tcsps.c:(.text+0x4ac): undefined reference to `read_data'
++tcsps.c:(.text+0x1888): undefined reference to `write_data'
++...
++
++Partial backport of upstream commit
++3297fcdf5ac0df868778e976b8b59e35542c1ee2.
++
++Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
++---
++ src/include/tcsps.h    | 5 -----
++ src/tcs/ps/ps_utils.c  | 8 --------
++ src/tspi/ps/ps_utils.c | 4 ++--
++ 3 files changed, 2 insertions(+), 15 deletions(-)
++
++diff --git a/src/include/tcsps.h b/src/include/tcsps.h
++index 87542965877d..dcd5db469822 100644
++--- a/src/include/tcsps.h
+++++ b/src/include/tcsps.h
++@@ -23,13 +23,8 @@ int		   get_file();
++ int		   put_file(int);
++ void		   close_file(int);
++ void		   ps_destroy();
++-#ifdef SOLARIS
++ TSS_RESULT  read_data(int, void *, UINT32);
++ TSS_RESULT  write_data(int, void *, UINT32);
++-#else
++-inline TSS_RESULT  read_data(int, void *, UINT32);
++-inline TSS_RESULT  write_data(int, void *, UINT32);
++-#endif
++ int		   write_key_init(int, UINT32, UINT32, UINT32);
++ TSS_RESULT	   cache_key(UINT32, UINT16, TSS_UUID *, TSS_UUID *, UINT16, UINT32, UINT32);
++ TSS_RESULT	   UnloadBlob_KEY_PS(UINT16 *, BYTE *, TSS_KEY *);
++diff --git a/src/tcs/ps/ps_utils.c b/src/tcs/ps/ps_utils.c
++index 2e7f502b9599..35ac89f8fc12 100644
++--- a/src/tcs/ps/ps_utils.c
+++++ b/src/tcs/ps/ps_utils.c
++@@ -42,11 +42,7 @@
++ struct key_disk_cache *key_disk_cache_head = NULL;
++
++
++-#ifdef SOLARIS
++ TSS_RESULT
++-#else
++-inline TSS_RESULT
++-#endif
++ read_data(int fd, void *data, UINT32 size)
++ {
++	int rc;
++@@ -64,11 +60,7 @@ read_data(int fd, void *data, UINT32 size)
++ }
++
++
++-#ifdef SOLARIS
++ TSS_RESULT
++-#else
++-inline TSS_RESULT
++-#endif
++ write_data(int fd, void *data, UINT32 size)
++ {
++	int rc;
++diff --git a/src/tspi/ps/ps_utils.c b/src/tspi/ps/ps_utils.c
++index aac40a147314..83259141d375 100644
++--- a/src/tspi/ps/ps_utils.c
+++++ b/src/tspi/ps/ps_utils.c
++@@ -22,7 +22,7 @@
++ #include "tspps.h"
++ #include "tsplog.h"
++
++-inline TSS_RESULT
+++TSS_RESULT
++ read_data(int fd, void *data, UINT32 size)
++ {
++	int rc;
++@@ -39,7 +39,7 @@ read_data(int fd, void *data, UINT32 size)
++	return TSS_SUCCESS;
++ }
++
++-inline TSS_RESULT
+++TSS_RESULT
++ write_data(int fd, void *data, UINT32 size)
++ {
++	int rc;
++--
++1.9.1
++
