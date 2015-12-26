@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Dec 2015 16:15:35 +0100
-Subject: [Buildroot] [git commit] package/upmpcli: bump to version 0.13.1
-Message-ID: <20151226151542.E51BF81E86@busybox.osuosl.org>
+Date: Sat, 26 Dec 2015 16:16:00 +0100
+Subject: [Buildroot] [git commit] package/luv: bump to version 1.8.0
+Message-ID: <20151226151605.CD2D781E96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d6bb06bcfa456f0002b46a8a6367234986882070
+commit: http://git.buildroot.net/buildroot/commit/?id=8b49215f87becf9e7895611502573cf118aabb57
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-upmpdcli version 0.13.1 requires libupnpp version 0.13.1 to build successfully.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/luv/luv.hash | 2 +-
+ package/luv/luv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index c8dc318..5a6c47a 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
+diff --git a/package/luv/luv.hash b/package/luv/luv.hash
+index 31d29c7..20aaffe 100644
+--- a/package/luv/luv.hash
++++ b/package/luv/luv.hash
 @@ -1,2 +1,2 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.12.0.tar.gz.sha256
--sha256 7862fc599fc60dfdf22bbbf7e134655d29c51a8ccc6b5cc81232f7bc4a7351c9  upmpdcli-0.12.0.tar.gz
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.13.1.tar.gz.sha256
-+sha256 86f964e49b0288a4d660aa4ad83576d83aad7c354df67d3aa8e324e8912876e0  upmpdcli-0.13.1.tar.gz
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 74413ae..ba5bbb2 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
+ # Locally calculated
+-sha256 7f558461225dd57fbc784cd8b4f7ec8270dd1c179e8bdce3f7009c835c828317  luv-1.7.4-5.tar.gz
++sha256 d5b21def19a5c411adaac3e817e2c7d3825d1062d8d0024b6ebd7a1f0a0a58d0  luv-1.8.0-0.tar.gz
+diff --git a/package/luv/luv.mk b/package/luv/luv.mk
+index 85da7d1..c5648c5 100644
+--- a/package/luv/luv.mk
++++ b/package/luv/luv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UPMPDCLI_VERSION = 0.12.0
-+UPMPDCLI_VERSION = 0.13.1
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
+-LUV_VERSION = 1.7.4-5
++LUV_VERSION = 1.8.0-0
+ LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
+ LUV_LICENSE = Apache-2.0
+ LUV_LICENSE_FILES = LICENSE.txt
