@@ -1,51 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Dec 2015 10:52:44 +0100
-Subject: [Buildroot] [PATCH v5] luvi: new package
-In-Reply-To: <1451080268.16818.8.camel@embedded.rocks>
-References: <1446104703-21295-1-git-send-email-joerg.krause@embedded.rocks>
- <20151220232856.12acbfe8@free-electrons.com>
- <1451080268.16818.8.camel@embedded.rocks>
-Message-ID: <20151226105244.14556b27@free-electrons.com>
+Date: Sat, 26 Dec 2015 10:58:36 +0100
+Subject: [Buildroot] Nginx package
+In-Reply-To: <567E5D9E.1030003@gmail.com>
+References: <567E5D9E.1030003@gmail.com>
+Message-ID: <20151226105836.26a19543@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg,
+Hello,
 
-On Fri, 25 Dec 2015 22:51:08 +0100, J?rg Krause wrote:
+On Sat, 26 Dec 2015 10:27:58 +0100, Geoffrey Ragot wrote:
 
-> > Thanks, patch applied. I must say I don't really understand what this
-> > luvi thing is doing, but it built fine here, and the packaging seems
-> > reasonable.
+> I have a question related to packages dependencies.
 > 
-> luvi is a LuaJIT runtime with additional bindings, e.g. libuv. You can
-> compare it with the V8 engine (the JavaScript engine used by Node.js),
-> the main difference is, that luvi already contains the libuv bindings,
-> whereas Node.js adds the libuv bindings to V8.
-> 
-> All together, it is a Node.js like system for Lua.
+> I have a case where i want to compile nginx with some additionnal 
+> modules (luajit).
+> I can define modules paths in the nginx config, but i don't find a way 
+> to say buildroot to compile these additional modules before nginx, 
+> otherwise than modifying nginx dependencies.
 
-Thanks a lot for the explanation, makes sense!
+Well, look at nginx.mk, there are plenty of examples:
 
-> I want to integrate some luvi applications like lit and luvit into
-> Buildroot. lit is similar to npm and luvit adds a Node.js like API to
-> luvi.
-> 
-> This will be done in follow-up patches...
+ifeq ($(BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE),y)
+NGINX_DEPENDENCIES += zlib
+NGINX_CONF_OPTS += --with-http_spdy_module
+endif
 
-Cool!
+If BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE is enabled, then zlib is
+guaranteed to be built before nginx, and the option
+--with-http_spdy_module will be passed to the nginx configure script.
 
-> > as this ?.lua doesn't really look like a path, but since it builds
-> > fine, maybe I'm missing something.
-> 
-> Lua(JIT) uses this string as a path to search for files. In this case
-> we have to tell LuaJIT where to search for its bundled modules.
-
-Ok. So this "?" is interpreted by LuaJIT in a "special" way.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
