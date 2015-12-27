@@ -1,95 +1,51 @@
-From: Chris LaRocque <clarocq@gmail.com>
-Date: Sun, 27 Dec 2015 11:28:04 -0500
-Subject: [Buildroot] trying to use
- https://github.com/beagleboard/linux.git with buildroot
-In-Reply-To: <1451223280.497246.477065626.34AC2AD3@webmail.messagingengine.com>
-References: <1450890296.2355509.475056490.71128E4E@webmail.messagingengine.com>
- <20151223184751.12365336@free-electrons.com>
- <1450893821.3034067.475093450.34890777@webmail.messagingengine.com>
- <1450894505.3036056.475106194.467AC874@webmail.messagingengine.com>
- <20151223193943.21a6f0fc@free-electrons.com>
- <1450910736.3752716.475291418.490BB3EA@webmail.messagingengine.com>
- <20151223235253.0afe702e@free-electrons.com>
- <1450917779.3775953.475348978.37FAC3A8@webmail.messagingengine.com>
- <n5mdi8$5go$1@ger.gmane.org>
- <1451154853.3394517.476716010.48669FA1@webmail.messagingengine.com>
- <CA+-urNRO0DWv7Xw+DctiFspDootbJRwbwdE66UYMbfCjL8jWuQ@mail.gmail.com>
- <1451173488.3993354.476829962.2D827969@webmail.messagingengine.com>
- <20151227110817.288a2e3f@free-electrons.com>
- <1451223280.497246.477065626.34AC2AD3@webmail.messagingengine.com>
-Message-ID: <CAOURK2uwXJd7KpTrWZqZP_Ci3oPQjOYedF-_Je0yTTo5tnFbNg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Dec 2015 17:40:56 +0100
+Subject: [Buildroot] [git commit] vboot-utils: add missing dependency on
+	host-util-linux
+Message-ID: <20151227164328.7EC30818B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+commit: http://git.buildroot.net/buildroot/commit/?id=555231fa2d6df3b60235c5401c773f1ab9804d4e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm running a new beaglebone_defconfig as we speak and may be able to post
-a patch this afternoon.
+vboot-utils needs uuid.h and libuuid for the cgpt tool, so we need to
+depend on host-util-linux.
 
-The DTC patch will take me a couple of days to test. What I posted earlier
-was a hack that accomplished my needs but it needs to be a little more
-refined. I'll review the debian install script at
-github.com/beagleboard/bb.org-overlays to see how to best incorporate both
-the DTC patch and the device tree overlays. Can I put the DTC patch into
-the /board/beaglebone directory and have it specified for application in
-the board defconfig? Suggestions on this aspect would be much appreciated.
+Fixes:
 
-Regards
+  http://autobuild.buildroot.org/results/ee1/ee18202cb6d7751178617e6a3d0bc97e65318aa9/
 
-C
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vboot-utils/Config.in.host | 1 +
+ package/vboot-utils/vboot-utils.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-
-Pushing back the boundaries of ignorance.
-I'd like to help out, but it might take a bit of hand holding for me
-since I'm pretty new to buildroot and submitting patches.  I suppose the
-things that would need to be changed would be
-
-1. configs/beaglbone_defconfig
-2. the uEnv.txt file needs to be different in output/images
-3. Chris attached a patch for the host dtc
-4. Two configs for the kernel build need to change
-
-I have a diff for configs/beaglebone_defconfig but everything else I'm
-not sure where to start.
-
-If someone has time to coach me through this I'm happy to learn, but if
-it is easier for someone else to do this I could learn from that too.
-
-
-
-On Sun, Dec 27, 2015, at 02:08 AM, Thomas Petazzoni wrote:
-> Hello all,
->
-> On Sat, 26 Dec 2015 15:44:48 -0800, Craig Swank wrote:
->
-> > YES!  Using Chris's uEnv.txt and u-boot 2015.07 instead of 2015.10 it
-> > finally booted up correctly.  Many thanks to Thomas, Chris, and, last
-> > but not least, Frank, who swooped in with the secret sauce at the very
-> > end.
-> >
-> > I'm not even close to being able to figure out why the 07 version worked
-> > and 10 did not, but I'm just too happy to care.
->
-> Glad to hear that you solved the different problems.
->
-> Our beaglebone_defconfig is utterly old, and it would be really great
-> to update it to use newer kernel and u-boot versions.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
---
-  Craig Swank
-  craigswank at fastmail.fm
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151227/cceb55e7/attachment.html>
+diff --git a/package/vboot-utils/Config.in.host b/package/vboot-utils/Config.in.host
+index 899f6e7..aa0caef 100644
+--- a/package/vboot-utils/Config.in.host
++++ b/package/vboot-utils/Config.in.host
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_HOST_VBOOT_UTILS
+ 	bool "host vboot utils"
++	select BR2_PACKAGE_HOST_UTIL_LINUX
+ 	help
+ 	  Chromium OS verified boot utilities: futility and cgpt.
+ 
+diff --git a/package/vboot-utils/vboot-utils.mk b/package/vboot-utils/vboot-utils.mk
+index 75978cb..a7592d6 100644
+--- a/package/vboot-utils/vboot-utils.mk
++++ b/package/vboot-utils/vboot-utils.mk
+@@ -10,7 +10,7 @@ VBOOT_UTILS_SITE_METHOD = git
+ VBOOT_UTILS_LICENSE = BSD-3c
+ VBOOT_UTILS_LICENSE_FILES = LICENSE
+ 
+-HOST_VBOOT_UTILS_DEPENDENCIES = host-openssl host-pkgconf
++HOST_VBOOT_UTILS_DEPENDENCIES = host-openssl host-util-linux host-pkgconf
+ 
+ # vboot_reference contains code that goes into bootloaders,
+ # utilities intended for the target system, and a bunch of scripts
