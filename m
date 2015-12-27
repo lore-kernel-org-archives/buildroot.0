@@ -1,73 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Dec 2015 20:58:24 +0100
-Subject: [Buildroot] [PATCH 1/1] Add ARM11 MPCore CPU target support
-In-Reply-To: <BLU437-SMTP123CD239C2AFC2F2A7D66EC1020@phx.gbl>
-References: <BLU437-SMTP123CD239C2AFC2F2A7D66EC1020@phx.gbl>
-Message-ID: <20151227195824.GJ3483@free.fr>
+Date: Sun, 27 Dec 2015 11:55:18 +0100
+Subject: [Buildroot] [PATCHv2] toolchain: granular choice for stack
+ protector
+In-Reply-To: <CAKbGBLgU3woN+OEPF3tDUO7xs1XdUrFk2i10qdY1x=wF-EBZdw@mail.gmail.com>
+References: <1451173326-3424-1-git-send-email-yann.morin.1998@free.fr>
+ <20151227111936.5283ba73@free-electrons.com>
+ <20151227102655.GB3483@free.fr>
+ <CAKbGBLgU3woN+OEPF3tDUO7xs1XdUrFk2i10qdY1x=wF-EBZdw@mail.gmail.com>
+Message-ID: <20151227105518.GD3483@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergi, All,
+Steven, All,
 
-On 2015-11-28 15:55 +0100, Sergi Granell spake thusly:
-> gcc differentiates the mpcore-with-vfp from the mcpore-without-vfp
-> CPUs. The former is named just 'mpcore', while the latter is named
-> 'mpcorenovfp'.
+On 2015-12-27 02:44 -0800, Steven Noonan spake thusly:
+> On Sun, Dec 27, 2015 at 2:26 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2015-12-27 11:19 +0100, Thomas Petazzoni spake thusly:
+> >> On Sun, 27 Dec 2015 00:42:06 +0100, Yann E. MORIN wrote:
+> >> > -config BR2_ENABLE_SSP
+> >> > +choice
+> >> >     bool "build code with Stack Smashing Protection"
+> >> > -   depends on BR2_TOOLCHAIN_HAS_SSP
+> >> > +   default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
+> >> > +   default BR2_SSP_STRONG if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> >>
+> >> I don't understand this part. Why would we now defalut on
+> >> BR2_SSP_STRONG if gcc >= 4.9 ?
+> >
+> > Hmmm... I did not think too much about that. I just "updated" the patch
+> > and kept its meaning as-is.
+> >
+> >> I think we should keep the default of not having SSP enabled.
+> >
+> > Yes, makes sense. At best, the change in the default should have been in
+> > another patch.
 > 
-> We only add one entry, 'mpcore' and let the user select whether or
-> not to use the VFP. We then name the CPU according to the user's
-> selection.
-> 
-> Signed-off-by: Sergi Granell <xerpi.g.12@gmail.com>
+> I could be wrong, but I *think* BuildRoot used to default to SSP on.
+> If not, I don't know why I would have changed the default. I'm not a
+> particularly big fan of SSP to begin with, so I'd have no incentive to
+> default it enabled.
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: build-tested only]
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+OK, so I will definitely remove the new defaults before I respin.
+
+Thanks for the feedback! :-)
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  arch/Config.in.arm | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index 67ff384..1bf1fe2 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -104,6 +104,13 @@ config BR2_arm1176jzf_s
->  	select BR2_ARM_CPU_HAS_THUMB
->  	select BR2_ARM_CPU_ARMV6
->  	select BR2_ARCH_HAS_MMU_OPTIONAL
-> +config BR2_arm11mpcore
-> +	bool "mpcore"
-> +	select BR2_ARM_CPU_HAS_ARM
-> +	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
-> +	select BR2_ARM_CPU_HAS_THUMB
-> +	select BR2_ARM_CPU_ARMV6
-> +	select BR2_ARCH_HAS_MMU_OPTIONAL
->  config BR2_cortex_a5
->  	bool "cortex-A5"
->  	select BR2_ARM_CPU_HAS_ARM
-> @@ -419,6 +426,8 @@ config BR2_GCC_TARGET_CPU
->  	default "arm1136jf-s"	if BR2_arm1136jf_s
->  	default "arm1176jz-s"	if BR2_arm1176jz_s
->  	default "arm1176jzf-s"	if BR2_arm1176jzf_s
-> +	default "mpcore"	if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
-> +	default "mpcorenovfp"	if BR2_arm11mpcore
->  	default "cortex-a5"	if BR2_cortex_a5
->  	default "cortex-a7"	if BR2_cortex_a7
->  	default "cortex-a8"	if BR2_cortex_a8
-> -- 
-> 2.6.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> > I'll fix and respin.
+> >
+> > Regards,
+> > Yann E. MORIN.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
