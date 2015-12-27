@@ -1,34 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Dec 2015 12:22:43 +0100
-Subject: [Buildroot] [git commit] arch/arm: add help text to
-	BR2_ARM_ENABLE_VFP
-Message-ID: <20151227112454.B57ED822CF@busybox.osuosl.org>
+Date: Sun, 27 Dec 2015 12:25:50 +0100
+Subject: [Buildroot] [PATCH 0/5 v2] arch/arm: properly handle ARM
+ processors with optional VFP units (branch yem/arm-vfp-2)
+In-Reply-To: <cover.1451145472.git.yann.morin.1998@free.fr>
+References: <cover.1451145472.git.yann.morin.1998@free.fr>
+Message-ID: <20151227122550.1995a3c1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb02e4c0b367c004565178f50e3ea74ee98e249f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in.arm | 4 ++++
- 1 file changed, 4 insertions(+)
+On Sat, 26 Dec 2015 17:05:42 +0100, Yann E. MORIN wrote:
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 01555a6..ea84147 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -200,6 +200,10 @@ config BR2_ARM_ENABLE_VFP
- 	select BR2_ARM_CPU_HAS_VFPV4 if BR2_ARM_CPU_MAYBE_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_VFPV3 if BR2_ARM_CPU_MAYBE_HAS_VFPV3
- 	select BR2_ARM_CPU_HAS_VFPV2 if BR2_ARM_CPU_MAYBE_HAS_VFPV2
-+	help
-+	  For some CPU cores, the VFP extension is optional. Select
-+	  this option if you are certain your particular
-+	  implementation has VFP support and you want to use it.
- 
- choice
- 	prompt "Target ABI"
+> Yann E. MORIN (5):
+>       arch/arm: reorder NEON option
+>       arch/arm: add option to enable an optional VFP unit
+>       arch/arm: only expose EABIhf when the CPU *has* a VFP unit
+>       arch/arm: only expose VFP in FP strategy when the CPU *has* a VFP unit
+>       toolchain/external: Arago armv7 toolchain really requires a VFPv3
+
+Thanks, I've applied, after adding one more commit to add a help text
+to the new BR2_ARM_ENABLE_VFP option.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
