@@ -1,178 +1,173 @@
-From: Steven Noonan <steven@uplinklabs.net>
-Date: Sat, 26 Dec 2015 16:27:59 -0800
-Subject: [Buildroot] [PATCHv2] toolchain: granular choice for stack
-	protector
-In-Reply-To: <1451173326-3424-1-git-send-email-yann.morin.1998@free.fr>
-References: <1451173326-3424-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAKbGBLj6=vRc5SnRPcTzcvaJAU20X3Wq93EUPPDEAJ5DGyWk5Q@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 26 Dec 2015 20:28:52 -0600
+Subject: [Buildroot] [PATCH v2] python-pyxml: remove obsolete package
+In-Reply-To: <20151219210733.GC3394@free.fr>
+References: <1450557773-9320-1-git-send-email-yegorslists@googlemail.com>
+ <20151219210733.GC3394@free.fr>
+Message-ID: <CANQCQpYa5PKkWyHugaxOZTeyUKLCvokAAdVn756j_8Qj6byePg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LGTM. Also looks like a better implementation than what I've been
-using (like the BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 usage). The next time I
-rebase my tree I'll include this version instead and see how things go
-(not expecting any difference in behavior based on my read of this,
-though).
+Yegor, All,
 
-On Sat, Dec 26, 2015 at 3:42 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: Steven Noonan <steven@uplinklabs.net>
+On 12/19/15, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Yegor, All,
 >
-> Currently, we only support two levels of stach-smashing protection:
->   - entirely disabled,
->   - protect _all_ functions with -fstack-protector-all.
+> On 2015-12-19 21:42 +0100, Yegor Yefremov spake thusly:
+>> PyXML is bitrotten and obsolete. You'll find the functionality it
+>> previously provided is now included in the Python standard library.
+>>
+>> So no need to keep this package in Buildroot anymore.
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 >
-> -fstack-protector-all tends to be far too aggressive and impacts
-> performance too much to be worth on a real product.
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> Add a choice that allows us to select between different levels of
-> stack-smashing protection:
->   - none
->   - basic   (NEW)
->   - strong  (NEW)
->   - all
+> Clayton, Matthew: you were the initial authors of that package, so this
+> is the last chance to block this removal. ;-)
+
+Agree, please remove.  This package was a dependency for the audit
+package in its early versions of that patch set.  By the time audit
+was merged pyxml was no longer a dependency.
+
+Thanks for the cleanup!
+-Matt.
+(Sorry if this didn't send plain text, my email client this week is limited)
+
+> Regards,
+> Yann E. MORIN.
 >
-> The differences are documented in the GCC online documentation:
->     https://gcc.gnu.org/onlinedocs/gcc-4.9.2/gcc/Optimize-Options.html
+>> ---
+>> Changes:
+>> 	v2: add Config.in.legacy entry
+>>
+>>  Config.in.legacy                       |  7 +++++++
+>>  package/Config.in                      |  1 -
+>>  package/python-pyxml/Config.in         | 12 ------------
+>>  package/python-pyxml/python-pyxml.hash |  2 --
+>>  package/python-pyxml/python-pyxml.mk   | 17 -----------------
+>>  5 files changed, 7 insertions(+), 32 deletions(-)
+>>  delete mode 100644 package/python-pyxml/Config.in
+>>  delete mode 100644 package/python-pyxml/python-pyxml.hash
+>>  delete mode 100644 package/python-pyxml/python-pyxml.mk
+>>
+>> diff --git a/Config.in.legacy b/Config.in.legacy
+>> index 4d22527..af30de5 100644
+>> --- a/Config.in.legacy
+>> +++ b/Config.in.legacy
+>> @@ -145,6 +145,13 @@ endif
+>>
+>> ###############################################################################
+>>  comment "Legacy options removed in 2016.02"
+>>
+>> +config BR2_PACKAGE_PYTHON_PYXML
+>> +	bool "python-pyxml package has been removed"
+>> +	select BR2_LEGACY
+>> +	help
+>> +	  PyXML is obsolete and its functionality is covered either via
+>> +	  native Python XML support or python-lxml package.
+>> +
+>>  config BR2_PACKAGE_LIBEINA
+>>  	bool "libeina package has been removed"
+>>  	select BR2_LEGACY
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 94898a1..4bd37a4 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -675,7 +675,6 @@ menu "External python modules"
+>>  	source "package/python-pyudev/Config.in"
+>>  	source "package/python-pyusb/Config.in"
+>>  	source "package/python-pyxb/Config.in"
+>> -	source "package/python-pyxml/Config.in"
+>>  	source "package/python-pyyaml/Config.in"
+>>  	source "package/python-pyzmq/Config.in"
+>>  	source "package/python-requests/Config.in"
+>> diff --git a/package/python-pyxml/Config.in
+>> b/package/python-pyxml/Config.in
+>> deleted file mode 100644
+>> index 82316ba..0000000
+>> --- a/package/python-pyxml/Config.in
+>> +++ /dev/null
+>> @@ -1,12 +0,0 @@
+>> -config BR2_PACKAGE_PYTHON_PYXML
+>> -	bool "python-pyxml"
+>> -	depends on BR2_PACKAGE_PYTHON
+>> -	select BR2_PACKAGE_EXPAT
+>> -	help
+>> -	  This is the Python XML package. The distribution contains a
+>> -	  validating XML parser, an implementation of the SAX and DOM
+>> -	  programming interfaces, an interface to the Expat parser (and the
+>> -	  Expat parser itself), and a C helper module that can speed up
+>> -	  xmllib.py by a factor of 5. There's even documentation!
+>> -
+>> -	  http://pyxml.sourceforge.net/topics/index.html
+>> diff --git a/package/python-pyxml/python-pyxml.hash
+>> b/package/python-pyxml/python-pyxml.hash
+>> deleted file mode 100644
+>> index df98c46..0000000
+>> --- a/package/python-pyxml/python-pyxml.hash
+>> +++ /dev/null
+>> @@ -1,2 +0,0 @@
+>> -# Locally computed
+>> -sha256 9fab66f9584fb8e67aebd8745a5c97bf1c5a2e2e461adf68862bcec64e448c13
+>> PyXML-0.8.4.tar.gz
+>> diff --git a/package/python-pyxml/python-pyxml.mk
+>> b/package/python-pyxml/python-pyxml.mk
+>> deleted file mode 100644
+>> index 7ccce8e..0000000
+>> --- a/package/python-pyxml/python-pyxml.mk
+>> +++ /dev/null
+>> @@ -1,17 +0,0 @@
+>> -################################################################################
+>> -#
+>> -# python-pyxml
+>> -#
+>> -################################################################################
+>> -
+>> -PYTHON_PYXML_VERSION = 0.8.4
+>> -PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
+>> -PYTHON_PYXML_SITE =
+>> http://downloads.sourceforge.net/project/pyxml/pyxml/$(PYTHON_PYXML_VERSION)
+>> -PYTHON_PYXML_LICENSE = BSD-3c
+>> -PYTHON_PYXML_LICENSE_FILES = LICENCE
+>> -PYTHON_PYXML_SETUP_TYPE = distutils
+>> -PYTHON_PYXML_DEPENDENCIES = expat
+>> -PYTHON_PYXML_BUILD_OPTS = --with-libexpat=$(STAGING_DIR)/usr
+>> -PYTHON_PYXML_INSTALL_TARGET_OPTS = --with-libexpat=$(STAGING_DIR)/usr
+>> -
+>> -$(eval $(python-package))
+>> --
+>> 2.1.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-> [yann.morin.1998 at free.fr:
->   - rebase
->   - add legacy handling
->   - SSP-strong depends on gcc >= 4.9
->   - slightly simple ifeq-block in package/Makefile.in
->   - keep the comment in the choice; add a comment shen strong is not
->     available
->   - update commit log
-> ]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> ---
-> Changes v1 -> v2:
->   - see commit log ;-)  (Yann)
->
-> ---
-> Note: I (Yann) have only slightly tested this patch. More testing is in
-> order before we can apply this. Steven, care to see if it still fits
-> your need? Thanks! :-)
-> ---
->  Config.in           | 50 +++++++++++++++++++++++++++++++++++++++++++++-----
->  Config.in.legacy    |  8 ++++++++
->  package/Makefile.in |  8 +++++++-
->  3 files changed, 60 insertions(+), 6 deletions(-)
->
-> diff --git a/Config.in b/Config.in
-> index 0be44d9..1e85d78 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -522,12 +522,14 @@ config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
->
->  endif
->
-> -config BR2_ENABLE_SSP
-> +choice
->         bool "build code with Stack Smashing Protection"
-> -       depends on BR2_TOOLCHAIN_HAS_SSP
-> +       default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-> +       default BR2_SSP_STRONG if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> +       default BR2_SSP_REGULAR
->         help
-> -         Enable stack smashing protection support using GCCs
-> -         -fstack-protector-all option.
-> +         Enable stack smashing protection support using GCC's
-> +         -fstack-protector option family.
->
->           See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
->           for details.
-> @@ -536,9 +538,47 @@ config BR2_ENABLE_SSP
->           support. This is always the case for glibc and eglibc
->           toolchain, but is optional in uClibc toolchains.
->
-> -comment "enabling Stack Smashing Protection requires support in the toolchain"
-> +config BR2_SSP_NONE
-> +       bool "None"
-> +       help
-> +         Disable stack-smashing protection.
-> +
-> +comment "Stack Smashing Protection needs a toolchain w/ SSP"
->         depends on !BR2_TOOLCHAIN_HAS_SSP
->
-> +config BR2_SSP_REGULAR
-> +       bool "-fstack-protector"
-> +       depends on BR2_TOOLCHAIN_HAS_SSP
-> +       help
-> +         Emit extra code to check for buffer overflows, such as stack
-> +         smashing attacks. This is done by adding a guard variable to
-> +         functions with vulnerable objects. This includes functions
-> +         that call alloca, and functions with buffers larger than 8
-> +         bytes. The guards are initialized when a function is entered
-> +         and then checked when the function exits. If a guard check
-> +         fails, an error message is printed and the program exits.
-> +
-> +config BR2_SSP_STRONG
-> +       bool "-fstack-protector-strong"
-> +       depends on BR2_TOOLCHAIN_HAS_SSP
-> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> +       help
-> +         Like -fstack-protector but includes additional functions to be
-> +         protected - those that have local array definitions, or have
-> +         references to local frame addresses.
-> +
-> +comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
-> +       depends on BR2_TOOLCHAIN_HAS_SSP
-> +       depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> +
-> +config BR2_SSP_ALL
-> +       bool "-fstack-protector-all"
-> +       depends on BR2_TOOLCHAIN_HAS_SSP
-> +       help
-> +         Like -fstack-protector except that all functions are protected.
-> +
-> +endchoice
-> +
->  choice
->         bool "libraries"
->         default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 2628796..5d45d04 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,14 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2016.02"
->
-> +# BR2_ENABLE_SSP is still referenced in Config.in (default in choice)
-> +config BR2_ENABLE_SSP
-> +       bool "Stack Smashing protection now has different levels"
-> +       help
-> +         The protection offered by SSP can now be selected from different
-> +         protection levels. Be sure to review the SSP level in the build
-> +         options menu.
-> +
->  config BR2_PACKAGE_DIRECTFB_CLE266
->         bool "cle266 driver for directfb removed"
->         select BR2_LEGACY
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 82a66c2..c5652af 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -159,7 +159,13 @@ TARGET_CFLAGS += -msep-data
->  TARGET_CXXFLAGS += -msep-data
->  endif
->
-> -ifeq ($(BR2_ENABLE_SSP),y)
-> +ifeq ($(BR2_SSP_REGULAR),y)
-> +TARGET_CFLAGS += -fstack-protector
-> +TARGET_CXXFLAGS += -fstack-protector
-> +else ifeq ($(BR2_SSP_STRONG),y)
-> +TARGET_CFLAGS += -fstack-protector-strong
-> +TARGET_CXXFLAGS += -fstack-protector-strong
-> +else ifeq ($(BR2_SSP_ALL),y)
->  TARGET_CFLAGS += -fstack-protector-all
->  TARGET_CXXFLAGS += -fstack-protector-all
->  endif
 > --
-> 1.9.1
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>   |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+> conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 >
+
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure
+Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted Third
+Party Intellectual Property (TPIP) content must be encrypted and sent to
+matthew.weber at corp.rockwellcollins.com.
