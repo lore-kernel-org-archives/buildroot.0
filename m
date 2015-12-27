@@ -1,120 +1,151 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Dec 2015 19:07:15 +0100
-Subject: [Buildroot] [PATCHv2] jack2: allow to choose the mode to operate
-	jackd
-Message-ID: <1451239635-6238-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 27 Dec 2015 19:10:23 +0100
+Subject: [Buildroot] [PATCH] jack2: allow to choose the mode to operate
+ jackd
+In-Reply-To: <1431417818-12630-1-git-send-email-antoine.tenart@free-electrons.com>
+References: <1431417818-12630-1-git-send-email-antoine.tenart@free-electrons.com>
+Message-ID: <20151227181022.GI3483@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Antoine T?nart <antoine.tenart@free-electrons.com>
+Antoine, All,
 
-jack2 allows to use three modes:
-- A legacy jackd service alone.
-- A DBUS jackd service alone.
-- A mixture between the standalone jackd and the DBUS jackd.
+On 2015-05-12 10:03 +0200, Antoine Tenart spake thusly:
+> jack2 allows to use three modes:
+> - A legacy jackd service alone.
+> - A DBUS jackd service alone.
+> - A mixture between the standalone jackd and the DBUS jackd.
+> 
+> This patch adds the possibility to choose between these three modes,
+> while the legacy jackd was the only option before.
+> 
+> In addition, the jack_control tool is removed when the DBUS jackd is not
+> available, as this tool is used to control it.
 
-This patch adds the possibility to choose between these three modes,
-while the legacy jackd was the only option before.
+I've tried to update that patch, clean it up a bit, and I just sent a
+new version:
+    http://lists.busybox.net/pipermail/buildroot/2015-December/148388.html
 
-In addition, the jack_control tool is removed when the DBUS jackd is not
-available, as this tool is used to control it.
+I'd like your opinion on this new version.
 
-Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
-[yann.morin.1998 at free.fr:
-  - rebase
-  - only use two booleans, not a choice
-  - python is a runtime-only dependency
-  - use python3 if enabled, fallback to python
-  - simplify post-install condition
-]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Regards,
+Yann E. MORIN.
 
----
-Changes v1 -> v2:
-  - rebased; see commit log  (Yann)
----
- package/jack2/Config.in | 26 ++++++++++++++++++++++++++
- package/jack2/jack2.mk  | 15 +++++++++++++++
- 2 files changed, 41 insertions(+)
+> Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+> ---
+>  package/jack2/Config.in | 40 ++++++++++++++++++++++++++++++++++++++++
+>  package/jack2/jack2.mk  | 22 +++++++++++++++++++++-
+>  2 files changed, 61 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+> index eeeb8daad8bd..26869a7aac1c 100644
+> --- a/package/jack2/Config.in
+> +++ b/package/jack2/Config.in
+> @@ -20,6 +20,46 @@ config BR2_PACKAGE_JACK2
+>  
+>  	  http://jackaudio.org/
+>  
+> +if BR2_PACKAGE_JACK2
+> +
+> +choice
+> +	prompt "jack2 mode"
+> +	default BR2_PACKAGE_JACK2_LEGACY
+> +	help
+> +	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
+> +
+> +config BR2_PACKAGE_JACK2_LEGACY
+> +	bool "legacy jack2 only"
+> +	help
+> +	  Build and use only jackd.
+> +
+> +config BR2_PACKAGE_JACK2_DBUS
+> +	bool "dbus jack2 only"
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_USE_WCHAR
+> +	select BR2_PACKAGE_DBUS
+> +	select BR2_PACKAGE_DBUS_PYTHON
+> +	select BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_PYEXPAT
+> +	help
+> +	  Build on use only jackdbus.
+> +
+> +config BR2_PACKAGE_JACK2_CLASSIC
+> +	bool "legacy jack2 and dbus jack2 mixture"
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_USE_WCHAR
+> +	select BR2_PACKAGE_DBUS
+> +	select BR2_PACKAGE_DBUS_PYTHON
+> +	select BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_PYEXPAT
+> +	help
+> +	  Build jackd and jackdbus, and allow to use both of
+> +	  these tools.
+> +
+> +endchoice
+> +
+> +endif
+> +
+>  comment "jack2 needs a toolchain w/ threads, C++"
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_ARCH_HAS_ATOMICS
+> diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+> index 73328d3fd408..72f2a23d83c0 100644
+> --- a/package/jack2/jack2.mk
+> +++ b/package/jack2/jack2.mk
+> @@ -10,12 +10,24 @@ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
+>  JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+>  JACK2_INSTALL_STAGING = YES
+>  
+> +JACK2_CONF_OPTS = --alsa
+> +
+> +ifeq ($(BR2_PACKAGE_JACK2_DBUS),y)
+> +JACK2_DEPENDENCIES += dbus
+> +JACK2_CONF_OPTS += --dbus
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_JACK2_CLASSIC),y)
+> +JACK2_DEPENDENCIES += dbus
+> +JACK2_CONF_OPTS += --dbus --classic
+> +endif
+> +
+>  define JACK2_CONFIGURE_CMDS
+>  	(cd $(@D); \
+>  		$(TARGET_CONFIGURE_OPTS)	\
+>  		$(HOST_DIR)/usr/bin/python2 ./waf configure \
+>  		--prefix=/usr			\
+> -		--alsa				\
+> +		$(JACK2_CONF_OPTS)		\
+>  	)
+>  endef
+>  
+> @@ -33,4 +45,12 @@ define JACK2_INSTALL_STAGING_CMDS
+>  		install)
+>  endef
+>  
+> +define JACK2_REMOVE_JACK_CONTROL
+> +	$(RM) -f $(TARGET_DIR)/usr/bin/jack_control
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_JACK2_LEGACY),y)
+> +JACK2_POST_INSTALL_TARGET_HOOKS += JACK2_REMOVE_JACK_CONTROL
+> +endif
+> +
+>  $(eval $(generic-package))
+> -- 
+> 2.4.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/jack2/Config.in b/package/jack2/Config.in
-index 350a342..a8799b2 100644
---- a/package/jack2/Config.in
-+++ b/package/jack2/Config.in
-@@ -11,6 +11,8 @@ config BR2_PACKAGE_JACK2
- 	select BR2_PACKAGE_ALSA_LIB_HWDEP
- 	select BR2_PACKAGE_ALSA_LIB_SEQ
- 	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
-+	# Ensure we get at least one:
-+	select BR2_PACKAGE_JACK2_LEGACY if !BR2_PACKAGE_JACK2_DBUS
- 	help
- 	  JACK Audio Connection Kit (server and example clients).
- 
-@@ -21,6 +23,30 @@ config BR2_PACKAGE_JACK2
- 
- 	  http://jackaudio.org/
- 
-+if BR2_PACKAGE_JACK2
-+
-+config BR2_PACKAGE_JACK2_LEGACY
-+	bool "classic jack2"
-+	help
-+	  Build and use jackd.
-+
-+	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
-+
-+config BR2_PACKAGE_JACK2_DBUS
-+	bool "dbus jack2"
-+	depends on BR2_USE_WCHAR # dbus-python, python
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_DBUS_PYTHON
-+	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-+	help
-+	  Build on use jackdbus.
-+
-+	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
-+
-+endif
-+
- comment "jack2 needs a toolchain w/ threads, C++, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index 73328d3..e4ad36e 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -10,12 +10,27 @@ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
- JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
- JACK2_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_PACKAGE_JACK2_LEGACY),y)
-+JACK2_CONF_OPTS += --classic
-+else
-+define JACK2_REMOVE_JACK_CONTROL
-+	$(RM) -f $(TARGET_DIR)/usr/bin/jack_control
-+endef
-+JACK2_POST_INSTALL_TARGET_HOOKS += JACK2_REMOVE_JACK_CONTROL
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JACK2_DBUS),y)
-+JACK2_DEPENDENCIES += dbus
-+JACK2_CONF_OPTS += --dbus
-+endif
-+
- define JACK2_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS)	\
- 		$(HOST_DIR)/usr/bin/python2 ./waf configure \
- 		--prefix=/usr			\
- 		--alsa				\
-+		$(JACK2_CONF_OPTS)		\
- 	)
- endef
- 
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
