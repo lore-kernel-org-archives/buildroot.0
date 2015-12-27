@@ -1,54 +1,144 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 17:57:58 +0100
-Subject: [Buildroot] [git commit] package/nodejs: move comment around,
-	to keep proper indentation
-Message-ID: <20151228165835.00E5B7F8EB@busybox.osuosl.org>
+Date: Sun, 27 Dec 2015 11:45:12 +0100
+Subject: [Buildroot] [git commit] strace: fix building for arc, metag, nios2,
+	or1k and tile
+Message-ID: <20151227105858.6437581F63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d819e3ebed293eda0168285f61c1c153394ef90
+commit: http://git.buildroot.net/buildroot/commit/?id=7b4a2bfa579030cf83bb3c003ec77a99627769fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In Kconfig, when there is an item (like a comment) between a symbol and
-its dependees, then the indentation is not in effect.
+Following commit broke building for arc, metag, nios2, or1k and tile:
+http://sourceforge.net/p/strace/code/ci/34683e3926d8c2daa368afb805da422ee7043396/
 
-Move the symbol to the top of the file to guarantee the indentation in
-menuconfig.
+Now we're fixing that breakage with a back-port of upstream fix:
+http://sourceforge.net/p/strace/code/ci/dd1a80c8d213eed95fe55b7ebcb07ee165dd8e4b/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Mentioned fix will be a part of the next strace release,
+i.e. this patch must be removed on strace version bump.
+
+Fixes http://autobuild.buildroot.org/results/f25/f25c23003ed282b935f5289c944615860265364a
+and alike, see http://autobuild.buildroot.org/?reason=strace-4.11
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nodejs/Config.in | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ .../0001-arc-metag-nios2-or1k-tile-fix-build.patch | 104 +++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index eb3aeec..008fbbf 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -1,3 +1,10 @@
-+comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
-+	depends on !BR2_MIPS_SOFT_FLOAT
-+	depends on !BR2_ARM_CPU_ARMV4
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch b/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
+new file mode 100644
+index 0000000..0d81b59
+--- /dev/null
++++ b/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
+@@ -0,0 +1,104 @@
++From d83bcfa9a2977c037c638ae09e561f554ab19681 Mon Sep 17 00:00:00 2001
++From: Alexey Brodkin <abrodkin@synopsys.com>
++Date: Sat, 26 Dec 2015 00:13:36 +0300
++Subject: [PATCH] arc, metag, nios2, or1k, tile: fix build
 +
- config BR2_PACKAGE_NODEJS
- 	bool "nodejs"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -17,13 +24,6 @@ config BR2_PACKAGE_NODEJS
- 
- 	  http://nodejs.org/
- 
--comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
--	depends on BR2_USE_MMU
--	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
--	depends on !BR2_MIPS_SOFT_FLOAT
--	depends on !BR2_ARM_CPU_ARMV4
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
--
- if BR2_PACKAGE_NODEJS
- 
- # Starting with 0.12.x, on ARM, V8 (the JS engine)
++Fix build regression introduced by commit
++34683e3926d8c2daa368afb805da422ee7043396.
++
++* linux/32/syscallent.h: Add sys_ prefix to ARCH_mmap and mmap.
++* linux/arc/syscallent.h: Add sys_ prefix to ARCH_mmap and mmap_pgoff.
++* linux/nios2/syscallent.h: Likewise.
++* linux/or1k/syscallent.h: Likewise.
++* linux/tile/syscallent1.h: Add sys_ prefix to ARCH_mmap and sys_mmap_4koff.
++* pathtrace.c (pathtrace_match): Handle SEN_ARCH_mmap.
++
++This is a back-port of upstream commit
++http://sourceforge.net/p/strace/code/ci/dd1a80c8d213eed95fe55b7ebcb07ee165dd8e4b/
++
++It should be removed upon the next bump of strace version.
++
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++---
++ linux/32/syscallent.h    | 6 +++---
++ linux/arc/syscallent.h   | 2 +-
++ linux/nios2/syscallent.h | 2 +-
++ linux/or1k/syscallent.h  | 2 +-
++ linux/tile/syscallent1.h | 2 +-
++ pathtrace.c              | 1 +
++ 6 files changed, 8 insertions(+), 7 deletions(-)
++
++diff --git a/linux/32/syscallent.h b/linux/32/syscallent.h
++index 5f997e7..e6f895c 100644
++--- a/linux/32/syscallent.h
+++++ b/linux/32/syscallent.h
++@@ -1,5 +1,5 @@
++-#ifndef ARCH_mmap
++-# define ARCH_mmap mmap
+++#ifndef sys_ARCH_mmap
+++# define sys_ARCH_mmap sys_mmap
++ #endif
++ [  0] = { 2,	0,		SEN(io_setup),			"io_setup"		},
++ [  1] = { 1,	0,		SEN(io_destroy),		"io_destroy"		},
++@@ -276,5 +276,5 @@
++ [283] = { 2,	0,		SEN(membarrier),		"membarrier",		},
++ [284] = { 3,	TM,		SEN(mlock2),			"mlock2"		},
++ 
++-#undef ARCH_mmap
+++#undef sys_ARCH_mmap
++ #undef ARCH_WANT_SYNC_FILE_RANGE2
++diff --git a/linux/arc/syscallent.h b/linux/arc/syscallent.h
++index 5847dc4..1100008 100644
++--- a/linux/arc/syscallent.h
+++++ b/linux/arc/syscallent.h
++@@ -1,4 +1,4 @@
++-#define ARCH_mmap mmap_pgoff
+++#define sys_ARCH_mmap sys_mmap_pgoff
++ #include "32/syscallent.h"
++ [244] = { 3,	0,	SEN(printargs),	"arc_cacheflush"},
++ [245] = { 1,	0,	SEN(printargs),	"arc_settls"	},
++diff --git a/linux/nios2/syscallent.h b/linux/nios2/syscallent.h
++index 8a4b70e..01efe3a 100644
++--- a/linux/nios2/syscallent.h
+++++ b/linux/nios2/syscallent.h
++@@ -1,4 +1,4 @@
++-#define ARCH_mmap mmap_pgoff
+++#define sys_ARCH_mmap sys_mmap_pgoff
++ #include "32/syscallent.h"
++ [244] = {4,    0,	SEN(cacheflush), "cacheflush"},
++ [245 ... 259] = { },
++diff --git a/linux/or1k/syscallent.h b/linux/or1k/syscallent.h
++index ed84b3b..351fe25 100644
++--- a/linux/or1k/syscallent.h
+++++ b/linux/or1k/syscallent.h
++@@ -1,4 +1,4 @@
++-#define ARCH_mmap mmap_pgoff
+++#define sys_ARCH_mmap sys_mmap_pgoff
++ #include "32/syscallent.h"
++ [244] = { 3,	NF,	SEN(or1k_atomic),	"or1k_atomic"	},
++ [245 ... 259] = { },
++diff --git a/linux/tile/syscallent1.h b/linux/tile/syscallent1.h
++index c86f059..28dbab4 100644
++--- a/linux/tile/syscallent1.h
+++++ b/linux/tile/syscallent1.h
++@@ -1,4 +1,4 @@
++-#define ARCH_mmap mmap_4koff
+++#define sys_ARCH_mmap sys_mmap_4koff
++ #define ARCH_WANT_SYNC_FILE_RANGE2 1
++ #include "32/syscallent.h"
++ [244] = { 1,	0,	SEN(printargs),	"cmpxchg_badaddr"	},
++diff --git a/pathtrace.c b/pathtrace.c
++index d530ec2..e72cdf7 100644
++--- a/pathtrace.c
+++++ b/pathtrace.c
++@@ -216,6 +216,7 @@ pathtrace_match(struct tcb *tcp)
++ 	case SEN_mmap:
++ 	case SEN_mmap_4koff:
++ 	case SEN_mmap_pgoff:
+++	case SEN_ARCH_mmap:
++ 		/* x, x, x, x, fd */
++ 		return fdmatch(tcp, tcp->u_arg[4]);
++ 
++-- 
++2.4.3
++
