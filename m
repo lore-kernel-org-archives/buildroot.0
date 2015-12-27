@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Dec 2015 14:59:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.60.0
-In-Reply-To: <1451081406-21991-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1451081406-21991-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151227145920.28ceac50@free-electrons.com>
+Date: Sun, 27 Dec 2015 15:00:06 +0100
+Subject: [Buildroot] [PATCH v2 2/2] tpm-tools: new package
+In-Reply-To: <1446659225-30438-2-git-send-email-nrubinstein@aldebaran.com>
+References: <1446659225-30438-1-git-send-email-nrubinstein@aldebaran.com>
+ <1446659225-30438-2-git-send-email-nrubinstein@aldebaran.com>
+Message-ID: <20151227150006.39dab496@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear No? Rubinstein,
 
-On Fri, 25 Dec 2015 23:10:06 +0100, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+On Wed,  4 Nov 2015 18:47:05 +0100, No? Rubinstein wrote:
+> Signed-off-by: Al West <al.west@v-nova.com>
+> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
+> 
 > ---
->  package/boost/boost.hash | 6 +++---
->  package/boost/boost.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
 
-This update is causing a large number of build failures (some may not
-be related to the update itself, but some clearly seem to be new). Can
-you have a look at:
+This package is causing a number of build issues. Can you look into
+them? See:
 
-  http://autobuild.buildroot.org/?reason=boost-1.60.0
+  http://autobuild.buildroot.org/?reason=tpm-tools-1.3.8
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
