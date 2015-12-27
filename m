@@ -1,67 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Dec 2015 15:34:51 +0100
-Subject: [Buildroot] [PATCHv3] toolchain: granular choice for stack
- protector
-In-Reply-To: <1451214451-26133-1-git-send-email-yann.morin.1998@free.fr>
-References: <1451214451-26133-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20151227153451.7b3ede57@free-electrons.com>
+Date: Sun, 27 Dec 2015 12:17:48 +0100
+Subject: [Buildroot] [git commit] arch/arm: only expose VFP in FP strategy
+	when the CPU *has* a VFP unit
+Message-ID: <20151227112454.94281822CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=110fecf1f50b766813335dd5d70cb4b31c30c088
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 27 Dec 2015 12:07:31 +0100, Yann E. MORIN wrote:
-> From: Steven Noonan <steven@uplinklabs.net>
-> 
-> Currently, we only support two levels of stach-smashing protection:
->   - entirely disabled,
->   - protect _all_ functions with -fstack-protector-all.
-> 
-> -fstack-protector-all tends to be far too aggressive and impacts
-> performance too much to be worth on a real product.
-> 
-> Add a choice that allows us to select between different levels of
-> stack-smashing protection:
->   - none
->   - basic   (NEW)
->   - strong  (NEW)
->   - all
-> 
-> The differences are documented in the GCC online documentation:
->     https://gcc.gnu.org/onlinedocs/gcc-4.9.2/gcc/Optimize-Options.html
-> 
-> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-> [yann.morin.1998 at free.fr:
->   - rebase
->   - add legacy handling
->   - SSP-strong depends on gcc >= 4.9
->   - slightly simple ifeq-block in package/Makefile.in
->   - keep the comment in the choice; add a comment shen strong is not
->     available
->   - drop the defaults (only keep the legacy)
->   - update commit log
-> ]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
-> Changes v2 -> v3:
->   - drop the new defaults, only keep legacy  (Thomas)
+There's no point in offering the user an option to select an FP strategy
+when the CPU does not actually have a VFP unit.
 
-Applied with the following changes:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.arm | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-    [Thomas:
-     - only show the choice if the toolchain has SSP support
-     - add details for the BR2_SSP_ALL option that it has a significant
-       performance impact.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index d63a26c..01555a6 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -276,7 +276,7 @@ config BR2_ARM_SOFT_FLOAT
+ 
+ config BR2_ARM_FPU_VFPV2
+ 	bool "VFPv2"
+-	depends on BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_MAYBE_HAS_VFPV2
++	depends on BR2_ARM_CPU_HAS_VFPV2
+ 	help
+ 	  This option allows to use the VFPv2 floating point unit, as
+ 	  available in some ARMv5 processors (ARM926EJ-S) and some
+@@ -289,7 +289,7 @@ config BR2_ARM_FPU_VFPV2
+ 
+ config BR2_ARM_FPU_VFPV3
+ 	bool "VFPv3"
+-	depends on BR2_ARM_CPU_HAS_VFPV3 || BR2_ARM_CPU_MAYBE_HAS_VFPV3
++	depends on BR2_ARM_CPU_HAS_VFPV3
+ 	help
+ 	  This option allows to use the VFPv3 floating point unit, as
+ 	  available in some ARMv7 processors (Cortex-A{8, 9}). This
+@@ -305,7 +305,7 @@ config BR2_ARM_FPU_VFPV3
+ 
+ config BR2_ARM_FPU_VFPV3D16
+ 	bool "VFPv3-D16"
+-	depends on BR2_ARM_CPU_HAS_VFPV3 || BR2_ARM_CPU_MAYBE_HAS_VFPV3
++	depends on BR2_ARM_CPU_HAS_VFPV3
+ 	help
+ 	  This option allows to use the VFPv3 floating point unit, as
+ 	  available in some ARMv7 processors (Cortex-A{8, 9}). This
+@@ -320,7 +320,7 @@ config BR2_ARM_FPU_VFPV3D16
+ 
+ config BR2_ARM_FPU_VFPV4
+ 	bool "VFPv4"
+-	depends on BR2_ARM_CPU_HAS_VFPV4 || BR2_ARM_CPU_MAYBE_HAS_VFPV4
++	depends on BR2_ARM_CPU_HAS_VFPV4
+ 	help
+ 	  This option allows to use the VFPv4 floating point unit, as
+ 	  available in some ARMv7 processors (Cortex-A{5, 7, 12,
+@@ -335,7 +335,7 @@ config BR2_ARM_FPU_VFPV4
+ 
+ config BR2_ARM_FPU_VFPV4D16
+ 	bool "VFPv4-D16"
+-	depends on BR2_ARM_CPU_HAS_VFPV4 || BR2_ARM_CPU_MAYBE_HAS_VFPV4
++	depends on BR2_ARM_CPU_HAS_VFPV4
+ 	help
+ 	  This option allows to use the VFPv4 floating point unit, as
+ 	  available in some ARMv7 processors (Cortex-A{5, 7, 12,
+@@ -360,7 +360,7 @@ config BR2_ARM_FPU_NEON
+ 
+ config BR2_ARM_FPU_NEON_VFPV4
+ 	bool "NEON/VFPv4"
+-	depends on BR2_ARM_CPU_HAS_VFPV4 || BR2_ARM_CPU_MAYBE_HAS_VFPV4
++	depends on BR2_ARM_CPU_HAS_VFPV4
+ 	depends on BR2_ARM_CPU_HAS_NEON
+ 	help
+ 	  This option allows to use both the VFPv4 and the NEON SIMD
