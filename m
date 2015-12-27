@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 12:28:35 +0100
-Subject: [Buildroot] [git commit] pinentry: optionally depend on libsecret
-Message-ID: <20151228112950.4585F7F8AF@busybox.osuosl.org>
+Date: Sun, 27 Dec 2015 15:05:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.60.0
+In-Reply-To: <20151227145920.28ceac50@free-electrons.com>
+References: <1451081406-21991-1-git-send-email-joerg.krause@embedded.rocks>
+ <20151227145920.28ceac50@free-electrons.com>
+Message-ID: <20151227150531.1072a816@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f3a2ed15eac8e9a03983c90f7f91b69a50650566
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-pinentry can use libsecret when available, so we should handle this
-optional dependencies properly.
+On Sun, 27 Dec 2015 14:59:20 +0100, Thomas Petazzoni wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pinentry/pinentry.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> On Fri, 25 Dec 2015 23:10:06 +0100, J?rg Krause wrote:
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > ---
+> >  package/boost/boost.hash | 6 +++---
+> >  package/boost/boost.mk   | 2 +-
+> >  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> This update is causing a large number of build failures (some may not
+> be related to the update itself, but some clearly seem to be new). Can
+> you have a look at:
+> 
+>   http://autobuild.buildroot.org/?reason=boost-1.60.0
 
-diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
-index ab7be54..09a7705 100644
---- a/package/pinentry/pinentry.mk
-+++ b/package/pinentry/pinentry.mk
-@@ -21,6 +21,13 @@ else
- PINENTRY_CONF_OPTS += --without-x
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSECRET),y)
-+PINENTRY_CONF_OPTS += --enable-libsecret
-+PINENTRY_DEPENDENCIES += libsecret
-+else
-+PINENTRY_CONF_OPTS += --disable-libsecret
-+endif
-+
- # pinentry-ncurses backend
- ifeq ($(BR2_PACKAGE_PINENTRY_NCURSES),y)
- PINENTRY_CONF_OPTS += --enable-ncurses --with-ncurses-include-dir=none
+We are also getting build failures of Boost on the host:
+
+  http://autobuild.buildroot.org/?reason=host-boost-1.60.0
+
+This might be due to the host compiler not having C++11 support.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
