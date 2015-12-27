@@ -1,61 +1,120 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Dec 2015 18:04:37 +0100
-Subject: [Buildroot] [PATCH 1/1] Add ARM11 MPCore CPU target support
-In-Reply-To: <20151223231024.3c760e7b@free-electrons.com>
-References: <BLU437-SMTP302AFC715EFB42C4E0320FC1020@phx.gbl>
- <20151128143030.GA3816@free.fr>
- <20151223231024.3c760e7b@free-electrons.com>
-Message-ID: <20151227170437.GH3483@free.fr>
+Date: Sun, 27 Dec 2015 19:07:15 +0100
+Subject: [Buildroot] [PATCHv2] jack2: allow to choose the mode to operate
+	jackd
+Message-ID: <1451239635-6238-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: Antoine T?nart <antoine.tenart@free-electrons.com>
 
-On 2015-12-23 23:10 +0100, Thomas Petazzoni spake thusly:
-> Sergi sent a v2 of his patch... but your suggestion doesn't work. See
-> below.
-> 
-> On Sat, 28 Nov 2015 15:30:30 +0100, Yann E. MORIN wrote:
-> 
-> > I wonder if we should not make VFP optional, and change the CPU nme on
-> > whether the user has enabled VFP, like:
-> > 
-> >     config BR2_arm11mpcore
-> >         bool "mpcore"
-> >         [...]
-> >         select BR2_ARM_CPU_MAYBE_HAS_VFPV2
-> >         [...]
-> > 
-> >     config BR2_GCC_TARGET_CPU
-> >         [...]
-> >         default "mpcore"        if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
-> >         default "mpcorenovfp"   if BR2_arm11mpcore
-> >         [...]
-> 
-> This doesn't work, because BR2_ARM_CPU_HAS_VFPV2 is not a user visible
-> option, and there is nothing that selects it in the current Buildroot.
-> Therefore the "mpcore" case can never be reached.
-> 
-> Consequently, I am tempted to take v1 of Sergi's patch. Yes, it means
-> we don't support the no-VFP variant of ARM11 MPCore, but I'm not sure
-> there are lots of ARM11 MPCore without a VFP, so maybe supporting
-> mpcorenovfp is not worth the effort for the moment.
-> 
-> Thoughts?
+jack2 allows to use three modes:
+- A legacy jackd service alone.
+- A DBUS jackd service alone.
+- A mixture between the standalone jackd and the DBUS jackd.
 
-I think that with the newly VFP stuff we committed today, we could
-slightly rework that patch and make it work, no? ;-)
+This patch adds the possibility to choose between these three modes,
+while the legacy jackd was the only option before.
 
-Regards,
-Yann E. MORIN.
+In addition, the jack_control tool is removed when the DBUS jackd is not
+available, as this tool is used to control it.
 
+Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+[yann.morin.1998 at free.fr:
+  - rebase
+  - only use two booleans, not a choice
+  - python is a runtime-only dependency
+  - use python3 if enabled, fallback to python
+  - simplify post-install condition
+]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+---
+Changes v1 -> v2:
+  - rebased; see commit log  (Yann)
+---
+ package/jack2/Config.in | 26 ++++++++++++++++++++++++++
+ package/jack2/jack2.mk  | 15 +++++++++++++++
+ 2 files changed, 41 insertions(+)
+
+diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+index 350a342..a8799b2 100644
+--- a/package/jack2/Config.in
++++ b/package/jack2/Config.in
+@@ -11,6 +11,8 @@ config BR2_PACKAGE_JACK2
+ 	select BR2_PACKAGE_ALSA_LIB_HWDEP
+ 	select BR2_PACKAGE_ALSA_LIB_SEQ
+ 	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
++	# Ensure we get at least one:
++	select BR2_PACKAGE_JACK2_LEGACY if !BR2_PACKAGE_JACK2_DBUS
+ 	help
+ 	  JACK Audio Connection Kit (server and example clients).
+ 
+@@ -21,6 +23,30 @@ config BR2_PACKAGE_JACK2
+ 
+ 	  http://jackaudio.org/
+ 
++if BR2_PACKAGE_JACK2
++
++config BR2_PACKAGE_JACK2_LEGACY
++	bool "classic jack2"
++	help
++	  Build and use jackd.
++
++	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
++
++config BR2_PACKAGE_JACK2_DBUS
++	bool "dbus jack2"
++	depends on BR2_USE_WCHAR # dbus-python, python
++	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_DBUS_PYTHON
++	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
++	help
++	  Build on use jackdbus.
++
++	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
++
++endif
++
+ comment "jack2 needs a toolchain w/ threads, C++, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_ARCH_HAS_ATOMICS
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 73328d3..e4ad36e 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -10,12 +10,27 @@ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
+ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+ JACK2_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PACKAGE_JACK2_LEGACY),y)
++JACK2_CONF_OPTS += --classic
++else
++define JACK2_REMOVE_JACK_CONTROL
++	$(RM) -f $(TARGET_DIR)/usr/bin/jack_control
++endef
++JACK2_POST_INSTALL_TARGET_HOOKS += JACK2_REMOVE_JACK_CONTROL
++endif
++
++ifeq ($(BR2_PACKAGE_JACK2_DBUS),y)
++JACK2_DEPENDENCIES += dbus
++JACK2_CONF_OPTS += --dbus
++endif
++
+ define JACK2_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS)	\
+ 		$(HOST_DIR)/usr/bin/python2 ./waf configure \
+ 		--prefix=/usr			\
+ 		--alsa				\
++		$(JACK2_CONF_OPTS)		\
+ 	)
+ endef
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
