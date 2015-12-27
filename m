@@ -1,167 +1,61 @@
-From: Craig Swank <craigswank@fastmail.fm>
-Date: Sun, 27 Dec 2015 09:01:10 -0800
-Subject: [Buildroot] trying to use
- https://github.com/beagleboard/linux.git with buildroot
-In-Reply-To: <CAOURK2uwXJd7KpTrWZqZP_Ci3oPQjOYedF-_Je0yTTo5tnFbNg@mail.gmail.com>
-References: <1450890296.2355509.475056490.71128E4E@webmail.messagingengine.com>
- <20151223184751.12365336@free-electrons.com>
- <1450893821.3034067.475093450.34890777@webmail.messagingengine.com>
- <1450894505.3036056.475106194.467AC874@webmail.messagingengine.com>
- <20151223193943.21a6f0fc@free-electrons.com>
- <1450910736.3752716.475291418.490BB3EA@webmail.messagingengine.com>
- <20151223235253.0afe702e@free-electrons.com>
- <1450917779.3775953.475348978.37FAC3A8@webmail.messagingengine.com>
- <n5mdi8$5go$1@ger.gmane.org>
- <1451154853.3394517.476716010.48669FA1@webmail.messagingengine.com>
- <CA+-urNRO0DWv7Xw+DctiFspDootbJRwbwdE66UYMbfCjL8jWuQ@mail.gmail.com>
- <1451173488.3993354.476829962.2D827969@webmail.messagingengine.com>
- <20151227110817.288a2e3f@free-electrons.com>
- <1451223280.497246.477065626.34AC2AD3@webmail.messagingengine.com>
- <CAOURK2uwXJd7KpTrWZqZP_Ci3oPQjOYedF-_Je0yTTo5tnFbNg@mail.gmail.com>
-Message-ID: <1451235670.1698153.477162482.3D38F83F@webmail.messagingengine.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 27 Dec 2015 18:04:37 +0100
+Subject: [Buildroot] [PATCH 1/1] Add ARM11 MPCore CPU target support
+In-Reply-To: <20151223231024.3c760e7b@free-electrons.com>
+References: <BLU437-SMTP302AFC715EFB42C4E0320FC1020@phx.gbl>
+ <20151128143030.GA3816@free.fr>
+ <20151223231024.3c760e7b@free-electrons.com>
+Message-ID: <20151227170437.GH3483@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'll be interested in how your tests for the DTC patch go. ?I'm not
-having luck with the bone_capemgr at the moment and am considering
-filing a bug at beagleboard/linux.
+Thomas, All,
 
-Will your tests involve compiling a .dtbo file and doing an echo command
-to /sys/devices/platform/bone_capemgr/slots? ?When I try to load my dtbo
-file (for dallas one wire temperature sensor), the expected kernel
-modules don't get loaded even though no errors show up in dmesg.
-
-
-
-
-On Sun, Dec 27, 2015, at 08:28 AM, Chris LaRocque wrote:
->
-> Hello
-
-
-> I'm running a new beaglebone_defconfig as we speak and may be able to
-> post a patch this afternoon.
-
-
-> The DTC patch will take me a couple of days to test. What I posted
-> earlier was a hack that accomplished my needs but it needs to be a
-> little more refined. I'll review the debian install script at?github.com/beagleboard/bb.org-
-> overlays to see how to best incorporate both the DTC patch and the
-> device tree overlays. Can I put the DTC patch into the
-> /board/beaglebone directory and have it specified for application in
-> the board defconfig? Suggestions on this aspect would be much
-> appreciated.
-
-
-> Regards
-
-
-> C
-
-
->
-
-
-> Pushing back the boundaries of ignorance.
-
-
-> I'd like to help out, but it might take a bit of hand holding for me
->
-since I'm pretty new to buildroot and submitting patches.? I suppose the
->
-things that would need to be changed would be
->
->
-1. configs/beaglbone_defconfig
->
-2. the uEnv.txt file needs to be different in output/images
->
-3. Chris attached a patch for the host dtc
->
-4. Two configs for the kernel build need to change
->
->
-I have a diff for configs/beaglebone_defconfig but everything else I'm
->
-not sure where to start.
->
->
-If someone has time to coach me through this I'm happy to learn, but if
->
-it is easier for someone else to do this I could learn from that too.
->
->
->
->
-On Sun, Dec 27, 2015, at 02:08 AM, Thomas Petazzoni wrote:
->
-> Hello all,
->
->
->
-> On Sat, 26 Dec 2015 15:44:48 -0800, Craig Swank wrote:
->
->
->
-> > YES!? Using Chris's uEnv.txt and u-boot 2015.07 instead of
-> > 2015.10 it
->
-> > finally booted up correctly.? Many thanks to Thomas, Chris,
-> > and, last
->
-> > but not least, Frank, who swooped in with the secret sauce at
-> > the very
->
-> > end.
->
-> >
->
-> > I'm not even close to being able to figure out why the 07 version
-> > worked
->
-> > and 10 did not, but I'm just too happy to care.
->
->
->
-> Glad to hear that you solved the different problems.
->
->
->
-> Our beaglebone_defconfig is utterly old, and it would be really great
->
-> to update it to use newer kernel and u-boot versions.
->
->
->
-> Thanks!
->
->
->
-> Thomas
->
-> --
->
-> Thomas Petazzoni, CTO, Free Electrons
->
-> Embedded Linux, Kernel and Android engineering
->
-> http://free-electrons.com
->
->
->
---
+On 2015-12-23 23:10 +0100, Thomas Petazzoni spake thusly:
+> Sergi sent a v2 of his patch... but your suggestion doesn't work. See
+> below.
 > 
-? Craig Swank
-> craigswank at fastmail.fm
- 
---
-? Craig Swank
-? craigswank at fastmail.fm
- 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151227/bec65914/attachment.html>
+> On Sat, 28 Nov 2015 15:30:30 +0100, Yann E. MORIN wrote:
+> 
+> > I wonder if we should not make VFP optional, and change the CPU nme on
+> > whether the user has enabled VFP, like:
+> > 
+> >     config BR2_arm11mpcore
+> >         bool "mpcore"
+> >         [...]
+> >         select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+> >         [...]
+> > 
+> >     config BR2_GCC_TARGET_CPU
+> >         [...]
+> >         default "mpcore"        if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
+> >         default "mpcorenovfp"   if BR2_arm11mpcore
+> >         [...]
+> 
+> This doesn't work, because BR2_ARM_CPU_HAS_VFPV2 is not a user visible
+> option, and there is nothing that selects it in the current Buildroot.
+> Therefore the "mpcore" case can never be reached.
+> 
+> Consequently, I am tempted to take v1 of Sergi's patch. Yes, it means
+> we don't support the no-VFP variant of ARM11 MPCore, but I'm not sure
+> there are lots of ARM11 MPCore without a VFP, so maybe supporting
+> mpcorenovfp is not worth the effort for the moment.
+> 
+> Thoughts?
+
+I think that with the newly VFP stuff we committed today, we could
+slightly rework that patch and make it work, no? ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
