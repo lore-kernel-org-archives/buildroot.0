@@ -1,48 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Dec 2015 11:26:55 +0100
-Subject: [Buildroot] [PATCHv2] toolchain: granular choice for stack
- protector
-In-Reply-To: <20151227111936.5283ba73@free-electrons.com>
-References: <1451173326-3424-1-git-send-email-yann.morin.1998@free.fr>
- <20151227111936.5283ba73@free-electrons.com>
-Message-ID: <20151227102655.GB3483@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Dec 2015 11:44:27 +0100
+Subject: [Buildroot] [PATCH] package/gettext: host variant needs
+ host-libxml2
+In-Reply-To: <1451165734-15534-1-git-send-email-yann.morin.1998@free.fr>
+References: <1451165734-15534-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20151227114427.554e436b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Yann,
 
-On 2015-12-27 11:19 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 27 Dec 2015 00:42:06 +0100, Yann E. MORIN wrote:
-> > -config BR2_ENABLE_SSP
-> > +choice
-> >  	bool "build code with Stack Smashing Protection"
-> > -	depends on BR2_TOOLCHAIN_HAS_SSP
-> > +	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-> > +	default BR2_SSP_STRONG if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+On Sat, 26 Dec 2015 22:35:34 +0100, Yann E. MORIN wrote:
+> From: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
 > 
-> I don't understand this part. Why would we now defalut on
-> BR2_SSP_STRONG if gcc >= 4.9 ?
+> Of host-gettext, we only build the tools. however some of those tools
+> have a --color option, which needs libxml2.
+> 
+> If the libxml2 development files are missing on the host, a bundled
+> subset of libxml2 is used, and all seems OK. But if they ar epresent,
+> then the host libxml2 is used. On some distros, lbxml2 is linked with
+> liblzma. And if we happend to _then_ build our host-liblzma, we may have
+> a conflict later when trying to run any of the host-gettext tools.
+> 
+> Always build host-gettext with our own host-libxml2 which is not linked
+> with liblzma.
+> 
+> Fixes https://bugs.busybox.net/show_bug.cgi?id=7886
+> 
+> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+> [nicolas: added extended commit message]
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> [yann.morin.1998 at free.fr: rebase; add comment; enhance commit log]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hmmm... I did not think too much about that. I just "updated" the patch
-and kept its meaning as-is.
+Thanks for reviving this old patch. I do remember it, and I believe
+back then I raised the concern that unconditionally building
+host-libxml2 as a dependency of host-gettext would add quite a bit of
+build time (to a package that already takes an awful lot of time to
+build for what it does, but that's another story).
 
-> I think we should keep the default of not having SSP enabled.
+So I did a measurement:
 
-Yes, makes sense. At best, the change in the default should have been in
-another patch.
+ * If we force the usage of the included libxml2, then the time needed
+   to do "make host-gettext" from an empty build is:
 
-I'll fix and respin.
+	real	1m40.892s
+	user	2m38.664s
+	sys	0m13.132s
 
-Regards,
-Yann E. MORIN.
+ * If we use your patch, which unconditionally adds the dependency on
+   host-libxml2, the time needed to do a "make host-gettext" from an
+   empty build is:
 
+	real    2m21.035s
+	user    3m51.956s
+	sys     0m16.020s
+
+So about a 40 seconds build time difference. I'm not sure what to
+decide from that. 40 seconds is not that long, but host-gettext is
+already quite long to build...
+
+Thoughts ? Opinions ?
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
