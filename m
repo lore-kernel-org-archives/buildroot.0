@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Dec 2015 12:17:55 +0100
-Subject: [Buildroot] [git commit] toolchain/external: Arago armv7 toolchain
-	really requires a VFPv3
-Message-ID: <20151227112454.9D10A81917@busybox.osuosl.org>
+Date: Sun, 27 Dec 2015 12:22:43 +0100
+Subject: [Buildroot] [git commit] arch/arm: add help text to
+	BR2_ARM_ENABLE_VFP
+Message-ID: <20151227112454.B57ED822CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=08ce10927c8b4977a01dce8eddd6ebc61c3c8c93
+commit: http://git.buildroot.net/buildroot/commit/?id=bb02e4c0b367c004565178f50e3ea74ee98e249f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Arago armv7 toolchain really requires a VFPv3 unit, so only expose
-it to the user when the CPU actually has such a VFP unit
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in.arm | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 8d4a835..35d8b7a 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -140,7 +140,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_CPU_ARMV7A
- 	depends on BR2_ARM_EABI
--	depends on BR2_ARM_CPU_HAS_VFPV3 || BR2_ARM_CPU_MAYBE_HAS_VFPV3
-+	depends on BR2_ARM_CPU_HAS_VFPV3
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 01555a6..ea84147 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -200,6 +200,10 @@ config BR2_ARM_ENABLE_VFP
+ 	select BR2_ARM_CPU_HAS_VFPV4 if BR2_ARM_CPU_MAYBE_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_VFPV3 if BR2_ARM_CPU_MAYBE_HAS_VFPV3
+ 	select BR2_ARM_CPU_HAS_VFPV2 if BR2_ARM_CPU_MAYBE_HAS_VFPV2
++	help
++	  For some CPU cores, the VFP extension is optional. Select
++	  this option if you are certain your particular
++	  implementation has VFP support and you want to use it.
+ 
+ choice
+ 	prompt "Target ABI"
