@@ -1,151 +1,134 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Dec 2015 19:10:23 +0100
-Subject: [Buildroot] [PATCH] jack2: allow to choose the mode to operate
- jackd
-In-Reply-To: <1431417818-12630-1-git-send-email-antoine.tenart@free-electrons.com>
-References: <1431417818-12630-1-git-send-email-antoine.tenart@free-electrons.com>
-Message-ID: <20151227181022.GI3483@free.fr>
+From: Chris LaRocque <clarocq@gmail.com>
+Date: Sun, 27 Dec 2015 13:36:40 -0500
+Subject: [Buildroot] trying to use
+ https://github.com/beagleboard/linux.git with buildroot
+In-Reply-To: <1451235670.1698153.477162482.3D38F83F@webmail.messagingengine.com>
+References: <1450890296.2355509.475056490.71128E4E@webmail.messagingengine.com>
+ <20151223184751.12365336@free-electrons.com>
+ <1450893821.3034067.475093450.34890777@webmail.messagingengine.com>
+ <1450894505.3036056.475106194.467AC874@webmail.messagingengine.com>
+ <20151223193943.21a6f0fc@free-electrons.com>
+ <1450910736.3752716.475291418.490BB3EA@webmail.messagingengine.com>
+ <20151223235253.0afe702e@free-electrons.com>
+ <1450917779.3775953.475348978.37FAC3A8@webmail.messagingengine.com>
+ <n5mdi8$5go$1@ger.gmane.org>
+ <1451154853.3394517.476716010.48669FA1@webmail.messagingengine.com>
+ <CA+-urNRO0DWv7Xw+DctiFspDootbJRwbwdE66UYMbfCjL8jWuQ@mail.gmail.com>
+ <1451173488.3993354.476829962.2D827969@webmail.messagingengine.com>
+ <20151227110817.288a2e3f@free-electrons.com>
+ <1451223280.497246.477065626.34AC2AD3@webmail.messagingengine.com>
+ <CAOURK2uwXJd7KpTrWZqZP_Ci3oPQjOYedF-_Je0yTTo5tnFbNg@mail.gmail.com>
+ <1451235670.1698153.477162482.3D38F83F@webmail.messagingengine.com>
+Message-ID: <CAOURK2s7T+0U08HTBBKKpvVRxrvqTQBLD0VjqM-NwoHdnr-Zww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Antoine, All,
+Yes, I'll test the DTC. I've already created some overlays but there is a
+difference between the version 3.X and 4.X capemanager. You need to look at
+the structure of the new device trees and patch the old cape overlays to
+make them work. I'm struggling with that as well.
 
-On 2015-05-12 10:03 +0200, Antoine Tenart spake thusly:
-> jack2 allows to use three modes:
-> - A legacy jackd service alone.
-> - A DBUS jackd service alone.
-> - A mixture between the standalone jackd and the DBUS jackd.
-> 
-> This patch adds the possibility to choose between these three modes,
-> while the legacy jackd was the only option before.
-> 
-> In addition, the jack_control tool is removed when the DBUS jackd is not
-> available, as this tool is used to control it.
+You might want to verify that the modules are built.
 
-I've tried to update that patch, clean it up a bit, and I just sent a
-new version:
-    http://lists.busybox.net/pipermail/buildroot/2015-December/148388.html
+C
 
-I'd like your opinion on this new version.
+Pushing back the boundaries of ignorance.
+On Dec 27, 2015 12:01, "Craig Swank" <craigswank@fastmail.fm> wrote:
 
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
-> ---
->  package/jack2/Config.in | 40 ++++++++++++++++++++++++++++++++++++++++
->  package/jack2/jack2.mk  | 22 +++++++++++++++++++++-
->  2 files changed, 61 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/jack2/Config.in b/package/jack2/Config.in
-> index eeeb8daad8bd..26869a7aac1c 100644
-> --- a/package/jack2/Config.in
-> +++ b/package/jack2/Config.in
-> @@ -20,6 +20,46 @@ config BR2_PACKAGE_JACK2
->  
->  	  http://jackaudio.org/
->  
-> +if BR2_PACKAGE_JACK2
-> +
-> +choice
-> +	prompt "jack2 mode"
-> +	default BR2_PACKAGE_JACK2_LEGACY
-> +	help
-> +	  https://github.com/jackaudio/jackaudio.github.com/wiki/JackDbusPackaging
-> +
-> +config BR2_PACKAGE_JACK2_LEGACY
-> +	bool "legacy jack2 only"
-> +	help
-> +	  Build and use only jackd.
-> +
-> +config BR2_PACKAGE_JACK2_DBUS
-> +	bool "dbus jack2 only"
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_USE_WCHAR
-> +	select BR2_PACKAGE_DBUS
-> +	select BR2_PACKAGE_DBUS_PYTHON
-> +	select BR2_PACKAGE_PYTHON
-> +	select BR2_PACKAGE_PYTHON_PYEXPAT
-> +	help
-> +	  Build on use only jackdbus.
-> +
-> +config BR2_PACKAGE_JACK2_CLASSIC
-> +	bool "legacy jack2 and dbus jack2 mixture"
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_USE_WCHAR
-> +	select BR2_PACKAGE_DBUS
-> +	select BR2_PACKAGE_DBUS_PYTHON
-> +	select BR2_PACKAGE_PYTHON
-> +	select BR2_PACKAGE_PYTHON_PYEXPAT
-> +	help
-> +	  Build jackd and jackdbus, and allow to use both of
-> +	  these tools.
-> +
-> +endchoice
-> +
-> +endif
-> +
->  comment "jack2 needs a toolchain w/ threads, C++"
->  	depends on BR2_USE_MMU
->  	depends on BR2_ARCH_HAS_ATOMICS
-> diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-> index 73328d3fd408..72f2a23d83c0 100644
-> --- a/package/jack2/jack2.mk
-> +++ b/package/jack2/jack2.mk
-> @@ -10,12 +10,24 @@ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
->  JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
->  JACK2_INSTALL_STAGING = YES
->  
-> +JACK2_CONF_OPTS = --alsa
-> +
-> +ifeq ($(BR2_PACKAGE_JACK2_DBUS),y)
-> +JACK2_DEPENDENCIES += dbus
-> +JACK2_CONF_OPTS += --dbus
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_JACK2_CLASSIC),y)
-> +JACK2_DEPENDENCIES += dbus
-> +JACK2_CONF_OPTS += --dbus --classic
-> +endif
-> +
->  define JACK2_CONFIGURE_CMDS
->  	(cd $(@D); \
->  		$(TARGET_CONFIGURE_OPTS)	\
->  		$(HOST_DIR)/usr/bin/python2 ./waf configure \
->  		--prefix=/usr			\
-> -		--alsa				\
-> +		$(JACK2_CONF_OPTS)		\
->  	)
->  endef
->  
-> @@ -33,4 +45,12 @@ define JACK2_INSTALL_STAGING_CMDS
->  		install)
->  endef
->  
-> +define JACK2_REMOVE_JACK_CONTROL
-> +	$(RM) -f $(TARGET_DIR)/usr/bin/jack_control
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_JACK2_LEGACY),y)
-> +JACK2_POST_INSTALL_TARGET_HOOKS += JACK2_REMOVE_JACK_CONTROL
-> +endif
-> +
->  $(eval $(generic-package))
-> -- 
-> 2.4.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> I'll be interested in how your tests for the DTC patch go.  I'm not having
+> luck with the bone_capemgr at the moment and am considering filing a bug at
+> beagleboard/linux.
+>
+> Will your tests involve compiling a .dtbo file and doing an echo command
+> to /sys/devices/platform/bone_capemgr/slots?  When I try to load my dtbo
+> file (for dallas one wire temperature sensor), the expected kernel modules
+> don't get loaded even though no errors show up in dmesg.
+>
+>
+>
+>
+> On Sun, Dec 27, 2015, at 08:28 AM, Chris LaRocque wrote:
+>
+>
+> Hello
+>
+> I'm running a new beaglebone_defconfig as we speak and may be able to post
+> a patch this afternoon.
+>
+> The DTC patch will take me a couple of days to test. What I posted earlier
+> was a hack that accomplished my needs but it needs to be a little more
+> refined. I'll review the debian install script at
+> github.com/beagleboard/bb.org-overlays to see how to best incorporate
+> both the DTC patch and the device tree overlays. Can I put the DTC patch
+> into the /board/beaglebone directory and have it specified for application
+> in the board defconfig? Suggestions on this aspect would be much
+> appreciated.
+>
+> Regards
+>
+> C
+>
+>
+> Pushing back the boundaries of ignorance.
+> I'd like to help out, but it might take a bit of hand holding for me
+> since I'm pretty new to buildroot and submitting patches.  I suppose the
+> things that would need to be changed would be
+>
+> 1. configs/beaglbone_defconfig
+> 2. the uEnv.txt file needs to be different in output/images
+> 3. Chris attached a patch for the host dtc
+> 4. Two configs for the kernel build need to change
+>
+> I have a diff for configs/beaglebone_defconfig but everything else I'm
+> not sure where to start.
+>
+> If someone has time to coach me through this I'm happy to learn, but if
+> it is easier for someone else to do this I could learn from that too.
+>
+>
+>
+> On Sun, Dec 27, 2015, at 02:08 AM, Thomas Petazzoni wrote:
+> > Hello all,
+> >
+> > On Sat, 26 Dec 2015 15:44:48 -0800, Craig Swank wrote:
+> >
+> > > YES!  Using Chris's uEnv.txt and u-boot 2015.07 instead of 2015.10 it
+> > > finally booted up correctly.  Many thanks to Thomas, Chris, and, last
+> > > but not least, Frank, who swooped in with the secret sauce at the very
+> > > end.
+> > >
+> > > I'm not even close to being able to figure out why the 07 version
+> worked
+> > > and 10 did not, but I'm just too happy to care.
+> >
+> > Glad to hear that you solved the different problems.
+> >
+> > Our beaglebone_defconfig is utterly old, and it would be really great
+> > to update it to use newer kernel and u-boot versions.
+> >
+> > Thanks!
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Free Electrons
+> > Embedded Linux, Kernel and Android engineering
+> > http://free-electrons.com
+>
+>
+> --
+>   Craig Swank
+> craigswank at fastmail.fm
+>
+>
+> --
+>   Craig Swank
+>   craigswank at fastmail.fm
+>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151227/ac7b4e96/attachment.html>
