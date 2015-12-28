@@ -1,25 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 17:52:43 +0100
-Subject: [Buildroot] [PATCH] autofs: not available on static
-In-Reply-To: <1451319496-17224-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1451319496-17224-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151228175243.01996646@free-electrons.com>
+Date: Mon, 28 Dec 2015 17:53:45 +0100
+Subject: [Buildroot] [PATCHv3] package/connman: cleanup backtrace patch
+In-Reply-To: <1450962009-12924-1-git-send-email-yann.morin.1998@free.fr>
+References: <1450962009-12924-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20151228175345.364a9594@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Yann E. MORIN,
 
-On Mon, 28 Dec 2015 13:18:16 -0300, Gustavo Zacarias wrote:
-> Uses dlfcn & friends, fixes:
-> http://autobuild.buildroot.net/results/2f2/2f2dcf8d2af961c0401a4b39f96cefe691a4479b/
+On Thu, 24 Dec 2015 14:00:09 +0100, Yann E. MORIN wrote:
+> connman uses execinfo.h to dump a backtrace in case of failure.
+> execinfo.h is optional in uClibc, so we had a patch that conditonally
+> disabled backtraces for uClibc when it was missing execinfo.h
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> However, musl is also entirely lacking execinfo.h.
+> 
+> Add a proper patch that checks for execinfo.h at ./configure time. This
+> will no longer make any assumption on the C library that is being used.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/f6e/f6ee8ab3a6300f1f527f9e92b8c2ec81e63afb27/
+>     http://autobuild.buildroot.org/results/96b/96b78bb644ed4ef3493782521b17e3b2113a405f/
+>     ...
+> 
+> Note that there might be other issues with musl; this patch only fixes
+> the execinfo.h one.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> 
 > ---
->  package/autofs/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Patch sent upstream:
+>     https://lists.01.org/pipermail/connman/2015-December/000188.html
 
 Applied, thanks.
 
