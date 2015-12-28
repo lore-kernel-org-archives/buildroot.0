@@ -1,144 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Dec 2015 11:45:12 +0100
-Subject: [Buildroot] [git commit] strace: fix building for arc, metag, nios2,
-	or1k and tile
-Message-ID: <20151227105858.6437581F63@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 28 Dec 2015 14:24:22 +0100
+Subject: [Buildroot] [PATCH 1/1] python-paho-mqtt: add new package
+In-Reply-To: <1451307455-23911-1-git-send-email-zinosat@tiscali.it>
+References: <1451307455-23911-1-git-send-email-zinosat@tiscali.it>
+Message-ID: <CAGm1_kssftXCr7S1BRoJNLqHgSD7wp1YeCzF0sw0Un5MvvnZdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b4a2bfa579030cf83bb3c003ec77a99627769fe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Davide,
 
-Following commit broke building for arc, metag, nios2, or1k and tile:
-http://sourceforge.net/p/strace/code/ci/34683e3926d8c2daa368afb805da422ee7043396/
+On Mon, Dec 28, 2015 at 1:57 PM, Davide Viti <zinosat@tiscali.it> wrote:
+> Signed-off-by: Davide Viti <zinosat@tiscali.it>
+> ---
+>  package/Config.in                              |  1 +
+>  package/python-paho-mqtt/Config.in             |  9 +++++++++
+>  package/python-paho-mqtt/python-paho-mqtt.hash |  2 ++
+>  package/python-paho-mqtt/python-paho-mqtt.mk   | 21 +++++++++++++++++++++
+>  4 files changed, 33 insertions(+)
+>  create mode 100644 package/python-paho-mqtt/Config.in
+>  create mode 100644 package/python-paho-mqtt/python-paho-mqtt.hash
+>  create mode 100644 package/python-paho-mqtt/python-paho-mqtt.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index dd44743..aab1958 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -659,6 +659,7 @@ menu "External python modules"
+>         source "package/python-networkmanager/Config.in"
+>         source "package/python-nfc/Config.in"
+>         source "package/python-numpy/Config.in"
+> +       source "package/python-paho-mqtt/Config.in"
+>         source "package/python-pam/Config.in"
+>         source "package/python-posix-ipc/Config.in"
+>         source "package/python-protobuf/Config.in"
+> diff --git a/package/python-paho-mqtt/Config.in b/package/python-paho-mqtt/Config.in
+> new file mode 100644
+> index 0000000..1b20da9
+> --- /dev/null
+> +++ b/package/python-paho-mqtt/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_PAHO_MQTT
+> +       bool "python-paho-mqtt"
+> +       help
+> +         The Paho Python Client provides a client class with support
+> +         for both MQTT v3.1 and v3.1.1 on Python 2.7 or 3.x. It also
+> +         provides some helper functions to make publishing one off
+> +         messages to an MQTT server very straightforward.
+> +
+> +         https://pypi.python.org/pypi/paho-mqtt
+> diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
+> new file mode 100644
+> index 0000000..eb1dfb5
+> --- /dev/null
+> +++ b/package/python-paho-mqtt/python-paho-mqtt.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha256  0f7a629efe6e3a2c61b59d3550aa9f2c4529b5689a65fde45e6f1ac36b9a261e  paho-mqtt-1.1.tar.gz
+> diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
 
-Now we're fixing that breakage with a back-port of upstream fix:
-http://sourceforge.net/p/strace/code/ci/dd1a80c8d213eed95fe55b7ebcb07ee165dd8e4b/
+please also provide oficial md5 from pypi like we do in for example
+package/python-pyudev
 
-Mentioned fix will be a part of the next strace release,
-i.e. this patch must be removed on strace version bump.
+> new file mode 100644
+> index 0000000..f039835
+> --- /dev/null
+> +++ b/package/python-paho-mqtt/python-paho-mqtt.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# python-paho-mqtt
+> +#
+> +################################################################################
+> +
+> +PYTHON_PAHO_MQTT_VERSION = 1.1
+> +PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
+> +PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/source/p/paho-mqtt
+> +PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
+> +PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
+> +PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
+> +
+> +define PYTHON_PAHO_MQTT_INSTALL_TARGET_CMDS
+> +       (cd $(@D); \
+> +               $(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
+> +               $(HOST_DIR)/usr/bin/python2 setup.py install \
+> +               --root=/)
+> +endef
 
-Fixes http://autobuild.buildroot.org/results/f25/f25c23003ed282b935f5289c944615860265364a
-and alike, see http://autobuild.buildroot.org/?reason=strace-4.11
+Why do you need this and have you tested this with Python3?
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-arc-metag-nios2-or1k-tile-fix-build.patch | 104 +++++++++++++++++++++
- 1 file changed, 104 insertions(+)
-
-diff --git a/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch b/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
-new file mode 100644
-index 0000000..0d81b59
---- /dev/null
-+++ b/package/strace/0001-arc-metag-nios2-or1k-tile-fix-build.patch
-@@ -0,0 +1,104 @@
-+From d83bcfa9a2977c037c638ae09e561f554ab19681 Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Sat, 26 Dec 2015 00:13:36 +0300
-+Subject: [PATCH] arc, metag, nios2, or1k, tile: fix build
-+
-+Fix build regression introduced by commit
-+34683e3926d8c2daa368afb805da422ee7043396.
-+
-+* linux/32/syscallent.h: Add sys_ prefix to ARCH_mmap and mmap.
-+* linux/arc/syscallent.h: Add sys_ prefix to ARCH_mmap and mmap_pgoff.
-+* linux/nios2/syscallent.h: Likewise.
-+* linux/or1k/syscallent.h: Likewise.
-+* linux/tile/syscallent1.h: Add sys_ prefix to ARCH_mmap and sys_mmap_4koff.
-+* pathtrace.c (pathtrace_match): Handle SEN_ARCH_mmap.
-+
-+This is a back-port of upstream commit
-+http://sourceforge.net/p/strace/code/ci/dd1a80c8d213eed95fe55b7ebcb07ee165dd8e4b/
-+
-+It should be removed upon the next bump of strace version.
-+
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+---
-+ linux/32/syscallent.h    | 6 +++---
-+ linux/arc/syscallent.h   | 2 +-
-+ linux/nios2/syscallent.h | 2 +-
-+ linux/or1k/syscallent.h  | 2 +-
-+ linux/tile/syscallent1.h | 2 +-
-+ pathtrace.c              | 1 +
-+ 6 files changed, 8 insertions(+), 7 deletions(-)
-+
-+diff --git a/linux/32/syscallent.h b/linux/32/syscallent.h
-+index 5f997e7..e6f895c 100644
-+--- a/linux/32/syscallent.h
-++++ b/linux/32/syscallent.h
-+@@ -1,5 +1,5 @@
-+-#ifndef ARCH_mmap
-+-# define ARCH_mmap mmap
-++#ifndef sys_ARCH_mmap
-++# define sys_ARCH_mmap sys_mmap
-+ #endif
-+ [  0] = { 2,	0,		SEN(io_setup),			"io_setup"		},
-+ [  1] = { 1,	0,		SEN(io_destroy),		"io_destroy"		},
-+@@ -276,5 +276,5 @@
-+ [283] = { 2,	0,		SEN(membarrier),		"membarrier",		},
-+ [284] = { 3,	TM,		SEN(mlock2),			"mlock2"		},
-+ 
-+-#undef ARCH_mmap
-++#undef sys_ARCH_mmap
-+ #undef ARCH_WANT_SYNC_FILE_RANGE2
-+diff --git a/linux/arc/syscallent.h b/linux/arc/syscallent.h
-+index 5847dc4..1100008 100644
-+--- a/linux/arc/syscallent.h
-++++ b/linux/arc/syscallent.h
-+@@ -1,4 +1,4 @@
-+-#define ARCH_mmap mmap_pgoff
-++#define sys_ARCH_mmap sys_mmap_pgoff
-+ #include "32/syscallent.h"
-+ [244] = { 3,	0,	SEN(printargs),	"arc_cacheflush"},
-+ [245] = { 1,	0,	SEN(printargs),	"arc_settls"	},
-+diff --git a/linux/nios2/syscallent.h b/linux/nios2/syscallent.h
-+index 8a4b70e..01efe3a 100644
-+--- a/linux/nios2/syscallent.h
-++++ b/linux/nios2/syscallent.h
-+@@ -1,4 +1,4 @@
-+-#define ARCH_mmap mmap_pgoff
-++#define sys_ARCH_mmap sys_mmap_pgoff
-+ #include "32/syscallent.h"
-+ [244] = {4,    0,	SEN(cacheflush), "cacheflush"},
-+ [245 ... 259] = { },
-+diff --git a/linux/or1k/syscallent.h b/linux/or1k/syscallent.h
-+index ed84b3b..351fe25 100644
-+--- a/linux/or1k/syscallent.h
-++++ b/linux/or1k/syscallent.h
-+@@ -1,4 +1,4 @@
-+-#define ARCH_mmap mmap_pgoff
-++#define sys_ARCH_mmap sys_mmap_pgoff
-+ #include "32/syscallent.h"
-+ [244] = { 3,	NF,	SEN(or1k_atomic),	"or1k_atomic"	},
-+ [245 ... 259] = { },
-+diff --git a/linux/tile/syscallent1.h b/linux/tile/syscallent1.h
-+index c86f059..28dbab4 100644
-+--- a/linux/tile/syscallent1.h
-++++ b/linux/tile/syscallent1.h
-+@@ -1,4 +1,4 @@
-+-#define ARCH_mmap mmap_4koff
-++#define sys_ARCH_mmap sys_mmap_4koff
-+ #define ARCH_WANT_SYNC_FILE_RANGE2 1
-+ #include "32/syscallent.h"
-+ [244] = { 1,	0,	SEN(printargs),	"cmpxchg_badaddr"	},
-+diff --git a/pathtrace.c b/pathtrace.c
-+index d530ec2..e72cdf7 100644
-+--- a/pathtrace.c
-++++ b/pathtrace.c
-+@@ -216,6 +216,7 @@ pathtrace_match(struct tcb *tcp)
-+ 	case SEN_mmap:
-+ 	case SEN_mmap_4koff:
-+ 	case SEN_mmap_pgoff:
-++	case SEN_ARCH_mmap:
-+ 		/* x, x, x, x, fd */
-+ 		return fdmatch(tcp, tcp->u_arg[4]);
-+ 
-+-- 
-+2.4.3
-+
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
