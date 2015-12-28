@@ -1,45 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 17:43:39 +0100
-Subject: [Buildroot] [git commit] start-stop-daemon: bump to version 1.18.4
-Message-ID: <20151228164406.585F582563@busybox.osuosl.org>
+Date: Mon, 28 Dec 2015 17:43:49 +0100
+Subject: [Buildroot] [git commit] libjpeg-turbo: bump to version 1.4.2
+Message-ID: <20151228164406.98F86801BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=884558928b04ecd01f75a8603e50a3cdcf967b0a
+commit: http://git.buildroot.net/buildroot/commit/?id=af6148e53d9a37823ab9a5cace3c27bfcd3947c9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/start-stop-daemon/start-stop-daemon.hash | 4 ++--
- package/start-stop-daemon/start-stop-daemon.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
+ package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/start-stop-daemon/start-stop-daemon.hash b/package/start-stop-daemon/start-stop-daemon.hash
-index 295c2ff..a05b9a0 100644
---- a/package/start-stop-daemon/start-stop-daemon.hash
-+++ b/package/start-stop-daemon/start-stop-daemon.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.de.debian.org/debian/pool/main/d/dpkg/dpkg_1.18.3.dsc
--sha256	a40ffe38d7f36d858a752189a306433cfc52c7d15d7b98f61d9f9dd49e0e4807	dpkg_1.18.3.tar.xz
-+# From http://ftp.de.debian.org/debian/pool/main/d/dpkg/dpkg_1.18.4.dsc
-+sha256	fe89243868888ce715bf45861f26264f767d4e4dbd0d6f1a26ce60bbbbf106da	dpkg_1.18.4.tar.xz
-diff --git a/package/start-stop-daemon/start-stop-daemon.mk b/package/start-stop-daemon/start-stop-daemon.mk
-index a38f927..e0ef6c9 100644
---- a/package/start-stop-daemon/start-stop-daemon.mk
-+++ b/package/start-stop-daemon/start-stop-daemon.mk
-@@ -7,9 +7,9 @@
- # Debian start-stop-daemon is part of dpkg. Since start-stop-daemon is the only
- # interesting tool in it, we call the buildroot package start-stop-daemon.
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index dd61b2c..a38a5af 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/
+-sha1	363a149f644211462c45138a19674f38100036d3	libjpeg-turbo-1.4.1.tar.gz
+-md5	b1f6b84859a16b8ebdcda951fa07c3f2	libjpeg-turbo-1.4.1.tar.gz
++# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.2/
++sha1	2666158ccd5318513f875867bbc4af52f6eb9f0b	libjpeg-turbo-1.4.2.tar.gz
++md5	86b0d5f7507c2e6c21c00219162c3c44	libjpeg-turbo-1.4.2.tar.gz
+ # Locally computed
+-sha256 4bf5bad4ce85625bffbbd9912211e06790e00fb982b77724af7211034efafb08	libjpeg-turbo-1.4.1.tar.gz
++sha256	521bb5d3043e7ac063ce3026d9a59cc2ab2e9636c655a2515af5f4706122233e	libjpeg-turbo-1.4.2.tar.gz
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 25434b1..047e925 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--START_STOP_DAEMON_VERSION = 1.18.3
-+START_STOP_DAEMON_VERSION = 1.18.4
- START_STOP_DAEMON_SOURCE = dpkg_$(START_STOP_DAEMON_VERSION).tar.xz
--START_STOP_DAEMON_SITE = http://snapshot.debian.org/archive/debian/20150921T092814Z/pool/main/d/dpkg
-+START_STOP_DAEMON_SITE = http://snapshot.debian.org/archive/debian/20151225T154922Z/pool/main/d/dpkg
- START_STOP_DAEMON_CONF_OPTS = \
- 	--disable-dselect \
- 	--disable-update-alternatives \
+-JPEG_TURBO_VERSION = 1.4.1
++JPEG_TURBO_VERSION = 1.4.2
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
