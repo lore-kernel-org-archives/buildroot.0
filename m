@@ -1,59 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Dec 2015 22:13:12 +0100
-Subject: [Buildroot] [PATCH 1/2] package/eigen: install .pc file
-In-Reply-To: <20151228220540.262dfc9c@free-electrons.com>
-References: <cover.1451329553.git.yann.morin.1998@free.fr>
- <6208cd9e3ec1e0da22459393104981ab0e43d69b.1451329553.git.yann.morin.1998@free.fr>
- <20151228220540.262dfc9c@free-electrons.com>
-Message-ID: <20151228211312.GC3446@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 28 Dec 2015 18:12:26 +0100
+Subject: [Buildroot] [PATCH] package/tpm-tools: fix build with locale support
+Message-ID: <1451322746-3828-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+tpm-tools needs to link with libintl when locale support is enabled.
 
-On 2015-12-28 22:05 +0100, Thomas Petazzoni spake thusly:
-> Dear Yann E. MORIN,
-> 
-> On Mon, 28 Dec 2015 20:08:54 +0100, Yann E. MORIN wrote:
-> > Other packages will look for eigen3.pc to detect the presence of eigen3.
-> > 
-> > eigen3.pc is usually installed by eigen's cmake buildsystem, but we do a
-> > manual install to not depend on host-cmake just to install header files.
-> > But in doing so, we forgot to install the .pc file.
-> > 
-> > Manually sed the source .pc.in to generate the final .pc file.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  package/eigen/eigen.mk | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> 
-> Applied, thanks.
+However, tpm-tools' build-system internally builds a couple of static libraries
+used to build the final programs.
+When linking these libraries or the final programs, we need to explicitly tell
+the linker to link with libintl in order to resolve all the missing symbols.
 
-:-)
+Fixes:
+  http://autobuild.buildroot.org/results/560/56020558ec298ac4007bf7f6ce030b3f2fa1157d/
+  http://autobuild.buildroot.org/results/17f/17fc6ca79765fd9ecdacec4f5a2b58caa554d48d/
+  http://autobuild.buildroot.org/results/2d2/2d2c655429df62da2b8746a564fc064609e96001/
+  http://autobuild.buildroot.org/results/d52/d5259b83e7a269bca019d024366aa201f5a174fd/
+  http://autobuild.buildroot.org/results/11c/11cb0d1e51459e75e5f376cb07ce0188f8f050c4/
+  http://autobuild.buildroot.org/results/bad/bad9a97b4fff00732f2efb043bbb76a99963c491/
+  http://autobuild.buildroot.org/results/2f8/2f8bd534e6fcd9d356fe9087cb1394b9b2c4192c/
+  and many others...
 
-> Since I forgot to fix it in the commit, I did a
-> follow-up commit to fix the indentation. You used a mix of tabs and
-> spaces in a not very consistent way.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: No? Rubinstein <nrubinstein@aldebaran.com>
+---
+ ...e.am-make-sure-libintl-LDFLAGS-are-added-.patch | 33 ++++++++++++++++++++++
+ package/tpm-tools/Config.in                        |  1 +
+ package/tpm-tools/tpm-tools.mk                     |  5 +++-
+ 3 files changed, 38 insertions(+), 1 deletion(-)
+ create mode 100644 package/tpm-tools/0002-lib-Makefile.am-make-sure-libintl-LDFLAGS-are-added-.patch
 
-Well, it was not really 'inconsistent' since I did it on purpose:
-  - the sed's -e expression were all aligned (with tabstop=8)
-  - the install's source and destination were aligned (with tabstop=8)
-
-But OK, your fix provides another kind of 'consistency' ;-)
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/tpm-tools/0002-lib-Makefile.am-make-sure-libintl-LDFLAGS-are-added-.patch b/package/tpm-tools/0002-lib-Makefile.am-make-sure-libintl-LDFLAGS-are-added-.patch
+new file mode 100644
+index 0000000..544b338
+--- /dev/null
++++ b/package/tpm-tools/0002-lib-Makefile.am-make-sure-libintl-LDFLAGS-are-added-.patch
+@@ -0,0 +1,33 @@
++From 5a2fb77973b54aaefa192146561e06d5020d4fa0 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Mon, 28 Dec 2015 11:04:11 +0100
++Subject: [PATCH] lib/Makefile.am: make sure libintl LDFLAGS are added when
++ building the internal static library
++
++The build-system internally builds a couple of static libraries used to build
++the final programs.
++
++When linking these libraries and the final programs, we need to explicitly tell
++the linker to link with libintl in order to resolve all the missing symbols.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ lib/Makefile.am | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/lib/Makefile.am b/lib/Makefile.am
++index cef6a2f..3c65e15 100644
++--- a/lib/Makefile.am
+++++ b/lib/Makefile.am
++@@ -28,6 +28,8 @@ lib_LTLIBRARIES		= 	libtpm_unseal.la
++ noinst_LTLIBRARIES	=	libtpm_tspi.la	\
++ 				libtpm_utils.la
++ 
+++LIBS	+= $(INTLLIBS)
+++
++ #
++ # Common build flags (with gettext support)
++ AM_CPPFLAGS		=	-I$(top_srcdir)/include -D_LINUX -DLOCALEDIR=\"$(localedir)\"
++-- 
++2.6.4
++
+diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
+index d54be3e..dd59aaa 100644
+--- a/package/tpm-tools/Config.in
++++ b/package/tpm-tools/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_TPM_TOOLS
+ 	bool "tpm-tools"
+ 	select BR2_PACKAGE_TROUSERS
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # trousers
+ 	depends on !BR2_STATIC_LIBS # trousers
+ 	help
+diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
+index 20df489..9dd844d 100644
+--- a/package/tpm-tools/tpm-tools.mk
++++ b/package/tpm-tools/tpm-tools.mk
+@@ -10,7 +10,10 @@ TPM_TOOLS_SITE = http://downloads.sourceforge.net/project/trousers/tpm-tools/$(T
+ TPM_TOOLS_STRIP_COMPONENTS = 2
+ TPM_TOOLS_LICENSE = Common Public License Version 1.0
+ TPM_TOOLS_LICENSE_FILES = LICENSE
+-TPM_TOOLS_DEPENDENCIES = trousers openssl
++TPM_TOOLS_DEPENDENCIES = trousers openssl \
++	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++# lib/Makefile.am is patched
++TPM_TOOLS_AUTORECONF = YES
+ 
+ TPM_TOOLS_CONF_OPTS = --disable-pkcs11-support
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.6.4
