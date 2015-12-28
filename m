@@ -1,91 +1,160 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 29 Dec 2015 01:55:04 +0100
-Subject: [Buildroot] [PATCH 1/7] toolchain-external: CodeSourcery AMD64:
- support only one version
-In-Reply-To: <20151219135757.30f09e4d@free-electrons.com>
-References: <1448123780-30067-1-git-send-email-romain.naour@openwide.fr>
- <20151219135757.30f09e4d@free-electrons.com>
-Message-ID: <5681D9E8.70308@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Dec 2015 17:52:53 +0100
+Subject: [Buildroot] [git commit] package/connman: cleanup backtrace patch
+Message-ID: <20151228165315.0C416822F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=2a5c841eaa37d61ffac1afee22e5637c4a70d954
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 19/12/2015 13:57, Thomas Petazzoni a ?crit :
-> Romain,
-> 
-> On Sat, 21 Nov 2015 17:36:14 +0100, Romain Naour wrote:
->> See the conclusion about external toolchains during the Buildroot
->> meeting [1]:
->> "In the future, we stick to a single external toolchain version. The
->> Kconfig symbol should not encode the version (avoid legacy handling)"
->>
->> [1] http://elinux.org/index.php?title=Buildroot:DeveloperDaysELCE2015#Report
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> 
-> I have applied patches 1, 2, 3, 4, 6 and 7 of this patch series. Could
-> you send patches doing the same (reducing to one version only) for
-> other CodeSourcery toolchains as well ?
-> 
-> Regarding patch 5, I don't really like the hacks needed with the
-> dynamic loader, and would like to see if there is a way to avoid having
-> those hacks.
+connman uses execinfo.h to dump a backtrace in case of failure.
+execinfo.h is optional in uClibc, so we had a patch that conditonally
+disabled backtraces for uClibc when it was missing execinfo.h
 
-Well, this CS toolchain defeat (once again) the Buildroot toolchain-external
-Makefile code...
+However, musl is also entirely lacking execinfo.h.
 
-I removed the hack from TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
-but I had to do something in copy_toolchain_sysroot() to handle the special
-case.
+Add a proper patch that checks for execinfo.h at ./configure time. This
+will no longer make any assumption on the C library that is being used.
 
-if we use a 64 bits toolchain we also look at "lib" directory to see if there
-are some symlink to libraries belonging to "lib64". If yes, we create the
-corresponding symlink in STAGING_DIR.
+Fixes:
+    http://autobuild.buildroot.org/results/f6e/f6ee8ab3a6300f1f527f9e92b8c2ec81e63afb27/
+    http://autobuild.buildroot.org/results/96b/96b78bb644ed4ef3493782521b17e3b2113a405f/
+    ...
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 1452ec6..f6f769b 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -142,6 +142,18 @@ copy_toolchain_sysroot = \
- 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
- 		fi ; \
- 	done ; \
-+	if [ $${ARCH_LIB_DIR} = "lib64" ] ; then \
-+		if [ -d $${ARCH_SYSROOT_DIR}/lib ] ; then \
-+			mkdir -p `dirname $(STAGING_DIR)/lib` ; \
-+			SYMLINKS=`find $${ARCH_SYSROOT_DIR}/lib -maxdepth 1 -type l 2>/dev/null` ; \
-+			for i in $${SYMLINKS} ; do \
-+				relpath=`readlink -f $${i}` ; \
-+				if [ "`dirname $${relpath}`" = "$${ARCH_SYSROOT_DIR}lib64" ] ; then \
-+					ln -sf `basename $${relpath}` $(STAGING_DIR)/lib/`basename $${i}` ; \
-+				fi ; \
-+			done ; \
-+		fi ; \
-+	fi ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
- 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+Note that there might be other issues with musl; this patch only fixes
+the execinfo.h one.
 
-I don't think it's better than TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-configure-check-for-execinfo.h.patch      | 65 ++++++++++++++++++++++
+ package/connman/0001-uclibc-backtrace.patch        | 44 ---------------
+ 2 files changed, 65 insertions(+), 44 deletions(-)
 
-The same kind of change should be done in copy_toolchain_lib_root() to copy the
-dynamic loader.
-In the common case, we expect that it match this pattern: ld*.so.*
-But it's not the case here because the symlink to the dynamic loader
-is in another directory (lib) and we are looking for it in (lib64).
-So the LIB_EXTERNAL_LIBS += ld*.so.* doesn't match any library during
-the copy to TARGET_DIR.
-That's why the system doesn't boot at runtime.
-
-Thoughts ?
-
-Best regards,
-Romain
-
-> 
-> Thomas
-> 
+diff --git a/package/connman/0001-configure-check-for-execinfo.h.patch b/package/connman/0001-configure-check-for-execinfo.h.patch
+new file mode 100644
+index 0000000..384f41b
+--- /dev/null
++++ b/package/connman/0001-configure-check-for-execinfo.h.patch
+@@ -0,0 +1,65 @@
++From 30642d5b1a3f479987c4d50a237311d84d5f0581 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Thu, 24 Dec 2015 12:04:57 +0100
++Subject: [PATCH] configure: check for execinfo.h
++
++Not all toolchains have execinfo.h. For example, support for it is
++optional in uClibc, while it is entirely missing from musl.
++
++Add a check in configure to look for it.
++
++Since execinfo.h is /only/ used to dump a backtrace in case of failure,
++just do nothing when execinfo.h is missing.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ configure.ac | 2 ++
++ src/log.c    | 4 ++++
++ 2 files changed, 6 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index b51d6b3..28e657b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -182,6 +182,8 @@ AC_CHECK_LIB(resolv, ns_initparse, dummy=yes, [
++ 		AC_MSG_ERROR(resolver library support is required))
++ ])
++ 
+++AC_CHECK_HEADERS([execinfo.h])
+++
++ AC_CHECK_FUNC(signalfd, dummy=yes,
++ 			AC_MSG_ERROR(signalfd support is required))
++ 
++diff --git a/src/log.c b/src/log.c
++index a693bd0..76e10e7 100644
++--- a/src/log.c
+++++ b/src/log.c
++@@ -30,7 +30,9 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <syslog.h>
+++#if defined(HAVE_EXECINFO_H)
++ #include <execinfo.h>
+++#endif
++ #include <dlfcn.h>
++ 
++ #include "connman.h"
++@@ -112,6 +114,7 @@ void connman_debug(const char *format, ...)
++ 
++ static void print_backtrace(unsigned int offset)
++ {
+++#if defined(HAVE_EXECINFO_H)
++ 	void *frames[99];
++ 	size_t n_ptrs;
++ 	unsigned int i;
++@@ -210,6 +213,7 @@ static void print_backtrace(unsigned int offset)
++ 
++ 	close(outfd[1]);
++ 	close(infd[0]);
+++#endif /* HAVE_EXECINFO_H */
++ }
++ 
++ static void signal_handler(int signo)
++-- 
++1.9.1
++
+diff --git a/package/connman/0001-uclibc-backtrace.patch b/package/connman/0001-uclibc-backtrace.patch
+deleted file mode 100644
+index 4b806c6..0000000
+--- a/package/connman/0001-uclibc-backtrace.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-[PATCH] fix build on uClibc without UCLIBC_HAS_BACKTRACE
+-
+-Backtrace support is only used for logging on signal errors, which
+-isn't really critical, so simply remove backtrace info if not
+-available in uClibc.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/log.c |    7 +++++++
+- 1 file changed, 7 insertions(+)
+-
+-Index: connman-0.78/src/log.c
+-===================================================================
+---- connman-0.78.orig/src/log.c
+-+++ connman-0.78/src/log.c
+-@@ -30,7 +30,12 @@
+- #include <stdlib.h>
+- #include <string.h>
+- #include <syslog.h>
+-+#include <features.h>
+-+/* backtrace support is optional on uClibc */
+-+#if !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
+-+#define HAVE_BACKTRACE
+- #include <execinfo.h>
+-+#endif
+- #include <dlfcn.h>
+- 
+- #include "connman.h"
+-@@ -112,6 +117,7 @@
+- 
+- static void print_backtrace(unsigned int offset)
+- {
+-+#ifdef HAVE_BACKTRACE
+- 	void *frames[99];
+- 	size_t n_ptrs;
+- 	unsigned int i;
+-@@ -210,6 +216,7 @@
+- 
+- 	close(outfd[1]);
+- 	close(infd[0]);
+-+#endif /* HAVE_BACKTRACE */
+- }
+- 
+- static void signal_handler(int signo)
