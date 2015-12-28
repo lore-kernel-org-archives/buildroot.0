@@ -1,47 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 17:53:45 +0100
-Subject: [Buildroot] [PATCHv3] package/connman: cleanup backtrace patch
-In-Reply-To: <1450962009-12924-1-git-send-email-yann.morin.1998@free.fr>
-References: <1450962009-12924-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20151228175345.364a9594@free-electrons.com>
+Date: Mon, 28 Dec 2015 17:57:35 +0100
+Subject: [Buildroot] [git commit] package/gstreamer: move comment around,
+	to keep proper indentation
+Message-ID: <20151228165834.DFB217F8EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=ac295c45883e9349a65c5e7bf50a0e03fef03739
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 24 Dec 2015 14:00:09 +0100, Yann E. MORIN wrote:
-> connman uses execinfo.h to dump a backtrace in case of failure.
-> execinfo.h is optional in uClibc, so we had a patch that conditonally
-> disabled backtraces for uClibc when it was missing execinfo.h
-> 
-> However, musl is also entirely lacking execinfo.h.
-> 
-> Add a proper patch that checks for execinfo.h at ./configure time. This
-> will no longer make any assumption on the C library that is being used.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/f6e/f6ee8ab3a6300f1f527f9e92b8c2ec81e63afb27/
->     http://autobuild.buildroot.org/results/96b/96b78bb644ed4ef3493782521b17e3b2113a405f/
->     ...
-> 
-> Note that there might be other issues with musl; this patch only fixes
-> the execinfo.h one.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> 
-> ---
-> Patch sent upstream:
->     https://lists.01.org/pipermail/connman/2015-December/000188.html
+In Kconfig, when there is an item (like a comment) between a symbol and
+its dependees, then the indentation is not in effect.
 
-Applied, thanks.
+Move the symbol to the top of the file to guarantee the indentation in
+menuconfig.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+In this case, it means the gstremaer plugins are not indented below
+the main gstreamer prompt.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/gstreamer/gstreamer/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
+index b833c96..eb1249a 100644
+--- a/package/gstreamer/gstreamer/Config.in
++++ b/package/gstreamer/gstreamer/Config.in
+@@ -1,3 +1,7 @@
++comment "gstreamer 0.10 needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_GSTREAMER
+ 	bool "gstreamer 0.10"
+ 	depends on BR2_USE_WCHAR # glib2
+@@ -30,7 +34,3 @@ config BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY
+ 	  the launch-time for a GStreamer application.
+ 
+ endif
+-
+-comment "gstreamer 0.10 needs a toolchain w/ wchar, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
