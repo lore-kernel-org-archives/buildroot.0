@@ -1,55 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 09:20:19 +0100
-Subject: [Buildroot] [PATCH] Handle defconfig as .config in .gitignore
- and distclean.
-In-Reply-To: <20151227204416.GK3483@free.fr>
-References: <555c49ac.0a64b40a.3499.ffffb3f0@mx.google.com>
- <530190200.250863.1432112666116.JavaMail.root@openwide.fr>
- <CABbD_XAgJWoQ5R6-01Enp37CP18i6fNgj6oCRB7uxvrkY4TmRA@mail.gmail.com>
- <20151227204416.GK3483@free.fr>
-Message-ID: <20151228092019.5fb2af66@free-electrons.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 28 Dec 2015 10:47:41 +0100
+Subject: [Buildroot] [PATCH] libffi: fix headers location for host-libffi
+Message-ID: <1451296061-20592-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Sun, 27 Dec 2015 21:44:16 +0100, Yann E. MORIN wrote:
+There is a special hook for target-libffi, that moves headers
+from /usr/lib/libffi-version/include to /usr/include. This patch
+adds the same procedure for host-libffi.
 
-> Unlike Jeremy, I'm perfectly fine with defconfig in .gitignore. It's the
-> distclean part I'm more concerned with.
-> 
-> On the one hand, it does make sense to remove it like we do remove
-> .config. After all, the user is king, and if he wants to remove
-> everything, why should we keep it? ;-)
-> 
-> On the other hand, I would see defconfig as really the quintessence of
-> the configuration, which the user explicitly saved. They could get quite
-> surprised if we now remove that file.
-> 
-> So, I'm a bit skeptical either way: keep it or remove it, I am unsure.
-> Let's lean toward the safe side, and ket's just keep it, for users that
-> were used to that behaviour, OK?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libffi/libffi.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Since the defconfig file name is configurable (by means of
-BR2_DEFCONFIG), I don't think we should do anything special with it. So
-I don't think it should be in .gitignore and I don't think we should
-remove it upon "make distclean".
-
-If we were do "rm -f $(BR2_DEFCONFIG)" to always remove the user
-configured defconfig, then it would remove configs/<foo>_defconfig if
-you started from that defconfig and do a "make distclean". Not good.
-And we can't have user-configurable file names in .gitignore I believe.
-
-So I'm personally in favor of keeping things as they are today, and
-therefore reject the patch proposed by K?roly.
-
-Best regards,
-
-Thomas
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index 8f0f72d..47de8cd 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -22,6 +22,17 @@ endef
+ 
+ LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
+ 
++# Move the headers to the usual location, and adjust the .pc file
++# accordingly.
++define HOST_LIBFFI_MOVE_HOST_HEADERS
++	mv $(HOST_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(HOST_DIR)/usr/include/
++	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
++		$(HOST_DIR)/usr/lib/pkgconfig/libffi.pc
++	rm -rf $(HOST_DIR)/usr/lib/libffi-*
++endef
++
++HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_MOVE_HOST_HEADERS
++
+ # Remove headers that are not at the usual location from the target
+ define LIBFFI_REMOVE_TARGET_HEADERS
+ 	$(RM) -rf $(TARGET_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
