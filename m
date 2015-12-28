@@ -1,62 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Dec 2015 18:24:19 +0100
-Subject: [Buildroot] [PATCH] Handle defconfig as .config in .gitignore
- and distclean.
-In-Reply-To: <20151228092019.5fb2af66@free-electrons.com>
-References: <555c49ac.0a64b40a.3499.ffffb3f0@mx.google.com>
- <530190200.250863.1432112666116.JavaMail.root@openwide.fr>
- <CABbD_XAgJWoQ5R6-01Enp37CP18i6fNgj6oCRB7uxvrkY4TmRA@mail.gmail.com>
- <20151227204416.GK3483@free.fr>
- <20151228092019.5fb2af66@free-electrons.com>
-Message-ID: <20151228172419.GA3446@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Dec 2015 12:28:35 +0100
+Subject: [Buildroot] [git commit] pinentry: optionally depend on libsecret
+Message-ID: <20151228112950.4585F7F8AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, K?roly, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=f3a2ed15eac8e9a03983c90f7f91b69a50650566
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-12-28 09:20 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 27 Dec 2015 21:44:16 +0100, Yann E. MORIN wrote:
-> 
-> > Unlike Jeremy, I'm perfectly fine with defconfig in .gitignore. It's the
-> > distclean part I'm more concerned with.
-> > 
-> > On the one hand, it does make sense to remove it like we do remove
-> > .config. After all, the user is king, and if he wants to remove
-> > everything, why should we keep it? ;-)
-> > 
-> > On the other hand, I would see defconfig as really the quintessence of
-> > the configuration, which the user explicitly saved. They could get quite
-> > surprised if we now remove that file.
-> > 
-> > So, I'm a bit skeptical either way: keep it or remove it, I am unsure.
-> > Let's lean toward the safe side, and ket's just keep it, for users that
-> > were used to that behaviour, OK?
-> 
-> Since the defconfig file name is configurable (by means of
-> BR2_DEFCONFIG), I don't think we should do anything special with it. So
-> I don't think it should be in .gitignore and I don't think we should
-> remove it upon "make distclean".
-> 
-> If we were do "rm -f $(BR2_DEFCONFIG)" to always remove the user
-> configured defconfig, then it would remove configs/<foo>_defconfig if
-> you started from that defconfig and do a "make distclean". Not good.
-> And we can't have user-configurable file names in .gitignore I believe.
-> 
-> So I'm personally in favor of keeping things as they are today, and
-> therefore reject the patch proposed by K?roly.
+pinentry can use libsecret when available, so we should handle this
+optional dependencies properly.
 
-That's fine with me. I'll mark it rejected, then.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pinentry/pinentry.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+index ab7be54..09a7705 100644
+--- a/package/pinentry/pinentry.mk
++++ b/package/pinentry/pinentry.mk
+@@ -21,6 +21,13 @@ else
+ PINENTRY_CONF_OPTS += --without-x
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSECRET),y)
++PINENTRY_CONF_OPTS += --enable-libsecret
++PINENTRY_DEPENDENCIES += libsecret
++else
++PINENTRY_CONF_OPTS += --disable-libsecret
++endif
++
+ # pinentry-ncurses backend
+ ifeq ($(BR2_PACKAGE_PINENTRY_NCURSES),y)
+ PINENTRY_CONF_OPTS += --enable-ncurses --with-ncurses-include-dir=none
