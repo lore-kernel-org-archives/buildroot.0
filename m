@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 22:05:40 +0100
-Subject: [Buildroot] [PATCH 1/2] package/eigen: install .pc file
-In-Reply-To: <6208cd9e3ec1e0da22459393104981ab0e43d69b.1451329553.git.yann.morin.1998@free.fr>
-References: <cover.1451329553.git.yann.morin.1998@free.fr>
- <6208cd9e3ec1e0da22459393104981ab0e43d69b.1451329553.git.yann.morin.1998@free.fr>
-Message-ID: <20151228220540.262dfc9c@free-electrons.com>
+Date: Mon, 28 Dec 2015 22:06:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libasplib: new package
+In-Reply-To: <1450647112-17364-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1450647112-17364-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151228220655.64e381c1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Bernd Kuhls,
 
-On Mon, 28 Dec 2015 20:08:54 +0100, Yann E. MORIN wrote:
-> Other packages will look for eigen3.pc to detect the presence of eigen3.
+On Sun, 20 Dec 2015 22:31:52 +0100, Bernd Kuhls wrote:
+> Needed for upcoming kodi-adsp-biquad-filters package
 > 
-> eigen3.pc is usually installed by eigen's cmake buildsystem, but we do a
-> manual install to not depend on host-cmake just to install header files.
-> But in doing so, we forgot to install the .pc file.
-> 
-> Manually sed the source .pc.in to generate the final .pc file.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/eigen/eigen.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  package/Config.in                                  |  1 +
+>  .../0001-Fix-linux-detection-with-buildroot.patch  | 31 ++++++++++++++++++++++
+>  package/libasplib/Config.in                        | 11 ++++++++
+>  package/libasplib/libasplib.mk                     | 13 +++++++++
+>  4 files changed, 56 insertions(+)
+>  create mode 100644 package/libasplib/0001-Fix-linux-detection-with-buildroot.patch
+>  create mode 100644 package/libasplib/Config.in
+>  create mode 100644 package/libasplib/libasplib.mk
 
-Applied, thanks. Since I forgot to fix it in the commit, I did a
-follow-up commit to fix the indentation. You used a mix of tabs and
-spaces in a not very consistent way.
+I applied, after doing two changes:
+ 
+ - Adding a dependency on i386 || x86-64. Indeed the source code uses
+   <cpuid.h>, which is only provided on these architectures. In
+   general, it would be good if you could test build the new packages
+   on at least one non-x86 architecture, since it typically allows to
+   uncover some cross-compilation issues or other x86 specificities.
 
-Best regards,
+ - Added a hash file, since we now add hash files for packages sourced
+   from github.
+
+Thanks!
 
 Thomas
 -- 
