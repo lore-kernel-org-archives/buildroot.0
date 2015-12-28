@@ -1,46 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 23:03:11 +0100
-Subject: [Buildroot] [git commit] xdriver_xf86-video-ati: fix dependencies
-Message-ID: <20151228220332.3AC9C819ED@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 28 Dec 2015 23:08:23 +0100
+Subject: [Buildroot] [PATCH] toolchain: create symlink to 'lib' from
+ ARCH_LIB_DIR iso fixed lib32/lib64
+In-Reply-To: <CAAXf6LVq=n35Gq242XiUU3vKkkjZtQwRd+q77OFe8WjZm2jj=Q@mail.gmail.com>
+References: <1445245676-21017-1-git-send-email-patrickdepinguin@gmail.com>
+ <564A515D.1030800@mind.be>
+ <CAAXf6LVq=n35Gq242XiUU3vKkkjZtQwRd+q77OFe8WjZm2jj=Q@mail.gmail.com>
+Message-ID: <5681B2D7.1000202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8fc8e2242ca55c10b8e3db619e8f4e7afe7b5316
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21-12-15 14:29, Thomas De Schampheleire wrote:
+> Hi Arnout,
+> 
+> Sorry, I completely missed your reply. Thanks for reviewing. See below...
+> 
+> On Mon, Nov 16, 2015 at 10:57 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>  Hi Thomas,
+>>
+>> On 19-10-15 11:07, Thomas De Schampheleire wrote:
+>>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>>
+>>> Currently, following symbolic links are created in both target and
+>>> staging directories:
+>>> - lib(32|64) --> lib
+>>> - usr/lib(32|64) --> lib
+>>>
+>>> The decision for lib32 or lib64 is based on the target architecture
+>>> configuration in buildroot (BR2_ARCH_IS_64).
+>>>
+>>> In at least one case this is not correct: when building for a Cavium Octeon
+>>> III processor using the toolchain from the Cavium Networks SDK, and
+>>> specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
+>>> in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
+>>>
+>>> More generally, for external toolchains, the correct symbolic link is
+>>> from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
+>>> toolchains always use either lib32 or lib64.
+>>
+>>  Sorry, it's not OK (yet). The reason we add the lib32 and lib64 symlinks for
+>> the internal toolchain as well is because there are some slightly broken
+>> packages that expect these directories to exist. With this patch, the symlink is
+>> no longer created for some external toolchains, e.g. musl. Unfortunately, I'm
+>> not sure which packages are problematic. A quick search through the archives
+>> points at libatomic_ops as a candidate.
+> 
+> Did you mean 'external' instead of 'internal' in the second sentence
+> of this paragraph?
 
-This package depends on the radeon driver from libdrm and depends on
-DRI support in xserver_xorg-server, to achieve this we select the
-Radeon mesa3d DRI driver.
+ No, I meant external. But I agree that my explanation wasn't very clear.
 
-Fixes:
-http://autobuild.buildroot.net/results/9da/9da4ffdf1c4ec78ae37322e253cb769340116035
+> 
+> For internal toolchains, the lib32 or lib64 symlink is always created,
+> with and without this patch. Agreed?
 
-Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xdriver_xf86-video-ati/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ For internal toolchains, things are still OK with your patch.
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-index 191c20f..55be603 100644
---- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-@@ -1,8 +1,10 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	bool "xf86-video-ati"
- 	depends on BR2_PACKAGE_MESA3D
--	select BR2_PACKAGE_LIBDRM        if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
--	select BR2_PACKAGE_LIBDRM_RADEON if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm -> libpthread-stubs
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_GLPROTO
+> 
+> For external toolchains, if ARCH_LIB_DIR == 'lib', previously symbolic
+> links lib32 or lib64 would be created anyhow, but with this patch they
+> are not. I guess this is the case you refer to?
+
+ Exactly, and for example external musl toolchains are in this situation.
+
+> 
+>>
+>>  So I think the solution is to keep on creating the symlink like is done now,
+>> and just check if ${ARCH_LIB_DIR} exists for the external toolchains.
+> 
+> You mean to create a lib32/lib64 symlink as before, and additionally a
+> link '${ARCH_LIB_DIR} -> lib' in case ARCH_LIB_DIR is different from
+> 'lib32' and 'lib64', right?
+
+ Yep. Though it probably will make things even uglier.
+
+ Regards,
+ Arnout
+
+> 
+> Thanks,
+> Thomas
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
