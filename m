@@ -1,59 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Dec 2015 12:17:23 +0100
-Subject: [Buildroot] [git commit] arch/arm: add option to enable an optional
-	VFP unit
-Message-ID: <20151227112454.204A681917@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 Dec 2015 22:13:12 +0100
+Subject: [Buildroot] [PATCH 1/2] package/eigen: install .pc file
+In-Reply-To: <20151228220540.262dfc9c@free-electrons.com>
+References: <cover.1451329553.git.yann.morin.1998@free.fr>
+ <6208cd9e3ec1e0da22459393104981ab0e43d69b.1451329553.git.yann.morin.1998@free.fr>
+ <20151228220540.262dfc9c@free-electrons.com>
+Message-ID: <20151228211312.GC3446@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f52692ed64c64d24771e89f12b3db439247e28fc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Currently, the VFP selection for ARM is a little bit muddy:
-  - some CPUs definitely do not have a VFP or NEON,
-  - some CPUs definitely do have a VFP or NEON,
-  - some CPUs may have a VFP or NEON.
+On 2015-12-28 22:05 +0100, Thomas Petazzoni spake thusly:
+> Dear Yann E. MORIN,
+> 
+> On Mon, 28 Dec 2015 20:08:54 +0100, Yann E. MORIN wrote:
+> > Other packages will look for eigen3.pc to detect the presence of eigen3.
+> > 
+> > eigen3.pc is usually installed by eigen's cmake buildsystem, but we do a
+> > manual install to not depend on host-cmake just to install header files.
+> > But in doing so, we forgot to install the .pc file.
+> > 
+> > Manually sed the source .pc.in to generate the final .pc file.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/eigen/eigen.mk | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> 
+> Applied, thanks.
 
-However, we currently conflate the availability of the VFP/NEON with the
-possibility to use them. Even is the user chooses a floating point
-strategy with a 'lower' solution (i.e. VFPv2 when a VFPv3 exists, or not
-using NEON when the CPU has it), some packages are still using the
-CPU-defined HW availaibility rather thean the usr's selection.
+:-)
 
-Furthermore, for CPU that may have a VFP/NEON, there is no way for the
-user to actually specify that the HW is indeed available; the user can
-only specify the floating point strategy. This means that some packages
-or some package versions, like nodejs for example, can not be properly
-selected on some CPU cores, like Cortex-A9 which only may have a VFP.
+> Since I forgot to fix it in the commit, I did a
+> follow-up commit to fix the indentation. You used a mix of tabs and
+> spaces in a not very consistent way.
 
-Like we have an option to enable an optional NEON unit, add a similar
-option to enable an optional VFP unit.
+Well, it was not really 'inconsistent' since I did it on purpose:
+  - the sed's -e expression were all aligned (with tabstop=8)
+  - the install's source and destination were aligned (with tabstop=8)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in.arm | 7 +++++++
- 1 file changed, 7 insertions(+)
+But OK, your fix provides another kind of 'consistency' ;-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index feac16d..f2c5a58 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -194,6 +194,13 @@ config BR2_ARM_ENABLE_NEON
- 	  Select this option if you are certain your particular
- 	  implementation has NEON support and you want to use it.
- 
-+config BR2_ARM_ENABLE_VFP
-+	bool "Enable VFP extension support"
-+	depends on BR2_ARM_CPU_MAYBE_HAS_VFPV2
-+	select BR2_ARM_CPU_HAS_VFPV4 if BR2_ARM_CPU_MAYBE_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_VFPV3 if BR2_ARM_CPU_MAYBE_HAS_VFPV3
-+	select BR2_ARM_CPU_HAS_VFPV2 if BR2_ARM_CPU_MAYBE_HAS_VFPV2
-+
- choice
- 	prompt "Target ABI"
- 	depends on BR2_arm || BR2_armeb
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
