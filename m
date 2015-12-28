@@ -1,46 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 22:06:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libasplib: new package
-In-Reply-To: <1450647112-17364-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1450647112-17364-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151228220655.64e381c1@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 28 Dec 2015 22:23:33 +0100
+Subject: [Buildroot] [PATCH v2 2/3] package/gtkmm3: reorder select/depends
+In-Reply-To: <1451337814-16379-1-git-send-email-romain.naour@gmail.com>
+References: <1451337814-16379-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <1451337814-16379-2-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+From: Romain Naour <romain.naour@openwide.fr>
 
-On Sun, 20 Dec 2015 22:31:52 +0100, Bernd Kuhls wrote:
-> Needed for upcoming kodi-adsp-biquad-filters package
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/Config.in                                  |  1 +
->  .../0001-Fix-linux-detection-with-buildroot.patch  | 31 ++++++++++++++++++++++
->  package/libasplib/Config.in                        | 11 ++++++++
->  package/libasplib/libasplib.mk                     | 13 +++++++++
->  4 files changed, 56 insertions(+)
->  create mode 100644 package/libasplib/0001-Fix-linux-detection-with-buildroot.patch
->  create mode 100644 package/libasplib/Config.in
->  create mode 100644 package/libasplib/libasplib.mk
+From [1]:
+"Even though the ordering has absolutely no consequences in Kconfig, it
+is not logical (when reading). It is more logical and far easier to
+understand when depends come first, followed by the selects."
 
-I applied, after doing two changes:
+Also, the Config.in exemple in the manual suggest to use this coding
+style [2].
+
+[1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
+[2] http://buildroot.uclibc.org/downloads/manual/manual.html#writing-rules-config-in
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/gtkmm3/Config.in | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/gtkmm3/Config.in b/package/gtkmm3/Config.in
+index 30d3492..f617d83 100644
+--- a/package/gtkmm3/Config.in
++++ b/package/gtkmm3/Config.in
+@@ -1,17 +1,17 @@
+ config BR2_PACKAGE_GTKMM3
+ 	bool "gtkmm3"
+-	select BR2_PACKAGE_ATKMM
+-	select BR2_PACKAGE_CAIROMM
+-	select BR2_PACKAGE_GLIBMM
+-	select BR2_PACKAGE_LIBGTK3
+-	select BR2_PACKAGE_LIBSIGC
+-	select BR2_PACKAGE_PANGOMM
+ 	depends on BR2_ARCH_HAS_ATOMICS # libcairomm/libgtk3/libpangomm -> cairo
+ 	depends on BR2_INSTALL_LIBSTDCPP # glibmm, libpangomm -> glibmm/pango
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/libgtk3 -> libglib2
+ 	depends on BR2_USE_MMU # *mm/libgtk3 -> libglib2
+ 	depends on BR2_USE_WCHAR # *mm/libgtk3 -> libglib2
++	select BR2_PACKAGE_ATKMM
++	select BR2_PACKAGE_CAIROMM
++	select BR2_PACKAGE_GLIBMM
++	select BR2_PACKAGE_LIBGTK3
++	select BR2_PACKAGE_LIBSIGC
++	select BR2_PACKAGE_PANGOMM
+ 	help
+ 	  The gtkmm3 package is a set of C++ bindings for GTK 3.
  
- - Adding a dependency on i386 || x86-64. Indeed the source code uses
-   <cpuid.h>, which is only provided on these architectures. In
-   general, it would be good if you could test build the new packages
-   on at least one non-x86 architecture, since it typically allows to
-   uncover some cross-compilation issues or other x86 specificities.
-
- - Added a hash file, since we now add hash files for packages sourced
-   from github.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.3
