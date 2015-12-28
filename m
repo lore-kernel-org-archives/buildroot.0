@@ -1,61 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Dec 2015 20:08:55 +0100
-Subject: [Buildroot] [PATCH 2/2] package/jack2: add missing optional
-	dependencies
-In-Reply-To: <cover.1451329553.git.yann.morin.1998@free.fr>
-References: <cover.1451329553.git.yann.morin.1998@free.fr>
-Message-ID: <5f7632a3d6ed3e3ab0f324e31be21a0ea18245d4.1451329553.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 28 Dec 2015 16:17:04 -0300
+Subject: [Buildroot] [PATCH v2 1/1] toolchain-external: CodeSourcery
+ PowerPC: Revert the removal of CS PowerPC 2011.03
+In-Reply-To: <20151226220445.GD4083@free.fr>
+References: <1451164306-30008-1-git-send-email-romain.naour@gmail.com>
+ <20151226220445.GD4083@free.fr>
+Message-ID: <56818AB0.8090505@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-jack2 can optionally use opus, readline and eigen3, but those
-dependencies were not expressed in out jack2 package, potentially
-leading to unreproducible builds.
+On 26/12/15 19:04, Yann E. MORIN wrote:
 
-Add them.
+> Or we just ditch 2012.03 altogether, and just keep 2011.03.
+>
+> The difference being:
+>
+>    - back to a gcc-4.5 instead of gcc-46.6; we loose 5 packages:
+>          apitrace, dawgdig, mpd, upmpdcli and zmqpp
+>
+>    - back to kernel headers 2.6.38 instead of 3.2; we loose 31 packages:
+>          bluez5_utils cdrkit dhcpcd dvb-apps dvdrw-tools fastd
+>          gst1-plugins-good ifupdown iproute2 libcap libnftnl libseccomp
+>          libv4l lxc mjpg-streamer mmc-utils network-manager nftables
+>          openswan racehound smack squid stress-ng tvheadend util-linux
+>          v4l2grab vlc w_scan weston zbar
+>
+> Thomas, Gustavo: your opinion?
 
-Note that the optinal dependency on celt is not added, because we only
-have celt-0.5.1 and jack2 requires celt >= 0.5.2 (even though it does
-look for celt >= 0.5.0, it does not build with celt- < 0.5.2). Sinc ewe
-can not upgrade celt (for now), we just never make jack2 depend on
-celt051, and it won;t find it either, as it just searches for celt.pc
-and we have celt051.pc.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/jack2/jack2.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index e4ad36e..5566b78 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -24,6 +24,23 @@ JACK2_DEPENDENCIES += dbus
- JACK2_CONF_OPTS += --dbus
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPUS),y)
-+JACK2_DEPENDENCIES += opus
-+endif
-+
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+JACK2_DEPENDENCIES += readline
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EIGEN),y)
-+JACK2_DEPENDENCIES += eigen
-+endif
-+
-+# Even though it advertises support for celt-0.5.x, jack2 really requires
-+# celt >= 0.5.2 but we only have 0.5.1.3 and we can not upgrade, so we do
-+# not add a dependency to celt051, which it can't find anyway as it looks
-+# for celt.pc but we only have celt-51.pc.
-+
- define JACK2_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS)	\
--- 
-1.9.1
+Hi all.
+In general i dislike the CS powerpc toolchains, they're finicky and 
+outdated, so i tend to roll my own via ct-ng or internal.
+That being said and going back to Romain's original mail, you can't have 
+SPE and altivec at the same time, they're mutually exclusive.
+That's because SPE is basically a FPU bolted into CPU GP registers: for 
+v1 it just implements single precision, for v2 it implements double (by 
+extending the GP registers to 64 bits).
+Altivec requires a "classic" FPU with dedicated registers.
+Getting that out of the way the altivec woes come from gcc changing the 
+semantics for enabling them: in the old wild west that was -faltivec, 
+the standard/modern way is -maltivec. The problem lies with Apple if i'm 
+not wrong, since they ditched powerpc a while ago back then they used an 
+old gcc, hence -faltivec, and in many cases the tested condition is 
+based on that assumption (powerpc = apple). Care must be taken since the 
+calling convention for the asm-optimized code might be OSX rather than 
+linux as well, hence just switching the knob to the new/standard way may 
+do no good.
+Now back to SPE, since ABI can't be maintained between e500v1 and v2 for 
+obvious reasons it was kind of decided to drop hard float from glibc, 
+hence newer (eglibc >= 2.18 IIRC) versions can't be built targetting an 
+e500v? without softfloat, so basically it's a dead path anyway (except 
+uclibc*, it still has the hard float implementation in place, and screw 
+the ABI).
+Regards.
