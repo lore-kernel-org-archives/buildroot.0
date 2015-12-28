@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 17:58:01 +0100
-Subject: [Buildroot] [git commit] package/tcl: move comment around,
+Date: Mon, 28 Dec 2015 17:57:58 +0100
+Subject: [Buildroot] [git commit] package/nodejs: move comment around,
 	to keep proper indentation
-Message-ID: <20151228165835.08B517F8EB@busybox.osuosl.org>
+Message-ID: <20151228165835.00E5B7F8EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac371770de69b5ee5f15eed7dd790558b8835d7d
+commit: http://git.buildroot.net/buildroot/commit/?id=4d819e3ebed293eda0168285f61c1c153394ef90
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 In Kconfig, when there is an item (like a comment) between a symbol and
@@ -20,29 +20,35 @@ menuconfig.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/tcl/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/nodejs/Config.in | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/tcl/Config.in b/package/tcl/Config.in
-index 63d1b25..f1fa054 100644
---- a/package/tcl/Config.in
-+++ b/package/tcl/Config.in
-@@ -1,3 +1,7 @@
-+comment "tcl needs a toolchain w/ threads, dynamic library"
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index eb3aeec..008fbbf 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -1,3 +1,10 @@
++comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
 +	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
++	depends on !BR2_MIPS_SOFT_FLOAT
++	depends on !BR2_ARM_CPU_ARMV4
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 +
- config BR2_PACKAGE_TCL
- 	bool "tcl"
- 	# fork()
-@@ -11,10 +15,6 @@ config BR2_PACKAGE_TCL
+ config BR2_PACKAGE_NODEJS
+ 	bool "nodejs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -17,13 +24,6 @@ config BR2_PACKAGE_NODEJS
  
- 	  http://www.tcl.tk
+ 	  http://nodejs.org/
  
--comment "tcl needs a toolchain w/ threads, dynamic library"
+-comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
 -	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
+-	depends on !BR2_MIPS_SOFT_FLOAT
+-	depends on !BR2_ARM_CPU_ARMV4
+-	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 -
- if BR2_PACKAGE_TCL
+ if BR2_PACKAGE_NODEJS
  
- config BR2_PACKAGE_TCL_DEL_ENCODINGS
+ # Starting with 0.12.x, on ARM, V8 (the JS engine)
