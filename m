@@ -1,65 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Dec 2015 14:25:14 +0100
-Subject: [Buildroot] [PATCH 1/1] python-paho-mqtt: add new package
-In-Reply-To: <1451307455-23911-1-git-send-email-zinosat@tiscali.it>
-References: <1451307455-23911-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <20151228142514.58df0700@free-electrons.com>
+From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <noe.rubinstein@gmail.com>
+Date: Mon, 28 Dec 2015 14:30:56 +0100
+Subject: [Buildroot] [PATCH] tpm-tools: fix build failures caused by -Werror
+Message-ID: <1451309456-27538-1-git-send-email-nrubinstein@aldebaran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Davide,
+Change-Id: I1797d19039938e750c92bb89d05b2f05c10668ad
 
-On Mon, 28 Dec 2015 13:57:35 +0100, Davide Viti wrote:
+---
 
-> diff --git a/package/python-paho-mqtt/Config.in b/package/python-paho-mqtt/Config.in
-> new file mode 100644
-> index 0000000..1b20da9
-> --- /dev/null
-> +++ b/package/python-paho-mqtt/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_PAHO_MQTT
-> +	bool "python-paho-mqtt"
-> +	help
-> +	  The Paho Python Client provides a client class with support
-> +	  for both MQTT v3.1 and v3.1.1 on Python 2.7 or 3.x. It also
-> +	  provides some helper functions to make publishing one off
-> +	  messages to an MQTT server very straightforward.
+I am aware there is another tpm-tools build issue, related to libintl:
+http://autobuild.buildroot.org/results/ce7/ce7d971c1e590b39a3e457ee59c3031817a3c969/build-end.log
 
-I know it was copy/pasted from the website, but this last sentence
-doesn't make much sense to me. Maybe it's because I'm not a native
-speaker, but "publishing one off messages" is not something that I can
-parse. Did they mean "publishing on/off messages" ? Or something else ?
+I'm leaving this one to smartin, who is currently working on a fix.
+---
+ .../0002-configure.in-remove-Werror.patch          | 26 ++++++++++++++++++++++
+ package/tpm-tools/tpm-tools.mk                     |  1 +
+ 2 files changed, 27 insertions(+)
+ create mode 100644 package/tpm-tools/0002-configure.in-remove-Werror.patch
 
-> +PYTHON_PAHO_MQTT_VERSION = 1.1
-> +PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
-> +PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/source/p/paho-mqtt
-> +PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
-> +PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
-> +PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
-> +
-> +define PYTHON_PAHO_MQTT_INSTALL_TARGET_CMDS
-> +	(cd $(@D); \
-> +		$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
-> +		$(HOST_DIR)/usr/bin/python2 setup.py install \
-> +		--root=/)
-> +endef
-
-Why do you need to override <pkg>_INSTALL_TARGET_CMDS ?
-
-Using $(HOST_PKG_PYTHON_SETUPTOOLS_ENV) for a target package looks
-clearly wrong. Also, since you're not passing
---prefix=$(TARGET_DIR)/usr, I don't see how this overriden install
-target commands can even install something in $(TARGET_DIR).
-
-Could you clarify this?
-
-Thanks!
-
-Thomas
+diff --git a/package/tpm-tools/0002-configure.in-remove-Werror.patch b/package/tpm-tools/0002-configure.in-remove-Werror.patch
+new file mode 100644
+index 0000000..4baae70
+--- /dev/null
++++ b/package/tpm-tools/0002-configure.in-remove-Werror.patch
+@@ -0,0 +1,26 @@
++From b060873f444d79f3f5aa388427cb1ede6665834a Mon Sep 17 00:00:00 2001
++From: Kent Yoder <key@linux.vnet.ibm.com>
++Date: Mon, 5 Nov 2012 14:58:31 -0600
++Subject: [PATCH] configure.in: remove -Werror
++
++Signed-off-by: Kent Yoder <key@linux.vnet.ibm.com>
++---
++ configure.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.in b/configure.in
++index da170d0..0f175be 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -138,7 +138,7 @@ AC_TYPE_SIZE_T
++ AC_TYPE_SIGNAL
++ AC_TYPE_UID_T
++ 
++-CFLAGS="$CFLAGS -Wall -Werror -Wreturn-type -Wsign-compare"
+++CFLAGS="$CFLAGS -Wall -Wreturn-type -Wsign-compare"
++ 
++ AC_CONFIG_FILES(./Makefile		\
++ 		po/Makefile.in		\
++-- 
++2.1.4
++
+diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
+index 20df489..9e4d66a 100644
+--- a/package/tpm-tools/tpm-tools.mk
++++ b/package/tpm-tools/tpm-tools.mk
+@@ -11,6 +11,7 @@ TPM_TOOLS_STRIP_COMPONENTS = 2
+ TPM_TOOLS_LICENSE = Common Public License Version 1.0
+ TPM_TOOLS_LICENSE_FILES = LICENSE
+ TPM_TOOLS_DEPENDENCIES = trousers openssl
++TPM_TOOLS_AUTORECONF = yes
+ 
+ TPM_TOOLS_CONF_OPTS = --disable-pkcs11-support
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
