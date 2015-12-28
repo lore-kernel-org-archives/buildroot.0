@@ -1,59 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Dec 2015 11:55:18 +0100
-Subject: [Buildroot] [PATCHv2] toolchain: granular choice for stack
- protector
-In-Reply-To: <CAKbGBLgU3woN+OEPF3tDUO7xs1XdUrFk2i10qdY1x=wF-EBZdw@mail.gmail.com>
-References: <1451173326-3424-1-git-send-email-yann.morin.1998@free.fr>
- <20151227111936.5283ba73@free-electrons.com>
- <20151227102655.GB3483@free.fr>
- <CAKbGBLgU3woN+OEPF3tDUO7xs1XdUrFk2i10qdY1x=wF-EBZdw@mail.gmail.com>
-Message-ID: <20151227105518.GD3483@free.fr>
+Date: Mon, 28 Dec 2015 18:24:19 +0100
+Subject: [Buildroot] [PATCH] Handle defconfig as .config in .gitignore
+ and distclean.
+In-Reply-To: <20151228092019.5fb2af66@free-electrons.com>
+References: <555c49ac.0a64b40a.3499.ffffb3f0@mx.google.com>
+ <530190200.250863.1432112666116.JavaMail.root@openwide.fr>
+ <CABbD_XAgJWoQ5R6-01Enp37CP18i6fNgj6oCRB7uxvrkY4TmRA@mail.gmail.com>
+ <20151227204416.GK3483@free.fr>
+ <20151228092019.5fb2af66@free-electrons.com>
+Message-ID: <20151228172419.GA3446@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Steven, All,
+Thomas, K?roly, All,
 
-On 2015-12-27 02:44 -0800, Steven Noonan spake thusly:
-> On Sun, Dec 27, 2015 at 2:26 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2015-12-27 11:19 +0100, Thomas Petazzoni spake thusly:
-> >> On Sun, 27 Dec 2015 00:42:06 +0100, Yann E. MORIN wrote:
-> >> > -config BR2_ENABLE_SSP
-> >> > +choice
-> >> >     bool "build code with Stack Smashing Protection"
-> >> > -   depends on BR2_TOOLCHAIN_HAS_SSP
-> >> > +   default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-> >> > +   default BR2_SSP_STRONG if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> >>
-> >> I don't understand this part. Why would we now defalut on
-> >> BR2_SSP_STRONG if gcc >= 4.9 ?
-> >
-> > Hmmm... I did not think too much about that. I just "updated" the patch
-> > and kept its meaning as-is.
-> >
-> >> I think we should keep the default of not having SSP enabled.
-> >
-> > Yes, makes sense. At best, the change in the default should have been in
-> > another patch.
+On 2015-12-28 09:20 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 27 Dec 2015 21:44:16 +0100, Yann E. MORIN wrote:
 > 
-> I could be wrong, but I *think* BuildRoot used to default to SSP on.
-> If not, I don't know why I would have changed the default. I'm not a
-> particularly big fan of SSP to begin with, so I'd have no incentive to
-> default it enabled.
+> > Unlike Jeremy, I'm perfectly fine with defconfig in .gitignore. It's the
+> > distclean part I'm more concerned with.
+> > 
+> > On the one hand, it does make sense to remove it like we do remove
+> > .config. After all, the user is king, and if he wants to remove
+> > everything, why should we keep it? ;-)
+> > 
+> > On the other hand, I would see defconfig as really the quintessence of
+> > the configuration, which the user explicitly saved. They could get quite
+> > surprised if we now remove that file.
+> > 
+> > So, I'm a bit skeptical either way: keep it or remove it, I am unsure.
+> > Let's lean toward the safe side, and ket's just keep it, for users that
+> > were used to that behaviour, OK?
+> 
+> Since the defconfig file name is configurable (by means of
+> BR2_DEFCONFIG), I don't think we should do anything special with it. So
+> I don't think it should be in .gitignore and I don't think we should
+> remove it upon "make distclean".
+> 
+> If we were do "rm -f $(BR2_DEFCONFIG)" to always remove the user
+> configured defconfig, then it would remove configs/<foo>_defconfig if
+> you started from that defconfig and do a "make distclean". Not good.
+> And we can't have user-configurable file names in .gitignore I believe.
+> 
+> So I'm personally in favor of keeping things as they are today, and
+> therefore reject the patch proposed by K?roly.
 
-OK, so I will definitely remove the new defaults before I respin.
-
-Thanks for the feedback! :-)
+That's fine with me. I'll mark it rejected, then.
 
 Regards,
 Yann E. MORIN.
-
-> > I'll fix and respin.
-> >
-> > Regards,
-> > Yann E. MORIN.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
