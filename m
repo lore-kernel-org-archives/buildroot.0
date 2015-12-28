@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Dec 2015 15:05:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.60.0
-In-Reply-To: <20151227145920.28ceac50@free-electrons.com>
-References: <1451081406-21991-1-git-send-email-joerg.krause@embedded.rocks>
- <20151227145920.28ceac50@free-electrons.com>
-Message-ID: <20151227150531.1072a816@free-electrons.com>
+Date: Mon, 28 Dec 2015 17:58:01 +0100
+Subject: [Buildroot] [git commit] package/tcl: move comment around,
+	to keep proper indentation
+Message-ID: <20151228165835.08B517F8EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=ac371770de69b5ee5f15eed7dd790558b8835d7d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 27 Dec 2015 14:59:20 +0100, Thomas Petazzoni wrote:
+In Kconfig, when there is an item (like a comment) between a symbol and
+its dependees, then the indentation is not in effect.
 
-> On Fri, 25 Dec 2015 23:10:06 +0100, J?rg Krause wrote:
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> >  package/boost/boost.hash | 6 +++---
-> >  package/boost/boost.mk   | 2 +-
-> >  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> This update is causing a large number of build failures (some may not
-> be related to the update itself, but some clearly seem to be new). Can
-> you have a look at:
-> 
->   http://autobuild.buildroot.org/?reason=boost-1.60.0
+Move the symbol to the top of the file to guarantee the indentation in
+menuconfig.
 
-We are also getting build failures of Boost on the host:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/tcl/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-  http://autobuild.buildroot.org/?reason=host-boost-1.60.0
-
-This might be due to the host compiler not having C++11 support.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tcl/Config.in b/package/tcl/Config.in
+index 63d1b25..f1fa054 100644
+--- a/package/tcl/Config.in
++++ b/package/tcl/Config.in
+@@ -1,3 +1,7 @@
++comment "tcl needs a toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_TCL
+ 	bool "tcl"
+ 	# fork()
+@@ -11,10 +15,6 @@ config BR2_PACKAGE_TCL
+ 
+ 	  http://www.tcl.tk
+ 
+-comment "tcl needs a toolchain w/ threads, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+ if BR2_PACKAGE_TCL
+ 
+ config BR2_PACKAGE_TCL_DEL_ENCODINGS
