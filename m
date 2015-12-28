@@ -1,70 +1,39 @@
-From: DATACOM - henrique.marks <henrique.marks@datacom.ind.br>
-Date: Mon, 28 Dec 2015 13:28:03 -0200 (BRST)
-Subject: [Buildroot] [PATCH] tpm-tools: fix build failures caused
-	by	-Werror
-In-Reply-To: <20151228143749.61f69d04@free-electrons.com>
-References: <1451309456-27538-1-git-send-email-nrubinstein@aldebaran.com>
- <20151228143749.61f69d04@free-electrons.com>
-Message-ID: <1426132396.18085024.1451316483973.JavaMail.zimbra@datacom.ind.br>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 28 Dec 2015 12:50:53 -0300
+Subject: [Buildroot] [PATCH] nasm: bump to version 2.11.08
+Message-ID: <1451317853-30622-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Isn't better to fix the code, instead of taking off -Werror ?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nasm/nasm.hash | 2 +-
+ package/nasm/nasm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-If it is not possible to fix the code (a huge amount of errors, for instance, caused by a new compiler version), maybe some -Wno directive would be better.
-
-Thanks
-
------ Mensagem original -----
-> De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Para: "No? Rubinstein" <noe.rubinstein@gmail.com>
-> Cc: "No? Rubinstein" <nrubinstein@aldebaran.com>, buildroot at buildroot.org
-> Enviadas: Segunda-feira, 28 de dezembro de 2015 11:37:49
-> Assunto: Re: [Buildroot] [PATCH] tpm-tools: fix build failures caused by	-Werror
-
-> No?,
-> 
-> On Mon, 28 Dec 2015 14:30:56 +0100, No? Rubinstein wrote:
->> Change-Id: I1797d19039938e750c92bb89d05b2f05c10668ad
-> 
-> We don't need a Change-Id. We need a Signed-off-by line as well as a
-> reference to the autobuilder failure that you are fixing. And also a
-> short explanation on how you're fixing the failure (backport an
-> upstream patch, etc.).
-> 
-> 
->> diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
->> index 20df489..9e4d66a 100644
->> --- a/package/tpm-tools/tpm-tools.mk
->> +++ b/package/tpm-tools/tpm-tools.mk
->> @@ -11,6 +11,7 @@ TPM_TOOLS_STRIP_COMPONENTS = 2
->>  TPM_TOOLS_LICENSE = Common Public License Version 1.0
->>  TPM_TOOLS_LICENSE_FILES = LICENSE
->>  TPM_TOOLS_DEPENDENCIES = trousers openssl
->> +TPM_TOOLS_AUTORECONF = yes
-> 
-> Please add a comment:
-> 
-> # We're patching configure.in
-> 
-> Thanks!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
+index a92ba3c..c693f52 100644
+--- a/package/nasm/nasm.hash
++++ b/package/nasm/nasm.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	233c574f2c068c0256f9b3653220ceb247c72b671085595259529156c6cfa55d	nasm-2.11.02.tar.xz
++sha256	c99467c7072211c550d147640d8a1a0aa4d636d4d8cf849f3bf4317d900a1f7f	nasm-2.11.08.tar.xz
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index b87d6ef..c70557f 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NASM_VERSION = 2.11.02
++NASM_VERSION = 2.11.08
+ NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
+ NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ NASM_LICENSE = BSD-2c
 -- 
-Dr. Henrique Marks
-henrique.marks at datacom.ind.br
-R. Am?rica, 1000 - Eldorado do Sul - RS
-CEP: 92990-000 - Brasil
-Fone: +55 51 3933 3000 - Ramal 3466
+2.4.10
