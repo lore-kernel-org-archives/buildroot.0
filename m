@@ -1,95 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Dec 2015 23:08:23 +0100
-Subject: [Buildroot] [PATCH] toolchain: create symlink to 'lib' from
- ARCH_LIB_DIR iso fixed lib32/lib64
-In-Reply-To: <CAAXf6LVq=n35Gq242XiUU3vKkkjZtQwRd+q77OFe8WjZm2jj=Q@mail.gmail.com>
-References: <1445245676-21017-1-git-send-email-patrickdepinguin@gmail.com>
- <564A515D.1030800@mind.be>
- <CAAXf6LVq=n35Gq242XiUU3vKkkjZtQwRd+q77OFe8WjZm2jj=Q@mail.gmail.com>
-Message-ID: <5681B2D7.1000202@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 28 Dec 2015 19:12:26 -0300
+Subject: [Buildroot] [PATCH] gettext: bump to version 0.19.7
+Message-ID: <1451340746-28040-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21-12-15 14:29, Thomas De Schampheleire wrote:
-> Hi Arnout,
-> 
-> Sorry, I completely missed your reply. Thanks for reviewing. See below...
-> 
-> On Mon, Nov 16, 2015 at 10:57 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  Hi Thomas,
->>
->> On 19-10-15 11:07, Thomas De Schampheleire wrote:
->>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>>
->>> Currently, following symbolic links are created in both target and
->>> staging directories:
->>> - lib(32|64) --> lib
->>> - usr/lib(32|64) --> lib
->>>
->>> The decision for lib32 or lib64 is based on the target architecture
->>> configuration in buildroot (BR2_ARCH_IS_64).
->>>
->>> In at least one case this is not correct: when building for a Cavium Octeon
->>> III processor using the toolchain from the Cavium Networks SDK, and
->>> specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
->>> in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
->>>
->>> More generally, for external toolchains, the correct symbolic link is
->>> from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
->>> toolchains always use either lib32 or lib64.
->>
->>  Sorry, it's not OK (yet). The reason we add the lib32 and lib64 symlinks for
->> the internal toolchain as well is because there are some slightly broken
->> packages that expect these directories to exist. With this patch, the symlink is
->> no longer created for some external toolchains, e.g. musl. Unfortunately, I'm
->> not sure which packages are problematic. A quick search through the archives
->> points at libatomic_ops as a candidate.
-> 
-> Did you mean 'external' instead of 'internal' in the second sentence
-> of this paragraph?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gettext/gettext.hash | 6 +++---
+ package/gettext/gettext.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- No, I meant external. But I agree that my explanation wasn't very clear.
-
-> 
-> For internal toolchains, the lib32 or lib64 symlink is always created,
-> with and without this patch. Agreed?
-
- For internal toolchains, things are still OK with your patch.
-
-> 
-> For external toolchains, if ARCH_LIB_DIR == 'lib', previously symbolic
-> links lib32 or lib64 would be created anyhow, but with this patch they
-> are not. I guess this is the case you refer to?
-
- Exactly, and for example external musl toolchains are in this situation.
-
-> 
->>
->>  So I think the solution is to keep on creating the symlink like is done now,
->> and just check if ${ARCH_LIB_DIR} exists for the external toolchains.
-> 
-> You mean to create a lib32/lib64 symlink as before, and additionally a
-> link '${ARCH_LIB_DIR} -> lib' in case ARCH_LIB_DIR is different from
-> 'lib32' and 'lib64', right?
-
- Yep. Though it probably will make things even uglier.
-
- Regards,
- Arnout
-
-> 
-> Thanks,
-> Thomas
-> 
-
-
+diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
+index 33fe515..3236fda 100644
+--- a/package/gettext/gettext.hash
++++ b/package/gettext/gettext.hash
+@@ -1,3 +1,3 @@
+-# From https://lists.gnu.org/archive/html/info-gnu/2015-09/msg00003.html
+-md5 69d79254ee3b41df23f41c2f4fd720d9  gettext-0.19.6.tar.xz
+-sha1 6033a0f87246c510dda9bfd8b3b3c488c0853156  gettext-0.19.6.tar.xz
++# From http://lists.gnu.org/archive/html/bug-gettext/2015-12/msg00019.html
++md5	f81e50556da41b44c1d59ac93474dca5	gettext-0.19.7.tar.xz
++sha1	4b2574b76d14c98270bf607a2a62f033524d8e8c	gettext-0.19.7.tar.xz
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index cb509f2..10034d6 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GETTEXT_VERSION = 0.19.6
++GETTEXT_VERSION = 0.19.7
+ GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
+ GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
+ GETTEXT_INSTALL_STAGING = YES
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.10
