@@ -1,18 +1,36 @@
-From: Mathew Benson <mathew.benson@gmail.com>
-Date: Mon, 28 Dec 2015 21:10:41 -0600
-Subject: [Buildroot] sysroot
-Message-ID: <CA+C+_XRofByfgd5oo5R1CZykm=vhsXQLD0ESODbkwxXwiTF9QA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 29 Dec 2015 09:07:24 +0200
+Subject: [Buildroot] [PATCH 1/1] xdotool: new package
+In-Reply-To: <1451354367-26073-1-git-send-email-nunes.erico@gmail.com>
+References: <1451354367-26073-1-git-send-email-nunes.erico@gmail.com>
+Message-ID: <20151229070724.GA1990@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-What is the best way to add 32 bit headers (i.e. gnu/stubs-32.h) to the
-sysroot directory on a 64 bit build?  I need to create a sysroot for some
-new code development and I'd rather use the correct files that buildroot
-would have pulled in if it was a 32 bit build, rather than piece together a
-sysroot manually.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151228/93a014d7/attachment.html>
+Hi Erico,
+
+On Mon, Dec 28, 2015 at 11:59:27PM -0200, Erico Nunes wrote:
+> +################################################################################
+> +#
+> +# xdotool
+> +#
+> +################################################################################
+> +
+> +XDOTOOL_VERSION = v3.20150503.1
+> +XDOTOOL_SITE = $(call github,jordansissel,xdotool,$(XDOTOOL_VERSION))
+> +XDOTOOL_LICENSE = custom
+
+Should be "BSD-3c". Compare COPYRIGHT to 
+https://opensource.org/licenses/BSD-3-Clause.
+
+> +XDOTOOL_LICENSE_FILES = COPYRIGHT
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
