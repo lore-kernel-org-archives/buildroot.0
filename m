@@ -1,64 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 23:36:18 +0100
-Subject: [Buildroot] [PATCH v2] package/tpm-tools: fix build with locale
- support
-In-Reply-To: <1451423672-24575-1-git-send-email-s.martin49@gmail.com>
-References: <1451423672-24575-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20151229233618.0d9f9c4e@free-electrons.com>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Tue, 29 Dec 2015 23:37:52 +0100
+Subject: [Buildroot] [PATCH 1/1] python-paho-mqtt: add new package
+In-Reply-To: <20151228142514.58df0700@free-electrons.com>
+References: <1451307455-23911-1-git-send-email-zinosat@tiscali.it>
+ <20151228142514.58df0700@free-electrons.com>
+Message-ID: <CAKpAL0=3nfy0Y3qDZm5-UrckQ1t5Vn1dyMN_EcOWEjK7skve4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+*Hi Thomas and Yegor,*
 
-On Tue, 29 Dec 2015 22:14:32 +0100, Samuel Martin wrote:
+I've tried to rebuild the package using python3 and the build fails finding
+$(HOST_DIR)/usr/bin/python2
 
-> diff --git a/package/tpm-tools/0002-lib-Makefile.am-make-sure-libintl-is-in-LDFLAGS-when.patch b/package/tpm-tools/0002-lib-Makefile.am-make-sure-libintl-is-in-LDFLAGS-when.patch
-> new file mode 100644
-> index 0000000..eee92c1
-> --- /dev/null
-> +++ b/package/tpm-tools/0002-lib-Makefile.am-make-sure-libintl-is-in-LDFLAGS-when.patch
-> @@ -0,0 +1,40 @@
-> +From bbea0774bda411784294b01131bca60428124844 Mon Sep 17 00:00:00 2001
-> +From: Samuel Martin <s.martin49@gmail.com>
-> +Date: Mon, 28 Dec 2015 11:04:11 +0100
-> +Subject: [PATCH] lib/Makefile.am: make sure libintl is in LDFLAGS when needed
-> +
-> +The build-system internally builds a couple of static libraries used to
-> +build the final programs.
-> +
-> +When linking these libraries and the final programs, we need to
-> +explicitly tell the linker to link with libintl in order to resolve all
-> +the missing symbols.
-> +
-> +Use LIBS instead of LDADD/LIBADD to make sure the libintl is added to
-> +all linker commands (both libraries and programs).
-> +
-> +Note that LDADD/LIBADD are the defaults for foo_LDADD/foo_LIBADD, so
-> +adding the libintl flags to the LDADD/LIBADD variables is not enough
-> +when the per-target foo_LDADD/foo_LIBADD are set in Makefile.am.
-> +
-> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+I guess it's worth discussing the redefinition of
+PYTHON_PAHO_MQTT_INSTALL_TARGET_CMDS though, since it probably is the
+origin of the problems
 
-I am still not happy with this, since LIBS shouldn't been overridden in
-a Makefile.am.
+2015-12-28 14:25 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-Could you please do the following change instead:
+>
+> On Mon, 28 Dec 2015 13:57:35 +0100, Davide Viti wrote:
+>
+> > ...
+> > +define PYTHON_PAHO_MQTT_INSTALL_TARGET_CMDS
+> > +     (cd $(@D); \
+> > +             $(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
+> > +             $(HOST_DIR)/usr/bin/python2 setup.py install \
+> > +             --root=/)
+> > +endef
+>
+> Why do you need to override <pkg>_INSTALL_TARGET_CMDS ?
+>
+> Using $(HOST_PKG_PYTHON_SETUPTOOLS_ENV) for a target package looks
+> clearly wrong. Also, since you're not passing
+> --prefix=$(TARGET_DIR)/usr, I don't see how this overriden install
+> target commands can even install something in $(TARGET_DIR).
+>
+> Could you clarify this?
+>
+>
+The install stage of the package, fails with the following error (I
+replaced the custom paths with "..."):
 
-libtpm_utils_la_SOURCES =       tpm_utils.c \
-                                tpm_log.c
-+libtpm_utils_la_LIBADD  =       @LIBINTL@
+.../bin/python setup.py install --prefix=... --executable=/usr/bin/python
+--single-version-externally-managed --root=/ )
+usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+or: setup.py --help [cmd1 cmd2 ...]
+or: setup.py --help-commands
+or: setup.py cmd --help
 
-Indeed, libtpm_utils is then linked into all other libraries/programs.
+error: option --executable not recognized
 
-And please submit the patch upstream.
+I narrowed this down to "--executable" and
+"--single-version-externally-managed" not being supported by setup.py
+I've looked at packages/pkg-python.mk and tried to fix it overriding
+"PYTHON_PAHO_MQTT_BASE_INSTALL_TARGET_OPTS" and
+"PYTHON_PAHO_MQTT_INSTALL_TARGET_OPTS" but it did not work, so I ended up
+overriding the entire rule.
+Never packaged a python module before, so thank you for assisting me in
+this process
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Davide
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151229/98d3a12f/attachment.html>
