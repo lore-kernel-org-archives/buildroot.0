@@ -1,44 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 12:26:47 +0100
-Subject: [Buildroot] [git commit] gettext: bump to version 0.19.7
-Message-ID: <20151229150504.01F58826DE@busybox.osuosl.org>
+From: Andrea Cappelli <a.cappelli@gmail.com>
+Date: Tue, 29 Dec 2015 16:07:11 +0100
+Subject: [Buildroot] [PATCH] Added uwsgi to packages
+Message-ID: <CAKR0bvtdwebq-VkZ9+pcVb2KwHZvJ_AVb4sydQYvjgPndQRTJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec581782f0b523738a569d8d263629158cfcb28e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
+please find attached a patch to add the uwsgi (
+https://uwsgi-docs.readthedocs.org/en/latest/) package to buildroot
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gettext/gettext.hash | 6 +++---
- package/gettext/gettext.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Best regards
 
-diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
-index 33fe515..3236fda 100644
---- a/package/gettext/gettext.hash
-+++ b/package/gettext/gettext.hash
-@@ -1,3 +1,3 @@
--# From https://lists.gnu.org/archive/html/info-gnu/2015-09/msg00003.html
--md5 69d79254ee3b41df23f41c2f4fd720d9  gettext-0.19.6.tar.xz
--sha1 6033a0f87246c510dda9bfd8b3b3c488c0853156  gettext-0.19.6.tar.xz
-+# From http://lists.gnu.org/archive/html/bug-gettext/2015-12/msg00019.html
-+md5	f81e50556da41b44c1d59ac93474dca5	gettext-0.19.7.tar.xz
-+sha1	4b2574b76d14c98270bf607a2a62f033524d8e8c	gettext-0.19.7.tar.xz
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index cb509f2..10034d6 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GETTEXT_VERSION = 0.19.6
-+GETTEXT_VERSION = 0.19.7
- GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
- GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
- GETTEXT_INSTALL_STAGING = YES
+-- 
+Andrea Cappelli
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151229/ab10400a/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Added-uwsgi-package.patch
+Type: text/x-patch
+Size: 5276 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151229/ab10400a/attachment.bin>
