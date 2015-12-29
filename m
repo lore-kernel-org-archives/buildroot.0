@@ -1,51 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Dec 2015 23:52:34 +0100
-Subject: [Buildroot] [git commit] package/rtai: require kernel modules from
-	Kconfig
-Message-ID: <20151229225703.4F9B8826DE@busybox.osuosl.org>
+Date: Tue, 29 Dec 2015 23:50:11 +0100
+Subject: [Buildroot] [git commit] linux: add blind kconfig option to require
+	kernel modules
+Message-ID: <20151229225703.29006826DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=963ad186ba0fdb37fd82b5c7f0c9c3e39990aa58
+commit: http://git.buildroot.net/buildroot/commit/?id=5471bac7483d0c315830b38ae252de3cd47c1853
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Currently, packages that need the kernel to have support for laodable
+modules have two ways to require it:
+
+  - either the use the kernel-module infra, which does it automatically,
+
+  - or they do not use it, and they need to require it manually by
+    setting the corresponding Makefile variable; however, they must only
+    set it when they are actually enabled, which makes for a slightly
+    cumbersome and ugly code, like:
+
+        ifeq ($(BR2_PACKAGE_FOO),y)
+        LINUX_NEEDS_MODULES = y
+        endif
+
+Introduce a new blind Kconfig option that packages can select to signify
+they need kernel modules. That Kconfig option is then used to set the
+Makefile variable.
+
+It makes it cleaner:
+
+  - code is simpler (one Kconfig line instead of a Makefile if-block,
+
+  - this is handled at the Kconfig level, which is where we usually
+    handle such dependencies.
+
+Packages will be updated in follow-up commits.
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtai/Config.in | 1 +
- package/rtai/rtai.mk   | 6 ------
- 2 files changed, 1 insertion(+), 6 deletions(-)
+ linux/Config.in | 6 ++++++
+ linux/linux.mk  | 3 +++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/rtai/Config.in b/package/rtai/Config.in
-index ecbff38..14b1854 100644
---- a/package/rtai/Config.in
-+++ b/package/rtai/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_RTAI
- 	bool "rtai"
- 	depends on BR2_LINUX_KERNEL_EXT_RTAI
-+	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
- 	help
- 	  RTAI - the RealTime Application Interface for Linux.
+diff --git a/linux/Config.in b/linux/Config.in
+index 8faf1c8..4e2db47 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -8,6 +8,12 @@ config BR2_LINUX_KERNEL
  
-diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
-index 6e803a6..dfd8e0c 100644
---- a/package/rtai/rtai.mk
-+++ b/package/rtai/rtai.mk
-@@ -18,12 +18,6 @@ RTAI_POST_INSTALL_STAGING_HOOKS += RTAI_POST_PATCH_FIXUP
+ if BR2_LINUX_KERNEL
  
- RTAI_DEPENDENCIES = linux
++# Packages that need to have a kernel with support for loadable modules,
++# but do not use the kernel-modules infrastructure, should select that
++# option.
++config BR2_LINUX_NEEDS_MODULES
++	bool
++
+ #
+ # Version selection. We provide the choice between:
+ #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 69a09aa..045294b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -196,6 +196,9 @@ LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_
+ LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
  
--# We're building a kernel module without using the kernel-module infra,
--# so we need to tell we want module support in the kernel
--ifeq ($(BR2_PACKAGE_RTAI),y)
--LINUX_NEEDS_MODULES = y
--endif
--
- RTAI_CONF_OPTS = \
- 	--includedir=/usr/include/rtai \
- 	--with-linux-dir=$(LINUX_DIR) 	\
++# If no package has yet set it, set it from the Kconfig option
++LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
++
+ define LINUX_KCONFIG_FIXUP_CMDS
+ 	$(if $(LINUX_NEEDS_MODULES),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_MODULES,$(@D)/.config))
