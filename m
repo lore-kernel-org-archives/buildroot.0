@@ -1,28 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 12:24:11 +0100
-Subject: [Buildroot] [PATCH 1/1] eventlog: add EVENTLOG_VERSION_MAJOR
- variable
-In-Reply-To: <1451376815-21691-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1451376815-21691-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20151229122411.6c6b88b2@free-electrons.com>
+Date: Tue, 29 Dec 2015 12:24:19 +0100
+Subject: [Buildroot] [git commit] uboot: add COPY_OLD_LICENSE_FILE fix to
+	rsync hook
+Message-ID: <20151229112427.0C75F81E66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=a6a40578fc108136d7a23feb7f90f8609962d53c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Dec 2015 09:13:35 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/eventlog/eventlog.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+make legal-info breaks when using an older u-boot version in local.mk
+with OVERRIDE_SRCDIR, due to the reorganization of license files which
+happened in u-boot v2013.10.
+This issue had already been fixed in Buildroot for the regular use of
+old u-boot versions (non-local.mk).
+This patch adds the same fix to UBOOT_POST_RSYNC_HOOKS so that it also
+covers the local.mk case.
 
-Applied, thanks.
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/uboot.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 868bf08..c8c50f0 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -110,6 +110,7 @@ define UBOOT_COPY_OLD_LICENSE_FILE
+ endef
+ 
+ UBOOT_POST_EXTRACT_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
++UBOOT_POST_RSYNC_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
+ 
+ # Prior to Buildroot 2015.05, only patch directories were supported. New
+ # configurations use BR2_TARGET_UBOOT_PATCH instead.
