@@ -1,66 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 18:04:11 +0100
-Subject: [Buildroot] [PATCH 1/1] cubieboard2: update board defconfig
-In-Reply-To: <1451353925-24429-1-git-send-email-nunes.erico@gmail.com>
-References: <1451353925-24429-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <20151229180411.496ee52f@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Dec 2015 18:05:13 +0100
+Subject: [Buildroot] [PATCHv2] core: add defconfig to .gitignore
+In-Reply-To: <20151229091922.41fac4b7@free-electrons.com>
+References: <1451249086-24341-1-git-send-email-yann.morin.1998@free.fr>
+ <20151229091922.41fac4b7@free-electrons.com>
+Message-ID: <20151229170513.GA3445@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Erico Nunes,
+Thomas, All,
 
-On Mon, 28 Dec 2015 23:52:05 -0200, Erico Nunes wrote:
-> This patch updates the Cubieboard2 board defconfig to use newer u-boot
-> and linux versions, along with a few other improvements.
-> The other improvements were mostly backported from the recent Orange Pi
-> defconfig inclusion and are related to image generation.
-> linux-sunxi.org was used as a reference for both linux and u-boot
-> defconfig names.
+On 2015-12-29 09:19 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 27 Dec 2015 21:44:46 +0100, Yann E. MORIN wrote:
+> > From: Karoly Kasza <kaszak@gmail.com>
+> > 
+> > After using "make safedefconfig", a defconfig file appears which is an
+> > extract of the .config file. When running git, it incorrectly detects it as a
+> > source code change.
+> > 
+> > Add /defconfig to .gitignore.
+> > 
+> > Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> > [yann.morin.1998 at free.fr: do not remove on distclean]
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> In detail:
-> - Update linux to vanilla upstream -- currently 4.3.3 is the most
-> up-to-date. Although it lacks some features present only in the
-> linux-sunxi 3.4 branch, upstream support appears to be relatively mature
-> and is already being deployed by default by distributions such as Arch
-> Linux ARM.
-> - Update u-boot to vanilla upstream 2015.10. According to
-> linux-sunxi.org, upstream fully supports major functions (except NAND)
-> since 2015.07.
-> - Change image format to zImage and drop custom image generation script
-> in favour of genimage, as pointed out by reviewers in the Orange Pi
-> defconfig submission.
+> I continue to question whether this is the right thing to do.
+> "defconfig" is really only the default name, and it can be changed to
+> anything by changing BR2_DEFCONFIG. So should we gitignore the default
+> name, but not any other name?
 > 
-> This was tested in a Cubieboard2 board with boot from mmc and it boots
-> fine to login prompt.
-> 
-> This has not been tested in a Cubieboard (A10) as I don't own any; the
-> version bumps probably apply to it although there are some differences
-> (lack of VFPv4 support, Cortex-A8 instead of Cortex-A7), so I have kept
-> the current Cubieboard defconfig and its scripts. This one has been only
-> build-tested.
-> 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> ---
->  board/cubietech/cubieboard2/boot.cmd      |  5 +++
->  board/cubietech/cubieboard2/genimage.cfg  | 36 +++++++++++++++++++++
->  board/cubietech/cubieboard2/post-build.sh | 11 +++++++
->  board/cubietech/cubieboard2/post-image.sh | 16 +++++++++
->  configs/cubieboard2_defconfig             | 54 +++++++++++++------------------
->  5 files changed, 90 insertions(+), 32 deletions(-)
->  create mode 100644 board/cubietech/cubieboard2/boot.cmd
->  create mode 100644 board/cubietech/cubieboard2/genimage.cfg
->  create mode 100755 board/cubietech/cubieboard2/post-build.sh
->  create mode 100755 board/cubietech/cubieboard2/post-image.sh
+> I'm for the principle of least surprise, and I would personally find it
+> odd that we gitignore the default name only. Since we can't gitignore
+> all defconfigs, I'd prefer to not gitignore any of them.
 
-Thanks a lot, I've applied, after a minor tweak on the commit title.
+Yes, and I guess with the recent ML issues you did not catch my reply in
+the initial thread;
+    http://lists.busybox.net/pipermail/buildroot/2015-December/148452.html
 
-Thanks again!
+And since I did respin that patch before you replied there, this is now
+moot. At that time, that patch did not appear on Pathwork when I wanted
+to mark it reject. I guess it is now marked Rejected in Patchwork? ;-)
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
