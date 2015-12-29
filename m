@@ -1,56 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Dec 2015 18:05:13 +0100
-Subject: [Buildroot] [PATCHv2] core: add defconfig to .gitignore
-In-Reply-To: <20151229091922.41fac4b7@free-electrons.com>
-References: <1451249086-24341-1-git-send-email-yann.morin.1998@free.fr>
- <20151229091922.41fac4b7@free-electrons.com>
-Message-ID: <20151229170513.GA3445@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Dec 2015 18:05:15 +0100
+Subject: [Buildroot] [git commit] configs: add readme.txt for the orangepipc
+	defconfig
+Message-ID: <20151229170528.E341F82572@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=1354803789cd897839fe36e2a7e6e33a9f1502a0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-12-29 09:19 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 27 Dec 2015 21:44:46 +0100, Yann E. MORIN wrote:
-> > From: Karoly Kasza <kaszak@gmail.com>
-> > 
-> > After using "make safedefconfig", a defconfig file appears which is an
-> > extract of the .config file. When running git, it incorrectly detects it as a
-> > source code change.
-> > 
-> > Add /defconfig to .gitignore.
-> > 
-> > Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-> > [yann.morin.1998 at free.fr: do not remove on distclean]
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> I continue to question whether this is the right thing to do.
-> "defconfig" is really only the default name, and it can be changed to
-> anything by changing BR2_DEFCONFIG. So should we gitignore the default
-> name, but not any other name?
-> 
-> I'm for the principle of least surprise, and I would personally find it
-> odd that we gitignore the default name only. Since we can't gitignore
-> all defconfigs, I'd prefer to not gitignore any of them.
+[Thomas: minor tweaks.]
 
-Yes, and I guess with the recent ML issues you did not catch my reply in
-the initial thread;
-    http://lists.busybox.net/pipermail/buildroot/2015-December/148452.html
+Signed-off-by: Eelco Chaudron <echaudron@xiot.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/orangepi/orangepipc/readme.txt | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-And since I did respin that patch before you replied there, this is now
-moot. At that time, that patch did not appear on Pathwork when I wanted
-to mark it reject. I guess it is now marked Rejected in Patchwork? ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/board/orangepi/orangepipc/readme.txt b/board/orangepi/orangepipc/readme.txt
+new file mode 100644
+index 0000000..0792bf4
+--- /dev/null
++++ b/board/orangepi/orangepipc/readme.txt
+@@ -0,0 +1,33 @@
++OrangePi PC
++
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the OrangePi PC. With the current configuration
++it will bring-up the board, and allow access trough the serial console.
++
++Unfortunately this boards processor is not yet supported by the
++mainline kernel, and therefore this default configuration is using a
++private Linux kernel repository based on 4.4-rc.
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make orangepipc_defconfig
++
++Compile everything and build the SD card image:
++
++    $ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
