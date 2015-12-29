@@ -1,53 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Dec 2015 00:10:39 +0100
-Subject: [Buildroot] [PATCH 2/3] package/netbsd-queue: add Kconfig symbol
-	like for all target packages
+Date: Wed, 30 Dec 2015 00:10:40 +0100
+Subject: [Buildroot] [PATCH 3/3] core/pkg-virtual: do not check they are
+	neabled
 In-Reply-To: <cover.1451430505.git.yann.morin.1998@free.fr>
 References: <cover.1451430505.git.yann.morin.1998@free.fr>
-Message-ID: <bdbd50f9cea9eeeca54950f0cc9897156bb0ae0e.1451430505.git.yann.morin.1998@free.fr>
+Message-ID: <7048b92dbba0ba35f610d7863f0c599eca3e3399.1451430505.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select that package from musl, too, since it is a dependency.
+Virtual packages do not have a Kconfig symbol, so we must not check that
+they are enabled.
 
 Fixes:
-    http://autobuild.buildroot.org/results/15c/15c9a80fb2754ed1866b59d5e62d02691b57834e/
-    ... and numerous similar issues ...
+    http://autobuild.buildroot.org/results/287/28713478cc6edf8e5d5c3e830fee86a42f0afa8d/
+    ... and numerous similar failures ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-
 ---
-Conflicts:
-	package/musl/Config.in
----
- package/musl/Config.in         | 1 +
- package/netbsd-queue/Config.in | 2 ++
- 2 files changed, 3 insertions(+)
- create mode 100644 package/netbsd-queue/Config.in
+ package/pkg-generic.mk | 5 ++++-
+ package/pkg-virtual.mk | 2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/musl/Config.in b/package/musl/Config.in
-index 4f6cc51..f1a3150 100644
---- a/package/musl/Config.in
-+++ b/package/musl/Config.in
-@@ -3,3 +3,4 @@ config BR2_PACKAGE_MUSL
- 	depends on BR2_TOOLCHAIN_USES_MUSL
- 	default y
- 	select BR2_PACKAGE_LINUX_HEADERS
-+	select BR2_PACKAGE_NETBSD_QUEUE
-diff --git a/package/netbsd-queue/Config.in b/package/netbsd-queue/Config.in
-new file mode 100644
-index 0000000..7837f4c
---- /dev/null
-+++ b/package/netbsd-queue/Config.in
-@@ -0,0 +1,2 @@
-+config BR2_PACKAGE_NETBSD_QUEUE
-+	bool
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 2daf337..08f9703 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -186,7 +186,10 @@ $(BUILD_DIR)/%/.stamp_configured:
+ # building a package, even if not enabled in the configuration, we
+ # want to accept it.
+ ifeq ($(MAKECMDGOALS),)
+-	@if test "$($(PKG)_TYPE)" = "target" -a -z "$($($(PKG)_KCONFIG_VAR))" ; then \
++	@if test "$($(PKG)_TYPE)" = "target" \
++		-a ! "$($(PKG)_IS_VIRTUAL)" = "YES" \
++		-a -z "$($($(PKG)_KCONFIG_VAR))" ; \
++	then \
+ 		echo "ERROR: $($(PKG)_NAME) is in the dependency chain of a package that has" ; \
+ 		echo "added it to its _DEPENDENCIES variable (directly or indirectly)" ; \
+ 		echo "without selecting it from Config.in." ; \
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index 9c68b51..244c1d0 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -41,6 +41,8 @@ $$(error No implementation selected for virtual package $(1). Configuration erro
+ endif
+ endif
+ 
++$(2)_IS_VIRTUAL = YES
++
+ # A virtual package does not have any source associated
+ $(2)_SOURCE =
+ 
 -- 
 1.9.1
