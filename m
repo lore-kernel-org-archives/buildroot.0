@@ -1,51 +1,75 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Dec 2015 13:51:23 -0300
-Subject: [Buildroot] [PATCH] gettext: add dependency on host-libxml2 for
- host-gettext.
-In-Reply-To: <55F6E339.90805@imgtec.com>
-References: <20150220222933.5B92D817C4@busybox.osuosl.org>
- <1424696593-21361-1-git-send-email-nicolas.cavallari@green-communications.fr>
- <20150223191721.573fdb19@free-electrons.com> <20150224222402.GD4783@free.fr>
- <55F6E339.90805@imgtec.com>
-Message-ID: <5682BA0B.4010401@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Dec 2015 17:54:34 +0100
+Subject: [Buildroot] [git commit] unionfs: add patch to revert to old
+	pre-1.0 meta directory
+Message-ID: <20151229165503.CD292822B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/09/15 12:09, Vicente Olivert Riera wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=49c4a83a081f0309780124766ccfae87dc12de3f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Given the following reasons:
->
-> - The difference of build time caused by using host-libxml2 is not that
-> much, as Yann said.
->
-> - We normally prefer to rely on external libraries
->
-> - Other packages could benefit on having host-libxml2 already built.
-> Otherwise we could end up with building libxml2 twice, the one bundled
-> in gettext and the external one.
->
-> I vote for using the host-libxml2 package instead of the bundled libxml2.
->
-> Regards,
->
-> Vincent.
+Unionfs changed its meta directory from .unionfs to .unionfs-fuse with the
+unionfs -> unionfs-fuse rename.  The rename later got reverted everywhere
+but the meta directory, so now unionfs doesn't find the whiteout files from
+older releases.
 
-Hi All.
-Given my recent bump to gettext 0.19.7 libxml2 is now required more than 
-ever for the new ITS handling code.
-The problem now is that older libxml2 versions might not be enough for 
-host-gettext and result in build failure:
-http://autobuild.buildroot.net/results/1b7/1b7b1244ccab111dbcdb6350525077d2a7157d91/build-end.log
+Revert back to the pre-1.0 behaviour to fix this.
 
-It is silly that the configure script doesn't check for this, however we 
-can't make conditionals for host packages (or better said, for things 
-that may or may not be present in the distro), and i follow the same 
-line of reasoning of avoiding bundled duplication - it's more a matter 
-of build time than space for host packages, but still.
+Patch merged upstream:
+https://github.com/rpodgorny/unionfs-fuse/commit/93c2f9bd8b058b28016e6db2421e5b38eac0606c
 
-I'd vote for making it so as well.
+[Thomas: add reference to the upstream commit, now that the patch has
+been merged.]
 
-Regards.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...0001-Revert-to-old-pre-1.0-meta-directory.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/package/unionfs/0001-Revert-to-old-pre-1.0-meta-directory.patch b/package/unionfs/0001-Revert-to-old-pre-1.0-meta-directory.patch
+new file mode 100644
+index 0000000..228441b
+--- /dev/null
++++ b/package/unionfs/0001-Revert-to-old-pre-1.0-meta-directory.patch
+@@ -0,0 +1,36 @@
++From 93c2f9bd8b058b28016e6db2421e5b38eac0606c Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Thu, 17 Dec 2015 15:06:38 +0100
++Subject: [PATCH] Revert to old pre-1.0 meta directory
++
++Unionfs changed its meta directory from .unionfs to .unionfs-fuse with the
++unionfs -> unionfs-fuse rename.  The rename later got reverted everywhere
++but the meta directory, so now unionfs doesn't find the whiteout files from
++older releases.
++
++Revert back to the pre-1.0 behaviour to fix this.
++
++Committed upstream:
++https://github.com/rpodgorny/unionfs-fuse/commit/93c2f9bd8b058b28016e6db2421e5b38eac0606c
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/unionfs.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/unionfs.h b/src/unionfs.h
++index c2b5ee3..74b824f 100644
++--- a/src/unionfs.h
+++++ b/src/unionfs.h
++@@ -10,7 +10,7 @@
++ #define PATHLEN_MAX 1024
++ #define HIDETAG "_HIDDEN~"
++ 
++-#define METANAME ".unionfs-fuse"
+++#define METANAME ".unionfs"
++ #define METADIR (METANAME  "/") // string concetanation!
++ 
++ // fuse meta files, we might want to hide those
++-- 
++2.1.4
++
