@@ -1,37 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 12:20:55 +0100
-Subject: [Buildroot] [git commit] eventlog: add EVENTLOG_VERSION_MAJOR
-	variable
-Message-ID: <20151229112402.37660826D6@busybox.osuosl.org>
+Date: Tue, 29 Dec 2015 12:24:11 +0100
+Subject: [Buildroot] [PATCH 1/1] eventlog: add EVENTLOG_VERSION_MAJOR
+ variable
+In-Reply-To: <1451376815-21691-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1451376815-21691-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20151229122411.6c6b88b2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ebafb18877da782377cd337171e3a6b487cb6069
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jerzy Grzegorek,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/eventlog/eventlog.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Tue, 29 Dec 2015 09:13:35 +0100, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  package/eventlog/eventlog.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/eventlog/eventlog.mk b/package/eventlog/eventlog.mk
-index c4e5fd9..76da002 100644
---- a/package/eventlog/eventlog.mk
-+++ b/package/eventlog/eventlog.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--EVENTLOG_VERSION = 0.2.12
-+EVENTLOG_VERSION_MAJOR = 0.2
-+EVENTLOG_VERSION = $(EVENTLOG_VERSION_MAJOR).12
- EVENTLOG_SOURCE = eventlog_$(EVENTLOG_VERSION).tar.gz
--EVENTLOG_SITE = https://my.balabit.com/downloads/eventlog/0.2
-+EVENTLOG_SITE = https://my.balabit.com/downloads/eventlog/$(EVENTLOG_VERSION_MAJOR)
- EVENTLOG_LICENSE = BSD-3c
- EVENTLOG_LICENSE_FILES = COPYING
- EVENTLOG_INSTALL_STAGING = YES
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
