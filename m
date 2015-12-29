@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 12:26:16 +0100
-Subject: [Buildroot] [PATCH 1/1] uboot: add COPY_OLD_LICENSE_FILE fix to
- rsync hook
-In-Reply-To: <1451356050-6300-1-git-send-email-nunes.erico@gmail.com>
-References: <1451356050-6300-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <20151229122616.2ddd9ad0@free-electrons.com>
+Date: Tue, 29 Dec 2015 12:26:29 +0100
+Subject: [Buildroot] [git commit] exfat: bump to version 1.2.3
+Message-ID: <20151229112640.4A9BD826C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Erico Nunes,
+commit: http://git.buildroot.net/buildroot/commit/?id=09f0456052810cd6f856bc143fd423c73ca66abb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Dec 2015 00:27:30 -0200, Erico Nunes wrote:
-> make legal-info breaks when using an older u-boot version in local.mk
-> with OVERRIDE_SRCDIR, due to the reorganization of license files which
-> happened in u-boot v2013.10.
-> This issue had already been fixed in Buildroot for the regular use of
-> old u-boot versions (non-local.mk).
-> This patch adds the same fix to UBOOT_POST_RSYNC_HOOKS so that it also
-> covers the local.mk case.
-> 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> ---
->  boot/uboot/uboot.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/exfat/exfat.hash | 2 +-
+ package/exfat/exfat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I am not super happy with having to duplicate all extract and patch
-hooks as rsync hooks. The theory is that if you use a
-<pkg>_OVERRIDE_SRCDIR, you should know what you're doing, and your
-source tree should match the expectations of Buildroot.
-
-But oh well, it kind of makes sense to help in this case, so I've
-applied your patch. Still there is an open discussion on where to draw
-the line for those post rsync hooks.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/exfat/exfat.hash b/package/exfat/exfat.hash
+index af67785..a6dbdac 100644
+--- a/package/exfat/exfat.hash
++++ b/package/exfat/exfat.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	f444cd2849295b8de7fc61022fbf02f5bb1a84790c43f0c75ba3bf96f4619dd4	fuse-exfat-1.2.1.tar.gz
++sha256	f2e06eba5a21c621aac1d6da21b12a5a324fdd1e20f9c8acd357dd463c2355d9	fuse-exfat-1.2.3.tar.gz
+diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+index cc474a7..c7904ba 100644
+--- a/package/exfat/exfat.mk
++++ b/package/exfat/exfat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXFAT_VERSION = 1.2.1
++EXFAT_VERSION = 1.2.3
+ EXFAT_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_VERSION)
+ EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
+ EXFAT_DEPENDENCIES = libfuse host-pkgconf
