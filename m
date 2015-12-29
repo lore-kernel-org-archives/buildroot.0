@@ -1,91 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Dec 2015 23:06:22 +0100
-Subject: [Buildroot] [PATCH 3/3] package/gcc: align gcc-final
- configure-cmds to the generic ones
-In-Reply-To: <4d9f7a6896c496372a4f415987e60eeeac79225b.1448202976.git.yann.morin.1998@free.fr>
-References: <cover.1448202976.git.yann.morin.1998@free.fr>
- <4d9f7a6896c496372a4f415987e60eeeac79225b.1448202976.git.yann.morin.1998@free.fr>
-Message-ID: <20151229220622.GI3445@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Dec 2015 23:14:16 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wireshark: Fix libpcap detection
+In-Reply-To: <566DDC20.5000104@mind.be> (Arnout Vandecappelle's message of
+ "Sun, 13 Dec 2015 21:59:12 +0100")
+References: <1449998185-15082-1-git-send-email-bernd.kuhls@t-online.de>
+ <566DDC20.5000104@mind.be>
+Message-ID: <87h9j0dhs7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Me, All,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 2015-11-22 15:39 +0100, Yann E. MORIN spake thusly:
-> Since 7d6c79 (Compile static versions of gcc libraries) was applied, the
-> generic configure commands have been updated, but those changes have not
-> been propagated to the gcc-final custom configure commands.
-> 
-> Update the gcc-final custom configure commands to better match the
-> generic ones.
-> 
-> We do not propagate --disable-dependency-tracking because it breaks the
-> build, and --enable-shared (because of 169141a).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> On 13-12-15 10:16, Bernd Kuhls wrote:
+>> To reproduce the build error I had to install libpcap0.8-dev on my host
+>> system, then wireshark configure picks up
+>> 
+>> checking for pcap-config... /usr/bin/pcap-config
 
-Rejected. ;-p
+>  To fundamentally avoid this type of issue (we have a bunch of fixes like this),
+> I think we should add an additional directory that is put in the _beginning_ of
+> the path in TARGET_MAKE_ENV. This directory could then be populated through the
+> _CONFIG_SCRIPTS mechanism.
 
-Regards,
-Yann E. MORIN.
+>  What do the others think?
 
-> ---
->  package/gcc/gcc-final/gcc-final.mk | 25 ++++++++++++++++++++-----
->  1 file changed, 20 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index dbdb615..53199c3 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -36,16 +36,31 @@ HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
->  #
->  # So we must completely override the generic commands and provide our own.
->  #
-> +# Except for --disable-dependency-tracking which breaks the build, and
-> +# --enable-shared (see 169141a, gcc-final: disable shared build for
-> +# static), we reproduce the exact same command as the autotools infra
-> +# uses.
-> +#
->  define  HOST_GCC_FINAL_CONFIGURE_CMDS
->  	(cd $(HOST_GCC_FINAL_SRCDIR) && rm -rf config.cache; \
-> -		$(HOST_CONFIGURE_OPTS) \
-> -		CFLAGS="$(HOST_CFLAGS)" \
-> -		LDFLAGS="$(HOST_LDFLAGS)" \
-> -		$(HOST_GCC_FINAL_CONF_ENV) \
-> -		./configure \
-> +	$(HOST_CONFIGURE_OPTS) \
-> +	CFLAGS="$(HOST_CFLAGS)" \
-> +	LDFLAGS="$(HOST_LDFLAGS)" \
-> +	$(HOST_GCC_FINAL_CONF_ENV) \
-> +	CONFIG_SITE=/dev/null \
-> +	./configure \
->  		--prefix="$(HOST_DIR)/usr" \
->  		--sysconfdir="$(HOST_DIR)/etc" \
-> +		--localstatedir="$(HOST_DIR)/var" \
->  		--enable-static \
-> +		--disable-gtk-doc \
-> +		--disable-gtk-doc-html \
-> +		--disable-doc \
-> +		--disable-docs \
-> +		--disable-documentation \
-> +		--disable-debug \
-> +		--with-xmlto=no \
-> +		--with-fop=no \
->  		$(QUIET) $(HOST_GCC_FINAL_CONF_OPTS) \
->  	)
->  endef
-> -- 
-> 1.9.1
-> 
+Sounds good to me!
+
+>  It will be a bit of work to revert all these fixes again :-)
+
+But that can be done iteratively. The point is that buildroot will do
+the right thing for these scripts out of the box (as long as they are
+listed in the packages providing them) and users of those scripts will
+automatically get the right ones.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
