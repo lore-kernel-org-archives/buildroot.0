@@ -1,24 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 19:07:21 +0100
-Subject: [Buildroot] [PATCH 1/3] janus-gateway: indentation cleanup
-In-Reply-To: <1451409034-17537-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1451409034-17537-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20151229190721.1c15b672@free-electrons.com>
+Date: Tue, 29 Dec 2015 19:07:39 +0100
+Subject: [Buildroot] [PATCH] findutils: bump to version 4.6.0
+In-Reply-To: <1451410053-26589-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1451410053-26589-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151229190739.2caab201@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Dear Gustavo Zacarias,
 
-On Tue, 29 Dec 2015 18:10:32 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+On Tue, 29 Dec 2015 14:27:33 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/janus-gateway/janus-gateway.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/findutils/findutils.hash | 2 +-
+>  package/findutils/findutils.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-All three applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
