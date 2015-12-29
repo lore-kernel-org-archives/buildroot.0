@@ -1,9 +1,10 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 29 Dec 2015 18:10:34 +0100
-Subject: [Buildroot] [PATCH 3/3] qt5webchannel: indentation cleanup
+Date: Tue, 29 Dec 2015 18:10:33 +0100
+Subject: [Buildroot] [PATCH 2/3] xdriver_xf86-video-fbturbo: indentation
+	cleanup
 In-Reply-To: <1451409034-17537-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 References: <1451409034-17537-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1451409034-17537-3-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1451409034-17537-2-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/qt5/qt5webchannel/qt5webchannel.mk | 2 +-
+ package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
-index bd4257f..6ceb59e 100644
---- a/package/qt5/qt5webchannel/qt5webchannel.mk
-+++ b/package/qt5/qt5webchannel/qt5webchannel.mk
-@@ -36,7 +36,7 @@ define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
+diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
+index 991b00e..b2053d3 100644
+--- a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
++++ b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
+@@ -27,7 +27,7 @@ XDRIVER_XF86_VIDEO_FBTURBO_CONF_OPTS += --disable-pciaccess
+ endif
+ 
+ define XDRIVER_XF86_VIDEO_FBTURBO_INSTALL_CONF_FILE
+-        $(INSTALL) -m 0644 -D $(@D)/xorg.conf $(TARGET_DIR)/etc/X11/xorg.conf
++	$(INSTALL) -m 0644 -D $(@D)/xorg.conf $(TARGET_DIR)/etc/X11/xorg.conf
  endef
  
- define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
--        $(INSTALL) -m 0644 -D $(@D)/src/webchannel/qwebchannel.js \
-+	$(INSTALL) -m 0644 -D $(@D)/src/webchannel/qwebchannel.js \
- 		$(TARGET_DIR)/var/www/qwebchannel.js
- endef
- 
+ XDRIVER_XF86_VIDEO_FBTURBO_POST_INSTALL_TARGET_HOOKS += XDRIVER_XF86_VIDEO_FBTURBO_INSTALL_CONF_FILE
 -- 
 1.9.1
