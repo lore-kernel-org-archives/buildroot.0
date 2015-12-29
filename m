@@ -1,60 +1,48 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 29 Dec 2015 23:43:48 +0100
-Subject: [Buildroot] [PATCH] python-serial: bump to 3.0
-Message-ID: <1451429028-10049-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Dec 2015 23:45:54 +0100
+Subject: [Buildroot] [git commit] graph-depends: optimize
+	remove_transitive_deps()
+In-Reply-To: <20151229222734.A219F826ED@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Tue, 29 Dec 2015 23:26:22 +0100")
+References: <20151229222734.A219F826ED@busybox.osuosl.org>
+Message-ID: <87y4ccc1r1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash file, switch to setuptools and change project's home page to
-GitHub.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-serial/Config.in          | 2 +-
- package/python-serial/python-serial.hash | 3 +++
- package/python-serial/python-serial.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 3 deletions(-)
- create mode 100644 package/python-serial/python-serial.hash
+> commit: http://git.buildroot.net/buildroot/commit/?id=5ed60cee1ed5f8a8e93866fc9db9ff890184afce
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-serial/Config.in b/package/python-serial/Config.in
-index 09a4c39..ca12d12 100644
---- a/package/python-serial/Config.in
-+++ b/package/python-serial/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_PYTHON_SERIAL
- 	help
- 	  python-serial is a Python library to access serial ports.
+> For large configurations, the execution time of
+> remove_transitive_deps() becomes really high, due to the number of
+> nested loops + the is_dep() function being recursive.
+
+>  # This function return True if pkg is a dependency (direct or
+>  # transitive) of pkg2, dependencies being listed in the deps
+>  # dictionary. Returns False otherwise.
+> -def is_dep(pkg,pkg2,deps):
+> -    if pkg2 in deps:
+> +# This is the un-cached version.
+> +def is_dep_uncached(pkg,pkg2,deps):
+> +    try:
+>          for p in deps[pkg2]:
+>              if pkg == p:
+>                  return True
+>              if is_dep(pkg,p,deps):
+>                  return True
+> +    except KeyError:
+> +        pass
+>      return False
  
--	  http://pyserial.sf.net
-+	  https://github.com/pyserial/pyserial
-diff --git a/package/python-serial/python-serial.hash b/package/python-serial/python-serial.hash
-new file mode 100644
-index 0000000..7400624
---- /dev/null
-+++ b/package/python-serial/python-serial.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f94bc6e141d60f17edc7bf8757c4d922, sha256 locally computed
-+md5     f94bc6e141d60f17edc7bf8757c4d922  pyserial-3.0.tar.gz
-+sha256  056c2d96c83c009d8d04aad43a90f91f10f6a97d42c0d9656c2655c63fb8ff07  pyserial-3.0.tar.gz
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index b9b5931..ba871ea 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_SERIAL_VERSION = 2.6
-+PYTHON_SERIAL_VERSION = 3.0
- PYTHON_SERIAL_SOURCE = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
- PYTHON_SERIAL_SITE = http://pypi.python.org/packages/source/p/pyserial
- PYTHON_SERIAL_LICENSE = Python Software Foundation License
- PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
--PYTHON_SERIAL_SETUP_TYPE = distutils
-+PYTHON_SERIAL_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+> +# See is_dep_full() above; this is the cached version.
+> +def is_dep(pkg,pkg2,deps):
+
+I believe that comment should refer to is_dep_uncached() instead. Fixed
+in git.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
