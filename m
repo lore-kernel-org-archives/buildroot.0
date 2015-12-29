@@ -1,35 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 15:04:09 +0100
-Subject: [Buildroot] [PATCH 1/1] xdotool: new package
-In-Reply-To: <CAK4VdL1BwdG8f525yz3f=8H5a97nyJ0x-0NSPg9Gr2ob1pFLFA@mail.gmail.com>
-References: <1451354367-26073-1-git-send-email-nunes.erico@gmail.com>
- <20151229070724.GA1990@tarshish>
- <CAK4VdL1BwdG8f525yz3f=8H5a97nyJ0x-0NSPg9Gr2ob1pFLFA@mail.gmail.com>
-Message-ID: <20151229150409.3c5e1c20@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 Dec 2015 11:10:59 -0300
+Subject: [Buildroot] [PATCH] subversion: add missing comment when threads
+	are missing
+Message-ID: <1451398259-24939-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Erico Nunes,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/subversion/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On Tue, 29 Dec 2015 11:51:40 -0200, Erico Nunes wrote:
-> Hi Baruch,
-> 
-> On Tue, Dec 29, 2015 at 5:07 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > Should be "BSD-3c". Compare COPYRIGHT to
-> > https://opensource.org/licenses/BSD-3-Clause.
-> >
-> 
-> Thanks for pointing this out, I'll submit a v2.
-
-Not needed, I have already applied your patch locally, I'll push soon.
-
-Thanks!
-
-Thomas
+diff --git a/package/subversion/Config.in b/package/subversion/Config.in
+index 61c9d3b..ffe424a 100644
+--- a/package/subversion/Config.in
++++ b/package/subversion/Config.in
+@@ -12,3 +12,7 @@ config BR2_PACKAGE_SUBVERSION
+ 	  Subversion is an open source version control system
+ 
+ 	  http://subversion.apache.org/
++
++comment "subversion needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
