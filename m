@@ -1,100 +1,119 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Dec 2015 19:43:49 +0100
-Subject: [Buildroot] [PATCH] [RFC] linux: add option to avoid kernel
- kconfig updates
-In-Reply-To: <1445277739-30943-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1445277739-30943-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20151229184349.GE3445@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Dec 2015 20:42:13 +0100
+Subject: [Buildroot] [PATCH] Added uwsgi to packages
+In-Reply-To: <CAKR0bvuMyYv62qcYExnPrX9Vjtkx8D+gLmrSodRMDkXvn4-uWg@mail.gmail.com>
+References: <CAKR0bvtdwebq-VkZ9+pcVb2KwHZvJ_AVb4sydQYvjgPndQRTJQ@mail.gmail.com>
+ <20151229183218.23fac6c1@free-electrons.com>
+ <CAKR0bvuMyYv62qcYExnPrX9Vjtkx8D+gLmrSodRMDkXvn4-uWg@mail.gmail.com>
+Message-ID: <20151229204213.69aae4fc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, all,
+Andrea,
 
-On 2015-10-19 15:02 -0300, gustavo.zacarias at free-electrons.com spake thusly:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+On Tue, 29 Dec 2015 19:20:02 +0100, Andrea Cappelli wrote:
+
+> > Thanks. However, you posted your patch as an attachment, which is quite
+> > impractical to review. Could you send it inline, by using the "git
+> > send-email" tool, as explained in the Buildroot documentation at
+> > https://buildroot.org/downloads/manual/manual.html#submitting-patches ?
 > 
-> Some packages require specific kernel options enabled to be of any use,
-> however when building a kernel with a specific configuration intended
-> for binary-only modules this can be counterproductive.
+> Ok, i'll configure git with my smtp account
+
+Great, thanks!
+
+> > This patch and the second patch should be merged, they really are the
+> > same thing.
 > 
-> Add an option to disable this behaviour and leave the .config alone.
+> I split in 2 separate patch because I read somewhere that each patch should
+> refer only to a single source file (but maybe this was a rule chosen in a
+> specific project, I assumed that was a common practice)
 
-Following the discussion we had on IRC, and taking into account the
-comments by Arnout, I've marked this as rejected.
+I don't know which project has this rule, but it seems like a silly
+rule. Instead, modifications should be separated into different patches
+by "logical changes". See
+http://lxr.free-electrons.com/source/Documentation/SubmittingPatches#L201.
 
-(on IRC: it's because of proprietary modules that no longer want to
-load/work because of ABI-changing options they were not built with.
-Solution if to fix those suckers. ;-] )
+> > You run on the build machine a command installed in STAGING_DIR.
+> > Doesn't look good. Can you explain what you're trying to do here?
+> >
+> >
+> uwsgi was available on PyPi (pypi.python.org) as package, you can download
+> and recompile it. The build system is created with a setup.py which in turn
+> invoke some function inside uwsgiconfig.py
+
+Right. But you can also use the Makefile, which also invokes
+uwsgiconfig.py.
+
+> One of the function use the os.system command to invoke external tools,
+> among which are pcre-config and xml2-config, which are used to get path to
+> be passed to the compiler
+> 
+> The problem is that instead of using the buildroot ones (which I found on
+> STAGING_DIR/usr/bin) the ones from PATH are chosen, which leads to cross
+> compilation error (/urs/lib of host was not good for the purpose)
+> 
+> I asked in the ML of the project if someone has built for buildroot and
+> found an old thread in which a guy had success with a dirty hack: he
+> changed each call pcre-config using an absolute path to buildroot ones
+> 
+> The project maintainer said that the right way was to add an ENV var which
+> tells to build system a cross compiling is in place and so adjust path
+> accordingly
+> 
+> I can't simply add STAGING_DIR to path because if I do so other tools get
+> chosen from buildroot instead of host, so having the opposite problem
+
+Absolutely. In this case, what I'd prefer to see if to have two
+environment variables called PCRE_CONFIG and XML2_CONFIG, which allow
+to override the path to the pcre-config and xml2-config binaries.
+
+Note that there is an on-going discussion in the Buildroot project to
+find a better mechanism to handle such *-config scripts, and make sure
+they are naturally available in the PATH when building target packages.
+However, this discussion has not matured yet, so we cannot count on
+that right now.
+
+> > Also, why do you depend on python here?
+> 
+> 
+> Because python is required for building and I read in manual to do so
+
+As you say: "python is required for building". So you need host-python,
+i.e python installed on the build machine. But most likely not python
+on the target, *except* if you intend to use uwsgi for Python
+applications. Apparently, uwsgi is mainly a C library, no ?
+
+> "In their Config.in file, they should depend on BR2_PACKAGE_PYTHON so that
+> when Buildroot will enable Python 3 usage
+> for modules, we will be able to enable Python modules progressively on
+> Python 3."
+
+Right, for packages that need Python on the target.
+
+> > You could also use the Makefile, to not use the python-package
+> > infrastructure, and therefore not make this package depend on python
+> > being available for the target.
+> 
+> I usually install it using pip in a virtualenv (which i can't do on
+> buildoroot due to lack of gcc on target), I didn't compile it directly, so
+> using python-package seems to me the simplest way to accomplish the same
+> task
+> 
+> I can try to change this if it's problem
+
+I don't really like the fact that it's a python-package if really it
+isn't one. Can you try making it a generic-package, with
+<pkg>_BUILD_CMDS calling $(MAKE) -C $(@D), and adding host-python to
+the <pkg>_DEPENDENCIES variable ?
 
 Thanks!
 
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> ---
->  linux/Config.in | 12 ++++++++++++
->  linux/linux.mk  |  2 ++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 99c8a0e..8c1b138 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -365,6 +365,18 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
->  	  /boot if DTBs have been generated by the kernel build
->  	  process.
->  
-> +config BR2_LINUX_KERNEL_PACKAGES_ADJUST_CONFIG
-> +	bool "Adjust kernel configuration for package requirements"
-> +	default y
-> +	help
-> +	  Select this option if you want to allow packages to enable
-> +	  specific kernel options that are required for them to work
-> +	  properly.
-> +
-> +	  Normally you'd want this unless you're using precompiled
-> +	  binary-only modules that are tied to a specific kernel
-> +	  configuration via modversions.
-> +
->  # Linux extensions
->  source "linux/Config.ext.in"
->  
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 6c7ecfc..16eeb2c 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -176,6 +176,7 @@ LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_
->  LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
->  LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
->  
-> +ifeq ($(BR2_LINUX_KERNEL_PACKAGES_ADJUST_CONFIG),y)
->  define LINUX_KCONFIG_FIXUP_CMDS
->  	$(if $(LINUX_NEEDS_MODULES),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_MODULES,$(@D)/.config))
-> @@ -225,6 +226,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
->  	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
->  endef
-> +endif
->  
->  ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
->  ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
-> -- 
-> 2.4.10
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
