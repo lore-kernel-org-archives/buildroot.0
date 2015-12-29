@@ -1,58 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Dec 2015 23:52:39 +0100
-Subject: [Buildroot] [git commit] package/ti-gfx: require kernel modules
-	from Kconfig
-Message-ID: <20151229225703.59CB8826DE@busybox.osuosl.org>
+Date: Tue, 29 Dec 2015 23:52:34 +0100
+Subject: [Buildroot] [git commit] package/rtai: require kernel modules from
+	Kconfig
+Message-ID: <20151229225703.4F9B8826DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44bf3e1a9e2ad5fc03470c9661ef065e1bb3690f
+commit: http://git.buildroot.net/buildroot/commit/?id=963ad186ba0fdb37fd82b5c7f0c9c3e39990aa58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-And reorder 'depends' before 'select'.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ti-gfx/Config.in | 3 ++-
- package/ti-gfx/ti-gfx.mk | 6 ------
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/rtai/Config.in | 1 +
+ package/rtai/rtai.mk   | 6 ------
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index 4ee8622..de4e9cb 100644
---- a/package/ti-gfx/Config.in
-+++ b/package/ti-gfx/Config.in
-@@ -1,10 +1,11 @@
- config BR2_PACKAGE_TI_GFX
- 	bool "ti-gfx"
-+	depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_HAS_POWERVR
- 	select BR2_PACKAGE_FBSET if !BR2_PACKAGE_BUSYBOX # Runtime dependency only
--	depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
+diff --git a/package/rtai/Config.in b/package/rtai/Config.in
+index ecbff38..14b1854 100644
+--- a/package/rtai/Config.in
++++ b/package/rtai/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_RTAI
+ 	bool "rtai"
+ 	depends on BR2_LINUX_KERNEL_EXT_RTAI
 +	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
  	help
- 	  Graphics libraries for TI boards.
+ 	  RTAI - the RealTime Application Interface for Linux.
  
-diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-index d23985f..47eb474 100644
---- a/package/ti-gfx/ti-gfx.mk
-+++ b/package/ti-gfx/ti-gfx.mk
-@@ -22,12 +22,6 @@ TI_GFX_INSTALL_STAGING = YES
+diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
+index 6e803a6..dfd8e0c 100644
+--- a/package/rtai/rtai.mk
++++ b/package/rtai/rtai.mk
+@@ -18,12 +18,6 @@ RTAI_POST_INSTALL_STAGING_HOOKS += RTAI_POST_PATCH_FIXUP
  
- TI_GFX_DEPENDENCIES = linux
+ RTAI_DEPENDENCIES = linux
  
 -# We're building a kernel module without using the kernel-module infra,
 -# so we need to tell we want module support in the kernel
--ifeq ($(BR2_PACKAGE_TI_GFX),y)
+-ifeq ($(BR2_PACKAGE_RTAI),y)
 -LINUX_NEEDS_MODULES = y
 -endif
 -
- TI_GFX_PROVIDES = libegl libgles powervr
- 
- ifeq ($(BR2_PACKAGE_TI_GFX_ES3),y)
+ RTAI_CONF_OPTS = \
+ 	--includedir=/usr/include/rtai \
+ 	--with-linux-dir=$(LINUX_DIR) 	\
