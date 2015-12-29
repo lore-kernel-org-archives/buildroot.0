@@ -1,29 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Dec 2015 22:03:56 +0100
-Subject: [Buildroot] [PATCH] package/mke2img: set sparse_super for
-	revision 1
-In-Reply-To: <1440760370-61713-1-git-send-email-benoit@wsystem.com>
- (=?utf-8?Q?=22Beno=C3=AEt=09Th=C3=A9baudeau=22's?= message of "Fri, 28 Aug
- 2015 13:12:50 +0200")
-References: <1440760370-61713-1-git-send-email-benoit@wsystem.com>
-Message-ID: <87si2lc6gz.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Dec 2015 22:06:45 +0100
+Subject: [Buildroot] [git commit] docs/website: fixing pre block indentation
+Message-ID: <20151229210728.8C8AD826F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Beno?t" == Beno?t Th?baudeau <benoit@wsystem.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=33771d6a2d422054bd41d593f129a8b5f5fe8534
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The sparse_super feature is more efficient in terms of speed and
-> available space, so set it by default if supported, i.e. for revision 1.
+Pre block should not be indented, this patch fixes wrong
+indentation.
 
-> This gives a huge speed gain for large resize2fs operations, especially
-> for expansion.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/website/download.html | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 46f601d..34b06bf 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -137,9 +137,9 @@
+ 		tree at any time so it is in sync with the latest and greatest by entering your
+ 		buildroot directory and running the command:
+ 
+-		<pre>
+-		  git pull
+-		</pre>
++<pre>
++git pull
++</pre>
+ 
+ 		Because you've only been granted anonymous access to the tree, you won't be
+ 		able to push your changes to the repo. Changes can instead be submitted for
