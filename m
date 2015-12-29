@@ -1,28 +1,48 @@
-From: Andrea Cappelli <a.cappelli@gmail.com>
-Date: Tue, 29 Dec 2015 16:07:11 +0100
-Subject: [Buildroot] [PATCH] Added uwsgi to packages
-Message-ID: <CAKR0bvtdwebq-VkZ9+pcVb2KwHZvJ_AVb4sydQYvjgPndQRTJQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Dec 2015 16:09:41 +0100
+Subject: [Buildroot] [PATCH 1/1] xdotool: new package
+In-Reply-To: <1451354367-26073-1-git-send-email-nunes.erico@gmail.com>
+References: <1451354367-26073-1-git-send-email-nunes.erico@gmail.com>
+Message-ID: <20151229160941.52b31100@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-please find attached a patch to add the uwsgi (
-https://uwsgi-docs.readthedocs.org/en/latest/) package to buildroot
+Dear Erico Nunes,
 
-Best regards
+On Mon, 28 Dec 2015 23:59:27 -0200, Erico Nunes wrote:
+> xdotool is a command-line X11 automation tool.
+> 
+> http://www.semicomplete.com/projects/xdotool
+> 
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> ---
+>  package/Config.in            |  1 +
+>  package/xdotool/Config.in    | 11 +++++++++++
+>  package/xdotool/xdotool.hash |  2 ++
+>  package/xdotool/xdotool.mk   | 24 ++++++++++++++++++++++++
+>  4 files changed, 38 insertions(+)
+>  create mode 100644 package/xdotool/Config.in
+>  create mode 100644 package/xdotool/xdotool.hash
+>  create mode 100644 package/xdotool/xdotool.mk
 
+I've applied after doing a few changes:
+
+    [Thomas:
+     - fix <pkg>_LICENSE, as noticed by Baruch
+     - use $(TARGET_MAKE_ENV).]
+
+Also, I've submitted a pull request to the original project to allow
+the LDCONFIG variable to be overridden so that ultimately we should be
+able to use 'make install'. See
+https://github.com/jordansissel/xdotool/pull/90.
+
+Thanks!
+
+Thomas
 -- 
-Andrea Cappelli
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151229/ab10400a/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Added-uwsgi-package.patch
-Type: text/x-patch
-Size: 5276 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151229/ab10400a/attachment.bin>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
