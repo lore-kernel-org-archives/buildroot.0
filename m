@@ -1,39 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 22:06:45 +0100
-Subject: [Buildroot] [git commit] docs/website: fixing pre block indentation
-Message-ID: <20151229210728.8C8AD826F1@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Dec 2015 22:07:53 +0100
+Subject: [Buildroot] [git commit] package/mke2img: set sparse_super for
+	revision 1
+Message-ID: <20151229210759.A42A6826F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33771d6a2d422054bd41d593f129a8b5f5fe8534
+commit: http://git.buildroot.net/buildroot/commit/?id=225189803d9ecb07aef3f7f016376c7eb00dc44d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pre block should not be indented, this patch fixes wrong
-indentation.
+The sparse_super feature is more efficient in terms of speed and
+available space, so set it by default if supported, i.e. for revision 1.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This gives a huge speed gain for large resize2fs operations, especially
+for expansion.
+
+Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mke2img/mke2img | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 46f601d..34b06bf 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -137,9 +137,9 @@
- 		tree at any time so it is in sync with the latest and greatest by entering your
- 		buildroot directory and running the command:
+diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+index d772af5..c2e0d02 100755
+--- a/package/mke2img/mke2img
++++ b/package/mke2img/mke2img
+@@ -82,7 +82,7 @@ main() {
  
--		<pre>
--		  git pull
--		</pre>
-+<pre>
-+git pull
-+</pre>
+     # Upgrade to rev1 if needed
+     if [ ${rev} -ge 1 ]; then
+-        tune2fs_O_opts+=",filetype"
++        tune2fs_O_opts+=",filetype,sparse_super"
+     fi
  
- 		Because you've only been granted anonymous access to the tree, you won't be
- 		able to push your changes to the repo. Changes can instead be submitted for
+     # Add a journal for ext3 and above
