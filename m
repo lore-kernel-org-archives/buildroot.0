@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 12:23:07 +0100
-Subject: [Buildroot] [git commit] emlog: remove linux dependency
-Message-ID: <20151229112402.477287FB99@busybox.osuosl.org>
+Date: Tue, 29 Dec 2015 12:20:55 +0100
+Subject: [Buildroot] [git commit] eventlog: add EVENTLOG_VERSION_MAJOR
+	variable
+Message-ID: <20151229112402.37660826D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cabb083814999cae69b7eb17202e3238e169aab1
+commit: http://git.buildroot.net/buildroot/commit/?id=ebafb18877da782377cd337171e3a6b487cb6069
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The dependency on linux is automatically added by the kernel-module
-infrastructure, so there is no need to explicit add it in the emlog
-package.
-
-Thanks to Arnout for spotting the issue.
-
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/emlog/emlog.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/eventlog/eventlog.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
-index cf11961..f79b1cf 100644
---- a/package/emlog/emlog.mk
-+++ b/package/emlog/emlog.mk
-@@ -6,7 +6,6 @@
+diff --git a/package/eventlog/eventlog.mk b/package/eventlog/eventlog.mk
+index c4e5fd9..76da002 100644
+--- a/package/eventlog/eventlog.mk
++++ b/package/eventlog/eventlog.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
  
- EMLOG_VERSION = bd32494ad757c3d37469877aaf99ced3ee6ca3f8
- EMLOG_SITE = $(call github,nicupavel,emlog,$(EMLOG_VERSION))
--EMLOG_DEPENDENCIES = linux
- EMLOG_LICENSE = GPLv2
- EMLOG_LICENSE_FILES = COPYING
- 
+-EVENTLOG_VERSION = 0.2.12
++EVENTLOG_VERSION_MAJOR = 0.2
++EVENTLOG_VERSION = $(EVENTLOG_VERSION_MAJOR).12
+ EVENTLOG_SOURCE = eventlog_$(EVENTLOG_VERSION).tar.gz
+-EVENTLOG_SITE = https://my.balabit.com/downloads/eventlog/0.2
++EVENTLOG_SITE = https://my.balabit.com/downloads/eventlog/$(EVENTLOG_VERSION_MAJOR)
+ EVENTLOG_LICENSE = BSD-3c
+ EVENTLOG_LICENSE_FILES = COPYING
+ EVENTLOG_INSTALL_STAGING = YES
