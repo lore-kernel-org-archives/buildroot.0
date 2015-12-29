@@ -1,65 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 17:00:15 +0100
-Subject: [Buildroot] [git commit] libfuse: switch to github
-Message-ID: <20151229160137.1D7AD826E2@busybox.osuosl.org>
+Date: Tue, 29 Dec 2015 17:00:57 +0100
+Subject: [Buildroot] [git commit] sshfs: switch to github
+Message-ID: <20151229160137.28029826D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f6573601de55e919757884d533c79c57c7699a18
+commit: http://git.buildroot.net/buildroot/commit/?id=d8cea838971c4ff532021837322ca3e8632df565
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The project moved to github, so point the homepage and download URL
 there.
 
 [Thomas:
- - Remove comment "Switch to github helper on bump" since we clearly
-   don't want to switch to the github helper if they continue to
-   upload release tarballs.
- - Adjust comment in the .hash file for clarity.]
+  - Remove comment "Switch to github helper on bump" since we clearly
+    don't want to switch to the github helper if they continue to
+    upload release tarballs.]
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfuse/Config.in    | 2 +-
- package/libfuse/libfuse.hash | 1 +
- package/libfuse/libfuse.mk   | 2 +-
- 3 files changed, 3 insertions(+), 2 deletions(-)
+ package/sshfs/Config.in  | 2 +-
+ package/sshfs/sshfs.hash | 4 ++--
+ package/sshfs/sshfs.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libfuse/Config.in b/package/libfuse/Config.in
-index deedb5a..2b0e31a 100644
---- a/package/libfuse/Config.in
-+++ b/package/libfuse/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBFUSE
+diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
+index 7c821a5..31fef9f 100644
+--- a/package/sshfs/Config.in
++++ b/package/sshfs/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_SSHFS
  	help
- 	  FUSE (Filesystem in UserSpacE)
+ 	  FUSE filesystem client based on the SSH File Transfer Protocol.
  
--	  http://fuse.sourceforge.net/
-+	  https://github.com/libfuse/libfuse
+-	  http://fuse.sourceforge.net/sshfs.html
++	  https://github.com/libfuse/sshfs
  
- comment "libfuse needs a toolchain w/ threads, dynamic library"
+ comment "sshfs needs a toolchain w/ wchar, threads, dynamic library"
  	depends on BR2_USE_MMU
-diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
-index b1bbee3..618ab3b 100644
---- a/package/libfuse/libfuse.hash
-+++ b/package/libfuse/libfuse.hash
-@@ -1,3 +1,4 @@
- # From http://sourceforge.net/projects/fuse/files/fuse-2.X/2.9.4/
-+# Currently still valid for github release tarballs
- md5	ecb712b5ffc6dffd54f4a405c9b372d8	fuse-2.9.4.tar.gz
- sha1	c8b25419f33624dc5240af6a5d26f2c04367ca71	fuse-2.9.4.tar.gz
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index 8360c82..32d70d3 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/sshfs/sshfs.hash b/package/sshfs/sshfs.hash
+index c8b0c00..16253e0 100644
+--- a/package/sshfs/sshfs.hash
++++ b/package/sshfs/sshfs.hash
+@@ -1,2 +1,2 @@
+-# Locally computed:
+-sha256  e9171452e5d0150b9c6a2158fd2e2dcefb5d5d03ba4d208949e00a3a46c6e63e  sshfs-fuse-2.5.tar.gz
++# Locally computed
++sha256	e9171452e5d0150b9c6a2158fd2e2dcefb5d5d03ba4d208949e00a3a46c6e63e	sshfs-fuse-2.5.tar.gz
+diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
+index 572f44e..93f2522 100644
+--- a/package/sshfs/sshfs.mk
++++ b/package/sshfs/sshfs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- LIBFUSE_VERSION = 2.9.4
- LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
--LIBFUSE_SITE = http://downloads.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
-+LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse_2_9_4
- LIBFUSE_LICENSE = GPLv2, LGPLv2.1
- LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
- LIBFUSE_INSTALL_STAGING = YES
+ SSHFS_VERSION = 2.5
+-SSHFS_SITE = http://downloads.sourceforge.net/project/fuse/sshfs-fuse/$(SSHFS_VERSION)
++SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs_2_5
+ SSHFS_SOURCE = sshfs-fuse-$(SSHFS_VERSION).tar.gz
+ SSHFS_LICENSE = GPLv2
+ SSHFS_LICENSE_FILES = COPYING
