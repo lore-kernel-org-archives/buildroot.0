@@ -1,35 +1,43 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 29 Dec 2015 09:13:35 +0100
-Subject: [Buildroot] [PATCH 1/1] eventlog: add EVENTLOG_VERSION_MAJOR
-	variable
-Message-ID: <1451376815-21691-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Dec 2015 09:19:22 +0100
+Subject: [Buildroot] [PATCHv2] core: add defconfig to .gitignore
+In-Reply-To: <1451249086-24341-1-git-send-email-yann.morin.1998@free.fr>
+References: <1451249086-24341-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20151229091922.41fac4b7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/eventlog/eventlog.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Yann,
 
-diff --git a/package/eventlog/eventlog.mk b/package/eventlog/eventlog.mk
-index c4e5fd9..76da002 100644
---- a/package/eventlog/eventlog.mk
-+++ b/package/eventlog/eventlog.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--EVENTLOG_VERSION = 0.2.12
-+EVENTLOG_VERSION_MAJOR = 0.2
-+EVENTLOG_VERSION = $(EVENTLOG_VERSION_MAJOR).12
- EVENTLOG_SOURCE = eventlog_$(EVENTLOG_VERSION).tar.gz
--EVENTLOG_SITE = https://my.balabit.com/downloads/eventlog/0.2
-+EVENTLOG_SITE = https://my.balabit.com/downloads/eventlog/$(EVENTLOG_VERSION_MAJOR)
- EVENTLOG_LICENSE = BSD-3c
- EVENTLOG_LICENSE_FILES = COPYING
- EVENTLOG_INSTALL_STAGING = YES
+On Sun, 27 Dec 2015 21:44:46 +0100, Yann E. MORIN wrote:
+> From: Karoly Kasza <kaszak@gmail.com>
+> 
+> After using "make safedefconfig", a defconfig file appears which is an
+> extract of the .config file. When running git, it incorrectly detects it as a
+> source code change.
+> 
+> Add /defconfig to .gitignore.
+> 
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> [yann.morin.1998 at free.fr: do not remove on distclean]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+I continue to question whether this is the right thing to do.
+"defconfig" is really only the default name, and it can be changed to
+anything by changing BR2_DEFCONFIG. So should we gitignore the default
+name, but not any other name?
+
+I'm for the principle of least surprise, and I would personally find it
+odd that we gitignore the default name only. Since we can't gitignore
+all defconfigs, I'd prefer to not gitignore any of them.
+
+Best regards,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
