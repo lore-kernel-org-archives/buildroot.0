@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 18:06:34 +0100
-Subject: [Buildroot] [PATCH 1/1] This commit adds the readme.txt to the
- the Orange Pi PC board configuration.
-In-Reply-To: <1451390020-3145-1-git-send-email-echaudron@xiot.nl>
-References: <1451390020-3145-1-git-send-email-echaudron@xiot.nl>
-Message-ID: <20151229180634.0a0b694d@free-electrons.com>
+Date: Tue, 29 Dec 2015 18:07:39 +0100
+Subject: [Buildroot] [PATCHv2] core: add defconfig to .gitignore
+In-Reply-To: <20151229170513.GA3445@free.fr>
+References: <1451249086-24341-1-git-send-email-yann.morin.1998@free.fr>
+ <20151229091922.41fac4b7@free-electrons.com>
+ <20151229170513.GA3445@free.fr>
+Message-ID: <20151229180739.7ea8dc28@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eelco Chaudron,
+Yann,
 
-On Tue, 29 Dec 2015 12:53:40 +0100, Eelco Chaudron wrote:
-> Signed-off-by: Eelco Chaudron <echaudron@xiot.nl>
-> ---
->  board/orangepi/orangepipc/readme.txt | 35 +++++++++++++++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 board/orangepi/orangepipc/readme.txt
+On Tue, 29 Dec 2015 18:05:13 +0100, Yann E. MORIN wrote:
 
-Thanks, I've applied your patch with a few minor tweaks. The main tweak
-is that your commit title was not appropriate. A commit title should be
-short (< 80 characters), not be a sentence, and must start with a
-"category". So I've changed it to:
+> Yes, and I guess with the recent ML issues you did not catch my reply in
+> the initial thread;
+>     http://lists.busybox.net/pipermail/buildroot/2015-December/148452.html
+> 
+> And since I did respin that patch before you replied there, this is now
+> moot. At that time, that patch did not appear on Pathwork when I wanted
+> to mark it reject. I guess it is now marked Rejected in Patchwork? ;-)
 
-	configs: add readme.txt for the orangepipc defconfig
+I think you can mark it as rejected indeed.
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
