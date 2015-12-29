@@ -1,60 +1,178 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Dec 2015 22:36:57 +0100
-Subject: [Buildroot] [PATCH 0/5] Introduce alternative archive format
-In-Reply-To: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
-References: <1447929366-8972-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20151229213657.GH3445@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Dec 2015 22:43:43 +0100
+Subject: [Buildroot] [git commit] mongoose: bump to version 6.1
+Message-ID: <20151229214414.54FF8826EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J??me, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=9860746ff98a886dbdbccf769d89d73a0d5ad636
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-11-19 11:36 +0100, J?r?me Pouiller spake thusly:
-> As suggested by Arnout [1], this series provide an alternative archive
-> format. This new format contains a shallowed version of upstream
-> repository. This format is a little bigger and a little longer to
-> create but it allow a better workflow with upstream. I describe some
-> good practice in patch 2.
-> 
-> Notice projects hosted by github don't yet benefit of this feature
-> since I have not found any elegant way to do it :-(. 
-> 
-> During my tests, I have noticed current shallow clone is mostly broken
-> (at least with git < 2.5 [2]). Indeed, shallow clone only work with
-> symbolic references (HEAD, a tag or a branch). However, we avoid use of
-> symbolic references in VERSION.
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2015-November/144296.html
-> [2] http://stackoverflow.com/a/30701724/301717
-> 
-> 
-> J?r?me Pouiller (5):
->   pkg-download: do not test SITE_METHOD
->   download/git: allow to create archives containing shallowed git repos
->   pkg-generic: allow to populate build directory from a git archive
->   pkg-generic: provide an option to use git archives
->   pkg-generic: tag sources if git is used
+- provide only libmongoose.a
+- rework package description
 
-Thanks for the proposal. :-)
+[Peter: move under Libraries->Networking]
+Signed-off-by: Davide Viti <zinosat@tiscali.it>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in                 |  2 +-
+ package/mongoose/Config.in        |  3 ++-
+ package/mongoose/S85mongoose      | 41 ---------------------------------------
+ package/mongoose/mongoose.hash    |  2 +-
+ package/mongoose/mongoose.mk      | 23 +---------------------
+ package/mongoose/mongoose.service | 10 ----------
+ 6 files changed, 5 insertions(+), 76 deletions(-)
 
-Following the previous replies from Thomas and I, we've further
-discussed this tonight on IRC, and we still believe this is not how
-development (active or debugging) should be done, and we already provide
-the _OVERRIDE_SRCDIR for that.
-
-As such, I've marked patches 2..5 of your series as rejected in
-Patchwork.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index a34b5ce..283363d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1102,6 +1102,7 @@ menu "Networking"
+ 	source "package/libvncserver/Config.in"
+ 	source "package/libwebsock/Config.in"
+ 	source "package/libwebsockets/Config.in"
++	source "package/mongoose/Config.in"
+ 	source "package/neon/Config.in"
+ 	source "package/nss-mdns/Config.in"
+ 	source "package/nss-pam-ldapd/Config.in"
+@@ -1361,7 +1362,6 @@ endif
+ 	source "package/minidlna/Config.in"
+ 	source "package/mjpg-streamer/Config.in"
+ 	source "package/modem-manager/Config.in"
+-	source "package/mongoose/Config.in"
+ 	source "package/mongrel2/Config.in"
+ 	source "package/monkey/Config.in"
+ 	source "package/mosh/Config.in"
+diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
+index df706b9..22b385d 100644
+--- a/package/mongoose/Config.in
++++ b/package/mongoose/Config.in
+@@ -3,7 +3,8 @@ config BR2_PACKAGE_MONGOOSE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+-	  Mongoose is a small and easy to use web server
++	  Mongoose is an embedded networking library, which can turn
++	  anything into a web server
+ 
+ 	  https://github.com/cesanta/mongoose
+ 
+diff --git a/package/mongoose/S85mongoose b/package/mongoose/S85mongoose
+deleted file mode 100755
+index 9f24e06..0000000
+--- a/package/mongoose/S85mongoose
++++ /dev/null
+@@ -1,41 +0,0 @@
+-#!/bin/sh
+-#
+-# Start/stop the mongoose HTTP server
+-#
+-
+-set -e
+-
+-PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-NAME=mongoose
+-DESC="Mongoose HTTP server"
+-
+-DAEMON=`which mongoose`
+-OPTIONS="-document_root /var/www -listening_port 80"
+-
+-[ -e /etc/default/mongoose ] && . /etc/default/mongoose
+-
+-case "$1" in
+-  start)
+-	echo "Starting $DESC:"
+-	start-stop-daemon -S -x "$DAEMON" -b -- $OPTIONS
+-	echo "$NAME."
+-	;;
+-  stop)
+-	printf "Stopping $DESC: "
+-	start-stop-daemon -K -x "$DAEMON"
+-	echo "$NAME."
+-	;;
+-  restart|force-reload)
+-	printf "Restarting $DESC: "
+-	start-stop-daemon -K -x "$DAEMON"
+-	sleep 1
+-	start-stop-daemon -S -x "$DAEMON" -b -- $OPTIONS
+-	echo "$NAME."
+-	;;
+-  *)
+-	echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+-	exit 1
+-	;;
+-esac
+-
+-exit 0
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 5687094..1ed4a78 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	cc2557c7cf9f15e1e691f285a4c6c705cc7e56cb70c64cb49703a428a0677065  mongoose-5.6.tar.gz
++sha256	512b406714d31a178fc41263ca6ecafd0c1e2dd091e9685a7b2462fecdaaea8e  mongoose-6.1.tar.gz
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 14f2aae..6caaf2e 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGOOSE_VERSION = 5.6
++MONGOOSE_VERSION = 6.1
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPLv2
+ MONGOOSE_LICENSE_FILES = LICENSE
+@@ -19,31 +19,10 @@ MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
+ endif
+ 
+ define MONGOOSE_BUILD_CMDS
+-	$(TARGET_CC) $(@D)/examples/web_server/web_server.c $(@D)/mongoose.c \
+-		-I$(@D) -o $(@D)/examples/web_server/web_server \
+-		$(MONGOOSE_CFLAGS) -pthread
+ 	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
+ 	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
+ endef
+ 
+-define MONGOOSE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 755 $(@D)/examples/web_server/web_server \
+-		$(TARGET_DIR)/usr/sbin/mongoose
+-endef
+-
+-define MONGOOSE_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+-		$(TARGET_DIR)/etc/init.d/S85mongoose
+-endef
+-
+-define MONGOOSE_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/mongoose/mongoose.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/mongoose.service
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -sf ../../../../usr/lib/systemd/system/mongoose.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mongoose.service
+-endef
+-
+ define MONGOOSE_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 644 $(@D)/libmongoose.a \
+ 		$(STAGING_DIR)/usr/lib/libmongoose.a
+diff --git a/package/mongoose/mongoose.service b/package/mongoose/mongoose.service
+deleted file mode 100644
+index 12a731c..0000000
+--- a/package/mongoose/mongoose.service
++++ /dev/null
+@@ -1,10 +0,0 @@
+-[Unit]
+-Description=Mongoose HTTP server
+-After=network.target
+-
+-[Service]
+-ExecStart=/usr/sbin/mongoose -document_root /var/www -listening_port 80
+-Restart=always
+-
+-[Install]
+-WantedBy=multi-user.target
