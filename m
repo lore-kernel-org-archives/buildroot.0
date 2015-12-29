@@ -1,8 +1,8 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Dec 2015 11:10:59 -0300
-Subject: [Buildroot] [PATCH] subversion: add missing comment when threads
-	are missing
-Message-ID: <1451398259-24939-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 29 Dec 2015 11:12:50 -0300
+Subject: [Buildroot] [PATCH v2] subversion: add missing comment when
+	building static
+Message-ID: <1451398370-25116-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
