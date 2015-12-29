@@ -1,119 +1,239 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 20:42:13 +0100
-Subject: [Buildroot] [PATCH] Added uwsgi to packages
-In-Reply-To: <CAKR0bvuMyYv62qcYExnPrX9Vjtkx8D+gLmrSodRMDkXvn4-uWg@mail.gmail.com>
-References: <CAKR0bvtdwebq-VkZ9+pcVb2KwHZvJ_AVb4sydQYvjgPndQRTJQ@mail.gmail.com>
- <20151229183218.23fac6c1@free-electrons.com>
- <CAKR0bvuMyYv62qcYExnPrX9Vjtkx8D+gLmrSodRMDkXvn4-uWg@mail.gmail.com>
-Message-ID: <20151229204213.69aae4fc@free-electrons.com>
+Date: Tue, 29 Dec 2015 20:34:44 +0100
+Subject: [Buildroot] [git commit] mysql: don't install libraries in
+	/usr/lib/mysql directory
+Message-ID: <20151229202659.71E71826B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andrea,
+commit: http://git.buildroot.net/buildroot/commit/?id=7b9c5d65e0dc3b6b55ff67196b8110c5a758da31
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Dec 2015 19:20:02 +0100, Andrea Cappelli wrote:
+Installing libraries in a subdirectory of /usr/lib leads to no end of
+trouble. It requires either setting a RUN_PATH in the ELF files linked
+with it or adding the path to ld.so.conf and calling ldconfig on the
+target.
 
-> > Thanks. However, you posted your patch as an attachment, which is quite
-> > impractical to review. Could you send it inline, by using the "git
-> > send-email" tool, as explained in the Buildroot documentation at
-> > https://buildroot.org/downloads/manual/manual.html#submitting-patches ?
-> 
-> Ok, i'll configure git with my smtp account
+So to simplify things, put everything in /usr/lib instead of
+/usr/lib/mysql
 
-Great, thanks!
+[Thomas:
+ - tweak commit title.
+ - also remove ld.so.conf handling in mysql.mk, since it is no longer
+   necessary.]
 
-> > This patch and the second patch should be merged, they really are the
-> > same thing.
-> 
-> I split in 2 separate patch because I read somewhere that each patch should
-> refer only to a single source file (but maybe this was a rule chosen in a
-> specific project, I assumed that was a common practice)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0007-dont-install-in-mysql-directory.patch     | 182 +++++++++++++++++++++
+ package/mysql/mysql.mk                             |   5 -
+ 2 files changed, 182 insertions(+), 5 deletions(-)
 
-I don't know which project has this rule, but it seems like a silly
-rule. Instead, modifications should be separated into different patches
-by "logical changes". See
-http://lxr.free-electrons.com/source/Documentation/SubmittingPatches#L201.
-
-> > You run on the build machine a command installed in STAGING_DIR.
-> > Doesn't look good. Can you explain what you're trying to do here?
-> >
-> >
-> uwsgi was available on PyPi (pypi.python.org) as package, you can download
-> and recompile it. The build system is created with a setup.py which in turn
-> invoke some function inside uwsgiconfig.py
-
-Right. But you can also use the Makefile, which also invokes
-uwsgiconfig.py.
-
-> One of the function use the os.system command to invoke external tools,
-> among which are pcre-config and xml2-config, which are used to get path to
-> be passed to the compiler
-> 
-> The problem is that instead of using the buildroot ones (which I found on
-> STAGING_DIR/usr/bin) the ones from PATH are chosen, which leads to cross
-> compilation error (/urs/lib of host was not good for the purpose)
-> 
-> I asked in the ML of the project if someone has built for buildroot and
-> found an old thread in which a guy had success with a dirty hack: he
-> changed each call pcre-config using an absolute path to buildroot ones
-> 
-> The project maintainer said that the right way was to add an ENV var which
-> tells to build system a cross compiling is in place and so adjust path
-> accordingly
-> 
-> I can't simply add STAGING_DIR to path because if I do so other tools get
-> chosen from buildroot instead of host, so having the opposite problem
-
-Absolutely. In this case, what I'd prefer to see if to have two
-environment variables called PCRE_CONFIG and XML2_CONFIG, which allow
-to override the path to the pcre-config and xml2-config binaries.
-
-Note that there is an on-going discussion in the Buildroot project to
-find a better mechanism to handle such *-config scripts, and make sure
-they are naturally available in the PATH when building target packages.
-However, this discussion has not matured yet, so we cannot count on
-that right now.
-
-> > Also, why do you depend on python here?
-> 
-> 
-> Because python is required for building and I read in manual to do so
-
-As you say: "python is required for building". So you need host-python,
-i.e python installed on the build machine. But most likely not python
-on the target, *except* if you intend to use uwsgi for Python
-applications. Apparently, uwsgi is mainly a C library, no ?
-
-> "In their Config.in file, they should depend on BR2_PACKAGE_PYTHON so that
-> when Buildroot will enable Python 3 usage
-> for modules, we will be able to enable Python modules progressively on
-> Python 3."
-
-Right, for packages that need Python on the target.
-
-> > You could also use the Makefile, to not use the python-package
-> > infrastructure, and therefore not make this package depend on python
-> > being available for the target.
-> 
-> I usually install it using pip in a virtualenv (which i can't do on
-> buildoroot due to lack of gcc on target), I didn't compile it directly, so
-> using python-package seems to me the simplest way to accomplish the same
-> task
-> 
-> I can try to change this if it's problem
-
-I don't really like the fact that it's a python-package if really it
-isn't one. Can you try making it a generic-package, with
-<pkg>_BUILD_CMDS calling $(MAKE) -C $(@D), and adding host-python to
-the <pkg>_DEPENDENCIES variable ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mysql/0007-dont-install-in-mysql-directory.patch b/package/mysql/0007-dont-install-in-mysql-directory.patch
+new file mode 100644
+index 0000000..971b9ce
+--- /dev/null
++++ b/package/mysql/0007-dont-install-in-mysql-directory.patch
+@@ -0,0 +1,182 @@
++Don't install in mysql directory
++
++Installing libraries in a subdirectory of /usr/lib leads to no end of
++trouble. It requires either setting a RUN_PATH in the ELF files linked
++with it or adding the path to ld.so.conf and calling ldconfig on the
++target.
++
++So to simplify things, put everything in /usr/lib instead of
++/usr/lib/mysql
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++
++diff -Nrup mysql-5.1.73.orig/dbug/Makefile.am mysql-5.1.73/dbug/Makefile.am
++--- mysql-5.1.73.orig/dbug/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/dbug/Makefile.am	2015-12-14 00:34:58.567937603 +0100
++@@ -17,7 +17,7 @@
++ 
++ INCLUDES =              -I$(top_builddir)/include -I$(top_srcdir)/include
++ LDADD =                 libdbug.a ../mysys/libmysys.a ../strings/libmystrings.a
++-pkglib_LIBRARIES =      libdbug.a
+++lib_LIBRARIES =      libdbug.a
++ noinst_HEADERS =        dbug_long.h
++ libdbug_a_SOURCES =     dbug.c sanity.c
++ EXTRA_DIST =            CMakeLists.txt example1.c example2.c example3.c \
++diff -Nrup mysql-5.1.73.orig/libmysql/Makefile.shared mysql-5.1.73/libmysql/Makefile.shared
++--- mysql-5.1.73.orig/libmysql/Makefile.shared	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/libmysql/Makefile.shared	2015-12-14 00:34:58.567937603 +0100
++@@ -25,7 +25,7 @@ MYSQLBASEdir=			$(prefix)
++ ## We'll use CLIENT_EXTRA_LDFLAGS for threaded and non-threaded
++ ## until someone complains that they need separate options.
++ LDADD =				@CLIENT_EXTRA_LDFLAGS@ $(target)
++-pkglib_LTLIBRARIES =		$(target)
+++lib_LTLIBRARIES =		$(target)
++ 
++ noinst_PROGRAMS = conf_to_src
++ 
++diff -Nrup mysql-5.1.73.orig/libmysqld/Makefile.am mysql-5.1.73/libmysqld/Makefile.am
++--- mysql-5.1.73.orig/libmysqld/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/libmysqld/Makefile.am	2015-12-14 00:34:58.567937603 +0100
++@@ -38,7 +38,7 @@ INCLUDES=		-I$(top_builddir)/include -I$
++ 			@condition_dependent_plugin_includes@
++ 
++ noinst_LIBRARIES =	libmysqld_int.a
++-pkglib_LIBRARIES =	libmysqld.a
+++lib_LIBRARIES =	libmysqld.a
++ SUBDIRS =		. examples
++ libmysqld_sources=	libmysqld.c lib_sql.cc emb_qcache.cc
++ libmysqlsources =	errmsg.c get_password.c libmysql.c client.c pack.c \
++diff -Nrup mysql-5.1.73.orig/mysys/Makefile.am mysql-5.1.73/mysys/Makefile.am
++--- mysql-5.1.73.orig/mysys/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/mysys/Makefile.am	2015-12-14 00:34:58.567937603 +0100
++@@ -18,7 +18,7 @@ MYSQLSHAREdir =		$(pkgdatadir)
++ MYSQLBASEdir=		$(prefix)
++ INCLUDES =		@ZLIB_INCLUDES@ -I$(top_builddir)/include \
++ 			-I$(top_srcdir)/include -I$(srcdir)
++-pkglib_LIBRARIES =	libmysys.a
+++lib_LIBRARIES =	libmysys.a
++ LDADD =			libmysys.a $(top_builddir)/strings/libmystrings.a $(top_builddir)/dbug/libdbug.a
++ noinst_HEADERS =	mysys_priv.h my_static.h my_handler_errors.h
++ libmysys_a_SOURCES =    my_init.c my_getwd.c mf_getdate.c my_mmap.c \
++diff -Nrup mysql-5.1.73.orig/storage/csv/Makefile.am mysql-5.1.73/storage/csv/Makefile.am
++--- mysql-5.1.73.orig/storage/csv/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/storage/csv/Makefile.am	2015-12-14 00:34:58.563937596 +0100
++@@ -30,7 +30,7 @@ DEFS =	@DEFS@
++ noinst_HEADERS	  =	ha_tina.h transparent_file.h
++ 
++ EXTRA_LTLIBRARIES =	ha_csv.la
++-pkglib_LTLIBRARIES =	@plugin_csv_shared_target@
+++lib_LTLIBRARIES =	@plugin_csv_shared_target@
++ ha_csv_la_LDFLAGS =	-module -rpath $(MYSQLLIBdir)
++ ha_csv_la_CXXFLAGS =	$(AM_CXXFLAGS) -DMYSQL_PLUGIN
++ ha_csv_la_SOURCES =	transparent_file.cc ha_tina.cc 
++diff -Nrup mysql-5.1.73.orig/storage/heap/Makefile.am mysql-5.1.73/storage/heap/Makefile.am
++--- mysql-5.1.73.orig/storage/heap/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/storage/heap/Makefile.am	2015-12-14 00:34:58.563937596 +0100
++@@ -26,7 +26,7 @@ WRAPLIBS=
++ LDADD =
++ 
++ DEFS =                  @DEFS@
++-pkglib_LIBRARIES =	libheap.a
+++lib_LIBRARIES =	libheap.a
++ noinst_PROGRAMS	=	hp_test1 hp_test2
++ noinst_LIBRARIES =	libheap.a
++ hp_test1_LDFLAGS = @NOINST_LDFLAGS@
++diff -Nrup mysql-5.1.73.orig/storage/myisam/Makefile.am mysql-5.1.73/storage/myisam/Makefile.am
++--- mysql-5.1.73.orig/storage/myisam/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/storage/myisam/Makefile.am	2015-12-14 00:34:58.563937596 +0100
++@@ -30,7 +30,7 @@ DEFS =                  @DEFS@
++ EXTRA_DIST =		mi_test_all.sh mi_test_all.res ft_stem.c CMakeLists.txt plug.in
++ pkgdata_DATA =		mi_test_all mi_test_all.res
++ 
++-pkglib_LIBRARIES =	libmyisam.a
+++lib_LIBRARIES =	libmyisam.a
++ bin_PROGRAMS =		myisamchk myisamlog myisampack myisam_ftdump
++ myisamchk_DEPENDENCIES=	$(LIBRARIES)
++ myisamchk_LDADD=		@CLIENT_EXTRA_LDFLAGS@ libmyisam.a \
++diff -Nrup mysql-5.1.73.orig/storage/myisammrg/Makefile.am mysql-5.1.73/storage/myisammrg/Makefile.am
++--- mysql-5.1.73.orig/storage/myisammrg/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/storage/myisammrg/Makefile.am	2015-12-14 00:34:58.563937596 +0100
++@@ -26,7 +26,7 @@ WRAPLIBS=
++ LDADD =
++ 
++ DEFS =                  @DEFS@
++-pkglib_LIBRARIES =	libmyisammrg.a
+++lib_LIBRARIES =	libmyisammrg.a
++ noinst_HEADERS =	myrg_def.h ha_myisammrg.h
++ noinst_LIBRARIES =	libmyisammrg.a
++ libmyisammrg_a_SOURCES = myrg_open.c myrg_extra.c myrg_info.c myrg_locking.c \
++diff -Nrup mysql-5.1.73.orig/strings/Makefile.am mysql-5.1.73/strings/Makefile.am
++--- mysql-5.1.73.orig/strings/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/strings/Makefile.am	2015-12-14 00:34:58.567937603 +0100
++@@ -16,7 +16,7 @@
++ # This file is public domain and comes with NO WARRANTY of any kind
++ 
++ INCLUDES =		-I$(top_builddir)/include -I$(top_srcdir)/include
++-pkglib_LIBRARIES =	libmystrings.a
+++lib_LIBRARIES =	libmystrings.a
++ 
++ # Exact one of ASSEMBLER_X
++ if ASSEMBLER_x86
++@@ -69,15 +69,15 @@ conf_to_src_LDFLAGS= @NOINST_LDFLAGS@
++ 
++ FLAGS=$(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) @NOINST_LDFLAGS@
++ 
++-str_test: str_test.c $(pkglib_LIBRARIES)
++-	$(LINK) $(FLAGS) -DMAIN $(INCLUDES) $(srcdir)/str_test.c $(LDADD) $(pkglib_LIBRARIES)
+++str_test: str_test.c $(lib_LIBRARIES)
+++	$(LINK) $(FLAGS) -DMAIN $(INCLUDES) $(srcdir)/str_test.c $(LDADD) $(lib_LIBRARIES)
++ 
++ uctypedump: uctypedump.c
++ 	$(LINK) $(INCLUDES) $(srcdir)/uctypedump.c
++ 
++-test_decimal$(EXEEXT): decimal.c $(pkglib_LIBRARIES)
+++test_decimal$(EXEEXT): decimal.c $(lib_LIBRARIES)
++ 	$(CP) $(srcdir)/decimal.c ./test_decimal.c
++-	$(LINK) $(FLAGS) -DMAIN  ./test_decimal.c $(LDADD) $(pkglib_LIBRARIES)
+++	$(LINK) $(FLAGS) -DMAIN  ./test_decimal.c $(LDADD) $(lib_LIBRARIES)
++ 	$(RM) -f ./test_decimal.c
++ 
++ # Don't update the files from bitkeeper
++diff -Nrup mysql-5.1.73.orig/tests/Makefile.am mysql-5.1.73/tests/Makefile.am
++--- mysql-5.1.73.orig/tests/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/tests/Makefile.am	2015-12-14 00:34:58.567937603 +0100
++@@ -51,11 +51,11 @@ mysql_client_test.o:	mysql_client_fw.c
++ 
++ insert_test_SOURCES=       insert_test.c
++ select_test_SOURCES=       select_test.c
++-insert_test_DEPENDENCIES=	$(LIBRARIES) $(pkglib_LTLIBRARIES)
++-select_test_DEPENDENCIES=	$(LIBRARIES) $(pkglib_LTLIBRARIES)
+++insert_test_DEPENDENCIES=	$(LIBRARIES) $(lib_LTLIBRARIES)
+++select_test_DEPENDENCIES=	$(LIBRARIES) $(lib_LTLIBRARIES)
++ 
++ bug25714_SOURCES=          bug25714.c
++-bug25714_DEPENDENCIES=     $(LIBRARIES) $(pkglib_LTLIBRARIES)
+++bug25714_DEPENDENCIES=     $(LIBRARIES) $(lib_LTLIBRARIES)
++ 
++ # Fix for mit-threads
++ DEFS =			-DMYSQL_CLIENT_NO_THREADS
++diff -Nrup mysql-5.1.73.orig/vio/Makefile.am mysql-5.1.73/vio/Makefile.am
++--- mysql-5.1.73.orig/vio/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/vio/Makefile.am	2015-12-14 00:34:58.567937603 +0100
++@@ -16,7 +16,7 @@
++ INCLUDES =		-I$(top_builddir)/include -I$(top_srcdir)/include \
++ 			$(openssl_includes)
++ LDADD =			@CLIENT_EXTRA_LDFLAGS@ $(openssl_libs) $(yassl_libs)
++-pkglib_LIBRARIES =	libvio.a
+++lib_LIBRARIES =	libvio.a
++ 
++ noinst_HEADERS =	vio_priv.h
++ 
++diff -Nrup mysql-5.1.73.orig/zlib/Makefile.am mysql-5.1.73/zlib/Makefile.am
++--- mysql-5.1.73.orig/zlib/Makefile.am	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/zlib/Makefile.am	2015-12-14 00:34:58.567937603 +0100
++@@ -19,7 +19,7 @@ INCLUDES=		-I$(top_builddir)/include -I$
++ 
++ LIBS= $(NON_THREADED_LIBS)
++ 
++-pkglib_LTLIBRARIES = libz.la
+++lib_LTLIBRARIES = libz.la
++ noinst_LTLIBRARIES = libzlt.la
++ 
++ libz_la_LDFLAGS    = -static
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 1aad831..534bd97 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -125,12 +125,7 @@ define MYSQL_REMOVE_TEST_PROGS
+ 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
+ endef
+ 
+-define MYSQL_ADD_MYSQL_LIB_PATH
+-	echo "/usr/lib/mysql" >> $(TARGET_DIR)/etc/ld.so.conf
+-endef
+-
+ MYSQL_POST_INSTALL_TARGET_HOOKS += MYSQL_REMOVE_TEST_PROGS
+-MYSQL_POST_INSTALL_TARGET_HOOKS += MYSQL_ADD_MYSQL_LIB_PATH
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
