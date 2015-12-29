@@ -1,80 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 13:51:04 +0100
-Subject: [Buildroot] [PATCH 1/1 v1] yp-tools: new package
-In-Reply-To: <alpine.DEB.2.11.1512291332270.647@tanhuma.tkos.co.il>
-References: <1450893584-2926-1-git-send-email-yba@tkos.co.il>
- <20151228225821.5112f7df@free-electrons.com>
- <alpine.DEB.2.11.1512291332270.647@tanhuma.tkos.co.il>
-Message-ID: <20151229135104.3544d057@free-electrons.com>
+Date: Tue, 29 Dec 2015 14:00:21 +0100
+Subject: [Buildroot] [PATCH] pandaboard_defconfig: bump u-boot to
+ 2015.10 and kernel to 4.3
+In-Reply-To: <CANu7NGsP5K4268wtVMAcvUD+OaTxdEUvnV8aaoVqFhY1X-oOfg@mail.gmail.com>
+References: <1450978394-822-1-git-send-email-sergio.prado@e-labworks.com>
+ <20151227120631.78043b59@free-electrons.com>
+ <CANu7NGsP5K4268wtVMAcvUD+OaTxdEUvnV8aaoVqFhY1X-oOfg@mail.gmail.com>
+Message-ID: <20151229140021.054e6740@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jonathan,
+Sergio,
 
-On Tue, 29 Dec 2015 13:37:34 +0200 (IST), Jonathan Ben Avraham wrote:
+On Tue, 29 Dec 2015 10:21:52 -0200, Sergio Prado wrote:
 
-> Do you mean a git-generated change log from the previous version of the 
-> patch to the current version of the patch?
-
-Git cannot generate such a changelog, only a human can describe the
-changes between two iterations of a patch (or patch series).
-
-See
-https://buildroot.org/downloads/manual/manual.html#submitting-patches
-for details, and especially the section "21.5.2. Patch revision
-changelog".
-
-
-> > and it fails to build with:
+> > Could you instead replace this with a genimage configuration file ? You
+> > can look at the support for the following boards for examples:
 > >
-> > yp_get_default_domain.c:23:24: fatal error: rpcsvc/nis.h: No such file
-> > or directory
+> > ./board/via/imx6_vab820/genimage.cfg
+> > ./board/intel/galileo/genimage.cfg
+> > ./board/wandboard/genimage.cfg
 > 
-> What would be a good set of configs to test before submitting patches?
+> That was my first attempt, but it didn't work. The ROM code from OMAP
+> processors (and I think also Sitara processors) need the SD card to be
+> formatted with a special geometry in the partition table. That's the reason
+> of the script above. I did not find any option in the genimage tool to
+> configure thinks like sectors and cylinders. So I do not see an easy way to
+> generate a sdcard image in this case. What do you think?
 
-Depends on what you want to test. From my point of view, testing with
-at least
-http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config is
-a strict minimum. It's a uClibc configuration for ARM, with all
-toolchain features enabled. If your package doesn't build with this
-one, it's really a no-go (and your package currently doesn't build with
-this one).
+Ah ok. I don't know if genimage can handle such scenarios. I am Cc'ing
+Vivien Didelot, who did quite a bit of work on genimage in Buildroot. I
+think I remember he telling me that he had a working genimage
+configuration for the BeagleBone, which has, AFAIK, the same
+requirements as the PandaBoard in terms of geometry and all.
 
-Then, if you don't have any toolchain feature dependency, you may want
-to try with
-http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config,
-which is the same as above, except that things like RPC, wchar, locales
-and al. are disabled.
+> Yes, the old bootloader's default kernel arguments had a "rootfstype=ext3"
+> option, and the new one doesn't, so the kernel is able to find out and
+> mount any supported filesystem. I kept the ext2 format because most of the
+> boards use it. Is this the right approach, or should I change to ext4?
 
-If you want to verify that your package builds for noMMU platforms, you
-can use
-http://autobuild.buildroot.org/toolchains/configs/bfin-linux-uclibc.config.
+No, it's alright to keep ext2.
 
-If you want to verify that your package builds without shared library
-support, you can use:
-http://autobuild.buildroot.org/toolchains/configs/br-arm-full-static.config.
-
-If you want to verify that your package builds without thread support,
-you can use:
-http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config.
-
-If you want to verify that your package builds with the musl C library,
-you can use:
-http://autobuild.buildroot.org/toolchains/configs/br-arm-cortex-a9-musl.config.
-
-If you want to verify that your package builds with gcc 5.x, you can
-use:
-http://autobuild.buildroot.org/toolchains/configs/br-arm-cortex-a9-glibc.config.
-
-However, it is pointless to test *all* those combinations every time
-you submit a package: the autobuilder infrastructure will do it for
-you. However, building with the first one (ARM/uClibc/all features) is
-definitely something that should be tested before submitting a patch.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
