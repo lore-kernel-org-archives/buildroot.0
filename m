@@ -1,158 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 23:23:31 +0100
-Subject: [Buildroot] [PATCH v4] remmina: new package
-In-Reply-To: <1441118174-9899-1-git-send-email-fancp2007@gmail.com>
-References: <1441118174-9899-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <20151229232331.30c477a4@free-electrons.com>
+Date: Tue, 29 Dec 2015 23:26:22 +0100
+Subject: [Buildroot] [git commit] graph-depends: optimize
+	remove_transitive_deps()
+Message-ID: <20151229222734.A219F826ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Scott Fan,
+commit: http://git.buildroot.net/buildroot/commit/?id=5ed60cee1ed5f8a8e93866fc9db9ff890184afce
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  1 Sep 2015 22:36:14 +0800, Scott Fan wrote:
-> Remmina is a remote desktop client written in GTK+.
-> Currently RDP, VNC, NX, XDMCP and SSH are supported.
-> 
-> http://remmina.sourceforge.net/
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+For large configurations, the execution time of
+remove_transitive_deps() becomes really high, due to the number of
+nested loops + the is_dep() function being recursive.
 
-It's been a long while, so I wanted to get back to your patch.
-Unfortunately, it doesn't build properly:
+For an allyespackageconfig, the remove_extra_deps() function takes 334
+seconds to execute, and the overall time to generate the .dot file is
+6 minutes and 39 seconds. Here is a timing of the different
+graph-depends steps and the overall execution time:
 
--- Checking for module 'freerdp>=1.0'
---   Found freerdp, version 1.2.5-dev
-CMake Error at /home/test/buildroot/output/host/usr/share/cmake-3.4/Modules/FindPackageHandleStandardArgs.cmake:148 (message):
-  Could NOT find FREERDP (missing: FREERDP_LIBRARY)
-Call Stack (most recent call first):
-  /home/test/buildroot/output/host/usr/share/cmake-3.4/Modules/FindPackageHandleStandardArgs.cmake:388 (_FPHSA_FAILURE_MESSAGE)
-  cmake/FindFREERDP.cmake:47 (find_package_handle_standard_args)
-  cmake/FindOptionalPackage.cmake:37 (find_package)
-  remmina-plugins/CMakeLists.txt:59 (find_suggested_package)
+  Getting dependencies:   42.5735 seconds
+  Turn deps into a dict:   0.0023 seconds
+  Remove extra deps:     334.1542 seconds
+  Get version:            22.4919 seconds
+  Generate .dot:           0.0197 seconds
 
-It might be due to the fact that we updated freerdp in the mean time,
-I'm not sure. You can reproduce this failure by building the following
-configuration:
+  real	6m39.289s
+  user	6m16.644s
+  sys	0m8.792s
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.11-rc1-71-g90d1299.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_REMMINA=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_LIBGTK3=y
-# BR2_TARGET_ROOTFS_TAR is not set
+By adding a very simple cache for the results of is_dep(), we bring
+down the execution time of the "Remove extra deps" step from 334
+seconds to just 4 seconds, reducing the overall execution time to 1
+minutes and 10 seconds:
 
-> diff --git a/package/remmina/Config.in b/package/remmina/Config.in
-> new file mode 100644
-> index 0000000..e82f31b
-> --- /dev/null
-> +++ b/package/remmina/Config.in
-> @@ -0,0 +1,28 @@
-> +config BR2_PACKAGE_REMMINA
-> +	bool "remmina"
-> +	depends on BR2_PACKAGE_XORG7
-> +	depends on BR2_PACKAGE_LIBGTK3
+  Getting dependencies:  42.9546 seconds
+  Turn deps into a dict:  0.0025 seconds
+  Remove extra deps:      4.9643 seconds
+  Get version:           22.1865 seconds
+  Generate .dot:          0.0207 seconds
 
-Since you also select some X11 library, I guess this package will only
-work with the X11 backend of GTK3, so presumably, you need:
+  real	1m10.201s
+  user	0m47.716s
+  sys	0m7.948s
 
-	depends on BR2_PACKAGE_LIBGTK3_X11
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+[yann.morin.1998 at free.fr:
+  - rename is_dep() to is_dep_uncached(), keep existig code as-is
+  - add is_dep() as a cached-version of is_dep_uncached()
+  - use constructs more conform with 2to3
+  - use exceptions (EAFP) rather than check-before-use (LBYL) to be more
+    pythonist; that even decreases the duration yet a little bit more!
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/scripts/graph-depends | 34 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
 
-> +	depends on BR2_USE_MMU # libvncserver depends on BR2_USE_MMU
-> +	depends on BR2_USE_WCHAR # freerdp
-> +	depends on !BR2_STATIC_LIBS # freerdp
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # freerdp
-> +	select BR2_PACKAGE_XLIB_LIBX11
-> +	select BR2_PACKAGE_XLIB_LIBXEXT
-> +	select BR2_PACKAGE_XLIB_LIBXKBFILE
-> +	select BR2_PACKAGE_LIBGCRYPT
-> +	select BR2_PACKAGE_LIBSSH
-
-Is LIBSSH really mandatory? CMake says:
-
--- Finding suggested package LIBSSH.
---   Disable this using "-DWITH_LIBSSH=OFF".
-
-> +	select BR2_PACKAGE_LIBVNCSERVER
-> +	select BR2_PACKAGE_FREERDP
-> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-
-Is gettext really mandatory ? CMake says:
-
--- Finding suggested package Gettext.
---   Disable this using "-DWITH_GETTEXT=OFF".
--- Found Gettext: /home/test/buildroot/output/host/usr/bin/msgmerge (found version "0.19.7") 
-
-> diff --git a/package/remmina/remmina.mk b/package/remmina/remmina.mk
-> new file mode 100644
-> index 0000000..0ac5fd0
-> --- /dev/null
-> +++ b/package/remmina/remmina.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# remmina
-> +#
-> +################################################################################
-> +
-> +REMMINA_VERSION = v1.1.2
-> +REMMINA_SITE = $(call github,FreeRDP,Remmina,$(REMMINA_VERSION))
-
-We now would like to have hash files even for github sourced packages.
-So if you could add a hash file, it would be good.
-
-> +REMMINA_LICENSE = GPLv2+ with OpenSSL exception
-> +REMMINA_LICENSE_FILES = COPYING LICENSE LICENSE.OpenSSL
-> +
-> +REMMINA_CONF_OPTS = \
-> +	-DWITH_AVAHI=OFF \
-> +	-DWITH_APPINDICATOR=OFF \
-> +	-DWITH_GNOMEKEYRING=OFF \
-> +	-DWITH_TELEPATHY=OFF \
-> +	-DWITH_VTE=OFF
-> +
-> +REMMINA_DEPENDENCIES = \
-> +	libgtk3 libgcrypt libssh libvncserver freerdp \
-> +	xlib_libX11 xlib_libXext xlib_libxkbfile
-> +
-> +ifeq ($(BR2_NEEDS_GETTEXT),y)
-> +REMMINA_DEPENDENCIES += gettext
-> +
-> +define REMMINA_POST_PATCH_FIXINTL
-> +	$(SED) 's/$${GTK_LIBRARIES}/$${GTK_LIBRARIES} -lintl/' \
-> +		$(@D)/remmina/CMakeLists.txt
-
-I think the package should rather use the FindIntl() function provided
-by CMake, see https://cmake.org/cmake/help/v3.3/module/FindIntl.html,
-by doing:
-
-find_package(Intl)
-
-This is probably something you can bring upstream to the Remmina
-developers. In the mean time, we can live with the $(SED) hack you
-proposed.
-
-Could you rework the patch to address the various comments, and send an
-updated version?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 5f77038..e91c9c5 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -237,18 +237,48 @@ for dep in dependencies:
+         dict_deps[dep[0]] = []
+     dict_deps[dep[0]].append(dep[1])
+ 
++# Basic cache for the results of the is_dep() function, in order to
++# optimize the execution time. The cache is a dict of dict of boolean
++# values. The key to the primary dict is "pkg", and the key of the
++# sub-dicts is "pkg2".
++is_dep_cache = {}
++
++def is_dep_cache_insert(pkg, pkg2, val):
++    try:
++        is_dep_cache[pkg].update({pkg2: val})
++    except KeyError:
++        is_dep_cache[pkg] = {pkg2: val}
++
++# Retrieves from the cache whether pkg2 is a transitive dependency
++# of pkg.
++# Note: raises a KeyError exception if the dependency is not known.
++def is_dep_cache_lookup(pkg, pkg2):
++    return is_dep_cache[pkg][pkg2]
++
+ # This function return True if pkg is a dependency (direct or
+ # transitive) of pkg2, dependencies being listed in the deps
+ # dictionary. Returns False otherwise.
+-def is_dep(pkg,pkg2,deps):
+-    if pkg2 in deps:
++# This is the un-cached version.
++def is_dep_uncached(pkg,pkg2,deps):
++    try:
+         for p in deps[pkg2]:
+             if pkg == p:
+                 return True
+             if is_dep(pkg,p,deps):
+                 return True
++    except KeyError:
++        pass
+     return False
+ 
++# See is_dep_full() above; this is the cached version.
++def is_dep(pkg,pkg2,deps):
++    try:
++        return is_dep_cache_lookup(pkg, pkg2)
++    except KeyError:
++        val = is_dep_uncached(pkg, pkg2, deps)
++        is_dep_cache_insert(pkg, pkg2, val)
++        return val
++
+ # This function eliminates transitive dependencies; for example, given
+ # these dependency chain: A->{B,C} and B->{C}, the A->{C} dependency is
+ # already covered by B->{C}, so C is a transitive dependency of A, via B.
