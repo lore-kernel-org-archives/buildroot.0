@@ -1,81 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Dec 2015 23:50:11 +0100
-Subject: [Buildroot] [git commit] linux: add blind kconfig option to require
-	kernel modules
-Message-ID: <20151229225703.29006826DE@busybox.osuosl.org>
+Date: Tue, 29 Dec 2015 23:53:04 +0100
+Subject: [Buildroot] [git commit] package/xtables-addons: require kernel
+	modules from Kconfig
+Message-ID: <20151229225703.7AD7D826DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5471bac7483d0c315830b38ae252de3cd47c1853
+commit: http://git.buildroot.net/buildroot/commit/?id=5203541aa62c1d77d1e85662961bd7ab313813bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, packages that need the kernel to have support for laodable
-modules have two ways to require it:
-
-  - either the use the kernel-module infra, which does it automatically,
-
-  - or they do not use it, and they need to require it manually by
-    setting the corresponding Makefile variable; however, they must only
-    set it when they are actually enabled, which makes for a slightly
-    cumbersome and ugly code, like:
-
-        ifeq ($(BR2_PACKAGE_FOO),y)
-        LINUX_NEEDS_MODULES = y
-        endif
-
-Introduce a new blind Kconfig option that packages can select to signify
-they need kernel modules. That Kconfig option is then used to set the
-Makefile variable.
-
-It makes it cleaner:
-
-  - code is simpler (one Kconfig line instead of a Makefile if-block,
-
-  - this is handled at the Kconfig level, which is where we usually
-    handle such dependencies.
-
-Packages will be updated in follow-up commits.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 6 ++++++
- linux/linux.mk  | 3 +++
- 2 files changed, 9 insertions(+)
+ package/xtables-addons/Config.in         | 1 +
+ package/xtables-addons/xtables-addons.mk | 6 ------
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8faf1c8..4e2db47 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -8,6 +8,12 @@ config BR2_LINUX_KERNEL
+diff --git a/package/xtables-addons/Config.in b/package/xtables-addons/Config.in
+index a687618..4538519 100644
+--- a/package/xtables-addons/Config.in
++++ b/package/xtables-addons/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_XTABLES_ADDONS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # extensions are .so
+ 	select BR2_PACKAGE_IPTABLES
++	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+ 	help
+ 	  Xtables-addons is the successor to patch-o-matic(-ng).
+ 	  Likewise, it contains extensions that were not, or are not yet,
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 66e7386..b4e5992 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -16,12 +16,6 @@ XTABLES_ADDONS_CONF_OPTS = \
+ 	--with-xtables="$(STAGING_DIR)/usr" \
+ 	--with-xtlibdir="/usr/lib/xtables"
  
- if BR2_LINUX_KERNEL
- 
-+# Packages that need to have a kernel with support for loadable modules,
-+# but do not use the kernel-modules infrastructure, should select that
-+# option.
-+config BR2_LINUX_NEEDS_MODULES
-+	bool
-+
- #
- # Version selection. We provide the choice between:
- #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 69a09aa..045294b 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -196,6 +196,9 @@ LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_
- LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
- 
-+# If no package has yet set it, set it from the Kconfig option
-+LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
-+
- define LINUX_KCONFIG_FIXUP_CMDS
- 	$(if $(LINUX_NEEDS_MODULES),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_MODULES,$(@D)/.config))
+-# We're building a kernel module without using the kernel-module infra,
+-# so we need to tell we want module support in the kernel
+-ifeq ($(BR2_PACKAGE_XTABLES_ADDONS),y)
+-LINUX_NEEDS_MODULES = y
+-endif
+-
+ # geoip helpers need perl with modules and unzip so disable
+ define XTABLES_DISABLE_GEOIP_HELPERS
+ 	$(SED) 's/ geoip//' $(@D)/Makefile.in
