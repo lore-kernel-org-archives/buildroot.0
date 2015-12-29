@@ -1,239 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 20:34:44 +0100
-Subject: [Buildroot] [git commit] mysql: don't install libraries in
-	/usr/lib/mysql directory
-Message-ID: <20151229202659.71E71826B8@busybox.osuosl.org>
+Date: Tue, 29 Dec 2015 21:27:30 +0100
+Subject: [Buildroot] [PATCH] Drop ldconfig handling
+Message-ID: <1451420850-22132-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b9c5d65e0dc3b6b55ff67196b8110c5a758da31
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The ldconfig handling in the main Makefile is utterly broken, as it
+calls the build machine ldconfig to generate the ld.so.cache of the
+target. Unfortunately, the format of the ld.so.cache is architecture
+specific, and therefore the build machine ldconfig cannot be used
+as-is.
 
-Installing libraries in a subdirectory of /usr/lib leads to no end of
-trouble. It requires either setting a RUN_PATH in the ELF files linked
-with it or adding the path to ld.so.conf and calling ldconfig on the
-target.
+This patch therefore simply drops using ldconfig entirely, and removes
+/etc/ld.so.conf.d/ from the target skeleton. The idea is that all
+libraries that should be loaded by the dynamic linker must be
+installed in paths where the dynamic linker searches them by default
+(typically /lib or /usr/lib).
 
-So to simplify things, put everything in /usr/lib instead of
-/usr/lib/mysql
+This might potentially break a few packages, but the only way to know
+is to actually stop handling ldconfig. In order to be notified of such
+cases, we add a check in target-finalize to verify that there is no
+/etc/ld.so.conf file in the target.
 
-[Thomas:
- - tweak commit title.
- - also remove ld.so.conf handling in mysql.mk, since it is no longer
-   necessary.]
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0007-dont-install-in-mysql-directory.patch     | 182 +++++++++++++++++++++
- package/mysql/mysql.mk                             |   5 -
- 2 files changed, 182 insertions(+), 5 deletions(-)
+ Makefile                                | 14 ++------------
+ system/skeleton/etc/ld.so.conf.d/.empty |  0
+ 2 files changed, 2 insertions(+), 12 deletions(-)
+ delete mode 100644 system/skeleton/etc/ld.so.conf.d/.empty
 
-diff --git a/package/mysql/0007-dont-install-in-mysql-directory.patch b/package/mysql/0007-dont-install-in-mysql-directory.patch
-new file mode 100644
-index 0000000..971b9ce
---- /dev/null
-+++ b/package/mysql/0007-dont-install-in-mysql-directory.patch
-@@ -0,0 +1,182 @@
-+Don't install in mysql directory
-+
-+Installing libraries in a subdirectory of /usr/lib leads to no end of
-+trouble. It requires either setting a RUN_PATH in the ELF files linked
-+with it or adding the path to ld.so.conf and calling ldconfig on the
-+target.
-+
-+So to simplify things, put everything in /usr/lib instead of
-+/usr/lib/mysql
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+
-+diff -Nrup mysql-5.1.73.orig/dbug/Makefile.am mysql-5.1.73/dbug/Makefile.am
-+--- mysql-5.1.73.orig/dbug/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/dbug/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-+@@ -17,7 +17,7 @@
-+ 
-+ INCLUDES =              -I$(top_builddir)/include -I$(top_srcdir)/include
-+ LDADD =                 libdbug.a ../mysys/libmysys.a ../strings/libmystrings.a
-+-pkglib_LIBRARIES =      libdbug.a
-++lib_LIBRARIES =      libdbug.a
-+ noinst_HEADERS =        dbug_long.h
-+ libdbug_a_SOURCES =     dbug.c sanity.c
-+ EXTRA_DIST =            CMakeLists.txt example1.c example2.c example3.c \
-+diff -Nrup mysql-5.1.73.orig/libmysql/Makefile.shared mysql-5.1.73/libmysql/Makefile.shared
-+--- mysql-5.1.73.orig/libmysql/Makefile.shared	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/libmysql/Makefile.shared	2015-12-14 00:34:58.567937603 +0100
-+@@ -25,7 +25,7 @@ MYSQLBASEdir=			$(prefix)
-+ ## We'll use CLIENT_EXTRA_LDFLAGS for threaded and non-threaded
-+ ## until someone complains that they need separate options.
-+ LDADD =				@CLIENT_EXTRA_LDFLAGS@ $(target)
-+-pkglib_LTLIBRARIES =		$(target)
-++lib_LTLIBRARIES =		$(target)
-+ 
-+ noinst_PROGRAMS = conf_to_src
-+ 
-+diff -Nrup mysql-5.1.73.orig/libmysqld/Makefile.am mysql-5.1.73/libmysqld/Makefile.am
-+--- mysql-5.1.73.orig/libmysqld/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/libmysqld/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-+@@ -38,7 +38,7 @@ INCLUDES=		-I$(top_builddir)/include -I$
-+ 			@condition_dependent_plugin_includes@
-+ 
-+ noinst_LIBRARIES =	libmysqld_int.a
-+-pkglib_LIBRARIES =	libmysqld.a
-++lib_LIBRARIES =	libmysqld.a
-+ SUBDIRS =		. examples
-+ libmysqld_sources=	libmysqld.c lib_sql.cc emb_qcache.cc
-+ libmysqlsources =	errmsg.c get_password.c libmysql.c client.c pack.c \
-+diff -Nrup mysql-5.1.73.orig/mysys/Makefile.am mysql-5.1.73/mysys/Makefile.am
-+--- mysql-5.1.73.orig/mysys/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/mysys/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-+@@ -18,7 +18,7 @@ MYSQLSHAREdir =		$(pkgdatadir)
-+ MYSQLBASEdir=		$(prefix)
-+ INCLUDES =		@ZLIB_INCLUDES@ -I$(top_builddir)/include \
-+ 			-I$(top_srcdir)/include -I$(srcdir)
-+-pkglib_LIBRARIES =	libmysys.a
-++lib_LIBRARIES =	libmysys.a
-+ LDADD =			libmysys.a $(top_builddir)/strings/libmystrings.a $(top_builddir)/dbug/libdbug.a
-+ noinst_HEADERS =	mysys_priv.h my_static.h my_handler_errors.h
-+ libmysys_a_SOURCES =    my_init.c my_getwd.c mf_getdate.c my_mmap.c \
-+diff -Nrup mysql-5.1.73.orig/storage/csv/Makefile.am mysql-5.1.73/storage/csv/Makefile.am
-+--- mysql-5.1.73.orig/storage/csv/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/storage/csv/Makefile.am	2015-12-14 00:34:58.563937596 +0100
-+@@ -30,7 +30,7 @@ DEFS =	@DEFS@
-+ noinst_HEADERS	  =	ha_tina.h transparent_file.h
-+ 
-+ EXTRA_LTLIBRARIES =	ha_csv.la
-+-pkglib_LTLIBRARIES =	@plugin_csv_shared_target@
-++lib_LTLIBRARIES =	@plugin_csv_shared_target@
-+ ha_csv_la_LDFLAGS =	-module -rpath $(MYSQLLIBdir)
-+ ha_csv_la_CXXFLAGS =	$(AM_CXXFLAGS) -DMYSQL_PLUGIN
-+ ha_csv_la_SOURCES =	transparent_file.cc ha_tina.cc 
-+diff -Nrup mysql-5.1.73.orig/storage/heap/Makefile.am mysql-5.1.73/storage/heap/Makefile.am
-+--- mysql-5.1.73.orig/storage/heap/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/storage/heap/Makefile.am	2015-12-14 00:34:58.563937596 +0100
-+@@ -26,7 +26,7 @@ WRAPLIBS=
-+ LDADD =
-+ 
-+ DEFS =                  @DEFS@
-+-pkglib_LIBRARIES =	libheap.a
-++lib_LIBRARIES =	libheap.a
-+ noinst_PROGRAMS	=	hp_test1 hp_test2
-+ noinst_LIBRARIES =	libheap.a
-+ hp_test1_LDFLAGS = @NOINST_LDFLAGS@
-+diff -Nrup mysql-5.1.73.orig/storage/myisam/Makefile.am mysql-5.1.73/storage/myisam/Makefile.am
-+--- mysql-5.1.73.orig/storage/myisam/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/storage/myisam/Makefile.am	2015-12-14 00:34:58.563937596 +0100
-+@@ -30,7 +30,7 @@ DEFS =                  @DEFS@
-+ EXTRA_DIST =		mi_test_all.sh mi_test_all.res ft_stem.c CMakeLists.txt plug.in
-+ pkgdata_DATA =		mi_test_all mi_test_all.res
-+ 
-+-pkglib_LIBRARIES =	libmyisam.a
-++lib_LIBRARIES =	libmyisam.a
-+ bin_PROGRAMS =		myisamchk myisamlog myisampack myisam_ftdump
-+ myisamchk_DEPENDENCIES=	$(LIBRARIES)
-+ myisamchk_LDADD=		@CLIENT_EXTRA_LDFLAGS@ libmyisam.a \
-+diff -Nrup mysql-5.1.73.orig/storage/myisammrg/Makefile.am mysql-5.1.73/storage/myisammrg/Makefile.am
-+--- mysql-5.1.73.orig/storage/myisammrg/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/storage/myisammrg/Makefile.am	2015-12-14 00:34:58.563937596 +0100
-+@@ -26,7 +26,7 @@ WRAPLIBS=
-+ LDADD =
-+ 
-+ DEFS =                  @DEFS@
-+-pkglib_LIBRARIES =	libmyisammrg.a
-++lib_LIBRARIES =	libmyisammrg.a
-+ noinst_HEADERS =	myrg_def.h ha_myisammrg.h
-+ noinst_LIBRARIES =	libmyisammrg.a
-+ libmyisammrg_a_SOURCES = myrg_open.c myrg_extra.c myrg_info.c myrg_locking.c \
-+diff -Nrup mysql-5.1.73.orig/strings/Makefile.am mysql-5.1.73/strings/Makefile.am
-+--- mysql-5.1.73.orig/strings/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/strings/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-+@@ -16,7 +16,7 @@
-+ # This file is public domain and comes with NO WARRANTY of any kind
-+ 
-+ INCLUDES =		-I$(top_builddir)/include -I$(top_srcdir)/include
-+-pkglib_LIBRARIES =	libmystrings.a
-++lib_LIBRARIES =	libmystrings.a
-+ 
-+ # Exact one of ASSEMBLER_X
-+ if ASSEMBLER_x86
-+@@ -69,15 +69,15 @@ conf_to_src_LDFLAGS= @NOINST_LDFLAGS@
-+ 
-+ FLAGS=$(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) @NOINST_LDFLAGS@
-+ 
-+-str_test: str_test.c $(pkglib_LIBRARIES)
-+-	$(LINK) $(FLAGS) -DMAIN $(INCLUDES) $(srcdir)/str_test.c $(LDADD) $(pkglib_LIBRARIES)
-++str_test: str_test.c $(lib_LIBRARIES)
-++	$(LINK) $(FLAGS) -DMAIN $(INCLUDES) $(srcdir)/str_test.c $(LDADD) $(lib_LIBRARIES)
-+ 
-+ uctypedump: uctypedump.c
-+ 	$(LINK) $(INCLUDES) $(srcdir)/uctypedump.c
-+ 
-+-test_decimal$(EXEEXT): decimal.c $(pkglib_LIBRARIES)
-++test_decimal$(EXEEXT): decimal.c $(lib_LIBRARIES)
-+ 	$(CP) $(srcdir)/decimal.c ./test_decimal.c
-+-	$(LINK) $(FLAGS) -DMAIN  ./test_decimal.c $(LDADD) $(pkglib_LIBRARIES)
-++	$(LINK) $(FLAGS) -DMAIN  ./test_decimal.c $(LDADD) $(lib_LIBRARIES)
-+ 	$(RM) -f ./test_decimal.c
-+ 
-+ # Don't update the files from bitkeeper
-+diff -Nrup mysql-5.1.73.orig/tests/Makefile.am mysql-5.1.73/tests/Makefile.am
-+--- mysql-5.1.73.orig/tests/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/tests/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-+@@ -51,11 +51,11 @@ mysql_client_test.o:	mysql_client_fw.c
-+ 
-+ insert_test_SOURCES=       insert_test.c
-+ select_test_SOURCES=       select_test.c
-+-insert_test_DEPENDENCIES=	$(LIBRARIES) $(pkglib_LTLIBRARIES)
-+-select_test_DEPENDENCIES=	$(LIBRARIES) $(pkglib_LTLIBRARIES)
-++insert_test_DEPENDENCIES=	$(LIBRARIES) $(lib_LTLIBRARIES)
-++select_test_DEPENDENCIES=	$(LIBRARIES) $(lib_LTLIBRARIES)
-+ 
-+ bug25714_SOURCES=          bug25714.c
-+-bug25714_DEPENDENCIES=     $(LIBRARIES) $(pkglib_LTLIBRARIES)
-++bug25714_DEPENDENCIES=     $(LIBRARIES) $(lib_LTLIBRARIES)
-+ 
-+ # Fix for mit-threads
-+ DEFS =			-DMYSQL_CLIENT_NO_THREADS
-+diff -Nrup mysql-5.1.73.orig/vio/Makefile.am mysql-5.1.73/vio/Makefile.am
-+--- mysql-5.1.73.orig/vio/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/vio/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-+@@ -16,7 +16,7 @@
-+ INCLUDES =		-I$(top_builddir)/include -I$(top_srcdir)/include \
-+ 			$(openssl_includes)
-+ LDADD =			@CLIENT_EXTRA_LDFLAGS@ $(openssl_libs) $(yassl_libs)
-+-pkglib_LIBRARIES =	libvio.a
-++lib_LIBRARIES =	libvio.a
-+ 
-+ noinst_HEADERS =	vio_priv.h
-+ 
-+diff -Nrup mysql-5.1.73.orig/zlib/Makefile.am mysql-5.1.73/zlib/Makefile.am
-+--- mysql-5.1.73.orig/zlib/Makefile.am	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/zlib/Makefile.am	2015-12-14 00:34:58.567937603 +0100
-+@@ -19,7 +19,7 @@ INCLUDES=		-I$(top_builddir)/include -I$
-+ 
-+ LIBS= $(NON_THREADED_LIBS)
-+ 
-+-pkglib_LTLIBRARIES = libz.la
-++lib_LTLIBRARIES = libz.la
-+ noinst_LTLIBRARIES = libzlt.la
-+ 
-+ libz_la_LDFLAGS    = -static
-diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
-index 1aad831..534bd97 100644
---- a/package/mysql/mysql.mk
-+++ b/package/mysql/mysql.mk
-@@ -125,12 +125,7 @@ define MYSQL_REMOVE_TEST_PROGS
- 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
- endef
+diff --git a/Makefile b/Makefile
+index 1d69192..a15013e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -598,18 +598,8 @@ endif
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
  
--define MYSQL_ADD_MYSQL_LIB_PATH
--	echo "/usr/lib/mysql" >> $(TARGET_DIR)/etc/ld.so.conf
--endef
--
- MYSQL_POST_INSTALL_TARGET_HOOKS += MYSQL_REMOVE_TEST_PROGS
--MYSQL_POST_INSTALL_TARGET_HOOKS += MYSQL_ADD_MYSQL_LIB_PATH
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ 	mkdir -p $(TARGET_DIR)/etc
+-	# Mandatory configuration file and auxiliary cache directory
+-	# for recent versions of ldconfig
+-	touch $(TARGET_DIR)/etc/ld.so.conf
+-	mkdir -p $(TARGET_DIR)/var/cache/ldconfig
+-	if [ -x "$(TARGET_CROSS)ldconfig" ]; \
+-	then \
+-		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR) \
+-					-f $(TARGET_DIR)/etc/ld.so.conf; \
+-	else \
+-		/sbin/ldconfig -r $(TARGET_DIR) \
+-			       -f $(TARGET_DIR)/etc/ld.so.conf; \
+-	fi
++	test -f $(TARGET_DIR)/etc/ld.so.conf && \
++		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
+ 	( \
+ 		echo "NAME=Buildroot"; \
+ 		echo "VERSION=$(BR2_VERSION_FULL)"; \
+diff --git a/system/skeleton/etc/ld.so.conf.d/.empty b/system/skeleton/etc/ld.so.conf.d/.empty
+deleted file mode 100644
+index e69de29..0000000
+-- 
+2.6.4
