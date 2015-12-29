@@ -1,28 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 18:08:07 +0100
-Subject: [Buildroot] [PATCH] sysstat: bump to version 11.2.0
-In-Reply-To: <1451408271-28118-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1451408271-28118-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151229180807.24f6a8b4@free-electrons.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 29 Dec 2015 18:10:34 +0100
+Subject: [Buildroot] [PATCH 3/3] qt5webchannel: indentation cleanup
+In-Reply-To: <1451409034-17537-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1451409034-17537-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1451409034-17537-3-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/qt5/qt5webchannel/qt5webchannel.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue, 29 Dec 2015 13:57:51 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/sysstat/sysstat.hash | 2 +-
->  package/sysstat/sysstat.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
+index bd4257f..6ceb59e 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.mk
++++ b/package/qt5/qt5webchannel/qt5webchannel.mk
+@@ -36,7 +36,7 @@ define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
+ endef
+ 
+ define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
+-        $(INSTALL) -m 0644 -D $(@D)/src/webchannel/qwebchannel.js \
++	$(INSTALL) -m 0644 -D $(@D)/src/webchannel/qwebchannel.js \
+ 		$(TARGET_DIR)/var/www/qwebchannel.js
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
