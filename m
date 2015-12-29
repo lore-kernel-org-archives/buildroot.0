@@ -1,48 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 23:01:31 +0100
-Subject: [Buildroot] [PATCH v1] bcm2835: new package
-In-Reply-To: <1449609824-2649-1-git-send-email-ps.report@gmx.net>
-References: <1449609824-2649-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151229230131.494ae5a0@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Dec 2015 23:06:22 +0100
+Subject: [Buildroot] [PATCH 3/3] package/gcc: align gcc-final
+ configure-cmds to the generic ones
+In-Reply-To: <4d9f7a6896c496372a4f415987e60eeeac79225b.1448202976.git.yann.morin.1998@free.fr>
+References: <cover.1448202976.git.yann.morin.1998@free.fr>
+ <4d9f7a6896c496372a4f415987e60eeeac79225b.1448202976.git.yann.morin.1998@free.fr>
+Message-ID: <20151229220622.GI3445@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Me, All,
 
-On Tue,  8 Dec 2015 22:23:44 +0100, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On 2015-11-22 15:39 +0100, Yann E. MORIN spake thusly:
+> Since 7d6c79 (Compile static versions of gcc libraries) was applied, the
+> generic configure commands have been updated, but those changes have not
+> been propagated to the gcc-final custom configure commands.
+> 
+> Update the gcc-final custom configure commands to better match the
+> generic ones.
+> 
+> We do not propagate --disable-dependency-tracking because it breaks the
+> build, and --enable-shared (because of 169141a).
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Rejected. ;-p
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  package/Config.in            |  1 +
->  package/bcm2835/Config.in    | 10 ++++++++++
->  package/bcm2835/bcm2835.hash |  2 ++
->  package/bcm2835/bcm2835.mk   | 13 +++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/bcm2835/Config.in
->  create mode 100644 package/bcm2835/bcm2835.hash
->  create mode 100644 package/bcm2835/bcm2835.mk
+>  package/gcc/gcc-final/gcc-final.mk | 25 ++++++++++++++++++++-----
+>  1 file changed, 20 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index dbdb615..53199c3 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -36,16 +36,31 @@ HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
+>  #
+>  # So we must completely override the generic commands and provide our own.
+>  #
+> +# Except for --disable-dependency-tracking which breaks the build, and
+> +# --enable-shared (see 169141a, gcc-final: disable shared build for
+> +# static), we reproduce the exact same command as the autotools infra
+> +# uses.
+> +#
+>  define  HOST_GCC_FINAL_CONFIGURE_CMDS
+>  	(cd $(HOST_GCC_FINAL_SRCDIR) && rm -rf config.cache; \
+> -		$(HOST_CONFIGURE_OPTS) \
+> -		CFLAGS="$(HOST_CFLAGS)" \
+> -		LDFLAGS="$(HOST_LDFLAGS)" \
+> -		$(HOST_GCC_FINAL_CONF_ENV) \
+> -		./configure \
+> +	$(HOST_CONFIGURE_OPTS) \
+> +	CFLAGS="$(HOST_CFLAGS)" \
+> +	LDFLAGS="$(HOST_LDFLAGS)" \
+> +	$(HOST_GCC_FINAL_CONF_ENV) \
+> +	CONFIG_SITE=/dev/null \
+> +	./configure \
+>  		--prefix="$(HOST_DIR)/usr" \
+>  		--sysconfdir="$(HOST_DIR)/etc" \
+> +		--localstatedir="$(HOST_DIR)/var" \
+>  		--enable-static \
+> +		--disable-gtk-doc \
+> +		--disable-gtk-doc-html \
+> +		--disable-doc \
+> +		--disable-docs \
+> +		--disable-documentation \
+> +		--disable-debug \
+> +		--with-xmlto=no \
+> +		--with-fop=no \
+>  		$(QUIET) $(HOST_GCC_FINAL_CONF_OPTS) \
+>  	)
+>  endef
+> -- 
+> 1.9.1
+> 
 
-I've applied after doing a few changes:
-
-    [Thomas:
-     - addition of 'depends on BR2_arm' as suggested by Yann.
-     - addition of a comment in the Config.in help text that says that
-       this library is a pure abomination.
-     - fix the hash, since apparently upstream changes the released
-       tarballs after they are published.
-     - fix license, it's GPLv2, not GPLv2+.]
-
-If you could contact upstream to tell them to not change their tarballs
-after they are published, it would be good. I had to change the hash
-because yours wasn't matching the tarball I could download today, even
-if the version hasn't changed.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
