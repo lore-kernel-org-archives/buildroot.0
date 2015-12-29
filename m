@@ -1,40 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Dec 2015 13:56:43 -0300
-Subject: [Buildroot] [PATCH] package/gettext: host variant needs
- host-libxml2
-In-Reply-To: <1451165734-15534-1-git-send-email-yann.morin.1998@free.fr>
-References: <1451165734-15534-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <5682BB4B.1060805@zacarias.com.ar>
+Date: Tue, 29 Dec 2015 13:57:51 -0300
+Subject: [Buildroot] [PATCH] sysstat: bump to version 11.2.0
+Message-ID: <1451408271-28118-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/12/15 18:35, Yann E. MORIN wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sysstat/sysstat.hash | 2 +-
+ package/sysstat/sysstat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> From: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
->
-> Of host-gettext, we only build the tools. however some of those tools
-> have a --color option, which needs libxml2.
->
-> If the libxml2 development files are missing on the host, a bundled
-> subset of libxml2 is used, and all seems OK. But if they ar epresent,
-> then the host libxml2 is used. On some distros, lbxml2 is linked with
-> liblzma. And if we happend to _then_ build our host-liblzma, we may have
-> a conflict later when trying to run any of the host-gettext tools.
->
-> Always build host-gettext with our own host-libxml2 which is not linked
-> with liblzma.
->
-> Fixes https://bugs.busybox.net/show_bug.cgi?id=7886
->
-> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
-> [nicolas: added extended commit message]
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> [yann.morin.1998 at free.fr: rebase; add comment; enhance commit log]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Regards.
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+index fc55ec9..d69440b 100644
+--- a/package/sysstat/sysstat.hash
++++ b/package/sysstat/sysstat.hash
+@@ -1,2 +1,2 @@
+ # From: http://sebastien.godard.pagesperso-orange.fr/download.html
+-sha1 22910242c6c5c1a0ff9699ef212195f90aa4d9ae  sysstat-11.0.8.tar.xz
++sha1	61b70892d864f8bac5714e2fe0a006f0fda6efba	sysstat-11.2.0.tar.xz
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index 7747a68..ba0eb26 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSSTAT_VERSION = 11.0.8
++SYSSTAT_VERSION = 11.2.0
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
+-- 
+2.4.10
