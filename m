@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Dec 2015 12:20:10 +0100
-Subject: [Buildroot] [PATCH v3] Fixing xdriver_xf86-video-ati
- dependencies
-In-Reply-To: <1450965468-22030-1-git-send-email-ltrimas@synopsys.com>
-References: <1450965468-22030-1-git-send-email-ltrimas@synopsys.com>
-Message-ID: <20151229122010.3b8529de@free-electrons.com>
+Date: Tue, 29 Dec 2015 12:23:07 +0100
+Subject: [Buildroot] [git commit] emlog: remove linux dependency
+Message-ID: <20151229112402.477287FB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lada Trimasova,
+commit: http://git.buildroot.net/buildroot/commit/?id=cabb083814999cae69b7eb17202e3238e169aab1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 24 Dec 2015 16:57:48 +0300, Lada Trimasova wrote:
-> This package depends on the radeon driver from libdrm and depends on
-> DRI support in xserver_xorg-server, to achieve this we select the
-> Radeon mesa3d DRI driver.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/9da/9da4ffdf1c4ec78ae37322e253cb769340116035
-> 
-> Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
-> Changes v2 -> v3:
->  - Libdrm dependencies on libpthread-stubs were propagated.
+The dependency on linux is automatically added by the kernel-module
+infrastructure, so there is no need to explicit add it in the emlog
+package.
 
-Applied, thanks.
+Thanks to Arnout for spotting the issue.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/emlog/emlog.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
+index cf11961..f79b1cf 100644
+--- a/package/emlog/emlog.mk
++++ b/package/emlog/emlog.mk
+@@ -6,7 +6,6 @@
+ 
+ EMLOG_VERSION = bd32494ad757c3d37469877aaf99ced3ee6ca3f8
+ EMLOG_SITE = $(call github,nicupavel,emlog,$(EMLOG_VERSION))
+-EMLOG_DEPENDENCIES = linux
+ EMLOG_LICENSE = GPLv2
+ EMLOG_LICENSE_FILES = COPYING
+ 
