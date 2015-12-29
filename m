@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 30 Dec 2015 00:22:08 +0100
-Subject: [Buildroot] [PATCH v2 2/2] nodejs: version 4.X needs host GCC >= 4.8
-In-Reply-To: <1451431328-28120-1-git-send-email-arnout@mind.be>
-References: <1451431328-28120-1-git-send-email-arnout@mind.be>
-Message-ID: <1451431328-28120-2-git-send-email-arnout@mind.be>
+Date: Wed, 30 Dec 2015 00:27:48 +0100
+Subject: [Buildroot] [PATCH v3] nodejs: version 5.X needs host GCC >= 4.8
+In-Reply-To: <1451431328-28120-2-git-send-email-arnout@mind.be>
+References: <1451431328-28120-2-git-send-email-arnout@mind.be>
+Message-ID: <1451431668-28340-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,6 +17,7 @@ and many more.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
+v3: update commit message 4.X -> 5.X
 v2: no change, just updated autobuild references
 ---
  package/nodejs/Config.in | 2 ++
