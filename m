@@ -1,37 +1,48 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Wed, 30 Dec 2015 16:05:24 +0200
-Subject: [Buildroot] [PATCH 0/3] vboot-utils fixes
-Message-ID: <cover.1451483256.git.alex.suykov@gmail.com>
+Date: Wed, 30 Dec 2015 16:05:30 +0200
+Subject: [Buildroot] [PATCH 1/3] vboot-utils: MTD_CHAR_MAJOR definition
+In-Reply-To: <cover.1451483256.git.alex.suykov@gmail.com>
+References: <cover.1451483256.git.alex.suykov@gmail.com>
+Message-ID: <8ab37f6789bea6e1e6bcf070c8234f970d9fae77.1451483256.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-vboot-utils depend on relatively recent host kernel headers,
-and fail to build on some of the autobuilders.
+Fixes
+http://autobuild.buildroot.net/results/a6360fd21314899321071c34fcb4892c5eed9bcc/
+http://autobuild.buildroot.net/results/0af3aa4a429c45d3a2609913ec1040f32378f3c8/
+http://autobuild.buildroot.net/results/cc4940fd6f51b31d71014f5aedee5223180eb36e/
 
-MTD_CHAR_MAJOR definition appears in linux-3.13, and ssize_t related
-failures probably happen with glibc from the same timeframe.
-
-Sadly I cannot check it properly, I can only tell it does not break
-builds on newer systems. If possible, please try them on some older
-systems before applying.
-
-If everything works well, I'd try to send 0002 upstream, but probably not 0001.
-It's an ugly fix and I don't think upstream cares much about older kernels.
-
-  vboot-utils: MTD_CHAR_MAJOR definition
-  vboot-utils: ssize_t needs unistd.h
-  vboot-utils: remove hash file
-
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+---
  package/vboot-utils/0001-mtd-char-major.patch | 17 +++++++++++++++++
- package/vboot-utils/0002-ssize-t.patch        | 14 ++++++++++++++
- package/vboot-utils/vboot-utils.hash          |  2 --
- 3 files changed, 31 insertions(+), 2 deletions(-)
+ 1 file changed, 17 insertions(+)
  create mode 100644 package/vboot-utils/0001-mtd-char-major.patch
- create mode 100644 package/vboot-utils/0002-ssize-t.patch
- delete mode 100644 package/vboot-utils/vboot-utils.hash
 
+diff --git a/package/vboot-utils/0001-mtd-char-major.patch b/package/vboot-utils/0001-mtd-char-major.patch
+new file mode 100644
+index 0000000..9db90b2
+--- /dev/null
++++ b/package/vboot-utils/0001-mtd-char-major.patch
+@@ -0,0 +1,17 @@
++This definition missing from <linux/major.h> for kernels <= 3.13.
++
++Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++
++--- a/cgpt/cgpt_wrapper.c
+++++ b/cgpt/cgpt_wrapper.c
++@@ -25,6 +25,10 @@
++ #include "cgpt_nor.h"
++ #include "cryptolib.h"
++ 
+++#ifndef MTD_CHAR_MAJOR
+++#define MTD_CHAR_MAJOR 90
+++#endif
+++
++ // Check if cmdline |argv| has "-D". "-D" signifies that GPT structs are stored
++ // off device, and hence we should not wrap around cgpt.
++ static bool has_dash_D(int argc, const char *const argv[]) {
 -- 
 2.6.4
