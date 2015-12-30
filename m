@@ -1,39 +1,48 @@
-From: Andrea Cappelli <a.cappelli@gmail.com>
-Date: Wed, 30 Dec 2015 09:53:57 +0100
-Subject: [Buildroot] [PATCH] Added uwsgi to packages
-In-Reply-To: <20151229204213.69aae4fc@free-electrons.com>
-References: <CAKR0bvtdwebq-VkZ9+pcVb2KwHZvJ_AVb4sydQYvjgPndQRTJQ@mail.gmail.com>
- <20151229183218.23fac6c1@free-electrons.com>
- <CAKR0bvuMyYv62qcYExnPrX9Vjtkx8D+gLmrSodRMDkXvn4-uWg@mail.gmail.com>
- <20151229204213.69aae4fc@free-electrons.com>
-Message-ID: <CAKR0bvuP2W6gNjNAWECvky6=Dfj4k0WK4wppyxwCxvcJH_TZ3Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Dec 2015 09:54:55 +0100
+Subject: [Buildroot] [git commit] package/netbsd-queue: add Kconfig symbol
+	like for all target packages
+Message-ID: <20151230090205.2CB2B801FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-12-29 20:42 GMT+01:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+commit: http://git.buildroot.net/buildroot/commit/?id=e84fd04e88bcda2771847958b3b5153e476db45f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Andrea,
->
-> [...]
-> I don't really like the fact that it's a python-package if really it
-> isn't one. Can you try making it a generic-package, with
-> <pkg>_BUILD_CMDS calling $(MAKE) -C $(@D), and adding host-python to
-> the <pkg>_DEPENDENCIES variable ?
->
+Select that package from musl, too, since it is a dependency.
 
-Hi Thomas,
-as soon as I have some spare time I'll rework the patch as you suggested,
-try in on my dev board and send back
+Fixes:
+    http://autobuild.buildroot.org/results/15c/15c9a80fb2754ed1866b59d5e62d02691b57834e/
+    ... and numerous similar issues ...
 
-Thank you for your review
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/musl/Config.in         | 1 +
+ package/netbsd-queue/Config.in | 2 ++
+ 2 files changed, 3 insertions(+)
 
-
--- 
-Andrea Cappelli
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151230/49b30ddf/attachment.html>
+diff --git a/package/musl/Config.in b/package/musl/Config.in
+index 4f6cc51..f1a3150 100644
+--- a/package/musl/Config.in
++++ b/package/musl/Config.in
+@@ -3,3 +3,4 @@ config BR2_PACKAGE_MUSL
+ 	depends on BR2_TOOLCHAIN_USES_MUSL
+ 	default y
+ 	select BR2_PACKAGE_LINUX_HEADERS
++	select BR2_PACKAGE_NETBSD_QUEUE
+diff --git a/package/netbsd-queue/Config.in b/package/netbsd-queue/Config.in
+new file mode 100644
+index 0000000..7837f4c
+--- /dev/null
++++ b/package/netbsd-queue/Config.in
+@@ -0,0 +1,2 @@
++config BR2_PACKAGE_NETBSD_QUEUE
++	bool
