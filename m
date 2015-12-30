@@ -1,44 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 14:28:02 +0100
-Subject: [Buildroot] [git commit] netbsd-queue: actually use the Config.in
-	file
-Message-ID: <20151230132927.BACD882749@busybox.osuosl.org>
+From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Date: Wed, 30 Dec 2015 14:30:56 +0100
+Subject: [Buildroot] [PATCH 1/1] libdvbpsi: new package
+Message-ID: <1451482256-11816-1-git-send-email-pieterjan.camerlynck@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=762b819e6f4bf741a94dfe3d6b28a6deea99edd8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+libdvbpsi is a library used by vlc for decoding MPEG TS
 
-In commit e84fd04e88bcda2771847958b3b5153e476db45f, Yann added a
-Config.in symbol for netbsd-queue in a brand new Config.in file. But
-that Config.in file was never included anywhere, making it somewhat
-useless.
-
-Let's include it under Libraries -> Other, even if its actual
-inclusion location doesn't matter much since it's just a hidden
-Config.in option anyway.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/d23/d23a1c51c4d7a260364aeef576fdf5a407abc2f6/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
 ---
- package/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/Config.in                |  1 +
+ package/libdvbpsi/Config.in      |  8 ++++++++
+ package/libdvbpsi/libdvbpsi.hash |  4 ++++
+ package/libdvbpsi/libdvbpsi.mk   | 15 +++++++++++++++
+ package/vlc/vlc.mk               |  7 +++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/libdvbpsi/Config.in
+ create mode 100644 package/libdvbpsi/libdvbpsi.hash
+ create mode 100644 package/libdvbpsi/libdvbpsi.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bc6099d..cf994b8 100644
+index bc6099d..5abd9d8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1198,6 +1198,7 @@ endif
- 	source "package/mpfr/Config.in"
- 	source "package/msgpack/Config.in"
- 	source "package/mtdev2tuio/Config.in"
-+	source "package/netbsd-queue/Config.in"
- 	source "package/orc/Config.in"
- 	source "package/p11-kit/Config.in"
- 	source "package/poco/Config.in"
+@@ -1015,6 +1015,7 @@ menu "Multimedia"
+ 	source "package/libbluray/Config.in"
+ 	source "package/libdcadec/Config.in"
+ 	source "package/libdvbcsa/Config.in"
++	source "package/libdvbpsi/Config.in"
+ 	source "package/libdvbsi/Config.in"
+ 	source "package/libdvdnav/Config.in"
+ 	source "package/libdvdread/Config.in"
+diff --git a/package/libdvbpsi/Config.in b/package/libdvbpsi/Config.in
+new file mode 100644
+index 0000000..7323466
+--- /dev/null
++++ b/package/libdvbpsi/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBDVBPSI
++	bool "libdvbpsi"
++	help
++	  libdvbpsi is a simple library designed for decoding and
++	  generation of MPEG TS and DVB PSI tables according to standards
++	  ISO/IEC 13818 and ITU-T H.222.0.
++
++	  http://www.videolan.org/developers/libdvbpsi.html
+diff --git a/package/libdvbpsi/libdvbpsi.hash b/package/libdvbpsi/libdvbpsi.hash
+new file mode 100644
+index 0000000..cf76616
+--- /dev/null
++++ b/package/libdvbpsi/libdvbpsi.hash
+@@ -0,0 +1,4 @@
++# From http://download.videolan.org/pub/libdvbpsi/1.3.0/libdvbpsi-1.3.0.tar.bz2.md5
++md5	2b217039a1299000c39423441f77e76a	libdvbpsi-1.3.0.tar.bz2
++# From http://download.videolan.org/pub/libdvbpsi/1.3.0/libdvbpsi-1.3.0.tar.bz2.sha256
++sha256	a2fed1d11980662f919bbd1f29e2462719e0f6227e1a531310bd5a706db0a1fe	libdvbpsi-1.3.0.tar.bz2
+diff --git a/package/libdvbpsi/libdvbpsi.mk b/package/libdvbpsi/libdvbpsi.mk
+new file mode 100644
+index 0000000..c45ade0
+--- /dev/null
++++ b/package/libdvbpsi/libdvbpsi.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libdvbpsi
++#
++################################################################################
++
++LIBDVBPSI_VERSION = 1.3.0
++LIBDVBPSI_SITE = http://download.videolan.org/pub/libdvbpsi/$(LIBDVBPSI_VERSION)
++LIBDVBPSI_SOURCE = libdvbpsi-$(LIBDVBPSI_VERSION).tar.bz2
++LIBDVBPSI_LICENSE = LGPLv2.1+
++LIBDVBPSI_LICENSE_FILES = COPYING
++LIBDVBPSI_AUTORECONF = YES
++LIBDVBPSI_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index ca1f09c..ee21c16 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -179,6 +179,13 @@ else
+ VLC_CONF_OPTS += --disable-libass
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDVBPSI),y)
++VLC_CONF_OPTS += --enable-dvbpsi
++VLC_DEPENDENCIES += libdvbpsi
++else
++VLC_CONF_OPTS += --disable-dvbpsi
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ VLC_CONF_OPTS += --enable-libgcrypt
+ VLC_DEPENDENCIES += libgcrypt
+-- 
+1.9.1
