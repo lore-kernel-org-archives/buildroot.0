@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 23:29:30 +0100
-Subject: [Buildroot] [git commit] vlc: add support for libdvbpsi
-Message-ID: <20151230222934.08C2482748@busybox.osuosl.org>
+Date: Wed, 30 Dec 2015 23:30:08 +0100
+Subject: [Buildroot] [v2 1/2] libdvbpsi: new package
+In-Reply-To: <1451486755-7314-1-git-send-email-pieterjan.camerlynck@gmail.com>
+References: <1451482256-11816-1-git-send-email-pieterjan.camerlynck@gmail.com>
+ <1451486755-7314-1-git-send-email-pieterjan.camerlynck@gmail.com>
+Message-ID: <20151230233008.087dca2f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c7239e36f2dc76fa8d3c79a3135f648110b7579
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Pieterjan Camerlynck,
 
-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vlc/vlc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Wed, 30 Dec 2015 15:45:54 +0100, Pieterjan Camerlynck wrote:
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index ca1f09c..ee21c16 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -179,6 +179,13 @@ else
- VLC_CONF_OPTS += --disable-libass
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBDVBPSI),y)
-+VLC_CONF_OPTS += --enable-dvbpsi
-+VLC_DEPENDENCIES += libdvbpsi
-+else
-+VLC_CONF_OPTS += --disable-dvbpsi
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- VLC_CONF_OPTS += --enable-libgcrypt
- VLC_DEPENDENCIES += libgcrypt
+> diff --git a/package/libdvbpsi/Config.in b/package/libdvbpsi/Config.in
+> new file mode 100644
+> index 0000000..2a27964
+> --- /dev/null
+> +++ b/package/libdvbpsi/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_LIBDVBPSI
+> +	bool "libdvbpsi"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	help
+> +	  libdvbpsi is a simple library designed for decoding and
+> +	  generation of MPEG TS and DVB PSI tables according to standards
+> +	  ISO/IEC 13818 and ITU-T H.222.0.
+> +
+> +	  http://www.videolan.org/developers/libdvbpsi.html
+
+You forgot the Config.in comment here about the thread dependency.
+
+I've added it and applied your patch. Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
