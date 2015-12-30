@@ -1,50 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 22:18:11 +0100
-Subject: [Buildroot] [git commit] hidapi: add libiconv handling
-Message-ID: <20151230211827.943637FCBB@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Dec 2015 22:19:10 +0100
+Subject: [Buildroot] [PATCH 0/4 v2] Do not select providers of virtual
+	packages (branch yem/dont-select-providers)
+In-Reply-To: <20151230221450.27edf444@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 30 Dec 2015 22:14:50 +0100")
+References: <cover.1450391976.git.yann.morin.1998@free.fr>
+ <20151218220532.515e1b50@free-electrons.com>
+ <87poxnwtm3.fsf@dell.be.48ers.dk>
+ <20151230221450.27edf444@free-electrons.com>
+Message-ID: <87vb7fvdm9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97f6ba2e7bae5df8ae07b8062a5b80e044cedecb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-hidapi uses iconv functions, which on uClibc without locale support is
-provided by the external libiconv library. This commit adds the
-necessary libiconv handling to make the hidapi package build on
-!locale toolchains.
+> Dear Peter Korsgaard,
+> On Wed, 30 Dec 2015 21:48:20 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/hidapi/Config.in | 1 +
- package/hidapi/hidapi.mk | 5 +++++
- 2 files changed, 6 insertions(+)
+>> Should these lua suboptions perhaps now be enabled by default if lua is
+>> available (E.G. default y)?
 
-diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
-index c48a096..5119aac 100644
---- a/package/hidapi/Config.in
-+++ b/package/hidapi/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_HIDAPI
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBGUDEV
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  HIDAPI is a multi-platform library which allows an application
- 	  to interface with USB and Bluetooth HID-Class devices on
-diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
-index b16e4ae..270836c 100644
---- a/package/hidapi/hidapi.mk
-+++ b/package/hidapi/hidapi.mk
-@@ -16,4 +16,9 @@ HIDAPI_LICENSE_FILES = LICENSE.txt LICENSE-gpl3.txt LICENSE-bsd.txt LICENSE-orig
- 
- HIDAPI_DEPENDENCIES = libusb libgudev
- 
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+HIDAPI_DEPENDENCIES += libiconv
-+HIDAPI_CONF_ENV += LIBS="-liconv"
-+endif
-+
- $(eval $(autotools-package))
+> To provide better "legacy" compatibility ?
+
+No, just that the support code to provide lua support probably is quite
+a bit smaller than lua / people are likely to want it if they have lua
+enabled - So it perhaps makes sense to enable it by default.
+
+You could also argue that we should handle it automatically without a
+sub option like we do for openssl, but that would be a bigger change.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
