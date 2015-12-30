@@ -1,37 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 10:19:28 +0100
-Subject: [Buildroot] [git commit] mesa3d: add missing select of
-	xproto_glproto
-Message-ID: <20151230092021.581F1805E6@busybox.osuosl.org>
+Date: Wed, 30 Dec 2015 10:24:56 +0100
+Subject: [Buildroot] [git commit] libcdaudio: disable on nios2,
+	binutils assertion failure
+Message-ID: <20151230092519.2125E826DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da7f56d81316be0dafb5f8a1236ba96266ee3dc2
+commit: http://git.buildroot.net/buildroot/commit/?id=53b5374c2f0bfcba3f4c98388da2825adeb54bf4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When X.org is available, mesa3d has xproto_glproto in its
-dependencies, but it forgets to select it. This commit fixes this
-mistake, which fixes the following autobuilder failure:
+Fixes:
 
-  http://autobuild.buildroot.org/results/378/378bbf8520d67a67b5906ec177079542158a6be7/
+  http://autobuild.buildroot.org/results/539/5397c51bc6915a082e873dee2d298f433172ef4d/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/gstreamer/gst-plugins-bad/Config.in | 1 +
+ package/libcdaudio/Config.in                | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 04167c3..6e16f9d 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -3,6 +3,7 @@ menuconfig BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XPROTO_GLPROTO if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+index 3bfd12b..e2a67f1 100644
+--- a/package/gstreamer/gst-plugins-bad/Config.in
++++ b/package/gstreamer/gst-plugins-bad/Config.in
+@@ -252,6 +252,7 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_BZ2
+ 
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CDAUDIO
+ 	bool "cdaudio"
++	depends on !BR2_nios2 # libcdaudio
+ 	select BR2_PACKAGE_LIBCDAUDIO
+ 
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CURL
+diff --git a/package/libcdaudio/Config.in b/package/libcdaudio/Config.in
+index 02df01e..3eca607 100644
+--- a/package/libcdaudio/Config.in
++++ b/package/libcdaudio/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_LIBCDAUDIO
+ 	bool "libcdaudio"
++	# binutils assertion failure
++	depends on !BR2_nios2
+ 	help
+ 	  libcdaudio is a library designed to provide functions to
+ 	  control operation of a CD-ROM when playing audio CDs. It
