@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 23:02:01 +0100
-Subject: [Buildroot] [PATCH v3 1/2] assimp: new package
-In-Reply-To: <20151230170547.3f85816c@free-electrons.com>
-References: <1450390699-10377-1-git-send-email-ps.report@gmx.net>
- <20151230170547.3f85816c@free-electrons.com>
-Message-ID: <20151230230201.6403be7c@free-electrons.com>
+Date: Wed, 30 Dec 2015 23:02:45 +0100
+Subject: [Buildroot] [git commit] libvncserver: disable on nios2,
+	due to binutils issues
+Message-ID: <20151230220308.A387E80AE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=8b093218c452a4846c1db0c01300db8086d130c0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Dec 2015 17:05:47 +0100, Thomas Petazzoni wrote:
+Fixes:
 
-> This package is causing some build failures:
-> 
->   http://autobuild.buildroot.org/?reason=assimp-v3.2
-> 
-> They all look similar. I guess it's because assimp needs C++11 support.
-> Can you have a look ?
+  http://autobuild.buildroot.org/results/469/469d5667f05ca6954805772fcaaa2b33dfdc6167/
 
-One of the issue is different though:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libvncserver/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-  http://autobuild.buildroot.org/results/79e/79edc3a8c7bcc5a7ffb433bf1ecb645050e2f044/build-end.log
-
-Thanks for your feedback,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
+index 28fbaa5..460aa78 100644
+--- a/package/libvncserver/Config.in
++++ b/package/libvncserver/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_LIBVNCSERVER
+ 	bool "libvncserver"
+ 	depends on BR2_USE_MMU # VNCommand.c uses fork()
++	# binutils issue (bad expression)
++	depends on !BR2_nios2
+ 	help
+ 	  libvncserver is a VNC server/client library.
+ 
