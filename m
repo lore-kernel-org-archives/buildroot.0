@@ -1,42 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Dec 2015 15:21:04 -0300
-Subject: [Buildroot] [PATCH] netatalk: bump to version 3.1.8
-Message-ID: <1451499664-9008-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Dec 2015 19:22:51 +0100
+Subject: [Buildroot] [git commit] bind: disable libjson support
+Message-ID: <20151230182311.4840782756@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/netatalk/netatalk.hash | 6 +++---
- package/netatalk/netatalk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=6e8f91f346c3fefd5e9115881813f96ae422b5a7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
-index e201ae6..955ffd4 100644
---- a/package/netatalk/netatalk.hash
-+++ b/package/netatalk/netatalk.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.7/
--md5	831ec8bf9e084b64f965d16c528af299	netatalk-3.1.7.tar.bz2
--sha1	d4077a9496beae766ab1e4f28afa22e5c96514f0	netatalk-3.1.7.tar.bz2
-+# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.8/
-+md5	9cab934ca32b8979f389da52d44c69c2	netatalk-3.1.8.tar.bz2
-+sha1	00518461a311e6c17c95738ac214c8f06f863b4b	netatalk-3.1.8.tar.bz2
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 85aeb6d..2e955e9 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+It conflicts with jsoncpp, bind probes for json/json.h first, but that
+header is installed by jsoncpp, which is completely different from
+json-c.
+Since it's not clear who's correct here (there might be some other
+json-c predecessor/version that installs there as well) and the same
+functionality (stats channel) is provided by libxml2 as well, just
+disable libjson support completely.
+
+Fixes:
+http://autobuild.buildroot.net/results/226/2262c9b46663ea7a45e128a5fd7ff30417c2c2a7/build-end.log
+(indirectly, it was probing aboslute directories while searching for it)
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bind/bind.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 5a77d82..2a06599 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -22,6 +22,7 @@ BIND_CONF_ENV = \
+ 	BUILD_CC="$(TARGET_CC)" \
+ 	BUILD_CFLAGS="$(TARGET_CFLAGS)"
+ BIND_CONF_OPTS = \
++	--with-libjson=no \
+ 	--with-randomdev=/dev/urandom \
+ 	--enable-epoll \
+ 	--with-libtool \
+@@ -36,13 +37,6 @@ else
+ BIND_CONF_OPTS += --disable-linux-caps
+ endif
  
--NETATALK_VERSION = 3.1.7
-+NETATALK_VERSION = 3.1.8
- NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
- NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
- # For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
--- 
-2.4.10
+-ifeq ($(BR2_PACKAGE_JSON_C),y)
+-BIND_CONF_OPTS += --with-libjson=yes
+-BIND_DEPENDENCIES += json-c
+-else
+-BIND_CONF_OPTS += --with-libjson=no
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr --enable-newstats
+ BIND_DEPENDENCIES += libxml2
