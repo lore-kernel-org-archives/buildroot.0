@@ -1,84 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 12:21:59 +0100
-Subject: [Buildroot] [git commit] minidlna,
-	libsvg: do not use libjpeg directly, use jpeg
-Message-ID: <20151230132307.11FAA8274A@busybox.osuosl.org>
+Date: Wed, 30 Dec 2015 14:28:02 +0100
+Subject: [Buildroot] [git commit] netbsd-queue: actually use the Config.in
+	file
+Message-ID: <20151230132927.BACD882749@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3bc78b13bdb32f28c76d8fb9f9acd5197ed3bb6
+commit: http://git.buildroot.net/buildroot/commit/?id=762b819e6f4bf741a94dfe3d6b28a6deea99edd8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libjpeg should not be selected directly, as it is one implementation
-of the virtual jpeg package. Consequently, this commit moves minidlna
-and libsvg to use the jpeg virtual package instead.
+In commit e84fd04e88bcda2771847958b3b5153e476db45f, Yann added a
+Config.in symbol for netbsd-queue in a brand new Config.in file. But
+that Config.in file was never included anywhere, making it somewhat
+useless.
 
-The build has been tested with both libjpeg and jpeg-turbo variants.
+Let's include it under Libraries -> Other, even if its actual
+inclusion location doesn't matter much since it's just a hidden
+Config.in option anyway.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/a12/a12760dea9e9d7ca62d14d0821539cc4b0c76835/
+  http://autobuild.buildroot.org/results/d23/d23a1c51c4d7a260364aeef576fdf5a407abc2f6/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsvg/Config.in     | 2 +-
- package/libsvg/libsvg.mk     | 2 +-
- package/minidlna/Config.in   | 2 +-
- package/minidlna/minidlna.mk | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libsvg/Config.in b/package/libsvg/Config.in
-index e3a5e72..741ef10 100644
---- a/package/libsvg/Config.in
-+++ b/package/libsvg/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LIBSVG
- 	bool "libsvg"
- 	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_LIBJPEG
-+	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBXML2 if !BR2_PACKAGE_EXPAT
- 	help
- 	  Libsvg provides a parser for SVG content in files or buffers.
-diff --git a/package/libsvg/libsvg.mk b/package/libsvg/libsvg.mk
-index a876c4e..8b85d5a 100644
---- a/package/libsvg/libsvg.mk
-+++ b/package/libsvg/libsvg.mk
-@@ -6,7 +6,7 @@
- 
- LIBSVG_VERSION = 0.1.4
- LIBSVG_SITE = http://cairographics.org/snapshots
--LIBSVG_DEPENDENCIES = host-pkgconf libpng libjpeg
-+LIBSVG_DEPENDENCIES = host-pkgconf libpng jpeg
- LIBSVG_INSTALL_STAGING = YES
- LIBSVG_LICENSE = LGPLv2+
- LIBSVG_LICENSE_FILES = COPYING
-diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
-index 0a475f7..6925e01 100644
---- a/package/minidlna/Config.in
-+++ b/package/minidlna/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_MINIDLNA
- 	select BR2_PACKAGE_LIBOGG
- 	select BR2_PACKAGE_LIBID3TAG # selects zlib
- 	select BR2_PACKAGE_LIBEXIF
--	select BR2_PACKAGE_LIBJPEG
-+	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on !BR2_nios2 # ffmpeg
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 6902aa8..729680c 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -11,7 +11,7 @@ MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
- 
- MINIDLNA_DEPENDENCIES = \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-gettext \
--	ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite \
-+	ffmpeg flac libvorbis libogg libid3tag libexif jpeg sqlite \
- 	host-xutil_makedepend
- 
- ifeq ($(BR2_STATIC_LIBS),y)
+diff --git a/package/Config.in b/package/Config.in
+index bc6099d..cf994b8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1198,6 +1198,7 @@ endif
+ 	source "package/mpfr/Config.in"
+ 	source "package/msgpack/Config.in"
+ 	source "package/mtdev2tuio/Config.in"
++	source "package/netbsd-queue/Config.in"
+ 	source "package/orc/Config.in"
+ 	source "package/p11-kit/Config.in"
+ 	source "package/poco/Config.in"
