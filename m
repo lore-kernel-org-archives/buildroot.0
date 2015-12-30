@@ -1,111 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 09:54:33 +0100
-Subject: [Buildroot] [git commit] package/c-libraries: need linux-headers
-Message-ID: <20151230090205.2732D82713@busybox.osuosl.org>
+Date: Wed, 30 Dec 2015 10:01:30 +0100
+Subject: [Buildroot] [git commit] core/pkg-virtual: do not check they are
+	neabled
+Message-ID: <20151230090205.4D4DA82712@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=863036378b257d9a9eb9908322edaf29f2121ae7
+commit: http://git.buildroot.net/buildroot/commit/?id=f674c428c2ef76f6486eae10facfb702f8be7244
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we check that a target package in the _DEPENDENCIES of another
-package has to be enabled in config, all target packages must have a
-kconfig symbol.
-
-Add a Kconfig symbol for linux-headers, and select it from the packages
-that depends on it (C libraries).
-
-Also remove the now-misleading comments "for legal-info" from the C
-libraries.
+Virtual packages do not have a Kconfig symbol, so we must not check that
+they are enabled.
 
 Fixes:
-    http://autobuild.buildroot.org/results/2a9/2a9e5d27b34357819b44f573a834da1ba5079030/
+    http://autobuild.buildroot.org/results/287/28713478cc6edf8e5d5c3e830fee86a42f0afa8d/
     ... and numerous similar failures ...
+
+[Thomas:
+ - use "$($(PKG)_IS_VIRTUAL)" != "YES" instead of !
+   "$($(PKG)_IS_VIRTUAL)" = "YES"]
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/glibc/Config.in                 | 4 ++--
- package/linux-headers/Config.in         | 2 ++
- package/musl/Config.in                  | 2 +-
- package/uclibc/Config.in                | 2 +-
- toolchain/toolchain-buildroot/Config.in | 1 +
- 5 files changed, 7 insertions(+), 4 deletions(-)
+ package/pkg-generic.mk | 5 ++++-
+ package/pkg-virtual.mk | 2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 72fd3df..aeb236c 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -1,9 +1,9 @@
- if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 2daf337..9e88423 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -186,7 +186,10 @@ $(BUILD_DIR)/%/.stamp_configured:
+ # building a package, even if not enabled in the configuration, we
+ # want to accept it.
+ ifeq ($(MAKECMDGOALS),)
+-	@if test "$($(PKG)_TYPE)" = "target" -a -z "$($($(PKG)_KCONFIG_VAR))" ; then \
++	@if test "$($(PKG)_TYPE)" = "target" \
++		-a "$($(PKG)_IS_VIRTUAL)" != "YES" \
++		-a -z "$($($(PKG)_KCONFIG_VAR))" ; \
++	then \
+ 		echo "ERROR: $($(PKG)_NAME) is in the dependency chain of a package that has" ; \
+ 		echo "added it to its _DEPENDENCIES variable (directly or indirectly)" ; \
+ 		echo "without selecting it from Config.in." ; \
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index 9c68b51..244c1d0 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -41,6 +41,8 @@ $$(error No implementation selected for virtual package $(1). Configuration erro
+ endif
+ endif
  
--# For legal-info
- config BR2_PACKAGE_EGLIBC
- 	bool
- 	default y
-+	select BR2_PACKAGE_LINUX_HEADERS
++$(2)_IS_VIRTUAL = YES
++
+ # A virtual package does not have any source associated
+ $(2)_SOURCE =
  
- choice
- 	prompt "eglibc version"
-@@ -25,10 +25,10 @@ endif
- 
- if BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 
--# For legal-info
- config BR2_PACKAGE_GLIBC
- 	bool
- 	default y
-+	select BR2_PACKAGE_LINUX_HEADERS
- 
- choice
- 	prompt "glibc version"
-diff --git a/package/linux-headers/Config.in b/package/linux-headers/Config.in
-new file mode 100644
-index 0000000..0ea9516
---- /dev/null
-+++ b/package/linux-headers/Config.in
-@@ -0,0 +1,2 @@
-+config BR2_PACKAGE_LINUX_HEADERS
-+	bool
-diff --git a/package/musl/Config.in b/package/musl/Config.in
-index 0aa3537..4f6cc51 100644
---- a/package/musl/Config.in
-+++ b/package/musl/Config.in
-@@ -1,5 +1,5 @@
--# For legal-info
- config BR2_PACKAGE_MUSL
- 	bool
- 	depends on BR2_TOOLCHAIN_USES_MUSL
- 	default y
-+	select BR2_PACKAGE_LINUX_HEADERS
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index bd95041..9ebec70 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -1,9 +1,9 @@
- if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 
--# For legal-info
- config BR2_PACKAGE_UCLIBC
- 	bool
- 	default y
-+	select BR2_PACKAGE_LINUX_HEADERS
- 
- comment "uClibc Options"
- 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index cee2578..cbeb030 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -110,6 +110,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
- 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 	default "musl"	 if BR2_TOOLCHAIN_BUILDROOT_MUSL
- 
-+source "package/linux-headers/Config.in"
- source "package/uclibc/Config.in"
- source "package/glibc/Config.in"
- source "package/binutils/Config.in.host"
