@@ -1,32 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Dec 2015 20:10:42 +0100
-Subject: [Buildroot] [git commit] package/tcl: move comment around,
-	to keep proper indentation
-In-Reply-To: <20151228165835.08B517F8EB@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Mon, 28 Dec 2015 17:58:01 +0100")
-References: <20151228165835.08B517F8EB@busybox.osuosl.org>
-Message-ID: <877fjv21n1.fsf@dell.be.48ers.dk>
+From: Craig Swank <craigswank@fastmail.fm>
+Date: Wed, 30 Dec 2015 12:01:24 -0800
+Subject: [Buildroot] updating the beaglebone black defconfig
+In-Reply-To: <n6183t$ket$1@ger.gmane.org>
+References: <n6183t$ket$1@ger.gmane.org>
+Message-ID: <1451505684.3162125.479430882.4C107C58@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Chris,
+Have you been able to confirm overlays (and the device-tree) work with
+buildroot and beagleboard/linux?  
 
-> commit: http://git.buildroot.net/buildroot/commit/?id=ac371770de69b5ee5f15eed7dd790558b8835d7d
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When 'echo BB-W1-P9.12 > /sys/devices/platform/bone_capemgr/slots' the
+w1-gpio module should get loaded and it doesn't.  My overlay works as
+expected on a Robert Nelson debian beagle bone, so the overlay is not
+the problem.  He also confirmed that his overlay works with
+beagleboard/linux, so the kernel isn't the problem either.
 
-> In Kconfig, when there is an item (like a comment) between a symbol and
-> its dependees, then the indentation is not in effect.
+I'm just curious if you've tried a custom overlay yourself and had
+success.
 
-> Move the symbol to the top of the file to guarantee the indentation in
-> menuconfig.
+Craig
 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thomas, it seems like you forgot to use the -s option to git am, please
-try to remember.
+On Wed, Dec 30, 2015, at 10:34 AM, Chris LaRocque wrote:
+> Hello
+> 
+> I'm working to update the beaglebone defconfig to kernel 4.1.13 ti 36
+> branch 
+> (github.com/beagleboard/linux).
+> 
+> The build works but I want to incorporate a patched version of DTC 
+> (github.com/pantoniou/dtc/tree/dt-overlays5) to support the cape manager
+> and 
+> device tree overlay changes. At this pont I'd appreciate some guidance.
+> 
+> My first thought was to simply patch the buildroot dtc package files to
+> pull 
+> from the new location. This looks to be the most direct, probably only 
+> requiring that place the file in board/beaglebone/patches/dtc?
+> 
+> Second, try to dynamically create a patch for the mainline dtc to the
+> bb.org 
+> fork. Haven't thought this through yet. A pointer or two would be 
+> appreciated. I thought to use 'git diff'?
+> 
+> Regards
+> 
+> Chris
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 -- 
-Bye, Peter Korsgaard
+  Craig Swank
+  craigswank at fastmail.fm
