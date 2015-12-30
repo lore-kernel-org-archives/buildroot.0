@@ -1,63 +1,58 @@
-From: Craig Swank <craigswank@fastmail.fm>
-Date: Wed, 30 Dec 2015 12:01:24 -0800
-Subject: [Buildroot] updating the beaglebone black defconfig
-In-Reply-To: <n6183t$ket$1@ger.gmane.org>
-References: <n6183t$ket$1@ger.gmane.org>
-Message-ID: <1451505684.3162125.479430882.4C107C58@webmail.messagingengine.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Dec 2015 21:06:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: Allow to build
+	OpenJPEG plugin
+In-Reply-To: <1451489205-4560-1-git-send-email-vincent.dehors@openwide.fr>
+ (Vincent Dehors's message of "Wed, 30 Dec 2015 16:26:45 +0100")
+References: <1451489205-4560-1-git-send-email-vincent.dehors@openwide.fr>
+Message-ID: <87ziwrya48.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Chris,
-Have you been able to confirm overlays (and the device-tree) work with
-buildroot and beagleboard/linux?  
+>>>>> "Vincent" == Vincent Dehors <vincent.dehors@openwide.fr> writes:
 
-When 'echo BB-W1-P9.12 > /sys/devices/platform/bone_capemgr/slots' the
-w1-gpio module should get loaded and it doesn't.  My overlay works as
-expected on a Robert Nelson debian beagle bone, so the overlay is not
-the problem.  He also confirmed that his overlay works with
-beagleboard/linux, so the kernel isn't the problem either.
+> The OpenJPEG library is packaged in buildroot (version 1) and there is a
+> plugin "openjpeg" using it in gst1-plugins-bad. This commit add the option
+> for building this plugin. It provide a JPEG2000 encoder and decoder.
 
-I'm just curious if you've tried a custom overlay yourself and had
-success.
+> Signed-off-by: Vincent Dehors <vincent.dehors@openwide.fr>
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in           | 9 +++++++++
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
+>  2 files changed, 16 insertions(+), 1 deletion(-)
 
-Craig
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index a834f13..8bc4df1 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -593,6 +593,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+>  comment "opencv plugin needs OpenCV-2.4"
+>  	depends on !BR2_PACKAGE_OPENCV
+ 
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENJPEG
+> +	bool "openjpeg"
+> +	depends on BR2_PACKAGE_OPENJPEG
 
+openjpeg is a library (and doesn't have any special toolchain
+dependencies), so a select should be used instead of 'depends on'.
 
-On Wed, Dec 30, 2015, at 10:34 AM, Chris LaRocque wrote:
-> Hello
-> 
-> I'm working to update the beaglebone defconfig to kernel 4.1.13 ti 36
-> branch 
-> (github.com/beagleboard/linux).
-> 
-> The build works but I want to incorporate a patched version of DTC 
-> (github.com/pantoniou/dtc/tree/dt-overlays5) to support the cape manager
-> and 
-> device tree overlay changes. At this pont I'd appreciate some guidance.
-> 
-> My first thought was to simply patch the buildroot dtc package files to
-> pull 
-> from the new location. This looks to be the most direct, probably only 
-> requiring that place the file in board/beaglebone/patches/dtc?
-> 
-> Second, try to dynamically create a patch for the mainline dtc to the
-> bb.org 
-> fork. Haven't thought this through yet. A pointer or two would be 
-> appreciated. I thought to use 'git diff'?
-> 
-> Regards
-> 
-> Chris
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +	help
+> +	  GStreamer OpenJPEG Plugin
+> +
+> +comment "openjpeg plugin needs OpenJPEG library"
+> +	depends on !BR2_PACKAGE_OPENJPEG
 
+And then this comment isn't needed.
+
+> +
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENH264
+
+'H' comes before 'J', so the openjpeg option should come after openh264.
+
+Committed with these things fixed, thanks.
 
 -- 
-  Craig Swank
-  craigswank at fastmail.fm
+Bye, Peter Korsgaard
