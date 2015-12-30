@@ -1,140 +1,121 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Dec 2015 00:18:39 +0100
-Subject: [Buildroot] [PATCHv3] Config.in: add symbols for
-	BR2_HOST_GCC_AT_LEAST_X_Y
-In-Reply-To: <1451516925-24453-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1451516925-24453-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20151230231839.GB13296@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 31 Dec 2015 00:27:53 +0100
+Subject: [Buildroot] [PATCH 10/84 RFC] package/angularjs: simplify
+ modules selection
+In-Reply-To: <ff46e42197b59eabccfd4c74e92c671e0e9f9e1e.1451076704.git.yann.morin.1998@free.fr>
+References: <cover.1451076704.git.yann.morin.1998@free.fr>
+ <ff46e42197b59eabccfd4c74e92c671e0e9f9e1e.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <56846879.90902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-THomas, Arnout, All,
-
-On 2015-12-31 00:08 +0100, Thomas Petazzoni spake thusly:
-> From: Arnout Vandecappelle <arnout@mind.be>
+On 25-12-15 22:24, Yann E. MORIN wrote:
+> Remove the superfluous config option, and make all modules default to
+> 'y', which provides exactly the same functionality.
 > 
-> Some host packages need a recent gcc version. Add symbols to Config.in
-> to specify the HOSTCC version. The values are passed through the
-> environment, and this environment is generated in a new support script.
+> simplify (and slightly beautofy) the handling of modules in the .mk:
+> since the modules' symbols are always meaningful now, we can get rid of
+> the else-clause, and always build the list of modules using the Kconfig
+> options.
 > 
-> Also update the documentation to mention the new symbols.
+> Re-order the list alphabetically (message <-> message-format).
 > 
-> [Thomas: simplify by using only make logic instead of an external
-> shell script.]
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
-> This is an alternate version, in which I've removed the shell script,
-> and did everything in make. Contrary to what Arnout said, I don't find
-> the sed expression to be more complicated, and the condition on gcc <=
-> 4 or gcc >= 5 can easily be done in make.
+>  package/angularjs/Config.in    | 35 +++++++++++++++++++++--------------
+>  package/angularjs/angularjs.mk | 24 +++++++++++++++---------
+>  2 files changed, 36 insertions(+), 23 deletions(-)
 > 
->  Config.in                                 | 24 ++++++++++++++++++++++++
->  Makefile                                  | 12 ++++++++++++
->  docs/manual/adding-packages-directory.txt |  7 +++++++
->  3 files changed, 43 insertions(+)
+> diff --git a/package/angularjs/Config.in b/package/angularjs/Config.in
+> index 206b3d8..ee1dbbf 100644
+> --- a/package/angularjs/Config.in
+> +++ b/package/angularjs/Config.in
+> @@ -7,16 +7,17 @@ menuconfig BR2_PACKAGE_ANGULARJS
+>  
+>  if BR2_PACKAGE_ANGULARJS
+>  
+> -config BR2_ANGULARJS_MODULES
+> -	bool "angularjs modules"
+> -	help
+> -	  Select which modules to install. If disabled, all modules
+> -	  will be installed.
+> +# All the modules default to 'y' to keep backward-compatibility
+
+ I don't think this comment is needed, because it will no longer be true in the
+future.
+
+> +# Keep this list in sync and in the same (alphabetical) order as # the
+> +# one in angularjs.mk. However, always keep 'angular' first in the list.
+
+ I don't think this comment is needed either. We don't have something like that
+at the top of package/Config.in for instance. And it's not that things stop to
+work if it's not alphabetical.
+
+>  
+> -if BR2_ANGULARJS_MODULES
+> +config BR2_ANGULARJS_MODULE_ANGULAR
+> +	bool
+> +	default y
+
+ I don't like this part either, see below.
+
+[snip]
+
+> diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
+> index 60dbdb6..20a129d 100644
+> --- a/package/angularjs/angularjs.mk
+> +++ b/package/angularjs/angularjs.mk
+> @@ -17,18 +17,24 @@ define ANGULARJS_EXTRACT_CMDS
+>  	rmdir $(@D)/angular-$(ANGULARJS_VERSION)
+>  endef
+>  
+> -ANGULARJS_FILES = angular
+
+ I prefered it like this, with the angular bit always there and the rest added
+by Kconfig options. Simpler than adding a dummy Kconfig option for angular itself.
+
+ Regards,
+ Arnout
+
+> +# This list mirrors the list of available modules from Config.in.
+> +# Keep this list in sync and in the same (alphabetical) order as the
+> +# one in Config.in. However, always keep 'angular' first in the list.
+> +ANGULARJS_MODULES = \
+> +	angular \
+> +	animate \
+> +	aria \
+> +	cookies \
+> +	messages \
+> +	message-format \
+> +	resource \
+> +	route \
+> +	sanitize \
+> +	touch
+>  
+> -ANGULARJS_MODULES = animate aria cookies message-format messages resource \
+> -	route sanitize touch
+> -
+> -ifeq ($(BR2_ANGULARJS_MODULES),y)
+> -ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),\
+> +ANGULARJS_FILES = $(foreach mod,$(ANGULARJS_MODULES),\
+>  			$(if $(BR2_ANGULARJS_MODULE_$(call UPPERCASE,$(mod))),\
+>  				angular-$(mod)))
+> -else
+> -ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),angular-$(mod))
+> -endif
+>  
+>  define ANGULARJS_INSTALL_TARGET_CMDS
+>  	$(foreach f,$(ANGULARJS_FILES),\
 > 
-> diff --git a/Config.in b/Config.in
-> index 9513cc1..bbbefb0 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -18,6 +18,30 @@ config BR2_EXTERNAL
->  	string
->  	option env="BR2_EXTERNAL"
->  
-> +# Hidden config symbols for packages to check system gcc version
-> +config BR2_HOST_GCC_VERSION
-> +	string
-> +	option env="HOST_GCC_VERSION"
-> +
-> +config BR2_HOST_GCC_AT_LEAST_4_7
-> +	bool
-> +	default y if BR2_HOST_GCC_VERSION = "47"
-> +
-> +config BR2_HOST_GCC_AT_LEAST_4_8
-> +	bool
-> +	default y if BR2_HOST_GCC_VERSION = "48"
-> +	select BR2_HOST_GCC_AT_LEAST_4_7
-> +
-> +config BR2_HOST_GCC_AT_LEAST_4_9
-> +	bool
-> +	default y if BR2_HOST_GCC_VERSION = "49"
-> +	select BR2_HOST_GCC_AT_LEAST_4_8
-> +
-> +config BR2_HOST_GCC_AT_LEAST_5
-> +	bool
-> +	default y if BR2_HOST_GCC_VERSION = "5"
-> +	select BR2_HOST_GCC_AT_LEAST_4_9
-> +
->  # Hidden boolean selected by packages in need of Java in order to build
->  # (example: xbmc)
->  config BR2_NEEDS_HOST_JAVA
-> diff --git a/Makefile b/Makefile
-> index 1d69192..0cfca6c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -293,6 +293,17 @@ HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranli
->  export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
->  export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
->  
-> +HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
-> +	sed 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*/\1 \2/')
-> +
-> +# For gcc 4.x, keep the second number around. For gcc >= 5.x, the
-> +# major version is enough.
-> +ifeq ($(firstword $(HOSTCC_VERSION)),4)
-> +HOSTCC_VERSION := $(subst $(space),,$(HOSTCC_VERSION))
-> +else
-> +HOSTCC_VERSION := $(firstword $(HOSTCC_VERSION))
-> +endif
-> +
->  # Make sure pkg-config doesn't look outside the buildroot tree
->  HOST_PKG_CONFIG_PATH := $(PKG_CONFIG_PATH)
->  unexport PKG_CONFIG_PATH
-> @@ -724,6 +735,7 @@ COMMON_CONFIG_ENV = \
->  	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
->  	BR2_CONFIG=$(BR2_CONFIG) \
->  	BR2_EXTERNAL=$(BR2_EXTERNAL) \
-> +	HOST_GCC_VERSION=$(HOSTCC_VERSION) \
->  	SKIP_LEGACY=
->  
->  xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 139123e..c2d9f75 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -283,6 +283,13 @@ use in the comment.
->  ** Comment string: +gcc >= X.Y+ and/or `gcc <= X.Y` (replace
->     +X.Y+ with the proper version)
->  
-> +* Host GCC version
-> +** Dependency symbol: +BR2_HOST_GCC_AT_LEAST_X_Y+, (replace
-> +   +X_Y+ with the proper version, see +Config.in+)
-> +** Comment string: no comment to be added
-> +** Note that it is usually not the package itself that has a minimum
-> +   host GCC version, but rather a host-package on which it depends.
-> +
->  * C library
->  ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
->     +BR2_TOOLCHAIN_USES_MUSL+, +BR2_TOOLCHAIN_USES_UCLIBC+
-> -- 
-> 2.6.4
-> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
