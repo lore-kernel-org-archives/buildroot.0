@@ -1,44 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Dec 2015 22:41:13 +0100
-Subject: [Buildroot] [PATCH 3/3] vboot-utils: remove hash file
-In-Reply-To: <20151230160016.14524b1f@free-electrons.com>
-References: <cover.1451483256.git.alex.suykov@gmail.com>
- <05e1570e0377fc9e913819765ecb8e488b6b6c1a.1451483256.git.alex.suykov@gmail.com>
- <20151230160016.14524b1f@free-electrons.com>
-Message-ID: <56844F79.3080903@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Dec 2015 22:43:29 +0100
+Subject: [Buildroot] [PATCH v2 1/1] [autobuild] configs: update PowerPC
+ Kconfig symbols
+In-Reply-To: <1451165710-30849-1-git-send-email-romain.naour@gmail.com>
+References: <1451165710-30849-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20151230224329.58497fa9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-12-15 16:00, Thomas Petazzoni wrote:
-> Dear Alex Suykov,
+Dear Romain Naour,
+
+On Sat, 26 Dec 2015 22:35:10 +0100, Romain Naour wrote:
+> The Kconfig symbole BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+
+symbol
+
+> has been renamed to BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC in commit
+> [1].
 > 
-> On Wed, 30 Dec 2015 16:06:05 +0200, Alex Suykov wrote:
->> The package uses git to download the sources.
->>
->> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> And with [2], the CS PowerPC 2012.03 toolchain became the default toolchain
+> when the PPC 8548 is selected. This toolchain doesn't requiere the "-te500v2"
+
+require
+
+> since there is only one sysroot.
 > 
-> I think it is good to have hash files in this case, even if they simply
-> indicate "there's no hash". This way, we will be able in the future to
-> make hash files mandatory.
-> 
-> I *think* this was part of the conclusion we had at the latest
-> Buildroot Developers Meeting, even if the write up at
-> http://elinux.org/Buildroot:DeveloperDaysELCE2015 doesn't make this
-> completely clear.
+> [1] https://git.busybox.net/buildroot/commit/?id=fa4214e21b50b791ec365c64897ac2676b45448a
+> [2] http://patchwork.ozlabs.org/patch/561118/
 
- I think we didn't get to a clear conclusion, except about the github hashes.
+Note that your commit also changes the behavior:
+sourcery-powerpc-e500v2 used to be there to test the e500v2 sysroot of
+the old CodeSourcery toolchain, as a mean of testing that the external
+toolchain logic was working OK for this toolchain.
 
- Regards,
- Arnout
+That being said, I do believe it makes sense to test the new toolchain
+as well, so I've applied your change (after fixing the two minor
+typos).
 
+Thanks a lot!
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
