@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 19:24:43 +0100
-Subject: [Buildroot] [PATCH] bind: disable libjson support
-In-Reply-To: <1451494264-2399-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1451494264-2399-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151230192443.29192de5@free-electrons.com>
+Date: Wed, 30 Dec 2015 19:25:36 +0100
+Subject: [Buildroot] [PATCH] netatalk: bump to version 3.1.8
+In-Reply-To: <1451499664-9008-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1451499664-9008-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151230192536.668669ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,12 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 30 Dec 2015 13:51:04 -0300, Gustavo Zacarias wrote:
-> It conflicts with jsoncpp, bind probes for json/json.h first, but that
-> header is installed by jsoncpp, which is completely different from
-> json-c.
-> Since it's not clear who's correct here (there might be some other
-> json-c predecessor/version that installs there as well) and the same
-> functionality (stats channel) is provided by libxml2 as well, just
-> disable libjson support completely.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/226/2262c9b46663ea7a45e128a5fd7ff30417c2c2a7/build-end.log
-> (indirectly, it was probing aboslute directories while searching for it)
-> 
+On Wed, 30 Dec 2015 15:21:04 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/bind/bind.mk | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
+>  package/netatalk/netatalk.hash | 6 +++---
+>  package/netatalk/netatalk.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied, thanks.
 
