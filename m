@@ -1,92 +1,164 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Wed, 30 Dec 2015 09:13:27 +0100
-Subject: [Buildroot] [PATCHv3] python-paho-mqtt: add new package
-Message-ID: <1451463207-2630-1-git-send-email-zinosat@tiscali.it>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Dec 2015 09:53:47 +0100
+Subject: [Buildroot] [PATCH 2/2] bfin: put the libc link path of the
+ flat shared and sep data formats before the sysroot link path
+In-Reply-To: <B168F8A49F4BCF4C84FD23DA5F6363EE75D82F29@NWD2MBX7.ad.analog.com>
+References: <1426669156-24250-1-git-send-email-sonic.adi@gmail.com>
+ <1426669156-24250-2-git-send-email-sonic.adi@gmail.com>
+ <20151229220149.0fe86aac@free-electrons.com>
+ <B168F8A49F4BCF4C84FD23DA5F6363EE75D82F29@NWD2MBX7.ad.analog.com>
+Message-ID: <20151230095347.6e9a9197@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
+Hello Sonic,
 
-v1 -> v2:
- - Provide official md5 (suggested by Yegor Yefremov)
- - Reword package description (suggested by Thomas Petazzoni)
- - Use "distutils" setup type (suggested by Yegor Yefremov)
- - Add "depends on BR2_PACKAGE_PYTHON" in Config.in
- - Test with Python3 (suggested by Yegor Yefremov)
+First of all, thanks for replying so quickly. Since we haven't seen
+much patches from you improving the Blackfin support in upstream
+Buildroot, I wasn't sure you would answer our e-mail.
 
-v2 -> v3:
- - Remove dependency on BR2_PACKAGE_PYTHON since the package builds
-   fine against Python 3 (suggested by Yegor Yefremov)
+On Wed, 30 Dec 2015 06:55:57 +0000, Zhang, Sonic wrote:
 
----
- package/Config.in                              |  1 +
- package/python-paho-mqtt/Config.in             |  9 +++++++++
- package/python-paho-mqtt/python-paho-mqtt.hash |  3 +++
- package/python-paho-mqtt/python-paho-mqtt.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-paho-mqtt/Config.in
- create mode 100644 package/python-paho-mqtt/python-paho-mqtt.hash
- create mode 100644 package/python-paho-mqtt/python-paho-mqtt.mk
+> The right sysroot of the Blackfin toolchain is copied by the external
+> toolchain logic in buildroot. The problem is that the libc files for
+> FLAT, Shared FLAT and Shared FLAT with separate data formats are put
+> into different subfolders of the same blackfin toolchain for FLAT
+> binary.
 
-diff --git a/package/Config.in b/package/Config.in
-index dd44743..aab1958 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -659,6 +659,7 @@ menu "External python modules"
- 	source "package/python-networkmanager/Config.in"
- 	source "package/python-nfc/Config.in"
- 	source "package/python-numpy/Config.in"
-+	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-protobuf/Config.in"
-diff --git a/package/python-paho-mqtt/Config.in b/package/python-paho-mqtt/Config.in
-new file mode 100644
-index 0000000..79d8b33
---- /dev/null
-+++ b/package/python-paho-mqtt/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PAHO_MQTT
-+	bool "python-paho-mqtt"
-+	help
-+	  The Paho Python Client provides a client class with support
-+	  for both MQTT v3.1 and v3.1.1 on Python 2.7 or 3.x. It also
-+	  provides some helper functions to make publishing messages
-+	  to an MQTT server very straightforward.
-+
-+	  https://pypi.python.org/pypi/paho-mqtt
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
-new file mode 100644
-index 0000000..52729cc
---- /dev/null
-+++ b/package/python-paho-mqtt/python-paho-mqtt.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=a6407b74eb5e5411e157be1de5c11366, sha256 locally computed
-+md5     a6407b74eb5e5411e157be1de5c11366  paho-mqtt-1.1.tar.gz
-+sha256  0f7a629efe6e3a2c61b59d3550aa9f2c4529b5689a65fde45e6f1ac36b9a261e  paho-mqtt-1.1.tar.gz
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
-new file mode 100644
-index 0000000..01da2b3
---- /dev/null
-+++ b/package/python-paho-mqtt/python-paho-mqtt.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-paho-mqtt
-+#
-+################################################################################
-+
-+PYTHON_PAHO_MQTT_VERSION = 1.1
-+PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
-+PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/source/p/paho-mqtt
-+PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
-+PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
-+PYTHON_PAHO_MQTT_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
+Absolutely.
+
+> Do you suggest to copy the libc for current FLAT format type
+> into $(STAGING_DIR)/usr/lib in the toolchain copy logic? If so, I can
+> send a new patch.
+
+Yes, but this should normally happen "magically". Let me take an
+example from another toolchain to illustrate how it works.
+
+If you take the CodeSourcery ARM toolchain, it has three sysroots:
+
+ - One for ARMv5 (the default one)
+ - One for ARMv4
+ - One for ARMv7 Thumb2
+
+See below:
+
+$ ./bin/arm-none-linux-gnueabi-gcc -print-file-name=libc.a
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc.a
+$ ./bin/arm-none-linux-gnueabi-gcc -march=armv4t -print-file-name=libc.a
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../arm-none-linux-gnueabi/libc/armv4t/usr/lib/libc.a
+$ ./bin/arm-none-linux-gnueabi-gcc -march=armv7-a -mthumb -print-file-name=libc.a
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../arm-none-linux-gnueabi/libc/thumb2/usr/lib/libc.a
+
+If I build an ARMv5 system in Buildroot, then the sysroot from libc/ will
+be copied to $(STAGING_DIR) :
+
+$ md5sum output/staging/usr/lib/libc.a 
+0c6a145ebbc860800152c2d8c82e5af9  output/staging/usr/lib/libc.a
+$ md5sum output/host/opt/ext-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc.a
+0c6a145ebbc860800152c2d8c82e5af9  output/host/opt/ext-toolchain/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc.a
+
+If I now build an ARMv4 system in Buildroot, then the sysroot from
+libc/armv4t/ will be copied to $(STAGING_DIR) :
+
+$ md5sum output/staging/usr/lib/libc.a 
+21109c9b68203d10437446d998d782c7  output/staging/usr/lib/libc.a
+$ md5sum output/host/opt/ext-toolchain/bin/../arm-none-linux-gnueabi/libc/armv4t/usr/lib/libc.a
+21109c9b68203d10437446d998d782c7  output/host/opt/ext-toolchain/bin/../arm-none-linux-gnueabi/libc/armv4t/usr/lib/libc.a
+
+And finally, if I build an ARMv7 Thumb2 system in Buildroot, then the
+sysroot from libc/thumb2/ will be copied to $(STAGING_DIR) :
+
+$ md5sum output/staging/usr/lib/libc.a 
+d94693412ceac0839883ed0ece38c43f  output/staging/usr/lib/libc.a
+$ md5sum output/host/opt/ext-toolchain/bin/../arm-none-linux-gnueabi/libc/thumb2/usr/lib/libc.a
+d94693412ceac0839883ed0ece38c43f  output/host/opt/ext-toolchain/bin/../arm-none-linux-gnueabi/libc/thumb2/usr/lib/libc.a
+
+This all gets done magically by the existing external toolchain logic,
+with no special handling for this CodeSourcery toolchain. In all three
+cases, we end up with $(STAGING_DIR) containing a copy of the sysroot
+that corresponds to the selected architecture flags. If you want to try
+this out by ourself, try the following configurations:
+
+ - For ARMv5
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+
+ - For ARMv4
+
+BR2_arm=y
+BR2_arm920t=y
+BR2_TOOLCHAIN_EXTERNAL=y
+
+ - For ARMv7/Thumb2
+
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_ARM_EABI=y
+BR2_ARM_SOFT_FLOAT=y
+BR2_ARM_INSTRUCTIONS_THUMB2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+
+Now, back to the Blackfin toolchain, if we ask gcc for the location of
+libc.a (like I did before with the ARM toolchain), we get :
+
+ - With no special flags
+
+$ ./bin/bfin-uclinux-gcc -print-file-name=libc.a
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bfin-uclinux/bin/../bfin-uclinux/runtime/usr/lib/libc.a
+
+ - With -mid-shared-library
+
+$ ./bin/bfin-uclinux-gcc -mid-shared-library -print-file-name=libc.a
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bfin-uclinux/bin/../bfin-uclinux/runtime/usr/lib/mid-shared-library/libc.a
+
+ - With -msep-data
+
+$ ./bin/bfin-uclinux-gcc -msep-data -print-file-name=libc.a
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bfin-uclinux/bin/../bfin-uclinux/runtime/usr/lib/msep-data/libc.a
+
+As you can see, it behaves like the CodeSourcery ARM toolchain:
+depending on the gcc flags passed, it points to a different sysroot. So
+my expectation is that the external toolchain logic that works for the
+CodeSourcery ARM toolchain should also work for the ADI Blackfin
+toolchain. Note that Buildroot specifically uses the location of libc.a
+to determine where the sysroot is. See:
+
+# Returns the location of the libc.a file for the given compiler + flags
+define toolchain_find_libc_a
+$$(readlink -f $$(LANG=C $(1) -print-file-name=libc.a))
+endef
+
+Can you investigate why the external toolchain logic doesn't work for
+the Blackfin use case, and whether it can be fixed/extended to cover
+this case ?
+
+I saw your patch, which could be a work-around specific to the Blackfin
+toolchain. It takes into account the mid-shared-library and msep-data
+cases, but it doesn't take into account the other sysroot available in
+the Blackfin toolchain:
+
+$ ./output/host/opt/ext-toolchain/bfin-uclinux/bin/bfin-uclinux-gcc -print-multi-lib
+.;
+bf532-none;@mcpu=bf532-none
+mid-shared-library;@mid-shared-library
+msep-data;@msep-data
+bf532-none/mid-shared-library;@mcpu=bf532-none at mid-shared-library
+bf532-none/msep-data;@mcpu=bf532-none at msep-data
+
+So we would have to add other cases for the bf532-none flag (but what
+is this flag ? the gcc documentation documents -mcpu=bf532, but
+certainly not -mcpu=bf532-none).
+
+Could you look into this ?
+
+Thanks!
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
