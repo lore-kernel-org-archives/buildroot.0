@@ -1,80 +1,42 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Dec 2015 15:01:23 -0300
-Subject: [Buildroot] [PATCH] iptables: add parallel build fix patch
-Message-ID: <1451498483-23715-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 30 Dec 2015 15:21:04 -0300
+Subject: [Buildroot] [PATCH] netatalk: bump to version 3.1.8
+Message-ID: <1451499664-9008-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/5c4/5c4ca595c4bf744aa00fc58851eeccf81f9c6ecc/
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...-xtables-config-parser.h-to-BUILT_SOURCES.patch | 39 ++++++++++++++++++++++
- package/iptables/iptables.mk                       |  2 ++
- 2 files changed, 41 insertions(+)
- create mode 100644 package/iptables/0002-iptables-add-xtables-config-parser.h-to-BUILT_SOURCES.patch
+ package/netatalk/netatalk.hash | 6 +++---
+ package/netatalk/netatalk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/iptables/0002-iptables-add-xtables-config-parser.h-to-BUILT_SOURCES.patch b/package/iptables/0002-iptables-add-xtables-config-parser.h-to-BUILT_SOURCES.patch
-new file mode 100644
-index 0000000..761c048
---- /dev/null
-+++ b/package/iptables/0002-iptables-add-xtables-config-parser.h-to-BUILT_SOURCES.patch
-@@ -0,0 +1,39 @@
-+From 4dc8e2aa91bd4151f7e5cd56d88d3731b4c1525e Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Wed, 30 Dec 2015 14:39:35 -0300
-+Subject: [PATCH] iptables: add xtables-config-parser.h to BUILT_SOURCES
-+
-+Otherwise other sources that use it might be built before it's ready leading
-+to build failure, for example by iptables/nft.c
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: sent upstream (mailing list, no link yet)
-+
-+ iptables/Makefile.am | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/iptables/Makefile.am b/iptables/Makefile.am
-+index 3c0faa5..c3eb8a8 100644
-+--- a/iptables/Makefile.am
-++++ b/iptables/Makefile.am
-+@@ -4,6 +4,8 @@ AM_CFLAGS        = ${regular_CFLAGS}
-+ AM_CPPFLAGS      = ${regular_CPPFLAGS} -I${top_builddir}/include -I${top_srcdir}/include ${kinclude_CPPFLAGS} ${libmnl_CFLAGS} ${libnftnl_CFLAGS} ${libnetfilter_conntrack_CFLAGS}
-+ AM_YFLAGS = -d
-+ 
-++BUILT_SOURCES =
-++
-+ xtables_multi_SOURCES  = xtables-multi.c iptables-xml.c
-+ xtables_multi_CFLAGS   = ${AM_CFLAGS}
-+ xtables_multi_LDADD    = ../extensions/libext.a
-+@@ -27,6 +29,7 @@ xtables_multi_LDADD   += ../libxtables/libxtables.la -lm
-+ 
-+ # nftables compatibility layer
-+ if ENABLE_NFTABLES
-++BUILT_SOURCES += xtables-config-parser.h
-+ xtables_compat_multi_SOURCES  = xtables-compat-multi.c iptables-xml.c
-+ xtables_compat_multi_CFLAGS   = ${AM_CFLAGS}
-+ xtables_compat_multi_LDADD    = ../extensions/libext.a ../extensions/libext_ebt.a
-+-- 
-+2.4.10
-+
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index da8d48b..77a9fad 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -15,6 +15,8 @@ IPTABLES_LICENSE_FILES = COPYING
- # Building static causes ugly warnings on some plugins
- IPTABLES_CONF_OPTS = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr \
- 	$(if $(BR2_STATIC_LIBS),,--disable-static)
-+# For 0002-iptables-add-xtables-config-parser.h-to-BUILT_SOURCES.patch
-+IPTABLES_AUTORECONF = YES
+diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
+index e201ae6..955ffd4 100644
+--- a/package/netatalk/netatalk.hash
++++ b/package/netatalk/netatalk.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.7/
+-md5	831ec8bf9e084b64f965d16c528af299	netatalk-3.1.7.tar.bz2
+-sha1	d4077a9496beae766ab1e4f28afa22e5c96514f0	netatalk-3.1.7.tar.bz2
++# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.8/
++md5	9cab934ca32b8979f389da52d44c69c2	netatalk-3.1.8.tar.bz2
++sha1	00518461a311e6c17c95738ac214c8f06f863b4b	netatalk-3.1.8.tar.bz2
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index 85aeb6d..2e955e9 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # For connlabel match
- ifeq ($(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),y)
+-NETATALK_VERSION = 3.1.7
++NETATALK_VERSION = 3.1.8
+ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+ # For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
 -- 
 2.4.10
