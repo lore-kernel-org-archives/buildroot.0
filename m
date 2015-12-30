@@ -1,156 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 23:20:57 +0100
-Subject: [Buildroot] [git commit] bind: add libressl-enabling patch
-Message-ID: <20151230222101.3A9537FADB@busybox.osuosl.org>
+Date: Wed, 30 Dec 2015 23:20:51 +0100
+Subject: [Buildroot] [git commit] fetchmail: add libressl-enabling patch
+Message-ID: <20151230222101.2F56B82748@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb61b735840ab23e532c4e75385e3832077f56ad
+commit: http://git.buildroot.net/buildroot/commit/?id=e31d09dbcfc9ae9b48a9f5fcb58c1fe50aa65c13
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Besides the version bump we also require this patch, which is upstream.
+Patch status: upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...0001-Fix-LibreSSL-compatibility.-RT-40977.patch | 129 +++++++++++++++++++++
- 1 file changed, 129 insertions(+)
+ package/fetchmail/0002-enable-libressl.patch | 67 ++++++++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/package/bind/0001-Fix-LibreSSL-compatibility.-RT-40977.patch b/package/bind/0001-Fix-LibreSSL-compatibility.-RT-40977.patch
+diff --git a/package/fetchmail/0002-enable-libressl.patch b/package/fetchmail/0002-enable-libressl.patch
 new file mode 100644
-index 0000000..921ec36
+index 0000000..a98e19d
 --- /dev/null
-+++ b/package/bind/0001-Fix-LibreSSL-compatibility.-RT-40977.patch
-@@ -0,0 +1,129 @@
-+From f824c65d1fb6a2490b03228e63cc43dae6844f73 Mon Sep 17 00:00:00 2001
-+From: Mark Andrews <marka@isc.org>
-+Date: Mon, 19 Oct 2015 10:43:58 +1100
-+Subject: [PATCH] 4340.  [port]          Fix LibreSSL compatibility. [RT
-+ #40977]
-+
-+Status: upstream git
++++ b/package/fetchmail/0002-enable-libressl.patch
+@@ -0,0 +1,67 @@
++Fetched from upstream git and tweaked for the release:
++https://gitlab.com/fetchmail/fetchmail/commit/a2ae6f8d15d7caf815d7bdd13df833fd1b2af5cc
 +
 +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ lib/dns/dst_openssl.h     | 2 +-
-+ lib/dns/openssl_link.c    | 8 ++++----
-+ lib/dns/openssldh_link.c  | 4 ++--
-+ lib/dns/openssldsa_link.c | 4 ++--
-+ lib/dns/opensslrsa_link.c | 2 +-
 +
-+diff --git a/lib/dns/dst_openssl.h b/lib/dns/dst_openssl.h
-+index dd67405..12f8bfc 100644
-+--- a/lib/dns/dst_openssl.h
-++++ b/lib/dns/dst_openssl.h
-+@@ -36,7 +36,7 @@
-+ #define USE_ENGINE 1
-+ #endif
++diff -Nura fetchmail-6.3.26.orig/config.h.in fetchmail-6.3.26/config.h.in
++--- fetchmail-6.3.26.orig/config.h.in	2015-12-30 10:44:33.467746835 -0300
+++++ fetchmail-6.3.26/config.h.in	2015-12-30 10:45:50.271403589 -0300
++@@ -53,6 +53,10 @@
++    if you don't. */
++ #undef HAVE_DECL_SSLV2_CLIENT_METHOD
 + 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ /*
-+  * These are new in OpenSSL 1.1.0.  BN_GENCB _cb needs to be declared in
-+  * the function like this before the BN_GENCB_new call:
-+diff --git a/lib/dns/openssl_link.c b/lib/dns/openssl_link.c
-+index 8683bee..6a52b31 100644
-+--- a/lib/dns/openssl_link.c
-++++ b/lib/dns/openssl_link.c
-+@@ -88,7 +88,7 @@ entropy_getpseudo(unsigned char *buf, int num) {
-+ 	return (result == ISC_R_SUCCESS ? 1 : -1);
-+ }
+++/* Define to 1 if you have the declaration of `SSLv3_client_method', and to 0
+++   if you don't. */
+++#undef HAVE_DECL_SSLV3_CLIENT_METHOD
+++
++ /* Define to 1 if you have the declaration of `strerror', and to 0 if you
++    don't. */
++ #undef HAVE_DECL_STRERROR
++diff -Nura fetchmail-6.3.26.orig/configure.ac fetchmail-6.3.26/configure.ac
++--- fetchmail-6.3.26.orig/configure.ac	2015-12-30 10:44:33.465746766 -0300
+++++ fetchmail-6.3.26/configure.ac	2015-12-30 10:46:03.708868409 -0300
++@@ -803,6 +803,7 @@
 + 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ static void
-+ entropy_add(const void *buf, int num, double entropy) {
-+ 	/*
-+@@ -121,7 +121,7 @@ lock_callback(int mode, int type, const char *file, int line) {
-+ 		UNLOCK(&locks[type]);
-+ }
++ case "$LIBS" in *-lssl*)
++ 	AC_CHECK_DECLS([SSLv2_client_method],,,[#include <openssl/ssl.h>])
+++	AC_CHECK_DECLS([SSLv3_client_method],,,[#include <openssl/ssl.h>])
++ 	;;
++ esac
 + 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ static unsigned long
-+ id_callback(void) {
-+ 	return ((unsigned long)isc_thread_self());
-+@@ -187,7 +187,7 @@ dst__openssl_init(const char *engine) {
-+ 	if (result != ISC_R_SUCCESS)
-+ 		goto cleanup_mutexalloc;
-+ 	CRYPTO_set_locking_callback(lock_callback);
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ 	CRYPTO_set_id_callback(id_callback);
++diff -Nura fetchmail-6.3.26.orig/fetchmail.c fetchmail-6.3.26/fetchmail.c
++--- fetchmail-6.3.26.orig/fetchmail.c	2015-12-30 10:44:33.469746904 -0300
+++++ fetchmail-6.3.26/fetchmail.c	2015-12-30 10:46:03.708868409 -0300
++@@ -263,6 +263,12 @@
++ #ifdef SSL_ENABLE
++ 	"+SSL"
 + #endif
-+ 
-+@@ -287,7 +287,7 @@ dst__openssl_destroy(void) {
-+ 	CRYPTO_cleanup_all_ex_data();
+++#if HAVE_DECL_SSLV2_CLIENT_METHOD + 0 == 0
+++	"-SSLv2"
+++#endif
+++#if HAVE_DECL_SSLV3_CLIENT_METHOD + 0 == 0
+++	"-SSLv3"
+++#endif
++ #ifdef OPIE_ENABLE
++ 	"+OPIE"
++ #endif /* OPIE_ENABLE */
++diff -Nura fetchmail-6.3.26.orig/socket.c fetchmail-6.3.26/socket.c
++--- fetchmail-6.3.26.orig/socket.c	2015-12-30 10:44:33.464746731 -0300
+++++ fetchmail-6.3.26/socket.c	2015-12-30 10:46:03.709868443 -0300
++@@ -910,11 +910,16 @@
++ #if HAVE_DECL_SSLV2_CLIENT_METHOD + 0 > 0
++ 			_ctx[sock] = SSL_CTX_new(SSLv2_client_method());
++ #else
++-			report(stderr, GT_("Your operating system does not support SSLv2.\n"));
+++			report(stderr, GT_("Your OpenSSL version does not support SSLv2.\n"));
++ 			return -1;
 + #endif
-+ 	ERR_clear_error();
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ 	ERR_remove_state(0);
-+ #endif
-+ 	ERR_free_strings();
-+diff --git a/lib/dns/openssldh_link.c b/lib/dns/openssldh_link.c
-+index 9f42219..67fbf69 100644
-+--- a/lib/dns/openssldh_link.c
-++++ b/lib/dns/openssldh_link.c
-+@@ -173,7 +173,7 @@ openssldh_generate(dst_key_t *key, int generator, void (*callback)(int)) {
-+ 	DH *dh = NULL;
-+ #if OPENSSL_VERSION_NUMBER > 0x00908000L
-+ 	BN_GENCB *cb;
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ 	BN_GENCB _cb;
-+ #endif
-+ 	union {
-+@@ -210,7 +210,7 @@ openssldh_generate(dst_key_t *key, int generator, void (*callback)(int)) {
-+ 		if (dh == NULL)
-+ 			return (dst__openssl_toresult(ISC_R_NOMEMORY));
-+ 		cb = BN_GENCB_new();
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
-+ 		if (cb == NULL) {
-+ 			DH_free(dh);
-+ 			return (dst__openssl_toresult(ISC_R_NOMEMORY));
-+diff --git a/lib/dns/openssldsa_link.c b/lib/dns/openssldsa_link.c
-+index 963e2f5..d47b265 100644
-+--- a/lib/dns/openssldsa_link.c
-++++ b/lib/dns/openssldsa_link.c
-+@@ -359,7 +359,7 @@ openssldsa_generate(dst_key_t *key, int unused, void (*callback)(int)) {
-+ 	isc_result_t result;
-+ #if OPENSSL_VERSION_NUMBER > 0x00908000L
-+ 	BN_GENCB *cb;
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ 	BN_GENCB _cb;
-+ #endif
-+ 	union {
-+@@ -383,7 +383,7 @@ openssldsa_generate(dst_key_t *key, int unused, void (*callback)(int)) {
-+ 	if (dsa == NULL)
-+ 		return (dst__openssl_toresult(DST_R_OPENSSLFAILURE));
-+ 	cb = BN_GENCB_new();
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
-+ 	if (cb == NULL) {
-+ 		DSA_free(dsa);
-+ 		return (dst__openssl_toresult(DST_R_OPENSSLFAILURE));
-+diff --git a/lib/dns/opensslrsa_link.c b/lib/dns/opensslrsa_link.c
-+index 94aced2..d799be0 100644
-+--- a/lib/dns/opensslrsa_link.c
-++++ b/lib/dns/opensslrsa_link.c
-+@@ -771,7 +771,7 @@ opensslrsa_generate(dst_key_t *key, int exp, void (*callback)(int)) {
-+ 	} u;
-+ 	RSA *rsa = RSA_new();
-+ 	BIGNUM *e = BN_new();
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ 	BN_GENCB _cb;
-+ #endif
-+ 	BN_GENCB *cb = BN_GENCB_new();
-+-- 
-+2.4.10
-+
++ 		} else if(!strcasecmp("ssl3",myproto)) {
+++#if HAVE_DECL_SSLV3_CLIENT_METHOD + 0 > 0
++ 			_ctx[sock] = SSL_CTX_new(SSLv3_client_method());
+++#else
+++			report(stderr, GT_("Your OpenSSL version does not support SSLv3.\n"));
+++			return -1;
+++#endif
++ 		} else if(!strcasecmp("tls1",myproto)) {
++ 			_ctx[sock] = SSL_CTX_new(TLSv1_client_method());
++ 		} else if (!strcasecmp("ssl23",myproto)) {
