@@ -1,47 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 15:56:28 +0100
-Subject: [Buildroot] [git commit] vboot-utils: MTD_CHAR_MAJOR definition
-Message-ID: <20151230145745.257FD82750@busybox.osuosl.org>
+Date: Wed, 30 Dec 2015 15:57:23 +0100
+Subject: [Buildroot] [git commit] libfuse: use LIBFUSE_VERSION variable in
+	URL
+Message-ID: <20151230145745.3BC2D8274F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9aebcc3c1c6b46ba956e2bde6b73a7b1da5af87b
+commit: http://git.buildroot.net/buildroot/commit/?id=556aab13e4d33c06feeb8f2145f9aacfac035021
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/a6360fd21314899321071c34fcb4892c5eed9bcc/
-http://autobuild.buildroot.net/results/0af3aa4a429c45d3a2609913ec1040f32378f3c8/
-http://autobuild.buildroot.net/results/cc4940fd6f51b31d71014f5aedee5223180eb36e/
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vboot-utils/0001-mtd-char-major.patch | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/libfuse/libfuse.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/vboot-utils/0001-mtd-char-major.patch b/package/vboot-utils/0001-mtd-char-major.patch
-new file mode 100644
-index 0000000..9db90b2
---- /dev/null
-+++ b/package/vboot-utils/0001-mtd-char-major.patch
-@@ -0,0 +1,17 @@
-+This definition missing from <linux/major.h> for kernels <= 3.13.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/cgpt/cgpt_wrapper.c
-++++ b/cgpt/cgpt_wrapper.c
-+@@ -25,6 +25,10 @@
-+ #include "cgpt_nor.h"
-+ #include "cryptolib.h"
-+ 
-++#ifndef MTD_CHAR_MAJOR
-++#define MTD_CHAR_MAJOR 90
-++#endif
-++
-+ // Check if cmdline |argv| has "-D". "-D" signifies that GPT structs are stored
-+ // off device, and hence we should not wrap around cgpt.
-+ static bool has_dash_D(int argc, const char *const argv[]) {
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 32d70d3..9928d62 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBFUSE_VERSION = 2.9.4
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+-LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse_2_9_4
++LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse_$(subst .,_,$(LIBFUSE_VERSION))
+ LIBFUSE_LICENSE = GPLv2, LGPLv2.1
+ LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
+ LIBFUSE_INSTALL_STAGING = YES
