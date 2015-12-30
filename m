@@ -1,185 +1,407 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 30 Dec 2015 11:10:50 +0100
-Subject: [Buildroot] [PATCH v3] package/tpm-tools: fix build with locale
-	support
-Message-ID: <1451470250-27174-1-git-send-email-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Dec 2015 11:15:27 +0100
+Subject: [Buildroot] [git commit] x11r7/xfont_*: add missing select
+	BR2_PACKAGE_XFONT_FONT_UTIL
+Message-ID: <20151230101615.A82E682722@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tpm-tools needs to link with libintl when locale support is enabled.
-
-However, tpm-tools' build-system internally builds a couple of static libraries
-used to build the final programs.
-When linking these libraries or the final programs, we need to explicitly tell
-the linker to link with libintl in order to resolve all the missing symbols.
+commit: http://git.buildroot.net/buildroot/commit/?id=9da584ea2b3319f8f36eb2b3380fb976f6a13572
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-  http://autobuild.buildroot.org/results/560/56020558ec298ac4007bf7f6ce030b3f2fa1157d/
-  http://autobuild.buildroot.org/results/17f/17fc6ca79765fd9ecdacec4f5a2b58caa554d48d/
-  http://autobuild.buildroot.org/results/2d2/2d2c655429df62da2b8746a564fc064609e96001/
-  http://autobuild.buildroot.org/results/d52/d5259b83e7a269bca019d024366aa201f5a174fd/
-  http://autobuild.buildroot.org/results/11c/11cb0d1e51459e75e5f376cb07ce0188f8f050c4/
-  http://autobuild.buildroot.org/results/bad/bad9a97b4fff00732f2efb043bbb76a99963c491/
-  http://autobuild.buildroot.org/results/2f8/2f8bd534e6fcd9d356fe9087cb1394b9b2c4192c/
-  and many others...
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: No? Rubinstein <nrubinstein@aldebaran.com>
+  http://autobuild.buildroot.org/results/d63/d63b45c24d01bfb3409e90569a0708f1d4af905d/
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-changes v2->v3:
-- rework the patch to not alter LIBS values (ThomasP)
+ package/x11r7/xfont_font-adobe-100dpi/Config.in               | 1 +
+ package/x11r7/xfont_font-adobe-75dpi/Config.in                | 1 +
+ package/x11r7/xfont_font-adobe-utopia-100dpi/Config.in        | 1 +
+ package/x11r7/xfont_font-adobe-utopia-75dpi/Config.in         | 1 +
+ package/x11r7/xfont_font-adobe-utopia-type1/Config.in         | 1 +
+ package/x11r7/xfont_font-alias/Config.in                      | 1 +
+ package/x11r7/xfont_font-arabic-misc/Config.in                | 1 +
+ package/x11r7/xfont_font-bh-100dpi/Config.in                  | 1 +
+ package/x11r7/xfont_font-bh-75dpi/Config.in                   | 1 +
+ package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/Config.in | 1 +
+ package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/Config.in  | 1 +
+ package/x11r7/xfont_font-bh-ttf/Config.in                     | 1 +
+ package/x11r7/xfont_font-bh-type1/Config.in                   | 1 +
+ package/x11r7/xfont_font-bitstream-100dpi/Config.in           | 1 +
+ package/x11r7/xfont_font-bitstream-75dpi/Config.in            | 1 +
+ package/x11r7/xfont_font-bitstream-type1/Config.in            | 1 +
+ package/x11r7/xfont_font-cronyx-cyrillic/Config.in            | 1 +
+ package/x11r7/xfont_font-cursor-misc/Config.in                | 1 +
+ package/x11r7/xfont_font-daewoo-misc/Config.in                | 1 +
+ package/x11r7/xfont_font-dec-misc/Config.in                   | 1 +
+ package/x11r7/xfont_font-ibm-type1/Config.in                  | 1 +
+ package/x11r7/xfont_font-isas-misc/Config.in                  | 1 +
+ package/x11r7/xfont_font-jis-misc/Config.in                   | 1 +
+ package/x11r7/xfont_font-micro-misc/Config.in                 | 1 +
+ package/x11r7/xfont_font-misc-cyrillic/Config.in              | 1 +
+ package/x11r7/xfont_font-misc-ethiopic/Config.in              | 1 +
+ package/x11r7/xfont_font-misc-meltho/Config.in                | 1 +
+ package/x11r7/xfont_font-misc-misc/Config.in                  | 1 +
+ package/x11r7/xfont_font-mutt-misc/Config.in                  | 1 +
+ package/x11r7/xfont_font-schumacher-misc/Config.in            | 1 +
+ package/x11r7/xfont_font-screen-cyrillic/Config.in            | 1 +
+ package/x11r7/xfont_font-sony-misc/Config.in                  | 1 +
+ package/x11r7/xfont_font-sun-misc/Config.in                   | 1 +
+ package/x11r7/xfont_font-winitzki-cyrillic/Config.in          | 1 +
+ package/x11r7/xfont_font-xfree86-type1/Config.in              | 1 +
+ 35 files changed, 35 insertions(+)
 
-changes v1->v2:
-- use @INTLLIBS@ instead of $(INTLLIBS) (ThomasP)
-- shrink a bit the patch title (ThomasP)
----
- ...-make-sure-libintl-is-in-LDFLAGS-when-nee.patch | 104 +++++++++++++++++++++
- package/tpm-tools/Config.in                        |   1 +
- package/tpm-tools/tpm-tools.mk                     |   5 +-
- 3 files changed, 109 insertions(+), 1 deletion(-)
- create mode 100644 package/tpm-tools/0002-Makefile.am-make-sure-libintl-is-in-LDFLAGS-when-nee.patch
-
-diff --git a/package/tpm-tools/0002-Makefile.am-make-sure-libintl-is-in-LDFLAGS-when-nee.patch b/package/tpm-tools/0002-Makefile.am-make-sure-libintl-is-in-LDFLAGS-when-nee.patch
-new file mode 100644
-index 0000000..fac7b2c
---- /dev/null
-+++ b/package/tpm-tools/0002-Makefile.am-make-sure-libintl-is-in-LDFLAGS-when-nee.patch
-@@ -0,0 +1,104 @@
-+Fetched from: http://sourceforge.net/p/trousers/mailman/message/34728585/
-+Upstream status: Submitted
-+
-+From 924cbdfc67ca405aa4df2f9d3787365618b58630 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Wed, 30 Dec 2015 00:06:33 +0100
-+Subject: [PATCH] Makefile.am: make sure libintl is in LDFLAGS when needed
-+
-+The build-system internally builds a couple of static libraries used to
-+build the final programs.
-+
-+When linking these libraries and the final programs, we need to
-+explicitly tell libtool to link with libintl in order to resolve all the
-+missing symbols.
-+
-+This is done in the appropriate LDADD/LIBADD variables (or the per-target
-+*_LDADD/*_LIBADD ones when they do not default to LDADD or LIBADD), for
-+any sources using gettext/libintl functionalities.
-+
-+This change fixes build failures [2,3] in cross-compilation, triggered by
-+Buildroot buildfarms [1].
-+
-+[1] http://autobuild.buildroot.org/
-+[2] http://autobuild.buildroot.org/?reason=tpm-tools-1.3.8
-+[3] http://autobuild.buildroot.org/results/c82/c82a6c1f41c561b15f10e7b7ffcaed15fa0ec895/build-end.log
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ lib/Makefile.am           | 6 +++---
-+ src/cmds/Makefile.am      | 2 +-
-+ src/data_mgmt/Makefile.am | 2 +-
-+ src/tpm_mgmt/Makefile.am  | 2 +-
-+ 4 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/lib/Makefile.am b/lib/Makefile.am
-+index cef6a2f..c1d7009 100644
-+--- a/lib/Makefile.am
-++++ b/lib/Makefile.am
-+@@ -44,7 +44,7 @@ libtpm_utils_la_SOURCES	=	tpm_utils.c \
-+ #
-+ # TSPI interface library
-+ libtpm_tspi_la_SOURCES	=	tpm_tspi.c
-+-libtpm_tspi_la_LIBADD	=	libtpm_utils.la -ldl
-++libtpm_tspi_la_LIBADD	=	libtpm_utils.la -ldl @INTLLIBS@
-+ 
-+ #
-+ # PKCS#11 interface library
-+@@ -52,7 +52,7 @@ if P11_SUPPORT
-+ noinst_LTLIBRARIES	+=	libtpm_pkcs11.la
-+ 
-+ libtpm_pkcs11_la_SOURCES=	tpm_pkcs11.c
-+-libtpm_pkcs11_la_LIBADD	=	libtpm_utils.la
-++libtpm_pkcs11_la_LIBADD	=	libtpm_utils.la @INTLLIBS@
-+ endif
-+ 
-+ #
-+@@ -80,4 +80,4 @@ endif
-+ # Unseal library - for addition to existing apps, counter part of seal cmd
-+ libtpm_unseal_la_SOURCES =	tpm_unseal.c
-+ libtpm_unseal_la_LDFLAGS =	-shared -version-info 1:0:0
-+-libtpm_unseal_la_LIBADD  =	-ltspi  libtpm_tspi.la
-++libtpm_unseal_la_LIBADD  =	-ltspi  libtpm_tspi.la @INTLLIBS@
-+diff --git a/src/cmds/Makefile.am b/src/cmds/Makefile.am
-+index de73ecf..27fc9ef 100644
-+--- a/src/cmds/Makefile.am
-++++ b/src/cmds/Makefile.am
-+@@ -30,7 +30,7 @@ else
-+ AM_CPPFLAGS	=	-I$(top_srcdir)/include -D_LINUX
-+ endif
-+ 
-+-LDADD		=	$(top_builddir)/lib/libtpm_tspi.la -ltspi $(top_builddir)/lib/libtpm_unseal.la -ltpm_unseal -lcrypto
-++LDADD		=	$(top_builddir)/lib/libtpm_tspi.la -ltspi $(top_builddir)/lib/libtpm_unseal.la -ltpm_unseal -lcrypto @INTLLIBS@
-+ 
-+ tpm_sealdata_SOURCES = tpm_sealdata.c
-+ tpm_unsealdata_SOURCES = tpm_unsealdata.c
-+diff --git a/src/data_mgmt/Makefile.am b/src/data_mgmt/Makefile.am
-+index f8bf41c..de505e4 100644
-+--- a/src/data_mgmt/Makefile.am
-++++ b/src/data_mgmt/Makefile.am
-+@@ -38,7 +38,7 @@ noinst_HEADERS =	data_common.h \
-+ # Common build flags
-+ AM_CPPFLAGS	=	-I$(top_srcdir)/include -D_LINUX
-+ 
-+-LDADD		=	$(top_builddir)/lib/libtpm_pkcs11.la -ltspi -ldl
-++LDADD		=	$(top_builddir)/lib/libtpm_pkcs11.la -ltspi -ldl @INTLLIBS@
-+ 
-+ 
-+ #
-+diff --git a/src/tpm_mgmt/Makefile.am b/src/tpm_mgmt/Makefile.am
-+index 195fba9..7ca47c9 100644
-+--- a/src/tpm_mgmt/Makefile.am
-++++ b/src/tpm_mgmt/Makefile.am
-+@@ -55,7 +55,7 @@ else
-+ AM_CPPFLAGS	=	-I$(top_srcdir)/include -D_LINUX
-+ endif
-+ 
-+-LDADD		=	$(top_builddir)/lib/libtpm_tspi.la -ltspi
-++LDADD		=	$(top_builddir)/lib/libtpm_tspi.la -ltspi @INTLLIBS@
-+ 
-+ tpm_startup_SOURCES =		tpm_startup.c
-+ tpm_reset_SOURCES =		tpm_reset.c
-+-- 
-+2.6.4
-+
-diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
-index d54be3e..dd59aaa 100644
---- a/package/tpm-tools/Config.in
-+++ b/package/tpm-tools/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_TPM_TOOLS
- 	bool "tpm-tools"
- 	select BR2_PACKAGE_TROUSERS
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # trousers
- 	depends on !BR2_STATIC_LIBS # trousers
+diff --git a/package/x11r7/xfont_font-adobe-100dpi/Config.in b/package/x11r7/xfont_font-adobe-100dpi/Config.in
+index aaac639..766c06e 100644
+--- a/package/x11r7/xfont_font-adobe-100dpi/Config.in
++++ b/package/x11r7/xfont_font-adobe-100dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_ADOBE_100DPI
+ 	bool "font-adobe-100dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
  	help
-diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
-index 20df489..9dd844d 100644
---- a/package/tpm-tools/tpm-tools.mk
-+++ b/package/tpm-tools/tpm-tools.mk
-@@ -10,7 +10,10 @@ TPM_TOOLS_SITE = http://downloads.sourceforge.net/project/trousers/tpm-tools/$(T
- TPM_TOOLS_STRIP_COMPONENTS = 2
- TPM_TOOLS_LICENSE = Common Public License Version 1.0
- TPM_TOOLS_LICENSE_FILES = LICENSE
--TPM_TOOLS_DEPENDENCIES = trousers openssl
-+TPM_TOOLS_DEPENDENCIES = trousers openssl \
-+	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+# lib/Makefile.am is patched
-+TPM_TOOLS_AUTORECONF = YES
- 
- TPM_TOOLS_CONF_OPTS = --disable-pkcs11-support
- 
--- 
-2.6.4
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-adobe-75dpi/Config.in b/package/x11r7/xfont_font-adobe-75dpi/Config.in
+index f1c0a41..1d79f41 100644
+--- a/package/x11r7/xfont_font-adobe-75dpi/Config.in
++++ b/package/x11r7/xfont_font-adobe-75dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_ADOBE_75DPI
+ 	bool "font-adobe-75dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-adobe-utopia-100dpi/Config.in b/package/x11r7/xfont_font-adobe-utopia-100dpi/Config.in
+index 02f2aeb..a31ee5d 100644
+--- a/package/x11r7/xfont_font-adobe-utopia-100dpi/Config.in
++++ b/package/x11r7/xfont_font-adobe-utopia-100dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_ADOBE_UTOPIA_100DPI
+ 	bool "font-adobe-utopia-100dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-adobe-utopia-75dpi/Config.in b/package/x11r7/xfont_font-adobe-utopia-75dpi/Config.in
+index 4a6e29c..2279723 100644
+--- a/package/x11r7/xfont_font-adobe-utopia-75dpi/Config.in
++++ b/package/x11r7/xfont_font-adobe-utopia-75dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_ADOBE_UTOPIA_75DPI
+ 	bool "font-adobe-utopia-75dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-adobe-utopia-type1/Config.in b/package/x11r7/xfont_font-adobe-utopia-type1/Config.in
+index d1efb70..60b631e 100644
+--- a/package/x11r7/xfont_font-adobe-utopia-type1/Config.in
++++ b/package/x11r7/xfont_font-adobe-utopia-type1/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_ADOBE_UTOPIA_TYPE1
+ 	bool "font-adobe-utopia-type1"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-alias/Config.in b/package/x11r7/xfont_font-alias/Config.in
+index b655160..b30e222 100644
+--- a/package/x11r7/xfont_font-alias/Config.in
++++ b/package/x11r7/xfont_font-alias/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_ALIAS
+ 	bool "font-alias"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-arabic-misc/Config.in b/package/x11r7/xfont_font-arabic-misc/Config.in
+index acbdf7c..1ec5090 100644
+--- a/package/x11r7/xfont_font-arabic-misc/Config.in
++++ b/package/x11r7/xfont_font-arabic-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_ARABIC_MISC
+ 	bool "font-arabic-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-bh-100dpi/Config.in b/package/x11r7/xfont_font-bh-100dpi/Config.in
+index dc405a2..3bfb0b8 100644
+--- a/package/x11r7/xfont_font-bh-100dpi/Config.in
++++ b/package/x11r7/xfont_font-bh-100dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_BH_100DPI
+ 	bool "font-bh-100dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-bh-75dpi/Config.in b/package/x11r7/xfont_font-bh-75dpi/Config.in
+index 6cd334e..0fe93bb 100644
+--- a/package/x11r7/xfont_font-bh-75dpi/Config.in
++++ b/package/x11r7/xfont_font-bh-75dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_BH_75DPI
+ 	bool "font-bh-75dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/Config.in b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/Config.in
+index 0e082d5..0005cc1 100644
+--- a/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/Config.in
++++ b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI
+ 	bool "font-bh-lucidatypewriter-100dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/Config.in b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/Config.in
+index 126fb85..60dfb95 100644
+--- a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/Config.in
++++ b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI
+ 	bool "font-bh-lucidatypewriter-75dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-bh-ttf/Config.in b/package/x11r7/xfont_font-bh-ttf/Config.in
+index 2590798..d747989 100644
+--- a/package/x11r7/xfont_font-bh-ttf/Config.in
++++ b/package/x11r7/xfont_font-bh-ttf/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_BH_TTF
+ 	bool "font-bh-ttf"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-bh-type1/Config.in b/package/x11r7/xfont_font-bh-type1/Config.in
+index 047268c..0a3ab18 100644
+--- a/package/x11r7/xfont_font-bh-type1/Config.in
++++ b/package/x11r7/xfont_font-bh-type1/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_BH_TYPE1
+ 	bool "font-bh-type1"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-bitstream-100dpi/Config.in b/package/x11r7/xfont_font-bitstream-100dpi/Config.in
+index 81393c5..5363fae 100644
+--- a/package/x11r7/xfont_font-bitstream-100dpi/Config.in
++++ b/package/x11r7/xfont_font-bitstream-100dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_BITSTREAM_100DPI
+ 	bool "font-bitstream-100dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-bitstream-75dpi/Config.in b/package/x11r7/xfont_font-bitstream-75dpi/Config.in
+index bada475..34a4a19 100644
+--- a/package/x11r7/xfont_font-bitstream-75dpi/Config.in
++++ b/package/x11r7/xfont_font-bitstream-75dpi/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_BITSTREAM_75DPI
+ 	bool "font-bitstream-75dpi"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-bitstream-type1/Config.in b/package/x11r7/xfont_font-bitstream-type1/Config.in
+index d482a6d..c8cbc90 100644
+--- a/package/x11r7/xfont_font-bitstream-type1/Config.in
++++ b/package/x11r7/xfont_font-bitstream-type1/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_BITSTREAM_TYPE1
+ 	bool "font-bitstream-type1"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-cronyx-cyrillic/Config.in b/package/x11r7/xfont_font-cronyx-cyrillic/Config.in
+index a0085f5..e92ab83 100644
+--- a/package/x11r7/xfont_font-cronyx-cyrillic/Config.in
++++ b/package/x11r7/xfont_font-cronyx-cyrillic/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_CRONYX_CYRILLIC
+ 	bool "font-cronyx-cyrillic"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-cursor-misc/Config.in b/package/x11r7/xfont_font-cursor-misc/Config.in
+index 03ed530..0e10da6 100644
+--- a/package/x11r7/xfont_font-cursor-misc/Config.in
++++ b/package/x11r7/xfont_font-cursor-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_CURSOR_MISC
+ 	bool "font-cursor-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-daewoo-misc/Config.in b/package/x11r7/xfont_font-daewoo-misc/Config.in
+index 9e45341..cffe81d 100644
+--- a/package/x11r7/xfont_font-daewoo-misc/Config.in
++++ b/package/x11r7/xfont_font-daewoo-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_DAEWOO_MISC
+ 	bool "font-daewoo-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-dec-misc/Config.in b/package/x11r7/xfont_font-dec-misc/Config.in
+index 326ea9b..a926d9f 100644
+--- a/package/x11r7/xfont_font-dec-misc/Config.in
++++ b/package/x11r7/xfont_font-dec-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_DEC_MISC
+ 	bool "font-dec-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-ibm-type1/Config.in b/package/x11r7/xfont_font-ibm-type1/Config.in
+index 92783af..d4ac1ae 100644
+--- a/package/x11r7/xfont_font-ibm-type1/Config.in
++++ b/package/x11r7/xfont_font-ibm-type1/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_IBM_TYPE1
+ 	bool "font-ibm-type1"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-isas-misc/Config.in b/package/x11r7/xfont_font-isas-misc/Config.in
+index 2e77f66..4dddaf7 100644
+--- a/package/x11r7/xfont_font-isas-misc/Config.in
++++ b/package/x11r7/xfont_font-isas-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_ISAS_MISC
+ 	bool "font-isas-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-jis-misc/Config.in b/package/x11r7/xfont_font-jis-misc/Config.in
+index 6a59cce..1874ad8 100644
+--- a/package/x11r7/xfont_font-jis-misc/Config.in
++++ b/package/x11r7/xfont_font-jis-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_JIS_MISC
+ 	bool "font-jis-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-micro-misc/Config.in b/package/x11r7/xfont_font-micro-misc/Config.in
+index 1420cbd..2062e16 100644
+--- a/package/x11r7/xfont_font-micro-misc/Config.in
++++ b/package/x11r7/xfont_font-micro-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_MICRO_MISC
+ 	bool "font-micro-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-misc-cyrillic/Config.in b/package/x11r7/xfont_font-misc-cyrillic/Config.in
+index e793d70..58702c1 100644
+--- a/package/x11r7/xfont_font-misc-cyrillic/Config.in
++++ b/package/x11r7/xfont_font-misc-cyrillic/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_MISC_CYRILLIC
+ 	bool "font-misc-cyrillic"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-misc-ethiopic/Config.in b/package/x11r7/xfont_font-misc-ethiopic/Config.in
+index aa3b834..af62ddc 100644
+--- a/package/x11r7/xfont_font-misc-ethiopic/Config.in
++++ b/package/x11r7/xfont_font-misc-ethiopic/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_MISC_ETHIOPIC
+ 	bool "font-misc-ethiopic"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-misc-meltho/Config.in b/package/x11r7/xfont_font-misc-meltho/Config.in
+index dcc6c84..dd2d87d 100644
+--- a/package/x11r7/xfont_font-misc-meltho/Config.in
++++ b/package/x11r7/xfont_font-misc-meltho/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_MISC_MELTHO
+ 	bool "font-misc-meltho"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-misc-misc/Config.in b/package/x11r7/xfont_font-misc-misc/Config.in
+index b3e4fc1..fc379a6 100644
+--- a/package/x11r7/xfont_font-misc-misc/Config.in
++++ b/package/x11r7/xfont_font-misc-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_MISC_MISC
+ 	bool "font-misc-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-mutt-misc/Config.in b/package/x11r7/xfont_font-mutt-misc/Config.in
+index e27ea74..563dc9f 100644
+--- a/package/x11r7/xfont_font-mutt-misc/Config.in
++++ b/package/x11r7/xfont_font-mutt-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_MUTT_MISC
+ 	bool "font-mutt-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-schumacher-misc/Config.in b/package/x11r7/xfont_font-schumacher-misc/Config.in
+index d37babc..e30940a 100644
+--- a/package/x11r7/xfont_font-schumacher-misc/Config.in
++++ b/package/x11r7/xfont_font-schumacher-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_SCHUMACHER_MISC
+ 	bool "font-schumacher-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-screen-cyrillic/Config.in b/package/x11r7/xfont_font-screen-cyrillic/Config.in
+index a1f02d0..67f4ae6 100644
+--- a/package/x11r7/xfont_font-screen-cyrillic/Config.in
++++ b/package/x11r7/xfont_font-screen-cyrillic/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_SCREEN_CYRILLIC
+ 	bool "font-screen-cyrillic"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-sony-misc/Config.in b/package/x11r7/xfont_font-sony-misc/Config.in
+index a4ce4ab..df558c4 100644
+--- a/package/x11r7/xfont_font-sony-misc/Config.in
++++ b/package/x11r7/xfont_font-sony-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_SONY_MISC
+ 	bool "font-sony-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-sun-misc/Config.in b/package/x11r7/xfont_font-sun-misc/Config.in
+index 07603a1..accc764 100644
+--- a/package/x11r7/xfont_font-sun-misc/Config.in
++++ b/package/x11r7/xfont_font-sun-misc/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_SUN_MISC
+ 	bool "font-sun-misc"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-winitzki-cyrillic/Config.in b/package/x11r7/xfont_font-winitzki-cyrillic/Config.in
+index c804441..ccfb080 100644
+--- a/package/x11r7/xfont_font-winitzki-cyrillic/Config.in
++++ b/package/x11r7/xfont_font-winitzki-cyrillic/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_WINITZKI_CYRILLIC
+ 	bool "font-winitzki-cyrillic"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-xfree86-type1/Config.in b/package/x11r7/xfont_font-xfree86-type1/Config.in
+index b7d0587..1a897b2 100644
+--- a/package/x11r7/xfont_font-xfree86-type1/Config.in
++++ b/package/x11r7/xfont_font-xfree86-type1/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_XFREE86_TYPE1
+ 	bool "font-xfree86-type1"
++	select BR2_PACKAGE_XFONT_FONT_UTIL
+ 	help
+ 	  No description available
