@@ -1,53 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 10:12:04 +0100
-Subject: [Buildroot] [PATCH 3/3] core/pkg-virtual: do not check they are
- neabled
-In-Reply-To: <7048b92dbba0ba35f610d7863f0c599eca3e3399.1451430505.git.yann.morin.1998@free.fr>
-References: <cover.1451430505.git.yann.morin.1998@free.fr>
- <7048b92dbba0ba35f610d7863f0c599eca3e3399.1451430505.git.yann.morin.1998@free.fr>
-Message-ID: <20151230101204.0f71f2d5@free-electrons.com>
+Date: Wed, 30 Dec 2015 10:12:56 +0100
+Subject: [Buildroot] [git commit] collectd: fix incorrect select of libmodbus
+Message-ID: <20151230091340.DC19D82714@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=4e5f17e8edc4e377f747893979c0a154c7e76117
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Dec 2015 00:10:40 +0100, Yann E. MORIN wrote:
+BR2_PACKAGE_MODBUS does not exist, we meant to select
+BR2_PACKAGE_LIBMODBUS.
 
->  ifeq ($(MAKECMDGOALS),)
-> -	@if test "$($(PKG)_TYPE)" = "target" -a -z "$($($(PKG)_KCONFIG_VAR))" ; then \
-> +	@if test "$($(PKG)_TYPE)" = "target" \
-> +		-a ! "$($(PKG)_IS_VIRTUAL)" = "YES" \
+Fixes:
 
-I changed this to:
+  http://autobuild.buildroot.org/results/661/6617ea58424bf55640a70bee8fc3a6a8d098e3b2/
 
-		-a "$($(PKG)_IS_VIRTUAL)" != "YES" \
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/collectd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-which I believe is a bit more logical.
-
-> diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-> index 9c68b51..244c1d0 100644
-> --- a/package/pkg-virtual.mk
-> +++ b/package/pkg-virtual.mk
-> @@ -41,6 +41,8 @@ $$(error No implementation selected for virtual package $(1). Configuration erro
->  endif
->  endif
->  
-> +$(2)_IS_VIRTUAL = YES
-
-I wasn't sure whether a new variable was needed. We could have used
-$($(PKG)_VERSION) != "virtual", but that would have failed if one day
-we have a normal package that really has a version named "virtual" for
-some reason.
-
-We can anyway change this later on if others have better suggestions.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 5cdb24e..ec7e942 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -284,7 +284,7 @@ config BR2_PACKAGE_COLLECTD_MEMORY
+ 
+ config BR2_PACKAGE_COLLECTD_MODBUS
+ 	bool "modbus"
+-	select BR2_PACKAGE_MODBUS
++	select BR2_PACKAGE_LIBMODBUS
+ 	help
+ 	  Reads register values from a modbus "slave" via Modbus/TCP.
+ 
