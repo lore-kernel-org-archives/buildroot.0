@@ -1,78 +1,106 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 14:59:08 +0100
-Subject: [Buildroot] [git commit] python-paho-mqtt: add new package
-Message-ID: <20151230142705.4CD488274E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Dec 2015 15:25:32 +0100
+Subject: [Buildroot] [PATCH] Drop ldconfig handling
+In-Reply-To: <20151229203420.GF3445@free.fr>
+References: <1451420850-22132-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20151229203420.GF3445@free.fr>
+Message-ID: <5683E95C.9070903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2f796885c6c157d26698d7ec271d111e233b016
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 29-12-15 21:34, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2015-12-29 21:27 +0100, Thomas Petazzoni spake thusly:
+>> The ldconfig handling in the main Makefile is utterly broken, as it
+>> calls the build machine ldconfig to generate the ld.so.cache of the
+>> target. Unfortunately, the format of the ld.so.cache is architecture
+>> specific, and therefore the build machine ldconfig cannot be used
+>> as-is.
+>>
+>> This patch therefore simply drops using ldconfig entirely, and removes
+>> /etc/ld.so.conf.d/ from the target skeleton. The idea is that all
+>> libraries that should be loaded by the dynamic linker must be
+>> installed in paths where the dynamic linker searches them by default
+>> (typically /lib or /usr/lib).
+>>
+>> This might potentially break a few packages, but the only way to know
+>> is to actually stop handling ldconfig. In order to be notified of such
+>> cases, we add a check in target-finalize to verify that there is no
+>> /etc/ld.so.conf file in the target.
+>>
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> ---
+>>  Makefile                                | 14 ++------------
+>>  system/skeleton/etc/ld.so.conf.d/.empty |  0
+>>  2 files changed, 2 insertions(+), 12 deletions(-)
+>>  delete mode 100644 system/skeleton/etc/ld.so.conf.d/.empty
+>>
+>> diff --git a/Makefile b/Makefile
+>> index 1d69192..a15013e 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -598,18 +598,8 @@ endif
+>>  		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+>>  
+>>  	mkdir -p $(TARGET_DIR)/etc
+>> -	# Mandatory configuration file and auxiliary cache directory
+>> -	# for recent versions of ldconfig
+>> -	touch $(TARGET_DIR)/etc/ld.so.conf
+>> -	mkdir -p $(TARGET_DIR)/var/cache/ldconfig
+>> -	if [ -x "$(TARGET_CROSS)ldconfig" ]; \
+>> -	then \
+>> -		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR) \
+>> -					-f $(TARGET_DIR)/etc/ld.so.conf; \
+>> -	else \
+>> -		/sbin/ldconfig -r $(TARGET_DIR) \
+>> -			       -f $(TARGET_DIR)/etc/ld.so.conf; \
+>> -	fi
+>> +	test -f $(TARGET_DIR)/etc/ld.so.conf && \
+>> +		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
+> 
+> We could also add (in case a package installs something in there):
+> 
+>     test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
+>         { echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
 
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                              |  1 +
- package/python-paho-mqtt/Config.in             |  9 +++++++++
- package/python-paho-mqtt/python-paho-mqtt.hash |  3 +++
- package/python-paho-mqtt/python-paho-mqtt.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
+ And it probably should be done after the overlay and post-build scripts, since
+these may (and are likely to) add it.
 
-diff --git a/package/Config.in b/package/Config.in
-index cf994b8..ef03632 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -660,6 +660,7 @@ menu "External python modules"
- 	source "package/python-networkmanager/Config.in"
- 	source "package/python-nfc/Config.in"
- 	source "package/python-numpy/Config.in"
-+	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-protobuf/Config.in"
-diff --git a/package/python-paho-mqtt/Config.in b/package/python-paho-mqtt/Config.in
-new file mode 100644
-index 0000000..79d8b33
---- /dev/null
-+++ b/package/python-paho-mqtt/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PAHO_MQTT
-+	bool "python-paho-mqtt"
-+	help
-+	  The Paho Python Client provides a client class with support
-+	  for both MQTT v3.1 and v3.1.1 on Python 2.7 or 3.x. It also
-+	  provides some helper functions to make publishing messages
-+	  to an MQTT server very straightforward.
-+
-+	  https://pypi.python.org/pypi/paho-mqtt
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
-new file mode 100644
-index 0000000..52729cc
---- /dev/null
-+++ b/package/python-paho-mqtt/python-paho-mqtt.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=a6407b74eb5e5411e157be1de5c11366, sha256 locally computed
-+md5     a6407b74eb5e5411e157be1de5c11366  paho-mqtt-1.1.tar.gz
-+sha256  0f7a629efe6e3a2c61b59d3550aa9f2c4529b5689a65fde45e6f1ac36b9a261e  paho-mqtt-1.1.tar.gz
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
-new file mode 100644
-index 0000000..01da2b3
---- /dev/null
-+++ b/package/python-paho-mqtt/python-paho-mqtt.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-paho-mqtt
-+#
-+################################################################################
-+
-+PYTHON_PAHO_MQTT_VERSION = 1.1
-+PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
-+PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/source/p/paho-mqtt
-+PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
-+PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
-+PYTHON_PAHO_MQTT_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
+ Regards,
+ Arnout
+
+> 
+> Otherwise:
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>  	( \
+>>  		echo "NAME=Buildroot"; \
+>>  		echo "VERSION=$(BR2_VERSION_FULL)"; \
+>> diff --git a/system/skeleton/etc/ld.so.conf.d/.empty b/system/skeleton/etc/ld.so.conf.d/.empty
+>> deleted file mode 100644
+>> index e69de29..0000000
+>> -- 
+>> 2.6.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
