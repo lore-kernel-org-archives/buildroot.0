@@ -1,120 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Dec 2015 00:08:45 +0100
-Subject: [Buildroot] [PATCHv3] Config.in: add symbols for
-	BR2_HOST_GCC_AT_LEAST_X_Y
-Message-ID: <1451516925-24453-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 31 Dec 2015 00:09:12 +0100
+Subject: [Buildroot] [PATCH 08/84 RFC] package/alsa-utils: use
+ 'menuconfig' instead of 'config'+'menu'
+In-Reply-To: <568462B4.2030802@mind.be>
+References: <cover.1451076704.git.yann.morin.1998@free.fr>
+ <dfe3c11a00f2b3eec4b08215bf6e7210a2a8647c.1451076704.git.yann.morin.1998@free.fr>
+ <568462B4.2030802@mind.be>
+Message-ID: <20151230230912.GA13296@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnout Vandecappelle <arnout@mind.be>
+Arnout, All,
 
-Some host packages need a recent gcc version. Add symbols to Config.in
-to specify the HOSTCC version. The values are passed through the
-environment, and this environment is generated in a new support script.
+On 2015-12-31 00:03 +0100, Arnout Vandecappelle spake thusly:
+> On 25-12-15 22:24, Yann E. MORIN wrote:
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/alsa-utils/Config.in | 7 +++----
+> >  1 file changed, 3 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+> > index a08743e..762fcdf 100644
+> > --- a/package/alsa-utils/Config.in
+> > +++ b/package/alsa-utils/Config.in
+> > @@ -2,7 +2,7 @@ comment "alsa-utils needs a toolchain w/ threads"
+> >  	depends on BR2_USE_MMU # fork
+> >  	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> >  
+> > -config BR2_PACKAGE_ALSA_UTILS
+> > +menuconfig BR2_PACKAGE_ALSA_UTILS
+> >  	bool "alsa-utils"
+> >  	depends on BR2_USE_MMU # fork
+> >  	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+> > @@ -15,7 +15,8 @@ config BR2_PACKAGE_ALSA_UTILS
+> >  	  http://www.alsa-project.org/
+> >  
+> >  if BR2_PACKAGE_ALSA_UTILS
+> > -menu "ALSA utils selection"
+> > +
+> > +comment  "ALSA utils selection"
+> 
+> I don't think this comment is needed.
 
-Also update the documentation to mention the new symbols.
+I don't care about that comment either. ;-)
 
-[Thomas: simplify by using only make logic instead of an external
-shell script.]
+>  Also, why do you do it for alsa-utils but
+> not alsa-lib?
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-This is an alternate version, in which I've removed the shell script,
-and did everything in make. Contrary to what Arnout said, I don't find
-the sed expression to be more complicated, and the condition on gcc <=
-4 or gcc >= 5 can easily be done in make.
+Because I skimmed through the menuconfig UI, seeeking those constructs,
+and alsa-utils is very early, with alsa-lib much later, with a lot of
+packages between the two, and I may have changed my mind in-between.
 
- Config.in                                 | 24 ++++++++++++++++++++++++
- Makefile                                  | 12 ++++++++++++
- docs/manual/adding-packages-directory.txt |  7 +++++++
- 3 files changed, 43 insertions(+)
+This does not really appear in the series, because I then rebased it and
+re-ordered alphabetically on packages' names.
 
-diff --git a/Config.in b/Config.in
-index 9513cc1..bbbefb0 100644
---- a/Config.in
-+++ b/Config.in
-@@ -18,6 +18,30 @@ config BR2_EXTERNAL
- 	string
- 	option env="BR2_EXTERNAL"
- 
-+# Hidden config symbols for packages to check system gcc version
-+config BR2_HOST_GCC_VERSION
-+	string
-+	option env="HOST_GCC_VERSION"
-+
-+config BR2_HOST_GCC_AT_LEAST_4_7
-+	bool
-+	default y if BR2_HOST_GCC_VERSION = "47"
-+
-+config BR2_HOST_GCC_AT_LEAST_4_8
-+	bool
-+	default y if BR2_HOST_GCC_VERSION = "48"
-+	select BR2_HOST_GCC_AT_LEAST_4_7
-+
-+config BR2_HOST_GCC_AT_LEAST_4_9
-+	bool
-+	default y if BR2_HOST_GCC_VERSION = "49"
-+	select BR2_HOST_GCC_AT_LEAST_4_8
-+
-+config BR2_HOST_GCC_AT_LEAST_5
-+	bool
-+	default y if BR2_HOST_GCC_VERSION = "5"
-+	select BR2_HOST_GCC_AT_LEAST_4_9
-+
- # Hidden boolean selected by packages in need of Java in order to build
- # (example: xbmc)
- config BR2_NEEDS_HOST_JAVA
-diff --git a/Makefile b/Makefile
-index 1d69192..0cfca6c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -293,6 +293,17 @@ HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranli
- export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
- 
-+HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
-+	sed 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*/\1 \2/')
-+
-+# For gcc 4.x, keep the second number around. For gcc >= 5.x, the
-+# major version is enough.
-+ifeq ($(firstword $(HOSTCC_VERSION)),4)
-+HOSTCC_VERSION := $(subst $(space),,$(HOSTCC_VERSION))
-+else
-+HOSTCC_VERSION := $(firstword $(HOSTCC_VERSION))
-+endif
-+
- # Make sure pkg-config doesn't look outside the buildroot tree
- HOST_PKG_CONFIG_PATH := $(PKG_CONFIG_PATH)
- unexport PKG_CONFIG_PATH
-@@ -724,6 +735,7 @@ COMMON_CONFIG_ENV = \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
- 	BR2_CONFIG=$(BR2_CONFIG) \
- 	BR2_EXTERNAL=$(BR2_EXTERNAL) \
-+	HOST_GCC_VERSION=$(HOSTCC_VERSION) \
- 	SKIP_LEGACY=
- 
- xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 139123e..c2d9f75 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -283,6 +283,13 @@ use in the comment.
- ** Comment string: +gcc >= X.Y+ and/or `gcc <= X.Y` (replace
-    +X.Y+ with the proper version)
- 
-+* Host GCC version
-+** Dependency symbol: +BR2_HOST_GCC_AT_LEAST_X_Y+, (replace
-+   +X_Y+ with the proper version, see +Config.in+)
-+** Comment string: no comment to be added
-+** Note that it is usually not the package itself that has a minimum
-+   host GCC version, but rather a host-package on which it depends.
-+
- * C library
- ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
-    +BR2_TOOLCHAIN_USES_MUSL+, +BR2_TOOLCHAIN_USES_UCLIBC+
+I agree that, when there is a single 'category', there's no need for a
+comment. I will drop.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.6.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
