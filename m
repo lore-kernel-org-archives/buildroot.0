@@ -1,81 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 30 Dec 2015 22:18:11 +0100
-Subject: [Buildroot] [git commit] hidapi: fix build with toolchains lacking
-	C++ support
-Message-ID: <20151230211827.89F3882758@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] hidapi: add libiconv handling
+Message-ID: <20151230211827.943637FCBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26e1b249da4f041494f131dc9d1544419b50c87b
+commit: http://git.buildroot.net/buildroot/commit/?id=97f6ba2e7bae5df8ae07b8062a5b80e044cedecb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-hidapi currently doesn't build on non-C++ capable toolchains due to
-hidtest being a C++ source file, even if it in facts contains only C
-code. This commit adds a patch that fixes this in the hidapi source
-code.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/6ce/6ce0a4b8c7acb857005350a57c313b493bc6e2b7/
+hidapi uses iconv functions, which on uClibc without locale support is
+provided by the external libiconv library. This commit adds the
+necessary libiconv handling to make the hidapi package build on
+!locale toolchains.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ont-use-a-C-source-file-since-it-s-pure-C.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ package/hidapi/Config.in | 1 +
+ package/hidapi/hidapi.mk | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch b/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch
-new file mode 100644
-index 0000000..3ea4fdb
---- /dev/null
-+++ b/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch
-@@ -0,0 +1,47 @@
-+From 2fb04c2245167e247b95400112b5dbea12fcb206 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Wed, 30 Dec 2015 20:02:29 +0100
-+Subject: [PATCH] hidtest: dont' use a C++ source file, since it's pure C
+diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
+index c48a096..5119aac 100644
+--- a/package/hidapi/Config.in
++++ b/package/hidapi/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_HIDAPI
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBGUDEV
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  HIDAPI is a multi-platform library which allows an application
+ 	  to interface with USB and Bluetooth HID-Class devices on
+diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
+index b16e4ae..270836c 100644
+--- a/package/hidapi/hidapi.mk
++++ b/package/hidapi/hidapi.mk
+@@ -16,4 +16,9 @@ HIDAPI_LICENSE_FILES = LICENSE.txt LICENSE-gpl3.txt LICENSE-bsd.txt LICENSE-orig
+ 
+ HIDAPI_DEPENDENCIES = libusb libgudev
+ 
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++HIDAPI_DEPENDENCIES += libiconv
++HIDAPI_CONF_ENV += LIBS="-liconv"
++endif
 +
-+This allows to build the test program with toolchains that don't have
-+C++ support.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ hidtest/Makefile.am                | 6 +++---
-+ hidtest/{hidtest.cpp => hidtest.c} | 0
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+ rename hidtest/{hidtest.cpp => hidtest.c} (100%)
-+
-+diff --git a/hidtest/Makefile.am b/hidtest/Makefile.am
-+index d278644..5f52c3f 100644
-+--- a/hidtest/Makefile.am
-++++ b/hidtest/Makefile.am
-+@@ -4,17 +4,17 @@ AM_CPPFLAGS = -I$(top_srcdir)/hidapi/
-+ if OS_LINUX
-+ noinst_PROGRAMS = hidtest-libusb hidtest-hidraw
-+ 
-+-hidtest_hidraw_SOURCES = hidtest.cpp
-++hidtest_hidraw_SOURCES = hidtest.c
-+ hidtest_hidraw_LDADD = $(top_builddir)/linux/libhidapi-hidraw.la
-+ 
-+-hidtest_libusb_SOURCES = hidtest.cpp
-++hidtest_libusb_SOURCES = hidtest.c
-+ hidtest_libusb_LDADD = $(top_builddir)/libusb/libhidapi-libusb.la
-+ else
-+ 
-+ # Other OS's
-+ noinst_PROGRAMS = hidtest
-+ 
-+-hidtest_SOURCES = hidtest.cpp
-++hidtest_SOURCES = hidtest.c
-+ hidtest_LDADD = $(top_builddir)/$(backend)/libhidapi.la
-+ 
-+ endif
-+diff --git a/hidtest/hidtest.cpp b/hidtest/hidtest.c
-+similarity index 100%
-+rename from hidtest/hidtest.cpp
-+rename to hidtest/hidtest.c
-+-- 
-+2.6.4
-+
+ $(eval $(autotools-package))
