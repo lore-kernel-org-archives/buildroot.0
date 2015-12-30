@@ -1,101 +1,120 @@
-From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Date: Wed, 30 Dec 2015 14:30:56 +0100
-Subject: [Buildroot] [PATCH 1/1] libdvbpsi: new package
-Message-ID: <1451482256-11816-1-git-send-email-pieterjan.camerlynck@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Dec 2015 10:39:29 -0300
+Subject: [Buildroot] [PATCH] bind: bump to version 9.10.3-P2
+Message-ID: <1451482769-15603-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libdvbpsi is a library used by vlc for decoding MPEG TS
+Leave the LTS series for the latest stable version for libressl
+compatibility.
+Unfortunately this means threads are now required, but this shouldn't be
+a problem for a fully-featured resolver.
 
-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Drop 0001-disable-tests.patch since it's no longer required, genrandom
+isn't run unless the tests are called upon.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                |  1 +
- package/libdvbpsi/Config.in      |  8 ++++++++
- package/libdvbpsi/libdvbpsi.hash |  4 ++++
- package/libdvbpsi/libdvbpsi.mk   | 15 +++++++++++++++
- package/vlc/vlc.mk               |  7 +++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 package/libdvbpsi/Config.in
- create mode 100644 package/libdvbpsi/libdvbpsi.hash
- create mode 100644 package/libdvbpsi/libdvbpsi.mk
+ package/bind/0001-disable-tests.patch | 28 ----------------------------
+ package/bind/Config.in                |  5 +++--
+ package/bind/bind.hash                |  4 ++--
+ package/bind/bind.mk                  |  9 ++++++++-
+ 4 files changed, 13 insertions(+), 33 deletions(-)
+ delete mode 100644 package/bind/0001-disable-tests.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index bc6099d..5abd9d8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1015,6 +1015,7 @@ menu "Multimedia"
- 	source "package/libbluray/Config.in"
- 	source "package/libdcadec/Config.in"
- 	source "package/libdvbcsa/Config.in"
-+	source "package/libdvbpsi/Config.in"
- 	source "package/libdvbsi/Config.in"
- 	source "package/libdvdnav/Config.in"
- 	source "package/libdvdread/Config.in"
-diff --git a/package/libdvbpsi/Config.in b/package/libdvbpsi/Config.in
-new file mode 100644
-index 0000000..7323466
---- /dev/null
-+++ b/package/libdvbpsi/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBDVBPSI
-+	bool "libdvbpsi"
-+	help
-+	  libdvbpsi is a simple library designed for decoding and
-+	  generation of MPEG TS and DVB PSI tables according to standards
-+	  ISO/IEC 13818 and ITU-T H.222.0.
-+
-+	  http://www.videolan.org/developers/libdvbpsi.html
-diff --git a/package/libdvbpsi/libdvbpsi.hash b/package/libdvbpsi/libdvbpsi.hash
-new file mode 100644
-index 0000000..cf76616
---- /dev/null
-+++ b/package/libdvbpsi/libdvbpsi.hash
-@@ -0,0 +1,4 @@
-+# From http://download.videolan.org/pub/libdvbpsi/1.3.0/libdvbpsi-1.3.0.tar.bz2.md5
-+md5	2b217039a1299000c39423441f77e76a	libdvbpsi-1.3.0.tar.bz2
-+# From http://download.videolan.org/pub/libdvbpsi/1.3.0/libdvbpsi-1.3.0.tar.bz2.sha256
-+sha256	a2fed1d11980662f919bbd1f29e2462719e0f6227e1a531310bd5a706db0a1fe	libdvbpsi-1.3.0.tar.bz2
-diff --git a/package/libdvbpsi/libdvbpsi.mk b/package/libdvbpsi/libdvbpsi.mk
-new file mode 100644
-index 0000000..c45ade0
---- /dev/null
-+++ b/package/libdvbpsi/libdvbpsi.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libdvbpsi
-+#
-+################################################################################
-+
-+LIBDVBPSI_VERSION = 1.3.0
-+LIBDVBPSI_SITE = http://download.videolan.org/pub/libdvbpsi/$(LIBDVBPSI_VERSION)
-+LIBDVBPSI_SOURCE = libdvbpsi-$(LIBDVBPSI_VERSION).tar.bz2
-+LIBDVBPSI_LICENSE = LGPLv2.1+
-+LIBDVBPSI_LICENSE_FILES = COPYING
-+LIBDVBPSI_AUTORECONF = YES
-+LIBDVBPSI_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index ca1f09c..ee21c16 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -179,6 +179,13 @@ else
- VLC_CONF_OPTS += --disable-libass
+diff --git a/package/bind/0001-disable-tests.patch b/package/bind/0001-disable-tests.patch
+deleted file mode 100644
+index 181b229..0000000
+--- a/package/bind/0001-disable-tests.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Disable tests to avoid cross-compilation issues (tries to run genrandom).
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura bind-9.9.4-P2.orig/bin/Makefile.in bind-9.9.4-P2/bin/Makefile.in
+---- bind-9.9.4-P2.orig/bin/Makefile.in	2013-12-19 21:28:28.000000000 -0300
+-+++ bind-9.9.4-P2/bin/Makefile.in	2014-01-17 11:41:25.378784210 -0300
+-@@ -19,7 +19,7 @@
+- VPATH =		@srcdir@
+- top_srcdir =	@top_srcdir@
+- 
+--SUBDIRS =	named rndc dig dnssec tools tests nsupdate \
+-+SUBDIRS =	named rndc dig dnssec tools nsupdate \
+- 		check confgen @PYTHON_TOOLS@ @PKCS11_TOOLS@
+- TARGETS =
+- 
+-diff -Nura bind-9.9.4-P2.orig/lib/Makefile.in bind-9.9.4-P2/lib/Makefile.in
+---- bind-9.9.4-P2.orig/lib/Makefile.in	2013-12-19 21:28:28.000000000 -0300
+-+++ bind-9.9.4-P2/lib/Makefile.in	2014-01-17 11:41:30.489954861 -0300
+-@@ -23,7 +23,7 @@
+- # Attempt to disable parallel processing.
+- .NOTPARALLEL:
+- .NO_PARALLEL:
+--SUBDIRS =	isc isccc dns isccfg bind9 lwres tests
+-+SUBDIRS =	isc isccc dns isccfg bind9 lwres
+- TARGETS =
+- 
+- @BIND9_MAKE_RULES@
+diff --git a/package/bind/Config.in b/package/bind/Config.in
+index d758884..a580f0e 100644
+--- a/package/bind/Config.in
++++ b/package/bind/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BIND
+ 	bool "bind"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  BIND (Berkeley Internet Name Domain) is an implementation of
+@@ -37,6 +38,6 @@ config BR2_PACKAGE_BIND_TOOLS
+ 
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBDVBPSI),y)
-+VLC_CONF_OPTS += --enable-dvbpsi
-+VLC_DEPENDENCIES += libdvbpsi
+-comment "bind needs a toolchain w/ dynamic library"
++comment "bind needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index befc8d7..ae71bd1 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.9.8-P2/bind-9.9.8-P2.tar.gz.sha256.asc
+-sha256	f5841926e19637b93ec0b44b5abfbab2410e692736cf11143d461f656fbdf329	bind-9.9.8-P2.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.10.3-P2/bind-9.10.3-P2.tar.gz.sha256.asc
++sha256	4a6c1911ac0d4b6be635b63de3429b6c168ea244043f12bbc8a4eb3368fd6ecd	bind-9.10.3-P2.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 0e9a0f4..5a77d82 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.9.8-P2
++BIND_VERSION = 9.10.3-P2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
+ BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+@@ -36,6 +36,13 @@ else
+ BIND_CONF_OPTS += --disable-linux-caps
+ endif
+ 
++ifeq ($(BR2_PACKAGE_JSON_C),y)
++BIND_CONF_OPTS += --with-libjson=yes
++BIND_DEPENDENCIES += json-c
 +else
-+VLC_CONF_OPTS += --disable-dvbpsi
++BIND_CONF_OPTS += --with-libjson=no
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- VLC_CONF_OPTS += --enable-libgcrypt
- VLC_DEPENDENCIES += libgcrypt
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr --enable-newstats
+ BIND_DEPENDENCIES += libxml2
 -- 
-1.9.1
+2.4.10
