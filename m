@@ -1,37 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 10:03:27 +0100
-Subject: [Buildroot] [git commit] toolchain-external: select netbsd-queue
-	for musl toolchains
-Message-ID: <20151230090426.29F7282713@busybox.osuosl.org>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Wed, 30 Dec 2015 15:33:35 +0800
+Subject: [Buildroot] [PATCH] toolchain: copy the libc for current FLAT
+	format to the default lib folder in the sysroot
+Message-ID: <1451460815-26081-1-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=69e0d0e2821e759da2b6b5ab119c6c3b0dac8805
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-Following the introduction of the check that target packages must have
-their Config.in option enabled, we started to see failures related to
-netbsd-queue. Yann fixed the internal toolchain case in commit
-e84fd04e88bcda2771847958b3b5153e476db45f. This commit fixes the
-similar issue, but for the external toolchain case.
+The libc for the shared flat and share flat with sep data formats are put into
+different subfolders in the Blackfin toolchain lib path. In order to link the
+application with proper libc, copy the libc for current FLAT format to the
+default lib folder in the sysroot.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- toolchain/toolchain-external/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ toolchain/toolchain-external/toolchain-external.mk |   12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 35d8b7a..1418fc1 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -583,6 +583,7 @@ config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- config BR2_TOOLCHAIN_EXTERNAL_MUSL
- 	bool
- 	select BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_NETBSD_QUEUE
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 8a9ea88..97f0919 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -599,6 +599,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+ 	fi
+ endef
  
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
++
+ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+ 	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+ 	if test -z "$${SYSROOT_DIR}" ; then \
+@@ -616,7 +617,16 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+ 	fi ; \
+ 	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+ 	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
+-	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
++	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR}) ; \
++	echo "PATH=" $(STAGING_DIR)/usr/$${ARCH_LIB_DIR} ; \
++	if test "$(BR2_BINFMT_FLAT_SHARED)" = "y"; then \
++		$(call MESSAGE,"Move the Blackfin share flat lib into the sysroot...") ; \
++		cp -af $(STAGING_DIR)/usr/$${ARCH_LIB_DIR}/mid-shared-library/* $(STAGING_DIR)/usr/$${ARCH_LIB_DIR} ; \
++	fi ; \
++	if test "$(BR2_BINFMT_FLAT_SEP_DATA)" = "y"; then \
++		$(call MESSAGE,"Move the Blackfin share flat lib with separate data in the sysroot...") ; \
++		cp -af $(STAGING_DIR)/usr/$${ARCH_LIB_DIR}/msep-data/* $(STAGING_DIR)/usr/$${ARCH_LIB_DIR} ; \
++	fi
+ endef
  
+ # Special installation target used on the Blackfin architecture when
+-- 
+1.7.9.5
