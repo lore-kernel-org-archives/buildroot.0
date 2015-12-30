@@ -1,32 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 15:57:33 +0100
-Subject: [Buildroot] [git commit] sshfs: use SSHFS_VERSION variable in URL
-Message-ID: <20151230145745.439F882712@busybox.osuosl.org>
+Date: Wed, 30 Dec 2015 15:58:14 +0100
+Subject: [Buildroot] [PATCH 1/3] vboot-utils: MTD_CHAR_MAJOR definition
+In-Reply-To: <8ab37f6789bea6e1e6bcf070c8234f970d9fae77.1451483256.git.alex.suykov@gmail.com>
+References: <cover.1451483256.git.alex.suykov@gmail.com>
+ <8ab37f6789bea6e1e6bcf070c8234f970d9fae77.1451483256.git.alex.suykov@gmail.com>
+Message-ID: <20151230155814.001cd370@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3c6943ffb0d64267675e756e97a1c96564414c2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Alex Suykov,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sshfs/sshfs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 30 Dec 2015 16:05:30 +0200, Alex Suykov wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/a6360fd21314899321071c34fcb4892c5eed9bcc/
+> http://autobuild.buildroot.net/results/0af3aa4a429c45d3a2609913ec1040f32378f3c8/
+> http://autobuild.buildroot.net/results/cc4940fd6f51b31d71014f5aedee5223180eb36e/
+> 
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+>  package/vboot-utils/0001-mtd-char-major.patch | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>  create mode 100644 package/vboot-utils/0001-mtd-char-major.patch
 
-diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
-index 93f2522..f59f7ea 100644
---- a/package/sshfs/sshfs.mk
-+++ b/package/sshfs/sshfs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SSHFS_VERSION = 2.5
--SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs_2_5
-+SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs_$(subst .,_,$(SSHFS_VERSION))
- SSHFS_SOURCE = sshfs-fuse-$(SSHFS_VERSION).tar.gz
- SSHFS_LICENSE = GPLv2
- SSHFS_LICENSE_FILES = COPYING
+Applied, thanks. It would have been nicer to have a Git formatted
+patch, though.
+
+I'm not sure if it's possible, but if you could submit this patch
+to the upstream ChromiumOS project, it would be good.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
