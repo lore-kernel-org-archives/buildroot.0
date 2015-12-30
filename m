@@ -1,36 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 22:37:19 +0100
-Subject: [Buildroot] [PATCH 0/4 v2] Do not select providers of virtual
- packages (branch yem/dont-select-providers)
-In-Reply-To: <87vb7fvdm9.fsf@dell.be.48ers.dk>
-References: <cover.1450391976.git.yann.morin.1998@free.fr>
- <20151218220532.515e1b50@free-electrons.com>
- <87poxnwtm3.fsf@dell.be.48ers.dk>
- <20151230221450.27edf444@free-electrons.com>
- <87vb7fvdm9.fsf@dell.be.48ers.dk>
-Message-ID: <20151230223719.219a519c@free-electrons.com>
+Date: Wed, 30 Dec 2015 22:39:33 +0100
+Subject: [Buildroot] [PATCH v2 1/1] toolchain-external: CodeSourcery
+ PowerPC: Revert the removal of CS PowerPC 2011.03
+In-Reply-To: <1451164306-30008-1-git-send-email-romain.naour@gmail.com>
+References: <1451164306-30008-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20151230223933.36d53c35@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Dear Romain Naour,
 
-On Wed, 30 Dec 2015 22:19:10 +0100, Peter Korsgaard wrote:
-
-> No, just that the support code to provide lua support probably is quite
-> a bit smaller than lua / people are likely to want it if they have lua
-> enabled - So it perhaps makes sense to enable it by default.
+On Sat, 26 Dec 2015 22:11:46 +0100, Romain Naour wrote:
+> As reported by Yann E. MORIN [1], the latest CS PowerPC toolchain (2012.03)
+> requires a PPC CPU with SPE, which is basically two variants, 8540 (e500v1) and
+> 8548 (e500v2) in Buildroot. All other PPC CPU can't use that toolchain.
 > 
-> You could also argue that we should handle it automatically without a
-> sub option like we do for openssl, but that would be a bigger change.
+> Keep CS PowerPC 2011.03 as latest available version and add a second Kconfig
+> symbol for the CS PowerPC 2012.03 since it's verry specific to one CPU type
+> (e500v2).
+> 
+> Previously it was possible to select the CS 2012.03 with a powerpc 8540 (e500v1)
+> CPU but the sysroot provided by the toolchain only support the 8548 (e500v2)
+> variant. Allow to select CS 2012.03 only with BR2_powerpc_8548.
+> 
+> Also re-add the previous CS toolchain handling for pixman and liquid-dsp.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-December/148308.html
+> 
+> Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+> v2: Add a second Kconfig symbol for the CS PowerPC 2012.03 since it's verry specific
+>     to one CPU type (e500v2)
+> ---
+>  package/liquid-dsp/Config.in                       |  3 ++
+>  package/pixman/pixman.mk                           |  5 +++
+>  toolchain/toolchain-external/Config.in             | 42 +++++++++++++++++++---
+>  .../toolchain-external/toolchain-external.hash     |  1 +
+>  toolchain/toolchain-external/toolchain-external.mk |  5 ++-
+>  5 files changed, 51 insertions(+), 5 deletions(-)
 
-I don't feel very strongly about this. If we have sub-options, then I
-don't really see why we should default them to y. But if Yann reads you
-and wants to send a patch to do this, I won't oppose to it :-)
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
