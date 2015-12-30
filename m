@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 31 Dec 2015 00:45:19 +0100
-Subject: [Buildroot] [PATCH 14/84 RFC] package/jquery: include external
- plugins from jquery's Config.in
-In-Reply-To: <805bddfa16ccc143f1c0a871d7304af0f2b155c7.1451076704.git.yann.morin.1998@free.fr>
+Date: Thu, 31 Dec 2015 00:46:57 +0100
+Subject: [Buildroot] [PATCH 16/84 RFC] package/libdrm: use 'menuconfig'
+ instad of 'config'+'menu'
+In-Reply-To: <c1a144f851aa93fffd93803b3ef4954009d26fe6.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <805bddfa16ccc143f1c0a871d7304af0f2b155c7.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <56846C8F.50308@mind.be>
+ <c1a144f851aa93fffd93803b3ef4954009d26fe6.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <56846CF1.10903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,74 +13,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 25-12-15 22:24, Yann E. MORIN wrote:
-> ... and make it a menuconfig instead of a 'config'+'menu'.
+> Transform the menu prompt into a comment.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/libdrm/Config.in | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+> index ad015f8..9b75647 100644
+> --- a/package/libdrm/Config.in
+> +++ b/package/libdrm/Config.in
+> @@ -1,4 +1,4 @@
+> -config BR2_PACKAGE_LIBDRM
+> +menuconfig BR2_PACKAGE_LIBDRM
+>  	bool "libdrm"
+>  	select BR2_PACKAGE_LIBPTHREAD_STUBS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libpthread-stubs
+> @@ -9,7 +9,7 @@ config BR2_PACKAGE_LIBDRM
+>  
+>  if BR2_PACKAGE_LIBDRM
+>  
+> -menu "DRM Drivers"
+> +comment "DRM Drivers"
 
- I don't agree with this change, because these are really separate packages, not
-suboptions of the jquery package. Similar for python, where it is even more
-obvious because as indicated by the symlink hack for python3.
+ Comment can be dropped.
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/Config.in        | 12 ------------
->  package/jquery/Config.in | 17 ++++++++++++++++-
->  2 files changed, 16 insertions(+), 13 deletions(-)
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index dd44743..73a3ac8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -951,18 +951,6 @@ menu "Javascript"
->  	source "package/explorercanvas/Config.in"
->  	source "package/flot/Config.in"
->  	source "package/jquery/Config.in"
-> -if BR2_PACKAGE_JQUERY
-> -menu "External jQuery plugins"
-> -	source "package/jquery-datetimepicker/Config.in"
-> -	source "package/jquery-keyboard/Config.in"
-> -	source "package/jquery-mobile/Config.in"
-> -	source "package/jquery-sidebar/Config.in"
-> -	source "package/jquery-sparkline/Config.in"
-> -	source "package/jquery-ui/Config.in"
-> -	source "package/jquery-ui-themes/Config.in"
-> -	source "package/jquery-validation/Config.in"
-> -endmenu
-> -endif
->  	source "package/jsmin/Config.in"
->  	source "package/json-javascript/Config.in"
->  endmenu
-> diff --git a/package/jquery/Config.in b/package/jquery/Config.in
-> index 92f5604..3133702 100644
-> --- a/package/jquery/Config.in
-> +++ b/package/jquery/Config.in
-> @@ -1,4 +1,4 @@
-> -config BR2_PACKAGE_JQUERY
-> +menuconfig BR2_PACKAGE_JQUERY
->  	bool "jQuery"
->  	help
->  	  jQuery is a fast and concise JavaScript Library that
-> @@ -6,3 +6,18 @@ config BR2_PACKAGE_JQUERY
->  	  animating, and Ajax interactions for rapid web development.
 >  
->  	  http://jquery.com
-> +
-> +if BR2_PACKAGE_JQUERY
-> +
-> +comment "External jQuery plugins"
-> +
-> +source "package/jquery-datetimepicker/Config.in"
-> +source "package/jquery-keyboard/Config.in"
-> +source "package/jquery-mobile/Config.in"
-> +source "package/jquery-sidebar/Config.in"
-> +source "package/jquery-sparkline/Config.in"
-> +source "package/jquery-ui/Config.in"
-> +source "package/jquery-ui-themes/Config.in"
-> +source "package/jquery-validation/Config.in"
-> +
-> +endif
+>  config BR2_PACKAGE_LIBDRM_INTEL
+>  	bool "intel"
+> @@ -64,8 +64,6 @@ config BR2_PACKAGE_LIBDRM_TEGRA
+>  	help
+>  	  Install NVIDIA Tegra driver using an experimental API.
+>  
+> -endmenu
+> -
+>  config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
+>  	bool "Install test programs"
+>  	help
 > 
 
 
