@@ -1,30 +1,30 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Wed, 30 Dec 2015 16:06:05 +0200
-Subject: [Buildroot] [PATCH 3/3] vboot-utils: remove hash file
-In-Reply-To: <cover.1451483256.git.alex.suykov@gmail.com>
-References: <cover.1451483256.git.alex.suykov@gmail.com>
-Message-ID: <05e1570e0377fc9e913819765ecb8e488b6b6c1a.1451483256.git.alex.suykov@gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 30 Dec 2015 15:08:31 +0100
+Subject: [Buildroot] [PATCH 1/2] libfuse: use LIBFUSE_VERSION variable in URL
+Message-ID: <1451484512-28872-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package uses git to download the sources.
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/vboot-utils/vboot-utils.hash | 2 --
- 1 file changed, 2 deletions(-)
- delete mode 100644 package/vboot-utils/vboot-utils.hash
+ package/libfuse/libfuse.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/vboot-utils/vboot-utils.hash b/package/vboot-utils/vboot-utils.hash
-deleted file mode 100644
-index e161423..0000000
---- a/package/vboot-utils/vboot-utils.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Git shapshot
--none	xxx	bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 32d70d3..9928d62 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBFUSE_VERSION = 2.9.4
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+-LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse_2_9_4
++LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse_$(subst .,_,$(LIBFUSE_VERSION))
+ LIBFUSE_LICENSE = GPLv2, LGPLv2.1
+ LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
+ LIBFUSE_INSTALL_STAGING = YES
 -- 
-2.6.4
+1.9.1
