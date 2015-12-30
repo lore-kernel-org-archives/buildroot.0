@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 22:53:33 +0100
-Subject: [Buildroot] [PATCH 3/3] vboot-utils: remove hash file
-In-Reply-To: <56844F79.3080903@mind.be>
-References: <cover.1451483256.git.alex.suykov@gmail.com>
- <05e1570e0377fc9e913819765ecb8e488b6b6c1a.1451483256.git.alex.suykov@gmail.com>
- <20151230160016.14524b1f@free-electrons.com>
- <56844F79.3080903@mind.be>
-Message-ID: <20151230225333.171a6c4c@free-electrons.com>
+Date: Wed, 30 Dec 2015 22:54:41 +0100
+Subject: [Buildroot] [git commit] xserver_xorg-server: add missing select
+	BR2_PACKAGE_MCOOKIE
+Message-ID: <20151230215514.BC63582758@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+commit: http://git.buildroot.net/buildroot/commit/?id=c8dd1f622c88240b5ea0a6634f542b4745fb190a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Dec 2015 22:41:13 +0100, Arnout Vandecappelle wrote:
+Fixes:
 
-> > I *think* this was part of the conclusion we had at the latest
-> > Buildroot Developers Meeting, even if the write up at
-> > http://elinux.org/Buildroot:DeveloperDaysELCE2015 doesn't make this
-> > completely clear.
-> 
->  I think we didn't get to a clear conclusion, except about the github hashes.
+  http://autobuild.buildroot.org/results/7af/7afbf93492819ce59141f056f72679e4cdec0649/
 
-OK, so what do we do ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xserver_xorg-server/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index e2eec55..2bc3f75 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	# libgcrypt are already part of the build, we'll use one of
+ 	# them, otherwise, use the small libsha1 library.
+ 	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
++	select BR2_PACKAGE_MCOOKIE
+ 	select BR2_PACKAGE_PIXMAN
+ 	select BR2_PACKAGE_XFONT_FONT_ALIAS if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+ 	select BR2_PACKAGE_XFONT_FONT_MISC_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
