@@ -1,28 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 17:20:57 +0100
-Subject: [Buildroot] [PATCH 1/2] libfuse: use LIBFUSE_VERSION variable
- in URL
-In-Reply-To: <1451484512-28872-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1451484512-28872-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20151230172057.6f86f6e1@free-electrons.com>
+Date: Wed, 30 Dec 2015 17:23:01 +0100
+Subject: [Buildroot] [git commit] php: add missing select
+	BR2_PACKAGE_LIBMCRYPT
+Message-ID: <20151230162327.94CCB8274F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=6b7a4a4d223eaf3c2267fa7db67b7bda336aad3b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Dec 2015 15:08:31 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/libfuse/libfuse.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes:
 
-Both applied, thanks!
+  http://autobuild.buildroot.org/results/b0c/b0c9ea0d577a74549476ddbdb0d2ecd09311c765/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/php/Config.ext | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 5324e79..c044e45 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -67,6 +67,7 @@ config BR2_PACKAGE_PHP_EXT_HASH
+ 
+ config BR2_PACKAGE_PHP_EXT_MCRYPT
+ 	bool "mcrypt"
++	select BR2_PACKAGE_LIBMCRYPT
+ 	help
+ 	  mcrypt support
+ 
