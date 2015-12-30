@@ -1,61 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 15:56:00 +0100
-Subject: [Buildroot] [PATCHv3] python-paho-mqtt: add new package
-In-Reply-To: <1451463207-2630-1-git-send-email-zinosat@tiscali.it>
-References: <1451463207-2630-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <20151230155600.3352bbba@free-electrons.com>
+Date: Wed, 30 Dec 2015 15:56:28 +0100
+Subject: [Buildroot] [git commit] vboot-utils: MTD_CHAR_MAJOR definition
+Message-ID: <20151230145745.257FD82750@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Davide Viti,
+commit: http://git.buildroot.net/buildroot/commit/?id=9aebcc3c1c6b46ba956e2bde6b73a7b1da5af87b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Dec 2015 09:13:27 +0100, Davide Viti wrote:
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes
+http://autobuild.buildroot.net/results/a6360fd21314899321071c34fcb4892c5eed9bcc/
+http://autobuild.buildroot.net/results/0af3aa4a429c45d3a2609913ec1040f32378f3c8/
+http://autobuild.buildroot.net/results/cc4940fd6f51b31d71014f5aedee5223180eb36e/
 
-Yegor didn't give you his Reviewed-by. It is not because someone
-commented on your patch that this person is giving you his formal
-Reviewed-by.
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vboot-utils/0001-mtd-char-major.patch | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-See
-http://lxr.free-electrons.com/source/Documentation/SubmittingPatches#L539
-for the meaning of Reviewed-by.
-
-And specifically, if someone has made comments, it indicates that your
-patch wasn't fully correct, and therefore this person is *not* giving
-you his Reviewed-by.
-
-> Signed-off-by: Davide Viti <zinosat@tiscali.it>
-> 
-> v1 -> v2:
->  - Provide official md5 (suggested by Yegor Yefremov)
->  - Reword package description (suggested by Thomas Petazzoni)
->  - Use "distutils" setup type (suggested by Yegor Yefremov)
->  - Add "depends on BR2_PACKAGE_PYTHON" in Config.in
->  - Test with Python3 (suggested by Yegor Yefremov)
-> 
-> v2 -> v3:
->  - Remove dependency on BR2_PACKAGE_PYTHON since the package builds
->    fine against Python 3 (suggested by Yegor Yefremov)
-
-Such changelog is very good, but should be place below the "---" sign...
-
-> 
-> ---
-
-here.
-
-If you don't do this, when I apply the patch, the changelog is kept in
-the commit log, which we don't want.
-
-I've fixed those two minor issues, and applied your patch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/vboot-utils/0001-mtd-char-major.patch b/package/vboot-utils/0001-mtd-char-major.patch
+new file mode 100644
+index 0000000..9db90b2
+--- /dev/null
++++ b/package/vboot-utils/0001-mtd-char-major.patch
+@@ -0,0 +1,17 @@
++This definition missing from <linux/major.h> for kernels <= 3.13.
++
++Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++
++--- a/cgpt/cgpt_wrapper.c
+++++ b/cgpt/cgpt_wrapper.c
++@@ -25,6 +25,10 @@
++ #include "cgpt_nor.h"
++ #include "cryptolib.h"
++ 
+++#ifndef MTD_CHAR_MAJOR
+++#define MTD_CHAR_MAJOR 90
+++#endif
+++
++ // Check if cmdline |argv| has "-D". "-D" signifies that GPT structs are stored
++ // off device, and hence we should not wrap around cgpt.
++ static bool has_dash_D(int argc, const char *const argv[]) {
