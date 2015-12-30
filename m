@@ -1,82 +1,61 @@
-From: Mathew Benson <mathew.benson@gmail.com>
-Date: Wed, 30 Dec 2015 12:42:54 -0600
-Subject: [Buildroot] sysroot
-In-Reply-To: <5683FCE8.6000206@mind.be>
-References: <CA+C+_XRofByfgd5oo5R1CZykm=vhsXQLD0ESODbkwxXwiTF9QA@mail.gmail.com>
- <5683FCE8.6000206@mind.be>
-Message-ID: <CA+C+_XTdzafsUvNhP=HAmqQbQVuzX5kjo3=QYAeNph2mghiiyQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Dec 2015 20:04:59 +0100
+Subject: [Buildroot] [PATCH] pandaboard_defconfig: bump u-boot to
+	2015.10 and kernel to 4.3
+In-Reply-To: <20151229140134.6dce652c@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 29 Dec 2015 14:01:34 +0100")
+References: <1450978394-822-1-git-send-email-sergio.prado@e-labworks.com>
+ <20151227120631.78043b59@free-electrons.com>
+ <CANu7NGsP5K4268wtVMAcvUD+OaTxdEUvnV8aaoVqFhY1X-oOfg@mail.gmail.com>
+ <20151229140021.054e6740@free-electrons.com>
+ <20151229140134.6dce652c@free-electrons.com>
+Message-ID: <871ta33gh0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First, I'm not complaining.  I recently discovered Buildroot and I love
-it.  Kudos to the maintainers.  I'm just learning it so I'm fumbling about
-a bit.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I'm building a networked appliance that will run two applications.  Both
-applications are already written.  One I wrote and maintained myself over
-the past 4 years, but its 32 bit.  Upgrading it to 64 bit would have a
-massive impact on other projects.  Its planned.  Just not for a little
-while.  The other application is being written but requires 64 bit
-drivers.  The drivers are not open source, so I don't have access to the
-code.  The CPU is a 64 bit Intel to accommodate the 64 bit driver.  I did
-get it almost working.  I verified I can run 32-bit applications by
-compiling host code, copying it over, and copying the needed 32 bit
-libraries over.  Obviously not the best solution.  I got it to cross
-compile 32 bit, with manual tweaks.  I had to change several .so linker
-scripts from "/lib" and "/usr/lib" to "/lib32" and "/usr/lib32", and
-changing symbolic links in "/usr/lib32" from "/lib" to "/lib32".  I see
-that buildroot is not intended for this use case, so I'm ok with my manual
-work around.
+Hi,
 
-Though, I haven't quite got it to run correctly.  Its either a dynamic
-linking issue or just a misconfigured buildroot image.  When I run my
-executable, I get an error that suggests the system is interpreting the elf
-binary as a shell script.  I'm not sitting at that computer, so I can't
-copy the exact error.  Something like "error:  unexpected "("".
+> Hello,
+> On Tue, 29 Dec 2015 14:00:21 +0100, Thomas Petazzoni wrote:
 
-I did create a 32 bit and a 64 bit buildroot environment.  I had merged
-them into a single multilib 64 bit environment, though now I'm thinking it
-would just be cleaner to keep them separate.
+>> > That was my first attempt, but it didn't work. The ROM code from OMAP
+>> > processors (and I think also Sitara processors) need the SD card to be
+>> > formatted with a special geometry in the partition table. That's the reason
+>> > of the script above. I did not find any option in the genimage tool to
+>> > configure thinks like sectors and cylinders. So I do not see an easy way to
+>> > generate a sdcard image in this case. What do you think?
+>> 
+>> Ah ok. I don't know if genimage can handle such scenarios. I am Cc'ing
+>> Vivien Didelot, who did quite a bit of work on genimage in Buildroot. I
+>> think I remember he telling me that he had a working genimage
+>> configuration for the BeagleBone, which has, AFAIK, the same
+>> requirements as the PandaBoard in terms of geometry and all.
 
-On Wed, Dec 30, 2015 at 9:48 AM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
+> I found Vivien's initial patch for the BeagleBone:
 
-> On 29-12-15 04:10, Mathew Benson wrote:
-> > What is the best way to add 32 bit headers (i.e. gnu/stubs-32.h) to the
-> sysroot
-> > directory on a 64 bit build?  I need to create a sysroot for some new
-> code
-> > development and I'd rather use the correct files that buildroot would
-> have
-> > pulled in if it was a 32 bit build, rather than piece together a sysroot
-> manually.
->
->  Could you clarify what you intend to do? The sysroot we create for a
-> 64-bit
-> build cannot be used for 32-bit binaries. The only exception is if you
-> build a
-> completely standalone executable (i.e. not linked with libc). And that's
-> such an
-> exceptional case that we don't support it.
->
->  If you want to build 32-bit executables, create a 32-bit buildroot
-> environment.
->
->  Regards,
->  Arnout
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151230/d7270db0/attachment.html>
+>   http://lists.busybox.net/pipermail/buildroot/2015-March/122406.html
+
+> Though I don't see where it handles the specific geometry requirements.
+> Maybe those requirements have been relaxed in the AM335x compared to
+> the OMAP4 ?
+
+Yes, I believe so, I atleast haven't seen the issuess with more recent
+TI components.
+
+The boot problems on omap3 (and 4?) were afaik a combination of boot rom
+issues/erratas (and therefore depending on chip revisions) and sw
+limitations (E.G. early xloader versions had various limitations).
+
+https://groups.google.com/forum/#!topic/beagleboard/ro5k5r4Cuq4
+http://elinux.org/Panda_How_to_MLO_%26_u-boot
+
+I do have an early pandaboard somewhere that I can try to dig out and do
+some tests with.
+
+-- 
+Bye, Peter Korsgaard
