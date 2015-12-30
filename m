@@ -1,72 +1,32 @@
-From: Chris LaRocque <clarocq@gmail.com>
-Date: Thu, 31 Dec 2015 18:51:12 -0500
-Subject: [Buildroot] updating the beaglebone black defconfig
-References: <n6183t$ket$1@ger.gmane.org>
- <1451505684.3162125.479430882.4C107C58@webmail.messagingengine.com>
-Message-ID: <n64f1h$ecf$1@ger.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Dec 2015 19:24:45 +0100
+Subject: [Buildroot] [PATCH] iptables: add parallel build fix patch
+In-Reply-To: <1451498483-23715-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1451498483-23715-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151230192445.3b14d6c2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Craig Swank wrote:
+Dear Gustavo Zacarias,
 
-> Hi Chris,
-> Have you been able to confirm overlays (and the device-tree) work with
-> buildroot and beagleboard/linux?
+On Wed, 30 Dec 2015 15:01:23 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/5c4/5c4ca595c4bf744aa00fc58851eeccf81f9c6ecc/
 > 
-> When 'echo BB-W1-P9.12 > /sys/devices/platform/bone_capemgr/slots' the
-> w1-gpio module should get loaded and it doesn't.  My overlay works as
-> expected on a Robert Nelson debian beagle bone, so the overlay is not
-> the problem.  He also confirmed that his overlay works with
-> beagleboard/linux, so the kernel isn't the problem either.
-> 
-> I'm just curious if you've tried a custom overlay yourself and had
-> success.
-> 
-> Craig
-> 
-> 
-> On Wed, Dec 30, 2015, at 10:34 AM, Chris LaRocque wrote:
->> Hello
->> 
->> I'm working to update the beaglebone defconfig to kernel 4.1.13 ti 36
->> branch
->> (github.com/beagleboard/linux).
->> 
->> The build works but I want to incorporate a patched version of DTC
->> (github.com/pantoniou/dtc/tree/dt-overlays5) to support the cape manager
->> and
->> device tree overlay changes. At this pont I'd appreciate some guidance.
->> 
->> My first thought was to simply patch the buildroot dtc package files to
->> pull
->> from the new location. This looks to be the most direct, probably only
->> requiring that place the file in board/beaglebone/patches/dtc?
->> 
->> Second, try to dynamically create a patch for the mainline dtc to the
->> bb.org
->> fork. Haven't thought this through yet. A pointer or two would be
->> appreciated. I thought to use 'git diff'?
->> 
->> Regards
->> 
->> Chris
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-Hi Craig
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  ...-xtables-config-parser.h-to-BUILT_SOURCES.patch | 39 ++++++++++++++++++++++
+>  package/iptables/iptables.mk                       |  2 ++
+>  2 files changed, 41 insertions(+)
+>  create mode 100644 package/iptables/0002-iptables-add-xtables-config-parser.h-to-BUILT_SOURCES.patch
 
-Yes, I've built overlays and they work. I've not tried having the driver 
-auto load though. I always ensured the driver I needed was loaded before I 
-pushed the overlay to cape manager. FYI You need a patched version of DTC 
-for the 4.1 kernel. I've got the patch ready for buildroot review and I 
-should be able to push it up in an hour or so.
+Applied, thanks.
 
-
-C
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
