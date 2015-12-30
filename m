@@ -1,89 +1,77 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Wed, 30 Dec 2015 01:06:16 +0100
-Subject: [Buildroot] [PATCHv2] python-paho-mqtt: add new package
-Message-ID: <1451433976-29496-1-git-send-email-zinosat@tiscali.it>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Dec 2015 01:09:00 +0100
+Subject: [Buildroot] [PATCH v3 5/7] package/nodejs: remove version choice
+In-Reply-To: <CAFGQKxde_+aNen+tipZq8k=Nd+ErNHBY6YJQeOD7GGQQ1vX57g@mail.gmail.com>
+References: <1450872968-5834-1-git-send-email-martin@barkynet.com>
+ <1450872968-5834-5-git-send-email-martin@barkynet.com>
+ <20151223185653.19830dfe@free-electrons.com>
+ <CAFGQKxde_+aNen+tipZq8k=Nd+ErNHBY6YJQeOD7GGQQ1vX57g@mail.gmail.com>
+Message-ID: <5683209C.2060001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
+On 24-12-15 17:23, Martin Bark wrote:
+> Thomas,
+> 
+> On 23 December 2015 at 17:56, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Martin,
+>>
+>> On Wed, 23 Dec 2015 12:16:06 +0000, Martin Bark wrote:
+>>
+>>> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+>>> index eb3aeec..1aac38e 100644
+>>> --- a/package/nodejs/Config.in
+>>> +++ b/package/nodejs/Config.in
+>>> @@ -6,6 +6,7 @@ config BR2_PACKAGE_NODEJS
+>>>       depends on !BR2_MIPS_SOFT_FLOAT
+>>>       # ARM needs BLX, so v5t+
+>>>       depends on !BR2_ARM_CPU_ARMV4
+>>> +     depends on BR2_PACKAGE_NODEJS_0_10_X || BR2_PACKAGE_NODEJS_5_X
+>>
+>> I don't like that the main BR2_PACKAGE_NODEJS option depends on
+>> BR2_PACKAGE_NODEJS_0_10_X || BR2_PACKAGE_NODEJS_5_X.
+>>
+>> Instead, please do something like:
+>>
+>> BR2_PACKAGE_NODEJS_VERSION
+>>         string
+>>         default "5.3.0"   if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && BR2_USE_WCHAR
+>>         default "0.10.41"
+>>
+>> And then use BR2_PACKAGE_NODEJS_VERSION in nodejs.mk to find which
+>> version to use.
+> 
+> I'm not 100% clear what you want.  If BR2_PACKAGE_NODEJS does not
+> depend on BR2_PACKAGE_NODEJS_0_10_X || BR2_PACKAGE_NODEJS_5_X then you
+> can select nodejs when some dependencies are not satisfied.
 
- - Provide official md5 (suggested by Yegor Yefremov)
- - Reword package description (suggested by Thomas Petazzoni)
- - use "distutils" setup type (suggested by Yegor Yefremov)
- - Add "depends on BR2_PACKAGE_PYTHON" in Config.in
- - Test with Python3 (suggested by Yegor Yefremov)
+ No, because BR2_PACKAGE_NODEJS already has the required depends on
+!BR2_ARM_CPU_ARMV4 and others, so this is not an issue.
 
----
- package/Config.in                              |  1 +
- package/python-paho-mqtt/Config.in             | 10 ++++++++++
- package/python-paho-mqtt/python-paho-mqtt.hash |  3 +++
- package/python-paho-mqtt/python-paho-mqtt.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-paho-mqtt/Config.in
- create mode 100644 package/python-paho-mqtt/python-paho-mqtt.hash
- create mode 100644 package/python-paho-mqtt/python-paho-mqtt.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index dd44743..aab1958 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -659,6 +659,7 @@ menu "External python modules"
- 	source "package/python-networkmanager/Config.in"
- 	source "package/python-nfc/Config.in"
- 	source "package/python-numpy/Config.in"
-+	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-protobuf/Config.in"
-diff --git a/package/python-paho-mqtt/Config.in b/package/python-paho-mqtt/Config.in
-new file mode 100644
-index 0000000..015135e
---- /dev/null
-+++ b/package/python-paho-mqtt/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_PAHO_MQTT
-+	bool "python-paho-mqtt"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  The Paho Python Client provides a client class with support
-+	  for both MQTT v3.1 and v3.1.1 on Python 2.7 or 3.x. It also
-+	  provides some helper functions to make publishing messages
-+	  to an MQTT server very straightforward.
-+
-+	  https://pypi.python.org/pypi/paho-mqtt
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
-new file mode 100644
-index 0000000..52729cc
---- /dev/null
-+++ b/package/python-paho-mqtt/python-paho-mqtt.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=a6407b74eb5e5411e157be1de5c11366, sha256 locally computed
-+md5     a6407b74eb5e5411e157be1de5c11366  paho-mqtt-1.1.tar.gz
-+sha256  0f7a629efe6e3a2c61b59d3550aa9f2c4529b5689a65fde45e6f1ac36b9a261e  paho-mqtt-1.1.tar.gz
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
-new file mode 100644
-index 0000000..01da2b3
---- /dev/null
-+++ b/package/python-paho-mqtt/python-paho-mqtt.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-paho-mqtt
-+#
-+################################################################################
-+
-+PYTHON_PAHO_MQTT_VERSION = 1.1
-+PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
-+PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/source/p/paho-mqtt
-+PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
-+PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
-+PYTHON_PAHO_MQTT_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
+> This
+> would mean 0.10.x would get installed on architectures other than
+> armv5.  I thought the idea was 0.10.x only on armv5.  Can you please
+> clarify.
+
+ No it doesn't, with Thomas's proposal, 5.3.0 will be selected except if it is
+not supported.
+
+
+ By the way, if/when you repost, please include the host-gcc version check
+patches that I just sent, because they are conflicting.
+
+ Regards,
+ Arnout
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
