@@ -1,58 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Dec 2015 21:06:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: Allow to build
-	OpenJPEG plugin
-In-Reply-To: <1451489205-4560-1-git-send-email-vincent.dehors@openwide.fr>
- (Vincent Dehors's message of "Wed, 30 Dec 2015 16:26:45 +0100")
-References: <1451489205-4560-1-git-send-email-vincent.dehors@openwide.fr>
-Message-ID: <87ziwrya48.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Dec 2015 21:17:56 +0100
+Subject: [Buildroot] [git commit] package/tcl: move comment around,
+ to keep proper indentation
+In-Reply-To: <877fjv21n1.fsf@dell.be.48ers.dk>
+References: <20151228165835.08B517F8EB@busybox.osuosl.org>
+ <877fjv21n1.fsf@dell.be.48ers.dk>
+Message-ID: <20151230211756.4023d5e8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vincent" == Vincent Dehors <vincent.dehors@openwide.fr> writes:
+Peter,
 
-> The OpenJPEG library is packaged in buildroot (version 1) and there is a
-> plugin "openjpeg" using it in gst1-plugins-bad. This commit add the option
-> for building this plugin. It provide a JPEG2000 encoder and decoder.
+On Wed, 30 Dec 2015 20:10:42 +0100, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+> > commit: http://git.buildroot.net/buildroot/commit/?id=ac371770de69b5ee5f15eed7dd790558b8835d7d
+> > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> > In Kconfig, when there is an item (like a comment) between a symbol and
+> > its dependees, then the indentation is not in effect.
+> 
+> > Move the symbol to the top of the file to guarantee the indentation in
+> > menuconfig.
+> 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Thomas, it seems like you forgot to use the -s option to git am, please
+> try to remember.
 
-> Signed-off-by: Vincent Dehors <vincent.dehors@openwide.fr>
-> ---
->  package/gstreamer1/gst1-plugins-bad/Config.in           | 9 +++++++++
->  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
->  2 files changed, 16 insertions(+), 1 deletion(-)
+Hum, right. But in fact it is due to the fact that I did not "git am"
+such patches. Yann sent them to the list, then immediately marked them
+as RFC in Patchwork, so that they were no longer visible in the list of
+pending patches in Patchwork.
 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-> index a834f13..8bc4df1 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-> @@ -593,6 +593,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
->  comment "opencv plugin needs OpenCV-2.4"
->  	depends on !BR2_PACKAGE_OPENCV
- 
-> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENJPEG
-> +	bool "openjpeg"
-> +	depends on BR2_PACKAGE_OPENJPEG
+So, rather than fetching them with patchwork, I simply "git
+cherry-pick"ed them from Yann's Git repo. So the process to get those
+patches was not the classical one, hence I forgot to add my SoB line.
 
-openjpeg is a library (and doesn't have any special toolchain
-dependencies), so a select should be used instead of 'depends on'.
+Otherwise, I use my "git pwam" alias, which automatically adds my SoB
+line, so I can't forget it.
 
-> +	help
-> +	  GStreamer OpenJPEG Plugin
-> +
-> +comment "openjpeg plugin needs OpenJPEG library"
-> +	depends on !BR2_PACKAGE_OPENJPEG
+That being said, this is not an excuse, so sorry for the mess. But it
+explains why those 6 patches didn't have my SoB line.
 
-And then this comment isn't needed.
-
-> +
->  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENH264
-
-'H' comes before 'J', so the openjpeg option should come after openh264.
-
-Committed with these things fixed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
