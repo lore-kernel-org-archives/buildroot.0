@@ -1,34 +1,37 @@
-From: Nathan Ford <nford@westpond.com>
-Date: Wed, 30 Dec 2015 17:46:04 -0500
-Subject: [Buildroot] [PATCH 1/1] Fix VCS folders not being excluded from
-	rootfs
-Message-ID: <1451515564-10008-1-git-send-email-nford@westpond.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Dec 2015 23:53:23 +0100
+Subject: [Buildroot] [PATCH 3/3] vboot-utils: remove hash file
+In-Reply-To: <56845669.3050005@mind.be>
+References: <cover.1451483256.git.alex.suykov@gmail.com>
+ <05e1570e0377fc9e913819765ecb8e488b6b6c1a.1451483256.git.alex.suykov@gmail.com>
+ <20151230160016.14524b1f@free-electrons.com>
+ <56844F79.3080903@mind.be>
+ <20151230225333.171a6c4c@free-electrons.com>
+ <56845669.3050005@mind.be>
+Message-ID: <20151230235323.3f11d1ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a typo in skeleton.mk preventing rsync from excluding VCS
-folders such as .svn
+Arnout,
 
-Signed-off-by: Nathan Ford <nford@westpond.com>
----
- package/skeleton/skeleton.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 30 Dec 2015 23:10:49 +0100, Arnout Vandecappelle wrote:
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 790afaf..d640e24 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -78,7 +78,7 @@ endef
- endif
- 
- define SKELETON_INSTALL_TARGET_CMDS
--	rsync -a --ignore-times $(SYNC_VCS_EXCLUSIONS) \
-+	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
- 		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
- 		$(SKELETON_PATH)/ $(TARGET_DIR)/
- 	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+>  IIRC the main reason why we didn't fully go for the "add hash files for all
+> packages" approach was that we would need to add an empty hash file for about
+> 300 packages. But then we discovered that github could have hash files, but we
+> weren't entirely sure yet if that was really true.
+> 
+>  So I think now we can safely conclude that a hash file should be added for all
+> packages, even if it just contains 'none' hashes. It is definitely an advantage
+> to be able to distinguish packages that should still get a hash from packages of
+
+Agreed.
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
