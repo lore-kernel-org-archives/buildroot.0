@@ -1,50 +1,100 @@
-From: Mathew Benson <mathew.benson@gmail.com>
-Date: Tue, 29 Dec 2015 18:45:09 -0600
-Subject: [Buildroot] -m32 cross compile builds with 64 bit kernel
-Message-ID: <CA+C+_XQXAkF+GCsOdULRLUZjiyCnN=tmyfDk0VX2kEbt_UBNqg@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 30 Dec 2015 07:12:32 +0100
+Subject: [Buildroot] [PATCHv2] python-paho-mqtt: add new package
+In-Reply-To: <1451433976-29496-1-git-send-email-zinosat@tiscali.it>
+References: <1451433976-29496-1-git-send-email-zinosat@tiscali.it>
+Message-ID: <CAGm1_kvjuVtyv+11UMOC9uo85L=0jY0=GS74gM6r7keF76=3RQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to cross compile 32 bit code with the -m32 switch for a 64 bit
-kernel that I created with buildroot.  My steps are:
+On Wed, Dec 30, 2015 at 1:06 AM, Davide Viti <zinosat@tiscali.it> wrote:
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Davide Viti <zinosat@tiscali.it>
+>
+>  - Provide official md5 (suggested by Yegor Yefremov)
+>  - Reword package description (suggested by Thomas Petazzoni)
+>  - use "distutils" setup type (suggested by Yegor Yefremov)
+>  - Add "depends on BR2_PACKAGE_PYTHON" in Config.in
+>  - Test with Python3 (suggested by Yegor Yefremov)
+>
+> ---
+>  package/Config.in                              |  1 +
+>  package/python-paho-mqtt/Config.in             | 10 ++++++++++
+>  package/python-paho-mqtt/python-paho-mqtt.hash |  3 +++
+>  package/python-paho-mqtt/python-paho-mqtt.mk   | 14 ++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/python-paho-mqtt/Config.in
+>  create mode 100644 package/python-paho-mqtt/python-paho-mqtt.hash
+>  create mode 100644 package/python-paho-mqtt/python-paho-mqtt.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index dd44743..aab1958 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -659,6 +659,7 @@ menu "External python modules"
+>         source "package/python-networkmanager/Config.in"
+>         source "package/python-nfc/Config.in"
+>         source "package/python-numpy/Config.in"
+> +       source "package/python-paho-mqtt/Config.in"
+>         source "package/python-pam/Config.in"
+>         source "package/python-posix-ipc/Config.in"
+>         source "package/python-protobuf/Config.in"
+> diff --git a/package/python-paho-mqtt/Config.in b/package/python-paho-mqtt/Config.in
+> new file mode 100644
+> index 0000000..015135e
+> --- /dev/null
+> +++ b/package/python-paho-mqtt/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PYTHON_PAHO_MQTT
+> +       bool "python-paho-mqtt"
+> +       depends on BR2_PACKAGE_PYTHON
 
-1.  Built a 32 bit ("output_32") and a 64 bit ("output") kernel and sysroot
-2.  Copied "output_32/host/usr/x86_64-buildroot-linux-gnu/sysroot/lib/" to
-"output/host/usr/x86_64-buildroot-linux-gnu/sysroot/lib32/"
-3.  Copied "output_32/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/"
-to "output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib32/"
-4.  Set my build tools to "output/host/usr/bin/i686-pc-linux-gnu-"
-5.  Added "output/host/usr/x86_64-buildroot-linux-gnu/sysroot/lib32/" and
-"output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usrlib32/" to my
-library search path.
+You don't need this dependency as long as Python 3 build is working.
 
-Everything compiles and most of the libraries are found and linked in, but
-why do I get the following error:
-
-/home/orion/i5/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld:
-skipping incompatible
-/home/orion/i5/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/lib/libc.so.6
-when searching for /lib/libc.so.6
-/home/orion/i5/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld:
-cannot find /lib/libc.so.6 inside
-/home/orion/i5/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot
-/home/orion/i5/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld:
-skipping incompatible
-/home/orion/i5/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libc_nonshared.a
-when searching for /usr/lib/libc_nonshared.a
-/home/orion/i5/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld:
-cannot find /usr/lib/libc_nonshared.a inside
-/home/orion/i5/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot
-/home/orion/i5/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld:
-cannot find /lib/ld-linux.so.2 inside
-/home/orion/i5/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot
-collect2: error: ld returned 1 exit status
-make[2]: *** [cf/apps/core-bin] Error 1
-make[1]: *** [cfe/CMakeFiles/core-bin.dir/all] Error 2
-make: *** [all] Error 2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151229/a398c4d4/attachment.html>
+> +       help
+> +         The Paho Python Client provides a client class with support
+> +         for both MQTT v3.1 and v3.1.1 on Python 2.7 or 3.x. It also
+> +         provides some helper functions to make publishing messages
+> +         to an MQTT server very straightforward.
+> +
+> +         https://pypi.python.org/pypi/paho-mqtt
+> diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
+> new file mode 100644
+> index 0000000..52729cc
+> --- /dev/null
+> +++ b/package/python-paho-mqtt/python-paho-mqtt.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=a6407b74eb5e5411e157be1de5c11366, sha256 locally computed
+> +md5     a6407b74eb5e5411e157be1de5c11366  paho-mqtt-1.1.tar.gz
+> +sha256  0f7a629efe6e3a2c61b59d3550aa9f2c4529b5689a65fde45e6f1ac36b9a261e  paho-mqtt-1.1.tar.gz
+> diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
+> new file mode 100644
+> index 0000000..01da2b3
+> --- /dev/null
+> +++ b/package/python-paho-mqtt/python-paho-mqtt.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-paho-mqtt
+> +#
+> +################################################################################
+> +
+> +PYTHON_PAHO_MQTT_VERSION = 1.1
+> +PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
+> +PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/source/p/paho-mqtt
+> +PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
+> +PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
+> +PYTHON_PAHO_MQTT_SETUP_TYPE = distutils
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
