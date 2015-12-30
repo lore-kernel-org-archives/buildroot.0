@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Dec 2015 14:54:46 +0100
-Subject: [Buildroot] [PATCH] bind: bump to version 9.10.3-P2
-In-Reply-To: <1451482769-15603-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1451482769-15603-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151230145446.1307ccc7@free-electrons.com>
+Date: Wed, 30 Dec 2015 14:54:50 +0100
+Subject: [Buildroot] [PATCH] mbedtls: disable assembly for some scenarios
+In-Reply-To: <1451477223-14834-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1451477223-14834-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151230145450.4e6f8702@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,16 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 30 Dec 2015 10:39:29 -0300, Gustavo Zacarias wrote:
-> Leave the LTS series for the latest stable version for libressl
-> compatibility.
-> Unfortunately this means threads are now required, but this shouldn't be
-> a problem for a fully-featured resolver.
-> 
-> Drop 0001-disable-tests.patch since it's no longer required, genrandom
-> isn't run unless the tests are called upon.
+On Wed, 30 Dec 2015 09:07:03 -0300, Gustavo Zacarias wrote:
+> It's affected in the same way as polarssl, but use an enhanced trick
+> compared to 130ca81b since it's required by the codebase. Fixes:
+> http://autobuild.buildroot.net/results/584/584d1d12be9f2bbf45ccbdf93b6b442524059dcc/
+> http://autobuild.buildroot.net/results/d13/d13a06ba3fc0d7f08a03c04fcb484761da7af3f7/
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/bind/0001-disable-tests.patch | 28 ----------------------------
->  package/bind/Config.in                |  5 +++--
->  package/bind/bind.hash                |  4 ++--
->  package/bind/bind.mk                  |  9 ++++++++-
->  4 files changed, 13 insertions(+), 33 deletions(-)
->  delete mode 100644 package/bind/0001-disable-tests.patch
+>  package/mbedtls/mbedtls.mk | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 
 Applied, thanks.
 
