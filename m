@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Dec 2015 18:26:53 +0100
-Subject: [Buildroot] [PATCH 38/84 RFC] docs/manual: add example about
- sub-options
-In-Reply-To: <5684740D.3060107@mind.be>
+Date: Thu, 31 Dec 2015 18:28:52 +0100
+Subject: [Buildroot] [PATCH 0/84 RFC] all: use 'menuconfig' to group
+ sub-options (branch yem/menuconfig)
+In-Reply-To: <56847581.6000407@mind.be>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <d74a1da746237dff8a24373d5f561853bcc6b175.1451076704.git.yann.morin.1998@free.fr>
- <5684740D.3060107@mind.be>
-Message-ID: <20151231172653.GF3495@free.fr>
+ <56847581.6000407@mind.be>
+Message-ID: <20151231172852.GG3495@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,74 +14,44 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2015-12-31 01:17 +0100, Arnout Vandecappelle spake thusly:
+On 2015-12-31 01:23 +0100, Arnout Vandecappelle spake thusly:
 > On 25-12-15 22:25, Yann E. MORIN wrote:
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  docs/manual/adding-packages-directory.txt | 25 +++++++++++++++++++++++++
-> >  1 file changed, 25 insertions(+)
+> > Hello All!
 > > 
-> > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> > index faf967c..2b9e714 100644
-> > --- a/docs/manual/adding-packages-directory.txt
-> > +++ b/docs/manual/adding-packages-directory.txt
-> > @@ -54,6 +54,31 @@ examples in other packages. The syntax of the +Config.in+ file is the same
-> >  as the one for the kernel Kconfig file. The documentation for this syntax is
-> >  available at http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[]
-> >  
-> > +For example:
-> > +
-> > +---------------------------
-> > +config BR2_PACKAGE_LIBFOO
-> > +	bool "libfoo"
-> > +	help
-> > +	  This is a comment that explains what libfoo is.
-> > +
-> > +	  http://foosoftware.org/libfoo/
-> > +
-> > +if BR2_PACKAGE_LIBFOO
-> > +
-> > +config BR2_PACKAGE_LIBFOO_BAR
-> > +	bool "bar support"
-> > +	help
-> > +	  This is a comment that briefly explains what
-> > +	  bar support is, if it's not obvious.
+> > This RFC series is a proposal to cleanup the layout of the menuconfig
+> > UI. Although it looks to be pretty long (84 patches), it really is only
+> > three different changes :
+> > 
+> >   - patches 1-6: re-order comments to fix indentation of sub-options;
+> >     this can probably be applied without too much discussion, as it is
+> >     really only a cleanup;
+> > 
+> >   - patches 7-35: changes use of 'config'+'menu' into a 'menuconfig'
+> >     (the Kconfig keywords) to automatically arrange the sub-options into
+> >     sub-menus;
+> > 
+> >   - patches 36-84: document that packages with 5 or more options should
+> >     use sub-menus (with 'menuconfig') to store their sub-options
+> >     (patches 36-39); it then changes a lot of packages accordingly
+> >     (patches 40-84).
 > 
->  This should be indented at 72 columns like we require in the real Config.in.
+>  I reviewed and tested patches 7-39, you can add my
+> 
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Yes, but in this case, the second line is really short, and in that case
-I prefer (and usually tend to use) a shorter first line so the second
-line is more than one or two words, it looks easier to read to me...
+Thank you for the review. I know by experience that reviewing long
+series can be tedious, so: thanks!
 
-But I don't feel strongly about it either. I'll fix.
+> to the ones where I didn't have comments. I didn't bother adding Acks everywhere
+> because it's anyway not going to be picked up by Patchwork.
+
+Yep, I sent the series as an RFC, just to "feel the temperature of the
+water".
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> > +
-> > +endif # BR2_PACKAGE_LIBFOO
-> > +---------------------------
-> > +
-> > +The sub-options will be cleanly indented below the main symbol when it
-> > +is enabled, and will be properly hidden when the symbol is disabled.
-> > +
-> > +
-> >  Finally you have to add your new +libfoo/Config.in+ to
-> >  +package/Config.in+ (or in a category subdirectory if you decided to
-> >  put your package in one of the existing categories). The files
-> > 
-> 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
