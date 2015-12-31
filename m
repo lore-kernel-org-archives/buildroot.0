@@ -1,30 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 31 Dec 2015 07:55:10 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
-Message-ID: <1451559310-13919-1-git-send-email-gustavo@zacarias.com.ar>
+From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Date: Thu, 31 Dec 2015 12:02:22 +0100
+Subject: [Buildroot] [PATCH 1/1] vlc: add optional dependency to libmatroska
+Message-ID: <1451559742-15329-1-git-send-email-pieterjan.camerlynck@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+libmatroska is an optional dependency to vlc:
+http://git.videolan.org/?p=vlc.git;a=blob;f=configure.ac;h=c46120d7f2a7d49d68d488d617e071148b8c5595;hb=HEAD#l2044
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 1b8af0a..9fabb9e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -199,7 +199,7 @@ endchoice
+Add it to vlc.mk to get reproducable builds.
+
+Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+---
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index ee21c16..a080e3e 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -202,6 +202,13 @@ else
+ VLC_CONF_OPTS += --disable-mad
+ endif
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.74"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.75"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.94"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.51"	if BR2_KERNEL_HEADERS_3_12
++ifeq ($(BR2_PACKAGE_LIBMATROSKA),y)
++VLC_CONF_OPTS += --enable-mkv
++VLC_DEPENDENCIES += libmatroska
++else
++VLC_CONF_OPTS += --disable-mkv
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
+ VLC_CONF_OPTS += --enable-mod
+ VLC_DEPENDENCIES += libmodplug
 -- 
-2.4.10
+1.9.1
