@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 31 Dec 2015 01:21:19 +0100
-Subject: [Buildroot] [PATCH 39/84 RFC] docs/manual: use 'menuconfig'
- when there are more than 5 sub-options
-In-Reply-To: <b99c60174e89c794c76df7cb0c2bdd79ddace67c.1451076704.git.yann.morin.1998@free.fr>
+Date: Thu, 31 Dec 2015 01:23:29 +0100
+Subject: [Buildroot] [PATCH 0/84 RFC] all: use 'menuconfig' to group
+ sub-options (branch yem/menuconfig)
+In-Reply-To: <cover.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <b99c60174e89c794c76df7cb0c2bdd79ddace67c.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <568474FF.1080701@mind.be>
+Message-ID: <56847581.6000407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,72 +12,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 25-12-15 22:25, Yann E. MORIN wrote:
-> When a package has a lot of sub-options, the layout in menuconfig (the
-> mconf UI) is quickly getting messy.
+> Hello All!
 > 
-> Using 'menuconfig' (the kconfig keyword) will automatically create a
-> sub-menu, which provides a cleaner layout.
+> This RFC series is a proposal to cleanup the layout of the menuconfig
+> UI. Although it looks to be pretty long (84 patches), it really is only
+> three different changes :
 > 
-> Document that, with 5 or more options, a 'menuconfig' should be used
-> instead of a simple 'config'.
+>   - patches 1-6: re-order comments to fix indentation of sub-options;
+>     this can probably be applied without too much discussion, as it is
+>     really only a cleanup;
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>   - patches 7-35: changes use of 'config'+'menu' into a 'menuconfig'
+>     (the Kconfig keywords) to automatically arrange the sub-options into
+>     sub-menus;
 > 
-> ---
-> Note: 5 is arbitrary. We could tweak it to a bit more, but on small
-> terminals (the smallest supported is 80x24), there are only 10 lines
-> for the menu entries, so 5 looks like a good compromise. YMMV.
-> ---
->  docs/manual/adding-packages-directory.txt | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 2b9e714..df3011b 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -79,6 +79,34 @@ The sub-options will be cleanly indented below the main symbol when it
->  is enabled, and will be properly hidden when the symbol is disabled.
->  
->  
-> +If your package has 5 or more options, then you should use +menuconfig+
-> +to define the main symbol; this will ensure that all the package's
-> +sub-options are automaticaly classified in a sub-menu:
-> +
-> +---------------------------
-> +menuconfig BR2_PACKAGE_LIBFOO
-> +	bool "libfoo"
-> +	help
-> +	  This is a comment that explains what libfoo is.
-> +
-> +	  http://foosoftware.org/libfoo/
-> +
-> +if BR2_PACKAGE_LIBFOO
-> +
-> +config BR2_PACKAGE_LIBFOO_BAR
-> +	bool "bar support"
-> +	help
-> +	  This is a comment that briefly explains what
-> +	  bar support is, if it's not obvious.
+>   - patches 36-84: document that packages with 5 or more options should
+>     use sub-menus (with 'menuconfig') to store their sub-options
+>     (patches 36-39); it then changes a lot of packages accordingly
+>     (patches 40-84).
 
- Again the wrapping.
+ I reviewed and tested patches 7-39, you can add my
 
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+to the ones where I didn't have comments. I didn't bother adding Acks everywhere
+because it's anyway not going to be picked up by Patchwork.
 
  Regards,
  Arnout
-
-> +
-> +endif # BR2_PACKAGE_LIBFOO
-> +---------------------------
-> +
-> +In any case, ensure that there is no +comment+ or other symbol in-between
-> +the main symbol (be it +config+ or +menuconfig+) and the +if+ clause,
-> +otherwise 'Kconfig' will not properly classify the sub-options.
-> +
-> +
->  Finally you have to add your new +libfoo/Config.in+ to
->  +package/Config.in+ (or in a category subdirectory if you decided to
->  put your package in one of the existing categories). The files
-> 
 
 
 -- 
