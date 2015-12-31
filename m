@@ -1,40 +1,326 @@
-From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Date: Thu, 31 Dec 2015 12:02:22 +0100
-Subject: [Buildroot] [PATCH 1/1] vlc: add optional dependency to libmatroska
-Message-ID: <1451559742-15329-1-git-send-email-pieterjan.camerlynck@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 31 Dec 2015 10:28:08 -0300
+Subject: [Buildroot] [PATCH] configs/raspberrypi*: update them to use
+	genimage
+Message-ID: <1451568488-12829-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libmatroska is an optional dependency to vlc:
-http://git.videolan.org/?p=vlc.git;a=blob;f=configure.ac;h=c46120d7f2a7d49d68d488d617e071148b8c5595;hb=HEAD#l2044
+Update the raspberrypi and raspberrypi2 configs to use genimage directly
+to build the image.
+Update the documentation to reflect this, and drop the volatile rootfs
+option since it doesn't make much sense and it's not easily integrated
+with the genimage configurations.
 
-Add it to vlc.mk to get reproducable builds.
-
-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/vlc/vlc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ board/raspberrypi/genimage-raspberrypi.cfg  |  31 ++++++++
+ board/raspberrypi/genimage-raspberrypi2.cfg |  30 ++++++++
+ board/raspberrypi/post-image.sh             |  22 ++++++
+ board/raspberrypi/readme.txt                | 110 +++++-----------------------
+ configs/raspberrypi2_defconfig              |  11 +++
+ configs/raspberrypi_defconfig               |  11 +++
+ 6 files changed, 122 insertions(+), 93 deletions(-)
+ create mode 100644 board/raspberrypi/genimage-raspberrypi.cfg
+ create mode 100644 board/raspberrypi/genimage-raspberrypi2.cfg
+ create mode 100755 board/raspberrypi/post-image.sh
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index ee21c16..a080e3e 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -202,6 +202,13 @@ else
- VLC_CONF_OPTS += --disable-mad
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBMATROSKA),y)
-+VLC_CONF_OPTS += --enable-mkv
-+VLC_DEPENDENCIES += libmatroska
-+else
-+VLC_CONF_OPTS += --disable-mkv
-+endif
+diff --git a/board/raspberrypi/genimage-raspberrypi.cfg b/board/raspberrypi/genimage-raspberrypi.cfg
+new file mode 100644
+index 0000000..45be4d0
+--- /dev/null
++++ b/board/raspberrypi/genimage-raspberrypi.cfg
+@@ -0,0 +1,31 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "bcm2708-rpi-b.dtb",
++      "bcm2708-rpi-b-plus.dtb",
++      "rpi-firmware/bootcode.bin",
++      "rpi-firmware/cmdline.txt",
++      "rpi-firmware/config.txt",
++      "rpi-firmware/fixup.dat",
++      "rpi-firmware/start.elf",
++      "kernel-marked/zImage"
++    }
++  }
++  size = 32M
++}
 +
- ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
- VLC_CONF_OPTS += --enable-mod
- VLC_DEPENDENCIES += libmodplug
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/raspberrypi/genimage-raspberrypi2.cfg b/board/raspberrypi/genimage-raspberrypi2.cfg
+new file mode 100644
+index 0000000..443c821
+--- /dev/null
++++ b/board/raspberrypi/genimage-raspberrypi2.cfg
+@@ -0,0 +1,30 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "bcm2709-rpi-2-b.dtb",
++      "rpi-firmware/bootcode.bin",
++      "rpi-firmware/cmdline.txt",
++      "rpi-firmware/config.txt",
++      "rpi-firmware/fixup.dat",
++      "rpi-firmware/start.elf",
++      "kernel-marked/zImage"
++    }
++  }
++  size = 32M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+new file mode 100755
+index 0000000..73ffd65
+--- /dev/null
++++ b/board/raspberrypi/post-image.sh
+@@ -0,0 +1,22 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++BOARD_NAME="$(basename ${BOARD_DIR})"
++GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++# Mark the kernel as DT-enabled
++mkdir -p "${BINARIES_DIR}/kernel-marked"
++${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
++	"${BINARIES_DIR}/kernel-marked/zImage"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage                           \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
++
++exit $?
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index cf95879..b21a75a 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -8,14 +8,6 @@ These instructions apply to all models of the Raspberry Pi:
+   - the "enhanced" models A+ and B+,
+   - the model B2 (aka Raspberry Pi 2).
+ 
+-To be able to use your Raspberry Pi board with the images generated by
+-Buildroot, you have to choose whether you will use:
+-
+-    * Volatile rootfs in RAM (the rootfs is an initramfs) or
+-    * Persistent rootfs on the SDCard
+-
+-Also, a good source of information is http://elinux.org/R-Pi_Hub
+-
+ How to build it
+ ===============
+ 
+@@ -33,16 +25,6 @@ And for model 2 B:
+ 
+   $ make raspberrypi2_defconfig
+ 
+-If you want to use a persistent rootfs, skip to "Build the rootfs", below.
+-
+-For a volatile rootfs, you have to slightly adjust the configuration:
+-
+-  $ make menuconfig
+-    * Select "Filesystem images"
+-    * Select "initial RAM filesystem linked into linux kernel"
+-
+-You may also deselect "tar the root filesystem".
+-
+ Build the rootfs
+ ----------------
+ 
+@@ -53,7 +35,7 @@ You may now build your rootfs with:
+ 
+   $ make
+ 
+-(This may take a while; consider getting yourself a coffee ;-) )
++(This may take a while, consider getting yourself a coffee ;-) )
+ 
+ Result of the build
+ -------------------
+@@ -61,93 +43,35 @@ Result of the build
+ After building, you should obtain this tree:
+ 
+     output/images/
+-    +-- rootfs.tar                  [0]
++    +-- bcm2708-rpi-b.dtb           [1]
++    +-- bcm2708-rpi-b-plus.dtb      [1]
++    +-- bcm2709-rpi-2-b.dtb         [1]
++    +-- boot.vfat
++    +-- kernel-marked/zImage        [2]
++    +-- rootfs.ext4
+     +-- rpi-firmware/
+     |   +-- bootcode.bin
++    |   +-- cmdline.txt
+     |   +-- config.txt
+     |   +-- fixup.dat
+     |   `-- start.elf
+-    +-- bcm2708-rpi-b.dtb           [1]
+-    +-- bcm2708-rpi-b-plus.dtb      [1]
+-    +-- bcm2709-rpi-2-b.dtb         [1]
++    +-- sdcard.img
+     `-- zImage
+ 
+-[0] Note for Volatile: rootfs.tar will only be there if you kept
+-    "tar the root filesystem" option selected in "Filesystem images".
+-
+ [1] Not all of them will be present, depending on the RaspberryPi
+     model you are using.
+ 
+-Prepare you SDCard
+-==================
+-
+-For more information, visit
+-http://elinux.org/RPi_Advanced_Setup#Advanced_SD_card_setup
+-
+-In summary, your SDCard must have first partition in fat32 and marked bootable.
+-
+-Create the required partitions:
+-  - for a persistent rootfs, 10MiB is enough memory for the boot fat32
+-    partition, and a second partition is required for the root filesystem
+-  - for a volatile rootfs, 50MiB is required for the boot fat32 partition
+-
+-Note: You can create any number of partitions you desire, the only requirement
+-is that the first partition must be using fat32 and be bootable.
+-
+-Mount the partitions (adjust 'sdX' to match your SDcard device):
+-
+-  $ sudo mount /dev/sdX1 /mnt/mountpointboot
+-  $ sudo mount /dev/sdX2 /mnt/mountpointroot    (only for persistent rootfs)
+-
+-Install the binaries to the SDCard
+-----------------------------------
+-
+-At the root of the boot partition, the Raspberry Pi must find the following
+-files:
+-
+-    * bcm2708-rpi-b.dtb         [2]
+-    * bcm2708-rpi-b-plus.dtb    [3]
+-    * bcm2709-rpi-2-b.dtb       [4]
+-    * bootcode.bin
+-    * config.txt
+-    * fixup.dat
+-    * start.elf
+-    * zImage
+-
+-[2] For models A and B
+-[3] For models A+ and B+
+-[4] For model 2
+-
+-For example:
+-
+-  $ cp output/images/rpi-firmware/* /mnt/mountpointboot
+-  $ cp output/images/*.dtb /mnt/mountpointboot
+-
+-The kernel image must be marked with a special header so that the
+-bootloader of the RaspberryPi knows it supports Device Tree:
+-
+-  $ ./output/host/usr/bin/mkknlimg output/images/zImage /mnt/mountpointboot/zImage
+-
+-Note: The kernel image file name is defined in config.txt like this:
+-kernel=zImage
+-
+-If you use a volatile rootfs, Skip to "Finish", below. For a persistent
+-rootfs, there are further steps to do.
+-
+-Extract (as root!) the contents of the rootfs.tar archive into the second
+-partition you created above:
+-
+-  $ sudo tar xf ./output/images/rootfs.tar -C /mnt/mountpointroot
++[2] This is the mkknlimg DT-marked kernel.
+ 
+-Finish
+-======
++How to write the SD card
++========================
+ 
+-Unmount all the partitions:
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
+ 
+-  $ sudo umount /mnt/mountpointboot
+-  $ sudo umount /mnt/mountpointroot     (only for persistent rootfs)
++Copy the bootable "sdcard.img" onto an SD card with "dd":
+ 
+-And eject your SDcard from your computer SDcard reader.
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+ 
+ Insert the SDcard into your Raspberry Pi, and power it up. Your new system
+-should come up, now.
++should come up now.
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 7e49f0c..0d0c6d0 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -26,3 +26,14 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b"
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+ # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2/post-image.sh"
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 2d47058..76edc6b 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -25,3 +25,14 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b bcm2708-rpi-b-plus"
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+ # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi/post-image.sh"
 -- 
-1.9.1
+2.4.10
