@@ -1,42 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Dec 2015 15:22:07 +0100
-Subject: [Buildroot] [git commit] vlc: add optional dependency to libmatroska
-Message-ID: <20151231142257.E1EB28191E@busybox.osuosl.org>
+Date: Thu, 31 Dec 2015 15:21:56 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
+Message-ID: <20151231142257.D6A3C827A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=217171565fe7c1d8b3bdfe538da11ed190f46b28
+commit: http://git.buildroot.net/buildroot/commit/?id=eac47611bfcaad16561e1cc3c9a1d9d71029157e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libmatroska is an optional dependency to vlc:
-http://git.videolan.org/?p=vlc.git;a=blob;f=configure.ac;h=c46120d7f2a7d49d68d488d617e071148b8c5595;hb=HEAD#l2044
-
-Add it to vlc.mk to get reproducable builds.
-
-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vlc/vlc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index ee21c16..a080e3e 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -202,6 +202,13 @@ else
- VLC_CONF_OPTS += --disable-mad
- endif
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1b8af0a..9fabb9e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -199,7 +199,7 @@ endchoice
  
-+ifeq ($(BR2_PACKAGE_LIBMATROSKA),y)
-+VLC_CONF_OPTS += --enable-mkv
-+VLC_DEPENDENCIES += libmatroska
-+else
-+VLC_CONF_OPTS += --disable-mkv
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
- VLC_CONF_OPTS += --enable-mod
- VLC_DEPENDENCIES += libmodplug
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.74"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.75"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.94"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.51"	if BR2_KERNEL_HEADERS_3_12
