@@ -1,74 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 31 Dec 2015 01:12:51 +0100
-Subject: [Buildroot] [PATCH 32/84 RFC] package/gstreamer: include
- plugins from gstreamer's real Config.in
-In-Reply-To: <14c33d26a86cb2bb6673d5f053fb871dbfe9b8c8.1451076704.git.yann.morin.1998@free.fr>
+Date: Thu, 31 Dec 2015 01:14:21 +0100
+Subject: [Buildroot] [PATCH 33/84 RFC] package/gstreamer: use
+ 'menuconfig' instead of 'config'+'menu'
+In-Reply-To: <b49ea4e735ecb94e314ef1e5674f7082da73d9cc.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <14c33d26a86cb2bb6673d5f053fb871dbfe9b8c8.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <56847303.4040608@mind.be>
+ <b49ea4e735ecb94e314ef1e5674f7082da73d9cc.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <5684735D.7080906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25-12-15 22:25, Yann E. MORIN wrote:
-> It is more logical to have a single if-clause, rather than repeat it in
-> another file, possiblty brealking indentation like it previously was.
+ Subject is wrong: there was no menu originally, you added it.
 
- I actually preferred the way it was indented before. Now there is no
-distinction anymore between the gstreamer options and the additional plugin
-packages. But I don't feel strongly about it.
-
+ Again I don't really like it, but I don't feel so strongly about it as about
+jquery etc.
 
  Regards,
  Arnout
 
-> 
+On 25-12-15 22:25, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/gstreamer/Config.in           | 12 ------------
->  package/gstreamer/gstreamer/Config.in | 10 ++++++++++
->  2 files changed, 10 insertions(+), 12 deletions(-)
+>  package/gstreamer/gstreamer/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/gstreamer/Config.in b/package/gstreamer/Config.in
-> index c6292f4..476f838 100644
-> --- a/package/gstreamer/Config.in
-> +++ b/package/gstreamer/Config.in
-> @@ -1,14 +1,2 @@
->  # Gstreamer 0.10.x & Plugins
->  source "package/gstreamer/gstreamer/Config.in"
-> -
-> -if BR2_PACKAGE_GSTREAMER
-> -source "package/gstreamer/gst-plugins-base/Config.in"
-> -source "package/gstreamer/gst-plugins-good/Config.in"
-> -source "package/gstreamer/gst-plugins-bad/Config.in"
-> -source "package/gstreamer/gst-plugins-ugly/Config.in"
-> -source "package/gstreamer/gst-ffmpeg/Config.in"
-> -source "package/gstreamer/gst-dsp/Config.in"
-> -source "package/gstreamer/gst-fsl-plugins/Config.in"
-> -source "package/gstreamer/gst-omapfb/Config.in"
-> -source "package/gstreamer/gst-plugin-x170/Config.in"
-> -endif
 > diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
-> index eb1249a..aee48b1 100644
+> index aee48b1..cba8774 100644
 > --- a/package/gstreamer/gstreamer/Config.in
 > +++ b/package/gstreamer/gstreamer/Config.in
-> @@ -33,4 +33,14 @@ config BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY
->  	  Enable support for the GStreamer plugin registry. This may increase
->  	  the launch-time for a GStreamer application.
+> @@ -2,7 +2,7 @@ comment "gstreamer 0.10 needs a toolchain w/ wchar, threads"
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 >  
-> +source "package/gstreamer/gst-plugins-base/Config.in"
-> +source "package/gstreamer/gst-plugins-good/Config.in"
-> +source "package/gstreamer/gst-plugins-bad/Config.in"
-> +source "package/gstreamer/gst-plugins-ugly/Config.in"
-> +source "package/gstreamer/gst-ffmpeg/Config.in"
-> +source "package/gstreamer/gst-dsp/Config.in"
-> +source "package/gstreamer/gst-fsl-plugins/Config.in"
-> +source "package/gstreamer/gst-omapfb/Config.in"
-> +source "package/gstreamer/gst-plugin-x170/Config.in"
-> +
->  endif
+> -config BR2_PACKAGE_GSTREAMER
+> +menuconfig BR2_PACKAGE_GSTREAMER
+>  	bool "gstreamer 0.10"
+>  	depends on BR2_USE_WCHAR # glib2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
 > 
 
 
