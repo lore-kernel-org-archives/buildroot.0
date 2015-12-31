@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Dec 2015 10:36:03 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix VCS folders not being excluded from
- rootfs
-In-Reply-To: <1451515564-10008-1-git-send-email-nford@westpond.com>
-References: <1451515564-10008-1-git-send-email-nford@westpond.com>
-Message-ID: <20151231103603.0aa5c352@free-electrons.com>
+Date: Thu, 31 Dec 2015 10:36:33 +0100
+Subject: [Buildroot] [git commit] nodejs: version 5.X needs host GCC >= 4.8
+Message-ID: <20151231093641.8B58B8275D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathan,
+commit: http://git.buildroot.net/buildroot/commit/?id=2f6093ae7637f1c9f56f0db07e2ee85dabb075f2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Dec 2015 17:46:04 -0500, Nathan Ford wrote:
-> There is a typo in skeleton.mk preventing rsync from excluding VCS
-> folders such as .svn
-> 
-> Signed-off-by: Nathan Ford <nford@westpond.com>
-> ---
->  package/skeleton/skeleton.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes
+http://autobuild.buildroot.org/results/4589dd076585d6472ad1e65926ffe68343b94422
+http://autobuild.buildroot.org/results/e3147c0d9c9eb9f58773b75c8cb4ea49df483611
+and many more.
 
-Applied, thanks a lot for spotting this mistake! I've just amended the
-commit title to contain the name of the affected package as a prefix.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nodejs/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 008fbbf..3dfccac 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -48,12 +48,14 @@ config BR2_PACKAGE_NODEJS_0_10_X
+ config BR2_PACKAGE_NODEJS_5_X
+ 	bool "v5.3.0"
+ 	depends on BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_4_8
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_USE_WCHAR
+ 
+ comment "v5.3.0 needs a toolchain w/ gcc >= 4.8, wchar"
+ 	depends on BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR
++	depends on BR2_HOST_GCC_AT_LEAST_4_8
+ 
+ endchoice
+ 
