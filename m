@@ -1,93 +1,72 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 31 Dec 2015 23:10:32 +0100
-Subject: [Buildroot] [PATCH] python-smbus-cffi: new package
-In-Reply-To: <1451599710-7304-1-git-send-email-yegorslists@googlemail.com>
-References: <1451599710-7304-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAGm1_ktsY6Va7X_x5Sy+inudnXdEE-N4CAuBvwKcTNtHuF5ehg@mail.gmail.com>
+From: Chris LaRocque <clarocq@gmail.com>
+Date: Thu, 31 Dec 2015 18:51:12 -0500
+Subject: [Buildroot] updating the beaglebone black defconfig
+References: <n6183t$ket$1@ger.gmane.org>
+ <1451505684.3162125.479430882.4C107C58@webmail.messagingengine.com>
+Message-ID: <n64f1h$ecf$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 31, 2015 at 11:08 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                                |  1 +
->  package/python-smbus-cffi/Config.in              |  9 +++++++++
->  package/python-smbus-cffi/python-smbus-cffi.hash |  3 +++
->  package/python-smbus-cffi/python-smbus-cffi.mk   | 15 +++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-smbus-cffi/Config.in
->  create mode 100644 package/python-smbus-cffi/python-smbus-cffi.hash
->  create mode 100644 package/python-smbus-cffi/python-smbus-cffi.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 8379007..2873d4b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -700,6 +700,7 @@ menu "External python modules"
->         source "package/python-singledispatch/Config.in"
->         source "package/python-sip/Config.in"
->         source "package/python-six/Config.in"
-> +       source "package/python-smbus-cffi/Config.in"
->         source "package/python-spidev/Config.in"
->         source "package/python-thrift/Config.in"
->         source "package/python-tornado/Config.in"
-> diff --git a/package/python-smbus-cffi/Config.in b/package/python-smbus-cffi/Config.in
-> new file mode 100644
-> index 0000000..b5c38f5
-> --- /dev/null
-> +++ b/package/python-smbus-cffi/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_SMBUS_CFFI
-> +       bool "python-smbus-cffi"
-> +       select BR2_PACKAGE_PYTHON_CFFI
-> +       help
-> +         This Python module allows SMBus access through the I2C /dev
-> +         interface on Linux hosts. The host kernel must have I2C
-> +         support, I2C device interface support, and a bus adapter driver.
-> +
-> +         https://github.com/bivab/smbus-cffi
-> diff --git a/package/python-smbus-cffi/python-smbus-cffi.hash b/package/python-smbus-cffi/python-smbus-cffi.hash
-> new file mode 100644
-> index 0000000..1e28df9
-> --- /dev/null
-> +++ b/package/python-smbus-cffi/python-smbus-cffi.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f621c871bd658ee665751ad78e3b2df9, sha256 locally computed
-> +md5     f621c871bd658ee665751ad78e3b2df9  smbus-cffi-0.5.1.tar.gz
-> +sha256  fb4195aaabfc01586863f60d3190b5cb1bf8f12622fd597e23e48768dad6bde8  smbus-cffi-0.5.1.tar.gz
-> diff --git a/package/python-smbus-cffi/python-smbus-cffi.mk b/package/python-smbus-cffi/python-smbus-cffi.mk
-> new file mode 100644
-> index 0000000..8cb78b0
-> --- /dev/null
-> +++ b/package/python-smbus-cffi/python-smbus-cffi.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-smbus-cffi
-> +#
-> +################################################################################
-> +
-> +PYTHON_SMBUS_CFFI_VERSION = 0.5.1
-> +PYTHON_SMBUS_CFFI_SOURCE = smbus-cffi-$(PYTHON_SMBUS_CFFI_VERSION).tar.gz
-> +PYTHON_SMBUS_CFFI_SITE = https://pypi.python.org/packages/source/s/smbus-cffi
-> +PYTHON_SMBUS_CFFI_SETUP_TYPE = setuptools
-> +PYTHON_SMBUS_CFFI_LICENSE = GPLv2+
-> +PYTHON_SMBUS_CFFI_LICENSE_FILES = LICENSE
-> +PYTHON_SMBUS_CFFI_DEPENDENCIES = host-python-cffi
-> +
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
+Craig Swank wrote:
 
-This package has following patch dependencies:
+> Hi Chris,
+> Have you been able to confirm overlays (and the device-tree) work with
+> buildroot and beagleboard/linux?
+> 
+> When 'echo BB-W1-P9.12 > /sys/devices/platform/bone_capemgr/slots' the
+> w1-gpio module should get loaded and it doesn't.  My overlay works as
+> expected on a Robert Nelson debian beagle bone, so the overlay is not
+> the problem.  He also confirmed that his overlay works with
+> beagleboard/linux, so the kernel isn't the problem either.
+> 
+> I'm just curious if you've tried a custom overlay yourself and had
+> success.
+> 
+> Craig
+> 
+> 
+> On Wed, Dec 30, 2015, at 10:34 AM, Chris LaRocque wrote:
+>> Hello
+>> 
+>> I'm working to update the beaglebone defconfig to kernel 4.1.13 ti 36
+>> branch
+>> (github.com/beagleboard/linux).
+>> 
+>> The build works but I want to incorporate a patched version of DTC
+>> (github.com/pantoniou/dtc/tree/dt-overlays5) to support the cape manager
+>> and
+>> device tree overlay changes. At this pont I'd appreciate some guidance.
+>> 
+>> My first thought was to simply patch the buildroot dtc package files to
+>> pull
+>> from the new location. This looks to be the most direct, probably only
+>> requiring that place the file in board/beaglebone/patches/dtc?
+>> 
+>> Second, try to dynamically create a patch for the mainline dtc to the
+>> bb.org
+>> fork. Haven't thought this through yet. A pointer or two would be
+>> appreciated. I thought to use 'git diff'?
+>> 
+>> Regards
+>> 
+>> Chris
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+Hi Craig
 
-http://lists.busybox.net/pipermail/buildroot/2015-December/148396.html
-http://lists.busybox.net/pipermail/buildroot/2015-December/148190.html
-http://lists.busybox.net/pipermail/buildroot/2015-December/148191.html
+Yes, I've built overlays and they work. I've not tried having the driver 
+auto load though. I always ensured the driver I needed was loaded before I 
+pushed the overlay to cape manager. FYI You need a patched version of DTC 
+for the 4.1 kernel. I've got the patch ready for buildroot review and I 
+should be able to push it up in an hour or so.
 
-Yegor
+
+C
