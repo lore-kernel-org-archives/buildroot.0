@@ -1,37 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Dec 2015 15:28:15 +0100
-Subject: [Buildroot] [git commit] configs: orangepipc defconfig needs dtc
-	for u-boot
-Message-ID: <20151231142931.385E182793@busybox.osuosl.org>
+Date: Thu, 31 Dec 2015 15:48:00 +0100
+Subject: [Buildroot] [PATCH v2] Makefile: drop ldconfig handling
+Message-ID: <1451573280-7301-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c12a3ea5e5f56b93c5c08adc986b037af7452b39
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The ldconfig handling in the main Makefile is utterly broken, as it
+calls the build machine ldconfig to generate the ld.so.cache of the
+target. Unfortunately, the format of the ld.so.cache is architecture
+specific, and therefore the build machine ldconfig cannot be used
+as-is.
 
-As can be seen at
-https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/99518455,
-the new Orange Pi PC defconfig fails to build due to DTC being missing
-when building U-Boot. This commit adds the appropriate option to add
-DTC as a dependency to U-Boot.
+This patch therefore simply drops using ldconfig entirely, and removes
+/etc/ld.so.conf.d/ from the target skeleton. The idea is that all
+libraries that should be loaded by the dynamic linker must be
+installed in paths where the dynamic linker searches them by default
+(typically /lib or /usr/lib).
+
+This might potentially break a few packages, but the only way to know
+is to actually stop handling ldconfig.
+
+In order to be notified of such cases, we add a check in
+target-finalize to verify that there is no /etc/ld.so.conf file as
+well as no /etc/ld.so.conf.d directory. Such checks are done after the
+rootfs overlays are copied and post-build scripts are executed, in
+order to also catch the cases where such mechanisms would add ld.so
+related configuration.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/orangepipc_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Changes from v1:
+ - Add check for /etc/ld.so.conf.d suggested by Yann
+ - Move the checks after copying the rootfs overlays and running the
+   post build scripts, in order to catch cases where the ld.so
+   configuration would be added by an overlay or a post-build
+   script. This was suggested by Arnout.
+---
+ Makefile                                | 17 +++++------------
+ system/skeleton/etc/ld.so.conf.d/.empty |  0
+ 2 files changed, 5 insertions(+), 12 deletions(-)
+ delete mode 100644 system/skeleton/etc/ld.so.conf.d/.empty
 
-diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
-index f430392..f39ea43 100644
---- a/configs/orangepipc_defconfig
-+++ b/configs/orangepipc_defconfig
-@@ -24,6 +24,7 @@ BR2_TARGET_UBOOT_BOARDNAME="orangepi_pc"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.denx.de/u-boot.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4832e17787acb29734d895751bc7a594908aecc6"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/Makefile b/Makefile
+index 1d69192..8953b02 100644
+--- a/Makefile
++++ b/Makefile
+@@ -598,18 +598,6 @@ endif
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+ 
+ 	mkdir -p $(TARGET_DIR)/etc
+-	# Mandatory configuration file and auxiliary cache directory
+-	# for recent versions of ldconfig
+-	touch $(TARGET_DIR)/etc/ld.so.conf
+-	mkdir -p $(TARGET_DIR)/var/cache/ldconfig
+-	if [ -x "$(TARGET_CROSS)ldconfig" ]; \
+-	then \
+-		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR) \
+-					-f $(TARGET_DIR)/etc/ld.so.conf; \
+-	else \
+-		/sbin/ldconfig -r $(TARGET_DIR) \
+-			       -f $(TARGET_DIR)/etc/ld.so.conf; \
+-	fi
+ 	( \
+ 		echo "NAME=Buildroot"; \
+ 		echo "VERSION=$(BR2_VERSION_FULL)"; \
+@@ -628,6 +616,11 @@ endif
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
++	test -f $(TARGET_DIR)/etc/ld.so.conf && \
++		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
++	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
++		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
++
+ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+diff --git a/system/skeleton/etc/ld.so.conf.d/.empty b/system/skeleton/etc/ld.so.conf.d/.empty
+deleted file mode 100644
+index e69de29..0000000
+-- 
+2.6.4
