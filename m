@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 31 Dec 2015 01:17:17 +0100
-Subject: [Buildroot] [PATCH 38/84 RFC] docs/manual: add example about
- sub-options
-In-Reply-To: <d74a1da746237dff8a24373d5f561853bcc6b175.1451076704.git.yann.morin.1998@free.fr>
+Date: Thu, 31 Dec 2015 01:21:19 +0100
+Subject: [Buildroot] [PATCH 39/84 RFC] docs/manual: use 'menuconfig'
+ when there are more than 5 sub-options
+In-Reply-To: <b99c60174e89c794c76df7cb0c2bdd79ddace67c.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <d74a1da746237dff8a24373d5f561853bcc6b175.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <5684740D.3060107@mind.be>
+ <b99c60174e89c794c76df7cb0c2bdd79ddace67c.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <568474FF.1080701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 25-12-15 22:25, Yann E. MORIN wrote:
+> When a package has a lot of sub-options, the layout in menuconfig (the
+> mconf UI) is quickly getting messy.
+> 
+> Using 'menuconfig' (the kconfig keyword) will automatically create a
+> sub-menu, which provides a cleaner layout.
+> 
+> Document that, with 5 or more options, a 'menuconfig' should be used
+> instead of a simple 'config'.
+> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
 > ---
->  docs/manual/adding-packages-directory.txt | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+> Note: 5 is arbitrary. We could tweak it to a bit more, but on small
+> terminals (the smallest supported is 80x24), there are only 10 lines
+> for the menu entries, so 5 looks like a good compromise. YMMV.
+> ---
+>  docs/manual/adding-packages-directory.txt | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
 > 
 > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index faf967c..2b9e714 100644
+> index 2b9e714..df3011b 100644
 > --- a/docs/manual/adding-packages-directory.txt
 > +++ b/docs/manual/adding-packages-directory.txt
-> @@ -54,6 +54,31 @@ examples in other packages. The syntax of the +Config.in+ file is the same
->  as the one for the kernel Kconfig file. The documentation for this syntax is
->  available at http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[]
+> @@ -79,6 +79,34 @@ The sub-options will be cleanly indented below the main symbol when it
+>  is enabled, and will be properly hidden when the symbol is disabled.
 >  
-> +For example:
+>  
+> +If your package has 5 or more options, then you should use +menuconfig+
+> +to define the main symbol; this will ensure that all the package's
+> +sub-options are automaticaly classified in a sub-menu:
 > +
 > +---------------------------
-> +config BR2_PACKAGE_LIBFOO
+> +menuconfig BR2_PACKAGE_LIBFOO
 > +	bool "libfoo"
 > +	help
 > +	  This is a comment that explains what libfoo is.
@@ -44,7 +60,7 @@ On 25-12-15 22:25, Yann E. MORIN wrote:
 > +	  This is a comment that briefly explains what
 > +	  bar support is, if it's not obvious.
 
- This should be indented at 72 columns like we require in the real Config.in.
+ Again the wrapping.
 
 
  Regards,
@@ -54,8 +70,9 @@ On 25-12-15 22:25, Yann E. MORIN wrote:
 > +endif # BR2_PACKAGE_LIBFOO
 > +---------------------------
 > +
-> +The sub-options will be cleanly indented below the main symbol when it
-> +is enabled, and will be properly hidden when the symbol is disabled.
+> +In any case, ensure that there is no +comment+ or other symbol in-between
+> +the main symbol (be it +config+ or +menuconfig+) and the +if+ clause,
+> +otherwise 'Kconfig' will not properly classify the sub-options.
 > +
 > +
 >  Finally you have to add your new +libfoo/Config.in+ to
