@@ -1,27 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Jan 2016 22:01:26 +0100
-Subject: [Buildroot] [PATCH 1/2] package/sysdig: reorder select/depends
-In-Reply-To: <1451678542-1376-1-git-send-email-romain.naour@gmail.com> (Romain
- Naour's message of "Fri, 1 Jan 2016 21:02:21 +0100")
-References: <1451678542-1376-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <87wprtovyx.fsf@dell.be.48ers.dk>
+Date: Fri, 1 Jan 2016 22:01:00 +0100
+Subject: [Buildroot] [git commit] package:sysdig: propagate dependencies
+	from jsoncpp
+Message-ID: <20160101210136.B8C6B7FB36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=63b6665092f9bd12eba8d5ba520d81e7369ea3a4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> From [1]:
- > "Even though the ordering has absolutely no consequences in Kconfig, it
- > is not logical (when reading). It is more logical and far easier to
- > understand when depends come first, followed by the selects."
+sysdig select jsoncpp which needs a gcc compiler >= 4.7
 
- > Also, the Config.in exemple in the manual suggest to use this coding
- > style [2].
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sysdig/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 151e75d..dfb9db5 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_SYSDIG
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_INSTALL_LIBSTDCPP # libjson
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
+ 	depends on !BR2_STATIC_LIBS # luajit
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LUAJIT
+@@ -16,6 +17,7 @@ config BR2_PACKAGE_SYSDIG
+ 
+ 	  http://sysdig.org
+ 
+-comment "sysdig needs a toolchain w/ C++, dynamic library and a Linux kernel to be built"
+-	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++comment "sysdig needs a toolchain w/ C++, gcc >= 4.7, dynamic library and a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
