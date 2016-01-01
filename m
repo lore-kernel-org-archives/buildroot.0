@@ -1,58 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jan 2016 23:05:49 +0100
-Subject: [Buildroot] host directories in target rpath
-In-Reply-To: <20160101155622.GA20087@vostro>
-References: <20160101155622.GA20087@vostro>
-Message-ID: <20160101230549.6cb360cf@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri,  1 Jan 2016 23:18:29 +0100
+Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
+Message-ID: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+Add hash file and change download location to PyPi.
 
-On Fri, 1 Jan 2016 17:56:23 +0200, Alex Suykov wrote:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-can/python-can.hash | 3 +++
+ package/python-can/python-can.mk   | 5 ++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+ create mode 100644 package/python-can/python-can.hash
 
-> I noticed I have bunch of target executables with host directories in RPATH:
-> 
->     $ readelf -d output/target/usr/bin/aserver | grep RPATH
->      0x0000000f (RPATH) Library rpath: [/home/alex/src/buildroot.snow/output/build/alsa-lib-1.0.29/src/.libs]
->     
->     $ readelf -d output/target/usr/bin/glib-compile-resources | grep RPATH
->      0x0000000f (RPATH) Library rpath: [/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/gio/.libs:/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/gobject/.libs:/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/gmodule/.libs:/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/glib/.libs:/home/alex/src/buildroot.snow/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib]
->     
->     $ readelf -d output/target/usr/bin/weston | grep RPATH
->      0x0000000f (RPATH) Library rpath: [/home/alex/src/buildroot.snow/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib]
-> 
-> It does not break anything, but it's not right either.
-> And it makes strace output look rather messy.
-> 
-> A quick way to check it is building alsa-lib, which is where aserver comes from.
-> 
-> The underlying cause is libtool, and for autoreconfed packages I can fix it
-> by patching (host-)libtool. This fixes alsa-lib but not weston because weston
-> carries that code in its pre-built configure. So I have to either patch weston
-> in place (and also every non-autoreconfed package), or autoreconf them all.
-> 
-> What's your thoughts on this? Maybe there are better ways to fix it?
-
-You can see the following patches from Samuel Martin, which aim at
-solving this problem:
-
-  http://patchwork.ozlabs.org/patch/494781/
-  http://patchwork.ozlabs.org/patch/494782/
-  http://patchwork.ozlabs.org/patch/494783/
-  http://patchwork.ozlabs.org/patch/494784/
-  http://patchwork.ozlabs.org/patch/494785/
-
-Samuel said he would respin them on top of master and post a new
-version of those patches.
-
-Thanks!
-
-Thomas
+diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+new file mode 100644
+index 0000000..fc9fc2a
+--- /dev/null
++++ b/package/python-can/python-can.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=63e922ae913bb0db1dd54e9189810130, sha256 locally computed
++md5     63e922ae913bb0db1dd54e9189810130  python-can-1.4.1.tar.gz
++sha256  ab60195d112504fc4d38b74fb4a6874cd509066472b9d6d3516a8ce1485cec6f  python-can-1.4.1.tar.gz
+diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+index c7b06a5..9a9d9df 100644
+--- a/package/python-can/python-can.mk
++++ b/package/python-can/python-can.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CAN_VERSION = ae5b6cf
+-PYTHON_CAN_SITE = https://bitbucket.org/hardbyte/python-can/get
+-PYTHON_CAN_SOURCE = $(PYTHON_CAN_VERSION).tar.bz2
++PYTHON_CAN_VERSION = 1.4.1
++PYTHON_CAN_SITE = https://pypi.python.org/packages/source/p/python-can
+ PYTHON_CAN_LICENSE = LGPLv3
+ PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+ PYTHON_CAN_SETUP_TYPE = setuptools
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
