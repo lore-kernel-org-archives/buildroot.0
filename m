@@ -1,99 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jan 2016 22:34:59 +0100
-Subject: [Buildroot] [PATCH v3] Makefile: drop ldconfig handling
-In-Reply-To: <1451683419-18398-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1451683419-18398-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160101213459.GB2182@free.fr>
+Date: Fri, 1 Jan 2016 22:52:28 +0100
+Subject: [Buildroot] [PATCH 3/3] vboot-utils: remove hash file
+In-Reply-To: <20160101145244.GA29643@vostro>
+References: <cover.1451483256.git.alex.suykov@gmail.com>
+ <05e1570e0377fc9e913819765ecb8e488b6b6c1a.1451483256.git.alex.suykov@gmail.com>
+ <20151230160016.14524b1f@free-electrons.com>
+ <56844F79.3080903@mind.be>
+ <20151230225333.171a6c4c@free-electrons.com>
+ <56845669.3050005@mind.be>
+ <20151230235323.3f11d1ea@free-electrons.com>
+ <20160101145244.GA29643@vostro>
+Message-ID: <20160101215228.GC2182@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Alex, All,
 
-On 2016-01-01 22:23 +0100, Thomas Petazzoni spake thusly:
-> The ldconfig handling in the main Makefile is utterly broken, as it
-> calls the build machine ldconfig to generate the ld.so.cache of the
-> target. Unfortunately, the format of the ld.so.cache is architecture
-> specific, and therefore the build machine ldconfig cannot be used
-> as-is.
+On 2016-01-01 16:52 +0200, Alex Suykov spake thusly:
+> Wed, Dec 30, 2015 at 11:53:23PM +0100, Thomas Petazzoni wrote:
 > 
-> This patch therefore simply drops using ldconfig entirely, and removes
-> /etc/ld.so.conf.d/ from the target skeleton. The idea is that all
-> libraries that should be loaded by the dynamic linker must be
-> installed in paths where the dynamic linker searches them by default
-> (typically /lib or /usr/lib).
+> > >  So I think now we can safely conclude that a hash file should be added for all
+> > > packages, even if it just contains 'none' hashes. It is definitely an advantage
+> > > to be able to distinguish packages that should still get a hash from packages of
+> > 
+> > Agreed.
 > 
-> This might potentially break a few packages, but the only way to know
-> is to actually stop handling ldconfig.
+> Ok, got it.
 > 
-> In order to be notified of such cases, we add a check in
-> target-finalize to verify that there is no /etc/ld.so.conf file as
-> well as no /etc/ld.so.conf.d directory.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Does it make sense to update the file name in .hash, or is it ok to leave it as is
+> since it's not used anyway?  It's (version).tar.gz now but the git checkout gets saved
+> as vboot-utils-(version).tar.gz.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Yes, you should update the file name, so that it matches the name the
+archive is saved as. Thanks for spotting the problem! :-)
 
 Regards,
 Yann E. MORIN.
-
-> ---
-> Changes from v2:
->  - Move back the checks *before* the rootfs overlay and post-build
->    scripts are applied. As indicated by Yann, this potentially leaves
->    the possibility for a user to use ld.so configuration in its
->    overlay/post-build script, as long as (s)he also takes care of the
->    ldconfig mess.
-> 
-> Changes from v1:
->  - Add check for /etc/ld.so.conf.d suggested by Yann
->  - Move the checks after copying the rootfs overlays and running the
->    post build scripts, in order to catch cases where the ld.so
->    configuration would be added by an overlay or a post-build
->    script. This was suggested by Arnout.
-> ---
->  Makefile                                | 17 ++++-------------
->  system/skeleton/etc/ld.so.conf.d/.empty |  0
->  2 files changed, 4 insertions(+), 13 deletions(-)
->  delete mode 100644 system/skeleton/etc/ld.so.conf.d/.empty
-> 
-> diff --git a/Makefile b/Makefile
-> index 80e94a2..0883175 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -604,20 +604,11 @@ endif
->  # debugging symbols.
->  	find $(TARGET_DIR)/lib -type f -name 'ld-*.so*' | \
->  		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
-> -
-> +	test -f $(TARGET_DIR)/etc/ld.so.conf && \
-> +		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
-> +	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
-> +		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
->  	mkdir -p $(TARGET_DIR)/etc
-> -	# Mandatory configuration file and auxiliary cache directory
-> -	# for recent versions of ldconfig
-> -	touch $(TARGET_DIR)/etc/ld.so.conf
-> -	mkdir -p $(TARGET_DIR)/var/cache/ldconfig
-> -	if [ -x "$(TARGET_CROSS)ldconfig" ]; \
-> -	then \
-> -		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR) \
-> -					-f $(TARGET_DIR)/etc/ld.so.conf; \
-> -	else \
-> -		/sbin/ldconfig -r $(TARGET_DIR) \
-> -			       -f $(TARGET_DIR)/etc/ld.so.conf; \
-> -	fi
->  	( \
->  		echo "NAME=Buildroot"; \
->  		echo "VERSION=$(BR2_VERSION_FULL)"; \
-> diff --git a/system/skeleton/etc/ld.so.conf.d/.empty b/system/skeleton/etc/ld.so.conf.d/.empty
-> deleted file mode 100644
-> index e69de29..0000000
-> -- 
-> 2.6.4
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
