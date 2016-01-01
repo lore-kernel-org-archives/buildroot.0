@@ -1,35 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 1 Jan 2016 19:48:47 +0100
-Subject: [Buildroot] [git commit] dillo: fix jpeg dependency
-Message-ID: <20160101185048.8B5E182751@busybox.osuosl.org>
+Date: Fri, 01 Jan 2016 19:55:16 +0100
+Subject: [Buildroot] [PATCH] package/gstreamer/zbar-plugin: propagate
+	dependencies from zbar
+In-Reply-To: <1451673257-23081-1-git-send-email-romain.naour@gmail.com>
+ (Romain Naour's message of "Fri, 1 Jan 2016 19:34:17 +0100")
+References: <1451673257-23081-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <87vb7druy3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d222f6d06e1799778fc2ffde53f011370c3e3ea6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-dillo was explicitly pulling in libjpeg instead of the virtual 'jpeg'
-package, even though it also works with jpeg-turbo.
+ > BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR select BR2_PACKAGE_ZBAR which
+ > has several dependencies from libv4l.
 
-Reported-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dillo/dillo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Propagate these dependencies to avoid unmet dependencies while
+ > selecting BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR.
 
-diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
-index 8eb8d88..01ab4f5 100644
---- a/package/dillo/dillo.mk
-+++ b/package/dillo/dillo.mk
-@@ -32,7 +32,7 @@ endif
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > ---
+ >  package/gstreamer/gst-plugins-bad/Config.in | 5 +++++
+ >  1 file changed, 5 insertions(+)
+
+ > diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+ > index e2a67f1..95acbaf 100644
+ > --- a/package/gstreamer/gst-plugins-bad/Config.in
+ > +++ b/package/gstreamer/gst-plugins-bad/Config.in
+ > @@ -322,6 +322,11 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VP8
  
- ifeq ($(BR2_PACKAGE_JPEG),y)
- DILLO_CONF_OPTS += --enable-jpeg
--DILLO_DEPENDENCIES += libjpeg
-+DILLO_DEPENDENCIES += jpeg
- else
- DILLO_CONF_OPTS += --disable-jpeg
- endif
+ >  config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
+ >  	bool "zbar"
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS # zbar-> libv4l
+ > +	depends on BR2_USE_MMU # zbar-> libv4l
+ > +	depends on !BR2_STATIC_LIBS # zbar-> libv4l
+ > +	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
+ > +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # zbar-> libv4l
+
+You forgot to copy over the comment to be displayed if these
+dependencies aren't available.
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
