@@ -1,32 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Jan 2016 20:45:46 +0100
-Subject: [Buildroot] [PATCH 3/3] vboot-utils: remove hash file
-In-Reply-To: <56845669.3050005@mind.be> (Arnout Vandecappelle's message of
- "Wed, 30 Dec 2015 23:10:49 +0100")
-References: <cover.1451483256.git.alex.suykov@gmail.com>
- <05e1570e0377fc9e913819765ecb8e488b6b6c1a.1451483256.git.alex.suykov@gmail.com>
- <20151230160016.14524b1f@free-electrons.com>
- <56844F79.3080903@mind.be>
- <20151230225333.171a6c4c@free-electrons.com>
- <56845669.3050005@mind.be>
-Message-ID: <87k2ntrslx.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri,  1 Jan 2016 21:02:21 +0100
+Subject: [Buildroot] [PATCH 1/2] package/sysdig: reorder select/depends
+Message-ID: <1451678542-1376-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+From [1]:
+"Even though the ordering has absolutely no consequences in Kconfig, it
+is not logical (when reading). It is more logical and far easier to
+understand when depends come first, followed by the selects."
 
-Hi,
+Also, the Config.in exemple in the manual suggest to use this coding
+style [2].
 
- >  So I think now we can safely conclude that a hash file should be
- > added for all packages, even if it just contains 'none' hashes. It is
- > definitely an advantage to be able to distinguish packages that
- > should still get a hash from packages of which we already decided
- > that the hash should be 'none'.
+[1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
+[2] http://buildroot.uclibc.org/downloads/manual/manual.html#writing-rules-config-in
 
-Yes, makes sense to me.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/sysdig/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index dc71d5f..151e75d 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -1,12 +1,12 @@
+ config BR2_PACKAGE_SYSDIG
+ 	bool "sysdig"
+-	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_LUAJIT
+-	select BR2_PACKAGE_JSONCPP
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_INSTALL_LIBSTDCPP # libjson
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS # luajit
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_LUAJIT
++	select BR2_PACKAGE_JSONCPP
+ 	help
+ 	  Sysdig is open source, system-level exploration:
+ 	  capture system state and activity from a running Linux instance,
 -- 
-Bye, Peter Korsgaard
+2.4.3
