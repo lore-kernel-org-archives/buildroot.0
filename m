@@ -1,47 +1,77 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Fri, 1 Jan 2016 17:56:23 +0200
-Subject: [Buildroot] host directories in target rpath
-Message-ID: <20160101155622.GA20087@vostro>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri,  1 Jan 2016 17:01:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openocd: select libusb when
+	selecting libusb-compat
+Message-ID: <1451664066-6127-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+libusb-compat depends on libusb package, so we need to select
+libusb package at the same time as libusb-compat to avoid an
+unmet dependency.
 
-I noticed I have bunch of target executables with host directories in RPATH:
+Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
+stop if a package build is trigged at Makefile level without
+being selected at Config.in level.
 
-    $ readelf -d output/target/usr/bin/aserver | grep RPATH
-     0x0000000f (RPATH) Library rpath: [/home/alex/src/buildroot.snow/output/build/alsa-lib-1.0.29/src/.libs]
-    
-    $ readelf -d output/target/usr/bin/glib-compile-resources | grep RPATH
-     0x0000000f (RPATH) Library rpath: [/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/gio/.libs:/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/gobject/.libs:/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/gmodule/.libs:/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/glib/.libs:/home/alex/src/buildroot.snow/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib]
-    
-    $ readelf -d output/target/usr/bin/weston | grep RPATH
-     0x0000000f (RPATH) Library rpath: [/home/alex/src/buildroot.snow/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib]
+This is the case here with BR2_PACKAGE_OPENOCD_USBPROG which
+select BR2_PACKAGE_LIBUSB_COMPAT without selecting
+BR2_PACKAGE_LIBUSB.
 
-It does not break anything, but it's not right either.
-And it makes strace output look rather messy.
+Fixes:
+http://autobuild.buildroot.net/results/b4a/b4a8c54eed6bf75ab8ade0653953d19792155727/
 
-A quick way to check it is building alsa-lib, which is where aserver comes from.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/openocd/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-The underlying cause is libtool, and for autoreconfed packages I can fix it
-by patching (host-)libtool. This fixes alsa-lib but not weston because weston
-carries that code in its pre-built configure. So I have to either patch weston
-in place (and also every non-autoreconfed package), or autoreconf them all.
-
-What's your thoughts on this? Maybe there are better ways to fix it?
-
-
-package/libtool/0001-no-rpath.patch:
---- a/m4/libtool.m4
-+++ b/m4/libtool.m4
-@@ -5035,7 +5035,6 @@
-     # are reset later if shared libraries are not supported. Putting them
-     # here allows them to be overridden if necessary.
-     runpath_var=LD_RUN_PATH
--    _LT_TAGVAR(hardcode_libdir_flag_spec, $1)='$wl-rpath $wl$libdir'
-     _LT_TAGVAR(export_dynamic_flag_spec, $1)='$wl--export-dynamic'
-     # ancient GNU ld didn't support --whole-archive et. al.
-     if $LD --help 2>&1 | $GREP 'no-whole-archive' > /dev/null; then
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+index d84aac1..a35bd27 100644
+--- a/package/openocd/Config.in
++++ b/package/openocd/Config.in
+@@ -84,6 +84,7 @@ config BR2_PACKAGE_OPENOCD_AICE
+ 
+ config BR2_PACKAGE_OPENOCD_VSLLINK
+ 	bool "Versaloon-Link JTAG Programmer"
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+@@ -92,6 +93,7 @@ config BR2_PACKAGE_OPENOCD_VSLLINK
+ 
+ config BR2_PACKAGE_OPENOCD_USBPROG
+ 	bool "USBProg JTAG Programmer"
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+@@ -100,6 +102,7 @@ config BR2_PACKAGE_OPENOCD_USBPROG
+ 
+ config BR2_PACKAGE_OPENOCD_RLINK
+ 	bool "Raisonance RLink JTAG Programmer"
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+@@ -108,6 +111,7 @@ config BR2_PACKAGE_OPENOCD_RLINK
+ 
+ config BR2_PACKAGE_OPENOCD_ARMEW
+ 	bool "Olimex ARM-JTAG-EW Programmer"
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+@@ -186,6 +190,7 @@ config BR2_PACKAGE_OPENOCD_PRESTO
+ config BR2_PACKAGE_OPENOCD_OPENJTAG
+ 	bool "OpenJTAG Programmer"
+ 	select BR2_PACKAGE_LIBFTDI1
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	depends on BR2_ARCH_HAS_ATOMICS
+-- 
+2.4.3
