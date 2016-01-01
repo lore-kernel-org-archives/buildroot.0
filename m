@@ -1,47 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jan 2016 21:58:10 +0100
-Subject: [Buildroot] [PATCH v2] Makefile: drop ldconfig handling
-In-Reply-To: <20151231180135.GH3495@free.fr>
-References: <1451573280-7301-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20151231180135.GH3495@free.fr>
-Message-ID: <20160101215810.77c4a518@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 01 Jan 2016 22:01:26 +0100
+Subject: [Buildroot] [PATCH 1/2] package/sysdig: reorder select/depends
+In-Reply-To: <1451678542-1376-1-git-send-email-romain.naour@gmail.com> (Romain
+ Naour's message of "Fri, 1 Jan 2016 21:02:21 +0100")
+References: <1451678542-1376-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <87wprtovyx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-On Thu, 31 Dec 2015 19:01:35 +0100, Yann E. MORIN wrote:
+ >> From [1]:
+ > "Even though the ordering has absolutely no consequences in Kconfig, it
+ > is not logical (when reading). It is more logical and far easier to
+ > understand when depends come first, followed by the selects."
 
-> I disagree on that one.
-> 
-> We basically tell user that they can do "whatever they want" in a
-> post-build-script. So, if a user has a mean to create the ld.so.cache,
-> we should not prevent him to do so.
-> 
-> For example, a user may have a first-install procedure on his machine,
-> that runs ldocnfig natively on the machine. Custom (aka br2-external
-> packages may install libraries in weird locations (proprietary stuff)
-> and can not change that (because other proprietary binary-only stuff).
-> In this vase a "first-install" procedure may run ldconfig natively on
-> the target, and that would be OK.
-> 
-> Or he may have a cross-ldconfig (from wherever that comes) so he could
-> run that in a post-build script.
-> 
-> So I believe this check should be before the overlay and post-build
-> scripts.
+ > Also, the Config.in exemple in the manual suggest to use this coding
+ > style [2].
 
-You're absolutely right I believe. We should leave as much freedom as
-possible for people to do what they want in their rootfs overlay and
-post build scripts. I'll resend an updated version of my patch.
+Committed both, thanks.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
