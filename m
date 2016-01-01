@@ -1,80 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 1 Jan 2016 19:56:22 +0100
-Subject: [Buildroot] [git commit] package/openocd: select libusb when
-	selecting libusb-compat
-Message-ID: <20160101185721.933477FE29@busybox.osuosl.org>
+Date: Fri, 1 Jan 2016 19:55:42 +0100
+Subject: [Buildroot] [git commit] package/gstreamer/zbar-plugin: propagate
+	dependencies from zbar
+Message-ID: <20160101185721.7C16381F71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee2f4138004a8fb7493039503dbedd8a73d6475d
+commit: http://git.buildroot.net/buildroot/commit/?id=d52deb9a9f1af9cfc8b4fed9ff9189eff29d2788
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libusb-compat depends on libusb package, so we need to select
-libusb package at the same time as libusb-compat to avoid an
-unmet dependency.
+BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR select BR2_PACKAGE_ZBAR which
+has several dependencies from libv4l.
 
-Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
-stop if a package build is trigged at Makefile level without
-being selected at Config.in level.
+Propagate these dependencies to avoid unmet dependencies while
+selecting BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR.
 
-This is the case here with BR2_PACKAGE_OPENOCD_USBPROG which
-select BR2_PACKAGE_LIBUSB_COMPAT without selecting
-BR2_PACKAGE_LIBUSB.
-
-Fixes:
-http://autobuild.buildroot.net/results/b4a/b4a8c54eed6bf75ab8ade0653953d19792155727/
-
+[Peter: show comment if toolchain dependencies aren't available]
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openocd/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/gstreamer/gst-plugins-bad/Config.in | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index d84aac1..a35bd27 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -84,6 +84,7 @@ config BR2_PACKAGE_OPENOCD_AICE
+diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+index e2a67f1..43849e2 100644
+--- a/package/gstreamer/gst-plugins-bad/Config.in
++++ b/package/gstreamer/gst-plugins-bad/Config.in
+@@ -322,6 +322,16 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VP8
  
- config BR2_PACKAGE_OPENOCD_VSLLINK
- 	bool "Versaloon-Link JTAG Programmer"
-+	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	help
-@@ -92,6 +93,7 @@ config BR2_PACKAGE_OPENOCD_VSLLINK
+ config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
+ 	bool "zbar"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # zbar-> libv4l
++	depends on BR2_USE_MMU # zbar-> libv4l
++	depends on !BR2_STATIC_LIBS # zbar-> libv4l
++	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # zbar-> libv4l
+ 	select BR2_PACKAGE_ZBAR
  
- config BR2_PACKAGE_OPENOCD_USBPROG
- 	bool "USBProg JTAG Programmer"
-+	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	help
-@@ -100,6 +102,7 @@ config BR2_PACKAGE_OPENOCD_USBPROG
- 
- config BR2_PACKAGE_OPENOCD_RLINK
- 	bool "Raisonance RLink JTAG Programmer"
-+	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	help
-@@ -108,6 +111,7 @@ config BR2_PACKAGE_OPENOCD_RLINK
- 
- config BR2_PACKAGE_OPENOCD_ARMEW
- 	bool "Olimex ARM-JTAG-EW Programmer"
-+	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	help
-@@ -186,6 +190,7 @@ config BR2_PACKAGE_OPENOCD_PRESTO
- config BR2_PACKAGE_OPENOCD_OPENJTAG
- 	bool "OpenJTAG Programmer"
- 	select BR2_PACKAGE_LIBFTDI1
-+	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
- 	depends on BR2_ARCH_HAS_ATOMICS
++comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++
+ endif
