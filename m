@@ -1,101 +1,140 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jan 2016 17:07:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openocd: select libusb when
- selecting libusb-compat
-In-Reply-To: <1451664066-6127-1-git-send-email-romain.naour@gmail.com>
-References: <1451664066-6127-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160101160754.GB3710@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 1 Jan 2016 17:49:08 +0100
+Subject: [Buildroot] [PATCH] pkg-generic: improve incorrectly used
+ package detection
+In-Reply-To: <1451606483-29096-1-git-send-email-yann.morin.1998@free.fr>
+References: <1451606483-29096-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <5686AE04.7020703@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Hi Yann, All,
 
-On 2016-01-01 17:01 +0100, Romain Naour spake thusly:
-> libusb-compat depends on libusb package, so we need to select
-> libusb package at the same time as libusb-compat to avoid an
-> unmet dependency.
+Le 01/01/2016 01:01, Yann E. MORIN a ?crit :
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
-> stop if a package build is trigged at Makefile level without
-> being selected at Config.in level.
+> Currently, the check that packages we build are indeed enabled is done
+> at the time a package is configured.
 > 
-> This is the case here with BR2_PACKAGE_OPENOCD_USBPROG which
-> select BR2_PACKAGE_LIBUSB_COMPAT without selecting
-> BR2_PACKAGE_LIBUSB.
+> This can come quite late in the build process, and does not provide
+> direct knowledge of the real culprit for the incorrect dependency.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/b4a/b4a8c54eed6bf75ab8ade0653953d19792155727/
+> However, we can improve these two issues quite easily, albeit at the
+> expense of a very slightly more complicated make code.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> First, the check can not be done at the time we define the package, i.e.
+> in the inner-generic-pacakge, because all its dependencies might have
+> not been parsed yet, so we can't yet know whether it is enabled or not
+> (because we can't match the package name of the dependency to its
+> Kconfig variable yet).
+> 
+> But then, we know we have all packages definitions after we scanned the
+> the bundled packages, kernel, bootloaders and toolchains, as well as the
+> br2-external tree (if any).
+> 
+> So, at this location, we iterate through the list of enabled packages,
+> and check that the packages they each depend on are indeed enabled.
+> 
+> This allows us to:
+>  1- do the check very early, before any build action,
+>  2- report on the exact offending package very easily.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+While testing this patch with some packages enabled (efl + enlightenment), I get:
 
-Regards,
-Yann E. MORIN.
+make[1]: execvp: /bin/sh: Liste d'arguments trop longue
+package/pkg-generic.mk:200: recipe for target
+'output/build/skeleton-undefined/.stamp_configured' failed
 
+Any idea ?
+
+Best regards,
+Romain
+> 
 > ---
->  package/openocd/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+> Changes v2 -> v3:  (Yann)
+>   - completely drop the reverse dependency list
+>   - drop the pre-configure check
+>   - make it Makefile code
+>   - print the offending package
+>   - drop Thomas' SoB, as I rewrote it entirely and completely
+>     differently
 > 
-> diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-> index d84aac1..a35bd27 100644
-> --- a/package/openocd/Config.in
-> +++ b/package/openocd/Config.in
-> @@ -84,6 +84,7 @@ config BR2_PACKAGE_OPENOCD_AICE
->  
->  config BR2_PACKAGE_OPENOCD_VSLLINK
->  	bool "Versaloon-Link JTAG Programmer"
-> +	select BR2_PACKAGE_LIBUSB
->  	select BR2_PACKAGE_LIBUSB_COMPAT
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
->  	help
-> @@ -92,6 +93,7 @@ config BR2_PACKAGE_OPENOCD_VSLLINK
->  
->  config BR2_PACKAGE_OPENOCD_USBPROG
->  	bool "USBProg JTAG Programmer"
-> +	select BR2_PACKAGE_LIBUSB
->  	select BR2_PACKAGE_LIBUSB_COMPAT
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
->  	help
-> @@ -100,6 +102,7 @@ config BR2_PACKAGE_OPENOCD_USBPROG
->  
->  config BR2_PACKAGE_OPENOCD_RLINK
->  	bool "Raisonance RLink JTAG Programmer"
-> +	select BR2_PACKAGE_LIBUSB
->  	select BR2_PACKAGE_LIBUSB_COMPAT
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
->  	help
-> @@ -108,6 +111,7 @@ config BR2_PACKAGE_OPENOCD_RLINK
->  
->  config BR2_PACKAGE_OPENOCD_ARMEW
->  	bool "Olimex ARM-JTAG-EW Programmer"
-> +	select BR2_PACKAGE_LIBUSB
->  	select BR2_PACKAGE_LIBUSB_COMPAT
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
->  	help
-> @@ -186,6 +190,7 @@ config BR2_PACKAGE_OPENOCD_PRESTO
->  config BR2_PACKAGE_OPENOCD_OPENJTAG
->  	bool "OpenJTAG Programmer"
->  	select BR2_PACKAGE_LIBFTDI1
-> +	select BR2_PACKAGE_LIBUSB
->  	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
->  	depends on BR2_ARCH_HAS_ATOMICS
-> -- 
-> 2.4.3
+> Changes v1 -> v2:  (Yann)
+>   - recursively scan the reverse list of dependencies to find all the
+>     potential cuplrits, not only the first-level ones
+> ---
+>  Makefile               | 28 ++++++++++++++++++++++++++++
+>  package/pkg-generic.mk | 14 --------------
+>  2 files changed, 28 insertions(+), 14 deletions(-)
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> diff --git a/Makefile b/Makefile
+> index 71ace68..9139e81 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -434,6 +434,34 @@ include fs/common.mk
+>  
+>  include $(BR2_EXTERNAL)/external.mk
+>  
+> +# Now we are sure we have all the packages scanned and defined. We now
+> +# check for each package in the list of enabled packages, that all its
+> +# dependencies are indeed enabled.
+> +#
+> +# Only trigger the check for default builds. If the user forces building
+> +# a package, even if not enabled in the configuration, we want to accept
+> +# it.
+> +#
+> +ifeq ($(MAKECMDGOALS),)
+> +
+> +define CHECK_ONE_DEPENDENCY
+> +ifeq ($$($(2)_TYPE),target)
+> +ifeq ($$($(2)_IS_VIRTUAL),)
+> +ifneq ($$($$($(2)_KCONFIG_VAR)),y)
+> +$$(error $$($(2)_NAME) is in the dependency chain of $$($(1)_NAME) that \
+> +has added it to its _DEPENDENCIES variable without selecting it or \
+> +depending on it from Config.in)
+> +endif
+> +endif
+> +endif
+> +endef
+> +
+> +$(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
+> +	$(foreach dep,$(call UPPERCASE,$($(pkg)_FINAL_ALL_DEPENDENCIES)),\
+> +		$(eval $(call CHECK_ONE_DEPENDENCY,$(pkg),$(dep))$(sep))))
+> +
+> +endif
+> +
+>  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+>  	$(HOST_DIR) $(BINARIES_DIR)
+>  
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 9e88423..1e024d3 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -182,20 +182,6 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+>  
+>  # Configure
+>  $(BUILD_DIR)/%/.stamp_configured:
+> -# Only trigger the check for default builds. If the user forces
+> -# building a package, even if not enabled in the configuration, we
+> -# want to accept it.
+> -ifeq ($(MAKECMDGOALS),)
+> -	@if test "$($(PKG)_TYPE)" = "target" \
+> -		-a "$($(PKG)_IS_VIRTUAL)" != "YES" \
+> -		-a -z "$($($(PKG)_KCONFIG_VAR))" ; \
+> -	then \
+> -		echo "ERROR: $($(PKG)_NAME) is in the dependency chain of a package that has" ; \
+> -		echo "added it to its _DEPENDENCIES variable (directly or indirectly)" ; \
+> -		echo "without selecting it from Config.in." ; \
+> -		exit 1 ; \
+> -	fi
+> -endif
+>  	@$(call step_start,configure)
+>  	@$(call MESSAGE,"Configuring")
+>  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+> 
