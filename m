@@ -1,49 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jan 2016 22:52:28 +0100
-Subject: [Buildroot] [PATCH 3/3] vboot-utils: remove hash file
-In-Reply-To: <20160101145244.GA29643@vostro>
-References: <cover.1451483256.git.alex.suykov@gmail.com>
- <05e1570e0377fc9e913819765ecb8e488b6b6c1a.1451483256.git.alex.suykov@gmail.com>
- <20151230160016.14524b1f@free-electrons.com>
- <56844F79.3080903@mind.be>
- <20151230225333.171a6c4c@free-electrons.com>
- <56845669.3050005@mind.be>
- <20151230235323.3f11d1ea@free-electrons.com>
- <20160101145244.GA29643@vostro>
-Message-ID: <20160101215228.GC2182@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jan 2016 23:05:49 +0100
+Subject: [Buildroot] host directories in target rpath
+In-Reply-To: <20160101155622.GA20087@vostro>
+References: <20160101155622.GA20087@vostro>
+Message-ID: <20160101230549.6cb360cf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex, All,
+Dear Alex Suykov,
 
-On 2016-01-01 16:52 +0200, Alex Suykov spake thusly:
-> Wed, Dec 30, 2015 at 11:53:23PM +0100, Thomas Petazzoni wrote:
+On Fri, 1 Jan 2016 17:56:23 +0200, Alex Suykov wrote:
+
+> I noticed I have bunch of target executables with host directories in RPATH:
 > 
-> > >  So I think now we can safely conclude that a hash file should be added for all
-> > > packages, even if it just contains 'none' hashes. It is definitely an advantage
-> > > to be able to distinguish packages that should still get a hash from packages of
-> > 
-> > Agreed.
+>     $ readelf -d output/target/usr/bin/aserver | grep RPATH
+>      0x0000000f (RPATH) Library rpath: [/home/alex/src/buildroot.snow/output/build/alsa-lib-1.0.29/src/.libs]
+>     
+>     $ readelf -d output/target/usr/bin/glib-compile-resources | grep RPATH
+>      0x0000000f (RPATH) Library rpath: [/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/gio/.libs:/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/gobject/.libs:/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/gmodule/.libs:/home/alex/src/buildroot.snow/output/build/libglib2-2.46.1/glib/.libs:/home/alex/src/buildroot.snow/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib]
+>     
+>     $ readelf -d output/target/usr/bin/weston | grep RPATH
+>      0x0000000f (RPATH) Library rpath: [/home/alex/src/buildroot.snow/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib]
 > 
-> Ok, got it.
+> It does not break anything, but it's not right either.
+> And it makes strace output look rather messy.
 > 
-> Does it make sense to update the file name in .hash, or is it ok to leave it as is
-> since it's not used anyway?  It's (version).tar.gz now but the git checkout gets saved
-> as vboot-utils-(version).tar.gz.
+> A quick way to check it is building alsa-lib, which is where aserver comes from.
+> 
+> The underlying cause is libtool, and for autoreconfed packages I can fix it
+> by patching (host-)libtool. This fixes alsa-lib but not weston because weston
+> carries that code in its pre-built configure. So I have to either patch weston
+> in place (and also every non-autoreconfed package), or autoreconf them all.
+> 
+> What's your thoughts on this? Maybe there are better ways to fix it?
 
-Yes, you should update the file name, so that it matches the name the
-archive is saved as. Thanks for spotting the problem! :-)
+You can see the following patches from Samuel Martin, which aim at
+solving this problem:
 
-Regards,
-Yann E. MORIN.
+  http://patchwork.ozlabs.org/patch/494781/
+  http://patchwork.ozlabs.org/patch/494782/
+  http://patchwork.ozlabs.org/patch/494783/
+  http://patchwork.ozlabs.org/patch/494784/
+  http://patchwork.ozlabs.org/patch/494785/
 
+Samuel said he would respin them on top of master and post a new
+version of those patches.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
