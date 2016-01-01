@@ -1,37 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Jan 2016 19:56:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openocd: select libusb when
+Date: Fri, 1 Jan 2016 19:56:22 +0100
+Subject: [Buildroot] [git commit] package/openocd: select libusb when
 	selecting libusb-compat
-In-Reply-To: <1451664066-6127-1-git-send-email-romain.naour@gmail.com> (Romain
- Naour's message of "Fri, 1 Jan 2016 17:01:06 +0100")
-References: <1451664066-6127-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <87r3i1ruvf.fsf@dell.be.48ers.dk>
+Message-ID: <20160101185721.933477FE29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ee2f4138004a8fb7493039503dbedd8a73d6475d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libusb-compat depends on libusb package, so we need to select
- > libusb package at the same time as libusb-compat to avoid an
- > unmet dependency.
+libusb-compat depends on libusb package, so we need to select
+libusb package at the same time as libusb-compat to avoid an
+unmet dependency.
 
- > Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
- > stop if a package build is trigged at Makefile level without
- > being selected at Config.in level.
+Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
+stop if a package build is trigged at Makefile level without
+being selected at Config.in level.
 
- > This is the case here with BR2_PACKAGE_OPENOCD_USBPROG which
- > select BR2_PACKAGE_LIBUSB_COMPAT without selecting
- > BR2_PACKAGE_LIBUSB.
+This is the case here with BR2_PACKAGE_OPENOCD_USBPROG which
+select BR2_PACKAGE_LIBUSB_COMPAT without selecting
+BR2_PACKAGE_LIBUSB.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/b4a/b4a8c54eed6bf75ab8ade0653953d19792155727/
+Fixes:
+http://autobuild.buildroot.net/results/b4a/b4a8c54eed6bf75ab8ade0653953d19792155727/
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openocd/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+index d84aac1..a35bd27 100644
+--- a/package/openocd/Config.in
++++ b/package/openocd/Config.in
+@@ -84,6 +84,7 @@ config BR2_PACKAGE_OPENOCD_AICE
+ 
+ config BR2_PACKAGE_OPENOCD_VSLLINK
+ 	bool "Versaloon-Link JTAG Programmer"
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+@@ -92,6 +93,7 @@ config BR2_PACKAGE_OPENOCD_VSLLINK
+ 
+ config BR2_PACKAGE_OPENOCD_USBPROG
+ 	bool "USBProg JTAG Programmer"
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+@@ -100,6 +102,7 @@ config BR2_PACKAGE_OPENOCD_USBPROG
+ 
+ config BR2_PACKAGE_OPENOCD_RLINK
+ 	bool "Raisonance RLink JTAG Programmer"
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+@@ -108,6 +111,7 @@ config BR2_PACKAGE_OPENOCD_RLINK
+ 
+ config BR2_PACKAGE_OPENOCD_ARMEW
+ 	bool "Olimex ARM-JTAG-EW Programmer"
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+@@ -186,6 +190,7 @@ config BR2_PACKAGE_OPENOCD_PRESTO
+ config BR2_PACKAGE_OPENOCD_OPENJTAG
+ 	bool "OpenJTAG Programmer"
+ 	select BR2_PACKAGE_LIBFTDI1
++	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	depends on BR2_ARCH_HAS_ATOMICS
