@@ -1,11 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jan 2016 12:03:20 +0100
-Subject: [Buildroot] [PATCH 46/84 RFC] package/directfb: use 'menuconfig'
-In-Reply-To: <5687282E.1070904@mind.be>
+Date: Sat, 2 Jan 2016 12:09:21 +0100
+Subject: [Buildroot] [PATCH 0/84 RFC] all: use 'menuconfig' to group
+ sub-options (branch yem/menuconfig)
+In-Reply-To: <56872C44.9090202@mind.be>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <1b63f13fc3066aa397dedf17e729b031497ce113.1451076704.git.yann.morin.1998@free.fr>
- <5687282E.1070904@mind.be>
-Message-ID: <20160102110320.GE3477@free.fr>
+ <56847581.6000407@mind.be> <20151231172852.GG3495@free.fr>
+ <56872C44.9090202@mind.be>
+Message-ID: <20160102110921.GF3477@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,47 +15,60 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2016-01-02 02:30 +0100, Arnout Vandecappelle spake thusly:
-> On 25-12-15 22:25, Yann E. MORIN wrote:
-> > directfb has more than 5 options, so use a 'menuconfig' to group the
-> > options in an sub-menu.
+On 2016-01-02 02:47 +0100, Arnout Vandecappelle spake thusly:
+> On 31-12-15 18:28, Yann E. MORIN wrote:
+> > On 2015-12-31 01:23 +0100, Arnout Vandecappelle spake thusly:
+> >> On 25-12-15 22:25, Yann E. MORIN wrote:
+> >>> Hello All!
+> >>>
+> >>> This RFC series is a proposal to cleanup the layout of the menuconfig
+> >>> UI. Although it looks to be pretty long (84 patches), it really is only
+> >>> three different changes :
+> >>>
+> >>>   - patches 1-6: re-order comments to fix indentation of sub-options;
+> >>>     this can probably be applied without too much discussion, as it is
+> >>>     really only a cleanup;
+> >>>
+> >>>   - patches 7-35: changes use of 'config'+'menu' into a 'menuconfig'
+> >>>     (the Kconfig keywords) to automatically arrange the sub-options into
+> >>>     sub-menus;
+> >>>
+> >>>   - patches 36-84: document that packages with 5 or more options should
+> >>>     use sub-menus (with 'menuconfig') to store their sub-options
+> >>>     (patches 36-39); it then changes a lot of packages accordingly
+> >>>     (patches 40-84).
+> >>
+> >>  I reviewed and tested patches 7-39, you can add my
+> >>
+> >> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  package/directfb/Config.in | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-> > index 73425d3..6a233dc 100644
-> > --- a/package/directfb/Config.in
-> > +++ b/package/directfb/Config.in
-> > @@ -1,4 +1,4 @@
-> > -config BR2_PACKAGE_DIRECTFB
-> > +menuconfig BR2_PACKAGE_DIRECTFB
-> >  	bool "directfb"
-> >  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> >  	depends on BR2_INSTALL_LIBSTDCPP
+> > Thank you for the review. I know by experience that reviewing long
+> > series can be tedious, so: thanks!
 > 
->  Maybe directfb-examples should be moved into this menu as well?
+>  You can now ack up to and including 58 (libiio).
 
-I was not sure about that one.
+Great! Thank you very much for having had another look! :-)
 
-directfb-examples is a separate package that buids _on top_ of directfb;
-it does not provide additional features like addons or modules that can
-be 'dynamically loaded' at runtime (like gst plugins or php mdules or
-perl addons or...).
+(I'll add your ACKs after fixing the little nits here and there you
+already commented on, like comments to drop...)
 
-IMHO it's a bit like enlightenment and EFL: enlightenment is only one
-package that can _use_ EFL and does not enhance EFL.
+> >> to the ones where I didn't have comments. I didn't bother adding Acks everywhere
+> >> because it's anyway not going to be picked up by Patchwork.
+> > 
+> > Yep, I sent the series as an RFC, just to "feel the temperature of the
+> > water".
+> 
+>  For actual submission, perhaps squash a little here and there. Although in fact
+> they're not really squashable, except perhaps 41-84 but that would be a pretty
+> big patch.
 
-But since they are example for DirectFB, it probably does not nmake
-sense to have it on the final target, and they would probably be used
-only during development, so could belong to the directfb sub-menu.
+Well, and what about my commit count? ;-]
 
-Anyway, I'll leave it out for now, we can move it later if people
-prefer.
+But yeah, I don't think we could squash it, at least during the review. I
+think it is easier to review a lot of little patches rather than a bit
+one even if the changes are simple.
 
-Thanks! :-)
+Thanks!
 
 Regards,
 Yann E. MORIN.
