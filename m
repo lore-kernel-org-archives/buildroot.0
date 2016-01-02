@@ -1,131 +1,88 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 2 Jan 2016 10:05:25 +0100
-Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
-In-Reply-To: <20160101224914.GE2182@free.fr>
-References: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
- <20160101222835.GD2182@free.fr> <20160101224914.GE2182@free.fr>
-Message-ID: <CAGm1_ktsesfzLN6GKBuNviVc1Yn-_XegksJyLuycxY+heXy=VQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Jan 2016 11:10:43 +0100
+Subject: [Buildroot] [PATCH 22/84 RFC] package/perl: use 'menuconfig'
+ instead of 'config'+'menu'
+In-Reply-To: <56871AD6.3040702@mind.be>
+References: <cover.1451076704.git.yann.morin.1998@free.fr>
+ <9a9c7803ba0a2c468d0a58f809f1fe8d4539e048.1451076704.git.yann.morin.1998@free.fr>
+ <56871AD6.3040702@mind.be>
+Message-ID: <20160102101043.GA3477@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 1, 2016 at 11:49 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Yegor, All,
->
-> On 2016-01-01 23:28 +0100, Yann E. MORIN spake thusly:
->> On 2016-01-01 23:18 +0100, Yegor Yefremov spake thusly:
->> > Add hash file and change download location to PyPi.
->>
->> Why did you change the location?
->>
->> I think we want to use upstream locations as much as possible, and only
->> fallback to alternative locations when there is no upstream, or upstream
->> is flaky.
->
-> OK, I think I know why you wanted to download from PyPi: the current
-> package we have will download an archive named ae5b6cf.tar.gz without
-> the name of the package.
->
-> That's because Bitbucket provides snapshots as such.
->
-> Also, there is not 'tag' per-se in the repository; upstream only
-> updates the version in the setup.py script.
->
-> I don't think it is bad to use a hash when there is no human-readable
-> version tagged. But we are currently using the short hash, when we
-> require the full hash.
->
-> So, I'd suggest we fix it by using the Hg download method:
->
->     PYTHON_CAN_VERSION = 4085cffd2519f0ce21779e26b5c43ce8c007e9aa
->     PYHTON_CAN_SITE = https://bitbucket.org/hardbyte/python-can
->     PYHTON_CAN_SITE_METHOD = hg
->
-> Then we have tarballs properly named with the package name and the full
-> hash.
->
-> Care to update and respin, please? Thanks!
+Arnout, All,
 
-I don't always change download location for Python packages, but when
-I do, I change it to PyPi :-)
+On 2016-01-02 01:33 +0100, Arnout Vandecappelle spake thusly:
+> On 25-12-15 22:24, Yann E. MORIN wrote:
+> > Move the perl library/modules inclusion to the perl's Config.in.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/Config.in      | 47 -----------------------------------------------
+> >  package/perl/Config.in | 48 +++++++++++++++++++++++++++++++++++++++++++++++-
+> >  2 files changed, 47 insertions(+), 48 deletions(-)
+> > 
+> [snip]
+> > diff --git a/package/perl/Config.in b/package/perl/Config.in
+> > index cdd5aab..635a6f8 100644
+> > --- a/package/perl/Config.in
+> > +++ b/package/perl/Config.in
+> > @@ -1,4 +1,4 @@
+> > -config BR2_PACKAGE_PERL
+> > +menuconfig BR2_PACKAGE_PERL
+> >  	bool "perl"
+> >  	depends on BR2_USE_MMU # fork()
+> >  	help
+> > @@ -24,4 +24,50 @@ config BR2_PACKAGE_PERL_MODULES
+> >  	  Leave empty for all modules (as far as the external libraries
+> >  	  are available).
+> >  
+> > +comment "Perl libraries/modules"
+> 
+>  This comment looks pretty weird in xconfig, but OK in menuconfig and something
+> definitely needs to be put in there, so OK.
 
-First of all it is simpler with checksums: you have official MD5 and
-in addition you add sha256.
+Hmm.. I never use xconfig, because I think xconfig already looks weird to
+me. ;-)  But indeed it looks weird. But the "custom modules selection"
+looks weird as well (well, I guess all 'string' and 'int' look weird in
+xconfig, and gconfig is only so slightly better).
 
-PyPi is a standard place to download official package releases. Many
-Python packages in BR have PyPi. It is also very easy to add a new
-package using PyPi based package as template. I'm even thinking about
-making a PyPi helper.
+What I'm a bit worried for xconfig and gconfig, is that, if we remove
+the "Perl libraries/modules" comment, the "custom modules selection"
+just above would seem to indicate that the custom modules are listed
+below, which it is not since it is a string option, not a comment.
 
-Upstream repo can be used, if there are important fixes and official
-released is not planned.
+But Eh... Graybeard speaking... ;-)
 
-What do you think?
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> Regards,
-> Yann E. MORIN.
->
->> Regards,
->> Yann E. MORIN.
->>
->> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> > ---
->> >  package/python-can/python-can.hash | 3 +++
->> >  package/python-can/python-can.mk   | 5 ++---
->> >  2 files changed, 5 insertions(+), 3 deletions(-)
->> >  create mode 100644 package/python-can/python-can.hash
->> >
->> > diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
->> > new file mode 100644
->> > index 0000000..fc9fc2a
->> > --- /dev/null
->> > +++ b/package/python-can/python-can.hash
->> > @@ -0,0 +1,3 @@
->> > +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=63e922ae913bb0db1dd54e9189810130, sha256 locally computed
->> > +md5     63e922ae913bb0db1dd54e9189810130  python-can-1.4.1.tar.gz
->> > +sha256  ab60195d112504fc4d38b74fb4a6874cd509066472b9d6d3516a8ce1485cec6f  python-can-1.4.1.tar.gz
->> > diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
->> > index c7b06a5..9a9d9df 100644
->> > --- a/package/python-can/python-can.mk
->> > +++ b/package/python-can/python-can.mk
->> > @@ -4,9 +4,8 @@
->> >  #
->> >  ################################################################################
->> >
->> > -PYTHON_CAN_VERSION = ae5b6cf
->> > -PYTHON_CAN_SITE = https://bitbucket.org/hardbyte/python-can/get
->> > -PYTHON_CAN_SOURCE = $(PYTHON_CAN_VERSION).tar.bz2
->> > +PYTHON_CAN_VERSION = 1.4.1
->> > +PYTHON_CAN_SITE = https://pypi.python.org/packages/source/p/python-can
->> >  PYTHON_CAN_LICENSE = LGPLv3
->> >  PYTHON_CAN_LICENSE_FILES = LICENSE.txt
->> >  PYTHON_CAN_SETUP_TYPE = setuptools
->> > --
->> > 2.1.4
->> >
->> > _______________________________________________
->> > buildroot mailing list
->> > buildroot at busybox.net
->> > http://lists.busybox.net/mailman/listinfo/buildroot
->>
->> --
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->> '------------------------------^-------^------------------^--------------------'
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Thanks! I appreciate you re-reviewed the series! :-)
+
+Regards,
+Yann E. MORIN.
+
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+> [snip]
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
