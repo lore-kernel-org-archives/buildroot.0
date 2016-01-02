@@ -1,104 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jan 2016 22:18:41 +0100
-Subject: [Buildroot] [PATCH 2/2] New package RPi-GPIO
-In-Reply-To: <1451735982-5703-2-git-send-email-haylocki@yahoo.co.uk>
-References: <1451735982-5703-1-git-send-email-haylocki@yahoo.co.uk>
- <1451735982-5703-2-git-send-email-haylocki@yahoo.co.uk>
-Message-ID: <56883EB1.5070607@mind.be>
+Date: Sat, 2 Jan 2016 22:35:33 +0100
+Subject: [Buildroot] [PATCH] Add download helper for PyPi
+In-Reply-To: <1451766174-7072-1-git-send-email-yegorslists@googlemail.com>
+References: <1451766174-7072-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <568842A5.6010103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Ian,
-
- In addition to Yegor's comments, a few more things below.
-
-On 02-01-16 12:59, Ian Haylock wrote:
-> Signed-off-by: Ian Haylock <haylocki@yahoo.co.uk>
-> ---
->  package/python-rpi-gpio/Config.in            |  9 +++++++++
->  package/python-rpi-gpio/python-rpi-gpio.hash |  4 ++++
->  package/python-rpi-gpio/python-rpi-gpio.mk   | 14 ++++++++++++++
->  3 files changed, 27 insertions(+)
->  create mode 100755 package/python-rpi-gpio/Config.in
->  create mode 100755 package/python-rpi-gpio/python-rpi-gpio.hash
->  create mode 100755 package/python-rpi-gpio/python-rpi-gpio.mk
-
- These files should not be executable.
-
+On 02-01-16 21:22, Yegor Yefremov wrote:
+> PyPi has following URL structure:
 > 
-> diff --git a/package/python-rpi-gpio/Config.in b/package/python-rpi-gpio/Config.in
-> new file mode 100755
-> index 0000000..da5b8c2
-> --- /dev/null
-> +++ b/package/python-rpi-gpio/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_RPI_GPIO
-> +        bool "python-rpi-gpio"
+> https://pypi.python.org/packages/source/{first pkg name char}/{pkg name}
+> 
+> User only needs to pass package name to the helper. The helper itself
+> extracts the first package name character and inserts it into download URL
+> together with package name.
+> 
+> Usage example:
+> 
+> PYTHON_SIX_SITE = $(call pypi,six)
 
- Indentation should be a single tab.
+ The reason we introduced this variable for github was that github had changed
+the direct URL a few times. For pypi, there is no such problem.
 
-> +	depends on BR2_arm
-> +	depends on BR2_PACKAGE_PYTHON
-> +
-> +        help
+ In general, we prefer to keep things explicit, even if that is more verbose.
+The $(call pypi,six) is nice and terse, but it makes it more difficult to
+copy/paste the URL in your browser for instance.
 
- Here as well.
-
-> +          A Python module to control the GPIO on a Raspberry Pi.
-
- And here one tab followed by two spaces.
-
-> +
-> +          http://sourceforge.net/p/raspberry-gpio-python
-> \ No newline at end of file
-
- There should be a newline at the end of the file (not an empty line, but the
-last character should be \n).
-
-> diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
-> new file mode 100755
-> index 0000000..b234396
-> --- /dev/null
-> +++ b/package/python-rpi-gpio/python-rpi-gpio.hash
-> @@ -0,0 +1,4 @@
-> +md5	a98d0b33e16fce3f303136e963b187ec	RPi.GPIO-0.5.11.tar.gz
-> +
-> +
-> +
-
- There shouldn't be any empty lines here.
-
-> diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
-> new file mode 100755
-> index 0000000..efad0f3
-> --- /dev/null
-> +++ b/package/python-rpi-gpio/python-rpi-gpio.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-rpi-gpio
-> +#
-> +################################################################################
-> +
-> +PYTHON_RPI_GPIO_VERSION = 0.5.11
-> +PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
-> +PYTHON_RPI_GPIO_SITE = http://sourceforge.net/projects/raspberry-gpio-python/files
-> +PYTHON_RPI_GPIO_LICENSE = MIT
-> +PYTHON_RPI_GPIO_LICENSE_FILES = LICENSE.txt
-> +PYTHON_RPI_GPIO_SETUP_TYPE = distutils
-> +
-> +$(eval $(python-package))
-> \ No newline at end of file
-
- There should be a newline here as well.
+ In short, I'm not too fond of this new helper.
 
 
  Regards,
  Arnout
 
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/pkg-download.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 1332e66..caaeba5 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -55,6 +55,9 @@ domainseparator = $(if $(1),$(1),/)
+>  # github(user,package,version): returns site of GitHub repository
+>  github = https://github.com/$(1)/$(2)/archive/$(3)
+>  
+> +# pypi(package): returns site of PyPi download location
+> +pypi = https://pypi.python.org/packages/source/$(shell echo $(1) | cut -c1)/$(1)
+> +
+>  # Expressly do not check hashes for those files
+>  # Exported variables default to immediately expanded in some versions of
+>  # make, but we need it to be recursively-epxanded, so explicitly assign it.
 > 
 
 
