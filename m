@@ -1,73 +1,93 @@
-From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <noe.rubinstein@gmail.com>
-Date: Sat,  2 Jan 2016 12:13:30 +0100
-Subject: [Buildroot] [PATCH v2] tpm-tools: fix build failures caused by
-	-Werror
-Message-ID: <1451733210-11293-1-git-send-email-noe.rubinstein@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Jan 2016 12:15:29 +0100
+Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
+In-Reply-To: <CAGm1_ktsesfzLN6GKBuNviVc1Yn-_XegksJyLuycxY+heXy=VQ@mail.gmail.com>
+References: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
+ <20160101222835.GD2182@free.fr> <20160101224914.GE2182@free.fr>
+ <CAGm1_ktsesfzLN6GKBuNviVc1Yn-_XegksJyLuycxY+heXy=VQ@mail.gmail.com>
+Message-ID: <20160102111529.GG3477@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes this build failure (and many others):
-  http://autobuild.buildroot.org/results/d56/d56bfc69ef0a478219c959d50fb96d526fc2155e/
+Yegor, All,
 
-The build failure is caused by the build system using -Werror; this is
-already patched upstream, so this commit just imports the upstream
-patch.
+On 2016-01-02 10:05 +0100, Yegor Yefremov spake thusly:
+> On Fri, Jan 1, 2016 at 11:49 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2016-01-01 23:28 +0100, Yann E. MORIN spake thusly:
+> >> On 2016-01-01 23:18 +0100, Yegor Yefremov spake thusly:
+> >> > Add hash file and change download location to PyPi.
+> >>
+> >> Why did you change the location?
+> >>
+> >> I think we want to use upstream locations as much as possible, and only
+> >> fallback to alternative locations when there is no upstream, or upstream
+> >> is flaky.
+> >
+> > OK, I think I know why you wanted to download from PyPi: the current
+> > package we have will download an archive named ae5b6cf.tar.gz without
+> > the name of the package.
+> >
+> > That's because Bitbucket provides snapshots as such.
+> >
+> > Also, there is not 'tag' per-se in the repository; upstream only
+> > updates the version in the setup.py script.
+> >
+> > I don't think it is bad to use a hash when there is no human-readable
+> > version tagged. But we are currently using the short hash, when we
+> > require the full hash.
+> >
+> > So, I'd suggest we fix it by using the Hg download method:
+> >
+> >     PYTHON_CAN_VERSION = 4085cffd2519f0ce21779e26b5c43ce8c007e9aa
+> >     PYHTON_CAN_SITE = https://bitbucket.org/hardbyte/python-can
+> >     PYHTON_CAN_SITE_METHOD = hg
+> >
+> > Then we have tarballs properly named with the package name and the full
+> > hash.
+> >
+> > Care to update and respin, please? Thanks!
+> 
+> I don't always change download location for Python packages, but when
+> I do, I change it to PyPi :-)
+> 
+> First of all it is simpler with checksums: you have official MD5 and
+> in addition you add sha256.
+> 
+> PyPi is a standard place to download official package releases. Many
+> Python packages in BR have PyPi. It is also very easy to add a new
+> package using PyPi based package as template. I'm even thinking about
+> making a PyPi helper.
+> 
+> Upstream repo can be used, if there are important fixes and official
+> released is not planned.
+> 
+> What do you think?
 
-Signed-off-by: No? Rubinstein <noe.rubinstein@gmail.com>
----
- .../0002-configure.in-remove-Werror.patch          | 27 ++++++++++++++++++++++
- package/tpm-tools/tpm-tools.mk                     |  2 +-
- 2 files changed, 28 insertions(+), 1 deletion(-)
- create mode 100644 package/tpm-tools/0002-configure.in-remove-Werror.patch
+As discussed on IRC: yeah, you were not the one who changed all the
+other PyPi-related locations. ;-)
 
-diff --git a/package/tpm-tools/0002-configure.in-remove-Werror.patch b/package/tpm-tools/0002-configure.in-remove-Werror.patch
-new file mode 100644
-index 0000000..c101a95
---- /dev/null
-+++ b/package/tpm-tools/0002-configure.in-remove-Werror.patch
-@@ -0,0 +1,27 @@
-+From b060873f444d79f3f5aa388427cb1ede6665834a Mon Sep 17 00:00:00 2001
-+From: Kent Yoder <key@linux.vnet.ibm.com>
-+Date: Mon, 5 Nov 2012 14:58:31 -0600
-+Subject: [PATCH] configure.in: remove -Werror
-+
-+Signed-off-by: Kent Yoder <key@linux.vnet.ibm.com>
-+Signed-off-by: Noe Rubinstein <nrubinstein@aldebaran.com>
-+---
-+ configure.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.in b/configure.in
-+index da170d0..0f175be 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -138,7 +138,7 @@ AC_TYPE_SIZE_T
-+ AC_TYPE_SIGNAL
-+ AC_TYPE_UID_T
-+ 
-+-CFLAGS="$CFLAGS -Wall -Werror -Wreturn-type -Wsign-compare"
-++CFLAGS="$CFLAGS -Wall -Wreturn-type -Wsign-compare"
-+ 
-+ AC_CONFIG_FILES(./Makefile		\
-+ 		po/Makefile.in		\
-+-- 
-+2.1.4
-+
-diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
-index 9dd844d..d196e89 100644
---- a/package/tpm-tools/tpm-tools.mk
-+++ b/package/tpm-tools/tpm-tools.mk
-@@ -12,7 +12,7 @@ TPM_TOOLS_LICENSE = Common Public License Version 1.0
- TPM_TOOLS_LICENSE_FILES = LICENSE
- TPM_TOOLS_DEPENDENCIES = trousers openssl \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
--# lib/Makefile.am is patched
-+# configure.in and lib/Makefile.am is patched
- TPM_TOOLS_AUTORECONF = YES
- 
- TPM_TOOLS_CONF_OPTS = --disable-pkcs11-support
+I was only referring to that very patch.
+
+Still, I think we should use upstream locations, not some packaging
+location. For example, switching to PyPi for Python packages would be
+like switching to Debian for 'native' packages. We don't do that (except
+when upstream has disapeared, is acting...)
+
+The argument about the hash is only patially valid: md5 is long dead
+now, and you still have to compute a sha256 anyway.
+
+But as seen on IRC: let's see what others think.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
