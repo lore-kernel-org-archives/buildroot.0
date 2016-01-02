@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jan 2016 22:56:25 +0100
-Subject: [Buildroot] [PATCH 80/84 RFC] boot/at91bootstrap3: use
- 'menuconfig'
-In-Reply-To: <6e4ec02d3d97c4d6e87aaf93f2abbcdabd3d91e8.1451076704.git.yann.morin.1998@free.fr>
+Date: Sat, 2 Jan 2016 23:09:30 +0100
+Subject: [Buildroot] [PATCH 82/84 RFC] boot/grub: use 'menuconfig'
+In-Reply-To: <e066fd4b8d753cd95c9d70ca5d91517ee94461eb.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <6e4ec02d3d97c4d6e87aaf93f2abbcdabd3d91e8.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <56884789.6070807@mind.be>
+ <e066fd4b8d753cd95c9d70ca5d91517ee94461eb.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <56884A9A.5040403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +12,59 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 25-12-15 22:25, Yann E. MORIN wrote:
-> at91bootstrap3 has more than 5 options, so use a 'menuconfig' to
+> grub has more than 5 options, so use a 'menuconfig' to
 > group the options in an sub-menu.
 
- It's a bit weird that at91bootstrap3 has a menu and at91bootstrap doesn't, but OK.
+ Again, weird that grub has a menu and grub2 doesn't. Perhaps we should give
+grub2 a menu as well.
 
  Regards,
  Arnout
 
+
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  boot/at91bootstrap3/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  boot/grub/Config.in | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
 > 
-> diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-> index b8ebe80..6f4050c 100644
-> --- a/boot/at91bootstrap3/Config.in
-> +++ b/boot/at91bootstrap3/Config.in
+> diff --git a/boot/grub/Config.in b/boot/grub/Config.in
+> index 4db8642..3ae688f 100644
+> --- a/boot/grub/Config.in
+> +++ b/boot/grub/Config.in
 > @@ -1,4 +1,4 @@
-> -config BR2_TARGET_AT91BOOTSTRAP3
-> +menuconfig BR2_TARGET_AT91BOOTSTRAP3
->  	depends on BR2_arm926t || BR2_cortex_a5
->  	bool "AT91 Bootstrap 3"
+> -config BR2_TARGET_GRUB
+> +menuconfig BR2_TARGET_GRUB
+>  	bool "grub"
+>  	depends on BR2_i386 || BR2_x86_64
+>  	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
+> @@ -52,7 +52,7 @@ config BR2_TARGET_GRUB_DISKLESS
 >  	help
+>  	  enable diskless support
+>  
+> -menu "filesystem drivers"
+> +comment "Filesystem drivers"
+>  
+>  config BR2_TARGET_GRUB_FS_EXT2
+>  	bool "ext2"
+> @@ -86,9 +86,7 @@ config BR2_TARGET_GRUB_FS_XFS
+>  	help
+>  	  Enable support for the XFS filesystem in Grub.
+>  
+> -endmenu
+> -
+> -menu "network drivers"
+> +comment "Network drivers"
+>  
+>  config BR2_TARGET_GRUB_3c595
+>  	bool "3Com595 driver"
+> @@ -195,6 +193,4 @@ config BR2_TARGET_GRUB_w89c840
+>  	help
+>  	  enable Winbond W89c840 driver
+>  
+> -endmenu
+> -
+>  endif # BR2_TARGET_GRUB
 > 
 
 
