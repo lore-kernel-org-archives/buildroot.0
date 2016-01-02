@@ -1,37 +1,30 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Sat, 2 Jan 2016 01:16:14 -0500
-Subject: [Buildroot] [PATCH 1/2 v4] vboot-utils: new package
-In-Reply-To: <20151224192602.GA14377@vostro>
-References: <20151224184333.GA7510@vostro> <20151224185516.GO25803@vapier.lan>
- <20151224192602.GA14377@vostro>
-Message-ID: <20160102061614.GP25803@vapier.lan>
+Date: Sat, 2 Jan 2016 01:17:40 -0500
+Subject: [Buildroot] [PATCH 0/3] vboot-utils fixes
+In-Reply-To: <cover.1451483256.git.alex.suykov@gmail.com>
+References: <cover.1451483256.git.alex.suykov@gmail.com>
+Message-ID: <20160102061740.GQ25803@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24 Dec 2015 21:26, Alex Suykov wrote:
-> Thu, Dec 24, 2015 at 01:55:16PM -0500, Mike Frysinger wrote:
+On 30 Dec 2015 16:05, Alex Suykov wrote:
+> vboot-utils depend on relatively recent host kernel headers,
+> and fail to build on some of the autobuilders.
 > 
-> > this seems to have the same errors i pointed out in the ealier versions
+> MTD_CHAR_MAJOR definition appears in linux-3.13, and ssize_t related
+> failures probably happen with glibc from the same timeframe.
 > 
-> (this message I think:
-> http://lists.busybox.net/pipermail/buildroot/2015-December/146493.html )
+> Sadly I cannot check it properly, I can only tell it does not break
+> builds on newer systems. If possible, please try them on some older
+> systems before applying.
 > 
-> "ChromiumOS" instead of "Chromium OS" in Config.host.in, overlooked that.
-> This is going into v5 patch then.
-> 
-> As for the tarball issue, I don't think there are any better options.
-> It's either that, or a git checkout.
-> Do you mean it would be better to use git instead?
+> If everything works well, I'd try to send 0002 upstream, but probably not 0001.
+> It's an ugly fix and I don't think upstream cares much about older kernels.
 
-i mean git is the only option.  any hash you commit will be invalid for
-any other user.  unless you download that tarball and host it on your own
-site and list that as the source, but i think that's frowned upon.
-
-run `wget` multiple times on the archive URI and you should get different
-results every time.
+please send all of them to us via gerrit
 -mike
 -------------- next part --------------
 A non-text attachment was scrubbed...
@@ -39,4 +32,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 819 bytes
 Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160102/5f7442eb/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160102/80135f9b/attachment.asc>
