@@ -1,85 +1,49 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 2 Jan 2016 22:50:44 +0100
-Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
-In-Reply-To: <56883B79.2050806@mind.be>
-References: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
- <20160101222835.GD2182@free.fr> <20160101224914.GE2182@free.fr>
- <CAGm1_ktsesfzLN6GKBuNviVc1Yn-_XegksJyLuycxY+heXy=VQ@mail.gmail.com>
- <20160102111529.GG3477@free.fr> <56883B79.2050806@mind.be>
-Message-ID: <CA+TH9Vn0=XqUhDZO0eAj1qis6GmjAJhJob3mDhOq_q2wCMGZsw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Jan 2016 22:56:25 +0100
+Subject: [Buildroot] [PATCH 80/84 RFC] boot/at91bootstrap3: use
+ 'menuconfig'
+In-Reply-To: <6e4ec02d3d97c4d6e87aaf93f2abbcdabd3d91e8.1451076704.git.yann.morin.1998@free.fr>
+References: <cover.1451076704.git.yann.morin.1998@free.fr>
+ <6e4ec02d3d97c4d6e87aaf93f2abbcdabd3d91e8.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <56884789.6070807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, Arnout, All
+On 25-12-15 22:25, Yann E. MORIN wrote:
+> at91bootstrap3 has more than 5 options, so use a 'menuconfig' to
+> group the options in an sub-menu.
 
-2016-01-02 22:04 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
-> On 02-01-16 12:15, Yann E. MORIN wrote:
->> Yegor, All,
->>
->
-> [snip]
->
->> Still, I think we should use upstream locations, not some packaging
->> location. For example, switching to PyPi for Python packages would be
->> like switching to Debian for 'native' packages. We don't do that (except
->> when upstream has disapeared, is acting...)
->
->  This analogy is not quite correct. PyPi is a distribution channel, not a
-> downstream. Not that I can think of a better analogy though. But the important
-> thing is: the PyPi location is under control of the upstream author, so it is
-> equally upstream as the git repo. Brian Thorne (the python-can author) doesn't
-> upload tarballs to the bitbucket location (you only get the automatic ones), but
-> only to PyPi. So there really is something to be said for using PyPi as the
-> download location.
+ It's a bit weird that at91bootstrap3 has a menu and at91bootstrap doesn't, but OK.
 
-I'm following (and contributing to) python-can for more than a year
-now and this is the first time in my memory that a release was
-uploaded to PyPi, and this happened cause someone asked for that on a
-project issue.
+ Regards,
+ Arnout
 
-IMHO, it will not happen in the future again if not prompted by someone.
-
-Indeed, I originally submitted the package using bitbucket as a source
-location, cause it was the only available.
-
-Sincerely, Angelo.
-
->
->>
->> The argument about the hash is only patially valid: md5 is long dead
->> now, and you still have to compute a sha256 anyway.
->
->  Very true.
->
->  Basically I'm OK with either location.
->
->  Regards,
->  Arnout
->
->>
->> But as seen on IRC: let's see what others think.
->>
->> Regards,
->> Yann E. MORIN.
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  boot/at91bootstrap3/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+> index b8ebe80..6f4050c 100644
+> --- a/boot/at91bootstrap3/Config.in
+> +++ b/boot/at91bootstrap3/Config.in
+> @@ -1,4 +1,4 @@
+> -config BR2_TARGET_AT91BOOTSTRAP3
+> +menuconfig BR2_TARGET_AT91BOOTSTRAP3
+>  	depends on BR2_arm926t || BR2_cortex_a5
+>  	bool "AT91 Bootstrap 3"
+>  	help
+> 
 
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
