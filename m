@@ -1,76 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jan 2016 02:47:48 +0100
-Subject: [Buildroot] [PATCH 0/84 RFC] all: use 'menuconfig' to group
- sub-options (branch yem/menuconfig)
-In-Reply-To: <20151231172852.GG3495@free.fr>
-References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <56847581.6000407@mind.be> <20151231172852.GG3495@free.fr>
-Message-ID: <56872C44.9090202@mind.be>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sat, 2 Jan 2016 01:16:14 -0500
+Subject: [Buildroot] [PATCH 1/2 v4] vboot-utils: new package
+In-Reply-To: <20151224192602.GA14377@vostro>
+References: <20151224184333.GA7510@vostro> <20151224185516.GO25803@vapier.lan>
+ <20151224192602.GA14377@vostro>
+Message-ID: <20160102061614.GP25803@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-12-15 18:28, Yann E. MORIN wrote:
-> Arnout, All,
+On 24 Dec 2015 21:26, Alex Suykov wrote:
+> Thu, Dec 24, 2015 at 01:55:16PM -0500, Mike Frysinger wrote:
 > 
-> On 2015-12-31 01:23 +0100, Arnout Vandecappelle spake thusly:
->> On 25-12-15 22:25, Yann E. MORIN wrote:
->>> Hello All!
->>>
->>> This RFC series is a proposal to cleanup the layout of the menuconfig
->>> UI. Although it looks to be pretty long (84 patches), it really is only
->>> three different changes :
->>>
->>>   - patches 1-6: re-order comments to fix indentation of sub-options;
->>>     this can probably be applied without too much discussion, as it is
->>>     really only a cleanup;
->>>
->>>   - patches 7-35: changes use of 'config'+'menu' into a 'menuconfig'
->>>     (the Kconfig keywords) to automatically arrange the sub-options into
->>>     sub-menus;
->>>
->>>   - patches 36-84: document that packages with 5 or more options should
->>>     use sub-menus (with 'menuconfig') to store their sub-options
->>>     (patches 36-39); it then changes a lot of packages accordingly
->>>     (patches 40-84).
->>
->>  I reviewed and tested patches 7-39, you can add my
->>
->> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> > this seems to have the same errors i pointed out in the ealier versions
 > 
-> Thank you for the review. I know by experience that reviewing long
-> series can be tedious, so: thanks!
-
- You can now ack up to and including 58 (libiio).
-
+> (this message I think:
+> http://lists.busybox.net/pipermail/buildroot/2015-December/146493.html )
 > 
->> to the ones where I didn't have comments. I didn't bother adding Acks everywhere
->> because it's anyway not going to be picked up by Patchwork.
+> "ChromiumOS" instead of "Chromium OS" in Config.host.in, overlooked that.
+> This is going into v5 patch then.
 > 
-> Yep, I sent the series as an RFC, just to "feel the temperature of the
-> water".
+> As for the tarball issue, I don't think there are any better options.
+> It's either that, or a git checkout.
+> Do you mean it would be better to use git instead?
 
- For actual submission, perhaps squash a little here and there. Although in fact
-they're not really squashable, except perhaps 41-84 but that would be a pretty
-big patch.
+i mean git is the only option.  any hash you commit will be invalid for
+any other user.  unless you download that tarball and host it on your own
+site and list that as the source, but i think that's frowned upon.
 
- Regards,
- Arnout
-
-> 
-> Thanks! :-)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+run `wget` multiple times on the archive URI and you should get different
+results every time.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160102/5f7442eb/attachment.asc>
