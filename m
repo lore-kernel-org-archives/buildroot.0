@@ -1,71 +1,50 @@
-From: Ian Haylock <haylocki@yahoo.co.uk>
-Date: Sat,  2 Jan 2016 11:59:42 +0000
-Subject: [Buildroot] [PATCH 2/2] New package RPi-GPIO
-In-Reply-To: <1451735982-5703-1-git-send-email-haylocki@yahoo.co.uk>
-References: <1451735982-5703-1-git-send-email-haylocki@yahoo.co.uk>
-Message-ID: <1451735982-5703-2-git-send-email-haylocki@yahoo.co.uk>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 2 Jan 2016 13:58:37 +0100
+Subject: [Buildroot] [PATCH] support/download: generate reproducible Hg
+	archives
+In-Reply-To: <1451734549-27492-1-git-send-email-yann.morin.1998@free.fr>
+References: <1451734549-27492-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAGm1_kumWnQquRTPJKAkqFxhjn4okw0Ruidse_5J+d_HFvBFWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ian Haylock <haylocki@yahoo.co.uk>
----
- package/python-rpi-gpio/Config.in            |  9 +++++++++
- package/python-rpi-gpio/python-rpi-gpio.hash |  4 ++++
- package/python-rpi-gpio/python-rpi-gpio.mk   | 14 ++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100755 package/python-rpi-gpio/Config.in
- create mode 100755 package/python-rpi-gpio/python-rpi-gpio.hash
- create mode 100755 package/python-rpi-gpio/python-rpi-gpio.mk
+On Sat, Jan 2, 2016 at 12:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> When hg directly creates the output file, the hash for that file changes
+> everytime.
+>
+> However, if we just tell hg to output the archive on stdout and we do
+> the redirect to the file, then the archive is reproducible.
+>
+> (The reason is that in the first case, a temporary file is created and
+> then compressed, and gzip is adding the filename and its timestamp in
+> the gzip header, while in the second case, there is no temporary file,
+> and thus no timestamp and thus it is reproducible.)
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/python-rpi-gpio/Config.in b/package/python-rpi-gpio/Config.in
-new file mode 100755
-index 0000000..da5b8c2
---- /dev/null
-+++ b/package/python-rpi-gpio/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_RPI_GPIO
-+        bool "python-rpi-gpio"
-+	depends on BR2_arm
-+	depends on BR2_PACKAGE_PYTHON
-+
-+        help
-+          A Python module to control the GPIO on a Raspberry Pi.
-+
-+          http://sourceforge.net/p/raspberry-gpio-python
-\ No newline at end of file
-diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
-new file mode 100755
-index 0000000..b234396
---- /dev/null
-+++ b/package/python-rpi-gpio/python-rpi-gpio.hash
-@@ -0,0 +1,4 @@
-+md5	a98d0b33e16fce3f303136e963b187ec	RPi.GPIO-0.5.11.tar.gz
-+
-+
-+
-diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
-new file mode 100755
-index 0000000..efad0f3
---- /dev/null
-+++ b/package/python-rpi-gpio/python-rpi-gpio.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-rpi-gpio
-+#
-+################################################################################
-+
-+PYTHON_RPI_GPIO_VERSION = 0.5.11
-+PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
-+PYTHON_RPI_GPIO_SITE = http://sourceforge.net/projects/raspberry-gpio-python/files
-+PYTHON_RPI_GPIO_LICENSE = MIT
-+PYTHON_RPI_GPIO_LICENSE_FILES = LICENSE.txt
-+PYTHON_RPI_GPIO_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
-\ No newline at end of file
--- 
-2.6.4
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+> ---
+> Note: Yegor, you'll now be able to use the 'hg' method to download
+> reproducible archives! Hehe! ;-)
+> ---
+>  support/download/hg | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/support/download/hg b/support/download/hg
+> index 5bdbbc8..25cb4e9 100755
+> --- a/support/download/hg
+> +++ b/support/download/hg
+> @@ -35,4 +35,4 @@ _hg clone ${verbose} --noupdate "'${repo}'" "'${basename}'"
+>
+>  _hg archive ${verbose} --repository "'${basename}'" --type tgz \
+>              --prefix "'${basename}'" --rev "'${cset}'" \
+> -            "'${output}'"
+> +            - >"${output}"
+> --
+> 1.9.1
+>
