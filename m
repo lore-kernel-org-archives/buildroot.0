@@ -1,61 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jan 2016 22:35:33 +0100
-Subject: [Buildroot] [PATCH] Add download helper for PyPi
-In-Reply-To: <1451766174-7072-1-git-send-email-yegorslists@googlemail.com>
-References: <1451766174-7072-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <568842A5.6010103@mind.be>
+Date: Sat, 2 Jan 2016 22:44:52 +0100
+Subject: [Buildroot] [PATCH 65/84 RFC] package/gnuradio: split long
+	omment
+In-Reply-To: <f020ad988a84c95b108db63d7e82e312faa7dae1.1451076704.git.yann.morin.1998@free.fr>
+References: <cover.1451076704.git.yann.morin.1998@free.fr>
+ <f020ad988a84c95b108db63d7e82e312faa7dae1.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <568844D4.2060805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02-01-16 21:22, Yegor Yefremov wrote:
-> PyPi has following URL structure:
+On 25-12-15 22:25, Yann E. MORIN wrote:
+> It does not fit even is a wider-than-normal terminal.
 > 
-> https://pypi.python.org/packages/source/{first pkg name char}/{pkg name}
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/gnuradio/Config.in | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> User only needs to pass package name to the helper. The helper itself
-> extracts the first package name character and inserts it into download URL
-> together with package name.
-> 
-> Usage example:
-> 
-> PYTHON_SIX_SITE = $(call pypi,six)
+> diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+> index f2c884b..d502b06 100644
+> --- a/package/gnuradio/Config.in
+> +++ b/package/gnuradio/Config.in
+> @@ -58,8 +58,11 @@ config BR2_PACKAGE_GNURADIO_UTILS
+>  	help
+>  	  Misc python utilities
+>  
+> -comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager depends fftw's single precision"
+> -	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
+> +if !BR2_PACKAGE_FFTW_PRECISION_SINGLE
+> +comment "gr-fft, gr-filter, gr-analog, gr-channels,"
+> +comment "gr-digital, gr-trellis and gr-pager all"
+> +comment "depend on fftw's single precision"
 
- The reason we introduced this variable for github was that github had changed
-the direct URL a few times. For pypi, there is no such problem.
+ This would perhaps be a good occasion to also correct the sentence into
+something like "single precision implementation".
 
- In general, we prefer to keep things explicit, even if that is more verbose.
-The $(call pypi,six) is nice and terse, but it makes it more difficult to
-copy/paste the URL in your browser for instance.
-
- In short, I'm not too fond of this new helper.
-
+ Also, it would be prettier if the excess space were filled up with spaces so
+the *** lines up, like we do in Config.in.legacy.
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/pkg-download.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 1332e66..caaeba5 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -55,6 +55,9 @@ domainseparator = $(if $(1),$(1),/)
->  # github(user,package,version): returns site of GitHub repository
->  github = https://github.com/$(1)/$(2)/archive/$(3)
+> +endif
 >  
-> +# pypi(package): returns site of PyPi download location
-> +pypi = https://pypi.python.org/packages/source/$(shell echo $(1) | cut -c1)/$(1)
-> +
->  # Expressly do not check hashes for those files
->  # Exported variables default to immediately expanded in some versions of
->  # make, but we need it to be recursively-epxanded, so explicitly assign it.
+>  if BR2_PACKAGE_FFTW_PRECISION_SINGLE
+>  
 > 
 
 
