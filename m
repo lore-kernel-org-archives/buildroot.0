@@ -1,50 +1,38 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 2 Jan 2016 13:58:37 +0100
-Subject: [Buildroot] [PATCH] support/download: generate reproducible Hg
-	archives
-In-Reply-To: <1451734549-27492-1-git-send-email-yann.morin.1998@free.fr>
-References: <1451734549-27492-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAGm1_kumWnQquRTPJKAkqFxhjn4okw0Ruidse_5J+d_HFvBFWg@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  2 Jan 2016 15:42:15 +0100
+Subject: [Buildroot] [PATCH] package/tremor: select libogg package
+Message-ID: <1451745735-5358-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 2, 2016 at 12:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> When hg directly creates the output file, the hash for that file changes
-> everytime.
->
-> However, if we just tell hg to output the archive on stdout and we do
-> the redirect to the file, then the archive is reproducible.
->
-> (The reason is that in the first case, a temporary file is created and
-> then compressed, and gzip is adding the filename and its timestamp in
-> the gzip header, while in the second case, there is no temporary file,
-> and thus no timestamp and thus it is reproducible.)
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+tremor depends on libogg package but doesn't select it
+in Config.in. so libogg build is trigged at Makefile level.
 
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
+stop if a package build is trigged at Makefile level without
+being selected at Config.in level.
 
-> ---
-> Note: Yegor, you'll now be able to use the 'hg' method to download
-> reproducible archives! Hehe! ;-)
-> ---
->  support/download/hg | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/support/download/hg b/support/download/hg
-> index 5bdbbc8..25cb4e9 100755
-> --- a/support/download/hg
-> +++ b/support/download/hg
-> @@ -35,4 +35,4 @@ _hg clone ${verbose} --noupdate "'${repo}'" "'${basename}'"
->
->  _hg archive ${verbose} --repository "'${basename}'" --type tgz \
->              --prefix "'${basename}'" --rev "'${cset}'" \
-> -            "'${output}'"
-> +            - >"${output}"
-> --
-> 1.9.1
->
+Fixes:
+http://autobuild.buildroot.net/results/0da/0da3265f0f1e499f5d34ed32b0d13a2eda53f976
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/tremor/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/tremor/Config.in b/package/tremor/Config.in
+index 6125926..1a478c4 100644
+--- a/package/tremor/Config.in
++++ b/package/tremor/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TREMOR
+ 	bool "tremor (fixed point vorbis decoder)"
++	select BR2_PACKAGE_LIBOGG
+ 	help
+ 	  Tremor is a fixed point implementation of an Ogg Vorbis
+ 	  decoder. It provides a decoding API similar to libvorbis,
+-- 
+2.4.3
