@@ -1,43 +1,60 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat,  2 Jan 2016 21:22:54 +0100
-Subject: [Buildroot] [PATCH] Add download helper for PyPi
-Message-ID: <1451766174-7072-1-git-send-email-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Jan 2016 22:04:57 +0100
+Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
+In-Reply-To: <20160102111529.GG3477@free.fr>
+References: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
+ <20160101222835.GD2182@free.fr> <20160101224914.GE2182@free.fr>
+ <CAGm1_ktsesfzLN6GKBuNviVc1Yn-_XegksJyLuycxY+heXy=VQ@mail.gmail.com>
+ <20160102111529.GG3477@free.fr>
+Message-ID: <56883B79.2050806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PyPi has following URL structure:
+On 02-01-16 12:15, Yann E. MORIN wrote:
+> Yegor, All,
+> 
 
-https://pypi.python.org/packages/source/{first pkg name char}/{pkg name}
+[snip]
 
-User only needs to pass package name to the helper. The helper itself
-extracts the first package name character and inserts it into download URL
-together with package name.
+> Still, I think we should use upstream locations, not some packaging
+> location. For example, switching to PyPi for Python packages would be
+> like switching to Debian for 'native' packages. We don't do that (except
+> when upstream has disapeared, is acting...)
 
-Usage example:
+ This analogy is not quite correct. PyPi is a distribution channel, not a
+downstream. Not that I can think of a better analogy though. But the important
+thing is: the PyPi location is under control of the upstream author, so it is
+equally upstream as the git repo. Brian Thorne (the python-can author) doesn't
+upload tarballs to the bitbucket location (you only get the automatic ones), but
+only to PyPi. So there really is something to be said for using PyPi as the
+download location.
 
-PYTHON_SIX_SITE = $(call pypi,six)
+> 
+> The argument about the hash is only patially valid: md5 is long dead
+> now, and you still have to compute a sha256 anyway.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/pkg-download.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ Very true.
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 1332e66..caaeba5 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -55,6 +55,9 @@ domainseparator = $(if $(1),$(1),/)
- # github(user,package,version): returns site of GitHub repository
- github = https://github.com/$(1)/$(2)/archive/$(3)
- 
-+# pypi(package): returns site of PyPi download location
-+pypi = https://pypi.python.org/packages/source/$(shell echo $(1) | cut -c1)/$(1)
-+
- # Expressly do not check hashes for those files
- # Exported variables default to immediately expanded in some versions of
- # make, but we need it to be recursively-epxanded, so explicitly assign it.
+ Basically I'm OK with either location.
+
+ Regards,
+ Arnout
+
+> 
+> But as seen on IRC: let's see what others think.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
