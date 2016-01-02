@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jan 2016 01:54:25 +0100
-Subject: [Buildroot] [PATCH 27/84 RFC] package/python{,
- 3}: move inclusion of external python modules
-In-Reply-To: <356c69a5fadbf7e6cdbff04b3d12ba2db5282568.1451076704.git.yann.morin.1998@free.fr>
+Date: Sat, 2 Jan 2016 01:55:40 +0100
+Subject: [Buildroot] [PATCH 29/84 RFC] package/tcl: use 'menuconfig'
+ instad of 'config'+'menu'
+In-Reply-To: <647ce3d24f32a353382c1de643fef55f1e336e52.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <356c69a5fadbf7e6cdbff04b3d12ba2db5282568.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <56871FC1.5030809@mind.be>
+ <647ce3d24f32a353382c1de643fef55f1e336e52.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <5687200C.8080409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 25-12-15 22:24, Yann E. MORIN wrote:
-> Introduce a Config.ext for external python modules, that both python and
-> python include from there respective sub-menus.
+> Move inclusion of Tcl libraries/modules to Tcl's Config.in so that they
+> appear in Tcl's sub-menu.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -24,15 +24,11 @@ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  Arnout
 
 > ---
->  package/Config.in          | 96 ----------------------------------------------
->  package/python/Config.ext  | 96 ++++++++++++++++++++++++++++++++++++++++++++++
->  package/python/Config.in   |  2 +
->  package/python3/Config.ext |  1 +
->  package/python3/Config.in  |  2 +
->  5 files changed, 101 insertions(+), 96 deletions(-)
->  create mode 100644 package/python/Config.ext
->  create mode 120000 package/python3/Config.ext
-[snip]
+>  package/Config.in     | 6 ------
+>  package/tcl/Config.in | 7 ++++++-
+>  2 files changed, 6 insertions(+), 7 deletions(-)
+
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
