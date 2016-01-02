@@ -1,15 +1,17 @@
 From: Scott Fan <fancp2007@gmail.com>
-Date: Sat,  2 Jan 2016 23:52:32 +0800
-Subject: [Buildroot] [PATCH v5] Remmina is a remote desktop client written
-	in GTK+. Currently RDP, VNC, NX, XDMCP and SSH are supported.
-In-Reply-To: <1441118174-9899-1-git-send-email-fancp2007@gmail.com>
-References: <1441118174-9899-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <1451749952-9608-1-git-send-email-fancp2007@gmail.com>
+Date: Sat,  2 Jan 2016 23:55:15 +0800
+Subject: [Buildroot] [PATCH v5] remmina: new package
+In-Reply-To: <1451749952-9608-1-git-send-email-fancp2007@gmail.com>
+References: <1451749952-9608-1-git-send-email-fancp2007@gmail.com>
+Message-ID: <1451750115-9989-1-git-send-email-fancp2007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Remmina is a remote desktop client written in GTK+.
+Currently RDP, VNC, NX, XDMCP and SSH are supported.
 
 http://remmina.sourceforge.net/
 
