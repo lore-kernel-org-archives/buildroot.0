@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jan 2016 01:25:42 +0100
-Subject: [Buildroot] [PATCH 17/84 RFC] package/mono: use 'menuconfig'
+Date: Sat, 2 Jan 2016 01:33:26 +0100
+Subject: [Buildroot] [PATCH 22/84 RFC] package/perl: use 'menuconfig'
  instead of 'config'+'menu'
-In-Reply-To: <878e69d3cc61ddd814ec4d45aef231e151978a15.1451076704.git.yann.morin.1998@free.fr>
+In-Reply-To: <9a9c7803ba0a2c468d0a58f809f1fe8d4539e048.1451076704.git.yann.morin.1998@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <878e69d3cc61ddd814ec4d45aef231e151978a15.1451076704.git.yann.morin.1998@free.fr>
-Message-ID: <56871906.1020802@mind.be>
+ <9a9c7803ba0a2c468d0a58f809f1fe8d4539e048.1451076704.git.yann.morin.1998@free.fr>
+Message-ID: <56871AD6.3040702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 25-12-15 22:24, Yann E. MORIN wrote:
-> This is a bit overkill, as there is only one sub-item. However, this
-> commit is not about judging whether it makes sense or not to have a
-> sub-menu, but to cleanup the 'config'+'menu' situation.
+> Move the perl library/modules inclusion to the perl's Config.in.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/Config.in      | 47 -----------------------------------------------
+>  package/perl/Config.in | 48 +++++++++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 47 insertions(+), 48 deletions(-)
+> 
+[snip]
+> diff --git a/package/perl/Config.in b/package/perl/Config.in
+> index cdd5aab..635a6f8 100644
+> --- a/package/perl/Config.in
+> +++ b/package/perl/Config.in
+> @@ -1,4 +1,4 @@
+> -config BR2_PACKAGE_PERL
+> +menuconfig BR2_PACKAGE_PERL
+>  	bool "perl"
+>  	depends on BR2_USE_MMU # fork()
+>  	help
+> @@ -24,4 +24,50 @@ config BR2_PACKAGE_PERL_MODULES
+>  	  Leave empty for all modules (as far as the external libraries
+>  	  are available).
+>  
+> +comment "Perl libraries/modules"
 
- Definitely overkill, since it is even empty when gtk3 isn't selected...
-
- But as you say, that's not what this patch is about, so
+ This comment looks pretty weird in xconfig, but OK in menuconfig and something
+definitely needs to be put in there, so OK.
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/Config.in      | 5 -----
->  package/mono/Config.in | 8 +++++++-
->  2 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 73a3ac8..4d2b763 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -539,11 +539,6 @@ endif
->  	source "package/micropython-lib/Config.in"
->  	source "package/moarvm/Config.in"
->  	source "package/mono/Config.in"
-> -if BR2_PACKAGE_MONO
-> -menu "Mono libraries/modules"
-> -	source "package/mono-gtksharp3/Config.in"
-> -endmenu
-> -endif
->  	source "package/nodejs/Config.in"
->  	source "package/perl/Config.in"
->  if BR2_PACKAGE_PERL
-> diff --git a/package/mono/Config.in b/package/mono/Config.in
-> index cf18a03..c00a3fa 100644
-> --- a/package/mono/Config.in
-> +++ b/package/mono/Config.in
-> @@ -3,7 +3,7 @@ config BR2_PACKAGE_MONO_ARCH_SUPPORTS
->  	default y if (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
->  		      BR2_mipsel || BR2_powerpc || BR2_sparc || BR2_x86_64)
->  
-> -config BR2_PACKAGE_MONO
-> +menuconfig BR2_PACKAGE_MONO
->  	bool "mono"
->  	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> @@ -14,6 +14,12 @@ config BR2_PACKAGE_MONO
->  
->  	  http://download.mono-project.com/sources/mono/
->  
-> +if BR2_PACKAGE_MONO
-> +
-> +source "package/mono-gtksharp3/Config.in"
-> +
-> +endif
-> +
->  comment "mono needs a toolchain w/ threads, dynamic library"
->  	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> 
 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
