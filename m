@@ -1,63 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jan 2016 02:21:46 +0100
-Subject: [Buildroot] [PATCH 32/84 RFC] package/gstreamer: include
- plugins from gstreamer's real Config.in
-In-Reply-To: <20151231172336.GD3495@free.fr>
+Date: Sat, 2 Jan 2016 02:23:29 +0100
+Subject: [Buildroot] [PATCH 38/84 RFC] docs/manual: add example about
+ sub-options
+In-Reply-To: <20151231172653.GF3495@free.fr>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <14c33d26a86cb2bb6673d5f053fb871dbfe9b8c8.1451076704.git.yann.morin.1998@free.fr>
- <56847303.4040608@mind.be> <20151231172336.GD3495@free.fr>
-Message-ID: <5687262A.3030300@mind.be>
+ <d74a1da746237dff8a24373d5f561853bcc6b175.1451076704.git.yann.morin.1998@free.fr>
+ <5684740D.3060107@mind.be> <20151231172653.GF3495@free.fr>
+Message-ID: <56872691.6050507@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-12-15 18:23, Yann E. MORIN wrote:
+On 31-12-15 18:26, Yann E. MORIN wrote:
 > Arnout, All,
 > 
-> On 2015-12-31 01:12 +0100, Arnout Vandecappelle spake thusly:
+> On 2015-12-31 01:17 +0100, Arnout Vandecappelle spake thusly:
 >> On 25-12-15 22:25, Yann E. MORIN wrote:
->>> It is more logical to have a single if-clause, rather than repeat it in
->>> another file, possiblty brealking indentation like it previously was.
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> ---
+>>>  docs/manual/adding-packages-directory.txt | 25 +++++++++++++++++++++++++
+>>>  1 file changed, 25 insertions(+)
+>>>
+>>> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+>>> index faf967c..2b9e714 100644
+>>> --- a/docs/manual/adding-packages-directory.txt
+>>> +++ b/docs/manual/adding-packages-directory.txt
+>>> @@ -54,6 +54,31 @@ examples in other packages. The syntax of the +Config.in+ file is the same
+>>>  as the one for the kernel Kconfig file. The documentation for this syntax is
+>>>  available at http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[]
+>>>  
+>>> +For example:
+>>> +
+>>> +---------------------------
+>>> +config BR2_PACKAGE_LIBFOO
+>>> +	bool "libfoo"
+>>> +	help
+>>> +	  This is a comment that explains what libfoo is.
+>>> +
+>>> +	  http://foosoftware.org/libfoo/
+>>> +
+>>> +if BR2_PACKAGE_LIBFOO
+>>> +
+>>> +config BR2_PACKAGE_LIBFOO_BAR
+>>> +	bool "bar support"
+>>> +	help
+>>> +	  This is a comment that briefly explains what
+>>> +	  bar support is, if it's not obvious.
 >>
->>  I actually preferred the way it was indented before. Now there is no
->> distinction anymore between the gstreamer options and the additional plugin
->> packages.
+>>  This should be indented at 72 columns like we require in the real Config.in.
 > 
-> Yes, that is on-purpose. The gstreamer plugins are really "sub-options"
-> (in the end-user experience) of gstreamer. That they are in fact
-> completely different packages is still irrelevant to him. ;-)
+> Yes, but in this case, the second line is really short, and in that case
+> I prefer (and usually tend to use) a shorter first line so the second
+> line is more than one or two words, it looks easier to read to me...
 
- Well, according to that reasoning the packages should not be shown and instead
-only the plug-in list should be there. I don't think we're going to do that.
-
- The reason I had less of a concern about gstreamer is because here most of them
-are in fact pieces of the same project (like kodi, xorg, matchbox, etc). The
-others (python, php, ...) are really external plugins. Of course there are also
-some "external" plugins here, but even those tend to get absorbed by the
-superproject eventually (like what happened with gst-omx for instance).
-
- Still,
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+ Well, this is the manual, we're setting the example here, so not sticking to
+the rule would be confusing IMHO.
 
  Regards,
  Arnout
 
 > 
+> But I don't feel strongly about it either. I'll fix.
+> 
 > Regards,
 > Yann E. MORIN.
 > 
->> But I don't feel strongly about it.
->>
->>
 >>  Regards,
 >>  Arnout
->>
 [snip]
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
