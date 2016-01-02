@@ -1,12 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jan 2016 11:28:19 +0100
-Subject: [Buildroot] [PATCH 24/84 RFC] package/php: use 'menuconfig'
- instad of 'config'+'menu'
-In-Reply-To: <56871E59.4090803@mind.be>
+Date: Sat, 2 Jan 2016 11:34:11 +0100
+Subject: [Buildroot] [PATCH 32/84 RFC] package/gstreamer: include
+ plugins from gstreamer's real Config.in
+In-Reply-To: <5687262A.3030300@mind.be>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <7f07ff3547359b272d229ebd4ca3740b7c6eff84.1451076704.git.yann.morin.1998@free.fr>
- <56871E59.4090803@mind.be>
-Message-ID: <20160102102819.GB3477@free.fr>
+ <14c33d26a86cb2bb6673d5f053fb871dbfe9b8c8.1451076704.git.yann.morin.1998@free.fr>
+ <56847303.4040608@mind.be> <20151231172336.GD3495@free.fr>
+ <5687262A.3030300@mind.be>
+Message-ID: <20160102103411.GC3477@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +16,44 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2016-01-02 01:48 +0100, Arnout Vandecappelle spake thusly:
-> On 25-12-15 22:24, Yann E. MORIN wrote:
-> > Move the external extensions selection into the bundled extensions'
-> > Config.in.
+On 2016-01-02 02:21 +0100, Arnout Vandecappelle spake thusly:
+> On 31-12-15 18:23, Yann E. MORIN wrote:
+> > Arnout, All,
 > > 
-> > Make the menu prompt a comment, reword it so that it is more in line
-> > with the following comments.
+> > On 2015-12-31 01:12 +0100, Arnout Vandecappelle spake thusly:
+> >> On 25-12-15 22:25, Yann E. MORIN wrote:
+> >>> It is more logical to have a single if-clause, rather than repeat it in
+> >>> another file, possiblty brealking indentation like it previously was.
+> >>
+> >>  I actually preferred the way it was indented before. Now there is no
+> >> distinction anymore between the gstreamer options and the additional plugin
+> >> packages.
 > > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Yes, that is on-purpose. The gstreamer plugins are really "sub-options"
+> > (in the end-user experience) of gstreamer. That they are in fact
+> > completely different packages is still irrelevant to him. ;-)
 > 
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
->  I still think it looks really weird that you have XSL and then php-geoip.
+>  Well, according to that reasoning the packages should not be shown and instead
+> only the plug-in list should be there. I don't think we're going to do that.
 
-Well, it looks a bit different, indeed. But I think it is a good thing,
-since they are external extensions and thus stand out in the list.
+No, especially since it is totally possible to use gstreamer even
+without the base plugins, using only local (aka proprietary) plugins.
 
-> Perhaps we should consider letting go of the rule that the prompt should be the
-> exact package name, and instead make it plain geoip. But that's more churn...
+>  The reason I had less of a concern about gstreamer is because here most of them
+> are in fact pieces of the same project (like kodi, xorg, matchbox, etc).
 
-By 'the exact package name', did you mean 'the way we named it in
-Buildroot' or 'the way upstream named it' ?  Speaking about 'package'
-can quickly get really confusing! ;-)
+OK, I understand now.
 
-However, I think we should really use the way upstream names it,
-whatever we call it in Buildroot.
+But for Kodi, not all the addons are managed by the "Kodi project". For
+example, most if not all the PVR addons are completely separately
+developped.
 
-But s you said, it's more churn, and we can work on it later. If needed.
+> The
+> others (python, php, ...) are really external plugins. Of course there are also
+> some "external" plugins here, but even those tend to get absorbed by the
+> superproject eventually (like what happened with gst-omx for instance).
 
-Thanks!
+I now see what was the difference for you, thanks!
 
 Regards,
 Yann E. MORIN.
