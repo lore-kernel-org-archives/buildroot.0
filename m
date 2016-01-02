@@ -1,65 +1,36 @@
-From: lothar felten <felten@vaxnet.de>
-Date: Sat,  2 Jan 2016 23:25:03 +0100
-Subject: [Buildroot] [PATCH 1/1] added option to enable or disable reboot on
-	ctrl-alt-del
-Message-ID: <1451773503-11764-1-git-send-email-felten@vaxnet.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Jan 2016 23:31:27 +0100
+Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
+In-Reply-To: <20160101222835.GD2182@free.fr>
+References: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
+ <20160101222835.GD2182@free.fr>
+Message-ID: <20160102233127.0c6f078c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: felten <felten@vaxnet.de>
+Yann, all,
 
-Signed-off-by: lothar felten <felten@vaxnet.de>
----
- package/skeleton/skeleton.mk | 12 ++++++++++++
- system/Config.in             | 10 ++++++++++
- 2 files changed, 22 insertions(+)
+On Fri, 1 Jan 2016 23:28:35 +0100, Yann E. MORIN wrote:
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index d640e24..7c9d8ed 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -230,6 +230,18 @@ define SKELETON_SYSTEM_REMOUNT_RW
- endef
- endif
- TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_REMOUNT_RW
-+ifeq ($(BR2_TARGET_GENERIC_ENABLE_CTRL_ALT_DEL),y)
-+# Find commented line, if any, and remove leading '#'s
-+define SKELETON_SYSTEM_ENABLE_CTRL_ALT_DEL
-+	$(SED) '/^#.*ctrlaltdel.*$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
-+endef
-+else
-+# Find uncommented line, if any, and add a leading '#'
-+define SKELETON_SYSTEM_ENABLE_CTRL_ALT_DEL
-+	$(SED) '/^[^#].*ctrlaltdel.*$$/s~^~#~' $(TARGET_DIR)/etc/inittab
-+endef
-+endif
-+TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_ENABLE_CTRL_ALT_DEL
- endif # BR2_INIT_BUSYBOX || BR2_INIT_SYSV
- 
- endif # BR2_ROOTFS_SKELETON_DEFAULT
-diff --git a/system/Config.in b/system/Config.in
-index 2e14971..e3ff125 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -347,6 +347,16 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- 	  read-only.
- 	  If unsure, say Y.
- 
-+config BR2_TARGET_GENERIC_ENABLE_CTRL_ALT_DEL
-+	bool "enable system reboot on ctrl-alt-del"
-+	default y
-+	help
-+	  By default, pressing ctrl-alt-del will reboot the system by invoking
-+	  the reboot command.
-+	  Say no here if you would rather like your system to ignore the
-+	  ctrl-alt-del combination.
-+	  If unsure, say y.
-+
- endif # BR2_ROOTFS_SKELETON_DEFAULT
- 
- 
+> I think we want to use upstream locations as much as possible, and only
+> fallback to alternative locations when there is no upstream, or upstream
+> is flaky.
+
+For Python packages, I actually find it quite practical when PyPi is
+used. Indeed, instead of having dozens of weird upstream locations and
+release behavior, you have one consistent way of fetching Python
+modules. It also makes it easier when reviewing new packages, when
+looking at package bumps, since you know what to expect from PyPi.
+
+So I wouldn't be as strict as you said in terms of not using PyPi.
+
+Best regards,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
