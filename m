@@ -1,13 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jan 2016 11:35:01 +0100
-Subject: [Buildroot] [PATCH 38/84 RFC] docs/manual: add example about
- sub-options
-In-Reply-To: <56872691.6050507@mind.be>
+Date: Sat, 2 Jan 2016 12:03:20 +0100
+Subject: [Buildroot] [PATCH 46/84 RFC] package/directfb: use 'menuconfig'
+In-Reply-To: <5687282E.1070904@mind.be>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <d74a1da746237dff8a24373d5f561853bcc6b175.1451076704.git.yann.morin.1998@free.fr>
- <5684740D.3060107@mind.be> <20151231172653.GF3495@free.fr>
- <56872691.6050507@mind.be>
-Message-ID: <20160102103501.GD3477@free.fr>
+ <1b63f13fc3066aa397dedf17e729b031497ce113.1451076704.git.yann.morin.1998@free.fr>
+ <5687282E.1070904@mind.be>
+Message-ID: <20160102110320.GE3477@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,77 +14,50 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2016-01-02 02:23 +0100, Arnout Vandecappelle spake thusly:
-> On 31-12-15 18:26, Yann E. MORIN wrote:
-> > On 2015-12-31 01:17 +0100, Arnout Vandecappelle spake thusly:
-> >> On 25-12-15 22:25, Yann E. MORIN wrote:
-> >>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >>> ---
-> >>>  docs/manual/adding-packages-directory.txt | 25 +++++++++++++++++++++++++
-> >>>  1 file changed, 25 insertions(+)
-> >>>
-> >>> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> >>> index faf967c..2b9e714 100644
-> >>> --- a/docs/manual/adding-packages-directory.txt
-> >>> +++ b/docs/manual/adding-packages-directory.txt
-> >>> @@ -54,6 +54,31 @@ examples in other packages. The syntax of the +Config.in+ file is the same
-> >>>  as the one for the kernel Kconfig file. The documentation for this syntax is
-> >>>  available at http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[]
-> >>>  
-> >>> +For example:
-> >>> +
-> >>> +---------------------------
-> >>> +config BR2_PACKAGE_LIBFOO
-> >>> +	bool "libfoo"
-> >>> +	help
-> >>> +	  This is a comment that explains what libfoo is.
-> >>> +
-> >>> +	  http://foosoftware.org/libfoo/
-> >>> +
-> >>> +if BR2_PACKAGE_LIBFOO
-> >>> +
-> >>> +config BR2_PACKAGE_LIBFOO_BAR
-> >>> +	bool "bar support"
-> >>> +	help
-> >>> +	  This is a comment that briefly explains what
-> >>> +	  bar support is, if it's not obvious.
-> >>
-> >>  This should be indented at 72 columns like we require in the real Config.in.
+On 2016-01-02 02:30 +0100, Arnout Vandecappelle spake thusly:
+> On 25-12-15 22:25, Yann E. MORIN wrote:
+> > directfb has more than 5 options, so use a 'menuconfig' to group the
+> > options in an sub-menu.
 > > 
-> > Yes, but in this case, the second line is really short, and in that case
-> > I prefer (and usually tend to use) a shorter first line so the second
-> > line is more than one or two words, it looks easier to read to me...
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/directfb/Config.in | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+> > index 73425d3..6a233dc 100644
+> > --- a/package/directfb/Config.in
+> > +++ b/package/directfb/Config.in
+> > @@ -1,4 +1,4 @@
+> > -config BR2_PACKAGE_DIRECTFB
+> > +menuconfig BR2_PACKAGE_DIRECTFB
+> >  	bool "directfb"
+> >  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> >  	depends on BR2_INSTALL_LIBSTDCPP
 > 
->  Well, this is the manual, we're setting the example here, so not sticking to
-> the rule would be confusing IMHO.
+>  Maybe directfb-examples should be moved into this menu as well?
 
-Agreed. I'll fix.
+I was not sure about that one.
 
-Thanks!
+directfb-examples is a separate package that buids _on top_ of directfb;
+it does not provide additional features like addons or modules that can
+be 'dynamically loaded' at runtime (like gst plugins or php mdules or
+perl addons or...).
+
+IMHO it's a bit like enlightenment and EFL: enlightenment is only one
+package that can _use_ EFL and does not enhance EFL.
+
+But since they are example for DirectFB, it probably does not nmake
+sense to have it on the final target, and they would probably be used
+only during development, so could belong to the directfb sub-menu.
+
+Anyway, I'll leave it out for now, we can move it later if people
+prefer.
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> > 
-> > But I don't feel strongly about it either. I'll fix.
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> >>  Regards,
-> >>  Arnout
-> [snip]
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
