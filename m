@@ -1,13 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jan 2016 11:34:11 +0100
-Subject: [Buildroot] [PATCH 32/84 RFC] package/gstreamer: include
- plugins from gstreamer's real Config.in
-In-Reply-To: <5687262A.3030300@mind.be>
+Date: Sat, 2 Jan 2016 11:35:01 +0100
+Subject: [Buildroot] [PATCH 38/84 RFC] docs/manual: add example about
+ sub-options
+In-Reply-To: <56872691.6050507@mind.be>
 References: <cover.1451076704.git.yann.morin.1998@free.fr>
- <14c33d26a86cb2bb6673d5f053fb871dbfe9b8c8.1451076704.git.yann.morin.1998@free.fr>
- <56847303.4040608@mind.be> <20151231172336.GD3495@free.fr>
- <5687262A.3030300@mind.be>
-Message-ID: <20160102103411.GC3477@free.fr>
+ <d74a1da746237dff8a24373d5f561853bcc6b175.1451076704.git.yann.morin.1998@free.fr>
+ <5684740D.3060107@mind.be> <20151231172653.GF3495@free.fr>
+ <56872691.6050507@mind.be>
+Message-ID: <20160102103501.GD3477@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,47 +16,77 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2016-01-02 02:21 +0100, Arnout Vandecappelle spake thusly:
-> On 31-12-15 18:23, Yann E. MORIN wrote:
-> > Arnout, All,
-> > 
-> > On 2015-12-31 01:12 +0100, Arnout Vandecappelle spake thusly:
+On 2016-01-02 02:23 +0100, Arnout Vandecappelle spake thusly:
+> On 31-12-15 18:26, Yann E. MORIN wrote:
+> > On 2015-12-31 01:17 +0100, Arnout Vandecappelle spake thusly:
 > >> On 25-12-15 22:25, Yann E. MORIN wrote:
-> >>> It is more logical to have a single if-clause, rather than repeat it in
-> >>> another file, possiblty brealking indentation like it previously was.
+> >>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >>> ---
+> >>>  docs/manual/adding-packages-directory.txt | 25 +++++++++++++++++++++++++
+> >>>  1 file changed, 25 insertions(+)
+> >>>
+> >>> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> >>> index faf967c..2b9e714 100644
+> >>> --- a/docs/manual/adding-packages-directory.txt
+> >>> +++ b/docs/manual/adding-packages-directory.txt
+> >>> @@ -54,6 +54,31 @@ examples in other packages. The syntax of the +Config.in+ file is the same
+> >>>  as the one for the kernel Kconfig file. The documentation for this syntax is
+> >>>  available at http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[]
+> >>>  
+> >>> +For example:
+> >>> +
+> >>> +---------------------------
+> >>> +config BR2_PACKAGE_LIBFOO
+> >>> +	bool "libfoo"
+> >>> +	help
+> >>> +	  This is a comment that explains what libfoo is.
+> >>> +
+> >>> +	  http://foosoftware.org/libfoo/
+> >>> +
+> >>> +if BR2_PACKAGE_LIBFOO
+> >>> +
+> >>> +config BR2_PACKAGE_LIBFOO_BAR
+> >>> +	bool "bar support"
+> >>> +	help
+> >>> +	  This is a comment that briefly explains what
+> >>> +	  bar support is, if it's not obvious.
 > >>
-> >>  I actually preferred the way it was indented before. Now there is no
-> >> distinction anymore between the gstreamer options and the additional plugin
-> >> packages.
+> >>  This should be indented at 72 columns like we require in the real Config.in.
 > > 
-> > Yes, that is on-purpose. The gstreamer plugins are really "sub-options"
-> > (in the end-user experience) of gstreamer. That they are in fact
-> > completely different packages is still irrelevant to him. ;-)
+> > Yes, but in this case, the second line is really short, and in that case
+> > I prefer (and usually tend to use) a shorter first line so the second
+> > line is more than one or two words, it looks easier to read to me...
 > 
->  Well, according to that reasoning the packages should not be shown and instead
-> only the plug-in list should be there. I don't think we're going to do that.
+>  Well, this is the manual, we're setting the example here, so not sticking to
+> the rule would be confusing IMHO.
 
-No, especially since it is totally possible to use gstreamer even
-without the base plugins, using only local (aka proprietary) plugins.
+Agreed. I'll fix.
 
->  The reason I had less of a concern about gstreamer is because here most of them
-> are in fact pieces of the same project (like kodi, xorg, matchbox, etc).
-
-OK, I understand now.
-
-But for Kodi, not all the addons are managed by the "Kodi project". For
-example, most if not all the PVR addons are completely separately
-developped.
-
-> The
-> others (python, php, ...) are really external plugins. Of course there are also
-> some "external" plugins here, but even those tend to get absorbed by the
-> superproject eventually (like what happened with gst-omx for instance).
-
-I now see what was the difference for you, thanks!
+Thanks!
 
 Regards,
 Yann E. MORIN.
+
+>  Regards,
+>  Arnout
+> 
+> > 
+> > But I don't feel strongly about it either. I'll fix.
+> > 
+> > Regards,
+> > Yann E. MORIN.
+> > 
+> >>  Regards,
+> >>  Arnout
+> [snip]
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
