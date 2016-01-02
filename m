@@ -1,134 +1,91 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Sat,  2 Jan 2016 23:56:06 +0800
-Subject: [Buildroot] [PATCH v5] remmina: new package
-In-Reply-To: <1441118174-9899-1-git-send-email-fancp2007@gmail.com>
-References: <1441118174-9899-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <1451750166-10049-1-git-send-email-fancp2007@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 2 Jan 2016 19:10:37 +0100
+Subject: [Buildroot] [PATCH 2/2] New package RPi-GPIO
+In-Reply-To: <1451735982-5703-2-git-send-email-haylocki@yahoo.co.uk>
+References: <1451735982-5703-1-git-send-email-haylocki@yahoo.co.uk>
+ <1451735982-5703-2-git-send-email-haylocki@yahoo.co.uk>
+Message-ID: <CAGm1_kue-SyG3JK3eTrmY6tdhyidyqQ_14GPOa7=+OBmiDmQ7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remmina is a remote desktop client written in GTK+.
-Currently RDP, VNC, NX, XDMCP and SSH are supported.
+Hello Ian,
 
-http://remmina.sourceforge.net/
+could you please squash these two patches into one?
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+The patch title should be
 
----
-Changes v4 -> v5:
-1) rebase to master, select the latest 1.2.0 rcgit.7 release.
-2) remove libssh dependency.
+python-rpi-gpio: new package
 
-Changes v3 -> v4:
-1) rebase to master
-2) remove libssh patch which had merged to master
+On Sat, Jan 2, 2016 at 12:59 PM, Ian Haylock <haylocki@yahoo.co.uk> wrote:
+> Signed-off-by: Ian Haylock <haylocki@yahoo.co.uk>
+> ---
+>  package/python-rpi-gpio/Config.in            |  9 +++++++++
+>  package/python-rpi-gpio/python-rpi-gpio.hash |  4 ++++
+>  package/python-rpi-gpio/python-rpi-gpio.mk   | 14 ++++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100755 package/python-rpi-gpio/Config.in
+>  create mode 100755 package/python-rpi-gpio/python-rpi-gpio.hash
+>  create mode 100755 package/python-rpi-gpio/python-rpi-gpio.mk
+>
+> diff --git a/package/python-rpi-gpio/Config.in b/package/python-rpi-gpio/Config.in
+> new file mode 100755
+> index 0000000..da5b8c2
+> --- /dev/null
+> +++ b/package/python-rpi-gpio/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_RPI_GPIO
+> +        bool "python-rpi-gpio"
+> +       depends on BR2_arm
+> +       depends on BR2_PACKAGE_PYTHON
+> +
+> +        help
+> +          A Python module to control the GPIO on a Raspberry Pi.
+> +
+> +          http://sourceforge.net/p/raspberry-gpio-python
+> \ No newline at end of file
+> diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
+> new file mode 100755
+> index 0000000..b234396
+> --- /dev/null
+> +++ b/package/python-rpi-gpio/python-rpi-gpio.hash
+> @@ -0,0 +1,4 @@
+> +md5    a98d0b33e16fce3f303136e963b187ec        RPi.GPIO-0.5.11.tar.gz
 
-Changes v2 -> v3:
-1) pick the first patch 'libssh' from the 'next' tree.
-2) fix the dependencies of package remmina.
+Could you please name the origin of this MD5 checksum? We also add
+locally calculated sha256 checksum.  See package/python-pyudev package
+for example.
 
-Changes v1 -> v2:
-1) fix the dependencies of package remmina.
-2) fix the license of package remmina.
-3) wrap lines at 72 characters.
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- package/Config.in          |  1 +
- package/remmina/Config.in  | 26 ++++++++++++++++++++++++++
- package/remmina/remmina.mk | 36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+)
- create mode 100644 package/remmina/Config.in
- create mode 100644 package/remmina/remmina.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index f58f2be..ce3f75c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -256,6 +256,7 @@ endif
- 	source "package/fbterm/Config.in"
- 	source "package/fbv/Config.in"
- 	source "package/freerdp/Config.in"
-+	source "package/remmina/Config.in"
- 	source "package/imagemagick/Config.in"
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
-diff --git a/package/remmina/Config.in b/package/remmina/Config.in
-new file mode 100644
-index 0000000..78e9435
---- /dev/null
-+++ b/package/remmina/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_REMMINA
-+	bool "remmina"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_LIBGTK3
-+	depends on BR2_USE_MMU # libvncserver depends on BR2_USE_MMU
-+	depends on BR2_USE_WCHAR # freerdp
-+	depends on !BR2_STATIC_LIBS # freerdp
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # freerdp
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXKBFILE
-+	select BR2_PACKAGE_LIBVNCSERVER
-+	select BR2_PACKAGE_FREERDP
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+	help
-+	  Remmina is a remote desktop client written in GTK+, aiming to be
-+	  useful for system administrators and travellers, who need to work
-+	  with lots of remote computers in front of either large monitors
-+	  or tiny netbooks.
-+
-+	  Remmina supports multiple network protocols in an integrated and
-+	  consistent user interface.
-+
-+	  Currently RDP, VNC, NX, XDMCP and SSH are supported.
-+
-+	  http://remmina.sourceforge.net/
-diff --git a/package/remmina/remmina.mk b/package/remmina/remmina.mk
-new file mode 100644
-index 0000000..8f333ae
---- /dev/null
-+++ b/package/remmina/remmina.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# remmina
-+#
-+################################################################################
-+
-+REMMINA_VERSION = e7f665f2634939aaa9bed114569cbd13eac10b82
-+REMMINA_SITE = $(call github,FreeRDP,Remmina,$(REMMINA_VERSION))
-+REMMINA_LICENSE = GPLv2+ with OpenSSL exception
-+REMMINA_LICENSE_FILES = COPYING LICENSE LICENSE.OpenSSL
-+
-+REMMINA_CONF_OPTS = \
-+	-DWITH_AVAHI=OFF \
-+	-DWITH_APPINDICATOR=OFF \
-+	-DWITH_GNOMEKEYRING=OFF \
-+	-DWITH_TELEPATHY=OFF \
-+	-DWITH_GCRYPT=OFF \
-+	-DWITH_LIBSSH=OFF \
-+	-DWITH_VTE=OFF
-+
-+REMMINA_DEPENDENCIES = \
-+	libgtk3 libvncserver freerdp \
-+	xlib_libX11 xlib_libXext xlib_libxkbfile
-+
-+ifeq ($(BR2_NEEDS_GETTEXT),y)
-+REMMINA_DEPENDENCIES += gettext
-+
-+define REMMINA_POST_PATCH_FIXINTL
-+	$(SED) 's/$${GTK_LIBRARIES}/$${GTK_LIBRARIES} -lintl/' \
-+		$(@D)/remmina/CMakeLists.txt
-+endef
-+
-+REMMINA_POST_PATCH_HOOKS += REMMINA_POST_PATCH_FIXINTL
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.6.4
+> +
+> +
+> +
+> diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
+> new file mode 100755
+> index 0000000..efad0f3
+> --- /dev/null
+> +++ b/package/python-rpi-gpio/python-rpi-gpio.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-rpi-gpio
+> +#
+> +################################################################################
+> +
+> +PYTHON_RPI_GPIO_VERSION = 0.5.11
+> +PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
+> +PYTHON_RPI_GPIO_SITE = http://sourceforge.net/projects/raspberry-gpio-python/files
+> +PYTHON_RPI_GPIO_LICENSE = MIT
+> +PYTHON_RPI_GPIO_LICENSE_FILES = LICENSE.txt
+> +PYTHON_RPI_GPIO_SETUP_TYPE = distutils
+> +
+> +$(eval $(python-package))
+> \ No newline at end of file
+> --
+> 2.6.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
