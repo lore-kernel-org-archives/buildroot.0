@@ -1,37 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jan 2016 23:26:36 +0100
-Subject: [Buildroot] [PATCH] package/tremor: select libogg package
-In-Reply-To: <1451745735-5358-1-git-send-email-romain.naour@gmail.com>
-References: <1451745735-5358-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160102232636.0632fbd9@free-electrons.com>
+From: lothar felten <felten@vaxnet.de>
+Date: Sat,  2 Jan 2016 23:25:03 +0100
+Subject: [Buildroot] [PATCH 1/1] added option to enable or disable reboot on
+	ctrl-alt-del
+Message-ID: <1451773503-11764-1-git-send-email-felten@vaxnet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: felten <felten@vaxnet.de>
 
-On Sat,  2 Jan 2016 15:42:15 +0100, Romain Naour wrote:
-> tremor depends on libogg package but doesn't select it
-> in Config.in. so libogg build is trigged at Makefile level.
-> 
-> Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
-> stop if a package build is trigged at Makefile level without
-> being selected at Config.in level.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/0da/0da3265f0f1e499f5d34ed32b0d13a2eda53f976
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/tremor/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: lothar felten <felten@vaxnet.de>
+---
+ package/skeleton/skeleton.mk | 12 ++++++++++++
+ system/Config.in             | 10 ++++++++++
+ 2 files changed, 22 insertions(+)
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Thomas
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index d640e24..7c9d8ed 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -230,6 +230,18 @@ define SKELETON_SYSTEM_REMOUNT_RW
+ endef
+ endif
+ TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_REMOUNT_RW
++ifeq ($(BR2_TARGET_GENERIC_ENABLE_CTRL_ALT_DEL),y)
++# Find commented line, if any, and remove leading '#'s
++define SKELETON_SYSTEM_ENABLE_CTRL_ALT_DEL
++	$(SED) '/^#.*ctrlaltdel.*$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
++endef
++else
++# Find uncommented line, if any, and add a leading '#'
++define SKELETON_SYSTEM_ENABLE_CTRL_ALT_DEL
++	$(SED) '/^[^#].*ctrlaltdel.*$$/s~^~#~' $(TARGET_DIR)/etc/inittab
++endef
++endif
++TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_ENABLE_CTRL_ALT_DEL
+ endif # BR2_INIT_BUSYBOX || BR2_INIT_SYSV
+ 
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
+diff --git a/system/Config.in b/system/Config.in
+index 2e14971..e3ff125 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -347,6 +347,16 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+ 	  read-only.
+ 	  If unsure, say Y.
+ 
++config BR2_TARGET_GENERIC_ENABLE_CTRL_ALT_DEL
++	bool "enable system reboot on ctrl-alt-del"
++	default y
++	help
++	  By default, pressing ctrl-alt-del will reboot the system by invoking
++	  the reboot command.
++	  Say no here if you would rather like your system to ignore the
++	  ctrl-alt-del combination.
++	  If unsure, say y.
++
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
