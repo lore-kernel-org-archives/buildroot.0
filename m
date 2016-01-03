@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jan 2016 21:47:08 +0100
-Subject: [Buildroot] [PATCH v3] Makefile: drop ldconfig handling
-In-Reply-To: <1451683419-18398-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 1 Jan 2016 22:23:39 +0100")
-References: <1451683419-18398-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87k2nqo0fn.fsf@dell.be.48ers.dk>
+Date: Sun, 03 Jan 2016 21:50:02 +0100
+Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
+In-Reply-To: <20160102233127.0c6f078c@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 2 Jan 2016 23:31:27 +0100")
+References: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
+ <20160101222835.GD2182@free.fr>
+ <20160102233127.0c6f078c@free-electrons.com>
+Message-ID: <87fuyeo0at.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +15,23 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > The ldconfig handling in the main Makefile is utterly broken, as it
- > calls the build machine ldconfig to generate the ld.so.cache of the
- > target. Unfortunately, the format of the ld.so.cache is architecture
- > specific, and therefore the build machine ldconfig cannot be used
- > as-is.
+ > Yann, all,
+ > On Fri, 1 Jan 2016 23:28:35 +0100, Yann E. MORIN wrote:
 
- > This patch therefore simply drops using ldconfig entirely, and removes
- > /etc/ld.so.conf.d/ from the target skeleton. The idea is that all
- > libraries that should be loaded by the dynamic linker must be
- > installed in paths where the dynamic linker searches them by default
- > (typically /lib or /usr/lib).
+ >> I think we want to use upstream locations as much as possible, and only
+ >> fallback to alternative locations when there is no upstream, or upstream
+ >> is flaky.
 
- > This might potentially break a few packages, but the only way to know
- > is to actually stop handling ldconfig.
+ > For Python packages, I actually find it quite practical when PyPi is
+ > used. Indeed, instead of having dozens of weird upstream locations and
+ > release behavior, you have one consistent way of fetching Python
+ > modules. It also makes it easier when reviewing new packages, when
+ > looking at package bumps, since you know what to expect from PyPi.
 
- > In order to be notified of such cases, we add a check in
- > target-finalize to verify that there is no /etc/ld.so.conf file as
- > well as no /etc/ld.so.conf.d directory.
+ > So I wouldn't be as strict as you said in terms of not using PyPi.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+I agree. I also find it "nice" to use pypi if we can (E.G. if we are
+using a release).
 
 -- 
 Bye, Peter Korsgaard
