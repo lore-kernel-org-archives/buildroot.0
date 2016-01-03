@@ -1,72 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jan 2016 21:46:07 +0100
-Subject: [Buildroot] [git commit] Makefile: drop ldconfig handling
-Message-ID: <20160103210633.5672E82302@busybox.osuosl.org>
+Date: Sun, 3 Jan 2016 21:50:38 +0100
+Subject: [Buildroot] [git commit] support/download: generate reproducible Hg
+	archives
+Message-ID: <20160103210633.69399822D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c4072348960d99d39f2cf47ff022f2d3711962e
+commit: http://git.buildroot.net/buildroot/commit/?id=76b51f90c0e393349dd0c71d7e6cf82fbc094282
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ldconfig handling in the main Makefile is utterly broken, as it
-calls the build machine ldconfig to generate the ld.so.cache of the
-target. Unfortunately, the format of the ld.so.cache is architecture
-specific, and therefore the build machine ldconfig cannot be used
-as-is.
+When hg directly creates the output file, the hash for that file changes
+everytime.
 
-This patch therefore simply drops using ldconfig entirely, and removes
-/etc/ld.so.conf.d/ from the target skeleton. The idea is that all
-libraries that should be loaded by the dynamic linker must be
-installed in paths where the dynamic linker searches them by default
-(typically /lib or /usr/lib).
+However, if we just tell hg to output the archive on stdout and we do
+the redirect to the file, then the archive is reproducible.
 
-This might potentially break a few packages, but the only way to know
-is to actually stop handling ldconfig.
+(The reason is that in the first case, a temporary file is created and
+then compressed, and gzip is adding the filename and its timestamp in
+the gzip header, while in the second case, there is no temporary file,
+and thus no timestamp and thus it is reproducible.)
 
-In order to be notified of such cases, we add a check in
-target-finalize to verify that there is no /etc/ld.so.conf file as
-well as no /etc/ld.so.conf.d directory.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile                                | 17 ++++-------------
- system/skeleton/etc/ld.so.conf.d/.empty |  0
- 2 files changed, 4 insertions(+), 13 deletions(-)
+ support/download/hg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 80e94a2..0883175 100644
---- a/Makefile
-+++ b/Makefile
-@@ -604,20 +604,11 @@ endif
- # debugging symbols.
- 	find $(TARGET_DIR)/lib -type f -name 'ld-*.so*' | \
- 		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
--
-+	test -f $(TARGET_DIR)/etc/ld.so.conf && \
-+		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
-+	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
-+		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
- 	mkdir -p $(TARGET_DIR)/etc
--	# Mandatory configuration file and auxiliary cache directory
--	# for recent versions of ldconfig
--	touch $(TARGET_DIR)/etc/ld.so.conf
--	mkdir -p $(TARGET_DIR)/var/cache/ldconfig
--	if [ -x "$(TARGET_CROSS)ldconfig" ]; \
--	then \
--		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR) \
--					-f $(TARGET_DIR)/etc/ld.so.conf; \
--	else \
--		/sbin/ldconfig -r $(TARGET_DIR) \
--			       -f $(TARGET_DIR)/etc/ld.so.conf; \
--	fi
- 	( \
- 		echo "NAME=Buildroot"; \
- 		echo "VERSION=$(BR2_VERSION_FULL)"; \
-diff --git a/system/skeleton/etc/ld.so.conf.d/.empty b/system/skeleton/etc/ld.so.conf.d/.empty
-deleted file mode 100644
-index e69de29..0000000
+diff --git a/support/download/hg b/support/download/hg
+index 5bdbbc8..25cb4e9 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -35,4 +35,4 @@ _hg clone ${verbose} --noupdate "'${repo}'" "'${basename}'"
+ 
+ _hg archive ${verbose} --repository "'${basename}'" --type tgz \
+             --prefix "'${basename}'" --rev "'${cset}'" \
+-            "'${output}'"
++            - >"${output}"
