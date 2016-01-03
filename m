@@ -1,37 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jan 2016 22:05:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: add patch to fix
-	libquadmath issue
-In-Reply-To: <1451733095-26811-1-git-send-email-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Sat, 2 Jan 2016 12:11:35
+Date: Sun, 03 Jan 2016 22:06:12 +0100
+Subject: [Buildroot] [PATCH v2] tpm-tools: fix build failures caused by
+	-Werror
+In-Reply-To: <1451733210-11293-1-git-send-email-noe.rubinstein@gmail.com>
+ (=?utf-8?Q?=22No=C3=A9?= Rubinstein"'s message of "Sat, 2 Jan 2016 12:13:30
  +0100")
-References: <1451733095-26811-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <87poximl0e.fsf@dell.be.48ers.dk>
+References: <1451733210-11293-1-git-send-email-noe.rubinstein@gmail.com>
+Message-ID: <87lh86mkzf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "No?" == No? Rubinstein <noe.rubinstein@gmail.com> writes:
 
- > Backport patch from upstream [1] to fix build issues with toolchains not
- > providing libquadmath, but still supporting __float128.
+ > This fixes this build failure (and many others):
+ >   http://autobuild.buildroot.org/results/d56/d56bfc69ef0a478219c959d50fb96d526fc2155e/
 
- > Fixes:
- > http://autobuild.buildroot.net/results/fcc/fccb40e7b05b84275cfe36a890cedbbaaaa4f953/
- > http://autobuild.buildroot.net/results/cfc/cfcc6c44d2225b9baf0fd92d3cfba4922bfb248b/
- > http://autobuild.buildroot.net/results/ab1/ab1a5aceedb7f9edcd5536b601f1ffb66c5fe1e8/
- > http://autobuild.buildroot.net/results/1ed/1ed3c1ae1e31325b49dd05c1f616637bb5e6382d/
- > http://autobuild.buildroot.net/results/9e5/9e53a5aff9966c6f26e705c91d13692107452feb/
- > and many more.
+ > The build failure is caused by the build system using -Werror; this is
+ > already patched upstream, so this commit just imports the upstream
+ > patch.
 
- > Backported from: 74ff2db959c5fa75bec770c41ed2951a740fe936
-
- > [1]
- > https://github.com/boostorg/math/commit/74ff2db959c5fa75bec770c41ed2951a740fe936
-
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > Signed-off-by: No? Rubinstein <noe.rubinstein@gmail.com>
 
 Committed, thanks.
 
