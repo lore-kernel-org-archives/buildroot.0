@@ -1,37 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jan 2016 21:50:02 +0100
-Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
-In-Reply-To: <20160102233127.0c6f078c@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 2 Jan 2016 23:31:27 +0100")
-References: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
- <20160101222835.GD2182@free.fr>
- <20160102233127.0c6f078c@free-electrons.com>
-Message-ID: <87fuyeo0at.fsf@dell.be.48ers.dk>
+Date: Sun, 03 Jan 2016 21:50:46 +0100
+Subject: [Buildroot] [PATCH] support/download: generate reproducible Hg
+	archives
+In-Reply-To: <1451734549-27492-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 2 Jan 2016 12:35:49 +0100")
+References: <1451734549-27492-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87bn92o09l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Yann, all,
- > On Fri, 1 Jan 2016 23:28:35 +0100, Yann E. MORIN wrote:
+ > When hg directly creates the output file, the hash for that file changes
+ > everytime.
 
- >> I think we want to use upstream locations as much as possible, and only
- >> fallback to alternative locations when there is no upstream, or upstream
- >> is flaky.
+ > However, if we just tell hg to output the archive on stdout and we do
+ > the redirect to the file, then the archive is reproducible.
 
- > For Python packages, I actually find it quite practical when PyPi is
- > used. Indeed, instead of having dozens of weird upstream locations and
- > release behavior, you have one consistent way of fetching Python
- > modules. It also makes it easier when reviewing new packages, when
- > looking at package bumps, since you know what to expect from PyPi.
+ > (The reason is that in the first case, a temporary file is created and
+ > then compressed, and gzip is adding the filename and its timestamp in
+ > the gzip header, while in the second case, there is no temporary file,
+ > and thus no timestamp and thus it is reproducible.)
 
- > So I wouldn't be as strict as you said in terms of not using PyPi.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Yegor Yefremov <yegorslists@googlemail.com>
 
-I agree. I also find it "nice" to use pypi if we can (E.G. if we are
-using a release).
+ > ---
+ > Note: Yegor, you'll now be able to use the 'hg' method to download
+ > reproducible archives! Hehe! ;-)
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
