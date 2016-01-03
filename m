@@ -1,43 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jan 2016 22:33:03 +0100
-Subject: [Buildroot] [PATCH] Add download helper for PyPi
-In-Reply-To: <568842A5.6010103@mind.be> (Arnout Vandecappelle's message of
- "Sat, 2 Jan 2016 22:35:33 +0100")
-References: <1451766174-7072-1-git-send-email-yegorslists@googlemail.com>
- <568842A5.6010103@mind.be>
-Message-ID: <877fjqmjqo.fsf@dell.be.48ers.dk>
+Date: Sun, 03 Jan 2016 22:39:38 +0100
+Subject: [Buildroot] [PATCH 1/1] Add ARM11 MPCore CPU target support
+In-Reply-To: <20151227195824.GJ3483@free.fr> (Yann E. MORIN's message of "Sun, 
+ 27 Dec 2015 20:58:24 +0100")
+References: <BLU437-SMTP123CD239C2AFC2F2A7D66EC1020@phx.gbl>
+ <20151227195824.GJ3483@free.fr>
+Message-ID: <87r3hyl4v9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > On 02-01-16 21:22, Yegor Yefremov wrote:
- >> PyPi has following URL structure:
+ > Sergi, All,
+ > On 2015-11-28 15:55 +0100, Sergi Granell spake thusly:
+ >> gcc differentiates the mpcore-with-vfp from the mcpore-without-vfp
+ >> CPUs. The former is named just 'mpcore', while the latter is named
+ >> 'mpcorenovfp'.
  >> 
- >> https://pypi.python.org/packages/source/{first pkg name char}/{pkg name}
+ >> We only add one entry, 'mpcore' and let the user select whether or
+ >> not to use the VFP. We then name the CPU according to the user's
+ >> selection.
  >> 
- >> User only needs to pass package name to the helper. The helper itself
- >> extracts the first package name character and inserts it into download URL
- >> together with package name.
- >> 
- >> Usage example:
- >> 
- >> PYTHON_SIX_SITE = $(call pypi,six)
+ >> Signed-off-by: Sergi Granell <xerpi.g.12@gmail.com>
 
- >  The reason we introduced this variable for github was that github had changed
- > the direct URL a few times. For pypi, there is no such problem.
+ > Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > [yann.morin.1998 at free.fr: build-tested only]
+ > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- >  In general, we prefer to keep things explicit, even if that is more verbose.
- > The $(call pypi,six) is nice and terse, but it makes it more difficult to
- > copy/paste the URL in your browser for instance.
-
- >  In short, I'm not too fond of this new helper.
-
-I agree, if it doesn't buy us anything besides a little bit of typing
-then I also prefer to stay explicit.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
