@@ -1,43 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jan 2016 21:50:38 +0100
-Subject: [Buildroot] [git commit] support/download: generate reproducible Hg
-	archives
-Message-ID: <20160103210633.69399822D0@busybox.osuosl.org>
+Date: Sun, 3 Jan 2016 21:57:00 +0100
+Subject: [Buildroot] [git commit] python-urllib3: new package
+Message-ID: <20160103210633.80CEA822D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=76b51f90c0e393349dd0c71d7e6cf82fbc094282
+commit: http://git.buildroot.net/buildroot/commit/?id=1bdd3b92a300010af6ecf5b57da3c74f696af50d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When hg directly creates the output file, the hash for that file changes
-everytime.
-
-However, if we just tell hg to output the archive on stdout and we do
-the redirect to the file, then the archive is reproducible.
-
-(The reason is that in the first case, a temporary file is created and
-then compressed, and gzip is adding the filename and its timestamp in
-the gzip header, while in the second case, there is no temporary file,
-and thus no timestamp and thus it is reproducible.)
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/hg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in                          |  1 +
+ package/python-urllib3/Config.in           |  9 +++++++++
+ package/python-urllib3/python-urllib3.hash |  3 +++
+ package/python-urllib3/python-urllib3.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
 
-diff --git a/support/download/hg b/support/download/hg
-index 5bdbbc8..25cb4e9 100755
---- a/support/download/hg
-+++ b/support/download/hg
-@@ -35,4 +35,4 @@ _hg clone ${verbose} --noupdate "'${repo}'" "'${basename}'"
- 
- _hg archive ${verbose} --repository "'${basename}'" --type tgz \
-             --prefix "'${basename}'" --rev "'${cset}'" \
--            "'${output}'"
-+            - >"${output}"
+diff --git a/package/Config.in b/package/Config.in
+index f58f2be..442021f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -701,6 +701,7 @@ menu "External python modules"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-twisted/Config.in"
++	source "package/python-urllib3/Config.in"
+ 	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
+ 	source "package/python-web2py/Config.in"
+diff --git a/package/python-urllib3/Config.in b/package/python-urllib3/Config.in
+new file mode 100644
+index 0000000..21d3f67
+--- /dev/null
++++ b/package/python-urllib3/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_URLLIB3
++	bool "python-urllib3"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	help
++	  Python HTTP library with thread-safe connection pooling, file
++	  post support, sanity friendly, and more.
++
++	  http://urllib3.readthedocs.org/
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+new file mode 100644
+index 0000000..266b8e9
+--- /dev/null
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e1407428ac33b521c71a7ac273b3847, sha256 locally computed
++md5     5e1407428ac33b521c71a7ac273b3847  urllib3-1.14.tar.gz
++sha256  dd4fb13a4ce50b18338c7e4d665b21fd38632c5d4b1d9f1a1379276bd3c08d37  urllib3-1.14.tar.gz
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+new file mode 100644
+index 0000000..0101053
+--- /dev/null
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-urllib3
++#
++################################################################################
++
++PYTHON_URLLIB3_VERSION = 1.14
++PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
++PYTHON_URLLIB3_SITE = https://pypi.python.org/packages/source/u/urllib3
++PYTHON_URLLIB3_LICENSE = MIT
++PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
++PYTHON_URLLIB3_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
