@@ -1,36 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jan 2016 21:50:46 +0100
-Subject: [Buildroot] [PATCH] support/download: generate reproducible Hg
-	archives
-In-Reply-To: <1451734549-27492-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 2 Jan 2016 12:35:49 +0100")
-References: <1451734549-27492-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87bn92o09l.fsf@dell.be.48ers.dk>
+Date: Sun, 03 Jan 2016 21:51:20 +0100
+Subject: [Buildroot] [PATCH] package/tremor: select libogg package
+In-Reply-To: <1451745735-5358-1-git-send-email-romain.naour@gmail.com> (Romain
+ Naour's message of "Sat, 2 Jan 2016 15:42:15 +0100")
+References: <1451745735-5358-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <877fjqo08n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > When hg directly creates the output file, the hash for that file changes
- > everytime.
+ > tremor depends on libogg package but doesn't select it
+ > in Config.in. so libogg build is trigged at Makefile level.
 
- > However, if we just tell hg to output the archive on stdout and we do
- > the redirect to the file, then the archive is reproducible.
+ > Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
+ > stop if a package build is trigged at Makefile level without
+ > being selected at Config.in level.
 
- > (The reason is that in the first case, a temporary file is created and
- > then compressed, and gzip is adding the filename and its timestamp in
- > the gzip header, while in the second case, there is no temporary file,
- > and thus no timestamp and thus it is reproducible.)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/0da/0da3265f0f1e499f5d34ed32b0d13a2eda53f976
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Yegor Yefremov <yegorslists@googlemail.com>
-
- > ---
- > Note: Yegor, you'll now be able to use the 'hg' method to download
- > reproducible archives! Hehe! ;-)
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed, thanks.
 
