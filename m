@@ -1,30 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jan 2016 22:06:12 +0100
-Subject: [Buildroot] [PATCH v2] tpm-tools: fix build failures caused by
-	-Werror
-In-Reply-To: <1451733210-11293-1-git-send-email-noe.rubinstein@gmail.com>
- (=?utf-8?Q?=22No=C3=A9?= Rubinstein"'s message of "Sat, 2 Jan 2016 12:13:30
- +0100")
-References: <1451733210-11293-1-git-send-email-noe.rubinstein@gmail.com>
-Message-ID: <87lh86mkzf.fsf@dell.be.48ers.dk>
+Date: Sun, 3 Jan 2016 21:46:07 +0100
+Subject: [Buildroot] [git commit] Makefile: drop ldconfig handling
+Message-ID: <20160103210633.5672E82302@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "No?" == No? Rubinstein <noe.rubinstein@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9c4072348960d99d39f2cf47ff022f2d3711962e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This fixes this build failure (and many others):
- >   http://autobuild.buildroot.org/results/d56/d56bfc69ef0a478219c959d50fb96d526fc2155e/
+The ldconfig handling in the main Makefile is utterly broken, as it
+calls the build machine ldconfig to generate the ld.so.cache of the
+target. Unfortunately, the format of the ld.so.cache is architecture
+specific, and therefore the build machine ldconfig cannot be used
+as-is.
 
- > The build failure is caused by the build system using -Werror; this is
- > already patched upstream, so this commit just imports the upstream
- > patch.
+This patch therefore simply drops using ldconfig entirely, and removes
+/etc/ld.so.conf.d/ from the target skeleton. The idea is that all
+libraries that should be loaded by the dynamic linker must be
+installed in paths where the dynamic linker searches them by default
+(typically /lib or /usr/lib).
 
- > Signed-off-by: No? Rubinstein <noe.rubinstein@gmail.com>
+This might potentially break a few packages, but the only way to know
+is to actually stop handling ldconfig.
 
-Committed, thanks.
+In order to be notified of such cases, we add a check in
+target-finalize to verify that there is no /etc/ld.so.conf file as
+well as no /etc/ld.so.conf.d directory.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile                                | 17 ++++-------------
+ system/skeleton/etc/ld.so.conf.d/.empty |  0
+ 2 files changed, 4 insertions(+), 13 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 80e94a2..0883175 100644
+--- a/Makefile
++++ b/Makefile
+@@ -604,20 +604,11 @@ endif
+ # debugging symbols.
+ 	find $(TARGET_DIR)/lib -type f -name 'ld-*.so*' | \
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+-
++	test -f $(TARGET_DIR)/etc/ld.so.conf && \
++		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
++	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
++		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
+ 	mkdir -p $(TARGET_DIR)/etc
+-	# Mandatory configuration file and auxiliary cache directory
+-	# for recent versions of ldconfig
+-	touch $(TARGET_DIR)/etc/ld.so.conf
+-	mkdir -p $(TARGET_DIR)/var/cache/ldconfig
+-	if [ -x "$(TARGET_CROSS)ldconfig" ]; \
+-	then \
+-		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR) \
+-					-f $(TARGET_DIR)/etc/ld.so.conf; \
+-	else \
+-		/sbin/ldconfig -r $(TARGET_DIR) \
+-			       -f $(TARGET_DIR)/etc/ld.so.conf; \
+-	fi
+ 	( \
+ 		echo "NAME=Buildroot"; \
+ 		echo "VERSION=$(BR2_VERSION_FULL)"; \
+diff --git a/system/skeleton/etc/ld.so.conf.d/.empty b/system/skeleton/etc/ld.so.conf.d/.empty
+deleted file mode 100644
+index e69de29..0000000
