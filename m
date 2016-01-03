@@ -1,79 +1,40 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun,  3 Jan 2016 21:06:46 +0100
-Subject: [Buildroot] [PATCH] python-urllib3: new package
-Message-ID: <1451851606-4207-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 03 Jan 2016 21:47:08 +0100
+Subject: [Buildroot] [PATCH v3] Makefile: drop ldconfig handling
+In-Reply-To: <1451683419-18398-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 1 Jan 2016 22:23:39 +0100")
+References: <1451683419-18398-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87k2nqo0fn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                          |  1 +
- package/python-urllib3/Config.in           |  9 +++++++++
- package/python-urllib3/python-urllib3.hash |  3 +++
- package/python-urllib3/python-urllib3.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-urllib3/Config.in
- create mode 100644 package/python-urllib3/python-urllib3.hash
- create mode 100644 package/python-urllib3/python-urllib3.mk
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/Config.in b/package/Config.in
-index f58f2be..442021f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -701,6 +701,7 @@ menu "External python modules"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-twisted/Config.in"
-+	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
- 	source "package/python-web2py/Config.in"
-diff --git a/package/python-urllib3/Config.in b/package/python-urllib3/Config.in
-new file mode 100644
-index 0000000..21d3f67
---- /dev/null
-+++ b/package/python-urllib3/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_URLLIB3
-+	bool "python-urllib3"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	help
-+	  Python HTTP library with thread-safe connection pooling, file
-+	  post support, sanity friendly, and more.
-+
-+	  http://urllib3.readthedocs.org/
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-new file mode 100644
-index 0000000..266b8e9
---- /dev/null
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e1407428ac33b521c71a7ac273b3847, sha256 locally computed
-+md5     5e1407428ac33b521c71a7ac273b3847  urllib3-1.14.tar.gz
-+sha256  dd4fb13a4ce50b18338c7e4d665b21fd38632c5d4b1d9f1a1379276bd3c08d37  urllib3-1.14.tar.gz
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-new file mode 100644
-index 0000000..0101053
---- /dev/null
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-urllib3
-+#
-+################################################################################
-+
-+PYTHON_URLLIB3_VERSION = 1.14
-+PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
-+PYTHON_URLLIB3_SITE = https://pypi.python.org/packages/source/u/urllib3
-+PYTHON_URLLIB3_LICENSE = MIT
-+PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
-+PYTHON_URLLIB3_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+ > The ldconfig handling in the main Makefile is utterly broken, as it
+ > calls the build machine ldconfig to generate the ld.so.cache of the
+ > target. Unfortunately, the format of the ld.so.cache is architecture
+ > specific, and therefore the build machine ldconfig cannot be used
+ > as-is.
+
+ > This patch therefore simply drops using ldconfig entirely, and removes
+ > /etc/ld.so.conf.d/ from the target skeleton. The idea is that all
+ > libraries that should be loaded by the dynamic linker must be
+ > installed in paths where the dynamic linker searches them by default
+ > (typically /lib or /usr/lib).
+
+ > This might potentially break a few packages, but the only way to know
+ > is to actually stop handling ldconfig.
+
+ > In order to be notified of such cases, we add a check in
+ > target-finalize to verify that there is no /etc/ld.so.conf file as
+ > well as no /etc/ld.so.conf.d directory.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
