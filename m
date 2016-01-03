@@ -1,29 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jan 2016 21:51:20 +0100
-Subject: [Buildroot] [PATCH] package/tremor: select libogg package
-In-Reply-To: <1451745735-5358-1-git-send-email-romain.naour@gmail.com> (Romain
- Naour's message of "Sat, 2 Jan 2016 15:42:15 +0100")
-References: <1451745735-5358-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <877fjqo08n.fsf@dell.be.48ers.dk>
+Date: Sun, 03 Jan 2016 21:51:56 +0100
+Subject: [Buildroot] [PATCH] support/download: generate reproducible
+	Bazaar archives
+In-Reply-To: <1451747202-21873-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 2 Jan 2016 16:06:42 +0100")
+References: <1451747202-21873-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <8737ueo07n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > tremor depends on libogg package but doesn't select it
- > in Config.in. so libogg build is trigged at Makefile level.
+ > Similarly to what has previously been done for the Hg download backend,
+ > instruct bzr to generate the archive on stdout, so that we can generate
+ > reproducible archives.
 
- > Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
- > stop if a package build is trigged at Makefile level without
- > being selected at Config.in level.
+ > When instructing bzr to generate the output file by itself, it uses a
+ > temporary file that is then fed to gzip, which in turn stores the
+ > timestamp of that file in the generated archive, whereas when the output
+ > is generated on stdout, there is no timestamp, so the archive is then
+ > reproducible.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/0da/0da3265f0f1e499f5d34ed32b0d13a2eda53f976
+ > Bizarely enough, we can tell 'bazaar' not to generate a bazaar in the
+ > archive. Cool, uh? ;-]
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+:P
 
 Committed, thanks.
 
