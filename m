@@ -1,201 +1,79 @@
-From: Andreas Ehmanns <universeii@gmx.de>
-Date: Sun, 3 Jan 2016 15:07:08 +0100
-Subject: [Buildroot] [PATCH 1/1] openldap: add support to build the
-	server
-In-Reply-To: <20151229121950.30dfde8a@free-electrons.com>
-References: <1450384879-5494-1-git-send-email-universeII@gmx.de>
- <20151229121950.30dfde8a@free-electrons.com>
-Message-ID: <56892B0C.2020901@gmx.de>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun,  3 Jan 2016 21:06:46 +0100
+Subject: [Buildroot] [PATCH] python-urllib3: new package
+Message-ID: <1451851606-4207-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-thanks for your detailed answer. Actually I'm on holiday but will be 
-back on 11th of January.
-Then I will have a look at all your comments, fix the issues and prepare 
-a new patch.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                          |  1 +
+ package/python-urllib3/Config.in           |  9 +++++++++
+ package/python-urllib3/python-urllib3.hash |  3 +++
+ package/python-urllib3/python-urllib3.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-urllib3/Config.in
+ create mode 100644 package/python-urllib3/python-urllib3.hash
+ create mode 100644 package/python-urllib3/python-urllib3.mk
 
-Regards,
-Andreas
-
-
-Am 29.12.2015 um 12:19 schrieb Thomas Petazzoni:
-> Andreas,
->
-> Thanks for this patch. I tried it, but there are a number of remaining
-> issues to be resolved I believe.
->
-> First, if you disable BR2_PACKAGE_OPENLDAP_CLIENTS,
-> the /etc/openldap/slapd.conf file gets removed in a post installation
-> hook, so slapd cannot start.
->
-> If you fix this, then the path to the pidfile (and argsfile) in
-> slapd.conf are wrong, because they point to /var/run/, to which the
-> ldap user has not write access.
->
-> If you fix this again, when you start slapd, it complains:
->
-> bdb_db_open: warning - no DB_CONFIG file found in
-> directory /var/openldap-data: (2). Expect poor performance for suffix
-> "dc=my-domain,dc=com".
->
-> It should probably be fixed by using DB_CONFIG.example as DB_CONFIG
-> in /var/openldap-data/.
->
-> Some more comments below.
->
-> On Thu, 17 Dec 2015 21:41:19 +0100, Andreas Ehmanns wrote:
->
->> +case "$1" in
->> +    start)
->> +        if [ ! -d /var/run/openldap ]; then
->> +            install -d -o ldap -g ldap -m 755 /var/run/openldap
->> +        fi
->> +
->> +        if [ ! -d /var/openldap-data ]; then
->> +            install -d -o ldap -g ldap -m 755 /var/openldap-data
-> This directory should be 700 according to the slapd documentation:
->
-> ==
-> # The database directory MUST exist prior to running slapd AND
-> # should only be accessible by the slapd and slap tools.
-> # Mode 700 recommended.
-> directory       %LOCALSTATEDIR%/openldap-data
-> ==
->
->> +        else
->> +            chown -R ldap:ldap /var/openldap-data
->> +        fi
-> It is not clear why you need this. /var is a persistent directory, so I
-> believe all you need here is an unconditional:
->
-> 	chown -R ldap:ldap /var/openldap-data
->
-> Setting the permission to 700 can be done by a OPENLDAP_PERMISSIONS
-> variable in the .mk file. Ideally, we would also be able to define the
-> user/group, but we currently can't do this by referencing symbolic
-> user/groups, only by explicit UID/GID, and we don't know the UID/GID
-> that will be allocated to the ldap user/group. So I think we should:
->
->   1/ Set the permission in OPENLDAP_PERMISSIONS
->   2/ Set the owner/group in the S75slapd script
->
->> +
->> +        printf "Starting $DESC: $NAME: "
->> +        start-stop-daemon -S -b -n $NAME -a $DAEMON -- $ARGS
-> You can add:
->
-> 	-p /var/run/slapd/slapd.pid
->
-> Why do you pass -n ? And why do you use -a instead of -x ?
->
-> See S50dropbear in the Buildroot sources for a good example of an init
-> script.
->
->> +        echo "done."
->> +        ;;
->> +    stop)
->> +        printf "Stopping $DESC: $NAME: "
->> +        start-stop-daemon -K -n $NAME
-> Same here.
->
-> Also add the "-q" option
->
->> +        echo "done."
->> +        ;;
->> +    restart)
->> +        printf "Restarting $DESC: $NAME: "
->> +        $0 stop
->> +        $0 start
->> +        echo "done."
->> +        ;;
->> +    reload)
->> +        printf "Reloading $DESC: $NAME: "
->> +        killall -HUP $(basename ${DAEMON})
-> I think it's better to use the pid file here, no?
->
-> 	   kill -HUP $(cat /var/run/slapd/slapd.pid)
->
->> +        echo "done."
->> +        ;;
->> +    *)
->> +        echo "Usage: $0 {start|stop|restart|reload}"
->> +        exit 1
->> +        ;;
->> +esac
->> +
->> +exit 0
->> +
->> +
->> diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
->> index 17bf991..bcb285a 100644
->> --- a/package/openldap/openldap.mk
->> +++ b/package/openldap/openldap.mk
->> @@ -12,6 +12,17 @@ OPENLDAP_LICENSE_FILES = LICENSE
->>   OPENLDAP_INSTALL_STAGING = YES
->>   OPENLDAP_DEPENDENCIES = host-pkgconf
->>   
->> +ifeq ($(BR2_PACKAGE_OPENLDAP_SERVER),y)
->> +define OPENLDAP_USERS
->> +        ldap -1 ldap -1 * /var/run/openldap - - OpenLDAP server user
->> +endef
->> +
->> +define OPENLDAP_COPY_INITSCRIPT
->> +        $(INSTALL) -D -m 755 $(@D)/S75slapd $(TARGET_DIR)/etc/init.d/S75slapd
-> $(@D)/S75slapd does not exist. So this means you never rebuilt your
-> package :-)
->
-> $(@D) is the source directory of openldap. You want to replace this
-> with: $(OPENLDAP_PKGDIR)/S75slapd
->
->> +endef
->> +OPENLDAP_POST_INSTALL_TARGET_HOOKS += OPENLDAP_COPY_INITSCRIPT
-> Shouldn't be a post install target hook. Instead, do this:
->
-> define OPENLDAP_INIT_SYSV
-> 	$(INSTALL) -D -m 755 $(OPENLDAP_PKGDIR)/S75slapd $(TARGET_DIR)/etc/init.d/S75slapd
-> endef
->
-> and it will automatically install the init script of the chosen init
-> system is sysV compatible.
->
->> +endif
->> +
->>   ifeq ($(BR2_PACKAGE_OPENSSL),y)
->>   OPENLDAP_TLS = openssl
->>   OPENLDAP_DEPENDENCIES += openssl
->> @@ -44,7 +55,6 @@ OPENLDAP_CONF_ENV += ac_cv_func_memcmp_working=yes
->>   OPENLDAP_CONF_OPTS += \
->>   	--enable-syslog \
->>   	--disable-proctitle \
->> -	--disable-slapd \
->>   	--with-yielding-select \
->>   	--sysconfdir=/etc \
->>   	--enable-dynamic=$(if $(BR2_STATIC_LIBS),no,yes) \
->> @@ -52,6 +62,11 @@ OPENLDAP_CONF_OPTS += \
->>   	--with-mp=$(OPENLDAP_MP) \
->>   	CPPFLAGS="$(TARGET_CPPFLAGS) $(OPENLDAP_CPPFLAGS)"
->>   
->> +ifeq ($(BR2_PACKAGE_OPENLDAP_SERVER),)
->> +OPENLDAP_CONF_OPTS += \
->> +        --disable-slapd
->> +endif
-> Please do:
->
-> ifeq ($(BR2_PACKAGE_OPENLDAP_SERVER),y)
-> OPENLDAP_CONF_OPTS += --enable-slapd
-> else
-> OPENLDAP_CONF_OPTS += --disable-slapd
-> endif
->
-> Which is a bit more explicit.
->
-> Could you rework your patch to solve those different issues, and send
-> an updated version?
->
-> Thanks!
->
-> Thomas
+diff --git a/package/Config.in b/package/Config.in
+index f58f2be..442021f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -701,6 +701,7 @@ menu "External python modules"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-twisted/Config.in"
++	source "package/python-urllib3/Config.in"
+ 	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
+ 	source "package/python-web2py/Config.in"
+diff --git a/package/python-urllib3/Config.in b/package/python-urllib3/Config.in
+new file mode 100644
+index 0000000..21d3f67
+--- /dev/null
++++ b/package/python-urllib3/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_URLLIB3
++	bool "python-urllib3"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	help
++	  Python HTTP library with thread-safe connection pooling, file
++	  post support, sanity friendly, and more.
++
++	  http://urllib3.readthedocs.org/
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+new file mode 100644
+index 0000000..266b8e9
+--- /dev/null
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e1407428ac33b521c71a7ac273b3847, sha256 locally computed
++md5     5e1407428ac33b521c71a7ac273b3847  urllib3-1.14.tar.gz
++sha256  dd4fb13a4ce50b18338c7e4d665b21fd38632c5d4b1d9f1a1379276bd3c08d37  urllib3-1.14.tar.gz
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+new file mode 100644
+index 0000000..0101053
+--- /dev/null
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-urllib3
++#
++################################################################################
++
++PYTHON_URLLIB3_VERSION = 1.14
++PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
++PYTHON_URLLIB3_SITE = https://pypi.python.org/packages/source/u/urllib3
++PYTHON_URLLIB3_LICENSE = MIT
++PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
++PYTHON_URLLIB3_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
+-- 
+2.1.4
