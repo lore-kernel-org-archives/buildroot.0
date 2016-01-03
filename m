@@ -1,74 +1,133 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jan 2016 22:06:00 +0100
-Subject: [Buildroot] [git commit] tpm-tools: fix build failures caused by
-	-Werror
-Message-ID: <20160103210633.96F44822D0@busybox.osuosl.org>
+Date: Sun, 3 Jan 2016 21:58:45 +0100
+Subject: [Buildroot] [git commit] package/boost: add patch to fix
+	libquadmath issue
+Message-ID: <20160103210633.8D675822D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c79d685975b966d3406e8623a44e1e5d0f0d9b10
+commit: http://git.buildroot.net/buildroot/commit/?id=8c91a32be5a2899cadc46900854665be6edcb3a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes this build failure (and many others):
-  http://autobuild.buildroot.org/results/d56/d56bfc69ef0a478219c959d50fb96d526fc2155e/
+Backport patch from upstream [1] to fix build issues with toolchains not
+providing libquadmath, but still supporting __float128.
 
-The build failure is caused by the build system using -Werror; this is
-already patched upstream, so this commit just imports the upstream
-patch.
+Fixes:
+http://autobuild.buildroot.net/results/fcc/fccb40e7b05b84275cfe36a890cedbbaaaa4f953/
+http://autobuild.buildroot.net/results/cfc/cfcc6c44d2225b9baf0fd92d3cfba4922bfb248b/
+http://autobuild.buildroot.net/results/ab1/ab1a5aceedb7f9edcd5536b601f1ffb66c5fe1e8/
+http://autobuild.buildroot.net/results/1ed/1ed3c1ae1e31325b49dd05c1f616637bb5e6382d/
+http://autobuild.buildroot.net/results/9e5/9e53a5aff9966c6f26e705c91d13692107452feb/
+and many more.
 
-Signed-off-by: No?? Rubinstein <noe.rubinstein@gmail.com>
+Backported from: 74ff2db959c5fa75bec770c41ed2951a740fe936
+
+[1]
+https://github.com/boostorg/math/commit/74ff2db959c5fa75bec770c41ed2951a740fe936
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-configure.in-remove-Werror.patch          | 27 ++++++++++++++++++++++
- package/tpm-tools/tpm-tools.mk                     |  2 +-
- 2 files changed, 28 insertions(+), 1 deletion(-)
+ package/boost/0003-fix-libquadmath-issue.patch | 91 ++++++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-diff --git a/package/tpm-tools/0002-configure.in-remove-Werror.patch b/package/tpm-tools/0002-configure.in-remove-Werror.patch
+diff --git a/package/boost/0003-fix-libquadmath-issue.patch b/package/boost/0003-fix-libquadmath-issue.patch
 new file mode 100644
-index 0000000..c101a95
+index 0000000..49772e8
 --- /dev/null
-+++ b/package/tpm-tools/0002-configure.in-remove-Werror.patch
-@@ -0,0 +1,27 @@
-+From b060873f444d79f3f5aa388427cb1ede6665834a Mon Sep 17 00:00:00 2001
-+From: Kent Yoder <key@linux.vnet.ibm.com>
-+Date: Mon, 5 Nov 2012 14:58:31 -0600
-+Subject: [PATCH] configure.in: remove -Werror
++++ b/package/boost/0003-fix-libquadmath-issue.patch
+@@ -0,0 +1,91 @@
++From 74ff2db959c5fa75bec770c41ed2951a740fe936 Mon Sep 17 00:00:00 2001
++From: jzmaddock <jz.maddock@gmail.com>
++Date: Fri, 1 Jan 2016 16:49:48 +0000
++Subject: [PATCH] Change <quadmath.h> config to not use it at all if we don't
++ have __has_include as GCC may be configured with --disable-libquadmath but
++ still signal that it supports __float128
 +
-+Signed-off-by: Kent Yoder <key@linux.vnet.ibm.com>
-+Signed-off-by: Noe Rubinstein <nrubinstein@aldebaran.com>
++Backported from: 74ff2db959c5fa75bec770c41ed2951a740fe936
++
++[J??rg Krause: adjust pathes to match sourceforge release tarball]
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++
 +---
-+ configure.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ boost/math/special_functions/fpclassify.hpp | 16 +++++++++++++---
++ boost/math/tools/config.hpp                 | 12 ------------
++ 2 files changed, 13 insertions(+), 15 deletions(-)
 +
-+diff --git a/configure.in b/configure.in
-+index da170d0..0f175be 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -138,7 +138,7 @@ AC_TYPE_SIZE_T
-+ AC_TYPE_SIGNAL
-+ AC_TYPE_UID_T
++diff --git a/boost/math/special_functions/fpclassify.hpp b/boost/math/special_functions/fpclassify.hpp
++index 0a4e1ac..58fad13 100644
++--- a/boost/math/special_functions/fpclassify.hpp
+++++ b/boost/math/special_functions/fpclassify.hpp
++@@ -81,7 +81,12 @@ is used.
++ #include <float.h>
++ #endif
++ #ifdef BOOST_MATH_USE_FLOAT128
+++#ifdef __has_include
+++#if  __has_include("quadmath.h")
++ #include "quadmath.h"
+++#define BOOST_MATH_HAS_QUADMATH_H
+++#endif
+++#endif
++ #endif
 + 
-+-CFLAGS="$CFLAGS -Wall -Werror -Wreturn-type -Wsign-compare"
-++CFLAGS="$CFLAGS -Wall -Wreturn-type -Wsign-compare"
++ #ifdef BOOST_NO_STDC_NAMESPACE
++@@ -124,9 +129,14 @@ inline bool is_nan_helper(T, const boost::false_type&)
++ {
++    return false;
++ }
++-#ifdef BOOST_MATH_USE_FLOAT128
+++#if defined(BOOST_MATH_USE_FLOAT128) 
+++#if defined(BOOST_MATH_HAS_QUADMATH_H)
++ inline bool is_nan_helper(__float128 f, const boost::true_type&) { return ::isnanq(f); }
++ inline bool is_nan_helper(__float128 f, const boost::false_type&) { return ::isnanq(f); }
+++#else
+++inline bool is_nan_helper(__float128 f, const boost::true_type&) { return ::isnan(static_cast<double>(f)); }
+++inline bool is_nan_helper(__float128 f, const boost::false_type&) { return ::isnan(static_cast<double>(f)); }
+++#endif
++ #endif
++ }
 + 
-+ AC_CONFIG_FILES(./Makefile		\
-+ 		po/Makefile.in		\
-+-- 
-+2.1.4
-+
-diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
-index 9dd844d..d196e89 100644
---- a/package/tpm-tools/tpm-tools.mk
-+++ b/package/tpm-tools/tpm-tools.mk
-@@ -12,7 +12,7 @@ TPM_TOOLS_LICENSE = Common Public License Version 1.0
- TPM_TOOLS_LICENSE_FILES = LICENSE
- TPM_TOOLS_DEPENDENCIES = trousers openssl \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
--# lib/Makefile.am is patched
-+# configure.in and lib/Makefile.am is patched
- TPM_TOOLS_AUTORECONF = YES
- 
- TPM_TOOLS_CONF_OPTS = --disable-pkcs11-support
++@@ -519,7 +529,7 @@ inline bool (isinf)(long double x)
++    return detail::isinf_impl(static_cast<value_type>(x), method());
++ }
++ #endif
++-#ifdef BOOST_MATH_USE_FLOAT128
+++#if defined(BOOST_MATH_USE_FLOAT128) && defined(BOOST_MATH_HAS_QUADMATH_H)
++ template<>
++ inline bool (isinf)(__float128 x)
++ {
++@@ -611,7 +621,7 @@ inline bool (isnan)(long double x)
++    return detail::isnan_impl(x, method());
++ }
++ #endif
++-#ifdef BOOST_MATH_USE_FLOAT128
+++#if defined(BOOST_MATH_USE_FLOAT128) && defined(BOOST_MATH_HAS_QUADMATH_H)
++ template<>
++ inline bool (isnan)(__float128 x)
++ {
++diff --git a/boost/math/tools/config.hpp b/boost/math/tools/config.hpp
++index ffd0ab4..75d29b6 100644
++--- a/boost/math/tools/config.hpp
+++++ b/boost/math/tools/config.hpp
++@@ -265,18 +265,6 @@
++ #  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##SUF
++ #endif
++ //
++-// Test whether to support __float128, if we don't have quadmath.h then this can't currently work:
++-//
++-#ifndef BOOST_MATH_USE_FLOAT128
++-#ifdef __has_include
++-#if ! __has_include("quadmath.h")
++-#define BOOST_MATH_DISABLE_FLOAT128
++-#endif
++-#elif !defined(BOOST_ARCH_X86)
++-#define BOOST_MATH_DISABLE_FLOAT128
++-#endif
++-#endif
++-//
++ // And then the actual configuration:
++ //
++ #if defined(_GLIBCXX_USE_FLOAT128) && defined(BOOST_GCC) && !defined(__STRICT_ANSI__) \
