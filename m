@@ -1,118 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Jan 2016 22:52:04 +0100
-Subject: [Buildroot] [PATCH 1/1] added option to enable or disable
- reboot on ctrl-alt-del
-In-Reply-To: <87y4c6mlfx.fsf@dell.be.48ers.dk>
-References: <1451773503-11764-1-git-send-email-felten@vaxnet.de>
- <87y4c6mlfx.fsf@dell.be.48ers.dk>
-Message-ID: <20160103215204.GA3551@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 3 Jan 2016 22:35:22 +0100
+Subject: [Buildroot] [git commit] Add ARM11 MPCore CPU target support
+Message-ID: <20160103215517.D184881DD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lothar, Peter, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=449d7b9127096cf0a40118b298bc2fbbdac99d2a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-01-03 21:56 +0100, Peter Korsgaard spake thusly:
-> >>>>> "lothar" == lothar felten <felten@vaxnet.de> writes:
-> 
->  > From: felten <felten@vaxnet.de>
->  > Signed-off-by: lothar felten <felten@vaxnet.de>
-> 
-> I'm not sure this is something that needs to be tweaked often enough
-> (E.G. most systems don't have a keyboard connected), so I'm not sure we
-> want the clutter the system menu with the option.
-> 
-> Perhaps we should simply remove the ctrlaltdel handling of our inittabs,
-> as most people probably don't want it - And then just let the (few?)
-> people wanting it add it through an overlay / post-build script.
-> 
-> Comments anyony?
+gcc differentiates the mpcore-with-vfp from the mcpore-without-vfp
+CPUs. The former is named just 'mpcore', while the latter is named
+'mpcorenovfp'.
 
-FTR, here's a repeat from IRC:
+We only add one entry, 'mpcore' and let the user select whether or
+not to use the VFP. We then name the CPU according to the user's
+selection.
 
-I do agree with Peter. Just disabling the 3-finger salute is OK for me.
-As Lothar suggested, I don;t mind the line being kept as comments in the
-inittabs.
+Signed-off-by: Sergi Granell <xerpi.g.12@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ arch/Config.in.arm | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Lothar, I'll mark your patch as "Changes Requested" in our patchwork.
-Care to send an update, please?
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> > ---
->  >  package/skeleton/skeleton.mk | 12 ++++++++++++
->  >  system/Config.in             | 10 ++++++++++
->  >  2 files changed, 22 insertions(+)
-> 
->  > diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
->  > index d640e24..7c9d8ed 100644
->  > --- a/package/skeleton/skeleton.mk
->  > +++ b/package/skeleton/skeleton.mk
->  > @@ -230,6 +230,18 @@ define SKELETON_SYSTEM_REMOUNT_RW
->  >  endef
->  >  endif
->  >  TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_REMOUNT_RW
->  > +ifeq ($(BR2_TARGET_GENERIC_ENABLE_CTRL_ALT_DEL),y)
->  > +# Find commented line, if any, and remove leading '#'s
->  > +define SKELETON_SYSTEM_ENABLE_CTRL_ALT_DEL
->  > +	$(SED) '/^#.*ctrlaltdel.*$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
->  > +endef
->  > +else
->  > +# Find uncommented line, if any, and add a leading '#'
->  > +define SKELETON_SYSTEM_ENABLE_CTRL_ALT_DEL
->  > +	$(SED) '/^[^#].*ctrlaltdel.*$$/s~^~#~' $(TARGET_DIR)/etc/inittab
->  > +endef
->  > +endif
->  > +TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_ENABLE_CTRL_ALT_DEL
->  >  endif # BR2_INIT_BUSYBOX || BR2_INIT_SYSV
->  
->  >  endif # BR2_ROOTFS_SKELETON_DEFAULT
->  > diff --git a/system/Config.in b/system/Config.in
->  > index 2e14971..e3ff125 100644
->  > --- a/system/Config.in
->  > +++ b/system/Config.in
->  > @@ -347,6 +347,16 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
->  >  	  read-only.
->  >  	  If unsure, say Y.
->  
->  > +config BR2_TARGET_GENERIC_ENABLE_CTRL_ALT_DEL
->  > +	bool "enable system reboot on ctrl-alt-del"
->  > +	default y
->  > +	help
->  > +	  By default, pressing ctrl-alt-del will reboot the system by invoking
->  > +	  the reboot command.
->  > +	  Say no here if you would rather like your system to ignore the
->  > +	  ctrl-alt-del combination.
->  > +	  If unsure, say y.
->  > +
->  >  endif # BR2_ROOTFS_SKELETON_DEFAULT
->  
->  
->  > -- 
->  > 1.9.1
-> 
->  > _______________________________________________
->  > buildroot mailing list
->  > buildroot at busybox.net
->  > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-> -- 
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index ea84147..60cd3a7 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -104,6 +104,13 @@ config BR2_arm1176jzf_s
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++config BR2_arm11mpcore
++	bool "mpcore"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
++	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV6
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a5
+ 	bool "cortex-A5"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -430,6 +437,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "arm1136jf-s"	if BR2_arm1136jf_s
+ 	default "arm1176jz-s"	if BR2_arm1176jz_s
+ 	default "arm1176jzf-s"	if BR2_arm1176jzf_s
++	default "mpcore"	if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
++	default "mpcorenovfp"	if BR2_arm11mpcore
+ 	default "cortex-a5"	if BR2_cortex_a5
+ 	default "cortex-a7"	if BR2_cortex_a7
+ 	default "cortex-a8"	if BR2_cortex_a8
