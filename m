@@ -1,44 +1,61 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  4 Jan 2016 01:11:46 +0100
-Subject: [Buildroot] [PATCH 2/6] package/mesa3d: select packages required by
-	dri3proto support dependencies
+Date: Mon,  4 Jan 2016 01:11:47 +0100
+Subject: [Buildroot] [PATCH 3/6] package/x11r7/xserver_xorg-server: reorder
+	select/depends
 In-Reply-To: <1451866310-10246-1-git-send-email-romain.naour@gmail.com>
 References: <1451866310-10246-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1451866310-10246-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <1451866310-10246-3-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When BR2_PACKAGE_MESA3D_DRI_DRIVER and BR2_PACKAGE_XPROTO_DRI3PROTO
-are selected, xlib_libxshmfence and xproto_presentproto packages
-build are trigged at Makefile level.
+From [1]:
+"Even though the ordering has absolutely no consequences in Kconfig, it
+is not logical (when reading). It is more logical and far easier to
+understand when depends come first, followed by the selects."
 
-Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
-stop if a package build is trigged at Makefile level without
-being selected at Config.in level.
+Also, the Config.in exemple in the manual suggest to use this coding
+style [2].
 
-Fixes:
-http://autobuild.buildroot.net/results/6a4/6a471d2873ff7e645b0f0962d1719632e290993c
+[1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
+[2] http://buildroot.uclibc.org/downloads/manual/manual.html#writing-rules-config-in
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/mesa3d/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/x11r7/xserver_xorg-server/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index fd7e7f8..8c72a3d 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -30,6 +30,8 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_MESA3D_DRIVER
- 	select BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
-+	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XPROTO_DRI3PROTO
- 	bool
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 2bc3f75..71697ef 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	bool "xorg-server"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBPCIACCESS if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	# We need a SHA1 implementation. If either openssl or
+ 	# libgcrypt are already part of the build, we'll use one of
+@@ -48,7 +49,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+-	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  X.Org X server
  
- config BR2_PACKAGE_PROVIDES_LIBGL
+@@ -93,9 +93,9 @@ choice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	bool "Modular X.org"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBDRM if (BR2_PACKAGE_XPROTO_XF86DRIPROTO || \
+ 		BR2_PACKAGE_XPROTO_DRI2PROTO)
+-	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  This variant of the X.org server is the full-blown variant,
+ 	  as used by desktop GNU/Linux distributions. The drivers (for
 -- 
 2.4.3
