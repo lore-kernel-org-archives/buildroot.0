@@ -1,55 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2016 00:14:15 +0100
-Subject: [Buildroot] [git commit] python3: switch to Git formatted patches
-Message-ID: <20160104232302.5AB55826FD@busybox.osuosl.org>
+Date: Tue, 5 Jan 2016 00:17:11 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: reorder
+	select/depends
+Message-ID: <20160104232302.A6FD9826FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5c63280caf23ca7438e2fe23586cca9f450fc936
+commit: http://git.buildroot.net/buildroot/commit/?id=7358a7157f4996bf74a3ca93cb899f11a64985d0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation for the bump to Python 3.5.0, let's switch all the
-patches to the Git format. This way, a Git repository of the Python
-source code can be used to manage those patches, which makes it easier
-to bump to newer Python versions.
+From [1]:
+"Even though the ordering has absolutely no consequences in Kconfig, it
+is not logical (when reading). It is more logical and far easier to
+understand when depends come first, followed by the selects."
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Also, the Config.in exemple in the manual suggest to use this coding
+style [2].
+
+[1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
+[2] http://buildroot.uclibc.org/downloads/manual/manual.html#writing-rules-config-in
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...p.py-do-not-add-invalid-header-locations.patch} | 18 ++++--
- ...he-install-location-of-_sysconfigdata.py.patch} | 30 ++++++---
- ...e-build-of-pyc-and-pyo-files-conditional.patch} | 30 +++++++--
- ...gy_getaddrinfo-configure-test-when-cross-.patch | 27 ++++++++
- ...ucture-to-disable-the-build-of-certain-e.patch} | 38 ++++++-----
- ...06-distutils-sysconfig-use-sysconfigdata.patch} | 22 ++++++-
- ...brary-header-paths-for-cross-compilation.patch} | 50 +++++++++------
- ...-t-look-in-usr-lib-termcap-for-libraries.patch} | 17 +++--
- ....patch => 0009-Don-t-add-multiarch-paths.patch} | 17 +++--
- ...tch => 0010-Abort-on-failed-module-build.patch} | 17 +++--
- ...nd.patch => 0011-Serial-ioctl-workaround.patch} | 15 ++++-
- ...t-the-shebang-of-Python-scripts-for-cros.patch} | 18 ++++--
- ...config.sh.in-ensure-sed-invocations-only.patch} | 13 ++--
- ...harcode-invalid-path-to-ncursesw-headers.patch} | 17 +++--
- ...tem-locale-and-set-to-default-when-addin.patch} | 18 ++++--
- ...016-Add-importlib-fix-for-PEP-3147-issue.patch} | 22 +++++--
- ...n-to-disable-installation-of-test-module.patch} | 29 +++++----
- ...h => 0018-Add-an-option-to-disable-pydoc.patch} | 39 +++++++-----
- ...=> 0019-Add-an-option-to-disable-lib2to3.patch} | 73 ++++++++++++----------
- ...Add-option-to-disable-the-sqlite3-module.patch} | 65 ++++++++++---------
- ...1-Add-an-option-to-disable-the-tk-module.patch} | 31 +++++----
- ...d-an-option-to-disable-the-curses-module.patch} | 27 ++++----
- ...h => 0023-Add-an-option-to-disable-expat.patch} | 35 ++++++-----
- ...0024-Add-an-option-to-disable-CJK-codecs.patch} | 17 +++--
- ...tch => 0025-Add-an-option-to-disable-NIS.patch} | 17 +++--
- ...026-Add-an-option-to-disable-unicodedata.patch} | 17 +++--
- ...ch => 0027-Add-an-option-to-disable-IDLE.patch} | 39 +++++++-----
- ...=> 0028-Add-an-option-to-disable-decimal.patch} | 23 ++++---
- ...option-to-disable-the-ossaudiodev-module.patch} | 17 +++--
- .../python3/006-cross-compile-getaddrinfo.patch    | 21 -------
- 30 files changed, 523 insertions(+), 296 deletions(-)
+ package/x11r7/xserver_xorg-server/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 2bc3f75..71697ef 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	bool "xorg-server"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBPCIACCESS if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	# We need a SHA1 implementation. If either openssl or
+ 	# libgcrypt are already part of the build, we'll use one of
+@@ -48,7 +49,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+-	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  X.Org X server
+ 
+@@ -93,9 +93,9 @@ choice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	bool "Modular X.org"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBDRM if (BR2_PACKAGE_XPROTO_XF86DRIPROTO || \
+ 		BR2_PACKAGE_XPROTO_DRI2PROTO)
+-	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  This variant of the X.org server is the full-blown variant,
+ 	  as used by desktop GNU/Linux distributions. The drivers (for
