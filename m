@@ -1,49 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Jan 2016 17:39:12 +0100
-Subject: [Buildroot] [git commit] mongodb: disable support for armv4 and
-	armv5
-Message-ID: <20160104163931.D86D4826BD@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon,  4 Jan 2016 18:09:22 +0100
+Subject: [Buildroot] [PATCH] python-pysocks: new package
+Message-ID: <1451927362-4384-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af2de9e6628c16f50ce5888a6ff7068977129fd6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When compiling for armv4 or armv5, we get the following error:
-
-src/mongo/util/signal_handlers_synchronous.cpp:188:9: error: 'current_exception' is not a member of 'std'
-     if (std::current_exception()) {
-         ^
-
-This is because libstdc++ will only enable std::current_exception if ATOMIC_INT_LOCK_FREE > 1, which is not the case for armv4 and armv5 architectures, so disable them.
-
-Fixes:
-http://autobuild.buildroot.net/results/589a02f511939531141135def73785b600113152/
-http://autobuild.buildroot.net/results/89b9cd2dae8645b50407409c7f2a8567c551822c/
-http://autobuild.buildroot.net/results/b8ffce927cb0563f5c43533ec2f02d3487acc198/
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/mongodb/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/Config.in                          |  1 +
+ package/python-pysocks/Config.in           |  6 ++++++
+ package/python-pysocks/python-pysocks.hash |  3 +++
+ package/python-pysocks/python-pysocks.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-pysocks/Config.in
+ create mode 100644 package/python-pysocks/python-pysocks.hash
+ create mode 100644 package/python-pysocks/python-pysocks.mk
 
-diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
-index 7665c86..2f6876a 100644
---- a/package/mongodb/Config.in
-+++ b/package/mongodb/Config.in
-@@ -1,8 +1,9 @@
- # from src/mongo/platform/bits.h
- config BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
- 	bool
--	default y if BR2_aarch64 || BR2_arm ||  \
--		BR2_i386 || BR2_powerpc64 || BR2_x86_64
-+	# ARM needs LDREX/STREX, so ARMv6+
-+	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
-+	default y if BR2_aarch64 || BR2_i386 || BR2_powerpc64 || BR2_x86_64
- 
- config BR2_PACKAGE_MONGODB
- 	bool "mongodb"
+diff --git a/package/Config.in b/package/Config.in
+index 442021f..af39b03 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -684,6 +684,7 @@ menu "External python modules"
+ 	source "package/python-pysnmp/Config.in"
+ 	source "package/python-pysnmp-apps/Config.in"
+ 	source "package/python-pysnmp-mibs/Config.in"
++	source "package/python-pysocks/Config.in"
+ 	source "package/python-pyudev/Config.in"
+ 	source "package/python-pyusb/Config.in"
+ 	source "package/python-pyxb/Config.in"
+diff --git a/package/python-pysocks/Config.in b/package/python-pysocks/Config.in
+new file mode 100644
+index 0000000..cd38d4d
+--- /dev/null
++++ b/package/python-pysocks/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYSOCKS
++	bool "python-pysocks"
++	help
++	  A Python SOCKS client module.
++
++	  https://github.com/Anorov/PySocks
+diff --git a/package/python-pysocks/python-pysocks.hash b/package/python-pysocks/python-pysocks.hash
+new file mode 100644
+index 0000000..9388c42
+--- /dev/null
++++ b/package/python-pysocks/python-pysocks.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c825c7c52b2c79dde73cac8d04bd25cb, sha256 locally computed
++md5     c825c7c52b2c79dde73cac8d04bd25cb  PySocks-1.5.6.tar.gz
++sha256  a62b35b13968ba3642a973d115ae6a11be886b5f5ae0841a3ecad4b4f1d7deb1  PySocks-1.5.6.tar.gz
+diff --git a/package/python-pysocks/python-pysocks.mk b/package/python-pysocks/python-pysocks.mk
+new file mode 100644
+index 0000000..a556ced
+--- /dev/null
++++ b/package/python-pysocks/python-pysocks.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pysocks
++#
++################################################################################
++
++PYTHON_PYSOCKS_VERSION = 1.5.6
++PYTHON_PYSOCKS_SOURCE = PySocks-$(PYTHON_PYSOCKS_VERSION).tar.gz
++PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/source/P/PySocks
++PYTHON_PYSOCKS_LICENSE = BSD-3c
++PYTHON_PYSOCKS_LICENSE_FILES = socks.py
++PYTHON_PYSOCKS_SETUP_TYPE = distutils
++
++$(eval $(python-package))
+-- 
+2.1.4
