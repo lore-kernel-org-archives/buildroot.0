@@ -1,23 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 04 Jan 2016 12:04:44 +0000
-Subject: [Buildroot] [Bug 8541] fail to build host-fakeroot-1.20.2
-In-Reply-To: <bug-8541-163@https.bugs.busybox.net/>
-References: <bug-8541-163@https.bugs.busybox.net/>
-Message-ID: <bug-8541-163-GzVXCXlQHs@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 4 Jan 2016 09:44:11 -0300
+Subject: [Buildroot] [PATCH] mongodb: fix legal info build error
+In-Reply-To: <1451905048-10732-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1451905048-10732-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <568A691B.8010000@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8541
+On 04/01/16 07:57, Sergio Prado wrote:
 
---- Comment #4 from Luca Ceresoli <luca@lucaceresoli.net> ---
-I confirm the bug on current master. It triggers only if libcap-dev in
-installed on the build host.
+> Remove extra comma to fix legal info build error.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/87faca89bc9ff6ff4699c4b50bbb890ff80b95ee/
+> http://autobuild.buildroot.net/results/ea54721ef0d1c210b2baa9eef7c6c68863020b50/
+> http://autobuild.buildroot.net/results/5a81db472d432880f44dfb30bae0d777b6ae6c79/
+> ...
+>
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 
-Patch sent: http://patchwork.ozlabs.org/patch/562348/
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
