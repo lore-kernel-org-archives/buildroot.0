@@ -1,37 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jan 2016 16:24:21 +0100
-Subject: [Buildroot] [PATCH 1/1] disable reboot by ctrl-alt-del
-In-Reply-To: <87r3hxjru4.fsf@dell.be.48ers.dk>
-References: <1451858433-7932-1-git-send-email-felten@vaxnet.de>
- <20160104160337.402c3aef@free-electrons.com>
- <87r3hxjru4.fsf@dell.be.48ers.dk>
-Message-ID: <20160104162421.3d15a8ad@free-electrons.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Mon,  4 Jan 2016 13:50:23 -0200
+Subject: [Buildroot] [PATCH] mongodb: disable support for armv4 and armv5
+Message-ID: <1451922623-12708-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When compiling for armv4 or armv5, we get the following error:
 
-On Mon, 04 Jan 2016 16:18:43 +0100, Peter Korsgaard wrote:
+src/mongo/util/signal_handlers_synchronous.cpp:188:9: error: 'current_exception' is not a member of 'std'
+     if (std::current_exception()) {
+         ^
 
-> Ehh, I think we all agree. This commit didn't add a configuration
-> option, it simply changed our default behavior to NOT do anything when
-> ctrl-alt-del is pressed (which is imho a better default).
+This is because libstdc++ will only enable std::current_exception if ATOMIC_INT_LOCK_FREE > 1, which is not the case for armv4 and armv5 architectures, so disable them.
 
-Ah, my bad. I had in mind the previous patch from Lothar, i.e "added
-option to enable or disable reboot on ctrl-alt-del". Indeed his new
-patch, which you committed, does not add a new option, which is
-perfectly fine.
+Fixes:
+http://autobuild.buildroot.net/results/589a02f511939531141135def73785b600113152/
+http://autobuild.buildroot.net/results/89b9cd2dae8645b50407409c7f2a8567c551822c/
+http://autobuild.buildroot.net/results/b8ffce927cb0563f5c43533ec2f02d3487acc198/
 
-Sorry for the noise. That's what happens when you don't read e-mails in
-the right order.
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/mongodb/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Thomas
+diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
+index 7665c864833e..2f6876a19919 100644
+--- a/package/mongodb/Config.in
++++ b/package/mongodb/Config.in
+@@ -1,8 +1,9 @@
+ # from src/mongo/platform/bits.h
+ config BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_aarch64 || BR2_arm ||  \
+-		BR2_i386 || BR2_powerpc64 || BR2_x86_64
++	# ARM needs LDREX/STREX, so ARMv6+
++	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
++	default y if BR2_aarch64 || BR2_i386 || BR2_powerpc64 || BR2_x86_64
+ 
+ config BR2_PACKAGE_MONGODB
+ 	bool "mongodb"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
