@@ -1,22 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Jan 2016 22:00:02 +0100
-Subject: [Buildroot] [PATCH] strace: enable supported nios2 arch
-In-Reply-To: <1451931258-30051-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- (Ezequiel Garcia's message of "Mon, 4 Jan 2016 15:14:18 -0300")
-References: <1451931258-30051-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <877fjpjc19.fsf@dell.be.48ers.dk>
+Date: Mon, 04 Jan 2016 22:02:03 +0100
+Subject: [Buildroot] [PATCH 1/2] python3: switch to Git formatted patches
+In-Reply-To: <1451931809-24511-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 4 Jan 2016 19:23:28 +0100")
+References: <1451931809-24511-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8737udjbxw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Support for Nios-II has been added in strace release 4.11.
- > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ > In preparation for the bump to Python 3.5.0, let's switch all the
+ > patches to the Git format. This way, a Git repository of the Python
+ > source code can be used to manage those patches, which makes it easier
+ > to bump to newer Python versions.
 
-Committed, thanks.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+[snip]
+
+>  delete mode 100644 package/python3/006-cross-compile-getaddrinfo.patch
+
+Did you drop this patch on purpose?
 
 -- 
 Bye, Peter Korsgaard
