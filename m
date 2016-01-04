@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Jan 2016 07:43:58 -0300
-Subject: [Buildroot] [PATCH] lighttpd: bump to version 1.4.39
-Message-ID: <1451904238-23741-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  4 Jan 2016 07:44:58 -0300
+Subject: [Buildroot] [PATCH] pciutils: bump to version 3.4.1
+Message-ID: <1451904298-24613-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lighttpd/lighttpd.hash | 2 +-
- package/lighttpd/lighttpd.mk   | 2 +-
+ package/pciutils/pciutils.hash | 2 +-
+ package/pciutils/pciutils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index 1158652..7ae17f2 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
+diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
+index cda0ac2..dd75e42 100644
+--- a/package/pciutils/pciutils.hash
++++ b/package/pciutils/pciutils.hash
 @@ -1,2 +1,2 @@
- # From http://www.lighttpd.net/
--sha256 4912568b7befcf3f552ca4668bd7f38cd85f42a22944359d00816ec27eb1e504  lighttpd-1.4.38.tar.xz
-+sha256	7eb9a1853c3d6dd5851682b0733a729ba4158d6bdff80974d5ef5f1f6887365b	lighttpd-1.4.39.tar.xz
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 49b9ac6..0146373 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
+ # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
+-sha256	f8898ff6d58f52e9e17e2763bff479bb9511bcf0d8711084fa77f1b6b1739196	pciutils-3.4.0.tar.xz
++sha256	865554cc5604d1644bd8da38d94845405e2a319a6d5acabc6a0296417684a82a	pciutils-3.4.1.tar.xz
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 6c0e660..24f250e 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).38
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).39
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3c
+-PCIUTILS_VERSION = 3.4.0
++PCIUTILS_VERSION = 3.4.1
+ PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
+ PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
+ PCIUTILS_INSTALL_STAGING = YES
 -- 
 2.4.10
