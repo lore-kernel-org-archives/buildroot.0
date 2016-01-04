@@ -1,46 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 04 Jan 2016 20:56:15 +0000
-Subject: [Buildroot] [Bug 8581] pciutils.mk PCIUTILS_MAKE_OPTS typo
-In-Reply-To: <bug-8581-163@https.bugs.busybox.net/>
-References: <bug-8581-163@https.bugs.busybox.net/>
-Message-ID: <bug-8581-163-1QTPYaYK9B@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jan 2016 22:00:02 +0100
+Subject: [Buildroot] [PATCH] strace: enable supported nios2 arch
+In-Reply-To: <1451931258-30051-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ (Ezequiel Garcia's message of "Mon, 4 Jan 2016 15:14:18 -0300")
+References: <1451931258-30051-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <877fjpjc19.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8581
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ > Support for Nios-II has been added in strace release 4.11.
+ > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-Thanks, fixed in git by:
-
-commit 85e2a87699f4f98d1b669576922581ae3bcac004
-Author: Peter Korsgaard <peter@korsgaard.com>
-Date:   Mon Jan 4 21:47:37 2016 +0100
-
-    pciutils: correct dns disabling logic
-
-    Fixes #8581
-
-    Commit 2c879f95a0 (pciutils: cleanup) refactored the make arguments, but
-    accidently changed the logic to disable dns based lookups to pass
-    PCIUTILS_DNS=no instead of DNS=no, causing the autotection to be used.
-
-    This autodetection looks at host includes, so it isn't safe for cross
-    compilation.
-
-    Disable it by setting the correct make variable instead.
-
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
