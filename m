@@ -1,32 +1,45 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 4 Jan 2016 16:09:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sp-oops-extract: consolidate
- use of stdint types
-In-Reply-To: <1451917380-2270-1-git-send-email-rdkehn@yahoo.com>
-References: <1451917380-2270-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <568A8B0D.80602@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jan 2016 16:18:43 +0100
+Subject: [Buildroot] [PATCH 1/1] disable reboot by ctrl-alt-del
+In-Reply-To: <20160104160337.402c3aef@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 4 Jan 2016 16:03:37 +0100")
+References: <1451858433-7932-1-git-send-email-felten@vaxnet.de>
+ <20160104160337.402c3aef@free-electrons.com>
+Message-ID: <87r3hxjru4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Doug,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Doug Kehn wrote:
-> Change u_int*_t to uint*_t for compatibility with a larger number of C
-> libraries.
->
-> This patch resolves 2016-01-02 auto-build failure. This patch has also
-> been submitted upstream (ptxdist at pengutronix.de).
+ > Hello,
+ > On Sun,  3 Jan 2016 23:00:33 +0100, lothar felten wrote:
+ >> From: lf <micro1183@gmail.com>
+ >> 
+ >> Most embedded systems do not have a keyboard.
+ >> If a keyboard is attached afterwards (e.g. to an accessible USB host port) 
+ >> this allows the user to reboot the system by pressing Ctrl-Alt-Del, which
+ >> might not be desired.
+ >> 
+ >> Signed-off-by: lothar felten <felten@vaxnet.de>
 
-Adding the URL of the build failure webpage is a good practice. It
-allows reviewers to have a look at the problem you're fixing.
+ > Thanks Lothar for your contribution. Your patch has already been
+ > committed, so I hadn't had the time to give my opinion.
 
-See for example:
+ > My opinion is quite different than the one from Yann and Peter however:
+ > I believe your customization of the ctrl-alt-del behavior is really a
+ > detail, which can very easily be overridden in a post-build script and
+ > therefore does not deserve an additional Config.in option. If we start
+ > adding Config.in options for every possible customization of the
+ > inittab, we will have gazillions of options to solve very specific use
+ > cases.
 
- 
-https://git.busybox.net/buildroot/commit/?id=a5ec50b2cc874a2e8a711792d673f0c51b5142b2
+Ehh, I think we all agree. This commit didn't add a configuration
+option, it simply changed our default behavior to NOT do anything when
+ctrl-alt-del is pressed (which is imho a better default).
 
 -- 
-Luca
+Venlig hilsen,
+Peter Korsgaard 
