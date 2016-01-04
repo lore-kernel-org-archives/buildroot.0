@@ -1,40 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 04 Jan 2016 21:41:57 +0000
-Subject: [Buildroot] [Bug 8541] fail to build host-fakeroot-1.20.2
-In-Reply-To: <bug-8541-163@https.bugs.busybox.net/>
-References: <bug-8541-163@https.bugs.busybox.net/>
-Message-ID: <bug-8541-163-uGfRe2Keua@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jan 2016 22:50:18 +0100
+Subject: [Buildroot] [PATCH 1/2] python3: switch to Git formatted patches
+In-Reply-To: <568AE67B.4030308@mind.be> (Arnout Vandecappelle's message of
+ "Mon, 4 Jan 2016 22:39:07 +0100")
+References: <1451931809-24511-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <8737udjbxw.fsf@dell.be.48ers.dk> <568AE67B.4030308@mind.be>
+Message-ID: <87poxhhv51.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8541
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Hi,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+ >>> delete mode 100644 package/python3/006-cross-compile-getaddrinfo.patch
+ >> 
+ >> Did you drop this patch on purpose?
+ >> 
 
---- Comment #6 from Peter Korsgaard <jacmet@uclibc.org> ---
-Fixed in git by:
+ >  It's been renamed 006 -> 0004 and rename detection didn't kick in.
 
-commit 6fc5de4ef466b649b37a86e4f4994a667149dd80
-Author: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date:   Mon Jan 4 16:33:56 2016 -0200
-
-    fakeroot: fix build when libcap-dev is installed
-
-    Fixes https://bugs.busybox.net/show_bug.cgi?id=8541
-
-    Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-    Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-    Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Ahh, sorry.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Venlig hilsen,
+Peter Korsgaard 
