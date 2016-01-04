@@ -1,23 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 04 Jan 2016 18:43:21 +0000
-Subject: [Buildroot] [Bug 8541] fail to build host-fakeroot-1.20.2
-In-Reply-To: <bug-8541-163@https.bugs.busybox.net/>
-References: <bug-8541-163@https.bugs.busybox.net/>
-Message-ID: <bug-8541-163-BDbi2nVbhc@https.bugs.busybox.net/>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Mon, 4 Jan 2016 21:43:01 +0200
+Subject: [Buildroot] host directories in target rpath
+In-Reply-To: <20160101230549.6cb360cf@free-electrons.com>
+References: <20160101155622.GA20087@vostro>
+ <20160101230549.6cb360cf@free-electrons.com>
+Message-ID: <20160104194301.GA8582@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8541
+Fri, Jan 01, 2016 at 11:05:49PM +0100, Thomas Petazzoni wrote:
 
---- Comment #5 from Ricardo Martincoski <ricardo0y-buildroot@yahoo.com.br> ---
-(In reply to Vicente Olivert Riera from comment #2)
-I propose a different approach: disable the detection of sys/capability.h
-provided by libcap-dev.
-https://patchwork.ozlabs.org/patch/562657/
+> > The underlying cause is libtool, and for autoreconfed packages I can fix it
+> > by patching (host-)libtool. This fixes alsa-lib but not weston because weston
+> > carries that code in its pre-built configure. So I have to either patch weston
+> > in place (and also every non-autoreconfed package), or autoreconf them all.
+> > 
+> > What's your thoughts on this? Maybe there are better ways to fix it?
+> 
+> You can see the following patches from Samuel Martin, which aim at
+> solving this problem:
+> 
+>   http://patchwork.ozlabs.org/patch/494781/
+>   http://patchwork.ozlabs.org/patch/494782/
+>   http://patchwork.ozlabs.org/patch/494783/
+>   http://patchwork.ozlabs.org/patch/494784/
+>   http://patchwork.ozlabs.org/patch/494785/
+> 
+> Samuel said he would respin them on top of master and post a new
+> version of those patches.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thanks, I wasn't aware of this set and it looks much better than
+what I was going to do!
