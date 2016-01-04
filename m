@@ -1,35 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Jan 2016 16:19:19 +0100
-Subject: [Buildroot] [git commit] xapp_xbacklight: select xcb-util package
-Message-ID: <20160104151955.7A2FB826C4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jan 2016 16:24:21 +0100
+Subject: [Buildroot] [PATCH 1/1] disable reboot by ctrl-alt-del
+In-Reply-To: <87r3hxjru4.fsf@dell.be.48ers.dk>
+References: <1451858433-7932-1-git-send-email-felten@vaxnet.de>
+ <20160104160337.402c3aef@free-electrons.com>
+ <87r3hxjru4.fsf@dell.be.48ers.dk>
+Message-ID: <20160104162421.3d15a8ad@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a0368e6fe711c7b57bd7a5315c0f11b3aab77d0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-xapp_xbacklight depends on the xcb-utils package but doesn't select it.
-Fixes:
+On Mon, 04 Jan 2016 16:18:43 +0100, Peter Korsgaard wrote:
 
-http://autobuild.buildroot.net/results/d96/d96aa77e02954bef6fb6e9d244fbf9d1e939a374/
+> Ehh, I think we all agree. This commit didn't add a configuration
+> option, it simply changed our default behavior to NOT do anything when
+> ctrl-alt-del is pressed (which is imho a better default).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xapp_xbacklight/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Ah, my bad. I had in mind the previous patch from Lothar, i.e "added
+option to enable or disable reboot on ctrl-alt-del". Indeed his new
+patch, which you committed, does not add a new option, which is
+perfectly fine.
 
-diff --git a/package/x11r7/xapp_xbacklight/Config.in b/package/x11r7/xapp_xbacklight/Config.in
-index 9756235..5764056 100644
---- a/package/x11r7/xapp_xbacklight/Config.in
-+++ b/package/x11r7/xapp_xbacklight/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XAPP_XBACKLIGHT
- 	bool "xbacklight"
-+	select BR2_PACKAGE_XCB_UTIL
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 	select BR2_PACKAGE_XLIB_LIBXRENDER
+Sorry for the noise. That's what happens when you don't read e-mails in
+the right order.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
