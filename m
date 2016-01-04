@@ -1,33 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Jan 2016 11:37:12 -0300
-Subject: [Buildroot] [PATCH] xapp_xbacklight: select xcb-util package
-Message-ID: <1451918232-11957-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jan 2016 16:03:37 +0100
+Subject: [Buildroot] [PATCH 1/1] disable reboot by ctrl-alt-del
+In-Reply-To: <1451858433-7932-1-git-send-email-felten@vaxnet.de>
+References: <1451858433-7932-1-git-send-email-felten@vaxnet.de>
+Message-ID: <20160104160337.402c3aef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xapp_xbacklight depends on the xcb-utils package but doesn't select it.
-Fixes:
+Hello,
 
-http://autobuild.buildroot.net/results/d96/d96aa77e02954bef6fb6e9d244fbf9d1e939a374/
+On Sun,  3 Jan 2016 23:00:33 +0100, lothar felten wrote:
+> From: lf <micro1183@gmail.com>
+> 
+> Most embedded systems do not have a keyboard.
+> If a keyboard is attached afterwards (e.g. to an accessible USB host port) 
+> this allows the user to reboot the system by pressing Ctrl-Alt-Del, which
+> might not be desired.
+>  
+> Signed-off-by: lothar felten <felten@vaxnet.de>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/x11r7/xapp_xbacklight/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Thanks Lothar for your contribution. Your patch has already been
+committed, so I hadn't had the time to give my opinion.
 
-diff --git a/package/x11r7/xapp_xbacklight/Config.in b/package/x11r7/xapp_xbacklight/Config.in
-index 9756235..5764056 100644
---- a/package/x11r7/xapp_xbacklight/Config.in
-+++ b/package/x11r7/xapp_xbacklight/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XAPP_XBACKLIGHT
- 	bool "xbacklight"
-+	select BR2_PACKAGE_XCB_UTIL
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 	select BR2_PACKAGE_XLIB_LIBXRENDER
+My opinion is quite different than the one from Yann and Peter however:
+I believe your customization of the ctrl-alt-del behavior is really a
+detail, which can very easily be overridden in a post-build script and
+therefore does not deserve an additional Config.in option. If we start
+adding Config.in options for every possible customization of the
+inittab, we will have gazillions of options to solve very specific use
+cases.
+
+Best regards,
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
