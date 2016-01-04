@@ -1,61 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2016 00:17:11 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: reorder
-	select/depends
-Message-ID: <20160104232302.A6FD9826FA@busybox.osuosl.org>
+Date: Tue, 5 Jan 2016 00:17:33 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: select
+	xlib_libxshmfence required by dri3proto support dependencies
+Message-ID: <20160104232302.B9DF7822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7358a7157f4996bf74a3ca93cb899f11a64985d0
+commit: http://git.buildroot.net/buildroot/commit/?id=9cb8f160c2ebac03d29314511501271239f399ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From [1]:
-"Even though the ordering has absolutely no consequences in Kconfig, it
-is not logical (when reading). It is more logical and far easier to
-understand when depends come first, followed by the selects."
+When BR2_PACKAGE_XPROTO_DRI3PROTO and
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR are selected, xlib_libxshmfence
+package build is triggered at Makefile level.
 
-Also, the Config.in exemple in the manual suggest to use this coding
-style [2].
+Since 28f67899e54f15c6e48484ea2976c3e431756bcb, the build
+stop if a package build is trigged at Makefile level without
+being selected at Config.in level.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
-[2] http://buildroot.uclibc.org/downloads/manual/manual.html#writing-rules-config-in
+Fixes:
+http://autobuild.buildroot.net/results/a25/a253d19191dbc8bcc54f9e9d7fddae03d6695b4b/
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xserver_xorg-server/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 2bc3f75..71697ef 100644
+index 71697ef..f407d34 100644
 --- a/package/x11r7/xserver_xorg-server/Config.in
 +++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	bool "xorg-server"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBPCIACCESS if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
- 	# We need a SHA1 implementation. If either openssl or
- 	# libgcrypt are already part of the build, we'll use one of
-@@ -48,7 +49,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
- 	select BR2_PACKAGE_XKEYBOARD_CONFIG
--	depends on BR2_USE_MMU # fork()
- 	help
- 	  X.Org X server
- 
-@@ -93,9 +93,9 @@ choice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
- 	bool "Modular X.org"
-+	depends on BR2_INSTALL_LIBSTDCPP
+@@ -96,6 +96,7 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	select BR2_PACKAGE_LIBDRM if (BR2_PACKAGE_XPROTO_XF86DRIPROTO || \
  		BR2_PACKAGE_XPROTO_DRI2PROTO)
--	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
  	help
  	  This variant of the X.org server is the full-blown variant,
  	  as used by desktop GNU/Linux distributions. The drivers (for
