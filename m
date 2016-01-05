@@ -1,55 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2016 22:40:27 +0100
-Subject: [Buildroot] [git commit] pv: fix build error on sparc/sparc64
-Message-ID: <20160105214315.4A5CD81ED7@busybox.osuosl.org>
+Date: Tue, 5 Jan 2016 22:37:11 +0100
+Subject: [Buildroot] [git commit] cantarell: bump to version 0.0.20
+Message-ID: <20160105214315.2D9E37FB47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ed37b14bc1160b0ddbbb1590bbd604bfae63563
+commit: http://git.buildroot.net/buildroot/commit/?id=4a38f3aef3b6cd3da831bdbb3839396cbf0e2ada
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Relax linker option is enabled by default on sparc/sparc64
-architectures, and it can't be used together with -r option, so disable
-it.
-
-Fixes:
-http://autobuild.buildroot.net/results/fadc6fc5500d68b91aead58b1d74887db5244f52/
-http://autobuild.buildroot.net/results/2f30486f2d72e0277fc30febd4012825a59e4f41/
-http://autobuild.buildroot.net/results/82ccb8f0818d1909309eaef969548f963fc6cf04/
-...
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pv/pv.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/cantarell/cantarell.hash | 4 ++--
+ package/cantarell/cantarell.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pv/pv.mk b/package/pv/pv.mk
-index 5346b10..47f570f 100644
---- a/package/pv/pv.mk
-+++ b/package/pv/pv.mk
-@@ -17,6 +17,13 @@ PV_LICENSE_FILES = doc/COPYING
- # ensuring that host-gettext is built if gettext support is enabled;
- PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext)
+diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
+index 9597550..67428d8 100644
+--- a/package/cantarell/cantarell.hash
++++ b/package/cantarell/cantarell.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.19.sha256sum
+-sha256	c7f975ef3d5cf0ed409636c59d069260783683c47ba1289ac3e66a98446e46ae	cantarell-fonts-0.0.19.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.20.sha256sum
++sha256	fb78a5cb6bdcfc464b763a030186c818080860107283bff8adcbb2d084f8f8de	cantarell-fonts-0.0.20.tar.xz
+diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
+index 008e1e6..a82b758 100644
+--- a/package/cantarell/cantarell.mk
++++ b/package/cantarell/cantarell.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+# --relax linker option is enabled by default on sparc/sparc64
-+# architectures, and it can't be used together with -r option, so
-+# disable it.
-+ifeq ($(BR2_sparc)$(BR2_sparc64),y)
-+PV_LDFLAGS = "-Wl,--no-relax"
-+endif
-+
- # While 'pv' uses autoconf, it does not use automake for its
- # makefiles. It uses $(LD) $(LDFLAGS) to achieve partial linking, but
- # using 'ld' directly doesn't work well with some toolchain
-@@ -25,6 +32,6 @@ PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext)
- # ensure that 'gcc' is used to do these partial linking steps.
- PV_MAKE_OPTS = \
- 	LD="$(TARGET_CC)" \
--	LDFLAGS="-Wl,-r -nostdlib"
-+	LDFLAGS="-Wl,-r -nostdlib $(PV_LDFLAGS)"
- 
- $(eval $(autotools-package))
+ CANTARELL_VERSION_MAJOR = 0.0
+-CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).19
++CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).20
+ CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
+ CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
+ CANTARELL_DEPENDENCIES = host-pkgconf
