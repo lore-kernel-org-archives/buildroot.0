@@ -1,34 +1,82 @@
-From: Daniele Colombo <daniele.email0@gmail.com>
-Date: Tue, 5 Jan 2016 11:16:48 +0100
-Subject: [Buildroot] Include in Autotools Buildroot ARM toolchain for
-	eclipse Luna Indexer
-Message-ID: <CAC3k=W3S56fWDFALf3LxKaskgO7zETRHoBHVxqPYkvQ0t3WFrg@mail.gmail.com>
+From: Ian Haylock <haylocki@yahoo.co.uk>
+Date: Tue,  5 Jan 2016 10:40:46 +0000
+Subject: [Buildroot] [PATCH] python-rpi-gpio: new package
+Message-ID: <1451990446-4757-1-git-send-email-haylocki@yahoo.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Signed-off-by: Ian Haylock <haylocki@yahoo.co.uk>
+---
+ package/Config.in                            |  1 +
+ package/python-rpi-gpio/Config.in            |  9 +++++++++
+ package/python-rpi-gpio/python-rpi-gpio.hash |  3 +++
+ package/python-rpi-gpio/python-rpi-gpio.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100755 package/python-rpi-gpio/Config.in
+ create mode 100755 package/python-rpi-gpio/python-rpi-gpio.hash
+ create mode 100755 package/python-rpi-gpio/python-rpi-gpio.mk
 
-I'm trying to create a Shared Library for ARM with buildroot Autotool
-toolchain, the toolchain have the entry "CDT GCC Build-in Compiler
-Settings" that provide C++ standard include from the host (/usr/include
-...).
-
-In the eclipse project this include is addressed instead the c++ include
-provided by buildroot.
-
-If I disable "CDT GCC Build-in Compiler Settings" eclipse is not able to
-resolve standard C++ include.
-
-No problem with building, the problem affect only eclipse Index and maybe
-Cross debug,
-
-Any suggestion ?
-
-Thanks
-Daniele
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160105/fd3a628c/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 442021f..a1cf595 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -690,6 +690,7 @@ menu "External python modules"
+ 	source "package/python-pyyaml/Config.in"
+ 	source "package/python-pyzmq/Config.in"
+ 	source "package/python-requests/Config.in"
++	source "package/python-rpi-gpio/Config.in"
+ 	source "package/python-rtslib-fb/Config.in"
+ 	source "package/python-serial/Config.in"
+ 	source "package/python-setuptools/Config.in"
+diff --git a/package/python-rpi-gpio/Config.in b/package/python-rpi-gpio/Config.in
+new file mode 100755
+index 0000000..da5b8c2
+--- /dev/null
++++ b/package/python-rpi-gpio/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_RPI_GPIO
++        bool "python-rpi-gpio"
++	depends on BR2_arm
++	depends on BR2_PACKAGE_PYTHON
++
++        help
++          A Python module to control the GPIO on a Raspberry Pi.
++
++          http://sourceforge.net/p/raspberry-gpio-python
+\ No newline at end of file
+diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
+new file mode 100755
+index 0000000..46c4e5b
+--- /dev/null
++++ b/package/python-rpi-gpio/python-rpi-gpio.hash
+@@ -0,0 +1,3 @@
++# md5sum from http://sourceforge.net/projects/raspberry-gpio-python/files/, sha256 calculated locally
++md5	254d0443a436eb241367c487274e7197	RPi.GPIO-0.6.1.tar.gz
++sha256	54e5fb06d9ea1a1389a497fb5a06dfa950c86303b0f4ba89b68c55999d1df064	RPi.GPIO-0.6.1.tar.gz
+\ No newline at end of file
+diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
+new file mode 100755
+index 0000000..aa086dc
+--- /dev/null
++++ b/package/python-rpi-gpio/python-rpi-gpio.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-rpi-gpio
++#
++################################################################################
++
++PYTHON_RPI_GPIO_VERSION = 0.6.1
++PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
++PYTHON_RPI_GPIO_SITE = http://sourceforge.net/projects/raspberry-gpio-python/files
++PYTHON_RPI_GPIO_LICENSE = MIT
++PYTHON_RPI_GPIO_LICENSE_FILES = LICENSE.txt
++PYTHON_RPI_GPIO_SETUP_TYPE = distutils
++
++$(eval $(python-package))
+\ No newline at end of file
+-- 
+2.6.4
