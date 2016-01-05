@@ -1,80 +1,65 @@
-From: Ian Haylock <haylocki@yahoo.co.uk>
-Date: Tue,  5 Jan 2016 15:44:08 +0000
-Subject: [Buildroot] [PATCH] python-rpi-gpio: new package
-Message-ID: <1452008648-10885-1-git-send-email-haylocki@yahoo.co.uk>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 5 Jan 2016 16:45:35 +0100
+Subject: [Buildroot] [PATCH v2 3/3] python-cffi: add host variant
+In-Reply-To: <CAGm1_ksVRyLz6Zi+-Lkz0NYi0ZEJMbHrP1TSY9ZnX4Mxe_gtfg@mail.gmail.com>
+References: <1451978244-15878-1-git-send-email-yegorslists@googlemail.com>
+ <1451978244-15878-4-git-send-email-yegorslists@googlemail.com>
+ <CAGm1_ksVRyLz6Zi+-Lkz0NYi0ZEJMbHrP1TSY9ZnX4Mxe_gtfg@mail.gmail.com>
+Message-ID: <CAGm1_ktPcAjOh33BqkuFMrA5v=ho7LD0A93Ppo-WsmKT0d0UJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ian Haylock <haylocki@yahoo.co.uk>
----
- package/Config.in                            |  1 +
- package/python-rpi-gpio/Config.in            |  7 +++++++
- package/python-rpi-gpio/python-rpi-gpio.hash |  3 +++
- package/python-rpi-gpio/python-rpi-gpio.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100755 package/python-rpi-gpio/Config.in
- create mode 100755 package/python-rpi-gpio/python-rpi-gpio.hash
- create mode 100755 package/python-rpi-gpio/python-rpi-gpio.mk
+On Tue, Jan 5, 2016 at 4:40 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Hello Thomas, Yann,
+>
+> On Tue, Jan 5, 2016 at 8:17 AM,  <yegorslists@googlemail.com> wrote:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> Host variant is needed to cross-compile CFFI based C library wrappers.
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>> Changes:
+>>         v2: add host-libffi dependency
+>>
+>>  package/python-cffi/python-cffi.mk | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+>> index 70fbe02..02c969b 100644
+>> --- a/package/python-cffi/python-cffi.mk
+>> +++ b/package/python-cffi/python-cffi.mk
+>> @@ -11,5 +11,7 @@ PYTHON_CFFI_SETUP_TYPE = setuptools
+>>  PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+>>  PYTHON_CFFI_LICENSE = MIT
+>>  PYTHON_CFFI_LICENSE_FILES = LICENSE
+>> +HOST_PYTHON_CFFI_DEPENDENCIES = host-python-pycparser host-libffi
+>>
+>>  $(eval $(python-package))
+>> +$(eval $(host-python-package))
+>> --
+>
+> I have now following theory regarding checking dependencies in target
+> and host variant.
+>
+> If you look at python-tornado's setup.py file [1], you see, that they
+> say, install_requires will be checked only for setuptools. This is
+> also the case for host-python-cffi. The target variant will be
+> installed with --single-version-externally-managed option, that
+> performs "old-style" install [2] [3], i.e. without checking
+> install_requires.
+>
+> That's my understanding for now.
+>
+> [1] https://github.com/tornadoweb/tornado/blob/master/setup.py#L126
+> [2] https://pythonhosted.org/setuptools/setuptools.html
+> [3] https://bitbucket.org/pypa/setuptools/src/e517fced669d54bcaf3da2d8ca468d29120fedfc/setuptools/command/install.py?at=default&fileviewer=file-view-default#install.py-58
 
-diff --git a/package/Config.in b/package/Config.in
-index 442021f..a1cf595 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -690,6 +690,7 @@ menu "External python modules"
- 	source "package/python-pyyaml/Config.in"
- 	source "package/python-pyzmq/Config.in"
- 	source "package/python-requests/Config.in"
-+	source "package/python-rpi-gpio/Config.in"
- 	source "package/python-rtslib-fb/Config.in"
- 	source "package/python-serial/Config.in"
- 	source "package/python-setuptools/Config.in"
-diff --git a/package/python-rpi-gpio/Config.in b/package/python-rpi-gpio/Config.in
-new file mode 100755
-index 0000000..908ab45
---- /dev/null
-+++ b/package/python-rpi-gpio/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_RPI_GPIO
-+	bool "python-rpi-gpio"
-+	depends on BR2_arm
-+	  help
-+	  A Python module to control the GPIO on a Raspberry Pi.
-+
-+	  http://sourceforge.net/p/raspberry-gpio-python
-\ No newline at end of file
-diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
-new file mode 100755
-index 0000000..46c4e5b
---- /dev/null
-+++ b/package/python-rpi-gpio/python-rpi-gpio.hash
-@@ -0,0 +1,3 @@
-+# md5sum from http://sourceforge.net/projects/raspberry-gpio-python/files/, sha256 calculated locally
-+md5	254d0443a436eb241367c487274e7197	RPi.GPIO-0.6.1.tar.gz
-+sha256	54e5fb06d9ea1a1389a497fb5a06dfa950c86303b0f4ba89b68c55999d1df064	RPi.GPIO-0.6.1.tar.gz
-\ No newline at end of file
-diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
-new file mode 100755
-index 0000000..aa086dc
---- /dev/null
-+++ b/package/python-rpi-gpio/python-rpi-gpio.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-rpi-gpio
-+#
-+################################################################################
-+
-+PYTHON_RPI_GPIO_VERSION = 0.6.1
-+PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
-+PYTHON_RPI_GPIO_SITE = http://sourceforge.net/projects/raspberry-gpio-python/files
-+PYTHON_RPI_GPIO_LICENSE = MIT
-+PYTHON_RPI_GPIO_LICENSE_FILES = LICENSE.txt
-+PYTHON_RPI_GPIO_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
-\ No newline at end of file
--- 
-2.6.4
+This SO answer also points to this conclusion:
+http://stackoverflow.com/a/22179371/1113139
+
+Yegor
