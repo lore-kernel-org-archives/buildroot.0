@@ -1,42 +1,21 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 5 Jan 2016 16:47:28 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jan 2016 17:16:31 +0100
 Subject: [Buildroot] [PATCH] python-rpi-gpio: new package
 In-Reply-To: <1452008648-10885-1-git-send-email-haylocki@yahoo.co.uk>
 References: <1452008648-10885-1-git-send-email-haylocki@yahoo.co.uk>
-Message-ID: <CAGm1_kt-m4sLvaWmowBTFDxF2d8x19h9DU7k4BHY0ELbBa071g@mail.gmail.com>
+Message-ID: <20160105171631.7c65a813@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 5, 2016 at 4:44 PM, Ian Haylock <haylocki@yahoo.co.uk> wrote:
-> Signed-off-by: Ian Haylock <haylocki@yahoo.co.uk>
+Ian,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Thanks for your patch!
 
-> ---
->  package/Config.in                            |  1 +
->  package/python-rpi-gpio/Config.in            |  7 +++++++
->  package/python-rpi-gpio/python-rpi-gpio.hash |  3 +++
->  package/python-rpi-gpio/python-rpi-gpio.mk   | 14 ++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100755 package/python-rpi-gpio/Config.in
->  create mode 100755 package/python-rpi-gpio/python-rpi-gpio.hash
->  create mode 100755 package/python-rpi-gpio/python-rpi-gpio.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 442021f..a1cf595 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -690,6 +690,7 @@ menu "External python modules"
->         source "package/python-pyyaml/Config.in"
->         source "package/python-pyzmq/Config.in"
->         source "package/python-requests/Config.in"
-> +       source "package/python-rpi-gpio/Config.in"
->         source "package/python-rtslib-fb/Config.in"
->         source "package/python-serial/Config.in"
->         source "package/python-setuptools/Config.in"
+On Tue,  5 Jan 2016 15:44:08 +0000, Ian Haylock wrote:
+
 > diff --git a/package/python-rpi-gpio/Config.in b/package/python-rpi-gpio/Config.in
 > new file mode 100755
 > index 0000000..908ab45
@@ -44,13 +23,19 @@ Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 > +++ b/package/python-rpi-gpio/Config.in
 > @@ -0,0 +1,7 @@
 > +config BR2_PACKAGE_PYTHON_RPI_GPIO
-> +       bool "python-rpi-gpio"
-> +       depends on BR2_arm
-> +         help
-> +         A Python module to control the GPIO on a Raspberry Pi.
+> +	bool "python-rpi-gpio"
+> +	depends on BR2_arm
+> +	  help
+
+Indentation of "help" should be one tab, like "bool" and "depends on".
+
+> +	  A Python module to control the GPIO on a Raspberry Pi.
 > +
-> +         http://sourceforge.net/p/raspberry-gpio-python
+> +	  http://sourceforge.net/p/raspberry-gpio-python
 > \ No newline at end of file
+
+You should end the file with a newline.
+
 > diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
 > new file mode 100755
 > index 0000000..46c4e5b
@@ -58,9 +43,12 @@ Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 > +++ b/package/python-rpi-gpio/python-rpi-gpio.hash
 > @@ -0,0 +1,3 @@
 > +# md5sum from http://sourceforge.net/projects/raspberry-gpio-python/files/, sha256 calculated locally
-> +md5    254d0443a436eb241367c487274e7197        RPi.GPIO-0.6.1.tar.gz
-> +sha256 54e5fb06d9ea1a1389a497fb5a06dfa950c86303b0f4ba89b68c55999d1df064        RPi.GPIO-0.6.1.tar.gz
+> +md5	254d0443a436eb241367c487274e7197	RPi.GPIO-0.6.1.tar.gz
+> +sha256	54e5fb06d9ea1a1389a497fb5a06dfa950c86303b0f4ba89b68c55999d1df064	RPi.GPIO-0.6.1.tar.gz
 > \ No newline at end of file
+
+Ditto.
+
 > diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
 > new file mode 100755
 > index 0000000..aa086dc
@@ -82,10 +70,15 @@ Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 > +
 > +$(eval $(python-package))
 > \ No newline at end of file
-> --
-> 2.6.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Ditto.
+
+Other than that, looks good to me.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
