@@ -1,44 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2016 09:22:00 +0100
-Subject: [Buildroot] [git commit] mesa3d-demos: select libglew/libglu if
-	needed
-Message-ID: <20160105082218.BBDAA82718@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue,  5 Jan 2016 09:54:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libupnpp: needs at least gcc 4.6
+Message-ID: <1451984072-2312-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7dda4cff6e8aef36f507f254cac4f19b2abacf0c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Version 0.13.1 of libupnpp uses range-based for loops. This C++11 feature
+requires at least gcc 4.6.
 
 Fixes:
-http://autobuild.buildroot.net/results/4b1/4b16c9797c653c248725a55d9b8eafc4634b968c/build-end.log
+http://autobuild.buildroot.net/results/aa9/aa93ff96305a3b201636bea65f1cfdb6db6d3dfb/
+http://autobuild.buildroot.net/results/d8b/d8b96987a5336a64857817ec9831b0fb12867e7c/
+http://autobuild.buildroot.net/results/408/40807fe84f67961817b6592a6df243c036cf3b4b/
+http://autobuild.buildroot.net/results/408/40807fe84f67961817b6592a6df243c036cf3b4b/
+.. and many more
 
-libglew/libglu are added to _DEPENDENCIES for X11+GL, but not selected at
-the kconfig level.
-
-While we're at it, correct the dependencies for the X11 selects as well
-(only used if GL is available).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/mesa3d-demos/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/libupnpp/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-demos/Config.in b/package/mesa3d-demos/Config.in
-index d63c47b..f22c0de 100644
---- a/package/mesa3d-demos/Config.in
-+++ b/package/mesa3d-demos/Config.in
-@@ -1,7 +1,9 @@
- config BR2_PACKAGE_MESA3D_DEMOS
- 	bool "mesa3d-demos"
--	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_XORG7 && BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_XORG7 && BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7 && BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7 && BR2_PACKAGE_HAS_LIBGL
- 	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES \
- 		|| BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBOPENVG
+diff --git a/package/libupnpp/Config.in b/package/libupnpp/Config.in
+index 1dfd3c7..17a3391 100644
+--- a/package/libupnpp/Config.in
++++ b/package/libupnpp/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBUPNPP
+ 	select BR2_PACKAGE_LIBUPNP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 	# Triggers the _gp link issue
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
  	help
+@@ -14,6 +14,6 @@ config BR2_PACKAGE_LIBUPNPP
+ 
+ 	  http://www.lesbonscomptes.com/upmpdcli/
+ 
+-comment "libupnpp needs a toolchain w/ C++, threads, gcc >= 4.5"
++comment "libupnpp needs a toolchain w/ C++, threads, gcc >= 4.6"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+-- 
+2.6.4
