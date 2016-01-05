@@ -1,70 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2016 22:23:56 +0100
-Subject: [Buildroot] [git commit] package/sp-oops-extract: consolidate use
-	of stdint types
-Message-ID: <20160105214313.ED9728274E@busybox.osuosl.org>
+Date: Tue, 5 Jan 2016 22:36:37 +0100
+Subject: [Buildroot] [git commit] package/boost: add patch to fix host build
+	with gcc 4.4
+Message-ID: <20160105214315.1441481ED7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7d5420144cbc98a38501de712b24ac0dc60eb9e
+commit: http://git.buildroot.net/buildroot/commit/?id=d0b17497572a4bcb97d5c8ea9f8d844b8fb9b9ec
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change u_int*_t to uint*_t for compatibility, as the latter is in C99:
-
-https://stackoverflow.com/questions/5090737/datatypes-used-in-c
+Add patch from upstream [1] to fix a host build with gcc 4.4.x:
+  gcc.compile.c++ bin.v2/libs/container/build/gcc-4.4.5/release/threading-multi/pool_resource.o
+  libs/container/src/pool_resource.cpp:35: error: declaration of 'typedef class boost::container::pmr::block_slist_base<boost::container::pmr::block_slist_header> boost::container::pmr::pool_data_t::block_slist_base'
+  ./boost/container/detail/block_slist.hpp:67: error: changes meaning of 'block_slist_base' from 'class boost::container::pmr::block_slist_base<boost::container::pmr::block_slist_header>'
 
 Fixes:
-http://autobuild.buildroot.net/results/c649822aa129d56e5462a4887b13811340564453/
+http://autobuild.buildroot.org/results/3cd/3cdc30a5b6e05de99787a20bf71fcf82842c15b3/
+http://autobuild.buildroot.net/results/852/85212dd41db76d4e32efd98736ad8506e1917a8d/
+http://autobuild.buildroot.org/results/963/963d102aa1c42efd84447d68d0856074421fbe05/
+http://autobuild.buildroot.org/results/a39/a395f91969f79a8a4c0deffca4cdfdad33d48bd0/
+.. and many more.
 
-This patch has also been submitted upstream (ptxdist at pengutronix.de).
+Host build tested on Scientific Linux 6.7 with gcc 4.4.7.
 
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Backported from: a4e9686f8a0258bc30f9da2abab65673d6b9bd50
+
+[1] https://github.com/boostorg/container/commit/a4e9686f8a0258bc30f9da2abab65673d6b9bd50
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sp-oops-extract/0002-stdint-cleanup.patch | 33 +++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ .../0004-fix-declaration-error-with-gcc-4-4.patch  | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/sp-oops-extract/0002-stdint-cleanup.patch b/package/sp-oops-extract/0002-stdint-cleanup.patch
+diff --git a/package/boost/0004-fix-declaration-error-with-gcc-4-4.patch b/package/boost/0004-fix-declaration-error-with-gcc-4-4.patch
 new file mode 100644
-index 0000000..70317a7
+index 0000000..073ec04
 --- /dev/null
-+++ b/package/sp-oops-extract/0002-stdint-cleanup.patch
-@@ -0,0 +1,33 @@
-+consolidate use of stdint types
++++ b/package/boost/0004-fix-declaration-error-with-gcc-4-4.patch
+@@ -0,0 +1,50 @@
++From a4e9686f8a0258bc30f9da2abab65673d6b9bd50 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Jupp=20M=C3=BCller?= <jupp0r@gmail.com>
++Date: Wed, 23 Dec 2015 09:18:51 +0100
++Subject: [PATCH] Fix declaration changes meaning error with GCC 4.4.7 (#11856)
 +
-+Change u_int*_t to uint*_t for compatibility with a larger number of C
-+libraries.
++Backported from a4e9686f8a0258bc30f9da2abab65673d6b9bd50
 +
-+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
++[J??rg Krause: adjust pathes to match sourceforge release tarball]
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 +
-+Index: sp-oops-extract-0.0.7-1/src/oopslog.c
-+===================================================================
-+--- sp-oops-extract-0.0.7-1.orig/src/oopslog.c
-++++ sp-oops-extract-0.0.7-1/src/oopslog.c
-+@@ -64,8 +64,8 @@ static int try_to_check_for_bad_blocks(v
-+ 
-+ int main(const int argc, const char *argv[])
++---
++ libs/container/src/pool_resource.cpp | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/libs/container/src/pool_resource.cpp b/libs/container/src/pool_resource.cpp
++index 4df7ee2..45f1564 100644
++--- a/libs/container/src/pool_resource.cpp
+++++ b/libs/container/src/pool_resource.cpp
++@@ -32,11 +32,11 @@ namespace pmr {
++ class pool_data_t
++    : public block_slist_base<>
 + {
-+-	u_int32_t *count, maxcount = 0xffffffff;
-+-	u_int32_t *magic_ptr, magic_value = 0x5d005d00;
-++	uint32_t *count, maxcount = 0xffffffff;
-++	uint32_t *magic_ptr, magic_value = 0x5d005d00;
-+ 	
-+ 	unsigned char *charbuf;
-+ 	unsigned long size;
-+@@ -137,8 +137,8 @@ int main(const int argc, const char *arg
-+ 		errx(-1, "%s is something weird", device);
++-   typedef block_slist_base<> block_slist_base;
+++   typedef block_slist_base<> block_slist_base_t;
 + 
-+ 	charbuf = buf;	
-+-	count = (u_int32_t *) buf;
-+-	magic_ptr = (u_int32_t *) (buf + sizeof(u_int32_t));
-++	count = (uint32_t *) buf;
-++	magic_ptr = (uint32_t *) (buf + sizeof(uint32_t));
++    public:
++    explicit pool_data_t(std::size_t initial_blocks_per_chunk)
++-      : block_slist_base(), next_blocks_per_chunk(initial_blocks_per_chunk)
+++      : block_slist_base_t(), next_blocks_per_chunk(initial_blocks_per_chunk)
++    {  slist_algo::init_header(&free_slist);  }
 + 
-+ 	for (i = 0; i < (size / OOPS_PAGE_SIZE); i++) {
-+ 		pread(fd, buf, OOPS_PAGE_SIZE, i * OOPS_PAGE_SIZE);
++    void *allocate_block() BOOST_NOEXCEPT
++@@ -59,7 +59,7 @@ class pool_data_t
++    void release(memory_resource &upstream)
++    {
++       slist_algo::init_header(&free_slist);
++-      this->block_slist_base::release(upstream);
+++      this->block_slist_base_t::release(upstream);
++       next_blocks_per_chunk = pool_options_minimum_max_blocks_per_chunk;
++    }
++ 
++@@ -72,7 +72,7 @@ class pool_data_t
++       
++       //Minimum block size is at least max_align, so all pools allocate sizes that are multiple of max_align,
++       //meaning that all blocks are max_align-aligned.
++-      char *p = static_cast<char *>(block_slist_base::allocate(blocks_per_chunk*pool_block, mr));
+++      char *p = static_cast<char *>(block_slist_base_t::allocate(blocks_per_chunk*pool_block, mr));
++ 
++       //Create header types. This is no-throw
++       for(std::size_t i = 0, max = blocks_per_chunk; i != max; ++i){
