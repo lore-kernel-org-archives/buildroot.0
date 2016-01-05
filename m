@@ -1,53 +1,33 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue,  5 Jan 2016 19:01:48 -0200
-Subject: [Buildroot] [PATCH] pv: fix build error on sparc/sparc64
-Message-ID: <1452027708-22658-1-git-send-email-sergio.prado@e-labworks.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 05 Jan 2016 22:25:31 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/sp-oops-extract: consolidate
+	use of stdint types
+In-Reply-To: <1451939038-32365-1-git-send-email-rdkehn@yahoo.com> (Doug Kehn's
+ message of "Mon, 4 Jan 2016 14:23:58 -0600")
+References: <1451939038-32365-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <87r3hvhg6s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Relax linker option is enabled by default on sparc/sparc64
-architectures, and it can't be used together with -r option, so disabled
-it.
+>>>>> "Doug" == Doug Kehn <rdkehn@yahoo.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/fadc6fc5500d68b91aead58b1d74887db5244f52/
-http://autobuild.buildroot.net/results/2f30486f2d72e0277fc30febd4012825a59e4f41/
-http://autobuild.buildroot.net/results/82ccb8f0818d1909309eaef969548f963fc6cf04/
-...
+ > Change u_int*_t to uint*_t for compatibility with a larger number of C
+ > libraries.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- package/pv/pv.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/c649822aa129d56e5462a4887b13811340564453/
 
-diff --git a/package/pv/pv.mk b/package/pv/pv.mk
-index 5346b10fc49f..80c1ec349ba7 100644
---- a/package/pv/pv.mk
-+++ b/package/pv/pv.mk
-@@ -17,6 +17,13 @@ PV_LICENSE_FILES = doc/COPYING
- # ensuring that host-gettext is built if gettext support is enabled;
- PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext)
- 
-+# --relax linker option is enabled by default on sparc/sparc64
-+# architectures, and it can't be used together with -r option, so
-+# disabled it.
-+ifeq ($(BR2_sparc)$(BR2_sparc64),y)
-+PV_LDFLAGS = "-Wl,--no-relax"
-+endif
-+
- # While 'pv' uses autoconf, it does not use automake for its
- # makefiles. It uses $(LD) $(LDFLAGS) to achieve partial linking, but
- # using 'ld' directly doesn't work well with some toolchain
-@@ -25,6 +32,6 @@ PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext)
- # ensure that 'gcc' is used to do these partial linking steps.
- PV_MAKE_OPTS = \
- 	LD="$(TARGET_CC)" \
--	LDFLAGS="-Wl,-r -nostdlib"
-+	LDFLAGS="-Wl,-r -nostdlib $(PV_LDFLAGS)"
- 
- $(eval $(autotools-package))
+ > This patch has also been submitted upstream (ptxdist at pengutronix.de).
+
+It is more about toolchains that C libraries as uint*_t is in C99, and
+u_int*_t isn't - E.G.:
+
+https://stackoverflow.com/questions/5090737/datatypes-used-in-c
+
+Committed with the description extended a bit to explain this, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
