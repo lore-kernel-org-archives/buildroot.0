@@ -1,94 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2016 22:36:37 +0100
-Subject: [Buildroot] [git commit] package/boost: add patch to fix host build
-	with gcc 4.4
-Message-ID: <20160105214315.1441481ED7@busybox.osuosl.org>
+Date: Tue, 5 Jan 2016 22:40:27 +0100
+Subject: [Buildroot] [git commit] pv: fix build error on sparc/sparc64
+Message-ID: <20160105214315.4A5CD81ED7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d0b17497572a4bcb97d5c8ea9f8d844b8fb9b9ec
+commit: http://git.buildroot.net/buildroot/commit/?id=4ed37b14bc1160b0ddbbb1590bbd604bfae63563
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add patch from upstream [1] to fix a host build with gcc 4.4.x:
-  gcc.compile.c++ bin.v2/libs/container/build/gcc-4.4.5/release/threading-multi/pool_resource.o
-  libs/container/src/pool_resource.cpp:35: error: declaration of 'typedef class boost::container::pmr::block_slist_base<boost::container::pmr::block_slist_header> boost::container::pmr::pool_data_t::block_slist_base'
-  ./boost/container/detail/block_slist.hpp:67: error: changes meaning of 'block_slist_base' from 'class boost::container::pmr::block_slist_base<boost::container::pmr::block_slist_header>'
+Relax linker option is enabled by default on sparc/sparc64
+architectures, and it can't be used together with -r option, so disable
+it.
 
 Fixes:
-http://autobuild.buildroot.org/results/3cd/3cdc30a5b6e05de99787a20bf71fcf82842c15b3/
-http://autobuild.buildroot.net/results/852/85212dd41db76d4e32efd98736ad8506e1917a8d/
-http://autobuild.buildroot.org/results/963/963d102aa1c42efd84447d68d0856074421fbe05/
-http://autobuild.buildroot.org/results/a39/a395f91969f79a8a4c0deffca4cdfdad33d48bd0/
-.. and many more.
+http://autobuild.buildroot.net/results/fadc6fc5500d68b91aead58b1d74887db5244f52/
+http://autobuild.buildroot.net/results/2f30486f2d72e0277fc30febd4012825a59e4f41/
+http://autobuild.buildroot.net/results/82ccb8f0818d1909309eaef969548f963fc6cf04/
+...
 
-Host build tested on Scientific Linux 6.7 with gcc 4.4.7.
-
-Backported from: a4e9686f8a0258bc30f9da2abab65673d6b9bd50
-
-[1] https://github.com/boostorg/container/commit/a4e9686f8a0258bc30f9da2abab65673d6b9bd50
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-fix-declaration-error-with-gcc-4-4.patch  | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ package/pv/pv.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/boost/0004-fix-declaration-error-with-gcc-4-4.patch b/package/boost/0004-fix-declaration-error-with-gcc-4-4.patch
-new file mode 100644
-index 0000000..073ec04
---- /dev/null
-+++ b/package/boost/0004-fix-declaration-error-with-gcc-4-4.patch
-@@ -0,0 +1,50 @@
-+From a4e9686f8a0258bc30f9da2abab65673d6b9bd50 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jupp=20M=C3=BCller?= <jupp0r@gmail.com>
-+Date: Wed, 23 Dec 2015 09:18:51 +0100
-+Subject: [PATCH] Fix declaration changes meaning error with GCC 4.4.7 (#11856)
+diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+index 5346b10..47f570f 100644
+--- a/package/pv/pv.mk
++++ b/package/pv/pv.mk
+@@ -17,6 +17,13 @@ PV_LICENSE_FILES = doc/COPYING
+ # ensuring that host-gettext is built if gettext support is enabled;
+ PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext)
+ 
++# --relax linker option is enabled by default on sparc/sparc64
++# architectures, and it can't be used together with -r option, so
++# disable it.
++ifeq ($(BR2_sparc)$(BR2_sparc64),y)
++PV_LDFLAGS = "-Wl,--no-relax"
++endif
 +
-+Backported from a4e9686f8a0258bc30f9da2abab65673d6b9bd50
-+
-+[J??rg Krause: adjust pathes to match sourceforge release tarball]
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+
-+---
-+ libs/container/src/pool_resource.cpp | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/libs/container/src/pool_resource.cpp b/libs/container/src/pool_resource.cpp
-+index 4df7ee2..45f1564 100644
-+--- a/libs/container/src/pool_resource.cpp
-++++ b/libs/container/src/pool_resource.cpp
-+@@ -32,11 +32,11 @@ namespace pmr {
-+ class pool_data_t
-+    : public block_slist_base<>
-+ {
-+-   typedef block_slist_base<> block_slist_base;
-++   typedef block_slist_base<> block_slist_base_t;
-+ 
-+    public:
-+    explicit pool_data_t(std::size_t initial_blocks_per_chunk)
-+-      : block_slist_base(), next_blocks_per_chunk(initial_blocks_per_chunk)
-++      : block_slist_base_t(), next_blocks_per_chunk(initial_blocks_per_chunk)
-+    {  slist_algo::init_header(&free_slist);  }
-+ 
-+    void *allocate_block() BOOST_NOEXCEPT
-+@@ -59,7 +59,7 @@ class pool_data_t
-+    void release(memory_resource &upstream)
-+    {
-+       slist_algo::init_header(&free_slist);
-+-      this->block_slist_base::release(upstream);
-++      this->block_slist_base_t::release(upstream);
-+       next_blocks_per_chunk = pool_options_minimum_max_blocks_per_chunk;
-+    }
-+ 
-+@@ -72,7 +72,7 @@ class pool_data_t
-+       
-+       //Minimum block size is at least max_align, so all pools allocate sizes that are multiple of max_align,
-+       //meaning that all blocks are max_align-aligned.
-+-      char *p = static_cast<char *>(block_slist_base::allocate(blocks_per_chunk*pool_block, mr));
-++      char *p = static_cast<char *>(block_slist_base_t::allocate(blocks_per_chunk*pool_block, mr));
-+ 
-+       //Create header types. This is no-throw
-+       for(std::size_t i = 0, max = blocks_per_chunk; i != max; ++i){
+ # While 'pv' uses autoconf, it does not use automake for its
+ # makefiles. It uses $(LD) $(LDFLAGS) to achieve partial linking, but
+ # using 'ld' directly doesn't work well with some toolchain
+@@ -25,6 +32,6 @@ PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext)
+ # ensure that 'gcc' is used to do these partial linking steps.
+ PV_MAKE_OPTS = \
+ 	LD="$(TARGET_CC)" \
+-	LDFLAGS="-Wl,-r -nostdlib"
++	LDFLAGS="-Wl,-r -nostdlib $(PV_LDFLAGS)"
+ 
+ $(eval $(autotools-package))
