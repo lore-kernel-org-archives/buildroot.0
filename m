@@ -1,9 +1,9 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  7 Jan 2016 00:05:37 +0100
-Subject: [Buildroot] [PATCH 3/3] package/enlightenment: bump to 0.19.14
+Date: Thu,  7 Jan 2016 00:05:36 +0100
+Subject: [Buildroot] [PATCH 2/3] package/elementary: bump to 1.15.3
 In-Reply-To: <1452121537-32273-1-git-send-email-romain.naour@gmail.com>
 References: <1452121537-32273-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1452121537-32273-4-git-send-email-romain.naour@gmail.com>
+Message-ID: <1452121537-32273-3-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
+ package/elementary/elementary.hash | 4 ++--
+ package/elementary/elementary.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index c9b1284..66bdb49 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
+diff --git a/package/elementary/elementary.hash b/package/elementary/elementary.hash
+index 2cd36d8..ecdbc8e 100644
+--- a/package/elementary/elementary.hash
++++ b/package/elementary/elementary.hash
 @@ -1,2 +1,2 @@
--# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
--sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
-+# From https://phab.enlightenment.org/phame/live/3/post/e19_14_release/
-+sha256	8906e762f0d953752bfe002663280a855da9bb74acf613424c517b78a8dde407	enlightenment-0.19.14.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 5cf4811..a756361 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
+-# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.15.2.tar.xz.sha256
+-sha256	523c3073210b611817d0f56aa8348962ec757282f9f7dfde93825afa164a0f3f	elementary-1.15.2.tar.xz
++# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.15.3.tar.xz.sha256
++sha256	474a9175061021ce8cbcfdbde6162316fc0d927b21118d1ab549377ebc802a93	elementary-1.15.3.tar.xz
+diff --git a/package/elementary/elementary.mk b/package/elementary/elementary.mk
+index 57da1e0..7de0c7b 100644
+--- a/package/elementary/elementary.mk
++++ b/package/elementary/elementary.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ENLIGHTENMENT_VERSION = 0.19.12
-+ENLIGHTENMENT_VERSION = 0.19.14
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
+-ELEMENTARY_VERSION = 1.15.2
++ELEMENTARY_VERSION = 1.15.3
+ ELEMENTARY_SOURCE = elementary-$(ELEMENTARY_VERSION).tar.xz
+ ELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
+ ELEMENTARY_LICENSE = LGPLv2.1
 -- 
 2.4.3
