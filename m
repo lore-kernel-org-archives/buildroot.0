@@ -1,90 +1,160 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Jan 2016 09:49:00 -0300
-Subject: [Buildroot] [PATCH] unrar: new package
-Message-ID: <1452084540-12198-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 6 Jan 2016 13:56:39 +0100
+Subject: [Buildroot] [PATCH v2] mraa: new package
+In-Reply-To: <1452024700-24200-1-git-send-email-pieterjan.camerlynck@gmail.com>
+References: <1451936760-1654-1-git-send-email-pieterjan.camerlynck@gmail.com>
+ <1452024700-24200-1-git-send-email-pieterjan.camerlynck@gmail.com>
+Message-ID: <CAHXCMM+5=dZbQxqAxJ79-Fac1hzRsGs2k5PL3ip1gfymLLaPGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in        |  1 +
- package/unrar/Config.in  | 13 +++++++++++++
- package/unrar/unrar.hash |  2 ++
- package/unrar/unrar.mk   | 22 ++++++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/unrar/Config.in
- create mode 100644 package/unrar/unrar.hash
- create mode 100644 package/unrar/unrar.mk
+Hi Pieterjan,
 
-diff --git a/package/Config.in b/package/Config.in
-index 5f331d7..dba9ef3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -56,6 +56,7 @@ endif
- 	source "package/lz4/Config.in"
- 	source "package/lzip/Config.in"
- 	source "package/lzop/Config.in"
-+	source "package/unrar/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/unzip/Config.in"
- endif
-diff --git a/package/unrar/Config.in b/package/unrar/Config.in
-new file mode 100644
-index 0000000..29696c3
---- /dev/null
-+++ b/package/unrar/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_UNRAR
-+	bool "unrar"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
-+	help
-+	  RAR file uncompressor.
-+
-+	  http://www.rarlab.com/rar_add.htm
-+
-+comment "unrar needs a toolchain w/ C++, wchar, threads"
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-new file mode 100644
-index 0000000..4490d70
---- /dev/null
-+++ b/package/unrar/unrar.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	ff593728aed0ac865908b8ea52cff449a4c298f095db2f3d27438ffbc3e35d5b	unrarsrc-5.3.9.tar.gz
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-new file mode 100644
-index 0000000..d0112e9
---- /dev/null
-+++ b/package/unrar/unrar.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# unrar
-+#
-+################################################################################
-+
-+UNRAR_VERSION = 5.3.9
-+UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
-+UNRAR_SITE = http://www.rarlab.com/rar
-+UNRAR_LICENSE = unrar
-+UNRAR_LICENSE_FILES = license.txt
-+
-+define UNRAR_BUILD_CMDS
-+	$(MAKE) CXX="$(TARGET_CXX)" STRIP="/bin/true" \
-+		CXXFLAGS="$(TARGET_CXXFLAGS) -pthread" -C $(@D)
-+endef
-+
-+define UNRAR_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
+On Tue, Jan 5, 2016 at 9:11 PM, Pieterjan Camerlynck
+<pieterjan.camerlynck@gmail.com> wrote:
+> mraa provides a unified interface for IO on Galileo, Edison,
+> Raspberry Pi and others
+> ---
+> Changes v1->v2:
+> - rename libmraa to mraa
+> - remove C++ compiler dependency
+> - depend on BR2_arm instead of BR2_ARM_CPU_ARMV7A
+>
+> Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+> ---
+>  package/Config.in                                  |  1 +
+>  .../mraa/0001-do-not-require-cpp-compiler.patch    | 28 ++++++++++++++++++++++
+>  package/mraa/Config.in                             | 15 ++++++++++++
+>  package/mraa/mraa.mk                               | 22 +++++++++++++++++
+>  4 files changed, 66 insertions(+)
+>  create mode 100644 package/mraa/0001-do-not-require-cpp-compiler.patch
+>  create mode 100644 package/mraa/Config.in
+>  create mode 100644 package/mraa/mraa.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 442021f..06ed4a8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -946,6 +946,7 @@ menu "Hardware handling"
+>         source "package/libusb-compat/Config.in"
+>         source "package/libv4l/Config.in"
+>         source "package/libxkbcommon/Config.in"
+> +       source "package/mraa/Config.in"
+>         source "package/mtdev/Config.in"
+>         source "package/ne10/Config.in"
+>         source "package/neardal/Config.in"
+> diff --git a/package/mraa/0001-do-not-require-cpp-compiler.patch b/package/mraa/0001-do-not-require-cpp-compiler.patch
+> new file mode 100644
+> index 0000000..fe58a26
+> --- /dev/null
+> +++ b/package/mraa/0001-do-not-require-cpp-compiler.patch
+> @@ -0,0 +1,28 @@
+> +From f490cf66dbbbdb80de20d8bb5c8cf5d663feb3c5 Mon Sep 17 00:00:00 2001
+> +From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+> +Date: Tue, 5 Jan 2016 19:36:55 +0100
+> +Subject: [PATCH 1/1] do not require a C++ compiler
+> +
+> +By default, CMake assumes both a C and C++ compiler are required.
+> +This is not needed for mraa because it only provides C++ header
+> +files.
+> +
+> +Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+
+Please indicate the status with upstream of the patch
+(submitted/merged/etc) and a ref. to the submission/discussion if any.
+This  way, it will make easier bumping the package and this patch.
+
+> +---
+> + CMakeLists.txt | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index 9860556..34d8e16 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -1,5 +1,5 @@
+> + cmake_minimum_required (VERSION 2.8)
+> +-project (mraa)
+> ++project (mraa C)
+> +
+> + FIND_PACKAGE (Threads REQUIRED)
+> +
+> +--
+> +1.9.1
+> +
+> diff --git a/package/mraa/Config.in b/package/mraa/Config.in
+> new file mode 100644
+> index 0000000..9e8918a
+> --- /dev/null
+> +++ b/package/mraa/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_MRAA
+> +       bool "mraa"
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on !BR2_STATIC_LIBS
+
+Looping back with upstream [1], it seems there is no real reason to
+only build shared object libs.
+Consider dropping this "depends on" and picking up [2]. ;-)
+
+> +       depends on BR2_arm || BR2_i386 || BR2_x86_64
+> +       help
+> +         mraa is a C/C++ library with bindings to javascript & python
+> +         to interface with the IO on Galileo, Edison & other platforms,
+> +         with a structured and sane API where port names/numbering matches
+> +         the board that you are on.
+> +
+> +         http://iotdk.intel.com/docs/master/mraa
+> +
+> +comment "mraa needs a toolchain w/ threads, dynamic library"
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+
+... and don't forget to update the comment ;)
+
+> diff --git a/package/mraa/mraa.mk b/package/mraa/mraa.mk
+> new file mode 100644
+> index 0000000..9f3b953
+> --- /dev/null
+> +++ b/package/mraa/mraa.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# mraa
+> +#
+> +################################################################################
+> +
+> +MRAA_VERSION = v0.9.0
+> +MRAA_SITE = $(call github,intel-iot-devkit,mraa,$(MRAA_VERSION))
+> +MRAA_LICENSE = MIT
+> +MRAA_LICENSE_FILES = COPYING
+> +MRAA_INSTALL_STAGING = YES
+> +
+> +MRAA_CONF_OPTS += \
+> +       -DBUILDSWIG=OFF \
+> +       -DUSBPLAT=OFF \
+> +       -DFTDI4222=OFF \
+> +       -DIPK=OFF \
+> +       -DRPM=OFF \
+> +       -DENABLEEXAMPLES=OFF \
+> +       -DTESTS=OFF
+> +
+> +$(eval $(cmake-package))
+> --
+> 1.9.1
+>
+
+[1] https://github.com/intel-iot-devkit/mraa/commit/d1ceeae4e3d830a4867da560b8da3ad5fa7fa8fb#commitcomment-15275905
+[2] https://github.com/intel-iot-devkit/mraa/commit/86a0e10c037e5c069c48012f169f9e8e2587a0ef
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+
 -- 
-2.4.10
+Samuel
