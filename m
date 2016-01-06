@@ -1,46 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Jan 2016 11:18:54 -0300
-Subject: [Buildroot] [PATCH] libnss: add build workaround for older gcc
-	versions
-Message-ID: <1452089934-10364-1-git-send-email-gustavo@zacarias.com.ar>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Wed, 6 Jan 2016 08:26:29 -0600
+Subject: [Buildroot] ifupdown-0.8.2 / dhcp-4.1-ESV-R12 incompatibility
+Message-ID: <20160106142628.GA3891@dkarchlinux64.currentcomm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nss uses some #pragma directives that require newish (>= 4.6) versions
-of gcc, so disable Werror when building with older versions to avoid the
-build from breaking unfairly.
-However make this a gcc >= 4.8 conditional since the kludge is called so
-(NSS_NO_GCC48) and other bits might depend upon it.
+Hi All,
 
-Upstream bug https://bugzilla.mozilla.org/show_bug.cgi?id=1226179
+I'm using SYSVINIT and get the following at startup from S40network:
 
-Fixes:
-http://autobuild.buildroot.net/results/ebd/ebd0647eb1eef41a7fb6e5f5bab18d4d12168661/
+--8<---
+Starting network...
+Internet Systems Consortium DHCP Client 4.1-ESV-R12
+Copyright 2004-2015 Internet Systems Consortium.
+All rights reserved.
+For info, please visit https://www.isc.org/software/dhcp/
+Usage: dhclient [-4|-6] [-SNTP1dvrx] [-nw] [-p <port>]
+                [-s server-addr] [-cf config-file] [-lf lease-file]
+                [-pf pid-file] [--no-pid] [-e VAR=val]
+                [-sf script-file] [interface]
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libnss/libnss.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+If you did not get this software from ftp.isc.org, please
+get the latest from ftp.isc.org and install that before
+requesting help.
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 10879e2..6fdb77c 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -30,6 +30,12 @@ LIBNSS_BUILD_VARS = \
- 	OS_RELEASE="2.6" \
- 	OS_TEST="$(ARCH)"
- 
-+# #pragma usage needs gcc >= 4.8
-+# See https://bugzilla.mozilla.org/show_bug.cgi?id=1226179
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),)
-+LIBNSS_BUILD_VARS += NSS_ENABLE_WERROR=0
-+endif
-+
- ifeq ($(BR2_ARCH_IS_64),y)
- # MIPS64 n32 is treated as a 32-bit architecture by libnss.
- # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1010730
--- 
-2.4.10
+If you did get this software from ftp.isc.org and have not
+yet read the README, please read it before requesting help.
+If you intend to request help from the dhcp-bugs at isc.org
+mailing list, please read the section on the README about
+submitting bug reports and requests for help.
+
+Please do not under any circumstances send requests for
+help directly to the authors of this software - please
+send them to the appropriate mailing list as described in
+the README file.
+
+exiting.
+Failed to bring up eth0.
+--8<---
+
+Looking into it, ifupdown-0.8.2 calls dhclient with -I and -df
+options; these options are not supported by dhclient. The previous
+version of ifupdown, 0.7.49, worked with dhcp-4.1-ESV-R12. Has
+anyone else noticed this?
+
+It appears that dhcp-4.3.3 supports the -I and -df options used by
+ifupdown-0.8.2. Cross-compiling dhcp-4.3.3 will be more complicated
+since there is now a bind tar-ball embedded into the dhcp source. Is
+anyone else attempting to add dhcp-4.3.3 to Buildroot?
+
+Thanks and Regards,
+...doug
