@@ -1,46 +1,46 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed,  6 Jan 2016 14:33:18 +0100
-Subject: [Buildroot] [PATCH trivial] uboot: remove unused helper function
-	insert_define
-Message-ID: <1452087198-28726-1-git-send-email-patrickdepinguin@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  6 Jan 2016 11:18:54 -0300
+Subject: [Buildroot] [PATCH] libnss: add build workaround for older gcc
+	versions
+Message-ID: <1452089934-10364-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+nss uses some #pragma directives that require newish (>= 4.6) versions
+of gcc, so disable Werror when building with older versions to avoid the
+build from breaking unfairly.
+However make this a gcc >= 4.8 conditional since the kludge is called so
+(NSS_NO_GCC48) and other bits might depend upon it.
 
-Commit 16b8e813c810fde2fe3655c696edf1e76a7d27ba removed all remaining users
-of helper function insert_define.
+Upstream bug https://bugzilla.mozilla.org/show_bug.cgi?id=1226179
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/ebd/ebd0647eb1eef41a7fb6e5f5bab18d4d12168661/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- boot/uboot/uboot.mk | 12 ------------
- 1 file changed, 12 deletions(-)
+ package/libnss/libnss.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index c8c50f0..d539b31 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -89,18 +89,6 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
- endif
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 10879e2..6fdb77c 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -30,6 +30,12 @@ LIBNSS_BUILD_VARS = \
+ 	OS_RELEASE="2.6" \
+ 	OS_TEST="$(ARCH)"
  
--# Helper function to fill the U-Boot config.h file.
--# Argument 1: option name
--# Argument 2: option value
--# If the option value is empty, this function does nothing.
--define insert_define
--$(if $(call qstrip,$(2)),
--	@echo "#ifdef $(strip $(1))" >> $(@D)/include/config.h
--	@echo "#undef $(strip $(1))" >> $(@D)/include/config.h
--	@echo "#endif" >> $(@D)/include/config.h
--	@echo '#define $(strip $(1)) $(call qstrip,$(2))' >> $(@D)/include/config.h)
--endef
--
- # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
- # legal-info finds it
- define UBOOT_COPY_OLD_LICENSE_FILE
++# #pragma usage needs gcc >= 4.8
++# See https://bugzilla.mozilla.org/show_bug.cgi?id=1226179
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),)
++LIBNSS_BUILD_VARS += NSS_ENABLE_WERROR=0
++endif
++
+ ifeq ($(BR2_ARCH_IS_64),y)
+ # MIPS64 n32 is treated as a 32-bit architecture by libnss.
+ # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1010730
 -- 
-1.9.5
+2.4.10
