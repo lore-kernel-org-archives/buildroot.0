@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Jan 2016 20:11:25 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.10.0
-Message-ID: <1452121885-29413-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  6 Jan 2016 20:56:30 -0300
+Subject: [Buildroot] [PATCH] nbd: bump to version 3.13
+Message-ID: <1452124590-4248-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 4 ++--
+ package/nbd/nbd.hash | 6 +++---
+ package/nbd/nbd.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 435e5de..4fca659 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1	dae1ae5297fece9671ae0c434a7ecd0cda09c76a	sqlite-autoconf-3090200.tar.gz
-+sha1	7be6e6869d0d2d9fe3df71b5c65f065dd2325f58	sqlite-autoconf-3100000.tar.gz
- # Calculated based on the hash above
--sha256	064c0abe9c9177534d4c770bca7a5902f9924b629ac886b4c08956be6dfbc36b	sqlite-autoconf-3090200.tar.gz
-+sha256	43cc292d70711fa7580250c8a1cd7c64813a4a0a479dbd502cce5f10b5d91042	sqlite-autoconf-3100000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 0758fe9..fe115eb 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
+index 306e11b..c90682f 100644
+--- a/package/nbd/nbd.hash
++++ b/package/nbd/nbd.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/nbd/files/nbd/3.11/
+-md5	73d11644a28b9f335292cdb3bdc4b74b	nbd-3.11.tar.xz
+-sha1	a9823a656ef3411c7a14f3c1ae843d92a9141476	nbd-3.11.tar.xz
++# From http://sourceforge.net/projects/nbd/files/nbd/3.13/
++md5	784be37497cc2f9a53c67c8c77d1676d	nbd-3.13.tar.xz
++sha1	e43674a2d2b42d20719cba3149748e8f5683e554	nbd-3.13.tar.xz
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index fee2cf8..d91c2d7 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3090200
-+SQLITE_VERSION = 3100000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = http://www.sqlite.org/2015
-+SQLITE_SITE = http://www.sqlite.org/2016
- SQLITE_LICENSE = Public domain
- SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_INSTALL_STAGING = YES
+-NBD_VERSION = 3.11
++NBD_VERSION = 3.13
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPTS = --enable-lfs
 -- 
 2.4.10
