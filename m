@@ -1,44 +1,53 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 6 Jan 2016 11:56:17 -0300
-Subject: [Buildroot] [PATCH] libnss: add build workaround for older gcc
- versions
-In-Reply-To: <20160106155444.34e63384@free-electrons.com>
-References: <1452089934-10364-1-git-send-email-gustavo@zacarias.com.ar>
- <20160106155444.34e63384@free-electrons.com>
-Message-ID: <568D2B11.3030701@zacarias.com.ar>
+From: Mason <slash.tmp@free.fr>
+Date: Wed, 6 Jan 2016 17:35:22 +0100
+Subject: [Buildroot] package/linux-fusion: 'struct msghdr' has no member
+ named 'msg_iov'
+In-Reply-To: <568BBD3F.2030607@free.fr>
+References: <568BBD3F.2030607@free.fr>
+Message-ID: <568D424A.8060500@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/01/16 11:54, Thomas Petazzoni wrote:
+On 05/01/2016 13:55, Mason wrote:
 
-> Hello,
->
-> On Wed,  6 Jan 2016 11:18:54 -0300, Gustavo Zacarias wrote:
->> nss uses some #pragma directives that require newish (>= 4.6) versions
->> of gcc, so disable Werror when building with older versions to avoid the
->> build from breaking unfairly.
->> However make this a gcc >= 4.8 conditional since the kludge is called so
->> (NSS_NO_GCC48) and other bits might depend upon it.
->
-> Here you say the kludge is called NSS_NO_GCC48, but...
->
->> +# #pragma usage needs gcc >= 4.8
->> +# See https://bugzilla.mozilla.org/show_bug.cgi?id=1226179
->> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),)
->> +LIBNSS_BUILD_VARS += NSS_ENABLE_WERROR=0
->> +endif
->
-> here you use NSS_ENABLE_WERROR.
->
-> Is it me misunderstanding your commit message?
+> The linux-fusion package fails to build with recent kernels.
 
-Hi.
-Well, maybe i wasn't clear.
-The public kludge is NSS_ENABLE_WERROR, which triggers are build define 
-NSS_NO_GCC48 (which is what we're interested in), but however we can't 
-def that directly from the outside, hence we use NSS_ENABLE_WERROR=0 
-(which sets the other one).
-Regards.
+There is also an issue /loading/ the module.
+
+# modprobe fusion
+[   49.971930] fusion: Unknown symbol tasklist_lock (err 0)
+
+The tasklist_lock export was removed in 2.6.18
+Kernel commit c59923a15c12d2b3597af913bf234a0ef264a38b
+
+The actual issue was fixed in 2010, but returned in 3.19
+because TREE_PREEMPT_RCU was renamed to PREEMPT_RCU.
+
+The long-term fix seems to be along these lines:
+
+
+diff --git a/linux/drivers/char/fusion/fusionee.c b/linux/drivers/char/fusion/fusionee.c
+index ef067f5bc831..adaabaedb355 100644
+--- a/linux/drivers/char/fusion/fusionee.c
++++ b/linux/drivers/char/fusion/fusionee.c
+@@ -925,7 +925,7 @@ fusionee_kill(FusionDev * dev,
+                if (f != fusionee && (!target || target == f->id)) {
+                     struct task_struct *p;
+ 
+-#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) || defined(CONFIG_TINY_RCU) || defined(rcu_read_lock)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,18) || defined(rcu_read_lock)
+                     rcu_read_lock();
+ #else
+                     read_lock(&tasklist_lock);
+@@ -946,7 +946,7 @@ fusionee_kill(FusionDev * dev,
+                          }
+                     }
+ 
+-#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) || defined(CONFIG_TINY_RCU) || defined(rcu_read_unlock)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,18) || defined(rcu_read_lock)
+                     rcu_read_unlock();
+ #else
+                     read_unlock(&tasklist_lock);
