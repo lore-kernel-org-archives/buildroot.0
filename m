@@ -1,38 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Jan 2016 10:25:38 -0300
-Subject: [Buildroot] [PATCH] iptables: fix libpcap static linking
-Message-ID: <1452086738-4541-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed,  6 Jan 2016 14:33:18 +0100
+Subject: [Buildroot] [PATCH trivial] uboot: remove unused helper function
+	insert_define
+Message-ID: <1452087198-28726-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libpcap can depend on other libraries like libusb and doesn't support
-pkgconfig, so add those libraries to LIBS when building statically.
-Fixes:
-http://autobuild.buildroot.net/results/b4a/b4a3d00e9673a7aacc663c81de1d8e887a17951d/
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Commit 16b8e813c810fde2fe3655c696edf1e76a7d27ba removed all remaining users
+of helper function insert_define.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/iptables/iptables.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ boot/uboot/uboot.mk | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 77a9fad..12e00f2 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -38,6 +38,11 @@ endif
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index c8c50f0..d539b31 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -89,18 +89,6 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+ UBOOT_DEPENDENCIES += host-dtc
+ endif
  
- # bpf compiler support and nfsynproxy tool
- ifeq ($(BR2_PACKAGE_IPTABLES_BPF_NFSYNPROXY),y)
-+# libpcap is tricky for static-only builds and needs help
-+ifeq ($(BR2_STATIC_LIBS),y)
-+IPTABLES_LIBS_FOR_STATIC_LINK += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
-+IPTABLES_CONF_OPTS += LIBS="$(IPTABLES_LIBS_FOR_STATIC_LINK)"
-+endif
- IPTABLES_CONF_OPTS += --enable-bpf-compiler --enable-nfsynproxy
- IPTABLES_DEPENDENCIES += libpcap
- else
+-# Helper function to fill the U-Boot config.h file.
+-# Argument 1: option name
+-# Argument 2: option value
+-# If the option value is empty, this function does nothing.
+-define insert_define
+-$(if $(call qstrip,$(2)),
+-	@echo "#ifdef $(strip $(1))" >> $(@D)/include/config.h
+-	@echo "#undef $(strip $(1))" >> $(@D)/include/config.h
+-	@echo "#endif" >> $(@D)/include/config.h
+-	@echo '#define $(strip $(1)) $(call qstrip,$(2))' >> $(@D)/include/config.h)
+-endef
+-
+ # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
+ # legal-info finds it
+ define UBOOT_COPY_OLD_LICENSE_FILE
 -- 
-2.4.10
+1.9.5
