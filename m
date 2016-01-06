@@ -1,39 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Jan 2016 15:53:37 -0300
-Subject: [Buildroot] [PATCH] libcurl: enable mbedtls support
-Message-ID: <1452106417-12097-1-git-send-email-gustavo@zacarias.com.ar>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 6 Jan 2016 22:00:32 +0100
+Subject: [Buildroot] [PATCH 1/6] package/mesa3d: reorder select/depends
+In-Reply-To: <87egdxhqv5.fsf@dell.be.48ers.dk>
+References: <1451866310-10246-1-git-send-email-romain.naour@gmail.com>
+ <87egdxhqv5.fsf@dell.be.48ers.dk>
+Message-ID: <568D8070.90501@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we've got an mbedtls package in the tree we can enable the
-optional support for it in libcurl.
+Hi Peter,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcurl/libcurl.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Le 05/01/2016 00:22, Peter Korsgaard a ?crit :
+>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+> 
+>  >> From [1]:
+>  > "Even though the ordering has absolutely no consequences in Kconfig, it
+>  > is not logical (when reading). It is more logical and far easier to
+>  > understand when depends come first, followed by the selects."
+> 
+>  > Also, the Config.in exemple in the manual suggest to use this coding
+>  > style [2].
+> 
+>  > [1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
+>  > [2] http://buildroot.uclibc.org/downloads/manual/manual.html#writing-rules-config-in
+> 
+>  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> 
+> Committed patch 1-5, thanks. I had already applied a similar patch from
+> Gustavoz for xapp_xbacklight. That one didn't select libxcb though, but
+> I guess it doesn't really matter as libX11 pulls it in.
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 10514c6..8798d71 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -40,10 +40,12 @@ else ifeq ($(BR2_PACKAGE_LIBNSS),y)
- LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr
- LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
- LIBCURL_DEPENDENCIES += libnss
-+else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr
-+LIBCURL_DEPENDENCIES += mbedtls
- else
--# polarssl support needs 1.3.x
- LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
--	--without-polarssl --without-nss
-+	--without-polarssl --without-nss --without-mbedtls
- endif
- 
- ifeq ($(BR2_PACKAGE_C_ARES),y)
--- 
-2.4.10
+No problem, I'll remove patch 6 from the patchwork.
+
+> 
+> (xcb-util should arguably select libxcb as it is a library instead of
+> using depends on).
+> 
+
+Yes probably. Using "depends on" would help if libxcb would have several
+dependencies (like for the efl package) but there is none.
+
+Best regards,
+Romain
