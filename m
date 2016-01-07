@@ -1,38 +1,39 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu,  7 Jan 2016 14:56:22 -0200
-Subject: [Buildroot] [PATCH 1/1] readline: fix stripping on target
-Message-ID: <1452185782-7505-1-git-send-email-casantos@datacom.ind.br>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  7 Jan 2016 14:06:39 -0300
+Subject: [Buildroot] [PATCH] opusfile: bump to version 0.7
+Message-ID: <1452186399-24674-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libraries got installed read only, so strip failed.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/readline/readline.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/opusfile/opusfile.hash | 2 +-
+ package/opusfile/opusfile.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index 3d31696..58cd948 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
-@@ -24,5 +24,14 @@ define READLINE_INSTALL_INPUTRC
- endef
- READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_INPUTRC
+diff --git a/package/opusfile/opusfile.hash b/package/opusfile/opusfile.hash
+index 1833950..2da4bab 100644
+--- a/package/opusfile/opusfile.hash
++++ b/package/opusfile/opusfile.hash
+@@ -1,2 +1,2 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256	2428717b356e139f18ed2fdb5ad990b5654a238907a0058200b39c46a7d03ea6	opusfile-0.6.tar.gz
++sha256	9e2bed13bc729058591a0f1cab2505e8cfd8e7ac460bf10a78bcc3b125e7c301	opusfile-0.7.tar.gz
+diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
+index bd0a30d..d813759 100644
+--- a/package/opusfile/opusfile.mk
++++ b/package/opusfile/opusfile.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifneq ($(BR2_STATIC_LIBS),y)
-+# libraries get installed read only, so strip fails
-+define READLINE_INSTALL_FIXUPS_SHARED
-+	for i in $(addprefix $(TARGET_DIR)/usr/lib/,libhistory.so.* libreadline.so.*); \
-+	do chmod +w $$i; done
-+endef
-+READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_FIXUPS_SHARED
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-OPUSFILE_VERSION = 0.6
++OPUSFILE_VERSION = 0.7
+ OPUSFILE_SITE = http://downloads.xiph.org/releases/opus
+ OPUSFILE_DEPENDENCIES = host-pkgconf libogg opus
+ OPUSFILE_LICENSE = BSD-3c
 -- 
-1.8.3.1
+2.4.10
