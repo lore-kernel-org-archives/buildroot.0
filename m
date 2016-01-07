@@ -1,50 +1,69 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  7 Jan 2016 15:46:52 -0300
-Subject: [Buildroot] [PATCH] php: security bump to version 5.6.17
-Message-ID: <1452192412-29164-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 7 Jan 2016 16:11:26 -0300
+Subject: [Buildroot] ifupdown-0.8.2 / dhcp-4.1-ESV-R12 incompatibility
+In-Reply-To: <20160106142628.GA3891@dkarchlinux64.currentcomm.com>
+References: <20160106142628.GA3891@dkarchlinux64.currentcomm.com>
+Message-ID: <568EB85E.3090501@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bug #70976 (Memory Read via gdImageRotateInterpolated Array Index Out of
-Bounds).
-Bug #70755 (fpm_log.c memory leak and buffer overflow).
-Bug #70661 (Use After Free Vulnerability in WDDX Packet
-Deserialization).
-Bug #70741 (Session WDDX Packet Deserialization Type Confusion
-Vulnerability).
-Bug #70728 (Type Confusion Vulnerability in PHP_to_XMLRPC_worker()).
+On 06/01/16 11:26, rdkehn at yahoo.com wrote:
 
-No CVEs assigned yet.
+> Hi All,
+>
+> I'm using SYSVINIT and get the following at startup from S40network:
+>
+> --8<---
+> Starting network...
+> Internet Systems Consortium DHCP Client 4.1-ESV-R12
+> Copyright 2004-2015 Internet Systems Consortium.
+> All rights reserved.
+> For info, please visit https://www.isc.org/software/dhcp/
+> Usage: dhclient [-4|-6] [-SNTP1dvrx] [-nw] [-p <port>]
+>                  [-s server-addr] [-cf config-file] [-lf lease-file]
+>                  [-pf pid-file] [--no-pid] [-e VAR=val]
+>                  [-sf script-file] [interface]
+>
+> If you did not get this software from ftp.isc.org, please
+> get the latest from ftp.isc.org and install that before
+> requesting help.
+>
+> If you did get this software from ftp.isc.org and have not
+> yet read the README, please read it before requesting help.
+> If you intend to request help from the dhcp-bugs at isc.org
+> mailing list, please read the section on the README about
+> submitting bug reports and requests for help.
+>
+> Please do not under any circumstances send requests for
+> help directly to the authors of this software - please
+> send them to the appropriate mailing list as described in
+> the README file.
+>
+> exiting.
+> Failed to bring up eth0.
+> --8<---
+>
+> Looking into it, ifupdown-0.8.2 calls dhclient with -I and -df
+> options; these options are not supported by dhclient. The previous
+> version of ifupdown, 0.7.49, worked with dhcp-4.1-ESV-R12. Has
+> anyone else noticed this?
+>
+> It appears that dhcp-4.3.3 supports the -I and -df options used by
+> ifupdown-0.8.2. Cross-compiling dhcp-4.3.3 will be more complicated
+> since there is now a bind tar-ball embedded into the dhcp source. Is
+> anyone else attempting to add dhcp-4.3.3 to Buildroot?
+>
+> Thanks and Regards,
+> ...doug
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/php/php.hash b/package/php/php.hash
-index ec632bf..7a7616f 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256	8ef43271d9bd8cc8f8d407d3ba569de9fa14a28985ae97c76085bb50d597de98	php-5.6.16.tar.xz
-+sha256	ea9d5749380c7c7171e131616466deacd7cb124b5010eafc34e551b0a7b0fb2c	php-5.6.17.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 5a7f952..7575cd9 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PHP_VERSION_MAJOR = 5.6
--PHP_VERSION = $(PHP_VERSION_MAJOR).16
-+PHP_VERSION = $(PHP_VERSION_MAJOR).17
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
--- 
-2.4.10
+Hi Doug.
+I've bumped ifupdown recently, so i guess i'm guilty since i didn't try 
+that alternative.
+That being said: you shouldn't use ISC dhcp if you can avoid it, much 
+less for just a client.
+Try dhcpcd, upstream is responsive, it's better (IMO of course) and it's 
+smaller.
+Regards.
