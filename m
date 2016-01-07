@@ -1,69 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 7 Jan 2016 16:11:26 -0300
-Subject: [Buildroot] ifupdown-0.8.2 / dhcp-4.1-ESV-R12 incompatibility
-In-Reply-To: <20160106142628.GA3891@dkarchlinux64.currentcomm.com>
-References: <20160106142628.GA3891@dkarchlinux64.currentcomm.com>
-Message-ID: <568EB85E.3090501@zacarias.com.ar>
+Date: Thu,  7 Jan 2016 16:27:12 -0300
+Subject: [Buildroot] [PATCH] giflib: bump to version 5.1.2
+Message-ID: <1452194832-27844-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/01/16 11:26, rdkehn at yahoo.com wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/giflib/giflib.hash | 3 ++-
+ package/giflib/giflib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-> Hi All,
->
-> I'm using SYSVINIT and get the following at startup from S40network:
->
-> --8<---
-> Starting network...
-> Internet Systems Consortium DHCP Client 4.1-ESV-R12
-> Copyright 2004-2015 Internet Systems Consortium.
-> All rights reserved.
-> For info, please visit https://www.isc.org/software/dhcp/
-> Usage: dhclient [-4|-6] [-SNTP1dvrx] [-nw] [-p <port>]
->                  [-s server-addr] [-cf config-file] [-lf lease-file]
->                  [-pf pid-file] [--no-pid] [-e VAR=val]
->                  [-sf script-file] [interface]
->
-> If you did not get this software from ftp.isc.org, please
-> get the latest from ftp.isc.org and install that before
-> requesting help.
->
-> If you did get this software from ftp.isc.org and have not
-> yet read the README, please read it before requesting help.
-> If you intend to request help from the dhcp-bugs at isc.org
-> mailing list, please read the section on the README about
-> submitting bug reports and requests for help.
->
-> Please do not under any circumstances send requests for
-> help directly to the authors of this software - please
-> send them to the appropriate mailing list as described in
-> the README file.
->
-> exiting.
-> Failed to bring up eth0.
-> --8<---
->
-> Looking into it, ifupdown-0.8.2 calls dhclient with -I and -df
-> options; these options are not supported by dhclient. The previous
-> version of ifupdown, 0.7.49, worked with dhcp-4.1-ESV-R12. Has
-> anyone else noticed this?
->
-> It appears that dhcp-4.3.3 supports the -I and -df options used by
-> ifupdown-0.8.2. Cross-compiling dhcp-4.3.3 will be more complicated
-> since there is now a bind tar-ball embedded into the dhcp source. Is
-> anyone else attempting to add dhcp-4.3.3 to Buildroot?
->
-> Thanks and Regards,
-> ...doug
-
-Hi Doug.
-I've bumped ifupdown recently, so i guess i'm guilty since i didn't try 
-that alternative.
-That being said: you shouldn't use ISC dhcp if you can avoid it, much 
-less for just a client.
-Try dhcpcd, upstream is responsive, it's better (IMO of course) and it's 
-smaller.
-Regards.
+diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
+index 46ba7ca..94bcb5d 100644
+--- a/package/giflib/giflib.hash
++++ b/package/giflib/giflib.hash
+@@ -1,2 +1,3 @@
+ # From http://sourceforge.net/projects/giflib/files
+-sha1	e5d716e0ccef671103c38c25693927e413fac639	giflib-5.1.1.tar.bz2
++md5	323a9f11ab56c8a2d1715376410ce376	giflib-5.1.2.tar.bz2
++sha1	3f7bc86280db30a7120b2113f9f261301c515ad2	giflib-5.1.2.tar.bz2
+diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
+index 96a1dfd..6f67a99 100644
+--- a/package/giflib/giflib.mk
++++ b/package/giflib/giflib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIFLIB_VERSION = 5.1.1
++GIFLIB_VERSION = 5.1.2
+ GIFLIB_SOURCE = giflib-$(GIFLIB_VERSION).tar.bz2
+ GIFLIB_SITE = http://downloads.sourceforge.net/project/giflib
+ GIFLIB_INSTALL_STAGING = YES
+-- 
+2.4.10
