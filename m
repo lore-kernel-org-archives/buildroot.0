@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Jan 2016 19:08:55 +0100
-Subject: [Buildroot] [git commit] nbd: bump to version 3.13
-Message-ID: <20160108182923.117AF827EB@busybox.osuosl.org>
+Date: Fri, 8 Jan 2016 19:17:10 +0100
+Subject: [Buildroot] [git commit] readline: fix stripping on target
+Message-ID: <20160108182923.4F283827F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b19f51a964dc857522081f54bd9abeaaaf765440
+commit: http://git.buildroot.net/buildroot/commit/?id=af8501cf963d2b23f8c092615a4c047da92accfd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Libraries got installed read only, so strip failed.
+
+[Peter: simplify chmod logic]
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nbd/nbd.hash | 6 +++---
- package/nbd/nbd.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/readline/readline.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
-index 306e11b..c90682f 100644
---- a/package/nbd/nbd.hash
-+++ b/package/nbd/nbd.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/nbd/files/nbd/3.11/
--md5	73d11644a28b9f335292cdb3bdc4b74b	nbd-3.11.tar.xz
--sha1	a9823a656ef3411c7a14f3c1ae843d92a9141476	nbd-3.11.tar.xz
-+# From http://sourceforge.net/projects/nbd/files/nbd/3.13/
-+md5	784be37497cc2f9a53c67c8c77d1676d	nbd-3.13.tar.xz
-+sha1	e43674a2d2b42d20719cba3149748e8f5683e554	nbd-3.13.tar.xz
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index fee2cf8..d91c2d7 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index 3d31696..7631970 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -24,5 +24,13 @@ define READLINE_INSTALL_INPUTRC
+ endef
+ READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_INPUTRC
  
--NBD_VERSION = 3.11
-+NBD_VERSION = 3.13
- NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
- NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
- NBD_CONF_OPTS = --enable-lfs
++ifneq ($(BR2_STATIC_LIBS),y)
++# libraries get installed read only, so strip fails
++define READLINE_INSTALL_FIXUPS_SHARED
++	chmod +w $(addprefix $(TARGET_DIR)/usr/lib/,libhistory.so.* libreadline.so.*)
++endef
++READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_FIXUPS_SHARED
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
