@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jan 2016 18:50:50 +0100
-Subject: [Buildroot] [PATCH] bash: bump to patchlevel 42
-In-Reply-To: <1452196334-9814-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 7 Jan 2016 16:52:14 -0300")
-References: <1452196334-9814-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a8ogdkp1.fsf@dell.be.48ers.dk>
+Date: Fri, 08 Jan 2016 18:51:17 +0100
+Subject: [Buildroot] [PATCH] giflib: bump to version 5.1.2
+In-Reply-To: <1452194832-27844-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 7 Jan 2016 16:27:12 -0300")
+References: <1452194832-27844-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8760z4dkoa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
