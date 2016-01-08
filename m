@@ -1,47 +1,54 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  8 Jan 2016 08:09:15 -0300
-Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p5
-Message-ID: <1452251355-10986-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri,  8 Jan 2016 12:30:19 +0100
+Subject: [Buildroot] [PATCH] linux: provide symlink dtc->linux-dtc is there
+	is no dtc yet
+Message-ID: <1452252619-13802-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-5300 - MITM attacker can force ntpd to make a step larger than
-the panic threshold.
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Commit ab74e09eb4e28dab8bed8d783c5f0464d39a32e7 renamed the dtc host tool
+provided by linux to linux-dtc to avoid clashes with the dtc host tool
+provided by host-dtc.
+
+However, external scripting may well rely on the existence of a device tree
+compiler as $(HOST_DIR)/usr/bin/dtc, regardless of its source. Changing
+these external scripts to use linux-dtc means that the scripts need to be
+aware of the buildroot release they are working with, which is not very
+nice.
+
+Add a symlink dtc->linux-dtc when no $(HOST_DIR)/usr/bin/dtc is present.
+When host-dtc is not enabled, the end result will be dtc and
+linux-dtc representing the same thing.
+When host-dtc is enabled, either it is build before linux and no symlink
+is created at any time, or it is build after linux, and the 'install'
+command in host-dtc will overwrite the symlink with a proper dtc. In both
+cases, the end result will be dtc and linux-dtc representing a different
+thing.
+
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/ntp/ntp.hash | 6 +++---
- package/ntp/ntp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ linux/linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index 735e533..a98b2e2 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,4 +1,4 @@
--# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p4.tar.gz.md5
--md5	6af96862b09324a8ef965ca76b759c8b	ntp-4.2.8p4.tar.gz
-+# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p5.tar.gz.md5
-+md5	9f02b2a0acc1617ce2716d529a58d2d8	ntp-4.2.8p5.tar.gz
- # Calculated based on the hash above
--sha256	0d6961572548d2c4af96f58f763e22ac620f5afef717384ddc317a0e365cfdb9	ntp-4.2.8p4.tar.gz
-+sha256	ca28baf4f6bb6fabdc1b62fd1dcec412be2e621192b40466a469a2496164f696	ntp-4.2.8p5.tar.gz
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 0691154..c86000a 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 045294b..f5c629c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -339,6 +339,9 @@ define LINUX_INSTALL_HOST_TOOLS
+ 	# Installing dtc (device tree compiler) as host tool, if selected
+ 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then 	\
+ 		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/linux-dtc ;	\
++		if [ ! -e $(HOST_DIR)/usr/bin/dtc ]; then	\
++			ln -sf linux-dtc $(HOST_DIR)/usr/bin/dtc ;	\
++		fi	\
+ 	fi
+ endef
  
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8p4
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p5
- NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- NTP_LICENSE = ntp license
 -- 
-2.4.10
+1.9.5
