@@ -1,46 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Jan 2016 20:29:22 +0100
-Subject: [Buildroot] [git commit] mbedtls: security bump to version 2.2.1
-Message-ID: <20160108192941.24D5B827EF@busybox.osuosl.org>
+Date: Fri, 8 Jan 2016 20:28:50 +0100
+Subject: [Buildroot] [git commit] ruby: bump to version 2.3.0
+Message-ID: <20160108192941.17FFB82800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d8994c47ffe9fa0a9b1973110d0bbdfa2cf63f1
+commit: http://git.buildroot.net/buildroot/commit/?id=7f61488649a6360d350aef5fc8f6d2c401d236da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-CVE-2015-7575 - Security Losses from Obsolete and Truncated Transcript
-Hashes (SLOTH) vulnerability.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 161dc2b..eebbfe8 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 06faed6..3499263 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
 @@ -1,2 +1,2 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.2.0-2.1.3-1.3.15-and-polarssl.1.2.18-released
--sha256	3c6d3487ab056da94450cf907afc84f026aff7880182baffe137c98e3d00fb55	mbedtls-2.2.0-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.2.1-2.1.4-1.3.16-and-polarssl.1.2.19-released
-+sha256	6ddd5ca2e7dfb43d2fd750400856246fc1c98344dabf01b1594eb2f9880ef7ce	mbedtls-2.2.1-apache.tgz
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index b98b7f5..fe166e2 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
+-# From https://www.ruby-lang.org/en/news/2015/12/16/ruby-2-2-4-released/
+-sha256	d28bff4641e382681c58072ddc244d025ac47ff71dd9426a92fcfc3830d1773c	ruby-2.2.4.tar.xz
++# From https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/
++sha256	70125af0cfd7048e813a5eecab3676249582bfb65cfd57b868c3595f966e4097	ruby-2.3.0.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index fd8be90..19b33de 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.2.0
-+MBEDTLS_VERSION = 2.2.1
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+-RUBY_VERSION_MAJOR = 2.2
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
+-RUBY_VERSION_EXT = 2.2.0
++RUBY_VERSION_MAJOR = 2.3
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).0
++RUBY_VERSION_EXT = 2.3.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
