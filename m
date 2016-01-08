@@ -1,23 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 8 Jan 2016 14:37:34 -0300
-Subject: [Buildroot] [PATCH] configs/qemu: enable SMP for x86 & x86_64
-In-Reply-To: <87r3hsdlfj.fsf@dell.be.48ers.dk>
-References: <1452259790-9223-1-git-send-email-gustavo@zacarias.com.ar>
- <87r3hsdlfj.fsf@dell.be.48ers.dk>
-Message-ID: <568FF3DE.9020903@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 08 Jan 2016 18:45:29 +0100
+Subject: [Buildroot] Persistent dropbear keys
+In-Reply-To: <CAAXf6LULMusN+KRUf6D32GNx77bbB0vSayJqk03T7ouNCArhHA@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Fri, 8 Jan 2016 14:43:29
+ +0100")
+References: <CAAXf6LULMusN+KRUf6D32GNx77bbB0vSayJqk03T7ouNCArhHA@mail.gmail.com>
+Message-ID: <87mvsgdkxy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/01/16 14:34, Peter Korsgaard wrote:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-> True. Shouldn't we then change board/qemu/x86*/readme.txt to pass -smp
-> <n> to qemu?
+ > Hello,
+ > Commit e7d04dd2df8bb935c61f7c814ee88eba7e75b5e4 (package/dropbear: fix
+ > generating keys on RO file systems) (+ some subsequent commits)
+ > changed the handling of the /etc/dropbear directory. Previously
+ > /etc/dropbear was a real directory in the rootfs, now it initially is
+ > a link to /var/run/dropbear. During S50dropboar, the link is replaced
+ > with a real (empty) directory (if rootfs is writable) or a warning is
+ > given.
 
-Hi.
-Maybe, however it's optional, a smp-enabled kernel will boot just fine 
-in UP, and maybe a user doesn't have a SMP host which would probably 
-have a steep price i think (unlikely to be the case, but still).
-Regards.
+ > I understand all this. However, what I do not understand is how you
+ > are then creating persistent dropbear keys. From how I understand the
+ > code, the keys are persistent across reboots, but not between upgrades
+ > of the rootfs, because after an upgrade a new empty /etc/dropbear is
+ > created.
+
+If your upgrade overwrites /etc/dropbear, then yes.
+
+E.G. I use a persistent writable unionfs on /etc, so changes to /etc are
+not lost after an upgrade.
+
+
+ > In my case, the rootfs is an initramfs, but mounted rw at boot time.
+
+ > The solution I have been using is with an S49dropbear_keys script that:
+ > - at 'stop', verifies the correctness of the keys in /etc/dropbear
+ > (with dropbearkey) and if ok copies them to a real persistent medium,
+ > - at 'start', verifies if there are any keys on the persistent medium,
+ > verify their correctness, and if ok copies them to /etc/dropbear.
+
+Why don't you just make /etc/dropbear a symlink to your persistent
+medium?
+
+-- 
+Bye, Peter Korsgaard
