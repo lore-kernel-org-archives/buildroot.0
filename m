@@ -1,25 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jan 2016 19:13:45 +0100
-Subject: [Buildroot] [PATCH] squeezelite: uses dlopen/dlfcn,
-	needs dynamic libraries
-In-Reply-To: <1452171627-17404-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 7 Jan 2016 10:00:27 -0300")
-References: <1452171627-17404-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874meoc52e.fsf@dell.be.48ers.dk>
+Date: Fri, 08 Jan 2016 19:16:58 +0100
+Subject: [Buildroot] [PATCH 1/1] readline: fix stripping on target
+In-Reply-To: <1452185782-7505-1-git-send-email-casantos@datacom.ind.br>
+ (Carlos Santos's message of "Thu, 7 Jan 2016 14:56:22 -0200")
+References: <1452185782-7505-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <87ziwgaqcl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/382/38201ac27b2813f0e9784d63b7aecd0cad06efdf/
+ > Libraries got installed read only, so strip failed.
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+ > ---
+ >  package/readline/readline.mk | 9 +++++++++
+ >  1 file changed, 9 insertions(+)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+ > index 3d31696..58cd948 100644
+ > --- a/package/readline/readline.mk
+ > +++ b/package/readline/readline.mk
+ > @@ -24,5 +24,14 @@ define READLINE_INSTALL_INPUTRC
+ >  endef
+ >  READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_INPUTRC
+ 
+ > +ifneq ($(BR2_STATIC_LIBS),y)
+ > +# libraries get installed read only, so strip fails
+ > +define READLINE_INSTALL_FIXUPS_SHARED
+ > +	for i in $(addprefix $(TARGET_DIR)/usr/lib/,libhistory.so.* libreadline.so.*); \
+ > +	do chmod +w $$i; done
+ > +endef
 
-Committed, thanks.
+Committed after simplifying it to just be:
+
+chmod +w $(addprefix $(TARGET_DIR)/usr/lib/,libhistory.so.* libreadline.so.*)
+
+Thanks.
 
 -- 
 Bye, Peter Korsgaard
