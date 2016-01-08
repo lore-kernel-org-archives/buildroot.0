@@ -1,41 +1,78 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 8 Jan 2016 14:43:29 +0100
-Subject: [Buildroot] Persistent dropbear keys
-Message-ID: <CAAXf6LULMusN+KRUf6D32GNx77bbB0vSayJqk03T7ouNCArhHA@mail.gmail.com>
+From: Vincent Dehors <vincent.dehors@openwide.fr>
+Date: Fri,  8 Jan 2016 15:32:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: Add option for building
+	x264 plugin
+Message-ID: <1452263539-29288-1-git-send-email-vincent.dehors@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As x264 is packaged, we can also build the gstreamer plugin using it.
+This commit adds the option in menuconfig and make sure it is built if
+selected.
 
-Commit e7d04dd2df8bb935c61f7c814ee88eba7e75b5e4 (package/dropbear: fix
-generating keys on RO file systems) (+ some subsequent commits)
-changed the handling of the /etc/dropbear directory. Previously
-/etc/dropbear was a real directory in the rootfs, now it initially is
-a link to /var/run/dropbear. During S50dropboar, the link is replaced
-with a real (empty) directory (if rootfs is writable) or a warning is
-given.
+A typo has been corrected, other unhandled plugins (like cdio, twolame,
+...) are now disabled.
 
-I understand all this. However, what I do not understand is how you
-are then creating persistent dropbear keys. From how I understand the
-code, the keys are persistent across reboots, but not between upgrades
-of the rootfs, because after an upgrade a new empty /etc/dropbear is
-created.
+Signed-off-by: Vincent Dehors <vincent.dehors@openwide.fr>
+---
+ package/gstreamer1/gst1-plugins-ugly/Config.in            |  6 ++++++
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 12 +++++++++---
+ 2 files changed, 15 insertions(+), 3 deletions(-)
 
-In my case, the rootfs is an initramfs, but mounted rw at boot time.
-
-The solution I have been using is with an S49dropbear_keys script that:
-- at 'stop', verifies the correctness of the keys in /etc/dropbear
-(with dropbearkey) and if ok copies them to a real persistent medium,
-- at 'start', verifies if there are any keys on the persistent medium,
-verify their correctness, and if ok copies them to /etc/dropbear.
-
-I will now need to adapt this script S49dropbear_keys to first remove
-the /etc/dropbear link, to keep its functionality.
-
-But it pops up the question how other people are handling this.
-
-Thanks,
-Thomas
+diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
+index f33e258..9cfc662 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/Config.in
++++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
+@@ -67,6 +67,12 @@ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC
+ 	help
+ 	  LibMpeg2 decoder
+ 
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_X264
++	bool "x264"
++	select BR2_PACKAGE_X264
++	help
++	  x264 decoder
++
+ # Note: to get descriptions use the following.
+ # # find . -name 'plugin-*.xml' | xargs grep -m 1 description
+ endif
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 4d13b7b..475add4 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -13,14 +13,13 @@ GST1_PLUGINS_UGLY_LICENSE = LGPLv2.1+
+ 
+ GST1_PLUGINS_UGLY_CONF_OPTS = --disable-examples --disable-valgrind
+ 
+-GST_PLUGINS_BAD1_CONF_OPTS += \
++GST1_PLUGINS_UGLY_CONF_OPTS += \
+ 	--disable-a52dec \
+ 	--disable-amrnb \
+ 	--disable-amrwb \
+ 	--disable-cdio \
+ 	--disable-sidplay \
+-	--disable-twolame \
+-	--disable-x264
++	--disable-twolame
+ 
+ GST1_PLUGINS_UGLY_DEPENDENCIES = gstreamer1 gst1-plugins-base
+ 
+@@ -90,6 +89,13 @@ else
+ GST1_PLUGINS_UGLY_CONF_OPTS += --disable-mpeg2dec
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_X264),y)
++GST1_PLUGINS_UGLY_CONF_OPTS += --enable-x264
++GST1_PLUGINS_UGLY_DEPENDENCIES += x264
++else
++GST1_PLUGINS_UGLY_CONF_OPTS += --disable-x264
++endif
++
+ # Add GPL license if GPL plugins enabled.
+ ifeq ($(GST1_PLUGINS_UGLY_HAS_GPL_LICENSE),y)
+ GST1_PLUGINS_UGLY_LICENSE += GPLv2
+-- 
+2.1.4
