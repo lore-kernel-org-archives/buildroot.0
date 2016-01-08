@@ -1,58 +1,47 @@
-From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Thu, 7 Jan 2016 21:40:24 +0100
-Subject: [Buildroot] [PATCH v3 09/13] package/dhcp: SysV init scripts:
- remove PID files after stop
-In-Reply-To: <20151224152632.7af2c1a1@free-electrons.com>
-References: <1445734779-7212-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <1445734779-7212-9-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <20151224152632.7af2c1a1@free-electrons.com>
-Message-ID: <CA+sos78p79o2oNcsRgc=L=pnt3YkxMqtVM9U6yLaOQ4F01=POw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  7 Jan 2016 22:34:21 -0300
+Subject: [Buildroot] [PATCH] squid: bump to version 3.5.13
+Message-ID: <1452216861-8647-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Switch to bz2 tarball since there doesn't seem to be an xz release this
+time around.
 
-On Thu, Dec 24, 2015 at 3:26 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Sun, 25 Oct 2015 02:59:35 +0200, Beno?t Th?baudeau wrote:
->> From: Beno?t Th?baudeau <benoit@wsystem.com>
->>
->> These daemons do not remove their PID files, so do it manually in the
->> scripts.
->>
->> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
->
-> I think this is not the right way of handling this and the IPv6
-> problem.
->
-> What I would suggest is that the S80dhcp-server script should start two
-> DHCP servers: one with -4 and one with -6. To avoid IPv6 failures, you
-> can test if /proc/net/if_inet6 exists.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-OK, I'll do that.
-
-> Then, I was hoping you could use the --remove-pidfile option of
-> start-stop-daemon, but it unfortunately doesn't exist in the Busybox
-> implementation of start-stop-daemon.
-
-Indeed. I also went that way first. So what are you eventually
-suggesting to change for 09/13 since there is apparently no other
-solution for SysV? Even with two daemons started, the PID files will
-have to be removed with rm for SysV, so 09/13 would only have to be
-split. This is already handled for systemd.
-
-> That being said, I still believe starting two daemons is the best
-> solution. I don't think a Config.in option should be added for that.
-> Just always start both, with as I propose an exception to not start the
-> IPv6 daemon if /proc/net/if_inet6 does not exist.
->
-> Could you rework your patches 9 to 13 with this goal in mind ?
->
-> Thanks a lot!
-
-Will do.
-
-Beno?t
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index c806dc9..97fb45d 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.12.tar.xz.asc
+-md5	50016bf6e2d3a3a186a6c7236d251f63	squid-3.5.12.tar.xz
+-sha1	59b0dcb2c9c04f1a0586f7a1f346197ddb6d5be5	squid-3.5.12.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.13.tar.bz2.asc
++md5	3fccd1c072433bb896374a832f608b7d	squid-3.5.13.tar.bz2
++sha1	9bf3b803752c019cb2ddf15afa20f21fa9d385e3	squid-3.5.13.tar.bz2
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index b1dee3c..47060d1 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).12
+-SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).13
++SQUID_SOURCE = squid-$(SQUID_VERSION).tar.bz2
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
+ SQUID_LICENSE_FILES = COPYING
+-- 
+2.4.10
