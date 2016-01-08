@@ -1,41 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Jan 2016 19:17:10 +0100
-Subject: [Buildroot] [git commit] readline: fix stripping on target
-Message-ID: <20160108182923.4F283827F1@busybox.osuosl.org>
+Date: Fri, 8 Jan 2016 19:23:20 +0100
+Subject: [Buildroot] [git commit] rabbitmq-c: needs a toolchain with thread
+	support
+Message-ID: <20160108182923.5D427818A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af8501cf963d2b23f8c092615a4c047da92accfd
+commit: http://git.buildroot.net/buildroot/commit/?id=b248d93b5035d2b161cef7f37d0ad9b8d2eda9e5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libraries got installed read only, so strip failed.
+Fixes:
+http://autobuild.buildroot.net/results/312/312f0e59e3f83868e86725ee552b320d0e739f9f/
 
-[Peter: simplify chmod logic]
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Peter: add autobuilder reference]
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/readline/readline.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/rabbitmq-c/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index 3d31696..7631970 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
-@@ -24,5 +24,13 @@ define READLINE_INSTALL_INPUTRC
- endef
- READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_INPUTRC
+diff --git a/package/rabbitmq-c/Config.in b/package/rabbitmq-c/Config.in
+index f3379f2..b330c90 100644
+--- a/package/rabbitmq-c/Config.in
++++ b/package/rabbitmq-c/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_RABBITMQ_C
+ 	bool "rabbitmq-c"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  This is a C-language AMQP client library for use with v2.0+
+ 	  of the RabbitMQ broker.
  
-+ifneq ($(BR2_STATIC_LIBS),y)
-+# libraries get installed read only, so strip fails
-+define READLINE_INSTALL_FIXUPS_SHARED
-+	chmod +w $(addprefix $(TARGET_DIR)/usr/lib/,libhistory.so.* libreadline.so.*)
-+endef
-+READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_FIXUPS_SHARED
-+endif
+ 	  https://github.com/alanxz/rabbitmq-c
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++comment "rabbitmq-c needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
