@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jan 2016 19:06:03 +0100
-Subject: [Buildroot] [PATCH] configs/qemu: enable SMP for x86 & x86_64
-In-Reply-To: <568FF3DE.9020903@zacarias.com.ar> (Gustavo Zacarias's message of
- "Fri, 8 Jan 2016 14:37:34 -0300")
-References: <1452259790-9223-1-git-send-email-gustavo@zacarias.com.ar>
- <87r3hsdlfj.fsf@dell.be.48ers.dk> <568FF3DE.9020903@zacarias.com.ar>
-Message-ID: <87mvsgc5f8.fsf@dell.be.48ers.dk>
+Date: Fri, 08 Jan 2016 19:08:42 +0100
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.10.0
+In-Reply-To: <1452121885-29413-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 6 Jan 2016 20:11:25 -0300")
+References: <1452121885-29413-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d1tcc5at.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > On 08/01/16 14:34, Peter Korsgaard wrote:
- >> True. Shouldn't we then change board/qemu/x86*/readme.txt to pass -smp
- >> <n> to qemu?
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > Hi.
- > Maybe, however it's optional, a smp-enabled kernel will boot just fine
- > in UP, and maybe a user doesn't have a SMP host which would probably
- > have a steep price i think (unlikely to be the case, but still).
- > Regards.
-
-True. I've committed it after adding a comment in the two readme's about
-the qemu -smp option, thanks.
+Committed, thanks.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
