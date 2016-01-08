@@ -1,111 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 9 Jan 2016 00:35:49 +0100
-Subject: [Buildroot] [PATCH 2/2] openssl: remove additional engines
-	option
-In-Reply-To: <1451997340-4430-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1451997340-4430-1-git-send-email-gustavo@zacarias.com.ar>
- <1451997340-4430-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <569047D5.9070409@mind.be>
+Date: Sat, 9 Jan 2016 00:44:49 +0100
+Subject: [Buildroot] [PATCH trivial] uboot: remove unused helper
+ function insert_define
+In-Reply-To: <1452087198-28726-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1452087198-28726-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <569049F1.9080802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05-01-16 13:35, Gustavo Zacarias wrote:
-> In preparation for the libssl virtual and libressl inclusion, also
-> keeping with the KISS principle the engines can be removed in a
-> post-build script if need be, so remove the option and add it in legacy.
+On 06-01-16 14:33, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Commit 16b8e813c810fde2fe3655c696edf1e76a7d27ba removed all remaining users
+> of helper function insert_define.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- The engines take up 8.5% of the openssl package, so not worthwhile to remove them.
 
  Regards,
  Arnout
 
 > ---
->  Config.in.legacy           | 8 ++++++++
->  package/bind/bind.mk       | 9 ++-------
->  package/openssl/Config.in  | 9 ---------
->  package/openssl/openssl.mk | 7 -------
->  4 files changed, 10 insertions(+), 23 deletions(-)
+>  boot/uboot/uboot.mk | 12 ------------
+>  1 file changed, 12 deletions(-)
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 3bcd50d..45b5e23 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,14 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2016.02"
->  
-> +config BR2_PACKAGE_OPENSSL_ENGINES
-> +	bool "openssl additional engines option removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The openssl additional engines option has been removed. You
-> +	  can remove them from a post-build script if your target space
-> +	  is too constrained.
-> +
->  config BR2_PACKAGE_OPENSSL_BIN
->  	bool "openssl binary option removed"
->  	select BR2_LEGACY
-> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-> index 2a06599..4d3fa86 100644
-> --- a/package/bind/bind.mk
-> +++ b/package/bind/bind.mk
-> @@ -52,13 +52,8 @@ BIND_CONF_ENV += \
->  	ac_cv_func_EVP_sha512=yes
->  BIND_CONF_OPTS += \
->  	--with-openssl=$(STAGING_DIR)/usr LIBS="-lz" \
-> -	--with-ecdsa=yes
-> -# GOST cipher support requires openssl extra engines
-> -ifeq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
-> -BIND_CONF_OPTS += --with-gost=yes
-> -else
-> -BIND_CONF_OPTS += --with-gost=no
-> -endif
-> +	--with-ecdsa=yes \
-> +	--with-gost=yes
->  else
->  BIND_CONF_OPTS += --with-openssl=no
->  endif
-> diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-> index dfbc850..baca05c 100644
-> --- a/package/openssl/Config.in
-> +++ b/package/openssl/Config.in
-> @@ -10,12 +10,3 @@ config BR2_PACKAGE_OPENSSL
->  	  http://www.openssl.org/
->  
->  	  Note: Some helper scripts need perl.
-> -
-> -if BR2_PACKAGE_OPENSSL
-> -
-> -config BR2_PACKAGE_OPENSSL_ENGINES
-> -	bool "openssl additional engines"
-> -	help
-> -	  Install additional encryption engine libraries.
-> -
-> -endif
-> diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-> index 1e5ea9b..2c8a96f 100644
-> --- a/package/openssl/openssl.mk
-> +++ b/package/openssl/openssl.mk
-> @@ -151,12 +151,5 @@ endef
->  OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_PERL_SCRIPTS
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index c8c50f0..d539b31 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -89,18 +89,6 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+>  UBOOT_DEPENDENCIES += host-dtc
 >  endif
 >  
-> -ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
-> -define OPENSSL_REMOVE_OPENSSL_ENGINES
-> -	rm -rf $(TARGET_DIR)/usr/lib/engines
+> -# Helper function to fill the U-Boot config.h file.
+> -# Argument 1: option name
+> -# Argument 2: option value
+> -# If the option value is empty, this function does nothing.
+> -define insert_define
+> -$(if $(call qstrip,$(2)),
+> -	@echo "#ifdef $(strip $(1))" >> $(@D)/include/config.h
+> -	@echo "#undef $(strip $(1))" >> $(@D)/include/config.h
+> -	@echo "#endif" >> $(@D)/include/config.h
+> -	@echo '#define $(strip $(1)) $(call qstrip,$(2))' >> $(@D)/include/config.h)
 > -endef
-> -OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_OPENSSL_ENGINES
-> -endif
 > -
->  $(eval $(generic-package))
->  $(eval $(host-generic-package))
+>  # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
+>  # legal-info finds it
+>  define UBOOT_COPY_OLD_LICENSE_FILE
 > 
 
 
