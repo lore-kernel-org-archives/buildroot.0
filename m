@@ -1,46 +1,104 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Jan 2016 20:28:50 +0100
-Subject: [Buildroot] [git commit] ruby: bump to version 2.3.0
-Message-ID: <20160108192941.17FFB82800@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 9 Jan 2016 00:33:47 +0100
+Subject: [Buildroot] [PATCH 1/2] openssl: remove binary install option
+In-Reply-To: <1451997340-4430-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1451997340-4430-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5690475B.2090201@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f61488649a6360d350aef5fc8f6d2c401d236da
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05-01-16 13:35, Gustavo Zacarias wrote:
+> In preparation for the libssl virtual and libressl inclusion, also
+> keeping with the KISS principle the binary can be removed in a
+> post-build script if need be, so remove the option and add it in legacy.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ I did a build of openssl on aarch64, and the openssl binary makes up almost 20%
+of the package and 5% of a minimal filesystem (with glibc though). I think
+that's a fairly significant percentage, so I think it's worthwhile to keep this
+option.
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 06faed6..3499263 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,2 +1,2 @@
--# From https://www.ruby-lang.org/en/news/2015/12/16/ruby-2-2-4-released/
--sha256	d28bff4641e382681c58072ddc244d025ac47ff71dd9426a92fcfc3830d1773c	ruby-2.2.4.tar.xz
-+# From https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/
-+sha256	70125af0cfd7048e813a5eecab3676249582bfb65cfd57b868c3595f966e4097	ruby-2.3.0.tar.xz
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index fd8be90..19b33de 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--RUBY_VERSION_MAJOR = 2.2
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
--RUBY_VERSION_EXT = 2.2.0
-+RUBY_VERSION_MAJOR = 2.3
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).0
-+RUBY_VERSION_EXT = 2.3.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ Of course, people who care about size should probably use libressl :-)
+
+ How does it help for the libssl virtual package? For the engines I can
+understand because other packages select it, but this one could stay, no?
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  Config.in.legacy           | 8 ++++++++
+>  package/openssl/Config.in  | 7 -------
+>  package/openssl/openssl.mk | 8 --------
+>  3 files changed, 8 insertions(+), 15 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 2e6062c..3bcd50d 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -145,6 +145,14 @@ endif
+>  ###############################################################################
+>  comment "Legacy options removed in 2016.02"
+>  
+> +config BR2_PACKAGE_OPENSSL_BIN
+> +	bool "openssl binary option removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The openssl binary option has been removed. You can remove the
+> +	  binary from a post-build script if your target space is too
+> +	  constrained.
+> +
+>  config BR2_PACKAGE_PYTHON_PYXML
+>  	bool "python-pyxml package has been removed"
+>  	select BR2_LEGACY
+> diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+> index e08b648..dfbc850 100644
+> --- a/package/openssl/Config.in
+> +++ b/package/openssl/Config.in
+> @@ -13,13 +13,6 @@ config BR2_PACKAGE_OPENSSL
+>  
+>  if BR2_PACKAGE_OPENSSL
+>  
+> -config BR2_PACKAGE_OPENSSL_BIN
+> -	bool "openssl binary"
+> -	help
+> -	  Install the openssl binary and the associated helper scripts to the
+> -	  target file system. This is a command line tool for doing various
+> -	  cryptographic stuff.
+> -
+>  config BR2_PACKAGE_OPENSSL_ENGINES
+>  	bool "openssl additional engines"
+>  	help
+> diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+> index c3ea08d..1e5ea9b 100644
+> --- a/package/openssl/openssl.mk
+> +++ b/package/openssl/openssl.mk
+> @@ -151,14 +151,6 @@ endef
+>  OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_PERL_SCRIPTS
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_OPENSSL_BIN),)
+> -define OPENSSL_REMOVE_BIN
+> -	$(RM) -f $(TARGET_DIR)/usr/bin/openssl
+> -	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.*,c_*}
+> -endef
+> -OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_BIN
+> -endif
+> -
+>  ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
+>  define OPENSSL_REMOVE_OPENSSL_ENGINES
+>  	rm -rf $(TARGET_DIR)/usr/lib/engines
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
