@@ -1,176 +1,97 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri,  8 Jan 2016 08:50:51 -0200
-Subject: [Buildroot] [PATCH v2] pandaboard_defconfig: bump u-boot to 2015.10
-	and kernel to 4.3
-Message-ID: <1452250251-9442-1-git-send-email-sergio.prado@e-labworks.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  8 Jan 2016 07:57:16 -0300
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.8
+Message-ID: <1452250636-26846-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-VFPv3 and NEON was enabled and a readme.txt file was added.
+Patch now upstream, so drop it along autoreconf and gettextize.
 
-Fixes bug #7580.
-
-Tested on Pandaboard ES.
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes v1 -> v2:
-  - Removed extra "=====" signs from readme.txt.
-  - Removed empty new lines from readme.txt.
-  - Improved script and description to format the sdcard in the
-    readme.txt.
-  - Locking kernel headers version, u-boot version and kernel version
-    being used.
----
- board/pandaboard/readme.txt  | 76 ++++++++++++++++++++++++++++++++++++++++++++
- configs/pandaboard_defconfig | 45 ++++++++++----------------
- 2 files changed, 92 insertions(+), 29 deletions(-)
- create mode 100644 board/pandaboard/readme.txt
+ ...onfigure-really-make-disable-crywrap-work.patch | 40 ----------------------
+ package/gnutls/gnutls.hash                         |  2 +-
+ package/gnutls/gnutls.mk                           |  5 +--
+ 3 files changed, 2 insertions(+), 45 deletions(-)
+ delete mode 100644 package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
 
-diff --git a/board/pandaboard/readme.txt b/board/pandaboard/readme.txt
-new file mode 100644
-index 000000000000..8741349d19f0
---- /dev/null
-+++ b/board/pandaboard/readme.txt
-@@ -0,0 +1,76 @@
-+Pandaboard
-+==========
-+
-+This file documents the Buildroot support for the Pandaboard, a
-+low-power, low-cost single-board computer development platform based
-+on the Texas Instruments OMAP4 system on a chip (SoC).
-+
-+Configuring and building Buildroot
-+----------------------------------
-+
-+Start from the defconfig:
-+
-+  $ make pandaboard_defconfig
-+
-+You can edit build options the usual way:
-+
-+  $ make menuconfig
-+
-+When you are happy with the setup, run:
-+
-+  $ make
-+
-+The result of the build with the default settings should be these files:
-+
-+  output/images
-+  ??? MLO
-+  ??? omap4-panda-a4.dtb
-+  ??? omap4-panda.dtb
-+  ??? omap4-panda-es.dtb
-+  ??? rootfs.ext2
-+  ??? u-boot.img
-+  ??? zImage
-+
-+Setting up your SD card
-+-----------------------
-+
-+*Important*: pay attention which partition you are modifying so you don't
-+accidentally erase the wrong file system, e.g your host computer or your
-+external storage!
-+
-+In the default setup you need to create two partitions on your SD card:
-+a boot partition and a rootfs partition.
-+
-+The ROM code from OMAP processors need the SD card to be formatted with
-+a special geometry in the partition table. To do that, you can use the
-+shell script below (this script was extracted from
-+http://elinux.org/Panda_How_to_MLO_%26_u-boot).
-+
-+#!/bin/sh
-+DRIVE=$1
-+if [ -b "$DRIVE" ] ; then
-+	dd if=/dev/zero of=$DRIVE bs=1024 count=1024
-+	SIZE=`fdisk -l $DRIVE | grep Disk | awk '{print $5}'`
-+	echo DISK SIZE - $SIZE bytes
-+	CYLINDERS=`echo $SIZE/255/63/512 | bc`
-+	echo CYLINDERS - $CYLINDERS
-+	{
-+	echo ,9,0x0C,*
-+	echo ,,,-
-+	} | sfdisk -D -H 255 -S 63 -C $CYLINDERS $DRIVE
-+	mkfs.vfat -F 32 -n "boot" ${DRIVE}1
-+	mke2fs -j -L "rootfs" ${DRIVE}2
-+fi
-+
-+The next step is to mount the sdcard's first partition and copy MLO
-+and u-boot.img to it.
-+
-+  $ sudo mkdir -p /mnt/sdcard
-+  $ sudo mount /dev/sdX1 /mnt/sdcard
-+  $ sudo cp MLO u-boot.img /mnt/sdcard
-+  $ sudo umount /mnt/sdcard
-+
-+The last step is to copy the rootfs image to the sdcard's second
-+partition using 'dd':
-+
-+  $ sudo dd if=rootfs.ext2 of=/dev/sdX2 bs=1M conv=fsync
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index 50c3714d84d9..f89409fc8a9d 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -1,39 +1,26 @@
--# Architecture
- BR2_arm=y
- BR2_cortex_a9=y
+diff --git a/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch b/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
+deleted file mode 100644
+index 52d34f0..0000000
+--- a/package/gnutls/0001-configure-really-make-disable-crywrap-work.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 996b3741e8c7a5d19ae6c554e062f20c259f52d7 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Mon, 14 Dec 2015 15:16:24 -0300
+-Subject: [PATCH] configure: really make --disable-crywrap work
 -
--# system
--BR2_TARGET_GENERIC_GETTY=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+-The crywrap variable is set regardless of the state of enable_crywrap,
+-hence --disable-crywrap never works.
+-Just put the tests for crywrap deps inside the enable_crywrap
+-conditional.
 -
--# filesystem
--BR2_TARGET_ROOTFS_EXT2=y
--# BR2_TARGET_ROOTFS_TAR is not set
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Status: applied upstream.
 -
--# Lock to 3.12 headers to avoid breaking with newer kernels
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_FPU_VFPV3=y
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+- configure.ac | 9 ++++-----
+- 1 file changed, 4 insertions(+), 5 deletions(-)
 -
--# Kernel
-+BR2_DEFAULT_KERNEL_VERSION="4.3.3"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.3.3"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
--BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
--BR2_LINUX_KERNEL_APPENDED_DTB=y
--BR2_LINUX_KERNEL_USE_INTREE_DTS=y
--# might need omap4-panda or omap4-panda-a4 instead
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es"
+-diff --git a/configure.ac b/configure.ac
+-index e1d1df0..efacc30 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -836,11 +836,10 @@ AC_ARG_ENABLE(crywrap,
+- 
+- 
+-  if test "x$enable_crywrap" != "xno" ; then
+--	AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
+-- fi
+--
+-- if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
+--  crywrap=yes
+-+   AC_CHECK_FUNCS([argp_usage],[ac_argp=yes],[ac_argp=no])
+-+   if test "$ac_cv_func_daemon" != "no" && test "$ac_argp" != "no" && test "$with_libidn" != "no";then
+-+     crywrap=yes
+-+   fi
+-  fi
+- 
+- fi
+--- 
+-2.4.10
 -
--# Bootloaders
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es omap4-panda omap4-panda-a4"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="omap4_panda"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
--BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
--BR2_TARGET_UBOOT_LATEST_VERSION=n
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2012.07"
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index f062041..38418a8 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	c1be9e4b30295d7b5f96fa332c6a908e6fa2254377b67811301fca92eb882e5a	gnutls-3.4.7.tar.xz
++sha256	e07c05dea525c6bf0dd8017fc5b89d886954f04fedf457ecd1ce488ac3b86ab7	gnutls-3.4.8.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 6c01c1b..78dfa5a 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,15 +5,12 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.4
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
+ GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER
+ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
+-# For 0001-configure-really-make-disable-crywrap-work.patch
+-GNUTLS_AUTORECONF = YES
+-GNUTLS_GETTEXTIZE = YES
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+ 	--disable-guile \
 -- 
-1.9.1
+2.4.10
