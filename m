@@ -1,71 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Jan 2016 19:04:23 +0100
-Subject: [Buildroot] [git commit] configs/qemu: enable SMP for x86 & x86_64
-Message-ID: <20160108182923.0E5FA827F2@busybox.osuosl.org>
+Date: Fri, 8 Jan 2016 19:08:12 +0100
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.10.0
+Message-ID: <20160108182923.1E529827F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1968440f35ff5d035f4767c29ed3fd6446965523
+commit: http://git.buildroot.net/buildroot/commit/?id=1d02f1a9f2ea722e1aa858982c6a7cc75c301a13
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is the 21st century, so enable SMP for them.
-
-[Peter: add note to readme.txt about how emulate a SMP system in QEMU]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/qemu/x86/linux-4.3.config    | 1 +
- board/qemu/x86/readme.txt          | 2 ++
- board/qemu/x86_64/linux-4.3.config | 1 +
- board/qemu/x86_64/readme.txt       | 2 ++
- 4 files changed, 6 insertions(+)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/qemu/x86/linux-4.3.config b/board/qemu/x86/linux-4.3.config
-index 20726c3..4dcc995 100644
---- a/board/qemu/x86/linux-4.3.config
-+++ b/board/qemu/x86/linux-4.3.config
-@@ -1,4 +1,5 @@
- CONFIG_SYSVIPC=y
-+CONFIG_SMP=y
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
-index da8384a..62c51b0 100644
---- a/board/qemu/x86/readme.txt
-+++ b/board/qemu/x86/readme.txt
-@@ -2,6 +2,8 @@ Run the emulation with:
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 435e5de..4fca659 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1	dae1ae5297fece9671ae0c434a7ecd0cda09c76a	sqlite-autoconf-3090200.tar.gz
++sha1	7be6e6869d0d2d9fe3df71b5c65f065dd2325f58	sqlite-autoconf-3100000.tar.gz
+ # Calculated based on the hash above
+-sha256	064c0abe9c9177534d4c770bca7a5902f9924b629ac886b4c08956be6dfbc36b	sqlite-autoconf-3090200.tar.gz
++sha256	43cc292d70711fa7580250c8a1cd7c64813a4a0a479dbd502cce5f10b5d91042	sqlite-autoconf-3100000.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 0758fe9..fe115eb 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-   qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append root=/dev/sda -net nic,model=rtl8139 -net user
- 
-+Optionally add -smp N to emulate a SMP system with N CPUs.
-+
- The login prompt will appear in the graphical window.
- 
- Tested with QEMU 2.3.0
-diff --git a/board/qemu/x86_64/linux-4.3.config b/board/qemu/x86_64/linux-4.3.config
-index 20726c3..4dcc995 100644
---- a/board/qemu/x86_64/linux-4.3.config
-+++ b/board/qemu/x86_64/linux-4.3.config
-@@ -1,4 +1,5 @@
- CONFIG_SYSVIPC=y
-+CONFIG_SMP=y
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-index 7c39563..e2be574 100644
---- a/board/qemu/x86_64/readme.txt
-+++ b/board/qemu/x86_64/readme.txt
-@@ -2,6 +2,8 @@ Run the emulation with:
- 
-   qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append root=/dev/sda -net nic,model=rtl8139 -net user
- 
-+Optionally add -smp N to emulate a SMP system with N CPUs.
-+
- The login prompt will appear in the graphical window.
- 
- Tested with QEMU 2.3.0
+-SQLITE_VERSION = 3090200
++SQLITE_VERSION = 3100000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE = http://www.sqlite.org/2015
++SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
