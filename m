@@ -1,54 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri,  8 Jan 2016 12:30:19 +0100
-Subject: [Buildroot] [PATCH] linux: provide symlink dtc->linux-dtc is there
-	is no dtc yet
-Message-ID: <1452252619-13802-1-git-send-email-patrickdepinguin@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  8 Jan 2016 09:03:43 -0300
+Subject: [Buildroot] [PATCH] cantarell: bump to version 0.20.1
+Message-ID: <1452254623-10934-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Commit ab74e09eb4e28dab8bed8d783c5f0464d39a32e7 renamed the dtc host tool
-provided by linux to linux-dtc to avoid clashes with the dtc host tool
-provided by host-dtc.
-
-However, external scripting may well rely on the existence of a device tree
-compiler as $(HOST_DIR)/usr/bin/dtc, regardless of its source. Changing
-these external scripts to use linux-dtc means that the scripts need to be
-aware of the buildroot release they are working with, which is not very
-nice.
-
-Add a symlink dtc->linux-dtc when no $(HOST_DIR)/usr/bin/dtc is present.
-When host-dtc is not enabled, the end result will be dtc and
-linux-dtc representing the same thing.
-When host-dtc is enabled, either it is build before linux and no symlink
-is created at any time, or it is build after linux, and the 'install'
-command in host-dtc will overwrite the symlink with a proper dtc. In both
-cases, the end result will be dtc and linux-dtc representing a different
-thing.
-
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- linux/linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/cantarell/cantarell.hash | 4 ++--
+ package/cantarell/cantarell.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 045294b..f5c629c 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -339,6 +339,9 @@ define LINUX_INSTALL_HOST_TOOLS
- 	# Installing dtc (device tree compiler) as host tool, if selected
- 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then 	\
- 		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/linux-dtc ;	\
-+		if [ ! -e $(HOST_DIR)/usr/bin/dtc ]; then	\
-+			ln -sf linux-dtc $(HOST_DIR)/usr/bin/dtc ;	\
-+		fi	\
- 	fi
- endef
+diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
+index 67428d8..d776647 100644
+--- a/package/cantarell/cantarell.hash
++++ b/package/cantarell/cantarell.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.20.sha256sum
+-sha256	fb78a5cb6bdcfc464b763a030186c818080860107283bff8adcbb2d084f8f8de	cantarell-fonts-0.0.20.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.20.1.sha256sum
++sha256	0f933516f3270fb7307d9c2e26e4703b403608c5cc9da3127cba4395bcd4ec91	cantarell-fonts-0.0.20.1.tar.xz
+diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
+index a82b758..aaad85a 100644
+--- a/package/cantarell/cantarell.mk
++++ b/package/cantarell/cantarell.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
+ CANTARELL_VERSION_MAJOR = 0.0
+-CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).20
++CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).20.1
+ CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
+ CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
+ CANTARELL_DEPENDENCIES = host-pkgconf
 -- 
-1.9.5
+2.4.10
