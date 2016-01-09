@@ -1,25 +1,26 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 09 Jan 2016 20:45:13 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/libgsm: new package
-References: <1430072810-27772-1-git-send-email-bernd.kuhls@t-online.de>
- <20160109181205.GD3444@free.fr>
-Message-ID: <9j48mcxnur.ln2@ID-313208.user.individual.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 9 Jan 2016 22:39:36 +0200
+Subject: [Buildroot] [PATCH 1/2] package/lttng-tools: bump to version
+ 2.7.1
+In-Reply-To: <1452368548-5465-1-git-send-email-s.martin49@gmail.com>
+References: <1452368548-5465-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160109203936.GA2957@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Samuel,
 
-Am Sat, 09 Jan 2016 19:12:05 +0100 schrieb Yann E. MORIN:
+On Sat, Jan 09, 2016 at 08:42:27PM +0100, Samuel Martin wrote:
+> Also remove merged patches.
 
-> So, I',m not sure what the intent for this package was, but if was only
-> to be used by Asterisk, then it is not currently possible to do so...
+Is AUTORECONF still needed then?
 
-tbh I do not remember why I thought this package is necessary. Since I 
-never got Asterisk configured for a run-time usable setup and I lost 
-interest in it after I found Freeswitch (along with Fusionpbx) easier to 
-use, I do not care when you mark my patch as Rejected.
+baruch
 
-Regards, Bernd
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
