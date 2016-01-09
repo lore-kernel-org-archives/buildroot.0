@@ -1,52 +1,87 @@
-From: Doug Kehn <rdkehn@yahoo.com>
-Date: Sat,  9 Jan 2016 15:59:45 -0600
-Subject: [Buildroot] [RFC PATCH 3/3] package/dhcp: ensure host cc is used
-	for compiling gen
-In-Reply-To: <1452376785-31174-1-git-send-email-rdkehn@yahoo.com>
-References: <1452376785-31174-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <1452376785-31174-4-git-send-email-rdkehn@yahoo.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 9 Jan 2016 23:08:52 +0100
+Subject: [Buildroot] [PATCH] gcc/gcc-final: pass TARGET_CFLAGS flags to
+ configure with --enable-cxx-flags
+In-Reply-To: <1433169427-7527-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1433169427-7527-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20160109220852.GE3444@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is derived from:
-http://wiki.beyondlogic.org/patches/dhcp-4.3.0b1.bind_arm-linux-gnueabi.patch
+Max, All,
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
----
- package/dhcp/0002-dhcp-bind-host-gen.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 package/dhcp/0002-dhcp-bind-host-gen.patch
+On 2015-06-01 17:37 +0300, Max Filippov spake thusly:
+> Currently only TARGET_ABI flags are passed to the final compiler
+> configure script and only when building for Xtensa. Since libstdc++ is a
+> normal library it should be built with full TARGET_CFLAGS on all
+> targets.
+> 
+> Pass TARGET_CFLAGS flags to gcc-final configure script for all targets
+> in the --enable-cxx-flags parameter.
+> 
+> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
-diff --git a/package/dhcp/0002-dhcp-bind-host-gen.patch b/package/dhcp/0002-dhcp-bind-host-gen.patch
-new file mode 100644
-index 0000000..0a33693
---- /dev/null
-+++ b/package/dhcp/0002-dhcp-bind-host-gen.patch
-@@ -0,0 +1,22 @@
-+ensure host cc is used for compiling gen
-+
-+This patch is derived from:
-+http://wiki.beyondlogic.org/patches/dhcp-4.3.0b1.bind_arm-linux-gnueabi.patch
-+
-+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-+
-+Index: dhcp-4.3.3/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
-+===================================================================
-+--- dhcp-4.3.3.orig/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
-++++ dhcp-4.3.3/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
-+@@ -168,7 +168,9 @@ code.h:	gen
-+ 	./gen -s ${srcdir} > code.h
-+ 
-+ gen: ${srcdir}/gen.c
-+-	${CC} ${ALL_CFLAGS} ${LDFLAGS} -o $@ ${srcdir}/gen.c ${LIBS}
-++	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
-++		${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c \
-++		${BUILD_LIBS}
-+ 
-+ #We don't need rbtdb64 for this library
-+ #rbtdb64. at O@: rbtdb.c
+So, I finally had a look at this patch. I've tested it to build a
+gcc-4.9 + glibc-2.21 + binutils-2.24 toolchain with C++ support, which
+then was used to suessfully build Qt5base (which is quite a heavy C++
+user).
+
+However, I'd like to understand what this is all about.
+
+In gcc.mk, we do:
+
+    GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+    [...]
+    HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+
+So it looks like we were already passing the proper CXXFLAGS to gcc (we
+only filter-out problematic flags, like -Os on broken gcc-4.5 for PPC).
+
+So, what are we supposed to gain/loose with this change?
+
+As a side note, we should not have to pass TARGET_ABI either, since it
+is part of TARGET_CFLAGS and as shown above, it is already part of the
+CFLAGS_FOR_TARGET that we pass gcc.
+
+Any explanations? Something that I missed?
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/gcc/gcc-final/gcc-final.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index 8d7009b..59c8708 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -185,8 +185,6 @@ endef
+>  HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
+>  endif
+>  
+> -ifeq ($(BR2_xtensa),y)
+> -HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_ABI)"
+> -endif
+> +HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_CFLAGS)"
+>  
+>  $(eval $(host-autotools-package))
+> -- 
+> 1.8.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.6.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
