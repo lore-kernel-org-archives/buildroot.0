@@ -1,53 +1,110 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 9 Jan 2016 01:18:07 +0100
-Subject: [Buildroot] ifupdown-0.8.2 / dhcp-4.1-ESV-R12 incompatibility
-In-Reply-To: <568ECC28.50704@zacarias.com.ar>
-References: <20160106142628.GA3891@dkarchlinux64.currentcomm.com>
- <568EB85E.3090501@zacarias.com.ar>
- <CA+sos7-4puPse5UehUFe3LO7DvfTattF+qUAu4n==LAdOBwYzw@mail.gmail.com>
- <568ECC28.50704@zacarias.com.ar>
-Message-ID: <569051BF.70209@mind.be>
+Date: Sat, 9 Jan 2016 01:52:23 +0100
+Subject: [Buildroot] [PATCH] linux: provide symlink dtc->linux-dtc is
+ there is no dtc yet
+In-Reply-To: <1452252619-13802-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1452252619-13802-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <569059C7.8090901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07-01-16 21:35, Gustavo Zacarias wrote:
-> On 07/01/16 17:30, Beno?t Th?baudeau wrote:
-> 
->> I had started to look into this a few months ago, and setting
->> --with-libbind=PATH to use the bind provided by Buildroot seemed to be
->> a better option (in order to avoid possibly installing two instances
->> of bind on the target, either standalone or inside the dhcp binaries
->> if statically linked, and both bind versions were compatible at that
->> time), though I have not yet tested it.
-> 
-> Hi Beno?t.
-> Let me save you some time, it doesn't work as expected.
-> I've tried pointing that into the bind build directory (because it needs some
-> specific *.a files that i think aren't installed, besides another problem) but
-> no luck, since it stills expects that to live in it's own build directory, try
-> in dhcp's source dir:
-> 
-> find . -name Makefile.am -exec grep --with-filename ../bind/lib {} \;
-> 
-> ...and you'll see the drastic results.
-> 
-> Even so with that fixed the bind package will need to get tweaked as well, since
-> if you build shared-only you won't get those intermediate libraries built, and
-> hence dhcp will fail as well.
-> 
-> All in all, it seems pretty broken.
+ Hi Thomas,
 
- Given this brokenness, and that there are better alternatives, perhaps we
-should kill the dhcp package? Or is it useful as a server? In the latter case,
-we should add a warning to the ifupdown help text.
+ In the subject: is -> if
 
- BTW, I guess busybox ifupdown does work?
+On 08-01-16 12:30, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> Commit ab74e09eb4e28dab8bed8d783c5f0464d39a32e7 renamed the dtc host tool
+> provided by linux to linux-dtc to avoid clashes with the dtc host tool
+> provided by host-dtc.
+> 
+> However, external scripting may well rely on the existence of a device tree
+> compiler as $(HOST_DIR)/usr/bin/dtc, regardless of its source. Changing
+> these external scripts to use linux-dtc means that the scripts need to be
+> aware of the buildroot release they are working with, which is not very
+> nice.
+> 
+> Add a symlink dtc->linux-dtc when no $(HOST_DIR)/usr/bin/dtc is present.
+> When host-dtc is not enabled, the end result will be dtc and
+> linux-dtc representing the same thing.
+> When host-dtc is enabled, either it is build before linux and no symlink
+> is created at any time, or it is build after linux, and the 'install'
+> command in host-dtc will overwrite the symlink with a proper dtc. In both
+> cases, the end result will be dtc and linux-dtc representing a different
+> thing.
+
+ Or, when we eventually enable top-level parallel build, dtc and linux-dtc may
+be installed in parallel...
+
+ Why do you always have these controversial patches, Thomas :-)
+
+ How about a simple:
+
+	ln -s linux-dtc $(HOST_DIR)/usr/bin/dtc 2>/dev/null
+
+ i.e. just try to create the symlink and ignore errors. Creating a symlink is
+atomic.
+
+ Argh, no, that leaves another race condition: the install of the dtc package
+will do stat, (unlink), open, so between the stat or unlink and the open there
+is a window in which the symlink will succeed. Then the version from host-dtc
+will overwrite linux-dtc, which is not what we want...
+
+ I just love race conditions :-)
+
+
+ Perhaps a better solution is to revisit ab74e09e completely. The intention of
+that commit was to have the linux version of dtc available for scripts. But is
+there ever any reason for a script _not_ to use the linux version? So what we
+would actually like is to keep a single dtc: the linux one if it is available,
+that one will be used, and host-dtc is a NOP. If not, then host-dtc kicks into
+action.
+
+ So we'd add a dependency from host-dtc to linux if BR2_LINUX_KERNEL=y, and in
+the build and install commands test if dtc is available in the kernel (testing
+$(HOST_DIR)/usr/bin/dtc isn't sufficient, because it's possible that we rebuilt
+host-dtc and then we do want to overwrite it). It's a bit kludgy but it would
+work I think.
+
+ PeterS, PeterK, what do you think?
+
+
+ That said, we don't have parallel build at the moment, and my proposed
+alternative is definitely going to be controversial, so we should probably
+accept this one as is and revisit later. So:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
  Regards,
  Arnout
+
+> 
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  linux/linux.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 045294b..f5c629c 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -339,6 +339,9 @@ define LINUX_INSTALL_HOST_TOOLS
+>  	# Installing dtc (device tree compiler) as host tool, if selected
+>  	if grep -q "CONFIG_DTC=y" $(@D)/.config; then 	\
+>  		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/linux-dtc ;	\
+> +		if [ ! -e $(HOST_DIR)/usr/bin/dtc ]; then	\
+> +			ln -sf linux-dtc $(HOST_DIR)/usr/bin/dtc ;	\
+> +		fi	\
+>  	fi
+>  endef
+>  
+> 
 
 
 -- 
