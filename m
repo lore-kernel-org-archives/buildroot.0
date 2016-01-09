@@ -1,46 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  9 Jan 2016 22:13:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vlc: disable for static-only builds
-Message-ID: <1452374016-16908-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  9 Jan 2016 22:19:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.66
+Message-ID: <1452374371-29836-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-vlc configure errors out for a non-shared build:
-http://git.videolan.org/gitweb.cgi?p=vlc.git;a=blob;f=configure.ac;h=d44151b3fb507141ce7f9b98e95fa11edcdaac01;hb=HEAD#l450
-
-Fixes
-http://autobuild.buildroot.net/results/f93/f93771b4f76b82197b930e6fde5eb7aebfe9c910/
-http://autobuild.buildroot.net/results/4af/4af880a8a8a37efd57e12e18d43183ba49f5cbe0/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vlc/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/libdrm/libdrm.hash | 4 ++--
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index e2b8da9..03e85c3 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_VLC
- 	bool "vlc"
- 	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-@@ -31,7 +32,7 @@ config BR2_PACKAGE_VLC_OPENCV3_BACKEND
- 	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 95dcd7a..948c7bf 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/dri-devel/2015-September/090394.html
+-sha256	71960ac8bde7d710992b1bc8879935e8300a870c36bd06f22412d0447e3d96c4	libdrm-2.4.65.tar.bz2
++# From http://lists.freedesktop.org/archives/dri-devel/2015-December/097697.html
++sha256	79cb8e988749794edfb2d777b298d5292eff353bbbb71ed813589e61d2bc2d76	libdrm-2.4.66.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 8db2236..8d84beb 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, wchar, threads, headers >= 3.7"
-+comment "vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, dynamic library, wchar, threads, headers >= 3.7"
- 	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-+		|| !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+-LIBDRM_VERSION = 2.4.65
++LIBDRM_VERSION = 2.4.66
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
 2.6.4
