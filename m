@@ -1,48 +1,100 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 9 Jan 2016 02:15:53 +0100
-Subject: [Buildroot] [PATCH] dropbear: add help text about key creation
-Message-ID: <1452302153-9304-1-git-send-email-arnout@mind.be>
+Date: Sat, 9 Jan 2016 02:57:40 +0100
+Subject: [Buildroot] [PATCH] support/scripts/apply-patches.sh: fix whitespace
+Message-ID: <1452304660-12393-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit e7d04dd2d replaced /etc/dropbear with a symlink to /var/run and
-updated the start scripts to replace it with a real directory, so the
-keys would be persistent. However, it turns out that this is pretty
-confusing even for expert users, who don't know how to make the keys
-really persistent now.
+The apply-patches.sh script was using a mix of tabs and spaces, and
+some three-space indentation. Normalize everything to four-space
+indentation.
 
-Update the help text explaining what the issue is, and telling the user
-to replace the /etc/dropbear symlink with a symlink to a persistent
-directory. Also mention the possiblity of unionfs.
-
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/dropbear/Config.in | 9 +++++++++
- 1 file changed, 9 insertions(+)
+This patch is a side-effect of an attempt I made to replace the bash
+patches that we carry with downloaded patches. That required a change
+to apply-patches.sh to allow patch files that don't end with .patch,
+hence this preparatory patch. But that turned out to be insufficient,
+because the upstream patches don't apply with -p1, they need -p0.
+Adding support for that was too much for me, so I gave up on downloading
+the bash patches. But at least this commit can still come out of it :-)
+---
+ support/scripts/apply-patches.sh | 50 ++++++++++++++++++++--------------------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index c14c654..d92361f 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -4,6 +4,15 @@ config BR2_PACKAGE_DROPBEAR
- 	help
- 	  A small SSH 2 server designed for small memory environments.
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index aa13e88..201278d 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -69,41 +69,41 @@ function apply_patch {
+         type="series"; uncomp="cat"
+     else
+         case "$patch" in
+-	    *.gz)
+-	    type="gzip"; uncomp="gunzip -dc"; ;;
+-	    *.bz)
+-	    type="bzip"; uncomp="bunzip -dc"; ;;
+-	    *.bz2)
+-	    type="bzip2"; uncomp="bunzip2 -dc"; ;;
+-	    *.xz)
+-	    type="xz"; uncomp="unxz -dc"; ;;
+-	    *.zip)
+-	    type="zip"; uncomp="unzip -d"; ;;
+-	    *.Z)
+-	    type="compress"; uncomp="uncompress -c"; ;;
+-	    *.diff*)
+-	    type="diff"; uncomp="cat"; ;;
+-	    *.patch*)
+-	    type="patch"; uncomp="cat"; ;;
+-	    *)
+-	    echo "Unsupported file type for ${path}/${patch}, skipping";
+-	    return 0
+-	    ;;
++            *.gz)
++            type="gzip"; uncomp="gunzip -dc"; ;;
++            *.bz)
++            type="bzip"; uncomp="bunzip -dc"; ;;
++            *.bz2)
++            type="bzip2"; uncomp="bunzip2 -dc"; ;;
++            *.xz)
++            type="xz"; uncomp="unxz -dc"; ;;
++            *.zip)
++            type="zip"; uncomp="unzip -d"; ;;
++            *.Z)
++            type="compress"; uncomp="uncompress -c"; ;;
++            *.diff*)
++            type="diff"; uncomp="cat"; ;;
++            *.patch*)
++            type="patch"; uncomp="cat"; ;;
++            *)
++            echo "Unsupported file type for ${path}/${patch}, skipping";
++            return 0
++            ;;
+         esac
+     fi
+     if [ -z "$silent" ] ; then
+-	echo ""
+-	echo "Applying $patch using ${type}: "
++        echo ""
++        echo "Applying $patch using ${type}: "
+     fi
+     if [ ! -e "${path}/$patch" ] ; then
+-	echo "Error: missing patch file ${path}/$patch"
+-	exit 1
++        echo "Error: missing patch file ${path}/$patch"
++        exit 1
+     fi
+     echo $patch >> ${builddir}/.applied_patches_list
+     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
+     if [ $? != 0 ] ; then
+         echo "Patch failed!  Please fix ${patch}!"
+-	exit 1
++        exit 1
+     fi
+ }
  
-+	  Note that dropbear requires a per-device unique host key. The
-+	  key will be generated when dropbear starts, but it is not
-+	  persistent over reboot (if you have a read-only rootfs) or
-+	  upgrade (if you have a read-write rootfs). To make the key
-+	  persistent, replace /etc/dropbear with a symlink to a
-+	  directory on a persistent, writeable filesystem.
-+	  Alternatively, mount a persistent unionfs over your root
-+	  filesystem.
-+
- 	  http://matt.ucc.asn.au/dropbear/dropbear.html
- 
- if BR2_PACKAGE_DROPBEAR
 -- 
 2.7.0.rc3
