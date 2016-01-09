@@ -1,95 +1,33 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 9 Jan 2016 10:28:38 +0100
-Subject: [Buildroot] [PATCH] python-rpi-gpio: new package
-In-Reply-To: <1452331496-20813-1-git-send-email-haylocki@yahoo.co.uk>
-References: <1452331496-20813-1-git-send-email-haylocki@yahoo.co.uk>
-Message-ID: <CAGm1_kt9bXYwqmRpmTrGzN9W5B-Fv-ZR80ctFpUgGeVO+3TceQ@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat,  9 Jan 2016 13:43:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tremor: bump to revision 19427
+Message-ID: <1452343407-7638-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 9, 2016 at 10:24 AM, Ian Haylock <haylocki@yahoo.co.uk> wrote:
-> Signed-off-by: Ian Haylock <haylocki@yahoo.co.uk>
+The revision 18153 dates from 2012-01-20. Lets update to latest changed revision
+19427 which dates from 2015-01-07.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/tremor/tremor.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-For future patches please read this section
-http://nightly.buildroot.org/manual.html#submitting-patches
-
-Your patches are missing revision number and history.
-
-Yegor
-
-> ---
->  package/Config.in                            |  1 +
->  package/python-rpi-gpio/Config.in            |  7 +++++++
->  package/python-rpi-gpio/python-rpi-gpio.hash |  3 +++
->  package/python-rpi-gpio/python-rpi-gpio.mk   | 14 ++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100755 package/python-rpi-gpio/Config.in
->  create mode 100755 package/python-rpi-gpio/python-rpi-gpio.hash
->  create mode 100755 package/python-rpi-gpio/python-rpi-gpio.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 442021f..a1cf595 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -690,6 +690,7 @@ menu "External python modules"
->         source "package/python-pyyaml/Config.in"
->         source "package/python-pyzmq/Config.in"
->         source "package/python-requests/Config.in"
-> +       source "package/python-rpi-gpio/Config.in"
->         source "package/python-rtslib-fb/Config.in"
->         source "package/python-serial/Config.in"
->         source "package/python-setuptools/Config.in"
-> diff --git a/package/python-rpi-gpio/Config.in b/package/python-rpi-gpio/Config.in
-> new file mode 100755
-> index 0000000..4f59ebd
-> --- /dev/null
-> +++ b/package/python-rpi-gpio/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_RPI_GPIO
-> +       bool "python-rpi-gpio"
-> +       depends on BR2_arm
-> +       help
-> +         A Python module to control the GPIO on a Raspberry Pi.
-> +
-> +         http://sourceforge.net/p/raspberry-gpio-python
-> diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
-> new file mode 100755
-> index 0000000..8b498f1
-> --- /dev/null
-> +++ b/package/python-rpi-gpio/python-rpi-gpio.hash
-> @@ -0,0 +1,3 @@
-> +# md5sum from http://sourceforge.net/projects/raspberry-gpio-python/files/, sha256 calculated locally
-> +md5    254d0443a436eb241367c487274e7197        RPi.GPIO-0.6.1.tar.gz
-> +sha256 54e5fb06d9ea1a1389a497fb5a06dfa950c86303b0f4ba89b68c55999d1df064        RPi.GPIO-0.6.1.tar.gz
-> diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
-> new file mode 100755
-> index 0000000..e71fdea
-> --- /dev/null
-> +++ b/package/python-rpi-gpio/python-rpi-gpio.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-rpi-gpio
-> +#
-> +################################################################################
-> +
-> +PYTHON_RPI_GPIO_VERSION = 0.6.1
-> +PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
-> +PYTHON_RPI_GPIO_SITE = http://sourceforge.net/projects/raspberry-gpio-python/files
-> +PYTHON_RPI_GPIO_LICENSE = MIT
-> +PYTHON_RPI_GPIO_LICENSE_FILES = LICENSE.txt
-> +PYTHON_RPI_GPIO_SETUP_TYPE = distutils
-> +
-> +$(eval $(python-package))
-> --
-> 2.6.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
+index 590a18c..97b0ce3 100644
+--- a/package/tremor/tremor.mk
++++ b/package/tremor/tremor.mk
+@@ -6,7 +6,7 @@
+ 
+ TREMOR_SITE = http://svn.xiph.org/trunk/Tremor
+ TREMOR_SITE_METHOD = svn
+-TREMOR_VERSION = 18153
++TREMOR_VERSION = 19427
+ TREMOR_LICENSE = BSD-3c
+ TREMOR_LICENSE_FILES = COPYING
+ 
+-- 
+2.6.4
