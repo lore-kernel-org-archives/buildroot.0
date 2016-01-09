@@ -1,62 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 9 Jan 2016 02:10:21 +0100
-Subject: [Buildroot] Persistent dropbear keys
-In-Reply-To: <87mvsgdkxy.fsf@dell.be.48ers.dk>
-References: <CAAXf6LULMusN+KRUf6D32GNx77bbB0vSayJqk03T7ouNCArhHA@mail.gmail.com>
- <87mvsgdkxy.fsf@dell.be.48ers.dk>
-Message-ID: <56905DFD.30706@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 9 Jan 2016 02:15:53 +0100
+Subject: [Buildroot] [PATCH] dropbear: add help text about key creation
+Message-ID: <1452302153-9304-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08-01-16 18:45, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
-> 
->  > Hello,
->  > Commit e7d04dd2df8bb935c61f7c814ee88eba7e75b5e4 (package/dropbear: fix
->  > generating keys on RO file systems) (+ some subsequent commits)
->  > changed the handling of the /etc/dropbear directory. Previously
->  > /etc/dropbear was a real directory in the rootfs, now it initially is
->  > a link to /var/run/dropbear. During S50dropboar, the link is replaced
->  > with a real (empty) directory (if rootfs is writable) or a warning is
->  > given.
-> 
->  > I understand all this. However, what I do not understand is how you
->  > are then creating persistent dropbear keys. From how I understand the
->  > code, the keys are persistent across reboots, but not between upgrades
->  > of the rootfs, because after an upgrade a new empty /etc/dropbear is
->  > created.
-> 
-> If your upgrade overwrites /etc/dropbear, then yes.
-> 
-> E.G. I use a persistent writable unionfs on /etc, so changes to /etc are
-> not lost after an upgrade.
-> 
-> 
->  > In my case, the rootfs is an initramfs, but mounted rw at boot time.
-> 
->  > The solution I have been using is with an S49dropbear_keys script that:
->  > - at 'stop', verifies the correctness of the keys in /etc/dropbear
->  > (with dropbearkey) and if ok copies them to a real persistent medium,
->  > - at 'start', verifies if there are any keys on the persistent medium,
->  > verify their correctness, and if ok copies them to /etc/dropbear.
-> 
-> Why don't you just make /etc/dropbear a symlink to your persistent
-> medium?
+Commit e7d04dd2d replaced /etc/dropbear with a symlink to /var/run and
+updated the start scripts to replace it with a real directory, so the
+keys would be persistent. However, it turns out that this is pretty
+confusing even for expert users, who don't know how to make the keys
+really persistent now.
 
- We should probably add some explanation in the help text about this possibility.
+Update the help text explaining what the issue is, and telling the user
+to replace the /etc/dropbear symlink with a symlink to a persistent
+directory. Also mention the possiblity of unionfs.
 
- I'll try to cook something up.
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/dropbear/Config.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-
- Regards,
- Arnout
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index c14c654..d92361f 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -4,6 +4,15 @@ config BR2_PACKAGE_DROPBEAR
+ 	help
+ 	  A small SSH 2 server designed for small memory environments.
+ 
++	  Note that dropbear requires a per-device unique host key. The
++	  key will be generated when dropbear starts, but it is not
++	  persistent over reboot (if you have a read-only rootfs) or
++	  upgrade (if you have a read-write rootfs). To make the key
++	  persistent, replace /etc/dropbear with a symlink to a
++	  directory on a persistent, writeable filesystem.
++	  Alternatively, mount a persistent unionfs over your root
++	  filesystem.
++
+ 	  http://matt.ucc.asn.au/dropbear/dropbear.html
+ 
+ if BR2_PACKAGE_DROPBEAR
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.0.rc3
