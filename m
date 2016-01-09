@@ -1,59 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Jan 2016 19:12:05 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/libgsm: new package
-In-Reply-To: <1430072810-27772-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1430072810-27772-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160109181205.GD3444@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat,  9 Jan 2016 20:37:34 +0100
+Subject: [Buildroot] [PATCH] python-requests: bump to 2.9.1
+Message-ID: <1452368254-13969-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Add missing zlib runtime dependency.
 
-On 2015-04-26 20:26 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v3: - fixed typo
-> v2: - added hash
->     - updated 0001-cross.patch to reflect libgsm version
->     - added license info (Thomas)
->     - optimized license infos (Thomas)
-> 
->  package/Config.in               |    1 +
->  package/libgsm/0001-cross.patch |  205 +++++++++++++++++++++++++++++++++++++++
->  package/libgsm/Config.in        |    6 ++
->  package/libgsm/libgsm.hash      |    2 +
->  package/libgsm/libgsm.mk        |   41 ++++++++
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-requests/Config.in            | 2 ++
+ package/python-requests/python-requests.hash | 6 +++---
+ package/python-requests/python-requests.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-So I had a look at this, and I am a bit sceptical...
-
-If the intent was to use libgsm with Asterisk, then I think there is a
-bit of a confusion in my head (and probably a lot of confusion in
-Asterisk) because:
-
-  - Asterisk comes with its own bundled version of libgsm
-
-  - I was not able to tel Asterisk to use the libgsm from the system
-    (i.e. it insisted on either using the budled version, or completely
-    failed to configure (or build?, I can't recall...))
-
-So, I',m not sure what the intent for this package was, but if was only
-to be used by Asterisk, then it is not currently possible to do so...
-
-If it was meant to provide libgsm globaly, wihtout just Asterisk in
-mind, then I'll do a proper review of it later.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
+index 3367cf0..23ab309 100644
+--- a/package/python-requests/Config.in
++++ b/package/python-requests/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_REQUESTS
+ 	bool "python-requests"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+ 	help
+ 	  Requests is an Apache2 Licensed HTTP library, written in
+ 	  Python, for human beings.
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index d187dcd..b567fe6 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=02214b3a179e445545de4b7a98d3dd17, sha256 locally computed
+-md5	02214b3a179e445545de4b7a98d3dd17  requests-2.4.3.tar.gz
+-sha256	53c68313c5c6149b1a899234c000296e60a8900682accf73d6f0c6d608afc6b1  requests-2.4.3.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0b7f480d19012ec52bab78292efd976d, sha256 locally computed
++md5	0b7f480d19012ec52bab78292efd976d  requests-2.9.1.tar.gz
++sha256	c577815dd00f1394203fc44eb979724b098f88264a9ef898ee45b8e5e9cf587f  requests-2.9.1.tar.gz
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 5c12f1b..8cda2c5 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_REQUESTS_VERSION = 2.4.3
++PYTHON_REQUESTS_VERSION = 2.9.1
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+ PYTHON_REQUESTS_SITE = http://pypi.python.org/packages/source/r/requests
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
