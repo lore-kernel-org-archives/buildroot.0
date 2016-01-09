@@ -1,42 +1,31 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  9 Jan 2016 20:42:28 +0100
-Subject: [Buildroot] [PATCH 2/2] package/lttng-modules: bump to version 2.7.1
-In-Reply-To: <1452368548-5465-1-git-send-email-s.martin49@gmail.com>
-References: <1452368548-5465-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1452368548-5465-2-git-send-email-s.martin49@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 09 Jan 2016 20:42:41 +0100
+Subject: [Buildroot] [RFC 1/1] package/asterisk: new package
+References: <1430068623-2118-1-git-send-email-bernd.kuhls@t-online.de>
+ <1430068623-2118-2-git-send-email-bernd.kuhls@t-online.de>
+ <20160109173811.GB3444@free.fr>
+Message-ID: <he48mcxnur.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/lttng-modules/lttng-modules.hash | 4 ++--
- package/lttng-modules/lttng-modules.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Yann,
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index b94d910..2d50287 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
-@@ -1,2 +1,2 @@
--# http://www.lttng.org/files/lttng-modules/lttng-modules-2.7.0.tar.bz2.sha1
--sha1  b98b85cd71c03d511b37790644353c7209bcadd4  lttng-modules-2.7.0.tar.bz2
-+# from http://lttng.org/files/lttng-tools/lttng-modules-2.7.1.tar.bz2.sha1
-+sha1  38c42ec89b4966c7a4cc04aea75f5841634d8d66  lttng-modules-2.7.1.tar.bz2
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index a4e1461..5d0c422 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTTNG_MODULES_VERSION = 2.7.0
-+LTTNG_MODULES_VERSION = 2.7.1
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
--- 
-2.7.0
+Am Sat, 09 Jan 2016 18:38:11 +0100 schrieb Yann E. MORIN:
+
+> Following a recent discussion on IRC, I've had a look at this monster
+> patch to add Asterisk.
+> 
+> It turns out that Thomas already had a much, much simpler patch to add
+> Asterisk, but it was definitely not in shape to be sent. So I took the
+> job of looking at this asterisk stuff, and started from scratch.
+
+after switching to Freeswitch
+
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/125731/
+
+I lost interest in Asterisk, so go ahead ;)
+
+Regards, Bernd
