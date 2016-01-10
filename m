@@ -1,21 +1,15 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jan 2016 21:59:29 +0100
-Subject: [Buildroot] [PATCH v5 13/29] package/freeswitch: enable mod_av,
-	add optional dependencies to ffmpeg, libvpx & libyuv
+Date: Sun, 10 Jan 2016 21:59:44 +0100
+Subject: [Buildroot] [PATCH v5 28/29] package/freeswitch: enable
+	mod_memcache, add optional dependency to libmemcached
 In-Reply-To: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452459585-7085-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452459585-7085-29-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-mod_av delivers native support for these video codecs:
-
-codec,H263 Video,mod_av
-codec,H263+ Video,mod_av
-codec,H264 Video,mod_av
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
@@ -23,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 23b31c9..439de3e 100644
+index 71b5ad6..05d79c1 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -118,6 +118,11 @@ endef
+@@ -182,6 +182,11 @@ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
+ endif
  
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyyy)
-+FREESWITCH_DEPENDENCIES += ffmpeg libvpx libyuv
-+FREESWITCH_ENABLED_MODULES += applications/mod_av
++ifeq ($(BR2_PACKAGE_LIBMEMCACHED),y)
++FREESWITCH_DEPENDENCIES += libmemcached
++FREESWITCH_ENABLED_MODULES += applications/mod_memcache
 +endif
 +
- ifeq ($(BR2_PACKAGE_FREESWITCH_ZRTP),y)
- FREESWITCH_CONF_OPTS += --enable-zrtp
- else
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ FREESWITCH_DEPENDENCIES += libpng
+ FREESWITCH_ENABLED_MODULES += formats/mod_png
 -- 
 2.6.4
