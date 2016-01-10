@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jan 2016 21:59:39 +0100
-Subject: [Buildroot] [PATCH v5 23/29] package/freeswitch: enable mod_sndfile,
-	add optional dependency to libsndfile
+Date: Sun, 10 Jan 2016 21:59:35 +0100
+Subject: [Buildroot] [PATCH v5 19/29] package/freeswitch: enable mod_isac
 In-Reply-To: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452459585-7085-24-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452459585-7085-20-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,43 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freeswitch/Config.in     | 10 ++++++++++
+ package/freeswitch/freeswitch.mk |  4 ++++
+ 2 files changed, 14 insertions(+)
 
+diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
+index 48f7983..01463a9 100644
+--- a/package/freeswitch/Config.in
++++ b/package/freeswitch/Config.in
+@@ -45,4 +45,14 @@ config BR2_PACKAGE_FREESWITCH_ZRTP
+ 
+ 	  https://wiki.freeswitch.org/wiki/ZRTP
+ 
++config BR2_PACKAGE_FREESWITCH_ISAC
++	bool "isac"
++	# no aarch64/armeb support in src/mod/codecs/mod_isac/typedefs.h
++	depends on !BR2_aarch64 && !BR2_armeb
++	help
++	  iSAC is a HD codec kit similar to G.722 anthony extracted iSAC
++	  codec from WebRTC project and built mod_iSAC on top of it.
++
++	  https://freeswitch.org/confluence/display/FREESWITCH/mod_isac
++
+ endif # BR2_PACKAGE_FREESWITCH
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 08bf693..abaeb81 100644
+index 23ca1aa..3e4c83d 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -208,6 +208,11 @@ FREESWITCH_DEPENDENCIES += libsilk
- FREESWITCH_ENABLED_MODULES += codecs/mod_silk
+@@ -123,6 +123,10 @@ FREESWITCH_DEPENDENCIES += ffmpeg libvpx libyuv
+ FREESWITCH_ENABLED_MODULES += applications/mod_av
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
-+FREESWITCH_DEPENDENCIES += libsndfile
-+FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
++ifeq ($(BR2_PACKAGE_FREESWITCH_ISAC),y)
++FREESWITCH_ENABLED_MODULES += codecs/mod_isac
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_FREESWITCH_ZRTP),y)
+ FREESWITCH_CONF_OPTS += --enable-zrtp
+ else
 -- 
 2.6.4
