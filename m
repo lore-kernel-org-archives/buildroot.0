@@ -1,61 +1,90 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 10 Jan 2016 15:50:01 +0100
-Subject: [Buildroot] [PATCH] perl: bump to version 5.22.1
-Message-ID: <1452437401-509-1-git-send-email-francois.perrad@gadz.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 10 Jan 2016 16:36:50 +0100
+Subject: [Buildroot] [PATCH 1/2] scanpypi: new utility
+In-Reply-To: <20160110105950.GA3460@free.fr>
+References: <1438089330-18923-1-git-send-email-denis.thulin@openwide.fr>
+ <20160110105950.GA3460@free.fr>
+Message-ID: <56927A92.50804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.hash | 10 +++++-----
- package/perl/perl.mk   |  8 ++++----
- 2 files changed, 9 insertions(+), 9 deletions(-)
+On 10-01-16 11:59, Yann E. MORIN wrote:
+> Denis, All,
+> 
+> Sorry for the long delay. I'm now having a look at this patch.
+> 
+> On 2015-07-28 15:15 +0200, Denis THULIN spake thusly:
+>> An utility for creating python package from the python package index
+>> It fetches packages info from http://pypi.python.org and generates
+>> corresponding packages files.
+> 
+> So, we currently have scancpan to create perl packages. You are adding
+> scanpypi to create Python packages. There's also someone who submitted
+> a script to generate a 'generic' package (i.e. not perl/python) [0].
+> The scancpan is written in perl, yours and the generic one in Python.
+> 
+> Besides Perl and Python, we also have nodejs which provides a similar
+> "package-store" and for which it would become interesting to provide a
+> helper script to generate packages [1].
+> 
+> What I would love to see is that we have a single script to add
+> packages. Something like:
+> 
+>     $ ./support/script/add-package -t TYPE [OPTS] PKG [PKG...]
+> 
+> with TYPE being one of the package types we currently have (generic,
+> autotools... python, perl...) or an abstract type (nodejs...).
+> 
+> Then, the cpan, pypi, nodejs... script would be just 'backends' that
+> would provide classes called by the main script, like;
+> 
+>     pkg = new PythonPkg("foo")
+>     pkg.get_br_name()       returns the BR2_PACKAGE_ name
+>     pkg.get_version()       returns the _VERSION string
+>     pkg.get_source()        returns the _SOURCE string
+>     pkg.get_site()          returns the _SITE string
+>     pkg.get_method()        returns the _SITE_METHOD string
+>     pkg.get_dependencies()  returns the _DEPENDENCIES list
+>     ... and so on, you get the idea. ;-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 76e959c..3f1bd1a 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.22.0.tar.bz2.{md5,sha1,sha256}.txt
--md5    f67b152160431b3180fb766bdc2d02e2                                 perl-5.22.0.tar.bz2
--sha1   400338c91c56420d98142cbfcb84d418cae2c98c                         perl-5.22.0.tar.bz2
--sha256 3689fdb519133d039f49e12834764ff4c1de8f8d925dea44a952ca110d0ac9f7 perl-5.22.0.tar.bz2
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.22.1.tar.bz2.{md5,sha1,sha256}.txt
-+md5    67242b9bd642b458bec884ed2a040910                                 perl-5.22.1.tar.bz2
-+sha1   29f9b320b0299577a3e1d02e9e8ef8f26f160332                         perl-5.22.1.tar.bz2
-+sha256 e98e4075a3167fa40524abe447c30bcca10c60e02a54ee1361eff278947a1221 perl-5.22.1.tar.bz2
- 
- # No upstream hashes for the following
--sha256 2f972534820b028da92400e25dfcaab155232e3b118e2f91a5b63c624b49f5e8 perl-5.22.0-cross-1.0.1.tar.gz
-+sha256 250ab6e6c034a8b7ae447fa2b453fa0b61ebb7db4d039eba60c52e44ab5899bd perl-5.22.1-cross-1.0.2.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index f3b7b2b..0bd10ad 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -5,17 +5,17 @@
- ################################################################################
- 
- PERL_VERSION_MAJOR = 22
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
- PERL_LICENSE = Artistic or GPLv1+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.0.1
--PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
-+PERL_CROSS_VERSION = 1.0.2
-+PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
- # DO NOT refactor with the github helper (the result is not the same)
--PERL_CROSS_SITE = http://raw.github.com/arsv/perl-cross/releases
-+PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
- PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
- 
+ However, it is more natural for a CPAN-accessor to be written in perl. So I
+guess the backend scripts should be really independent scripts that report the
+package metadata in a specified format. Hm, you know what, let's use Config.in
+and pkg.mk as the specification!
+
+ In short, I'm not so convinced that having everything written in the same
+language is such an advantage.
+
+ But of course, if someone shows me the patches, I could change my mind.
+
+
+ Regards,
+ Arnout
+
+
+> That would also recursively generate the packages for the dependencies,
+> if not already present.
+> 
+> Of course, that would mean we'd have to standardise on a single
+> language. I think Python is the way to go here.
+> 
+> Would you be interested in pursuing this?
+> 
+> [0] https://patchwork.ozlabs.org/patch/523257/
+> [1] that could also require a nodejs-package infra, but not necessarily.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
 -- 
-2.5.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
