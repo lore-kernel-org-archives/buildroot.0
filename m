@@ -1,54 +1,80 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 10 Jan 2016 18:58:06 +0100
-Subject: [Buildroot] [PATCH] uclibc: update uClibc-ng to latest version
-	1.0.11
-Message-ID: <20160110175806.GA23441@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Jan 2016 19:58:23 +0100
+Subject: [Buildroot] [PATCH] [RFC] DO NOT APPLY Remove usr/ component
+ from HOST_DIR
+In-Reply-To: <1444914910-5370-1-git-send-email-arnout@mind.be>
+References: <1444914910-5370-1-git-send-email-arnout@mind.be>
+Message-ID: <20160110185823.GB9022@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to 1.0.11. Contains a lot of bugfixes
-and some new features:
- * mips{32r6,64r6} enablement
- * argp support
- * support for very simple /etc/gai.conf
- * Xtensa nommu vfork fix
- * systemd portability fixes
+Arnout, All,
 
-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+On 2015-10-15 15:15 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> We currently use $(HOST_DIR)/usr as the prefix for host packages. That
+> has a few disadvantages:
+> 
+> - There are some things installed in $(HOST_DIR)/etc and
+>   $(HOST_DIR)/sbin, which is inconsistent.
+> 
+> - To pack a buildroot-built toolchain into a tarball for use as an
+>   external toolchain, you have to pack output/host/usr instead of the
+>   more obvious output/host.
+> 
+> - Because of the above, the internal toolchain wrapper breaks which
+>   forces us to work around it (call the actual toolchain executable
+>   directly). This is OK for us, but when used in another build system,
+>   that's a problem.
+> 
+> - Paths are four characters longer.
+> 
+> This patch replaces all occurences of 'host/usr' (in its various forms)
+> with 'host', and updates relative paths accordingly.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> I did not review the change or test it beyond just building busybox
+> with an internal and external toolchain. Hence the RFC status.
+> I still added my Sob in case anyone wants to take over (you know how
+> long it takes me to actually finish anything :-)
+> 
+> As an example of why more verification is needed: the genromfs package
+> was using PREFIX together with the default /usr prefix, so the
+> automatic replacement missed that occurence.
+> 
+> It would be possible to submit this as separate patches (though
+> obviously that's more work, since you have to make sure that the
+> dependencies are done right, e.g. when moving python then everything
+> that calls python should also move). Would this be useful?
 
----
- package/uclibc/Config.in   |    2 +-
- package/uclibc/uclibc.hash |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Well, we could it step byt step, adding a symlink host/usr -> . so that
+we have things available from both locations.
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 9ebec70..1e4d892 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -57,7 +57,7 @@ config BR2_USE_UCLIBC_SNAPSHOT
- config BR2_UCLIBC_VERSION_STRING
- 	string
- 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
--	default "1.0.9"		if BR2_UCLIBC_VERSION_NG
-+	default "1.0.11"		if BR2_UCLIBC_VERSION_NG
- 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
- config BR2_UCLIBC_CONFIG
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 00e3389..9acb82e 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -2,7 +2,7 @@
- sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
- 
- # From http://www.uclibc-ng.org/
--sha256  08be8dd22ac0c3806add88b813129fb3014437eddc9d78fc73eba7f33c4b4a9d        uClibc-ng-1.0.9.tar.xz
-+sha256  2fdc6b9015f8049be0eb12a5e3e446de471fb80061115afd8d72ea582cb22b74        uClibc-ng-1.0.11.tar.xz
- 
- # No hash for this git snapshot
- none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
+Then we can fix packages one by one, until there's no more offenders.
+
+However, I think we should ultimately keep the host/usr symlinks, if at
+least to provide backward compatibility with external packages (like
+br2-external).
+
+We can later remove the symlink and add a post-install step-hook (those
+you do not like that much! ;-) ) to check if any package creates /usr
+and warn users.
+
+Iltimately, in a few years, we can turn that warnoing into an actual
+error.
+
+What do you think of that?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
