@@ -1,49 +1,55 @@
 From: Doug Kehn <rdkehn@yahoo.com>
-Date: Sun, 10 Jan 2016 15:25:07 -0600
-Subject: [Buildroot] [RFC PATCH v2 2/4] package/dhcp: add bind configure
-	options for cross compiling
+Date: Sun, 10 Jan 2016 15:25:08 -0600
+Subject: [Buildroot] [RFC PATCH v2 3/4] package/dhcp: ensure host cc is used
+	for compiling gen
 In-Reply-To: <1452461109-27498-1-git-send-email-rdkehn@yahoo.com>
 References: <1452461109-27498-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <1452461109-27498-3-git-send-email-rdkehn@yahoo.com>
+Message-ID: <1452461109-27498-4-git-send-email-rdkehn@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch is derived from:
+http://wiki.beyondlogic.org/patches/dhcp-4.3.0b1.bind_arm-linux-gnueabi.patch
+
 Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 ---
 Changes v1 -> v2
   - no changes
 ---
- package/dhcp/0001-bind-configure.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/dhcp/0001-bind-configure.patch
+ package/dhcp/0002-dhcp-bind-host-gen.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/dhcp/0002-dhcp-bind-host-gen.patch
 
-diff --git a/package/dhcp/0001-bind-configure.patch b/package/dhcp/0001-bind-configure.patch
+diff --git a/package/dhcp/0002-dhcp-bind-host-gen.patch b/package/dhcp/0002-dhcp-bind-host-gen.patch
 new file mode 100644
-index 0000000..a4d4a89
+index 0000000..0a33693
 --- /dev/null
-+++ b/package/dhcp/0001-bind-configure.patch
-@@ -0,0 +1,19 @@
-+add bind configure options for cross compiling
++++ b/package/dhcp/0002-dhcp-bind-host-gen.patch
+@@ -0,0 +1,22 @@
++ensure host cc is used for compiling gen
++
++This patch is derived from:
++http://wiki.beyondlogic.org/patches/dhcp-4.3.0b1.bind_arm-linux-gnueabi.patch
 +
 +Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 +
-+Index: dhcp-4.3.3/bind/Makefile.in
++Index: dhcp-4.3.3/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
 +===================================================================
-+--- dhcp-4.3.3.orig/bind/Makefile.in
-++++ dhcp-4.3.3/bind/Makefile.in
-+@@ -30,7 +30,9 @@ bindconfig = --disable-kqueue --disable-
-+ 	--without-openssl --without-libxml2 --enable-exportlib \
-+ 	--with-gssapi=no --enable-threads=no @BINDCONFIG@ \
-+ 	--with-export-includedir=${binddir}/include \
-+-	--with-export-libdir=${binddir}/lib
-++	--with-export-libdir=${binddir}/lib \
-++	--target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-++	--build=$(GNU_HOST_NAME) --with-randomdev=/dev/urandom
++--- dhcp-4.3.3.orig/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
+++++ dhcp-4.3.3/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
++@@ -168,7 +168,9 @@ code.h:	gen
++ 	./gen -s ${srcdir} > code.h
 + 
-+ @BIND_ATF_FALSE at cleandirs = ./lib ./include
-+ @BIND_ATF_TRUE at cleandirs = ./lib ./include ./atf
++ gen: ${srcdir}/gen.c
++-	${CC} ${ALL_CFLAGS} ${LDFLAGS} -o $@ ${srcdir}/gen.c ${LIBS}
+++	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
+++		${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c \
+++		${BUILD_LIBS}
++ 
++ #We don't need rbtdb64 for this library
++ #rbtdb64. at O@: rbtdb.c
 -- 
 2.6.4
