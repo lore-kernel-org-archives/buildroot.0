@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jan 2016 21:59:41 +0100
-Subject: [Buildroot] [PATCH v5 25/29] package/freeswitch: enable
-	mod_soundtouch, add optional dependency to libsoundtouch
+Date: Sun, 10 Jan 2016 21:59:43 +0100
+Subject: [Buildroot] [PATCH v5 27/29] package/freeswitch: enable mod_imagick,
+	add optional dependencies to imagemagick, libvpx & libyuv
 In-Reply-To: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452459585-7085-26-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452459585-7085-28-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index e320916..f5c81c5 100644
+index 399a6c3..71b5ad6 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -218,6 +218,11 @@ FREESWITCH_DEPENDENCIES += libsndfile
- FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
+@@ -146,6 +146,11 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ FREESWITCH_DEPENDENCIES += freetype
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSOUNDTOUCH),y)
-+FREESWITCH_DEPENDENCIES += libsoundtouch
-+FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
++ifeq ($(BR2_PACKAGE_IMAGEMAGICK)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyy)
++FREESWITCH_DEPENDENCIES += imagemagick libvpx libyuv
++FREESWITCH_ENABLED_MODULES += formats/mod_imagick
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_LIBBROADVOICE),y)
+ FREESWITCH_DEPENDENCIES += libbroadvoice
+ FREESWITCH_ENABLED_MODULES += codecs/mod_bv
 -- 
 2.6.4
