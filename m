@@ -1,83 +1,176 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 10 Jan 2016 16:36:50 +0100
-Subject: [Buildroot] [PATCH 1/2] scanpypi: new utility
-In-Reply-To: <20160110105950.GA3460@free.fr>
-References: <1438089330-18923-1-git-send-email-denis.thulin@openwide.fr>
- <20160110105950.GA3460@free.fr>
-Message-ID: <56927A92.50804@mind.be>
+Date: Sun, 10 Jan 2016 16:58:58 +0100
+Subject: [Buildroot] [PATCH] package/inetutils: new package
+In-Reply-To: <1452433036-23866-1-git-send-email-yann.morin.1998@free.fr>
+References: <1452433036-23866-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <56927FC2.70304@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10-01-16 11:59, Yann E. MORIN wrote:
-> Denis, All,
+On 10-01-16 14:37, Yann E. MORIN wrote:
+> From: Karoly Kasza <kaszak@gmail.com>
 > 
-> Sorry for the long delay. I'm now having a look at this patch.
+> GNU Inetutils is a collection of common network programs.
 > 
-> On 2015-07-28 15:15 +0200, Denis THULIN spake thusly:
->> An utility for creating python package from the python package index
->> It fetches packages info from http://pypi.python.org and generates
->> corresponding packages files.
+> Clients included:
+> dnsdomainname, ftp, hostname, ifconfig, logger, ping, ping6, rcp,
+> rexec, rlogin, rsh, talk, telnet, tftp, traceroute, whois
 > 
-> So, we currently have scancpan to create perl packages. You are adding
-> scanpypi to create Python packages. There's also someone who submitted
-> a script to generate a 'generic' package (i.e. not perl/python) [0].
-> The scancpan is written in perl, yours and the generic one in Python.
+> Servers included:
+> ftpd, inetd, rexecd, rlogind, rshd, syslogd, talkd, telnetd, tftpd,
+> uucpd
 > 
-> Besides Perl and Python, we also have nodejs which provides a similar
-> "package-store" and for which it would become interesting to provide a
-> helper script to generate packages [1].
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> [yann.morin.1998 at free.fr:
+>   - rebase
+>   - update version
+>   - use ifeq-endif for all tools
+>   - ifconfig needs its special post-install hook
+>   - use $(foreach) to move/delete programs
+>   - only move programs if not using merged /usr
+>   - don't check before moving/deleting
+>   - chmod +x moved programs
+>   - remove IPv6 dependency
+>   - no 'default y'
+>   - add homepage
+> ]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> What I would love to see is that we have a single script to add
-> packages. Something like:
+> ---
+> Changes v1 -> v2:
+>   - rebase and all the changes in the commit log
 > 
->     $ ./support/script/add-package -t TYPE [OPTS] PKG [PKG...]
-> 
-> with TYPE being one of the package types we currently have (generic,
-> autotools... python, perl...) or an abstract type (nodejs...).
-> 
-> Then, the cpan, pypi, nodejs... script would be just 'backends' that
-> would provide classes called by the main script, like;
-> 
->     pkg = new PythonPkg("foo")
->     pkg.get_br_name()       returns the BR2_PACKAGE_ name
->     pkg.get_version()       returns the _VERSION string
->     pkg.get_source()        returns the _SOURCE string
->     pkg.get_site()          returns the _SITE string
->     pkg.get_method()        returns the _SITE_METHOD string
->     pkg.get_dependencies()  returns the _DEPENDENCIES list
->     ... and so on, you get the idea. ;-)
+> ---
+> Note: this patch won't be applicable using pwclient, as it contains a ^L
+> character which makes the python xml stack barf like a student during a
+> spring break.
 
- However, it is more natural for a CPAN-accessor to be written in perl. So I
-guess the backend scripts should be really independent scripts that report the
-package metadata in a specified format. Hm, you know what, let's use Config.in
-and pkg.mk as the specification!
+ :-) I'll snip that away then.
 
- In short, I'm not so convinced that having everything written in the same
-language is such an advantage.
+[snip]
+> diff --git a/package/inetutils/Config.in b/package/inetutils/Config.in
+> new file mode 100644
+> index 0000000..8e0658b
+> --- /dev/null
+> +++ b/package/inetutils/Config.in
+> @@ -0,0 +1,162 @@
+> +menuconfig BR2_PACKAGE_INETUTILS
+> +	bool "inetutils"
+> +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 
- But of course, if someone shows me the patches, I could change my mind.
+ It's not a policy I'm fond of, but we currently have all of these in
+package/Config.in.
+
+ That said, I don't think it should depend on show others because some of the
+tools don't exist in busybox (at least rshd, maybe others). And I don't like the
+show others anyway, so I prefer to leave it out as much as possible :-)
+
+> +	depends on BR2_USE_WCHAR
+> +	help
+> +	  GNU Inetutils is a collection of common network programs.
+> +
+> +	  Clients included:
+> +	  dnsdomainname, ftp, hostname, ifconfig, logger, ping, ping6, rcp,
+> +	  rexec, rlogin, rsh, talk, telnet, tftp, traceroute, whois
+> +
+> +	  Servers included:
+> +	  ftpd, inetd, rexecd, rlogind, rshd, syslogd, talkd, telnetd, tftpd,
+> +	  uucpd
+> +
+> +	  https://www.gnu.org/software/inetutils/
+> +
+> +if BR2_PACKAGE_INETUTILS
+> +
+> +comment "Clients"
+
+ Not sure if it's really worthwhile to make all of these selectable. If you want
+it small, use busybox, no? But now that it's there, why not.
+
+[snip]
+> diff --git a/package/inetutils/inetutils.mk b/package/inetutils/inetutils.mk
+> new file mode 100644
+> index 0000000..05a8be1
+> --- /dev/null
+> +++ b/package/inetutils/inetutils.mk
+> @@ -0,0 +1,185 @@
+> +################################################################################
+> +#
+> +# inetutils
+> +#
+> +################################################################################
+> +
+> +INETUTILS_VERSION = 1.9.4
+> +INETUTILS_SITE = $(BR2_GNU_MIRROR)/inetutils
+> +INETUTILS_SOURCE = inetutils-$(INETUTILS_VERSION).tar.xz
+> +INETUTILS_LICENSE = GPLv3
+
+ GPLv3+ actually.
+
+> +INETUTILS_LICENSE_FILES = COPYING
+> +
+> +# libexecdir is defined to have the daemons installed in /usr/sbin instead of /usr/libexec
+> +INETUTILS_CONF_OPTS = --libexecdir=/usr/sbin
+> +
+[snip]
+> +ifeq ($(BR2_PACKAGE_INETUTILS_PING),y)
+> +INETUTILS_CONF_OPTS += --enable-ping
+> +INETUTILS_USR_BINS_MOVE += ping
+> +INETUTILS_PERMISSIONS += /bin/ping f 4755 0 0 - - - - -$(sep)
+
+ AFAICS (didn't test), this should be sufficient and the chmod +x shouldn't be
+needed, no? All the executables that don't require suid are installed correctly
+I think.
+
+> +endif
+[snip]
+> +ifneq ($(BR2_ROOTFS_MERGED_USR),y)
+> +
+> +# Move binaries to proper path (possibly overwriting other utility versions)
+> +define INETUTILS_MOVE_PROPER_PATH
+> +	$(foreach fname,$(INETUTILS_USR_BINS_MOVE),\
+> +		mv -f $(TARGET_DIR)/usr/bin/$(fname) $(TARGET_DIR)/bin/$(fname)$(sep)\
+> +		chmod +x $(TARGET_DIR)/bin/$(fname)$(sep))
+
+ If the chmod is needed:
+
+- the .mk file should have a comment about it;
+
+- it should be done for the merged usr case as well.
+
+> +	$(foreach fname,$(INETUTILS_USR_SBINS_MOVE),\
+> +		mv -f $(TARGET_DIR)/usr/sbin/$(fname) $(TARGET_DIR)/sbin/$(fname)$(sep)\
+> +		chmod +x $(TARGET_DIR)/sbin/$(fname)$(sep))
+> +endef
+> +INETUTILS_POST_INSTALL_TARGET_HOOKS += INETUTILS_MOVE_PROPER_PATH
+> +
+> +endif # Merged /usr
+> +
+> +# Remove iputils and rshd-redone utilities to avoid multiply installed tools
+> +define INETUTILS_REMOVE_REDUNDANT_TOOLS
+> +	$(foreach fname,$(INETUTILS_DEL_OTHER),\
+> +		rm -f $(TARGET_DIR)/usr/sbin/in.$(fname)$(sep))
+
+ IMHO it would have been better to add in.foo in _DEL_OTHER rather than adding
+it here.
+
+ Also, instead of a loop, I think this is better:
+
+	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,$(INETUTILS_DEL_OTHER))
+
+(note that rm -f with no files is allowed).
+
 
 
  Regards,
  Arnout
 
-
-> That would also recursively generate the packages for the dependencies,
-> if not already present.
-> 
-> Of course, that would mean we'd have to standardise on a single
-> language. I think Python is the way to go here.
-> 
-> Would you be interested in pursuing this?
-> 
-> [0] https://patchwork.ozlabs.org/patch/523257/
-> [1] that could also require a nodejs-package infra, but not necessarily.
-> 
-> Regards,
-> Yann E. MORIN.
+> +endef
+> +INETUTILS_POST_INSTALL_TARGET_HOOKS += INETUTILS_REMOVE_REDUNDANT_TOOLS
+> +
+> +$(eval $(autotools-package))
 > 
 
 
