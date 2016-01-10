@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jan 2016 21:59:43 +0100
-Subject: [Buildroot] [PATCH v5 27/29] package/freeswitch: enable mod_imagick,
-	add optional dependencies to imagemagick, libvpx & libyuv
+Date: Sun, 10 Jan 2016 21:59:39 +0100
+Subject: [Buildroot] [PATCH v5 23/29] package/freeswitch: enable mod_sndfile,
+	add optional dependency to libsndfile
 In-Reply-To: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452459585-7085-28-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452459585-7085-24-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 399a6c3..71b5ad6 100644
+index 08bf693..abaeb81 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -146,6 +146,11 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- FREESWITCH_DEPENDENCIES += freetype
+@@ -208,6 +208,11 @@ FREESWITCH_DEPENDENCIES += libsilk
+ FREESWITCH_ENABLED_MODULES += codecs/mod_silk
  endif
  
-+ifeq ($(BR2_PACKAGE_IMAGEMAGICK)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyy)
-+FREESWITCH_DEPENDENCIES += imagemagick libvpx libyuv
-+FREESWITCH_ENABLED_MODULES += formats/mod_imagick
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++FREESWITCH_DEPENDENCIES += libsndfile
++FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBBROADVOICE),y)
- FREESWITCH_DEPENDENCIES += libbroadvoice
- FREESWITCH_ENABLED_MODULES += codecs/mod_bv
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.6.4
