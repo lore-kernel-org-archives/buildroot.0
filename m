@@ -1,58 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jan 2016 18:09:23 +0100
-Subject: [Buildroot] [PATCH 1/1] lxc needs gzip scripts for
- lxc-checkconfig runtime
-In-Reply-To: <20150920230136.513b491c@free-electrons.com>
-References: <1442761327-18830-1-git-send-email-yba@tkos.co.il>
- <20150920190622.3f7278c3@free-electrons.com>
- <alpine.DEB.2.02.1509202012390.13941@orcam81.orcam.lan>
- <20150920230136.513b491c@free-electrons.com>
-Message-ID: <20160110170922.GH3460@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 10 Jan 2016 18:58:06 +0100
+Subject: [Buildroot] [PATCH] uclibc: update uClibc-ng to latest version
+	1.0.11
+Message-ID: <20160110175806.GA23441@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Jonathan, All,
+Update to 1.0.11. Contains a lot of bugfixes
+and some new features:
+ * mips{32r6,64r6} enablement
+ * argp support
+ * support for very simple /etc/gai.conf
+ * Xtensa nommu vfork fix
+ * systemd portability fixes
 
-On 2015-09-20 23:01 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 20 Sep 2015 20:15:02 +0300 (IDT), Jonathan Ben Avraham wrote:
-> 
-> > I wondered whether to send a patch for each 'select' individually or to 
-> > wait until I complete my testing and submit a single patch with all of the 
-> > lxc selects. What do you prefer?
-> 
-> Both solutions are fine with me. You can send patches as you
-> progressively discover the issues, or send a single patch fixing all
-> problems at once.
-> 
-> I'm just wondering if we want to make all these dependencies actually
-> mandatory or not. It seems some of these dependencies are only used for
-> one specific tool in LXC. If the tool is not crucial in LXC usage,
-> maybe we should make it optional via a sub-option? I'm not sure here,
-> just thinking out loud.
+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
 
-Well, lxc is already in the 'server-class' software, probably to run a
-bunch of containers, themselves in the 'bloatware-class'.
+---
+ package/uclibc/Config.in   |    2 +-
+ package/uclibc/uclibc.hash |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So, the overhead of having gzip is probably insignifiant in the face of
-the size of the rest of the system.
-
-So, I'm OK with selecting gzip unconditionally.
-
-However, I would not want to force-select BB_SHOW_OTHERS, even though we
-already do it in three locations. Well, damn be it, just select both.
-
-Jonathan, care to fix and respin, please?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 9ebec70..1e4d892 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -57,7 +57,7 @@ config BR2_USE_UCLIBC_SNAPSHOT
+ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
+-	default "1.0.9"		if BR2_UCLIBC_VERSION_NG
++	default "1.0.11"		if BR2_UCLIBC_VERSION_NG
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+ 
+ config BR2_UCLIBC_CONFIG
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 00e3389..9acb82e 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -2,7 +2,7 @@
+ sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
+ 
+ # From http://www.uclibc-ng.org/
+-sha256  08be8dd22ac0c3806add88b813129fb3014437eddc9d78fc73eba7f33c4b4a9d        uClibc-ng-1.0.9.tar.xz
++sha256  2fdc6b9015f8049be0eb12a5e3e446de471fb80061115afd8d72ea582cb22b74        uClibc-ng-1.0.11.tar.xz
+ 
+ # No hash for this git snapshot
+ none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
