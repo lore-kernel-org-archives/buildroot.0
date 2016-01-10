@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jan 2016 21:59:32 +0100
-Subject: [Buildroot] [PATCH v5 16/29] package/freeswitch: enable mod_codec2,
-	add optional dependency to libcodec2
+Date: Sun, 10 Jan 2016 21:59:27 +0100
+Subject: [Buildroot] [PATCH v5 11/29] package/freeswitch: enable mod_lua,
+	add optional dependency to lua
 In-Reply-To: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452459585-7085-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452459585-7085-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452459585-7085-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 754d1f9..5ad2bbb 100644
+index cfca0fa..9e0d812 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -138,6 +138,11 @@ FREESWITCH_DEPENDENCIES += libbroadvoice
- FREESWITCH_ENABLED_MODULES += codecs/mod_bv
+@@ -150,6 +150,11 @@ FREESWITCH_DEPENDENCIES += libyaml
+ FREESWITCH_ENABLED_MODULES += languages/mod_yaml
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBCODEC2),y)
-+FREESWITCH_DEPENDENCIES += libcodec2
-+FREESWITCH_ENABLED_MODULES += codecs/mod_codec2
++ifeq ($(BR2_PACKAGE_LUA),y)
++FREESWITCH_DEPENDENCIES += lua
++FREESWITCH_ENABLED_MODULES += languages/mod_lua
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBEDIT),y)
- FREESWITCH_DEPENDENCIES += libedit
- FREESWITCH_CONF_OPTS += --enable-core-libedit-support
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.6.4
