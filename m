@@ -1,36 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jan 2016 17:30:53 +0100
-Subject: [Buildroot] [git commit] skeleton: fix indentation of generated
-	interfaces file
-Message-ID: <20160111163526.669AF826C3@busybox.osuosl.org>
+Date: Mon, 11 Jan 2016 17:29:45 +0100
+Subject: [Buildroot] [git commit] cdrkit: add zlib select
+Message-ID: <20160111163526.5AACE826C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f896b109edcc019e18b18117cc8bb99258b0ae41
+commit: http://git.buildroot.net/buildroot/commit/?id=fa67fbbb3f3c880721f0cea8a07baf2e28d67f41
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The generated $(TARGET_DIR)/etc/network/interfaces mixes spaces and
-tabs. Fix by using tabs only.
+It's inconsistent with it's DEPENDENCIES otherwise, fixes:
+http://autobuild.buildroot.net/results/ac1/ac1e671dcd66c3823cf2e289604ed56f14f7161e/
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/skeleton/skeleton.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cdrkit/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index d640e24..6b5ab79 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -148,7 +148,7 @@ define SET_NETWORK_DHCP
- 		echo ;                                               \
- 		echo "auto $(NETWORK_DHCP_IFACE)";                   \
- 		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
--		echo "  pre-up /etc/network/nfs_check";              \
-+		echo "	pre-up /etc/network/nfs_check";              \
- 		echo "	wait-delay 15";                              \
- 	) >> $(TARGET_DIR)/etc/network/interfaces
- 	$(INSTALL) -m 0755 -D $(SKELETON_PKGDIR)/nfs_check \
+diff --git a/package/cdrkit/Config.in b/package/cdrkit/Config.in
+index 3b0b7f1..46c0ba9 100644
+--- a/package/cdrkit/Config.in
++++ b/package/cdrkit/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_CDRKIT
+ 	# Needed for libbz
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_LIBCAP
++	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
+ 	bool "cdrkit"
