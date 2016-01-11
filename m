@@ -1,52 +1,77 @@
-From: Jonathan Ben-Avraham <yba@tkos.co.il>
-Date: Mon, 11 Jan 2016 10:24:07 +0200
-Subject: [Buildroot] [PATCH 2/2 v3] linux-pam: enable nis support if
-	yp-tools selected
-In-Reply-To: <1452500647-10035-1-git-send-email-yba@tkos.co.il>
-References: <1452500647-10035-1-git-send-email-yba@tkos.co.il>
-Message-ID: <1452500647-10035-2-git-send-email-yba@tkos.co.il>
+From: Mamatha <mamatha4@linux.vnet.ibm.com>
+Date: Mon, 11 Jan 2016 14:03:28 +0530
+Subject: [Buildroot] [PATCH] This patch is to add NVME tool support in
+	petitboot
+Message-ID: <20160111083231.8836.248.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jonathan Ben Avraham <yba@tkos.co.il>
+Enable NVME block device and nvme tool support in petitboot
+After enabling NVME device and tool in op-build this will increase the size
+of rootfs.tar by 92KB and zImage.epapr by 41KB.
 
-Enable the NIS support in linux-pam when the yp-tools package is
-selected.
-
-Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+Signed-off-by: Mamatha <mamatha4@linux.vnet.ibm.com>
 ---
- package/linux-pam/linux-pam.mk |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/Config.in      |    1 +
+ package/nvme/Config.in |    6 ++++++
+ package/nvme/nvme.mk   |   23 +++++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100755 package/nvme/Config.in
+ create mode 100755 package/nvme/nvme.mk
 
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 26b627e..3d860d2 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -11,7 +11,6 @@ LINUX_PAM_INSTALL_STAGING = YES
- LINUX_PAM_CONF_OPTS = \
- 	--disable-prelude \
- 	--disable-isadir \
--	--disable-nis \
- 	--disable-db \
- 	--disable-regenerate-docu \
- 	--enable-securedir=/lib/security \
-@@ -21,6 +20,14 @@ LINUX_PAM_AUTORECONF = YES
- LINUX_PAM_LICENSE = BSD-3c
- LINUX_PAM_LICENSE_FILES = Copyright
- 
-+ifeq ($(BR2_PACKAGE_YP_TOOLS),y)
-+LINUX_PAM_CONF_OPTS += \
-+	--enable-nis
-+else
-+LINUX_PAM_CONF_OPTS += \
-+	--disable-nis
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index e0c2e2a..014debd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1399,6 +1399,7 @@ endif
+ 	source "package/openvmtools/Config.in"
+ 	source "package/polkit/Config.in"
+ 	source "package/powerpc-utils/Config.in"
++	source "package/nvme/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/procps-ng/Config.in"
+ 	source "package/psmisc/Config.in"
+diff --git a/package/nvme/Config.in b/package/nvme/Config.in
+new file mode 100755
+index 0000000..8b5d37d
+--- /dev/null
++++ b/package/nvme/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_NVME
++	bool "nvme"
++	help
++	  System utilities for IBM Power NVME devices
 +
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- LINUX_PAM_DEPENDENCIES += gettext
- LINUX_PAM_MAKE_OPTS += LIBS=-lintl
--- 
-1.7.9.5
++	  https://github.com/linux-nvme/nvme-cli
+diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
+new file mode 100755
+index 0000000..214e879
+--- /dev/null
++++ b/package/nvme/nvme.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# nvme
++#
++################################################################################
++
++NVME_VERSION = 798812627467a9999682176ade631ee5b6ea4785
++NVME_SITE = https://github.com/linux-nvme/nvme-cli.git
++NVME_SITE_METHOD = git
++NVME_LICENSE = GPLv2
++NVME_LICENSE_FILES = COPYING
++
++define NVME_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
++		INCLUDEDIR="-I." all
++endef
++
++define NVME_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/nvme $(TARGET_DIR)/sbin/nvme
++endef
++
++$(eval $(generic-package))
++
