@@ -1,39 +1,45 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Mon, 11 Jan 2016 20:26:04 +0100
-Subject: [Buildroot] [PATCH 1/1] mongoose: bump to version 6.2
-Message-ID: <1452540364-5296-1-git-send-email-zinosat@tiscali.it>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 11 Jan 2016 21:49:35 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/libgsm: new package
+In-Reply-To: <9j48mcxnur.ln2@ID-313208.user.individual.net>
+References: <1430072810-27772-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160109181205.GD3444@free.fr>
+ <9j48mcxnur.ln2@ID-313208.user.individual.net>
+Message-ID: <20160111204935.GC4257@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
----
- package/mongoose/mongoose.hash | 2 +-
- package/mongoose/mongoose.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Bernd, All,
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index 1ed4a78..c131e48 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	512b406714d31a178fc41263ca6ecafd0c1e2dd091e9685a7b2462fecdaaea8e  mongoose-6.1.tar.gz
-+sha256	94b934da083afe8abb1c0af5abb8f25294050011793f048166b12f000f9433a0  mongoose-6.2.tar.gz
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 6caaf2e..98f6525 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 6.1
-+MONGOOSE_VERSION = 6.2
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPLv2
- MONGOOSE_LICENSE_FILES = LICENSE
+On 2016-01-09 20:45 +0100, Bernd Kuhls spake thusly:
+> Am Sat, 09 Jan 2016 19:12:05 +0100 schrieb Yann E. MORIN:
+> > So, I',m not sure what the intent for this package was, but if was only
+> > to be used by Asterisk, then it is not currently possible to do so...
+> 
+> tbh I do not remember why I thought this package is necessary. Since I 
+> never got Asterisk configured for a run-time usable setup and I lost 
+> interest in it after I found Freeswitch (along with Fusionpbx) easier to 
+> use, I do not care when you mark my patch as Rejected.
+
+OK, thanks for the feedback. :-)
+
+Since you're no longer interested in this package, and that from my
+(arguably limited) experience with Asterisk, with which is was supposed
+to be used, this package is not required for Asterisk to at least build
+properly, I'll mark this as rejected in Pathwork.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
