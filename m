@@ -1,44 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Jan 2016 23:40:46 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/libgsm: new package
-In-Reply-To: <1430072810-27772-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1430072810-27772-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160111224046.GE4257@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 11 Jan 2016 23:53:41 +0100
+Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.4.6
+Message-ID: <1452552821-4221-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Update version and hash (see [1] for details).
 
-On 2015-04-26 20:26 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v3: - fixed typo
-> v2: - added hash
->     - updated 0001-cross.patch to reflect libgsm version
->     - added license info (Thomas)
->     - optimized license infos (Thomas)
-> 
->  package/Config.in               |    1 +
->  package/libgsm/0001-cross.patch |  205 +++++++++++++++++++++++++++++++++++++++
->  package/libgsm/Config.in        |    6 ++
->  package/libgsm/libgsm.hash      |    2 +
->  package/libgsm/libgsm.mk        |   41 ++++++++
+[1] http://lists.freedesktop.org/archives/input-tools/2016-January/001240.html
 
-So I've added that patch to my series adding asterisk, and I've reworked
-it a bit.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libevdev/libevdev.hash | 4 ++--
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index af78c0f..20ca4fb 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://lists.freedesktop.org/archives/input-tools/2015-November/001227.html
+-sha256 e91c58ca86e0631186798449e0a78c65474ff562081d968ba0521f76c8c2ca1d libevdev-1.4.5.tar.xz
++# Hash from http://lists.freedesktop.org/archives/input-tools/2016-January/001240.html
++sha256 7b2ae1a0c7f9f7a96198ddc8fd167f090f233d6cbd8168b847e4f968445132d3 libevdev-1.4.6.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index b126943..5513191 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.4.5
++LIBEVDEV_VERSION = 1.4.6
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
