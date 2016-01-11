@@ -1,23 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jan 2016 17:30:57 +0100
-Subject: [Buildroot] [PATCH] skeleton: fix indentation of generated
-	interfaces file
-In-Reply-To: <1452527066-4914-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Mon, 11 Jan 2016 16:44:26 +0100")
-References: <1452527066-4914-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87k2ng9iym.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jan 2016 17:31:46 +0100
+Subject: [Buildroot] [PATCH] python-httplib2: bump to 0.9.2
+In-Reply-To: <1452510276-28799-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Mon, 11 Jan 2016 12:04:36
+ +0100")
+References: <1452510276-28799-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87fuy49ix9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
- > The generated $(TARGET_DIR)/etc/network/interfaces mixes spaces and
- > tabs. Fix by using tabs only.
-
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed, thanks.
 
