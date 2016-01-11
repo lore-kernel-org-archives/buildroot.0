@@ -1,92 +1,84 @@
-From: Doug Kehn <rdkehn@yahoo.com>
-Date: Sun, 10 Jan 2016 15:25:09 -0600
-Subject: [Buildroot] [RFC PATCH v2 4/4] package/dhcp: remove hard coded ar
-	reference
-In-Reply-To: <1452461109-27498-1-git-send-email-rdkehn@yahoo.com>
-References: <1452461109-27498-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <1452461109-27498-5-git-send-email-rdkehn@yahoo.com>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Mon, 11 Jan 2016 08:32:26 +0200 (IST)
+Subject: [Buildroot] [PATCH 1/1] lxc needs gzip scripts for
+ lxc-checkconfig runtime
+In-Reply-To: <20160110170922.GH3460@free.fr>
+References: <1442761327-18830-1-git-send-email-yba@tkos.co.il>
+ <20150920190622.3f7278c3@free-electrons.com>
+ <alpine.DEB.2.02.1509202012390.13941@orcam81.orcam.lan>
+ <20150920230136.513b491c@free-electrons.com> <20160110170922.GH3460@free.fr>
+Message-ID: <alpine.DEB.2.11.1601110802480.13943@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow AR to be substituted so toolchain ar can be referenced when cross
-compiling.
+Hi Yann,
+My current use case for lxc in Buildroot is for mobile SoC's such as the 
+Qualcomm Snapdragon 805 and 810 that have IP blocks such as DSP's, VPU's 
+and GPU's for which Qualcomm only releases Android drivers and libraries. 
+In order to use these IP blocks, I run Android in an lxc and pass CNN 
+kernels from Linux to adsprpcd running in Android that passes the CNN 
+kernels through the Linux kernel to the Hexagon DSP. Admittedly this adds 
+new meaning to the term "Convoluted Neural Networks" but it provides an 
+interim solution to the application developers until we can reverse 
+engineer Qualcomm's FastRPC interface.
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
-Changes v1 -> v2:
-  - new for v2 (suggested by Arnout)
----
- package/dhcp/0003-toolchain-ar.patch | 58 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/dhcp/0003-toolchain-ar.patch
+I will re-spin the patch but before that I have yp-tools, ypbind-mt, 
+sphinxbase and pocketsphinx to finish.
+Thanks,
 
-diff --git a/package/dhcp/0003-toolchain-ar.patch b/package/dhcp/0003-toolchain-ar.patch
-new file mode 100644
-index 0000000..0b53602
---- /dev/null
-+++ b/package/dhcp/0003-toolchain-ar.patch
-@@ -0,0 +1,58 @@
-+remove hard coded ar reference
-+
-+Allow AR to be substituted so toolchain ar can be referenced when cross
-+compiling.
-+
-+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-+
-+Index: dhcp-4.3.3/common/Makefile.in
-+===================================================================
-+--- dhcp-4.3.3.orig/common/Makefile.in
-++++ dhcp-4.3.3/common/Makefile.in
-+@@ -90,7 +90,7 @@ CONFIG_HEADER = $(top_builddir)/includes
-+ CONFIG_CLEAN_FILES =
-+ CONFIG_CLEAN_VPATH_FILES =
-+ LIBRARIES = $(noinst_LIBRARIES)
-+-AR = ar
-++AR = @AR@
-+ ARFLAGS = cru
-+ AM_V_AR = $(am__v_AR_ at AM_V@)
-+ am__v_AR_ = $(am__v_AR_ at AM_DEFAULT_V@)
-+Index: dhcp-4.3.3/configure
-+===================================================================
-+--- dhcp-4.3.3.orig/configure
-++++ dhcp-4.3.3/configure
-+@@ -658,6 +658,7 @@ CPPFLAGS
-+ LDFLAGS
-+ CFLAGS
-+ CC
-++AR
-+ host_os
-+ host_vendor
-+ host_cpu
-+Index: dhcp-4.3.3/dhcpctl/Makefile.in
-+===================================================================
-+--- dhcp-4.3.3.orig/dhcpctl/Makefile.in
-++++ dhcp-4.3.3/dhcpctl/Makefile.in
-+@@ -122,7 +122,7 @@ am__uninstall_files_from_dir = { \
-+ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
-+ 	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(man3dir)"
-+ LIBRARIES = $(lib_LIBRARIES)
-+-AR = ar
-++AR = @AR@
-+ ARFLAGS = cru
-+ AM_V_AR = $(am__v_AR_ at AM_V@)
-+ am__v_AR_ = $(am__v_AR_ at AM_DEFAULT_V@)
-+Index: dhcp-4.3.3/omapip/Makefile.in
-+===================================================================
-+--- dhcp-4.3.3.orig/omapip/Makefile.in
-++++ dhcp-4.3.3/omapip/Makefile.in
-+@@ -120,7 +120,7 @@ am__uninstall_files_from_dir = { \
-+   }
-+ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(man3dir)"
-+ LIBRARIES = $(lib_LIBRARIES)
-+-AR = ar
-++AR = @AR@
-+ ARFLAGS = cru
-+ AM_V_AR = $(am__v_AR_ at AM_V@)
-+ am__v_AR_ = $(am__v_AR_ at AM_DEFAULT_V@)
+  - yba
+
+
+On Sun, 10 Jan 2016, Yann E. MORIN wrote:
+
+> Date: Sun, 10 Jan 2016 18:09:23 +0100
+> From: Yann E. MORIN <yann.morin.1998@free.fr>
+> To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Jonathan Ben Avraham <yba@tkos.co.il>, buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH 1/1] lxc needs gzip scripts for
+>     lxc-checkconfig runtime
+> 
+> Thomas, Jonathan, All,
+>
+> On 2015-09-20 23:01 +0200, Thomas Petazzoni spake thusly:
+>> On Sun, 20 Sep 2015 20:15:02 +0300 (IDT), Jonathan Ben Avraham wrote:
+>>
+>>> I wondered whether to send a patch for each 'select' individually or to
+>>> wait until I complete my testing and submit a single patch with all of the
+>>> lxc selects. What do you prefer?
+>>
+>> Both solutions are fine with me. You can send patches as you
+>> progressively discover the issues, or send a single patch fixing all
+>> problems at once.
+>>
+>> I'm just wondering if we want to make all these dependencies actually
+>> mandatory or not. It seems some of these dependencies are only used for
+>> one specific tool in LXC. If the tool is not crucial in LXC usage,
+>> maybe we should make it optional via a sub-option? I'm not sure here,
+>> just thinking out loud.
+>
+> Well, lxc is already in the 'server-class' software, probably to run a
+> bunch of containers, themselves in the 'bloatware-class'.
+>
+> So, the overhead of having gzip is probably insignifiant in the face of
+> the size of the rest of the system.
+>
+> So, I'm OK with selecting gzip unconditionally.
+>
+> However, I would not want to force-select BB_SHOW_OTHERS, even though we
+> already do it in three locations. Well, damn be it, just select both.
+>
+> Jonathan, care to fix and respin, please?
+>
+> Regards,
+> Yann E. MORIN.
+>
+>
+
 -- 
-2.6.4
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
