@@ -1,41 +1,44 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 11 Jan 2016 22:56:51 +0100
-Subject: [Buildroot] [PATCH v3 1/2] assimp: new package
-In-Reply-To: <20151230170547.3f85816c@free-electrons.com>
-References: <1450390699-10377-1-git-send-email-ps.report@gmx.net>
- <20151230170547.3f85816c@free-electrons.com>
-Message-ID: <20160111225651.0f1fe48c@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 11 Jan 2016 23:40:46 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/libgsm: new package
+In-Reply-To: <1430072810-27772-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1430072810-27772-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160111224046.GE4257@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Bernd, All,
 
-On Wed, 30 Dec 2015 17:05:47 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On 2015-04-26 20:26 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v3: - fixed typo
+> v2: - added hash
+>     - updated 0001-cross.patch to reflect libgsm version
+>     - added license info (Thomas)
+>     - optimized license infos (Thomas)
+> 
+>  package/Config.in               |    1 +
+>  package/libgsm/0001-cross.patch |  205 +++++++++++++++++++++++++++++++++++++++
+>  package/libgsm/Config.in        |    6 ++
+>  package/libgsm/libgsm.hash      |    2 +
+>  package/libgsm/libgsm.mk        |   41 ++++++++
 
-> Dear Peter Seiderer,
-> 
-> On Thu, 17 Dec 2015 23:18:18 +0100, Peter Seiderer wrote:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ----
-> > Changes v1 -> v2:
-> >   - use github helper (thanks to J?rg Krause)
-> 
-> This package is causing some build failures:
-> 
->   http://autobuild.buildroot.org/?reason=assimp-v3.2
-> 
-> They all look similar. I guess it's because assimp needs C++11 support.
-> Can you have a look ?
+So I've added that patch to my series adding asterisk, and I've reworked
+it a bit.
 
-O.k, will have a look at it...
+Thanks!
 
 Regards,
-Peter
+Yann E. MORIN.
 
-> 
-> Thanks,
-> 
-> Thomas
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
