@@ -1,81 +1,31 @@
-From: Mamatha <mamatha4@linux.vnet.ibm.com>
-Date: Mon, 11 Jan 2016 15:37:41 +0530
-Subject: [Buildroot] [PATCH V2] Adding support for NVME utils
-Message-ID: <20160111095719.19626.17062.stgit@localhost.localdomain>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 11 Jan 2016 07:52:35 -0300
+Subject: [Buildroot] [PATCH 1/5] linux-headers: mark EOL versions deprecated
+Message-ID: <1452509559-14718-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is to add support for NVME utils.
-After enabling NVME device and tool in op-build this will increase the size
-of rootfs.tar by 92KB and zImage.epapr by 41KB.
+Follow the upstream EOL cycle and mark 4.2 as deprecated for 2016.02.
 
-Changes from V1:
-===============
-* Updated NVME_VERSION = 0.1
-* updated the subject description
-
-Signed-off-by: Mamatha <mamatha4@linux.vnet.ibm.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in      |    1 +
- package/nvme/Config.in |    6 ++++++
- package/nvme/nvme.mk   |   23 +++++++++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100755 package/nvme/Config.in
- create mode 100755 package/nvme/nvme.mk
+ package/linux-headers/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index e0c2e2a..014debd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1399,6 +1399,7 @@ endif
- 	source "package/openvmtools/Config.in"
- 	source "package/polkit/Config.in"
- 	source "package/powerpc-utils/Config.in"
-+	source "package/nvme/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/procps-ng/Config.in"
- 	source "package/psmisc/Config.in"
-diff --git a/package/nvme/Config.in b/package/nvme/Config.in
-new file mode 100755
-index 0000000..8b5d37d
---- /dev/null
-+++ b/package/nvme/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_NVME
-+	bool "nvme"
-+	help
-+	  System utilities for IBM Power NVME devices
-+
-+	  https://github.com/linux-nvme/nvme-cli
-diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
-new file mode 100755
-index 0000000..43bec67
---- /dev/null
-+++ b/package/nvme/nvme.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# nvme
-+#
-+################################################################################
-+
-+NVME_VERSION = 0.1
-+NVME_SITE = https://github.com/linux-nvme/nvme-cli.git
-+NVME_SITE_METHOD = git
-+NVME_LICENSE = GPLv2
-+NVME_LICENSE_FILES = COPYING
-+
-+define NVME_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		INCLUDEDIR="-I." all
-+endef
-+
-+define NVME_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/nvme $(TARGET_DIR)/sbin/nvme
-+endef
-+
-+$(eval $(generic-package))
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9fabb9e..141811b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -69,6 +69,7 @@ choice
+ 
+ 	config BR2_KERNEL_HEADERS_4_2
+ 		bool "Linux 4.2.x kernel headers"
++		depends on BR2_DEPRECATED_SINCE_2016_02
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
+ 
+ 	config BR2_KERNEL_HEADERS_4_3
+-- 
+2.4.10
