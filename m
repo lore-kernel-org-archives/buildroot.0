@@ -1,32 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 11 Jan 2016 09:46:33 -0300
-Subject: [Buildroot] [PATCH] cdrkit: add zlib select
-Message-ID: <1452516393-15090-1-git-send-email-gustavo@zacarias.com.ar>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Mon, 11 Jan 2016 13:52:33 +0100
+Subject: [Buildroot] [PATCH] rabbitmq-c: needs a toolchain with posix_spawn
+	support
+Message-ID: <1452516753-1555-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's inconsistent with it's DEPENDENCIES otherwise, fixes:
-http://autobuild.buildroot.net/results/ac1/ac1e671dcd66c3823cf2e289604ed56f14f7161e/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/a6c3e79c61c5a535970d03bf37b068349f766a7f/
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 ---
- package/cdrkit/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/rabbitmq-c/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/cdrkit/Config.in b/package/cdrkit/Config.in
-index 3b0b7f1..46c0ba9 100644
---- a/package/cdrkit/Config.in
-+++ b/package/cdrkit/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_CDRKIT
- 	# Needed for libbz
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_LIBCAP
-+	select BR2_PACKAGE_ZLIB
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
- 	bool "cdrkit"
+diff --git a/package/rabbitmq-c/Config.in b/package/rabbitmq-c/Config.in
+index b330c90..ec72f82 100644
+--- a/package/rabbitmq-c/Config.in
++++ b/package/rabbitmq-c/Config.in
+@@ -1,11 +1,15 @@
+ config BR2_PACKAGE_RABBITMQ_C
+ 	bool "rabbitmq-c"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG \
++		|| BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
+ 	help
+ 	  This is a C-language AMQP client library for use with v2.0+
+ 	  of the RabbitMQ broker.
+ 
+ 	  https://github.com/alanxz/rabbitmq-c
+ 
+-comment "rabbitmq-c needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "rabbitmq-c needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG \
++		|| BR2_TOOLCHAIN_USES_GLIBC) 
 -- 
-2.4.10
+1.8.3.1
