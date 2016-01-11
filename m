@@ -1,60 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jan 2016 17:33:22 +0100
-Subject: [Buildroot] [git commit] linux-headers: add 4.4.x series
-Message-ID: <20160111163526.A55A3826C2@busybox.osuosl.org>
+Date: Mon, 11 Jan 2016 17:31:38 +0100
+Subject: [Buildroot] [git commit] python-httplib2: bump to 0.9.2
+Message-ID: <20160111163526.74E8B826D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6a09cf401fc8215adeccb2500d4c4611638dd66
+commit: http://git.buildroot.net/buildroot/commit/?id=85590e245c92b07f0ef7be3e628cd6349cb5a2d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/python-httplib2/python-httplib2.hash | 6 +++---
+ package/python-httplib2/python-httplib2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 141811b..6abf731 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -5,7 +5,7 @@ comment "Kernel Header Options"
+diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
+index 6b128d3..879f18b 100644
+--- a/package/python-httplib2/python-httplib2.hash
++++ b/package/python-httplib2/python-httplib2.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=09d8e8016911fc40e2e4c58f1aa3ec24, sha256 locally computed
+-md5	09d8e8016911fc40e2e4c58f1aa3ec24  httplib2-0.9.tar.gz
+-sha256	39ea8c6a6d9f595c177a16134fc49a990ad8d382758cbf469c8659662f2f51ab  httplib2-0.9.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=bd1b1445b3b2dfa7276b09b1a07b7f0e, sha256 locally computed
++md5	bd1b1445b3b2dfa7276b09b1a07b7f0e  httplib2-0.9.2.tar.gz
++sha256	c3aba1c9539711551f4d83e857b316b5134a1c4ddce98a875b7027be7dd6d988  httplib2-0.9.2.tar.gz
+diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
+index ec5c476..adeddd3 100644
+--- a/package/python-httplib2/python-httplib2.mk
++++ b/package/python-httplib2/python-httplib2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- choice
- 	prompt "Kernel Headers"
--	default BR2_KERNEL_HEADERS_4_3
-+	default BR2_KERNEL_HEADERS_4_4
- 	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
-@@ -76,6 +76,10 @@ choice
- 		bool "Linux 4.3.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
- 
-+	config BR2_KERNEL_HEADERS_4_4
-+		bool "Linux 4.4.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- endchoice
-@@ -97,6 +101,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4
-+	bool "4.4.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3
- 	bool "4.3.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-@@ -213,4 +221,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.1.15"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.3"		if BR2_KERNEL_HEADERS_4_3
-+	default "4.4"		if BR2_KERNEL_HEADERS_4_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-PYTHON_HTTPLIB2_VERSION = 0.9
++PYTHON_HTTPLIB2_VERSION = 0.9.2
+ PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
+ PYTHON_HTTPLIB2_SITE = http://pypi.python.org/packages/source/h/httplib2
+ PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
