@@ -1,39 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 11 Jan 2016 10:44:10 -0300
-Subject: [Buildroot] [PATCH] nano: bump to version 2.5.1
-Message-ID: <1452519850-24875-1-git-send-email-gustavo@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 11 Jan 2016 16:44:26 +0100
+Subject: [Buildroot] [PATCH] skeleton: fix indentation of generated
+	interfaces file
+Message-ID: <1452527066-4914-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The generated $(TARGET_DIR)/etc/network/interfaces mixes spaces and
+tabs. Fix by using tabs only.
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 8da4b55..8b45847 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  ff323e6fef74caf0a924304841c07ac65ec30db99dc5c1f8272b4c536a5c89ee  nano-2.5.0.tar.gz
-+sha256  e06fca01bf183f4d531aa65a28dffc0e2d10185239909eb3de797023f3453bde  nano-2.5.1.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 5bcdfd4..0fa9009 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NANO_VERSION = 2.5.0
-+NANO_VERSION = 2.5.1
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/skeleton/skeleton.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index d640e24..6b5ab79 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -148,7 +148,7 @@ define SET_NETWORK_DHCP
+ 		echo ;                                               \
+ 		echo "auto $(NETWORK_DHCP_IFACE)";                   \
+ 		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
+-		echo "  pre-up /etc/network/nfs_check";              \
++		echo "	pre-up /etc/network/nfs_check";              \
+ 		echo "	wait-delay 15";                              \
+ 	) >> $(TARGET_DIR)/etc/network/interfaces
+ 	$(INSTALL) -m 0755 -D $(SKELETON_PKGDIR)/nfs_check \
 -- 
-2.4.10
+1.9.1
