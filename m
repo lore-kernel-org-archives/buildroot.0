@@ -1,59 +1,39 @@
-From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Tue, 12 Jan 2016 11:50:53 +0000
-Subject: [Buildroot] [PATCH 1/2] qt/qt5base: force gstreamer on configure
-In-Reply-To: <20160110161902.GF3460@free.fr>
-References: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
- <20160110161902.GF3460@free.fr>
-Message-ID: <5694E89C.30807@ecagroup.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 12 Jan 2016 08:55:37 -0300
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.3.4
+Message-ID: <1452599737-10684-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Peter, All
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Le 10/01/2016 17:19, Yann E. MORIN a ?crit :
-> Julien, All,
->
-> On 2015-08-06 12:06 +0200, Julien Corjon spake thusly:
->> Fixes: http://autobuild.buildroot.net/results/0ee0f879e8563954c64b3940cdec39d2e6de937a/
->
-> As Thomas said, this does not really fix that issue.
->
-> However, still following Thomas comment, I think this is a valid patch,
-
-Patch was valid back then.
-
-> and it should be applied with a tweaked commit log;
->
->      package/qt5base: add support for optional gstreamer
->
->      qt5base can optionally support gstreamer-0.10 or gstreamer-1.0.
->      Upstreamer still considers gstreamer-0.10 to be preferred over 1.0.
->
->      Ensure that gstreamer, when enabled, is built before qt5base; tell
->      qt5base to use the proper gstreamer variant, or none if gstreamer
->      is not enabled.
->
->      Signed-off-by: You
->
-
-Peter already patch gstreamer for qt5base and he have removed 
-gstreamer0.1 support[1]. I'm not sure this was the good solution because 
-gstreamer0.1 is still the default choise for Qt[2] but no buildroot user 
-seems to complain about that.
-
-> With that fixed, you can add my:
->
->      Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Regards,
-> Yann E. MORIN.
-
-Regards,
-Julien Corjon
-
-[1] 
-https://git.busybox.net/buildroot/commit/?id=da9f034d5d1df10ad6c3e249a9a488dc7ef1c42a
-[2] https://wiki.qt.io/New_Features_in_Qt_5.5
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 494ad17..f42e37a 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e62d21313acbb29e24b0b80aaf2b63fdd1ccce4cfb741f333deca95a1a3a70df	samba-4.3.3.tar.gz
++sha256	5d0eb52e842832af922f7d57716eacff23192906ec3bdf6727e18ca24f1419d9	samba-4.3.4.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 50a2692..4e796a6 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.3.3
++SAMBA4_VERSION = 4.3.4
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+-- 
+2.4.10
