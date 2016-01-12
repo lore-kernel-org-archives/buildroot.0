@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 12 Jan 2016 08:08:46 -0300
-Subject: [Buildroot] [PATCH] iproute2: bump to version 4.4.0
-Message-ID: <1452596926-32639-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 12 Jan 2016 08:09:03 -0300
+Subject: [Buildroot] [PATCH] tcpreplay: bump to version 4.1.1
+Message-ID: <1452596943-32682-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tcpreplay/tcpreplay.hash | 5 ++---
+ package/tcpreplay/tcpreplay.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index b3605b9..d291d3d 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,2 +1,2 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	f03b1188dd6c039512424de82ff7a8f3b446680bd4e908ff42a7b9b137422995	iproute2-4.3.0.tar.xz
-+sha256	bc91c367288a19f78ef800cd6840363be1f22da8436fbae88e1a7250490d6514	iproute2-4.4.0.tar.xz
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index afe2d29..6789c52 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index 7d153e5..95d6d5d 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
+@@ -1,3 +1,2 @@
+-# From http://sourceforge.net/projects/tcpreplay/files/tcpreplay/4.1.0/
+-md5	fd48d73d84ade30ece0a9abb538c82d5	tcpreplay-4.1.0.tar.gz
+-sha1	9723d82a0136d963bcc2665d562cb562d216a1c1	tcpreplay-4.1.0.tar.gz
++# Locally calculated after checking pgp signature
++sha256	61b916ef91049cad2a9ddc8de6f5e3e3cc5d9998dbb644dc91cf3a798497ffe4	tcpreplay-4.1.1.tar.gz
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index f6bd08f..b32810f 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 4.3.0
-+IPROUTE2_VERSION = 4.4.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-TCPREPLAY_VERSION = 4.1.0
+-TCPREPLAY_SITE = http://downloads.sourceforge.net/project/tcpreplay/tcpreplay/$(TCPREPLAY_VERSION)
++TCPREPLAY_VERSION = 4.1.1
++TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
+ TCPREPLAY_LICENSE = GPLv3
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
+ TCPREPLAY_CONF_ENV = \
 -- 
 2.4.10
