@@ -1,46 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2016 21:37:02 +0100
-Subject: [Buildroot] [git commit] libevdev: bump version to 1.4.6
-Message-ID: <20160112204022.A22328274E@busybox.osuosl.org>
+Date: Tue, 12 Jan 2016 21:39:14 +0100
+Subject: [Buildroot] [git commit] samba4: bump to version 4.3.4
+Message-ID: <20160112204022.D01C581ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=042848a35147f4280de1e8d758a266cc2bdcc1a7
+commit: http://git.buildroot.net/buildroot/commit/?id=3b6207a8f6bafa864734c1a15149c68944a6ef3f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update version and hash (see [1] for details).
-
-[1] http://lists.freedesktop.org/archives/input-tools/2016-January/001240.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libevdev/libevdev.hash | 4 ++--
- package/libevdev/libevdev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index af78c0f..20ca4fb 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 494ad17..f42e37a 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
 @@ -1,2 +1,2 @@
--# Hash from http://lists.freedesktop.org/archives/input-tools/2015-November/001227.html
--sha256 e91c58ca86e0631186798449e0a78c65474ff562081d968ba0521f76c8c2ca1d libevdev-1.4.5.tar.xz
-+# Hash from http://lists.freedesktop.org/archives/input-tools/2016-January/001240.html
-+sha256 7b2ae1a0c7f9f7a96198ddc8fd167f090f233d6cbd8168b847e4f968445132d3 libevdev-1.4.6.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index b126943..5513191 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
+ # Locally calculated after checking pgp signature
+-sha256	e62d21313acbb29e24b0b80aaf2b63fdd1ccce4cfb741f333deca95a1a3a70df	samba-4.3.3.tar.gz
++sha256	5d0eb52e842832af922f7d57716eacff23192906ec3bdf6727e18ca24f1419d9	samba-4.3.4.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 50a2692..4e796a6 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBEVDEV_VERSION = 1.4.5
-+LIBEVDEV_VERSION = 1.4.6
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
+-SAMBA4_VERSION = 4.3.3
++SAMBA4_VERSION = 4.3.4
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
