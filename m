@@ -1,30 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2016 22:48:41 +0100
-Subject: [Buildroot] [PATCH] uclibc: update uClibc-ng to latest version
-	1.0.11
-In-Reply-To: <20160110175806.GA23441@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Sun, 10 Jan 2016 18:58:06 +0100")
-References: <20160110175806.GA23441@waldemar-brodkorb.de>
-Message-ID: <87d1t679l2.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Jan 2016 22:27:36 +0100
+Subject: [Buildroot] [git commit] lua: switch to 5.3.x as default version
+Message-ID: <20160112214906.CE98381E9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d9e74e78b5fbf61a080176537c4faccfc71d43a1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Update to 1.0.11. Contains a lot of bugfixes
- > and some new features:
- >  * mips{32r6,64r6} enablement
- >  * argp support
- >  * support for very simple /etc/gai.conf
- >  * Xtensa nommu vfork fix
- >  * systemd portability fixes
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lua/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Does this mean that systemd can be now used with uClibc-NG?
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index d9cd1dd..711fa89 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
+ 
+ choice
+ 	prompt "Lua Version"
+-	default BR2_PACKAGE_LUA_5_1
++	default BR2_PACKAGE_LUA_5_3
+ 	help
+ 	  Select the version of Lua API/ABI you wish to use.
+ 
