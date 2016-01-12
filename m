@@ -1,50 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2016 23:35:08 +0100
-Subject: [Buildroot] [git commit] dropbear: add help text about key creation
-Message-ID: <20160112223529.F209F8274F@busybox.osuosl.org>
+Date: Tue, 12 Jan 2016 22:59:10 +0100
+Subject: [Buildroot] [git commit] package/tremor: bump to revision 19427
+Message-ID: <20160112223529.DE9F582751@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e146d82b96b471886f00c64a2661df9d4ba0d8c5
+commit: http://git.buildroot.net/buildroot/commit/?id=0420114855f36aa6c38866878ce303b0ed95d887
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit e7d04dd2d replaced /etc/dropbear with a symlink to /var/run and
-updated the start scripts to replace it with a real directory, so the
-keys would be persistent. However, it turns out that this is pretty
-confusing even for expert users, who don't know how to make the keys
-really persistent now.
+The revision 18153 dates from 2012-01-20. Lets update to latest changed revision
+19427 which dates from 2015-01-07.
 
-Update the help text explaining what the issue is, and telling the user
-to replace the /etc/dropbear symlink with a symlink to a persistent
-directory. Also mention the possiblity of unionfs.
-
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dropbear/Config.in | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/tremor/tremor.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index c14c654..d92361f 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -4,6 +4,15 @@ config BR2_PACKAGE_DROPBEAR
- 	help
- 	  A small SSH 2 server designed for small memory environments.
+diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
+index 590a18c..97b0ce3 100644
+--- a/package/tremor/tremor.mk
++++ b/package/tremor/tremor.mk
+@@ -6,7 +6,7 @@
  
-+	  Note that dropbear requires a per-device unique host key. The
-+	  key will be generated when dropbear starts, but it is not
-+	  persistent over reboot (if you have a read-only rootfs) or
-+	  upgrade (if you have a read-write rootfs). To make the key
-+	  persistent, replace /etc/dropbear with a symlink to a
-+	  directory on a persistent, writeable filesystem.
-+	  Alternatively, mount a persistent unionfs over your root
-+	  filesystem.
-+
- 	  http://matt.ucc.asn.au/dropbear/dropbear.html
+ TREMOR_SITE = http://svn.xiph.org/trunk/Tremor
+ TREMOR_SITE_METHOD = svn
+-TREMOR_VERSION = 18153
++TREMOR_VERSION = 19427
+ TREMOR_LICENSE = BSD-3c
+ TREMOR_LICENSE_FILES = COPYING
  
- if BR2_PACKAGE_DROPBEAR
