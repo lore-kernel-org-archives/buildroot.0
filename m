@@ -1,39 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 12 Jan 2016 09:08:11 -0300
-Subject: [Buildroot] [PATCH] geoip: bump to version 1.6.9
-Message-ID: <1452600491-10830-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Jan 2016 13:24:17 +0100
+Subject: [Buildroot] [PATCH 1/2] qt/qt5base: force gstreamer on configure
+In-Reply-To: <5694E89C.30807@ecagroup.com> (Julien CORJON's message of "Tue,
+ 12 Jan 2016 11:50:53 +0000")
+References: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
+ <20160110161902.GF3460@free.fr> <5694E89C.30807@ecagroup.com>
+Message-ID: <8760yz9ea6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/geoip/geoip.hash | 2 +-
- package/geoip/geoip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Julien" == Julien CORJON <corjon.j@ecagroup.com> writes:
 
-diff --git a/package/geoip/geoip.hash b/package/geoip/geoip.hash
-index d410c2f..505c38f 100644
---- a/package/geoip/geoip.hash
-+++ b/package/geoip/geoip.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  0ae1c95e69ad627d3a45cb897f79ce0c30f13fcd4b4a0dda073be0c9552521b3  GeoIP-1.6.5.tar.gz
-+sha256  4b446491843de67c1af9b887da17a3e5939e0aeed4826923a5f4bf09d845096f  GeoIP-1.6.9.tar.gz
-diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
-index 0496de1..cf3bc1a 100644
---- a/package/geoip/geoip.mk
-+++ b/package/geoip/geoip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GEOIP_VERSION = 1.6.5
-+GEOIP_VERSION = 1.6.9
- GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
- GEOIP_SITE = https://github.com/maxmind/geoip-api-c/releases/download/v$(GEOIP_VERSION)
- GEOIP_INSTALL_STAGING = YES
+Hi,
+
+ > Peter already patch gstreamer for qt5base and he have removed 
+ > gstreamer0.1 support[1]. I'm not sure this was the good solution because 
+ > gstreamer0.1 is still the default choise for Qt[2] but no buildroot user 
+ > seems to complain about that.
+
+As I explained in the commit message, the reason for disabling the
+gstreamer 0.10.x support was that it was broken in qt5multimedia. If
+this is (or gets in the future) fixed, then I have no problem adding it
+again.
+
+With that said, we should use prefer gstreamer 1.x support over 0.10.x
+if both are enabled.
+
 -- 
-2.4.10
+Venlig hilsen,
+Peter Korsgaard 
