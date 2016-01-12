@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 12 Jan 2016 08:55:37 -0300
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.3.4
-Message-ID: <1452599737-10684-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 12 Jan 2016 09:08:11 -0300
+Subject: [Buildroot] [PATCH] geoip: bump to version 1.6.9
+Message-ID: <1452600491-10830-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
+ package/geoip/geoip.hash | 2 +-
+ package/geoip/geoip.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 494ad17..f42e37a 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
+diff --git a/package/geoip/geoip.hash b/package/geoip/geoip.hash
+index d410c2f..505c38f 100644
+--- a/package/geoip/geoip.hash
++++ b/package/geoip/geoip.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	e62d21313acbb29e24b0b80aaf2b63fdd1ccce4cfb741f333deca95a1a3a70df	samba-4.3.3.tar.gz
-+sha256	5d0eb52e842832af922f7d57716eacff23192906ec3bdf6727e18ca24f1419d9	samba-4.3.4.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 50a2692..4e796a6 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+ # Locally calculated
+-sha256  0ae1c95e69ad627d3a45cb897f79ce0c30f13fcd4b4a0dda073be0c9552521b3  GeoIP-1.6.5.tar.gz
++sha256  4b446491843de67c1af9b887da17a3e5939e0aeed4826923a5f4bf09d845096f  GeoIP-1.6.9.tar.gz
+diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
+index 0496de1..cf3bc1a 100644
+--- a/package/geoip/geoip.mk
++++ b/package/geoip/geoip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.3.3
-+SAMBA4_VERSION = 4.3.4
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-GEOIP_VERSION = 1.6.5
++GEOIP_VERSION = 1.6.9
+ GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
+ GEOIP_SITE = https://github.com/maxmind/geoip-api-c/releases/download/v$(GEOIP_VERSION)
+ GEOIP_INSTALL_STAGING = YES
 -- 
 2.4.10
