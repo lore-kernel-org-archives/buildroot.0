@@ -1,74 +1,77 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 12 Jan 2016 17:49:38 +0000
-Subject: [Buildroot] [PATCH v5] toolchain: allow side by side sysroot
-	directories
-Message-ID: <1452620978-60112-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Jan 2016 21:12:20 +0100
+Subject: [Buildroot] [PATCH] procps-ng: remove the remaining busybox
+ symlinks
+In-Reply-To: <1452608581-9742-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1452608581-9742-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160112211220.2b7c24bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently our toolchain infrastructure assumes that every toolchain has
-nested sysroot directories. However that's not true for all of them. The
-Codescape toolchains from Imagination Technologies use a side by side
-sysroot structure, for instance.
+Vicente,
 
-This patch allows our toolchain infrastructure to detect what kind of
-sysroot structure we have (nested or side by side) and performs the
-appropriate actions.
+On Tue, 12 Jan 2016 14:23:01 +0000, Vicente Olivert Riera wrote:
+> procps-ng is installed after busybox to ensure that its tools overwrite
+> the ones installed by busybox. However, some busybox symlinks for tools
+> which are now provided by procps-ng remain in /bin and /sbin pointing to
+> the busybox binary.
+> 
+> This shouldn't be a problem since the /usr/bin directory is listed
+> before /bin in the $PATH variable. However there could be some scripts
+> out there hardcoding the path of those tools calling them by "/bin/ps"
+> for instance.
+> 
+> So in order to avoid potential problems we just remove all busybox
+> symlinks for the tools which are now provided by procps-ng.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/procps-ng/procps-ng.mk | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+> index 07e98b9..784977d 100644
+> --- a/package/procps-ng/procps-ng.mk
+> +++ b/package/procps-ng/procps-ng.mk
+> @@ -17,8 +17,23 @@ PROCPS_NG_GETTEXTIZE = YES
+>  
+>  # If both procps-ng and busybox are selected, make certain procps-ng
+>  # wins the fight over who gets to have their utils actually installed.
+> +# Also remove the remaining busybox symlinks for tools which are now
+> +# provided by procps-ng.
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+>  PROCPS_NG_DEPENDENCIES += busybox
+> +
+> +define PROCPS_NG_REMOVE_BUSYBOX_COUNTERPARTS
+> +	for i in free kill pgrep pidof pkill pmap ps pwdx slabtop tload top uptime vmstat w watch; do \
+> +		if [ "$$(readlink $(TARGET_DIR)/bin/$$i)" == "busybox" ]; then \
+> +			rm $(TARGET_DIR)/bin/$$i; \
+> +		fi; \
+> +	done
+> +
+> +	if [ "$$(readlink $(TARGET_DIR)/sbin/sysctl)" == "../bin/busybox" ]; then \
+> +		rm $(TARGET_DIR)/sbin/sysctl; \
+> +	fi
+> +endef
+> +PROCPS_NG_POST_INSTALL_TARGET_HOOKS += PROCPS_NG_REMOVE_BUSYBOX_COUNTERPARTS
+>  endif
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
----
-Changes v4 -> v5:
- - Add an echo to display what is being symlinked. (Suggested by Romain)
-Changes v1 -> v4:
- - This patch didn't exist before. It has been introduced in v4.
+I don't think we're doing it this way for any other package. In
+general, we either:
 
- toolchain/helpers.mk | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ * Arrange for the package to install its tools at the same location as
+   Busybox installs them.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 1452ec6..d55474b 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -142,18 +142,25 @@ copy_toolchain_sysroot = \
- 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
- 		fi ; \
- 	done ; \
--	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
--		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
--			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
--		fi ; \
--		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
-+	SYSROOT_DIR_CANON=`readlink -f $${SYSROOT_DIR}` ; \
-+	ARCH_SYSROOT_DIR_CANON=`readlink -f $${ARCH_SYSROOT_DIR}` ; \
-+	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} ] ; then \
- 		relpath="./" ; \
--		nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
--		for slash in `seq 1 $${nbslashs}` ; do \
--			relpath=$${relpath}"../" ; \
--		done ; \
--		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
--		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
-+		if [ $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
-+			if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
-+				cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
-+			fi ; \
-+			mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
-+			nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
-+			for slash in `seq 1 $${nbslashs}` ; do \
-+				relpath=$${relpath}"../" ; \
-+			done ; \
-+			ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
-+			echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
-+		elif [ `dirname $${ARCH_SYSROOT_DIR_CANON}` == `dirname $${SYSROOT_DIR_CANON}` ] ; then \
-+			ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
-+			echo "Symlinking $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` -> $${relpath}" ; \
-+		fi ; \
- 	fi ; \
- 	if test -n "$${SUPPORT_LIB_DIR}" ; then \
- 		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
+ * Or add a post-install hook to move the binaries installed by the
+   package to where Busybox installs them.
+
+Peter, Yann ?
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
