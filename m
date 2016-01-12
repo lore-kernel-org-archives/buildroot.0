@@ -1,34 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2016 13:24:17 +0100
-Subject: [Buildroot] [PATCH 1/2] qt/qt5base: force gstreamer on configure
-In-Reply-To: <5694E89C.30807@ecagroup.com> (Julien CORJON's message of "Tue,
- 12 Jan 2016 11:50:53 +0000")
-References: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
- <20160110161902.GF3460@free.fr> <5694E89C.30807@ecagroup.com>
-Message-ID: <8760yz9ea6.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 12 Jan 2016 14:23:01 +0000
+Subject: [Buildroot] [PATCH] procps-ng: remove the remaining busybox symlinks
+Message-ID: <1452608581-9742-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien CORJON <corjon.j@ecagroup.com> writes:
+procps-ng is installed after busybox to ensure that its tools overwrite
+the ones installed by busybox. However, some busybox symlinks for tools
+which are now provided by procps-ng remain in /bin and /sbin pointing to
+the busybox binary.
 
-Hi,
+This shouldn't be a problem since the /usr/bin directory is listed
+before /bin in the $PATH variable. However there could be some scripts
+out there hardcoding the path of those tools calling them by "/bin/ps"
+for instance.
 
- > Peter already patch gstreamer for qt5base and he have removed 
- > gstreamer0.1 support[1]. I'm not sure this was the good solution because 
- > gstreamer0.1 is still the default choise for Qt[2] but no buildroot user 
- > seems to complain about that.
+So in order to avoid potential problems we just remove all busybox
+symlinks for the tools which are now provided by procps-ng.
 
-As I explained in the commit message, the reason for disabling the
-gstreamer 0.10.x support was that it was broken in qt5multimedia. If
-this is (or gets in the future) fixed, then I have no problem adding it
-again.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/procps-ng/procps-ng.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-With that said, we should use prefer gstreamer 1.x support over 0.10.x
-if both are enabled.
-
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 07e98b9..784977d 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -17,8 +17,23 @@ PROCPS_NG_GETTEXTIZE = YES
+ 
+ # If both procps-ng and busybox are selected, make certain procps-ng
+ # wins the fight over who gets to have their utils actually installed.
++# Also remove the remaining busybox symlinks for tools which are now
++# provided by procps-ng.
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ PROCPS_NG_DEPENDENCIES += busybox
++
++define PROCPS_NG_REMOVE_BUSYBOX_COUNTERPARTS
++	for i in free kill pgrep pidof pkill pmap ps pwdx slabtop tload top uptime vmstat w watch; do \
++		if [ "$$(readlink $(TARGET_DIR)/bin/$$i)" == "busybox" ]; then \
++			rm $(TARGET_DIR)/bin/$$i; \
++		fi; \
++	done
++
++	if [ "$$(readlink $(TARGET_DIR)/sbin/sysctl)" == "../bin/busybox" ]; then \
++		rm $(TARGET_DIR)/sbin/sysctl; \
++	fi
++endef
++PROCPS_NG_POST_INSTALL_TARGET_HOOKS += PROCPS_NG_REMOVE_BUSYBOX_COUNTERPARTS
+ endif
+ 
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.4.10
