@@ -1,42 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2016 21:35:54 +0100
-Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.1.3
-Message-ID: <20160112204022.86E1D81ED2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Jan 2016 21:39:43 +0100
+Subject: [Buildroot] [PATCH] rabbitmq-c: needs a toolchain with
+ posix_spawn support
+In-Reply-To: <1452516753-1555-1-git-send-email-joris.lijssens@gmail.com>
+References: <1452516753-1555-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <20160112213943.60b8fc12@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f141eb21858c72fbd62fc83aaf9475f7b4af7125
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Joris,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Mon, 11 Jan 2016 13:52:33 +0100, Joris Lijssens wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/a6c3e79c61c5a535970d03bf37b068349f766a7f/
+> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 0b2bdcb..67050a7 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.2.tar.bz2.sha256
--sha256	4a2c5790bd3db7c3ca8c02e4858f2fd592df7932c1d2fa9f6b99acbce0f8461f	harfbuzz-1.1.2.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.3.tar.bz2.sha256
-+sha256	d93d7cb7979c32672e902fdfa884599e63f07f2fa5b06c66147d20c516d4b8f7	harfbuzz-1.1.3.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index be8a899..36b291a 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 1.1.2
-+HARFBUZZ_VERSION = 1.1.3
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+Missing empty line before your SoB line.
+
+> ---
+>  package/rabbitmq-c/Config.in | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/rabbitmq-c/Config.in b/package/rabbitmq-c/Config.in
+> index b330c90..ec72f82 100644
+> --- a/package/rabbitmq-c/Config.in
+> +++ b/package/rabbitmq-c/Config.in
+> @@ -1,11 +1,15 @@
+>  config BR2_PACKAGE_RABBITMQ_C
+>  	bool "rabbitmq-c"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG \
+> +		|| BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
+>  	help
+>  	  This is a C-language AMQP client library for use with v2.0+
+>  	  of the RabbitMQ broker.
+>  
+>  	  https://github.com/alanxz/rabbitmq-c
+>  
+> -comment "rabbitmq-c needs a toolchain w/ threads"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +comment "rabbitmq-c needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+> +		|| !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG \
+> +		|| BR2_TOOLCHAIN_USES_GLIBC) 
+
+I know that the vlc package is doing the same for its spawn.h
+dependency, but I don't like this: the comment says that you need a
+"uclibc snapshot or uclibc-ng toolchain", but in practice, if you use
+an external toolchain that uses uClibc-ng, you still won't be able to
+enable the rabbitmq-c package because BR2_UCLIBC_VERSION_NG is a symbol
+that is specific to the internal toolchain backend.
+
+So I see a few options here:
+
+ 1/ We do like the blktrace package is doing (for the same reason),
+    which is allowing the package only on glibc and musl
+    configurations. This is a bit sad because modern uClibc version are
+    perfectly capable of handling this package.
+
+ 2/ We assume that all uClibc versions are now sufficiently recent and
+    we allow the package with uClibc, with a special exception for the
+    Blackfin toolchain (which was the reason of the failure).
+
+(If we chose either (1) or (2), then we should align vlc and blktrace
+on the chosen solution)
+
+Peter, Yann, what do you think ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
