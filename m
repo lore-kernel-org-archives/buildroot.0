@@ -1,28 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jan 2016 09:17:26 +0100
-Subject: [Buildroot] [PATCH] rabbitmq-c: needs a toolchain with
- posix_spawn support
-In-Reply-To: <CACt6We3dS-9LNNTMkUNu2vmBdSkJYri6g6X0g2No-D61GRmq4g@mail.gmail.com>
-References: <1452516753-1555-1-git-send-email-joris.lijssens@gmail.com>
- <20160112213943.60b8fc12@free-electrons.com>
- <20160112205052.GB3463@free.fr>
- <CACt6We3dS-9LNNTMkUNu2vmBdSkJYri6g6X0g2No-D61GRmq4g@mail.gmail.com>
-Message-ID: <20160113091726.62ed0d01@free-electrons.com>
+Date: Wed, 13 Jan 2016 09:23:06 +0100
+Subject: [Buildroot] [PATCH] linux-fusion: fix several build issues
+In-Reply-To: <56957C2D.4060901@free.fr>
+References: <56951746.4070806@free.fr>
+ <20160112174251.7280fdf3@free-electrons.com>
+ <56957C2D.4060901@free.fr>
+Message-ID: <20160113092306.6e57b621@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Joris Lijssens,
+Hello,
 
-On Wed, 13 Jan 2016 08:56:33 +0100, Joris Lijssens wrote:
+On Tue, 12 Jan 2016 23:20:29 +0100, Mason wrote:
 
-> So I will send a new patch excluding the blackfin. are there still other
-> configurations that use an ancient uClibc without spawn support, or is the
-> blackfin the only one?
+> > We need your real name here to accept your patches. See
+> > http://lxr.free-electrons.com/source/Documentation/SubmittingPatches#L448.
+> 
+> Do you mean my full name, not just my first name?
 
-As far as I remember, Blackfin is the only one.
+Yes, your full name (first name + last name).
+
+> > Can you try instead to replace '%ld' by '%tu'. Apparently, according to
+> > lib/vsprintf.c, %t is the proper format specifier for ptrdiff_t.
+> 
+> Erf, I had missed that, as the documentation isn't up-to-date.
+> https://www.kernel.org/doc/Documentation/printk-formats.txt
+> 
+> However, if I do use a specific kernel feature, the module
+> will no longer build for earlier kernels, while a cast
+> works "everywhere".
+> 
+> I tried tracing the history of the %t spec in printk.
+> I found 4370aa4aa753 (dated 2009-03-06) i.e. since 2.6.30
+> 
+> What do you think?
+
+Keep your cast, it's simpler and will remain compatible with kernels
+earlier than 2.6.30.
+
+> >> +-#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) || defined(CONFIG_TINY_RCU) || defined(rcu_read_lock)
+> >> ++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,18) || defined(rcu_read_lock)
+> > 
+> > Are you sure it is good to keep the defined(rcu_read_lock) test ? This
+> > only works if rcu_read_lock is a macro, not if it's an inline function.
+> > If tasklisk_lock is available up to 2.6.18, then why not simply keep
+> > the version-based condition?
+> 
+> AFAICT, the rcu_read_lock macro was introduced in the 2.5 dev cycle.
+> bc33f24bdca8 changed rcu_read_lock from a macro to an inline function
+> since 2.6.32
+> 
+> It's possible e.g. kernel 2.6.16 (one of the first LTS kernels IIUC)
+> had both rcu_read_lock available, and tasklist_lock exported.
+> 
+> On the other hand, if both methods are available, I'm not sure which
+> was better. Do you have a strong opinion on the subject?
+
+No, I don't have a strong opinion on this, since I don't fully grok the
+details. Though I would assume that if tasklist_lock was changed to be
+no longer exported, then presumably using rcu_read_lock() is a better
+solution. But again I'm just guessing.
 
 Best regards,
 
