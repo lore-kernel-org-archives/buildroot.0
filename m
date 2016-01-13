@@ -1,51 +1,64 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Wed, 13 Jan 2016 07:25:14 -0800
-Subject: [Buildroot] [USER] buildroot install external toolchains
-In-Reply-To: <20160112074938.GB1937@tarshish>
-References: <CAJJ6jxvGYN8Pd-8GwzVHSZWKc2CpsNE47Xb23EF-m0_ZFVS7Ew@mail.gmail.com>
- <20160112074938.GB1937@tarshish>
-Message-ID: <CAJJ6jxtn_2Uigby3hMW9Q3orCAFyYRjoQ9sdos9t-s=NNvrd=Q@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 13 Jan 2016 15:26:42 +0000
+Subject: [Buildroot] [PATCH] procps-ng: remove the remaining busybox
+	symlinks
+In-Reply-To: <8760yy8r7b.fsf@dell.be.48ers.dk>
+References: <1452608581-9742-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160112211220.2b7c24bb@free-electrons.com> <20160112202045.GA3463@free.fr>
+ <8760yy8r7b.fsf@dell.be.48ers.dk>
+Message-ID: <56966CB2.5030702@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hello Peter, Thomas, Yann,
 
-Hi Baruch,
+On 12/01/16 20:42, Peter Korsgaard wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+> Hi,
+> 
+>  >> I don't think we're doing it this way for any other package. In
+>  >> general, we either:
+>  >> 
+>  >> * Arrange for the package to install its tools at the same location as
+>  >> Busybox installs them.
+>  >> 
+>  >> * Or add a post-install hook to move the binaries installed by the
+>  >> package to where Busybox installs them.
+>  >> 
+>  >> Peter, Yann ?
+> 
+>  > Yes, I agree with Thomas. First solution is preferred if possible, of
+>  > course, so that we don't have to maintain the list of executables to
+>  > move in the post-install hook.
+> 
+> Agreed. If you need to go for the second option make sure it is only
+> done if !BR2_ROOTFS_MERGED_USR.
+> 
 
-On Mon, Jan 11, 2016 at 11:49 PM, Baruch Siach <baruch@tkos.co.il> wrote:
->
-> Hi Steve,
->
-> On Mon, Jan 11, 2016 at 08:55:34PM -0800, Steve Calfee wrote:
-> > I am trying to use docker to cross build buildroot. I don't want to build
-> > the toolchain so I tried to use a pre-built toolchain as the autobuilders
-> > do. I got a list of toolchains from
-> > https://sourceware.org/ml/crossgcc/2015-05/msg00014.html written by Thomas
-> > P.
-> >
-> > So I extracted one into the filesystem and tried to use it, but something
-> > is wrong.
-> >
-> > From bash I tried:
-> > /br/armv7-ctng-linux-gnueabihf/bin/armv7-ctng-linux-gnueabihf-gcc --version
-> > bash: /br/armv7-ctng-linux-gnueabihf/bin/armv7-ctng-linux-gnueabihf-gcc: No
-> > such file or directory
->
-> The 'No such file or directory' error might indicate missing libraries. This
-> toolchain is built to run on 32bit x86 systems. Make sure you have 32bit
-> versions of libc and libstdc++ packages installed on your system.
->
->
+configuring procps-ng for installing its binaries in /bin and /sbin
+(first option suggested by Thomas) mostly works, except for two tools
+(pidof and watch) which are installed in /usr/bin and their busybox
+counterparts still exist in /bin.
 
+configuring procps-ng for installing its binaries in /bin and /sbin
+doesn't mean that all its binaries will end up in /bin and /sbin. Some
+of them are still installed in /usr/bin and /usr/sbin.
 
-Thanks, I did not know they were 32 bit apps. So I installed those
-libraries and the toolchains now work in a docker container.
+So, I see three options here:
 
-I am still struggling with getting persistent storage working - Stuff
-like customization, builds and downloads should be persistent. However
-when done it will make it much easier to setup a build system.
+1 - follow the second suggestion from Thomas (post-install hook to move
+the ALL binaries installed by the package to where Busybox installs them)
 
-Regards, Steve
+2 - same thing but only move pidof and watch binaries
+
+3 - remove /bin/pidof and /bin/watch symlinks installed by Busybox
+
+I happy with any of them, so, which one do you prefer?
+
+Regards,
+
+Vincent.
