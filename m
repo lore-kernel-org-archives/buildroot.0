@@ -1,41 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2016 21:43:18 +0100
-Subject: [Buildroot] [git commit] openntpd: set time immediately from
-	initscript
-Message-ID: <20160113204530.C419782767@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 13 Jan 2016 21:53:32 +0100
+Subject: [Buildroot] [PATCH] docs/website: fixing mixing content error
+Message-ID: <1452718412-15095-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80003ab6cfce0faaa473d5b99062c905b8f231ba
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Firefox recently activated mixing content mode protection
+(http elements in an https page). This patch changes
+the external slides service to https.
 
-Match the systemd service file and set time immediately on startup
-rather than small steps when it differs a lot.
-On embedded scenarios this is better since boards that lack a
-battery-backed RTC might start at unix epoch and the time set will delay
-for quite a while otherwise.
-For boards that do have a battery-backed RTC the behaviour will be
-practically the same unless the RTC drifts a lot.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/openntpd/S49ntp | 2 +-
+ docs/website/js/buildroot.js | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openntpd/S49ntp b/package/openntpd/S49ntp
-index 1a67841..c211ac8 100755
---- a/package/openntpd/S49ntp
-+++ b/package/openntpd/S49ntp
-@@ -6,7 +6,7 @@
- case "$1" in
- 	start)
- 		printf "Starting openntpd: "
--		start-stop-daemon -S -x /usr/sbin/ntpd -- -p /run/ntpd.pid
-+		start-stop-daemon -S -x /usr/sbin/ntpd -- -s -p /run/ntpd.pid
- 		[ $? = 0 ] && echo "OK" || echo "FAIL"
- 		;;
- 	stop)
+diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
+index 2fd3b78..122436e 100644
+--- a/docs/website/js/buildroot.js
++++ b/docs/website/js/buildroot.js
+@@ -78,7 +78,7 @@ jQuery(document).ready(function($) {
+     url = url.split(/[\\/]/).pop()
+     $('.nav a[href="/' + url + '"]').parent().addClass('active');
+ 
+-    $('#slides').html('<iframe src="http://docs.google.com/gview?url=http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
++    $('#slides').html('<iframe src="https://docs.google.com/gview?url=http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
+ });
+ 
+ function showTooltip(elem, msg) {
+-- 
+1.9.1
