@@ -1,80 +1,115 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Wed, 13 Jan 2016 09:43:10 +0200 (IST)
-Subject: [Buildroot] [PATCH 1/1 v3] ypbind-mt: new package
-In-Reply-To: <569579C5.1010409@mind.be>
-References: <1452516304-6029-1-git-send-email-yba@tkos.co.il>
- <569579C5.1010409@mind.be>
-Message-ID: <alpine.DEB.2.11.1601130838470.11251@tanhuma.tkos.co.il>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Wed, 13 Jan 2016 08:56:33 +0100
+Subject: [Buildroot] [PATCH] rabbitmq-c: needs a toolchain with
+ posix_spawn support
+In-Reply-To: <20160112205052.GB3463@free.fr>
+References: <1452516753-1555-1-git-send-email-joris.lijssens@gmail.com>
+ <20160112213943.60b8fc12@free-electrons.com>
+ <20160112205052.GB3463@free.fr>
+Message-ID: <CACt6We3dS-9LNNTMkUNu2vmBdSkJYri6g6X0g2No-D61GRmq4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Jan 2016, Arnout Vandecappelle wrote:
+Hello Thomas, All,
 
-> Date: Tue, 12 Jan 2016 23:10:13 +0100
-> From: Arnout Vandecappelle <arnout@mind.be>
-> To: Jonathan Ben-Avraham <yba@tkos.co.il>, buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH 1/1 v3] ypbind-mt: new package
-> 
-> Hi Jonathan,
+So I will send a new patch excluding the blackfin. are there still other
+configurations that use an ancient uClibc without spawn support, or is the
+blackfin the only one?
+
+regards
+Joris
+
+On 12 January 2016 at 21:50, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+
+> Joris, thomas, All,
 >
-> On 11-01-16 13:45, Jonathan Ben-Avraham wrote:
->> From: Jonathan Ben Avraham <yba@tkos.co.il>
->>
->> This patch adds the ypbind-mt package that contains a multithreaded
->> ypbind daemon for Linux. It uses threads for better response and
->> supports the ypbind protocols version 1, 2 and 3. ypbind finds the
->> server for a given NIS domain and stores information about it in a
->> binding file on the local host.
-
-[snip]
->> diff --git a/package/Config.in b/package/Config.in
->> index f3b4812..b226518 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1476,7 +1476,7 @@ endif
+> On 2016-01-12 21:39 +0100, Thomas Petazzoni spake thusly:
+> > On Mon, 11 Jan 2016 13:52:33 +0100, Joris Lijssens wrote:
+> > > Fixes:
+> > >
+> http://autobuild.buildroot.net/results/a6c3e79c61c5a535970d03bf37b068349f766a7f/
+> > > Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+> [--SNIP--]
+> > > diff --git a/package/rabbitmq-c/Config.in
+> b/package/rabbitmq-c/Config.in
+> > > index b330c90..ec72f82 100644
+> > > --- a/package/rabbitmq-c/Config.in
+> > > +++ b/package/rabbitmq-c/Config.in
+> > > @@ -1,11 +1,15 @@
+> > >  config BR2_PACKAGE_RABBITMQ_C
+> > >     bool "rabbitmq-c"
+> > >     depends on BR2_TOOLCHAIN_HAS_THREADS
+> > > +   depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG \
+> > > +           || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
+> > >     help
+> > >       This is a C-language AMQP client library for use with v2.0+
+> > >       of the RabbitMQ broker.
+> > >
+> > >       https://github.com/alanxz/rabbitmq-c
+> > >
+> > > -comment "rabbitmq-c needs a toolchain w/ threads"
+> > > -   depends on !BR2_TOOLCHAIN_HAS_THREADS
+> > > +comment "rabbitmq-c needs a uclibc snapshot, uclibc-ng or (e)glibc
+> toolchain w/ threads"
+> > > +   depends on !BR2_TOOLCHAIN_HAS_THREADS \
+> > > +           || !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG \
+> > > +           || BR2_TOOLCHAIN_USES_GLIBC)
+> >
+> > I know that the vlc package is doing the same for its spawn.h
+> > dependency, but I don't like this: the comment says that you need a
+> > "uclibc snapshot or uclibc-ng toolchain", but in practice, if you use
+> > an external toolchain that uses uClibc-ng, you still won't be able to
+> > enable the rabbitmq-c package because BR2_UCLIBC_VERSION_NG is a symbol
+> > that is specific to the internal toolchain backend.
+> >
+> > So I see a few options here:
+> >
+> >  1/ We do like the blktrace package is doing (for the same reason),
+> >     which is allowing the package only on glibc and musl
+> >     configurations. This is a bit sad because modern uClibc version are
+> >     perfectly capable of handling this package.
+> >
+> >  2/ We assume that all uClibc versions are now sufficiently recent and
+> >     we allow the package with uClibc, with a special exception for the
+> >     Blackfin toolchain (which was the reason of the failure).
+> >
+> > (If we chose either (1) or (2), then we should align vlc and blktrace
+> > on the chosen solution)
+> >
+> > Peter, Yann, what do you think ?
 >
-> There's something funky about this patch fragment (i.e. it's wrong). Did you
-> manually edit it?
+> Well:
+>   - I don't care much about bfin,
 >
->>  	source "package/xinetd/Config.in"
->>  	source "package/xl2tp/Config.in"
->>  	source "package/xtables-addons/Config.in"
->> +	source "package/ypbind-mt/Config.in"
+>   - last uClibc verison was ~3 years ago, uClibc snapshot is OK,
+>     uClibc-ng is capable.
 >
-> This conflicts with your own yp-tools submission from a few hours before. You
-> should put these patches in a single series to avoid that kind of problem.
+> So we can consider that ancient uClibc missing spawn.h is too old, and
+> we don't support that.
 >
->>  	source "package/znc/Config.in"
->>
->>  endmenu
-
-[snip]
-Hi Arnout,
-TP explicitly asked to submit yp-tools and ypbind-mt in separate 
-submissions.
-
-It is not clear to me how to submit a patch that depends on another 
-pending patch having been applied. The possibilities that I see are:
-
-1. Patch against the current origin and ignore the fact that there is a 
-dependency on the yp-tools patch having been applied
-
-2. Provide the same line added by the patch for yp-tools as part of this 
-patch. That is, the ypbind-mt patch would add two lines to 
-package/Config.in.
-
-3. Provide a patch for ypbind-mt that assumes that the patch for yp-tools 
-has already been applied to the origin.
-
-What is the correct decision?
-
-  - yba
-
-
--- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+> So I'm fine with #2. And of course, we must propagate that decision ot
+> other similarly-impacted packages, yes.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
+> is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160113/3d4c2c4a/attachment.html>
