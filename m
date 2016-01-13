@@ -1,43 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2016 22:13:12 +0100
-Subject: [Buildroot] [git commit] package/lttng-modules: bump to version
-	2.7.1
-Message-ID: <20160113211741.3AE037FDDD@busybox.osuosl.org>
+Date: Wed, 13 Jan 2016 22:13:50 +0100
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.66
+Message-ID: <20160113211741.4FEDF7FDDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bbb2f8bf32b93377daae8d020848b6ab8b77a014
+commit: http://git.buildroot.net/buildroot/commit/?id=baf459cdae3f20445e4d9d05f947a5baa25c8bed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lttng-modules/lttng-modules.hash | 4 ++--
- package/lttng-modules/lttng-modules.mk   | 2 +-
+ package/libdrm/libdrm.hash | 4 ++--
+ package/libdrm/libdrm.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index b94d910..2d50287 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 95dcd7a..948c7bf 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
 @@ -1,2 +1,2 @@
--# http://www.lttng.org/files/lttng-modules/lttng-modules-2.7.0.tar.bz2.sha1
--sha1  b98b85cd71c03d511b37790644353c7209bcadd4  lttng-modules-2.7.0.tar.bz2
-+# from http://lttng.org/files/lttng-tools/lttng-modules-2.7.1.tar.bz2.sha1
-+sha1  38c42ec89b4966c7a4cc04aea75f5841634d8d66  lttng-modules-2.7.1.tar.bz2
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index a4e1461..5d0c422 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
+-# From http://lists.freedesktop.org/archives/dri-devel/2015-September/090394.html
+-sha256	71960ac8bde7d710992b1bc8879935e8300a870c36bd06f22412d0447e3d96c4	libdrm-2.4.65.tar.bz2
++# From http://lists.freedesktop.org/archives/dri-devel/2015-December/097697.html
++sha256	79cb8e988749794edfb2d777b298d5292eff353bbbb71ed813589e61d2bc2d76	libdrm-2.4.66.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 8db2236..8d84beb 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LTTNG_MODULES_VERSION = 2.7.0
-+LTTNG_MODULES_VERSION = 2.7.1
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+-LIBDRM_VERSION = 2.4.65
++LIBDRM_VERSION = 2.4.66
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
