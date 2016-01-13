@@ -1,73 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jan 2016 09:23:06 +0100
-Subject: [Buildroot] [PATCH] linux-fusion: fix several build issues
-In-Reply-To: <56957C2D.4060901@free.fr>
-References: <56951746.4070806@free.fr>
- <20160112174251.7280fdf3@free-electrons.com>
- <56957C2D.4060901@free.fr>
-Message-ID: <20160113092306.6e57b621@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Jan 2016 09:33:38 +0100
+Subject: [Buildroot] [git commit] opus: bump to version 1.1.2
+Message-ID: <20160113083422.2ABBA826D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=87d813f69a044982e29cbd948b39d17170fc0de8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 12 Jan 2016 23:20:29 +0100, Mason wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/opus/opus.hash | 2 +-
+ package/opus/opus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > We need your real name here to accept your patches. See
-> > http://lxr.free-electrons.com/source/Documentation/SubmittingPatches#L448.
-> 
-> Do you mean my full name, not just my first name?
-
-Yes, your full name (first name + last name).
-
-> > Can you try instead to replace '%ld' by '%tu'. Apparently, according to
-> > lib/vsprintf.c, %t is the proper format specifier for ptrdiff_t.
-> 
-> Erf, I had missed that, as the documentation isn't up-to-date.
-> https://www.kernel.org/doc/Documentation/printk-formats.txt
-> 
-> However, if I do use a specific kernel feature, the module
-> will no longer build for earlier kernels, while a cast
-> works "everywhere".
-> 
-> I tried tracing the history of the %t spec in printk.
-> I found 4370aa4aa753 (dated 2009-03-06) i.e. since 2.6.30
-> 
-> What do you think?
-
-Keep your cast, it's simpler and will remain compatible with kernels
-earlier than 2.6.30.
-
-> >> +-#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) || defined(CONFIG_TINY_RCU) || defined(rcu_read_lock)
-> >> ++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,18) || defined(rcu_read_lock)
-> > 
-> > Are you sure it is good to keep the defined(rcu_read_lock) test ? This
-> > only works if rcu_read_lock is a macro, not if it's an inline function.
-> > If tasklisk_lock is available up to 2.6.18, then why not simply keep
-> > the version-based condition?
-> 
-> AFAICT, the rcu_read_lock macro was introduced in the 2.5 dev cycle.
-> bc33f24bdca8 changed rcu_read_lock from a macro to an inline function
-> since 2.6.32
-> 
-> It's possible e.g. kernel 2.6.16 (one of the first LTS kernels IIUC)
-> had both rcu_read_lock available, and tasklist_lock exported.
-> 
-> On the other hand, if both methods are available, I'm not sure which
-> was better. Do you have a strong opinion on the subject?
-
-No, I don't have a strong opinion on this, since I don't fully grok the
-details. Though I would assume that if tasklist_lock was changed to be
-no longer exported, then presumably using rcu_read_lock() is a better
-solution. But again I'm just guessing.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/opus/opus.hash b/package/opus/opus.hash
+index b3aea0d..1d48398 100644
+--- a/package/opus/opus.hash
++++ b/package/opus/opus.hash
+@@ -1,2 +1,2 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256	9b84ff56bd7720d5554103c557664efac2b8b18acc4bbcc234cb881ab9a3371e	opus-1.1.1.tar.gz
++sha256	0e290078e31211baa7b5886bcc8ab6bc048b9fc83882532da4a1a45e58e907fd	opus-1.1.2.tar.gz
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index c4fef3a..eb082e3 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPUS_VERSION = 1.1.1
++OPUS_VERSION = 1.1.2
+ OPUS_SITE = http://downloads.xiph.org/releases/opus
+ OPUS_LICENSE = BSD-3c
+ OPUS_LICENSE_FILES = COPYING
