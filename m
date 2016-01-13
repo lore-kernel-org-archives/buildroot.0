@@ -1,95 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2016 22:09:08 +0100
-Subject: [Buildroot] [git commit] support/scripts/apply-patches.sh: fix
-	whitespace
-Message-ID: <20160113211741.04255827D6@busybox.osuosl.org>
+Date: Wed, 13 Jan 2016 22:10:14 +0100
+Subject: [Buildroot] [git commit] python-requests: bump to 2.9.1
+Message-ID: <20160113211741.0DC257FDDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c1a674f99422b2cc3b5fbe30b7abb255be71b6c0
+commit: http://git.buildroot.net/buildroot/commit/?id=4cc36ef9867feef9ba3da42fc345f0c61b3ed847
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The apply-patches.sh script was using a mix of tabs and spaces, and
-some three-space indentation. Normalize everything to four-space
-indentation.
+Add missing zlib runtime dependency.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/apply-patches.sh | 50 ++++++++++++++++++++--------------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
+ package/python-requests/Config.in            | 2 ++
+ package/python-requests/python-requests.hash | 6 +++---
+ package/python-requests/python-requests.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index aa13e88..201278d 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -69,41 +69,41 @@ function apply_patch {
-         type="series"; uncomp="cat"
-     else
-         case "$patch" in
--	    *.gz)
--	    type="gzip"; uncomp="gunzip -dc"; ;;
--	    *.bz)
--	    type="bzip"; uncomp="bunzip -dc"; ;;
--	    *.bz2)
--	    type="bzip2"; uncomp="bunzip2 -dc"; ;;
--	    *.xz)
--	    type="xz"; uncomp="unxz -dc"; ;;
--	    *.zip)
--	    type="zip"; uncomp="unzip -d"; ;;
--	    *.Z)
--	    type="compress"; uncomp="uncompress -c"; ;;
--	    *.diff*)
--	    type="diff"; uncomp="cat"; ;;
--	    *.patch*)
--	    type="patch"; uncomp="cat"; ;;
--	    *)
--	    echo "Unsupported file type for ${path}/${patch}, skipping";
--	    return 0
--	    ;;
-+            *.gz)
-+            type="gzip"; uncomp="gunzip -dc"; ;;
-+            *.bz)
-+            type="bzip"; uncomp="bunzip -dc"; ;;
-+            *.bz2)
-+            type="bzip2"; uncomp="bunzip2 -dc"; ;;
-+            *.xz)
-+            type="xz"; uncomp="unxz -dc"; ;;
-+            *.zip)
-+            type="zip"; uncomp="unzip -d"; ;;
-+            *.Z)
-+            type="compress"; uncomp="uncompress -c"; ;;
-+            *.diff*)
-+            type="diff"; uncomp="cat"; ;;
-+            *.patch*)
-+            type="patch"; uncomp="cat"; ;;
-+            *)
-+            echo "Unsupported file type for ${path}/${patch}, skipping";
-+            return 0
-+            ;;
-         esac
-     fi
-     if [ -z "$silent" ] ; then
--	echo ""
--	echo "Applying $patch using ${type}: "
-+        echo ""
-+        echo "Applying $patch using ${type}: "
-     fi
-     if [ ! -e "${path}/$patch" ] ; then
--	echo "Error: missing patch file ${path}/$patch"
--	exit 1
-+        echo "Error: missing patch file ${path}/$patch"
-+        exit 1
-     fi
-     echo $patch >> ${builddir}/.applied_patches_list
-     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
--	exit 1
-+        exit 1
-     fi
- }
+diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
+index 3367cf0..23ab309 100644
+--- a/package/python-requests/Config.in
++++ b/package/python-requests/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_REQUESTS
+ 	bool "python-requests"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+ 	help
+ 	  Requests is an Apache2 Licensed HTTP library, written in
+ 	  Python, for human beings.
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index d187dcd..b567fe6 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=02214b3a179e445545de4b7a98d3dd17, sha256 locally computed
+-md5	02214b3a179e445545de4b7a98d3dd17  requests-2.4.3.tar.gz
+-sha256	53c68313c5c6149b1a899234c000296e60a8900682accf73d6f0c6d608afc6b1  requests-2.4.3.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0b7f480d19012ec52bab78292efd976d, sha256 locally computed
++md5	0b7f480d19012ec52bab78292efd976d  requests-2.9.1.tar.gz
++sha256	c577815dd00f1394203fc44eb979724b098f88264a9ef898ee45b8e5e9cf587f  requests-2.9.1.tar.gz
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 5c12f1b..8cda2c5 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-PYTHON_REQUESTS_VERSION = 2.4.3
++PYTHON_REQUESTS_VERSION = 2.9.1
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+ PYTHON_REQUESTS_SITE = http://pypi.python.org/packages/source/r/requests
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
