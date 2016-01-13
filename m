@@ -1,34 +1,23 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 13 Jan 2016 21:53:32 +0100
-Subject: [Buildroot] [PATCH] docs/website: fixing mixing content error
-Message-ID: <1452718412-15095-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Jan 2016 22:08:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/portaudio: bump to version
+	v19_20140130
+In-Reply-To: <1452298415-9248-1-git-send-email-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Sat, 9 Jan 2016 01:13:35
+ +0100")
+References: <1452298415-9248-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <87vb6x427o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Firefox recently activated mixing content mode protection
-(http elements in an https page). This patch changes
-the external slides service to https.
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- docs/website/js/buildroot.js | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
-index 2fd3b78..122436e 100644
---- a/docs/website/js/buildroot.js
-+++ b/docs/website/js/buildroot.js
-@@ -78,7 +78,7 @@ jQuery(document).ready(function($) {
-     url = url.split(/[\\/]/).pop()
-     $('.nav a[href="/' + url + '"]').parent().addClass('active');
- 
--    $('#slides').html('<iframe src="http://docs.google.com/gview?url=http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
-+    $('#slides').html('<iframe src="https://docs.google.com/gview?url=http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
- });
- 
- function showTooltip(elem, msg) {
+Committed, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
