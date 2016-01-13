@@ -1,38 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 13 Jan 2016 09:29:04 -0300
-Subject: [Buildroot] [PATCH] openntpd: set time immediately from initscript
-Message-ID: <1452688144-5079-1-git-send-email-gustavo@zacarias.com.ar>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 13 Jan 2016 15:24:18 +0100
+Subject: [Buildroot] [PATCH] python-can: bump to 1.4.2
+Message-ID: <1452695058-4056-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Match the systemd service file and set time immediately on startup
-rather than small steps when it differs a lot.
-On embedded scenarios this is better since boards that lack a
-battery-backed RTC might start at unix epoch and the time set will delay
-for quite a while otherwise.
-For boards that do have a battery-backed RTC the behaviour will be
-practically the same unless the RTC drifts a lot.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Add hash file and change download location to PyPi.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/openntpd/S49ntp | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-can/python-can.hash | 3 +++
+ package/python-can/python-can.mk   | 5 ++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+ create mode 100644 package/python-can/python-can.hash
 
-diff --git a/package/openntpd/S49ntp b/package/openntpd/S49ntp
-index 1a67841..c211ac8 100755
---- a/package/openntpd/S49ntp
-+++ b/package/openntpd/S49ntp
-@@ -6,7 +6,7 @@
- case "$1" in
- 	start)
- 		printf "Starting openntpd: "
--		start-stop-daemon -S -x /usr/sbin/ntpd -- -p /run/ntpd.pid
-+		start-stop-daemon -S -x /usr/sbin/ntpd -- -s -p /run/ntpd.pid
- 		[ $? = 0 ] && echo "OK" || echo "FAIL"
- 		;;
- 	stop)
+diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+new file mode 100644
+index 0000000..bc3dfda
+--- /dev/null
++++ b/package/python-can/python-can.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9fb15ff75266f2cb53a175ee2097768, sha256 locally computed
++md5     b9fb15ff75266f2cb53a175ee2097768  python-can-1.4.2.tar.gz
++sha256  29b4e736b0d8b958b8074e209c9f1482e02761bbf97ddf0871f291da312c11ed  python-can-1.4.2.tar.gz
+diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+index c7b06a5..d6370ed 100644
+--- a/package/python-can/python-can.mk
++++ b/package/python-can/python-can.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CAN_VERSION = ae5b6cf
+-PYTHON_CAN_SITE = https://bitbucket.org/hardbyte/python-can/get
+-PYTHON_CAN_SOURCE = $(PYTHON_CAN_VERSION).tar.bz2
++PYTHON_CAN_VERSION = 1.4.2
++PYTHON_CAN_SITE = https://pypi.python.org/packages/source/p/python-can
+ PYTHON_CAN_LICENSE = LGPLv3
+ PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+ PYTHON_CAN_SETUP_TYPE = setuptools
 -- 
-2.4.10
+2.1.4
