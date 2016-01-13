@@ -1,40 +1,94 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2016 09:33:38 +0100
-Subject: [Buildroot] [git commit] opus: bump to version 1.1.2
-Message-ID: <20160113083422.2ABBA826D7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Jan 2016 09:51:53 +0100
+Subject: [Buildroot] [PATCH 1/1] configs: beaglebone: update kernel to
+ 4.1.13 and u-boot to 2015.10
+In-Reply-To: <1452653542-5562-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1452653542-5562-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <20160113095153.6b4f95cb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87d813f69a044982e29cbd948b39d17170fc0de8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Zoltan,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/opus/opus.hash | 2 +-
- package/opus/opus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, 13 Jan 2016 03:52:22 +0100, Zoltan Gyarmati wrote:
 
-diff --git a/package/opus/opus.hash b/package/opus/opus.hash
-index b3aea0d..1d48398 100644
---- a/package/opus/opus.hash
-+++ b/package/opus/opus.hash
-@@ -1,2 +1,2 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256	9b84ff56bd7720d5554103c557664efac2b8b18acc4bbcc234cb881ab9a3371e	opus-1.1.1.tar.gz
-+sha256	0e290078e31211baa7b5886bcc8ab6bc048b9fc83882532da4a1a45e58e907fd	opus-1.1.2.tar.gz
-diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-index c4fef3a..eb082e3 100644
---- a/package/opus/opus.mk
-+++ b/package/opus/opus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPUS_VERSION = 1.1.1
-+OPUS_VERSION = 1.1.2
- OPUS_SITE = http://downloads.xiph.org/releases/opus
- OPUS_LICENSE = BSD-3c
- OPUS_LICENSE_FILES = COPYING
+> This patch is basically the cleaned-up version of Chris LaRocque's patch
+> from his mail
+
+Thanks for respining this patch.
+
+> "[PATCH 1/2] Updated the Beaglebone configuration, 01/03/2016 10:01 PM"
+> and the cleanup followed Arnout's corresponding answers.
+> Changes to Chris' patches:
+> * dtc patches fetched from GH and placed in 'board/beaglebone/patches/dtc'
+> * BR2_GLOBAL_PATCH_DIR set accordingly
+> * added seperated kernel defconfig instead of patching the upstream defconfig
+> * cleanups in uEnv.txt
+> * fix u-boot version to 2015.10
+> 
+> The heavy-lifting was done by Chris here, the rest is mostly cosmetics. If
+> anything els seems to be tweaked, please let us know.
+> 
+> 
+>  board/beaglebone/linux-3.12.config                 |  251 ---
+>  board/beaglebone/linux_4.1.13_bb.org_defconfig     | 2043 ++++++++++++++++++++
+
+Looking at its size, this file looks like a full config file and not a
+defconfig. Please use a defconfig.
+
+Or better: please use the defconfig that is inside the kernel tree, and
+if you need additional tweaks, use config fragments.
+
+>  ...comment-block-of-fdt_get_property_namelen.patch |   32 +
+>  .../0002-fdt-Add-a-function-to-count-strings.patch |  246 +++
+>  ...d-a-function-to-get-the-index-of-a-string.patch |  159 ++
+>  ...004-fdt-Add-functions-to-retrieve-strings.patch |  173 ++
+
+I am not supper happy with the solution of having those DTC patches
+specifically for the BeagleBone platform. If I understand correctly,
+those patches are needed to get the DT overlay to work, right ?
+
+We had the same problem for the C.H.I.P platform, so it would also be
+useful for us to have a overlay-capable DTC. You can see what my
+colleague Antoine T?nart did:
+
+  https://github.com/NextThingCo/CHIP-buildroot/commit/1a73b514d204d0c6e9100d53011a11d99fd8b778
+  https://github.com/NextThingCo/CHIP-buildroot/commit/f3334df58611ff3cae5fd62906423fdce3d80d24
+  https://github.com/NextThingCo/CHIP-buildroot/commit/c4457eba3099f5ca514c06bb35b42772178a151a
+
+It is not ideal because it relies on a separate dtc-overlay package,
+which packages a different version of dtc, which Antoine has cooked on
+his own github repository.
+
+We really need to find a solution that is acceptable in the upstream
+Buildroot, and applies to multiple platforms.
+
+>  ...cache-flush-management-symbols-when-MULTI.patch |   34 -
+>  .../0001-am335x_evm-uEnv.txt-bootz-n-fixes.patch   |  754 ++++++++
+
+This huge U-Boot patch is really ugly and mixes lots of stuff. Why do
+you need it?
+
+
+> -# bootloader
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
+>  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.10"
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+
+So this is going to use the host-dtc package for U-Boot, but isn't the
+kernel still going to use its internal copy of dtc ? If so, how are
+your dtc patches useful for the kernel ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
