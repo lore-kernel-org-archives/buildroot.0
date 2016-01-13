@@ -1,26 +1,42 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 13 Jan 2016 19:34:28 -0200
-Subject: [Buildroot] [RFC PATCH v2 0/4] package/dhcp
-Message-ID: <5696c2e46d700_16baf34c4c4499@ultri2.mail>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Jan 2016 22:42:33 +0100
+Subject: [Buildroot] [PATCH] uclibc: update uClibc-ng to latest version
+	1.0.11
+In-Reply-To: <20160113194941.GY19876@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Wed, 13 Jan 2016 20:49:41 +0100")
+References: <20160110175806.GA23441@waldemar-brodkorb.de>
+ <87d1t679l2.fsf@dell.be.48ers.dk>
+ <20160113194941.GY19876@waldemar-brodkorb.de>
+Message-ID: <87si212m2e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Doug,
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-On Sun, 10 Jan 2016 15:25:05 -0600, Doug Kehn wrote:
-> This patch series bumps dhcp package to 4.3.3. I'm doing this as an RFC to get
-[snip]
+Hi,
 
-There is a new release for isc-dhcp from yesterday. It's a security update.
+>> Does this mean that systemd can be now used with uClibc-NG?
 
-https://kb.isc.org/article/AA-01334/0/CVE-2015-8605%3A-UDP-payload-length-not-properly-checked.html
-DHCP version 4.1-ESV-R12-P1
-DHCP version 4.3.3-P1
+ > In theory yes. OpenEmbedded recently switched to uClibc-ng and
+ > I got some bug reports regarding systemd. I debugged and tested
+ > some issues with buildroot, but I am not very interested in systemd
+ > myself. It needs some patching of systemd and some options disabled.
 
-IMO we should have a new version of the patch series before committing it.
+ > So if anybody cares, you could take a look at oe git.
 
-Regards,
-Ricardo
+Ok, thanks. I'm myself also not a systemd user, but if somebody else is
+interested, feel free to try it out!
+
+
+ > But as with all new features and bugfixes for uClibc-ng, it will not
+ > work for any external uClibc toolchain or any internal uClibc
+ > 0.9.33.2 users.
+
+Indeed :/
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
