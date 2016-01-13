@@ -1,71 +1,78 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 13 Jan 2016 15:26:01 +0100
-Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
-In-Reply-To: <CAGm1_kuuFpqDjW7+DAjbHr28PwWCe8erTGA6BW1UEuMBrkuS3w@mail.gmail.com>
-References: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
- <20160101222835.GD2182@free.fr> <20160101224914.GE2182@free.fr>
- <CAGm1_ktsesfzLN6GKBuNviVc1Yn-_XegksJyLuycxY+heXy=VQ@mail.gmail.com>
- <20160102111529.GG3477@free.fr> <56883B79.2050806@mind.be>
- <CA+TH9Vn0=XqUhDZO0eAj1qis6GmjAJhJob3mDhOq_q2wCMGZsw@mail.gmail.com>
- <56899F95.6020808@mind.be>
- <CAGm1_kuuFpqDjW7+DAjbHr28PwWCe8erTGA6BW1UEuMBrkuS3w@mail.gmail.com>
-Message-ID: <CAGm1_ktDW4j2k_1apEA2Ux663iZ6bG_QgtPxAcLDY=KUMzu5Pg@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 13 Jan 2016 16:18:10 +0100
+Subject: [Buildroot] [PATCH] python-html5lib: new package
+Message-ID: <1452698290-18275-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Mon, Jan 4, 2016 at 9:54 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Arnout, All
->
-> On Sun, Jan 3, 2016 at 11:24 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 02-01-16 22:50, Angelo Compagnucci wrote:
->>> Yegor, Arnout, All
->>>
->>> 2016-01-02 22:04 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
->>>> > On 02-01-16 12:15, Yann E. MORIN wrote:
->>>>> >> Yegor, All,
->>>>> >>
->>>> >
->>>> > [snip]
->>>> >
->>>>> >> Still, I think we should use upstream locations, not some packaging
->>>>> >> location. For example, switching to PyPi for Python packages would be
->>>>> >> like switching to Debian for 'native' packages. We don't do that (except
->>>>> >> when upstream has disapeared, is acting...)
->>>> >
->>>> >  This analogy is not quite correct. PyPi is a distribution channel, not a
->>>> > downstream. Not that I can think of a better analogy though. But the important
->>>> > thing is: the PyPi location is under control of the upstream author, so it is
->>>> > equally upstream as the git repo. Brian Thorne (the python-can author) doesn't
->>>> > upload tarballs to the bitbucket location (you only get the automatic ones), but
->>>> > only to PyPi. So there really is something to be said for using PyPi as the
->>>> > download location.
->>> I'm following (and contributing to) python-can for more than a year
->>> now and this is the first time in my memory that a release was
->>> uploaded to PyPi, and this happened cause someone asked for that on a
->>> project issue.
->>>
->>> IMHO, it will not happen in the future again if not prompted by someone.
->>>
->>> Indeed, I originally submitted the package using bitbucket as a source
->>> location, cause it was the only available.
->>
->>  In that case we should stick to bitbucket as the source. If the next bump is
->> still available on pypi we can still switch then.
->
-> I've emaled Brian Thorne (maintainer of python-can) about PyPi publishing.
->
-> First of all he's very glad to see python-can being included into BR.
->
-> Second he agrees, that publishing updates on PyPi is the right
-> solution and is willing to do so in the future.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                            |  1 +
+ package/python-html5lib/Config.in            |  6 ++++++
+ package/python-html5lib/python-html5lib.hash |  3 +++
+ package/python-html5lib/python-html5lib.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-html5lib/Config.in
+ create mode 100644 package/python-html5lib/python-html5lib.hash
+ create mode 100644 package/python-html5lib/python-html5lib.mk
 
-The python-can maintainer has published another version on PyPi, so we
-can change download location.
-
-Yegor
+diff --git a/package/Config.in b/package/Config.in
+index 06ed4a8..89b23db 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -638,6 +638,7 @@ menu "External python modules"
+ 	source "package/python-flask/Config.in"
+ 	source "package/python-flup/Config.in"
+ 	source "package/python-gobject/Config.in"
++	source "package/python-html5lib/Config.in"
+ 	source "package/python-httplib2/Config.in"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-idna/Config.in"
+diff --git a/package/python-html5lib/Config.in b/package/python-html5lib/Config.in
+new file mode 100644
+index 0000000..c3e9f2a
+--- /dev/null
++++ b/package/python-html5lib/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_HTML5LIB
++	bool "python-html5lib"
++	help
++	  HTML parser based on the WHATWG HTML specification.
++
++	  https://github.com/html5lib/html5lib-python
+diff --git a/package/python-html5lib/python-html5lib.hash b/package/python-html5lib/python-html5lib.hash
+new file mode 100644
+index 0000000..0ec712a
+--- /dev/null
++++ b/package/python-html5lib/python-html5lib.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ef43cb05e9e799f25d65d1135838a96f, sha256 locally computed
++md5     ef43cb05e9e799f25d65d1135838a96f  html5lib-0.9999999.tar.gz
++sha256  2612a191a8d5842bfa057e41ba50bbb9dcb722419d2408c78cff4758d0754868  html5lib-0.9999999.tar.gz
+diff --git a/package/python-html5lib/python-html5lib.mk b/package/python-html5lib/python-html5lib.mk
+new file mode 100644
+index 0000000..93eef9a
+--- /dev/null
++++ b/package/python-html5lib/python-html5lib.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-html5lib
++#
++################################################################################
++
++PYTHON_HTML5LIB_VERSION = 0.9999999
++PYTHON_HTML5LIB_SOURCE = html5lib-$(PYTHON_HTML5LIB_VERSION).tar.gz
++PYTHON_HTML5LIB_SITE = https://pypi.python.org/packages/source/h/html5lib
++PYTHON_HTML5LIB_LICENSE = MIT
++PYTHON_HTML5LIB_LICENSE_FILES = LICENSE
++PYTHON_HTML5LIB_SETUP_TYPE = distutils
++
++$(eval $(python-package))
+-- 
+2.1.4
