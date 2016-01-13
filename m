@@ -1,75 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2016 21:35:08 +0100
-Subject: [Buildroot] [git commit] python-html5lib: new package
-Message-ID: <20160113204530.BDF7280462@busybox.osuosl.org>
+Date: Wed, 13 Jan 2016 21:34:08 +0100
+Subject: [Buildroot] [git commit] python-can: bump to 1.4.2
+Message-ID: <20160113204530.AF647827C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82f3124522a579d2fa75f9021a16f8494fc7bf25
+commit: http://git.buildroot.net/buildroot/commit/?id=8d49d853f5c882c7d9c3c30e61c82265ee26e9e1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add hash file and change download location to PyPi.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                            |  1 +
- package/python-html5lib/Config.in            |  6 ++++++
- package/python-html5lib/python-html5lib.hash |  3 +++
- package/python-html5lib/python-html5lib.mk   | 14 ++++++++++++++
- 4 files changed, 24 insertions(+)
+ package/python-can/python-can.hash | 3 +++
+ package/python-can/python-can.mk   | 5 ++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 06ed4a8..89b23db 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -638,6 +638,7 @@ menu "External python modules"
- 	source "package/python-flask/Config.in"
- 	source "package/python-flup/Config.in"
- 	source "package/python-gobject/Config.in"
-+	source "package/python-html5lib/Config.in"
- 	source "package/python-httplib2/Config.in"
- 	source "package/python-id3/Config.in"
- 	source "package/python-idna/Config.in"
-diff --git a/package/python-html5lib/Config.in b/package/python-html5lib/Config.in
+diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
 new file mode 100644
-index 0000000..c3e9f2a
+index 0000000..bc3dfda
 --- /dev/null
-+++ b/package/python-html5lib/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_HTML5LIB
-+	bool "python-html5lib"
-+	help
-+	  HTML parser based on the WHATWG HTML specification.
-+
-+	  https://github.com/html5lib/html5lib-python
-diff --git a/package/python-html5lib/python-html5lib.hash b/package/python-html5lib/python-html5lib.hash
-new file mode 100644
-index 0000000..0ec712a
---- /dev/null
-+++ b/package/python-html5lib/python-html5lib.hash
++++ b/package/python-can/python-can.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ef43cb05e9e799f25d65d1135838a96f, sha256 locally computed
-+md5     ef43cb05e9e799f25d65d1135838a96f  html5lib-0.9999999.tar.gz
-+sha256  2612a191a8d5842bfa057e41ba50bbb9dcb722419d2408c78cff4758d0754868  html5lib-0.9999999.tar.gz
-diff --git a/package/python-html5lib/python-html5lib.mk b/package/python-html5lib/python-html5lib.mk
-new file mode 100644
-index 0000000..93eef9a
---- /dev/null
-+++ b/package/python-html5lib/python-html5lib.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-html5lib
-+#
-+################################################################################
-+
-+PYTHON_HTML5LIB_VERSION = 0.9999999
-+PYTHON_HTML5LIB_SOURCE = html5lib-$(PYTHON_HTML5LIB_VERSION).tar.gz
-+PYTHON_HTML5LIB_SITE = https://pypi.python.org/packages/source/h/html5lib
-+PYTHON_HTML5LIB_LICENSE = MIT
-+PYTHON_HTML5LIB_LICENSE_FILES = LICENSE
-+PYTHON_HTML5LIB_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9fb15ff75266f2cb53a175ee2097768, sha256 locally computed
++md5     b9fb15ff75266f2cb53a175ee2097768  python-can-1.4.2.tar.gz
++sha256  29b4e736b0d8b958b8074e209c9f1482e02761bbf97ddf0871f291da312c11ed  python-can-1.4.2.tar.gz
+diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+index c7b06a5..d6370ed 100644
+--- a/package/python-can/python-can.mk
++++ b/package/python-can/python-can.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CAN_VERSION = ae5b6cf
+-PYTHON_CAN_SITE = https://bitbucket.org/hardbyte/python-can/get
+-PYTHON_CAN_SOURCE = $(PYTHON_CAN_VERSION).tar.bz2
++PYTHON_CAN_VERSION = 1.4.2
++PYTHON_CAN_SITE = https://pypi.python.org/packages/source/p/python-can
+ PYTHON_CAN_LICENSE = LGPLv3
+ PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+ PYTHON_CAN_SETUP_TYPE = setuptools
