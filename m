@@ -1,48 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jan 2016 16:33:08 +0100
-Subject: [Buildroot] [PATCH] procps-ng: remove the remaining busybox
-	symlinks
-In-Reply-To: <56966CB2.5030702@imgtec.com>
-References: <1452608581-9742-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160112211220.2b7c24bb@free-electrons.com>
- <20160112202045.GA3463@free.fr> <8760yy8r7b.fsf@dell.be.48ers.dk>
- <56966CB2.5030702@imgtec.com>
-Message-ID: <20160113163308.03661753@free-electrons.com>
+Date: Wed, 13 Jan 2016 16:35:19 +0100
+Subject: [Buildroot] [git commit] support/scripts/size-stats: fix copy/paste
+	error in ArgumentParser
+Message-ID: <20160113153749.0C60682749@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente,
+commit: http://git.buildroot.net/buildroot/commit/?id=a059055c5241ff69bd3b2f32088d03bf2a0f611e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 13 Jan 2016 15:26:42 +0000, Vicente Olivert Riera wrote:
+A copy/paste error in the ArgumentParser() constructor call disclosed
+the fact that the author of the script has shamefully based his work
+on the existing graph-build-time script. This commit fixes this
+mistake, therefore hiding in a better way how size-stats was
+vampirized from graph-build-time.
 
-> So, I see three options here:
-> 
-> 1 - follow the second suggestion from Thomas (post-install hook to move
-> the ALL binaries installed by the package to where Busybox installs them)
-> 
-> 2 - same thing but only move pidof and watch binaries
-> 
-> 3 - remove /bin/pidof and /bin/watch symlinks installed by Busybox
-> 
-> I happy with any of them, so, which one do you prefer?
+Reported-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/size-stats | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I think my personal preference would be to install as many procps-ng
-tools as possible in the "right" place, and then only move the few ones
-for which you can't configure the installation location.
-
-On a side note, it would be interesting to write a tool that looks if
-there are two binaries in bin/, sbin/, usr/bin/ and usr/sbin/ with the
-same name, in order to automatically detect at the end of the build if
-we have two commands (one full implementation and one from Busybox)
-that are installed in different locations.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+index 54685f6..81d96ca 100755
+--- a/support/scripts/size-stats
++++ b/support/scripts/size-stats
+@@ -191,7 +191,7 @@ def gen_packages_csv(pkgsizes, outputf):
+         for (pkg, size) in pkgsizes.items():
+             wr.writerow([pkg, size, "%.1f" % (float(size) / total * 100)])
+ 
+-parser = argparse.ArgumentParser(description='Draw build time graphs')
++parser = argparse.ArgumentParser(description='Draw size statistics graphs')
+ 
+ parser.add_argument("--builddir", '-i', metavar="BUILDDIR", required=True,
+                     help="Buildroot output directory")
