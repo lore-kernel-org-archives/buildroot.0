@@ -1,82 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jan 2016 16:23:20 +0100
-Subject: [Buildroot] [PATCH 1/2] scanpypi: new utility
-In-Reply-To: <56927A92.50804@mind.be>
-References: <1438089330-18923-1-git-send-email-denis.thulin@openwide.fr>
- <20160110105950.GA3460@free.fr> <56927A92.50804@mind.be>
-Message-ID: <20160113162320.1c1dbbc3@free-electrons.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Wed, 13 Jan 2016 07:25:14 -0800
+Subject: [Buildroot] [USER] buildroot install external toolchains
+In-Reply-To: <20160112074938.GB1937@tarshish>
+References: <CAJJ6jxvGYN8Pd-8GwzVHSZWKc2CpsNE47Xb23EF-m0_ZFVS7Ew@mail.gmail.com>
+ <20160112074938.GB1937@tarshish>
+Message-ID: <CAJJ6jxtn_2Uigby3hMW9Q3orCAFyYRjoQ9sdos9t-s=NNvrd=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Yann,
+Hi Baruch,
 
-On Sun, 10 Jan 2016 16:36:50 +0100, Arnout Vandecappelle wrote:
+Hi Baruch,
 
-> > So, we currently have scancpan to create perl packages. You are adding
-> > scanpypi to create Python packages. There's also someone who submitted
-> > a script to generate a 'generic' package (i.e. not perl/python) [0].
-> > The scancpan is written in perl, yours and the generic one in Python.
-> > 
-> > Besides Perl and Python, we also have nodejs which provides a similar
-> > "package-store" and for which it would become interesting to provide a
-> > helper script to generate packages [1].
-> > 
-> > What I would love to see is that we have a single script to add
-> > packages. Something like:
-> > 
-> >     $ ./support/script/add-package -t TYPE [OPTS] PKG [PKG...]
-> > 
-> > with TYPE being one of the package types we currently have (generic,
-> > autotools... python, perl...) or an abstract type (nodejs...).
-> > 
-> > Then, the cpan, pypi, nodejs... script would be just 'backends' that
-> > would provide classes called by the main script, like;
-> > 
-> >     pkg = new PythonPkg("foo")
-> >     pkg.get_br_name()       returns the BR2_PACKAGE_ name
-> >     pkg.get_version()       returns the _VERSION string
-> >     pkg.get_source()        returns the _SOURCE string
-> >     pkg.get_site()          returns the _SITE string
-> >     pkg.get_method()        returns the _SITE_METHOD string
-> >     pkg.get_dependencies()  returns the _DEPENDENCIES list
-> >     ... and so on, you get the idea. ;-)
-> 
->  However, it is more natural for a CPAN-accessor to be written in perl. So I
-> guess the backend scripts should be really independent scripts that report the
-> package metadata in a specified format. Hm, you know what, let's use Config.in
-> and pkg.mk as the specification!
-> 
->  In short, I'm not so convinced that having everything written in the same
-> language is such an advantage.
-> 
->  But of course, if someone shows me the patches, I could change my mind.
+On Mon, Jan 11, 2016 at 11:49 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+>
+> Hi Steve,
+>
+> On Mon, Jan 11, 2016 at 08:55:34PM -0800, Steve Calfee wrote:
+> > I am trying to use docker to cross build buildroot. I don't want to build
+> > the toolchain so I tried to use a pre-built toolchain as the autobuilders
+> > do. I got a list of toolchains from
+> > https://sourceware.org/ml/crossgcc/2015-05/msg00014.html written by Thomas
+> > P.
+> >
+> > So I extracted one into the filesystem and tried to use it, but something
+> > is wrong.
+> >
+> > From bash I tried:
+> > /br/armv7-ctng-linux-gnueabihf/bin/armv7-ctng-linux-gnueabihf-gcc --version
+> > bash: /br/armv7-ctng-linux-gnueabihf/bin/armv7-ctng-linux-gnueabihf-gcc: No
+> > such file or directory
+>
+> The 'No such file or directory' error might indicate missing libraries. This
+> toolchain is built to run on 32bit x86 systems. Make sure you have 32bit
+> versions of libc and libstdc++ packages installed on your system.
+>
+>
 
-I also initially would have preferred to have the scancpan script
-written in Python. But 1/ it's not very practical to query CPAN from
-Python, and more importantly 2/ it's a bit weird to ask to a Perl
-fan who maintains the Perl stuff in Buildroot to write something like
-scancpan in Python.
 
-Bottom line, my opinion is that:
+Thanks, I did not know they were 32 bit apps. So I installed those
+libraries and the toolchains now work in a docker container.
 
- 1/ We should keep scancpan in Perl
+I am still struggling with getting persistent storage working - Stuff
+like customization, builds and downloads should be persistent. However
+when done it will make it much easier to setup a build system.
 
- 2/ We should keep scanpipy in Python, refine it and merge it.
-
- 3/ The script that generates just a generic package skeleton is a bit
-    useless IMO and is not very useful to merge.
-
-Both scancpan and canpipy are really internal tools, for Buildroot
-developers, so it's not super important if they don't look like /
-behave the same.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Steve
