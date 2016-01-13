@@ -1,48 +1,71 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 13 Jan 2016 15:24:18 +0100
-Subject: [Buildroot] [PATCH] python-can: bump to 1.4.2
-Message-ID: <1452695058-4056-1-git-send-email-yegorslists@googlemail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 13 Jan 2016 15:26:01 +0100
+Subject: [Buildroot] [PATCH] python-can: bump to 1.4.1
+In-Reply-To: <CAGm1_kuuFpqDjW7+DAjbHr28PwWCe8erTGA6BW1UEuMBrkuS3w@mail.gmail.com>
+References: <1451686709-25501-1-git-send-email-yegorslists@googlemail.com>
+ <20160101222835.GD2182@free.fr> <20160101224914.GE2182@free.fr>
+ <CAGm1_ktsesfzLN6GKBuNviVc1Yn-_XegksJyLuycxY+heXy=VQ@mail.gmail.com>
+ <20160102111529.GG3477@free.fr> <56883B79.2050806@mind.be>
+ <CA+TH9Vn0=XqUhDZO0eAj1qis6GmjAJhJob3mDhOq_q2wCMGZsw@mail.gmail.com>
+ <56899F95.6020808@mind.be>
+ <CAGm1_kuuFpqDjW7+DAjbHr28PwWCe8erTGA6BW1UEuMBrkuS3w@mail.gmail.com>
+Message-ID: <CAGm1_ktDW4j2k_1apEA2Ux663iZ6bG_QgtPxAcLDY=KUMzu5Pg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Arnout, All
 
-Add hash file and change download location to PyPi.
+On Mon, Jan 4, 2016 at 9:54 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Arnout, All
+>
+> On Sun, Jan 3, 2016 at 11:24 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 02-01-16 22:50, Angelo Compagnucci wrote:
+>>> Yegor, Arnout, All
+>>>
+>>> 2016-01-02 22:04 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+>>>> > On 02-01-16 12:15, Yann E. MORIN wrote:
+>>>>> >> Yegor, All,
+>>>>> >>
+>>>> >
+>>>> > [snip]
+>>>> >
+>>>>> >> Still, I think we should use upstream locations, not some packaging
+>>>>> >> location. For example, switching to PyPi for Python packages would be
+>>>>> >> like switching to Debian for 'native' packages. We don't do that (except
+>>>>> >> when upstream has disapeared, is acting...)
+>>>> >
+>>>> >  This analogy is not quite correct. PyPi is a distribution channel, not a
+>>>> > downstream. Not that I can think of a better analogy though. But the important
+>>>> > thing is: the PyPi location is under control of the upstream author, so it is
+>>>> > equally upstream as the git repo. Brian Thorne (the python-can author) doesn't
+>>>> > upload tarballs to the bitbucket location (you only get the automatic ones), but
+>>>> > only to PyPi. So there really is something to be said for using PyPi as the
+>>>> > download location.
+>>> I'm following (and contributing to) python-can for more than a year
+>>> now and this is the first time in my memory that a release was
+>>> uploaded to PyPi, and this happened cause someone asked for that on a
+>>> project issue.
+>>>
+>>> IMHO, it will not happen in the future again if not prompted by someone.
+>>>
+>>> Indeed, I originally submitted the package using bitbucket as a source
+>>> location, cause it was the only available.
+>>
+>>  In that case we should stick to bitbucket as the source. If the next bump is
+>> still available on pypi we can still switch then.
+>
+> I've emaled Brian Thorne (maintainer of python-can) about PyPi publishing.
+>
+> First of all he's very glad to see python-can being included into BR.
+>
+> Second he agrees, that publishing updates on PyPi is the right
+> solution and is willing to do so in the future.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-can/python-can.hash | 3 +++
- package/python-can/python-can.mk   | 5 ++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
- create mode 100644 package/python-can/python-can.hash
+The python-can maintainer has published another version on PyPi, so we
+can change download location.
 
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-new file mode 100644
-index 0000000..bc3dfda
---- /dev/null
-+++ b/package/python-can/python-can.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9fb15ff75266f2cb53a175ee2097768, sha256 locally computed
-+md5     b9fb15ff75266f2cb53a175ee2097768  python-can-1.4.2.tar.gz
-+sha256  29b4e736b0d8b958b8074e209c9f1482e02761bbf97ddf0871f291da312c11ed  python-can-1.4.2.tar.gz
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index c7b06a5..d6370ed 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_CAN_VERSION = ae5b6cf
--PYTHON_CAN_SITE = https://bitbucket.org/hardbyte/python-can/get
--PYTHON_CAN_SOURCE = $(PYTHON_CAN_VERSION).tar.bz2
-+PYTHON_CAN_VERSION = 1.4.2
-+PYTHON_CAN_SITE = https://pypi.python.org/packages/source/p/python-can
- PYTHON_CAN_LICENSE = LGPLv3
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
- PYTHON_CAN_SETUP_TYPE = setuptools
--- 
-2.1.4
+Yegor
