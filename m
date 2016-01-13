@@ -1,94 +1,133 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jan 2016 09:51:53 +0100
-Subject: [Buildroot] [PATCH 1/1] configs: beaglebone: update kernel to
- 4.1.13 and u-boot to 2015.10
-In-Reply-To: <1452653542-5562-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1452653542-5562-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20160113095153.6b4f95cb@free-electrons.com>
+From: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+Date: Wed, 13 Jan 2016 16:35:22 +0530
+Subject: [Buildroot] [PATCH V3] Adding support for NVME utils
+In-Reply-To: <20160112212700.01ce8859@free-electrons.com>
+References: <20160112054917.5859.13862.stgit@localhost.localdomain>
+ <20160112212700.01ce8859@free-electrons.com>
+Message-ID: <56962F72.60007@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zoltan,
 
-On Wed, 13 Jan 2016 03:52:22 +0100, Zoltan Gyarmati wrote:
+Hi Thomas,
 
-> This patch is basically the cleaned-up version of Chris LaRocque's patch
-> from his mail
+Thanks for reviewing the patch.
 
-Thanks for respining this patch.
-
-> "[PATCH 1/2] Updated the Beaglebone configuration, 01/03/2016 10:01 PM"
-> and the cleanup followed Arnout's corresponding answers.
-> Changes to Chris' patches:
-> * dtc patches fetched from GH and placed in 'board/beaglebone/patches/dtc'
-> * BR2_GLOBAL_PATCH_DIR set accordingly
-> * added seperated kernel defconfig instead of patching the upstream defconfig
-> * cleanups in uEnv.txt
-> * fix u-boot version to 2015.10
-> 
-> The heavy-lifting was done by Chris here, the rest is mostly cosmetics. If
-> anything els seems to be tweaked, please let us know.
-> 
-> 
->  board/beaglebone/linux-3.12.config                 |  251 ---
->  board/beaglebone/linux_4.1.13_bb.org_defconfig     | 2043 ++++++++++++++++++++
-
-Looking at its size, this file looks like a full config file and not a
-defconfig. Please use a defconfig.
-
-Or better: please use the defconfig that is inside the kernel tree, and
-if you need additional tweaks, use config fragments.
-
->  ...comment-block-of-fdt_get_property_namelen.patch |   32 +
->  .../0002-fdt-Add-a-function-to-count-strings.patch |  246 +++
->  ...d-a-function-to-get-the-index-of-a-string.patch |  159 ++
->  ...004-fdt-Add-functions-to-retrieve-strings.patch |  173 ++
-
-I am not supper happy with the solution of having those DTC patches
-specifically for the BeagleBone platform. If I understand correctly,
-those patches are needed to get the DT overlay to work, right ?
-
-We had the same problem for the C.H.I.P platform, so it would also be
-useful for us to have a overlay-capable DTC. You can see what my
-colleague Antoine T?nart did:
-
-  https://github.com/NextThingCo/CHIP-buildroot/commit/1a73b514d204d0c6e9100d53011a11d99fd8b778
-  https://github.com/NextThingCo/CHIP-buildroot/commit/f3334df58611ff3cae5fd62906423fdce3d80d24
-  https://github.com/NextThingCo/CHIP-buildroot/commit/c4457eba3099f5ca514c06bb35b42772178a151a
-
-It is not ideal because it relies on a separate dtc-overlay package,
-which packages a different version of dtc, which Antoine has cooked on
-his own github repository.
-
-We really need to find a solution that is acceptable in the upstream
-Buildroot, and applies to multiple platforms.
-
->  ...cache-flush-management-symbols-when-MULTI.patch |   34 -
->  .../0001-am335x_evm-uEnv.txt-bootz-n-fixes.patch   |  754 ++++++++
-
-This huge U-Boot patch is really ugly and mixes lots of stuff. Why do
-you need it?
+I have worked on all your comments,facing some issue while building nvme.
+Will check and send new version of patch soon.
 
 
-> -# bootloader
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.10"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-
-So this is going to use the host-dtc package for U-Boot, but isn't the
-kernel still going to use its internal copy of dtc ? If so, how are
-your dtc patches useful for the kernel ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On 01/13/2016 01:57 AM, Thomas Petazzoni wrote:
+> Dear Mamatha,
+>
+> Thanks for your contribution!
+>
+> On Tue, 12 Jan 2016 11:22:06 +0530, Mamatha wrote:
+>> Add support for building NVME utility - a utility for interacting with
+>> standard NVM Express (optimized PCI Express SSD interface) devices.
+> For all patches on packages, we prefer to have the title of the commit
+> comply with the following format:
+>
+> 	<package>: <description>
+>
+> So in your case, it should be:
+>
+> 	nvme: new package
+>
+>> Signed-off-by: Mamatha <mamatha4@linux.vnet.ibm.com>
+> Sorry if I'm not familiar with naming practices in your part of the
+> world, but we require a full name (i.e first name + last name). Is
+> Mamatha your full name ?
+>
+>> ---
+>>   package/Config.in      |    1 +
+>>   package/nvme/Config.in |    6 ++++++
+>>   package/nvme/nvme.mk   |   23 +++++++++++++++++++++++
+>>   3 files changed, 30 insertions(+)
+>>   create mode 100755 package/nvme/Config.in
+>>   create mode 100755 package/nvme/nvme.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index e0c2e2a..014debd 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1399,6 +1399,7 @@ endif
+>>   	source "package/openvmtools/Config.in"
+>>   	source "package/polkit/Config.in"
+>>   	source "package/powerpc-utils/Config.in"
+>> +	source "package/nvme/Config.in"
+> You should respect alphabetic ordering here when including
+> nvme/Config.in. Also I believe this package better belongs to the
+> "Hardware handling" menu rather than "System tools".
+>
+>>   if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>>   	source "package/procps-ng/Config.in"
+>>   	source "package/psmisc/Config.in"
+>> diff --git a/package/nvme/Config.in b/package/nvme/Config.in
+>> new file mode 100755
+>> index 0000000..a3c8ada
+>> --- /dev/null
+>> +++ b/package/nvme/Config.in
+>> @@ -0,0 +1,6 @@
+>> +config BR2_PACKAGE_NVME
+>> +	bool "nvme"
+>> +	help
+>> +	  System utilities for standard NVME Express devices
+>> +
+>> +	  https://github.com/linux-nvme/nvme-cli
+>> diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
+>> new file mode 100755
+>> index 0000000..43bec67
+>> --- /dev/null
+>> +++ b/package/nvme/nvme.mk
+>> @@ -0,0 +1,23 @@
+>> +################################################################################
+>> +#
+>> +# nvme
+>> +#
+>> +################################################################################
+>> +
+>> +NVME_VERSION = 0.1
+>> +NVME_SITE = https://github.com/linux-nvme/nvme-cli.git
+>> +NVME_SITE_METHOD = git
+> You should use the github helper. See also
+> https://buildroot.org/downloads/manual/manual.html#github-download-url.
+>
+>> +NVME_LICENSE = GPLv2
+> The license is GPLv2+
+>
+>> +NVME_LICENSE_FILES = COPYING
+>> +
+>> +define NVME_BUILD_CMDS
+>> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+>> +		INCLUDEDIR="-I." all
+> Why do you explicitly specify "all" here ? It is going to build the
+> documentation, while if you leave it out, it will only build the first
+> target, which is named "default" in nvme's Makefile, and it will only
+> build the nvme binary.
+>
+> Also, when calling $(MAKE), please pass $(TARGET_MAKE_ENV) in the
+> environment:
+>
+> 	$(TARGET_MAKE_ENV) $(MAKE) ...
+>
+>> +endef
+>> +
+>> +define NVME_INSTALL_TARGET_CMDS
+>> +	$(INSTALL) -D -m 0755 $(@D)/nvme $(TARGET_DIR)/sbin/nvme
+> Why you don't you use the install-bin target ? Like this:
+>
+> 	$(TARGET_MAKE_ENV) $(MAKE) -C (@D) DESTDIR=$(TARGET_DIR) install-bin
+>
+> Also, could you add a hash file, as explained in
+> https://buildroot.org/downloads/manual/manual.html#adding-packages-hash ?
+>
+> Could you rework your patch to take into account those comments and
+> send an updated version ?
+>
+> Thanks!
+>
+> Thomas
