@@ -1,32 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jan 2016 12:38:20 +0100
-Subject: [Buildroot] [PATCH V3] Adding support for NVME utils
-In-Reply-To: <56962F72.60007@linux.vnet.ibm.com>
-References: <20160112054917.5859.13862.stgit@localhost.localdomain>
- <20160112212700.01ce8859@free-electrons.com>
- <56962F72.60007@linux.vnet.ibm.com>
-Message-ID: <20160113123820.3efe098e@free-electrons.com>
+Date: Wed, 13 Jan 2016 12:42:21 +0100
+Subject: [Buildroot] [PATCH 1/1 v3] ypbind-mt: new package
+In-Reply-To: <alpine.DEB.2.11.1601130827550.11251@tanhuma.tkos.co.il>
+References: <1452516304-6029-1-git-send-email-yba@tkos.co.il>
+ <569579C5.1010409@mind.be>
+ <alpine.DEB.2.11.1601130827550.11251@tanhuma.tkos.co.il>
+Message-ID: <20160113124221.1ae6deeb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mamatha,
+Jonathan,
 
-On Wed, 13 Jan 2016 16:35:22 +0530, Mamatha Inamdar wrote:
+On Wed, 13 Jan 2016 08:31:43 +0200 (IST), Jonathan Ben Avraham wrote:
 
-> Thanks for reviewing the patch.
+> >> This patch adds the ypbind-mt package that contains a multithreaded
+> >> ypbind daemon for Linux. It uses threads for better response and
+> >> supports the ypbind protocols version 1, 2 and 3. ypbind finds the
+> >> server for a given NIS domain and stores information about it in a
+> >> binding file on the local host.
+> >>
+> >
+> > You Sob should go here, before the ---
+> 
+> Hi Arnout,
+> I do not understand this comment. Please provide further explanation.
 
-You're welcome, thanks for your contribution in the first place.
+A Git formatted patch looks like this:
 
-> I have worked on all your comments,facing some issue while building nvme.
+=====================================================================
 
-Which issues?
+foo: some short description
 
-> Will check and send new version of patch soon.
+Here is some longer description that explains what I'm doing, it spans
+multiple lines.
 
-Thanks!
+And even multiple paragraphs.
+
+Signed-off-by: John Doe <john.doe@acme.com>
+---
+This is the v2 of the patch, which compared to v1 has such and such
+changes.
+
+=====================================================================
+
+When Git will apply this patch, it will discard everything that is
+after the "---" line. So:
+
+ * We need the SoB line to be before the "---" sign, because we want
+   the SoB line to be preserved in the commit log.
+
+ * We want all informations that should be kept in the Git history
+   before the "---" line.
+
+ * We want all informations that should *NOT* be kept in the Git
+   history *after* the "---" line.
+
+Best regards,
 
 Thomas
 -- 
