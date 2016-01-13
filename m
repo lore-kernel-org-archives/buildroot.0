@@ -1,29 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2016 21:40:44 +0100
-Subject: [Buildroot] [git commit] support/scripts/size-stats: fix
-	copy/paste error in ArgumentParser
-In-Reply-To: <20160113153749.0C60682749@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 13 Jan 2016 16:35:19 +0100")
-References: <20160113153749.0C60682749@busybox.osuosl.org>
-Message-ID: <8760yx5i2b.fsf@dell.be.48ers.dk>
+Date: Wed, 13 Jan 2016 21:43:08 +0100
+Subject: [Buildroot] [PATCH] openntpd: set time immediately from
+	initscript
+In-Reply-To: <1452688144-5079-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 13 Jan 2016 09:29:04 -0300")
+References: <1452688144-5079-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871t9l5hyb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > commit: http://git.buildroot.net/buildroot/commit/?id=a059055c5241ff69bd3b2f32088d03bf2a0f611e
- > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Match the systemd service file and set time immediately on startup
+ > rather than small steps when it differs a lot.
+ > On embedded scenarios this is better since boards that lack a
+ > battery-backed RTC might start at unix epoch and the time set will delay
+ > for quite a while otherwise.
+ > For boards that do have a battery-backed RTC the behaviour will be
+ > practically the same unless the RTC drifts a lot.
 
- > A copy/paste error in the ArgumentParser() constructor call disclosed
- > the fact that the author of the script has shamefully based his work
- > on the existing graph-build-time script. This commit fixes this
- > mistake, therefore hiding in a better way how size-stats was
- > vampirized from graph-build-time.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Heh ;)
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
