@@ -1,79 +1,83 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 14 Jan 2016 09:25:17 +0100
-Subject: [Buildroot] [PATCH] python-cssselect: new package
-Message-ID: <1452759917-7083-1-git-send-email-yegorslists@googlemail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 14 Jan 2016 09:32:09 +0100
+Subject: [Buildroot] [PATCH 1/2] scanpypi: new utility
+In-Reply-To: <20160113162320.1c1dbbc3@free-electrons.com>
+References: <1438089330-18923-1-git-send-email-denis.thulin@openwide.fr>
+ <20160110105950.GA3460@free.fr> <56927A92.50804@mind.be>
+ <20160113162320.1c1dbbc3@free-electrons.com>
+Message-ID: <CAGm1_kskt8ME6ntMha8vn20LJDxLS2wF35uKiDcFN-u4jnpohg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed, Jan 13, 2016 at 4:23 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Arnout, Yann,
+>
+> On Sun, 10 Jan 2016 16:36:50 +0100, Arnout Vandecappelle wrote:
+>
+>> > So, we currently have scancpan to create perl packages. You are adding
+>> > scanpypi to create Python packages. There's also someone who submitted
+>> > a script to generate a 'generic' package (i.e. not perl/python) [0].
+>> > The scancpan is written in perl, yours and the generic one in Python.
+>> >
+>> > Besides Perl and Python, we also have nodejs which provides a similar
+>> > "package-store" and for which it would become interesting to provide a
+>> > helper script to generate packages [1].
+>> >
+>> > What I would love to see is that we have a single script to add
+>> > packages. Something like:
+>> >
+>> >     $ ./support/script/add-package -t TYPE [OPTS] PKG [PKG...]
+>> >
+>> > with TYPE being one of the package types we currently have (generic,
+>> > autotools... python, perl...) or an abstract type (nodejs...).
+>> >
+>> > Then, the cpan, pypi, nodejs... script would be just 'backends' that
+>> > would provide classes called by the main script, like;
+>> >
+>> >     pkg = new PythonPkg("foo")
+>> >     pkg.get_br_name()       returns the BR2_PACKAGE_ name
+>> >     pkg.get_version()       returns the _VERSION string
+>> >     pkg.get_source()        returns the _SOURCE string
+>> >     pkg.get_site()          returns the _SITE string
+>> >     pkg.get_method()        returns the _SITE_METHOD string
+>> >     pkg.get_dependencies()  returns the _DEPENDENCIES list
+>> >     ... and so on, you get the idea. ;-)
+>>
+>>  However, it is more natural for a CPAN-accessor to be written in perl. So I
+>> guess the backend scripts should be really independent scripts that report the
+>> package metadata in a specified format. Hm, you know what, let's use Config.in
+>> and pkg.mk as the specification!
+>>
+>>  In short, I'm not so convinced that having everything written in the same
+>> language is such an advantage.
+>>
+>>  But of course, if someone shows me the patches, I could change my mind.
+>
+> I also initially would have preferred to have the scancpan script
+> written in Python. But 1/ it's not very practical to query CPAN from
+> Python, and more importantly 2/ it's a bit weird to ask to a Perl
+> fan who maintains the Perl stuff in Buildroot to write something like
+> scancpan in Python.
+>
+> Bottom line, my opinion is that:
+>
+>  1/ We should keep scancpan in Perl
+>
+>  2/ We should keep scanpipy in Python, refine it and merge it.
+>
+>  3/ The script that generates just a generic package skeleton is a bit
+>     useless IMO and is not very useful to merge.
+>
+> Both scancpan and canpipy are really internal tools, for Buildroot
+> developers, so it's not super important if they don't look like /
+> behave the same.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                              |  1 +
- package/python-cssselect/Config.in             |  6 ++++++
- package/python-cssselect/python-cssselect.hash |  4 ++++
- package/python-cssselect/python-cssselect.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-cssselect/Config.in
- create mode 100644 package/python-cssselect/python-cssselect.hash
- create mode 100644 package/python-cssselect/python-cssselect.mk
+I gave scanpypi a try: http://patchwork.ozlabs.org/patch/567288/
 
-diff --git a/package/Config.in b/package/Config.in
-index 89b23db..d915131 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -628,6 +628,7 @@ menu "External python modules"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
-+	source "package/python-cssselect/Config.in"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dialog/Config.in"
- 	source "package/python-django/Config.in"
-diff --git a/package/python-cssselect/Config.in b/package/python-cssselect/Config.in
-new file mode 100644
-index 0000000..9c1ffe4
---- /dev/null
-+++ b/package/python-cssselect/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_CSSSELECT
-+	bool "python-cssselect"
-+	help
-+	  cssselect parses CSS3 Selectors and translates them to XPath 1.0
-+
-+	  http://packages.python.org/cssselect/
-diff --git a/package/python-cssselect/python-cssselect.hash b/package/python-cssselect/python-cssselect.hash
-new file mode 100644
-index 0000000..08c81e5
---- /dev/null
-+++ b/package/python-cssselect/python-cssselect.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/cssselect/json
-+md5	c74f45966277dc7a0f768b9b0f3522ac  cssselect-0.9.1.tar.gz
-+# sha256 calculated by scanpypi
-+sha256	0535a7e27014874b27ae3a4d33e8749e345bdfa62766195208b7996bf1100682  cssselect-0.9.1.tar.gz
-diff --git a/package/python-cssselect/python-cssselect.mk b/package/python-cssselect/python-cssselect.mk
-new file mode 100644
-index 0000000..c6b476b
---- /dev/null
-+++ b/package/python-cssselect/python-cssselect.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-cssselect
-+#
-+################################################################################
-+
-+PYTHON_CSSSELECT_VERSION = 0.9.1
-+PYTHON_CSSSELECT_SOURCE = cssselect-$(PYTHON_CSSSELECT_VERSION).tar.gz
-+PYTHON_CSSSELECT_SITE = https://pypi.python.org/packages/source/c/cssselect
-+PYTHON_CSSSELECT_SETUP_TYPE = setuptools
-+PYTHON_CSSSELECT_LICENSE = BSD-3c
-+PYTHON_CSSSELECT_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
--- 
-2.1.4
+So far it was working as expected. Thanks for the very useful tool.
+
+Yegor
