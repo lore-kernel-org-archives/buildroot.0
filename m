@@ -1,78 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Jan 2016 13:11:10 +0100
-Subject: [Buildroot] Persistent dropbear keys
-In-Reply-To: <CAAXf6LWOC6O3eCX_AH=0hRrGqP0hcnsaJEMDnOV4Tu-5vP-aJw@mail.gmail.com>
- (Thomas De Schampheleire's message of "Wed, 13 Jan 2016 09:16:45
- +0100")
-References: <CAAXf6LULMusN+KRUf6D32GNx77bbB0vSayJqk03T7ouNCArhHA@mail.gmail.com>
- <87mvsgdkxy.fsf@dell.be.48ers.dk>
- <CAAXf6LUt+aNoD+JWABzdjnQ5DAP3UO9DYFHXKjqkj49jo+d0Jw@mail.gmail.com>
- <8737u4bg4h.fsf@dell.be.48ers.dk>
- <CAAXf6LWOC6O3eCX_AH=0hRrGqP0hcnsaJEMDnOV4Tu-5vP-aJw@mail.gmail.com>
-Message-ID: <874meg2wf5.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 14 Jan 2016 09:25:16 -0300
+Subject: [Buildroot] [PATCH] connman: bump to version 1.31
+Message-ID: <1452774316-20163-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/connman/connman.hash | 2 +-
+ package/connman/connman.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
-
->> With the fix in 2015.67 I haven't seen corrupted host keys any more in
- >> the projects I work on, and for the use cases we have that is good
- >> enough (E.G. ssh is not a feature accessible to end users, and our
- >> factory reset button throws away the /etc overlay, so this could be used
- >> to fix corrupted host keys if needed).
-
- > While we haven't seen corrupted host keys in real life (but apparently
- > you did already), I think it is a good safety precaution to take it
- > into account. The fix in dropbear you refer to is very recent, so up
- > until now there was anyway a good reason to not use a direct symlink
- > /etc/dropbear -> /persistent/something.
-
-I've seen empty (not corrupted data) key files from the missing fsync,
-yes.
-
-Yes, the fix is quite recent, but the feature to let dropbear
-automatically generate the keys is also relatively new (2013.62).
-
-
- > But even with this fix, how much guarantee can you give that there is
- > not another bug in dropbear or the filesystem, or a script of our own
- > for that matter, that would inadvertently change the file or cause
- > some kind of corruption in it?
-
-Guarantees are hard to come by ;) Now, the code that writes the file is
-fairly small and self contained, but with a writable /etc you could
-indeed conceptually have all kinds of problems (not limited to dropbear
-keys).
-
-
- > In our case, these boxes are 'out there' (and this can be in the
- > middle of a city or the middle of the desert). In case of trouble, SSH
- > access is the sole practical connection available and as such it needs
- > to be reliable. The alternative is having a technician driving to the
- > box, either attaching a serial connection or simply replacing the box
- > and sending the 'bad' one to skilled people. In either case, this is a
- > very expensive operation that should be avoided as much as possible.
-
-Yes, like just about anything in engineering, it is a matter of
-tradeoffs - And different projects may need different solutions.
-
-The solution you describe is certainly fine. As I mentioned, I'm
-currently using a reset-to-factory-defaults button in case stuff really
-get corrupt. Other solutions I've used are:
-
-- Generate / install (ssh keys, TLS certificates, ..) data once during
-  production flow and write this to a file system. In operation this
-  file system is always mounted read only.
-
-- Prebake SSH keys in (RO) rootfs (!).
-
-And I'm sure there's others as well.
-
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index 06bd48d..4810f81 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256	5c5e464bacc9c27ed4e7269fb9b5059f07947f5be26433b59212133663ffa991  connman-1.30.tar.xz
++sha256	88fcf0b6df334796b90e2fd2e434d6f5b36cd6f13b886a119b8c90276b72b8e2  connman-1.31.tar.xz
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 3b14a80..1fe103c 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.30
++CONNMAN_VERSION = 1.31
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.4.10
