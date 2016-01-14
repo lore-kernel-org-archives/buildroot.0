@@ -1,25 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Jan 2016 20:36:11 +0100
-Subject: [Buildroot] [PATCH] package/argp-standalone: Fix build with c99
-	compilers
-In-Reply-To: <1452781891-11795-1-git-send-email-vicencb@gmail.com> (Vicente
- Bergas's message of "Thu, 14 Jan 2016 15:31:31 +0100")
-References: <20160114142034.35adff54@free-electrons.com>
- <1452781891-11795-1-git-send-email-vicencb@gmail.com>
-Message-ID: <87si20ymvo.fsf@dell.be.48ers.dk>
+Date: Thu, 14 Jan 2016 20:48:17 +0100
+Subject: [Buildroot] [PATCH v4] rabbitmq-c: needs a toolchain with
+	posix_spawn support
+In-Reply-To: <1452773001-2993-1-git-send-email-joris.lijssens@gmail.com>
+ (Joris Lijssens's message of "Thu, 14 Jan 2016 13:03:21 +0100")
+References: <1452773001-2993-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <87oacoymbi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Bergas <vicencb@gmail.com> writes:
+>>>>> "Joris" == Joris Lijssens <joris.lijssens@gmail.com> writes:
 
- > Add patch from:
- > http://review.gluster.org/6034
+ > Fixes:
+ > http://autobuild.buildroot.net/results/a6c3e79c61c5a535970d03bf37b068349f766a7f/
 
- > Signed-off-by: Vicente Bergas <vicencb@gmail.com>
- > Tested-by: Vicente Bergas <vicencb@gmail.com>
+ > Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 
 Committed, thanks.
 
