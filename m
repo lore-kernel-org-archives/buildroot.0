@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Jan 2016 22:40:00 +0100
-Subject: [Buildroot] [PATCH v6 19/29] package/freeswitch: enable mod_isac
+Date: Thu, 14 Jan 2016 22:40:05 +0100
+Subject: [Buildroot] [PATCH v6 24/29] package/freeswitch: enable mod_alsa,
+	add optional dependency to alsa-lib
 In-Reply-To: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452807610-15534-20-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452807610-15534-25-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/Config.in     | 10 ++++++++++
- package/freeswitch/freeswitch.mk |  4 ++++
- 2 files changed, 14 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-index 608dbc2..aa7dbff 100644
---- a/package/freeswitch/Config.in
-+++ b/package/freeswitch/Config.in
-@@ -46,4 +46,14 @@ config BR2_PACKAGE_FREESWITCH_ZRTP
- 
- 	  https://wiki.freeswitch.org/wiki/ZRTP
- 
-+config BR2_PACKAGE_FREESWITCH_ISAC
-+	bool "isac"
-+	# no aarch64/armeb support in src/mod/codecs/mod_isac/typedefs.h
-+	depends on !BR2_aarch64 && !BR2_armeb
-+	help
-+	  iSAC is a HD codec kit similar to G.722 anthony extracted iSAC
-+	  codec from WebRTC project and built mod_iSAC on top of it.
-+
-+	  https://freeswitch.org/confluence/display/FREESWITCH/mod_isac
-+
- endif # BR2_PACKAGE_FREESWITCH
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 84a0f86..af3db24 100644
+index fb60779..01c8bab 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -137,6 +137,10 @@ FREESWITCH_DEPENDENCIES += ffmpeg libvpx libyuv
- FREESWITCH_ENABLED_MODULES += applications/mod_av
- endif
+@@ -132,6 +132,11 @@ endef
  
-+ifeq ($(BR2_PACKAGE_FREESWITCH_ISAC),y)
-+FREESWITCH_ENABLED_MODULES += codecs/mod_isac
+ FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
+ 
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++FREESWITCH_DEPENDENCIES += alsa-lib
++FREESWITCH_ENABLED_MODULES += endpoints/mod_alsa
 +endif
 +
- ifeq ($(BR2_PACKAGE_FREESWITCH_ZRTP),y)
- FREESWITCH_CONF_OPTS += --enable-zrtp
- else
+ ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyyy)
+ FREESWITCH_DEPENDENCIES += ffmpeg libvpx libyuv
+ FREESWITCH_ENABLED_MODULES += applications/mod_av
 -- 
 2.6.4
