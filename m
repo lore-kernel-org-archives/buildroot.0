@@ -1,96 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Jan 2016 10:04:35 +0100
-Subject: [Buildroot] [PATCH V3] Adding support for NVME utils
-In-Reply-To: <569720FF.6020807@linux.vnet.ibm.com>
-References: <20160112054917.5859.13862.stgit@localhost.localdomain>
- <20160112212700.01ce8859@free-electrons.com>
- <56962F72.60007@linux.vnet.ibm.com>
- <20160113123820.3efe098e@free-electrons.com>
- <569720FF.6020807@linux.vnet.ibm.com>
-Message-ID: <20160114100435.6cec7d91@free-electrons.com>
+Date: Thu, 14 Jan 2016 10:15:28 +0100
+Subject: [Buildroot] [PATCH v2] rabbitmq-c: needs a toolchain with
+ posix_spawn support
+In-Reply-To: <1452761277-28917-1-git-send-email-joris.lijssens@gmail.com>
+References: <1452761277-28917-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <20160114101528.70488889@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Joris,
 
-Please don't reply to me directly, always keep the list in Cc.
+On Thu, 14 Jan 2016 09:47:57 +0100, Joris Lijssens wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/a6c3e79c61c5a535970d03bf37b068349f766a7f/
+> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 
-On Thu, 14 Jan 2016 09:45:59 +0530, Mamatha Inamdar wrote:
+The empty line separating the commit log from the SoB line is still
+missing.
 
-> I am facing two issues here.
+> ---
+>  package/rabbitmq-c/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> 1) NVME_VERSION = 0.1
->      If I update version as 0.1 and compile the build, It's unable to 
-> build and following errors occur
+> diff --git a/package/rabbitmq-c/Config.in b/package/rabbitmq-c/Config.in
+> index b330c90..73e3909 100644
+> --- a/package/rabbitmq-c/Config.in
+> +++ b/package/rabbitmq-c/Config.in
+> @@ -1,6 +1,10 @@
+>  config BR2_PACKAGE_RABBITMQ_C
+>  	bool "rabbitmq-c"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	# disable rabbitmq-c on blackfin, because it doesn't support
+> +	# posix_spawn :
+> +	# http://autobuild.buildroot.net/results/a6c3e79c61c5a535970d03bf37b068349f766a7f/
+> +	depends on !BR2_bfin
 
-You need to do:
+I think this should rather be:
 
-NVME_VERSION = v0.2
-NVME_SITE = $(call github,linux-nvme,nvme-cli,$(NVME_VERSION))
+	# too old uClibc, not providing posix_spawn functions
+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
 
-(and not define the NVME_SOURCE variable)
+because theoretically, a different Blackfin toolchain using a newer
+uClibc version would have spawn.h.
 
-Note that I've changed the version from 0.1 to 0.2, since 0.2 is
-available, so you should use this one.
+Also, the rabbitmq-c package has a comment that you need to update:
 
+comment "rabbitmq-c needs a toolchain w/ threads"
+        depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-> 2) Second issue is...If I use the install-bin target Like this:
-> 
-> $(TARGET_MAKE_ENV) $(MAKE) -C (@D) DESTDIR=$(TARGET_DIR) install-bin
-> 
-> I don't see nvme tool installed in sbin/bin, but it works for the 
-> following install command
+should be changed to:
 
-Because you also need to set PREFIX=/usr otherwise it gets installed
-in /usr/local.
-
-A few other things:
-
- *) You need to patch the Makefile to remove -m64 and -Werror otherwise
-    it won't build
-
- *) You need to pass $(TARGET_CONFIGURE_OPTS) on the left hand side of
-    $(MAKE) rather than the right hand side so that the CFLAGS from
-    $(TARGET_CONFIGURE_OPTS) don't override the ones defined in the
-    Makefile. Without this, -std=gnu99 is no longer passed in the CFLAGS,
-    and the package fails to build.
-
- *) INCLUDEDIR="-I." becomes useless.
-
- *) You need to pass LIBUDEV=1 to disable using the udev library. If
-    you don't do this, the Makefile looks on the host machine if libudev
-    is installed to determine whether it should enable udev support or
-    not, which is completely wrong since we're cross-compiling.
-    Alternatively, you could optionally add libudev support if you
-    want, but that's not mandatory.
-
- *) Since the upstream project is named nvme-cli, I think the Buildroot
-    package should also be named nvme-cli.
-
-All in all, I had a .mk file that looks like this:
-
-NVME_VERSION = v0.2
-NVME_SITE = $(call github,linux-nvme,nvme-cli,$(NVME_VERSION))
-NVME_LICENSE = GPLv2
-NVME_LICENSE_FILES = COPYING
-
-# LIBUDEV=1 indicates that we don't want udev support
-define NVME_BUILD_CMDS
-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
-		LIBUDEV=1 -C $(@D)
-endef
-
-define NVME_INSTALL_TARGET_CMDS
-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
-		PREFIX=/usr install-bin
-endef
-
-$(eval $(generic-package))
-
-Hope this helps,
+comment "rabbitmq-c needs a toolchain w/ threads"
+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+        depends on !BR2_TOOLCHAIN_HAS_THREADS
 
 Thomas
 -- 
