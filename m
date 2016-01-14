@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Jan 2016 22:40:02 +0100
-Subject: [Buildroot] [PATCH v6 21/29] package/freeswitch: enable
-	mod_portaudio, add optional dependency to portaudio
+Date: Thu, 14 Jan 2016 22:39:57 +0100
+Subject: [Buildroot] [PATCH v6 16/29] package/freeswitch: enable mod_codec2,
+	add optional dependency to libcodec2
 In-Reply-To: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452807610-15534-22-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452807610-15534-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 79a85cf..7a7b42f 100644
+index 984ca36..2457ab1 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -212,6 +212,11 @@ FREESWITCH_DEPENDENCIES += opus
- FREESWITCH_ENABLED_MODULES += codecs/mod_opus
+@@ -152,6 +152,11 @@ FREESWITCH_DEPENDENCIES += libbroadvoice
+ FREESWITCH_ENABLED_MODULES += codecs/mod_bv
  endif
  
-+ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
-+FREESWITCH_DEPENDENCIES += portaudio
-+FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
++ifeq ($(BR2_PACKAGE_LIBCODEC2),y)
++FREESWITCH_DEPENDENCIES += libcodec2
++FREESWITCH_ENABLED_MODULES += codecs/mod_codec2
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+ FREESWITCH_DEPENDENCIES += libedit
+ FREESWITCH_CONF_OPTS += --enable-core-libedit-support
 -- 
 2.6.4
