@@ -1,26 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Jan 2016 20:49:12 +0100
-Subject: [Buildroot] [PATCH] harfbuzz: enable optional graphite2 support
-In-Reply-To: <1452788452-30013-1-git-send-email-gustavo.zacarias@free-electrons.com>
- (gustavo zacarias's message of "Thu, 14 Jan 2016 13:20:52 -0300")
-References: <1452788452-30013-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <87k2ncym9z.fsf@dell.be.48ers.dk>
+Date: Thu, 14 Jan 2016 20:15:50 +0100
+Subject: [Buildroot] [git commit] package/argp-standalone: Fix build with
+	c99 compilers
+Message-ID: <20160114195206.3BE8A827F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "gustavo" == gustavo zacarias <gustavo.zacarias@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a662ff7e79630ca0875dd8529fe54db27a275007
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
- > Enable building harfbuzz with the optional graphite2 support.
- > Also switch --without-X configure options to the correct/documented
- > --with-X=no syntax.
+Add patch from:
+http://review.gluster.org/6034
 
- > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Vicente Bergas <vicencb@gmail.com>
+Tested-by: Vicente Bergas <vicencb@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0003-fix_build_with_c99_compilers.patch        | 80 ++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/argp-standalone/0003-fix_build_with_c99_compilers.patch b/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
+new file mode 100644
+index 0000000..bfa0bb5
+--- /dev/null
++++ b/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
+@@ -0,0 +1,80 @@
++From b2dfa011a3fdcb7d22764d143517d0fbd1c2a201 Mon Sep 17 00:00:00 2001
++From: Emmanuel Dreyfus <manu@netbsd.org>
++Date: Wed, 22 Jan 2014 14:47:23 +0100
++Subject: [PATCH] Fix build with c99 compilers
++
++BUG: 764655
++Change-Id: If5dfdc9c7427bd3d39d8da8f79e33ae2da6a3137
++Signed-off-by: Emmanuel Dreyfus <manu@netbsd.org>
++Reviewed-on: http://review.gluster.org/6034
++Reviewed-by: Harshavardhana <harsha@harshavardhana.net>
++Tested-by: Gluster Build System <jenkins@build.gluster.com>
++---
++
++diff --git a/argp-fmtstream.c b/argp-fmtstream.c
++index 7f79285..494b6b3 100644
++--- a/argp-fmtstream.c
+++++ b/argp-fmtstream.c
++@@ -389,6 +389,7 @@
++ weak_alias (__argp_fmtstream_printf, argp_fmtstream_printf)
++ #endif
++ 
+++#if __STDC_VERSION__ - 199900L < 1
++ /* Duplicate the inline definitions in argp-fmtstream.h, for compilers
++  * that don't do inlining. */
++ size_t
++@@ -471,5 +472,6 @@
++     __argp_fmtstream_update (__fs);
++   return __fs->point_col >= 0 ? __fs->point_col : 0;
++ }
+++#endif /* __STDC_VERSION__ - 199900L < 1 */
++ 
++ #endif /* !ARGP_FMTSTREAM_USE_LINEWRAP */
++diff --git a/argp-fmtstream.h b/argp-fmtstream.h
++index e797b11..828f435 100644
++--- a/argp-fmtstream.h
+++++ b/argp-fmtstream.h
++@@ -153,6 +153,7 @@
++ 				      __const char *__fmt, ...)
++      PRINTF_STYLE(2,3);
++ 
+++#if __STDC_VERSION__ - 199900L < 1
++ extern int __argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
++ extern int argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
++ 
++@@ -163,6 +164,7 @@
++ 				      __const char *__str, size_t __len);
++ extern size_t argp_fmtstream_write (argp_fmtstream_t __fs,
++ 				    __const char *__str, size_t __len);
+++#endif /* __STDC_VERSION__ - 199900L < 1 */
++ 
++ /* Access macros for various bits of state.  */
++ #define argp_fmtstream_lmargin(__fs) ((__fs)->lmargin)
++@@ -172,6 +174,7 @@
++ #define __argp_fmtstream_rmargin argp_fmtstream_rmargin
++ #define __argp_fmtstream_wmargin argp_fmtstream_wmargin
++ 
+++#if __STDC_VERSION__ - 199900L < 1
++ /* Set __FS's left margin to LMARGIN and return the old value.  */
++ extern size_t argp_fmtstream_set_lmargin (argp_fmtstream_t __fs,
++ 					  size_t __lmargin);
++@@ -193,6 +196,7 @@
++ /* Return the column number of the current output point in __FS.  */
++ extern size_t argp_fmtstream_point (argp_fmtstream_t __fs);
++ extern size_t __argp_fmtstream_point (argp_fmtstream_t __fs);
+++#endif /* __STDC_VERSION__ - 199900L < 1 */
++ 
++ /* Internal routines.  */
++ extern void _argp_fmtstream_update (argp_fmtstream_t __fs);
++@@ -216,7 +220,11 @@
++ #endif
++ 
++ #ifndef ARGP_FS_EI
+++#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
++ #define ARGP_FS_EI extern inline
+++#else
+++#define ARGP_FS_EI inline
+++#endif
++ #endif
++ 
++ ARGP_FS_EI size_t
