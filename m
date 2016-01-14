@@ -1,41 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 14 Jan 2016 21:57:57 +0000
-Subject: [Buildroot] [Bug 8606] New: Problem compiling on Arch Linux
-Message-ID: <bug-8606-163@https.bugs.busybox.net/>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 14 Jan 2016 21:27:43 -0200
+Subject: [Buildroot] [RFC PATCH v2 0/4] package/dhcp
+Message-ID: <56982eef6f13a_72e5f2a044692@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8606
+Hi Doug,
 
-            Bug ID: 8606
-           Summary: Problem compiling on Arch Linux
-           Product: buildroot
-           Version: 2015.11
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: l.andro.cs at gmail.com
-                CC: buildroot at uclibc.org
+On Wed, 13 Jan 2016 16:38:27 -0600, Doug Kehn wrote:
+[snip]
+> Does the series need to retain the RFC tag, or is the handling of
+> the embedded bind tar-ball acceptable?
+Regarding the tag, I can't say for sure. I am still new to this mailing list.
+Maybe someone else can advise?
 
-Hello,
+I found an issue in the bind configuration when using an external toolchain.
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_DHCP=y
+BR2_PACKAGE_DHCP_CLIENT=y
+I will post a suggestion in the appropriate patch from de series (1/4).
 
-  This is not technically a bug with buildroot, but with libiconv in Arch
-Linux, but the only "workaround" that I found so far has to be done with the
-"configure" phase of building anything that use libiconv on Arch Linux.
-  I need to pass "--with-libiconv" option to the configure script of uCLib, or
-any other that use the HOST (Arch Linux, in this case) libiconv, so that the
-configure can setup the compiler to find it.
-  So, how can I pass this option in buildroot?
-
-Thanks.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards,
+Ricardo
