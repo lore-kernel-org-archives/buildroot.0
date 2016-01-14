@@ -1,37 +1,46 @@
-From: Lada Trimasova <Lada.Trimasova@synopsys.com>
-Date: Thu, 14 Jan 2016 14:55:56 +0300
-Subject: [Buildroot] [PATCH 2/2] Disabling TPM tools for ARC
-In-Reply-To: <1452772556-18734-1-git-send-email-ltrimas@synopsys.com>
-References: <1452772556-18734-1-git-send-email-ltrimas@synopsys.com>
-Message-ID: <1452772556-18734-3-git-send-email-ltrimas@synopsys.com>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Thu, 14 Jan 2016 12:59:54 +0100
+Subject: [Buildroot] [PATCH v3] rabbitmq-c: needs a toolchain with
+ posix_spawn support
+In-Reply-To: <20160114115948.486a53e9@free-electrons.com>
+References: <1452768693-1078-1-git-send-email-joris.lijssens@gmail.com>
+ <20160114115948.486a53e9@free-electrons.com>
+Message-ID: <CACt6We0+6HidZGjaW_3O9o9cSPyYXEL0JSUePju_MwR2x5+mXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TPM tools selects trousers package which is not available for ARC.
-So this package should be disabled for ARC too.
+hello Thomas,
 
-Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- package/tpm-tools/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Sorry for that :). That is my annoying habit of speed reading through mails.
 
-diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
-index dd59aaa..77e43fd 100644
---- a/package/tpm-tools/Config.in
-+++ b/package/tpm-tools/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_TPM_TOOLS
- 	select BR2_PACKAGE_TROUSERS
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	depends on !BR2_arc # trousers
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # trousers
- 	depends on !BR2_STATIC_LIBS # trousers
- 	help
--- 
-2.5.0
+regards
+Joris
+
+On 14 January 2016 at 11:59, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Joris,
+>
+> On Thu, 14 Jan 2016 11:51:33 +0100, Joris Lijssens wrote:
+> > Fixes:
+> >
+> http://autobuild.buildroot.net/results/a6c3e79c61c5a535970d03bf37b068349f766a7f/
+> > Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+>
+> Still missing the empty line before your SoB. I'm starting to wonder if
+> you actually read my reviews completely :-)
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160114/ce851b3a/attachment.html>
