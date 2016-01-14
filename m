@@ -1,161 +1,62 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Thu, 14 Jan 2016 17:25:24 +0100
-Subject: [Buildroot] [PATCH 1/1] gr-osmosdr: new package
-Message-ID: <1452788724-10250-1-git-send-email-gwenj@trabucayre.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Thu, 14 Jan 2016 13:20:52 -0300
+Subject: [Buildroot] [PATCH] harfbuzz: enable optional graphite2 support
+Message-ID: <1452788452-30013-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-Add support for gr-osmosdr - a GNU Radio block for interfacing with various
-radio hardware.
+Enable building harfbuzz with the optional graphite2 support.
+Also switch --without-X configure options to the correct/documented
+--with-X=no syntax.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/Config.in                  |  1 +
- package/gr-osmosdr/Config.in       | 50 +++++++++++++++++++++++++++++++++++++
- package/gr-osmosdr/gr-osmosdr.hash |  2 ++
- package/gr-osmosdr/gr-osmosdr.mk   | 51 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 104 insertions(+)
- create mode 100644 package/gr-osmosdr/Config.in
- create mode 100644 package/gr-osmosdr/gr-osmosdr.hash
- create mode 100644 package/gr-osmosdr/gr-osmosdr.mk
+ package/harfbuzz/harfbuzz.mk | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 89b23db..e86264c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1266,6 +1266,7 @@ menu "Miscellaneous"
- 	source "package/empty/Config.in"
- 	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
-+	source "package/gr-osmosdr/Config.in"
- 	source "package/haveged/Config.in"
- 	source "package/mcrypt/Config.in"
- 	source "package/mobile-broadband-provider-info/Config.in"
-diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
-new file mode 100644
-index 0000000..b49a1e9
---- /dev/null
-+++ b/package/gr-osmosdr/Config.in
-@@ -0,0 +1,50 @@
-+comment "gr-osmosdr needs gnuradio support"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_PACKAGE_GNURADIO
-+
-+config BR2_PACKAGE_GR_OSMOSDR
-+	bool "gr-osmosdr"
-+	depends on BR2_USE_MMU # use fork()
-+	depends on BR2_PACKAGE_GNURADIO
-+	help
-+	  GNU Radio block for interfacing with various radio hardware
-+
-+if BR2_PACKAGE_GR_OSMOSDR
-+
-+comment "gr-osmosdr-python needs gnuradio with python support"
-+	depends on !BR2_PACKAGE_GNURADIO_PYTHON
-+
-+config BR2_PACKAGE_GR_OSMOSDR_PYTHON
-+	bool "python support"
-+	depends on BR2_PACKAGE_GNURADIO_PYTHON
-+	help
-+	  Enable Python support
-+
-+config BR2_PACKAGE_GR_OSMOSDR_IQFILE
-+	bool "IQ File Source support"
-+	select BR2_PACKAGE_GNURADIO_BLOCKS
-+	help
-+	  Enable IQ File Source support
-+
-+comment "gr-osmodr-rtlsdr needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_GR_OSMOSDR_RTLSDR
-+	bool "Osmocom RTLSDR support"
-+	select BR2_PACKAGE_LIBRTLSDR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # librtlsdr
-+	help
-+	  Enable Osmocom RTLSDR support
-+
-+config BR2_PACKAGE_GR_OSMOSDR_RTLSDR_TCP
-+	bool "RTLSDR TCP Client support"
-+	select BR2_PACKAGE_GNURADIO_BLOCKS
-+	help
-+	  Enable RTLSDR TCP client support
-+
-+config BR2_PACKAGE_GR_OSMOSDR_RFSPACE
-+	bool "RFSPACE Receivers support"
-+	help
-+	  Enable RFSPACE Receivers support
-+
-+endif
-diff --git a/package/gr-osmosdr/gr-osmosdr.hash b/package/gr-osmosdr/gr-osmosdr.hash
-new file mode 100644
-index 0000000..a65ed30
---- /dev/null
-+++ b/package/gr-osmosdr/gr-osmosdr.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated:
-+sha256 5df3faa49e76a9f66a37755f20b5c9238550f913b0dbd9214f811415ec61b1b3 gr-osmosdr-0.1.4.tar.gz
-diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
-new file mode 100644
-index 0000000..1ea711e
---- /dev/null
-+++ b/package/gr-osmosdr/gr-osmosdr.mk
-@@ -0,0 +1,51 @@
-+################################################################################
-+#
-+# gr-osmosdr
-+#
-+################################################################################
-+
-+GR_OSMOSDR_VERSION = 0.1.4
-+GR_OSMOSDR_SITE = http://cgit.osmocom.org/gr-osmosdr/snapshot
-+GR_OSMOSDR_LICENSE = GPLv3+
-+GR_OSMOSDR_LICENSE_FILES = COPYING
-+
-+# gr-osmosdr prevents doing an in-source-tree build
-+GR_OSMOSDR_SUPPORTS_IN_SOURCE_BUILD = no
-+
-+GR_OSMOSDR_DEPENDENCIES = gnuradio
-+
-+GR_OSMOSDR_CONF_OPTS = -DENABLE_DEFAULT=OFF
-+
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_PYTHON),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_PYTHON=ON
-+GR_OSMOSDR_DEPENDENCIES += python
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 36b291a..c704f32 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -10,16 +10,16 @@ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+ HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING
+ HARFBUZZ_INSTALL_STAGING = YES
+-HARFBUZZ_CONF_OPTS = --without-coretext --without-uniscribe --without-graphite2
++HARFBUZZ_CONF_OPTS = --with-coretext=no --with-uniscribe=no
+ 
+ # freetype & glib2 support required by host-pango
+ HOST_HARFBUZZ_DEPENDENCIES = \
+ 	host-freetype \
+ 	host-libglib2
+ HOST_HARFBUZZ_CONF_OPTS = \
+-	--without-corext \
+-	--without-uniscribe \
+-	--without-graphite2 \
++	--with-coretext=no \
++	--with-uniscribe=no \
++	--with-graphite2=no \
+ 	--with-cairo=no \
+ 	--with-icu=no \
+ 	--with-freetype=yes \
+@@ -44,6 +44,13 @@ else
+ HARFBUZZ_CONF_OPTS += --with-freetype=no
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GRAPHITE2),y)
++HARFBUZZ_DEPENDENCIES += graphite2
++HARFBUZZ_CONF_OPTS += --with-graphite2=yes
 +else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_PYTHON=OFF
++HARFBUZZ_CONF_OPTS += --with-graphite2=no
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_IQFILE),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_FILE=ON
-+else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_FILE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_RTLSDR),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RTL=ON
-+GR_OSMOSDR_DEPENDENCIES += librtlsdr
-+else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RTL=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_RTLSDR_TCP),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RTL_TCP=ON
-+else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RTL_TCP=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_RFSPACE),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RFSPACE=ON
-+else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RFSPACE=OFF
-+endif
-+
-+$(eval $(cmake-package))
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+ HARFBUZZ_DEPENDENCIES += libglib2
+ HARFBUZZ_CONF_OPTS += --with-glib=yes
 -- 
 2.4.10
