@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Jan 2016 22:39:46 +0100
-Subject: [Buildroot] [PATCH v6 05/29] package/freeswitch: enable mod_enum,
-	add optional dependency to libldns
+Date: Thu, 14 Jan 2016 22:40:02 +0100
+Subject: [Buildroot] [PATCH v6 21/29] package/freeswitch: enable
+	mod_portaudio, add optional dependency to portaudio
 In-Reply-To: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452807610-15534-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452807610-15534-22-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index b698d88..33735dd 100644
+index 79a85cf..7a7b42f 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -141,6 +141,11 @@ else
- FREESWITCH_CONF_OPTS += --disable-core-libedit-support
+@@ -212,6 +212,11 @@ FREESWITCH_DEPENDENCIES += opus
+ FREESWITCH_ENABLED_MODULES += codecs/mod_opus
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBLDNS),y)
-+FREESWITCH_DEPENDENCIES += libldns
-+FREESWITCH_ENABLED_MODULES += applications/mod_enum
++ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++FREESWITCH_DEPENDENCIES += portaudio
++FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
 +endif
 +
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- FREESWITCH_DEPENDENCIES += util-linux
- endif
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.6.4
