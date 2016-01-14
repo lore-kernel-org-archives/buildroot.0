@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Jan 2016 22:40:07 +0100
-Subject: [Buildroot] [PATCH v6 26/29] package/freeswitch: enable mod_xml_rpc
+Date: Thu, 14 Jan 2016 22:40:01 +0100
+Subject: [Buildroot] [PATCH v6 20/29] package/freeswitch: enable mod_opus,
+	add optional dependency to opus
 In-Reply-To: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452807610-15534-27-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452807610-15534-21-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 775b63c..fadb9c6 100644
+index af3db24..79a85cf 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -132,6 +132,10 @@ endef
+@@ -207,6 +207,11 @@ FREESWITCH_DEPENDENCIES += lua
+ FREESWITCH_ENABLED_MODULES += languages/mod_lua
+ endif
  
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_USE_WCHAR),y)
-+FREESWITCH_ENABLED_MODULES += xml_int/mod_xml_rpc
++ifeq ($(BR2_PACKAGE_OPUS),y)
++FREESWITCH_DEPENDENCIES += opus
++FREESWITCH_ENABLED_MODULES += codecs/mod_opus
 +endif
 +
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- FREESWITCH_DEPENDENCIES += alsa-lib
- FREESWITCH_ENABLED_MODULES += endpoints/mod_alsa
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.6.4
