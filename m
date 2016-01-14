@@ -1,101 +1,76 @@
-From: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
-Date: Thu, 14 Jan 2016 16:45:07 +0530
-Subject: [Buildroot] [PATCH V3] Adding support for NVME utils
-In-Reply-To: <20160114100435.6cec7d91@free-electrons.com>
-References: <20160112054917.5859.13862.stgit@localhost.localdomain>
- <20160112212700.01ce8859@free-electrons.com>
- <56962F72.60007@linux.vnet.ibm.com>
- <20160113123820.3efe098e@free-electrons.com>
- <569720FF.6020807@linux.vnet.ibm.com>
- <20160114100435.6cec7d91@free-electrons.com>
-Message-ID: <5697833B.5000007@linux.vnet.ibm.com>
+From: =?UTF-8?Q?Vicen=C3=A7?= <vicencb@gmail.com>
+Date: Thu, 14 Jan 2016 12:54:40 +0100
+Subject: [Buildroot] argp-standalone broken when optimization is enabled
+In-Reply-To: <20160114115735.079123f4@free-electrons.com>
+References: <CAAMcf8C=SMLHGaz0aYy3A+xDA0fDNkncW5=J6KE-K8X8dYeLsQ@mail.gmail.com>
+ <20160114101914.36da8560@free-electrons.com>
+ <CAAMcf8AcZzNpGrvfOaGO-EBPZHfyzojNsKusZr2RuEfC9xE+iw@mail.gmail.com>
+ <20160114115735.079123f4@free-electrons.com>
+Message-ID: <CAAMcf8CKZ+ZFbTgTgdkWGMSiV4Xitnb-PpzsZeOSs800O9ieQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the detailed explanation,
-updated your comments and sent new version of Patch.
+On Thu, Jan 14, 2016 at 11:57 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Vicen?,
+>
+> Please keep the Buildroot list in Cc, thanks!
+>
+> On Thu, 14 Jan 2016 11:26:45 +0100, Vicen? wrote:
+>> On Thu, Jan 14, 2016 at 10:19 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> > Vicen?,
+>> >
+>> > Thanks for your report.
+>> >
+>> > On Wed, 13 Jan 2016 18:15:37 +0100, Vicen? wrote:
+>> >> Hello,
+>> >> could this patch be added to buildroot to fix the issue:
+>> >>
+>> >> https://dev.openwrt.org/browser/trunk/package/libs/argp-standalone/patches/002-no_optimize.patch
+>> >
+>> > Could you describe more precisely what doesn't work ? The OpenWRT
+>> > patch unfortunately doesn't give any details about what it is fixing.
+>>
+>> Hello Thomas,
+>> In the OpenWRT page there is a link to the bug fixed by this patch:
+>> https://dev.openwrt.org/ticket/20460
+>> The configuration that fails in my case is when this buildroot options
+>> are enabled:
+>> BR2_OPTIMIZE_3
+>> BR2_TOOLCHAIN_EXTERNAL_GCC_5
+>> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
+>> BR2_PACKAGE_LIBV4L_UTILS
+>>
+>> The error reported is the same as in OpenWRT.
+>> argp is provided with the glibc, but the standalone version is
+>> automatically selected when building some packages with musl.
+>> So, libc != glibc plus some other specific package triggers the issue.
+>
+> Thanks for the details. Then I think
+> http://review.gluster.org/#/c/6034/ is a better solution than the one
+> taken by OpenWRT. Can you try this change ?
 
-Thanks
-Mamatha
+Hello Thomas,
+I can confirm that
+http://review.gluster.org/changes/6034/revisions/b2dfa011a3fdcb7d22764d143517d0fbd1c2a201/patch?zip
+works fine.
+It just needs to tweak the file paths.
+And it is a proper solution, indeed better than just disabling optimizations.
 
-On 01/14/2016 02:34 PM, Thomas Petazzoni wrote:
-> Hello,
+Thanks!
+  Vicente.
+
 >
-> Please don't reply to me directly, always keep the list in Cc.
+> It originates from https://bugzilla.redhat.com/show_bug.cgi?id=1201898.
 >
-> On Thu, 14 Jan 2016 09:45:59 +0530, Mamatha Inamdar wrote:
->
->> I am facing two issues here.
->>
->> 1) NVME_VERSION = 0.1
->>       If I update version as 0.1 and compile the build, It's unable to
->> build and following errors occur
-> You need to do:
->
-> NVME_VERSION = v0.2
-> NVME_SITE = $(call github,linux-nvme,nvme-cli,$(NVME_VERSION))
->
-> (and not define the NVME_SOURCE variable)
->
-> Note that I've changed the version from 0.1 to 0.2, since 0.2 is
-> available, so you should use this one.
->
->
->> 2) Second issue is...If I use the install-bin target Like this:
->>
->> $(TARGET_MAKE_ENV) $(MAKE) -C (@D) DESTDIR=$(TARGET_DIR) install-bin
->>
->> I don't see nvme tool installed in sbin/bin, but it works for the
->> following install command
-> Because you also need to set PREFIX=/usr otherwise it gets installed
-> in /usr/local.
->
-> A few other things:
->
->   *) You need to patch the Makefile to remove -m64 and -Werror otherwise
->      it won't build
->
->   *) You need to pass $(TARGET_CONFIGURE_OPTS) on the left hand side of
->      $(MAKE) rather than the right hand side so that the CFLAGS from
->      $(TARGET_CONFIGURE_OPTS) don't override the ones defined in the
->      Makefile. Without this, -std=gnu99 is no longer passed in the CFLAGS,
->      and the package fails to build.
->
->   *) INCLUDEDIR="-I." becomes useless.
->
->   *) You need to pass LIBUDEV=1 to disable using the udev library. If
->      you don't do this, the Makefile looks on the host machine if libudev
->      is installed to determine whether it should enable udev support or
->      not, which is completely wrong since we're cross-compiling.
->      Alternatively, you could optionally add libudev support if you
->      want, but that's not mandatory.
->
->   *) Since the upstream project is named nvme-cli, I think the Buildroot
->      package should also be named nvme-cli.
->
-> All in all, I had a .mk file that looks like this:
->
-> NVME_VERSION = v0.2
-> NVME_SITE = $(call github,linux-nvme,nvme-cli,$(NVME_VERSION))
-> NVME_LICENSE = GPLv2
-> NVME_LICENSE_FILES = COPYING
->
-> # LIBUDEV=1 indicates that we don't want udev support
-> define NVME_BUILD_CMDS
-> 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
-> 		LIBUDEV=1 -C $(@D)
-> endef
->
-> define NVME_INSTALL_TARGET_CMDS
-> 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
-> 		PREFIX=/usr install-bin
-> endef
->
-> $(eval $(generic-package))
->
-> Hope this helps,
+> Thanks,
 >
 > Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
