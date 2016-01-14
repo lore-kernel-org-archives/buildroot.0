@@ -1,62 +1,53 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Thu, 14 Jan 2016 13:20:52 -0300
-Subject: [Buildroot] [PATCH] harfbuzz: enable optional graphite2 support
-Message-ID: <1452788452-30013-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 14 Jan 2016 14:55:43 -0300
+Subject: [Buildroot] [PATCH] openssh: security bump to version 7.1p2
+Message-ID: <1452794143-13968-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Fixes:
 
-Enable building harfbuzz with the optional graphite2 support.
-Also switch --without-X configure options to the correct/documented
---with-X=no syntax.
+CVE-2016-0777 - Client Information leak from use of roaming connection
+feature.
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+CVE-2016-0778 - A buffer overflow flaw was found in the way the OpenSSH
+client roaming feature was implemented. A malicious server could
+potentially use this flaw to execute arbitrary code on a successfully
+authenticated OpenSSH client if that client used certain non-default
+configuration options.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/harfbuzz/harfbuzz.mk | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ package/openssh/openssh.hash | 5 ++---
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 36b291a..c704f32 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -10,16 +10,16 @@ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
- HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING
- HARFBUZZ_INSTALL_STAGING = YES
--HARFBUZZ_CONF_OPTS = --without-coretext --without-uniscribe --without-graphite2
-+HARFBUZZ_CONF_OPTS = --with-coretext=no --with-uniscribe=no
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 84f0667..b93b4a9 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,3 @@
+ # Locally calculated after checking pgp signature
+-# Also from http://www.openssh.com/txt/release-7.1 (sha256 is base64 encoded)
+-# Decode with -> echo <encoded stuff>|base64 -d|hexdump -v -e '/1 "%02x"'
+-sha256	fc0a6d2d1d063d5c66dffd952493d0cda256cad204f681de0f84ef85b2ad8428	openssh-7.1p1.tar.gz
++# Also from http://www.openssh.com/txt/release-7.1p2
++sha256	dd75f024dcf21e06a0d6421d582690bf987a1f6323e32ad6619392f3bfde6bbd	openssh-7.1p2.tar.gz
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index b7aeb2a..a6cdfe2 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # freetype & glib2 support required by host-pango
- HOST_HARFBUZZ_DEPENDENCIES = \
- 	host-freetype \
- 	host-libglib2
- HOST_HARFBUZZ_CONF_OPTS = \
--	--without-corext \
--	--without-uniscribe \
--	--without-graphite2 \
-+	--with-coretext=no \
-+	--with-uniscribe=no \
-+	--with-graphite2=no \
- 	--with-cairo=no \
- 	--with-icu=no \
- 	--with-freetype=yes \
-@@ -44,6 +44,13 @@ else
- HARFBUZZ_CONF_OPTS += --with-freetype=no
- endif
- 
-+ifeq ($(BR2_PACKAGE_GRAPHITE2),y)
-+HARFBUZZ_DEPENDENCIES += graphite2
-+HARFBUZZ_CONF_OPTS += --with-graphite2=yes
-+else
-+HARFBUZZ_CONF_OPTS += --with-graphite2=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
- HARFBUZZ_DEPENDENCIES += libglib2
- HARFBUZZ_CONF_OPTS += --with-glib=yes
+-OPENSSH_VERSION = 7.1p1
++OPENSSH_VERSION = 7.1p2
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
 -- 
 2.4.10
