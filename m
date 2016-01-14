@@ -1,49 +1,115 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Jan 2016 22:34:11 +0100
-Subject: [Buildroot] [git commit] python-can: bump to 1.4.3
-Message-ID: <20160114213421.F17B0827DB@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 14 Jan 2016 22:39:41 +0100
+Subject: [Buildroot] [PATCH v6 00/29] package/freeswitch: new package
+Message-ID: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=632842b5412d9e036feab84518a2d8a5c9fbb101
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Fixes following legal-info issues:
+this patch series splits my previous patch into smaller chunks for easier
+review as requested by Luca and Thomas. I also removed almost all options
+from Config.in and kept only two:
+- mod_isac is not available on all platforms
+- zrtp may not be needed by all users
+There are no technical reasons why these options exist, they can easily
+be moved to freeswitch.mk if you prefer, I favoured it this way ;)
 
-http://autobuild.buildroot.net/results/316/3162ae78c27e174740012851e4a57fcab58ad421//
-http://autobuild.buildroot.net/results/087/087b85d9c3e0184be2261912138c1957fe61fae2//
+Instead of enabling or disabling modules in the upstream modules.conf I
+decided to delete that file in the first patch to provide a minimal
+build for easier review, please keep in mind that I never did a run-time
+test with this minimal version. A lot of modules, desired as a default
+set, are added with the second patch - all of them have no external
+dependencies. The rest of the patch series consists of modules having
+some form of dependency, added module by module for easier review.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-can/python-can.hash | 6 +++---
- package/python-can/python-can.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Regards, Bernd
 
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index bc3dfda..a877862 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9fb15ff75266f2cb53a175ee2097768, sha256 locally computed
--md5     b9fb15ff75266f2cb53a175ee2097768  python-can-1.4.2.tar.gz
--sha256  29b4e736b0d8b958b8074e209c9f1482e02761bbf97ddf0871f291da312c11ed  python-can-1.4.2.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9b556fe6f016c0a3b27cc67790cf821, sha256 locally computed
-+md5     b9b556fe6f016c0a3b27cc67790cf821  python-can-1.4.3.tar.gz
-+sha256  2dcd32737cc39fbf39f41521146a9685f594942c99c6183bad7e3c404930198b  python-can-1.4.3.tar.gz
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index d6370ed..ae9ef1a 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_CAN_VERSION = 1.4.2
-+PYTHON_CAN_VERSION = 1.4.3
- PYTHON_CAN_SITE = https://pypi.python.org/packages/source/p/python-can
- PYTHON_CAN_LICENSE = LGPLv3
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+v6: - bumped to version 1.6.6
+    - fixed autoreconf bug in libs/spandsp/ introduced by version bump
+    - added hint for dynamic libs to comment in Config.in (Ricardo)
+    - changed dependency from libjpeg to jpeg (Ricardo)
+    - fixed -Werror bug using FREESWITCH_CONF_ENV,
+      removed 0001-cross_git.patch (Ricardo)
+    - re-numbered patches
+v5: - bumped to version 1.6.5
+    - split patch into smaller chunks (Luca, Thomas)
+    - removed most of the options from Config.in
+    - added several new modules
+    - compilation with uClibc-ng is fixed
+v4: - bumped to version 1.6.2
+v3: - bumped to version 1.6.0, added hash
+    - to compile with uClibc-NG this patch is needed:
+      http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=1.0&id=5a167e319ca2bee566d330d1c901d76dc53deea7
+      http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/126450/focus=127191
+    - removed python module, cross compiling to 32bit on 64bit host is
+      broken:
+      http://lists.busybox.net/pipermail/buildroot/2011-August/045039.html
+    - added reverse dependencies from vlc
+    - added comment to 0002-jpeg.patch
+v2: - addressed various comments (Thomas)
+
+
+Bernd Kuhls (29):
+  package/freeswitch: new package
+  package/freeswitch: enable optional modules
+  package/freeswitch: add optional dependency to libuuid
+  package/freeswitch: add optional dependency to libedit
+  package/freeswitch: enable mod_enum, add optional dependency to
+    libldns
+  package/freeswitch: enable optional zrtp support
+  package/freeswitch: add optional dependency to libpng
+  package/freeswitch: add optional dependency to unixodbc
+  package/freeswitch: add optional dependency to freetype
+  package/freeswitch: enable mod_yaml, add optional dependency to
+    libyaml
+  package/freeswitch: enable mod_lua, add optional dependency to lua
+  package/freeswitch: enable mod_fsv, add optional dependencies to
+    libvpx & libyuv
+  package/freeswitch: enable mod_av, add optional dependencies to
+    ffmpeg, libvpx & libyuv
+  package/freeswitch: enable mod_vpx, add optional dependency to libvpx
+  package/freeswitch: enable mod_bv, add optional dependency to
+    libbroadvoice
+  package/freeswitch: enable mod_codec2, add optional dependency to
+    libcodec2
+  package/freeswitch: add optional dependency to libg7221
+  package/freeswitch: enable mod_ilbc, add optional dependency to
+    libilbc
+  package/freeswitch: enable mod_isac
+  package/freeswitch: enable mod_opus, add optional dependency to opus
+  package/freeswitch: enable mod_portaudio, add optional dependency to
+    portaudio
+  package/freeswitch: enable mod_silk, add optional dependency to
+    libsilk
+  package/freeswitch: enable mod_sndfile, add optional dependency to
+    libsndfile
+  package/freeswitch: enable mod_alsa, add optional dependency to
+    alsa-lib
+  package/freeswitch: enable mod_soundtouch, add optional dependency to
+    libsoundtouch
+  package/freeswitch: enable mod_xml_rpc
+  package/freeswitch: enable mod_imagick, add optional dependencies to
+    imagemagick, libvpx & libyuv
+  package/freeswitch: enable mod_memcache, add optional dependency to
+    libmemcached
+  package/freeswitch: add optional dependency to xz
+
+ package/Config.in                          |   1 +
+ package/freeswitch/0001-jpeg.patch         |  29 +++
+ package/freeswitch/0002-aarch64_zrtp.patch |  22 +++
+ package/freeswitch/Config.in               |  59 +++++++
+ package/freeswitch/freeswitch.hash         |   2 +
+ package/freeswitch/freeswitch.mk           | 271 +++++++++++++++++++++++++++++
+ 6 files changed, 384 insertions(+)
+ create mode 100644 package/freeswitch/0001-jpeg.patch
+ create mode 100644 package/freeswitch/0002-aarch64_zrtp.patch
+ create mode 100644 package/freeswitch/Config.in
+ create mode 100644 package/freeswitch/freeswitch.hash
+ create mode 100644 package/freeswitch/freeswitch.mk
+
+-- 
+2.6.4
