@@ -1,53 +1,42 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 14 Jan 2016 14:55:43 -0300
-Subject: [Buildroot] [PATCH] openssh: security bump to version 7.1p2
-Message-ID: <1452794143-13968-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 14 Jan 2016 15:57:36 -0300
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.10.1
+Message-ID: <1452797856-21989-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-
-CVE-2016-0777 - Client Information leak from use of roaming connection
-feature.
-
-CVE-2016-0778 - A buffer overflow flaw was found in the way the OpenSSH
-client roaming feature was implemented. A malicious server could
-potentially use this flaw to execute arbitrary code on a successfully
-authenticated OpenSSH client if that client used certain non-default
-configuration options.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openssh/openssh.hash | 5 ++---
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 84f0667..b93b4a9 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,3 @@
- # Locally calculated after checking pgp signature
--# Also from http://www.openssh.com/txt/release-7.1 (sha256 is base64 encoded)
--# Decode with -> echo <encoded stuff>|base64 -d|hexdump -v -e '/1 "%02x"'
--sha256	fc0a6d2d1d063d5c66dffd952493d0cda256cad204f681de0f84ef85b2ad8428	openssh-7.1p1.tar.gz
-+# Also from http://www.openssh.com/txt/release-7.1p2
-+sha256	dd75f024dcf21e06a0d6421d582690bf987a1f6323e32ad6619392f3bfde6bbd	openssh-7.1p2.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index b7aeb2a..a6cdfe2 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 4fca659..116bbba 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1	7be6e6869d0d2d9fe3df71b5c65f065dd2325f58	sqlite-autoconf-3100000.tar.gz
++sha1	fedd95d402628ed0e0e3444ce50bcbd1fe2e7294	sqlite-autoconf-3100100.tar.gz
+ # Calculated based on the hash above
+-sha256	43cc292d70711fa7580250c8a1cd7c64813a4a0a479dbd502cce5f10b5d91042	sqlite-autoconf-3100000.tar.gz
++sha256	3cb4e17137f7422554c8e8906b5a7274c7a0d362872e8aa25233c3f1246bda98	sqlite-autoconf-3100100.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index fe115eb..e47e3c2 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 7.1p1
-+OPENSSH_VERSION = 7.1p2
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-SQLITE_VERSION = 3100000
++SQLITE_VERSION = 3100100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
 -- 
 2.4.10
