@@ -1,15 +1,21 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Jan 2016 22:40:08 +0100
-Subject: [Buildroot] [PATCH v6 27/29] package/freeswitch: enable mod_imagick,
-	add optional dependencies to imagemagick, libvpx & libyuv
+Date: Thu, 14 Jan 2016 22:39:54 +0100
+Subject: [Buildroot] [PATCH v6 13/29] package/freeswitch: enable mod_av,
+	add optional dependencies to ffmpeg, libvpx & libyuv
 In-Reply-To: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452807610-15534-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452807610-15534-28-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452807610-15534-14-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+mod_av delivers native support for these video codecs:
+
+codec,H263 Video,mod_av
+codec,H263+ Video,mod_av
+codec,H264 Video,mod_av
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
@@ -17,20 +23,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index fadb9c6..2c07a47 100644
+index 0f20b83..fe2b04d 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -160,6 +160,11 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- FREESWITCH_DEPENDENCIES += freetype
- endif
+@@ -132,6 +132,11 @@ endef
  
-+ifeq ($(BR2_PACKAGE_IMAGEMAGICK)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyy)
-+FREESWITCH_DEPENDENCIES += imagemagick libvpx libyuv
-+FREESWITCH_ENABLED_MODULES += formats/mod_imagick
+ FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
+ 
++ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyyy)
++FREESWITCH_DEPENDENCIES += ffmpeg libvpx libyuv
++FREESWITCH_ENABLED_MODULES += applications/mod_av
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBBROADVOICE),y)
- FREESWITCH_DEPENDENCIES += libbroadvoice
- FREESWITCH_ENABLED_MODULES += codecs/mod_bv
+ ifeq ($(BR2_PACKAGE_FREESWITCH_ZRTP),y)
+ FREESWITCH_CONF_OPTS += --enable-zrtp
+ else
 -- 
 2.6.4
