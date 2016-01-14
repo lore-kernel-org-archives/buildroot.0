@@ -1,39 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Jan 2016 13:39:34 +0100
-Subject: [Buildroot] [PATCH 1/2] Disabling trousers package for arc
-In-Reply-To: <1452772556-18734-2-git-send-email-ltrimas@synopsys.com>
-References: <1452772556-18734-1-git-send-email-ltrimas@synopsys.com>
- <1452772556-18734-2-git-send-email-ltrimas@synopsys.com>
-Message-ID: <20160114133934.6554ac7b@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 14 Jan 2016 14:13:38 +0100
+Subject: [Buildroot] [PATCH] connman: bump to version 1.31
+In-Reply-To: <1452774316-20163-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 14 Jan 2016 09:25:16 -0300")
+References: <1452774316-20163-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87y4bs1eyl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lada,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Thu, 14 Jan 2016 14:55:55 +0300, Lada Trimasova wrote:
-> Even though ARC gcc understands "-pie" option and attempts
-> to generate PIE binaries as of today PIE is not really supported
-> for user-space applications. Trousers configure scripts don't provide any
-> options which can disable pie usage. So there is no easy way to prevent
-> linking with -pie on ARC. The easiest solution is just to make
-> the trousers package not available on ARC.
-> 
-> Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Rather than doing this, what about adding an option to make the pie
-usage optional? You can take some inspiration from
-http://www.spinics.net/lists/linux-cifs/msg06418.html for example.
+Committed, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
