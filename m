@@ -1,58 +1,31 @@
-From: Joao Mano <joao@datacom.ind.br>
-Date: Fri, 15 Jan 2016 10:55:10 -0200
-Subject: [Buildroot] [PATCH 1/1] support/download: Aternative access methods
-	to CVS
-Message-ID: <1452862510-31390-1-git-send-email-joao@datacom.ind.br>
+From: David Picard <davepiq@yahoo.fr>
+Date: Fri, 15 Jan 2016 14:08:06 +0100
+Subject: [Buildroot] SPI module on Raspberry Pi B+
+Message-ID: <5698EF36.2040403@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allows to user specify other access methods than
-:pserver:anonymous@ on CVS repositories.
+Hello,
 
-This shall be specifically defined along MODULE_SITE string.
+I just switched from Buildroot 2015.08.1 to 2015.11.1, and tried to keep 
+the same configuration. SPI was working well, before the switch.
 
-Signed-off-by: Joao Mano <joao@datacom.ind.br>
----
- docs/manual/adding-packages-generic.txt | 3 ++-
- support/download/cvs                    | 8 +++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+Now, I am having some trouble with the SPI driver, namely spi_bcm2835 : 
+when I insert the module, there is no log in dmesg output, and nothing 
+is created in /sys/bus/spi/devices.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 1c25c4e..a5726d8 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -279,7 +279,8 @@ information is (assuming the package name is +libfoo+) :
-   ** +cvs+ for retrieving source code from a CVS repository.
-      Used by default when +LIBFOO_SITE+ begins with +cvs://+.
-      The downloaded source code is cached as with the +svn+ method.
--     Only anonymous pserver mode is supported.
-+     Anonymous pserver mode is assumed otherwise explicitly defined
-+     on +LIBFOO_SITE+.
-      +LIBFOO_SITE+ 'must' contain the source URL as well as the remote
-      repository directory. The module is the package name.
-      +LIBFOO_VERSION+ is 'mandatory' and 'must' be a tag, a branch, or
-diff --git a/support/download/cvs b/support/download/cvs
-index e1d5035..b4e947a 100755
---- a/support/download/cvs
-+++ b/support/download/cvs
-@@ -40,8 +40,14 @@ else
-     select="-r"
- fi
- 
-+# The absence of an initial : on ${repo} means access method undefined
-+if [[ ${repo} == [^:]* ]]; then
-+   # defaults to anonymous pserver
-+   repo=":pserver:anonymous@${repo}"
-+fi
-+
- export TZ=UTC
--_cvs ${verbose} -z3 -d"':pserver:anonymous@${repo}'" \
-+_cvs ${verbose} -z3 -d"'${repo}'" \
-      co -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
- 
- tar czf "${output}" "${basename}"
--- 
-1.9.1
+I could make it work by loading spi_bcm2708 instead, despite the 
+deprecated warning. In this case, I get some logging messages and 
+/sys/bus/spi/devices/spi0.0 and /sys/bus/spi/devices/spi0.1 appear.
+
+Any idea ?
+
+David.
+
+------------------
+Board : Raspberry Pi B+
+Buildroot : 2015.11.1
+SPI peripheral : Adafruit PiTFT 2.8"
