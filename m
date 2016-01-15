@@ -1,52 +1,46 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 15 Jan 2016 18:52:05 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2016.01.0
-Message-ID: <1452880325-24060-1-git-send-email-fabio.porcedda@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 15 Jan 2016 18:53:45 +0100
+Subject: [Buildroot] Standardizing format for specifying license(s)
+In-Reply-To: <20160115145153.39e486e3@free-electrons.com>
+References: <5698DDBE.3000402@imgtec.com>
+ <1a9e07dbd834ef9ca57e1b6a91d043c2@localhost>
+ <20160115145153.39e486e3@free-electrons.com>
+Message-ID: <56993229.5060606@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 207d9b2..39cb5d2 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.12.0"
-+	bool "2016.01.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2016.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 178655d..b6e1869 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
- # http://www.barebox.org/download/barebox-2015.12.0.tar.bz2.md5
--md5 1ef8926cd2eadc39ce779b8377e7cfcc barebox-2015.12.0.tar.bz2
-+md5 99f8c1252e3085e4b3a4e365ff36e9bd barebox-2016.01.0.tar.bz2
- 
- # Locally calculated
--sha256 b0b7df82dafcc7aceeaa6285755855a71f6422c5a278949c717096f4ffd7f315 barebox-2015.12.0.tar.bz2
-+sha256 f0bb34b745b9c8c626186e22b0154f57c15d0eec5de1e3654f740665b2136d91 barebox-2016.01.0.tar.bz2
+Thomas Petazzoni wrote:
+> Alexander,
+>
+> On Fri, 15 Jan 2016 14:12:47 +0100, Alexander Dahl wrote:
+>
+>> If not already done, I would suggest to have those license stuff
+>> compatible with SPDX [1]. I noticed license names in at least some
+>> packages are not the same as the identifiers on
+>> https://spdx.org/licenses/ ? so if someone wants to generate SPDX stuff
+>> from a buildroot project, it maybe would be better to have a format for
+>> names and delimiters which make it easier towards SPDX package data.
+>
+> We normally try to use the SPDX license code, at least for "new"
+> licenses (i.e licenses for which we don't yet have a single Buildroot
+> package under that license). However, for the first licenses (like GPL,
+> LGPL, etc.), we have started using an encoding that is not the one from
+> SPDX. I would personally be in favor to move to SPDX license codes
+> everywhere, but that would break things for people that are currently
+> parsing our license information. Is this reasonable to do nonetheless?
+
+Changing our format to comply with SPDX would be a good idea IMHO. If
+there's a well-defined and suitable standard out there it makes no
+sense to define another one.
+
+Obviously I understand this might be annoying to somebody. But we never
+formally specified how "composite" licenses must be written and so,
+strictly speaking, any parsing activity not based on a reliable ground.
+
 -- 
-2.7.0
+Luca
