@@ -1,34 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jan 2016 14:57:27 +0100
-Subject: [Buildroot] [PATCH v2] netsniff-ng: check if linux-headers are
- v3.0 or higher
-In-Reply-To: <1452864217-2503-1-git-send-email-joris.lijssens@gmail.com>
-References: <1452864217-2503-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <20160115145727.2854e65c@free-electrons.com>
+Date: Fri, 15 Jan 2016 15:00:16 +0100
+Subject: [Buildroot] [PATCH] util-linux: enable Python bindings for
+ libmount
+In-Reply-To: <1452853497-29131-1-git-send-email-yegorslists@googlemail.com>
+References: <1452853497-29131-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160115150016.0ac51eb3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joris,
+Yegor,
 
-On Fri, 15 Jan 2016 14:23:37 +0100, Joris Lijssens wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/c87a440e29ae387f600cb6ecce3caa
+On Fri, 15 Jan 2016 11:24:57 +0100, yegorslists at googlemail.com wrote:
 
-This URL gives a 404. The correct address is:
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 58ace1d..a80e287 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -23,8 +23,7 @@ UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no \
+>  	$(if $(BR2_TOOLCHAIN_USES_UCLIBC),ac_cv_header_sys_timex_h=no)
+>  UTIL_LINUX_CONF_OPTS += \
+>  	--disable-rpath \
+> -	--disable-makeinstall-chown \
+> -	--without-python
+> +	--disable-makeinstall-chown
+>  
+>  # system depends on util-linux so we enable systemd support
+>  # (which needs systemd to be installed)
+> @@ -136,6 +135,19 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
+>  UTIL_LINUX_CONF_OPTS += --disable-all-programs
+>  endif
+>  
+> +# Install libmount Python bindings
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+> +ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+> +UTIL_LINUX_CONF_OPTS += \
+> +	--enable-pylibmount \
+> +	--with-python
+> +else
+> +UTIL_LINUX_CONF_OPTS += \
+> +	--disable-pylibmount \
+> +	--without-python
+> +endif
+> +endif
 
-http://autobuild.buildroot.net/results/c87/c87a440e29ae387f600cb6ecce3caaa08557f4f0/
+With this change, we are no longer passing --without-python when
+BR2_PACKAGE_UTIL_LINUX_LIBMOUNT is disabled. I think it would be good
+to continue passing --without-python. Also, shouldn't python be built
+before util-linux for this to work ?
 
-Also, it's good to give a few more details, like:
+Would something like this make sense maybe:
 
-netsniff-ng uses the TP_STATUS_VLAN_VALID define, provided by the
-kernel headers. This definition has been added in the kernel by commit
-a3bcc23e890a6d49d6763d9eb073d711de2e0469 ("af-packet: Add flag to
-distinguish VID 0 from no-vlan"), which was merged in v3.0.
+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+UTIL_LINUX_CONF_OPTS += --with-python
+UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+UTIL_LINUX_CONF_OPTS += --enable-pylibmount
+else
+UTIL_LINUX_CONF_OPTS += --disable-pylibmount
+endif
+else
+UTIL_LINUX_CONF_OPTS += --without-python
+endif
 
-Thanks,
+Best regards,
 
 Thomas
 -- 
