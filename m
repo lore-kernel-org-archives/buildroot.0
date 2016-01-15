@@ -1,7 +1,7 @@
 From: David Picard <davepiq@yahoo.fr>
-Date: Fri, 15 Jan 2016 14:08:06 +0100
+Date: Fri, 15 Jan 2016 14:06:10 +0100
 Subject: [Buildroot] SPI module on Raspberry Pi B+
-Message-ID: <5698EF36.2040403@yahoo.fr>
+Message-ID: <5698EEC2.7030806@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
