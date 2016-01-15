@@ -1,54 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Jan 2016 21:29:52 +0100
-Subject: [Buildroot] [git commit] util-linux: enable Python bindings for
-	libmount
-Message-ID: <20160115204330.8CCCC827ED@busybox.osuosl.org>
+Date: Fri, 15 Jan 2016 18:53:49 +0100
+Subject: [Buildroot] [git commit] barebox: bump to version 2016.01.0
+Message-ID: <20160115204330.6319D8280A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c20ffc5effe4ae35f12e843eb72208a09c1471a
+commit: http://git.buildroot.net/buildroot/commit/?id=442c9fa4fce51753dd3a410b902296329ca996ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux.mk | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 58ace1d..f6e5d62 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -23,8 +23,7 @@ UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no \
- 	$(if $(BR2_TOOLCHAIN_USES_UCLIBC),ac_cv_header_sys_timex_h=no)
- UTIL_LINUX_CONF_OPTS += \
- 	--disable-rpath \
--	--disable-makeinstall-chown \
--	--without-python
-+	--disable-makeinstall-chown
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 207d9b2..39cb5d2 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
- # system depends on util-linux so we enable systemd support
- # (which needs systemd to be installed)
-@@ -136,6 +135,19 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
- UTIL_LINUX_CONF_OPTS += --disable-all-programs
- endif
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.12.0"
++	bool "2016.01.0"
  
-+# Install libmount Python bindings
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-+UTIL_LINUX_CONF_OPTS += --with-python
-+UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
-+UTIL_LINUX_CONF_OPTS += --enable-pylibmount
-+else
-+UTIL_LINUX_CONF_OPTS += --disable-pylibmount
-+endif
-+else
-+UTIL_LINUX_CONF_OPTS += --without-python
-+endif
-+
- # Install PAM configuration files
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
- define UTIL_LINUX_INSTALL_PAMFILES
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2016.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 178655d..b6e1869 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+ # http://www.barebox.org/download/barebox-2015.12.0.tar.bz2.md5
+-md5 1ef8926cd2eadc39ce779b8377e7cfcc barebox-2015.12.0.tar.bz2
++md5 99f8c1252e3085e4b3a4e365ff36e9bd barebox-2016.01.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 b0b7df82dafcc7aceeaa6285755855a71f6422c5a278949c717096f4ffd7f315 barebox-2015.12.0.tar.bz2
++sha256 f0bb34b745b9c8c626186e22b0154f57c15d0eec5de1e3654f740665b2136d91 barebox-2016.01.0.tar.bz2
