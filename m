@@ -1,135 +1,210 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Jan 2016 16:41:32 +0100
-Subject: [Buildroot] [PATCH] support/scripts: add size-stats-compare script
-Message-ID: <1452872492-6980-1-git-send-email-patrickdepinguin@gmail.com>
+From: Mason <slash.tmp@free.fr>
+Date: Fri, 15 Jan 2016 17:12:00 +0100
+Subject: [Buildroot] [PATCH v2] linux-fusion: fix several build issues
+In-Reply-To: <20160113092306.6e57b621@free-electrons.com>
+References: <56951746.4070806@free.fr>
+ <20160112174251.7280fdf3@free-electrons.com> <56957C2D.4060901@free.fr>
+ <20160113092306.6e57b621@free-electrons.com>
+Message-ID: <56991A50.5030808@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+From: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
 
-Leverage the CSV files produces by size-stats (make graph-size) to allow
-for a comparison of rootfs size between two different buildroot
-compilations.
+The first patch merely fixes a warning. The other two are required
+to use the module on Linux 4.x
 
-The script takes the file-size CSV files of two compilations as input, and
-produces a textual report of the differences per package.
-Using the -d/--detail flag, the report will show the file size changes
-instead of package size changes.
-The -t/--threshold option allows to ignore file size differences smaller
-than the given threshold (in bytes).
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
 ---
- support/scripts/size-stats-compare | 98 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
- create mode 100755 support/scripts/size-stats-compare
+ .../0002-Fix-mismatched-conversion-spec-and-value-in-printk.patch     | 29 ++++++++++
+ .../0003-Fix-fusion-Unknown-symbol-tasklist_lock-err-0.patch          | 38 +++++++++++++
+ package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch       | 99 +++++++++++++++++++++++++++++++++
+ 3 files changed, 166 insertions(+)
 
-diff --git a/support/scripts/size-stats-compare b/support/scripts/size-stats-compare
-new file mode 100755
-index 0000000..d7eec09
+diff --git a/package/linux-fusion/0002-Fix-mismatched-conversion-spec-and-value-in-printk.patch b/package/linux-fusion/0002-Fix-mismatched-conversion-spec-and-value-in-printk.patch
+new file mode 100644
+index 000000000000..a3f8bb7812bf
 --- /dev/null
-+++ b/support/scripts/size-stats-compare
-@@ -0,0 +1,98 @@
-+#!/usr/bin/env python
++++ b/package/linux-fusion/0002-Fix-mismatched-conversion-spec-and-value-in-printk.patch
+@@ -0,0 +1,29 @@
++From debb9cafe9b7cc2b286399ecc8e3210480061c70 Mon Sep 17 00:00:00 2001
++From: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
++Date: Mon, 11 Jan 2016 15:42:16 +0100
++Subject: [PATCH] Fix mismatched conversion spec and value in printk
 +
-+# Copyright (C) 2016 Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++linux/drivers/char/fusion/fusiondev.c:775:38: warning:
++format '%ld' expects argument of type 'long int', but argument 7 has type 'int'
 +
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+# General Public License for more details.
-+#
-+# You should have received a copy of the GNU General Public License
-+# along with this program; if not, write to the Free Software
-+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++Subtracting two pointers yields a ptrdiff_t value, and ptrdiff_t is not
++necessarily an alias for long int. Cast the value to long int.
 +
-+# Compare the rootfs size per package/file with that from another compilation
-+# (possibly from a different release).
++Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
++---
++ linux/drivers/char/fusion/fusiondev.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+# This code relies on the output CSV files of 'make graph-size'. If you
-+# are comparing to an older Buildroot release, you can consider backporting
-+# that feature. See commits:
-+#    99aca138c20e1259ac8c23252c223e150d460482 (instrumentation hook)
-+#    598c80be8fc7b5ddfcba6f7715d90757033723ef (size-stats script)
-+#    24c75fbb38ffeb5c5a7278cf40f4f7cf867502e0 (make graph-size)
++diff --git a/linux/drivers/char/fusion/fusiondev.c b/linux/drivers/char/fusion/fusiondev.c
++index 7003407f7e1e..dfb5f8ecb81a 100644
++--- a/linux/drivers/char/fusion/fusiondev.c
+++++ b/linux/drivers/char/fusion/fusiondev.c
++@@ -775,7 +775,7 @@ call_ioctl(FusionDev * dev, Fusionee * fusionee,
++                               printk( KERN_ERR "fusion: FUSION_CALL_EXECUTE3 with errorneous call (failed on previous ioctl call), "
++                                                "call id %d, flags 0x%08x, arg %d, length %u, serial %u,  %ld\n",
++                                       execute3.call_id, execute3.flags, execute3.call_arg, execute3.length, execute3.ret_length,
++-                                      (execute3_bin - (FusionCallExecute3 *) arg) );
+++                                      (long int)(execute3_bin - (FusionCallExecute3 *) arg) );
++                               return -EIO;
++                          }
++ 
+diff --git a/package/linux-fusion/0003-Fix-fusion-Unknown-symbol-tasklist_lock-err-0.patch b/package/linux-fusion/0003-Fix-fusion-Unknown-symbol-tasklist_lock-err-0.patch
+new file mode 100644
+index 000000000000..b14ec9d90af3
+--- /dev/null
++++ b/package/linux-fusion/0003-Fix-fusion-Unknown-symbol-tasklist_lock-err-0.patch
+@@ -0,0 +1,38 @@
++From 9fcd5003c0363af140a06aba94e62c9e1ea0381e Mon Sep 17 00:00:00 2001
++From: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
++Date: Mon, 11 Jan 2016 16:45:30 +0100
++Subject: [PATCH] Fix fusion: Unknown symbol tasklist_lock (err 0)
 +
-+import csv
-+import argparse
++Commit 28f6569ab7d0 renamed TREE_PREEMPT_RCU to PREEMPT_RCU in 3.19
++As a result, the code incorrectly falls back to using tasklist_lock
++(which was made private in 2.6.18)
 +
-+def read_packages_csv(inputf, detail=None):
-+    sizes = {}
-+    with open(inputf) as f:
-+        reader = csv.reader(f)
-+        # skip first line (header)
-+        next(reader)
-+        for row in csv.reader(f):
-+            if detail:
-+                sizes[row[0]] = int(row[2])
-+            else:
-+                sizes[row[1]] = int(row[3])
-+    return sizes
++Always use rcu_read_lock on modern kernels.
 +
-+def compare_sizes(this, other):
-+    delta = {}
-+    removed = {}
-+    added = {}
-+    thiskeys = set(this.keys())
-+    otherkeys = set(other.keys())
++Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
++---
++ linux/drivers/char/fusion/fusionee.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+    # packages in both
-+    for pkg in thiskeys.intersection(otherkeys):
-+        delta[pkg] = this[pkg] - other[pkg]
-+    # packages only in this
-+    for pkg in thiskeys.difference(otherkeys):
-+        added[pkg] = this[pkg]
-+    # packages only in other
-+    for pkg in otherkeys.difference(thiskeys):
-+        removed[pkg] = -other[pkg]
++diff --git a/linux/drivers/char/fusion/fusionee.c b/linux/drivers/char/fusion/fusionee.c
++index ef067f5bc831..70cd0a665f98 100644
++--- a/linux/drivers/char/fusion/fusionee.c
+++++ b/linux/drivers/char/fusion/fusionee.c
++@@ -925,7 +925,7 @@ fusionee_kill(FusionDev * dev,
++                if (f != fusionee && (!target || target == f->id)) {
++                     struct task_struct *p;
++ 
++-#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) || defined(CONFIG_TINY_RCU) || defined(rcu_read_lock)
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
++                     rcu_read_lock();
++ #else
++                     read_lock(&tasklist_lock);
++@@ -946,7 +946,7 @@ fusionee_kill(FusionDev * dev,
++                          }
++                     }
++ 
++-#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) || defined(CONFIG_TINY_RCU) || defined(rcu_read_unlock)
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
++                     rcu_read_unlock();
++ #else
++                     read_unlock(&tasklist_lock);
+diff --git a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
+new file mode 100644
+index 000000000000..e1bff64f3b9c
+--- /dev/null
++++ b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
+@@ -0,0 +1,99 @@
++From be288b60278c78eccfd347aacf4d3dd8771215a9 Mon Sep 17 00:00:00 2001
++From: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
++Date: Tue, 12 Jan 2016 14:01:42 +0100
++Subject: [PATCH] Port one/one_udp.c to Linux 4.1
 +
-+    return delta, added, removed
++Kernel commit c0371da6047a replaced msg_iov and msg_iovlen with msg_iter
++in struct msghdr since 3.19
 +
-+def print_results(result, title, threshold):
-+    print '%s:' % title
-+    for pkg in result.keys():
-+        if abs(result[pkg]) < threshold:
-+            continue
-+        print '%12d %s' % (result[pkg], pkg)
++one/one_udp.c: In function 'ksocket_send_iov':
++one/one_udp.c:186:9: error: 'struct msghdr' has no member named 'msg_iov'
++one/one_udp.c:187:9: error: 'struct msghdr' has no member named 'msg_iovlen'
 +
++one/one_udp.c: In function 'ksocket_receive':
++one/one_udp.c:221:9: error: 'struct msghdr' has no member named 'msg_iov'
++one/one_udp.c:222:9: error: 'struct msghdr' has no member named 'msg_iovlen'
 +
-+# main #########################################################################
++The iov_iter interface
++https://lwn.net/Articles/625077/
 +
-+parser = argparse.ArgumentParser(description='Compare rootfs size between Buildroot compilations')
++Kernel commit d8725c86aeba dropped the len parameter in sock_sendmsg
++since 4.1
 +
-+parser.add_argument('-f', '--file-size-csv',
-+                    help='CSV file with file and package size statistics')
-+parser.add_argument('-g', '--other-file-size-csv',
-+                    help='CSV file with file and package size statistics to compare with')
-+parser.add_argument('-d', '--detail', action='store_true',
-+                    help='detail with individual files rather than packages')
-+parser.add_argument('-t', '--threshold', type=int,
-+                    help='threshold value: ignore size differences smaller than this value (bytes)')
-+args = parser.parse_args()
++one/one_udp.c: In function 'ksocket_send_iov':
++one/one_udp.c:192:13: error: too many arguments to function 'sock_sendmsg'
 +
-+sizes = read_packages_csv(args.file_size_csv, args.detail)
-+other_sizes = read_packages_csv(args.other_file_size_csv, args.detail)
++Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
++---
++ one/one_udp.c | 30 +++++++++++++++---------------
++ 1 file changed, 15 insertions(+), 15 deletions(-)
 +
-+delta, added, removed = compare_sizes(sizes, other_sizes)
-+
-+if args.detail:
-+    keyword = 'file'
-+else:
-+    keyword = 'package'
-+
-+print_results(delta, 'Size difference per %s (bytes)' % keyword, args.threshold)
-+print_results(added, 'Size difference due to added %ss (bytes)' % keyword, args.threshold)
-+print_results(removed, 'Size difference due to removed %ss (bytes)' % keyword, args.threshold)
--- 
-1.9.5
++diff --git a/one/one_udp.c b/one/one_udp.c
++index 26b9e6a1f729..b1daae164cdf 100644
++--- a/one/one_udp.c
+++++ b/one/one_udp.c
++@@ -161,7 +161,7 @@ ksocket_send_iov( struct socket      *sock,
++                   const struct iovec *iov,
++                   size_t              iov_count )
++ {
++-     struct msghdr msg;
+++     struct msghdr msg = { addr, sizeof *addr };
++      mm_segment_t oldfs;
++      int size = 0;
++      size_t len = 0;
++@@ -178,18 +178,20 @@ ksocket_send_iov( struct socket      *sock,
++      for (i=0; i<iov_count; i++)
++           len += iov[i].iov_len;
++ 
++-     msg.msg_flags = 0;
++-     msg.msg_name = addr;
++-     msg.msg_namelen  = sizeof(struct sockaddr_in);
++-     msg.msg_control = NULL;
++-     msg.msg_controllen = 0;
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(3,19,0) // commit c0371da6047a
++      msg.msg_iov = (struct iovec*) iov;
++      msg.msg_iovlen = iov_count;
++-     msg.msg_control = NULL;
+++#else
+++     iov_iter_init(&msg.msg_iter, WRITE, iov, iov_count, len);
+++#endif
++ 
++      oldfs = get_fs();
++      set_fs(KERNEL_DS);
++-     size = sock_sendmsg(sock,&msg,len);
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,1,0) // commit d8725c86aeba
+++     size = sock_sendmsg(sock, &msg, len);
+++#else
+++     size = sock_sendmsg(sock, &msg);
+++#endif
++      set_fs(oldfs);
++ 
++      return size;
++@@ -198,7 +200,7 @@ ksocket_send_iov( struct socket      *sock,
++ static int
++ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int len)
++ {
++-     struct msghdr msg;
+++     struct msghdr msg = { addr, sizeof *addr };
++      struct iovec iov;
++      mm_segment_t oldfs;
++      int size = 0;
++@@ -213,14 +215,12 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
++      iov.iov_base = buf;
++      iov.iov_len = len;
++ 
++-     msg.msg_flags = 0;
++-     msg.msg_name = addr;
++-     msg.msg_namelen  = sizeof(struct sockaddr_in);
++-     msg.msg_control = NULL;
++-     msg.msg_controllen = 0;
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(3,19,0) // commit c0371da6047a
++      msg.msg_iov = &iov;
++      msg.msg_iovlen = 1;
++-     msg.msg_control = NULL;
+++#else
+++     iov_iter_init(&msg.msg_iter, READ, &iov, 1, len);
+++#endif
++ 
++      oldfs = get_fs();
++      set_fs(KERNEL_DS);
