@@ -1,81 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jan 2016 09:21:51 +0100
-Subject: [Buildroot] [PATCH 1/1] configs: beaglebone: update kernel to
- 4.1.13 and u-boot to 2015.10
-In-Reply-To: <56987FDD.5060508@gmail.com>
-References: <1452653542-5562-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20160113095153.6b4f95cb@free-electrons.com>
- <56981620.5020805@mind.be> <56987FDD.5060508@gmail.com>
-Message-ID: <20160115092151.5452f93c@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 15 Jan 2016 09:28:52 +0100
+Subject: [Buildroot] [PATCH] luabitop: disabled for Lua 5.3
+Message-ID: <1452846532-7780-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zoltan,
+see failure in http://autobuild.buildroot.net/results/6306c929e9ee05cbb33e4eb6b590166c6554ec21/
 
-On Fri, 15 Jan 2016 06:13:01 +0100, Zoltan Gyarmati wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luabitop/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> I looked into this a bit more:
-> * The u-boot doesn't need the host DTC (even though the
-> BR2_TARGET_UBOOT_NEEDS_DTC is set in the patch i sent, something i'll
-> need to fix in the next iteration)
-> 
-> * As the shipped .dtb files are built with the dtc version included in
-> the linux tree from https://github.com/beagleboard/linux.git, which
-> has the support for the overlays, so for merely getting a booting
-> system, no need to hack the dtc package
-> 
-> * As the kernel build also installs this dtc version as
-> 'output/host/usr/bin/linux-dtc', if one needs to compile overlays on
-> the build host, s/he can use that one (although this need to be
-> documented at least in the board's README)
-
-So in fact, for the purpose of the beaglebone defconfig itself, we
-don't need to package an overlay-capable DTC, right?
-
-If that's the case, then I would suggest that we separate the problem
-in two parts: first get an updated beaglebone defconfig merged, then
-work on packaging an overlay-capable DTC.
-
-> So as far i can see the options are (and none of them is ideal):
-> 
-> 1. Implementing a similar solution as Antoine with an additional
-> dtc-overlay package with a custom upstream repo.
-> 
-> 2. Stick to the current package and upstream, but introduce a config
-> variable like "BR2_PACKAGE_DTC_SUPPORT_OVERLAY", and if it's set, the
-> needed patchset is applied (or just using an other upstream)
-> 
-> 3. Create a virtual package and 2 implementations as dtc-kernel-org
-> and a dtc-overlay
-> 
-> 4. Only add the needed patches on the boards where needed and patch
-> dtc by setting BR2_GLOBAL_PATCH_DIR
-> 
-> 5. Introducing custom repository/custom patch dir config options for
-> the dtc package like for u-boot and linux (maybe also with an option
-> to use the dtc source coming with the kernel tree?)
-
-Do we really need to package the two variants of DTC ? The
-overlay-capable version is perfectly backward compatible with the
-mainline DTC. So why don't we simply include in package/dtc/ the
-patches needed to make DTC overlay-capable ?
-
-Yes, this is moving away from our general rule of not including patches
-that add new features. But general rules are meant to have exceptions,
-and in this specific case, the upstream DTC project is so slow at
-integrating major changes such as overlays, and this feature is now
-being used so often (BeagleBone, Raspberry Pi, CHIP, etc.) that it
-makes sense to support it.
-
-Arnout ? Antoine ?
-
-Best regards,
-
-Thomas
+diff --git a/package/luabitop/Config.in b/package/luabitop/Config.in
+index c5b3f60..26442fc 100644
+--- a/package/luabitop/Config.in
++++ b/package/luabitop/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_LUABITOP
+ 	bool "luabitop"
+-	depends on !BR2_PACKAGE_LUA_32BITS
++	depends on !BR2_PACKAGE_LUA_5_3
+ 	help
+ 	  Lua BitOp is a C extension module for Lua 5.1/5.2 which adds bitwise
+ 	  operations on numbers.
+ 
+ 	  http://bitop.luajit.org
+ 
+-comment "luabitop needs a full Lua interpreter"
+-	depends on BR2_PACKAGE_LUA_32BITS
++comment "luabitop needs a Lua 5.1/5.2 interpreter"
++	depends on BR2_PACKAGE_LUA_5_3
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
