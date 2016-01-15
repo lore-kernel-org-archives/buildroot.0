@@ -1,39 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Jan 2016 21:43:17 +0100
-Subject: [Buildroot] [PATCH] libnspr: only enable thumb if
-	BR2_ARM_INSTRUCTIONS_THUMB2
-In-Reply-To: <1452869536-13918-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Fri, 15 Jan 2016 15:52:16 +0100")
-References: <1452869536-13918-1-git-send-email-arnout@mind.be>
-Message-ID: <878u3qy3oa.fsf@dell.be.48ers.dk>
+Date: Fri, 15 Jan 2016 21:29:52 +0100
+Subject: [Buildroot] [git commit] util-linux: enable Python bindings for
+	libmount
+Message-ID: <20160115204330.8CCCC827ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4c20ffc5effe4ae35f12e843eb72208a09c1471a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libnspr currently passes --enable-thumb2 if the CPU has thumb
- > instructions. This option will pass -mthumb to the compiler. However,
- > if an external multilib toolchain is used that has a thumb-specific
- > variant, it will try to use that one. But we only copy a single variant
- > to the sysroot, so the build will fail with:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/util-linux/util-linux.mk | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
- > In order to fix this, only enable thumb2 when we are really using
- > thumb2. Note that it is still necessary to pass this option, cfr.
- > http://autobuild.buildroot.org/results/d7323831372050e425a34f5104a46d8cbd6be214
-
- > We could have chosen to still enable thumb2 with the internal toolchain.
- > However, that would mean we create a discrepancy between the result of
- > building with the same (buildroot) toolchain when it is used as an
- > internal one or as an external one. To avoid potentially surprising
- > results, just stick to the option chosen for the rest of the rootfs.
-
-Why do we actually ever pass --enable-thumb2 / --disable-thumb2? As far
-as I can see, the only thing this does is adding -marm / -mthumb to
-CFLAGS, and we already pass the correct -m<arm/thumb> option in the
-toolchain wrapper.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 58ace1d..f6e5d62 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -23,8 +23,7 @@ UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no \
+ 	$(if $(BR2_TOOLCHAIN_USES_UCLIBC),ac_cv_header_sys_timex_h=no)
+ UTIL_LINUX_CONF_OPTS += \
+ 	--disable-rpath \
+-	--disable-makeinstall-chown \
+-	--without-python
++	--disable-makeinstall-chown
+ 
+ # system depends on util-linux so we enable systemd support
+ # (which needs systemd to be installed)
+@@ -136,6 +135,19 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
+ UTIL_LINUX_CONF_OPTS += --disable-all-programs
+ endif
+ 
++# Install libmount Python bindings
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
++UTIL_LINUX_CONF_OPTS += --with-python
++UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
++UTIL_LINUX_CONF_OPTS += --enable-pylibmount
++else
++UTIL_LINUX_CONF_OPTS += --disable-pylibmount
++endif
++else
++UTIL_LINUX_CONF_OPTS += --without-python
++endif
++
+ # Install PAM configuration files
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
+ define UTIL_LINUX_INSTALL_PAMFILES
