@@ -1,210 +1,52 @@
-From: Mason <slash.tmp@free.fr>
-Date: Fri, 15 Jan 2016 17:12:00 +0100
-Subject: [Buildroot] [PATCH v2] linux-fusion: fix several build issues
-In-Reply-To: <20160113092306.6e57b621@free-electrons.com>
-References: <56951746.4070806@free.fr>
- <20160112174251.7280fdf3@free-electrons.com> <56957C2D.4060901@free.fr>
- <20160113092306.6e57b621@free-electrons.com>
-Message-ID: <56991A50.5030808@free.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 15 Jan 2016 18:52:05 +0100
+Subject: [Buildroot] [PATCH] barebox: bump to version 2016.01.0
+Message-ID: <1452880325-24060-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-
-The first patch merely fixes a warning. The other two are required
-to use the module on Linux 4.x
-
-Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- .../0002-Fix-mismatched-conversion-spec-and-value-in-printk.patch     | 29 ++++++++++
- .../0003-Fix-fusion-Unknown-symbol-tasklist_lock-err-0.patch          | 38 +++++++++++++
- package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch       | 99 +++++++++++++++++++++++++++++++++
- 3 files changed, 166 insertions(+)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-fusion/0002-Fix-mismatched-conversion-spec-and-value-in-printk.patch b/package/linux-fusion/0002-Fix-mismatched-conversion-spec-and-value-in-printk.patch
-new file mode 100644
-index 000000000000..a3f8bb7812bf
---- /dev/null
-+++ b/package/linux-fusion/0002-Fix-mismatched-conversion-spec-and-value-in-printk.patch
-@@ -0,0 +1,29 @@
-+From debb9cafe9b7cc2b286399ecc8e3210480061c70 Mon Sep 17 00:00:00 2001
-+From: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-+Date: Mon, 11 Jan 2016 15:42:16 +0100
-+Subject: [PATCH] Fix mismatched conversion spec and value in printk
-+
-+linux/drivers/char/fusion/fusiondev.c:775:38: warning:
-+format '%ld' expects argument of type 'long int', but argument 7 has type 'int'
-+
-+Subtracting two pointers yields a ptrdiff_t value, and ptrdiff_t is not
-+necessarily an alias for long int. Cast the value to long int.
-+
-+Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-+---
-+ linux/drivers/char/fusion/fusiondev.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/linux/drivers/char/fusion/fusiondev.c b/linux/drivers/char/fusion/fusiondev.c
-+index 7003407f7e1e..dfb5f8ecb81a 100644
-+--- a/linux/drivers/char/fusion/fusiondev.c
-++++ b/linux/drivers/char/fusion/fusiondev.c
-+@@ -775,7 +775,7 @@ call_ioctl(FusionDev * dev, Fusionee * fusionee,
-+                               printk( KERN_ERR "fusion: FUSION_CALL_EXECUTE3 with errorneous call (failed on previous ioctl call), "
-+                                                "call id %d, flags 0x%08x, arg %d, length %u, serial %u,  %ld\n",
-+                                       execute3.call_id, execute3.flags, execute3.call_arg, execute3.length, execute3.ret_length,
-+-                                      (execute3_bin - (FusionCallExecute3 *) arg) );
-++                                      (long int)(execute3_bin - (FusionCallExecute3 *) arg) );
-+                               return -EIO;
-+                          }
-+ 
-diff --git a/package/linux-fusion/0003-Fix-fusion-Unknown-symbol-tasklist_lock-err-0.patch b/package/linux-fusion/0003-Fix-fusion-Unknown-symbol-tasklist_lock-err-0.patch
-new file mode 100644
-index 000000000000..b14ec9d90af3
---- /dev/null
-+++ b/package/linux-fusion/0003-Fix-fusion-Unknown-symbol-tasklist_lock-err-0.patch
-@@ -0,0 +1,38 @@
-+From 9fcd5003c0363af140a06aba94e62c9e1ea0381e Mon Sep 17 00:00:00 2001
-+From: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-+Date: Mon, 11 Jan 2016 16:45:30 +0100
-+Subject: [PATCH] Fix fusion: Unknown symbol tasklist_lock (err 0)
-+
-+Commit 28f6569ab7d0 renamed TREE_PREEMPT_RCU to PREEMPT_RCU in 3.19
-+As a result, the code incorrectly falls back to using tasklist_lock
-+(which was made private in 2.6.18)
-+
-+Always use rcu_read_lock on modern kernels.
-+
-+Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-+---
-+ linux/drivers/char/fusion/fusionee.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/linux/drivers/char/fusion/fusionee.c b/linux/drivers/char/fusion/fusionee.c
-+index ef067f5bc831..70cd0a665f98 100644
-+--- a/linux/drivers/char/fusion/fusionee.c
-++++ b/linux/drivers/char/fusion/fusionee.c
-+@@ -925,7 +925,7 @@ fusionee_kill(FusionDev * dev,
-+                if (f != fusionee && (!target || target == f->id)) {
-+                     struct task_struct *p;
-+ 
-+-#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) || defined(CONFIG_TINY_RCU) || defined(rcu_read_lock)
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
-+                     rcu_read_lock();
-+ #else
-+                     read_lock(&tasklist_lock);
-+@@ -946,7 +946,7 @@ fusionee_kill(FusionDev * dev,
-+                          }
-+                     }
-+ 
-+-#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) || defined(CONFIG_TINY_RCU) || defined(rcu_read_unlock)
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
-+                     rcu_read_unlock();
-+ #else
-+                     read_unlock(&tasklist_lock);
-diff --git a/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-new file mode 100644
-index 000000000000..e1bff64f3b9c
---- /dev/null
-+++ b/package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch
-@@ -0,0 +1,99 @@
-+From be288b60278c78eccfd347aacf4d3dd8771215a9 Mon Sep 17 00:00:00 2001
-+From: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-+Date: Tue, 12 Jan 2016 14:01:42 +0100
-+Subject: [PATCH] Port one/one_udp.c to Linux 4.1
-+
-+Kernel commit c0371da6047a replaced msg_iov and msg_iovlen with msg_iter
-+in struct msghdr since 3.19
-+
-+one/one_udp.c: In function 'ksocket_send_iov':
-+one/one_udp.c:186:9: error: 'struct msghdr' has no member named 'msg_iov'
-+one/one_udp.c:187:9: error: 'struct msghdr' has no member named 'msg_iovlen'
-+
-+one/one_udp.c: In function 'ksocket_receive':
-+one/one_udp.c:221:9: error: 'struct msghdr' has no member named 'msg_iov'
-+one/one_udp.c:222:9: error: 'struct msghdr' has no member named 'msg_iovlen'
-+
-+The iov_iter interface
-+https://lwn.net/Articles/625077/
-+
-+Kernel commit d8725c86aeba dropped the len parameter in sock_sendmsg
-+since 4.1
-+
-+one/one_udp.c: In function 'ksocket_send_iov':
-+one/one_udp.c:192:13: error: too many arguments to function 'sock_sendmsg'
-+
-+Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
-+---
-+ one/one_udp.c | 30 +++++++++++++++---------------
-+ 1 file changed, 15 insertions(+), 15 deletions(-)
-+
-+diff --git a/one/one_udp.c b/one/one_udp.c
-+index 26b9e6a1f729..b1daae164cdf 100644
-+--- a/one/one_udp.c
-++++ b/one/one_udp.c
-+@@ -161,7 +161,7 @@ ksocket_send_iov( struct socket      *sock,
-+                   const struct iovec *iov,
-+                   size_t              iov_count )
-+ {
-+-     struct msghdr msg;
-++     struct msghdr msg = { addr, sizeof *addr };
-+      mm_segment_t oldfs;
-+      int size = 0;
-+      size_t len = 0;
-+@@ -178,18 +178,20 @@ ksocket_send_iov( struct socket      *sock,
-+      for (i=0; i<iov_count; i++)
-+           len += iov[i].iov_len;
-+ 
-+-     msg.msg_flags = 0;
-+-     msg.msg_name = addr;
-+-     msg.msg_namelen  = sizeof(struct sockaddr_in);
-+-     msg.msg_control = NULL;
-+-     msg.msg_controllen = 0;
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(3,19,0) // commit c0371da6047a
-+      msg.msg_iov = (struct iovec*) iov;
-+      msg.msg_iovlen = iov_count;
-+-     msg.msg_control = NULL;
-++#else
-++     iov_iter_init(&msg.msg_iter, WRITE, iov, iov_count, len);
-++#endif
-+ 
-+      oldfs = get_fs();
-+      set_fs(KERNEL_DS);
-+-     size = sock_sendmsg(sock,&msg,len);
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,1,0) // commit d8725c86aeba
-++     size = sock_sendmsg(sock, &msg, len);
-++#else
-++     size = sock_sendmsg(sock, &msg);
-++#endif
-+      set_fs(oldfs);
-+ 
-+      return size;
-+@@ -198,7 +200,7 @@ ksocket_send_iov( struct socket      *sock,
-+ static int
-+ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int len)
-+ {
-+-     struct msghdr msg;
-++     struct msghdr msg = { addr, sizeof *addr };
-+      struct iovec iov;
-+      mm_segment_t oldfs;
-+      int size = 0;
-+@@ -213,14 +215,12 @@ ksocket_receive(struct socket* sock, struct sockaddr_in* addr, void *buf, int le
-+      iov.iov_base = buf;
-+      iov.iov_len = len;
-+ 
-+-     msg.msg_flags = 0;
-+-     msg.msg_name = addr;
-+-     msg.msg_namelen  = sizeof(struct sockaddr_in);
-+-     msg.msg_control = NULL;
-+-     msg.msg_controllen = 0;
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(3,19,0) // commit c0371da6047a
-+      msg.msg_iov = &iov;
-+      msg.msg_iovlen = 1;
-+-     msg.msg_control = NULL;
-++#else
-++     iov_iter_init(&msg.msg_iter, READ, &iov, 1, len);
-++#endif
-+ 
-+      oldfs = get_fs();
-+      set_fs(KERNEL_DS);
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 207d9b2..39cb5d2 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.12.0"
++	bool "2016.01.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2016.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 178655d..b6e1869 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+ # http://www.barebox.org/download/barebox-2015.12.0.tar.bz2.md5
+-md5 1ef8926cd2eadc39ce779b8377e7cfcc barebox-2015.12.0.tar.bz2
++md5 99f8c1252e3085e4b3a4e365ff36e9bd barebox-2016.01.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 b0b7df82dafcc7aceeaa6285755855a71f6422c5a278949c717096f4ffd7f315 barebox-2015.12.0.tar.bz2
++sha256 f0bb34b745b9c8c626186e22b0154f57c15d0eec5de1e3654f740665b2136d91 barebox-2016.01.0.tar.bz2
+-- 
+2.7.0
