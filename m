@@ -1,51 +1,76 @@
-From: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Fri, 15 Jan 2016 16:03:40 +0100
-Subject: [Buildroot] [PATCH v3] netsniff-ng: check if linux-headers are v3.0
-	or higher
-Message-ID: <1452870220-1045-1-git-send-email-joris.lijssens@gmail.com>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Fri, 15 Jan 2016 09:31:21 -0600
+Subject: [Buildroot] [RFC PATCH v2 1/4] package/dhcp: bump version to
+ 4.3.3
+In-Reply-To: <56983a98296cb_72e5eb094c81f@ultri2.mail>
+References: <56983a98296cb_72e5eb094c81f@ultri2.mail>
+Message-ID: <20160115153121.GA16597@dkarchlinux64.currentcomm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-netsniff-ng uses the TP_STATUS_VLAN_VALID define, provided by the
-kernel headers. This definition has been added in the kernel by commit
-a3bcc23e890a6d49d6763d9eb073d711de2e0469 ("af-packet: Add flag to
-distinguish VID 0 from no-vlan"), which was merged in v3.0.
+Hi Richardo, Arnout, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/c87/c87a440e29ae387f600cb6ecce3caaa08557f4f0/
+On Thu, Jan 14, 2016 at 10:17:28PM -0200, Ricardo Martincoski wrote:
+> Hi Doug and Arnout,
+> 
+> On Sun, 10 Jan 2016 15:25:06 -0600, Doug Kehn wrote:
+> > The embedded bind configure is called as part of dhcp make instead of
+> > dhcp configure. dhcp make environment is expanded to ensure bind
+> > configure has the proper information.
+> Maybe the bind configure could be called in a post configure hook.
+> This way, bind would be configured in the configure step too.
+> 
+> [snip]
+> > +DHCP_MAKE=$(MAKE1)
+> > +
+> > +DHCP_MAKE_ENV = \
+> > +	GNU_TARGET_NAME=$(GNU_TARGET_NAME) \
+> For at least one external toolchain, the bind configure can't find the
+> target compiler because it is expecting arm-buildroot-linux-gnueabi-gcc
+> while the binary name is arm-none-linux-gnueabi-gcc.
+> Maybe setting CC here would fix this.
+> > +	GNU_HOST_NAME=$(GNU_HOST_NAME) \
+> > +	AR="$(TARGET_AR)" \
+> > +	BUILD_CC="$(HOSTCC)"
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
----
- package/netsniff-ng/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Did you try adding CC to see if it fixed the external toolchain
+issue? I also wonder if adding $(TARGET_CONFIGURE_OPTS) to MAKE_ENV
+is warranted?
 
-diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-index b39ec96..a2494a9 100644
---- a/package/netsniff-ng/Config.in
-+++ b/package/netsniff-ng/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_NETSNIFF_NG
- 	# Build with uClibc fails due to missing ceill()
- 	# Build with musl fails due to various header issues
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
-@@ -17,9 +18,10 @@ config BR2_PACKAGE_NETSNIFF_NG
- 	  networking toolkit. If you will, the Swiss army knife for
- 	  network packets.
- 
--comment "netsniff-ng needs an (e)glibc toolchain w/ threads"
-+comment "netsniff-ng needs an (e)glibc toolchain w/ threads, headers >= 3.0"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC \
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854
- 
- comment "netsniff-ng needs a toolchain not affected by GCC bug 58854"
--- 
-1.8.3.1
+> 
+> If a hook is used, TARGET_CONFIGURE_OPTS can provide most of variables needed,
+> fixing the issue with some external toolchains.
+> Something like this:
+> DHCP_BIND_CONF_ENV = \
+> 	$(TARGET_CONFIGURE_OPTS) \
+> 	GNU_TARGET_NAME=$(GNU_TARGET_NAME) \
+> 	GNU_HOST_NAME=$(GNU_HOST_NAME) \
+> 	BUILD_CC="$(HOSTCC)"
+> 
+> define DHCP_CONFIGURE_BIND
+> 	$(DHCP_BIND_CONF_ENV) $(DHCP_MAKE) -C $(@D)/bind bind1
+> endef
+> DHCP_POST_CONFIGURE_HOOKS += DHCP_CONFIGURE_BIND
+> > +
+> > +define DHCP_EXTRACT_BIND
+> > +	cd $(@D)/bind; tar -xvf bind.tar.gz
+> > +endef
+> > +DHCP_POST_EXTRACT_HOOKS += DHCP_EXTRACT_BIND
+> 
+> What do you think about this?
+
+Did the configure hook work for you?
+
+At the end of the day, configure hook vs make env is a matter
+preference for the Buildroot maintainers; as long as it works... I
+have not yet tried the configure hook; but, I will. My only
+reservation with the configure hook is that it must know the exact
+target to make to configure bind as apposed to just ensuring the
+environment has the proper values for cross compiling and letting
+the Buildroot infra take care of the rest. 
+
+Regards,
+...doug
