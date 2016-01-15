@@ -1,54 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jan 2016 14:51:53 +0100
-Subject: [Buildroot] Standardizing format for specifying license(s)
-In-Reply-To: <1a9e07dbd834ef9ca57e1b6a91d043c2@localhost>
-References: <5698DDBE.3000402@imgtec.com>
- <1a9e07dbd834ef9ca57e1b6a91d043c2@localhost>
-Message-ID: <20160115145153.39e486e3@free-electrons.com>
+Date: Fri, 15 Jan 2016 14:52:59 +0100
+Subject: [Buildroot] [PATCH 1/1] support/download: Aternative access
+ methods to CVS
+In-Reply-To: <1452862510-31390-1-git-send-email-joao@datacom.ind.br>
+References: <1452862510-31390-1-git-send-email-joao@datacom.ind.br>
+Message-ID: <20160115145259.0fbabb8a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander,
+Dear Joao Mano,
 
-On Fri, 15 Jan 2016 14:12:47 +0100, Alexander Dahl wrote:
+On Fri, 15 Jan 2016 10:55:10 -0200, Joao Mano wrote:
 
-> If not already done, I would suggest to have those license stuff
-> compatible with SPDX [1]. I noticed license names in at least some
-> packages are not the same as the identifiers on
-> https://spdx.org/licenses/ ? so if someone wants to generate SPDX stuff
-> from a buildroot project, it maybe would be better to have a format for
-> names and delimiters which make it easier towards SPDX package data.
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 1c25c4e..a5726d8 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -279,7 +279,8 @@ information is (assuming the package name is +libfoo+) :
+>    ** +cvs+ for retrieving source code from a CVS repository.
+>       Used by default when +LIBFOO_SITE+ begins with +cvs://+.
+>       The downloaded source code is cached as with the +svn+ method.
+> -     Only anonymous pserver mode is supported.
+> +     Anonymous pserver mode is assumed otherwise explicitly defined
+> +     on +LIBFOO_SITE+.
 
-We normally try to use the SPDX license code, at least for "new"
-licenses (i.e licenses for which we don't yet have a single Buildroot
-package under that license). However, for the first licenses (like GPL,
-LGPL, etc.), we have started using an encoding that is not the one from
-SPDX. I would personally be in favor to move to SPDX license codes
-everywhere, but that would break things for people that are currently
-parsing our license information. Is this reasonable to do nonetheless?
+I think an example would be good (for both the anonymous pserver mode,
+and the other mode).
 
-The Buildroot documentation already has a license of license
-abbreviations:
-https://buildroot.org/downloads/manual/manual.html#legal-info-list-licenses.
-
-Note that http://spdx.org/sites/spdx/files/SPDX-2.0.pdf, page 82 and
-83, has a description of a syntax for composite license expressions.
-
-One case that SPDX doesn't allow to encode is "GPL" or "LGPL", i.e the
-cases where the software is said to be licensed under the GPL or LGPL,
-but without any version information. Yes this sucks because in practice
-it means you don't know the corresponding license text. But sometimes,
-this is the only information provided by the package source code.
-
-Examples:
-
-MII_DIAG_LICENSE = GPL # No version specified
-tslib/tslib.mk:TSLIB_LICENSE = GPL, LGPL
-
-Best regards,
+Otherwise, it looks good.
 
 Thomas
 -- 
