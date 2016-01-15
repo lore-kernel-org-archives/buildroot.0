@@ -1,51 +1,51 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 15 Jan 2016 15:52:16 +0100
-Subject: [Buildroot] [PATCH] libnspr: only enable thumb if
-	BR2_ARM_INSTRUCTIONS_THUMB2
-Message-ID: <1452869536-13918-1-git-send-email-arnout@mind.be>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Fri, 15 Jan 2016 16:03:40 +0100
+Subject: [Buildroot] [PATCH v3] netsniff-ng: check if linux-headers are v3.0
+	or higher
+Message-ID: <1452870220-1045-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnspr currently passes --enable-thumb2 if the CPU has thumb
-instructions. This option will pass -mthumb to the compiler. However,
-if an external multilib toolchain is used that has a thumb-specific
-variant, it will try to use that one. But we only copy a single variant
-to the sysroot, so the build will fail with:
+netsniff-ng uses the TP_STATUS_VLAN_VALID define, provided by the
+kernel headers. This definition has been added in the kernel by commit
+a3bcc23e890a6d49d6763d9eb073d711de2e0469 ("af-packet: Add flag to
+distinguish VID 0 from no-vlan"), which was merged in v3.0.
 
-In order to fix this, only enable thumb2 when we are really using
-thumb2. Note that it is still necessary to pass this option, cfr.
-http://autobuild.buildroot.org/results/d7323831372050e425a34f5104a46d8cbd6be214
+Fixes:
+http://autobuild.buildroot.net/results/c87/c87a440e29ae387f600cb6ecce3caaa08557f4f0/
 
-We could have chosen to still enable thumb2 with the internal toolchain.
-However, that would mean we create a discrepancy between the result of
-building with the same (buildroot) toolchain when it is used as an
-internal one or as an external one. To avoid potentially surprising
-results, just stick to the option chosen for the rest of the rootfs.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 ---
-Build-tested with various combinations of thumb, thumb2, floating point,
-and external toolchains. I didn't test with an internal toolchain but
-what could go wrong there? :-)
----
- package/libnspr/libnspr.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/netsniff-ng/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 8e58986..c9bfa0c 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -50,7 +50,7 @@ LIBNSPR_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIBRARY= install
- endif
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index b39ec96..a2494a9 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_NETSNIFF_NG
+ 	# Build with uClibc fails due to missing ceill()
+ 	# Build with musl fails due to various header issues
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+@@ -17,9 +18,10 @@ config BR2_PACKAGE_NETSNIFF_NG
+ 	  networking toolkit. If you will, the Swiss army knife for
+ 	  network packets.
  
- ifeq ($(BR2_arm),y)
--ifeq ($(BR2_ARM_CPU_HAS_THUMB2),y)
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB2),y)
- LIBNSPR_CONF_OPTS += --enable-thumb2
- else
- LIBNSPR_CONF_OPTS += --disable-thumb2
+-comment "netsniff-ng needs an (e)glibc toolchain w/ threads"
++comment "netsniff-ng needs an (e)glibc toolchain w/ threads, headers >= 3.0"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854
+ 
+ comment "netsniff-ng needs a toolchain not affected by GCC bug 58854"
 -- 
-2.7.0.rc3
+1.8.3.1
