@@ -1,55 +1,123 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 14 Jan 2016 22:17:28 -0200
-Subject: [Buildroot] [RFC PATCH v2 1/4] package/dhcp: bump version to 4.3.3
-Message-ID: <56983a98296cb_72e5eb094c81f@ultri2.mail>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 15 Jan 2016 02:19:55 +0100
+Subject: [Buildroot] musl/gettext issue
+In-Reply-To: <20150916221636.039df52b@free-electrons.com>
+References: <20150916221636.039df52b@free-electrons.com>
+Message-ID: <1452820795.6436.5.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Doug and Arnout,
+Hello,
 
-On Sun, 10 Jan 2016 15:25:06 -0600, Doug Kehn wrote:
-> The embedded bind configure is called as part of dhcp make instead of
-> dhcp configure. dhcp make environment is expanded to ensure bind
-> configure has the proper information.
-Maybe the bind configure could be called in a post configure hook.
-This way, bind would be configured in the configure step too.
+On Mi, 2015-09-16 at 22:16 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Today, I started looking at:
+> 
+> ???http://autobuild.buildroot.org/results/ede/ede5ee3316ea2b6790dcb93
+> 0a6bc71adc8922bfc/build-end.log
+> 
+> Which, in appearance, seems to be the traditional missing -lintl when
+> linking. But further investigation has revealed a slightly more
+> complicated problem: how do we handle GNU gettext vs. musl.
+> 
+> Until, we were handling GNU gettext for glibc and uClibc:
+> 
+> ?* With glibc, the gettext handling is built into the C library. So
+> the
+> ???separate GNU gettext package (for the target) is not needed, and
+> if
+> ???it ever gets built, it detects that the C library has the
+> necessary
+> ???features, and therefore it doesn't build/install a libintl.so
+> ???library and its header files.
+> 
+> ?* With uclibc, the gettext handling is not part of the C library, so
+> ???we have to build the GNU gettext package when gettext support is
+> ???needed. In this case, the GNU gettext package detects that the C
+> ???library does not provide the gettext functionality, and it will
+> ???build/install libintl.so and its header files.
+> 
+> This is why we have BR2_NEEDS_GETTEXT which is true when we use
+> uClibc
+> and false when we use uClibc, and BR2_NEEDS_GETTEXT_IF_LOCALE which
+> is
+> true when BR2_NEEDS_GETTEXT is true (i.e uClibc) *and* locale support
+> is enabled.
+> 
+> So far, so good.
+> 
+> Now, enter musl. It does have an internal gettext implementation.
+> However, it is not recognized by GNU gettext has a correct
+> implementation, so when you build GNU gettext in a musl system, it
+> does
+> build/install libintl.so and its header files.
+> 
+> So for httping, two scenarios are possible:
+> 
+> ?1/ httping is built alone against musl. No problem: the gettext
+> ????functions are part of the C library, everything works fine.
+> 
+> ?2/ httping is built *after* GNU gettext has been built. Since GNU
+> ????gettext will replace the libintl.h of musl by its own one, the
+> ????symbols from the GNU gettext libintl.so will be used, so we must
+> ????link with -lintl explicitly. Which we are not doing, since
+> ????htting.mk does:
+> 
+> ???????$(if $(BR2_NEEDS_GETTEXT),-lintl)
+> 
+> ????And BR2_NEEDS_GETTEXT is false for musl.
+> 
+> So, I initially tried:
+> 
+> -???????$(if $(BR2_NEEDS_GETTEXT),-lintl)
+> +???????$(if $(BR2_PACKAGE_GETTEXT),-lintl)
+> 
+> With the reasoning that if GNU gettext is available, we want to use
+> it,
+> and if it's not available, then we'll not use it.
+> 
+> But that doesn't work with a glibc configuration: BR2_PACKAGE_GETTEXT
+> can be enabled, but we don't have a libintl library, because GNU
+> gettext doesn't build one in a glibc configuration. We try to link
+> against libintl, but it's not there, and the build fails.
+> 
+> So, I see two possible options here:
+> 
+> ?1/ Simply do not allow the GNU gettext package to be built with
+> glibc
+> ????and musl since they provide the gettext functionality internally.
+> 
+> ????The only problem with this approach is that while httping is
+> happy
+> ????with the POSIX compliant gettext functionality of musl, some
+> other
+> ????programs such as Bison
+> ????(https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=786885) will
+> ????really need GNU gettext functionality.
+> 
+> ?2/ Allows force to use GNU gettext in musl configurations. This
+> simply
+> ????consists in:
+> 
+> ?config BR2_NEEDS_GETTEXT
+> ????????bool
+> -???????default y if BR2_TOOLCHAIN_USES_UCLIBC
+> +???????default y if BR2_TOOLCHAIN_USES_UCLIBC ||
+> BR2_TOOLCHAIN_USES_MUSL
+> 
+> ?????I have tested this solution and it does work (obviously).
+> 
+> ?????The drawback is obviously that we are going to build/install GNU
+> ?????gettext even for cases where the internal gettext implementation
+> ?????of musl would have been sufficient.
+> 
+> Do you see some other options? Any opinion between the two proposed
+> options?
 
-[snip]
-> +DHCP_MAKE=$(MAKE1)
-> +
-> +DHCP_MAKE_ENV = \
-> +	GNU_TARGET_NAME=$(GNU_TARGET_NAME) \
-For at least one external toolchain, the bind configure can't find the
-target compiler because it is expecting arm-buildroot-linux-gnueabi-gcc
-while the binary name is arm-none-linux-gnueabi-gcc.
-Maybe setting CC here would fix this.
-> +	GNU_HOST_NAME=$(GNU_HOST_NAME) \
-> +	AR="$(TARGET_AR)" \
-> +	BUILD_CC="$(HOSTCC)"
+How do we deal with this issue?
 
-If a hook is used, TARGET_CONFIGURE_OPTS can provide most of variables needed,
-fixing the issue with some external toolchains.
-Something like this:
-DHCP_BIND_CONF_ENV = \
-	$(TARGET_CONFIGURE_OPTS) \
-	GNU_TARGET_NAME=$(GNU_TARGET_NAME) \
-	GNU_HOST_NAME=$(GNU_HOST_NAME) \
-	BUILD_CC="$(HOSTCC)"
-
-define DHCP_CONFIGURE_BIND
-	$(DHCP_BIND_CONF_ENV) $(DHCP_MAKE) -C $(@D)/bind bind1
-endef
-DHCP_POST_CONFIGURE_HOOKS += DHCP_CONFIGURE_BIND
-> +
-> +define DHCP_EXTRACT_BIND
-> +	cd $(@D)/bind; tar -xvf bind.tar.gz
-> +endef
-> +DHCP_POST_EXTRACT_HOOKS += DHCP_EXTRACT_BIND
-
-What do you think about this?
-
-Regards,
-Ricardo
+J?rg
