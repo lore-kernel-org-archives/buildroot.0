@@ -1,38 +1,35 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 15 Jan 2016 09:28:52 +0100
-Subject: [Buildroot] [PATCH] luabitop: disabled for Lua 5.3
-Message-ID: <1452846532-7780-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 15 Jan 2016 09:47:35 +0100
+Subject: [Buildroot] [PATCH] perf: remove tests from target
+Message-ID: <1452847655-15415-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-see failure in http://autobuild.buildroot.net/results/6306c929e9ee05cbb33e4eb6b590166c6554ec21/
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+The perf tool installed test files in
+    output/target/usr/libexec/perf-core/tests/
+which amounted to about 30+K.
+
+Since they are not needed for normal perf operation, remove them.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/luabitop/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ linux/linux-tool-perf.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/luabitop/Config.in b/package/luabitop/Config.in
-index c5b3f60..26442fc 100644
---- a/package/luabitop/Config.in
-+++ b/package/luabitop/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_LUABITOP
- 	bool "luabitop"
--	depends on !BR2_PACKAGE_LUA_32BITS
-+	depends on !BR2_PACKAGE_LUA_5_3
- 	help
- 	  Lua BitOp is a C extension module for Lua 5.1/5.2 which adds bitwise
- 	  operations on numbers.
- 
- 	  http://bitop.luajit.org
- 
--comment "luabitop needs a full Lua interpreter"
--	depends on BR2_PACKAGE_LUA_32BITS
-+comment "luabitop needs a Lua 5.1/5.2 interpreter"
-+	depends on BR2_PACKAGE_LUA_5_3
+diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
+index 0bd0ed1..07c3514 100644
+--- a/linux/linux-tool-perf.mk
++++ b/linux/linux-tool-perf.mk
+@@ -84,4 +84,5 @@ define PERF_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
+ 		-C $(@D)/tools/perf O=$(@D)/tools/perf/ install
+ 	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
++	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
+ endef
 -- 
-2.5.0
+2.4.10
