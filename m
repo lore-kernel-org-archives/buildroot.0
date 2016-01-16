@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:42 +0100
-Subject: [Buildroot] [PATCH v7 22/28] package/freeswitch: enable mod_sndfile,
-	add optional dependency to libsndfile
+Date: Sat, 16 Jan 2016 21:44:36 +0100
+Subject: [Buildroot] [PATCH v7 16/28] package/freeswitch: add optional
+	dependency to libg7221
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freeswitch/freeswitch.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index f549341..f008248 100644
+index fd262e2..7505136 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -246,6 +246,11 @@ FREESWITCH_DEPENDENCIES += libsilk
- FREESWITCH_ENABLED_MODULES += codecs/mod_silk
+@@ -186,6 +186,10 @@ else
+ FREESWITCH_CONF_OPTS += --disable-core-libedit-support
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
-+FREESWITCH_DEPENDENCIES += libsndfile
-+FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
++ifeq ($(BR2_PACKAGE_LIBG7221),y)
++FREESWITCH_DEPENDENCIES += libg7221
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_LIBLDNS),y)
+ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
 -- 
 2.7.0.rc3
