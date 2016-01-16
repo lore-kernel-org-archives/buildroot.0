@@ -1,42 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2016 23:37:35 +0100
-Subject: [Buildroot] [PATCH 43/80 v1] package/flot: use 'menuconfig'
+Date: Sat, 16 Jan 2016 23:37:10 +0100
+Subject: [Buildroot] [PATCH 18/80 v1] package/php: use 'menuconfig' instead
+	of 'config'+'menu'
 In-Reply-To: <cover.1452983019.git.yann.morin.1998@free.fr>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <295f568c87969a4ed7d42868cd3c38d6e7d14c7c.1452983019.git.yann.morin.1998@free.fr>
+Message-ID: <0a28f80145b8042d4361d1de0d2a3402670c5a5a.1452983019.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-flot has more than 5 options, so use a 'menuconfig' to group the
-options in an sub-menu.
+Move the external extensions selection into the bundled extensions'
+Config.in.
+
+Make the menu prompt a comment, reword it so that it is more in line
+with the following comments.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/flot/Config.in | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/Config.in      | 16 ----------------
+ package/php/Config.ext | 20 ++++++++++++++++++--
+ package/php/Config.in  |  2 +-
+ 3 files changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/package/flot/Config.in b/package/flot/Config.in
-index 4c0d3ec..0037ff2 100644
---- a/package/flot/Config.in
-+++ b/package/flot/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index 6fd68a8..91c96ea 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -544,22 +544,6 @@ endif
+ 	source "package/nodejs/Config.in"
+ 	source "package/perl/Config.in"
+ 	source "package/php/Config.in"
+-if BR2_PACKAGE_PHP
+-if !BR2_STATIC_LIBS
+-menu "External php extensions"
+-	source "package/php-geoip/Config.in"
+-	source "package/php-gnupg/Config.in"
+-	source "package/php-imagick/Config.in"
+-	source "package/php-memcached/Config.in"
+-	source "package/php-ssh2/Config.in"
+-	source "package/php-yaml/Config.in"
+-	source "package/php-zmq/Config.in"
+-endmenu
+-endif
+-if BR2_STATIC_LIBS
+-comment "External PHP extensions need a toolchain w/ dynamic library"
+-endif
+-endif
+ 	source "package/python/Config.in"
+ 	source "package/python3/Config.in"
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index c044e45..a93086f 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
 @@ -1,4 +1,4 @@
--config BR2_PACKAGE_FLOT
-+menuconfig BR2_PACKAGE_FLOT
- 	bool "flot"
- 	select BR2_PACKAGE_JQUERY
- 	help
-@@ -18,8 +18,6 @@ config BR2_PACKAGE_FLOT
+-menu "Extensions"
++comment "Generic extensions"
  
- if BR2_PACKAGE_FLOT
- 
--comment "flot plugins"
--
- config BR2_PACKAGE_FLOT_CANVAS
- 	bool "canvas"
+ config BR2_PACKAGE_PHP_EXT_CALENDAR
+ 	bool "Calendar"
+@@ -401,4 +401,20 @@ config BR2_PACKAGE_PHP_EXT_XSL
  	help
+ 	  XSL transformation support
+ 
+-endmenu
++if !BR2_STATIC_LIBS
++
++comment "External extensions"
++
++source "package/php-geoip/Config.in"
++source "package/php-gnupg/Config.in"
++source "package/php-imagick/Config.in"
++source "package/php-memcached/Config.in"
++source "package/php-ssh2/Config.in"
++source "package/php-yaml/Config.in"
++source "package/php-zmq/Config.in"
++
++endif # !STATIC_LIBS
++
++if BR2_STATIC_LIBs
++comment "External PHP extensions need a toolchain w/ dynamic library"
++endif
+diff --git a/package/php/Config.in b/package/php/Config.in
+index eee8d26..7e79179 100644
+--- a/package/php/Config.in
++++ b/package/php/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_PHP
++menuconfig BR2_PACKAGE_PHP
+ 	bool "php"
+ 	help
+ 	  PHP  is a widely-used general-purpose scripting
 -- 
 1.9.1
