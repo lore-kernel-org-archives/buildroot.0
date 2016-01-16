@@ -1,38 +1,108 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 22:52:39 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-01-14
-References: <20160115073021.DAA6410303A@stock.ovh.net>
- <jvipmcxaun.ln2@ID-313208.user.individual.net> <569AB33F.6010701@mind.be>
-Message-ID: <7mqqmcx6cr.ln2@ID-313208.user.individual.net>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Sat, 16 Jan 2016 16:08:07 -0600
+Subject: [Buildroot] [RFC PATCH v2 1/4] package/dhcp: bump version to
+ 4.3.3
+In-Reply-To: <56999dadc4b34_37c612cbc848316d@ultri2.mail>
+References: <20160115153121.GA16597@dkarchlinux64.currentcomm.com>
+ <56999dadc4b34_37c612cbc848316d@ultri2.mail>
+Message-ID: <20160116220807.GA2321@dkarchlinux64.gateway.pace.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 16 Jan 2016 22:16:47 +0100 schrieb Arnout Vandecappelle:
+Hi Ricardo, All,
 
-> On 16-01-16 11:34, Bernd Kuhls wrote:
->> the reason for this build error is a arc-only gcc bug which was fixed 
-in 
->> gcc-4.9: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
->> 
->> The toolchain used by the autobuilders is gcc-4.8 which explains the 
->> build error. Afaics Kconfig does not allow something like this:
->> 
->> 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 if BR2_arc
->> 
->> Could you please give me some advise on how to fix the problem?
+On Fri, Jan 15, 2016 at 11:32:29PM -0200, Ricardo Martincoski wrote:
+> Hi Doug,
 > 
->  Apply logic. FOO if BAR is the same as FOO || !BAR.
+> On Fri, Jan 15, 2016 at 01:31 PM, rdkehn at yahoo.com wrote:
+> > Hi Richardo, Arnout, All,
+> > 
+> > On Thu, Jan 14, 2016 at 10:17:28PM -0200, Ricardo Martincoski wrote:
+> >> Hi Doug and Arnout,
+> >> 
+> >> On Sun, 10 Jan 2016 15:25:06 -0600, Doug Kehn wrote:
+> >> > The embedded bind configure is called as part of dhcp make instead of
+> >> > dhcp configure. dhcp make environment is expanded to ensure bind
+> >> > configure has the proper information.
+> >> Maybe the bind configure could be called in a post configure hook.
+> >> This way, bind would be configured in the configure step too.
+> >> 
+> >> [snip]
+> >> > +DHCP_MAKE=$(MAKE1)
+> >> > +
+> >> > +DHCP_MAKE_ENV = \
+> >> > +	GNU_TARGET_NAME=$(GNU_TARGET_NAME) \
+> >> For at least one external toolchain, the bind configure can't find the
+> >> target compiler because it is expecting arm-buildroot-linux-gnueabi-gcc
+> >> while the binary name is arm-none-linux-gnueabi-gcc.
+> >> Maybe setting CC here would fix this.
+> >> > +	GNU_HOST_NAME=$(GNU_HOST_NAME) \
+> >> > +	AR="$(TARGET_AR)" \
+> >> > +	BUILD_CC="$(HOSTCC)"
+> > 
+> > Did you try adding CC to see if it fixed the external toolchain
+> > issue? I also wonder if adding $(TARGET_CONFIGURE_OPTS) to MAKE_ENV
+> > is warranted?
+> > 
+> I just tested adding only CC="$(TARGET_CC)" copied from TARGET_CONFIGURE_OPTS
+> and it solves the external toolchain issue.
+> Only a few autotools-packages (smcroute, fcgiwrap, libpam-radius-auth) add
+> $(TARGET_CONFIGURE_OPTS) to MAKE_ENV. All three have comments to justify the
+> use, so I suppose it is not the best practice.
 
-Hi Arnout,
+Thanks for the feedback.
 
-this would mean that the package is blocked on BR2_arc, regardless of the 
-toolchain used there, and all other archs need gcc-4.9+, right?
-If yes, then this is not what I want to achieve. The package works with 
-all buildroot-supported gcc versions on all archs _except_ that it is 
-broken on arc with gcc-4.8 or older, gcc bug 59049 is arc-only.
+> 
+> >> 
+> >> If a hook is used, TARGET_CONFIGURE_OPTS can provide most of variables needed,
+> >> fixing the issue with some external toolchains.
+> >> Something like this:
+> >> DHCP_BIND_CONF_ENV = \
+> >> 	$(TARGET_CONFIGURE_OPTS) \
+> >> 	GNU_TARGET_NAME=$(GNU_TARGET_NAME) \
+> >> 	GNU_HOST_NAME=$(GNU_HOST_NAME) \
+> >> 	BUILD_CC="$(HOSTCC)"
+> >> 
+> >> define DHCP_CONFIGURE_BIND
+> >> 	$(DHCP_BIND_CONF_ENV) $(DHCP_MAKE) -C $(@D)/bind bind1
+> >> endef
+> >> DHCP_POST_CONFIGURE_HOOKS += DHCP_CONFIGURE_BIND
+> >> > +
+> >> > +define DHCP_EXTRACT_BIND
+> >> > +	cd $(@D)/bind; tar -xvf bind.tar.gz
+> >> > +endef
+> >> > +DHCP_POST_EXTRACT_HOOKS += DHCP_EXTRACT_BIND
+> >> 
+> >> What do you think about this?
+> > 
+> > Did the configure hook work for you?
+> > 
+> Yes.
+> Also, in a rapid test, the hook seems to work fine after removing
+> TARGET_CONFIGURE_OPTS and adding back AR and CC.
+> 
 
-Regards, Bernd
+I also tested the configure hook scenario. It worked for my use case
+as well.
+
+> > At the end of the day, configure hook vs make env is a matter
+> > preference for the Buildroot maintainers; as long as it works... I
+> > have not yet tried the configure hook; but, I will. My only
+> > reservation with the configure hook is that it must know the exact
+> > target to make to configure bind as apposed to just ensuring the
+> > environment has the proper values for cross compiling and letting
+> > the Buildroot infra take care of the rest. 
+> > 
+> Taking your reservation into account, I agree make env seems a better choice.
+> Thank you for your explanation.
+> 
+
+Peter, Thomas, there are two solutions to this problem. I
+would appreciate your input on your preference before I submit a
+patch.
+
+Thanks and Regards,
+...doug
