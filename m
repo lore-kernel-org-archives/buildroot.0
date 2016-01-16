@@ -1,40 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 18:19:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: add patch to fix
- undeclared isnan issue
-In-Reply-To: <1452806240-4196-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1452806240-4196-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160116181913.7fee7421@free-electrons.com>
+Date: Sat, 16 Jan 2016 18:25:18 +0100
+Subject: [Buildroot] [PATCH] package/canfestival: fix build with musl
+In-Reply-To: <CA+BsyQ53-OSsdm=DONB9AX_K+y0a8AKnzf1SrRV7ykZVUagjkw@mail.gmail.com>
+References: <1440279318-19132-1-git-send-email-yann.morin.1998@free.fr>
+ <20150822213815.GA3861@free.fr>
+ <CA+BsyQ5AaMkDCb7Ldnu5u9ZArNe0swiAhKwxsRgES6RdrxTVoQ@mail.gmail.com>
+ <20150822222544.GB3861@free.fr>
+ <CA+BsyQ53-OSsdm=DONB9AX_K+y0a8AKnzf1SrRV7ykZVUagjkw@mail.gmail.com>
+Message-ID: <20160116182518.44e5f9dc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Brendan, Yann,
 
-On Thu, 14 Jan 2016 22:17:20 +0100, J?rg Krause wrote:
-> Add patch from upstream [1] to fix build error:
->   ./boost/math/special_functions/fpclassify.hpp:137:75: error: '::isnan' has not been declared
+On Sat, 22 Aug 2015 23:35:00 +0100, Brendan Heading wrote:
+> >> I was going to take this up with the developers as I can't see a good
+> >> reason why the behaviour is different for uclibc and non-uclibc
+> >> environments, and in any case CLOCK_REALTIME is almost certainly not
+> >> what they want. But I haven't had a spare moment to write a test case
+> >> to prove that the timer code used in the non-uclibc version would work
+> >> just as well under uclibc.
+> >
+> > That sounds really weird, indeed... :-(
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/6c7/6c72c189cd029fb6c81798f5443fab331358bb90/
-> http://autobuild.buildroot.net/results/b70/b709fc201c9df8f76163e2a620da32362abe5288/
-> http://autobuild.buildroot.net/results/99b/99bdbc5622dfd0ac369611ec07dd2a8a8fe41ce8/
-> http://autobuild.buildroot.net/results/d2b/d2b270787fc20e45c839d5670af55e47723aef2a/
-> and many more.
+> It feels like they ran into some kind of issue with uclibc and hacked
+> together a fix.
 > 
-> Backported from: fbd1393858719c7bda7d251f742950c1bc691ea8
+> And IME naive coders often make the mistake of using the wrong CLOCK_*
+> parameters when doing POSIX time related things ..
 > 
-> [1] https://github.com/boostorg/math/commit/fbd1393858719c7bda7d251f742950c1bc691ea8
+> > OK, I'll try to revisit this later. Thanks for the heads up.
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/boost/0005-fix-undeclared-isnan.patch | 32 +++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/boost/0005-fix-undeclared-isnan.patch
+> I thought about submitting a patch with another #ifdef __UCLIBC__
+> around the function declaration - not ideal, but it at least matches
+> what the upstream were trying to do. But I wasn't sure if such an
+> approach would pass muster here ?
 
-Applied, thanks.
+Any progress with this? can-festival still fails to build in the
+autobuilders due to this:
+
+  http://autobuild.buildroot.net/results/5c5a48b050223d5f4f66a3a5ddde12cb17e310d7/
+
+Thanks,
 
 Thomas
 -- 
