@@ -1,49 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 16 Jan 2016 22:16:47 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-01-14
-In-Reply-To: <jvipmcxaun.ln2@ID-313208.user.individual.net>
-References: <20160115073021.DAA6410303A@stock.ovh.net>
- <jvipmcxaun.ln2@ID-313208.user.individual.net>
-Message-ID: <569AB33F.6010701@mind.be>
+Date: Sat, 16 Jan 2016 22:18:11 +0100
+Subject: [Buildroot] [PATCH] support/scripts: add size-stats-compare
+ script
+In-Reply-To: <20160116135112.52d70412@free-electrons.com>
+References: <1452872492-6980-1-git-send-email-patrickdepinguin@gmail.com>
+ <56998EA7.5020603@mind.be> <20160116135112.52d70412@free-electrons.com>
+Message-ID: <569AB393.3010403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16-01-16 11:34, Bernd Kuhls wrote:
-> Am Fri, 15 Jan 2016 08:30:21 +0100 schrieb Thomas Petazzoni:
+On 16-01-16 13:51, Thomas Petazzoni wrote:
+> Arnout,
 > 
->>          arc | libbroadvoice-f65b0f50c8c76... | NOK |
->>          http://autobuild.buildroot.net/
-> results/2c6cc56b8d103c661b7ec66f5216ff6dc72ff02a/
+> On Sat, 16 Jan 2016 01:28:23 +0100, Arnout Vandecappelle wrote:
 > 
-> Hi,
+>>  I think you should also add a reference to the script to
+>> docs/manual/common-usage.txt. No full documentation is needed, you can just
+>> point to the --help option (otherwise it would just get out of sync).
 > 
-> the reason for this build error is a arc-only gcc bug which was fixed in 
-> gcc-4.9: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
+> Agreed.
 > 
-> The toolchain used by the autobuilders is gcc-4.8 which explains the 
-> build error. Afaics Kconfig does not allow something like this:
 > 
-> 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 if BR2_arc
+>>> +# This code relies on the output CSV files of 'make graph-size'. If you
+>>> +# are comparing to an older Buildroot release, you can consider backporting
+>>> +# that feature. See commits:
+>>> +#    99aca138c20e1259ac8c23252c223e150d460482 (instrumentation hook)
+>>> +#    598c80be8fc7b5ddfcba6f7715d90757033723ef (size-stats script)
+>>> +#    24c75fbb38ffeb5c5a7278cf40f4f7cf867502e0 (make graph-size)
+>>
+>>  I think this documentation should be part of the argparse description.
 > 
-> Could you please give me some advise on how to fix the problem?
+> I tend to disagree here, and instead who advocate to not have such
+> documentation at all. Nowhere do we document which commits should be
+> backported to bring this or that feature to an older Buildroot release,
+> and I don't think we should start doing this.
 
- Apply logic. FOO if BAR is the same as FOO || !BAR.
+ OK, I actually meant that the documentation should be part of the description,
+I tend to agree that it's not necessary to tell people what to backport.
 
  Regards,
  Arnout
 
-> Thanks!
 > 
-> Regards, Bernd
+> Best regards,
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thomas
 > 
 
 
