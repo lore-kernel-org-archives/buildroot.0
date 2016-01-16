@@ -1,62 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2016 23:37:18 +0100
-Subject: [Buildroot] [PATCH 26/80 v1] package/gstreamer: include plugins
-	from gstreamer's real Config.in
+Date: Sat, 16 Jan 2016 23:37:20 +0100
+Subject: [Buildroot] [PATCH 28/80 v1] docs/manual: slightly compactify a
+	paragraph
 In-Reply-To: <cover.1452983019.git.yann.morin.1998@free.fr>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <968b35041b0586de1b8174735bbf584691629701.1452983019.git.yann.morin.1998@free.fr>
+Message-ID: <0fc6c8c218781d9c80ef66b787a010e4287e9c06.1452983019.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is more logical to have a single if-clause, rather than repeat it in
-another file, possiblty brealking indentation like it previously was.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gstreamer/Config.in           | 12 ------------
- package/gstreamer/gstreamer/Config.in | 10 ++++++++++
- 2 files changed, 10 insertions(+), 12 deletions(-)
+ docs/manual/adding-packages-directory.txt | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/gstreamer/Config.in b/package/gstreamer/Config.in
-index c6292f4..476f838 100644
---- a/package/gstreamer/Config.in
-+++ b/package/gstreamer/Config.in
-@@ -1,14 +1,2 @@
- # Gstreamer 0.10.x & Plugins
- source "package/gstreamer/gstreamer/Config.in"
--
--if BR2_PACKAGE_GSTREAMER
--source "package/gstreamer/gst-plugins-base/Config.in"
--source "package/gstreamer/gst-plugins-good/Config.in"
--source "package/gstreamer/gst-plugins-bad/Config.in"
--source "package/gstreamer/gst-plugins-ugly/Config.in"
--source "package/gstreamer/gst-ffmpeg/Config.in"
--source "package/gstreamer/gst-dsp/Config.in"
--source "package/gstreamer/gst-fsl-plugins/Config.in"
--source "package/gstreamer/gst-omapfb/Config.in"
--source "package/gstreamer/gst-plugin-x170/Config.in"
--endif
-diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
-index eb1249a..aee48b1 100644
---- a/package/gstreamer/gstreamer/Config.in
-+++ b/package/gstreamer/gstreamer/Config.in
-@@ -33,4 +33,14 @@ config BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY
- 	  Enable support for the GStreamer plugin registry. This may increase
- 	  the launch-time for a GStreamer application.
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index c2d9f75..d0de358 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -39,12 +39,11 @@ itself should be indented with one tab and two spaces, lines should
+ not be longer than 72 columns, and it must mention the upstream URL
+ of the project.
  
-+source "package/gstreamer/gst-plugins-base/Config.in"
-+source "package/gstreamer/gst-plugins-good/Config.in"
-+source "package/gstreamer/gst-plugins-bad/Config.in"
-+source "package/gstreamer/gst-plugins-ugly/Config.in"
-+source "package/gstreamer/gst-ffmpeg/Config.in"
-+source "package/gstreamer/gst-dsp/Config.in"
-+source "package/gstreamer/gst-fsl-plugins/Config.in"
-+source "package/gstreamer/gst-omapfb/Config.in"
-+source "package/gstreamer/gst-plugin-x170/Config.in"
-+
- endif
+-You can add other sub-options into a +if
+-BR2_PACKAGE_LIBFOO...endif+ statement to configure particular things
+-in your software. You can look at examples in other packages. The
+-syntax of the +Config.in+ file is the same as the one for the kernel
+-Kconfig file. The documentation for this syntax is available at
+-http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[]
++You can add other sub-options into a +if BR2_PACKAGE_LIBFOO...endif+
++statement to configure particular things in your software. You can look at
++examples in other packages. The syntax of the +Config.in+ file is the same
++as the one for the kernel Kconfig file. The documentation for this syntax is
++available at http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[]
+ 
+ Finally you have to add your new +libfoo/Config.in+ to
+ +package/Config.in+ (or in a category subdirectory if you decided to
 -- 
 1.9.1
