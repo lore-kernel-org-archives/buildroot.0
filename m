@@ -1,50 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2016 23:37:21 +0100
-Subject: [Buildroot] [PATCH 29/80 v1] docs/manual: add ordering of kconfig
-	options' attributes
+Date: Sat, 16 Jan 2016 23:38:09 +0100
+Subject: [Buildroot] [PATCH 77/80 v1] boot/grub: use 'menuconfig'
 In-Reply-To: <cover.1452983019.git.yann.morin.1998@free.fr>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <82e2631f78a5305d258e97b6b0615d165e36657c.1452983019.git.yann.morin.1998@free.fr>
+Message-ID: <13300e0ddcbce551fd1fce81e9f95a7aeba9f9c3.1452983019.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We want to ensure all packages follow the same coding style, so we add a
-blurb about the order of kconfig options' attributes:
-
-  - first, the type and the prompt
-  - the default value if needed
-  - then dependencies of the 'depends on' category
-  - followed by dependencies of the 'select' form
-  - with eventually the help text
+grub has more than 5 options, so use a 'menuconfig' to
+group the options in an sub-menu.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- docs/manual/adding-packages-directory.txt | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ boot/grub/Config.in | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index d0de358..b9596a2 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -39,6 +39,15 @@ itself should be indented with one tab and two spaces, lines should
- not be longer than 72 columns, and it must mention the upstream URL
- of the project.
+diff --git a/boot/grub/Config.in b/boot/grub/Config.in
+index 4db8642..3ae688f 100644
+--- a/boot/grub/Config.in
++++ b/boot/grub/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_TARGET_GRUB
++menuconfig BR2_TARGET_GRUB
+ 	bool "grub"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
+@@ -52,7 +52,7 @@ config BR2_TARGET_GRUB_DISKLESS
+ 	help
+ 	  enable diskless support
  
-+As a convention specific to Buildroot, the ordering of the attributes
-+is as follows:
-+
-+1. The type of option: +bool+, +string+... with the prompt
-+2. If needed, the +default+ value(s)
-+3. Any dependency of the +depends on+ form
-+4. Any dependency of the +select+ form
-+5. The help keyword and help text.
-+
- You can add other sub-options into a +if BR2_PACKAGE_LIBFOO...endif+
- statement to configure particular things in your software. You can look at
- examples in other packages. The syntax of the +Config.in+ file is the same
+-menu "filesystem drivers"
++comment "Filesystem drivers"
+ 
+ config BR2_TARGET_GRUB_FS_EXT2
+ 	bool "ext2"
+@@ -86,9 +86,7 @@ config BR2_TARGET_GRUB_FS_XFS
+ 	help
+ 	  Enable support for the XFS filesystem in Grub.
+ 
+-endmenu
+-
+-menu "network drivers"
++comment "Network drivers"
+ 
+ config BR2_TARGET_GRUB_3c595
+ 	bool "3Com595 driver"
+@@ -195,6 +193,4 @@ config BR2_TARGET_GRUB_w89c840
+ 	help
+ 	  enable Winbond W89c840 driver
+ 
+-endmenu
+-
+ endif # BR2_TARGET_GRUB
 -- 
 1.9.1
