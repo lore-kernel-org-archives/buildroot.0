@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:45 +0100
-Subject: [Buildroot] [PATCH v7 25/28] package/freeswitch: enable mod_xml_rpc
+Date: Sat, 16 Jan 2016 21:44:48 +0100
+Subject: [Buildroot] [PATCH v7 28/28] package/freeswitch: add optional
+	dependency to xz
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-26-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-29-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +17,17 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 4 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index d58b891..134dbec 100644
+index 7178590..69b0d6c 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -166,6 +166,10 @@ ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_x86_6
- FREESWITCH_ENABLED_MODULES += codecs/mod_isac
+@@ -288,4 +288,8 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ FREESWITCH_DEPENDENCIES += util-linux
  endif
  
-+ifeq ($(BR2_USE_WCHAR),y)
-+FREESWITCH_ENABLED_MODULES += xml_int/mod_xml_rpc
++ifeq ($(BR2_PACKAGE_XZ),y)
++FREESWITCH_DEPENDENCIES += xz
 +endif
 +
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- FREESWITCH_DEPENDENCIES += alsa-lib
- FREESWITCH_ENABLED_MODULES += endpoints/mod_alsa
+ $(eval $(autotools-package))
 -- 
 2.7.0.rc3
