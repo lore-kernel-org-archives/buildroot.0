@@ -1,20 +1,15 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:33 +0100
-Subject: [Buildroot] [PATCH v7 13/28] package/freeswitch: enable mod_vpx,
-	add optional dependency to libvpx
+Date: Sat, 16 Jan 2016 21:44:26 +0100
+Subject: [Buildroot] [PATCH v7 06/28] package/freeswitch: add optional
+	dependency to libpng
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-mod_vpx delivers native support for these video codecs:
-
-codec,VP8 Video,mod_vpx
-codec,VP9 Video,mod_vpx
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
@@ -22,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 82cd84b..6191fad 100644
+index ce2c2ca..83b2626 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -191,6 +191,11 @@ FREESWITCH_DEPENDENCIES += libyaml
- FREESWITCH_ENABLED_MODULES += languages/mod_yaml
+@@ -173,6 +173,11 @@ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBVPX),y)
-+FREESWITCH_DEPENDENCIES += libvpx
-+FREESWITCH_ENABLED_MODULES += codecs/mod_vpx
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++FREESWITCH_DEPENDENCIES += libpng
++FREESWITCH_ENABLED_MODULES += formats/mod_png
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yy)
- FREESWITCH_DEPENDENCIES += libvpx libyuv
- FREESWITCH_ENABLED_MODULES += applications/mod_fsv
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ FREESWITCH_DEPENDENCIES += util-linux
+ endif
 -- 
 2.7.0.rc3
