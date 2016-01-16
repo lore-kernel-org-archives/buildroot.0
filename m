@@ -1,41 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2016 23:37:39 +0100
-Subject: [Buildroot] [PATCH 47/80 v1] package/gstreamer: use 'menuconfig'
+Date: Sat, 16 Jan 2016 23:37:46 +0100
+Subject: [Buildroot] [PATCH 54/80 v1] package/lighttpd: use 'menuconfig'
 In-Reply-To: <cover.1452983019.git.yann.morin.1998@free.fr>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <eaaf644d7c596a582ad082445012ab244008a20b.1452983019.git.yann.morin.1998@free.fr>
+Message-ID: <6f9b59b7e902b8f481b913b56945447c7b3adae5.1452983019.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gstreamer has more than 5 options, so use a 'menuconfig' to group the
+lighttpd has more than 5 options, so use a 'menuconfig' to group the
 options in an sub-menu.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes RFC -> v1:
-  - fix commit log+title  (Arnout)
-  - move later in the series, after we document that 5-or-more
-    sub-options require a menuconfig
----
- package/gstreamer/gstreamer/Config.in | 2 +-
+ package/lighttpd/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
-index aee48b1..cba8774 100644
---- a/package/gstreamer/gstreamer/Config.in
-+++ b/package/gstreamer/gstreamer/Config.in
-@@ -2,7 +2,7 @@ comment "gstreamer 0.10 needs a toolchain w/ wchar, threads"
+diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+index f62ccb9..6672ec1 100644
+--- a/package/lighttpd/Config.in
++++ b/package/lighttpd/Config.in
+@@ -2,7 +2,7 @@ comment "lighttpd needs a toolchain w/ dynamic library"
  	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_STATIC_LIBS
  
--config BR2_PACKAGE_GSTREAMER
-+menuconfig BR2_PACKAGE_GSTREAMER
- 	bool "gstreamer 0.10"
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+-config BR2_PACKAGE_LIGHTTPD
++menuconfig BR2_PACKAGE_LIGHTTPD
+ 	bool "lighttpd"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
 -- 
 1.9.1
