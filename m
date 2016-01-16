@@ -1,24 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 Jan 2016 17:29:19 +0000
-Subject: [Buildroot] [Bug 8606] Problem compiling on Arch Linux
-In-Reply-To: <bug-8606-163@https.bugs.busybox.net/>
-References: <bug-8606-163@https.bugs.busybox.net/>
-Message-ID: <bug-8606-163-0ztpqDSDT4@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 16 Jan 2016 21:03:16 +0100
+Subject: [Buildroot] [PATCH] libedit: fix build error with musl toolchain
+References: <1452127277-9538-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <49kqmcxaun.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8606
+Am Wed, 06 Jan 2016 22:41:17 -0200 schrieb Sergio Prado:
 
---- Comment #1 from Erico Nunes <nunes.erico@gmail.com> ---
-Leo,
-I'm also using up-to-date Arch Linux and I don't remember having any specific
-problem in Buildroot due to it, even when building uClibc toolchains.
-Can you share a .config (and whether you're using latest master or any specific
-version) so that I can try to reproduce it?
+> +# musl is ISO 10646 compliant but doesn't define __STDC_ISO_10646__,
+> +# so let's define it manually +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> +LIBEDIT_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS)
+> -D__STDC_ISO_10646__=201103L" +endif +
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Hi,
+
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+compile-tested using this defconfig:
+http://autobuild.buildroot.net/toolchains/configs/br-arm-cortex-a9-musl.config
+
+Regards, Bernd
