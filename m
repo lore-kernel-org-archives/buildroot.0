@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:31 +0100
-Subject: [Buildroot] [PATCH v7 11/28] package/freeswitch: enable mod_fsv,
-	add optional dependencies to libvpx & libyuv
+Date: Sat, 16 Jan 2016 21:44:45 +0100
+Subject: [Buildroot] [PATCH v7 25/28] package/freeswitch: enable mod_xml_rpc
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-26-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freeswitch/freeswitch.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index a280aa6..dc96785 100644
+index d58b891..134dbec 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -186,6 +186,11 @@ FREESWITCH_DEPENDENCIES += libyaml
- FREESWITCH_ENABLED_MODULES += languages/mod_yaml
+@@ -166,6 +166,10 @@ ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_x86_6
+ FREESWITCH_ENABLED_MODULES += codecs/mod_isac
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yy)
-+FREESWITCH_DEPENDENCIES += libvpx libyuv
-+FREESWITCH_ENABLED_MODULES += applications/mod_fsv
++ifeq ($(BR2_USE_WCHAR),y)
++FREESWITCH_ENABLED_MODULES += xml_int/mod_xml_rpc
 +endif
 +
- ifeq ($(BR2_PACKAGE_LUA),y)
- FREESWITCH_DEPENDENCIES += lua
- FREESWITCH_ENABLED_MODULES += languages/mod_lua
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ FREESWITCH_DEPENDENCIES += alsa-lib
+ FREESWITCH_ENABLED_MODULES += endpoints/mod_alsa
 -- 
 2.7.0.rc3
