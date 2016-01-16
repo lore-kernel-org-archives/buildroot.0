@@ -1,41 +1,115 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 14:14:40 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: fix for linux 4.4
-In-Reply-To: <CACeaM89dURUrB7frSMgMLg+tvbqM4YVwpaZiwLNHnm5=Kh=7nQ@mail.gmail.com>
-References: <1452856397-21566-1-git-send-email-Gerhard@Heift.Name>
- <87pox2yb5g.fsf@dell.be.48ers.dk>
- <CACeaM89dURUrB7frSMgMLg+tvbqM4YVwpaZiwLNHnm5=Kh=7nQ@mail.gmail.com>
-Message-ID: <20160116141440.0924b24b@free-electrons.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Sat, 16 Jan 2016 14:36:09 +0100
+Subject: [Buildroot] [PATCH 1/1] configs: beaglebone: update kernel to
+ 4.1.13 and u-boot to 2015.10
+In-Reply-To: <20160115092151.5452f93c@free-electrons.com>
+References: <1452653542-5562-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <20160113095153.6b4f95cb@free-electrons.com> <56981620.5020805@mind.be>
+ <56987FDD.5060508@gmail.com> <20160115092151.5452f93c@free-electrons.com>
+Message-ID: <569A4749.4030301@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gerhard Heift,
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-On Fri, 15 Jan 2016 19:18:22 +0100, Gerhard Heift wrote:
+Dear Thomas & All,
 
-> > Has this been fixed upstream? U-Boot 2016.01 is out, so if it is fixed
-> > upstream then I would prefer to change the version instead.
+On 01/15/2016 09:21 AM, Thomas Petazzoni wrote:
+> Zoltan,
 > 
-> No, this is not yet fixed in 2016-01.
+> On Fri, 15 Jan 2016 06:13:01 +0100, Zoltan Gyarmati wrote:
 > 
-> > If it isn't upstream, please send the fix to the u-boot list first.
+>> I looked into this a bit more: * The u-boot doesn't need the host
+>> DTC (even though the BR2_TARGET_UBOOT_NEEDS_DTC is set in the
+>> patch i sent, something i'll need to fix in the next iteration)
+>> 
+>> * As the shipped .dtb files are built with the dtc version
+>> included in the linux tree from
+>> https://github.com/beagleboard/linux.git, which has the support
+>> for the overlays, so for merely getting a booting system, no need
+>> to hack the dtc package
+>> 
+>> * As the kernel build also installs this dtc version as 
+>> 'output/host/usr/bin/linux-dtc', if one needs to compile overlays
+>> on the build host, s/he can use that one (although this need to
+>> be documented at least in the board's README)
 > 
-> I sent this fix to the u-boot list too, but it since the list is
-> moderated the mail is not yet approved by a moderater and therefor not
-> yet public.
+> So in fact, for the purpose of the beaglebone defconfig itself, we 
+> don't need to package an overlay-capable DTC, right?
+> 
+> If that's the case, then I would suggest that we separate the
+> problem in two parts: first get an updated beaglebone defconfig
+> merged, then work on packaging an overlay-capable DTC.
+> 
+>> So as far i can see the options are (and none of them is ideal):
+>> 
+>> 1. Implementing a similar solution as Antoine with an additional 
+>> dtc-overlay package with a custom upstream repo.
+>> 
+>> 2. Stick to the current package and upstream, but introduce a
+>> config variable like "BR2_PACKAGE_DTC_SUPPORT_OVERLAY", and if
+>> it's set, the needed patchset is applied (or just using an other
+>> upstream)
+>> 
+>> 3. Create a virtual package and 2 implementations as
+>> dtc-kernel-org and a dtc-overlay
+>> 
+>> 4. Only add the needed patches on the boards where needed and
+>> patch dtc by setting BR2_GLOBAL_PATCH_DIR
+>> 
+>> 5. Introducing custom repository/custom patch dir config options
+>> for the dtc package like for u-boot and linux (maybe also with an
+>> option to use the dtc source coming with the kernel tree?)
+> 
+> Do we really need to package the two variants of DTC ? The 
+> overlay-capable version is perfectly backward compatible with the 
+> mainline DTC. So why don't we simply include in package/dtc/ the 
+> patches needed to make DTC overlay-capable ?
+> 
+> Yes, this is moving away from our general rule of not including
+> patches that add new features. But general rules are meant to have
+> exceptions, and in this specific case, the upstream DTC project is
+> so slow at integrating major changes such as overlays, and this
+> feature is now being used so often (BeagleBone, Raspberry Pi, CHIP,
+> etc.) that it makes sense to support it.
+> 
+> Arnout ? Antoine ?
+> 
 
-Are you sure the problem is not fixed by
-http://git.denx.de/?p=u-boot.git;a=commit;h=69bf2d2fafe64349be3c3ef1256e3c68f812bb25,
-which was merged as part of 2016.01 ? The problem description looks
-really similar.
+Sounds as Columbus' egg solution to me :)
+ In the meantime i tested u-boot 2016.01 with the eewiki patch [1],
+and with kernel tag  4.1.15-ti-rt-r41 from [2], and so far it seems to
+be working well (i still need to look into the overlay loading though).
+If the community also think it makes sense, in the next iteration i'm
+happy to post a patchset which contains:
 
-Thanks,
+* adding the [3] patches for the current dtc package unconditionally
+* beaglebone board config with patched u-boot 2016.01 and kernel
+4.1.15-ti-rt-r41 with a saner defconfig
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+
+[1]
+https://github.com/eewiki/u-boot-patches/blob/master/v2016.01/0001-am335
+x_evm-uEnv.txt-bootz-n-fixes.patch
+[2] https://github.com/beagleboard/linux
+[3] https://github.com/pantoniou/dtc/commits/dt-overlays5
+
+
+Regards
+zgyarmati
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.22 (GNU/Linux)
+
+iQEcBAEBAgAGBQJWmkdJAAoJEAGmEeeR8iVhEbMH/jG4onr2/MOVNAvTNZGFC86A
+lX1GQO52BHzXirBTL5uY9cwrJwvnmHx/ZVbUOm5MK/dkqMXQcNplyH3CHwcG+aa7
+sBhG7jSvRsG+JzTVG01YZVizbBODFzmSyRzRgR+Wy8gtgi5lfVvdo0zXlOJbPZiI
+0dNeTQx/2Bf+ulmqXpqplLnnzrW60w5k0xeHGoea8ZCWNDLgIxUqtUdxdOf7eBAr
++grYBuAjJg6y9OpCtWTRf8OEDrj1hY1aFzx/BwYvJKc3ITLt+KMNwrf1oxZSprIG
+BMMKXkek8TaRRnpyRHEfEhuO3LI1baG5VcsmNgYxq/2ZonJwdBxv5CbjFWaoBXA=
+=df8M
+-----END PGP SIGNATURE-----
