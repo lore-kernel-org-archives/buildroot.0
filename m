@@ -1,273 +1,192 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2016 23:37:13 +0100
-Subject: [Buildroot] [PATCH 21/80 v1] package/python{,
-	3}: move inclusion of external python modules
+Date: Sat, 16 Jan 2016 23:37:49 +0100
+Subject: [Buildroot] [PATCH 57/80 v1] package/lua{,
+	jit}: move inclusion of external libraries/modules
 In-Reply-To: <cover.1452983019.git.yann.morin.1998@free.fr>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <d327278baa3d87bec8aaebe25167bb540b9b5564.1452983019.git.yann.morin.1998@free.fr>
+Message-ID: <4d529ce12549eb4dbf2c3e363c47bf455871c9e1.1452983019.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce a Config.ext for external python modules, that both python and
-python include from there respective sub-menus.
+Introduce a Config.ext for external Lua external libraries/modules, that
+both lua and luajit include from their respective sub-menus.
+
+lua and luajit now have more than 5 options, so use a 'menuconfig' to
+group the options in sub-menus.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in          | 98 ----------------------------------------------
- package/python/Config.ext  | 98 ++++++++++++++++++++++++++++++++++++++++++++++
- package/python/Config.in   |  2 +
- package/python3/Config.ext |  1 +
- package/python3/Config.in  |  2 +
- 5 files changed, 103 insertions(+), 98 deletions(-)
- create mode 100644 package/python/Config.ext
- create mode 120000 package/python3/Config.ext
+ package/Config.in         | 46 --------------------------------------------
+ package/lua/Config.ext    | 49 +++++++++++++++++++++++++++++++++++++++++++++++
+ package/lua/Config.in     |  4 +++-
+ package/luajit/Config.ext |  1 +
+ package/luajit/Config.in  |  4 +++-
+ 5 files changed, 56 insertions(+), 48 deletions(-)
+ create mode 100644 package/lua/Config.ext
+ create mode 120000 package/luajit/Config.ext
 
 diff --git a/package/Config.in b/package/Config.in
-index 91c96ea..531b1a0 100644
+index 4fe5c81..73f69ef 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -546,104 +546,6 @@ endif
- 	source "package/php/Config.in"
- 	source "package/python/Config.in"
- 	source "package/python3/Config.in"
--if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
--menu "External python modules"
--	source "package/python-alsaaudio/Config.in"
--	source "package/python-backports-abc/Config.in"
--	source "package/python-bottle/Config.in"
--	source "package/python-can/Config.in"
--	source "package/python-certifi/Config.in"
--	source "package/python-cffi/Config.in"
--	source "package/python-cheetah/Config.in"
--	source "package/python-cherrypy/Config.in"
--	source "package/python-coherence/Config.in"
--	source "package/python-configobj/Config.in"
--	source "package/python-configshell-fb/Config.in"
--	source "package/python-crc16/Config.in"
--	source "package/python-daemon/Config.in"
--	source "package/python-dialog/Config.in"
--	source "package/python-django/Config.in"
--	source "package/python-docopt/Config.in"
--	source "package/python-dpkt/Config.in"
--	source "package/python-enum/Config.in"
--	source "package/python-enum34/Config.in"
--	source "package/python-flask/Config.in"
--	source "package/python-flup/Config.in"
--	source "package/python-gobject/Config.in"
--	source "package/python-html5lib/Config.in"
--	source "package/python-httplib2/Config.in"
--	source "package/python-id3/Config.in"
--	source "package/python-idna/Config.in"
--	source "package/python-ipaddr/Config.in"
--	source "package/python-ipaddress/Config.in"
--	source "package/python-ipy/Config.in"
--	source "package/python-ipython/Config.in"
--	source "package/python-itsdangerous/Config.in"
--	source "package/python-jinja2/Config.in"
--	source "package/python-json-schema-validator/Config.in"
--	source "package/python-keyring/Config.in"
--	source "package/python-libconfig/Config.in"
--	source "package/python-lxml/Config.in"
--	source "package/python-mad/Config.in"
--	source "package/python-mako/Config.in"
--	source "package/python-markdown/Config.in"
--	source "package/python-markupsafe/Config.in"
--	source "package/python-meld3/Config.in"
--	source "package/python-msgpack/Config.in"
--	source "package/python-netifaces/Config.in"
--	source "package/python-networkmanager/Config.in"
--	source "package/python-nfc/Config.in"
--	source "package/python-numpy/Config.in"
--	source "package/python-paho-mqtt/Config.in"
--	source "package/python-pam/Config.in"
--	source "package/python-posix-ipc/Config.in"
--	source "package/python-protobuf/Config.in"
--	source "package/python-psutil/Config.in"
--	source "package/python-pyasn/Config.in"
--	source "package/python-pycli/Config.in"
--	source "package/python-pycrypto/Config.in"
--	source "package/python-pydal/Config.in"
--	source "package/python-pyftpdlib/Config.in"
--	source "package/python-pygame/Config.in"
--	source "package/python-pyinotify/Config.in"
--	source "package/python-pyparsing/Config.in"
--	source "package/python-pypcap/Config.in"
--	source "package/python-pyqt/Config.in"
--	source "package/python-pyratemp/Config.in"
--	source "package/python-pyro/Config.in"
--	source "package/python-pyroute2/Config.in"
--	source "package/python-pysendfile/Config.in"
--	source "package/python-pysmb/Config.in"
--	source "package/python-pysnmp/Config.in"
--	source "package/python-pysnmp-apps/Config.in"
--	source "package/python-pysnmp-mibs/Config.in"
--	source "package/python-pyudev/Config.in"
--	source "package/python-pyusb/Config.in"
--	source "package/python-pyxb/Config.in"
--	source "package/python-pyyaml/Config.in"
--	source "package/python-pyzmq/Config.in"
--	source "package/python-requests/Config.in"
--	source "package/python-rtslib-fb/Config.in"
--	source "package/python-serial/Config.in"
--	source "package/python-setuptools/Config.in"
--	source "package/python-simplejson/Config.in"
--	source "package/python-singledispatch/Config.in"
--	source "package/python-sip/Config.in"
--	source "package/python-six/Config.in"
--	source "package/python-spidev/Config.in"
--	source "package/python-thrift/Config.in"
--	source "package/python-tornado/Config.in"
--	source "package/python-twisted/Config.in"
--	source "package/python-urllib3/Config.in"
--	source "package/python-urwid/Config.in"
--	source "package/python-versiontools/Config.in"
--	source "package/python-web2py/Config.in"
--	source "package/python-webpy/Config.in"
--	source "package/python-werkzeug/Config.in"
--	source "package/python-ws4py/Config.in"
--	source "package/python-zope-interface/Config.in"
+@@ -474,52 +474,6 @@ menu "Interpreter languages and scripting"
+ 	source "package/lua/Config.in"
+ 	source "package/luainterpreter/Config.in"
+ 	source "package/luajit/Config.in"
+-if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
+-# lua modules are dynamically loaded, so not available on static builds
+-menu "Lua libraries/modules"
+-	source "package/cgilua/Config.in"
+-	source "package/copas/Config.in"
+-	source "package/cosmo/Config.in"
+-	source "package/coxpcall/Config.in"
+-	source "package/dado/Config.in"
+-	source "package/lbase64/Config.in"
+-	source "package/ljlinenoise/Config.in"
+-	source "package/ljsyscall/Config.in"
+-	source "package/lpeg/Config.in"
+-	source "package/lpty/Config.in"
+-	source "package/lrandom/Config.in"
+-	source "package/lsqlite3/Config.in"
+-	source "package/lua-cjson/Config.in"
+-	source "package/lua-coat/Config.in"
+-	source "package/lua-coatpersistent/Config.in"
+-	source "package/lua-csnappy/Config.in"
+-	source "package/lua-ev/Config.in"
+-	source "package/lua-iconv/Config.in"
+-	source "package/lua-messagepack/Config.in"
+-	source "package/lua-msgpack-native/Config.in"
+-	source "package/lua-periphery/Config.in"
+-	source "package/lua-testmore/Config.in"
+-	source "package/luabitop/Config.in"
+-	source "package/luacrypto/Config.in"
+-	source "package/luaexpat/Config.in"
+-	source "package/luaexpatutils/Config.in"
+-	source "package/luafilesystem/Config.in"
+-	source "package/luajson/Config.in"
+-	source "package/lualogging/Config.in"
+-	source "package/luaposix/Config.in"
+-	source "package/luasec/Config.in"
+-	source "package/luasocket/Config.in"
+-	source "package/luasql-sqlite3/Config.in"
+-	source "package/lunit/Config.in"
+-	source "package/luv/Config.in"
+-	source "package/luvi/Config.in"
+-	source "package/lzlib/Config.in"
+-	source "package/orbit/Config.in"
+-	source "package/rings/Config.in"
+-	source "package/wsapi/Config.in"
+-	source "package/xavante/Config.in"
 -endmenu
 -endif
- 	source "package/ruby/Config.in"
- 	source "package/tcl/Config.in"
- if BR2_PACKAGE_TCL
-diff --git a/package/python/Config.ext b/package/python/Config.ext
+ 	source "package/lutok/Config.in"
+ 	source "package/micropython/Config.in"
+ 	source "package/micropython-lib/Config.in"
+diff --git a/package/lua/Config.ext b/package/lua/Config.ext
 new file mode 100644
-index 0000000..154e653
+index 0000000..4215e41
 --- /dev/null
-+++ b/package/python/Config.ext
-@@ -0,0 +1,98 @@
-+# This file is included both from python and python3
++++ b/package/lua/Config.ext
+@@ -0,0 +1,49 @@
++# This file is included both from lua and luajit
 +
-+comment "External python modules"
++if !BR2_STATIC_LIBS
 +
-+source "package/python-alsaaudio/Config.in"
-+source "package/python-backports-abc/Config.in"
-+source "package/python-bottle/Config.in"
-+source "package/python-can/Config.in"
-+source "package/python-certifi/Config.in"
-+source "package/python-cffi/Config.in"
-+source "package/python-cheetah/Config.in"
-+source "package/python-cherrypy/Config.in"
-+source "package/python-coherence/Config.in"
-+source "package/python-configobj/Config.in"
-+source "package/python-configshell-fb/Config.in"
-+source "package/python-crc16/Config.in"
-+source "package/python-daemon/Config.in"
-+source "package/python-dialog/Config.in"
-+source "package/python-django/Config.in"
-+source "package/python-docopt/Config.in"
-+source "package/python-dpkt/Config.in"
-+source "package/python-enum/Config.in"
-+source "package/python-enum34/Config.in"
-+source "package/python-flask/Config.in"
-+source "package/python-flup/Config.in"
-+source "package/python-gobject/Config.in"
-+source "package/python-html5lib/Config.in"
-+source "package/python-httplib2/Config.in"
-+source "package/python-id3/Config.in"
-+source "package/python-idna/Config.in"
-+source "package/python-ipaddr/Config.in"
-+source "package/python-ipaddress/Config.in"
-+source "package/python-ipy/Config.in"
-+source "package/python-ipython/Config.in"
-+source "package/python-itsdangerous/Config.in"
-+source "package/python-jinja2/Config.in"
-+source "package/python-json-schema-validator/Config.in"
-+source "package/python-keyring/Config.in"
-+source "package/python-libconfig/Config.in"
-+source "package/python-lxml/Config.in"
-+source "package/python-mad/Config.in"
-+source "package/python-mako/Config.in"
-+source "package/python-markdown/Config.in"
-+source "package/python-markupsafe/Config.in"
-+source "package/python-meld3/Config.in"
-+source "package/python-msgpack/Config.in"
-+source "package/python-netifaces/Config.in"
-+source "package/python-networkmanager/Config.in"
-+source "package/python-nfc/Config.in"
-+source "package/python-numpy/Config.in"
-+source "package/python-paho-mqtt/Config.in"
-+source "package/python-pam/Config.in"
-+source "package/python-posix-ipc/Config.in"
-+source "package/python-protobuf/Config.in"
-+source "package/python-psutil/Config.in"
-+source "package/python-pyasn/Config.in"
-+source "package/python-pycli/Config.in"
-+source "package/python-pycrypto/Config.in"
-+source "package/python-pydal/Config.in"
-+source "package/python-pyftpdlib/Config.in"
-+source "package/python-pygame/Config.in"
-+source "package/python-pyinotify/Config.in"
-+source "package/python-pyparsing/Config.in"
-+source "package/python-pypcap/Config.in"
-+source "package/python-pyqt/Config.in"
-+source "package/python-pyratemp/Config.in"
-+source "package/python-pyro/Config.in"
-+source "package/python-pyroute2/Config.in"
-+source "package/python-pysendfile/Config.in"
-+source "package/python-pysmb/Config.in"
-+source "package/python-pysnmp/Config.in"
-+source "package/python-pysnmp-apps/Config.in"
-+source "package/python-pysnmp-mibs/Config.in"
-+source "package/python-pyudev/Config.in"
-+source "package/python-pyusb/Config.in"
-+source "package/python-pyxb/Config.in"
-+source "package/python-pyyaml/Config.in"
-+source "package/python-pyzmq/Config.in"
-+source "package/python-requests/Config.in"
-+source "package/python-rtslib-fb/Config.in"
-+source "package/python-serial/Config.in"
-+source "package/python-setuptools/Config.in"
-+source "package/python-simplejson/Config.in"
-+source "package/python-singledispatch/Config.in"
-+source "package/python-sip/Config.in"
-+source "package/python-six/Config.in"
-+source "package/python-spidev/Config.in"
-+source "package/python-thrift/Config.in"
-+source "package/python-tornado/Config.in"
-+source "package/python-twisted/Config.in"
-+source "package/python-urllib3/Config.in"
-+source "package/python-urwid/Config.in"
-+source "package/python-versiontools/Config.in"
-+source "package/python-web2py/Config.in"
-+source "package/python-webpy/Config.in"
-+source "package/python-werkzeug/Config.in"
-+source "package/python-ws4py/Config.in"
-+source "package/python-zope-interface/Config.in"
-diff --git a/package/python/Config.in b/package/python/Config.in
-index 40a2ef4..6563cd6 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -127,4 +127,6 @@ config BR2_PACKAGE_PYTHON_HASHLIB
++comment "Lua libraries/modules"
++
++source "package/cgilua/Config.in"
++source "package/copas/Config.in"
++source "package/cosmo/Config.in"
++source "package/coxpcall/Config.in"
++source "package/dado/Config.in"
++source "package/lbase64/Config.in"
++source "package/ljlinenoise/Config.in"
++source "package/ljsyscall/Config.in"
++source "package/lpeg/Config.in"
++source "package/lpty/Config.in"
++source "package/lrandom/Config.in"
++source "package/lsqlite3/Config.in"
++source "package/lua-cjson/Config.in"
++source "package/lua-coat/Config.in"
++source "package/lua-coatpersistent/Config.in"
++source "package/lua-csnappy/Config.in"
++source "package/lua-ev/Config.in"
++source "package/lua-iconv/Config.in"
++source "package/lua-messagepack/Config.in"
++source "package/lua-msgpack-native/Config.in"
++source "package/lua-periphery/Config.in"
++source "package/lua-testmore/Config.in"
++source "package/luabitop/Config.in"
++source "package/luacrypto/Config.in"
++source "package/luaexpat/Config.in"
++source "package/luaexpatutils/Config.in"
++source "package/luafilesystem/Config.in"
++source "package/luajson/Config.in"
++source "package/lualogging/Config.in"
++source "package/luaposix/Config.in"
++source "package/luasec/Config.in"
++source "package/luasocket/Config.in"
++source "package/luasql-sqlite3/Config.in"
++source "package/lunit/Config.in"
++source "package/luv/Config.in"
++source "package/luvi/Config.in"
++source "package/lzlib/Config.in"
++source "package/orbit/Config.in"
++source "package/rings/Config.in"
++source "package/wsapi/Config.in"
++source "package/xavante/Config.in"
++
++endif # !static
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index 711fa89..99637dc 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_LUA
++menuconfig BR2_PACKAGE_LUA
+ 	bool "lua"
+ 	select BR2_PACKAGE_HAS_LUAINTERPRETER
  	help
- 	  hashlib support in Python
+@@ -68,4 +68,6 @@ config BR2_PACKAGE_LUA_LINENOISE
  
-+source "package/python/Config.ext"
+ endchoice
+ 
++source "package/lua/Config.ext"
 +
  endif
-diff --git a/package/python3/Config.ext b/package/python3/Config.ext
+diff --git a/package/luajit/Config.ext b/package/luajit/Config.ext
 new file mode 120000
-index 0000000..1b3df59
+index 0000000..62d6109
 --- /dev/null
-+++ b/package/python3/Config.ext
++++ b/package/luajit/Config.ext
 @@ -0,0 +1 @@
-+../python/Config.ext
++../lua/Config.ext
 \ No newline at end of file
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index aadc8b6..f221a54 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -104,4 +104,6 @@ config BR2_PACKAGE_PYTHON3_ZLIB
- 	help
- 	  zlib support in Python3
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 8ce528b..4916b21 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 		BR2_powerpc || BR2_arm || BR2_armeb || \
+ 		((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT)
  
-+source "package/python3/Config.ext"
+-config BR2_PACKAGE_LUAJIT
++menuconfig BR2_PACKAGE_LUAJIT
+ 	bool "luajit"
+ 	select BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	depends on !BR2_STATIC_LIBS # dlopen
+@@ -32,6 +32,8 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
+ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+ 	default "5.1"
+ 
++source "package/luajit/Config.ext"
 +
  endif
+ 
+ comment "luajit needs a toolchain w/ dynamic library"
 -- 
 1.9.1
