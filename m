@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:37 +0100
-Subject: [Buildroot] [PATCH v7 17/28] package/freeswitch: enable mod_ilbc,
-	add optional dependency to libilbc
+Date: Sat, 16 Jan 2016 21:44:42 +0100
+Subject: [Buildroot] [PATCH v7 22/28] package/freeswitch: enable mod_sndfile,
+	add optional dependency to libsndfile
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-18-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-23-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 7505136..0b88bed 100644
+index f549341..f008248 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -190,6 +190,11 @@ ifeq ($(BR2_PACKAGE_LIBG7221),y)
- FREESWITCH_DEPENDENCIES += libg7221
+@@ -246,6 +246,11 @@ FREESWITCH_DEPENDENCIES += libsilk
+ FREESWITCH_ENABLED_MODULES += codecs/mod_silk
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBILBC),y)
-+FREESWITCH_DEPENDENCIES += libilbc
-+FREESWITCH_ENABLED_MODULES += codecs/mod_ilbc
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++FREESWITCH_DEPENDENCIES += libsndfile
++FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBLDNS),y)
- FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.7.0.rc3
