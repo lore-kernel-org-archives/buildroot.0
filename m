@@ -1,53 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 18:25:18 +0100
-Subject: [Buildroot] [PATCH] package/canfestival: fix build with musl
-In-Reply-To: <CA+BsyQ53-OSsdm=DONB9AX_K+y0a8AKnzf1SrRV7ykZVUagjkw@mail.gmail.com>
-References: <1440279318-19132-1-git-send-email-yann.morin.1998@free.fr>
- <20150822213815.GA3861@free.fr>
- <CA+BsyQ5AaMkDCb7Ldnu5u9ZArNe0swiAhKwxsRgES6RdrxTVoQ@mail.gmail.com>
- <20150822222544.GB3861@free.fr>
- <CA+BsyQ53-OSsdm=DONB9AX_K+y0a8AKnzf1SrRV7ykZVUagjkw@mail.gmail.com>
-Message-ID: <20160116182518.44e5f9dc@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 16 Jan 2016 17:29:19 +0000
+Subject: [Buildroot] [Bug 8606] Problem compiling on Arch Linux
+In-Reply-To: <bug-8606-163@https.bugs.busybox.net/>
+References: <bug-8606-163@https.bugs.busybox.net/>
+Message-ID: <bug-8606-163-0ztpqDSDT4@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan, Yann,
+https://bugs.busybox.net/show_bug.cgi?id=8606
 
-On Sat, 22 Aug 2015 23:35:00 +0100, Brendan Heading wrote:
-> >> I was going to take this up with the developers as I can't see a good
-> >> reason why the behaviour is different for uclibc and non-uclibc
-> >> environments, and in any case CLOCK_REALTIME is almost certainly not
-> >> what they want. But I haven't had a spare moment to write a test case
-> >> to prove that the timer code used in the non-uclibc version would work
-> >> just as well under uclibc.
-> >
-> > That sounds really weird, indeed... :-(
-> 
-> It feels like they ran into some kind of issue with uclibc and hacked
-> together a fix.
-> 
-> And IME naive coders often make the mistake of using the wrong CLOCK_*
-> parameters when doing POSIX time related things ..
-> 
-> > OK, I'll try to revisit this later. Thanks for the heads up.
-> 
-> I thought about submitting a patch with another #ifdef __UCLIBC__
-> around the function declaration - not ideal, but it at least matches
-> what the upstream were trying to do. But I wasn't sure if such an
-> approach would pass muster here ?
+--- Comment #1 from Erico Nunes <nunes.erico@gmail.com> ---
+Leo,
+I'm also using up-to-date Arch Linux and I don't remember having any specific
+problem in Buildroot due to it, even when building uClibc toolchains.
+Can you share a .config (and whether you're using latest master or any specific
+version) so that I can try to reproduce it?
 
-Any progress with this? can-festival still fails to build in the
-autobuilders due to this:
-
-  http://autobuild.buildroot.net/results/5c5a48b050223d5f4f66a3a5ddde12cb17e310d7/
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
