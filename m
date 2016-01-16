@@ -1,36 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2016 23:37:36 +0100
-Subject: [Buildroot] [PATCH 44/80 v1] package/gnuradio: use 'menuconfig'
+Date: Sat, 16 Jan 2016 23:37:37 +0100
+Subject: [Buildroot] [PATCH 45/80 v1] package/gnuradio: split long omment
 In-Reply-To: <cover.1452983019.git.yann.morin.1998@free.fr>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <6a7de0d80fac6ddaae8cde12db7c39faa106454c.1452983019.git.yann.morin.1998@free.fr>
+Message-ID: <db4e2619cc112a795d22f0dace2f2d94e53a39d7.1452983019.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gnuradio has more than 5 options, so use a 'menuconfig' to group the
-options in an sub-menu.
+It does not fit even is a wider-than-normal terminal.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 ---
- package/gnuradio/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes RFC -> v1;
+  - tabulate comment  (Arnout)
+  - slightly tweak sentence  (Arnout)
+  - follow alphabetical ordering
+
+---
+Note to Arnout: I did not exactly use your proposal to fix the sentence,
+because it was too wide or would have required yet another line.
+---
+ package/gnuradio/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 603532c..f2c884b 100644
+index f2c884b..3dfd0a3 100644
 --- a/package/gnuradio/Config.in
 +++ b/package/gnuradio/Config.in
-@@ -4,7 +4,7 @@ comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+@@ -58,8 +58,11 @@ config BR2_PACKAGE_GNURADIO_UTILS
+ 	help
+ 	  Misc python utilities
  
--config BR2_PACKAGE_GNURADIO
-+menuconfig BR2_PACKAGE_GNURADIO
- 	bool "gnuradio"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
+-comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager depends fftw's single precision"
+-	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
++if !BR2_PACKAGE_FFTW_PRECISION_SINGLE
++comment "gr-analog, gr-channels, gr-digital, gr-fft,"
++comment "gr-filter, gr-pager and gr-trellis support "
++comment "all depend on fftw with single precision.  "
++endif
+ 
+ if BR2_PACKAGE_FFTW_PRECISION_SINGLE
+ 
 -- 
 1.9.1
