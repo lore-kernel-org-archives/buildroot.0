@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 14:07:44 +0100
-Subject: [Buildroot] [git commit] luabitop: disabled for Lua 5.3
-Message-ID: <20160116130808.9F3468184D@busybox.osuosl.org>
+Date: Sat, 16 Jan 2016 14:07:35 +0100
+Subject: [Buildroot] [PATCH v1 1/2] assimp: fix bfin compile
+In-Reply-To: <1452807861-1020-1-git-send-email-ps.report@gmx.net>
+References: <1452807861-1020-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160116140735.32b862b5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be5d265220f36df7e0b633fcc55e3a33b2e74035
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-see failure in http://autobuild.buildroot.net/results/6306c929e9ee05cbb33e4eb6b590166c6554ec21/
+On Thu, 14 Jan 2016 22:44:20 +0100, Peter Seiderer wrote:
+> Use proper 64-bit constant for CONVERT_FBX_TIME(time) conversion.
+> 
+> Fixes ([1]):
+> 
+>   code/FBXConverter.cpp:2025: error: integer constant is too large for 'long' type
+>   code/FBXConverter.cpp:2026: error: integer constant is too large for 'long' type
+>   code/FBXConverter.cpp:2794: error: integer constant is too large for 'long' type
+>   code/FBXConverter.cpp:2868: error: integer constant is too large for 'long' type
+>   code/FBXConverter.cpp:2878: error: integer constant is too large for 'long' type
+>   code/FBXConverter.cpp:2888: error: integer constant is too large for 'long' type
+> 
+> [1] http://autobuild.buildroot.net/results/885/8853b192d16ca7ef769c5352a2df0540a7a2a4fd
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  ...x-FBXConverter-use-proper-64-bit-constant.patch | 35 ++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luabitop/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Both patches applied, thanks! For the first patch, please make sure to
+submit it upstream.
 
-diff --git a/package/luabitop/Config.in b/package/luabitop/Config.in
-index c5b3f60..26442fc 100644
---- a/package/luabitop/Config.in
-+++ b/package/luabitop/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_LUABITOP
- 	bool "luabitop"
--	depends on !BR2_PACKAGE_LUA_32BITS
-+	depends on !BR2_PACKAGE_LUA_5_3
- 	help
- 	  Lua BitOp is a C extension module for Lua 5.1/5.2 which adds bitwise
- 	  operations on numbers.
- 
- 	  http://bitop.luajit.org
- 
--comment "luabitop needs a full Lua interpreter"
--	depends on BR2_PACKAGE_LUA_32BITS
-+comment "luabitop needs a Lua 5.1/5.2 interpreter"
-+	depends on BR2_PACKAGE_LUA_5_3
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
