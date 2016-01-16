@@ -1,206 +1,100 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 16 Jan 2016 01:28:23 +0100
-Subject: [Buildroot] [PATCH] support/scripts: add size-stats-compare
- script
-In-Reply-To: <1452872492-6980-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1452872492-6980-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <56998EA7.5020603@mind.be>
+Date: Sat, 16 Jan 2016 02:02:01 +0100
+Subject: [Buildroot] Standardizing format for specifying license(s)
+In-Reply-To: <20160115145153.39e486e3@free-electrons.com>
+References: <5698DDBE.3000402@imgtec.com>
+ <1a9e07dbd834ef9ca57e1b6a91d043c2@localhost>
+ <20160115145153.39e486e3@free-electrons.com>
+Message-ID: <56999689.7040605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Thomas,
-
- Interesting concept...
-
-On 15-01-16 16:41, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 15-01-16 14:51, Thomas Petazzoni wrote:
+> Alexander,
 > 
-> Leverage the CSV files produces by size-stats (make graph-size) to allow
-> for a comparison of rootfs size between two different buildroot
-> compilations.
+> On Fri, 15 Jan 2016 14:12:47 +0100, Alexander Dahl wrote:
 > 
-> The script takes the file-size CSV files of two compilations as input, and
-> produces a textual report of the differences per package.
-> Using the -d/--detail flag, the report will show the file size changes
-> instead of package size changes.
-> The -t/--threshold option allows to ignore file size differences smaller
-> than the given threshold (in bytes).
+>> If not already done, I would suggest to have those license stuff
+>> compatible with SPDX [1]. I noticed license names in at least some
+>> packages are not the same as the identifiers on
+>> https://spdx.org/licenses/ ? so if someone wants to generate SPDX stuff
+>> from a buildroot project, it maybe would be better to have a format for
+>> names and delimiters which make it easier towards SPDX package data.
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  support/scripts/size-stats-compare | 98 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 98 insertions(+)
->  create mode 100755 support/scripts/size-stats-compare
+> We normally try to use the SPDX license code, at least for "new"
+> licenses (i.e licenses for which we don't yet have a single Buildroot
+> package under that license). However, for the first licenses (like GPL,
+> LGPL, etc.), we have started using an encoding that is not the one from
+> SPDX. I would personally be in favor to move to SPDX license codes
+> everywhere, but that would break things for people that are currently
+> parsing our license information. Is this reasonable to do nonetheless?
 
- I think you should also add a reference to the script to
-docs/manual/common-usage.txt. No full documentation is needed, you can just
-point to the --help option (otherwise it would just get out of sync).
+ Like Luca, I believe that we can still afford to change it now.
+
+ However, I'm not sure if it is worth it. SPDX short tags often look ugly
+(BSD-3-Clause) and is anyway not sufficient (see below). For the list of tags we
+have, it's easy enough to convert it to the SPDX tag automatically by a
+post-processing tool if someone feels so inclined.
 
 > 
-> diff --git a/support/scripts/size-stats-compare b/support/scripts/size-stats-compare
-> new file mode 100755
-> index 0000000..d7eec09
-> --- /dev/null
-> +++ b/support/scripts/size-stats-compare
-> @@ -0,0 +1,98 @@
-> +#!/usr/bin/env python
-> +
-> +# Copyright (C) 2016 Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> +
-> +# This program is free software; you can redistribute it and/or modify
-> +# it under the terms of the GNU General Public License as published by
-> +# the Free Software Foundation; either version 2 of the License, or
-> +# (at your option) any later version.
-> +#
-> +# This program is distributed in the hope that it will be useful,
-> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
-> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> +# General Public License for more details.
-> +#
-> +# You should have received a copy of the GNU General Public License
-> +# along with this program; if not, write to the Free Software
-> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-> +
-> +# Compare the rootfs size per package/file with that from another compilation
-> +# (possibly from a different release).
-> +
-> +# This code relies on the output CSV files of 'make graph-size'. If you
-> +# are comparing to an older Buildroot release, you can consider backporting
-> +# that feature. See commits:
-> +#    99aca138c20e1259ac8c23252c223e150d460482 (instrumentation hook)
-> +#    598c80be8fc7b5ddfcba6f7715d90757033723ef (size-stats script)
-> +#    24c75fbb38ffeb5c5a7278cf40f4f7cf867502e0 (make graph-size)
-
- I think this documentation should be part of the argparse description.
-
-> +
-> +import csv
-> +import argparse
-> +
-> +def read_packages_csv(inputf, detail=None):
-
- Given the name of the input file read_file_size_stats_csv would be a more
-natural name.
-
-> +    sizes = {}
-> +    with open(inputf) as f:
-> +        reader = csv.reader(f)
-> +        # skip first line (header)
-> +        next(reader)
-
- Perhaps it would be good to verify here that the header is as expected, at
-least the first 4 entries.
-
-> +        for row in csv.reader(f):
-> +            if detail:
-> +                sizes[row[0]] = int(row[2])
-> +            else:
-> +                sizes[row[1]] = int(row[3])
-> +    return sizes
-> +
-> +def compare_sizes(this, other):
-> +    delta = {}
-> +    removed = {}
-> +    added = {}
-> +    thiskeys = set(this.keys())
-> +    otherkeys = set(other.keys())
-> +
-> +    # packages in both
-
- packages or files, actually.
-
-> +    for pkg in thiskeys.intersection(otherkeys):
-> +        delta[pkg] = this[pkg] - other[pkg]
-> +    # packages only in this
-> +    for pkg in thiskeys.difference(otherkeys):
-> +        added[pkg] = this[pkg]
-> +    # packages only in other
-> +    for pkg in otherkeys.difference(thiskeys):
-> +        removed[pkg] = -other[pkg]
-> +
-> +    return delta, added, removed
-> +
-> +def print_results(result, title, threshold):
-> +    print '%s:' % title
-
- I would skip this complete if the result is empty. So
-
-    if not result:
-        return
-
-> +    for pkg in result.keys():
-> +        if abs(result[pkg]) < threshold:
-
- I think <= would be more natural here. Then you can pass -t 0 to get rid of all
-packages that remain equal.
-
- Also a nice extension for a future patch would be to support K, M, G in the
-threshold.
-
-> +            continue
-> +        print '%12d %s' % (result[pkg], pkg)
-
- I think it would be better if the output was also CSV. If it is not CSV, please
-make it python3-compatible by adding () around the argument.
-
- A nice additional feature would be if the output CSV would (optionally?)
-contain all the info from the original CSVs. But that can be follow-up patch, of
-course.
-
-> +
-> +
-> +# main #########################################################################
-> +
-> +parser = argparse.ArgumentParser(description='Compare rootfs size between Buildroot compilations')
-> +
-> +parser.add_argument('-f', '--file-size-csv',
-> +                    help='CSV file with file and package size statistics')
-
- You could use type=argparse.FileType('r') to get automatic help in case the
-file doesn't exist. And then you have to remove the open() from
-read_packages_csv, of course.
-
- Can you put the actual file name in the help text? Perhaps just with
-metavar='file-size-stats.csv'
-
- And actually, I would remove the -f and -g bits, i.e. make them positional
-arguments. So add_argument('file-size-csv', help=...).
-
-> +parser.add_argument('-g', '--other-file-size-csv',
-> +                    help='CSV file with file and package size statistics to compare with')
-
- Wrap this line (using '''). argparse will rewrap the help text. Same below.
-Note that you can even align the help text here, all whitespace will be rewrapped.
-
-> +parser.add_argument('-d', '--detail', action='store_true',
-> +                    help='detail with individual files rather than packages')
-> +parser.add_argument('-t', '--threshold', type=int,
-> +                    help='threshold value: ignore size differences smaller than this value (bytes)')
-> +args = parser.parse_args()
-> +
-> +sizes = read_packages_csv(args.file_size_csv, args.detail)
-> +other_sizes = read_packages_csv(args.other_file_size_csv, args.detail)
-> +
-> +delta, added, removed = compare_sizes(sizes, other_sizes)
-> +
-> +if args.detail:
-> +    keyword = 'file'
-> +else:
-> +    keyword = 'package'
-> +
-> +print_results(delta, 'Size difference per %s (bytes)' % keyword, args.threshold)
-> +print_results(added, 'Size difference due to added %ss (bytes)' % keyword, args.threshold)
-> +print_results(removed, 'Size difference due to removed %ss (bytes)' % keyword, args.threshold)
+> The Buildroot documentation already has a license of license
+> abbreviations:
+> https://buildroot.org/downloads/manual/manual.html#legal-info-list-licenses.
 > 
+> Note that http://spdx.org/sites/spdx/files/SPDX-2.0.pdf, page 82 and
+> 83, has a description of a syntax for composite license expressions.
 
- Otherwise looks good. Or in fact, most of my comments are optional, feel free
-to ignore them. Only the wrapping and the full description I consider essential.
+ Unfortunately this syntax is a bit unwieldy. The license identifier must be
+either one of the official ones, or something matching
+LicenseRef-[-+.a-zA-Z0-9]+ - for somewhat complicated licenses, it looks ugly.
+If it is a composite expression, it must be enclosed in (). And if there is an
+exception, it again must come from the official list - if it's not in the list,
+a new LicenseRef must be created. I could live with converting spaces to -, but
+anything beyond that is not a good idea IMHO.
+
+ Also, it doesn't allow to express some of the things we want to express in our
+license statements. In particular, the "GPLv2+ (programs), LGPLv2 (library)" is
+not possible. In SPDX, every individual (source or binary) file is supposed to
+have a concluded license, and the concluded license of the package is the thing
+that applies when all files are distributed together.
+
+ So I don't think we should go for fully formal SPDX, and I see little advantage
+in choosing something that resembles formal SPDX but is not quite it. I think
+that for someone who uses SPDX, the licensing info we give is never anything
+more than a hint so there is no need to make it almost-SPDX.
+
+
+ Bottom line: I'm completely in-line with the OP's proposal, as amended by
+ThomasP (/ -> or). And I'm open to converting some or all existing tags to the
+SPDX ones.
+
+> 
+> One case that SPDX doesn't allow to encode is "GPL" or "LGPL", i.e the
+> cases where the software is said to be licensed under the GPL or LGPL,
+> but without any version information. Yes this sucks because in practice
+> it means you don't know the corresponding license text. But sometimes,
+> this is the only information provided by the package source code.
+
+ Yeah, so that would have to become LicenseRef-GPL...
+
 
  Regards,
  Arnout
+
+
+> 
+> Examples:
+> 
+> MII_DIAG_LICENSE = GPL # No version specified
+> tslib/tslib.mk:TSLIB_LICENSE = GPL, LGPL
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
 
 -- 
