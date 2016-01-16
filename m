@@ -1,53 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2016 23:37:06 +0100
-Subject: [Buildroot] [PATCH 14/80 v1] package/nodejs: use 'menuconfig'
-	instead of 'config'+'menu'
+Date: Sat, 16 Jan 2016 23:37:00 +0100
+Subject: [Buildroot] [PATCH 08/80 v1] package/jquery: include external
+	plugins from jquery's Config.in
 In-Reply-To: <cover.1452983019.git.yann.morin.1998@free.fr>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <69f8a298cee6ad4340690c8d0567b4523ab28338.1452983019.git.yann.morin.1998@free.fr>
+Message-ID: <837acfb60a337e2f6b1c6e279185e8c95878a4e9.1452983019.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+... and make it a menuconfig instead of a 'config'+'menu'.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes RFC -> v1;
-  - drop the comment  (Arnout)
----
- package/nodejs/Config.in | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/Config.in        | 12 ------------
+ package/jquery/Config.in | 17 ++++++++++++++++-
+ 2 files changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 3dfccac..702ea38 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -5,7 +5,7 @@ comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
- 	depends on !BR2_ARM_CPU_ARMV4
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
- 
--config BR2_PACKAGE_NODEJS
-+menuconfig BR2_PACKAGE_NODEJS
- 	bool "nodejs"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -64,8 +64,6 @@ config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	default "0.10.41"	if BR2_PACKAGE_NODEJS_0_10_X
- 	default "5.3.0"		if BR2_PACKAGE_NODEJS_5_X
- 
--menu "Module Selection"
--
- config BR2_PACKAGE_NODEJS_NPM
- 	bool "NPM for the target"
- 	select BR2_PACKAGE_OPENSSL
-@@ -120,6 +118,4 @@ config BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS
- 	  'libcurl' here, to ensure that buildroot builds the libcurl package,
- 	  and does so before building your node modules.
- 
+diff --git a/package/Config.in b/package/Config.in
+index 89b23db..48e0c7c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -962,18 +962,6 @@ menu "Javascript"
+ 	source "package/explorercanvas/Config.in"
+ 	source "package/flot/Config.in"
+ 	source "package/jquery/Config.in"
+-if BR2_PACKAGE_JQUERY
+-menu "External jQuery plugins"
+-	source "package/jquery-datetimepicker/Config.in"
+-	source "package/jquery-keyboard/Config.in"
+-	source "package/jquery-mobile/Config.in"
+-	source "package/jquery-sidebar/Config.in"
+-	source "package/jquery-sparkline/Config.in"
+-	source "package/jquery-ui/Config.in"
+-	source "package/jquery-ui-themes/Config.in"
+-	source "package/jquery-validation/Config.in"
 -endmenu
--
- endif
+-endif
+ 	source "package/jsmin/Config.in"
+ 	source "package/json-javascript/Config.in"
+ endmenu
+diff --git a/package/jquery/Config.in b/package/jquery/Config.in
+index 92f5604..3133702 100644
+--- a/package/jquery/Config.in
++++ b/package/jquery/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_JQUERY
++menuconfig BR2_PACKAGE_JQUERY
+ 	bool "jQuery"
+ 	help
+ 	  jQuery is a fast and concise JavaScript Library that
+@@ -6,3 +6,18 @@ config BR2_PACKAGE_JQUERY
+ 	  animating, and Ajax interactions for rapid web development.
+ 
+ 	  http://jquery.com
++
++if BR2_PACKAGE_JQUERY
++
++comment "External jQuery plugins"
++
++source "package/jquery-datetimepicker/Config.in"
++source "package/jquery-keyboard/Config.in"
++source "package/jquery-mobile/Config.in"
++source "package/jquery-sidebar/Config.in"
++source "package/jquery-sparkline/Config.in"
++source "package/jquery-ui/Config.in"
++source "package/jquery-ui-themes/Config.in"
++source "package/jquery-validation/Config.in"
++
++endif
 -- 
 1.9.1
