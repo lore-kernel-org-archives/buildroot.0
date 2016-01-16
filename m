@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:43 +0100
-Subject: [Buildroot] [PATCH v7 23/28] package/freeswitch: enable mod_alsa,
-	add optional dependency to alsa-lib
+Date: Sat, 16 Jan 2016 21:44:41 +0100
+Subject: [Buildroot] [PATCH v7 21/28] package/freeswitch: enable mod_silk,
+	add optional dependency to libsilk
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-24-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-22-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index f008248..b097794 100644
+index 6a8da08..f549341 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -166,6 +166,11 @@ ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_x86_6
- FREESWITCH_ENABLED_MODULES += codecs/mod_isac
+@@ -241,6 +241,11 @@ FREESWITCH_DEPENDENCIES += portaudio
+ FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
  endif
  
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+FREESWITCH_DEPENDENCIES += alsa-lib
-+FREESWITCH_ENABLED_MODULES += endpoints/mod_alsa
++ifeq ($(BR2_PACKAGE_LIBSILK),y)
++FREESWITCH_DEPENDENCIES += libsilk
++FREESWITCH_ENABLED_MODULES += codecs/mod_silk
 +endif
 +
- ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyyy)
- FREESWITCH_DEPENDENCIES += ffmpeg libvpx libyuv
- FREESWITCH_ENABLED_MODULES += applications/mod_av
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.7.0.rc3
