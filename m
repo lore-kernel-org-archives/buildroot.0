@@ -1,56 +1,91 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 16 Jan 2016 02:04:27 +0100
-Subject: [Buildroot] [PATCH] luabitop: disabled for Lua 5.3
-In-Reply-To: <1452846532-7780-1-git-send-email-francois.perrad@gadz.org>
-References: <1452846532-7780-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <5699971B.2030902@mind.be>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri, 15 Jan 2016 23:32:29 -0200
+Subject: [Buildroot] [RFC PATCH v2 1/4] package/dhcp: bump version to
+ 4.3.3
+References: <20160115153121.GA16597@dkarchlinux64.currentcomm.com>
+Message-ID: <56999dadc4b34_37c612cbc848316d@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15-01-16 09:28, Francois Perrad wrote:
-> see failure in http://autobuild.buildroot.net/results/6306c929e9ee05cbb33e4eb6b590166c6554ec21/
+Hi Doug,
+
+On Fri, Jan 15, 2016 at 01:31 PM, rdkehn at yahoo.com wrote:
+> Hi Richardo, Arnout, All,
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> ---
->  package/luabitop/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> On Thu, Jan 14, 2016 at 10:17:28PM -0200, Ricardo Martincoski wrote:
+>> Hi Doug and Arnout,
+>> 
+>> On Sun, 10 Jan 2016 15:25:06 -0600, Doug Kehn wrote:
+>> > The embedded bind configure is called as part of dhcp make instead of
+>> > dhcp configure. dhcp make environment is expanded to ensure bind
+>> > configure has the proper information.
+>> Maybe the bind configure could be called in a post configure hook.
+>> This way, bind would be configured in the configure step too.
+>> 
+>> [snip]
+>> > +DHCP_MAKE=$(MAKE1)
+>> > +
+>> > +DHCP_MAKE_ENV = \
+>> > +	GNU_TARGET_NAME=$(GNU_TARGET_NAME) \
+>> For at least one external toolchain, the bind configure can't find the
+>> target compiler because it is expecting arm-buildroot-linux-gnueabi-gcc
+>> while the binary name is arm-none-linux-gnueabi-gcc.
+>> Maybe setting CC here would fix this.
+>> > +	GNU_HOST_NAME=$(GNU_HOST_NAME) \
+>> > +	AR="$(TARGET_AR)" \
+>> > +	BUILD_CC="$(HOSTCC)"
 > 
-> diff --git a/package/luabitop/Config.in b/package/luabitop/Config.in
-> index c5b3f60..26442fc 100644
-> --- a/package/luabitop/Config.in
-> +++ b/package/luabitop/Config.in
-> @@ -1,11 +1,11 @@
->  config BR2_PACKAGE_LUABITOP
->  	bool "luabitop"
-> -	depends on !BR2_PACKAGE_LUA_32BITS
-> +	depends on !BR2_PACKAGE_LUA_5_3
->  	help
->  	  Lua BitOp is a C extension module for Lua 5.1/5.2 which adds bitwise
->  	  operations on numbers.
->  
->  	  http://bitop.luajit.org
->  
-> -comment "luabitop needs a full Lua interpreter"
-> -	depends on BR2_PACKAGE_LUA_32BITS
-> +comment "luabitop needs a Lua 5.1/5.2 interpreter"
-> +	depends on BR2_PACKAGE_LUA_5_3
+> Did you try adding CC to see if it fixed the external toolchain
+> issue? I also wonder if adding $(TARGET_CONFIGURE_OPTS) to MAKE_ENV
+> is warranted?
 > 
+I just tested adding only CC="$(TARGET_CC)" copied from TARGET_CONFIGURE_OPTS
+and it solves the external toolchain issue.
+Only a few autotools-packages (smcroute, fcgiwrap, libpam-radius-auth) add
+$(TARGET_CONFIGURE_OPTS) to MAKE_ENV. All three have comments to justify the
+use, so I suppose it is not the best practice.
 
+>> 
+>> If a hook is used, TARGET_CONFIGURE_OPTS can provide most of variables needed,
+>> fixing the issue with some external toolchains.
+>> Something like this:
+>> DHCP_BIND_CONF_ENV = \
+>> 	$(TARGET_CONFIGURE_OPTS) \
+>> 	GNU_TARGET_NAME=$(GNU_TARGET_NAME) \
+>> 	GNU_HOST_NAME=$(GNU_HOST_NAME) \
+>> 	BUILD_CC="$(HOSTCC)"
+>> 
+>> define DHCP_CONFIGURE_BIND
+>> 	$(DHCP_BIND_CONF_ENV) $(DHCP_MAKE) -C $(@D)/bind bind1
+>> endef
+>> DHCP_POST_CONFIGURE_HOOKS += DHCP_CONFIGURE_BIND
+>> > +
+>> > +define DHCP_EXTRACT_BIND
+>> > +	cd $(@D)/bind; tar -xvf bind.tar.gz
+>> > +endef
+>> > +DHCP_POST_EXTRACT_HOOKS += DHCP_EXTRACT_BIND
+>> 
+>> What do you think about this?
+> 
+> Did the configure hook work for you?
+> 
+Yes.
+Also, in a rapid test, the hook seems to work fine after removing
+TARGET_CONFIGURE_OPTS and adding back AR and CC.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> At the end of the day, configure hook vs make env is a matter
+> preference for the Buildroot maintainers; as long as it works... I
+> have not yet tried the configure hook; but, I will. My only
+> reservation with the configure hook is that it must know the exact
+> target to make to configure bind as apposed to just ensuring the
+> environment has the proper values for cross compiling and letting
+> the Buildroot infra take care of the rest. 
+> 
+Taking your reservation into account, I agree make env seems a better choice.
+Thank you for your explanation.
+
+Regards,
+Ricardo
