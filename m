@@ -1,114 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2016 23:36:59 +0100
-Subject: [Buildroot] [PATCH 07/80 v1] package/gpsd: use 'menuconfig' instead
-	of 'config'+'menu'
+Date: Sat, 16 Jan 2016 23:37:09 +0100
+Subject: [Buildroot] [PATCH 17/80 v1] package/php: move list of extensions
+	after interface selection
 In-Reply-To: <cover.1452983019.git.yann.morin.1998@free.fr>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <56acb12a685733c06214b858155bcd851f66227d.1452983019.git.yann.morin.1998@free.fr>
+Message-ID: <857c54a6bbb809235a53927c6c63bd97fb03bb06.1452983019.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since there were multiple sub-menus, their prompts are turned into
-comments.
-
-Some option were missing a prompt, so add one. Add separating lines
-around options.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gpsd/Config.in | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+ package/php/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index b4008eb..876ab9b 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -2,7 +2,7 @@ comment "gpsd needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/php/Config.in b/package/php/Config.in
+index 32faa32..eee8d26 100644
+--- a/package/php/Config.in
++++ b/package/php/Config.in
+@@ -9,8 +9,6 @@ config BR2_PACKAGE_PHP
  
--config BR2_PACKAGE_GPSD
-+menuconfig BR2_PACKAGE_GPSD
- 	bool "gpsd"
- 	# Uses fork()
- 	depends on BR2_USE_MMU
-@@ -25,7 +25,7 @@ config BR2_PACKAGE_GPSD_DEVICES
- 	string "Where to look for GPSes"
- 	default "/dev/ttyS1"
+ if BR2_PACKAGE_PHP
  
--menu "Features"
-+comment "Features"
- 
- config BR2_PACKAGE_GPSD_CLIENT_DEBUG
- 	bool "client debugging support"
-@@ -50,36 +50,41 @@ config BR2_PACKAGE_GPSD_PPS
- 
- config BR2_PACKAGE_GPSD_USER
- 	bool "GPSD privilege revocation user"
-+
- config BR2_PACKAGE_GPSD_USER_VALUE
--	string ""
-+	string "user to run as"
- 	default "nobody"
- 	depends on BR2_PACKAGE_GPSD_USER
- 
- config BR2_PACKAGE_GPSD_GROUP
- 	bool "GPSD privilege revocation group"
-+
- config BR2_PACKAGE_GPSD_GROUP_VALUE
--	string ""
-+	string "group to run as"
- 	default "nobody"
- 	depends on BR2_PACKAGE_GPSD_GROUP
- 
- config BR2_PACKAGE_GPSD_FIXED_PORT_SPEED
- 	bool "compile with fixed serial port speed"
-+
- config BR2_PACKAGE_GPSD_FIXED_PORT_SPEED_VALUE
--	string ""
-+	int "serial port speed"
- 	default "9600"
- 	depends on BR2_PACKAGE_GPSD_FIXED_PORT_SPEED
- 
- config BR2_PACKAGE_GPSD_MAX_CLIENT
- 	bool "compile with limited maximum clients"
-+
- config BR2_PACKAGE_GPSD_MAX_CLIENT_VALUE
--	string "compile with limited maximum clients"
-+	int "maximum number of clients"
- 	default "10"
- 	depends on BR2_PACKAGE_GPSD_MAX_CLIENT
- 
- config BR2_PACKAGE_GPSD_MAX_DEV
- 	bool "compile with maximum allowed devices"
-+
- config BR2_PACKAGE_GPSD_MAX_DEV_VALUE
--	string "compile with maximum allowed devices"
-+	int "maximum allowed devices"
- 	default "2"
- 	depends on BR2_PACKAGE_GPSD_MAX_DEV
- 
-@@ -94,9 +99,7 @@ config BR2_PACKAGE_GPSD_CONTROLSEND
- config BR2_PACKAGE_GPSD_SQUELCH
- 	bool "squelch gpsd_report and gpsd_hexdump to save cpu"
- 
--endmenu
+-source "package/php/Config.ext"
 -
--menu "Protocols"
-+comment "Protocols"
+ config BR2_PACKAGE_PHP_CLI
+ 	bool
  
- config BR2_PACKAGE_GPSD_AIVDM
- 	bool "Aivdm"
-@@ -231,6 +234,4 @@ config BR2_PACKAGE_GPSD_UBX
- 	help
- 	  uBlox UBX binary support
+@@ -66,4 +64,6 @@ config BR2_PACKAGE_PHP_SAPI_CLI_FPM
  
--endmenu
--
+ endchoice
+ 
++source "package/php/Config.ext"
++
  endif
 -- 
 1.9.1
