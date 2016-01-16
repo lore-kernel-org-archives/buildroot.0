@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:27 +0100
-Subject: [Buildroot] [PATCH v7 07/28] package/freeswitch: add optional
-	dependency to unixodbc
+Date: Sat, 16 Jan 2016 21:44:37 +0100
+Subject: [Buildroot] [PATCH v7 17/28] package/freeswitch: enable mod_ilbc,
+	add optional dependency to libilbc
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 83b2626..9e12f33 100644
+index 7505136..0b88bed 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -71,7 +71,6 @@ FREESWITCH_CONF_ENV += \
- 	ac_cv_gcc_supports_w_no_unused_result=no
- 
- FREESWITCH_CONF_OPTS = \
--	--disable-core-odbc-support \
- 	--without-erlang \
- 	--enable-fhs \
- 	--without-python \
-@@ -178,6 +177,15 @@ FREESWITCH_DEPENDENCIES += libpng
- FREESWITCH_ENABLED_MODULES += formats/mod_png
+@@ -190,6 +190,11 @@ ifeq ($(BR2_PACKAGE_LIBG7221),y)
+ FREESWITCH_DEPENDENCIES += libg7221
  endif
  
-+ifeq ($(BR2_PACKAGE_UNIXODBC),y)
-+FREESWITCH_DEPENDENCIES += unixodbc
-+FREESWITCH_CONF_OPTS += \
-+	--enable-core-odbc-support \
-+	--with-odbc=$(STAGING_DIR)/usr
-+else
-+FREESWITCH_CONF_OPTS += --disable-core-odbc-support
++ifeq ($(BR2_PACKAGE_LIBILBC),y)
++FREESWITCH_DEPENDENCIES += libilbc
++FREESWITCH_ENABLED_MODULES += codecs/mod_ilbc
 +endif
 +
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- FREESWITCH_DEPENDENCIES += util-linux
- endif
+ ifeq ($(BR2_PACKAGE_LIBLDNS),y)
+ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
 -- 
 2.7.0.rc3
