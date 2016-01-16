@@ -1,98 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2016 23:37:10 +0100
-Subject: [Buildroot] [PATCH 18/80 v1] package/php: use 'menuconfig' instead
-	of 'config'+'menu'
+Date: Sat, 16 Jan 2016 23:37:36 +0100
+Subject: [Buildroot] [PATCH 44/80 v1] package/gnuradio: use 'menuconfig'
 In-Reply-To: <cover.1452983019.git.yann.morin.1998@free.fr>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <0a28f80145b8042d4361d1de0d2a3402670c5a5a.1452983019.git.yann.morin.1998@free.fr>
+Message-ID: <6a7de0d80fac6ddaae8cde12db7c39faa106454c.1452983019.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move the external extensions selection into the bundled extensions'
-Config.in.
-
-Make the menu prompt a comment, reword it so that it is more in line
-with the following comments.
+gnuradio has more than 5 options, so use a 'menuconfig' to group the
+options in an sub-menu.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in      | 16 ----------------
- package/php/Config.ext | 20 ++++++++++++++++++--
- package/php/Config.in  |  2 +-
- 3 files changed, 19 insertions(+), 19 deletions(-)
+ package/gnuradio/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6fd68a8..91c96ea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -544,22 +544,6 @@ endif
- 	source "package/nodejs/Config.in"
- 	source "package/perl/Config.in"
- 	source "package/php/Config.in"
--if BR2_PACKAGE_PHP
--if !BR2_STATIC_LIBS
--menu "External php extensions"
--	source "package/php-geoip/Config.in"
--	source "package/php-gnupg/Config.in"
--	source "package/php-imagick/Config.in"
--	source "package/php-memcached/Config.in"
--	source "package/php-ssh2/Config.in"
--	source "package/php-yaml/Config.in"
--	source "package/php-zmq/Config.in"
--endmenu
--endif
--if BR2_STATIC_LIBS
--comment "External PHP extensions need a toolchain w/ dynamic library"
--endif
--endif
- 	source "package/python/Config.in"
- 	source "package/python3/Config.in"
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index c044e45..a93086f 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -1,4 +1,4 @@
--menu "Extensions"
-+comment "Generic extensions"
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 603532c..f2c884b 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -4,7 +4,7 @@ comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
  
- config BR2_PACKAGE_PHP_EXT_CALENDAR
- 	bool "Calendar"
-@@ -401,4 +401,20 @@ config BR2_PACKAGE_PHP_EXT_XSL
- 	help
- 	  XSL transformation support
- 
--endmenu
-+if !BR2_STATIC_LIBS
-+
-+comment "External extensions"
-+
-+source "package/php-geoip/Config.in"
-+source "package/php-gnupg/Config.in"
-+source "package/php-imagick/Config.in"
-+source "package/php-memcached/Config.in"
-+source "package/php-ssh2/Config.in"
-+source "package/php-yaml/Config.in"
-+source "package/php-zmq/Config.in"
-+
-+endif # !STATIC_LIBS
-+
-+if BR2_STATIC_LIBs
-+comment "External PHP extensions need a toolchain w/ dynamic library"
-+endif
-diff --git a/package/php/Config.in b/package/php/Config.in
-index eee8d26..7e79179 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_PHP
-+menuconfig BR2_PACKAGE_PHP
- 	bool "php"
- 	help
- 	  PHP  is a widely-used general-purpose scripting
+-config BR2_PACKAGE_GNURADIO
++menuconfig BR2_PACKAGE_GNURADIO
+ 	bool "gnuradio"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
 -- 
 1.9.1
