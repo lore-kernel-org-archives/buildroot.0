@@ -1,36 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 14:04:57 +0100
-Subject: [Buildroot] [git commit] perf: remove tests from target
-Message-ID: <20160116130708.28E258038C@busybox.osuosl.org>
+Date: Sat, 16 Jan 2016 14:06:17 +0100
+Subject: [Buildroot] [git commit] assimp: fix bfin compile
+Message-ID: <20160116130708.74C1E7F931@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=77e7cdb5de94801982d0b0c37d26a12884ae1785
+commit: http://git.buildroot.net/buildroot/commit/?id=25ba49518a93265ecb3146e6eb21a2a138989100
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The perf tool installed test files in
-    output/target/usr/libexec/perf-core/tests/
-which amounted to about 30+K.
+Use proper 64-bit constant for CONVERT_FBX_TIME(time) conversion.
 
-Since they are not needed for normal perf operation, remove them.
+Fixes ([1]):
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  code/FBXConverter.cpp:2025: error: integer constant is too large for 'long' type
+  code/FBXConverter.cpp:2026: error: integer constant is too large for 'long' type
+  code/FBXConverter.cpp:2794: error: integer constant is too large for 'long' type
+  code/FBXConverter.cpp:2868: error: integer constant is too large for 'long' type
+  code/FBXConverter.cpp:2878: error: integer constant is too large for 'long' type
+  code/FBXConverter.cpp:2888: error: integer constant is too large for 'long' type
+
+[1] http://autobuild.buildroot.net/results/885/8853b192d16ca7ef769c5352a2df0540a7a2a4fd
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux-tool-perf.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...x-FBXConverter-use-proper-64-bit-constant.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
-index 0bd0ed1..07c3514 100644
---- a/linux/linux-tool-perf.mk
-+++ b/linux/linux-tool-perf.mk
-@@ -84,4 +84,5 @@ define PERF_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
- 		-C $(@D)/tools/perf O=$(@D)/tools/perf/ install
- 	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
-+	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
- endef
+diff --git a/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch b/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch
+new file mode 100644
+index 0000000..bfcbeb5
+--- /dev/null
++++ b/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch
+@@ -0,0 +1,35 @@
++From 30a2ecc7939449f235282eb6de42e367fc5b1867 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 14 Jan 2016 22:13:15 +0100
++Subject: [PATCH] Fix FBXConverter: use proper 64-bit constant
++
++Use proper 64-bit constant for CONVERT_FBX_TIME(time) conversion, fixes:
++
++  code/FBXConverter.cpp:2025: error: integer constant is too large for 'long' type
++  code/FBXConverter.cpp:2026: error: integer constant is too large for 'long' type
++  code/FBXConverter.cpp:2794: error: integer constant is too large for 'long' type
++  code/FBXConverter.cpp:2868: error: integer constant is too large for 'long' type
++  code/FBXConverter.cpp:2878: error: integer constant is too large for 'long' type
++  code/FBXConverter.cpp:2888: error: integer constant is too large for 'long' type
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ code/FBXConverter.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/code/FBXConverter.cpp b/code/FBXConverter.cpp
++index e0c6b9c..b1e9a71 100644
++--- a/code/FBXConverter.cpp
+++++ b/code/FBXConverter.cpp
++@@ -67,7 +67,7 @@ namespace FBX {
++ 
++ #define MAGIC_NODE_TAG "_$AssimpFbx$"
++ 
++-#define CONVERT_FBX_TIME(time) static_cast<double>(time) / 46186158000L
+++#define CONVERT_FBX_TIME(time) static_cast<double>(time) / 46186158000LL
++ 
++     // XXX vc9's debugger won't step into anonymous namespaces
++ //namespace {
++-- 
++2.1.4
++
