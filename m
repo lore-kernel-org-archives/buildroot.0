@@ -1,53 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 16 Jan 2016 22:06:29 +0100
-Subject: [Buildroot] [PATCH] libnspr: only enable thumb if
-	BR2_ARM_INSTRUCTIONS_THUMB2
-In-Reply-To: <878u3qy3oa.fsf@dell.be.48ers.dk>
-References: <1452869536-13918-1-git-send-email-arnout@mind.be>
- <878u3qy3oa.fsf@dell.be.48ers.dk>
-Message-ID: <569AB0D5.7010701@mind.be>
+Date: Sat, 16 Jan 2016 22:16:47 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-01-14
+In-Reply-To: <jvipmcxaun.ln2@ID-313208.user.individual.net>
+References: <20160115073021.DAA6410303A@stock.ovh.net>
+ <jvipmcxaun.ln2@ID-313208.user.individual.net>
+Message-ID: <569AB33F.6010701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15-01-16 21:43, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+On 16-01-16 11:34, Bernd Kuhls wrote:
+> Am Fri, 15 Jan 2016 08:30:21 +0100 schrieb Thomas Petazzoni:
 > 
->  > libnspr currently passes --enable-thumb2 if the CPU has thumb
->  > instructions. This option will pass -mthumb to the compiler. However,
->  > if an external multilib toolchain is used that has a thumb-specific
->  > variant, it will try to use that one. But we only copy a single variant
->  > to the sysroot, so the build will fail with:
+>>          arc | libbroadvoice-f65b0f50c8c76... | NOK |
+>>          http://autobuild.buildroot.net/
+> results/2c6cc56b8d103c661b7ec66f5216ff6dc72ff02a/
 > 
->  > In order to fix this, only enable thumb2 when we are really using
->  > thumb2. Note that it is still necessary to pass this option, cfr.
->  > http://autobuild.buildroot.org/results/d7323831372050e425a34f5104a46d8cbd6be214
+> Hi,
 > 
->  > We could have chosen to still enable thumb2 with the internal toolchain.
->  > However, that would mean we create a discrepancy between the result of
->  > building with the same (buildroot) toolchain when it is used as an
->  > internal one or as an external one. To avoid potentially surprising
->  > results, just stick to the option chosen for the rest of the rootfs.
+> the reason for this build error is a arc-only gcc bug which was fixed in 
+> gcc-4.9: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
 > 
-> Why do we actually ever pass --enable-thumb2 / --disable-thumb2? As far
-> as I can see, the only thing this does is adding -marm / -mthumb to
-> CFLAGS, and we already pass the correct -m<arm/thumb> option in the
-> toolchain wrapper.
+> The toolchain used by the autobuilders is gcc-4.8 which explains the 
+> build error. Afaics Kconfig does not allow something like this:
+> 
+> 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 if BR2_arc
+> 
+> Could you please give me some advise on how to fix the problem?
 
- Well, if you don't pass anything, it will check if the _compiler_ supports
-thumb by compiling (not linking) something which checks for __thumb2__. So we
-have to pass something.
-
- Er, on second look, it uses that compile to set MOZ_THUMB2 and then doesn't do
-anything with it... Still, there is a good chance that upstream will in the
-future do something with that symbol, so I think it's safer to explicitly
-en/disable thumb2.
+ Apply logic. FOO if BAR is the same as FOO || !BAR.
 
  Regards,
  Arnout
 
+> Thanks!
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
