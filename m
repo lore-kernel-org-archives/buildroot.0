@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:44 +0100
-Subject: [Buildroot] [PATCH v7 24/28] package/freeswitch: enable
-	mod_soundtouch, add optional dependency to libsoundtouch
+Date: Sat, 16 Jan 2016 21:44:31 +0100
+Subject: [Buildroot] [PATCH v7 11/28] package/freeswitch: enable mod_fsv,
+	add optional dependencies to libvpx & libyuv
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index b097794..d58b891 100644
+index a280aa6..dc96785 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -256,6 +256,11 @@ FREESWITCH_DEPENDENCIES += libsndfile
- FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
+@@ -186,6 +186,11 @@ FREESWITCH_DEPENDENCIES += libyaml
+ FREESWITCH_ENABLED_MODULES += languages/mod_yaml
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSOUNDTOUCH),y)
-+FREESWITCH_DEPENDENCIES += libsoundtouch
-+FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
++ifeq ($(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yy)
++FREESWITCH_DEPENDENCIES += libvpx libyuv
++FREESWITCH_ENABLED_MODULES += applications/mod_fsv
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_LUA),y)
+ FREESWITCH_DEPENDENCIES += lua
+ FREESWITCH_ENABLED_MODULES += languages/mod_lua
 -- 
 2.7.0.rc3
