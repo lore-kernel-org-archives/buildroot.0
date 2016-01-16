@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:24 +0100
-Subject: [Buildroot] [PATCH v7 04/28] package/freeswitch: add optional
-	dependency to libedit
+Date: Sat, 16 Jan 2016 21:44:43 +0100
+Subject: [Buildroot] [PATCH v7 23/28] package/freeswitch: enable mod_alsa,
+	add optional dependency to alsa-lib
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-24-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 2c98c6c..ec1eb95 100644
+index f008248..b097794 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -71,7 +71,6 @@ FREESWITCH_CONF_ENV += \
- 	ac_cv_gcc_supports_w_no_unused_result=no
+@@ -166,6 +166,11 @@ ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_x86_6
+ FREESWITCH_ENABLED_MODULES += codecs/mod_isac
+ endif
  
- FREESWITCH_CONF_OPTS = \
--	--disable-core-libedit-support \
- 	--disable-core-odbc-support \
- 	--without-erlang \
- 	--enable-fhs \
-@@ -162,6 +161,13 @@ endef
- 
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-+FREESWITCH_DEPENDENCIES += libedit
-+FREESWITCH_CONF_OPTS += --enable-core-libedit-support
-+else
-+FREESWITCH_CONF_OPTS += --disable-core-libedit-support
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++FREESWITCH_DEPENDENCIES += alsa-lib
++FREESWITCH_ENABLED_MODULES += endpoints/mod_alsa
 +endif
 +
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- FREESWITCH_DEPENDENCIES += util-linux
- endif
+ ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyyy)
+ FREESWITCH_DEPENDENCIES += ffmpeg libvpx libyuv
+ FREESWITCH_ENABLED_MODULES += applications/mod_av
 -- 
 2.7.0.rc3
