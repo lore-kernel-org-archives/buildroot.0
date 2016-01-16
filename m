@@ -1,73 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 14:06:17 +0100
-Subject: [Buildroot] [git commit] assimp: fix bfin compile
-Message-ID: <20160116130708.74C1E7F931@busybox.osuosl.org>
+Date: Sat, 16 Jan 2016 14:06:23 +0100
+Subject: [Buildroot] [git commit] assimp: fix compile for big endian target
+Message-ID: <20160116130708.8A5448038C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25ba49518a93265ecb3146e6eb21a2a138989100
+commit: http://git.buildroot.net/buildroot/commit/?id=9ebac3bd050ee57cdd8a5ede053aed5522f5e8dc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use proper 64-bit constant for CONVERT_FBX_TIME(time) conversion.
+Patch taken from upstream [1].
 
-Fixes ([1]):
+Fixes ([2]):
+  code/Bitmap.cpp: In function 'std::size_t Assimp::Copy(uint8_t*, T&) [with T = short unsigned int, std::size_t = unsigned int, uint8_t = unsigned char]':
+  code/Bitmap.cpp:95:50:   instantiated from here
+  code/Bitmap.cpp:87:9: error: lvalue required as unary '&' operand
 
-  code/FBXConverter.cpp:2025: error: integer constant is too large for 'long' type
-  code/FBXConverter.cpp:2026: error: integer constant is too large for 'long' type
-  code/FBXConverter.cpp:2794: error: integer constant is too large for 'long' type
-  code/FBXConverter.cpp:2868: error: integer constant is too large for 'long' type
-  code/FBXConverter.cpp:2878: error: integer constant is too large for 'long' type
-  code/FBXConverter.cpp:2888: error: integer constant is too large for 'long' type
-
-[1] http://autobuild.buildroot.net/results/885/8853b192d16ca7ef769c5352a2df0540a7a2a4fd
+[1] https://github.com/assimp/assimp/commit/756cfd4f74b866e3183caede69daa8c105b73bab.patch
+[2] http://autobuild.buildroot.net/results/7aa/7aafdc2633bad96a2a17f4e8664e09aae78a3bbd
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...x-FBXConverter-use-proper-64-bit-constant.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ .../assimp/0002-fix-compilation-on-BigEndian.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch b/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch
+diff --git a/package/assimp/0002-fix-compilation-on-BigEndian.patch b/package/assimp/0002-fix-compilation-on-BigEndian.patch
 new file mode 100644
-index 0000000..bfcbeb5
+index 0000000..93cba5d
 --- /dev/null
-+++ b/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch
-@@ -0,0 +1,35 @@
-+From 30a2ecc7939449f235282eb6de42e367fc5b1867 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 14 Jan 2016 22:13:15 +0100
-+Subject: [PATCH] Fix FBXConverter: use proper 64-bit constant
++++ b/package/assimp/0002-fix-compilation-on-BigEndian.patch
+@@ -0,0 +1,40 @@
++From 8457f3eff89dae35d43f679a66842ceedfd08808 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?IOhannes=20m=20zm=C3=B6lnig?=
++ <zmoelnig@umlautQ.umlaeute.mur.at>
++Date: Fri, 13 Nov 2015 22:33:20 +0100
++Subject: [PATCH] fix compilation on BigEndian
 +
-+Use proper 64-bit constant for CONVERT_FBX_TIME(time) conversion, fixes:
++cannot pass a function by reference where an lvalue is expected
++(only applies to bigendian, where a macro expands to a byteswap function)
 +
-+  code/FBXConverter.cpp:2025: error: integer constant is too large for 'long' type
-+  code/FBXConverter.cpp:2026: error: integer constant is too large for 'long' type
-+  code/FBXConverter.cpp:2794: error: integer constant is too large for 'long' type
-+  code/FBXConverter.cpp:2868: error: integer constant is too large for 'long' type
-+  code/FBXConverter.cpp:2878: error: integer constant is too large for 'long' type
-+  code/FBXConverter.cpp:2888: error: integer constant is too large for 'long' type
++Closes https://github.com/assimp/assimp/issues/613
++
++Taken from [1] for buildroot assimp package compile fix.
++
++[1] https://github.com/assimp/assimp/commit/756cfd4f74b866e3183caede69daa8c105b73bab.patch
 +
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ code/FBXConverter.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ code/Bitmap.cpp | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+diff --git a/code/FBXConverter.cpp b/code/FBXConverter.cpp
-+index e0c6b9c..b1e9a71 100644
-+--- a/code/FBXConverter.cpp
-++++ b/code/FBXConverter.cpp
-+@@ -67,7 +67,7 @@ namespace FBX {
++diff --git a/code/Bitmap.cpp b/code/Bitmap.cpp
++index 13ec372..829fd02 100644
++--- a/code/Bitmap.cpp
+++++ b/code/Bitmap.cpp
++@@ -84,7 +84,12 @@ namespace Assimp {
 + 
-+ #define MAGIC_NODE_TAG "_$AssimpFbx$"
++     template<typename T>
++     inline std::size_t Copy(uint8_t* data, T& field) {
+++#ifdef AI_BUILD_BIG_ENDIAN
+++        T field_swapped=AI_BE(field);
+++        std::memcpy(data, &field_swapped, sizeof(field)); return sizeof(field);
+++#else
++         std::memcpy(data, &AI_BE(field), sizeof(field)); return sizeof(field);
+++#endif
++     }
 + 
-+-#define CONVERT_FBX_TIME(time) static_cast<double>(time) / 46186158000L
-++#define CONVERT_FBX_TIME(time) static_cast<double>(time) / 46186158000LL
-+ 
-+     // XXX vc9's debugger won't step into anonymous namespaces
-+ //namespace {
++     void Bitmap::WriteHeader(Header& header, IOStream* file) {
 +-- 
 +2.1.4
 +
