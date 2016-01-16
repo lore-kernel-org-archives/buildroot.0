@@ -1,41 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 13:53:06 +0100
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 2.8.5
-Message-ID: <20160116125312.2BD5980ACE@busybox.osuosl.org>
+Date: Sat, 16 Jan 2016 13:53:29 +0100
+Subject: [Buildroot] [git commit] netsniff-ng: check if linux-headers are
+	v3.0 or higher
+Message-ID: <20160116125357.C574A81D88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7f6ad9f5baae8da6d5d13b9490da2a688e3eec2
+commit: http://git.buildroot.net/buildroot/commit/?id=17f70899e13530035afac62c757f90b6d7eaea34
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+netsniff-ng uses the TP_STATUS_VLAN_VALID define, provided by the
+kernel headers. This definition has been added in the kernel by commit
+a3bcc23e890a6d49d6763d9eb073d711de2e0469 ("af-packet: Add flag to
+distinguish VID 0 from no-vlan"), which was merged in v3.0.
+
+Fixes:
+http://autobuild.buildroot.net/results/c87/c87a440e29ae387f600cb6ecce3caaa08557f4f0/
+
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/netsniff-ng/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 543d65d..5570a57 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	8b6380a748fe2e0903d875b30aa613d1057824682d8d52f378d5aa5fc0dd951f	ffmpeg-2.8.4.tar.xz
-+sha256	76fb83a267d2d1cb332742dadf28ad8b58af7958165f51bb1a2c226a122f0ac7	ffmpeg-2.8.5.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 0f8b840..138618d 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index b39ec96..a2494a9 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_NETSNIFF_NG
+ 	# Build with uClibc fails due to missing ceill()
+ 	# Build with musl fails due to various header issues
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+@@ -17,9 +18,10 @@ config BR2_PACKAGE_NETSNIFF_NG
+ 	  networking toolkit. If you will, the Swiss army knife for
+ 	  network packets.
  
--FFMPEG_VERSION = 2.8.4
-+FFMPEG_VERSION = 2.8.5
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-comment "netsniff-ng needs an (e)glibc toolchain w/ threads"
++comment "netsniff-ng needs an (e)glibc toolchain w/ threads, headers >= 3.0"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854
+ 
+ comment "netsniff-ng needs a toolchain not affected by GCC bug 58854"
