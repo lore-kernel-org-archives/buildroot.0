@@ -1,28 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 13:52:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 2.8.5
-In-Reply-To: <1452943077-18843-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1452943077-18843-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160116135245.3f08d843@free-electrons.com>
+Date: Sat, 16 Jan 2016 13:53:06 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime: bump u-boot to
+	2016.01
+Message-ID: <20160116125312.1A16681E68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=8725f2f21570790e689ea867565d63df68e1cfd2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 16 Jan 2016 12:17:57 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ffmpeg/ffmpeg.hash | 2 +-
->  package/ffmpeg/ffmpeg.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/olimex_a20_olinuxino_lime_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index e30a070..19e665b 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
