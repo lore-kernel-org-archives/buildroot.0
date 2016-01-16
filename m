@@ -1,49 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 18:10:24 +0100
-Subject: [Buildroot] [git commit] alsa-utils: allow installing the new
-	alsatplg tool
-Message-ID: <20160116171448.E92227F9E8@busybox.osuosl.org>
+Date: Sat, 16 Jan 2016 18:18:31 +0100
+Subject: [Buildroot] [git commit] package/boost: add patch to fix undeclared
+	isnan issue
+Message-ID: <20160116171902.2268A81EBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f9d6ba356109508108bf896a57521af30886685c
+commit: http://git.buildroot.net/buildroot/commit/?id=640b75c8d73d713c908d6b288802c9e6bffe76ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since we now depend on !BR2_STATIC_LIBS to be able to build the
-alsatplg tool, it makes sense to provide an option to install it.
+Add patch from upstream [1] to fix build error:
+  ./boost/math/special_functions/fpclassify.hpp:137:75: error: '::isnan' has not been declared
 
+Fixes:
+http://autobuild.buildroot.net/results/6c7/6c72c189cd029fb6c81798f5443fab331358bb90/
+http://autobuild.buildroot.net/results/b70/b709fc201c9df8f76163e2a620da32362abe5288/
+http://autobuild.buildroot.net/results/99b/99bdbc5622dfd0ac369611ec07dd2a8a8fe41ce8/
+http://autobuild.buildroot.net/results/d2b/d2b270787fc20e45c839d5670af55e47723aef2a/
+and many more.
+
+Backported from: fbd1393858719c7bda7d251f742950c1bc691ea8
+
+[1] https://github.com/boostorg/math/commit/fbd1393858719c7bda7d251f742950c1bc691ea8
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/alsa-utils/Config.in     | 3 +++
- package/alsa-utils/alsa-utils.mk | 1 +
- 2 files changed, 4 insertions(+)
+ package/boost/0005-fix-undeclared-isnan.patch | 32 +++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index 2486d0f..82f3ad6 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -45,6 +45,9 @@ comment "alsamixer needs a toolchain w/ wchar"
- config BR2_PACKAGE_ALSA_UTILS_ALSAUCM
- 	bool "alsaucm"
- 
-+config BR2_PACKAGE_ALSA_UTILS_ALSATPLG
-+	bool "alsatplg"
+diff --git a/package/boost/0005-fix-undeclared-isnan.patch b/package/boost/0005-fix-undeclared-isnan.patch
+new file mode 100644
+index 0000000..95d8fed
+--- /dev/null
++++ b/package/boost/0005-fix-undeclared-isnan.patch
+@@ -0,0 +1,32 @@
++From fbd1393858719c7bda7d251f742950c1bc691ea8 Mon Sep 17 00:00:00 2001
++From: Kohei Takahashi <flast@flast.jp>
++Date: Wed, 6 Jan 2016 19:39:55 +0900
++Subject: [PATCH] Qualify std:: for isnan in some situation.
 +
- config BR2_PACKAGE_ALSA_UTILS_AMIDI
- 	bool "amidi"
- 	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 11b46c4..32822bb 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -43,6 +43,7 @@ endif
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACONF) += usr/sbin/alsaconf
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACTL) += usr/sbin/alsactl
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER) += usr/bin/alsamixer
-+ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSATPLG) += usr/bin/alsatplg
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIDI) += usr/bin/amidi
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIXER) += usr/bin/amixer
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_APLAY) += usr/bin/aplay usr/bin/arecord
++Because isnan is implemented as a macro and libstdc++ undef it within
++<cmath> (at least FreeBSD 10).
++
++Backported from fbd1393858719c7bda7d251f742950c1bc691ea8
++
++[J??rg Krause: adjust pathes to match sourceforge release tarball]
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++
++---
++ boost/math/special_functions/fpclassify.hpp | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/boost/math/special_functions/fpclassify.hpp b/boost/math/special_functions/fpclassify.hpp
++index 58fad13..d83e111 100644
++--- a/boost/math/special_functions/fpclassify.hpp
+++++ b/boost/math/special_functions/fpclassify.hpp
++@@ -133,6 +133,10 @@ inline bool is_nan_helper(T, const boost::false_type&)
++ #if defined(BOOST_MATH_HAS_QUADMATH_H)
++ inline bool is_nan_helper(__float128 f, const boost::true_type&) { return ::isnanq(f); }
++ inline bool is_nan_helper(__float128 f, const boost::false_type&) { return ::isnanq(f); }
+++#elif defined(BOOST_GNU_STDLIB) && BOOST_GNU_STDLIB && \
+++      _GLIBCXX_USE_C99_MATH && !_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC
+++inline bool is_nan_helper(__float128 f, const boost::true_type&) { return std::isnan(static_cast<double>(f)); }
+++inline bool is_nan_helper(__float128 f, const boost::false_type&) { return std::isnan(static_cast<double>(f)); }
++ #else
++ inline bool is_nan_helper(__float128 f, const boost::true_type&) { return ::isnan(static_cast<double>(f)); }
++ inline bool is_nan_helper(__float128 f, const boost::false_type&) { return ::isnan(static_cast<double>(f)); }
