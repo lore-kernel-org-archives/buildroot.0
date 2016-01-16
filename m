@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:34 +0100
-Subject: [Buildroot] [PATCH v7 14/28] package/freeswitch: enable mod_bv,
-	add optional dependency to libbroadvoice
+Date: Sat, 16 Jan 2016 21:44:29 +0100
+Subject: [Buildroot] [PATCH v7 09/28] package/freeswitch: enable mod_yaml,
+	add optional dependency to libyaml
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-15-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 6191fad..55ac8f9 100644
+index 6bc9b3a..5a8d32f 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -169,6 +169,11 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- FREESWITCH_DEPENDENCIES += freetype
+@@ -181,6 +181,11 @@ FREESWITCH_DEPENDENCIES += libpng
+ FREESWITCH_ENABLED_MODULES += formats/mod_png
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBBROADVOICE),y)
-+FREESWITCH_DEPENDENCIES += libbroadvoice
-+FREESWITCH_ENABLED_MODULES += codecs/mod_bv
++ifeq ($(BR2_PACKAGE_LIBYAML),y)
++FREESWITCH_DEPENDENCIES += libyaml
++FREESWITCH_ENABLED_MODULES += languages/mod_yaml
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBEDIT),y)
- FREESWITCH_DEPENDENCIES += libedit
- FREESWITCH_CONF_OPTS += --enable-core-libedit-support
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.7.0.rc3
