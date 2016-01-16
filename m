@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:47 +0100
-Subject: [Buildroot] [PATCH v7 27/28] package/freeswitch: enable
-	mod_memcache, add optional dependency to libmemcached
+Date: Sat, 16 Jan 2016 21:44:24 +0100
+Subject: [Buildroot] [PATCH v7 04/28] package/freeswitch: add optional
+	dependency to libedit
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-28-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freeswitch/freeswitch.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 3404fb2..7178590 100644
+index 2c98c6c..ec1eb95 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -220,6 +220,11 @@ FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
- endif
+@@ -71,7 +71,6 @@ FREESWITCH_CONF_ENV += \
+ 	ac_cv_gcc_supports_w_no_unused_result=no
  
-+ifeq ($(BR2_PACKAGE_LIBMEMCACHED),y)
-+FREESWITCH_DEPENDENCIES += libmemcached
-+FREESWITCH_ENABLED_MODULES += applications/mod_memcache
+ FREESWITCH_CONF_OPTS = \
+-	--disable-core-libedit-support \
+ 	--disable-core-odbc-support \
+ 	--without-erlang \
+ 	--enable-fhs \
+@@ -162,6 +161,13 @@ endef
+ 
+ FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
+ 
++ifeq ($(BR2_PACKAGE_LIBEDIT),y)
++FREESWITCH_DEPENDENCIES += libedit
++FREESWITCH_CONF_OPTS += --enable-core-libedit-support
++else
++FREESWITCH_CONF_OPTS += --disable-core-libedit-support
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- FREESWITCH_DEPENDENCIES += libpng
- FREESWITCH_ENABLED_MODULES += formats/mod_png
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ FREESWITCH_DEPENDENCIES += util-linux
+ endif
 -- 
 2.7.0.rc3
