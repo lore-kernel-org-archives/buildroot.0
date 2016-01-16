@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:30 +0100
-Subject: [Buildroot] [PATCH v7 10/28] package/freeswitch: enable mod_lua,
-	add optional dependency to lua
+Date: Sat, 16 Jan 2016 21:44:28 +0100
+Subject: [Buildroot] [PATCH v7 08/28] package/freeswitch: add optional
+	dependency to freetype
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-11-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freeswitch/freeswitch.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 5a8d32f..a280aa6 100644
+index 9e12f33..6bc9b3a 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -186,6 +186,11 @@ FREESWITCH_DEPENDENCIES += libyaml
- FREESWITCH_ENABLED_MODULES += languages/mod_yaml
- endif
+@@ -160,6 +160,10 @@ endef
  
-+ifeq ($(BR2_PACKAGE_LUA),y)
-+FREESWITCH_DEPENDENCIES += lua
-+FREESWITCH_ENABLED_MODULES += languages/mod_lua
+ FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
+ 
++ifeq ($(BR2_PACKAGE_FREETYPE),y)
++FREESWITCH_DEPENDENCIES += freetype
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+ FREESWITCH_DEPENDENCIES += libedit
+ FREESWITCH_CONF_OPTS += --enable-core-libedit-support
 -- 
 2.7.0.rc3
