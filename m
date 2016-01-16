@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:23 +0100
-Subject: [Buildroot] [PATCH v7 03/28] package/freeswitch: add optional
-	dependency to libuuid
+Date: Sat, 16 Jan 2016 21:44:34 +0100
+Subject: [Buildroot] [PATCH v7 14/28] package/freeswitch: enable mod_bv,
+	add optional dependency to libbroadvoice
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-15-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/Config.in     | 4 ++++
- package/freeswitch/freeswitch.mk | 4 ++++
- 2 files changed, 8 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-index b52d469..a641008 100644
---- a/package/freeswitch/Config.in
-+++ b/package/freeswitch/Config.in
-@@ -10,6 +10,10 @@ config BR2_PACKAGE_FREESWITCH
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_SPEEX
- 	select BR2_PACKAGE_SQLITE
-+	# "libuuid development package highly recommended!"
-+	# https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/build/config/uuid.m4#9
-+	select BR2_PACKAGE_UTIL_LINUX if BR2_USE_WCHAR
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID if BR2_USE_WCHAR
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  FreeSWITCH is a scalable open source cross-platform telephony
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index f4846c9..2c98c6c 100644
+index 6191fad..55ac8f9 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -162,4 +162,8 @@ endef
+@@ -169,6 +169,11 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ FREESWITCH_DEPENDENCIES += freetype
+ endif
  
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+FREESWITCH_DEPENDENCIES += util-linux
++ifeq ($(BR2_PACKAGE_LIBBROADVOICE),y)
++FREESWITCH_DEPENDENCIES += libbroadvoice
++FREESWITCH_ENABLED_MODULES += codecs/mod_bv
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+ FREESWITCH_DEPENDENCIES += libedit
+ FREESWITCH_CONF_OPTS += --enable-core-libedit-support
 -- 
 2.7.0.rc3
