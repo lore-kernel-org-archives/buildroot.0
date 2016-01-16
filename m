@@ -1,52 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jan 2016 14:13:30 +0100
-Subject: [Buildroot] [PATCH V4] nvme: new package
-In-Reply-To: <20160114110931.25590.46942.stgit@localhost.localdomain>
-References: <20160114110931.25590.46942.stgit@localhost.localdomain>
-Message-ID: <20160116141330.3af0deea@free-electrons.com>
+Date: Sat, 16 Jan 2016 14:14:40 +0100
+Subject: [Buildroot] [PATCH] uboot-tools: fix for linux 4.4
+In-Reply-To: <CACeaM89dURUrB7frSMgMLg+tvbqM4YVwpaZiwLNHnm5=Kh=7nQ@mail.gmail.com>
+References: <1452856397-21566-1-git-send-email-Gerhard@Heift.Name>
+ <87pox2yb5g.fsf@dell.be.48ers.dk>
+ <CACeaM89dURUrB7frSMgMLg+tvbqM4YVwpaZiwLNHnm5=Kh=7nQ@mail.gmail.com>
+Message-ID: <20160116141440.0924b24b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mamatha Inamdar,
+Dear Gerhard Heift,
 
-On Thu, 14 Jan 2016 16:42:40 +0530, Mamatha Inamdar wrote:
-> Add support for building NVME utility - a utility for interacting with
-> standard NVM Express (optimized PCI Express SSD interface) devices.
+On Fri, 15 Jan 2016 19:18:22 +0100, Gerhard Heift wrote:
+
+> > Has this been fixed upstream? U-Boot 2016.01 is out, so if it is fixed
+> > upstream then I would prefer to change the version instead.
 > 
-> Signed-off-by: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
-> ---
->  package/Config.in      |    1 +
->  package/nvme/Config.in |    6 ++++++
->  package/nvme/nvme.hash |    2 ++
->  package/nvme/nvme.mk   |   23 +++++++++++++++++++++++
->  4 files changed, 32 insertions(+)
->  create mode 100755 package/nvme/Config.in
->  create mode 100644 package/nvme/nvme.hash
->  create mode 100755 package/nvme/nvme.mk
+> No, this is not yet fixed in 2016-01.
+> 
+> > If it isn't upstream, please send the fix to the u-boot list first.
+> 
+> I sent this fix to the u-boot list too, but it since the list is
+> moderated the mail is not yet approved by a moderater and therefor not
+> yet public.
 
-Your patch does not apply:
+Are you sure the problem is not fixed by
+http://git.denx.de/?p=u-boot.git;a=commit;h=69bf2d2fafe64349be3c3ef1256e3c68f812bb25,
+which was merged as part of 2016.01 ? The problem description looks
+really similar.
 
-Applying patch #567318 using 'git am -s -3'
-Description: [V4] nvme: new package
-Applying: nvme: new package
-fatal: corrupt patch at line 72
-error: could not build fake ancestor
-Patch failed at 0001 nvme: new package
-The copy of the patch that failed is found in: .git/rebase-apply/patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
-
-Please make sure to use "git send-email" to submit your patch.
-
-Also, you haven't included a patch that removes -Werror. Are you sure
-the package builds properly? It wasn't building properly for me without
-a patch removing -Werror.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
