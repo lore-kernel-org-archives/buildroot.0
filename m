@@ -1,21 +1,15 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jan 2016 21:44:32 +0100
-Subject: [Buildroot] [PATCH v7 12/28] package/freeswitch: enable mod_av,
-	add optional dependencies to ffmpeg, libvpx & libyuv
+Date: Sat, 16 Jan 2016 21:44:30 +0100
+Subject: [Buildroot] [PATCH v7 10/28] package/freeswitch: enable mod_lua,
+	add optional dependency to lua
 In-Reply-To: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1452977088-17867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1452977088-17867-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1452977088-17867-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-mod_av delivers native support for these video codecs:
-
-codec,H263 Video,mod_av
-codec,H263+ Video,mod_av
-codec,H264 Video,mod_av
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
@@ -23,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index dc96785..82cd84b 100644
+index 5a8d32f..a280aa6 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -160,6 +160,11 @@ endef
+@@ -186,6 +186,11 @@ FREESWITCH_DEPENDENCIES += libyaml
+ FREESWITCH_ENABLED_MODULES += languages/mod_yaml
+ endif
  
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyyy)
-+FREESWITCH_DEPENDENCIES += ffmpeg libvpx libyuv
-+FREESWITCH_ENABLED_MODULES += applications/mod_av
++ifeq ($(BR2_PACKAGE_LUA),y)
++FREESWITCH_DEPENDENCIES += lua
++FREESWITCH_ENABLED_MODULES += languages/mod_lua
 +endif
 +
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- FREESWITCH_DEPENDENCIES += freetype
- endif
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.7.0.rc3
