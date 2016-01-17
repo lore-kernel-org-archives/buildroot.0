@@ -1,58 +1,81 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Jan 2016 21:27:03 +0100
-Subject: [Buildroot] [PATCH v2] package/libbroadvoice: Broken on BR2_arc
- with gcc <= 4.8
-In-Reply-To: <1453038796-7041-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453038796-7041-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <569BF917.2000501@mind.be>
+Date: Sun, 17 Jan 2016 21:35:16 +0100
+Subject: [Buildroot] could not read symbols: Bad value error on musl
+ based buildroot env on rpi2 config.
+In-Reply-To: <569BB682.4000707@scalemp.com>
+References: <569BB682.4000707@scalemp.com>
+Message-ID: <569BFB04.4050000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-01-16 14:53, Bernd Kuhls wrote:
-> Please read this bug report for details:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
+On 17-01-16 16:42, Eial Czerwacki wrote:
+> Greetings,
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/4a1/4a1fd92d1ce4963d3e282ea2dc8f0f6c5db4f1e1/
-> http://autobuild.buildroot.net/results/ce3/ce3be7d27489647a98d8932c5bcabd08c845187b/
-> http://autobuild.buildroot.net/results/988/988bd189bab37a03c037160d6758774d4aa6c8a0/
-> and many others
+> I'm trying to create a musl base env for my rpi2 and I'm getting the
+> below failure.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> /usr/bin/ld: /usr/local/lib/libpython2.7.a(abstract.o): relocation
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ This is bad, because it's trying to use your installed python while building
+buildroot's host-python... This error happens while compiling host-python,
+right? You didn't show the last bit of the output.
 
- ThomasP: this really is the intended condition.
+ Can you pastebin output/build/host-python-2.7.11/config.log?
 
- Note that we could add a comment saying that it needs gcc 4.9 on ARC, but that
-would be pointless since you can't currently select gcc 4.9 on ARC...
+ (Note for others on the list: I suspect host-python is built for xcb-proto and
+libxcb.)
 
  Regards,
  Arnout
 
-
-> ---
-> v2: changed logic to "material implication" (Arnout, Mason)
+> R_X86_64_32 against `.rodata.str1.8' can not be used when making a
+> shared object; recompile with -fPIC
+> /usr/local/lib/libpython2.7.a: could not read symbols: Bad value
+> collect2: ld returned 1 exit status
 > 
->  package/libbroadvoice/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
+> Python build finished, but the necessary bits to build these modules
+> were not found:
+> _tkinter           bsddb185           dl             
+> imageop            sunaudiodev                       
+> To find the necessary bits, look in setup.py in detect_modules() for the
+> module's name.
 > 
-> diff --git a/package/libbroadvoice/Config.in b/package/libbroadvoice/Config.in
-> index d695df0..3301ba8 100644
-> --- a/package/libbroadvoice/Config.in
-> +++ b/package/libbroadvoice/Config.in
-> @@ -1,5 +1,8 @@
->  config BR2_PACKAGE_LIBBROADVOICE
->  	bool "libbroadvoice"
-> +	# broken with gcc <= 4.8 on arc
-> +	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
-> +	depends on !BR2_arc || BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->  	help
->  	  broadvoice - a library for the BroadVoice 16 and 32 speech
->  	  codecs
+> 
+> Failed to build these modules:
+> _bisect            _codecs_iso2022    _collections   
+> _csv               _ctypes            _ctypes_test   
+> _elementtree       _functools         _hashlib       
+> _heapq             _hotshot           _io            
+> _json              _locale            _lsprof        
+> _multibytecodec    _multiprocessing   _random        
+> _socket            _ssl               _struct        
+> _testcapi          array              audioop        
+> binascii           cmath              cPickle        
+> crypt              cStringIO          datetime       
+> fcntl              future_builtins    grp            
+> itertools          linuxaudiodev      math           
+> mmap               operator           parser         
+> pyexpat            readline           resource       
+> select             spwd               strop          
+> syslog             termios            time           
+> unicodedata        zlib                              
+> 
+> make[1]: *** [sharedmods] Error 1
+> 
+> my config can be found here: http://paste.ubuntu.com/14543009/
+> 
+> is it possible I'm having a bitness issue on the system? the machine I'm
+> using to compile is 64 bit but the machine on which the fs exists is 32 bit.
+> any ideas how to fix it?
+> 
+> Thanks.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 
