@@ -1,42 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Jan 2016 14:53:16 +0100
-Subject: [Buildroot] [PATCH v2] package/libbroadvoice: Broken on BR2_arc
-	with gcc <= 4.8
-Message-ID: <1453038796-7041-1-git-send-email-bernd.kuhls@t-online.de>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 17 Jan 2016 14:55:21 +0100
+Subject: [Buildroot] [PATCHv2] moarvm: disable for sparc64
+Message-ID: <20160117135521.GA11259@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please read this bug report for details:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
+Missing implementation of AO_fetch_compare_and_swap in
+libatomic_ops library for sparcv9.
 
-Fixes
-http://autobuild.buildroot.net/results/4a1/4a1fd92d1ce4963d3e282ea2dc8f0f6c5db4f1e1/
-http://autobuild.buildroot.net/results/ce3/ce3be7d27489647a98d8932c5bcabd08c845187b/
-http://autobuild.buildroot.net/results/988/988bd189bab37a03c037160d6758774d4aa6c8a0/
-and many others
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
-v2: changed logic to "material implication" (Arnout, Mason)
+v1 -> v2:
+  * added comment dependency suggested by Baruch Siach
+    it was not possible to use a new dependency line.
 
- package/libbroadvoice/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+---
+ package/moarvm/Config.in |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbroadvoice/Config.in b/package/libbroadvoice/Config.in
-index d695df0..3301ba8 100644
---- a/package/libbroadvoice/Config.in
-+++ b/package/libbroadvoice/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_LIBBROADVOICE
- 	bool "libbroadvoice"
-+	# broken with gcc <= 4.8 on arc
-+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
-+	depends on !BR2_arc || BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
+index 95f3752..038fe6b 100644
+--- a/package/moarvm/Config.in
++++ b/package/moarvm/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_MOARVM
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_USE_MMU # libuv
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # libatomic_ops
++	# needs AO_fetch_compare_and_swap, not implemented for sparcv9
++	depends on !BR2_sparc64
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
  	help
- 	  broadvoice - a library for the BroadVoice 16 and 32 speech
- 	  codecs
+@@ -12,8 +14,8 @@ config BR2_PACKAGE_MOARVM
+ 
+ 	  http://moarvm.com
+ 
+-comment "moarvm needs a toolchain w/ threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++comment "moarvm needs a toolchain w/ threads, dynamic library and complete atomic ops"
++	depends on BR2_sparc64 || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+ 
 -- 
-2.7.0.rc3
+1.7.10.4
