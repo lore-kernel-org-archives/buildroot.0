@@ -1,88 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Jan 2016 21:35:16 +0100
-Subject: [Buildroot] could not read symbols: Bad value error on musl
- based buildroot env on rpi2 config.
-In-Reply-To: <569BB682.4000707@scalemp.com>
-References: <569BB682.4000707@scalemp.com>
-Message-ID: <569BFB04.4050000@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Jan 2016 22:00:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/alsa-utils: Add util alsaloop
+Message-ID: <1453064452-31266-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-01-16 16:42, Eial Czerwacki wrote:
-> Greetings,
-> 
-> I'm trying to create a musl base env for my rpi2 and I'm getting the
-> below failure.
-> 
-> /usr/bin/ld: /usr/local/lib/libpython2.7.a(abstract.o): relocation
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/alsa-utils/Config.in     | 4 ++++
+ package/alsa-utils/alsa-utils.mk | 8 ++++++++
+ 2 files changed, 12 insertions(+)
 
- This is bad, because it's trying to use your installed python while building
-buildroot's host-python... This error happens while compiling host-python,
-right? You didn't show the last bit of the output.
-
- Can you pastebin output/build/host-python-2.7.11/config.log?
-
- (Note for others on the list: I suspect host-python is built for xcb-proto and
-libxcb.)
-
- Regards,
- Arnout
-
-> R_X86_64_32 against `.rodata.str1.8' can not be used when making a
-> shared object; recompile with -fPIC
-> /usr/local/lib/libpython2.7.a: could not read symbols: Bad value
-> collect2: ld returned 1 exit status
-> 
-> Python build finished, but the necessary bits to build these modules
-> were not found:
-> _tkinter           bsddb185           dl             
-> imageop            sunaudiodev                       
-> To find the necessary bits, look in setup.py in detect_modules() for the
-> module's name.
-> 
-> 
-> Failed to build these modules:
-> _bisect            _codecs_iso2022    _collections   
-> _csv               _ctypes            _ctypes_test   
-> _elementtree       _functools         _hashlib       
-> _heapq             _hotshot           _io            
-> _json              _locale            _lsprof        
-> _multibytecodec    _multiprocessing   _random        
-> _socket            _ssl               _struct        
-> _testcapi          array              audioop        
-> binascii           cmath              cPickle        
-> crypt              cStringIO          datetime       
-> fcntl              future_builtins    grp            
-> itertools          linuxaudiodev      math           
-> mmap               operator           parser         
-> pyexpat            readline           resource       
-> select             spwd               strop          
-> syslog             termios            time           
-> unicodedata        zlib                              
-> 
-> make[1]: *** [sharedmods] Error 1
-> 
-> my config can be found here: http://paste.ubuntu.com/14543009/
-> 
-> is it possible I'm having a bitness issue on the system? the machine I'm
-> using to compile is 64 bit but the machine on which the fs exists is 32 bit.
-> any ideas how to fix it?
-> 
-> Thanks.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index 82f3ad6..2e98176 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -29,6 +29,10 @@ config BR2_PACKAGE_ALSA_UTILS_ALSACTL
+ 	bool "alsactl"
+ 	default y
+ 
++config BR2_PACKAGE_ALSA_UTILS_ALSALOOP
++	bool "alsaloop"
++	select BR2_PACKAGE_LIBSAMPLERATE
++
+ config BR2_PACKAGE_ALSA_UTILS_ALSAMIXER
+ 	bool "alsamixer"
+ 	select BR2_PACKAGE_NCURSES
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 32822bb..7841fbb 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -29,6 +29,13 @@ ALSA_UTILS_DEPENDENCIES += gettext
+ ALSA_UTILS_CONF_ENV += LIBS=-lintl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSALOOP),y)
++ALSA_UTILS_CONF_OPTS += --enable-alsaloop
++ALSA_UTILS_DEPENDENCIES += libsamplerate
++else
++ALSA_UTILS_CONF_OPTS += --disable-alsaloop
++endif
++
+ ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
+ ALSA_UTILS_CONF_OPTS += --disable-alsamixer --disable-alsatest
+ endif
+@@ -42,6 +49,7 @@ endif
+ 
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACONF) += usr/sbin/alsaconf
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACTL) += usr/sbin/alsactl
++ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSALOOP) += usr/bin/alsaloop
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER) += usr/bin/alsamixer
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSATPLG) += usr/bin/alsatplg
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_AMIDI) += usr/bin/amidi
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.0.rc3
