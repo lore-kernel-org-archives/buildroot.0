@@ -1,45 +1,86 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 17 Jan 2016 18:33:04 +0100
-Subject: [Buildroot] [PATCH v3] moarvm: disable for sparc64
-Message-ID: <20160117173304.GA5921@waldemar-brodkorb.de>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 17 Jan 2016 18:36:30 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20160117001117.569d43f2@free-electrons.com>
+References: <20160116073021.A4B95101BCC@stock.ovh.net>
+ <20160117001117.569d43f2@free-electrons.com>
+Message-ID: <1453052190.4519.13.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Missing implementation of AO_fetch_compare_and_swap in
-libatomic_ops library for sparcv9.
+Hi,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v2 -> v3:
-   * comment dependency was wrong, fix by Baruch Siach
-v1 -> v2:
-   * added comment dependency suggested by Baruch Siach
-     it was not possible to use a new dependency line.
----
- package/moarvm/Config.in |    3 +++
- 1 file changed, 3 insertions(+)
+On So, 2016-01-17 at 00:11 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Gustavo, Vicente, J?rg, Frank, Bernd, Maxime, Carsten, Davide,
+> Jeremy,
+> VIcente, Gilles, Gary, Romain, Matt, Waldemar, Fran?ois, Alexey,
+> Joris,
+> Volkov: there are some specific build failures for which your help
+> would be appreciated. See below. Thanks in advance for your help!
+> 
+> On Sat, 16 Jan 2016 08:30:21 +0100 (CET), Thomas Petazzoni wrote:
+> 
+> > ?????powerpc |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/e92fc7bac808e708e1aadd1b8e6677d003e5bbe4/
+> > ?????????arm |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/46d0907fe06a7b93bb092ad4bf869a2e0030cf32/
+> > ??????x86_64 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/9ef4d4f5d793f9a854d3a398d00eec6ce9b59178/
+> > ??????x86_64 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/74e22545f50c9f9e7f12208a1cb9cbb9154a6150/
+> > ?????powerpc |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/5438729ded4bf9887a1dc080366aee9abf27fb19/
+> > ??????x86_64 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/99ef4325d424569bbd900d6590b8a3a5e445c140/
+> > ?????????arc |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/caded0b9ff89ba69cb3775d5fef18565a85a398a/
+> > ??????x86_64 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/b81bcc845a091ff1182df7dec306492b67db10ea/
+> > ??????xtensa |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/29241cbf4791947e8bd990253716d8d43e219c23/
+> > ????mips64el |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/648507a680fa0360622ad1fdd47fdf30d3c54091/
+> > ??????x86_64 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/dea9364e8d8276bbcf42847822ef5da905cd7007/
+> > ??????x86_64 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/adcea53d916e0825cb5963768304dfe883d5d379/
+> > microblazeel |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/41ee80a733bc676d07d8296b262125b616070835/
+> > ??????xtensa |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/2c555d574540caf3a3b1ed64502274d3ba1f551b/
+> > ?????????arc |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/316dc6221a50537234e4b3e88268363d61b9bf59/
+> > ?????????arc |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/d4eb7cdbfd1152bb5a2a80f832c5edf524852701/
+> > ?????????sh4 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/3bb3e2b683eabe7a6a9626f083b761b158a418ba/
+> > ??????x86_64 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/0e2f3f4e4fa9dca521206d52fc061709534be12b/
+> > ??????x86_64 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/84f5d3417ef5cdb826435b0029ddc8d2e9e4ec44/
+> > ??????x86_64 |???????????????????boost-1.60.0 | NOK | http://autobu
+> > ild.buildroot.net/results/428cb84d3bde356050b04647a599aea0fae6aeff/
+> 
+> Some of these are the isnan() declaration issue, which is now fixed
+> thanks to
+> https://git.busybox.net/buildroot/commit/?id=640b75c8d73d713c908d6b28
+> 8802c9e6bffe76ed.
+> 
+> However, there is still the FE_* definition problem. J?rg, do you
+> have
+> something in the works to fix this ?
 
-diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
-index 95f3752..dcd353f 100644
---- a/package/moarvm/Config.in
-+++ b/package/moarvm/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_MOARVM
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_USE_MMU # libuv
- 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # libatomic_ops
-+	# needs AO_fetch_compare_and_swap, not implemented for sparcv9
-+	depends on !BR2_sparc64
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_LIBATOMIC_OPS
- 	help
-@@ -16,4 +18,5 @@ comment "moarvm needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
-+	depends on !BR2_sparc64
- 
--- 
-1.7.10.4
+Not really, someone from OpenWRT reported this issue upstream [1]. I
+added a comment to the ticket that it affects Buildroot, too.
+
+My guess is that Boost check for fenv.h implies that FE_* is defined
+too, which is wrong for those toolchains.
+
+[1]?https://svn.boost.org/trac/boost/ticket/11756
+
+J?rg
