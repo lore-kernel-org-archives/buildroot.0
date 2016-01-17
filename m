@@ -1,10 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Jan 2016 15:55:17 +0100
-Subject: [Buildroot] [PATCH 5/5] package/x11r7/xdriver_xf86-input-libinput:
-	bump version to 0.16.0
-In-Reply-To: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1453042517-12040-5-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 17 Jan 2016 15:55:13 +0100
+Subject: [Buildroot] [PATCH 1/5] package/pixman: bump version to 0.33.6
+Message-ID: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash      | 4 ++--
- .../x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk  | 2 +-
+ package/pixman/pixman.hash | 4 ++--
+ package/pixman/pixman.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index be0bf09..b2925db 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
+index 66decf6..f0c4915 100644
+--- a/package/pixman/pixman.hash
++++ b/package/pixman/pixman.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-October/002648.html
--sha256	28707c504194648b11a1e26acf13039b60bf344efa6aa9788afed6d47f019a41	xf86-input-libinput-0.15.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-December/002667.html
-+sha256	fdade531e91e79acf6dce8ac55fa4f65abe3f1358c5d3d777ae48dbc74b76f49	xf86-input-libinput-0.16.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index b4bc4b8..9e48886 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-October/002644.html
+-sha1	dff77cd08412b33ab0294057ade93e401c8a9302	pixman-0.33.4.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-December/002666.html
++sha1	11e93fed35deb9c89347e7a7da3060e5e5c89412	pixman-0.33.6.tar.bz2
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index a130af9..fc43140 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.15.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.16.0
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+-PIXMAN_VERSION = 0.33.4
++PIXMAN_VERSION = 0.33.6
+ PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.bz2
+ PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ PIXMAN_LICENSE = MIT
 -- 
 2.7.0.rc3
