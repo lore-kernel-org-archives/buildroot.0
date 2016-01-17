@@ -1,39 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jan 2016 22:55:25 +0100
-Subject: [Buildroot] [git commit] configs/orangepipc: bump u-boot to 2016.01
-Message-ID: <20160117220214.756007FDA7@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 17 Jan 2016 23:04:53 +0100
+Subject: [Buildroot] [PATCH] package/scrub: new package
+Message-ID: <1453068293-16263-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d7b1c3409617f2b06e42550eec0ecbbc9473c8f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-And configure it for kconfig mode, as that is what it is using.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- configs/orangepipc_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in        |  1 +
+ package/scrub/Config.in  |  7 +++++++
+ package/scrub/scrub.hash |  2 ++
+ package/scrub/scrub.mk   | 18 ++++++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/scrub/Config.in
+ create mode 100644 package/scrub/scrub.hash
+ create mode 100644 package/scrub/scrub.mk
 
-diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
-index 1dea4c8..34358fb 100644
---- a/configs/orangepipc_defconfig
-+++ b/configs/orangepipc_defconfig
-@@ -20,10 +20,10 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="orangepi_pc"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.denx.de/u-boot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4832e17787acb29734d895751bc7a594908aecc6"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+diff --git a/package/Config.in b/package/Config.in
+index 06ed4a8..0f6a61c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1585,6 +1585,7 @@ endif
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/rsyslog/Config.in"
+ endif
++	source "package/scrub/Config.in"
+ 	source "package/scrypt/Config.in"
+ 	source "package/smack/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/scrub/Config.in b/package/scrub/Config.in
+new file mode 100644
+index 0000000..3c7d28b
+--- /dev/null
++++ b/package/scrub/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SCRUB
++	bool "scrub"
++	help
++	  Scrub iteratively writes patterns on files or disk devices to make
++	  retrieving the data more difficult.
++
++	  https://code.google.com/p/diskscrub/
+diff --git a/package/scrub/scrub.hash b/package/scrub/scrub.hash
+new file mode 100644
+index 0000000..42f7b2f
+--- /dev/null
++++ b/package/scrub/scrub.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  838b061b2e1932b342fb9695c5579cdff5d2d72506cb41d6d8032eba18aed969  scrub-2.6.1.tar.gz
+diff --git a/package/scrub/scrub.mk b/package/scrub/scrub.mk
+new file mode 100644
+index 0000000..92837a1
+--- /dev/null
++++ b/package/scrub/scrub.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# scrub
++#
++################################################################################
++
++SCRUB_VERSION = 2.6.1
++SCRUB_SITE = $(call github,chaos,scrub,$(SCRUB_VERSION))
++SCRUB_LICENSE = GPLv2+
++SCRUB_LICENSE_FILES = COPYING
++
++# tarball of the git repo, but autoreconf does not work as expected, so:
++define SCRUB_AUTOCONF_HOOK
++	( cd $(@D) && PATH=$(BR_PATH) $(@D)/autogen.sh )
++endef
++SCRUB_PRE_CONFIGURE_HOOKS += SCRUB_AUTOCONF_HOOK
++
++$(eval $(autotools-package))
+-- 
+2.7.0
