@@ -1,52 +1,22 @@
-From: Mason <slash.tmp@free.fr>
-Date: Sun, 17 Jan 2016 10:05:42 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-01-14
-In-Reply-To: <7mqqmcx6cr.ln2@ID-313208.user.individual.net>
-References: <20160115073021.DAA6410303A@stock.ovh.net>
- <jvipmcxaun.ln2@ID-313208.user.individual.net> <569AB33F.6010701@mind.be>
- <7mqqmcx6cr.ln2@ID-313208.user.individual.net>
-Message-ID: <569B5966.5080706@free.fr>
+From: Eial Czerwacki <eial@scalemp.com>
+Date: Sun, 17 Jan 2016 09:54:56 +0200
+Subject: [Buildroot] pixman-0.33.4 fails on Error: bad instruction `int
+ __flt_rounds(void)' for musl rpi2 build
+Message-ID: <569B48D0.4050007@scalemp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/01/2016 22:52, Bernd Kuhls wrote:
+Greetings,
 
-> Am Sat, 16 Jan 2016 22:16:47 +0100 schrieb Arnout Vandecappelle:
-> 
->> On 16-01-16 11:34, Bernd Kuhls wrote:
->>
->>> the reason for this build error is a arc-only gcc bug which was fixed in 
->>> gcc-4.9: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
->>>
->>> The toolchain used by the autobuilders is gcc-4.8 which explains the 
->>> build error. Afaics Kconfig does not allow something like this:
->>>
->>> 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 if BR2_arc
->>>
->>> Could you please give me some advise on how to fix the problem?
->>
->>  Apply logic. FOO if BAR is the same as FOO || !BAR.
-> 
-> Hi Arnout,
-> 
-> this would mean that the package is blocked on BR2_arc, regardless of the 
-> toolchain used there, and all other archs need gcc-4.9+, right?
-> If yes, then this is not what I want to achieve. The package works with 
-> all buildroot-supported gcc versions on all archs _except_ that it is 
-> broken on arc with gcc-4.8 or older, gcc bug 59049 is arc-only.
+I'm trying to build a basic musl based image for my rpi2 that has
+openbox in it and it keeps failing on
+pixman-0.33.4 with the error mentioned above.
 
-Arnout is suggesting:
+my config can be found here: http://paste.ubuntu.com/14543009/
 
-depends on !BR2_arc || BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+any ideas how to fix it?
 
-This equivalence is called "material implication".
-https://en.wikipedia.org/wiki/Material_implication_%28rule_of_inference%29
-
-Reading more closely, are you saying the build is broken
-on ARC if gcc version >= 4.8 ? Or is gcc version <= 4.8 ?
-
-Regards.
+Thanks.
