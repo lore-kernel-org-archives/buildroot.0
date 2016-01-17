@@ -1,71 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Jan 2016 15:45:28 +0100
-Subject: [Buildroot] [PATCH v9] toolchain: create symlink
- ARCH_LIB_DIR->lib in addition to lib32/lib64->lib
-In-Reply-To: <1450787734-2547-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1450787734-2547-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20160117154528.1bb05d3e@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Jan 2016 15:55:14 +0100
+Subject: [Buildroot] [PATCH 2/5] package/x11r7/xlib_libXi: bump version to
+	1.7.6
+In-Reply-To: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1453042517-12040-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xlib_libXi/xlib_libXi.hash | 4 ++--
+ package/x11r7/xlib_libXi/xlib_libXi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Tue, 22 Dec 2015 13:35:34 +0100, Thomas De Schampheleire wrote:
-
-> Currently, following symbolic links are created in both target and
-> staging directories:
-> - lib(32|64) --> lib
-> - usr/lib(32|64) --> lib
-> 
-> The decision for lib32 or lib64 is based on the target architecture
-> configuration in buildroot (BR2_ARCH_IS_64).
-> 
-> In at least one case this is not correct: when building for a Cavium Octeon
-> III processor using the toolchain from the Cavium Networks SDK, and
-> specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
-> in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
-> 
-> More generally, for external toolchains, the correct symbolic link is
-> from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
-> toolchains always use either lib32 or lib64.
-> 
-> Feedback from Arnout Vandecappelle is that there are packages that do depend
-> on the lib32/lib64 symlink, even if ARCH_LIB_DIR is different. Hence, these
-> must be kept.
-> 
-> Fix the problem as follows:
-> - For internal toolchains: no functional change, but move the symlink
->   creation from Makefile to package gcc-initial.
-> - For external toolchains: create a symlink creation helper in
->   toolchain/helpers.mk, which first creates lib32->lib or lib64->lib as
->   appropriate, and then creates ARCH_LIB_DIR->lib if that is different from
->   lib32/lib64.
-
-I don't quite understand the benefit of duplicating the code that
-creates the lib32/lib64 symlinks. It used to be part of the skeleton,
-which ensures the code is common to all cases (i.e internal or external
-cases). And now with this change, you are duplicating it in the
-external toolchain code and the host-gcc-initial code. What's the
-benefit of doing this?
-
-Unless I missed something, this patch should be simplified to leave the
-creation of lib32/lib64 as is (i.e in skeleton.mk), and only the
-external toolchain code should be changed to create the $(ARCH_LIB_DIR)
-symlink when needed.
-
-Note that the move of the LIB_SYMLINK definition from the main Makefile
-to toolchain/helpers.mk remains a good change IMO (I like when things
-are removed from the main Makefile). Or it could be moved to
-skeleton.mk just above where it is used. But it should be a separate
-change.
-
-Best regards,
-
-Thomas
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.hash b/package/x11r7/xlib_libXi/xlib_libXi.hash
+index 67b7b33..28eb77e 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.hash
++++ b/package/x11r7/xlib_libXi/xlib_libXi.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-September/002634.html
+-sha256	d964d7deb5d8f7d6b9c358969c625073d7ab273dbda94693130b3540bc0ca229	libXi-1.7.5.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-December/002664.html
++sha256	1f32a552cec0f056c0260bdb32e853cec0673d2f40646ce932ad5a9f0205b7ac	libXi-1.7.6.tar.bz2
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
+index 391247f..54c9af4 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.mk
++++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXI_VERSION = 1.7.5
++XLIB_LIBXI_VERSION = 1.7.6
+ XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
+ XLIB_LIBXI_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXI_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0.rc3
