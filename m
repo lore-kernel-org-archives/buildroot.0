@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Jan 2016 15:55:16 +0100
-Subject: [Buildroot] [PATCH 4/5] package/libinput: bump version to 1.1.4
+Date: Sun, 17 Jan 2016 15:55:17 +0100
+Subject: [Buildroot] [PATCH 5/5] package/x11r7/xdriver_xf86-input-libinput:
+	bump version to 0.16.0
 In-Reply-To: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1453042517-12040-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1453042517-12040-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash      | 4 ++--
+ .../x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk  | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 56b2c10..20b7bf0 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index be0bf09..b2925db 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/wayland-devel/2015-December/026041.html
--sha256	a323a32718a8f0f5e85e1ed3a81f0dde45eb52b215a15c7887bec40961d97a84	libinput-1.1.2.tar.xz
-+# From http://lists.freedesktop.org/archives/wayland-devel/2015-December/026233.html
-+sha256	302cb76209b9c57a5a318e178f9bc446eede8ea79386103b5291cbfaa5fab5b6	libinput-1.1.4.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 91d6e53..8b69a51 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-October/002648.html
+-sha256	28707c504194648b11a1e26acf13039b60bf344efa6aa9788afed6d47f019a41	xf86-input-libinput-0.15.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-December/002667.html
++sha256	fdade531e91e79acf6dce8ac55fa4f65abe3f1358c5d3d777ae48dbc74b76f49	xf86-input-libinput-0.16.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index b4bc4b8..9e48886 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.1.2
-+LIBINPUT_VERSION = 1.1.4
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_LICENSE = MIT
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.15.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.16.0
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
 -- 
 2.7.0.rc3
