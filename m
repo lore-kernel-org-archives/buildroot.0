@@ -1,81 +1,71 @@
-From: Eial Czerwacki <eial@scalemp.com>
-Date: Sun, 17 Jan 2016 16:41:36 +0200
-Subject: [Buildroot] [PATCH 2/2] pixman: add patch to fix build issue
-	with musl
-In-Reply-To: <1453041600-5005-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453041600-5005-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453041600-5005-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <569BA820.6040300@scalemp.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Jan 2016 15:45:28 +0100
+Subject: [Buildroot] [PATCH v9] toolchain: create symlink
+ ARCH_LIB_DIR->lib in addition to lib32/lib64->lib
+In-Reply-To: <1450787734-2547-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1450787734-2547-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20160117154528.1bb05d3e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-thanks, will try.
+Thomas,
 
-On 01/17/2016 04:40 PM, Thomas Petazzoni wrote:
-> pixman fails to build with musl because <float.h> is included in
-> assembler files, which doesn't work with the <float.h> provided by
-> musl. This commit fixes that by patching pixman (patch submitted
-> upstream).
->
-> Reported-by: Eial Czerwacki <eial@scalemp.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  ...an-private-include-float.h-only-in-C-code.patch | 46 ++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch
->
-> diff --git a/package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch b/package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch
-> new file mode 100644
-> index 0000000..455cebb
-> --- /dev/null
-> +++ b/package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch
-> @@ -0,0 +1,46 @@
-> +From 2a5b33fe5cb921993573392afac19185e224b49a Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Date: Sun, 17 Jan 2016 14:14:28 +0100
-> +Subject: [PATCH] pixman-private: include <float.h> only in C code
-> +
-> +<float.h> is included unconditionally by pixman-private.h, which in
-> +turn gets included by assembler files. Unfortunately, with certain C
-> +libraries (like the musl C library), <float.h> cannot be included in
-> +assembler files:
-> +
-> +  CCLD     libpixman-arm-simd.la
-> +/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h: Assembler messages:
-> +/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h:8: Error: bad instruction `int __flt_rounds(void)'
-> +/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h: Assembler messages:
-> +/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h:8: Error: bad instruction `int __flt_rounds(void)'
-> +
-> +It turns out however that <float.h> is not needed by assembly files,
-> +so we move its inclusion within the #ifndef __ASSEMBLER__ condition,
-> +which solves the problem.
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +---
-> + pixman/pixman-private.h | 3 +--
-> + 1 file changed, 1 insertion(+), 2 deletions(-)
-> +
-> +diff --git a/pixman/pixman-private.h b/pixman/pixman-private.h
-> +index 73108a0..73a5414 100644
-> +--- a/pixman/pixman-private.h
-> ++++ b/pixman/pixman-private.h
-> +@@ -1,5 +1,3 @@
-> +-#include <float.h>
-> +-
-> + #ifndef PIXMAN_PRIVATE_H
-> + #define PIXMAN_PRIVATE_H
-> + 
-> +@@ -30,6 +28,7 @@
-> + #include <stdio.h>
-> + #include <string.h>
-> + #include <stddef.h>
-> ++#include <float.h>
-> + 
-> + #include "pixman-compiler.h"
-> + 
-> +-- 
-> +2.6.4
-> +
+On Tue, 22 Dec 2015 13:35:34 +0100, Thomas De Schampheleire wrote:
+
+> Currently, following symbolic links are created in both target and
+> staging directories:
+> - lib(32|64) --> lib
+> - usr/lib(32|64) --> lib
+> 
+> The decision for lib32 or lib64 is based on the target architecture
+> configuration in buildroot (BR2_ARCH_IS_64).
+> 
+> In at least one case this is not correct: when building for a Cavium Octeon
+> III processor using the toolchain from the Cavium Networks SDK, and
+> specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
+> in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
+> 
+> More generally, for external toolchains, the correct symbolic link is
+> from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
+> toolchains always use either lib32 or lib64.
+> 
+> Feedback from Arnout Vandecappelle is that there are packages that do depend
+> on the lib32/lib64 symlink, even if ARCH_LIB_DIR is different. Hence, these
+> must be kept.
+> 
+> Fix the problem as follows:
+> - For internal toolchains: no functional change, but move the symlink
+>   creation from Makefile to package gcc-initial.
+> - For external toolchains: create a symlink creation helper in
+>   toolchain/helpers.mk, which first creates lib32->lib or lib64->lib as
+>   appropriate, and then creates ARCH_LIB_DIR->lib if that is different from
+>   lib32/lib64.
+
+I don't quite understand the benefit of duplicating the code that
+creates the lib32/lib64 symlinks. It used to be part of the skeleton,
+which ensures the code is common to all cases (i.e internal or external
+cases). And now with this change, you are duplicating it in the
+external toolchain code and the host-gcc-initial code. What's the
+benefit of doing this?
+
+Unless I missed something, this patch should be simplified to leave the
+creation of lib32/lib64 as is (i.e in skeleton.mk), and only the
+external toolchain code should be changed to create the $(ARCH_LIB_DIR)
+symlink when needed.
+
+Note that the move of the LIB_SYMLINK definition from the main Makefile
+to toolchain/helpers.mk remains a good change IMO (I like when things
+are removed from the main Makefile). Or it could be moved to
+skeleton.mk just above where it is used. But it should be a separate
+change.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
