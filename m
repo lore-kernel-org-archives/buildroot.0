@@ -1,36 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Jan 2016 15:40:51 +0100
-Subject: [Buildroot] pixman-0.33.4 fails on Error: bad instruction `int
- __flt_rounds(void)' for musl rpi2 build
-In-Reply-To: <569B48D0.4050007@scalemp.com>
-References: <569B48D0.4050007@scalemp.com>
-Message-ID: <20160117154051.11936eeb@free-electrons.com>
+From: Eial Czerwacki <eial@scalemp.com>
+Date: Sun, 17 Jan 2016 16:41:36 +0200
+Subject: [Buildroot] [PATCH 2/2] pixman: add patch to fix build issue
+	with musl
+In-Reply-To: <1453041600-5005-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453041600-5005-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453041600-5005-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <569BA820.6040300@scalemp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eial,
+thanks, will try.
 
-On Sun, 17 Jan 2016 09:54:56 +0200, Eial Czerwacki wrote:
-
-> I'm trying to build a basic musl based image for my rpi2 that has
-> openbox in it and it keeps failing on
-> pixman-0.33.4 with the error mentioned above.
-> 
-> my config can be found here: http://paste.ubuntu.com/14543009/
-> 
-> any ideas how to fix it?
-
-Thanks for reporting the problem. I have just sent a patch (I Cc'ed
-you) which fixes this problem. It would be great if you could test it
-and tell us if it fixes the problem for you.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On 01/17/2016 04:40 PM, Thomas Petazzoni wrote:
+> pixman fails to build with musl because <float.h> is included in
+> assembler files, which doesn't work with the <float.h> provided by
+> musl. This commit fixes that by patching pixman (patch submitted
+> upstream).
+>
+> Reported-by: Eial Czerwacki <eial@scalemp.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  ...an-private-include-float.h-only-in-C-code.patch | 46 ++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch
+>
+> diff --git a/package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch b/package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch
+> new file mode 100644
+> index 0000000..455cebb
+> --- /dev/null
+> +++ b/package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch
+> @@ -0,0 +1,46 @@
+> +From 2a5b33fe5cb921993573392afac19185e224b49a Mon Sep 17 00:00:00 2001
+> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Date: Sun, 17 Jan 2016 14:14:28 +0100
+> +Subject: [PATCH] pixman-private: include <float.h> only in C code
+> +
+> +<float.h> is included unconditionally by pixman-private.h, which in
+> +turn gets included by assembler files. Unfortunately, with certain C
+> +libraries (like the musl C library), <float.h> cannot be included in
+> +assembler files:
+> +
+> +  CCLD     libpixman-arm-simd.la
+> +/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h: Assembler messages:
+> +/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h:8: Error: bad instruction `int __flt_rounds(void)'
+> +/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h: Assembler messages:
+> +/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h:8: Error: bad instruction `int __flt_rounds(void)'
+> +
+> +It turns out however that <float.h> is not needed by assembly files,
+> +so we move its inclusion within the #ifndef __ASSEMBLER__ condition,
+> +which solves the problem.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +---
+> + pixman/pixman-private.h | 3 +--
+> + 1 file changed, 1 insertion(+), 2 deletions(-)
+> +
+> +diff --git a/pixman/pixman-private.h b/pixman/pixman-private.h
+> +index 73108a0..73a5414 100644
+> +--- a/pixman/pixman-private.h
+> ++++ b/pixman/pixman-private.h
+> +@@ -1,5 +1,3 @@
+> +-#include <float.h>
+> +-
+> + #ifndef PIXMAN_PRIVATE_H
+> + #define PIXMAN_PRIVATE_H
+> + 
+> +@@ -30,6 +28,7 @@
+> + #include <stdio.h>
+> + #include <string.h>
+> + #include <stddef.h>
+> ++#include <float.h>
+> + 
+> + #include "pixman-compiler.h"
+> + 
+> +-- 
+> +2.6.4
+> +
