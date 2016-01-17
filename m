@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jan 2016 22:55:25 +0100
-Subject: [Buildroot] [git commit] configs/sheevaplug: bump kernel to 4.4
-Message-ID: <20160117220214.55E10821B6@busybox.osuosl.org>
+Date: Sun, 17 Jan 2016 23:00:52 +0100
+Subject: [Buildroot] [git commit] package/uboot-tools: bump to version
+	2016.01
+Message-ID: <20160117220214.9F4057FDA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8aef3a4106608fac04608eebe9cdae10e1432bca
+commit: http://git.buildroot.net/buildroot/commit/?id=29a570fbc9de58d6a48e1a32a06d1e9d5290fc90
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/sheevaplug_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/uboot-tools/uboot-tools.hash | 2 +-
+ package/uboot-tools/uboot-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
-index 9e272ff..bb53789 100644
---- a/configs/sheevaplug_defconfig
-+++ b/configs/sheevaplug_defconfig
-@@ -12,8 +12,8 @@ BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+index 65a5261..31b0db9 100644
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	bdc68d5f9455ad933b059c735d983f2c8b6b552dafb062e5ff1444f623021955  u-boot-2015.10.tar.bz2
++sha256  e5792fba9399d9804aa2ef667f14ff771e2cdece72367d340250265bf095a5d5  u-boot-2016.01.tar.bz2
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 6e4d0ed..3150279 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Lock down headers to avoid breaking with new defaults
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18.1"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_DEFAULT_KERNEL_VERSION="4.4"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -26,7 +26,7 @@ BR2_TARGET_UBOOT_FORMAT_KWB=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4"
- BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
- BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+-UBOOT_TOOLS_VERSION = 2015.10
++UBOOT_TOOLS_VERSION = 2016.01
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPLv2+
