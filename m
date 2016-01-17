@@ -1,80 +1,62 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 17 Jan 2016 23:04:53 +0100
-Subject: [Buildroot] [PATCH] package/scrub: new package
-Message-ID: <1453068293-16263-1-git-send-email-s.martin49@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Jan 2016 23:10:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libevent: Fix broken download URL
+Message-ID: <1453068619-20590-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/Config.in        |  1 +
- package/scrub/Config.in  |  7 +++++++
- package/scrub/scrub.hash |  2 ++
- package/scrub/scrub.mk   | 18 ++++++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/scrub/Config.in
- create mode 100644 package/scrub/scrub.hash
- create mode 100644 package/scrub/scrub.mk
+Upstream URL has changed on Sourceforge:
 
-diff --git a/package/Config.in b/package/Config.in
-index 06ed4a8..0f6a61c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1585,6 +1585,7 @@ endif
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/rsyslog/Config.in"
- endif
-+	source "package/scrub/Config.in"
- 	source "package/scrypt/Config.in"
- 	source "package/smack/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/scrub/Config.in b/package/scrub/Config.in
-new file mode 100644
-index 0000000..3c7d28b
---- /dev/null
-+++ b/package/scrub/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SCRUB
-+	bool "scrub"
-+	help
-+	  Scrub iteratively writes patterns on files or disk devices to make
-+	  retrieving the data more difficult.
-+
-+	  https://code.google.com/p/diskscrub/
-diff --git a/package/scrub/scrub.hash b/package/scrub/scrub.hash
-new file mode 100644
-index 0000000..42f7b2f
---- /dev/null
-+++ b/package/scrub/scrub.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  838b061b2e1932b342fb9695c5579cdff5d2d72506cb41d6d8032eba18aed969  scrub-2.6.1.tar.gz
-diff --git a/package/scrub/scrub.mk b/package/scrub/scrub.mk
-new file mode 100644
-index 0000000..92837a1
---- /dev/null
-+++ b/package/scrub/scrub.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# scrub
-+#
-+################################################################################
-+
-+SCRUB_VERSION = 2.6.1
-+SCRUB_SITE = $(call github,chaos,scrub,$(SCRUB_VERSION))
-+SCRUB_LICENSE = GPLv2+
-+SCRUB_LICENSE_FILES = COPYING
-+
-+# tarball of the git repo, but autoreconf does not work as expected, so:
-+define SCRUB_AUTOCONF_HOOK
-+	( cd $(@D) && PATH=$(BR_PATH) $(@D)/autogen.sh )
-+endef
-+SCRUB_PRE_CONFIGURE_HOOKS += SCRUB_AUTOCONF_HOOK
-+
-+$(eval $(autotools-package))
+>>> libevent 2.0.22-stable Downloading
+--2016-01-17 23:06:31--  http://downloads.sourceforge.net/project/levent/libevent/libevent-2.0/libevent-2.0.22-stable.tar.gz
+Resolving downloads.sourceforge.net (downloads.sourceforge.net)... 216.34.181.59
+Connecting to downloads.sourceforge.net (downloads.sourceforge.net)|216.34.181.59|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2016-01-17 23:06:31 ERROR 404: Not Found.
+
+Additionally the project moved to github:
+http://sourceforge.net/projects/levent/
+
+"As of 2015-10-07, this project may now be found at
+ https://github.com/libevent/libevent."
+
+This patch points Config.in to the new upstream URL and fixes the broken
+download URL by using github.com.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libevent/Config.in   | 2 +-
+ package/libevent/libevent.mk | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/libevent/Config.in b/package/libevent/Config.in
+index 680fa48..c32f29e 100644
+--- a/package/libevent/Config.in
++++ b/package/libevent/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_LIBEVENT
+ 	help
+ 	  Userspace library for handling asynchronous notifications
+ 
+-	  http://monkey.org/~provos/
++	  http://libevent.org
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index d67c738..cfec28e 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBEVENT_VERSION_MAJOR = 2.0
+-LIBEVENT_VERSION = $(LIBEVENT_VERSION_MAJOR).22-stable
+-LIBEVENT_SITE = http://downloads.sourceforge.net/project/levent/libevent/libevent-$(LIBEVENT_VERSION_MAJOR)
++LIBEVENT_VERSION = 2.0.22-stable
++LIBEVENT_SITE = $(call github,libevent,libevent,$(LIBEVENT_VERSION))
+ LIBEVENT_INSTALL_STAGING = YES
+ LIBEVENT_LICENSE = BSD-3c, OpenBSD
+ LIBEVENT_LICENSE_FILES = LICENSE
 -- 
-2.7.0
+2.7.0.rc3
