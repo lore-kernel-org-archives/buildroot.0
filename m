@@ -1,40 +1,34 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Sun, 17 Jan 2016 16:22:35 -0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20160117001117.569d43f2@free-electrons.com>
-References: <20160116073021.A4B95101BCC@stock.ovh.net>
- <20160117001117.569d43f2@free-electrons.com>
-Message-ID: <CABLs7GWCkOptR=Bg=ppkARz_WDmxU4-eAiHSVwmwEJGdv8yRAg@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 17 Jan 2016 19:24:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake: use MinSizeRel for size
+	optimized build
+Message-ID: <1453055051-11080-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+MinSizeRel sets the gcc compiler optimization level to '-Os' whereas Release
+sets it to '-O3'.
 
-2016-01-16 21:11 GMT-02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-[snip]
->>          arm |           chocolate-doom-2.2.1 | NOK | http://autobuild.buildroot.net/results/20019b0daebf1aaf44e0802603108ff712f60513/
->
-> In static linking configurations, when SDL_mixer is linked against
-> libmad, chocolate-doom doesn't pass -lmad. To fix this, we need to:
->
->  * Fix SDL_mixer.pc so that it references libmad in Libs.private (or
->    Requires.private ?)
->
->  * Either use pkg-config directly in chocolate-doom.mk to pass the
->    appropriate flags, or change the chocolate-doom build system itself.
->
-> Note that a similar problem might appear when SDL_mixer is linked
-> against vorbis.
->
-> Rodrigo, since you added the chocolate-doom package, can you look into
-> fixing this ?
->
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/pkg-cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No problem, I'll look into that in the next few days.
-
-Regards,
-Rodrigo
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 81dcfcc..dc2dc93 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -87,7 +87,7 @@ define $(2)_CONFIGURE_CMDS
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+-		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
++		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,$$(if $$(BR2_OPTIMIZE_S),MinSizeRel,Release) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
+-- 
+2.7.0
