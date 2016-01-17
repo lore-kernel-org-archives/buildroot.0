@@ -1,23 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jan 2016 23:01:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: bump to version
-	2016.01
-In-Reply-To: <1452980355-20322-1-git-send-email-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Sat, 16 Jan 2016 22:39:15
- +0100")
-References: <1452980355-20322-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <874mebx3u4.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jan 2016 22:55:25 +0100
+Subject: [Buildroot] [git commit] configs/sheevaplug: bump u-boot to 2016.01
+Message-ID: <20160117220214.5E01B7FDA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=36f8101675259c8e3cfadd95b3f90d148bd3a935
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/sheevaplug_defconfig | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
+index bb53789..d6fd3e0 100644
+--- a/configs/sheevaplug_defconfig
++++ b/configs/sheevaplug_defconfig
+@@ -17,9 +17,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="sheevaplug"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sheevaplug"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
+ BR2_TARGET_UBOOT_FORMAT_KWB=y
+ # BR2_TARGET_UBOOT_NETWORK is not set
+ 
