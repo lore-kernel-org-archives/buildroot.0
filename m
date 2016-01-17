@@ -1,31 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 17 Jan 2016 22:55:25 +0100
-Subject: [Buildroot] [git commit] orangepipc: readme.txt: fix typo
-Message-ID: <20160117220214.7CF27821B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/orangepipc: add host-dosfstools
+Message-ID: <20160117220214.6208480172@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=34d25ae735f422fbe21c1a5088bdf58381cd91a1
+commit: http://git.buildroot.net/buildroot/commit/?id=54acbe90fef0e7713792c26e86bb367db0f7ec8e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+genimage from the post-image script needs mkdosfs to create fat partition:
+
+>>>   Executing post-image script board/orangepi/orangepipc/post-image.sh
+sh: 1: mkdosfs: not found
+vfat(boot.vfat): failed to generate boot.vfat
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/orangepi/orangepipc/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/orangepipc_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/orangepi/orangepipc/readme.txt b/board/orangepi/orangepipc/readme.txt
-index 0792bf4..00845a4 100644
---- a/board/orangepi/orangepipc/readme.txt
-+++ b/board/orangepi/orangepipc/readme.txt
-@@ -5,7 +5,7 @@ Intro
- 
- This default configuration will allow you to start experimenting with the
- buildroot environment for the OrangePi PC. With the current configuration
--it will bring-up the board, and allow access trough the serial console.
-+it will bring-up the board, and allow access through the serial console.
- 
- Unfortunately this boards processor is not yet supported by the
- mainline kernel, and therefore this default configuration is using a
+diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
+index f39ea43..1dea4c8 100644
+--- a/configs/orangepipc_defconfig
++++ b/configs/orangepipc_defconfig
+@@ -27,5 +27,6 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4832e17787acb29734d895751bc7a594908aecc6"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
