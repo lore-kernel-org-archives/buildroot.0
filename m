@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Jan 2016 15:55:15 +0100
-Subject: [Buildroot] [PATCH 3/5] package/x11r7/xdriver_xf86-input-evdev:
-	bump version to 2.10.1
+Date: Sun, 17 Jan 2016 15:55:16 +0100
+Subject: [Buildroot] [PATCH 4/5] package/libinput: bump version to 1.1.4
 In-Reply-To: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1453042517-12040-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1453042517-12040-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash | 4 ++--
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk   | 2 +-
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-index cd892d3..3314934 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 56b2c10..20b7bf0 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-October/002649.html
--sha256	d097298eb07b7a9edf4493b5c3c058041458ca52c8c62dbd4f40b84c5086d117	xf86-input-evdev-2.10.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2016-January/002669.html
-+sha256	af9c2b47f5b272ae56b45da6bd84610fc9a3d80a4b32c8215842a39d862de017	xf86-input-evdev-2.10.1.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 6f692ab..4a2ed36 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+-# From http://lists.freedesktop.org/archives/wayland-devel/2015-December/026041.html
+-sha256	a323a32718a8f0f5e85e1ed3a81f0dde45eb52b215a15c7887bec40961d97a84	libinput-1.1.2.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2015-December/026233.html
++sha256	302cb76209b9c57a5a318e178f9bc446eede8ea79386103b5291cbfaa5fab5b6	libinput-1.1.4.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 91d6e53..8b69a51 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.0
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.1
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+-LIBINPUT_VERSION = 1.1.2
++LIBINPUT_VERSION = 1.1.4
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
 -- 
 2.7.0.rc3
