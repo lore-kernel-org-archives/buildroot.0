@@ -1,38 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Jan 2016 12:44:24 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-01-14
-References: <20160115073021.DAA6410303A@stock.ovh.net>
- <jvipmcxaun.ln2@ID-313208.user.individual.net> <569AB33F.6010701@mind.be>
- <7mqqmcx6cr.ln2@ID-313208.user.individual.net> <569B5966.5080706@free.fr>
-Message-ID: <odbsmcxudn.ln2@ID-313208.user.individual.net>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 17 Jan 2016 13:58:08 +0100
+Subject: [Buildroot] [PATCH] moarvm: disable for sparc64
+Message-ID: <20160117125808.GA7423@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 17 Jan 2016 10:05:42 +0100 schrieb Mason:
+Missing implementation of AO_fetch_compare_and_swap in
+libatomic_ops library for sparcv9.
 
-> Arnout is suggesting:
-> 
-> depends on !BR2_arc || BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> 
-> This equivalence is called "material implication".
-> https://en.wikipedia.org/wiki/Material_implication_%28rule_of_inference%
-29
-> 
-> Reading more closely, are you saying the build is broken on ARC if gcc
-> version >= 4.8 ? Or is gcc version <= 4.8 ?
+Fixes following autobuilder issues:
+http://autobuild.buildroot.net/results/268e328e2d9ea951c0728ab6031d32e2b460d015/
+http://autobuild.buildroot.net/results/84847a9201244fce3e05e5e4e201f2e1848238de/
 
-Hi Mason,
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/moarvm/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-the build on arc is broken with gcc-4.8, the fix was committed to gcc-4.9:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
-
-After further inspection I saw that gcc-4.8 is the only toolchain offered 
-by buildroot for arc so
-	depends on !BR2_arc
-alone fixes the problem, see http://patchwork.ozlabs.org/patch/569251/
-
-Regards, Bernd
+diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
+index 95f3752..bb1af7e 100644
+--- a/package/moarvm/Config.in
++++ b/package/moarvm/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_MOARVM
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_USE_MMU # libuv
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # libatomic_ops
++	# needs AO_fetch_compare_and_swap, not implemented for sparcv9
++	depends on !BR2_sparc64
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+ 	help
+-- 
+1.7.10.4
