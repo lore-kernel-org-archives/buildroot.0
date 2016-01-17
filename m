@@ -1,35 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 17 Jan 2016 22:55:25 +0100
-Subject: [Buildroot] [git commit] configs/sheevaplug: bump u-boot to 2016.01
-Message-ID: <20160117220214.5E01B7FDA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] orangepipc: readme.txt: fix typo
+Message-ID: <20160117220214.7CF27821B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36f8101675259c8e3cfadd95b3f90d148bd3a935
+commit: http://git.buildroot.net/buildroot/commit/?id=34d25ae735f422fbe21c1a5088bdf58381cd91a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/sheevaplug_defconfig | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ board/orangepi/orangepipc/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
-index bb53789..d6fd3e0 100644
---- a/configs/sheevaplug_defconfig
-+++ b/configs/sheevaplug_defconfig
-@@ -17,9 +17,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+diff --git a/board/orangepi/orangepipc/readme.txt b/board/orangepi/orangepipc/readme.txt
+index 0792bf4..00845a4 100644
+--- a/board/orangepi/orangepipc/readme.txt
++++ b/board/orangepi/orangepipc/readme.txt
+@@ -5,7 +5,7 @@ Intro
  
- # bootloader
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="sheevaplug"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sheevaplug"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
- BR2_TARGET_UBOOT_FORMAT_KWB=y
- # BR2_TARGET_UBOOT_NETWORK is not set
+ This default configuration will allow you to start experimenting with the
+ buildroot environment for the OrangePi PC. With the current configuration
+-it will bring-up the board, and allow access trough the serial console.
++it will bring-up the board, and allow access through the serial console.
  
+ Unfortunately this boards processor is not yet supported by the
+ mainline kernel, and therefore this default configuration is using a
