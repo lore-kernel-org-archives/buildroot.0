@@ -1,46 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 23:24:57 +0100
-Subject: [Buildroot] [PATCH v4] linux-headers: allow use of headers from
- kernel "package" selected
-In-Reply-To: <877fj64jhn.fsf@dell.be.48ers.dk>
-References: <1425230275-127768-1-git-send-email-kaszak@gmail.com>
- <20160109172908.GA3444@free.fr> <87y4bn6y5s.fsf@dell.be.48ers.dk>
- <20160118214704.GA3380@free.fr>
- <20160118230345.52b8f054@free-electrons.com>
- <877fj64jhn.fsf@dell.be.48ers.dk>
-Message-ID: <20160118232457.472dc051@free-electrons.com>
+Date: Mon, 18 Jan 2016 23:27:01 +0100
+Subject: [Buildroot] [PATCH 05/80 v1] package/collectd: use 'menuconfig'
+ instead of 'config'+'menu'
+In-Reply-To: <20160118221808.GE3380@free.fr>
+References: <cover.1452983019.git.yann.morin.1998@free.fr>
+ <015a3c362744fb1f25235088a353f3d3689fd62f.1452983019.git.yann.morin.1998@free.fr>
+ <20160118225659.16e260ac@free-electrons.com>
+ <20160118220015.GC3380@free.fr>
+ <20160118230510.50308fc5@free-electrons.com>
+ <20160118221808.GE3380@free.fr>
+Message-ID: <20160118232701.47a6433f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hello,
 
-On Mon, 18 Jan 2016 23:21:08 +0100, Peter Korsgaard wrote:
+On Mon, 18 Jan 2016 23:18:08 +0100, Yann E. MORIN wrote:
 
->  > I also don't like the way the patch is implemented, but I think the
->  > problem raised by this patch is real. Sometimes people have kernel
->  > sources that contain some custom kernel headers needed for their
->  > userspace libraries/applications, and we have no mechanism to allow
->  > them to use their custom kernel source for the linux-headers package,
->  > which is a bit annoying.
+> > But in the case of collectd, the current situation looks good to me,
+> > and I don't see the need to introduce a sub-menu for it.
 > 
-> Yeah, true. It does require that these custom header files are really
-> exported (so they get installed by headers_install) which in my
-> experience is not always the case.
-> 
-> What I have told people to do in the past instead is to either copy the
-> needed definitions into their user space code or add
-> -I$(LINUX_DIR)/include (if they build their kernel in Buildroot) like
-> E.G. xdriver_xf86-video-imx does it.
+> Well, the idea is that all packages that have sub-options all use the
+> same layout, so that the menuconfig really is more consistent than it is
+> today.
 
-Yes, I know there are ways around it.
+Well, they won't all have a sub-menu, since according to the second
+part of your patch series, only those packages that have more than 5
+sub-options are converted to use a sub-menu.
 
-But it does seem weird to many users that the "linux" package provides
-some many possibilities for fetching/patching the kernel, and still the
-linux-headers package downloads a completely different kernel version,
-with less possibilities of using a custom version.
+Aren't we bike-shedding here? :-)
 
 Thomas
 -- 
