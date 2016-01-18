@@ -1,65 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jan 2016 22:59:38 +0100
-Subject: [Buildroot] [PATCH v2] package/alsa-utils: Add util alsaloop
-In-Reply-To: <1453151639-28753-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Mon, 18 Jan 2016 22:13:59 +0100")
-References: <1453151639-28753-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87io2q4khh.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 18 Jan 2016 23:00:15 +0100
+Subject: [Buildroot] [PATCH 05/80 v1] package/collectd: use 'menuconfig'
+ instead of 'config'+'menu'
+In-Reply-To: <20160118225659.16e260ac@free-electrons.com>
+References: <cover.1452983019.git.yann.morin.1998@free.fr>
+ <015a3c362744fb1f25235088a353f3d3689fd62f.1452983019.git.yann.morin.1998@free.fr>
+ <20160118225659.16e260ac@free-electrons.com>
+Message-ID: <20160118220015.GC3380@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Thomas, All,
 
- > Add libsamplerate as optional dependency, see
- > alsa-utils-1.1.0/alsaloop/Makefile.am
+On 2016-01-18 22:56 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 16 Jan 2016 23:36:57 +0100, Yann E. MORIN wrote:
+> > Since there were multiple sub-menus, keep their prompts as a comment, to
+> > properly separate all famillies of plugins.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> It is really a matter of taste, so my opinion is clearly not a strong
+> one here. But I believe I actually prefer the current solution. With
+> your solution yes all sub-options are hidden behind a menu. But this
+> menu is now very long, and I find the "comment" in Kconfig to not be
+> very nice separators to separate various parts of the menu.
+> 
+> They are even more confusing in that there are "comments" used as
+> separators, and real "comments" about missing dependencies, causing
+> confusion.
+> 
+> So I'm not too fan of this one, but if Arnout and you are happy with it
+> and Peter likes it, that's OK, it's really a minor detail from my point
+> of view.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > v2: libsamplerate is not a mandatory, but an optional dependency (Thomas)
+I am very much and totally undecided on this either...
 
- >  package/alsa-utils/Config.in     |  3 +++
- >  package/alsa-utils/alsa-utils.mk | 10 ++++++++++
- >  2 files changed, 13 insertions(+)
+On one hand, sub-menus in sub-menus can be a bit tedious to navigate in,
+hence the change to use comments a separators.
 
- > diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
- > index 82f3ad6..9b8e8c0 100644
- > --- a/package/alsa-utils/Config.in
- > +++ b/package/alsa-utils/Config.in
- > @@ -29,6 +29,9 @@ config BR2_PACKAGE_ALSA_UTILS_ALSACTL
- >  	bool "alsactl"
- >  	default y
- 
- > +config BR2_PACKAGE_ALSA_UTILS_ALSALOOP
- > +	bool "alsaloop"
- > +
- >  config BR2_PACKAGE_ALSA_UTILS_ALSAMIXER
- >  	bool "alsamixer"
- >  	select BR2_PACKAGE_NCURSES
- > diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
- > index 32822bb..4b3df19 100644
- > --- a/package/alsa-utils/alsa-utils.mk
- > +++ b/package/alsa-utils/alsa-utils.mk
- > @@ -29,6 +29,15 @@ ALSA_UTILS_DEPENDENCIES += gettext
- >  ALSA_UTILS_CONF_ENV += LIBS=-lintl
- >  endif
- 
- > +ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSALOOP),y)
- > +ALSA_UTILS_CONF_OPTS += --enable-alsaloop
- > +ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
- > +ALSA_UTILS_DEPENDENCIES += libsamplerate
- > +endif
- > +else
- > +ALSA_UTILS_CONF_OPTS += --disable-alsaloop
- > +endif
+On the other hand, the new layout is definitely quite long, indeed, and
+difficult to navigate as well.
 
-While libsamplerate is today only (optionally) used by alsaloop, this
-might change in the future, so I prefer to move this check outside the
-_UTILS_ALSALOOP conditional.
+I'll revert to use sub-menus, unless Peter chimes in to voice his
+preference for the new layout.
 
-Committed with that fixed, thanks.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
