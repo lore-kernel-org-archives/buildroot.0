@@ -1,58 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 21:24:57 +0100
-Subject: [Buildroot] [PATCH 4/8] vlc: remove dependency on C library
+Date: Mon, 18 Jan 2016 21:24:58 +0100
+Subject: [Buildroot] [PATCH 5/8] samba4: remove dependency on specific C
+	libraries
 In-Reply-To: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453148701-10036-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453148701-10036-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-vlc uses <spawn.h> which was not available in old uClibc
-versions. However, since we are removing support for uClibc 0.9.33, we
-can get rid of such dependency. In addition, <spawn.h> is provided by
-musl, and therefore VLC can be enabled with this C library.
+samba4 relies on the $ORIGIN feature of the dynamic linker, which used
+to not be implemented in old uClibc versions. However:
 
-Consequently, this commit completely removes any C library dependency
-for the vlc package. The only special case that needs to be handled is
-the Blackfin external toolchain from Analog Devices, which still uses
-an old uClibc version that doesn't provide <spawn.h>.
+ - this feature is supported by glibc
+ - this feature is supported by uClibc-ng, which is the only uClibc
+   version we are going to support
+ - this feature is supported by musl
+
+Consequently, we can completely remove the dependency of samba4 on
+certain C libraries. This means that samba4 can now be built against
+the musl C library.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vlc/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/samba4/Config.in | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 03e85c3..cad21e2 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -5,12 +5,12 @@ endif
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index 1411b08..c53adba 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -1,6 +1,5 @@
+-comment "samba4 needs an (e)glibc or uClibc-ng toolchain w/ RPC, wchar, dynamic library, threads"
+-	depends on (!BR2_TOOLCHAIN_USES_GLIBC && !BR2_UCLIBC_VERSION_NG) \
+-		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_NATIVE_RPC \
++comment "samba4 needs a toolchain w/ RPC, wchar, dynamic library, threads"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_NATIVE_RPC \
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
  
- config BR2_PACKAGE_VLC
- 	bool "vlc"
--	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
- 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
- 	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
-@@ -32,7 +32,7 @@ config BR2_PACKAGE_VLC_OPENCV3_BACKEND
- 	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
- 
--comment "vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, dynamic library, wchar, threads, headers >= 3.7"
--	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) \
--		|| !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR \
-+comment "vlc needs a toolchain w/ C++, dynamic library, wchar, threads, headers >= 3.7"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+@@ -12,8 +11,6 @@ config BR2_PACKAGE_SAMBA4
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # python -> libffi
+ 	depends on !BR2_STATIC_LIBS # python
+-	# needs $ORIGIN support
+-	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_UCLIBC_VERSION_NG
+ 	depends on !BR2_nios2 # binary too large, relocations don't fit
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_POPT
 -- 
 2.6.4
