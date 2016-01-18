@@ -1,104 +1,87 @@
-From: Jonathan Ben-Avraham <yba@tkos.co.il>
-Date: Mon, 18 Jan 2016 18:33:17 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] pocketsphinx: new package
-Message-ID: <1453134797-17963-1-git-send-email-yba@tkos.co.il>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 18 Jan 2016 16:46:08 +0000
+Subject: [Buildroot] [PATCH] libffi: fix the build for MIPS soft-float with
+	recent compilers
+Message-ID: <1453135568-1657-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jonathan Ben Avraham <yba@tkos.co.il>
+Recent MIPS compilers have an stricter agreement between the compiler
+and the assembler on the ABI. The compiler now passes -msoft-float to
+the assembler where it previously did not.
 
-PocketSphinx is one of Carnegie Mellon University's open source large
-vocabulary, speaker-independent, continuous speech recognition engines.
+libffi uses MIPS hard-float instructions so when we try to build it for
+soft-float using a recent compiler it fails because of the explained
+above. This package should be fixed in order to add support for
+soft-float.
 
-PocketSphinx is a toolkit that uses the Sphinxbase library.
+In the meantime we can add a little hack in order to be able to build it
+for soft-float. Basically we add ".set hardfloat" so the assembler will
+not disable the hard-float instructions. The build will of course
+include some hard-float bits which shouldn't exist in a soft-float
+build, and that may cause runtime problems. But that's what we already
+had before and we had lived with it.
 
-Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+We choose to apply this temporary fix because it only affects MIPS
+soft-float builds. Otherwise we would need to disable libffi and
+recursively all the packages depending on it (python, libglib2...) for
+MIPS soft-float, which would be a bit overkill.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-Changes v1 -> v2:
- 1. Applied all review comments by Arnout Vandecappelle:
-  a. Removed comments regarding github repo
-  b. Added comment regarding missing license file upstream bug report
-  c. Added example source file as license file
-  d. Removed redundant source specification
-  e. Added config opt --with-sphinxbase=auto
+ ...nable-hardfloat-in-the-MIPS-assembly-code.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch
 
- 2. Tested patch application with git apply --check
-
- package/Config.in                      |    1 +
- package/pocketsphinx/Config.in         |   13 +++++++++++++
- package/pocketsphinx/pocketsphinx.hash |    3 +++
- package/pocketsphinx/pocketsphinx.mk   |   18 ++++++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/pocketsphinx/Config.in
- create mode 100644 package/pocketsphinx/pocketsphinx.hash
- create mode 100644 package/pocketsphinx/pocketsphinx.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index b555808..d5b66e2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1208,6 +1208,7 @@ endif
- 	source "package/netbsd-queue/Config.in"
- 	source "package/orc/Config.in"
- 	source "package/p11-kit/Config.in"
-+	source "package/pocketsphinx/Config.in"
- 	source "package/poco/Config.in"
- 	source "package/protobuf/Config.in"
- 	source "package/protobuf-c/Config.in"
-diff --git a/package/pocketsphinx/Config.in b/package/pocketsphinx/Config.in
+diff --git a/package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch b/package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch
 new file mode 100644
-index 0000000..8892c2e
+index 0000000..776990d
 --- /dev/null
-+++ b/package/pocketsphinx/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_POCKETSPHINX
-+	bool "pocketsphinx"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_SPHINXBASE
-+	help
-+	  PocketSphinx is one of Carnegie Mellon University's open
-+	  source large vocabulary, speaker-independent, continuous
-+	  speech recognition engine.
++++ b/package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch
+@@ -0,0 +1,41 @@
++From 48bc37fabbc685b1e3293055bd33ca66c619305e Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Wed, 13 Jan 2016 14:49:59 +0000
++Subject: [PATCH] libffi: enable hardfloat in the MIPS assembly code
 +
-+	  http://cmusphinx.sourceforge.net/
++This way it will be possible to build it for soft-float. This is only a
++temporary fix. The package needs to be fixed properly.
 +
-+comment "pocketsphinx needs a toolchain with threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/pocketsphinx/pocketsphinx.hash b/package/pocketsphinx/pocketsphinx.hash
-new file mode 100644
-index 0000000..9815d98
---- /dev/null
-+++ b/package/pocketsphinx/pocketsphinx.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 34c4d218bbb8c5bb85622909426a137fe89140ea2e35c65e84fe3ccc42356a39 pocketsphinx-5prealpha.tar.gz
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ src/mips/n32.S | 1 +
++ src/mips/o32.S | 1 +
++ 2 files changed, 2 insertions(+)
 +
-diff --git a/package/pocketsphinx/pocketsphinx.mk b/package/pocketsphinx/pocketsphinx.mk
-new file mode 100644
-index 0000000..a02e7e1
---- /dev/null
-+++ b/package/pocketsphinx/pocketsphinx.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# pocketsphinx
-+#
-+################################################################################
++diff --git a/src/mips/n32.S b/src/mips/n32.S
++index c6985d3..dc842d5 100644
++--- a/src/mips/n32.S
+++++ b/src/mips/n32.S
++@@ -44,6 +44,7 @@
++ 	.abicalls
++ #endif
++ 	.set mips4
+++	.set hardfloat
++ 	.text
++ 	.align	2
++ 	.globl	ffi_call_N32
++diff --git a/src/mips/o32.S b/src/mips/o32.S
++index eb27981..b653daf 100644
++--- a/src/mips/o32.S
+++++ b/src/mips/o32.S
++@@ -42,6 +42,7 @@
++ #define RA_OFF		(SIZEOF_FRAME - 1 * FFI_SIZEOF_ARG)
++ 
++ 	.abicalls
+++	.set hardfloat
++ 	.text
++ 	.align	2
++ 	.globl	ffi_call_O32
++-- 
++2.4.10
 +
-+POCKETSPHINX_VERSION = 5prealpha
-+POCKETSPHINX_SITE = http://downloads.sourceforge.net/project/cmusphinx/pocketsphinx
-+POCKETSPHINX_LICENSE = MIT
-+# Note http://sourceforge.net/p/cmusphinx/bugs/441/ "LICENSE file missing in"
-+# 5prealpha tarballs". The license is contained in the copyright notice at the
-+# top of each source file. For example:
-+POCKETSPHINX_LICENSE_FILES = src/programs/batch.c
-+POCKETSPHINX_CONF_OPTS = --without-python --with-sphinxbase=auto
-+POCKETSPHINX_INSTALL_STAGING = YES
-+POCKETSPHINX_DEPENDENCIES = sphinxbase
-+
-+$(eval $(autotools-package))
 -- 
-1.7.9.5
+2.4.10
