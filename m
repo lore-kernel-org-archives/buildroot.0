@@ -1,69 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 23:21:45 +0100
-Subject: [Buildroot] [PATCH v4] linux-headers: allow use of headers from
- kernel "package" selected
-In-Reply-To: <20160118221343.GD3380@free.fr>
-References: <1425230275-127768-1-git-send-email-kaszak@gmail.com>
- <20160109172908.GA3444@free.fr> <87y4bn6y5s.fsf@dell.be.48ers.dk>
- <20160118214704.GA3380@free.fr>
- <20160118230345.52b8f054@free-electrons.com>
- <20160118221343.GD3380@free.fr>
-Message-ID: <20160118232145.32bfbd40@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Jan 2016 23:23:29 +0100
+Subject: [Buildroot] [PATCH v2] libffi: fix the build for MIPS
+	soft-float with recent compilers
+In-Reply-To: <1453135700-2404-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 18 Jan 2016 16:48:20 +0000")
+References: <1453135700-2404-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <8737tu4jdq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On Mon, 18 Jan 2016 23:13:43 +0100, Yann E. MORIN wrote:
+ > Recent MIPS compilers have an stricter agreement between the compiler
+ > and the assembler on the ABI. The compiler now passes -msoft-float to
+ > the assembler where it previously did not.
 
-> IIRC, I think I already suggested that we set the version string from
-> Kconfig, a bit like:
-> 
->     choice
->         bool "headers version"
-> 
->     [...]
-> 
->     config BR2_PKG_HEADERS_AS_KERNEL
->         bool "like kernel"
->         depends on BR2_LINUX_KERNEL
-> 
->     comment "blabla needs a kernel to be built"
->         depends on !BR2_LINUX_KERNEL
-> 
->     [...]
-> 
->     endchoice
-> 
->     config BR2_DEFAULT_KERNEL_HEADERS
->         string
->         default BR2_LINUX_KERNEL_VERSION if BR2_PKG_HEADERS_AS_KERNEL
+ > libffi uses MIPS hard-float instructions so when we try to build it for
+ > soft-float using a recent compiler it fails because of the explained
+ > above. This package should be fixed in order to add support for
+ > soft-float.
 
-This is not sufficient. If you select "custom tarball", or "local",
-then BR2_LINUX_KERNEL_VERSION just contains "custom". Or it will
-contain just the Git tag/commit id, or just the Mercurial version. You
-still lack the repo/tarball URL/local directory.
+ > In the meantime we can add a little hack in order to be able to build it
+ > for soft-float. Basically we add ".set hardfloat" so the assembler will
+ > not disable the hard-float instructions. The build will of course
+ > include some hard-float bits which shouldn't exist in a soft-float
+ > build, and that may cause runtime problems. But that's what we already
+ > had before and we had lived with it.
 
-But if you have a proposal based on that, that takes into account those
-issues, don't hesitate to submit a patch.
+ > We choose to apply this temporary fix because it only affects MIPS
+ > soft-float builds. Otherwise we would need to disable libffi and
+ > recursively all the packages depending on it (python, libglib2...) for
+ > MIPS soft-float, which would be a bit overkill.
 
-Alternatively, what we could do is simply duplicate some code from
-linux.mk into linux-headers.mk and therefore have linux-header.mk
-directly poke at the linux/Config.in variables. Not nice, but it solves
-a long-standing request, and we don't change that often the Linux
-download/patch logic.
+ > Fixes:
 
-I was trying to think of getting rid of the linux-headers package and
-have the linux package provide the headers for the toolchain, but I
-don't see a really feasible way of doing this.
+ >   http://autobuild.buildroot.net/results/6b0607b7cb0ac5525c2e47e819301f38bd2d6b30/
 
-Best regards,
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > ---
+ > Changes v1 -> v2:
+ >  - Add autobuild URL
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
