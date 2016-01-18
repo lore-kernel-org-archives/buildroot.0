@@ -1,40 +1,101 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 18 Jan 2016 16:09:35 +0000
-Subject: [Buildroot] [PATCH] luvi: build for the right MIPS endianness
-Message-ID: <1453133375-54831-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Jonathan Ben-Avraham <yba@tkos.co.il>
+Date: Mon, 18 Jan 2016 18:31:48 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] sphinxbase: new package
+Message-ID: <1453134708-17909-1-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise it will cause build failures like this one:
+From: Jonathan Ben Avraham <yba@tkos.co.il>
 
-[100%] Linking C executable luvi
-/home/buildroot/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/5.2.0/../../../../mipsel-buildroot-linux-gnu/bin/ld:
-jitted_tmp/src/lua/init.lua_luvi_generated.o: compiled for a big endian
-system and target is little endian
+CMUSphinx toolkit is a speech recognition toolkit with various tools
+used to build speech applications. CMU Sphinx toolkit has a number of
+packages for different tasks and applications. The toolkit is designed
+for use on mobile platforms.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
 ---
- package/luvi/luvi.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Changes v1 -> v2:
+ 1. Applied all review comments by Arnout Vandecappelle:
+  a. Removed comments regarding github repo
+  b. Added comment regarding missing license file upstream bug report
+  c. Added example source file as license file
+  d. Removed redundant source specification
 
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index ef1c2e1..d83933e 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -20,8 +20,10 @@ else ifeq ($(BR2_powerpc),y)
- LUVI_TARGET_ARCH = ppc
- else ifeq ($(BR2_arm)$(BR2_armeb),y)
- LUVI_TARGET_ARCH = arm
--else ifeq ($(BR2_mips)$(BR2_mipsel),y)
-+else ifeq ($(BR2_mips),y)
- LUVI_TARGET_ARCH = mips
-+else ifeq ($(BR2_mipsel),y)
-+LUVI_TARGET_ARCH = mipsel
- else
- LUVI_TARGET_ARCH = $(BR2_ARCH)
- endif
+ 2. Tested patch application with git apply --check
+
+ package/Config.in                  |    1 +
+ package/sphinxbase/Config.in       |   13 +++++++++++++
+ package/sphinxbase/sphinxbase.hash |    2 ++
+ package/sphinxbase/sphinxbase.mk   |   18 ++++++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/sphinxbase/Config.in
+ create mode 100644 package/sphinxbase/sphinxbase.hash
+ create mode 100644 package/sphinxbase/sphinxbase.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 89b23db..b555808 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1213,6 +1213,7 @@ endif
+ 	source "package/protobuf-c/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
++	source "package/sphinxbase/Config.in"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tz/Config.in"
+ 	source "package/tzdata/Config.in"
+diff --git a/package/sphinxbase/Config.in b/package/sphinxbase/Config.in
+new file mode 100644
+index 0000000..ee9ca31
+--- /dev/null
++++ b/package/sphinxbase/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_SPHINXBASE
++	bool "sphinxbase"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  CMUSphinx toolkit is a leading speech recognition toolkit with
++	  various tools used to build speech applications. CMU Sphinx
++	  toolkit has a number of packages for different tasks and
++	  applications.
++
++	  http://cmusphinx.sourceforge.net/
++
++comment "sphinxbase needs a toolchain with threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sphinxbase/sphinxbase.hash b/package/sphinxbase/sphinxbase.hash
+new file mode 100644
+index 0000000..483fda3
+--- /dev/null
++++ b/package/sphinxbase/sphinxbase.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 b8b19a207d1a285753a93ed67c36aacba0ebdc0892471fd3be6f6ffaba776f88 sphinxbase-5prealpha.tar.gz
+diff --git a/package/sphinxbase/sphinxbase.mk b/package/sphinxbase/sphinxbase.mk
+new file mode 100644
+index 0000000..9397997
+--- /dev/null
++++ b/package/sphinxbase/sphinxbase.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# sphinxbase
++#
++################################################################################
++
++SPHINXBASE_VERSION = 5prealpha
++SPHINXBASE_SITE = http://downloads.sourceforge.net/project/cmusphinx/sphinxbase
++SPHINXBASE_AUTORECONF = YES
++SPHINXBASE_LICENSE = MIT
++# Note http://sourceforge.net/p/cmusphinx/bugs/441/ "LICENSE file missing in"
++# 5prealpha tarballs". The license is contained in the copyright notice at the
++# top of each source file. For example:
++SPHINXBASE_LICENSE_FILES = src/libsphinxbase/util/bio.c
++SPHINXBASE_CONF_OPTS = --without-python
++
++$(eval $(autotools-package))
 -- 
-2.4.10
+1.7.9.5
