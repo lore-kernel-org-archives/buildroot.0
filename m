@@ -1,41 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jan 2016 10:09:38 +0100
-Subject: [Buildroot] [git commit] package/micropython: bump to version 1.5.2
-Message-ID: <20160118091230.D9C4F82718@busybox.osuosl.org>
+Date: Mon, 18 Jan 2016 10:21:19 +0100
+Subject: [Buildroot] [PATCH v4] linux-headers: allow use of headers from
+	kernel "package" selected
+In-Reply-To: <20160109172908.GA3444@free.fr> (Yann E. MORIN's message of "Sat, 
+ 9 Jan 2016 18:29:08 +0100")
+References: <1425230275-127768-1-git-send-email-kaszak@gmail.com>
+ <20160109172908.GA3444@free.fr>
+Message-ID: <87y4bn6y5s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42971b1e629d3fb52c6c327dc31eb0235fb1a45d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/micropython/micropython.hash | 2 +-
- package/micropython/micropython.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Karoly, All,
+ > Reviving this old one that is still pending in Patchwork...
 
-diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-index 24b878e..0c9e2ae 100644
---- a/package/micropython/micropython.hash
-+++ b/package/micropython/micropython.hash
-@@ -1,2 +1,2 @@
- #locally computed
--sha256 4ba128def442275ef528c210d8d3dc6d6e12460069a570706b5fbdb6b4a6a25f  micropython-v1.5.tar.gz
-+sha256 3c594ee701622f01c4e9c7abd1c322a0bc6c8af17bea0b0126812cb8e61bb5d9  micropython-v1.5.2.tar.gz
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 2126f15..59d164f 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MICROPYTHON_VERSION = v1.5
-+MICROPYTHON_VERSION = v1.5.2
- MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
- MICROPYTHON_LICENSE = MIT
- MICROPYTHON_LICENSE_FILES = LICENSE
+ > On 2015-03-01 18:17 +0100, Karoly Kasza spake thusly:
+ >> This change makes it possible to use exactly the same sources for both
+ >> headers during toolchain building and for kernel building itself, even
+ >> if custom kernel is selected.
+ >> 
+ >> That way users can be sure that ABI mismatch won't happen between toolchain
+ >> and kernel.
+
+ > So, I'll try to summarise what we have for now:
+
+ >   - select kernel headers version and select kernel version (separately)
+
+ >   - select kernel headers version, also used as kernel version.
+
+ > What you want to add with this patch is:
+
+ >   - select kernel version, also used as kernel headers version.
+
+ > In fact, I think that the second case we already have (headers version
+ > implies kernel version) is a bit weird. Surely, I would have expected
+ > something reversed, like "kernel version implies headers version", which
+ > this patch is trying to provide.
+
+I think part of the reason we have it this way is purely historical
+(E.G. we had support for building a toolchain a lot earlier than we had
+a generic way of building a Linux kernel, and for a long time we would
+always build an internal toolchain, but building a kernel is optional),
+but also because the kernel headers option comes before the Linux
+option, so you would need to go and enable the Linux kernel and then go
+back and change the kernel headers option.
+
+The question is also what do about the kernel headers option if you go
+and disable building a Linux kernel?
+
+Perhaps we can find good solutions to these questions, but all in all,
+I'm not sure it is worth it. What we have today is functionally
+equivalent, even though it is perhaps a bit backwards for certain use
+cases.
+
+-- 
+Bye, Peter Korsgaard
