@@ -1,280 +1,295 @@
-From: Lada Trimasova <Lada.Trimasova@synopsys.com>
-Date: Mon, 18 Jan 2016 17:44:13 +0300
-Subject: [Buildroot] [PATCH v2] Trousers: disable pie option on ARC
-Message-ID: <1453128253-17722-1-git-send-email-ltrimas@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Jan 2016 16:04:50 +0100
+Subject: [Buildroot] [PATCH] lldpd: new package
+In-Reply-To: <1453112084-16105-1-git-send-email-julien.floret@6wind.com>
+References: <1453112084-16105-1-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160118160450.0645b1db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARC gcc understands "-pie" option and attempts to generate PIE
-binaries as of today PIE is not really supported for user-space
-applications.
-So we provide option which checks if compiler understands relro
-and pie options and disable PIE detection if building for ARC.
-Also AUTORECONF option should be added because of modified
-configure.in and Makefile.am files.
+Dear Julien Floret,
 
-Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+On Mon, 18 Jan 2016 11:14:44 +0100, Julien Floret wrote:
+> lldpd is a 802.1ab implementation (LLDP) to help you locate neighbors
+> of all your equipments.
+> 
+> LLDP is an industry standard protocol designed to supplant
+> proprietary Link-Layer protocols such as EDP or CDP. The goal of LLDP
+> is to provide an inter-vendor compatible mechanism to deliver
+> Link-Layer notifications to adjacent network devices.
+> 
+> https://vincentbernat.github.io/lldpd/
+> 
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
 
----
-Changes v1 -> v2:
- - Check if compiler understands PIE_CFLAGS and RELRO_LDFLAGS
----
- ...ompiler-understands-pie-and-relro-options.patch | 215 +++++++++++++++++++++
- package/trousers/trousers.mk                       |   9 +
- 2 files changed, 224 insertions(+)
- create mode 100644 package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch
+Thanks for this patch! Overall it looks good, I just have a few
+comments here and there, see below.
 
-diff --git a/package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch b/package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch
-new file mode 100644
-index 0000000..3275b76
---- /dev/null
-+++ b/package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch
-@@ -0,0 +1,215 @@
-+From 9abda1bb380bdbef1affaec381742ced394ca118 Mon Sep 17 00:00:00 2001
-+From: Lada Trimasova <ltrimas@synopsys.com>
-+Date: Mon, 18 Jan 2016 15:58:19 +0300
-+Subject: [PATCH] Check if the compiler understands pie and relro options
-+
-+-pie and -fpie enable the building of position-independent
-+executables, and -Wl,-z,relro turns on read-only relocation support in gcc.
-+Add checks to ensure that the compiler and linker understand these options.
-+
-+Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-+---
-+ configure.in                |  5 +++
-+ m4/ax_check_compile_flag.m4 | 72 ++++++++++++++++++++++++++++++++++++
-+ m4/ax_check_link_flag.m4    | 71 +++++++++++++++++++++++++++++++++++
-+ src/tcsd/Makefile.am        |  4 +-
-+ 4 files changed, 150 insertions(+), 2 deletions(-)
-+ create mode 100644 m4/ax_check_compile_flag.m4
-+ create mode 100644 m4/ax_check_link_flag.m4
-+
-+diff --git a/configure.in b/configure.in
-+index add23dc..9603353 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -12,6 +12,7 @@ TSS_VER_MINOR=3
-+ # compute $target
-+ AC_CANONICAL_TARGET
-+ AM_INIT_AUTOMAKE([foreign 1.6])
-++AC_CONFIG_MACRO_DIR([m4])
-+ 
-+ # Debugging support
-+ AC_ARG_ENABLE([debug],
-+@@ -383,6 +384,10 @@ elif test x"${prefix}" = x"NONE"; then
-+ 	localstatedir="/usr/local/var"
-+ fi
-+ 
-++AX_CHECK_COMPILE_FLAG([-fPIE -DPIE], [PIE_CFLAGS="-fPIE -DPIE"])
-++AX_CHECK_LINK_FLAG([-pie], [PIE_LDFLAGS="$PIE_LDFLAGS -pie"])
-++AX_CHECK_LINK_FLAG([-Wl,-z,relro], [LDFLAGS="$LDFLAGS -Wl,-z,relro"])
-++
-+ AC_OUTPUT(dist/tcsd.conf \
-+ 	  dist/fedora/trousers.spec \
-+ 	  dist/trousers.spec \
-+diff --git a/m4/ax_check_compile_flag.m4 b/m4/ax_check_compile_flag.m4
-+new file mode 100644
-+index 0000000..c3a8d69
-+--- /dev/null
-++++ b/m4/ax_check_compile_flag.m4
-+@@ -0,0 +1,72 @@
-++# ===========================================================================
-++#   http://www.gnu.org/software/autoconf-archive/ax_check_compile_flag.html
-++# ===========================================================================
-++#
-++# SYNOPSIS
-++#
-++#   AX_CHECK_COMPILE_FLAG(FLAG, [ACTION-SUCCESS], [ACTION-FAILURE], [EXTRA-FLAGS])
-++#
-++# DESCRIPTION
-++#
-++#   Check whether the given FLAG works with the current language's compiler
-++#   or gives an error.  (Warnings, however, are ignored)
-++#
-++#   ACTION-SUCCESS/ACTION-FAILURE are shell commands to execute on
-++#   success/failure.
-++#
-++#   If EXTRA-FLAGS is defined, it is added to the current language's default
-++#   flags (e.g. CFLAGS) when the check is done.  The check is thus made with
-++#   the flags: "CFLAGS EXTRA-FLAGS FLAG".  This can for example be used to
-++#   force the compiler to issue an error when a bad flag is given.
-++#
-++#   NOTE: Implementation based on AX_CFLAGS_GCC_OPTION. Please keep this
-++#   macro in sync with AX_CHECK_{PREPROC,LINK}_FLAG.
-++#
-++# LICENSE
-++#
-++#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
-++#   Copyright (c) 2011 Maarten Bosmans <mkbosmans@gmail.com>
-++#
-++#   This program is free software: you can redistribute it and/or modify it
-++#   under the terms of the GNU General Public License as published by the
-++#   Free Software Foundation, either version 3 of the License, or (at your
-++#   option) any later version.
-++#
-++#   This program is distributed in the hope that it will be useful, but
-++#   WITHOUT ANY WARRANTY; without even the implied warranty of
-++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-++#   Public License for more details.
-++#
-++#   You should have received a copy of the GNU General Public License along
-++#   with this program. If not, see <http://www.gnu.org/licenses/>.
-++#
-++#   As a special exception, the respective Autoconf Macro's copyright owner
-++#   gives unlimited permission to copy, distribute and modify the configure
-++#   scripts that are the output of Autoconf when processing the Macro. You
-++#   need not follow the terms of the GNU General Public License when using
-++#   or distributing such scripts, even though portions of the text of the
-++#   Macro appear in them. The GNU General Public License (GPL) does govern
-++#   all other use of the material that constitutes the Autoconf Macro.
-++#
-++#   This special exception to the GPL applies to versions of the Autoconf
-++#   Macro released by the Autoconf Archive. When you make and distribute a
-++#   modified version of the Autoconf Macro, you may extend this special
-++#   exception to the GPL to apply to your modified version as well.
-++
-++#serial 2
-++
-++AC_DEFUN([AX_CHECK_COMPILE_FLAG],
-++[AC_PREREQ(2.59)dnl for _AC_LANG_PREFIX
-++AS_VAR_PUSHDEF([CACHEVAR],[ax_cv_check_[]_AC_LANG_ABBREV[]flags_$4_$1])dnl
-++AC_CACHE_CHECK([whether _AC_LANG compiler accepts $1], CACHEVAR, [
-++  ax_check_save_flags=$[]_AC_LANG_PREFIX[]FLAGS
-++  _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $4 $1"
-++  AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
-++    [AS_VAR_SET(CACHEVAR,[yes])],
-++    [AS_VAR_SET(CACHEVAR,[no])])
-++  _AC_LANG_PREFIX[]FLAGS=$ax_check_save_flags])
-++AS_IF([test x"AS_VAR_GET(CACHEVAR)" = xyes],
-++  [m4_default([$2], :)],
-++  [m4_default([$3], :)])
-++AS_VAR_POPDEF([CACHEVAR])dnl
-++])dnl AX_CHECK_COMPILE_FLAGS
-+diff --git a/m4/ax_check_link_flag.m4 b/m4/ax_check_link_flag.m4
-+new file mode 100644
-+index 0000000..e2d0d36
-+--- /dev/null
-++++ b/m4/ax_check_link_flag.m4
-+@@ -0,0 +1,71 @@
-++# ===========================================================================
-++#    http://www.gnu.org/software/autoconf-archive/ax_check_link_flag.html
-++# ===========================================================================
-++#
-++# SYNOPSIS
-++#
-++#   AX_CHECK_LINK_FLAG(FLAG, [ACTION-SUCCESS], [ACTION-FAILURE], [EXTRA-FLAGS])
-++#
-++# DESCRIPTION
-++#
-++#   Check whether the given FLAG works with the linker or gives an error.
-++#   (Warnings, however, are ignored)
-++#
-++#   ACTION-SUCCESS/ACTION-FAILURE are shell commands to execute on
-++#   success/failure.
-++#
-++#   If EXTRA-FLAGS is defined, it is added to the linker's default flags
-++#   when the check is done.  The check is thus made with the flags: "LDFLAGS
-++#   EXTRA-FLAGS FLAG".  This can for example be used to force the linker to
-++#   issue an error when a bad flag is given.
-++#
-++#   NOTE: Implementation based on AX_CFLAGS_GCC_OPTION. Please keep this
-++#   macro in sync with AX_CHECK_{PREPROC,COMPILE}_FLAG.
-++#
-++# LICENSE
-++#
-++#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
-++#   Copyright (c) 2011 Maarten Bosmans <mkbosmans@gmail.com>
-++#
-++#   This program is free software: you can redistribute it and/or modify it
-++#   under the terms of the GNU General Public License as published by the
-++#   Free Software Foundation, either version 3 of the License, or (at your
-++#   option) any later version.
-++#
-++#   This program is distributed in the hope that it will be useful, but
-++#   WITHOUT ANY WARRANTY; without even the implied warranty of
-++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-++#   Public License for more details.
-++#
-++#   You should have received a copy of the GNU General Public License along
-++#   with this program. If not, see <http://www.gnu.org/licenses/>.
-++#
-++#   As a special exception, the respective Autoconf Macro's copyright owner
-++#   gives unlimited permission to copy, distribute and modify the configure
-++#   scripts that are the output of Autoconf when processing the Macro. You
-++#   need not follow the terms of the GNU General Public License when using
-++#   or distributing such scripts, even though portions of the text of the
-++#   Macro appear in them. The GNU General Public License (GPL) does govern
-++#   all other use of the material that constitutes the Autoconf Macro.
-++#
-++#   This special exception to the GPL applies to versions of the Autoconf
-++#   Macro released by the Autoconf Archive. When you make and distribute a
-++#   modified version of the Autoconf Macro, you may extend this special
-++#   exception to the GPL to apply to your modified version as well.
-++
-++#serial 2
-++
-++AC_DEFUN([AX_CHECK_LINK_FLAG],
-++[AS_VAR_PUSHDEF([CACHEVAR],[ax_cv_check_ldflags_$4_$1])dnl
-++AC_CACHE_CHECK([whether the linker accepts $1], CACHEVAR, [
-++  ax_check_save_flags=$LDFLAGS
-++  LDFLAGS="$LDFLAGS $4 $1"
-++  AC_LINK_IFELSE([AC_LANG_PROGRAM()],
-++    [AS_VAR_SET(CACHEVAR,[yes])],
-++    [AS_VAR_SET(CACHEVAR,[no])])
-++  LDFLAGS=$ax_check_save_flags])
-++AS_IF([test x"AS_VAR_GET(CACHEVAR)" = xyes],
-++  [m4_default([$2], :)],
-++  [m4_default([$3], :)])
-++AS_VAR_POPDEF([CACHEVAR])dnl
-++])dnl AX_CHECK_LINK_FLAGS
-+diff --git a/src/tcsd/Makefile.am b/src/tcsd/Makefile.am
-+index 2210734..6640ab2 100644
-+--- a/src/tcsd/Makefile.am
-++++ b/src/tcsd/Makefile.am
-+@@ -1,8 +1,8 @@
-+ sbin_PROGRAMS=tcsd
-+ 
-+-tcsd_CFLAGS=-DAPPID=\"TCSD\" -DVAR_PREFIX=\"@localstatedir@\" -DETC_PREFIX=\"@sysconfdir@\" -I${top_srcdir}/src/include -fPIE -DPIE
-++tcsd_CFLAGS=-DAPPID=\"TCSD\" -DVAR_PREFIX=\"@localstatedir@\" -DETC_PREFIX=\"@sysconfdir@\" -I${top_srcdir}/src/include $(PIE_CFLAGS)
-+ tcsd_LDADD=${top_builddir}/src/tcs/libtcs.a ${top_builddir}/src/tddl/libtddl.a -lpthread @CRYPTOLIB@
-+-tcsd_LDFLAGS=-pie -Wl,-z,relro -Wl,-z,now
-++tcsd_LDFLAGS=$(PIE_LDFLAGS) $(RELRO_LDFLAGS)
-+ 
-+ tcsd_SOURCES=svrside.c tcsd_conf.c tcsd_threads.c platform.c
-+ 
-+-- 
-+2.5.0
-+
-diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
-index 5ecab70..70daa88 100644
---- a/package/trousers/trousers.mk
-+++ b/package/trousers/trousers.mk
-@@ -10,6 +10,8 @@ TROUSERS_SITE = http://downloads.sourceforge.net/project/trousers/trousers/$(TRO
- TROUSERS_LICENSE = BSD-3c
- TROUSERS_LICENSE_FILES = LICENSE
- TROUSERS_INSTALL_STAGING = YES
-+# Need autoreconf because of a patch touching configure.in and Makefile.am
-+TROUSERS_AUTORECONF = YES
- TROUSERS_DEPENDENCIES = openssl
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
-@@ -21,4 +23,11 @@ endif
- # workaround.
- TROUSERS_CONF_OPTS += --disable-usercheck
- 
-+# uClibc toolchain for ARC doesn't support PIE at the moment
-+ifeq ($(BR2_arc),y)
-+TROUSERS_CONF_ENV += \
-+	ax_cv_check_cflags___fPIE__DPIE=no \
-+	ax_cv_check_ldflags___pie=no
-+endif
-+
- $(eval $(autotools-package))
+> diff --git a/package/lldpd/Config.in b/package/lldpd/Config.in
+> new file mode 100644
+> index 000000000000..c152c559a9de
+> --- /dev/null
+> +++ b/package/lldpd/Config.in
+> @@ -0,0 +1,91 @@
+> +config BR2_PACKAGE_LLDPD
+> +	bool "lldpd"
+> +	select BR2_PACKAGE_LIBEVENT
+
+BR2_PACKAGE_LIBEVENT has a "depends on !BR2_bfin" so you need to
+duplicate this dependency in lldpd's Config.in file.
+
+> +	help
+> +	  lldpd is a 802.1ab implementation (LLDP) to help you locate neighbors
+> +	  of all your equipments.
+> +
+> +	  LLDP allows you to know exactly on which port is a server
+> +	  (and reciprocally).
+> +
+> +	  LLDP is an industry standard protocol designed to supplant
+> +	  proprietary Link-Layer protocols such as EDP or CDP. The goal of LLDP
+> +	  is to provide an inter-vendor compatible mechanism to deliver
+> +	  Link-Layer notifications to adjacent network devices.
+> +
+> +	  lldpd is an ISC-licensed implementation of LLDP for various Unixes.
+> +	  It also supports some proprietary protocols.
+> +
+> +	  https://vincentbernat.github.io/lldpd/
+> +
+> +if BR2_PACKAGE_LLDPD
+> +
+> +config BR2_PACKAGE_LLDPD_CDP
+> +	bool "CDP"
+> +	default y
+> +	help
+> +	  Enable Cisco Discovery Protocol
+> +
+> +config BR2_PACKAGE_LLDPD_FDP
+> +	bool "FDP"
+> +	default y
+> +	help
+> +	  Enable Foundry Discovery Protocol
+> +
+> +config BR2_PACKAGE_LLDPD_EDP
+> +	bool "EDP"
+> +	default y
+> +	help
+> +	  Enable Extreme Discovery Protocol
+> +
+> +config BR2_PACKAGE_LLDPD_SONMP
+> +	bool "SONMP"
+> +	default y
+> +	help
+> +	  Enable SynOptics Network Management
+> +
+> +config BR2_PACKAGE_LLDPD_LLDPMED
+> +	bool "LLDP-MED"
+> +	default y
+> +	help
+> +	  Enable LLDP-MED extension
+> +
+> +config BR2_PACKAGE_LLDPD_DOT1
+> +	bool "DOT1"
+> +	default y
+> +	help
+> +	  Enable Dot1 extension (VLAN stuff)
+> +
+> +config BR2_PACKAGE_LLDPD_DOT3
+> +	bool "DOT3"
+> +	default y
+> +	help
+> +	  Enable Dot3 extension (PHY stuff)
+> +
+> +config BR2_PACKAGE_LLDPD_CUSTOM
+
+This option should be named BR2_PACKAGE_LLDPD_CUSTOM_TLV, because
+BR2_PACKAGE_LLDPD_CUSTOM is a bit unspecific.
+
+> +	bool "Custom TLV"
+> +	default y
+> +	help
+> +	  Enable Custom TLV support
+> +
+> +config BR2_PACKAGE_LLDPD_PRIVSEP
+> +	bool "Privilege separation"
+> +	default y
+> +	help
+> +	  Enable Privilege separation
+> +
+> +config BR2_PACKAGE_LLDPD_PRIVSEP_USER
+> +	string "Privilege separation user"
+> +	depends on BR2_PACKAGE_LLDPD_PRIVSEP
+> +	default "_lldpd"
+> +	help
+> +	  Which user to use for privilege separation
+> +
+> +config BR2_PACKAGE_LLDPD_PRIVSEP_GROUP
+> +	string "Privilege separation group"
+> +	depends on BR2_PACKAGE_LLDPD_PRIVSEP
+> +	default "_lldpd"
+> +	help
+> +	  Which group to use for privilege separation
+
+Do we really need to allow the configuration of the user and group? We
+generally don't do this for most package. Also, are _lldpd a good
+choice? Why the leading underscore?
+
+If we're really talking about Unix user/group, then I would suggest to
+just have an option to enable/disable privilege separation. And when
+enabled, use lldpd as the user and group names.
+
+Also, shouldn't these user and group names be created by Buildroot in
+the target root filesystem?
+
+> new file mode 100644
+> index 000000000000..984991723894
+> --- /dev/null
+> +++ b/package/lldpd/lldpd.mk
+> @@ -0,0 +1,88 @@
+> +################################################################################
+> +#
+> +# lldpd
+> +#
+> +################################################################################
+> +
+> +LLDPD_VERSION = 0.7.19
+> +LLDPD_SITE = http://media.luffy.cx/files/lldpd
+> +LLDPD_SOURCE = lldpd-$(LLDPD_VERSION).tar.gz
+
+This is the default value, so you can remove this definition.
+
+> +LLDPD_DEPENDENCIES = host-pkgconf libevent
+> +LLDPD_LICENSE = ISC
+
+Please specifly LLDPD_LICENSE_FILES. You can point it to README.md,
+which contains the license text.
+
+> +
+> +# Detection of c99 support in configure fails without WCHAR. To enable
+> +# automatic detection of c99 support by configure, we need to enable
+> +# WCHAR in toolchain. But actually we do not need WCHAR at lldpd
+> +# runtime. So requesting WCHAR in toolchain just for automatic detection
+> +# will be overkill. To solve this, explicitly -specify c99 here.
+> +LLDPD_CONF_ENV = ac_cv_prog_cc_c99=-std=gnu99
+> +
+> +LLDPD_CONF_OPTS = \
+> +	--localstatedir=/var \
+
+Not needed, this is already passed by the autotools-package
+infrastructure.
+
+> +	--with-readline=no \
+
+--without-readline
+
+Since readline is available in Buildroot, it might be good in a
+separate patch to enable readline support. But this is definitely not
+mandatory, just a suggestion.
+
+> +	--with-embedded-libevent=no \
+
+--without-embedded-libevent
+
+(yes, --with-embedded-libevent=no is the same, but we normally use
+--without-<foo> in Buildroot)
+
+There are other features that would be good to disable explicitly if
+you don't handle them:
+
+	--without-xml \
+	--without-snmp \
+	--without-json \
+	--without-seccomp
+
+> +	--disable-hardening
+> +
+> +ifeq ($(BR2_PACKAGE_LLDPD_CDP),y)
+> +LLDPD_CONF_OPTS += --enable-cdp=yes
+> +else
+> +LLDPD_CONF_OPTS += --enable-cdp=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LLDPD_FDP),y)
+> +LLDPD_CONF_OPTS += --enable-fdp=yes
+> +else
+> +LLDPD_CONF_OPTS += --enable-fdp=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LLDPD_EDP),y)
+> +LLDPD_CONF_OPTS += --enable-edp=yes
+> +else
+> +LLDPD_CONF_OPTS += --enable-edp=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LLDPD_SONMP),y)
+> +LLDPD_CONF_OPTS += --enable-sonmp=yes
+> +else
+> +LLDPD_CONF_OPTS += --enable-sonmp=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LLDPD_LLDPMED),y)
+> +LLDPD_CONF_OPTS += --enable-lldpmed=yes
+> +else
+> +LLDPD_CONF_OPTS += --enable-lldpmed=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LLDPD_DOT1),y)
+> +LLDPD_CONF_OPTS += --enable-dot1=yes
+> +else
+> +LLDPD_CONF_OPTS += --enable-dot1=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LLDPD_DOT3),y)
+> +LLDPD_CONF_OPTS += --enable-dot3=yes
+> +else
+> +LLDPD_CONF_OPTS += --enable-dot3=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LLDPD_CUSTOM),y)
+> +LLDPD_CONF_OPTS += --enable-custom=yes
+> +else
+> +LLDPD_CONF_OPTS += --enable-custom=no
+> +endif
+
+As said above, we prefer --enable/--disable over
+--enable-<foo>=yes/--enable-<foo>=no. Also, you could simplify the
+above:
+
+LLDPD_CONF_OPTS += \
+	$(if $(BR2_PACKAGE_LLDPD_DOT3),--enable-dot3,--disable-dot3) \
+	$(if $(......................),--enable-foo,--disable-foo)
+
+> +ifeq ($(BR2_PACKAGE_LLDPD_PRIVSEP),y)
+> +LLDPD_CONF_OPTS += --enable-privsep=yes
+> +else
+> +LLDPD_CONF_OPTS += --enable-privsep=no
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LLDPD_PRIVSEP_USER),)
+> +LLDPD_CONF_OPTS += --with-privsep-user=$(BR2_PACKAGE_LLDPD_PRIVSEP_USER)
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LLDPD_PRIVSEP_GROUP),)
+> +LLDPD_CONF_OPTS += --with-privsep-group=$(BR2_PACKAGE_LLDPD_PRIVSEP_GROUP)
+> +endif
+
+These two last conditions should be within the ifeq
+($(BR2_PACKAGE_LLDPD_PRIVSEP),y), of course except if you remove those
+two string options as suggested above.
+
+If lldpd needs a daemon, it is generally a good idea to provide an init
+script for it, and to support starting using systemd (I see that lldpd
+has some systemd support). However, this is also not mandatory, and can
+be considered for future improvements. It is even good to have a fairly
+simple patch (like yours) for a first submission, and then improve on
+top of that with additional patches.
+
+Thanks!
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
