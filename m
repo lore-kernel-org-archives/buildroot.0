@@ -1,72 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jan 2016 20:46:04 +0100
-Subject: [Buildroot] [git commit] support/download: support older bazaar
-	versions
-Message-ID: <20160118194633.D5A737FF2A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Jan 2016 21:13:09 +0100
+Subject: [Buildroot] [PATCH] lldpd: new package
+In-Reply-To: <CAHfJR7jVn99vE=6i+Z7D5w6wMPHYyOrYm+1aM-HTvMWq2PeG6w@mail.gmail.com>
+References: <1453112084-16105-1-git-send-email-julien.floret@6wind.com>
+ <20160118160450.0645b1db@free-electrons.com>
+ <CAHfJR7jVn99vE=6i+Z7D5w6wMPHYyOrYm+1aM-HTvMWq2PeG6w@mail.gmail.com>
+Message-ID: <20160118211309.057d1922@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9be0f65acce48e10a37bb93bff4a01b75302bd8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Julien,
 
-In efe7f68 (support/download: generate reproducible Bazaar archives),
-bzr was instructed to store files with the timestamp set to the date
-they were last modified in the repository, instead of the current date,
-using the --per-file-timestamp option.
+On Mon, 18 Jan 2016 18:23:35 +0100, Julien Floret wrote:
 
-However, this option has been added only in bzr-2.2 (August 2010) which
-is not available on older distros.
+> > BR2_PACKAGE_LIBEVENT has a "depends on !BR2_bfin" so you need to
+> > duplicate this dependency in lldpd's Config.in file.
+> 
+> I don't see such dependency for libevent...
+> Maybe you got mixed up with libev?
 
-We fix that by not using --per-file-timestamp when the bzr version is
-older than 2.2, in which case we just generate the archive with the
-current date set on files.
+Absolutely. Blame the auto-completion, or my stupidity. libevent indeed
+doesn't have any dependency, so what you did is perfectly fine.
 
-This means the archive is thus non-reproducible, and if a hash is
-available for that archive, the hash will not match, and Buildroot will
-try to download from the mirror (if any) or fail (if no mirror).
+> > Do we really need to allow the configuration of the user and group? We
+> > generally don't do this for most package. Also, are _lldpd a good
+> > choice? Why the leading underscore?
+> >
+> > If we're really talking about Unix user/group, then I would suggest to
+> > just have an option to enable/disable privilege separation. And when
+> > enabled, use lldpd as the user and group names.
+> >
+> > Also, shouldn't these user and group names be created by Buildroot in
+> > the target root filesystem?
+> >
+> 
+> _lldpd (with the leading underscore) is the default value of the user and
+> group in lldpd, when privsep is enabled but user/group are not specified.
+> But I agree this is not really needed.
+> 
+> In fact, for a first simple patch, I suggest to disable explicitely the
+> privilege separation feature. We can then handle it properly in a later patch,
+> with user and group names created in the target root filesystem.
 
-Fixes:
-    http://autobuild.buildroot.org/results/51f/51f4ff5462c15a85937d411f457096224d00fdcd
-    http://autobuild.buildroot.org/results/b88/b8828b5fbc16128408c2f44169ac23de7e34d770
-    http://autobuild.buildroot.org/results/fb4/fb4b0fb2131b40c18273dbe5e51b393cb6df18ec
-    ...
+Sounds good to me.
 
-[Peter: simplify sed invocation]
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/download/bzr | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+Thanks!
 
-diff --git a/support/download/bzr b/support/download/bzr
-index a8a8887..e18b01f 100755
---- a/support/download/bzr
-+++ b/support/download/bzr
-@@ -32,6 +32,22 @@ _bzr() {
-     eval ${BZR} "${@}"
- }
- 
-+# --per-file-timestamps comes with bzr-2.2 (released August 2010),
-+# so only pass it if bzr is recent enough. We compute versions as:
-+# major*1000 + minor
-+bzr_min_version=2002
-+bzr_version=$(($(bzr --version |
-+                 sed -r -n 's/^Bazaar \(bzr\) ([[:digit:]]+)\.([[:digit:]]+)\..*$/\1*1000+\2/p')
-+             ))
-+
-+# If the version is recent enough, we can generate reproducible
-+# archives; otherwise, we just hope for the best (as it would
-+# be downloaded from the BR mirror if what we generate here does
-+# not match the hash we have for it).
-+if [ ${bzr_version} -ge ${bzr_min_version} ]; then
-+    timestamp_opt="--per-file-timestamps"
-+fi
-+
- _bzr export ${verbose} --root="'${basename}/'" --format=tgz \
--    --per-file-timestamps - "'${repo}'" -r "'${rev}'" \
-+    ${timestamp_opt} - "'${repo}'" -r "'${rev}'" \
-     >"${output}"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
