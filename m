@@ -1,65 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 23:10:51 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAGduivyTp9AvHe09K1QOeKA3VU34T5nTnw-jqnJhvMzyfQDf3A@mail.gmail.com>
-References: <20160116073021.A4B95101BCC@stock.ovh.net>
- <20160117001117.569d43f2@free-electrons.com>
- <CAGduivyTp9AvHe09K1QOeKA3VU34T5nTnw-jqnJhvMzyfQDf3A@mail.gmail.com>
-Message-ID: <20160118231051.31adbabc@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 18 Jan 2016 23:13:43 +0100
+Subject: [Buildroot] [PATCH v4] linux-headers: allow use of headers from
+ kernel "package" selected
+In-Reply-To: <20160118230345.52b8f054@free-electrons.com>
+References: <1425230275-127768-1-git-send-email-kaszak@gmail.com>
+ <20160109172908.GA3444@free.fr> <87y4bn6y5s.fsf@dell.be.48ers.dk>
+ <20160118214704.GA3380@free.fr>
+ <20160118230345.52b8f054@free-electrons.com>
+Message-ID: <20160118221343.GD3380@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime,
+Thomas, All,
 
-I know you're using GMail, but please learn to strip long e-mails when
-you're just replying to one specific of it :-)
+On 2016-01-18 23:03 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 18 Jan 2016 22:47:04 +0100, Yann E. MORIN wrote:
+> 
+> > Yes, it *is* functionally equivalent. It just looks weird that you have
+> > to define the kernel version after (as 'as a conseuence of) the headers
+> > version, since logically, it is the opposite that one would want.
+> > 
+> > However, as you said, it would not be very practical to implement that
+> > in a user-friendly way:
+> >   - on one hand, it seems totally more logical to define the toolchain
+> >     options before enblign a kernel,
+> >   - on the other hand, the kernel headers version is very dependent on
+> >     the running kernel version.
+> > 
+> > Chicken'n'egg problem... :-(
+> > 
+> > So, do we agree that we should drop this patch?
+> 
+> I also don't like the way the patch is implemented, but I think the
+> problem raised by this patch is real. Sometimes people have kernel
+> sources that contain some custom kernel headers needed for their
+> userspace libraries/applications, and we have no mechanism to allow
+> them to use their custom kernel source for the linux-headers package,
+> which is a bit annoying.
 
-On Sun, 17 Jan 2016 18:10:58 +0100, Maxime Hadjinlian wrote:
+Ah... I just looked, and indeed all we have is an option to manually
+specify the version, nad there is no way to use any of the other sources
+that we have for the kernel (tarball, git tree...)
 
-> > Not sure:
-> >
-> > cache.c: In function 'same_path':
-> > cache.c:429:22: error: field 'fh' has incomplete type
-> > cache.c:436:2: warning: implicit declaration of function 'name_to_handle_at' [-Wimplicit-function-declaration]
-> > Makefile:613: recipe for target 'mountd-cache.o' failed
-> >
-> > Maxime, can you have a look ?
-> I will look at it, the errors is a bit puzzling but I only glanced at
-> it for now.
+Indeed, we do not have the same functionality.
 
-I had a look: nfs-utils does have some code to detect if
-name_to_handle_at() is implemented. Unfortunately, as can be seen here,
-using this function only triggers a warning (because its prototype is
-not defined in any headers of the C library), but doesn't fail to link
-(because for some reason the function is implemented). However the
-"struct file_handle" type is not available.
+So, what should we do:
 
-So, I suggest to add:
+  - "duplicate" for the headers the many ways we have to retrieve a
+    kernel's source tree?
 
-AC_CHECK_TYPES([struct file_handle])
+  - find a better way to implement Karoly's needs?
 
-to configure.ac, and then change cache.c from
+IIRC, I think I already suggested that we set the version string from
+Kconfig, a bit like:
 
-#if HAVE_NAME_TO_HANDLE_AT
+    choice
+        bool "headers version"
 
-to:
+    [...]
 
-#if defined(HAVE_NAME_TO_HANDLE_AT) && defined(HAVE_STRUCT_FILE_HANDLE)
+    config BR2_PKG_HEADERS_AS_KERNEL
+        bool "like kernel"
+        depends on BR2_LINUX_KERNEL
 
-It works with the problematic PowerPC toolchains (i.e it properly
-detects that struct file_handle is not available), but it remains to be
-tested on another toolchain. Also, this fix should be submitted
-upstream, obviously :-)
+    comment "blabla needs a kernel to be built"
+        depends on !BR2_LINUX_KERNEL
 
-Care to do it ? :-)
+    [...]
 
-Thanks!
+    endchoice
 
-Thomas
+    config BR2_DEFAULT_KERNEL_HEADERS
+        string
+        default BR2_LINUX_KERNEL_VERSION if BR2_PKG_HEADERS_AS_KERNEL
+
+Which will avoid having to deal with tricky Makefile code like this
+patch does.
+
+(Yes, it is possible to use another Kconfig variable as a default
+value.)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
