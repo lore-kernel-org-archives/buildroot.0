@@ -1,35 +1,35 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 18 Jan 2016 22:00:42 +0100
-Subject: [Buildroot] [PATCH] libdrm: disable drivers for sparcv8
-Message-ID: <20160118210041.GA19430@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Jan 2016 22:03:12 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20160118215347.6447b77c@gmx.net>
+References: <20160116073021.A4B95101BCC@stock.ovh.net>
+ <20160117001117.569d43f2@free-electrons.com>
+ <20160118215347.6447b77c@gmx.net>
+Message-ID: <20160118220312.7669211d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The drivers use atomic ops as CAS, which fails
-to compile for sparcv8, but works fine for leon3.
+Peter,
 
-Fixes following autobuild error:
-http://autobuild.buildroot.net/results/fa0ac44d3c7953b2e2afa03cd7570d8a5d49fcc4/
+On Mon, 18 Jan 2016 21:53:47 +0100, Peter Seiderer wrote:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/libdrm/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+> This two enums entered the linux kernel with commit '[media] add DTMB support for DVB API' [1], at least
+> since linux-3.10 (did no exact search)...., may be depend GST1_PLUGINS_BAD_PLUGIN_DVB on
+> TOOLCHAIN_HEADERS_AT_LEAST_3_10 ?
 
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 445a85b..bacbeac 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
- 	  This option allows to install the libdrm test programs.
- 
- menu "DRM Drivers"
-+depends on !BR2_sparc_v8 # drivers need atomic ops
- 
- config BR2_PACKAGE_LIBDRM_INTEL
- 	bool "intel"
+Thanks for the research. This commit dates back from v3.7:
+
+$ git tag --contains 224b6642f5e82a1b21f6b552c799fa02e527d542 | grep ^v | sort -V | head -1
+v3.7
+
+I've committed a patch that fixes this. Many thanks for your
+investigation!
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
