@@ -1,56 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 21:24:55 +0100
-Subject: [Buildroot] [PATCH 2/8] lttng-babeltrace: make available for all C
-	libraries
+Date: Mon, 18 Jan 2016 21:24:57 +0100
+Subject: [Buildroot] [PATCH 4/8] vlc: remove dependency on C library
 In-Reply-To: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453148701-10036-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453148701-10036-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to posix_fallocate() being unavailable in uClibc 0.9.33, libunwind
-was marked as available only for uClibc snapshot in glibc. However:
+vlc uses <spawn.h> which was not available in old uClibc
+versions. However, since we are removing support for uClibc 0.9.33, we
+can get rid of such dependency. In addition, <spawn.h> is provided by
+musl, and therefore VLC can be enabled with this C library.
 
- - lttng-babeltrace builds fine with musl
- - lttng-babeltrace builds fine with uClibc-ng
- - we're going to get rid of uClibc 0.9.33 support
- - the only toolchain left with an old uClibc version is the Blackfin
-   Analog Devices toolchain, and lttng-babeltrace cannot be enabled on
-   non-MMU platforms
-
-Conclusion: we can enable lttng-babeltrace on all C libraries, and no
-longer require any condition. This commit adjusts the libunwind
-package accordingly.
+Consequently, this commit completely removes any C library dependency
+for the vlc package. The only special case that needs to be handled is
+the Blackfin external toolchain from Analog Devices, which still uses
+an old uClibc version that doesn't provide <spawn.h>.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lttng-babeltrace/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/vlc/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
-index 633ea3d..d362779 100644
---- a/package/lttng-babeltrace/Config.in
-+++ b/package/lttng-babeltrace/Config.in
-@@ -7,7 +7,6 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
- 	depends on BR2_USE_WCHAR # libglib2, util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
--	depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC # posix_fallocate
- 	help
- 	  The Babeltrace project provides trace read and write
- 	  libraries, as well as a trace converter application. Plugins
-@@ -28,7 +27,6 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index 03e85c3..cad21e2 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -5,12 +5,12 @@ endif
  
- 	  http://www.efficios.com/babeltrace
+ config BR2_PACKAGE_VLC
+ 	bool "vlc"
+-	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
+ 	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
+ 	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
+@@ -32,7 +32,7 @@ config BR2_PACKAGE_VLC_OPENCV3_BACKEND
+ 	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
+ 	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
  
--comment "lttng-babeltrace needs a uclibc snapshot or (e)glib toolchain w/ wchar, threads"
-+comment "lttng-babeltrace needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC)
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+-comment "vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, dynamic library, wchar, threads, headers >= 3.7"
+-	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) \
+-		|| !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR \
++comment "vlc needs a toolchain w/ C++, dynamic library, wchar, threads, headers >= 3.7"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
 -- 
 2.6.4
