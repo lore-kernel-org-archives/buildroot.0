@@ -1,43 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 21:50:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake: use MinSizeRel for
- size optimized build
-In-Reply-To: <1453055051-11080-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1453055051-11080-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160118215057.0108fad3@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 18 Jan 2016 21:53:47 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20160117001117.569d43f2@free-electrons.com>
+References: <20160116073021.A4B95101BCC@stock.ovh.net>
+ <20160117001117.569d43f2@free-electrons.com>
+Message-ID: <20160118215347.6447b77c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Hello Thomas,
 
-On Sun, 17 Jan 2016 19:24:11 +0100, J?rg Krause wrote:
-> MinSizeRel sets the gcc compiler optimization level to '-Os' whereas Release
-> sets it to '-O3'.
+On Sun, 17 Jan 2016 00:11:17 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/pkg-cmake.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> >         i686 |         gst1-plugins-bad-1.6.2 | NOK | http://autobuild.buildroot.net/results/fab7afc3490d77a6b29760394337298f2fd55d51/
+> >       x86_64 |         gst1-plugins-bad-1.6.2 | NOK | http://autobuild.buildroot.net/results/4da1b0454fe7bf028a62058d28dafda104fb75f4/
 > 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 81dcfcc..dc2dc93 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -87,7 +87,7 @@ define $(2)_CONFIGURE_CMDS
->  	PATH=$$(BR_PATH) \
->  	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
-> -		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
-> +		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,$$(if $$(BR2_OPTIMIZE_S),MinSizeRel,Release) \
+> gstdvbsrc.c: In function 'gst_dvbsrc_code_rate_get_type':
+> gstdvbsrc.c:273:6: error: 'FEC_2_5' undeclared (first use in this function)
+> gstdvbsrc.c:273:6: note: each undeclared identifier is reported only once for each function it appears in
+> gstdvbsrc.c: In function 'gst_dvbsrc_modulation_get_type':
+> gstdvbsrc.c:303:6: error: 'QAM_4_NR' undeclared (first use in this function)
+> gstdvbsrc.c:303:5: error: initializer element is not constant
+> gstdvbsrc.c:303:5: error: (near initialization for 'modulation_types[13].value')
+> 
+> Not sure. Peter, Gustavo ?
+> 
+ 
+This two enums entered the linux kernel with commit '[media] add DTMB support for DVB API' [1], at least
+since linux-3.10 (did no exact search)...., may be depend GST1_PLUGINS_BAD_PLUGIN_DVB on
+TOOLCHAIN_HEADERS_AT_LEAST_3_10 ?
 
-Looks good, but instead of this, can't CMake be taught to use Buildroot
-CFLAGS, which have our own -O<value> ?
+Regards,
+Peter
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[1] https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/include/linux/dvb/frontend.h?id=224b6642f5e82a1b21f6b552c799fa02e527d542
