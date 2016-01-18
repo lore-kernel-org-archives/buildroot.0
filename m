@@ -1,81 +1,138 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 21:24:56 +0100
-Subject: [Buildroot] [PATCH 3/8] mongrel2: allow using uClibc but only on
-	certain architectures
+Date: Mon, 18 Jan 2016 21:25:00 +0100
+Subject: [Buildroot] [PATCH 7/8] uclibc: remove support for the snapshot
+	version
 In-Reply-To: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453148701-10036-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453148701-10036-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mongrel2 uses  the {get,make,swap}context functions:
-
- - With glibc, no problem, they are available on all supported
-   architectures
-
- - With uClibc, they are available only on a subset of the
-   architectures. Until now, only BR2_UCLIBC_VERSION_SNAPSHOT
-   configurations were allowed to select mongrel2, but we are going to
-   get rid of the uClibc snapshot version, and uClibc-ng is as capable
-   as the uClibc snapshot. However, only certain architectures have
-   the *context() functions.
-
- - With musl, there is no *context() support.
-
-Since this dependency is quite complicated, we introduce a
-BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS hidden boolean to encode which C
-libraries are supported.
-
-Also, listing the supported uClibc architectures would be too long in
-the comment, so we simply indicate that the package needs uClibc or
-glibc.
+The snapshot version points to the original uClibc project, which is
+dead. Moreover, we no longer support "snapshot" versions for any other
+Buildroot component, so there is no reason to keep it for uClibc.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mongrel2/Config.in | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ package/uclibc/Config.in              | 17 ---------------
+ package/uclibc/uClibc-snapshot.config | 41 -----------------------------------
+ package/uclibc/uclibc.hash            |  3 ---
+ package/uclibc/uclibc.mk              |  5 +----
+ 4 files changed, 1 insertion(+), 65 deletions(-)
+ delete mode 100644 package/uclibc/uClibc-snapshot.config
 
-diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
-index 1c7b495..49dd6fd 100644
---- a/package/mongrel2/Config.in
-+++ b/package/mongrel2/Config.in
-@@ -1,10 +1,16 @@
--comment "mongrel2 needs a toolchain w/ C++, threads, wchar, dynamic library"
--	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
--		BR2_TOOLCHAIN_USES_GLIBC || \
--		BR2_arm
-+# mongrel2 uses {get,make,swap}context() functions, which are
-+# available in glibc for all architectures and in uClibc only for a
-+# subset of the architectures
-+config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
-+	bool
-+	default y if BR2_TOOLCHAIN_USES_GLIBC
-+	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
-+		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_x86_64)
-+
-+comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		BR2_STATIC_LIBS
-+		BR2_STATIC_LIBS || !BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 7cbd45c..452043d 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -30,32 +30,15 @@ choice
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+ 		       if !BR2_m68k && !BR2_x86_i386
  
- config BR2_PACKAGE_MONGREL2
- 	bool "mongrel2"
-@@ -14,11 +20,7 @@ config BR2_PACKAGE_MONGREL2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
- 	depends on BR2_USE_WCHAR # zeromq -> util-linux
- 	depends on !BR2_STATIC_LIBS # uses dlopen()
--	# {get,make,swap}context functions present in
--	# {e,}glibc and in uClibc's master branch. Source has arm workaround
--	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
--		BR2_TOOLCHAIN_USES_GLIBC || \
--		BR2_arm
-+	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+-	config BR2_UCLIBC_VERSION_SNAPSHOT
+-		bool "daily snapshot"
+-		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if !BR2_xtensa
+-		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+-		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+-		       if !BR2_x86_i386 && !BR2_xtensa
+-		depends on !(BR2_arc || BR2_mips64 || BR2_mips64el)
+-
+ endchoice
+ 
+-config BR2_USE_UCLIBC_SNAPSHOT
+-	string "Date (yyyymmdd) of snapshot or 'snapshot' for latest"
+-	default "snapshot"
+-	depends on BR2_UCLIBC_VERSION_SNAPSHOT
+-	help
+-	  Use latest snapshot or one from a specific date?
+-
+ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default "1.0.11"		if BR2_UCLIBC_VERSION_NG
+-	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+ 
+ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
+ 	default "package/uclibc/uClibc-ng.config" if BR2_UCLIBC_VERSION_NG
+-	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
  	help
- 	  Mongrel2 is an application, language, and network architecture
- 	  agnostic web server that focuses on web applications using
+ 	  Some people may wish to use their own modified uClibc configuration
+ 	  file and will specify their config file location with this option.
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+deleted file mode 100644
+index cbb4737..0000000
+--- a/package/uclibc/uClibc-snapshot.config
++++ /dev/null
+@@ -1,41 +0,0 @@
+-DO_C99_MATH=y
+-KERNEL_HEADERS="/usr/src/linux/include"
+-# LDSO_CACHE_SUPPORT is not set
+-# UCLIBC_STATIC_LDCONFIG is not set
+-LDSO_RUNPATH=y
+-LINUXTHREADS_OLD=y
+-MALLOC_GLIBC_COMPAT=y
+-UCLIBC_HAS_OBSTACK=y
+-UCLIBC_HAS_UTMPX=y
+-UCLIBC_HAS_UTMP=y
+-UCLIBC_SUSV2_LEGACY=y
+-UCLIBC_SUSV3_LEGACY=y
+-UCLIBC_HAS_CONTEXT_FUNCS=y
+-UCLIBC_SUSV4_LEGACY=y
+-UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
+-UCLIBC_HAS_GETPT=y
+-UCLIBC_HAS_LIBUTIL=y
+-UCLIBC_HAS_OBSOLETE_BSD_SIGNAL=y
+-UCLIBC_USE_NETLINK=y
+-UCLIBC_SUPPORT_AI_ADDRCONFIG=y
+-UCLIBC_HAS_RESOLVER_SUPPORT=y
+-UCLIBC_HAS_LIBRESOLV_STUB=y
+-UCLIBC_HAS_LIBNSL_STUB=y
+-UCLIBC_HAS_CTYPE_CHECKED=y
+-UCLIBC_HAS_HEXADECIMAL_FLOATS=y
+-UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
+-UCLIBC_HAS_STDIO_GETC_MACRO=y
+-UCLIBC_HAS_STDIO_PUTC_MACRO=y
+-UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
+-UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+-UCLIBC_HAS_PRINTF_M_SPEC=y
+-# UCLIBC_HAS_REGEX_OLD is not set
+-# UCLIBC_HAS_FNMATCH_OLD is not set
+-UCLIBC_HAS_NFTW=y
+-UCLIBC_HAS_FTW=y
+-UCLIBC_HAS_GNU_GLOB=y
+-RUNTIME_PREFIX="/"
+-DEVEL_PREFIX="/usr/"
+-UCLIBC_HAS_SSP=y
+-UCLIBC_BUILD_NOW=y
+-# DOSTRIP is not set
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 0a1fdf6..ecc8cf9 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,5 +1,2 @@
+ # From http://www.uclibc-ng.org/
+ sha256  2fdc6b9015f8049be0eb12a5e3e446de471fb80061115afd8d72ea582cb22b74        uClibc-ng-1.0.11.tar.xz
+-
+-# No hash for this git snapshot
+-none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index ad5f607..44b8a97 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -9,10 +9,7 @@ UCLIBC_SOURCE ?= uClibc-$(UCLIBC_VERSION).tar.bz2
+ UCLIBC_LICENSE = LGPLv2.1+
+ UCLIBC_LICENSE_FILES = COPYING.LIB
+ 
+-ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+-UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
+-BR_NO_CHECK_HASH_FOR += $(UCLIBC_SOURCE)
+-else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
++ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ endif
 -- 
 2.6.4
