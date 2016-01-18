@@ -1,46 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 22:03:17 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-bad: add kernel header
-	version dependency on DVB plugin
-Message-ID: <20160118210326.909497FB68@busybox.osuosl.org>
+Date: Mon, 18 Jan 2016 22:05:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/alsa-utils: Add util alsaloop
+In-Reply-To: <1453064452-31266-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453064452-31266-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160118220522.46378557@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a2bb236edb644e6c901b73a03a767d213f52a4a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd,
 
-The DVB plugin uses the FEC_2_5 and QAM_4_NR from the DVB API, which
-were added only in kernel 3.7. This commit adds the necessary kernel
-header version dependency, which fixes:
+On Sun, 17 Jan 2016 22:00:52 +0100, Bernd Kuhls wrote:
 
-  http://autobuild.buildroot.net/results/fab7afc3490d77a6b29760394337298f2fd55d51/
+> +config BR2_PACKAGE_ALSA_UTILS_ALSALOOP
+> +	bool "alsaloop"
+> +	select BR2_PACKAGE_LIBSAMPLERATE
 
-Thanks to Peter Seiderer for the investigation!
+libsamplerate is not mandatory to build alsaloop it seems:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+thomas at skate:~/projets/buildroot (master)$ readelf -d output/build/alsa-utils-1.1.0/alsaloop/alsaloop| grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libasound.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libintl.so.8]
+ 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index f557678..0aafea0 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -651,9 +651,14 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SNDFILE
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB
- 	bool "dvb"
- 	select BR2_PACKAGE_DTV_SCAN_TABLES
-+	# FEC_2_5 / QAM_4_NR definitions
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
- 	help
- 	  DVB elements
- 
-+comment "dvb needs a toolchain w/ headers >= 3.7"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
- 	bool "hls"
- 	select BR2_PACKAGE_GNUTLS
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
