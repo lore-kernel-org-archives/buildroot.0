@@ -1,47 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jan 2016 10:10:50 +0100
-Subject: [Buildroot] [git commit] uboot: remove unused helper function
-	insert_define
-Message-ID: <20160118091230.F34067FC4A@busybox.osuosl.org>
+Date: Mon, 18 Jan 2016 10:09:46 +0100
+Subject: [Buildroot] [git commit] package/micropython-lib: bump to version
+	1.0
+Message-ID: <20160118091230.E25717FC4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd81c9817137d9de10347502b2d5d53127081c2f
+commit: http://git.buildroot.net/buildroot/commit/?id=7528a2735c310e720fbd89b6142cb128bd32ade4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 16b8e813c810fde2fe3655c696edf1e76a7d27ba removed all remaining users
-of helper function insert_define.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 12 ------------
- 1 file changed, 12 deletions(-)
+ package/micropython-lib/micropython-lib.hash | 2 +-
+ package/micropython-lib/micropython-lib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index c8c50f0..d539b31 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -89,18 +89,6 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
- endif
+diff --git a/package/micropython-lib/micropython-lib.hash b/package/micropython-lib/micropython-lib.hash
+index 7ab22d5..30d0cf8 100644
+--- a/package/micropython-lib/micropython-lib.hash
++++ b/package/micropython-lib/micropython-lib.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 f66bfe0e7d2d61119a5def989f74278f42bee7d04162913ea60d3f2955d65909  micropython-lib-v0.5.tar.gz
++sha256 e659444fadd755c1b5dbff091aa1b23a835e7361da3a32f38774bd39a15937ad  micropython-lib-v1.0.tar.gz
+diff --git a/package/micropython-lib/micropython-lib.mk b/package/micropython-lib/micropython-lib.mk
+index a4a6cf6..4ed2120 100644
+--- a/package/micropython-lib/micropython-lib.mk
++++ b/package/micropython-lib/micropython-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Helper function to fill the U-Boot config.h file.
--# Argument 1: option name
--# Argument 2: option value
--# If the option value is empty, this function does nothing.
--define insert_define
--$(if $(call qstrip,$(2)),
--	@echo "#ifdef $(strip $(1))" >> $(@D)/include/config.h
--	@echo "#undef $(strip $(1))" >> $(@D)/include/config.h
--	@echo "#endif" >> $(@D)/include/config.h
--	@echo '#define $(strip $(1)) $(call qstrip,$(2))' >> $(@D)/include/config.h)
--endef
--
- # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
- # legal-info finds it
- define UBOOT_COPY_OLD_LICENSE_FILE
+-MICROPYTHON_LIB_VERSION = v0.5
++MICROPYTHON_LIB_VERSION = v1.0
+ MICROPYTHON_LIB_SITE = $(call github,micropython,micropython-lib,$(MICROPYTHON_LIB_VERSION))
+ MICROPYTHON_LIB_LICENSE = Python software foundation license v2 (some modules), MIT (everything else)
+ MICROPYTHON_LIB_LICENSE_FILES = LICENSE
