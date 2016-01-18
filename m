@@ -1,94 +1,64 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Mon, 18 Jan 2016 18:23:35 +0100
-Subject: [Buildroot] [PATCH] lldpd: new package
-In-Reply-To: <20160118160450.0645b1db@free-electrons.com>
-References: <1453112084-16105-1-git-send-email-julien.floret@6wind.com>
- <20160118160450.0645b1db@free-electrons.com>
-Message-ID: <CAHfJR7jVn99vE=6i+Z7D5w6wMPHYyOrYm+1aM-HTvMWq2PeG6w@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 18 Jan 2016 18:38:40 +0100
+Subject: [Buildroot] [PATCH v2] package/libevent: Fix broken download URL
+Message-ID: <1453138720-16100-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-01-18 16:04 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Julien Floret,
->
+Upstream URL has changed on Sourceforge:
 
-Dear Thomas Petazzoni,
+>>> libevent 2.0.22-stable Downloading
+--2016-01-17 23:06:31--  http://downloads.sourceforge.net/project/levent/libevent/libevent-2.0/libevent-2.0.22-stable.tar.gz
+Resolving downloads.sourceforge.net (downloads.sourceforge.net)... 216.34.181.59
+Connecting to downloads.sourceforge.net (downloads.sourceforge.net)|216.34.181.59|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2016-01-17 23:06:31 ERROR 404: Not Found.
 
-Thanks for the quick response!
+Additionally the project moved to github:
+http://sourceforge.net/projects/levent/
 
-> On Mon, 18 Jan 2016 11:14:44 +0100, Julien Floret wrote:
->> lldpd is a 802.1ab implementation (LLDP) to help you locate neighbors
->> of all your equipments.
->>
->> LLDP is an industry standard protocol designed to supplant
->> proprietary Link-Layer protocols such as EDP or CDP. The goal of LLDP
->> is to provide an inter-vendor compatible mechanism to deliver
->> Link-Layer notifications to adjacent network devices.
->>
->> https://vincentbernat.github.io/lldpd/
->>
->> Signed-off-by: Julien Floret <julien.floret@6wind.com>
->
-> Thanks for this patch! Overall it looks good, I just have a few
-> comments here and there, see below.
->
->> diff --git a/package/lldpd/Config.in b/package/lldpd/Config.in
->> new file mode 100644
->> index 000000000000..c152c559a9de
->> --- /dev/null
->> +++ b/package/lldpd/Config.in
->> @@ -0,0 +1,91 @@
->> +config BR2_PACKAGE_LLDPD
->> +     bool "lldpd"
->> +     select BR2_PACKAGE_LIBEVENT
->
-> BR2_PACKAGE_LIBEVENT has a "depends on !BR2_bfin" so you need to
-> duplicate this dependency in lldpd's Config.in file.
->
+"As of 2015-10-07, this project may now be found at
+ https://github.com/libevent/libevent."
 
-I don't see such dependency for libevent...
-Maybe you got mixed up with libev?
+This patch points Config.in to the new upstream URL and fixes the broken
+download URL by using github.com.
 
->> +config BR2_PACKAGE_LLDPD_PRIVSEP
->> +     bool "Privilege separation"
->> +     default y
->> +     help
->> +       Enable Privilege separation
->> +
->> +config BR2_PACKAGE_LLDPD_PRIVSEP_USER
->> +     string "Privilege separation user"
->> +     depends on BR2_PACKAGE_LLDPD_PRIVSEP
->> +     default "_lldpd"
->> +     help
->> +       Which user to use for privilege separation
->> +
->> +config BR2_PACKAGE_LLDPD_PRIVSEP_GROUP
->> +     string "Privilege separation group"
->> +     depends on BR2_PACKAGE_LLDPD_PRIVSEP
->> +     default "_lldpd"
->> +     help
->> +       Which group to use for privilege separation
->
-> Do we really need to allow the configuration of the user and group? We
-> generally don't do this for most package. Also, are _lldpd a good
-> choice? Why the leading underscore?
->
-> If we're really talking about Unix user/group, then I would suggest to
-> just have an option to enable/disable privilege separation. And when
-> enabled, use lldpd as the user and group names.
->
-> Also, shouldn't these user and group names be created by Buildroot in
-> the target root filesystem?
->
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: the download URL should work now ;) (Peter)
 
-_lldpd (with the leading underscore) is the default value of the user and
-group in lldpd, when privsep is enabled but user/group are not specified.
-But I agree this is not really needed.
+ package/libevent/Config.in   | 2 +-
+ package/libevent/libevent.mk | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-In fact, for a first simple patch, I suggest to disable explicitely the
-privilege separation feature. We can then handle it properly in a later patch,
-with user and group names created in the target root filesystem.
+diff --git a/package/libevent/Config.in b/package/libevent/Config.in
+index 680fa48..c32f29e 100644
+--- a/package/libevent/Config.in
++++ b/package/libevent/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_LIBEVENT
+ 	help
+ 	  Userspace library for handling asynchronous notifications
+ 
+-	  http://monkey.org/~provos/
++	  http://libevent.org
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index d67c738..820beea 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBEVENT_VERSION_MAJOR = 2.0
+-LIBEVENT_VERSION = $(LIBEVENT_VERSION_MAJOR).22-stable
+-LIBEVENT_SITE = http://downloads.sourceforge.net/project/levent/libevent/libevent-$(LIBEVENT_VERSION_MAJOR)
++LIBEVENT_VERSION = 2.0.22-stable
++LIBEVENT_SITE = https://github.com/libevent/libevent/releases/download/release-$(LIBEVENT_VERSION)
+ LIBEVENT_INSTALL_STAGING = YES
+ LIBEVENT_LICENSE = BSD-3c, OpenBSD
+ LIBEVENT_LICENSE_FILES = LICENSE
+-- 
+2.7.0.rc3
