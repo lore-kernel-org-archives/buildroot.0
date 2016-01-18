@@ -1,94 +1,94 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 18 Jan 2016 16:48:20 +0000
-Subject: [Buildroot] [PATCH v2] libffi: fix the build for MIPS soft-float
-	with recent compilers
-Message-ID: <1453135700-2404-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Mon, 18 Jan 2016 18:23:35 +0100
+Subject: [Buildroot] [PATCH] lldpd: new package
+In-Reply-To: <20160118160450.0645b1db@free-electrons.com>
+References: <1453112084-16105-1-git-send-email-julien.floret@6wind.com>
+ <20160118160450.0645b1db@free-electrons.com>
+Message-ID: <CAHfJR7jVn99vE=6i+Z7D5w6wMPHYyOrYm+1aM-HTvMWq2PeG6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Recent MIPS compilers have an stricter agreement between the compiler
-and the assembler on the ABI. The compiler now passes -msoft-float to
-the assembler where it previously did not.
+2016-01-18 16:04 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Julien Floret,
+>
 
-libffi uses MIPS hard-float instructions so when we try to build it for
-soft-float using a recent compiler it fails because of the explained
-above. This package should be fixed in order to add support for
-soft-float.
+Dear Thomas Petazzoni,
 
-In the meantime we can add a little hack in order to be able to build it
-for soft-float. Basically we add ".set hardfloat" so the assembler will
-not disable the hard-float instructions. The build will of course
-include some hard-float bits which shouldn't exist in a soft-float
-build, and that may cause runtime problems. But that's what we already
-had before and we had lived with it.
+Thanks for the quick response!
 
-We choose to apply this temporary fix because it only affects MIPS
-soft-float builds. Otherwise we would need to disable libffi and
-recursively all the packages depending on it (python, libglib2...) for
-MIPS soft-float, which would be a bit overkill.
+> On Mon, 18 Jan 2016 11:14:44 +0100, Julien Floret wrote:
+>> lldpd is a 802.1ab implementation (LLDP) to help you locate neighbors
+>> of all your equipments.
+>>
+>> LLDP is an industry standard protocol designed to supplant
+>> proprietary Link-Layer protocols such as EDP or CDP. The goal of LLDP
+>> is to provide an inter-vendor compatible mechanism to deliver
+>> Link-Layer notifications to adjacent network devices.
+>>
+>> https://vincentbernat.github.io/lldpd/
+>>
+>> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+>
+> Thanks for this patch! Overall it looks good, I just have a few
+> comments here and there, see below.
+>
+>> diff --git a/package/lldpd/Config.in b/package/lldpd/Config.in
+>> new file mode 100644
+>> index 000000000000..c152c559a9de
+>> --- /dev/null
+>> +++ b/package/lldpd/Config.in
+>> @@ -0,0 +1,91 @@
+>> +config BR2_PACKAGE_LLDPD
+>> +     bool "lldpd"
+>> +     select BR2_PACKAGE_LIBEVENT
+>
+> BR2_PACKAGE_LIBEVENT has a "depends on !BR2_bfin" so you need to
+> duplicate this dependency in lldpd's Config.in file.
+>
 
-Fixes:
+I don't see such dependency for libevent...
+Maybe you got mixed up with libev?
 
-  http://autobuild.buildroot.net/results/6b0607b7cb0ac5525c2e47e819301f38bd2d6b30/
+>> +config BR2_PACKAGE_LLDPD_PRIVSEP
+>> +     bool "Privilege separation"
+>> +     default y
+>> +     help
+>> +       Enable Privilege separation
+>> +
+>> +config BR2_PACKAGE_LLDPD_PRIVSEP_USER
+>> +     string "Privilege separation user"
+>> +     depends on BR2_PACKAGE_LLDPD_PRIVSEP
+>> +     default "_lldpd"
+>> +     help
+>> +       Which user to use for privilege separation
+>> +
+>> +config BR2_PACKAGE_LLDPD_PRIVSEP_GROUP
+>> +     string "Privilege separation group"
+>> +     depends on BR2_PACKAGE_LLDPD_PRIVSEP
+>> +     default "_lldpd"
+>> +     help
+>> +       Which group to use for privilege separation
+>
+> Do we really need to allow the configuration of the user and group? We
+> generally don't do this for most package. Also, are _lldpd a good
+> choice? Why the leading underscore?
+>
+> If we're really talking about Unix user/group, then I would suggest to
+> just have an option to enable/disable privilege separation. And when
+> enabled, use lldpd as the user and group names.
+>
+> Also, shouldn't these user and group names be created by Buildroot in
+> the target root filesystem?
+>
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v1 -> v2:
- - Add autobuild URL
+_lldpd (with the leading underscore) is the default value of the user and
+group in lldpd, when privsep is enabled but user/group are not specified.
+But I agree this is not really needed.
 
- ...nable-hardfloat-in-the-MIPS-assembly-code.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch
-
-diff --git a/package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch b/package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch
-new file mode 100644
-index 0000000..776990d
---- /dev/null
-+++ b/package/libffi/0003-libffi-enable-hardfloat-in-the-MIPS-assembly-code.patch
-@@ -0,0 +1,41 @@
-+From 48bc37fabbc685b1e3293055bd33ca66c619305e Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Wed, 13 Jan 2016 14:49:59 +0000
-+Subject: [PATCH] libffi: enable hardfloat in the MIPS assembly code
-+
-+This way it will be possible to build it for soft-float. This is only a
-+temporary fix. The package needs to be fixed properly.
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ src/mips/n32.S | 1 +
-+ src/mips/o32.S | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/src/mips/n32.S b/src/mips/n32.S
-+index c6985d3..dc842d5 100644
-+--- a/src/mips/n32.S
-++++ b/src/mips/n32.S
-+@@ -44,6 +44,7 @@
-+ 	.abicalls
-+ #endif
-+ 	.set mips4
-++	.set hardfloat
-+ 	.text
-+ 	.align	2
-+ 	.globl	ffi_call_N32
-+diff --git a/src/mips/o32.S b/src/mips/o32.S
-+index eb27981..b653daf 100644
-+--- a/src/mips/o32.S
-++++ b/src/mips/o32.S
-+@@ -42,6 +42,7 @@
-+ #define RA_OFF		(SIZEOF_FRAME - 1 * FFI_SIZEOF_ARG)
-+ 
-+ 	.abicalls
-++	.set hardfloat
-+ 	.text
-+ 	.align	2
-+ 	.globl	ffi_call_O32
-+-- 
-+2.4.10
-+
--- 
-2.4.10
+In fact, for a first simple patch, I suggest to disable explicitely the
+privilege separation feature. We can then handle it properly in a later patch,
+with user and group names created in the target root filesystem.
