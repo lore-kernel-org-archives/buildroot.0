@@ -1,42 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 22:56:59 +0100
-Subject: [Buildroot] [PATCH 05/80 v1] package/collectd: use 'menuconfig'
- instead of 'config'+'menu'
-In-Reply-To: <015a3c362744fb1f25235088a353f3d3689fd62f.1452983019.git.yann.morin.1998@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 18 Jan 2016 22:57:08 +0100
+Subject: [Buildroot] [PATCH 04/80 v1] package/angularjs: simplify
+ modules selection
+In-Reply-To: <20160118224819.3957df62@free-electrons.com>
 References: <cover.1452983019.git.yann.morin.1998@free.fr>
- <015a3c362744fb1f25235088a353f3d3689fd62f.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <20160118225659.16e260ac@free-electrons.com>
+ <0ff063277872269c4b86770a44755cd68e232680.1452983019.git.yann.morin.1998@free.fr>
+ <20160118224819.3957df62@free-electrons.com>
+Message-ID: <20160118215708.GB3380@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas, All,
 
-On Sat, 16 Jan 2016 23:36:57 +0100, Yann E. MORIN wrote:
-> Since there were multiple sub-menus, keep their prompts as a comment, to
-> properly separate all famillies of plugins.
+On 2016-01-18 22:48 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 16 Jan 2016 23:36:56 +0100, Yann E. MORIN wrote:
+> > Remove the superfluous config option, and make all modules default to
+> > 'y', which provides exactly the same functionality.
+> > 
+> > simplify (and slightly beautify) the handling of modules in the .mk:
+> > since the modules' symbols are always meaningful now, we can get rid of
+> > the else-clause, and always build the list of modules using the Kconfig
+> > options.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > ---
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> You have an empty line at the end of many commit logs.
 
-It is really a matter of taste, so my opinion is clearly not a strong
-one here. But I believe I actually prefer the current solution. With
-your solution yes all sub-options are hidden behind a menu. But this
-menu is now very long, and I find the "comment" in Kconfig to not be
-very nice separators to separate various parts of the menu.
+Yup, there's an empty line because I added a '---' comment and I always
+separate them with an empty line so they are properly separated from the
+commit log itself. But that's no a problem, since git-am (and thus
+pwclient git-am does too):
+  - drops the --- comments
+  - drops emtpy trailing lines
 
-They are even more confusing in that there are "comments" used as
-separators, and real "comments" about missing dependencies, causing
-confusion.
+> I agree with the principle of the patch, but sometimes is odd:
+> 
+> 
+> > +# This list mirrors the list of available modules from Config.in.
+> > +# Keep this list in sync and in the same (alphabetical) order as the
+> > +# one in Config.in. However, always keep 'angular' first in the list.
+> 
+> You say "angular" must be first in the list...
 
-So I'm not too fan of this one, but if Arnout and you are happy with it
-and Peter likes it, that's OK, it's really a minor detail from my point
-of view.
+Damn, I forgot to remove that part when I moved back 'angular' out of
+the modules list.
 
-Thomas
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> > +ANGULARJS_MODULES = \
+> > +	animate \
+> > +	aria \
+> > +	cookies \
+> > +	messages \
+> > +	message-format \
+> > +	resource \
+> > +	route \
+> > +	sanitize \
+> > +	touch
+> 
+> But there is no "angular" in this list.
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
