@@ -1,38 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 22:05:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/alsa-utils: Add util alsaloop
-In-Reply-To: <1453064452-31266-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453064452-31266-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160118220522.46378557@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 18 Jan 2016 22:06:52 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2016-01-06
+References: <20160107073021.EA2B5102939@stock.ovh.net>
+Message-ID: <co00ncx5q3.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Am Thu, 07 Jan 2016 08:30:21 +0100 schrieb Thomas Petazzoni:
 
-On Sun, 17 Jan 2016 22:00:52 +0100, Bernd Kuhls wrote:
+>          arm |           libedit-20150325-3.1 | NOK |
+>          http://autobuild.buildroot.net/
+results/3d12a7e6423d236c9d528bca7cbcf86b1499d738/
 
-> +config BR2_PACKAGE_ALSA_UTILS_ALSALOOP
-> +	bool "alsaloop"
-> +	select BR2_PACKAGE_LIBSAMPLERATE
+Hi,
 
-libsamplerate is not mandatory to build alsaloop it seems:
+fixed by http://patchwork.ozlabs.org/patch/564146/
 
-thomas at skate:~/projets/buildroot (master)$ readelf -d output/build/alsa-utils-1.1.0/alsaloop/alsaloop| grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libm.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libasound.so.2]
- 0x00000001 (NEEDED)                     Shared library: [libdl.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libpthread.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libintl.so.8]
- 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
+The bug was caught again today: http://autobuild.buildroot.net/
+results/695/695bb9d5feb9d12b50be6a7909bc882863e722b4/
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
