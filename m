@@ -1,51 +1,40 @@
-From: Doug Kehn <rdkehn@yahoo.com>
-Date: Mon, 18 Jan 2016 09:42:19 -0600
-Subject: [Buildroot] [PATCH v3 2/4] package/dhcp: add bind configure options
-	for cross compiling
-In-Reply-To: <1453131741-1613-1-git-send-email-rdkehn@yahoo.com>
-References: <1453131741-1613-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <1453131741-1613-3-git-send-email-rdkehn@yahoo.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 18 Jan 2016 16:09:35 +0000
+Subject: [Buildroot] [PATCH] luvi: build for the right MIPS endianness
+Message-ID: <1453133375-54831-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
----
-Changes v2 -> v3
-  - removed RFC tag
-Changes v1 -> v2
-  - no changes
----
- package/dhcp/0001-bind-configure.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/dhcp/0001-bind-configure.patch
+Otherwise it will cause build failures like this one:
 
-diff --git a/package/dhcp/0001-bind-configure.patch b/package/dhcp/0001-bind-configure.patch
-new file mode 100644
-index 0000000..9a38f45
---- /dev/null
-+++ b/package/dhcp/0001-bind-configure.patch
-@@ -0,0 +1,19 @@
-+add bind configure options for cross compiling
-+
-+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-+
-+Index: dhcp-4.3.3-P1/bind/Makefile.in
-+===================================================================
-+--- dhcp-4.3.3-P1.orig/bind/Makefile.in
-++++ dhcp-4.3.3-P1/bind/Makefile.in
-+@@ -30,7 +30,9 @@ bindconfig = --disable-kqueue --disable-
-+ 	--without-openssl --without-libxml2 --enable-exportlib \
-+ 	--with-gssapi=no --enable-threads=no @BINDCONFIG@ \
-+ 	--with-export-includedir=${binddir}/include \
-+-	--with-export-libdir=${binddir}/lib
-++	--with-export-libdir=${binddir}/lib \
-++	--target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-++	--build=$(GNU_HOST_NAME) --with-randomdev=/dev/urandom
-+ 
-+ @BIND_ATF_FALSE at cleandirs = ./lib ./include
-+ @BIND_ATF_TRUE at cleandirs = ./lib ./include ./atf
+[100%] Linking C executable luvi
+/home/buildroot/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/5.2.0/../../../../mipsel-buildroot-linux-gnu/bin/ld:
+jitted_tmp/src/lua/init.lua_luvi_generated.o: compiled for a big endian
+system and target is little endian
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/luvi/luvi.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index ef1c2e1..d83933e 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -20,8 +20,10 @@ else ifeq ($(BR2_powerpc),y)
+ LUVI_TARGET_ARCH = ppc
+ else ifeq ($(BR2_arm)$(BR2_armeb),y)
+ LUVI_TARGET_ARCH = arm
+-else ifeq ($(BR2_mips)$(BR2_mipsel),y)
++else ifeq ($(BR2_mips),y)
+ LUVI_TARGET_ARCH = mips
++else ifeq ($(BR2_mipsel),y)
++LUVI_TARGET_ARCH = mipsel
+ else
+ LUVI_TARGET_ARCH = $(BR2_ARCH)
+ endif
 -- 
-2.7.0
+2.4.10
