@@ -1,87 +1,71 @@
-From: Eial Czerwacki <eial@scalemp.com>
-Date: Mon, 18 Jan 2016 08:23:46 +0200
-Subject: [Buildroot] could not read symbols: Bad value error on musl
- based buildroot env on rpi2 config.
-In-Reply-To: <569BFB04.4050000@mind.be>
-References: <569BB682.4000707@scalemp.com> <569BFB04.4050000@mind.be>
-Message-ID: <569C84F2.1050309@scalemp.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 18 Jan 2016 07:06:10 +0000
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20160117001117.569d43f2@free-electrons.com>
+References: <20160116073021.A4B95101BCC@stock.ovh.net>
+ <20160117001117.569d43f2@free-electrons.com>
+Message-ID: <1453100769.7056.14.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Hi Thomas,
 
-the pastebin can be found at http://paste.ubuntu.com/14565509/
+On Sun, 2016-01-17 at 00:11 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Gustavo, Vicente, J?rg, Frank, Bernd, Maxime, Carsten, Davide, Jeremy,
+> VIcente, Gilles, Gary, Romain, Matt, Waldemar, Fran?ois, Alexey, Joris,
+> Volkov: there are some specific build failures for which your help
+> would be appreciated. See below. Thanks in advance for your help!
+> 
+> On Sat, 16 Jan 2016 08:30:21 +0100 (CET), Thomas Petazzoni wrote:
 
-what makes it a bit weirder is that on my 64 bit gentoo machine (this is
-a 32 bit ubuntu 12.04 machine) it compiles well.
+> >          arc |                  mesa3d-11.1.0 | NOK | 
+> > http://autobuild.buildroot.net/results/7b3f5c0e3c59bd49614e8ad4eee3d89e3527a939/
+> 
+> Compiler problem, issue is known by Synopsys.
 
-On 01/17/2016 10:35 PM, Arnout Vandecappelle wrote:
-> On 17-01-16 16:42, Eial Czerwacki wrote:
->> Greetings,
->>
->> I'm trying to create a musl base env for my rpi2 and I'm getting the
->> below failure.
->>
->> /usr/bin/ld: /usr/local/lib/libpython2.7.a(abstract.o): relocation
->  This is bad, because it's trying to use your installed python while building
-> buildroot's host-python... This error happens while compiling host-python,
-> right? You didn't show the last bit of the output.
->
->  Can you pastebin output/build/host-python-2.7.11/config.log?
->
->  (Note for others on the list: I suspect host-python is built for xcb-proto and
-> libxcb.)
->
->  Regards,
->  Arnout
->
->> R_X86_64_32 against `.rodata.str1.8' can not be used when making a
->> shared object; recompile with -fPIC
->> /usr/local/lib/libpython2.7.a: could not read symbols: Bad value
->> collect2: ld returned 1 exit status
->>
->> Python build finished, but the necessary bits to build these modules
->> were not found:
->> _tkinter           bsddb185           dl             
->> imageop            sunaudiodev                       
->> To find the necessary bits, look in setup.py in detect_modules() for the
->> module's name.
->>
->>
->> Failed to build these modules:
->> _bisect            _codecs_iso2022    _collections   
->> _csv               _ctypes            _ctypes_test   
->> _elementtree       _functools         _hashlib       
->> _heapq             _hotshot           _io            
->> _json              _locale            _lsprof        
->> _multibytecodec    _multiprocessing   _random        
->> _socket            _ssl               _struct        
->> _testcapi          array              audioop        
->> binascii           cmath              cPickle        
->> crypt              cStringIO          datetime       
->> fcntl              future_builtins    grp            
->> itertools          linuxaudiodev      math           
->> mmap               operator           parser         
->> pyexpat            readline           resource       
->> select             spwd               strop          
->> syslog             termios            time           
->> unicodedata        zlib                              
->>
->> make[1]: *** [sharedmods] Error 1
->>
->> my config can be found here: http://paste.ubuntu.com/14543009/
->>
->> is it possible I'm having a bitness issue on the system? the machine I'm
->> using to compile is 64 bit but the machine on which the fs exists is 32 bit.
->> any ideas how to fix it?
->>
->> Thanks.
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
+Indeed that's a known problem for us and it's me to blame for seeing no progress here.
+Still we already have newer toolchain in its RC1, let's see it problem still happens.
+And anyways I'll send a patch with new tools support today.
+
+> >          arc |                       qt-4.8.7 | NOK | 
+> > http://autobuild.buildroot.net/results/a85a1839a45fb6102e53131ecc8f6dadf92bcdc2/
+> 
+> Static linking, I'm assuming this *could* be fixed by
+> https://git.busybox.net/buildroot/commit/?id=12009bb92931b153823110f811632540044d3b02,
+> though I am not sure. Alexey?
+
+Well unfortunately mentioned patch doesn't help here, see it's being applied already:
+------------------->8------------------
+Applying 0009-Fix-library-inclusion-order-when-building-statically.patch using patch: 
+patching file config.tests/unix/compile.test
+[3m>>> qt 4.8.7 Configuring[23m
+------------------->8------------------
+
+So there's something else. I have 1 idea to try here.
+
+> 
+> >          arc |                     ruby-2.3.0 | NOK | 
+> > http://autobuild.buildroot.net/results/8e98934b066d4973d88e7d28b042b99550d68ae8/
+> 
+> Compiler issue:
+> 
+> /tmp/cctdImle.s: Assembler messages:
+> /tmp/cctdImle.s:2253: Error: invalid register number `63'
+> /tmp/cctdImle.s:2255: Error: invalid register number `63'
+> 
+> Alexey ?
+
+Good catch. Again let us try newer tools and if it doesn't help we'll be
+bugging our toolchain developers.
+
+> >          arc |                trousers-0.3.13 | NOK | 
+> > http://autobuild.buildroot.net/results/c3d3bedffe0f4ba40f33d18e90a4802f4a7bfffb/
+> 
+> PIE problem, under discussion.
+
+Indeed, Lada is busy with that.
+
+Regards,
+Alexey
