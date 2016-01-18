@@ -1,36 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jan 2016 16:32:11 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: fix for linux 4.4
-In-Reply-To: <CACeaM88ZeuF0LRH5GbtRpZsJsNA3Mw0MCiU2yuCcyJKQugBaGg@mail.gmail.com>
- (Gerhard Heift's message of "Sat, 16 Jan 2016 15:13:56 +0100")
-References: <1452856397-21566-1-git-send-email-Gerhard@Heift.Name>
- <87pox2yb5g.fsf@dell.be.48ers.dk>
- <CACeaM89dURUrB7frSMgMLg+tvbqM4YVwpaZiwLNHnm5=Kh=7nQ@mail.gmail.com>
- <20160116141440.0924b24b@free-electrons.com>
- <CACeaM88ZeuF0LRH5GbtRpZsJsNA3Mw0MCiU2yuCcyJKQugBaGg@mail.gmail.com>
-Message-ID: <87egde7vk4.fsf@dell.be.48ers.dk>
+From: Doug Kehn <rdkehn@yahoo.com>
+Date: Mon, 18 Jan 2016 09:42:17 -0600
+Subject: [Buildroot] [PATCH v3 0/4] package/dhcp
+Message-ID: <1453131741-1613-1-git-send-email-rdkehn@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gerhard" == Gerhard Heift <gerhard@heift.name> writes:
+This patch series bumps dhcp package version to 4.3.3-P1. This series needed
+additional consideration due to the embedded bind tar-ball that now exists
+within the dhcp package.
 
-Hi,
+This series has been tested with an arm-buildroot-linus-gnueabihf toolchain and
+with an external toolchain (by Ricardo Martincoski).
 
->> Are you sure the problem is not fixed by
- >> http://git.denx.de/?p=u-boot.git;a=commit;h=69bf2d2fafe64349be3c3ef1256e3c68f812bb25,
- >> which was merged as part of 2016.01 ? The problem description looks
- >> really similar.
+Patches
+   0002-dhcp-bind-host-gen.patch
+   0003-toolchain-ar.patch
+have been submitted upstream.
 
- > You are correct. I only looked for patches after the release of linux
- > 4.4 and missed that one.
- > So bumping u-boot-tools to 2016.01 works for me.
+Buildroot thread
+   http://lists.busybox.net/pipermail/buildroot/2016-January/149079.html
+has related information.
 
-Ok, good. I've committed a version bump and marked this patch as
-rejected.
+Regards,
+...doug
+
+---
+Changes v2 -> v3
+  - removed RFC tag
+  - updated version from 4.3.3 to 4.3.3-P1 (suggested by Richardo)
+  - external toolchain support (suggested by Richardo)
+Changes v1 -> v2
+  - removed DHCP_PRE_BUILD_HOOKS in favor of patch (suggested by Arnout)
+---
+Doug Kehn (4):
+  package/dhcp: bump version to 4.3.3-P1
+  package/dhcp: add bind configure options for cross compiling
+  package/dhcp: ensure host cc is used for compiling gen
+  package/dhcp: remove hard coded ar referece
+
+ package/dhcp/0001-bind-configure.patch     | 19 ++++++++++
+ package/dhcp/0002-dhcp-bind-host-gen.patch | 22 ++++++++++++
+ package/dhcp/0003-toolchain-ar.patch       | 58 ++++++++++++++++++++++++++++++
+ package/dhcp/dhcp.hash                     |  4 +--
+ package/dhcp/dhcp.mk                       | 17 ++++++++-
+ 5 files changed, 117 insertions(+), 3 deletions(-)
+ create mode 100644 package/dhcp/0001-bind-configure.patch
+ create mode 100644 package/dhcp/0002-dhcp-bind-host-gen.patch
+ create mode 100644 package/dhcp/0003-toolchain-ar.patch
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.0
