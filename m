@@ -1,130 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jan 2016 21:25:01 +0100
-Subject: [Buildroot] [PATCH 8/8] uclibc: remove version selection
+Date: Mon, 18 Jan 2016 21:24:54 +0100
+Subject: [Buildroot] [PATCH 1/8] libunwind: fix C library dependency
 In-Reply-To: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453148701-10036-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453148701-10036-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we now only support uClibc-ng, remove the version selection from
-the uclibc package.
+The libunwind package currently dependency on glibc *or* uclibc
+snapshot. However, we are going to remove the support for uclibc
+snapshot, and uClibc-ng has equivalent functionality as uclibc
+snapshot. Moreover, musl is also capable of building libunwind for
+certain architectures.
 
-Note that the BR2_UCLIBC_VERSION_SUPPORTS_* hidden booleans, which
-were only used to allow each uClibc version to specify which thread
-implementation they support and on which architecture are removed. Now
-such architecture dependencies are directly encoded in the "Thread
-library implementation" choice.
+Therefore, this commit reworks the architecture dependencies of
+libunwind, to make it available on all architectures for which it is
+supported, depending on the capabilities of the different C libraries,
+and the implementation of libunwind on each architecture.
+
+On some architectures, libunwind uses the C library *context()
+functions, which are not provided by musl at all, and not provided by
+uClibc on all architectures. But on some other architectures,
+libunwind does not use the C library *context() functions, which
+explains why it can be built with musl on such architectures.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in | 41 +++++------------------------------------
- package/uclibc/uclibc.mk | 11 +++--------
- 2 files changed, 8 insertions(+), 44 deletions(-)
+ package/libunwind/Config.in | 31 ++++++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 7 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 452043d..16bf89c 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -7,38 +7,9 @@ config BR2_PACKAGE_UCLIBC
- 
- comment "uClibc Options"
- 
--config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
--	bool
--
--config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
--	bool
--
--config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
--	bool
--
--choice
--	prompt "uClibc C library Version"
--	default BR2_UCLIBC_VERSION_NG
--	help
--	  Select the version of uClibc you wish to use.
--
--	config BR2_UCLIBC_VERSION_NG
--		bool "uClibc-ng"
--		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if BR2_m68k
--		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
--		       if BR2_m68k || BR2_arm || BR2_armeb
--		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
--		       if !BR2_m68k && !BR2_x86_i386
--
--endchoice
--
--config BR2_UCLIBC_VERSION_STRING
--	string
--	default "1.0.11"		if BR2_UCLIBC_VERSION_NG
--
- config BR2_UCLIBC_CONFIG
- 	string "uClibc configuration file to use?"
--	default "package/uclibc/uClibc-ng.config" if BR2_UCLIBC_VERSION_NG
-+	default "package/uclibc/uClibc-ng.config"
+diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
+index 85cb472..6f747ae 100644
+--- a/package/libunwind/Config.in
++++ b/package/libunwind/Config.in
+@@ -1,15 +1,32 @@
++# libunwind is only available for a certain subset of the
++# architectures (as visible in the list of architectures supported
++# with the glibc C library below).
++#
++# In addition to this, on some architectures libunwind requires the
++# *context() function from the C library, which are only available on
++# certain architectures in uClibc, and not available at all on
++# musl. But on some other architectures, libunwind works without using
++# the *context() functions, which allows it to be built with musl.
++config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
++	bool
++	default y if BR2_TOOLCHAIN_USES_GLIBC && \
++		(BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
++		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64)
++	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
++		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || \
++		 BR2_x86_64)
++	default y if BR2_TOOLCHAIN_USES_MUSL && \
++		(BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64)
++
+ config BR2_PACKAGE_LIBUNWIND
+ 	bool "libunwind"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) # {g,s}etcontext
+-	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
+-		BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
  	help
- 	  Some people may wish to use their own modified uClibc configuration
- 	  file and will specify their config file location with this option.
-@@ -76,9 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+ 	  C API to determine the call-chain of a program.
  
- choice
- 	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SUPPORTS_NPTL
--	default BR2_PTHREADS_OLD if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
--	default BR2_PTHREADS if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+	default BR2_PTHREADS_NATIVE
- 	help
- 	  Use this option to select the thread library implementation
- 	  that should be used in your toolchain.
-@@ -89,18 +58,18 @@ choice
- 	config BR2_PTHREADS
- 		bool "linuxthreads"
- 		select BR2_TOOLCHAIN_HAS_THREADS
--		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+		depends on BR2_m68k
+ 	  http://www.nongnu.org/libunwind/index.html
  
- 	config BR2_PTHREADS_OLD
- 		bool "linuxthreads (stable/old)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
--		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-+		depends on BR2_m68k || BR2_arm || BR2_armeb
- 
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
- 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--		depends on BR2_UCLIBC_VERSION_SUPPORTS_NPTL
-+		depends on !BR2_m68k && !BR2_x86_i386
- endchoice
- 
- config BR2_PTHREAD_DEBUG
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 44b8a97..6b05181 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,16 +4,11 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
--UCLIBC_SOURCE ?= uClibc-$(UCLIBC_VERSION).tar.bz2
-+UCLIBC_VERSION = 1.0.11
-+UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
-+UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPLv2.1+
- UCLIBC_LICENSE_FILES = COPYING.LIB
--
--ifeq ($(BR2_UCLIBC_VERSION_NG),y)
--UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
--UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
--endif
--
- UCLIBC_INSTALL_STAGING = YES
- 
- # uclibc is part of the toolchain so disable the toolchain dependency
+-comment "libunwind needs a uclibc snapshot or (e)glibc toolchain w/ threads"
+-	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
+-		BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC)
++comment "libunwind needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.6.4
