@@ -1,53 +1,71 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 18 Jan 2016 18:42:00 +0100
-Subject: [Buildroot] [PATCH v4] linux-headers: allow use of headers from
- kernel "package" selected
-In-Reply-To: <20160109172908.GA3444@free.fr>
-References: <1425230275-127768-1-git-send-email-kaszak@gmail.com>
- <20160109172908.GA3444@free.fr>
-Message-ID: <569D23E8.7070207@mind.be>
+Date: Mon, 18 Jan 2016 18:56:56 +0100
+Subject: [Buildroot] [PATCH v3 2/4] package/dhcp: add bind configure
+ options for cross compiling
+In-Reply-To: <1453131741-1613-3-git-send-email-rdkehn@yahoo.com>
+References: <1453131741-1613-1-git-send-email-rdkehn@yahoo.com>
+ <1453131741-1613-3-git-send-email-rdkehn@yahoo.com>
+Message-ID: <569D2768.9070208@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09-01-16 18:29, Yann E. MORIN wrote:
-> Karoly, All,
+On 18-01-16 16:42, Doug Kehn wrote:
+> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> ---
+> Changes v2 -> v3
+>   - removed RFC tag
+> Changes v1 -> v2
+>   - no changes
+> ---
+>  package/dhcp/0001-bind-configure.patch | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>  create mode 100644 package/dhcp/0001-bind-configure.patch
 > 
-> Reviving this old one that is still pending in Patchwork...
-> 
-> On 2015-03-01 18:17 +0100, Karoly Kasza spake thusly:
->> This change makes it possible to use exactly the same sources for both
->> headers during toolchain building and for kernel building itself, even
->> if custom kernel is selected.
->>
->> That way users can be sure that ABI mismatch won't happen between toolchain
->> and kernel.
-> 
-> So, I'll try to summarise what we have for now:
-> 
->   - select kernel headers version and select kernel version (separately)
-> 
->   - select kernel headers version, also used as kernel version.
-> 
-> What you want to add with this patch is:
-> 
->   - select kernel version, also used as kernel headers version.
+> diff --git a/package/dhcp/0001-bind-configure.patch b/package/dhcp/0001-bind-configure.patch
+> new file mode 100644
+> index 0000000..9a38f45
+> --- /dev/null
+> +++ b/package/dhcp/0001-bind-configure.patch
+> @@ -0,0 +1,19 @@
+> +add bind configure options for cross compiling
+> +
+> +Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> +
+> +Index: dhcp-4.3.3-P1/bind/Makefile.in
+> +===================================================================
+> +--- dhcp-4.3.3-P1.orig/bind/Makefile.in
+> ++++ dhcp-4.3.3-P1/bind/Makefile.in
+> +@@ -30,7 +30,9 @@ bindconfig = --disable-kqueue --disable-
+> + 	--without-openssl --without-libxml2 --enable-exportlib \
+> + 	--with-gssapi=no --enable-threads=no @BINDCONFIG@ \
+> + 	--with-export-includedir=${binddir}/include \
+> +-	--with-export-libdir=${binddir}/lib
+> ++	--with-export-libdir=${binddir}/lib \
+> ++	--target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
+> ++	--build=$(GNU_HOST_NAME) --with-randomdev=/dev/urandom
 
- Actually, I think the main purpose of this patch is to take the same source for
-kernel-headers as you use when building the kernel. This is particularly
-important if your kernel is some wild branch that adds extra userspace stuff
-(typically, ioctl definitions, but it could also be struct definitions). Failing
-this, you have to pass a reference to LINUX_DIR to the build of the package that
-uses these symbols.
+ I think the --target, --host and --build parts are upstreamable.
 
- That said, it's been years since I ran into such a braindead package that
-required specific custom kernel headers. Except for some wicked Broadcom stuff,
-of course, but that probably doesn't even build with our linux.mk rules.
+ However, the --with-randomdev certainly is not upstreamable in its current
+form. It should probably use ac_cv_file__dev_random to decide.
+
+ BTW we have a bit of an inconsistency here: in dhcp, we choose /dev/random but
+in bind we choose /dev/urandom.
+
+ Note that if we call configure explicitly in a POST_CONFIGURE_HOOK, then this
+patch is not needed (although the --target, --host, --build stuff is of course
+still interesting to improve its cross-compilation support).
 
  Regards,
  Arnout
+
+> + 
+> + @BIND_ATF_FALSE at cleandirs = ./lib ./include
+> + @BIND_ATF_TRUE at cleandirs = ./lib ./include ./atf
+> 
 
 
 -- 
