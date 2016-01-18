@@ -1,65 +1,38 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 18 Jan 2016 11:37:54 +0100
-Subject: [Buildroot] [PATCH] package/scrub: new package
-In-Reply-To: <20160118102304.1ccbc389@free-electrons.com>
-References: <1453068293-16263-1-git-send-email-s.martin49@gmail.com>
- <20160118102304.1ccbc389@free-electrons.com>
-Message-ID: <CAHXCMMJTX6eyQ6R7mP_EgX74gfba-Xmghsms9S36V21BSq6+dQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 18 Jan 2016 09:22:45 -0300
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20160117001117.569d43f2@free-electrons.com>
+References: <20160116073021.A4B95101BCC@stock.ovh.net>
+ <20160117001117.569d43f2@free-electrons.com>
+Message-ID: <569CD915.5090302@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 16/01/16 20:11, Thomas Petazzoni wrote:
 
-On Mon, Jan 18, 2016 at 10:23 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Samuel,
+>>       powerpc |                    libnss-3.21 | NOK | http://autobuild.buildroot.net/results/cef2fe3d87b742743a54a2fdbc585771e175a9e6/
 >
-> On Sun, 17 Jan 2016 23:04:53 +0100, Samuel Martin wrote:
+> In file included from secoid.c:1915:0:
+> verref.h: In function 'SECOID_Init':
+> verref.h:22:9: error: #pragma GCC diagnostic not allowed inside functions
+> verref.h:23:9: error: #pragma GCC diagnostic not allowed inside functions
+> cc1: warnings being treated as errors
 >
->> diff --git a/package/scrub/scrub.mk b/package/scrub/scrub.mk
->> new file mode 100644
->> index 0000000..92837a1
->> --- /dev/null
->> +++ b/package/scrub/scrub.mk
->> @@ -0,0 +1,18 @@
->> +################################################################################
->> +#
->> +# scrub
->> +#
->> +################################################################################
->> +
->> +SCRUB_VERSION = 2.6.1
->> +SCRUB_SITE = $(call github,chaos,scrub,$(SCRUB_VERSION))
->> +SCRUB_LICENSE = GPLv2+
->> +SCRUB_LICENSE_FILES = COPYING
->> +
->> +# tarball of the git repo, but autoreconf does not work as expected, so:
->
-> "tarball of the git repo" is unclear, you should rather say: "Fetching
-> from the git repo, no configure/Makefile generated".
-Indeed, this is a much better wording :-)
+> old compiler problem.
 
->
-> Also, how is it broken?
-I'll give more detail in the respin.
+This one is fixed via http://patchwork.ozlabs.org/patch/563960/
 
+>>           arm |                        unknown | NOK | http://autobuild.buildroot.net/results/0581889edfb7bf5ca0f23e3111ac6eeffbee3376/
+>>      mips64el |                        unknown | NOK | http://autobuild.buildroot.net/results/1abb03babacacf13db33ae9fe89b5d52925b58b1/
 >
->> +define SCRUB_AUTOCONF_HOOK
->> +     ( cd $(@D) && PATH=$(BR_PATH) $(@D)/autogen.sh )
->> +endef
->> +SCRUB_PRE_CONFIGURE_HOOKS += SCRUB_AUTOCONF_HOOK
->
-> This is broken if you don't depend on host-automake, host-libtool,
-> host-autoconf.
-Hmm, good to know!
-I somehow thought that every autotools packages would depend on these
-packages...
-But it totally make sense they only depend on them when autoreconf is enabled.
+> 2 different dependency problems.
 
-Regards,
+Fixed via http://patchwork.ozlabs.org/patch/564312/
+(more a backport of 2.10.x features than really trying to fix that 
+particular failure).
 
--- 
-Samuel
+I'll look at the others time allowing.
+Regards.
