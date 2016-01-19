@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 21:59:28 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXi: bump version to
-	1.7.6
-Message-ID: <20160119205943.83664827D7@busybox.osuosl.org>
+Date: Tue, 19 Jan 2016 21:59:36 +0100
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.1.4
+Message-ID: <20160119205943.A02B1802FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b594a773b1d3883815078daf361f4e73225b63aa
+commit: http://git.buildroot.net/buildroot/commit/?id=d4666aaaf21d01e235f5e43af9abb08e5a67189a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXi/xlib_libXi.hash | 4 ++--
- package/x11r7/xlib_libXi/xlib_libXi.mk   | 2 +-
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXi/xlib_libXi.hash b/package/x11r7/xlib_libXi/xlib_libXi.hash
-index 67b7b33..28eb77e 100644
---- a/package/x11r7/xlib_libXi/xlib_libXi.hash
-+++ b/package/x11r7/xlib_libXi/xlib_libXi.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 56b2c10..20b7bf0 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-September/002634.html
--sha256	d964d7deb5d8f7d6b9c358969c625073d7ab273dbda94693130b3540bc0ca229	libXi-1.7.5.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-December/002664.html
-+sha256	1f32a552cec0f056c0260bdb32e853cec0673d2f40646ce932ad5a9f0205b7ac	libXi-1.7.6.tar.bz2
-diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
-index 391247f..54c9af4 100644
---- a/package/x11r7/xlib_libXi/xlib_libXi.mk
-+++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
+-# From http://lists.freedesktop.org/archives/wayland-devel/2015-December/026041.html
+-sha256	a323a32718a8f0f5e85e1ed3a81f0dde45eb52b215a15c7887bec40961d97a84	libinput-1.1.2.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2015-December/026233.html
++sha256	302cb76209b9c57a5a318e178f9bc446eede8ea79386103b5291cbfaa5fab5b6	libinput-1.1.4.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 91d6e53..8b69a51 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXI_VERSION = 1.7.5
-+XLIB_LIBXI_VERSION = 1.7.6
- XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
- XLIB_LIBXI_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXI_LICENSE = MIT
+-LIBINPUT_VERSION = 1.1.2
++LIBINPUT_VERSION = 1.1.4
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
