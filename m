@@ -1,36 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2016 19:35:40 +0100
-Subject: [Buildroot] [PATCH v9] toolchain: create symlink
-	ARCH_LIB_DIR->lib in addition to lib32/lib64->lib
-In-Reply-To: <20160119182947.GB3360@free.fr> (Yann E. MORIN's message of "Tue, 
- 19 Jan 2016 19:29:47 +0100")
-References: <1450787734-2547-1-git-send-email-patrickdepinguin@gmail.com>
- <20160117154528.1bb05d3e@free-electrons.com>
- <CAAXf6LVkS49xBPa80iqi0EbkausB2gYJRJodsPMoWR8n6LZaAg@mail.gmail.com>
- <CAAXf6LUUwQ4yt38Cy+A5QpL+kXhGmd9iiBvJLdNA8uJDv=TpMA@mail.gmail.com>
- <87lh7l3asr.fsf@dell.be.48ers.dk>
- <CAAXf6LUqCv04ZkCH5fKwq2_0w9hBYFYXM_Bf5t1yawG1D8yeTQ@mail.gmail.com>
- <20160119182947.GB3360@free.fr>
-Message-ID: <878u3l2z9f.fsf@dell.be.48ers.dk>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 19 Jan 2016 20:02:45 +0100
+Subject: [Buildroot] [PATCH] lighttpd: requires a Lua 5.1.x
+In-Reply-To: <87h9ia62zq.fsf@dell.be.48ers.dk>
+References: <1453030107-7010-1-git-send-email-francois.perrad@gadz.org>
+ <8760yq7lvs.fsf@dell.be.48ers.dk>
+ <CAB0FRsvFSPO_EKWM01kYG367CNE_FwETWPPNZqK6CxroLk-g+A@mail.gmail.com>
+ <87h9ia62zq.fsf@dell.be.48ers.dk>
+Message-ID: <CAB0FRsv3hpO25POg_EFvXBiKysZneYG4DBLHU7DVBMdB9G7Hdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+2016-01-18 21:34 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
+>
+>  > Peter,
+>  > I try this patch, it fixes only the file src/mod_magnet.c,
+>  > but it doesn't fix the compilation of src/mod_cml_lua.c
+>
+>  > ibtool: compile:
+>  > /home/user/build/sourcery/host/usr/bin/arm-none-linux-gnueabi-gcc
+>  > -DHAVE_CONFIG_H -DHAVE_VERSION_H -DLIBRARY_DIR=\"/usr/lib/lighttpd\"
+>  > -DSBIN_DIR=\"/usr/sbin\" -I. -I.. -D_LARGEFILE_SOURCE
+>  > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_REENTRANT
+>  > -D__EXTENSIONS__ -DOPENSSL_NO_KRB5 -D_FILE_OFFSET_BITS=64
+>  > -D_LARGEFILE_SOURCE -D_LARGE_FILES
+>  > -I/home/user/build/sourcery/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
+>  > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+>  > -Wall -W -Wshadow -pedantic -std=gnu99 -c mod_cml_funcs.c  -fPIC -DPIC
+>  > -o .libs/mod_cml_la-mod_cml_funcs.o
+>  > mod_cml_lua.c: In function 'lua_to_c_get_string':
+>  > mod_cml_lua.c:54:18: error: 'LUA_GLOBALSINDEX' undeclared (first use
+>  > in this function)
+>  >   lua_gettable(L, LUA_GLOBALSINDEX);
+>
+> Hmm, are you sure you applied the patch correctly?
+>
+> From the diff, it seems like you didn't patch mod_cml_lua.c:
+>
+> https://redmine.lighttpd.net/projects/lighttpd/repository/revisions/3070/diff/branches/lighttpd-1.4.x/src/mod_cml_lua.c?utf8=%E2%9C%93&type=sbs
+>
+> --
+> Venlig hilsen,
+> Peter Korsgaard
 
-Hi,
+You're right, I use the patch in the ticket instead of the commit r3070.
+Now working.
 
->> I was not aware that glibc already depends on skeleton. Then indeed
- >> ThomasP's reasoning is correct and the patch should be simplified. I
- >> will investigate that further and resubmit.
-
- > Skeleton is currently not a dependency of host-gcc-initial, so you'd
- > have to make it so.
-
-Ahh yes, we only add it for target packages.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Fran?ois
