@@ -1,65 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jan 2016 00:11:08 +0100
-Subject: [Buildroot] [PATCH] core: fix setting of HOSTARCH
-In-Reply-To: <1447095621-32080-1-git-send-email-yann.morin.1998@free.fr>
-References: <1447095621-32080-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CACXmViZUX+KJREOxhJ-DpoDf2Tv49d7EszR0VbMuXmr0=o6GEQ@mail.gmail.com>
+Date: Wed, 20 Jan 2016 00:12:30 +0100
+Subject: [Buildroot] [PATCH v3] libnspr: remove thumb2 handling
+In-Reply-To: <1453243871-22360-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 19 Jan 2016 23:51:11 +0100")
+References: <1453243871-22360-1-git-send-email-arnout@mind.be>
+Message-ID: <87h9i9upsx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 9, 2015 at 8:00 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Currently, we set HOSTARCH to the output of `uname -m`. This gives us
-> the architecture as seen by the running kernel. For example, we would
-> end up with 'x86_64' for a 64-bit kernel running on an x86_64 processor.
->
-> We use that value to determine whether we can run some binary tools,
-> like our pre-configured external toolchains.
->
-> However, one may be running a userland in a different bitness than that
-> of the running kernel. For example, one may run in a 32-bit chroot, even
-> though the kernel is running in 64-bit.
->
-> Up until recently, this was not an issue because the pre-configured
-> external toolchains were all requiring an i386 (x86 in Buildroot
-> parlance).
->
-> But since w eintroduced the latest Linaro toolchains, we now have
-> toolchains that require a 64-bit userland.
->
-> So, when running on a 64-bit kernel, we believe those toolchains are
-> available, even when the user is running a 32-bit userland. This causes
-> build failures for our autobuilders, like so:
->
->     http://autobuild.buildroot.org/results/9cd/9cdf10ec5b31144b2e03ea09cf128702339895b3/
->
-> with the following symptoms:
->
->     >>> toolchain-external undefined Configuring
->     Cannot execute cross-compiler '/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bin/aarch64-linux-gnu-gcc'
->
-> So, instead of relying on the output of `uname -r`, look for the host
-> gcc and extract the target it was configured to generate code for.
->
-> Fixes:
->     http://autobuild.buildroot.org/results/9cd/9cdf10ec5b31144b2e03ea09cf128702339895b3/  (aarch64)
->     http://autobuild.buildroot.org/results/888/8889aa7d9fb48370e4760a6edbc6d3ae945f02f2/  (arm)
->     and many more...
->
-> Besides fixing those issues, it will also allow us to add the 64-bit
-> variants of toolchains when they exist, like the upcoming Codescape
-> MTI and IMG toolchains for MIPS from Imagination Technologies.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  Makefile | 34 +++++++++++++++++++++++++---------
->  1 file changed, 25 insertions(+), 9 deletions(-)
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Committed after changing it to use HOSTCC_NOCCACHE instead of 'gcc', thanks!
+ > libnspr currently passes --enable-thumb2 if the CPU has thumb
+ > instructions. This option will pass -mthumb to the compiler. However,
+ > if an external multilib toolchain is used that has a thumb-specific
+ > variant (e.g. Sourcery), it will try to use that one. But we only copy
+ > a single variant to the sysroot, so the build will fail with:
 
---
+ > .../arm-none-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory
+ > ...
+ > collect2: error: ld returned 1 exit status
+ > ../../config/rules.mk:303: recipe for target 'libnspr4.so' failed
+
+ > We can in fact just remove the thumb2 handling. With current libnspr,
+ > the thumb and thumb2 options just add -marm and -mthumb. But we already
+ > pass that in our toolchain wrapper so it's completely redundant.
+
+ > Note that when nothing is passed, the configure script still tries to
+ > autodetect whether thumb2 is available (but doesn't do it correctly,
+ > see the error above), but in the end it doesn't use the result for
+ > anything. In other words, even if it detects that thumb2 is available,
+ > it will _not_ pass -mthumb to the compiler.
+
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ > Build-tested with various combinations of thumb, thumb2, floating point,
+ > and external toolchains. I didn't test with an internal toolchain but
+ > what could go wrong there? :-)
+
+ > Also tested with the original build failure which led to the
+ > introduction of the --enable-thumb2 handling:
+ > http://autobuild.buildroot.org/results/d7323831372050e425a34f5104a46d8cbd6be214
+
+ > Changes v2: added missing build failure output to commit message
+ > Changes v3: Remove thumb2 handling completely
+
+Committed, thanks.
+
+-- 
 Bye, Peter Korsgaard
