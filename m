@@ -1,22 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2016 21:22:59 +0100
-Subject: [Buildroot] [PATCH] lighttpd: fix compat Lua 5.2 & 5.3
-In-Reply-To: <1453230216-16615-1-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Tue, 19 Jan 2016 20:03:36 +0100")
-References: <1453230216-16615-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <874me92uak.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 Jan 2016 21:22:54 +0100
+Subject: [Buildroot] [git commit] util-linux: put package options in a
+	sub-menu
+Message-ID: <20160119202351.7F710827CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2ade93c30d3cb3c349772a1957786a2bb0fa8672
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > see failure in http://autobuild.buildroot.net/results/13f/13faa9ebce00359b8943775364a432ce422fe8b8/
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Hide all the util-linux options in a menuconfig, as the option
+list is quite long.
 
-Committed, thanks.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 214b975..df89f99 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_UTIL_LINUX
++menuconfig BR2_PACKAGE_UTIL_LINUX
+ 	bool "util-linux"
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
