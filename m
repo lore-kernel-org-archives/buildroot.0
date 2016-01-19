@@ -1,8 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 19 Jan 2016 20:10:51 +0100
-Subject: [Buildroot] [PATCH 1/2] scancpan: use test & recommend flags only
-	at first level
-Message-ID: <1453230652-17279-1-git-send-email-francois.perrad@gadz.org>
+Date: Tue, 19 Jan 2016 20:10:52 +0100
+Subject: [Buildroot] [PATCH 2/2] scancpan: handle recommended dependencies
+	as optional packages
+In-Reply-To: <1453230652-17279-1-git-send-email-francois.perrad@gadz.org>
+References: <1453230652-17279-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1453230652-17279-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,69 +13,79 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- support/scripts/scancpan | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ support/scripts/scancpan | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 0436d2a..e90d495 100755
+index e90d495..b5cd362 100755
 --- a/support/scripts/scancpan
 +++ b/support/scripts/scancpan
-@@ -551,7 +551,7 @@ sub find_license_files {
- }
- 
- sub fetch {
--    my ($name, $need_target, $need_host) = @_;
-+    my ($name, $need_target, $need_host, $want_recommend, $want_test) = @_;
-     $need_target{$name} = $need_target if $need_target;
-     $need_host{$name} = $need_host if $need_host;
-     unless ($dist{$name}) {
-@@ -568,13 +568,13 @@ sub fetch {
+@@ -505,6 +505,7 @@ my %need_host;          # name -> 1 if host package is needed
+ my %need_dlopen;        # name -> 1 if requires dynamic library
+ my %deps_build;         # name -> list of host dependencies
+ my %deps_runtime;       # name -> list of target dependencies
++my %deps_optional;      # name -> list of optional target dependencies
+ my %license_files;      # name -> list of license files
+ my %checksum;           # author -> list of checksum
+ my $mcpan = MetaCPAN::API::Tiny->new();
+@@ -563,6 +564,7 @@ sub fetch {
+         $license_files{$name} = find_license_files( $manifest );
+         my %build = ();
+         my %runtime = ();
++        my %optional = ();
+         foreach my $dep (@{$result->{dependency}}) {
+             my $modname = ${$dep}{module};
              next if $modname eq q{perl};
-             next if $modname =~ m|^Alien|;
-             next if $modname =~ m|^Win32|;
--            next if !$test && $modname =~ m|^Test|;
-+            next if !$want_test && $modname =~ m|^Test|;
-             next if Module::CoreList::is_core( $modname, undef, $] );
-             # we could use the host Module::CoreList data, because host perl and
+@@ -574,10 +576,14 @@ sub fetch {
              # target perl have the same major version
              next if ${$dep}{phase} eq q{develop};
--            next if !$test && ${$dep}{phase} eq q{test};
--            next if !$recommend && ${$dep}{relationship} ne q{requires};
-+            next if !$want_test && ${$dep}{phase} eq q{test};
-+            next if !$want_recommend && ${$dep}{relationship} ne q{requires};
+             next if !$want_test && ${$dep}{phase} eq q{test};
+-            next if !$want_recommend && ${$dep}{relationship} ne q{requires};
              my $distname = $mcpan->module( $modname )->{distribution};
              if (${$dep}{phase} eq q{runtime}) {
-                 $runtime{$distname} = 1;
-@@ -586,10 +586,10 @@ sub fetch {
+-                $runtime{$distname} = 1;
++                if (${$dep}{relationship} eq q{requires}) {
++                    $runtime{$distname} = 1;
++                }
++                else {
++                    $optional{$distname} = 1 if $want_recommend;
++                }
+             }
+             else { # configure, build
+                 $build{$distname} = 1;
+@@ -585,6 +591,7 @@ sub fetch {
+         }
          $deps_build{$name} = [keys %build];
          $deps_runtime{$name} = [keys %runtime];
++        $deps_optional{$name} = [keys %optional];
          foreach my $distname (@{$deps_build{$name}}) {
--            fetch( $distname, 0, 1 );
-+            fetch( $distname, 0, 1, 0, 0 );
+             fetch( $distname, 0, 1, 0, 0 );
          }
-         foreach my $distname (@{$deps_runtime{$name}}) {
--            fetch( $distname, $need_target, $need_host );
-+            fetch( $distname, $need_target, $need_host, 0, 0 );
+@@ -592,6 +599,9 @@ sub fetch {
+             fetch( $distname, $need_target, $need_host, 0, 0 );
              $need_dlopen{$name} ||= $need_dlopen{$distname};
          }
++        foreach my $distname (@{$deps_optional{$name}}) {
++            fetch( $distname, $need_target, $need_host, 0, 0 );
++        }
      }
-@@ -598,7 +598,7 @@ sub fetch {
- 
- foreach my $distname (@ARGV) {
-     # Command-line's distributions
--    fetch( $distname, !!$target, !!$host );
-+    fetch( $distname, !!$target, !!$host, !!$recommend, !!$test );
+     return;
  }
- say scalar keys %dist, q{ packages fetched.} unless $quiet;
- 
-@@ -800,7 +800,7 @@ in order to work with the right CoreList data.
- 
- =head1 LICENSE
- 
--Copyright (C) 2013-2014 by Francois Perrad <francois.perrad@gadz.org>
-+Copyright (C) 2013-2016 by Francois Perrad <francois.perrad@gadz.org>
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
+@@ -683,6 +693,15 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
+         say {$fh} qq{${brname}_LICENSE_FILES = ${license_files}} if $license_files;
+         say {$fh} qq{};
++        foreach (sort @{$deps_optional{$distname}}) {
++            next if grep { $_ eq $distname; } @{$deps_runtime{$_}};     # avoid cyclic dependencies
++            my $opt_brname = brname( $_ );
++            my $opt_fsname = fsname( $_ );
++            say {$fh} qq{ifeq (\$(BR2_PACKAGE_PERL_${opt_brname}),y)};
++            say {$fh} qq{${brname}_DEPENDENCIES += ${opt_fsname}};
++            say {$fh} qq{endif};
++            say {$fh} qq{};
++        }
+         say {$fh} qq{\$(eval \$(perl-package))} if $need_target{$distname};
+         say {$fh} qq{\$(eval \$(host-perl-package))} if $need_host{$distname};
+         close $fh;
 -- 
 2.5.0
