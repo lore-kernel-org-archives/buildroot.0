@@ -1,42 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 22:00:24 +0100
-Subject: [Buildroot] [git commit] luvi: build for the right MIPS endianness
-Message-ID: <20160119210029.0A610827E8@busybox.osuosl.org>
+Date: Tue, 19 Jan 2016 22:00:06 +0100
+Subject: [Buildroot] [PATCH 2/5] package/x11r7/xlib_libXi: bump version
+ to 1.7.6
+In-Reply-To: <1453042517-12040-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1453042517-12040-1-git-send-email-bernd.kuhls@t-online.de>
+ <1453042517-12040-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160119220006.3ba736e2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbb76bb3826aeaf057ace2911fe741b0f3679b27
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Otherwise it will cause build failures like this one:
+On Sun, 17 Jan 2016 15:55:14 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x11r7/xlib_libXi/xlib_libXi.hash | 4 ++--
+>  package/x11r7/xlib_libXi/xlib_libXi.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-[100%] Linking C executable luvi
-/home/buildroot/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/5.2.0/../../../../mipsel-buildroot-linux-gnu/bin/ld:
-jitted_tmp/src/lua/init.lua_luvi_generated.o: compiled for a big endian
-system and target is little endian
+Patches 2 to 5 applied, thanks!
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luvi/luvi.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index ef1c2e1..d83933e 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -20,8 +20,10 @@ else ifeq ($(BR2_powerpc),y)
- LUVI_TARGET_ARCH = ppc
- else ifeq ($(BR2_arm)$(BR2_armeb),y)
- LUVI_TARGET_ARCH = arm
--else ifeq ($(BR2_mips)$(BR2_mipsel),y)
-+else ifeq ($(BR2_mips),y)
- LUVI_TARGET_ARCH = mips
-+else ifeq ($(BR2_mipsel),y)
-+LUVI_TARGET_ARCH = mipsel
- else
- LUVI_TARGET_ARCH = $(BR2_ARCH)
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
