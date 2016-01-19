@@ -1,68 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Jan 2016 18:22:48 +0100
-Subject: [Buildroot] [PATCH v4] linux-headers: allow use of headers from
- kernel "package" selected
-In-Reply-To: <87powx3le0.fsf@dell.be.48ers.dk>
-References: <87y4bn6y5s.fsf@dell.be.48ers.dk> <20160118214704.GA3380@free.fr>
- <20160118230345.52b8f054@free-electrons.com>
- <877fj64jhn.fsf@dell.be.48ers.dk>
- <20160118232457.472dc051@free-electrons.com>
- <87y4bm2d42.fsf@dell.be.48ers.dk>
- <20160119111834.797ea6d9@free-electrons.com>
- <87twm93lsb.fsf@dell.be.48ers.dk>
- <20160119113154.2f4613fc@free-electrons.com>
- <87powx3le0.fsf@dell.be.48ers.dk>
-Message-ID: <20160119172248.GA3360@free.fr>
+Date: Tue, 19 Jan 2016 19:29:47 +0100
+Subject: [Buildroot] [PATCH v9] toolchain: create symlink
+ ARCH_LIB_DIR->lib in addition to lib32/lib64->lib
+In-Reply-To: <CAAXf6LUqCv04ZkCH5fKwq2_0w9hBYFYXM_Bf5t1yawG1D8yeTQ@mail.gmail.com>
+References: <1450787734-2547-1-git-send-email-patrickdepinguin@gmail.com>
+ <20160117154528.1bb05d3e@free-electrons.com>
+ <CAAXf6LVkS49xBPa80iqi0EbkausB2gYJRJodsPMoWR8n6LZaAg@mail.gmail.com>
+ <CAAXf6LUUwQ4yt38Cy+A5QpL+kXhGmd9iiBvJLdNA8uJDv=TpMA@mail.gmail.com>
+ <87lh7l3asr.fsf@dell.be.48ers.dk>
+ <CAAXf6LUqCv04ZkCH5fKwq2_0w9hBYFYXM_Bf5t1yawG1D8yeTQ@mail.gmail.com>
+Message-ID: <20160119182947.GB3360@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, All,
+Thomas?, Peter, All,
 
-On 2016-01-19 11:37 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->  > Dear Peter Korsgaard,
->  > On Tue, 19 Jan 2016 11:29:08 +0100, Peter Korsgaard wrote:
+On 2016-01-19 17:01 +0100, Thomas De Schampheleire spake thusly:
+> On Tue, Jan 19, 2016 at 3:26 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> >>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+> >
+> > Hi,
+> >
+> >>> In earlier versions of the patch, I stated that the symlink creation
+> >  >> needs to happen before gcc-initial is built. This is the reason we are
+> >  >> hooking into gcc-initial. This was also effectively the case before
+> >  >> the skeleton package was introduced.
+> >
+> >  > Small correction, the statement is:
+> >  > +# The creation of lib32/lib64 symlinks into target and staging directories
+> >  > +# needs to be done before the C library is installed.
+> >
+> > And that's already the case, right? E.G. all packages depend on
+> > skeleton, including the glibc/uclibc/musl packages.
 > 
->  >> Well, linux-headers doesn't need to do much - So with a bit of care I
->  >> think you can.
->  >> 
->  >> E.G. something like (completely untested):
->  >> 
->  >> ifeq ($(LINUX_HEADERS_FROM_KERNEL),y)
->  >> # no source
->  >> LINUX_HEADERS_SOURCE =
->  >> LINUX_HEADERS_DEPENDENCIES += linux-configure
+> Ok, so that is the missing part of the puzzle.
 > 
->  > The configure step of a package depends on the dependencies of that
->  > package. So linux-configure depends on toolchain. And toolchain depends
->  > on linux-headers -> recursive dependency.
+> On 2015.05, where skeleton was not yet a package, and so the situation
+> upon which the original patch was based, the symlinks were made in the
+> .root target. To allow for this new symlink behavior, it had to be
+> moved, but it had to be before the C library. The toolchain target was
+> too late, gcc-initial was voted the 'best' place at the time.
 > 
->  > Another try ? :-)
-> 
-> Then linux-patch, we afaik don't need a configured linux kernel to make headers_install
+> I was not aware that glibc already depends on skeleton. Then indeed
+> ThomasP's reasoning is correct and the patch should be simplified. I
+> will investigate that further and resubmit.
 
-Indeed, that's a good idea. We propbably could use set:
-
-    LINUX_HEADERS_PATCH_DEPENDENCIES = linux
-
-which will guarantee that linux is patched before linux-headers is
-configured (in the Buildroot sense).
-
-Then, we basically could do:
-
-    define LINUX_HEADERS_INSTALL_STAGING_CMDS
-        $(MAKE) -C $(LINUX_DIR) INSTALL_HDR_PATH=$(STAGING_DIR)/usr
-    endef
-
-(with extra variables as done today, of course...)
-
-There, we can use $(LINUX_DIR) because the macro is only expanded in a
-make rule, so we should be fine. Hopefully...
-
-I can have a look at this.
+Skeleton is currently not a dependency of host-gcc-initial, so you'd
+have to make it so.
 
 Regards,
 Yann E. MORIN.
