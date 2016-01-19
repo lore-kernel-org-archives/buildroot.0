@@ -1,62 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Jan 2016 23:09:39 +0100
-Subject: [Buildroot] as: unrecognized option '--64'
-In-Reply-To: <CAKradHu116Zh8Rh-iWk9a=UL6SrtBz48-syBD=5uOJaZpWdRTw@mail.gmail.com>
-References: <CAKradHu116Zh8Rh-iWk9a=UL6SrtBz48-syBD=5uOJaZpWdRTw@mail.gmail.com>
-Message-ID: <569EB423.8010203@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 Jan 2016 23:14:39 +0100
+Subject: [Buildroot] [PATCH v5] toolchain: allow side by side sysroot
+ directories
+In-Reply-To: <1452620978-60112-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1452620978-60112-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160119231439.4b63712c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19-01-16 17:26, Alejandro Blasco wrote:
-> Hi, thank you for your work.
-> 
-> I'm having this problem after configuring and running make, and nobody talk
-> about it in forums, stackoverflow, ....
-> 
-> btw I'm using Fedora 23
-> * Attached .config file
-> 
-> 
-> 
-> 
-> 
-> make[2]: Leaving directory
-> '/home/alejandro/Desktop/linux/buildroot/output/build/host-gcc-initial-5.2.0/build/fixincludes'
-> make[2]: Entering directory
-> '/home/alejandro/Desktop/linux/buildroot/output/build/host-gcc-initial-5.2.0/build/gcc'
-> /home/alejandro/Desktop/linux/buildroot/output/host/usr/bin/ccache /usr/bin/g++
-> -c   -O2 -I/home/alejandro/Desktop/linux/buildroot/output/host/usr/include
-> -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE  -fno-exceptions -fno-rtti
-> -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual
-> -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long
-> -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H -DGENERATOR_FILE
-> -I. -Ibuild -I../../gcc -I../../gcc/build
-> -I../../gcc/../include  -I../../gcc/../libcpp/include  \
-> -DBASEVER="\"5.2.0\"" -DDATESTAMP="\"\"" \
-> -DREVISION="\"\"" \
-> -DDEVPHASE="\"\"" -DPKGVERSION="\"(Buildroot 2015.11.1) \"" \
-> -DBUGURL="\"<http://bugs.buildroot.net/>\"" -o build/version.o
-> ../../gcc/version.c
-[snip]
-> /home/alejandro/Desktop/linux/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/bin/as:
-> unrecognized option '--64'
+Dear Vicente Olivert Riera,
 
- This is _extremely_ strange. There is no reason at all why the system's g++
-should call the cross-as...
+On Tue, 12 Jan 2016 17:49:38 +0000, Vicente Olivert Riera wrote:
+> Currently our toolchain infrastructure assumes that every toolchain has
+> nested sysroot directories. However that's not true for all of them. The
+> Codescape toolchains from Imagination Technologies use a side by side
+> sysroot structure, for instance.
+> 
+> This patch allows our toolchain infrastructure to detect what kind of
+> sysroot structure we have (nested or side by side) and performs the
+> appropriate actions.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> Changes v4 -> v5:
+>  - Add an echo to display what is being symlinked. (Suggested by Romain)
+> Changes v1 -> v4:
+>  - This patch didn't exist before. It has been introduced in v4.
 
- Do you have something particular in your environment?
+I've applied after updating the comment above the function to explain
+what's going on. It's a pity we can't have inline comments in those big
+shell blocks. Part of my mid-term goal is to move some of this crap to
+helper shell scripts, which would simplify the syntax and allow the
+addition of comments everywhere.
 
- Regards,
- Arnout
+Thanks!
 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
