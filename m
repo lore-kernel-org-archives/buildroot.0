@@ -1,61 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 22:13:24 +0100
-Subject: [Buildroot] [PATCH 1/1] iputils: resolve musl compatibility
-In-Reply-To: <1453089044-10391-1-git-send-email-matt@thewebers.ws>
-References: <1453089044-10391-1-git-send-email-matt@thewebers.ws>
-Message-ID: <20160119221324.74332232@free-electrons.com>
+Date: Tue, 19 Jan 2016 22:21:05 +0100
+Subject: [Buildroot] [git commit] package/libbroadvoice: Broken on BR2_arc
+	with gcc <= 4.8
+Message-ID: <20160119212148.B50AC827E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt,
+commit: http://git.buildroot.net/buildroot/commit/?id=c18d8323b045ee49fe2030a127fb3bcba600785d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some more comments (see below).
+Please read this bug report for details:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
 
-On Mon, 18 Jan 2016 03:50:44 +0000, Matt Weber wrote:
+Fixes
+http://autobuild.buildroot.net/results/4a1/4a1fd92d1ce4963d3e282ea2dc8f0f6c5db4f1e1/
+http://autobuild.buildroot.net/results/ce3/ce3be7d27489647a98d8932c5bcabd08c845187b/
+http://autobuild.buildroot.net/results/988/988bd189bab37a03c037160d6758774d4aa6c8a0/
+and many others
 
-> diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-> index 21a2044..fcca52c 100644
-> --- a/package/iputils/iputils.hash
-> +++ b/package/iputils/iputils.hash
-> @@ -1,2 +1,4 @@
-> +# Locally computed
-> +sha256	0e98cb527fa175d1e08afb969c124e452b30968f10ec2c3b078f1440c8977a94	iputils-c8ff6feaf0442f8efd96ccb415770c54f9e84d47.tar.gz
->  # From http://sourceforge.net/projects/iputils/files/
->  sha1	3e85179746fd93000d6267bd55addfe97f321ba7	iputils-s20121011.tar.bz2
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libbroadvoice/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Why are you keeping the hash for the old tarball ?
-
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 7510d99..d427b11 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -4,13 +4,12 @@
->  #
->  ################################################################################
->  
-> -IPUTILS_VERSION = s20121011
-> -IPUTILS_SITE = http://www.skbuff.net/iputils
-> -IPUTILS_SOURCE = iputils-$(IPUTILS_VERSION).tar.bz2
-> -IPUTILS_LICENSE = GPLv2+, BSD-3c
-> +IPUTILS_VERSION = c8ff6feaf0442f8efd96ccb415770c54f9e84d47
-> +IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
-
-I don't understand why you are moving to github.
-http://www.skbuff.net/iputils has some recent tarballs, which
-correspond to the releases made on github.
-http://www.skbuff.net/iputils/iputils-s20151218.tar.bz2 will most
-likely contain the musl fixes.
-
-I'll mark your patch as Changes Requested in patchwork. Can you respin
-after fixing the issues raised during the review?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libbroadvoice/Config.in b/package/libbroadvoice/Config.in
+index d695df0..3301ba8 100644
+--- a/package/libbroadvoice/Config.in
++++ b/package/libbroadvoice/Config.in
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_LIBBROADVOICE
+ 	bool "libbroadvoice"
++	# broken with gcc <= 4.8 on arc
++	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
++	depends on !BR2_arc || BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+ 	  broadvoice - a library for the BroadVoice 16 and 32 speech
+ 	  codecs
