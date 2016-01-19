@@ -1,91 +1,44 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 19 Jan 2016 20:10:52 +0100
-Subject: [Buildroot] [PATCH 2/2] scancpan: handle recommended dependencies
-	as optional packages
-In-Reply-To: <1453230652-17279-1-git-send-email-francois.perrad@gadz.org>
-References: <1453230652-17279-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1453230652-17279-2-git-send-email-francois.perrad@gadz.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 19 Jan 2016 20:40:59 +0100
+Subject: [Buildroot] [PATCH v9] toolchain: create symlink
+ ARCH_LIB_DIR->lib in addition to lib32/lib64->lib
+In-Reply-To: <878u3l2z9f.fsf@dell.be.48ers.dk>
+References: <1450787734-2547-1-git-send-email-patrickdepinguin@gmail.com>
+ <20160117154528.1bb05d3e@free-electrons.com>
+ <CAAXf6LVkS49xBPa80iqi0EbkausB2gYJRJodsPMoWR8n6LZaAg@mail.gmail.com>
+ <CAAXf6LUUwQ4yt38Cy+A5QpL+kXhGmd9iiBvJLdNA8uJDv=TpMA@mail.gmail.com>
+ <87lh7l3asr.fsf@dell.be.48ers.dk>
+ <CAAXf6LUqCv04ZkCH5fKwq2_0w9hBYFYXM_Bf5t1yawG1D8yeTQ@mail.gmail.com>
+ <20160119182947.GB3360@free.fr> <878u3l2z9f.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LVSwy5ozhJ4cYrSDF5gXBNEkjEs9ej_L2TkLa5a4avV8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- support/scripts/scancpan | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+On Jan 19, 2016 19:35, "Peter Korsgaard" <peter@korsgaard.com> wrote:
+>
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+> Hi,
+>
+> >> I was not aware that glibc already depends on skeleton. Then indeed
+>  >> ThomasP's reasoning is correct and the patch should be simplified. I
+>  >> will investigate that further and resubmit.
+>
+>  > Skeleton is currently not a dependency of host-gcc-initial, so you'd
+>  > have to make it so.
+>
+> Ahh yes, we only add it for target packages.
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index e90d495..b5cd362 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -505,6 +505,7 @@ my %need_host;          # name -> 1 if host package is needed
- my %need_dlopen;        # name -> 1 if requires dynamic library
- my %deps_build;         # name -> list of host dependencies
- my %deps_runtime;       # name -> list of target dependencies
-+my %deps_optional;      # name -> list of optional target dependencies
- my %license_files;      # name -> list of license files
- my %checksum;           # author -> list of checksum
- my $mcpan = MetaCPAN::API::Tiny->new();
-@@ -563,6 +564,7 @@ sub fetch {
-         $license_files{$name} = find_license_files( $manifest );
-         my %build = ();
-         my %runtime = ();
-+        my %optional = ();
-         foreach my $dep (@{$result->{dependency}}) {
-             my $modname = ${$dep}{module};
-             next if $modname eq q{perl};
-@@ -574,10 +576,14 @@ sub fetch {
-             # target perl have the same major version
-             next if ${$dep}{phase} eq q{develop};
-             next if !$want_test && ${$dep}{phase} eq q{test};
--            next if !$want_recommend && ${$dep}{relationship} ne q{requires};
-             my $distname = $mcpan->module( $modname )->{distribution};
-             if (${$dep}{phase} eq q{runtime}) {
--                $runtime{$distname} = 1;
-+                if (${$dep}{relationship} eq q{requires}) {
-+                    $runtime{$distname} = 1;
-+                }
-+                else {
-+                    $optional{$distname} = 1 if $want_recommend;
-+                }
-             }
-             else { # configure, build
-                 $build{$distname} = 1;
-@@ -585,6 +591,7 @@ sub fetch {
-         }
-         $deps_build{$name} = [keys %build];
-         $deps_runtime{$name} = [keys %runtime];
-+        $deps_optional{$name} = [keys %optional];
-         foreach my $distname (@{$deps_build{$name}}) {
-             fetch( $distname, 0, 1, 0, 0 );
-         }
-@@ -592,6 +599,9 @@ sub fetch {
-             fetch( $distname, $need_target, $need_host, 0, 0 );
-             $need_dlopen{$name} ||= $need_dlopen{$distname};
-         }
-+        foreach my $distname (@{$deps_optional{$name}}) {
-+            fetch( $distname, $need_target, $need_host, 0, 0 );
-+        }
-     }
-     return;
- }
-@@ -683,6 +693,15 @@ while (my ($distname, $dist) = each %dist) {
-         say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
-         say {$fh} qq{${brname}_LICENSE_FILES = ${license_files}} if $license_files;
-         say {$fh} qq{};
-+        foreach (sort @{$deps_optional{$distname}}) {
-+            next if grep { $_ eq $distname; } @{$deps_runtime{$_}};     # avoid cyclic dependencies
-+            my $opt_brname = brname( $_ );
-+            my $opt_fsname = fsname( $_ );
-+            say {$fh} qq{ifeq (\$(BR2_PACKAGE_PERL_${opt_brname}),y)};
-+            say {$fh} qq{${brname}_DEPENDENCIES += ${opt_fsname}};
-+            say {$fh} qq{endif};
-+            say {$fh} qq{};
-+        }
-         say {$fh} qq{\$(eval \$(perl-package))} if $need_target{$distname};
-         say {$fh} qq{\$(eval \$(host-perl-package))} if $need_host{$distname};
-         close $fh;
--- 
-2.5.0
+I did 'make clean toolchain' on x86-64 qemu defconfig but with glibc, and
+at the end I noticed that skeleton was built and the symlinks were
+correctly created.
+So which package had the skeleton dependency? (Don't have a buildroot near
+me ATM)
+
+/Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160119/0c0999ef/attachment.html>
