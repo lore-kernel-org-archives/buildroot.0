@@ -1,58 +1,37 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 19 Jan 2016 22:50:07 +0100
-Subject: [Buildroot] [PATCH] libnspr: only enable thumb if
-	BR2_ARM_INSTRUCTIONS_THUMB2
-Message-ID: <1453240207-27367-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Jan 2016 22:54:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/triggerhappy: bump to latest
+	commit to fix runtime issue
+In-Reply-To: <1453197113-27321-1-git-send-email-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Tue, 19 Jan 2016 10:51:53
+ +0100")
+References: <1453197113-27321-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <87oach1bhu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnspr currently passes --enable-thumb2 if the CPU has thumb
-instructions. This option will pass -mthumb to the compiler. However,
-if an external multilib toolchain is used that has a thumb-specific
-variant (e.g. Sourcery), it will try to use that one. But we only copy
-a single variant to the sysroot, so the build will fail with:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-.../arm-none-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory
-...
-collect2: error: ld returned 1 exit status
-../../config/rules.mk:303: recipe for target 'libnspr4.so' failed
+ > Bump to latest commit to fix runtime issue with the Linux Kernel headers 4.4:
+ >   Starting thd: Unable to parse trigger line: [..]
 
-In order to fix this, only enable thumb2 when we are really using
-thumb2. Note that it is still necessary to pass this option, cfr.
-http://autobuild.buildroot.org/results/d7323831372050e425a34f5104a46d8cbd6be214
+ > With version 4.4 of the Linux Kernel the input event codes are not defined in
+ > 'linux/input.h' anymore, but in a seperate header file
+ > 'linux/input-event-codes.h' leaving triggerhappys evtable_*.h header files
+ > empty with no event codes defined.
 
-We could have chosen to still enable thumb2 with the internal toolchain.
-However, that would mean we create a discrepancy between the result of
-building with the same (buildroot) toolchain when it is used as an
-internal one or as an external one. To avoid potentially surprising
-results, just stick to the option chosen for the rest of the rootfs.
+ > This issue is fixed upstream by commit 7e5abc69f215678e93a6b999524981c8b40bdcd9
+ > which also makes overwriting of the 'LINUX_INPUT_H' definition obsolet.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Build-tested with various combinations of thumb, thumb2, floating point,
-and external toolchains. I didn't test with an internal toolchain but
-what could go wrong there? :-)
+ > Tested with an internal Buildroot toolchain with Linux Kernel headers 4.4 and
+ > an external Linaro ARM 2015.08 toolchain with Linux Kernel headers 4.0.
 
-Changes v2: added missing build failure output to commit message
----
- package/libnspr/libnspr.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 8e58986..c9bfa0c 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -50,7 +50,7 @@ LIBNSPR_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIBRARY= install
- endif
- 
- ifeq ($(BR2_arm),y)
--ifeq ($(BR2_ARM_CPU_HAS_THUMB2),y)
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB2),y)
- LIBNSPR_CONF_OPTS += --enable-thumb2
- else
- LIBNSPR_CONF_OPTS += --disable-thumb2
+Committed after adding a .hash file, thanks.
+
 -- 
-2.7.0.rc3
+Bye, Peter Korsgaard
