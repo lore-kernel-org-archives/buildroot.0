@@ -1,56 +1,66 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 19 Jan 2016 23:45:51 +0100
-Subject: [Buildroot] [PATCH] mpd: allow to enable/disable httpd output
-Message-ID: <20160119224551.GA16917@waldemar-brodkorb.de>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 19 Jan 2016 23:51:11 +0100
+Subject: [Buildroot] [PATCH v3] libnspr: remove thumb2 handling
+Message-ID: <1453243871-22360-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It might be useful to disable this plugin.
+libnspr currently passes --enable-thumb2 if the CPU has thumb
+instructions. This option will pass -mthumb to the compiler. However,
+if an external multilib toolchain is used that has a thumb-specific
+variant (e.g. Sourcery), it will try to use that one. But we only copy
+a single variant to the sysroot, so the build will fail with:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-While testing sparcv8 compile I tried to disable failing features
-and plugins and this couldn't be disabled.
----
- package/mpd/Config.in |    5 +++++
- package/mpd/mpd.mk    |    6 ++++++
- 2 files changed, 11 insertions(+)
+.../arm-none-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory
+...
+collect2: error: ld returned 1 exit status
+../../config/rules.mk:303: recipe for target 'libnspr4.so' failed
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 0b3bb72..be0843f 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -223,6 +223,11 @@ config BR2_PACKAGE_MPD_AO
- 	help
- 	  Enable libao output support.
- 
-+config BR2_PACKAGE_MPD_HTTPD_OUTPUT
-+	bool "httpd output"
-+	help
-+	  Enable httpd output support.
-+
- config BR2_PACKAGE_MPD_JACK2
- 	bool "jack2"
- 	depends on BR2_ARCH_HAS_ATOMICS
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index c794e82..7a265f4 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -92,6 +92,12 @@ else
- MPD_CONF_OPTS += --disable-flac
+We can in fact just remove the thumb2 handling. With current libnspr,
+the thumb and thumb2 options just add -marm and -mthumb. But we already
+pass that in our toolchain wrapper so it's completely redundant.
+
+Note that when nothing is passed, the configure script still tries to
+autodetect whether thumb2 is available (but doesn't do it correctly,
+see the error above), but in the end it doesn't use the result for
+anything. In other words, even if it detects that thumb2 is available,
+it will _not_ pass -mthumb to the compiler.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Build-tested with various combinations of thumb, thumb2, floating point,
+and external toolchains. I didn't test with an internal toolchain but
+what could go wrong there? :-)
+
+Also tested with the original build failure which led to the
+introduction of the --enable-thumb2 handling:
+http://autobuild.buildroot.org/results/d7323831372050e425a34f5104a46d8cbd6be214
+
+Changes v2: added missing build failure output to commit message
+Changes v3: Remove thumb2 handling completely
+---
+ package/libnspr/libnspr.mk | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 8e58986..9f49eef 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -49,12 +49,4 @@ LIBNSPR_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIBRARY= install
+ LIBNSPR_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIBRARY= install
  endif
  
-+ifeq ($(BR2_PACKAGE_MPD_HTTPD_OUTPUT),y)
-+MPD_CONF_OPTS += --enable-httpd-output
-+else
-+MPD_CONF_OPTS += --disable-httpd-output
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPD_JACK2),y)
- MPD_DEPENDENCIES += jack2
- MPD_CONF_OPTS += --enable-jack
+-ifeq ($(BR2_arm),y)
+-ifeq ($(BR2_ARM_CPU_HAS_THUMB2),y)
+-LIBNSPR_CONF_OPTS += --enable-thumb2
+-else
+-LIBNSPR_CONF_OPTS += --disable-thumb2
+-endif
+-endif
+-
+ $(eval $(autotools-package))
 -- 
-1.7.10.4
+2.7.0.rc3
