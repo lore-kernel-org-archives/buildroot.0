@@ -1,28 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 21:21:30 +0100
-Subject: [Buildroot] [PATCH 0/3] efl bump to 1.15.3
-In-Reply-To: <1452121537-32273-1-git-send-email-romain.naour@gmail.com>
-References: <1452121537-32273-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160119212130.0bee2a64@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Jan 2016 21:22:59 +0100
+Subject: [Buildroot] [PATCH] lighttpd: fix compat Lua 5.2 & 5.3
+In-Reply-To: <1453230216-16615-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Tue, 19 Jan 2016 20:03:36 +0100")
+References: <1453230216-16615-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <874me92uak.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-On Thu,  7 Jan 2016 00:05:34 +0100, Romain Naour wrote:
+ > see failure in http://autobuild.buildroot.net/results/13f/13faa9ebce00359b8943775364a432ce422fe8b8/
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-> Romain Naour (3):
->   package/efl: bump to 1.15.3
->   package/elementary: bump to 1.15.3
->   package/enlightenment: bump to 0.19.14
+Committed, thanks.
 
-Series applied, thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
