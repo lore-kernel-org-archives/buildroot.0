@@ -1,56 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Jan 2016 21:16:10 +0100
-Subject: [Buildroot] [PATCH v3 3/3] util-linux: put package options in a
- sub-menu
-In-Reply-To: <1436842628-29469-3-git-send-email-danomimanchego123@gmail.com>
-References: <1436842628-29469-1-git-send-email-danomimanchego123@gmail.com>
- <1436842628-29469-3-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20160119201610.GD3360@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 Jan 2016 21:20:20 +0100
+Subject: [Buildroot] [git commit] package/enlightenment: bump to 0.19.14
+Message-ID: <20160119202028.03D957FD5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=0045429c48588fd1881fefa102cab7b5f5837016
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-07-13 22:57 -0400, Danomi Manchego spake thusly:
-> Hide all the util-linux options in a menuconfig, as the option
-> list is quite long.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/enlightenment/enlightenment.hash | 4 ++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/util-linux/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> index 042cae0..c8d16d2 100644
-> --- a/package/util-linux/Config.in
-> +++ b/package/util-linux/Config.in
-> @@ -1,4 +1,4 @@
-> -config BR2_PACKAGE_UTIL_LINUX
-> +menuconfig BR2_PACKAGE_UTIL_LINUX
->  	bool "util-linux"
->  	depends on BR2_USE_WCHAR
->  	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index c9b1284..66bdb49 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
+@@ -1,2 +1,2 @@
+-# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
+-sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
++# From https://phab.enlightenment.org/phame/live/3/post/e19_14_release/
++sha256	8906e762f0d953752bfe002663280a855da9bb74acf613424c517b78a8dde407	enlightenment-0.19.14.tar.xz
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 5cf4811..a756361 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ENLIGHTENMENT_VERSION = 0.19.12
++ENLIGHTENMENT_VERSION = 0.19.14
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2c
