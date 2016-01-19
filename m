@@ -1,32 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 22:06:01 +0100
-Subject: [Buildroot] [PATCH] imx-kobs: fix build for recent toolchains
-In-Reply-To: <1453060408-12544-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1453060408-12544-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20160119220601.1a8ae3a0@free-electrons.com>
+Date: Tue, 19 Jan 2016 22:13:24 +0100
+Subject: [Buildroot] [PATCH 1/1] iputils: resolve musl compatibility
+In-Reply-To: <1453089044-10391-1-git-send-email-matt@thewebers.ws>
+References: <1453089044-10391-1-git-send-email-matt@thewebers.ws>
+Message-ID: <20160119221324.74332232@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
+Matt,
 
-On Sun, 17 Jan 2016 20:53:28 +0100, Gary Bisson wrote:
-> Starting with Linux 4.4 headers, mtd-user.h isn't including stdint.h any
-> more which breaks the build.
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
-> Hi all,
+Some more comments (see below).
 
-Applied, with some minor changes:
+On Mon, 18 Jan 2016 03:50:44 +0000, Matt Weber wrote:
 
-    [Thomas:
-     - fix minor typo in the patch description
-     - add reference to the autobuilder failure, as suggested by Baruch.]
+> diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
+> index 21a2044..fcca52c 100644
+> --- a/package/iputils/iputils.hash
+> +++ b/package/iputils/iputils.hash
+> @@ -1,2 +1,4 @@
+> +# Locally computed
+> +sha256	0e98cb527fa175d1e08afb969c124e452b30968f10ec2c3b078f1440c8977a94	iputils-c8ff6feaf0442f8efd96ccb415770c54f9e84d47.tar.gz
+>  # From http://sourceforge.net/projects/iputils/files/
+>  sha1	3e85179746fd93000d6267bd55addfe97f321ba7	iputils-s20121011.tar.bz2
 
-Thanks!
+Why are you keeping the hash for the old tarball ?
+
+> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+> index 7510d99..d427b11 100644
+> --- a/package/iputils/iputils.mk
+> +++ b/package/iputils/iputils.mk
+> @@ -4,13 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -IPUTILS_VERSION = s20121011
+> -IPUTILS_SITE = http://www.skbuff.net/iputils
+> -IPUTILS_SOURCE = iputils-$(IPUTILS_VERSION).tar.bz2
+> -IPUTILS_LICENSE = GPLv2+, BSD-3c
+> +IPUTILS_VERSION = c8ff6feaf0442f8efd96ccb415770c54f9e84d47
+> +IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
+
+I don't understand why you are moving to github.
+http://www.skbuff.net/iputils has some recent tarballs, which
+correspond to the releases made on github.
+http://www.skbuff.net/iputils/iputils-s20151218.tar.bz2 will most
+likely contain the musl fixes.
+
+I'll mark your patch as Changes Requested in patchwork. Can you respin
+after fixing the issues raised during the review?
+
+Thanks a lot!
 
 Thomas
 -- 
