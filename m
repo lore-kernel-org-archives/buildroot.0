@@ -1,57 +1,118 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 20 Jan 2016 00:12:41 +0100
-Subject: [Buildroot] [git commit] libnspr: remove thumb2 handling
-Message-ID: <20160119231259.687B381ED9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] core: fix setting of HOSTARCH
+Message-ID: <20160119231259.626E782767@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=86e97855724f77817749cf6a036a352ad9b99cca
+commit: http://git.buildroot.net/buildroot/commit/?id=91ea9331275d5074be9202a6d866f6a6a860b8d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libnspr currently passes --enable-thumb2 if the CPU has thumb
-instructions. This option will pass -mthumb to the compiler. However,
-if an external multilib toolchain is used that has a thumb-specific
-variant (e.g. Sourcery), it will try to use that one. But we only copy
-a single variant to the sysroot, so the build will fail with:
+Currently, we set HOSTARCH to the output of `uname -m`. This gives us
+the architecture as seen by the running kernel. For example, we would
+end up with 'x86_64' for a 64-bit kernel running on an x86_64 processor.
 
-.../arm-none-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory
-...
-collect2: error: ld returned 1 exit status
-../../config/rules.mk:303: recipe for target 'libnspr4.so' failed
+We use that value to determine whether we can run some binary tools,
+like our pre-configured external toolchains.
 
-We can in fact just remove the thumb2 handling. With current libnspr,
-the thumb and thumb2 options just add -marm and -mthumb. But we already
-pass that in our toolchain wrapper so it's completely redundant.
+However, one may be running a userland in a different bitness than that
+of the running kernel. For example, one may run in a 32-bit chroot, even
+though the kernel is running in 64-bit.
 
-Note that when nothing is passed, the configure script still tries to
-autodetect whether thumb2 is available (but doesn't do it correctly,
-see the error above), but in the end it doesn't use the result for
-anything. In other words, even if it detects that thumb2 is available,
-it will _not_ pass -mthumb to the compiler.
+Up until recently, this was not an issue because the pre-configured
+external toolchains were all requiring an i386 (x86 in Buildroot
+parlance).
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+But since we introduced the latest Linaro toolchains, we now have
+toolchains that require a 64-bit userland.
+
+So, when running on a 64-bit kernel, we believe those toolchains are
+available, even when the user is running a 32-bit userland. This causes
+build failures for our autobuilders, like so:
+
+    http://autobuild.buildroot.org/results/9cd/9cdf10ec5b31144b2e03ea09cf128702339895b3/
+
+with the following symptoms:
+
+    >>> toolchain-external undefined Configuring
+    Cannot execute cross-compiler '/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bin/aarch64-linux-gnu-gcc'
+
+So, instead of relying on the output of `uname -r`, look for the host
+gcc and extract the target it was configured to generate code for.
+
+Fixes:
+    http://autobuild.buildroot.org/results/9cd/9cdf10ec5b31144b2e03ea09cf128702339895b3/  (aarch64)
+    http://autobuild.buildroot.org/results/888/8889aa7d9fb48370e4760a6edbc6d3ae945f02f2/  (arm)
+    and many more...
+
+Besides fixing those issues, it will also allow us to add the 64-bit
+variants of toolchains when they exist, like the upcoming Codescape
+MTI and IMG toolchains for MIPS from Imagination Technologies.
+
+[Peter: use HOSTCC_NOCCACHE]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnspr/libnspr.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ Makefile | 36 ++++++++++++++++++++++++++----------
+ 1 file changed, 26 insertions(+), 10 deletions(-)
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 8e58986..9f49eef 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -49,12 +49,4 @@ LIBNSPR_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIBRARY= install
- LIBNSPR_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIBRARY= install
+diff --git a/Makefile b/Makefile
+index a21869a..6bf9864 100644
+--- a/Makefile
++++ b/Makefile
+@@ -52,16 +52,6 @@ ifneq ($(firstword $(sort $(RUNNING_MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MA
+ $(error You have make '$(RUNNING_MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
  endif
  
--ifeq ($(BR2_arm),y)
--ifeq ($(BR2_ARM_CPU_HAS_THUMB2),y)
--LIBNSPR_CONF_OPTS += --enable-thumb2
--else
--LIBNSPR_CONF_OPTS += --disable-thumb2
--endif
--endif
+-export HOSTARCH := $(shell uname -m | \
+-	sed -e s/i.86/x86/ \
+-	    -e s/sun4u/sparc64/ \
+-	    -e s/arm.*/arm/ \
+-	    -e s/sa110/arm/ \
+-	    -e s/ppc64/powerpc64/ \
+-	    -e s/ppc/powerpc/ \
+-	    -e s/macppc/powerpc/\
+-	    -e s/sh.*/sh/)
 -
- $(eval $(autotools-package))
+ # Parallel execution of this Makefile is disabled because it changes
+ # the packages building order, that can be a problem for two reasons:
+ # - If a package has an unspecified optional dependency and that
+@@ -293,6 +283,32 @@ HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranli
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
+ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+ 
++# Determine the userland we are running on.
++#
++# Note that, despite its name, we are not interested in the actual
++# architecture name. This is mostly used to determine whether some
++# of the binary tools (e.g. pre-built external toolchains) can run
++# on the current host. So we need to know if the userland we're
++# running on can actually run those toolchains.
++#
++# For example, a 64-bit prebuilt toolchain will not run on a 64-bit
++# kernel if the userland is 32-bit (e.g. in a chroot for example).
++#
++# So, we extract the first part of the tuple the host gcc was
++# configured to generate code for; we assume this is our userland.
++#
++export HOSTARCH := $(shell $(HOSTCC_NOCCACHE) -v 2>&1 | \
++	sed -e '/^Target: \([^-]*\).*/!d' \
++	    -e 's//\1/' \
++	    -e 's/i.86/x86/' \
++	    -e 's/sun4u/sparc64/' \
++	    -e 's/arm.*/arm/' \
++	    -e 's/sa110/arm/' \
++	    -e 's/ppc64/powerpc64/' \
++	    -e 's/ppc/powerpc/' \
++	    -e 's/macppc/powerpc/' \
++	    -e 's/sh.*/sh/' )
++
+ HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
+ 	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p')
+ 
