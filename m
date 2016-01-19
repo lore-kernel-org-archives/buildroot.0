@@ -1,43 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 22:22:59 +0100
-Subject: [Buildroot] [git commit] package/angularjs: use 'menuconfig'
+Date: Tue, 19 Jan 2016 22:22:54 +0100
+Subject: [Buildroot] [git commit] package/alsa-utils: use 'menuconfig'
 	instead of 'config'+'menu'
-Message-ID: <20160119212303.ACBA07FC1B@busybox.osuosl.org>
+Message-ID: <20160119212303.9E0C77FC1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aee8dc79a64aad5335f3a104f7ba139546f1fcd1
+commit: http://git.buildroot.net/buildroot/commit/?id=47996624b5ebc929ab1e0a244ed39c8e10cb5cd1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... and change the modules 'menuconfig' to a simple 'config'
+Drop the now useless comment.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/angularjs/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/alsa-utils/Config.in | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/angularjs/Config.in b/package/angularjs/Config.in
-index 2b563f7..206b3d8 100644
---- a/package/angularjs/Config.in
-+++ b/package/angularjs/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_ANGULARJS
-+menuconfig BR2_PACKAGE_ANGULARJS
- 	bool "angularjs"
- 	help
- 	  AngularJS web application framework.
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_ANGULARJS
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index 9b8e8c0..b58e658 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -2,7 +2,7 @@ comment "alsa-utils needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
  
- if BR2_PACKAGE_ANGULARJS
+-config BR2_PACKAGE_ALSA_UTILS
++menuconfig BR2_PACKAGE_ALSA_UTILS
+ 	bool "alsa-utils"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+@@ -16,7 +16,6 @@ config BR2_PACKAGE_ALSA_UTILS
+ 	  http://www.alsa-project.org/
  
--menuconfig BR2_ANGULARJS_MODULES
-+config BR2_ANGULARJS_MODULES
- 	bool "angularjs modules"
- 	help
- 	  Select which modules to install. If disabled, all modules
+ if BR2_PACKAGE_ALSA_UTILS
+-menu "ALSA utils selection"
+ 
+ config BR2_PACKAGE_ALSA_UTILS_ALSACONF
+ 	bool "alsaconf"
+@@ -92,6 +91,4 @@ config BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST
+ 	bool "speaker-test"
+ 	select BR2_PACKAGE_ALSA_LIB_PCM
+ 
+-endmenu
+-
+ endif
