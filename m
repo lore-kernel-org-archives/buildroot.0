@@ -1,56 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 11:16:40 +0100
-Subject: [Buildroot] [PATCH] zbar: Fix gcc5 logical-not-parentheses error
-In-Reply-To: <569E07BA.2050106@inbox.ru>
-References: <20160116073021.A4B95101BCC@stock.ovh.net>
- <20160117001117.569d43f2@free-electrons.com>
- <569E07BA.2050106@inbox.ru>
-Message-ID: <20160119111640.066210e2@free-electrons.com>
+Date: Tue, 19 Jan 2016 11:18:34 +0100
+Subject: [Buildroot] [PATCH v4] linux-headers: allow use of headers from
+ kernel "package" selected
+In-Reply-To: <87y4bm2d42.fsf@dell.be.48ers.dk>
+References: <1425230275-127768-1-git-send-email-kaszak@gmail.com>
+ <20160109172908.GA3444@free.fr> <87y4bn6y5s.fsf@dell.be.48ers.dk>
+ <20160118214704.GA3380@free.fr>
+ <20160118230345.52b8f054@free-electrons.com>
+ <877fj64jhn.fsf@dell.be.48ers.dk>
+ <20160118232457.472dc051@free-electrons.com>
+ <87y4bm2d42.fsf@dell.be.48ers.dk>
+Message-ID: <20160119111834.797ea6d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Viacheslav,
+Peter,
 
-Thanks for your patch!
+On Tue, 19 Jan 2016 09:21:49 +0100, Peter Korsgaard wrote:
 
-On Tue, 19 Jan 2016 12:54:02 +0300, Viacheslav Volkov wrote:
-> From b9dd5d73c19d2b7170f722dba61a99655487fe9c Mon Sep 17 00:00:00 2001
-> From: Viacheslav Volkov <sv99@inbox.ru>
-> Date: Tue, 19 Jan 2016 12:19:29 +0300
-> Subject: [PATCH] zbar: Fix gcc5 logical-not-parentheses error
+>  > But it does seem weird to many users that the "linux" package provides
+>  > some many possibilities for fetching/patching the kernel, and still the
+>  > linux-headers package downloads a completely different kernel version,
+>  > with less possibilities of using a custom version.
 > 
-> Fix error: logical not is only applied to the left hand side of comparison
-> [-Werror=logical-not-parentheses]
-> 
-> Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
+> So perhaps we need an option to use the linux source for our kernel
+> headers? It does mean that people need to jump back and forth between
+> the toolchain and linux menus.
 
-Are you sure this is the correct fix? Yes, it fixes the build issue,
-but is it what the code intended to do?
-
-> ---
->  zbar/decoder/ean.c  | 4 ++--
->  zbar/qrcode/qrdec.c | 8 ++++----
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/zbar/decoder/ean.c b/zbar/decoder/ean.c
-> index c20f538..fe38eaa 100644
-> --- a/zbar/decoder/ean.c
-> +++ b/zbar/decoder/ean.c
-> @@ -294,7 +294,7 @@ static inline zbar_symbol_type_t ean_part_end4
-> (ean_pass_t *pass,
->          /* invalid parity combination */
->          return(ZBAR_NONE);
->  
-> -    if(!par == fwd) {
-> +    if(!(par == fwd)) {
-
-Then par != fwd would be a lot simpler (and ditto below).
-
-But did you analyze the code to make sure that this is actually the
-right change?
+Adding the option is not the problem. The problem is that from
+package/linux-headers/linux-headers.mk, you can't use variables defined
+from linux/linux.mk. So all you can do in
+package/linux-headers/linux-headers.mk is duplicate the logic from
+linux/linux.mk that will calculate LINUX_HEADERS_{VERSION,SITE,SOURCE}
+and apply the custom patches from the BR2_LINUX_KERNEL_* Config.in
+values.
 
 Thomas
 -- 
