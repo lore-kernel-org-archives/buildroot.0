@@ -1,66 +1,68 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 19 Jan 2016 23:51:11 +0100
-Subject: [Buildroot] [PATCH v3] libnspr: remove thumb2 handling
-Message-ID: <1453243871-22360-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Jan 2016 23:57:46 +0100
+Subject: [Buildroot] [PATCH v9] toolchain: create symlink
+ ARCH_LIB_DIR->lib in addition to lib32/lib64->lib
+In-Reply-To: <CAAXf6LVSwy5ozhJ4cYrSDF5gXBNEkjEs9ej_L2TkLa5a4avV8g@mail.gmail.com>
+References: <1450787734-2547-1-git-send-email-patrickdepinguin@gmail.com>
+ <20160117154528.1bb05d3e@free-electrons.com>
+ <CAAXf6LVkS49xBPa80iqi0EbkausB2gYJRJodsPMoWR8n6LZaAg@mail.gmail.com>
+ <CAAXf6LUUwQ4yt38Cy+A5QpL+kXhGmd9iiBvJLdNA8uJDv=TpMA@mail.gmail.com>
+ <87lh7l3asr.fsf@dell.be.48ers.dk>
+ <CAAXf6LUqCv04ZkCH5fKwq2_0w9hBYFYXM_Bf5t1yawG1D8yeTQ@mail.gmail.com>
+ <20160119182947.GB3360@free.fr> <878u3l2z9f.fsf@dell.be.48ers.dk>
+ <CAAXf6LVSwy5ozhJ4cYrSDF5gXBNEkjEs9ej_L2TkLa5a4avV8g@mail.gmail.com>
+Message-ID: <569EBF6A.4080208@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnspr currently passes --enable-thumb2 if the CPU has thumb
-instructions. This option will pass -mthumb to the compiler. However,
-if an external multilib toolchain is used that has a thumb-specific
-variant (e.g. Sourcery), it will try to use that one. But we only copy
-a single variant to the sysroot, so the build will fail with:
+On 19-01-16 20:40, Thomas De Schampheleire wrote:
+> 
+> On Jan 19, 2016 19:35, "Peter Korsgaard" <peter@korsgaard.com
+> <mailto:peter@korsgaard.com>> wrote:
+>>
+>> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr
+> <mailto:yann.morin.1998@free.fr>> writes:
+>>
+>> Hi,
+>>
+>> >> I was not aware that glibc already depends on skeleton. Then indeed
+>>  >> ThomasP's reasoning is correct and the patch should be simplified. I
+>>  >> will investigate that further and resubmit.
+>>
+>>  > Skeleton is currently not a dependency of host-gcc-initial, so you'd
+>>  > have to make it so.
+>>
+>> Ahh yes, we only add it for target packages.
+> 
+> I did 'make clean toolchain' on x86-64 qemu defconfig but with glibc, and at the
+> end I noticed that skeleton was built and the symlinks were correctly created.
+> So which package had the skeleton dependency? (Don't have a buildroot near me ATM)
 
-.../arm-none-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory
-...
-collect2: error: ld returned 1 exit status
-../../config/rules.mk:303: recipe for target 'libnspr4.so' failed
+ glibc is a target package so depends on skeleton (see pkg-generic.mk, search
+for skeleton).
 
-We can in fact just remove the thumb2 handling. With current libnspr,
-the thumb and thumb2 options just add -marm and -mthumb. But we already
-pass that in our toolchain wrapper so it's completely redundant.
+ Regards,
+ Arnout
 
-Note that when nothing is passed, the configure script still tries to
-autodetect whether thumb2 is available (but doesn't do it correctly,
-see the error above), but in the end it doesn't use the result for
-anything. In other words, even if it detects that thumb2 is available,
-it will _not_ pass -mthumb to the compiler.
+> 
+> /Thomas
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Build-tested with various combinations of thumb, thumb2, floating point,
-and external toolchains. I didn't test with an internal toolchain but
-what could go wrong there? :-)
 
-Also tested with the original build failure which led to the
-introduction of the --enable-thumb2 handling:
-http://autobuild.buildroot.org/results/d7323831372050e425a34f5104a46d8cbd6be214
-
-Changes v2: added missing build failure output to commit message
-Changes v3: Remove thumb2 handling completely
----
- package/libnspr/libnspr.mk | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 8e58986..9f49eef 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -49,12 +49,4 @@ LIBNSPR_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIBRARY= install
- LIBNSPR_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIBRARY= install
- endif
- 
--ifeq ($(BR2_arm),y)
--ifeq ($(BR2_ARM_CPU_HAS_THUMB2),y)
--LIBNSPR_CONF_OPTS += --enable-thumb2
--else
--LIBNSPR_CONF_OPTS += --disable-thumb2
--endif
--endif
--
- $(eval $(autotools-package))
 -- 
-2.7.0.rc3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
