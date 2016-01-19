@@ -1,51 +1,54 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 19 Jan 2016 10:20:58 +0100
-Subject: [Buildroot] [PATCH 76/80 v1] boot/barebox: use 'menuconfig'
-In-Reply-To: <e94d00fc8b99d734b696db083f51e356d0623a91.1452983019.git.yann.morin.1998@free.fr>
-References: <cover.1452983019.git.yann.morin.1998@free.fr>
- <e94d00fc8b99d734b696db083f51e356d0623a91.1452983019.git.yann.morin.1998@free.fr>
-Message-ID: <CAGm1_ksvPvg4qcE87dnp38mSWTb9tpyC+nPiEFzD_nGAUiGyoA@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 19 Jan 2016 10:51:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/triggerhappy: bump to latest commit
+	to fix runtime issue
+Message-ID: <1453197113-27321-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 16, 2016 at 11:38 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> barebox has more than 5 options, so use a 'menuconfig' to
-> group the options in an sub-menu.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Bump to latest commit to fix runtime issue with the Linux Kernel headers 4.4:
+  Starting thd: Unable to parse trigger line: [..]
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+With version 4.4 of the Linux Kernel the input event codes are not defined in
+'linux/input.h' anymore, but in a seperate header file
+'linux/input-event-codes.h' leaving triggerhappys evtable_*.h header files
+empty with no event codes defined.
 
-> ---
->  boot/barebox/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-> index 39cb5d2..f27afb6 100644
-> --- a/boot/barebox/Config.in
-> +++ b/boot/barebox/Config.in
-> @@ -1,4 +1,4 @@
-> -config BR2_TARGET_BAREBOX
-> +menuconfig BR2_TARGET_BAREBOX
->         bool "Barebox"
->         help
->           The Barebox bootloader, formerly known as U-Boot v2.
-> @@ -6,6 +6,7 @@ config BR2_TARGET_BAREBOX
->           http://www.barebox.org
->
->  if BR2_TARGET_BAREBOX
-> +
->  choice
->         prompt "version"
->         help
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+This issue is fixed upstream by commit 7e5abc69f215678e93a6b999524981c8b40bdcd9
+which also makes overwriting of the 'LINUX_INPUT_H' definition obsolet.
+
+Tested with an internal Buildroot toolchain with Linux Kernel headers 4.4 and
+an external Linaro ARM 2015.08 toolchain with Linux Kernel headers 4.0.
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/triggerhappy/triggerhappy.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/package/triggerhappy/triggerhappy.mk b/package/triggerhappy/triggerhappy.mk
+index 3a68e50..5a29ca7 100644
+--- a/package/triggerhappy/triggerhappy.mk
++++ b/package/triggerhappy/triggerhappy.mk
+@@ -4,15 +4,13 @@
+ #
+ ################################################################################
+ 
+-TRIGGERHAPPY_VERSION = aac9f353a28c0f414b27ac54bbbb2292c152eedc
++TRIGGERHAPPY_VERSION = 7e5abc69f215678e93a6b999524981c8b40bdcd9
+ TRIGGERHAPPY_SITE = $(call github,wertarbyte,triggerhappy,$(TRIGGERHAPPY_VERSION))
+ TRIGGERHAPPY_LICENSE = GPLv3+
+ TRIGGERHAPPY_LICENSE_FILES = COPYING
+ 
+ define TRIGGERHAPPY_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		LINUX_INPUT_H=$(STAGING_DIR)/usr/include/linux/input.h \
+-		-C $(@D) thd th-cmd
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) thd th-cmd
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-- 
+2.7.0
