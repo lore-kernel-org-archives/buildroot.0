@@ -1,57 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Jan 2016 00:09:26 +0100
-Subject: [Buildroot] [PATCH] luvi: build for the right MIPS endianness
-In-Reply-To: <1453133375-54831-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1453133375-54831-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <569EC226.7060700@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Jan 2016 00:11:08 +0100
+Subject: [Buildroot] [PATCH] core: fix setting of HOSTARCH
+In-Reply-To: <1447095621-32080-1-git-send-email-yann.morin.1998@free.fr>
+References: <1447095621-32080-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CACXmViZUX+KJREOxhJ-DpoDf2Tv49d7EszR0VbMuXmr0=o6GEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18-01-16 17:09, Vicente Olivert Riera wrote:
-> Otherwise it will cause build failures like this one:
-> 
-> [100%] Linking C executable luvi
-> /home/buildroot/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/5.2.0/../../../../mipsel-buildroot-linux-gnu/bin/ld:
-> jitted_tmp/src/lua/init.lua_luvi_generated.o: compiled for a big endian
-> system and target is little endian
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Mon, Nov 9, 2015 at 8:00 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Currently, we set HOSTARCH to the output of `uname -m`. This gives us
+> the architecture as seen by the running kernel. For example, we would
+> end up with 'x86_64' for a 64-bit kernel running on an x86_64 processor.
+>
+> We use that value to determine whether we can run some binary tools,
+> like our pre-configured external toolchains.
+>
+> However, one may be running a userland in a different bitness than that
+> of the running kernel. For example, one may run in a 32-bit chroot, even
+> though the kernel is running in 64-bit.
+>
+> Up until recently, this was not an issue because the pre-configured
+> external toolchains were all requiring an i386 (x86 in Buildroot
+> parlance).
+>
+> But since w eintroduced the latest Linaro toolchains, we now have
+> toolchains that require a 64-bit userland.
+>
+> So, when running on a 64-bit kernel, we believe those toolchains are
+> available, even when the user is running a 32-bit userland. This causes
+> build failures for our autobuilders, like so:
+>
+>     http://autobuild.buildroot.org/results/9cd/9cdf10ec5b31144b2e03ea09cf128702339895b3/
+>
+> with the following symptoms:
+>
+>     >>> toolchain-external undefined Configuring
+>     Cannot execute cross-compiler '/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bin/aarch64-linux-gnu-gcc'
+>
+> So, instead of relying on the output of `uname -r`, look for the host
+> gcc and extract the target it was configured to generate code for.
+>
+> Fixes:
+>     http://autobuild.buildroot.org/results/9cd/9cdf10ec5b31144b2e03ea09cf128702339895b3/  (aarch64)
+>     http://autobuild.buildroot.org/results/888/8889aa7d9fb48370e4760a6edbc6d3ae945f02f2/  (arm)
+>     and many more...
+>
+> Besides fixing those issues, it will also allow us to add the 64-bit
+> variants of toolchains when they exist, like the upcoming Codescape
+> MTI and IMG toolchains for MIPS from Imagination Technologies.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/luvi/luvi.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-> index ef1c2e1..d83933e 100644
-> --- a/package/luvi/luvi.mk
-> +++ b/package/luvi/luvi.mk
-> @@ -20,8 +20,10 @@ else ifeq ($(BR2_powerpc),y)
->  LUVI_TARGET_ARCH = ppc
->  else ifeq ($(BR2_arm)$(BR2_armeb),y)
->  LUVI_TARGET_ARCH = arm
-> -else ifeq ($(BR2_mips)$(BR2_mipsel),y)
-> +else ifeq ($(BR2_mips),y)
->  LUVI_TARGET_ARCH = mips
-> +else ifeq ($(BR2_mipsel),y)
-> +LUVI_TARGET_ARCH = mipsel
+>  Makefile | 34 +++++++++++++++++++++++++---------
+>  1 file changed, 25 insertions(+), 9 deletions(-)
 
- This could just fall into the BR2_ARCH situation below, no?
+Committed after changing it to use HOSTCC_NOCCACHE instead of 'gcc', thanks!
 
- Regards,
- Arnout
-
->  else
->  LUVI_TARGET_ARCH = $(BR2_ARCH)
->  endif
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+--
+Bye, Peter Korsgaard
