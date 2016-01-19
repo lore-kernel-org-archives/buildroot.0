@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 21:59:32 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-evdev:
-	bump version to 2.10.1
-Message-ID: <20160119205943.93038802FF@busybox.osuosl.org>
+Date: Tue, 19 Jan 2016 22:00:24 +0100
+Subject: [Buildroot] [git commit] luvi: build for the right MIPS endianness
+Message-ID: <20160119210029.0A610827E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f502aac711751c87e560777f6968352519ac13e
+commit: http://git.buildroot.net/buildroot/commit/?id=fbb76bb3826aeaf057ace2911fe741b0f3679b27
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Otherwise it will cause build failures like this one:
+
+[100%] Linking C executable luvi
+/home/buildroot/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/5.2.0/../../../../mipsel-buildroot-linux-gnu/bin/ld:
+jitted_tmp/src/lua/init.lua_luvi_generated.o: compiled for a big endian
+system and target is little endian
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash | 4 ++--
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/luvi/luvi.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-index cd892d3..3314934 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-October/002649.html
--sha256	d097298eb07b7a9edf4493b5c3c058041458ca52c8c62dbd4f40b84c5086d117	xf86-input-evdev-2.10.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2016-January/002669.html
-+sha256	af9c2b47f5b272ae56b45da6bd84610fc9a3d80a4b32c8215842a39d862de017	xf86-input-evdev-2.10.1.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 6f692ab..4a2ed36 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.0
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.1
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index ef1c2e1..d83933e 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -20,8 +20,10 @@ else ifeq ($(BR2_powerpc),y)
+ LUVI_TARGET_ARCH = ppc
+ else ifeq ($(BR2_arm)$(BR2_armeb),y)
+ LUVI_TARGET_ARCH = arm
+-else ifeq ($(BR2_mips)$(BR2_mipsel),y)
++else ifeq ($(BR2_mips),y)
+ LUVI_TARGET_ARCH = mips
++else ifeq ($(BR2_mipsel),y)
++LUVI_TARGET_ARCH = mipsel
+ else
+ LUVI_TARGET_ARCH = $(BR2_ARCH)
+ endif
