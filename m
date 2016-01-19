@@ -1,40 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 22:04:16 +0100
-Subject: [Buildroot] [PATCH] ARC: bump tools to arc-2015.12-rc1
-In-Reply-To: <1453112251-13965-1-git-send-email-abrodkin@synopsys.com>
-References: <1453112251-13965-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20160119220416.1278c84e@free-electrons.com>
+Date: Tue, 19 Jan 2016 22:05:08 +0100
+Subject: [Buildroot] [git commit] imx-kobs: fix build for recent toolchains
+Message-ID: <20160119210545.625F6827DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=55e2b92b49b5adef2dc0706d0173a4345fbcb991
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Jan 2016 13:17:31 +0300, Alexey Brodkin wrote:
-> This change introduces newer ARC toolchain in Buildroot.
-> Note this is the first release candidate and we'll probably see another
-> RC before cutting the final release.
-> 
-> That new arc-2015.12 release doesn't bring any significant changes but
-> mostly is focused on fixes and minor improvements here and there.
-> Most noticeable changes are:
->  * GCC updated to v4.8.5
->  * GDB updated to 7.10
-> 
-> Here you may find more info on fixes and improvements in that release:
-> https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2015.12-rc1
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: arc-buildroot at synopsys.com
+Starting with Linux 4.4 headers, mtd-user.h isn't including stdint.h any
+more which breaks the build.
 
-Thanks, applied with some minor tweaks to the commit title.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  http://autobuild.buildroot.net/results/05a/05a159c7f8382237d4c941b1bb6de7dad72708f3/
+
+[Thomas:
+ - fix minor typo in the patch description
+ - add reference to the autobuilder failure, as suggested by Baruch.]
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0002-Fix-build-for-recent-toolchains.patch     | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/package/freescale-imx/imx-kobs/0002-Fix-build-for-recent-toolchains.patch b/package/freescale-imx/imx-kobs/0002-Fix-build-for-recent-toolchains.patch
+new file mode 100644
+index 0000000..c5cfb80
+--- /dev/null
++++ b/package/freescale-imx/imx-kobs/0002-Fix-build-for-recent-toolchains.patch
+@@ -0,0 +1,26 @@
++[PATCH] Fix build for recent toolchains
++
++Starting with Linux 4.4 headers, mtd-user.h isn't including stdint.h
++anymore which breaks the build.
++
++Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
++---
++ src/BootControlBlocks.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/BootControlBlocks.h b/src/BootControlBlocks.h
++index 192eb61..aacdb64 100644
++--- a/src/BootControlBlocks.h
+++++ b/src/BootControlBlocks.h
++@@ -20,6 +20,8 @@
++ #ifndef BOOTCONTROLBLOCKS_H_
++ #define BOOTCONTROLBLOCKS_H_
++ 
+++#include <stdint.h>
+++
++ #define NCB_FINGERPRINT1	0x504d5453	//!< 'STMP'
++ #define NCB_FINGERPRINT2	0x2042434e	//!< 'NCB<space>' - NAND Control Block
++ #define NCB_FINGERPRINT3	0x4e494252	//!< 'RBIN' - ROM Boot Image Block - N
++-- 
++2.6.4
++
