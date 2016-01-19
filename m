@@ -1,36 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 22:21:52 +0100
-Subject: [Buildroot] [PATCH v2] package/libbroadvoice: Broken on BR2_arc
- with gcc <= 4.8
-In-Reply-To: <1453038796-7041-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453038796-7041-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160119222152.5c7f61a7@free-electrons.com>
+Date: Tue, 19 Jan 2016 22:22:59 +0100
+Subject: [Buildroot] [git commit] package/angularjs: use 'menuconfig'
+	instead of 'config'+'menu'
+Message-ID: <20160119212303.ACBA07FC1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=aee8dc79a64aad5335f3a104f7ba139546f1fcd1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Jan 2016 14:53:16 +0100, Bernd Kuhls wrote:
-> Please read this bug report for details:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59049
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/4a1/4a1fd92d1ce4963d3e282ea2dc8f0f6c5db4f1e1/
-> http://autobuild.buildroot.net/results/ce3/ce3be7d27489647a98d8932c5bcabd08c845187b/
-> http://autobuild.buildroot.net/results/988/988bd189bab37a03c037160d6758774d4aa6c8a0/
-> and many others
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: changed logic to "material implication" (Arnout, Mason)
+... and change the modules 'menuconfig' to a simple 'config'
 
-Applied, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/angularjs/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/angularjs/Config.in b/package/angularjs/Config.in
+index 2b563f7..206b3d8 100644
+--- a/package/angularjs/Config.in
++++ b/package/angularjs/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_ANGULARJS
++menuconfig BR2_PACKAGE_ANGULARJS
+ 	bool "angularjs"
+ 	help
+ 	  AngularJS web application framework.
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_ANGULARJS
+ 
+ if BR2_PACKAGE_ANGULARJS
+ 
+-menuconfig BR2_ANGULARJS_MODULES
++config BR2_ANGULARJS_MODULES
+ 	bool "angularjs modules"
+ 	help
+ 	  Select which modules to install. If disabled, all modules
