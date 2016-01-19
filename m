@@ -1,27 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jan 2016 21:23:58 +0100
-Subject: [Buildroot] [PATCH v3 3/3] util-linux: put package options in a
- sub-menu
-In-Reply-To: <1436842628-29469-3-git-send-email-danomimanchego123@gmail.com>
-References: <1436842628-29469-1-git-send-email-danomimanchego123@gmail.com>
- <1436842628-29469-3-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20160119212358.28a127c9@free-electrons.com>
+Date: Tue, 19 Jan 2016 21:24:40 +0100
+Subject: [Buildroot] [PATCH] gst-ffmpeg: disable for MIPS R6
+In-Reply-To: <1453204981-7883-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1453204981-7883-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160119212440.6350b1d4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+Dear Vicente Olivert Riera,
 
-On Mon, 13 Jul 2015 22:57:08 -0400, Danomi Manchego wrote:
-> Hide all the util-linux options in a menuconfig, as the option
-> list is quite long.
+On Tue, 19 Jan 2016 12:03:01 +0000, Vicente Olivert Riera wrote:
+> This package bundles a version of libav which doesn't have support for
+> MIPS R6.
 > 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/e54/e54f0f9aa8fbc1760379ce64d17422810864b56b/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/util-linux/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/gstreamer/gst-ffmpeg/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
 
 Applied, thanks.
 
