@@ -1,40 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 20 Jan 2016 15:18:55 +0100
-Subject: [Buildroot] Building a Linux from scratch and new target
-	architecture
-In-Reply-To: <1453201429564-122990.post@n4.nabble.com>
-References: <1453201429564-122990.post@n4.nabble.com>
-Message-ID: <CAAXf6LULhmtpM3ncZwK=wFa+VPBh5=GE39M0X7Jc8bw1R81i8A@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 20 Jan 2016 11:20:33 -0300
+Subject: [Buildroot] [PATCH] cmake: bump to version 3.4.2
+Message-ID: <1453299633-7064-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Md.Rashedul Amin Rony,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Tue, Jan 19, 2016 at 12:03 PM, ronyboss <md.rashedul.amin@gmail.com> wrote:
-> Hello,
->
-> Recently I have been working with buildroot system and openwrt system. I
-> have successfully build the linux for raspberry pi and other different
-> routers with my own modifications. Now I want to learn how to add custom
-> Target architecture, how to add kernel for them and how to tweek rootfs, and
-> how to tweek file system and others.
->
-> So it would be helpful for me if anyone can provide me some information
-> about these things.
->
-
-Have you seen the Buildroot manual? I think it can be a good starting
-point on some of these topics:
-http://buildroot.uclibc.org/downloads/manual/manual.html
-
-In particular, you may be interested in chapters
-"Project-specific customization"
-http://buildroot.uclibc.org/downloads/manual/manual.html#customize
-"Adding board support"
-http://buildroot.uclibc.org/downloads/manual/manual.html#adding-board-support
-
-Best regards,
-Thomas
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index be0b464..b0bcf17 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.4/cmake-3.4.1-SHA-256.txt
+-sha256	d41462bdd80dc37f0d5608167b354bb3af8c068eee640be04c907154c5c113e2	cmake-3.4.1.tar.gz
++# From http://www.cmake.org/files/v3.4/cmake-3.4.2-SHA-256.txt
++sha256	da7cc34e1ce1d82e67a32ab081c02c2845534cd8bf2e09d88077a1b282e97392	cmake-3.4.2.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 8c3da1e..341ab27 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CMAKE_VERSION_MAJOR = 3.4
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+-- 
+2.4.10
