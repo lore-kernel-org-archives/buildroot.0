@@ -1,187 +1,114 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 20 Jan 2016 19:34:28 +0100
-Subject: [Buildroot] [PATCH 1/3] package/linux-headers: add option to use
-	same sources as the kernel
+Date: Wed, 20 Jan 2016 19:34:29 +0100
+Subject: [Buildroot] [PATCH 2/3] defconfigs: use the new
+	headers-version-same-as-kernel-version option
 In-Reply-To: <cover.1453314776.git.yann.morin.1998@free.fr>
 References: <cover.1453314776.git.yann.morin.1998@free.fr>
-Message-ID: <dde8a16a5331beb6280d7b86002aa917eae44664.1453314776.git.yann.morin.1998@free.fr>
+Message-ID: <811e1f5fe52c239010c412ce9f22b307d115cfcf.1453314776.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some heavily (and most often improperly) modified kernel may export
-new APIs to userland, so as to speak to custom hardware or custom kernel
-facilities.
+Now that we can say that the linux headers version should match that of
+the kernel to be built, we inverse the logic in our defconfigs, as it is
+more sensible that way.
 
-However, we currently have no easy way to use such kernels as a source
-for the linux-headers package, which precludes having those userland
-headers intalled for userland applications to use them.
-
-We do have a way for the kernel to use the same version as for the
-headers, but that is definitely not enough, as the linux-headers package
-has a version choice that is far less versatile and capable than that of
-the linux package.
-
-Add a new option for the linux-headers package, for the user to specify
-that the version (really, the sources) of the kernel be used to install
-the headers from.
-
-We do that by making linux-headers patch-depend on the linux package.
-
-We can't have linux-header simply depend on linux, because the simple
-depenency means the the dependee will be configured, built and installed
-before the dependent is configured. And since linux is a target package,
-it depends on the toolchain, which internally dependes on linux-headers,
-which would depend on linux, and we'd get a circular dependency.
-
-Using patch-depend will ensure that linux is extracted and patched
-before linux-headers is extracted, which is really all we need.
-
-Then, we install the headers from the linux source tree, rather than
-from linux-headers' source tree (as there's nothing in there!).
-
-Since we need to install a private set for uClibc (see cde947f, uclibc:
-prevent rebuilding after installation to staging), we explicitly set
-INSTALL_HDR_PATH when calling the kernel' install-headers rule in
-LINUX_HEADERS_CONFIGURE_CMDS, so that the headers are installed in
-linux-headers' $(@D) instead of linux' $(@D).
-
-Finally, as there is no way to know the kernel version in this case, we
-must still prompt the user for the kernel series the headers are from
-(like we do for a custom version) and check for consistency at build
-time.
-
-Note however that this still leaves users that want to built their
-such-kernel outside of Buildroot out in the cold.
+And also because we'll get rid of the former, converse kernel-same-as-headers
+option.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Karoly Kasza <kaszak@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- linux/Config.in                        |  1 +
- package/linux-headers/Config.in.host   | 12 +++++++++++-
- package/linux-headers/linux-headers.mk | 25 ++++++++++++++++++++++---
- 3 files changed, 34 insertions(+), 4 deletions(-)
+ configs/freescale_imx28evk_defconfig     |  5 ++---
+ configs/freescale_imx31_3stack_defconfig |  9 ++++-----
+ configs/ts5x00_defconfig                 | 15 +++++++++++----
+ 3 files changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 263f937..f5865f3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -31,6 +31,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+diff --git a/configs/freescale_imx28evk_defconfig b/configs/freescale_imx28evk_defconfig
+index 9ce5217..3f2f9e7 100644
+--- a/configs/freescale_imx28evk_defconfig
++++ b/configs/freescale_imx28evk_defconfig
+@@ -3,8 +3,6 @@ BR2_arm=y
+ BR2_arm926t=y
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-+	depends on !BR2_KERNEL_HEADERS_AS_KERNEL
- 	depends on BR2_TOOLCHAIN_BUILDROOT
- 	help
- 	  This option will re-use the same kernel sources as the one
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 41e3a92..a4573d2 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -5,12 +5,22 @@ comment "Kernel Header Options"
+ # toolchain
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.19.2"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
  
- choice
- 	prompt "Kernel Headers"
-+	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
- 	default BR2_KERNEL_HEADERS_4_4
- 	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
- 	  the kernel you intend to use on your target system.
+ # system
+@@ -12,7 +10,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
  
-+	config BR2_KERNEL_HEADERS_AS_KERNEL
-+		bool "Same as kernel"
-+		depends on BR2_LINUX_KERNEL
-+
-+	comment "Using the same version as that of the"
-+		depends on !BR2_LINUX_KERNEL
-+	comment "kernel needs a kernel to be built.   "
-+		depends on !BR2_LINUX_KERNEL
-+
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
- 		depends on !BR2_arc && !BR2_nios2
-@@ -93,7 +103,7 @@ config BR2_DEFAULT_KERNEL_VERSION
+ # kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/freescale_imx31_3stack_defconfig b/configs/freescale_imx31_3stack_defconfig
+index 68781eb..ded6563 100644
+--- a/configs/freescale_imx31_3stack_defconfig
++++ b/configs/freescale_imx31_3stack_defconfig
+@@ -4,10 +4,6 @@ BR2_arm1136jf_s_r0=y
+ BR2_ARM_EABIHF=y
  
- choice
- 	bool "Custom kernel headers series"
--	depends on BR2_KERNEL_HEADERS_VERSION
-+	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL
- 	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
- 	help
- 	  Set to the kernel headers series you manually set above.
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 1b8b81b..6339280 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -7,6 +7,19 @@
- # This package is used to provide Linux kernel headers for the
- # internal toolchain backend.
+ # toolchain
+-BR2_KERNEL_HEADERS_VERSION=y
+-# Note: sadly the Linux kernel will not boot on the i.MX31 PDK, starting with
+-# v3.16 and at least up to v4.0-rc4; this is why we use v3.15.y here.
+-BR2_DEFAULT_KERNEL_VERSION="3.15.10"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
  
-+ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
-+
-+LINUX_HEADERS_VERSION = none
-+LINUX_HEADERS_SOURCE =
-+
-+LINUX_HEADERS_LICENSE = $(LINUX_LICENSE)
-+LINUX_HEADERS_LICENSE_FILES = $(LINUX_LICENSE_FILES)
-+
-+LINUX_HEADERS_PATCH_DEPENDENCIES = linux
-+LINUX_HEADERS_REAL_DIR = $(LINUX_DIR)
-+
-+else # ! BR2_KERNEL_HEADERS_AS_KERNEL
-+
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
- ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
-@@ -16,9 +29,14 @@ else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
- endif
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
-+
- LINUX_HEADERS_LICENSE = GPLv2
- LINUX_HEADERS_LICENSE_FILES = COPYING
+ # system
+@@ -15,7 +11,10 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
  
-+LINUX_HEADERS_REAL_DIR = $(@D)
+ # kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
++# Note: sadly the Linux kernel will not boot on the i.MX31 PDK, starting with
++# v3.16 and at least up to v4.0-rc4; this is why we use v3.15.y here.
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.10"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_TARGET_ROOTFS_CPIO_GZIP=y
+diff --git a/configs/ts5x00_defconfig b/configs/ts5x00_defconfig
+index befb655..6f140e6 100644
+--- a/configs/ts5x00_defconfig
++++ b/configs/ts5x00_defconfig
+@@ -1,19 +1,26 @@
++# architecture
+ BR2_i386=y
+ BR2_x86_i586=y
+ 
+-# Lock headers version to match and avoid breakage
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.17.8"
++# toolchain
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
+ 
++# system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
+ BR2_ROOTFS_OVERLAY="board/ts/ts5x00/fs-overlay"
 +
-+endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
++# kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.8"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/ts/ts5x00/linux-3.17.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 +
- LINUX_HEADERS_INSTALL_STAGING = YES
- 
- # linux-headers is part of the toolchain so disable the toolchain dependency
-@@ -35,17 +53,18 @@ LINUX_HEADERS_ADD_TOOLCHAIN_DEPENDENCY = NO
- # uClibc building. This way uClibc doesn't modify linux headers on installation
- # of "its" headers
- define LINUX_HEADERS_CONFIGURE_CMDS
--	(cd $(@D); \
-+	(cd $(LINUX_HEADERS_REAL_DIR); \
- 		$(TARGET_MAKE_ENV) $(MAKE) \
- 			ARCH=$(KERNEL_ARCH) \
- 			HOSTCC="$(HOSTCC)" \
- 			HOSTCFLAGS="$(HOSTCFLAGS)" \
- 			HOSTCXX="$(HOSTCXX)" \
-+			INSTALL_HDR_PATH=$(@D)/usr \
- 			headers_install)
- endef
- 
- define LINUX_HEADERS_INSTALL_STAGING_CMDS
--	(cd $(@D); \
-+	(cd $(LINUX_HEADERS_REAL_DIR); \
- 		$(TARGET_MAKE_ENV) $(MAKE) \
- 			ARCH=$(KERNEL_ARCH) \
- 			HOSTCC="$(HOSTCC)" \
-@@ -55,7 +74,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
- 			headers_install)
- endef
- 
--ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)
-+ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
- define LINUX_HEADERS_CHECK_VERSION
- 	$(call check_kernel_headers_version,\
- 		$(STAGING_DIR),\
++# rootfs
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++
++# bootloader
+ BR2_TARGET_SYSLINUX=y
+ BR2_TARGET_SYSLINUX_MBR=y
 -- 
 1.9.1
