@@ -1,39 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 20 Jan 2016 10:19:26 -0300
-Subject: [Buildroot] [PATCH] coreutils: bump to version 8.25
-Message-ID: <1453295966-22372-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 20 Jan 2016 10:26:49 -0300
+Subject: [Buildroot] Browser in kiosk mode
+In-Reply-To: <569F7F6A.4060906@gmail.com>
+References: <569F7F6A.4060906@gmail.com>
+Message-ID: <569F8B19.5010304@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/coreutils/coreutils.hash | 2 +-
- package/coreutils/coreutils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 20/01/16 09:36, Marco Trapanese wrote:
 
-diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
-index 21a2545..38d3bb1 100644
---- a/package/coreutils/coreutils.hash
-+++ b/package/coreutils/coreutils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	a2d75286a4b9ef3a13039c2da3868a61be4ee9f17d8ae380a35a97e506972170	coreutils-8.24.tar.xz
-+sha256	31e67c057a5b32a582f26408c789e11c2e8d676593324849dcf5779296cdce87	coreutils-8.25.tar.xz
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index aac8794..237c2a9 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COREUTILS_VERSION = 8.24
-+COREUTILS_VERSION = 8.25
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
- COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- COREUTILS_LICENSE = GPLv3+
--- 
-2.4.10
+> Hi, I'm asking some hints about which is the best solution in buildroot
+> to have a browser in kiosk mode with a whitelist.
+> I mean, a full-screen browser, with no way to change the settings, and a
+> list of allowable addresses.
+>
+> Firefox has a couple of plugins to achieve that but it's not included
+> (yet?) in buildroot. I found this:
+>
+> http://lists.busybox.net/pipermail/buildroot/2012-September/058314.html
+>
+> I guess it won't be included soon, because the patches are there since
+> 2012. Anyway I will try to use them on the latest version.
+>
+> Do you recommend other packages already provided in the current
+> buildroot version which I could use?
+> Thanks!
+> Marco
+
+Hi.
+You can do that with any browser using squid in transparent mode with a 
+whitelist, that way you're not tied to any particular solution (plugin, 
+addon).
+Regarding which browser to use that will probably depend on which 
+features you want/need and which graphics platform you want to run it on 
+(example: X11, pure framebuffer, EGL, so on).
+Regards.
