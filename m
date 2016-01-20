@@ -1,30 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jan 2016 12:09:47 +0100
-Subject: [Buildroot] [PATCH 1/2 V6] Adds package/nvme: new package
-In-Reply-To: <20160120102906.23540.76413.stgit@localhost.localdomain>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 20 Jan 2016 13:10:51 +0200
+Subject: [Buildroot] [PATCH 2/2] package/nvme: new package
+In-Reply-To: <20160120103611.23540.32033.stgit@localhost.localdomain>
 References: <20160120102906.23540.76413.stgit@localhost.localdomain>
-Message-ID: <20160120120947.7fee88c4@free-electrons.com>
+ <20160120103611.23540.32033.stgit@localhost.localdomain>
+Message-ID: <20160120111051.GJ14114@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mamatha Inamdar,
+Hi Mamatha,
 
-On Wed, 20 Jan 2016 16:05:48 +0530, Mamatha Inamdar wrote:
-> Add support for building NVME utility - a utility for interacting with
-> standard NVM Express (optimized PCI Express SSD interface) devices.
-> 
-> Signed-off-by: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+On Wed, Jan 20, 2016 at 04:09:14PM +0530, Mamatha Inamdar wrote:
+> This patch is to add NVME Config file
 
-Once again, there should be a *single* patch adding the package. Please
-merge your two patches into one.
+This should be part of the previous patch. That's what Thomas meant when he 
+asked you to send a single patch. He only used a list to indicate what should 
+change in this single patch compared to your previous submissions.
 
-Best regards,
+baruch
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
