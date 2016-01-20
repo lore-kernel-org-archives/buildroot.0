@@ -1,57 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 20 Jan 2016 10:18:48 -0300
-Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p6
-Message-ID: <1453295928-30116-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 20 Jan 2016 10:19:26 -0300
+Subject: [Buildroot] [PATCH] coreutils: bump to version 8.25
+Message-ID: <1453295966-22372-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2015-7973 - Deja Vu: Replay attack on authenticated broadcast mode
-CVE-2015-7974 - Skeleton Key: Missing key check allows impersonation
-between authenticated peers
-CVE-2015-7975 - nextvar() missing length check
-CVE-2015-7976 - ntpq saveconfig command allows dangerous characters in
-filenames
-CVE-2015-7977 - reslist NULL pointer dereference
-CVE-2015-7978 - Stack exhaustion in recursive traversal of restriction
-list
-CVE-2015-7979 - Off-path Denial of Service (DoS) attack on authenticated
-broadcast mode
-CVE-2015-8137 - origin: Zero Origin Timestamp Bypass
-CVE-2015-8158 - Potential Infinite Loop in ntpq
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ntp/ntp.hash | 6 +++---
- package/ntp/ntp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/coreutils/coreutils.hash | 2 +-
+ package/coreutils/coreutils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index a98b2e2..0c2c29d 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,4 +1,4 @@
--# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p5.tar.gz.md5
--md5	9f02b2a0acc1617ce2716d529a58d2d8	ntp-4.2.8p5.tar.gz
-+# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p6.tar.gz.md5
-+md5	60049f51e9c8305afe30eb22b711c5c6	ntp-4.2.8p6.tar.gz
- # Calculated based on the hash above
--sha256	ca28baf4f6bb6fabdc1b62fd1dcec412be2e621192b40466a469a2496164f696	ntp-4.2.8p5.tar.gz
-+sha256	583d0e1c573ace30a9c6afbea0fc52cae9c8c916dbc15c026e485a0dda4ba048	ntp-4.2.8p6.tar.gz
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index c86000a..7e1e87f 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
+index 21a2545..38d3bb1 100644
+--- a/package/coreutils/coreutils.hash
++++ b/package/coreutils/coreutils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	a2d75286a4b9ef3a13039c2da3868a61be4ee9f17d8ae380a35a97e506972170	coreutils-8.24.tar.xz
++sha256	31e67c057a5b32a582f26408c789e11c2e8d676593324849dcf5779296cdce87	coreutils-8.25.tar.xz
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index aac8794..237c2a9 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8p5
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p6
- NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- NTP_LICENSE = ntp license
+-COREUTILS_VERSION = 8.24
++COREUTILS_VERSION = 8.25
+ COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
+ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ COREUTILS_LICENSE = GPLv3+
 -- 
 2.4.10
