@@ -1,34 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jan 2016 17:27:25 +0100
-Subject: [Buildroot] [git commit] libcroco: fix typo in license file
-Message-ID: <20160120162809.BDEAC8280C@busybox.osuosl.org>
+Date: Wed, 20 Jan 2016 17:27:16 +0100
+Subject: [Buildroot] [git commit] libjpeg: bump to version 9b
+Message-ID: <20160120162809.B210C82807@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fef4fc0e0ebb5235b4aa9301ee7e34a85e8fb4a3
+commit: http://git.buildroot.net/buildroot/commit/?id=55d19d9cd7aab39622863d573701ce7b28d2f487
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Otherwise it won't be saved.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcroco/libcroco.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libjpeg/libjpeg.hash | 2 +-
+ package/libjpeg/libjpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcroco/libcroco.mk b/package/libcroco/libcroco.mk
-index 0cda9da..c4cb676 100644
---- a/package/libcroco/libcroco.mk
-+++ b/package/libcroco/libcroco.mk
-@@ -14,7 +14,7 @@ LIBCROCO_CONFIG_SCRIPTS = croco-$(LIBCROCO_VERSION_MAJOR)-config
- # NEWS states that it's only LGPL
- # Source code says v2.1+ even though COPYING.LIB is v2
- LIBCROCO_LICENSE = LGPLv2.1+
--LIBCROSO_LICENSE_FILES = COPYING.LIB
-+LIBCROCO_LICENSE_FILES = COPYING.LIB
+diff --git a/package/libjpeg/libjpeg.hash b/package/libjpeg/libjpeg.hash
+index 035812a..2ad7dda 100644
+--- a/package/libjpeg/libjpeg.hash
++++ b/package/libjpeg/libjpeg.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 3a753ea48d917945dd54a2d97de388aa06ca2eb1066cbfdc6652036349fe05a7 jpegsrc.v9a.tar.gz
++sha256	240fd398da741669bf3c90366f58452ea59041cacc741a489b99f2f6a0bad052	jpegsrc.v9b.tar.gz
+diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
+index c4190c7..14aba61 100644
+--- a/package/libjpeg/libjpeg.mk
++++ b/package/libjpeg/libjpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-LIBJPEG_VERSION = 9a
++LIBJPEG_VERSION = 9b
+ LIBJPEG_SITE = http://www.ijg.org/files
+ LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
+ LIBJPEG_LICENSE = jpeg-license (BSD-3c-like)
