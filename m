@@ -1,172 +1,57 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Wed, 20 Jan 2016 13:01:37 +0000
-Subject: [Buildroot] [PATCH] package/radlib: New package
-In-Reply-To: <20160120134527.7b78d6a3@free-electrons.com>
-References: <1453220389.3109.32.camel@intel.com>
- <20160119174734.664e230c@free-electrons.com>
- <1453291037.2933.40.camel@intel.com>
- <20160120134527.7b78d6a3@free-electrons.com>
-Message-ID: <1453294897.2933.57.camel@intel.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 20 Jan 2016 10:18:48 -0300
+Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p6
+Message-ID: <1453295928-30116-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+CVE-2015-7973 - Deja Vu: Replay attack on authenticated broadcast mode
+CVE-2015-7974 - Skeleton Key: Missing key check allows impersonation
+between authenticated peers
+CVE-2015-7975 - nextvar() missing length check
+CVE-2015-7976 - ntpq saveconfig command allows dangerous characters in
+filenames
+CVE-2015-7977 - reslist NULL pointer dereference
+CVE-2015-7978 - Stack exhaustion in recursive traversal of restriction
+list
+CVE-2015-7979 - Off-path Denial of Service (DoS) attack on authenticated
+broadcast mode
+CVE-2015-8137 - origin: Zero Origin Timestamp Bypass
+CVE-2015-8158 - Potential Infinite Loop in ntpq
 
-On Wed, 2016-01-20 at 13:45 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 20 Jan 2016 11:57:17 +0000, Kinsella, Ray wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ntp/ntp.hash | 6 +++---
+ package/ntp/ntp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> Just don't use your e-mail client to send patches, use "git
-> send-email".
-
-ok - I will look at this :-)
-
-> 
-> > > This remains completely wrong. Contrary to what you do in your
-> > > .mk
-> > > file, --prefix should *NOT* be $(STAGING_DIR)/usr or
-> > > $(TARGET_DIR)/usr.
-> > > It should be just "/usr". And therefore those -I$(prefix)/include
-> > > and
-> > > -L$(prefix)/lib are totally wrong.
-> > 
-> > Ok - but if I don't do this, it picks up the headers/libs for its
-> > dependencies (libc, sqlite, mysql) from the host's /usr. I was
-> > using
-> > the prefix to keep these paths right.
-> 
-> Just remove -I$(prefix)/include everywhere from the Makefile.am of
-> this
-> package, it is bogus.
-
-ok - thanks for the pointer.
-
-> > 
-> > > > +-if CROSSCOMPILE
-> > > > +-raddebug_LDFLAGS += $(prefix)/lib/crt1.o $(prefix)/lib/crti.o
-> > > > $(prefix)/lib/crtn.o
-> > > > +-endif
-> > > > ++#if CROSSCOMPILE
-> > > > ++#raddebug_LDFLAGS += $(prefix)/lib/crt1.o
-> > > > $(prefix)/lib/crti.o
-> > > > $(prefix)/lib/crtn.o
-> > > > ++#endif
-> > > 
-> > > Why ?
-> > 
-> > Ok - I can ask why these wherever explicitly passed to linker in
-> > the
-> > first instance. If I don't remove them - the linker fails
-> > complaining
-> > of duplicate symbols. (the patch should just remove, rather than
-> > comment these lines).  
-> 
-> Linking explicitly against crt1.o and crti.o seems wrong to me. gcc
-> will automatically take care of linking against crt1.o/crti.o when
-> needed.
-
-Hence I commented them out - I will just remove them altogether via a
-patch. 
-
-> 
-> > > > +diff -Naur a/debug/Makefile.in b/debug/Makefile.in
-> > > > +--- a/debug/Makefile.in        2016-01-12 14:33:24.655252603
-> > > > +0000
-> > > > ++++ b/debug/Makefile.in        2016-01-12 14:34:05.062321796
-> > > > +0000
-> > > Same.
-> > 
-> > As above - but I will remove this altogether and let the reconf
-> > take
-> > care of making the Makefile.in. 
-> 
-> Absolutely. Changing both Makefile.am and Makefile.in doesn't make
-> much
-> sense.
-
-Agreed,
-
-> 
-> > > > diff --git a/package/radlib/Config.in
-> > > > b/package/radlib/Config.in
-> > > > new file mode 100644
-> > > > index 0000000..2ca1617
-> > > > --- /dev/null
-> > > > +++ b/package/radlib/Config.in
-> > > > @@ -0,0 +1,22 @@
-> > > > +config BR2_PACKAGE_RADLIB
-> > > > +       bool "radlib"
-> > > > +       select BR2_PACKAGE_SQLITE
-> > > > +       select BR2_PACKAGE_SQLITE_NO_SYNC
-> > > 
-> > > Why do you force this NO_SYNC option ?
-> > 
-> > The sqlite db is staging area really - the data doesn't usually
-> > hang
-> > around on the embedded device - it is generally uploaded to the
-> > cloud
-> > etc. Might be more appropriate to trigger this wview instead of
-> > radlib.
-> 
-> It is really up to the user to decide this.
-
-Ok agreed.
-
-> Remember that on the same system, sqlite can also be used for other
-> purposes. So assuming that fsync() is not needed because *your*
-> package
-> doesn't need it is a wrong assumption. Maybe other applications using
-> sqlite on the same system need to have fsync() enabled.
-
-Understood - fair point. 
-
-> > > Ditto. Also, if you select BR2_PACKAGE_MYSQL, you must replicate
-> > > all
-> > > the "depends on" of BR2_PACKAGE_MYSQL. I would therefore rather
-> > > suggest
-> > > you to remove this option, and simply enable MySQL support in the
-> > > .mk
-> > > file if BR2_PACKAGE_MYSQL=y.
-> > 
-> > ok this makes sense - but is less explicit.
-> 
-> Right, but it's "obvious" for the user: if you want MySQL support or
-> SQLite support in a package, it is kind of obvious that you need to
-> enable the MySQL / SQLite packages.
-> 
-> We normally only do sub-options for optional dependencies when it is
-> not obvious which other packages need to be enabled in order to
-> benefit
-> for the optional dependency.
-> 
-> However, there are situations where this is not so clear-cut, so we
-> don't have a very strict rule about this.
-
-ok - I will rework as indicated. 
-
-
-> > ok noted - that I shouldn't explicitly passing these, but it still
-> > doesn't fix my paths for dependencies.
-> 
-> See above: remove all the -I$(prefix)/include and -L$(prefix)/lib
-> from
-> the Makefile.am.
-
-Agreed.
-
-> 
-> Are you in contact with upstream ?
-
-No - will send em a patch, once we are done here. 
-
-> Thanks,
-> 
-> Thomas
-
-Thanks for the feedback,
-
-Ray K
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index a98b2e2..0c2c29d 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,4 +1,4 @@
+-# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p5.tar.gz.md5
+-md5	9f02b2a0acc1617ce2716d529a58d2d8	ntp-4.2.8p5.tar.gz
++# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p6.tar.gz.md5
++md5	60049f51e9c8305afe30eb22b711c5c6	ntp-4.2.8p6.tar.gz
+ # Calculated based on the hash above
+-sha256	ca28baf4f6bb6fabdc1b62fd1dcec412be2e621192b40466a469a2496164f696	ntp-4.2.8p5.tar.gz
++sha256	583d0e1c573ace30a9c6afbea0fc52cae9c8c916dbc15c026e485a0dda4ba048	ntp-4.2.8p6.tar.gz
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index c86000a..7e1e87f 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p5
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p6
+ NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = ntp license
+-- 
+2.4.10
