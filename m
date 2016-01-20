@@ -1,31 +1,44 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Wed, 20 Jan 2016 13:37:56 -0800
-Subject: [Buildroot] [PATCH 2/3] defconfigs: use the new
- headers-version-same-as-kernel-version option
-In-Reply-To: <87powwrlbr.fsf@dell.be.48ers.dk>
-References: <cover.1453314776.git.yann.morin.1998@free.fr>
- <811e1f5fe52c239010c412ce9f22b307d115cfcf.1453314776.git.yann.morin.1998@free.fr>
- <20160120213824.686c94fb@free-electrons.com>
- <87powwrlbr.fsf@dell.be.48ers.dk>
-Message-ID: <CAJJ6jxtuOqfdTsbgcbwP1+y5yuLGFi-Ny5=_96kMhaWpSN5uvA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 20 Jan 2016 22:53:19 +0100
+Subject: [Buildroot] [PATCH] core: override the user's locale while setting
+	HOSTARCH
+Message-ID: <1453326799-14060-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Can we still have different header and kernel versions?
+At least with French user's locale HOSTARCH is empty since
+'Target' is not present in gcc output.
 
-As I understand it we have to rebuild the toolchain when we change
-header versions. So if I have a working embedded system based on
-kernel x and am trying to get a new one working with kernel x+1, I
-really don't want to change the kernel header version. In this case
-they should be backward compatible. And rebuilding the toolchain is
-such a pain that I always use an external toolchain, even if using the
-buildroot internal built one.
+gcc -v 2>&1
+Utilisation des specs internes.
+COLLECT_GCC=gcc
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/5.3.1/lto-wrapper
+Cible : x86_64-redhat-linux
 
-So as long as I can still have separate header/kernel versions, I am
-happy with this change. Otherwise, it will be a pain with more full
-rebuilds.
+Override the user's local with LC_ALL=C.
 
-Regards, Steve
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 2e09611..17c181b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -297,7 +297,7 @@ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+ # So, we extract the first part of the tuple the host gcc was
+ # configured to generate code for; we assume this is our userland.
+ #
+-export HOSTARCH := $(shell $(HOSTCC_NOCCACHE) -v 2>&1 | \
++export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
+ 	sed -e '/^Target: \([^-]*\).*/!d' \
+ 	    -e 's//\1/' \
+ 	    -e 's/i.86/x86/' \
+-- 
+2.4.3
