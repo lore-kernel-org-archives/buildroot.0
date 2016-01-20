@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jan 2016 10:13:45 +0100
-Subject: [Buildroot] [PATCH 2/2] pixman: add patch to fix build issue
- with musl
-In-Reply-To: <569F2863.7030604@scalemp.com>
-References: <1453041600-5005-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453041600-5005-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <569BA820.6040300@scalemp.com> <569BB563.8020706@scalemp.com>
- <569F2863.7030604@scalemp.com>
-Message-ID: <20160120101345.2e081237@free-electrons.com>
+Date: Wed, 20 Jan 2016 10:16:24 +0100
+Subject: [Buildroot] [PATCH V2] NVME Makefile update
+In-Reply-To: <20160120034712.7432.71222.stgit@localhost.localdomain>
+References: <20160120034712.7432.71222.stgit@localhost.localdomain>
+Message-ID: <20160120101624.5c41e419@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Mamatha Inamdar,
 
-On Wed, 20 Jan 2016 08:25:39 +0200, Eial Czerwacki wrote:
+On Wed, 20 Jan 2016 09:19:41 +0530, Mamatha Inamdar wrote:
+> Makefile cleanup: remove -Werror flag in CFLAGS
+> 
+> Signed-off-by: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
 
-> is there any intention to commit this patch to buildroot's git
+Thanks, but this should be part of the patch adding the nvme package.
+Could you please send a *single* patch that:
 
-Yes, especially since I got a Reviewed-by on this patch that I sent on
-the pixman@ mailing list.
+ - Adds package/nvme/ (with nvme.mk, nvme.hash *and*
+   0001-NVME-Makefile-cleanup.patch)
+
+ - Changes package/Config.in to include package/nvme/Config.in
+
+Thanks!
 
 Best regards,
 
