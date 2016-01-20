@@ -1,90 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jan 2016 21:10:15 +0100
-Subject: [Buildroot] [PATCH] board: add support for Freescale i.MX6UL
- Evaluation Kit
-In-Reply-To: <1453300220-29113-1-git-send-email-julien.boibessot@free.fr>
-References: <1453300220-29113-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20160120211015.79807c32@free-electrons.com>
+Date: Wed, 20 Jan 2016 21:13:43 +0100
+Subject: [Buildroot] [git commit] linux-headers: remove deprecated version
+	3.16.x
+Message-ID: <20160120201432.9890B82813@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien,
+commit: http://git.buildroot.net/buildroot/commit/?id=d8da5f103752e47f7f06b35a17a3a69ac1911f4b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this contribution!
+Remove for the upcoming 2016.02 release, it's been deprecated for a year
+now.
 
-On Wed, 20 Jan 2016 15:30:20 +0100, julien.boibessot at free.fr wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in.legacy                     | 10 ++++++++++
+ package/linux-headers/Config.in.host |  7 -------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-> diff --git a/board/freescale/imx6ulevk/create-boot-sd.sh b/board/freescale/imx6ulevk/create-boot-sd.sh
-> new file mode 100755
-> index 0000000..b3c47ae
-> --- /dev/null
-> +++ b/board/freescale/imx6ulevk/create-boot-sd.sh
-
-Could you instead use genimage rather than providing a script to create
-the SD card contents ?
-
-You can look at the following examples:
-
-board/cubietech/cubieboard2/genimage.cfg
-board/via/imx6_vab820/genimage.cfg
-board/intel/galileo/genimage.cfg
-board/raspberrypi/genimage-raspberrypi.cfg
-board/raspberrypi/genimage-raspberrypi2.cfg
-board/orangepi/orangepipc/genimage.cfg
-board/wandboard/genimage.cfg
-
-The wandboard one should be particularly useful, since it's also an i.MX6 board.
-
-
-> diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
-> new file mode 100644
-> index 0000000..7ba5e7b
-> --- /dev/null
-> +++ b/configs/freescale_imx6ulevk_defconfig
-> @@ -0,0 +1,31 @@
-> +# architecture
-> +BR2_arm=y
-> +BR2_cortex_a7=y
-> +BR2_ARM_EABI=y
-
-Why ? Any reason to use EABI over EABIhf, which is now the default in
-Buildroot for Cortex-A processors ?
-
-> +BR2_ARM_FPU_NEON=y
-> +
-> +# toolchain
-> +BR2_KERNEL_HEADERS_VERSION=y
-> +BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-> +
-> +# system
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-> +
-> +# kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="imx_3.14.38_6ul_ga"
-> +BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-> +BR2_LINUX_KERNEL_ZIMAGE=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
-> +
-> +# bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="imx_v2015.04_3.14.38_6ul_ga"
-> +BR2_TARGET_UBOOT_FORMAT_IMX=y
-
-The rest looks good to me. Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2e6062c..9111c01 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,16 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
+ 
++config BR2_KERNEL_HEADERS_3_16
++	bool "kernel headers version 3.16.x are no longer supported"
++	select BR2_KERNEL_HEADERS_3_18
++	select BR2_LEGACY
++	help
++	Version 3.16.x of the Linux kernel headers have been deprecated
++	for more than four buildroot releases and are now removed.
++	As an alternative, version 3.18.x of the headers have been
++	automatically selected in your configuration.
++
+ config BR2_PACKAGE_PYTHON_PYXML
+ 	bool "python-pyxml package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 41e3a92..ade95be 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -36,12 +36,6 @@ choice
+ 		depends on !BR2_nios2
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 
+-	config BR2_KERNEL_HEADERS_3_16
+-		bool "Linux 3.16.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2015_02
+-		depends on !BR2_nios2
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+-
+ 	config BR2_KERNEL_HEADERS_3_17
+ 		bool "Linux 3.17.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2015_05
+@@ -213,7 +207,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.94"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.52"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.58"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.25"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
