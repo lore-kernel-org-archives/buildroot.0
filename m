@@ -1,69 +1,68 @@
 From: Pieter Smith <pieter@boesman.nl>
-Date: Wed, 20 Jan 2016 23:43:41 +0100
-Subject: [Buildroot] [v3, 4/4] beaglebone: adds barebox bootloader defconfig
-In-Reply-To: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
-Message-ID: <1453329821-3167-5-git-send-email-pieter@boesman.nl>
+Date: Wed, 20 Jan 2016 23:47:42 +0100
+Subject: [Buildroot] [v2,
+	0/4] Supporting building a second Barebox config
+In-Reply-To: <CAGm1_kuK9-vd6-293KqYSyzqLT9m_+yLXnT_ach85mRzmKefhg@mail.gmail.com>
+References: <1446672031-13866-1-git-send-email-pieter@boesman.nl>
+ <CAGm1_kuK9-vd6-293KqYSyzqLT9m_+yLXnT_ach85mRzmKefhg@mail.gmail.com>
+Message-ID: <20160120224742.GA3128@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Builds barebox MLO and the barebox bootloader.
-* Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
-  being generated with the kernel.
+Hi Yegor,
 
-Signed-off-by: Pieter Smith <pieter@boesman.nl>
----
- configs/beaglebone_barebox_defconfig | 39 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 configs/beaglebone_barebox_defconfig
+On Tue, Jan 19, 2016 at 11:11:44AM +0100, Yegor Yefremov wrote:
+> Hi Pieter,
+> 
+> On Wed, Nov 4, 2015 at 10:20 PM, Pieter Smith <pieter@boesman.nl> wrote:
+> > This patch-set in 4 parts adds support for building barebox with up to 2
+> > configurations. It can be used to build the barebox x-loader or MLO (also
+> > called Secondary Program Loader) in addition to the standard barebox build
+> > (Tertiary Program Loader). This implements the design proposed in
+> > http://elinux.org/Buildroot#Todo_list:
+> > 1. Have boot/barebox/ containing the common stuff.
+> > 2. Add two separate packages boot/barebox-1/ and boot/barebox-2/.
+> > 3. There is only one version selection, but each package allows to
+> >    define the configuration to be used.
+> > 4. Design is a little bit like package/gcc, where we have multiple gcc builds,
+> >    but share a lot of common definitions between the packages.
+> >
+> > To demonstrate that it works as advertized, the last patch adds a defconfig for
+> > the beaglebone black that makes use of the added functionality.
+> >
+> > Pieter Smith (4):
+> >   barebox: prepare for secondary config build
+> >   barebox: adds option to build secondary config
+> >   barebox: user selection of build output images
+> >   beaglebone: adds barebox bootloader defconfig
+> >
+> >  boot/barebox/Config.in                | 155 +++++++++++++++++++++++++++++-----
+> >  boot/barebox/barebox-1/barebox-1.hash |   1 +
+> >  boot/barebox/barebox-1/barebox-1.mk   |  89 +++++++++++++++++++
+> >  boot/barebox/barebox-2/barebox-2.hash |   1 +
+> >  boot/barebox/barebox-2/barebox-2.mk   |  51 +++++++++++
+> >  boot/barebox/barebox.mk               |  60 +------------
+> >  configs/beaglebone_barebox_defconfig  |  39 +++++++++
+> >  7 files changed, 317 insertions(+), 79 deletions(-)
+> >  create mode 120000 boot/barebox/barebox-1/barebox-1.hash
+> >  create mode 100644 boot/barebox/barebox-1/barebox-1.mk
+> >  create mode 120000 boot/barebox/barebox-2/barebox-2.hash
+> >  create mode 100644 boot/barebox/barebox-2/barebox-2.mk
+> >  create mode 100644 configs/beaglebone_barebox_defconfig
+> 
+> Thanks for the patches. Just wanted to review/test them. They don't
+> apply cleanly.
+> Could you please rebase your patches on top of the master branch?
+> 
+> Thanks.
+> 
+> Yegor
 
-diff --git a/configs/beaglebone_barebox_defconfig b/configs/beaglebone_barebox_defconfig
-new file mode 100644
-index 0000000..b4fd67b
---- /dev/null
-+++ b/configs/beaglebone_barebox_defconfig
-@@ -0,0 +1,39 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_ARM_EABIHF=y
-+
-+# system
-+BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
-+
-+# filesystem
-+BR2_PACKAGE_AM33X_CM3=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.12.10"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
-+
-+# bootloader
-+BR2_TARGET_BAREBOX_TWO_CONFIGS=y
-+BR2_TARGET_BAREBOX=y
-+BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="am335x"
-+BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE=y
-+BR2_TARGET_BAREBOX_IMAGE_FILE="barebox-am33xx-beaglebone.img"
-+BR2_TARGET_BAREBOX_2=y
-+BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG="am335x_mlo"
-+BR2_TARGET_BAREBOX_2_USE_SPECIFIC_IMAGE=y
-+BR2_TARGET_BAREBOX_2_IMAGE_FILE="barebox-am33xx-beaglebone-mlo.img"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_LATEST_VERSION=y
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_ZIMAGE=y
--- 
-2.5.0
+As requested, I rebased the patches onto the latest master and reposted bumping
+to v3. I look forward to your feedback.
+
+Regards,
+Pieter
