@@ -1,42 +1,169 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 20 Jan 2016 19:18:04 -0300
-Subject: [Buildroot] [PATCH 6/6] gst1-libav: bump to version 1.6.3
-In-Reply-To: <1453328284-13549-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1453328284-13549-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1453328284-13549-6-git-send-email-gustavo@zacarias.com.ar>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Thu, 21 Jan 2016 00:17:47 +0200
+Subject: [Buildroot] [PATCH v4 5/5] package/cups-filters: Add new package
+	cups-filters 1.7.0
+In-Reply-To: <1453328267-31962-1-git-send-email-olivier.schonken@gmail.com>
+References: <1453328267-31962-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <1453328267-31962-6-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy                       |  1 +
+ package/Config.in                      |  1 +
+ package/cups-filters/Config.in         | 41 ++++++++++++++++++++++++
+ package/cups-filters/cups-filters.hash |  2 ++
+ package/cups-filters/cups-filters.mk   | 57 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 102 insertions(+)
+ create mode 100644 package/cups-filters/Config.in
+ create mode 100644 package/cups-filters/cups-filters.hash
+ create mode 100644 package/cups-filters/cups-filters.mk
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 7530637..d234b32 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.6.2.tar.xz.sha256sum
--sha256	2597acc00171006d49f0d300440a87df51b113d557466e532153abc740db3469  gst-libav-1.6.2.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.6.3.tar.xz.sha256sum
-+sha256	857b9c060a0337de38c6d26238c47352433c02eabf26c2f860c854dbc35bd4ab  gst-libav-1.6.3.tar.xz
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 6a72f9c..3a987a7 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 793b116..cf509af 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -147,6 +147,7 @@ comment "Legacy options removed in 2016.02"
  
--GST1_LIBAV_VERSION = 1.6.2
-+GST1_LIBAV_VERSION = 1.6.3
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
- 
+ config BR2_PACKAGE_CUPS_PDFTOPS
+ 	bool "Pdftops support has been removed from Cups"
++	select BR2_PACKAGE_CUPS_FILTERS_PDFTOPS
+ 	select BR2_LEGACY
+ 	help
+ 	  Pdftops support has been removed from the cups package
+diff --git a/package/Config.in b/package/Config.in
+index 8883bbf..9f52194 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1310,6 +1310,7 @@ menu "Networking applications"
+ 	source "package/crda/Config.in"
+ 	source "package/ctorrent/Config.in"
+ 	source "package/cups/Config.in"
++	source "package/cups-filters/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dhcp/Config.in"
+ endif
+diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
+new file mode 100644
+index 0000000..1acfbe8
+--- /dev/null
++++ b/package/cups-filters/Config.in
+@@ -0,0 +1,41 @@
++config BR2_PACKAGE_CUPS_FILTERS
++	bool "cups-filters"
++	# needs fork()
++	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_CUPS
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_IJS
++	select BR2_PACKAGE_LCMS2
++	select BR2_PACKAGE_POPPLER
++	select BR2_PACKAGE_QPDF
++	help
++	  This project provides backends, filters, and other software that was
++	  once part of the core CUPS distribution but is no longer maintained
++	  by Apple Inc. In addition it contains additional filters and software
++	  developed independently of Apple, especially filters for the PDF-
++	  centric printing workflow introduced by OpenPrinting and a daemon
++	  to browse Bonjour broadcasts of remote CUPS printers to make these
++	  printers available locally and to provide backward compatibility to
++	  the old CUPS broadcasting and browsing of CUPS 1.5.x and older.
++	  From CUPS 1.6.0 on, this package is required for using printer drivers
++	  with CUPS under Linux. With CUPS 1.5.x and earlier this package can be
++	  used optionally to switch over to PDF-based printing.
++
++	  http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters
++
++comment "cups-filters needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
++if BR2_PACKAGE_CUPS_FILTERS
++
++config BR2_PACKAGE_CUPS_FILTERS_PDFTOPS
++	bool "pdftops support"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Enable pdftops support
++
++comment "pdftops support needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++endif
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+new file mode 100644
+index 0000000..1e553aa
+--- /dev/null
++++ b/package/cups-filters/cups-filters.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	c6996e51b43e3baed99f0e386c1914e6d2245aa93c2cca182da0f59953cd6854  cups-filters-1.7.0.tar.gz
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+new file mode 100644
+index 0000000..82c4144
+--- /dev/null
++++ b/package/cups-filters/cups-filters.mk
+@@ -0,0 +1,57 @@
++################################################################################
++#
++# cups-filters
++#
++################################################################################
++
++CUPS_FILTERS_VERSION = 1.7.0
++CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
++CUPS_FILTERS_LICENSE = GPLv2+
++CUPS_FILTERS_LICENSE_FILES = COPYING
++
++CUPS_FILTERS_DEPENDENCIES = cups libglib2 ijs lcms2 poppler qpdf
++
++CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
++	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
++	--with-sysroot=$(STAGING_DIR)
++
++ifeq ($(BR2_PACKAGE_CUPS_FILTERS_PDFTOPS),y)
++CUPS_FILTERS_CONF_OPTS += --with-pdftops=pdftops
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++CUPS_FILTERS_CONF_OPTS += --with-jpeg
++CUPS_FILTERS_DEPENDENCIES += jpeg
++else
++CUPS_FILTERS_CONF_OPTS += --without-jpeg
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++CUPS_FILTERS_CONF_OPTS += --with-png
++CUPS_FILTERS_DEPENDENCIES += libpng
++else
++CUPS_FILTERS_CONF_OPTS += --without-png
++endif
++
++ifeq ($(BR2_PACKAGE_TIFF),y)
++CUPS_FILTERS_CONF_OPTS += --with-tiff
++CUPS_FILTERS_DEPENDENCIES += tiff
++else
++CUPS_FILTERS_CONF_OPTS += --without-tiff
++endif
++
++ifeq ($(BR2_PACKAGE_DBUS),y)
++CUPS_FILTERS_CONF_OPTS += --enable-dbus
++CUPS_FILTERS_DEPENDENCIES += dbus
++else
++CUPS_FILTERS_CONF_OPTS += --disable-dbus
++endif
++
++ifeq ($(BR2_PACKAGE_AVAHI),y)
++CUPS_FILTERS_DEPENDENCIES += avahi
++CUPS_FILTERS_CONF_OPTS += --enable-avahi
++else
++CUPS_FILTERS_CONF_OPTS += --disable-avahi
++endif
++
++$(eval $(autotools-package))
 -- 
-2.4.10
+2.5.0
