@@ -1,68 +1,104 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Wed, 20 Jan 2016 23:47:42 +0100
-Subject: [Buildroot] [v2,
-	0/4] Supporting building a second Barebox config
-In-Reply-To: <CAGm1_kuK9-vd6-293KqYSyzqLT9m_+yLXnT_ach85mRzmKefhg@mail.gmail.com>
-References: <1446672031-13866-1-git-send-email-pieter@boesman.nl>
- <CAGm1_kuK9-vd6-293KqYSyzqLT9m_+yLXnT_ach85mRzmKefhg@mail.gmail.com>
-Message-ID: <20160120224742.GA3128@smipidev>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Jan 2016 23:59:28 +0100
+Subject: [Buildroot] [PATCH 1/1] openldap: add support to build the
+ server
+In-Reply-To: <1452850809-5526-1-git-send-email-universeII@gmx.de>
+References: <1452850809-5526-1-git-send-email-universeII@gmx.de>
+Message-ID: <20160120235928.4feebe12@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Dear Andreas Ehmanns,
 
-On Tue, Jan 19, 2016 at 11:11:44AM +0100, Yegor Yefremov wrote:
-> Hi Pieter,
-> 
-> On Wed, Nov 4, 2015 at 10:20 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> > This patch-set in 4 parts adds support for building barebox with up to 2
-> > configurations. It can be used to build the barebox x-loader or MLO (also
-> > called Secondary Program Loader) in addition to the standard barebox build
-> > (Tertiary Program Loader). This implements the design proposed in
-> > http://elinux.org/Buildroot#Todo_list:
-> > 1. Have boot/barebox/ containing the common stuff.
-> > 2. Add two separate packages boot/barebox-1/ and boot/barebox-2/.
-> > 3. There is only one version selection, but each package allows to
-> >    define the configuration to be used.
-> > 4. Design is a little bit like package/gcc, where we have multiple gcc builds,
-> >    but share a lot of common definitions between the packages.
-> >
-> > To demonstrate that it works as advertized, the last patch adds a defconfig for
-> > the beaglebone black that makes use of the added functionality.
-> >
-> > Pieter Smith (4):
-> >   barebox: prepare for secondary config build
-> >   barebox: adds option to build secondary config
-> >   barebox: user selection of build output images
-> >   beaglebone: adds barebox bootloader defconfig
-> >
-> >  boot/barebox/Config.in                | 155 +++++++++++++++++++++++++++++-----
-> >  boot/barebox/barebox-1/barebox-1.hash |   1 +
-> >  boot/barebox/barebox-1/barebox-1.mk   |  89 +++++++++++++++++++
-> >  boot/barebox/barebox-2/barebox-2.hash |   1 +
-> >  boot/barebox/barebox-2/barebox-2.mk   |  51 +++++++++++
-> >  boot/barebox/barebox.mk               |  60 +------------
-> >  configs/beaglebone_barebox_defconfig  |  39 +++++++++
-> >  7 files changed, 317 insertions(+), 79 deletions(-)
-> >  create mode 120000 boot/barebox/barebox-1/barebox-1.hash
-> >  create mode 100644 boot/barebox/barebox-1/barebox-1.mk
-> >  create mode 120000 boot/barebox/barebox-2/barebox-2.hash
-> >  create mode 100644 boot/barebox/barebox-2/barebox-2.mk
-> >  create mode 100644 configs/beaglebone_barebox_defconfig
-> 
-> Thanks for the patches. Just wanted to review/test them. They don't
-> apply cleanly.
-> Could you please rebase your patches on top of the master branch?
-> 
-> Thanks.
-> 
-> Yegor
+On Fri, 15 Jan 2016 10:40:09 +0100, Andreas Ehmanns wrote:
+> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+> ---
+>  package/Config.in            |  2 +-
+>  package/openldap/Config.in   |  8 +++++++-
+>  package/openldap/S75slapd    | 47 ++++++++++++++++++++++++++++++++++++++++++++
+>  package/openldap/openldap.mk | 29 ++++++++++++++++++++++++++-
+>  4 files changed, 83 insertions(+), 3 deletions(-)
+>  create mode 100644 package/openldap/S75slapd
 
-As requested, I rebased the patches onto the latest master and reposted bumping
-to v3. I look forward to your feedback.
+Thanks for respining. However, I am sorry, but it still doesn't work.
+Problems encountered:
 
-Regards,
-Pieter
+ 1/ The /etc/openldap/slapd.conf file doesn't exist. This happens when
+    you build with BR2_PACKAGE_OPENLDAP_CLIENTS disabled. I think I
+    already mentioned this problem in a previous review of this patch.
+    I fixed this problem by doing:
+
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 18509cc..fdf8c88 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -91,9 +91,15 @@ OPENLDAP_CLIENTS = \
+        ldapsearch
+ define OPENLDAP_REMOVE_CLIENTS
+        $(RM) -f $(foreach p,$(OPENLDAP_CLIENTS),$(TARGET_DIR)/usr/bin/$(p))
+-       $(RM) -rf $(TARGET_DIR)/etc/openldap
+ endef
+ OPENLDAP_POST_INSTALL_TARGET_HOOKS += OPENLDAP_REMOVE_CLIENTS
+ endif
+ 
++define OPENLDAP_REMOVE_UNNEEDED_FILES
++       $(RM) -f $(TARGET_DIR)/etc/openldap/*.default
++       $(RM) -f $(TARGET_DIR)/etc/openldap/DB_CONFIG.example
++endef
++
++OPENLDAP_POST_INSTALL_TARGET_HOOKS += OPENLDAP_REMOVE_UNNEEDED_FILES
++
+ $(eval $(autotools-package))
+
+ 2/ The /etc/openldap/slapd.conf file has permissions that do not allow
+    the slapd daemon to read it. I fixed this problem by:
+
+diff --git a/package/openldap/S75slapd b/package/openldap/S75slapd
+index 0a5ff8e..8b8cf30 100644
+--- a/package/openldap/S75slapd
++++ b/package/openldap/S75slapd
+@@ -15,6 +15,7 @@ case "$1" in
+         fi
+ 
+         chown -R ldap:ldap /var/openldap-data
++        chown ldap:ldap /etc/openldap/slapd.conf
+ 
+         printf "Starting $DESC: $NAME: "
+         start-stop-daemon -S -q -p $PIDFILE -x $DAEMON -- $ARGS
+
+ 3/ The sldap daemon doesn't start because it tries to write its PID
+    file to /var/run/, where it doesn't have write permissions, while it
+    should create it in /var/run/openldap. Here is the message I get in
+    the logs:
+
+Jan 20 22:55:48 buildroot local4.debug slapd[728]: unable to open pid file "/var/run/slapd.pid": 13 (Permission denied)
+Jan 20 22:55:48 buildroot local4.debug slapd[728]: slapd stopped.
+
+Also, your init script logging is not consistent with what we do in
+other packages. You do:
+
+        printf "Starting $DESC: $NAME: "
+        start-stop-daemon -S -q -p $PIDFILE -x $DAEMON -- $ARGS
+        echo "done."
+
+While we normally do:
+
+	printf "Starting dropbear sshd: "
+	start-stop-daemon -S -q -p /var/run/dropbear.pid \
+		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
+	[ $? = 0 ] && echo "OK" || echo "FAIL"
+
+Also, there is something weird: when the daemon fails to start, it
+doesn't show "done." (with your code) or "FAIL" (with my suggestion).
+Can you have a look ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
