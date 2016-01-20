@@ -1,39 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 20 Jan 2016 12:23:09 -0300
-Subject: [Buildroot] [PATCH] libjpeg: bump to version 9b
-Message-ID: <1453303389-28602-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Jan 2016 16:24:34 +0100
+Subject: [Buildroot] [PATCH v10 4/4] toolchain-external: create symlink
+ ARCH_LIB_DIR->lib
+In-Reply-To: <1453302547-24314-4-git-send-email-patrickdepinguin@gmail.com>
+References: <1453302547-24314-1-git-send-email-patrickdepinguin@gmail.com>
+ <1453302547-24314-4-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20160120162434.5ac86865@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libjpeg/libjpeg.hash | 2 +-
- package/libjpeg/libjpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Dear Thomas De Schampheleire,
 
-diff --git a/package/libjpeg/libjpeg.hash b/package/libjpeg/libjpeg.hash
-index 035812a..2ad7dda 100644
---- a/package/libjpeg/libjpeg.hash
-+++ b/package/libjpeg/libjpeg.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 3a753ea48d917945dd54a2d97de388aa06ca2eb1066cbfdc6652036349fe05a7 jpegsrc.v9a.tar.gz
-+sha256	240fd398da741669bf3c90366f58452ea59041cacc741a489b99f2f6a0bad052	jpegsrc.v9b.tar.gz
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index c4190c7..14aba61 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBJPEG_VERSION = 9a
-+LIBJPEG_VERSION = 9b
- LIBJPEG_SITE = http://www.ijg.org/files
- LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
- LIBJPEG_LICENSE = jpeg-license (BSD-3c-like)
+On Wed, 20 Jan 2016 16:09:07 +0100, Thomas De Schampheleire wrote:
+
+> +       ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> +       if [ "$${ARCH_LIB_DIR}" != "lib" -a "$${ARCH_LIB_DIR}" != "$(SKELETON_LIB_SYMLINK)" ]; then \
+
+Where is SKELETON_LIB_SYMLINK defined? Shouldn't this be
+TOOLCHAIN_LIB_SYMLINK ?
+
+Or better, can we indeed name the variable SKELETON_LIB_SYMLINK, have
+it under skeleton.mk, and replace this test by something that simply
+tests if ARCH_LIB_DIR exists or not. If it exists (i.e it's the lib/
+directory, or one of the lib32/ or lib64/ symlinks), there is nothing
+to do, otherwise you need to create the symlinks.
+
+Best regards,
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
