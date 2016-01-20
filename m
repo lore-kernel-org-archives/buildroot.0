@@ -1,45 +1,42 @@
-From: Lada Trimasova <Lada.Trimasova@synopsys.com>
-Date: Wed, 20 Jan 2016 18:21:18 +0300
-Subject: [Buildroot] [PATCH] alsa-lib: disable libdl for static only builds
-Message-ID: <1453303278-15283-1-git-send-email-ltrimas@synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 20 Jan 2016 12:22:59 -0300
+Subject: [Buildroot] [PATCH] libpng: bump to version 1.6.21
+Message-ID: <1453303379-28559-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
--ldl includes the reference to the library that has
-the symbols for loading dynamic libraries.
-So there is no need for this library for static only builds.
-Even though alsa-lib uses dlopen, it has functions snd_dlopen
-and others which can emulate dynamic linking for the static
-build of the alsa-lib library and there is no need in libdl
-dlopen when static build only.
-This patch fixes build failures of the shairport-sync
-(and probably other packages) when static libs are used.
-
-Fixes:
-http://autobuild.buildroot.net/results/85a/85a3f01bcd4eb2ce7ac480e63b4cc04bf7c8f3e5/
-
-Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/alsa-lib/alsa-lib.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libpng/libpng.hash | 6 +++---
+ package/libpng/libpng.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index ea2351c..6a4d14f 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -21,6 +21,7 @@ ALSA_LIB_CONF_OPTS = \
- # Can't build with static & shared at the same time (1.0.25+)
- ifeq ($(BR2_STATIC_LIBS),y)
- ALSA_LIB_CONF_OPTS += --enable-shared=no
-+ALSA_LIB_CONF_OPTS += --without-libdl
- else
- ALSA_LIB_CONF_OPTS += --enable-static=no
- endif
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 264dd45..3b2db43 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.20/
+-md5	3968acb7c66ef81a9dab867f35d0eb4b	libpng-1.6.20.tar.xz
+-sha1	c4f02051e0b86613076ce390fd15824f3506a148	libpng-1.6.20.tar.xz
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.21/
++md5	3bacb4728f6694a64ad9052769d6a4ce	libpng-1.6.21.tar.xz
++sha1	978b2f4e007eda56032001493ddb97d20f0ab291	libpng-1.6.21.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 36ccf83..7ce4a3a 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.20
++LIBPNG_VERSION = 1.6.21
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
 -- 
-2.5.0
+2.4.10
