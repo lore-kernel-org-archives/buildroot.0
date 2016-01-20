@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jan 2016 15:45:33 +0100
-Subject: [Buildroot] [PATCH] coreutils: bump to version 8.25
-In-Reply-To: <1453295966-22372-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 20 Jan 2016 10:19:26 -0300")
-References: <1453295966-22372-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wpr4tilu.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Jan 2016 15:45:48 +0100
+Subject: [Buildroot] [PATCH] libfuse: bump to version 2.9.5
+In-Reply-To: <1453296471-8459-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 20 Jan 2016 10:27:51 -0300")
+References: <1453296471-8459-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87si1stilf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
