@@ -1,40 +1,42 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 20 Jan 2016 10:26:49 -0300
-Subject: [Buildroot] Browser in kiosk mode
-In-Reply-To: <569F7F6A.4060906@gmail.com>
-References: <569F7F6A.4060906@gmail.com>
-Message-ID: <569F8B19.5010304@zacarias.com.ar>
+Date: Wed, 20 Jan 2016 10:27:51 -0300
+Subject: [Buildroot] [PATCH] libfuse: bump to version 2.9.5
+Message-ID: <1453296471-8459-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/01/16 09:36, Marco Trapanese wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libfuse/libfuse.hash | 6 ++----
+ package/libfuse/libfuse.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-> Hi, I'm asking some hints about which is the best solution in buildroot
-> to have a browser in kiosk mode with a whitelist.
-> I mean, a full-screen browser, with no way to change the settings, and a
-> list of allowable addresses.
->
-> Firefox has a couple of plugins to achieve that but it's not included
-> (yet?) in buildroot. I found this:
->
-> http://lists.busybox.net/pipermail/buildroot/2012-September/058314.html
->
-> I guess it won't be included soon, because the patches are there since
-> 2012. Anyway I will try to use them on the latest version.
->
-> Do you recommend other packages already provided in the current
-> buildroot version which I could use?
-> Thanks!
-> Marco
-
-Hi.
-You can do that with any browser using squid in transparent mode with a 
-whitelist, that way you're not tied to any particular solution (plugin, 
-addon).
-Regarding which browser to use that will probably depend on which 
-features you want/need and which graphics platform you want to run it on 
-(example: X11, pure framebuffer, EGL, so on).
-Regards.
+diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
+index 618ab3b..c9c2302 100644
+--- a/package/libfuse/libfuse.hash
++++ b/package/libfuse/libfuse.hash
+@@ -1,4 +1,2 @@
+-# From http://sourceforge.net/projects/fuse/files/fuse-2.X/2.9.4/
+-# Currently still valid for github release tarballs
+-md5	ecb712b5ffc6dffd54f4a405c9b372d8	fuse-2.9.4.tar.gz
+-sha1	c8b25419f33624dc5240af6a5d26f2c04367ca71	fuse-2.9.4.tar.gz
++# Locally calculated after checking pgp signature
++sha256	579f371cc5ffc1afca7057512bf7d52988a9ede57859a7c55e5b9f72435cdbb5	fuse-2.9.5.tar.gz
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 9928d62..bece18d 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE_VERSION = 2.9.4
++LIBFUSE_VERSION = 2.9.5
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse_$(subst .,_,$(LIBFUSE_VERSION))
+ LIBFUSE_LICENSE = GPLv2, LGPLv2.1
+-- 
+2.4.10
