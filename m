@@ -1,42 +1,73 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 20 Jan 2016 18:58:15 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.10.2
-Message-ID: <1453327095-17814-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 20 Jan 2016 22:58:21 +0100
+Subject: [Buildroot] [PATCH 2/3] defconfigs: use the new
+ headers-version-same-as-kernel-version option
+In-Reply-To: <20160120213824.686c94fb@free-electrons.com>
+References: <cover.1453314776.git.yann.morin.1998@free.fr>
+ <811e1f5fe52c239010c412ce9f22b307d115cfcf.1453314776.git.yann.morin.1998@free.fr>
+ <20160120213824.686c94fb@free-electrons.com>
+Message-ID: <20160120215821.GD3992@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thomas, All,
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 116bbba..1f07794 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1	fedd95d402628ed0e0e3444ce50bcbd1fe2e7294	sqlite-autoconf-3100100.tar.gz
-+sha1	ea4156fc3f6a4a4a2752a5a3ac5c5b3fe7e1a24b	sqlite-autoconf-3100200.tar.gz
- # Calculated based on the hash above
--sha256	3cb4e17137f7422554c8e8906b5a7274c7a0d362872e8aa25233c3f1246bda98	sqlite-autoconf-3100100.tar.gz
-+sha256	a2b3b4bd1291ea7d6c8252f7edff36a4362f2f0e5d5370444ba6cbe313ae2971	sqlite-autoconf-3100200.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index e47e3c2..bf31292 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3100100
-+SQLITE_VERSION = 3100200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2016
- SQLITE_LICENSE = Public domain
+On 2016-01-20 21:38 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 20 Jan 2016 19:34:29 +0100, Yann E. MORIN wrote:
+> > Now that we can say that the linux headers version should match that of
+> > the kernel to be built, we inverse the logic in our defconfigs, as it is
+> > more sensible that way.
+> > 
+> > And also because we'll get rid of the former, converse kernel-same-as-headers
+> > option.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> In this commit, you are changing the defconfigs that use
+> BR2_LINUX_KERNEL_SAME_AS_HEADERS. But I am wondering if we shouldn't
+> simply change *all* defconfigs to use this new feature. Essentially all
+> defconfigs have to worry about selecting a kernel headers version that
+> matches the kernel version they use. We could switch them all to use
+> your new mechanism, no?
+
+Well, I think it may be worse than that, in fact... Let's see what
+happens with a trivial defconfig from before this patch, with the
+default toolchain and the kernel settings:
+
+    BR2_LINUX_KERNEL=y
+
+This would give:
+
+    BR2_KERNEL_HEADERS_4_4=y
+    BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4=y
+    BR2_TOOLCHAIN_HEADERS_AT_LEAST="4.4"
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_LATEST_VERSION=y
+
+Now we use that defconfig after this patch, this gives:
+
+    BR2_KERNEL_HEADERS_AS_KERNEL=y
+    BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD=y
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_VERSION="4.4"
+
+And boom, we've lost BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4=y
+
+I have no idea how we could solve this. I doubt we want to add anything
+like BR2_LINUX_KERNEL_AT_LEAST_4_4 and the likes... :-/
+
+Ideas?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.4.10
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
