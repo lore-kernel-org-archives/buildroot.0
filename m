@@ -1,61 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jan 2016 22:34:34 +0100
-Subject: [Buildroot] [PATCH] alsa-lib: disable libdl for static only
- builds
-In-Reply-To: <1453303278-15283-1-git-send-email-ltrimas@synopsys.com>
-References: <1453303278-15283-1-git-send-email-ltrimas@synopsys.com>
-Message-ID: <20160120223434.0d6cd9a6@free-electrons.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Wed, 20 Jan 2016 13:37:56 -0800
+Subject: [Buildroot] [PATCH 2/3] defconfigs: use the new
+ headers-version-same-as-kernel-version option
+In-Reply-To: <87powwrlbr.fsf@dell.be.48ers.dk>
+References: <cover.1453314776.git.yann.morin.1998@free.fr>
+ <811e1f5fe52c239010c412ce9f22b307d115cfcf.1453314776.git.yann.morin.1998@free.fr>
+ <20160120213824.686c94fb@free-electrons.com>
+ <87powwrlbr.fsf@dell.be.48ers.dk>
+Message-ID: <CAJJ6jxtuOqfdTsbgcbwP1+y5yuLGFi-Ny5=_96kMhaWpSN5uvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lada Trimasova,
+Can we still have different header and kernel versions?
 
-On Wed, 20 Jan 2016 18:21:18 +0300, Lada Trimasova wrote:
-> -ldl includes the reference to the library that has
-> the symbols for loading dynamic libraries.
-> So there is no need for this library for static only builds.
-> Even though alsa-lib uses dlopen, it has functions snd_dlopen
-> and others which can emulate dynamic linking for the static
-> build of the alsa-lib library and there is no need in libdl
-> dlopen when static build only.
-> This patch fixes build failures of the shairport-sync
-> (and probably other packages) when static libs are used.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/85a/85a3f01bcd4eb2ce7ac480e63b4cc04bf7c8f3e5/
-> 
-> Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/alsa-lib/alsa-lib.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-> index ea2351c..6a4d14f 100644
-> --- a/package/alsa-lib/alsa-lib.mk
-> +++ b/package/alsa-lib/alsa-lib.mk
-> @@ -21,6 +21,7 @@ ALSA_LIB_CONF_OPTS = \
->  # Can't build with static & shared at the same time (1.0.25+)
->  ifeq ($(BR2_STATIC_LIBS),y)
->  ALSA_LIB_CONF_OPTS += --enable-shared=no
-> +ALSA_LIB_CONF_OPTS += --without-libdl
+As I understand it we have to rebuild the toolchain when we change
+header versions. So if I have a working embedded system based on
+kernel x and am trying to get a new one working with kernel x+1, I
+really don't want to change the kernel header version. In this case
+they should be backward compatible. And rebuilding the toolchain is
+such a pain that I always use an external toolchain, even if using the
+buildroot internal built one.
 
-We generally use a single assignment in such cases, so I've changed this
-to:
+So as long as I can still have separate header/kernel versions, I am
+happy with this change. Otherwise, it will be a pain with more full
+rebuilds.
 
-ALSA_LIB_CONF_OPTS += \
-        --enable-shared=no \
-        --without-libdl
-
-and applied your patch. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Steve
