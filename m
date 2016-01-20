@@ -1,64 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 20 Jan 2016 22:56:21 +0100
-Subject: [Buildroot] [PATCH] core: override the user's locale while
-	setting HOSTARCH
-In-Reply-To: <1453326799-14060-1-git-send-email-romain.naour@gmail.com>
-References: <1453326799-14060-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160120215621.GC3992@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 20 Jan 2016 18:58:15 -0300
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.10.2
+Message-ID: <1453327095-17814-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2016-01-20 22:53 +0100, Romain Naour spake thusly:
-> At least with French user's locale HOSTARCH is empty since
-> 'Target' is not present in gcc output.
-> 
-> gcc -v 2>&1
-> Utilisation des specs internes.
-> COLLECT_GCC=gcc
-> COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/5.3.1/lto-wrapper
-> Cible : x86_64-redhat-linux
-> 
-> Override the user's local with LC_ALL=C.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 2e09611..17c181b 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -297,7 +297,7 @@ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
->  # So, we extract the first part of the tuple the host gcc was
->  # configured to generate code for; we assume this is our userland.
->  #
-> -export HOSTARCH := $(shell $(HOSTCC_NOCCACHE) -v 2>&1 | \
-> +export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
->  	sed -e '/^Target: \([^-]*\).*/!d' \
->  	    -e 's//\1/' \
->  	    -e 's/i.86/x86/' \
-> -- 
-> 2.4.3
-> 
-
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 116bbba..1f07794 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1	fedd95d402628ed0e0e3444ce50bcbd1fe2e7294	sqlite-autoconf-3100100.tar.gz
++sha1	ea4156fc3f6a4a4a2752a5a3ac5c5b3fe7e1a24b	sqlite-autoconf-3100200.tar.gz
+ # Calculated based on the hash above
+-sha256	3cb4e17137f7422554c8e8906b5a7274c7a0d362872e8aa25233c3f1246bda98	sqlite-autoconf-3100100.tar.gz
++sha256	a2b3b4bd1291ea7d6c8252f7edff36a4362f2f0e5d5370444ba6cbe313ae2971	sqlite-autoconf-3100200.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index e47e3c2..bf31292 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3100100
++SQLITE_VERSION = 3100200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.4.10
