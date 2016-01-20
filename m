@@ -1,55 +1,42 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Thu, 21 Jan 2016 00:17:45 +0200
-Subject: [Buildroot] [PATCH v4 3/5] package/gutenprint: Un-deprecate and
-	bump version to 5.2.10
-In-Reply-To: <1453328267-31962-1-git-send-email-olivier.schonken@gmail.com>
-References: <1453328267-31962-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <1453328267-31962-4-git-send-email-olivier.schonken@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 20 Jan 2016 19:18:01 -0300
+Subject: [Buildroot] [PATCH 3/6] gst1-plugins-good: bump to version 1.6.3
+In-Reply-To: <1453328284-13549-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1453328284-13549-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1453328284-13549-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gutenprint/Config.in       | 2 --
- package/gutenprint/gutenprint.hash | 2 +-
- package/gutenprint/gutenprint.mk   | 2 +-
- 3 files changed, 2 insertions(+), 4 deletions(-)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gutenprint/Config.in b/package/gutenprint/Config.in
-index 686dbce..f93717c 100644
---- a/package/gutenprint/Config.in
-+++ b/package/gutenprint/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_GUTENPRINT
- 	bool "gutenprint"
--	# because of cups security issues
--	depends on BR2_DEPRECATED_SINCE_2015_05
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_CUPS
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-diff --git a/package/gutenprint/gutenprint.hash b/package/gutenprint/gutenprint.hash
-index 3cfe0e1..36c12cc 100644
---- a/package/gutenprint/gutenprint.hash
-+++ b/package/gutenprint/gutenprint.hash
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index c21f391..3d8f943 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  4b27e4f06f32d30271df89ecb6089bb11bcf2caec5f60b0909e083095354bca0  gutenprint-5.2.9.tar.bz2
-+sha256  431f352b412dfb9809d126a85a37a1fcd1c1826275ace8cdcd4fd9a6ee360e59  gutenprint-5.2.10.tar.bz2
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index 3ff05b6..0bdc3bc 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -5,7 +5,7 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.6.2.tar.xz.sha256sum
+-sha256	876e54dfce93274b98e024f353258d35fa4d49d1f9010069e676c530f6eb6a92  gst-plugins-good-1.6.2.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.6.3.tar.xz.sha256sum
++sha256	24b19db70b2a83461ebddfe20033db432dadfdb5d4b54ffb1dfa0d830134a177  gst-plugins-good-1.6.3.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index c2c69f1..92ce029 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GUTENPRINT_VERSION_MAJOR = 5.2
--GUTENPRINT_VERSION = $(GUTENPRINT_VERSION_MAJOR).9
-+GUTENPRINT_VERSION = $(GUTENPRINT_VERSION_MAJOR).10
- GUTENPRINT_SITE = http://downloads.sourceforge.net/project/gimp-print/gutenprint-$(GUTENPRINT_VERSION_MAJOR)/$(GUTENPRINT_VERSION)
- GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
- GUTENPRINT_LICENSE = GPLv2+
+-GST1_PLUGINS_GOOD_VERSION = 1.6.2
++GST1_PLUGINS_GOOD_VERSION = 1.6.3
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
 -- 
-2.5.0
+2.4.10
