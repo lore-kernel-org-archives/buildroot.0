@@ -1,42 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jan 2016 23:26:47 +0100
-Subject: [Buildroot] [PATCH v2] support/download: Aternative access
- methods to CVS
-In-Reply-To: <1452888795-14158-1-git-send-email-joao@datacom.ind.br>
-References: <1452862510-31390-1-git-send-email-joao@datacom.ind.br>
- <1452888795-14158-1-git-send-email-joao@datacom.ind.br>
-Message-ID: <20160120232647.3c7e1b40@free-electrons.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Wed, 20 Jan 2016 23:43:37 +0100
+Subject: [Buildroot] [v3, 0/4] Supporting building a second Barebox config
+Message-ID: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Joao Mano,
+This patch-set in 4 parts adds support for building barebox with up to 2
+configurations. It can be used to build the barebox x-loader or MLO (also
+called Secondary Program Loader) in addition to the standard barebox build
+(Tertiary Program Loader). This implements the design proposed in
+http://elinux.org/Buildroot#Todo_list:
+1. Have boot/barebox/ containing the common stuff.
+2. Add two separate packages boot/barebox-1/ and boot/barebox-2/.
+3. There is only one version selection, but each package allows to
+   define the configuration to be used.
+4. Design is a little bit like package/gcc, where we have multiple gcc builds,
+   but share a lot of common definitions between the packages.
 
-On Fri, 15 Jan 2016 18:13:15 -0200, Joao Mano wrote:
-> Allows user to specify other access methods than
-> :pserver:anonymous@ on CVS repositories.
-> 
-> This shall be specifically defined along MODULE_SITE string.
-> 
-> Signed-off-by: Joao Mano <joao@datacom.ind.br>
-> 
-> ---
-> Changes v1 -> v2:
->  - Documentation improved with examples. (Thomas Petazzoni suggestion)
+To demonstrate that it works as advertized, the last patch adds a defconfig for
+the beaglebone black that makes use of the added functionality.
 
-Thanks, applied after doing some changes (mainly suggested by Yann) :
+Revision history:
+v3: Updated for master at 544e2c5871f223facd1ab3c2853cd07ad70dd9d1
+v2: Dropped x-loader build specialization in favor of 2 generic barebox builds
+v1: Initial posting
 
-    [Thomas:
-     - as suggested by Yann, quote the variable expansion
-     - as suggested by Yann, use a regexp match
-     - tweak commit log]
+Pieter Smith (4):
+  barebox: prepare for secondary config build
+  barebox: adds option to build secondary config
+  barebox: user selection of build output images
+  beaglebone: adds barebox bootloader defconfig
 
-Thanks,
+ boot/barebox/Config.in                | 155 +++++++++++++++++++++++++++++-----
+ boot/barebox/barebox-1/barebox-1.hash |   1 +
+ boot/barebox/barebox-1/barebox-1.mk   |  90 ++++++++++++++++++++
+ boot/barebox/barebox-2/barebox-2.hash |   1 +
+ boot/barebox/barebox-2/barebox-2.mk   |  61 +++++++++++++
+ boot/barebox/barebox.mk               |  61 +------------
+ configs/beaglebone_barebox_defconfig  |  39 +++++++++
+ 7 files changed, 328 insertions(+), 80 deletions(-)
+ create mode 120000 boot/barebox/barebox-1/barebox-1.hash
+ create mode 100644 boot/barebox/barebox-1/barebox-1.mk
+ create mode 120000 boot/barebox/barebox-2/barebox-2.hash
+ create mode 100644 boot/barebox/barebox-2/barebox-2.mk
+ create mode 100644 configs/beaglebone_barebox_defconfig
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
