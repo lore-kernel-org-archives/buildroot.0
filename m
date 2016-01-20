@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jan 2016 15:45:48 +0100
-Subject: [Buildroot] [PATCH] libfuse: bump to version 2.9.5
-In-Reply-To: <1453296471-8459-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 20 Jan 2016 10:27:51 -0300")
-References: <1453296471-8459-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87si1stilf.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Jan 2016 15:46:07 +0100
+Subject: [Buildroot] [PATCH] cmake: bump to version 3.4.2
+In-Reply-To: <1453299633-7064-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 20 Jan 2016 11:20:33 -0300")
+References: <1453299633-7064-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87oacgtikw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
