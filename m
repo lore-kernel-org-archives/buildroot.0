@@ -1,90 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jan 2016 21:45:18 +0100
-Subject: [Buildroot] [PATCH v3 1/1] iputils: resolve musl compatibility
-In-Reply-To: <1453292421-21583-1-git-send-email-matt@thewebers.ws>
-References: <1453292421-21583-1-git-send-email-matt@thewebers.ws>
-Message-ID: <20160120214518.2914b389@free-electrons.com>
+Date: Wed, 20 Jan 2016 21:49:14 +0100
+Subject: [Buildroot] [git commit] skeleton: move LIB_SYMLINK definition from
+	Makefile
+Message-ID: <20160120205455.61286827EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+commit: http://git.buildroot.net/buildroot/commit/?id=50a93866f0851a9cd06feb95c556f007bc578af1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 Jan 2016 12:20:21 +0000, Matt Weber wrote:
-> The new upstream is a fork of the original that consolidates other distro's
-> patches.  This fork resolves a series of musl build failures noted in the
-> autobuilder log.
-> 
-> http://autobuild.buildroot.net/results/12cb73f3def95efe706bcd957bc2c091e7931d5a/
-> 
->   - Updated to github fork, selected merge from Nov 3 2015
->     which provided musl fixes (last release was to old, 20150815)
->   - Why the fork ? (http://www.spinics.net/lists/netdev/msg279881.html)
->   - Added missing dependencies for kernel capabilies lib
->   - Accounted for new consolidated ping (ipv4/6)
-> 
-> Tested against a buildroot arm musl/glibc toolchains, as well as
-> autobuilder defconfig.
+Commit 7a6b83a211612ff95a1f5d35b2861ad5655ac8b1 introduced the skeleton
+package, which took over the lib32/lib64 -> lib symlink creation from the
+main Makefile.
+However, the definition of the LIB_SYMLINK variable did not move along, for
+no real reason.
 
-You don't explain here why you are adding libcap as a mandatory
-dependency. USE_CAP=no still exists, and it stills works, so there is
-no reason to make libcap a mandatory dependency.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile                     |  8 --------
+ package/skeleton/skeleton.mk | 16 ++++++++++++----
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-
-> diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-> index 5324639..4188353 100644
-> --- a/package/iputils/Config.in
-> +++ b/package/iputils/Config.in
-> @@ -1,9 +1,11 @@
->  config BR2_PACKAGE_IPUTILS
->  	bool "iputils"
->  	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_LIBCAP
->  	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # XATTR_NAME_CAPS
-
-If you add a dependency like this, you need to add a "comment" in the
-Config.in file. However, this this new dependency is caused by "select
-BR2_PACKAGE_LIBCAP", and this select is not needed, you can get rid of
-it.
-
-> -IPUTILS_VERSION = s20121011
-> -IPUTILS_SITE = http://www.skbuff.net/iputils
-> -IPUTILS_SOURCE = iputils-$(IPUTILS_VERSION).tar.bz2
-> -IPUTILS_LICENSE = GPLv2+, BSD-3c
-> +# The original upstream was forked to the github repository in 2014 to
-> +# pull fixes from other distribution and centralize the changes after
-> +# the upstream seemed to have gone dormant.  The fork contains the
-> +# latest changes including msul support, removing a libsysfs dependency
-> +# and IPv6 updates.
-> +# http://www.spinics.net/lists/netdev/msg279881.html
-> +
-> +IPUTILS_VERSION = c8ff6feaf0442f8efd96ccb415770c54f9e84d47
-> +IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
-> +IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
->  # Only includes a license file for BSD
->  IPUTILS_LICENSE_FILES = ninfod/COPYING
-> -IPUTILS_DEPENDENCIES = openssl
-> +IPUTILS_DEPENDENCIES = openssl libcap
-
-If you want to enable libcap support, you can do:
-
-IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no \
-	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-
-ifeq ($(BR2_PACKAGE_LIBCAP),y)
-IPUTILS_MAKE_OPTS += USE_CAP=yes
-IPUTILS_DEPENDENCIES += libcap
-else
-IPUTILS_MAKE_OPTS += USE_CAP=no
-endif
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index 6bf9864..2e09611 100644
+--- a/Makefile
++++ b/Makefile
+@@ -501,14 +501,6 @@ world: target-post-image
+ $(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+ 	@mkdir -p $@
+ 
+-# We make a symlink lib32->lib or lib64->lib as appropriate
+-# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
+-ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
+-LIB_SYMLINK = lib64
+-else
+-LIB_SYMLINK = lib32
+-endif
+-
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 6b5ab79..7618835 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -77,13 +77,21 @@ define SKELETON_USR_SYMLINKS_OR_DIRS
+ endef
+ endif
+ 
++# We make a symlink lib32->lib or lib64->lib as appropriate
++# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
++ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
++SKELETON_LIB_SYMLINK = lib64
++else
++SKELETON_LIB_SYMLINK = lib32
++endif
++
+ define SKELETON_INSTALL_TARGET_CMDS
+ 	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+ 		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+ 		$(SKELETON_PATH)/ $(TARGET_DIR)/
+ 	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+-	ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+-	ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
++	ln -snf lib $(TARGET_DIR)/$(SKELETON_LIB_SYMLINK)
++	ln -snf lib $(TARGET_DIR)/usr/$(SKELETON_LIB_SYMLINK)
+ 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+ 		$(TARGET_DIR_WARNING_FILE)
+ endef
+@@ -99,8 +107,8 @@ define SKELETON_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
+ 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
+ 	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
+-	ln -snf lib $(STAGING_DIR)/$(LIB_SYMLINK)
+-	ln -snf lib $(STAGING_DIR)/usr/$(LIB_SYMLINK)
++	ln -snf lib $(STAGING_DIR)/$(SKELETON_LIB_SYMLINK)
++	ln -snf lib $(STAGING_DIR)/usr/$(SKELETON_LIB_SYMLINK)
+ endef
+ 
+ SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
