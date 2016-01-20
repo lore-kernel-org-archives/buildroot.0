@@ -1,46 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jan 2016 22:29:44 +0100
-Subject: [Buildroot] [PATCH 2/3] defconfigs: use the new
-	headers-version-same-as-kernel-version option
-In-Reply-To: <20160120213824.686c94fb@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 20 Jan 2016 21:38:24 +0100")
-References: <cover.1453314776.git.yann.morin.1998@free.fr>
- <811e1f5fe52c239010c412ce9f22b307d115cfcf.1453314776.git.yann.morin.1998@free.fr>
- <20160120213824.686c94fb@free-electrons.com>
-Message-ID: <87powwrlbr.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Jan 2016 22:31:52 +0100
+Subject: [Buildroot] [git commit] alsa-lib: disable libdl for static only
+	builds
+Message-ID: <20160120213237.661C580124@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1e209d022d751b7874e71858b59ca6cd320d50fc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Yann E. MORIN,
- > On Wed, 20 Jan 2016 19:34:29 +0100, Yann E. MORIN wrote:
- >> Now that we can say that the linux headers version should match that of
- >> the kernel to be built, we inverse the logic in our defconfigs, as it is
- >> more sensible that way.
- >> 
- >> And also because we'll get rid of the former, converse kernel-same-as-headers
- >> option.
- >> 
- >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-ldl includes the reference to the library that has
+the symbols for loading dynamic libraries.
+So there is no need for this library for static only builds.
+Even though alsa-lib uses dlopen, it has functions snd_dlopen
+and others which can emulate dynamic linking for the static
+build of the alsa-lib library and there is no need in libdl
+dlopen when static build only.
+This patch fixes build failures of the shairport-sync
+(and probably other packages) when static libs are used.
 
- > In this commit, you are changing the defconfigs that use
- > BR2_LINUX_KERNEL_SAME_AS_HEADERS. But I am wondering if we shouldn't
- > simply change *all* defconfigs to use this new feature. Essentially all
- > defconfigs have to worry about selecting a kernel headers version that
- > matches the kernel version they use. We could switch them all to use
- > your new mechanism, no?
+Fixes:
+http://autobuild.buildroot.net/results/85a/85a3f01bcd4eb2ce7ac480e63b4cc04bf7c8f3e5/
 
- > Of course, this can be done as a separate effort, this is not a call
- > to change this particular patch, but rather a discussion on what to do
- > next.
+[Thomas: use a single ALSA_LIB_CONF_OPTS for both --enable-shared=no
+and --without-libdl.]
 
-Agreed. As long as we use the internal toolchain for our defconfigs and
-build a kernel (and we so far always do), it makes sense to use this
-option.
+Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/alsa-lib/alsa-lib.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index ea2351c..2075d41 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -20,7 +20,9 @@ ALSA_LIB_CONF_OPTS = \
+ 
+ # Can't build with static & shared at the same time (1.0.25+)
+ ifeq ($(BR2_STATIC_LIBS),y)
+-ALSA_LIB_CONF_OPTS += --enable-shared=no
++ALSA_LIB_CONF_OPTS += \
++	--enable-shared=no \
++	--without-libdl
+ else
+ ALSA_LIB_CONF_OPTS += --enable-static=no
+ endif
