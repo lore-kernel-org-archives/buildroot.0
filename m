@@ -1,28 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 20 Jan 2016 13:10:51 +0200
-Subject: [Buildroot] [PATCH 2/2] package/nvme: new package
-In-Reply-To: <20160120103611.23540.32033.stgit@localhost.localdomain>
-References: <20160120102906.23540.76413.stgit@localhost.localdomain>
- <20160120103611.23540.32033.stgit@localhost.localdomain>
-Message-ID: <20160120111051.GJ14114@tarshish>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 20 Jan 2016 11:14:45 +0000
+Subject: [Buildroot] [PATCH v4 2/3] toolchain/external: add MIPS
+ Codescape MTI GNU Linux toolchain
+In-Reply-To: <20160120105916.5f86c027@free-electrons.com>
+References: <1450196485-19214-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1450196485-19214-2-git-send-email-Vincent.Riera@imgtec.com>
+ <20160120105916.5f86c027@free-electrons.com>
+Message-ID: <569F6C25.9010102@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mamatha,
+Hi Thomas,
 
-On Wed, Jan 20, 2016 at 04:09:14PM +0530, Mamatha Inamdar wrote:
-> This patch is to add NVME Config file
+On 20/01/16 09:59, Thomas Petazzoni wrote:
+> Vicente,
+> 
+> On Tue, 15 Dec 2015 16:21:24 +0000, Vicente Olivert Riera wrote:
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>> Changes v3 -> v4:
+>>  - Move the changes to helpers.mk into a separate patch.
+> 
+> I've applied patches 2 and 3 to add the two MIPS Codescape toolchains,
+> after rebasing on top of master, and removing the version number of the
+> Config.in options.
 
-This should be part of the previous patch. That's what Thomas meant when he 
-asked you to send a single patch. He only used a list to indicate what should 
-change in this single patch compared to your previous submissions.
+Yeah, the patches were sent when we were supporting different versions
+of the same toolchain, so the version number was necessary. But now that
+we only support one version of each one is no longer necessary to have
+the version number in the name.
 
-baruch
+Thanks!
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Vincent.
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
