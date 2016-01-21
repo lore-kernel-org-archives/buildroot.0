@@ -1,85 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Jan 2016 10:52:02 +0100
-Subject: [Buildroot] [PATCH] libv4l: add patch to fix libjpeg build issue
-Message-ID: <1453369922-12258-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Jan 2016 11:32:08 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libfontenc: select zlib
+Message-ID: <20160121103225.C7545805E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump of libjpeg to v9b, libv4l doesn't build anymore due to
-the change of the prototype of jpeg_mem_src(), which gets
-re-implemented in libv4l when the libjpeg is too old.
+commit: http://git.buildroot.net/buildroot/commit/?id=2e61aaa7c49653df181061199f7ecd6f6007d58f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+xlib_libfontenc depends on the zlib package but doesn't select it.
 
-  http://autobuild.buildroot.org/results/e7a/e7a2341cbbcf514f4cd6754a5a36cebd6556a757/
-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...rt-only-expose-jpeg_mem_-protoypes-when-J.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 package/libv4l/0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch
+ package/x11r7/xlib_libfontenc/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libv4l/0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch b/package/libv4l/0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch
-new file mode 100644
-index 0000000..d0d3624
---- /dev/null
-+++ b/package/libv4l/0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch
-@@ -0,0 +1,53 @@
-+From d468d1bba973999f2f1103ebaf7df5c8440a5499 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Thu, 21 Jan 2016 10:22:16 +0100
-+Subject: [PATCH] libv4lconvert: only expose jpeg_mem_*() protoypes when
-+ JPEG_LIB_VERSION < 80
-+
-+The jpeg_memsrcdest.c file implements jpeg_mem_src() and
-+jpeg_mem_dest() when JPEG_LIB_VERSION < 80 in order to provide those
-+functions to libv4lconvert when the libjpeg library being used is too
-+old.
-+
-+However, the jpeg_memsrcdest.h file exposes the prototypes of those
-+functions unconditionally. Until now, the prototype was matching the
-+one of the functions exposed by libjpeg (when JPEG_LIB_VERSION >= 80),
-+so there was no problem.
-+
-+But since the release of libjpeg 9b (in January 2016), they changed
-+the second argument of jpeg_mem_src() from "unsigned char *" to "const
-+unsigned char*". Therefore, there are two prototypes for the
-+jpeg_mem_src() function: one from libjpeg, one from libv4l, and they
-+conflict with each other.
-+
-+To resolve this situation, this patch modifies jpeg_memsrcdest.h to
-+only expose the prototypes when libv4l is implementing the functions
-+(i.e when JPEG_LIB_VERSION < 80). When JPEG_LIB_VERSION >= 80, the
-+prototypes will come from <jpeglib.h>.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ lib/libv4lconvert/jpeg_memsrcdest.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/lib/libv4lconvert/jpeg_memsrcdest.h b/lib/libv4lconvert/jpeg_memsrcdest.h
-+index e971182..28a6477 100644
-+--- a/lib/libv4lconvert/jpeg_memsrcdest.h
-++++ b/lib/libv4lconvert/jpeg_memsrcdest.h
-+@@ -1,5 +1,7 @@
-+ #include <jpeglib.h>
-+ 
-++#if JPEG_LIB_VERSION < 80
-++
-+ void
-+ jpeg_mem_src (j_decompress_ptr cinfo, unsigned char * buffer,
-+ 	unsigned long bufsize);
-+@@ -7,3 +9,5 @@ jpeg_mem_src (j_decompress_ptr cinfo, unsigned char * buffer,
-+ void
-+ jpeg_mem_dest (j_compress_ptr cinfo, unsigned char ** outbuffer,
-+ 	unsigned long * outsize);
-++
-++#endif
-+-- 
-+2.6.4
-+
--- 
-2.6.4
+diff --git a/package/x11r7/xlib_libfontenc/Config.in b/package/x11r7/xlib_libfontenc/Config.in
+index d2a3023..d25e96a 100644
+--- a/package/x11r7/xlib_libfontenc/Config.in
++++ b/package/x11r7/xlib_libfontenc/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBFONTENC
+ 	bool "libfontenc"
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  X.Org fontenc library
