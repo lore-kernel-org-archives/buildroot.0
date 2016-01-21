@@ -1,29 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 21 Jan 2016 07:47:27 -0300
-Subject: [Buildroot] [PATCH] libv4l: add patch to fix libjpeg build issue
-In-Reply-To: <1453369922-12258-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453369922-12258-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56A0B73F.6020508@zacarias.com.ar>
+Date: Thu, 21 Jan 2016 08:27:44 -0300
+Subject: [Buildroot] [PATCH] dhcpcd: bump to version 6.10.1
+Message-ID: <1453375664-510-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/01/16 06:52, Thomas Petazzoni wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dhcpcd/dhcpcd.hash | 2 +-
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Since the bump of libjpeg to v9b, libv4l doesn't build anymore due to
-> the change of the prototype of jpeg_mem_src(), which gets
-> re-implemented in libv4l when the libjpeg is too old.
->
-> Fixes:
->
->    http://autobuild.buildroot.org/results/e7a/e7a2341cbbcf514f4cd6754a5a36cebd6556a757/
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-(test via broken jpeg and working jpeg-turbo builds before patching, 
-then patching, then both builds work).
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 18ffaed..ea05f86 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	ab56af9b2e86913c55a965cb0f835e87749df78318564acf90d5d698f413ad35	dhcpcd-6.10.0.tar.xz
++sha256	284abf8c3be0580bbac5eaca95359346ab0d78d4072317b6ce87cc68f2e8ae7b	dhcpcd-6.10.1.tar.xz
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 27e0666..5d1388d 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCPCD_VERSION = 6.10.0
++DHCPCD_VERSION = 6.10.1
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
+-- 
+2.4.10
