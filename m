@@ -1,41 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 21 Jan 2016 16:55:49 +0000
-Subject: [Buildroot] [Bug 8616] Fail to build for raspberrypi_defconfig with
-	big endian
-In-Reply-To: <bug-8616-163@https.bugs.busybox.net/>
-References: <bug-8616-163@https.bugs.busybox.net/>
-Message-ID: <bug-8616-163-eTqMcx1Aa7@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 21 Jan 2016 14:31:54 -0300
+Subject: [Buildroot] [PATCH] stunnel: bump to version 5.29
+Message-ID: <1453397514-26135-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8616
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/stunnel/stunnel.hash | 4 ++--
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
-
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> ---
-You can't just change endianness arbitrarily and expect that to work.
-
-For starters the pre-compiled rpi-firmware required for the boot process is
-only enabled for little-endian, which gives you the error you're seeing because
-it's not installed for big-endian.
-
-I don't have much technical detail about the broadcom SOCs used in the rpi1/2
-and how open they're to changing endianness, some SOCs require hardware changes
-(pin bootstrap), others can be switched in the bootloader, others use fuses and
-some can't be changed.
-Even if they could be switched in the bootloader for the rpi boards that's a
-propietary blob in rpi-firmware, so there's not much you can do.
-
-I'm closing this as invalid.
-
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index ee9d94b..1801e61 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,2 +1,2 @@
+-# From http://www.stunnel.org/pipermail/stunnel-announce/2015-December/000115.html
+-sha256	9a25b87b1ef0c08fa3d796edce07b4408e6a8acece23de2eb7ee9285b78852b5	stunnel-5.28.tar.gz
++# From http://www.stunnel.org/pipermail/stunnel-announce/2016-January/000117.html
++sha256	43909625403ea634fa7cb8399d58faf8e7f11c1b7b29097491469951f56df551	stunnel-5.29.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index bfa7d3f..8ea71b8 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).28
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).29
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.4.10
