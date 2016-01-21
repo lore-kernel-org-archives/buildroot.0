@@ -1,76 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Jan 2016 13:32:57 +0100
-Subject: [Buildroot] [PATCH] board: add support for Freescale i.MX6UL
- Evaluation Kit
-In-Reply-To: <56A0C3B7.40900@free.fr>
-References: <1453300220-29113-1-git-send-email-julien.boibessot@free.fr>
- <20160120211015.79807c32@free-electrons.com>
- <56A0C3B7.40900@free.fr>
-Message-ID: <20160121133257.38d9a56a@free-electrons.com>
+From: =?UTF-8?Q?Gabriel_Andr=C3=A9s_Castillo?= <gcastillo@controlnet.com.ar>
+Date: Thu, 21 Jan 2016 10:07:32 -0300
+Subject: [Buildroot] Wvdial segmentation fault
+Message-ID: <CAKvcKqdOoe+XCRfQeVbk=u=iQga5AnP3Dt+6vLcTVgwRJp-BgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien,
+Hi to all, i'm trying to use wvdial to open a network connection using a
+usb modem.
 
-On Thu, 21 Jan 2016 12:40:39 +0100, Julien Boibessot wrote:
+The steps that i'm doing is:
 
-> 
-> I first started to use genimage, yes, but as I wanted to mimic Freescale
-> microSD partitionning I was stucked by the fact that genimage
-> (apparently) doesn't handle VFAT partitions. Indeed i.MX6UL microSD
-> Freescale's format is:
-> * 1MB free
-> * U-Boot
-> * VFAT partition starting at offset 8M to store kernel and dtbs (size 16MB)
-> * EXT2 rootfs on the remaining space.
-> 
-> So I ended up in using i.XM28EVK way of doing
-> (board/freescale/imx28evk/create-boot-sd.sh).
-> Do you agree ?
+1) I create the "/etc/wvdial.conf" file:
 
-genimage is perfectly capable of creating a vfat partition, see
-board/raspberrypi/genimage-raspberrypi.cfg for an example.
+# wvdialconf /etc/wvdial.conf
 
-> > Why ? Any reason to use EABI over EABIhf, which is now the default in
-> > Buildroot for Cortex-A processors ?
-> 
-> Well i.MX6UL has no VFPU, only a NEON, so I thought it was a good idea,
-> no ? :-)
 
-What is your source for this information, because it seems to be wrong.
-According to ARM
-(http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0463f/index.html):
+2) I configure the "/etc/wvdia.conf" file
 
-"""
-The Cortex-A7 MPCore processor implements the ARMv7-A architecture with
-the following architecture extensions:
-[...]
- - Vector Floating-Point version 4 (VFPv4) architecture extension for
-   floating-point computation that is fully compliant with the IEEE 754
-   standard.
-"""
+[Dialer Defaults]
+Init2 = ATQ0 V1 E1 &C1 &D2 +FCLASS=0
+Modem Type = USB Modem
+Phone = *99#
+ISDN = 0
+Username = gprs
+Init1 = ATZ
+Password = gprs
+Modem = /dev/ttyACM0
+Baud = 460800
 
-So, the Cortex-A7 (which is the core used in the i.MX6UL) has a
-mandatory VFPv4 unit.
+3) I run wvdial:
 
-Also, according to Freescale
-(http://cache.nxp.com/files/32bit/doc/fact_sheet/IMX6SRSFS.pdf), in
-the column for i.MX6UL:
+# wvdial
+--> WvDial: Internet dialer version 1.61
+--> Warning: section [Dialer Defaults] does not exist in wvdial.conf.
+--> Initializing modem.
+--> Sending: ATZ
+ATZ
+OK
+--> Modem initialized.
+--> Configuration does not specify a valid phone number.
+--> Configuration does not specify a valid login name.
+--> Configuration does not specify a valid password.
 
-"""
-128 KB L2 cache, NEON?, VFP, TrustZone?
-"""
+4) I read the forum, and the solution for that was to run the wvdial with
+all the flags configured by me:
 
-So, please use BR2_EABIHF, and improve your systems by using hard-float
-instead of soft-float :-)
+# wvdial Init2="ATQ0 V1 E1 &C1 &D2 +FCLASS=0" Phone=*99# ISDN=0
+Username=gprs Init1=ATZ Password=gprs Modem=/dev/ttyACM0 Baud=460800
+--> WvDial: Internet dialer version 1.61
+--> Warning: section [Dialer Defaults] does not exist in wvdial.conf.
+--> Initializing modem.
+--> Sending: ATZ
+ATZ
+OK
+--> Sending: ATQ0 V1 E1 &C1 &D2 +FCLASS=0
+ATQ0 V1 E1 &C1 &D2 +FCLASS=0
+OK
+--> Modem initialized.
+Segmentation fault
 
-Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+I don't know what i'm doing wrong. If someone can help, i will to
+appreciate.
+Regards, Gabriel.
+--
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160121/27d702e7/attachment.html>
