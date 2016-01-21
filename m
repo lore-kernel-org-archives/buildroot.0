@@ -1,50 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Jan 2016 22:23:39 +0100
-Subject: [Buildroot] [PATCH 4/4] [DO NOT COMMIT] busybox: user username and
-	group name
-In-Reply-To: <cover.1453411322.git.yann.morin.1998@free.fr>
-References: <cover.1453411322.git.yann.morin.1998@free.fr>
-Message-ID: <1091c86340c443e61aba2523f0eb9ef7a2881e6a.1453411322.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 21 Jan 2016 22:32:47 +0100
+Subject: [Buildroot] [PATCH] ifupdown: bump to version 0.8.8
+In-Reply-To: <20160121221324.62c48f5e@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 21 Jan 2016 22:13:24 +0100")
+References: <1453401915-7117-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160121221324.62c48f5e@free-electrons.com>
+Message-ID: <87bn8esjnk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit is just a testbed from the newly-introduced possibility
-to use usernames and group names from the _PREMISSIONS and _DEVICES
-variables, instaed of only numerical values.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Using that defconfig:
-    BR2_arm=y
-    BR2_cortex_a7=y
-    BR2_TOOLCHAIN_EXTERNAL=y
+ > Gustavo,
+ > On Thu, 21 Jan 2016 15:45:15 -0300, Gustavo Zacarias wrote:
 
-Extract the generated rootfs.tar (as root!) and check that busybox is
-owned by 762:763.
+ >> -IFUPDOWN_VERSION = 0.8.2
+ >> +IFUPDOWN_VERSION = 0.8.8
+ >> IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
+ >> -IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20151205T042642Z/pool/main/i/ifupdown
+ >> +IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160113T035819Z/pool/main/i/ifupdown
+ >> IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ >> IFUPDOWN_LICENSE = GPLv2+
+ >> IFUPDOWN_LICENSE_FILES = COPYING
+ >> @@ -23,4 +23,13 @@ define IFUPDOWN_INSTALL_TARGET_CMDS
+ >> $(TARGET_MAKE_ENV) $(MAKE) BASEDIR=$(TARGET_DIR) -C $(@D) install
+ >> endef
+ >> 
+ >> +# We need to switch from /bin/ip to /sbin/ip
+ >> +IFUPDOWN_DEFN_FILES = can inet inet6 ipx link meta
+ >> +define IFUPDOWN_MAKE_IP_IN_SBIN
+ >> +	for f in $(IFUPDOWN_DEFN_FILES) ; do \
+ >> +		$(SED) 's,/bin/ip,/sbin/ip,' $(@D)/$$f.defn ; \
+ >> +	done
+ >> +endef
+ >> +IFUPDOWN_POST_PATCH_HOOKS += IFUPDOWN_MAKE_IP_IN_SBIN
 
-Explicitly not Signed-off-by me, as this SHOULD NOT BE COMMITTED.
----
- package/busybox/busybox.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ > For this kind of things, I think my personal preference would be to
+ > have a real patch rather than a post patch hook.
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 7f6dbd6..eb670e8 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -50,8 +50,12 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
- BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
- BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
- 
-+define BUSYBOX_USERS
-+bbuser 762 bbgroup 763 * - - -
-+endef
-+
- define BUSYBOX_PERMISSIONS
--	/bin/busybox                     f 4755 0  0 - - - - -
-+	/bin/busybox f 4755 bbuser bbgroup - - - - -
- endef
- 
- # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+I also generally dislike the combination of patches AND sed
+replacements, but like Gustavoz says it's a bit painful to patch as
+there's so many instances of it.
+
+And I guess we won't be able to upstream such as patch as Debian has
+/bin/ip (and a /sbin/ip symlink) because of bug reports like this:
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=134812
+
+And if busybox would change to /bin/ip, a bunch of scripts would
+probably break, so that's not going to happen either.
+
+So I'm not sure what the best option really is :/ Perhaps just the sed.
+
 -- 
-1.9.1
+Venlig hilsen,
+Peter Korsgaard 
