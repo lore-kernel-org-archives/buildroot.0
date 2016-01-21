@@ -1,31 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Jan 2016 15:27:25 +0100
-Subject: [Buildroot] [PATCH] libv4l: add patch to fix libjpeg build issue
-In-Reply-To: <1453369922-12258-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453369922-12258-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160121152725.2ebf9d6f@free-electrons.com>
+Date: Thu, 21 Jan 2016 15:27:30 +0100
+Subject: [Buildroot] [PATCH] libsecret: bump to version 0.18.4
+In-Reply-To: <1453385553-9419-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1453385553-9419-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160121152730.5a9133f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Gustavo Zacarias,
 
-On Thu, 21 Jan 2016 10:52:02 +0100, Thomas Petazzoni wrote:
-> Since the bump of libjpeg to v9b, libv4l doesn't build anymore due to
-> the change of the prototype of jpeg_mem_src(), which gets
-> re-implemented in libv4l when the libjpeg is too old.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/e7a/e7a2341cbbcf514f4cd6754a5a36cebd6556a757/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Thu, 21 Jan 2016 11:12:33 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  ...rt-only-expose-jpeg_mem_-protoypes-when-J.patch | 53 ++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 package/libv4l/0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch
+>  package/libsecret/libsecret.hash | 4 ++--
+>  package/libsecret/libsecret.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied, thanks.
 
