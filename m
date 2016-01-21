@@ -1,60 +1,98 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 21 Jan 2016 15:45:15 -0300
-Subject: [Buildroot] [PATCH] ifupdown: bump to version 0.8.8
-Message-ID: <1453401915-7117-1-git-send-email-gustavo@zacarias.com.ar>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 21 Jan 2016 21:44:52 +0100
+Subject: [Buildroot] [V2 1/2] scancpan: handle recommended dependencies as
+	optional packages
+Message-ID: <1453409093-22012-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add a kludge switching the explicit invocation of the ip binary
-from /bin to /sbin since that's where buildroot installs it.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/ifupdown/ifupdown.hash |  4 ++--
- package/ifupdown/ifupdown.mk   | 13 +++++++++++--
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ support/scripts/scancpan | 25 ++++++++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
-index 02dfd2b..c5a4189 100644
---- a/package/ifupdown/ifupdown.hash
-+++ b/package/ifupdown/ifupdown.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.2.dsc
--sha256	edb08f935fea9bc376c3faa0140c04c7a4d4ef5f22fd280ec4060386a75df10b	ifupdown_0.8.2.tar.xz
-+# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.8.dsc
-+sha256	180edaaa6de99e4e74de7229481edf74361b8e8468462842618a42a952a26c0e	ifupdown_0.8.8.tar.xz
-diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
-index 7fbd003..37aaf5d 100644
---- a/package/ifupdown/ifupdown.mk
-+++ b/package/ifupdown/ifupdown.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 0436d2a..72cca1a 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -505,6 +505,7 @@ my %need_host;          # name -> 1 if host package is needed
+ my %need_dlopen;        # name -> 1 if requires dynamic library
+ my %deps_build;         # name -> list of host dependencies
+ my %deps_runtime;       # name -> list of target dependencies
++my %deps_optional;      # name -> list of optional target dependencies
+ my %license_files;      # name -> list of license files
+ my %checksum;           # author -> list of checksum
+ my $mcpan = MetaCPAN::API::Tiny->new();
+@@ -563,6 +564,7 @@ sub fetch {
+         $license_files{$name} = find_license_files( $manifest );
+         my %build = ();
+         my %runtime = ();
++        my %optional = ();
+         foreach my $dep (@{$result->{dependency}}) {
+             my $modname = ${$dep}{module};
+             next if $modname eq q{perl};
+@@ -574,10 +576,14 @@ sub fetch {
+             # target perl have the same major version
+             next if ${$dep}{phase} eq q{develop};
+             next if !$test && ${$dep}{phase} eq q{test};
+-            next if !$recommend && ${$dep}{relationship} ne q{requires};
+             my $distname = $mcpan->module( $modname )->{distribution};
+             if (${$dep}{phase} eq q{runtime}) {
+-                $runtime{$distname} = 1;
++                if (${$dep}{relationship} eq q{requires}) {
++                    $runtime{$distname} = 1;
++                }
++                else {
++                    $optional{$distname} = 1 if $recommend;
++                }
+             }
+             else { # configure, build
+                 $build{$distname} = 1;
+@@ -585,6 +591,7 @@ sub fetch {
+         }
+         $deps_build{$name} = [keys %build];
+         $deps_runtime{$name} = [keys %runtime];
++        $deps_optional{$name} = [keys %optional];
+         foreach my $distname (@{$deps_build{$name}}) {
+             fetch( $distname, 0, 1 );
+         }
+@@ -592,6 +599,9 @@ sub fetch {
+             fetch( $distname, $need_target, $need_host );
+             $need_dlopen{$name} ||= $need_dlopen{$distname};
+         }
++        foreach my $distname (@{$deps_optional{$name}}) {
++            fetch( $distname, $need_target, $need_host );
++        }
+     }
+     return;
+ }
+@@ -683,6 +693,15 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
+         say {$fh} qq{${brname}_LICENSE_FILES = ${license_files}} if $license_files;
+         say {$fh} qq{};
++        foreach (sort @{$deps_optional{$distname}}) {
++            next if grep { $_ eq $distname; } @{$deps_runtime{$_}};     # avoid cyclic dependencies
++            my $opt_brname = brname( $_ );
++            my $opt_fsname = fsname( $_ );
++            say {$fh} qq{ifeq (\$(BR2_PACKAGE_PERL_${opt_brname}),y)};
++            say {$fh} qq{${brname}_DEPENDENCIES += ${opt_fsname}};
++            say {$fh} qq{endif};
++            say {$fh} qq{};
++        }
+         say {$fh} qq{\$(eval \$(perl-package))} if $need_target{$distname};
+         say {$fh} qq{\$(eval \$(host-perl-package))} if $need_host{$distname};
+         close $fh;
+@@ -800,7 +819,7 @@ in order to work with the right CoreList data.
  
--IFUPDOWN_VERSION = 0.8.2
-+IFUPDOWN_VERSION = 0.8.8
- IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
--IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20151205T042642Z/pool/main/i/ifupdown
-+IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160113T035819Z/pool/main/i/ifupdown
- IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- IFUPDOWN_LICENSE = GPLv2+
- IFUPDOWN_LICENSE_FILES = COPYING
-@@ -23,4 +23,13 @@ define IFUPDOWN_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) BASEDIR=$(TARGET_DIR) -C $(@D) install
- endef
+ =head1 LICENSE
  
-+# We need to switch from /bin/ip to /sbin/ip
-+IFUPDOWN_DEFN_FILES = can inet inet6 ipx link meta
-+define IFUPDOWN_MAKE_IP_IN_SBIN
-+	for f in $(IFUPDOWN_DEFN_FILES) ; do \
-+		$(SED) 's,/bin/ip,/sbin/ip,' $(@D)/$$f.defn ; \
-+	done
-+endef
-+IFUPDOWN_POST_PATCH_HOOKS += IFUPDOWN_MAKE_IP_IN_SBIN
-+
- $(eval $(generic-package))
+-Copyright (C) 2013-2014 by Francois Perrad <francois.perrad@gadz.org>
++Copyright (C) 2013-2016 by Francois Perrad <francois.perrad@gadz.org>
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
 -- 
-2.4.10
+2.5.0
