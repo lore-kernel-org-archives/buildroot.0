@@ -1,23 +1,32 @@
-From: rony <md.rashedul.amin@gmail.com>
-Date: Wed, 20 Jan 2016 19:34:40 -0800 (PST)
-Subject: [Buildroot] Building a Linux from scratch and new target
-	architecture
-In-Reply-To: <CAAXf6LWcEtAe+cHpiSOCJddhW58nAdOZdLGangX+j8gGSVf7NA@mail.gmail.com>
-References: <1453201429564-122990.post@n4.nabble.com>
- <20160119163728.3dc4953c@free-electrons.com>
- <1453306367402-123150.post@n4.nabble.com>
- <CAAXf6LWcEtAe+cHpiSOCJddhW58nAdOZdLGangX+j8gGSVf7NA@mail.gmail.com>
-Message-ID: <1453347280476-123228.post@n4.nabble.com>
+From: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+Date: Thu, 21 Jan 2016 11:03:27 +0530
+Subject: [Buildroot] [PATCH 1/2 V6] Adds package/nvme: new package
+In-Reply-To: <20160120120947.7fee88c4@free-electrons.com>
+References: <20160120102906.23540.76413.stgit@localhost.localdomain>
+ <20160120120947.7fee88c4@free-electrons.com>
+Message-ID: <56A06DA7.1000009@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-He replied before you and subscribed when you comment. I guess that's why.
+Hi Thomas,
 
+Sorry...based on your two points I created the patch.... will send 
+single patch now.
 
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Building-a-Linux-from-scratch-and-new-target-architecture-tp122990p123228.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+On 01/20/2016 04:39 PM, Thomas Petazzoni wrote:
+> Dear Mamatha Inamdar,
+>
+> On Wed, 20 Jan 2016 16:05:48 +0530, Mamatha Inamdar wrote:
+>> Add support for building NVME utility - a utility for interacting with
+>> standard NVM Express (optimized PCI Express SSD interface) devices.
+>>
+>> Signed-off-by: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+> Once again, there should be a *single* patch adding the package. Please
+> merge your two patches into one.
+>
+> Best regards,
+>
+> Thomas
