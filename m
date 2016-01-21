@@ -1,69 +1,82 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 21 Jan 2016 21:44:53 +0100
-Subject: [Buildroot] [V2 2/2] scancpan: use recommend & test flags only at
-	first level
-In-Reply-To: <1453409093-22012-1-git-send-email-francois.perrad@gadz.org>
-References: <1453409093-22012-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1453409093-22012-2-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Jan 2016 22:10:10 +0100
+Subject: [Buildroot] [PATCH 2/2] vboot-utils: fix RSA redefinition build
+	error with old compilers
+In-Reply-To: <1453410610-12040-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453410610-12040-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453410610-12040-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- support/scripts/scancpan | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Old gcc compilers do not support type redefinitions, which causes a
+build failure of the host-vboot-utils package on certain machines. The
+vboot-utils source code redefines "typedef struct rsa_st RSA" which is
+already defined in the OpenSSL headers.
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 72cca1a..6c70cfb 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -552,10 +552,10 @@ sub find_license_files {
- }
- 
- sub fetch {
--    my ($name, $need_target, $need_host) = @_;
-+    my ($name, $need_target, $need_host, $top) = @_;
-     $need_target{$name} = $need_target if $need_target;
-     $need_host{$name} = $need_host if $need_host;
--    unless ($dist{$name}) {
-+    unless ($dist{$name} && !$top) {
-         say qq{fetch ${name}} unless $quiet;
-         my $result = $mcpan->release( distribution => $name );
-         $dist{$name} = $result;
-@@ -570,19 +570,19 @@ sub fetch {
-             next if $modname eq q{perl};
-             next if $modname =~ m|^Alien|;
-             next if $modname =~ m|^Win32|;
--            next if !$test && $modname =~ m|^Test|;
-+            next if !($test && $top) && $modname =~ m|^Test|;
-             next if Module::CoreList::is_core( $modname, undef, $] );
-             # we could use the host Module::CoreList data, because host perl and
-             # target perl have the same major version
-             next if ${$dep}{phase} eq q{develop};
--            next if !$test && ${$dep}{phase} eq q{test};
-+            next if !($test && $top) && ${$dep}{phase} eq q{test};
-             my $distname = $mcpan->module( $modname )->{distribution};
-             if (${$dep}{phase} eq q{runtime}) {
-                 if (${$dep}{relationship} eq q{requires}) {
-                     $runtime{$distname} = 1;
-                 }
-                 else {
--                    $optional{$distname} = 1 if $recommend;
-+                    $optional{$distname} = 1 if $recommend && $top;
-                 }
-             }
-             else { # configure, build
-@@ -608,7 +608,7 @@ sub fetch {
- 
- foreach my $distname (@ARGV) {
-     # Command-line's distributions
--    fetch( $distname, !!$target, !!$host );
-+    fetch( $distname, !!$target, !!$host, 1 );
- }
- say scalar keys %dist, q{ packages fetched.} unless $quiet;
- 
+This commit adds a patch which works around this build issue.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/1a4/1a45412939a3f9d6fa59d086d834a3b4a4bffef7/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0003-Avoid-RSA-type-redefinition.patch         | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch
+
+diff --git a/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch b/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch
+new file mode 100644
+index 0000000..86374ca
+--- /dev/null
++++ b/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch
+@@ -0,0 +1,44 @@
++From 593407d2b3ea3b871d55ec399671e48c84b900a7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 21 Jan 2016 22:01:37 +0100
++Subject: [PATCH] Avoid RSA type redefinition
++
++The host_key.h headers does:
++
++  typedef struct rsa_st RSA;
++
++But this type definition is already done by the OpenSSL headers.
++
++While such a type redefinition is legal with recent gcc versions, it
++doesn't build with older gcc versions such as gcc 4.4.
++
++To work around this problem, we instead use a forward declaration of
++"struct rsa_st", and change the only place where the RSA type was used
++by "struct rsa_st".
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ host/lib/include/host_key.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/host/lib/include/host_key.h b/host/lib/include/host_key.h
++index 9f98ccc..c2d01a5 100644
++--- a/host/lib/include/host_key.h
+++++ b/host/lib/include/host_key.h
++@@ -12,11 +12,11 @@
++ #include "vboot_struct.h"
++ 
++ 
++-typedef struct rsa_st RSA;
+++struct rsa_st;
++ 
++ /* Private key data */
++ typedef struct VbPrivateKey {
++-  RSA* rsa_private_key;  /* Private key data */
+++  struct rsa_rt* rsa_private_key;  /* Private key data */
++   uint64_t algorithm;    /* Algorithm to use when signing */
++ } VbPrivateKey;
++ 
++-- 
++2.6.4
++
 -- 
-2.5.0
+2.6.4
