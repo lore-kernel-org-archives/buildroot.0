@@ -1,60 +1,150 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Jan 2016 22:32:47 +0100
-Subject: [Buildroot] [PATCH] ifupdown: bump to version 0.8.8
-In-Reply-To: <20160121221324.62c48f5e@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 21 Jan 2016 22:13:24 +0100")
-References: <1453401915-7117-1-git-send-email-gustavo@zacarias.com.ar>
- <20160121221324.62c48f5e@free-electrons.com>
-Message-ID: <87bn8esjnk.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Jan 2016 22:16:32 +0100
+Subject: [Buildroot] [git commit] iputils: resolve musl compatibility
+Message-ID: <20160121214031.6F80080E63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=837de1793a37d350e689c03eeaa32f6477bcfd43
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Gustavo,
- > On Thu, 21 Jan 2016 15:45:15 -0300, Gustavo Zacarias wrote:
+The new upstream is a fork of the original that consolidates other distro's
+patches.  This fork resolves a series of musl build failures noted in the
+autobuilder log.
 
- >> -IFUPDOWN_VERSION = 0.8.2
- >> +IFUPDOWN_VERSION = 0.8.8
- >> IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
- >> -IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20151205T042642Z/pool/main/i/ifupdown
- >> +IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160113T035819Z/pool/main/i/ifupdown
- >> IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- >> IFUPDOWN_LICENSE = GPLv2+
- >> IFUPDOWN_LICENSE_FILES = COPYING
- >> @@ -23,4 +23,13 @@ define IFUPDOWN_INSTALL_TARGET_CMDS
- >> $(TARGET_MAKE_ENV) $(MAKE) BASEDIR=$(TARGET_DIR) -C $(@D) install
- >> endef
- >> 
- >> +# We need to switch from /bin/ip to /sbin/ip
- >> +IFUPDOWN_DEFN_FILES = can inet inet6 ipx link meta
- >> +define IFUPDOWN_MAKE_IP_IN_SBIN
- >> +	for f in $(IFUPDOWN_DEFN_FILES) ; do \
- >> +		$(SED) 's,/bin/ip,/sbin/ip,' $(@D)/$$f.defn ; \
- >> +	done
- >> +endef
- >> +IFUPDOWN_POST_PATCH_HOOKS += IFUPDOWN_MAKE_IP_IN_SBIN
+http://autobuild.buildroot.net/results/12cb73f3def95efe706bcd957bc2c091e7931d5a/
 
- > For this kind of things, I think my personal preference would be to
- > have a real patch rather than a post patch hook.
+  - Updated to github fork, selected merge from Nov 3 2015
+    which provided musl fixes (last release was to old, 20150815)
+  - Why the fork ? (http://www.spinics.net/lists/netdev/msg279881.html)
+  - Added missing dependencies for kernel capabilies lib
+  - Accounted for new consolidated ping (ipv4/6)
 
-I also generally dislike the combination of patches AND sed
-replacements, but like Gustavoz says it's a bit painful to patch as
-there's so many instances of it.
+Tested against a buildroot arm musl/glibc toolchains, as well as
+autobuilder defconfig.
 
-And I guess we won't be able to upstream such as patch as Debian has
-/bin/ip (and a /sbin/ip symlink) because of bug reports like this:
+Signed-off-by: Matt Weber <matt@thewebers.ws>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-ping-ping6-Fix-hang-with-f-option.patch   | 34 ----------------------
+ package/iputils/Config.in                          |  2 +-
+ package/iputils/iputils.hash                       |  4 +--
+ package/iputils/iputils.mk                         | 29 +++++++++++-------
+ 4 files changed, 22 insertions(+), 47 deletions(-)
 
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=134812
-
-And if busybox would change to /bin/ip, a bunch of scripts would
-probably break, so that's not going to happen either.
-
-So I'm not sure what the best option really is :/ Perhaps just the sed.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/iputils/0001-ping-ping6-Fix-hang-with-f-option.patch b/package/iputils/0001-ping-ping6-Fix-hang-with-f-option.patch
+deleted file mode 100644
+index fe1ab77..0000000
+--- a/package/iputils/0001-ping-ping6-Fix-hang-with-f-option.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 712fddacfb5c4a8a48d9c5debe1870bc051d836c Mon Sep 17 00:00:00 2001
+-From: YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>
+-Date: Tue, 6 Nov 2012 02:44:12 +0900
+-Subject: [PATCH] ping,ping6: Fix hang with -f option.
+-
+-Bug was introduced by commit 8feb586c4... (ping,ping6: Check return
+-value of write(2) for stdout.).
+-
+-https://bugs.archlinux.org/task/32306
+-
+-Patch-by: Jan Synacek <jsynacek@redhat.com>
+-Reported-by: Mohammad Alsaleh <msal@tormail.org>
+-Signed-off-by: YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- ping_common.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/ping_common.h b/ping_common.h
+-index d2a2b5c..6726e1b 100644
+---- a/ping_common.h
+-+++ b/ping_common.h
+-@@ -140,7 +140,7 @@ static inline void write_stdout(const char *str, size_t len)
+- 	do {
+- 		cc = write(STDOUT_FILENO, str + o, len - o);
+- 		o += cc;
+--	} while (len >= o || cc < 0);
+-+	} while (len > o || cc < 0);
+- }
+- 
+- /*
+--- 
+-2.1.3
+-
+diff --git a/package/iputils/Config.in b/package/iputils/Config.in
+index 5324639..40580d2 100644
+--- a/package/iputils/Config.in
++++ b/package/iputils/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_IPUTILS
+ 	  This package is set of small useful utilities for Linux networking.
+ 	  It includes complete versions of ping, traceroute, etc.
+ 
+-	  http://sourceforge.net/projects/iputils/
++	  https://github.com/iputils/iputils
+diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
+index 21a2044..e32e134 100644
+--- a/package/iputils/iputils.hash
++++ b/package/iputils/iputils.hash
+@@ -1,2 +1,2 @@
+-# From http://sourceforge.net/projects/iputils/files/
+-sha1	3e85179746fd93000d6267bd55addfe97f321ba7	iputils-s20121011.tar.bz2
++# Locally computed
++sha256	0e98cb527fa175d1e08afb969c124e452b30968f10ec2c3b078f1440c8977a94	iputils-c8ff6feaf0442f8efd96ccb415770c54f9e84d47.tar.gz
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 7510d99..6392dec 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -4,10 +4,16 @@
+ #
+ ################################################################################
+ 
+-IPUTILS_VERSION = s20121011
+-IPUTILS_SITE = http://www.skbuff.net/iputils
+-IPUTILS_SOURCE = iputils-$(IPUTILS_VERSION).tar.bz2
+-IPUTILS_LICENSE = GPLv2+, BSD-3c
++# The original upstream was forked to the github repository in 2014 to
++# pull fixes from other distribution and centralize the changes after
++# the upstream seemed to have gone dormant.  The fork contains the
++# latest changes including msul support, removing a libsysfs dependency
++# and IPv6 updates.
++# http://www.spinics.net/lists/netdev/msg279881.html
++
++IPUTILS_VERSION = c8ff6feaf0442f8efd96ccb415770c54f9e84d47
++IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
++IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
+ # Only includes a license file for BSD
+ IPUTILS_LICENSE_FILES = ninfod/COPYING
+ IPUTILS_DEPENDENCIES = openssl
+@@ -18,11 +24,15 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ IPUTILS_DEPENDENCIES += busybox
+ endif
+ 
+-# Disabling CAP_SETPCAP (file capabilities)
+-IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_CAP=no USE_SYSFS=no\
+-	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+-	arping clockdiff ping rarpd rdisc tftpd tracepath \
+-	ping6 tracepath6 traceroute6
++IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no\
++	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
++
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++IPUTILS_MAKE_OPTS += USE_CAP=yes
++IPUTILS_DEPENDENCIES += libcap
++else
++IPUTILS_MAKE_OPTS += USE_CAP=no
++endif
+ 
+ define IPUTILS_BUILD_CMDS
+ 	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
+@@ -36,7 +46,6 @@ define IPUTILS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/rdisc       $(TARGET_DIR)/sbin/rdisc
+ 	$(INSTALL) -D -m 755 $(@D)/tftpd       $(TARGET_DIR)/usr/sbin/in.tftpd
+ 	$(INSTALL) -D -m 755 $(@D)/tracepath   $(TARGET_DIR)/bin/tracepath
+-	$(INSTALL) -D -m 755 $(@D)/ping6       $(TARGET_DIR)/bin/ping6
+ 	$(INSTALL) -D -m 755 $(@D)/tracepath6  $(TARGET_DIR)/bin/tracepath6
+ 	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
+ endef
