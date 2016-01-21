@@ -1,99 +1,129 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Jan 2016 22:23:37 +0100
-Subject: [Buildroot] [PATCH 2/4] package/makedevs: use the rooted
-	/etc/passwd and /etc/group
+Date: Thu, 21 Jan 2016 22:23:38 +0100
+Subject: [Buildroot] [PATCH 3/4] docs/manual: makedev syntax accepts
+	usernames and group names
 In-Reply-To: <cover.1453411322.git.yann.morin.1998@free.fr>
 References: <cover.1453411322.git.yann.morin.1998@free.fr>
-Message-ID: <2e6c607e821c7c6576389bb60e7fc91a35862b8b.1453411322.git.yann.morin.1998@free.fr>
+Message-ID: <f4a46ff20ba8d4e0513a82c0796c74f3ed4474e1.1453411322.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, makedevs will query the host's /etc/passwd and /etc/group to
-resolve usernames and group names. This is inherently flawed, as we can
-never guarantee that the UIDs will be the same on the target as on the
-host, or even whether a particular user does exist on the host.
-
-This is because getpwnam() and getgrnam() will forcibly read the
-system's /etc/passwd and /etc/group, and there is no way to tell them to
-look anywhere else.
-
-However, we can use use fgetpwent() and fgetgrent() instead, for which
-we can pass a FILE* stream to read from to get the entries. This means
-we must implement the scanning-loop ourselves, but fortunately, that's
-pretty trivial to do.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/makedevs/makedevs.c | 36 +++++++++++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 7 deletions(-)
+ docs/manual/adding-packages-generic.txt | 22 +++++++++++-----------
+ docs/manual/makedev-syntax.txt          | 20 ++++++++++++--------
+ 2 files changed, 23 insertions(+), 19 deletions(-)
 
-diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-index 53ff6fe..91f72e4 100644
---- a/package/makedevs/makedevs.c
-+++ b/package/makedevs/makedevs.c
-@@ -40,6 +40,8 @@ const char *bb_applet_name;
- uid_t recursive_uid;
- gid_t recursive_gid;
- unsigned int recursive_mode;
-+#define PASSWD_PATH "etc/passwd"  /* MUST be relative */
-+#define GROUP_PATH "etc/group"  /* MUST be relative */
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 1f9c7bb..b7817e3 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -43,16 +43,16 @@ system is based on hand-written Makefiles or shell scripts.
+ 28:	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
+ 29: endef
+ 30:
+-31: define LIBFOO_DEVICES
+-32:	/dev/foo  c  666  0  0	42  0  -  -  -
++31: define LIBFOO_USERS
++32:	foo -1 libfoo -1 * - - - LibFoo daemon
+ 33: endef
+ 34:
+-35: define LIBFOO_PERMISSIONS
+-36:	/bin/foo  f  4755  0  0	 -  -  -  -  -
++35: define LIBFOO_DEVICES
++36:	/dev/foo  c  666  0  0	42  0  -  -  -
+ 37: endef
+ 38:
+-39: define LIBFOO_USERS
+-40:	foo -1 libfoo -1 * - - - LibFoo daemon
++39: define LIBFOO_PERMISSIONS
++40:	/bin/foo  f  4755  foo  libfoo	 -  -  -  -  -
+ 41: endef
+ 42:
+ 43: $(eval $(generic-package))
+@@ -142,15 +142,15 @@ All these steps rely on the +$(@D)+ variable, which
+ contains the directory where the source code of the package has been
+ extracted.
  
- void bb_verror_msg(const char *s, va_list p)
- {
-@@ -255,10 +257,20 @@ char *bb_get_chomped_line_from_file(FILE *file)
- long my_getpwnam(const char *name)
- {
- 	struct passwd *myuser;
-+	FILE *stream;
+-On line 31..33, we define a device-node file used by this package
++On lines 31..43, we define a user that is used by this package (e.g.
++to run a daemon as non-root) (+LIBFOO_USERS+).
++
++On line 35..37, we define a device-node file used by this package
+ (+LIBFOO_DEVICES+).
  
--	myuser  = getpwnam(name);
--	if (myuser==NULL)
--		bb_error_msg_and_die("unknown user name: %s", name);
-+	stream = bb_xfopen(PASSWD_PATH, "r");
-+	while(1) {
-+		errno = 0;
-+		myuser = fgetpwent(stream);
-+		if (errno)
-+			bb_error_msg_and_die(strerror(errno));
-+		if (myuser==NULL)
-+			bb_error_msg_and_die("unknown user name: %s", name);
-+		if (!strcmp(name, myuser->pw_name))
-+			break;
-+	}
-+	fclose(stream);
+-On line 35..37, we define the permissions to set to specific files
++On line 39..41, we define the permissions to set to specific files
+ installed by this package (+LIBFOO_PERMISSIONS+).
  
- 	return myuser->pw_uid;
- }
-@@ -266,12 +278,22 @@ long my_getpwnam(const char *name)
- long my_getgrnam(const char *name)
- {
- 	struct group *mygroup;
-+	FILE *stream;
+-On lines 39..41, we define a user that is used by this package (e.g.
+-to run a daemon as non-root) (+LIBFOO_USERS+).
+-
+ Finally, on line 43, we call the +generic-package+ function, which
+ generates, according to the variables defined previously, all the
+ Makefile code necessary to make your package working.
+diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+index cae37f7..0bbc16e 100644
+--- a/docs/manual/makedev-syntax.txt
++++ b/docs/manual/makedev-syntax.txt
+@@ -28,8 +28,10 @@ There are a few non-trivial blocks:
+   * c: a character device file
+   * b: a block device file
+   * p: a named pipe
+-- +mode+, +uid+ and +gid+ are the usual permissions settings (only
+-  numerical values are allowed)
++- +mode+ are the usual permissions settings (only numerical values
++  are allowed)
++- +uid+ and +gid+ are the UID and GID to set on this file; can be
++  either numerical values or actual names
+ - +major+ and +minor+ are here for device files, set to +-+ for other
+   files
+ - +start+, +inc+ and +count+ are for when you want to create a batch
+@@ -37,19 +39,21 @@ There are a few non-trivial blocks:
+   incrementing its counter by +inc+ until it reaches +count+
  
--	mygroup  = getgrnam(name);
--	if (mygroup==NULL)
--		bb_error_msg_and_die("unknown group name: %s", name);
-+	stream = bb_xfopen(GROUP_PATH, "r");
-+	while(1) {
-+		errno = 0;
-+		mygroup = fgetgrent(stream);
-+		if (errno)
-+			bb_error_msg_and_die(strerror(errno));
-+		if (mygroup==NULL)
-+			bb_error_msg_and_die("unknown group name: %s", name);
-+		if (!strcmp(name, mygroup->gr_name))
-+			break;
-+	}
-+	fclose(stream);
+ Let's say you want to change the permissions of a given file; using
+-this syntax, you will need to put:
++this syntax, you will need to write:
  
--	return (mygroup->gr_gid);
-+	return mygroup->gr_gid;
- }
+ ----
+-/usr/bin/foobar f 644 0 0 - - - - -
++/usr/bin/foo f 755 0 0 - - - - -
++/usr/bin/bar f 755 root root - - - - -
++/data/buz f buz-user buz-group - - - - -
+ ----
  
- unsigned long get_ug_id(const char *s, long (*my_getxxnam)(const char *))
+ Alternatively, if you want to change owner/permission of a directory
+-recursively, you can put (to set UID to 123, GID to 456 and access
++recursively, you can write (to set UID to foo, GID to bar and access
+ rights to rwxr-x--- for the directory /usr/share/myapp and all files
+ and directories below it):
+ 
+ ----
+-/usr/share/myapp r 750 123 456 - - - - -
++/usr/share/myapp r 750 foo bar - - - - -
+ ----
+ 
+ On the other hand, if you want to create the device file +/dev/hda+
+@@ -57,13 +61,13 @@ and the corresponding 15 files for the partitions, you will need for
+ +/dev/hda+:
+ 
+ ----
+-/dev/hda b 640 0 0 3 0 0 0 -
++/dev/hda b 640 root root 3 0 0 0 -
+ ----
+ 
+ and then for device files corresponding to the partitions of
+ +/dev/hda+, +/dev/hdaX+, +X+ ranging from 1 to 15:
+ 
+ ----
+-/dev/hda b 640 0 0 3 1 1 1 15
++/dev/hda b 640 root root 3 1 1 1 15
+ ----
+ 
 -- 
 1.9.1
