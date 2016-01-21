@@ -1,40 +1,63 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 21 Jan 2016 14:31:54 -0300
-Subject: [Buildroot] [PATCH] stunnel: bump to version 5.29
-Message-ID: <1453397514-26135-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 21 Jan 2016 15:31:13 -0300
+Subject: [Buildroot] [PATCH] iproute2: add musl build fix patch
+Message-ID: <1453401073-3237-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Patch status: submitted upstream
+http://marc.info/?l=linux-netdev&m=145340072013792
+
+Fixes:
+http://autobuild.buildroot.net/results/d3d/d3d79b55cb19987d5d5c0da9c0f0d25697697c05/
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0003-iproute2-fix-building-with-musl.patch     | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/iproute2/0003-iproute2-fix-building-with-musl.patch
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index ee9d94b..1801e61 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-announce/2015-December/000115.html
--sha256	9a25b87b1ef0c08fa3d796edce07b4408e6a8acece23de2eb7ee9285b78852b5	stunnel-5.28.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-announce/2016-January/000117.html
-+sha256	43909625403ea634fa7cb8399d58faf8e7f11c1b7b29097491469951f56df551	stunnel-5.29.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index bfa7d3f..8ea71b8 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).28
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).29
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+diff --git a/package/iproute2/0003-iproute2-fix-building-with-musl.patch b/package/iproute2/0003-iproute2-fix-building-with-musl.patch
+new file mode 100644
+index 0000000..377bf40
+--- /dev/null
++++ b/package/iproute2/0003-iproute2-fix-building-with-musl.patch
+@@ -0,0 +1,33 @@
++From e445686215f44c95b8b777c4c7efe5318d48505e Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Thu, 21 Jan 2016 15:14:44 -0300
++Subject: [PATCH] iproute2: fix building with musl
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++We need limits.h for PATH_MAX, fixes:
++
++rt_names.c:364:13: error: ?PATH_MAX? undeclared (first use in this
++function)
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ lib/rt_names.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/rt_names.c b/lib/rt_names.c
++index f6d17c0..b665d3e 100644
++--- a/lib/rt_names.c
+++++ b/lib/rt_names.c
++@@ -18,6 +18,7 @@
++ #include <sys/time.h>
++ #include <sys/socket.h>
++ #include <dirent.h>
+++#include <limits.h>
++ 
++ #include <asm/types.h>
++ #include <linux/rtnetlink.h>
++-- 
++2.4.10
++
 -- 
 2.4.10
