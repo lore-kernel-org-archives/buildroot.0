@@ -1,63 +1,60 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 21 Jan 2016 15:31:13 -0300
-Subject: [Buildroot] [PATCH] iproute2: add musl build fix patch
-Message-ID: <1453401073-3237-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 21 Jan 2016 15:45:15 -0300
+Subject: [Buildroot] [PATCH] ifupdown: bump to version 0.8.8
+Message-ID: <1453401915-7117-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch status: submitted upstream
-http://marc.info/?l=linux-netdev&m=145340072013792
-
-Fixes:
-http://autobuild.buildroot.net/results/d3d/d3d79b55cb19987d5d5c0da9c0f0d25697697c05/
+Also add a kludge switching the explicit invocation of the ip binary
+from /bin to /sbin since that's where buildroot installs it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../0003-iproute2-fix-building-with-musl.patch     | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/iproute2/0003-iproute2-fix-building-with-musl.patch
+ package/ifupdown/ifupdown.hash |  4 ++--
+ package/ifupdown/ifupdown.mk   | 13 +++++++++++--
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/package/iproute2/0003-iproute2-fix-building-with-musl.patch b/package/iproute2/0003-iproute2-fix-building-with-musl.patch
-new file mode 100644
-index 0000000..377bf40
---- /dev/null
-+++ b/package/iproute2/0003-iproute2-fix-building-with-musl.patch
-@@ -0,0 +1,33 @@
-+From e445686215f44c95b8b777c4c7efe5318d48505e Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Thu, 21 Jan 2016 15:14:44 -0300
-+Subject: [PATCH] iproute2: fix building with musl
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
+index 02dfd2b..c5a4189 100644
+--- a/package/ifupdown/ifupdown.hash
++++ b/package/ifupdown/ifupdown.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.2.dsc
+-sha256	edb08f935fea9bc376c3faa0140c04c7a4d4ef5f22fd280ec4060386a75df10b	ifupdown_0.8.2.tar.xz
++# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.8.dsc
++sha256	180edaaa6de99e4e74de7229481edf74361b8e8468462842618a42a952a26c0e	ifupdown_0.8.8.tar.xz
+diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
+index 7fbd003..37aaf5d 100644
+--- a/package/ifupdown/ifupdown.mk
++++ b/package/ifupdown/ifupdown.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-IFUPDOWN_VERSION = 0.8.2
++IFUPDOWN_VERSION = 0.8.8
+ IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
+-IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20151205T042642Z/pool/main/i/ifupdown
++IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160113T035819Z/pool/main/i/ifupdown
+ IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ IFUPDOWN_LICENSE = GPLv2+
+ IFUPDOWN_LICENSE_FILES = COPYING
+@@ -23,4 +23,13 @@ define IFUPDOWN_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) BASEDIR=$(TARGET_DIR) -C $(@D) install
+ endef
+ 
++# We need to switch from /bin/ip to /sbin/ip
++IFUPDOWN_DEFN_FILES = can inet inet6 ipx link meta
++define IFUPDOWN_MAKE_IP_IN_SBIN
++	for f in $(IFUPDOWN_DEFN_FILES) ; do \
++		$(SED) 's,/bin/ip,/sbin/ip,' $(@D)/$$f.defn ; \
++	done
++endef
++IFUPDOWN_POST_PATCH_HOOKS += IFUPDOWN_MAKE_IP_IN_SBIN
 +
-+We need limits.h for PATH_MAX, fixes:
-+
-+rt_names.c:364:13: error: ?PATH_MAX? undeclared (first use in this
-+function)
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ lib/rt_names.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/lib/rt_names.c b/lib/rt_names.c
-+index f6d17c0..b665d3e 100644
-+--- a/lib/rt_names.c
-++++ b/lib/rt_names.c
-+@@ -18,6 +18,7 @@
-+ #include <sys/time.h>
-+ #include <sys/socket.h>
-+ #include <dirent.h>
-++#include <limits.h>
-+ 
-+ #include <asm/types.h>
-+ #include <linux/rtnetlink.h>
-+-- 
-+2.4.10
-+
+ $(eval $(generic-package))
 -- 
 2.4.10
