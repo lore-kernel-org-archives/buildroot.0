@@ -1,81 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Jan 2016 15:25:55 +0100
-Subject: [Buildroot] [git commit] libv4l: update upstream status of patches
-Message-ID: <20160121142637.623BE7FCB1@busybox.osuosl.org>
+Date: Thu, 21 Jan 2016 15:22:54 +0100
+Subject: [Buildroot] [git commit] libv4l: add patch to fix libjpeg build
+	issue
+Message-ID: <20160121142636.EE06681696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09816566f4a451b3eb00584278c710df5dc7e1e1
+commit: http://git.buildroot.net/buildroot/commit/?id=343ec915e3f7cb6f83ef114cd6c5e5f3502d8f4a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After some effort to upstream the libv4l patches, 4 out of our 5
-patches are now upstream. This commit updates those patches to
-indicate their upstream status.
+Since the bump of libjpeg to v9b, libv4l doesn't build anymore due to
+the change of the prototype of jpeg_mem_src(), which gets
+re-implemented in libv4l when the libjpeg is too old.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/e7a/e7a2341cbbcf514f4cd6754a5a36cebd6556a757/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch     | 3 +++
- .../0003-libv4lsyscall-priv.h-Use-off_t-instead-of-__off_t.patch       | 3 +++
- .../0004-utils-Properly-use-ENABLE_NLS-for-locale-related-cod.patch    | 3 +++
- .../0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch    | 3 +++
- 4 files changed, 12 insertions(+)
+ ...rt-only-expose-jpeg_mem_-protoypes-when-J.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch b/package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch
-index 5fb93ff..1b89961 100644
---- a/package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch
-+++ b/package/libv4l/0002-dvb-keytable-fix-missing-libintl-linking.patch
-@@ -3,6 +3,9 @@ From: Peter Seiderer <ps.report@gmx.net>
- Date: Fri, 16 Oct 2015 20:32:45 +0200
- Subject: [PATCH] dvb/keytable: fix missing libintl linking
- 
-+Patch upstream at
-+http://git.linuxtv.org/v4l-utils.git/commit/?id=ceaec539b62d83ffb5fdb5231e574a6adef0bf83.
-+
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-  utils/dvb/Makefile.am      | 8 ++++----
-diff --git a/package/libv4l/0003-libv4lsyscall-priv.h-Use-off_t-instead-of-__off_t.patch b/package/libv4l/0003-libv4lsyscall-priv.h-Use-off_t-instead-of-__off_t.patch
-index 015acd4..7868d71 100644
---- a/package/libv4l/0003-libv4lsyscall-priv.h-Use-off_t-instead-of-__off_t.patch
-+++ b/package/libv4l/0003-libv4lsyscall-priv.h-Use-off_t-instead-of-__off_t.patch
-@@ -11,6 +11,9 @@ but the mmap() manpage really uses off_t, not __off_t.
- Switching from __off_t to off_t allows the code to build properly with
- musl.
- 
-+Patch upstream at
-+http://git.linuxtv.org/v4l-utils.git/commit/?id=a6ff0635f7ed3400eec25039b96002b60a44209b.
-+
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-  lib/libv4l1/v4l1compat.c               |  3 +--
-diff --git a/package/libv4l/0004-utils-Properly-use-ENABLE_NLS-for-locale-related-cod.patch b/package/libv4l/0004-utils-Properly-use-ENABLE_NLS-for-locale-related-cod.patch
-index 8325234..2be74cc 100644
---- a/package/libv4l/0004-utils-Properly-use-ENABLE_NLS-for-locale-related-cod.patch
-+++ b/package/libv4l/0004-utils-Properly-use-ENABLE_NLS-for-locale-related-cod.patch
-@@ -13,6 +13,9 @@ not available due to <locale.h> not being included.
- In order to fix this, we add ENABLE_NLS conditionals around the calls
- to these functions.
- 
-+Patch upstream at:
-+http://git.linuxtv.org/v4l-utils.git/commit/?id=defad307a09c11ba989e6338bb0293c0e1acba87.
-+
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-  utils/dvb/dvb-fe-tool.c        | 2 ++
 diff --git a/package/libv4l/0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch b/package/libv4l/0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch
-index d0d3624..1868fd3 100644
---- a/package/libv4l/0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch
+new file mode 100644
+index 0000000..d0d3624
+--- /dev/null
 +++ b/package/libv4l/0005-libv4lconvert-only-expose-jpeg_mem_-protoypes-when-J.patch
-@@ -25,6 +25,9 @@ only expose the prototypes when libv4l is implementing the functions
- (i.e when JPEG_LIB_VERSION < 80). When JPEG_LIB_VERSION >= 80, the
- prototypes will come from <jpeglib.h>.
- 
-+Patch upstream at:
-+http://git.linuxtv.org/v4l-utils.git/commit/?id=0b33f4c87cb26644ea662455acbc1649858b151f.
+@@ -0,0 +1,53 @@
++From d468d1bba973999f2f1103ebaf7df5c8440a5499 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 21 Jan 2016 10:22:16 +0100
++Subject: [PATCH] libv4lconvert: only expose jpeg_mem_*() protoypes when
++ JPEG_LIB_VERSION < 80
 +
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-  lib/libv4lconvert/jpeg_memsrcdest.h | 4 ++++
++The jpeg_memsrcdest.c file implements jpeg_mem_src() and
++jpeg_mem_dest() when JPEG_LIB_VERSION < 80 in order to provide those
++functions to libv4lconvert when the libjpeg library being used is too
++old.
++
++However, the jpeg_memsrcdest.h file exposes the prototypes of those
++functions unconditionally. Until now, the prototype was matching the
++one of the functions exposed by libjpeg (when JPEG_LIB_VERSION >= 80),
++so there was no problem.
++
++But since the release of libjpeg 9b (in January 2016), they changed
++the second argument of jpeg_mem_src() from "unsigned char *" to "const
++unsigned char*". Therefore, there are two prototypes for the
++jpeg_mem_src() function: one from libjpeg, one from libv4l, and they
++conflict with each other.
++
++To resolve this situation, this patch modifies jpeg_memsrcdest.h to
++only expose the prototypes when libv4l is implementing the functions
++(i.e when JPEG_LIB_VERSION < 80). When JPEG_LIB_VERSION >= 80, the
++prototypes will come from <jpeglib.h>.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ lib/libv4lconvert/jpeg_memsrcdest.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/lib/libv4lconvert/jpeg_memsrcdest.h b/lib/libv4lconvert/jpeg_memsrcdest.h
++index e971182..28a6477 100644
++--- a/lib/libv4lconvert/jpeg_memsrcdest.h
+++++ b/lib/libv4lconvert/jpeg_memsrcdest.h
++@@ -1,5 +1,7 @@
++ #include <jpeglib.h>
++ 
+++#if JPEG_LIB_VERSION < 80
+++
++ void
++ jpeg_mem_src (j_decompress_ptr cinfo, unsigned char * buffer,
++ 	unsigned long bufsize);
++@@ -7,3 +9,5 @@ jpeg_mem_src (j_decompress_ptr cinfo, unsigned char * buffer,
++ void
++ jpeg_mem_dest (j_compress_ptr cinfo, unsigned char ** outbuffer,
++ 	unsigned long * outsize);
+++
+++#endif
++-- 
++2.6.4
++
