@@ -1,116 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Jan 2016 23:40:17 +0100
-Subject: [Buildroot] [git commit] package/hplip: Un-deprecate and bump
-	version to 3.15.11
-Message-ID: <20160121230642.167DF80337@busybox.osuosl.org>
+Date: Fri, 22 Jan 2016 00:05:50 +0100
+Subject: [Buildroot] [git commit] package/hplip: fixup configure.in script
+	for proper autoreconf
+Message-ID: <20160121230642.43C79800FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e11c38bcec6329fb02dcc9244b00a4ae959c860
+commit: http://git.buildroot.net/buildroot/commit/?id=3fc77e5f81906d774be2710b16166fca48fb3e05
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+This commit adds a minor patch to hplip's configure.in script, which
+avoids the need to create the AUTOHRS, ChangeLog, NEWS and README
+files before autoreconfiguring, and silences a huge number of warnings
+telling to enable the subdir-objects automake option.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/hplip/0001-fix-make.patch | 40 +++++++++++++++++++--------------------
- package/hplip/Config.in           |  2 --
- package/hplip/hplip.hash          |  2 +-
- package/hplip/hplip.mk            |  2 +-
- 4 files changed, 22 insertions(+), 24 deletions(-)
+ ...02-configure.in-fix-AM_INIT_AUTOMAKE-call.patch | 35 ++++++++++++++++++++++
+ package/hplip/hplip.mk                             |  8 -----
+ 2 files changed, 35 insertions(+), 8 deletions(-)
 
-diff --git a/package/hplip/0001-fix-make.patch b/package/hplip/0001-fix-make.patch
-index da05d03..9105d6f 100644
---- a/package/hplip/0001-fix-make.patch
-+++ b/package/hplip/0001-fix-make.patch
-@@ -1,35 +1,35 @@
--From 6019d012246578ae1a191d3510284e7b894fb528 Mon Sep 17 00:00:00 2001
-+From c1822a19e75bae8e044cd46a257a234cd9649896 Mon Sep 17 00:00:00 2001
- From: Olivier Schonken <olivier.schonken@gmail.com>
--Date: Sat, 2 Mar 2013 18:01:03 +0200
-+Date: Wed, 20 Jan 2016 23:46:50 +0200
- Subject: [PATCH] Changed Makefile.am to allow cross-compilation of HPLIP
- 
- Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
- ---
-- Makefile.am |   28 ++++++++++++++--------------
-- 1 file changed, 14 insertions(+), 14 deletions(-)
-+ Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/Makefile.am b/Makefile.am
--index 16ea902..b22f46a 100644
-+index 73fed2e..23aa0ec 100644
- --- a/Makefile.am
- +++ b/Makefile.am
--@@ -72,7 +72,7 @@ libhpmud_la_SOURCES = io/hpmud/hpmud.c io/hpmud/mlc.c io/hpmud/model.c io/hpmud/
-- 	  io/hpmud/hpmud.h io/hpmud/hpmudi.h io/hpmud/list.h io/hpmud/mlc.h io/hpmud/pml.h io/hpmud/dot4.c \
-- 	  io/hpmud/dot4.h io/hpmud/jd.c io/hpmud/jd.h io/hpmud/pp.c io/hpmud/pp.h io/hpmud/musb.h io/hpmud/musb_libusb01.c
-+@@ -92,7 +92,7 @@ libhpmud_la_SOURCES += io/hpmud/musb_libusb01.c
-+ libhpmud_la_LDFLAGS += -lusb
-  else
---libhpmud_la_CFLAGS = -I/usr/include/libusb-1.0 -DMUDNAME=\"$(MUDNAME)\" -DCONFDIR=\"$(hplip_confdir)\"
--+libhpmud_la_CFLAGS = -I$(includedir)/libusb-1.0 -DMUDNAME=\"$(MUDNAME)\" -DCONFDIR=\"$(hplip_confdir)\"
-- libhpmud_la_SOURCES = io/hpmud/hpmud.c io/hpmud/mlc.c io/hpmud/model.c io/hpmud/pml.c \
-- 	  io/hpmud/hpmud.h io/hpmud/hpmudi.h io/hpmud/list.h io/hpmud/mlc.h io/hpmud/pml.h io/hpmud/dot4.c \
-- 	  io/hpmud/dot4.h io/hpmud/jd.c io/hpmud/jd.h io/hpmud/pp.c io/hpmud/pp.h io/hpmud/musb.h io/hpmud/musb.c
--@@ -292,7 +292,7 @@ hpmudext_la_LIBADD = libhpmud.la
-- if LIBUSB01_BUILD
-- hpmudext_la_CFLAGS = -I$(PYTHONINCLUDEDIR)
-- else
---hpmudext_la_CFLAGS =-I/usr/include/libusb-1.0 -I$(PYTHONINCLUDEDIR)
--+hpmudext_la_CFLAGS =-I$(includedir)/libusb-1.0 -I$(PYTHONINCLUDEDIR)
-+ libhpmud_la_SOURCES += io/hpmud/musb.c 
-+-libhpmud_la_CFLAGS  += -I/usr/include/libusb-1.0
-++libhpmud_la_CFLAGS  += -I$(includedir)/libusb-1.0
-+ libhpmud_la_LDFLAGS += -lusb-1.0
-+ endif
+diff --git a/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
+new file mode 100644
+index 0000000..7c7538d
+--- /dev/null
++++ b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
+@@ -0,0 +1,35 @@
++From a2de7e834417de68db10dc6f09d5810b06e6cbc8 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 21 Jan 2016 23:54:50 +0100
++Subject: [PATCH] configure.in: fix AM_INIT_AUTOMAKE call
++
++Uncomment the appropriate call to AM_INIT_AUTOMAKE so that the
++"foreign" option is passed, which avoids the need for creating various
++unneeded files when autoreconfiguring.
++
++Add the subdir-objects options since the main Makefile.am references
++files in subdirectories. This allows to silence a huge amount of
++warning when autoreconfiguring.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.in | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/configure.in b/configure.in
++index 8b06428..680cad5 100755
++--- a/configure.in
+++++ b/configure.in
++@@ -27,8 +27,7 @@
 + 
-+@@ -314,7 +314,7 @@ hpmudext_la_LIBADD = libhpmud.la libhpdiscovery.la
-+ hpmudext_la_CFLAGS = -I$(PYTHONINCLUDEDIR) -Iprotocol/discovery
++ #AC_PREREQ(2.59)
++ AC_INIT([HP Linux Imaging and Printing], [3.15.11], [3.15.11], [hplip])
++-#AM_INIT_AUTOMAKE([1.9 foreign])
++-AM_INIT_AUTOMAKE
+++AM_INIT_AUTOMAKE([1.9 foreign subdir-objects])
++ AC_DISABLE_STATIC
 + 
-+ if !LIBUSB01_BUILD
-+-hpmudext_la_CFLAGS +=-I/usr/include/libusb-1.0 
-++hpmudext_la_CFLAGS +=-I$(includedir)/libusb-1.0 
-  endif
-  
-  # ui (qt3)
- -- 
--1.7.10.4
-+2.5.0
- 
-diff --git a/package/hplip/Config.in b/package/hplip/Config.in
-index a8a5f69..7565671 100644
---- a/package/hplip/Config.in
-+++ b/package/hplip/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_HPLIP
- 	bool "hplip"
--	# because of cups security issues
--	depends on BR2_DEPRECATED_SINCE_2015_05
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_CUPS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-diff --git a/package/hplip/hplip.hash b/package/hplip/hplip.hash
-index fb7d4e7..75ff7d3 100644
---- a/package/hplip/hplip.hash
-+++ b/package/hplip/hplip.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  a8122cd824398ac6374154f86152e24fdf5c0100b5c1d6518e853308362e627d  hplip-3.13.10.tar.gz
-+sha256  33c4711bde04a34b81f3f70e6277a0375dded171469e5aa8b9cef1a14a407c6d  hplip-3.15.11.tar.gz
++ # Checks for programs.
++-- 
++2.6.4
++
 diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
-index 2cdddca..aea1f0c 100644
+index 62cf9c0..b1e8cb5 100644
 --- a/package/hplip/hplip.mk
 +++ b/package/hplip/hplip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -40,12 +40,4 @@ define HPLIP_POST_INSTALL_TARGET_FIXUP
+ endef
+ HPLIP_POST_INSTALL_TARGET_HOOKS += HPLIP_POST_INSTALL_TARGET_FIXUP
  
--HPLIP_VERSION = 3.13.10
-+HPLIP_VERSION = 3.15.11
- HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
- HPLIP_AUTORECONF = YES
- HPLIP_DEPENDENCIES = cups libusb jpeg
+-define HPLIP_PRE_CONFIGURE_FIXUP
+-	touch $(@D)/AUTHORS
+-	touch $(@D)/ChangeLog
+-	touch $(@D)/NEWS
+-	touch $(@D)/README
+-endef
+-HPLIP_PRE_CONFIGURE_HOOKS += HPLIP_PRE_CONFIGURE_FIXUP
+-
+ $(eval $(autotools-package))
