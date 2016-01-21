@@ -1,150 +1,490 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Jan 2016 22:16:32 +0100
-Subject: [Buildroot] [git commit] iputils: resolve musl compatibility
-Message-ID: <20160121214031.6F80080E63@busybox.osuosl.org>
+Date: Thu, 21 Jan 2016 23:37:01 +0100
+Subject: [Buildroot] [git commit] package/cups: Un-deprecate,
+	and update CUPS to 2.1.2
+Message-ID: <20160121223830.DD957803E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=837de1793a37d350e689c03eeaa32f6477bcfd43
+commit: http://git.buildroot.net/buildroot/commit/?id=d37ce8e1a4edc9a06831e6b0842996866534b1ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The new upstream is a fork of the original that consolidates other distro's
-patches.  This fork resolves a series of musl build failures noted in the
-autobuilder log.
+ - Remove 0001-fix-static.patch - Fixed upstream
+ - Remove 0002-fix-stack-protector-check.patch - Fixed upstream
+ - Remove 0003-mantohtml.patch - Replaced by
+   0001-Remove-man-from-BUILDDIRS-in- configure.patch
+ - Add 0002-Do-not-use-genstrings.patch
+ - Add CUPS_PDFTOPS option to Config.in.legacy - This support was
+   moved to the cups-filters package.
 
-http://autobuild.buildroot.net/results/12cb73f3def95efe706bcd957bc2c091e7931d5a/
-
-  - Updated to github fork, selected merge from Nov 3 2015
-    which provided musl fixes (last release was to old, 20150815)
-  - Why the fork ? (http://www.spinics.net/lists/netdev/msg279881.html)
-  - Added missing dependencies for kernel capabilies lib
-  - Accounted for new consolidated ping (ipv4/6)
-
-Tested against a buildroot arm musl/glibc toolchains, as well as
-autobuilder defconfig.
-
-Signed-off-by: Matt Weber <matt@thewebers.ws>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+[Thomas:
+ - rewrap patch description in patch 0001
+ - adjust patch 0002 to completely remove the call to genstrings
+   instead of commenting it, and remove the potentially confusing
+   'echo' above it
+ - add a third patch that sanitizes the installation process to avoid
+   non-working stripping, owernship changes, etc.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-ping-ping6-Fix-hang-with-f-option.patch   | 34 ----------------------
- package/iputils/Config.in                          |  2 +-
- package/iputils/iputils.hash                       |  4 +--
- package/iputils/iputils.mk                         | 29 +++++++++++-------
- 4 files changed, 22 insertions(+), 47 deletions(-)
+ Config.in.legacy                                   |   7 ++
+ ...01-Remove-man-from-BUILDDIRS-in-configure.patch |  29 +++++
+ package/cups/0001-fix-static.patch                 |  28 -----
+ package/cups/0002-Do-not-use-genstrings.patch      |  36 ++++++
+ package/cups/0002-fix-stack-protector-check.patch  |  25 ----
+ .../0003-Sanitize-the-installation-process.patch   | 131 +++++++++++++++++++++
+ package/cups/0003-mantohtml.patch                  |  11 --
+ package/cups/Config.in                             |  16 +--
+ package/cups/cups.hash                             |   2 +
+ package/cups/cups.mk                               |  50 +++++---
+ 10 files changed, 240 insertions(+), 95 deletions(-)
 
-diff --git a/package/iputils/0001-ping-ping6-Fix-hang-with-f-option.patch b/package/iputils/0001-ping-ping6-Fix-hang-with-f-option.patch
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 9111c01..793b116 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
+ 
++config BR2_PACKAGE_CUPS_PDFTOPS
++	bool "Pdftops support has been removed from Cups"
++	select BR2_LEGACY
++	help
++	  Pdftops support has been removed from the cups package
++	  It is now part of the cups-filters package.
++
+ config BR2_KERNEL_HEADERS_3_16
+ 	bool "kernel headers version 3.16.x are no longer supported"
+ 	select BR2_KERNEL_HEADERS_3_18
+diff --git a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+new file mode 100644
+index 0000000..c0e87a4
+--- /dev/null
++++ b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+@@ -0,0 +1,29 @@
++From a77bb18a5584bb23687ed3c522dbd91a9987d5a7 Mon Sep 17 00:00:00 2001
++From: Olivier Schonken <olivier.schonken@gmail.com>
++Date: Wed, 20 Jan 2016 22:13:11 +0200
++Subject: [PATCH] Remove man from BUILDDIRS in configure
++
++Since cups doesn't autoreconf properly, we directly patch the
++configure script.
++
++Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
++---
++ configure | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index 4170ff3..3879a75 100755
++--- a/configure
+++++ b/configure
++@@ -5921,7 +5921,7 @@ fi
++ 
++ case "$COMPONENTS" in
++ 	all)
++-		BUILDDIRS="filter backend berkeley cgi-bin monitor notifier ppdc scheduler systemv conf data desktop locale man doc examples templates"
+++		BUILDDIRS="filter backend berkeley cgi-bin monitor notifier ppdc scheduler systemv conf data desktop locale doc examples templates"
++ 		;;
++ 
++ 	core)
++-- 
++2.5.0
++
+diff --git a/package/cups/0001-fix-static.patch b/package/cups/0001-fix-static.patch
 deleted file mode 100644
-index fe1ab77..0000000
---- a/package/iputils/0001-ping-ping6-Fix-hang-with-f-option.patch
+index 4c9d0d4..0000000
+--- a/package/cups/0001-fix-static.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From 712fddacfb5c4a8a48d9c5debe1870bc051d836c Mon Sep 17 00:00:00 2001
--From: YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>
--Date: Tue, 6 Nov 2012 02:44:12 +0900
--Subject: [PATCH] ping,ping6: Fix hang with -f option.
+@@ -1,28 +0,0 @@
+-cups: fix static linking
 -
--Bug was introduced by commit 8feb586c4... (ping,ping6: Check return
--value of write(2) for stdout.).
+-Append -lz to the cups linking libs to fix a problem like this one:
 -
--https://bugs.archlinux.org/task/32306
+-../cups/libcups.a(file.o): In function `cupsFileSeek':
+-/home/test/test/1/output/build/cups-1.3.11/cups/file.c:1444: undefined 
+-reference to `inflateEnd'
+-collect2: error: ld returned 1 exit status
+-make[2]: *** [ipp] Error 1
+-make[2]: *** Waiting for unfinished jobs....
 -
--Patch-by: Jan Synacek <jsynacek@redhat.com>
--Reported-by: Mohammad Alsaleh <msal@tormail.org>
--Signed-off-by: YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-This solution is the same used upstream in newer versions.
+-
+-Fixes:
+-   http://autobuild.buildroot.net/results/f3d/f3d4f67ce7ee1d54f5bd4c87dfddb7417db614e5/
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---- cups-1.3.11/Makedefs.in.orig	2014-03-05 13:28:10.175437880 +0000
+-+++ cups-1.3.11/Makedefs.in	2014-03-05 13:28:35.398845162 +0000
+-@@ -132,7 +132,7 @@ LDFLAGS		=	-L../cups -L../filter @LDARCH
+- LEGACY_BACKENDS	=	@LEGACY_BACKENDS@
+- LIBCUPSORDER	=	@LIBCUPSORDER@
+- LIBCUPSIMAGEORDER =	@LIBCUPSIMAGEORDER@
+--LINKCUPS	=	@LINKCUPS@ $(SSLLIBS)
+-+LINKCUPS	=	@LINKCUPS@ $(SSLLIBS) $(LIBZ)
+- LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
+- LIBS		=	$(LINKCUPS) $(COMMONLIBS)
+- OPTIM		=	@OPTIM@
+diff --git a/package/cups/0002-Do-not-use-genstrings.patch b/package/cups/0002-Do-not-use-genstrings.patch
+new file mode 100644
+index 0000000..325483e
+--- /dev/null
++++ b/package/cups/0002-Do-not-use-genstrings.patch
+@@ -0,0 +1,36 @@
++From 193c8d8c55a3478ca5c9e161ce581e5794098c6d Mon Sep 17 00:00:00 2001
++From: Olivier Schonken <olivier.schonken@gmail.com>
++Date: Thu, 21 Jan 2016 23:04:49 +0100
++Subject: [PATCH] Do not use genstrings
++
++Using cross compiled genstrings while cross-compiling will break
++compilation.  Genstrings is still compiled because some power users
++might want to do ppd compilation on their target machine, and for that
++they would need to use the native compiled genstrings binary, to
++generate a sample.c file for their target
++
++Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
++[Thomas: completely remove call to genstrings rather than commenting
++it, remove useless and potentially confusing 'echo' before the
++genstrings call.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ ppdc/Makefile | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/ppdc/Makefile b/ppdc/Makefile
++index 68bf6b2..d57a0c9 100644
++--- a/ppdc/Makefile
+++++ b/ppdc/Makefile
++@@ -242,8 +242,6 @@ genstrings:		genstrings.o libcupsppdc.a ../cups/$(LIBCUPSSTATIC) \
++ 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o genstrings genstrings.o \
++ 		libcupsppdc.a ../cups/$(LIBCUPSSTATIC) $(LIBGSSAPI) $(SSLLIBS) \
++ 		$(DNSSDLIBS) $(COMMONLIBS) $(LIBZ)
++-	echo Generating localization strings...
++-	./genstrings >sample.c
++ 
++ 
++ #
++-- 
++2.6.4
++
+diff --git a/package/cups/0002-fix-stack-protector-check.patch b/package/cups/0002-fix-stack-protector-check.patch
+deleted file mode 100644
+index 1db35ff..0000000
+--- a/package/cups/0002-fix-stack-protector-check.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-[PATCH]: use AC_TRY_LINK for stack protector check
+-
+-Actually try to link an executable to test for stack protector support,
+-as gcc seems to accept the -fstack-protector argument even when it's
+-compiled with --disable-libssp (but linking fails with a error
+-finding -lssp_nonshared).
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ----
-- ping_common.h | 2 +-
+- config-scripts/cups-compiler.m4 |    2 +-
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/ping_common.h b/ping_common.h
--index d2a2b5c..6726e1b 100644
----- a/ping_common.h
--+++ b/ping_common.h
--@@ -140,7 +140,7 @@ static inline void write_stdout(const char *str, size_t len)
-- 	do {
-- 		cc = write(STDOUT_FILENO, str + o, len - o);
-- 		o += cc;
---	} while (len >= o || cc < 0);
--+	} while (len > o || cc < 0);
-- }
+-Index: cups-1.3.9/config-scripts/cups-compiler.m4
+-===================================================================
+---- cups-1.3.9.orig/config-scripts/cups-compiler.m4
+-+++ cups-1.3.9/config-scripts/cups-compiler.m4
+-@@ -109,7 +109,7 @@ if test -n "$GCC"; then
+- 	AC_MSG_CHECKING(if GCC supports -fstack-protector)
+- 	OLDCFLAGS="$CFLAGS"
+- 	CFLAGS="$CFLAGS -fstack-protector"
+--	AC_TRY_COMPILE(,,
+-+	AC_TRY_LINK(,,
+- 		OPTIM="$OPTIM -fstack-protector"
+- 		AC_MSG_RESULT(yes),
+- 		AC_MSG_RESULT(no))
+diff --git a/package/cups/0003-Sanitize-the-installation-process.patch b/package/cups/0003-Sanitize-the-installation-process.patch
+new file mode 100644
+index 0000000..25bfa42
+--- /dev/null
++++ b/package/cups/0003-Sanitize-the-installation-process.patch
+@@ -0,0 +1,131 @@
++From e35f809c435c224954a5c7bff3f5729c5b3bc0ba Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 21 Jan 2016 23:21:06 +0100
++Subject: [PATCH] Sanitize the installation process
++
++The installation process does two things that are not convenient when
++cross-compiling:
++
++ - It uses install's -s option to strip binaries, but this option uses
++   the host strip and not the cross strip, which fails at stripping
++   binaries. In addition, we do not necessarily want cups to strip its
++   binaries, we may want to keep the debugging symbols.
++
++ - It enforces ownership (user, group) which isn't possible since
++   "make install" isn't executed as root when cross-compiling.
++
++ - It installs many files and directories with permissions that
++   prevent overwriting those files/directories, which meant calling
++   "make install" twice was failing.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makedefs.in        | 12 ++++++------
++ conf/Makefile      |  6 +++---
++ notifier/Makefile  |  2 +-
++ scheduler/Makefile | 17 ++++++++---------
++ 4 files changed, 18 insertions(+), 19 deletions(-)
++
++diff --git a/Makedefs.in b/Makedefs.in
++index 3afef0a..3e4f1bd 100644
++--- a/Makedefs.in
+++++ b/Makedefs.in
++@@ -40,14 +40,14 @@ SHELL		=	/bin/sh
++ # Installation programs...
++ #
++ 
++-INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -c -m 555 @INSTALL_STRIP@
++-INSTALL_COMPDATA =	$(INSTALL) -c -m 444 @INSTALL_GZIP@
+++INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -c -m 755
+++INSTALL_COMPDATA =	$(INSTALL) -c -m 644 @INSTALL_GZIP@
++ INSTALL_CONFIG	=	$(INSTALL) -c -m @CUPS_CONFIG_FILE_PERM@
++-INSTALL_DATA	=	$(INSTALL) -c -m 444
+++INSTALL_DATA	=	$(INSTALL) -c -m 644
++ INSTALL_DIR	=	$(INSTALL) -d
++-INSTALL_LIB	=	$(LIBTOOL) $(INSTALL) -c -m 555 @INSTALL_STRIP@
++-INSTALL_MAN	=	$(INSTALL) -c -m 444
++-INSTALL_SCRIPT	=	$(INSTALL) -c -m 555
+++INSTALL_LIB	=	$(LIBTOOL) $(INSTALL) -c -m 755
+++INSTALL_MAN	=	$(INSTALL) -c -m 644
+++INSTALL_SCRIPT	=	$(INSTALL) -c -m 755
++ 
++ #
++ # Default user, group, and system groups for the scheduler...
++diff --git a/conf/Makefile b/conf/Makefile
++index 933d7d9..6ac5e19 100644
++--- a/conf/Makefile
+++++ b/conf/Makefile
++@@ -72,11 +72,11 @@ install:	all install-data install-headers install-libs install-exec
++ install-data:
++ 	for file in $(KEEP); do \
++ 		if test -r $(SERVERROOT)/$$file ; then \
++-			$(INSTALL_CONFIG) -g $(CUPS_GROUP) $$file $(SERVERROOT)/$$file.N ; \
+++			$(INSTALL_CONFIG) $$file $(SERVERROOT)/$$file.N ; \
++ 		else \
++-			$(INSTALL_CONFIG) -g $(CUPS_GROUP) $$file $(SERVERROOT) ; \
+++			$(INSTALL_CONFIG) $$file $(SERVERROOT) ; \
++ 		fi ; \
++-		$(INSTALL_CONFIG) -g $(CUPS_GROUP) $$file $(SERVERROOT)/$$file.default; \
+++		$(INSTALL_CONFIG) $$file $(SERVERROOT)/$$file.default; \
++ 	done
++ 	$(INSTALL_DIR) -m 755 $(DATADIR)/mime
++ 	for file in $(REPLACE); do \
++diff --git a/notifier/Makefile b/notifier/Makefile
++index 3206dd0..c34a4d7 100644
++--- a/notifier/Makefile
+++++ b/notifier/Makefile
++@@ -62,7 +62,7 @@ install:	all install-data install-headers install-libs install-exec
++ #
++ 
++ install-data:
++-	$(INSTALL_DIR) -m 775 -g $(CUPS_GROUP) $(CACHEDIR)/rss
+++	$(INSTALL_DIR) -m 775 $(CACHEDIR)/rss
++ 
++ 
++ #
++diff --git a/scheduler/Makefile b/scheduler/Makefile
++index c7d244d..a96a528 100644
++--- a/scheduler/Makefile
+++++ b/scheduler/Makefile
++@@ -148,30 +148,29 @@ install-data:
++ 	echo Creating $(SERVERBIN)/driver...
++ 	$(INSTALL_DIR) -m 755 $(SERVERBIN)/driver
++ 	echo Creating $(SERVERROOT)...
++-	$(INSTALL_DIR) -m 755 -g $(CUPS_GROUP) $(SERVERROOT)
+++	$(INSTALL_DIR) -m 755 $(SERVERROOT)
++ 	echo Creating $(SERVERROOT)/interfaces...
++-	$(INSTALL_DIR) -m 755 -g $(CUPS_GROUP) $(SERVERROOT)/interfaces
+++	$(INSTALL_DIR) -m 755 $(SERVERROOT)/interfaces
++ 	echo Creating $(SERVERROOT)/ppd...
++-	$(INSTALL_DIR) -m 755 -g $(CUPS_GROUP) $(SERVERROOT)/ppd
+++	$(INSTALL_DIR) -m 755 $(SERVERROOT)/ppd
++ 	if test "x`uname`" != xDarwin; then \
++ 		echo Creating $(SERVERROOT)/ssl...; \
++-		$(INSTALL_DIR) -m 700 -g $(CUPS_GROUP) $(SERVERROOT)/ssl; \
+++		$(INSTALL_DIR) -m 700 $(SERVERROOT)/ssl; \
++ 	fi
++ 	if test "$(STATEDIR)" != "$(SERVERROOT)"; then \
++ 		echo Creating $(STATEDIR)...; \
++ 		$(INSTALL_DIR) -m 755 $(STATEDIR); \
++ 	fi
++ 	echo Creating $(STATEDIR)/certs...
++-	$(INSTALL_DIR) -m 511 -o $(CUPS_USER) -g $(CUPS_PRIMARY_SYSTEM_GROUP) \
++-		$(STATEDIR)/certs
+++	$(INSTALL_DIR) -m 711 $(STATEDIR)/certs
++ 	echo Creating $(LOGDIR)...
++ 	$(INSTALL_DIR) -m 755 $(LOGDIR)
++ 	echo Creating $(REQUESTS)...
++-	$(INSTALL_DIR) -m 710 -g $(CUPS_GROUP) $(REQUESTS)
+++	$(INSTALL_DIR) -m 710 $(REQUESTS)
++ 	echo Creating $(REQUESTS)/tmp...
++-	$(INSTALL_DIR) -m 1770 -g $(CUPS_GROUP) $(REQUESTS)/tmp
+++	$(INSTALL_DIR) -m 1770 $(REQUESTS)/tmp
++ 	echo Creating $(CACHEDIR)...
++-	$(INSTALL_DIR) -m 770 -g $(CUPS_GROUP) $(CACHEDIR)
+++	$(INSTALL_DIR) -m 770 $(CACHEDIR)
++ 	if test "x$(INITDIR)" != x; then \
++ 		echo Installing init scripts...; \
++ 		$(INSTALL_DIR) -m 755 $(BUILDROOT)$(INITDIR)/init.d; \
++-- 
++2.6.4
++
+diff --git a/package/cups/0003-mantohtml.patch b/package/cups/0003-mantohtml.patch
+deleted file mode 100644
+index e6a10b0..0000000
+--- a/package/cups/0003-mantohtml.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- cups-1.3.5/man/Makefile	2007-07-12 21:01:14.000000000 -0400
+-+++ cups-1.3.5/man/Makefile	2008-02-11 08:55:24.000000000 -0500
+-@@ -173,7 +173,7 @@ html:	$(MAN1) $(MAN5) $(MAN7) $(MAN8) ma
+- 	done
 - 
-- /*
---- 
--2.1.3
--
-diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-index 5324639..40580d2 100644
---- a/package/iputils/Config.in
-+++ b/package/iputils/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_IPUTILS
- 	  This package is set of small useful utilities for Linux networking.
- 	  It includes complete versions of ping, traceroute, etc.
+- mantohtml:	mantohtml.o
+--	$(CC) $(LDFLAGS) -o $@ mantohtml.o
+-+	gcc -I/usr/include -I../ -L/usr/lib mantohtml.c -o mantohtml
+- 
+- 
+- #
+diff --git a/package/cups/Config.in b/package/cups/Config.in
+index 8e60221..3f5460c 100644
+--- a/package/cups/Config.in
++++ b/package/cups/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_CUPS
+ 	bool "cups"
+-	# serious security issues, needs upgrading
+-	depends on BR2_DEPRECATED_SINCE_2015_05
++	# needs libstdcpp for ppdc
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
+ 	help
+@@ -9,15 +9,5 @@ config BR2_PACKAGE_CUPS
  
--	  http://sourceforge.net/projects/iputils/
-+	  https://github.com/iputils/iputils
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index 21a2044..e32e134 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,2 +1,2 @@
--# From http://sourceforge.net/projects/iputils/files/
--sha1	3e85179746fd93000d6267bd55addfe97f321ba7	iputils-s20121011.tar.bz2
-+# Locally computed
-+sha256	0e98cb527fa175d1e08afb969c124e452b30968f10ec2c3b078f1440c8977a94	iputils-c8ff6feaf0442f8efd96ccb415770c54f9e84d47.tar.gz
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 7510d99..6392dec 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -4,10 +4,16 @@
+ 	  http://www.cups.org
+ 
+-if BR2_PACKAGE_CUPS
+-
+-config BR2_PACKAGE_CUPS_PDFTOPS
+-	bool "pdftops support"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	help
+-	  Enable pdftops support
+-
+-comment "pdftops support needs a toolchain w/ C++"
++comment "cups needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-
+-endif
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+new file mode 100644
+index 0000000..f38399f
+--- /dev/null
++++ b/package/cups/cups.hash
+@@ -0,0 +1,2 @@
++# Locally calculated:
++sha256 bab0ca3ba80eae48319b3a6b19a5b14fad5ce230f30151a0cfa4c0271df281ad  cups-2.1.2-source.tar.bz2
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index c028ef4..c07dcb4 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPUTILS_VERSION = s20121011
--IPUTILS_SITE = http://www.skbuff.net/iputils
--IPUTILS_SOURCE = iputils-$(IPUTILS_VERSION).tar.bz2
--IPUTILS_LICENSE = GPLv2+, BSD-3c
-+# The original upstream was forked to the github repository in 2014 to
-+# pull fixes from other distribution and centralize the changes after
-+# the upstream seemed to have gone dormant.  The fork contains the
-+# latest changes including msul support, removing a libsysfs dependency
-+# and IPv6 updates.
-+# http://www.spinics.net/lists/netdev/msg279881.html
+-CUPS_VERSION = 1.3.11
++CUPS_VERSION = 2.1.2
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.bz2
+ CUPS_SITE = http://www.cups.org/software/$(CUPS_VERSION)
+ CUPS_LICENSE = GPLv2 LGPLv2
+@@ -12,20 +12,24 @@ CUPS_LICENSE_FILES = LICENSE.txt
+ CUPS_INSTALL_STAGING = YES
+ CUPS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) DSTROOT=$(STAGING_DIR) install
+ CUPS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR) install
 +
-+IPUTILS_VERSION = c8ff6feaf0442f8efd96ccb415770c54f9e84d47
-+IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
-+IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
- # Only includes a license file for BSD
- IPUTILS_LICENSE_FILES = ninfod/COPYING
- IPUTILS_DEPENDENCIES = openssl
-@@ -18,11 +24,15 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- IPUTILS_DEPENDENCIES += busybox
- endif
- 
--# Disabling CAP_SETPCAP (file capabilities)
--IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_CAP=no USE_SYSFS=no\
--	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
--	arping clockdiff ping rarpd rdisc tftpd tracepath \
--	ping6 tracepath6 traceroute6
-+IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no\
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ CUPS_CONF_OPTS = \
+ 	--without-perl \
+ 	--without-java \
+ 	--without-php \
+-	--disable-gnutls \
+ 	--disable-gssapi \
+ 	--libdir=/usr/lib
+ CUPS_CONFIG_SCRIPTS = cups-config
+-
+ CUPS_DEPENDENCIES = \
+-	$(if $(BR2_PACKAGE_ZLIB),zlib) \
+-	$(if $(BR2_PACKAGE_LIBPNG),libpng) \
+-	$(if $(BR2_PACKAGE_JPEG),jpeg) \
+-	$(if $(BR2_PACKAGE_TIFF),tiff)
++	$(if $(BR2_PACKAGE_ZLIB),zlib)
 +
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+IPUTILS_MAKE_OPTS += USE_CAP=yes
-+IPUTILS_DEPENDENCIES += libcap
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++CUPS_CONF_OPTS += --with-systemd=/usr/lib/systemd/system \
++	--enable-systemd
++CUPS_DEPENDENCIES += systemd
 +else
-+IPUTILS_MAKE_OPTS += USE_CAP=no
++CUPS_CONF_OPTS += --disable-systemd
 +endif
  
- define IPUTILS_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
-@@ -36,7 +46,6 @@ define IPUTILS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/rdisc       $(TARGET_DIR)/sbin/rdisc
- 	$(INSTALL) -D -m 755 $(@D)/tftpd       $(TARGET_DIR)/usr/sbin/in.tftpd
- 	$(INSTALL) -D -m 755 $(@D)/tracepath   $(TARGET_DIR)/bin/tracepath
--	$(INSTALL) -D -m 755 $(@D)/ping6       $(TARGET_DIR)/bin/ping6
- 	$(INSTALL) -D -m 755 $(@D)/tracepath6  $(TARGET_DIR)/bin/tracepath6
- 	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
- endef
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ CUPS_CONF_OPTS += --enable-dbus
+@@ -34,8 +38,11 @@ else
+ CUPS_CONF_OPTS += --disable-dbus
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+-CUPS_DEPENDENCIES += xlib_libX11
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++CUPS_CONF_OPTS += --enable-gnutls
++CUPS_DEPENDENCIES += gnutls
++else
++CUPS_CONF_OPTS += --disable-gnutls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+@@ -45,18 +52,25 @@ else
+ CUPS_CONF_OPTS += --without-python
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_CUPS_PDFTOPS),y)
+-CUPS_CONF_OPTS += --enable-pdftops
++ifeq ($(BR2_PACKAGE_LIBUSB),y)
++CUPS_CONF_OPTS += --enable-libusb
++CUPS_DEPENDENCIES += libusb
+ else
+-CUPS_CONF_OPTS += --disable-pdftops
++CUPS_CONF_OPTS += --disable-libusb
+ endif
+ 
+-# standard autoreconf fails with autoheader failures
+-define CUPS_FIXUP_AUTOCONF
+-	cd $(@D) && $(AUTOCONF)
+-endef
+-CUPS_DEPENDENCIES += host-autoconf
++ifeq ($(BR2_PACKAGE_LIBPAPER),y)
++CUPS_CONF_OPTS += --enable-libpaper
++CUPS_DEPENDENCIES += libpaper
++else
++CUPS_CONF_OPTS += --disable-libpaper
++endif
+ 
+-CUPS_PRE_CONFIGURE_HOOKS += CUPS_FIXUP_AUTOCONF
++ifeq ($(BR2_PACKAGE_AVAHI),y)
++CUPS_DEPENDENCIES += avahi
++CUPS_CONF_OPTS += --enable-avahi
++else
++CUPS_CONF_OPTS += --disable-avahi
++endif
+ 
+ $(eval $(autotools-package))
