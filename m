@@ -1,44 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Jan 2016 15:09:51 +0100
-Subject: [Buildroot] [PATCH] board: add support for Freescale i.MX6UL
- Evaluation Kit
-In-Reply-To: <56A0E50A.2060002@free.fr>
-References: <1453300220-29113-1-git-send-email-julien.boibessot@free.fr>
- <20160120211015.79807c32@free-electrons.com>
- <56A0C3B7.40900@free.fr>
- <20160121133257.38d9a56a@free-electrons.com>
- <56A0E50A.2060002@free.fr>
-Message-ID: <20160121150951.421a1ec4@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 21 Jan 2016 11:12:33 -0300
+Subject: [Buildroot] [PATCH] libsecret: bump to version 0.18.4
+Message-ID: <1453385553-9419-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libsecret/libsecret.hash | 4 ++--
+ package/libsecret/libsecret.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Thu, 21 Jan 2016 15:02:50 +0100, Julien Boibessot wrote:
-
-> >> So I ended up in using i.XM28EVK way of doing
-> >> (board/freescale/imx28evk/create-boot-sd.sh).
-> >> Do you agree ?
-> > genimage is perfectly capable of creating a vfat partition, see
-> > board/raspberrypi/genimage-raspberrypi.cfg for an example.
-> 
-> cool ! Is that new ?
-
-No, I don't think this genimage capability is new. However, what is
-rather new is this raspberrypi.cfg configuration in Buildroot.
-
-> No problemo ! Can you recommend a test tool to evaluate Floating point
-> performances inside BR ?
-
-Maybe whetstone, but I'm not sure as I've never used it.
-
-Best regards,
-
-Thomas
+diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
+index d40f320..cd405e6 100644
+--- a/package/libsecret/libsecret.hash
++++ b/package/libsecret/libsecret.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.3.sha256sum
+-sha256	f2bf1d0c5ab4640664f3e3c7ef6b086c180e50ff415720b5e22f96750dbf84c9	libsecret-0.18.3.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.4.sha256sum
++sha256	0f29b51698198e6999c91f4adce3119c8c457f546b133a85baea5ea9010a19ed	libsecret-0.18.4.tar.xz
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index a762dd7..84e9f3b 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSECRET_VERSION_MAJOR = 0.18
+-LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).3
++LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).4
+ LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
+ LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+ LIBSECRET_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
