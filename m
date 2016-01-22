@@ -1,106 +1,60 @@
-From: David Picard <davepiq@yahoo.fr>
-Date: Fri, 22 Jan 2016 18:44:34 +0100
-Subject: [Buildroot] [PATCH 2/2] Qwt package : added dependency to Qt5
-	besides Qt.
-In-Reply-To: <1453484674-8951-1-git-send-email-davepiq@yahoo.fr>
-References: <1453484674-8951-1-git-send-email-davepiq@yahoo.fr>
-Message-ID: <1453484674-8951-2-git-send-email-davepiq@yahoo.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 22 Jan 2016 18:46:52 +0100
+Subject: [Buildroot] [PATCH] mpd: disable for sparcv8
+In-Reply-To: <20160120101807.33930860@free-electrons.com>
+References: <20160119224338.GA16884@waldemar-brodkorb.de>
+ <20160120101807.33930860@free-electrons.com>
+Message-ID: <20160122174652.GM17143@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replaced the original select by depends on, due to recursive dependencies
-involving qt5base. Qwt optional modules not tested.
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Signed-off-by: David Picard <davepiq@yahoo.fr>
----
- package/qwt/Config.in | 20 +++++++++++++-------
- package/qwt/qwt.mk    | 16 +++++++++++++++-
- 2 files changed, 28 insertions(+), 8 deletions(-)
+> Dear Waldemar Brodkorb,
+> 
+> On Tue, 19 Jan 2016 23:43:38 +0100, Waldemar Brodkorb wrote:
+> > Even the main source code in mpd requires some missing
+> > atomic ops. So only disable some failing plugins, does not
+> > solve the following autobuild error:
+> > http://autobuild.buildroot.net/results/e2207280f3a177e12dba502b1c01f5aeb431d04c/
+> > 
+> > Leon3 works fine.
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> >  package/mpd/Config.in |    2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+> > index be0843f..b88c0ca 100644
+> > --- a/package/mpd/Config.in
+> > +++ b/package/mpd/Config.in
+> > @@ -6,6 +6,7 @@ menuconfig BR2_PACKAGE_MPD
+> >  	depends on BR2_USE_MMU # libglib2
+> >  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+> >  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+> > +	depends on !BR2_sparc_v8 # feature need atomic ops
+> 
+> To be honest, I don't really like this solution. I know it is the
+> easiest quick fix, but it's not the long-term proper solution.
+> 
+> Instead, I've started looking at all architectures, to see which of the
+> __sync_*() and __atomic_*() builtins are supported, when -latomic is
+> needed or not needed, etc. Once we have this picture, we can then
+> design how such dependencies should be expressed rather than adding
+> more and more architecture exclusions.
 
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-index 8c7bc56..40b382b 100644
---- a/package/qwt/Config.in
-+++ b/package/qwt/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_QWT
- 	bool "qwt"
--	depends on BR2_PACKAGE_QT
--	depends on BR2_PACKAGE_QT_GUI_MODULE
-+	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5BASE
-+	depends on BR2_PACKAGE_QT_GUI_MODULE || BR2_PACKAGE_QT5BASE_GUI
-+	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5BASE
- 	help
- 	  Qwt is a graphics extension to the Qt GUI application
- 	  framework. It provides a 2D plotting widget and more.
-@@ -12,7 +13,8 @@ if BR2_PACKAGE_QWT
- 
- config BR2_PACKAGE_QWT_SVG
- 	bool "SVG support"
--	select BR2_PACKAGE_QT_SVG
-+	depends on BR2_PACKAGE_QT_SVG || BR2_PACKAGE_QT5SVG
-+
- 
- config BR2_PACKAGE_QWT_MATHML
- 	bool "MathML support"
-@@ -21,10 +23,14 @@ config BR2_PACKAGE_QWT_OPENGL
- 	bool "OpenGL support"
- 	depends on BR2_PACKAGE_HAS_LIBGLES
- 	depends on BR2_PACKAGE_HAS_LIBEGL
--	select BR2_PACKAGE_QT_OPENGL_ES
-+	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5BASE
-+
-+comment "SVG support depends on Qt or Qt5 SVG module"
-+	depends on !BR2_PACKAGE_QT_SVG && !BR2_PACKAGE_QT5SVG
- 
- endif
- 
--comment "qwt depends on QT gui module"
--	depends on BR2_PACKAGE_QT
--	depends on !BR2_PACKAGE_QT_GUI_MODULE
-+comment "qwt depends on Qt or Qt5 gui module"
-+	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5BASE
-+	depends on !BR2_PACKAGE_QT_GUI_MODULE && !BR2_PACKAGE_QT5BASE_GUI
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index 8a46c25..cdb3008 100644
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
-@@ -8,7 +8,14 @@ QWT_VERSION = 6.1.2
- QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
- QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
- QWT_INSTALL_STAGING = YES
--QWT_DEPENDENCIES = qt
-+ifeq ($(BR2_PACKAGE_QT),y)
-+QWT_DEPENDENCIES += qt
-+endif
-+ifeq ($(BR2_PACKAGE_QT5BASE),y)
-+QWT_DEPENDENCIES += qt5base
-+QT5_MAKE = $(HOST_DIR)/usr/bin/qmake -spec $(HOST_DIR)/mkspecs/devices/linux-buildroot-g++
-+endif
-+
- 
- QWT_LICENSE = LGPLv2.1 with exceptions
- QWT_LICENSE_FILES = COPYING
-@@ -35,10 +42,17 @@ else
- QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtOpenGL.*$$/\# QWT_CONFIG += QwtOpenGL/'
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT),y)
- define QWT_CONFIGURE_CMDS
- 	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
- endef
-+else
-+define QWT_CONFIGURE_CMDS
-+	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE))
-+endef
-+endif
- 
- define QWT_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
--- 
-1.9.1
+May be we can add this patch now and when you figured everything out
+to do a clean solution, you just use grep to find the problematic
+packages disabled for sparc/sparc64.
+
+Therefore we have some fewer autobuild failures meanwhile.
+Other atomic related patches got applied, so we should do this until
+your refactoring.
+
+best regards
+ Waldemar
