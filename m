@@ -1,104 +1,54 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 22 Jan 2016 08:41:01 -0300
-Subject: [Buildroot] [PATCH] bind: rename ptrsize to ptr_size in the code
-Message-ID: <1453462861-32484-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 22 Jan 2016 12:14:22 +0000
+Subject: [Buildroot] [PATCH] toolchain: add a harmless link when sysroot
+	detection is not accurate
+Message-ID: <1453464862-33174-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc in commit 70a04a28 #defined ptrsize globally in bits/setjmp.h for
-mips. However this is a common variable name and causes build failure
-for at least bind.
-So rename ptrsize to ptr_size in bind to avoid this. Fixes:
-http://autobuild.buildroot.net/results/a92/a92fa5dc5d9d6742d61d4d293f7eac97c5355dfe/
+Sometimes is not possible to detect if the sysroots are nested or side
+by side. For instance this happens for MIPS big endian, where the
+sysroot and the arch-sysroot directories are the same.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+For those cases where the sysroot detection is not accurate we add a
+harmless symlink necessary for certain toolchains.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/bind/0003-Rename-ptrsize-to-ptr_size.patch | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/bind/0003-Rename-ptrsize-to-ptr_size.patch
+ toolchain/helpers.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/bind/0003-Rename-ptrsize-to-ptr_size.patch b/package/bind/0003-Rename-ptrsize-to-ptr_size.patch
-new file mode 100644
-index 0000000..e3b58e2
---- /dev/null
-+++ b/package/bind/0003-Rename-ptrsize-to-ptr_size.patch
-@@ -0,0 +1,74 @@
-+From 254dc19788ba2a03504fc6d1036fef477a60035f Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Fri, 22 Jan 2016 08:31:02 -0300
-+Subject: [PATCH] Rename ptrsize to ptr_size
-+
-+This is to compensate for a uClibc mess caused by commit
-+70a04a287a2875c82e6822c36e071afba5b63a62 where ptrsize is defined for
-+mips, hence causing build breakage under certain conditions for programs
-+that use this variable name.
-+
-+Status: definitely not upstreamable.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ lib/dns/rbt.c   | 6 +++---
-+ lib/dns/rbtdb.c | 4 ++--
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/lib/dns/rbt.c b/lib/dns/rbt.c
-+index 86b5183..5fd55de 100644
-+--- a/lib/dns/rbt.c
-++++ b/lib/dns/rbt.c
-+@@ -113,7 +113,7 @@ struct file_header {
-+ 	 * information about the system on which the map file was generated
-+ 	 * will be used to tell if we can load the map file or not
-+ 	 */
-+-	isc_uint32_t ptrsize;
-++	isc_uint32_t ptr_size;
-+ 	unsigned int bigendian:1;	/* big or little endian system */
-+ 	unsigned int rdataset_fixed:1;	/* compiled with --enable-rrset-fixed */
-+ 	unsigned int nodecount;		/* shadow from rbt structure */
-+@@ -517,7 +517,7 @@ write_header(FILE *file, dns_rbt_t *rbt, isc_uint64_t first_node_offset,
-+ 	memmove(header.version1, FILE_VERSION, sizeof(header.version1));
-+ 	memmove(header.version2, FILE_VERSION, sizeof(header.version2));
-+ 	header.first_node_offset = first_node_offset;
-+-	header.ptrsize = (isc_uint32_t) sizeof(void *);
-++	header.ptr_size = (isc_uint32_t) sizeof(void *);
-+ 	header.bigendian = (1 == htonl(1)) ? 1 : 0;
-+ 
-+ #ifdef DNS_RDATASET_FIXED
-+@@ -902,7 +902,7 @@ dns_rbt_deserialize_tree(void *base_address, size_t filesize,
-+ 	}
-+ #endif
-+ 
-+-	if (header->ptrsize != (isc_uint32_t) sizeof(void *)) {
-++	if (header->ptr_size != (isc_uint32_t) sizeof(void *)) {
-+ 		result = ISC_R_INVALIDFILE;
-+ 		goto cleanup;
-+ 	}
-+diff --git a/lib/dns/rbtdb.c b/lib/dns/rbtdb.c
-+index c7168cb..dbcf944 100644
-+--- a/lib/dns/rbtdb.c
-++++ b/lib/dns/rbtdb.c
-+@@ -114,7 +114,7 @@ typedef struct rbtdb_file_header rbtdb_file_header_t;
-+ 
-+ struct rbtdb_file_header {
-+ 	char version1[32];
-+-	isc_uint32_t ptrsize;
-++	isc_uint32_t ptr_size;
-+ 	unsigned int bigendian:1;
-+ 	isc_uint64_t tree;
-+ 	isc_uint64_t nsec;
-+@@ -7593,7 +7593,7 @@ rbtdb_write_header(FILE *rbtfile, off_t tree_location, off_t nsec_location,
-+ 	memset(&header, 0, sizeof(rbtdb_file_header_t));
-+ 	memmove(header.version1, FILE_VERSION, sizeof(header.version1));
-+ 	memmove(header.version2, FILE_VERSION, sizeof(header.version2));
-+-	header.ptrsize = (isc_uint32_t) sizeof(void *);
-++	header.ptr_size = (isc_uint32_t) sizeof(void *);
-+ 	header.bigendian = (1 == htonl(1)) ? 1 : 0;
-+ 	header.tree = (isc_uint64_t) tree_location;
-+ 	header.nsec = (isc_uint64_t) nsec_location;
-+-- 
-+2.4.10
-+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 70695ee..1f8a60c 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -163,6 +163,7 @@ copy_toolchain_sysroot = \
+ 	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} ] ; then \
+ 		relpath="./" ; \
+ 		if [ $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
++			echo "Nested sysroots detected." ; \
+ 			if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+ 				cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+ 			fi ; \
+@@ -174,9 +175,16 @@ copy_toolchain_sysroot = \
+ 			ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
+ 			echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+ 		elif [ `dirname $${ARCH_SYSROOT_DIR_CANON}` == `dirname $${SYSROOT_DIR_CANON}` ] ; then \
++			echo "Side by side sysroots detected." ; \
+ 			ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
+ 			echo "Symlinking $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` -> $${relpath}" ; \
+ 		fi ; \
++	else \
++		relpath="./" ; \
++		echo "Unable to detect if sysroots are nested or side by side." ; \
++		echo "Creating a harmless symlink necessary for certain toolchains." ; \
++		ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
++		echo "Symlinking $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` -> $${relpath}" ; \
+ 	fi ; \
+ 	if test -n "$${SUPPORT_LIB_DIR}" ; then \
+ 		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
 -- 
 2.4.10
