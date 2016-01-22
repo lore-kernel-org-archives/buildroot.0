@@ -1,231 +1,164 @@
 From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Date: Fri, 22 Jan 2016 12:53:38 -0300
-Subject: [Buildroot] [PATCH 1/3] mali-t76x: add new package
+Date: Fri, 22 Jan 2016 12:53:39 -0300
+Subject: [Buildroot] [PATCH 2/3] board/firefly_rk3288: add new board
 In-Reply-To: <1453478020-311-1-git-send-email-ariel@vanguardiasur.com.ar>
 References: <1453478020-311-1-git-send-email-ariel@vanguardiasur.com.ar>
-Message-ID: <1453478020-311-2-git-send-email-ariel@vanguardiasur.com.ar>
+Message-ID: <1453478020-311-3-git-send-email-ariel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package provides the binary user-space components for the ARM Mali
-Midgard T76X GPU.
-
-Note that this package requires a kernel with the ARM Mali Midgard GPU
-Kernel Drivers enabled.
+More info about the board:
+http://en.t-firefly.com/en/firenow/firefly_rk3288/specifications/
 
 Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
 ---
- package/Config.in                                  |  1 +
- ...latform.h-with-framebuffer-instead-of-X11.patch | 39 +++++++++++++
- package/mali-t76x/Config.in                        | 27 +++++++++
- package/mali-t76x/egl.pc                           | 12 ++++
- package/mali-t76x/glesv2.pc                        | 12 ++++
- package/mali-t76x/rockchip-mali.mk                 | 64 ++++++++++++++++++++++
- 6 files changed, 155 insertions(+)
- create mode 100644 package/mali-t76x/0001-use-eglplatform.h-with-framebuffer-instead-of-X11.patch
- create mode 100644 package/mali-t76x/Config.in
- create mode 100644 package/mali-t76x/egl.pc
- create mode 100644 package/mali-t76x/glesv2.pc
- create mode 100644 package/mali-t76x/rockchip-mali.mk
+ board/firefly/firefly-rk3288/build_sd_image.sh | 18 ++++++++++++
+ board/firefly/firefly-rk3288/extlinux.conf     |  6 ++++
+ board/firefly/firefly-rk3288/post-image.sh     |  6 ++++
+ board/firefly/firefly-rk3288/pre-image.sh      |  3 ++
+ board/firefly/firefly-rk3288/readme.txt        | 40 ++++++++++++++++++++++++++
+ board/firefly/firefly-rk3288/sd-image.cfg      | 22 ++++++++++++++
+ 6 files changed, 95 insertions(+)
+ create mode 100755 board/firefly/firefly-rk3288/build_sd_image.sh
+ create mode 100644 board/firefly/firefly-rk3288/extlinux.conf
+ create mode 100755 board/firefly/firefly-rk3288/post-image.sh
+ create mode 100755 board/firefly/firefly-rk3288/pre-image.sh
+ create mode 100644 board/firefly/firefly-rk3288/readme.txt
+ create mode 100644 board/firefly/firefly-rk3288/sd-image.cfg
 
-diff --git a/package/Config.in b/package/Config.in
-index 09c2b40..274c451 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -398,6 +398,7 @@ endif
- 	source "package/lshw/Config.in"
- 	source "package/lsuio/Config.in"
- 	source "package/lvm2/Config.in"
-+	source "package/mali-t76x/Config.in"
- 	source "package/mdadm/Config.in"
- 	source "package/memtest86/Config.in"
- 	source "package/memtester/Config.in"
-diff --git a/package/mali-t76x/0001-use-eglplatform.h-with-framebuffer-instead-of-X11.patch b/package/mali-t76x/0001-use-eglplatform.h-with-framebuffer-instead-of-X11.patch
-new file mode 100644
-index 0000000..9311f18
+diff --git a/board/firefly/firefly-rk3288/build_sd_image.sh b/board/firefly/firefly-rk3288/build_sd_image.sh
+new file mode 100755
+index 0000000..ae7fde1
 --- /dev/null
-+++ b/package/mali-t76x/0001-use-eglplatform.h-with-framebuffer-instead-of-X11.patch
-@@ -0,0 +1,39 @@
-+From 90a1279f7d7bf4a584124cf4c20fbd6e0eee0396 Mon Sep 17 00:00:00 2001
-+From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-+Date: Thu, 17 Dec 2015 04:26:05 -0300
-+Subject: [PATCH] use eglplatform.h with framebuffer instead of X11
++++ b/board/firefly/firefly-rk3288/build_sd_image.sh
+@@ -0,0 +1,18 @@
++#!/bin/bash
 +
-+Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-+---
-+ eglplatform.h | 15 ++++++++-------
-+ 1 file changed, 8 insertions(+), 7 deletions(-)
++set -ue
 +
-+diff --git a/eglplatform.h b/eglplatform.h
-+index 1284089..762fc57 100644
-+--- a/eglplatform.h
-++++ b/eglplatform.h
-+@@ -95,13 +95,14 @@ typedef void*                           EGLNativeDisplayType;
-+ 
-+ #elif defined(__unix__)
-+ 
-+-/* X11 (tentative)  */
-+-#include <X11/Xlib.h>
-+-#include <X11/Xutil.h>
-+-
-+-typedef Display *EGLNativeDisplayType;
-+-typedef Pixmap   EGLNativePixmapType;
-+-typedef Window   EGLNativeWindowType;
-++struct mali_native_window {
-++	unsigned short width;
-++	unsigned short height;
-++};
-++
-++typedef void*         EGLNativeDisplayType;
-++typedef void*         EGLNativePixmapType;
-++typedef struct mali_native_window *EGLNativeWindowType;
-+ 
-+ #else
-+ #error "Platform not recognized"
-+-- 
-+2.6.4
++D=board/firefly/firefly-rk3288
++CFG=${D}/sd-image.cfg
 +
-diff --git a/package/mali-t76x/Config.in b/package/mali-t76x/Config.in
++T=$(mktemp -d)
++mkdir -p $T/{root,tmp}
++
++$HOST_DIR/usr/bin/genimage		\
++	--rootpath $T/root/			\
++	--tmppath $T/tmp/			\
++	--inputpath $BINARIES_DIR/	\
++	--outputpath $BINARIES_DIR/	\
++	--config ${CFG}				\
++
++rm -rf $T
+diff --git a/board/firefly/firefly-rk3288/extlinux.conf b/board/firefly/firefly-rk3288/extlinux.conf
 new file mode 100644
-index 0000000..b87622a
+index 0000000..65092d2
 --- /dev/null
-+++ b/package/mali-t76x/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_MALI_T76X
-+	bool "mali-t76x"
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_ARM_EABIHF
-+	depends on BR2_arm
-+	help
-+	  Install the binary user-space components for the ARM Mali Midgard
-+	  T76X GPU. This package requires a kernel with the ARM Mali Midgard
-+	  GPU Kernel Drivers enabled.
++++ b/board/firefly/firefly-rk3288/extlinux.conf
+@@ -0,0 +1,6 @@
++default firefly-rk3288
 +
-+	  Source: http://malideveloper.arm.com/resources/drivers/
++label firefly-rk3288
++kernel /boot/uImage
++devicetree /boot/rk3288-firefly.dtb
++append console=ttyS2,115200n8 earlyprintk init=/sbin/init root=/dev/mmcblk0p1 rootwait
+diff --git a/board/firefly/firefly-rk3288/post-image.sh b/board/firefly/firefly-rk3288/post-image.sh
+new file mode 100755
+index 0000000..98c2778
+--- /dev/null
++++ b/board/firefly/firefly-rk3288/post-image.sh
+@@ -0,0 +1,6 @@
++board=board/firefly/firefly-rk3288
++MKIMAGE=$HOST_DIR/usr/bin/mkimage
 +
-+if BR2_PACKAGE_MALI_T76X
++$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-spl-dtb.bin $BINARIES_DIR/u-boot-spl-dtb.img
 +
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "mali-t76x"
++${board}/build_sd_image.sh
+diff --git a/board/firefly/firefly-rk3288/pre-image.sh b/board/firefly/firefly-rk3288/pre-image.sh
+new file mode 100755
+index 0000000..7770f6b
+--- /dev/null
++++ b/board/firefly/firefly-rk3288/pre-image.sh
+@@ -0,0 +1,3 @@
++board=board/firefly/firefly-rk3288
 +
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "mali-t76x"
-+
-+endif
-+
-+comment "mali-t76x needs an (e)glibc toolchain with armhf enabled"
-+	depends on BR2_arm
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
-diff --git a/package/mali-t76x/egl.pc b/package/mali-t76x/egl.pc
++install -m 0644 -D $board/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+diff --git a/board/firefly/firefly-rk3288/readme.txt b/board/firefly/firefly-rk3288/readme.txt
 new file mode 100644
-index 0000000..f9ccf07
+index 0000000..d621085
 --- /dev/null
-+++ b/package/mali-t76x/egl.pc
-@@ -0,0 +1,12 @@
-+prefix=/usr/
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
++++ b/board/firefly/firefly-rk3288/readme.txt
+@@ -0,0 +1,40 @@
++Firefly RK3288
 +
-+Name: egl
-+Description: ARM Mali implementation of EGL
-+Version: 1.5
-+Requires:
-+Libs: -L${libdir} -lEGL -lGLESv2
-+Cflags: -I${includedir}
++How to build it
++===============
 +
-diff --git a/package/mali-t76x/glesv2.pc b/package/mali-t76x/glesv2.pc
++  $ make firefly_rk3288_defconfig
++
++Then you can edit the build options using
++
++  $ make menuconfig
++
++Compile all and build rootfs image:
++
++  $ make
++
++Result of the build
++-------------------
++
++After building, you should get a tree like this:
++
++  output/images/
++  ??? rk3288-firefly.dtb
++  ??? rootfs.ext2
++  ??? rootfs.ext4 -> rootfs.ext2
++  ??? sdcard.img
++  ??? u-boot-dtb.img
++  ??? u-boot-spl-dtb.bin
++  ??? u-boot-spl-dtb.img
++  ??? uImage
++
++Prepare your SDCard
++===================
++
++Buildroot generates a ready-to-use SD card image that you can flash directly to
++the card. The image will be in output/images/sdcard.img.
++You can write this image directly to an SD card device (i.e. /dev/xxx):
++
++  $ dd if=output/images/sdcard.img of=/dev/xxx
++
++Finally, you can insert the SD card to the Firefly RK3288 board and boot it.
+diff --git a/board/firefly/firefly-rk3288/sd-image.cfg b/board/firefly/firefly-rk3288/sd-image.cfg
 new file mode 100644
-index 0000000..6910b46
+index 0000000..a9eb9f0
 --- /dev/null
-+++ b/package/mali-t76x/glesv2.pc
-@@ -0,0 +1,12 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
++++ b/board/firefly/firefly-rk3288/sd-image.cfg
+@@ -0,0 +1,22 @@
++image sdcard.img {
++  hdimage {
++  }
 +
-+Name: glesv2
-+Description: ARM Mali implementation of OpenGL ESv2
-+Version: 2.0
-+Requires:
-+Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
-+Cflags: -I${includedir}
++  partition u-boot-spl-dtb {
++    in-partition-table = "no"
++    image = "u-boot-spl-dtb.img"
++    offset = 32K
++  }
 +
-diff --git a/package/mali-t76x/rockchip-mali.mk b/package/mali-t76x/rockchip-mali.mk
-new file mode 100644
-index 0000000..3117864
---- /dev/null
-+++ b/package/mali-t76x/rockchip-mali.mk
-@@ -0,0 +1,64 @@
-+################################################################################
-+#
-+# mali-t76x
-+#
-+################################################################################
++  partition u-boot-dtb {
++    in-partition-table = "no"
++    image = "u-boot-dtb.img"
++    offset = 128K
++  }
 +
-+MALI_T76X_VERSION = r5p0-06rel0
-+MALI_T76X_SOURCE = mali-t76x_$(MALI_T76X_VERSION)_linux_1+fbdev.tar.gz
-+MALI_T76X_SITE = http://malideveloper.arm.com/downloads/drivers/binary/$(MALI_T76X_VERSION)
-+
-+MALI_T76X_EXTRA_SITE = https://www.khronos.org/registry
-+MALI_T76X_EXTRA_DOWNLOADS = \
-+	$(MALI_T76X_EXTRA_SITE)/egl/api/EGL/egl.h \
-+	$(MALI_T76X_EXTRA_SITE)/egl/api/EGL/eglext.h \
-+	$(MALI_T76X_EXTRA_SITE)/egl/api/EGL/eglplatform.h \
-+	$(MALI_T76X_EXTRA_SITE)/gles/api/GLES/gl.h \
-+	$(MALI_T76X_EXTRA_SITE)/gles/api/GLES/glext.h \
-+	$(MALI_T76X_EXTRA_SITE)/gles/api/GLES/glplatform.h \
-+	$(MALI_T76X_EXTRA_SITE)/gles/api/old/2.0/gl2.h \
-+	$(MALI_T76X_EXTRA_SITE)/gles/api/old/2.0/gl2ext.h \
-+	$(MALI_T76X_EXTRA_SITE)/gles/api/old/2.0/gl2platform.h \
-+	$(MALI_T76X_EXTRA_SITE)/egl/api/KHR/khrplatform.h
-+
-+MALI_T76X_INSTALL_STAGING = YES
-+MALI_T76X_PROVIDES = libegl libgles
-+
-+define MALI_T76X_PRE_PATCH
-+	cp $(BR2_DL_DIR)/eglplatform.h $(@D)/eglplatform.h
-+endef
-+
-+MALI_T76X_PRE_PATCH_HOOKS += MALI_T76X_PRE_PATCH
-+
-+define MALI_T76X_INSTALL_STAGING_CMDS
-+	$(INSTALL) -m 755 $(@D)/*.so $(STAGING_DIR)/usr/lib/
-+
-+	$(INSTALL) -D -m 0644 package/mali-t76x/egl.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
-+	$(INSTALL) -D -m 0644 package/mali-t76x/glesv2.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
-+
-+	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/EGL
-+	$(INSTALL) -D -m 0644 $(BR2_DL_DIR)/egl.h $(STAGING_DIR)/usr/include/EGL
-+	$(INSTALL) -D -m 0644 $(BR2_DL_DIR)/eglext.h $(STAGING_DIR)/usr/include/EGL
-+	$(INSTALL) -D -m 0644 $(@D)/eglplatform.h $(STAGING_DIR)/usr/include/EGL
-+
-+	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/GLES
-+	$(INSTALL) -D -m 0644 $(BR2_DL_DIR)/gl.h $(STAGING_DIR)/usr/include/GLES
-+	$(INSTALL) -D -m 0644 $(BR2_DL_DIR)/glext.h $(STAGING_DIR)/usr/include/GLES
-+	$(INSTALL) -D -m 0644 $(BR2_DL_DIR)/glplatform.h $(STAGING_DIR)/usr/include/GLES
-+
-+	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/GLES2
-+	$(INSTALL) -D -m 0644 $(BR2_DL_DIR)/gl2.h $(STAGING_DIR)/usr/include/GLES2
-+	$(INSTALL) -D -m 0644 $(BR2_DL_DIR)/gl2ext.h $(STAGING_DIR)/usr/include/GLES2
-+	$(INSTALL) -D -m 0644 $(BR2_DL_DIR)/gl2platform.h $(STAGING_DIR)/usr/include/GLES2
-+
-+	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/KHR
-+	$(INSTALL) -D -m 0644 $(BR2_DL_DIR)/khrplatform.h $(STAGING_DIR)/usr/include/KHR
-+endef
-+
-+define MALI_T76X_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 $(@D)/*.so $(TARGET_DIR)/usr/lib/
-+endef
-+
-+$(eval $(generic-package))
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++    size = 512M
++  }
++}
 -- 
 2.7.0
