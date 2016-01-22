@@ -1,102 +1,71 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 22 Jan 2016 15:05:55 +0000
-Subject: [Buildroot] [PATCH v2] toolchain: add a harmless link when sysroot
-	detection is not accurate
-Message-ID: <1453475155-49586-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+Date: Fri, 22 Jan 2016 12:53:37 -0300
+Subject: [Buildroot] [PATCH 0/3] Add support for Firefly RK3288
+Message-ID: <1453478020-311-1-git-send-email-ariel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes is not possible to detect if the sysroots are nested or side
-by side. For instance this happens for MIPS big endian, where the
-sysroot and the arch-sysroot directories are the same. Examples:
+Hi all,
 
-=== Mentor Sourcery CodeBench toolchain
+This patchset adds support for the Firefly RK3288 board [0].
+Support includes running Qt5 + EGLFS backend, so the board is
+configured in that way, as follows:
 
-$ readlink -f $(LANG=C mips-linux-gnu-gcc -print-file-name=libc.a) | sed
--r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::'
-/toolchains/mips-2015.11/mips-linux-gnu/libc/
+A new mali-t76x package is added, which installs the required libraries
+for Mali Midgard GPU from ARM [1].
 
-$ readlink -f $(LANG=C mips-linux-gnu-gcc -EB -print-file-name=libc.a) |
-sed -r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::'
-/toolchains/mips-2015.11/mips-linux-gnu/libc/
+Although most of the kernel support for the board has been mainlined,
+the kernel is taken from Heiko St?bner's [2] devel/somewhat-stable
+branch as it includes the latest support and the Mali GPU drivers.
+The GPU drivers should be added as an extension separated from the
+kernel in the future.
 
-=== Codescape toolchain
+Uboot bootloader is taken from mainline tag v2016.01.
 
-$ readlink -f $(LANG=C mips-img-linux-gnu-gcc -print-file-name=libc.a) |
-sed -r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::'
-/toolchains/mips-img-linux-gnu/2015.06-05/sysroot/mips-r6-hard/
+The building process will output a 'sdcard.img' that is ready to be
+flash into a SD card and boot the board.
 
-$ readlink -f $(LANG=C mips-img-linux-gnu-gcc -EB
--print-file-name=libc.a) | sed -r -e
-'s:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::'
-/toolchains/mips-img-linux-gnu/2015.06-05/sysroot/mips-r6-hard/
+Regards,
 
-For those cases where the sysroot detection is not accurate we add a
-harmless symlink necessary for certain toolchains such as Codescape for
-MIPS. The other toolchains in this situation (unknown sysroot layout)
-don't need this symlink to work, but as stated before, this symlink is
-harmless.
+Links:
+[0] http://en.t-firefly.com/en/firenow/firefly_rk3288/specifications/
+[1] http://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/
+[2] https://github.com/mmind/linux-rockchip
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v1 -> v2:
- - Update the comment above the copy_toolchain_sysroot function.
- - Explain in the commit log which toolchains are affected and provide
-   some outputs of -print-file-name to explain the problem.
-   (Both changes requested by Thomas Petazzoni)
+Ariel D'Alessandro (3):
+  mali-t76x: add new package
+  board/firefly_rk3288: add new board
+  configs/firefly_rk3288: new board
 
- toolchain/helpers.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ board/firefly/firefly-rk3288/build_sd_image.sh     | 18 ++++++
+ board/firefly/firefly-rk3288/extlinux.conf         |  6 ++
+ board/firefly/firefly-rk3288/post-image.sh         |  6 ++
+ board/firefly/firefly-rk3288/pre-image.sh          |  3 +
+ board/firefly/firefly-rk3288/readme.txt            | 40 ++++++++++++++
+ board/firefly/firefly-rk3288/sd-image.cfg          | 22 ++++++++
+ configs/firefly_rk3288_defconfig                   | 40 ++++++++++++++
+ package/Config.in                                  |  1 +
+ ...latform.h-with-framebuffer-instead-of-X11.patch | 39 +++++++++++++
+ package/mali-t76x/Config.in                        | 27 +++++++++
+ package/mali-t76x/egl.pc                           | 12 ++++
+ package/mali-t76x/glesv2.pc                        | 12 ++++
+ package/mali-t76x/rockchip-mali.mk                 | 64 ++++++++++++++++++++++
+ 13 files changed, 290 insertions(+)
+ create mode 100755 board/firefly/firefly-rk3288/build_sd_image.sh
+ create mode 100644 board/firefly/firefly-rk3288/extlinux.conf
+ create mode 100755 board/firefly/firefly-rk3288/post-image.sh
+ create mode 100755 board/firefly/firefly-rk3288/pre-image.sh
+ create mode 100644 board/firefly/firefly-rk3288/readme.txt
+ create mode 100644 board/firefly/firefly-rk3288/sd-image.cfg
+ create mode 100644 configs/firefly_rk3288_defconfig
+ create mode 100644 package/mali-t76x/0001-use-eglplatform.h-with-framebuffer-instead-of-X11.patch
+ create mode 100644 package/mali-t76x/Config.in
+ create mode 100644 package/mali-t76x/egl.pc
+ create mode 100644 package/mali-t76x/glesv2.pc
+ create mode 100644 package/mali-t76x/rockchip-mali.mk
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 70695ee..c8245f7 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -130,6 +130,12 @@ copy_toolchain_lib_root = \
- #
- # * Create a symbolic link
- #
-+# If we are in the situation where we don't know if the sysroot layout
-+# is nested of side by side, we:
-+#
-+# * Create a symbolic link because it's harmless and is necessary for
-+#   certain toolchains like Codescape for MIPS.
-+#
- # Finally, some toolchains (i.e Linaro binary toolchains) store
- # support libraries (libstdc++, libgcc_s) outside of the sysroot, so
- # we simply copy all the libraries from the "support lib directory"
-@@ -160,9 +166,12 @@ copy_toolchain_sysroot = \
- 	done ; \
- 	SYSROOT_DIR_CANON=`readlink -f $${SYSROOT_DIR}` ; \
- 	ARCH_SYSROOT_DIR_CANON=`readlink -f $${ARCH_SYSROOT_DIR}` ; \
-+	echo "SYSROOT_DIR_CANON: $${ARCH_SYSROOT_DIR_CANON}" ; \
-+	echo "ARCH_SYSROOT_DIR_CANON: $${ARCH_SYSROOT_DIR_CANON}" ; \
- 	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} ] ; then \
- 		relpath="./" ; \
- 		if [ $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
-+			echo "Nested sysroots detected." ; \
- 			if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
- 				cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
- 			fi ; \
-@@ -174,9 +183,16 @@ copy_toolchain_sysroot = \
- 			ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
- 			echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
- 		elif [ `dirname $${ARCH_SYSROOT_DIR_CANON}` == `dirname $${SYSROOT_DIR_CANON}` ] ; then \
-+			echo "Side by side sysroots detected." ; \
- 			ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
- 			echo "Symlinking $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` -> $${relpath}" ; \
- 		fi ; \
-+	else \
-+		relpath="./" ; \
-+		echo "Unable to detect if sysroots are nested or side by side." ; \
-+		echo "Creating a harmless symlink necessary for certain toolchains." ; \
-+		ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
-+		echo "Symlinking $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` -> $${relpath}" ; \
- 	fi ; \
- 	if test -n "$${SUPPORT_LIB_DIR}" ; then \
- 		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
 -- 
-2.4.10
+2.7.0
