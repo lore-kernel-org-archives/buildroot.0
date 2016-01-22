@@ -1,62 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 22 Jan 2016 00:15:50 +0100
-Subject: [Buildroot] [PATCH v4 3/5] package/gutenprint: Un-deprecate and
- bump version to 5.2.10
-In-Reply-To: <1453328267-31962-4-git-send-email-olivier.schonken@gmail.com>
-References: <1453328267-31962-1-git-send-email-olivier.schonken@gmail.com>
- <1453328267-31962-4-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <20160122001550.406e6207@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 22 Jan 2016 04:51:13 +0000
+Subject: [Buildroot] [Bug 8621] sqlite package, properly enable readline
+In-Reply-To: <bug-8621-163@https.bugs.busybox.net/>
+References: <bug-8621-163@https.bugs.busybox.net/>
+Message-ID: <bug-8621-163-L1xSjbPEtw@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Olivier Schonken,
+https://bugs.busybox.net/show_bug.cgi?id=8621
 
-On Thu, 21 Jan 2016 00:17:45 +0200, Olivier Schonken wrote:
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-> ---
->  package/gutenprint/Config.in       | 2 --
->  package/gutenprint/gutenprint.hash | 2 +-
->  package/gutenprint/gutenprint.mk   | 2 +-
->  3 files changed, 2 insertions(+), 4 deletions(-)
+--- Comment #1 from Lonnie Abelbeck <lonnie@abelbeck.com> ---
+Additionally, while you are checking out this readline fix, recently sqlite
+changed it's default behavior wrt the sqlite CLI tool, previously it was
+dynamically linked with libsqlite3.so.0 by default, now it is statically linked
+by default.
 
-This one doesn't build here:
+The old behavior can be signaled with: --disable-static-shell
 
-print-olympus.c: In function ?dyesub_do_print?:
-print-olympus.c:4909:2: error: #error "Unable to determine endianness, aborting compilation!"
- #error "Unable to determine endianness, aborting compilation!"
+Either add the configure option by default or possibly:
 
-Here is the defconfig to reproduce:
+  ifeq ($(BR2_STATIC_LIBS),y)
+  SQLITE_CONF_OPTS += --enable-dynamic-extensions=no
++ else
++ SQLITE_CONF_OPTS += --disable-static-shell
+  endif
 
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_COMPILER_PARANOID_UNSAFE_PATH=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2015.11-rc1-71-g90d1299.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_CUPS=y
-BR2_PACKAGE_GUTENPRINT=y
-BR2_PACKAGE_HPLIP=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-It's late, I'm heading off to bed, so I haven't investigated at all. It
-might be trivial.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
