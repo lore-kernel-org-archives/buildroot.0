@@ -1,49 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 22 Jan 2016 14:15:47 +0100
-Subject: [Buildroot] [PATCH] toolchain: add a harmless link when sysroot
- detection is not accurate
-In-Reply-To: <1453464862-33174-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1453464862-33174-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160122141547.6fe95d7d@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 22 Jan 2016 10:23:37 -0300
+Subject: [Buildroot] [PATCH] pptp-linux: add musl build fix patch
+Message-ID: <1453469017-11700-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Fixes:
+http://autobuild.buildroot.net/results/56d/56dd530d53489220d0080480310b8dc150cf1b2e/
 
-On Fri, 22 Jan 2016 12:14:22 +0000, Vicente Olivert Riera wrote:
-> Sometimes is not possible to detect if the sysroots are nested or side
-> by side. For instance this happens for MIPS big endian, where the
-> sysroot and the arch-sysroot directories are the same.
-> 
-> For those cases where the sysroot detection is not accurate we add a
-> harmless symlink necessary for certain toolchains.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../0003-pqueue.h-include-sys-types.h.patch        | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
 
-Gaah, even more magic in this code.
-
-Can you update the comment above the function, and also in the commit
-log explain which toolchain is affected, and give outputs of
--print-file-name that explain the problem ?
-
-It is really important to document all those things, because we
-progressively adjust this sorcery to accommodate all toolchains, but
-when we'll want to refactor this stuff, it will be very useful to have
-some explanation as to why each case was handled this way.
-
-The more I look at this external toolchain mess, the more I think we
-should have less magic, and simply for each toolchain have some
-explicit code in BR that says "this toolchain is organized this way".
-Yes, it means that we will no longer automagically accommodate to
-custom external toolchains...
-
-Best regards,
-
-Thomas
+diff --git a/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch b/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
+new file mode 100644
+index 0000000..d6b5445
+--- /dev/null
++++ b/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
+@@ -0,0 +1,30 @@
++From 060ad28b9ca5e99d7c6e8010132da58a3a8a0585 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Fri, 22 Jan 2016 10:19:18 -0300
++Subject: [PATCH] pqueue.h: include sys/types.h
++
++We're using u_int32_t here, this breaks on musl libc builds otherwise.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: sent upstream to the devel mailing list
++(moderated, no archive link yet)
++
++ pqueue.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/pqueue.h b/pqueue.h
++index a56590f..8c60c62 100644
++--- a/pqueue.h
+++++ b/pqueue.h
++@@ -3,6 +3,7 @@
++ 
++ #include <time.h>
++ #include <sys/time.h>
+++#include <sys/types.h>
++ 
++ /* wait this many seconds for missing packets before forgetting about them */
++ #define DEFAULT_PACKET_TIMEOUT 0.3
++-- 
++2.4.10
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
