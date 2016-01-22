@@ -1,38 +1,104 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 22 Jan 2016 08:26:57 -0300
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20160122102957.10f29956@free-electrons.com>
-References: <20160122073021.E35B6101A27@stock.ovh.net>
- <20160122102957.10f29956@free-electrons.com>
-Message-ID: <56A21201.5000508@zacarias.com.ar>
+Date: Fri, 22 Jan 2016 08:41:01 -0300
+Subject: [Buildroot] [PATCH] bind: rename ptrsize to ptr_size in the code
+Message-ID: <1453462861-32484-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/01/16 06:29, Thomas Petazzoni wrote:
+uClibc in commit 70a04a28 #defined ptrsize globally in bits/setjmp.h for
+mips. However this is a common variable name and causes build failure
+for at least bind.
+So rename ptrsize to ptr_size in bind to avoid this. Fixes:
+http://autobuild.buildroot.net/results/a92/a92fa5dc5d9d6742d61d4d293f7eac97c5355dfe/
 
->>        mipsel |                 bind-9.10.3-P2 | NOK | http://autobuild.buildroot.net/results/62f386829193c747176ace05e4b26826fcabbf59/
->>      mips64el |                 bind-9.10.3-P2 | NOK | http://autobuild.buildroot.net/results/a92fa5dc5d9d6742d61d4d293f7eac97c5355dfe/
->
-> rbt.c:116:15: error: two or more data types in declaration specifiers
->    isc_uint32_t ptrsize;
->                 ^
-> rbt.c:116:22: error: expected identifier or '(' before ';' token
->    isc_uint32_t ptrsize;
->
-> Gustavo, can you have a look ? I think this error already popped up in the past, no?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bind/0003-Rename-ptrsize-to-ptr_size.patch | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 package/bind/0003-Rename-ptrsize-to-ptr_size.patch
 
-Hi.
-Finally nailed it down, it's uclibc's fault, basically it #defines 
-ptrsize in bits/setjmp.h for mips.
-Waldemar: you did that in 70a04a287a2875c82e6822c36e071afba5b63a62 
-(uclibc), unfortunately it will be hard to get rid of, we'll have to 
-live with this for some time.
-I can patch bind to not use ptrsize (say, rename it to pointersize or 
-something like that) and that fixes it, however it definitely won't be 
-upstreamable (i don't even want to show my face to explain why it's 
-necessary).
-This could affect other programs in the future i believe.
-Regards.
+diff --git a/package/bind/0003-Rename-ptrsize-to-ptr_size.patch b/package/bind/0003-Rename-ptrsize-to-ptr_size.patch
+new file mode 100644
+index 0000000..e3b58e2
+--- /dev/null
++++ b/package/bind/0003-Rename-ptrsize-to-ptr_size.patch
+@@ -0,0 +1,74 @@
++From 254dc19788ba2a03504fc6d1036fef477a60035f Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Fri, 22 Jan 2016 08:31:02 -0300
++Subject: [PATCH] Rename ptrsize to ptr_size
++
++This is to compensate for a uClibc mess caused by commit
++70a04a287a2875c82e6822c36e071afba5b63a62 where ptrsize is defined for
++mips, hence causing build breakage under certain conditions for programs
++that use this variable name.
++
++Status: definitely not upstreamable.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ lib/dns/rbt.c   | 6 +++---
++ lib/dns/rbtdb.c | 4 ++--
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/lib/dns/rbt.c b/lib/dns/rbt.c
++index 86b5183..5fd55de 100644
++--- a/lib/dns/rbt.c
+++++ b/lib/dns/rbt.c
++@@ -113,7 +113,7 @@ struct file_header {
++ 	 * information about the system on which the map file was generated
++ 	 * will be used to tell if we can load the map file or not
++ 	 */
++-	isc_uint32_t ptrsize;
+++	isc_uint32_t ptr_size;
++ 	unsigned int bigendian:1;	/* big or little endian system */
++ 	unsigned int rdataset_fixed:1;	/* compiled with --enable-rrset-fixed */
++ 	unsigned int nodecount;		/* shadow from rbt structure */
++@@ -517,7 +517,7 @@ write_header(FILE *file, dns_rbt_t *rbt, isc_uint64_t first_node_offset,
++ 	memmove(header.version1, FILE_VERSION, sizeof(header.version1));
++ 	memmove(header.version2, FILE_VERSION, sizeof(header.version2));
++ 	header.first_node_offset = first_node_offset;
++-	header.ptrsize = (isc_uint32_t) sizeof(void *);
+++	header.ptr_size = (isc_uint32_t) sizeof(void *);
++ 	header.bigendian = (1 == htonl(1)) ? 1 : 0;
++ 
++ #ifdef DNS_RDATASET_FIXED
++@@ -902,7 +902,7 @@ dns_rbt_deserialize_tree(void *base_address, size_t filesize,
++ 	}
++ #endif
++ 
++-	if (header->ptrsize != (isc_uint32_t) sizeof(void *)) {
+++	if (header->ptr_size != (isc_uint32_t) sizeof(void *)) {
++ 		result = ISC_R_INVALIDFILE;
++ 		goto cleanup;
++ 	}
++diff --git a/lib/dns/rbtdb.c b/lib/dns/rbtdb.c
++index c7168cb..dbcf944 100644
++--- a/lib/dns/rbtdb.c
+++++ b/lib/dns/rbtdb.c
++@@ -114,7 +114,7 @@ typedef struct rbtdb_file_header rbtdb_file_header_t;
++ 
++ struct rbtdb_file_header {
++ 	char version1[32];
++-	isc_uint32_t ptrsize;
+++	isc_uint32_t ptr_size;
++ 	unsigned int bigendian:1;
++ 	isc_uint64_t tree;
++ 	isc_uint64_t nsec;
++@@ -7593,7 +7593,7 @@ rbtdb_write_header(FILE *rbtfile, off_t tree_location, off_t nsec_location,
++ 	memset(&header, 0, sizeof(rbtdb_file_header_t));
++ 	memmove(header.version1, FILE_VERSION, sizeof(header.version1));
++ 	memmove(header.version2, FILE_VERSION, sizeof(header.version2));
++-	header.ptrsize = (isc_uint32_t) sizeof(void *);
+++	header.ptr_size = (isc_uint32_t) sizeof(void *);
++ 	header.bigendian = (1 == htonl(1)) ? 1 : 0;
++ 	header.tree = (isc_uint64_t) tree_location;
++ 	header.nsec = (isc_uint64_t) nsec_location;
++-- 
++2.4.10
++
+-- 
+2.4.10
