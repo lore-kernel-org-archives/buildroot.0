@@ -1,61 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 22 Jan 2016 18:50:53 +0100
-Subject: [Buildroot] [PATCH 1/2] Update for 2015.11.1
-In-Reply-To: <1453484674-8951-1-git-send-email-davepiq@yahoo.fr>
-References: <1453484674-8951-1-git-send-email-davepiq@yahoo.fr>
-Message-ID: <20160122175053.GA3774@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 22 Jan 2016 19:06:39 +0100
+Subject: [Buildroot] [PATCH] mpd: disable for sparcv8
+In-Reply-To: <20160122174652.GM17143@waldemar-brodkorb.de>
+References: <20160119224338.GA16884@waldemar-brodkorb.de>
+ <20160120101807.33930860@free-electrons.com>
+ <20160122174652.GM17143@waldemar-brodkorb.de>
+Message-ID: <20160122190639.4a83e4db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David, All,
+Hello,
 
-On 2016-01-22 18:44 +0100, David Picard spake thusly:
-> From: Peter Korsgaard <peter@korsgaard.com>
+On Fri, 22 Jan 2016 18:46:52 +0100, Waldemar Brodkorb wrote:
+
+> May be we can add this patch now and when you figured everything out
+> to do a clean solution, you just use grep to find the problematic
+> packages disabled for sparc/sparc64.
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> Signed-off-by: David Picard <davepiq@yahoo.fr>
-> ---
->  CHANGES | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/CHANGES b/CHANGES
-> index 336b195..7b7797c 100644
-> --- a/CHANGES
-> +++ b/CHANGES
-> @@ -1,3 +1,13 @@
-> +2015.11.1, Released December 5th, 2015
-> +
-> +	Fix for issue with the host package RPATH check when a custom host
-> +	directory (BR2_HOST_DIR=/path/to/somewhere) is used.
-> +
-> +	Important (and/or security related) bugfixes for busybox,
-> +	dropbear, libpng and openssl.
-> +
-> +	Updated/fixed packages: busybox, dropbear, gawk, libpng, openssl
+> Therefore we have some fewer autobuild failures meanwhile.
+> Other atomic related patches got applied, so we should do this until
+> your refactoring.
 
-I guess you did not really want to send that one, did you? ;-)
+Agreed. Then it would be good to make sure to annotate such
+dependencies in a systematic way, so that we can easily grep for them
+in the future.
 
-Regards,
-Yann E. MORIN.
+Best regards,
 
->  2015.11, Released November 30th, 2015
->  
->  	Minor fixes.
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
