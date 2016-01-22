@@ -1,98 +1,41 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 22 Jan 2016 10:25:23 -0300
-Subject: [Buildroot] [PATCH] busybox: add truncate fix patch
-Message-ID: <1453469123-12758-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 22 Jan 2016 10:35:18 -0300
+Subject: [Buildroot] [PATCH] rt-tests: unavailable for static builds
+Message-ID: <1453469718-14732-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/a6f/a6f6502e55fd68803f3ff8b4b76cce6601e101db/
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/busybox/0004-truncate-open-mode.patch | 74 +++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/busybox/0004-truncate-open-mode.patch
+ package/rt-tests/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/0004-truncate-open-mode.patch b/package/busybox/0004-truncate-open-mode.patch
-new file mode 100644
-index 0000000..f0dc6d1
---- /dev/null
-+++ b/package/busybox/0004-truncate-open-mode.patch
-@@ -0,0 +1,74 @@
-+From be729c1d3b5c923f10871dd68ea94156d0f8c803 Mon Sep 17 00:00:00 2001
-+From: Ari Sundholm <ari@tuxera.com>
-+Date: Mon, 4 Jan 2016 15:40:37 +0200
-+Subject: [PATCH] truncate: always set mode when opening file to avoid fortify
-+ errors
-+
-+Busybox crashes due to no mode being given when opening:
-+$ ./busybox truncate -s 1M foo
-+*** invalid open64 call: O_CREAT without mode ***: ./busybox terminated
-+======= Backtrace: =========
-+/lib/x86_64-linux-gnu/libc.so.6(+0x7338f)[0x7f66d921338f]
-+/lib/x86_64-linux-gnu/libc.so.6(__fortify_fail+0x5c)[0x7f66d92aac9c]
-+/lib/x86_64-linux-gnu/libc.so.6(+0xeb6aa)[0x7f66d928b6aa]
-+./busybox[0x4899f9]
-+======= Memory map: ========
-+00400000-004d0000 r-xp 00000000 00:1a 137559                             /home/ari/busybox/busybox
-+006cf000-006d0000 r--p 000cf000 00:1a 137559                             /home/ari/busybox/busybox
-+006d0000-006d1000 rw-p 000d0000 00:1a 137559                             /home/ari/busybox/busybox
-+006d1000-006d4000 rw-p 00000000 00:00 0
-+014e7000-01508000 rw-p 00000000 00:00 0                                  [heap]
-+7f66d8f8a000-7f66d8fa0000 r-xp 00000000 08:07 1579008                    /lib/x86_64-linux-gnu/libgcc_s.so.1
-+7f66d8fa0000-7f66d919f000 ---p 00016000 08:07 1579008                    /lib/x86_64-linux-gnu/libgcc_s.so.1
-+7f66d919f000-7f66d91a0000 rw-p 00015000 08:07 1579008                    /lib/x86_64-linux-gnu/libgcc_s.so.1
-+7f66d91a0000-7f66d935b000 r-xp 00000000 08:07 1578994                    /lib/x86_64-linux-gnu/libc-2.19.so
-+7f66d935b000-7f66d955a000 ---p 001bb000 08:07 1578994                    /lib/x86_64-linux-gnu/libc-2.19.so
-+7f66d955a000-7f66d955e000 r--p 001ba000 08:07 1578994                    /lib/x86_64-linux-gnu/libc-2.19.so
-+7f66d955e000-7f66d9560000 rw-p 001be000 08:07 1578994                    /lib/x86_64-linux-gnu/libc-2.19.so
-+7f66d9560000-7f66d9565000 rw-p 00000000 00:00 0
-+7f66d9565000-7f66d966a000 r-xp 00000000 08:07 1579020                    /lib/x86_64-linux-gnu/libm-2.19.so
-+7f66d966a000-7f66d9869000 ---p 00105000 08:07 1579020                    /lib/x86_64-linux-gnu/libm-2.19.so
-+7f66d9869000-7f66d986a000 r--p 00104000 08:07 1579020                    /lib/x86_64-linux-gnu/libm-2.19.so
-+7f66d986a000-7f66d986b000 rw-p 00105000 08:07 1579020                    /lib/x86_64-linux-gnu/libm-2.19.so
-+7f66d986b000-7f66d988e000 r-xp 00000000 08:07 1578981                    /lib/x86_64-linux-gnu/ld-2.19.so
-+7f66d9a64000-7f66d9a67000 rw-p 00000000 00:00 0
-+7f66d9a8a000-7f66d9a8d000 rw-p 00000000 00:00 0
-+7f66d9a8d000-7f66d9a8e000 r--p 00022000 08:07 1578981                    /lib/x86_64-linux-gnu/ld-2.19.so
-+7f66d9a8e000-7f66d9a8f000 rw-p 00023000 08:07 1578981                    /lib/x86_64-linux-gnu/ld-2.19.so
-+7f66d9a8f000-7f66d9a90000 rw-p 00000000 00:00 0
-+7ffc47761000-7ffc47782000 rw-p 00000000 00:00 0                          [stack]
-+7ffc477ab000-7ffc477ad000 r-xp 00000000 00:00 0                          [vdso]
-+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
-+Aborted (core dumped)
-+$
-+
-+Fix this by simply always setting the mode, as it doesn't hurt even
-+when O_CREAT is not specified.
-+
-+This bug is a regression introduced in fc3e40e, as xopen(), which
-+was originally used, would automatically set the mode.
-+
-+Signed-off-by: Ari Sundholm <ari@tuxera.com>
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+(cherry picked from commit e111a1640494fe87fc913f94fae3bb805de0fc99)
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ coreutils/truncate.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/coreutils/truncate.c b/coreutils/truncate.c
-+index e5fa656..4c997bf 100644
-+--- a/coreutils/truncate.c
-++++ b/coreutils/truncate.c
-+@@ -64,7 +64,7 @@ int truncate_main(int argc UNUSED_PARAM, char **argv)
-+ 
-+ 	argv += optind;
-+ 	while (*argv) {
-+-		int fd = open(*argv, flags);
-++		int fd = open(*argv, flags, 0666);
-+ 		if (fd < 0) {
-+ 			if (errno != ENOENT || !(opts & OPT_NOCREATE)) {
-+ 				bb_perror_msg("%s: open", *argv);
-+-- 
-+2.6.2
-+
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index db5e0a0..4c57c0f 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_RT_TESTS
+ 	bool "rt-tests"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # dlopen
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+ 	  Linux system.
+@@ -26,6 +27,6 @@ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
+ 	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 
+-comment "rt-tests needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "rt-tests needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
 -- 
 2.4.10
