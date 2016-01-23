@@ -1,30 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 00:27:53 +0100
-Subject: [Buildroot] [PATCH] pptp-linux: add musl build fix patch
-References: <1453469017-11700-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <psedncx9k5.ln2@ID-313208.user.individual.net>
+Date: Sun, 24 Jan 2016 00:40:19 +0100
+Subject: [Buildroot] [PATCH 2/2] package/ptpd2: Fix musl build
+In-Reply-To: <1453592419-15454-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453592419-15454-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1453592419-15454-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 22 Jan 2016 10:23:37 -0300 schrieb Gustavo Zacarias:
+The autobuilders did not catch the error yet because they failed
+earlier with other packages, but I am continuing the build using
+the defconfig from:
+http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 
-> +diff --git a/pqueue.h b/pqueue.h +index a56590f..8c60c62 100644 +---
-> a/pqueue.h ++++ b/pqueue.h +@@ -3,6 +3,7 @@
-> +
-> + #include <time.h>
-> + #include <sys/time.h>
-> ++#include <sys/types.h>
-> +
-> + /* wait this many seconds for missing packets before forgetting about
-> them */
-> + #define DEFAULT_PACKET_TIMEOUT 0.3 +--
-> +2.4.10 +
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ptpd2/0001-musl.patch | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 package/ptpd2/0001-musl.patch
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-(compile-tested only using http://autobuild.buildroot.org/toolchains/
-tarballs/br-x86-64-musl-2015.11-rc1-71-g90d1299.tar.bz2)
-
-Regards, Bernd
+diff --git a/package/ptpd2/0001-musl.patch b/package/ptpd2/0001-musl.patch
+new file mode 100644
+index 0000000..2e214b2
+--- /dev/null
++++ b/package/ptpd2/0001-musl.patch
+@@ -0,0 +1,15 @@
++Fix musl build
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr ptpd-ptpd-2.3.1.org/src/dep/net.c ptpd-ptpd-2.3.1/src/dep/net.c
++--- ptpd-ptpd-2.3.1.org/src/dep/net.c	2015-06-29 17:13:29.000000000 +0200
+++++ ptpd-ptpd-2.3.1/src/dep/net.c	2016-01-24 00:35:44.509860065 +0100
++@@ -82,7 +82,6 @@
++ #ifdef SO_TIMESTAMPING
++ #include <linux/net_tstamp.h>
++ #include <linux/sockios.h>
++-#include <linux/ethtool.h>
++ #endif /* SO_TIMESTAMPING */
++ 
++ /**
+-- 
+2.7.0.rc3
