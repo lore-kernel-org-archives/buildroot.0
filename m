@@ -1,44 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Jan 2016 20:29:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iptables: nfsynproxy not available
-	on musl
-Message-ID: <1453577396-6003-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Jan 2016 21:48:22 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <56a3b4eeb29e1_57733f8e785e4ed04615@ultri2.mail>
+References: <CAAXf6LVpYZ7vkXWLPB373i0dXDSaLP3tGi+MXWaoVzbXMY_byQ@mail.gmail.com>
+ <56a3b4eeb29e1_57733f8e785e4ed04615@ultri2.mail>
+Message-ID: <20160123214822.2746cc01@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-utils/nfsynproxy.c needs several TCP_* constants which are not yet
-provided by musl, they were added Jan 17, 2016:
-http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
+Ricardo,
 
-Until we support a musl version containing the constants we disable
-the option for building nfsynproxy on musl.
+On Sat, 23 Jan 2016 15:14:22 -0200, Ricardo Martincoski wrote:
 
-Fixes
-http://autobuild.buildroot.net/results/8ee/8ee299d8697bf488ba94f60785e81f274b2128fd/
-http://autobuild.buildroot.net/results/f1a/f1ab3fe59d0dd7dd7b9a7bc6bc10a0019f0fa567/
-http://autobuild.buildroot.net/results/4f9/4f904a2913984201ad0bffb63664019c73e0eb77/
-http://autobuild.buildroot.net/results/65c/65c7d47fdc0f55fb8deb77e34063320e2af337ee/
-http://autobuild.buildroot.net/results/aaa/aaaa1fc92b6a885d223681f40c5df7a962ee1fce/
+> Maybe there is a solution that does not limit the version of patch, following
+> the idea of symlinks or hardlinks.
+> It still needs more tests, but it seems to work with patch 2.5.4.
+> I created 2 hooks, one before patching to rename the file, and other after to
+> rename it back.
+> 
+> See example below. I used POST_EXTRACT instead of PRE_PATCH because some
+> developer could use 'make package-extract', create a copy of the extracted
+> directory, edit the needed files and then use diff to create the patch.
+> This way hand-editing the patch would not be needed.
+> 
+> Please let me know if you agree with this approach.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/iptables/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+I think you can remove the post patch hook, i.e keep the file named
+with the _, and simply adjust:
 
-diff --git a/package/iptables/Config.in b/package/iptables/Config.in
-index ae7a634..f5197b7 100644
---- a/package/iptables/Config.in
-+++ b/package/iptables/Config.in
-@@ -9,6 +9,7 @@ if BR2_PACKAGE_IPTABLES
- 
- config BR2_PACKAGE_IPTABLES_BPF_NFSYNPROXY
- 	bool "bpfc and nfsynproxy"
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LIBPCAP
- 	help
- 	  Build bpf compiler and nfsynproxy configuration tool.
+LIBSOIL_MAKEFILE = "../projects/makefile/alternate Makefile.txt"
+
+to:
+
+LIBSOIL_MAKEFILE = ../projects/makefile/alternate_Makefile.txt
+
+Thomas
 -- 
-2.7.0.rc3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
