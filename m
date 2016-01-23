@@ -1,110 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jan 2016 13:09:24 +0100
-Subject: [Buildroot] [git commit] vboot-utils: convert to Git formatted
-	patches
-Message-ID: <20160123121058.5B7768080E@busybox.osuosl.org>
+Date: Sat, 23 Jan 2016 13:09:29 +0100
+Subject: [Buildroot] [git commit] vboot-utils: fix RSA redefinition build
+	error with old compilers
+Message-ID: <20160123121058.7E0307FC1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d6ac6942f9b74bf24dcd37642259347ab7b0eaaa
+commit: http://git.buildroot.net/buildroot/commit/?id=530c5a55959f161f49dc095641a24ede649725be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since vboot-utils is hosted in a Git repository, it makes sense to use
-Git formatted patches for this package.
+Old gcc compilers do not support type redefinitions, which causes a
+build failure of the host-vboot-utils package on certain machines. The
+vboot-utils source code redefines "typedef struct rsa_st RSA" which is
+already defined in the OpenSSL headers.
+
+This commit adds a patch which works around this build issue.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/1a4/1a45412939a3f9d6fa59d086d834a3b4a4bffef7/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...Add-missing-definition-of-MTD_CHAR_MAJOR.patch} | 15 +++++++++++-
- ...02-Add-missing-header-include-for-ssize_t.patch | 27 ++++++++++++++++++++++
- package/vboot-utils/0002-ssize-t.patch             | 14 -----------
- 3 files changed, 41 insertions(+), 15 deletions(-)
+ .../0003-Avoid-RSA-type-redefinition.patch         | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/vboot-utils/0001-mtd-char-major.patch b/package/vboot-utils/0001-Add-missing-definition-of-MTD_CHAR_MAJOR.patch
-similarity index 57%
-rename from package/vboot-utils/0001-mtd-char-major.patch
-rename to package/vboot-utils/0001-Add-missing-definition-of-MTD_CHAR_MAJOR.patch
-index 9db90b2..42410c8 100644
---- a/package/vboot-utils/0001-mtd-char-major.patch
-+++ b/package/vboot-utils/0001-Add-missing-definition-of-MTD_CHAR_MAJOR.patch
-@@ -1,7 +1,17 @@
--This definition missing from <linux/major.h> for kernels <= 3.13.
-+From 1438211660e700b2c9505863aae1cc957236b7c8 Mon Sep 17 00:00:00 2001
-+From: Alex Suykov <alex.suykov@gmail.com>
-+Date: Thu, 21 Jan 2016 21:59:46 +0100
-+Subject: [PATCH] Add missing definition of MTD_CHAR_MAJOR
-+
-+This definition missing from <linux/major.h> for kernels <= 3.13
- 
- Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+---
-+ cgpt/cgpt_wrapper.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
- 
-+diff --git a/cgpt/cgpt_wrapper.c b/cgpt/cgpt_wrapper.c
-+index dcfaab9..4d07aad 100644
- --- a/cgpt/cgpt_wrapper.c
- +++ b/cgpt/cgpt_wrapper.c
- @@ -25,6 +25,10 @@
-@@ -15,3 +25,6 @@ Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-  // Check if cmdline |argv| has "-D". "-D" signifies that GPT structs are stored
-  // off device, and hence we should not wrap around cgpt.
-  static bool has_dash_D(int argc, const char *const argv[]) {
-+-- 
-+2.6.4
-+
-diff --git a/package/vboot-utils/0002-Add-missing-header-include-for-ssize_t.patch b/package/vboot-utils/0002-Add-missing-header-include-for-ssize_t.patch
+diff --git a/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch b/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch
 new file mode 100644
-index 0000000..4d559ea
+index 0000000..86374ca
 --- /dev/null
-+++ b/package/vboot-utils/0002-Add-missing-header-include-for-ssize_t.patch
-@@ -0,0 +1,27 @@
-+From b6bed8d4e9453bc74ba021c8c17e20c3b5964c37 Mon Sep 17 00:00:00 2001
-+From: Alex Suykov <alex.suykov@gmail.com>
-+Date: Thu, 21 Jan 2016 22:00:34 +0100
-+Subject: [PATCH] Add missing header include for ssize_t
++++ b/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch
+@@ -0,0 +1,44 @@
++From 593407d2b3ea3b871d55ec399671e48c84b900a7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 21 Jan 2016 22:01:37 +0100
++Subject: [PATCH] Avoid RSA type redefinition
 +
-+The code uses ssize_t which is usually defined in <unistd.h>.
++The host_key.h headers does:
 +
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++  typedef struct rsa_st RSA;
++
++But this type definition is already done by the OpenSSL headers.
++
++While such a type redefinition is legal with recent gcc versions, it
++doesn't build with older gcc versions such as gcc 4.4.
++
++To work around this problem, we instead use a forward declaration of
++"struct rsa_st", and change the only place where the RSA type was used
++by "struct rsa_st".
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ host/lib/fmap.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ host/lib/include/host_key.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/host/lib/fmap.c b/host/lib/fmap.c
-+index c95338d..e3db826 100644
-+--- a/host/lib/fmap.c
-++++ b/host/lib/fmap.c
-+@@ -6,6 +6,7 @@
++diff --git a/host/lib/include/host_key.h b/host/lib/include/host_key.h
++index 9f98ccc..c2d01a5 100644
++--- a/host/lib/include/host_key.h
+++++ b/host/lib/include/host_key.h
++@@ -12,11 +12,11 @@
++ #include "vboot_struct.h"
 + 
-+ #include <stdio.h>
-+ #include <string.h>
-++#include <unistd.h>
 + 
-+ #include "fmap.h"
++-typedef struct rsa_st RSA;
+++struct rsa_st;
++ 
++ /* Private key data */
++ typedef struct VbPrivateKey {
++-  RSA* rsa_private_key;  /* Private key data */
+++  struct rsa_rt* rsa_private_key;  /* Private key data */
++   uint64_t algorithm;    /* Algorithm to use when signing */
++ } VbPrivateKey;
 + 
 +-- 
 +2.6.4
 +
-diff --git a/package/vboot-utils/0002-ssize-t.patch b/package/vboot-utils/0002-ssize-t.patch
-deleted file mode 100644
-index 9f1df45..0000000
---- a/package/vboot-utils/0002-ssize-t.patch
-+++ /dev/null
-@@ -1,14 +0,0 @@
--The code uses ssize_t which is usually defined in <unistd.h>
--
--Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
--
----- a/host/lib/fmap.c
--+++ a/host/lib/fmap.c
--@@ -6,6 +6,7 @@
-- 
-- #include <stdio.h>
-- #include <string.h>
--+#include <unistd.h>
-- 
-- #include "fmap.h"
-- 
