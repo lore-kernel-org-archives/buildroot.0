@@ -1,78 +1,32 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Fri, 22 Jan 2016 20:11:03 -0500
-Subject: [Buildroot] [PATCH 10/18] erlang-p1_stun: bump to version 0.9.0
+Date: Fri, 22 Jan 2016 20:10:58 -0500
+Subject: [Buildroot] [PATCH 05/18] erlang-rebar: bump to version 2.6.1
 In-Reply-To: <1453511471-28519-1-git-send-email-fhunleth@troodon-software.com>
 References: <1453511471-28519-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <1453511471-28519-11-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <1453511471-28519-6-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As part of the version change, the package name changed to use an
-underscore rather than a hyphen.
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/Config.in                                                   | 2 +-
- package/{erlang-p1-stun => erlang-p1_stun}/Config.in                | 4 ++--
- .../erlang-p1-stun.mk => erlang-p1_stun/erlang-p1_stun.mk}          | 6 +++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
- rename package/{erlang-p1-stun => erlang-p1_stun}/Config.in (70%)
- rename package/{erlang-p1-stun/erlang-p1-stun.mk => erlang-p1_stun/erlang-p1_stun.mk} (77%)
+ package/erlang-rebar/erlang-rebar.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a560784..987c10d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -475,7 +475,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-p1-iconv/Config.in"
- 	source "package/erlang-p1-sip/Config.in"
- 	source "package/erlang-p1-stringprep/Config.in"
--	source "package/erlang-p1-stun/Config.in"
-+	source "package/erlang-p1_stun/Config.in"
- 	source "package/erlang-p1-tls/Config.in"
- 	source "package/erlang-p1-utils/Config.in"
- 	source "package/erlang-p1-xml/Config.in"
-diff --git a/package/erlang-p1-stun/Config.in b/package/erlang-p1_stun/Config.in
-similarity index 70%
-rename from package/erlang-p1-stun/Config.in
-rename to package/erlang-p1_stun/Config.in
-index 70cdd91..b3f56de 100644
---- a/package/erlang-p1-stun/Config.in
-+++ b/package/erlang-p1_stun/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_ERLANG_P1_STUN
--	bool "erlang-p1-stun"
--	select BR2_PACKAGE_ERLANG_P1_TLS
-+	bool "erlang-p1_stun"
-+	select BR2_PACKAGE_ERLANG_FAST_TLS
- 	select BR2_PACKAGE_ERLANG_P1_UTILS
- 	help
- 	  STUN library for Erlang
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1_stun/erlang-p1_stun.mk
-similarity index 77%
-rename from package/erlang-p1-stun/erlang-p1-stun.mk
-rename to package/erlang-p1_stun/erlang-p1_stun.mk
-index 7920347..d689585 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.mk
-+++ b/package/erlang-p1_stun/erlang-p1_stun.mk
-@@ -1,14 +1,14 @@
- ################################################################################
- #
--# erlang-p1-stun
-+# erlang-p1_stun
+diff --git a/package/erlang-rebar/erlang-rebar.mk b/package/erlang-rebar/erlang-rebar.mk
+index f29eb75..06a7800 100644
+--- a/package/erlang-rebar/erlang-rebar.mk
++++ b/package/erlang-rebar/erlang-rebar.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_STUN_VERSION = a3dce07
-+ERLANG_P1_STUN_VERSION = 0.9.0
- ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
- ERLANG_P1_STUN_LICENSE = GPLv2+
- ERLANG_P1_STUN_LICENSE_FILES = COPYING
--ERLANG_P1_STUN_DEPENDENCIES = erlang-p1-tls erlang-p1-utils
-+ERLANG_P1_STUN_DEPENDENCIES = erlang-fast_tls erlang-p1-utils
- ERLANG_P1_STUN_INSTALL_STAGING = YES
+-ERLANG_REBAR_VERSION = 2.5.1
++ERLANG_REBAR_VERSION = 2.6.1
  
- $(eval $(rebar-package))
+ # Upstream publishes a release, but we can not use it as it is a release of
+ # a generated rebar script, when we want the sources. So we have to use the
 -- 
 2.5.0
