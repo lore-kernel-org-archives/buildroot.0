@@ -1,55 +1,124 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 00:40:18 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ptpd2: bump version to 2.3.1,
-	switch upstream to github
-Message-ID: <1453592419-15454-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 00:46:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/radvd: fix musl build
+Message-ID: <1453592805-20348-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+he autobuilders did not catch the error yet because they failed
+earlier with other packages, but I am continuing the build using
+the defconfig from:
+http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ptpd2/Config.in  | 3 ++-
- package/ptpd2/ptpd2.hash | 2 +-
- package/ptpd2/ptpd2.mk   | 5 ++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/radvd/0001-musl-libc-fix.patch | 95 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 95 insertions(+)
+ create mode 100644 package/radvd/0001-musl-libc-fix.patch
 
-diff --git a/package/ptpd2/Config.in b/package/ptpd2/Config.in
-index e37b10e..e88a9bb 100644
---- a/package/ptpd2/Config.in
-+++ b/package/ptpd2/Config.in
-@@ -5,4 +5,5 @@ config BR2_PACKAGE_PTPD2
- 	  The PTP daemon (PTPd) implements the Precision Time protocol
- 	  (PTP) as defined by the IEEE-1588-2008.
- 
--	  http://ptpd.sourceforge.net/
-+	  https://github.com/ptpd/ptpd
+diff --git a/package/radvd/0001-musl-libc-fix.patch b/package/radvd/0001-musl-libc-fix.patch
+new file mode 100644
+index 0000000..b3b3847
+--- /dev/null
++++ b/package/radvd/0001-musl-libc-fix.patch
+@@ -0,0 +1,95 @@
++Fix musl build
 +
-diff --git a/package/ptpd2/ptpd2.hash b/package/ptpd2/ptpd2.hash
-index 2570c00..af1f78a 100644
---- a/package/ptpd2/ptpd2.hash
-+++ b/package/ptpd2/ptpd2.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  1a4e90496f004bfd91657ccc49209101dc25b787e540648c07c0973469f1d8f7  ptpd-2.3.0.tar.gz
-+sha256	267ad61d09d97069acec5d4878dceda20d0ddbebd27557d80230847848cee6c2	ptpd2-ptpd-2.3.1.tar.gz
-diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
-index cd49fe5..c86db7e 100644
---- a/package/ptpd2/ptpd2.mk
-+++ b/package/ptpd2/ptpd2.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--PTPD2_VERSION = 2.3.0
--PTPD2_SITE = http://downloads.sourceforge.net/project/ptpd/ptpd/$(PTPD2_VERSION)
--PTPD2_SOURCE = ptpd-$(PTPD2_VERSION).tar.gz
-+PTPD2_VERSION = ptpd-2.3.1
-+PTPD2_SITE = $(call github,ptpd,ptpd,$(PTPD2_VERSION))
- PTPD2_DEPENDENCIES = libpcap
- # configure not shipped
- PTPD2_AUTORECONF = YES
++Downloaded from
++https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/net-misc/radvd/files/radvd-2.10-musl-libc-fix.patch?revision=1.1&view=markup
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++
++From 1d8973e13d89802eee0b648451e2b97ac65cf9e0 Mon Sep 17 00:00:00 2001
++From: Reuben Hawkins <reubenhwk@gmail.com>
++Date: Sat, 16 May 2015 09:27:38 -0700
++Subject: [PATCH] device-linux.c: IEEE 802.15.4 musl libc fix
++
++The ARPHRD_IEEE802154 macro's definition and name have been recently
++moved around from kernel header to glibc headers.  Include linux/if_arp.h
++if available and then use either ARPHRD_IEEE802154_MONITOR or ARPHRD_IEEE802154_PHY,
++whichever comes first.
++---
++ configure.ac   | 1 +
++ device-linux.c | 8 ++++++++
++ includes.h     | 6 ++++++
++ 3 files changed, 15 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 0c1efd6..4bd4c9d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -156,6 +156,7 @@ AC_HEADER_STDC
++ AC_CHECK_HEADERS( \
++ 	getopt.h \
++ 	ifaddrs.h \
+++	linux/if_arp.h \
++ 	machine/limits.h \
++ 	machine/param.h \
++ 	net/if_arp.h \
++diff --git a/device-linux.c b/device-linux.c
++index fa7d978..de83f2e 100644
++--- a/device-linux.c
+++++ b/device-linux.c
++@@ -79,10 +79,12 @@ int update_device_info(int sock, struct Interface *iface)
++ 		iface->sllao.if_maxmtu = -1;
++ 		break;
++ #endif				/* ARPHDR_ARCNET */
+++#ifdef ARPHRD_IEEE802154
++ 	case ARPHRD_IEEE802154:
++ 		iface->sllao.if_hwaddr_len = 64;
++ 		iface->sllao.if_prefix_len = 64;
++ 		break;
+++#endif
++ 	default:
++ 		iface->sllao.if_hwaddr_len = -1;
++ 		iface->sllao.if_prefix_len = -1;
++@@ -371,9 +373,15 @@ static char const *hwstr(unsigned short sa_family)
++ 	case ARPHRD_IEEE802154:
++ 		rc = "ARPHRD_IEEE802154";
++ 		break;
+++#if ARPHRD_IEEE802154_MONITOR
+++	case ARPHRD_IEEE802154_MONITOR:
+++		rc = "ARPHRD_IEEE802154_MONITOR";
+++		break;
+++#elif ARPHRD_IEEE802154_PHY
++ 	case ARPHRD_IEEE802154_PHY:
++ 		rc = "ARPHRD_IEEE802154_PHY";
++ 		break;
+++#endif
++ 	case ARPHRD_VOID:
++ 		rc = "ARPHRD_VOID";
++ 		break;
++diff --git a/includes.h b/includes.h
++index 39a36d2..d2449c4 100644
++--- a/includes.h
+++++ b/includes.h
++@@ -81,9 +81,11 @@
++ #ifdef HAVE_NET_IF_DL_H
++ #include <net/if_dl.h>
++ #endif
+++
++ #ifdef HAVE_NET_IF_TYPES_H
++ #include <net/if_types.h>
++ #endif
+++
++ #if defined(HAVE_NET_IF_ARP_H) && !defined(ARPHRD_ETHER)
++ #include <net/if_arp.h>
++ #endif				/* defined(HAVE_NET_IF_ARP_H) && !defined(ARPHRD_ETHER) */
++@@ -100,3 +102,7 @@
++ #include <ifaddrs.h>
++ #endif
++ 
+++#ifdef HAVE_LINUX_IF_ARP_H
+++#include <linux/if_arp.h>
+++#endif
+++
++-- 
++2.3.6
++
 -- 
 2.7.0.rc3
