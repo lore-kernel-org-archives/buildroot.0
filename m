@@ -1,258 +1,72 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 00:54:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rpcbind: fix musl build
-Message-ID: <1453593283-25792-1-git-send-email-bernd.kuhls@t-online.de>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 23 Jan 2016 21:53:41 -0200
+Subject: [Buildroot]  [PATCH v2 0/2] fix build using old versions of patch
+Message-ID: <1453593223-10558-1-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The autobuilders did not catch the error yet because they failed
-earlier with other packages, but I am continuing the build based
-on the defconfig from:
-http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
+This patch series makes libsoil (currently the only package that
+patches a file with spaces in the name) to build fine even in very old
+distros. I tested using patch 2.5 (from 1997) compiled from its tarball
+in a Ubuntu 14.04 host system.
+The patch series also updates the manual to describe the workaround
+needed in such cases (when a patch need to be applied to a file with
+spaces in the name).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...003-Avoid-use-of-glibc-sys-cdefs.h-header.patch | 229 +++++++++++++++++++++
- 1 file changed, 229 insertions(+)
- create mode 100644 package/rpcbind/0003-Avoid-use-of-glibc-sys-cdefs.h-header.patch
+Anyone willing to help by testing on a RHEL4 or RHEL5 after the
+code-review? See
+http://autobuild.buildroot.net/results/ea7/ea77d6b23aca0cb1cf527e6c16ddf5eba957a69c/
 
-diff --git a/package/rpcbind/0003-Avoid-use-of-glibc-sys-cdefs.h-header.patch b/package/rpcbind/0003-Avoid-use-of-glibc-sys-cdefs.h-header.patch
-new file mode 100644
-index 0000000..0c987cc
---- /dev/null
-+++ b/package/rpcbind/0003-Avoid-use-of-glibc-sys-cdefs.h-header.patch
-@@ -0,0 +1,229 @@
-+Fix musl build
-+
-+Downloaded from
-+http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-extended/rpcbind/rpcbind/0001-Avoid-use-of-glibc-sys-cdefs.h-header.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From 2a44d862233f2126581e290d568e1c8b8f2eb9f5 Mon Sep 17 00:00:00 2001
-+From: Carlo Landmeter <clandmeter@gmail.com>
-+Date: Thu, 19 Feb 2015 15:28:45 +0000
-+Subject: [PATCH] Avoid use of glibc sys/cdefs.h header
-+
-+Upstream-Status: Pending
-+---
-+ src/check_bound.c  |    2 +-
-+ src/pmap_svc.c     |   10 +++++-----
-+ src/rpcb_svc.c     |   10 +++++-----
-+ src/rpcb_svc_4.c   |   14 +++++++-------
-+ src/rpcb_svc_com.c |   46 +++++++++++++++++++++++-----------------------
-+ src/rpcbind.c      |   12 ++++++------
-+ src/util.c         |    2 +-
-+ src/warmstart.c    |    4 ++--
-+ 8 files changed, 50 insertions(+), 50 deletions(-)
-+
-+diff --git a/src/check_bound.c b/src/check_bound.c
-+index c70b845..5d21730 100644
-+--- a/src/check_bound.c
-++++ b/src/check_bound.c
-+@@ -70,7 +70,7 @@ static struct fdlist *fdhead;	/* Link list of the check fd's */
-+ static struct fdlist *fdtail;
-+ static char *nullstring = "";
-+ 
-+-static bool_t check_bound __P((struct fdlist *, char *uaddr));
-++static bool_t check_bound (struct fdlist *, char *uaddr);
-+ 
-+ /*
-+  * Returns 1 if the given address is bound for the given addr & transport
-+diff --git a/src/pmap_svc.c b/src/pmap_svc.c
-+index ad28b93..9c7d409 100644
-+--- a/src/pmap_svc.c
-++++ b/src/pmap_svc.c
-+@@ -60,11 +60,11 @@ static	char sccsid[] = "@(#)pmap_svc.c 1.23 89/04/05 Copyr 1984 Sun Micro";
-+ #include "rpcbind.h"
-+ #include "xlog.h"
-+ #include <rpc/svc_soc.h> /* svc_getcaller routine definition */
-+-static struct pmaplist *find_service_pmap __P((rpcprog_t, rpcvers_t,
-+-					       rpcprot_t));
-+-static bool_t pmapproc_change __P((struct svc_req *, SVCXPRT *, u_long));
-+-static bool_t pmapproc_getport __P((struct svc_req *, SVCXPRT *));
-+-static bool_t pmapproc_dump __P((struct svc_req *, SVCXPRT *));
-++static struct pmaplist *find_service_pmap (rpcprog_t, rpcvers_t,
-++					       rpcprot_t);
-++static bool_t pmapproc_change (struct svc_req *, SVCXPRT *, u_long);
-++static bool_t pmapproc_getport (struct svc_req *, SVCXPRT *);
-++static bool_t pmapproc_dump (struct svc_req *, SVCXPRT *);
-+ 
-+ /*
-+  * Called for all the version 2 inquiries.
-+diff --git a/src/rpcb_svc.c b/src/rpcb_svc.c
-+index bd92201..6c7f7fe 100644
-+--- a/src/rpcb_svc.c
-++++ b/src/rpcb_svc.c
-+@@ -53,10 +53,10 @@
-+ #include "rpcbind.h"
-+ #include "xlog.h"
-+ 
-+-static void *rpcbproc_getaddr_3_local __P((void *, struct svc_req *, SVCXPRT *,
-+-					   rpcvers_t));
-+-static void *rpcbproc_dump_3_local __P((void *, struct svc_req *, SVCXPRT *,
-+-					rpcvers_t));
-++static void *rpcbproc_getaddr_3_local (void *, struct svc_req *, SVCXPRT *,
-++					   rpcvers_t);
-++static void *rpcbproc_dump_3_local (void *, struct svc_req *, SVCXPRT *,
-++					rpcvers_t);
-+ 
-+ /*
-+  * Called by svc_getreqset. There is a separate server handle for
-+@@ -75,7 +75,7 @@ rpcb_service_3(struct svc_req *rqstp, SVCXPRT *transp)
-+ 	} argument;
-+ 	char *result;
-+ 	xdrproc_t xdr_argument, xdr_result;
-+-	void *(*local) __P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
-++	void *(*local) (void *, struct svc_req *, SVCXPRT *, rpcvers_t);
-+ 	rpcprog_t setprog = 0;
-+ 
-+ 	rpcbs_procinfo(RPCBVERS_3_STAT, rqstp->rq_proc);
-+diff --git a/src/rpcb_svc_4.c b/src/rpcb_svc_4.c
-+index b673452..6764c0a 100644
-+--- a/src/rpcb_svc_4.c
-++++ b/src/rpcb_svc_4.c
-+@@ -54,13 +54,13 @@
-+ #include "rpcbind.h"
-+ #include "xlog.h"
-+ 
-+-static void *rpcbproc_getaddr_4_local __P((void *, struct svc_req *, SVCXPRT *,
-+-				      rpcvers_t));
-+-static void *rpcbproc_getversaddr_4_local __P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
-++static void *rpcbproc_getaddr_4_local (void *, struct svc_req *, SVCXPRT *,
-++				      rpcvers_t);
-++static void *rpcbproc_getversaddr_4_local (void *, struct svc_req *, SVCXPRT *, rpcvers_t);
-+ static void *rpcbproc_getaddrlist_4_local
-+-	__P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
-+-static void free_rpcb_entry_list __P((rpcb_entry_list_ptr *));
-+-static void *rpcbproc_dump_4_local __P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
-++	(void *, struct svc_req *, SVCXPRT *, rpcvers_t);
-++static void free_rpcb_entry_list (rpcb_entry_list_ptr *);
-++static void *rpcbproc_dump_4_local (void *, struct svc_req *, SVCXPRT *, rpcvers_t);
-+ 
-+ /*
-+  * Called by svc_getreqset. There is a separate server handle for
-+@@ -78,7 +78,7 @@ rpcb_service_4(struct svc_req *rqstp, SVCXPRT *transp)
-+ 	} argument;
-+ 	char *result;
-+ 	xdrproc_t xdr_argument, xdr_result;
-+-	void *(*local) __P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
-++	void *(*local) (void *, struct svc_req *, SVCXPRT *, rpcvers_t);
-+ 	rpcprog_t setprog = 0;
-+ 
-+ 	rpcbs_procinfo(RPCBVERS_4_STAT, rqstp->rq_proc);
-+diff --git a/src/rpcb_svc_com.c b/src/rpcb_svc_com.c
-+index ff9ce6b..8aef9e5 100644
-+--- a/src/rpcb_svc_com.c
-++++ b/src/rpcb_svc_com.c
-+@@ -100,29 +100,29 @@ struct finfo {
-+ static struct finfo     FINFO[NFORWARD];
-+ 
-+ 
-+-static bool_t xdr_encap_parms __P((XDR *, struct encap_parms *));
-+-static bool_t xdr_rmtcall_args __P((XDR *, struct r_rmtcall_args *));
-+-static bool_t xdr_rmtcall_result __P((XDR *, struct r_rmtcall_args *));
-+-static bool_t xdr_opaque_parms __P((XDR *, struct r_rmtcall_args *));
-+-static int find_rmtcallfd_by_netid __P((char *));
-+-static SVCXPRT *find_rmtcallxprt_by_fd __P((int));
-+-static int forward_register __P((u_int32_t, struct netbuf *, int, char *,
-+-    rpcproc_t, rpcvers_t, u_int32_t *));
-+-static struct finfo *forward_find __P((u_int32_t));
-+-static int free_slot_by_xid __P((u_int32_t));
-+-static int free_slot_by_index __P((int));
-+-static int netbufcmp __P((struct netbuf *, struct netbuf *));
-+-static struct netbuf *netbufdup __P((struct netbuf *));
-+-static void netbuffree __P((struct netbuf *));
-+-static int check_rmtcalls __P((struct pollfd *, int));
-+-static void xprt_set_caller __P((SVCXPRT *, struct finfo *));
-+-static void send_svcsyserr __P((SVCXPRT *, struct finfo *));
-+-static void handle_reply __P((int, SVCXPRT *));
-+-static void find_versions __P((rpcprog_t, char *, rpcvers_t *, rpcvers_t *));
-+-static rpcblist_ptr find_service __P((rpcprog_t, rpcvers_t, char *));
-+-static char *getowner __P((SVCXPRT *, char *, size_t));
-+-static int add_pmaplist __P((RPCB *));
-+-static int del_pmaplist __P((RPCB *));
-++static bool_t xdr_encap_parms (XDR *, struct encap_parms *);
-++static bool_t xdr_rmtcall_args (XDR *, struct r_rmtcall_args *);
-++static bool_t xdr_rmtcall_result (XDR *, struct r_rmtcall_args *);
-++static bool_t xdr_opaque_parms (XDR *, struct r_rmtcall_args *);
-++static int find_rmtcallfd_by_netid (char *);
-++static SVCXPRT *find_rmtcallxprt_by_fd (int);
-++static int forward_register (u_int32_t, struct netbuf *, int, char *,
-++    rpcproc_t, rpcvers_t, u_int32_t *);
-++static struct finfo *forward_find (u_int32_t);
-++static int free_slot_by_xid (u_int32_t);
-++static int free_slot_by_index (int);
-++static int netbufcmp (struct netbuf *, struct netbuf *);
-++static struct netbuf *netbufdup (struct netbuf *);
-++static void netbuffree (struct netbuf *);
-++static int check_rmtcalls (struct pollfd *, int);
-++static void xprt_set_caller (SVCXPRT *, struct finfo *);
-++static void send_svcsyserr (SVCXPRT *, struct finfo *);
-++static void handle_reply (int, SVCXPRT *);
-++static void find_versions (rpcprog_t, char *, rpcvers_t *, rpcvers_t *);
-++static rpcblist_ptr find_service (rpcprog_t, rpcvers_t, char *);
-++static char *getowner (SVCXPRT *, char *, size_t);
-++static int add_pmaplist (RPCB *);
-++static int del_pmaplist (RPCB *);
-+ 
-+ /*
-+  * Set a mapping of program, version, netid
-+diff --git a/src/rpcbind.c b/src/rpcbind.c
-+index 045daa1..137011b 100644
-+--- a/src/rpcbind.c
-++++ b/src/rpcbind.c
-+@@ -135,13 +135,13 @@ char *tcp_uaddr;	/* Universal TCP address */
-+ static char servname[] = "rpcbind";
-+ static char superuser[] = "superuser";
-+ 
-+-int main __P((int, char *[]));
-++int main (int, char *[]);
-+ 
-+-static int init_transport __P((struct netconfig *));
-+-static void rbllist_add __P((rpcprog_t, rpcvers_t, struct netconfig *,
-+-			     struct netbuf *));
-+-static void terminate __P((int));
-+-static void parseargs __P((int, char *[]));
-++static int init_transport (struct netconfig *);
-++static void rbllist_add (rpcprog_t, rpcvers_t, struct netconfig *,
-++			     struct netbuf *);
-++static void terminate (int);
-++static void parseargs (int, char *[]);
-+ 
-+ int
-+ main(int argc, char *argv[])
-+diff --git a/src/util.c b/src/util.c
-+index a6c835b..33b9e4f 100644
-+--- a/src/util.c
-++++ b/src/util.c
-+@@ -70,7 +70,7 @@ static struct sockaddr_in *local_in4;
-+ static struct sockaddr_in6 *local_in6;
-+ #endif
-+ 
-+-static int bitmaskcmp __P((void *, void *, void *, int));
-++static int bitmaskcmp (void *, void *, void *, int);
-+ 
-+ /*
-+  * For all bits set in "mask", compare the corresponding bits in
-+diff --git a/src/warmstart.c b/src/warmstart.c
-+index b6eb73e..42dd3af 100644
-+--- a/src/warmstart.c
-++++ b/src/warmstart.c
-+@@ -58,8 +58,8 @@
-+ #define	PMAPFILE	RPCBIND_STATEDIR "/portmap.xdr"
-+ #endif
-+ 
-+-static bool_t write_struct __P((char *, xdrproc_t, void *));
-+-static bool_t read_struct __P((char *, xdrproc_t, void *));
-++static bool_t write_struct (char *, xdrproc_t, void *);
-++static bool_t read_struct (char *, xdrproc_t, void *);
-+ 
-+ static bool_t
-+ write_struct(char *filename, xdrproc_t structproc, void *list)
+Some background:
+
+patch version 2.7 or later is required to apply patches (generated by
+ diff v3.3) that change a file with space in the name
+
+The output of "diff -purN" when there are spaces in the name of a
+changed file depends on the tool version:
+ diff <= v3.2 does not add double quotes to filenames with spaces
+ diff >= v3.3 adds double quotes to filenames with spaces
+Tests were performed using the versions 3.2 and 3.3 from
+http://ftp.gnu.org/gnu/diffutils/
+
+The tool 'patch' can handle patches with spaces in the name of a
+changed file depending on the tool version:
+ patch <= 2.5.4 cannot handle spaces in filenames
+ patch >= 2.5.9 can handle unquoted filenames with spaces
+ patch >= 2.7 can handle both quoted and unquoted filenames
+Tests were performed using all versions with tarball available at
+http://ftp.gnu.org/gnu/patch/
+
+If the patch file is just edited to remove the quote (added by
+ diff >= v3.3) around the filename, it would become applicable by
+patch >= 2.5.9
+
+RHEL5 and RHEL4 use patch 2.5.4. (Thomas P)
+There are still users that build using these distros. (Thomas DS)
+
+Symlink and hard link cannot be used because patch unlinks them.
+But the file can be renamed by a hook before patched.
+And the patched file can be renamed back by another hook, if needed.
+
+Ricardo Martincoski (2):
+  package/libsoil: fix build using old versions of patch
+  docs/manual: patches that change files with spaces in the name
+
+ docs/manual/patch-policy.txt            | 17 +++++++++++++++++
+ package/libsoil/0001-fix-makefile.patch |  6 +++---
+ package/libsoil/libsoil.mk              |  8 +++++++-
+ 3 files changed, 27 insertions(+), 4 deletions(-)
+
+--- 
+v1 -> v2:
+ - remove prerequisite patch >= 2.5.9 (added by v1)
+ - use 1 or 2 hooks to rename the file that contains spaces
+   (based on the suggestion to use a symlink from Thomas DS)
+ - change the patch file to be applied on the renamed file
+ - update the manual entry
+ - do not use the 2nd rename hook for libsoil (Thomas P)
 -- 
-2.7.0.rc3
+1.9.1
