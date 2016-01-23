@@ -1,30 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jan 2016 15:42:20 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAAXf6LVEad4=FoRzHa1cE5Yop94UAAEY7n-O7GfhHYaPsF06_w@mail.gmail.com>
-References: <CAAXf6LVT_WBVsRfs8JAT0DMPDhSYDhvM02CDkLFW+6RQ4JkQeg@mail.gmail.com>
- <56a38670821b1_103918cca708271f@ultri2.mail>
- <CAAXf6LVEad4=FoRzHa1cE5Yop94UAAEY7n-O7GfhHYaPsF06_w@mail.gmail.com>
-Message-ID: <20160123154220.06518c9d@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 23 Jan 2016 15:53:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/monit: Fix musl build
+Message-ID: <1453560802-8969-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Fixes
+http://autobuild.buildroot.net/results/aa1/aa1c06324b066ba13d82bcb7afa452a4974f1254/
 
-On Sat, 23 Jan 2016 15:26:13 +0100, Thomas De Schampheleire wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/monit/0002-musl.patch | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 package/monit/0002-musl.patch
 
-> I guess a hard link would work here, then. Care to try?
-
-But why would we do that? If I understood Ricardo's e-mail, a simple
-change to the patch (remove the double quotes) would make it just work.
-
-So why are we looking for a complicated solution here ?
-
-Thomas
+diff --git a/package/monit/0002-musl.patch b/package/monit/0002-musl.patch
+new file mode 100644
+index 0000000..ba8e4f0
+--- /dev/null
++++ b/package/monit/0002-musl.patch
+@@ -0,0 +1,20 @@
++Fix musl build
++
++Downloaded from
++http://git.alpinelinux.org/cgit/aports/tree/main/monit/musl-fix.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- monit-5.6.old/src/process/sysdep_LINUX.c
+++++ monit-5.6/src/process/sysdep_LINUX.c
++@@ -79,6 +79,10 @@
++ #include <glob.h>
++ #endif
++ 
+++#ifndef GLOB_ONLYDIR
+++#define GLOB_ONLYDIR 0
+++#endif
+++
++ #ifndef HZ
++ # define HZ sysconf(_SC_CLK_TCK)
++ #endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0.rc3
