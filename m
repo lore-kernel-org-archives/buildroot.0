@@ -1,63 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Jan 2016 16:44:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/open-plc-utils: bump version
-Message-ID: <1453563890-6361-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Jan 2016 16:58:16 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <56a39930cd84_671a180a0ec59869@ultri2.mail>
+References: <20160123154220.06518c9d@free-electrons.com>
+ <56a39930cd84_671a180a0ec59869@ultri2.mail>
+Message-ID: <20160123165816.05338d25@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch for scripts/Makefile because the file was removed upstream:
-https://github.com/qca/open-plc-utils/commit/3682e7be80b76490360b655c6217da41bfb90a8e
+Hello,
 
-Fixes musl build error:
-http://autobuild.buildroot.net/results/582/5824f101d21698d562e9836c571ceab6fdfadc29//
+On Sat, 23 Jan 2016 13:16:00 -0200, Ricardo Martincoski wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...01-Remove-OWNER-and-GROUPS-parameters-to-install.patch | 15 ---------------
- package/open-plc-utils/open-plc-utils.mk                  |  2 +-
- 2 files changed, 1 insertion(+), 16 deletions(-)
+> Just to be clear, removing the double quotes makes it work with
+> patch 2.5.9 or later.
+> Patch 2.5.4 can't handle spaces in filenames.
+> (I tested using only the versions with tarballs available, that's the cause of
+> the gap 2.5.9 -> 2.5.4, see http://ftp.gnu.org/gnu/patch/)
 
-diff --git a/package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch b/package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch
-index 061b3a6..9fc30a9 100644
---- a/package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch
-+++ b/package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch
-@@ -237,21 +237,6 @@ index 60b9bb3..c951218 100755
-  uninstall:
-  	cd ${BIN}; rm -f ${TOOLS}
-  	cd ${MAN}; rm -f ${PAGES}
--diff --git a/scripts/Makefile b/scripts/Makefile
--index c9a785a..022e5f9 100755
----- a/scripts/Makefile
--+++ b/scripts/Makefile
--@@ -30,8 +30,8 @@ all compile:
-- install:
-- scripts:
-- manuals:
---	test -d ${MAN} || install -m ${DIR_PERM} -o ${OWNER} -g ${GROUP} -d ${MAN}
---	install -m ${MAN_PERM} -o ${OWNER} -g ${GROUP} ${PAGES} ${MAN}
--+	test -d ${MAN} || install -m ${DIR_PERM} -d ${MAN}
--+	install -m ${MAN_PERM} ${PAGES} ${MAN}
-- library:
-- uninstall:
-- clean:
- diff --git a/serial/Makefile b/serial/Makefile
- index c25f1a6..6420d4a 100755
- --- a/serial/Makefile
-diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
-index 61badcd..a674372 100644
---- a/package/open-plc-utils/open-plc-utils.mk
-+++ b/package/open-plc-utils/open-plc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPEN_PLC_UTILS_VERSION = 1f6e7e372b313cf570aa63314037588ed01ec0de
-+OPEN_PLC_UTILS_VERSION = 05ef40c0a2949cfaf1c3230e10679fbcf912d174
- OPEN_PLC_UTILS_SITE = $(call github,qca,open-plc-utils,$(OPEN_PLC_UTILS_VERSION))
- OPEN_PLC_UTILS_LICENSE = BSD-3c
- OPEN_PLC_UTILS_LICENSE_FILES = LICENSE
+RHEL4 uses patch 2.5.4
+(http://ftp.redhat.com/pub/redhat/linux/enterprise/4/en/os/i386/SRPMS/).
+RHEL4 was released January 2005
+
+RHEL5 also seems to be using patch 2.5.4
+(http://ftp.redhat.com/pub/redhat/linux/enterprise/5Client/en/os/SRPMS/).
+RHEL5 was released March 2007.
+
+It's only starting at RHEL6 that patch 2.6 starts to be used
+(http://ftp.redhat.com/pub/redhat/linux/enterprise/6Client/en/os/SRPMS/).
+RHEL6 was released November 2010.
+
+Thomas DS, you are one of our users relying on very old enterprise
+distros. Are you still on RHEL 4/5 ?
+
+Best regards,
+
+Thomas
 -- 
-2.7.0.rc3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
