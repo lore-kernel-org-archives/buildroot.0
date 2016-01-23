@@ -1,53 +1,49 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 23 Jan 2016 17:56:26 +0100
-Subject: [Buildroot] [PATCH] package/gdb: avoid build issue with gdb sources
-	from a git repository
-Message-ID: <1453568186-4592-1-git-send-email-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 23 Jan 2016 18:06:13 +0100
+Subject: [Buildroot] [git commit] package/cups: Un-deprecate,
+ and update CUPS to 2.1.2
+In-Reply-To: <20160123162456.GB3363@free.fr>
+References: <20160121223830.DD957803E9@busybox.osuosl.org>
+ <20160123162456.GB3363@free.fr>
+Message-ID: <20160123170613.GC3363@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't try to generate standards.info.
+Olivier, Thomas, All,
 
-WARNING: `makeinfo' is missing on your system.  You should only need it if
-         you modified a `.texi' or `.texinfo' file, or any other file
-         indirectly affecting the aspect of the manual.  The spurious
-         call might also be the consequence of using a buggy `make' (AIX,
-         DU, IRIX).  You might want to install the `Texinfo' package or
-         the `GNU make' package.  Grab either from any GNU archive site.
-make[5]: *** [standards.info] Error 1
-make[4]: *** [info] Error 1
-make[3]: *** [all-etc] Error 2
-make[3]: *** Waiting for unfinished jobs....
+On 2016-01-23 17:24 +0100, Yann E. MORIN spake thusly:
+> On 2016-01-21 23:37 +0100, Thomas Petazzoni spake thusly:
+> > commit: http://git.buildroot.net/buildroot/commit/?id=d37ce8e1a4edc9a06831e6b0842996866534b1ea
+> > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > 
+> >  - Remove 0001-fix-static.patch - Fixed upstream
+> >  - Remove 0002-fix-stack-protector-check.patch - Fixed upstream
+> >  - Remove 0003-mantohtml.patch - Replaced by
+> >    0001-Remove-man-from-BUILDDIRS-in- configure.patch
+> >  - Add 0002-Do-not-use-genstrings.patch
+> >  - Add CUPS_PDFTOPS option to Config.in.legacy - This support was
+> >    moved to the cups-filters package.
+> 
+> This is causing circular dependencies in make:
+> 
+>     make[1]: Circular cups-all-source <- avahi-all-source dependency dropped.
 
-Fixes:
-http://autobuild.buildroot.net/results/55d/55d95d7decc8ff8c451601a38ce2c2818fe23bcc
+I managed to get the reason for that. Here's what we have:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-It would be easier to force "missing" script to exit 0
-instead of unsing SED all over the gdb's tree.
----
- package/gdb/gdb.mk | 3 +++
- 1 file changed, 3 insertions(+)
+    cups depends on avahi depends on libgtk3 depends on cups
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 3b0f501..6447598 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -54,6 +54,9 @@ endif
- # Prevent gdb to build the documentation
- define GDB_DISABLE_DOC
- 	$(SED) '/^SUBDIRS =/ s/doc//' $(@D)/gdb/Makefile.in
-+	if test -e $(@D)/etc/Makefile.in ; then \
-+		$(SED) '/^INFOFILES =/ s/standards.info configure.info//' $(@D)/etc/Makefile.in ; \
-+	fi
- 	if test -e $(@D)/bfd/doc/Makefile.in ; then \
- 		$(SED) 's/^INFO_DEPS =.*$$/INFO_DEPS =/' $(@D)/bfd/doc/Makefile.in ; \
- 	fi
+So, we must cut the dependency chain somewhere. Ideas?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.4.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
