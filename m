@@ -1,30 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jan 2016 12:02:26 +0100
-Subject: [Buildroot] [PATCH 1/2] package/lttng-tools: reorder 'select'
- vs 'depends on'
-In-Reply-To: <1453546342-14457-1-git-send-email-s.martin49@gmail.com>
-References: <1453546342-14457-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160123120226.771c57b6@free-electrons.com>
+Date: Sat, 23 Jan 2016 12:02:43 +0100
+Subject: [Buildroot] [git commit] package/sqlite: Dynamically link
+	libsqlite.so to bin/sqlite3
+Message-ID: <20160123110527.EF3387FB27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=58e931989fb23df55334a17aa5d4ee0d8dc45355
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 23 Jan 2016 11:52:21 +0100, Samuel Martin wrote:
-> Place 'depends on' statements before 'select' ones.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/lttng-tools/Config.in | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+Fixes https://bugs.busybox.net/show_bug.cgi?id=8621#c1
+Lonnie Abelbeck wrote:
+"recently sqlite changed it's default behavior wrt the sqlite CLI tool,
+ previously it was dynamically linked with libsqlite3.so.0 by default,
+ now it is statically linked by default.
 
-Both applied, thanks.
+The old behavior can be signaled with: --disable-static-shell"
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sqlite/sqlite.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 27dad12..46acbf8 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -35,6 +35,8 @@ SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ SQLITE_CONF_OPTS += --enable-dynamic-extensions=no
++else
++SQLITE_CONF_OPTS += --disable-static-shell
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
