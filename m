@@ -1,63 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Jan 2016 14:10:30 +0100
-Subject: [Buildroot] [PATCH 4/4] package/sqlite: add optional support
-	for libedit
-In-Reply-To: <20160123131048.579f660b@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 23 Jan 2016 13:10:48 +0100")
-References: <1453544625-30597-1-git-send-email-bernd.kuhls@t-online.de>
- <1453544625-30597-4-git-send-email-bernd.kuhls@t-online.de>
- <20160123131048.579f660b@free-electrons.com>
-Message-ID: <87oaccqw55.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 23 Jan 2016 14:13:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix musl build
+Message-ID: <1453554802-9952-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Fixes
+http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 
- > Dear Bernd Kuhls,
- > On Sat, 23 Jan 2016 11:23:45 +0100, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdrm/0003-fixmusl.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/libdrm/0003-fixmusl.patch
 
- >> diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
- >> index 7ea9eb1..31add17 100644
- >> --- a/package/sqlite/Config.in
- >> +++ b/package/sqlite/Config.in
- >> @@ -8,13 +8,25 @@ config BR2_PACKAGE_SQLITE
- >> 
- >> if BR2_PACKAGE_SQLITE
- >> 
- >> +choice
- >> +	prompt "Command-line editing"
- >> +	default BR2_PACKAGE_SQLITE_READLINE
- >> +	help
- >> +	  Enable command-line editing.
- >> +
- >> +config BR2_PACKAGE_SQLITE_LIBEDIT
- >> +	bool "libedit"
- >> +	select BR2_PACKAGE_LIBEDIT
- >> +
- >> config BR2_PACKAGE_SQLITE_READLINE
- >> -	bool "Command-line editing"
- >> +	bool "readline"
- >> select BR2_PACKAGE_NCURSES
- >> select BR2_PACKAGE_READLINE
- >> help
- >> Enable command-line editing. This requires ncurses and readline.
-
- > I am not sure I like adding a choice for such a simple thing.
- > Config.in choices are not randomized in our build testing.
-
- > What about instead dropping the BR2_PACKAGE_SQLITE_READLINE option, and
- > automatically enable readline/libedit support in sqlite when the
- > corresponding packages are enabled ?
-
- > Peter, what do you think ?
-
-Yes, I also think that would be nicer. The situation with readline is
-imho quite like openssl, E.G. we should just enable support for it in
-packages if it is present.
-
+diff --git a/package/libdrm/0003-fixmusl.patch b/package/libdrm/0003-fixmusl.patch
+new file mode 100644
+index 0000000..5c7cc79
+--- /dev/null
++++ b/package/libdrm/0003-fixmusl.patch
+@@ -0,0 +1,18 @@
++Fix musl build
++
++Patch inspired by upstream bug report:
++https://bugs.freedesktop.org/show_bug.cgi?id=93764
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr libdrm-2.4.66.org/tests/kms/kms-steal-crtc.c libdrm-2.4.66/tests/kms/kms-steal-crtc.c
++--- libdrm-2.4.66.org/tests/kms/kms-steal-crtc.c	2015-12-27 20:40:57.000000000 +0100
+++++ libdrm-2.4.66/tests/kms/kms-steal-crtc.c	2016-01-23 11:33:26.000000000 +0100
++@@ -31,6 +31,7 @@
++ #include <stdio.h>
++ #include <string.h>
++ #include <unistd.h>
+++#include <sys/select.h>
++ 
++ #include <drm_fourcc.h>
++ 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.0.rc3
