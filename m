@@ -1,101 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jan 2016 09:25:49 +0100
-Subject: [Buildroot] [PATCH 18/18] erlang: make libatomic_ops optional
-In-Reply-To: <1453511471-28519-19-git-send-email-fhunleth@troodon-software.com>
-References: <1453511471-28519-1-git-send-email-fhunleth@troodon-software.com>
- <1453511471-28519-19-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20160123092549.2c47f3b5@free-electrons.com>
+Date: Sat, 23 Jan 2016 09:32:09 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <56A2B908.2000801@gmail.com>
+References: <20160122073021.E35B6101A27@stock.ovh.net>
+ <20160122102957.10f29956@free-electrons.com>
+ <56A2B908.2000801@gmail.com>
+Message-ID: <20160123093209.5f0085c5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank,
+Hello,
 
-On Fri, 22 Jan 2016 20:11:11 -0500, Frank Hunleth wrote:
-> The Erlang developers prefer the use of Erlang's native atomics in
-> Erlang 18. In the previous Erlang release, the native atomics
-> implementation was not complete and so libatomic_ops was necessary. Now
-> libatomic_ops is used as a fallback, but based on tests of every
-> qemu_*_defconfig and several other configs it appears to not be
-> necessary. In fact, it causes build failures on aarch64. Since it is
+On Sat, 23 Jan 2016 00:19:36 +0100, Romain Naour wrote:
 
-If using libatomic_ops on aarch64 with erlang causes build failures,
-then your BR2_PACKAGE_ERLANG_USE_LIBATOMIC_OPS option should depend
-on !BR2_aarch64.
-
-> conceivable that a platform exists that may still require libatomic_ops,
-> this change makes the use of the library optional.
+> > Romain ? This is host-efl, maybe we need to disable Lua support or
+> > something ?
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/0cd/0cd22eb74fa29e5a85bf897762e16ab3daf33962/
+> It's a lua 5.1 vs 5.2 and 5.3 issue.
 > 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  package/erlang/Config.in | 10 ++++++++--
->  package/erlang/erlang.mk |  2 ++
->  2 files changed, 10 insertions(+), 2 deletions(-)
+> It's a complete mess because there is an uptream patch [1] that try to fixes the
+> build issue, but not completely.
 > 
-> diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-> index 0ec01bb..9bd64ac 100644
-> --- a/package/erlang/Config.in
-> +++ b/package/erlang/Config.in
-> @@ -7,8 +7,7 @@ config BR2_PACKAGE_ERLANG
->  	bool "erlang"
->  	depends on BR2_USE_MMU # fork()
->  	depends on !BR2_STATIC_LIBS
-> -	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
-> -	select BR2_PACKAGE_LIBATOMIC_OPS
-> +	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # erlang native atomics and libatomic_ops
+> The build fail with the following error due to compatibility mode in lua
+> (LUA_COMPAT_ALL and LUA_COMPAT_5_1):
+> 
+> lib/evas/.libs/libevas.so: undefined reference to `luaL_openlib'
+> collect2: error: ld returned 1 exit status
+> 
+> Also the patch break the build for lua 5.1...
+> So, I think it's safe to add a dependency on lua 5.1 and report the problem
+> upstream.
 
-This shouldn't be here, since you no longer select libatomic_ops.
+So you would make the *target* EFL package depend on lua 5.1, so that
+the *host* EFL package also gets built against the host Lua 5.1 ?
 
->  	help
->  	  Erlang is a programming language used to build massively scalable
->  	  soft real-time systems with requirements on high availability.
-> @@ -20,6 +19,13 @@ config BR2_PACKAGE_ERLANG
->  
->  if BR2_PACKAGE_ERLANG
->  
-> +config BR2_PACKAGE_ERLANG_USE_LIBATOMIC_OPS
+I guess there is no way of disabling Lua support ? :-)
 
-We rarely use _USE_ in Config.in options for such cases. Just
-BR2_PACKAGE_ERLANG_LIBATOMIC_OPS is enough.
+So, yes, in the mean time, please add the dependency, and report the
+problem upstream. BTW, did you test the  --enable-lua-old option that
+is mentioned in
+https://git.enlightenment.org/core/efl.git/commit/?id=6124d0733657e425001ce51f526aea3bb8dc54e7,
+which you pointed ?
 
-> +	bool "use libatomic_ops"
-> +	select BR2_PACKAGE_LIBATOMIC_OPS
+> >> microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/d35f6ee7643a695af7db3739ff480d25b99ee051/
+> >> microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/09f4a89e463b6ccbca01cce1d38eb849c17ed6e1/
+> > 
+> > The documentation issue. Romain, you looked into this a while ago, why
+> > does it pop up again on Microblaze specifically ?
+> 
+> I think this build failure is here since we SED into the Makefile to remove the
+> documentation.
 
-This is where you should have the
-"depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS".
+I don't understand. Isn't the SED precisely here to prevent the
+documentation from being built ?
 
-> +	help
-> +	  Erlang's native atomic ops implementation is preferred. If this is
-> +	  insufficient, enabling this option forces Erlang to use libatomic_ops.
+> But I gave up on the patch for upstream...
 
-Lines too long I believe.
+What was the feedback ?
 
-> +
->  config BR2_PACKAGE_ERLANG_SMP
->  	bool "enable SMP support"
->  	help
-> diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-> index dfab30d..a2f75e7 100644
-> --- a/package/erlang/erlang.mk
-> +++ b/package/erlang/erlang.mk
-> @@ -30,8 +30,10 @@ ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
->  
->  ERLANG_CONF_OPTS = --without-javac
->  
-> +ifeq ($(BR2_PACKAGE_ERLANG_USE_LIBATOMIC_OPS),y)
->  ERLANG_DEPENDENCIES += libatomic_ops
->  ERLANG_CONF_OPTS += --with-libatomic_ops=$(STAGING_DIR)/usr LIBS=-latomic_ops
-> +endif
+> > Maybe we can switch to the mainline gdb for Microblaze ?
+> 
+> Why not. The latest gdb version was 7.5.1 when gdb for Microblaze was added to
+> Buildroot. Now we have at least 7.7.x.
 
-Can you add a "else" clause to explicitly disable libatomic_ops
-support? Otherwise, libatomic_ops may be enabled in the Buildroot
-configuration, built before erlang, and detected automatically by
-erlang configure script.
+I think we should try to use the mainline gdb. We have a Microblaze
+Qemu configuration, so we can at least do some basic testing here.
+
+> > 
+> >>        nios2 |           imagemagick-6.9.2-10 | NOK | http://autobuild.buildroot.net/results/0bf3a2a284b7d4712ab1530562d3b8164fc75e88/
+> > 
+> > The usual:
+> > 
+> >   assertion fail elf32-nios2.c:1038
+> > 
+> > This is being fixed at
+> > https://sourceware.org/bugzilla/show_bug.cgi?id=19405. In the mean
+> > time, we could disable on NIOS II maybe ?
+> 
+> Yes maybe.
+
+Can you submit a patch ?
+
+> >>        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/183df75a853c3b0e2617c9219a356c5531aa523d/
+> > 
+> > Will be fixed once we bump to binutils 2.26. Romain, maybe we should
+> > disable libcap-ng in the mean time ?
+> 
+> binutils 2.26 should be released in a few days, hopefully.
+
+Ok, good.
+
+> >>        nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/aa1492777c5f60ab45921618f64910ca4d048e5f/
+> >>        nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/a74810f0fce398c41fef11b8e2b8e1a52ffdb46a/
+> >>        nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/cb70d195cf9b9b5ae09b83a40ef767cc8f699a9c/
+> > 
+> > Toolchain issues. Being fixed in upstream gcc, but we should disable
+> > with external NIOS2 toolchain anyway.
+> > 
+> > Romain ?
+> 
+> This patch should be fine:
+> http://patchwork.ozlabs.org/patch/561414/
+
+Thanks. The only thing that bothers me a bit is that we will likely
+forget to remove all those "depends on BR2_nios2". But I guess we don't
+really have the choice.
 
 Thanks,
 
