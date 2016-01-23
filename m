@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jan 2016 12:02:43 +0100
-Subject: [Buildroot] [git commit] package/sqlite: Dynamically link
-	libsqlite.so to bin/sqlite3
-Message-ID: <20160123110527.EF3387FB27@busybox.osuosl.org>
+Date: Sat, 23 Jan 2016 12:02:35 +0100
+Subject: [Buildroot] [git commit] package/sqlite: Disable autoreconf
+Message-ID: <20160123110527.E068D80438@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58e931989fb23df55334a17aa5d4ee0d8dc45355
+commit: http://git.buildroot.net/buildroot/commit/?id=cef9b645cd00c16ee9b2d41591d5e94e634b004c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=8621#c1
-Lonnie Abelbeck wrote:
-"recently sqlite changed it's default behavior wrt the sqlite CLI tool,
- previously it was dynamically linked with libsqlite3.so.0 by default,
- now it is statically linked by default.
-
-The old behavior can be signaled with: --disable-static-shell"
+Currently we have no patches for this package, compilation works without
+autoreconf.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sqlite/sqlite.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/sqlite/sqlite.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 27dad12..46acbf8 100644
+index bf31292..27dad12 100644
 --- a/package/sqlite/sqlite.mk
 +++ b/package/sqlite/sqlite.mk
-@@ -35,6 +35,8 @@ SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
+@@ -11,9 +11,6 @@ SQLITE_LICENSE = Public domain
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
  
- ifeq ($(BR2_STATIC_LIBS),y)
- SQLITE_CONF_OPTS += --enable-dynamic-extensions=no
-+else
-+SQLITE_CONF_OPTS += --disable-static-shell
+-# Patching Makefile.am:
+-SQLITE_AUTORECONF = YES
+-
+ ifeq ($(BR2_PACKAGE_SQLITE_STAT3),y)
+ SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT3
  endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
