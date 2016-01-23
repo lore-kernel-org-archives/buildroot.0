@@ -1,58 +1,57 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Jan 2016 23:56:47 +0100
-Subject: [Buildroot] [PATCH 2/2] package/monkey: bump version to 1.6.8
-In-Reply-To: <1453589807-4373-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453589807-4373-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1453589807-4373-2-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Jan 2016 00:00:27 +0100
+Subject: [Buildroot] [PATCH] support/graph-depends: detect circular
+ dependencies
+In-Reply-To: <20160123223112.GD3363@free.fr>
+References: <1453586685-24190-1-git-send-email-yann.morin.1998@free.fr>
+ <20160123232121.10d1ffe3@free-electrons.com>
+ <20160123223112.GD3363@free.fr>
+Message-ID: <20160123230027.GE3363@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/monkey/monkey.hash | 6 +++---
- package/monkey/monkey.mk   | 6 ++----
- 2 files changed, 5 insertions(+), 7 deletions(-)
+Thomas, All,
 
-diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
-index 6c7eada..2f39945 100644
---- a/package/monkey/monkey.hash
-+++ b/package/monkey/monkey.hash
-@@ -1,3 +1,3 @@
--# md5 from http://monkey-project.com/releases/1.5/monkey-1.5.6.tar.gz.md5, sha256 locally computed:
--md5    9699e4c9ea6ce6b989907c252ae80254 				monkey-1.5.6.tar.gz
--sha256 7c3d845306aa74ee6effd7ab6169d16ac4e6450e564954d0d0baa2d1e9be1a22	monkey-1.5.6.tar.gz
-+# md5 from http://monkey-project.com/releases/1.6/monkey-1.6.8.tar.gz.md5, sha256 locally computed:
-+md5	aa9b95e16023a7fc062f00a197da059a					monkey-1.6.8.tar.gz
-+sha256	936aa276d11dea77cda2703eb5d1b89ede1cf8d44440e1ec029cafb10effb3cf	monkey-1.6.8.tar.gz
-diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
-index 02c26c9..da2a480 100644
---- a/package/monkey/monkey.mk
-+++ b/package/monkey/monkey.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--MONKEY_VERSION_MAJOR = 1.5
--MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).6
-+MONKEY_VERSION_MAJOR = 1.6
-+MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).8
- MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)
- MONKEY_LICENSE = Apache-2.0
- MONKEY_LICENSE_FILES = LICENSE
-@@ -17,11 +17,9 @@ MONKEY_LICENSE_FILES = LICENSE
- MONKEY_CONF_OPTS = \
- 	--prefix=/usr \
- 	--sysconfdir=/etc/monkey \
--	--datadir=/var/www \
- 	--mandir=/usr/share/man \
- 	--logdir=/var/log \
- 	--pidfile=/var/run \
--	--plugdir=/usr/lib/monkey \
- 	--malloc-libc
- 
- # --uclib-mode is not a typo
+On 2016-01-23 23:31 +0100, Yann E. MORIN spake thusly:
+> On 2016-01-23 23:21 +0100, Thomas Petazzoni spake thusly:
+> > On Sat, 23 Jan 2016 23:04:45 +0100, Yann E. MORIN wrote:
+> [--SNIP--]
+> > I am a bit worried about the algorithmic complexity of this new
+> > function. As you know, we had issues with other parts of graph-depends
+> > having a too high algorithmic complexity to handle large
+> > configurations, or configurations having specific patterns of
+> > dependencies.
+> > 
+> > Have you measured the time impact of this new check on a very large
+> > configuration (like allyespackageconfig) ?
+> 
+> I have an allyespackageconfig with an recent toolchain so I get a lot
+> of packages, and I tweaked the config to disable a few to enable others.
+> 
+> And no, the speed impact is not measurable for me. I'll come up with
+> numbers (of course, when there's no loop!) a bit later.
+
+Damn, I spoke too fast. The speed was totally fine as long as there were
+those circular dependencies I was hunting for.
+
+But without any circular deps, the speed is awfull and totally
+inacceptable.
+
+I'll see what I can do to speed this up.
+
+One option is to not do the check in graph-depends, but to off-load that
+into the package infrastructure, so we detect them even earlier.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.0.rc3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
