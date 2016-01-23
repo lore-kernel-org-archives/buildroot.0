@@ -1,754 +1,172 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Fri, 22 Jan 2016 20:11:10 -0500
-Subject: [Buildroot] [PATCH 17/18] ejabberd: bump to version 16.01
-In-Reply-To: <1453511471-28519-1-git-send-email-fhunleth@troodon-software.com>
-References: <1453511471-28519-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <1453511471-28519-18-git-send-email-fhunleth@troodon-software.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Jan 2016 08:30:21 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-01-22
+Message-ID: <20160123073021.625F6101B7A@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As part of the upgrade, updated patches from Debian were used where
-appropriate. All patches were converted to git format.
+Build statistics for 2016-01-22
+===============================
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- ...001-remove-dependencies-from-rebar-config.patch | 83 ++++++++++++++++++++++
- package/ejabberd/0001-remove-deps.patch            | 22 ------
- package/ejabberd/0002-disable-rebar-deps.patch     | 76 --------------------
- .../0002-remove-make-targets-for-deps.patch        | 74 +++++++++++++++++++
- package/ejabberd/0003-disable-test.patch           | 27 -------
- .../0003-remove-checking-erlang-version.patch      | 30 ++++++++
- package/ejabberd/0004-correct-include.patch        | 56 +++++++++++++++
- package/ejabberd/0004-disable-version-check.patch  | 20 ------
- .../0005-disable-ERLANG_DEPRECATED_CHECK.patch     | 27 +++++++
- package/ejabberd/0005-fix-includes.patch           | 45 ------------
- ...006-disable-erlang-deprecated-types-check.patch | 20 ------
- ...ns.patch => 0006-fix-install-permissions.patch} | 41 +++++------
- ...jabberdctl.patch => 0007-fix-ejabberdctl.patch} | 21 ++++--
- package/ejabberd/Config.in                         |  5 +-
- package/ejabberd/ejabberd.hash                     |  6 +-
- package/ejabberd/ejabberd.mk                       |  2 +-
- 16 files changed, 313 insertions(+), 242 deletions(-)
- create mode 100644 package/ejabberd/0001-remove-dependencies-from-rebar-config.patch
- delete mode 100644 package/ejabberd/0001-remove-deps.patch
- delete mode 100644 package/ejabberd/0002-disable-rebar-deps.patch
- create mode 100644 package/ejabberd/0002-remove-make-targets-for-deps.patch
- delete mode 100644 package/ejabberd/0003-disable-test.patch
- create mode 100644 package/ejabberd/0003-remove-checking-erlang-version.patch
- create mode 100644 package/ejabberd/0004-correct-include.patch
- delete mode 100644 package/ejabberd/0004-disable-version-check.patch
- create mode 100644 package/ejabberd/0005-disable-ERLANG_DEPRECATED_CHECK.patch
- delete mode 100644 package/ejabberd/0005-fix-includes.patch
- delete mode 100644 package/ejabberd/0006-disable-erlang-deprecated-types-check.patch
- rename package/ejabberd/{0007-fix-install-permissions.patch => 0006-fix-install-permissions.patch} (73%)
- rename package/ejabberd/{0008-fix-ejabberdctl.patch => 0007-fix-ejabberdctl.patch} (56%)
+        success : 200
+       failures : 87 
+       timeouts : 4  
+          TOTAL : 291
 
-diff --git a/package/ejabberd/0001-remove-dependencies-from-rebar-config.patch b/package/ejabberd/0001-remove-dependencies-from-rebar-config.patch
-new file mode 100644
-index 0000000..6929c10
---- /dev/null
-+++ b/package/ejabberd/0001-remove-dependencies-from-rebar-config.patch
-@@ -0,0 +1,83 @@
-+From 9bcf7020e348771f16a04abeff2a7cc3a5e87c5b Mon Sep 17 00:00:00 2001
-+From: Philipp Huebner <debalance@debian.org>
-+Date: Wed, 20 Jan 2016 08:08:42 -0500
-+Subject: [PATCH 1/7] remove dependencies from rebar config
-+
-+Without this patch, dependencies would be downloaded and compiled
-+by rebar at build time.
-+---
-+ rebar.config | 51 ---------------------------------------------------
-+ 1 file changed, 51 deletions(-)
-+
-+diff --git a/rebar.config b/rebar.config
-+index 30c0360..d6a5b4d 100644
-+--- a/rebar.config
-++++ b/rebar.config
-+@@ -7,48 +7,6 @@
-+ %%% Created :  1 May 2013 by Evgeniy Khramtsov <ekhramtsov@process-one.net>
-+ %%%-------------------------------------------------------------------
-+ 
-+-{deps, [{if_var_true, lager, {lager, ".*", {git, "https://github.com/basho/lager", {tag, "3.0.2"}}}},
-+-        {if_var_false, lager, {p1_logger, ".*", {git, "https://github.com/processone/p1_logger", {tag, "1.0.0"}}}},
-+-        {p1_utils, ".*", {git, "https://github.com/processone/p1_utils", {tag, "1.0.2"}}},
-+-        {cache_tab, ".*", {git, "https://github.com/processone/cache_tab", {tag, "1.0.1"}}},
-+-        {p1_tls, ".*", {git, "https://github.com/processone/tls", {tag, "1.0.0"}}},
-+-        {p1_stringprep, ".*", {git, "https://github.com/processone/stringprep", {tag, "1.0.0"}}},
-+-        {p1_xml, ".*", {git, "https://github.com/processone/xml", {tag, "1.1.1"}}},
-+-        {p1_stun, ".*", {git, "https://github.com/processone/stun", "0.9.0"}},
-+-        {esip, ".*", {git, "https://github.com/processone/p1_sip", "1.0.0"}},
-+-        {p1_yaml, ".*", {git, "https://github.com/processone/p1_yaml", {tag, "1.0.0"}}},
-+-        {jiffy, ".*", {git, "https://github.com/davisp/jiffy", {tag, "0.14.5"}}},
-+-        {oauth2, ".*", {git, "https://github.com/kivra/oauth2", "8d129fbf8866930b4ffa6dd84e65bd2b32b9acb8"}},
-+-        {xmlrpc, ".*", {git, "https://github.com/rds13/xmlrpc", {tag, "1.15"}}},
-+-        {if_var_true, mysql, {p1_mysql, ".*", {git, "https://github.com/processone/mysql", {tag, "1.0.0"}}}},
-+-        {if_var_true, pgsql, {p1_pgsql, ".*", {git, "https://github.com/processone/pgsql", {tag, "1.0.0"}}}},
-+-        {if_var_true, sqlite, {sqlite3, ".*", {git, "https://github.com/alexeyr/erlang-sqlite3", "cbc3505f7a131254265d3ef56191b2581b8cc172"}}},
-+-        {if_var_true, pam, {p1_pam, ".*", {git, "https://github.com/processone/epam", {tag, "1.0.0"}}}},
-+-        {if_var_true, zlib, {p1_zlib, ".*", {git, "https://github.com/processone/zlib", {tag, "1.0.0"}}}},
-+-        {if_var_true, riak, {hamcrest, ".*", {git, "https://github.com/hyperthunk/hamcrest-erlang", "908a24fda4a46776a5135db60ca071e3d783f9f6"}}},  % for riak_pb-2.1.0.7
-+-        {if_var_true, riak, {riakc, ".*", {git, "https://github.com/basho/riak-erlang-client", "527722d12d0433b837cdb92a60900c2cb5df8942"}}},
-+-        {if_var_true, elixir, {elixir, ".*", {git, "https://github.com/elixir-lang/elixir", {tag, "v1.1.0"}}}},
-+-        {if_var_true, elixir, {rebar_elixir_plugin, ".*", {git, "https://github.com/processone/rebar_elixir_plugin", "0.1.0"}}},
-+-        {if_var_true, iconv, {p1_iconv, ".*", {git, "https://github.com/processone/eiconv", {tag, "0.9.0"}}}},
-+-        {if_var_true, tools, {meck, "0.8.2", {git, "https://github.com/eproxus/meck", {tag, "0.8.2"}}}},
-+-        {if_var_true, redis, {eredis, ".*", {git, "https://github.com/wooga/eredis", {tag, "v1.0.8"}}}}]}.
-+-
-+-{if_var_true, latest_deps,
-+- {floating_deps, [p1_logger,
-+-                  cache_tab,
-+-                  p1_tls,
-+-                  p1_stringprep,
-+-                  p1_xml,
-+-                  esip,
-+-                  p1_stun,
-+-                  p1_yaml,
-+-                  p1_utils,
-+-                  p1_mysql,
-+-                  p1_pgsql,
-+-                  p1_pam,
-+-                  p1_zlib,
-+-                  p1_iconv]}}.
-+-
-+ {erl_opts, [nowarn_deprecated_function,
-+             {if_var_true, roster_gateway_workaround, {d, 'ROSTER_GATWAY_WORKAROUND'}},
-+             {if_var_match, db_type, mssql, {d, 'mssql'}},
-+@@ -92,15 +50,6 @@
-+ 
-+ {eunit_compile_opts, [{i, "tools"}]}.
-+ 
-+-{post_hook_configure, [{"p1_tls", []},
-+-                       {"p1_stringprep", []},
-+-                       {"p1_yaml", []},
-+-                       {"esip", []},
-+-                       {"p1_xml", [{if_var_true, full_xml, "--enable-full-xml"}]},
-+-                       {if_var_true, pam, {"p1_pam", []}},
-+-                       {if_var_true, zlib, {"p1_zlib", []}},
-+-                       {if_var_true, iconv, {"p1_iconv", []}}]}.
-+-
-+ {port_env, [{"CFLAGS", "-g -O2 -Wall"}]}.
-+ 
-+ {port_specs, [{"priv/lib/jid.so", ["c_src/jid.c"]}]}.
-+-- 
-+2.5.0
-+
-diff --git a/package/ejabberd/0001-remove-deps.patch b/package/ejabberd/0001-remove-deps.patch
-deleted file mode 100644
-index c5700dd..0000000
---- a/package/ejabberd/0001-remove-deps.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Description: remove make targets for deps
-- Without this patch, dependencies would be downloaded and compiled
-- using rebar at build time.
--Author: Philipp Huebner <debalance@debian.org>
--
--Index: ejabberd/rebar.config.script
--===================================================================
--diff --git a/rebar.config.script b/rebar.config.script
--index 633433c..646a15a 100644
----- a/rebar.config.script
--+++ b/rebar.config.script
--@@ -187,9 +187,7 @@ Config = [{erl_opts, Macros ++ HiPE ++ DebugInfo ++
--           {xref_checks, []},
-- 	  {xref_queries,
-- 	   [{"(XC - UC) || (XU - X - B - "
---	     ++ string:join(CfgXrefs, " - ") ++ ")", []}]},
---          {post_hooks, PostHooks ++ CfgPostHooks},
---          {deps, AllDeps}] ++ ElixirConfig,
--+	     ++ string:join(CfgXrefs, " - ") ++ ")", []}]}],
-- %%io:format("ejabberd configuration:~n  ~p~n", [Config]),
-- Config.
-- 
-diff --git a/package/ejabberd/0002-disable-rebar-deps.patch b/package/ejabberd/0002-disable-rebar-deps.patch
-deleted file mode 100644
-index e76b8a2..0000000
---- a/package/ejabberd/0002-disable-rebar-deps.patch
-+++ /dev/null
-@@ -1,76 +0,0 @@
--Description: remove make targets for deps
-- Without this patch, dependencies would be downloaded and compiled
-- using rebar at build time.
--Author: Philipp Huebner <debalance@debian.org>
--
--Index: ejabberd/Makefile.in
--===================================================================
--diff --git a/Makefile.in b/Makefile.in
--index 8dd6bf5..b9d783a 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -77,26 +77,11 @@ else
--   INIT_USER=$(INSTALLUSER)
-- endif
-- 
---all: deps src
--+all: src
-- 
---deps: deps/.got
---
---deps/.got:
---	rm -rf deps/.got
---	rm -rf deps/.built
---	$(REBAR) get-deps && :> deps/.got
---
---deps/.built: deps/.got
---	$(REBAR) compile && :> deps/.built
---
---src: deps/.built
--+src:
-- 	$(REBAR) skip_deps=true compile
-- 
---update:
---	rm -rf deps/.got
---	rm -rf deps/.built
---	$(REBAR) update-deps && :> deps/.got
---
-- xref: all
-- 	$(REBAR) skip_deps=true xref
-- 
--@@ -129,13 +114,10 @@ endef
-- 
-- $(foreach file,$(DEPS_FILES_FILTERED) $(MAIN_FILES),$(eval $(call COPY_template,$(file))))
-- 
---$(call TO_DEST,$(MAIN_DIRS) $(DEPS_DIRS)):
--+$(call TO_DEST,$(MAIN_DIRS)):
-- 	$(INSTALL) -d $@
-- 
---$(call TO_DEST,deps/p1_pam/priv/bin/epam): $(LIBDIR)/%: deps/% $(call TO_DEST,deps/p1_pam/priv/bin/)
---	$(INSTALL) -m 750 $(O_USER) $< $@
---
---copy-files: $(call TO_DEST,$(DEPS_FILES) $(MAIN_FILES))
--+copy-files: $(call TO_DEST,$(MAIN_FILES))
-- 
-- install: all copy-files
-- 	#
--@@ -172,10 +154,6 @@ install: all copy-files
-- 		-e "s*@installuser@*$(INIT_USER)*" ejabberd.init.template \
-- 		> ejabberd.init
-- 	chmod 755 ejabberd.init
---	# Install Elixir and Elixir dependancies
---	-$(INSTALL) -m 644 deps/*/lib/*/ebin/*.app $(BEAMDIR)
---	-$(INSTALL) -m 644 deps/*/lib/*/ebin/*.beam $(BEAMDIR)
---	rm -f $(BEAMDIR)/configure.beam
-- 	#
-- 	# Binary C programs
-- 	$(INSTALL) -d $(PBINDIR)
--@@ -266,8 +244,6 @@ TAGS:
-- 
-- Makefile: Makefile.in
-- 
---deps := $(wildcard deps/*/ebin)
---
-- dialyzer/erlang.plt:
-- 	@mkdir -p dialyzer
-- 	@dialyzer --build_plt --output_plt dialyzer/erlang.plt \
-diff --git a/package/ejabberd/0002-remove-make-targets-for-deps.patch b/package/ejabberd/0002-remove-make-targets-for-deps.patch
-new file mode 100644
-index 0000000..9e7d833
---- /dev/null
-+++ b/package/ejabberd/0002-remove-make-targets-for-deps.patch
-@@ -0,0 +1,74 @@
-+From fd176d4e9a298fd833aa073cb6413ebbc2cbef81 Mon Sep 17 00:00:00 2001
-+From: Philipp Huebner <debalance@debian.org>
-+Date: Wed, 20 Jan 2016 10:22:57 -0500
-+Subject: [PATCH 2/7] remove make targets for deps
-+
-+Without this patch, dependencies would be downloaded and compiled
-+using rebar at build time.
-+---
-+ Makefile.in | 26 +++-----------------------
-+ 1 file changed, 3 insertions(+), 23 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 08cd837..2a6457c 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -77,26 +77,11 @@ else
-+   INIT_USER=$(INSTALLUSER)
-+ endif
-+ 
-+-all: deps src
-++all: src
-+ 
-+-deps: deps/.got
-+-
-+-deps/.got:
-+-	rm -rf deps/.got
-+-	rm -rf deps/.built
-+-	$(REBAR) get-deps && :> deps/.got
-+-
-+-deps/.built: deps/.got
-+-	$(REBAR) compile && :> deps/.built
-+-
-+-src: deps/.built
-++src:
-+ 	$(REBAR) skip_deps=true compile
-+ 
-+-update:
-+-	rm -rf deps/.got
-+-	rm -rf deps/.built
-+-	$(REBAR) update-deps && :> deps/.got
-+-
-+ xref: all
-+ 	$(REBAR) skip_deps=true xref
-+ 
-+@@ -152,16 +137,13 @@ $(foreach file,$(DEPS_FILES_FILTERED) $(MAIN_FILES),$(eval $(call COPY_template,
-+ $(sort $(call TO_DEST,$(MAIN_DIRS) $(DEPS_DIRS))):
-+ 	$(INSTALL) -d $@
-+ 
-+-$(call TO_DEST,deps/p1_pam/priv/bin/epam): $(LIBDIR)/%: deps/p1_pam/priv/bin/epam $(call TO_DEST,deps/p1_pam/priv/bin/)
-+-	$(INSTALL) -m 750 $(O_USER) $< $@
-+-
-+ $(call TO_DEST,priv/sql/lite.sql): sql/lite.sql $(call TO_DEST,priv/sql)
-+ 	$(INSTALL) -m 644 $< $@
-+ 
-+ $(call TO_DEST,priv/bin/captcha.sh): tools/captcha.sh $(call TO_DEST,priv/bin)
-+ 	$(INSTALL) -m 750 $(O_USER) $< $@
-+ 
-+-copy-files-sub2: $(call TO_DEST,$(DEPS_FILES) $(MAIN_FILES) priv/bin/captcha.sh priv/sql/lite.sql)
-++copy-files-sub2: $(call TO_DEST,$(MAIN_FILES) priv/bin/captcha.sh priv/sql/lite.sql)
-+ 
-+ endif
-+ 
-+@@ -287,8 +269,6 @@ TAGS:
-+ 
-+ Makefile: Makefile.in
-+ 
-+-deps := $(wildcard deps/*/ebin)
-+-
-+ dialyzer/erlang.plt:
-+ 	@mkdir -p dialyzer
-+ 	@dialyzer --build_plt --output_plt dialyzer/erlang.plt \
-+-- 
-+2.5.0
-+
-diff --git a/package/ejabberd/0003-disable-test.patch b/package/ejabberd/0003-disable-test.patch
-deleted file mode 100644
-index 1b28957..0000000
---- a/package/ejabberd/0003-disable-test.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Description: remove testing with MySQL and PostgreSQL
-- Without this patch a test would be initiated after building ejabberd that
-- requires specially configured instances of MySQL and PostgreSQL to be up
-- and running.
--Author: Philipp Huebner <debalance@debian.org>
--
--Index: ejabberd/Makefile.in
--===================================================================
--diff --git a/Makefile.in b/Makefile.in
--index ffd1d30..835d611 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -306,14 +306,8 @@ dialyzer: erlang_plt deps_plt ejabberd_plt
-- 	status=$$? ; if [ $$status -ne 2 ]; then exit $$status; else exit 0; fi
-- 
-- test:
---	@echo "************************** NOTICE ***************************************"
---	@cat test/README
---	@echo "*************************************************************************"
---	@cd priv && ln -sf ../sql
---	$(REBAR) skip_deps=true ct
-- 
-- quicktest:
---	$(REBAR) skip_deps=true ct suites=elixir
-- 
-- .PHONY: src edoc dialyzer Makefile TAGS clean clean-rel distclean rel \
-- 	install uninstall uninstall-binary uninstall-all translations deps test spec \
-diff --git a/package/ejabberd/0003-remove-checking-erlang-version.patch b/package/ejabberd/0003-remove-checking-erlang-version.patch
-new file mode 100644
-index 0000000..1690aae
---- /dev/null
-+++ b/package/ejabberd/0003-remove-checking-erlang-version.patch
-@@ -0,0 +1,30 @@
-+From fa3d9795f5a3cf29866dd09848d57b679bb7aea2 Mon Sep 17 00:00:00 2001
-+From: Johan Oudinet <johan.oudinet@gmail.com>
-+Date: Wed, 20 Jan 2016 08:11:32 -0500
-+Subject: [PATCH 3/7] remove checking erlang version
-+
-+Without this patch, the configure will try to run erlang to simply check
-+if the version is supported by ejabberd. Instead, we do this test
-+statically.
-+---
-+ configure.ac | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 97e89a2..cd1ab08 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -39,10 +39,8 @@ AC_ARG_ENABLE(erlang-version-check,
-+ 	[Check Erlang/OTP version @<:@default=yes@:>@])])
-+ case "$enable_erlang_version_check" in
-+ 	yes|'')
-+-		ERLANG_VERSION_CHECK([$REQUIRE_ERLANG_MIN],[$REQUIRE_ERLANG_MAX])
-+ 		;;
-+ 	no)
-+-		ERLANG_VERSION_CHECK([$REQUIRE_ERLANG_MIN],[$REQUIRE_ERLANG_MAX],[warn])
-+ 		;;
-+ esac
-+ 
-+-- 
-+2.5.0
-+
-diff --git a/package/ejabberd/0004-correct-include.patch b/package/ejabberd/0004-correct-include.patch
-new file mode 100644
-index 0000000..01e48a7
---- /dev/null
-+++ b/package/ejabberd/0004-correct-include.patch
-@@ -0,0 +1,56 @@
-+From 8be7e0e65670490a65864d4e08224ec7d9a241c6 Mon Sep 17 00:00:00 2001
-+From: Philipp Huebner <debalance@debian.org>
-+Date: Wed, 20 Jan 2016 08:13:21 -0500
-+Subject: [PATCH 4/7] correct include
-+
-+This part of the code was moved into it's own project and was packaged
-+separately by me. To make the build process work, this small fix is
-+necessary.
-+---
-+ src/mod_sip.erl           | 2 +-
-+ src/mod_sip_proxy.erl     | 2 +-
-+ src/mod_sip_registrar.erl | 2 +-
-+ 3 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/mod_sip.erl b/src/mod_sip.erl
-+index c8c9533..7f188a0 100644
-+--- a/src/mod_sip.erl
-++++ b/src/mod_sip.erl
-+@@ -38,7 +38,7 @@
-+ 
-+ -include("ejabberd.hrl").
-+ -include("logger.hrl").
-+--include_lib("esip/include/esip.hrl").
-++-include_lib("p1_sip/include/esip.hrl").
-+ 
-+ %%%===================================================================
-+ %%% API
-+diff --git a/src/mod_sip_proxy.erl b/src/mod_sip_proxy.erl
-+index bf297bc..d8b65cd 100644
-+--- a/src/mod_sip_proxy.erl
-++++ b/src/mod_sip_proxy.erl
-+@@ -40,7 +40,7 @@
-+ 
-+ -include("ejabberd.hrl").
-+ -include("logger.hrl").
-+--include_lib("esip/include/esip.hrl").
-++-include_lib("p1_sip/include/esip.hrl").
-+ 
-+ -define(SIGN_LIFETIME, 300). %% in seconds.
-+ 
-+diff --git a/src/mod_sip_registrar.erl b/src/mod_sip_registrar.erl
-+index 44091ed..4d2ec82 100644
-+--- a/src/mod_sip_registrar.erl
-++++ b/src/mod_sip_registrar.erl
-+@@ -37,7 +37,7 @@
-+ 
-+ -include("ejabberd.hrl").
-+ -include("logger.hrl").
-+--include_lib("esip/include/esip.hrl").
-++-include_lib("p1_sip/include/esip.hrl").
-+ 
-+ -define(CALL_TIMEOUT, timer:seconds(30)).
-+ -define(DEFAULT_EXPIRES, 3600).
-+-- 
-+2.5.0
-+
-diff --git a/package/ejabberd/0004-disable-version-check.patch b/package/ejabberd/0004-disable-version-check.patch
-deleted file mode 100644
-index f2f1e81..0000000
---- a/package/ejabberd/0004-disable-version-check.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Description: remove checking erlang version
-- Without this patch, the configure will try to run erlang to simply check if
-- the version is supported by ejabberd. Instead, we do this test statically.
--Author: Johan Oudinet <johan.oudinet@gmail.com>
--
--Index: ejabberd/configure.ac
--===================================================================
----- ejabberd.orig/configure.ac	2014-10-20 11:04:14.751256865 +0200
--+++ ejabberd/configure.ac	2014-10-20 11:03:47.983578623 +0200
--@@ -37,10 +37,8 @@ AC_ARG_ENABLE(erlang-version-check,
-- 	[Check Erlang/OTP version @<:@default=yes@:>@])])
-- case "$enable_erlang_version_check" in
-- 	yes|'')
---		ERLANG_VERSION_CHECK([$REQUIRE_ERLANG_MIN],[$REQUIRE_ERLANG_MAX])
-- 		;;
-- 	no)
---		ERLANG_VERSION_CHECK([$REQUIRE_ERLANG_MIN],[$REQUIRE_ERLANG_MAX],[warn])
-- 		;;
-- esac
-- 
-diff --git a/package/ejabberd/0005-disable-ERLANG_DEPRECATED_CHECK.patch b/package/ejabberd/0005-disable-ERLANG_DEPRECATED_CHECK.patch
-new file mode 100644
-index 0000000..5b5d741
---- /dev/null
-+++ b/package/ejabberd/0005-disable-ERLANG_DEPRECATED_CHECK.patch
-@@ -0,0 +1,27 @@
-+From 7dbb86c84f7dd34c7fdb3c4f78c29381128793ea Mon Sep 17 00:00:00 2001
-+From: Johan Oudinet <johan.oudinet@gmail.com>
-+Date: Wed, 20 Jan 2016 08:16:26 -0500
-+Subject: [PATCH 5/7] disable ERLANG_DEPRECATED_CHECK
-+
-+Without this patch, the configure will try to execute erlang to check
-+if it uses deprecated types. Assume the answer is false.
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index cd1ab08..a4f1533 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -235,7 +235,7 @@ if test "$ENABLEUSER" != ""; then
-+   AC_SUBST([INSTALLUSER], [$ENABLEUSER])
-+ fi
-+ 
-+-ERLANG_DEPRECATED_TYPES_CHECK
-++AC_SUBST(erlang_deprecated_types, false)
-+ 
-+ if test "$sqlite" = "true"; then
-+    AX_LIB_SQLITE3([3.6.19])
-+-- 
-+2.5.0
-+
-diff --git a/package/ejabberd/0005-fix-includes.patch b/package/ejabberd/0005-fix-includes.patch
-deleted file mode 100644
-index 27ad761..0000000
---- a/package/ejabberd/0005-fix-includes.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--Description: correct include
-- This part of the code was moved into it's own project and was packaged
-- separately by me. To make the build process work, this small fix is
-- necessary.
--Author: Philipp Huebner <debalance@debian.org>
--
--Index: ejabberd/src/mod_sip_proxy.erl
--===================================================================
----- ejabberd.orig/src/mod_sip_proxy.erl
--+++ ejabberd/src/mod_sip_proxy.erl
--@@ -21,7 +21,7 @@
-- 
-- -include("ejabberd.hrl").
-- -include("logger.hrl").
----include_lib("esip/include/esip.hrl").
--+-include_lib("p1_sip/include/esip.hrl").
-- 
-- -define(SIGN_LIFETIME, 300). %% in seconds.
-- 
--Index: ejabberd/src/mod_sip.erl
--===================================================================
----- ejabberd.orig/src/mod_sip.erl
--+++ ejabberd/src/mod_sip.erl
--@@ -20,7 +20,7 @@
-- 
-- -include("ejabberd.hrl").
-- -include("logger.hrl").
----include_lib("esip/include/esip.hrl").
--+-include_lib("p1_sip/include/esip.hrl").
-- 
-- %%%===================================================================
-- %%% API
--Index: ejabberd/src/mod_sip_registrar.erl
--===================================================================
----- ejabberd.orig/src/mod_sip_registrar.erl
--+++ ejabberd/src/mod_sip_registrar.erl
--@@ -20,7 +20,7 @@
-- 
-- -include("ejabberd.hrl").
-- -include("logger.hrl").
----include_lib("esip/include/esip.hrl").
--+-include_lib("p1_sip/include/esip.hrl").
-- 
-- -define(CALL_TIMEOUT, timer:seconds(30)).
-- -define(DEFAULT_EXPIRES, 3600).
-diff --git a/package/ejabberd/0006-disable-erlang-deprecated-types-check.patch b/package/ejabberd/0006-disable-erlang-deprecated-types-check.patch
-deleted file mode 100644
-index 1b70953..0000000
---- a/package/ejabberd/0006-disable-erlang-deprecated-types-check.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Description: disable ERLANG_DEPRECATED_CHECK
-- Without this patch, the configure will try to execute erlang to check
-- if it uses deprecated types. Assume the answer is false.
--Author: Johan Oudinet <johan.oudinet@gmail.com>
--
--Index: ejabberd/configure.ac
--====================================================================
--diff --git a/configure.ac b/configure.ac
--index 6ae0a24..e5498df 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -252,7 +252,7 @@ if test "$ENABLEUSER" != ""; then
--   AC_SUBST([INSTALLUSER], [$ENABLEUSER])
-- fi
-- 
---ERLANG_DEPRECATED_TYPES_CHECK
--+AC_SUBST(erlang_deprecated_types, false)
-- 
-- if test "$sqlite" = "true"; then
--    AX_LIB_SQLITE3([3.6.19])
-diff --git a/package/ejabberd/0007-fix-install-permissions.patch b/package/ejabberd/0006-fix-install-permissions.patch
-similarity index 73%
-rename from package/ejabberd/0007-fix-install-permissions.patch
-rename to package/ejabberd/0006-fix-install-permissions.patch
-index 2ad8453..5400ab1 100644
---- a/package/ejabberd/0007-fix-install-permissions.patch
-+++ b/package/ejabberd/0006-fix-install-permissions.patch
-@@ -1,16 +1,20 @@
--Description: fix install permissions
-- Without this patch, the makefile will try to install directories and
-- files with incompatible permissions for ejabberd, which run as an
-- ejabberd user.
--Author: Johan Oudinet <johan.oudinet@gmail.com>
-+From 03630a7e7722ae66cbb26e607a3ef931a78f8714 Mon Sep 17 00:00:00 2001
-+From: Johan Oudinet <johan.oudinet@gmail.com>
-+Date: Wed, 20 Jan 2016 09:34:07 -0500
-+Subject: [PATCH 6/7] fix install permissions
-+
-+Without this patch, the makefile will try to install directories and
-+files with incompatible permissions for ejabberd, which run as an
-+ejabberd user.
-+---
-+ Makefile.in | 38 +++++---------------------------------
-+ 1 file changed, 5 insertions(+), 33 deletions(-)
- 
--Index: ejabberd/Makefile.in
--===================================================================
- diff --git a/Makefile.in b/Makefile.in
--index b9d783a..6ec805a 100644
-+index 2a6457c..0be4c50 100644
- --- a/Makefile.in
- +++ b/Makefile.in
--@@ -122,10 +122,8 @@ copy-files: $(call TO_DEST,$(MAIN_FILES))
-+@@ -155,10 +155,8 @@ copy-files-sub: copy-files-sub2
-  install: all copy-files
-  	#
-  	# Configuration files
-@@ -23,7 +27,7 @@ index b9d783a..6ec805a 100644
-  	$(SED) -e "s*{{rootdir}}*@prefix@*" \
-  		-e "s*{{installuser}}*@INSTALLUSER@*" \
-  		-e "s*{{bindir}}*@bindir@*" \
--@@ -135,14 +133,11 @@ install: all copy-files
-+@@ -168,14 +166,11 @@ install: all copy-files
-  		-e "s*{{docdir}}*@docdir@*" \
-  		-e "s*{{erl}}*@ERL@*" ejabberdctl.template \
-  		> ejabberdctl.example
-@@ -41,16 +45,10 @@ index b9d783a..6ec805a 100644
-  	# Elixir binaries
-  	[ -d $(BINDIR) ] || $(INSTALL) -d -m 755 $(BINDIR)
-  	[ -f deps/elixir/bin/iex ] && $(INSTALL) -m 550 $(G_USER) deps/elixir/bin/iex $(BINDIR)/iex || true
--@@ -157,34 +152,11 @@ install: all copy-files
-- 	#
-- 	# Binary C programs
-- 	$(INSTALL) -d $(PBINDIR)
---	$(INSTALL) -m 750 $(O_USER) tools/captcha.sh $(PBINDIR)
--+	$(INSTALL) tools/captcha.sh $(PBINDIR)
-- 	#
-- 	# Copy lite.sql
-- 	[ -d deps/sqlite3 ] && $(INSTALL) -d $(SQLDIR) || true
-- 	[ -d deps/sqlite3 ] && $(INSTALL) -m 644 sql/lite.sql $(SQLDIR) || true
-+@@ -187,29 +182,6 @@ install: all copy-files
-+ 		-e "s*@installuser@*$(INIT_USER)*" ejabberd.init.template \
-+ 		> ejabberd.init
-+ 	chmod 755 ejabberd.init
- -	#
- -	# Spool directory
- -	$(INSTALL) -d -m 750 $(O_USER) $(SPOOLDIR)
-@@ -77,3 +75,6 @@ index b9d783a..6ec805a 100644
-  
-  uninstall: uninstall-binary
-  
-+-- 
-+2.5.0
-+
-diff --git a/package/ejabberd/0008-fix-ejabberdctl.patch b/package/ejabberd/0007-fix-ejabberdctl.patch
-similarity index 56%
-rename from package/ejabberd/0008-fix-ejabberdctl.patch
-rename to package/ejabberd/0007-fix-ejabberdctl.patch
-index af0b6ee..bb99624 100644
---- a/package/ejabberd/0008-fix-ejabberdctl.patch
-+++ b/package/ejabberd/0007-fix-ejabberdctl.patch
-@@ -1,12 +1,18 @@
--Description: fix ejabberdctl
-- Change default values so ejabberdctl run commands as ejabberd user
-- Also add a way for the user to change default values.
-+From 8ed9f378d4a18114f2021969b4f440d34abacc0d Mon Sep 17 00:00:00 2001
-+From: Johan Oudinet <johan.oudinet@gmail.com>
-+Date: Wed, 20 Jan 2016 09:35:07 -0500
-+Subject: [PATCH 7/7] fix ejabberdctl
-+
-+Change default values so ejabberdctl run commands as ejabberd user
-+Also add a way for the user to change default values.
-+
- Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-+---
-+ ejabberdctl.template | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
- 
--Index: ejabberd/ejabberdctl.template
--===================================================================
- diff --git a/ejabberdctl.template b/ejabberdctl.template
--index c7d76ef..a7afce1 100755
-+index f65c21f..ff9225f 100755
- --- a/ejabberdctl.template
- +++ b/ejabberdctl.template
- @@ -14,9 +14,12 @@ SCRIPT_DIR=`cd ${0%/*} && pwd`
-@@ -23,3 +29,6 @@ index c7d76ef..a7afce1 100755
-  # check the proper system user is used if defined
-  if [ "$INSTALLUSER" != "" ] ; then
-      EXEC_CMD="false"
-+-- 
-+2.5.0
-+
-diff --git a/package/ejabberd/Config.in b/package/ejabberd/Config.in
-index 7b4e99b..7add8c6 100644
---- a/package/ejabberd/Config.in
-+++ b/package/ejabberd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_EJABBERD
- 	bool "ejabberd"
- 	depends on BR2_PACKAGE_ERLANG
-+	depends on BR2_INSTALL_LIBSTDCPP # required for erlang-p1-stringprep
- 	select BR2_PACKAGE_ERLANG_LAGER
- 	select BR2_PACKAGE_ERLANG_P1_CACHE_TAB
- 	select BR2_PACKAGE_ERLANG_P1_ICONV
-@@ -18,5 +19,5 @@ config BR2_PACKAGE_EJABBERD
- 
- 	  http://www.ejabberd.im
- 
--comment "ejabberd needs erlang"
--	depends on !BR2_PACKAGE_ERLANG
-+comment "ejabberd needs erlang and a toolchain w/ C++"
-+	depends on !BR2_PACKAGE_ERLANG || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/ejabberd/ejabberd.hash b/package/ejabberd/ejabberd.hash
-index b027183..ea85d1c 100644
---- a/package/ejabberd/ejabberd.hash
-+++ b/package/ejabberd/ejabberd.hash
-@@ -1,4 +1,4 @@
--# From https://www.process-one.net/downloads/ejabberd/15.11/ejabberd-15.11.tgz.md5
--md5 a6997b88d44c5a5acff45bb1d938d0f3 ejabberd-15.11.tgz
-+# From https://www.process-one.net/downloads/ejabberd/15.11/ejabberd-16.01.tgz.md5
-+md5 5e525c25c8f04287217b8a9522d7c942 ejabberd-16.01.tgz
- # Locally computed
--sha256 01044b5a25f9f8dda8c60726698bd27d650751b810e5bfa23f9bb49ba20e946a ejabberd-15.11.tgz
-+sha256 e2cc479d5870539b2e6756690b227969c88a541d464d1fc6e1cbf7270ad7d681 ejabberd-16.01.tgz
-diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
-index 841c911..a3aad35 100644
---- a/package/ejabberd/ejabberd.mk
-+++ b/package/ejabberd/ejabberd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EJABBERD_VERSION = 15.11
-+EJABBERD_VERSION = 16.01
- EJABBERD_SOURCE = ejabberd-$(EJABBERD_VERSION).tgz
- EJABBERD_SITE = https://www.process-one.net/downloads/ejabberd/$(EJABBERD_VERSION)
- EJABBERD_LICENSE = GPLv2+ with OpenSSL exception
+Classification of failures by reason
+====================================
+
+host-vboot-utils-bbdd62f9b0... | 12
+                  boost-1.60.0 | 7 
+zbar-854a5d97059e395807091a... | 5 
+hidapi-d17db57b9d4354752e0a... | 4 
+                  stunnel-5.29 | 3 
+        ltp-testsuite-20150903 | 3 
+                   erlang-17.5 | 3 
+                       unknown | 2 
+                  prboom-2.5.0 | 2 
+                 lvm2-2.02.138 | 2 
+               valgrind-3.11.0 | 2 
+               libgtk2-2.24.29 | 2 
+                      qt-4.8.7 | 2 
+                   mplayer-1.2 | 2 
+                    ruby-2.3.0 | 2 
+                    sox-14.4.2 | 2 
+             webkitgtk24-2.4.9 | 1 
+iputils-c8ff6feaf0442f8efd9... | 1 
+              memcached-1.4.25 | 1 
+make[6]: *** [libavfilter/a... | 1 
+                    glibc-2.21 | 1 
+          sane-backends-1.0.25 | 1 
+                   libnss-3.21 | 1 
+             host-nodejs-5.3.0 | 1 
+                  trinity-v1.6 | 1 
+                iprutils-2.4.5 | 1 
+make[5]: *** [all-local] Te... | 1 
+     host-google-breakpad-1373 | 1 
+                     mc-4.8.15 | 1 
+make[2]: *** [code/CMakeFil... | 1 
+                 openal-1.17.1 | 1 
+             lttng-tools-2.7.1 | 1 
+             stress-ng-0.04.16 | 1 
+             netbsd-queue-1.70 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+              libsoil-20080707 | 1 
+               linknx-0.0.1.32 | 1 
+          libpam-tacplus-1.3.9 | 1 
+                   redis-3.0.5 | 1 
+                 dropwatch-1.4 | 1 
+               tcpreplay-4.1.1 | 1 
+                 mesa3d-11.1.1 | 1 
+               host-efl-1.15.3 | 1 
+                  libssh-0.7.2 | 1 
+               libupnpp-0.13.1 | 1 
+             util-linux-2.27.1 | 1 
+                rt-tests-v0.89 | 1 
+                      tar-1.28 | 1 
+                    cups-2.1.2 | 1 
+                    vpnc-0.5.3 | 1 
+               nfs-utils-1.3.3 | 1 
+           host-gettext-0.19.7 | 1 
+
+Detail of failures
+===================
+
+    mips64el |                   boost-1.60.0 | NOK | http://autobuild.buildroot.net/results/818b1712c5f6e4bd8969c5be79f7184080f6e1e6/
+         arm |                   boost-1.60.0 | NOK | http://autobuild.buildroot.net/results/beb9d3da829a6a672ac397ff2b956e4e0dd62200/
+      xtensa |                   boost-1.60.0 | NOK | http://autobuild.buildroot.net/results/2d7a4b8000dd7220c2fa93c0d9aefd93641dab73/
+     powerpc |                   boost-1.60.0 | NOK | http://autobuild.buildroot.net/results/4928faeca79de380f542ba1676c2a6777b3494db/
+         sh4 |                   boost-1.60.0 | NOK | http://autobuild.buildroot.net/results/856dc6818c5ecd47c201e2e1446f3d310d42c203/
+      xtensa |                   boost-1.60.0 | NOK | http://autobuild.buildroot.net/results/dc66b7fa7ba324ed9f5271cb6175964404d4ba23/
+       nios2 |                   boost-1.60.0 | NOK | http://autobuild.buildroot.net/results/e2daeda2773a9bf7c3161984a6d1afacecf341d5/
+         arm |                     cups-2.1.2 | NOK | http://autobuild.buildroot.net/results/c7df3268f42b945c17a00bbe1367ccab15e1f71d/
+         arm |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/b7ebe8d964b69c7c6489e78ba25d898e4f56f476/
+         arm |                    erlang-17.5 | NOK | http://autobuild.buildroot.net/results/0cae9220446bfd0a27b58f7c9de804647885a9e0/
+      x86_64 |                    erlang-17.5 | NOK | http://autobuild.buildroot.net/results/084f23c443b4de20cdc922ac7e1722729f45734e/
+       sparc |                    erlang-17.5 | NOK | http://autobuild.buildroot.net/results/2c2d41b3d2f3016fb6942d6febe216243c49a1d7/
+microblazeel |                     glibc-2.21 | NOK | http://autobuild.buildroot.net/results/550625df7a8bee6d83ebda167c36ac6aebc048c0/
+    mips64el | hidapi-d17db57b9d4354752e0a... | NOK | http://autobuild.buildroot.net/results/f27dd73c7f8393e7b8bcbc03a057deb2119e632b/
+    mips64el | hidapi-d17db57b9d4354752e0a... | NOK | http://autobuild.buildroot.net/results/91df0ebbfcddb214f09c9fb5e51822c539322e55/
+    mips64el | hidapi-d17db57b9d4354752e0a... | NOK | http://autobuild.buildroot.net/results/4a7aec53764b7c46ba62316e46e73af2e13609e0/
+         sh4 | hidapi-d17db57b9d4354752e0a... | NOK | http://autobuild.buildroot.net/results/c130c77a98fb20bb521790d4a43912ae52714b40/
+         arm |                host-efl-1.15.3 | NOK | http://autobuild.buildroot.net/results/2b054f179827b71e7962b2890f5dd6056f8e92b2/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/55d95d7decc8ff8c451601a38ce2c2818fe23bcc/
+         arc |            host-gettext-0.19.7 | NOK | http://autobuild.buildroot.net/results/4ec03877d6e154a0a1f387f738ed4b66f7aa3912/
+        i686 |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/656ced8999da49f8fcd9fb02db04629164b118e2/
+      x86_64 |              host-nodejs-5.3.0 | NOK | http://autobuild.buildroot.net/results/56c4a1983991b553da3e97b5aefc43bf5b364f03/
+     powerpc | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/fc097029ac7319031a786df450f757189c160949/
+     powerpc | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/5d46aaab5eb0331dea4722ef34e2c2ed991a476f/
+     powerpc | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/e0de062d6425b30d37be62f15dc9a46d6256e7a9/
+        bfin | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/0ef58cc1a976c5c6042b7aa299dfedebe2bdc3dd/
+         arm | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/f0e7ff936c48bc8838be3e3283408105512aec98/
+      x86_64 | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/a882119e11c8bc20bc22f56d2290b7f613b6535e/
+         arm | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/a33f849ad41d1009c0ad25a662e0075b7272f419/
+      mipsel | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/b39d6cd61e96a8d57581ca9c82d3b037d86a41fe/
+         arm | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/05d95ed538d0e7eaed9692b6f8f42ab2bbe05426/
+        bfin | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/5690577b1be2109fa7229de35fdafaf55dd6da17/
+         arm | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/70917bf978648ca03c97f5fe9fd8b3581743af57/
+     powerpc | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/6654c733a915ae2afc59fc4db08e93a21512139f/
+      x86_64 |                 iprutils-2.4.5 | NOK | http://autobuild.buildroot.net/results/8002fee44d9b6fe8e4d822f35a652dca3245a3e8/
+         arc | iputils-c8ff6feaf0442f8efd9... | NOK | http://autobuild.buildroot.net/results/0668c3b02c8422623218951ee2f7338dbf171d7d/
+        sh4a |                libgtk2-2.24.29 | NOK | http://autobuild.buildroot.net/results/f802ccf06a31aa10d710141f5cda3b8276a27906/
+        mips |                libgtk2-2.24.29 | NOK | http://autobuild.buildroot.net/results/f22791d427f3bb7e629091801904c287a9d2dfc3/
+     powerpc |                    libnss-3.21 | NOK | http://autobuild.buildroot.net/results/5817abb20d228f78f0ac7eda1b2aaf1b842d7442/
+      mipsel |           libpam-tacplus-1.3.9 | NOK | http://autobuild.buildroot.net/results/4ebe9a99e7f462c72eb6569c1d8c7045d6425b82/
+      mipsel |               libsoil-20080707 | NOK | http://autobuild.buildroot.net/results/6d27ed83de0d1b67a190d1b88646dbe43f1078d8/
+         arm |                   libssh-0.7.2 | NOK | http://autobuild.buildroot.net/results/dee903ec7d813ef8a0969c5036b189124362819f/
+         arm |                libupnpp-0.13.1 | NOK | http://autobuild.buildroot.net/results/50d6a365b563a1122f4bb30e4cd9af4c352f6126/
+         arm |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/d3f545a0204a9bf09f39bfe229f25c3b3906b958/
+     sparc64 |         ltp-testsuite-20150903 | NOK | http://autobuild.buildroot.net/results/60d5d87b7f0e76355469dcecd0f52c016dee0485/
+      mipsel |         ltp-testsuite-20150903 | NOK | http://autobuild.buildroot.net/results/4f6b48e6cb165db50f344015a64d95ad0da55d93/
+     sparc64 |         ltp-testsuite-20150903 | NOK | http://autobuild.buildroot.net/results/c97bf1dfefbf91b345a8349c8f5e5cc2491702eb/
+         arm |              lttng-tools-2.7.1 | NOK | http://autobuild.buildroot.net/results/4df66fb34b101a05687c3d5d7774af571a3ff977/
+      x86_64 |                  lvm2-2.02.138 | NOK | http://autobuild.buildroot.net/results/018bab24c1c90cd402ee582e892613af6cd90bd8/
+      x86_64 |                  lvm2-2.02.138 | NOK | http://autobuild.buildroot.net/results/d88d5d87b63cfe7d51e8e70d3815a9cca637b62d/
+microblazeel | make[2]: *** [code/CMakeFil... | TIM | http://autobuild.buildroot.net/results/8f85eb15186a4fc5a03debbdd4de427391f573fd/
+microblazeel | make[5]: *** [all-local] Te... | TIM | http://autobuild.buildroot.net/results/c529f6f82c8232df4534c34c4cf684ab94f3d0f6/
+microblazeel | make[6]: *** [libavfilter/a... | TIM | http://autobuild.buildroot.net/results/20af6c077ab7d8f420d3fa08753cfa31d74d6778/
+         arm |                      mc-4.8.15 | NOK | http://autobuild.buildroot.net/results/1d25c74e642d80fc3e11a8dd343b4b62129e3bb6/
+        sh4a |               memcached-1.4.25 | NOK | http://autobuild.buildroot.net/results/46fbbda6b6b76eda6e76da9fac57f4e9fafb6753/
+        mips |                  mesa3d-11.1.1 | NOK | http://autobuild.buildroot.net/results/534002bf7f08b8722acda70b58f5a7f5d3b75457/
+        i686 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/3f6c89f994148816625ecf9d15de0d8e8e73374d/
+     aarch64 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/293079847b9a9c203e3e6684a810a3f7181d2290/
+         arm |              netbsd-queue-1.70 | NOK | http://autobuild.buildroot.net/results/6c289e92e9758cdd3ed641fad03817272b23ccfb/
+     powerpc |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/e672db7fb81033c7c3cd8e22c540f18117a7a61f/
+       sparc |                  openal-1.17.1 | NOK | http://autobuild.buildroot.net/results/b9c03dedcbe5cb32d0bdab5d27c9b9acf7d1a523/
+        sh4a |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/4b90245bff3976514090fd7bd2c5f4941d02b917/
+        sh4a |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/d5d30f93dbe7761d64c36dd0332d3ebfcdd8e583/
+       nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/4db355e2f4e317027c86e0f1595fe6d27f699933/
+       nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/0c0a765ab80e962c8836c9ce1e4e3cfe9432421e/
+       sparc |                    redis-3.0.5 | NOK | http://autobuild.buildroot.net/results/9662c705bd505a801cff15e2797bdbd98f61f599/
+         arm |                 rt-tests-v0.89 | NOK | http://autobuild.buildroot.net/results/cae79afc856568c710e0dae3ff00ecb25cd95747/
+         arc |                     ruby-2.3.0 | NOK | http://autobuild.buildroot.net/results/a48175ca152ad83bf07c4b3ccce53b2d3dec23de/
+         arc |                     ruby-2.3.0 | NOK | http://autobuild.buildroot.net/results/37ef4b5806e7607916c28bdb06c01b67230188cd/
+     powerpc |           sane-backends-1.0.25 | NOK | http://autobuild.buildroot.net/results/61c1dbc84f3ffecc71a34c007e7d375ca370f902/
+      mipsel |                     sox-14.4.2 | NOK | http://autobuild.buildroot.net/results/bbb90c095c7d82e9187c87e239ba095f7390b147/
+    mips64el |                     sox-14.4.2 | NOK | http://autobuild.buildroot.net/results/65c62d63f3c6cac0e7d6d17c4f839cbe9a8e7131/
+     sparc64 |              stress-ng-0.04.16 | NOK | http://autobuild.buildroot.net/results/3de7c5951e71e5952b05ba07ab027fe42553e4fb/
+    mips64el |                   stunnel-5.29 | NOK | http://autobuild.buildroot.net/results/a4408327f74c664b75a59b259151e0656a712276/
+    mips64el |                   stunnel-5.29 | NOK | http://autobuild.buildroot.net/results/a86070610e0c092763c7c3cd2566f591984bdb94/
+    mips64el |                   stunnel-5.29 | NOK | http://autobuild.buildroot.net/results/2fa443f7d1f7a10a70855eb97bafa1a9bf6e47b2/
+         arm |                       tar-1.28 | NOK | http://autobuild.buildroot.net/results/f9f0db6ac6f92c09b954aa82ba34b5072fffad42/
+         arm |                tcpreplay-4.1.1 | NOK | http://autobuild.buildroot.net/results/c58688ab237a693d457bf8ceede0ee8a369210b2/
+        i686 |                   trinity-v1.6 | NOK | http://autobuild.buildroot.net/results/3521919b772add17f6526c8b993f0d42698021f1/
+        i686 |                        unknown | NOK | http://autobuild.buildroot.net/results/ed7229efa77eaddc71f2451b00f6936ecf840b2e/
+       sparc |                        unknown | TIM | http://autobuild.buildroot.net/results/45a9be7f6b70bf560633fc7751373d70d0d4dc2f/
+         arc |              util-linux-2.27.1 | NOK | http://autobuild.buildroot.net/results/4f4c9210ffcd26b8297a5154a1d1a08ae5345312/
+    mips64el |                valgrind-3.11.0 | NOK | http://autobuild.buildroot.net/results/bb446074495a0828bb0aaec252f81829f078ae08/
+        mips |                valgrind-3.11.0 | NOK | http://autobuild.buildroot.net/results/99227b6f39f734e14ecd96326dfc5ea60e7d4a51/
+         arm |                     vpnc-0.5.3 | NOK | http://autobuild.buildroot.net/results/0661d1f7a51512e8de13f01f1ac781a9589ff89f/
+      x86_64 |              webkitgtk24-2.4.9 | NOK | http://autobuild.buildroot.net/results/742e2498d4412b72326eff7e0835bfee246b683a/
+        mips | zbar-854a5d97059e395807091a... | NOK | http://autobuild.buildroot.net/results/ece05ecd1d14251829530948ecd7de5a7d3af043/
+         arm | zbar-854a5d97059e395807091a... | NOK | http://autobuild.buildroot.net/results/db344fd0b69a6316e6c3c83285c4969db0638f77/
+         arm | zbar-854a5d97059e395807091a... | NOK | http://autobuild.buildroot.net/results/8c0d4d70d5afacfe79dc286968f0b290010179da/
+         arm | zbar-854a5d97059e395807091a... | NOK | http://autobuild.buildroot.net/results/9c3e34a4227764b47b3942a10810ce0531eeb290/
+         arm | zbar-854a5d97059e395807091a... | NOK | http://autobuild.buildroot.net/results/7743e1530df497ed555e062113c0d83749375adb/
+
+
 -- 
-2.5.0
+http://autobuild.buildroot.net
