@@ -1,34 +1,22 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Jan 2016 11:23:44 +0100
-Subject: [Buildroot] [PATCH 3/4] package/sqlite: Fix readline support
-In-Reply-To: <1453544625-30597-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453544625-30597-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1453544625-30597-3-git-send-email-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 23 Jan 2016 10:26:55 +0000
+Subject: [Buildroot] [Bug 8621] sqlite package, properly enable readline
+In-Reply-To: <bug-8621-163@https.bugs.busybox.net/>
+References: <bug-8621-163@https.bugs.busybox.net/>
+Message-ID: <bug-8621-163-cQp4dCiuVl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=8621#c0
+https://bugs.busybox.net/show_bug.cgi?id=8621
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/sqlite/sqlite.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #2 from Bernd Kuhls <bernd.kuhls@t-online.de> ---
+Please test
+http://patchwork.ozlabs.org/patch/572078/
+http://patchwork.ozlabs.org/patch/572080/
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 46acbf8..1603e00 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -47,7 +47,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
- SQLITE_DEPENDENCIES += ncurses readline
--SQLITE_CONF_OPTS += --with-readline-inc="-I$(STAGING_DIR)/usr/include"
-+SQLITE_CONF_OPTS += --enable-readline
- else
- SQLITE_CONF_OPTS += --disable-readline
- endif
 -- 
-2.7.0.rc3
+You are receiving this mail because:
+You are on the CC list for the bug.
