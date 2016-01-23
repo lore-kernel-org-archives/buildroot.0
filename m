@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jan 2016 13:09:43 +0100
-Subject: [Buildroot] [PATCH 1/4] package/sqlite: Disable autoreconf
-In-Reply-To: <1453544625-30597-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 23 Jan 2016 13:10:48 +0100
+Subject: [Buildroot] [PATCH 4/4] package/sqlite: add optional support
+ for libedit
+In-Reply-To: <1453544625-30597-4-git-send-email-bernd.kuhls@t-online.de>
 References: <1453544625-30597-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160123130943.43938e06@free-electrons.com>
+ <1453544625-30597-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160123131048.579f660b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +14,42 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat, 23 Jan 2016 11:23:42 +0100, Bernd Kuhls wrote:
-> Currently we have no patches for this package, compilation works without
-> autoreconf.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/sqlite/sqlite.mk | 3 ---
->  1 file changed, 3 deletions(-)
+On Sat, 23 Jan 2016 11:23:45 +0100, Bernd Kuhls wrote:
 
-Patches 1-3 applied, thanks!
+> diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
+> index 7ea9eb1..31add17 100644
+> --- a/package/sqlite/Config.in
+> +++ b/package/sqlite/Config.in
+> @@ -8,13 +8,25 @@ config BR2_PACKAGE_SQLITE
+>  
+>  if BR2_PACKAGE_SQLITE
+>  
+> +choice
+> +	prompt "Command-line editing"
+> +	default BR2_PACKAGE_SQLITE_READLINE
+> +	help
+> +	  Enable command-line editing.
+> +
+> +config BR2_PACKAGE_SQLITE_LIBEDIT
+> +	bool "libedit"
+> +	select BR2_PACKAGE_LIBEDIT
+> +
+>  config BR2_PACKAGE_SQLITE_READLINE
+> -	bool "Command-line editing"
+> +	bool "readline"
+>  	select BR2_PACKAGE_NCURSES
+>  	select BR2_PACKAGE_READLINE
+>  	help
+>  	  Enable command-line editing. This requires ncurses and readline.
+
+I am not sure I like adding a choice for such a simple thing.
+Config.in choices are not randomized in our build testing.
+
+What about instead dropping the BR2_PACKAGE_SQLITE_READLINE option, and
+automatically enable readline/libedit support in sqlite when the
+corresponding packages are enabled ?
+
+Peter, what do you think ?
 
 Thomas
 -- 
