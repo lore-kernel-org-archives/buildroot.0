@@ -1,110 +1,63 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Sun, 24 Jan 2016 21:55:19 +0100
-Subject: [Buildroot] [PATCH v2 1/4] libfslcodec: add install hooks to
- fix libraries path
-In-Reply-To: <20151214212514.GA10029@t450s.lan>
-References: <1449755560-2911-1-git-send-email-gary.bisson@boundarydevices.com>
- <1449755560-2911-2-git-send-email-gary.bisson@boundarydevices.com>
- <20151213203642.GD27769@free.fr> <20151214212514.GA10029@t450s.lan>
-Message-ID: <CAAMH-yusa46ttkW=f8rLwz5CfHTrENULP4ZMjux_kheDi069ag@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Jan 2016 22:08:06 +0100
+Subject: [Buildroot] [PATCH v3 2/2] docs/manual: patches that change
+ files with spaces in the name
+In-Reply-To: <56a5389a95e45_611f13d281c87bf@ultri2.mail>
+References: <20160124162002.GE3405@free.fr>
+ <56a5389a95e45_611f13d281c87bf@ultri2.mail>
+Message-ID: <20160124210806.GG3405@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Ricardo, All,
 
-On Mon, Dec 14, 2015 at 10:25 PM, Gary Bisson
-<gary.bisson@boundarydevices.com> wrote:
-> Yann, All,
->
-> On Sun, Dec 13, 2015 at 09:36:42PM +0100, Yann E. MORIN wrote:
->> Gary, All,
->>
->> On 2015-12-10 14:52 +0100, Gary Bisson spake thusly:
->> > By default, all the libraries are installed under /usr/lib/imx-mm which
->> > causes problems at runtime.
->> >
->> > The hooks are inspired from the mechanism used in the Yocto recipe:
->> > https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-
->> > multimedia/libfslcodec/libfslcodec.inc
->> >
->> > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
->> > ---
->> >
->> > Here are the dependencies the pipelines above are testing:
->> > $ for i in `find target/usr/lib/gstreamer*/*`; do readelf -d $i | grep NEEDED | grep lib_ && echo "($i)"; done
->> >  0x00000001 (NEEDED)                     Shared library: [lib_nb_amr_dec_arm9_elinux.so.2]
->> >  0x00000001 (NEEDED)                     Shared library: [lib_wb_amr_dec_arm9_elinux.so.2]
->> > (target/usr/lib/gstreamer-0.10/libmfw_gst_amrdec.so)
->> >  0x00000001 (NEEDED)                     Shared library: [lib_peq_arm11_elinux.so.1.fhw]
->> > (target/usr/lib/gstreamer-0.10/libmfw_gst_audio_pp.so)
->> >  0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
->> > (target/usr/lib/gstreamer-0.10/libmfw_gst_mp3enc.so)
->> >  0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
->> > (target/usr/lib/gstreamer-1.0/libgstimxaudio.so)
->> >
->> > Note that I added a staging install hook as well because otherwise the
->> > gst1-imx plugin doesn't find lib_mp3_enc_arm12_elinux.so at build time.
->> >
->> > Not to copy the same library twice I decided to go with a symlink. Let
->> > me know if that's acceptable.
->> >
->> > Regards,
->> > Gary
->> >
->> > ---
->> >  package/libfslcodec/libfslcodec.mk | 15 +++++++++++++++
->> >  1 file changed, 15 insertions(+)
->> >
->> > diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
->> > index 473d662..f8c6aa8 100644
->> > --- a/package/libfslcodec/libfslcodec.mk
->> > +++ b/package/libfslcodec/libfslcodec.mk
->> > @@ -20,4 +20,19 @@ endef
->> >  # FIXME The Makefile installs both the arm9 and arm11 versions of the
->> >  # libraries, but we only need one of them.
->> >
->> > +# Use symlinks in staging dir so every application can link against the libs
->> > +# whether they look at imx-mm or not (gst-fsl-plugins vs. gst1-imx).
->>
->> Hmmm.. I may have overlooked that part.
->>
->> So, gst-fsl-plugins looks for the libraries in /usr/lib/imx-mm/ , while
->> gst1-imx looks for them in /usr/lib , right?
->
-> That is correct indeed.
->
->> Is it possible to make gst-fsl-plugins look in /usr/lib, too?
->
-> Never really looked into it but yep maybe it is just a matter of
-> modifying a few lines of Makefile.am. It just sounds like more troubles
-> doing so, maybe having to update the patch every release and so on.
->
->> (or the other way around if the lookup is the other way around, of
->> course...)
->
-> Gstreamer1-imx is way cleaner that gst-fsl-plugins, I'd like to keep it
-> that way. What about removing gst-fsl-plugins and gstreamer0.10? ;)
->
->> > +define LIBFSLCODEC_FIXUP_STAGING_PATH
->> > +   find $(STAGING_DIR)/usr/lib/imx-mm -mindepth 2 -maxdepth 2 -not -type d \
->> > +           -exec ln -fs {} $(STAGING_DIR)/usr/lib \;
->> > +endef
->> > +LIBFSLCODEC_POST_INSTALL_STAGING_HOOKS += LIBFSLCODEC_FIXUP_STAGING_PATH
->> > +
->> > +# Use symlinks in install dir as well to match staging setup.
->>
->> In complement to my previous reply, with insight from what you said
->> above: even if gst-fsl-plugins looks for in /usr/lib/imx-mm at build
->> time, does it still look there at runtime? If not, then just do a move.
->
-> No, that is what people have been complaining about for quite some time
-> now:
-> http://patchwork.ozlabs.org/patch/409684/
+On 2016-01-24 18:48 -0200, Ricardo Martincoski spake thusly:
+> Arnout, Yann E. MORIN,
+> 
+> On Sun, Jan 24, 2016 at 02:20 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> [snip]
+> >>  - Arnout suggested to drop the patch to the manual:
+> >>    "I think that this situation is so exotic that it doesn't warrant a
+> >>    mention in the manual. The manual is already long and complicated
+> >>    enough."
+> >>    I updated the manual for now because it is a separate patch that can
+> >>    be Rejected if others agree with Arnout.
+> > 
+> > Well, like Arnout said, the number of cases that this would bite us is
+> > very limited (as in: there is only one case).
+> > 
+> > The most problematic issue here is not doing the fix, but recognising
+> > the symptoms. This is such a rare occurence that I'm afraid we'll again
+> > scratch our heads when we next encounter this issue. That is, if there's
+> > ever a "next time"...
+> > 
+> > So I don't think it is necessary that the manual has a blurb about that.
+> [snip]
+> 
+> Thank you both for your time.
+> I will set this patch as Rejected.
+> 
+> All,
+> 
+> I guess I don't need to send a v4 for the series (now it became a
+> single patch) while no change is requested in
+> http://patchwork.ozlabs.org/patch/572263/
+> If someone disagrees, just let me know and I will send it.
 
-Any update on this series? Would using symlink be acceptable?
+Indeed, no need to resubmit.
+
+Thanmks! :-)
 
 Regards,
-Gary
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
