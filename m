@@ -1,7 +1,9 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Sun, 24 Jan 2016 01:15:03 +0100
-Subject: [Buildroot] [PATCH 1/2] python-iniparse: new package
-Message-ID: <1453594504-8725-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Date: Sun, 24 Jan 2016 01:15:04 +0100
+Subject: [Buildroot] [PATCH 2/2] crudini: new package
+In-Reply-To: <1453594504-8725-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1453594504-8725-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <1453594504-8725-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,70 +12,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/Config.in                            |  1 +
- package/python-iniparse/Config.in            | 11 +++++++++++
- package/python-iniparse/python-iniparse.hash |  2 ++
- package/python-iniparse/python-iniparse.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-iniparse/Config.in
- create mode 100644 package/python-iniparse/python-iniparse.hash
- create mode 100644 package/python-iniparse/python-iniparse.mk
+ package/Config.in            |  1 +
+ package/crudini/Config.in    |  8 ++++++++
+ package/crudini/crudini.hash |  2 ++
+ package/crudini/crudini.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/crudini/Config.in
+ create mode 100644 package/crudini/crudini.hash
+ create mode 100644 package/crudini/crudini.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 09c2b40..a339161 100644
+index a339161..22f5dcb 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -645,6 +645,7 @@ menu "External python modules"
- 	source "package/python-httplib2/Config.in"
- 	source "package/python-id3/Config.in"
- 	source "package/python-idna/Config.in"
-+	source "package/python-iniparse/Config.in"
- 	source "package/python-ipaddr/Config.in"
- 	source "package/python-ipaddress/Config.in"
- 	source "package/python-ipy/Config.in"
-diff --git a/package/python-iniparse/Config.in b/package/python-iniparse/Config.in
+@@ -1525,6 +1525,7 @@ endif
+ comment "Utilities"
+ 	source "package/at/Config.in"
+ 	source "package/ccrypt/Config.in"
++	source "package/crudini/Config.in"
+ 	source "package/dialog/Config.in"
+ 	source "package/dtach/Config.in"
+ 	source "package/file/Config.in"
+diff --git a/package/crudini/Config.in b/package/crudini/Config.in
 new file mode 100644
-index 0000000..93d7ead
+index 0000000..c677f3b
 --- /dev/null
-+++ b/package/python-iniparse/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_INIPARSE
-+	bool "python-iniparse"
++++ b/package/crudini/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CRUDINI
 +	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_INIPARSE
++	bool "crudini"
 +	help
-+	  iniparse is an INI parser for  Python which is API compatible
-+	  with the standard library's ConfigParser, preserves structure of INI
-+	  files (order of sections & options, indentation, comments, and blank
-+	  lines are preserved when data is updated), and is more convenient to
-+	  use.
++	  A utility for handling ini files from the command line and shell scripts
 +
-+	  https://pypi.python.org/pypi/iniparse
-diff --git a/package/python-iniparse/python-iniparse.hash b/package/python-iniparse/python-iniparse.hash
++	  https://pypi.python.org/pypi/crudini
+diff --git a/package/crudini/crudini.hash b/package/crudini/crudini.hash
 new file mode 100644
-index 0000000..0caa146
+index 0000000..04e2575
 --- /dev/null
-+++ b/package/python-iniparse/python-iniparse.hash
++++ b/package/crudini/crudini.hash
 @@ -0,0 +1,2 @@
-+#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e573e9e9733d97623881ce9bbe5eca6
-+md5 5e573e9e9733d97623881ce9bbe5eca6 iniparse-0.4.tar.gz
-diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
++#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=7d1313f1bb9800db9cbceaa518bcf212
++md5    7d1313f1bb9800db9cbceaa518bcf212 crudini-0.7.tar.gz
+diff --git a/package/crudini/crudini.mk b/package/crudini/crudini.mk
 new file mode 100644
-index 0000000..b00e0c4
+index 0000000..d797efc
 --- /dev/null
-+++ b/package/python-iniparse/python-iniparse.mk
++++ b/package/crudini/crudini.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-iniparse
++# crudini
 +#
 +################################################################################
 +
-+PYTHON_INIPARSE_VERSION = 0.4
-+PYTHON_INIPARSE_SOURCE = iniparse-$(PYTHON_INIPARSE_VERSION).tar.gz
-+PYTHON_INIPARSE_SITE = https://pypi.python.org/packages/source/i/iniparse
-+PYTHON_INIPARSE_LICENSE = Python software foundation license v2, MIT
-+PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
-+PYTHON_INIPARSE_SETUP_TYPE = distutils
++CRUDINI_VERSION = 0.7
++CRUDINI_SOURCE = crudini-$(CRUDINI_VERSION).tar.gz
++CRUDINI_SITE = https://pypi.python.org/packages/source/c/crudini
++CRUDINI_SETUP_TYPE = setuptools
++CRUDINI_LICENSE = GPLv2
++CRUDINI_LICENSE_FILES = COPYING
 +
 +$(eval $(python-package))
 -- 
