@@ -1,48 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 14:30:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_sessreg: fix musl build
-Message-ID: <1453642260-24302-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 14:37:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dvbsnoop: fix musl build
+Message-ID: <1453642679-29490-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The autobuilders did not catch the error yet because they failed
-earlier with other packages, but I am continuing the build based
-on the defconfig from:
-http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
+Fixes
+http://autobuild.buildroot.net/results/6fb/6fbe96af007803acfe9deacf26399cb19e5f2b47/
+http://autobuild.buildroot.net/results/be6/be64a45ac158b9057fb3e7ef9b515250acc77187/
+and many others
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xapp_sessreg/0002-musl-missing-path-wtmpx.patch   | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/x11r7/xapp_sessreg/0002-musl-missing-path-wtmpx.patch
+ package/dvbsnoop/0001-musl-types-h.patch | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 package/dvbsnoop/0001-musl-types-h.patch
 
-diff --git a/package/x11r7/xapp_sessreg/0002-musl-missing-path-wtmpx.patch b/package/x11r7/xapp_sessreg/0002-musl-missing-path-wtmpx.patch
+diff --git a/package/dvbsnoop/0001-musl-types-h.patch b/package/dvbsnoop/0001-musl-types-h.patch
 new file mode 100644
-index 0000000..90e1e8e
+index 0000000..1149df0
 --- /dev/null
-+++ b/package/x11r7/xapp_sessreg/0002-musl-missing-path-wtmpx.patch
-@@ -0,0 +1,19 @@
++++ b/package/dvbsnoop/0001-musl-types-h.patch
+@@ -0,0 +1,15 @@
 +Fix musl build
-+
-+Downloaded from
-+https://cgit.gentoo.org/proj/musl.git/tree/x11-apps/sessreg/files/sessreg-1.1.0-missing_path_wtmpx.patch
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+diff -Naur sessreg-1.0.8.orig/sessreg.h sessreg-1.0.8/sessreg.h
-+--- sessreg-1.0.8.orig/sessreg.h	2013-02-10 21:43:50.000000000 -0500
-++++ sessreg-1.0.8/sessreg.h	2014-06-18 10:02:17.769459663 -0400
-+@@ -106,3 +106,8 @@
-+ #ifndef UTMPX_FILE
-+ # define UTMPX_FILE	_PATH_UTMPX
-+ #endif
-++
-++#ifndef _PATH_WTMPX
-++# define _PATH_WTMPX	"/var/log/wtmp"
-++#endif
-++
++diff -uNr dvbsnoop-1.4.50.org/src/misc/helper.h dvbsnoop-1.4.50/src/misc/helper.h
++--- dvbsnoop-1.4.50.org/src/misc/helper.h	2006-01-02 20:04:56.000000000 +0100
+++++ dvbsnoop-1.4.50/src/misc/helper.h	2016-01-24 14:35:02.000000000 +0100
++@@ -16,6 +16,7 @@
++ #ifndef __HELPER_H
++ #define __HELPER_H
++ 
+++#include <sys/types.h>
++ 
++ u_long outBit_Sx (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
++ u_long outBit_Sx_NL (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
 -- 
 2.7.0.rc3
