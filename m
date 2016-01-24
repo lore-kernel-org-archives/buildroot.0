@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 00:08:07 +0100
-Subject: [Buildroot] [PATCH 21/21] neard: add missing
+Date: Mon, 25 Jan 2016 00:08:05 +0100
+Subject: [Buildroot] [PATCH 19/21] openal: add missing
 	BR2_TOOLCHAIN_HAS_SYNC_4 dependency
 In-Reply-To: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453676887-31236-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453676887-31236-20-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,48 @@ To: buildroot@busybox.net
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/b8bf7be2efd8e8e369abdde0a5bec564e8cd6f23/
+  http://autobuild.buildroot.org/results/314fb8da3ca87984e9240d67ff233e2f999ae89e/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/connman/Config.in | 1 +
- package/neard/Config.in   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/gstreamer1/gst1-plugins-bad/Config.in | 2 ++
+ package/openal/Config.in                      | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 655db86..556de48 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -50,6 +50,7 @@ config BR2_PACKAGE_CONNMAN_LOOPBACK
- config BR2_PACKAGE_CONNMAN_NEARD
- 	bool "enable neard support"
- 	select BR2_PACKAGE_NEARD
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # neard
- 
- config BR2_PACKAGE_CONNMAN_OFONO
- 	bool "enable ofono support"
-diff --git a/package/neard/Config.in b/package/neard/Config.in
-index 353d1af..8571e7c 100644
---- a/package/neard/Config.in
-+++ b/package/neard/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_NEARD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
- 	depends on !BR2_STATIC_LIBS # dlopen
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index f02be34..0dc217e 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -566,9 +566,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENAL
+ 	bool "openal"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBNL
-@@ -26,4 +27,5 @@ endif
+ 	select BR2_PACKAGE_OPENAL
  
- comment "neard needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
+ comment "openal plugin needs a toolchain w/ NPTL, C++"
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ 		|| !BR2_INSTALL_LIBSTDCPP
+ 
+diff --git a/package/openal/Config.in b/package/openal/Config.in
+index 4a73f45..b497e26 100644
+--- a/package/openal/Config.in
++++ b/package/openal/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENAL
+ 	bool "openal"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  OpenAL provides capabilities for playing audio in a virtual
+ 	  3D environment. Distance attenuation, doppler shift, and
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_OPENAL
+ 	  http://kcat.strangesoft.net/openal.html
+ 
+ comment "openal needs a toolchain w/ NPTL, C++"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ 		|| !BR2_INSTALL_LIBSTDCPP
 -- 
 2.6.4
