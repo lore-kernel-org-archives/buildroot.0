@@ -1,50 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Jan 2016 15:26:01 +0100
-Subject: [Buildroot] [PATCH v4 3/5] package/gutenprint: Un-deprecate and
- bump version to 5.2.10
-In-Reply-To: <CALdGskKj_MrtZCWdYHZ7XKgaHHuffV1qabrfncXpjzkBdRC=ng@mail.gmail.com>
-References: <1453328267-31962-1-git-send-email-olivier.schonken@gmail.com>
- <1453328267-31962-4-git-send-email-olivier.schonken@gmail.com>
- <20160122001550.406e6207@free-electrons.com>
- <CALdGskKj_MrtZCWdYHZ7XKgaHHuffV1qabrfncXpjzkBdRC=ng@mail.gmail.com>
-Message-ID: <56A4DEF9.5050900@mind.be>
+Date: Sun, 24 Jan 2016 15:31:52 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/libsoil: fix build using old
+ versions of patch
+In-Reply-To: <1453641593-31129-2-git-send-email-ricardo.martincoski@gmail.com>
+References: <1453641593-31129-1-git-send-email-ricardo.martincoski@gmail.com>
+ <1453641593-31129-2-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <56A4E058.50308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24-01-16 14:50, Olivier Schonken wrote:
-> Hi Thomas, All
-> 
-> Attached is a patch that worked for fixing the build issue you had with
-> Gutenprint.  Seems they have a bit of issues with code quality control/review
-> upstream.
-> For the print-olympus.c file the way in which they checked the endianess
-> differed from the rest of the project, and the also had a variable in genppd.c
-> that was dependant on a HAVE_ZLIB define, but not encased in an #ifdef block.
-> 
-> If the changes are in order I will resubmit using the usual methods.
-> 
+On 24-01-16 14:19, Ricardo Martincoski wrote:
+> Well-formed patch fails to apply
+> - patch v2.6:
+> Hunk #1 FAILED at 1.
+> Hunk #2 FAILED at 23.
+> - patch v2.6.1:
+> can't find file to patch at input line 11
+> Perhaps you used the wrong -p or --strip option?
+> [snip]
+> No file to patch.  Skipping patch.
+> 2 out of 2 hunks ignored
+> Patch failed!  Please fix 0001-fix-makefile.patch!
+>
+> Old versions of the tool "patch" cannot handle spaces in filenames.
+> The same does not occur using "patch" v2.7 or any later.
+>
+> Workaround: when a file with space in the name needs to be patched,
+> one or two hooks must be used.
+> A pre-patch or post-extract hook renames the file to replace spaces
+> with underscores.
+> The patch file must be generated using diff between two source-trees
+> that have the file renamed with spaces replaced by underscores.
+> A post-patch hook could rename the file to its original name if needed.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/8ff/8ff91ab8e52000eb34dd8f662520cf1b31490cf5/
+> http://autobuild.buildroot.net/results/ea7/ea77d6b23aca0cb1cf527e6c16ddf5eba957a69c/
+>
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- A few small comments:
-
- It should be two separate patches, because they do two unrelated things.
-
- The patch commit log for the endianness fix could be improved a little, e.g.
-
-print-olympus.c: fix endianness detection
-
-The __LITTLE_ENDIAN__ and __BIG_ENDIAN__ macros are not a reliable way to detect
-endianness. Instead, rely on __BYTE_ORDER like we do in the rest of the code.
-
-
- There's a redundant newline in the patch description.
-
- And finally, don't forget to send these patches upstream.
-
- Thanks,
- Arnout
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
