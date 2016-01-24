@@ -1,68 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2016 16:49:21 +0100
-Subject: [Buildroot] [PATCH] support/download: protect from custom
- commands with spaces in args
-In-Reply-To: <20160124020636.GA1387@jack.zhora.eu>
-References: <1449480415-10043-1-git-send-email-yann.morin.1998@free.fr>
- <20160124020636.GA1387@jack.zhora.eu>
-Message-ID: <20160124154921.GC3405@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jan 2016 16:51:33 +0100
+Subject: [Buildroot] [PATCH v4 2/4] linux-pam: Enable NIS support if
+ yp-tools selected
+In-Reply-To: <alpine.DEB.2.11.1601241734061.4122@tanhuma.tkos.co.il>
+References: <1453647303-3965-1-git-send-email-yba@tkos.co.il>
+ <1453647303-3965-3-git-send-email-yba@tkos.co.il>
+ <20160124160949.00b03374@free-electrons.com>
+ <alpine.DEB.2.11.1601241734061.4122@tanhuma.tkos.co.il>
+Message-ID: <20160124165133.5bdb131d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andi, All,
+Hello,
 
-On 2016-01-24 11:06 +0900, Andi Shyti spake thusly:
-> > Some users may provide custom download commands with spaces in their
-> > arguments, like so:
-> >     BR2_HG="hg --config foo.bar='some space-separated value'"
-> 
-> this patch is breaking the build. With configs like this:
-> 
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
-> BR2_LINUX_KERNEL_DEFCONFIG="exynos"
-> BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
+On Sun, 24 Jan 2016 17:36:26 +0200 (IST), Jonathan Ben Avraham wrote:
 
-You forgot to specify a kernel version here, which is the ultimate
-reason for the failure.
+> Is this a rule defined in the documentation? I didn't notice it. What is 
+> the reasoning behind the rule?
 
-It does not make sense to use a git tree without specifying either a tag
-or a sha1 to checkout.
+Patches are applied in order. If we apply just your PATCH 2/4 without
+applying 3/4, then this change will be an orphan change, since
+BR2_PACKAGE_YP_TOOLS does not exist.
 
-> the command sent is:
-> 
-> git clone --mirror 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' ''
-> 
-> git dosn't like empty strngs and provides this output:
-> 
-> fatal: The empty string is not a valid path
-> 
-> Besides, I have never seen spaces in branch name, repositories
-> names and it is quite a corner case. I think this patch should be
-> reverted (at least) in the case of git.
+What you're doing is like adding code calling a function foo() in PATCH
+2/4, and then adding the implementation of foo() in PATCH 3/4.
 
-No, the patch is correct. What we should however check is that the
-version string is not empty, and bail out on that error instead.
+Granted, it's not that bad because if BR2_PACKAGE_YP_TOOLS doesn't
+exist, then its value is empty, and your PATCH 2/4 doesn't do anything,
+so it doesn't break anything. But it's just some dead code.
 
-Somehow, when the user forgets to specify a version string, we call the
-download scripts with no basename, and the empty string you see in the
-git call above should have been the basename of the directory to clone
-into, i.e. something like:  linux-VERSION/
+Note that these rules are nothing Buildroot specific. If you want to
+contribute to any other open-source project like the Linux kernel,
+U-Boot or other things, they will ask your patch series to comply with
+those exact same rules.
 
-Care to have a look into that? ;-)
+Best regards,
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
