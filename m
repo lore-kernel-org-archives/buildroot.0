@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 00:08:06 +0100
-Subject: [Buildroot] [PATCH 20/21] freerdp: add missing
+Date: Mon, 25 Jan 2016 00:08:07 +0100
+Subject: [Buildroot] [PATCH 21/21] neard: add missing
 	BR2_TOOLCHAIN_HAS_SYNC_4 dependency
 In-Reply-To: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453676887-31236-21-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453676887-31236-22-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,43 @@ To: buildroot@busybox.net
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/0501e63cbebe4cda4012ace6f7ec5f43342be5c5/
+  http://autobuild.buildroot.org/results/b8bf7be2efd8e8e369abdde0a5bec564e8cd6f23/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freerdp/Config.in | 2 ++
- package/weston/Config.in  | 2 ++
- 2 files changed, 4 insertions(+)
+ package/connman/Config.in | 1 +
+ package/neard/Config.in   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index f8dbb68..9dd2505 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_FREERDP
- 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # libglib2
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 655db86..556de48 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -50,6 +50,7 @@ config BR2_PACKAGE_CONNMAN_LOOPBACK
+ config BR2_PACKAGE_CONNMAN_NEARD
+ 	bool "enable neard support"
+ 	select BR2_PACKAGE_NEARD
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # neard
+ 
+ config BR2_PACKAGE_CONNMAN_OFONO
+ 	bool "enable ofono support"
+diff --git a/package/neard/Config.in b/package/neard/Config.in
+index 353d1af..8571e7c 100644
+--- a/package/neard/Config.in
++++ b/package/neard/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_NEARD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
+ 	depends on !BR2_STATIC_LIBS # dlopen
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_DBUS
  	select BR2_PACKAGE_LIBGLIB2
-@@ -84,5 +85,6 @@ config BR2_PACKAGE_FREERDP_CLIENT_WL
- endif
+ 	select BR2_PACKAGE_LIBNL
+@@ -26,4 +27,5 @@ endif
  
- comment "freerdp needs a toolchain w/ wchar, dynamic library, threads, C++"
+ comment "neard needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index c5525e1..4c820e9 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -44,6 +44,7 @@ config BR2_PACKAGE_WESTON_RDP
- 	bool "RDP compositor"
- 	depends on BR2_USE_WCHAR # freerdp
- 	depends on BR2_USE_MMU # freerdp, libglib2
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_FREERDP
- 	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	help
-@@ -61,6 +62,7 @@ config BR2_PACKAGE_WESTON_RDP
- 
- comment "RDP compositor needs a toolchain w/ wchar"
- 	depends on BROKEN # needs FreeRDP master
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR
- 
- # rpi-userland is an EGL/GLES provider, so we can't select it
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 -- 
 2.6.4
