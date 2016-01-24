@@ -1,12 +1,12 @@
 From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Sun, 24 Jan 2016 17:33:24 +0200 (IST)
-Subject: [Buildroot] [PATCH v4 1/4] Add yp-tools and ypbind-mt to
- packages menu
-In-Reply-To: <20160124160920.0fb91f86@free-electrons.com>
+Date: Sun, 24 Jan 2016 17:36:26 +0200 (IST)
+Subject: [Buildroot] [PATCH v4 2/4] linux-pam: Enable NIS support if
+ yp-tools selected
+In-Reply-To: <20160124160949.00b03374@free-electrons.com>
 References: <1453647303-3965-1-git-send-email-yba@tkos.co.il>
- <1453647303-3965-2-git-send-email-yba@tkos.co.il>
- <20160124160920.0fb91f86@free-electrons.com>
-Message-ID: <alpine.DEB.2.11.1601241724060.4122@tanhuma.tkos.co.il>
+ <1453647303-3965-3-git-send-email-yba@tkos.co.il>
+ <20160124160949.00b03374@free-electrons.com>
+Message-ID: <alpine.DEB.2.11.1601241734061.4122@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,61 +15,30 @@ To: buildroot@busybox.net
 
 On Sun, 24 Jan 2016, Thomas Petazzoni wrote:
 
-> Date: Sun, 24 Jan 2016 16:09:20 +0100
+> Date: Sun, 24 Jan 2016 16:09:49 +0100
 > From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > To: Jonathan Ben-Avraham <yba@tkos.co.il>
 > Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH v4 1/4] Add yp-tools and ypbind-mt to packages
->      menu
+> Subject: Re: [Buildroot] [PATCH v4 2/4] linux-pam: Enable NIS support if
+>     yp-tools selected
 > 
 > Jonathan,
 >
-> On Sun, 24 Jan 2016 16:55:00 +0200, Jonathan Ben-Avraham wrote:
->> From: Jonathan Ben Avraham <yba@tkos.co.il>
->>
->>
->> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
->> ---
->>  package/Config.in |    2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 09c2b40..af9656b 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1482,6 +1482,8 @@ endif
->>  	source "package/xinetd/Config.in"
->>  	source "package/xl2tp/Config.in"
->>  	source "package/xtables-addons/Config.in"
->> +	source "package/yp-tools/Config.in"
->> +	source "package/ypbind-mt/Config.in"
+> On Sun, 24 Jan 2016 16:55:01 +0200, Jonathan Ben-Avraham wrote:
 >
-> This should not be a separate patch. Instead, adding yp-tools to the
-> menu should be part of the patch adding the yp-tools package, and
-> adding ypbind-mt to the menu should be part of the patch adding the
-> ypbind-mt package.
+>> +ifeq ($(BR2_PACKAGE_YP_TOOLS),y)
+>> +LINUX_PAM_CONF_OPTS += \
+>> +	--enable-nis
+>> +else
+>> +LINUX_PAM_CONF_OPTS += \
+>> +	--disable-nis
+>> +endif
+>
+> This patch should come *after* the yp-tools package is added in the
+> series.
 
-That is, one patch should look something like
-
- 	source "package/xinetd/Config.in"
- 	source "package/xl2tp/Config.in"
- 	source "package/xtables-addons/Config.in"
-  +	source "package/yp-tools/Config.in"
- 	source "package/znc/Config.in"
-
-
-and the other should look like
-
- 	source "package/xinetd/Config.in"
- 	source "package/xl2tp/Config.in"
- 	source "package/xtables-addons/Config.in"
-  +	source "package/ypbind-mt/Config.in"
- 	source "package/znc/Config.in"
-
-?
-
-And then we rely on the order of the application of the patches to 
-determine the order of the items in the final Config.in?
+Is this a rule defined in the documentation? I didn't notice it. What is 
+the reasoning behind the rule?
 
   - yba
 
