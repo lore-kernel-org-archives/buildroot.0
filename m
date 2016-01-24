@@ -1,49 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 15:10:05 +0100
-Subject: [Buildroot] [PATCH v2] package/iptables: nfsynproxy not available
-	on musl
-Message-ID: <1453644605-3705-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 15:12:58 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/mjpg-streamer: bump version,
+	add hash
+Message-ID: <1453644779-7961-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-utils/nfsynproxy.c needs several TCP_* constants which are not yet
-provided by musl, they were added Jan 17, 2016 to musl:
-http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
-
-Until we support a musl version containing the constants we disable
-the option for building nfsynproxy on musl.
-
-Fixes
-http://autobuild.buildroot.net/results/8ee/8ee299d8697bf488ba94f60785e81f274b2128fd/
-http://autobuild.buildroot.net/results/f1a/f1ab3fe59d0dd7dd7b9a7bc6bc10a0019f0fa567/
-http://autobuild.buildroot.net/results/4f9/4f904a2913984201ad0bffb63664019c73e0eb77/
-http://autobuild.buildroot.net/results/65c/65c7d47fdc0f55fb8deb77e34063320e2af337ee/
-http://autobuild.buildroot.net/results/aaa/aaaa1fc92b6a885d223681f40c5df7a962ee1fce/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: added commit about future toolchain requirements (Baruch)
+v2: added hash (Arnout)
 
- package/iptables/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/mjpg-streamer/mjpg-streamer.hash | 2 ++
+ package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/mjpg-streamer/mjpg-streamer.hash
 
-diff --git a/package/iptables/Config.in b/package/iptables/Config.in
-index ae7a634..c7b69a8 100644
---- a/package/iptables/Config.in
-+++ b/package/iptables/Config.in
-@@ -9,6 +9,10 @@ if BR2_PACKAGE_IPTABLES
- 
- config BR2_PACKAGE_IPTABLES_BPF_NFSYNPROXY
- 	bool "bpfc and nfsynproxy"
-+	# this dependency can be removed when using a musl version
-+	# containing this commit:
-+	# http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LIBPCAP
- 	help
- 	  Build bpf compiler and nfsynproxy configuration tool.
+diff --git a/package/mjpg-streamer/mjpg-streamer.hash b/package/mjpg-streamer/mjpg-streamer.hash
+new file mode 100644
+index 0000000..8bbac29
+--- /dev/null
++++ b/package/mjpg-streamer/mjpg-streamer.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	756a60cbc3404ac21109bb66091774ac8e1d64ebf60e2bf2c0d08a06d1abb9be	mjpg-streamer-bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b.tar.gz
+diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
+index e10e9a8..e54c600 100644
+--- a/package/mjpg-streamer/mjpg-streamer.mk
++++ b/package/mjpg-streamer/mjpg-streamer.mk
+@@ -8,7 +8,7 @@
+ # http://sourceforge.net/p/mjpg-streamer/code/commit_browser
+ # oliv3r forked the repo to add support for 3.16 and 3.17 kernels:
+ # http://sourceforge.net/p/mjpg-streamer/patches/14/
+-MJPG_STREAMER_VERSION = 730b5bcdc378b6a201131c6c2620eedbe0f6eb30
++MJPG_STREAMER_VERSION = bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b
+ MJPG_STREAMER_SITE = $(call github,oliv3r,mjpg-streamer,$(MJPG_STREAMER_VERSION))
+ MJPG_STREAMER_LICENSE = GPLv2+
+ MJPG_STREAMER_LICENSE_FILES = LICENSE
 -- 
 2.7.0.rc3
