@@ -1,67 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 00:07:59 +0100
-Subject: [Buildroot] [PATCH 13/21] openocd: remove BR2_ARCH_HAS_ATOMICS
+Date: Mon, 25 Jan 2016 00:08:02 +0100
+Subject: [Buildroot] [PATCH 16/21] msgpack: rework BR2_ARCH_HAS_ATOMICS
 	dependency
 In-Reply-To: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453676887-31236-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453676887-31236-17-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some reason, since when openocd was introduced, it was using a
-BR2_ARCH_HAS_ATOMICS dependency for all sub-options that selected
-BR2_PACKAGE_LIBFTDI1, even if the libftdi1 package did not have any
-atomics dependency. Maybe it was confused with the libftdi package,
-which did have a BR2_ARCH_HAS_ATOMICS dependency ?
+The msgpack source code indeed checks for the 4 bytes __sync built-in,
+so this commit switches the package from a BR2_ARCH_HAS_ATOMICS
+dependency to a BR2_TOOLCHAIN_HAS_SYNC_4 dependency.
 
-Regardless, openocd with all four sub-options that currently depend on
-BR2_ARCH_HAS_ATOMICS builds perfectly fine with a toolchain that does
-not implement any of the __sync atomic built-ins, so we can remove the
-BR2_ARCH_HAS_ATOMICS dependency.
+python-msgpack, a reverse dependency of msgpack, is changed in the
+same way.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openocd/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/msgpack/Config.in        | 4 ++--
+ package/python-msgpack/Config.in | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index a35bd27..2313671 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -127,7 +127,6 @@ config BR2_PACKAGE_OPENOCD_FT2XXX
- 	bool "FT2232 based devices (DEPRECATED)"
- 	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index a57a378..b8e8213 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MSGPACK
+ 	bool "msgpack"
+ 	depends on BR2_INSTALL_LIBSTDCPP
 -	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
  	help
- 	  (DEPRECATED) Enable building support for FT2232
- 	  based devices using the libftdi library
-@@ -141,7 +140,6 @@ config BR2_PACKAGE_OPENOCD_UBLASTER
- 	bool "Altera USB-Blaster"
- 	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	  MessagePack is an efficient binary serialization format.
+ 
+@@ -11,5 +11,5 @@ config BR2_PACKAGE_MSGPACK
+ 	  http://msgpack.org/
+ 
+ comment "msgpack needs a toolchain w/ C++"
 -	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index ed0b432..cba3b51 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+-	depends on BR2_ARCH_HAS_ATOMICS # msgpack
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # msgpack
  	help
- 	  Enable building support for the Altera USB-Blaster
- 	  using the libftdi driver, opensource alternate of
-@@ -182,7 +180,6 @@ config BR2_PACKAGE_OPENOCD_PRESTO
- 	bool "ASIX Presto Programmer"
- 	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+@@ -13,6 +13,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	  https://pypi.python.org/pypi/msgpack-python/
+ 
+ comment "python-msgpack needs a toolchain w/ C++"
 -	depends on BR2_ARCH_HAS_ATOMICS
- 	help
- 	  Enable building support for ASIX Presto Programmer
- 	  using the libftdi driver
-@@ -193,7 +190,6 @@ config BR2_PACKAGE_OPENOCD_OPENJTAG
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
--	depends on BR2_ARCH_HAS_ATOMICS
- 	help
- 	  Enable building support for the OpenJTAG Programmer
- 	  with ftdi driver
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_PYTHON
+ 	depends on !BR2_INSTALL_LIBSTDCPP
 -- 
 2.6.4
