@@ -1,36 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jan 2016 16:09:49 +0100
-Subject: [Buildroot] [PATCH v4 2/4] linux-pam: Enable NIS support if
- yp-tools selected
-In-Reply-To: <1453647303-3965-3-git-send-email-yba@tkos.co.il>
-References: <1453647303-3965-1-git-send-email-yba@tkos.co.il>
- <1453647303-3965-3-git-send-email-yba@tkos.co.il>
-Message-ID: <20160124160949.00b03374@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 16:18:14 +0100
+Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
+References: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
+ <vjiikcxh6u.ln2@ID-313208.user.individual.net>
+ <20151220135412.652a8344@free-electrons.com>
+ <20151220130054.GC3677@free.fr>
+ <20151220141613.22b22bdc@free-electrons.com>
+ <j6oikcxh6u.ln2@ID-313208.user.individual.net>
+ <20151220145152.GE3677@free.fr>
+ <l4gjkcx7k7.ln2@ID-313208.user.individual.net>
+ <v21fncxsj2.ln2@ID-313208.user.individual.net>
+ <20160124155606.56f28e1d@free-electrons.com>
+Message-ID: <mi6fncxsj2.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jonathan,
+Am Sun, 24 Jan 2016 15:56:06 +0100 schrieb Thomas Petazzoni:
 
-On Sun, 24 Jan 2016 16:55:01 +0200, Jonathan Ben-Avraham wrote:
+> Bernd,
+> 
+> On Sun, 24 Jan 2016 14:44:31 +0100, Bernd Kuhls wrote:
+> 
+>> Hi @all:
+>> 
+>> Kodi 16.0-rc1 was released this week, I updated my github repo.
+> 
+> Do you know when the final 16 release will be published ?
 
-> +ifeq ($(BR2_PACKAGE_YP_TOOLS),y)
-> +LINUX_PAM_CONF_OPTS += \
-> +	--enable-nis
-> +else
-> +LINUX_PAM_CONF_OPTS += \
-> +	--disable-nis
-> +endif
+Hi Thomas,
 
-This patch should come *after* the yp-tools package is added in the
-series.
+unfortunately I have no idea, let's wait and see ;)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
