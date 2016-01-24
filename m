@@ -1,61 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2016 17:20:41 +0100
-Subject: [Buildroot] [PATCH 2/2] Qwt package : added dependency to Qt5
- besides Qt.
-In-Reply-To: <56A4244D.3090504@mind.be>
-References: <1453484674-8951-1-git-send-email-davepiq@yahoo.fr>
- <1453484674-8951-2-git-send-email-davepiq@yahoo.fr>
- <20160122181941.GB3774@free.fr> <56A4244D.3090504@mind.be>
-Message-ID: <20160124162041.GF3405@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 17:32:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gzip: fix musl build
+Message-ID: <1453653149-16537-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David, Arnout, All,
+Inspired by http://patchwork.openembedded.org/patch/111691/
+Adding "gl_cv_func_fflush_stdin=yes" was sufficient to fix the build.
 
-On 2016-01-24 02:09 +0100, Arnout Vandecappelle spake thusly:
-> On 22-01-16 19:19, Yann E. MORIN wrote:
-> > David, All,
-> > 
-> > On 2016-01-22 18:44 +0100, David Picard spake thusly:
-> [snip]
-> >> @@ -21,10 +23,14 @@ config BR2_PACKAGE_QWT_OPENGL
-> >>  	bool "OpenGL support"
-> >>  	depends on BR2_PACKAGE_HAS_LIBGLES
-> >>  	depends on BR2_PACKAGE_HAS_LIBEGL
-> >> -	select BR2_PACKAGE_QT_OPENGL_ES
-> >> +	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
-> >> +	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5BASE
-> > 
-> > BR2_PACKAGE_QT5BASE_OPENGL_LIB depends on BR2_PACKAGE_QT5BASE_OPENGL, so
-> > it should have been selected too.
-> > 
-> > However, I'm a bit worried about the complexity here, and I'd rather
-> > that we depend on such support rather than select it. So I'd prefer to
-> > see:
-> > 
-> >     depends on BR2_PACKAGE_QT_OPENGL_ES || BR2_PACKAGE_QT5BASE_OPENGL_LIB
-> 
->  In that case, it can probably be removed completely and turned into an
-> automatic dependency (i.e. just in the .mk file).
-> 
->  I also wouldn't bother with legacy handling when this symbol is removed. The
-> legacy .config file will already contain BR2_PACKAGE_QT_OPENGL_ES, so once the
-> handling is automatic, you just have to run 'make oldconfig' and it will Just
-> Work (TM).
+Fixes
+http://autobuild.buildroot.net/results/56d/56d926fcf8ca53cddb9106617e3b852d9c9a4eeb/
+http://autobuild.buildroot.net/results/4b5/4b5a6196b686030cf7fa9706508fd99f81a81049/
+http://autobuild.buildroot.net/results/568/568c1c05800d6bdd6457845e998a598e354afdfd/
 
-Yes, an automatic dependency in the .mk would be perfectly enough, I
-guess.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/gzip/gzip.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index 4ae2ae0..1b2f678 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -13,5 +13,6 @@ GZIP_CONF_OPTS = --exec-prefix=/
+ GZIP_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ GZIP_LICENSE = GPLv3+
+ GZIP_LICENSE_FILES = COPYING
++GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
+ 
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.0.rc3
