@@ -1,49 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 14:31:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xl2tp: fix musl build
+Date: Sun, 24 Jan 2016 14:30:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xload: fix musl build
 In-Reply-To: <1453642260-24302-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1453642260-24302-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1453642260-24302-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1453642260-24302-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/78d/78daf927aa43591401a072230b582591add1204c/
-http://autobuild.buildroot.net/results/b7e/b7e42137e2a7379ea8acb76b2d4faece86ab488a/
+The autobuilders did not catch the error yet because they failed
+earlier with other packages, but I am continuing the build based
+on the defconfig from:
+http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xl2tp/0002-musl.patch | 19 +++++++++++++++++++
+ package/x11r7/xapp_xload/0001-musl.patch | 19 +++++++++++++++++++
  1 file changed, 19 insertions(+)
- create mode 100644 package/xl2tp/0002-musl.patch
+ create mode 100644 package/x11r7/xapp_xload/0001-musl.patch
 
-diff --git a/package/xl2tp/0002-musl.patch b/package/xl2tp/0002-musl.patch
+diff --git a/package/x11r7/xapp_xload/0001-musl.patch b/package/x11r7/xapp_xload/0001-musl.patch
 new file mode 100644
-index 0000000..44238e8
+index 0000000..de32333
 --- /dev/null
-+++ b/package/xl2tp/0002-musl.patch
++++ b/package/x11r7/xapp_xload/0001-musl.patch
 @@ -0,0 +1,19 @@
 +Fix musl build
 +
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/tree/main/xl2tpd/xl2tpd-compile.patch
++Partly downloaded from
++https://github.com/GregorR/musl-pkgsrc-patches/blob/master/x11-xload.diff
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+diff -u --recursive src.orig/xl2tpd-1.3.6/xl2tpd.c src/xl2tpd-1.3.6/xl2tpd.c
-+--- xl2tpd-1.3.6.orig/xl2tpd.c	2014-01-15 21:58:37.000000000 -0100
-++++ xl2tpd-1.3.6/xl2tpd.c	2014-06-21 07:22:21.195278618 -0200
-+@@ -33,8 +33,6 @@
-+ #if (__GLIBC__ < 2)
-+ # if defined(FREEBSD) || defined(OPENBSD)
-+ #  include <sys/signal.h>
-+-# elif defined(LINUX)
-+-#  include <bsd/signal.h>
-+ # elif defined(SOLARIS)
-+ #  include <signal.h>
-+ # endif
++diff -uNr xload-1.1.2.org/get_rload.c xload-1.1.2/get_rload.c
++--- xload-1.1.2.org/get_rload.c	2013-08-04 06:43:06.000000000 +0200
+++++ xload-1.1.2/get_rload.c	2016-01-24 14:18:58.000000000 +0100
++@@ -9,7 +9,7 @@
++ /* Not all OS supports get_rload
++    steal the STUB idea from get_load
++  */
++-#if defined(QNX4) || defined(__CYGWIN__)
+++#if defined(QNX4) || defined(__CYGWIN__) || 1
++ #define RLOADSTUB
++ #endif
++ 
 -- 
 2.7.0.rc3
