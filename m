@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 13:41:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/trousers: fix musl build
-Message-ID: <1453639266-9856-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 13:50:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/transmission: fix musl build
+Message-ID: <1453639813-18779-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,53 @@ earlier with other packages, but I am continuing the build based
 on the defconfig from:
 http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 
-Error log:
-tsp_tcsi_param.c:14:28: fatal error: bits/local_lim.h: No such file or directory
- #include <bits/local_lim.h>
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/trousers/0002-musl-limits-h.patch | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 package/trousers/0002-musl-limits-h.patch
+ .../transmission/0002-musl-missing-header.patch    | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/transmission/0002-musl-missing-header.patch
 
-diff --git a/package/trousers/0002-musl-limits-h.patch b/package/trousers/0002-musl-limits-h.patch
+diff --git a/package/transmission/0002-musl-missing-header.patch b/package/transmission/0002-musl-missing-header.patch
 new file mode 100644
-index 0000000..14ecfcc
+index 0000000..ebb74cb
 --- /dev/null
-+++ b/package/trousers/0002-musl-limits-h.patch
-@@ -0,0 +1,16 @@
++++ b/package/transmission/0002-musl-missing-header.patch
+@@ -0,0 +1,36 @@
 +Fix musl build
++
++Downloaded from
++https://cgit.gentoo.org/proj/musl.git/tree/net-p2p/transmission/files/transmission-2.84-musl-missing-header.patch
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+diff -uNr trousers-0.3.13.org/src/tspi/tsp_tcsi_param.c trousers-0.3.13/src/tspi/tsp_tcsi_param.c
-+--- trousers-0.3.13.org/src/tspi/tsp_tcsi_param.c	2014-04-24 20:05:44.000000000 +0200
-++++ trousers-0.3.13/src/tspi/tsp_tcsi_param.c	2016-01-24 13:38:11.764784876 +0100
-+@@ -11,7 +11,7 @@
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <stdio.h>
-+-#include <bits/local_lim.h>
-++#include <limits.h>
-+ #include "trousers/tss.h"
-+ #include "trousers/trousers.h"
-+ #include "trousers_types.h"
++
++libtransmission/transmission.h: add missing <sys/types.h>
++
++transmission.h and several files including it, like bitfield.c and fdlimits.h
++make reference to ssize_t, off_t and other types defined in <sys/types.h> but
++never include the header.  By including <sys/types.h> in transmission.h, the
++required type definitions are propagated to all files that need them.
++
++Not including <sys/types.h> on glibc and uClibc systems does not pose a problem
++because of the way the headers stack in those C Standard Libraries, but on musl
++excluding <sys/types.h> leads to compile time failure.
++
++For the POSIX specs, see
++
++http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_types.h.html
++
++Signed-of-by: Anthony G. Basile <blueness@gentoo.org>
++
++diff -Naur transmission-2.84.orig/libtransmission/transmission.h transmission-2.84/libtransmission/transmission.h
++--- transmission-2.84.orig/libtransmission/transmission.h	2014-07-01 13:09:01.682910744 -0400
+++++ transmission-2.84/libtransmission/transmission.h	2015-07-19 03:11:07.379219181 -0400
++@@ -28,6 +28,7 @@
++ 
++ #include <inttypes.h> /* uintN_t */
++ #include <time.h> /* time_t */
+++#include <sys/types.h>
++ 
++ #ifdef WIN32
++  #define __USE_MINGW_ANSI_STDIO 1
 -- 
 2.7.0.rc3
