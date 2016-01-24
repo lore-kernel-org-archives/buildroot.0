@@ -1,46 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jan 2016 16:51:33 +0100
-Subject: [Buildroot] [PATCH v4 2/4] linux-pam: Enable NIS support if
- yp-tools selected
-In-Reply-To: <alpine.DEB.2.11.1601241734061.4122@tanhuma.tkos.co.il>
-References: <1453647303-3965-1-git-send-email-yba@tkos.co.il>
- <1453647303-3965-3-git-send-email-yba@tkos.co.il>
- <20160124160949.00b03374@free-electrons.com>
- <alpine.DEB.2.11.1601241734061.4122@tanhuma.tkos.co.il>
-Message-ID: <20160124165133.5bdb131d@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 16:58:27 +0100
+Subject: [Buildroot] [PATCH 2/2] package/ecryptfs-utils: fix musl build
+In-Reply-To: <1453651107-26352-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453651107-26352-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1453651107-26352-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The autobuilders did not catch the error yet because they failed
+earlier with other packages, but I am continuing the build based
+on the defconfig from:
+http://autobuild.buildroot.net/results/6fb/6fbe96af007803acfe9deacf26399cb19e5f2b47/defconfig
 
-On Sun, 24 Jan 2016 17:36:26 +0200 (IST), Jonathan Ben Avraham wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ecryptfs-utils/0001-musl.patch | 35 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/ecryptfs-utils/0001-musl.patch
 
-> Is this a rule defined in the documentation? I didn't notice it. What is 
-> the reasoning behind the rule?
-
-Patches are applied in order. If we apply just your PATCH 2/4 without
-applying 3/4, then this change will be an orphan change, since
-BR2_PACKAGE_YP_TOOLS does not exist.
-
-What you're doing is like adding code calling a function foo() in PATCH
-2/4, and then adding the implementation of foo() in PATCH 3/4.
-
-Granted, it's not that bad because if BR2_PACKAGE_YP_TOOLS doesn't
-exist, then its value is empty, and your PATCH 2/4 doesn't do anything,
-so it doesn't break anything. But it's just some dead code.
-
-Note that these rules are nothing Buildroot specific. If you want to
-contribute to any other open-source project like the Linux kernel,
-U-Boot or other things, they will ask your patch series to comply with
-those exact same rules.
-
-Best regards,
-
-Thomas
+diff --git a/package/ecryptfs-utils/0001-musl.patch b/package/ecryptfs-utils/0001-musl.patch
+new file mode 100644
+index 0000000..4a3b8a7
+--- /dev/null
++++ b/package/ecryptfs-utils/0001-musl.patch
+@@ -0,0 +1,35 @@
++fix musl build
++
++Patch inspired by
++https://github.com/kraj/meta-musl/blob/master/recipes-core/util-linux/util-linux-2.25/0001-switch_root-use-typeof-instead-of-__SWORD_TYPE-for-s.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr ecryptfs-utils-109.org/src/utils/mount.ecryptfs_private.c ecryptfs-utils-109/src/utils/mount.ecryptfs_private.c
++--- ecryptfs-utils-109.org/src/utils/mount.ecryptfs_private.c	2016-01-22 17:04:52.000000000 +0100
+++++ ecryptfs-utils-109/src/utils/mount.ecryptfs_private.c	2016-01-24 16:52:37.000000000 +0100
++@@ -224,6 +224,7 @@
++ 
++ static int check_cwd_f_type()
++ {
+++	struct statfs buf;
++ 	/**
++ 	 * This is *not* a list of compatible lower filesystems list for
++ 	 * eCryptfs. This is a list of filesystems that we reasonably expect to
++@@ -235,7 +236,7 @@
++ 	 * deceive other programs with a crafted /proc/self/*. See
++ 	 * https://launchpad.net/bugs/1530566 for more details.
++ 	 */
++-	__SWORD_TYPE f_type_whitelist[] = {
+++	typeof(buf.f_type) f_type_whitelist[] = {
++ 		0x61756673 /* AUFS_SUPER_MAGIC */,
++ 		0x9123683E /* BTRFS_SUPER_MAGIC */,
++ 		0x00C36400 /* CEPH_SUPER_MAGIC */,
++@@ -259,7 +260,6 @@
++ 		0x58465342 /* XFS_SB_MAGIC */,
++ 		0x2FC12FC1 /* ZFS_SUPER_MAGIC */,
++ 	};
++-	struct statfs buf;
++ 	size_t i, whitelist_len;
++ 
++ 	if (statfs(".", &buf) != 0) {
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0.rc3
