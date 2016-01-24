@@ -1,75 +1,68 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Sun, 24 Jan 2016 17:47:58 +0200 (IST)
-Subject: [Buildroot] [PATCH v4 1/4] Add yp-tools and ypbind-mt to
- packages menu
-In-Reply-To: <20160124163827.7984d2e1@free-electrons.com>
-References: <1453647303-3965-1-git-send-email-yba@tkos.co.il>
- <1453647303-3965-2-git-send-email-yba@tkos.co.il>
- <20160124160920.0fb91f86@free-electrons.com>
- <alpine.DEB.2.11.1601241724060.4122@tanhuma.tkos.co.il>
- <20160124163827.7984d2e1@free-electrons.com>
-Message-ID: <alpine.DEB.2.11.1601241743160.4122@tanhuma.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Jan 2016 16:49:21 +0100
+Subject: [Buildroot] [PATCH] support/download: protect from custom
+ commands with spaces in args
+In-Reply-To: <20160124020636.GA1387@jack.zhora.eu>
+References: <1449480415-10043-1-git-send-email-yann.morin.1998@free.fr>
+ <20160124020636.GA1387@jack.zhora.eu>
+Message-ID: <20160124154921.GC3405@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 24 Jan 2016, Thomas Petazzoni wrote:
+Andi, All,
 
-> Date: Sun, 24 Jan 2016 16:38:27 +0100
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> To: Jonathan Ben Avraham <yba@tkos.co.il>
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH v4 1/4] Add yp-tools and ypbind-mt to packages
->      menu
+On 2016-01-24 11:06 +0900, Andi Shyti spake thusly:
+> > Some users may provide custom download commands with spaces in their
+> > arguments, like so:
+> >     BR2_HG="hg --config foo.bar='some space-separated value'"
 > 
-> Dear Jonathan Ben Avraham,
->
-> On Sun, 24 Jan 2016 17:33:24 +0200 (IST), Jonathan Ben Avraham wrote:
->
->> That is, one patch should look something like
->>
->>  	source "package/xinetd/Config.in"
->>  	source "package/xl2tp/Config.in"
->>  	source "package/xtables-addons/Config.in"
->>   +	source "package/yp-tools/Config.in"
->>  	source "package/znc/Config.in"
->
-> This change should be part of the patch adding package/yp-tools/.
->
->> and the other should look like
->>
->>  	source "package/xinetd/Config.in"
->>  	source "package/xl2tp/Config.in"
->>  	source "package/xtables-addons/Config.in"
->>   +	source "package/ypbind-mt/Config.in"
->>  	source "package/znc/Config.in"
->
-> This change should be part of the patch adding package/ypbind-mt/
->
->> And then we rely on the order of the application of the patches to
->> determine the order of the items in the final Config.in?
->
-> Yes. A series is a list of patches that are ordered. They will be
-> applied in the order they are listed in your series. Many series have
-> patches that have dependencies between each other, that's the whole
-> purpose of sending them as a series rather than independently.
+> this patch is breaking the build. With configs like this:
+> 
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+> BR2_LINUX_KERNEL_DEFCONFIG="exynos"
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
 
-Hi Thomas,
-Thanks. I was not aware of the use of patch order to determine the final 
-outcome and so I intentionally created a series that could be applied in 
-any order and still have the desired outcome.
+You forgot to specify a kernel version here, which is the ultimate
+reason for the failure.
 
-  - yba
+It does not make sense to use a git tree without specifying either a tag
+or a sha1 to checkout.
 
+> the command sent is:
+> 
+> git clone --mirror 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git' ''
+> 
+> git dosn't like empty strngs and provides this output:
+> 
+> fatal: The empty string is not a valid path
+> 
+> Besides, I have never seen spaces in branch name, repositories
+> names and it is quite a corner case. I think this patch should be
+> reverted (at least) in the case of git.
 
-> Thanks!
->
-> Thomas
->
+No, the patch is correct. What we should however check is that the
+version string is not empty, and bail out on that error instead.
+
+Somehow, when the user forgets to specify a version string, we call the
+download scripts with no basename, and the empty string you see in the
+git call above should have been the basename of the directory to clone
+into, i.e. something like:  linux-VERSION/
+
+Care to have a look into that? ;-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
