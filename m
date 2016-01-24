@@ -1,54 +1,82 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 24 Jan 2016 06:34:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iptables: nfsynproxy not
- available on musl
-In-Reply-To: <1453577396-6003-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453577396-6003-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160124043411.GB2916@tarshish>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Sun, 24 Jan 2016 08:23:57 +0200
+Subject: [Buildroot] [git commit] package/cups: Un-deprecate,
+ and update CUPS to 2.1.2
+In-Reply-To: <20160123170613.GC3363@free.fr>
+References: <20160121223830.DD957803E9@busybox.osuosl.org>
+ <20160123162456.GB3363@free.fr> <20160123170613.GC3363@free.fr>
+Message-ID: <CALdGskJ2qCvYG7zGBjesroKzofo=n-c1xCHHn+D2HroxzsZb6g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hi Yann, Thomas, All,
 
-On Sat, Jan 23, 2016 at 08:29:56PM +0100, Bernd Kuhls wrote:
-> utils/nfsynproxy.c needs several TCP_* constants which are not yet
-> provided by musl, they were added Jan 17, 2016:
-> http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
-> 
-> Until we support a musl version containing the constants we disable
-> the option for building nfsynproxy on musl.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/8ee/8ee299d8697bf488ba94f60785e81f274b2128fd/
-> http://autobuild.buildroot.net/results/f1a/f1ab3fe59d0dd7dd7b9a7bc6bc10a0019f0fa567/
-> http://autobuild.buildroot.net/results/4f9/4f904a2913984201ad0bffb63664019c73e0eb77/
-> http://autobuild.buildroot.net/results/65c/65c7d47fdc0f55fb8deb77e34063320e2af337ee/
-> http://autobuild.buildroot.net/results/aaa/aaaa1fc92b6a885d223681f40c5df7a962ee1fce/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/iptables/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/iptables/Config.in b/package/iptables/Config.in
-> index ae7a634..f5197b7 100644
-> --- a/package/iptables/Config.in
-> +++ b/package/iptables/Config.in
-> @@ -9,6 +9,7 @@ if BR2_PACKAGE_IPTABLES
->  
->  config BR2_PACKAGE_IPTABLES_BPF_NFSYNPROXY
->  	bool "bpfc and nfsynproxy"
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+That's a tough one.  I don't see an easy way to break the dependency
+without building one of the dependant packages twice.
 
-Please add a comment saying which musl version is expected to work for 
-iptables.
+To me it seems like we would have to decide on which functionality is least
+important at this stage.  Disabling Avahi LibGTK support when building Cups
+with Avahi and LibGTK, or disabling Cups Avahi support when building Cups
+with Avahi and LibGTK, or disabling LibGTK Cups support. (Unfortunately
+those are the easy fixes that lose some functionality)
 
-baruch
+I'm open to suggestions.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards
+Olivier
+
+
+
+On 23 January 2016 at 19:06, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+
+> Olivier, Thomas, All,
+>
+> On 2016-01-23 17:24 +0100, Yann E. MORIN spake thusly:
+> > On 2016-01-21 23:37 +0100, Thomas Petazzoni spake thusly:
+> > > commit:
+> http://git.buildroot.net/buildroot/commit/?id=d37ce8e1a4edc9a06831e6b0842996866534b1ea
+> > > branch:
+> http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > >
+> > >  - Remove 0001-fix-static.patch - Fixed upstream
+> > >  - Remove 0002-fix-stack-protector-check.patch - Fixed upstream
+> > >  - Remove 0003-mantohtml.patch - Replaced by
+> > >    0001-Remove-man-from-BUILDDIRS-in- configure.patch
+> > >  - Add 0002-Do-not-use-genstrings.patch
+> > >  - Add CUPS_PDFTOPS option to Config.in.legacy - This support was
+> > >    moved to the cups-filters package.
+> >
+> > This is causing circular dependencies in make:
+> >
+> >     make[1]: Circular cups-all-source <- avahi-all-source dependency
+> dropped.
+>
+> I managed to get the reason for that. Here's what we have:
+>
+>     cups depends on avahi depends on libgtk3 depends on cups
+>
+> So, we must cut the dependency chain somewhere. Ideas?
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
+> is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160124/790796af/attachment-0001.html>
