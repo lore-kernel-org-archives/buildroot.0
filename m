@@ -1,93 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2016 12:56:24 +0100
-Subject: [Buildroot] [PATCH] support/graph-depends: detect circular
- dependencies
-In-Reply-To: <56A42321.9070104@mind.be>
-References: <1453586685-24190-1-git-send-email-yann.morin.1998@free.fr>
- <20160123232121.10d1ffe3@free-electrons.com>
- <20160123223112.GD3363@free.fr> <20160123230027.GE3363@free.fr>
- <56A42321.9070104@mind.be>
-Message-ID: <20160124115624.GA3405@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 12:58:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/socat: fix musl build
+Message-ID: <1453636704-20771-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Fixes
+http://autobuild.buildroot.net/results/d6e/d6e6f42450c8ad2c54b61d0950b6823f18628bc6/
 
-On 2016-01-24 02:04 +0100, Arnout Vandecappelle spake thusly:
-> On 24-01-16 00:00, Yann E. MORIN wrote:
-> > Thomas, All,
-> > 
-> > On 2016-01-23 23:31 +0100, Yann E. MORIN spake thusly:
-> >> On 2016-01-23 23:21 +0100, Thomas Petazzoni spake thusly:
-> >>> On Sat, 23 Jan 2016 23:04:45 +0100, Yann E. MORIN wrote:
-> >> [--SNIP--]
-> >>> I am a bit worried about the algorithmic complexity of this new
-> >>> function. As you know, we had issues with other parts of graph-depends
-> >>> having a too high algorithmic complexity to handle large
-> >>> configurations, or configurations having specific patterns of
-> >>> dependencies.
-> >>>
-> >>> Have you measured the time impact of this new check on a very large
-> >>> configuration (like allyespackageconfig) ?
-> >>
-> >> I have an allyespackageconfig with an recent toolchain so I get a lot
-> >> of packages, and I tweaked the config to disable a few to enable others.
-> >>
-> >> And no, the speed impact is not measurable for me. I'll come up with
-> >> numbers (of course, when there's no loop!) a bit later.
-> > 
-> > Damn, I spoke too fast. The speed was totally fine as long as there were
-> > those circular dependencies I was hunting for.
-> > 
-> > But without any circular deps, the speed is awfull and totally
-> > inacceptable.
-> >
-> > I'll see what I can do to speed this up.
-> 
-> 
->  Naive cycle detection is exponential. See [1] for a pythonese implementation of
-> single-visit cycle detection. Note that you have to do it on the whole graph at
-> once, not once per node, for this to work.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/socat/0002-musl.patch           | 18 ++++++++++++++++++
+ package/socat/0003-netdb-internal.patch | 20 ++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/socat/0002-musl.patch
+ create mode 100644 package/socat/0003-netdb-internal.patch
 
-Yeah, I have already implemented such a cut:
-    https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/fixes&id=451599b
-
-This new circular dependency check just adds less than 0.5 seconds now,
-which is IMHO totally acceptable. I'll respin the patch shortly.
-
-> > One option is to not do the check in graph-depends, but to off-load that
-> > into the package infrastructure, so we detect them even earlier.
-> 
->  It's going to stay equally exponential when you do it in make... And since make
-> already has cycle detection, I don't think it makes much sense to add a custom
-> one there. What more is your custom cycle detection going to tell you? Ah, yes,
-> you want it to show the entire cycle instead of just the place where it
-> arbitrarily cut it.
-
-Yes, that's what I wanted to get, the list of packages that makes the
-loop, so it is easier to understand.
-
-> Hm, I think graph-depends is still a better place for it -
-> the make logic is going to look _very_ ugly.
-
-Well, I managed to have a relatively simple code to detect circular
-dependencies in generic-package, but all it was able to do is detect it,
-not dump the loop.
-
-And it was really expensive, but not quite as expensive as the Python
-code, adding 'just' 2 minutes to the parsing of the Makefiles, instead
-of the 10+ minutes for the python code (which I really don't know hiw
-long it runs, as I always Ctrl-C-ed it after ~10 minutes).
-
-Thanks! :-)
-
+diff --git a/package/socat/0002-musl.patch b/package/socat/0002-musl.patch
+new file mode 100644
+index 0000000..f2b368d
+--- /dev/null
++++ b/package/socat/0002-musl.patch
+@@ -0,0 +1,18 @@
++Fix musl build
++
++Downloaded from
++http://git.alpinelinux.org/cgit/aports/tree/main/socat/use-linux-headers.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- socat-1.7.2.4.orig/sysincludes.h
+++++ socat-1.7.2.4/sysincludes.h
++@@ -134,7 +134,7 @@
++ #include <netpacket/packet.h>
++ #endif
++ #if HAVE_NETINET_IF_ETHER_H
++-#include <netinet/if_ether.h>
+++#include <linux/if_ether.h>
++ #endif
++ #if HAVE_LINUX_IF_TUN_H
++ #include <linux/if_tun.h>
+diff --git a/package/socat/0003-netdb-internal.patch b/package/socat/0003-netdb-internal.patch
+new file mode 100644
+index 0000000..44bd65f
+--- /dev/null
++++ b/package/socat/0003-netdb-internal.patch
+@@ -0,0 +1,20 @@
++Fix musl build
++
++Downloaded from
++http://git.alpinelinux.org/cgit/aports/tree/main/socat/netdb-internal.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- socat-1.7.2.4.orig/compat.h
+++++ socat-1.7.2.4/compat.h
++@@ -656,6 +656,10 @@
++ #  define NETDB_INTERNAL h_NETDB_INTERNAL
++ #endif
++ 
+++#if !defined(NETDB_INTERNAL)
+++#  define NETDB_INTERNAL (-1)
+++#endif
+++
++ #ifndef INET_ADDRSTRLEN
++ #  define INET_ADDRSTRLEN sizeof(struct sockaddr_in)
++ #endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.0.rc3
