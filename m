@@ -1,44 +1,37 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 14:37:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dvbsnoop: fix musl build
-Message-ID: <1453642679-29490-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 14:44:31 +0100
+Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
+References: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
+ <vjiikcxh6u.ln2@ID-313208.user.individual.net>
+ <20151220135412.652a8344@free-electrons.com>
+ <20151220130054.GC3677@free.fr>
+ <20151220141613.22b22bdc@free-electrons.com>
+ <j6oikcxh6u.ln2@ID-313208.user.individual.net>
+ <20151220145152.GE3677@free.fr>
+ <l4gjkcx7k7.ln2@ID-313208.user.individual.net>
+Message-ID: <v21fncxsj2.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/6fb/6fbe96af007803acfe9deacf26399cb19e5f2b47/
-http://autobuild.buildroot.net/results/be6/be64a45ac158b9057fb3e7ef9b515250acc77187/
-and many others
+Am Sun, 20 Dec 2015 21:37:09 +0100 schrieb Bernd Kuhls:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dvbsnoop/0001-musl-types-h.patch | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
- create mode 100644 package/dvbsnoop/0001-musl-types-h.patch
+> Am Sun, 20 Dec 2015 15:51:53 +0100 schrieb Yann E. MORIN:
+> 
+>> As long as it is only a mechanical bump, without change to the .mk
+>> files, and with n/removed patches (i.e. only the _VERSION variables are
+>> changed), then yes, a single commit.
+> 
+> Hi Yann,
+> 
+> done: https://github.com/bkuhls/buildroot/commits/kodi16
+> 
+> Regards, Bernd
 
-diff --git a/package/dvbsnoop/0001-musl-types-h.patch b/package/dvbsnoop/0001-musl-types-h.patch
-new file mode 100644
-index 0000000..1149df0
---- /dev/null
-+++ b/package/dvbsnoop/0001-musl-types-h.patch
-@@ -0,0 +1,15 @@
-+Fix musl build
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr dvbsnoop-1.4.50.org/src/misc/helper.h dvbsnoop-1.4.50/src/misc/helper.h
-+--- dvbsnoop-1.4.50.org/src/misc/helper.h	2006-01-02 20:04:56.000000000 +0100
-++++ dvbsnoop-1.4.50/src/misc/helper.h	2016-01-24 14:35:02.000000000 +0100
-+@@ -16,6 +16,7 @@
-+ #ifndef __HELPER_H
-+ #define __HELPER_H
-+ 
-++#include <sys/types.h>
-+ 
-+ u_long outBit_Sx (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
-+ u_long outBit_Sx_NL (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
--- 
-2.7.0.rc3
+Hi @all:
+
+Kodi 16.0-rc1 was released this week, I updated my github repo.
+
+Regards, Bernd
