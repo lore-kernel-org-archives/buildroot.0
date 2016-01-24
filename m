@@ -1,68 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 14:00:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vpnc: fix musl build
-Message-ID: <1453640456-32346-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 14:09:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/w_scan: fix musl build
+Message-ID: <1453640947-2780-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The autobuilders did not catch the error yet because they failed
-earlier with other packages, but I am continuing the build based
-on the defconfig from:
-http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
+Fixes
+http://autobuild.buildroot.net/results/d49/d497c0b23b7f905605f1764c136a9d7682e8137e/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vpnc/0004-musl.patch | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/vpnc/0004-musl.patch
+ package/w_scan/0001-musl.patch | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/w_scan/0001-musl.patch
 
-diff --git a/package/vpnc/0004-musl.patch b/package/vpnc/0004-musl.patch
+diff --git a/package/w_scan/0001-musl.patch b/package/w_scan/0001-musl.patch
 new file mode 100644
-index 0000000..db254b6
+index 0000000..7633d55
 --- /dev/null
-+++ b/package/vpnc/0004-musl.patch
-@@ -0,0 +1,39 @@
++++ b/package/w_scan/0001-musl.patch
+@@ -0,0 +1,26 @@
 +Fix musl build
-+
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/tree/testing/vpnc/working.patch
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+diff --git a/sysdep.c b/sysdep.c
-+index ff07753..43fdb74 100644
-+--- a/sysdep.c
-++++ b/sysdep.c
-+@@ -59,7 +59,7 @@
-+ #if defined(__DragonFly__)
-+ #include <net/tun/if_tun.h>
-+ #elif defined(__linux__)
-+-#include <linux/if_tun.h>
-++/*#include <linux/if_tun.h>*/
-+ #elif defined(__APPLE__)
-+ /* no header for tun */
-+ #elif defined(__CYGWIN__)
-+diff --git a/sysdep.h b/sysdep.h
-+index a5eafd6..af34e94 100644
-+--- a/sysdep.h
-++++ b/sysdep.h
-+@@ -38,11 +38,13 @@ int tun_get_hwaddr(int fd, char *dev, uint8_t *hwaddr);
++diff -uNr w_scan-20141122.org/descriptors.h w_scan-20141122/descriptors.h
++--- w_scan-20141122.org/descriptors.h	2014-11-22 09:49:26.000000000 +0100
+++++ w_scan-20141122/descriptors.h	2016-01-24 14:05:21.000000000 +0100
++@@ -28,6 +28,7 @@
++ #ifndef __DESCRIPTORS_H__
++ #define __DESCRIPTORS_H__
 + 
-+ /***************************************************************************/
-+ #if defined(__linux__) || defined(__GLIBC__)
-++#ifdef __GLIBC__
-+ #include <error.h>
-++#define HAVE_ERROR     1
-++#endif
+++#include <time.h>
++ #include "extended_frontend.h"
 + 
-+ #define HAVE_VASPRINTF 1
-+ #define HAVE_ASPRINTF  1
-+-#define HAVE_ERROR     1
-+ #define HAVE_GETLINE   1
-+ #define HAVE_UNSETENV  1
-+ #define HAVE_SETENV    1
++ /******************************************************************************
++diff -uNr w_scan-20141122.org/version.h w_scan-20141122/version.h
++--- w_scan-20141122.org/version.h	2014-11-22 11:59:56.000000000 +0100
+++++ w_scan-20141122/version.h	2016-01-24 14:06:33.000000000 +0100
++@@ -1,6 +1,6 @@
++ /* AUTOMATICALLY GENERATED - DO NOT EDIT MANUALLY */
++ #ifndef W_SCAN_VERSION_H
++ #define W_SCAN_VERSION_H
++-uint version=20141122;
+++unsigned int version=20141122;
++ #endif
++ 
 -- 
 2.7.0.rc3
