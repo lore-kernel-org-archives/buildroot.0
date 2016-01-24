@@ -1,23 +1,41 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 24 Jan 2016 15:39:29 -0200
-Subject: [Buildroot] [PATCH v4 1/1] package/dhcp: bump version to
-	4.3.3-P1
-References: <56a50b37b7661_7e95f439f49246c@ultri2.mail>
-Message-ID: <56a50c5151608_7e953faa1a6e6b689269@ultri2.mail>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 24 Jan 2016 20:12:37 +0100
+Subject: [Buildroot] PowerPC64 toolchain not building
+In-Reply-To: <20160123150731.1c1db4b0@free-electrons.com>
+References: <20160123150731.1c1db4b0@free-electrons.com>
+Message-ID: <20160124191236.GQ17143@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 24, 2016 at 03:34 PM, Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
-> On Sat, Jan 23, 2016 at 01:39 PM, Doug Kehn <rdkehn@yahoo.com> wrote:
-[snip]
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Hello Cody,
+> 
+> Back in 2014, you added support for PowerPC64 (BE and LE) in Buildroot.
+> Today, I wanted to build a PowerPC64 toolchain, and it appears that:
+> 
+>  * The default configuration (gcc 4.9, binutils 2.24)
+>  * gcc 4.9 + binutils 2.25
+>  * gcc 5.3 + binutils 2.25
+> 
+> do not build, all are failing with the following error message during
+> the host-gcc-final build:
+> 
+> /tmp/ccQDkG0a.s: Assembler messages:
+> /tmp/ccQDkG0a.s:19: Error: operand out of domain (7 is not a multiple of 2)
+> 
+> Note that I have only tested BE and not LE, so I don't know if LE is
+> also affected or if LE works fine.
+> 
+> Would you have the possibility to look into this issue ?
+> 
+> Thanks!
 
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Build test for arm using both external and buildroot toolchains, with
-all package flags enabled (client, server, relay).
-Basic run test (calling 'dhclient -v' gets an IPv4 address) using a
-qemu-system-arm target.
+Could you provide a config and full log? I couldn't reproduce it here.
+
+best regards
+ Waldemar
