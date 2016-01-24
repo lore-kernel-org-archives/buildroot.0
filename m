@@ -1,84 +1,54 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Mon, 25 Jan 2016 00:33:45 +0200
-Subject: [Buildroot] [PATCH] core: do not attempt downloads with no _VERSION
-	set
-Message-ID: <20160124223345.GA31752@vostro>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 24 Jan 2016 23:36:24 +0100
+Subject: [Buildroot] Error when running make linux-menuconfig
+In-Reply-To: <CABi8WTzGpkv+g-cX=w9AXEOu4bz3901q9HPdKYfuMyMvH6B1ug@mail.gmail.com>
+References: <CABi8WTzGpkv+g-cX=w9AXEOu4bz3901q9HPdKYfuMyMvH6B1ug@mail.gmail.com>
+Message-ID: <56A551E8.80900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, when the package defines no _SOURCE and no _VERSION
-variables, we end up trying to download <PACKAGE>-undefined.tar.gz.
+On 24-01-16 17:12, FrAnKenStEiN MC wrote:
+> I have done 
+> make raspberrypi_defconfig
+> make menu-config
+> make linux-menuconfig
+> i got :
+> PATH="/home/larbi/PFA/rootBuild/buildroot/output/host/bin:/home/larbi/PFA/rootBuild/buildroot/output/host/sbin:/home/larbi/PFA/rootBuild/buildroot/output/host/usr/bin:/home/larbi/PFA/rootBuild/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
+> /usr/local/games"
+> BR_BINARIES_DIR=/home/larbi/PFA/rootBuild/buildroot/output/images /usr/bin/make
+> -j5 -C
+> /home/larbi/PFA/rootBuild/buildroot/output/build/linux-592503752b6951972f161f04280683c5af38d173
+> HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+> INSTALL_MOD_PATH=/home/larbi/PFA/rootBuild/buildroot/output/target
+> CROSS_COMPILE="/home/larbi/PFA/rootBuild/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-"
+> DEPMOD=/home/larbi/PFA/rootBuild/buildroot/output/host/sbin/depmod bcmrpi_defconfig
+> make: ***
+> /home/larbi/PFA/rootBuild/buildroot/output/build/linux-592503752b6951972f161f04280683c5af38d173:
+> No such file or directory. Stop.
+> make[1]: ***
+> [/home/larbi/PFA/rootBuild/buildroot/output/build/linux-592503752b6951972f161f04280683c5af38d173/.config]
+> Error 2
+> make: *** [_all] Error 2
+> 
+> what's wrong ? thanks
 
-This is utterly pointless.
 
-Change the logic to not attempt a download when neither _SOURCE
-nor _VERSION is set:
-  - do not set an undefined _VERSION to "undefined"
-  - do not append an empty (or "undefined") version to the package
-    rawname
-  - use the package rawname in the MESSAGE macro
+ Looks like there's something wrong (again) with the dependencies in the kconfig
+infra. I'll have a look.
 
-Consequently, for packages that have no _VERSION, the build
-directory will be just the package name (which to some may look
-nicer than the current "package-undefined").
+ Simple workaround: explicitly call 'make linux-patch' first.
 
-Furthermore, the message trace is also a bit leaner (to the same
-people that find "package" nicer than "package-undefined").
+ Regards,
+ Arnout
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/pkg-generic.mk | 6 ++----
- package/pkg-utils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1e024d3..a5ee023 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -380,8 +380,6 @@ ifndef $(2)_VERSION
-   $(2)_DL_VERSION := $$($(3)_DL_VERSION)
-  else ifdef $(3)_VERSION
-   $(2)_DL_VERSION := $$($(3)_VERSION)
-- else
--  $(2)_DL_VERSION = undefined
-  endif
- else
-  $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
-@@ -392,7 +390,7 @@ ifdef $(3)_OVERRIDE_SRCDIR
-   $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
- endif
- 
--$(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
-+$(2)_BASE_NAME	=  $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
- $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
- 
-@@ -422,7 +420,7 @@ endif
- ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $$($(3)_SOURCE)
-- else
-+ else ifdef $(2)_VERSION
-   $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
-  endif
- endif
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 44bd2c9..c098b55 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -83,7 +83,7 @@ INFLATE.tar  = cat
- suitable-extractor = $(INFLATE$(suffix $(1)))
- 
- # MESSAGE Macro -- display a message in bold type
--MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
-+MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_BASE_NAME) $(call qstrip,$(1))$(TERM_RESET)"
- TERM_BOLD := $(shell tput smso)
- TERM_RESET := $(shell tput rmso)
- 
 -- 
-2.6.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
