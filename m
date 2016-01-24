@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jan 2016 16:09:20 +0100
-Subject: [Buildroot] [PATCH v4 1/4] Add yp-tools and ypbind-mt to
- packages menu
-In-Reply-To: <1453647303-3965-2-git-send-email-yba@tkos.co.il>
+Date: Sun, 24 Jan 2016 16:09:49 +0100
+Subject: [Buildroot] [PATCH v4 2/4] linux-pam: Enable NIS support if
+ yp-tools selected
+In-Reply-To: <1453647303-3965-3-git-send-email-yba@tkos.co.il>
 References: <1453647303-3965-1-git-send-email-yba@tkos.co.il>
- <1453647303-3965-2-git-send-email-yba@tkos.co.il>
-Message-ID: <20160124160920.0fb91f86@free-electrons.com>
+ <1453647303-3965-3-git-send-email-yba@tkos.co.il>
+Message-ID: <20160124160949.00b03374@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +14,18 @@ To: buildroot@busybox.net
 
 Jonathan,
 
-On Sun, 24 Jan 2016 16:55:00 +0200, Jonathan Ben-Avraham wrote:
-> From: Jonathan Ben Avraham <yba@tkos.co.il>
-> 
-> 
-> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
-> ---
->  package/Config.in |    2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 09c2b40..af9656b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1482,6 +1482,8 @@ endif
->  	source "package/xinetd/Config.in"
->  	source "package/xl2tp/Config.in"
->  	source "package/xtables-addons/Config.in"
-> +	source "package/yp-tools/Config.in"
-> +	source "package/ypbind-mt/Config.in"
+On Sun, 24 Jan 2016 16:55:01 +0200, Jonathan Ben-Avraham wrote:
 
-This should not be a separate patch. Instead, adding yp-tools to the
-menu should be part of the patch adding the yp-tools package, and
-adding ypbind-mt to the menu should be part of the patch adding the
-ypbind-mt package.
+> +ifeq ($(BR2_PACKAGE_YP_TOOLS),y)
+> +LINUX_PAM_CONF_OPTS += \
+> +	--enable-nis
+> +else
+> +LINUX_PAM_CONF_OPTS += \
+> +	--disable-nis
+> +endif
+
+This patch should come *after* the yp-tools package is added in the
+series.
 
 Thanks!
 
