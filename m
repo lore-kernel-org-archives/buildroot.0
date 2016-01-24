@@ -1,180 +1,128 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 24 Jan 2016 12:35:12 +0100
-Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
-In-Reply-To: <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
-References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
- <569A60E6.2030108@gmail.com>
- <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
- <569FFB7E.2000104@gmail.com>
- <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
-Message-ID: <56A4B6F0.8080108@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 12:39:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sconeserver: bump version to fix
+	musl build
+Message-ID: <1453635546-14992-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bamvor,
+Fixes this musl build error:
+TermBuffer.cpp: In member function ?virtual scx::Condition scx::TermBuffer::read(void*, int, int&)?:
+TermBuffer.cpp:83:10: error: ?CEOT? was not declared in this scope
+     case CEOT:
+          ^
+TermBuffer.cpp:123:10: error: ?CERASE? was not declared in this scope
+     case CERASE: // Backspace
+          ^
+The autobuilders did not catch this specific error yet because they
+failed earlier with other packages, but I am continuing the build based
+on the defconfig from:
+http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 
-Le 21/01/2016 10:03, Bamvor Zhang Jian a ?crit :
-> Hi, Romain
-> 
-> On 01/21/2016 05:26 AM, Romain Naour wrote:
->> Hi Bamvor,
->>
->> Le 19/01/2016 05:00, Bamvor Zhang Jian a ?crit :
->>> Hi, Romain
->>>
->>> On 01/16/2016 11:25 PM, Romain Naour wrote:
->>>> Hello Bamvor,
-> [...]
->>>> Can you provide the command lines you used to build the toolchain ? on which abe
->>>> branch ? Otherwise we can't test your series.
->>> You could find the toolchain here[1]
->>
->> Thanks but this is not a cross-toolchain:
->>
->> file bin/aarch64-ilp32-linux-gnu-gcc
->> bin/aarch64-ilp32-linux-gnu-gcc: ELF 64-bit LSB executable, ARM aarch64, version
->> 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for
->> GNU/Linux 3.7.0, BuildID[sha1]=0727b9d5c173c83568f5d19cfc87a05540ec8b77, not
->> stripped
->>
->> It seems that's a native toolchain.
->>
->> It should be something like (from aarch64-linaro 2015.08)
->> file bin/aarch64-linux-gnu-gcc
->> bin/aarch64-linux-gnu-gcc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV),
->> dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux
->> 2.6.32, BuildID[sha1]=91a19539d0f6b0f38d599db648b4b5760000666a, not stripped
->>
-> Yeap, it is not a cross compile. I use it in an aarch64 chroot environment in
-> x86. I feel it is enough to test these patches.
+- added hash
+- removed 0001-fix-ssl-libs-ordering.patch, applied upstream:
+  https://github.com/sconemad/sconeserver/commit/ffb69ca18fd03d0dc976696144d215b3a8555155
+- disabled markdown module because its git submodule cmark
+  ( https://github.com/sconemad/sconeserver/tree/master/markdown )
+  has no cross-compile support provided by the sconeserver build system:
 
-Buildroot is a tool for cross-compiling, you know it ;-)
-Honestly I'm not very interested to test the toolchain by itself, only your
-patches for the external toolchain infra.
+make[4]: Entering directory '/home/bernd/buildroot/br3/output/build/sconeserver-c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd/markdown/cmark'
+mkdir -p build; \
+cd build; \
+cmake .. \
+	-G "Unix Makefiles" \
+	-DCMAKE_BUILD_TYPE= \
+	-DCMAKE_INSTALL_PREFIX=/usr/local
+-- The C compiler identification is GNU 5.3.1
+-- The CXX compiler identification is GNU 5.3.1
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+[...]
 
->> Can you provide a pre-build toolchain or a recipe to rebuild a aarch64 ipl32
->> toolchain ?
-> Linaro provide abe[1] to build toochain. You could follow this script[2] to know
-> how to use it. It seems that the server in tcwg is down. Hope, you could make
-> use of the method used by abe system.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../sconeserver/0001-fix-ssl-libs-ordering.patch   | 36 ----------------------
+ package/sconeserver/sconeserver.hash               |  2 ++
+ package/sconeserver/sconeserver.mk                 |  7 ++---
+ 3 files changed, 4 insertions(+), 41 deletions(-)
+ delete mode 100644 package/sconeserver/0001-fix-ssl-libs-ordering.patch
+ create mode 100644 package/sconeserver/sconeserver.hash
 
-I really tried to build a aarch64 ipl32 cross-toolchain with abe but I'm stuck
-with glibc build. I don't know what's the glibc branch I should use.
-By default I used the release/2.20/master branch
-
-aarch64-ilp32-linux-gnu-gcc -mabi=ilp32 -nostdlib -nostartfiles -r -o
-/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/Scrt1.o
-/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.os
-/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/abi-note.o
-/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/init.o
-../sysdeps/aarch64/start.S: Assembler messages:
-../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
-in this object file format
-../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
-in this object file format
-../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
-in this object file format
-/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/sysd-rules:1345:
-recipe for target
-'/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o'
-failed
-make[2]: ***
-[/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o]
-Error 1
-
-Also I had several issue with the abe script on my system (Fedora) and I had to
-modify some part of the script to be able to continue the build.
-
-So, It would be great if you can provide a precompiled cross-toolchain.
-
-Best regards,
-Romain
-
-> 
-> Regards
-> 
-> Bamvor
-> 
-> [1] https://git.linaro.org/toolchain/abe.git/blob/refs/heads/benchmarking:/abe.sh
-> [2] https://git.linaro.org/toolchain/spec2xxx-utils.git/blob/refs/heads/test:/bench-ilp32.sh
-> 
->>>>
->>>> Do you know if Linaro plans to release a ipl32 toolchain ?
->>> It seems that linaro will not release it before patches for ilp32 of kernel and
->>> glibc upstreamed.
->>> Here[2] is a status for ilp32 in linaro.
->>
->> Thanks for the link.
->>
->> Best regards,
->> Romain
->>
->>>
->>> Regards
->>>
->>> Bamvor
->>>
->>> [1] http://people.linaro.org/~maxim.kuvyrkov/bench-ilp32/
->>> [2] https://wiki.linaro.org/Platform/arm64-ilp32
->>>
->>>> Best regards,
->>>> Romain Naour
->>>>
->>>>>
->>>>> changes since v2
->>>>> 1.  rebase on the patch have been .
->>>>>     "827ba46 aarch64: add big endian(aarch64_be) support"
->>>>> 2.  Add "!BR2_aarch64_be" along with "!BR2_aarch64" in patch 1/5 according to
->>>>>     the suggestion from Thomas.
->>>>> 3.  Improve the ifeq in patch 2/5 according to Gustavo.
->>>>> 4.  Do not pass invalid "-mabi" option to ld in patch 3/5 according to Gustavo.
->>>>>
->>>>> changes since v1
->>>>> 1.  Avoid mabi issue in gcc 4.8 while build aarch64 lp64.
->>>>> 2.  Change default libc, toolchain for ilp32 build.
->>>>> 3.  Others changes suggested by Gustavo.
->>>>>
->>>>> [1] http://lists.busybox.net/pipermail/buildroot/2015-March/122115.html
->>>>> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/122424.html
->>>>> [3] https://git.linaro.org/kernel/linux-linaro-tracking.git
->>>>> [4] https://wiki.linaro.org/ABE
->>>>>
->>>>>
->>>>> Bamvor Jian Zhang (5):
->>>>>   aarch64: align aarch64_be config with aarch64s'
->>>>>   aarch64: ilp32: handle special file name
->>>>>   aarch64: ilp32: add ilp32 compiler and linker flags
->>>>>   aarch64: ilp32: add ilp32 build config
->>>>>   aarch64: ilp32 defconfig examples
->>>>>
->>>>>  Makefile                                           |  6 +++
->>>>>  arch/Config.in.aarch64                             | 36 ++++++++++++++++++
->>>>>  configs/aarch64_be_defconfig                       |  2 +
->>>>>  configs/aarch64_be_ilp32_defconfig                 |  8 ++++
->>>>>  configs/aarch64_ilp32_defconfig                    |  8 ++++
->>>>>  package/Makefile.in                                | 13 ++++++-
->>>>>  package/binutils/Config.in                         |  4 +-
->>>>>  package/binutils/Config.in.host                    |  5 ++-
->>>>>  package/dropwatch/Config.in                        |  5 ++-
->>>>>  package/gcc/Config.in.host                         | 11 +++---
->>>>>  package/gdb/Config.in.host                         |  2 +-
->>>>>  package/gpsd/Config.in                             |  2 +-
->>>>>  package/lightning/Config.in                        |  5 ++-
->>>>>  package/nginx/Config.in                            |  3 +-
->>>>>  package/oprofile/Config.in                         |  6 ++-
->>>>>  toolchain/Config.in                                |  2 +
->>>>>  toolchain/helpers.mk                               |  5 ++-
->>>>>  toolchain/toolchain-buildroot/Config.in            |  7 ++--
->>>>>  toolchain/toolchain-external/Config.in             | 22 +++++++++++
->>>>>  toolchain/toolchain-external/toolchain-external.mk | 44 +++++++++++++++++++++-
->>>>>  20 files changed, 169 insertions(+), 27 deletions(-)
->>>>>  create mode 100644 configs/aarch64_be_defconfig
->>>>>  create mode 100644 configs/aarch64_be_ilp32_defconfig
->>>>>  create mode 100644 configs/aarch64_ilp32_defconfig
->>>>>
->>>>
->>>
-> 
+diff --git a/package/sconeserver/0001-fix-ssl-libs-ordering.patch b/package/sconeserver/0001-fix-ssl-libs-ordering.patch
+deleted file mode 100644
+index f1f25b9..0000000
+--- a/package/sconeserver/0001-fix-ssl-libs-ordering.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-configure: re-order SSL libs when linking
+-
+-When doing static builds, the ordering of libs is important, as the
+-linker does not back-pedal to previous libraries specified on the
+-command line to find missing symbols, and only searches for those
+-missing symbols in the following libs.
+-
+-Thus, as -lssl needs symbols from -lcrypto, it needs to come before
+--lcrypto.
+-
+-And globally, we do *not* append new libraries, we prepend them.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff -durN a/configure.in b/configure.in
+---- a/configure.in	2014-10-16 11:12:08.000000000 +0200
+-+++ b/configure.in	2015-05-30 15:44:25.540329788 +0200
+-@@ -133,12 +133,14 @@
+-     [AC_MSG_ERROR([header file <openssl/ssl.h> is required for OpenSSL, use --with-openssl-path=PATH])]
+-   )
+-   AC_CHECK_LIB([crypto],[CRYPTO_new_ex_data],
+--    [SSL_LIBADD="$SSL_LIBADD -lcrypto"],
+--    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])]
+-+    [SSL_LIBADD="-lcrypto $SSL_LIBADD"],
+-+    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])],
+-+    [$SSL_LIBADD]
+-   )
+-   AC_CHECK_LIB([ssl],[SSL_library_init],
+--    [SSL_LIBADD="$SSL_LIBADD -lssl"],
+--    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])]
+-+    [SSL_LIBADD="-lssl $SSL_LIBADD"],
+-+    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])],
+-+    [$SSL_LIBADD]
+-   )
+-   AC_SUBST(SSL_LIBADD)
+- fi
+diff --git a/package/sconeserver/sconeserver.hash b/package/sconeserver/sconeserver.hash
+new file mode 100644
+index 0000000..2e1fe84
+--- /dev/null
++++ b/package/sconeserver/sconeserver.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	442c29ae93f615b610983187023ba6c1a9ca69526cb07f69576efba1d29d9daf	sconeserver-c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd.tar.gz
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index 2072142..39c4586 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -4,16 +4,13 @@
+ #
+ ################################################################################
+ 
+-# Release 0.6.0 doesn't build cleanly, so use a recent
+-# Git commit.
+-SCONESERVER_VERSION = 3b886c3dda6eda39bcb27472d29ed7fd3185ba1d
++SCONESERVER_VERSION = c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd
+ SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
+ SCONESERVER_LICENSE = GPLv2+
+ SCONESERVER_LICENSE_FILES = COPYING
+-# For 0001-fix-ssl-libs-ordering.patch and configure isn't up to date
+ SCONESERVER_AUTORECONF = YES
+ SCONESERVER_DEPENDENCIES += pcre
+-SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6
++SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6 --without-markdown
+ 
+ # Sconeserver configure script fails to find the libxml2 headers.
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+-- 
+2.7.0.rc3
