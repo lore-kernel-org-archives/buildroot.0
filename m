@@ -1,54 +1,55 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Sun, 24 Jan 2016 17:36:26 +0200 (IST)
-Subject: [Buildroot] [PATCH v4 2/4] linux-pam: Enable NIS support if
- yp-tools selected
-In-Reply-To: <20160124160949.00b03374@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jan 2016 16:38:27 +0100
+Subject: [Buildroot] [PATCH v4 1/4] Add yp-tools and ypbind-mt to
+ packages menu
+In-Reply-To: <alpine.DEB.2.11.1601241724060.4122@tanhuma.tkos.co.il>
 References: <1453647303-3965-1-git-send-email-yba@tkos.co.il>
- <1453647303-3965-3-git-send-email-yba@tkos.co.il>
- <20160124160949.00b03374@free-electrons.com>
-Message-ID: <alpine.DEB.2.11.1601241734061.4122@tanhuma.tkos.co.il>
+ <1453647303-3965-2-git-send-email-yba@tkos.co.il>
+ <20160124160920.0fb91f86@free-electrons.com>
+ <alpine.DEB.2.11.1601241724060.4122@tanhuma.tkos.co.il>
+Message-ID: <20160124163827.7984d2e1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 24 Jan 2016, Thomas Petazzoni wrote:
+Dear Jonathan Ben Avraham,
 
-> Date: Sun, 24 Jan 2016 16:09:49 +0100
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> To: Jonathan Ben-Avraham <yba@tkos.co.il>
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH v4 2/4] linux-pam: Enable NIS support if
->     yp-tools selected
+On Sun, 24 Jan 2016 17:33:24 +0200 (IST), Jonathan Ben Avraham wrote:
+
+> That is, one patch should look something like
 > 
-> Jonathan,
->
-> On Sun, 24 Jan 2016 16:55:01 +0200, Jonathan Ben-Avraham wrote:
->
->> +ifeq ($(BR2_PACKAGE_YP_TOOLS),y)
->> +LINUX_PAM_CONF_OPTS += \
->> +	--enable-nis
->> +else
->> +LINUX_PAM_CONF_OPTS += \
->> +	--disable-nis
->> +endif
->
-> This patch should come *after* the yp-tools package is added in the
-> series.
+>  	source "package/xinetd/Config.in"
+>  	source "package/xl2tp/Config.in"
+>  	source "package/xtables-addons/Config.in"
+>   +	source "package/yp-tools/Config.in"
+>  	source "package/znc/Config.in"
 
-Is this a rule defined in the documentation? I didn't notice it. What is 
-the reasoning behind the rule?
+This change should be part of the patch adding package/yp-tools/.
 
-  - yba
+> and the other should look like
+> 
+>  	source "package/xinetd/Config.in"
+>  	source "package/xl2tp/Config.in"
+>  	source "package/xtables-addons/Config.in"
+>   +	source "package/ypbind-mt/Config.in"
+>  	source "package/znc/Config.in"
 
+This change should be part of the patch adding package/ypbind-mt/
 
-> Thanks!
->
-> Thomas
->
+> And then we rely on the order of the application of the patches to 
+> determine the order of the items in the final Config.in?
 
+Yes. A series is a list of patches that are ordered. They will be
+applied in the order they are listed in your series. Many series have
+patches that have dependencies between each other, that's the whole
+purpose of sending them as a series rather than independently.
+
+Thanks!
+
+Thomas
 -- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
