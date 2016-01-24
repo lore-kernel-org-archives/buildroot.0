@@ -1,69 +1,80 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 23 Jan 2016 21:53:43 -0200
-Subject: [Buildroot] [PATCH v2 2/2] docs/manual: patches that change files
-	with spaces in the name
-In-Reply-To: <1453593223-10558-1-git-send-email-ricardo.martincoski@gmail.com>
-References: <1453593223-10558-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1453593223-10558-3-git-send-email-ricardo.martincoski@gmail.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Sun, 24 Jan 2016 01:15:03 +0100
+Subject: [Buildroot] [PATCH 1/2] python-iniparse: new package
+Message-ID: <1453594504-8725-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a patch changes one or more files with spaces in the name, a
-workaround must be applied to ensure the build using old versions of
-+patch+ in the host system.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
-v1 -> v2:
- - update the manual entry
- - use 1 or 2 hooks to rename the file that contains spaces
-   (based on the suggestion to use a symlink from Thomas DS)
- - change the patch file to be applied on the renamed file
+ package/Config.in                            |  1 +
+ package/python-iniparse/Config.in            | 11 +++++++++++
+ package/python-iniparse/python-iniparse.hash |  2 ++
+ package/python-iniparse/python-iniparse.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-iniparse/Config.in
+ create mode 100644 package/python-iniparse/python-iniparse.hash
+ create mode 100644 package/python-iniparse/python-iniparse.mk
 
-Symlink and hard link cannot be used because patch unlinks them.
-So I renamed the file before patching it.
-The file can be renamed back when needed.
-
-Probably this patch will need some rewording.
-It's my first patch to the manual.
-I tested using 'make manual-html'
----
- docs/manual/patch-policy.txt | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index 0b4604e..471ded5 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -134,6 +134,23 @@ AC_PROG_MAKE_SET
- +AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
- ---------------
- 
-+==== Patches that change files with spaces in the name
+diff --git a/package/Config.in b/package/Config.in
+index 09c2b40..a339161 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -645,6 +645,7 @@ menu "External python modules"
+ 	source "package/python-httplib2/Config.in"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-idna/Config.in"
++	source "package/python-iniparse/Config.in"
+ 	source "package/python-ipaddr/Config.in"
+ 	source "package/python-ipaddress/Config.in"
+ 	source "package/python-ipy/Config.in"
+diff --git a/package/python-iniparse/Config.in b/package/python-iniparse/Config.in
+new file mode 100644
+index 0000000..93d7ead
+--- /dev/null
++++ b/package/python-iniparse/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_INIPARSE
++	bool "python-iniparse"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  iniparse is an INI parser for  Python which is API compatible
++	  with the standard library's ConfigParser, preserves structure of INI
++	  files (order of sections & options, indentation, comments, and blank
++	  lines are preserved when data is updated), and is more convenient to
++	  use.
 +
-+When a patch changes one or more files with spaces in the name, a workaround
-+must be applied to ensure the build using old versions of +patch+ in the
-+host system.
++	  https://pypi.python.org/pypi/iniparse
+diff --git a/package/python-iniparse/python-iniparse.hash b/package/python-iniparse/python-iniparse.hash
+new file mode 100644
+index 0000000..0caa146
+--- /dev/null
++++ b/package/python-iniparse/python-iniparse.hash
+@@ -0,0 +1,2 @@
++#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e573e9e9733d97623881ce9bbe5eca6
++md5 5e573e9e9733d97623881ce9bbe5eca6 iniparse-0.4.tar.gz
+diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
+new file mode 100644
+index 0000000..b00e0c4
+--- /dev/null
++++ b/package/python-iniparse/python-iniparse.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-iniparse
++#
++################################################################################
 +
-+. Add a hook to +<packagename>_POST_EXTRACT_HOOKS+ that renames the file to be
-+  patched, replacing spaces with underscores;
++PYTHON_INIPARSE_VERSION = 0.4
++PYTHON_INIPARSE_SOURCE = iniparse-$(PYTHON_INIPARSE_VERSION).tar.gz
++PYTHON_INIPARSE_SITE = https://pypi.python.org/packages/source/i/iniparse
++PYTHON_INIPARSE_LICENSE = Python software foundation license v2, MIT
++PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
++PYTHON_INIPARSE_SETUP_TYPE = distutils
 +
-+. Create the patch using the usual diff command, but both
-+  +package-version.orig/+ and +package-version/+ must have the file renamed
-+  to replace the spaces with underscores;
-+
-+. If the file must keep its name, add a hook to
-+  +<packagename>_POST_PATCH_HOOKS+ that renames the patched file to its
-+  original name;
-+
- === Integrating patches found on the Web
- 
- When integrating a patch of which you are not the author, you have to
++$(eval $(python-package))
 -- 
 1.9.1
