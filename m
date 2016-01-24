@@ -1,40 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2016 14:57:00 +0100
-Subject: [Buildroot] [git commit] package/cups: Un-deprecate,
- and update CUPS to 2.1.2
-In-Reply-To: <CALdGskJ2qCvYG7zGBjesroKzofo=n-c1xCHHn+D2HroxzsZb6g@mail.gmail.com>
-References: <20160121223830.DD957803E9@busybox.osuosl.org>
- <20160123162456.GB3363@free.fr> <20160123170613.GC3363@free.fr>
- <CALdGskJ2qCvYG7zGBjesroKzofo=n-c1xCHHn+D2HroxzsZb6g@mail.gmail.com>
-Message-ID: <20160124135700.GB3405@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 24 Jan 2016 15:10:05 +0100
+Subject: [Buildroot] [PATCH v2] package/iptables: nfsynproxy not available
+	on musl
+Message-ID: <1453644605-3705-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Olivier, All,
+utils/nfsynproxy.c needs several TCP_* constants which are not yet
+provided by musl, they were added Jan 17, 2016 to musl:
+http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
 
-On 2016-01-24 08:23 +0200, Olivier Schonken spake thusly:
-> That's a tough one.  I don't see an easy way to break the dependency
-> without building one of the dependant packages twice.
-> 
-> To me it seems like we would have to decide on which functionality is least
-> important at this stage.  Disabling Avahi LibGTK support when building Cups
-> with Avahi and LibGTK, or disabling Cups Avahi support when building Cups
-> with Avahi and LibGTK, or disabling LibGTK Cups support. (Unfortunately
-> those are the easy fixes that lose some functionality)
+Until we support a musl version containing the constants we disable
+the option for building nfsynproxy on musl.
 
-I've settled on cutting the libgtk{2,3} -> cups dependency, which I'll
-send soonish.
+Fixes
+http://autobuild.buildroot.net/results/8ee/8ee299d8697bf488ba94f60785e81f274b2128fd/
+http://autobuild.buildroot.net/results/f1a/f1ab3fe59d0dd7dd7b9a7bc6bc10a0019f0fa567/
+http://autobuild.buildroot.net/results/4f9/4f904a2913984201ad0bffb63664019c73e0eb77/
+http://autobuild.buildroot.net/results/65c/65c7d47fdc0f55fb8deb77e34063320e2af337ee/
+http://autobuild.buildroot.net/results/aaa/aaaa1fc92b6a885d223681f40c5df7a962ee1fce/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: added commit about future toolchain requirements (Baruch)
 
+ package/iptables/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/iptables/Config.in b/package/iptables/Config.in
+index ae7a634..c7b69a8 100644
+--- a/package/iptables/Config.in
++++ b/package/iptables/Config.in
+@@ -9,6 +9,10 @@ if BR2_PACKAGE_IPTABLES
+ 
+ config BR2_PACKAGE_IPTABLES_BPF_NFSYNPROXY
+ 	bool "bpfc and nfsynproxy"
++	# this dependency can be removed when using a musl version
++	# containing this commit:
++	# http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_LIBPCAP
+ 	help
+ 	  Build bpf compiler and nfsynproxy configuration tool.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.0.rc3
