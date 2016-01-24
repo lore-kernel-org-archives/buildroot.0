@@ -1,74 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 00:07:48 +0100
-Subject: [Buildroot] [PATCH 02/21] libftdi: remove BR2_ARCH_HAS_ATOMICS
-	dependency
+Date: Mon, 25 Jan 2016 00:07:50 +0100
+Subject: [Buildroot] [PATCH 04/21] docs/manual: document usage of
+	BR2_TOOLCHAIN_HAS_SYNC_x
 In-Reply-To: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453676887-31236-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453676887-31236-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 669ce8c75eb4c76cef81f279fb6b4f95d1472f51 ("libftdi: add
-dependency on atomic operations"), a dependency on
-BR2_ARCH_HAS_ATOMICS was added to the libftdi package to fix a build
-failure occuring on the ARC architecture due to the missing
-__sync_fetch_and_add_4 function:
-
-../ftdipp/.libs/libftdipp.so: undefined reference to `__sync_fetch_and_add_4'
-
-However, today, even on the SPARC architecture that does not implement
-any of the __sync built-ins, libftdi and its C++ binding libftdipp
-build fine. ARC was also tested and builds fine.
-
-Therefore, we remove the BR2_ARCH_HAS_ATOMICS dependency from libftdi,
-and also from flashrom, in which it was only present due to the
-selection of libftdi. Note that anyway flashrom is available only for
-i386 and x86_64, both of which implement all the __sync built-ins.
+This commit updates the documentation to detail when and how to use
+the BR2_TOOLCHAIN_HAS_SYNC_x dependency. Note that we chose to not add
+a comment about this dependency, because it is mainly tied to
+architecture capabilities (except in very specific cases, which would
+be way too complicated to explain in a Config.in comment).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/flashrom/Config.in | 2 --
- package/libftdi/Config.in  | 2 --
- 2 files changed, 4 deletions(-)
+ docs/manual/adding-packages-directory.txt | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
-index 9420cc6..adc068c 100644
---- a/package/flashrom/Config.in
-+++ b/package/flashrom/Config.in
-@@ -8,7 +8,6 @@ config BR2_PACKAGE_FLASHROM
- 	select BR2_PACKAGE_DMIDECODE
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_TOOLCHAIN_HAS_THREADS 	# libusb
--	depends on BR2_ARCH_HAS_ATOMICS 	# libftdi
- 	help
- 	  flashrom is a utility for identifying, reading, writing,
- 	  verifying and erasing flash chips. It is designed to flash
-@@ -20,5 +19,4 @@ config BR2_PACKAGE_FLASHROM
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index b9596a2..cd78390 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -279,6 +279,19 @@ use in the comment.
+ ** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
+ ** Comment string: no comment to be added
  
- comment "flashrom needs a toolchain w/ threads"
- 	depends on BR2_i386 || BR2_x86_64
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
-index c0ab0f2..8e02cb9 100644
---- a/package/libftdi/Config.in
-+++ b/package/libftdi/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LIBFTDI
- 	bool "libftdi"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
--	depends on BR2_ARCH_HAS_ATOMICS
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
-@@ -27,5 +26,4 @@ comment "libftdi C++ bindings need a toolchain w/ wchar, C++"
- endif # BR2_PACKAGE_LIBFTDI
- 
- comment "libftdi needs a toolchain w/ threads"
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
++* Gcc +__sync_*+ built-ins used for atomic operations. They are
++  available in variants operating on 1 byte, 2 bytes, 4 bytes and 8
++  bytes. Since different architectures support atomic operations on
++  different sizes, one dependency symbol is available for each size:
++** Dependency symbol: +BR2_TOOLCHAIN_HAS_SYNC_1+ for 1 byte,
++   +BR2_TOOLCHAIN_HAS_SYNC_2+ for two bytes,
++   +BR2_TOOLCHAIN_HAS_SYNC_4+ for 4 bytes, +BR2_TOOLCHAIN_HAS_SYNC_8+
++   for 8 bytes.
++** Comment string: no comment to be added
++
++* One byte +__sync_*+ gcc built-in for atomic instructions
++** Dependency symbol: +BR2_TOOLCHAIN_HAS_SYNC_1+
++
+ * Kernel headers
+ ** Dependency symbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
+    +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
 -- 
 2.6.4
