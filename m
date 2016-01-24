@@ -1,64 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 00:07:57 +0100
-Subject: [Buildroot] [PATCH 11/21] gauche: disable on SPARC(64),
-	remove atomics dependency
+Date: Mon, 25 Jan 2016 00:08:00 +0100
+Subject: [Buildroot] [PATCH 14/21] squid: rework atomic handling
 In-Reply-To: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453676887-31236-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453676887-31236-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gauche does not build on sparc64, it fails with:
+squid can use the __sync built-ins when available, but uses an
+AC_TRY_RUN autoconf tests to check their availability, which isn't
+compatible with cross-compilation. Due to this, squid.mk is already
+hinting the configure script about this by passing
+squid_cv_gnu_atomics=yes/no depending on the availability of atomic
+operations.
 
-  No rule to make target 'sparc_mach_dep.lo', needed by 'libgc.la'
+So far, squid.mk was assuming that BR2_ARCH_HAS_ATOMICS &&
+BR2_ARCH_IS_64 was needed, since 8 bytes __sync built-ins are
+used. However, this was a bit too restrictive, since certain 32 bits
+architectures (ARM, x86) do provide 8 bytes __sync built-ins.
 
-On Sparc, it first fails with the usual "membar" assembler issue which
-comes from gauche's internal version of libatomic_ops. However, even
-passing -DAO_NO_SPARC_V9 like we do for libatomic_ops is not
-sufficient, as we fall into the same build problem as on sparc64.
-
-Consequently, this commit disables the gauche package on the sparc and
-sparc64 architectures.
-
-Since it uses its own libatomic_ops copy, and libatomic_ops does not
-have any dependency on atomic built-ins, we also remove the
-BR2_ARCH_HAS_ATOMICS dependency. It was originally added to prevent
-gauche from being built on sparc, but this will no longer happen.
+So, instead of using BR2_ARCH_HAS_ATOMICS, we now rely on
+BR2_TOOLCHAIN_HAS_SYNC_4 and BR2_TOOLCHAIN_HAS_SYNC_8, since both 4
+bytes and 8 bytes __sync built-ins are tested by the autoconf test.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gauche/Config.in | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ package/squid/squid.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/gauche/Config.in b/package/gauche/Config.in
-index fd0617a..3ca012d 100644
---- a/package/gauche/Config.in
-+++ b/package/gauche/Config.in
-@@ -4,14 +4,12 @@ config BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
- 	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k || \
- 		BR2_mips || BR2_mipsel || BR2_mips64 || \
- 		BR2_mips64el || BR2_powerpc || BR2_powerpc64 || \
--		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_sparc || \
--		BR2_sparc64 || BR2_x86_64
-+		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_x86_64
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 3110573..f205da2 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -41,12 +41,10 @@ SQUID_CONF_OPTS = \
+ 	--with-swapdir=/var/cache/squid/ \
+ 	--with-default-user=squid
  
- config BR2_PACKAGE_GAUCHE
- 	bool "gauche"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
- 	depends on !BR2_STATIC_LIBS
- 	help
-@@ -26,6 +24,5 @@ config BR2_PACKAGE_GAUCHE
- 
- comment "gauche needs a toolchain w/ NPTL, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+-# Atomics in Squid use __sync_add_and_fetch_8, i.e a 64 bits atomic
+-# operation. This atomic intrinsic is only available natively on
+-# 64-bit architectures that have atomic operations. On 32-bit
+-# architectures, it would be provided by libatomic, but Buildroot
+-# typically doesn't provide it.
+-ifeq ($(BR2_ARCH_HAS_ATOMICS)$(BR2_ARCH_IS_64),yy)
++# Atomics in Squid use __sync built-ins on 4 and 8 bytes. However, the
++# configure script tests them using AC_TRY_RUN, so we have to give
++# some hints.
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4)$(BR2_TOOLCHAIN_HAS_SYNC_8),yy)
+ SQUID_CONF_ENV += squid_cv_gnu_atomics=yes
+ else
+ SQUID_CONF_ENV += squid_cv_gnu_atomics=no
 -- 
 2.6.4
