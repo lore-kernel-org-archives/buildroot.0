@@ -1,54 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Jan 2016 23:36:24 +0100
-Subject: [Buildroot] Error when running make linux-menuconfig
-In-Reply-To: <CABi8WTzGpkv+g-cX=w9AXEOu4bz3901q9HPdKYfuMyMvH6B1ug@mail.gmail.com>
-References: <CABi8WTzGpkv+g-cX=w9AXEOu4bz3901q9HPdKYfuMyMvH6B1ug@mail.gmail.com>
-Message-ID: <56A551E8.80900@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 24 Jan 2016 23:58:42 +0100
+Subject: [Buildroot] [PATCH] pkg-kconfig: add missing -patch dependency for
+	defconfig
+Message-ID: <1453676322-1906-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24-01-16 17:12, FrAnKenStEiN MC wrote:
-> I have done 
-> make raspberrypi_defconfig
-> make menu-config
-> make linux-menuconfig
-> i got :
-> PATH="/home/larbi/PFA/rootBuild/buildroot/output/host/bin:/home/larbi/PFA/rootBuild/buildroot/output/host/sbin:/home/larbi/PFA/rootBuild/buildroot/output/host/usr/bin:/home/larbi/PFA/rootBuild/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
-> /usr/local/games"
-> BR_BINARIES_DIR=/home/larbi/PFA/rootBuild/buildroot/output/images /usr/bin/make
-> -j5 -C
-> /home/larbi/PFA/rootBuild/buildroot/output/build/linux-592503752b6951972f161f04280683c5af38d173
-> HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
-> INSTALL_MOD_PATH=/home/larbi/PFA/rootBuild/buildroot/output/target
-> CROSS_COMPILE="/home/larbi/PFA/rootBuild/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-"
-> DEPMOD=/home/larbi/PFA/rootBuild/buildroot/output/host/sbin/depmod bcmrpi_defconfig
-> make: ***
-> /home/larbi/PFA/rootBuild/buildroot/output/build/linux-592503752b6951972f161f04280683c5af38d173:
-> No such file or directory. Stop.
-> make[1]: ***
-> [/home/larbi/PFA/rootBuild/buildroot/output/build/linux-592503752b6951972f161f04280683c5af38d173/.config]
-> Error 2
-> make: *** [_all] Error 2
-> 
-> what's wrong ? thanks
+Since the introduction of _KCONFIG_DEFCONFIG in 8ef62b99, the package's
+.config file no longer depends on anything (unless a fragment is
+defined). Therefore, there is no dependency anymore between .config
+and <pkg>-patch. Thus, it is possible that the .config file is
+attempted to be built before the package is extracted and patched.
+Usually this works out OK because <pkg>-patch will always be done
+before <pkg>-configure, but it will fail when the user calls
+<pkg>-menuconfig explicitly. It will also fail when we enable
+top-level parallel build.
 
+To solve this, just add an explicit order-only dependency on
+<pkg>-patch. It really is only necessary when _KCONFIG_DEFCONFIG is
+defined and _KCONFIG_FRAGMENT_FILES is not, but it doesn't hurt to
+add it unconditionally.
 
- Looks like there's something wrong (again) with the dependencies in the kconfig
-infra. I'll have a look.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reported-by: FrAnKenStEiN MC <chfakht@gmail.com>
+---
+ package/pkg-kconfig.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- Simple workaround: explicitly call 'make linux-patch' first.
-
- Regards,
- Arnout
-
-
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index eaee572..90f3f9f 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -72,6 +72,11 @@ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+ 	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ 		$$($(2)_KCONFIG_OPTS) oldconfig
+ 
++# If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
++# already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
++# it explicitly. It doesn't hurt to always have it though.
++$$($(2)_DIR)/.config: | $(1)-patch
++
+ # In order to get a usable, consistent configuration, some fixup may be needed.
+ # The exact rules are specified by the package .mk file.
+ define $(2)_FIXUP_DOT_CONFIG
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.0
