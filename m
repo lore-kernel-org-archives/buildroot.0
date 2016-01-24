@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jan 2016 15:56:06 +0100
-Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
-In-Reply-To: <v21fncxsj2.ln2@ID-313208.user.individual.net>
-References: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
- <vjiikcxh6u.ln2@ID-313208.user.individual.net>
- <20151220135412.652a8344@free-electrons.com>
- <20151220130054.GC3677@free.fr>
- <20151220141613.22b22bdc@free-electrons.com>
- <j6oikcxh6u.ln2@ID-313208.user.individual.net>
- <20151220145152.GE3677@free.fr>
- <l4gjkcx7k7.ln2@ID-313208.user.individual.net>
- <v21fncxsj2.ln2@ID-313208.user.individual.net>
-Message-ID: <20160124155606.56f28e1d@free-electrons.com>
+Date: Sun, 24 Jan 2016 16:09:20 +0100
+Subject: [Buildroot] [PATCH v4 1/4] Add yp-tools and ypbind-mt to
+ packages menu
+In-Reply-To: <1453647303-3965-2-git-send-email-yba@tkos.co.il>
+References: <1453647303-3965-1-git-send-email-yba@tkos.co.il>
+ <1453647303-3965-2-git-send-email-yba@tkos.co.il>
+Message-ID: <20160124160920.0fb91f86@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Jonathan,
 
-On Sun, 24 Jan 2016 14:44:31 +0100, Bernd Kuhls wrote:
-
-> Hi @all:
+On Sun, 24 Jan 2016 16:55:00 +0200, Jonathan Ben-Avraham wrote:
+> From: Jonathan Ben Avraham <yba@tkos.co.il>
 > 
-> Kodi 16.0-rc1 was released this week, I updated my github repo.
+> 
+> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+> ---
+>  package/Config.in |    2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 09c2b40..af9656b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1482,6 +1482,8 @@ endif
+>  	source "package/xinetd/Config.in"
+>  	source "package/xl2tp/Config.in"
+>  	source "package/xtables-addons/Config.in"
+> +	source "package/yp-tools/Config.in"
+> +	source "package/ypbind-mt/Config.in"
 
-Do you know when the final 16 release will be published ? If it's
-before end of January, then we can include it in 2016.02 and you should
-post the patches for -rc1 as soon as possible.
+This should not be a separate patch. Instead, adding yp-tools to the
+menu should be part of the patch adding the yp-tools package, and
+adding ypbind-mt to the menu should be part of the patch adding the
+ypbind-mt package.
 
-However, if it's scheduled to be released after end of January, then it
-will only make it for Buildroot 2016.05, in which case you can wait
-just after the release of 2016.02 to post your patch series.
-
-How does that sound?
-
-(BTW, if you want a specific reaction from me from a mail posted on the
-mailing list, try to Cc me.)
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
