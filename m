@@ -1,137 +1,131 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2016 17:02:38 +0100
-Subject: [Buildroot] [PATCH 3/6 v2] support/graph-depends: detect circular
-	dependencies
+Date: Sun, 24 Jan 2016 17:02:39 +0100
+Subject: [Buildroot] [PATCH 4/6 v2] support/graph-depends: add option to
+	specify output file
 In-Reply-To: <cover.1453651102.git.yann.morin.1998@free.fr>
 References: <cover.1453651102.git.yann.morin.1998@free.fr>
-Message-ID: <8f6e9ffe4989cc1893c3e2c56c97de0acef5c165.1453651102.git.yann.morin.1998@free.fr>
+Message-ID: <6b52c47dc2907744732cc2da7ee6f22c2b384836.1453651102.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, if there is a circular dependency in the packages, the
-graph-depends script just errors out with a Python RuntimeError which is
-not caught, resulting in a very-long backtrace which does not provide
-any hint as what the real issue is (even if "RuntimeError: maximum
-recursion depth exceeded" is a pretty good hint at it).
+Currently, graph-depends outputs the dotfile program to stdout, and uses
+stderr to trace the dependencies it is currently looking for.
 
-We fix that by recursing the dependency chain of each package, until we
-either end up with a package with no dependency, or with a package
-already seen along the current dependency chain.
+Redirection was done because the output was directly piped into the dot
+program to generate the final PDF/SVG/... dependency graph, but that
+meant that an error in the graph-depends script was never caught
+(because shell pipes only return the final command exit status, and an
+empty dot program is perfectly valid so dot would not complain).
 
-We need to introduce a new function, check_circular_deps(), because we
-can't re-use the existing ones:
+Add an option to tell graph-depends where to store the generated dot
+program, and keep stdout as the default if not specified.
 
-  - remove_mandatory_deps() does not iterate,
-
-  - remove_transitive_deps() does iterate, but we do not call it for the
-    top-level package if it is not 'all'
-
-  - it does not make sense to use those functions anyway, as they were
-    not designed to _check_ but to _act_ on the dependency chain.
-
-Since we've had time-related issues in the past, we do not want to
-introduce yet another time-hog, so here are timings with the circular
-dependency check:
-
-    $ time python -m cProfile -s cumtime support/scripts/graph-depends
-    [...]
-             28352654 function calls (20323050 primitive calls) in 87.292 seconds
-
-       Ordered by: cumulative time
-
-       ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-            1    0.012    0.012   87.292   87.292 graph-depends:24(<module>)
-           21    0.000    0.000   73.685    3.509 subprocess.py:473(_eintr_retry_call)
-            7    0.000    0.000   73.655   10.522 subprocess.py:768(communicate)
-            7   73.653   10.522   73.653   10.522 {method 'read' of 'file' objects}
-          5/1    0.027    0.005   43.488   43.488 graph-depends:164(get_all_depends)
-            5    0.003    0.001   43.458    8.692 graph-depends:135(get_depends)
-            1    0.001    0.001   25.712   25.712 graph-depends:98(get_version)
-            1    0.001    0.001   13.457   13.457 graph-depends:337(remove_extra_deps)
-         1717    1.672    0.001   13.050    0.008 graph-depends:290(remove_transitive_deps)
-    9784086/2672326    5.079    0.000   11.363    0.000 graph-depends:274(is_dep)
-    2883343/1980154    2.650    0.000    6.942    0.000 graph-depends:262(is_dep_uncached)
-            1    0.000    0.000    4.529    4.529 graph-depends:121(get_targets)
-      2883343    1.123    0.000    1.851    0.000 graph-depends:246(is_dep_cache_insert)
-      9784086    1.783    0.000    1.783    0.000 graph-depends:255(is_dep_cache_lookup)
-      2881580    0.728    0.000    0.728    0.000 {method 'update' of 'dict' objects}
-            1    0.001    0.001    0.405    0.405 graph-depends:311(check_circular_deps)
-    12264/1717    0.290    0.000    0.404    0.000 graph-depends:312(recurse)
-    [...]
-    real    1m27.371s
-    user    1m15.075s
-    sys     0m12.673s
-
-The cumulative time spent in check_circular_deps is just below 0.5s,
-which is largely less than 1% of the total run time.
+Change the calling sites to use that option, call graph-depends and dot
+as two separate commands, so we can bail out on graph-depends error.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
-
 ---
-Note: I'm not completely happy with the way the code detects the end of
-the dependency chain, but at least it works and is a starting point for
-further discussion. Python experts will happily point me in the right
-direction! ;-)
+ Makefile                      |  6 ++++--
+ package/pkg-generic.mk        |  8 +++++---
+ support/scripts/graph-depends | 19 +++++++++++++------
+ 3 files changed, 22 insertions(+), 11 deletions(-)
 
----
-Chamges v1 -> v2:
-  - store packages known to not cause loops, to cut short on the
-    visiting algorithm
-  - use the local variable 'deps', not the global 'dict_deps'
-  - add timing report
----
- support/scripts/graph-depends | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
+diff --git a/Makefile b/Makefile
+index 17c181b..20927de 100644
+--- a/Makefile
++++ b/Makefile
+@@ -721,8 +721,10 @@ graph-depends: graph-depends-requirements
+ 	@$(INSTALL) -d $(GRAPHS_DIR)
+ 	@cd "$(CONFIG_DIR)"; \
+ 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
+-	|tee $(GRAPHS_DIR)/$(@).dot \
+-	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT)
++		-o $(GRAPHS_DIR)/$(@).dot
++	dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) \
++		-o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT) \
++		<$(GRAPHS_DIR)/$(@).dot
+ 
+ graph-size:
+ 	$(Q)mkdir -p $(GRAPHS_DIR)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1e024d3..e396a5d 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -668,9 +668,11 @@ $(1)-show-depends:
+ $(1)-graph-depends: graph-depends-requirements
+ 			@$$(INSTALL) -d $$(GRAPHS_DIR)
+ 			@cd "$$(CONFIG_DIR)"; \
+-			$$(TOPDIR)/support/scripts/graph-depends -p $(1) $$(BR2_GRAPH_DEPS_OPTS) \
+-			|tee $$(GRAPHS_DIR)/$$(@).dot \
+-			|dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) -o $$(GRAPHS_DIR)/$$(@).$$(BR_GRAPH_OUT)
++			$$(TOPDIR)/support/scripts/graph-depends $$(BR2_GRAPH_DEPS_OPTS) \
++				-p $(1) -o $$(GRAPHS_DIR)/$$(@).dot
++			dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) \
++				-o $$(GRAPHS_DIR)/$$(@).$$(BR_GRAPH_OUT) \
++				<$$(GRAPHS_DIR)/$$(@).dot
+ 
+ $(1)-all-source:	$(1)-source
+ $(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index fd8ad2f..78be2ba 100755
+index 78be2ba..e872ed4 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -306,6 +306,32 @@ def remove_transitive_deps(pkg,deps):
- def remove_mandatory_deps(pkg,deps):
-     return [p for p in deps[pkg] if p not in ['toolchain', 'skeleton']]
+@@ -38,6 +38,8 @@ max_depth = 0
+ transitive = True
  
-+# This function will check that there is no loop in the dependency chain
-+# As a side effect, it builds up the dependency cache.
-+def check_circular_deps(deps):
-+    def recurse(pkg):
-+        if not pkg in list(deps.keys()):
-+            return
-+        if pkg in not_loop:
-+            return
-+        not_loop.append(pkg)
-+        chain.append(pkg)
-+        for p in deps[pkg]:
-+            if p in chain:
-+                sys.stderr.write("\nRecursion detected for  : %s\n" % (p))
-+                while True:
-+                    _p = chain.pop()
-+                    sys.stderr.write("which is a dependency of: %s\n" % (_p))
-+                    if p == _p:
-+                        sys.exit(1)
-+            recurse(p)
-+        chain.pop()
-+
-+    not_loop = []
-+    chain = []
-+    for pkg in list(deps.keys()):
-+        recurse(pkg)
-+
- # This functions trims down the dependency list of all packages.
- # It applies in sequence all the dependency-elimination methods.
- def remove_extra_deps(deps):
-@@ -317,6 +343,7 @@ def remove_extra_deps(deps):
-             deps[pkg] = remove_transitive_deps(pkg,deps)
-     return deps
+ parser = argparse.ArgumentParser(description="Graph packages dependencies")
++parser.add_argument("--output", "-o", metavar="DOT_FILE", dest="dotfile",
++                    help="File in which to generate the dot program")
+ parser.add_argument("--package", '-p', metavar="PACKAGE",
+                     help="Graph the dependencies of PACKAGE")
+ parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
+@@ -60,6 +62,11 @@ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
+                     help="Draw (do not draw) transitive dependencies")
+ args = parser.parse_args()
  
-+check_circular_deps(dict_deps)
- dict_deps = remove_extra_deps(dict_deps)
- dict_version = get_version([pkg for pkg in allpkgs
-                                 if pkg != "all" and not pkg.startswith("root")])
++if args.dotfile is None:
++    outfile = sys.stdout
++else:
++    outfile = open(args.dotfile, "wb")
++
+ if args.package is None:
+     mode = MODE_FULL
+ else:
+@@ -366,10 +373,10 @@ def print_attrs(pkg):
+             color = target_colour
+     version = dict_version.get(pkg)
+     if version == "virtual":
+-        print("%s [label = <<I>%s</I>>]" % (name, label))
++        outfile.write("%s [label = <<I>%s</I>>]\n" % (name, label))
+     else:
+-        print("%s [label = \"%s\"]" % (name, label))
+-    print("%s [color=%s,style=filled]" % (name, color))
++        outfile.write("%s [label = \"%s\"]\n" % (name, label))
++    outfile.write("%s [color=%s,style=filled]\n" % (name, color))
+ 
+ # Print the dependency graph of a package
+ def print_pkg_deps(depth, pkg):
+@@ -396,13 +403,13 @@ def print_pkg_deps(depth, pkg):
+                     add = False
+                     break
+             if add:
+-                print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
++                outfile.write("%s -> %s\n" % (pkg_node_name(pkg), pkg_node_name(d)))
+                 print_pkg_deps(depth+1, d)
+ 
+ # Start printing the graph data
+-print("digraph G {")
++outfile.write("digraph G {\n")
+ 
+ done_deps = []
+ print_pkg_deps(0, rootpkg)
+ 
+-print("}")
++outfile.write("}\n")
 -- 
 1.9.1
