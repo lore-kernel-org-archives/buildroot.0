@@ -1,70 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 24 Jan 2016 02:04:33 +0100
-Subject: [Buildroot] [PATCH] support/graph-depends: detect circular
- dependencies
-In-Reply-To: <20160123230027.GE3363@free.fr>
-References: <1453586685-24190-1-git-send-email-yann.morin.1998@free.fr>
- <20160123232121.10d1ffe3@free-electrons.com> <20160123223112.GD3363@free.fr>
- <20160123230027.GE3363@free.fr>
-Message-ID: <56A42321.9070104@mind.be>
+Date: Sun, 24 Jan 2016 02:09:33 +0100
+Subject: [Buildroot] [PATCH 2/2] Qwt package : added dependency to Qt5
+ besides Qt.
+In-Reply-To: <20160122181941.GB3774@free.fr>
+References: <1453484674-8951-1-git-send-email-davepiq@yahoo.fr>
+ <1453484674-8951-2-git-send-email-davepiq@yahoo.fr>
+ <20160122181941.GB3774@free.fr>
+Message-ID: <56A4244D.3090504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24-01-16 00:00, Yann E. MORIN wrote:
-> Thomas, All,
+On 22-01-16 19:19, Yann E. MORIN wrote:
+> David, All,
 > 
-> On 2016-01-23 23:31 +0100, Yann E. MORIN spake thusly:
->> On 2016-01-23 23:21 +0100, Thomas Petazzoni spake thusly:
->>> On Sat, 23 Jan 2016 23:04:45 +0100, Yann E. MORIN wrote:
->> [--SNIP--]
->>> I am a bit worried about the algorithmic complexity of this new
->>> function. As you know, we had issues with other parts of graph-depends
->>> having a too high algorithmic complexity to handle large
->>> configurations, or configurations having specific patterns of
->>> dependencies.
->>>
->>> Have you measured the time impact of this new check on a very large
->>> configuration (like allyespackageconfig) ?
->>
->> I have an allyespackageconfig with an recent toolchain so I get a lot
->> of packages, and I tweaked the config to disable a few to enable others.
->>
->> And no, the speed impact is not measurable for me. I'll come up with
->> numbers (of course, when there's no loop!) a bit later.
+> On 2016-01-22 18:44 +0100, David Picard spake thusly:
+[snip]
+>> @@ -21,10 +23,14 @@ config BR2_PACKAGE_QWT_OPENGL
+>>  	bool "OpenGL support"
+>>  	depends on BR2_PACKAGE_HAS_LIBGLES
+>>  	depends on BR2_PACKAGE_HAS_LIBEGL
+>> -	select BR2_PACKAGE_QT_OPENGL_ES
+>> +	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
+>> +	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5BASE
 > 
-> Damn, I spoke too fast. The speed was totally fine as long as there were
-> those circular dependencies I was hunting for.
+> BR2_PACKAGE_QT5BASE_OPENGL_LIB depends on BR2_PACKAGE_QT5BASE_OPENGL, so
+> it should have been selected too.
 > 
-> But without any circular deps, the speed is awfull and totally
-> inacceptable.
->
-> I'll see what I can do to speed this up.
+> However, I'm a bit worried about the complexity here, and I'd rather
+> that we depend on such support rather than select it. So I'd prefer to
+> see:
+> 
+>     depends on BR2_PACKAGE_QT_OPENGL_ES || BR2_PACKAGE_QT5BASE_OPENGL_LIB
 
+ In that case, it can probably be removed completely and turned into an
+automatic dependency (i.e. just in the .mk file).
 
- Naive cycle detection is exponential. See [1] for a pythonese implementation of
-single-visit cycle detection. Note that you have to do it on the whole graph at
-once, not once per node, for this to work.
-
-
-> One option is to not do the check in graph-depends, but to off-load that
-> into the package infrastructure, so we detect them even earlier.
-
- It's going to stay equally exponential when you do it in make... And since make
-already has cycle detection, I don't think it makes much sense to add a custom
-one there. What more is your custom cycle detection going to tell you? Ah, yes,
-you want it to show the entire cycle instead of just the place where it
-arbitrarily cut it. Hm, I think graph-depends is still a better place for it -
-the make logic is going to look _very_ ugly.
+ I also wouldn't bother with legacy handling when this symbol is removed. The
+legacy .config file will already contain BR2_PACKAGE_QT_OPENGL_ES, so once the
+handling is automatic, you just have to run 'make oldconfig' and it will Just
+Work (TM).
 
 
  Regards,
  Arnout
 
-[1]
-http://codereview.stackexchange.com/questions/86021/check-if-a-directed-graph-contains-a-cycle
+[snip]
 
 
 -- 
