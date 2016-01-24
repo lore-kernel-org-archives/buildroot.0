@@ -1,74 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 00:07:54 +0100
-Subject: [Buildroot] [PATCH 08/21] apache, apr: fix atomic handling
+Date: Mon, 25 Jan 2016 00:07:57 +0100
+Subject: [Buildroot] [PATCH 11/21] gauche: disable on SPARC(64),
+	remove atomics dependency
 In-Reply-To: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453676887-31236-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453676887-31236-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the apache package was introduced,
---enable-nonportable-atomics=yes was passed when
-BR2_ARCH_HAS_ATOMICS. However, Apache doesn't take this option: it
-only passes it down when building the APR library. But since we're
-building APR separately, this statement had no effect.
+gauche does not build on sparc64, it fails with:
 
-So this commit removes the useless code from the Apache package, and
-instead adds the appropriate logic to the apr package, using the new
-BR2_TOOLCHAIN_HAS_SYNC_x symbols rather than BR2_ARCH_HAS_ATOMICS.
+  No rule to make target 'sparc_mach_dep.lo', needed by 'libgc.la'
+
+On Sparc, it first fails with the usual "membar" assembler issue which
+comes from gauche's internal version of libatomic_ops. However, even
+passing -DAO_NO_SPARC_V9 like we do for libatomic_ops is not
+sufficient, as we fall into the same build problem as on sparc64.
+
+Consequently, this commit disables the gauche package on the sparc and
+sparc64 architectures.
+
+Since it uses its own libatomic_ops copy, and libatomic_ops does not
+have any dependency on atomic built-ins, we also remove the
+BR2_ARCH_HAS_ATOMICS dependency. It was originally added to prevent
+gauche from being built on sparc, but this will no longer happen.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/apache/apache.mk |  4 ----
- package/apr/apr.mk       | 17 +++++++++++++++++
- 2 files changed, 17 insertions(+), 4 deletions(-)
+ package/gauche/Config.in | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 8e7b6be..e752fcc 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -35,10 +35,6 @@ APACHE_CONF_OPTS = \
- 	--disable-lua \
- 	--disable-luajit
+diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+index fd0617a..3ca012d 100644
+--- a/package/gauche/Config.in
++++ b/package/gauche/Config.in
+@@ -4,14 +4,12 @@ config BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+ 	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k || \
+ 		BR2_mips || BR2_mipsel || BR2_mips64 || \
+ 		BR2_mips64el || BR2_powerpc || BR2_powerpc64 || \
+-		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_sparc || \
+-		BR2_sparc64 || BR2_x86_64
++		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_x86_64
  
--ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
--APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
--endif
--
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
- APACHE_DEPENDENCIES += libxml2
- # Apache wants the path to the header file, where it can find
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index 0fed19c..33873a0 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -35,6 +35,23 @@ endif
- # Fix lfs detection when cross compiling
- APR_CONF_ENV += apr_cv_use_lfs64=yes
+ config BR2_PACKAGE_GAUCHE
+ 	bool "gauche"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+@@ -26,6 +24,5 @@ config BR2_PACKAGE_GAUCHE
  
-+# Use non-portable atomics when available: 8 bytes atomics are used on
-+# 64-bits architectures, 4 bytes atomics on 32-bits architectures. We
-+# have to override ap_cv_atomic_builtins because the test used to
-+# check for atomic builtins uses AC_TRY_RUN, which doesn't work when
-+# cross-compiling.
-+ifeq ($(BR2_ARCH_IS_64),y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8),y)
-+APR_CONF_OPTS += --enable-nonportable-atomics
-+APR_CONF_ENV += ap_cv_atomic_builtins=yes
-+endif
-+else
-+ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),y)
-+APR_CONF_OPTS += --enable-nonportable-atomics
-+APR_CONF_ENV += ap_cv_atomic_builtins=yes
-+endif
-+endif
-+
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- APR_DEPENDENCIES += util-linux
- endif
+ comment "gauche needs a toolchain w/ NPTL, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
 -- 
 2.6.4
