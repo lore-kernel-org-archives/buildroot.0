@@ -1,57 +1,85 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jan 2016 16:22:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-r128: bump
-	version to 6.10.1
-Message-ID: <1453648930-18207-1-git-send-email-bernd.kuhls@t-online.de>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Sun, 24 Jan 2016 17:33:24 +0200 (IST)
+Subject: [Buildroot] [PATCH v4 1/4] Add yp-tools and ypbind-mt to
+ packages menu
+In-Reply-To: <20160124160920.0fb91f86@free-electrons.com>
+References: <1453647303-3965-1-git-send-email-yba@tkos.co.il>
+ <1453647303-3965-2-git-send-email-yba@tkos.co.il>
+ <20160124160920.0fb91f86@free-electrons.com>
+Message-ID: <alpine.DEB.2.11.1601241724060.4122@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-select BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST like we do in
-xdriver_xf86-video-mach64 to have gl support in xserver.
+On Sun, 24 Jan 2016, Thomas Petazzoni wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xdriver_xf86-video-r128/Config.in                    | 1 +
- package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash | 4 ++--
- package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk   | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+> Date: Sun, 24 Jan 2016 16:09:20 +0100
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Jonathan Ben-Avraham <yba@tkos.co.il>
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] [PATCH v4 1/4] Add yp-tools and ypbind-mt to packages
+>      menu
+> 
+> Jonathan,
+>
+> On Sun, 24 Jan 2016 16:55:00 +0200, Jonathan Ben-Avraham wrote:
+>> From: Jonathan Ben Avraham <yba@tkos.co.il>
+>>
+>>
+>> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+>> ---
+>>  package/Config.in |    2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 09c2b40..af9656b 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1482,6 +1482,8 @@ endif
+>>  	source "package/xinetd/Config.in"
+>>  	source "package/xl2tp/Config.in"
+>>  	source "package/xtables-addons/Config.in"
+>> +	source "package/yp-tools/Config.in"
+>> +	source "package/ypbind-mt/Config.in"
+>
+> This should not be a separate patch. Instead, adding yp-tools to the
+> menu should be part of the patch adding the yp-tools package, and
+> adding ypbind-mt to the menu should be part of the patch adding the
+> ypbind-mt package.
 
-diff --git a/package/x11r7/xdriver_xf86-video-r128/Config.in b/package/x11r7/xdriver_xf86-video-r128/Config.in
-index 647156f..00d0c03 100644
---- a/package/x11r7/xdriver_xf86-video-r128/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-r128/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_R128
- 	bool "xf86-video-r128"
- 	depends on BR2_PACKAGE_MESA3D
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_RENDERPROTO
-diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
-index 976521a..f5c92ab 100644
---- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
-+++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-May/002598.html
--sha256	80d531a07168230a408b88809a5440cfd48f9098666d12702d0012148a0d353d	xf86-video-r128-6.10.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2016-January/002670.html
-+sha256	5ebfef49831c9b12f7b7011c8314010596ac2ab0d5b9b7cfd17908e93d7de4ea	xf86-video-r128-6.10.1.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-index f9fcfdb..113aa21 100644
---- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-+++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_R128_VERSION = 6.10.0
-+XDRIVER_XF86_VIDEO_R128_VERSION = 6.10.1
- XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_R128_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
+That is, one patch should look something like
+
+ 	source "package/xinetd/Config.in"
+ 	source "package/xl2tp/Config.in"
+ 	source "package/xtables-addons/Config.in"
+  +	source "package/yp-tools/Config.in"
+ 	source "package/znc/Config.in"
+
+
+and the other should look like
+
+ 	source "package/xinetd/Config.in"
+ 	source "package/xl2tp/Config.in"
+ 	source "package/xtables-addons/Config.in"
+  +	source "package/ypbind-mt/Config.in"
+ 	source "package/znc/Config.in"
+
+?
+
+And then we rely on the order of the application of the patches to 
+determine the order of the items in the final Config.in?
+
+  - yba
+
+
+> Thanks!
+>
+> Thomas
+>
+
 -- 
-2.7.0.rc3
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
