@@ -1,38 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:22:05 +0100
-Subject: [Buildroot] [PATCH 10/21] libtorrent: use the proper
- BR2_TOOLCHAIN_HAS_SYNC_x symbols
-In-Reply-To: <20160125221440.GN3386@free.fr>
-References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-11-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160125214529.GK3386@free.fr>
- <20160125230728.6b2f577a@free-electrons.com>
- <20160125221440.GN3386@free.fr>
-Message-ID: <20160125232205.43e4e53e@free-electrons.com>
+Date: Mon, 25 Jan 2016 23:29:11 +0100
+Subject: [Buildroot] [PATCH] package/iprutils: disable for musl
+ toolchains
+In-Reply-To: <1453582679-30476-1-git-send-email-romain.naour@gmail.com>
+References: <1453582679-30476-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160125232911.6d1f5375@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Romain Naour,
 
-On Mon, 25 Jan 2016 23:14:40 +0100, Yann E. MORIN wrote:
-
-> > $ ./output/host/usr/bin/microblazeel-linux-gcc -o foo foo.c -ltorrent -lpthread
-> > /home/thomas/projets/buildroot/output/host/usr/microblazeel-buildroot-linux-gnu/sysroot/usr/lib/libtorrent.so: undefined reference to `__sync_bool_compare_and_swap_1'
-> > collect2: error: ld returned 1 exit status
+On Sat, 23 Jan 2016 21:57:59 +0100, Romain Naour wrote:
+> Disable iprutils for musl toolchain until someone
+> is interested enough to fixes it.
 > 
-> Ah, I see my tests are no longer needed! Thanks for that!
+> Note: the latest version (2.4.10) doesn't event build
+> with uClibc due to a test in the new configure script.
 > 
-> (Note: I was not trying to turn your patch down, I was just trying to
-> confirm the _1 stuff).
+> AC_CHECK_LIB([m], [matherr], [], [AC_ERROR("libm not found.")])
+> 
+> Avoid:
+> http://autobuild.buildroot.net/results/61e/61e121c25fc07083bcccedfcb4f938d18f5c5456/
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-Sure, no problem at all. It's perfectly good to have someone double
-checking all this stuff, and I took your question as a perfectly valid
-question, and not in any way a mean turn the patch down.
+Disabling on musl seems really excessive. I looked at the problem, and
+by:
 
-Cheers!
+ * Removing the #include <bits/sockaddr.h> from iprlib.h
+
+ * Adding #include <limits.h> to iprlib.h
+
+I was able to build the iprutils package with the musl C library on ARM.
+
+Could you look into this and cook a better patch ?
+
+Thanks!
 
 Thomas
 -- 
