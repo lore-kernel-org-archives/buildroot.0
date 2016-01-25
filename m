@@ -1,10 +1,10 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 25 Jan 2016 23:53:16 +0100
-Subject: [Buildroot] [PATCH 14/21] squid: rework atomic handling
-In-Reply-To: <1453676887-31236-15-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-15-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160125225316.GP3386@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 25 Jan 2016 23:55:27 +0100
+Subject: [Buildroot] [PATCH 4/8] vlc: remove dependency on C library
+In-Reply-To: <1453148701-10036-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453148701-10036-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56A6A7DF.1080607@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +13,57 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2016-01-25 00:08 +0100, Thomas Petazzoni spake thusly:
-> squid can use the __sync built-ins when available, but uses an
-> AC_TRY_RUN autoconf tests to check their availability, which isn't
-> compatible with cross-compilation. Due to this, squid.mk is already
-> hinting the configure script about this by passing
-> squid_cv_gnu_atomics=yes/no depending on the availability of atomic
-> operations.
+Le 18/01/2016 21:24, Thomas Petazzoni a ?crit :
+> vlc uses <spawn.h> which was not available in old uClibc
+> versions. However, since we are removing support for uClibc 0.9.33, we
+> can get rid of such dependency. In addition, <spawn.h> is provided by
+> musl, and therefore VLC can be enabled with this C library.
 > 
-> So far, squid.mk was assuming that BR2_ARCH_HAS_ATOMICS &&
-> BR2_ARCH_IS_64 was needed, since 8 bytes __sync built-ins are
-> used. However, this was a bit too restrictive, since certain 32 bits
-> architectures (ARM, x86) do provide 8 bytes __sync built-ins.
-> 
-> So, instead of using BR2_ARCH_HAS_ATOMICS, we now rely on
-> BR2_TOOLCHAIN_HAS_SYNC_4 and BR2_TOOLCHAIN_HAS_SYNC_8, since both 4
-> bytes and 8 bytes __sync built-ins are tested by the autoconf test.
+> Consequently, this commit completely removes any C library dependency
+> for the vlc package. The only special case that needs to be handled is
+> the Blackfin external toolchain from Analog Devices, which still uses
+> an old uClibc version that doesn't provide <spawn.h>.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Build tested on a x86_64 musl toolchain.
+Tested-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-Regards,
-Yann E. MORIN.
+Best regards,
+Romain
 
 > ---
->  package/squid/squid.mk | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
+>  package/vlc/Config.in | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-> index 3110573..f205da2 100644
-> --- a/package/squid/squid.mk
-> +++ b/package/squid/squid.mk
-> @@ -41,12 +41,10 @@ SQUID_CONF_OPTS = \
->  	--with-swapdir=/var/cache/squid/ \
->  	--with-default-user=squid
+> diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+> index 03e85c3..cad21e2 100644
+> --- a/package/vlc/Config.in
+> +++ b/package/vlc/Config.in
+> @@ -5,12 +5,12 @@ endif
 >  
-> -# Atomics in Squid use __sync_add_and_fetch_8, i.e a 64 bits atomic
-> -# operation. This atomic intrinsic is only available natively on
-> -# 64-bit architectures that have atomic operations. On 32-bit
-> -# architectures, it would be provided by libatomic, but Buildroot
-> -# typically doesn't provide it.
-> -ifeq ($(BR2_ARCH_HAS_ATOMICS)$(BR2_ARCH_IS_64),yy)
-> +# Atomics in Squid use __sync built-ins on 4 and 8 bytes. However, the
-> +# configure script tests them using AC_TRY_RUN, so we have to give
-> +# some hints.
-> +ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4)$(BR2_TOOLCHAIN_HAS_SYNC_8),yy)
->  SQUID_CONF_ENV += squid_cv_gnu_atomics=yes
->  else
->  SQUID_CONF_ENV += squid_cv_gnu_atomics=no
-> -- 
-> 2.6.4
+>  config BR2_PACKAGE_VLC
+>  	bool "vlc"
+> -	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_USE_WCHAR
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+>  	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
+>  	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
+>  	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
+> @@ -32,7 +32,7 @@ config BR2_PACKAGE_VLC_OPENCV3_BACKEND
+>  	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
+>  	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
+>  
+> -comment "vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, dynamic library, wchar, threads, headers >= 3.7"
+> -	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) \
+> -		|| !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+> +comment "vlc needs a toolchain w/ C++, dynamic library, wchar, threads, headers >= 3.7"
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+> +	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+>  		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
