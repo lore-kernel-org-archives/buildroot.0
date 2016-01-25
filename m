@@ -1,11 +1,11 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2016 00:05:07 +0100
-Subject: [Buildroot] [PATCH 13/21] openocd: remove BR2_ARCH_HAS_ATOMICS
- dependency
-In-Reply-To: <1453676887-31236-14-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-14-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160125230507.GQ3386@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 26 Jan 2016 00:06:14 +0100
+Subject: [Buildroot] [PATCH 5/8] samba4: remove dependency on specific C
+ libraries
+In-Reply-To: <1453148701-10036-6-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453148701-10036-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56A6AA66.1060504@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,84 +14,54 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-[it seems my previous mail got stuck in some pipes between me and the
-list. Resending. Sorry for the dupe if the previous mail is evenutally
-delivered...]
-
-On 2016-01-25 00:07 +0100, Thomas Petazzoni spake thusly:
-> For some reason, since when openocd was introduced, it was using a
-> BR2_ARCH_HAS_ATOMICS dependency for all sub-options that selected
-> BR2_PACKAGE_LIBFTDI1, even if the libftdi1 package did not have any
-> atomics dependency. Maybe it was confused with the libftdi package,
-> which did have a BR2_ARCH_HAS_ATOMICS dependency ?
+Le 18/01/2016 21:24, Thomas Petazzoni a ?crit :
+> samba4 relies on the $ORIGIN feature of the dynamic linker, which used
+> to not be implemented in old uClibc versions. However:
 > 
-> Regardless, openocd with all four sub-options that currently depend on
-> BR2_ARCH_HAS_ATOMICS builds perfectly fine with a toolchain that does
-> not implement any of the __sync atomic built-ins, so we can remove the
-> BR2_ARCH_HAS_ATOMICS dependency.
+>  - this feature is supported by glibc
+>  - this feature is supported by uClibc-ng, which is the only uClibc
+>    version we are going to support
+>  - this feature is supported by musl
+> 
+> Consequently, we can completely remove the dependency of samba4 on
+> certain C libraries. This means that samba4 can now be built against
+> the musl C library.
+
+I'm not able to select samba4 with a musl toolchain.
+Samba4 needs BR2_TOOLCHAIN_HAS_NATIVE_RPC which is not selected/detected with
+internal/external toolchains.
+
+So, no samba4 with musl for the moment ;-)
+
+Best regards,
+Romain
+
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-This can go in regardless of the rest of the series, feel free to apply
-as you wish! ;-)
-
-Regards,
-Yann E. MORIN.
-
 > ---
->  package/openocd/Config.in | 4 ----
->  1 file changed, 4 deletions(-)
+>  package/samba4/Config.in | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-> index a35bd27..2313671 100644
-> --- a/package/openocd/Config.in
-> +++ b/package/openocd/Config.in
-> @@ -127,7 +127,6 @@ config BR2_PACKAGE_OPENOCD_FT2XXX
->  	bool "FT2232 based devices (DEPRECATED)"
->  	select BR2_PACKAGE_LIBFTDI1
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
-> -	depends on BR2_ARCH_HAS_ATOMICS
->  	help
->  	  (DEPRECATED) Enable building support for FT2232
->  	  based devices using the libftdi library
-> @@ -141,7 +140,6 @@ config BR2_PACKAGE_OPENOCD_UBLASTER
->  	bool "Altera USB-Blaster"
->  	select BR2_PACKAGE_LIBFTDI1
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
-> -	depends on BR2_ARCH_HAS_ATOMICS
->  	help
->  	  Enable building support for the Altera USB-Blaster
->  	  using the libftdi driver, opensource alternate of
-> @@ -182,7 +180,6 @@ config BR2_PACKAGE_OPENOCD_PRESTO
->  	bool "ASIX Presto Programmer"
->  	select BR2_PACKAGE_LIBFTDI1
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
-> -	depends on BR2_ARCH_HAS_ATOMICS
->  	help
->  	  Enable building support for ASIX Presto Programmer
->  	  using the libftdi driver
-> @@ -193,7 +190,6 @@ config BR2_PACKAGE_OPENOCD_OPENJTAG
->  	select BR2_PACKAGE_LIBUSB
->  	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
-> -	depends on BR2_ARCH_HAS_ATOMICS
->  	help
->  	  Enable building support for the OpenJTAG Programmer
->  	  with ftdi driver
-> -- 
-> 2.6.4
+> diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+> index 1411b08..c53adba 100644
+> --- a/package/samba4/Config.in
+> +++ b/package/samba4/Config.in
+> @@ -1,6 +1,5 @@
+> -comment "samba4 needs an (e)glibc or uClibc-ng toolchain w/ RPC, wchar, dynamic library, threads"
+> -	depends on (!BR2_TOOLCHAIN_USES_GLIBC && !BR2_UCLIBC_VERSION_NG) \
+> -		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_NATIVE_RPC \
+> +comment "samba4 needs a toolchain w/ RPC, wchar, dynamic library, threads"
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_NATIVE_RPC \
+>  		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_USE_MMU
+>  
+> @@ -12,8 +11,6 @@ config BR2_PACKAGE_SAMBA4
+>  	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # python -> libffi
+>  	depends on !BR2_STATIC_LIBS # python
+> -	# needs $ORIGIN support
+> -	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_UCLIBC_VERSION_NG
+>  	depends on !BR2_nios2 # binary too large, relocations don't fit
+>  	select BR2_PACKAGE_E2FSPROGS
+>  	select BR2_PACKAGE_POPT
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
