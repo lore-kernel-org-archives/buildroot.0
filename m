@@ -1,35 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:11:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gzip: fix musl build
-In-Reply-To: <1453653149-16537-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453653149-16537-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160125231129.11691833@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 25 Jan 2016 23:14:40 +0100
+Subject: [Buildroot] [PATCH 10/21] libtorrent: use the proper
+ BR2_TOOLCHAIN_HAS_SYNC_x symbols
+In-Reply-To: <20160125230728.6b2f577a@free-electrons.com>
+References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453676887-31236-11-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20160125214529.GK3386@free.fr>
+ <20160125230728.6b2f577a@free-electrons.com>
+Message-ID: <20160125221440.GN3386@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+thomas, All,
 
-On Sun, 24 Jan 2016 17:32:29 +0100, Bernd Kuhls wrote:
-> Inspired by http://patchwork.openembedded.org/patch/111691/
-> Adding "gl_cv_func_fflush_stdin=yes" was sufficient to fix the build.
+On 2016-01-25 23:07 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 25 Jan 2016 22:45:29 +0100, Yann E. MORIN wrote:
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/56d/56d926fcf8ca53cddb9106617e3b852d9c9a4eeb/
-> http://autobuild.buildroot.net/results/4b5/4b5a6196b686030cf7fa9706508fd99f81a81049/
-> http://autobuild.buildroot.net/results/568/568c1c05800d6bdd6457845e998a598e354afdfd/
+> > On 2016-01-25 00:07 +0100, Thomas Petazzoni spake thusly:
+> > > libtorrent uses 1 bytes and 4 bytes __sync built-ins, so let's use the
+> > > appropriate BR2_TOOLCHAIN_HAS_SYNC_x symbols instead of
+> > > BR2_ARCH_HAS_ATOMICS. The rtorrent package, which is a reverse
+> > > dependency of libtorrent, gets fixed as well.
+> > > 
+> > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > > ---
+> > >  package/libtorrent/Config.in | 4 ++--
+> > >  package/rtorrent/Config.in   | 4 ++--
+> > >  2 files changed, 4 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
+> > > index 17a1f23..4787f9c 100644
+> > > --- a/package/libtorrent/Config.in
+> > > +++ b/package/libtorrent/Config.in
+> > > @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBTORRENT
+> > >  	bool "libtorrent"
+> > >  	depends on BR2_INSTALL_LIBSTDCPP
+> > >  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> > > -	depends on BR2_ARCH_HAS_ATOMICS
+> > > +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
+> > 
+> > The original build failure that prompted adding the atomics dependency
+> > only reported errors about the __sunc_*_4() functions, but libtorrent
+> > has been bumped sinc ethen.
+> > 
+> > I was not able to easily reproduce a failure so far, but I will try with
+> > an arc toolchain (which is lacking __sync_*_1() functions...
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/gzip/gzip.mk | 1 +
->  1 file changed, 1 insertion(+)
+> Beware with ARC: you need to have a toolchain with BR2_ARC_ATOMIC_EXT
+> disabled, otherwise the __sync built-ins are provided. And by default,
+> BR2_ARC_ATOMIC_EXT is enabled.
 
-Applied, thanks.
+Yep, I know and the toolchain I built does not have them.
 
-Thomas
+Thanks for the hint anyway. :-)
+
+> Regarding libtorrent, if you want to test:
+> 
+>  1/ Remove the dependency on BR2_TOOLCHAIN_HAS_SYNC_<x> (or
+>     BR2_ARCH_HAS_ATOMICS in the current Buildroot)
+
+What I did.
+
+>  2/ Build it with the br-sparc-glibc.config pointed above.
+
+Doing so for ARC...
+
+>  3/ Test the following:
+> 
+> $ echo "int main(void) { return 0; }" >> foo.c
+> $ ./output/host/usr/bin/sparc-linux-gcc -o foo foo.c -ltorrent -lpthread
+> 
+> You get:
+> 
+> /home/thomas/projets/buildroot/output/host/usr/sparc-buildroot-linux-gnu/sysroot/usr/lib/libtorrent.so: undefined reference to `__sync_sub_and_fetch_4'
+> /home/thomas/projets/buildroot/output/host/usr/sparc-buildroot-linux-gnu/sysroot/usr/lib/libtorrent.so: undefined reference to `__sync_bool_compare_and_swap_1'
+> /home/thomas/projets/buildroot/output/host/usr/sparc-buildroot-linux-gnu/sysroot/usr/lib/libtorrent.so: undefined reference to `__sync_or_and_fetch_4'
+> /home/thomas/projets/buildroot/output/host/usr/sparc-buildroot-linux-gnu/sysroot/usr/lib/libtorrent.so: undefined reference to `__sync_bool_compare_and_swap_4'
+> /home/thomas/projets/buildroot/output/host/usr/sparc-buildroot-linux-gnu/sysroot/usr/lib/libtorrent.so: undefined reference to `__sync_add_and_fetch_4'
+> /home/thomas/projets/buildroot/output/host/usr/sparc-buildroot-linux-gnu/sysroot/usr/lib/libtorrent.so: undefined reference to `__sync_fetch_and_or_4'
+> /home/thomas/projets/buildroot/output/host/usr/sparc-buildroot-linux-gnu/sysroot/usr/lib/libtorrent.so: undefined reference to `__sync_fetch_and_and_4'
+> collect2: error: ld returned 1 exit status
+> 
+> See the __sync_bool_compare_and_swap_1() ?
+> 
+> And now, you can test it with a Microblaze toolchain, which implements
+> the 4-byte __sync builtins, but not the 1-byte builtins. And you get:
+> 
+> $ ./output/host/usr/bin/microblazeel-linux-gcc -o foo foo.c -ltorrent -lpthread
+> /home/thomas/projets/buildroot/output/host/usr/microblazeel-buildroot-linux-gnu/sysroot/usr/lib/libtorrent.so: undefined reference to `__sync_bool_compare_and_swap_1'
+> collect2: error: ld returned 1 exit status
+
+Ah, I see my tests are no longer needed! Thanks for that!
+
+(Note: I was not trying to turn your patch down, I was just trying to
+confirm the _1 stuff).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
