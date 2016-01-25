@@ -1,7 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 10:09:43 +0100
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Mon, 25 Jan 2016 10:10:44 +0100
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CACt6We0Jcryw4jd8RcD66tgUhjE7+TgGwjm_8xG8-U=4VB7aTA@mail.gmail.com>
+In-Reply-To: <20160125100943.6796041c@free-electrons.com>
 References: <20160116073021.A4B95101BCC@stock.ovh.net>
  <20160117001117.569d43f2@free-electrons.com>
  <CA+-urNTGae35+MuvCzE3UE0POL0NJxfGRciXaZf8ohDdq_a-RQ@mail.gmail.com>
@@ -10,27 +10,40 @@ References: <20160116073021.A4B95101BCC@stock.ovh.net>
  <CA+-urNRYkOOe4TCxiUeLYLqQS-1+8qCVP9qMiEthTsi22Q61NQ@mail.gmail.com>
  <20160123090148.34d861bd@free-electrons.com>
  <CACt6We0Jcryw4jd8RcD66tgUhjE7+TgGwjm_8xG8-U=4VB7aTA@mail.gmail.com>
-Message-ID: <20160125100943.6796041c@free-electrons.com>
+ <20160125100943.6796041c@free-electrons.com>
+Message-ID: <CACt6We3-m9zLM3KOjC8UNaiVJNVn+biXvxHxM83c06XtEGhK7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joris,
+http://autobuild.buildroot.net/results/2ef/2ef1ed958db8012224f9174334e9c58edace604a/
 
-On Mon, 25 Jan 2016 10:06:25 +0100, Joris Lijssens wrote:
 
-> I had another look at the rabbitmq-c build issue this morning, but with the
-> latest buildroot version of this morning it builds just fine. Any idea what
-> has changed?
+On 25 January 2016 at 10:09, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Can you remind me which rabbitmq-c failure you are investigating ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Joris,
+>
+> On Mon, 25 Jan 2016 10:06:25 +0100, Joris Lijssens wrote:
+>
+> > I had another look at the rabbitmq-c build issue this morning, but with
+> the
+> > latest buildroot version of this morning it builds just fine. Any idea
+> what
+> > has changed?
+>
+> Can you remind me which rabbitmq-c failure you are investigating ?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160125/1e31e53f/attachment.html>
