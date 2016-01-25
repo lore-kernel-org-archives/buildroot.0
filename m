@@ -1,85 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 25 Jan 2016 23:33:02 +0100
-Subject: [Buildroot] [PATCH 1/8] libunwind: fix C library dependency
-In-Reply-To: <20160125232039.2ef30ef9@free-electrons.com>
-References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453148701-10036-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <56A69ACC.1030505@gmail.com> <20160125232039.2ef30ef9@free-electrons.com>
-Message-ID: <56A6A29E.5040709@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Jan 2016 23:35:11 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/libsoil: fix build using old
+ versions of patch
+In-Reply-To: <1453641593-31129-2-git-send-email-ricardo.martincoski@gmail.com>
+References: <1453641593-31129-1-git-send-email-ricardo.martincoski@gmail.com>
+ <1453641593-31129-2-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <20160125233511.57daa120@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Dear Ricardo Martincoski,
 
-Le 25/01/2016 23:20, Thomas Petazzoni a ?crit :
-> Romain,
+On Sun, 24 Jan 2016 11:19:52 -0200, Ricardo Martincoski wrote:
+> Well-formed patch fails to apply
+> - patch v2.6:
+> Hunk #1 FAILED at 1.
+> Hunk #2 FAILED at 23.
+> - patch v2.6.1:
+> can't find file to patch at input line 11
+> Perhaps you used the wrong -p or --strip option?
+> [snip]
+> No file to patch.  Skipping patch.
+> 2 out of 2 hunks ignored
+> Patch failed!  Please fix 0001-fix-makefile.patch!
 > 
-> On Mon, 25 Jan 2016 22:59:40 +0100, Romain Naour wrote:
+> Old versions of the tool "patch" cannot handle spaces in filenames.
+> The same does not occur using "patch" v2.7 or any later.
 > 
->>> diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
->>> index 85cb472..6f747ae 100644
->>> --- a/package/libunwind/Config.in
->>> +++ b/package/libunwind/Config.in
->>> @@ -1,15 +1,32 @@
->>> +# libunwind is only available for a certain subset of the
->>> +# architectures (as visible in the list of architectures supported
->>> +# with the glibc C library below).
->>> +#
->>> +# In addition to this, on some architectures libunwind requires the
->>> +# *context() function from the C library, which are only available on
->>> +# certain architectures in uClibc, and not available at all on
->>> +# musl. But on some other architectures, libunwind works without using
->>> +# the *context() functions, which allows it to be built with musl.
->>> +config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
->>> +	bool
->>> +	default y if BR2_TOOLCHAIN_USES_GLIBC && \
->>> +		(BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
->>> +		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64)
->>> +	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
->>> +		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || \
->>> +		 BR2_x86_64)
->>> +	default y if BR2_TOOLCHAIN_USES_MUSL && \
->>> +		(BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64)
->>> +
->>>  config BR2_PACKAGE_LIBUNWIND
->>>  	bool "libunwind"
->>>  	depends on BR2_TOOLCHAIN_HAS_THREADS
->>> -	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) # {g,s}etcontext
->>> -	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
->>> -		BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64
->>> +	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+> Workaround: when a file with space in the name needs to be patched,
+> one or two hooks must be used.
+> A pre-patch or post-extract hook renames the file to replace spaces
+> with underscores.
+> The patch file must be generated using diff between two source-trees
+> that have the file renamed with spaces replaced by underscores.
+> A post-patch hook could rename the file to its original name if needed.
 > 
-> Thanks for reviewing!
+> Fixes:
+> http://autobuild.buildroot.net/results/8ff/8ff91ab8e52000eb34dd8f662520cf1b31490cf5/
+> http://autobuild.buildroot.net/results/ea7/ea77d6b23aca0cb1cf527e6c16ddf5eba957a69c/
 > 
->> Build tested on musl and x86_64.
->> Checked that libunwind doesn't build with uClibc-snapshot and uClibc-ng.
-> 
-> I don't get this sentence however. libunwind should build with
-> uClibc-ng on the architectures listed in
-> BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS, no?
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Ha, sorry (missing some context).
-I build tested libunwind with uClibc-snapshot on powerpc with the master branch
-to verify that it doesn't build.
-Then, I switched to your series with a small modification to enable powerpc and
-verify that doesn't build as for uClibc-snapshot on the same architecture.
+Applied, thanks.
 
-The build error look like:
-In file included from ../include/libunwind.h:15:0,
-                 from ppc32/Lglobal.c:2:
-../include/libunwind-ppc32.h:182:9: erreur: unknown type name ?ucontext_t?
- typedef ucontext_t unw_tdep_context_t;
-
-So your BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS setting is correct.
-
-Best regards,
-Romain
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
