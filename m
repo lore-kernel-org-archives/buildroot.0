@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 25 Jan 2016 18:04:38 +0100
-Subject: [Buildroot] [PATCH 01/21] libftdi: C++ bindings need boost
-In-Reply-To: <1453676887-31236-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Jan 2016 18:15:27 +0100
+Subject: [Buildroot] [PATCH 02/21] libftdi: remove BR2_ARCH_HAS_ATOMICS
+ dependency
+In-Reply-To: <1453676887-31236-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160125170438.GB3386@free.fr>
+ <1453676887-31236-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160125171527.GC3386@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,88 +15,73 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2016-01-25 00:07 +0100, Thomas Petazzoni spake thusly:
-> According to libftdi configure.in:
+> In commit 669ce8c75eb4c76cef81f279fb6b4f95d1472f51 ("libftdi: add
+> dependency on atomic operations"), a dependency on
+> BR2_ARCH_HAS_ATOMICS was added to the libftdi package to fix a build
+> failure occuring on the ARC architecture due to the missing
+> __sync_fetch_and_add_4 function:
 > 
-> """
-> dnl libftdi C++ wrapper. Needs boost.
-> [...]
->         if test "x$HAVE_BOOST" != "xyes"; then
->             AC_MSG_ERROR(Sorry, we need the boost library for the C++ wrapper)
->         fi
-> """
+> ../ftdipp/.libs/libftdipp.so: undefined reference to `__sync_fetch_and_add_4'
 > 
-> And indeed, if you enable BR2_PACKAGE_LIBTFDI_CPP but don't have Boost
-> enabled, the libfdipp library is not built. To fix this, this commit
-> changes BR2_PACKAGE_LIBTFDI_CPP to select Boost.
+> However, today, even on the SPARC architecture that does not implement
+> any of the __sync built-ins, libftdi and its C++ binding libftdipp
+> build fine. ARC was also tested and builds fine.
+> 
+> Therefore, we remove the BR2_ARCH_HAS_ATOMICS dependency from libftdi,
+> and also from flashrom, in which it was only present due to the
+> selection of libftdi. Note that anyway flashrom is available only for
+> i386 and x86_64, both of which implement all the __sync built-ins.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Still, a few comments below...
-
-> ---
->  package/libftdi/Config.in  | 9 ++++++++-
->  package/libftdi/libftdi.mk | 1 +
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
-> index 76b30b1..c0ab0f2 100644
-> --- a/package/libftdi/Config.in
-> +++ b/package/libftdi/Config.in
-> @@ -12,11 +12,18 @@ config BR2_PACKAGE_LIBFTDI
->  if BR2_PACKAGE_LIBFTDI
->  
->  config BR2_PACKAGE_LIBTFDI_CPP
-> -	depends on BR2_INSTALL_LIBSTDCPP
->  	bool "C++ bindings"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> +	depends on BR2_USE_WCHAR
-> +	select BR2_PACKAGE_BOOST
-
-boost also has a threads dependency, but that is covered by the main
-symbol, because of libusb.
-
-I wonder if we should duplicate the dependency here, with another
-comment, like:
-
-    depends on BR2_TOOLCHAIN_HAS_THREADS # Boost
-
-Or at least state it in a comment:
-
-    # Boost depends on threads, but that's already accounted for
-    # in the main symbol because of libusb.
-
->  	help
->  	  C++ bindings for libftdi
->  
-> +comment "libftdi C++ bindings need a toolchain w/ wchar, C++"
-> +	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> +	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-
-Ditto the threads dependency.
-
-I'm not sure if we really want to do that, hence my reved-by tag.
+[yann.morin.1998 at free.fr: build-tested for sparc-v8]
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
+> ---
+>  package/flashrom/Config.in | 2 --
+>  package/libftdi/Config.in  | 2 --
+>  2 files changed, 4 deletions(-)
+> 
+> diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
+> index 9420cc6..adc068c 100644
+> --- a/package/flashrom/Config.in
+> +++ b/package/flashrom/Config.in
+> @@ -8,7 +8,6 @@ config BR2_PACKAGE_FLASHROM
+>  	select BR2_PACKAGE_DMIDECODE
+>  	depends on BR2_i386 || BR2_x86_64
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS 	# libusb
+> -	depends on BR2_ARCH_HAS_ATOMICS 	# libftdi
+>  	help
+>  	  flashrom is a utility for identifying, reading, writing,
+>  	  verifying and erasing flash chips. It is designed to flash
+> @@ -20,5 +19,4 @@ config BR2_PACKAGE_FLASHROM
+>  
+>  comment "flashrom needs a toolchain w/ threads"
+>  	depends on BR2_i386 || BR2_x86_64
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
+> index c0ab0f2..8e02cb9 100644
+> --- a/package/libftdi/Config.in
+> +++ b/package/libftdi/Config.in
+> @@ -1,7 +1,6 @@
+>  config BR2_PACKAGE_LIBFTDI
+>  	bool "libftdi"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	select BR2_PACKAGE_LIBUSB
+>  	select BR2_PACKAGE_LIBUSB_COMPAT
+>  	help
+> @@ -27,5 +26,4 @@ comment "libftdi C++ bindings need a toolchain w/ wchar, C++"
 >  endif # BR2_PACKAGE_LIBFTDI
 >  
 >  comment "libftdi needs a toolchain w/ threads"
-> diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
-> index 8370b0a..28f20e3 100644
-> --- a/package/libftdi/libftdi.mk
-> +++ b/package/libftdi/libftdi.mk
-> @@ -15,6 +15,7 @@ LIBFDTI_CONF_OPTS = --without-examples
->  
->  # configure detect it automaticaly so we need to force it
->  ifeq ($(BR2_PACKAGE_LIBTFDI_CPP),y)
-> +LIBFTDI_DEPENDENCIES += boost
->  LIBFDTI_CONF_OPTS += --enable-libftdipp
->  else
->  LIBFDTI_CONF_OPTS += --disable-libftdipp
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS
 > -- 
 > 2.6.4
 > 
