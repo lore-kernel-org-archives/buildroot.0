@@ -1,47 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 21:04:20 +0100
-Subject: [Buildroot] [PATCH 01/21] libftdi: C++ bindings need boost
-In-Reply-To: <20160125170438.GB3386@free.fr>
+Date: Mon, 25 Jan 2016 21:07:44 +0100
+Subject: [Buildroot] [PATCH 04/21] docs/manual: document usage of
+ BR2_TOOLCHAIN_HAS_SYNC_x
+In-Reply-To: <20160125183837.GE3386@free.fr>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160125170438.GB3386@free.fr>
-Message-ID: <20160125210420.205d1502@free-electrons.com>
+ <1453676887-31236-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20160125183837.GE3386@free.fr>
+Message-ID: <20160125210744.2e8f47e8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Yann,
 
-On Mon, 25 Jan 2016 18:04:38 +0100, Yann E. MORIN wrote:
+On Mon, 25 Jan 2016 19:38:37 +0100, Yann E. MORIN wrote:
 
-> >  config BR2_PACKAGE_LIBTFDI_CPP
-> > -	depends on BR2_INSTALL_LIBSTDCPP
-> >  	bool "C++ bindings"
-> > +	depends on BR2_INSTALL_LIBSTDCPP
-> > +	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> > +	depends on BR2_USE_WCHAR
-> > +	select BR2_PACKAGE_BOOST
+> > +* Gcc +__sync_*+ built-ins used for atomic operations. They are
+> > +  available in variants operating on 1 byte, 2 bytes, 4 bytes and 8
+> > +  bytes. Since different architectures support atomic operations on
+> > +  different sizes, one dependency symbol is available for each size:
+> > +** Dependency symbol: +BR2_TOOLCHAIN_HAS_SYNC_1+ for 1 byte,
+> > +   +BR2_TOOLCHAIN_HAS_SYNC_2+ for two bytes,
+> > +   +BR2_TOOLCHAIN_HAS_SYNC_4+ for 4 bytes, +BR2_TOOLCHAIN_HAS_SYNC_8+
+> > +   for 8 bytes.
+> > +** Comment string: no comment to be added
+> > +
+> > +* One byte +__sync_*+ gcc built-in for atomic instructions
+> > +** Dependency symbol: +BR2_TOOLCHAIN_HAS_SYNC_1+
 > 
-> boost also has a threads dependency, but that is covered by the main
-> symbol, because of libusb.
-> 
-> I wonder if we should duplicate the dependency here, with another
-> comment, like:
-> 
->     depends on BR2_TOOLCHAIN_HAS_THREADS # Boost
-> 
-> Or at least state it in a comment:
-> 
->     # Boost depends on threads, but that's already accounted for
->     # in the main symbol because of libusb.
+> I don't see why you specifically documment BR2_TOOLCHAIN_HAS_SYNC_1
+> separately. Did I miss something, or is it a stray attempt?
 
-We don't have clear rules about what to do in such situations. We
-sometimes say to duplicate the dependencies, but sometimes it looks
-really really annoying to duplicate all those dependencies when you
-*know* that the top-level package can anyway not be enabled in this or
-that situation.
+It's a stray attempt :-/ Will fix in v2, thanks for spotting!
 
 Thomas
 -- 
