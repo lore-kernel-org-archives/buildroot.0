@@ -1,36 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:16:46 +0100
-Subject: [Buildroot] [PATCH 1/3] package/tvheadend: bump version
-In-Reply-To: <1453542297-12086-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453542297-12086-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160125231646.0bb60f29@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 25 Jan 2016 23:17:34 +0100
+Subject: [Buildroot] ssh: connect to host pi adress port 22: Connection
+ refused
+In-Reply-To: <20160125093723.32061baa@free-electrons.com>
+References: <CABi8WTyCkO0dbH0GKkwV+C4Hb_OtaPipk06zBuNCuDJoHK7bLA@mail.gmail.com>
+ <20160125093723.32061baa@free-electrons.com>
+Message-ID: <20160125231734.12073cda@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello FrAnKenStEiN MC,
 
-On Sat, 23 Jan 2016 10:44:55 +0100, Bernd Kuhls wrote:
-> Default configure options were changed in
-> https://github.com/tvheadend/tvheadend/commit/ad9b54ad908fdc9a069c734234958ae8ad1eb38f
-> enabling the download of the source of libhdhomerun and its static
-> build which will lead to a link error because the host compiler is used
-> for that build. Therefore disable the static build of libhdhomerun by
-> tvheadend's build system like we do for ffmpeg.
+On Mon, 25 Jan 2016 09:37:23 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/tvheadend/0001-no-check_config.patch | 4 ++--
->  package/tvheadend/tvheadend.hash             | 2 +-
->  package/tvheadend/tvheadend.mk               | 3 ++-
->  3 files changed, 5 insertions(+), 4 deletions(-)
+> On Mon, 25 Jan 2016 02:37:18 +0000, FrAnKenStEiN MC wrote:
+> 
+> > But whe trying ssh i get `connection refused`
+> > 
+> >     ssh pi at 10.42.0.5
+> >     ssh: connect to host 10.42.0.5 port 22: Connection refused
+> > 
+> > I couldn't solve this problem all the day !!!
+> 
+> Plug a serial port adapter on your RPi, and look at the boot messages,
+> and see if dropbear gets started, and if it does, see if there are any
+> error message.
 
-All three patches applied, thanks!
+With buildroot from git (as of today) it worked for me (both cases ro and rw
+root filesystem)...., any chance to plugin a hdmi monitor (besides from a
+serial console) to get access to the last lines of boot messages?
+Mind to share your buildroot config file? How did you configure your ip
+adress, via cmdline.txt?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Peter
+
+> 
+> Best regards,
+> 
+> Thomas
