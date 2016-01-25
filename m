@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 25 Jan 2016 22:45:29 +0100
-Subject: [Buildroot] [PATCH 10/21] libtorrent: use the proper
- BR2_TOOLCHAIN_HAS_SYNC_x symbols
-In-Reply-To: <1453676887-31236-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Jan 2016 22:52:38 +0100
+Subject: [Buildroot] [PATCH 11/21] gauche: disable on SPARC(64),
+ remove atomics dependency
+In-Reply-To: <1453676887-31236-12-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-11-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160125214529.GK3386@free.fr>
+ <1453676887-31236-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160125215238.GL3386@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,68 +15,61 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2016-01-25 00:07 +0100, Thomas Petazzoni spake thusly:
-> libtorrent uses 1 bytes and 4 bytes __sync built-ins, so let's use the
-> appropriate BR2_TOOLCHAIN_HAS_SYNC_x symbols instead of
-> BR2_ARCH_HAS_ATOMICS. The rtorrent package, which is a reverse
-> dependency of libtorrent, gets fixed as well.
+> gauche does not build on sparc64, it fails with:
+> 
+>   No rule to make target 'sparc_mach_dep.lo', needed by 'libgc.la'
+> 
+> On Sparc, it first fails with the usual "membar" assembler issue which
+> comes from gauche's internal version of libatomic_ops. However, even
+> passing -DAO_NO_SPARC_V9 like we do for libatomic_ops is not
+> sufficient, as we fall into the same build problem as on sparc64.
+> 
+> Consequently, this commit disables the gauche package on the sparc and
+> sparc64 architectures.
+> 
+> Since it uses its own libatomic_ops copy, and libatomic_ops does not
+> have any dependency on atomic built-ins, we also remove the
+> BR2_ARCH_HAS_ATOMICS dependency. It was originally added to prevent
+> gauche from being built on sparc, but this will no longer happen.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/libtorrent/Config.in | 4 ++--
->  package/rtorrent/Config.in   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
-> index 17a1f23..4787f9c 100644
-> --- a/package/libtorrent/Config.in
-> +++ b/package/libtorrent/Config.in
-> @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBTORRENT
->  	bool "libtorrent"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on BR2_ARCH_HAS_ATOMICS
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
 
-The original build failure that prompted adding the atomics dependency
-only reported errors about the __sunc_*_4() functions, but libtorrent
-has been bumped sinc ethen.
-
-I was not able to easily reproduce a failure so far, but I will try with
-an arc toolchain (which is lacking __sync_*_1() functions...
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  	select BR2_PACKAGE_ZLIB
->  	help
->  	  BitTorrent library written in C++ for *nix
-> @@ -10,5 +10,5 @@ config BR2_PACKAGE_LIBTORRENT
->  	  https://github.com/rakshasa/libtorrent
+> ---
+>  package/gauche/Config.in | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+> index fd0617a..3ca012d 100644
+> --- a/package/gauche/Config.in
+> +++ b/package/gauche/Config.in
+> @@ -4,14 +4,12 @@ config BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+>  	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k || \
+>  		BR2_mips || BR2_mipsel || BR2_mips64 || \
+>  		BR2_mips64el || BR2_powerpc || BR2_powerpc64 || \
+> -		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_sparc || \
+> -		BR2_sparc64 || BR2_x86_64
+> +		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_x86_64
 >  
->  comment "libtorrent needs a toolchain w/ C++, threads"
-> -	depends on BR2_ARCH_HAS_ATOMICS
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/rtorrent/Config.in b/package/rtorrent/Config.in
-> index 0583152..190e50f 100644
-> --- a/package/rtorrent/Config.in
-> +++ b/package/rtorrent/Config.in
-> @@ -4,7 +4,7 @@ config BR2_PACKAGE_RTORRENT
->  	depends on BR2_USE_WCHAR
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  config BR2_PACKAGE_GAUCHE
+>  	bool "gauche"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
 >  	depends on BR2_USE_MMU # fork()
-> -	depends on BR2_ARCH_HAS_ATOMICS # libtorrent
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
->  	select BR2_PACKAGE_LIBCURL
->  	select BR2_PACKAGE_LIBTORRENT
->  	select BR2_PACKAGE_NCURSES
-> @@ -16,5 +16,5 @@ config BR2_PACKAGE_RTORRENT
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+>  	depends on !BR2_STATIC_LIBS
+>  	help
+> @@ -26,6 +24,5 @@ config BR2_PACKAGE_GAUCHE
 >  
->  comment "rtorrent needs a toolchain w/ C++, threads, wchar"
+>  comment "gauche needs a toolchain w/ NPTL, dynamic library"
 >  	depends on BR2_USE_MMU
 > -	depends on BR2_ARCH_HAS_ATOMICS
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+>  	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
 > -- 
 > 2.6.4
 > 
