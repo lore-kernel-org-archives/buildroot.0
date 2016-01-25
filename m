@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 25 Jan 2016 21:59:03 +0100
-Subject: [Buildroot] [PATCH 08/21] apache, apr: fix atomic handling
-In-Reply-To: <1453676887-31236-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Jan 2016 22:12:22 +0100
+Subject: [Buildroot] [PATCH 09/21] jack2: use the proper
+ BR2_TOOLCHAIN_HAS_SYNC_x symbol
+In-Reply-To: <1453676887-31236-10-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160125205903.GI3386@free.fr>
+ <1453676887-31236-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160125211222.GJ3386@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,90 +15,69 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2016-01-25 00:07 +0100, Thomas Petazzoni spake thusly:
-> Since the apache package was introduced,
-> --enable-nonportable-atomics=yes was passed when
-> BR2_ARCH_HAS_ATOMICS. However, Apache doesn't take this option: it
-> only passes it down when building the APR library. But since we're
-> building APR separately, this statement had no effect.
-> 
-> So this commit removes the useless code from the Apache package, and
-> instead adds the appropriate logic to the apr package, using the new
-> BR2_TOOLCHAIN_HAS_SYNC_x symbols rather than BR2_ARCH_HAS_ATOMICS.
+> Move away from BR2_ARCH_HAS_ATOMICS and use BR2_TOOLCHAIN_HAS_SYNC_4
+> instead for the jack2 package and its reverse dependency.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/apache/apache.mk |  4 ----
->  package/apr/apr.mk       | 17 +++++++++++++++++
->  2 files changed, 17 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-> index 8e7b6be..e752fcc 100644
-> --- a/package/apache/apache.mk
-> +++ b/package/apache/apache.mk
-> @@ -35,10 +35,6 @@ APACHE_CONF_OPTS = \
->  	--disable-lua \
->  	--disable-luajit
->  
-> -ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
-> -APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_LIBXML2),y)
->  APACHE_DEPENDENCIES += libxml2
->  # Apache wants the path to the header file, where it can find
-> diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-> index 0fed19c..33873a0 100644
-> --- a/package/apr/apr.mk
-> +++ b/package/apr/apr.mk
-> @@ -35,6 +35,23 @@ endif
->  # Fix lfs detection when cross compiling
->  APR_CONF_ENV += apr_cv_use_lfs64=yes
->  
-> +# Use non-portable atomics when available: 8 bytes atomics are used on
-> +# 64-bits architectures, 4 bytes atomics on 32-bits architectures. We
-> +# have to override ap_cv_atomic_builtins because the test used to
-> +# check for atomic builtins uses AC_TRY_RUN, which doesn't work when
-> +# cross-compiling.
-> +ifeq ($(BR2_ARCH_IS_64),y)
-> +ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8),y)
-> +APR_CONF_OPTS += --enable-nonportable-atomics
-> +APR_CONF_ENV += ap_cv_atomic_builtins=yes
-> +endif
-> +else
-> +ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),y)
-> +APR_CONF_OPTS += --enable-nonportable-atomics
-> +APR_CONF_ENV += ap_cv_atomic_builtins=yes
-> +endif
-> +endif
 
-What about forcing --disable-nonportable-atomics ?
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The code does:
+The original build issue that prompted adding the atomics dependency is:
+    http://autobuild.buildroot.net/results/c218be876d3abf7a8e212b6d526595bfd835e1c5/
 
-   643 AC_ARG_ENABLE(nonportable-atomics,
-   644 [  --enable-nonportable-atomics  Use optimized atomic code which may produce nonportable binaries],
-   645 [if test $enableval = yes; then
-   646    force_generic_atomics=no
-   647  else
-   648    force_generic_atomics=yes
-   649  fi
-   650 ],
-   651 [case $host_cpu in
-   652    i[[456]]86) force_generic_atomics=yes ;;
-   653    *) force_generic_atomics=no ;;
-   654 esac
-   655 ])
- 
-So, it looks like, if one does not provide any of --enable/disable, it
-will try to decide based on the CPU.
+with:
+    common/libjackserver.so: undefined reference to `__sync_bool_compare_and_swap_4'
 
 Regards,
 Yann E. MORIN.
 
->  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
->  APR_DEPENDENCIES += util-linux
->  endif
+> ---
+>  package/jack2/Config.in | 4 ++--
+>  package/mpd/Config.in   | 3 ++-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+> index 350a342..94cb7e0 100644
+> --- a/package/jack2/Config.in
+> +++ b/package/jack2/Config.in
+> @@ -3,8 +3,8 @@ config BR2_PACKAGE_JACK2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	select BR2_PACKAGE_LIBSAMPLERATE
+>  	select BR2_PACKAGE_LIBSNDFILE
+>  	select BR2_PACKAGE_ALSA_LIB
+> @@ -23,6 +23,6 @@ config BR2_PACKAGE_JACK2
+>  
+>  comment "jack2 needs a toolchain w/ threads, C++, dynamic library"
+>  	depends on BR2_USE_MMU
+> -	depends on BR2_ARCH_HAS_ATOMICS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+>  		BR2_STATIC_LIBS
+> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+> index 618bea9..6480a08 100644
+> --- a/package/mpd/Config.in
+> +++ b/package/mpd/Config.in
+> @@ -230,13 +230,14 @@ config BR2_PACKAGE_MPD_HTTPD_OUTPUT
+>  
+>  config BR2_PACKAGE_MPD_JACK2
+>  	bool "jack2"
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	depends on !BR2_STATIC_LIBS # jack2
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	select BR2_PACKAGE_JACK2
+>  	help
+>  	  Enable jack output support.
+>  
+>  comment "jack support needs a toolchain w/ dynamic library"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on BR2_STATIC_LIBS
+>  
+>  config BR2_PACKAGE_MPD_OSS
 > -- 
 > 2.6.4
 > 
