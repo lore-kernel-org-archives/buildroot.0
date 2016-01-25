@@ -1,53 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:38:32 +0100
-Subject: [Buildroot] [PATCH v2] package/iptables: nfsynproxy not
- available on musl
-In-Reply-To: <1453644605-3705-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453644605-3705-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160125233832.2df72e7b@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 25 Jan 2016 23:40:22 +0100
+Subject: [Buildroot] [PATCH] pkg-kconfig: add missing -patch dependency
+ for defconfig
+In-Reply-To: <1453676322-1906-1-git-send-email-arnout@mind.be>
+References: <1453676322-1906-1-git-send-email-arnout@mind.be>
+Message-ID: <20160125224022.GO3386@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Arnout, All,
 
-On Sun, 24 Jan 2016 15:10:05 +0100, Bernd Kuhls wrote:
-> utils/nfsynproxy.c needs several TCP_* constants which are not yet
-> provided by musl, they were added Jan 17, 2016 to musl:
-> http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
+On 2016-01-24 23:58 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> Since the introduction of _KCONFIG_DEFCONFIG in 8ef62b99, the package's
+> .config file no longer depends on anything (unless a fragment is
+> defined). Therefore, there is no dependency anymore between .config
+> and <pkg>-patch. Thus, it is possible that the .config file is
+> attempted to be built before the package is extracted and patched.
+> Usually this works out OK because <pkg>-patch will always be done
+> before <pkg>-configure, but it will fail when the user calls
+> <pkg>-menuconfig explicitly. It will also fail when we enable
+> top-level parallel build.
 > 
-> Until we support a musl version containing the constants we disable
-> the option for building nfsynproxy on musl.
+> To solve this, just add an explicit order-only dependency on
+> <pkg>-patch. It really is only necessary when _KCONFIG_DEFCONFIG is
+> defined and _KCONFIG_FRAGMENT_FILES is not, but it doesn't hurt to
+> add it unconditionally.
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/8ee/8ee299d8697bf488ba94f60785e81f274b2128fd/
-> http://autobuild.buildroot.net/results/f1a/f1ab3fe59d0dd7dd7b9a7bc6bc10a0019f0fa567/
-> http://autobuild.buildroot.net/results/4f9/4f904a2913984201ad0bffb63664019c73e0eb77/
-> http://autobuild.buildroot.net/results/65c/65c7d47fdc0f55fb8deb77e34063320e2af337ee/
-> http://autobuild.buildroot.net/results/aaa/aaaa1fc92b6a885d223681f40c5df7a962ee1fce/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Reported-by: FrAnKenStEiN MC <chfakht@gmail.com>
 > ---
-> v2: added commit about future toolchain requirements (Baruch)
+>  package/pkg-kconfig.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index eaee572..90f3f9f 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -72,6 +72,11 @@ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>  	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+>  		$$($(2)_KCONFIG_OPTS) oldconfig
+>  
+> +# If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+> +# already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+> +# it explicitly. It doesn't hurt to always have it though.
+> +$$($(2)_DIR)/.config: | $(1)-patch
 
-We could have also added a patch for iptables doing
+I don't understand why this is needed.
 
-#ifndef TCPOPT_EOL
-#define TCPOPT_EOL 0
-#endif
+On line 65, we have;
+    $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
 
-etc.
+and on line 52;
+    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
 
-But since nothing depends on nfsynproxy, we don't have to propagate
-this dependency to any reverse dependency, so it's simpler to disable
-this for musl.
+So, unless I'm missing something, $$($(2)_DIR)/.config already has a
+dependency on $(1)-patch via $$($(2)_KCONFIG_FILE)
 
-Applied, thanks!
+Oh, damn, I see it now... Grr...
 
-Thomas
+OK, so what made me understand is the comment in the code:
+
+   [...] if we only have a _KCONFIG_DEFCONFIG [...]
+
+Ok, so it goes thusly:
+
+  - if using a defconfig file, we do not have a $(2)_KCONFIG_FILE
+
+  - if at the same time, we have no fragments, we have no rule from
+    .config to $(1)-patch.
+
+OK, fine by me. Thanks!
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+>  # In order to get a usable, consistent configuration, some fixup may be needed.
+>  # The exact rules are specified by the package .mk file.
+>  define $(2)_FIXUP_DOT_CONFIG
+> -- 
+> 2.7.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
