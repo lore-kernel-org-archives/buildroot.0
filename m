@@ -1,56 +1,45 @@
-From: FrAnKenStEiN MC <chfakht@gmail.com>
-Date: Mon, 25 Jan 2016 02:37:18 +0000
-Subject: [Buildroot] ssh: connect to host pi adress port 22: Connection
-	refused
-Message-ID: <CABi8WTyCkO0dbH0GKkwV+C4Hb_OtaPipk06zBuNCuDJoHK7bLA@mail.gmail.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Mon, 25 Jan 2016 10:35:40 +0530
+Subject: [Buildroot] [PATCH v2 1/1] docs/manual: document format for
+	specifying licenses
+Message-ID: <1453698340-13777-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i'm having some trouble when trying to connect to my raspberry b+. i have
-used **buildroot** with raspberrypi_defconfig and add dropBear package for
-SSH , change hostname to pi and root password to 123.
-make runned successfully and i was able to deploy the necessary files on
-the pi ...
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+Changes v1 -> v2:
+  - tweak commit message (added missing 'for')
+  - use full sentences (suggested by Thomas Petazzoni)
+  - don't standardize components (suggested by Thomas Petazzoni)
+  - add missing 'the' before +or+ keyword (suggested by Thomas Petazzoni)
+---
+ docs/manual/adding-packages-generic.txt | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-
-I gave the pi a static adress `10.42.0.5` and it's detected correctly in my
-ethernet network
-here are some commands :
-
-    nmap -sP 10.42.0.0/24
-    Starting Nmap 6.40 ( http://nmap.org ) at 2016-01-25 02:23 WET
-    Nmap scan report for 10.42.0.1
-    Host is up (0.00017s latency).
-    Nmap scan report for 10.42.0.5
-    Host is up (0.0069s latency).
-    Nmap done: 256 IP addresses (2 hosts up) scanned in 2.61 seconds
-
-The pi adress is `10.42.0.5`
-
-For the ping it runs successfully
-
-    ping -c 3 10.42.0.5
-    PING 10.42.0.5 (10.42.0.5) 56(84) bytes of data.
-    64 bytes from 10.42.0.5: icmp_seq=1 ttl=64 time=4.83 ms
-    64 bytes from 10.42.0.5: icmp_seq=2 ttl=64 time=3.03 ms
-    64 bytes from 10.42.0.5: icmp_seq=3 ttl=64 time=2.03 ms
-
-    --- 10.42.0.5 ping statistics ---
-    3 packets transmitted, 3 received, 0% packet loss, time 2003ms
-    rtt min/avg/max/mdev = 2.035/3.303/4.836/1.158 ms
-
-But whe trying ssh i get `connection refused`
-
-    ssh pi at 10.42.0.5
-    ssh: connect to host 10.42.0.5 port 22: Connection refused
-
-I couldn't solve this problem all the day !!!
-
-thanks a lot
-?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160125/f9e4121f/attachment.html>
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 1f9c7bb..47cd95b 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -387,7 +387,15 @@ information is (assuming the package name is +libfoo+) :
+   Otherwise, describe the license in a precise and concise way, avoiding
+   ambiguous names such as +BSD+ which actually name a family of licenses.
+   This variable is optional. If it is not defined, +unknown+ will appear in
+-  the +license+ field of the manifest file for this package.
++  the +license+ field of the manifest file for this package. +
++  The expected format for this variable must comply with the following rules:
++  ** If the package is released under multiple licenses, then +comma+ separate
++  licenses (e.g. +`LIBFOO_LICENSE = GPLv2+, LGPLv2.1+`+). If there is clear
++  distinction between which component is licensed under what license, then
++  annotate the license with that component
++  (e.g. +`LIBFOO_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)`+).
++  ** If the package is dual licensed, then separate licenses with the +or+
++  keyword (e.g. +`LIBFOO_LICENSE = AFLv2.1 or GPLv2+`+).
+ 
+ * +LIBFOO_LICENSE_FILES+ is a space-separated list of files in the package
+   tarball that contain the license(s) under which the package is released.
+-- 
+1.9.1
