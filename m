@@ -1,63 +1,36 @@
-From: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Mon, 25 Jan 2016 10:30:07 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CACt6We3-m9zLM3KOjC8UNaiVJNVn+biXvxHxM83c06XtEGhK7w@mail.gmail.com>
-References: <20160116073021.A4B95101BCC@stock.ovh.net>
- <20160117001117.569d43f2@free-electrons.com>
- <CA+-urNTGae35+MuvCzE3UE0POL0NJxfGRciXaZf8ohDdq_a-RQ@mail.gmail.com>
- <20160117122340.3b07b5ed@free-electrons.com>
- <CA+-urNSaEmBp=wsP_kjzk=63T3xt+9wBY-yLJzsXagi5QH2iQQ@mail.gmail.com>
- <CA+-urNRYkOOe4TCxiUeLYLqQS-1+8qCVP9qMiEthTsi22Q61NQ@mail.gmail.com>
- <20160123090148.34d861bd@free-electrons.com>
- <CACt6We0Jcryw4jd8RcD66tgUhjE7+TgGwjm_8xG8-U=4VB7aTA@mail.gmail.com>
- <20160125100943.6796041c@free-electrons.com>
- <CACt6We3-m9zLM3KOjC8UNaiVJNVn+biXvxHxM83c06XtEGhK7w@mail.gmail.com>
-Message-ID: <CACt6We3WWBjyde+96Kvxn+j-ghGQEAwZrPpZEXju2ZJZuRArgQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 25 Jan 2016 13:15:34 +0100
+Subject: [Buildroot] Error when running make linux-menuconfig
+In-Reply-To: <CABi8WTz-HBpF2=Wb1sUDCtFgPhT8vkap14jdezK0zsbQg6660g@mail.gmail.com>
+References: <CABi8WTzGpkv+g-cX=w9AXEOu4bz3901q9HPdKYfuMyMvH6B1ug@mail.gmail.com>
+ <56A551E8.80900@mind.be>
+ <CABi8WTz-HBpF2=Wb1sUDCtFgPhT8vkap14jdezK0zsbQg6660g@mail.gmail.com>
+Message-ID: <56A611E6.7040304@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hey thomas,
+ [Please keep the list in Cc]
 
-used the wrong config file, sorry for that.
+On 25-01-16 03:38, FrAnKenStEiN MC wrote:
+> please what is the different between linux-menuconfig and menuconfig ... i'm
+> just new to buildroot 
 
-regards,
-Joris
+ menuconfig is to configure buildroot, e.g. to select packages to install in
+your rootfs.
 
-On 25 January 2016 at 10:10, Joris Lijssens <joris.lijssens@gmail.com>
-wrote:
+ linux-menuconfig is to configure the Linux kernel, e.g. to select which drivers
+to compile.
 
->
-> http://autobuild.buildroot.net/results/2ef/2ef1ed958db8012224f9174334e9c58edace604a/
->
->
-> On 25 January 2016 at 10:09, Thomas Petazzoni <
-> thomas.petazzoni at free-electrons.com> wrote:
->
->> Joris,
->>
->> On Mon, 25 Jan 2016 10:06:25 +0100, Joris Lijssens wrote:
->>
->> > I had another look at the rabbitmq-c build issue this morning, but with
->> the
->> > latest buildroot version of this morning it builds just fine. Any idea
->> what
->> > has changed?
->>
->> Can you remind me which rabbitmq-c failure you are investigating ?
->>
->> Thanks,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160125/9b23afe1/attachment.html>
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
