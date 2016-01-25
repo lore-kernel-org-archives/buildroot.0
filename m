@@ -1,291 +1,234 @@
-From: Lada Trimasova <Lada.Trimasova@synopsys.com>
-Date: Mon, 25 Jan 2016 15:27:07 +0000
-Subject: [Buildroot] [PATCH v2] Trousers: disable pie option on ARC
-In-Reply-To: <1453128253-17722-1-git-send-email-ltrimas@synopsys.com>
-References: <1453128253-17722-1-git-send-email-ltrimas@synopsys.com>
-Message-ID: <1453735627.2420.8.camel@synopsys.com>
+From: Doug Kehn <rdkehn@yahoo.com>
+Date: Mon, 25 Jan 2016 09:35:10 -0600
+Subject: [Buildroot] [PATCH v6 1/1] package/dhcp: bump version to 4.3.3-P1
+Message-ID: <1453736110-11878-1-git-send-email-rdkehn@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas!
+bind source tar-ball is now embedded into the dhcp source. The embedded
+bind tar-ball is extracted after the dhcp source so cross compiling
+patches can be applied to the dhcp and bind before the package is built.
 
-On Mon, 2016-01-18 at 17:44 +0300, Lada Trimasova wrote:
+The embedded bind configure is called as part of dhcp make instead of
+dhcp configure; therefore, needed configure parameters are set in the
+make env.
 
-ARC gcc understands "-pie" option and attempts to generate PIE
-binaries as of today PIE is not really supported for user-space
-applications.
-So we provide option which checks if compiler understands relro
-and pie options and disable PIE detection if building for ARC.
-Also AUTORECONF option should be added because of modified
-configure.in and Makefile.am files.
+0001-dhcp-cross-compile.patch and 0002-bind-cross-compile.patch have
+been submitted upstream as part of a cross compiling enhancement
+suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
+0003-bind-hos-cc.patch is already scheduled for the next dhcp release.
 
-Signed-off-by: Lada Trimasova <ltrimas at synopsys.com<mailto:ltrimas@synopsys.com>>
-Cc: Alexey Brodkin <abrodkin at synopsys.com<mailto:abrodkin@synopsys.com>>
-Cc: Thomas Petazzoni <thomas.petazzoni at free-electrons.com<mailto:thomas.petazzoni@free-electrons.com>>
-Cc: Peter Korsgaard <peter at korsgaard.com<mailto:peter@korsgaard.com>>
+Buildroot thread
+	http://lists.busybox.net/pipermail/buildroot/2016-January/149079.html
+has related information.
 
+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-Changes v1 -> v2:
- - Check if compiler understands PIE_CFLAGS and RELRO_LDFLAGS
+Changes v5 -> v6
+  - patch configure.ac instead of configure/Makefile.in (suggested by Arnout)
+  - rework dhcp.mk for patch changes.
+Changes v4 -> v5
+  - update hash reference (suggested by Arnout)
+  - expand comments (suggested by Arnout)
+Changes v3 -> v4
+  - consolidate into single patch (suggested by Arnout)
+  - separate into POST_CONFIGURE_HOOK & PRE_BUILD_HOOK (suggested by Arnout)
+Changes v2 -> v3
+  - removed RFC tag
+  - updated version from 4.3.3 to 4.3.3-P1 (suggested by Richardo)
+  - external toolchain support (suggested by Richardo)
+Changes v1 -> v2
+  - removed DHCP_PRE_BUILD_HOOKS in favor of patch (suggested by Arnout)
 ---
- ...ompiler-understands-pie-and-relro-options.patch | 215 +++++++++++++++++++++
- package/trousers/trousers.mk                       |   9 +
- 2 files changed, 224 insertions(+)
- create mode 100644 package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch
+ package/dhcp/0001-dhcp-cross-compile.patch | 34 +++++++++++++++++++++++++
+ package/dhcp/0002-bind-cross-compile.patch | 24 ++++++++++++++++++
+ package/dhcp/0003-bind-host-cc.patch       | 40 ++++++++++++++++++++++++++++++
+ package/dhcp/dhcp.hash                     |  4 +--
+ package/dhcp/dhcp.mk                       | 25 +++++++++++++++++--
+ 5 files changed, 123 insertions(+), 4 deletions(-)
+ create mode 100644 package/dhcp/0001-dhcp-cross-compile.patch
+ create mode 100644 package/dhcp/0002-bind-cross-compile.patch
+ create mode 100644 package/dhcp/0003-bind-host-cc.patch
 
-diff --git a/package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch b/package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch
+diff --git a/package/dhcp/0001-dhcp-cross-compile.patch b/package/dhcp/0001-dhcp-cross-compile.patch
 new file mode 100644
-index 0000000..3275b76
+index 0000000..95b4689
 --- /dev/null
-+++ b/package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch
-@@ -0,0 +1,215 @@
-+From 9abda1bb380bdbef1affaec381742ced394ca118 Mon Sep 17 00:00:00 2001
-+From: Lada Trimasova <ltrimas at synopsys.com<mailto:ltrimas@synopsys.com>>
-+Date: Mon, 18 Jan 2016 15:58:19 +0300
-+Subject: [PATCH] Check if the compiler understands pie and relro options
++++ b/package/dhcp/0001-dhcp-cross-compile.patch
+@@ -0,0 +1,34 @@
++dhcp cross compile support integration
 +
-+-pie and -fpie enable the building of position-independent
-+executables, and -Wl,-z,relro turns on read-only relocation support in gcc.
-+Add checks to ensure that the compiler and linker understand these options.
++Allow BINDCONFIG to be initialized in environment passed to configure.
 +
-+Signed-off-by: Lada Trimasova <ltrimas at synopsys.com<mailto:ltrimas@synopsys.com>>
-+---
-+ configure.in                |  5 +++
-+ m4/ax_check_compile_flag.m4 | 72 ++++++++++++++++++++++++++++++++++++
-+ m4/ax_check_link_flag.m4    | 71 +++++++++++++++++++++++++++++++++++
-+ src/tcsd/Makefile.am        |  4 +-
-+ 4 files changed, 150 insertions(+), 2 deletions(-)
-+ create mode 100644 m4/ax_check_compile_flag.m4
-+ create mode 100644 m4/ax_check_link_flag.m4
++Allow archiver to be determined during configure.
 +
-+diff --git a/configure.in b/configure.in
-+index add23dc..9603353 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -12,6 +12,7 @@ TSS_VER_MINOR=3
-+ # compute $target
-+ AC_CANONICAL_TARGET
-+ AM_INIT_AUTOMAKE([foreign 1.6])
-++AC_CONFIG_MACRO_DIR([m4])
++This patch is submitted upstream as part of a cross compiling enhancement
++suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
 +
-+ # Debugging support
-+ AC_ARG_ENABLE([debug],
-+@@ -383,6 +384,10 @@ elif test x"${prefix}" = x"NONE"; then
-+       localstatedir="/usr/local/var"
++Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
++
++Index: dhcp-4.3.3-P1/configure.ac
++===================================================================
++--- dhcp-4.3.3-P1.orig/configure.ac
+++++ dhcp-4.3.3-P1/configure.ac
++@@ -33,7 +33,7 @@ if test "$GCC" = "yes"; then
 + fi
-+
-++AX_CHECK_COMPILE_FLAG([-fPIE -DPIE], [PIE_CFLAGS="-fPIE -DPIE"])
-++AX_CHECK_LINK_FLAG([-pie], [PIE_LDFLAGS="$PIE_LDFLAGS -pie"])
-++AX_CHECK_LINK_FLAG([-Wl,-z,relro], [LDFLAGS="$LDFLAGS -Wl,-z,relro"])
++ 
++ # We can have some flags to pass to bind configure
++-BINDCONFIG=
+++BINDCONFIG="$BINDCONFIG"
++ AC_SUBST(BINDCONFIG)
++ 
++ # POSIX doesn't include the IPv6 Advanced Socket API and glibc hides
++@@ -43,6 +43,9 @@ AC_SUBST(BINDCONFIG)
++ # Use this to define _GNU_SOURCE to pull in the IPv6 Advanced Socket API.
++ AC_USE_SYSTEM_EXTENSIONS
++ 
+++AC_CHECK_TOOL(AR,ar)
+++AC_SUBST(AR)
 ++
-+ AC_OUTPUT(dist/tcsd.conf \
-+         dist/fedora/trousers.spec \
-+         dist/trousers.spec \
-+diff --git a/m4/ax_check_compile_flag.m4 b/m4/ax_check_compile_flag.m4
-+new file mode 100644
-+index 0000000..c3a8d69
-+--- /dev/null
-++++ b/m4/ax_check_compile_flag.m4
-+@@ -0,0 +1,72 @@
-++# ===========================================================================
-++#   http://www.gnu.org/software/autoconf-archive/ax_check_compile_flag.html
-++# ===========================================================================
-++#
-++# SYNOPSIS
-++#
-++#   AX_CHECK_COMPILE_FLAG(FLAG, [ACTION-SUCCESS], [ACTION-FAILURE], [EXTRA-FLAGS])
-++#
-++# DESCRIPTION
-++#
-++#   Check whether the given FLAG works with the current language's compiler
-++#   or gives an error.  (Warnings, however, are ignored)
-++#
-++#   ACTION-SUCCESS/ACTION-FAILURE are shell commands to execute on
-++#   success/failure.
-++#
-++#   If EXTRA-FLAGS is defined, it is added to the current language's default
-++#   flags (e.g. CFLAGS) when the check is done.  The check is thus made with
-++#   the flags: "CFLAGS EXTRA-FLAGS FLAG".  This can for example be used to
-++#   force the compiler to issue an error when a bad flag is given.
-++#
-++#   NOTE: Implementation based on AX_CFLAGS_GCC_OPTION. Please keep this
-++#   macro in sync with AX_CHECK_{PREPROC,LINK}_FLAG.
-++#
-++# LICENSE
-++#
-++#   Copyright (c) 2008 Guido U. Draheim <guidod at gmx.de<mailto:guidod@gmx.de>>
-++#   Copyright (c) 2011 Maarten Bosmans <mkbosmans at gmail.com<mailto:mkbosmans@gmail.com>>
-++#
-++#   This program is free software: you can redistribute it and/or modify it
-++#   under the terms of the GNU General Public License as published by the
-++#   Free Software Foundation, either version 3 of the License, or (at your
-++#   option) any later version.
-++#
-++#   This program is distributed in the hope that it will be useful, but
-++#   WITHOUT ANY WARRANTY; without even the implied warranty of
-++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-++#   Public License for more details.
-++#
-++#   You should have received a copy of the GNU General Public License along
-++#   with this program. If not, see <http://www.gnu.org/licenses/>.
-++#
-++#   As a special exception, the respective Autoconf Macro's copyright owner
-++#   gives unlimited permission to copy, distribute and modify the configure
-++#   scripts that are the output of Autoconf when processing the Macro. You
-++#   need not follow the terms of the GNU General Public License when using
-++#   or distributing such scripts, even though portions of the text of the
-++#   Macro appear in them. The GNU General Public License (GPL) does govern
-++#   all other use of the material that constitutes the Autoconf Macro.
-++#
-++#   This special exception to the GPL applies to versions of the Autoconf
-++#   Macro released by the Autoconf Archive. When you make and distribute a
-++#   modified version of the Autoconf Macro, you may extend this special
-++#   exception to the GPL to apply to your modified version as well.
-++
-++#serial 2
-++
-++AC_DEFUN([AX_CHECK_COMPILE_FLAG],
-++[AC_PREREQ(2.59)dnl for _AC_LANG_PREFIX
-++AS_VAR_PUSHDEF([CACHEVAR],[ax_cv_check_[]_AC_LANG_ABBREV[]flags_$4_$1])dnl
-++AC_CACHE_CHECK([whether _AC_LANG compiler accepts $1], CACHEVAR, [
-++  ax_check_save_flags=$[]_AC_LANG_PREFIX[]FLAGS
-++  _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $4 $1"
-++  AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
-++    [AS_VAR_SET(CACHEVAR,[yes])],
-++    [AS_VAR_SET(CACHEVAR,[no])])
-++  _AC_LANG_PREFIX[]FLAGS=$ax_check_save_flags])
-++AS_IF([test x"AS_VAR_GET(CACHEVAR)" = xyes],
-++  [m4_default([$2], :)],
-++  [m4_default([$3], :)])
-++AS_VAR_POPDEF([CACHEVAR])dnl
-++])dnl AX_CHECK_COMPILE_FLAGS
-+diff --git a/m4/ax_check_link_flag.m4 b/m4/ax_check_link_flag.m4
-+new file mode 100644
-+index 0000000..e2d0d36
-+--- /dev/null
-++++ b/m4/ax_check_link_flag.m4
-+@@ -0,0 +1,71 @@
-++# ===========================================================================
-++#    http://www.gnu.org/software/autoconf-archive/ax_check_link_flag.html
-++# ===========================================================================
-++#
-++# SYNOPSIS
-++#
-++#   AX_CHECK_LINK_FLAG(FLAG, [ACTION-SUCCESS], [ACTION-FAILURE], [EXTRA-FLAGS])
-++#
-++# DESCRIPTION
-++#
-++#   Check whether the given FLAG works with the linker or gives an error.
-++#   (Warnings, however, are ignored)
-++#
-++#   ACTION-SUCCESS/ACTION-FAILURE are shell commands to execute on
-++#   success/failure.
-++#
-++#   If EXTRA-FLAGS is defined, it is added to the linker's default flags
-++#   when the check is done.  The check is thus made with the flags: "LDFLAGS
-++#   EXTRA-FLAGS FLAG".  This can for example be used to force the linker to
-++#   issue an error when a bad flag is given.
-++#
-++#   NOTE: Implementation based on AX_CFLAGS_GCC_OPTION. Please keep this
-++#   macro in sync with AX_CHECK_{PREPROC,COMPILE}_FLAG.
-++#
-++# LICENSE
-++#
-++#   Copyright (c) 2008 Guido U. Draheim <guidod at gmx.de<mailto:guidod@gmx.de>>
-++#   Copyright (c) 2011 Maarten Bosmans <mkbosmans at gmail.com<mailto:mkbosmans@gmail.com>>
-++#
-++#   This program is free software: you can redistribute it and/or modify it
-++#   under the terms of the GNU General Public License as published by the
-++#   Free Software Foundation, either version 3 of the License, or (at your
-++#   option) any later version.
-++#
-++#   This program is distributed in the hope that it will be useful, but
-++#   WITHOUT ANY WARRANTY; without even the implied warranty of
-++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-++#   Public License for more details.
-++#
-++#   You should have received a copy of the GNU General Public License along
-++#   with this program. If not, see <http://www.gnu.org/licenses/>.
-++#
-++#   As a special exception, the respective Autoconf Macro's copyright owner
-++#   gives unlimited permission to copy, distribute and modify the configure
-++#   scripts that are the output of Autoconf when processing the Macro. You
-++#   need not follow the terms of the GNU General Public License when using
-++#   or distributing such scripts, even though portions of the text of the
-++#   Macro appear in them. The GNU General Public License (GPL) does govern
-++#   all other use of the material that constitutes the Autoconf Macro.
-++#
-++#   This special exception to the GPL applies to versions of the Autoconf
-++#   Macro released by the Autoconf Archive. When you make and distribute a
-++#   modified version of the Autoconf Macro, you may extend this special
-++#   exception to the GPL to apply to your modified version as well.
-++
-++#serial 2
-++
-++AC_DEFUN([AX_CHECK_LINK_FLAG],
-++[AS_VAR_PUSHDEF([CACHEVAR],[ax_cv_check_ldflags_$4_$1])dnl
-++AC_CACHE_CHECK([whether the linker accepts $1], CACHEVAR, [
-++  ax_check_save_flags=$LDFLAGS
-++  LDFLAGS="$LDFLAGS $4 $1"
-++  AC_LINK_IFELSE([AC_LANG_PROGRAM()],
-++    [AS_VAR_SET(CACHEVAR,[yes])],
-++    [AS_VAR_SET(CACHEVAR,[no])])
-++  LDFLAGS=$ax_check_save_flags])
-++AS_IF([test x"AS_VAR_GET(CACHEVAR)" = xyes],
-++  [m4_default([$2], :)],
-++  [m4_default([$3], :)])
-++AS_VAR_POPDEF([CACHEVAR])dnl
-++])dnl AX_CHECK_LINK_FLAGS
-+diff --git a/src/tcsd/Makefile.am b/src/tcsd/Makefile.am
-+index 2210734..6640ab2 100644
-+--- a/src/tcsd/Makefile.am
-++++ b/src/tcsd/Makefile.am
-+@@ -1,8 +1,8 @@
-+ sbin_PROGRAMS=tcsd
++ AC_PROG_RANLIB
++ AC_CONFIG_HEADERS([includes/config.h])
++ 
+diff --git a/package/dhcp/0002-bind-cross-compile.patch b/package/dhcp/0002-bind-cross-compile.patch
+new file mode 100644
+index 0000000..f7c42c6
+--- /dev/null
++++ b/package/dhcp/0002-bind-cross-compile.patch
+@@ -0,0 +1,24 @@
++bind cross compile support integration
 +
-+-tcsd_CFLAGS=-DAPPID=\"TCSD\" -DVAR_PREFIX=\"@localstatedir@\" -DETC_PREFIX=\"@sysconfdir@\" -I${top_srcdir}/src/include -fPIE -DPIE
-++tcsd_CFLAGS=-DAPPID=\"TCSD\" -DVAR_PREFIX=\"@localstatedir@\" -DETC_PREFIX=\"@sysconfdir@\" -I${top_srcdir}/src/include $(PIE_CFLAGS)
-+ tcsd_LDADD=${top_builddir}/src/tcs/libtcs.a ${top_builddir}/src/tddl/libtddl.a -lpthread @CRYPTOLIB@
-+-tcsd_LDFLAGS=-pie -Wl,-z,relro -Wl,-z,now
-++tcsd_LDFLAGS=$(PIE_LDFLAGS) $(RELRO_LDFLAGS)
++Pass system types from dhcp configure to bind configure.
 +
-+ tcsd_SOURCES=svrside.c tcsd_conf.c tcsd_threads.c platform.c
++This patch is submitted upstream as part of a cross compiling enhancement
++suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
 +
-+--
-+2.5.0
++Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 +
-diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
-index 5ecab70..70daa88 100644
---- a/package/trousers/trousers.mk
-+++ b/package/trousers/trousers.mk
-@@ -10,6 +10,8 @@ TROUSERS_SITE = http://downloads.sourceforge.net/project/trousers/trousers/$(TRO
- TROUSERS_LICENSE = BSD-3c
- TROUSERS_LICENSE_FILES = LICENSE
- TROUSERS_INSTALL_STAGING = YES
-+# Need autoreconf because of a patch touching configure.in and Makefile.am
-+TROUSERS_AUTORECONF = YES
- TROUSERS_DEPENDENCIES = openssl
-
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
-@@ -21,4 +23,11 @@ endif
- # workaround.
- TROUSERS_CONF_OPTS += --disable-usercheck
-
-+# uClibc toolchain for ARC doesn't support PIE at the moment
-+ifeq ($(BR2_arc),y)
-+TROUSERS_CONF_ENV += \
-+       ax_cv_check_cflags___fPIE__DPIE=no \
-+       ax_cv_check_ldflags___pie=no
-+endif
++Index: dhcp-4.3.3-P1/bind/Makefile.in
++===================================================================
++--- dhcp-4.3.3-P1.orig/bind/Makefile.in
+++++ dhcp-4.3.3-P1/bind/Makefile.in
++@@ -30,7 +30,9 @@ bindconfig = --disable-kqueue --disable-
++ 	--without-openssl --without-libxml2 --enable-exportlib \
++ 	--with-gssapi=no --enable-threads=no @BINDCONFIG@ \
++ 	--with-export-includedir=${binddir}/include \
++-	--with-export-libdir=${binddir}/lib
+++	--with-export-libdir=${binddir}/lib \
+++	--target=@target_alias@ --host=@host_alias@ \
+++	--build=@build_alias@
++ 
++ @BIND_ATF_FALSE at cleandirs = ./lib ./include
++ @BIND_ATF_TRUE at cleandirs = ./lib ./include ./atf
+diff --git a/package/dhcp/0003-bind-host-cc.patch b/package/dhcp/0003-bind-host-cc.patch
+new file mode 100644
+index 0000000..96c144f
+--- /dev/null
++++ b/package/dhcp/0003-bind-host-cc.patch
+@@ -0,0 +1,40 @@
++ensure host compiler is used
 +
- $(eval $(autotools-package))
-
-
-Please take a look to my patch when you have time. It fixes a long list of build failures.
-See http://autobuild.buildroot.net/?reason=trousers-0.3.13.
-
-Regards,
-Lada.
++dns/Makefile.in patch is derived from:
++http://wiki.beyondlogic.org/patches/dhcp-4.3.0b1.bind_arm-linux-gnueabi.patch
++
++This patch is already accepted upstream and will be included in the next
++release:
++--[snip]--
++From Francis Dupont via RT <dhcp-suggest@isc.org>
++To   rdkehn at yahoo.com 
++
++Message body
++It was fixed on the master branch sometimes ago.
++Quoting master RELNOTES:
++
++- Made the embedded bind libraries able to be cross compiled
++  (please refer to the bind9 documentation to learn how to cross
++  compile DHCP and its bind library dependency).
++  [ISC-Bugs #38836]
++
++This is in the Changes since 4.3.3 so for the next release.
++--[snip]--
++
++Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
++
++Index: dhcp-4.3.3-P1/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
++===================================================================
++--- dhcp-4.3.3-P1.orig/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
+++++ dhcp-4.3.3-P1/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
++@@ -168,7 +168,9 @@ code.h:	gen
++ 	./gen -s ${srcdir} > code.h
++ 
++ gen: ${srcdir}/gen.c
++-	${CC} ${ALL_CFLAGS} ${LDFLAGS} -o $@ ${srcdir}/gen.c ${LIBS}
+++	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
+++		${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c \
+++		${BUILD_LIBS}
++ 
++ #We don't need rbtdb64 for this library
++ #rbtdb64. at O@: rbtdb.c
+diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
+index 84e3c63..1baea54 100644
+--- a/package/dhcp/dhcp.hash
++++ b/package/dhcp/dhcp.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/dhcp/4.1-ESV-R12/dhcp-4.1-ESV-R12.tar.gz.sha256.asc
+-sha256	53265d1bf5e2073379df03c73a1a34d38a904307609c0f9cb77223912e753e5f	dhcp-4.1-ESV-R12.tar.gz
++# Verified from https://ftp.isc.org/isc/dhcp/4.2.3-P1/dhcp-4.2.3-P1.tar.gz.sha256.asc
++sha256 c11e896dffa1bfbc49462965d3f6dec45534e34068603546d9a236f2aa669921 dhcp-4.3.3-P1.tar.gz
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index c05e694..5255c75 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCP_VERSION = 4.1-ESV-R12
++DHCP_VERSION = 4.3.3-P1
+ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = ISC
+@@ -12,7 +12,8 @@ DHCP_LICENSE_FILES = LICENSE
+ DHCP_CONF_ENV = \
+ 	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
+ 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
+-	ac_cv_file__dev_random=yes
++	ac_cv_file__dev_random=yes \
++	BINDCONFIG='--with-randomdev=/dev/random'
+ DHCP_CONF_OPTS = \
+ 	--with-srv-lease-file=/var/lib/dhcp/dhcpd.leases \
+ 	--with-srv6-lease-file=/var/lib/dhcp/dhcpd6.leases \
+@@ -25,6 +26,26 @@ DHCP_CONF_OPTS = \
+ 	--with-relay-pid-file=/var/run/dhcrelay.pid \
+ 	--with-relay6-pid-file=/var/run/dhcrelay6.pid
+ 
++# The source for the bind libraries used by dhcp are embedded in the dhcp source
++# as a tar-ball. Extract the bind source to allow any patches to be applied
++# during the patch phase.
++define DHCP_EXTRACT_BIND
++	cd $(@D)/bind; tar -xvf bind.tar.gz
++endef
++DHCP_POST_EXTRACT_HOOKS += DHCP_EXTRACT_BIND
++
++# The patchset requires configure et.al. to be regenerated.
++DHCP_AUTORECONF = YES
++
++# bind does not support parallel builds.
++DHCP_MAKE = $(MAKE1)
++
++# bind configure is called via dhcp make instead of dhcp configure. The make env
++# needs extra values for bind configure.
++DHCP_MAKE_ENV = \
++	$(TARGET_CONFIGURE_OPTS) \
++	BUILD_CC="$(HOSTCC)"
++
+ ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
+ DHCP_CONF_OPTS += --enable-delayed-ack
+ endif
+-- 
+2.7.0
