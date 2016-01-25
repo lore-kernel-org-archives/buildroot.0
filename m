@@ -1,44 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:29:11 +0100
-Subject: [Buildroot] [PATCH] package/iprutils: disable for musl
- toolchains
-In-Reply-To: <1453582679-30476-1-git-send-email-romain.naour@gmail.com>
-References: <1453582679-30476-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160125232911.6d1f5375@free-electrons.com>
+Date: Mon, 25 Jan 2016 23:31:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/transmission: fix musl build
+In-Reply-To: <1453639813-18779-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453639813-18779-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160125233147.5fe1bafe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Bernd Kuhls,
 
-On Sat, 23 Jan 2016 21:57:59 +0100, Romain Naour wrote:
-> Disable iprutils for musl toolchain until someone
-> is interested enough to fixes it.
+On Sun, 24 Jan 2016 13:50:13 +0100, Bernd Kuhls wrote:
+> The autobuilders did not catch the error yet because they failed
+> earlier with other packages, but I am continuing the build based
+> on the defconfig from:
+> http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 > 
-> Note: the latest version (2.4.10) doesn't event build
-> with uClibc due to a test in the new configure script.
-> 
-> AC_CHECK_LIB([m], [matherr], [], [AC_ERROR("libm not found.")])
-> 
-> Avoid:
-> http://autobuild.buildroot.net/results/61e/61e121c25fc07083bcccedfcb4f938d18f5c5456/
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../transmission/0002-musl-missing-header.patch    | 36 ++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/transmission/0002-musl-missing-header.patch
 
-Disabling on musl seems really excessive. I looked at the problem, and
-by:
-
- * Removing the #include <bits/sockaddr.h> from iprlib.h
-
- * Adding #include <limits.h> to iprlib.h
-
-I was able to build the iprutils package with the musl C library on ARM.
-
-Could you look into this and cook a better patch ?
-
-Thanks!
+Applied, thanks. Please don't forget to submit the patch upstream.
 
 Thomas
 -- 
