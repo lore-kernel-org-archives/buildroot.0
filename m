@@ -1,94 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:34:30 +0100
-Subject: [Buildroot] [git commit] package/libsoil: fix build using old
-	versions of patch
-Message-ID: <20160201224702.B8B2E7F90D@busybox.osuosl.org>
+Date: Mon, 25 Jan 2016 23:13:47 +0100
+Subject: [Buildroot] [git commit] package/ecryptfs-utils: fix musl build
+Message-ID: <20160201224703.06A1D7F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8461906db4e5c1af84bf99458e9905a6d4d58c3e
+commit: https://git.buildroot.net/buildroot/commit/?id=b89cf7eb0a2907a1ba449ff0c57f092180d33816
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Well-formed patch fails to apply
-- patch v2.6:
-Hunk #1 FAILED at 1.
-Hunk #2 FAILED at 23.
-- patch v2.6.1:
-can't find file to patch at input line 11
-Perhaps you used the wrong -p or --strip option?
-[snip]
-No file to patch.  Skipping patch.
-2 out of 2 hunks ignored
-Patch failed!  Please fix 0001-fix-makefile.patch!
+The autobuilders did not catch the error yet because they failed
+earlier with other packages, but I am continuing the build based
+on the defconfig from:
+http://autobuild.buildroot.net/results/6fb/6fbe96af007803acfe9deacf26399cb19e5f2b47/defconfig
 
-Old versions of the tool "patch" cannot handle spaces in filenames.
-The same does not occur using "patch" v2.7 or any later.
-
-Workaround: when a file with space in the name needs to be patched,
-one or two hooks must be used.
-A pre-patch or post-extract hook renames the file to replace spaces
-with underscores.
-The patch file must be generated using diff between two source-trees
-that have the file renamed with spaces replaced by underscores.
-A post-patch hook could rename the file to its original name if needed.
-
-Fixes:
-http://autobuild.buildroot.net/results/8ff/8ff91ab8e52000eb34dd8f662520cf1b31490cf5/
-http://autobuild.buildroot.net/results/ea7/ea77d6b23aca0cb1cf527e6c16ddf5eba957a69c/
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsoil/0001-fix-makefile.patch | 6 +++---
- package/libsoil/libsoil.mk              | 8 +++++++-
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ package/ecryptfs-utils/0001-musl.patch | 35 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/libsoil/0001-fix-makefile.patch b/package/libsoil/0001-fix-makefile.patch
-index 3b80048..310d264 100644
---- a/package/libsoil/0001-fix-makefile.patch
-+++ b/package/libsoil/0001-fix-makefile.patch
-@@ -5,9 +5,9 @@ http://anonscm.debian.org/cgit/pkg-games/libsoil.git/tree/debian/patches/linking
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- 
--diff -uNr "soil.org/projects/makefile/alternate Makefile.txt" "soil/projects/makefile/alternate Makefile.txt"
----- "soil.org/projects/makefile/alternate Makefile.txt"	2008-07-07 18:13:28.000000000 +0200
--+++ "soil/projects/makefile/alternate Makefile.txt"	2015-11-07 11:15:04.140106336 +0100
-+diff -uNr soil.org/projects/makefile/alternate_Makefile.txt soil/projects/makefile/alternate_Makefile.txt
-+--- soil.org/projects/makefile/alternate_Makefile.txt	2008-07-07 18:13:28.000000000 +0200
-++++ soil/projects/makefile/alternate_Makefile.txt	2015-11-07 11:15:04.140106336 +0100
- @@ -1,8 +1,8 @@
-  MAKE = make
- -CC = gcc
-diff --git a/package/libsoil/libsoil.mk b/package/libsoil/libsoil.mk
-index eb8c2ce..99a47f6 100644
---- a/package/libsoil/libsoil.mk
-+++ b/package/libsoil/libsoil.mk
-@@ -11,13 +11,19 @@ LIBSOIL_INSTALL_STAGING = YES
- LIBSOIL_DEPENDENCIES = libgl
- LIBSOIL_LICENSE = Public Domain, MIT
- LIBSOIL_LICENSE_FILES = src/stb_image_aug.c src/image_helper.c
--LIBSOIL_MAKEFILE = "../projects/makefile/alternate Makefile.txt"
-+LIBSOIL_MAKEFILE = ../projects/makefile/alternate_Makefile.txt
- 
- define LIBSOIL_EXTRACT_CMDS
- 	$(UNZIP) -d $(@D) $(DL_DIR)/$(LIBSOIL_SOURCE)
- 	mv $(@D)/Simple\ OpenGL\ Image\ Library/* $(@D)
- endef
- 
-+define REMOVE_SPACE_FROM_FILENAME
-+	cd $(@D)/projects/makefile/ && \
-+		mv "alternate Makefile.txt" alternate_Makefile.txt
-+endef
-+LIBSOIL_POST_EXTRACT_HOOKS += REMOVE_SPACE_FROM_FILENAME
+diff --git a/package/ecryptfs-utils/0001-musl.patch b/package/ecryptfs-utils/0001-musl.patch
+new file mode 100644
+index 0000000..4a3b8a7
+--- /dev/null
++++ b/package/ecryptfs-utils/0001-musl.patch
+@@ -0,0 +1,35 @@
++fix musl build
 +
- define LIBSOIL_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -f $(LIBSOIL_MAKEFILE) \
- 		-C $(@D)/src
++Patch inspired by
++https://github.com/kraj/meta-musl/blob/master/recipes-core/util-linux/util-linux-2.25/0001-switch_root-use-typeof-instead-of-__SWORD_TYPE-for-s.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr ecryptfs-utils-109.org/src/utils/mount.ecryptfs_private.c ecryptfs-utils-109/src/utils/mount.ecryptfs_private.c
++--- ecryptfs-utils-109.org/src/utils/mount.ecryptfs_private.c	2016-01-22 17:04:52.000000000 +0100
+++++ ecryptfs-utils-109/src/utils/mount.ecryptfs_private.c	2016-01-24 16:52:37.000000000 +0100
++@@ -224,6 +224,7 @@
++ 
++ static int check_cwd_f_type()
++ {
+++	struct statfs buf;
++ 	/**
++ 	 * This is *not* a list of compatible lower filesystems list for
++ 	 * eCryptfs. This is a list of filesystems that we reasonably expect to
++@@ -235,7 +236,7 @@
++ 	 * deceive other programs with a crafted /proc/self/*. See
++ 	 * https://launchpad.net/bugs/1530566 for more details.
++ 	 */
++-	__SWORD_TYPE f_type_whitelist[] = {
+++	typeof(buf.f_type) f_type_whitelist[] = {
++ 		0x61756673 /* AUFS_SUPER_MAGIC */,
++ 		0x9123683E /* BTRFS_SUPER_MAGIC */,
++ 		0x00C36400 /* CEPH_SUPER_MAGIC */,
++@@ -259,7 +260,6 @@
++ 		0x58465342 /* XFS_SB_MAGIC */,
++ 		0x2FC12FC1 /* ZFS_SUPER_MAGIC */,
++ 	};
++-	struct statfs buf;
++ 	size_t i, whitelist_len;
++ 
++ 	if (statfs(".", &buf) != 0) {
