@@ -1,80 +1,142 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Tue, 26 Jan 2016 10:18:26 +1100
-Subject: [Buildroot] [PATCH 1/1] overlay: Allow overlay to be a tar archive.
-Message-ID: <1453763906-22220-1-git-send-email-camh@xdna.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 26 Jan 2016 00:31:58 +0100
+Subject: [Buildroot] [PATCH 8/8] uclibc: remove version selection
+In-Reply-To: <1453148701-10036-9-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453148701-10036-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56A6B06E.6070206@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When installing an overlay, check if the source is a directory. If it is,
-continue to use rsync to install it to the target. If it is not a
-directory, assume it is an archive extractable by GNU tar(1) and use
-that to install it to the target.
+Thomas, All,
 
-This allows an overlay specified with BR2_ROOTFS_OVERLAY to be a tar
-archive instead of a directory, which is useful when an external build
-process produces rootfs archives and not directories.
+Le 18/01/2016 21:25, Thomas Petazzoni a ?crit :
+> Since we now only support uClibc-ng, remove the version selection from
+> the uclibc package.
+> 
+> Note that the BR2_UCLIBC_VERSION_SUPPORTS_* hidden booleans, which
+> were only used to allow each uClibc version to specify which thread
+> implementation they support and on which architecture are removed. Now
+> such architecture dependencies are directly encoded in the "Thread
+> library implementation" choice.
 
-Signed-off-by: Cam Hutchison <camh@xdna.net>
----
- Makefile         | 14 +++++++++-----
- system/Config.in | 14 ++++++++------
- 2 files changed, 17 insertions(+), 11 deletions(-)
+The legacy handling for BR2_UCLIBC_VERSION_NG is missing.
+Otherwise the patch is ok.
 
-diff --git a/Makefile b/Makefile
-index 17c181b..803be0c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -653,11 +653,15 @@ endif
- 		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
- 	) >  $(TARGET_DIR)/etc/os-release
- 
--	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
--		$(call MESSAGE,"Copying overlay $(d)"); \
--		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
--			$(d)/ $(TARGET_DIR)$(sep))
-+	@$(foreach overlay, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
-+		$(call MESSAGE,"Copying overlay $(overlay)"); \
-+		if test -d $(overlay); then \
-+			rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-+				--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-+				$(overlay)/ $(TARGET_DIR); \
-+		else \
-+			tar -a -x -C $(TARGET_DIR) -f $(overlay); \
-+		fi$(sep))
- 
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-build script $(s)"); \
-diff --git a/system/Config.in b/system/Config.in
-index 2e14971..ef65d98 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -419,15 +419,17 @@ config BR2_ROOTFS_USERS_TABLES
- 	  See manual for details on the usage and syntax of these files.
- 
- config BR2_ROOTFS_OVERLAY
--	string "Root filesystem overlay directories"
-+	string "Root filesystem overlay directories or archives"
- 	default ""
- 	help
--	  Specify a list of directories that are copied over the target
--	  root filesystem after the build has finished and before it is
--	  packed into the selected filesystem images.
-+	  Specify a list of directories or archives that are copied over
-+	  the target root filesystem after the build has finished and
-+	  before it is packed into the selected filesystem images.
- 
--	  They are copied as-is into the rootfs, excluding files ending with
--	  ~ and .git, .svn and .hg directories.
-+	  Directories are copied as-is into the rootfs, excluding files ending
-+	  with ~ and .git, .svn and .hg directories.
-+
-+	  Archives are extracted as-is into the rootfs with no modifications.
- 
- config BR2_ROOTFS_POST_BUILD_SCRIPT
- 	string "Custom scripts to run before creating filesystem images"
--- 
-2.1.4
+Thanks !
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/uclibc/Config.in | 41 +++++------------------------------------
+>  package/uclibc/uclibc.mk | 11 +++--------
+>  2 files changed, 8 insertions(+), 44 deletions(-)
+> 
+> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+> index 452043d..16bf89c 100644
+> --- a/package/uclibc/Config.in
+> +++ b/package/uclibc/Config.in
+> @@ -7,38 +7,9 @@ config BR2_PACKAGE_UCLIBC
+>  
+>  comment "uClibc Options"
+>  
+> -config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
+> -	bool
+> -
+> -config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+> -	bool
+> -
+> -config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+> -	bool
+> -
+> -choice
+> -	prompt "uClibc C library Version"
+> -	default BR2_UCLIBC_VERSION_NG
+> -	help
+> -	  Select the version of uClibc you wish to use.
+> -
+> -	config BR2_UCLIBC_VERSION_NG
+> -		bool "uClibc-ng"
+> -		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if BR2_m68k
+> -		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
+> -		       if BR2_m68k || BR2_arm || BR2_armeb
+> -		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+> -		       if !BR2_m68k && !BR2_x86_i386
+> -
+> -endchoice
+> -
+> -config BR2_UCLIBC_VERSION_STRING
+> -	string
+> -	default "1.0.11"		if BR2_UCLIBC_VERSION_NG
+> -
+>  config BR2_UCLIBC_CONFIG
+>  	string "uClibc configuration file to use?"
+> -	default "package/uclibc/uClibc-ng.config" if BR2_UCLIBC_VERSION_NG
+> +	default "package/uclibc/uClibc-ng.config"
+>  	help
+>  	  Some people may wish to use their own modified uClibc configuration
+>  	  file and will specify their config file location with this option.
+> @@ -76,9 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+>  
+>  choice
+>  	prompt "Thread library implementation"
+> -	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+> -	default BR2_PTHREADS_OLD if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+> -	default BR2_PTHREADS if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
+> +	default BR2_PTHREADS_NATIVE
+>  	help
+>  	  Use this option to select the thread library implementation
+>  	  that should be used in your toolchain.
+> @@ -89,18 +58,18 @@ choice
+>  	config BR2_PTHREADS
+>  		bool "linuxthreads"
+>  		select BR2_TOOLCHAIN_HAS_THREADS
+> -		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
+> +		depends on BR2_m68k
+>  
+>  	config BR2_PTHREADS_OLD
+>  		bool "linuxthreads (stable/old)"
+>  		select BR2_TOOLCHAIN_HAS_THREADS
+> -		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+> +		depends on BR2_m68k || BR2_arm || BR2_armeb
+>  
+>  	config BR2_PTHREADS_NATIVE
+>  		bool "Native POSIX Threading (NPTL)"
+>  		select BR2_TOOLCHAIN_HAS_THREADS
+>  		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> -		depends on BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+> +		depends on !BR2_m68k && !BR2_x86_i386
+>  endchoice
+>  
+>  config BR2_PTHREAD_DEBUG
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index 44b8a97..6b05181 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -4,16 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
+> -UCLIBC_SOURCE ?= uClibc-$(UCLIBC_VERSION).tar.bz2
+> +UCLIBC_VERSION = 1.0.11
+> +UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+> +UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+>  UCLIBC_LICENSE = LGPLv2.1+
+>  UCLIBC_LICENSE_FILES = COPYING.LIB
+> -
+> -ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+> -UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+> -UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+> -endif
+> -
+>  UCLIBC_INSTALL_STAGING = YES
+>  
+>  # uclibc is part of the toolchain so disable the toolchain dependency
+> 
