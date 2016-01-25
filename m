@@ -1,99 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 25 Jan 2016 23:40:22 +0100
-Subject: [Buildroot] [PATCH] pkg-kconfig: add missing -patch dependency
- for defconfig
-In-Reply-To: <1453676322-1906-1-git-send-email-arnout@mind.be>
-References: <1453676322-1906-1-git-send-email-arnout@mind.be>
-Message-ID: <20160125224022.GO3386@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 25 Jan 2016 23:41:13 +0100
+Subject: [Buildroot] [PATCH 3/8] mongrel2: allow using uClibc but only
+ on certain architectures
+In-Reply-To: <1453148701-10036-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453148701-10036-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56A6A489.70105@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Thomas, All,
 
-On 2016-01-24 23:58 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> Since the introduction of _KCONFIG_DEFCONFIG in 8ef62b99, the package's
-> .config file no longer depends on anything (unless a fragment is
-> defined). Therefore, there is no dependency anymore between .config
-> and <pkg>-patch. Thus, it is possible that the .config file is
-> attempted to be built before the package is extracted and patched.
-> Usually this works out OK because <pkg>-patch will always be done
-> before <pkg>-configure, but it will fail when the user calls
-> <pkg>-menuconfig explicitly. It will also fail when we enable
-> top-level parallel build.
+Le 18/01/2016 21:24, Thomas Petazzoni a ?crit :
+> mongrel2 uses  the {get,make,swap}context functions:
 > 
-> To solve this, just add an explicit order-only dependency on
-> <pkg>-patch. It really is only necessary when _KCONFIG_DEFCONFIG is
-> defined and _KCONFIG_FRAGMENT_FILES is not, but it doesn't hurt to
-> add it unconditionally.
+>  - With glibc, no problem, they are available on all supported
+>    architectures
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Reported-by: FrAnKenStEiN MC <chfakht@gmail.com>
+>  - With uClibc, they are available only on a subset of the
+>    architectures. Until now, only BR2_UCLIBC_VERSION_SNAPSHOT
+>    configurations were allowed to select mongrel2, but we are going to
+>    get rid of the uClibc snapshot version, and uClibc-ng is as capable
+>    as the uClibc snapshot. However, only certain architectures have
+>    the *context() functions.
+> 
+>  - With musl, there is no *context() support.
+> 
+> Since this dependency is quite complicated, we introduce a
+> BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS hidden boolean to encode which C
+> libraries are supported.
+> 
+> Also, listing the supported uClibc architectures would be too long in
+> the comment, so we simply indicate that the package needs uClibc or
+> glibc.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/pkg-kconfig.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/mongrel2/Config.in | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
 > 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index eaee572..90f3f9f 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -72,6 +72,11 @@ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
->  	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
->  		$$($(2)_KCONFIG_OPTS) oldconfig
+> diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+> index 1c7b495..49dd6fd 100644
+> --- a/package/mongrel2/Config.in
+> +++ b/package/mongrel2/Config.in
+> @@ -1,10 +1,16 @@
+> -comment "mongrel2 needs a toolchain w/ C++, threads, wchar, dynamic library"
+> -	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
+> -		BR2_TOOLCHAIN_USES_GLIBC || \
+> -		BR2_arm
+> +# mongrel2 uses {get,make,swap}context() functions, which are
+> +# available in glibc for all architectures and in uClibc only for a
+> +# subset of the architectures
+> +config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+> +	bool
+> +	default y if BR2_TOOLCHAIN_USES_GLIBC
+> +	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+> +		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_x86_64)
+
+In the libunwind patch BR2_mips64 and BR2_mips64el where dropped from the
+libunwind's supported architecture. Why they are not here ?
+
+Best regards,
+Romain
+
+> +
+> +comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library"
+>  	depends on !BR2_INSTALL_LIBSTDCPP || \
+>  		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+> -		BR2_STATIC_LIBS
+> +		BR2_STATIC_LIBS || !BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
 >  
-> +# If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
-> +# already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
-> +# it explicitly. It doesn't hurt to always have it though.
-> +$$($(2)_DIR)/.config: | $(1)-patch
-
-I don't understand why this is needed.
-
-On line 65, we have;
-    $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-
-and on line 52;
-    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-
-So, unless I'm missing something, $$($(2)_DIR)/.config already has a
-dependency on $(1)-patch via $$($(2)_KCONFIG_FILE)
-
-Oh, damn, I see it now... Grr...
-
-OK, so what made me understand is the comment in the code:
-
-   [...] if we only have a _KCONFIG_DEFCONFIG [...]
-
-Ok, so it goes thusly:
-
-  - if using a defconfig file, we do not have a $(2)_KCONFIG_FILE
-
-  - if at the same time, we have no fragments, we have no rule from
-    .config to $(1)-patch.
-
-OK, fine by me. Thanks!
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
->  # In order to get a usable, consistent configuration, some fixup may be needed.
->  # The exact rules are specified by the package .mk file.
->  define $(2)_FIXUP_DOT_CONFIG
-> -- 
-> 2.7.0
+>  config BR2_PACKAGE_MONGREL2
+>  	bool "mongrel2"
+> @@ -14,11 +20,7 @@ config BR2_PACKAGE_MONGREL2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+>  	depends on BR2_USE_WCHAR # zeromq -> util-linux
+>  	depends on !BR2_STATIC_LIBS # uses dlopen()
+> -	# {get,make,swap}context functions present in
+> -	# {e,}glibc and in uClibc's master branch. Source has arm workaround
+> -	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
+> -		BR2_TOOLCHAIN_USES_GLIBC || \
+> -		BR2_arm
+> +	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+>  	help
+>  	  Mongrel2 is an application, language, and network architecture
+>  	  agnostic web server that focuses on web applications using
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
