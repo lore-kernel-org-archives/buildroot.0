@@ -1,72 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 23:27:33 +0100
-Subject: [Buildroot] [git commit] package/libsigrokdecode: bump version to
-	0.4.0
-Message-ID: <20160201224707.679647F892@busybox.osuosl.org>
+Date: Mon, 25 Jan 2016 23:15:55 +0100
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
+Message-ID: <20160201224704.1A1697F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18ca5124a9050b9ffd90f79a089ad12631a271be
+commit: https://git.buildroot.net/buildroot/commit/?id=2158bd6ae1f0627bdd645bca54c5476c522f33a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to upstream tarball, remove autoreconf, add hash, fix typo.
+Default configure options were changed in
+https://github.com/tvheadend/tvheadend/commit/ad9b54ad908fdc9a069c734234958ae8ad1eb38f
+enabling the download of the source of libhdhomerun and its static
+build which will lead to a link error because the host compiler is used
+for that build. Therefore disable the static build of libhdhomerun by
+tvheadend's build system like we do for ffmpeg.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsigrokdecode/Config.in            |  2 +-
- package/libsigrokdecode/libsigrokdecode.hash |  2 ++
- package/libsigrokdecode/libsigrokdecode.mk   | 13 ++-----------
- 3 files changed, 5 insertions(+), 12 deletions(-)
+ package/tvheadend/0001-no-check_config.patch | 4 ++--
+ package/tvheadend/tvheadend.hash             | 2 +-
+ package/tvheadend/tvheadend.mk               | 3 ++-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsigrokdecode/Config.in b/package/libsigrokdecode/Config.in
-index a8f4e85..70f86ce 100644
---- a/package/libsigrokdecode/Config.in
-+++ b/package/libsigrokdecode/Config.in
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_LIBSIGROKDECODE
- 
- 	  http://sigrok.org/wiki/Libsigrokdecode
- 
--comment "libsigrokecode needs a toolchain w/ wchar, threads, dynamic library"
-+comment "libsigrokdecode needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_PYTHON
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libsigrokdecode/libsigrokdecode.hash b/package/libsigrokdecode/libsigrokdecode.hash
-new file mode 100644
-index 0000000..3ac8a76
---- /dev/null
-+++ b/package/libsigrokdecode/libsigrokdecode.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	fd7e9d1b73245e844ead97a16d5321c766196f946c9b28a8646cab2e98ec3537	libsigrokdecode-0.4.0.tar.gz
-diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
-index c0a4017..b8b3c59 100644
---- a/package/libsigrokdecode/libsigrokdecode.mk
-+++ b/package/libsigrokdecode/libsigrokdecode.mk
-@@ -4,20 +4,11 @@
+diff --git a/package/tvheadend/0001-no-check_config.patch b/package/tvheadend/0001-no-check_config.patch
+index 6a0cddd..361ebcd 100644
+--- a/package/tvheadend/0001-no-check_config.patch
++++ b/package/tvheadend/0001-no-check_config.patch
+@@ -12,12 +12,12 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile
+ --- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile	2014-03-09 14:47:43.780025330 +0100
+ +++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile	2014-03-09 14:48:40.836539093 +0100
+-@@ -516,7 +516,7 @@
++@@ -566,7 +566,7 @@
+  	$(ROOTDIR)/configure $(CONFIGURE_ARGS)
+  
+  # Binary
+ -${PROG}: .config.mk make_webui $(OBJS)
+ +${PROG}: make_webui $(OBJS)
+- 	$(CC) -o $@ $(OBJS) $(CFLAGS) $(LDFLAGS)
++ 	$(pCC) -o $@ $(OBJS) $(CFLAGS) $(LDFLAGS)
+  
+  # Object
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 9a8432a..de7bc46 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	28b01f22f2d8efa201a782c1fbac68e4818e8982fd02c51497f492c9e547da67	tvheadend-66e5d277a59db723a8718afb3bdbef63824fa050.tar.gz
++sha256	0caf44de3baaf115d80410b660d99e49a42f50792397254e8f21b6e1c5ca58ef	tvheadend-1aa0073be39119f5d0d79212e6c83c470904a161.tar.gz
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 5f28d4a..43ff979 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSIGROKDECODE_VERSION = 9177963de41c2d003d417049470eea3c98eeb2ef
--# No https access on upstream git
--LIBSIGROKDECODE_SITE = git://sigrok.org/libsigrokdecode
-+LIBSIGROKDECODE_VERSION = 0.4.0
-+LIBSIGROKDECODE_SITE = http://sigrok.org/download/source/libsigrokdecode
- LIBSIGROKDECODE_LICENSE = GPLv3+
- LIBSIGROKDECODE_LICENSE_FILES = COPYING
--# Git checkout has no configure script
--LIBSIGROKDECODE_AUTORECONF = YES
- LIBSIGROKDECODE_INSTALL_STAGING = YES
- LIBSIGROKDECODE_DEPENDENCIES = host-pkgconf libglib2 python3
- 
--define LIBSIGROKDECODE_ADD_MISSING
--	mkdir -p $(@D)/autostuff
--endef
--
--LIBSIGROKDECODE_PRE_CONFIGURE_HOOKS += LIBSIGROKDECODE_ADD_MISSING
--
- $(eval $(autotools-package))
+-TVHEADEND_VERSION = 66e5d277a59db723a8718afb3bdbef63824fa050
++TVHEADEND_VERSION = 1aa0073be39119f5d0d79212e6c83c470904a161
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+@@ -74,6 +74,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ 			--enable-dvbscan			\
+ 			--enable-bundle				\
+ 			--disable-libffmpeg_static		\
++			--disable-hdhomerun_static		\
+ 			$(TVHEADEND_CONF_OPTS)			\
+ 	)
+ endef
