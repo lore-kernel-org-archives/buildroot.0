@@ -1,43 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2016 22:29:31 +0100
-Subject: [Buildroot] [git commit] package/perl-uri: bump version to 1.71
-Message-ID: <20160201224659.83D3C7FAE2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Jan 2016 23:31:26 +0100
+Subject: [Buildroot] [git commit] package/transmission: fix musl build
+Message-ID: <20160201224659.5DD4A80AD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9f3ebc268b36281aea239ee6a7469c8303394b2
+commit: https://git.buildroot.net/buildroot/commit/?id=acf3785e8fe9031a083cd086a28b69caeffd7dd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The autobuilders did not catch the error yet because they failed
+earlier with other packages, but I am continuing the build based
+on the defconfig from:
+http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index c97555a..8a265bf 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    3c56aee0300bce5a440ccbd558277ea0 URI-1.69.tar.gz
--sha256 b74b16ea626b6f8061821bb350674c638a98be1fc766eadb24fec6635998b42d URI-1.69.tar.gz
-+md5    247c3da29a794f72730e01aa5a715daf URI-1.71.tar.gz
-+sha256 9c8eca0d7f39e74bbc14706293e653b699238eeb1a7690cc9c136fb8c2644115 URI-1.71.tar.gz
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index c80b582..e7118fc 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_URI_VERSION = 1.69
-+PERL_URI_VERSION = 1.71
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_URI_LICENSE = Artistic or GPLv1+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../transmission/0002-musl-missing-header.patch    | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/package/transmission/0002-musl-missing-header.patch b/package/transmission/0002-musl-missing-header.patch
+new file mode 100644
+index 0000000..ebb74cb
+--- /dev/null
++++ b/package/transmission/0002-musl-missing-header.patch
+@@ -0,0 +1,36 @@
++Fix musl build
++
++Downloaded from
++https://cgit.gentoo.org/proj/musl.git/tree/net-p2p/transmission/files/transmission-2.84-musl-missing-header.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++
++libtransmission/transmission.h: add missing <sys/types.h>
++
++transmission.h and several files including it, like bitfield.c and fdlimits.h
++make reference to ssize_t, off_t and other types defined in <sys/types.h> but
++never include the header.  By including <sys/types.h> in transmission.h, the
++required type definitions are propagated to all files that need them.
++
++Not including <sys/types.h> on glibc and uClibc systems does not pose a problem
++because of the way the headers stack in those C Standard Libraries, but on musl
++excluding <sys/types.h> leads to compile time failure.
++
++For the POSIX specs, see
++
++http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_types.h.html
++
++Signed-of-by: Anthony G. Basile <blueness@gentoo.org>
++
++diff -Naur transmission-2.84.orig/libtransmission/transmission.h transmission-2.84/libtransmission/transmission.h
++--- transmission-2.84.orig/libtransmission/transmission.h	2014-07-01 13:09:01.682910744 -0400
+++++ transmission-2.84/libtransmission/transmission.h	2015-07-19 03:11:07.379219181 -0400
++@@ -28,6 +28,7 @@
++ 
++ #include <inttypes.h> /* uintN_t */
++ #include <time.h> /* time_t */
+++#include <sys/types.h>
++ 
++ #ifdef WIN32
++  #define __USE_MINGW_ANSI_STDIO 1
