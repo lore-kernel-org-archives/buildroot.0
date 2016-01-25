@@ -1,120 +1,107 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 25 Jan 2016 12:17:50 +0000
-Subject: [Buildroot] [PATCH] zbar: add a patch to wrap logical not
-	operations into parenthesis
-Message-ID: <1453724270-22823-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Andi Shyti <andi.shyti@gmail.com>
+Date: Mon, 25 Jan 2016 21:45:52 +0900
+Subject: [Buildroot] [PATCH] support/download: protect from custom
+ commands with spaces in args
+In-Reply-To: <20160124154921.GC3405@free.fr>
+References: <1449480415-10043-1-git-send-email-yann.morin.1998@free.fr>
+ <20160124020636.GA1387@jack.zhora.eu>
+ <20160124154921.GC3405@free.fr>
+Message-ID: <20160125124552.GA12615@jack.zhora.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes build failures like this one:
+Hi Yann,
 
-zbar/decoder/ean.c: In function 'ean_part_end4':
-zbar/decoder/ean.c:297:13: error: logical not is only applied to the
-left hand side of comparison [-Werror=logical-not-parentheses]
-     if(!par == fwd) {
+> > > Some users may provide custom download commands with spaces
+> > > in their
+> > > arguments, like so:
+> > >     BR2_HG="hg --config foo.bar='some space-separated
+> > >     value'"
+> >
+> > this patch is breaking the build. With configs like this:
+> >
+> > BR2_LINUX_KERNEL=y
+> > BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> > BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+> > BR2_LINUX_KERNEL_DEFCONFIG="exynos"
+> > BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
+>
+> You forgot to specify a kernel version here, which is the
+> ultimate
+> reason for the failure.
+>
+> It does not make sense to use a git tree without specifying
+> either a tag
+> or a sha1 to checkout.
 
-This patch has been sent upstream as a pull request:
+actually I haven't forgotten, but I normally expect to clone
+master out of a git clone without having specified any
+branch/sha1/tag (the way it was working before).
 
-  https://github.com/ZBar/ZBar/pull/9
+Indeed, by setting
 
-Fixes:
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
 
-  http://autobuild.buildroot.net/results/299/299dc845af082167085d366b38daf1dfd95d7047/
+it worked.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- ...p-logical-not-operations-into-parentheses.patch | 80 ++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
- create mode 100644 package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch
+> > the command sent is:
+> >
+> > git clone --mirror
+> > 'git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git'
+> > ''
+> >
+> > git dosn't like empty strngs and provides this output:
+> >
+> > fatal: The empty string is not a valid path
+> >
+> > Besides, I have never seen spaces in branch name,
+> > repositories
+> > names and it is quite a corner case. I think this patch
+> > should be
+> > reverted (at least) in the case of git.
+>
+> No, the patch is correct. What we should however check is that
+> the
+> version string is not empty, and bail out on that error
+> instead.
+>
+> Somehow, when the user forgets to specify a version string, we
+> call the
+> download scripts with no basename, and the empty string you see
+> in the
+> git call above should have been the basename of the directory
+> to clone
+> into, i.e. something like:  linux-VERSION/
 
-diff --git a/package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch b/package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch
-new file mode 100644
-index 0000000..6d39b1b
---- /dev/null
-+++ b/package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch
-@@ -0,0 +1,80 @@
-+From 7e69cdc8dfdf07701ba551985ee49d48e64d730f Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Mon, 25 Jan 2016 11:58:59 +0000
-+Subject: [PATCH] Wrap logical not operations into parentheses
+I think that buildroot should not fail if the version is not
+specified, but go ahead with a default solution, which can be
+master.
+
+Something like this, perhaps?
+
+ linux/linux.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 3c53a0b..61f7468 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -20,6 +20,11 @@ LINUX_SITE_METHOD = local
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = git
 +
-+Otherwise it fails like this:
++ifeq ($(strip $(LINUX_VERSION)),)
++LINUX_VERSION = "master"
++endif
 +
-+zbar/decoder/ean.c: In function 'ean_part_end4':
-+zbar/decoder/ean.c:297:13: error: logical not is only applied to the
-+left hand side of comparison [-Werror=logical-not-parentheses]
-+     if(!par == fwd) {
-+
-+This patch has been sent upstream as a pull request:
-+
-+  https://github.com/ZBar/ZBar/pull/9
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ zbar/decoder/ean.c  | 4 ++--
-+ zbar/qrcode/qrdec.c | 8 ++++----
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/zbar/decoder/ean.c b/zbar/decoder/ean.c
-+index c20f538..41d1493 100644
-+--- a/zbar/decoder/ean.c
-++++ b/zbar/decoder/ean.c
-+@@ -294,7 +294,7 @@ static inline zbar_symbol_type_t ean_part_end4 (ean_pass_t *pass,
-+         /* invalid parity combination */
-+         return(ZBAR_NONE);
-+ 
-+-    if(!par == fwd) {
-++    if((!par) == fwd) {
-+         /* reverse sampled digits */
-+         unsigned char tmp = pass->raw[1];
-+         pass->state |= STATE_REV;
-+@@ -380,7 +380,7 @@ static inline zbar_symbol_type_t ean_part_end7 (ean_decoder_t *ean,
-+         /* invalid parity combination */
-+         return(ZBAR_NONE);
-+ 
-+-    if(!par == fwd) {
-++    if((!par) == fwd) {
-+         unsigned char i;
-+         pass->state |= STATE_REV;
-+         /* reverse sampled digits */
-+diff --git a/zbar/qrcode/qrdec.c b/zbar/qrcode/qrdec.c
-+index d8fa802..5d3d265 100644
-+--- a/zbar/qrcode/qrdec.c
-++++ b/zbar/qrcode/qrdec.c
-+@@ -1219,8 +1219,8 @@ static int qr_finder_quick_crossing_check(const unsigned char *_img,
-+    _x1<0||_x1>=_width||_y1<0||_y1>=_height){
-+     return -1;
-+   }
-+-  if(!_img[_y0*_width+_x0]!=_v||!_img[_y1*_width+_x1]!=_v)return 1;
-+-  if(!_img[(_y0+_y1>>1)*_width+(_x0+_x1>>1)]==_v)return -1;
-++  if((!_img[_y0*_width+_x0])!=_v||(!_img[_y1*_width+_x1])!=_v)return 1;
-++  if((!_img[(_y0+_y1>>1)*_width+(_x0+_x1>>1)])==_v)return -1;
-+   return 0;
-+ }
-+ 
-+@@ -1261,7 +1261,7 @@ static int qr_finder_locate_crossing(const unsigned char *_img,
-+       x0[1-steep]+=step[1-steep];
-+       err-=dx[steep];
-+     }
-+-    if(!_img[x0[1]*_width+x0[0]]!=_v)break;
-++    if((!_img[x0[1]*_width+x0[0]])!=_v)break;
-+   }
-+   /*Find the last crossing from _v to !_v.*/
-+   err=0;
-+@@ -1273,7 +1273,7 @@ static int qr_finder_locate_crossing(const unsigned char *_img,
-+       x1[1-steep]-=step[1-steep];
-+       err-=dx[steep];
-+     }
-+-    if(!_img[x1[1]*_width+x1[0]]!=_v)break;
-++    if((!_img[x1[1]*_width+x1[0]])!=_v)break;
-+   }
-+   /*Return the midpoint of the _v segment.*/
-+   _p[0]=(x0[0]+x1[0]+1<<QR_FINDER_SUBPREC)>>1;
-+-- 
-+2.4.10
-+
--- 
-2.4.10
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = hg
+
+Thanks,
+Andi
