@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:35:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/w_scan: fix musl build
-In-Reply-To: <1453640947-2780-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453640947-2780-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160125233556.19e24fa0@free-electrons.com>
+Date: Mon, 25 Jan 2016 23:36:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dvbsnoop: fix musl build
+In-Reply-To: <1453642679-29490-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453642679-29490-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160125233631.3b4d821b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,21 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 24 Jan 2016 14:09:07 +0100, Bernd Kuhls wrote:
+On Sun, 24 Jan 2016 14:37:59 +0100, Bernd Kuhls wrote:
 > Fixes
-> http://autobuild.buildroot.net/results/d49/d497c0b23b7f905605f1764c136a9d7682e8137e/
+> http://autobuild.buildroot.net/results/6fb/6fbe96af007803acfe9deacf26399cb19e5f2b47/
+> http://autobuild.buildroot.net/results/be6/be64a45ac158b9057fb3e7ef9b515250acc77187/
+> and many others
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/w_scan/0001-musl.patch | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/w_scan/0001-musl.patch
+>  package/dvbsnoop/0001-musl-types-h.patch | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>  create mode 100644 package/dvbsnoop/0001-musl-types-h.patch
 
-Applied, thanks. Please don't forget to submit the patch upstream.
-Thanks!
+Applied, thanks. Same as for other patches: please submit upstream!
+
+Thanks,
 
 Thomas
 -- 
