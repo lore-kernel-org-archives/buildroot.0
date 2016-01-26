@@ -1,48 +1,106 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 21:52:51 +0100
-Subject: [Buildroot] [git commit] package/xl2tp: fix musl build
-Message-ID: <20160201224702.B55D17F8D4@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 26 Jan 2016 23:05:40 +0100
+Subject: [Buildroot] [git commit] bind: rename ptrsize to ptr_size in the
+	code
+Message-ID: <20160201224702.3D1A97F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9693d44aac1251a6ae3e877a04fbc75ccce0b68c
+commit: https://git.buildroot.net/buildroot/commit/?id=0b868e97e1a44fa8be9fa3875c583b5ebc78be89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/78d/78daf927aa43591401a072230b582591add1204c/
-http://autobuild.buildroot.net/results/b7e/b7e42137e2a7379ea8acb76b2d4faece86ab488a/
+uClibc in commit 70a04a28 #defined ptrsize globally in bits/setjmp.h for
+mips. However this is a common variable name and causes build failure
+for at least bind.
+So rename ptrsize to ptr_size in bind to avoid this. Fixes:
+http://autobuild.buildroot.net/results/a92/a92fa5dc5d9d6742d61d4d293f7eac97c5355dfe/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xl2tp/0002-musl.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ package/bind/0003-Rename-ptrsize-to-ptr_size.patch | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
-diff --git a/package/xl2tp/0002-musl.patch b/package/xl2tp/0002-musl.patch
+diff --git a/package/bind/0003-Rename-ptrsize-to-ptr_size.patch b/package/bind/0003-Rename-ptrsize-to-ptr_size.patch
 new file mode 100644
-index 0000000..44238e8
+index 0000000..e3b58e2
 --- /dev/null
-+++ b/package/xl2tp/0002-musl.patch
-@@ -0,0 +1,19 @@
-+Fix musl build
++++ b/package/bind/0003-Rename-ptrsize-to-ptr_size.patch
+@@ -0,0 +1,74 @@
++From 254dc19788ba2a03504fc6d1036fef477a60035f Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Fri, 22 Jan 2016 08:31:02 -0300
++Subject: [PATCH] Rename ptrsize to ptr_size
 +
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/tree/main/xl2tpd/xl2tpd-compile.patch
++This is to compensate for a uClibc mess caused by commit
++70a04a287a2875c82e6822c36e071afba5b63a62 where ptrsize is defined for
++mips, hence causing build breakage under certain conditions for programs
++that use this variable name.
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Status: definitely not upstreamable.
 +
-+diff -u --recursive src.orig/xl2tpd-1.3.6/xl2tpd.c src/xl2tpd-1.3.6/xl2tpd.c
-+--- xl2tpd-1.3.6.orig/xl2tpd.c	2014-01-15 21:58:37.000000000 -0100
-++++ xl2tpd-1.3.6/xl2tpd.c	2014-06-21 07:22:21.195278618 -0200
-+@@ -33,8 +33,6 @@
-+ #if (__GLIBC__ < 2)
-+ # if defined(FREEBSD) || defined(OPENBSD)
-+ #  include <sys/signal.h>
-+-# elif defined(LINUX)
-+-#  include <bsd/signal.h>
-+ # elif defined(SOLARIS)
-+ #  include <signal.h>
-+ # endif
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ lib/dns/rbt.c   | 6 +++---
++ lib/dns/rbtdb.c | 4 ++--
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/lib/dns/rbt.c b/lib/dns/rbt.c
++index 86b5183..5fd55de 100644
++--- a/lib/dns/rbt.c
+++++ b/lib/dns/rbt.c
++@@ -113,7 +113,7 @@ struct file_header {
++ 	 * information about the system on which the map file was generated
++ 	 * will be used to tell if we can load the map file or not
++ 	 */
++-	isc_uint32_t ptrsize;
+++	isc_uint32_t ptr_size;
++ 	unsigned int bigendian:1;	/* big or little endian system */
++ 	unsigned int rdataset_fixed:1;	/* compiled with --enable-rrset-fixed */
++ 	unsigned int nodecount;		/* shadow from rbt structure */
++@@ -517,7 +517,7 @@ write_header(FILE *file, dns_rbt_t *rbt, isc_uint64_t first_node_offset,
++ 	memmove(header.version1, FILE_VERSION, sizeof(header.version1));
++ 	memmove(header.version2, FILE_VERSION, sizeof(header.version2));
++ 	header.first_node_offset = first_node_offset;
++-	header.ptrsize = (isc_uint32_t) sizeof(void *);
+++	header.ptr_size = (isc_uint32_t) sizeof(void *);
++ 	header.bigendian = (1 == htonl(1)) ? 1 : 0;
++ 
++ #ifdef DNS_RDATASET_FIXED
++@@ -902,7 +902,7 @@ dns_rbt_deserialize_tree(void *base_address, size_t filesize,
++ 	}
++ #endif
++ 
++-	if (header->ptrsize != (isc_uint32_t) sizeof(void *)) {
+++	if (header->ptr_size != (isc_uint32_t) sizeof(void *)) {
++ 		result = ISC_R_INVALIDFILE;
++ 		goto cleanup;
++ 	}
++diff --git a/lib/dns/rbtdb.c b/lib/dns/rbtdb.c
++index c7168cb..dbcf944 100644
++--- a/lib/dns/rbtdb.c
+++++ b/lib/dns/rbtdb.c
++@@ -114,7 +114,7 @@ typedef struct rbtdb_file_header rbtdb_file_header_t;
++ 
++ struct rbtdb_file_header {
++ 	char version1[32];
++-	isc_uint32_t ptrsize;
+++	isc_uint32_t ptr_size;
++ 	unsigned int bigendian:1;
++ 	isc_uint64_t tree;
++ 	isc_uint64_t nsec;
++@@ -7593,7 +7593,7 @@ rbtdb_write_header(FILE *rbtfile, off_t tree_location, off_t nsec_location,
++ 	memset(&header, 0, sizeof(rbtdb_file_header_t));
++ 	memmove(header.version1, FILE_VERSION, sizeof(header.version1));
++ 	memmove(header.version2, FILE_VERSION, sizeof(header.version2));
++-	header.ptrsize = (isc_uint32_t) sizeof(void *);
+++	header.ptr_size = (isc_uint32_t) sizeof(void *);
++ 	header.bigendian = (1 == htonl(1)) ? 1 : 0;
++ 	header.tree = (isc_uint64_t) tree_location;
++ 	header.nsec = (isc_uint64_t) nsec_location;
++-- 
++2.4.10
++
