@@ -1,88 +1,75 @@
-From: David Picard <davepiq@yahoo.fr>
-Date: Tue, 26 Jan 2016 10:04:21 +0100
-Subject: [Buildroot] [PATCH 2/2] package/qwt : fixed dependencies to qt5
-In-Reply-To: <1453799061-7131-1-git-send-email-davepiq@yahoo.fr>
-References: <1453799061-7131-1-git-send-email-davepiq@yahoo.fr>
-Message-ID: <1453799061-7131-2-git-send-email-davepiq@yahoo.fr>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Tue, 26 Jan 2016 09:13:44 +0000
+Subject: [Buildroot] [PATCH 2/2] package/monkey: bump version to 1.6.8
+In-Reply-To: <1453589807-4373-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1453589807-4373-1-git-send-email-bernd.kuhls@t-online.de>
+ <1453589807-4373-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <ac3610a9-fab1-4147-adb3-58a0ab773a28@MAIL-SINTERS-01.sinters-int.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Set dependencies to qt5 instead of qt5base.
-- Use the same SVG select scheme for qt and qt5.
-- Moved the dependency to OpenGL libraries from Config.in to qwt.mk for both
-  qt and qt5, to make things less cumbersome.
+Dear Bernd,
 
-Qwt optional modules not tested.
+Le 23/01/2016 23:56, Bernd Kuhls a ?crit :
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>   package/monkey/monkey.hash | 6 +++---
+>   package/monkey/monkey.mk   | 6 ++----
+>   2 files changed, 5 insertions(+), 7 deletions(-)
+>
+> diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
+> index 6c7eada..2f39945 100644
+> --- a/package/monkey/monkey.hash
+> +++ b/package/monkey/monkey.hash
+> @@ -1,3 +1,3 @@
+> -# md5 from http://monkey-project.com/releases/1.5/monkey-1.5.6.tar.gz.md5, sha256 locally computed:
+> -md5    9699e4c9ea6ce6b989907c252ae80254 				monkey-1.5.6.tar.gz
+> -sha256 7c3d845306aa74ee6effd7ab6169d16ac4e6450e564954d0d0baa2d1e9be1a22	monkey-1.5.6.tar.gz
+> +# md5 from http://monkey-project.com/releases/1.6/monkey-1.6.8.tar.gz.md5, sha256 locally computed:
+> +md5	aa9b95e16023a7fc062f00a197da059a					monkey-1.6.8.tar.gz
+> +sha256	936aa276d11dea77cda2703eb5d1b89ede1cf8d44440e1ec029cafb10effb3cf	monkey-1.6.8.tar.gz
+> diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+> index 02c26c9..da2a480 100644
+> --- a/package/monkey/monkey.mk
+> +++ b/package/monkey/monkey.mk
+> @@ -4,8 +4,8 @@
+>   #
+>   ################################################################################
+>
+> -MONKEY_VERSION_MAJOR = 1.5
+> -MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).6
+> +MONKEY_VERSION_MAJOR = 1.6
+> +MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).8
+>   MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)
+>   MONKEY_LICENSE = Apache-2.0
+>   MONKEY_LICENSE_FILES = LICENSE
+> @@ -17,11 +17,9 @@ MONKEY_LICENSE_FILES = LICENSE
+>   MONKEY_CONF_OPTS = \
+>   	--prefix=/usr \
+>   	--sysconfdir=/etc/monkey \
+> -	--datadir=/var/www \
+>   	--mandir=/usr/share/man \
+>   	--logdir=/var/log \
+>   	--pidfile=/var/run \
+> -	--plugdir=/usr/lib/monkey \
+>   	--malloc-libc
+>
+>   # --uclib-mode is not a typo
+>
 
-Signed-off-by: David Picard <davepiq@yahoo.fr>
----
- package/qwt/Config.in | 20 ++++++++------------
- package/qwt/qwt.mk    |  4 ++--
- 2 files changed, 10 insertions(+), 14 deletions(-)
+Since monkey-1.6.0 build process is based on cmake. configure script is 
+now deprecated [1].
 
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-index 40b382b..31a79fe 100644
---- a/package/qwt/Config.in
-+++ b/package/qwt/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_QWT
- 	bool "qwt"
--	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5BASE
--	depends on BR2_PACKAGE_QT_GUI_MODULE || BR2_PACKAGE_QT5BASE_GUI
--	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5BASE
-+	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
- 	help
- 	  Qwt is a graphics extension to the Qt GUI application
- 	  framework. It provides a 2D plotting widget and more.
-@@ -13,7 +14,8 @@ if BR2_PACKAGE_QWT
- 
- config BR2_PACKAGE_QWT_SVG
- 	bool "SVG support"
--	depends on BR2_PACKAGE_QT_SVG || BR2_PACKAGE_QT5SVG
-+	select BR2_PACKAGE_QT_SVG if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5
- 
- 
- config BR2_PACKAGE_QWT_MATHML
-@@ -23,14 +25,8 @@ config BR2_PACKAGE_QWT_OPENGL
- 	bool "OpenGL support"
- 	depends on BR2_PACKAGE_HAS_LIBGLES
- 	depends on BR2_PACKAGE_HAS_LIBEGL
--	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
--	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5BASE
--
--comment "SVG support depends on Qt or Qt5 SVG module"
--	depends on !BR2_PACKAGE_QT_SVG && !BR2_PACKAGE_QT5SVG
- 
- endif
- 
--comment "qwt depends on Qt or Qt5 gui module"
--	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5BASE
--	depends on !BR2_PACKAGE_QT_GUI_MODULE && !BR2_PACKAGE_QT5BASE_GUI
-+comment "qwt needs Qt or Qt5"
-+	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index cdb3008..6c99c50 100644
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
-@@ -9,10 +9,10 @@ QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
- QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
- QWT_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_QT),y)
--QWT_DEPENDENCIES += qt
-+QWT_DEPENDENCIES += qt libgles libegl
- endif
- ifeq ($(BR2_PACKAGE_QT5BASE),y)
--QWT_DEPENDENCIES += qt5base
-+QWT_DEPENDENCIES += qt5base libgles
- QT5_MAKE = $(HOST_DIR)/usr/bin/qmake -spec $(HOST_DIR)/mkspecs/devices/linux-buildroot-g++
- endif
- 
--- 
-1.9.1
+Also the monkey package loose the shared library option.
+I had a quick chat with the maintainer (Eduardo Silva) last week and 
+reintegrate this shared library option is part of his roadmap. I suggest 
+to wait for this option (which i use) before doing the bump.
+
+Regards,
+
+Julien Corjon
+
+[1] http://monkey-project.com/announcements/v1.6.0/
