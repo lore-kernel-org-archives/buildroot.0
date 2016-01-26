@@ -1,77 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:49:19 +0100
-Subject: [Buildroot] [git commit] pixman: add patch to fix build issue with
-	musl
-Message-ID: <20160201224708.704107F892@busybox.osuosl.org>
+Date: Tue, 26 Jan 2016 21:25:38 +0100
+Subject: [Buildroot] [git commit] libftdi: remove BR2_ARCH_HAS_ATOMICS
+	dependency
+Message-ID: <20160201224707.5AAE77F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=802123c6248a7a4712b564897cfc5eb94173e7c6
+commit: https://git.buildroot.net/buildroot/commit/?id=1e1333fd8f1aa53b90f28187ad811f32bb0e79f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pixman fails to build with musl because <float.h> is included in
-assembler files, which doesn't work with the <float.h> provided by
-musl. This commit fixes that by patching pixman (patch submitted
-upstream).
+In commit 669ce8c75eb4c76cef81f279fb6b4f95d1472f51 ("libftdi: add
+dependency on atomic operations"), a dependency on
+BR2_ARCH_HAS_ATOMICS was added to the libftdi package to fix a build
+failure occuring on the ARC architecture due to the missing
+__sync_fetch_and_add_4 function:
 
-Reported-by: Eial Czerwacki <eial@scalemp.com>
+../ftdipp/.libs/libftdipp.so: undefined reference to `__sync_fetch_and_add_4'
+
+However, today, even on the SPARC architecture that does not implement
+any of the __sync built-ins, libftdi and its C++ binding libftdipp
+build fine. ARC was also tested and builds fine.
+
+Therefore, we remove the BR2_ARCH_HAS_ATOMICS dependency from libftdi,
+and also from flashrom, in which it was only present due to the
+selection of libftdi. Note that anyway flashrom is available only for
+i386 and x86_64, both of which implement all the __sync built-ins.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...an-private-include-float.h-only-in-C-code.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ package/flashrom/Config.in | 2 --
+ package/libftdi/Config.in  | 2 --
+ 2 files changed, 4 deletions(-)
 
-diff --git a/package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch b/package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch
-new file mode 100644
-index 0000000..455cebb
---- /dev/null
-+++ b/package/pixman/0002-pixman-private-include-float.h-only-in-C-code.patch
-@@ -0,0 +1,46 @@
-+From 2a5b33fe5cb921993573392afac19185e224b49a Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 17 Jan 2016 14:14:28 +0100
-+Subject: [PATCH] pixman-private: include <float.h> only in C code
-+
-+<float.h> is included unconditionally by pixman-private.h, which in
-+turn gets included by assembler files. Unfortunately, with certain C
-+libraries (like the musl C library), <float.h> cannot be included in
-+assembler files:
-+
-+  CCLD     libpixman-arm-simd.la
-+/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h: Assembler messages:
-+/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h:8: Error: bad instruction `int __flt_rounds(void)'
-+/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h: Assembler messages:
-+/home/test/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/float.h:8: Error: bad instruction `int __flt_rounds(void)'
-+
-+It turns out however that <float.h> is not needed by assembly files,
-+so we move its inclusion within the #ifndef __ASSEMBLER__ condition,
-+which solves the problem.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ pixman/pixman-private.h | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/pixman/pixman-private.h b/pixman/pixman-private.h
-+index 73108a0..73a5414 100644
-+--- a/pixman/pixman-private.h
-++++ b/pixman/pixman-private.h
-+@@ -1,5 +1,3 @@
-+-#include <float.h>
-+-
-+ #ifndef PIXMAN_PRIVATE_H
-+ #define PIXMAN_PRIVATE_H
-+ 
-+@@ -30,6 +28,7 @@
-+ #include <stdio.h>
-+ #include <string.h>
-+ #include <stddef.h>
-++#include <float.h>
-+ 
-+ #include "pixman-compiler.h"
-+ 
-+-- 
-+2.6.4
-+
+diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
+index 9420cc6..adc068c 100644
+--- a/package/flashrom/Config.in
++++ b/package/flashrom/Config.in
+@@ -8,7 +8,6 @@ config BR2_PACKAGE_FLASHROM
+ 	select BR2_PACKAGE_DMIDECODE
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS 	# libusb
+-	depends on BR2_ARCH_HAS_ATOMICS 	# libftdi
+ 	help
+ 	  flashrom is a utility for identifying, reading, writing,
+ 	  verifying and erasing flash chips. It is designed to flash
+@@ -20,5 +19,4 @@ config BR2_PACKAGE_FLASHROM
+ 
+ comment "flashrom needs a toolchain w/ threads"
+ 	depends on BR2_i386 || BR2_x86_64
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
+index c0ab0f2..8e02cb9 100644
+--- a/package/libftdi/Config.in
++++ b/package/libftdi/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBFTDI
+ 	bool "libftdi"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
+@@ -27,5 +26,4 @@ comment "libftdi C++ bindings need a toolchain w/ wchar, C++"
+ endif # BR2_PACKAGE_LIBFTDI
+ 
+ comment "libftdi needs a toolchain w/ threads"
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
