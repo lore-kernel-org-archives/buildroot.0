@@ -1,23 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 23:00:34 +0100
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{2, 10, 14}.x and 4.{1,
- 3}.x series
-In-Reply-To: <1453552578-1009-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1453552578-1009-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160126230034.7563ee24@free-electrons.com>
+Date: Tue, 26 Jan 2016 23:01:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi: fix typos
+In-Reply-To: <1453556804-22157-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453556804-22157-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160126230118.6a7b776f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Bernd Kuhls,
 
-On Sat, 23 Jan 2016 09:36:18 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Sat, 23 Jan 2016 14:46:44 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/linux-headers/Config.in.host | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  package/kodi/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
 Applied, thanks.
 
