@@ -1,28 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 26 Jan 2016 19:44:53 -0300
-Subject: [Buildroot] [PATCH] bind: rename ptrsize to ptr_size in the code
-In-Reply-To: <877fiwqafy.fsf@dell.be.48ers.dk>
-References: <1453462861-32484-1-git-send-email-gustavo@zacarias.com.ar>
- <877fiwqafy.fsf@dell.be.48ers.dk>
-Message-ID: <56A7F6E5.1050002@zacarias.com.ar>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Date: Tue, 26 Jan 2016 20:22:01 -0300
+Subject: [Buildroot] [PATCH] dt: new package
+In-Reply-To: <20160126215833.1afdb8dc@free-electrons.com>
+References: <1453840823-24345-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <20160126215833.1afdb8dc@free-electrons.com>
+Message-ID: <56A7FF99.4030202@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/01/16 18:48, Peter Korsgaard wrote:
+On 26/01/16 17:58, Thomas Petazzoni wrote:
 
-> What bind version is this patch against? It applies both before and
-> after the security bump, both with an offset:
+> Gustavo,
 >
-> Applying 0003-Rename-ptrsize-to-ptr_size.patch using patch:
-> patching file lib/dns/rbt.c
-> Hunk #2 succeeded at 480 (offset -37 lines).
-> Hunk #3 succeeded at 865 (offset -37 lines).
-> patching file lib/dns/rbtdb.c
-> Hunk #2 succeeded at 7536 (offset -57 lines).
+> On Tue, 26 Jan 2016 17:40:23 -0300, gustavo.zacarias at free-electrons.com
+> wrote:
+>
+>> +# uClibc doesn't provide POSIX AIO
+>> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),)
+>> +DT_AIO_FLAG = -DAIO
+>> +endif
+>
+> I think this one should rather be:
+>
+> ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+> ...
+> endif
 
 Hi.
-It's against git master.
+Musl has support for posix aio, so in the oft chance that someone wants 
+to patch/enable, in this way it would be inaccurate.
+
+>> +define DT_BUILD_CMDS
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(DT_SUBDIR) -f Makefile.linux \
+>> +	CC="$(TARGET_CC)" \
+>> +	CFLAGS="$(TARGET_CFLAGS) -std=c99 $(DT_AIO_FLAG) -DMMAP -D__linux__ -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DTHREADS -DSCSI" \
+>> +	LDFLAGS="$(TARGET_LDFLAGS)" \
+>> +	OS=linux
+>
+> Can you use TARGET_CONFIGURE_OPTS here instead ?
+>
+> Maybe something like:
+>
+> DT_CFLAGS = \
+> 	-std=c99 \
+> 	$(DT_AIO_FLAG) \
+> 	-DMMAP \
+> 	-D__linux__ \
+> 	-D_GNU_SOURCE \
+> 	-D_FILE_OFFSET_BITS=64 \
+> 	-DTHREADS \
+> 	-DSCSI
+>
+> and then:
+>
+> 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(DT_SUBDIR) -f Makefile.linux \
+> 		$(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) $(DT_CFLAGS)" \
+> 		OS=linux
+>
+> What do you think ?
+
+Sure, i can spin v2 with this change.
 Regards.
