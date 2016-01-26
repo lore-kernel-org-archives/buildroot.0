@@ -1,92 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2016 23:13:45 +0100
-Subject: [Buildroot] [PATCH 10/21] libtorrent: use the proper
- BR2_TOOLCHAIN_HAS_SYNC_x symbols
-In-Reply-To: <1453676887-31236-11-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-11-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160126221345.GA3462@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 26 Jan 2016 23:17:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openpgm: fix musl build
+Message-ID: <1453846632-1691-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fixes
+http://autobuild.buildroot.net/results/854/854554827ead82f29b293ddceced6eb7fbfeec27/
+http://autobuild.buildroot.net/results/aa2/aa2cf491dfb199a349afd107046f428107a583a0//
+and many others
 
-On 2016-01-25 00:07 +0100, Thomas Petazzoni spake thusly:
-> libtorrent uses 1 bytes and 4 bytes __sync built-ins, so let's use the
-> appropriate BR2_TOOLCHAIN_HAS_SYNC_x symbols instead of
-> BR2_ARCH_HAS_ATOMICS. The rtorrent package, which is a reverse
-> dependency of libtorrent, gets fixed as well.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/openpgm/0003-musl.patch | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/openpgm/0003-musl.patch
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: build-tested on an ARC toolchain without
- atomics, with CPU 770D]
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libtorrent/Config.in | 4 ++--
->  package/rtorrent/Config.in   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
-> index 17a1f23..4787f9c 100644
-> --- a/package/libtorrent/Config.in
-> +++ b/package/libtorrent/Config.in
-> @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBTORRENT
->  	bool "libtorrent"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on BR2_ARCH_HAS_ATOMICS
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
->  	select BR2_PACKAGE_ZLIB
->  	help
->  	  BitTorrent library written in C++ for *nix
-> @@ -10,5 +10,5 @@ config BR2_PACKAGE_LIBTORRENT
->  	  https://github.com/rakshasa/libtorrent
->  
->  comment "libtorrent needs a toolchain w/ C++, threads"
-> -	depends on BR2_ARCH_HAS_ATOMICS
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/rtorrent/Config.in b/package/rtorrent/Config.in
-> index 0583152..190e50f 100644
-> --- a/package/rtorrent/Config.in
-> +++ b/package/rtorrent/Config.in
-> @@ -4,7 +4,7 @@ config BR2_PACKAGE_RTORRENT
->  	depends on BR2_USE_WCHAR
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU # fork()
-> -	depends on BR2_ARCH_HAS_ATOMICS # libtorrent
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
->  	select BR2_PACKAGE_LIBCURL
->  	select BR2_PACKAGE_LIBTORRENT
->  	select BR2_PACKAGE_NCURSES
-> @@ -16,5 +16,5 @@ config BR2_PACKAGE_RTORRENT
->  
->  comment "rtorrent needs a toolchain w/ C++, threads, wchar"
->  	depends on BR2_USE_MMU
-> -	depends on BR2_ARCH_HAS_ATOMICS
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-> -- 
-> 2.6.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/openpgm/0003-musl.patch b/package/openpgm/0003-musl.patch
+new file mode 100644
+index 0000000..5b296a3
+--- /dev/null
++++ b/package/openpgm/0003-musl.patch
+@@ -0,0 +1,39 @@
++Fix musl build
++
++Downloaded from
++http://git.alpinelinux.org/cgit/aports/plain/main/openpgm/openpgm-fix-includes.patch
++and adjusted paths by prefixing with "openpgm/pgm/"
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++
++--- ./openpgm/pgm/include/pgm/types.h
+++++ ./openpgm/pgm/include/pgm/types.h
++@@ -27,6 +27,7 @@
++ 
++ #ifndef _MSC_VER
++ #	include <sys/param.h>
+++#	include <sys/types.h>
++ #endif
++ #include <pgm/macros.h>
++ 
++--- ./openpgm/pgm/include/impl/security.h
+++++ ./openpgm/pgm/include/impl/security.h
++@@ -33,7 +33,6 @@
++ #include <stdio.h>
++ #include <stdarg.h>
++ #include <sys/types.h>
++-#include <sys/timeb.h>
++ #include <impl/i18n.h>
++ #include <impl/errno.h>
++ #include <impl/string.h>
++@@ -41,6 +40,8 @@
++ PGM_BEGIN_DECLS
++ 
++ #ifdef HAVE_FTIME
+++#include <sys/timeb.h>
+++
++ static inline
++ errno_t
++ #	if   !defined( _WIN32 )
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.0.rc3
