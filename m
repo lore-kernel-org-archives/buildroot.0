@@ -1,44 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Jan 2016 23:08:15 +0100
-Subject: [Buildroot] [PATCH 6/8] uclibc: remove 0.9.33 version
-In-Reply-To: <56A6AC3E.6070908@gmail.com>
-References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453148701-10036-7-git-send-email-thomas.petazzoni@free-electrons.com>
- <56A6ABA8.1060708@gmail.com> <56A6AC3E.6070908@gmail.com>
-Message-ID: <56A7EE4F.4010102@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 23:12:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer/gst-plugins-base: Fix
+ build on x86 if emmintrin.h is available but can't be used
+In-Reply-To: <1453845373-30154-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453845373-30154-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160126231239.54c9a300@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26-01-16 00:14, Romain Naour wrote:
-> Thomas, All,
+Dear Bernd Kuhls,
+
+On Tue, 26 Jan 2016 22:56:13 +0100, Bernd Kuhls wrote:
+> I stumbled across this error using a musl-based allyesconfig but I
+> doubt it is related to musl. The autobuilders did not catch this
+> problem yet but the patch I found fits my config (BR2_i386=y,
+> BR2_x86_i586=y) and it solved the problem right away.
 > 
-> Le 18/01/2016 21:24, Thomas Petazzoni a ?crit :
->> The upstream project is dead, the 0.9.33 version requires tons of
->> patches, and uclibc-ng has now successfully replaced uclibc. It is
->> time to get rid of the 0.9.33 version.
-> 
-> For some reason I had some issue to apply the patch with pwclient (too many
-> lines removed at once ? :p )
-> 
-> There is no legacy handling for BR2_UCLIBC_VERSION_0_9_33.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- I don't think legacy handling is needed. Bumping to uClibc-ng is like bumping
-to uClibc-0.9.33.3, so it's OK if it happens without blocking the config.
+> diff --git a/package/gstreamer/gst-plugins-base/0002-sse.patch b/package/gstreamer/gst-plugins-base/0002-sse.patch
+> new file mode 100644
+> index 0000000..8d134f1
+> --- /dev/null
+> +++ b/package/gstreamer/gst-plugins-base/0002-sse.patch
+> @@ -0,0 +1,48 @@
+> +Fix build error with a musl-based allyesconfig (BR2_x86_i586=y)
+> +
+> +Downloaded from
+> +http://git.alpinelinux.org/cgit/aports/plain/main/gst-plugins-base0.10/sse.patch
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- What is a bit more annoying is that the old BR2_UCLIBC_CONFIG will no longer
-work. But not much can be done about that.
+This is not the proper way of formatting things, because it makes the
+patch no longer a Git formatted patch. Instead you should put your
+comments...
 
- Regards,
- Arnout
+> +
+> +
+> +From daa194b71ea6f9e8ee522ab02e8c56150b7e62b3 Mon Sep 17 00:00:00 2001
+> +From: Antoine Jacoutot <ajacoutot@gnome.org>
+> +Date: Mon, 20 Jan 2014 15:44:09 +0100
+> +Subject: audioresample: Fix build on x86 if emmintrin.h is available but can't
+> + be used
+> +
+> +On i386, EMMINTRIN is defined but not usable without SSE so check for
+> +__SSE__ and __SSE2__ as well.
+> +
+> +https://bugzilla.gnome.org/show_bug.cgi?id=670690
 
+... here.
 
+> +
+> +From 4e3d101aa854cfee633a9689efeb75e5001baa5e Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian@centricular.com>
+> +Date: Mon, 20 Jan 2014 16:11:04 +0100
+> +Subject: audioresample: It's HAVE_EMMINTRIN_H, not HAVE_XMMINTRIN_H for SSE2
+
+Also, this means two upstream commits have been squashed into one
+patch. Please use the upstream commits directly instead, either
+directly using GST_PLUGINS_BASE_PATCH if the patch don't need any
+backporting. Or if they do:
+
+gst-plugins-base (master)$ git checkout -b buildroot RELEASE-0.10.36
+gst-plugins-base (buildroot)$ git cherry-pick daa194b71ea6f9e8ee522ab02e8c56150b7e62b3
+gst-plugins-base (buildroot)$ git cherry-pick 4e3d101aa854cfee633a9689efeb75e5001baa5e
+gst-plugins-base (buildroot)$ git format-patch -N HEAD~2
+0001-audioresample-Fix-build-on-x86-if-emmintrin.h-is-ava.patch
+0002-audioresample-It-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch
+
+And there you are.
+
+But in this case, they seem to apply flawlessly, so using
+GST_PLUGINS_BASE_PATCH is probably good enough.
+
+Thanks,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
