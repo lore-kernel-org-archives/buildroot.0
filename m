@@ -1,43 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 14:13:32 +0100
-Subject: [Buildroot] [git commit] package/liblinear: bump version to 2.1
-Message-ID: <20160201224715.48EF97F90D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 23:01:40 +0100
+Subject: [Buildroot] [git commit] package/odhcp6c: add hash
+Message-ID: <20160201224701.CF1C67F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e0fcf25eb563bd4b403dee834fe4d9b98e44ded
+commit: https://git.buildroot.net/buildroot/commit/?id=dcea65ea7f821b98f97e9187bd4392d665e5eb7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bump also fixes the broken download of the previous version.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/liblinear/liblinear.hash | 2 +-
- package/liblinear/liblinear.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/odhcp6c/odhcp6c.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
-index 1c5b184..4f03fa4 100644
---- a/package/liblinear/liblinear.hash
-+++ b/package/liblinear/liblinear.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	ebc71999224f5779574b11e248f1e2ef647b5d839c0380c1c5a4ac8789aa95a9  liblinear-2.01.tar.gz
-+sha256	fa5c12dedc76ffca12f1681de7073b03af68163c4e4be65194217c99e55a7d68	liblinear-2.1.tar.gz
-diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
-index 80ba489..a9524e3 100644
---- a/package/liblinear/liblinear.mk
-+++ b/package/liblinear/liblinear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBLINEAR_VERSION = 2.01
-+LIBLINEAR_VERSION = 2.1
- LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
- LIBLINEAR_LICENSE = BSD-3c
- LIBLINEAR_LICENSE_FILES = COPYRIGHT
+diff --git a/package/odhcp6c/odhcp6c.hash b/package/odhcp6c/odhcp6c.hash
+new file mode 100644
+index 0000000..00a0960
+--- /dev/null
++++ b/package/odhcp6c/odhcp6c.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	b5f920ed300309d65e431a360cae5f3c2010eca09a4231c9ef907c730d3c0d09	odhcp6c-dc186d6d2b0dd4ad23ca5fc69c00e81f796ff6d9.tar.gz
