@@ -1,226 +1,47 @@
-From: Jonathan Ben-Avraham <yba@tkos.co.il>
-Date: Tue, 26 Jan 2016 20:28:20 +0200
-Subject: [Buildroot] [PATCH v6 3/3] ypbind-mt: new package
-In-Reply-To: <1453832900-25757-1-git-send-email-yba@tkos.co.il>
-References: <1453832900-25757-1-git-send-email-yba@tkos.co.il>
-Message-ID: <1453832900-25757-4-git-send-email-yba@tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 26 Jan 2016 20:24:50 +0100
+Subject: [Buildroot] [PATCH v2] package/mjpg-streamer: Fix musl build
+Message-ID: <1453836290-29654-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds the ypbind-mt package that contains a multi-threaded ypbind daemon
-for Linux. Depends on yp-tools package.
+Fixes
+http://autobuild.buildroot.net/results/74c/74c6006c4d7a97fa69c6feee204631861daffea9/
 
-Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                  |  1 +
- .../ypbind-mt/0001-Remove_man_dir_from_build.patch | 16 ++++
- package/ypbind-mt/Config.in                        | 17 ++++
- package/ypbind-mt/S70ypbind                        | 93 ++++++++++++++++++++++
- package/ypbind-mt/ypbind-mt.hash                   |  2 +
- package/ypbind-mt/ypbind-mt.mk                     | 24 ++++++
- 6 files changed, 153 insertions(+)
- create mode 100644 package/ypbind-mt/0001-Remove_man_dir_from_build.patch
- create mode 100644 package/ypbind-mt/Config.in
- create mode 100755 package/ypbind-mt/S70ypbind
- create mode 100644 package/ypbind-mt/ypbind-mt.hash
- create mode 100644 package/ypbind-mt/ypbind-mt.mk
+v2: use better patch suggested by Thomas
 
-diff --git a/package/Config.in b/package/Config.in
-index 6d8caf7..af9656b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1483,6 +1483,7 @@ endif
- 	source "package/xl2tp/Config.in"
- 	source "package/xtables-addons/Config.in"
- 	source "package/yp-tools/Config.in"
-+	source "package/ypbind-mt/Config.in"
- 	source "package/znc/Config.in"
- 
- endmenu
-diff --git a/package/ypbind-mt/0001-Remove_man_dir_from_build.patch b/package/ypbind-mt/0001-Remove_man_dir_from_build.patch
+ package/mjpg-streamer/0001-musl-pthread.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/mjpg-streamer/0001-musl-pthread.patch
+
+diff --git a/package/mjpg-streamer/0001-musl-pthread.patch b/package/mjpg-streamer/0001-musl-pthread.patch
 new file mode 100644
-index 0000000..10ebed7
+index 0000000..9e76e76
 --- /dev/null
-+++ b/package/ypbind-mt/0001-Remove_man_dir_from_build.patch
-@@ -0,0 +1,16 @@
-+Remove the man directory from the build in order to avoid trying to build the
-+commented targets ypbind.8 and ypconf.5
++++ b/package/mjpg-streamer/0001-musl-pthread.patch
+@@ -0,0 +1,18 @@
++Fix musl build
 +
-+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
++Patch written by Thomas Petazzoni:
++http://patchwork.ozlabs.org/patch/572309/
 +
-+--- a/Makefile.am	2014-12-04 16:27:18.000000000 +0200
-++++ b/Makefile.am	2015-12-16 15:00:21.950050679 +0200
-+@@ -5,7 +5,7 @@
-+ #
-+ AUTOMAKE_OPTIONS = 1.6 gnits dist-bzip2
-+ #
-+-SUBDIRS = lib src man po
-++SUBDIRS = lib src po
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr mjpg-streamer-bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b.org/plugins/input.h mjpg-streamer-bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b/plugins/input.h
++--- mjpg-streamer-bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b.org/plugins/input.h	2015-11-09 15:56:47.000000000 +0100
+++++ mjpg-streamer-bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b/plugins/input.h	2016-01-26 20:19:05.884349502 +0100
++@@ -20,6 +20,7 @@
++ #                                                                              #
++ *******************************************************************************/
 + 
-+ CLEANFILES = *~
-+ 
-diff --git a/package/ypbind-mt/Config.in b/package/ypbind-mt/Config.in
-new file mode 100644
-index 0000000..2ac9d28
---- /dev/null
-+++ b/package/ypbind-mt/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_YPBIND_MT
-+	bool "ypbind-mt"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # rpcsvc/nis.h
-+	select BR2_PACKAGE_YP_TOOLS
-+	select BR2_PACKAGE_RPCBIND # runtime
-+	help
-+	  The ypbind-mt package contains a multithreaded ypbind daemon
-+	  for Linux. It uses threads for better response and supports
-+	  the ypbind protocols version 1, 2 and 3.
-+
-+	  Note: You need to select package "linux-pam" for NIS
-+	  authentication.
-+
-+	  http://www.linux-nis.org/nis/ypbind-mt/
-+
-+comment "ypbind-mt needs an (e)glibc toolchain with rpcsvc/nis.h"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/ypbind-mt/S70ypbind b/package/ypbind-mt/S70ypbind
-new file mode 100755
-index 0000000..e73bec6
---- /dev/null
-+++ b/package/ypbind-mt/S70ypbind
-@@ -0,0 +1,93 @@
-+#!/bin/sh
-+# Based on /etc/init.d/ypbind from SuSe Linux by Thorsten Kukuk
-+
-+DAEMON=/usr/sbin/ypbind
-+pidfile=/var/run/ypbind.pid
-+
-+[ -x ${DAEMON} ] || exit 0
-+
-+[ -f /etc/default/ypbind ] && source /etc/default/ypbind
-+
-+case "$1" in
-+	start)
-+		echo -n "Starting ypbind: "
-+		# Check for preset YP domainname
-+		ypdomainname &> /dev/null
-+		if [ $? -ne 0 ]; then
-+			if [ ! -f /etc/defaultdomain ]; then
-+				# No configured YP domainname
-+				echo "FAIL"
-+				exit 1
-+			fi
-+			# Assume that /etc/defaultdomain contains
-+			# a valid domainname and assume ypdomainname
-+			# succeeds
-+			XDOMAINNAME=$(cat /etc/defaultdomain)
-+			ypdomainname "${XDOMAINNAME}"
-+		fi
-+
-+		if [ ! -f /etc/yp.conf -a "${YPBIND_BROADCAST}" != "yes" ]; then
-+			# We need a local configuration if not in broadcast mode
-+			echo "FAIL"
-+			exit 1
-+		fi
-+
-+		OPTIONS=""
-+		test "${YPBIND_LOCAL_ONLY}" = "yes" && \
-+			OPTIONS="-local-only ${OPTIONS}"
-+		test "${YPBIND_BROADCAST}" = "yes" && \
-+			OPTIONS="-broadcast ${OPTIONS}"
-+		test "${YPBIND_BROKEN_SERVER}" = "yes" && \
-+			OPTIONS="-broken-server ${OPTIONS}"
-+
-+		start-stop-daemon --start --quiet --pidfile ${pidfile} \
-+			--exec ${DAEMON} -- ${OPTIONS}
-+
-+		if [ $? -ne 0 ]; then
-+			echo "FAIL"
-+			exit 1
-+		fi
-+
-+		# Make sure we have a server so that later scripts can know
-+		notfound=1
-+		for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
-+			if ypwhich &>/dev/null; then
-+				notfound=0
-+				break
-+			fi
-+			echo -n " ."
-+			sleep 1;
-+		done
-+
-+		if [ ${notfound} -eq 1 ]; then
-+			# No NIS server found
-+			echo "FAIL"
-+			exit 1
-+		fi
-+
-+		echo "OK"
-+		;;
-+
-+	stop)
-+		echo "Shutting down ypbind "
-+		start-stop-daemon --stop --quiet --pidfile $pidfile
-+		# Remove static data, else glibc will continue to use NIS
-+		rm -f /var/yp/binding/* /var/run/ypbind.pid
-+		;;
-+
-+	restart)
-+		${0} stop
-+		sleep 1
-+		${0} start
-+		;;
-+
-+	reload|force-reload)
-+		echo "Reloading ypbind"
-+		start-stop-daemon --stop --quiet --signal 1 --pidfile $pidfile
-+		;;
-+
-+	*)
-+		echo "Usage: ${0} {start|stop|restart|force-reload|reload}"
-+		exit 1
-+		;;
-+esac
-diff --git a/package/ypbind-mt/ypbind-mt.hash b/package/ypbind-mt/ypbind-mt.hash
-new file mode 100644
-index 0000000..500eccc
---- /dev/null
-+++ b/package/ypbind-mt/ypbind-mt.hash
-@@ -0,0 +1,2 @@
-+# Computed locally
-+sha256 dedd2b94d01ae1a992abf1a569885c18f94ee57d9dfcc8d8cbb8d32f7f531478  ypbind-mt-ypbind-mt-2_2.tar.gz
-diff --git a/package/ypbind-mt/ypbind-mt.mk b/package/ypbind-mt/ypbind-mt.mk
-new file mode 100644
-index 0000000..08baf6e
---- /dev/null
-+++ b/package/ypbind-mt/ypbind-mt.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# ypbind-mt
-+#
-+################################################################################
-+
-+# The github releases of ypbind-mt are often a release or more ahead of the
-+# "Download" links on http://www.linux-nis.org/nis/ypbind-mt/
-+YPBIND_MT_VERSION = ypbind-mt-2_2
-+YPBIND_MT_SITE = $(call github,thkukuk,ypbind-mt,$(YPBIND_MT_VERSION))
-+YPBIND_MT_LICENSE = GPLv2
-+YPBIND_MT_LICENSE_FILES = COPYING
-+YPBIND_MT_AUTORECONF = YES
-+YPBIND_MT_DEPENDENCIES = host-pkgconf yp-tools
-+YPBIND_MT_CONF_ENV = \
-+	PKG_CONFIG_SYSROOT_DIR="$(TARGET_DIR)" \
-+	PKG_CONFIG_PATH="$(TARGET_DIR)/usr/lib/pkgconfig"
-+
-+define YPBIND_MT_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 $(YPBIND_MT_PKGDIR)/S70ypbind \
-+		$(TARGET_DIR)/etc/init.d/S70ypbind
-+endef
-+
-+$(eval $(autotools-package))
+++#include <pthread.h>
++ #include <syslog.h>
++ #include "../mjpg_streamer.h"
++ #define INPUT_PLUGIN_PREFIX " i: "
 -- 
-2.1.4
+2.7.0.rc3
