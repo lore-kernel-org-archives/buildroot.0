@@ -1,54 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 31 Jan 2016 23:52:59 +0100
-Subject: [Buildroot] Loading modules with device tree after rootfs is
- mounted
-In-Reply-To: <CANqk_c9oEnF32aeNnPzki0vr1E4-s-xxGyC5+dHAwAw6rHkLAg@mail.gmail.com>
-References: <CANqk_c9oEnF32aeNnPzki0vr1E4-s-xxGyC5+dHAwAw6rHkLAg@mail.gmail.com>
-Message-ID: <56AE904B.2030906@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 21:21:30 +0100
+Subject: [Buildroot] [git commit] package/mjpg-streamer: Fix musl build
+Message-ID: <20160201224659.663037FAE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-01-16 18:56, Tim Michals wrote:
-> I've created new buildroot defconfig for Udoo Neo board, u-boot, linux kernel
-> boots and busybox prompt is active and accepts commands.  The issue is several
-> drivers (wifi, camera, etc) are built as kernel modules and stored on ext4
-> rootfs.  How can the kernel load these modules via the device tree from the rootfs? 
+commit: https://git.buildroot.net/buildroot/commit/?id=f88a49064df9993efe2ecbc2d89e3e1301b983b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- The kernel doesn't automatically load modules, you need a userspace hotplug
-helper to handle that. You have the following options:
+Fixes
+http://autobuild.buildroot.net/results/74c/74c6006c4d7a97fa69c6feee204631861daffea9/
 
-1. modprobe the required drivers in an init script (no hotplugging).
-2. Write a hotplug script that modprobes as required (google it).
-3. Use mdev as the /dev handler and add a modprobe handler in mdev.conf (google it).
-4. Use udev as the /dev handler.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mjpg-streamer/0001-musl-pthread.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-
- Regards,
- Arnout
-
-> 
-> Udoo team has a lubuntu image, and the drivers are loaded after rootfs is
-> mounted, so I'm confused how this works.  
-> 
-> 
-> 
-> Thank your for help.
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/mjpg-streamer/0001-musl-pthread.patch b/package/mjpg-streamer/0001-musl-pthread.patch
+new file mode 100644
+index 0000000..9e76e76
+--- /dev/null
++++ b/package/mjpg-streamer/0001-musl-pthread.patch
+@@ -0,0 +1,18 @@
++Fix musl build
++
++Patch written by Thomas Petazzoni:
++http://patchwork.ozlabs.org/patch/572309/
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr mjpg-streamer-bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b.org/plugins/input.h mjpg-streamer-bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b/plugins/input.h
++--- mjpg-streamer-bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b.org/plugins/input.h	2015-11-09 15:56:47.000000000 +0100
+++++ mjpg-streamer-bbf32fddfd02a9e072e89e83a5b33e6ca0a7bd4b/plugins/input.h	2016-01-26 20:19:05.884349502 +0100
++@@ -20,6 +20,7 @@
++ #                                                                              #
++ *******************************************************************************/
++ 
+++#include <pthread.h>
++ #include <syslog.h>
++ #include "../mjpg_streamer.h"
++ #define INPUT_PLUGIN_PREFIX " i: "
