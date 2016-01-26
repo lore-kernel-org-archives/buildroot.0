@@ -1,78 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2016 23:35:11 +0100
-Subject: [Buildroot] [PATCH 21/21] neard: add missing
- BR2_TOOLCHAIN_HAS_SYNC_4 dependency
-In-Reply-To: <1453676887-31236-22-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-22-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160126223511.GH3462@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 26 Jan 2016 23:44:45 +0100
+Subject: [Buildroot] [PATCH 1/2] package/kodi: not available using a
+	musl-based toolchain
+Message-ID: <1453848286-2477-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+The build stops with
+configure: error: unsupported host (i586-buildroot-linux-musl)
+due to musl not being supported in
+https://github.com/xbmc/xbmc/blob/Isengard/m4/xbmc_arch.m4
 
-On 2016-01-25 00:08 +0100, Thomas Petazzoni spake thusly:
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/b8bf7be2efd8e8e369abdde0a5bec564e8cd6f23/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/connman/Config.in | 1 +
->  package/neard/Config.in   | 2 ++
->  2 files changed, 3 insertions(+)
-> 
-> diff --git a/package/connman/Config.in b/package/connman/Config.in
-> index 655db86..556de48 100644
-> --- a/package/connman/Config.in
-> +++ b/package/connman/Config.in
-> @@ -50,6 +50,7 @@ config BR2_PACKAGE_CONNMAN_LOOPBACK
->  config BR2_PACKAGE_CONNMAN_NEARD
->  	bool "enable neard support"
->  	select BR2_PACKAGE_NEARD
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # neard
->  
->  config BR2_PACKAGE_CONNMAN_OFONO
->  	bool "enable ofono support"
-> diff --git a/package/neard/Config.in b/package/neard/Config.in
-> index 353d1af..8571e7c 100644
-> --- a/package/neard/Config.in
-> +++ b/package/neard/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_NEARD
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, dbus, libglib2
->  	depends on BR2_USE_MMU # dbus, libglib2
->  	depends on !BR2_STATIC_LIBS # dlopen
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	select BR2_PACKAGE_DBUS
->  	select BR2_PACKAGE_LIBGLIB2
->  	select BR2_PACKAGE_LIBNL
-> @@ -26,4 +27,5 @@ endif
->  
->  comment "neard needs a toolchain w/ wchar, threads, dynamic library"
->  	depends on BR2_USE_MMU
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> -- 
-> 2.6.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index e697b52..ed90ed6 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -2,10 +2,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 
+-comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
++comment "kodi needs a uClibc or (e)glibc toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
++		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_KODI_EGL_GLES
+@@ -89,6 +90,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.0.rc3
