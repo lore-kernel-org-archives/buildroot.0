@@ -1,48 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 22:25:59 +0100
-Subject: [Buildroot] [git commit] package/radvd: fix musl build
-Message-ID: <20160201224707.882D57F8C1@busybox.osuosl.org>
+Date: Tue, 26 Jan 2016 21:25:22 +0100
+Subject: [Buildroot] [git commit] libftdi: C++ bindings need boost
+Message-ID: <20160201224708.803F87F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80e8e75f2a07407e07afc6208f7fd2cfb4343584
+commit: https://git.buildroot.net/buildroot/commit/?id=f1550e3eb082862259bc76d0312c556407a24046
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The autobuilders did not catch the error yet because they failed
-earlier with other packages, but I am continuing the build using the
-defconfig from:
-http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
+According to libftdi configure.in:
 
-[Thomas: replace with upstream patch directly, fetched from Github.]
+"""
+dnl libftdi C++ wrapper. Needs boost.
+[...]
+        if test "x$HAVE_BOOST" != "xyes"; then
+            AC_MSG_ERROR(Sorry, we need the boost library for the C++ wrapper)
+        fi
+"""
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+And indeed, if you enable BR2_PACKAGE_LIBTFDI_CPP but don't have Boost
+enabled, the libfdipp library is not built. To fix this, this commit
+changes BR2_PACKAGE_LIBTFDI_CPP to select Boost.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/radvd/radvd.hash | 1 +
- package/radvd/radvd.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/libftdi/Config.in  | 9 ++++++++-
+ package/libftdi/libftdi.mk | 1 +
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
-index 7324c31..3ace4fc 100644
---- a/package/radvd/radvd.hash
-+++ b/package/radvd/radvd.hash
-@@ -1,2 +1,3 @@
- # From http://www.litech.org/radvd/dist/radvd-2.11.tar.gz.sha256
- sha256	04636288fc79fa151260eeb2bea1b05942f59c31f01358c57f930a4eb45b5acc	radvd-2.11.tar.xz
-+sha256	01d12bd2970fedf5695d9177a5ea45483d5e3c709ecceed636972c3049c47d0d	1d8973e13d89802eee0b648451e2b97ac65cf9e0.patch
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 872eac0..503b62d 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -7,6 +7,8 @@
- RADVD_VERSION = 2.11
- RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
- RADVD_SITE = http://www.litech.org/radvd/dist
-+RADVD_PATCH = \
-+	https://github.com/reubenhwk/radvd/commit/1d8973e13d89802eee0b648451e2b97ac65cf9e0.patch
- RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
- RADVD_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- # We're patching configure.ac/Makefile.am.
+diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
+index 76b30b1..c0ab0f2 100644
+--- a/package/libftdi/Config.in
++++ b/package/libftdi/Config.in
+@@ -12,11 +12,18 @@ config BR2_PACKAGE_LIBFTDI
+ if BR2_PACKAGE_LIBFTDI
+ 
+ config BR2_PACKAGE_LIBTFDI_CPP
+-	depends on BR2_INSTALL_LIBSTDCPP
+ 	bool "C++ bindings"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_BOOST
+ 	help
+ 	  C++ bindings for libftdi
+ 
++comment "libftdi C++ bindings need a toolchain w/ wchar, C++"
++	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
++
+ endif # BR2_PACKAGE_LIBFTDI
+ 
+ comment "libftdi needs a toolchain w/ threads"
+diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
+index 8370b0a..28f20e3 100644
+--- a/package/libftdi/libftdi.mk
++++ b/package/libftdi/libftdi.mk
+@@ -15,6 +15,7 @@ LIBFDTI_CONF_OPTS = --without-examples
+ 
+ # configure detect it automaticaly so we need to force it
+ ifeq ($(BR2_PACKAGE_LIBTFDI_CPP),y)
++LIBFTDI_DEPENDENCIES += boost
+ LIBFDTI_CONF_OPTS += --enable-libftdipp
+ else
+ LIBFDTI_CONF_OPTS += --disable-libftdipp
