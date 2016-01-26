@@ -1,42 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 21:18:54 +0100
-Subject: [Buildroot] [PATCH 3/3] docs/manual: update graph-depends
-	documentation about --stop-on
-In-Reply-To: <1453839534-3912-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453839534-3912-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453839534-3912-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 21:18:52 +0100
+Subject: [Buildroot] [PATCH 1/3] graph-depends: fix handling of "virtual" in
+	exclude_list
+Message-ID: <1453839534-3912-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit updates the graph-depends documentation to take into
-account the new 'host' keyword that can be passed to the --stop-on and
---exclude options.
+The condition to determine if a virtual package should be excluded
+from the list due to "virtual" being passed in --exclude is under a
+loop iterating over each entry of the exclude_list, but it doesn't use
+the iterator of this list.
+
+Indeed, the condition contains:
+
+	"virtual" in exclude_list
+
+which checks automatically if "virtual" was passed in the list. Due to
+this, there is no need for this check to be within the "for p in
+exclude_list" iteration. This commit fixes that by moving the check
+outside of the loop.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/common-usage.txt | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ support/scripts/graph-depends | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index bca99f4..01cd31e 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -212,9 +212,10 @@ The +graph-depends+ behaviour can be controlled by setting options in the
-   default, +0+, means no limit.
- 
- * +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
--  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
--  (to stop on virtual packages). The package is still present on the
--  graph, but its dependencies are not.
-+  +PKG+ can be an actual package name, a glob, the keyword 'virtual'
-+  (to stop on virtual packages), or the keyword 'host' (to stop on
-+  host packages). The package is still present on the graph, but its
-+  dependencies are not.
- 
- * +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
-   the graph.
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index fd8ad2f..d09ce38 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -364,10 +364,10 @@ def print_pkg_deps(depth, pkg):
+                 if fnmatch(d,p):
+                     add = False
+                     break
+-                if dict_version.get(d) == "virtual" \
+-                and "virtual" in exclude_list:
+-                    add = False
+-                    break
++            if dict_version.get(d) == "virtual" \
++               and "virtual" in exclude_list:
++                add = False
++                break
+             if add:
+                 print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
+                 print_pkg_deps(depth+1, d)
 -- 
 2.6.4
