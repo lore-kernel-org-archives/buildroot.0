@@ -1,85 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 23:12:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer/gst-plugins-base: Fix
- build on x86 if emmintrin.h is available but can't be used
-In-Reply-To: <1453845373-30154-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453845373-30154-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160126231239.54c9a300@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Jan 2016 23:13:45 +0100
+Subject: [Buildroot] [PATCH 10/21] libtorrent: use the proper
+ BR2_TOOLCHAIN_HAS_SYNC_x symbols
+In-Reply-To: <1453676887-31236-11-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453676887-31236-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160126221345.GA3462@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Thomas, All,
 
-On Tue, 26 Jan 2016 22:56:13 +0100, Bernd Kuhls wrote:
-> I stumbled across this error using a musl-based allyesconfig but I
-> doubt it is related to musl. The autobuilders did not catch this
-> problem yet but the patch I found fits my config (BR2_i386=y,
-> BR2_x86_i586=y) and it solved the problem right away.
+On 2016-01-25 00:07 +0100, Thomas Petazzoni spake thusly:
+> libtorrent uses 1 bytes and 4 bytes __sync built-ins, so let's use the
+> appropriate BR2_TOOLCHAIN_HAS_SYNC_x symbols instead of
+> BR2_ARCH_HAS_ATOMICS. The rtorrent package, which is a reverse
+> dependency of libtorrent, gets fixed as well.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> diff --git a/package/gstreamer/gst-plugins-base/0002-sse.patch b/package/gstreamer/gst-plugins-base/0002-sse.patch
-> new file mode 100644
-> index 0000000..8d134f1
-> --- /dev/null
-> +++ b/package/gstreamer/gst-plugins-base/0002-sse.patch
-> @@ -0,0 +1,48 @@
-> +Fix build error with a musl-based allyesconfig (BR2_x86_i586=y)
-> +
-> +Downloaded from
-> +http://git.alpinelinux.org/cgit/aports/plain/main/gst-plugins-base0.10/sse.patch
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: build-tested on an ARC toolchain without
+ atomics, with CPU 770D]
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This is not the proper way of formatting things, because it makes the
-patch no longer a Git formatted patch. Instead you should put your
-comments...
+Regards,
+Yann E. MORIN.
 
-> +
-> +
-> +From daa194b71ea6f9e8ee522ab02e8c56150b7e62b3 Mon Sep 17 00:00:00 2001
-> +From: Antoine Jacoutot <ajacoutot@gnome.org>
-> +Date: Mon, 20 Jan 2014 15:44:09 +0100
-> +Subject: audioresample: Fix build on x86 if emmintrin.h is available but can't
-> + be used
-> +
-> +On i386, EMMINTRIN is defined but not usable without SSE so check for
-> +__SSE__ and __SSE2__ as well.
-> +
-> +https://bugzilla.gnome.org/show_bug.cgi?id=670690
+> ---
+>  package/libtorrent/Config.in | 4 ++--
+>  package/rtorrent/Config.in   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
+> index 17a1f23..4787f9c 100644
+> --- a/package/libtorrent/Config.in
+> +++ b/package/libtorrent/Config.in
+> @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBTORRENT
+>  	bool "libtorrent"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on BR2_ARCH_HAS_ATOMICS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+>  	  BitTorrent library written in C++ for *nix
+> @@ -10,5 +10,5 @@ config BR2_PACKAGE_LIBTORRENT
+>  	  https://github.com/rakshasa/libtorrent
+>  
+>  comment "libtorrent needs a toolchain w/ C++, threads"
+> -	depends on BR2_ARCH_HAS_ATOMICS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/rtorrent/Config.in b/package/rtorrent/Config.in
+> index 0583152..190e50f 100644
+> --- a/package/rtorrent/Config.in
+> +++ b/package/rtorrent/Config.in
+> @@ -4,7 +4,7 @@ config BR2_PACKAGE_RTORRENT
+>  	depends on BR2_USE_WCHAR
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_USE_MMU # fork()
+> -	depends on BR2_ARCH_HAS_ATOMICS # libtorrent
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
+>  	select BR2_PACKAGE_LIBCURL
+>  	select BR2_PACKAGE_LIBTORRENT
+>  	select BR2_PACKAGE_NCURSES
+> @@ -16,5 +16,5 @@ config BR2_PACKAGE_RTORRENT
+>  
+>  comment "rtorrent needs a toolchain w/ C++, threads, wchar"
+>  	depends on BR2_USE_MMU
+> -	depends on BR2_ARCH_HAS_ATOMICS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-... here.
-
-> +
-> +From 4e3d101aa854cfee633a9689efeb75e5001baa5e Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian@centricular.com>
-> +Date: Mon, 20 Jan 2014 16:11:04 +0100
-> +Subject: audioresample: It's HAVE_EMMINTRIN_H, not HAVE_XMMINTRIN_H for SSE2
-
-Also, this means two upstream commits have been squashed into one
-patch. Please use the upstream commits directly instead, either
-directly using GST_PLUGINS_BASE_PATCH if the patch don't need any
-backporting. Or if they do:
-
-gst-plugins-base (master)$ git checkout -b buildroot RELEASE-0.10.36
-gst-plugins-base (buildroot)$ git cherry-pick daa194b71ea6f9e8ee522ab02e8c56150b7e62b3
-gst-plugins-base (buildroot)$ git cherry-pick 4e3d101aa854cfee633a9689efeb75e5001baa5e
-gst-plugins-base (buildroot)$ git format-patch -N HEAD~2
-0001-audioresample-Fix-build-on-x86-if-emmintrin.h-is-ava.patch
-0002-audioresample-It-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch
-
-And there you are.
-
-But in this case, they seem to apply flawlessly, so using
-GST_PLUGINS_BASE_PATCH is probably good enough.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
