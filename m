@@ -1,171 +1,78 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 26 Jan 2016 23:26:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lvm2: fix musl build
-Message-ID: <1453847201-19076-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Jan 2016 23:31:13 +0100
+Subject: [Buildroot] [PATCH 15/21] thrift: remove BR2_ARCH_HAS_ATOMICS
+ dependency
+In-Reply-To: <1453676887-31236-16-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453676887-31236-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160126223113.GE3462@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/b25/b25847e1b8eddac6104c5777a8137e419eaefe64/
+Thomas, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/lvm2/0001-fix-stdio-usage.patch | 118 ++++++++++++++++++++++++++++++++
- package/lvm2/0002-mallinfo.patch        |  18 +++++
- 2 files changed, 136 insertions(+)
- create mode 100644 package/lvm2/0001-fix-stdio-usage.patch
- create mode 100644 package/lvm2/0002-mallinfo.patch
+On 2016-01-25 00:08 +0100, Thomas Petazzoni spake thusly:
+> thrift builds perfectly fine on SPARC, which doesn't implement any of
+> the __sync built-ins, so we can get rid of the BR2_ARCH_HAS_ATOMICS
+> dependency.
+> 
+> The dependency on atomic operations originated in commit
+> 1aaa14d84f1c920423ed0286b78f64a2b4b2b575 ("thrift: disable for ARC"),
+> but there was no reference to any autobuilder failure. Our testing
+> with an ARC toolchain that doesn't have atomics shows that thrift
+> builds just fine, and code inspection also shows no usage of
+> __sync_*() built-ins. At the time of the commit, the thrift version
+> was 0.9.1, which also did not contain any __sync_*() call.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/lvm2/0001-fix-stdio-usage.patch b/package/lvm2/0001-fix-stdio-usage.patch
-new file mode 100644
-index 0000000..a06ca7c
---- /dev/null
-+++ b/package/lvm2/0001-fix-stdio-usage.patch
-@@ -0,0 +1,118 @@
-+Fix musl build
-+
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/plain/main/lvm2/fix-stdio-usage.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- LVM2.2.02.103.orig/lib/commands/toolcontext.c
-++++ LVM2.2.02.103/lib/commands/toolcontext.c
-+@@ -1336,7 +1336,10 @@
-+ /*
-+  * Close and reopen stream on file descriptor fd.
-+  */
-+-static int _reopen_stream(FILE *stream, int fd, const char *mode, const char *name, FILE **new_stream)
-++#ifdef __GLIBC__
-++#define _reopen_stream(stream, fd, mode, name) __reopen_stream(stream, fd, mode, name, &stream)
-++
-++static int __reopen_stream(FILE *stream, int fd, const char *mode, const char *name, FILE **new_stream)
-+ {
-+ 	int fd_copy, new_fd;
-+ 
-+@@ -1363,6 +1366,9 @@
-+ 
-+ 	return 1;
-+ }
-++#else
-++#define _reopen_stream(stream, fd, mode, name) (freopen(NULL, mode, stream) != NULL)
-++#endif
-+ 
-+ /* Entry point */
-+ struct cmd_context *create_toolcontext(unsigned is_long_lived,
-+@@ -1371,7 +1377,6 @@
-+ 				       unsigned threaded)
-+ {
-+ 	struct cmd_context *cmd;
-+-	FILE *new_stream;
-+ 	int flags;
-+ 
-+ #ifdef M_MMAP_MAX
-+@@ -1421,9 +1426,8 @@
-+ 		if (is_valid_fd(STDIN_FILENO) &&
-+ 		    ((flags = fcntl(STDIN_FILENO, F_GETFL)) > 0) &&
-+ 		    (flags & O_ACCMODE) != O_WRONLY) {
-+-			if (!_reopen_stream(stdin, STDIN_FILENO, "r", "stdin", &new_stream))
-++			if (!_reopen_stream(stdin, STDIN_FILENO, "r", "stdin"))
-+ 				goto_out;
-+-			stdin = new_stream;
-+ 			if (setvbuf(stdin, cmd->linebuffer, _IOLBF, linebuffer_size)) {
-+ 				log_sys_error("setvbuf", "");
-+ 				goto out;
-+@@ -1433,9 +1437,8 @@
-+ 		if (is_valid_fd(STDOUT_FILENO) &&
-+ 		    ((flags = fcntl(STDOUT_FILENO, F_GETFL)) > 0) &&
-+ 		    (flags & O_ACCMODE) != O_RDONLY) {
-+-			if (!_reopen_stream(stdout, STDOUT_FILENO, "w", "stdout", &new_stream))
-++			if (!_reopen_stream(stdout, STDOUT_FILENO, "w", "stdout"))
-+ 				goto_out;
-+-			stdout = new_stream;
-+ 			if (setvbuf(stdout, cmd->linebuffer + linebuffer_size,
-+ 				     _IOLBF, linebuffer_size)) {
-+ 				log_sys_error("setvbuf", "");
-+@@ -1715,7 +1718,6 @@
-+ void destroy_toolcontext(struct cmd_context *cmd)
-+ {
-+ 	struct dm_config_tree *cft_cmdline;
-+-	FILE *new_stream;
-+ 	int flags;
-+ 
-+ 	if (cmd->dump_filter && cmd->filter && cmd->filter->dump &&
-+@@ -1752,8 +1754,7 @@
-+ 		if (is_valid_fd(STDIN_FILENO) &&
-+ 		    ((flags = fcntl(STDIN_FILENO, F_GETFL)) > 0) &&
-+ 		    (flags & O_ACCMODE) != O_WRONLY) {
-+-			if (_reopen_stream(stdin, STDIN_FILENO, "r", "stdin", &new_stream)) {
-+-				stdin = new_stream;
-++			if (_reopen_stream(stdin, STDIN_FILENO, "r", "stdin")) {
-+ 				setlinebuf(stdin);
-+ 			} else
-+ 				cmd->linebuffer = NULL;	/* Leave buffer in place (deliberate leak) */
-+@@ -1762,8 +1763,7 @@
-+ 		if (is_valid_fd(STDOUT_FILENO) &&
-+ 		    ((flags = fcntl(STDOUT_FILENO, F_GETFL)) > 0) &&
-+ 		    (flags & O_ACCMODE) != O_RDONLY) {
-+-			if (_reopen_stream(stdout, STDOUT_FILENO, "w", "stdout", &new_stream)) {
-+-				stdout = new_stream;
-++			if (_reopen_stream(stdout, STDOUT_FILENO, "w", "stdout")) {
-+ 				setlinebuf(stdout);
-+ 			} else
-+ 				cmd->linebuffer = NULL;	/* Leave buffer in place (deliberate leak) */
-+--- LVM2.2.02.103.orig/tools/lvmcmdline.c
-++++ LVM2.2.02.103/tools/lvmcmdline.c
-+@@ -1252,7 +1252,7 @@
-+ 	int err = is_valid_fd(STDERR_FILENO);
-+ 
-+ 	if (!is_valid_fd(STDIN_FILENO) &&
-+-	    !(stdin = fopen(_PATH_DEVNULL, "r"))) {
-++	    !freopen(_PATH_DEVNULL, "r", stdin)) {
-+ 		if (err)
-+ 			perror("stdin stream open");
-+ 		else
-+@@ -1262,7 +1262,7 @@
-+ 	}
-+ 
-+ 	if (!is_valid_fd(STDOUT_FILENO) &&
-+-	    !(stdout = fopen(_PATH_DEVNULL, "w"))) {
-++	    !freopen(_PATH_DEVNULL, "w", stdout)) {
-+ 		if (err)
-+ 			perror("stdout stream open");
-+ 		/* else no stdout */
-+@@ -1270,7 +1270,7 @@
-+ 	}
-+ 
-+ 	if (!is_valid_fd(STDERR_FILENO) &&
-+-	    !(stderr = fopen(_PATH_DEVNULL, "w"))) {
-++	    !freopen(_PATH_DEVNULL, "w", stderr)) {
-+ 		printf("stderr stream open: %s\n",
-+ 		       strerror(errno));
-+ 		return 0;
-diff --git a/package/lvm2/0002-mallinfo.patch b/package/lvm2/0002-mallinfo.patch
-new file mode 100644
-index 0000000..e3b5f89
---- /dev/null
-+++ b/package/lvm2/0002-mallinfo.patch
-@@ -0,0 +1,18 @@
-+Fix musl build
-+
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/plain/main/lvm2/mallinfo.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- ./lib/mm/memlock.c.orig	2015-03-09 11:18:41.560028850 -0100
-++++ ./lib/mm/memlock.c	2015-03-09 11:19:54.504373309 -0100
-+@@ -137,7 +137,7 @@
-+ 
-+ static void _allocate_memory(void)
-+ {
-+-#ifndef VALGRIND_POOL
-++#if !defined(VALGRIND_POOL) && defined(__GLIBC__)
-+ 	void *stack_mem;
-+ 	struct rlimit limit;
-+ 	int i, area = 0, missing = _size_malloc_tmp, max_areas = 32, hblks;
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: build-tested on an ARC toolchain without
+ atomics, with CPU 770D]
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/thrift/Config.in | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/package/thrift/Config.in b/package/thrift/Config.in
+> index b9960f8..54ca9b8 100644
+> --- a/package/thrift/Config.in
+> +++ b/package/thrift/Config.in
+> @@ -3,7 +3,6 @@ config BR2_PACKAGE_THRIFT
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_USE_WCHAR
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_BOOST
+>  	select BR2_PACKAGE_LIBEVENT
+> @@ -20,7 +19,6 @@ config BR2_PACKAGE_THRIFT
+>  	  http://thrift.apache.org/
+>  
+>  comment "thrift needs a toolchain w/ C++, wchar, threads"
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+>  	depends on !BR2_USE_WCHAR || \
+>  		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.0.rc3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
