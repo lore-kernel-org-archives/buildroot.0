@@ -1,121 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 21:32:34 +0100
-Subject: [Buildroot] [git commit] zbar: add a patch to wrap logical not
-	operations into parenthesis
-Message-ID: <20160201224704.961207F8C1@busybox.osuosl.org>
+Date: Tue, 26 Jan 2016 22:33:04 +0100
+Subject: [Buildroot] [git commit] package/setools: add homepage to Config.in
+Message-ID: <20160201224703.5C43D7F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12116d4df39911e771e1012442a9ed39836a8fb1
+commit: https://git.buildroot.net/buildroot/commit/?id=6201e08f8201c19b53c6d383f3ed8e02c4e0c7f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes build failures like this one:
-
-zbar/decoder/ean.c: In function 'ean_part_end4':
-zbar/decoder/ean.c:297:13: error: logical not is only applied to the
-left hand side of comparison [-Werror=logical-not-parentheses]
-     if(!par == fwd) {
-
-This patch has been sent upstream as a pull request:
-
-  https://github.com/ZBar/ZBar/pull/9
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/299/299dc845af082167085d366b38daf1dfd95d7047/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...p-logical-not-operations-into-parentheses.patch | 80 ++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ package/setools/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch b/package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch
-new file mode 100644
-index 0000000..6d39b1b
---- /dev/null
-+++ b/package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch
-@@ -0,0 +1,80 @@
-+From 7e69cdc8dfdf07701ba551985ee49d48e64d730f Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Mon, 25 Jan 2016 11:58:59 +0000
-+Subject: [PATCH] Wrap logical not operations into parentheses
+diff --git a/package/setools/Config.in b/package/setools/Config.in
+index 7bab789..c291b21 100644
+--- a/package/setools/Config.in
++++ b/package/setools/Config.in
+@@ -26,6 +26,8 @@ config BR2_PACKAGE_SETOOLS
+ 	   * secmds - command-line tools to analyze and search SELinux
+ 	     policy.
+ 
++	  https://github.com/TresysTechnology/setools3/wiki
 +
-+Otherwise it fails like this:
-+
-+zbar/decoder/ean.c: In function 'ean_part_end4':
-+zbar/decoder/ean.c:297:13: error: logical not is only applied to the
-+left hand side of comparison [-Werror=logical-not-parentheses]
-+     if(!par == fwd) {
-+
-+This patch has been sent upstream as a pull request:
-+
-+  https://github.com/ZBar/ZBar/pull/9
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ zbar/decoder/ean.c  | 4 ++--
-+ zbar/qrcode/qrdec.c | 8 ++++----
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/zbar/decoder/ean.c b/zbar/decoder/ean.c
-+index c20f538..41d1493 100644
-+--- a/zbar/decoder/ean.c
-++++ b/zbar/decoder/ean.c
-+@@ -294,7 +294,7 @@ static inline zbar_symbol_type_t ean_part_end4 (ean_pass_t *pass,
-+         /* invalid parity combination */
-+         return(ZBAR_NONE);
-+ 
-+-    if(!par == fwd) {
-++    if((!par) == fwd) {
-+         /* reverse sampled digits */
-+         unsigned char tmp = pass->raw[1];
-+         pass->state |= STATE_REV;
-+@@ -380,7 +380,7 @@ static inline zbar_symbol_type_t ean_part_end7 (ean_decoder_t *ean,
-+         /* invalid parity combination */
-+         return(ZBAR_NONE);
-+ 
-+-    if(!par == fwd) {
-++    if((!par) == fwd) {
-+         unsigned char i;
-+         pass->state |= STATE_REV;
-+         /* reverse sampled digits */
-+diff --git a/zbar/qrcode/qrdec.c b/zbar/qrcode/qrdec.c
-+index d8fa802..5d3d265 100644
-+--- a/zbar/qrcode/qrdec.c
-++++ b/zbar/qrcode/qrdec.c
-+@@ -1219,8 +1219,8 @@ static int qr_finder_quick_crossing_check(const unsigned char *_img,
-+    _x1<0||_x1>=_width||_y1<0||_y1>=_height){
-+     return -1;
-+   }
-+-  if(!_img[_y0*_width+_x0]!=_v||!_img[_y1*_width+_x1]!=_v)return 1;
-+-  if(!_img[(_y0+_y1>>1)*_width+(_x0+_x1>>1)]==_v)return -1;
-++  if((!_img[_y0*_width+_x0])!=_v||(!_img[_y1*_width+_x1])!=_v)return 1;
-++  if((!_img[(_y0+_y1>>1)*_width+(_x0+_x1>>1)])==_v)return -1;
-+   return 0;
-+ }
-+ 
-+@@ -1261,7 +1261,7 @@ static int qr_finder_locate_crossing(const unsigned char *_img,
-+       x0[1-steep]+=step[1-steep];
-+       err-=dx[steep];
-+     }
-+-    if(!_img[x0[1]*_width+x0[0]]!=_v)break;
-++    if((!_img[x0[1]*_width+x0[0]])!=_v)break;
-+   }
-+   /*Find the last crossing from _v to !_v.*/
-+   err=0;
-+@@ -1273,7 +1273,7 @@ static int qr_finder_locate_crossing(const unsigned char *_img,
-+       x1[1-steep]-=step[1-steep];
-+       err-=dx[steep];
-+     }
-+-    if(!_img[x1[1]*_width+x1[0]]!=_v)break;
-++    if((!_img[x1[1]*_width+x1[0]])!=_v)break;
-+   }
-+   /*Return the midpoint of the _v segment.*/
-+   _p[0]=(x0[0]+x1[0]+1<<QR_FINDER_SUBPREC)>>1;
-+-- 
-+2.4.10
-+
+ comment "setools needs a toolchain w/ threads, C++, wchar, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+ 		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
