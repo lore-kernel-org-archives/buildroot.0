@@ -1,44 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 26 Jan 2016 23:05:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/intel-microcode: bump version to
-	20151106
-Message-ID: <1453845953-17933-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 26 Jan 2016 23:08:15 +0100
+Subject: [Buildroot] [PATCH 6/8] uclibc: remove 0.9.33 version
+In-Reply-To: <56A6AC3E.6070908@gmail.com>
+References: <1453148701-10036-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453148701-10036-7-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56A6ABA8.1060708@gmail.com> <56A6AC3E.6070908@gmail.com>
+Message-ID: <56A7EE4F.4010102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/intel-microcode/intel-microcode.hash | 4 ++--
- package/intel-microcode/intel-microcode.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 26-01-16 00:14, Romain Naour wrote:
+> Thomas, All,
+> 
+> Le 18/01/2016 21:24, Thomas Petazzoni a ?crit :
+>> The upstream project is dead, the 0.9.33 version requires tons of
+>> patches, and uclibc-ng has now successfully replaced uclibc. It is
+>> time to get rid of the 0.9.33 version.
+> 
+> For some reason I had some issue to apply the patch with pwclient (too many
+> lines removed at once ? :p )
+> 
+> There is no legacy handling for BR2_UCLIBC_VERSION_0_9_33.
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index e46f7b0..7925209 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,2 +1,2 @@
--# Locally computed by Yann (http://lists.busybox.net/pipermail/buildroot/2015-January/117918.html) and me
--sha256	f5e7fb58643b2bf327eedf7bd91780fd5dfe74397552977cc77194c165910255	microcode-20150107.tgz
-+# Locally computed
-+sha256	096e39489eef67666be652e81fa372a06b74f39ea3d565dc0287242c668717e7	microcode-20151106.tgz
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 23c4b3e..aefa99a 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--INTEL_MICROCODE_VERSION = 20150107
-+INTEL_MICROCODE_VERSION = 20151106
- INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
--INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24616/eng
-+INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/25512/eng
- INTEL_MICROCODE_STRIP_COMPONENTS = 0
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license.txt
+ I don't think legacy handling is needed. Bumping to uClibc-ng is like bumping
+to uClibc-0.9.33.3, so it's OK if it happens without blocking the config.
+
+ What is a bit more annoying is that the old BR2_UCLIBC_CONFIG will no longer
+work. But not much can be done about that.
+
+ Regards,
+ Arnout
+
+
 -- 
-2.7.0.rc3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
