@@ -1,66 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2016 23:31:13 +0100
-Subject: [Buildroot] [PATCH 15/21] thrift: remove BR2_ARCH_HAS_ATOMICS
- dependency
-In-Reply-To: <1453676887-31236-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 23:32:59 +0100
+Subject: [Buildroot] [PATCH 19/21] openal: add missing
+ BR2_TOOLCHAIN_HAS_SYNC_4 dependency
+In-Reply-To: <1453676887-31236-20-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-16-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160126223113.GE3462@free.fr>
+ <1453676887-31236-20-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160126223259.GF3462@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Thomas, all,
 
 On 2016-01-25 00:08 +0100, Thomas Petazzoni spake thusly:
-> thrift builds perfectly fine on SPARC, which doesn't implement any of
-> the __sync built-ins, so we can get rid of the BR2_ARCH_HAS_ATOMICS
-> dependency.
+> Fixes:
 > 
-> The dependency on atomic operations originated in commit
-> 1aaa14d84f1c920423ed0286b78f64a2b4b2b575 ("thrift: disable for ARC"),
-> but there was no reference to any autobuilder failure. Our testing
-> with an ARC toolchain that doesn't have atomics shows that thrift
-> builds just fine, and code inspection also shows no usage of
-> __sync_*() built-ins. At the time of the commit, the thrift version
-> was 0.9.1, which also did not contain any __sync_*() call.
+>   http://autobuild.buildroot.org/results/314fb8da3ca87984e9240d67ff233e2f999ae89e/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: build-tested on an ARC toolchain without
- atomics, with CPU 770D]
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/thrift/Config.in | 2 --
->  1 file changed, 2 deletions(-)
+>  package/gstreamer1/gst1-plugins-bad/Config.in | 2 ++
+>  package/openal/Config.in                      | 2 ++
+>  2 files changed, 4 insertions(+)
 > 
-> diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-> index b9960f8..54ca9b8 100644
-> --- a/package/thrift/Config.in
-> +++ b/package/thrift/Config.in
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_THRIFT
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index f02be34..0dc217e 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -566,9 +566,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENAL
+>  	bool "openal"
 >  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_WCHAR
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on BR2_ARCH_HAS_ATOMICS
->  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
->  	select BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_LIBEVENT
-> @@ -20,7 +19,6 @@ config BR2_PACKAGE_THRIFT
->  	  http://thrift.apache.org/
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	select BR2_PACKAGE_OPENAL
 >  
->  comment "thrift needs a toolchain w/ C++, wchar, threads"
-> -	depends on BR2_ARCH_HAS_ATOMICS
->  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
->  	depends on !BR2_USE_WCHAR || \
->  		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+>  comment "openal plugin needs a toolchain w/ NPTL, C++"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+>  		|| !BR2_INSTALL_LIBSTDCPP
+>  
+> diff --git a/package/openal/Config.in b/package/openal/Config.in
+> index 4a73f45..b497e26 100644
+> --- a/package/openal/Config.in
+> +++ b/package/openal/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENAL
+>  	bool "openal"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	help
+>  	  OpenAL provides capabilities for playing audio in a virtual
+>  	  3D environment. Distance attenuation, doppler shift, and
+> @@ -11,5 +12,6 @@ config BR2_PACKAGE_OPENAL
+>  	  http://kcat.strangesoft.net/openal.html
+>  
+>  comment "openal needs a toolchain w/ NPTL, C++"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+>  		|| !BR2_INSTALL_LIBSTDCPP
 > -- 
 > 2.6.4
 > 
