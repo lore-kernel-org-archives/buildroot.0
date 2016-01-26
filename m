@@ -1,38 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jan 2016 08:33:13 +0100
-Subject: [Buildroot] [git commit] package/fio: bump version to 2.6,
-	fix musl build
-Message-ID: <20160201224659.ACD087FC43@busybox.osuosl.org>
+Date: Tue, 26 Jan 2016 21:33:07 +0100
+Subject: [Buildroot] [git commit] openocd: remove BR2_ARCH_HAS_ATOMICS
+	dependency
+Message-ID: <20160201224659.A91A77FB26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f22b47c39fd8840486a1daf592f5621b80d5d5b1
+commit: https://git.buildroot.net/buildroot/commit/?id=a148e2da7b0eba04cc8777f6dc7e3df782512f5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/063/0637236b89e3251bbf8b649ff60de0ff19494703/
-http://autobuild.buildroot.net/results/2fe/2fefe784fb45368344775c7b6f2eb83e1c0c2104/
-and others
+For some reason, since when openocd was introduced, it was using a
+BR2_ARCH_HAS_ATOMICS dependency for all sub-options that selected
+BR2_PACKAGE_LIBFTDI1, even if the libftdi1 package did not have any
+atomics dependency. Maybe it was confused with the libftdi package,
+which did have a BR2_ARCH_HAS_ATOMICS dependency ?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Regardless, openocd with all four sub-options that currently depend on
+BR2_ARCH_HAS_ATOMICS builds perfectly fine with a toolchain that does
+not implement any of the __sync atomic built-ins, so we can remove the
+BR2_ARCH_HAS_ATOMICS dependency.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fio/fio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openocd/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index f9a690e..9b14809 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FIO_VERSION = fio-2.1.4
-+FIO_VERSION = fio-2.6
- FIO_SITE = git://git.kernel.dk/fio.git
- FIO_LICENSE = GPLv2 + special obligations
- FIO_LICENSE_FILES = LICENSE
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+index a35bd27..2313671 100644
+--- a/package/openocd/Config.in
++++ b/package/openocd/Config.in
+@@ -127,7 +127,6 @@ config BR2_PACKAGE_OPENOCD_FT2XXX
+ 	bool "FT2232 based devices (DEPRECATED)"
+ 	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  (DEPRECATED) Enable building support for FT2232
+ 	  based devices using the libftdi library
+@@ -141,7 +140,6 @@ config BR2_PACKAGE_OPENOCD_UBLASTER
+ 	bool "Altera USB-Blaster"
+ 	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  Enable building support for the Altera USB-Blaster
+ 	  using the libftdi driver, opensource alternate of
+@@ -182,7 +180,6 @@ config BR2_PACKAGE_OPENOCD_PRESTO
+ 	bool "ASIX Presto Programmer"
+ 	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  Enable building support for ASIX Presto Programmer
+ 	  using the libftdi driver
+@@ -193,7 +190,6 @@ config BR2_PACKAGE_OPENOCD_OPENJTAG
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  Enable building support for the OpenJTAG Programmer
+ 	  with ftdi driver
