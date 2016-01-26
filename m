@@ -1,14 +1,14 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Tue, 26 Jan 2016 17:40:23 -0300
+Date: Tue, 26 Jan 2016 17:42:05 -0300
 Subject: [Buildroot] [PATCH] dt: new package
-Message-ID: <1453840823-24345-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1453840925-24451-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gsutavo.zacarias@free-electrons.com>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
