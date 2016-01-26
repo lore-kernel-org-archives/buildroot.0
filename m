@@ -1,41 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 10:08:56 +0100
-Subject: [Buildroot] [git commit] package/leafpad: bump version to 0.8.18.1
-Message-ID: <20160201224706.1E11D7F8C1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 22:25:59 +0100
+Subject: [Buildroot] [git commit] package/radvd: fix musl build
+Message-ID: <20160201224707.882D57F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ea881e711543bae8f03d7c8f049141c5bcce345
+commit: https://git.buildroot.net/buildroot/commit/?id=80e8e75f2a07407e07afc6208f7fd2cfb4343584
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/leafpad/leafpad.hash | 2 +-
- package/leafpad/leafpad.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The autobuilders did not catch the error yet because they failed
+earlier with other packages, but I am continuing the build using the
+defconfig from:
+http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 
-diff --git a/package/leafpad/leafpad.hash b/package/leafpad/leafpad.hash
-index 5c4cd78..be56d41 100644
---- a/package/leafpad/leafpad.hash
-+++ b/package/leafpad/leafpad.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	a047d2f82fb88b361ae7f382b4cae8ce1a30bef5ead503a68ae886d19be5fec0	leafpad-0.8.18.tar.gz
-+sha256	959d22ae07f22803bc66ff40d373a854532a6e4732680bf8a96a3fbcb9f80a2c	leafpad-0.8.18.1.tar.gz
-diff --git a/package/leafpad/leafpad.mk b/package/leafpad/leafpad.mk
-index 6366cab..9551a75 100644
---- a/package/leafpad/leafpad.mk
-+++ b/package/leafpad/leafpad.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LEAFPAD_VERSION = 0.8.18
-+LEAFPAD_VERSION = 0.8.18.1
- LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
- LEAFPAD_DEPENDENCIES = libgtk2 host-intltool
- LEAFPAD_LICENSE = GPLv2+
+[Thomas: replace with upstream patch directly, fetched from Github.]
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/radvd/radvd.hash | 1 +
+ package/radvd/radvd.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
+index 7324c31..3ace4fc 100644
+--- a/package/radvd/radvd.hash
++++ b/package/radvd/radvd.hash
+@@ -1,2 +1,3 @@
+ # From http://www.litech.org/radvd/dist/radvd-2.11.tar.gz.sha256
+ sha256	04636288fc79fa151260eeb2bea1b05942f59c31f01358c57f930a4eb45b5acc	radvd-2.11.tar.xz
++sha256	01d12bd2970fedf5695d9177a5ea45483d5e3c709ecceed636972c3049c47d0d	1d8973e13d89802eee0b648451e2b97ac65cf9e0.patch
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 872eac0..503b62d 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -7,6 +7,8 @@
+ RADVD_VERSION = 2.11
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
++RADVD_PATCH = \
++	https://github.com/reubenhwk/radvd/commit/1d8973e13d89802eee0b648451e2b97ac65cf9e0.patch
+ RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
+ RADVD_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ # We're patching configure.ac/Makefile.am.
