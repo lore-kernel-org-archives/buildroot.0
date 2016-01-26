@@ -1,47 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2016 22:29:08 +0100
-Subject: [Buildroot] [git commit] package/libcurl: security bump version to
-	7.47.0
-Message-ID: <20160201224713.5B5A47F8C1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 22:57:15 +0100
+Subject: [Buildroot] [git commit] package/iperf3: bump version to 3.1.1,
+	switch upstream to github
+Message-ID: <20160201224714.07B607F8C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4adae5d2eaa2eda770c1b5873265dfbca908d21f
+commit: https://git.buildroot.net/buildroot/commit/?id=f1271415cf52bde9af4d0d2036c0ae4df8f14c74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-CVE-2016-0754: remote file name path traversal in curl tool for Windows
-CVE-2016-0755: NTLM credentials not-checked for proxy connection re-use
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/iperf3/Config.in   | 2 +-
+ package/iperf3/iperf3.hash | 2 +-
+ package/iperf3/iperf3.mk   | 5 ++---
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index eb5bab1..cd35d4c 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/iperf3/Config.in b/package/iperf3/Config.in
+index 18c3612..074c1d3 100644
+--- a/package/iperf3/Config.in
++++ b/package/iperf3/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_IPERF3
+ 	  It's a redesign of the NLANR/DAST iperf(2) and is not
+ 	  backward compatible.
+ 
+-	  https://iperf.fr
++	  http://software.es.net/iperf/index.html
+ 
+ comment "iperf3 needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 9fb2cba..4b9332d 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
 @@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256 b7d726cdd8ed4b6db0fa1b474a3c59ebbbe4dcd4c61ac5e7ade0e0270d3195ad  curl-7.46.0.tar.bz2
-+# Locally calculated
-+sha256	2b096f9387fb9b2be08d17e518c62b6537b1f4d4bb59111d5b4fa0272f383f66	curl-7.47.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index e64014d..db9ef3f 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256	94fef2c3a51d01f0b1ee899bf02c87ff392423fb8c8d0af34fd59c1462c8bbb0	iperf-3.1-source.tar.gz
++sha256	86f292e554d42d1bddbd5f587e594005f4ca202c284e4da45ed8cfbe935a5be8	iperf3-3.1.1.tar.gz
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index d1338e6..885a599 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.46.0
-+LIBCURL_VERSION = 7.47.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-IPERF3_VERSION = 3.1
+-IPERF3_SITE = https://iperf.fr/download/iperf_$(IPERF3_VERSION)
+-IPERF3_SOURCE = iperf-$(IPERF3_VERSION)-source.tar.gz
++IPERF3_VERSION = 3.1.1
++IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
+ IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
+ IPERF3_LICENSE_FILES = LICENSE
+ 
