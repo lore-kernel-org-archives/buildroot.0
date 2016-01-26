@@ -1,37 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 21:45:10 +0100
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xserver_xorg-server: fix
- musl build
-In-Reply-To: <1453648919-16172-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1453648919-16172-1-git-send-email-bernd.kuhls@t-online.de>
- <1453648919-16172-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160126214510.39efb01e@free-electrons.com>
+Date: Tue, 26 Jan 2016 21:58:33 +0100
+Subject: [Buildroot] [PATCH] dt: new package
+In-Reply-To: <1453840823-24345-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1453840823-24345-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <20160126215833.1afdb8dc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Gustavo,
 
-On Sun, 24 Jan 2016 16:21:59 +0100, Bernd Kuhls wrote:
-> The autobuilders did not catch the error yet because they failed
-> earlier with other packages, but I am continuing the build based
-> on the defconfig from:
-> http://autobuild.buildroot.net/results/6fb/6fbe96af007803acfe9deacf26399cb19e5f2b47/defconfig
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0002-musl-arm-inb-outb.patch                   | 25 ++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->  create mode 100644 package/x11r7/xserver_xorg-server/0002-musl-arm-inb-outb.patch
+On Tue, 26 Jan 2016 17:40:23 -0300, gustavo.zacarias at free-electrons.com
+wrote:
 
-Alpine Linux has a similar patch, but it's doing one more thing:
-http://git.alpinelinux.org/cgit/aports/tree/main/xorg-server/fix-musl-arm.patch.
+> +# uClibc doesn't provide POSIX AIO
+> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),)
+> +DT_AIO_FLAG = -DAIO
+> +endif
 
-Can you check this ?
+I think this one should rather be:
 
-Thanks!
+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+...
+endif
+
+> +define DT_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(DT_SUBDIR) -f Makefile.linux \
+> +	CC="$(TARGET_CC)" \
+> +	CFLAGS="$(TARGET_CFLAGS) -std=c99 $(DT_AIO_FLAG) -DMMAP -D__linux__ -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DTHREADS -DSCSI" \
+> +	LDFLAGS="$(TARGET_LDFLAGS)" \
+> +	OS=linux
+
+Can you use TARGET_CONFIGURE_OPTS here instead ?
+
+Maybe something like:
+
+DT_CFLAGS = \
+	-std=c99 \
+	$(DT_AIO_FLAG) \
+	-DMMAP \
+	-D__linux__ \
+	-D_GNU_SOURCE \
+	-D_FILE_OFFSET_BITS=64 \
+	-DTHREADS \
+	-DSCSI
+
+and then:
+
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(DT_SUBDIR) -f Makefile.linux \
+		$(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) $(DT_CFLAGS)" \
+		OS=linux
+
+What do you think ?
 
 Thomas
 -- 
