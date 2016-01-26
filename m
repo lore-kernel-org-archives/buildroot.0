@@ -1,66 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 23:30:32 +0100
-Subject: [Buildroot] [git commit] package/pulseview: bump version to 0.3.0
-Message-ID: <20160201224711.266F07F8C1@busybox.osuosl.org>
+Date: Tue, 26 Jan 2016 21:43:04 +0100
+Subject: [Buildroot] [git commit] package/libpciaccess: fix musl build
+Message-ID: <20160201224709.2E3607F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0814553660e2a63dff959ca2082018a9e00ab858
+commit: https://git.buildroot.net/buildroot/commit/?id=c6514c83e7999d642de320f0162884742877ab00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to upstream tarball, remove autoreconf, add hash.
+Also added note about upstream commit to patch 0001.
 
-Upstream expects the boost unit tests being activated by default:
-http://sigrok.org/gitweb/?p=pulseview.git;a=blobdiff;f=CMakeLists.txt;h=77b0137db22b7b6cab80d8aee7c97fecb8c542bf;hp=a82953cc166141af626ace0e5d2b3a285bf20eea;hb=f513bec599b8d626f914aa804a01325914bdb5e9;hpb=8ada6ef1319fa11fd594a34853967c1f9688913b
-Add some logic to pulseview.mk to disable them if needed.
+Fixes
+http://autobuild.buildroot.net/results/e86/e869e08779626ac578017e6b34a82adf156d12f8/
+http://autobuild.buildroot.net/results/0bf/0bf803654e7298d5cd0b31fc55b1babdcd2f8765/
+http://autobuild.buildroot.net/results/f5a/f5a516cf6c25af89000019b6789d5a003099cdff/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pulseview/pulseview.hash |  3 +++
- package/pulseview/pulseview.mk   | 15 ++++++++++++---
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ package/libpciaccess/0001-limits_h.patch |  4 ++--
+ package/libpciaccess/0002-musl-arm.patch | 20 ++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/package/pulseview/pulseview.hash b/package/pulseview/pulseview.hash
+diff --git a/package/libpciaccess/0001-limits_h.patch b/package/libpciaccess/0001-limits_h.patch
+index 9afa203..c5c8444 100644
+--- a/package/libpciaccess/0001-limits_h.patch
++++ b/package/libpciaccess/0001-limits_h.patch
+@@ -3,8 +3,8 @@ Fix compilation error with musl-based toolchain
+ linux_sysfs.c:751:15: error: 'PATH_MAX' undeclared (first use in this function)
+      char name[PATH_MAX];
+ 
+-Patch already sent upstream by Felix Janda
+-http://lists.x.org/archives/xorg-devel/2014-December/044723.html
++Patch applied upstream:
++http://cgit.freedesktop.org/xorg/lib/libpciaccess/commit/?id=8ea3af620a2d4ad5648917b4a0ef2b23ff566774
+ 
+ Signed-off-by: Felix Janda <felix.janda@posteo.de>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+diff --git a/package/libpciaccess/0002-musl-arm.patch b/package/libpciaccess/0002-musl-arm.patch
 new file mode 100644
-index 0000000..dc50ec6
+index 0000000..0077f45
 --- /dev/null
-+++ b/package/pulseview/pulseview.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256	5ffe2cb7a602fcdc60933d400c77bcd66e6ce529bc4f6e97d6a5e5a86f2f530e	pulseview-0.3.0.tar.gz
-+sha256	7de425dfe3b0f76e76e266374dca8b2951510d232380901ef2abda71c7c30bb0	dcfe0a01f72021aab961245d0ebcc9f8d4504b40.patch
-diff --git a/package/pulseview/pulseview.mk b/package/pulseview/pulseview.mk
-index 67f293f..35d852c 100644
---- a/package/pulseview/pulseview.mk
-+++ b/package/pulseview/pulseview.mk
-@@ -6,14 +6,23 @@
- 
- # TODO Pulseview can be built and linked against Qt4 as well.
- 
--# No https access on upstream git
--PULSEVIEW_SITE = git://sigrok.org/pulseview
--PULSEVIEW_VERSION = ec6cc07fed12f5070eee6b8cb11343e83d42533c
-+PULSEVIEW_VERSION = 0.3.0
-+PULSEVIEW_SITE = http://sigrok.org/download/source/pulseview
-+# bug fixed upstream
-+# http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1950
-+PULSEVIEW_PATCH = \
-+	https://github.com/abraxa/pulseview/commit/dcfe0a01f72021aab961245d0ebcc9f8d4504b40.patch
- PULSEVIEW_LICENSE = GPLv3+
- PULSEVIEW_LICENSE_FILES = COPYING
- PULSEVIEW_DEPENDENCIES = libsigrok qt5base qt5svg boost
- PULSEVIEW_CONF_OPTS = -DDISABLE_WERROR=TRUE
- 
-+ifeq ($(BR2_PACKAGE_BOOST_TEST),y)
-+PULSEVIEW_CONF_OPTS += -DENABLE_TESTS=TRUE
-+else
-+PULSEVIEW_CONF_OPTS += -DENABLE_TESTS=FALSE
-+endif
++++ b/package/libpciaccess/0002-musl-arm.patch
+@@ -0,0 +1,20 @@
++Fix musl build
 +
- ifeq ($(BR2_PACKAGE_LIBSIGROKDECODE),y)
- PULSEVIEW_CONF_OPTS += -DENABLE_DECODE=TRUE
- PULSEVIEW_DEPENDENCIES += libsigrokdecode
++Inspired by http://patchwork.openembedded.org/patch/111661/
++"inb/outb are implemented for ARM on glibc but not on linux in general
++therefore the conditional has to reflect that"
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr libpciaccess-0.13.4.org/src/linux_sysfs.c libpciaccess-0.13.4/src/linux_sysfs.c
++--- libpciaccess-0.13.4.org/src/linux_sysfs.c	2015-05-01 06:44:47.000000000 +0200
+++++ libpciaccess-0.13.4/src/linux_sysfs.c	2016-01-24 15:27:57.141562678 +0100
++@@ -49,7 +49,7 @@
++ #include <dirent.h>
++ #include <errno.h>
++ 
++-#if defined(__i386__) || defined(__x86_64__) || defined(__arm__)
+++#if defined(__i386__) || defined(__x86_64__)
++ #include <sys/io.h>
++ #else
++ #define inb(x) -1
