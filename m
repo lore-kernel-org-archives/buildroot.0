@@ -1,69 +1,182 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Jan 2016 18:17:30 +0100
-Subject: [Buildroot] [git commit] madplay: fix musl gettext support detection
-Message-ID: <20160201224705.1B6C77F892@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 21:26:08 +0100
+Subject: [Buildroot] [git commit] icu: remove BR2_ARCH_HAS_ATOMICS dependency
+Message-ID: <20160201224704.88AF97F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0a244d26d8e7e7e5465c3e6e9fcd1c31e2c178d
+commit: https://git.buildroot.net/buildroot/commit/?id=9f99ec21e51e4a9a47d7383dcd7391d2a9aa5050
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/256/2561190b274d71666c4bdf3c569b02063cefdb30/
-http://autobuild.buildroot.net/results/14e/14e6addcd3ec35f882da7ec489caa9b60ecd4b63/
-http://autobuild.buildroot.net/results/cf0/cf011286be839674d358a8bccaf1c5c52de75e46/
+The BR2_ARCH_HAS_ATOMICS was added because on ARC, atomic instructions
+may not be provided by the architecture and therefore the compiler
+does not provide the __sync_*() built-ins.
 
-madplay needs gettext when built with nls, and it support 3 variants:
+However, since then, icu was changed and is now able to use C++11
+atomics, or even no atomic operations at all. In fact, icu will:
 
-- C library support gettext (E.G. glibc)
-- Libintl (E.G. uClibc)
-- An included libintl copy
+ * If possible, it will use C++11 atomics, which internally rely on
+   the __atomic built-ins. These are available since gcc 4.7, and all
+   architectures provide it. On some architectures, you *must* link
+   with libatomic, on some other architectures, they are available
+   built-in, but in all cases, linking against libatomic does not
+   harm. Thanks to this, even ARC with no atomic support (which was
+   the original reason for adding the BR2_ARCH_HAS_ATOMICS) dependency
+   builds fine, provided -latomic is added to LIBS.
 
-The included libintl copy has unfortunately bitrotted and doesn't even build
-any more.  With that said, musl DOES have gettext support, so that should be
-used instead.
+ * If C++11 atomics are not available, then it falls back to
+   __sync_*() built-ins, which allows compilers older than 4.7 to be
+   supported.
 
-The configure script unfortunately uses an old AM_GNU_GETTEXT test, which
-explicitly checks for nonstandard glibc extensions, which musl doesn't
-support:
+ * If really no atomic mechanism is available, then it falls back to a
+   basic implementation based on a mutex.
 
-http://www.openwall.com/lists/musl/2015/04/16/3
+Conclusion:
 
-Which causes the detection to fail:
+ - The BR2_ARCH_HAS_ATOMICS dependency is no longer needed.
 
-configure:24770: checking for GNU gettext in libc
-configure:24794: /home/peko/source/buildroot/output/host/usr/bin/i486-linux-musl-gcc \
-   -o conftest -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 \
-   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c  >&5
-/tmp/ccboDFhK.o: In function `main':
-conftest.c:(.text+0x39): undefined reference to `_nl_msg_cat_cntr'
-conftest.c:(.text+0x40): undefined reference to `_nl_domain_bindings'
-collect2: error: ld returned 1 exit status
+ - We need to link with -latomic when gcc >= 4.7 is used.
 
-Now, madplay itself doesn't actually use these glibc extensions, so just force the
-detection of GNU gettext when musl is used.
+Note that reverse dependencies of icu are also changed accordingly.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/madplay/madplay.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/beecrypt/Config.in        | 2 --
+ package/cppcms/Config.in          | 1 -
+ package/icu/Config.in             | 2 --
+ package/icu/icu.mk                | 8 ++++++++
+ package/php/Config.ext            | 2 --
+ package/qt-webkit-kiosk/Config.in | 1 -
+ package/qt5/qt5base/Config.in     | 1 -
+ package/qt5/qt5webkit/Config.in   | 1 -
+ 8 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
-index 2606ac8..65ae4f7 100644
---- a/package/madplay/madplay.mk
-+++ b/package/madplay/madplay.mk
-@@ -11,6 +11,11 @@ MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
- MADPLAY_LIBTOOL_PATCH = NO
- MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
+diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
+index fc93a77..069f3d5 100644
+--- a/package/beecrypt/Config.in
++++ b/package/beecrypt/Config.in
+@@ -16,7 +16,6 @@ config BR2_PACKAGE_BEECRYPT_CPP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # icu
+ 	depends on !BR2_BINFMT_FLAT # icu
+-	depends on BR2_ARCH_HAS_ATOMICS # icu
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_ICU
+ 	help
+@@ -24,7 +23,6 @@ config BR2_PACKAGE_BEECRYPT_CPP
  
-+# configure script misdetects musl gettext support
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+MADPLAY_CONF_ENV += gt_cv_func_gnugettext1_libc=yes
+ comment "C++ support needs a toolchain w/ C++, wchar, dynamic libraries"
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+ 		|| BR2_STATIC_LIBS
+ 
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index 85ba118..79f5474 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -26,7 +26,6 @@ if BR2_PACKAGE_CPPCMS
+ config BR2_PACKAGE_CPPCMS_ICU
+ 	bool "enable icu support"
+ 	depends on !BR2_BINFMT_FLAT # icu
+-	depends on BR2_ARCH_HAS_ATOMICS # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Using ICU allows advanced localization features into CppCMS,
+diff --git a/package/icu/Config.in b/package/icu/Config.in
+index 4d47c32..d31c1fa 100644
+--- a/package/icu/Config.in
++++ b/package/icu/Config.in
+@@ -7,7 +7,6 @@ config BR2_PACKAGE_ICU
+ 	# file, and it cannot easily be changed to generate FLAT
+ 	# format.
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  International Components for Unicode.
+ 
+@@ -28,6 +27,5 @@ endif
+ 
+ comment "icu needs a toolchain w/ C++, wchar, threads"
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 5604504..7bc7f93 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -17,6 +17,14 @@ ICU_CONF_OPTS = \
+ 	--with-cross-build=$(HOST_ICU_DIR)/source \
+ 	--disable-samples \
+ 	--disable-tests
++
++# With gcc >= 4.7, icu prefers to use C++11 atomics, which rely on the
++# __atomic builtins. On certain architectures, this requires linking
++# with libatomic.
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
++ICU_CONF_ENV += LIBS="-latomic"
 +endif
 +
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
- ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+ HOST_ICU_CONF_OPTS = \
+ 	--disable-samples \
+ 	--disable-tests \
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index c044e45..ee51030 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -207,13 +207,11 @@ config BR2_PACKAGE_PHP_EXT_INTL
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
+-	depends on BR2_ARCH_HAS_ATOMICS # icu
+ 	help
+ 	  Internationalization support
+ 
+ comment "intl support needs a toolchain w/ C++, wchar, threads"
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_PHP_EXT_MBSTRING
+diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
+index 51383f0..32952d7 100644
+--- a/package/qt-webkit-kiosk/Config.in
++++ b/package/qt-webkit-kiosk/Config.in
+@@ -8,7 +8,6 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
+ 	select BR2_PACKAGE_QT5MULTIMEDIA
+ 	depends on !BR2_STATIC_LIBS # qt5webkit
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5webkit
+-	depends on BR2_ARCH_HAS_ATOMICS # qt5webkit
+ 	depends on !BR2_BINFMT_FLAT # qt5webkit
+ 	help
+ 	  Simple kiosk-mode browser powered by Qt5Webkit
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 7cadcb2..64a7f65 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -259,7 +259,6 @@ config BR2_PACKAGE_QT5BASE_DBUS
+ config BR2_PACKAGE_QT5BASE_ICU
+ 	bool "Enable ICU support"
+ 	select BR2_PACKAGE_ICU
+-	depends on BR2_ARCH_HAS_ATOMICS # icu
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	help
+ 	  This option enables ICU support in Qt5. This is for example
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index eee82e8..96d97cc 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -9,7 +9,6 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	# This module does not support static linking
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+-	depends on BR2_ARCH_HAS_ATOMICS # icu
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
