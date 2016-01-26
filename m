@@ -1,45 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 26 Jan 2016 20:56:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: fix musl build
-Message-ID: <1453838206-10048-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 21:18:53 +0100
+Subject: [Buildroot] [PATCH 2/3] graph-depends: add support for excluding
+	host packages
+In-Reply-To: <1453839534-3912-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453839534-3912-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453839534-3912-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compile error occured using an allyesconfig, it seems it has not been
-caught by the autobuilders yet.
+Just like the --stop-on and --exclude options allow to stop on or
+exclude virtual packages from the list by passing the "virtual" magic
+value, this commit extends the graph-depends logic to support a "host"
+magic value for --stop-on and --exclude. This will allow to draw the
+graph by stopping on host packages, or by excluding host packages.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/0003-musl.patch | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 package/mesa3d/0003-musl.patch
+ support/scripts/graph-depends | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d/0003-musl.patch b/package/mesa3d/0003-musl.patch
-new file mode 100644
-index 0000000..8f7ba77
---- /dev/null
-+++ b/package/mesa3d/0003-musl.patch
-@@ -0,0 +1,18 @@
-+Fix musl build
-+
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/plain/main/mesa/musl-fixes.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- ./src/gallium/winsys/svga/drm/vmw_screen.h.orig
-++++ ./src/gallium/winsys/svga/drm/vmw_screen.h
-+@@ -34,7 +34,7 @@
-+ #ifndef VMW_SCREEN_H_
-+ #define VMW_SCREEN_H_
-+ 
-+-
-++#include <sys/stat.h>
-+ #include "pipe/p_compiler.h"
-+ #include "pipe/p_state.h"
-+ 
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index d09ce38..0124de9 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -44,8 +44,9 @@ parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, de
+                     help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
+ parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
+                     help="Do not graph past this package (can be given multiple times)." \
+-                       + " Can be a package name or a glob, or" \
+-                       + " 'virtual' to stop on virtual packages.")
++                       + " Can be a package name or a glob, " \
++                       + " 'virtual' to stop on virtual packages, or " \
++                       + "'host' to stop on host packages.")
+ parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
+                     help="Like --stop-on, but do not add PACKAGE to the graph.")
+ parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
+@@ -357,6 +358,8 @@ def print_pkg_deps(depth, pkg):
+             return
+     if dict_version.get(pkg) == "virtual" and "virtual" in stop_list:
+         return
++    if pkg.startswith("host-") and "host" in stop_list:
++        return
+     if max_depth == 0 or depth < max_depth:
+         for d in dict_deps[pkg]:
+             add = True
+@@ -368,6 +371,9 @@ def print_pkg_deps(depth, pkg):
+                and "virtual" in exclude_list:
+                 add = False
+                 break
++            if d.startswith("host-") and "host" in exclude_list:
++                add = False
++                break
+             if add:
+                 print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
+                 print_pkg_deps(depth+1, d)
 -- 
-2.7.0.rc3
+2.6.4
