@@ -1,68 +1,92 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 26 Jan 2016 23:17:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openpgm: fix musl build
-Message-ID: <1453846632-1691-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Jan 2016 23:17:52 +0100
+Subject: [Buildroot] [PATCH 16/21] msgpack: rework BR2_ARCH_HAS_ATOMICS
+ dependency
+In-Reply-To: <1453676887-31236-17-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453676887-31236-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160126221752.GB3462@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/854/854554827ead82f29b293ddceced6eb7fbfeec27/
-http://autobuild.buildroot.net/results/aa2/aa2cf491dfb199a349afd107046f428107a583a0//
-and many others
+Thomas, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/openpgm/0003-musl.patch | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/openpgm/0003-musl.patch
+On 2016-01-25 00:08 +0100, Thomas Petazzoni spake thusly:
+> The msgpack source code indeed checks for the 4 bytes __sync built-in,
+> so this commit switches the package from a BR2_ARCH_HAS_ATOMICS
+> dependency to a BR2_TOOLCHAIN_HAS_SYNC_4 dependency.
+> 
+> python-msgpack, a reverse dependency of msgpack, is changed in the
+> same way.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/openpgm/0003-musl.patch b/package/openpgm/0003-musl.patch
-new file mode 100644
-index 0000000..5b296a3
---- /dev/null
-+++ b/package/openpgm/0003-musl.patch
-@@ -0,0 +1,39 @@
-+Fix musl build
-+
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/plain/main/openpgm/openpgm-fix-includes.patch
-+and adjusted paths by prefixing with "openpgm/pgm/"
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+--- ./openpgm/pgm/include/pgm/types.h
-++++ ./openpgm/pgm/include/pgm/types.h
-+@@ -27,6 +27,7 @@
-+ 
-+ #ifndef _MSC_VER
-+ #	include <sys/param.h>
-++#	include <sys/types.h>
-+ #endif
-+ #include <pgm/macros.h>
-+ 
-+--- ./openpgm/pgm/include/impl/security.h
-++++ ./openpgm/pgm/include/impl/security.h
-+@@ -33,7 +33,6 @@
-+ #include <stdio.h>
-+ #include <stdarg.h>
-+ #include <sys/types.h>
-+-#include <sys/timeb.h>
-+ #include <impl/i18n.h>
-+ #include <impl/errno.h>
-+ #include <impl/string.h>
-+@@ -41,6 +40,8 @@
-+ PGM_BEGIN_DECLS
-+ 
-+ #ifdef HAVE_FTIME
-++#include <sys/timeb.h>
-++
-+ static inline
-+ errno_t
-+ #	if   !defined( _WIN32 )
-+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/msgpack/Config.in        | 4 ++--
+>  package/python-msgpack/Config.in | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+> index a57a378..b8e8213 100644
+> --- a/package/msgpack/Config.in
+> +++ b/package/msgpack/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_PACKAGE_MSGPACK
+>  	bool "msgpack"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_ARCH_HAS_ATOMICS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	help
+>  	  MessagePack is an efficient binary serialization format.
+>  
+> @@ -11,5 +11,5 @@ config BR2_PACKAGE_MSGPACK
+>  	  http://msgpack.org/
+>  
+>  comment "msgpack needs a toolchain w/ C++"
+> -	depends on BR2_ARCH_HAS_ATOMICS
+>  	depends on !BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+> index ed0b432..cba3b51 100644
+> --- a/package/python-msgpack/Config.in
+> +++ b/package/python-msgpack/Config.in
+> @@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+>  	depends on BR2_PACKAGE_PYTHON
+>  	select BR2_PACKAGE_MSGPACK
+>  	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+> -	depends on BR2_ARCH_HAS_ATOMICS # msgpack
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # msgpack
+>  	help
+>  	  MessagePack (http://msgpack.org/) is a fast, compact binary
+>  	  serialization format, suitable for similar data to JSON.
+> @@ -13,6 +13,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+>  	  https://pypi.python.org/pypi/msgpack-python/
+>  
+>  comment "python-msgpack needs a toolchain w/ C++"
+> -	depends on BR2_ARCH_HAS_ATOMICS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on BR2_PACKAGE_PYTHON
+>  	depends on !BR2_INSTALL_LIBSTDCPP
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.0.rc3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
