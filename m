@@ -1,41 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 14:19:15 +0100
-Subject: [Buildroot] [git commit] package/libraw: bump version to 0.17.1
-Message-ID: <20160201224700.37BF27F918@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 22:10:09 +0100
+Subject: [Buildroot] [git commit] package/ptpd2: Fix musl build
+Message-ID: <20160201224700.55B397F918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d1feadb19fb78dc816b1e1ece46f02c53a0afbe
+commit: https://git.buildroot.net/buildroot/commit/?id=347fb8f88132a5a1f34bec16166f407cb61adca0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libraw/libraw.hash | 2 +-
- package/libraw/libraw.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The autobuilders did not catch the error yet because they failed
+earlier with other packages, but I am continuing the build using
+the defconfig from:
+http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-index 98d3c12..e23ca9c 100644
---- a/package/libraw/libraw.hash
-+++ b/package/libraw/libraw.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	588caf5324c76240d6370852691e05ac8ef89428ee8d45168f15ce47422bc36b  LibRaw-0.13.4.tar.gz
-+sha256	e599651a4cc37e00cfc2d2b56be87c3a4e4dae2c360b680fe9ab3f93d07cdea1	LibRaw-0.17.1.tar.gz
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index 9c3522b..2f8643d 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRAW_VERSION = 0.13.4
-+LIBRAW_VERSION = 0.17.1
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data
- LIBRAW_INSTALL_STAGING = YES
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ptpd2/0001-musl.patch | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/package/ptpd2/0001-musl.patch b/package/ptpd2/0001-musl.patch
+new file mode 100644
+index 0000000..2e214b2
+--- /dev/null
++++ b/package/ptpd2/0001-musl.patch
+@@ -0,0 +1,15 @@
++Fix musl build
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr ptpd-ptpd-2.3.1.org/src/dep/net.c ptpd-ptpd-2.3.1/src/dep/net.c
++--- ptpd-ptpd-2.3.1.org/src/dep/net.c	2015-06-29 17:13:29.000000000 +0200
+++++ ptpd-ptpd-2.3.1/src/dep/net.c	2016-01-24 00:35:44.509860065 +0100
++@@ -82,7 +82,6 @@
++ #ifdef SO_TIMESTAMPING
++ #include <linux/net_tstamp.h>
++ #include <linux/sockios.h>
++-#include <linux/ethtool.h>
++ #endif /* SO_TIMESTAMPING */
++ 
++ /**
