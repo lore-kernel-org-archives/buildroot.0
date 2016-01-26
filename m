@@ -1,38 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:16:13 +0100
-Subject: [Buildroot] [git commit] package/tvheadend: enable optional support
-	for libhdhomerun
-Message-ID: <20160201224703.7EBFA7F90D@busybox.osuosl.org>
+Date: Tue, 26 Jan 2016 22:10:00 +0100
+Subject: [Buildroot] [git commit] package/ptpd2: bump version to 2.3.1,
+	switch upstream to github
+Message-ID: <20160201224702.18E6F7F9DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c29fe24ee9540a7fa22dd9b2fcce4ea49d9080be
+commit: https://git.buildroot.net/buildroot/commit/?id=65a4b9c01b6e617f245178166cdabc9a9844a98b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tvheadend/tvheadend.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/ptpd2/Config.in  | 3 ++-
+ package/ptpd2/ptpd2.hash | 2 +-
+ package/ptpd2/ptpd2.mk   | 5 ++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 43ff979..11f882a 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -39,6 +39,13 @@ else
- TVHEADEND_CONF_OPTS += --disable-dvbcsa
- endif
+diff --git a/package/ptpd2/Config.in b/package/ptpd2/Config.in
+index e37b10e..e88a9bb 100644
+--- a/package/ptpd2/Config.in
++++ b/package/ptpd2/Config.in
+@@ -5,4 +5,5 @@ config BR2_PACKAGE_PTPD2
+ 	  The PTP daemon (PTPd) implements the Precision Time protocol
+ 	  (PTP) as defined by the IEEE-1588-2008.
  
-+ifeq ($(BR2_PACKAGE_LIBHDHOMERUN),y)
-+TVHEADEND_DEPENDENCIES += libhdhomerun
-+TVHEADEND_CONF_OPTS += --enable-hdhomerun_client
-+else
-+TVHEADEND_CONF_OPTS += --disable-hdhomerun_client
-+endif
+-	  http://ptpd.sourceforge.net/
++	  https://github.com/ptpd/ptpd
 +
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- TVHEADEND_DEPENDENCIES += libiconv
- endif
+diff --git a/package/ptpd2/ptpd2.hash b/package/ptpd2/ptpd2.hash
+index 2570c00..af1f78a 100644
+--- a/package/ptpd2/ptpd2.hash
++++ b/package/ptpd2/ptpd2.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  1a4e90496f004bfd91657ccc49209101dc25b787e540648c07c0973469f1d8f7  ptpd-2.3.0.tar.gz
++sha256	267ad61d09d97069acec5d4878dceda20d0ddbebd27557d80230847848cee6c2	ptpd2-ptpd-2.3.1.tar.gz
+diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
+index cd49fe5..c86db7e 100644
+--- a/package/ptpd2/ptpd2.mk
++++ b/package/ptpd2/ptpd2.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-PTPD2_VERSION = 2.3.0
+-PTPD2_SITE = http://downloads.sourceforge.net/project/ptpd/ptpd/$(PTPD2_VERSION)
+-PTPD2_SOURCE = ptpd-$(PTPD2_VERSION).tar.gz
++PTPD2_VERSION = ptpd-2.3.1
++PTPD2_SITE = $(call github,ptpd,ptpd,$(PTPD2_VERSION))
+ PTPD2_DEPENDENCIES = libpcap
+ # configure not shipped
+ PTPD2_AUTORECONF = YES
