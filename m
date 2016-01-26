@@ -1,55 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 20:33:39 +0100
-Subject: [Buildroot] [git commit] package/subversion: security version bump
-	to 1.9.3
-Message-ID: <20160201224712.BB4437F8C2@busybox.osuosl.org>
+Date: Tue, 26 Jan 2016 23:14:56 +0100
+Subject: [Buildroot] [git commit] package/intel-microcode: bump version to
+	20151106
+Message-ID: <20160201224712.1E30D7F8C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=544949e4987c177ebcfa76244c5383a2267ac240
+commit: https://git.buildroot.net/buildroot/commit/?id=f7366974ecf0761b18f07ac5f8f1f6c146543c88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release announcement:
-http://mail-archives.apache.org/mod_mbox/subversion-dev/201512.mbox/%3CCAP_GPNj_GCA869VQeJUrp5ngXsgN7pQQHSS=sqoXm8_6hHTTxg at mail.gmail.com%3E
-
-CVE-2015-5259:
-Remotely triggerable heap overflow and out-of-bounds read caused by
-integer overflow in the svn:// protocol parser.
-http://subversion.apache.org/security/CVE-2015-5259-advisory.txt
-
-CVE-2015-5343:
-Remotely triggerable heap overflow and out-of-bounds read in mod_dav_svn
-caused by integer overflow when parsing skel-encoded request bodies.
-http://subversion.apache.org/security/CVE-2015-5343-advisory.txt
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/subversion/subversion.hash | 2 +-
- package/subversion/subversion.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/intel-microcode/intel-microcode.hash | 4 ++--
+ package/intel-microcode/intel-microcode.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index 7806374..4f0a446 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index e46f7b0..7925209 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
 @@ -1,2 +1,2 @@
- # From http://subversion.apache.org/download.cgi#recommended-release
--sha1 fb9db3b7ddf48ae37aa8785872301b59bfcc7017 subversion-1.9.2.tar.bz2
-+sha1	27e8df191c92095f48314a415194ec37c682cbcf	subversion-1.9.3.tar.bz2
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index 2f6a249..e9aa0ae 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,7 +4,7 @@
+-# Locally computed by Yann (http://lists.busybox.net/pipermail/buildroot/2015-January/117918.html) and me
+-sha256	f5e7fb58643b2bf327eedf7bd91780fd5dfe74397552977cc77194c165910255	microcode-20150107.tgz
++# Locally computed
++sha256	096e39489eef67666be652e81fa372a06b74f39ea3d565dc0287242c668717e7	microcode-20151106.tgz
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 23c4b3e..aefa99a 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SUBVERSION_VERSION = 1.9.2
-+SUBVERSION_VERSION = 1.9.3
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
- SUBVERSION_LICENSE = Apache-2.0
+-INTEL_MICROCODE_VERSION = 20150107
++INTEL_MICROCODE_VERSION = 20151106
+ INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+-INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24616/eng
++INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/25512/eng
+ INTEL_MICROCODE_STRIP_COMPONENTS = 0
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license.txt
