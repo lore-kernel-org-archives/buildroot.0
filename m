@@ -1,60 +1,121 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 13:59:13 +0100
-Subject: [Buildroot] [git commit] package/python-alsaaudio: bump version to
-	0.8.2
-Message-ID: <20160201224704.E8EAB7F90D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jan 2016 21:32:34 +0100
+Subject: [Buildroot] [git commit] zbar: add a patch to wrap logical not
+	operations into parenthesis
+Message-ID: <20160201224704.961207F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ebb7f600381c1f88b7f5e093bd51a38cf5f68c4
+commit: https://git.buildroot.net/buildroot/commit/?id=12116d4df39911e771e1012442a9ed39836a8fb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream moved to github, the old project site now redirects to the URL
+This fixes build failures like this one:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+zbar/decoder/ean.c: In function 'ean_part_end4':
+zbar/decoder/ean.c:297:13: error: logical not is only applied to the
+left hand side of comparison [-Werror=logical-not-parentheses]
+     if(!par == fwd) {
+
+This patch has been sent upstream as a pull request:
+
+  https://github.com/ZBar/ZBar/pull/9
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/299/299dc845af082167085d366b38daf1dfd95d7047/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-alsaaudio/Config.in             | 2 +-
- package/python-alsaaudio/python-alsaaudio.hash | 4 +++-
- package/python-alsaaudio/python-alsaaudio.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ ...p-logical-not-operations-into-parentheses.patch | 80 ++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
-diff --git a/package/python-alsaaudio/Config.in b/package/python-alsaaudio/Config.in
-index 22a7e87..60523bf 100644
---- a/package/python-alsaaudio/Config.in
-+++ b/package/python-alsaaudio/Config.in
-@@ -11,4 +11,4 @@ config BR2_PACKAGE_PYTHON_ALSAAUDIO
- 	  The PyAlsaAudio package contains bindings for the ALSA sound
- 	  API.
- 
--	  http://pyalsaaudio.sourceforge.net/
-+	  http://larsimmisch.github.io/pyalsaaudio/
-diff --git a/package/python-alsaaudio/python-alsaaudio.hash b/package/python-alsaaudio/python-alsaaudio.hash
-index d805710..92277ec 100644
---- a/package/python-alsaaudio/python-alsaaudio.hash
-+++ b/package/python-alsaaudio/python-alsaaudio.hash
-@@ -1,2 +1,4 @@
-+# From https://pypi.python.org/pypi?:action=show_md5&digest=1f22415a3d8da4b303182ad81c2d062e
-+md5	1f22415a3d8da4b303182ad81c2d062e	pyalsaaudio-0.8.2.tar.gz
- # Locally calculated
--sha256	bbd5a9eb351def673800707f48e64680685f397e29da72ea4c9355e1a2b2a0fd  pyalsaaudio-0.7.tar.gz
-+sha256	b6df486f1c4035041a5f3800496b86c64e48e4a7d47f94dcbca11b0187aa3a15	pyalsaaudio-0.8.2.tar.gz
-diff --git a/package/python-alsaaudio/python-alsaaudio.mk b/package/python-alsaaudio/python-alsaaudio.mk
-index e64ddb4..92c354e 100644
---- a/package/python-alsaaudio/python-alsaaudio.mk
-+++ b/package/python-alsaaudio/python-alsaaudio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ALSAAUDIO_VERSION = 0.7
-+PYTHON_ALSAAUDIO_VERSION = 0.8.2
- PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
--PYTHON_ALSAAUDIO_SITE = http://downloads.sourceforge.net/project/pyalsaaudio
-+PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/packages/source/p/pyalsaaudio
- PYTHON_ALSAAUDIO_SETUP_TYPE = distutils
- PYTHON_ALSAAUDIO_LICENSE = Python software foundation license v2
- PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
+diff --git a/package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch b/package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch
+new file mode 100644
+index 0000000..6d39b1b
+--- /dev/null
++++ b/package/zbar/0004-Wrap-logical-not-operations-into-parentheses.patch
+@@ -0,0 +1,80 @@
++From 7e69cdc8dfdf07701ba551985ee49d48e64d730f Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Mon, 25 Jan 2016 11:58:59 +0000
++Subject: [PATCH] Wrap logical not operations into parentheses
++
++Otherwise it fails like this:
++
++zbar/decoder/ean.c: In function 'ean_part_end4':
++zbar/decoder/ean.c:297:13: error: logical not is only applied to the
++left hand side of comparison [-Werror=logical-not-parentheses]
++     if(!par == fwd) {
++
++This patch has been sent upstream as a pull request:
++
++  https://github.com/ZBar/ZBar/pull/9
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ zbar/decoder/ean.c  | 4 ++--
++ zbar/qrcode/qrdec.c | 8 ++++----
++ 2 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/zbar/decoder/ean.c b/zbar/decoder/ean.c
++index c20f538..41d1493 100644
++--- a/zbar/decoder/ean.c
+++++ b/zbar/decoder/ean.c
++@@ -294,7 +294,7 @@ static inline zbar_symbol_type_t ean_part_end4 (ean_pass_t *pass,
++         /* invalid parity combination */
++         return(ZBAR_NONE);
++ 
++-    if(!par == fwd) {
+++    if((!par) == fwd) {
++         /* reverse sampled digits */
++         unsigned char tmp = pass->raw[1];
++         pass->state |= STATE_REV;
++@@ -380,7 +380,7 @@ static inline zbar_symbol_type_t ean_part_end7 (ean_decoder_t *ean,
++         /* invalid parity combination */
++         return(ZBAR_NONE);
++ 
++-    if(!par == fwd) {
+++    if((!par) == fwd) {
++         unsigned char i;
++         pass->state |= STATE_REV;
++         /* reverse sampled digits */
++diff --git a/zbar/qrcode/qrdec.c b/zbar/qrcode/qrdec.c
++index d8fa802..5d3d265 100644
++--- a/zbar/qrcode/qrdec.c
+++++ b/zbar/qrcode/qrdec.c
++@@ -1219,8 +1219,8 @@ static int qr_finder_quick_crossing_check(const unsigned char *_img,
++    _x1<0||_x1>=_width||_y1<0||_y1>=_height){
++     return -1;
++   }
++-  if(!_img[_y0*_width+_x0]!=_v||!_img[_y1*_width+_x1]!=_v)return 1;
++-  if(!_img[(_y0+_y1>>1)*_width+(_x0+_x1>>1)]==_v)return -1;
+++  if((!_img[_y0*_width+_x0])!=_v||(!_img[_y1*_width+_x1])!=_v)return 1;
+++  if((!_img[(_y0+_y1>>1)*_width+(_x0+_x1>>1)])==_v)return -1;
++   return 0;
++ }
++ 
++@@ -1261,7 +1261,7 @@ static int qr_finder_locate_crossing(const unsigned char *_img,
++       x0[1-steep]+=step[1-steep];
++       err-=dx[steep];
++     }
++-    if(!_img[x0[1]*_width+x0[0]]!=_v)break;
+++    if((!_img[x0[1]*_width+x0[0]])!=_v)break;
++   }
++   /*Find the last crossing from _v to !_v.*/
++   err=0;
++@@ -1273,7 +1273,7 @@ static int qr_finder_locate_crossing(const unsigned char *_img,
++       x1[1-steep]-=step[1-steep];
++       err-=dx[steep];
++     }
++-    if(!_img[x1[1]*_width+x1[0]]!=_v)break;
+++    if((!_img[x1[1]*_width+x1[0]])!=_v)break;
++   }
++   /*Return the midpoint of the _v segment.*/
++   _p[0]=(x0[0]+x1[0]+1<<QR_FINDER_SUBPREC)>>1;
++-- 
++2.4.10
++
