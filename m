@@ -1,43 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jan 2016 08:41:12 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xkeyboard-config: bump
-	version to 2.17
-Message-ID: <20160201224705.E516F7F892@busybox.osuosl.org>
+Date: Wed, 27 Jan 2016 21:36:39 +0100
+Subject: [Buildroot] [git commit] package/lxc: bump version to 1.1.5
+Message-ID: <20160201224705.EBA917F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=663173468c66fbffef319009ef363acb4ee2389e
+commit: https://git.buildroot.net/buildroot/commit/?id=62e17a5fc367e511d7443dd5166be248f84f81c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+[Thomas: download location changed to
+https://linuxcontainers.org/downloads/lxc, as noticed by Santosh
+Multhalli.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.hash | 4 ++--
- package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lxc/lxc.hash | 4 ++--
+ package/lxc/lxc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index 7b67d0c..fad76ed 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index d5b8ec5..7470101 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-October/002642.html
--sha256	1e8a1f212c96b7f71ca0b05da361cac1816d27baae1d8e03e7b53049b58d1d58	xkeyboard-config-2.16.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2016-January/002671.html
-+sha256	dec6be44bd31775cdc1ab95bfd75d5f2c0055613eeca8b4e9c6480b183430701	xkeyboard-config-2.17.tar.bz2
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index 1ab9350..352c55d 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -4,7 +4,7 @@
+-# Locally calculated after checking pgp signature
+-sha256 8f072ea2001bc94389003d82a91902855edf16b609e06f0486a74e4b8973e5dc lxc-1.1.4.tar.gz
++# Locally calculated
++sha256	9588ad1b04e114ee7370f690c65131e28098b28d2521d97c73557d11897ed0be	lxc-1.1.5.tar.gz
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index b11464e..e382f4d 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XKEYBOARD_CONFIG_VERSION = 2.16
-+XKEYBOARD_CONFIG_VERSION = 2.17
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
+-LXC_VERSION = 1.1.4
+-LXC_SITE = https://linuxcontainers.org/downloads
++LXC_VERSION = 1.1.5
++LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
