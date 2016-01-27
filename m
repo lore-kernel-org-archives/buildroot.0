@@ -1,24 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 21:38:23 +0100
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x series
-In-Reply-To: <1453895251-15389-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1453895251-15389-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160127213823.1e7deb63@free-electrons.com>
+Date: Wed, 27 Jan 2016 21:55:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minicom: fix musl build
+In-Reply-To: <1453560118-14646-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453560118-14646-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160127215537.2992a80f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Bernd,
 
-On Wed, 27 Jan 2016 08:47:31 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Sat, 23 Jan 2016 15:41:58 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/ea7/ea72a5aee30a89251c06e6a916499e39128437c0/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/linux-headers/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...0001-Fix-build-issus-surfaced-due-to-musl.patch | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 package/minicom/0001-Fix-build-issus-surfaced-due-to-musl.patch
 
-Applied, thanks.
+When possible, please use upstream patches rather than OpenEmbedded or
+OpenWRT patches. In this case, two commits have been merged upstream to
+solve the musl build problems. So I've replaced the single patch from
+OpenEmbedded patch by the two upstream commits and applied.
+
+Thanks,
 
 Thomas
 -- 
