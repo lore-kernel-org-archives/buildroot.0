@@ -1,30 +1,16 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 27 Jan 2016 08:47:31 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x series
-Message-ID: <1453895251-15389-1-git-send-email-gustavo@zacarias.com.ar>
+From: jerry at chordia.co.uk <jerry@chordia.co.uk>
+Date: Wed, 27 Jan 2016 12:02:53 -0000
+Subject: [Buildroot] suggestion?
+Message-ID: <09ad01d158fa$a6f7c8e0$f4e75aa0$@chordia.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+How about a buildroot-user list? Or is there a better place to go for help
+using BR as opposed to development? Thanks.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 1c19854..0c80528 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -208,7 +208,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.12.52"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.59"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.25"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.26"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.16"	if BR2_KERNEL_HEADERS_4_1
--- 
-2.4.10
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160127/db314abb/attachment.html>
