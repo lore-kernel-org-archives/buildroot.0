@@ -1,65 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:47:32 +0100
-Subject: [Buildroot] [PATCH v2 08/17] gauche: disable on SPARC(64),
-	remove atomics dependency
+Date: Wed, 27 Jan 2016 23:47:40 +0100
+Subject: [Buildroot] [PATCH v2 16/17] freerdp: add missing
+	BR2_TOOLCHAIN_HAS_SYNC_4 dependency
 In-Reply-To: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453934861-26364-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453934861-26364-17-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gauche does not build on sparc64, it fails with:
+Fixes:
 
-  No rule to make target 'sparc_mach_dep.lo', needed by 'libgc.la'
-
-On Sparc, it first fails with the usual "membar" assembler issue which
-comes from gauche's internal version of libatomic_ops. However, even
-passing -DAO_NO_SPARC_V9 like we do for libatomic_ops is not
-sufficient, as we fall into the same build problem as on sparc64.
-
-Consequently, this commit disables the gauche package on the sparc and
-sparc64 architectures.
-
-Since it uses its own libatomic_ops copy, and libatomic_ops does not
-have any dependency on atomic built-ins, we also remove the
-BR2_ARCH_HAS_ATOMICS dependency. It was originally added to prevent
-gauche from being built on sparc, but this will no longer happen.
+  http://autobuild.buildroot.org/results/0501e63cbebe4cda4012ace6f7ec5f43342be5c5/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/gauche/Config.in | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ package/freerdp/Config.in | 2 ++
+ package/weston/Config.in  | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/gauche/Config.in b/package/gauche/Config.in
-index fd0617a..3ca012d 100644
---- a/package/gauche/Config.in
-+++ b/package/gauche/Config.in
-@@ -4,14 +4,12 @@ config BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
- 	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k || \
- 		BR2_mips || BR2_mipsel || BR2_mips64 || \
- 		BR2_mips64el || BR2_powerpc || BR2_powerpc64 || \
--		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_sparc || \
--		BR2_sparc64 || BR2_x86_64
-+		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_x86_64
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index f8dbb68..9dd2505 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_FREERDP
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # libglib2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -84,5 +85,6 @@ config BR2_PACKAGE_FREERDP_CLIENT_WL
+ endif
  
- config BR2_PACKAGE_GAUCHE
- 	bool "gauche"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
- 	depends on !BR2_STATIC_LIBS
+ comment "freerdp needs a toolchain w/ wchar, dynamic library, threads, C++"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index c5525e1..4c820e9 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -44,6 +44,7 @@ config BR2_PACKAGE_WESTON_RDP
+ 	bool "RDP compositor"
+ 	depends on BR2_USE_WCHAR # freerdp
+ 	depends on BR2_USE_MMU # freerdp, libglib2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_FREERDP
+ 	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
  	help
-@@ -26,6 +24,5 @@ config BR2_PACKAGE_GAUCHE
+@@ -61,6 +62,7 @@ config BR2_PACKAGE_WESTON_RDP
  
- comment "gauche needs a toolchain w/ NPTL, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ comment "RDP compositor needs a toolchain w/ wchar"
+ 	depends on BROKEN # needs FreeRDP master
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR
+ 
+ # rpi-userland is an EGL/GLES provider, so we can't select it
 -- 
 2.6.4
