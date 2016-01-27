@@ -1,58 +1,74 @@
 From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Wed, 27 Jan 2016 15:21:04 +1100
-Subject: [Buildroot] glibc and --enable-kernel
-Message-ID: <20160127042104.GA6719@tungsten.ozlabs.ibm.com>
+Date: Wed, 27 Jan 2016 15:38:58 +1100
+Subject: [Buildroot] PowerPC64 toolchain not building
+In-Reply-To: <20160124213607.6e3b1257@free-electrons.com>
+References: <20160123150731.1c1db4b0@free-electrons.com>
+ <20160124191236.GQ17143@waldemar-brodkorb.de>
+ <20160124213607.6e3b1257@free-electrons.com>
+Message-ID: <20160127043858.GB6719@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot people,
+On Sun, Jan 24, 2016 at 09:36:07PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 24 Jan 2016 20:12:37 +0100, Waldemar Brodkorb wrote:
+> 
+> > Could you provide a config and full log? I couldn't reproduce it here.
+> 
+> Sure.
+> 
+> Here is an example:
+> 
+> BR2_powerpc64=y
+> BR2_powerpc_power8=y
+> BR2_BINUTILS_VERSION_2_25_X=y
+> BR2_GCC_VERSION_5_X=y
+> 
+> (but it also failed with binutils 2.24 and gcc 4.9). Maybe the
+> BR2_powerpc_power8=y part is the important part, I don't know.
+> 
+> The log looks like this:
+> 
+> libtool: compile:  /home/test/outputs/ppc64/build/host-gcc-final-5.3.0/build/./gcc/xgcc -B/home/test/outputs/ppc64/build/host-gcc-final-5.3.0/build/./gcc/ -B/home/test/outputs/ppc64/host
+> /usr/powerpc64-buildroot-linux-gnu/bin/ -B/home/test/outputs/ppc64/host/usr/powerpc64-buildroot-linux-gnu/lib/ -isystem /home/test/outputs/ppc64/host/usr/powerpc64-buildroot-linux-gnu/in
+> clude -isystem /home/test/outputs/ppc64/host/usr/powerpc64-buildroot-linux-gnu/sys-include -DHAVE_CONFIG_H -I../../../libatomic/config/powerpc -I../../../libatomic/config/posix -I../../.
+> ./libatomic -I. -Wall -Werror -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -MT exch_16_.lo -MD -MP -MF .deps/exch_16_.lo.Ppo -DN=16 -c ../../../libatomic
+> /exch_n.c  -fPIC -DPIC -o .libs/exch_16_.o
+> [...]
+> /tmp/ccQDkG0a.s: Assembler messages:
+> /tmp/ccQDkG0a.s:19: Error: operand out of domain (7 is not a multiple of 2)
+> make[6]: *** [exch_16_.lo] Error 1
+> make[6]: *** Waiting for unfinished jobs....
+> [...]
+> make[5]: *** [all-recursive] Error 1
+> make[4]: *** [all] Error 2
+> make[3]: *** [all-target-libatomic] Error 2
+> make[2]: *** [all] Error 2
+> make[1]: *** [/home/test/outputs/ppc64/build/host-gcc-final-5.3.0/.stamp_built] Error 2
+> make: *** [_all] Error 2
+> 
+> Thomas
 
-I've noticed that when building glibc, buildroot's configure command doesn't
-pass any "--enable-kernel" option, which according to the documentation...
+Hi Thomas,
 
-http://www.gnu.org/software/libc/manual/html_node/Configuring-and-compiling.html
+I have a bit of experience with buildroot on PowerPC64 so I also attempted to
+replicate this, but I could not. I don't know the rest of your config but I
+did match the values you posted above. An operand error like that could be
+related to the specific architecture version the assembler is expecting, so
+changing the "target architecture variant" is probably worth trying (try
+"generic").
 
-... means that glibc is always built to support the oldest possible kernel.
+If your buildroot is up to date, and you've done a completely clean build
+(either without ccache or after clearing ccache's cache), and this still happens
+then I'd be happy to try replicating your build more closely.
 
-At first this seems like a good idea but the documentation is misleading, and
-it actually causes two problems:
-
-1) Unnecessary compat code: If you've built a kernel and glibc together
-(presumably this is common when using buildroot) then you have no need of any
-compat code because the only kernel you'll be using is the one you just built.
-According to the doc (above) this causes glibc to include unnecessary compat
-code which slows it down.
-
-2) Availability of new features: It appears from the code that the
-documentation leaves out some important information. What actually happens
-while building glibc is that the "minimum kernel version" (which is either the
-version given by "--enable-kernel=" or the oldest possible version for that
-architecture) sets both __LINUX_KERNEL_VERSION and __ABI_TAG_VERSION so that
-glibc will never use any kernel features *newer* than this version. Therefore
-you cannot get access to recent kernel features *at all* via glibc (without
-manually altering glibc.mk).
-
-(An example of a recent feature would be the sendmmsg syscall, which
-requires a kernel version of 3.0.0 but the minimum version for PowerPC 64 is
-2.6.24.)
-
-I'd like to prepare a patch to make this configurable, and it obviously
-wouldn't be difficult to add but I'm not sure of the best way to do it.
-
-The most obvious way seems to be to add a menu item to the Toolchain menu, just
-after "glibc version" (and only enabled when glibc is the C library), called
-"glibc kernel API version" with a default value of "same as kernel headers".
-The other options would be "as old as possible" or a specific version.
-
-Comments?
-
-Is the default value reasonable even though it changes behaviour for current
-configs? (Presumably it will just make them faster :-) )
-
-Am I missing something? Would this be useful to others?
+If you can get at the content of the temporary file it's failing on I'd be
+happy to take a look at the assembly causing the error. Maybe it will provide a
+clue :-)
 
 Cheers,
 Sam.
