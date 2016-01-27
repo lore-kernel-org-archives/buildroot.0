@@ -1,29 +1,42 @@
-From: Weber, Holger <Holger.Weber@cobham.com>
-Date: Wed, 27 Jan 2016 14:06:54 +0000
-Subject: [Buildroot] ulimit.conf - rtprio permissions for normal users
-Message-ID: <9C21FA313B3F9749AA4A75A92FB291B458A09244@VMEXCH2010ENT.telerob.local>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Wed, 27 Jan 2016 14:25:29 +0000
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20160127131616.281b5748@free-electrons.com>
+References: <20160122073021.E35B6101A27@stock.ovh.net>
+ <20160122102957.10f29956@free-electrons.com> <56A76066.10908@synopsys.com>
+ <20160126142618.7ce66276@free-electrons.com> <56A8ABFB.5030803@synopsys.com>
+ <20160127131616.281b5748@free-electrons.com>
+Message-ID: <56A8D359.30905@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Thomas,
 
-I try to run a program which needs realtime priority as a normal user.
-If I do so, I get an error because a normal user is not allowed to set rt prio.
-On my linux pc I only need to edit /etc/security/limit.conf and add a line like
-user - rtprio 99
+Wrong commit, sorry.
+Please consider this one:
+https://git.busybox.net/buildroot/commit/?id=1fc839e436a2a745bc7996545b1f60df5670df63
 
-First I added the pam library to my buildroot configuration to get this file. But
-it still doesn't work. For completion the program is started out of an init script with
-start-stop-daemon which also changes the user to e.g. ftp.
-I also read that limit.conf settings are only applied if the user logs in, what in this case
-doesn't happen (start-stop-daemon).
-Is there another possibility to change the rt rights?
+Joao
 
-Thanks,
-Holger
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160127/d481cd73/attachment.html>
+On 1/27/2016 12:16 PM, Thomas Petazzoni wrote:
+> Dear Joao Pinto,
+> 
+> On Wed, 27 Jan 2016 11:37:31 +0000, Joao Pinto wrote:
+> 
+>> Just checked and apparently MPlayer 1.2.x already supports AARCH64 so I think
+>> the patch
+>> https://git.busybox.net/buildroot/commit/?id=c93805207e24df082495f4d050bc2f29f3d19dd6
+>> is no longer necessary.
+> 
+> Sorry, I don't understand. You're talking about MPlayer, which clearly
+> doesn't build for AArch64, and you point to a commit about sysvinit.
+> 
+> Could you explain ?
+> 
+> Thanks,
+> 
+> Thomas
+> 
