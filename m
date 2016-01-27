@@ -1,42 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 21:32:15 +0100
-Subject: [Buildroot] [PATCH v2 3/3] docs/manual: update graph-depends
-	documentation about --stop-on
-In-Reply-To: <1453926735-29571-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453926735-29571-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453926735-29571-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jan 2016 21:34:19 +0100
+Subject: [Buildroot] [PATCH] updated the package lxc to latest version
+ 1.1.5
+In-Reply-To: <CAGE8XjpWtgOtDLB1k+finr8ck0tpTXXLh03mqbPu=LfMVjHkjw@mail.gmail.com>
+References: <1453894151-30929-1-git-send-email-santosh.multhalli@rockwellcollins.com>
+ <20160127132359.645387ae@free-electrons.com>
+ <CAGE8XjpWtgOtDLB1k+finr8ck0tpTXXLh03mqbPu=LfMVjHkjw@mail.gmail.com>
+Message-ID: <20160127213419.0042d5cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit updates the graph-depends documentation to take into
-account the new 'host' keyword that can be passed to the --stop-on and
---exclude options.
+Santosh,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/common-usage.txt | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+On Wed, 27 Jan 2016 19:32:17 +0530, Santosh Multhalli wrote:
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index bca99f4..01cd31e 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -212,9 +212,10 @@ The +graph-depends+ behaviour can be controlled by setting options in the
-   default, +0+, means no limit.
- 
- * +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
--  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
--  (to stop on virtual packages). The package is still present on the
--  graph, but its dependencies are not.
-+  +PKG+ can be an actual package name, a glob, the keyword 'virtual'
-+  (to stop on virtual packages), or the keyword 'host' (to stop on
-+  host packages). The package is still present on the graph, but its
-+  dependencies are not.
- 
- * +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
-   the graph.
+> the download location of lxc package has been moved from
+> https://linuxcontainers.org/downloads
+> to
+> https://linuxcontainers.org/downloads/lxc
+> so I think we need to change LXC_SITE as well
+
+Indeed. The old location still works, but redirects to the new one, so
+I've changed Bernd's patch to use the new location.
+
+Thanks a lot!
+
+Thomas
 -- 
-2.6.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
