@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 09:24:03 +0100
-Subject: [Buildroot] [PATCH] dt: new package
-In-Reply-To: <56A7FF99.4030202@free-electrons.com>
-References: <1453840823-24345-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <20160126215833.1afdb8dc@free-electrons.com>
- <56A7FF99.4030202@free-electrons.com>
-Message-ID: <20160127092403.56330c11@free-electrons.com>
+Date: Wed, 27 Jan 2016 09:32:56 +0100
+Subject: [Buildroot] PowerPC64 toolchain not building
+In-Reply-To: <20160127043858.GB6719@tungsten.ozlabs.ibm.com>
+References: <20160123150731.1c1db4b0@free-electrons.com>
+ <20160124191236.GQ17143@waldemar-brodkorb.de>
+ <20160124213607.6e3b1257@free-electrons.com>
+ <20160127043858.GB6719@tungsten.ozlabs.ibm.com>
+Message-ID: <20160127093256.77169e7d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +15,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 26 Jan 2016 20:22:01 -0300, Gustavo Zacarias wrote:
+On Wed, 27 Jan 2016 15:38:58 +1100, Sam Bobroff wrote:
 
-> > I think this one should rather be:
-> >
-> > ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-> > ...
-> > endif
-> 
-> Hi.
-> Musl has support for posix aio, so in the oft chance that someone wants 
-> to patch/enable, in this way it would be inaccurate.
+> I have a bit of experience with buildroot on PowerPC64 so I also attempted to
+> replicate this, but I could not. I don't know the rest of your config but I
+> did match the values you posted above. An operand error like that could be
+> related to the specific architecture version the assembler is expecting, so
+> changing the "target architecture variant" is probably worth trying (try
+> "generic").
 
-OK, makes sense.
+Thanks a lot for having looked at the problem!
 
-> > What do you think ?
-> 
-> Sure, i can spin v2 with this change.
+You need to select the power8 processor for the issue to reproduce. It
+doesn't appear with power7 for example.
 
-Great, thanks!
+Best regards,
 
 Thomas
 -- 
