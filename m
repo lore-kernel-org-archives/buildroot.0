@@ -1,66 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 13:23:59 +0100
-Subject: [Buildroot] [PATCH] updated the package lxc to latest version
- 1.1.5
-In-Reply-To: <1453894151-30929-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-References: <1453894151-30929-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-Message-ID: <20160127132359.645387ae@free-electrons.com>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Wed, 27 Jan 2016 14:31:06 +0200 (IST)
+Subject: [Buildroot] suggestion?
+In-Reply-To: <09ad01d158fa$a6f7c8e0$f4e75aa0$@chordia.co.uk>
+References: <09ad01d158fa$a6f7c8e0$f4e75aa0$@chordia.co.uk>
+Message-ID: <alpine.DEB.2.11.1601271417460.9406@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Santosh,
+On Wed, 27 Jan 2016, jerry at chordia.co.uk wrote:
 
-On Wed, 27 Jan 2016 16:59:11 +0530, santosh.multhalli wrote:
-> ---
->  package/lxc/lxc.hash | 2 +-
->  package/lxc/lxc.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Date: Wed, 27 Jan 2016 12:02:53 -0000
+> From: jerry at chordia.co.uk
+> To: buildroot at busybox.net
+> Subject: [Buildroot] suggestion?
 > 
-> diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-> index d5b8ec5..31186eb 100644
-> --- a/package/lxc/lxc.hash
-> +++ b/package/lxc/lxc.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated after checking pgp signature
-> -sha256 8f072ea2001bc94389003d82a91902855edf16b609e06f0486a74e4b8973e5dc lxc-1.1.4.tar.gz
-> +sha256  9588ad1b04e114ee7370f690c65131e28098b28d2521d97c73557d11897ed0be lxc-1.1.5.tar.gz
-> diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-> index b11464e..e382f4d 100644
-> --- a/package/lxc/lxc.mk
-> +++ b/package/lxc/lxc.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -LXC_VERSION = 1.1.4
-> -LXC_SITE = https://linuxcontainers.org/downloads
-> +LXC_VERSION = 1.1.5
-> +LXC_SITE = https://linuxcontainers.org/downloads/lxc
->  LXC_LICENSE = LGPLv2.1+
->  LXC_LICENSE_FILES = COPYING
->  LXC_DEPENDENCIES = libcap host-pkgconf
+> 
+> How about a buildroot-user list? Or is there a better place to go for help using BR as opposed to development? Thanks.
 
-Thanks for your patch. Unfortunately, we already have an almost
-identical patch pending doing the same:
-http://patchwork.ozlabs.org/patch/572124/. Compared to your patch, it
-doesn't change the LXC_SITE variable, which is a bit strange.
+Hi Jerry,
+My suggestions is that you ask on
 
-One quick comment though (for your next patches!): the title of the
-commit should always have the form:
+http://stackoverflow.com/questions/ask
 
-	<package>: <description>
+using the new "buildroot" tag rather than asking on this list.
 
-So for your case, it should be:
+The reasons are:
 
-	lxc: bump to version 1.1.5
+1. The SE format is a much better format for Q&A than a mailing list
+2. SE has much better exposure than this list
+3. Newbie questions have historically gotten short shrift on this list
 
-Thanks!
+  - yba
 
-Thomas
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
