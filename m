@@ -1,42 +1,56 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 27 Jan 2016 09:03:20 -0300
-Subject: [Buildroot] [PATCH] redis: bump to version 3.0.6
-Message-ID: <1453896200-19057-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 27 Jan 2016 09:03:30 -0300
+Subject: [Buildroot] [PATCH] nginx: security bump to version 1.8.1
+Message-ID: <1453896210-19099-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+
+CVE-2016-0742 - invalid pointer dereference might occur during DNS
+server response processing if the "resolver" directive was used,
+allowing anattacker who is able to forge UDP packets from the DNS server
+to cause segmentation fault in a worker process.
+
+CVE-2016-0746 - use-after-free condition might occur during CNAME
+response processing if the "resolver" directive was used, allowing an
+attacker who is able to trigger name resolution to cause segmentation
+fault in a worker process, or might have potential other impact.
+
+CVE-2016-0747 - CNAME resolution was insufficiently limited if the
+"resolver" directive was used, allowing an attacker who is able to
+trigger arbitrary name resolution to cause excessive resource
+consumption in worker processes.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/redis/redis.hash | 4 ++--
- package/redis/redis.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index d8a957d..4d2f3b7 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1	ad3ee178c42bfcfd310c72bbddffbbe35db9b4a6 	redis-3.0.5.tar.gz
-+sha1	4b1c7b1201984bca8f7f9c6c58862f6928cf0a25 	redis-3.0.6.tar.gz
- # Calculated based on the hash above
--sha256	4c176826eee909fbdc63db1c15adc22aab42d758043829e556f4331e6a5bd480	redis-3.0.5.tar.gz
-+sha256	6f1e1523194558480c3782d84d88c2decf08a8e4b930c56d4df038e565b75624	redis-3.0.6.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index e7f4299..1edcf6e 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 7e0dc5e..fe4d6b2 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	23cca1239990c818d8f6da118320c4979aadf5386deda691b1b7c2c96b9df3d5	nginx-1.8.0.tar.gz
++sha256	8f4b3c630966c044ec72715754334d1fdf741caa1d5795fb4646c27d09f797b7	nginx-1.8.1.tar.gz
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 58418df..d9bc668 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REDIS_VERSION = 3.0.5
-+REDIS_VERSION = 3.0.6
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-NGINX_VERSION = 1.8.0
++NGINX_VERSION = 1.8.1
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2c
+ NGINX_LICENSE_FILES = LICENSE
 -- 
 2.4.10
