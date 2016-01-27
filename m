@@ -1,56 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:47:35 +0100
-Subject: [Buildroot] [PATCH v2 11/17] thrift: remove BR2_ARCH_HAS_ATOMICS
-	dependency
+Date: Wed, 27 Jan 2016 23:47:29 +0100
+Subject: [Buildroot] [PATCH v2 05/17] apache, apr: fix atomic handling
 In-Reply-To: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453934861-26364-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453934861-26364-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-thrift builds perfectly fine on SPARC, which doesn't implement any of
-the __sync built-ins, so we can get rid of the BR2_ARCH_HAS_ATOMICS
-dependency.
+Since the apache package was introduced,
+--enable-nonportable-atomics=yes was passed when
+BR2_ARCH_HAS_ATOMICS. However, Apache doesn't take this option: it
+only passes it down when building the APR library. But since we're
+building APR separately, this statement had no effect.
 
-The dependency on atomic operations originated in commit
-1aaa14d84f1c920423ed0286b78f64a2b4b2b575 ("thrift: disable for ARC"),
-but there was no reference to any autobuilder failure. Our testing
-with an ARC toolchain that doesn't have atomics shows that thrift
-builds just fine, and code inspection also shows no usage of
-__sync_*() built-ins. At the time of the commit, the thrift version
-was 0.9.1, which also did not contain any __sync_*() call.
+So this commit removes the useless code from the Apache package, and
+instead adds the appropriate logic to the apr package, using the new
+BR2_TOOLCHAIN_HAS_SYNC_x symbols rather than BR2_ARCH_HAS_ATOMICS.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: build-tested on an ARC toolchain without
- atomics, with CPU 770D]
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/thrift/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/apache/apache.mk |  4 ----
+ package/apr/apr.mk       | 15 +++++++++++++++
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-index b9960f8..54ca9b8 100644
---- a/package/thrift/Config.in
-+++ b/package/thrift/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_THRIFT
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBEVENT
-@@ -20,7 +19,6 @@ config BR2_PACKAGE_THRIFT
- 	  http://thrift.apache.org/
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 8e7b6be..e752fcc 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -35,10 +35,6 @@ APACHE_CONF_OPTS = \
+ 	--disable-lua \
+ 	--disable-luajit
  
- comment "thrift needs a toolchain w/ C++, wchar, threads"
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
+-APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ APACHE_DEPENDENCIES += libxml2
+ # Apache wants the path to the header file, where it can find
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 0fed19c..361a79f 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -35,6 +35,21 @@ endif
+ # Fix lfs detection when cross compiling
+ APR_CONF_ENV += apr_cv_use_lfs64=yes
+ 
++# Use non-portable atomics when available: 8 bytes atomics are used on
++# 64-bits architectures, 4 bytes atomics on 32-bits architectures. We
++# have to override ap_cv_atomic_builtins because the test used to
++# check for atomic builtins uses AC_TRY_RUN, which doesn't work when
++# cross-compiling.
++ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_8),y:y)
++APR_CONF_OPTS += --enable-nonportable-atomics
++APR_CONF_ENV += ap_cv_atomic_builtins=yes
++else ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_4),:y)
++APR_CONF_OPTS += --enable-nonportable-atomics
++APR_CONF_ENV += ap_cv_atomic_builtins=yes
++else
++APR_CONF_OPTS += --disable-nonportable-atomics
++endif
++
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ APR_DEPENDENCIES += util-linux
+ endif
 -- 
 2.6.4
