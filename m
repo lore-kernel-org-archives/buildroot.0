@@ -1,56 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 27 Jan 2016 09:03:30 -0300
-Subject: [Buildroot] [PATCH] nginx: security bump to version 1.8.1
-Message-ID: <1453896210-19099-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jan 2016 13:16:16 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <56A8ABFB.5030803@synopsys.com>
+References: <20160122073021.E35B6101A27@stock.ovh.net>
+ <20160122102957.10f29956@free-electrons.com>
+ <56A76066.10908@synopsys.com>
+ <20160126142618.7ce66276@free-electrons.com>
+ <56A8ABFB.5030803@synopsys.com>
+Message-ID: <20160127131616.281b5748@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Dear Joao Pinto,
 
-CVE-2016-0742 - invalid pointer dereference might occur during DNS
-server response processing if the "resolver" directive was used,
-allowing anattacker who is able to forge UDP packets from the DNS server
-to cause segmentation fault in a worker process.
+On Wed, 27 Jan 2016 11:37:31 +0000, Joao Pinto wrote:
 
-CVE-2016-0746 - use-after-free condition might occur during CNAME
-response processing if the "resolver" directive was used, allowing an
-attacker who is able to trigger name resolution to cause segmentation
-fault in a worker process, or might have potential other impact.
+> Just checked and apparently MPlayer 1.2.x already supports AARCH64 so I think
+> the patch
+> https://git.busybox.net/buildroot/commit/?id=c93805207e24df082495f4d050bc2f29f3d19dd6
+> is no longer necessary.
 
-CVE-2016-0747 - CNAME resolution was insufficiently limited if the
-"resolver" directive was used, allowing an attacker who is able to
-trigger arbitrary name resolution to cause excessive resource
-consumption in worker processes.
+Sorry, I don't understand. You're talking about MPlayer, which clearly
+doesn't build for AArch64, and you point to a commit about sysvinit.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Could you explain ?
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 7e0dc5e..fe4d6b2 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	23cca1239990c818d8f6da118320c4979aadf5386deda691b1b7c2c96b9df3d5	nginx-1.8.0.tar.gz
-+sha256	8f4b3c630966c044ec72715754334d1fdf741caa1d5795fb4646c27d09f797b7	nginx-1.8.1.tar.gz
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 58418df..d9bc668 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.8.0
-+NGINX_VERSION = 1.8.1
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2c
- NGINX_LICENSE_FILES = LICENSE
+Thanks,
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
