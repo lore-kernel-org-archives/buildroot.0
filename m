@@ -1,31 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 21:55:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/minicom: fix musl build
-In-Reply-To: <1453560118-14646-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453560118-14646-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160127215537.2992a80f@free-electrons.com>
+Date: Wed, 27 Jan 2016 21:58:10 +0100
+Subject: [Buildroot] [PATCH 1/1] OrangePi PC addition to build root
+In-Reply-To: <1450962484-90787-1-git-send-email-echaudron@xiot.nl>
+References: <1450962484-90787-1-git-send-email-echaudron@xiot.nl>
+Message-ID: <20160127215810.6270bb5f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Eelco,
 
-On Sat, 23 Jan 2016 15:41:58 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/ea7/ea72a5aee30a89251c06e6a916499e39128437c0/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...0001-Fix-build-issus-surfaced-due-to-musl.patch | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 package/minicom/0001-Fix-build-issus-surfaced-due-to-musl.patch
+On Thu, 24 Dec 2015 14:08:04 +0100, Eelco Chaudron wrote:
 
-When possible, please use upstream patches rather than OpenEmbedded or
-OpenWRT patches. In this case, two commits have been merged upstream to
-solve the musl build problems. So I've replaced the single patch from
-OpenEmbedded patch by the two upstream commits and applied.
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/jwrdegoede/linux-sunxi.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a516ac6dda21e6f5edceecd08b475b16e360656b"
+
+Your defconfig for the OrangePi PC no longer works. You used a specific
+commit from Hans De Goede repository, but his branches are not stable
+(i.e he is constantly rebasing them). So the commit
+a516ac6dda21e6f5edceecd08b475b16e360656b no longer exists.
+
+Could you send a patch to update the defconfig to use the mainline
+4.5-rc1 kernel, which according to my colleague Maxime Ripard, contains
+the support for the Orange Pi PC platform ?
+
+You can see the failure caused by the current defconfig at
+https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/105029977.
+Note that if you try to rebuild the defconfig on your side, it may work
+because you have linux-a516ac6dda21e6f5edceecd08b475b16e360656b.tar.gz
+in your $(BR2_DL_DIR). But new users using your defconfig are no longer
+able to download this kernel version.
 
 Thanks,
 
