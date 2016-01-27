@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 21:37:02 +0100
-Subject: [Buildroot] [PATCH] redis: bump to version 3.0.6
-In-Reply-To: <1453896200-19057-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1453896200-19057-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160127213702.6d19ed21@free-electrons.com>
+Date: Wed, 27 Jan 2016 21:37:18 +0100
+Subject: [Buildroot] [PATCH] nginx: security bump to version 1.8.1
+In-Reply-To: <1453896210-19099-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1453896210-19099-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160127213718.6339e906@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,29 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 27 Jan 2016 09:03:20 -0300, Gustavo Zacarias wrote:
+On Wed, 27 Jan 2016 09:03:30 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> 
+> CVE-2016-0742 - invalid pointer dereference might occur during DNS
+> server response processing if the "resolver" directive was used,
+> allowing anattacker who is able to forge UDP packets from the DNS server
+> to cause segmentation fault in a worker process.
+> 
+> CVE-2016-0746 - use-after-free condition might occur during CNAME
+> response processing if the "resolver" directive was used, allowing an
+> attacker who is able to trigger name resolution to cause segmentation
+> fault in a worker process, or might have potential other impact.
+> 
+> CVE-2016-0747 - CNAME resolution was insufficiently limited if the
+> "resolver" directive was used, allowing an attacker who is able to
+> trigger arbitrary name resolution to cause excessive resource
+> consumption in worker processes.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/redis/redis.hash | 4 ++--
->  package/redis/redis.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/nginx/nginx.hash | 2 +-
+>  package/nginx/nginx.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
