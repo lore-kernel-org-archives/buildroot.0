@@ -1,78 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 14:12:23 +0100
-Subject: [Buildroot] [git commit] package/zic: bump version to 2016a
-Message-ID: <20160201224701.0347E7FB01@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jan 2016 21:36:49 +0100
+Subject: [Buildroot] [git commit] redis: bump to version 3.0.6
+Message-ID: <20160201224701.05D917F918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46dcbcfd395482e873ead08f6320f6a146cc89be
+commit: https://git.buildroot.net/buildroot/commit/?id=e537d52b8516a751b2bec0ce0b0139f9c3d6f16f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed 0001-fix-dependencies.patch as this has now been fixed upstream
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zic/0001-fix-dependencies.patch | 27 ---------------------------
- package/zic/zic.hash                    |  4 ++--
- package/zic/zic.mk                      |  2 +-
- 3 files changed, 3 insertions(+), 30 deletions(-)
+ package/redis/redis.hash | 4 ++--
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/zic/0001-fix-dependencies.patch b/package/zic/0001-fix-dependencies.patch
-deleted file mode 100644
-index e1cbc12..0000000
---- a/package/zic/0001-fix-dependencies.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 4a2a55a640dd9316dac5f31832064f28f59ab0ae Mon Sep 17 00:00:00 2001
--From: Richard Braun <rbraun@sceen.net>
--Date: Fri, 4 Jan 2013 10:57:24 +0100
--Subject: [PATCH] zic: fix dependencies
--
--The yearistype script is provided by the tzdata package, and is required
--at runtime only.
-----
-- Makefile |    2 +-
-- 1 files changed, 1 insertions(+), 1 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index d76a81e..30df7dc 100644
----- a/Makefile
--+++ b/Makefile
--@@ -349,7 +349,7 @@ version.h:
-- zdump:		$(TZDOBJS)
-- 		$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $(TZDOBJS) $(LDLIBS)
-- 
---zic:		$(TZCOBJS) yearistype
--+zic:		$(TZCOBJS)
-- 		$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $(TZCOBJS) $(LDLIBS)
-- 
-- yearistype:	yearistype.sh
---- 
--1.7.2.5
--
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index 714b00c..290cfdb 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,2 +1,2 @@
--# From: http://mm.icann.org/pipermail/tz-announce/2015-October/000034.html
--sha512  44da833da3afdb82636a953785372bb4c765e61e40d700da40b46ab70007ebdbde4d480e10b87cbb36c45eaaffcaa6b9894375e2f553b7d16655dc167cd4a11f  tzcode2015g.tar.gz
-+# From: http://mm.icann.org/pipermail/tz-announce/2016-January/000035.html
-+sha512  33a1078ba16aef19048aa97ce1816fc5368061bfe40eddc0e7e246ca57c4a535eaf2f03847128e971a6d959f34ea77224bf33fd53dc6a0c006450dde35222223  tzcode2016a.tar.gz
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index fcc0288..6f5d160 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index d8a957d..4d2f3b7 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha1	ad3ee178c42bfcfd310c72bbddffbbe35db9b4a6 	redis-3.0.5.tar.gz
++sha1	4b1c7b1201984bca8f7f9c6c58862f6928cf0a25 	redis-3.0.6.tar.gz
+ # Calculated based on the hash above
+-sha256	4c176826eee909fbdc63db1c15adc22aab42d758043829e556f4331e6a5bd480	redis-3.0.5.tar.gz
++sha256	6f1e1523194558480c3782d84d88c2decf08a8e4b930c56d4df038e565b75624	redis-3.0.6.tar.gz
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index e7f4299..1edcf6e 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZIC_VERSION = 2015g
-+ZIC_VERSION = 2016a
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = http://www.iana.org/time-zones/repository/releases
- ZIC_STRIP_COMPONENTS = 0
+-REDIS_VERSION = 3.0.5
++REDIS_VERSION = 3.0.6
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
