@@ -1,59 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 22:25:24 +0100
-Subject: [Buildroot] [PATCH v2 2/8] lttng-babeltrace: make available for all
-	C libraries
+Date: Wed, 27 Jan 2016 22:25:25 +0100
+Subject: [Buildroot] [PATCH v2 3/8] mongrel2: allow using uClibc but only on
+	certain architectures
 In-Reply-To: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453929930-18215-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453929930-18215-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to posix_fallocate() being unavailable in uClibc 0.9.33,
-lttng-babeltrace was marked as available only for uClibc snapshot in
-glibc. However:
+mongrel2 uses  the {get,make,swap}context functions:
 
- - lttng-babeltrace builds fine with musl
- - lttng-babeltrace builds fine with uClibc-ng
- - we're going to get rid of uClibc 0.9.33 support
- - the only toolchain left with an old uClibc version is the Blackfin
-   Analog Devices toolchain, and lttng-babeltrace cannot be enabled on
-   non-MMU platforms
+ - With glibc, no problem, they are available on all supported
+   architectures
 
-Conclusion: we can enable lttng-babeltrace on all C libraries, and no
-longer require any condition. This commit adjusts the lttng-babeltrace
-package accordingly.
+ - With uClibc, they are available only on a subset of the
+   architectures. Until now, only BR2_UCLIBC_VERSION_SNAPSHOT
+   configurations were allowed to select mongrel2, but we are going to
+   get rid of the uClibc snapshot version, and uClibc-ng is as capable
+   as the uClibc snapshot. However, only certain architectures have
+   the *context() functions.
+
+ - With musl, there is no *context() support.
+
+Since this dependency is quite complicated, we introduce a
+BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS hidden boolean to encode which C
+libraries are supported.
+
+Also, listing the supported uClibc architectures would be too long in
+the comment, so we simply indicate that the package needs uClibc or
+glibc.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Romain Naour <romain.naour@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/lttng-babeltrace/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/mongrel2/Config.in | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
-index 633ea3d..d362779 100644
---- a/package/lttng-babeltrace/Config.in
-+++ b/package/lttng-babeltrace/Config.in
-@@ -7,7 +7,6 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
- 	depends on BR2_USE_WCHAR # libglib2, util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
--	depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC # posix_fallocate
+diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+index 1c7b495..49dd6fd 100644
+--- a/package/mongrel2/Config.in
++++ b/package/mongrel2/Config.in
+@@ -1,10 +1,16 @@
+-comment "mongrel2 needs a toolchain w/ C++, threads, wchar, dynamic library"
+-	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
+-		BR2_TOOLCHAIN_USES_GLIBC || \
+-		BR2_arm
++# mongrel2 uses {get,make,swap}context() functions, which are
++# available in glibc for all architectures and in uClibc only for a
++# subset of the architectures
++config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
++	bool
++	default y if BR2_TOOLCHAIN_USES_GLIBC
++	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
++		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_x86_64)
++
++comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		BR2_STATIC_LIBS
++		BR2_STATIC_LIBS || !BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+ 
+ config BR2_PACKAGE_MONGREL2
+ 	bool "mongrel2"
+@@ -14,11 +20,7 @@ config BR2_PACKAGE_MONGREL2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+ 	depends on BR2_USE_WCHAR # zeromq -> util-linux
+ 	depends on !BR2_STATIC_LIBS # uses dlopen()
+-	# {get,make,swap}context functions present in
+-	# {e,}glibc and in uClibc's master branch. Source has arm workaround
+-	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
+-		BR2_TOOLCHAIN_USES_GLIBC || \
+-		BR2_arm
++	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
  	help
- 	  The Babeltrace project provides trace read and write
- 	  libraries, as well as a trace converter application. Plugins
-@@ -28,7 +27,6 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
- 
- 	  http://www.efficios.com/babeltrace
- 
--comment "lttng-babeltrace needs a uclibc snapshot or (e)glib toolchain w/ wchar, threads"
-+comment "lttng-babeltrace needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC)
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	  Mongrel2 is an application, language, and network architecture
+ 	  agnostic web server that focuses on web applications using
 -- 
 2.6.4
