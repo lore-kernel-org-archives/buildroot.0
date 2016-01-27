@@ -1,88 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 27 Jan 2016 23:51:06 +0100
-Subject: [Buildroot] [PATCH 07/21] pulseaudio: remove
- BR2_ARCH_HAS_ATOMICS dependency
-In-Reply-To: <20160127225656.5c8afda9@free-electrons.com>
-References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-8-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160125185238.GH3386@free.fr>
- <20160127225656.5c8afda9@free-electrons.com>
-Message-ID: <20160127225106.GB3365@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jan 2016 23:59:27 +0100
+Subject: [Buildroot] [PATCH] libnspr: fix link error with musl toolchains
+In-Reply-To: <1452037716-22701-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1452037716-22701-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <20160127235927.45a0ed1b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Sergio Prado,
 
-On 2016-01-27 22:56 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 25 Jan 2016 19:52:38 +0100, Yann E. MORIN wrote:
-> > >  config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
-> > >  	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-> > >  	depends on BR2_USE_MMU # pulseaudio
-> > > -	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
-> > >  	depends on !BR2_STATIC_LIBS # pulseaudio
-> > >  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
-> > >  	select BR2_PACKAGE_PULSEAUDIO
-> > > @@ -212,7 +211,7 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
-> > >  
-> > >  comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
-> > >  	depends on BR2_USE_MMU
-> > > -	depends on BR2_ARCH_HAS_ATOMICS
-> > > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> > 
-> > In retrospect, I think this dependency should be added in the previous
-> > patch.
-> > 
-> > Yes, BR2_ARCH_HAS_ATOMICS is a superset of BR2_TOOLCHAIN_HAS_SYNC_4,
-> > still it would be more logical to add it at the time the depednency on
-> > _SYNC_4 is added.
-> > 
-> > Ditto for all comments, of course.
+On Tue,  5 Jan 2016 21:48:36 -0200, Sergio Prado wrote:
+> When linking against libnspr with musl toolchains we get undefined
+> references to `getprotobyname_r' and `getprotobynumber_r', for example
+> when compiling libnss:
 > 
-> I intentionally kept the json-c and pulseaudio patches separate. The
-> json-c patch only adds the additional BR2_TOOLCHAIN_HAS_SYNC_4
-> dependency to json-c and all its reverse dependencies, keeping the
-> BR2_ARCH_HAS_ATOMICS when they existed.
+> /home/test/autobuild/instance-1/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/lib/libnspr4.so:
+> undefined reference to `getprotobyname_r'
+> /home/test/autobuild/instance-1/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/lib/libnspr4.so:
+> undefined reference to `getprotobynumber_r'
 > 
-> This patch then removes the BR2_ARCH_HAS_ATOMICS where they are no
-> longer needed.
+> That's because musl does not have an implementation of these functions,
+> so we need to enable their internal implementation from libnspr.
 > 
-> I think it remains bisectable, and allows to kept the patches somewhat
-> saner in size than the cairo one.
-
-Sorry, what I meant was that the 'depends on BR2_TOOLCHAIN_HAS_SYNC_4'
-on the comment should have been added in the previous commit, i.e. at
-the time json-c gains the _SYNC_4 dependency.
-
-Then in this very commit, you can indeed 'just' remove the _HAS_ATOMICS
-dependency.
-
-> > > +# Make sure we don't detect libatomic_ops. Indeed, since pulseaudio
-> > > +# requires json-c, which needs 4 bytes __sync builtins, there should
-> > > +# be no need for pulseaudio to rely on libatomic_ops.
-> > > +PULSE_AUDIO_CONF_ENV += \
-> > > +	ac_cv_header_atomic_ops_h=no
-> > 
-> > What happens if pulseaudio detects libatomic_ops? Is it "bad" or just
-> > merely "harmless"?
+> This patch was backported from Alpine Linux commit
+> a162da839db0d3f8be94a5c1ad2e2e54e691c38a.
 > 
-> I don't think it's bad, but since it's not needed (as explained in the
-> comment), I prefer to be sure that it doesn't get detected/used if
-> libatomic_ops happens to be built before.
+> Fixes:
+> http://autobuild.buildroot.net/results/6052538d10779a21ac242d61bb43a371497ec684/
+> http://autobuild.buildroot.net/results/d62ea7dbe68188d073b4f176e6a354e95a8bab97/
+> http://autobuild.buildroot.net/results/ae50521c485371cd59bc4ee7e8f323169c7d513d/
+> ...
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> ---
+>  ...able-internal-getproto-functions-for-musl.patch | 35 ++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 package/libnspr/0003-enable-internal-getproto-functions-for-musl.patch
 
-Yes, perfectly valid. It was just an inquiry out of curiosity.
+Applied, thanks.
 
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
