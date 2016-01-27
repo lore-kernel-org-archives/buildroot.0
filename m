@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 13:16:16 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <56A8ABFB.5030803@synopsys.com>
-References: <20160122073021.E35B6101A27@stock.ovh.net>
- <20160122102957.10f29956@free-electrons.com>
- <56A76066.10908@synopsys.com>
- <20160126142618.7ce66276@free-electrons.com>
- <56A8ABFB.5030803@synopsys.com>
-Message-ID: <20160127131616.281b5748@free-electrons.com>
+Date: Wed, 27 Jan 2016 13:22:07 +0100
+Subject: [Buildroot] suggestion?
+In-Reply-To: <09ad01d158fa$a6f7c8e0$f4e75aa0$@chordia.co.uk>
+References: <09ad01d158fa$a6f7c8e0$f4e75aa0$@chordia.co.uk>
+Message-ID: <20160127132207.2372b7a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Joao Pinto,
+Hello Jerry,
 
-On Wed, 27 Jan 2016 11:37:31 +0000, Joao Pinto wrote:
+On Wed, 27 Jan 2016 12:02:53 -0000, jerry at chordia.co.uk wrote:
 
-> Just checked and apparently MPlayer 1.2.x already supports AARCH64 so I think
-> the patch
-> https://git.busybox.net/buildroot/commit/?id=c93805207e24df082495f4d050bc2f29f3d19dd6
-> is no longer necessary.
+> How about a buildroot-user list? Or is there a better place to go for help
+> using BR as opposed to development? Thanks.
 
-Sorry, I don't understand. You're talking about MPlayer, which clearly
-doesn't build for AArch64, and you point to a commit about sysvinit.
+We had this discussion a few times during the past Buildroot meetings,
+and our position is that in terms of Buildroot, the boundary between
+"user" and "developer" is clearly not as clear-cut as for many other
+programs. Indeed, a user very often needs to add his own packages
+(either to package his own custom applications/libraries, or to package
+open-source applications/libraries that are not yet in Buildroot),
+which makes this user almost immediately a developer.
 
-Could you explain ?
+For this reason, we've chosen to keep the entire discussions on one
+list. So feel free to ask your user-level questions on this list.
 
-Thanks,
+We also have an IRC channel, #buildroot on Freenode, on which you can
+very often get live help. Many of the participants are based in Europe,
+but I see you're in the UK, so in terms of timezone it should match
+pretty well.
+
+Best regards,
 
 Thomas
 -- 
