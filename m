@@ -1,46 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:59:27 +0100
-Subject: [Buildroot] [PATCH] libnspr: fix link error with musl toolchains
-In-Reply-To: <1452037716-22701-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1452037716-22701-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20160127235927.45a0ed1b@free-electrons.com>
+Date: Thu, 28 Jan 2016 00:01:31 +0100
+Subject: [Buildroot] [PATCH 07/21] pulseaudio: remove
+ BR2_ARCH_HAS_ATOMICS dependency
+In-Reply-To: <20160127225106.GB3365@free.fr>
+References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453676887-31236-8-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20160125185238.GH3386@free.fr>
+ <20160127225656.5c8afda9@free-electrons.com>
+ <20160127225106.GB3365@free.fr>
+Message-ID: <20160128000131.71d873e9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+Hello,
 
-On Tue,  5 Jan 2016 21:48:36 -0200, Sergio Prado wrote:
-> When linking against libnspr with musl toolchains we get undefined
-> references to `getprotobyname_r' and `getprotobynumber_r', for example
-> when compiling libnss:
-> 
-> /home/test/autobuild/instance-1/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/lib/libnspr4.so:
-> undefined reference to `getprotobyname_r'
-> /home/test/autobuild/instance-1/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/lib/libnspr4.so:
-> undefined reference to `getprotobynumber_r'
-> 
-> That's because musl does not have an implementation of these functions,
-> so we need to enable their internal implementation from libnspr.
-> 
-> This patch was backported from Alpine Linux commit
-> a162da839db0d3f8be94a5c1ad2e2e54e691c38a.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/6052538d10779a21ac242d61bb43a371497ec684/
-> http://autobuild.buildroot.net/results/d62ea7dbe68188d073b4f176e6a354e95a8bab97/
-> http://autobuild.buildroot.net/results/ae50521c485371cd59bc4ee7e8f323169c7d513d/
-> ...
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  ...able-internal-getproto-functions-for-musl.patch | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/libnspr/0003-enable-internal-getproto-functions-for-musl.patch
+On Wed, 27 Jan 2016 23:51:06 +0100, Yann E. MORIN wrote:
 
-Applied, thanks.
+> > I intentionally kept the json-c and pulseaudio patches separate. The
+> > json-c patch only adds the additional BR2_TOOLCHAIN_HAS_SYNC_4
+> > dependency to json-c and all its reverse dependencies, keeping the
+> > BR2_ARCH_HAS_ATOMICS when they existed.
+> > 
+> > This patch then removes the BR2_ARCH_HAS_ATOMICS where they are no
+> > longer needed.
+> > 
+> > I think it remains bisectable, and allows to kept the patches somewhat
+> > saner in size than the cairo one.
+> 
+> Sorry, what I meant was that the 'depends on BR2_TOOLCHAIN_HAS_SYNC_4'
+> on the comment should have been added in the previous commit, i.e. at
+> the time json-c gains the _SYNC_4 dependency.
+> 
+> Then in this very commit, you can indeed 'just' remove the _HAS_ATOMICS
+> dependency.
+
+Hum, right, I see what you mean. Indeed, I should fix that, it's not
+consistent. I'll wait for some other review on the v2, and I'll respin.
+
+Thanks!
 
 Thomas
 -- 
