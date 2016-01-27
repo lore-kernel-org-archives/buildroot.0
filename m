@@ -1,40 +1,30 @@
-From: santosh.multhalli <santosh.multhalli@rockwellcollins.com>
-Date: Wed, 27 Jan 2016 16:59:11 +0530
-Subject: [Buildroot] [PATCH] updated the package lxc to latest version 1.1.5
-Message-ID: <1453894151-30929-1-git-send-email-santosh.multhalli@rockwellcollins.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 27 Jan 2016 08:47:31 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x series
+Message-ID: <1453895251-15389-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lxc/lxc.hash | 2 +-
- package/lxc/lxc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index d5b8ec5..31186eb 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 8f072ea2001bc94389003d82a91902855edf16b609e06f0486a74e4b8973e5dc lxc-1.1.4.tar.gz
-+sha256  9588ad1b04e114ee7370f690c65131e28098b28d2521d97c73557d11897ed0be lxc-1.1.5.tar.gz
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index b11464e..e382f4d 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LXC_VERSION = 1.1.4
--LXC_SITE = https://linuxcontainers.org/downloads
-+LXC_VERSION = 1.1.5
-+LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPLv2.1+
- LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = libcap host-pkgconf
---
-libgit2 0.21.4
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1c19854..0c80528 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -208,7 +208,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.12.52"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.59"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.25"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.26"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.16"	if BR2_KERNEL_HEADERS_4_1
+-- 
+2.4.10
