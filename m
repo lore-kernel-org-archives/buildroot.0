@@ -1,57 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:47:34 +0100
-Subject: [Buildroot] [PATCH v2 10/17] squid: rework atomic handling
+Date: Wed, 27 Jan 2016 23:47:38 +0100
+Subject: [Buildroot] [PATCH v2 14/17] glog: fix atomic built-in problem
 In-Reply-To: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453934861-26364-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453934861-26364-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-squid can use the __sync built-ins when available, but uses an
-AC_TRY_RUN autoconf tests to check their availability, which isn't
-compatible with cross-compilation. Due to this, squid.mk is already
-hinting the configure script about this by passing
-squid_cv_gnu_atomics=yes/no depending on the availability of atomic
-operations.
+glog can optionally use atomic __sync built-ins. However, its
+configure script only checks for the availability of the 4-byte
+variant, but the code also uses the 1-byte variant. While this works
+on most architectures, it does not on architectures that implement
+only the 4-byte variant, such as Microblaze. So if the architecture
+does not implement the 1-byte variant, we hint the configure script
+that atomic built-ins should not be used.
 
-So far, squid.mk was assuming that BR2_ARCH_HAS_ATOMICS &&
-BR2_ARCH_IS_64 was needed, since 8 bytes __sync built-ins are
-used. However, this was a bit too restrictive, since certain 32 bits
-architectures (ARM, x86) do provide 8 bytes __sync built-ins.
+Fixes:
 
-So, instead of using BR2_ARCH_HAS_ATOMICS, we now rely on
-BR2_TOOLCHAIN_HAS_SYNC_4 and BR2_TOOLCHAIN_HAS_SYNC_8, since both 4
-bytes and 8 bytes __sync built-ins are tested by the autoconf test.
+  http://autobuild.buildroot.org/results/bedebd594c283adf39374c9a9f44432e5d6cbff7/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/squid/squid.mk | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ package/glog/glog.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 3110573..f205da2 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -41,12 +41,10 @@ SQUID_CONF_OPTS = \
- 	--with-swapdir=/var/cache/squid/ \
- 	--with-default-user=squid
+diff --git a/package/glog/glog.mk b/package/glog/glog.mk
+index 8a84094..aa7cacb 100644
+--- a/package/glog/glog.mk
++++ b/package/glog/glog.mk
+@@ -14,4 +14,15 @@ ifeq ($(BR2_PACKAGE_GFLAGS),y)
+ GLOG_DEPENDENCIES = gflags
+ endif
  
--# Atomics in Squid use __sync_add_and_fetch_8, i.e a 64 bits atomic
--# operation. This atomic intrinsic is only available natively on
--# 64-bit architectures that have atomic operations. On 32-bit
--# architectures, it would be provided by libatomic, but Buildroot
--# typically doesn't provide it.
--ifeq ($(BR2_ARCH_HAS_ATOMICS)$(BR2_ARCH_IS_64),yy)
-+# Atomics in Squid use __sync built-ins on 4 and 8 bytes. However, the
-+# configure script tests them using AC_TRY_RUN, so we have to give
-+# some hints.
-+ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4)$(BR2_TOOLCHAIN_HAS_SYNC_8),yy)
- SQUID_CONF_ENV += squid_cv_gnu_atomics=yes
- else
- SQUID_CONF_ENV += squid_cv_gnu_atomics=no
++# glog can optionally use atomic __sync built-ins. However, its
++# configure script only checks for the availability of the 4 bytes
++# version, but the code also uses the 1 byte version. While this works
++# on most architectures, it does not on architectures that implement
++# only the 4 bytes version, such as Microblaze. So if the architecture
++# does not implement the 1 byte version, we hint the configure script
++# that atomic built-ins should not be used.
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_1),)
++GLOG_CONF_ENV += ac_cv___sync_val_compare_and_swap=no
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.6.4
