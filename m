@@ -1,40 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2016 08:43:04 +0100
-Subject: [Buildroot] [git commit] mosquitto: bump to version 1.4.7
-Message-ID: <20160201224704.C75227F90D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jan 2016 21:38:20 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.18.x series
+Message-ID: <20160201224710.62A657F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f16d42a002d406d6b031acaeea628c9e14889645
+commit: https://git.buildroot.net/buildroot/commit/?id=712e69a87208e73111206ab48f55cac9f63622a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 31c5061..a8de658 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  b432e19fee0c549f4a0fb0e866d1b6a897b38dbf1ddfda92bb43e2a24f01df66  mosquitto-1.4.5.tar.gz
-+sha256  71a1cb37893403e00b7db85c5db4af50b40d055ce61e5d21092c2594f2023b8b  mosquitto-1.4.7.tar.gz
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 2db3173..d6a5fb2 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.4.5
-+MOSQUITTO_VERSION = 1.4.7
- MOSQUITTO_SITE = http://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1c19854..0c80528 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -208,7 +208,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.12.52"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.59"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.25"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.26"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.16"	if BR2_KERNEL_HEADERS_4_1
