@@ -1,144 +1,221 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 27 Jan 2016 23:47:54 +0100
-Subject: [Buildroot] [PATCH 03/21] toolchain: add
- BR2_TOOLCHAIN_HAS_SYNC_x hidden booleans
-In-Reply-To: <20160127224637.74ce1bb9@free-electrons.com>
-References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160125182737.GD3386@free.fr>
- <20160127224637.74ce1bb9@free-electrons.com>
-Message-ID: <20160127224754.GA3365@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jan 2016 23:47:37 +0100
+Subject: [Buildroot] [PATCH v2 13/17] arch: remove BR2_ARCH_HAS_ATOMICS
+	option
+In-Reply-To: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453934861-26364-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Now that BR2_ARCH_HAS_ATOMICS is no longer used anywhere, we can
+remove it from arch/Config.in*, as well as from the documentation.
 
-On 2016-01-27 22:46 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 25 Jan 2016 19:27:37 +0100, Yann E. MORIN wrote:
-> > > +#  - On ARMv7, there is no problem, it can be directly implemented in
-> > > +#    userspace.
-> > > +#
-> > > +#  - On < ARMv7, it requires help from the kernel. Unfortunately, the
-> > > +#    libgcc code implementing 8 bytes __sync with the help from the
-> > > +#    kernel calls __write() when a failure occurs, which is a function
-> > > +#    internal to glibc, not available in uClibc and musl. This means
-> > > +#    that the 8 bytes __sync operations are not available on < ARMv7
-> > > +#    with uClibc and musl. This problem was fixed as part of gcc
-> > > +#    PR68059, which was backported to the gcc 5 branch, but isn't yet
-> > > +#    part of any gcc 5.x release.
-> > > +#
-> > > +config BR2_TOOLCHAIN_ARM_HAS_SYNC_8
-> > > +	bool
-> > > +	default y
-> > > +	depends on BR2_arm || BR2_armeb
-> > > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> > > +	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_ARM_CPU_ARMV7A
-> > 
-> > I had a bit of difficulty parsing that one. It was not obvious from the
-> > commit log that gcc >= 4.7 was required, while the comment above makes
-> > it really explicit. Here's how I understood the commit log:
-> > 
-> >   - for armv7, with gcc-4.7+, it's OK
-> >   - for armv6-, it needs glibc and there is no gcc condition.
-> > 
-> > But the comment here states it differently, and matches the code.
-> > 
-> > Can you just confirm that I misunderstand the commit log?
-> 
-> Well, the commit log has:
-> 
->                     __sync       __atomic    gcc
-> 
->     ARM            Y  Y  Y  X    Y  Y  Y  Y   4.8, 4.7
->     ARM            Y  Y  Y  -                 4.5
-> 
-> So, as you can see:
-> 
->  - With a gcc 4.5 toolchain, there is no __sync for 8-byte types at all.
-> 
->  - Starting with gcc 4.7, there *might* be a __sync for 8-byte types,
->    but only if you're using glibc *or* if you're using ARMv7.
-> 
-> Hence the conditions:
-> 
-> 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_ARM_CPU_ARMV7A
-> 
-> So I believe the code, the comment and the commit log are matching
-> here. Am I missing something ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ arch/Config.in                            | 4 ----
+ arch/Config.in.aarch64                    | 3 ---
+ arch/Config.in.arc                        | 3 ---
+ arch/Config.in.arm                        | 3 ---
+ arch/Config.in.bfin                       | 3 ---
+ arch/Config.in.m68k                       | 3 ---
+ arch/Config.in.microblaze                 | 3 ---
+ arch/Config.in.mips                       | 3 ---
+ arch/Config.in.nios2                      | 3 ---
+ arch/Config.in.powerpc                    | 3 ---
+ arch/Config.in.sh                         | 3 ---
+ arch/Config.in.x86                        | 3 ---
+ arch/Config.in.xtensa                     | 3 ---
+ docs/manual/adding-packages-directory.txt | 5 -----
+ 14 files changed, 45 deletions(-)
 
-What I meant, is that I had some problem matching this part of the commit
-log:
-
->  * X indicates a very special case for 8 bytes __sync built-ins on
->    ARM. On ARMv7, there is no problem, starting from gcc 4.7, the
->    __sync built-in for 8 bytes integers is implemented, fully in
->    userspace. For cores < ARMv7, doing a 8 bytes atomic operation
->    requires help from the kernel. Unfortunately, the libgcc code
->    implementing this uses the __write() function to display an error,
->    and this function is internal to glibc. Therefore, if you're using
->    glibc everything is fine, but if you're using uClibc or musl, you
->    cannot link an application that uses 8 bytes __sync
->    operations. This has been fixed as part of gcc PR68095, merged in
->    the gcc 5 branch but not yet part of any gcc release.
-
-... with the actual dependencies you wrote.
-
-But reading the blurb above again, it looks OK now. It's just a little
-bit complex enough to need a second^Wthird^Wfourth read to fully grasp.
-;-)
-
-> > Well, I'd prefer we have a simpler conditional block, maybe something
-> > like:
-> > 
-> >     config BR2_TOOLCHAIN_i386_HAS_SYNC_8
-> >         bool
-> >         default y
-> >         depends on BR2_i386
-> >         depends on !BR2_x86_i386
-> >         depends on !BR2_x86_i486
-> >         depends on !BR2_x86_c3
-> >         depends on !BR2_x86_winchip_c6
-> >         depends on !BR2_x86_winchip2
-> > 
-> >     config BR2_TOOLCHAIN_HAS_SYNC_8
-> >         bool
-> >         default y if BR2_ARCH_IS_64
-> >         default y if BR2_TOOLCHAIN_i386_HAS_SYNC_8
-> >         default y if BR2_TOOLCHAIN_ARM_HAS_SYNC_8
-> 
-> Adopted.
-> 
-> > Also, I'm not sure about the 'default y if BR2_ARCH_IS_64' and I think
-> > we should just list those architectures (4 of them: AArch64, mips64,
-> > sparc64 and x86_64, with that last one already covered with i386).
-> 
-> I beg to disagree here. I don't see why a 64 bits architecture would
-> not provide the 8-byte intrinsics. I would like to suggest to keep it
-> as is for now, and revisit when/if we get a 64 bits architecture that
-> doesn't provide those 8-byte intrinsics.
-
-I was not implying 64-bit archictectures would not provide them. I
-suggested we use the actual architectures just to get a similar
-condition as we have for the other _SYNC_X options, for which we only
-use the architecture names (or an intermediate option derived from the
-architecture).
-
-But indeed, a 64-bit arch that does not provide _SYNC_8 woudl be really
-weird (and broken).
-
-So, OK.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/arch/Config.in b/arch/Config.in
+index 4cdd54e..401bd28 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -284,10 +284,6 @@ config BR2_GCC_TARGET_FLOAT_ABI
+ config BR2_GCC_TARGET_MODE
+ 	string
+ 
+-# If the architecture has atomic operations, select this:
+-config BR2_ARCH_HAS_ATOMICS
+-	bool
+-
+ # Must be selected by binary formats that support shared libraries.
+ config BR2_BINFMT_SUPPORTS_SHARED
+ 	bool
+diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
+index 325bccc..34cd409 100644
+--- a/arch/Config.in.aarch64
++++ b/arch/Config.in.aarch64
+@@ -5,6 +5,3 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE" if BR2_aarch64
+ 	default "BIG"	 if BR2_aarch64_be
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 7e0ad08..7d341f3 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -21,9 +21,6 @@ config BR2_ARC_ATOMIC_EXT
+ 	bool "Atomic extension (LLOCK/SCOND instructions)"
+ 	default y if BR2_arc770d || BR2_archs38
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y if BR2_ARC_ATOMIC_EXT
+-
+ config BR2_ARCH
+ 	default "arc"	if BR2_arcle
+ 	default "arceb"	if BR2_arceb
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 60cd3a7..2b34f42 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -426,9 +426,6 @@ config BR2_ENDIAN
+ 	default "LITTLE" if BR2_arm
+ 	default "BIG"	 if BR2_armeb
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_CPU
+ 	default "arm920t"	if BR2_arm920t
+ 	default "arm922t"	if BR2_arm922t
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index 0783969..415fc89 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -68,9 +68,6 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE"
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_CPU
+ 	default bf606		if BR2_bf606
+ 	default bf607		if BR2_bf607
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index 6b868a1..f40f97c 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -4,9 +4,6 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "BIG"
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_ARCH
+ 	default "68000"		if BR2_m68k_68000
+ 	default "68010"		if BR2_m68k_68010
+diff --git a/arch/Config.in.microblaze b/arch/Config.in.microblaze
+index 7c21dfc..2d4c1fe 100644
+--- a/arch/Config.in.microblaze
++++ b/arch/Config.in.microblaze
+@@ -9,6 +9,3 @@ config BR2_ENDIAN
+ config BR2_microblaze
+ 	bool
+ 	default y if BR2_microblazeel || BR2_microblazebe
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index 1e5d24d..fda1a1d 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -67,9 +67,6 @@ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_mipsel || BR2_mips64el
+ 	default "BIG" 	    	if BR2_mips || BR2_mips64
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_ARCH
+ 	default "mips32"	if BR2_mips_32
+ 	default "mips32r2"	if BR2_mips_32r2
+diff --git a/arch/Config.in.nios2 b/arch/Config.in.nios2
+index 7807769..ed63898 100644
+--- a/arch/Config.in.nios2
++++ b/arch/Config.in.nios2
+@@ -3,6 +3,3 @@ config BR2_ARCH
+ 
+ config BR2_ENDIAN
+ 	default "LITTLE"
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 8581a4d..09ac794 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -164,9 +164,6 @@ config BR2_ENDIAN
+ 	default "BIG"    if BR2_powerpc || BR2_powerpc64
+ 	default "LITTLE" if BR2_powerpc64le
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_CPU
+ 	default "401"		if BR2_powerpc_401
+ 	default "403"		if BR2_powerpc_403
+diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+index 9f8f79c..1bdea37 100644
+--- a/arch/Config.in.sh
++++ b/arch/Config.in.sh
+@@ -28,6 +28,3 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_sh4 || BR2_sh4a || BR2_sh64
+ 	default "BIG"		if BR2_sh2a || BR2_sh4eb || BR2_sh4aeb
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 771c20f..7be814b 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -245,9 +245,6 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE"
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y if !BR2_x86_i386
+-
+ config BR2_GCC_TARGET_ARCH
+ 	default "i386"		if BR2_x86_i386
+ 	default "i486"		if BR2_x86_i486
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index a0e18f1..fcb3dc9 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -54,6 +54,3 @@ config BR2_ENDIAN
+ 
+ config BR2_ARCH
+ 	default "xtensa"	if BR2_xtensa
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 5329c10..aab24b2 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -274,11 +274,6 @@ use in the comment.
+ ** Dependency symbol: +BR2_USE_MMU+
+ ** Comment string: no comment to be added
+ 
+-* Atomic instructions (whereby the architecture has instructions to
+-  perform some operations atomically, like LOCKCMPXCHG on x86)
+-** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
+-** Comment string: no comment to be added
+-
+ * Gcc +__sync_*+ built-ins used for atomic operations. They are
+   available in variants operating on 1 byte, 2 bytes, 4 bytes and 8
+   bytes. Since different architectures support atomic operations on
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.6.4
