@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 21:34:19 +0100
-Subject: [Buildroot] [PATCH] updated the package lxc to latest version
- 1.1.5
-In-Reply-To: <CAGE8XjpWtgOtDLB1k+finr8ck0tpTXXLh03mqbPu=LfMVjHkjw@mail.gmail.com>
-References: <1453894151-30929-1-git-send-email-santosh.multhalli@rockwellcollins.com>
- <20160127132359.645387ae@free-electrons.com>
- <CAGE8XjpWtgOtDLB1k+finr8ck0tpTXXLh03mqbPu=LfMVjHkjw@mail.gmail.com>
-Message-ID: <20160127213419.0042d5cd@free-electrons.com>
+Date: Wed, 27 Jan 2016 21:34:52 +0100
+Subject: [Buildroot] [PATCH 1/2] package/lxc: bump version to 1.1.5
+In-Reply-To: <1453559872-11381-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453559872-11381-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160127213452.23b7b0ee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Santosh,
+Dear Bernd Kuhls,
 
-On Wed, 27 Jan 2016 19:32:17 +0530, Santosh Multhalli wrote:
+On Sat, 23 Jan 2016 15:37:51 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/lxc/lxc.hash | 4 ++--
+>  package/lxc/lxc.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-> the download location of lxc package has been moved from
-> https://linuxcontainers.org/downloads
-> to
-> https://linuxcontainers.org/downloads/lxc
-> so I think we need to change LXC_SITE as well
+Applied, after changing the download location to the new one, as
+noticed by Santosh.
 
-Indeed. The old location still works, but redirects to the new one, so
-I've changed Bernd's patch to use the new location.
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
