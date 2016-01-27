@@ -1,52 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:47:38 +0100
-Subject: [Buildroot] [PATCH v2 14/17] glog: fix atomic built-in problem
+Date: Wed, 27 Jan 2016 23:47:41 +0100
+Subject: [Buildroot] [PATCH v2 17/17] neard: add missing
+	BR2_TOOLCHAIN_HAS_SYNC_4 dependency
 In-Reply-To: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453934861-26364-15-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453934861-26364-18-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glog can optionally use atomic __sync built-ins. However, its
-configure script only checks for the availability of the 4-byte
-variant, but the code also uses the 1-byte variant. While this works
-on most architectures, it does not on architectures that implement
-only the 4-byte variant, such as Microblaze. So if the architecture
-does not implement the 1-byte variant, we hint the configure script
-that atomic built-ins should not be used.
-
 Fixes:
 
-  http://autobuild.buildroot.org/results/bedebd594c283adf39374c9a9f44432e5d6cbff7/
+  http://autobuild.buildroot.org/results/b8bf7be2efd8e8e369abdde0a5bec564e8cd6f23/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/glog/glog.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/connman/Config.in | 1 +
+ package/neard/Config.in   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/glog/glog.mk b/package/glog/glog.mk
-index 8a84094..aa7cacb 100644
---- a/package/glog/glog.mk
-+++ b/package/glog/glog.mk
-@@ -14,4 +14,15 @@ ifeq ($(BR2_PACKAGE_GFLAGS),y)
- GLOG_DEPENDENCIES = gflags
- endif
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 655db86..556de48 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -50,6 +50,7 @@ config BR2_PACKAGE_CONNMAN_LOOPBACK
+ config BR2_PACKAGE_CONNMAN_NEARD
+ 	bool "enable neard support"
+ 	select BR2_PACKAGE_NEARD
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # neard
  
-+# glog can optionally use atomic __sync built-ins. However, its
-+# configure script only checks for the availability of the 4 bytes
-+# version, but the code also uses the 1 byte version. While this works
-+# on most architectures, it does not on architectures that implement
-+# only the 4 bytes version, such as Microblaze. So if the architecture
-+# does not implement the 1 byte version, we hint the configure script
-+# that atomic built-ins should not be used.
-+ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_1),)
-+GLOG_CONF_ENV += ac_cv___sync_val_compare_and_swap=no
-+endif
-+
- $(eval $(autotools-package))
+ config BR2_PACKAGE_CONNMAN_OFONO
+ 	bool "enable ofono support"
+diff --git a/package/neard/Config.in b/package/neard/Config.in
+index 353d1af..8571e7c 100644
+--- a/package/neard/Config.in
++++ b/package/neard/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_NEARD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
+ 	depends on !BR2_STATIC_LIBS # dlopen
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBNL
+@@ -26,4 +27,5 @@ endif
+ 
+ comment "neard needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 -- 
 2.6.4
