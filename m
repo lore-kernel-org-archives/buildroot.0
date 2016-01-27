@@ -1,36 +1,29 @@
-From: =?UTF-8?Q?Gabriel_Andr=C3=A9s_Castillo?= <gcastillo@controlnet.com.ar>
-Date: Wed, 27 Jan 2016 11:20:10 -0300
-Subject: [Buildroot] Verifying Checksum ... Bad Data CRC
-Message-ID: <CAKvcKqe0ikfjVcKcoTASC9LzsEcwfYpFmqMziqF_MjhYWVsipw@mail.gmail.com>
+From: Weber, Holger <Holger.Weber@cobham.com>
+Date: Wed, 27 Jan 2016 14:06:54 +0000
+Subject: [Buildroot] ulimit.conf - rtprio permissions for normal users
+Message-ID: <9C21FA313B3F9749AA4A75A92FB291B458A09244@VMEXCH2010ENT.telerob.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, when i configure linux kernel, on kernel features -> preemption model,
-i had "No forced preemption" and the boot was working fine. But when i want
-to change the option to "Preemptible Kernel", i want to boot again and i
-get this:
+Hi,
 
+I try to run a program which needs realtime priority as a normal user.
+If I do so, I get an error because a normal user is not allowed to set rt prio.
+On my linux pc I only need to edit /etc/security/limit.conf and add a line like
+user - rtprio 99
 
-NAND read: device 0 offset 0x180000, size 0x10000
- 65536 bytes read: OK
+First I added the pam library to my buildroot configuration to get this file. But
+it still doesn't work. For completion the program is started out of an init script with
+start-stop-daemon which also changes the user to e.g. ftp.
+I also read that limit.conf settings are only applied if the user logs in, what in this case
+doesn't happen (start-stop-daemon).
+Is there another possibility to change the rt rights?
 
-NAND read: device 0 offset 0x200000, size 0x380000
- 3670016 bytes read: OK
-## Booting kernel from Legacy Image at 22000000 ...
-   Image Name:   Linux-4.1.0-linux4sam_5.0
-   Image Type:   ARM Linux Kernel Image (uncompressed)
-   Data Size:    3730848 Bytes = 3.6 MiB
-   Load Address: 20008000
-   Entry Point:  20008000
-   Verifying Checksum ... Bad Data CRC
-ERROR: can't get kernel image!
-
-How can i make my kernel preemptible?
-
---
+Thanks,
+Holger
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160127/789e157b/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160127/d481cd73/attachment.html>
