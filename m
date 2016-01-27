@@ -1,94 +1,45 @@
-From: Julian Scheel <julian@jusst.de>
-Date: Wed, 27 Jan 2016 09:40:11 +0100
-Subject: [Buildroot] [PATCH] package/multicat: Add package
-Message-ID: <1453884011-15524-1-git-send-email-julian@jusst.de>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Wed, 27 Jan 2016 11:37:31 +0000
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20160126142618.7ce66276@free-electrons.com>
+References: <20160122073021.E35B6101A27@stock.ovh.net>
+ <20160122102957.10f29956@free-electrons.com> <56A76066.10908@synopsys.com>
+ <20160126142618.7ce66276@free-electrons.com>
+Message-ID: <56A8ABFB.5030803@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-multicat is a simple and efficient multicast and transport stream manipulation
-tool.
+Hi,
 
-Signed-off-by: Julian Scheel <julian@jusst.de>
----
- package/Config.in              |  1 +
- package/multicat/Config.in     | 11 +++++++++++
- package/multicat/multicat.hash |  4 ++++
- package/multicat/multicat.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/multicat/Config.in
- create mode 100644 package/multicat/multicat.hash
- create mode 100644 package/multicat/multicat.mk
+Just checked and apparently MPlayer 1.2.x already supports AARCH64 so I think
+the patch
+https://git.busybox.net/buildroot/commit/?id=c93805207e24df082495f4d050bc2f29f3d19dd6
+is no longer necessary.
 
-diff --git a/package/Config.in b/package/Config.in
-index 0075cd5..63aa8df 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -28,6 +28,7 @@ menu "Audio and video applications"
- 	source "package/mpd-mpc/Config.in"
- 	source "package/mpg123/Config.in"
- 	source "package/mplayer/Config.in"
-+	source "package/multicat/Config.in"
- 	source "package/musepack/Config.in"
- 	source "package/ncmpc/Config.in"
- 	source "package/on2-8170-libs/Config.in"
-diff --git a/package/multicat/Config.in b/package/multicat/Config.in
-new file mode 100644
-index 0000000..8dfb6c1
---- /dev/null
-+++ b/package/multicat/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_MULTICAT
-+	bool "multicat"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_BITSTREAM
-+	help
-+	  Simple and efficient multicast and transport stream manipulation.
-+
-+	  http://www.videolan.org/projects/multicat.html
-+
-+comment 'multicat needs a toolchain w/ threads'
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/multicat/multicat.hash b/package/multicat/multicat.hash
-new file mode 100644
-index 0000000..38cf9d7
---- /dev/null
-+++ b/package/multicat/multicat.hash
-@@ -0,0 +1,4 @@
-+# from https://get.videolan.org/multicat/2.1/multicat-2.1.tar.bz2.md5
-+md5 2e3ecd8dee64f5bd32a61733d4cc2226 multicat-2.1.tar.bz2
-+# locally calculated
-+sha256 5eabe8d9a3dde452b2d348683cc7da213680551a9d4059c356f7319c6aa9b3d1 multicat-2.1.tar.bz2
-diff --git a/package/multicat/multicat.mk b/package/multicat/multicat.mk
-new file mode 100644
-index 0000000..5909bc5
---- /dev/null
-+++ b/package/multicat/multicat.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# multicat
-+#
-+################################################################################
-+
-+MULTICAT_VERSION = 2.1
-+MULTICAT_SOURCE = multicat-$(MULTICAT_VERSION).tar.bz2
-+MULTICAT_SITE = https://get.videolan.org/multicat/$(MULTICAT_VERSION)
-+MULTICAT_LICENSE = GPLv2+
-+MULTICAT_LICENSE_FILES = COPYING
-+
-+MULTICAT_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
-+
-+define MULTICAT_BUILD_CMDS
-+	$(MULTICAT_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define MULTICAT_INSTALL_TARGET_CMDS
-+	$(MULTICAT_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.7.0
+On 1/26/2016 1:26 PM, Thomas Petazzoni wrote:
+> Joao,
+> 
+> On Tue, 26 Jan 2016 12:02:46 +0000, Joao Pinto wrote:
+> 
+>> Could you tell me what changed in the Buildroot ecosystem to generate such "new"
+>> errors?
+> 
+> So  you're talking about the mplayer failure on AArch64. I believe the
+> main change that took place is that after you enabled it on AArch64,
+> mplayer was bumped to version 1.2. Maybe the AArch64 build problem
+> appeared with the bump to version 1.2.
+> 
+> Could you investigate if that's the case, if mplayer upstream already
+> has a fix for the issue, and if not, see if the issue can be fixed
+> easily ?
+> 
+> Thanks,
+> 
+> Thomas
+> 
+
+Thanks,
+Joao
