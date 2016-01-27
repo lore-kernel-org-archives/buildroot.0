@@ -1,56 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:47:41 +0100
-Subject: [Buildroot] [PATCH v2 17/17] neard: add missing
-	BR2_TOOLCHAIN_HAS_SYNC_4 dependency
+Date: Wed, 27 Jan 2016 23:47:32 +0100
+Subject: [Buildroot] [PATCH v2 08/17] gauche: disable on SPARC(64),
+	remove atomics dependency
 In-Reply-To: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453934861-26364-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453934861-26364-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+gauche does not build on sparc64, it fails with:
 
-  http://autobuild.buildroot.org/results/b8bf7be2efd8e8e369abdde0a5bec564e8cd6f23/
+  No rule to make target 'sparc_mach_dep.lo', needed by 'libgc.la'
+
+On Sparc, it first fails with the usual "membar" assembler issue which
+comes from gauche's internal version of libatomic_ops. However, even
+passing -DAO_NO_SPARC_V9 like we do for libatomic_ops is not
+sufficient, as we fall into the same build problem as on sparc64.
+
+Consequently, this commit disables the gauche package on the sparc and
+sparc64 architectures.
+
+Since it uses its own libatomic_ops copy, and libatomic_ops does not
+have any dependency on atomic built-ins, we also remove the
+BR2_ARCH_HAS_ATOMICS dependency. It was originally added to prevent
+gauche from being built on sparc, but this will no longer happen.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/connman/Config.in | 1 +
- package/neard/Config.in   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/gauche/Config.in | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 655db86..556de48 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -50,6 +50,7 @@ config BR2_PACKAGE_CONNMAN_LOOPBACK
- config BR2_PACKAGE_CONNMAN_NEARD
- 	bool "enable neard support"
- 	select BR2_PACKAGE_NEARD
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # neard
+diff --git a/package/gauche/Config.in b/package/gauche/Config.in
+index fd0617a..3ca012d 100644
+--- a/package/gauche/Config.in
++++ b/package/gauche/Config.in
+@@ -4,14 +4,12 @@ config BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+ 	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k || \
+ 		BR2_mips || BR2_mipsel || BR2_mips64 || \
+ 		BR2_mips64el || BR2_powerpc || BR2_powerpc64 || \
+-		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_sparc || \
+-		BR2_sparc64 || BR2_x86_64
++		BR2_powerpc64le || BR2_sh || BR2_sh64 || BR2_x86_64
  
- config BR2_PACKAGE_CONNMAN_OFONO
- 	bool "enable ofono support"
-diff --git a/package/neard/Config.in b/package/neard/Config.in
-index 353d1af..8571e7c 100644
---- a/package/neard/Config.in
-+++ b/package/neard/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_NEARD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
- 	depends on !BR2_STATIC_LIBS # dlopen
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBNL
-@@ -26,4 +27,5 @@ endif
+ config BR2_PACKAGE_GAUCHE
+ 	bool "gauche"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+@@ -26,6 +24,5 @@ config BR2_PACKAGE_GAUCHE
  
- comment "neard needs a toolchain w/ wchar, threads, dynamic library"
+ comment "gauche needs a toolchain w/ NPTL, dynamic library"
  	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on BR2_PACKAGE_GAUCHE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
 -- 
 2.6.4
