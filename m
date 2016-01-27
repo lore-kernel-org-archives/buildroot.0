@@ -1,117 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 22:46:37 +0100
-Subject: [Buildroot] [PATCH 03/21] toolchain: add
- BR2_TOOLCHAIN_HAS_SYNC_x hidden booleans
-In-Reply-To: <20160125182737.GD3386@free.fr>
-References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453676887-31236-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160125182737.GD3386@free.fr>
-Message-ID: <20160127224637.74ce1bb9@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 27 Jan 2016 22:49:07 +0100
+Subject: [Buildroot] [PATCH v2 0/8] Remove uClibc version selection:
+ always use uClibc-ng
+In-Reply-To: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160127214907.GZ17143@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-On Mon, 25 Jan 2016 19:27:37 +0100, Yann E. MORIN wrote:
-> Thomas, All,
+> Hello,
 > 
-> [Warning: pedantic-english mode engaged. ;-) But with real, interesting
->  comments, too! ]
+> Since April 2015, the uClibc-ng has done very regular releases of the
+> uClibc C library, and is the de-facto active replacement of the now
+> defunct uClibc project.
 
-Thanks for the detailed review! I'll skip over the english related
-comments (which I've taken into account, of course!) and focus on the
-cases where some additional reply is needed.
+Just a small adjustment. The first release made @Fosdem time in
+February (maybe the directory time on the server was misleading):
+http://uclibc-ng.org/wiki/WikiStart?action=diff&version=22
 
-> > +#  - On ARMv7, there is no problem, it can be directly implemented in
-> > +#    userspace.
-> > +#
-> > +#  - On < ARMv7, it requires help from the kernel. Unfortunately, the
-> > +#    libgcc code implementing 8 bytes __sync with the help from the
-> > +#    kernel calls __write() when a failure occurs, which is a function
-> > +#    internal to glibc, not available in uClibc and musl. This means
-> > +#    that the 8 bytes __sync operations are not available on < ARMv7
-> > +#    with uClibc and musl. This problem was fixed as part of gcc
-> > +#    PR68059, which was backported to the gcc 5 branch, but isn't yet
-> > +#    part of any gcc 5.x release.
-> > +#
-> > +config BR2_TOOLCHAIN_ARM_HAS_SYNC_8
-> > +	bool
-> > +	default y
-> > +	depends on BR2_arm || BR2_armeb
-> > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> > +	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_ARM_CPU_ARMV7A
-> 
-> I had a bit of difficulty parsing that one. It was not obvious from the
-> commit log that gcc >= 4.7 was required, while the comment above makes
-> it really explicit. Here's how I understood the commit log:
-> 
->   - for armv7, with gcc-4.7+, it's OK
->   - for armv6-, it needs glibc and there is no gcc condition.
-> 
-> But the comment here states it differently, and matches the code.
-> 
-> Can you just confirm that I misunderstand the commit log?
+MIPS{32,64}r6 support was added in the latest release, may be
+we can enable it with this patch series?
 
-Well, the commit log has:
-
-                    __sync       __atomic    gcc
-
-    ARM            Y  Y  Y  X    Y  Y  Y  Y   4.8, 4.7
-    ARM            Y  Y  Y  -                 4.5
-
-So, as you can see:
-
- - With a gcc 4.5 toolchain, there is no __sync for 8-byte types at all.
-
- - Starting with gcc 4.7, there *might* be a __sync for 8-byte types,
-   but only if you're using glibc *or* if you're using ARMv7.
-
-Hence the conditions:
-
-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_ARM_CPU_ARMV7A
-
-So I believe the code, the comment and the commit log are matching
-here. Am I missing something ?
-
-
-> Well, I'd prefer we have a simpler conditional block, maybe something
-> like:
-> 
->     config BR2_TOOLCHAIN_i386_HAS_SYNC_8
->         bool
->         default y
->         depends on BR2_i386
->         depends on !BR2_x86_i386
->         depends on !BR2_x86_i486
->         depends on !BR2_x86_c3
->         depends on !BR2_x86_winchip_c6
->         depends on !BR2_x86_winchip2
-> 
->     config BR2_TOOLCHAIN_HAS_SYNC_8
->         bool
->         default y if BR2_ARCH_IS_64
->         default y if BR2_TOOLCHAIN_i386_HAS_SYNC_8
->         default y if BR2_TOOLCHAIN_ARM_HAS_SYNC_8
-
-Adopted.
-
-> Also, I'm not sure about the 'default y if BR2_ARCH_IS_64' and I think
-> we should just list those architectures (4 of them: AArch64, mips64,
-> sparc64 and x86_64, with that last one already covered with i386).
-
-I beg to disagree here. I don't see why a 64 bits architecture would
-not provide the 8-byte intrinsics. I would like to suggest to keep it
-as is for now, and revisit when/if we get a 64 bits architecture that
-doesn't provide those 8-byte intrinsics.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar
