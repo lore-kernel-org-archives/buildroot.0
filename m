@@ -1,106 +1,118 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Jan 2016 23:05:40 +0100
-Subject: [Buildroot] [git commit] bind: rename ptrsize to ptr_size in the
-	code
-Message-ID: <20160201224702.3D1A97F8D4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jan 2016 21:36:39 +0100
+Subject: [Buildroot] [git commit] package/collectd: bump version to 5.5.1
+Message-ID: <20160201224703.D96857F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b868e97e1a44fa8be9fa3875c583b5ebc78be89
+commit: https://git.buildroot.net/buildroot/commit/?id=29baa2cc4ba76eb34cd95d06c3ec2a4200064920
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uClibc in commit 70a04a28 #defined ptrsize globally in bits/setjmp.h for
-mips. However this is a common variable name and causes build failure
-for at least bind.
-So rename ptrsize to ptr_size in bind to avoid this. Fixes:
-http://autobuild.buildroot.net/results/a92/a92fa5dc5d9d6742d61d4d293f7eac97c5355dfe/
+Removed COLLECTD_AUTORECONF=yes because our patches applied were applied
+upstream:
+http://git.verplant.org/?p=collectd.git;a=commitdiff;h=780e6a76021a240e95007a04b723d827120afa95
+http://git.verplant.org/?p=collectd.git;a=commitdiff;h=3e3848349b753d78a0b1d19648fb394866856bda
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bind/0003-Rename-ptrsize-to-ptr_size.patch | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ ...libavltree-libcommon-libheap-dependencies.patch | 21 ----------------
+ package/collectd/0002-ipc-enable-gnu-source.patch  | 28 ----------------------
+ package/collectd/collectd.hash                     |  4 ++--
+ package/collectd/collectd.mk                       |  4 +---
+ 4 files changed, 3 insertions(+), 54 deletions(-)
 
-diff --git a/package/bind/0003-Rename-ptrsize-to-ptr_size.patch b/package/bind/0003-Rename-ptrsize-to-ptr_size.patch
-new file mode 100644
-index 0000000..e3b58e2
---- /dev/null
-+++ b/package/bind/0003-Rename-ptrsize-to-ptr_size.patch
-@@ -0,0 +1,74 @@
-+From 254dc19788ba2a03504fc6d1036fef477a60035f Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Fri, 22 Jan 2016 08:31:02 -0300
-+Subject: [PATCH] Rename ptrsize to ptr_size
-+
-+This is to compensate for a uClibc mess caused by commit
-+70a04a287a2875c82e6822c36e071afba5b63a62 where ptrsize is defined for
-+mips, hence causing build breakage under certain conditions for programs
-+that use this variable name.
-+
-+Status: definitely not upstreamable.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ lib/dns/rbt.c   | 6 +++---
-+ lib/dns/rbtdb.c | 4 ++--
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/lib/dns/rbt.c b/lib/dns/rbt.c
-+index 86b5183..5fd55de 100644
-+--- a/lib/dns/rbt.c
-++++ b/lib/dns/rbt.c
-+@@ -113,7 +113,7 @@ struct file_header {
-+ 	 * information about the system on which the map file was generated
-+ 	 * will be used to tell if we can load the map file or not
-+ 	 */
-+-	isc_uint32_t ptrsize;
-++	isc_uint32_t ptr_size;
-+ 	unsigned int bigendian:1;	/* big or little endian system */
-+ 	unsigned int rdataset_fixed:1;	/* compiled with --enable-rrset-fixed */
-+ 	unsigned int nodecount;		/* shadow from rbt structure */
-+@@ -517,7 +517,7 @@ write_header(FILE *file, dns_rbt_t *rbt, isc_uint64_t first_node_offset,
-+ 	memmove(header.version1, FILE_VERSION, sizeof(header.version1));
-+ 	memmove(header.version2, FILE_VERSION, sizeof(header.version2));
-+ 	header.first_node_offset = first_node_offset;
-+-	header.ptrsize = (isc_uint32_t) sizeof(void *);
-++	header.ptr_size = (isc_uint32_t) sizeof(void *);
-+ 	header.bigendian = (1 == htonl(1)) ? 1 : 0;
-+ 
-+ #ifdef DNS_RDATASET_FIXED
-+@@ -902,7 +902,7 @@ dns_rbt_deserialize_tree(void *base_address, size_t filesize,
-+ 	}
-+ #endif
-+ 
-+-	if (header->ptrsize != (isc_uint32_t) sizeof(void *)) {
-++	if (header->ptr_size != (isc_uint32_t) sizeof(void *)) {
-+ 		result = ISC_R_INVALIDFILE;
-+ 		goto cleanup;
-+ 	}
-+diff --git a/lib/dns/rbtdb.c b/lib/dns/rbtdb.c
-+index c7168cb..dbcf944 100644
-+--- a/lib/dns/rbtdb.c
-++++ b/lib/dns/rbtdb.c
-+@@ -114,7 +114,7 @@ typedef struct rbtdb_file_header rbtdb_file_header_t;
-+ 
-+ struct rbtdb_file_header {
-+ 	char version1[32];
-+-	isc_uint32_t ptrsize;
-++	isc_uint32_t ptr_size;
-+ 	unsigned int bigendian:1;
-+ 	isc_uint64_t tree;
-+ 	isc_uint64_t nsec;
-+@@ -7593,7 +7593,7 @@ rbtdb_write_header(FILE *rbtfile, off_t tree_location, off_t nsec_location,
-+ 	memset(&header, 0, sizeof(rbtdb_file_header_t));
-+ 	memmove(header.version1, FILE_VERSION, sizeof(header.version1));
-+ 	memmove(header.version2, FILE_VERSION, sizeof(header.version2));
-+-	header.ptrsize = (isc_uint32_t) sizeof(void *);
-++	header.ptr_size = (isc_uint32_t) sizeof(void *);
-+ 	header.bigendian = (1 == htonl(1)) ? 1 : 0;
-+ 	header.tree = (isc_uint64_t) tree_location;
-+ 	header.nsec = (isc_uint64_t) nsec_location;
-+-- 
-+2.4.10
-+
+diff --git a/package/collectd/0001-build-add-libavltree-libcommon-libheap-dependencies.patch b/package/collectd/0001-build-add-libavltree-libcommon-libheap-dependencies.patch
+deleted file mode 100644
+index 1ee1e7c..0000000
+--- a/package/collectd/0001-build-add-libavltree-libcommon-libheap-dependencies.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-build: add libavltree, libcommon & libheap dependencies
+-
+-Otherwise it can break on very parallel builds since collectd link time
+-arrives before one or more of these were built.
+-
+-Status: requested github pull (patch slightly different for newer rev).
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura collectd-5.5.0.orig/src/daemon/Makefile.am collectd-5.5.0/src/daemon/Makefile.am
+---- collectd-5.5.0.orig/src/daemon/Makefile.am	2015-07-06 10:01:17.820506239 -0300
+-+++ collectd-5.5.0/src/daemon/Makefile.am	2015-07-06 10:02:03.364054763 -0300
+-@@ -49,7 +49,7 @@
+- collectd_CFLAGS = $(AM_CFLAGS)
+- collectd_LDFLAGS = -export-dynamic
+- collectd_LDADD = libavltree.la libcommon.la libheap.la -lm
+--collectd_DEPENDENCIES =
+-+collectd_DEPENDENCIES = libavltree.la libcommon.la libheap.la
+- 
+- # Link to these libraries..
+- if BUILD_WITH_LIBRT
+diff --git a/package/collectd/0002-ipc-enable-gnu-source.patch b/package/collectd/0002-ipc-enable-gnu-source.patch
+deleted file mode 100644
+index 459fdbd..0000000
+--- a/package/collectd/0002-ipc-enable-gnu-source.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-https://github.com/collectd/collectd/commit/3e3848349b753d78a0b1d19648fb394866856bda
+-
+-    ipc: enable _GNU_SOURCE to fix build with musl libc
+-
+-    This fixes compile the compile error:
+-
+-    > ipc.c:154:49: error: 'struct shm_info' has no member named 'used_ids'
+-    >    ipc_submit_g("shm", "segments", NULL, shm_info.used_ids);
+-    >                                                   ^
+-
+-    Fixes #1147
+-
+-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+-
+-diff --git a/src/ipc.c b/src/ipc.c
+-index 3763f24..b403847 100644
+---- a/src/ipc.c
+-+++ b/src/ipc.c
+-@@ -32,6 +32,9 @@
+- #include "configfile.h"
+- 
+- #if KERNEL_LINUX
+-+  /* _GNU_SOURCE is needed for struct shm_info.used_ids on musl libc */
+-+# define _GNU_SOURCE
+-+
+-   /* X/OPEN tells us to use <sys/{types,ipc,sem}.h> for semctl() */
+-   /* X/OPEN tells us to use <sys/{types,ipc,msg}.h> for msgctl() */
+-   /* X/OPEN tells us to use <sys/{types,ipc,shm}.h> for shmctl() */
+diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
+index 43bcfdd..3d982fe 100644
+--- a/package/collectd/collectd.hash
++++ b/package/collectd/collectd.hash
+@@ -1,2 +1,2 @@
+-# From http://collectd.org/download.shtml
+-sha256	847684cf5c10de1dc34145078af3fcf6e0d168ba98c14f1343b1062a4b569e88	collectd-5.5.0.tar.bz2
++# From https://collectd.org/files/SHA256SUM
++sha256	f9c5d526e1f0429a7db1ccd90bdf9e23923a2fd43b7285cfda8f0341e5c0bc3f	collectd-5.5.1.tar.bz2
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index d7fd8f9..06c5389 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -4,15 +4,13 @@
+ #
+ ################################################################################
+ 
+-COLLECTD_VERSION = 5.5.0
++COLLECTD_VERSION = 5.5.1
+ COLLECTD_SITE = http://collectd.org/files
+ COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+ COLLECTD_INSTALL_STAGING = YES
+ COLLECTD_LICENSE = GPLv2, LGPLv2.1
+ COLLECTD_LICENSE_FILES = COPYING
+-# For 0001-build-add-libavltree-libcommon-libheap-dependencies.patch
+-COLLECTD_AUTORECONF = YES
+ 
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
