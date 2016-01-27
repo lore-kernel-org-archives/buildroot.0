@@ -1,70 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:47:36 +0100
-Subject: [Buildroot] [PATCH v2 12/17] msgpack: rework BR2_ARCH_HAS_ATOMICS
-	dependency
+Date: Wed, 27 Jan 2016 23:47:34 +0100
+Subject: [Buildroot] [PATCH v2 10/17] squid: rework atomic handling
 In-Reply-To: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453934861-26364-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453934861-26364-11-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The msgpack source code indeed checks for the 4 bytes __sync built-in,
-so this commit switches the package from a BR2_ARCH_HAS_ATOMICS
-dependency to a BR2_TOOLCHAIN_HAS_SYNC_4 dependency.
+squid can use the __sync built-ins when available, but uses an
+AC_TRY_RUN autoconf tests to check their availability, which isn't
+compatible with cross-compilation. Due to this, squid.mk is already
+hinting the configure script about this by passing
+squid_cv_gnu_atomics=yes/no depending on the availability of atomic
+operations.
 
-python-msgpack, a reverse dependency of msgpack, is changed in the
-same way.
+So far, squid.mk was assuming that BR2_ARCH_HAS_ATOMICS &&
+BR2_ARCH_IS_64 was needed, since 8 bytes __sync built-ins are
+used. However, this was a bit too restrictive, since certain 32 bits
+architectures (ARM, x86) do provide 8 bytes __sync built-ins.
+
+So, instead of using BR2_ARCH_HAS_ATOMICS, we now rely on
+BR2_TOOLCHAIN_HAS_SYNC_4 and BR2_TOOLCHAIN_HAS_SYNC_8, since both 4
+bytes and 8 bytes __sync built-ins are tested by the autoconf test.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/msgpack/Config.in        | 4 ++--
- package/python-msgpack/Config.in | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/squid/squid.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-index a57a378..b8e8213 100644
---- a/package/msgpack/Config.in
-+++ b/package/msgpack/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_MSGPACK
- 	bool "msgpack"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	help
- 	  MessagePack is an efficient binary serialization format.
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 3110573..f205da2 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -41,12 +41,10 @@ SQUID_CONF_OPTS = \
+ 	--with-swapdir=/var/cache/squid/ \
+ 	--with-default-user=squid
  
-@@ -11,5 +11,5 @@ config BR2_PACKAGE_MSGPACK
- 	  http://msgpack.org/
- 
- comment "msgpack needs a toolchain w/ C++"
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
-index ed0b432..cba3b51 100644
---- a/package/python-msgpack/Config.in
-+++ b/package/python-msgpack/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_MSGPACK
- 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
--	depends on BR2_ARCH_HAS_ATOMICS # msgpack
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # msgpack
- 	help
- 	  MessagePack (http://msgpack.org/) is a fast, compact binary
- 	  serialization format, suitable for similar data to JSON.
-@@ -13,6 +13,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 	  https://pypi.python.org/pypi/msgpack-python/
- 
- comment "python-msgpack needs a toolchain w/ C++"
--	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_PYTHON
- 	depends on !BR2_INSTALL_LIBSTDCPP
+-# Atomics in Squid use __sync_add_and_fetch_8, i.e a 64 bits atomic
+-# operation. This atomic intrinsic is only available natively on
+-# 64-bit architectures that have atomic operations. On 32-bit
+-# architectures, it would be provided by libatomic, but Buildroot
+-# typically doesn't provide it.
+-ifeq ($(BR2_ARCH_HAS_ATOMICS)$(BR2_ARCH_IS_64),yy)
++# Atomics in Squid use __sync built-ins on 4 and 8 bytes. However, the
++# configure script tests them using AC_TRY_RUN, so we have to give
++# some hints.
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4)$(BR2_TOOLCHAIN_HAS_SYNC_8),yy)
+ SQUID_CONF_ENV += squid_cv_gnu_atomics=yes
+ else
+ SQUID_CONF_ENV += squid_cv_gnu_atomics=no
 -- 
 2.6.4
