@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:47:40 +0100
-Subject: [Buildroot] [PATCH v2 16/17] freerdp: add missing
+Date: Wed, 27 Jan 2016 23:47:39 +0100
+Subject: [Buildroot] [PATCH v2 15/17] openal: add missing
 	BR2_TOOLCHAIN_HAS_SYNC_4 dependency
 In-Reply-To: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453934861-26364-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1453934861-26364-16-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,53 +13,49 @@ To: buildroot@busybox.net
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/0501e63cbebe4cda4012ace6f7ec5f43342be5c5/
+  http://autobuild.buildroot.org/results/314fb8da3ca87984e9240d67ff233e2f999ae89e/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/freerdp/Config.in | 2 ++
- package/weston/Config.in  | 2 ++
+ package/gstreamer1/gst1-plugins-bad/Config.in | 2 ++
+ package/openal/Config.in                      | 2 ++
  2 files changed, 4 insertions(+)
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index f8dbb68..9dd2505 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_FREERDP
- 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # libglib2
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index f02be34..0dc217e 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -566,9 +566,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENAL
+ 	bool "openal"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -84,5 +85,6 @@ config BR2_PACKAGE_FREERDP_CLIENT_WL
- endif
+ 	select BR2_PACKAGE_OPENAL
  
- comment "freerdp needs a toolchain w/ wchar, dynamic library, threads, C++"
+ comment "openal plugin needs a toolchain w/ NPTL, C++"
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index c5525e1..4c820e9 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -44,6 +44,7 @@ config BR2_PACKAGE_WESTON_RDP
- 	bool "RDP compositor"
- 	depends on BR2_USE_WCHAR # freerdp
- 	depends on BR2_USE_MMU # freerdp, libglib2
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ 		|| !BR2_INSTALL_LIBSTDCPP
+ 
+diff --git a/package/openal/Config.in b/package/openal/Config.in
+index 4a73f45..b497e26 100644
+--- a/package/openal/Config.in
++++ b/package/openal/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENAL
+ 	bool "openal"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_FREERDP
- 	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
  	help
-@@ -61,6 +62,7 @@ config BR2_PACKAGE_WESTON_RDP
+ 	  OpenAL provides capabilities for playing audio in a virtual
+ 	  3D environment. Distance attenuation, doppler shift, and
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_OPENAL
+ 	  http://kcat.strangesoft.net/openal.html
  
- comment "RDP compositor needs a toolchain w/ wchar"
- 	depends on BROKEN # needs FreeRDP master
+ comment "openal needs a toolchain w/ NPTL, C++"
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR
- 
- # rpi-userland is an EGL/GLES provider, so we can't select it
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ 		|| !BR2_INSTALL_LIBSTDCPP
 -- 
 2.6.4
