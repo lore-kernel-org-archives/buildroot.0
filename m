@@ -1,29 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 09:22:55 +0100
-Subject: [Buildroot] [PATCH 1/2] package/kodi: not available using a
- musl-based toolchain
-In-Reply-To: <1453848286-2477-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453848286-2477-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160127092255.75c83958@free-electrons.com>
+Date: Wed, 27 Jan 2016 09:24:03 +0100
+Subject: [Buildroot] [PATCH] dt: new package
+In-Reply-To: <56A7FF99.4030202@free-electrons.com>
+References: <1453840823-24345-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <20160126215833.1afdb8dc@free-electrons.com>
+ <56A7FF99.4030202@free-electrons.com>
+Message-ID: <20160127092403.56330c11@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello,
 
-On Tue, 26 Jan 2016 23:44:45 +0100, Bernd Kuhls wrote:
-> The build stops with
-> configure: error: unsupported host (i586-buildroot-linux-musl)
-> due to musl not being supported in
-> https://github.com/xbmc/xbmc/blob/Isengard/m4/xbmc_arch.m4
+On Tue, 26 Jan 2016 20:22:01 -0300, Gustavo Zacarias wrote:
+
+> > I think this one should rather be:
+> >
+> > ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+> > ...
+> > endif
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Hi.
+> Musl has support for posix aio, so in the oft chance that someone wants 
+> to patch/enable, in this way it would be inaccurate.
 
-And what happens if you add an additional case to support musl ?
+OK, makes sense.
 
-Thanks,
+> > What do you think ?
+> 
+> Sure, i can spin v2 with this change.
+
+Great, thanks!
 
 Thomas
 -- 
