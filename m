@@ -1,33 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Jan 2016 18:18:46 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20160122102957.10f29956@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 22 Jan 2016 10:29:57 +0100")
-References: <20160122073021.E35B6101A27@stock.ovh.net>
- <20160122102957.10f29956@free-electrons.com>
-Message-ID: <87fuxjos95.fsf@dell.be.48ers.dk>
+From: jerry at chordia.co.uk <jerry@chordia.co.uk>
+Date: Wed, 27 Jan 2016 18:56:01 -0000
+Subject: [Buildroot] suggestion?
+In-Reply-To: <20160127143857.2f2ea66d@free-electrons.com>
+References: <09ad01d158fa$a6f7c8e0$f4e75aa0$@chordia.co.uk>
+ <alpine.DEB.2.11.1601271417460.9406@tanhuma.tkos.co.il>
+ <09f301d15903$563d58d0$02b80a70$@chordia.co.uk>
+ <20160127143857.2f2ea66d@free-electrons.com>
+Message-ID: <0bce01d15934$5e2d3ed0$1a87bc70$@chordia.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas
 
-Hi,
+ 
+> Unlike what Jonathan said, I wouldn't really suggest to rely on
+Stackoverflow.
+> While Stackoverflow was really great at the beginning, there are now tons
+of
+> people giving completely incorrect and invalid answers. On the Buildroot
+> topic fortunately, a few of the core developers/contributors are
+monitoring
+> the "buildroot" tag, so they are giving good answers, but I've also seen
+other
+> answers that were completely wrong. Arnout Vandecappelle and Luca
+> Ceresoli are particularly active at answering Buildroot questions on
+> Stackoverflow.
+ 
+OK. That is good to know. 
 
- >> x86_64 |                madplay-0.15.2b | NOK | http://autobuild.buildroot.net/results/2561190b274d71666c4bdf3c569b02063cefdb30/
+I'd agree with your more general observations about SO though. Quality
+control has failed badly.
 
- > ./relocatable.c: In function 'libintl_relocate':
- > ./relocatable.c:402:40: error: 'INSTALLPREFIX' undeclared (first use in this function)
- >        const char *orig_installprefix = INSTALLPREFIX;
-
- > Musl related ? Not sure. Peter, you added the madplay package back in
- > 2007, so can you have a look ? :-)
-
-Heh, I don't recall any details from 2007 - But I've taken a look and
-pushed a fix. It was indeed musl related.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Let me try and experiment or two :)
