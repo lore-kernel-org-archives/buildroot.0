@@ -1,130 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 22:25:30 +0100
-Subject: [Buildroot] [PATCH v2 8/8] uclibc: remove version selection
-In-Reply-To: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1453929930-18215-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jan 2016 22:46:37 +0100
+Subject: [Buildroot] [PATCH 03/21] toolchain: add
+ BR2_TOOLCHAIN_HAS_SYNC_x hidden booleans
+In-Reply-To: <20160125182737.GD3386@free.fr>
+References: <1453676887-31236-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453676887-31236-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20160125182737.GD3386@free.fr>
+Message-ID: <20160127224637.74ce1bb9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we now only support uClibc-ng, remove the version selection from
-the uclibc package.
+Yann,
 
-Note that the BR2_UCLIBC_VERSION_SUPPORTS_* hidden booleans, which
-were only used to allow each uClibc version to specify which thread
-implementation they support and on which architecture are removed. Now
-such architecture dependencies are directly encoded in the "Thread
-library implementation" choice.
+On Mon, 25 Jan 2016 19:27:37 +0100, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> [Warning: pedantic-english mode engaged. ;-) But with real, interesting
+>  comments, too! ]
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uclibc/Config.in | 41 +++++------------------------------------
- package/uclibc/uclibc.mk | 11 +++--------
- 2 files changed, 8 insertions(+), 44 deletions(-)
+Thanks for the detailed review! I'll skip over the english related
+comments (which I've taken into account, of course!) and focus on the
+cases where some additional reply is needed.
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 452043d..16bf89c 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -7,38 +7,9 @@ config BR2_PACKAGE_UCLIBC
- 
- comment "uClibc Options"
- 
--config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
--	bool
--
--config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
--	bool
--
--config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
--	bool
--
--choice
--	prompt "uClibc C library Version"
--	default BR2_UCLIBC_VERSION_NG
--	help
--	  Select the version of uClibc you wish to use.
--
--	config BR2_UCLIBC_VERSION_NG
--		bool "uClibc-ng"
--		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if BR2_m68k
--		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
--		       if BR2_m68k || BR2_arm || BR2_armeb
--		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
--		       if !BR2_m68k && !BR2_x86_i386
--
--endchoice
--
--config BR2_UCLIBC_VERSION_STRING
--	string
--	default "1.0.11"		if BR2_UCLIBC_VERSION_NG
--
- config BR2_UCLIBC_CONFIG
- 	string "uClibc configuration file to use?"
--	default "package/uclibc/uClibc-ng.config" if BR2_UCLIBC_VERSION_NG
-+	default "package/uclibc/uClibc-ng.config"
- 	help
- 	  Some people may wish to use their own modified uClibc configuration
- 	  file and will specify their config file location with this option.
-@@ -76,9 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
- 
- choice
- 	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SUPPORTS_NPTL
--	default BR2_PTHREADS_OLD if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
--	default BR2_PTHREADS if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+	default BR2_PTHREADS_NATIVE
- 	help
- 	  Use this option to select the thread library implementation
- 	  that should be used in your toolchain.
-@@ -89,18 +58,18 @@ choice
- 	config BR2_PTHREADS
- 		bool "linuxthreads"
- 		select BR2_TOOLCHAIN_HAS_THREADS
--		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+		depends on BR2_m68k
- 
- 	config BR2_PTHREADS_OLD
- 		bool "linuxthreads (stable/old)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
--		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-+		depends on BR2_m68k || BR2_arm || BR2_armeb
- 
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
- 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--		depends on BR2_UCLIBC_VERSION_SUPPORTS_NPTL
-+		depends on !BR2_m68k && !BR2_x86_i386
- endchoice
- 
- config BR2_PTHREAD_DEBUG
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 44b8a97..6b05181 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,16 +4,11 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
--UCLIBC_SOURCE ?= uClibc-$(UCLIBC_VERSION).tar.bz2
-+UCLIBC_VERSION = 1.0.11
-+UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
-+UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPLv2.1+
- UCLIBC_LICENSE_FILES = COPYING.LIB
--
--ifeq ($(BR2_UCLIBC_VERSION_NG),y)
--UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
--UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
--endif
--
- UCLIBC_INSTALL_STAGING = YES
- 
- # uclibc is part of the toolchain so disable the toolchain dependency
+> > +#  - On ARMv7, there is no problem, it can be directly implemented in
+> > +#    userspace.
+> > +#
+> > +#  - On < ARMv7, it requires help from the kernel. Unfortunately, the
+> > +#    libgcc code implementing 8 bytes __sync with the help from the
+> > +#    kernel calls __write() when a failure occurs, which is a function
+> > +#    internal to glibc, not available in uClibc and musl. This means
+> > +#    that the 8 bytes __sync operations are not available on < ARMv7
+> > +#    with uClibc and musl. This problem was fixed as part of gcc
+> > +#    PR68059, which was backported to the gcc 5 branch, but isn't yet
+> > +#    part of any gcc 5.x release.
+> > +#
+> > +config BR2_TOOLCHAIN_ARM_HAS_SYNC_8
+> > +	bool
+> > +	default y
+> > +	depends on BR2_arm || BR2_armeb
+> > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> > +	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_ARM_CPU_ARMV7A
+> 
+> I had a bit of difficulty parsing that one. It was not obvious from the
+> commit log that gcc >= 4.7 was required, while the comment above makes
+> it really explicit. Here's how I understood the commit log:
+> 
+>   - for armv7, with gcc-4.7+, it's OK
+>   - for armv6-, it needs glibc and there is no gcc condition.
+> 
+> But the comment here states it differently, and matches the code.
+> 
+> Can you just confirm that I misunderstand the commit log?
+
+Well, the commit log has:
+
+                    __sync       __atomic    gcc
+
+    ARM            Y  Y  Y  X    Y  Y  Y  Y   4.8, 4.7
+    ARM            Y  Y  Y  -                 4.5
+
+So, as you can see:
+
+ - With a gcc 4.5 toolchain, there is no __sync for 8-byte types at all.
+
+ - Starting with gcc 4.7, there *might* be a __sync for 8-byte types,
+   but only if you're using glibc *or* if you're using ARMv7.
+
+Hence the conditions:
+
+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_ARM_CPU_ARMV7A
+
+So I believe the code, the comment and the commit log are matching
+here. Am I missing something ?
+
+
+> Well, I'd prefer we have a simpler conditional block, maybe something
+> like:
+> 
+>     config BR2_TOOLCHAIN_i386_HAS_SYNC_8
+>         bool
+>         default y
+>         depends on BR2_i386
+>         depends on !BR2_x86_i386
+>         depends on !BR2_x86_i486
+>         depends on !BR2_x86_c3
+>         depends on !BR2_x86_winchip_c6
+>         depends on !BR2_x86_winchip2
+> 
+>     config BR2_TOOLCHAIN_HAS_SYNC_8
+>         bool
+>         default y if BR2_ARCH_IS_64
+>         default y if BR2_TOOLCHAIN_i386_HAS_SYNC_8
+>         default y if BR2_TOOLCHAIN_ARM_HAS_SYNC_8
+
+Adopted.
+
+> Also, I'm not sure about the 'default y if BR2_ARCH_IS_64' and I think
+> we should just list those architectures (4 of them: AArch64, mips64,
+> sparc64 and x86_64, with that last one already covered with i386).
+
+I beg to disagree here. I don't see why a 64 bits architecture would
+not provide the 8-byte intrinsics. I would like to suggest to keep it
+as is for now, and revisit when/if we get a 64 bits architecture that
+doesn't provide those 8-byte intrinsics.
+
+Thanks!
+
+Thomas
 -- 
-2.6.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
