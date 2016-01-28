@@ -1,117 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Jan 2016 19:15:13 +0100
-Subject: [Buildroot] [PATCH 15/16 v3] core/legal-info: allow ignoring
-	packages from the legal-info
-In-Reply-To: <cover.1454004518.git.yann.morin.1998@free.fr>
-References: <cover.1454004518.git.yann.morin.1998@free.fr>
-Message-ID: <882f1002db3ce40f210893921c23728ca796d20e.1454004518.git.yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 28 Jan 2016 20:37:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openssl: security bump to version
+	1.0.2f
+Message-ID: <1454009827-8517-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It might be necessary to not even mention a package in the output of
-legal-info:
+Fixes
+DH small subgroups (CVE-2016-0701)
+SSLv2 doesn't block disabled ciphers (CVE-2015-3197)
+An update on DHE man-in-the-middle protection (Logjam)
 
-  - virtual package have virtually nothing to save in the legal-info
-    output;
-
-  - for Buildroot itself, host-gcc-initial and host-gcc-final are
-    not real packages, they are just two different steps of the same
-    package, gcc;
-
-  - for proprietary packages, it might not even be legal to even
-    mention them, being under NDA or some other such restrictive
-    conditions.
-
-Introduce the new FOO_LEGAL_INGORE variable that a package can set
-to 'YES' (default to 'NO') to indicate that the package should be
-completely ignored from the legal-info output, in which case the
-package is not metionned in the maniufest, its source archive,
-patches and license files are not saved into legal-info/ .
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-  - introduce a new variable, instead of making _REDISTRIBUTE a
-    tri-state  (Thomas, Peter, Luca)
----
- docs/manual/adding-packages-generic.txt |  9 +++++++++
- package/pkg-generic.mk                  | 15 +++++++++++++++
- 2 files changed, 24 insertions(+)
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 1f9c7bb..1b07a14 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -421,6 +421,15 @@ information is (assuming the package name is +libfoo+) :
-   non-opensource packages: Buildroot will not save the source code for this
-   package when collecting the +legal-info+.
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 2d2a5b0..2cf7516 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2e.tar.gz.sha256
+-sha256	e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff	openssl-1.0.2e.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2f.tar.gz.sha256
++sha256	932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c	openssl-1.0.2f.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index c3ea08d..b7498a7 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+* +LIBFOO_LEGAL_IGNORE+ can be set to +YES+ or +NO+ (the default) to indicate
-+  that this package should be completely ignored when saving the licensing
-+  information. If set to +YES+, then the package is not listed in the manifest,
-+  its source archive and its license files are not saved. You probably do not
-+  want to set it to +YES+, unless under very specific conditions (e.g. when
-+  you use the `legal-info/` output directory as-is to provide a compliance
-+  delivery, and do not want your proprietary, non-redistributable packages to
-+  even be mentionned in the manifest).
-+
- * +LIBFOO_FLAT_STACKSIZE+ defines the stack size of an application built into
-   the FLAT binary format. The application stack size on the NOMMU architecture
-   processors can't be enlarged at run time. The default stack size for the
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b59af9e..9c02372 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -490,6 +490,14 @@ endif
- 
- $(2)_REDISTRIBUTE		?= YES
- 
-+ifndef $(2)_LEGAL_IGNORE
-+ ifdef $(3)_LEGAL_IGNORE
-+  $(2)_LEGAL_IGNORE = $$($(3)_LEGAL_IGNORE)
-+ endif
-+endif
-+
-+$(2)_LEGAL_IGNORE		?= NO
-+
- $(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAWNAME_VERSION)
- 
- # When a target package is a toolchain dependency set this variable to
-@@ -762,7 +770,10 @@ $(2)_MANIFEST_LICENSE_FILES ?= not saved
- # We need to extract and patch a package to be able to retrieve its
- # license files (if any) and the list of patches applied to it (if
- # any).
-+# But not if we want to ignore that package completely.
-+ifneq ($$($(2)_LEGAL_IGNORE),YES)
- $(1)-legal-info: $(1)-patch
-+endif
- 
- # We only save the sources of packages we want to redistribute, that are
- # non-local, and non-overriden. So only store, in the manifest, the tarball
-@@ -792,6 +803,8 @@ endif # actual sources != ""
- 
- # legal-info: produce legally relevant info.
- $(1)-legal-info:
-+ifneq ($$($(2)_LEGAL_IGNORE),YES)
-+
- # Packages without a source are assumed to be part of Buildroot, skip them.
- 	$$(foreach hook,$$($(2)_PRE_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
- ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-@@ -845,6 +858,8 @@ endif # other packages
- endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
- 
-+endif # $(2)_LEGAL_IGNORE != YES
-+
- # add package to the general list of targets if requested by the buildroot
- # configuration
- ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+-OPENSSL_VERSION = 1.0.2e
++OPENSSL_VERSION = 1.0.2f
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
 -- 
-1.9.1
+2.7.0.rc3
