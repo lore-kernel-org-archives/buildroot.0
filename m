@@ -1,115 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Jan 2016 19:15:09 +0100
-Subject: [Buildroot] [PATCH 11/16 v3] core/legal-info: also save patches
+Date: Thu, 28 Jan 2016 19:15:10 +0100
+Subject: [Buildroot] [PATCH 12/16 v3] core/legal-info: renumber saved patches
 In-Reply-To: <cover.1454004518.git.yann.morin.1998@free.fr>
 References: <cover.1454004518.git.yann.morin.1998@free.fr>
-Message-ID: <415acb524afa715f0b51d6f1b3344a63e90301ee.1454004518.git.yann.morin.1998@free.fr>
+Message-ID: <89835259941b9067e4482d51ab2f45fa5e373262.1454004518.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the legal-info infra only saves the source archive of a
-package. However, that's not enough as we may apply some patches on
-packages sources.
+Patches we save can come from various locations;
+  - bundled with Buildroot
+  - downloaded
+  - from one or more global-patch-dir
 
-We do suggest users to also redistribute the Buildroot sources as part
-of their compliance distribution, so the patches bundled in Buildroot
-would indeed be included in the compliance distribution.
+It is possible that two patches lying into different locations have the
+same basename, like so (first is bundled, second is from an hypothetical
+global-patch-dir):
+    package/foo/0001-fix-Makefile.patch
+    /path/to/my/patches/foo/0001-fix-Makefile.patch
 
-However, that's still not enough, since we may download some patches, or
-the user may use a global patch directory. Patches in there might not
-end up in the compliance distribution, and there are risks of
-non-conformity.
+In that case, we'd save onlt the second patch, overwriting the first.
 
-So, always include patches alongside the source archive.
+We fix that by forcibly prefixing saved patches with a new numbering, to
+guarantee the unicity of saved files.
 
-To ensure reproducibility, we also generate a series file, so patches
-can be re-applied in the correct order.
+The unfortunate side-effects are that:
+  - most saved patches will be twice-numbered,
+  - the series file is now redundant.
 
-We get the list of patches to include from the list of patches that were
-applied by the package infrastructure (via the apply-patches support
-script). So, we need to get packages properly extracted and patched
-before we can save their legal-info, not just in the case they define
-_LICENSE_FILES.
+While the former is mostly not nice-looking, we shouldn't try to strip
+any leading numbering, as that might not be a numbering (e.g.
+42-retries.patch which is a patch add 42 retries).
 
-Update the legal-info header accordingly.
-
-Note: this means that, when a package is not patched and defines no
-LICENSE_FILES, we will extract and patch it for nothing. There is no
-easy way to know whether we have to patch a package or not. We can only
-either duplicate the logic to detect patches (bad) or rely on the infra
-actually patching the package. Also, a vast majority of packages are
-either patched, or define _LICENSE_FILES, so it is best and easiest to
-always extract and patch them prior to legal-info.
+The latter is not really problematic. A lot of tools (and people) can
+work with, and prefer to have a series file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 ---
-Changes v2 -> v3:
-  - also mention that patches have been saved  (Luca)
-
-Changes v1 -> v2:
-  - don't recompute rawname-version needlessly  (Luca)
+Note that I've made this a separate change, not because the patch would
+be too complex if squahed with the previous, but rather to have a more
+detailed commit log about the reason for the renumbering; squashing the
+two changes together would make for a really long commit log, at the
+risk of being more difficult to follow.
 ---
- package/pkg-generic.mk           | 13 ++++++++-----
- support/legal-info/README.header |  9 +++++----
- 2 files changed, 13 insertions(+), 9 deletions(-)
+ package/pkg-generic.mk | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7ad3bc3..c5b66db 100644
+index c5b66db..f6132b3 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -759,12 +759,10 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
- endif
- $(2)_MANIFEST_LICENSE_FILES ?= not saved
- 
--# If the package declares _LICENSE_FILES, we need to extract it,
--# for overriden, local or normal remote packages alike, whether
--# we want to redistribute it or not.
--ifneq ($$($(2)_LICENSE_FILES),)
-+# We need to extract and patch a package to be able to retrieve its
-+# license files (if any) and the list of patches applied to it (if
-+# any).
- $(1)-legal-info: $(1)-patch
--endif
- 
- # We only save the sources of packages we want to redistribute, that are
- # non-local, and non-overriden. So only store, in the manifest, the tarball
-@@ -826,6 +824,11 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
- 	$$(Q)$$(call hardlink-copy,\
+@@ -825,9 +825,16 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
  		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
  		     $$($(2)_REDIST_SOURCES_DIR))
-+# Copy patches and generate the series file
-+	$$(Q)while read f; do \
-+		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR)) || exit 1; \
-+		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
-+	done <$$($(2)_DIR)/.applied_patches_list
+ # Copy patches and generate the series file
+-	$$(Q)while read f; do \
+-		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR)) || exit 1; \
+-		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
++# Because patches may come from various places (bundled in Buildroot,
++# from one or more global-patch-dir), there might be collisions on the
++# basenames of those files.
++# We add a new numbering to each patch to ensure unicity of the filenames.
++	$$(Q)cpt=1; while read f; do \
++		_c=$$$$(printf "%04d" $$$${cpt}); \
++		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR),\
++			$$$${_c}-$$$${f##*/}) || exit 1; \
++		printf "%s\n" "$$$${_c}-$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
++		: $$$$((cpt++)); \
+ 	done <$$($(2)_DIR)/.applied_patches_list
  endif # redistribute
  
- endif # other packages
-diff --git a/support/legal-info/README.header b/support/legal-info/README.header
-index d07c45d..0b5aa66 100644
---- a/support/legal-info/README.header
-+++ b/support/legal-info/README.header
-@@ -14,10 +14,11 @@ This material is composed of the following items.
-    compiled programs.
-    Note: this may have not been saved due to technical limitations, you may
-    need to collect it manually.
-- * The source code for all packages; this has been saved in the sources/
--   subdirectory (except for the non-redistributable packages, which have not
--   been saved); patches applied to some packages by Buildroot are included in
--   the Buildroot sources and were not duplicated in the sources/ subdirectory.
-+ * The original source code for all packages; this has been saved in theo
-+   sources/ subdirectory (except for the non-redistributable packages, which
-+   have not been saved). Patches that were applied are also saved, along
-+   with a file named 'series' that lists the patches in the order they were
-+   applied.
-  * A manifest file listing the configured packages and related information.
-  * The license text of the packages; they have been saved in the licenses/
-    subdirectory.
 -- 
 1.9.1
