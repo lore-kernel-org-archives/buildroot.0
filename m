@@ -1,9 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Jan 2016 21:16:38 +0100
-Subject: [Buildroot] [PATCH 2/2] package/imagemagick: bump version to 6.9.3-2
-In-Reply-To: <1454012198-25849-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454012198-25849-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454012198-25849-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 28 Jan 2016 21:21:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libinput: bump version to 1.1.5
+Message-ID: <1454012486-8179-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 75ad035..1d5794f 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 20b7bf0..ea4c8e7 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 da2f6fba43d69f20ddb11783f13f77782b0b57783dde9cda39c9e5e733c2013c ImageMagick-6.9.2-10.tar.xz
-+sha256	78a9bfc581c81fb8376c00d06431b49f218d3900690905dc985459cbf5e41c4d	ImageMagick-6.9.3-2.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index b3d6a83..76061fa 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+-# From http://lists.freedesktop.org/archives/wayland-devel/2015-December/026233.html
+-sha256	302cb76209b9c57a5a318e178f9bc446eede8ea79386103b5291cbfaa5fab5b6	libinput-1.1.4.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2016-January/026701.html
++sha256	5e08c45dbb8bf32490cc6cd626da098564d646d161a07cba2e3adbd9745c0622	libinput-1.1.5.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 8b69a51..6d8b7b6 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 6.9.2-10
-+IMAGEMAGICK_VERSION = 6.9.3-2
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+-LIBINPUT_VERSION = 1.1.4
++LIBINPUT_VERSION = 1.1.5
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
 -- 
 2.7.0.rc3
