@@ -1,65 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Jan 2016 23:47:00 +0100
-Subject: [Buildroot] [PATCH v2 3/3] docs/manual: update graph-depends
- documentation about --stop-on
-In-Reply-To: <1453926735-29571-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453926735-29571-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453926735-29571-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160128224700.GH7523@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 28 Jan 2016 23:59:40 +0100
+Subject: [Buildroot] suggestion?
+In-Reply-To: <20160127143857.2f2ea66d@free-electrons.com>
+References: <09ad01d158fa$a6f7c8e0$f4e75aa0$@chordia.co.uk>
+ <alpine.DEB.2.11.1601271417460.9406@tanhuma.tkos.co.il>
+ <09f301d15903$563d58d0$02b80a70$@chordia.co.uk>
+ <20160127143857.2f2ea66d@free-electrons.com>
+Message-ID: <56AA9D5C.1010104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
-On 2016-01-27 21:32 +0100, Thomas Petazzoni spake thusly:
-> This commit updates the graph-depends documentation to take into
-> account the new 'host' keyword that can be passed to the --stop-on and
-> --exclude options.
+On 27-01-16 14:38, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  docs/manual/common-usage.txt | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> On Wed, 27 Jan 2016 13:05:03 -0000, jerry at chordia.co.uk wrote:
 > 
-> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-> index bca99f4..01cd31e 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -212,9 +212,10 @@ The +graph-depends+ behaviour can be controlled by setting options in the
->    default, +0+, means no limit.
->  
->  * +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
-> -  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
-> -  (to stop on virtual packages). The package is still present on the
-> -  graph, but its dependencies are not.
-> +  +PKG+ can be an actual package name, a glob, the keyword 'virtual'
-> +  (to stop on virtual packages), or the keyword 'host' (to stop on
-> +  host packages). The package is still present on the graph, but its
-> +  dependencies are not.
->  
->  * +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
->    the graph.
-> -- 
-> 2.6.4
+>>> http://stackoverflow.com/questions/ask
+>>> using the new "buildroot" tag rather than asking on this list.
+>>
+>> Is there much of a BR community on SO? I guess it works for those mad to
+>> build rep :)
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Unlike what Jonathan said, I wouldn't really suggest to rely on
+> Stackoverflow. While Stackoverflow was really great at the beginning,
+> there are now tons of people giving completely incorrect and invalid
+> answers. On the Buildroot topic fortunately, a few of the core
+> developers/contributors are monitoring the "buildroot" tag, so they are
+> giving good answers, but I've also seen other answers that were
+> completely wrong. Arnout Vandecappelle and Luca Ceresoli are
+> particularly active at answering Buildroot questions on Stackoverflow.
+
+ Begging to differ here, I think the quality of the answers on Stackoverflow is
+pretty good. At least, the answers that show up in search results. IMHO the
+voting mechanism does work pretty well.
+
+ For the buildroot tag, many of the questions are indeed better put on SO
+because they are not strictly buildroot-specific.
+
+ The main problem is that many questions are not appropriate SO questions but
+rather debugging help. And that requires a threaded conversation, which doesn't
+work well at all on SO.
+
+
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
