@@ -1,40 +1,31 @@
-From: Marc Leclerc <mleclerc@signel.ca>
-Date: Thu, 28 Jan 2016 07:26:27 -0500
-Subject: [Buildroot] Information on X front end
-Message-ID: <023701d159c7$1c5806f0$550814d0$@signel.ca>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Thu, 28 Jan 2016 14:19:58 +0100
+Subject: [Buildroot] [PATCH 1/1] gstreamer1: use a relative symlink to
+	gstconfig.h
+Message-ID: <1453987198-26052-1-git-send-email-phil@zankapfel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI,
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-First thanks to Thomas for pointing out that user question were welcome on
-this list, I wasn't sure either, and thanks to the team who maintain
-buildroot.
-
-I have been using buildroot for a while now and it really made my life
-easier. Today I would need it to go one step further and provide a working X
-frontend that would work on a 7" touch screen and I have basically zero
-experience on making that happen. The need here is to run a local gui to our
-device. I gave it a few try and got some xterm going but am missing the rest
-of the road. I have also found a few how-to but they are outdated and often
-about deprecated packages.
-
-So hopefully someone on this mailing list may have some insight to share or
-a link I missed. I had hope that ldxe would be part of buildroot but any
-frontend that is stable and will run gtk2 apps would do (in my case I'm
-giving lazarus a try since I already have some Delphi code that works for
-the gui). To top with a cherry, calibration for the screen and a virtual
-keyboard would be nice :)
-
-The board I use (Toradex Colibri iMX6DL) comes with a Yocto/lxde image on it
-but swimming in Yocto for a while trying to customize it to our need got me
-right back to buildroot, where in a few hour I have a fully configured os,
-less the gui.
-
- I am using version 2015.8.1 and as mentioned working on a Toradex Colibri
-iMX6DL board
-
-Best Regards
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 4548773..0eb46e8 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -41,7 +41,7 @@ GSTREAMER1_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
+ # updated to look in the correct location.
+ # Add a symlink to the legacy location
+ define GSTREAMER1_LEGACY_CGSTCONFIG_H
+-	ln -sf $(STAGING_DIR)/usr/lib/gstreamer-1.0/include/gst/gstconfig.h \
++	ln -srf $(STAGING_DIR)/usr/lib/gstreamer-1.0/include/gst/gstconfig.h \
+ 	       $(STAGING_DIR)/usr/include/gstreamer-1.0/gst/gstconfig.h
+ endef
+ GSTREAMER1_POST_INSTALL_STAGING_HOOKS += GSTREAMER1_LEGACY_CGSTCONFIG_H
+-- 
+2.1.4
