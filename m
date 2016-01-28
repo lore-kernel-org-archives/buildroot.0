@@ -1,24 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2016 22:26:00 +0100
-Subject: [Buildroot] [PATCH 1/1] directfb: add help text to Config.in,
-	note broken URL
-In-Reply-To: <1453995476-28960-1-git-send-email-yba@tkos.co.il> (Jonathan
- Ben-Avraham's message of "Thu, 28 Jan 2016 17:37:56 +0200")
-References: <1453995476-28960-1-git-send-email-yba@tkos.co.il>
-Message-ID: <87wpqto0pj.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Jan 2016 22:27:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openssl: security bump to
+	version 1.0.2f
+In-Reply-To: <1454009827-8517-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Thu, 28 Jan 2016 20:37:07 +0100")
+References: <1454009827-8517-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87si1ho0nc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jonathan" == Jonathan Ben-Avraham <yba@tkos.co.il> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Adds descriptive help text to Config.in based on content from elinux.org and
- > Wikipedia. Notes that http://www.directfb.org/ has been broken for more than
- > five months and suggests using http://elinux.org/DirectFB instead.
+ > Fixes
+ > DH small subgroups (CVE-2016-0701)
+ > SSLv2 doesn't block disabled ciphers (CVE-2015-3197)
+ > An update on DHE man-in-the-middle protection (Logjam)
 
- > Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
