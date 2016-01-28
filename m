@@ -1,52 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 28 Jan 2016 23:59:40 +0100
-Subject: [Buildroot] suggestion?
-In-Reply-To: <20160127143857.2f2ea66d@free-electrons.com>
-References: <09ad01d158fa$a6f7c8e0$f4e75aa0$@chordia.co.uk>
- <alpine.DEB.2.11.1601271417460.9406@tanhuma.tkos.co.il>
- <09f301d15903$563d58d0$02b80a70$@chordia.co.uk>
- <20160127143857.2f2ea66d@free-electrons.com>
-Message-ID: <56AA9D5C.1010104@mind.be>
+Date: Fri, 29 Jan 2016 00:35:26 +0100
+Subject: [Buildroot] glibc and --enable-kernel
+In-Reply-To: <20160128093618.42baf311@free-electrons.com>
+References: <20160127042104.GA6719@tungsten.ozlabs.ibm.com>
+ <20160127092119.7cf8953d@free-electrons.com>
+ <20160128025537.GB5589@tungsten.ozlabs.ibm.com>
+ <20160128093618.42baf311@free-electrons.com>
+Message-ID: <56AAA5BE.2050306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27-01-16 14:38, Thomas Petazzoni wrote:
-> Hello,
+On 28-01-16 09:36, Thomas Petazzoni wrote:
+> Sam,
 > 
-> On Wed, 27 Jan 2016 13:05:03 -0000, jerry at chordia.co.uk wrote:
-> 
->>> http://stackoverflow.com/questions/ask
->>> using the new "buildroot" tag rather than asking on this list.
+> On Thu, 28 Jan 2016 13:55:37 +1100, Sam Bobroff wrote:
+[snip]
+>> Ok that is certainly easier and works for me, so I'll post a patch :-)
 >>
->> Is there much of a BR community on SO? I guess it works for those mad to
->> build rep :)
+>> I'm curious tho: when I hacked up some test code I used
+>> BR2_DEFAULT_KERNEL_HEADERS (which seems to have the same value) but I must
+>> confess I don't understand the implications of choosing between
+>> BR2_DEFAULT_KERNEL_HEADERS or BR2_TOOLCHAIN_HEADERS_AT_LEAST. Could you explain
+>> the difference so I don't have to read so much Make code? ;-)
 > 
-> Unlike what Jonathan said, I wouldn't really suggest to rely on
-> Stackoverflow. While Stackoverflow was really great at the beginning,
-> there are now tons of people giving completely incorrect and invalid
-> answers. On the Buildroot topic fortunately, a few of the core
-> developers/contributors are monitoring the "buildroot" tag, so they are
-> giving good answers, but I've also seen other answers that were
-> completely wrong. Arnout Vandecappelle and Luca Ceresoli are
-> particularly active at answering Buildroot questions on Stackoverflow.
+> There would be no real difference between the two for your use case.
+> 
+> BR2_DEFAULT_KERNEL_HEADERS is a string that contains the version number
+> of the Linux kernel sources chosen in the linux-headers package. It
+> would contain things like 3.2.76, 4.3.4, etc. or a user-specified
+> kernel version. It would have worked all fine for your case.
+> 
+> BR2_TOOLCHAIN_HEADERS_AT_LEAST is a string that exists for both the
+> internal and external toolchains, and which indicates the "series" of
+> the kernel headers (i.e just 3.2, 3.4, 4.0, etc.).
+> 
+> The only reason that may encourage you to use
+> BR2_TOOLCHAIN_HEADERS_AT_LEAST instead of BR2_DEFAULT_KERNEL_HEADERS is
+> an upcoming patch from Yann E. Morin (already submitted but not merged
+> yet), which allows to tell Buildroot to use the kernel version
+> specified in the "Kernel" menu as the version for the kernel headers.
+> In this case, I believe BR2_DEFAULT_KERNEL_HEADERS will not be correct,
+> while BR2_TOOLCHAIN_HEADERS_AT_LEAST will be.
 
- Begging to differ here, I think the quality of the answers on Stackoverflow is
-pretty good. At least, the answers that show up in search results. IMHO the
-voting mechanism does work pretty well.
-
- For the buildroot tag, many of the questions are indeed better put on SO
-because they are not strictly buildroot-specific.
-
- The main problem is that many questions are not appropriate SO questions but
-rather debugging help. And that requires a threaded conversation, which doesn't
-work well at all on SO.
-
+ A minor issue with _AT_LEAST, however, is that it will probably go through
+deprecation eventually. Right now we have "2.6" as the lowest _AT_LEAST - how
+will glibc deal with that? I can imagine at some point we'll deprecate 3,1, 3.2,
+and 3.3, so if you're using 3.3 headers the _AT_LEAST will become 3.0. Right
+now, we already have that for 2.6.3x, which will fall back to 2.6.0 (I guess -
+should be checked if glibc doesn't barf on 2.6 without .0).
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
