@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 28 Jan 2016 13:32:45 +0100
-Subject: [Buildroot] [PATCH v12 2/3] toolchain-external: improve sysroot
-	rsync if ARCH_LIB_DIR != lib/lib32/lib64
+Date: Thu, 28 Jan 2016 13:32:46 +0100
+Subject: [Buildroot] [PATCH v12 3/3] toolchain-external: create symlink
+	ARCH_LIB_DIR->lib
 In-Reply-To: <1453984366-12393-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1453984366-12393-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1453984366-12393-2-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1453984366-12393-3-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,118 +13,139 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-The copy_toolchain_sysroot helper in toolchain/helpers.mk performs an
-rsync of various directories from the extracted external toolchain to the
-corresponding directory in staging.
+Currently, following symbolic links are created in both target and
+staging directories:
+- lib(32|64) --> lib
+- usr/lib(32|64) --> lib
 
-The relevant (simplified) snippet is:
-	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
-		rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
-			--exclude '/lib/' --exclude '/lib32/' \
-			--exclude '/lib64/' \
-			$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
-	done ; \
+The decision for lib32 or lib64 is based on the target architecture
+configuration in buildroot (BR2_ARCH_IS_64).
 
-The exclusion logic of lib/lib32/lib64 has originally been added by commit
-5628776c4a4d29d0715633ea463b64cc19e19c5a with the purpose of only copying
-the relevant usr/lib* directory from the toolchain to staging, instead of
-all. For example, if ARCH_LIB_DIR is 'lib64', then only usr/lib64 would be
-copied and usr/lib and usr/lib32 are ignored. It works by ignoring any
-lib/lib32/lib64 subdirectory on the rsync of 'usr' and then separately
-copying usr/{lib,lib32,lib64} as appropriate. (The exclusion rules only have
-impact on the files beneath the main source directory.)
+In at least one case this is not correct: when building for a Cavium Octeon
+III processor using the toolchain from the Cavium Networks SDK, and
+specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
+in directory 'lib32-fp' rather than 'lib32' (ABI=n32; likewise for
+lib64-fp in case of ABI=n64)
 
-However, ARCH_LIB_DIR can take other values than (lib, lib32, lib64), for
-example lib32-fp or lib64-fp (Octeon III toolchain with -march=octeon3). In
-the existing code, the rsync for 'usr' would then already copy these lib
-directories, and the next rsync for 'usr/$${ARCH_LIB_DIR}' does nothing.
+More generally the correct symbolic link is from (usr/)${ARCH_LIB_DIR}->lib.
+However, feedback from Arnout Vandecappelle is that there are packages that
+do depend on the lib32/lib64 symlink, even if ARCH_LIB_DIR is different.
+Hence, these links must be kept.
 
-By itself, this is not a very big problem: the staging directory simply has
-some extra directories. However, a subsequent patch will create a staging
-symlink from $${ARCH_LIB_DIR} to lib. The first rsync would then overwrite
-that symlink with the real directory usr/$${ARCH_LIB_DIR} from the
-toolchain, which is not correct.
-
-Assuming the patch that creates the symlink ARCH_LIB_DIR->lib is applied,
-the original situation after 'make clean toolchain' with an
-ARCH_LIB_DIR=lib32-fp is:
-
-$ ls -ld output/staging/{,usr/}lib* output/target/{usr/,}lib*
-drwxr-xr-x 2  4096 May 26  2015 output/staging/lib
-lrwxrwxrwx 1     3 Jan 20 13:47 output/staging/lib32 -> lib
-lrwxrwxrwx 1     3 Jan 20 13:47 output/staging/lib32-fp -> lib
-drwxr-xr-x 2  4096 Jan 20 13:47 output/staging/usr/lib
-lrwxrwxrwx 1     3 Jan 20 13:47 output/staging/usr/lib32 -> lib
-drwxr-xr-x 4  4096 May 26  2015 output/staging/usr/lib32-fp
-drwxr-xr-x 4  4096 May 26  2015 output/staging/usr/lib64-fp
-drwxr-xr-x 4  4096 May 26  2015 output/staging/usr/libexec
-drwxr-xr-x 3  4096 May 26  2015 output/staging/usr/libexec32
-drwxr-xr-x 3  4096 May 26  2015 output/staging/usr/libexec32-fp
-drwxr-xr-x 3  4096 May 26  2015 output/staging/usr/libexec64-fp
-drwxr-xr-x 2  4096 Jan 20 13:48 output/target/lib
-lrwxrwxrwx 1     3 Jan 20 13:47 output/target/lib32 -> lib
-lrwxrwxrwx 1     3 Jan 20 13:47 output/target/lib32-fp -> lib
-drwxr-xr-x 2  4096 Jan 20 13:48 output/target/usr/lib
-lrwxrwxrwx 1     3 Jan 20 13:47 output/target/usr/lib32 -> lib
-lrwxrwxrwx 1     3 Jan 20 13:47 output/target/usr/lib32-fp -> lib
-
-Notice how usr/lib32-fp is not a symlink but a directory, and the presence
-of an unnecessary directory usr/lib64-fp.
-
-This patch improves the rsync exclusion rules by excluding any lib*
-directory on the first rsync. As this would also exclude any
-libexec/libexec32/... directory, explicitly include them first (first match
-takes precedence). This (as is already the case today) results in more
-usr/libexec* directories than needed, but it is not touched by this patch.
-
-With the fix applied, the situation becomes:
-
-drwxr-xr-x 2 4096 May 26  2015 output/staging/lib
-lrwxrwxrwx 1    3 Jan 20 14:27 output/staging/lib32 -> lib
-lrwxrwxrwx 1    3 Jan 20 14:27 output/staging/lib32-fp -> lib
-drwxr-xr-x 4 4096 May 26  2015 output/staging/usr/lib
-lrwxrwxrwx 1    3 Jan 20 14:27 output/staging/usr/lib32 -> lib
-lrwxrwxrwx 1    3 Jan 20 14:27 output/staging/usr/lib32-fp -> lib
-drwxr-xr-x 4 4096 May 26  2015 output/staging/usr/libexec
-drwxr-xr-x 3 4096 May 26  2015 output/staging/usr/libexec32
-drwxr-xr-x 3 4096 May 26  2015 output/staging/usr/libexec32-fp
-drwxr-xr-x 3 4096 May 26  2015 output/staging/usr/libexec64-fp
-drwxr-xr-x 2 4096 Jan 20 14:27 output/target/lib
-lrwxrwxrwx 1    3 Jan 20 14:27 output/target/lib32 -> lib
-lrwxrwxrwx 1    3 Jan 20 14:27 output/target/lib32-fp -> lib
-drwxr-xr-x 2 4096 Jan 20 14:27 output/target/usr/lib
-lrwxrwxrwx 1    3 Jan 20 14:27 output/target/usr/lib32 -> lib
-lrwxrwxrwx 1    3 Jan 20 14:27 output/target/usr/lib32-fp -> lib
-
-For cases where ARCH_LIB_DIR is one of lib, lib32 or lib64 this fix
-makes no difference, and likewise for internal toolchains.
+Fix the problem as follows:
+- For internal toolchains: no change
+- For external toolchains: create a symlink ARCH_LIB_DIR->lib if
+  (usr/)ARCH_LIB_DIR does not exist yet.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 
 ---
-v12: unchanged
-v11: unchanged
-v10: new patch
+v12:
+- 'test -e' instead of 'test -f' to avoid broken symlinks lib->lib
+  (noticed by Romain)
+v11:
+- check for existence of destination instead of explicitly checking on the
+  known values lib/lib32/lib64. (ThomasP)
+v10:
+- simplify after realization that skeleton symlink creation can be kept
+  (thanks Thomas Petazzoni for noticing this)
+v9:
+- remove redundant mkdir's (handled by skeleton) (Yann)
+v8:
+- use helper only for external toolchain and incorporate ARCH_LIB_DIR
+  definition (Arnout)
+- keep lib32/lib64->lib symlink anyway
+v7: rebase
+v6: rebase only
+v5:
+- move internal toolchain logic into gcc-initial.mk
+- also silence the internal toolchain link steps with $(Q)
+v4:
+- merge both helpers into one
+- remove the separate target for the internal toolchain and hook into
+  gcc-initial
+- re-add deleted comment about MIPS64/n32
+v3:
+- update commit message wrapping
+- change dependency on $(BUILD_DIR) to a order-only dependency
+v2:
+- fix 'lib32-fp' leftover in toolchain-buildroot
+- silence commands creating symlink with $(Q)
+- fix case where ARCH_LIB_DIR is 'lib'
 
- toolchain/helpers.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Note: in output/staging/usr/ there would still be more directories than I
+think are really necessary. This behavior is not changed by this patch, it
+was already present before.
+For example, with the mentioned Octeon III toolchain, output/staging/usr/
+contains:
+    bin      bin32      bin32-fp      bin64-fp,
+    lib      lib32      lib32-fp      lib64-fp
+    libexec  libexec32  libexec32-fp  libexec64-fp
+    sbin     sbin32     sbin32-fp     sbin64-fp
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 906993d..02cc0bb 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -154,8 +154,7 @@ copy_toolchain_sysroot = \
- 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
- 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
- 			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
--				--exclude '/lib/' --exclude '/lib32/' \
--				--exclude '/lib64/' \
-+				--include '/libexec*/' --exclude '/lib*/' \
- 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
- 		fi ; \
- 	done ; \
+where bin/lib/libexec/sbin seem to be the 64-bit equivalents of
+bin32/lib32/libexec32/sbin32.
+This is related to the behavior of copy_toolchain_sysroot in
+toolchain/helpers.mk. It already attempts to filter out the unnecessary lib*
+directories, but does not care about any bin/sbin/libexec directories.
+As this poses no known problem and is not impacted by this patch, I make no
+attempt to change it.
+
+ toolchain/toolchain-external/toolchain-external.mk | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index ddefd01..518afd6 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -517,6 +517,27 @@ endef
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+ endif
+ 
++# Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
++# Note: the skeleton package additionally creates lib32->lib or lib64->lib
++# (as appropriate)
++#
++# $1: destination directory (TARGET_DIR / STAGING_DIR)
++create_lib_symlinks = \
++       $(Q)DESTDIR="$(strip $1)" ; \
++       ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++       if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
++               ln -snf lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
++               ln -snf lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
++       fi
++
++define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
++       $(call create_lib_symlinks,$(STAGING_DIR))
++endef
++
++define TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK
++       $(call create_lib_symlinks,$(TARGET_DIR))
++endef
++
+ # Integration of the toolchain into Buildroot: find the main sysroot
+ # and the variant-specific sysroot, then copy the needed libraries to
+ # the $(TARGET_DIR) and copy the whole sysroot (libraries and headers)
+@@ -732,6 +753,7 @@ endef
+ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
+ 
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
++	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+@@ -741,6 +763,7 @@ endef
+ # and the target directory, we do everything within the
+ # install-staging step, arbitrarily.
+ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
++	$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
 -- 
 2.4.10
