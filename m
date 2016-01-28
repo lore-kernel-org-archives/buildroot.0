@@ -1,78 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Jan 2016 19:15:10 +0100
-Subject: [Buildroot] [PATCH 12/16 v3] core/legal-info: renumber saved patches
+Date: Thu, 28 Jan 2016 19:15:11 +0100
+Subject: [Buildroot] [PATCH 13/16 v3] core/legal-info: also save extra
+	downloads
 In-Reply-To: <cover.1454004518.git.yann.morin.1998@free.fr>
 References: <cover.1454004518.git.yann.morin.1998@free.fr>
-Message-ID: <89835259941b9067e4482d51ab2f45fa5e373262.1454004518.git.yann.morin.1998@free.fr>
+Message-ID: <ae8085eb76c278a3dc76f1fc16ac625589faf4a2.1454004518.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patches we save can come from various locations;
-  - bundled with Buildroot
-  - downloaded
-  - from one or more global-patch-dir
+Some packages, like perl, download extra files that end up as part of
+the source that Buildroot builds. Up until now, those files were not
+saved in the legal-info output.
 
-It is possible that two patches lying into different locations have the
-same basename, like so (first is bundled, second is from an hypothetical
-global-patch-dir):
-    package/foo/0001-fix-Makefile.patch
-    /path/to/my/patches/foo/0001-fix-Makefile.patch
+Add those files to the legal-info output.
 
-In that case, we'd save onlt the second patch, overwriting the first.
+The unfortunate side-effect is that we will also save the secondary
+archive for the external blackfin toolchains; however, we already do
+save the binary release of some external toolchains when they do not
+provide actual source archives.
 
-We fix that by forcibly prefixing saved patches with a new numbering, to
-guarantee the unicity of saved files.
-
-The unfortunate side-effects are that:
-  - most saved patches will be twice-numbered,
-  - the series file is now redundant.
-
-While the former is mostly not nice-looking, we shouldn't try to strip
-any leading numbering, as that might not be a numbering (e.g.
-42-retries.patch which is a patch add 42 retries).
-
-The latter is not really problematic. A lot of tools (and people) can
-work with, and prefer to have a series file.
+This is inherently bad, as those are not source archives, but solving
+this is a bigger concern, for another series...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 ---
-Note that I've made this a separate change, not because the patch would
-be too complex if squahed with the previous, but rather to have a more
-detailed commit log about the reason for the renumbering; squashing the
-two changes together would make for a really long commit log, at the
-risk of being more difficult to follow.
+Changes v2 -> v3:
+  - typo  (Luca)
+  - incorporate the post-commit log message (the part about the
+    side-effect) into the commit log itself, it makes sense to not
+    forget about that
 ---
- package/pkg-generic.mk | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ package/pkg-generic.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index c5b66db..f6132b3 100644
+index f6132b3..b59af9e 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -825,9 +825,16 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
- 		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
- 		     $$($(2)_REDIST_SOURCES_DIR))
- # Copy patches and generate the series file
--	$$(Q)while read f; do \
--		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR)) || exit 1; \
--		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
-+# Because patches may come from various places (bundled in Buildroot,
-+# from one or more global-patch-dir), there might be collisions on the
-+# basenames of those files.
-+# We add a new numbering to each patch to ensure unicity of the filenames.
-+	$$(Q)cpt=1; while read f; do \
-+		_c=$$$$(printf "%04d" $$$${cpt}); \
-+		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR),\
-+			$$$${_c}-$$$${f##*/}) || exit 1; \
-+		printf "%s\n" "$$$${_c}-$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
-+		: $$$$((cpt++)); \
- 	done <$$($(2)_DIR)/.applied_patches_list
- endif # redistribute
+@@ -820,10 +820,12 @@ else
+ # Other packages
  
+ ifeq ($$($(2)_REDISTRIBUTE),YES)
+-# Copy the source tarball
+-	$$(Q)$$(call hardlink-copy,\
+-		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+-		     $$($(2)_REDIST_SOURCES_DIR))
++# Copy the source tarball and any extra downloads, but not
++# patches, as they are handled specially afterwards.
++	$$(foreach e,$$($(2)_ACTUAL_SOURCE_TARBALL) $$(notdir $$($(2)_EXTRA_DOWNLOADS)),\
++			$$(Q)$$(call hardlink-copy,\
++				$$(DL_DIR)/$$(e),\
++				$$($(2)_REDIST_SOURCES_DIR))$$(sep))
+ # Copy patches and generate the series file
+ # Because patches may come from various places (bundled in Buildroot,
+ # from one or more global-patch-dir), there might be collisions on the
 -- 
 1.9.1
