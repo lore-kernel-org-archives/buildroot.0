@@ -1,63 +1,116 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Jan 2016 09:36:18 +0100
-Subject: [Buildroot] glibc and --enable-kernel
-In-Reply-To: <20160128025537.GB5589@tungsten.ozlabs.ibm.com>
-References: <20160127042104.GA6719@tungsten.ozlabs.ibm.com>
- <20160127092119.7cf8953d@free-electrons.com>
- <20160128025537.GB5589@tungsten.ozlabs.ibm.com>
-Message-ID: <20160128093618.42baf311@free-electrons.com>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Thu, 28 Jan 2016 09:45:25 +0100
+Subject: [Buildroot] [PATCH v2] rabbitmq-c: link against zlib and libintl
+Message-ID: <1453970725-12387-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sam,
+When building the amqp toolset and static linking is enabled, the
+rabbitmq-c library needs to explicity link against zlib and libintl
 
-On Thu, 28 Jan 2016 13:55:37 +1100, Sam Bobroff wrote:
+Fixes:
+http://autobuild.buildroot.net/results/2ef/2ef1ed958db8012224f9174334e9c58edace604a/
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+---
+ ...bintl-are-needed-when-the-rabbitmq-toolse.patch | 87 ++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
+ create mode 100644 package/rabbitmq-c/0001-Zlib-and-libintl-are-needed-when-the-rabbitmq-toolse.patch
 
-> > Ah, so you're working on PowerPC 64, great! We have a toolchain build
-> > problem that I reported on Power PC 64, when building for Power 8:
-> > 
-> >   http://lists.busybox.net/pipermail/buildroot/2016-January/150338.html
-> > 
-> > If you have some time to look at it, it would be great.
-> 
-> No problem, I've replied in that thread :-)
-
-Seen that, thanks!
-
-> Ok that is certainly easier and works for me, so I'll post a patch :-)
-> 
-> I'm curious tho: when I hacked up some test code I used
-> BR2_DEFAULT_KERNEL_HEADERS (which seems to have the same value) but I must
-> confess I don't understand the implications of choosing between
-> BR2_DEFAULT_KERNEL_HEADERS or BR2_TOOLCHAIN_HEADERS_AT_LEAST. Could you explain
-> the difference so I don't have to read so much Make code? ;-)
-
-There would be no real difference between the two for your use case.
-
-BR2_DEFAULT_KERNEL_HEADERS is a string that contains the version number
-of the Linux kernel sources chosen in the linux-headers package. It
-would contain things like 3.2.76, 4.3.4, etc. or a user-specified
-kernel version. It would have worked all fine for your case.
-
-BR2_TOOLCHAIN_HEADERS_AT_LEAST is a string that exists for both the
-internal and external toolchains, and which indicates the "series" of
-the kernel headers (i.e just 3.2, 3.4, 4.0, etc.).
-
-The only reason that may encourage you to use
-BR2_TOOLCHAIN_HEADERS_AT_LEAST instead of BR2_DEFAULT_KERNEL_HEADERS is
-an upcoming patch from Yann E. Morin (already submitted but not merged
-yet), which allows to tell Buildroot to use the kernel version
-specified in the "Kernel" menu as the version for the kernel headers.
-In this case, I believe BR2_DEFAULT_KERNEL_HEADERS will not be correct,
-while BR2_TOOLCHAIN_HEADERS_AT_LEAST will be.
-
-Best regards,
-
-Thomas
+diff --git a/package/rabbitmq-c/0001-Zlib-and-libintl-are-needed-when-the-rabbitmq-toolse.patch b/package/rabbitmq-c/0001-Zlib-and-libintl-are-needed-when-the-rabbitmq-toolse.patch
+new file mode 100644
+index 0000000..35facea
+--- /dev/null
++++ b/package/rabbitmq-c/0001-Zlib-and-libintl-are-needed-when-the-rabbitmq-toolse.patch
+@@ -0,0 +1,87 @@
++From 208bc5adb10c73add19abb70f204951d1ef1b8b8 Mon Sep 17 00:00:00 2001
++From: Joris Lijssens <joris.lijssens@gmail.com>
++Date: Thu, 28 Jan 2016 09:14:24 +0100
++Subject: [PATCH] Zlib and libintl are needed when the rabbitmq toolset is
++ staticaly linked
++
++Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
++---
++ CMakeLists.txt             | 11 +++++++++++
++ librabbitmq/CMakeLists.txt |  2 +-
++ tools/CMakeLists.txt       | 10 +++++-----
++ 3 files changed, 17 insertions(+), 6 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 9b40a37..c9b1113 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -71,6 +71,7 @@ else()
++   endif()
++ endif()
++ 
+++
++ # Detect if we need to link against a socket library:
++ cmake_push_check_state()
++ if (WIN32)
++@@ -263,6 +264,16 @@ option(BUILD_API_DOCS "Build Doxygen API docs" ${DOXYGEN_FOUND})
++ option(ENABLE_SSL_SUPPORT "Enable SSL support" ON)
++ option(ENABLE_THREAD_SAFETY "Enable thread safety when using OpenSSL" ${Threads_FOUND})
++ 
+++
+++# Zlib and libintl are needed for the static linking of tools
+++if (BUILD_STATIC_LIBS)
+++  set(ZLIB_LIBRARY "z")
+++  set(INTL_LIBRARY "intl")
+++else ()
+++  set(ZLIB_LIBRARY "")
+++  set(INTL_LIBRARY "")
+++endif()
+++  
++ set(SSL_ENGINE "OpenSSL" CACHE STRING "SSL Backend to use, valid options: OpenSSL, cyaSSL, GnuTLS, PolarSSL")
++ mark_as_advanced(SSL_ENGINE)
++ 
++diff --git a/librabbitmq/CMakeLists.txt b/librabbitmq/CMakeLists.txt
++index 3c86094..46594f3 100644
++--- a/librabbitmq/CMakeLists.txt
+++++ b/librabbitmq/CMakeLists.txt
++@@ -87,7 +87,7 @@ if (ENABLE_SSL_SUPPORT)
++         amqp_hostcheck.h
++     )
++     include_directories(${OPENSSL_INCLUDE_DIR})
++-    set(AMQP_SSL_LIBS ${OPENSSL_LIBRARIES})
+++    set(AMQP_SSL_LIBS ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARY})
++     if (APPLE)
++       # Apple has deprecated OpenSSL in 10.7+. This disables that warning.
++       set_source_files_properties(${AMQP_SSL_SRCS}
++diff --git a/tools/CMakeLists.txt b/tools/CMakeLists.txt
++index 52e3464..8658ea7 100644
++--- a/tools/CMakeLists.txt
+++++ b/tools/CMakeLists.txt
++@@ -19,19 +19,19 @@ set(COMMON_SRCS
++     )
++ 
++ add_executable(amqp-publish publish.c ${COMMON_SRCS})
++-target_link_libraries(amqp-publish ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY})
+++target_link_libraries(amqp-publish ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY} ${INTL_LIBRARY})
++ 
++ add_executable(amqp-get get.c ${COMMON_SRCS})
++-target_link_libraries(amqp-get ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY})
+++target_link_libraries(amqp-get ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY} ${INTL_LIBRARY})
++ 
++ add_executable(amqp-consume consume.c ${PLATFORM_DIR}/process.c ${COMMON_SRCS})
++-target_link_libraries(amqp-consume ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY})
+++target_link_libraries(amqp-consume ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY} ${INTL_LIBRARY})
++ 
++ add_executable(amqp-declare-queue declare_queue.c ${COMMON_SRCS})
++-target_link_libraries(amqp-declare-queue ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY})
+++target_link_libraries(amqp-declare-queue ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY} ${INTL_LIBRARY})
++ 
++ add_executable(amqp-delete-queue delete_queue.c ${COMMON_SRCS})
++-target_link_libraries(amqp-delete-queue ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY})
+++target_link_libraries(amqp-delete-queue ${RMQ_LIBRARY_TARGET} ${POPT_LIBRARY} ${INTL_LIBRARY})
++ 
++ if (BUILD_TOOLS_DOCS)
++   if (XMLTO_FOUND)
++-- 
++1.8.3.1
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.1
