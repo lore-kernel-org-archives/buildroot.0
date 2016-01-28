@@ -1,82 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 22:07:41 +0100
-Subject: [Buildroot] [git commit] package/aumix: bump version to 2.9.1
-Message-ID: <20160201224713.00C2D7F8C2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2016 22:29:08 +0100
+Subject: [Buildroot] [git commit] package/libcurl: security bump version to
+	7.47.0
+Message-ID: <20160201224713.5B5A47F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6348fcec36094a70dff9ca0f6857962a9b681cdd
+commit: https://git.buildroot.net/buildroot/commit/?id=4adae5d2eaa2eda770c1b5873265dfbca908d21f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- rebased patch 0001
-- added AUMIX_GETTEXTIZE = YES to solve
-  *** error: gettext infrastructure mismatch: using a Makefile.in.in
-  from gettext version 0.17 but the autoconf macros are from gettext
-  version 0.19
-
 Fixes
-http://autobuild.buildroot.net/results/c8c/c8c7f9a799d1af507a6edd5e02b0bbc8b7b5d068/
-http://autobuild.buildroot.net/results/67e/67e6d29e6d6f8d4967a74ec70a754a5b24afc0ce/
-and others
+CVE-2016-0754: remote file name path traversal in curl tool for Windows
+CVE-2016-0755: NTLM credentials not-checked for proxy connection re-use
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/aumix/0001-fix-incorrect-makefile-am.patch | 9 ++++-----
- package/aumix/aumix.hash                           | 4 ++--
- package/aumix/aumix.mk                             | 3 ++-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/aumix/0001-fix-incorrect-makefile-am.patch b/package/aumix/0001-fix-incorrect-makefile-am.patch
-index 8d55218..143174d 100644
---- a/package/aumix/0001-fix-incorrect-makefile-am.patch
-+++ b/package/aumix/0001-fix-incorrect-makefile-am.patch
-@@ -15,15 +15,14 @@ Index: aumix-2.8/src/Makefile.am
- ===================================================================
- --- aumix-2.8.orig/src/Makefile.am
- +++ aumix-2.8/src/Makefile.am
--@@ -7,9 +7,8 @@
-+@@ -9,9 +9,8 @@
-  		mouse.c common.h curses.h gpm-xterm.h gtk.h interactive.h  \
-  		mouse.h play.xpm record.xpm
-  localedir	= $(datadir)/locale
- -INCLUDES	= -I../intl -DLOCALEDIR=\"$(localedir)\" -I at includedir@
---CFLAGS		= @CFLAGS@ @GLIB_CFLAGS@ @GTK_CFLAGS@
---LDADD		= -L at libdir@
- +INCLUDES	= -I../intl -DLOCALEDIR=\"$(localedir)\"
--+AM_CFLAGS	= @CFLAGS@ @GLIB_CFLAGS@ @GTK_CFLAGS@
-- LIBS		= @LIBS@ @GTK_LIBS@ @INTLLIBS@
-+ AM_CFLAGS	= @CFLAGS@ @GLIB_CFLAGS@ @GTK_CFLAGS@
-+-LDADD		= -L at libdir@
-+ LIBS		= @LIBS@ @GTK_LIBS@ @LIBINTL@
-  DEFS		= @DEFS@
-  
-diff --git a/package/aumix/aumix.hash b/package/aumix/aumix.hash
-index dbcd1e5..0463ea0 100644
---- a/package/aumix/aumix.hash
-+++ b/package/aumix/aumix.hash
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index eb5bab1..cd35d4c 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
 @@ -1,2 +1,2 @@
 -# Locally calculated after checking pgp signature
--sha256	636eef7f400c2f3df489c0d2fa21507e88692113561e75a40a26c52bc422d7fc  aumix-2.8.tar.bz2
+-sha256 b7d726cdd8ed4b6db0fa1b474a3c59ebbbe4dcd4c61ac5e7ade0e0270d3195ad  curl-7.46.0.tar.bz2
 +# Locally calculated
-+sha256	d2ce43d532ef75072c8d4e7922e3bc06be6d97765a508d9ceb0d1766bbe70e29	aumix-2.9.1.tar.bz2
-diff --git a/package/aumix/aumix.mk b/package/aumix/aumix.mk
-index 8c668d2..eae34d0 100644
---- a/package/aumix/aumix.mk
-+++ b/package/aumix/aumix.mk
-@@ -4,10 +4,11 @@
++sha256	2b096f9387fb9b2be08d17e518c62b6537b1f4d4bb59111d5b4fa0272f383f66	curl-7.47.0.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index e64014d..db9ef3f 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AUMIX_VERSION = 2.8
-+AUMIX_VERSION = 2.9.1
- AUMIX_SOURCE = aumix-$(AUMIX_VERSION).tar.bz2
- AUMIX_SITE = http://jpj.net/~trevor/aumix/releases
- AUMIX_AUTORECONF = YES
-+AUMIX_GETTEXTIZE = YES
- AUMIX_LICENSE = GPLv2+
- AUMIX_LICENSE_FILES = COPYING
- 
+-LIBCURL_VERSION = 7.46.0
++LIBCURL_VERSION = 7.47.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
