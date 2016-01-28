@@ -1,65 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Jan 2016 19:15:11 +0100
-Subject: [Buildroot] [PATCH 13/16 v3] core/legal-info: also save extra
-	downloads
+Date: Thu, 28 Jan 2016 19:15:14 +0100
+Subject: [Buildroot] [PATCH 16/16 v3] core/pkg-virtual: ignore from
+	legal-info output
 In-Reply-To: <cover.1454004518.git.yann.morin.1998@free.fr>
 References: <cover.1454004518.git.yann.morin.1998@free.fr>
-Message-ID: <ae8085eb76c278a3dc76f1fc16ac625589faf4a2.1454004518.git.yann.morin.1998@free.fr>
+Message-ID: <bee63e49a6e51196ca55bab2698c8e69d38e2512.1454004518.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages, like perl, download extra files that end up as part of
-the source that Buildroot builds. Up until now, those files were not
-saved in the legal-info output.
+Virtual packages really have nothing to save for legal-info, so we just
+ignore them.
 
-Add those files to the legal-info output.
-
-The unfortunate side-effect is that we will also save the secondary
-archive for the external blackfin toolchains; however, we already do
-save the binary release of some external toolchains when they do not
-provide actual source archives.
-
-This is inherently bad, as those are not source archives, but solving
-this is a bigger concern, for another series...
+Currently, packages are only extracted if they define _LICENSE_FILES.
+Follow-up patches will always extract and patch non-ignored packages, so
+we would potentially see spurious "extracting" and "patching" messages
+for virtual packages on the console, which would be a bit strange.
+Ignoring virtual packages will get us a cleaner log.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 
 ---
-Changes v2 -> v3:
-  - typo  (Luca)
-  - incorporate the post-commit log message (the part about the
-    side-effect) into the commit log itself, it makes sense to not
-    forget about that
+Changes v1 -> v2:
+  - use the new _LEGAL_IGNORE variable  (Thomas, Luca, Peter)
 ---
- package/pkg-generic.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ docs/manual/adding-packages-virtual.txt | 3 +++
+ package/pkg-virtual.mk                  | 2 ++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f6132b3..b59af9e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -820,10 +820,12 @@ else
- # Other packages
+diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+index a5f17a2..11a497d 100644
+--- a/docs/manual/adding-packages-virtual.txt
++++ b/docs/manual/adding-packages-virtual.txt
+@@ -56,6 +56,9 @@ The +.mk+ for the virtual package should just evaluate the +virtual-package+ mac
+ The ability to have target and host packages is also available, with the
+ +host-virtual-package+ macro.
  
- ifeq ($$($(2)_REDISTRIBUTE),YES)
--# Copy the source tarball
--	$$(Q)$$(call hardlink-copy,\
--		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
--		     $$($(2)_REDIST_SOURCES_DIR))
-+# Copy the source tarball and any extra downloads, but not
-+# patches, as they are handled specially afterwards.
-+	$$(foreach e,$$($(2)_ACTUAL_SOURCE_TARBALL) $$(notdir $$($(2)_EXTRA_DOWNLOADS)),\
-+			$$(Q)$$(call hardlink-copy,\
-+				$$(DL_DIR)/$$(e),\
-+				$$($(2)_REDIST_SOURCES_DIR))$$(sep))
- # Copy patches and generate the series file
- # Because patches may come from various places (bundled in Buildroot,
- # from one or more global-patch-dir), there might be collisions on the
++.Note:
++Virtual packages are automatically ignored when generating the +legal-info+ output.
++
+ ==== Provider's +Config.in+ file
+ 
+ When adding a package as a provider, only the +Config.in+ file requires some
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index 244c1d0..445f09a 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -59,6 +59,8 @@ endif
+ # Add dependency against the provider
+ $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+ 
++$(2)_LEGAL_IGNORE = YES
++
+ # Call the generic package infrastructure to generate the necessary
+ # make targets
+ $(call inner-generic-package,$(1),$(2),$(3),$(4))
 -- 
 1.9.1
