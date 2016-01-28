@@ -1,47 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Jan 2016 21:01:26 +0100
-Subject: [Buildroot] [PATCH 2/3] package/libcurl: security bump version to
-	7.47.0
-In-Reply-To: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454011287-28408-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 28 Jan 2016 21:16:37 +0100
+Subject: [Buildroot] [PATCH 1/2] package/python-mako: bump version to 1.0.3,
+	add hash
+Message-ID: <1454012198-25849-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-CVE-2016-0754: remote file name path traversal in curl tool for Windows
-CVE-2016-0755: NTLM credentials not-checked for proxy connection re-use
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-mako/python-mako.hash | 4 ++++
+ package/python-mako/python-mako.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+ create mode 100644 package/python-mako/python-mako.hash
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index eb5bab1..cd35d4c 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256 b7d726cdd8ed4b6db0fa1b474a3c59ebbbe4dcd4c61ac5e7ade0e0270d3195ad  curl-7.46.0.tar.bz2
-+# Locally calculated
-+sha256	2b096f9387fb9b2be08d17e518c62b6537b1f4d4bb59111d5b4fa0272f383f66	curl-7.47.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index e64014d..db9ef3f 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+new file mode 100644
+index 0000000..374be1a
+--- /dev/null
++++ b/package/python-mako/python-mako.hash
+@@ -0,0 +1,4 @@
++# From https://pypi.python.org/pypi/Mako/1.0.3
++md5	a78f20f6366a8a0659ce5532f8614e53	Mako-1.0.3.tar.gz
++# Locally computed
++sha256	7644bc0ee35965d2e146dde31827b8982ed70a58281085fac42869a09764d38c	Mako-1.0.3.tar.gz
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 398b8d2..52679e0 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.46.0
-+LIBCURL_VERSION = 7.47.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-PYTHON_MAKO_VERSION = 1.0.1
++PYTHON_MAKO_VERSION = 1.0.3
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+ PYTHON_MAKO_SITE = https://pypi.python.org/packages/source/M/Mako
+ PYTHON_MAKO_SETUP_TYPE = setuptools
 -- 
 2.7.0.rc3
