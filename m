@@ -1,42 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Jan 2016 21:01:25 +0100
-Subject: [Buildroot] [PATCH 1/3] package/cmake: bump version to 3.4.3
-Message-ID: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 28 Jan 2016 21:01:26 +0100
+Subject: [Buildroot] [PATCH 2/3] package/libcurl: security bump version to
+	7.47.0
+In-Reply-To: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454011287-28408-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes
+CVE-2016-0754: remote file name path traversal in curl tool for Windows
+CVE-2016-0755: NTLM credentials not-checked for proxy connection re-use
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index b0bcf17..5b81416 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index eb5bab1..cd35d4c 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
 @@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.4/cmake-3.4.2-SHA-256.txt
--sha256	da7cc34e1ce1d82e67a32ab081c02c2845534cd8bf2e09d88077a1b282e97392	cmake-3.4.2.tar.gz
-+# From http://www.cmake.org/files/v3.4/cmake-3.4.3-SHA-256.txt
-+sha256	b73f8c1029611df7ed81796bf5ca8ba0ef41c6761132340c73ffe42704f980fa	cmake-3.4.3.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 341ab27..1a1ba30 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -5,8 +5,8 @@
+-# Locally calculated after checking pgp signature
+-sha256 b7d726cdd8ed4b6db0fa1b474a3c59ebbbe4dcd4c61ac5e7ade0e0270d3195ad  curl-7.46.0.tar.bz2
++# Locally calculated
++sha256	2b096f9387fb9b2be08d17e518c62b6537b1f4d4bb59111d5b4fa0272f383f66	curl-7.47.0.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index e64014d..db9ef3f 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CMAKE_VERSION_MAJOR = 3.4
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
--CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
-+CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
- 
+-LIBCURL_VERSION = 7.46.0
++LIBCURL_VERSION = 7.47.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
 2.7.0.rc3
