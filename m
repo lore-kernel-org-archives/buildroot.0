@@ -1,49 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:37:18 +0100
-Subject: [Buildroot] [git commit] package/iptables: nfsynproxy not available
-	on musl
-Message-ID: <20160201224702.8423D7F87D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2016 22:31:31 +0100
+Subject: [Buildroot] [git commit] package/imagemagick: bump version to
+	6.9.3-2
+Message-ID: <20160201224701.16C3A7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=497f15b301273cd81e54b4fcc5da6ab90e27796c
+commit: https://git.buildroot.net/buildroot/commit/?id=9bea9d6c52140a4e65285abef2e7691ef72c4836
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-utils/nfsynproxy.c needs several TCP_* constants which are not yet
-provided by musl, they were added Jan 17, 2016 to musl:
-http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
-
-Until we support a musl version containing the constants we disable
-the option for building nfsynproxy on musl.
-
-Fixes
-http://autobuild.buildroot.net/results/8ee/8ee299d8697bf488ba94f60785e81f274b2128fd/
-http://autobuild.buildroot.net/results/f1a/f1ab3fe59d0dd7dd7b9a7bc6bc10a0019f0fa567/
-http://autobuild.buildroot.net/results/4f9/4f904a2913984201ad0bffb63664019c73e0eb77/
-http://autobuild.buildroot.net/results/65c/65c7d47fdc0f55fb8deb77e34063320e2af337ee/
-http://autobuild.buildroot.net/results/aaa/aaaa1fc92b6a885d223681f40c5df7a962ee1fce/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iptables/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iptables/Config.in b/package/iptables/Config.in
-index ae7a634..c7b69a8 100644
---- a/package/iptables/Config.in
-+++ b/package/iptables/Config.in
-@@ -9,6 +9,10 @@ if BR2_PACKAGE_IPTABLES
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 75ad035..1d5794f 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 da2f6fba43d69f20ddb11783f13f77782b0b57783dde9cda39c9e5e733c2013c ImageMagick-6.9.2-10.tar.xz
++sha256	78a9bfc581c81fb8376c00d06431b49f218d3900690905dc985459cbf5e41c4d	ImageMagick-6.9.3-2.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index b3d6a83..76061fa 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_IPTABLES_BPF_NFSYNPROXY
- 	bool "bpfc and nfsynproxy"
-+	# this dependency can be removed when using a musl version
-+	# containing this commit:
-+	# http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LIBPCAP
- 	help
- 	  Build bpf compiler and nfsynproxy configuration tool.
+-IMAGEMAGICK_VERSION = 6.9.2-10
++IMAGEMAGICK_VERSION = 6.9.3-2
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
