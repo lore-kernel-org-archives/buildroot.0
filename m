@@ -1,47 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jan 2016 08:41:32 +0100
-Subject: [Buildroot] [git commit] package/armadillo: bump version to 6.500.4
-Message-ID: <20160201224703.2B3867F90D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2016 22:26:15 +0100
+Subject: [Buildroot] [git commit] package/openssl: security bump to version
+	1.0.2f
+Message-ID: <20160201224703.DF7817F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=209cf5c6dfe0efb542537ab88b134e5fd2b07475
+commit: https://git.buildroot.net/buildroot/commit/?id=7d8b6bdd0075a57c2a4bb083197da7b41d6cef47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch also fixes the broken download of the current package
-version because upstream removed version 5.100.2.
+Fixes
+DH small subgroups (CVE-2016-0701)
+SSLv2 doesn't block disabled ciphers (CVE-2015-3197)
+An update on DHE man-in-the-middle protection (Logjam)
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/armadillo/armadillo.hash | 5 ++++-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 0046c56..4149a77 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,2 +1,5 @@
-+# From http://sourceforge.net/projects/arma/files/?source=navbar
-+md5	a39f27197d24b3d25437fab6bb1d118f		armadillo-6.500.4.tar.gz
-+sha1	68166e67521a720c72917d196b0807bc6cab8b2e	armadillo-6.500.4.tar.gz
- # Locally computed:
--sha256  63150f12bf7c7c598ea55b7271d99fce349ff386a3dc2cae3904b244f6e35320  armadillo-5.100.2.tar.gz
-+sha256	813de85fa61ba5077ed871d801ba7070d369e7e9742002e4c11474c75ff6d1c6	armadillo-6.500.4.tar.gz
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 8341ff6..813a41b 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 2d2a5b0..2cf7516 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2e.tar.gz.sha256
+-sha256	e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff	openssl-1.0.2e.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2f.tar.gz.sha256
++sha256	932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c	openssl-1.0.2f.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index c3ea08d..b7498a7 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ARMADILLO_VERSION = 5.100.2
-+ARMADILLO_VERSION = 6.500.4
- ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
- ARMADILLO_DEPENDENCIES = clapack
- ARMADILLO_INSTALL_STAGING = YES
+-OPENSSL_VERSION = 1.0.2e
++OPENSSL_VERSION = 1.0.2f
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
