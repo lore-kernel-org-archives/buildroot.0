@@ -1,68 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 21:33:07 +0100
-Subject: [Buildroot] [git commit] openocd: remove BR2_ARCH_HAS_ATOMICS
-	dependency
-Message-ID: <20160201224659.A91A77FB26@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2016 22:25:07 +0100
+Subject: [Buildroot] [git commit] directfb: add help text to Config.in,
+	note broken URL
+Message-ID: <20160201224659.72BBC80AD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a148e2da7b0eba04cc8777f6dc7e3df782512f5f
+commit: https://git.buildroot.net/buildroot/commit/?id=6722723a9554d9828bdae38ab82adca718e4f83f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For some reason, since when openocd was introduced, it was using a
-BR2_ARCH_HAS_ATOMICS dependency for all sub-options that selected
-BR2_PACKAGE_LIBFTDI1, even if the libftdi1 package did not have any
-atomics dependency. Maybe it was confused with the libftdi package,
-which did have a BR2_ARCH_HAS_ATOMICS dependency ?
+Adds descriptive help text to Config.in based on content from elinux.org and
+Wikipedia. Notes that http://www.directfb.org/ has been broken for more than
+five months and suggests using http://elinux.org/DirectFB instead.
 
-Regardless, openocd with all four sub-options that currently depend on
-BR2_ARCH_HAS_ATOMICS builds perfectly fine with a toolchain that does
-not implement any of the __sync atomic built-ins, so we can remove the
-BR2_ARCH_HAS_ATOMICS dependency.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openocd/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/directfb/Config.in | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index a35bd27..2313671 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -127,7 +127,6 @@ config BR2_PACKAGE_OPENOCD_FT2XXX
- 	bool "FT2232 based devices (DEPRECATED)"
- 	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
--	depends on BR2_ARCH_HAS_ATOMICS
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 73425d3..638e4e1 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -8,7 +8,13 @@ config BR2_PACKAGE_DIRECTFB
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_ZLIB
  	help
- 	  (DEPRECATED) Enable building support for FT2232
- 	  based devices using the libftdi library
-@@ -141,7 +140,6 @@ config BR2_PACKAGE_OPENOCD_UBLASTER
- 	bool "Altera USB-Blaster"
- 	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
--	depends on BR2_ARCH_HAS_ATOMICS
- 	help
- 	  Enable building support for the Altera USB-Blaster
- 	  using the libftdi driver, opensource alternate of
-@@ -182,7 +180,6 @@ config BR2_PACKAGE_OPENOCD_PRESTO
- 	bool "ASIX Presto Programmer"
- 	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
--	depends on BR2_ARCH_HAS_ATOMICS
- 	help
- 	  Enable building support for ASIX Presto Programmer
- 	  using the libftdi driver
-@@ -193,7 +190,6 @@ config BR2_PACKAGE_OPENOCD_OPENJTAG
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
--	depends on BR2_ARCH_HAS_ATOMICS
- 	help
- 	  Enable building support for the OpenJTAG Programmer
- 	  with ftdi driver
+-	  http://www.directfb.org/
++	  DirectFB (Direct Frame Buffer) is a set of graphics APIs implemented
++	  on top of the Linux Frame Buffer (fbdev) abstraction layer. It is an
++	  alternative to X11 with a smaller memory footprint that still has an
++	  integrated windowing system. As of 4 October 2015, DirectFB's website
++	  http://www.directfb.org/ is down. See alternative site listed below.
++
++	  http://elinux.org/DirectFB
+ 
+ if BR2_PACKAGE_DIRECTFB
+ 
