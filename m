@@ -1,46 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 23:14:56 +0100
-Subject: [Buildroot] [git commit] package/intel-microcode: bump version to
-	20151106
-Message-ID: <20160201224712.1E30D7F8C2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2016 17:47:44 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.12.x series
+Message-ID: <20160201224713.39DB67F8C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7366974ecf0761b18f07ac5f8f1f6c146543c88
+commit: https://git.buildroot.net/buildroot/commit/?id=5929b1bdbaafa274d2183a28bea07bf53003065c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 4 ++--
- package/intel-microcode/intel-microcode.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index e46f7b0..7925209 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,2 +1,2 @@
--# Locally computed by Yann (http://lists.busybox.net/pipermail/buildroot/2015-January/117918.html) and me
--sha256	f5e7fb58643b2bf327eedf7bd91780fd5dfe74397552977cc77194c165910255	microcode-20150107.tgz
-+# Locally computed
-+sha256	096e39489eef67666be652e81fa372a06b74f39ea3d565dc0287242c668717e7	microcode-20151106.tgz
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 23c4b3e..aefa99a 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--INTEL_MICROCODE_VERSION = 20150107
-+INTEL_MICROCODE_VERSION = 20151106
- INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
--INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24616/eng
-+INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/25512/eng
- INTEL_MICROCODE_STRIP_COMPONENTS = 0
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license.txt
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0c80528..013b1f2 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -205,7 +205,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.76"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.95"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.52"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.53"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.59"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.26"	if BR2_KERNEL_HEADERS_3_18
