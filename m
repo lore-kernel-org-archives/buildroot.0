@@ -1,49 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Jan 2016 20:37:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openssl: security bump to version
-	1.0.2f
-Message-ID: <1454009827-8517-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 28 Jan 2016 21:01:27 +0100
+Subject: [Buildroot] [PATCH 3/3] package/perl-uri: bump version to 1.71
+In-Reply-To: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454011287-28408-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-DH small subgroups (CVE-2016-0701)
-SSLv2 doesn't block disabled ciphers (CVE-2015-3197)
-An update on DHE man-in-the-middle protection (Logjam)
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
+ package/perl-uri/perl-uri.hash | 4 ++--
+ package/perl-uri/perl-uri.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 2d2a5b0..2cf7516 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2e.tar.gz.sha256
--sha256	e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff	openssl-1.0.2e.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2f.tar.gz.sha256
-+sha256	932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c	openssl-1.0.2f.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index c3ea08d..b7498a7 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index c97555a..8a265bf 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    3c56aee0300bce5a440ccbd558277ea0 URI-1.69.tar.gz
+-sha256 b74b16ea626b6f8061821bb350674c638a98be1fc766eadb24fec6635998b42d URI-1.69.tar.gz
++md5    247c3da29a794f72730e01aa5a715daf URI-1.71.tar.gz
++sha256 9c8eca0d7f39e74bbc14706293e653b699238eeb1a7690cc9c136fb8c2644115 URI-1.71.tar.gz
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index c80b582..e7118fc 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSL_VERSION = 1.0.2e
-+OPENSSL_VERSION = 1.0.2f
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+-PERL_URI_VERSION = 1.69
++PERL_URI_VERSION = 1.71
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+ PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_URI_LICENSE = Artistic or GPLv1+
 -- 
 2.7.0.rc3
