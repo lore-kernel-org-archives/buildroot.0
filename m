@@ -1,71 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 21:25:22 +0100
-Subject: [Buildroot] [git commit] libftdi: C++ bindings need boost
-Message-ID: <20160201224708.803F87F8C1@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2016 22:32:16 +0100
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.1.5
+Message-ID: <20160201224710.A9EAF7F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1550e3eb082862259bc76d0312c556407a24046
+commit: https://git.buildroot.net/buildroot/commit/?id=7c9b7f391f5f838b0b699bd17b36279429e09681
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-According to libftdi configure.in:
-
-"""
-dnl libftdi C++ wrapper. Needs boost.
-[...]
-        if test "x$HAVE_BOOST" != "xyes"; then
-            AC_MSG_ERROR(Sorry, we need the boost library for the C++ wrapper)
-        fi
-"""
-
-And indeed, if you enable BR2_PACKAGE_LIBTFDI_CPP but don't have Boost
-enabled, the libfdipp library is not built. To fix this, this commit
-changes BR2_PACKAGE_LIBTFDI_CPP to select Boost.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libftdi/Config.in  | 9 ++++++++-
- package/libftdi/libftdi.mk | 1 +
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
-index 76b30b1..c0ab0f2 100644
---- a/package/libftdi/Config.in
-+++ b/package/libftdi/Config.in
-@@ -12,11 +12,18 @@ config BR2_PACKAGE_LIBFTDI
- if BR2_PACKAGE_LIBFTDI
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 20b7bf0..ea4c8e7 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/wayland-devel/2015-December/026233.html
+-sha256	302cb76209b9c57a5a318e178f9bc446eede8ea79386103b5291cbfaa5fab5b6	libinput-1.1.4.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2016-January/026701.html
++sha256	5e08c45dbb8bf32490cc6cd626da098564d646d161a07cba2e3adbd9745c0622	libinput-1.1.5.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 8b69a51..6d8b7b6 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LIBTFDI_CPP
--	depends on BR2_INSTALL_LIBSTDCPP
- 	bool "C++ bindings"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_BOOST
- 	help
- 	  C++ bindings for libftdi
- 
-+comment "libftdi C++ bindings need a toolchain w/ wchar, C++"
-+	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+
- endif # BR2_PACKAGE_LIBFTDI
- 
- comment "libftdi needs a toolchain w/ threads"
-diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
-index 8370b0a..28f20e3 100644
---- a/package/libftdi/libftdi.mk
-+++ b/package/libftdi/libftdi.mk
-@@ -15,6 +15,7 @@ LIBFDTI_CONF_OPTS = --without-examples
- 
- # configure detect it automaticaly so we need to force it
- ifeq ($(BR2_PACKAGE_LIBTFDI_CPP),y)
-+LIBFTDI_DEPENDENCIES += boost
- LIBFDTI_CONF_OPTS += --enable-libftdipp
- else
- LIBFDTI_CONF_OPTS += --disable-libftdipp
+-LIBINPUT_VERSION = 1.1.4
++LIBINPUT_VERSION = 1.1.5
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
