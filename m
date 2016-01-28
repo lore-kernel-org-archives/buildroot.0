@@ -1,9 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Jan 2016 21:01:27 +0100
-Subject: [Buildroot] [PATCH 3/3] package/perl-uri: bump version to 1.71
-In-Reply-To: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454011287-28408-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 28 Jan 2016 21:01:25 +0100
+Subject: [Buildroot] [PATCH 1/3] package/cmake: bump version to 3.4.3
+Message-ID: <1454011287-28408-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index c97555a..8a265bf 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    3c56aee0300bce5a440ccbd558277ea0 URI-1.69.tar.gz
--sha256 b74b16ea626b6f8061821bb350674c638a98be1fc766eadb24fec6635998b42d URI-1.69.tar.gz
-+md5    247c3da29a794f72730e01aa5a715daf URI-1.71.tar.gz
-+sha256 9c8eca0d7f39e74bbc14706293e653b699238eeb1a7690cc9c136fb8c2644115 URI-1.71.tar.gz
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index c80b582..e7118fc 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index b0bcf17..5b81416 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.4/cmake-3.4.2-SHA-256.txt
+-sha256	da7cc34e1ce1d82e67a32ab081c02c2845534cd8bf2e09d88077a1b282e97392	cmake-3.4.2.tar.gz
++# From http://www.cmake.org/files/v3.4/cmake-3.4.3-SHA-256.txt
++sha256	b73f8c1029611df7ed81796bf5ca8ba0ef41c6761132340c73ffe42704f980fa	cmake-3.4.3.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 341ab27..1a1ba30 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--PERL_URI_VERSION = 1.69
-+PERL_URI_VERSION = 1.71
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_URI_LICENSE = Artistic or GPLv1+
+ CMAKE_VERSION_MAJOR = 3.4
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
+-CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
++CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+ 
 -- 
 2.7.0.rc3
