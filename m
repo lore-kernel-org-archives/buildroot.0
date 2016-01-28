@@ -1,78 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Jan 2016 10:20:44 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 28 Jan 2016 10:47:02 +0100
 Subject: [Buildroot] PowerPC64 toolchain not building
-In-Reply-To: <20160128091742.45cad80d@free-electrons.com>
+In-Reply-To: <20160128024442.GA5589@tungsten.ozlabs.ibm.com>
 References: <20160123150731.1c1db4b0@free-electrons.com>
  <20160124191236.GQ17143@waldemar-brodkorb.de>
  <20160124213607.6e3b1257@free-electrons.com>
  <20160127043858.GB6719@tungsten.ozlabs.ibm.com>
  <20160127093256.77169e7d@free-electrons.com>
  <20160128024442.GA5589@tungsten.ozlabs.ibm.com>
- <20160128091742.45cad80d@free-electrons.com>
-Message-ID: <20160128102044.53877287@free-electrons.com>
+Message-ID: <20160128094702.GA17327@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Sam,
+Sam Bobroff wrote,
 
-On Thu, 28 Jan 2016 09:17:42 +0100, Thomas Petazzoni wrote:
+> On Wed, Jan 27, 2016 at 09:32:56AM +0100, Thomas Petazzoni wrote:
+> > Hello,
+> > 
+> > On Wed, 27 Jan 2016 15:38:58 +1100, Sam Bobroff wrote:
+> > 
+> > > I have a bit of experience with buildroot on PowerPC64 so I also attempted to
+> > > replicate this, but I could not. I don't know the rest of your config but I
+> > > did match the values you posted above. An operand error like that could be
+> > > related to the specific architecture version the assembler is expecting, so
+> > > changing the "target architecture variant" is probably worth trying (try
+> > > "generic").
+> > 
+> > Thanks a lot for having looked at the problem!
+> > 
+> > You need to select the power8 processor for the issue to reproduce. It
+> > doesn't appear with power7 for example.
+> 
+> Hmm, while that's not surprising, I've used that combination of options (power8
+> big-endian with gcc 4.9.x and gcc 5.x) and it works fine for me. Have you tried
+> building from completely clean, including clearing or disabling ccache?
+> 
+> Maybe the host architecture matters? Is that x86_64? What gcc do you have on
+> the host?
 
-> I've restarted a build on my laptop, which has a more modern distro,
-> I'll let you know the results.
+At gcc-final time?
+I tried on Ubuntu 14.04 and Debian/wheezy with the same result:
+gcc -v
+Using built-in specs.
+COLLECT_GCC=/usr/bin/gcc-4.8.real
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.8/lto-wrapper
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu
+4.8.4-2ubuntu1~14.04'
+--with-bugurl=file:///usr/share/doc/gcc-4.8/README.Bugs
+--enable-languages=c,c++,java,go,d,fortran,objc,obj-c++
+--prefix=/usr --program-suffix=-4.8 --enable-shared
+--enable-linker-build-id --libexecdir=/usr/lib
+--without-included-gettext --enable-threads=posix
+--with-gxx-include-dir=/usr/include/c++/4.8 --libdir=/usr/lib
+--enable-nls --with-sysroot=/ --enable-clocale=gnu
+--enable-libstdcxx-debug --enable-libstdcxx-time=yes
+--enable-gnu-unique-object --disable-libmudflap --enable-plugin
+--with-system-zlib --disable-browser-plugin --enable-java-awt=gtk
+--enable-gtk-cairo
+--with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64/jre
+--enable-java-home
+--with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64
+--with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.8-amd64
+--with-arch-directory=amd64
+--with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc
+--enable-multiarch --disable-werror --with-arch-32=i686
+--with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic
+--enable-checking=release --build=x86_64-linux-gnu
+--host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Thread model: posix
+gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04) 
+$ ld -v
+GNU ld (GNU Binutils for Ubuntu) 2.24
 
-The following defconfig:
+That is rather strange. Could you provide a full build log
+and .config?
 
-BR2_powerpc64=y
-BR2_powerpc_power8=y
+make clean
+make V=1 &>log
+cat .config >> log
 
-fails to build on my machine, with the same error:
-
-/tmp/ccZgjbrm.s: Assembler messages:
-/tmp/ccZgjbrm.s:19: Error: operand out of domain (7 is not a multiple of 2)
-
-Here is the offending assembly file:
-
-	.file	"exch_n.c"
-	.section	".toc","aw"
-	.section	".text"
-	.align 2
-	.globl libat_exchange_16
-	.hidden	libat_exchange_16
-	.section	".opd","aw"
-	.align 3
-libat_exchange_16:
-	.quad	.L.libat_exchange_16,.TOC. at tocbase,0
-	.previous
-	.type	libat_exchange_16, @function
-.L.libat_exchange_16:
-	sync
-	mr 9,3
-	mr 11,5
-	mr 10,4
-.L2:
-	lqarx 7,0,9
-	mr 3,7
-	mr 4,8
-	stqcx. 10,0,9
-	bne- 0,.L2
-	isync
-	blr
-	.long 0
-	.byte 0,0,0,0,0,0,0,0
-	.size	libat_exchange_16,.-.L.libat_exchange_16
-	.globl __atomic_exchange_16
-	.set	__atomic_exchange_16,libat_exchange_16
-	.ident	"GCC: (Buildroot 2016.02-git-00995-g390d559) 4.9.3"
-
-So the instruction "lqarx 7,0,9" is at fault.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar
