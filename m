@@ -1,31 +1,41 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 28 Jan 2016 16:32:36 +0100
-Subject: [Buildroot] Gentle reminder
-In-Reply-To: <1746471162.4808853.1453985782623.JavaMail.zimbra@datacom.ind.br>
-References: <1746471162.4808853.1453985782623.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <CAAXf6LX-53zyLU_d8yoQcZgEAWipLKDJUE9Devo-Op+m=JjHOQ@mail.gmail.com>
+From: Jonathan Ben-Avraham <yba@tkos.co.il>
+Date: Thu, 28 Jan 2016 17:37:56 +0200
+Subject: [Buildroot] [PATCH 1/1] directfb: add help text to Config.in,
+	note broken URL
+Message-ID: <1453995476-28960-1-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CC Yann Morin
+Adds descriptive help text to Config.in based on content from elinux.org and
+Wikipedia. Notes that http://www.directfb.org/ has been broken for more than
+five months and suggests using http://elinux.org/DirectFB instead.
 
-On Thu, Jan 28, 2016 at 1:56 PM, Carlos Santos <casantos@datacom.ind.br> wrote:
-> Hello,
->
-> I sent this some time ago:
->
->     http://patchwork.ozlabs.org/patch/553398/
->
-> Could someone take a look, please?
->
-> Carlos Santos (Casantos) - DATACOM, P&D
-> Rua Am?rica, 1000 - Eldorado do Sul, RS, Brasil - 92990-000
-> casantos at datacom.ind.br          +55 51 3933.3000 ext. 3627
-> http://www.datacom.ind.br
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+---
+ package/directfb/Config.in | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 73425d3..638e4e1 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -8,7 +8,13 @@ config BR2_PACKAGE_DIRECTFB
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+-	  http://www.directfb.org/
++	  DirectFB (Direct Frame Buffer) is a set of graphics APIs implemented
++	  on top of the Linux Frame Buffer (fbdev) abstraction layer. It is an
++	  alternative to X11 with a smaller memory footprint that still has an
++	  integrated windowing system. As of 4 October 2015, DirectFB's website
++	  http://www.directfb.org/ is down. See alternative site listed below.
++
++	  http://elinux.org/DirectFB
+ 
+ if BR2_PACKAGE_DIRECTFB
+ 
+-- 
+2.1.4
